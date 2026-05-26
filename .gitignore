@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+
+# Compilation outputs
+dist/
+out/
+
+# Local databases and states
+*.db
+*.sqlite
+*.sqlite-journal
+data/
+auth_states/
+storage_state.json
+
+# Local downloads and logs
+library/
+*.log
+.DS_Store
