@@ -14,7 +14,9 @@ import {
   ExternalLink,
   Image as ImageIcon,
   Check,
-  Compass
+  Compass,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import { useBrowserStore } from '../stores/browser.store'
 import { useExtractorStore } from '../stores/extractor.store'
@@ -54,6 +56,8 @@ export default function BrowserPage() {
 
   const { enqueueDownload, tasks } = useDownloadStore()
   const [urlInput, setUrlInput] = useState('')
+  const [isLeftOpen, setIsLeftOpen] = useState(false)
+  const [isRightOpen, setIsRightOpen] = useState(false)
 
   // Load configured sites from database on mount
   useEffect(() => {
@@ -116,10 +120,26 @@ export default function BrowserPage() {
   }
 
   return (
-    <div className="flex-1 flex gap-5 h-full select-none overflow-hidden pr-1">
+    <div className="flex-1 flex h-full select-none overflow-hidden pr-1 relative">
+      {/* Left drawer hover handle */}
+      {!isLeftOpen && (
+        <div
+          onMouseEnter={() => setIsLeftOpen(true)}
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-16 rounded-r-xl bg-slate-200 hover:bg-brand-500 text-slate-400 hover:text-white flex items-center justify-center cursor-pointer transition-premium z-30 shadow-sm border border-l-0 border-slate-350/40"
+          title="展开网站导航"
+        >
+          <ChevronRight className="w-3 h-3 stroke-[3]" />
+        </div>
+      )}
+
       {/* 1. Left Sidebar: Registered Sites Navigator */}
-      <div className="w-56 flex flex-col gap-4 h-full shrink-0">
-        <div className="glass-panel p-4 rounded-2xl bg-white/80 shadow-premium flex flex-col flex-1 overflow-hidden">
+      <div
+        onMouseLeave={() => setIsLeftOpen(false)}
+        className={`h-full shrink-0 transition-all duration-300 ease-out overflow-hidden z-20 ${
+          isLeftOpen ? 'w-56 opacity-100 mr-4' : 'w-0 opacity-0 mr-0'
+        }`}
+      >
+        <div className="w-56 glass-panel p-4 rounded-2xl bg-white/95 shadow-premium flex flex-col h-full overflow-hidden border border-slate-200/50">
           <div className="flex items-center gap-2 mb-3.5 px-1 shrink-0">
             <Globe className="w-4 h-4 text-brand-500" />
             <h3 className="font-bold text-slate-800 text-[13px] tracking-wide">灵感网站导航</h3>
@@ -226,9 +246,25 @@ export default function BrowserPage() {
         </div>
       </div>
 
+      {/* Right drawer hover handle */}
+      {!isRightOpen && !isExtracting && (
+        <div
+          onMouseEnter={() => setIsRightOpen(true)}
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-16 rounded-l-xl bg-slate-200 hover:bg-brand-500 text-slate-400 hover:text-white flex items-center justify-center cursor-pointer transition-premium z-30 shadow-sm border border-r-0 border-slate-350/40"
+          title="展开素材识别"
+        >
+          <ChevronLeft className="w-3 h-3 stroke-[3]" />
+        </div>
+      )}
+
       {/* 3. Right Sidebar: Extracted Asset List & Operations */}
-      <div className="w-72 flex flex-col gap-4 h-full shrink-0">
-        <div className="glass-panel p-4 rounded-2xl bg-white/80 shadow-premium flex flex-col flex-1 overflow-hidden">
+      <div
+        onMouseLeave={() => setIsRightOpen(false)}
+        className={`h-full shrink-0 transition-all duration-300 ease-out overflow-hidden z-20 ${
+          isRightOpen || isExtracting ? 'w-72 opacity-100 ml-4' : 'w-0 opacity-0 ml-0'
+        }`}
+      >
+        <div className="w-72 glass-panel p-4 rounded-2xl bg-white/95 shadow-premium flex flex-col h-full overflow-hidden border border-slate-200/50">
           {/* Header & Scan Button */}
           <div className="shrink-0 border-b border-slate-100 pb-3 mb-4 space-y-3.5">
             <div className="flex items-center justify-between">

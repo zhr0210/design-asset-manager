@@ -6,6 +6,7 @@ export class EmbeddedBrowserManager {
   private activeView: WebContentsView | null = null
   private activeSiteId: string = ''
   private isVisible: boolean = false
+  private isMounted: boolean = false
   private bounds = { x: 0, y: 0, width: 0, height: 0 }
 
   private constructor() {}
@@ -28,6 +29,7 @@ export class EmbeddedBrowserManager {
   public createView(siteId: string): WebContentsView {
     if (this.activeView) {
       this.hide()
+      this.isMounted = false
       // Remove all listeners to prevent memory leak
       try {
         this.activeView.webContents.removeAllListeners()
@@ -110,7 +112,10 @@ export class EmbeddedBrowserManager {
     if (!this.mainWindow || !this.activeView) return
 
     try {
-      this.mainWindow.contentView.addChildView(this.activeView)
+      if (!this.isMounted) {
+        this.mainWindow.contentView.addChildView(this.activeView)
+        this.isMounted = true
+      }
       this.activeView.setBounds(this.bounds)
     } catch (err) {
       console.error('[BrowserManager] Failed to mount WebContentsView:', err)
@@ -122,7 +127,10 @@ export class EmbeddedBrowserManager {
     if (!this.mainWindow || !this.activeView) return
 
     try {
-      this.mainWindow.contentView.removeChildView(this.activeView)
+      if (this.isMounted) {
+        this.mainWindow.contentView.removeChildView(this.activeView)
+        this.isMounted = false
+      }
     } catch (err) {
       // View might already be detached, safe warn
       console.warn('[BrowserManager] Failed to detach WebContentsView:', err)

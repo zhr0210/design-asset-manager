@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const api = (window as any).electronAPI
 
 export default function BrowserViewport() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [showSpinner, setShowSpinner] = useState(true)
 
   useEffect(() => {
     if (!api) return
@@ -39,9 +40,20 @@ export default function BrowserViewport() {
       resizeObserver.observe(containerRef.current)
     }
 
+    // Hide spinner once url navigates
+    let unsubscribe: (() => void) | undefined
+    if (api.onBrowserStateChange) {
+      unsubscribe = api.onBrowserStateChange((_event: any, state: any) => {
+        if (state.url && state.url !== 'about:blank') {
+          setShowSpinner(false)
+        }
+      })
+    }
+
     return () => {
       window.removeEventListener('resize', updateBounds)
       resizeObserver.disconnect()
+      if (unsubscribe) unsubscribe()
       if (api) {
         api.browserHide().catch(console.error)
       }
@@ -53,14 +65,16 @@ export default function BrowserViewport() {
       ref={containerRef}
       className="w-full h-full bg-slate-50 border border-slate-200/60 rounded-2xl overflow-hidden shadow-inner relative flex items-center justify-center"
     >
-      <div className="absolute inset-0 bg-slate-100/50 flex items-center justify-center">
-        <div className="text-center space-y-2 pointer-events-none select-none">
-          <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-slate-400 text-[12px] font-semibold tracking-wide">
-            正在载入内嵌浏览器视图...
-          </p>
+      {showSpinner && (
+        <div className="absolute inset-0 bg-slate-100/50 flex items-center justify-center z-10">
+          <div className="text-center space-y-2 pointer-events-none select-none">
+            <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="text-slate-400 text-[12px] font-semibold tracking-wide">
+              正在载入内嵌浏览器视图...
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
