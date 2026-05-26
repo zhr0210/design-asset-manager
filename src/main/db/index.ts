@@ -35,6 +35,39 @@ export function initDatabase(): Database.Database {
     }
   })()
 
+  // Run dynamic migrations to ensure backward compatibility
+  try {
+    const assetsInfo = db.prepare("PRAGMA table_info(assets)").all() as Array<{ name: string }>
+    const assetsCols = assetsInfo.map((c) => c.name)
+
+    if (!assetsCols.includes('browser_page_title')) {
+      console.log('[SQLite] Migration: Adding browser_page_title to assets table')
+      db.prepare("ALTER TABLE assets ADD COLUMN browser_page_title TEXT").run()
+    }
+    if (!assetsCols.includes('capture_method')) {
+      console.log('[SQLite] Migration: Adding capture_method to assets table')
+      db.prepare("ALTER TABLE assets ADD COLUMN capture_method TEXT").run()
+    }
+
+    const downloadTasksInfo = db.prepare("PRAGMA table_info(download_tasks)").all() as Array<{ name: string }>
+    const downloadTasksCols = downloadTasksInfo.map((c) => c.name)
+
+    if (!downloadTasksCols.includes('source_site_name')) {
+      console.log('[SQLite] Migration: Adding source_site_name to download_tasks table')
+      db.prepare("ALTER TABLE download_tasks ADD COLUMN source_site_name TEXT").run()
+    }
+    if (!downloadTasksCols.includes('browser_page_title')) {
+      console.log('[SQLite] Migration: Adding browser_page_title to download_tasks table')
+      db.prepare("ALTER TABLE download_tasks ADD COLUMN browser_page_title TEXT").run()
+    }
+    if (!downloadTasksCols.includes('capture_method')) {
+      console.log('[SQLite] Migration: Adding capture_method to download_tasks table')
+      db.prepare("ALTER TABLE download_tasks ADD COLUMN capture_method TEXT").run()
+    }
+  } catch (migErr) {
+    console.error('[SQLite] Failed to run database migrations:', migErr)
+  }
+
   // Seed default sites if sites table is empty
   const sitesCount = (db.prepare('SELECT COUNT(*) as count FROM sites').get() as { count: number }).count
   if (sitesCount === 0) {

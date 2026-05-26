@@ -15,6 +15,8 @@ export interface DownloadTask {
   retryCount: number
   fileSize?: number
   thumbnailUrl: string
+  browserPageTitle?: string
+  captureMethod?: string
 }
 
 interface DownloadState {
@@ -27,6 +29,8 @@ interface DownloadState {
     sourcePageUrl: string
     downloadUrl: string
     thumbnailUrl: string
+    captureMethod?: string
+    browserPageTitle?: string
   }) => Promise<void>
   retryTask: (id: string) => Promise<void>
   clearCompleted: () => Promise<void>
@@ -40,7 +44,7 @@ function mapDbTaskToTask(dbTask: any): DownloadTask {
     id: dbTask.id,
     assetTitle: dbTask.asset_title,
     sourceSiteId: dbTask.source_site_id,
-    sourceSiteName: dbTask.source_site_id === 'tapnow' ? 'TapNow' : dbTask.source_site_id.charAt(0).toUpperCase() + dbTask.source_site_id.slice(1),
+    sourceSiteName: dbTask.source_site_name || (dbTask.source_site_id === 'tapnow' ? 'TapNow' : dbTask.source_site_id.charAt(0).toUpperCase() + dbTask.source_site_id.slice(1)),
     sourcePageUrl: dbTask.source_page_url || '',
     downloadUrl: dbTask.download_url,
     savePath: dbTask.save_path,
@@ -49,7 +53,9 @@ function mapDbTaskToTask(dbTask: any): DownloadTask {
     errorMessage: dbTask.error_message,
     retryCount: dbTask.retry_count,
     fileSize: 1024 * 1024 * 1.5, // Default mock size 1.5MB
-    thumbnailUrl: dbTask.download_url // Pre-populate with standard image url
+    thumbnailUrl: dbTask.download_url, // Pre-populate with standard image url
+    browserPageTitle: dbTask.browser_page_title || '',
+    captureMethod: dbTask.capture_method || 'search'
   }
 }
 
@@ -85,7 +91,9 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
       progress: 0,
       retryCount: 0,
       fileSize: Math.floor(Math.random() * 5 * 1024 * 1024) + 500 * 1024,
-      thumbnailUrl: item.thumbnailUrl
+      thumbnailUrl: item.thumbnailUrl,
+      browserPageTitle: item.browserPageTitle,
+      captureMethod: item.captureMethod || 'search'
     }
 
     set((state) => ({
@@ -98,12 +106,15 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
           id: newTask.id,
           asset_title: newTask.assetTitle,
           source_site_id: newTask.sourceSiteId,
+          source_site_name: newTask.sourceSiteName,
           source_page_url: newTask.sourcePageUrl,
           download_url: newTask.downloadUrl,
           save_path: newTask.savePath,
           status: newTask.status,
           progress: newTask.progress,
-          retry_count: newTask.retryCount
+          retry_count: newTask.retryCount,
+          browser_page_title: newTask.browserPageTitle || null,
+          capture_method: newTask.captureMethod || 'search'
         }
         await api.saveDownload(dbTask)
       } catch (err) {
@@ -129,12 +140,15 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
             id: task.id,
             asset_title: task.assetTitle,
             source_site_id: task.sourceSiteId,
+            source_site_name: task.sourceSiteName,
             source_page_url: task.sourcePageUrl,
             download_url: task.downloadUrl,
             save_path: task.savePath,
             status: 'downloading',
             progress: 0,
-            retry_count: task.retryCount
+            retry_count: task.retryCount,
+            browser_page_title: task.browserPageTitle || null,
+            capture_method: task.captureMethod || 'search'
           })
         }
       } catch (err) {
@@ -150,7 +164,7 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
         const tasks = state.tasks.map((t) => {
           if (t.id === id) {
             const nextProgress = Math.min(t.progress + Math.floor(Math.random() * 15) + 5, 100)
-            const nextStatus = nextProgress === 100 ? 'completed' : 'downloading'
+            const nextStatus: DownloadTask['status'] = nextProgress === 100 ? 'completed' : 'downloading'
             
             if (nextProgress === 100) {
               isDone = true
@@ -169,7 +183,9 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
                   height: 1080,
                   fileSize: t.fileSize || 1024 * 1024,
                   fileType: 'JPG',
-                  tags: ['Scraped', t.sourceSiteName]
+                  tags: ['Scraped', t.sourceSiteName],
+                  browserPageTitle: t.browserPageTitle,
+                  captureMethod: t.captureMethod
                 })
               }, 50)
             }
@@ -180,12 +196,15 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
                 id: t.id,
                 asset_title: t.assetTitle,
                 source_site_id: t.sourceSiteId,
+                source_site_name: t.sourceSiteName,
                 source_page_url: t.sourcePageUrl,
                 download_url: t.downloadUrl,
                 save_path: t.savePath,
                 status: nextStatus,
                 progress: nextProgress,
-                retry_count: t.retryCount
+                retry_count: t.retryCount,
+                browser_page_title: t.browserPageTitle || null,
+                capture_method: t.captureMethod || 'search'
               }).catch(console.error)
             }
 

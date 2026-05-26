@@ -4,6 +4,7 @@ export interface DbDownloadTask {
   id: string
   asset_title: string
   source_site_id: string
+  source_site_name?: string
   source_page_url?: string
   download_url: string
   save_path: string
@@ -11,6 +12,8 @@ export interface DbDownloadTask {
   progress: number
   error_message?: string
   retry_count: number
+  browser_page_title?: string
+  capture_method?: string
   created_at: string
   updated_at: string
 }
@@ -34,12 +37,13 @@ export class DownloadService {
     if (existing) {
       db.prepare(`
         UPDATE download_tasks
-        SET asset_title = ?, source_site_id = ?, source_page_url = ?, download_url = ?, save_path = ?,
-            status = ?, progress = ?, error_message = ?, retry_count = ?, updated_at = ?
+        SET asset_title = ?, source_site_id = ?, source_site_name = ?, source_page_url = ?, download_url = ?, save_path = ?,
+            status = ?, progress = ?, error_message = ?, retry_count = ?, browser_page_title = ?, capture_method = ?, updated_at = ?
         WHERE id = ?
       `).run(
         task.asset_title,
         task.source_site_id,
+        task.source_site_name || null,
         task.source_page_url || null,
         task.download_url,
         task.save_path,
@@ -47,6 +51,8 @@ export class DownloadService {
         task.progress,
         task.error_message || null,
         task.retry_count,
+        task.browser_page_title || null,
+        task.capture_method || 'search',
         now,
         task.id
       )
@@ -57,12 +63,13 @@ export class DownloadService {
       }
     } else {
       db.prepare(`
-        INSERT INTO download_tasks (id, asset_title, source_site_id, source_page_url, download_url, save_path, status, progress, error_message, retry_count, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO download_tasks (id, asset_title, source_site_id, source_site_name, source_page_url, download_url, save_path, status, progress, error_message, retry_count, browser_page_title, capture_method, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
         task.id,
         task.asset_title,
         task.source_site_id,
+        task.source_site_name || null,
         task.source_page_url || null,
         task.download_url,
         task.save_path,
@@ -70,6 +77,8 @@ export class DownloadService {
         task.progress,
         task.error_message || null,
         task.retry_count,
+        task.browser_page_title || null,
+        task.capture_method || 'search',
         now,
         now
       )

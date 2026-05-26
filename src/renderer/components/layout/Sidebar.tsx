@@ -7,7 +7,8 @@ import {
   DownloadCloud,
   Image as ImageIcon,
   Settings,
-  Sparkles
+  Sparkles,
+  Compass
 } from 'lucide-react'
 import { useDownloadStore } from '../../stores/download.store'
 
@@ -18,7 +19,8 @@ export default function Sidebar() {
   const navItems = [
     { to: '/dashboard', label: '仪表盘', icon: LayoutDashboard },
     { to: '/sites', label: '网站账号', icon: Globe },
-    { to: '/search', label: '素材搜索', icon: Search },
+    { to: '/browser', label: '素材浏览器', icon: Compass },
+    { to: '/search', label: '传统搜索', icon: Search },
     {
       to: '/downloads',
       label: '下载队列',

@@ -31,6 +31,8 @@ export const CREATE_ASSETS_TABLE = `
     file_size INTEGER,
     file_type TEXT,
     dominant_color TEXT,
+    browser_page_title TEXT,
+    capture_method TEXT,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
   );
@@ -60,6 +62,7 @@ export const CREATE_DOWNLOAD_TASKS_TABLE = `
     id TEXT PRIMARY KEY,
     asset_title TEXT NOT NULL,
     source_site_id TEXT NOT NULL,
+    source_site_name TEXT,
     source_page_url TEXT,
     download_url TEXT NOT NULL,
     save_path TEXT NOT NULL,
@@ -67,6 +70,8 @@ export const CREATE_DOWNLOAD_TASKS_TABLE = `
     progress INTEGER DEFAULT 0,
     error_message TEXT,
     retry_count INTEGER DEFAULT 0,
+    browser_page_title TEXT,
+    capture_method TEXT,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
   );

@@ -6,6 +6,8 @@ import { registerSiteIpc } from './ipc/site.ipc'
 import { registerAssetIpc } from './ipc/asset.ipc'
 import { registerDownloadIpc } from './ipc/download.ipc'
 import { registerSearchIpc } from './ipc/search.ipc'
+import { registerBrowserIpc } from './ipc/browser.ipc'
+import { EmbeddedBrowserManager } from './services/browser-view.manager'
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
@@ -26,6 +28,9 @@ function createWindow(): void {
       nodeIntegration: false
     }
   })
+
+  // Register main window inside our EmbeddedBrowserManager singleton
+  EmbeddedBrowserManager.getInstance().setMainWindow(mainWindow)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -81,4 +86,5 @@ function setupIpcHandlers() {
   registerAssetIpc()
   registerDownloadIpc()
   registerSearchIpc()
+  registerBrowserIpc()
 }

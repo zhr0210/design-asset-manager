@@ -15,6 +15,8 @@ export interface Asset {
   fileSize: number
   fileType: string
   dominantColor?: string
+  browserPageTitle?: string
+  captureMethod?: string
   tags: string[]
   createdAt: string
 }
@@ -61,6 +63,8 @@ function mapDbAssetToAsset(dbAsset: any): Asset {
     fileSize: dbAsset.file_size || 0,
     fileType: dbAsset.file_type || 'JPG',
     dominantColor: dbAsset.dominant_color,
+    browserPageTitle: dbAsset.browser_page_title || '',
+    captureMethod: dbAsset.capture_method || 'search',
     tags: dbAsset.tags || [],
     createdAt: dbAsset.created_at
   }
@@ -137,7 +141,9 @@ export const useAssetStore = create<AssetState>((set, get) => ({
       height: assetData.height,
       file_size: assetData.fileSize,
       file_type: assetData.fileType,
-      dominant_color: assetData.dominantColor
+      dominant_color: assetData.dominantColor,
+      browser_page_title: assetData.browserPageTitle || null,
+      capture_method: assetData.captureMethod || 'search'
     }
 
     if (api) {
