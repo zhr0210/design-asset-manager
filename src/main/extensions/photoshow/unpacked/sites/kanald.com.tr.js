@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"kanald.com.tr":{srcMatching:[{srcRegExp:"(//.+?/i/.+?/\\d+/)\\d+x\\d+(/.+)",processor:"$10x0$2"}]}};

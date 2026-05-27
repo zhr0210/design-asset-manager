@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"customink.com":{srcMatching:[{srcRegExp:"(//.+?\\.customink\\.com/.+?)_(?:large|medium|small)(?:_\\w+)?(@IMG@).*",processor:["$1$2","$1_large$2"]}]}};

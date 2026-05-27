@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"tiktok.com":{srcMatching:[{srcRegExp:"(//p\\d+).*(\\.tiktokcdn\\.com/.+/)\\d+x\\d+(/.+(?:\\.image|@IMG@)).*",processor:"$1$2720x720$3"},{srcRegExp:"(//p\\d+).*(\\.tiktokcdn\\.com/.+?~).+?(\\.image|@IMG@).*",processor:["$1$2noop$3"]}]}};

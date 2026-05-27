@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"xhamster.com":{ignore:"video",srcMatching:[{processor:({trigger:r})=>r.src}]}};

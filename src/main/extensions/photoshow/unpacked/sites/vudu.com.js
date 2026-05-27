@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"vudu.com":{srcMatching:[{srcRegExp:"(//images\\d*\\.vudu\\.com/.+-)\\d+",processor:["$1360","$1300"]}]}};

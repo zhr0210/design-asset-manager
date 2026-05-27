@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"mercari.com":{srcMatching:[{srcRegExp:"(.+?\\.mercdn\\.net/)thumb/item/.+(/.+@IMG@).*",processor:"$1item/detail/orig/photos$2"},{srcRegExp:"(.+?\\.mercari-shops-static\\.com/.+/)(?:small|medium|large)(/.+@IMG@).*",processor:"$1xlarge$2"}]}};

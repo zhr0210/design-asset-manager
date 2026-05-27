@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"perplexity.ai":{srcMatching:[{srcRegExp:"(.+/)t_(?:limit|thumbnail)/(https?:.+)",processor:["$2","$1$2"]},{srcRegExp:"(.+/)t_(?:limit|thumbnail)/(.+)",processor:"$1$2"}]}};

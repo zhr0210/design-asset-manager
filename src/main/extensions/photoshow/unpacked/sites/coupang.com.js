@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"coupang.com":{srcMatching:[{srcRegExp:"//thumbnail(\\d+\\.coupangcdn\\.com)/.+?(/image\\d*/.+@IMG@)",processor:"//image$1$2"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"op.gg":{srcMatching:[{srcRegExp:"(//.+?\\.akamaized\\.net/.+/)loading(/.+@IMG@).*",processor:"$1splash$2"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={pornxp:{ignore:".item_preview"}};

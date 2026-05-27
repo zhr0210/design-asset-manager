@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"tineye.com":{srcMatching:[{processor:({trigger:e})=>tools.cacheImage(e.href||/\w+/.exec(e.id)?.[0]),selectors:"a,img[id]"}]}};

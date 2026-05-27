@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"mashable.com":{srcMatching:[{srcRegExp:"(//.+?\\.mashable\\.com/imagery/.+/[^.]+).*(@IMG@)",processor:"$1$2"}]}};

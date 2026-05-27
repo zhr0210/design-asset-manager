@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"aixifan.com":{srcMatching:[{srcRegExp:"(//.+\\.kwimgs\\.com/uhead/.+_)\\w+(@IMG@)",processor:"$1o$2"},{srcRegExp:"(//.+\\.(?:acfun\\.cn|(?:aixifan|kwimgs)\\.com)/[^?]+)\\?image.*",processor:"$1"}]}};

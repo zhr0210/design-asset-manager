@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"noelleeming.co.nz":{srcMatching:[{srcRegExp:"(noelleeming\\.co\\.nz/.+?@IMG@).*",processor:"$1"},{srcRegExp:"(media\\.flixcar\\.com/.+)-(?:preview|thumb)(@IMG@)",processor:"$1$2"}]}};

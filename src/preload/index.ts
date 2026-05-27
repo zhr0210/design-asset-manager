@@ -40,6 +40,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     }
   },
 
+  // Preload download callback from injected site button click
+  onInjectedDownloadTrigger: (callback: (event: any, item: any) => void) => {
+    ipcRenderer.on('download:injected-trigger', callback)
+    return () => {
+      ipcRenderer.removeListener('download:injected-trigger', callback)
+    }
+  },
+
   // Extractor IPC API
   extractorScanPage: () => ipcRenderer.invoke('extractor:scan-current-page')
 })

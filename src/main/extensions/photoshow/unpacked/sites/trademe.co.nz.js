@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"trademe.co.nz":{maxLookupDepth:12,srcMatching:[{srcRegExp:"(//trademe\\.tmcdn\\.co\\.nz/photoserver/)\\w+(/\\d+@IMG@)",processor:"$1plusw$2"},{srcRegExp:"(//trademe\\.tmcdn\\.co\\.nz/).+(/agent_individual_profile.+@IMG@)",processor:"$1tm/property/agent_individual_profile$2"}]}};

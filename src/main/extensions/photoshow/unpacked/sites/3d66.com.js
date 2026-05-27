@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"3d66.com":{srcMatching:[{srcRegExp:"(//.+@IMG@!)[^?]*(.*)",processor:"$1detail-full$2"}]}};

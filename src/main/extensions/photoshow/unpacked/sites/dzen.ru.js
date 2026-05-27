@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"dzen.ru":{ignore:'[class*="video-feed--video-player"]',srcMatching:[{srcRegExp:"(//avatars\\.dzeninfra\\.ru/get-zen.+/)\\w+",processor:"$1scale_2400"},{srcRegExp:"(//avatars\\.dzeninfra\\.ru/get-ynews/.+/)\\d+x\\d+",processor:"$1800x400"}]}};

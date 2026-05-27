@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"duitang.com":{srcMatching:[{srcRegExp:"(.+\\.(?:dtstatic|duitang)\\.com/uploads/[^.]+).*(@IMG@).*",processor:"$1$2"}]}};

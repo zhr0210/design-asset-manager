@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"curseforge.com":{srcMatching:[{srcRegExp:"(//(?:\\d+\\.)?media\\.forgecdn\\.net/avatars/)thumbnails/(\\d+/\\d+/)\\d+/\\d+/(\\d+)(?:_\\w+)?(\\..+)",processor:"$1$2$3$4"}]}};

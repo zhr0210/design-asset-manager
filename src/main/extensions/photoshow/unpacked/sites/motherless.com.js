@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"motherless.com":{ignore:".img-container :not(img)",srcMatching:[{srcRegExp:"((//cdn\\d*-)thumbs(\\.motherlessmedia\\.com/)thumbs(/\\w+)).*(@IMG@)",processor:["$2images$3images$4$5","$1$5",e=>150===e.width&&150===e.height]}]}};

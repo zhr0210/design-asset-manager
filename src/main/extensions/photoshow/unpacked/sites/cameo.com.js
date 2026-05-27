@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"cameo.com":{srcMatching:[{srcRegExp:"https?://.*?/(https?://cdn\\.cameo\\.com/v/)(thumb-.*@IMG@)",processor:"$1no-wm-$2"},{srcRegExp:"https?://.*?/(https?://cdn\\.cameo\\.com/thumbnails/.*?)(?:-wm)+(.+@IMG@)",processor:"$1-wm$2"}]}};

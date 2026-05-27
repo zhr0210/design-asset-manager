@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"batdongsan.com.vn":{anonymous:!0,srcMatching:[{srcRegExp:"(//.+?\\.pgimgs\\.com/.+?\\.)[A-Z]\\d+(?:X\\d+|\\w+)?((?:/.+)?@IMG@)",processor:"$1V800$2"},{srcRegExp:"(//.+?\\.iproperty\\.com\\.my/.+/)\\d+x\\d+[^/]*(/.+@IMG@)",processor:"$12000x2000-fit$2"},{srcRegExp:"(.+?/)(?:resize|crop)/\\d+x\\d+/(.+@IMG@)",processor:"$1$2"}]}};

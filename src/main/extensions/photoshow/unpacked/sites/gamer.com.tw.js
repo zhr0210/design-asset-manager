@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"gamer.com.tw":{srcMatching:[{srcRegExp:"(//.+\\.bahamut\\.com\\.tw/avataruserpic/.+)_\\w+(@IMG@)",processor:"$1$2"},{srcRegExp:"(//.+\\.bahamut\\.com\\.tw/.+?@IMG@)\\?w=\\d+",processor:"$1"},{srcRegExp:"(//.+\\.bahamut\\.com\\.tw/)\\w(/.+@IMG@).*",processor:"$1B$2"}]}};

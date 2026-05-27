@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"afdian.com":{srcMatching:[{processor:({trigger:e})=>tools.cacheImage(`${/\/p\/(\w{32})/.test(e.closest(".feed-content")?.querySelector(".title-box a")?.href)?RegExp.$1:""}_${tools.getElementIndex(e)}`),selectors:".img-box"}]}};

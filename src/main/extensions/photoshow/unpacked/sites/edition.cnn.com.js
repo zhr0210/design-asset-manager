@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"edition.cnn.com":{maxLookupDepth:4,srcMatching:[{srcRegExp:"(//media.cnn.com/api/v\\d+/images/.+@IMG@).*",processor:"$1?q=w_auto"}]}};

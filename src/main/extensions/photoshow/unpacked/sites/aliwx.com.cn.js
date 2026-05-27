@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"aliwx.com.cn":{srcMatching:[{srcRegExp:"(img-tailor\\.11222\\.cn/bcv/)\\w+(/.+?@IMG@)",processor:"$1raw$2"}]}};

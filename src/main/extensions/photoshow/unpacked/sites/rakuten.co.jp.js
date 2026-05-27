@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"rakuten.co.jp":{srcMatching:[{processor:({trigger:r})=>r,selectors:".dui-card .image"}]}};

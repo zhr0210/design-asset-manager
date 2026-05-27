@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"thewarehouse.co.nz":{srcMatching:[{srcRegExp:"(//.+\\.co\\.nz/)(?:dw/.+/)?(on/.+@IMG@).*",processor:"$1$2"},{srcRegExp:"(//themarket\\.azureedge\\.net/resizer/view\\?.+?)&w=.*",processor:"$1&w=0"}]}};

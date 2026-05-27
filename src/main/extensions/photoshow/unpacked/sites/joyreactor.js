@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={joyreactor:{referrerAddedHostnames:["joyreactor.*"],srcMatching:[{srcRegExp:"(//.+?/pics/post/)(?:full/)?([^/]+@IMG@)",processor:"$1full/$2"}]}};

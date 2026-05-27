@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"cellphones.com.vn":{srcMatching:[{srcRegExp:"//.+?\\.cellphones\\.com\\.vn/.+?https?://(.+)",processor:"//$1"}]}};

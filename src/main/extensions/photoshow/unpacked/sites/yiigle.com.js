@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"yiigle.com":{srcMatching:[{srcRegExp:"(/img(?:content|source).jspx\\?.+?)c?(@IMG@).*",processor:"$1$2"},{srcRegExp:"(/apiVue/search/imgcontent\\?.*?type=)\\d+",processor:"$11"},{processor:({trigger:e})=>e.hasAttribute("xlink:href")&&[`/api/xml/getXmlFileUrl?url=${e.getAttribute("xlink:href")}`]}]}};

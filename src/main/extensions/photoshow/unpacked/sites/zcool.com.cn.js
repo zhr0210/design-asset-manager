@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"zcool.com.cn":{srcMatching:[{srcRegExp:"//resource\\.zcool\\.cn/.+"},{srcRegExp:"(//img\\.zcool\\.cn/.+?@IMG@)@(?!1280|3000|2o).*",processor:"$1"},{srcRegExp:"(//hellorfimg\\.zcool\\.cn/.*)preview\\d*/(.+@IMG@).*",processor:["$1large/$2","//image.shutterstock.com/z/stock-photo-$2"]}]}};

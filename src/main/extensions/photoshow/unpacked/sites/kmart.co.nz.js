@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"kmart.co.nz":{srcMatching:[{srcRegExp:"(//.+?\\.yotpo\\.com/Review/.+?/)\\w+(@IMG@).*",processor:"$1original$2"}]}};

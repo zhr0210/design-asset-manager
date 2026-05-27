@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"soutushenqi.com":{srcMatching:[{processor:({trigger:s})=>tools.cacheImage(s.dataset.src)||{triggerSrc:s.dataset.src},selectors:"canvas[data-src]"},{srcRegExp:"(//.+?\\.(?:baidu|bdstatic)\\.com/it/.+?&fm=\\d+).*",processor:"$1"},{srcRegExp:"(.+\\.(?:dtstatic|duitang)\\.com/uploads/[^.]+).*(@IMG@).*",processor:"$1$2"}]}};

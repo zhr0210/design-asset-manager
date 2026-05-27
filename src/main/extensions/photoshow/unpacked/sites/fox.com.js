@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"fox.com":{srcMatching:[{srcRegExp:"((?:\\w+\\.foxdcg|static-media\\.fox)\\.com/.+@IMG@).*",processor:"$1"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"mi-store":{srcMatching:[{srcRegExp:"(//.+\\.mi-store(?:\\.(?:com|[a-z]{2}))+/.+/products/)thumbs(/.+@IMG@)",processor:"$1images$2"},{srcRegExp:"(//mi-store(?:\\.(?:com|[a-z]{2}))+/.+)_.+?(@IMG@)",processor:"$1$2"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"xiaohongshu.com":{srcMatching:[{processor:({trigger:c})=>tools.cacheImage(c.closest('[id^="comment-"]')?.id.split("-").at(-1)),selectors:".comment-picture img"},{srcRegExp:"(//.+?\\.xhscdn\\.com/avatar/[^?]+).*",processor:"$1"},{srcRegExp:"//.+?\\.xhscdn\\.com/.+?/(\\w+)!\\w+",processor:["//ci.xiaohongshu.com/$1"]}]}};

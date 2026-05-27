@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"e621.net":{srcMatching:[{srcRegExp:"(//static\\d*\\.e621\\.net/data/)(?:crop|preview|sample)/(.+)(@IMG@)",processor:({srcRegExpObj:e,trigger:r,triggerSrc:t})=>{const c=e.exec(t),{fileUrl:s,largeUrl:a}=r.closest("[data-file-url]")?.dataset||{};return c&&(a||s||["$1$2.png","$1$2$3"])}}]}};

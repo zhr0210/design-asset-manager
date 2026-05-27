@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"huya.com":{ignore:".img-box~*"}};

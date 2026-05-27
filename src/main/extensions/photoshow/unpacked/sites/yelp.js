@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={yelp:{srcMatching:[{srcRegExp:"(//s\\d+-media\\d+\\.fl\\.yelpcdn\\.com/\\w*photo/.+/)\\d*[sml]{1,2}(@IMG@)",processor:"$1o$2"}]}};

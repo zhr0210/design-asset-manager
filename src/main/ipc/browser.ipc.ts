@@ -74,11 +74,54 @@ export function registerBrowserIpc() {
       }
 
       const extracted = await extractor.extractAssets(context)
-      console.log(`[IPC] Successfully scanned page and identified ${extracted.length} image assets`)
       return extracted
     } catch (err) {
       console.error('[IPC] extractor:scan-current-page error:', err)
       throw err
     }
+  })
+
+  // 3. Floating download button clicked in-page IPC listener
+  ipcMain.on('browser:download-injected', (event, asset) => {
+    try {
+      console.log(`[IPC] Injected download button clicked for: ${asset.url}`)
+      const urlObj = new URL(asset.sourcePageUrl)
+      const domain = urlObj.hostname.replace('www.', '')
+      const siteName = domain.charAt(0).toUpperCase() + domain.slice(1)
+
+      const win = manager.getMainWindow()
+      if (win) {
+        win.webContents.send('download:injected-trigger', {
+          title: asset.title,
+          sourceSite: siteName,
+          sourcePageUrl: asset.sourcePageUrl,
+          downloadUrl: asset.url,
+          thumbnailUrl: asset.url,
+          width: asset.width,
+          height: asset.height,
+          browserPageTitle: asset.pageTitle,
+          captureMethod: 'browser_extract'
+        })
+      }
+    } catch (err) {
+      console.error('[IPC] browser:download-injected error:', err)
+    }
+  })
+
+  // 4. Request native OS/Electron focus for guest browser view webContents
+  ipcMain.on('browser:request-focus', () => {
+    try {
+      const webContents = manager.getWebContents()
+      if (webContents) {
+        webContents.focus()
+      }
+    } catch (err) {
+      console.error('[IPC] browser:request-focus error:', err)
+    }
+  })
+
+  // 5. Track currently hovered original image metadata globally
+  ipcMain.on('browser:set-hovered-asset', (_event, asset) => {
+    manager.setActiveHoveredAsset(asset)
   })
 }

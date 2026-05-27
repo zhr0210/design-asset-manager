@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"temu.com":{ignore:'[style*="background-image"]+video[src*="goods-vod.kwcdn.com"]'}};

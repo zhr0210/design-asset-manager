@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"atresplayer.com":{srcMatching:[{srcRegExp:"(//imagenes\\.atresplayer\\.com/.+?/)(\\d+)x(\\d+)(@IMG@)",processor:({srcRegExpObj:e,triggerSrc:r})=>e.test(r)&&`${RegExp.$1}${Number(RegExp.$2)>Number(RegExp.$3)?"1920x960":"720x1280"}${RegExp.$4}`}]}};

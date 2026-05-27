@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"bandcamp.com":{srcMatching:[{srcRegExp:"(f\\d+\\.bcbits\\.com/img/.+_)\\d+(@IMG@)?",processor:"$10$2"}]}};

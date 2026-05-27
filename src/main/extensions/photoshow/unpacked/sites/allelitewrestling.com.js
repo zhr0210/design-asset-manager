@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"allelitewrestling.com":{srcMatching:[{srcRegExp:"(//static\\.wixstatic\\.com/.+?@IMG@).*",processor:"$1"}]}};

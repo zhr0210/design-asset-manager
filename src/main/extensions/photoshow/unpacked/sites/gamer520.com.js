@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"gamer520.com":{srcMatching:[{srcRegExp:"(//shared\\.cdn\\.queniuqe\\.com/.+)\\.\\d+x\\d+(@IMG@)",processor:"$1$2"}]}};

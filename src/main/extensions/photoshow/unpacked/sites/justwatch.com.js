@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"justwatch.com":{ignore:".youtube-player__play-button",srcMatching:[{srcRegExp:"(//.+\\.justwatch\\.com/(?:images/)?poster/\\d+/)s\\d+(/.+)",processor:"$1s718$2"},{srcRegExp:"(//.+?/backdrop/\\d+/)s\\d+(/.+)",processor:"$1s1920$2"}]}};

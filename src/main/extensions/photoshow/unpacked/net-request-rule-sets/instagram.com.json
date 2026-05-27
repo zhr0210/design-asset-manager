@@ -1,0 +1,1 @@
+[{"id":1,"action":{"type":"modifyHeaders","requestHeaders":[{"header":"User-Agent","operation":"set","value":"Instagram 272.0.0"}]},"condition":{"initiatorDomains":["instagram.com"],"resourceTypes":["xmlhttprequest"],"urlFilter":"||instagram.com/api/v1/users/"}}]

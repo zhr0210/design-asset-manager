@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"mynet.com":{srcMatching:[{srcRegExp:".*(//.+?\\.mynet\\.com(?:\\.tr)?/.+-)\\d+x\\d+(@IMG@)",processor:"$1autox0$2"}]}};

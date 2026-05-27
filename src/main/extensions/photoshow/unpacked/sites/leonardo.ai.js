@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"leonardo.ai":{srcMatching:[{srcRegExp:"//.+?\\.leonardo\\.ai/_next/image\\?.*url=([^&]+)",processor:({srcRegExpObj:e,triggerSrc:r})=>decodeURIComponent(e.exec(r)?.[1]||"")}]}};

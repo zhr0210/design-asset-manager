@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"webcamdownloads.org":{srcMatching:[{srcRegExp:"(//fastimages\\.org/images/.+)\\.th(@IMG@)",processor:"$1$2"}]}};

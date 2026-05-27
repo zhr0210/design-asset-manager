@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={shopee:{ignore:'[alt="custom-overlay"],img:has(~.thumbnail-selected-mask),a ._h5Zq0.aXY7Pt .aXY7Pt.H7sp0t[style*="background-image"]',srcMatching:[{srcRegExp:"(//.+?\\.img\\.susercontent\\.com/[^_@]+).*",processor:["$1"]}]}};

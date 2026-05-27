@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"zhihu.com":{ignore:".GifPlayer-icon",srcMatching:[{srcRegExp:"(//pic\\w+\\.zhimg\\.com/)(?:\\d+/)?(.+?)_.+?(@IMG@).*",processor:({srcRegExpObj:e,trigger:g,triggerSrc:r})=>e.test(r)&&`${RegExp.$1}${RegExp.$2}${g.matches(".GifPlayer > *")?".gif":RegExp.$3}`}]}};

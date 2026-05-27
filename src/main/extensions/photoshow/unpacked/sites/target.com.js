@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"target.com":{srcMatching:[{srcRegExp:"//target\\.scene7\\.com/is/image/[^?]+",processor:"$&?wid=800",selectors:'img[alt*="review"]'},{srcRegExp:"(//target\\.scene7\\.com/is/image/[^?]+).*",processor:"$1?wid=1200"},{srcRegExp:"(//edge\\.curalate\\.com/v\\d+/img/[^/]+).*",processor:"$1"}]}};

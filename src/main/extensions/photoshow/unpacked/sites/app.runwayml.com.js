@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"app.runwayml.com":{srcMatching:[{srcRegExp:"^.+?\\.runwayml\\.cloud/.+\\?.*\\binput_image=([^&]+).*",processor:({srcRegExpObj:e,triggerSrc:r})=>e.test(r)&&[decodeURIComponent(RegExp.$1),r]}]}};

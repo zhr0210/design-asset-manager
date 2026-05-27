@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"lofter.com":{referrerAddedHostnames:["lf127.net"]}};

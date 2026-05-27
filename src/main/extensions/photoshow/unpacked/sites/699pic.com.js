@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"699pic.com":{srcMatching:[{processor:({trigger:e})=>e.querySelector("image,img,picture"),selectors:":has(>img~video)"},{srcRegExp:"(//.+?\\.699pic\\.com/video_cover/.+@IMG@).*",processor:"$1"},{srcRegExp:"(//.+?\\.699pic\\.com/images/.+@IMG@!).*",processor:"$1seo.v1"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"onlyfans.com":{srcMatching:[{srcRegExp:"//thumbs\\.onlyfans\\.com/public/files/thumbs/\\w+(/.+@IMG@)",processor:"//public.onlyfans.com/files$1"}]}};

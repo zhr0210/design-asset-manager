@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"momoshop.com.tw":{srcMatching:[{srcRegExp:"(//.+?\\.momoshop\\.com\\.tw/(?:\\d+/)?goodsimg/.+?_O)\\w+(@IMG@)",processor:"$1$2"},{srcRegExp:"(//.+?\\.momoshop\\.com\\.tw/(?:\\d+/)?goodsimg/.+?_)\\w+?(\\d*@IMG@)",processor:"$1B$2"}]}};

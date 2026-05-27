@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"roblox.com":{srcMatching:[{srcRegExp:"(//.+?\\.rbxcdn\\.com/.+/)(?:384/216|576/324)(/.+)",processor:"$1768/432$2"},{srcRegExp:"(//.+?\\.rbxcdn\\.com/.+/)(\\d+)/\\2(/.+)",processor:"$11024/1024$3"}]}};

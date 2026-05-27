@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"mydrivers.com":{srcMatching:[{srcRegExp:"(//.+?\\.mydrivers\\.com/img/\\d+/)(?:s_?)(.+@IMG@)",processor:"$1$2"},{srcRegExp:"(//.+?\\.mydrivers\\.com/avatars/.+_)(?:small|medium)(@IMG@)",processor:"$1large$2"}]}};

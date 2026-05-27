@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"addons.mozilla.org":{srcMatching:[{srcRegExp:"(//addons\\.mozilla\\.org/user-media/addon_icons/.+?-)\\d+(@IMG@)",processor:"$1128$2"},{srcRegExp:"(//addons\\.mozilla\\.org/user-media/previews/)\\w+(/.+)@IMG@",processor:"$1full$2.png"}]}};

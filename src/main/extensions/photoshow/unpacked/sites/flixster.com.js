@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"flixster.com":{srcMatching:[{srcRegExp:"https?://resizing\\.flixster\\.com/.+(https?://.+)",processor:"$1"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"ajpw.tv":{srcMatching:[{processor:({trigger:r})=>r.querySelector(".image-rotator-image"),selectors:".pop-card"}]}};

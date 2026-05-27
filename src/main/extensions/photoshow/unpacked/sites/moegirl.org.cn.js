@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"moegirl.org.cn":{srcMatching:[{srcRegExp:"(//img\\.moegirl\\.org\\.cn/\\w+/)thumb/(.+?@IMG@).*",processor:"$1$2"},{srcRegExp:"//commons\\.moegirl\\.org\\.cn/extensions/Avatar/avatar\\.php.*",processor:"$&&res=original&nocache"}]}};

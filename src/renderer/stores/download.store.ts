@@ -78,6 +78,7 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
   },
 
   enqueueDownload: async (item) => {
+    console.log('[Store] enqueueDownload starting for:', item)
     const taskId = `dl-${Math.random().toString(36).substr(2, 9)}`
     const newTask: DownloadTask = {
       id: taskId,
@@ -245,3 +246,19 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
 
 // Auto load downloads on execution
 useDownloadStore.getState().loadDownloads()
+
+// Listen for main process injected download trigger events
+if (api && api.onInjectedDownloadTrigger) {
+  api.onInjectedDownloadTrigger(async (_event: any, item: any) => {
+    console.log('[Store] Received injected download trigger for URL:', item.downloadUrl)
+    await useDownloadStore.getState().enqueueDownload({
+      title: item.title,
+      sourceSite: item.sourceSite,
+      sourcePageUrl: item.sourcePageUrl,
+      downloadUrl: item.downloadUrl,
+      thumbnailUrl: item.thumbnailUrl,
+      captureMethod: item.captureMethod,
+      browserPageTitle: item.browserPageTitle
+    })
+  })
+}

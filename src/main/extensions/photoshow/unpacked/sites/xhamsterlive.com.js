@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"xhamsterlive.com":{srcMatching:[{processor:({trigger:r})=>r.querySelector("image,img,picture"),selectors:".video-thumb"},{srcRegExp:"(//static-cdn\\.strpst\\.com/.+/\\w+)-.+",processor:"$1"},{srcRegExp:"(//video-thumbs\\.strpst\\.com/.+/)\\d+(p/.+@IMG@)",processor:"$1720$2"}]}};

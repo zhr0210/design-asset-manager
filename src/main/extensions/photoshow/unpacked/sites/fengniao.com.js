@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"fengniao.com":{ignore:".picBox .btn",referrerAddedHostnames:["img-space.com"],srcMatching:[{srcRegExp:"(//.+?\\.img-space\\.com/.+\\?).*?&(auth_key=[^&]+)?.*",processor:["$1$2"]}]}};

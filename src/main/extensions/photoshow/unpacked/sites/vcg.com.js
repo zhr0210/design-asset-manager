@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"vcg.com":{srcMatching:[{srcRegExp:"(//.+\\.cfp\\.cn/.+/vcg/)\\d+(/.+?@IMG@)",processor:["//$1nowater800$2","//$1800$2"]}]}};

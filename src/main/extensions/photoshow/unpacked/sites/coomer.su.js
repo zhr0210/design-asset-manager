@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"coomer.su":{srcMatching:[{srcRegExp:"//img\\.coomer\\.su/thumbnail/(.+)",processor:["//n1.coomer.su/$1"]}]}};

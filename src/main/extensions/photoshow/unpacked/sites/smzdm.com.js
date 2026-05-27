@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"smzdm.com":{srcMatching:[{srcRegExp:"(//avatarimg\\.(?:smzdm|zdmimg)\\.com/.+-)\\w+(@IMG@)",processor:"$1big$2"},{srcRegExp:"(//.+?\\.(?:smzdm|zdmimg)\\.com/images/user_logo/.+-)\\w+(@IMG@)",processor:"$1big$2"},{srcRegExp:"(//.+?\\.(?:smzdm|zdmimg)\\.com/.+@IMG@)_\\w+(@IMG@)",processor:["$1","$1_orig$2"]}]}};

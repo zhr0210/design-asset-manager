@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"nohat.cc":{srcMatching:[{srcRegExp:"(//.+?\\.nohat\\.me/\\w+?)_\\d{2,}@IMG@",processor:"$1.png"},{srcRegExp:"(//.+?\\.nohat\\.cc/thumb/\\w+/)\\d+(/.+@IMG@)",processor:"$11020$2"},{srcRegExp:"(//.+?\\.nohat\\.cc/imgs/\\w+/)\\d+(@IMG@)",processor:"$10$2"}]}};

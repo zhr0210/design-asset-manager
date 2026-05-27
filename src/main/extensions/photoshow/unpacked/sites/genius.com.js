@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"genius.com":{srcMatching:[{srcRegExp:"//.+?\\.genius\\.com/.+/(https?.+)",processor:({srcRegExpObj:e,triggerSrc:r})=>decodeURIComponent(e.exec(r)?.[1]||"").replace(tools.buildSrcRegExp("(?:\\d+x?)+(?=@IMG@)"),"original")},{thumbType:"posters",srcRegExp:"(//video\\.primis\\.tech/.+)_\\w+(@IMG@)",processor:"$1$2"}]}};

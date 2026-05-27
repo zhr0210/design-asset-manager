@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"2dfan.com":{referrerAddedHostnames:["img.achost.top"],srcMatching:[{srcRegExp:"(//img\\.achost\\.top/.+/)\\w+?_(\\w+@IMG@)",processor:"$1$2"}]}};

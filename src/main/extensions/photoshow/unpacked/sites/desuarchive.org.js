@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"desuarchive.org":{srcMatching:[{processor:({trigger:e})=>e.closest(".thread_image_link").href,selectors:".thread_image_link .post_image"},{srcRegExp:"(//desu-usergeneratedcontent\\.xyz/.+?/)thumb(/.+)[a-z](@IMG@)",processor:"$1image$2$3"}]}};

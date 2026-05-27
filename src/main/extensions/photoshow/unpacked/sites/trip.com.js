@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"trip.com":{srcMatching:[{srcRegExp:"(//.+\\.(?:c-ctrip|tripcdn)\\.com/.+?)(?:_\\w+)*(@IMG@)",processor:"$1$2"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"arca.live":{srcMatching:[{processor:({trigger:r})=>r.closest(".vrow.column")?.querySelector(".vrow-preview img"),selectors:".vrow.column:has(.vrow-preview) .vcol.col-title"},{srcRegExp:"(//ac)(?:-.+)?(\\.namu\\.la/[^?]+).*",processor:"$1-o$2"}]}};

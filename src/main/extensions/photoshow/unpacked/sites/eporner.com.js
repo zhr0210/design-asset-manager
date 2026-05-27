@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"eporner.com":{ignore:'a>div[style*="background-image"]:empty',srcMatching:[{srcRegExp:"(//.+?\\.eporner\\.com/thumbs/.+_)\\d+(@IMG@)",processor:"$1360$2"},{srcRegExp:"(//.+?\\.eporner\\.com/gallery/.+)_\\d+x\\d+(@IMG@)",processor:"$1$2"}]}};

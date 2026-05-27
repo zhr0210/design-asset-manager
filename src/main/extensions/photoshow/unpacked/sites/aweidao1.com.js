@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"aweidao1.com":{srcMatching:[{srcRegExp:"(image\\d+\\.aweidao1\\.com/)thumb(/.+@IMG@)",processor:"$1image$2"}]}};

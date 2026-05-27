@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={nike:{srcMatching:[{srcRegExp:"(//static\\.nike\\.com/.+?/images/).+?/(\\w{8}(?:-\\w{4}){3}-\\w{12}/.+@IMG@)",processor:"$1$2"}]}};

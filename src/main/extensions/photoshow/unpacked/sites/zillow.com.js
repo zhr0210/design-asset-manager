@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"zillow.com":{srcMatching:[{srcRegExp:"(//.+?\\.zillowstatic\\.com/.+/\\w{32}-).+(@IMG@)",processor:"$1full$2"}]}};

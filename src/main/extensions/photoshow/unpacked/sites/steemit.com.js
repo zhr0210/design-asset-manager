@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"steemit.com":{srcMatching:[{srcRegExp:"(//steemitimages\\.com/u/[^/]+/avatar\\b).*",processor:"$1/large"},{srcRegExp:"https?://steemitimages\\.com/\\d+x\\d+/(https?://.+?\\.steemitimages\\.com/\\w+).*",processor:"$1"}]}};

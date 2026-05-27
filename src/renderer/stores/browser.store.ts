@@ -54,9 +54,11 @@ export const useBrowserStore = create<BrowserState>((set) => {
     setActiveSiteId: (activeSiteId) => set({ activeSiteId }),
 
     loadUrl: async (url, siteId) => {
+      console.log('[BrowserStore] loadUrl called for:', url, siteId, 'electronAPI exists:', !!api)
       set({ activeSiteId: siteId, isLoading: true })
       if (api) {
         try {
+          console.log('[BrowserStore] Calling api.browserLoadUrl...')
           await api.browserLoadUrl(url, siteId)
         } catch (err) {
           console.error('[BrowserStore] Failed to load URL:', err)
@@ -64,6 +66,7 @@ export const useBrowserStore = create<BrowserState>((set) => {
         }
       } else {
         // Mock fallback for web environments
+        console.log('[BrowserStore] electronAPI is missing, falling back to mock...')
         set({ currentUrl: url, pageTitle: 'Mock Web Page', isLoading: false })
       }
     },

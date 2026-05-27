@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={woolworths:{srcMatching:[{srcRegExp:"(assets\\.woolworths\\.com\\.au/images/.+?@IMG@(?:\\?impolicy=[^&]+)?).*",processor:"$1"}]}};

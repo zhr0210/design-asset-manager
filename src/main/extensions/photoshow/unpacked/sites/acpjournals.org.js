@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"acpjournals.org":{srcMatching:[{srcRegExp:"/medium/(\\w+)\\.jpg",processor:"/large/$1.jpeg"}]}};

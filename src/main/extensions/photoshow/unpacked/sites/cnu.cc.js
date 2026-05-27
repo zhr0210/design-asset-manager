@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"cnu.cc":{ignore:".work-thumbnail .author",srcMatching:[{srcRegExp:"(//imgoss\\.cnu\\.cc/.+?x-oss-process=)[^&]+(.*)",processor:"$1style/content$2"},{srcRegExp:"(//www\\.cnu\\.cc/uploads/avatar/images/\\w+_)\\d+(@IMG@)",processor:"$1200$2"}]}};

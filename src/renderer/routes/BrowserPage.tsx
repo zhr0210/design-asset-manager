@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Globe,
   ArrowLeft,
@@ -6,25 +7,16 @@ import {
   RotateCw,
   X,
   Search,
-  ScanLine,
-  Download,
-  Loader2,
-  CheckSquare,
-  Square,
-  ExternalLink,
-  Image as ImageIcon,
-  Check,
+  ChevronRight,
   Compass,
-  ChevronLeft,
-  ChevronRight
+  LayoutDashboard
 } from 'lucide-react'
 import { useBrowserStore } from '../stores/browser.store'
-import { useExtractorStore } from '../stores/extractor.store'
 import { useSiteStore } from '../stores/site.store'
-import { useDownloadStore } from '../stores/download.store'
 import BrowserViewport from '../components/browser/BrowserViewport'
 
 export default function BrowserPage() {
+  const navigate = useNavigate()
   const sites = useSiteStore((s) => s.sites)
   const loadSites = useSiteStore((s) => s.loadSites)
 
@@ -39,25 +31,11 @@ export default function BrowserPage() {
     goBack,
     goForward,
     reload,
-    stop,
-    setCurrentUrl
+    stop
   } = useBrowserStore()
 
-  const {
-    extractedAssets,
-    selectedAssetIds,
-    isExtracting,
-    extractError,
-    scanCurrentPage,
-    toggleSelectAsset,
-    selectAll,
-    selectNone
-  } = useExtractorStore()
-
-  const { enqueueDownload, tasks } = useDownloadStore()
   const [urlInput, setUrlInput] = useState('')
   const [isLeftOpen, setIsLeftOpen] = useState(false)
-  const [isRightOpen, setIsRightOpen] = useState(false)
 
   // Load configured sites from database on mount
   useEffect(() => {
@@ -73,8 +51,10 @@ export default function BrowserPage() {
 
   // If no site is loaded, load the first one by default
   useEffect(() => {
+    console.log('[BrowserPage] sites list changed:', sites.map(s => s.id), 'activeSiteId:', activeSiteId)
     if (sites.length > 0 && !activeSiteId) {
       const firstSite = sites[0]
+      console.log('[BrowserPage] Triggering default loadUrl for first site:', firstSite.baseUrl, firstSite.id)
       loadUrl(firstSite.baseUrl, firstSite.id)
     }
   }, [sites, activeSiteId])
@@ -90,37 +70,8 @@ export default function BrowserPage() {
     loadUrl(formattedUrl, activeSiteId || 'custom')
   }
 
-  const handleDownloadSelected = async () => {
-    const selected = extractedAssets.filter((a) => selectedAssetIds.includes(a.id))
-    for (const asset of selected) {
-      const targetUrl = asset.downloadUrl || asset.previewUrl || asset.thumbnailUrl
-      if (!targetUrl) continue
-
-      // Clean special characters from titles
-      const cleanTitle = (asset.title || '提取素材').trim().substring(0, 100)
-
-      await enqueueDownload({
-        title: cleanTitle,
-        sourceSite: asset.sourceSite,
-        sourcePageUrl: asset.sourcePageUrl,
-        downloadUrl: targetUrl,
-        thumbnailUrl: asset.thumbnailUrl,
-        // Custom arguments to be supported in download.store
-        captureMethod: 'browser_extract',
-        browserPageTitle: pageTitle || '素材浏览器页面'
-      } as any)
-    }
-    selectNone()
-  }
-
-  // Check if an item is already inside the download queue
-  const getTaskStatus = (url: string) => {
-    const matched = tasks.find((t) => t.downloadUrl === url)
-    return matched ? matched.status : null
-  }
-
   return (
-    <div className="flex-1 flex h-full select-none overflow-hidden pr-1 relative">
+    <div className="flex-1 flex h-full select-none overflow-hidden p-4 bg-slate-50 relative">
       {/* Left drawer hover handle */}
       {!isLeftOpen && (
         <div
@@ -191,6 +142,16 @@ export default function BrowserPage() {
         {/* Navigation Toolbar */}
         <div className="glass-panel p-3.5 rounded-2xl bg-white/80 shadow-premium shrink-0 space-y-3">
           <div className="flex items-center gap-3">
+            {/* Back to Home Button */}
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 flex items-center gap-1.5 transition-premium text-[12.5px] font-bold active:scale-95 border border-slate-200 shadow-sm shrink-0"
+              title="返回系统主页"
+            >
+              <LayoutDashboard className="w-4 h-4 text-brand-500" />
+              <span>返回主页</span>
+            </button>
+
             {/* History Controls */}
             <div className="flex items-center gap-1.5 shrink-0">
               <button
@@ -243,166 +204,6 @@ export default function BrowserPage() {
         {/* Embedded Browser Mount Viewport */}
         <div className="flex-1 relative overflow-hidden min-h-0">
           <BrowserViewport />
-        </div>
-      </div>
-
-      {/* Right drawer hover handle */}
-      {!isRightOpen && !isExtracting && (
-        <div
-          onMouseEnter={() => setIsRightOpen(true)}
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-16 rounded-l-xl bg-slate-200 hover:bg-brand-500 text-slate-400 hover:text-white flex items-center justify-center cursor-pointer transition-premium z-30 shadow-sm border border-r-0 border-slate-350/40"
-          title="展开素材识别"
-        >
-          <ChevronLeft className="w-3 h-3 stroke-[3]" />
-        </div>
-      )}
-
-      {/* 3. Right Sidebar: Extracted Asset List & Operations */}
-      <div
-        onMouseLeave={() => setIsRightOpen(false)}
-        className={`h-full shrink-0 transition-all duration-300 ease-out overflow-hidden z-20 ${
-          isRightOpen || isExtracting ? 'w-72 opacity-100 ml-4' : 'w-0 opacity-0 ml-0'
-        }`}
-      >
-        <div className="w-72 glass-panel p-4 rounded-2xl bg-white/95 shadow-premium flex flex-col h-full overflow-hidden border border-slate-200/50">
-          {/* Header & Scan Button */}
-          <div className="shrink-0 border-b border-slate-100 pb-3 mb-4 space-y-3.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <ScanLine className="w-4 h-4 text-brand-500" />
-                <h3 className="font-bold text-slate-800 text-[13px] tracking-wide">网页素材识别</h3>
-              </div>
-              {extractedAssets.length > 0 && (
-                <span className="text-[10px] font-bold bg-brand-50 text-brand-600 border border-brand-100 px-2 py-0.5 rounded-full select-none">
-                  {selectedAssetIds.length}/{extractedAssets.length} 项
-                </span>
-              )}
-            </div>
-
-            <button
-              onClick={scanCurrentPage}
-              disabled={isExtracting || isLoading}
-              className="w-full py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 disabled:bg-slate-100 text-white disabled:text-slate-400 font-bold text-[12.5px] transition-premium shadow-md shadow-brand-500/10 flex items-center justify-center gap-2"
-            >
-              {isExtracting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>正在扫描 DOM 节点...</span>
-                </>
-              ) : (
-                <>
-                  <ScanLine className="w-4 h-4 stroke-[2.5]" />
-                  <span>扫描当前网页</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Extracted Asset Cards List */}
-          <div className="flex-1 overflow-y-auto space-y-3 pr-0.5 min-h-0 select-none">
-            {isExtracting ? (
-              <div className="text-center py-20 text-slate-400 space-y-2">
-                <Loader2 className="w-6 h-6 animate-spin mx-auto text-brand-500 stroke-[1.5]" />
-                <p className="text-[11.5px] font-semibold">正在提取大图、背景图以及 srcset 节点...</p>
-              </div>
-            ) : extractedAssets.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2.5">
-                {extractedAssets.map((asset) => {
-                  const isChecked = selectedAssetIds.includes(asset.id)
-                  const taskStatus = getTaskStatus(asset.downloadUrl || asset.previewUrl || asset.thumbnailUrl || '')
-                  return (
-                    <div
-                      key={asset.id}
-                      onClick={() => !taskStatus && toggleSelectAsset(asset.id)}
-                      className={`group relative rounded-xl overflow-hidden border p-1.5 transition-premium bg-white ${
-                        taskStatus
-                          ? 'opacity-60 border-slate-100 cursor-default'
-                          : isChecked
-                          ? 'border-brand-500 ring-1 ring-brand-500 cursor-pointer shadow-md'
-                          : 'border-slate-150 hover:border-slate-300 hover:shadow-card-hover cursor-pointer'
-                      }`}
-                    >
-                      {/* Image Thumbnail */}
-                      <div className="aspect-square rounded-lg overflow-hidden bg-slate-50 relative">
-                        <img
-                          src={asset.thumbnailUrl}
-                          alt={asset.title || 'Extracted'}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-premium"
-                        />
-                        
-                        {/* Dimensional overlay */}
-                        {asset.width && asset.height && (
-                          <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/50 text-white font-bold text-[8px] tracking-wide select-none">
-                            {asset.width}x{asset.height}
-                          </span>
-                        )}
-
-                        {/* Top-left checkbox overlay */}
-                        {!taskStatus && (
-                          <div className="absolute top-1 left-1">
-                            {isChecked ? (
-                              <div className="w-4.5 h-4.5 rounded bg-brand-500 text-white flex items-center justify-center shadow-sm">
-                                <Check className="w-3 h-3 stroke-[3]" />
-                              </div>
-                            ) : (
-                              <div className="w-4.5 h-4.5 rounded bg-black/25 hover:bg-black/40 border border-white/20 transition-premium" />
-                            )}
-                          </div>
-                        )}
-
-                        {/* Status tag */}
-                        {taskStatus && (
-                          <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center text-[10px] font-bold text-white tracking-wide">
-                            {taskStatus === 'completed' ? '已在库中' : '下载中...'}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Brief details */}
-                      <div className="mt-1.5 px-0.5 flex flex-col gap-0.5 overflow-hidden">
-                        <span className="text-[9px] text-slate-400 font-bold uppercase truncate tracking-wide">
-                          {asset.fileType || 'JPG'}
-                        </span>
-                        {asset.title && (
-                          <span className="text-[10px] font-semibold text-slate-700 truncate">
-                            {asset.title}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            ) : (
-              <div className="text-center py-20 text-slate-400 border-2 border-dashed border-slate-100 rounded-2xl px-4 flex flex-col justify-center gap-2 bg-slate-50/50">
-                <ImageIcon className="w-7 h-7 mx-auto stroke-[1.5] text-slate-350" />
-                <p className="text-[11.5px] font-bold text-slate-500">这里是素材识别面板</p>
-                <p className="text-[10px] text-slate-400 font-semibold leading-relaxed">
-                  在内嵌网页中浏览，然后点击上方的“扫描当前网页”按钮，即可把符合标准的高清图片提取到此处。
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Action Footer Button */}
-          {extractedAssets.length > 0 && (
-            <div className="shrink-0 border-t border-slate-100 pt-3 mt-3 space-y-2">
-              <div className="flex items-center gap-2 justify-between text-[11px] font-bold text-slate-400 select-none px-1">
-                <button onClick={selectAll} className="hover:text-brand-500 transition-premium">全选所有</button>
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-                <button onClick={selectNone} className="hover:text-brand-500 transition-premium">取消选择</button>
-              </div>
-
-              <button
-                onClick={handleDownloadSelected}
-                disabled={selectedAssetIds.length === 0}
-                className="w-full py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 disabled:bg-slate-100 text-white disabled:text-slate-400 font-bold text-[12.5px] transition-premium shadow-md shadow-brand-500/10 flex items-center justify-center gap-2 active:scale-[0.99]"
-              >
-                <Download className="w-4 h-4 stroke-[2.5]" />
-                <span>加入下载队列 ({selectedAssetIds.length})</span>
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

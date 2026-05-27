@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"primevideo.com":{ignore:"._0r6cJW.ESUyK5",srcMatching:[{srcRegExp:"(//.+?\\.media-amazon\\.com/images/[^.]+).+(@IMG@)",processor:["$1$2"]},{processor:({trigger:e})=>e.querySelector("img"),selectors:'[data-testid="super-carousel-card"]'}]}};

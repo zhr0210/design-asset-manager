@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"chii.in":{ignore:".overlay,#captcha_img_code",srcMatching:[{srcRegExp:"(//lain\\.bgm\\.tv/).+?/(pic/cover/.+@IMG@)",processor:"$1$2"},{srcRegExp:"(//lain\\.bgm\\.tv/pic/user/)\\w(/.+@IMG@)",processor:["$1c$2","$1l$2"]},{srcRegExp:"(//lain\\.bgm\\.tv/pic/(?:\\w+/)+)\\w(/.+@IMG@)",processor:"$1l$2"}]}};

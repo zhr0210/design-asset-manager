@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"steampowered.com":{srcMatching:[{processor:({trigger:e})=>e.querySelector("image,img,picture"),selectors:".sale_capsule_image_ctn"},{srcRegExp:"(//avatars\\.fastly\\.steamstatic\\.com/.+?)(?:_medium)?(@IMG@)",processor:"$1_full$2"},{srcRegExp:"(//.+?\\.steamstatic\\.com/.+?)(?<!capsule)[._]\\d+x\\d+(@IMG@)",processor:"$1$2"}]}};

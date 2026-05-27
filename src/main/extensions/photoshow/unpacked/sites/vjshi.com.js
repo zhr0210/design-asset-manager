@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"vjshi.com":{referrerAddedHostnames:["vjshi.com"],srcMatching:[{srcRegExp:"(//.+?\\.vjshi\\.com/.+)/main(@IMG@)",processor:["$1$2"]}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"razorsql.com":{srcMatching:[{processor:({trigger:r})=>r.closest("a").href,selectors:'a[href^="images/"] img'},{srcRegExp:"(//razorsql\\.com/images/.+?)_\\w+(@IMG@)",processor:"$1$2"}]}};

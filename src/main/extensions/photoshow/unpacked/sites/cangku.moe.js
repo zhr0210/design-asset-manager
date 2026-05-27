@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"cangku.moe":{srcMatching:[{srcRegExp:".*(https?://.+@IMG@).*",processor:({srcRegExpObj:e,trigger:c})=>e.exec(c.querySelector(".cover")?.dataset.src)?.[1],selectors:".post-card-content"}]}};

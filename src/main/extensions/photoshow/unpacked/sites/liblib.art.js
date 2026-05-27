@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"liblib.art":{srcMatching:[{srcRegExp:"([^?]+)\\?.+",processor:({trigger:i})=>["$1",h=>h.width*h.height<=i.width*i.height]}]}};

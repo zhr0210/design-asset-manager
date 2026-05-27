@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"soundcloud.com":{ignore:".sc-button",srcMatching:[{srcRegExp:"(//.+?\\.sndcdn\\.com/.+-)t\\d+x\\d+(@IMG@)",processor:["$1original$2","$1t500x500$2"]}]}};

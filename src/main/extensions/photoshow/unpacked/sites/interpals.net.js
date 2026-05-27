@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"interpals.net":{srcMatching:[{srcRegExp:"(//ipstatic\\.net/)thumbs/\\d+x\\d+(/.+?)(?:_\\d{1,2})?(@IMG@).*",processor:"$1photos$2$3"}]}};

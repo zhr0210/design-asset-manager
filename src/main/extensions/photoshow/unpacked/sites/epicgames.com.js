@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"epicgames.com":{srcMatching:[{processor:({trigger:e})=>e.querySelector("image,img,picture"),selectors:".css-u421q6,.css-yb58t8"},{srcRegExp:"(//.+?\\.epicgames\\.com/.+?)(?:_[a-z]+)+(@IMG@)",processor:"$1$2"}]}};

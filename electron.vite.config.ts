@@ -7,7 +7,21 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      rollupOptions: {
+        input: {
+          index: resolve(__dirname, 'src/preload/index.ts'),
+          browser: resolve(__dirname, 'src/preload/browser.ts')
+        },
+        output: {
+          format: 'cjs',
+          entryFileNames: '[name].cjs',
+          chunkFileNames: '[name].cjs',
+          assetFileNames: '[name].[ext]'
+        }
+      }
+    }
   },
   renderer: {
     resolve: {

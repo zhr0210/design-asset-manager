@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={bunnings:{maxLookupDepth:5,srcMatching:[{srcRegExp:"(.+?/image-id/\\w+).*",processor:"$1"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"etsy.com":{srcMatching:[{srcRegExp:"(//.+\\.etsystatic\\.com/isc/.+?_)\\d+x\\d+(.*@IMG@.*)",processor:"$1190x190$2"},{srcRegExp:"(//.+\\.etsystatic\\.com/.+?_)\\d+x(?:\\d+|N)(.*@IMG@.*)",processor:"$1fullxfull$2"},{srcRegExp:"(//.+\\.etsystatic\\.com/video/upload/)[^/]+/(.*@IMG@.*)",processor:"$1$2"}]}};

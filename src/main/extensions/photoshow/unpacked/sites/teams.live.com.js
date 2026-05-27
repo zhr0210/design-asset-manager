@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"teams.live.com":{ignore:'img[itemtype*="Emoji"]',srcMatching:[{processor:({trigger:r,triggerSrc:e})=>r.dataset.gallerySrc||r.dataset.origSrc||e}]}};

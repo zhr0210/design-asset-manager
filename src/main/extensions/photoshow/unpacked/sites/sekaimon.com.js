@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"sekaimon.com":{srcMatching:[{srcRegExp:"(//i\\.ebayimg\\.com/.+/s-l)\\d+(?:/p)?(@IMG@)",processor:"$12000$2"},{srcRegExp:"(//thumbs\\d+\\.ebaystatic\\.com/.+/l)\\d+(/.+@IMG@)",processor:"$12000$2"},{srcRegExp:"(//i\\.ebayimg\\.com/.+/\\$_)\\d+(@IMG@)",processor:"$110$2"}]}};

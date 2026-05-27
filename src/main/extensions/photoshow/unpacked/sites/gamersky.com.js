@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"gamersky.com":{srcMatching:[{srcRegExp:"(//.+?\\.gamersky\\.com/avatar/.+_)\\w+(@IMG@)",processor:"$1original$2"},{srcRegExp:"(//.+?\\.gamersky\\.com/image.+)_[A-Z]+(@IMG@)",processor:"$1$2"},{srcRegExp:"(//.+?\\.gamersky\\.com/upimg/.+/)\\w+?(_\\d+@IMG@)",processor:["$1origin$2"]}]}};

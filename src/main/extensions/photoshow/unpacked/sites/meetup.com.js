@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"meetup.com":{srcMatching:[{srcRegExp:"(//.+?\\.meetupstatic\\.com/photos/.+/)\\w+(_\\d+@IMG@).*",processor:"$1highres$2"},{srcRegExp:"(//.+?\\.meetupstatic\\.com/images/.+/\\d+)/\\d+x\\d+(@IMG@).*",processor:"$1$2"}]}};

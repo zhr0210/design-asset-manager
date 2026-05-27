@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"9gag.com":{srcMatching:[{srcRegExp:"(//img-9gag-fun\\.9cache\\.com/photo/\\w+_)\\d+\\w*(@IMG@)",processor:"$1700b$2"},{srcRegExp:"(//accounts-cdn\\.9gag\\.com/media/avatar/\\d+_)\\d+(.*@IMG@)",processor:"$1800$2"}]}};

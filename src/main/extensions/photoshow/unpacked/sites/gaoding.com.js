@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"gaoding.com":{maxLookupDepth:3}};

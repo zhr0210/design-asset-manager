@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"simpcity.su":{srcMatching:[{srcRegExp:"(//.+?\\.jpg\\d+\\.su/.+/avatars/)\\w(/.+@IMG@)",processor:"$1o$2"},{exclusive:!1,srcRegExp:"(//.+?\\.jpg\\d+\\.su/.+)\\.(?:md|th)(@IMG@)",processor:({srcRegExpObj:r,trigger:s,triggerSrc:e})=>(tools.getBackgroundImageSrc(s)||e).replace(r,"$1$2"),selectors:'img[style*="background-image"]'}]}};

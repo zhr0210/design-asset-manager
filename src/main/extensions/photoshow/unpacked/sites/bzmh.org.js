@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"bzmh.org":{srcMatching:[{srcRegExp:"//pro-api\\.mgsearcher\\.com/.+/image\\?.*\\burl=([^&]+)",processor:({srcRegExpObj:r,triggerSrc:e})=>r.test(e)&&decodeURIComponent(RegExp.$1)}]}};

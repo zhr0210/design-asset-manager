@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"redgifs.com":{srcMatching:[{srcRegExp:"(//.+?\\.redgifs\\.com/.+-)(?:small|medium)(@IMG@)",processor:"$1large$2"}]}};

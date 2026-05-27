@@ -6,8 +6,11 @@ export function registerSiteIpc() {
   const service = new SiteService()
 
   ipcMain.handle('sites:list', async () => {
+    console.log('[IPC] sites:list called')
     try {
-      return service.listSites()
+      const sites = service.listSites()
+      console.log('[IPC] sites:list returning sites count:', sites.length)
+      return sites
     } catch (err) {
       console.error('[IPC] sites:list error:', err)
       throw err

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"nowtv.com.tr":{srcMatching:[{srcRegExp:"(.+/)(?:posters|thumbnail)(/.+)",processor:"$1cover$2"}]}};

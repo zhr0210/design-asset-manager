@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"behance.net":{srcMatching:[{srcRegExp:"(//.+\\.behance\\.net/projects/)\\w+(/.+@IMG@)",processor:"$1original$2"},{srcRegExp:"(//.+\\.behance\\.net/project_modules/)(?:\\w+_)?\\d+(/.+@IMG@)",processor:"$1fs$2"},{srcRegExp:"(//.+\\.behance\\.net/(?:user|team)/)\\d+(/.+@IMG@)",processor:"$1276$2"}]}};

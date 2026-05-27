@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"nhentai.net":{srcMatching:[{srcRegExp:"//t(\\d+\\.nhentai\\.net/.+/)(?:cover|thumb)(@IMG@).*",processor:"//i$11$2"},{srcRegExp:"//t(\\d+\\.nhentai\\.net/.+/\\d+)\\w*(@IMG@).*",processor:"//i$1$2"}]}};

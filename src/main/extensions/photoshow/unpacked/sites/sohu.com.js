@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"sohu.com":{srcMatching:[{srcRegExp:"(//.+?\\.itc\\.cn/)(?:[^/]+/)?(images.+@IMG@)",processor:"$1$2"}]}};

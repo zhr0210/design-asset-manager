@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"ruten.com.tw":{srcMatching:[{srcRegExp:"(//.+?\\.rimg\\.com\\.tw/.+)_\\w(@IMG@)",processor:"$1$2"}]}};

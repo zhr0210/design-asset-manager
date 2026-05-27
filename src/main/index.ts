@@ -1,5 +1,6 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
+import { existsSync } from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { initDatabase } from './db'
 import { registerSiteIpc } from './ipc/site.ipc'
@@ -12,6 +13,8 @@ import { EmbeddedBrowserManager } from './services/browser-view.manager'
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
 function createWindow(): void {
+  const preloadPath = join(__dirname, '../preload/index.cjs')
+
   const mainWindow = new BrowserWindow({
     width: 1280,
     height: 832,
@@ -22,7 +25,7 @@ function createWindow(): void {
     title: 'Design Asset Manager',
     backgroundColor: '#f8fafc',
     webPreferences: {
-      preload: join(__dirname, '../preload/index.mjs'),
+      preload: preloadPath,
       sandbox: false,
       contextIsolation: true,
       nodeIntegration: false
@@ -31,6 +34,8 @@ function createWindow(): void {
 
   // Register main window inside our EmbeddedBrowserManager singleton
   EmbeddedBrowserManager.getInstance().setMainWindow(mainWindow)
+
+
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

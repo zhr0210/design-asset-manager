@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"iwara.tv":{srcMatching:[{srcRegExp:"(//.+?\\.iwara\\.tv/image/)thumbnail(/.+@IMG@)",processor:["$1original$2","$&"]},{srcRegExp:"(//img\\.dlsite\\.jp/)resize(/.+)_\\d+x\\d+(@IMG@)",processor:"$1modpub$2$3"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"huaban.com":{referrerAddedHostnames:["huaban.com","huabanimg.com"]}};

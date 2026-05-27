@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"entamenext.com":{srcMatching:[{srcRegExp:"(//(?:.+\\.)?entamenext\\.com/.+/)\\d+x\\d+(/.+@IMG@)",processor:"$1ORG$2"}]}};

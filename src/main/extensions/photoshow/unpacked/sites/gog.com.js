@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"gog.com":{srcMatching:[{srcRegExp:"(//.+?\\.gog(?:-statics)?\\.com/\\w{64}).*(@IMG@)",processor:"$1$2"}]}};

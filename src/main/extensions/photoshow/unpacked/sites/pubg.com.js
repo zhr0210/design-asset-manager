@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"pubg.com":{srcMatching:[{srcRegExp:"(//.+?\\.krafton\\.com/.+)_thumb(@IMG@)",processor:"$1$2"}]}};

@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"catch.co.nz":{srcMatching:[{srcRegExp:"(//s\\.catch\\.com\\.au/.+)_[^/]+(@IMG@)",processor:"$1$2"},{srcRegExp:"(/magazine/.+?)(?:-\\d+x\\d+)?(@IMG@)",processor:"$1$2"}]}};

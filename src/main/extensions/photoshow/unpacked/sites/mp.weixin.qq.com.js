@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"mp.weixin.qq.com":{srcMatching:[{srcRegExp:"(//mmbiz\\.q(?:logo|pic)\\.cn/(?:\\w*/){2}).*",processor:"$1"},{srcRegExp:"(//mp\\.weixin\\.qq\\.com/mp/qrcode?.*?&size=)\\d+(.*)",processor:"$1980$2"}]}};

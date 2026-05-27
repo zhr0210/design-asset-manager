@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"bsky.app":{srcMatching:[{srcRegExp:"(//.+?\\.bsky\\.app/img/avatar)_\\w+(/.+)(?:@.+)?",processor:"$1$2"},{srcRegExp:"(//.+?\\.bsky\\.app/img/feed_)\\w+(/.+)(?:@.+)?",processor:"$1fullsize$2"}]}};

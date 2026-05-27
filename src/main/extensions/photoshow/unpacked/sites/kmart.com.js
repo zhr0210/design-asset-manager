@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"kmart.com":{srcMatching:[{srcRegExp:"(.+\\.shld\\.net/[^?]+)(?:\\?.*\\bsrc=([^&]+).*)?",processor:({srcRegExpObj:e,triggerSrc:r})=>e.test(r)&&(decodeURIComponent(RegExp.$2||"")||RegExp.$1)}]}};

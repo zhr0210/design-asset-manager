@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"fapreactor.com":{referrerAddedHostnames:["fapreactor.com"],srcMatching:[{srcRegExp:"(//.+?/pics/post/)(?:full/)?([^/]+@IMG@)",processor:"$1full/$2"}]}};

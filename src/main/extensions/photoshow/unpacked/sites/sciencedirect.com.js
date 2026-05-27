@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"sciencedirect.com":{srcMatching:[{srcRegExp:"(//.+?\\.els-cdn\\.com/content/image/.+-cov)\\d+([wh]@IMG@)",processor:"$1200$2"},{srcRegExp:"(//.+?\\.els-cdn\\.com/content/image/.+)\\.sml",processor:"$1_lrg.jpg"},{srcRegExp:"(//.+?\\.els-cdn\\.com/content/image/.+?)(?:_lrg)?(@IMG@)",processor:"$1_lrg$2"}]}};

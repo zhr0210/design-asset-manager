@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"e-talenta.eu":{srcMatching:[{srcRegExp:"(//media\\.e-talenta\\.eu/foto/)\\d+/\\d+/(\\d+@IMG@.*)",processor:"$1$2"}]}};

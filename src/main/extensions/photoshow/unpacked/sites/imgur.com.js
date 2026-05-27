@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"imgur.com":{srcMatching:[{srcRegExp:"(//i\\.imgur\\.com/\\w{7}).*?(@IMG@).*",processor:["$1.webp","$1$2"]},{srcRegExp:"(//i\\.imgur\\.com/\\w{7}).*?\\.mp4",processor:({srcRegExpObj:r,trigger:c})=>r.test(c.currentSrc)&&c.currentSrc.replace(r,"$1.webp"),selectors:"video"}]}};

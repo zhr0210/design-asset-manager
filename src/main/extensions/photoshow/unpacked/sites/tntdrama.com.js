@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"tntdrama.com":{srcMatching:[{srcRegExp:"(//.+?/w_)\\d+(/.*)",processor:"$1auto$2"}]}};

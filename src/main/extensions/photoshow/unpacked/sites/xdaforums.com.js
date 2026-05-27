@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"xdaforums.com":{srcMatching:[{srcRegExp:"(/files/.+)-\\d+x\\d+(?:_\\w+)?(@IMG@)",processor:"$1$2"},{srcRegExp:"(/data/avatars/)\\w(/.+)",processor:"$1o$2"},{processor:({trigger:r})=>r.parentElement.href,selectors:"a > img"}]}};

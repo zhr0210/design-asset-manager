@@ -1,0 +1,1 @@
+window.SITE_SETTINGS={"mixbook.com":{srcMatching:[{srcRegExp:"//assets\\.mixbook\\.com/.+/images/templates/(\\w+)/.+(@IMG@)",processor:"//media.mixbook.com/images/templates/$1$2"}]}};
