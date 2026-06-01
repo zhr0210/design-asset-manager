@@ -16,6 +16,7 @@ import {
 import { useSettingsStore } from '../stores/settings.store'
 import DoctorPanel from '../components/settings/DoctorPanel'
 import AiRuntimePanel from '../components/settings/AiRuntimePanel'
+import SettingsMigrationPanel from '../components/settings/SettingsMigrationPanel'
 
 export default function Settings() {
   const { settings, updateSettings, clearCache, loadSettings } = useSettingsStore()
@@ -217,6 +218,8 @@ export default function Settings() {
             <DoctorPanel />
 
             <AiRuntimePanel />
+
+            <SettingsMigrationPanel />
 
             <div className="rounded-[24px] border border-white bg-white p-6 shadow-premium">
               <h4 className="flex items-center gap-2 text-[14px] font-black text-slate-900">

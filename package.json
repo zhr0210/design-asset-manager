@@ -35,6 +35,7 @@
     "test-settings-service-defaults": "node scripts/run-ts-test.mjs scripts/settings-service-defaults.test.ts",
     "test-settings-migration": "node scripts/run-ts-test.mjs scripts/settings-migration.test.ts",
     "test-settings-migration-ipc": "node scripts/run-ts-test.mjs scripts/settings-migration-ipc-contract.test.ts",
+    "test-settings-migration-panel": "node scripts/run-ts-test.mjs scripts/settings-migration-panel-contract.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },
