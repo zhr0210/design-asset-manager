@@ -65,6 +65,10 @@ export class SettingsService {
     return SettingsService.instance
   }
 
+  public getSettingsPath(): string {
+    return this.configPath
+  }
+
   public createMigrationPlan(): SettingsMigrationPlan {
     return this.migrationService.createMigrationPlan(this.getSettings())
   }

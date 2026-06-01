@@ -50,6 +50,18 @@ import {
   CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG
 } from '../shared/contracts/ai-runtime.contract'
 import type { AiRuntimeConfig } from '../shared/types/ai-runtime.types'
+import {
+  CHANNEL_SETTINGS_MIGRATION_ANALYZE,
+  CHANNEL_SETTINGS_MIGRATION_CREATE_PLAN,
+  CHANNEL_SETTINGS_MIGRATION_DRY_RUN,
+  CHANNEL_SETTINGS_MIGRATION_LIST_BACKUPS
+} from '../shared/contracts/settings-migration.contract'
+import type {
+  SettingsMigrationAnalyzeRequest,
+  SettingsMigrationCreatePlanRequest,
+  SettingsMigrationDryRunRequest,
+  SettingsMigrationListBackupsRequest
+} from '../shared/contracts/settings-migration.contract'
 
 // Expose safe APIs to the React renderer
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -226,6 +238,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     healthCheck: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK, { runtimeId }),
     healthCheckAll: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL),
     updateRuntimeConfig: (runtimeId: string, config: Partial<AiRuntimeConfig>) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG, { runtimeId, config })
+  },
+
+  // Settings Migration IPC API
+  settingsMigration: {
+    createPlan: (request?: SettingsMigrationCreatePlanRequest) => ipcRenderer.invoke(CHANNEL_SETTINGS_MIGRATION_CREATE_PLAN, request),
+    dryRun: (request?: SettingsMigrationDryRunRequest) => ipcRenderer.invoke(CHANNEL_SETTINGS_MIGRATION_DRY_RUN, request),
+    analyze: (request?: SettingsMigrationAnalyzeRequest) => ipcRenderer.invoke(CHANNEL_SETTINGS_MIGRATION_ANALYZE, request),
+    listBackups: (request?: SettingsMigrationListBackupsRequest) => ipcRenderer.invoke(CHANNEL_SETTINGS_MIGRATION_LIST_BACKUPS, request)
   },
 
   // AI Model IPC API

@@ -19,6 +19,7 @@ export * from './types/runtime-profile.types'
 export * from './types/runtime-package.types'
 export * from './types/ai-runtime.types'
 export * from './types/ai-runtime-settings.types'
+export * from './types/settings-migration.types'
 
 // Export Constants
 export * from './constants/ai-sources.constants'
@@ -36,3 +37,4 @@ export * from './contracts/settings.contract'
 export * from './contracts/download.contract'
 export * from './contracts/doctor.contract'
 export * from './contracts/ai-runtime.contract'
+export * from './contracts/settings-migration.contract'
