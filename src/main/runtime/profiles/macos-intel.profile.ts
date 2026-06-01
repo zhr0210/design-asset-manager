@@ -11,7 +11,7 @@ export const macosIntelProfile: RuntimeProfile = {
   inferenceMode: 'external-http',
   ocrMode: 'local',
   recommendedPackages: [],
-  optionalPackages: ['python-runtime-macos-x64'],
+  optionalPackages: ['cpu-ocr-runtime'],
   warnings: ['Local AI can be limited on Intel macOS machines; external inference is the safest fallback.'],
   fallbackProfileId: 'external-inference-only',
   isExperimental: false

@@ -10,7 +10,7 @@ export const externalInferenceOnlyProfile: RuntimeProfile = {
   capabilities: ['external-inference', 'tagging'],
   inferenceMode: 'external-http',
   ocrMode: 'external',
-  recommendedPackages: [],
+  recommendedPackages: ['external-inference-config'],
   optionalPackages: [],
   warnings: ['Local AI worker is disabled for this profile.'],
   fallbackProfileId: null,

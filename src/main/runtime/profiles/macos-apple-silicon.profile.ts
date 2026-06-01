@@ -10,8 +10,8 @@ export const macosAppleSiliconProfile: RuntimeProfile = {
   capabilities: ['local-ai-worker', 'external-inference', 'ocr', 'tagging', 'embedding', 'runtime-package'],
   inferenceMode: 'local-python-worker',
   ocrMode: 'local',
-  recommendedPackages: ['python-runtime-macos-arm64'],
-  optionalPackages: ['metal-friendly-local-runtime'],
+  recommendedPackages: ['metal-runtime-hint'],
+  optionalPackages: [],
   warnings: ['Metal/MPS-friendly behavior is profile metadata only in this phase.'],
   fallbackProfileId: 'external-inference-only',
   isExperimental: false
