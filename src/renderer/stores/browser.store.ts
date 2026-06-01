@@ -27,7 +27,15 @@ const api = (window as any).electronAPI
 export const useBrowserStore = create<BrowserState>((set) => {
   // Listen for browser state changes from the main process
   if (api && api.onBrowserStateChange) {
-    api.onBrowserStateChange((_event: any, state: any) => {
+    const win = window as any
+    if (typeof win.__cleanup_browser_state_change__ === 'function') {
+      try {
+        win.__cleanup_browser_state_change__()
+      } catch (e) {
+        console.warn('[BrowserStore] Error cleaning up previous browser state listener:', e)
+      }
+    }
+    win.__cleanup_browser_state_change__ = api.onBrowserStateChange((_event: any, state: any) => {
       set({
         currentUrl: state.url || '',
         pageTitle: state.title || '',

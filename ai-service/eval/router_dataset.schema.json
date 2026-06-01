@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RouterEvaluationDataset",
+  "type": "object",
+  "properties": {
+    "dataset_name": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "samples_per_class": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        }
+      },
+      "required": ["samples_per_class"]
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "image_path": {
+            "type": "string"
+          },
+          "source_dataset": {
+            "type": "string"
+          },
+          "expected_primary_type": {
+            "type": "string",
+            "enum": ["anime", "photo", "design", "ui", "document", "unknown"]
+          },
+          "expected_secondary_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "should_use_wd_tagger": {
+            "type": "boolean"
+          },
+          "should_use_ram": {
+            "type": "boolean"
+          },
+          "should_use_florence": {
+            "type": "boolean"
+          },
+          "should_use_clip_design": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "image_path",
+          "source_dataset",
+          "expected_primary_type",
+          "should_use_wd_tagger",
+          "should_use_ram",
+          "should_use_florence",
+          "should_use_clip_design"
+        ]
+      }
+    }
+  },
+  "required": ["dataset_name", "created_at", "config", "samples"]
+}

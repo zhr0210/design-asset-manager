@@ -3,14 +3,17 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 
+const DESKTOP_MIN_WIDTH = 1120
+
 export default function AppShell() {
   const location = useLocation()
   const isBrowserRoute = location.pathname === '/browser'
+  const shouldShowTopbar = location.pathname !== '/library'
 
   if (isBrowserRoute) {
     return (
-      <div className="h-screen w-screen overflow-hidden bg-slate-50 text-slate-800 font-sans flex flex-col">
-        <main className="flex-1 w-full h-full relative">
+      <div className="flex h-screen w-screen overflow-hidden bg-slate-50 font-sans text-slate-800 dark:bg-slate-950 dark:text-slate-100">
+        <main className="relative h-full w-full flex-1">
           <Outlet />
         </main>
       </div>
@@ -18,21 +21,19 @@ export default function AppShell() {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 text-slate-800 font-sans">
-      {/* Sidebar Panel Left */}
-      <Sidebar />
+    <div className="scrollbar-none h-screen w-screen overflow-auto bg-slate-50 font-sans text-slate-800 dark:bg-slate-950 dark:text-slate-100">
+      <div className="flex h-full min-h-[720px]" style={{ minWidth: DESKTOP_MIN_WIDTH }}>
+        <Sidebar />
 
-      {/* Main Panel Right */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden">
-        {/* Header Top */}
-        <Topbar />
+        <div className="ml-3 flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-slate-50 dark:bg-slate-950">
+          {shouldShowTopbar && <Topbar />}
 
-        {/* Dynamic Route Canvas */}
-        <main className="flex-1 overflow-y-auto p-8 relative">
-          <div className="max-w-7xl mx-auto h-full flex flex-col">
-            <Outlet />
-          </div>
-        </main>
+          <main className="scrollbar-none relative flex-1 overflow-auto bg-slate-50 p-8 dark:bg-slate-950">
+            <div className="flex min-h-full min-w-[1040px] flex-col">
+              <Outlet />
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   )

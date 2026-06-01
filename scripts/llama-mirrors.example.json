@@ -1,0 +1,18 @@
+{
+  "mirrors": [
+    {
+      "region": "cn",
+      "source": "company-internal-mirror",
+      "files": {
+        "llama-b6085-bin-win-cuda-13.0-x64.zip": "https://mirror.example.cn/llama.cpp/b6085/llama-b6085-bin-win-cuda-13.0-x64.zip",
+        "cudart-llama-bin-win-cuda-13.0-x64.zip": "https://mirror.example.cn/llama.cpp/b6085/cudart-llama-bin-win-cuda-13.0-x64.zip"
+      }
+    },
+    {
+      "region": "cn",
+      "source": "regional-llama-release-mirror",
+      "baseUrl": "https://mirror.example.cn/github/ggml-org/llama.cpp/releases/download"
+    }
+  ]
+}
+

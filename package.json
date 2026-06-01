@@ -10,16 +10,22 @@
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test-openai-compatible-provider": "node scripts/run-ts-test.mjs scripts/test-openai-compatible-provider.ts",
+    "test-llama-openai-backend": "node scripts/run-ts-test.mjs scripts/test-llama-openai-backend.ts",
+    "test-llama-runtime-installer": "node scripts/run-ts-test.mjs scripts/test-llama-runtime-installer.ts",
+    "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.10.0",
     "clsx": "^2.1.1",
+    "colorthief": "^3.3.1",
     "lucide-react": "^0.378.0",
     "playwright": "^1.60.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^2.3.0",
     "zustand": "^4.5.2"
   },

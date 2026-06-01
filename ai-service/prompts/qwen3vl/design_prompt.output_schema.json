@@ -1,0 +1,11 @@
+{
+  "englishPrompt": "string",
+  "chineseDescription": "string",
+  "shortCaption": "string",
+  "styleTags": ["string"],
+  "subjectTags": ["string"],
+  "compositionTags": ["string"],
+  "colorTags": ["string"],
+  "usageTags": ["string"],
+  "negativePromptSuggestion": "string"
+}

@@ -1,14 +1,35 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, protocol, net } from 'electron'
 import { join } from 'path'
 import { existsSync } from 'fs'
+import { pathToFileURL } from 'url'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { initDatabase } from './db'
 import { registerSiteIpc } from './ipc/site.ipc'
+import { ColorPaletteService } from './services/color-palette.service'
 import { registerAssetIpc } from './ipc/asset.ipc'
 import { registerDownloadIpc } from './ipc/download.ipc'
 import { registerSearchIpc } from './ipc/search.ipc'
 import { registerBrowserIpc } from './ipc/browser.ipc'
+import { registerTagIpc } from './ipc/tag.ipc'
+import { registerAssetTagIpc } from './ipc/asset-tag.ipc'
+import { registerAiClientIpc } from './ipc/ai-client.ipc'
+import { registerColorPaletteIpc } from './ipc/color-palette.ipc'
 import { EmbeddedBrowserManager } from './services/browser-view.manager'
+import { ImageMetadataService } from './services/image-metadata.service'
+
+// Register local-file scheme as privileged before app is ready
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'local-file',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      corsEnabled: true,
+      stream: true
+    }
+  }
+])
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
@@ -58,6 +79,11 @@ app.whenReady().then(() => {
   try {
     initDatabase()
     console.log('[SQLite] Database successfully loaded.')
+    
+    // Automatically scan and extract color palettes for legacy assets that lack them
+    ColorPaletteService.runStartupBatchScanner().catch((err) => {
+      console.error('[ColorPaletteService] Failed to launch startup batch scanner:', err)
+    })
   } catch (err) {
     console.error('[SQLite] Failed to initialize database:', err)
   }
@@ -68,6 +94,22 @@ app.whenReady().then(() => {
 
   app.on('browser-window-created', (_, window) => {
     window.setMenuBarVisibility(false)
+  })
+
+  // Register local-file protocol handler using modern Electron protocol.handle API
+  protocol.handle('local-file', (request) => {
+    try {
+      let urlPath = request.url.replace('local-file://', '')
+      if (urlPath.startsWith('/')) {
+        urlPath = urlPath.slice(1)
+      }
+      const decodedPath = decodeURIComponent(urlPath)
+      const absolutePath = ImageMetadataService.resolvePath(decodedPath)
+      return net.fetch(pathToFileURL(absolutePath).toString())
+    } catch (err) {
+      console.error('[Protocol] Failed to handle local-file request:', err)
+      return new Response('Not Found', { status: 404 })
+    }
   })
 
   setupIpcHandlers()
@@ -85,6 +127,14 @@ app.on('window-all-closed', () => {
   }
 })
 
+import { registerSettingsIpc } from './ipc/settings.ipc'
+import { registerOcrHealthcheckIpc } from './ipc/ocr-healthcheck.ipc'
+import { registerOcrIpc } from './ipc/ocr.ipc'
+import { registerAiWorkerIpc } from './ipc/ai-worker.ipc'
+import { registerAiModelIpc } from './ipc/ai-model.ipc'
+import { registerAiBackendIpc } from './ipc/ai-backend.ipc'
+import { registerLlamaRuntimeIpc } from './ipc/llama-runtime.ipc'
+
 function setupIpcHandlers() {
   // Register database IPC handlers
   registerSiteIpc()
@@ -92,4 +142,15 @@ function setupIpcHandlers() {
   registerDownloadIpc()
   registerSearchIpc()
   registerBrowserIpc()
+  registerTagIpc()
+  registerAssetTagIpc()
+  registerAiClientIpc()
+  registerColorPaletteIpc()
+  registerSettingsIpc()
+  registerOcrHealthcheckIpc()
+  registerOcrIpc()
+  registerAiWorkerIpc()
+  registerAiModelIpc()
+  registerAiBackendIpc()
+  registerLlamaRuntimeIpc()
 }

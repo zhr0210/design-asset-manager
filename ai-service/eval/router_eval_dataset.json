@@ -1,0 +1,4270 @@
+{
+  "dataset_name": "VisualRouter Real Evaluation Dataset",
+  "created_at": "2026-05-28T02:05:04.825605Z",
+  "config": {
+    "samples_per_class": {
+      "photo": 50,
+      "scene": 50,
+      "document": 50,
+      "ui": 50,
+      "design": 50,
+      "anime": 30,
+      "illustration": 30,
+      "unknown": 20
+    }
+  },
+  "skipped_huggingface_datasets": [],
+  "skipped_reasons": {},
+  "samples": [
+    {
+      "id": "sample-photo-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_001.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_002.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_003.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_004.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_005.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_006.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_007.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_008.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_009.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_010.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_011.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_012.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_013.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_014.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_015.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_016.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_017.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_018.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_019.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_020.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-021",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_021.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-022",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_022.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-023",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_023.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-024",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_024.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-025",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_025.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-026",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_026.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-027",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_027.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-028",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_028.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-029",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_029.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-030",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_030.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-031",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_031.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-032",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_032.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-033",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_033.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-034",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_034.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-035",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_035.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-036",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_036.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-037",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_037.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-038",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_038.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-039",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_039.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-040",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_040.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-041",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_041.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-042",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_042.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-043",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_043.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-044",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_044.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-045",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_045.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-046",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_046.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-047",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_047.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-048",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_048.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-049",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_049.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-photo-050",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_photo_050.jpg",
+      "source_dataset": "zh-plus/tiny-imagenet",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "subject"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public zh-plus/tiny-imagenet.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_001.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_002.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_003.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_004.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_005.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_006.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_007.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_008.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_009.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_010.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_011.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_012.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_013.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_014.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_015.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_016.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_017.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_018.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_019.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_020.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-021",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_021.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-022",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_022.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-023",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_023.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-024",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_024.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-025",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_025.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-026",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_026.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-027",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_027.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-028",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_028.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-029",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_029.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-030",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_030.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-031",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_031.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-032",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_032.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-033",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_033.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-034",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_034.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-035",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_035.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-036",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_036.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-037",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_037.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-038",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_038.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-039",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_039.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-040",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_040.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-041",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_041.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-042",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_042.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-043",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_043.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-044",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_044.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-045",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_045.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-046",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_046.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-047",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_047.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-048",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_048.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-049",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_049.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-scene-050",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_scene_050.jpg",
+      "source_dataset": "dpdl-benchmark/Places365-Validation",
+      "expected_primary_type": "photo",
+      "expected_secondary_types": [
+        "photo",
+        "scene"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public dpdl-benchmark/Places365-Validation.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_001.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_002.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_003.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_004.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_005.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_006.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_007.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_008.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_009.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_010.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_011.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_012.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_013.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_014.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_015.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_016.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_017.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_018.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_019.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_020.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-021",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_021.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-022",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_022.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-023",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_023.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-024",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_024.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-025",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_025.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-026",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_026.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-027",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_027.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-028",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_028.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-029",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_029.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-030",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_030.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-031",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_031.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-032",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_032.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-033",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_033.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-034",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_034.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-035",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_035.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-036",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_036.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-037",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_037.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-038",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_038.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-039",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_039.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-040",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_040.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-041",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_041.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-042",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_042.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-043",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_043.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-044",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_044.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-045",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_045.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-046",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_046.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-047",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_047.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-048",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_048.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-049",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_049.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-document-050",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_document_050.jpg",
+      "source_dataset": "jordyvl/rvl_cdip_100_examples_per_class",
+      "expected_primary_type": "document",
+      "expected_secondary_types": [
+        "document",
+        "text"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": false,
+      "notes": "Streamed from public jordyvl/rvl_cdip_100_examples_per_class.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_001.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_002.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_003.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_004.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_005.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_006.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_007.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_008.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_009.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_010.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_011.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_012.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_013.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_014.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_015.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_016.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_017.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_018.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_019.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_020.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-021",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_021.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-022",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_022.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-023",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_023.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-024",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_024.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-025",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_025.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-026",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_026.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-027",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_027.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-028",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_028.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-029",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_029.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-030",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_030.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-031",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_031.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-032",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_032.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-033",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_033.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-034",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_034.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-035",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_035.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-036",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_036.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-037",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_037.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-038",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_038.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-039",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_039.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-040",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_040.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-041",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_041.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-042",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_042.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-043",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_043.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-044",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_044.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-045",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_045.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-046",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_046.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-047",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_047.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-048",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_048.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-049",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_049.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-ui-050",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_ui_050.jpg",
+      "source_dataset": "lmoroney/uiscreenshots",
+      "expected_primary_type": "ui",
+      "expected_secondary_types": [
+        "ui",
+        "layout"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "Streamed from public lmoroney/uiscreenshots.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_001.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_002.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_003.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_004.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_005.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_006.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_007.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_008.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_009.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_010.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_011.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_012.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_013.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_014.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_015.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_016.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_017.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_018.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_019.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_020.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-021",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_021.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-022",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_022.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-023",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_023.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-024",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_024.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-025",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_025.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-026",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_026.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-027",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_027.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-028",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_028.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-029",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_029.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-030",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_030.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-031",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_031.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-032",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_032.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-033",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_033.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-034",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_034.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-035",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_035.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-036",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_036.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-037",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_037.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-038",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_038.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-039",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_039.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-040",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_040.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-041",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_041.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-042",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_042.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-043",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_043.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-044",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_044.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-045",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_045.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-046",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_046.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-047",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_047.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-048",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_048.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-049",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_049.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    },
+    {
+      "id": "sample-design-050",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\sampled_design_050.jpg",
+      "source_dataset": "bhargavsdesai/laion_improved_aesthetics_6.5plus_with_images",
+      "expected_primary_type": "design",
+      "expected_secondary_types": [
+        "design",
+        "aesthetic"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": false,
+      "should_use_florence": true,
+      "should_use_clip_design": true,
+      "notes": "LAION high aesthetics subset, representing creative illustrations/posters.",
+      "sample_type": "real",
+      "user_manual": false
+    }
+  ]
+}

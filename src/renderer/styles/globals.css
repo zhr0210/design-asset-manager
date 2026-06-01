@@ -41,6 +41,23 @@
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@layer components {
+  .control {
+    border-width: 1px;
+    border-style: solid;
+    @apply w-full rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-[12px] font-bold text-slate-700 dark:text-slate-200 outline-none transition-all placeholder:text-slate-300 dark:placeholder:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Custom waterfall/masonry grid supports if needed */
 .waterfall-grid {
   column-count: 1;
@@ -68,4 +85,128 @@
 .waterfall-item {
   break-inside: avoid;
   margin-bottom: 1.5rem;
+}
+
+/* Premium dark mode global adaptation */
+.dark {
+  background-color: #030712 !important; /* slate-950 */
+  color: #f1f5f9 !important; /* slate-100 */
+}
+
+/* Main background panels override */
+.dark .bg-slate-50,
+.dark .bg-\[radial-gradient\(circle_at_top_left\,rgba\(99\,102\,241\,0\.10\)\,transparent_34\%\)\,linear-gradient\(180deg\,\#f8fafc_0\%\,\#eef2f7_100\%\)\] {
+  background: #030712 !important;
+  background-color: #030712 !important;
+}
+
+/* Target all primary containers, cards, and glass panels */
+.dark .bg-white,
+.dark .bg-white\/90,
+.dark .bg-white\/85,
+.dark .bg-white\/80,
+.dark .bg-white\/95,
+.dark .bg-white\/70,
+.dark .bg-white\/20 {
+  background-color: #0f172a !important; /* slate-900 */
+  color: #f1f5f9 !important;
+}
+
+/* Standard slate panels */
+.dark .bg-slate-50,
+.dark .bg-slate-50\/70,
+.dark .bg-slate-50\/60,
+.dark .bg-slate-50\/50,
+.dark .bg-slate-100 {
+  background-color: #1e293b !important; /* slate-800 */
+  color: #f1f5f9 !important;
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+/* Borders override */
+.dark .border,
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-200\/70,
+.dark .border-slate-200\/50,
+.dark .border-slate-100\/80,
+.dark .border-white,
+.dark .border-white\/70,
+.dark .border-white\/80 {
+  border-color: #1e293b !important; /* slate-800 */
+}
+
+/* Texts color override */
+.dark .text-slate-900,
+.dark .text-slate-950,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: #f1f5f9 !important; /* slate-100 */
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+/* Inputs, Selects, Buttons, Controls */
+.dark input, 
+.dark select, 
+.dark textarea, 
+.dark .control {
+  background-color: #0f172a !important; /* slate-900 */
+  color: #f1f5f9 !important;
+  border-color: #1e293b !important;
+}
+
+.dark input::placeholder, 
+.dark textarea::placeholder {
+  color: #475569 !important; /* slate-600 */
+}
+
+/* Hover states */
+.dark .hover\:bg-slate-50:hover {
+  background-color: #1e293b !important;
+}
+
+.dark .hover\:text-slate-800:hover {
+  color: #f8fafc !important;
+}
+
+.dark .hover\:border-slate-200:hover {
+  border-color: #334155 !important;
+}
+
+/* Brand / Active highlights */
+.dark .bg-brand-50 {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+  color: #818cf8 !important;
+}
+
+.dark .text-brand-600 {
+  color: #818cf8 !important;
+}
+
+/* Lists, grid items, and divide borders */
+.dark .waterfall-item,
+.dark .divide-y > * {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+}
+
+.dark .divide-slate-100 > * {
+  border-color: #1e293b !important;
+}
+
+/* Specific dialog overrides */
+.dark .animate-in.fade-in.zoom-in-95 {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
 }

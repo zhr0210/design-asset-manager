@@ -80,6 +80,12 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
   enqueueDownload: async (item) => {
     console.log('[Store] enqueueDownload starting for:', item)
     const taskId = `dl-${Math.random().toString(36).substr(2, 9)}`
+    const fileSuffix = taskId.replace('dl-', '')
+    const cleanTitle = item.title.toLowerCase()
+      .replace(/[\\/:*?"<>|]/g, '') // remove invalid Windows/macOS filename characters
+      .replace(/\s+/g, '-')
+      .substring(0, 60)
+    const finalFilename = cleanTitle ? `${cleanTitle}_${fileSuffix}.jpg` : `${fileSuffix}.jpg`
     const newTask: DownloadTask = {
       id: taskId,
       assetTitle: item.title,
@@ -87,7 +93,7 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
       sourceSiteName: item.sourceSite,
       sourcePageUrl: item.sourcePageUrl,
       downloadUrl: item.downloadUrl,
-      savePath: `~/DesignAssetManager/library/${item.title.toLowerCase().replace(/\s+/g, '-')}.jpg`,
+      savePath: `~/DesignAssetManager/library/${finalFilename}`,
       status: 'waiting',
       progress: 0,
       retryCount: 0,
@@ -171,9 +177,10 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
               isDone = true
               // Trigger save into local assets DB
               setTimeout(async () => {
+                const finalFilename = t.savePath.split('/').pop() || `${t.assetTitle.toLowerCase().replace(/\s+/g, '-')}.jpg`
                 await useAssetStore.getState().addAsset({
                   title: t.assetTitle,
-                  fileName: `${t.assetTitle.toLowerCase().replace(/\s+/g, '-')}.jpg`,
+                  fileName: finalFilename,
                   filePath: t.savePath,
                   thumbnailPath: t.thumbnailUrl,
                   sourceSiteId: t.sourceSiteId,
@@ -249,7 +256,15 @@ useDownloadStore.getState().loadDownloads()
 
 // Listen for main process injected download trigger events
 if (api && api.onInjectedDownloadTrigger) {
-  api.onInjectedDownloadTrigger(async (_event: any, item: any) => {
+  const win = window as any
+  if (typeof win.__cleanup_injected_download__ === 'function') {
+    try {
+      win.__cleanup_injected_download__()
+    } catch (e) {
+      console.warn('[Store] Error cleaning up previous download trigger listener:', e)
+    }
+  }
+  win.__cleanup_injected_download__ = api.onInjectedDownloadTrigger(async (_event: any, item: any) => {
     console.log('[Store] Received injected download trigger for URL:', item.downloadUrl)
     await useDownloadStore.getState().enqueueDownload({
       title: item.title,

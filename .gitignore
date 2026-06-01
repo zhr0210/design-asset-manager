@@ -4,16 +4,51 @@ node_modules/
 # Compilation outputs
 dist/
 out/
+build/
+.vite/
 
 # Local databases and states
 *.db
 *.sqlite
 *.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
 data/
 auth_states/
 storage_state.json
 
 # Local downloads and logs
 library/
+downloads/
+assets/
 *.log
 .DS_Store
+
+# Python caches
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+
+# AI model caches, eval images, and large artifacts
+ai-service/models_cache/
+ai-service/eval/datasets/raw/
+ai-service/eval/datasets/sampled/
+ai-service/eval/reports/*.json
+ai-service/eval/reports/*.md
+docs/archive/
+*.onnx
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.gguf
+
+# Temporary images
+*.tmp.png
+*.tmp.jpg
+*.tmp.jpeg
+*.tmp.webp
+
+# Temporary scratch directories
+scratch/

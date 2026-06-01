@@ -1,0 +1,1378 @@
+{
+  "dataset_name": "VisualRouter Synthetic Smoke Test Dataset",
+  "created_at": "2026-05-28T02:05:04.829178Z",
+  "config": {
+    "samples_per_class": {
+      "photo": 50,
+      "scene": 50,
+      "document": 50,
+      "ui": 50,
+      "design": 50,
+      "anime": 30,
+      "illustration": 30,
+      "unknown": 20
+    }
+  },
+  "samples": [
+    {
+      "id": "sample-anime-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_001.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_002.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_003.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_004.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_005.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_006.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_007.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_008.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_009.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_010.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_011.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_012.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_013.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_014.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_015.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_016.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_017.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_018.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_019.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_020.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-021",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_021.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-022",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_022.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-023",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_023.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-024",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_024.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-025",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_025.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-026",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_026.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-027",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_027.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-028",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_028.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-029",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_029.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-anime-030",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_anime_030.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "anime",
+        "character"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual anime evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_001.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_002.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_003.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_004.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_005.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_006.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_007.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_008.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_009.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_010.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_011.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_012.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_013.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_014.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_015.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_016.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_017.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_018.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_019.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_020.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-021",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_021.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-022",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_022.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-023",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_023.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-024",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_024.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-025",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_025.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-026",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_026.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-027",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_027.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-028",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_028.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-029",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_029.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-illustration-030",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_illustration_030.jpg",
+      "source_dataset": "PIL Mock Generator",
+      "expected_primary_type": "anime",
+      "expected_secondary_types": [
+        "illustration",
+        "art"
+      ],
+      "should_use_wd_tagger": true,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": false,
+      "notes": "Synthesized fallback image for manual illustration evaluating.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-001",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_001.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-002",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_002.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-003",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_003.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-004",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_004.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-005",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_005.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-006",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_006.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-007",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_007.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-008",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_008.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-009",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_009.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-010",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_010.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-011",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_011.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-012",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_012.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-013",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_013.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-014",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_014.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-015",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_015.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-016",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_016.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-017",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_017.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-018",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_018.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-019",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_019.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    },
+    {
+      "id": "sample-unknown-020",
+      "image_path": "C:\\Users\\kilian\\.gemini\\antigravity\\worktrees\\Design Asset Manager\\implement-material-tag-system\\ai-service\\eval\\datasets\\sampled\\eval_unknown_020.jpg",
+      "source_dataset": "PIL Synthesis Generator",
+      "expected_primary_type": "unknown",
+      "expected_secondary_types": [
+        "mixed",
+        "abstract"
+      ],
+      "should_use_wd_tagger": false,
+      "should_use_ram": true,
+      "should_use_florence": false,
+      "should_use_clip_design": true,
+      "notes": "Abstract shape contrast asset evaluating visual router flat-tie default outcomes.",
+      "sample_type": "synthetic_smoke",
+      "user_manual": false
+    }
+  ]
+}

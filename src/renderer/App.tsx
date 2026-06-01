@@ -8,6 +8,8 @@ import Search from './routes/Search'
 import DownloadQueue from './routes/DownloadQueue'
 import Library from './routes/Library'
 import Settings from './routes/Settings'
+import TagManagerPage from './routes/TagManagerPage'
+import AiConsolePage from './routes/AiConsolePage'
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
           <Route path="search" element={<Search />} />
           <Route path="downloads" element={<DownloadQueue />} />
           <Route path="library" element={<Library />} />
+          <Route path="tag-manager" element={<TagManagerPage />} />
+          <Route path="ai-console" element={<AiConsolePage />} />
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>

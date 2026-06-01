@@ -33,6 +33,15 @@ export const CREATE_ASSETS_TABLE = `
     dominant_color TEXT,
     browser_page_title TEXT,
     capture_method TEXT,
+    original_path TEXT,
+    normalized_path TEXT,
+    original_format TEXT,
+    normalized_format TEXT,
+    has_alpha INTEGER DEFAULT 0,
+    color_space TEXT,
+    normalize_status TEXT DEFAULT 'not_started',
+    normalized_at TEXT,
+    image_metadata_json TEXT,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
   );
@@ -41,19 +50,162 @@ export const CREATE_ASSETS_TABLE = `
 export const CREATE_TAGS_TABLE = `
   CREATE TABLE IF NOT EXISTS tags (
     id TEXT PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
-    color TEXT NOT NULL,
-    created_at TEXT NOT NULL
+    name TEXT NOT NULL,
+    normalized_name TEXT NOT NULL,
+    slug TEXT,
+    type TEXT DEFAULT 'custom',
+    color TEXT,
+    description TEXT,
+    shorthand TEXT,
+    aliases TEXT,
+    parent_id TEXT,
+    is_category INTEGER DEFAULT 0,
+    is_system INTEGER DEFAULT 0,
+    usage_count INTEGER DEFAULT 0,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(normalized_name, type)
   );
 `
 
 export const CREATE_ASSET_TAGS_TABLE = `
   CREATE TABLE IF NOT EXISTS asset_tags (
+    id TEXT PRIMARY KEY,
     asset_id TEXT NOT NULL,
     tag_id TEXT NOT NULL,
-    PRIMARY KEY (asset_id, tag_id),
+    source TEXT DEFAULT 'manual',
+    confidence REAL DEFAULT 1.0,
+    status TEXT DEFAULT 'confirmed',
+    model_name TEXT,
+    model_version TEXT,
+    raw_value TEXT,
+    created_by TEXT DEFAULT 'user',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(asset_id, tag_id, source),
     FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+  );
+`
+
+export const CREATE_TAG_ALIASES_TABLE = `
+  CREATE TABLE IF NOT EXISTS tag_aliases (
+    id TEXT PRIMARY KEY,
+    tag_id TEXT NOT NULL,
+    alias TEXT NOT NULL,
+    normalized_alias TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+  );
+`
+
+export const CREATE_TAG_RELATIONS_TABLE = `
+  CREATE TABLE IF NOT EXISTS tag_relations (
+    id TEXT PRIMARY KEY,
+    parent_tag_id TEXT NOT NULL,
+    child_tag_id TEXT NOT NULL,
+    relation_type TEXT DEFAULT 'parent',
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (parent_tag_id) REFERENCES tags(id) ON DELETE CASCADE,
+    FOREIGN KEY (child_tag_id) REFERENCES tags(id) ON DELETE CASCADE
+  );
+`
+
+export const CREATE_TAG_GROUPS_TABLE = `
+  CREATE TABLE IF NOT EXISTS tag_groups (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    color TEXT,
+    sort_order INTEGER,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+`
+
+export const CREATE_TAG_GROUP_ITEMS_TABLE = `
+  CREATE TABLE IF NOT EXISTS tag_group_items (
+    id TEXT PRIMARY KEY,
+    group_id TEXT NOT NULL,
+    tag_id TEXT NOT NULL,
+    sort_order INTEGER,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (group_id) REFERENCES tag_groups(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+  );
+`
+
+export const CREATE_TAG_SUGGESTIONS_TABLE = `
+  CREATE TABLE IF NOT EXISTS tag_suggestions (
+    id TEXT PRIMARY KEY,
+    asset_id TEXT NOT NULL,
+    tag_name TEXT NOT NULL,
+    tag_type TEXT,
+    source TEXT,
+    confidence REAL,
+    status TEXT DEFAULT 'pending',
+    model_name TEXT,
+    raw_payload TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE
+  );
+`
+
+export const CREATE_AI_TAG_TASKS_TABLE = `
+  CREATE TABLE IF NOT EXISTS ai_tag_tasks (
+    id TEXT PRIMARY KEY,
+    asset_id TEXT NOT NULL,
+    file_path TEXT NOT NULL,
+    status TEXT DEFAULT 'queued',
+    priority INTEGER DEFAULT 0,
+    batch_id TEXT,
+    model_name TEXT,
+    retry_count INTEGER DEFAULT 0,
+    error_message TEXT,
+    created_at TEXT NOT NULL,
+    started_at TEXT,
+    completed_at TEXT,
+    synced_at TEXT,
+    sync_status TEXT DEFAULT 'pending',
+    FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE
+  );
+`
+
+export const CREATE_AI_PROMPT_TASKS_TABLE = `
+  CREATE TABLE IF NOT EXISTS ai_prompt_tasks (
+    id TEXT PRIMARY KEY,
+    asset_id TEXT NOT NULL,
+    file_path TEXT NOT NULL,
+    status TEXT DEFAULT 'queued',
+    model_name TEXT,
+    result_prompt TEXT,
+    result_caption TEXT,
+    error_message TEXT,
+    created_at TEXT NOT NULL,
+    started_at TEXT,
+    completed_at TEXT,
+    synced_at TEXT,
+    sync_status TEXT DEFAULT 'pending',
+    FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE
+  );
+`
+
+export const CREATE_AI_ANALYSIS_TASKS_TABLE = `
+  CREATE TABLE IF NOT EXISTS ai_analysis_tasks (
+    id TEXT PRIMARY KEY,
+    asset_id TEXT NOT NULL,
+    file_path TEXT NOT NULL,
+    status TEXT DEFAULT 'queued',
+    model_name TEXT,
+    result_json TEXT,
+    error_message TEXT,
+    created_at TEXT NOT NULL,
+    started_at TEXT,
+    completed_at TEXT,
+    synced_at TEXT,
+    sync_status TEXT DEFAULT 'pending',
+    FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE
   );
 `
 
@@ -82,6 +234,11 @@ export const CREATE_INDEXES = [
   `CREATE INDEX IF NOT EXISTS idx_assets_site_id ON assets(source_site_id);`,
   `CREATE INDEX IF NOT EXISTS idx_asset_tags_asset ON asset_tags(asset_id);`,
   `CREATE INDEX IF NOT EXISTS idx_asset_tags_tag ON asset_tags(tag_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_asset_tags_source ON asset_tags(source);`,
+  `CREATE INDEX IF NOT EXISTS idx_asset_tags_status ON asset_tags(status);`,
+  `CREATE INDEX IF NOT EXISTS idx_asset_tags_confidence ON asset_tags(confidence);`,
+  `CREATE INDEX IF NOT EXISTS idx_tag_aliases_tag ON tag_aliases(tag_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_tag_suggestions_asset ON tag_suggestions(asset_id);`,
   `CREATE INDEX IF NOT EXISTS idx_download_tasks_status ON download_tasks(status);`
 ]
 
