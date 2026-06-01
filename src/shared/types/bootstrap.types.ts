@@ -1,4 +1,5 @@
 import type { DoctorReport } from './doctor.types'
+import type { RuntimeRegistry } from './runtime-registry.types'
 
 export type BootstrapStatus =
   | 'not_initialized'
@@ -29,6 +30,16 @@ export interface BootstrapError {
   recoverable: boolean
 }
 
+export interface BootstrapRecommendation {
+  recommendedMode: BootstrapMode
+  recommendedProfileId: string
+  reason: string
+  warnings: string[]
+  blockingIssues: string[]
+  canContinue: boolean
+  canSkip: boolean
+}
+
 export interface BootstrapState {
   status: BootstrapStatus
   mode: BootstrapMode
@@ -38,6 +49,7 @@ export interface BootstrapState {
   completedAt: string | null
   error: BootstrapError | null
   doctorReport: DoctorReport | null
+  recommendation: BootstrapRecommendation | null
   selectedProfileId: string | null
   recommendedProfileId: string | null
   warnings: string[]
@@ -64,4 +76,19 @@ export interface BootstrapTransitionResult {
   ok: boolean
   state: BootstrapState
   error?: BootstrapError
+}
+
+export interface BootstrapManagerResult {
+  state: BootstrapState
+  registry: RuntimeRegistry
+  recommendation?: BootstrapRecommendation | null
+}
+
+export interface BootstrapStartCheckResult extends BootstrapManagerResult {
+  doctorReport: DoctorReport
+  recommendation: BootstrapRecommendation
+}
+
+export interface BootstrapCompleteResult extends BootstrapManagerResult {
+  completed: boolean
 }

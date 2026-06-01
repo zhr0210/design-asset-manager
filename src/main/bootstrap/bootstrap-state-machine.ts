@@ -48,6 +48,7 @@ export function createInitialBootstrapState(mode: BootstrapMode = DEFAULT_MODE, 
     completedAt: null,
     error: null,
     doctorReport: null,
+    recommendation: null,
     selectedProfileId: null,
     recommendedProfileId: null,
     warnings: []

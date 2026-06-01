@@ -1,4 +1,5 @@
-import type { BootstrapError, BootstrapEvent, BootstrapMode, BootstrapState, BootstrapTransitionResult } from './bootstrap.types'
+import type { DoctorReport } from '../../shared/types/doctor.types'
+import type { BootstrapError, BootstrapEvent, BootstrapMode, BootstrapRecommendation, BootstrapState, BootstrapTransitionResult } from './bootstrap.types'
 import {
   createInitialBootstrapState,
   markBootstrapCompleted,
@@ -46,6 +47,32 @@ export class BootstrapStateService {
 
   markCompleted(): BootstrapState {
     this.state = markBootstrapCompleted(this.state)
+    return this.state
+  }
+
+  attachDoctorReport(doctorReport: DoctorReport): BootstrapState {
+    this.state = {
+      ...this.state,
+      doctorReport
+    }
+    return this.state
+  }
+
+  setRecommendation(recommendation: BootstrapRecommendation): BootstrapState {
+    this.state = {
+      ...this.state,
+      recommendation,
+      recommendedProfileId: recommendation.recommendedProfileId,
+      warnings: [...this.state.warnings, ...recommendation.warnings]
+    }
+    return this.state
+  }
+
+  setSelectedProfile(selectedProfileId: string): BootstrapState {
+    this.state = {
+      ...this.state,
+      selectedProfileId
+    }
     return this.state
   }
 
