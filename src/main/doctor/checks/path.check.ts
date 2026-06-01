@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import type { ManagedPaths } from '../../../shared/types/platform.types'
+import { auditManagedPaths, summarizeManagedPathAudit } from '../../platform/managed-path-audit'
 import type { RegisteredDoctorCheck } from '../doctor.types'
 
 async function pathState(pathValue: string) {
@@ -20,13 +21,17 @@ export const pathCheck: RegisteredDoctorCheck = {
     const paths = Object.fromEntries(
       await Promise.all(entries.map(async ([key, value]) => [key, await pathState(value)]))
     )
+    const audit = await auditManagedPaths(context.managedPaths)
+    const auditSummary = summarizeManagedPathAudit(audit)
+    const status = auditSummary.errorCount > 0 ? 'warning' : 'ok'
 
     return {
       id: this.id,
       label: this.label,
-      status: 'ok',
-      message: 'Managed paths resolved.',
-      details: { paths },
+      status,
+      message: status === 'ok' ? 'Managed paths resolved.' : 'Managed paths resolved with blocking audit issues.',
+      details: { paths, audit: auditSummary },
+      fixSuggestion: status === 'ok' ? undefined : 'Review managed path metadata and prefer path-resolver managed directories.',
       durationMs: Date.now() - startedAt
     }
   }

@@ -1,5 +1,7 @@
 export * from '../../shared/types/platform.types'
 export * from './filesystem-guard'
+export * from './managed-path-audit'
+export * from './managed-path-audit.types'
 export * from './path-normalizer'
 export * from './path-resolver'
 export * from './platform-detector'
