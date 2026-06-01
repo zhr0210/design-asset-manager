@@ -1,5 +1,6 @@
 import type { DoctorReport } from './doctor.types'
 import type { RuntimeRegistry } from './runtime-registry.types'
+import type { RuntimePackageManifest, RuntimePackageSelection } from './runtime-package.types'
 import type { RuntimeProfileId } from './runtime-profile.types'
 
 export type BootstrapStatus =
@@ -31,12 +32,26 @@ export interface BootstrapError {
   recoverable: boolean
 }
 
+export interface BootstrapPackagePlan {
+  profileId: RuntimeProfileId
+  requiredPackages: RuntimePackageSelection['requiredPackages']
+  recommendedPackages: RuntimePackageSelection['recommendedPackages']
+  optionalPackages: RuntimePackageSelection['optionalPackages']
+  warnings: string[]
+  blockingIssues: string[]
+  manifestVersion: RuntimePackageManifest['manifestVersion']
+  generatedAt: RuntimePackageManifest['generatedAt']
+}
+
 export interface BootstrapRecommendation {
   recommendedMode: BootstrapMode
   recommendedProfileId: RuntimeProfileId
   reason: string
   warnings: string[]
   blockingIssues: string[]
+  packagePlan: BootstrapPackagePlan | null
+  packageWarnings: string[]
+  packageBlockingIssues: string[]
   canContinue: boolean
   canSkip: boolean
 }

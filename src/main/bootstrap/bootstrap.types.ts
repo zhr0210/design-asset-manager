@@ -4,6 +4,7 @@ export type {
   BootstrapCompleteResult,
   BootstrapManagerResult,
   BootstrapMode,
+  BootstrapPackagePlan,
   BootstrapRecommendation,
   BootstrapStartCheckResult,
   BootstrapState,

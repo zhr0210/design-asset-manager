@@ -1,11 +1,14 @@
 import type { DoctorReport } from '../../shared/types/doctor.types'
 import type { RuntimeRegistry } from './runtime-registry.types'
-import type { BootstrapRecommendation } from './bootstrap.types'
+import type { BootstrapPackagePlan, BootstrapRecommendation } from './bootstrap.types'
 import { resolveRuntimeProfileRecommendation } from '../runtime/runtime-profile-resolver'
+import type { RuntimePackageManifest } from '../../shared/types/runtime-package.types'
+import { resolveBootstrapPackagePlan } from './bootstrap-package-plan-resolver'
 
 export function resolveBootstrapRecommendation(
   doctorReport: DoctorReport,
-  registry: RuntimeRegistry
+  registry: RuntimeRegistry,
+  manifest?: RuntimePackageManifest
 ): BootstrapRecommendation {
   const runtimeRecommendation = resolveRuntimeProfileRecommendation({
     platformInfo: {
@@ -18,6 +21,15 @@ export function resolveBootstrapRecommendation(
       nvidiaGpu: registry.metadata.nvidiaGpu === true
     }
   })
+  const packagePlan: BootstrapPackagePlan | null = manifest
+    ? resolveBootstrapPackagePlan({
+      manifest,
+      recommendation: runtimeRecommendation,
+      platform: registry.platform,
+      arch: registry.arch,
+      capabilities: []
+    })
+    : null
 
   const recommendedMode = runtimeRecommendation.recommendedProfileId === 'external-inference-only'
     ? 'external_inference_only'
@@ -30,8 +42,11 @@ export function resolveBootstrapRecommendation(
     recommendedProfileId: runtimeRecommendation.recommendedProfileId,
     reason: runtimeRecommendation.reason,
     warnings: runtimeRecommendation.warnings,
-    blockingIssues: runtimeRecommendation.blockingIssues,
-    canContinue: runtimeRecommendation.canContinue,
+    blockingIssues: [...runtimeRecommendation.blockingIssues, ...(packagePlan?.blockingIssues ?? [])],
+    packagePlan,
+    packageWarnings: packagePlan?.warnings ?? [],
+    packageBlockingIssues: packagePlan?.blockingIssues ?? [],
+    canContinue: runtimeRecommendation.canContinue && (packagePlan?.blockingIssues.length ?? 0) === 0,
     canSkip: true
   }
 }

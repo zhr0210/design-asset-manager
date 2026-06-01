@@ -24,6 +24,7 @@
     "test-bootstrap-manager": "node scripts/run-ts-test.mjs scripts/bootstrap-manager.test.ts",
     "test-runtime-profile": "node scripts/run-ts-test.mjs scripts/runtime-profile.test.ts",
     "test-runtime-package": "node scripts/run-ts-test.mjs scripts/runtime-package-manifest.test.ts",
+    "test-bootstrap-package-plan": "node scripts/run-ts-test.mjs scripts/bootstrap-package-plan.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },

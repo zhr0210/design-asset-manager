@@ -13,17 +13,21 @@ import { RuntimeRegistryService } from './runtime-registry.service'
 import type { RuntimeRegistry } from './runtime-registry.types'
 import { getDefaultRuntimeProfileForPlatform } from '../runtime/runtime-profile-resolver'
 import type { RuntimeProfileId } from '../../shared/types/runtime-profile.types'
+import { sampleRuntimePackageManifest } from '../runtime-package/fixtures/sample-runtime-package-manifest'
+import type { RuntimePackageManifest } from '../../shared/types/runtime-package.types'
 
 export interface BootstrapManagerOptions {
   stateService?: BootstrapStateService
   doctorService?: Pick<DoctorService, 'runAll'>
   runtimeRegistryService?: RuntimeRegistryService
+  runtimePackageManifest?: RuntimePackageManifest
 }
 
 export class BootstrapManager {
   private readonly stateService: BootstrapStateService
   private readonly doctorService: Pick<DoctorService, 'runAll'>
   private readonly runtimeRegistryService: RuntimeRegistryService
+  private readonly runtimePackageManifest: RuntimePackageManifest
   private lastDoctorReport: DoctorReport | null = null
   private lastRecommendation: BootstrapRecommendation | null = null
 
@@ -31,6 +35,7 @@ export class BootstrapManager {
     this.runtimeRegistryService = options.runtimeRegistryService ?? new RuntimeRegistryService()
     this.stateService = options.stateService ?? new BootstrapStateService('manual', this.runtimeRegistryService)
     this.doctorService = options.doctorService ?? DoctorService.getInstance()
+    this.runtimePackageManifest = options.runtimePackageManifest ?? sampleRuntimePackageManifest
   }
 
   getState(): BootstrapState {
@@ -49,7 +54,7 @@ export class BootstrapManager {
       const doctorReport = await this.doctorService.runAll()
       this.lastDoctorReport = doctorReport
       registry = await this.runtimeRegistryService.updateDoctorSummary(doctorReport)
-      const recommendation = resolveBootstrapRecommendation(doctorReport, registry)
+      const recommendation = resolveBootstrapRecommendation(doctorReport, registry, this.runtimePackageManifest)
       this.lastRecommendation = recommendation
 
       this.applyTransition('DOCTOR_COMPLETED', { doctorReport, warnings: recommendation.warnings })
@@ -66,7 +71,10 @@ export class BootstrapManager {
         metadata: {
           bootstrapRecommendedMode: recommendation.recommendedMode,
           bootstrapRecommendationReason: recommendation.reason,
-          bootstrapBlockingIssues: recommendation.blockingIssues
+          bootstrapBlockingIssues: recommendation.blockingIssues,
+          lastPackagePlan: summarizePackagePlan(recommendation.packagePlan),
+          lastManifestVersion: recommendation.packagePlan?.manifestVersion ?? null,
+          packagePlanGeneratedAt: recommendation.packagePlan?.generatedAt ?? null
         }
       })
 
@@ -93,7 +101,7 @@ export class BootstrapManager {
       throw new Error('Cannot resolve bootstrap recommendation before Doctor has run.')
     }
 
-    const recommendation = resolveBootstrapRecommendation(doctorReport, registry)
+    const recommendation = resolveBootstrapRecommendation(doctorReport, registry, this.runtimePackageManifest)
     this.lastRecommendation = recommendation
     this.applyTransition('PROFILE_RESOLVED', {
       recommendedProfileId: recommendation.recommendedProfileId,
@@ -107,7 +115,10 @@ export class BootstrapManager {
       metadata: {
         bootstrapRecommendedMode: recommendation.recommendedMode,
         bootstrapRecommendationReason: recommendation.reason,
-        bootstrapBlockingIssues: recommendation.blockingIssues
+        bootstrapBlockingIssues: recommendation.blockingIssues,
+        lastPackagePlan: summarizePackagePlan(recommendation.packagePlan),
+        lastManifestVersion: recommendation.packagePlan?.manifestVersion ?? null,
+        packagePlanGeneratedAt: recommendation.packagePlan?.generatedAt ?? null
       }
     })
 
@@ -197,5 +208,17 @@ export class BootstrapManager {
   private applyTransition(type: Parameters<BootstrapStateService['dispatch']>[0]['type'], payload: Record<string, unknown> = {}) {
     const result = this.stateService.dispatch({ type, ...payload } as Parameters<BootstrapStateService['dispatch']>[0])
     if (!result.ok) throw new Error(result.error?.message ?? `Bootstrap transition ${type} failed.`)
+  }
+}
+
+function summarizePackagePlan(plan: BootstrapRecommendation['packagePlan']) {
+  if (!plan) return null
+  return {
+    profileId: plan.profileId,
+    requiredPackageIds: plan.requiredPackages.map((pkg) => pkg.id),
+    recommendedPackageIds: plan.recommendedPackages.map((pkg) => pkg.id),
+    optionalPackageIds: plan.optionalPackages.map((pkg) => pkg.id),
+    warnings: plan.warnings,
+    blockingIssues: plan.blockingIssues
   }
 }
