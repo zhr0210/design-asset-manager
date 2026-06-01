@@ -33,6 +33,7 @@
     "test-ai-runtime-panel": "node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts",
     "test-settings-compatibility": "node scripts/run-ts-test.mjs scripts/settings-compatibility.test.ts",
     "test-settings-service-defaults": "node scripts/run-ts-test.mjs scripts/settings-service-defaults.test.ts",
+    "test-settings-migration": "node scripts/run-ts-test.mjs scripts/settings-migration.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },
