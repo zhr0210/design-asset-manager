@@ -31,6 +31,7 @@
     "test-ai-runtime-settings": "node scripts/run-ts-test.mjs scripts/ai-runtime-settings.test.ts",
     "test-ai-runtime-ipc": "node scripts/run-ts-test.mjs scripts/ai-runtime-ipc-contract.test.ts",
     "test-ai-runtime-panel": "node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts",
+    "test-settings-compatibility": "node scripts/run-ts-test.mjs scripts/settings-compatibility.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },
