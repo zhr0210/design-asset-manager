@@ -1,0 +1,67 @@
+import type { DoctorReport } from './doctor.types'
+
+export type BootstrapStatus =
+  | 'not_initialized'
+  | 'checking'
+  | 'recommendation_ready'
+  | 'installing'
+  | 'verifying'
+  | 'completed'
+  | 'failed'
+  | 'skipped'
+
+export type BootstrapMode = 'full' | 'lightweight' | 'external_inference_only' | 'manual'
+
+export type BootstrapStep =
+  | 'read_registry'
+  | 'run_doctor'
+  | 'resolve_profile'
+  | 'wait_user_confirm'
+  | 'install_runtime'
+  | 'verify_runtime'
+  | 'write_registry'
+  | 'completed'
+
+export interface BootstrapError {
+  code: string
+  message: string
+  details?: Record<string, unknown>
+  recoverable: boolean
+}
+
+export interface BootstrapState {
+  status: BootstrapStatus
+  mode: BootstrapMode
+  currentStep: BootstrapStep | null
+  startedAt: string | null
+  updatedAt: string
+  completedAt: string | null
+  error: BootstrapError | null
+  doctorReport: DoctorReport | null
+  selectedProfileId: string | null
+  recommendedProfileId: string | null
+  warnings: string[]
+  canContinue: boolean
+  canSkip: boolean
+  canRetry: boolean
+}
+
+export type BootstrapEvent =
+  | { type: 'START_CHECK'; mode?: BootstrapMode; at?: string }
+  | { type: 'DOCTOR_COMPLETED'; doctorReport: DoctorReport; warnings?: string[]; at?: string }
+  | { type: 'PROFILE_RESOLVED'; recommendedProfileId: string; selectedProfileId?: string; warnings?: string[]; at?: string }
+  | { type: 'USER_CONFIRMED'; selectedProfileId?: string; at?: string }
+  | { type: 'INSTALL_STARTED'; at?: string }
+  | { type: 'INSTALL_COMPLETED'; at?: string }
+  | { type: 'VERIFY_COMPLETED'; warnings?: string[]; at?: string }
+  | { type: 'COMPLETE'; warnings?: string[]; at?: string }
+  | { type: 'FAIL'; error: BootstrapError; at?: string }
+  | { type: 'SKIP'; at?: string }
+  | { type: 'RETRY'; at?: string }
+  | { type: 'RESET'; at?: string }
+
+export interface BootstrapTransitionResult {
+  ok: boolean
+  state: BootstrapState
+  error?: BootstrapError
+}

@@ -13,6 +13,7 @@ export * from './types/llama-runtime.types'
 export * from './types/download.types'
 export * from './types/platform.types'
 export * from './types/doctor.types'
+export * from './types/bootstrap.types'
 
 // Export Constants
 export * from './constants/ai-sources.constants'

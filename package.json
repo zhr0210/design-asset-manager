@@ -19,6 +19,7 @@
     "test-doctor-service": "node scripts/run-ts-test.mjs scripts/doctor-service.test.ts",
     "test-doctor-ipc": "node scripts/run-ts-test.mjs scripts/doctor-ipc-contract.test.ts",
     "test-doctor-panel": "node scripts/run-ts-test.mjs scripts/doctor-panel-contract.test.ts",
+    "test-bootstrap": "node scripts/run-ts-test.mjs scripts/bootstrap-state-machine.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },
