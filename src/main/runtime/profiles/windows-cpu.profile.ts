@@ -10,6 +10,7 @@ export const windowsCpuProfile: RuntimeProfile = {
   capabilities: ['cpu-only', 'external-inference', 'tagging', 'ocr'],
   inferenceMode: 'local-python-worker',
   ocrMode: 'local',
+  recommendedRuntimeKinds: ['python-worker', 'custom-http'],
   recommendedPackages: ['ai-worker-core'],
   optionalPackages: ['experimental-runtime'],
   warnings: ['Local AI features may run slowly on CPU-only machines.'],

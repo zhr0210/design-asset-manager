@@ -1,4 +1,5 @@
 import type { DoctorReport } from './doctor.types'
+import type { AiRuntimeKind } from './ai-runtime.types'
 import type { PlatformArch, PlatformName } from './platform.types'
 import type { RuntimeRegistry } from './runtime-registry.types'
 
@@ -34,6 +35,7 @@ export interface RuntimeProfile {
   capabilities: RuntimeCapability[]
   inferenceMode: RuntimeInferenceMode
   ocrMode: RuntimeOcrMode
+  recommendedRuntimeKinds: AiRuntimeKind[]
   recommendedPackages: string[]
   optionalPackages: string[]
   warnings: string[]

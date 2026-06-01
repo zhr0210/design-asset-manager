@@ -10,6 +10,7 @@ export const windowsNvidiaCudaProfile: RuntimeProfile = {
   capabilities: ['local-ai-worker', 'external-inference', 'ocr', 'tagging', 'embedding', 'gpu-acceleration', 'runtime-package'],
   inferenceMode: 'local-python-worker',
   ocrMode: 'local',
+  recommendedRuntimeKinds: ['python-worker'],
   recommendedPackages: ['ai-worker-core', 'cuda-runtime-hint'],
   optionalPackages: ['cpu-only-legacy-runtime'],
   warnings: ['This profile only describes CUDA runtime package compatibility; it does not install CUDA or inspect drivers deeply.'],
