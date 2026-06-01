@@ -1,3 +1,7 @@
 export * from './bootstrap.types'
 export * from './bootstrap-state-machine'
 export * from './bootstrap-state.service'
+export * from './runtime-registry.types'
+export * from './runtime-registry.validator'
+export * from './runtime-registry.backup'
+export * from './runtime-registry.service'

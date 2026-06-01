@@ -14,6 +14,7 @@ export * from './types/download.types'
 export * from './types/platform.types'
 export * from './types/doctor.types'
 export * from './types/bootstrap.types'
+export * from './types/runtime-registry.types'
 
 // Export Constants
 export * from './constants/ai-sources.constants'
