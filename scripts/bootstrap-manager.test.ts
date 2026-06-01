@@ -62,7 +62,7 @@ const manager = new BootstrapManager({
 const start = await manager.startCheck()
 assert.equal(runAllCount, 1)
 assert.equal(start.state.status, 'recommendation_ready')
-assert.equal(start.recommendation.recommendedMode, 'lightweight')
+assert.equal(start.recommendation.recommendedProfileId, 'windows-cpu')
 assert.equal(start.recommendation.blockingIssues.length, 0)
 assert.equal(start.registry.lastDoctorRunAt, aiWorkerWarningReport.generatedAt)
 assert.equal(start.registry.lastDoctorStatus, 'warning')
@@ -79,14 +79,14 @@ assert.equal(blocking.canContinue, false)
 assert.equal(blocking.blockingIssues.length, 2)
 
 const lightweight = await manager.confirmLightweightMode()
-assert.equal(lightweight.state.selectedProfileId, 'lightweight')
-assert.equal(lightweight.registry.selectedProfileId, 'lightweight')
+assert.equal(lightweight.state.selectedProfileId, 'windows-cpu')
+assert.equal(lightweight.registry.selectedProfileId, 'windows-cpu')
 
 const completed = await manager.completeBootstrapWithoutInstall()
 assert.equal(completed.completed, true)
 assert.equal(completed.state.status, 'completed')
 assert.equal(completed.registry.initialized, true)
-assert.equal(completed.registry.selectedProfileId, 'lightweight')
+assert.equal(completed.registry.selectedProfileId, 'windows-cpu')
 
 const externalBase = path.join(base, 'external')
 const externalManager = new BootstrapManager({
@@ -95,8 +95,8 @@ const externalManager = new BootstrapManager({
 })
 await externalManager.startCheck()
 const external = await externalManager.confirmExternalInferenceOnlyMode()
-assert.equal(external.state.selectedProfileId, 'external_inference_only')
-assert.equal(external.registry.selectedProfileId, 'external_inference_only')
+assert.equal(external.state.selectedProfileId, 'external-inference-only')
+assert.equal(external.registry.selectedProfileId, 'external-inference-only')
 
 const skipBase = path.join(base, 'skip')
 const skipRegistry = new RuntimeRegistryService({ managedPaths: makeManagedPaths(skipBase) })

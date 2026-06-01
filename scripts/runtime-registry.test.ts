@@ -47,13 +47,13 @@ await service.write(missing)
 const afterWrite = await service.read()
 assert.equal(afterWrite.paths.registryPath, service.getRegistryPath())
 
-const updated = await service.update({ recommendedProfileId: 'recommended-runtime', metadata: { source: 'test' } })
-assert.equal(updated.recommendedProfileId, 'recommended-runtime')
+const updated = await service.update({ recommendedProfileId: 'windows-cpu', metadata: { source: 'test' } })
+assert.equal(updated.recommendedProfileId, 'windows-cpu')
 assert.equal(updated.metadata.source, 'test')
 
-const initialized = await service.markInitialized('selected-runtime')
+const initialized = await service.markInitialized('windows-cpu')
 assert.equal(initialized.initialized, true)
-assert.equal(initialized.selectedProfileId, 'selected-runtime')
+assert.equal(initialized.selectedProfileId, 'windows-cpu')
 assert.ok(initialized.initializedAt)
 
 const report: DoctorReport = {

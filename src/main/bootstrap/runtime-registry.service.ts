@@ -2,6 +2,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import type { DoctorReport } from '../../shared/types/doctor.types'
 import type { ManagedPaths } from '../../shared/types/platform.types'
+import type { RuntimeProfileId } from '../../shared/types/runtime-profile.types'
 import { assertInsideManagedRoot, ensureDirectory } from '../platform/filesystem-guard'
 import { detectPlatform } from '../platform/platform-detector'
 import { ensureSafeJoin } from '../platform/path-normalizer'
@@ -146,7 +147,7 @@ export class RuntimeRegistryService {
     return this.read()
   }
 
-  async markInitialized(profileId: string): Promise<RuntimeRegistry> {
+  async markInitialized(profileId: RuntimeProfileId): Promise<RuntimeRegistry> {
     const at = this.now()
     return this.update({
       initialized: true,

@@ -35,7 +35,7 @@ state = result.state
 assert.equal(state.status, 'recommendation_ready')
 assert.equal(state.currentStep, 'resolve_profile')
 
-result = transitionBootstrapState(state, { type: 'PROFILE_RESOLVED', recommendedProfileId: 'local-runtime', at: '2026-06-01T00:00:03.000Z' })
+result = transitionBootstrapState(state, { type: 'PROFILE_RESOLVED', recommendedProfileId: 'windows-cpu', at: '2026-06-01T00:00:03.000Z' })
 assert.equal(result.ok, true)
 state = result.state
 assert.equal(state.status, 'recommendation_ready')

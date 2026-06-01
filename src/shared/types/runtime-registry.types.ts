@@ -1,5 +1,6 @@
 import type { DoctorReport } from './doctor.types'
 import type { PlatformArch, PlatformName, PlatformProfile } from './platform.types'
+import type { RuntimeProfileId } from './runtime-profile.types'
 
 export type RuntimeRegistryPackageStatus = 'installed' | 'missing' | 'corrupted' | 'disabled'
 export type RuntimeRegistryModelStatus = 'available' | 'missing' | 'corrupted' | 'disabled'
@@ -43,8 +44,8 @@ export interface RuntimeRegistry {
   initializedAt: string | null
   lastDoctorRunAt: string | null
   lastDoctorStatus: DoctorReport['overallStatus'] | null
-  selectedProfileId: string | null
-  recommendedProfileId: string | null
+  selectedProfileId: RuntimeProfileId | null
+  recommendedProfileId: RuntimeProfileId | null
   paths: RuntimeRegistryPaths
   packages: RuntimeRegistryPackage[]
   models: RuntimeRegistryModel[]

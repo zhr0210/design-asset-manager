@@ -11,6 +11,8 @@ import type {
 import { resolveBootstrapRecommendation } from './bootstrap-profile-resolver'
 import { RuntimeRegistryService } from './runtime-registry.service'
 import type { RuntimeRegistry } from './runtime-registry.types'
+import { getDefaultRuntimeProfileForPlatform } from '../runtime/runtime-profile-resolver'
+import type { RuntimeProfileId } from '../../shared/types/runtime-profile.types'
 
 export interface BootstrapManagerOptions {
   stateService?: BootstrapStateService
@@ -47,7 +49,7 @@ export class BootstrapManager {
       const doctorReport = await this.doctorService.runAll()
       this.lastDoctorReport = doctorReport
       registry = await this.runtimeRegistryService.updateDoctorSummary(doctorReport)
-      const recommendation = resolveBootstrapRecommendation(doctorReport, registry, registry.profile)
+      const recommendation = resolveBootstrapRecommendation(doctorReport, registry)
       this.lastRecommendation = recommendation
 
       this.applyTransition('DOCTOR_COMPLETED', { doctorReport, warnings: recommendation.warnings })
@@ -91,7 +93,7 @@ export class BootstrapManager {
       throw new Error('Cannot resolve bootstrap recommendation before Doctor has run.')
     }
 
-    const recommendation = resolveBootstrapRecommendation(doctorReport, registry, registry.profile)
+    const recommendation = resolveBootstrapRecommendation(doctorReport, registry)
     this.lastRecommendation = recommendation
     this.applyTransition('PROFILE_RESOLVED', {
       recommendedProfileId: recommendation.recommendedProfileId,
@@ -113,11 +115,15 @@ export class BootstrapManager {
   }
 
   async confirmLightweightMode(): Promise<BootstrapManagerResult> {
-    return this.confirmMode('lightweight')
+    const registry = await this.runtimeRegistryService.read()
+    const profileId = this.lastRecommendation?.recommendedProfileId === 'external-inference-only'
+      ? getDefaultRuntimeProfileForPlatform(registry.platform, registry.arch)
+      : this.lastRecommendation?.recommendedProfileId ?? getDefaultRuntimeProfileForPlatform(registry.platform, registry.arch)
+    return this.confirmMode(profileId)
   }
 
   async confirmExternalInferenceOnlyMode(): Promise<BootstrapManagerResult> {
-    return this.confirmMode('external_inference_only')
+    return this.confirmMode('external-inference-only')
   }
 
   async skipBootstrap(): Promise<BootstrapManagerResult> {
@@ -176,7 +182,7 @@ export class BootstrapManager {
     }
   }
 
-  private async confirmMode(profileId: 'lightweight' | 'external_inference_only'): Promise<BootstrapManagerResult> {
+  private async confirmMode(profileId: RuntimeProfileId): Promise<BootstrapManagerResult> {
     this.applyTransition('USER_CONFIRMED', { selectedProfileId: profileId })
     this.stateService.setSelectedProfile(profileId)
     const registry = await this.runtimeRegistryService.update({

@@ -1,5 +1,6 @@
 import type { DoctorReport } from './doctor.types'
 import type { RuntimeRegistry } from './runtime-registry.types'
+import type { RuntimeProfileId } from './runtime-profile.types'
 
 export type BootstrapStatus =
   | 'not_initialized'
@@ -32,7 +33,7 @@ export interface BootstrapError {
 
 export interface BootstrapRecommendation {
   recommendedMode: BootstrapMode
-  recommendedProfileId: string
+  recommendedProfileId: RuntimeProfileId
   reason: string
   warnings: string[]
   blockingIssues: string[]
@@ -50,8 +51,8 @@ export interface BootstrapState {
   error: BootstrapError | null
   doctorReport: DoctorReport | null
   recommendation: BootstrapRecommendation | null
-  selectedProfileId: string | null
-  recommendedProfileId: string | null
+  selectedProfileId: RuntimeProfileId | null
+  recommendedProfileId: RuntimeProfileId | null
   warnings: string[]
   canContinue: boolean
   canSkip: boolean
@@ -61,8 +62,8 @@ export interface BootstrapState {
 export type BootstrapEvent =
   | { type: 'START_CHECK'; mode?: BootstrapMode; at?: string }
   | { type: 'DOCTOR_COMPLETED'; doctorReport: DoctorReport; warnings?: string[]; at?: string }
-  | { type: 'PROFILE_RESOLVED'; recommendedProfileId: string; selectedProfileId?: string; warnings?: string[]; at?: string }
-  | { type: 'USER_CONFIRMED'; selectedProfileId?: string; at?: string }
+  | { type: 'PROFILE_RESOLVED'; recommendedProfileId: RuntimeProfileId; selectedProfileId?: RuntimeProfileId; warnings?: string[]; at?: string }
+  | { type: 'USER_CONFIRMED'; selectedProfileId?: RuntimeProfileId; at?: string }
   | { type: 'INSTALL_STARTED'; at?: string }
   | { type: 'INSTALL_COMPLETED'; at?: string }
   | { type: 'VERIFY_COMPLETED'; warnings?: string[]; at?: string }

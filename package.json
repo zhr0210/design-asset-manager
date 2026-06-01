@@ -22,6 +22,7 @@
     "test-bootstrap": "node scripts/run-ts-test.mjs scripts/bootstrap-state-machine.test.ts",
     "test-runtime-registry": "node scripts/run-ts-test.mjs scripts/runtime-registry.test.ts",
     "test-bootstrap-manager": "node scripts/run-ts-test.mjs scripts/bootstrap-manager.test.ts",
+    "test-runtime-profile": "node scripts/run-ts-test.mjs scripts/runtime-profile.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },

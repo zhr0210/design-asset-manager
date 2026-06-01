@@ -1,4 +1,5 @@
 import type { DoctorReport } from '../../shared/types/doctor.types'
+import type { RuntimeProfileId } from '../../shared/types/runtime-profile.types'
 import type { BootstrapError, BootstrapEvent, BootstrapMode, BootstrapRecommendation, BootstrapState, BootstrapTransitionResult } from './bootstrap.types'
 import {
   createInitialBootstrapState,
@@ -68,7 +69,7 @@ export class BootstrapStateService {
     return this.state
   }
 
-  setSelectedProfile(selectedProfileId: string): BootstrapState {
+  setSelectedProfile(selectedProfileId: RuntimeProfileId): BootstrapState {
     this.state = {
       ...this.state,
       selectedProfileId
