@@ -4,6 +4,7 @@ import { homedir } from 'os'
 import type { AppSettings } from '../../shared/types/settings.types'
 import type { AiBackendConfig, AiPromptReverseSettings } from '../../shared/types/ai-backend.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../shared/constants/prompt-templates.constants'
+import { createNewInstallAppSettingsDefaults } from './settings/settings-defaults.builder'
 
 export function createDefaultLlamaBackendConfig(): AiBackendConfig {
   return {
@@ -120,9 +121,10 @@ export class SettingsService {
     }
 
     if (!fs.existsSync(this.configPath)) {
-      this.cache = defaults
-      this.saveSettings(defaults)
-      return defaults
+      const newInstallDefaults = createNewInstallAppSettingsDefaults()
+      this.cache = newInstallDefaults
+      this.saveSettings(newInstallDefaults)
+      return newInstallDefaults
     }
 
     try {
