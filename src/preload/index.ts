@@ -37,6 +37,19 @@ import {
   CHANNEL_DOCTOR_RUN_CHECKS
 } from '../shared/contracts/doctor.contract'
 import type { DoctorRunCheckRequest, DoctorRunRequest } from '../shared/contracts/doctor.contract'
+import {
+  CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
+  CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
+  CHANNEL_AI_RUNTIME_HEALTH_CHECK,
+  CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
+  CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
+  CHANNEL_AI_RUNTIME_RESTART_RUNTIME,
+  CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
+  CHANNEL_AI_RUNTIME_START_RUNTIME,
+  CHANNEL_AI_RUNTIME_STOP_RUNTIME,
+  CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG
+} from '../shared/contracts/ai-runtime.contract'
+import type { AiRuntimeConfig } from '../shared/types/ai-runtime.types'
 
 // Expose safe APIs to the React renderer
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -199,6 +212,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getLastReport: () => ipcRenderer.invoke(CHANNEL_DOCTOR_GET_LAST_REPORT),
     clearLastReport: () => ipcRenderer.invoke(CHANNEL_DOCTOR_CLEAR_LAST_REPORT),
     listChecks: () => ipcRenderer.invoke(CHANNEL_DOCTOR_LIST_CHECKS)
+  },
+
+  // AI Runtime IPC API
+  aiRuntime: {
+    listRuntimes: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_LIST_RUNTIMES),
+    getRuntimeState: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE, { runtimeId }),
+    getActiveRuntime: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME),
+    selectActiveRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME, { runtimeId }),
+    startRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_START_RUNTIME, { runtimeId }),
+    stopRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_STOP_RUNTIME, { runtimeId }),
+    restartRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_RESTART_RUNTIME, { runtimeId }),
+    healthCheck: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK, { runtimeId }),
+    healthCheckAll: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL),
+    updateRuntimeConfig: (runtimeId: string, config: Partial<AiRuntimeConfig>) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG, { runtimeId, config })
   },
 
   // AI Model IPC API
