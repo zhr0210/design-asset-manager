@@ -1,6 +1,9 @@
 import fs from 'fs'
-import path from 'path'
 import { ImageMetadataService } from './image-metadata.service'
+import { ensureDirectory } from '../platform/filesystem-guard'
+import { assertSafeLogPath, resolveLogPaths, sanitizeLogFileName } from '../platform/log-path-resolver'
+import { ensureSafeJoin } from '../platform/path-normalizer'
+import { resolveManagedPaths } from '../platform/path-resolver'
 import { 
   parseRgb, 
   rgbToHsl, 
@@ -21,6 +24,24 @@ async function getSharp() {
   } catch (err) {
     return null
   }
+}
+
+function resolveManagedDebugDir(runId: string): string {
+  let getPath: ((name: 'userData' | 'temp' | 'downloads') => string) | undefined
+  try {
+    const { app } = require('electron')
+    if (app?.getPath) {
+      getPath = (name) => app.getPath(name)
+    }
+  } catch {
+    // Ignore: outside Electron environment (e.g., standard unit tests)
+  }
+
+  const managedPaths = resolveManagedPaths({ getPath })
+  const logPaths = resolveLogPaths(managedPaths)
+  const debugDir = ensureSafeJoin(logPaths.debugDir, 'text-palette', sanitizeLogFileName(runId))
+  assertSafeLogPath(debugDir, managedPaths)
+  return debugDir
 }
 
 // Development mode checker
@@ -460,11 +481,8 @@ export class TextColorExtractor {
         try {
           const runId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
           const createdAt = new Date().toISOString()
-          const baseAppDir = path.join(process.env.APPDATA || path.join(require('os').homedir(), '.gemini'), 'antigravity')
-          const debugDir = path.join(baseAppDir, 'scratch', 'text_palette_debug', runId)
-          if (!fs.existsSync(debugDir)) {
-            fs.mkdirSync(debugDir, { recursive: true })
-          }
+          const debugDir = resolveManagedDebugDir(runId)
+          await ensureDirectory(debugDir)
           const generatedFiles: string[] = []
           const missingFiles: string[] = []
 
@@ -487,14 +505,14 @@ export class TextColorExtractor {
           await sharp(resolvedPath)
             .composite([{ input: Buffer.from(svgOverlay), top: 0, left: 0 }])
             .png()
-            .toFile(path.join(debugDir, 'text_boxes_overlay.png'))
+            .toFile(ensureSafeJoin(debugDir, 'text_boxes_overlay.png'))
           generatedFiles.push('text_boxes_overlay.png')
 
           // B: text_foreground_mask_overlay.png
           if (maskCanvas) {
             await sharp(maskCanvas, { raw: { width: imgW, height: imgH, channels: 3 } })
               .png()
-              .toFile(path.join(debugDir, 'text_foreground_mask_overlay.png'))
+              .toFile(ensureSafeJoin(debugDir, 'text_foreground_mask_overlay.png'))
             generatedFiles.push('text_foreground_mask_overlay.png')
           } else {
             missingFiles.push('text_foreground_mask_overlay.png')
@@ -531,7 +549,7 @@ export class TextColorExtractor {
             finalSwatches
           }
           fs.writeFileSync(
-            path.join(debugDir, 'text_palette_debug.json'),
+            ensureSafeJoin(debugDir, 'text_palette_debug.json'),
             JSON.stringify(debugPayload, null, 2),
             'utf8'
           )
@@ -550,7 +568,7 @@ export class TextColorExtractor {
             notes: 'Development-only text color debug artifacts.'
           }
           fs.writeFileSync(
-            path.join(debugDir, 'manifest.json'),
+            ensureSafeJoin(debugDir, 'manifest.json'),
             JSON.stringify(manifestPayload, null, 2),
             'utf8'
           )

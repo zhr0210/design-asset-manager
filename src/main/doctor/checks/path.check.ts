@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import type { ManagedPaths } from '../../../shared/types/platform.types'
+import { assertSafeLogPath, resolveLogPaths } from '../../platform/log-path-resolver'
 import { auditManagedPaths, summarizeManagedPathAudit } from '../../platform/managed-path-audit'
 import type { RegisteredDoctorCheck } from '../doctor.types'
 
@@ -23,6 +24,17 @@ export const pathCheck: RegisteredDoctorCheck = {
     )
     const audit = await auditManagedPaths(context.managedPaths)
     const auditSummary = summarizeManagedPathAudit(audit)
+    const logPaths = resolveLogPaths(context.managedPaths)
+    const logPathDiagnostics = {
+      logsDir: {
+        path: logPaths.logsDir,
+        isInsideManagedLogsRoot: assertSafeLogPath(logPaths.logsDir, context.managedPaths).isInsideLogsDir
+      },
+      debugDir: {
+        path: logPaths.debugDir,
+        isInsideManagedLogsRoot: assertSafeLogPath(logPaths.debugDir, context.managedPaths).isInsideLogsDir
+      }
+    }
     const status = auditSummary.errorCount > 0 ? 'warning' : 'ok'
 
     return {
@@ -30,7 +42,7 @@ export const pathCheck: RegisteredDoctorCheck = {
       label: this.label,
       status,
       message: status === 'ok' ? 'Managed paths resolved.' : 'Managed paths resolved with blocking audit issues.',
-      details: { paths, audit: auditSummary },
+      details: { paths, audit: auditSummary, logPaths: logPathDiagnostics },
       fixSuggestion: status === 'ok' ? undefined : 'Review managed path metadata and prefer path-resolver managed directories.',
       durationMs: Date.now() - startedAt
     }
