@@ -15,5 +15,8 @@ export type {
   ExternalHttpRequestOptions,
   ExternalHttpResponse,
   ExternalHttpRuntimeConfig,
-  ExternalHttpRuntimeKind
+  ExternalHttpRuntimeKind,
+  PythonWorkerLaunchPlan,
+  PythonWorkerProcessState,
+  PythonWorkerRuntimeConfig
 } from '../../../shared/types/ai-runtime.types'

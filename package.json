@@ -27,6 +27,7 @@
     "test-bootstrap-package-plan": "node scripts/run-ts-test.mjs scripts/bootstrap-package-plan.test.ts",
     "test-ai-runtime": "node scripts/run-ts-test.mjs scripts/ai-runtime-manager.test.ts",
     "test-external-http-runtime": "node scripts/run-ts-test.mjs scripts/external-http-runtime.test.ts",
+    "test-python-worker-runtime": "node scripts/run-ts-test.mjs scripts/python-worker-runtime.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },

@@ -78,6 +78,48 @@ export interface ExternalHttpClient {
   post(url: string, body: unknown, options?: ExternalHttpRequestOptions): Promise<ExternalHttpResponse>
 }
 
+export interface PythonWorkerRuntimeConfig {
+  runtimeId: string
+  displayName: string
+  pythonPath: string | null
+  scriptPath: string | null
+  workingDirectory: string | null
+  host: string
+  port: number
+  baseUrl: string | null
+  healthEndpoint: string
+  launchArgs: string[]
+  env: Record<string, string>
+  timeoutMs: number
+  platform?: PlatformName | 'all'
+  profileId?: RuntimeProfileId | null
+  metadata?: Record<string, unknown>
+}
+
+export interface PythonWorkerProcessState {
+  pid: number | null
+  command: string
+  args: string[]
+  cwd: string | null
+  startedAt: string | null
+  exitedAt: string | null
+  exitCode: number | null
+  signal: string | null
+  stdoutTail: string[]
+  stderrTail: string[]
+}
+
+export interface PythonWorkerLaunchPlan {
+  command: string | null
+  args: string[]
+  cwd: string | null
+  env: Record<string, string>
+  healthUrl: string | null
+  timeoutMs: number
+  warnings: string[]
+  blockingIssues: string[]
+}
+
 export interface AiRuntimeConfig {
   id: string
   kind: AiRuntimeKind
