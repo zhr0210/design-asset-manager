@@ -11,6 +11,8 @@ export * from './types/settings.types'
 export * from './types/ai-backend.types'
 export * from './types/llama-runtime.types'
 export * from './types/download.types'
+export * from './types/platform.types'
+export * from './types/doctor.types'
 
 // Export Constants
 export * from './constants/ai-sources.constants'
@@ -26,3 +28,4 @@ export * from './contracts/llama-runtime.contract'
 export * from './contracts/color-palette.contract'
 export * from './contracts/settings.contract'
 export * from './contracts/download.contract'
+export * from './contracts/doctor.contract'

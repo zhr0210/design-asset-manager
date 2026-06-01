@@ -28,6 +28,15 @@ import {
   CHANNEL_OCR_GET_INSTALL_LOG,
   CHANNEL_OCR_INSTALL_LOG_UPDATE
 } from '../shared/contracts/ocr-dependency.contract'
+import {
+  CHANNEL_DOCTOR_CLEAR_LAST_REPORT,
+  CHANNEL_DOCTOR_GET_LAST_REPORT,
+  CHANNEL_DOCTOR_LIST_CHECKS,
+  CHANNEL_DOCTOR_RUN_ALL,
+  CHANNEL_DOCTOR_RUN_CHECK,
+  CHANNEL_DOCTOR_RUN_CHECKS
+} from '../shared/contracts/doctor.contract'
+import type { DoctorRunCheckRequest, DoctorRunRequest } from '../shared/contracts/doctor.contract'
 
 // Expose safe APIs to the React renderer
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -181,6 +190,16 @@ contextBridge.exposeInMainWorld('electronAPI', {
   aiWorkerRunPromptReverse: (params: { assetId: string; filePath: string; modelId: string; modelPath: string }) => ipcRenderer.invoke('ai-worker:run-prompt-reverse', params),
   aiWorkerGetGpuStatus: () => ipcRenderer.invoke('ai-worker:get-gpu-status'),
   aiWorkerClearGpuMemory: () => ipcRenderer.invoke('ai-worker:clear-gpu-memory'),
+
+  // Doctor IPC API
+  doctor: {
+    runAll: (request?: DoctorRunRequest) => ipcRenderer.invoke(CHANNEL_DOCTOR_RUN_ALL, request),
+    runChecks: (checkIds: string[], request?: Omit<DoctorRunRequest, 'checkIds'>) => ipcRenderer.invoke(CHANNEL_DOCTOR_RUN_CHECKS, { ...request, checkIds }),
+    runCheck: (checkId: string, request?: Omit<DoctorRunCheckRequest, 'checkId'>) => ipcRenderer.invoke(CHANNEL_DOCTOR_RUN_CHECK, { ...request, checkId }),
+    getLastReport: () => ipcRenderer.invoke(CHANNEL_DOCTOR_GET_LAST_REPORT),
+    clearLastReport: () => ipcRenderer.invoke(CHANNEL_DOCTOR_CLEAR_LAST_REPORT),
+    listChecks: () => ipcRenderer.invoke(CHANNEL_DOCTOR_LIST_CHECKS)
+  },
 
   // AI Model IPC API
   aiModelList: () => ipcRenderer.invoke('ai-model:list'),

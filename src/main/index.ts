@@ -134,6 +134,7 @@ import { registerAiWorkerIpc } from './ipc/ai-worker.ipc'
 import { registerAiModelIpc } from './ipc/ai-model.ipc'
 import { registerAiBackendIpc } from './ipc/ai-backend.ipc'
 import { registerLlamaRuntimeIpc } from './ipc/llama-runtime.ipc'
+import { registerDoctorIpc } from './ipc/doctor.ipc'
 
 function setupIpcHandlers() {
   // Register database IPC handlers
@@ -153,4 +154,5 @@ function setupIpcHandlers() {
   registerAiModelIpc()
   registerAiBackendIpc()
   registerLlamaRuntimeIpc()
+  registerDoctorIpc()
 }
