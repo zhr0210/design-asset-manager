@@ -4,6 +4,9 @@ import { homedir } from 'os'
 import type { AppSettings } from '../../shared/types/settings.types'
 import type { AiBackendConfig, AiPromptReverseSettings } from '../../shared/types/ai-backend.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../shared/constants/prompt-templates.constants'
+import { createNewInstallAppSettingsDefaults } from './settings/settings-defaults.builder'
+import { SettingsMigrationService } from './settings/settings-migration.service'
+import type { SettingsMigrationApplyResult, SettingsMigrationPlan, SettingsMigrationRollbackResult } from './settings/settings-migration.types'
 
 export function createDefaultLlamaBackendConfig(): AiBackendConfig {
   return {
@@ -45,6 +48,7 @@ export class SettingsService {
   private static instance: SettingsService
   private configPath: string
   private cache: AppSettings | null = null
+  private migrationService = new SettingsMigrationService()
 
   private constructor() {
     const baseDir = path.join(homedir(), 'DesignAssetManager')
@@ -59,6 +63,22 @@ export class SettingsService {
       SettingsService.instance = new SettingsService()
     }
     return SettingsService.instance
+  }
+
+  public getSettingsPath(): string {
+    return this.configPath
+  }
+
+  public createMigrationPlan(): SettingsMigrationPlan {
+    return this.migrationService.createMigrationPlan(this.getSettings())
+  }
+
+  public applySettingsMigration(): Promise<SettingsMigrationApplyResult> {
+    return this.migrationService.applyMigrationFromFile(this.configPath)
+  }
+
+  public rollbackSettingsMigration(backupPath: string): Promise<SettingsMigrationRollbackResult> {
+    return this.migrationService.rollbackMigration(this.configPath, backupPath)
   }
 
   /**
@@ -120,9 +140,10 @@ export class SettingsService {
     }
 
     if (!fs.existsSync(this.configPath)) {
-      this.cache = defaults
-      this.saveSettings(defaults)
-      return defaults
+      const newInstallDefaults = createNewInstallAppSettingsDefaults()
+      this.cache = newInstallDefaults
+      this.saveSettings(newInstallDefaults)
+      return newInstallDefaults
     }
 
     try {
