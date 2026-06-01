@@ -14,6 +14,7 @@ import {
   Trash2
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
+import DoctorPanel from '../components/settings/DoctorPanel'
 
 export default function Settings() {
   const { settings, updateSettings, clearCache, loadSettings } = useSettingsStore()
@@ -211,6 +212,8 @@ export default function Settings() {
                 </div>
               </div>
             </div>
+
+            <DoctorPanel />
 
             <div className="rounded-[24px] border border-white bg-white p-6 shadow-premium">
               <h4 className="flex items-center gap-2 text-[14px] font-black text-slate-900">
