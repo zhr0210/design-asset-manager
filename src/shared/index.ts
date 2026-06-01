@@ -18,6 +18,7 @@ export * from './types/runtime-registry.types'
 export * from './types/runtime-profile.types'
 export * from './types/runtime-package.types'
 export * from './types/ai-runtime.types'
+export * from './types/ai-runtime-settings.types'
 
 // Export Constants
 export * from './constants/ai-sources.constants'

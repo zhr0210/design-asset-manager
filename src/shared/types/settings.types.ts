@@ -1,5 +1,6 @@
 import { ModelCompatibilityStatus } from './ai-model.types';
 import type { AiBackendConfig, AiPromptReverseSettings } from './ai-backend.types';
+import type { AiRuntimeSettings } from './ai-runtime-settings.types'
 
 /**
  * ⚙️ 共享设置类型模型定义 (Shared App Settings Types)
@@ -60,6 +61,7 @@ export interface AppSettings {
   qwen3vlTopP?: number
   memoryPolicy?: AiMemoryPolicy
   aiBackends?: AiBackendConfig[]
+  aiRuntimeSettings?: AiRuntimeSettings
   promptReverseSettings?: AiPromptReverseSettings
   promptReverseTemplates?: AiPromptTemplate[]
 
