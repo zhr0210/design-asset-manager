@@ -221,6 +221,24 @@ node scripts/package-smoke.mjs --sandbox --work-root=G:\codex\DesignAssetManager
 npm.cmd run test-package-smoke
 ```
 
+## macOS Local Development Follow-up
+
+- Cloned the GitHub repository onto macOS and created the local `feature/macos-adjustments` branch.
+- Installed npm dependencies on macOS arm64; native dependencies are importable.
+- Fixed macOS-hosted governance tests that assumed the repository was not under `/Users/...` by moving log/cache/temp test roots to the system temp directory.
+- Fixed bootstrap tests that expected Windows CPU recommendations by seeding explicit Windows registry fixtures instead of depending on host platform detection.
+- Updated CI hygiene to ignore macOS `.DS_Store` metadata inside `dist-temp`.
+- Updated macOS packaging scripts to use the installed local Electron runtime (`node_modules/electron/dist`) and avoid re-downloading the Electron zip during local packaging.
+
+macOS validation result:
+
+```bash
+npm run verify:platform:mac
+npm run pack:mac
+```
+
+Both commands passed on macOS arm64. `doctor:ci` reported warning status because the AI Worker was not running and one or more managed paths were not writable; this remains acceptable because no doctor check returned `error`.
+
 ## GitHub / main Branch Handoff
 
 User requested merging the current cross-platform adaptation branch into `main` and uploading the source code to GitHub for macOS review and future dual-platform development.

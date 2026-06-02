@@ -33,6 +33,16 @@ function reportWith(checks: DoctorReport['checks']): DoctorReport {
   }
 }
 
+async function seedWindowsRegistry(service: RuntimeRegistryService) {
+  const registry = service.createDefault()
+  await service.write({
+    ...registry,
+    platform: 'win32',
+    arch: 'x64',
+    profile: 'windows-x64'
+  })
+}
+
 const aiWorkerWarningReport = reportWith([
   { id: 'system', label: 'system', status: 'ok', message: 'ok', durationMs: 1 },
   { id: 'path', label: 'path', status: 'ok', message: 'ok', durationMs: 1 },
@@ -49,6 +59,7 @@ const registryService = new RuntimeRegistryService({
   managedPaths: makeManagedPaths(base),
   now: () => '2026-06-01T00:00:00.000Z'
 })
+await seedWindowsRegistry(registryService)
 const manager = new BootstrapManager({
   runtimeRegistryService: registryService,
   doctorService: {
@@ -89,8 +100,10 @@ assert.equal(completed.registry.initialized, true)
 assert.equal(completed.registry.selectedProfileId, 'windows-cpu')
 
 const externalBase = path.join(base, 'external')
+const externalRegistryService = new RuntimeRegistryService({ managedPaths: makeManagedPaths(externalBase) })
+await seedWindowsRegistry(externalRegistryService)
 const externalManager = new BootstrapManager({
-  runtimeRegistryService: new RuntimeRegistryService({ managedPaths: makeManagedPaths(externalBase) }),
+  runtimeRegistryService: externalRegistryService,
   doctorService: { async runAll() { return aiWorkerWarningReport } }
 })
 await externalManager.startCheck()
@@ -100,6 +113,7 @@ assert.equal(external.registry.selectedProfileId, 'external-inference-only')
 
 const skipBase = path.join(base, 'skip')
 const skipRegistry = new RuntimeRegistryService({ managedPaths: makeManagedPaths(skipBase) })
+await seedWindowsRegistry(skipRegistry)
 const skipManager = new BootstrapManager({
   runtimeRegistryService: skipRegistry,
   doctorService: { async runAll() { return aiWorkerWarningReport } }
@@ -110,8 +124,10 @@ assert.equal(skipped.state.status, 'skipped')
 assert.equal(skipped.registry.initialized, false)
 
 const retryBase = path.join(base, 'retry')
+const retryRegistryService = new RuntimeRegistryService({ managedPaths: makeManagedPaths(retryBase) })
+await seedWindowsRegistry(retryRegistryService)
 const retryManager = new BootstrapManager({
-  runtimeRegistryService: new RuntimeRegistryService({ managedPaths: makeManagedPaths(retryBase) }),
+  runtimeRegistryService: retryRegistryService,
   doctorService: {
     async runAll() {
       throw new Error('doctor failed')

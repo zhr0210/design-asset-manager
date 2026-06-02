@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
+import os from 'node:os'
 import path from 'node:path'
 import type { ManagedPaths } from '../src/shared/types/platform.types'
 import {
@@ -20,7 +21,7 @@ import {
 } from '../src/main/platform'
 import { pathCheck } from '../src/main/doctor/checks/path.check'
 
-const base = path.join(process.cwd(), 'dist-temp', 'cache-temp-governance-tests')
+const base = path.join(os.tmpdir(), 'design-asset-manager-cache-temp-governance-tests')
 const userDataDir = path.join(base, 'user-data')
 const managedPaths: ManagedPaths = {
   userDataDir,

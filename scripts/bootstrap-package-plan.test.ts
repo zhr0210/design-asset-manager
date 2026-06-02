@@ -35,6 +35,16 @@ function managedPaths(base: string): ManagedPaths {
   }
 }
 
+async function seedWindowsRegistry(service: RuntimeRegistryService) {
+  const registry = service.createDefault()
+  await service.write({
+    ...registry,
+    platform: 'win32',
+    arch: 'x64',
+    profile: 'windows-x64'
+  })
+}
+
 const okReport = reportWith([
   { id: 'system', label: 'system', status: 'ok', message: 'ok', durationMs: 1 },
   { id: 'path', label: 'path', status: 'ok', message: 'ok', durationMs: 1 },
@@ -136,6 +146,7 @@ assert.ok(missingDependencyPlan.blockingIssues.some((issue) => issue.includes('a
 const base = path.join(process.cwd(), 'dist-temp', 'bootstrap-package-plan-test')
 await fs.rm(base, { recursive: true, force: true })
 const registryService = new RuntimeRegistryService({ managedPaths: managedPaths(base) })
+await seedWindowsRegistry(registryService)
 const manager = new BootstrapManager({
   runtimeRegistryService: registryService,
   doctorService: { async runAll() { return okReport } }

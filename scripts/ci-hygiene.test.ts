@@ -60,6 +60,7 @@ async function assertDistTempIsBounded(allowedEntries: string[]): Promise<void> 
 
   const allowed = new Set(allowedEntries)
   for (const entry of entries) {
+    if (entry === '.DS_Store') continue
     assert.ok(allowed.has(entry), `Unexpected dist-temp entry: ${entry}`)
     const stat = await fs.stat(path.join(distTemp, entry))
     assert.equal(stat.isDirectory(), true, `dist-temp entry must be a directory: ${entry}`)
