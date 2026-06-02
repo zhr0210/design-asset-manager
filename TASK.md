@@ -241,3 +241,10 @@ Packaging artifact handling:
 
 - Keep local generated packaging outputs (`dist-packages/`, `dist-temp/`) out of source commits.
 - Track `build/installer.nsh` because it is required by the Windows NSIS installer configuration.
+
+Local merge result:
+
+- Committed the adaptation branch changes as `ac21c56 feat: add cross-platform packaging governance`.
+- Merged `codex/platform-windows-macos-adaptation` into `main` as `e8c6328 merge: cross-platform packaging governance`.
+- `main` is clean locally after the merge.
+- GitHub upload still needs a target repository remote or explicit `owner/repo` plus an available write path.
