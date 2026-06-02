@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import type { ManagedPaths } from '../../../shared/types/platform.types'
+import { assertSafeCachePath, assertSafeTempPath, resolveCachePaths, resolveTempPaths } from '../../platform/cache-path-resolver'
 import { assertSafeLogPath, resolveLogPaths } from '../../platform/log-path-resolver'
 import { auditManagedPaths, summarizeManagedPathAudit } from '../../platform/managed-path-audit'
 import type { RegisteredDoctorCheck } from '../doctor.types'
@@ -25,6 +26,8 @@ export const pathCheck: RegisteredDoctorCheck = {
     const audit = await auditManagedPaths(context.managedPaths)
     const auditSummary = summarizeManagedPathAudit(audit)
     const logPaths = resolveLogPaths(context.managedPaths)
+    const cachePaths = resolveCachePaths(context.managedPaths)
+    const tempPaths = resolveTempPaths(context.managedPaths)
     const logPathDiagnostics = {
       logsDir: {
         path: logPaths.logsDir,
@@ -35,6 +38,24 @@ export const pathCheck: RegisteredDoctorCheck = {
         isInsideManagedLogsRoot: assertSafeLogPath(logPaths.debugDir, context.managedPaths).isInsideLogsDir
       }
     }
+    const cacheTempDiagnostics = {
+      cacheDir: {
+        path: cachePaths.cacheDir,
+        isInsideManagedCacheRoot: assertSafeCachePath(cachePaths.cacheDir, context.managedPaths).isInsideManagedRoot
+      },
+      tempDir: {
+        path: tempPaths.tempDir,
+        isInsideManagedTempRoot: assertSafeTempPath(tempPaths.tempDir, context.managedPaths).isInsideManagedRoot
+      },
+      diagnosticCacheDir: {
+        path: cachePaths.diagnosticCacheDir,
+        isInsideManagedCacheRoot: assertSafeCachePath(cachePaths.diagnosticCacheDir, context.managedPaths).isInsideManagedRoot
+      },
+      testTempDir: {
+        path: tempPaths.testTempDir,
+        isInsideManagedTempRoot: assertSafeTempPath(tempPaths.testTempDir, context.managedPaths).isInsideManagedRoot
+      }
+    }
     const status = auditSummary.errorCount > 0 ? 'warning' : 'ok'
 
     return {
@@ -42,7 +63,7 @@ export const pathCheck: RegisteredDoctorCheck = {
       label: this.label,
       status,
       message: status === 'ok' ? 'Managed paths resolved.' : 'Managed paths resolved with blocking audit issues.',
-      details: { paths, audit: auditSummary, logPaths: logPathDiagnostics },
+      details: { paths, audit: auditSummary, logPaths: logPathDiagnostics, cacheTempPaths: cacheTempDiagnostics },
       fixSuggestion: status === 'ok' ? undefined : 'Review managed path metadata and prefer path-resolver managed directories.',
       durationMs: Date.now() - startedAt
     }

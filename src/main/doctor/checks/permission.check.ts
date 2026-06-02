@@ -2,6 +2,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import type { ManagedPaths } from '../../../shared/types/platform.types'
 import { assertInsideManagedRoot, ensureDirectory, safeRemoveInsideRoot } from '../../platform/filesystem-guard'
+import { resolveCachePaths, resolveTempPaths } from '../../platform/cache-path-resolver'
 import { resolveLogPaths } from '../../platform/log-path-resolver'
 import { auditManagedPaths, summarizeManagedPathAudit } from '../../platform/managed-path-audit'
 import type { RegisteredDoctorCheck } from '../doctor.types'
@@ -45,19 +46,27 @@ export const permissionCheck: RegisteredDoctorCheck = {
       checkWritable(logPaths.logsDir, 'logsDir'),
       checkWritable(logPaths.debugDir, 'debugDir')
     ])
+    const cachePaths = resolveCachePaths(context.managedPaths)
+    const tempPaths = resolveTempPaths(context.managedPaths)
+    const cacheTempResults = await Promise.all([
+      checkWritable(cachePaths.cacheDir, 'cacheDir'),
+      checkWritable(tempPaths.tempDir, 'tempDir'),
+      checkWritable(cachePaths.diagnosticCacheDir, 'diagnosticCacheDir'),
+      checkWritable(tempPaths.testTempDir, 'testTempDir')
+    ])
     const audit = await auditManagedPaths(context.managedPaths, {
       checkWritable: true,
       writableProbeRoot: path.join(context.managedPaths.tempDir, 'doctor-managed-path-audit')
     })
     const auditSummary = summarizeManagedPathAudit(audit)
-    const status = [...results, ...logPathResults].every((item) => item.writable) && auditSummary.errorCount === 0 ? 'ok' : 'warning'
+    const status = [...results, ...logPathResults, ...cacheTempResults].every((item) => item.writable) && auditSummary.errorCount === 0 ? 'ok' : 'warning'
 
     return {
       id: this.id,
       label: this.label,
       status,
       message: status === 'ok' ? 'Managed paths are writable.' : 'One or more managed paths are not writable.',
-      details: { paths: results, logPaths: logPathResults, audit: auditSummary },
+      details: { paths: results, logPaths: logPathResults, cacheTempPaths: cacheTempResults, audit: auditSummary },
       fixSuggestion: status === 'ok' ? undefined : 'Choose writable app-managed directories or fix OS permissions.',
       durationMs: Date.now() - startedAt
     }
