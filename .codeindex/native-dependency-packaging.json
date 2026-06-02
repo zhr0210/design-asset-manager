@@ -17,6 +17,13 @@
       "requiresAsarUnpack": true,
       "asarUnpackPattern": "node_modules/sharp/**/*",
       "verification": "package config and native importability"
+    },
+    {
+      "name": "sharp",
+      "declaredInDependencies": true,
+      "requiresAsarUnpack": true,
+      "asarUnpackPattern": "node_modules/@img/**/*",
+      "verification": "sharp platform optional packages and libvips dylibs must be unpacked for dynamic loading"
     }
   ],
   "pathChecks": {

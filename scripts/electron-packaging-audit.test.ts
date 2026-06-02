@@ -46,6 +46,7 @@ if (packageJson.build) {
   assert.equal(packageJson.build.asar, true)
   assert.ok(packageJson.build.asarUnpack?.includes('node_modules/better-sqlite3/**/*'))
   assert.ok(packageJson.build.asarUnpack?.includes('node_modules/sharp/**/*'))
+  assert.ok(packageJson.build.asarUnpack?.includes('node_modules/@img/**/*'))
   assert.equal(packageJson.build.publish, null)
   assert.equal(packageJson.build.win?.executableName, 'Design Asset Manager')
   assert.equal(packageJson.build.mac?.identity, null)

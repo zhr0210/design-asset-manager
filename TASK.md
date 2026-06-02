@@ -268,4 +268,21 @@ npm run typecheck
 npm run build
 ```
 
-`npm run test-llama-runtime-installer` requires binding a temporary `127.0.0.1` mock HTTP server. It passed planner assertions up to the sandbox listener boundary, but the current sandbox rejected local listening without escalation.
+`npm run test-llama-runtime-installer` also passed after the local listener restriction was removed.
+
+macOS packaging/install result:
+
+- Rebuilt the macOS arm64 app with local Electron runtime to avoid Electron zip re-download failures.
+- Updated `/Applications/Design Asset Manager.app` from `dist-packages/mac-arm64/Design Asset Manager.app`.
+- Verified the installed `app.asar` contains the AI Runtime tab, Llama local inference service UI, Doctor repair actions, and cross-platform `llama-server` runtime logic.
+- Latest macOS DMG SHA256: `E47E30882323C39C34F8B720EE17F92EB518E303825361F6F9C2BFBB7D157452`.
+
+## macOS Sharp Native Dependency Packaging Fix
+
+- The installed macOS app crashed because `sharp` tried to load `@img/sharp-libvips-darwin-arm64/lib/libvips-cpp.8.17.3.dylib` from inside `app.asar`.
+- Added `node_modules/@img/**/*` to `asarUnpack` so sharp platform optional packages and libvips dylibs are unpacked beside `app.asar`.
+- Updated native dependency packaging governance and electron packaging audit coverage for the `@img` unpack rule.
+- Rebuilt the macOS arm64 app with local Electron runtime and updated `/Applications/Design Asset Manager.app`.
+- Verified `/Applications/Design Asset Manager.app/Contents/Resources/app.asar.unpacked/node_modules/@img/sharp-libvips-darwin-arm64/lib/libvips-cpp.8.17.3.dylib` and `@img/sharp-darwin-arm64/lib/sharp-darwin-arm64.node` exist.
+- Relaunched the installed app and confirmed the main, GPU, network, and renderer processes stay running.
+- Latest macOS DMG SHA256 after sharp packaging fix: `C73D08376DFA3194100EFEE8EF270B33DBF87B2F18E380F2CD46CA34B23FA6FE`.
