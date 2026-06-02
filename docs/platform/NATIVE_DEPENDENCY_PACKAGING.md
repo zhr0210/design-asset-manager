@@ -16,6 +16,10 @@ The current electron-builder config declares:
 - `asar: true`
 - `asarUnpack` for `node_modules/better-sqlite3/**/*`
 - `asarUnpack` for `node_modules/sharp/**/*`
+- `asarUnpack` for `node_modules/@img/sharp-*darwin-arm64/**/*`
+- `asarUnpack` for `node_modules/@img/sharp-*darwin-x64/**/*`
+
+`sharp` 0.34+ uses platform-specific optional packages for its native binding and libvips runtime. macOS packages must unpack both the `sharp` package and the matching `@img/sharp-*darwin-*` packages so the dylibs remain loadable outside `app.asar`.
 
 ## Resource Paths
 

@@ -3,7 +3,12 @@ import fs from 'node:fs/promises'
 
 type NativePackagingManifest = {
   runsPackaging?: boolean
-  nativeDependencies?: Array<{ name?: string; asarUnpackPattern?: string; requiresAsarUnpack?: boolean }>
+  nativeDependencies?: Array<{
+    name?: string
+    asarUnpackPattern?: string
+    additionalAsarUnpackPatterns?: string[]
+    requiresAsarUnpack?: boolean
+  }>
   pathChecks?: { preloadEntryPoints?: string[]; sqlitePathUsesManagedDatabaseDir?: boolean; userDataPathUsesElectronUserData?: boolean }
   packagingConfigRequired?: {
     asar?: boolean
@@ -42,6 +47,10 @@ for (const dependency of manifest.nativeDependencies ?? []) {
   assert.equal(packageJson.devDependencies?.[dependency.name], undefined, `${dependency.name} must not be dev-only`)
   assert.equal(dependency.requiresAsarUnpack, true)
   assert.ok(packageJson.build?.asarUnpack?.includes(dependency.asarUnpackPattern ?? ''))
+  for (const pattern of dependency.additionalAsarUnpackPatterns ?? []) {
+    assert.ok(packageJson.build?.asarUnpack?.includes(pattern), `${dependency.name} additional asarUnpack pattern missing: ${pattern}`)
+    assert.match(doc, new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+  }
   assert.match(doc, new RegExp(dependency.name))
 }
 

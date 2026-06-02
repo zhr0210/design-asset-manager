@@ -16,7 +16,11 @@
       "declaredInDependencies": true,
       "requiresAsarUnpack": true,
       "asarUnpackPattern": "node_modules/sharp/**/*",
-      "verification": "package config and native importability"
+      "additionalAsarUnpackPatterns": [
+        "node_modules/@img/sharp-*darwin-arm64/**/*",
+        "node_modules/@img/sharp-*darwin-x64/**/*"
+      ],
+      "verification": "package config, platform optional packages, and native importability"
     }
   ],
   "pathChecks": {
