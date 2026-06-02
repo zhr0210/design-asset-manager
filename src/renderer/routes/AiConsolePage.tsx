@@ -31,6 +31,7 @@ import {
   X
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
+import AiRuntimePanel from '../components/settings/AiRuntimePanel'
 import type {
   AiBackendConfig,
   AiBackendType,
@@ -1129,6 +1130,8 @@ export default function AiConsolePage() {
               </button>
             ))}
           </section>
+
+          <AiRuntimePanel />
 
           {activeTab === 'overview' && (
             <OverviewWorkspace

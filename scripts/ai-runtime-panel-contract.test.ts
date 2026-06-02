@@ -3,15 +3,18 @@ import fs from 'node:fs/promises'
 
 const panelPath = 'src/renderer/components/settings/AiRuntimePanel.tsx'
 const settingsPath = 'src/renderer/routes/Settings.tsx'
+const aiConsolePath = 'src/renderer/routes/AiConsolePage.tsx'
 const doctorPanelPath = 'src/renderer/components/settings/DoctorPanel.tsx'
 
 const panelSource = await fs.readFile(panelPath, 'utf8')
 const settingsSource = await fs.readFile(settingsPath, 'utf8')
+const aiConsoleSource = await fs.readFile(aiConsolePath, 'utf8')
 const doctorPanelSource = await fs.readFile(doctorPanelPath, 'utf8')
 
 assert.ok(panelSource.length > 0)
-assert.match(settingsSource, /AiRuntimePanel/)
-assert.match(settingsSource, /<AiRuntimePanel \/>/)
+assert.doesNotMatch(settingsSource, /AiRuntimePanel/)
+assert.match(aiConsoleSource, /AiRuntimePanel/)
+assert.match(aiConsoleSource, /<AiRuntimePanel \/>/)
 assert.match(settingsSource, /<DoctorPanel \/>/)
 
 assert.match(panelSource, /electronAPI\?\.aiRuntime/)

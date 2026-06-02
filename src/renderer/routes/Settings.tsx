@@ -15,7 +15,6 @@ import {
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
 import DoctorPanel from '../components/settings/DoctorPanel'
-import AiRuntimePanel from '../components/settings/AiRuntimePanel'
 import SettingsMigrationPanel from '../components/settings/SettingsMigrationPanel'
 
 export default function Settings() {
@@ -112,7 +111,7 @@ export default function Settings() {
           </Link>
         </div>
 
-        <form onSubmit={handleSave} className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <form onSubmit={handleSave} className="space-y-6">
           <div className="space-y-6">
             <section className="rounded-[24px] border border-white bg-white p-6 shadow-premium">
               <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
@@ -204,7 +203,7 @@ export default function Settings() {
             <DoctorPanel />
           </div>
 
-          <aside className="space-y-5">
+          <section className="space-y-5">
             <div className="rounded-[24px] border border-white bg-white p-6 shadow-premium">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
@@ -218,8 +217,6 @@ export default function Settings() {
                 </div>
               </div>
             </div>
-
-            <AiRuntimePanel />
 
             <SettingsMigrationPanel />
 
@@ -250,7 +247,7 @@ export default function Settings() {
               {saving ? <Loader2 className="h-4.5 w-4.5 animate-spin" /> : <Save className="h-4.5 w-4.5" />}
               保存配置并应用偏好
             </button>
-          </aside>
+          </section>
         </form>
       </div>
     </div>

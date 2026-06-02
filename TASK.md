@@ -247,6 +247,15 @@ Both commands passed on macOS arm64. `doctor:ci` reported warning status because
 - Kept raw diagnostic details behind collapsed "原始详情" sections for development troubleshooting.
 - Rebuilt the macOS arm64 DMG after the UI update.
 
+## Settings Single-Column / AI Runtime Follow-up
+
+- Removed the settings page right-side functional column and moved settings support panels into the main vertical content flow.
+- Moved the AI Runtime Manager from settings into the AI Console below the module tab bar.
+- Localized visible AI Runtime Manager and settings migration preflight UI text for Chinese users.
+- Rebuilt and installed the updated macOS app at `/Applications/Design Asset Manager.app`.
+- Verified the installed app UI with Computer Use on the Settings and AI Console pages.
+- Latest macOS DMG SHA256: `11D460D2F39FACDC821F9B34E70F5FC4FA61A6810C34004B0E1A3BF3BC2C6BB6`.
+
 ## GitHub / main Branch Handoff
 
 User requested merging the current cross-platform adaptation branch into `main` and uploading the source code to GitHub for macOS review and future dual-platform development.

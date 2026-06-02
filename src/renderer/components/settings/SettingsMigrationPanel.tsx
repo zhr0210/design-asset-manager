@@ -46,12 +46,12 @@ const statusStyles: Record<PanelStatus, string> = {
 }
 
 const statusLabels: Record<PanelStatus, string> = {
-  not_analyzed: 'Not analyzed',
-  loading: 'Checking',
-  safe_to_apply: 'Safe to apply later',
-  blocked: 'Blocked',
-  failed: 'Failed',
-  no_changes: 'No changes'
+  not_analyzed: '未检查',
+  loading: '检查中',
+  safe_to_apply: '可稍后应用',
+  blocked: '已阻塞',
+  failed: '失败',
+  no_changes: '无变化'
 }
 
 export default function SettingsMigrationPanel() {
@@ -77,7 +77,7 @@ export default function SettingsMigrationPanel() {
   const runAction = async (label: string, action: () => Promise<void>) => {
     if (!api) {
       setStatus('failed')
-      setError('Settings migration API is unavailable in preload.')
+      setError('当前运行环境未暴露设置迁移接口。')
       return
     }
 
@@ -95,20 +95,20 @@ export default function SettingsMigrationPanel() {
   }
 
   const handleAnalyze = () =>
-    runAction('Analyzing', async () => {
+    runAction('分析中', async () => {
       const response = await api!.analyze()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Analyze failed.')
+        throw new Error(response.error ?? '分析失败。')
       }
       setAnalysis(response.data)
       setStatus(getReportPanelStatus(response.data))
     })
 
   const handleCreatePlan = () =>
-    runAction('Creating plan', async () => {
+    runAction('生成方案中', async () => {
       const response = await api!.createPlan()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Plan creation failed.')
+        throw new Error(response.error ?? '生成方案失败。')
       }
       setPlan(response.data)
       setAnalysis(response.data.dryRunResult.report)
@@ -116,10 +116,10 @@ export default function SettingsMigrationPanel() {
     })
 
   const handleDryRun = () =>
-    runAction('Dry run', async () => {
+    runAction('试运行中', async () => {
       const response = await api!.dryRun()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Dry run failed.')
+        throw new Error(response.error ?? '试运行失败。')
       }
       setPlan(response.data)
       setAnalysis(response.data.dryRunResult.report)
@@ -127,10 +127,10 @@ export default function SettingsMigrationPanel() {
     })
 
   const handleRefreshBackups = () =>
-    runAction('Refreshing backups', async () => {
+    runAction('刷新备份中', async () => {
       const response = await api!.listBackups()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Backup refresh failed.')
+        throw new Error(response.error ?? '刷新备份失败。')
       }
       setBackups(response.data.backups)
       setStatus((current) => (current === 'loading' ? 'not_analyzed' : current))
@@ -144,9 +144,9 @@ export default function SettingsMigrationPanel() {
             <ClipboardCheck className="h-5 w-5" />
           </div>
           <div>
-            <h4 className="text-[14px] font-black text-slate-900">Settings migration dry run</h4>
+            <h4 className="text-[14px] font-black text-slate-900">设置迁移预检</h4>
             <p className="mt-1 text-[11px] font-semibold leading-5 text-slate-400">
-              Read-only compatibility checks for future cross-platform settings migration.
+              只读检查未来跨平台设置迁移的兼容性。
             </p>
           </div>
         </div>
@@ -154,14 +154,14 @@ export default function SettingsMigrationPanel() {
       </div>
 
       <div className="mt-4 rounded-2xl border border-cyan-100 bg-cyan-50/70 p-3 text-[10.5px] font-bold leading-5 text-cyan-800">
-        This panel is read-only. It does not write settings.json, does not auto-migrate, does not overwrite paths, and exposes no write or restore controls.
+        该面板仅执行只读检查，不会写入 settings.json，不会自动迁移，不会覆盖路径，也不会提供写入或恢复操作。
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <ActionButton label="Analyze" icon={<FileSearch className="h-3.5 w-3.5" />} busy={activeAction === 'Analyzing'} disabled={isBusy} onClick={handleAnalyze} />
-        <ActionButton label="Plan" icon={<ClipboardCheck className="h-3.5 w-3.5" />} busy={activeAction === 'Creating plan'} disabled={isBusy} onClick={handleCreatePlan} />
-        <ActionButton label="Dry run" icon={<ShieldCheck className="h-3.5 w-3.5" />} busy={activeAction === 'Dry run'} disabled={isBusy} onClick={handleDryRun} />
-        <ActionButton label="Backups" icon={<RefreshCw className="h-3.5 w-3.5" />} busy={activeAction === 'Refreshing backups'} disabled={isBusy} onClick={handleRefreshBackups} />
+        <ActionButton label="分析" icon={<FileSearch className="h-3.5 w-3.5" />} busy={activeAction === '分析中'} disabled={isBusy} onClick={handleAnalyze} />
+        <ActionButton label="生成方案" icon={<ClipboardCheck className="h-3.5 w-3.5" />} busy={activeAction === '生成方案中'} disabled={isBusy} onClick={handleCreatePlan} />
+        <ActionButton label="试运行" icon={<ShieldCheck className="h-3.5 w-3.5" />} busy={activeAction === '试运行中'} disabled={isBusy} onClick={handleDryRun} />
+        <ActionButton label="备份列表" icon={<RefreshCw className="h-3.5 w-3.5" />} busy={activeAction === '刷新备份中'} disabled={isBusy} onClick={handleRefreshBackups} />
       </div>
 
       {error && (
@@ -174,8 +174,8 @@ export default function SettingsMigrationPanel() {
       <div className="mt-4 space-y-3">
         <PlanSummary plan={plan} analysis={analysis} />
         <ChangeList changes={displayedChanges} />
-        <TextList title="Warnings" items={displayedWarnings} tone="warning" />
-        <TextList title="Blocking issues" items={displayedBlockingIssues} tone="blocked" />
+        <TextList title="提醒" items={displayedWarnings} tone="warning" />
+        <TextList title="阻塞项" items={displayedBlockingIssues} tone="blocked" />
         <BackupList backups={backups} />
       </div>
     </section>
@@ -247,16 +247,16 @@ function ActionButton({
 function PlanSummary({ plan, analysis }: { plan: SettingsMigrationPlan | null; analysis: CompatibilityReport | null }) {
   return (
     <details className="rounded-2xl border border-slate-100 bg-slate-50/80 p-3">
-      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">Plan summary</summary>
+      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">方案摘要</summary>
       <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[10.5px] font-bold text-slate-500">
-        <KeyValue label="id" value={plan?.id ?? '-'} />
-        <KeyValue label="generatedAt" value={plan?.generatedAt ?? '-'} />
-        <KeyValue label="sourceVersion" value={String(plan?.sourceVersion ?? analysis?.originalVersion ?? '-')} />
-        <KeyValue label="targetVersion" value={String(plan?.targetVersion ?? analysis?.targetVersion ?? '-')} />
-        <KeyValue label="status" value={plan?.status ?? '-'} />
-        <KeyValue label="canApply" value={plan ? String(plan.canApply) : '-'} />
-        <KeyValue label="canRollback" value={plan ? String(plan.canRollback) : '-'} />
-        <KeyValue label="backupRequired" value={plan ? String(plan.backupRequired) : '-'} />
+        <KeyValue label="方案 ID" value={plan?.id ?? '-'} />
+        <KeyValue label="生成时间" value={plan?.generatedAt ?? '-'} />
+        <KeyValue label="源版本" value={String(plan?.sourceVersion ?? analysis?.originalVersion ?? '-')} />
+        <KeyValue label="目标版本" value={String(plan?.targetVersion ?? analysis?.targetVersion ?? '-')} />
+        <KeyValue label="状态" value={plan?.status ?? '-'} />
+        <KeyValue label="可应用" value={plan ? boolLabel(plan.canApply) : '-'} />
+        <KeyValue label="可回滚" value={plan ? boolLabel(plan.canRollback) : '-'} />
+        <KeyValue label="需要备份" value={plan ? boolLabel(plan.backupRequired) : '-'} />
       </dl>
     </details>
   )
@@ -276,7 +276,7 @@ function KeyValue({ label, value }: { label: string; value: string }) {
 function ChangeList({ changes }: { changes: SettingsCompatibilityChange[] }) {
   return (
     <details className="rounded-2xl border border-slate-100 bg-white p-3">
-      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">Changes ({changes.length})</summary>
+      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">变化项（{changes.length}）</summary>
       {changes.length ? (
         <ul className="mt-3 space-y-2">
           {changes.map((change) => (
@@ -288,7 +288,7 @@ function ChangeList({ changes }: { changes: SettingsCompatibilityChange[] }) {
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-[10.5px] font-bold text-slate-400">No changes loaded.</p>
+        <p className="mt-3 text-[10.5px] font-bold text-slate-400">暂无已加载变化项。</p>
       )}
     </details>
   )
@@ -299,7 +299,7 @@ function TextList({ title, items, tone }: { title: string; items: string[]; tone
 
   return (
     <details className={`rounded-2xl border p-3 ${items.length ? colorClass : 'border-slate-100 bg-white text-slate-500'}`}>
-      <summary className="cursor-pointer text-[11.5px] font-black">{title} ({items.length})</summary>
+      <summary className="cursor-pointer text-[11.5px] font-black">{title}（{items.length}）</summary>
       {items.length ? (
         <ul className="mt-3 space-y-1.5 text-[10.5px] font-bold leading-5">
           {items.map((item) => (
@@ -307,7 +307,7 @@ function TextList({ title, items, tone }: { title: string; items: string[]; tone
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-[10.5px] font-bold text-slate-400">None reported.</p>
+        <p className="mt-3 text-[10.5px] font-bold text-slate-400">暂无报告。</p>
       )}
     </details>
   )
@@ -318,7 +318,7 @@ function BackupList({ backups }: { backups: SettingsMigrationBackupInfo[] }) {
     <details className="rounded-2xl border border-slate-100 bg-white p-3">
       <summary className="flex cursor-pointer items-center gap-2 text-[11.5px] font-black text-slate-700">
         <Archive className="h-3.5 w-3.5" />
-        Backups ({backups.length})
+        备份摘要（{backups.length}）
       </summary>
       {backups.length ? (
         <ul className="mt-3 space-y-2">
@@ -328,14 +328,14 @@ function BackupList({ backups }: { backups: SettingsMigrationBackupInfo[] }) {
                 {backup.name}
               </div>
               <div className="mt-1 flex justify-between gap-2">
-                <span>{backup.createdAt ?? 'Unknown time'}</span>
+                <span>{backup.createdAt ?? '未知时间'}</span>
                 <span>{formatSize(backup.sizeBytes)}</span>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-[10.5px] font-bold text-slate-400">No backup summaries loaded.</p>
+        <p className="mt-3 text-[10.5px] font-bold text-slate-400">暂无已加载备份摘要。</p>
       )}
     </details>
   )
@@ -346,4 +346,8 @@ function formatSize(sizeBytes: number): string {
   if (sizeBytes < 1024) return `${sizeBytes} B`
   if (sizeBytes < 1024 * 1024) return `${(sizeBytes / 1024).toFixed(1)} KB`
   return `${(sizeBytes / 1024 / 1024).toFixed(1)} MB`
+}
+
+function boolLabel(value: boolean): string {
+  return value ? '是' : '否'
 }
