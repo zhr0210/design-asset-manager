@@ -1,98 +1,243 @@
-# 当前任务
+# Current Task
 
-## 目标
+## Goal
 
-将 AI Console 的信息架构重构为有用的运行时驾驶舱：改进模型行选择的可读性，将 Qwen3-VL 做成可展开的已安装版本集合，把后端管理重命名为推理服务，移除独立的 VRAM Guard 标签页，并让概览页与模型页区分开。
+Continue the Windows / macOS cross-platform adaptation plan through Phase 15. Current completed checkpoint: Phase 15A, final validation complete.
 
-## 状态
+## Boundaries
 
-已完成。已将 AI Console 重构为运行时驾驶舱，包含独立的概览页、可读的模型选择状态、可展开的 Qwen3-VL 已安装版本集合、重命名后的推理服务区域，以及保留在模型工作区内的内存策略。
+- Do not download models, runtime packages, CUDA installers, Python dependencies, or other external artifacts.
+- Do not start a real AI Worker, llama server, OCR worker, or real external inference service.
+- Do not migrate user files, delete user files, rewrite database path fields, or inspect real asset library / runtime database contents.
+- Do not change IPC channel names, database schema semantics, AI Worker HTTP API, or other public contracts.
+- Do not include real local user paths, real asset paths, secrets, or private data in docs or reports.
 
-## 边界
+## Current Status
 
-- 保持 IPC channel 名称、数据库 schema 语义和 AI Worker HTTP API 稳定。
-- 不读取或修改用户资产库、运行时数据库、模型权重或模型缓存内容；已有的安全模型列表 IPC 检查除外。
-- 使用内置模型元数据中的官方发布日期；不要增加网络查询。
-- 保留现有 AI 设置和后端契约；除非显示元数据需要窄范围类型扩展。
+- Phase 11C old AI Client to AI Runtime adapter is complete.
+- Phase 12A OCR dependency governance is complete.
+- Phase 12B llama-runtime governance is complete.
+- Phase 13A database path design preflight is complete.
+- Phase 13B database path migration plan is complete.
+- Phase 14A asset library path governance is complete.
+- Phase 14B download path governance is complete.
+- Phase 14C thumbnail / normalized image path governance is complete.
+- Phase 15A release flow governance is complete.
 
-## 验证计划
+## Recently Completed
+
+### Phase 11C: Old AI Client Adapter
+
+- Added AI client runtime adapter with mock, external HTTP, and Python Worker bridge shapes.
+- Added grey switch planning and old-chain fallback.
+- Added `.codeindex/ai-client-runtime-adapter.json`, docs, and focused test.
+
+### Phase 12A: OCR Dependency Governance
+
+- Added OCR governance plan and doctor check plan.
+- Moved OCR debug logging to managed debug log path resolution with home path redaction.
+- Kept OCR installers deferred and explicit; no dependency install was run.
+- Added `.codeindex/ocr-dependency-governance.json`, docs, and focused test.
+
+### Phase 12B: llama-runtime Governance
+
+- Added external-inference-first llama-runtime governance.
+- Added macOS llama.app and Windows llama.cpp adapter design boundaries.
+- Kept downloads, installs, and local service launch disabled in governance.
+- Added `.codeindex/llama-runtime-governance.json`, docs, and focused test.
+
+### Phase 13A / 13B: Database Path Design
+
+- Added `pathRootId` design, library-relative helper, legacy absolute fallback, and dry-run remap report.
+- Added migration plan gates for backup, dry-run, sample DB test, rollback, user confirmation, no auto-migration, and old path fallback.
+- No schema or runtime database data was changed.
+
+### Phase 14A / 14B / 14C: Late Path Governance
+
+- Added asset-library path report shape, missing-file report shape, and remap suggestion shape.
+- Added download filename policy, Windows illegal character handling, duplicate strategy, and dry-run save path plan.
+- Added thumbnail and normalized image managed-cache path abstraction with legacy fallback.
+- No asset files, download queue rows, thumbnails, or normalized files were moved, deleted, regenerated, or updated.
+
+### Phase 15A: Release Flow Governance
+
+- Added release packaging governance plan.
+- Added manually triggered release packaging dry-run workflow covering Windows NSIS and macOS dmg on x64 / arm64.
+- Reserved signing, notarization, optional macOS universal packaging, and auto-update for later phases.
+- Publishing remains disabled.
+
+## Validation Plan
 
 ```bash
-npm run typecheck
-npm run build
-python scripts/check-agent-context.py
-python scripts/check-forbidden-paths.py
-python scripts/check-docs-sync.py
-```
-
-UI 验证：实现后检查 `/ai-console`，确认浅色/深色模式可读性、Qwen3-VL 已安装版本展开、推理服务命名、已移除 VRAM Guard 标签页、已保留内存策略控件，并且概览页和模型页有明确区分。
-
-## 验证结果
-
-已通过：
-
-```bash
+npm.cmd run test-ai-client-runtime-adapter
+npm.cmd run test-ocr-dependency-governance
+npm.cmd run test-llama-runtime-governance
+npm.cmd run test-database-path-design
+npm.cmd run test-database-path-migration-plan
+npm.cmd run test-path-governance-late-phases
+npm.cmd run test-release-flow-governance
+npm.cmd run ci:governance
 npm.cmd run typecheck
 npm.cmd run build
-C:\Users\kilian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe scripts/check-agent-context.py
-C:\Users\kilian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe scripts/check-forbidden-paths.py
-C:\Users\kilian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe scripts/check-docs-sync.py
+<bundled-python> scripts/check-docs-sync.py
 ```
 
-说明：
+Doctor `overallStatus = WARNING` remains acceptable in CI-safe mode when no check reports `error`.
 
-- 由于本地执行策略阻止了 `npm.ps1`，`npm run typecheck` 无法通过 PowerShell 运行；`npm.cmd run typecheck` 已通过。
-- `npm.cmd run build` 首次在沙箱内失败，因为 esbuild 无法读取 Electron Vite 配置。同一个构建在沙箱提权后通过。
-- 因为 `python` 不在 PATH 中，所以 Python 检查使用了 Codex bundled Python。
-- 曾两次尝试通过 in-app Browser 对构建后的 `/ai-console` 路由进行渲染验证，但 in-app Browser 的 Node runtime 在本地沙箱设置阶段失败，错误为 `windows sandbox failed: spawn setup refresh`；未使用备用浏览器。
+## Result
 
-补充：素材库右侧素材详细分析抽屉已改为固定在 viewport 右侧，高度为 `95vh`，上下保留 `2.5vh` 间隙；素材库主滚动区、抽屉内部滚动区和 AppShell 主滚动区已隐藏侧边滚动条。补充验证已通过：
+- Implementation is complete through Phase 15A.
+- Final validation is complete.
+- No model, runtime package, CUDA installer, Python dependency, OCR dependency, or external artifact was downloaded.
+- No real AI Worker, llama server, OCR worker, or external inference service was started.
+- No runtime database contents, user asset library contents, or private asset paths were inspected.
+- No schema migration, database path rewrite, file move, file delete, thumbnail regeneration, normalized image regeneration, publish, signing, notarization, or auto-update action was run.
+
+## Validation Result
 
 ```bash
+npm.cmd run ci:governance
 npm.cmd run typecheck
 npm.cmd run build
+<bundled-python> scripts/check-docs-sync.py
 ```
 
-补充：素材库顶部的当前筛选横条已移除；搜索筛选横条已改为固定在 viewport 顶部 `2.5vh`，与右侧素材详细分析抽屉顶部对齐。补充验证已通过：
+All commands above passed.
+
+`npm.cmd run ci:governance` completed with `Doctor CI WARNING`: Python runtime not detected by the app doctor, default AI Worker port / health endpoint unreachable, and one or more managed paths not writable. The CI-safe doctor wrapper accepted the report because no doctor check returned `error`.
+
+`npm.cmd run build` passed with existing Vite dynamic import warnings.
+
+## Packaging Smoke Result
+
+Additional packaging validation was run after Phase 15A:
 
 ```bash
-npm.cmd run typecheck
-npm.cmd run build
+npm.cmd run dist:win
+npx.cmd electron-builder --win --config.electronDist=node_modules/electron/dist --config.electronVersion=30.5.1
 ```
 
-补充：素材库页已隐藏全局 Topbar，移除顶部“本地素材库”、SQLite 状态、安全加密状态以及 Topbar 底部分隔线；其他路由仍保留 Topbar。补充验证已通过：
+Result:
+
+- A Windows `win-unpacked` package was generated.
+- A Windows NSIS installer was generated under `dist-packages`.
+- The installer blockmap was generated.
+- The installer is unsigned, as expected for the current reserved-signing phase.
+- The first `dist:win` attempt failed because app-builder tried to download Electron through an invalid proxy path.
+- The successful retry used the local Electron distribution and cleared proxy variables for the electron-builder process.
+- `win-unpacked` launch smoke passed when started normally and kept running for 8 seconds before the test process was stopped.
+
+Known remaining installation validation gap:
+
+- No controllable VM, Windows Sandbox, Docker, VirtualBox, or VMware command-line entry was available in this environment.
+- The NSIS installer was not executed on the host because doing so could write current-user installation and uninstall metadata.
+- Electron itself exits with a breakpoint when `USERPROFILE` is replaced with a synthetic temporary profile, so full isolated host install testing needs a real VM/sandbox or an application-level test userData override.
+
+## Current Verification Addendum
+
+Windows Sandbox has been enabled and the machine has been rebooted. Next validation target:
+
+- Regenerate or reuse the package smoke sandbox staging under the approved external work root.
+- Launch Windows Sandbox with the generated `.wsb` profile.
+- Run the sandbox smoke script inside the sandbox.
+- Record whether the packaged app launches from `win-unpacked`, whether installer metadata can be inspected, and whether any installer execution remains manually gated.
+
+Current blocker:
+
+- Windows Sandbox repeatedly reports a lost connection before package smoke validation can be observed.
+- Diagnose host Sandbox / Hyper-V / remote session readiness first; do not execute the NSIS installer on the host.
+
+Diagnosis update:
+
+- Sandbox report was written successfully from inside the mapped sandbox folder.
+- The report shows installer presence, unpacked executable presence, unpacked launch, and installer hash checks passed; installer signature remains warning because the installer is unsigned.
+- Host Hyper-V / container services stayed running and the Sandbox VM process stayed alive.
+- RDP client logs show repeated graphics-session disconnects, including hardware framebuffer use followed by disconnect reason `3`, then a software-framebuffer reconnect ending with component `slint` error `0x904` and disconnect reason `2308`.
+- Treat the visible "lost connection" as a Windows Sandbox remote display/session issue, not as evidence that the package smoke failed.
+- Updated package smoke sandbox generation to disable Sandbox vGPU and add a 15-second startup delay before running the logon smoke script.
+- Regenerated the approved external sandbox staging and verified the generated `.wsb` and PowerShell script contain the mitigation.
+
+Repeat Sandbox Validation Result:
+
+- Relaunched Windows Sandbox with the regenerated `.wsb` profile.
+- Removed the previous generated sandbox report before launch to prove the next report was from the new run.
+- A new sandbox report was written after launch.
+- New sandbox report checks: installer present passed, unpacked executable present passed, unpacked launch passed, installer hash passed, installer signature warning because the installer is unsigned.
+- Sandbox processes remained running after report generation.
+- RDP client logs still showed a graphics-session disconnect reason `3`, so the UI connection remains flaky even though the validation script completed successfully.
+
+GitHub macOS Packaging Follow-up:
+
+- User requested packaging a macOS installer and uploading it to GitHub.
+- Local environment is Windows and cannot reliably build a macOS DMG locally.
+- No GitHub remote is configured for this repository and `gh` CLI is unavailable, so this environment cannot directly upload to GitHub yet.
+- Added a manual GitHub Actions workflow to build unsigned macOS DMG artifacts on `macos-latest` for `x64` and `arm64` and upload them as Actions artifacts.
+- Added static workflow coverage for the macOS artifact workflow and included it in `ci:governance`.
+
+GitHub macOS Packaging Validation:
 
 ```bash
-npm.cmd run typecheck
-npm.cmd run build
+npm.cmd run test-macos-package-artifact-workflow
+npm.cmd run test-release-flow-governance
+npm.cmd run test-electron-packaging-scripts
 ```
 
-补充：定位到 GGUF / OpenAI-compatible 反推路径在模型输出 JSON 被 `max_tokens` 截断时没有字段级恢复逻辑，会把整段截断 JSON 落入 `englishPrompt`。已为外部推理 provider 增加 partial JSON 字段恢复，并覆盖截断 `usageTags` 的回归测试。补充验证已通过：
+All commands above passed.
+
+Installer UX Follow-up:
+
+- Manual sandbox install check found the NSIS installer could be installed but did not allow choosing an installation path.
+- Updated Windows NSIS config to use an assisted installer and allow changing the installation directory.
+- Explicitly set the Windows executable / NSIS installation folder name to `Design Asset Manager`, so selecting a parent directory resolves to a `Design Asset Manager` subfolder.
+- Added focused packaging audit coverage for the NSIS path-selection behavior.
+- Rebuilt the Windows installer with local Electron distribution; builder confirmed `oneClick=false`.
+- Refreshed the approved external Sandbox smoke staging with the rebuilt installer.
+- New installer SHA256: `B62D5E9CD0AF6D67E392B03D1004FC1847AEC217EB56B8361A4F6C6FB63DF39E`.
+- Follow-up clarified that selecting a parent directory should install into a newly created `Design Asset Manager` subfolder.
+- Explicit Windows executable name config now fixes the NSIS installation folder name to `Design Asset Manager`.
+- Rebuilt and refreshed Sandbox staging again; `win-unpacked` contains `Design Asset Manager.exe`.
+- Latest installer SHA256: `80F1BAB8E72053FC3731937ECAF6FDE9B02C86AD5B19794966ED04851D008AEC`.
+- User screenshot showed the directory page still displaying the selected parent directory, which made the final install location ambiguous.
+- Added a custom NSIS include and confirmation page that normalizes `$INSTDIR` to the `Design Asset Manager` subfolder and displays the final path before installation starts.
+- First custom NSIS attempt failed compilation because `MUI_HEADER_TEXT` was not available in the include context; removed the unsupported macro.
+- Second custom NSIS attempt failed while building the uninstaller because install-only custom page functions were unreferenced; wrapped custom install page code in `!ifndef BUILD_UNINSTALLER`.
+- Rebuilt the Windows installer successfully with the custom NSIS confirmation page.
+- Latest installer SHA256 after custom NSIS page: `ED83A8C3A2F84494B5A595C3D7A617B274775BCBC28CF389202CBDFC2B3921B5`.
+- The previous Sandbox shared directory installer was locked by an open installer/Sandbox mapping, so the latest smoke staging was written to `G:\codex\DesignAssetManagerPackageSmokeFinal`.
+- Added a `--sandbox-install` package smoke mode to run the NSIS installer only inside Windows Sandbox and verify that choosing a parent directory installs into the `Design Asset Manager` subfolder.
+- Added `customInit` normalization so silent install with `/D=<parent>` follows the same subfolder rule as the assisted installer UI.
+- Rebuilt the Windows installer successfully after adding install E2E support.
+- Ran Windows Sandbox install E2E with `--sandbox-install`; the sandbox report confirmed installer exit code 0, `install-parent\Design Asset Manager` exists, and the installed executable exists under that normalized subfolder.
+- Latest installer SHA256 after Sandbox install E2E: `1674E0A699C2DE136A16C04FF3E006DC7C84666905606CE7A031071CEC155B49`.
+
+Installer UX Validation:
 
 ```bash
-npm.cmd run test-openai-compatible-provider
-npm.cmd run typecheck
+npm.cmd run test-electron-packaging-audit
+npm.cmd run test-native-dependency-packaging
 npm.cmd run build
+npx.cmd electron-builder --win --config.electronDist=node_modules/electron/dist --config.electronVersion=30.5.1
+node scripts/package-smoke.mjs --sandbox --work-root=G:\codex\DesignAssetManagerPackageSmoke
+npm.cmd run test-package-smoke
 ```
 
-补充：反推默认输出 token 上限已从 512 提高到 1536；当 native Qwen 或 GGUF/OpenAI-compatible 反推输出疑似 JSON 截断时，会自动把上限提高到 3072 并重试一次。外部推理 provider 已增加自适应重试回归测试。补充验证已通过：
+## GitHub / main Branch Handoff
 
-```bash
-npm.cmd run test-openai-compatible-provider
-npm.cmd run typecheck
-npm.cmd run build
-```
+User requested merging the current cross-platform adaptation branch into `main` and uploading the source code to GitHub for macOS review and future dual-platform development.
 
-补充：AI 控制台的“推理服务 / Llama 本地推理服务”已恢复前端安装管理 UI：安装方案候选模型选择、开始安装、取消安装、安装进度条和终端日志输出重新接回现有 llama-runtime IPC。补充验证已通过：
+Execution plan:
 
-```bash
-npm.cmd run typecheck
-npm.cmd run build
-```
+- Commit the current source, workflow, documentation, and governance changes on the adaptation branch.
+- Merge the adaptation branch into `main`.
+- Upload to GitHub only after a repository remote and GitHub authentication are available.
 
-补充：Llama 安装方案候选已从展开卡片列表改为下拉选择，并保留当前选中方案摘要，避免候选模型全部铺开撑高面板。补充验证已通过：
+Current GitHub blocker:
 
-```bash
-npm.cmd run typecheck
-npm.cmd run build
-```
+- No GitHub remote is configured for this local repository.
+- `gh` CLI is not available in the local shell.
+- The local GitHub skill is installed, but no callable GitHub connector tool is currently exposed in this session.
+
+Packaging artifact handling:
+
+- Keep local generated packaging outputs (`dist-packages/`, `dist-temp/`) out of source commits.
+- Track `build/installer.nsh` because it is required by the Windows NSIS installer configuration.

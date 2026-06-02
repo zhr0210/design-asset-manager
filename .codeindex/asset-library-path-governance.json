@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "phase": "14A",
+  "scope": "asset library path governance",
+  "dryRunOnly": true,
+  "autoMoveFiles": false,
+  "autoDeleteFiles": false,
+  "autoUpdateFilePath": false,
+  "runtimeDatabaseRead": false,
+  "assetLibraryScanned": false,
+  "privacy": {
+    "containsRealAssetPaths": false,
+    "containsRuntimeDatabaseContents": false
+  }
+}

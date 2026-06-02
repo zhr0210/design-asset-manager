@@ -1,0 +1,56 @@
+name: cross-platform-governance
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  DAM_CI_SAFE: true
+  DAM_DISABLE_MODEL_DOWNLOADS: true
+  DAM_DISABLE_RUNTIME_DOWNLOADS: true
+  DAM_DISABLE_REAL_AI_WORKER: true
+  DAM_DISABLE_EXTERNAL_INFERENCE: true
+
+jobs:
+  governance:
+    name: ${{ matrix.os }} / Node ${{ matrix.node-version }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - macos-latest
+        node-version:
+          - '20'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Cross-platform governance checks
+        run: npm run ci:governance

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "phase": "12A",
+  "scope": "OCR dependency governance",
+  "readOnlyAudit": true,
+  "autoInstall": false,
+  "installerDeferred": true,
+  "doctorCheck": true,
+  "runtimeProfilePlan": true,
+  "managedDebugLog": true,
+  "knownRisks": [
+    "Windows-only Python search paths",
+    "pip install IPC exposure"
+  ],
+  "privacy": {
+    "containsRealUserPaths": false,
+    "containsSecrets": false
+  }
+}

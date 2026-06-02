@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "phase": "11B",
+  "scope": "controlled Python Worker launch pilot boundary",
+  "realProcessRunnerAvailable": true,
+  "testsUseMockRunner": true,
+  "autoInstallPython": false,
+  "autoInstallDependencies": false,
+  "autoStartWorker": false,
+  "cleanupDeletesFiles": false,
+  "features": [
+    "args array launch plan",
+    "controlled cwd",
+    "controlled env",
+    "configurable port",
+    "health URL planning",
+    "stop plan",
+    "crash log plan"
+  ]
+}

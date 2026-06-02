@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "phase": "10A",
+  "scope": "runtime package source model",
+  "networkAccess": false,
+  "sourceTypes": [
+    {
+      "type": "local",
+      "access": "filesystem",
+      "enabled": true,
+      "downloads": false
+    },
+    {
+      "type": "bundled",
+      "access": "app-resource",
+      "enabled": true,
+      "downloads": false
+    },
+    {
+      "type": "remote",
+      "access": "reserved-remote",
+      "enabled": false,
+      "downloads": false
+    }
+  ],
+  "forbidden": [
+    "fetch",
+    "http",
+    "https",
+    "download",
+    "install",
+    "extract",
+    "run package script"
+  ]
+}

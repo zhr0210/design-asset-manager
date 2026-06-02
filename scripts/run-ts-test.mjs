@@ -9,6 +9,7 @@ if (!entryArg) {
   process.exit(1)
 }
 const entry = path.resolve(entryArg)
+const relativeEntry = path.relative(process.cwd(), entry).split(path.sep).join('/')
 
 const outdir = path.resolve('dist-temp', 'tests')
 await fs.mkdir(outdir, { recursive: true })
@@ -16,7 +17,8 @@ await fs.mkdir(outdir, { recursive: true })
 const outfile = path.join(outdir, `${path.basename(entry, '.ts')}.mjs`)
 
 await build({
-  entryPoints: [entry],
+  absWorkingDir: process.cwd(),
+  entryPoints: [relativeEntry],
   outfile,
   bundle: true,
   platform: 'node',

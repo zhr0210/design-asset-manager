@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "phase": "10D",
+  "scope": "runtime package installer skeleton",
+  "realInstall": false,
+  "registryWrites": false,
+  "pythonInstall": false,
+  "cudaInstall": false,
+  "modelInstall": false,
+  "dryRunOnly": true,
+  "states": [
+    "idle",
+    "planned",
+    "verifying",
+    "extracting",
+    "completed",
+    "blocked",
+    "rolled-back"
+  ],
+  "artifacts": [
+    "RuntimePackageInstallPlan",
+    "RuntimePackageRegistryMetadataPlan",
+    "MockRuntimePackageInstaller"
+  ]
+}

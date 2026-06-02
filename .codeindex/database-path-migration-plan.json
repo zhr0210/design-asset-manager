@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "phase": "13B",
+  "scope": "database path migration design",
+  "backupRequired": true,
+  "dryRunRequired": true,
+  "sampleDatabaseTestRequired": true,
+  "rollbackRequired": true,
+  "userConfirmationRequired": true,
+  "noAutoMigration": true,
+  "oldPathFallback": true,
+  "applyEnabled": false,
+  "rollbackEnabled": false,
+  "schemaChangeIncluded": false,
+  "dataWriteIncluded": false,
+  "runtimeDatabaseRead": false,
+  "privacy": {
+    "containsRealUserPaths": false,
+    "containsRealAssetPaths": false,
+    "containsRuntimeDatabaseContents": false
+  }
+}

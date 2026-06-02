@@ -1,0 +1,46 @@
+name: Release Packaging Dry Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package-plan:
+    name: ${{ matrix.target }} ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: windows-nsis
+            os: windows-latest
+            arch: x64
+            command: npm run pack:win
+          - target: windows-nsis
+            os: windows-latest
+            arch: arm64
+            command: npm run pack:win
+          - target: macos-dmg
+            os: macos-latest
+            arch: x64
+            command: npm run pack:mac
+          - target: macos-dmg
+            os: macos-latest
+            arch: arm64
+            command: npm run pack:mac
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Packaging command reserved
+        run: echo "${{ matrix.command }}"
+      - name: Publish disabled
+        run: echo "publish=false signing=reserved notarization=reserved auto-update=future"

@@ -5,7 +5,11 @@ node_modules/
 dist/
 out/
 build/
+!build/
+!build/installer.nsh
 .vite/
+dist-packages/
+dist-temp/
 
 # Local databases and states
 *.db

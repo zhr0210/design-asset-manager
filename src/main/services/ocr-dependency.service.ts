@@ -3,20 +3,38 @@ import fs from 'fs'
 import { spawn, execSync } from 'child_process'
 import type { WebContents } from 'electron'
 import { SettingsService } from './settings.service'
+import { resolveManagedPaths } from '../platform/path-resolver'
+import { resolveDebugLogPath } from '../platform/log-path-resolver'
 import type { OcrEnvPayload } from '../../shared/contracts/ocr-dependency.contract'
 import {
   CHANNEL_OCR_INSTALL_LOG_UPDATE
 } from '../../shared/contracts/ocr-dependency.contract'
 
+function redactDebugMessage(msg: string): string {
+  const homeLikeValues = [
+    process.env.USERPROFILE,
+    process.env.HOME,
+    process.env.HOMEPATH
+  ].filter((value): value is string => Boolean(value && value.trim()))
+
+  return homeLikeValues.reduce((current, value) => {
+    return current.split(value).join('<user-home>')
+  }, msg)
+}
+
 function writeDebugLog(msg: string): void {
   try {
-    const logPath = 'C:\\Users\\kilian\\.gemini\\antigravity\\scratch\\ocr_debug.log'
+    const managedPaths = resolveManagedPaths()
+    const logPath = resolveDebugLogPath('ocr-dependency', {
+      managedPaths,
+      fileName: 'ocr-dependency.log'
+    })
     const dir = path.dirname(logPath)
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true })
     }
     const timestamp = new Date().toISOString()
-    fs.appendFileSync(logPath, `[${timestamp}] ${msg}\n`, 'utf8')
+    fs.appendFileSync(logPath, `[${timestamp}] ${redactDebugMessage(msg)}\n`, 'utf8')
   } catch (err) {
     // Ignore
   }

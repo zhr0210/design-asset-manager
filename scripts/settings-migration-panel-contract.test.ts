@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+
+const panelSource = await fs.readFile('src/renderer/components/settings/SettingsMigrationPanel.tsx', 'utf8')
+const settingsRouteSource = await fs.readFile('src/renderer/routes/Settings.tsx', 'utf8')
+const settingsStoreSource = await fs.readFile('src/renderer/stores/settings.store.ts', 'utf8')
+
+assert.match(settingsRouteSource, /SettingsMigrationPanel/)
+assert.match(settingsRouteSource, /<SettingsMigrationPanel \/>/)
+assert.ok(settingsRouteSource.indexOf('<AiRuntimePanel />') < settingsRouteSource.indexOf('<SettingsMigrationPanel />'))
+
+assert.match(panelSource, /electronAPI\?\.\s*settingsMigration/)
+assert.match(panelSource, /createPlan:/)
+assert.match(panelSource, /dryRun:/)
+assert.match(panelSource, /analyze:/)
+assert.match(panelSource, /listBackups:/)
+assert.match(panelSource, /SettingsMigrationPlan/)
+assert.match(panelSource, /not_analyzed/)
+assert.match(panelSource, /loading/)
+assert.match(panelSource, /safe_to_apply/)
+assert.match(panelSource, /blocked/)
+assert.match(panelSource, /failed/)
+assert.match(panelSource, /no_changes/)
+assert.match(panelSource, /backupRequired/)
+assert.match(panelSource, /canApply/)
+assert.match(panelSource, /canRollback/)
+
+assert.doesNotMatch(panelSource, /ipcRenderer/)
+assert.doesNotMatch(panelSource, /process\.platform/)
+assert.doesNotMatch(panelSource, /from ['"](?:node:)?fs['"]|require\(['"](?:node:)?fs['"]\)/)
+assert.doesNotMatch(panelSource, /from ['"](?:node:)?path['"]|require\(['"](?:node:)?path['"]\)/)
+assert.doesNotMatch(panelSource, /fetch\(|axios|XMLHttpRequest/)
+assert.doesNotMatch(panelSource, /applySettingsMigration|rollbackSettingsMigration|applyMigrationFromFile|rollbackMigration/)
+assert.doesNotMatch(panelSource, /writeFile|saveSettings|updateSettings/)
+assert.doesNotMatch(panelSource, /downloadRuntime|installRuntime|runtimePackageInstaller/)
+
+const effectBlocks = [...panelSource.matchAll(/useEffect\s*\([\s\S]*?\n\s*\}/g)].map((match) => match[0])
+assert.equal(effectBlocks.length, 0, 'SettingsMigrationPanel must not auto-run migration checks on mount')
+
+const saveHandlerStart = settingsRouteSource.indexOf('const handleSave')
+const saveHandlerEnd = settingsRouteSource.indexOf('const handleClearCache', saveHandlerStart)
+const saveHandlerBlock = settingsRouteSource.slice(saveHandlerStart, saveHandlerEnd)
+assert.match(saveHandlerBlock, /updateSettings/)
+assert.doesNotMatch(saveHandlerBlock, /settingsMigration|createPlan|dryRun|analyze|listBackups/)
+assert.doesNotMatch(settingsStoreSource, /settingsMigration|settings-migration/)

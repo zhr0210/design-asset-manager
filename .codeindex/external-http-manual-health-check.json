@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "phase": "11A",
+  "scope": "manual external HTTP runtime health checks",
+  "autoNetworkAccess": false,
+  "requiresUserInitiated": true,
+  "startsService": false,
+  "supportedKinds": [
+    "ollama",
+    "lm-studio",
+    "llama-app",
+    "custom-http"
+  ],
+  "defaultNoAccess": true,
+  "forbidden": [
+    "automatic health check",
+    "service startup",
+    "process spawn",
+    "settings save",
+    "runtime registry write"
+  ]
+}

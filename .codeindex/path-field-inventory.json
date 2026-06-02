@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "generatedByPhase": "7E",
+  "scope": "design-only",
+  "privacy": {
+    "containsRealUserPaths": false,
+    "containsRealAssetPaths": false,
+    "containsRuntimeDatabaseContents": false,
+    "scannedUserAssetLibrary": false
+  },
+  "rules": {
+    "noAutoMigration": true,
+    "requiresDryRun": true,
+    "requiresBackup": true,
+    "requiresRollback": true,
+    "requiresUserConfirmation": true
+  },
+  "fields": [
+    {
+      "field": "assets.file_path",
+      "files": ["src/main/db/schema.ts", "src/main/services/asset.service.ts"],
+      "module": "asset-library",
+      "meaning": "Primary asset image path consumed by UI and AI-adjacent flows.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8B"
+    },
+    {
+      "field": "thumbnail_path",
+      "files": ["src/main/db/schema.ts", "src/main/services/asset.service.ts", "src/main/services/image-normalize.service.ts"],
+      "module": "asset-library",
+      "meaning": "Thumbnail preview path.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8C"
+    },
+    {
+      "field": "original_path",
+      "files": ["src/main/db/schema.ts", "src/main/db/index.ts", "src/main/services/asset.service.ts", "src/main/services/image-normalize.service.ts"],
+      "module": "normalization",
+      "meaning": "Original asset copy path after normalization.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8B"
+    },
+    {
+      "field": "normalized_path",
+      "files": ["src/main/db/schema.ts", "src/main/services/asset.service.ts", "src/main/services/image-normalize.service.ts"],
+      "module": "normalization",
+      "meaning": "Normalized image path.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8C"
+    },
+    {
+      "field": "AI task file_path",
+      "files": ["src/main/db/schema.ts", "src/main/services/ai-client.service.ts"],
+      "module": "ai-queue",
+      "meaning": "File path snapshot used by AI tasks.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8D"
+    },
+    {
+      "field": "download task save_path",
+      "files": ["src/main/db/schema.ts", "src/main/services/download.service.ts"],
+      "module": "download-queue",
+      "meaning": "Download destination path.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8E"
+    },
+    {
+      "field": "libraryPath",
+      "files": ["src/main/services/settings.service.ts", "src/shared/types/settings.types.ts"],
+      "module": "settings",
+      "meaning": "User asset library root.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8A"
+    },
+    {
+      "field": "downloadPath",
+      "files": ["settings metadata"],
+      "module": "settings",
+      "meaning": "User download root if present in compatibility metadata.",
+      "riskLevel": "medium",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8E"
+    },
+    {
+      "field": "modelRootDir",
+      "files": ["src/main/services/settings.service.ts", "src/shared/types/settings.types.ts"],
+      "module": "models",
+      "meaning": "User model storage root.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8F"
+    },
+    {
+      "field": "selectedPromptModelPath",
+      "files": ["src/main/services/settings.service.ts", "src/shared/types/settings.types.ts"],
+      "module": "models",
+      "meaning": "Selected prompt model path.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8F"
+    },
+    {
+      "field": "cacheDir",
+      "files": ["src/main/platform/path-resolver.ts", "src/shared/types/platform.types.ts"],
+      "module": "platform",
+      "meaning": "Managed cache root.",
+      "riskLevel": "low",
+      "forbidAutomaticMigration": false,
+      "recommendedPhase": "done"
+    },
+    {
+      "field": "tempDir",
+      "files": ["src/main/platform/path-resolver.ts", "src/shared/types/platform.types.ts"],
+      "module": "platform",
+      "meaning": "Managed temp root.",
+      "riskLevel": "low",
+      "forbidAutomaticMigration": false,
+      "recommendedPhase": "done"
+    },
+    {
+      "field": "logsDir",
+      "files": ["src/main/platform/path-resolver.ts", "src/shared/types/platform.types.ts"],
+      "module": "platform",
+      "meaning": "Managed logs root.",
+      "riskLevel": "low",
+      "forbidAutomaticMigration": false,
+      "recommendedPhase": "done"
+    },
+    {
+      "field": "runtimeDir",
+      "files": ["src/main/platform/path-resolver.ts", "src/shared/types/platform.types.ts"],
+      "module": "platform",
+      "meaning": "Managed runtime metadata root.",
+      "riskLevel": "medium",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8F"
+    },
+    {
+      "field": "modelsDir",
+      "files": ["src/main/platform/path-resolver.ts", "src/shared/types/platform.types.ts"],
+      "module": "platform",
+      "meaning": "Managed model metadata/default root.",
+      "riskLevel": "high",
+      "forbidAutomaticMigration": true,
+      "recommendedPhase": "8F"
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 import { ModelCompatibilityStatus } from './ai-model.types';
 import type { AiBackendConfig, AiPromptReverseSettings } from './ai-backend.types';
+import type { AiRuntimeSettings } from './ai-runtime-settings.types'
+import type { BootstrapMode, BootstrapStatus } from './bootstrap.types'
+import type { ManagedPaths, PlatformProfile } from './platform.types'
+import type { RuntimeProfileId } from './runtime-profile.types'
 
 /**
  * ⚙️ 共享设置类型模型定义 (Shared App Settings Types)
@@ -24,7 +28,29 @@ export interface AiPromptTemplate {
   updatedAt?: string;
 }
 
+export interface AppBootstrapSettings {
+  status?: BootstrapStatus
+  mode?: BootstrapMode
+  selectedProfileId?: RuntimeProfileId | null
+  recommendedProfileId?: RuntimeProfileId | null
+  completedAt?: string | null
+  skippedAt?: string | null
+}
+
+export interface AppDoctorSettings {
+  lastRunAt?: string | null
+  lastOverallStatus?: 'ok' | 'warning' | 'error' | null
+  showInSettings?: boolean
+  dismissedCheckIds?: string[]
+}
+
 export interface AppSettings {
+  schemaVersion?: number
+  platformProfile?: PlatformProfile
+  managedPaths?: Partial<ManagedPaths>
+  bootstrapSettings?: AppBootstrapSettings
+  doctorSettings?: AppDoctorSettings
+
   libraryPath: string
   concurrency: number
   delayInterval: number
@@ -60,6 +86,7 @@ export interface AppSettings {
   qwen3vlTopP?: number
   memoryPolicy?: AiMemoryPolicy
   aiBackends?: AiBackendConfig[]
+  aiRuntimeSettings?: AiRuntimeSettings
   promptReverseSettings?: AiPromptReverseSettings
   promptReverseTemplates?: AiPromptTemplate[]
 
