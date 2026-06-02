@@ -31,6 +31,10 @@ const release: LlamaReleaseInfo = {
     {
       name: 'llama-b9999-bin-win-vulkan-x64.zip',
       browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9999/llama-b9999-bin-win-vulkan-x64.zip'
+    },
+    {
+      name: 'llama-b9999-bin-macos-arm64.zip',
+      browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9999/llama-b9999-bin-macos-arm64.zip'
     }
   ]
 }
@@ -97,6 +101,23 @@ async function main() {
   assert.equal(plan.runtimePackages[0].mirrorUrl, 'https://mirror.example.cn/llama-b9999-bin-win-cuda-13.3-x64.zip')
   assert.equal(plan.runtimePackages[0].verified, true)
   assert.equal(plan.runtimePackages[1].officialUrl.includes('cudart-llama'), true)
+
+  const macPlan = createInstallPlan({
+    hardware: createHardwareProfile({
+      platform: 'darwin',
+      arch: 'arm64',
+      totalMemoryGB: 16,
+      totalVramGB: 10.4,
+      hasNvidiaGpu: false,
+      gpuName: 'Apple M-series unified memory GPU',
+      recommendedAccelerator: 'metal'
+    }),
+    release,
+    installRoot: '/Users/example/DesignAssetManager/AIModels/llama-runtime'
+  })
+  assert.equal(macPlan.accelerator, 'metal')
+  assert.equal(macPlan.runtimePackages[0].filename, 'llama-b9999-bin-macos-arm64.zip')
+  assert.equal(macPlan.recommendedModel.id, 'qwen3-vl-4b-instruct-q4-k-m')
 
   assert.throws(
     () => createInstallPlan({

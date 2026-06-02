@@ -32,11 +32,12 @@ import {
   CHANNEL_DOCTOR_CLEAR_LAST_REPORT,
   CHANNEL_DOCTOR_GET_LAST_REPORT,
   CHANNEL_DOCTOR_LIST_CHECKS,
+  CHANNEL_DOCTOR_REPAIR_CHECK,
   CHANNEL_DOCTOR_RUN_ALL,
   CHANNEL_DOCTOR_RUN_CHECK,
   CHANNEL_DOCTOR_RUN_CHECKS
 } from '../shared/contracts/doctor.contract'
-import type { DoctorRunCheckRequest, DoctorRunRequest } from '../shared/contracts/doctor.contract'
+import type { DoctorRepairCheckRequest, DoctorRunCheckRequest, DoctorRunRequest } from '../shared/contracts/doctor.contract'
 import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
@@ -221,6 +222,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     runAll: (request?: DoctorRunRequest) => ipcRenderer.invoke(CHANNEL_DOCTOR_RUN_ALL, request),
     runChecks: (checkIds: string[], request?: Omit<DoctorRunRequest, 'checkIds'>) => ipcRenderer.invoke(CHANNEL_DOCTOR_RUN_CHECKS, { ...request, checkIds }),
     runCheck: (checkId: string, request?: Omit<DoctorRunCheckRequest, 'checkId'>) => ipcRenderer.invoke(CHANNEL_DOCTOR_RUN_CHECK, { ...request, checkId }),
+    repairCheck: (checkId: string, request?: Omit<DoctorRepairCheckRequest, 'checkId'>) => ipcRenderer.invoke(CHANNEL_DOCTOR_REPAIR_CHECK, { ...request, checkId }),
     getLastReport: () => ipcRenderer.invoke(CHANNEL_DOCTOR_GET_LAST_REPORT),
     clearLastReport: () => ipcRenderer.invoke(CHANNEL_DOCTOR_CLEAR_LAST_REPORT),
     listChecks: () => ipcRenderer.invoke(CHANNEL_DOCTOR_LIST_CHECKS)

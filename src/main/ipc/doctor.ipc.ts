@@ -3,11 +3,12 @@ import {
   CHANNEL_DOCTOR_CLEAR_LAST_REPORT,
   CHANNEL_DOCTOR_GET_LAST_REPORT,
   CHANNEL_DOCTOR_LIST_CHECKS,
+  CHANNEL_DOCTOR_REPAIR_CHECK,
   CHANNEL_DOCTOR_RUN_ALL,
   CHANNEL_DOCTOR_RUN_CHECK,
   CHANNEL_DOCTOR_RUN_CHECKS
 } from '../../shared/contracts/doctor.contract'
-import type { DoctorRunCheckRequest, DoctorRunRequest } from '../../shared/contracts/doctor.contract'
+import type { DoctorRepairCheckRequest, DoctorRunCheckRequest, DoctorRunRequest } from '../../shared/contracts/doctor.contract'
 import { DoctorService } from '../services/doctor'
 
 function errorResponse(error: unknown) {
@@ -46,6 +47,16 @@ export function registerDoctorIpc() {
       return { success: true, check }
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_DOCTOR_RUN_CHECK} error:`, err)
+      return errorResponse(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_DOCTOR_REPAIR_CHECK, async (_, request: DoctorRepairCheckRequest) => {
+    try {
+      const result = await service.repairCheck(request.checkId, { timeoutMs: request.timeoutMs })
+      return { success: true, ...result }
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_DOCTOR_REPAIR_CHECK} error:`, err)
       return errorResponse(err)
     }
   })

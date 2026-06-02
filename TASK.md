@@ -286,3 +286,32 @@ macOS packaging/install result:
 - Verified `/Applications/Design Asset Manager.app/Contents/Resources/app.asar.unpacked/node_modules/@img/sharp-libvips-darwin-arm64/lib/libvips-cpp.8.17.3.dylib` and `@img/sharp-darwin-arm64/lib/sharp-darwin-arm64.node` exist.
 - Relaunched the installed app and confirmed the main, GPU, network, and renderer processes stay running.
 - Latest macOS DMG SHA256 after sharp packaging fix: `C73D08376DFA3194100EFEE8EF270B33DBF87B2F18E380F2CD46CA34B23FA6FE`.
+
+## Doctor One-Click Repair / macOS Llama Hardware Follow-up
+
+- Replaced the Doctor panel's copy-command repair flow with a real `doctor:repairCheck` IPC flow.
+- The settings Doctor panel now shows `一键修复`, runs the repair inside the Electron main process, and updates the check result in place.
+- Packaged Electron Node detection now uses the bundled Node runtime and no longer requires user-installed npm in the macOS app.
+- Added safe in-app repairs for managed path/permission checks by creating or confirming app-managed directories before rerunning the check.
+- Added macOS Llama hardware detection through `sysctl` and `system_profiler` to read chip name, core summary, display/GPU summary, and unified memory.
+- Apple Silicon planning now uses a `metal` accelerator label and estimates usable unified-memory inference budget for Qwen3-VL GGUF recommendation.
+
+Validation:
+
+```bash
+npm run test-doctor-panel
+npm run test-doctor-ipc
+npm run test-doctor-service
+npm run test-llama-runtime-installer
+npm run typecheck
+npm run build
+```
+
+macOS packaging/install result:
+
+- Rebuilt the macOS arm64 app with local Electron runtime.
+- Replaced the installed `/Applications/Design Asset Manager.app` with the rebuilt app bundle.
+- Verified the installed `app.asar` contains `doctor:repairCheck`, `一键修复`, macOS `system_profiler` hardware detection, `metal` accelerator planning, and the Llama local inference service UI.
+- Verified the installed `app.asar` no longer contains `复制修复命令`.
+- Relaunched the installed app and confirmed the main, GPU, network, and renderer processes stay running.
+- Latest macOS DMG SHA256 after Doctor repair and macOS Llama hardware follow-up: `D88F0FEA8CED19615D4695C4A0E9C1ADF540812FCBAF63F0FD4E6594530423CB`.

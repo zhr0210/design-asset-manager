@@ -49,15 +49,17 @@ export class LlamaRuntimeInstallService {
   }
 
   public async detectHardware(): Promise<LlamaHardwareProfile> {
+    if (process.platform === 'darwin') {
+      return this.detectMacHardware()
+    }
+
     if (process.platform !== 'win32') {
       return createHardwareProfile({
         platform: process.platform,
         arch: process.arch,
         cpuThreads: os.cpus().length,
         totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
-        warnings: process.platform === 'darwin'
-          ? ['macOS 将使用 llama.cpp macOS 运行包与 CPU/Metal 可用后端；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
-          : ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
+        warnings: ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
       })
     }
 
@@ -93,6 +95,66 @@ export class LlamaRuntimeInstallService {
       driverVersion,
       cudaVersion,
       warnings
+    })
+  }
+
+  private async detectMacHardware(): Promise<LlamaHardwareProfile> {
+    const warnings: string[] = []
+    const totalMemoryGB = Math.round(os.totalmem() / 1024 / 1024 / 1024)
+    const cpuThreads = os.cpus().length
+    let chipName = os.cpus()[0]?.model || 'Apple Silicon / Intel Mac'
+    let coreSummary = `${cpuThreads} 线程`
+    let displaySummary = ''
+
+    try {
+      const brand = await this.runCapture('sysctl', ['-n', 'machdep.cpu.brand_string'], 3000)
+      if (brand.trim()) chipName = brand.trim()
+    } catch {
+      // Apple Silicon may not expose machdep.cpu.brand_string in all environments.
+    }
+
+    try {
+      const hardware = await this.runCapture('system_profiler', ['SPHardwareDataType'], 8000)
+      const chip = /Chip:\s*(.+)/i.exec(hardware)?.[1]?.trim()
+      const processor = /Processor Name:\s*(.+)/i.exec(hardware)?.[1]?.trim()
+      const cores = /Total Number of Cores:\s*(.+)/i.exec(hardware)?.[1]?.trim()
+      const memory = /Memory:\s*(.+)/i.exec(hardware)?.[1]?.trim()
+      chipName = chip || processor || chipName
+      coreSummary = cores || coreSummary
+      if (memory) warnings.push(`检测到统一内存：${memory}。`)
+    } catch (err) {
+      warnings.push(`无法读取 macOS 硬件详情，将使用 Node/os 基础信息：${err instanceof Error ? err.message : String(err)}`)
+    }
+
+    try {
+      const displays = await this.runCapture('system_profiler', ['SPDisplaysDataType'], 8000)
+      const chipset = /Chipset Model:\s*(.+)/i.exec(displays)?.[1]?.trim()
+      const vram = /VRAM(?: \(Dynamic, Max\))?:\s*(.+)/i.exec(displays)?.[1]?.trim()
+      displaySummary = [chipset, vram].filter(Boolean).join(' / ')
+    } catch {
+      // Display profiler data is optional for llama runtime planning.
+    }
+
+    const isAppleSilicon = process.arch === 'arm64' || /Apple\s+M\d|Apple\s+Silicon/i.test(chipName)
+    const estimatedUnifiedVramGB = isAppleSilicon
+      ? Math.max(4, Math.round(totalMemoryGB * 0.65 * 10) / 10)
+      : undefined
+    const recommendedAccelerator = isAppleSilicon ? 'metal' : 'cpu'
+
+    return createHardwareProfile({
+      platform: process.platform,
+      arch: process.arch,
+      cpuThreads,
+      totalMemoryGB,
+      hasNvidiaGpu: false,
+      gpuName: displaySummary || `${chipName}${isAppleSilicon ? ' 统一内存 GPU' : ''}`,
+      totalVramGB: estimatedUnifiedVramGB,
+      recommendedAccelerator,
+      warnings: [
+        `macOS 硬件检测完成：${chipName}，${coreSummary}，系统内存约 ${totalMemoryGB} GB。`,
+        ...(estimatedUnifiedVramGB ? [`按 Apple 统一内存估算可用于本地推理的显存预算约 ${estimatedUnifiedVramGB} GB。`] : []),
+        ...warnings
+      ]
     })
   }
 

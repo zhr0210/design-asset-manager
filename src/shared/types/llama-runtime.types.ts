@@ -1,4 +1,4 @@
-export type LlamaRuntimeAccelerator = 'cuda13' | 'cuda12' | 'vulkan' | 'cpu';
+export type LlamaRuntimeAccelerator = 'cuda13' | 'cuda12' | 'vulkan' | 'metal' | 'cpu';
 
 export type LlamaInstallPhase =
   | 'idle'

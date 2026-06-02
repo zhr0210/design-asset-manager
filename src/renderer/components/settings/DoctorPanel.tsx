@@ -6,6 +6,7 @@ import type {
   DoctorClearLastReportResponse,
   DoctorGetLastReportResponse,
   DoctorListChecksResponse,
+  DoctorRepairCheckResponse,
   DoctorRunCheckResponse,
   DoctorRunResponse
 } from '../../../shared/contracts/doctor.contract'
@@ -13,6 +14,7 @@ import type {
 type DoctorApi = {
   runAll: () => Promise<DoctorRunResponse>
   runCheck: (checkId: string) => Promise<DoctorRunCheckResponse>
+  repairCheck: (checkId: string) => Promise<DoctorRepairCheckResponse>
   getLastReport: () => Promise<DoctorGetLastReportResponse>
   clearLastReport: () => Promise<DoctorClearLastReportResponse>
   listChecks: () => Promise<DoctorListChecksResponse>
@@ -187,28 +189,7 @@ export default function DoctorPanel() {
     try {
       const response = await api.runCheck(checkId)
       if (!response.success || !response.check) throw new Error(response.error || '单项体检失败。')
-      setReport((current) => {
-        if (!current) {
-          return {
-            id: `doctor-single-${Date.now()}`,
-            generatedAt: new Date().toISOString(),
-            platform: 'unknown' as any,
-            arch: 'unknown' as any,
-            profile: 'unknown' as any,
-            overallStatus: response.check!.status === 'error' ? 'error' : response.check!.status === 'warning' ? 'warning' : 'ok',
-            checks: [response.check!]
-          }
-        }
-        const nextChecks = current.checks.some((check) => check.id === checkId)
-          ? current.checks.map((check) => (check.id === checkId ? response.check! : check))
-          : [...current.checks, response.check!]
-        const overallStatus = nextChecks.some((check) => check.status === 'error')
-          ? 'error'
-          : nextChecks.some((check) => check.status === 'warning')
-            ? 'warning'
-            : 'ok'
-        return { ...current, generatedAt: new Date().toISOString(), overallStatus, checks: nextChecks }
-      })
+      upsertCheckResult(response.check)
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
     } finally {
@@ -217,21 +198,50 @@ export default function DoctorPanel() {
   }
 
   const handleRepair = async (check: DoctorCheckResult) => {
-    const suggestion = repairSuggestionFor(check)
+    const api = getDoctorApi()
+    if (!api?.repairCheck) {
+      setError('当前运行环境未暴露一键修复接口。')
+      return
+    }
+
+    setBusyCheckId(check.id)
     setRepairMessage(null)
-
-    if (check.id === 'ai-worker' || check.id === 'port') {
-      window.location.hash = '#/ai-console'
-      return
+    setError(null)
+    try {
+      const response = await api.repairCheck(check.id)
+      if (!response.success || !response.check) throw new Error(response.error || '一键修复失败。')
+      upsertCheckResult(response.check)
+      setRepairMessage(response.repair?.message ?? '已完成软件内修复并重新检测。')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err))
+    } finally {
+      setBusyCheckId(null)
     }
+  }
 
-    if (navigator.clipboard && suggestion.command) {
-      await navigator.clipboard.writeText(suggestion.command)
-      setRepairMessage(`已复制修复命令：${suggestion.title}`)
-      return
-    }
-
-    setRepairMessage(suggestion.description)
+  const upsertCheckResult = (nextCheck: DoctorCheckResult) => {
+    setReport((current) => {
+      if (!current) {
+        return {
+          id: `doctor-single-${Date.now()}`,
+          generatedAt: new Date().toISOString(),
+          platform: 'unknown' as any,
+          arch: 'unknown' as any,
+          profile: 'unknown' as any,
+          overallStatus: nextCheck.status === 'error' ? 'error' : nextCheck.status === 'warning' ? 'warning' : 'ok',
+          checks: [nextCheck]
+        }
+      }
+      const nextChecks = current.checks.some((check) => check.id === nextCheck.id)
+        ? current.checks.map((check) => (check.id === nextCheck.id ? nextCheck : check))
+        : [...current.checks, nextCheck]
+      const overallStatus = nextChecks.some((check) => check.status === 'error')
+        ? 'error'
+        : nextChecks.some((check) => check.status === 'warning')
+          ? 'warning'
+          : 'ok'
+      return { ...current, generatedAt: new Date().toISOString(), overallStatus, checks: nextChecks }
+    })
   }
 
   return (
@@ -404,7 +414,7 @@ function CheckRow({
             className="inline-flex items-center gap-1.5 rounded-lg border border-brand-100 bg-brand-50 px-2.5 py-1.5 text-[10px] font-black text-brand-600 hover:bg-brand-100"
           >
             {id === 'ai-worker' || id === 'port' ? <Sparkles className="h-3 w-3" /> : <Wrench className="h-3 w-3" />}
-            {id === 'ai-worker' || id === 'port' ? '前往修复' : '复制修复命令'}
+            一键修复
           </button>
         )}
       </div>
@@ -419,41 +429,4 @@ function CheckRow({
       </details>
     </div>
   )
-}
-
-function repairSuggestionFor(check: DoctorCheckResult) {
-  const fallback = check.fixSuggestion ?? check.message
-  if (check.id === 'python') {
-    return {
-      title: '安装或配置 Python',
-      description: fallback,
-      command: 'python3 --version || python --version'
-    }
-  }
-  if (check.id === 'node') {
-    return {
-      title: '检查 Node/npm',
-      description: fallback,
-      command: 'node --version && npm --version'
-    }
-  }
-  if (check.id === 'native-deps') {
-    return {
-      title: '重装原生依赖',
-      description: fallback,
-      command: 'npm install --include=optional && npm rebuild better-sqlite3 sharp'
-    }
-  }
-  if (check.id === 'permission' || check.id === 'path') {
-    return {
-      title: '检查托管目录权限',
-      description: fallback,
-      command: 'mkdir -p "$HOME/DesignAssetManager" "$HOME/DesignAssetManager/logs" "$HOME/DesignAssetManager/cache"'
-    }
-  }
-  return {
-    title: CHECK_LABELS[check.id] ?? check.label,
-    description: fallback,
-    command: fallback
-  }
 }

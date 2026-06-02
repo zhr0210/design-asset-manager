@@ -11,7 +11,11 @@ assert.match(settingsSource, /import DoctorPanel from '\.\.\/components\/setting
 assert.match(settingsSource, /<DoctorPanel\s*\/>/)
 
 assert.match(panelSource, /electronAPI\?\.doctor/)
+assert.match(panelSource, /repairCheck/)
+assert.match(panelSource, /一键修复/)
 assert.match(panelSource, /import type \{ DoctorCheckResult, DoctorCheckStatus, DoctorReport \}/)
+assert.doesNotMatch(panelSource, /复制修复命令/)
+assert.doesNotMatch(panelSource, /navigator\.clipboard/)
 
 assert.doesNotMatch(panelSource, /ipcRenderer/)
 assert.doesNotMatch(panelSource, /process\.platform/)

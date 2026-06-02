@@ -8,6 +8,7 @@ export const CHANNEL_DOCTOR_CLEAR_LAST_REPORT = 'doctor:clearLastReport'
 export const CHANNEL_DOCTOR_RUN = CHANNEL_DOCTOR_RUN_ALL
 export const CHANNEL_DOCTOR_RUN_CHECK = 'doctor:runCheck'
 export const CHANNEL_DOCTOR_LIST_CHECKS = 'doctor:listChecks'
+export const CHANNEL_DOCTOR_REPAIR_CHECK = 'doctor:repairCheck'
 
 export interface DoctorRunRequest {
   checkIds?: string[]
@@ -15,6 +16,11 @@ export interface DoctorRunRequest {
 }
 
 export interface DoctorRunCheckRequest {
+  checkId: string
+  timeoutMs?: number
+}
+
+export interface DoctorRepairCheckRequest {
   checkId: string
   timeoutMs?: number
 }
@@ -28,6 +34,18 @@ export interface DoctorRunResponse {
 export interface DoctorRunCheckResponse {
   success: boolean
   check?: DoctorCheckResult
+  error?: string
+}
+
+export interface DoctorRepairCheckResponse {
+  success: boolean
+  check?: DoctorCheckResult
+  repair?: {
+    checkId: string
+    action: string
+    changed: boolean
+    message: string
+  }
   error?: string
 }
 
