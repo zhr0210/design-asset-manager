@@ -51,7 +51,13 @@ export class LlamaRuntimeInstallService {
   public async detectHardware(): Promise<LlamaHardwareProfile> {
     if (process.platform !== 'win32') {
       return createHardwareProfile({
-        warnings: ['第一版安装向导只支持 Windows llama-server.exe；当前平台只能生成 CPU/Vulkan 参考方案。']
+        platform: process.platform,
+        arch: process.arch,
+        cpuThreads: os.cpus().length,
+        totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
+        warnings: process.platform === 'darwin'
+          ? ['macOS 将使用 llama.cpp macOS 运行包与 CPU/Metal 可用后端；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
+          : ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
       })
     }
 
@@ -223,7 +229,7 @@ export class LlamaRuntimeInstallService {
           const files = fs.readdirSync(runtimesBaseDir)
           for (const f of files) {
             const fullPath = path.join(runtimesBaseDir, f)
-            if (fs.statSync(fullPath).isDirectory() && fs.existsSync(path.join(fullPath, 'llama-server.exe'))) {
+            if (fs.statSync(fullPath).isDirectory() && this.findServerExecutable(fullPath)) {
               runtimeDir = fullPath
               break
             }
@@ -241,7 +247,7 @@ export class LlamaRuntimeInstallService {
       throw new Error('缺少 llama.cpp 安装目录或 GGUF 模型路径。')
     }
     
-    const exePath = path.join(runtimeDir, 'llama-server.exe')
+    const exePath = this.findServerExecutable(runtimeDir)
     
     let mmprojPath = plan?.recommendedModel.mmprojFilename
       ? path.join(plan.modelDir, plan.recommendedModel.mmprojFilename)
@@ -263,8 +269,8 @@ export class LlamaRuntimeInstallService {
       }
     }
 
-    if (!fs.existsSync(exePath)) {
-      throw new Error('未找到 llama-server.exe，请先完成安装。')
+    if (!exePath || !fs.existsSync(exePath)) {
+      throw new Error(process.platform === 'win32' ? '未找到 llama-server.exe，请先完成安装。' : '未找到 llama-server，请先完成安装。')
     }
     if (!fs.existsSync(ggufPath)) {
       throw new Error('未找到 GGUF 模型文件，请先完成模型下载。')
@@ -275,6 +281,13 @@ export class LlamaRuntimeInstallService {
       args.push('--mmproj', mmprojPath)
     }
     args.push('--host', '127.0.0.1', '--port', '8080', '-c', '4096', '-ngl', '999')
+    if (process.platform !== 'win32') {
+      try {
+        fs.chmodSync(exePath, 0o755)
+      } catch {
+        // Ignore chmod failures; spawn will report the real error if it is not executable.
+      }
+    }
     this.serverProcess = spawn(exePath, args, { cwd: runtimeDir, shell: false })
     this.serverProcess.on('exit', () => {
       this.serverProcess = null
@@ -587,6 +600,19 @@ export class LlamaRuntimeInstallService {
     const buffer = await fsp.readFile(zipPath)
     assertSafeZipEntries(listZipEntries(buffer), destinationDir)
     await fsp.mkdir(destinationDir, { recursive: true })
+    if (process.platform !== 'win32') {
+      await new Promise<void>((resolve, reject) => {
+        const child = spawn('unzip', ['-o', zipPath, '-d', destinationDir], { shell: false })
+        let stderr = ''
+        child.stderr.on('data', (chunk) => { stderr += chunk.toString() })
+        child.on('error', reject)
+        child.on('close', (code) => {
+          if (code === 0) resolve()
+          else reject(new Error(sanitizeLlamaLog(stderr || `unzip failed with ${code}`)))
+        })
+      })
+      return
+    }
     await new Promise<void>((resolve, reject) => {
       const powershellCmd = `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Expand-Archive -LiteralPath '${zipPath.replace(/'/g, "''")}' -DestinationPath '${destinationDir.replace(/'/g, "''")}' -Force`
       const child = spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', powershellCmd], { shell: false })
@@ -598,6 +624,38 @@ export class LlamaRuntimeInstallService {
         else reject(new Error(sanitizeLlamaLog(stderr || `Expand-Archive failed with ${code}`)))
       })
     })
+  }
+
+  private findServerExecutable(runtimeDir: string): string | null {
+    const executableName = process.platform === 'win32' ? 'llama-server.exe' : 'llama-server'
+    const directCandidates = [
+      path.join(runtimeDir, executableName),
+      path.join(runtimeDir, 'bin', executableName),
+      path.join(runtimeDir, 'build', 'bin', executableName)
+    ]
+    for (const candidate of directCandidates) {
+      if (fs.existsSync(candidate)) return candidate
+    }
+
+    const stack = [runtimeDir]
+    while (stack.length) {
+      const current = stack.pop()!
+      let entries: fs.Dirent[]
+      try {
+        entries = fs.readdirSync(current, { withFileTypes: true })
+      } catch {
+        continue
+      }
+      for (const entry of entries) {
+        const fullPath = path.join(current, entry.name)
+        if (entry.isDirectory()) {
+          stack.push(fullPath)
+        } else if (entry.name === executableName) {
+          return fullPath
+        }
+      }
+    }
+    return null
   }
 
   private async updateLlamaBackend(plan: LlamaInstallPlan, modelPath: string): Promise<void> {

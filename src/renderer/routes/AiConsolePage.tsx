@@ -31,6 +31,7 @@ import {
   X
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
+import AiRuntimePanel from '../components/settings/AiRuntimePanel'
 import type {
   AiBackendConfig,
   AiBackendType,
@@ -48,7 +49,7 @@ import type {
 import type { ClearGpuMemoryResult, GpuStatus } from '../../shared/types/ai-worker.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS, DEFAULT_PROMPT_TEMPLATE_ID, DEFAULT_QWEN3VL_DESIGN_PROMPT, OPENAI_COMPATIBLE_REVERSE_PROMPT } from '../../shared/constants/prompt-templates.constants'
 
-type ConsoleTab = 'overview' | 'models' | 'services' | 'prompts' | 'logs'
+type ConsoleTab = 'overview' | 'models' | 'services' | 'runtime' | 'prompts' | 'logs'
 type TextBoxProvider = 'none' | 'easyocr' | 'rapidocr' | 'mock'
 
 type ModelRow = {
@@ -866,10 +867,11 @@ export default function AiConsolePage() {
   const createSelectedLlamaPlan = () => {
     if (!llamaPlan) return null
     const selectedModel = llamaPlan.modelCandidates.find((model) => model.id === selectedLlamaModelId) ?? llamaPlan.recommendedModel
+    const separator = llamaPlan.installRoot.includes('\\') ? '\\' : '/'
     return {
       ...llamaPlan,
       recommendedModel: selectedModel,
-      modelDir: `${llamaPlan.installRoot.replace(/[\\/]+$/, '')}\\models\\gguf\\${selectedModel.id}`
+      modelDir: `${llamaPlan.installRoot.replace(/[\\/]+$/, '')}${separator}models${separator}gguf${separator}${selectedModel.id}`
     }
   }
 
@@ -1111,6 +1113,7 @@ export default function AiConsolePage() {
               ['overview', '总览', Activity],
               ['models', '模型', Boxes],
               ['services', '推理服务', Server],
+              ['runtime', 'AI 运行时管理', ShieldCheck],
               ['prompts', '反推提示词', Wand2],
               ['logs', '日志', TerminalSquare]
             ] as Array<[ConsoleTab, string, React.ComponentType<{ className?: string }>]>).map(([id, label, Icon]) => (
@@ -1206,6 +1209,8 @@ export default function AiConsolePage() {
               testLlamaServer={testLlamaServer}
             />
           )}
+
+          {activeTab === 'runtime' && <AiRuntimePanel />}
 
           {activeTab === 'prompts' && (
             <PromptSystemPanel
@@ -1803,7 +1808,7 @@ function BackendsWorkspace(props: {
   const installInProgress = props.llamaStatus ? ['detecting', 'planning', 'downloading', 'extracting', 'installing'].includes(props.llamaStatus.phase) : false
 
   return (
-    <section className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
+    <section className="space-y-5">
       <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
@@ -1877,7 +1882,7 @@ function BackendsWorkspace(props: {
             {props.llamaStatus?.serverPid ? '运行中' : props.llamaStatus?.phase === 'error' ? '异常' : '已停止'}
           </StatusPill>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
           <MiniButton onClick={props.detectLlamaHardware} disabled={props.loading['llama-detect']}>
             <Cpu className="h-4 w-4" />
             硬件分析

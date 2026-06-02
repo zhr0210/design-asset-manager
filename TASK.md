@@ -248,3 +248,24 @@ Local merge result:
 - Merged `codex/platform-windows-macos-adaptation` into `main` as `e8c6328 merge: cross-platform packaging governance`.
 - `main` is clean locally after the merge.
 - GitHub upload still needs a target repository remote or explicit `owner/repo` plus an available write path.
+
+## AI Console / Llama Runtime / Doctor Follow-up
+
+- Moved the Llama local inference service out of the narrow right rail and into the lower full-width area of the AI Console service page.
+- Added an `AI 运行时管理` tab at the same level as `总览`, `模型`, `推理服务`, `反推提示词`, and `日志`; the panel is no longer shown in Settings.
+- Localized the AI Runtime Manager visible UI and removed the misleading mock-only copy.
+- Implemented cross-platform Llama runtime planning/start support by selecting macOS/Linux runtime packages, extracting non-Windows packages with `unzip`, and discovering `llama-server` recursively instead of only `llama-server.exe`.
+- Hardened ZIP path safety checks so Windows absolute paths are rejected even when tests run on macOS.
+- Expanded the Settings System Doctor panel with Chinese labels, per-check rerun controls, and safe repair actions for AI Worker/ports, Python, Node, native dependencies, and managed path permissions.
+
+Validation:
+
+```bash
+npm run test-ai-runtime-panel
+npm run test-settings-migration-panel
+npm run test-doctor-panel
+npm run typecheck
+npm run build
+```
+
+`npm run test-llama-runtime-installer` requires binding a temporary `127.0.0.1` mock HTTP server. It passed planner assertions up to the sandbox listener boundary, but the current sandbox rejected local listening without escalation.

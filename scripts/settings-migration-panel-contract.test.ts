@@ -7,7 +7,7 @@ const settingsStoreSource = await fs.readFile('src/renderer/stores/settings.stor
 
 assert.match(settingsRouteSource, /SettingsMigrationPanel/)
 assert.match(settingsRouteSource, /<SettingsMigrationPanel \/>/)
-assert.ok(settingsRouteSource.indexOf('<AiRuntimePanel />') < settingsRouteSource.indexOf('<SettingsMigrationPanel />'))
+assert.doesNotMatch(settingsRouteSource, /AiRuntimePanel/)
 
 assert.match(panelSource, /electronAPI\?\.\s*settingsMigration/)
 assert.match(panelSource, /createPlan:/)

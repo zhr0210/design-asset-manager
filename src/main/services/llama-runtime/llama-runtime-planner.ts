@@ -57,6 +57,18 @@ const DEFAULT_LLAMA_RELEASE: LlamaReleaseInfo = {
     {
       name: 'llama-b9437-bin-win-cpu-x64.zip',
       browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9437/llama-b9437-bin-win-cpu-x64.zip'
+    },
+    {
+      name: 'llama-b9437-bin-macos-arm64.zip',
+      browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9437/llama-b9437-bin-macos-arm64.zip'
+    },
+    {
+      name: 'llama-b9437-bin-macos-x64.zip',
+      browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9437/llama-b9437-bin-macos-x64.zip'
+    },
+    {
+      name: 'llama-b9437-bin-linux-x64.zip',
+      browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9437/llama-b9437-bin-linux-x64.zip'
     }
   ]
 }
@@ -155,7 +167,17 @@ export function selectModelCandidate(profile: LlamaHardwareProfile): LlamaModelC
   return QWEN3_VL_GGUF_CANDIDATES.find((model) => model.id === preferred) ?? QWEN3_VL_GGUF_CANDIDATES[0]
 }
 
-function runtimePatterns(accelerator: LlamaRuntimeAccelerator): RegExp[] {
+function runtimePatterns(accelerator: LlamaRuntimeAccelerator, platform: string = process.platform, arch: string = process.arch): RegExp[] {
+  if (platform === 'darwin') {
+    return arch === 'arm64'
+      ? [/^llama-.*bin-macos-arm64\.zip/i, /^llama-.*bin-macos.*arm64.*\.zip/i]
+      : [/^llama-.*bin-macos-x64\.zip/i, /^llama-.*bin-macos.*x64.*\.zip/i]
+  }
+  if (platform === 'linux') {
+    return arch === 'arm64'
+      ? [/^llama-.*bin-linux-arm64\.zip/i, /^llama-.*bin-linux.*arm64.*\.zip/i]
+      : [/^llama-.*bin-linux-x64\.zip/i, /^llama-.*bin-linux.*x64.*\.zip/i]
+  }
   if (accelerator === 'cuda13') {
     return [/^llama-.*bin-win-cuda-13[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu13[\d.]*-x64\.zip/i]
   }
@@ -225,9 +247,9 @@ export function createInstallPlan(input: {
 }): LlamaInstallPlan {
   const release = input.release?.assets?.length ? input.release : DEFAULT_LLAMA_RELEASE
   const accelerator = input.hardware.recommendedAccelerator
-  const runtimeAsset = findAsset(release, runtimePatterns(accelerator))
+  const runtimeAsset = findAsset(release, runtimePatterns(accelerator, input.hardware.platform, input.hardware.arch))
   if (!runtimeAsset) {
-    throw new Error(`未找到适合 ${accelerator} 的 llama.cpp Windows 安装包。`)
+    throw new Error(`未找到适合 ${input.hardware.platform}/${input.hardware.arch}/${accelerator} 的 llama.cpp 安装包。`)
   }
 
   const packages = [toRuntimePackage(runtimeAsset, release, accelerator, 'runtime', input.mirrorManifest)]
@@ -286,7 +308,7 @@ export function assertSafeZipEntries(entries: string[], destinationDir: string):
   for (const entry of entries) {
     const normalized = entry.replace(/\\/g, '/')
     if (!normalized || normalized.endsWith('/')) continue
-    if (path.isAbsolute(normalized) || normalized.includes('../')) {
+    if (path.isAbsolute(normalized) || /^[A-Za-z]:\//.test(normalized) || normalized.includes('../')) {
       throw new Error(`ZIP 包含不安全路径: ${entry}`)
     }
     const target = path.resolve(root, normalized)
