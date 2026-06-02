@@ -51,6 +51,26 @@ export interface ExternalHttpHealthCheckConfig {
   parseStrategy: ExternalHttpHealthParseStrategy
 }
 
+export interface ExternalHttpManualHealthCheckRequest {
+  runtimeId: string
+  kind: ExternalHttpRuntimeKind
+  baseUrl: string | null
+  healthEndpoint: string
+  timeoutMs: number
+  headers?: Record<string, string>
+  userInitiated: boolean
+}
+
+export interface ExternalHttpManualHealthCheckPlan {
+  runtimeId: string
+  url: string | null
+  method: 'GET'
+  timeoutMs: number
+  userInitiated: boolean
+  warnings: string[]
+  blockingIssues: string[]
+}
+
 export interface ExternalHttpRequestInput {
   method: 'GET' | 'POST'
   url: string
@@ -116,6 +136,23 @@ export interface PythonWorkerLaunchPlan {
   env: Record<string, string>
   healthUrl: string | null
   timeoutMs: number
+  warnings: string[]
+  blockingIssues: string[]
+}
+
+export interface PythonWorkerCrashLogPlan {
+  runtimeId: string
+  crashLogPath: string | null
+  stdoutTailLimit: number
+  stderrTailLimit: number
+  warnings: string[]
+}
+
+export interface PythonWorkerStopPlan {
+  runtimeId: string
+  pid: number | null
+  signal: 'SIGTERM'
+  cleanupTempFiles: false
   warnings: string[]
   blockingIssues: string[]
 }

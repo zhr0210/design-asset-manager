@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "description": "CI path and artifact hygiene denylist for validation-only cross-platform governance.",
+  "rootDeniedEntries": [
+    ".npm-cache",
+    "runtime-registry.json",
+    "runtime-registry.backup.json",
+    "settings-backup",
+    "settings-backups",
+    "settings-migration-backups",
+    "model-cache",
+    "models-cache",
+    "download-cache",
+    "asset-test-files",
+    "asset-library-test",
+    "downloaded-assets"
+  ],
+  "allowedDistTempEntries": [
+    "doctor",
+    "platform-tests",
+    "settings-migration-tests",
+    "tests"
+  ],
+  "workflowForbiddenPatterns": [
+    "\\bcuda\\b",
+    "\\bnotarize\\b",
+    "\\bpublish\\b",
+    "\\brelease\\b",
+    "\\bpip install\\b",
+    "\\bpython -m pip\\b",
+    "\\bcurl\\b",
+    "\\bwget\\b",
+    "workflow npm run (?:pack|dist):",
+    "model download",
+    "download model",
+    "runtime package download"
+  ],
+  "requiredWorkflowGuardrails": [
+    "DAM_CI_SAFE",
+    "DAM_DISABLE_MODEL_DOWNLOADS",
+    "DAM_DISABLE_RUNTIME_DOWNLOADS",
+    "DAM_DISABLE_REAL_AI_WORKER",
+    "DAM_DISABLE_EXTERNAL_INFERENCE"
+  ]
+}

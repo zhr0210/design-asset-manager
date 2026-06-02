@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "phase": "9B",
+  "scope": "minimal Windows / macOS packaging script integration",
+  "runsPackagingInCI": false,
+  "scripts": {
+    "pack:win": {
+      "command": "npm run build && electron-builder --win --dir",
+      "publishes": false,
+      "signs": false,
+      "notarizes": false,
+      "releaseWorkflow": false
+    },
+    "pack:mac": {
+      "command": "npm run build && electron-builder --mac --dir --config.mac.identity=null",
+      "publishes": false,
+      "signs": false,
+      "notarizes": false,
+      "releaseWorkflow": false
+    },
+    "dist:win": {
+      "command": "npm run build && electron-builder --win",
+      "publishes": false,
+      "signs": false,
+      "notarizes": false,
+      "releaseWorkflow": false
+    },
+    "dist:mac": {
+      "command": "npm run build && electron-builder --mac --config.mac.identity=null",
+      "publishes": false,
+      "signs": false,
+      "notarizes": false,
+      "releaseWorkflow": false
+    }
+  },
+  "forbidden": [
+    "publish",
+    "release",
+    "notarize",
+    "afterSign",
+    "model download",
+    "runtime package download",
+    "real AI Worker startup"
+  ],
+  "validationOnly": true
+}

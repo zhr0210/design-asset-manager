@@ -6,9 +6,60 @@
   "type": "module",
   "author": "Antigravity",
   "license": "MIT",
+  "build": {
+    "appId": "com.antigravity.design-asset-manager",
+    "productName": "Design Asset Manager",
+    "directories": {
+      "output": "dist-packages",
+      "buildResources": "build"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "ai-service",
+        "to": "ai-service",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!**/.venv/**",
+          "!**/models/**"
+        ]
+      }
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*",
+      "node_modules/sharp/**/*"
+    ],
+    "win": {
+      "executableName": "Design Asset Manager",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "include": "build/installer.nsh",
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "identity": null
+    },
+    "publish": null
+  },
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "pack:win": "npm run build && electron-builder --win --dir",
+    "pack:mac": "npm run build && electron-builder --mac --dir --config.mac.identity=null",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac --config.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
     "typecheck": "tsc --noEmit",
     "test-openai-compatible-provider": "node scripts/run-ts-test.mjs scripts/test-openai-compatible-provider.ts",
@@ -40,6 +91,39 @@
     "test-log-path-governance": "node scripts/run-ts-test.mjs scripts/log-path-governance.test.ts",
     "test-cache-temp-governance": "node scripts/run-ts-test.mjs scripts/cache-temp-governance.test.ts",
     "test-path-governance-panel": "node scripts/run-ts-test.mjs scripts/path-governance-panel-contract.test.ts",
+    "test-path-governance-docs": "node scripts/run-ts-test.mjs scripts/path-governance-docs.test.ts",
+    "test-ci-governance": "node scripts/run-ts-test.mjs scripts/ci-governance.test.ts",
+    "test-ci-hygiene": "node scripts/run-ts-test.mjs scripts/ci-hygiene.test.ts",
+    "test-verify-platform-scripts": "node scripts/run-ts-test.mjs scripts/verify-platform-scripts.test.ts",
+    "test-electron-packaging-audit": "node scripts/run-ts-test.mjs scripts/electron-packaging-audit.test.ts",
+    "test-electron-packaging-scripts": "node scripts/run-ts-test.mjs scripts/electron-packaging-scripts.test.ts",
+    "test-native-dependency-packaging": "node scripts/run-ts-test.mjs scripts/native-dependency-packaging.test.ts",
+    "test-runtime-package-source": "node scripts/run-ts-test.mjs scripts/runtime-package-source.test.ts",
+    "test-runtime-package-downloader": "node scripts/run-ts-test.mjs scripts/runtime-package-downloader.test.ts",
+    "test-runtime-package-verifier-extractor": "node scripts/run-ts-test.mjs scripts/runtime-package-verifier-extractor.test.ts",
+    "test-runtime-package-installer": "node scripts/run-ts-test.mjs scripts/runtime-package-installer.test.ts",
+    "test-external-http-manual-health-check": "node scripts/run-ts-test.mjs scripts/external-http-manual-health-check.test.ts",
+    "test-python-worker-launch-pilot": "node scripts/run-ts-test.mjs scripts/python-worker-launch-pilot.test.ts",
+    "test-ai-client-runtime-adapter": "node scripts/run-ts-test.mjs scripts/ai-client-runtime-adapter.test.ts",
+    "test-ocr-dependency-governance": "node scripts/run-ts-test.mjs scripts/ocr-dependency-governance.test.ts",
+    "test-llama-runtime-governance": "node scripts/run-ts-test.mjs scripts/llama-runtime-governance.test.ts",
+    "test-database-path-design": "node scripts/run-ts-test.mjs scripts/database-path-design.test.ts",
+    "test-database-path-migration-plan": "node scripts/run-ts-test.mjs scripts/database-path-migration-plan.test.ts",
+    "test-path-governance-late-phases": "node scripts/run-ts-test.mjs scripts/path-governance-late-phases.test.ts",
+    "test-release-flow-governance": "node scripts/run-ts-test.mjs scripts/release-flow-governance.test.ts",
+    "test-package-smoke": "node scripts/run-ts-test.mjs scripts/package-smoke.test.ts",
+    "test-macos-package-artifact-workflow": "node scripts/run-ts-test.mjs scripts/macos-package-artifact-workflow.test.ts",
+    "package:smoke": "node scripts/package-smoke.mjs",
+    "package:smoke:sandbox": "node scripts/package-smoke.mjs --sandbox --work-root=G:\\codex\\DesignAssetManagerPackageSmoke",
+    "ci:test-governance": "npm run test-platform && npm run test-doctor && npm run test-doctor-service && npm run test-settings-compatibility && npm run test-settings-service-defaults && npm run test-settings-migration && npm run test-settings-migration-ipc && npm run test-settings-migration-panel && npm run test-managed-path-audit && npm run test-log-path-governance && npm run test-cache-temp-governance && npm run test-path-governance-panel && npm run test-path-governance-docs && npm run test-ci-governance",
+    "ci:test-runtime-safety": "npm run test-bootstrap && npm run test-runtime-registry && npm run test-bootstrap-manager && npm run test-runtime-profile && npm run test-runtime-package && npm run test-bootstrap-package-plan && npm run test-ai-runtime && npm run test-external-http-runtime && npm run test-python-worker-runtime && npm run test-ai-runtime-settings && npm run test-ai-runtime-ipc && npm run test-ai-runtime-panel",
+    "ci:hygiene": "npm run test-ci-hygiene",
+    "doctor:ci": "node scripts/doctor-ci-check.mjs",
+    "ci:governance": "npm run ci:test-governance && npm run ci:test-runtime-safety && npm run doctor:ci && npm run ci:hygiene && npm run test-verify-platform-scripts && npm run test-electron-packaging-audit && npm run test-electron-packaging-scripts && npm run test-native-dependency-packaging && npm run test-runtime-package-source && npm run test-runtime-package-downloader && npm run test-runtime-package-verifier-extractor && npm run test-runtime-package-installer && npm run test-external-http-manual-health-check && npm run test-python-worker-launch-pilot && npm run test-ai-client-runtime-adapter && npm run test-ocr-dependency-governance && npm run test-llama-runtime-governance && npm run test-database-path-design && npm run test-database-path-migration-plan && npm run test-path-governance-late-phases && npm run test-release-flow-governance && npm run test-macos-package-artifact-workflow",
+    "verify:platform": "node scripts/verify-platform-common.mjs",
+    "verify:platform:clean": "node scripts/verify-platform-common.mjs --clean",
+    "verify:platform:win": "scripts\\verify-platform-win.cmd",
+    "verify:platform:mac": "sh scripts/verify-platform-mac.sh",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "phase": "10C",
+  "scope": "runtime package verifier and extractor skeleton",
+  "realChecksumHashing": false,
+  "realExtraction": false,
+  "fileWrites": false,
+  "packageScripts": false,
+  "safeExtractRootRequired": true,
+  "rollbackPlanRequired": true,
+  "artifacts": [
+    "RuntimePackageVerificationResult",
+    "RuntimePackageExtractPlan",
+    "RuntimePackageRollbackPlan",
+    "RuntimePackageExtractor",
+    "MockRuntimePackageExtractor"
+  ],
+  "forbidden": [
+    "createHash file hashing",
+    "archive extraction",
+    "writeFile",
+    "createWriteStream",
+    "spawn",
+    "execFile",
+    "package script execution"
+  ]
+}

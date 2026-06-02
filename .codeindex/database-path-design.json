@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "phase": "13A",
+  "scope": "database path design preflight",
+  "schemaChange": false,
+  "dataMigration": false,
+  "runtimeDatabaseRead": false,
+  "pathRootIdDesign": true,
+  "libraryRelativePathHelper": true,
+  "legacyAbsoluteFallback": true,
+  "dryRunOnly": true,
+  "privacy": {
+    "containsRealUserPaths": false,
+    "containsRealAssetPaths": false,
+    "containsRuntimeDatabaseContents": false
+  },
+  "fields": [
+    "assets.file_path",
+    "assets.thumbnail_path",
+    "assets.original_path",
+    "assets.normalized_path",
+    "ai_*_tasks.file_path",
+    "download_tasks.save_path"
+  ]
+}

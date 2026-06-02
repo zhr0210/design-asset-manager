@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "phase": "10B",
+  "scope": "runtime package downloader skeleton",
+  "realDownloads": false,
+  "fileWrites": false,
+  "networkAccess": false,
+  "artifacts": [
+    "RuntimePackageDownloader",
+    "RuntimePackageDownloadProgress",
+    "RuntimePackageDownloadPlan",
+    "RuntimePackageChecksumPlan",
+    "MockRuntimePackageDownloader"
+  ],
+  "progressStatuses": [
+    "planned",
+    "progress",
+    "completed",
+    "blocked",
+    "failed"
+  ],
+  "checksum": {
+    "algorithm": "sha256",
+    "verificationPlannedOnly": true
+  },
+  "forbidden": [
+    "fetch",
+    "http",
+    "https",
+    "writeFile",
+    "createWriteStream",
+    "spawn",
+    "execFile",
+    "real package download"
+  ]
+}

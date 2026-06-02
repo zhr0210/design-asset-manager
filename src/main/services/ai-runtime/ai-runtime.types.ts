@@ -10,6 +10,8 @@ export type {
   ExternalHttpAuthMode,
   ExternalHttpClient,
   ExternalHttpHealthCheckConfig,
+  ExternalHttpManualHealthCheckPlan,
+  ExternalHttpManualHealthCheckRequest,
   ExternalHttpHealthParseStrategy,
   ExternalHttpRequestInput,
   ExternalHttpRequestOptions,
@@ -17,6 +19,8 @@ export type {
   ExternalHttpRuntimeConfig,
   ExternalHttpRuntimeKind,
   PythonWorkerLaunchPlan,
+  PythonWorkerCrashLogPlan,
   PythonWorkerProcessState,
+  PythonWorkerStopPlan,
   PythonWorkerRuntimeConfig
 } from '../../../shared/types/ai-runtime.types'

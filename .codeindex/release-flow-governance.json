@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "phase": "15A",
+  "scope": "Windows and macOS packaging release flow",
+  "windowsNsis": true,
+  "macosDmg": true,
+  "archMatrix": ["x64", "arm64"],
+  "universalMacOptional": true,
+  "codeSigningReserved": true,
+  "notarizationReserved": true,
+  "releaseWorkflow": ".github/workflows/release-packaging-dry-run.yml",
+  "publishEnabled": false,
+  "autoUpdateEnabled": false,
+  "privacy": {
+    "containsSecrets": false,
+    "containsRealUserPaths": false
+  }
+}

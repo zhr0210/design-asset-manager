@@ -1,0 +1,81 @@
+name: macOS Package Artifact
+
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: macOS architecture to package
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - x64
+          - arm64
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  DAM_CI_SAFE: true
+  DAM_DISABLE_MODEL_DOWNLOADS: true
+  DAM_DISABLE_RUNTIME_DOWNLOADS: true
+  DAM_DISABLE_REAL_AI_WORKER: true
+  DAM_DISABLE_EXTERNAL_INFERENCE: true
+  CSC_IDENTITY_AUTO_DISCOVERY: false
+
+jobs:
+  package-macos:
+    name: macOS DMG ${{ matrix.arch }}
+    runs-on: macos-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - x64
+          - arm64
+
+    steps:
+      - name: Skip unmatched architecture
+        if: ${{ github.event.inputs.arch != 'all' && github.event.inputs.arch != matrix.arch }}
+        run: echo "Skipping ${{ matrix.arch }}"
+
+      - name: Checkout
+        if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
+        run: npm ci
+
+      - name: Typecheck
+        if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
+        run: npm run typecheck
+
+      - name: Build application
+        if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
+        run: npm run build
+
+      - name: Package unsigned DMG
+        if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
+        run: npx electron-builder --mac dmg --${{ matrix.arch }} --config.mac.identity=null --publish never
+
+      - name: Upload macOS package artifact
+        if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-asset-manager-macos-${{ matrix.arch }}
+          path: |
+            dist-packages/*.dmg
+            dist-packages/*.blockmap
+          if-no-files-found: error
+          retention-days: 14

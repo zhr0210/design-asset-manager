@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "phase": "9C",
+  "scope": "native dependency packaging verification preflight",
+  "runsPackaging": false,
+  "nativeDependencies": [
+    {
+      "name": "better-sqlite3",
+      "declaredInDependencies": true,
+      "requiresAsarUnpack": true,
+      "asarUnpackPattern": "node_modules/better-sqlite3/**/*",
+      "verification": "package config and native importability"
+    },
+    {
+      "name": "sharp",
+      "declaredInDependencies": true,
+      "requiresAsarUnpack": true,
+      "asarUnpackPattern": "node_modules/sharp/**/*",
+      "verification": "package config and native importability"
+    }
+  ],
+  "pathChecks": {
+    "sqlitePathUsesManagedDatabaseDir": false,
+    "userDataPathUsesElectronUserData": false,
+    "sqlitePathGap": "src/main/db/index.ts still resolves the runtime database from homedir()/DesignAssetManager; actual migration is reserved for Phase 13.",
+    "preloadEntryPoints": [
+      "src/preload/index.ts",
+      "src/preload/browser.ts"
+    ]
+  },
+  "packagingConfigRequired": {
+    "asar": true,
+    "publish": null,
+    "macIdentity": null,
+    "extraResourcesIncludesAiService": true,
+    "aiServiceModelsExcluded": true
+  },
+  "forbidden": [
+    "running pack scripts",
+    "running dist scripts",
+    "downloading native dependencies",
+    "downloading models",
+    "starting AI Worker",
+    "signing",
+    "notarization",
+    "release publishing"
+  ]
+}

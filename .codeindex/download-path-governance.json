@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "phase": "14B",
+  "scope": "download path governance",
+  "filenamePolicy": true,
+  "windowsIllegalCharacterHandling": true,
+  "duplicateFilenameStrategy": "append-counter",
+  "dryRunOnly": true,
+  "autoModifyDownloadQueue": false,
+  "privacy": {
+    "containsRealAssetPaths": false,
+    "containsRuntimeDatabaseContents": false
+  }
+}

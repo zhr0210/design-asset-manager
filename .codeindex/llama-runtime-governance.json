@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "phase": "12B",
+  "scope": "llama-runtime governance",
+  "readOnlyAudit": true,
+  "externalInferencePreferred": true,
+  "macosLlamaAppAdapterDesign": true,
+  "windowsLlamaCppAdapterDesign": true,
+  "autoDownload": false,
+  "autoInstall": false,
+  "autoStart": false,
+  "privacy": {
+    "containsRealUserPaths": false,
+    "containsSecrets": false
+  },
+  "knownRisks": [
+    "existing Windows-oriented llama.cpp installer",
+    "explicit download/install capability remains deferred",
+    "explicit local llama-server launch capability remains manual"
+  ]
+}

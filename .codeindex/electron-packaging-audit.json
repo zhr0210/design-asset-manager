@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "phase": "9A",
+  "scope": "read-only Electron packaging configuration audit",
+  "readOnly": true,
+  "changedPackagingBehavior": false,
+  "packagingConfig": {
+    "electronViteConfig": "electron.vite.config.ts",
+    "electronBuilderConfigPresent": false,
+    "electronBuilderConfigLocationsChecked": [
+      "package.json.build",
+      "electron-builder.yml",
+      "electron-builder.yaml",
+      "electron-builder.json"
+    ],
+    "packageScriptsPresent": {
+      "pack:win": false,
+      "pack:mac": false,
+      "dist:win": false,
+      "dist:mac": false
+    }
+  },
+  "auditAreas": [
+    {
+      "id": "electron-vite",
+      "status": "present",
+      "risk": "medium",
+      "summary": "Main and preload builds use electron-vite with externalized dependencies; renderer aliases are configured."
+    },
+    {
+      "id": "electron-builder",
+      "status": "missing-config",
+      "risk": "high",
+      "summary": "electron-builder is installed and postinstall runs install-app-deps, but no explicit Windows/macOS build config is present."
+    },
+    {
+      "id": "asar-unpack",
+      "status": "missing-config",
+      "risk": "high",
+      "summary": "No asar/unpack policy is declared for native dependencies, ai-service resources, or extension assets."
+    },
+    {
+      "id": "native-dependencies",
+      "status": "requires-packaging-validation",
+      "risk": "high",
+      "summary": "better-sqlite3 and sharp are native dependencies and require unpack/rebuild validation in later phases."
+    },
+    {
+      "id": "preload",
+      "status": "present",
+      "risk": "medium",
+      "summary": "Two preload entry points are configured: src/preload/index.ts and src/preload/browser.ts."
+    },
+    {
+      "id": "python-worker-resources",
+      "status": "missing-config",
+      "risk": "high",
+      "summary": "No packaging resource policy is declared for ai-service, Python worker files, or future runtime packages."
+    },
+    {
+      "id": "windows-macos-targets",
+      "status": "missing-config",
+      "risk": "medium",
+      "summary": "No NSIS/DMG, x64/arm64, signing, notarization, or release target policy is currently declared."
+    }
+  ],
+  "forbiddenForPhase": [
+    "adding pack scripts",
+    "adding dist scripts",
+    "running electron-builder",
+    "changing asar behavior",
+    "moving native dependency files",
+    "moving ai-service files",
+    "signing",
+    "notarization",
+    "release publishing"
+  ],
+  "nextPhase": "9B should add minimal pack/dist scripts without signing, notarization, or publishing."
+}

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "phase": "11C",
+  "scope": "old AI Client to AI Runtime adapter boundary",
+  "readOnlyOldClientAnalysis": true,
+  "changesOldAiClientService": false,
+  "databaseAccess": false,
+  "networkAccess": false,
+  "realInference": false,
+  "bridges": [
+    "mock",
+    "external-http",
+    "python-worker"
+  ],
+  "requiresGreySwitch": true,
+  "oldChainFallback": true,
+  "forbidden": [
+    "modify ai-client.service.ts",
+    "fetch",
+    "database write",
+    "runtime startup",
+    "prompt inference"
+  ]
+}

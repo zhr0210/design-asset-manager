@@ -1,3 +1,7 @@
 export * from './runtime-package.types'
 export * from './runtime-package-manifest.validator'
 export * from './runtime-package-resolver'
+export * from './runtime-package-source'
+export * from './runtime-package-downloader'
+export * from './runtime-package-verifier'
+export * from './runtime-package-installer'

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "phase": "14C",
+  "scope": "thumbnail and normalized image path governance",
+  "thumbnailPathAbstraction": true,
+  "normalizedImagePathAbstraction": true,
+  "legacyPathFallback": true,
+  "cacheRootDesign": "managed-cache",
+  "regenerateFiles": false,
+  "moveLegacyFiles": false,
+  "privacy": {
+    "containsRealAssetPaths": false,
+    "containsRuntimeDatabaseContents": false
+  }
+}

@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+
+const workflow = await fs.readFile('.github/workflows/macos-package-artifact.yml', 'utf8')
+const docs = await fs.readFile('docs/platform/CI_MATRIX.md', 'utf8')
+
+assert.match(workflow, /workflow_dispatch/)
+assert.match(workflow, /macos-latest/)
+assert.match(workflow, /actions\/setup-node@v4/)
+assert.match(workflow, /npm ci/)
+assert.match(workflow, /npm run typecheck/)
+assert.match(workflow, /npm run build/)
+assert.match(workflow, /electron-builder --mac dmg/)
+assert.match(workflow, /--config\.mac\.identity=null/)
+assert.match(workflow, /--publish never/)
+assert.match(workflow, /actions\/upload-artifact@v4/)
+assert.match(workflow, /dist-packages\/\*\.dmg/)
+assert.match(workflow, /dist-packages\/\*\.blockmap/)
+assert.match(workflow, /DAM_DISABLE_MODEL_DOWNLOADS/)
+assert.match(workflow, /DAM_DISABLE_REAL_AI_WORKER/)
+assert.match(workflow, /DAM_DISABLE_EXTERNAL_INFERENCE/)
+assert.match(workflow, /CSC_IDENTITY_AUTO_DISCOVERY: false/)
+assert.doesNotMatch(workflow, /APPLE_ID|APPLE_APP_SPECIFIC_PASSWORD|CSC_LINK|CSC_KEY_PASSWORD|GH_TOKEN|GITHUB_TOKEN/)
+assert.doesNotMatch(workflow, /notarize|--publish always|gh release|create-release/i)
+assert.match(docs, /macos-package-artifact\.yml/)
+assert.match(docs, /Actions artifact/)
