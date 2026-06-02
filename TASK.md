@@ -239,6 +239,14 @@ npm run pack:mac
 
 Both commands passed on macOS arm64. `doctor:ci` reported warning status because the AI Worker was not running and one or more managed paths were not writable; this remains acceptable because no doctor check returned `error`.
 
+## macOS Settings Doctor UX Follow-up
+
+- Moved the System Doctor panel out of the narrow settings sidebar and into the main settings content column.
+- Localized visible Doctor status labels, summary fields, check labels, common messages, and fix suggestions for Chinese users.
+- Localized the path governance summary visible labels and empty states.
+- Kept raw diagnostic details behind collapsed "原始详情" sections for development troubleshooting.
+- Rebuilt the macOS arm64 DMG after the UI update.
+
 ## GitHub / main Branch Handoff
 
 User requested merging the current cross-platform adaptation branch into `main` and uploading the source code to GitHub for macOS review and future dual-platform development.

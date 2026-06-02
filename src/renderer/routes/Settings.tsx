@@ -113,92 +113,96 @@ export default function Settings() {
         </div>
 
         <form onSubmit={handleSave} className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="rounded-[24px] border border-white bg-white p-6 shadow-premium">
-            <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
-                <Database className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-[15px] font-black text-slate-900">下载与本地素材库偏好</h3>
-                <p className="mt-0.5 text-[11.5px] font-semibold text-slate-400">这些设置影响素材入库、下载速度和本地缓存位置。</p>
-              </div>
-            </div>
-
-            <div className="space-y-7">
-              <Field label="本地素材库物理路径">
-                <div className="flex gap-3">
-                  <div className="relative flex-1">
-                    <FolderOpen className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                    <input value={libraryPath} onChange={(event) => setLibraryPath(event.target.value)} className="control pl-10" required />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleSelectFolder(libraryPath, setLibraryPath)}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[12px] font-black text-slate-600 transition-colors hover:bg-slate-50"
-                  >
-                    浏览文件夹
-                  </button>
+          <div className="space-y-6">
+            <section className="rounded-[24px] border border-white bg-white p-6 shadow-premium">
+              <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+                  <Database className="h-5 w-5" />
                 </div>
-                <p className="mt-2 text-[10.5px] font-semibold text-slate-400">抓取的原图与缩略图默认存放在这里，支持多盘迁移。</p>
-              </Field>
-
-              <Field label="AI 模型与运行时存储目录">
-                <div className="flex gap-3">
-                  <div className="relative flex-1">
-                    <HardDrive className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                    <input value={modelRootDir} onChange={(event) => setModelRootDir(event.target.value)} className="control pl-10" required />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleSelectFolder(modelRootDir, setModelRootDir)}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[12px] font-black text-slate-600 transition-colors hover:bg-slate-50"
-                  >
-                    选择目录
-                  </button>
+                <div>
+                  <h3 className="text-[15px] font-black text-slate-900">下载与本地素材库偏好</h3>
+                  <p className="mt-0.5 text-[11.5px] font-semibold text-slate-400">这些设置影响素材入库、下载速度和本地缓存位置。</p>
                 </div>
-                <p className="mt-2 text-[10.5px] font-semibold text-slate-400">
-                  Qwen3-VL、GGUF、mmproj、llama.cpp 运行时与安装缓存会存放在这里。具体模型、后端和反推策略请在 AI 控制台配置。
-                </p>
-              </Field>
-
-              <SliderField
-                label="并发下载任务上限"
-                value={concurrency}
-                suffix="个并发"
-                min={1}
-                max={8}
-                step={1}
-                onChange={setConcurrency}
-                marks={['1 单图模式', '3 默认并发', '8 高速模式']}
-              />
-
-              <SliderField
-                label="请求延迟间隔"
-                value={delayInterval}
-                suffix="秒延迟"
-                min={0}
-                max={5}
-                step={0.5}
-                onChange={setDelayInterval}
-                marks={['0 秒', '1.5 秒推荐', '5 秒深度节流']}
-              />
-
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                <ToggleCard
-                  title="保存原始来源 URL"
-                  caption="保留素材来源页面，方便后续回溯。"
-                  checked={saveOriginalUrl}
-                  onChange={setSaveOriginalUrl}
-                />
-                <ToggleCard
-                  title="自动生成缩略图"
-                  caption="入库后自动生成本地预览图。"
-                  checked={autoThumbnail}
-                  onChange={setAutoThumbnail}
-                />
               </div>
-            </div>
-          </section>
+
+              <div className="space-y-7">
+                <Field label="本地素材库物理路径">
+                  <div className="flex gap-3">
+                    <div className="relative flex-1">
+                      <FolderOpen className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                      <input value={libraryPath} onChange={(event) => setLibraryPath(event.target.value)} className="control pl-10" required />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectFolder(libraryPath, setLibraryPath)}
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[12px] font-black text-slate-600 transition-colors hover:bg-slate-50"
+                    >
+                      浏览文件夹
+                    </button>
+                  </div>
+                  <p className="mt-2 text-[10.5px] font-semibold text-slate-400">抓取的原图与缩略图默认存放在这里，支持多盘迁移。</p>
+                </Field>
+
+                <Field label="AI 模型与运行时存储目录">
+                  <div className="flex gap-3">
+                    <div className="relative flex-1">
+                      <HardDrive className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                      <input value={modelRootDir} onChange={(event) => setModelRootDir(event.target.value)} className="control pl-10" required />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectFolder(modelRootDir, setModelRootDir)}
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[12px] font-black text-slate-600 transition-colors hover:bg-slate-50"
+                    >
+                      选择目录
+                    </button>
+                  </div>
+                  <p className="mt-2 text-[10.5px] font-semibold text-slate-400">
+                    Qwen3-VL、GGUF、mmproj、llama.cpp 运行时与安装缓存会存放在这里。具体模型、后端和反推策略请在 AI 控制台配置。
+                  </p>
+                </Field>
+
+                <SliderField
+                  label="并发下载任务上限"
+                  value={concurrency}
+                  suffix="个并发"
+                  min={1}
+                  max={8}
+                  step={1}
+                  onChange={setConcurrency}
+                  marks={['1 单图模式', '3 默认并发', '8 高速模式']}
+                />
+
+                <SliderField
+                  label="请求延迟间隔"
+                  value={delayInterval}
+                  suffix="秒延迟"
+                  min={0}
+                  max={5}
+                  step={0.5}
+                  onChange={setDelayInterval}
+                  marks={['0 秒', '1.5 秒推荐', '5 秒深度节流']}
+                />
+
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  <ToggleCard
+                    title="保存原始来源 URL"
+                    caption="保留素材来源页面，方便后续回溯。"
+                    checked={saveOriginalUrl}
+                    onChange={setSaveOriginalUrl}
+                  />
+                  <ToggleCard
+                    title="自动生成缩略图"
+                    caption="入库后自动生成本地预览图。"
+                    checked={autoThumbnail}
+                    onChange={setAutoThumbnail}
+                  />
+                </div>
+              </div>
+            </section>
+
+            <DoctorPanel />
+          </div>
 
           <aside className="space-y-5">
             <div className="rounded-[24px] border border-white bg-white p-6 shadow-premium">
@@ -214,8 +218,6 @@ export default function Settings() {
                 </div>
               </div>
             </div>
-
-            <DoctorPanel />
 
             <AiRuntimePanel />
 

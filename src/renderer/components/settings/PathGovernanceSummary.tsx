@@ -25,6 +25,26 @@ const MANAGED_PATH_KEYS = [
   'databaseDir'
 ]
 
+const PATH_LABELS: Record<string, string> = {
+  userDataDir: '用户数据',
+  configDir: '配置目录',
+  logsDir: '日志目录',
+  debugDir: '调试日志',
+  cacheDir: '缓存目录',
+  tempDir: '临时目录',
+  runtimeDir: '运行时目录',
+  modelsDir: '模型目录',
+  databaseDir: '数据库目录'
+}
+
+const STATUS_LABELS: Record<DoctorCheckStatus | 'unknown', string> = {
+  ok: '正常',
+  warning: '提醒',
+  error: '错误',
+  skipped: '跳过',
+  unknown: '未知'
+}
+
 const STATUS_STYLE: Record<DoctorCheckStatus | 'unknown', string> = {
   ok: 'border-emerald-100 bg-emerald-50 text-emerald-700',
   warning: 'border-amber-100 bg-amber-50 text-amber-700',
@@ -41,9 +61,9 @@ export function PathGovernanceSummary({ report }: { report: DoctorReport | null 
       <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
         <div className="flex items-center gap-2 text-[12px] font-black text-slate-700">
           <FolderTree className="h-4 w-4 text-slate-400" />
-          Path governance
+          路径治理摘要
         </div>
-        <p className="mt-2 text-[10.5px] font-semibold leading-5 text-slate-400">No Doctor report has been loaded yet.</p>
+        <p className="mt-2 text-[10.5px] font-semibold leading-5 text-slate-400">尚未加载系统体检报告。</p>
       </div>
     )
   }
@@ -54,14 +74,14 @@ export function PathGovernanceSummary({ report }: { report: DoctorReport | null 
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-[12px] font-black text-slate-800">
             <FolderTree className="h-4 w-4 text-brand-500" />
-            Path governance
+            路径治理摘要
           </div>
           <p className="mt-1 text-[10.5px] font-semibold leading-5 text-slate-400">
-            Read-only managed path summary from the latest Doctor report.
+            根据最近一次系统体检生成的只读路径状态汇总。
           </p>
         </div>
         <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${STATUS_STYLE[summary.status]}`}>
-          {summary.status}
+          {STATUS_LABELS[summary.status]}
         </span>
       </div>
 
@@ -74,21 +94,21 @@ export function PathGovernanceSummary({ report }: { report: DoctorReport | null 
       <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
         <SummaryBox
           icon={AlertTriangle}
-          label="Warnings"
+          label="路径提醒"
           items={summary.warnings}
-          empty="No path warnings reported."
+          empty="未发现路径治理提醒。"
         />
         <SummaryBox
           icon={ShieldAlert}
-          label="Permission probes"
+          label="权限探测"
           items={summary.permissions}
-          empty="No permission probe warnings reported."
+          empty="未发现权限探测提醒。"
         />
       </div>
 
       <details className="mt-4">
         <summary className="cursor-pointer select-none text-[10px] font-black text-slate-400 transition-colors hover:text-slate-600">
-          Details
+          原始摘要
         </summary>
         <div className="mt-2 space-y-2 text-[10px] font-semibold leading-5 text-slate-500">
           {summary.details.map((item) => (
@@ -105,12 +125,12 @@ export function PathGovernanceSummary({ report }: { report: DoctorReport | null 
 function PathRow({ item }: { item: PathEntry }) {
   return (
     <div className="grid grid-cols-[92px_minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
-      <span className="text-[10px] font-black text-slate-500">{item.key}</span>
+      <span className="text-[10px] font-black text-slate-500">{PATH_LABELS[item.key] ?? item.key}</span>
       <span className="truncate text-[10px] font-semibold text-slate-500" title={maskPath(item.path)}>
         {maskPath(item.path)}
       </span>
       <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black ${STATUS_STYLE[item.status ?? 'unknown']}`}>
-        {item.status ?? 'unknown'}
+        {STATUS_LABELS[item.status ?? 'unknown']}
       </span>
     </div>
   )
@@ -158,9 +178,9 @@ function buildSummary(report: DoctorReport | null) {
     warnings,
     permissions,
     details: [
-      `${paths.length} managed path entries summarized.`,
-      `${warnings.length} path warnings or blocking issues reported.`,
-      `${permissions.length} permission probe warnings reported.`
+      `已汇总 ${paths.length} 个托管路径。`,
+      `发现 ${warnings.length} 条路径提醒或阻塞项。`,
+      `发现 ${permissions.length} 条权限探测提醒。`
     ]
   }
 }
@@ -230,7 +250,8 @@ function collectPermissionItems(permissionCheck: DoctorCheckResult | null): stri
     for (const item of asArray(asRecord(details)[groupKey])) {
       const record = asRecord(item)
       if (record.writable === false) {
-        items.push(`${String(record.label ?? 'path')}: ${String(record.error ?? 'not writable')}`)
+        const label = PATH_LABELS[String(record.label ?? '')] ?? String(record.label ?? '路径')
+        items.push(`${label}: ${String(record.error ?? '不可写').replace(/not writable/i, '不可写')}`)
       }
     }
   }
@@ -262,7 +283,7 @@ function statusForPath(
 }
 
 function maskPath(value?: string): string {
-  if (!value) return 'unknown'
+  if (!value) return '未知'
   const normalized = value.replace(/\\/g, '/')
   const parts = normalized.split('/').filter(Boolean)
   if (parts.length <= 2) return normalized
