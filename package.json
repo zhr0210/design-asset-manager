@@ -39,6 +39,7 @@
     "test-managed-path-audit": "node scripts/run-ts-test.mjs scripts/managed-path-audit.test.ts",
     "test-log-path-governance": "node scripts/run-ts-test.mjs scripts/log-path-governance.test.ts",
     "test-cache-temp-governance": "node scripts/run-ts-test.mjs scripts/cache-temp-governance.test.ts",
+    "test-path-governance-panel": "node scripts/run-ts-test.mjs scripts/path-governance-panel-contract.test.ts",
     "doctor": "node scripts/doctor-check.mjs",
     "llama-doctor": "node scripts/run-ts-test.mjs scripts/llama-doctor.ts"
   },

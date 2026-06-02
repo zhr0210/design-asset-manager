@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Activity, AlertTriangle, CheckCircle2, Loader2, RefreshCw, RotateCcw, Trash2 } from 'lucide-react'
 import type { DoctorCheckResult, DoctorCheckStatus, DoctorReport } from '../../../shared/types/doctor.types'
+import { PathGovernanceSummary } from './PathGovernanceSummary'
 import type {
   DoctorClearLastReportResponse,
   DoctorGetLastReportResponse,
@@ -199,6 +200,10 @@ export default function DoctorPanel() {
         <PanelButton onClick={handleClear} disabled={loading || !report} icon={Trash2}>
           清除结果
         </PanelButton>
+      </div>
+
+      <div className="mt-5">
+        <PathGovernanceSummary report={report} />
       </div>
 
       <div className="mt-5 space-y-2">
