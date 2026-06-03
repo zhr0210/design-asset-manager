@@ -76,7 +76,9 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
       env: {
         PYTHONUNBUFFERED: '1',
         DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1',
-        HF_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'huggingface-cache')
+        HF_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'huggingface-cache'),
+        PADDLE_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'paddle-cache'),
+        PADDLEX_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'paddlex-cache')
       }
     })
   ))
