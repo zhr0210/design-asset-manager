@@ -1,3 +1,5 @@
+import path from 'path'
+import os from 'os'
 import { ipcMain } from 'electron'
 import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
@@ -73,7 +75,8 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
       workingDirectory: resolveAiServiceRoot(),
       env: {
         PYTHONUNBUFFERED: '1',
-        DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1'
+        DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1',
+        HF_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'huggingface-cache')
       }
     })
   ))

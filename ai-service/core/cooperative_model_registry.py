@@ -62,7 +62,8 @@ def _cooperative_root() -> Path:
 
 
 def get_cooperative_model_path(entry: dict) -> Optional[Path]:
-    """Return the local download directory for this model if it exists and is non-empty."""
+    """Return the local download directory for this model if it exists, is non-empty,
+    and contains the expected weight file."""
     local_dir = _cooperative_root() / entry["provider"] / entry["id"]
     if not local_dir.is_dir():
         return None
@@ -72,6 +73,30 @@ def get_cooperative_model_path(entry: dict) -> Optional[Path]:
             return None
     except OSError:
         return None
+
+    # Verify the actual weight file exists and is non-empty
+    weight_files: dict[str, str] = {
+        "ram": "ram_plus_swin_large_14m.pth",
+        "florence2": "model.safetensors",
+        "clip": "model.safetensors",
+        "wd_tagger": "model.onnx",
+    }
+    # Minimum expected sizes (bytes) — partial downloads below these are incomplete
+    min_sizes: dict[str, int] = {
+        "ram": 100 * 1024 * 1024,        # ~1.4GB full, <100MB is partial
+        "florence2": 100 * 1024 * 1024,  # ~1.5GB full
+        "clip": 100 * 1024 * 1024,       # ~577MB full
+        "wd_tagger": 100 * 1024 * 1024,  # ~800MB full, <100MB is partial
+    }
+    model_family = entry.get("model_family", "")
+    required_file = weight_files.get(model_family)
+    if required_file:
+        weight_path = local_dir / required_file
+        if not weight_path.is_file():
+            return None
+        if weight_path.stat().st_size < min_sizes.get(model_family, 1024 * 1024):
+            return None
+
     return local_dir
 
 

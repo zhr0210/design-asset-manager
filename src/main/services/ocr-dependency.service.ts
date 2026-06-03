@@ -139,6 +139,25 @@ export function resolveMacOSAiPythonRuntime(): {
   }
 }
 
+/** Resolve an older venv that already has torch installed as a fallback. */
+function resolveFallbackVenvPython(): string | null {
+  const managedPaths = resolveElectronManagedPaths()
+  const oldVenvPython = path.join(
+    managedPaths.runtimeDir,
+    'macos-ai-python',
+    '.venv.old',
+    process.platform === 'win32' ? path.join('Scripts', 'python.exe') : path.join('bin', 'python')
+  )
+  if (!fs.existsSync(oldVenvPython)) return null
+  try {
+    execSync(`"${oldVenvPython}" -c "import torch"`, { timeout: 5000, stdio: 'ignore' })
+    writeDebugLog('[resolvePythonExecutable] Fallback old venv has torch, preferring it.')
+    return oldVenvPython
+  } catch {
+    return null
+  }
+}
+
 export function resolveBasePythonExecutable(): string {
   writeDebugLog('[resolvePythonExecutable] Resolving Python executable...')
   const envs = [
@@ -199,8 +218,20 @@ export function resolvePythonExecutable(): string {
 
   const managedRuntime = resolveMacOSAiPythonRuntime()
   if (managedRuntime.exists) {
-    writeDebugLog('[resolvePythonExecutable] Using managed macOS AI Python runtime.')
-    return managedRuntime.pythonPath
+    try {
+      execSync(`"${managedRuntime.pythonPath}" -c "import torch"`, {
+        timeout: 5000,
+        stdio: 'ignore'
+      })
+      writeDebugLog('[resolvePythonExecutable] Using managed macOS AI Python runtime.')
+      return managedRuntime.pythonPath
+    } catch {
+      writeDebugLog('[resolvePythonExecutable] Managed venv missing torch, trying fallback...')
+      const fallback = resolveFallbackVenvPython()
+      if (fallback) return fallback
+      writeDebugLog('[resolvePythonExecutable] Fallback also missing torch, using managed venv.')
+      return managedRuntime.pythonPath
+    }
   }
 
   return resolveBasePythonExecutable()
