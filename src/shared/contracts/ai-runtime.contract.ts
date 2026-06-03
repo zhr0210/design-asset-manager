@@ -1,8 +1,12 @@
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../types/ai-runtime.types'
+import type { MacOSAiWorkerProbeResult } from '../types/macos-ai-runtime.types'
 
 export const CHANNEL_AI_RUNTIME_LIST_RUNTIMES = 'aiRuntime:listRuntimes'
 export const CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE = 'aiRuntime:getRuntimeState'
 export const CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME = 'aiRuntime:getActiveRuntime'
+export const CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES = 'aiRuntime:getMacOSCapabilities'
+export const CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS = 'aiRuntime:getPythonMpsStatus'
+export const CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS = 'aiRuntime:getClipSiglipOnnxStatus'
 export const CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME = 'aiRuntime:selectActiveRuntime'
 export const CHANNEL_AI_RUNTIME_START_RUNTIME = 'aiRuntime:startRuntime'
 export const CHANNEL_AI_RUNTIME_STOP_RUNTIME = 'aiRuntime:stopRuntime'
@@ -17,6 +21,29 @@ export interface AiRuntimeListRuntimesResponse {
 
 export interface AiRuntimeGetStateRequest {
   runtimeId: string
+}
+
+export interface AiRuntimeMacOSCapabilitiesResponse {
+  offline: boolean
+  capabilities: MacOSAiWorkerProbeResult | null
+  error?: string
+}
+
+export interface AiRuntimePythonMpsStatusResponse {
+  success: boolean
+  compatible: boolean
+  runtime?: string | null
+  status: 'optional' | 'planned' | 'unavailable'
+  diagnostics: Record<string, unknown>
+  error?: string | null
+}
+
+export interface AiRuntimeClipSiglipOnnxStatusResponse {
+  success: boolean
+  compatible: boolean
+  runtime?: string | null
+  diagnostics: Record<string, unknown>
+  error?: string | null
 }
 
 export interface AiRuntimeSelectActiveRequest {

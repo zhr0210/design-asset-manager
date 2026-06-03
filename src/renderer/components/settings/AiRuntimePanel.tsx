@@ -1,10 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw, RotateCcw, ShieldCheck, Star } from 'lucide-react'
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
+import type { MacOSAiBranchRuntimeMetadata, MacOSAiCapabilityStatus, MacOSAiRuntimeLane, MacOSAiWorkerProbeResult } from '../../../shared/types/macos-ai-runtime.types'
+import { MacOSAiCapabilityMatrix } from './MacOSAiCapabilityMatrix'
 import type {
   AiRuntimeActiveRuntimeResponse,
+  AiRuntimeClipSiglipOnnxStatusResponse,
   AiRuntimeHealthCheckAllResponse,
   AiRuntimeHealthCheckResponse,
+  AiRuntimeMacOSCapabilitiesResponse,
+  AiRuntimePythonMpsStatusResponse,
   AiRuntimeIpcResponse,
   AiRuntimeListRuntimesResponse,
   AiRuntimeOperationResponse,
@@ -15,6 +20,9 @@ type AiRuntimeApi = {
   listRuntimes: () => Promise<AiRuntimeIpcResponse<AiRuntimeListRuntimesResponse>>
   getRuntimeState: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeStateResponse>>
   getActiveRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimeActiveRuntimeResponse>>
+  getMacOSCapabilities: () => Promise<AiRuntimeIpcResponse<AiRuntimeMacOSCapabilitiesResponse>>
+  getPythonMpsStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonMpsStatusResponse>>
+  getClipSiglipOnnxStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimeClipSiglipOnnxStatusResponse>>
   selectActiveRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   startRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   stopRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
@@ -63,7 +71,12 @@ const INFO_LABELS: Record<string, string> = {
   baseUrl: '服务地址',
   lastCheck: '最近检查',
   pid: '进程 PID',
-  error: '错误'
+  error: '错误',
+  platform: '平台',
+  machine: '机器架构',
+  isMacOS: 'macOS',
+  isAppleSilicon: 'Apple Silicon',
+  clipSiglipOnnx: 'CLIP/SigLIP ONNX'
 }
 
 function getAiRuntimeApi(): AiRuntimeApi | null {
@@ -105,6 +118,38 @@ function stringifyMetadata(metadata?: Record<string, unknown>) {
   }
 }
 
+function isMacOSAiBranchMetadata(value: unknown): value is MacOSAiBranchRuntimeMetadata {
+  return Boolean(value && typeof value === 'object' && (value as { marker?: unknown }).marker === 'macos-ai-branch' && Array.isArray((value as { lanes?: unknown }).lanes))
+}
+
+function getMacOSAiBranchRuntime(runtimes: AiRuntimeState[]): MacOSAiBranchRuntimeMetadata | null {
+  for (const runtime of runtimes) {
+    const branch = runtime.metadata?.macosAiBranch
+    if (isMacOSAiBranchMetadata(branch)) return branch
+  }
+  return null
+}
+
+function statusText(status: MacOSAiCapabilityStatus) {
+  return {
+    ready: '就绪',
+    optional: '可选',
+    planned: '规划中',
+    fallback: '回退',
+    unavailable: '不可用'
+  }[status]
+}
+
+function branchStatusStyle(status: MacOSAiCapabilityStatus) {
+  return {
+    ready: 'border-emerald-100 bg-emerald-50 text-emerald-700',
+    optional: 'border-sky-100 bg-sky-50 text-sky-700',
+    planned: 'border-amber-100 bg-amber-50 text-amber-700',
+    fallback: 'border-slate-200 bg-slate-50 text-slate-600',
+    unavailable: 'border-rose-100 bg-rose-50 text-rose-700'
+  }[status]
+}
+
 function statusIcon(status: string) {
   if (status === 'running' || status === 'ok') return <CheckCircle2 className="h-3.5 w-3.5" />
   if (status === 'failed' || status === 'error' || status === 'unhealthy' || status === 'warning') return <AlertTriangle className="h-3.5 w-3.5" />
@@ -115,6 +160,12 @@ export default function AiRuntimePanel() {
   const [runtimes, setRuntimes] = useState<AiRuntimeState[]>([])
   const [activeRuntime, setActiveRuntime] = useState<AiRuntimeState | null>(null)
   const [healthResults, setHealthResults] = useState<Record<string, AiRuntimeHealthResult>>({})
+  const [macOSWorkerProbe, setMacOSWorkerProbe] = useState<MacOSAiWorkerProbeResult | null>(null)
+  const [macOSWorkerProbeError, setMacOSWorkerProbeError] = useState<string | null>(null)
+  const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
+  const [pythonMpsStatusError, setPythonMpsStatusError] = useState<string | null>(null)
+  const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
+  const [clipSiglipOnnxStatusError, setClipSiglipOnnxStatusError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [busyRuntimeId, setBusyRuntimeId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -122,6 +173,7 @@ export default function AiRuntimePanel() {
 
   const activeRuntimeId = activeRuntime?.id ?? null
   const hasRuntimes = runtimes.length > 0
+  const macosAiBranch = useMemo(() => getMacOSAiBranchRuntime(runtimes), [runtimes])
 
   const runtimeSummary = useMemo(() => {
     const running = runtimes.filter((runtime) => runtime.status === 'running').length
@@ -138,12 +190,42 @@ export default function AiRuntimePanel() {
 
     setLoading(true)
     setError(null)
+    setMacOSWorkerProbeError(null)
+    setPythonMpsStatusError(null)
+    setClipSiglipOnnxStatusError(null)
     try {
-      const [listResponse, activeResponse] = await Promise.all([api.listRuntimes(), api.getActiveRuntime()])
+      const [listResponse, activeResponse, macOSProbeResponse, pythonMpsResponse] = await Promise.all([
+        api.listRuntimes(),
+        api.getActiveRuntime(),
+        api.getMacOSCapabilities(),
+        api.getPythonMpsStatus()
+      ])
       if (!listResponse.success || !listResponse.data) throw new Error(listResponse.error || '读取 AI 运行时列表失败。')
       if (!activeResponse.success) throw new Error(activeResponse.error || '读取当前 AI 运行时失败。')
       setRuntimes(listResponse.data.runtimes)
       setActiveRuntime(activeResponse.data ?? null)
+      if (macOSProbeResponse.success && macOSProbeResponse.data) {
+        setMacOSWorkerProbe(macOSProbeResponse.data.capabilities)
+        setMacOSWorkerProbeError(macOSProbeResponse.data.error ?? null)
+      } else {
+        setMacOSWorkerProbe(null)
+        setMacOSWorkerProbeError(macOSProbeResponse.error || '读取 macOS Worker 能力失败。')
+      }
+      if (pythonMpsResponse.success && pythonMpsResponse.data) {
+        setPythonMpsStatus(pythonMpsResponse.data)
+        setPythonMpsStatusError(pythonMpsResponse.data.error ?? null)
+      } else {
+        setPythonMpsStatus(null)
+        setPythonMpsStatusError(pythonMpsResponse.error || '读取 Python MPS 兼容性失败。')
+      }
+      const clipSiglipResponse = await api.getClipSiglipOnnxStatus()
+      if (clipSiglipResponse.success && clipSiglipResponse.data) {
+        setClipSiglipOnnxStatus(clipSiglipResponse.data)
+        setClipSiglipOnnxStatusError(clipSiglipResponse.data.error ?? null)
+      } else {
+        setClipSiglipOnnxStatus(null)
+        setClipSiglipOnnxStatusError(clipSiglipResponse.error || '读取 CLIP/SigLIP ONNX 兼容性失败。')
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
     } finally {
@@ -258,6 +340,66 @@ export default function AiRuntimePanel() {
         运行时操作会经过 Electron 主进程的安全 IPC。外部服务、模型下载和运行时安装仍由各自模块管理，不会在本面板自动触发。
       </div>
 
+      {macosAiBranch && <MacOSAiBranchPanel branch={macosAiBranch} />}
+      <MacOSAiWorkerProbePanel probe={macOSWorkerProbe} error={macOSWorkerProbeError} />
+      <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">Python MPS 兼容性检查</div>
+            <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
+              这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。
+            </div>
+          </div>
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsStatus?.compatible ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-amber-100 bg-amber-50 text-amber-700'}`}>
+            {pythonMpsStatus?.compatible ? '可兼容' : pythonMpsStatus ? pythonMpsStatus.status === 'planned' ? '待补齐' : '不可用' : '未检查'}
+          </span>
+        </div>
+
+        {pythonMpsStatus && (
+          <div className="mt-3 grid grid-cols-2 gap-3 text-[10.5px] font-bold text-slate-500 lg:grid-cols-4">
+            <InfoTile label="displayName" value={pythonMpsStatus.runtime ?? 'torch.mps'} />
+            <InfoTile label="platform" value={pythonMpsStatus.compatible ? 'compatible' : 'incompatible'} />
+            <InfoTile label="machine" value={pythonMpsStatus.status} />
+            <InfoTile label="error" value={pythonMpsStatusError ?? 'None'} wide />
+          </div>
+        )}
+
+        {!pythonMpsStatus && pythonMpsStatusError && (
+          <div className="mt-3 rounded-xl border border-amber-100 bg-amber-50/80 p-3 text-[10.5px] font-bold leading-5 text-amber-700">
+            {pythonMpsStatusError}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">CLIP/SigLIP ONNX 兼容性检查</div>
+            <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
+              这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。
+            </div>
+          </div>
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${clipSiglipOnnxStatus?.compatible ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-amber-100 bg-amber-50 text-amber-700'}`}>
+            {clipSiglipOnnxStatus?.compatible ? '可兼容' : clipSiglipOnnxStatus ? '待补齐' : '未检查'}
+          </span>
+        </div>
+
+        {clipSiglipOnnxStatus && (
+          <div className="mt-3 grid grid-cols-2 gap-3 text-[10.5px] font-bold text-slate-500 lg:grid-cols-4">
+            <InfoTile label="displayName" value={clipSiglipOnnxStatus.runtime ?? 'optimum.onnxruntime'} />
+            <InfoTile label="platform" value={clipSiglipOnnxStatus.compatible ? 'compatible' : 'incompatible'} />
+            <InfoTile label="machine" value={clipSiglipOnnxStatus.diagnostics?.onnxruntime ? 'onnxruntime' : 'unknown'} />
+            <InfoTile label="error" value={clipSiglipOnnxStatusError ?? 'None'} wide />
+          </div>
+        )}
+
+        {!clipSiglipOnnxStatus && clipSiglipOnnxStatusError && (
+          <div className="mt-3 rounded-xl border border-amber-100 bg-amber-50/80 p-3 text-[10.5px] font-bold leading-5 text-amber-700">
+            {clipSiglipOnnxStatusError}
+          </div>
+        )}
+      </div>
+
       {error && (
         <div className="mt-4 rounded-2xl border border-rose-100 bg-rose-50 p-3 text-[11px] font-bold leading-5 text-rose-700">
           {error}
@@ -316,6 +458,126 @@ export default function AiRuntimePanel() {
         </div>
       )}
     </section>
+  )
+}
+
+function MacOSAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata }) {
+  return (
+    <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div className="min-w-0">
+          <div className="text-[13px] font-black text-slate-900">macOS AI 分支</div>
+          <div className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
+            Python MPS、ONNX Runtime 与 Llama 三条路线的阶段性能力图。当前阶段：{branch.phase} / {branch.platform}/{branch.arch}
+          </div>
+        </div>
+        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${branch.isCurrentPlatform ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-white text-slate-500'}`}>
+          {branch.isCurrentPlatform ? '当前平台' : '非当前平台'}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 xl:grid-cols-3">
+        {branch.lanes.map((lane) => <MacOSAiLaneCard key={lane.id} lane={lane} />)}
+      </div>
+
+      {branch.warnings.length > 0 && (
+        <div className="mt-3 space-y-1 rounded-xl border border-amber-100 bg-amber-50/70 p-3 text-[10.5px] font-bold leading-5 text-amber-700">
+          {branch.warnings.map((warning) => <div key={warning}>{warning}</div>)}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function MacOSAiWorkerProbePanel({ probe, error }: { probe: MacOSAiWorkerProbeResult | null; error: string | null }) {
+  return (
+    <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div className="min-w-0">
+          <div className="text-[13px] font-black text-slate-900">macOS Worker 实时探测</div>
+          <div className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
+            这里显示 Python Worker 当前探测到的 MPS、ONNX Runtime 和 MLX 状态，帮助确认真实运行时能力是否已经可用。
+          </div>
+        </div>
+        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${probe?.isMacOS ? 'border-indigo-100 bg-white text-indigo-700' : 'border-slate-200 bg-white text-slate-500'}`}>
+          {probe ? `${probe.platform}/${probe.machine}` : '等待探测'}
+        </span>
+      </div>
+
+      {probe && (
+        <div className="mt-4 grid grid-cols-2 gap-3 text-[10.5px] font-bold text-slate-500 lg:grid-cols-5">
+          <InfoTile label="platform" value={probe.platform} />
+          <InfoTile label="machine" value={probe.machine} />
+          <InfoTile label="isMacOS" value={probe.isMacOS ? 'yes' : 'no'} />
+          <InfoTile label="isAppleSilicon" value={probe.isAppleSilicon ? 'yes' : 'no'} />
+          <InfoTile label="clipSiglipOnnx" value={statusText(probe.clipSiglipOnnx.status)} />
+        </div>
+      )}
+
+      {probe && (
+        <div className="mt-4 grid gap-3 xl:grid-cols-3">
+          {probe.lanes.map((lane) => <MacOSAiLaneCard key={lane.id} lane={lane} />)}
+        </div>
+      )}
+
+      <MacOSAiCapabilityMatrix probe={probe} />
+
+      {error && (
+        <div className="mt-3 rounded-xl border border-amber-100 bg-amber-50/80 p-3 text-[10.5px] font-bold leading-5 text-amber-700">
+          {error}
+        </div>
+      )}
+
+      {!probe && !error && (
+        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-[10.5px] font-bold leading-5 text-slate-500">
+          暂未获取到 Worker 探测结果。
+        </div>
+      )}
+    </div>
+  )
+}
+
+type MacOSAiLaneLike = {
+  id: string
+  label: string
+  status: MacOSAiCapabilityStatus
+  summary: string
+  capabilities: Array<{
+    id: string
+    label: string
+    status: MacOSAiCapabilityStatus
+    backend?: string
+    role: string
+  }>
+}
+
+function MacOSAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
+  return (
+    <div className="rounded-xl border border-white bg-white p-3 shadow-sm">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className="truncate text-[12px] font-black text-slate-900">{lane.label}</div>
+          <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500">{lane.summary}</div>
+        </div>
+        <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${branchStatusStyle(lane.status)}`}>
+          {statusText(lane.status)}
+        </span>
+      </div>
+
+      <div className="mt-3 space-y-1.5">
+        {lane.capabilities.map((capability) => (
+          <div key={capability.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 px-2.5 py-2">
+            <div className="min-w-0">
+              <div className="truncate text-[10.5px] font-black text-slate-700">{capability.label}</div>
+              <div className="mt-0.5 truncate text-[9.5px] font-bold text-slate-400">{capability.backend ?? capability.role}</div>
+            </div>
+            <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black ${branchStatusStyle(capability.status)}`}>
+              {statusText(capability.status)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 

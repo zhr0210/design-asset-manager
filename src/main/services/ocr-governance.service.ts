@@ -9,7 +9,7 @@ export interface OcrDependencyRisk {
 }
 
 export interface OcrDependencyPlan {
-  provider: 'easyocr' | 'rapidocr' | 'mock'
+  provider: 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'
   runtimeProfile: 'local-ocr' | 'external-ocr' | 'mock-only'
   autoInstall: false
   doctorCheckRequired: true
@@ -18,7 +18,7 @@ export interface OcrDependencyPlan {
   blockingIssues: string[]
 }
 
-export function createOcrDependencyGovernancePlan(provider: 'easyocr' | 'rapidocr' | 'mock'): OcrDependencyPlan {
+export function createOcrDependencyGovernancePlan(provider: 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'): OcrDependencyPlan {
   return {
     provider,
     runtimeProfile: provider === 'mock' ? 'mock-only' : 'local-ocr',
@@ -52,7 +52,7 @@ export function createOcrDependencyGovernancePlan(provider: 'easyocr' | 'rapidoc
   }
 }
 
-export function createOcrDoctorCheckPlan(provider: 'easyocr' | 'rapidocr' | 'mock'): {
+export function createOcrDoctorCheckPlan(provider: 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'): {
   id: string
   provider: string
   readonly: true

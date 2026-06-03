@@ -20,8 +20,9 @@ export interface OcrEnvPayload {
   providers: {
     easyocr: OcrEnvProvider
     rapidocr: OcrEnvProvider
+    paddleocr: OcrEnvProvider
   }
-  selectedProvider: 'none' | 'easyocr' | 'rapidocr' | 'mock'
+  selectedProvider: 'none' | 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'
   selectedProviderAvailable: boolean
   checkedAt: string
 }

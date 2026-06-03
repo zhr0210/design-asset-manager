@@ -40,7 +40,10 @@ import {
 import type { DoctorRepairCheckRequest, DoctorRunCheckRequest, DoctorRunRequest } from '../shared/contracts/doctor.contract'
 import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
+  CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
+  CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
+  CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
@@ -233,6 +236,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     listRuntimes: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_LIST_RUNTIMES),
     getRuntimeState: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE, { runtimeId }),
     getActiveRuntime: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME),
+    getMacOSCapabilities: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES),
+    getPythonMpsStatus: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS),
+    getClipSiglipOnnxStatus: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS),
     selectActiveRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME, { runtimeId }),
     startRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_START_RUNTIME, { runtimeId }),
     stopRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_STOP_RUNTIME, { runtimeId }),

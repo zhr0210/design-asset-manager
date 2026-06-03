@@ -1,0 +1,1182 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design Asset Manager Architecture Mind Map</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fb;
+      --panel: #ffffff;
+      --ink: #16202a;
+      --muted: #667382;
+      --line: #d9e1e8;
+      --strong-line: #9fb2c2;
+      --teal: #0f8f8c;
+      --teal-soft: #dff7f5;
+      --coral: #d85c4a;
+      --coral-soft: #ffe8e3;
+      --gold: #c69122;
+      --gold-soft: #fff3d6;
+      --blue: #4267c7;
+      --blue-soft: #e7edff;
+      --violet: #7c4bc7;
+      --violet-soft: #efe6ff;
+      --green: #2f8a58;
+      --green-soft: #e5f5ec;
+      --shadow: 0 18px 50px rgba(28, 43, 59, 0.12);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 260px minmax(560px, 1fr) 340px;
+      grid-template-rows: 64px 1fr;
+      height: 100vh;
+    }
+
+    .topbar {
+      grid-column: 1 / 4;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      z-index: 5;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 250px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: conic-gradient(from 210deg, var(--teal), var(--blue), var(--coral), var(--gold), var(--teal));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.15;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 620;
+    }
+
+    .search {
+      position: relative;
+      flex: 1;
+      max-width: 520px;
+    }
+
+    .search input {
+      width: 100%;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 14px 0 36px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+      font-size: 13px;
+      box-shadow: 0 1px 0 rgba(22, 32, 42, 0.03);
+    }
+
+    .search input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(15, 143, 140, 0.16);
+    }
+
+    .search svg {
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      width: 18px;
+      height: 18px;
+      color: #7c8a98;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .button {
+      height: 36px;
+      min-width: 36px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 11px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 1px 0 rgba(22, 32, 42, 0.03);
+    }
+
+    .button:hover {
+      border-color: var(--strong-line);
+      background: #fbfcfd;
+    }
+
+    .sidebar,
+    .inspector {
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .inspector {
+      border-right: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .section-title {
+      margin: 18px 18px 10px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .domain-list {
+      display: grid;
+      gap: 6px;
+      padding: 0 12px 18px;
+    }
+
+    .domain-button {
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: var(--radius);
+      padding: 10px 10px;
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 10px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      color: var(--ink);
+    }
+
+    .domain-button:hover,
+    .domain-button.active {
+      background: #f3f7f8;
+      border-color: #e1eaed;
+    }
+
+    .domain-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .domain-name {
+      font-size: 13px;
+      font-weight: 760;
+      line-height: 1.25;
+    }
+
+    .domain-count {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 760;
+    }
+
+    .legend {
+      padding: 0 18px 22px;
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .legend-sample {
+      width: 22px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--teal-soft);
+      border: 1px solid rgba(15, 143, 140, 0.24);
+    }
+
+    .canvas-shell {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(22, 32, 42, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 32, 42, 0.04) 1px, transparent 1px),
+        radial-gradient(circle at 50% 46%, #ffffff 0, #ffffff 24%, #f3f7fa 70%, #eef3f7 100%);
+      background-size: 24px 24px, 24px 24px, auto;
+    }
+
+    .canvas-meta {
+      position: absolute;
+      left: 18px;
+      top: 16px;
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-width: calc(100% - 36px);
+    }
+
+    .meta-chip {
+      border: 1px solid rgba(159, 178, 194, 0.38);
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 999px;
+      padding: 7px 10px;
+      color: #44515d;
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 780;
+      box-shadow: 0 8px 22px rgba(28, 43, 59, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .map-viewport {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      cursor: grab;
+    }
+
+    .map-viewport.dragging {
+      cursor: grabbing;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .edge {
+      fill: none;
+      stroke: rgba(87, 106, 122, 0.33);
+      stroke-width: 1.5;
+    }
+
+    .edge.active {
+      stroke: rgba(15, 143, 140, 0.78);
+      stroke-width: 2.4;
+    }
+
+    .node rect {
+      fill: #fff;
+      stroke: #d7e1e8;
+      stroke-width: 1.2;
+      rx: 8;
+      filter: drop-shadow(0 7px 13px rgba(28, 43, 59, 0.10));
+    }
+
+    .node.root rect {
+      fill: #17212b;
+      stroke: #17212b;
+    }
+
+    .node.cluster rect {
+      stroke-width: 1.4;
+    }
+
+    .node text {
+      fill: var(--ink);
+      font-size: 12px;
+      font-weight: 740;
+      pointer-events: none;
+      letter-spacing: 0;
+    }
+
+    .node.root text {
+      fill: #fff;
+      font-size: 16px;
+      font-weight: 820;
+    }
+
+    .node .subtext {
+      fill: #718191;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .node.active rect {
+      stroke: var(--teal);
+      stroke-width: 2.4;
+    }
+
+    .node.match rect {
+      stroke: var(--coral);
+      stroke-width: 2.4;
+    }
+
+    .node.dim {
+      opacity: 0.22;
+    }
+
+    .node.hidden {
+      display: none;
+    }
+
+    .edge.hidden {
+      display: none;
+    }
+
+    .cluster-label {
+      fill: #51606e;
+      font-size: 11px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .inspector-content {
+      padding: 18px;
+    }
+
+    .inspector h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.15;
+      font-weight: 820;
+      letter-spacing: 0;
+    }
+
+    .inspector .kind {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+      font-weight: 760;
+    }
+
+    .detail-box {
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfd;
+    }
+
+    .detail-box h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 850;
+      color: #3f4c59;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .detail-box p {
+      margin: 0;
+      color: #43505d;
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: 520;
+    }
+
+    .tag-list {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #4b5a66;
+      font-size: 11px;
+      font-weight: 760;
+    }
+
+    .term-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .term-row {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .term-row:hover {
+      border-color: var(--strong-line);
+    }
+
+    .term-row strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .term-row span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1120px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 72vh auto;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .topbar,
+      .sidebar,
+      .canvas-shell,
+      .inspector {
+        grid-column: 1;
+      }
+
+      .topbar {
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        min-width: 100%;
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        max-height: none;
+      }
+
+      .domain-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .canvas-shell {
+        min-height: 620px;
+      }
+
+      .inspector {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .domain-list {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        flex-wrap: wrap;
+      }
+
+      .toolbar .button {
+        padding: 0 10px;
+      }
+
+      .toolbar .button span {
+        display: inline;
+      }
+    }
+
+    @media print {
+      body {
+        overflow: visible;
+        background: #fff;
+      }
+
+      .app {
+        display: block;
+        height: auto;
+      }
+
+      .topbar,
+      .sidebar,
+      .inspector,
+      .canvas-meta {
+        display: none;
+      }
+
+      .canvas-shell {
+        height: 100vh;
+        background: #fff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" aria-label="Design Asset Manager">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1>Design Asset Manager 架构思维导图</h1>
+          <small>术语、软件架构、AI 模型、运行时与治理边界</small>
+        </div>
+      </div>
+      <label class="search" aria-label="搜索节点">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m21 21-4.35-4.35m1.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input id="searchInput" type="search" placeholder="搜索术语、模块、模型、技术或边界">
+      </label>
+      <div class="toolbar" aria-label="视图控制">
+        <button class="button" id="zoomOut" title="缩小" aria-label="缩小">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="button" id="zoomIn" title="放大" aria-label="放大">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="button" id="resetView" title="重置视图" aria-label="重置视图">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4v6h6M20 20v-6h-6M5.5 14A7 7 0 0 0 18 18.5M18.5 10A7 7 0 0 0 6 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="button" id="expandAll" title="展开全部"><span>展开</span></button>
+        <button class="button" id="collapseTerms" title="只看主架构"><span>主架构</span></button>
+        <button class="button" id="printMap" title="打印或导出 PDF">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8V4h10v4M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v6H7v-6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <span>打印</span>
+        </button>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="section-title">Domains</div>
+      <div class="domain-list" id="domainList"></div>
+      <div class="section-title">Legend</div>
+      <div class="legend">
+        <div class="legend-row"><span class="legend-sample" style="background:var(--teal-soft)"></span><span>产品域与用户工作流</span></div>
+        <div class="legend-row"><span class="legend-sample" style="background:var(--blue-soft)"></span><span>桌面软件架构与公共契约</span></div>
+        <div class="legend-row"><span class="legend-sample" style="background:var(--coral-soft)"></span><span>Windows / macOS AI 分支</span></div>
+        <div class="legend-row"><span class="legend-sample" style="background:var(--violet-soft)"></span><span>AI Worker、模型与推理结果</span></div>
+        <div class="legend-row"><span class="legend-sample" style="background:var(--gold-soft)"></span><span>运行时、包、Bootstrap 与 Llama</span></div>
+        <div class="legend-row"><span class="legend-sample" style="background:var(--green-soft)"></span><span>路径、Doctor、CI、打包治理</span></div>
+      </div>
+    </aside>
+
+    <main class="canvas-shell">
+      <div class="canvas-meta">
+        <div class="meta-chip" id="nodeCount">0 nodes</div>
+        <div class="meta-chip">点击节点查看定义</div>
+        <div class="meta-chip">拖拽画布，滚轮缩放</div>
+      </div>
+      <div class="map-viewport" id="viewport" role="application" aria-label="架构思维导图画布">
+        <svg id="map" viewBox="110 70 1280 850" aria-labelledby="mapTitle mapDesc">
+          <title id="mapTitle">Design Asset Manager Architecture Mind Map</title>
+          <desc id="mapDesc">Interactive mind map of product domains, desktop architecture, AI architecture, runtime systems, and governance boundaries.</desc>
+          <g id="panZoom">
+            <g id="edges"></g>
+            <g id="nodes"></g>
+          </g>
+        </svg>
+      </div>
+    </main>
+
+    <aside class="inspector">
+      <div class="inspector-content">
+        <h2 id="detailTitle">Design Asset Manager</h2>
+        <div class="kind" id="detailKind">本地图片与设计资产管理桌面工具</div>
+        <div class="detail-box">
+          <h3>说明</h3>
+          <p id="detailBody">点击任意节点查看定义、相关术语和架构边界。左侧可以按领域聚焦，顶部搜索会高亮匹配节点。</p>
+        </div>
+        <div class="detail-box">
+          <h3>相关术语</h3>
+          <div class="term-list" id="relatedTerms">
+            <div class="empty">选择一个节点后显示相关术语。</div>
+          </div>
+        </div>
+        <div class="detail-box">
+          <h3>标签</h3>
+          <div class="tag-list" id="detailTags">
+            <span class="tag">architecture</span>
+            <span class="tag">context</span>
+            <span class="tag">visual map</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const palette = {
+      product: { fill: '#dff7f5', stroke: '#0f8f8c', dot: '#0f8f8c' },
+      desktop: { fill: '#e7edff', stroke: '#4267c7', dot: '#4267c7' },
+      platform: { fill: '#ffe8e3', stroke: '#d85c4a', dot: '#d85c4a' },
+      ai: { fill: '#efe6ff', stroke: '#7c4bc7', dot: '#7c4bc7' },
+      runtime: { fill: '#fff3d6', stroke: '#c69122', dot: '#c69122' },
+      governance: { fill: '#e5f5ec', stroke: '#2f8a58', dot: '#2f8a58' },
+      root: { fill: '#17212b', stroke: '#17212b', dot: '#17212b' }
+    };
+
+    const domains = [
+      {
+        id: 'product',
+        title: '产品域',
+        subtitle: '资产、标签、下载、视觉分析',
+        x: 370,
+        y: 245,
+        color: 'product',
+        detail: '面向用户的资产库语言：设计资产如何进入库、如何被浏览、分类、打标、分析与复用。',
+        terms: [
+          ['Design Asset', '保存到本地库的图片或设计参考。'],
+          ['Asset Library', '用户面对的设计资产集合及其元数据。'],
+          ['Source Site', '可搜索、浏览、抓取或下载资产的网站。'],
+          ['Embedded Browser', '用于访问来源站点并捕获候选资产的内置浏览面。'],
+          ['Download Queue', '被跟踪的下载任务集合。'],
+          ['Thumbnail', '用于浏览和选择的轻量预览。'],
+          ['Normalized Image', '为一致展示或分析准备的图像变体。'],
+          ['Asset Inspector', '查看单个资产预览、元数据、标签和 AI 结果的工作区。'],
+          ['Tag', '用于搜索、分类或组织的可复用语义标签。'],
+          ['Tag Suggestion', '用户可确认或拒绝的 AI/算法建议。'],
+          ['Tag Fusion', '合并多模型标签源并清洗去重。'],
+          ['Color Palette', '资产的代表性色彩集合。'],
+          ['Text Color Analysis', '估计文字前景/背景色和可读性的流程。']
+        ],
+        children: [
+          ['Asset Library', 'Design Asset / Asset Source / Thumbnail / Inspector'],
+          ['Tags', 'Asset Tag / Tag Suggestion / Alias / Group'],
+          ['Capture And Downloads', 'Embedded Browser / Download Task / Save Path Plan'],
+          ['Visual Analysis', 'Color Palette / OCR Text / Text Box / Readability']
+        ]
+      },
+      {
+        id: 'desktop',
+        title: '桌面软件架构',
+        subtitle: 'Electron、Preload、React、SQLite、IPC',
+        x: 1080,
+        y: 245,
+        color: 'desktop',
+        detail: 'Electron 主进程拥有窗口、IPC、服务和本地数据；Preload 暴露安全桥；React 渲染进程通过契约调用主进程能力。',
+        terms: [
+          ['Electron Main', '应用启动、窗口、IPC 注册、本地服务与运行时治理。'],
+          ['Preload Bridge', '通过 electronAPI/browserAPI 暴露安全渲染端 API。'],
+          ['React Renderer', '资产库、设置、AI Console、详情面板和状态管理 UI。'],
+          ['Shared Contracts', '主进程、预加载和渲染进程共享的类型、常量和 IPC 契约。'],
+          ['SQLite Runtime Data', '站点、资产、标签、AI 任务、下载任务等本地元数据。'],
+          ['IPC Channels', 'assets/tag/ai/doctor/runtime 等公共调用边界。']
+        ],
+        children: [
+          ['Electron Main', 'Window / IPC / Services / Doctor'],
+          ['Preload Bridge', 'electronAPI / browserAPI'],
+          ['React Renderer', 'Routes / Components / Zustand Stores'],
+          ['Shared Contracts', 'Types / Constants / IPC channels'],
+          ['SQLite Runtime Data', 'Assets / Tags / Tasks / Downloads']
+        ]
+      },
+      {
+        id: 'ai',
+        title: 'AI 架构',
+        subtitle: 'AI Client、Python Worker、模型路由、输出',
+        x: 380,
+        y: 715,
+        color: 'ai',
+        detail: 'Electron 侧 AI Client 负责任务入队和结果同步；Python AI Worker 负责推理、队列、模型管理、打标、反推提示词和深度分析。',
+        terms: [
+          ['AI Client', 'Electron 侧入队、写本地任务、轮询同步并通知渲染端。'],
+          ['AI Worker', '本地 Python/FastAPI 工作进程，执行 AI 任务。'],
+          ['AI Task', '资产上的 AI 工作单元：打标、反推提示词或视觉分析。'],
+          ['Queue Sync', 'Electron 后台同步已完成 Worker 结果。'],
+          ['Batch Scheduler', '监控排队打标任务并触发批处理。'],
+          ['Model Manager', '协调模型加载、keep-alive、驱逐和显存互斥。'],
+          ['Visual Router', '分类资产类型并选择打标流水线。'],
+          ['Cooperative Tagging Pipeline', '多模型、规则和标签融合组成的打标流程。'],
+          ['Prompt Reverse', '分析视觉资产并生成可复用图像生成提示词。'],
+          ['Deep Visual Analysis', '标签之外的结构化版式、风格和语义分析。']
+        ],
+        children: [
+          ['AI Client', 'Queue writes / HTTP calls / Poller'],
+          ['Python AI Worker', 'FastAPI / TaskQueue / Workers'],
+          ['Model Routing', 'VisualRouter / FlorenceSemanticRouter'],
+          ['Model Families', 'RAM++ / Florence-2 / WD / CLIP / CLIP-SigLIP ONNX / JoyCaption / Qwen'],
+          ['Compatibility Checkers', 'Python MPS checker / CLIP-SigLIP ONNX checker / Qwen3-VL checker'],
+          ['Inference Outputs', 'AI Tags / Captions / Prompt Reverse / Analysis']
+        ]
+      },
+      {
+        id: 'platform',
+        title: '平台 AI 分支',
+        subtitle: 'Windows 完成 / macOS worker probe bridge',
+        x: 800,
+        y: 190,
+        color: 'platform',
+        detail: 'Windows 和 macOS 不是同一条 AI 执行栈：Windows 保留 CUDA AI Worker 主链路，但 Qwen3-VL 大视觉模型应走 llama.app / llama.cpp / Ollama 量化服务；macOS AI 分支现在已经接入 lane metadata 和 worker probe bridge，目标是 Python MPS + ONNX Runtime + llama.app / llama.cpp Metal / MLX 三层混合架构，并把 Python MPS 和 CLIP/SigLIP ONNX 作为独立可见能力面，同时配套独立的兼容性检查器。',
+        terms: [
+          ['Platform AI Branch', '按系统拆分 AI 运行时后端，同时尽量保留共享产品工作流。'],
+          ['Windows AI Branch', '已开发基线：保留 CUDA AI Worker 主链路，Qwen3-VL 大视觉模型转向量化服务。'],
+          ['macOS AI Branch', '已接入 AI Console 与 Worker probe bridge：目标是 Python MPS、ONNX Runtime、Metal/MLX 服务混合架构，并带有独立的 Python MPS 兼容性检查器。'],
+          ['Qwen3-VL Large Vision Runtime', '不应被当成通用 Python 模型，应按平台走量化服务、Metal 或 MLX。'],
+          ['Python MPS Runtime', 'macOS 小模型可选的 PyTorch MPS 推理路径。'],
+          ['Python MPS Compatibility Checker', '用于判断当前环境是否真的具备 PyTorch MPS 与可选模型家族导入能力。'],
+          ['ONNX Runtime Route', '适合小模型或跨平台模型图的推理路径。'],
+          ['MLX Runtime', 'Apple Silicon 上大模型推理的候选运行时路线。']
+        ],
+        children: [
+          ['Windows AI Branch', 'CUDA AI Worker main chain / Qwen3-VL via llama.app, llama.cpp, Ollama'],
+          ['macOS AI Branch', 'AI Console lane cards + worker probe bridge / Python MPS + ONNX + CLIP/SigLIP ONNX + Metal + MLX + Ollama fallback + external HTTP fallback + compatibility checkers'],
+          ['Shared Reuse', 'UI / IPC / settings / result schema / queue sync'],
+          ['Non-Reusable AI Parts', 'Native Python Qwen3-VL / CUDA memory guard / Windows Python discovery']
+        ]
+      },
+      {
+        id: 'runtime',
+        title: '运行时系统',
+        subtitle: 'AI Runtime、外部推理、Llama、Bootstrap',
+        x: 1080,
+        y: 715,
+        color: 'runtime',
+        detail: '运行时层把 Python Worker、外部 HTTP、Llama Runtime、Runtime Profile、Runtime Registry 和包计划串起来；默认计划优先，真实访问和安装显式触发。',
+        terms: [
+          ['AI Runtime', 'Electron 侧可选推理运行时抽象。'],
+          ['Active Runtime', '当前选中的运行时。'],
+          ['Runtime Provider', '某种运行时类型的实现。'],
+          ['External HTTP Runtime', 'Ollama、LM Studio、llama.app 或自定义 HTTP 推理端点。'],
+          ['Manual Health Check', '用户触发的外部运行时连通性检查。'],
+          ['Python Worker Runtime', '本地 Python AI Worker 的运行时 Provider 形状。'],
+          ['Llama Runtime', '面向 GGUF/Llama 推理服务的本地运行时能力。'],
+          ['Llama Install Plan', 'Llama runtime 包、模型候选和安装根的计划。'],
+          ['Runtime Profile', '平台和硬件能力的运行时推荐档案。'],
+          ['Runtime Registry', '应用管理的运行时档案、路径、包和模型记录。'],
+          ['Runtime Package Install Plan', '下载、校验、解压、注册表元数据和回滚的 dry-run 组合计划。']
+        ],
+        children: [
+          ['AI Runtime', 'Active runtime / Providers / Health'],
+          ['External Inference', 'Ollama / LM Studio / llama.app / Custom HTTP'],
+          ['Llama Runtime', 'Hardware Profile / Accelerator / GGUF / MMProj'],
+          ['Bootstrap', 'Runtime Profile / Registry / Package Plan']
+        ]
+      },
+      {
+        id: 'governance',
+        title: '治理边界',
+        subtitle: '路径、Doctor、打包、CI、ADR',
+        x: 800,
+        y: 500,
+        color: 'governance',
+        detail: '治理层记录哪些事情必须 dry-run、备份、显式确认或保持验证-only，保护私有资产、路径、模型权重和运行时状态。',
+        terms: [
+          ['Managed Path', '由平台规则解析的应用自有路径。'],
+          ['User Root', '用户选择的资产库根或模型根。'],
+          ['Path Root ID', '存储路径值的逻辑所有者标识。'],
+          ['Library-Relative Path', '相对资产库根存储的路径表示。'],
+          ['Legacy Absolute Path', '为兼容读取保留的已有物理路径。'],
+          ['Dry Run', '不改变用户数据、文件、设置或运行时状态的计划/报告。'],
+          ['Doctor', '平台、依赖、AI Worker、端口、原生依赖和路径健康诊断。'],
+          ['Doctor Repair', '针对具体检查的有界应用内修复动作。'],
+          ['Package Smoke', '打包候选产物验证流程。'],
+          ['Release Flow', 'Windows/macOS 产物的治理式打包路径。']
+        ],
+        children: [
+          ['Path Governance', 'Managed Paths / User Roots / Remap'],
+          ['Doctor', 'Checks / Reports / Bounded Repair'],
+          ['Packaging', 'electron-builder / NSIS / DMG / asarUnpack'],
+          ['CI', 'Governance workflow / Hygiene / Validation only']
+        ]
+      }
+    ];
+
+    const rootNode = {
+      id: 'root',
+      title: 'Design Asset Manager',
+      subtitle: 'Local desktop design asset management tool',
+      x: 800,
+      y: 500,
+      w: 260,
+      h: 76,
+      color: 'root',
+      detail: '用于管理图片和设计资产的本地桌面工具，围绕资产库、标签、AI 分析、运行时管理和跨平台治理组织。'
+    };
+
+    const nodes = [rootNode];
+    const edges = [];
+
+    domains.forEach((domain) => {
+      const cluster = {
+        id: domain.id,
+        title: domain.title,
+        subtitle: domain.subtitle,
+        x: domain.x,
+        y: domain.y,
+        w: 230,
+        h: 72,
+        color: domain.color,
+        level: 'cluster',
+        detail: domain.detail,
+        terms: domain.terms,
+        tags: ['domain', domain.color]
+      };
+      nodes.push(cluster);
+      edges.push({ from: 'root', to: domain.id, color: domain.color });
+
+      const radius = domain.id === 'governance' ? 198 : domain.id === 'platform' ? 154 : 178;
+      const angleStart = domain.id === 'product' ? -150 : domain.id === 'desktop' ? -25 : domain.id === 'ai' ? 150 : domain.id === 'runtime' ? 28 : domain.id === 'platform' ? -160 : -100;
+      const angleStep = domain.id === 'governance' ? 50 : domain.id === 'platform' ? 48 : 28;
+
+      domain.children.forEach((child, index) => {
+        const angle = (angleStart + index * angleStep) * Math.PI / 180;
+        const id = `${domain.id}-${index}`;
+        const node = {
+          id,
+          parent: domain.id,
+          title: child[0],
+          subtitle: child[1],
+          x: Math.round(domain.x + Math.cos(angle) * radius),
+          y: Math.round(domain.y + Math.sin(angle) * radius),
+          w: 198,
+          h: 64,
+          color: domain.color,
+          level: 'topic',
+          detail: `${child[0]} 是 ${domain.title} 下的关键架构/术语簇：${child[1]}。`,
+          terms: domain.terms.filter((_, termIndex) => termIndex % domain.children.length === index % domain.children.length),
+          tags: ['topic', domain.color]
+        };
+        nodes.push(node);
+        edges.push({ from: domain.id, to: id, color: domain.color });
+      });
+    });
+
+    const nodeById = new Map(nodes.map((node) => [node.id, node]));
+    const state = {
+      selected: 'root',
+      activeDomain: 'all',
+      collapsedTerms: false,
+      query: '',
+      scale: 1,
+      tx: 0,
+      ty: 0,
+      dragging: false,
+      dragStart: null
+    };
+
+    const nodesLayer = document.getElementById('nodes');
+    const edgesLayer = document.getElementById('edges');
+    const panZoom = document.getElementById('panZoom');
+    const domainList = document.getElementById('domainList');
+    const viewport = document.getElementById('viewport');
+    const searchInput = document.getElementById('searchInput');
+
+    function textLines(text, maxLength) {
+      const words = String(text).split(' ');
+      const lines = [];
+      let line = '';
+      words.forEach((word) => {
+        const next = line ? `${line} ${word}` : word;
+        if (next.length > maxLength && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = next;
+        }
+      });
+      if (line) lines.push(line);
+      return lines.slice(0, 2);
+    }
+
+    function colorFor(node) {
+      return palette[node.color] || palette.product;
+    }
+
+    function renderDomains() {
+      const allButton = document.createElement('button');
+      allButton.className = `domain-button ${state.activeDomain === 'all' ? 'active' : ''}`;
+      allButton.type = 'button';
+      allButton.dataset.domain = 'all';
+      allButton.innerHTML = '<span class="domain-dot" style="background:#17212b"></span><span class="domain-name">全部架构</span><span class="domain-count">' + nodes.length + '</span>';
+      domainList.appendChild(allButton);
+
+      domains.forEach((domain) => {
+        const button = document.createElement('button');
+        const count = 1 + domain.children.length;
+        button.className = `domain-button ${state.activeDomain === domain.id ? 'active' : ''}`;
+        button.type = 'button';
+        button.dataset.domain = domain.id;
+        button.innerHTML = `<span class="domain-dot" style="background:${palette[domain.color].dot}"></span><span class="domain-name">${domain.title}</span><span class="domain-count">${count}</span>`;
+        domainList.appendChild(button);
+      });
+    }
+
+    function nodeMatches(node) {
+      if (!state.query) return false;
+      const haystack = [
+        node.title,
+        node.subtitle,
+        node.detail,
+        ...(node.terms || []).flat()
+      ].join(' ').toLowerCase();
+      return haystack.includes(state.query.toLowerCase());
+    }
+
+    function nodeVisible(node) {
+      if (node.id === 'root') return true;
+      if (state.activeDomain !== 'all') {
+        if (node.id !== state.activeDomain && node.parent !== state.activeDomain) return false;
+      }
+      if (state.collapsedTerms && node.level === 'topic') return false;
+      return true;
+    }
+
+    function renderMap() {
+      nodesLayer.innerHTML = '';
+      edgesLayer.innerHTML = '';
+
+      edges.forEach((edge) => {
+        const from = nodeById.get(edge.from);
+        const to = nodeById.get(edge.to);
+        const visible = nodeVisible(from) && nodeVisible(to);
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const midX = (from.x + to.x) / 2;
+        const d = `M ${from.x} ${from.y} C ${midX} ${from.y}, ${midX} ${to.y}, ${to.x} ${to.y}`;
+        path.setAttribute('d', d);
+        path.setAttribute('class', `edge ${visible ? '' : 'hidden'} ${(state.selected === from.id || state.selected === to.id) ? 'active' : ''}`);
+        edgesLayer.appendChild(path);
+      });
+
+      nodes.forEach((node) => {
+        const visible = nodeVisible(node);
+        const matches = nodeMatches(node);
+        const c = colorFor(node);
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const classes = ['node'];
+        if (node.id === 'root') classes.push('root');
+        if (node.level === 'cluster') classes.push('cluster');
+        if (state.selected === node.id) classes.push('active');
+        if (matches) classes.push('match');
+        if (!visible) classes.push('hidden');
+        if (state.query && !matches && node.id !== 'root') classes.push('dim');
+        group.setAttribute('class', classes.join(' '));
+        group.setAttribute('transform', `translate(${node.x - node.w / 2}, ${node.y - node.h / 2})`);
+        group.setAttribute('data-id', node.id);
+        group.setAttribute('tabindex', '0');
+        group.setAttribute('role', 'button');
+        group.setAttribute('aria-label', node.title);
+
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', node.w);
+        rect.setAttribute('height', node.h);
+        if (node.id !== 'root') {
+          rect.setAttribute('fill', c.fill);
+          rect.style.stroke = c.stroke;
+        }
+        group.appendChild(rect);
+
+        const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        title.setAttribute('x', node.w / 2);
+        title.setAttribute('y', node.id === 'root' ? 31 : 24);
+        title.setAttribute('text-anchor', 'middle');
+        title.textContent = node.title;
+        group.appendChild(title);
+
+        const lines = textLines(node.subtitle || '', node.id === 'root' ? 34 : 28);
+        lines.forEach((line, index) => {
+          const sub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          sub.setAttribute('class', 'subtext');
+          sub.setAttribute('x', node.w / 2);
+          sub.setAttribute('y', (node.id === 'root' ? 52 : 43) + index * 13);
+          sub.setAttribute('text-anchor', 'middle');
+          sub.textContent = line;
+          group.appendChild(sub);
+        });
+
+        group.addEventListener('click', () => selectNode(node.id));
+        group.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            selectNode(node.id);
+          }
+        });
+        nodesLayer.appendChild(group);
+      });
+
+      document.getElementById('nodeCount').textContent = `${nodes.filter(nodeVisible).length} visible nodes`;
+      applyTransform();
+    }
+
+    function selectNode(id) {
+      state.selected = id;
+      const node = nodeById.get(id);
+      document.getElementById('detailTitle').textContent = node.title;
+      document.getElementById('detailKind').textContent = node.subtitle || 'Architecture node';
+      document.getElementById('detailBody').textContent = node.detail || '暂无说明。';
+
+      const related = document.getElementById('relatedTerms');
+      related.innerHTML = '';
+      const terms = node.terms || [];
+      if (!terms.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = '这个节点是总览节点。请选择具体领域查看术语。';
+        related.appendChild(empty);
+      } else {
+        terms.forEach(([term, definition]) => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'term-row';
+          row.innerHTML = `<strong>${term}</strong><span>${definition}</span>`;
+          row.addEventListener('click', () => {
+            searchInput.value = term;
+            state.query = term;
+            renderMap();
+          });
+          related.appendChild(row);
+        });
+      }
+
+      const tagList = document.getElementById('detailTags');
+      tagList.innerHTML = '';
+      (node.tags || ['overview']).forEach((tag) => {
+        const item = document.createElement('span');
+        item.className = 'tag';
+        item.textContent = tag;
+        tagList.appendChild(item);
+      });
+      renderMap();
+    }
+
+    function applyTransform() {
+      panZoom.setAttribute('transform', `translate(${state.tx} ${state.ty}) scale(${state.scale})`);
+    }
+
+    function setZoom(nextScale) {
+      state.scale = Math.max(0.55, Math.min(1.8, nextScale));
+      applyTransform();
+    }
+
+    function resetView() {
+      state.scale = 1;
+      state.tx = 0;
+      state.ty = 0;
+      applyTransform();
+    }
+
+    domainList.addEventListener('click', (event) => {
+      const button = event.target.closest('.domain-button');
+      if (!button) return;
+      state.activeDomain = button.dataset.domain;
+      [...domainList.querySelectorAll('.domain-button')].forEach((item) => {
+        item.classList.toggle('active', item.dataset.domain === state.activeDomain);
+      });
+      if (state.activeDomain !== 'all') selectNode(state.activeDomain);
+      renderMap();
+    });
+
+    searchInput.addEventListener('input', (event) => {
+      state.query = event.target.value.trim();
+      renderMap();
+    });
+
+    document.getElementById('zoomIn').addEventListener('click', () => setZoom(state.scale + 0.12));
+    document.getElementById('zoomOut').addEventListener('click', () => setZoom(state.scale - 0.12));
+    document.getElementById('resetView').addEventListener('click', resetView);
+    document.getElementById('expandAll').addEventListener('click', () => {
+      state.collapsedTerms = false;
+      renderMap();
+    });
+    document.getElementById('collapseTerms').addEventListener('click', () => {
+      state.collapsedTerms = true;
+      renderMap();
+    });
+    document.getElementById('printMap').addEventListener('click', () => window.print());
+
+    viewport.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      const direction = event.deltaY > 0 ? -1 : 1;
+      setZoom(state.scale + direction * 0.06);
+    }, { passive: false });
+
+    viewport.addEventListener('pointerdown', (event) => {
+      state.dragging = true;
+      state.dragStart = { x: event.clientX, y: event.clientY, tx: state.tx, ty: state.ty };
+      viewport.classList.add('dragging');
+    });
+
+    window.addEventListener('pointermove', (event) => {
+      if (!state.dragging || !state.dragStart) return;
+      state.tx = state.dragStart.tx + (event.clientX - state.dragStart.x);
+      state.ty = state.dragStart.ty + (event.clientY - state.dragStart.y);
+      applyTransform();
+    });
+
+    window.addEventListener('pointerup', () => {
+      state.dragging = false;
+      state.dragStart = null;
+      viewport.classList.remove('dragging');
+    });
+
+    renderDomains();
+    renderMap();
+    selectNode('root');
+  </script>
+</body>
+</html>

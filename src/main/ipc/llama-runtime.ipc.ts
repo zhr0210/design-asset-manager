@@ -3,6 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import { SettingsService } from '../services/settings.service'
 import { LlamaRuntimeInstallService } from '../services/llama-runtime/llama-runtime-install.service'
+import { getDownloadedArtifactState } from '../services/llama-runtime/llama-runtime-local-models'
 import {
   CHANNEL_LLAMA_RUNTIME_CANCEL_INSTALL,
   CHANNEL_LLAMA_RUNTIME_CREATE_INSTALL_PLAN,
@@ -74,10 +75,13 @@ export function registerLlamaRuntimeIpc() {
         ? path.join(installRoot, 'models', 'gguf', model.id, model.mmprojFilename) 
         : ''
       
-      const ggufExists = fs.existsSync(modelPath)
-      const mmprojExists = mmprojPath ? fs.existsSync(mmprojPath) : true
+      const ggufState = getDownloadedArtifactState(modelPath)
+      const mmprojState = mmprojPath ? getDownloadedArtifactState(mmprojPath) : 'downloaded'
+      const ggufExists = ggufState === 'downloaded'
+      const mmprojExists = mmprojState === 'downloaded'
       // Visual reverse prompts require BOTH the GGUF LLM model and its companion mmproj vision model (if model is multi-modal) to be present on disk
       const isDownloaded = ggufExists && mmprojExists
+      const isDownloading = ggufState === 'downloading' || mmprojState === 'downloading'
       
       console.log(`[llama-runtime:list-local-models] Candidate model: ${model.id}`)
       console.log(`  GGUF path: ${modelPath} (Exists: ${ggufExists})`)
@@ -87,7 +91,10 @@ export function registerLlamaRuntimeIpc() {
       return {
         ...model,
         modelPath,
-        isDownloaded
+        isDownloaded,
+        isDownloading,
+        ggufDownloadState: ggufState,
+        mmprojDownloadState: mmprojState
       }
     })
   })

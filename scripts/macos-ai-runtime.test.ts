@@ -1,0 +1,80 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+import { createMacOSAiBranchRuntimeMetadata } from '../src/shared/constants/macos-ai-runtime.constants'
+import { getRuntimeProfile } from '../src/main/runtime/runtime-profile-registry'
+
+const appleSilicon = createMacOSAiBranchRuntimeMetadata('darwin', 'arm64')
+assert.equal(appleSilicon.marker, 'macos-ai-branch')
+assert.equal(appleSilicon.phase, 'skeleton')
+assert.equal(appleSilicon.isCurrentPlatform, true)
+assert.deepEqual(appleSilicon.lanes.map((lane) => lane.id), ['python-mps', 'onnx-runtime', 'llama'])
+
+const pythonMps = appleSilicon.lanes.find((lane) => lane.id === 'python-mps')!
+assert.ok(pythonMps.capabilities.some((capability) => capability.label === 'RAM++ optional'))
+assert.ok(pythonMps.capabilities.some((capability) => capability.label === 'Florence-2 optional'))
+assert.ok(pythonMps.capabilities.some((capability) => capability.label === 'CLIP/SigLIP optional'))
+assert.ok(pythonMps.capabilities.some((capability) => capability.label === 'CPU fallback' && capability.status === 'fallback'))
+
+const onnx = appleSilicon.lanes.find((lane) => lane.id === 'onnx-runtime')!
+assert.ok(onnx.capabilities.some((capability) => capability.label === 'WD14 Tagger'))
+assert.ok(onnx.capabilities.some((capability) => capability.label === 'RapidOCR'))
+assert.ok(onnx.capabilities.some((capability) => capability.label === 'PaddleOCR ONNX'))
+assert.ok(onnx.capabilities.some((capability) => capability.label === 'CLIP/SigLIP ONNX'))
+assert.ok(onnx.capabilities.some((capability) => capability.label === 'CoreML fallback'))
+assert.ok(onnx.capabilities.some((capability) => capability.label === 'CPU fallback'))
+
+const llama = appleSilicon.lanes.find((lane) => lane.id === 'llama')!
+assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL GGUF'))
+assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL MLX'))
+assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen2.5-VL Ollama fallback'))
+assert.ok(llama.capabilities.some((capability) => capability.label === 'external HTTP fallback'))
+
+const nonMac = createMacOSAiBranchRuntimeMetadata('win32', 'x64')
+assert.equal(nonMac.isCurrentPlatform, false)
+assert.equal(nonMac.lanes[0].status, 'unavailable')
+
+const appleProfile = getRuntimeProfile('macos-apple-silicon')!
+assert.ok(appleProfile.capabilities.includes('python-mps'))
+assert.ok(appleProfile.capabilities.includes('onnx-runtime'))
+assert.ok(appleProfile.capabilities.includes('llama-metal'))
+assert.ok(appleProfile.capabilities.includes('mlx'))
+assert.ok(appleProfile.recommendedRuntimeKinds.includes('python-worker'))
+assert.ok(appleProfile.recommendedRuntimeKinds.includes('llama-app'))
+assert.ok(appleProfile.recommendedRuntimeKinds.includes('ollama'))
+
+const intelProfile = getRuntimeProfile('macos-intel')!
+assert.ok(intelProfile.capabilities.includes('onnx-runtime'))
+assert.ok(intelProfile.capabilities.includes('cpu-only'))
+assert.ok(intelProfile.recommendedRuntimeKinds.includes('custom-http'))
+
+const ipcSource = await fs.readFile('src/main/ipc/ai-runtime.ipc.ts', 'utf8')
+const clientSource = await fs.readFile('src/main/services/ai-client.service.ts', 'utf8')
+const preloadSource = await fs.readFile('src/preload/index.ts', 'utf8')
+const appSource = await fs.readFile('ai-service/app.py', 'utf8')
+assert.match(ipcSource, /macos-ai-branch-runtime/)
+assert.match(ipcSource, /createMacOSAiBranchRuntimeMetadata/)
+assert.match(ipcSource, /getMacOSCapabilities/)
+assert.match(clientSource, /getMacOSCapabilities/)
+assert.match(clientSource, /getPythonMpsStatus/)
+assert.match(clientSource, /ai\/runtime\/macos-capabilities/)
+assert.match(clientSource, /ai\/model\/python-mps\/status/)
+assert.match(preloadSource, /getMacOSCapabilities/)
+assert.match(preloadSource, /getPythonMpsStatus/)
+assert.match(appSource, /clip-siglip-onnx\/status/)
+assert.match(appSource, /probe_clip_siglip_onnx_environment/)
+assert.match(appSource, /python-mps\/status/)
+assert.match(appSource, /probe_python_mps_environment/)
+
+const panelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
+const sharedTypesSource = await fs.readFile('src/shared/types/macos-ai-runtime.types.ts', 'utf8')
+assert.match(panelSource, /macOS AI 分支/)
+assert.match(panelSource, /Python MPS/)
+assert.match(panelSource, /ONNX Runtime/)
+assert.match(panelSource, /Llama/)
+assert.match(panelSource, /macOS Worker 实时探测/)
+assert.match(panelSource, /MacOSAiWorkerProbeResult/)
+assert.match(panelSource, /Python MPS 兼容性检查/)
+assert.match(panelSource, /CLIP\/SigLIP ONNX/)
+assert.match(panelSource, /CLIP\/SigLIP ONNX 兼容性检查/)
+assert.match(sharedTypesSource, /clipSiglipOnnx/)
+assert.doesNotMatch(panelSource, /downloadModel|startInstall|hf download|huggingface-cli/)

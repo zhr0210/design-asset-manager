@@ -1,7 +1,10 @@
 import { ipcMain } from 'electron'
 import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
+  CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
+  CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
+  CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
@@ -11,6 +14,8 @@ import {
   CHANNEL_AI_RUNTIME_STOP_RUNTIME,
   CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG
 } from '../../shared/contracts/ai-runtime.contract'
+import { createMacOSAiBranchRuntimeMetadata } from '../../shared/constants/macos-ai-runtime.constants'
+import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
 import type {
   AiRuntimeGetStateRequest,
   AiRuntimeHealthCheckRequest,
@@ -19,6 +24,7 @@ import type {
   AiRuntimeSelectActiveRequest,
   AiRuntimeUpdateConfigRequest
 } from '../../shared/contracts/ai-runtime.contract'
+import { AiClientService } from '../services/ai-client.service'
 import { AiRuntimeManager } from '../services/ai-runtime/ai-runtime-manager'
 import { DisabledAiRuntimeProvider } from '../services/ai-runtime/providers/disabled-ai-runtime.provider'
 import { ExternalHttpRuntimeProvider } from '../services/ai-runtime/providers/external-http-runtime.provider'
@@ -42,8 +48,21 @@ function failure(error: unknown): AiRuntimeIpcResponse<never> {
 
 function createSafeAiRuntimeManager(): AiRuntimeManager {
   const manager = new AiRuntimeManager()
+  const currentPlatform = process.platform as PlatformName
+  const currentArch = process.arch as PlatformArch
+  const macosAiBranchMetadata = createMacOSAiBranchRuntimeMetadata(currentPlatform, currentArch)
 
   manager.registerProvider(new DisabledAiRuntimeProvider({ id: 'disabled-runtime' }))
+  manager.registerProvider(new DisabledAiRuntimeProvider({
+    id: 'macos-ai-branch-runtime',
+    displayName: 'macOS AI Branch Runtime',
+    platform: 'darwin',
+    profileId: currentPlatform === 'darwin' ? (currentArch === 'arm64' ? 'macos-apple-silicon' : 'macos-intel') : null,
+    metadata: {
+      displayName: 'macOS AI Branch',
+      macosAiBranch: macosAiBranchMetadata
+    }
+  }))
   manager.registerProvider(new MockAiRuntimeProvider({ id: 'mock-runtime' }))
   manager.registerProvider(new ExternalHttpRuntimeProvider(
     createCustomHttpRuntimeConfig({
@@ -69,6 +88,7 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
 }
 
 const aiRuntimeManager = createSafeAiRuntimeManager()
+const aiClientService = new AiClientService()
 
 export function registerAiRuntimeIpc() {
   ipcMain.handle(CHANNEL_AI_RUNTIME_LIST_RUNTIMES, async () => {
@@ -94,6 +114,33 @@ export function registerAiRuntimeIpc() {
       return success(aiRuntimeManager.getActiveRuntime())
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES, async () => {
+    try {
+      return success(await aiClientService.getMacOSCapabilities())
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS, async () => {
+    try {
+      return success(await aiClientService.getPythonMpsStatus())
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS, async () => {
+    try {
+      return success(await aiClientService.getClipSiglipOnnxStatus())
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS} error:`, err)
       return failure(err)
     }
   })

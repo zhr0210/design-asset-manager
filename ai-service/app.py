@@ -11,7 +11,10 @@ from contextlib import asynccontextmanager
 from core.task_queue import TaskQueue
 from core.model_manager import ModelManager
 from core.batch_scheduler import BatchScheduler
+from core.clip_siglip_onnx_compat import probe_clip_siglip_onnx_environment
+from core.python_mps_compat import probe_python_mps_environment
 from core.gpu_monitor import get_gpu_status
+from core.macos_ai_capabilities import probe_macos_ai_capabilities
 from schemas.tag_schema import TagEnqueueRequest
 from schemas.prompt_schema import PromptGenerateRequest
 from schemas.analysis_schema import AnalysisGenerateRequest
@@ -222,6 +225,21 @@ async def cooperative_model_status():
             "unknown": ["ram", "design_rule", "clip"]
         }
     }
+
+@app.get("/ai/runtime/macos-capabilities")
+async def macos_runtime_capabilities():
+    """Return macOS AI branch runtime capability probes without loading models."""
+    return probe_macos_ai_capabilities()
+
+@app.get("/ai/model/clip-siglip-onnx/status")
+async def clip_siglip_onnx_status():
+    """Return the CLIP/SigLIP ONNX environment compatibility signal."""
+    return probe_clip_siglip_onnx_environment()
+
+@app.get("/ai/model/python-mps/status")
+async def python_mps_status():
+    """Return the Python MPS environment compatibility signal."""
+    return probe_python_mps_environment()
 
 @app.get("/ai/routing/preview")
 async def preview_routing(file_path: str = ""):

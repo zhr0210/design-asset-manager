@@ -123,6 +123,20 @@ def main():
         "status": "MISSING_RUNNER"
     }
 
+    paddle_runner_path = os.path.join(workspace, "tools", "ocr", "paddleocr_detect.py")
+    paddle_runner_exists = os.path.isfile(paddle_runner_path)
+    paddle_runner_status = {
+        "exists": paddle_runner_exists,
+        "path": "tools/ocr/paddleocr_detect.py" if paddle_runner_exists else None,
+        "dryRunOk": False,
+        "exitCode": None,
+        "jsonParseOk": False,
+        "ok": None,
+        "boxes": None,
+        "error": None,
+        "status": "MISSING_RUNNER"
+    }
+
     if runner_exists:
         try:
             res = subprocess.run(
@@ -156,6 +170,38 @@ def main():
             runner_status["error"] = f"Run error: {str(run_err)}"
             runner_status["status"] = "FAIL"
 
+    if paddle_runner_exists:
+        try:
+            res = subprocess.run(
+                [sys.executable, paddle_runner_path, "--image", "__missing__.jpg", "--dry-run"],
+                capture_output=True,
+                text=True,
+                timeout=3,
+                errors="replace"
+            )
+            paddle_runner_status["exitCode"] = res.returncode
+            try:
+                parsed = json.loads(res.stdout.strip())
+                paddle_runner_status["jsonParseOk"] = True
+                paddle_runner_status["ok"] = parsed.get("ok")
+                paddle_runner_status["boxes"] = parsed.get("boxes")
+                paddle_runner_status["error"] = parsed.get("error")
+
+                if (res.returncode == 0 and
+                    parsed.get("ok") is False and
+                    parsed.get("boxes") == [] and
+                    parsed.get("error") == "Image does not exist"):
+                    paddle_runner_status["dryRunOk"] = True
+                    paddle_runner_status["status"] = "PASS"
+                else:
+                    paddle_runner_status["status"] = "FAIL"
+            except Exception as parse_err:
+                paddle_runner_status["error"] = f"JSON parse error: {str(parse_err)}. Raw stdout: {res.stdout.strip()}"
+                paddle_runner_status["status"] = "FAIL"
+        except Exception as run_err:
+            paddle_runner_status["error"] = f"Run error: {str(run_err)}"
+            paddle_runner_status["status"] = "FAIL"
+
     output = {
         "ok": True,
         "status": "HEALTHCHECK_COMPLETE",
@@ -173,10 +219,11 @@ def main():
         "providers": providers,
         "runner": {
             "rapidocr_detect": runner_status,
+            "paddleocr_detect": paddle_runner_status,
         },
         "recommendation": {
             "defaultProvider": "none",
-            "preferredFutureProvider": "rapidocr_detection",
+            "preferredFutureProvider": "paddleocr_detection",
             "shouldInstallNow": False,
             "notes": [
                 "This script is offline-only and never installs dependencies.",

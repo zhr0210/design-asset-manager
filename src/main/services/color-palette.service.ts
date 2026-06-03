@@ -290,6 +290,10 @@ export class ColorPaletteService {
           skipReason = 'rapidocr_not_installed'
           textStatus = 'skipped'
           detectionProvider = 'rapidocr'
+        } else if (rawProvider === 'paddleocr' && !env.providers.paddleocr.available) {
+          skipReason = 'paddleocr_not_installed'
+          textStatus = 'skipped'
+          detectionProvider = 'paddleocr'
         } else {
           // All checks passed, execute actual OCR!
           try {
@@ -298,6 +302,7 @@ export class ColorPaletteService {
             let providerType: any = 'none'
             if (rawProvider === 'easyocr') providerType = 'easyocr_detection'
             else if (rawProvider === 'rapidocr') providerType = 'rapidocr_detection'
+            else if (rawProvider === 'paddleocr') providerType = 'paddleocr_detection'
             else if (rawProvider === 'mock') providerType = 'mock_text_boxes'
             else if (rawProvider === 'qwen_vl_text_blocks') providerType = 'qwen_vl_text_blocks'
 
@@ -1314,4 +1319,3 @@ export class ColorPaletteService {
     }
   }
 }
-

@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
 import AiRuntimePanel from '../components/settings/AiRuntimePanel'
+import { MacOSAiCapabilityMatrix } from '../components/settings/MacOSAiCapabilityMatrix'
 import type {
   AiBackendConfig,
   AiBackendType,
@@ -39,6 +40,7 @@ import type {
   PromptReverseBackendMode
 } from '../../shared/types/ai-backend.types'
 import type { AiMemoryPolicy, AiPromptTemplate } from '../../shared/types/settings.types'
+import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
 import type {
   LlamaHardwareProfile,
   LlamaInstallPlan,
@@ -46,11 +48,12 @@ import type {
   LlamaInstallStatus,
   LlamaServerTestResult
 } from '../../shared/types/llama-runtime.types'
+import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
 import type { ClearGpuMemoryResult, GpuStatus } from '../../shared/types/ai-worker.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS, DEFAULT_PROMPT_TEMPLATE_ID, DEFAULT_QWEN3VL_DESIGN_PROMPT, OPENAI_COMPATIBLE_REVERSE_PROMPT } from '../../shared/constants/prompt-templates.constants'
 
 type ConsoleTab = 'overview' | 'models' | 'services' | 'runtime' | 'prompts' | 'logs'
-type TextBoxProvider = 'none' | 'easyocr' | 'rapidocr' | 'mock'
+type TextBoxProvider = 'none' | 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'
 
 type ModelRow = {
   id: string
@@ -67,6 +70,7 @@ type LocalGgufModel = {
   filename: string
   modelPath: string
   isDownloaded?: boolean
+  isDownloading?: boolean
   quantization?: string
   parameterSize?: string
   recommendedMinVramGB?: number
@@ -80,6 +84,11 @@ type GpuSample = {
   time: number
   usagePercent: number
   freeMb: number
+}
+
+type FallbackSummary = {
+  value: string
+  caption: string
 }
 
 const MODEL_ROWS: ModelRow[] = [
@@ -285,6 +294,49 @@ function currentReversePromptPreview(promptSettings: AiPromptReverseSettings) {
     title: DEFAULT_PROMPT_TEMPLATE_ID,
     text: DEFAULT_QWEN3VL_DESIGN_PROMPT
   }
+}
+
+function backendHealthText(backend: AiBackendConfig, backendResults: Record<string, string>) {
+  return backendResults[`health:${backend.id}`] || backendResults[`models:${backend.id}`] || null
+}
+
+function summarizeFallbackBackends(
+  backends: AiBackendConfig[],
+  backendResults: Record<string, string>,
+  matcher: (backend: AiBackendConfig) => boolean,
+  emptyCaption: string
+): FallbackSummary {
+  const matches = backends.filter(matcher)
+  const enabled = matches.filter((backend) => backend.enabled)
+  const latestHealth = matches.map((backend) => backendHealthText(backend, backendResults)).find(Boolean)
+  const primary = enabled[0] ?? matches[0] ?? null
+
+  if (!primary) {
+    return { value: '未配置', caption: emptyCaption }
+  }
+
+  return {
+    value: enabled.length > 0 ? '已启用' : '已配置',
+    caption: latestHealth || primary.defaultModel || primary.name
+  }
+}
+
+function summarizeOllamaFallback(backends: AiBackendConfig[], backendResults: Record<string, string>): FallbackSummary {
+  return summarizeFallbackBackends(
+    backends,
+    backendResults,
+    (backend) => backend.type === 'ollama' || /ollama/i.test(backend.name) || /:11434\b/.test(backend.baseUrl),
+    'Qwen2.5-VL Ollama fallback'
+  )
+}
+
+function summarizeExternalHttpFallback(backends: AiBackendConfig[], backendResults: Record<string, string>): FallbackSummary {
+  return summarizeFallbackBackends(
+    backends,
+    backendResults,
+    (backend) => backend.type === 'openai-compatible' || backend.type === 'custom' || backend.type === 'lm-studio',
+    'OpenAI-compatible / LM Studio / custom HTTP'
+  )
 }
 
 function GpuMemoryChart({
@@ -548,6 +600,9 @@ export default function AiConsolePage() {
   const [modelsList, setModelsList] = useState<any[]>([])
   const [localGgufModels, setLocalGgufModels] = useState<LocalGgufModel[]>([])
   const [gpuSamples, setGpuSamples] = useState<GpuSample[]>([])
+  const [macOSWorkerProbe, setMacOSWorkerProbe] = useState<MacOSAiWorkerProbeResult | null>(null)
+  const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
+  const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [loading, setLoading] = useState<Record<string, boolean>>({})
   const [toast, setToast] = useState<string | null>(null)
   const [clearResult, setClearResult] = useState<ClearGpuMemoryResult | null>(null)
@@ -580,6 +635,8 @@ export default function AiConsolePage() {
   const loadedModels = aiStatus?.loaded_models ?? {}
   const queueStats = aiStatus?.queue_stats ?? { queued: 0, running: 0, completed: 0, failed: 0 }
   const selectedBackend = aiBackends.find((backend) => backend.id === promptSettings.selectedExternalBackendId)
+  const ollamaFallback = useMemo(() => summarizeOllamaFallback(aiBackends, backendResults), [aiBackends, backendResults])
+  const externalHttpFallback = useMemo(() => summarizeExternalHttpFallback(aiBackends, backendResults), [aiBackends, backendResults])
   const activeBackendLabel =
     promptSettings.backendMode === 'native-qwen3vl'
       ? 'Native Qwen3-VL'
@@ -640,12 +697,14 @@ export default function AiConsolePage() {
         return
       }
 
-      const [status, gpu, models, llama, ggufModels] = await Promise.all([
+      const [status, gpu, models, llama, ggufModels, macOSProbe, clipSiglipStatus] = await Promise.all([
         api.aiModelStatus?.().catch((err: any) => ({ offline: true, error: String(err) })),
         api.aiWorkerGetGpuStatus?.().catch(() => null),
         api.aiModelList?.().catch(() => []),
         api.llamaRuntimeGetStatus?.().catch(() => null),
-        api.llamaRuntimeListLocalModels?.().catch(() => [])
+        api.llamaRuntimeListLocalModels?.().catch(() => []),
+        api.aiRuntime?.getMacOSCapabilities ? api.aiRuntime.getMacOSCapabilities().catch(() => null) : Promise.resolve(null),
+        api.aiRuntime?.getClipSiglipOnnxStatus ? api.aiRuntime.getClipSiglipOnnxStatus().catch(() => null) : Promise.resolve(null)
       ])
 
       setAiStatus(status)
@@ -653,6 +712,26 @@ export default function AiConsolePage() {
       setModelsList(Array.isArray(models) ? models : [])
       setLocalGgufModels(Array.isArray(ggufModels) ? ggufModels : [])
       if (llama) setLlamaStatus(llama)
+      if (macOSProbe?.success && macOSProbe.data?.capabilities) {
+        setMacOSWorkerProbe(macOSProbe.data.capabilities)
+      } else {
+        setMacOSWorkerProbe(null)
+      }
+      if (status?.offline === false && api.aiRuntime?.getPythonMpsStatus) {
+        const pythonMps = await api.aiRuntime.getPythonMpsStatus().catch(() => null)
+        if (pythonMps?.success && pythonMps.data) {
+          setPythonMpsStatus(pythonMps.data)
+        } else {
+          setPythonMpsStatus(null)
+        }
+      } else {
+        setPythonMpsStatus(null)
+      }
+      if (clipSiglipStatus?.success && clipSiglipStatus.data) {
+        setClipSiglipOnnxStatus(clipSiglipStatus.data)
+      } else {
+        setClipSiglipOnnxStatus(null)
+      }
       const sample = normalizeWorkerGpuStatus(status?.gpu_status).available
         ? normalizeWorkerGpuStatus(status?.gpu_status)
         : normalizeWorkerGpuStatus(gpu)
@@ -1144,6 +1223,11 @@ export default function AiConsolePage() {
               queueStats={queueStats}
               isWorkerOffline={isWorkerOffline}
               llamaStatus={llamaStatus}
+              macOSWorkerProbe={macOSWorkerProbe}
+              pythonMpsStatus={pythonMpsStatus}
+              clipSiglipOnnxStatus={clipSiglipOnnxStatus}
+              ollamaFallback={ollamaFallback}
+              externalHttpFallback={externalHttpFallback}
               selectedBackend={selectedBackend}
               latestLogLine={latestLogLine}
               telemetryTrusted={telemetryTrusted}
@@ -1261,6 +1345,7 @@ export default function AiConsolePage() {
                     <option value="none">暂不启用</option>
                     <option value="easyocr">EasyOCR（推荐）</option>
                     <option value="rapidocr">RapidOCR</option>
+                    <option value="paddleocr">PaddleOCR ONNX</option>
                     <option value="mock">开发者虚拟检测框</option>
                   </select>
                 </Field>
@@ -1352,6 +1437,11 @@ function OverviewWorkspace(props: {
   queueStats: any
   isWorkerOffline: boolean
   llamaStatus: LlamaInstallStatus | null
+  macOSWorkerProbe: MacOSAiWorkerProbeResult | null
+  pythonMpsStatus: AiRuntimePythonMpsStatusResponse | null
+  clipSiglipOnnxStatus: AiRuntimeClipSiglipOnnxStatusResponse | null
+  ollamaFallback: FallbackSummary
+  externalHttpFallback: FallbackSummary
   selectedBackend?: AiBackendConfig
   latestLogLine: string
   telemetryTrusted: boolean
@@ -1359,6 +1449,7 @@ function OverviewWorkspace(props: {
   riskTone: 'good' | 'warn' | 'bad'
   setActiveTab: React.Dispatch<React.SetStateAction<ConsoleTab>>
 }) {
+  const smokeGguf = props.installedGgufModels.find((model) => model.id === 'qwen3-vl-2b-instruct-q4-k-m') ?? props.installedGgufModels[0] ?? null
   const serviceState = props.promptMode === 'llama-openai'
     ? props.llamaStatus?.serverPid ? 'Llama 服务运行中' : 'Llama 服务未运行'
     : props.promptMode === 'openai-compatible'
@@ -1400,6 +1491,36 @@ function OverviewWorkspace(props: {
             <RuntimeTile label="Native Qwen3-VL" value={`${props.installedNativeModels.length} 个`} caption={props.installedNativeModels.map((m) => m.id).join(' / ') || '暂无已安装版本'} />
             <RuntimeTile label="GGUF 量化模型" value={`${props.installedGgufModels.length} 个`} caption={props.installedGgufModels.map((m) => m.filename).slice(0, 2).join(' / ') || '暂无已安装版本'} />
           </div>
+        </div>
+
+        <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">macOS 路线概览</h3>
+              <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">把 Python MPS、ONNX Runtime 和 Llama 路线放到同一屏里查看。</p>
+            </div>
+            <StatusPill tone={props.macOSWorkerProbe?.isMacOS ? 'good' : 'muted'}>{props.macOSWorkerProbe?.isMacOS ? 'macOS 探测已连接' : '等待探测'}</StatusPill>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <RuntimeTile label="MPS" value={props.macOSWorkerProbe?.torch.mpsAvailable ? '可用' : '回退'} caption={props.macOSWorkerProbe?.torch.version ? `torch ${props.macOSWorkerProbe.torch.version}` : '尚未探测'} />
+            <RuntimeTile label="Python MPS 兼容性" value={props.pythonMpsStatus?.compatible ? '可兼容' : props.pythonMpsStatus ? props.pythonMpsStatus.status === 'planned' ? '待补齐' : '不可用' : '未检查'} caption={props.pythonMpsStatus?.runtime ?? 'ai/model/python-mps/status'} />
+            <RuntimeTile label="ONNX Runtime" value={props.macOSWorkerProbe?.onnxruntime.available ? '可用' : '回退'} caption={props.macOSWorkerProbe?.onnxruntime.providers.join(' / ') || '尚未探测'} />
+            <RuntimeTile label="CLIP/SigLIP ONNX" value={props.macOSWorkerProbe?.clipSiglipOnnx.available ? '可用' : '规划中'} caption={props.macOSWorkerProbe?.clipSiglipOnnx.version ? `${props.macOSWorkerProbe.clipSiglipOnnx.backend ?? 'optimum'} ${props.macOSWorkerProbe.clipSiglipOnnx.version}` : '尚未探测'} />
+            <RuntimeTile label="CLIP/SigLIP 兼容性" value={props.clipSiglipOnnxStatus?.compatible ? '可兼容' : props.clipSiglipOnnxStatus ? '待补齐' : '未检查'} caption={props.clipSiglipOnnxStatus?.runtime ?? 'ai/model/clip-siglip-onnx/status'} />
+            <RuntimeTile label="MLX" value={props.macOSWorkerProbe?.mlx.available ? '可用' : '规划中'} caption={props.macOSWorkerProbe?.mlx.version ? `mlx ${props.macOSWorkerProbe.mlx.version}` : '尚未探测'} />
+            <RuntimeTile label="Llama 路线" value={props.llamaStatus?.phase || '未启动'} caption={props.llamaStatus?.serverPid ? `PID ${props.llamaStatus.serverPid}` : 'llama.app / llama.cpp Metal / Ollama'} />
+            <RuntimeTile label="Qwen2.5-VL Ollama fallback" value={props.ollamaFallback.value} caption={props.ollamaFallback.caption} />
+            <RuntimeTile label="external HTTP fallback" value={props.externalHttpFallback.value} caption={props.externalHttpFallback.caption} />
+            <RuntimeTile label="Smoke GGUF" value={smokeGguf?.isDownloaded ? '已下载' : smokeGguf?.isDownloading ? '下载中' : '未下载'} caption={smokeGguf ? smokeGguf.name : 'Qwen3-VL 2B Q4_K_M'} />
+            <RuntimeTile label="Vision mmproj" value={smokeGguf?.mmprojFilename ? (smokeGguf.isDownloaded ? '已就绪' : smokeGguf.isDownloading ? '下载中' : '待下载') : '无需'} caption={smokeGguf?.mmprojFilename || 'mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf'} />
+          </div>
+
+          <div className="mt-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 text-[11px] font-bold leading-6 text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
+            当前 macOS 目标模型优先级：Qwen3-VL GGUF {'>'} Qwen3-VL MLX {'>'} Qwen2.5-VL Ollama fallback {'>'} external HTTP fallback。
+          </div>
+
+          <MacOSAiCapabilityMatrix probe={props.macOSWorkerProbe} />
         </div>
       </div>
 
@@ -1832,6 +1953,9 @@ function BackendsWorkspace(props: {
                   <select value={backend.type} onChange={(event) => props.updateBackend(backend.id, { type: event.target.value as AiBackendType })} className="control">
                     <option value="llama-openai">Llama 本地接口</option>
                     <option value="openai-compatible">OpenAI-compatible</option>
+                    <option value="ollama">Ollama fallback</option>
+                    <option value="lm-studio">LM Studio</option>
+                    <option value="custom">Custom HTTP</option>
                   </select>
                 </Field>
                 <Field label="Base URL">

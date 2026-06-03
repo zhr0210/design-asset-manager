@@ -69,7 +69,7 @@ export interface AppSettings {
 
   // OCR Enhancements R3
   enableTextColorAnalysis: boolean
-  textBoxProvider: 'none' | 'easyocr' | 'rapidocr' | 'mock'
+  textBoxProvider: 'none' | 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'
   ocrTimeoutMs: number
   maxTextBoxesPerImage: number
   autoInstallAllowed?: boolean

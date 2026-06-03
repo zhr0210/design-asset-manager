@@ -2,11 +2,13 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 
 const panelPath = 'src/renderer/components/settings/AiRuntimePanel.tsx'
+const matrixPath = 'src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx'
 const settingsPath = 'src/renderer/routes/Settings.tsx'
 const aiConsolePath = 'src/renderer/routes/AiConsolePage.tsx'
 const doctorPanelPath = 'src/renderer/components/settings/DoctorPanel.tsx'
 
 const panelSource = await fs.readFile(panelPath, 'utf8')
+const matrixSource = await fs.readFile(matrixPath, 'utf8')
 const settingsSource = await fs.readFile(settingsPath, 'utf8')
 const aiConsoleSource = await fs.readFile(aiConsolePath, 'utf8')
 const doctorPanelSource = await fs.readFile(doctorPanelPath, 'utf8')
@@ -21,6 +23,9 @@ assert.match(settingsSource, /<DoctorPanel \/>/)
 assert.match(panelSource, /electronAPI\?\.aiRuntime/)
 assert.match(panelSource, /listRuntimes/)
 assert.match(panelSource, /getActiveRuntime/)
+assert.match(panelSource, /getMacOSCapabilities/)
+assert.match(panelSource, /getPythonMpsStatus/)
+assert.match(panelSource, /getClipSiglipOnnxStatus/)
 assert.match(panelSource, /selectActiveRuntime/)
 assert.match(panelSource, /startRuntime/)
 assert.match(panelSource, /stopRuntime/)
@@ -44,6 +49,19 @@ assert.doesNotMatch(firstEffectBlock, /startRuntime|restartRuntime|healthCheck/)
 
 assert.match(panelSource, /AiRuntimeState/)
 assert.match(panelSource, /AiRuntimeConfig/)
+assert.match(panelSource, /macOS AI 分支/)
+assert.match(panelSource, /MacOSAiBranchRuntimeMetadata/)
+assert.match(panelSource, /metadata\?\.macosAiBranch/)
+assert.match(panelSource, /MacOSAiWorkerProbeResult/)
+assert.match(panelSource, /macOS Worker 实时探测/)
+assert.match(panelSource, /Python MPS 兼容性检查/)
+assert.match(panelSource, /CLIP\/SigLIP ONNX/)
+assert.match(panelSource, /CLIP\/SigLIP ONNX 兼容性检查/)
+assert.match(panelSource, /MacOSAiCapabilityMatrix/)
+assert.match(matrixSource, /macOS 细项能力矩阵/)
+assert.match(matrixSource, /probe\.lanes\.map/)
+assert.match(matrixSource, /capability\.modelFamily \?\? capability\.backend \?\? capability\.role/)
+assert.match(matrixSource, /capability\.label/)
 
 assert.match(doctorPanelSource, /export default function DoctorPanel/)
 assert.match(doctorPanelSource, /doctor/)

@@ -206,7 +206,8 @@ export class OcrDependencyService {
       },
       providers: {
         easyocr: { installed: false, version: null, available: false, installCommand: `${pythonExe} -m pip install easyocr opencv-python numpy` },
-        rapidocr: { installed: false, version: null, available: false }
+        rapidocr: { installed: false, version: null, available: false },
+        paddleocr: { installed: false, version: null, available: false, installCommand: `${pythonExe} -m pip install paddleocr opencv-python numpy` }
       },
       selectedProvider: settings.textBoxProvider ?? 'easyocr',
       selectedProviderAvailable: false,
@@ -268,6 +269,7 @@ export class OcrDependencyService {
           
           const isEasyAvailable = parsed.easyocr?.installed === true
           const isRapidAvailable = parsed.rapidocr?.installed === true
+          const isPaddleAvailable = parsed.paddleocr?.installed === true
 
           const pythonVersion = parsed.python?.version ?? '3.11.9'
           const realPythonPath = parsed.python?.executable ?? pythonExe
@@ -276,6 +278,7 @@ export class OcrDependencyService {
           let selectedProviderAvailable = false
           if (selectedProvider === 'easyocr') selectedProviderAvailable = isEasyAvailable
           else if (selectedProvider === 'rapidocr') selectedProviderAvailable = isRapidAvailable
+          else if (selectedProvider === 'paddleocr') selectedProviderAvailable = isPaddleAvailable
           else if (selectedProvider === 'mock') selectedProviderAvailable = true
 
           const payload: OcrEnvPayload = {
@@ -295,6 +298,12 @@ export class OcrDependencyService {
                 installed: isRapidAvailable,
                 version: parsed.rapidocr?.version ?? null,
                 available: isRapidAvailable
+              },
+              paddleocr: {
+                installed: isPaddleAvailable,
+                version: parsed.paddleocr?.version ?? null,
+                available: isPaddleAvailable,
+                installCommand: `${pythonExe} -m pip install paddleocr opencv-python numpy`
               }
             },
             selectedProvider,
@@ -336,7 +345,8 @@ export class OcrDependencyService {
       },
       providers: {
         easyocr: { installed: false, version: null, available: false, installCommand: `${pythonExe} -m pip install easyocr opencv-python numpy` },
-        rapidocr: { installed: false, version: null, available: false }
+        rapidocr: { installed: false, version: null, available: false },
+        paddleocr: { installed: false, version: null, available: false, installCommand: `${pythonExe} -m pip install paddleocr opencv-python numpy` }
       },
       selectedProvider: settings.textBoxProvider ?? 'easyocr',
       selectedProviderAvailable: false,

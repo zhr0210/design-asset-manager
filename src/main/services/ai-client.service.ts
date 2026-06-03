@@ -2,6 +2,8 @@ import { getDatabase } from '../db'
 import { TagService } from './tag.service'
 import { AssetTagService } from './asset-tag.service'
 import { readAiQueueStats } from './ai-client/queue-stats'
+import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
+import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
 
 export class AiClientService {
   private pythonUrl = 'http://127.0.0.1:8000'
@@ -193,6 +195,106 @@ export class AiClientService {
           error: "Python AI Worker is offline."
         },
         queue_stats: queueStats
+      }
+    }
+  }
+
+  /**
+   * Fetches the macOS AI branch worker capability probe without loading models.
+   */
+  public async getMacOSCapabilities(): Promise<{
+    success: boolean
+    offline: boolean
+    capabilities: MacOSAiWorkerProbeResult | null
+    error?: string
+  }> {
+    try {
+      const res = await fetch(`${this.pythonUrl}/ai/runtime/macos-capabilities`, { signal: AbortSignal.timeout(1000) })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      return {
+        success: true,
+        offline: false,
+        capabilities: data as MacOSAiWorkerProbeResult
+      }
+    } catch (err) {
+      return {
+        success: true,
+        offline: true,
+        capabilities: null,
+        error: err instanceof Error ? err.message : String(err)
+      }
+    }
+  }
+
+  /**
+   * Fetches the Python MPS compatibility signal without loading models.
+   */
+  public async getPythonMpsStatus(): Promise<AiRuntimePythonMpsStatusResponse & { offline: boolean; error?: string | null }> {
+    try {
+      const res = await fetch(`${this.pythonUrl}/ai/model/python-mps/status`, { signal: AbortSignal.timeout(1000) })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      const compatData = data as {
+        success?: boolean
+        compatible: boolean
+        runtime?: string | null
+        status: AiRuntimePythonMpsStatusResponse['status']
+        diagnostics?: Record<string, unknown>
+        error?: { code?: string; message?: string } | string | null
+      }
+      const errorMessage = typeof compatData.error === 'string'
+        ? compatData.error
+        : compatData.error && typeof compatData.error === 'object'
+          ? String((compatData.error as { message?: unknown }).message ?? null)
+          : null
+      return {
+        success: compatData.success ?? true,
+        offline: false,
+        compatible: compatData.compatible,
+        runtime: compatData.runtime ?? null,
+        status: compatData.status,
+        diagnostics: compatData.diagnostics ?? {},
+        error: errorMessage
+      }
+    } catch (err) {
+      return {
+        success: false,
+        offline: true,
+        compatible: false,
+        runtime: null,
+        status: 'unavailable',
+        diagnostics: {},
+        error: err instanceof Error ? err.message : String(err)
+      }
+    }
+  }
+
+  /**
+   * Fetches the CLIP/SigLIP ONNX compatibility signal without loading models.
+   */
+  public async getClipSiglipOnnxStatus(): Promise<AiRuntimeClipSiglipOnnxStatusResponse & { offline: boolean; error?: string | null }> {
+    try {
+      const res = await fetch(`${this.pythonUrl}/ai/model/clip-siglip-onnx/status`, { signal: AbortSignal.timeout(1000) })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      const compatData = data as AiRuntimeClipSiglipOnnxStatusResponse & { error?: { code: string; message: string } | null }
+      return {
+        success: compatData.success ?? true,
+        offline: false,
+        compatible: compatData.compatible,
+        runtime: compatData.runtime ?? null,
+        diagnostics: compatData.diagnostics ?? {},
+        error: compatData.error?.message ?? null
+      }
+    } catch (err) {
+      return {
+        success: false,
+        offline: true,
+        compatible: false,
+        runtime: null,
+        diagnostics: {},
+        error: err instanceof Error ? err.message : String(err)
       }
     }
   }

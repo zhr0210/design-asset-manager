@@ -2,7 +2,10 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
+  CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
+  CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
+  CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
@@ -17,6 +20,9 @@ const channels = {
   listRuntimes: CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
   getRuntimeState: CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
   getActiveRuntime: CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
+  getClipSiglipOnnxStatus: CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
+  getPythonMpsStatus: CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
+  getMacOSCapabilities: CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
   selectActiveRuntime: CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   startRuntime: CHANNEL_AI_RUNTIME_START_RUNTIME,
   stopRuntime: CHANNEL_AI_RUNTIME_STOP_RUNTIME,
@@ -29,6 +35,9 @@ const channelConstants = [
   'CHANNEL_AI_RUNTIME_LIST_RUNTIMES',
   'CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE',
   'CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME',
+  'CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS',
+  'CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS',
+  'CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES',
   'CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME',
   'CHANNEL_AI_RUNTIME_START_RUNTIME',
   'CHANNEL_AI_RUNTIME_STOP_RUNTIME',
@@ -42,6 +51,9 @@ assert.deepEqual(channels, {
   listRuntimes: 'aiRuntime:listRuntimes',
   getRuntimeState: 'aiRuntime:getRuntimeState',
   getActiveRuntime: 'aiRuntime:getActiveRuntime',
+  getClipSiglipOnnxStatus: 'aiRuntime:getClipSiglipOnnxStatus',
+  getPythonMpsStatus: 'aiRuntime:getPythonMpsStatus',
+  getMacOSCapabilities: 'aiRuntime:getMacOSCapabilities',
   selectActiveRuntime: 'aiRuntime:selectActiveRuntime',
   startRuntime: 'aiRuntime:startRuntime',
   stopRuntime: 'aiRuntime:stopRuntime',
@@ -65,7 +77,10 @@ assert.match(handlerSource, /new MockAiRuntimeProvider/)
 assert.match(handlerSource, /new DisabledAiRuntimeProvider/)
 assert.match(handlerSource, /new MockAiRuntimeHttpClient/)
 assert.match(handlerSource, /new MockAiRuntimeProcessRunner/)
-assert.doesNotMatch(handlerSource, /ai-client\.service|child_process|execFile|runProcess|SettingsService|saveSettings|runtime-registry\.service|RuntimeRegistry|better-sqlite3|src\/main\/db/i)
+assert.match(handlerSource, /getMacOSCapabilities/)
+assert.match(handlerSource, /getClipSiglipOnnxStatus/)
+assert.match(handlerSource, /AiClientService/)
+assert.doesNotMatch(handlerSource, /child_process|execFile|runProcess|SettingsService|saveSettings|runtime-registry\.service|RuntimeRegistry|better-sqlite3|src\/main\/db/i)
 assert.doesNotMatch(handlerSource, /ai-worker-manager|llama-runtime-install|ocr-dependency/i)
 
 assert.match(mainSource, /registerAiRuntimeIpc\(\)/)
