@@ -50,7 +50,7 @@ class Florence2TaggerModel:
             self.model = AutoModelForCausalLM.from_pretrained(
                 load_source, 
                 trust_remote_code=True,
-                torch_dtype=torch.float16 if device == "cuda" else torch.float32,
+                dtype=torch.float16 if device == "cuda" else torch.float32,
                 attn_implementation="eager"
             )
             self.processor = AutoProcessor.from_pretrained(load_source, trust_remote_code=True)

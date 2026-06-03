@@ -196,26 +196,26 @@ class WDTaggerModel:
                 except Exception as dll_err:
                     print(f"[WDTaggerModel] DLL preloading warning: {dll_err}")
             
-            providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
+            available = ort.get_available_providers()
             if self.backend_preference == "cpu":
                 providers = ["CPUExecutionProvider"]
-                
+            elif "CoreMLExecutionProvider" in available:
+                providers = ["CoreMLExecutionProvider", "CPUExecutionProvider"]
+            elif "CUDAExecutionProvider" in available:
+                providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
+            else:
+                providers = ["CPUExecutionProvider"]
+
             print(f"[WDTaggerModel] Loading ONNX Session with providers: {providers}...")
-            
-            # First attempt loading with primary providers list
-            try:
-                self.session = ort.InferenceSession(onnx_path, providers=providers)
-            except Exception as gpu_err:
-                if "CUDAExecutionProvider" in providers:
-                    print(f"[WDTaggerModel] CUDA initialization failed: {gpu_err}. Falling back strictly to CPUExecutionProvider.")
-                    self.session = ort.InferenceSession(onnx_path, providers=["CPUExecutionProvider"])
-                else:
-                    raise gpu_err
-            
+            self.session = ort.InferenceSession(onnx_path, providers=providers)
+
             # Confirm loaded provider
             active_providers = self.session.get_providers()
-            if "CUDAExecutionProvider" in self.session.get_provider_options():
+            provider_opts = self.session.get_provider_options()
+            if "CUDAExecutionProvider" in provider_opts:
                 self.backend = "ONNX GPU"
+            elif "CoreMLExecutionProvider" in provider_opts:
+                self.backend = "ONNX CoreML"
             else:
                 self.backend = "ONNX CPU"
                 
