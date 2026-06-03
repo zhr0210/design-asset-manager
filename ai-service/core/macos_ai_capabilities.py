@@ -143,7 +143,7 @@ def _probe_onnxruntime(import_module: ImportModule) -> CapabilityPayload:
 
 
 def _probe_mlx(import_module: ImportModule) -> CapabilityPayload:
-    mlx, error = _try_import("mlx.core", import_module)
+    mlx, error = _try_import("mlx", import_module)
     if mlx is None:
         return {
             "available": False,
