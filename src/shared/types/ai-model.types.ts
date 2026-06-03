@@ -3,11 +3,15 @@ export type AiModelQuantization =
   | 'awq-4bit'
   | 'awq-8bit'
   | 'fp8'
+  | 'q4_k_m'
+  | 'q8_0'
+  | 'f16'
   | 'unknown';
 
 export type AiModelRuntime =
   | 'transformers'
   | 'transformers-compatible-check-required'
+  | 'gguf-llama-cpp'
   | 'unsupported-on-this-platform';
 
 export type AiModelCapability =
@@ -47,6 +51,12 @@ export interface PromptVlmModel {
   
   estimatedMinFreeVramGB?: number;
   estimatedRecommendedFreeVramGB?: number;
+  
+  // GGUF-specific fields
+  ggufFilename?: string;
+  mmprojFilename?: string;
+  ggufRepoId?: string;
+  estimatedSizeGB?: number;
 }
 
 export interface ModelDownloadProgress {

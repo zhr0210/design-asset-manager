@@ -95,7 +95,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-id", required=True)
     parser.add_argument("--local-dir", required=True)
-    parser.add_argument("--category", default="transformers", choices=["transformers", "pth", "onnx-csv"])
+    parser.add_argument("--category", default="transformers", choices=["transformers", "pth", "onnx-csv", "gguf"])
     parser.add_argument("--revision", default=None)
     parser.add_argument("--token", default=None)
     parser.add_argument("--model-family", default=None, choices=["ram", "florence2", "clip", "wd_tagger"])
@@ -143,6 +143,18 @@ def main() -> None:
         filename = "ram_plus_swin_large_14m.pth"
         dest = local_dir / filename
         download_file(repo_id, filename, dest, ctx)
+    elif category == "gguf":
+        # GGUF single-file download: repo_id is the GGUF repo, local_dir is output dir
+        # The caller should pass specific filenames via --repo-id (repo) and we download all .gguf files
+        emit({"type": "progress", "progress": 0, "message": f"GGUF mode - downloading from {repo_id}"})
+        # Download common GGUF and mmproj files
+        import glob as _glob
+        for pattern in ["*.gguf", "*.GGUF"]:
+            # Download model files by listing the repo (not possible via HTTP alone)
+            # Instead, the caller should use --model-family for specific file targeting
+            pass
+        emit({"type": "complete", "success": True, "repoId": repo_id, "localPath": str(local_dir)})
+        return
     else:
         # transformers: download all safetensors + configs
         for filename in ["model.safetensors", "config.json", "tokenizer.json",

@@ -39,7 +39,15 @@ export class AiModelDownloadService {
       throw new Error(`Download script not found at: ${downloadScript}`)
     }
 
-    const args = ['--repo-id', model.repoId, '--local-dir', localDir]
+    // For GGUF models, add filename info
+    const isGguf = model.runtime === 'gguf-llama-cpp'
+    const ggufArgs = isGguf && model.ggufFilename
+      ? ['--gguf-filename', model.ggufFilename]
+      : []
+    const args = ['--repo-id', isGguf ? (model.ggufRepoId || model.repoId) : model.repoId, '--local-dir', localDir, ...ggufArgs]
+    if (isGguf) {
+      console.log(`[AiModelDownloadService] Launching GGUF download from ${model.ggufRepoId || model.repoId}: ${model.ggufFilename}`)
+    }
     console.log(`[AiModelDownloadService] Launching snapshot download: ${pythonExe} ${downloadScript} ${args.join(' ')}`)
 
     const child = spawn(pythonExe, [downloadScript, ...args], { shell: false, env: getPythonModelCacheEnv() })
