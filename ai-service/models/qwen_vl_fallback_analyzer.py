@@ -1,6 +1,7 @@
 import os
 import random
 from typing import Dict, Any, List
+from core.mock_policy import guard_mock_inference
 
 class QwenVLFallbackAnalyzer:
     """
@@ -22,6 +23,7 @@ class QwenVLFallbackAnalyzer:
             return
             
         if self.is_mock:
+            guard_mock_inference("Qwen-VL fallback analyzer", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
             return
@@ -44,6 +46,7 @@ class QwenVLFallbackAnalyzer:
             print(f"[QwenVLFallbackAnalyzer] Fallback model successfully loaded. Backend: {self.backend}")
         except Exception as e:
             print(f"[QwenVLFallbackAnalyzer] Fallback model loading failed: {e}. Activating mock fallback.")
+            guard_mock_inference("Qwen-VL fallback analyzer", str(e))
             self.is_mock = True
             self.backend = "mock"
             self.is_loaded = True
@@ -57,6 +60,7 @@ class QwenVLFallbackAnalyzer:
 
         # 1. Handle Mock Prediction Fallback
         if self.is_mock or not self.model:
+            guard_mock_inference("Qwen-VL fallback analyzer", "No real Qwen-VL fallback model is loaded.")
             return self._simulate_mock_analysis(image_path, reason)
 
         # 2. Real Qwen-VL Instruct execution
@@ -103,10 +107,12 @@ class QwenVLFallbackAnalyzer:
             
         except Exception as err:
             print(f"[QwenVLFallbackAnalyzer] Real inference failed: {err}. Falling back to mock analysis.")
+            guard_mock_inference("Qwen-VL fallback analyzer", str(err))
             return self._simulate_mock_analysis(image_path, reason)
 
     def _simulate_mock_analysis(self, image_path: str, reason: str) -> Dict[str, Any]:
         """Contextually generates mock fallback tags and captions for robust operation."""
+        guard_mock_inference("Qwen-VL fallback analyzer", "Direct mock analysis was requested.")
         filename_lower = os.path.basename(image_path).lower()
         
         # Default mock details

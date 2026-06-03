@@ -1,5 +1,6 @@
 import os
 from typing import List, Dict, Any, Union, Optional
+from core.mock_policy import guard_mock_inference
 from utils.design_translation_dictionary import DESIGN_TRANSLATION_MAP
 
 class TranslationService:
@@ -24,6 +25,7 @@ class TranslationService:
             return
             
         if self.is_mock:
+            guard_mock_inference("OPUS-MT translation", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
             return
@@ -45,6 +47,7 @@ class TranslationService:
             print(f"[TranslationService] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
             print(f"[TranslationService] Failed loading real OPUS-MT model: {e}. Activating mock fallback.")
+            guard_mock_inference("OPUS-MT translation", str(e))
             self.is_mock = True
             self.backend = "mock"
             self.is_loaded = True
@@ -79,6 +82,7 @@ class TranslationService:
 
         # Handle Mock translation fallback
         if self.is_mock or not self.model or not self.tokenizer:
+            guard_mock_inference("OPUS-MT translation", "No real translation model and tokenizer are loaded.")
             return self._translate_batch_mock(cleaned_texts, source_lang, target_lang)
 
         # Real OPUS-MT translation pass
@@ -98,6 +102,7 @@ class TranslationService:
             return [d.strip() if d else cleaned_texts[i] for i, d in enumerate(decoded)]
         except Exception as e:
             print(f"[TranslationService] Error during batch translation: {e}. Falling back to mock.")
+            guard_mock_inference("OPUS-MT translation", str(e))
             return self._translate_batch_mock(cleaned_texts, source_lang, target_lang)
 
     def translate_caption(self, caption: str) -> str:
@@ -110,6 +115,7 @@ class TranslationService:
 
     def _translate_batch_mock(self, texts: List[str], source_lang: str, target_lang: str) -> List[str]:
         """Fallbacks to local dictionary matching or mock translation rules."""
+        guard_mock_inference("OPUS-MT translation", "Direct mock translation was requested.")
         results = []
         for text in texts:
             if not text:

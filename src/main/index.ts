@@ -132,6 +132,7 @@ import { registerOcrHealthcheckIpc } from './ipc/ocr-healthcheck.ipc'
 import { registerOcrIpc } from './ipc/ocr.ipc'
 import { registerAiWorkerIpc } from './ipc/ai-worker.ipc'
 import { registerAiModelIpc } from './ipc/ai-model.ipc'
+import { registerCooperativeModelIpc } from './ipc/cooperative-model.ipc'
 import { registerAiBackendIpc } from './ipc/ai-backend.ipc'
 import { registerLlamaRuntimeIpc } from './ipc/llama-runtime.ipc'
 import { registerDoctorIpc } from './ipc/doctor.ipc'
@@ -154,6 +155,7 @@ function setupIpcHandlers() {
   registerOcrIpc()
   registerAiWorkerIpc()
   registerAiModelIpc()
+  registerCooperativeModelIpc()
   registerAiBackendIpc()
   registerLlamaRuntimeIpc()
   registerDoctorIpc()

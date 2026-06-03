@@ -193,6 +193,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   llamaRuntimeStopServer: () => ipcRenderer.invoke(CHANNEL_LLAMA_RUNTIME_STOP_SERVER),
   llamaRuntimeTestServer: (request?: LlamaServerControlRequest) => ipcRenderer.invoke(CHANNEL_LLAMA_RUNTIME_TEST_SERVER, request),
   llamaRuntimeOpenInstallRoot: () => ipcRenderer.invoke('llama-runtime:open-install-root'),
+  llamaHealthCheck: (baseUrl?: string) => ipcRenderer.invoke("llama-runtime:health-check", { baseUrl }),
   llamaRuntimeListLocalModels: () => ipcRenderer.invoke('llama-runtime:list-local-models'),
   onLlamaRuntimeInstallProgress: (installId: string, callback: (event: any, data: any) => void) => {
     const channel = llamaRuntimeInstallProgressChannel(installId)
@@ -268,5 +269,21 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return () => {
       ipcRenderer.removeListener(channel, callback)
     }
-  }
+  },
+
+  // Cooperative Model IPC API
+  cooperativeModelList: () => ipcRenderer.invoke("cooperative-model:list"),
+  cooperativeModelDownload: (modelId: string) => ipcRenderer.invoke("cooperative-model:download", { modelId }),
+  cooperativeModelCancelDownload: (modelId: string) => ipcRenderer.invoke("cooperative-model:cancel-download", { modelId }),
+  cooperativeModelDelete: (modelId: string) => ipcRenderer.invoke("cooperative-model:delete", { modelId }),
+  onCooperativeModelDownloadProgress: (modelId: string, callback: (event: any, data: any) => void) => {
+    const channel = "cooperative-model:download-progress:" + modelId
+    ipcRenderer.on(channel, callback)
+    return () => {
+      ipcRenderer.removeListener(channel, callback)
+    }
+  },
+
+  // macOS AI dependency installer
+  macosAiInstallDeps: () => ipcRenderer.invoke('macos-ai:install-deps')
 })

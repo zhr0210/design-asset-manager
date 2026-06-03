@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { spawn, execSync } from 'child_process'
-import type { WebContents } from 'electron'
+import { app, type WebContents } from 'electron'
 import { SettingsService } from './settings.service'
 import { resolveManagedPaths } from '../platform/path-resolver'
 import { resolveDebugLogPath } from '../platform/log-path-resolver'
@@ -9,6 +9,7 @@ import type { OcrEnvPayload } from '../../shared/contracts/ocr-dependency.contra
 import {
   CHANNEL_OCR_INSTALL_LOG_UPDATE
 } from '../../shared/contracts/ocr-dependency.contract'
+import { resolveAiServicePath } from './ai-service-paths'
 
 function redactDebugMessage(msg: string): string {
   const homeLikeValues = [
@@ -40,31 +41,14 @@ function writeDebugLog(msg: string): void {
   }
 }
 
+function resolveElectronManagedPaths() {
+  return resolveManagedPaths({
+    getPath: (name) => app.getPath(name)
+  })
+}
+
 function findEnvCheckScriptPath(): string {
-  const starts = [process.cwd()]
-  try {
-    const moduleDir = typeof __dirname !== 'undefined'
-      ? __dirname
-      : path.dirname(new URL(import.meta.url).pathname)
-    starts.push(moduleDir)
-  } catch {
-    // Ignore
-  }
-
-  for (const start of starts) {
-    let current = path.resolve(start)
-    for (let depth = 0; depth < 8; depth += 1) {
-      const candidate = path.resolve(current, 'ai-service', 'tools', 'check_ocr_env.py')
-      if (fs.existsSync(candidate)) {
-        return candidate
-      }
-      const parent = path.dirname(current)
-      if (parent === current) break
-      current = parent
-    }
-  }
-
-  return path.resolve(process.cwd(), 'ai-service', 'tools', 'check_ocr_env.py')
+  return resolveAiServicePath(['tools', 'check_ocr_env.py'])
 }
 
 function searchWindowsPythonPaths(): string | null {
@@ -134,7 +118,28 @@ function searchWindowsPythonPaths(): string | null {
   return null
 }
 
-export function resolvePythonExecutable(): string {
+export function resolveMacOSAiPythonRuntime(): {
+  runtimeDir: string
+  venvDir: string
+  pythonPath: string
+  exists: boolean
+} {
+  const managedPaths = resolveElectronManagedPaths()
+  const runtimeDir = path.join(managedPaths.runtimeDir, 'macos-ai-python')
+  const venvDir = path.join(runtimeDir, '.venv')
+  const pythonPath = process.platform === 'win32'
+    ? path.join(venvDir, 'Scripts', 'python.exe')
+    : path.join(venvDir, 'bin', 'python')
+
+  return {
+    runtimeDir,
+    venvDir,
+    pythonPath,
+    exists: fs.existsSync(pythonPath)
+  }
+}
+
+export function resolveBasePythonExecutable(): string {
   writeDebugLog('[resolvePythonExecutable] Resolving Python executable...')
   const envs = [
     process.env.DESIGN_ASSET_MANAGER_PYTHON,
@@ -171,7 +176,91 @@ export function resolvePythonExecutable(): string {
   }
 
   writeDebugLog('[resolvePythonExecutable] Falling back to default "python"')
+
+  if (process.platform === "darwin") {
+    const homebrewPython313 = "/opt/homebrew/bin/python3.13"
+    if (fs.existsSync(homebrewPython313)) {
+      writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3.13")
+      return homebrewPython313
+    }
+    const homebrewPython3 = "/opt/homebrew/bin/python3"
+    if (fs.existsSync(homebrewPython3)) {
+      writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3")
+      return homebrewPython3
+    }
+  }
+
   return 'python'
+}
+
+export function resolvePythonExecutable(): string {
+  const explicit = process.env.DESIGN_ASSET_MANAGER_PYTHON
+  if (explicit && explicit.trim()) return explicit.trim()
+
+  const managedRuntime = resolveMacOSAiPythonRuntime()
+  if (managedRuntime.exists) {
+    writeDebugLog('[resolvePythonExecutable] Using managed macOS AI Python runtime.')
+    return managedRuntime.pythonPath
+  }
+
+  return resolveBasePythonExecutable()
+}
+
+export async function ensureMacOSAiPythonRuntime(): Promise<{
+  success: boolean
+  pythonPath: string
+  runtimeDir: string
+  created: boolean
+  error?: string
+}> {
+  const managedRuntime = resolveMacOSAiPythonRuntime()
+  if (managedRuntime.exists) {
+    return {
+      success: true,
+      pythonPath: managedRuntime.pythonPath,
+      runtimeDir: managedRuntime.runtimeDir,
+      created: false
+    }
+  }
+
+  const basePython = resolveBasePythonExecutable()
+  fs.mkdirSync(managedRuntime.runtimeDir, { recursive: true })
+
+  return new Promise((resolve) => {
+    const child = spawn(basePython, ['-m', 'venv', managedRuntime.venvDir], {
+      shell: false,
+      env: {
+        ...process.env,
+        PYTHONPYCACHEPREFIX: process.env.PYTHONPYCACHEPREFIX || path.join(resolveElectronManagedPaths().tempDir, 'pycache')
+      }
+    })
+    let errorOutput = ''
+
+    child.stderr?.on('data', (chunk) => {
+      errorOutput += chunk.toString()
+    })
+
+    child.on('error', (err) => {
+      resolve({
+        success: false,
+        pythonPath: managedRuntime.pythonPath,
+        runtimeDir: managedRuntime.runtimeDir,
+        created: false,
+        error: err.message
+      })
+    })
+
+    child.on('close', (code) => {
+      const exists = fs.existsSync(managedRuntime.pythonPath)
+      resolve({
+        success: code === 0 && exists,
+        pythonPath: managedRuntime.pythonPath,
+        runtimeDir: managedRuntime.runtimeDir,
+        created: code === 0 && exists,
+        error: code === 0 && exists ? undefined : (errorOutput.slice(-1000) || `venv exited with code ${code}`)
+      })
+    })
+  })
 }
 
 export class OcrDependencyService {
@@ -446,6 +535,61 @@ export class OcrDependencyService {
         this.logAndSend(sender, `\n[SYSTEM] Installation finished successfully (Exit Code: 0).\n`)
       } else {
         this.logAndSend(sender, `\n[SYSTEM WARNING] Installation finished with non-zero exit code: ${code}.\n`)
+      }
+    })
+  }
+
+  /**
+   * Install macOS AI runtime dependencies (torch, transformers, onnxruntime, etc.)
+   * through the Python install_macos_ai_deps.py script.
+   */
+  public async installMacOSAiDeps(sender: WebContents): Promise<void> {
+    if (this.installProcess) {
+      console.warn('[OcrDependencyService] macOS AI dep installation already in progress.')
+      return
+    }
+
+    this.installLogs = ''
+    const pythonExe = resolvePythonExecutable()
+    const installScript = resolveAiServicePath(['tools', 'install_macos_ai_deps.py'])
+
+    this.logAndSend(sender, `[SYSTEM] Starting macOS AI dependency installation via ${installScript}\n`)
+
+    try {
+      this.installProcess = spawn(pythonExe, [installScript], { shell: false })
+    } catch (err) {
+      this.logAndSend(sender, `[SYSTEM ERROR] Failed to spawn macOS AI dep installer: ${String(err)}\n`)
+      this.installProcess = null
+      return
+    }
+
+    this.installProcess.stdout?.on('data', (chunk: Buffer) => {
+      const text = chunk.toString()
+      // Try to parse JSON progress events
+      for (const line of text.split('\n').filter(Boolean)) {
+        try {
+          const evt = JSON.parse(line.trim())
+          this.logAndSend(sender, `[${evt.type}] ${evt.message}\n`)
+        } catch {
+          this.logAndSend(sender, text)
+        }
+      }
+    })
+
+    this.installProcess.stderr?.on('data', (chunk: Buffer) => {
+      this.logAndSend(sender, chunk.toString())
+    })
+
+    this.installProcess.on('error', (err: Error) => {
+      this.logAndSend(sender, `\n[SYSTEM ERROR] Spawn error: ${String(err)}\n`)
+    })
+
+    this.installProcess.on('close', (code: number | null) => {
+      this.installProcess = null
+      if (code === 0) {
+        this.logAndSend(sender, '\n[SYSTEM] macOS AI dependencies installed successfully.\n')
+      } else {
+        this.logAndSend(sender, `\n[SYSTEM WARNING] macOS AI dep install exited with code: ${code}.\n`)
       }
     })
   }

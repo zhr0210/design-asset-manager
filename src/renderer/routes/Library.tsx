@@ -77,7 +77,8 @@ export default function Library() {
 
   const handleRunPromptReverse = async (options?: { promptTemplateId?: string; promptTemplateText?: string }) => {
     if (!selectedAsset) return
-    const backendMode = settings.promptReverseSettings?.backendMode ?? 'native-qwen3vl'
+    const latestSettings = useSettingsStore.getState().settings
+    const backendMode = latestSettings.promptReverseSettings?.backendMode ?? 'llama-openai'
     if (backendMode === 'native-qwen3vl') {
       if (!activeModelLocal) return
       await runPromptReverseAction(selectedAsset.id, activeModelLocal.id, activeModelLocal.localPath, options)
@@ -86,7 +87,7 @@ export default function Library() {
 
     await runPromptReverseAction(
       selectedAsset.id,
-      settings.promptReverseSettings?.selectedExternalModel || settings.promptReverseSettings?.selectedExternalBackendId || backendMode,
+      latestSettings.promptReverseSettings?.selectedExternalModel || latestSettings.promptReverseSettings?.selectedExternalBackendId || backendMode,
       '',
       options
     )

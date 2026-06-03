@@ -1,11 +1,11 @@
 import { spawn } from 'child_process'
-import path from 'path'
 import fs from 'fs'
 import type { AiProvider, AiMemoryEstimate, AiWorkerContext } from '../ai-provider.interface'
 import type { PromptReverseResult } from '../../../../shared/types/prompt.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../../../shared/constants/prompt-templates.constants'
 
 import { getPythonModelCacheEnv, PROMPT_VLM_MODELS } from '../../ai-models/ai-model-registry'
+import { resolveAiServicePath } from '../../ai-service-paths'
 
 export class Qwen3vlPromptProvider implements AiProvider<any, PromptReverseResult> {
   public id = 'provider.prompt.qwen3vl'
@@ -34,7 +34,7 @@ export class Qwen3vlPromptProvider implements AiProvider<any, PromptReverseResul
     input: { assetId: string; filePath: string; modelId: string; modelPath: string },
     context: AiWorkerContext
   ): Promise<PromptReverseResult> {
-    const workerScript = path.resolve(process.cwd(), 'ai-service', 'prompt_workers', 'qwen3vl_prompt_worker.py')
+    const workerScript = resolveAiServicePath(['prompt_workers', 'qwen3vl_prompt_worker.py'])
     if (!fs.existsSync(workerScript)) {
       throw new Error(`Worker script not found at ${workerScript}`)
     }

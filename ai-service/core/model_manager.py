@@ -1,7 +1,12 @@
 import asyncio
 import time
 import gc
+import os
 from typing import Dict, Any, Optional
+
+from core.cooperative_model_registry import find_downloaded_model, get_downloaded_models_status
+from core.cooperative_model_readiness import get_cooperative_model_readiness
+from core.mock_policy import guard_mock_inference
 
 # Estimated actual GPU VRAM weights of loaded models (in MB)
 MODEL_VRAM_OCCUPANCY = {
@@ -100,7 +105,8 @@ class ModelManager:
         if name == "wd_tagger":
             try:
                 from models.wd_tagger import WDTaggerModel
-                instance = WDTaggerModel()
+                local_p = find_downloaded_model("wd_tagger")
+                instance = WDTaggerModel(local_path=str(local_p) if local_p else None)
                 instance.load()
             except Exception as e:
                 print(f"[ModelManager] Failed loading real WDTaggerModel: {e}. Falling back to mock session.")
@@ -111,7 +117,8 @@ class ModelManager:
         elif name == "ram":
             try:
                 from models.ram_tagger import RAMTaggerModel
-                instance = RAMTaggerModel()
+                local_p = find_downloaded_model("ram")
+                instance = RAMTaggerModel(local_path=str(local_p) if local_p else None)
                 instance.load()
             except Exception as e:
                 print(f"[ModelManager] Failed loading real RAMTaggerModel: {e}. Falling back to mock session.")
@@ -122,7 +129,8 @@ class ModelManager:
         elif name == "florence2":
             try:
                 from models.florence2_tagger import Florence2TaggerModel
-                instance = Florence2TaggerModel()
+                local_p = find_downloaded_model("florence2")
+                instance = Florence2TaggerModel(local_path=str(local_p) if local_p else None)
                 instance.load()
             except Exception as e:
                 print(f"[ModelManager] Failed loading real Florence2TaggerModel: {e}. Falling back to mock session.")
@@ -133,7 +141,8 @@ class ModelManager:
         elif name == "clip":
             try:
                 from models.clip_design_classifier import CLIPDesignClassifier
-                instance = CLIPDesignClassifier()
+                local_p = find_downloaded_model("clip")
+                instance = CLIPDesignClassifier(local_path=str(local_p) if local_p else None)
                 instance.load()
             except Exception as e:
                 print(f"[ModelManager] Failed loading real CLIPDesignClassifier: {e}. Falling back to mock session.")
@@ -165,6 +174,7 @@ class ModelManager:
                 instance.load()
         else:
             # Simulate mock loading latency for others
+            guard_mock_inference(name, "Unknown model names cannot be registered as loaded mock models.")
             await asyncio.sleep(0.5)
 
         # Register loaded model
@@ -281,6 +291,8 @@ class ModelManager:
     def get_cooperative_status(self) -> dict:
         """Returns comprehensive status for all cooperative models (RAM, Florence-2, CLIP, WD Tagger)."""
         status = {}
+        downloaded_status = get_downloaded_models_status()
+        readiness_status = get_cooperative_model_readiness(self.loaded_models)
         cooperative_models = {
             "ram": {
                 "model_id": "xinyu1205/recognize-anything-plus-model",
@@ -313,12 +325,20 @@ class ModelManager:
                 backend = getattr(info["instance"], "backend", "unknown")
             elif is_loaded:
                 backend = "mock"
+            # Check if model is downloaded locally
+            ds_info = downloaded_status.get(name, {})
+            readiness = readiness_status.get(name, {})
+            local_path = ds_info.get("local_path")
+            
             status[name] = {
                 "model_id": meta["model_id"],
                 "role": meta["role"],
                 "loaded": is_loaded,
                 "backend": backend,
                 "is_mock": is_mock,
-                "vram_occupancy_mb": vram_occupancy
+                "vram_occupancy_mb": vram_occupancy,
+                "downloaded": ds_info.get("downloaded", False),
+                "local_path": local_path,
+                "readiness": readiness
             }
         return status

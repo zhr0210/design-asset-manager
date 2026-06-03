@@ -25,7 +25,17 @@
           "**/*",
           "!**/__pycache__/**",
           "!**/.venv/**",
-          "!**/models/**"
+          "!**/models/**/*.pth",
+          "!**/models/**/*.onnx",
+          "!**/models/**/*.safetensors",
+          "!**/models/**/*.bin",
+          "!**/models/**/*.h5",
+          "!**/models/**/*.ot",
+          "!**/models/**/*.tflite",
+          "!**/models/**/*.gguf",
+          "!**/models/**/*.pt",
+          "!**/models/**/*.ckpt",
+          "!**/models/**/*.msgpack"
         ]
       }
     ],

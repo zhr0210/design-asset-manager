@@ -34,7 +34,7 @@ export default function AssetPromptReversePanel({
   const [serverError, setServerError] = useState<string | null>(null)
   const [selectedCustomTemplateId, setSelectedCustomTemplateId] = useState(settings.promptReverseTemplates?.[0]?.id ?? '')
 
-  const promptBackendMode = settings.promptReverseSettings?.backendMode ?? 'native-qwen3vl'
+  const promptBackendMode = settings.promptReverseSettings?.backendMode ?? 'llama-openai'
 
   // Load available models on mount and when settings change
   useEffect(() => {
@@ -102,6 +102,70 @@ export default function AssetPromptReversePanel({
 
   const selectedOption = dropdownOptions.find(o => o.value === activeValue) || dropdownOptions[0]
 
+  const buildGgufSettings = (model: any): AppSettings => {
+    const backends = settings.aiBackends ?? []
+    const llamaBackend = backends.find((backend) => backend.id === 'llama-local-openai')
+    const nextBackend = {
+      ...(llamaBackend ?? {
+        id: 'llama-local-openai',
+        name: 'Llama 本地量化模型服务',
+        type: 'llama-openai' as const,
+        baseUrl: 'http://127.0.0.1:8080/v1',
+        apiKey: 'local',
+        timeoutMs: 120000,
+        priority: 50,
+        notes: '适用于 llama.cpp / llama-server 暴露的 OpenAI-compatible API。'
+      }),
+      enabled: true,
+      type: 'llama-openai' as const,
+      defaultModel: model.filename,
+      capabilities: {
+        ...(llamaBackend?.capabilities ?? {}),
+        chat: true,
+        vision: true,
+        embeddings: false,
+        jsonOutput: true,
+        modelList: true,
+        modelManagement: false
+      }
+    }
+    const nextBackends = backends.some((backend) => backend.id === nextBackend.id)
+      ? backends.map((backend) => backend.id === nextBackend.id ? nextBackend : backend)
+      : [nextBackend, ...backends]
+
+    return {
+      ...settings,
+      aiBackends: nextBackends,
+      promptReverseSettings: {
+        ...(settings.promptReverseSettings ?? {
+          maxNewTokens: DEFAULT_PROMPT_REVERSE_MAX_TOKENS,
+          maxImageSize: 1024,
+          temperature: 0.6,
+          topP: 0.9
+        }),
+        backendMode: 'llama-openai' as const,
+        selectedExternalBackendId: 'llama-local-openai',
+        selectedExternalModel: model.filename
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (loadingModels || promptBackendMode !== 'native-qwen3vl') return
+    const preferredGguf = ggufModels.find((model) => model.isDownloaded && model.id === 'qwen3-vl-2b-instruct-q4-k-m')
+      ?? ggufModels.find((model) => model.isDownloaded)
+    if (!preferredGguf) return
+
+    const api = (window as any).electronAPI
+    if (!api?.settingsSave) return
+    void api.settingsSave(buildGgufSettings(preferredGguf)).then(async () => {
+      const { loadSettings } = useSettingsStore.getState()
+      await loadSettings()
+    }).catch((error: any) => {
+      console.error('Failed to switch prompt reverse route to GGUF/Llama', error)
+    })
+  }, [ggufModels, loadingModels, promptBackendMode])
+
   const handleModelChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value
     const api = (window as any).electronAPI
@@ -111,21 +175,7 @@ export default function AssetPromptReversePanel({
     if (!option) return
 
     if (option.type === 'gguf') {
-      const nextSettings = {
-        ...settings,
-        promptReverseSettings: {
-          ...(settings.promptReverseSettings ?? {
-            maxNewTokens: DEFAULT_PROMPT_REVERSE_MAX_TOKENS,
-            maxImageSize: 1024,
-            temperature: 0.6,
-            topP: 0.9
-          }),
-          backendMode: 'llama-openai' as const,
-          selectedExternalBackendId: 'llama-local-openai',
-          selectedExternalModel: option.model.filename
-        }
-      }
-      await api.settingsSave(nextSettings)
+      await api.settingsSave(buildGgufSettings(option.model))
     } else {
       const nextSettings = {
         ...settings,
@@ -164,6 +214,9 @@ export default function AssetPromptReversePanel({
     if (selectedOption.type === 'gguf') {
       try {
         setStartingServer(true)
+        await api.settingsSave(buildGgufSettings(selectedOption.model))
+        const { loadSettings } = useSettingsStore.getState()
+        await loadSettings()
         const status = await api.llamaRuntimeGetStatus()
         const targetModelPath = selectedOption.model.modelPath
 

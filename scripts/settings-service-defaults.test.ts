@@ -43,7 +43,7 @@ assert.equal(newInstallDefaults.doctorSettings?.lastRunAt, null)
 assert.equal(newInstallDefaults.doctorSettings?.showInSettings, true)
 
 assert.equal(createDefaultLlamaBackendConfig().enabled, false)
-assert.equal(createDefaultPromptReverseSettings().backendMode, 'native-qwen3vl')
+assert.equal(createDefaultPromptReverseSettings().backendMode, 'llama-openai')
 
 const settingsServiceSource = await fs.readFile('src/main/services/settings.service.ts', 'utf8')
 const builderSource = await fs.readFile('src/main/services/settings/settings-defaults.builder.ts', 'utf8')

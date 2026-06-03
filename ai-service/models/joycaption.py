@@ -1,5 +1,6 @@
 import random
 from typing import Dict, Any
+from core.mock_policy import guard_mock_inference
 
 class JoyCaption:
     def __init__(self):
@@ -8,6 +9,7 @@ class JoyCaption:
 
     def generate_prompt(self, image_path: str) -> Dict[str, Any]:
         """Simulates JoyCaption prompt reversal."""
+        guard_mock_inference("JoyCaption", "The current JoyCaption worker is a template-based mock implementation.")
         prompts = [
             {
                 "prompt": "A beautiful flat design illustration showing a modern tech environment with minimalist icons and dynamic grids, glowing neon colors, highly detailed, style of premium digital UI art",

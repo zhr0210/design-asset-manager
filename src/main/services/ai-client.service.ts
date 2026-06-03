@@ -176,6 +176,7 @@ export class AiClientService {
         success: true,
         offline: false,
         loaded_models: data.loaded_models,
+        cooperative_models: data.cooperative_models ?? {},
         gpu_status: data.gpu_status,
         queue_stats: queueStats
       }
@@ -184,6 +185,7 @@ export class AiClientService {
         success: true,
         offline: true,
         loaded_models: {},
+        cooperative_models: {},
         gpu_status: {
           available: false,
           is_mock: false,

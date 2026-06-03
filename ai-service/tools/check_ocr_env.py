@@ -41,7 +41,8 @@ def main():
             "executable": sys.executable
         },
         "easyocr": check_module("easyocr", "easyocr"),
-        "rapidocr": check_module("rapidocr_onnxruntime", "rapidocr-onnxruntime")
+        "rapidocr": check_module("rapidocr_onnxruntime", "rapidocr-onnxruntime"),
+        "paddleocr": check_module("paddleocr", "paddleocr")
     }
     print(json.dumps(result, ensure_ascii=False))
 

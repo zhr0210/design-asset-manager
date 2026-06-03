@@ -100,6 +100,9 @@ export interface LlamaInstallStatus {
   mmprojPath?: string;
   baseUrl: string;
   serverPid?: number;
+  serverRunning?: boolean;
+  serverModels?: string[];
+  serverHealthCheckedAt?: string;
   error?: {
     code: string;
     message: string;

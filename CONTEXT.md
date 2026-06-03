@@ -194,6 +194,22 @@ _Avoid_: macOS build, MPS mode
 The local Python worker responsible for AI tagging, prompt reverse, visual analysis, routing, OCR helpers, and translation support.
 _Avoid_: AI service, runtime, model server
 
+**Real Model Path**:
+An AI workflow path whose output is produced by an installed and loaded model backend, or by an explicitly configured external inference backend.
+_Avoid_: Enabled card, downloaded label, wrapper import
+
+**Mock Inference Path**:
+An AI workflow path that returns simulated, randomized, templated, or filename-derived AI output instead of model-backed inference.
+_Avoid_: Demo data, graceful fallback, fake model
+
+**Planned Capability**:
+A UI-visible or metadata-visible AI capability that describes an intended runtime, model family, or fallback route before a real model path is available.
+_Avoid_: Available model, installed runtime, loaded route
+
+**Runtime Probe**:
+A read-only check that reports whether a runtime dependency, import, service, or hardware hint appears available without proving full model inference.
+_Avoid_: Inference validation, model load, health guarantee
+
 **AI Client**:
 The Electron-side facade that enqueues AI work, records local task state, polls worker results, and notifies the renderer.
 _Avoid_: AI Worker, model client

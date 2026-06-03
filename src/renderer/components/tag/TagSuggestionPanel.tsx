@@ -56,6 +56,7 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
   const [scanningState, setScanningState] = useState<'idle' | 'routing' | 'classified' | 'tagging' | 'completed'>('idle')
   const [detectedType, setDetectedType] = useState<string>('')
   const [customModels, setCustomModels] = useState<string[]>([])
+  const [taggingError, setTaggingError] = useState<string | null>(null)
 
   // Load custom categories or routing on mount and change
   React.useEffect(() => {
@@ -138,24 +139,21 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
   }
 
   const triggerAiTagging = async () => {
+    setTaggingError(null)
     setScanningState('routing')
-
-    // Smooth step-by-step progress timers to emulate VisualRouter & model loading preheat
-    const timer1 = setTimeout(() => setScanningState('classified'), 800)
-    const timer2 = setTimeout(() => setScanningState('tagging'), 2000)
     
     try {
-      // Pass user selected models
-      await generateMockAiSuggestions(assetId, customModels)
-      clearTimeout(timer1)
-      clearTimeout(timer2)
+      setScanningState('tagging')
+      const result = await generateMockAiSuggestions(assetId, customModels)
+      if (!result.success) {
+        setTaggingError(result.error || '真实 AI 打标不可用。')
+        return
+      }
       setScanningState('completed')
-      await new Promise(resolve => setTimeout(resolve, 1500))
-    } catch (e) {
-      console.error(e)
+      await new Promise(resolve => setTimeout(resolve, 800))
+    } catch (e: any) {
+      setTaggingError(e?.message || String(e))
     } finally {
-      clearTimeout(timer1)
-      clearTimeout(timer2)
       setScanningState('idle')
     }
   }
@@ -181,6 +179,12 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
           <span>{scanning ? '分析中...' : 'AI 智能打标'}</span>
         </button>
       </div>
+
+      {taggingError && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[10.5px] font-semibold text-amber-700">
+          {taggingError}
+        </div>
+      )}
 
       {/* Premium Category Overwrite and Selector */}
       {!scanning && (
@@ -304,10 +308,10 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
             )}
             
             <span className="leading-relaxed leading-none transition-all duration-300">
-              {scanningState === 'routing' && '🔍 正在使用 VisualRouter 进行智能类型判断...'}
-              {scanningState === 'classified' && `👉 已识别/锁定类型: ${TYPE_LABEL_MAP[detectedType]?.type || detectedType.toUpperCase()}`}
-              {scanningState === 'tagging' && `⚡ 正在启用 [${customModels.map(m => MODEL_DISPLAY_NAMES[m]?.name || m).join(', ')}] 模型生成标签建议...`}
-              {scanningState === 'completed' && '智能标签建议已完成。'}
+              {scanningState === 'routing' && '正在提交真实 AI Worker 打标任务...'}
+              {scanningState === 'classified' && `已识别/锁定类型: ${TYPE_LABEL_MAP[detectedType]?.type || detectedType.toUpperCase()}`}
+              {scanningState === 'tagging' && `正在等待真实模型返回：[${customModels.map(m => MODEL_DISPLAY_NAMES[m]?.name || m).join(', ')}]`}
+              {scanningState === 'completed' && '真实 AI 标签建议已完成。'}
             </span>
           </div>
         </div>

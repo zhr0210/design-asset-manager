@@ -111,6 +111,13 @@ async function main() {
     capabilities: { ...config.capabilities, vision: true }
   }
 
+  const defaultRoute = resolvePromptReverseRoute({
+    aiBackends: [routeConfig],
+    promptReverseSettings: undefined
+  })
+  assert.equal(defaultRoute.mode, 'llama-openai')
+  assert.equal(defaultRoute.backend?.id, routeConfig.id)
+
   assert.equal(resolvePromptReverseRoute({
     aiBackends: [routeConfig],
     promptReverseSettings: { backendMode: 'native-qwen3vl', maxNewTokens: 512, maxImageSize: 1024, temperature: 0.6, topP: 0.9 }

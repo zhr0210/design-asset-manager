@@ -1,7 +1,11 @@
 import { ipcMain } from 'electron'
+import { spawn } from 'child_process'
+import path from 'path'
+import os from 'os'
 import { AiWorkerManager } from '../services/ai-worker/ai-worker-manager'
 import { Qwen3vlPromptProvider } from '../services/ai-worker/providers/qwen3vl-prompt.provider'
 import { getDatabase } from '../db'
+import { CHANNEL_OCR_INSTALL_LOG_UPDATE } from '../../shared/contracts/ocr-dependency.contract'
 
 export function registerAiWorkerIpc() {
   const manager = AiWorkerManager.getInstance()
@@ -73,5 +77,125 @@ export function registerAiWorkerIpc() {
     } catch (err: any) {
       return { success: false, error: String(err) }
     }
+  })
+
+  // macOS AI dependency installer (torch, transformers, onnxruntime, etc.)
+  ipcMain.handle('macos-ai:install-deps', async (event) => {
+    const { ensureMacOSAiPythonRuntime } = await import('../services/ocr-dependency.service')
+    const { resolveAiServicePath } = await import('../services/ai-service-paths')
+    const installScript = resolveAiServicePath(['tools', 'install_macos_ai_deps.py'])
+    const startedAt = Date.now()
+    const scriptLabel = 'ai-service/tools/install_macos_ai_deps.py'
+    const runtime = await ensureMacOSAiPythonRuntime()
+    const pythonExe = runtime.pythonPath
+    const pythonLabel = runtime.success ? 'managed-venv-python' : path.basename(pythonExe)
+
+    if (!runtime.success) {
+      return {
+        success: false,
+        exitCode: null,
+        durationMs: Date.now() - startedAt,
+        python: pythonLabel,
+        script: scriptLabel,
+        runtime: {
+          managed: true,
+          ready: false,
+          created: runtime.created
+        },
+        installedPackages: [],
+        failedPackages: [{ package: 'python-venv', detail: runtime.error ?? 'failed to create managed Python environment' }],
+        events: [],
+        outputTail: runtime.error ?? ''
+      }
+    }
+
+    console.log('[macos-ai:install-deps] Running:', pythonLabel, scriptLabel)
+
+    return new Promise((resolve) => {
+      const child = spawn(pythonExe, [installScript], {
+        shell: false,
+        env: {
+          ...process.env,
+          PYTHONPYCACHEPREFIX: process.env.PYTHONPYCACHEPREFIX || path.join(os.tmpdir(), 'design-asset-manager-pycache')
+        }
+      })
+      let output = ''
+      const events: any[] = []
+      const failures: any[] = []
+
+      child.stdout?.on('data', (chunk: Buffer) => {
+        const text = chunk.toString()
+        output += text
+        for (const line of text.split(/\r?\n/)) {
+          if (!line.trim()) continue
+          try {
+            const eventPayload = JSON.parse(line)
+            events.push(eventPayload)
+            if (Array.isArray(eventPayload.failures)) {
+              failures.splice(0, failures.length, ...eventPayload.failures)
+            } else if (eventPayload.type === 'error') {
+              failures.push({ package: eventPayload.package ?? 'unknown', detail: eventPayload.message ?? eventPayload.detail ?? 'unknown' })
+            }
+          } catch {
+            // Keep non-JSON pip output in the tail only.
+          }
+        }
+        if (!event.sender.isDestroyed()) {
+          event.sender.send(CHANNEL_OCR_INSTALL_LOG_UPDATE, text)
+        }
+      })
+
+      child.stderr?.on('data', (chunk: Buffer) => {
+        const text = chunk.toString()
+        output += text
+        if (!event.sender.isDestroyed()) {
+          event.sender.send(CHANNEL_OCR_INSTALL_LOG_UPDATE, text)
+        }
+      })
+
+      child.on('close', (code: number | null) => {
+        console.log('[macos-ai:install-deps] Exited with code:', code)
+        const completeEvent = [...events].reverse().find((entry) => entry?.type === 'complete')
+        resolve({
+          success: code === 0 && completeEvent?.success !== false,
+          exitCode: code,
+          durationMs: Date.now() - startedAt,
+          python: pythonLabel,
+          script: scriptLabel,
+          runtime: {
+            managed: true,
+            ready: true,
+            created: runtime.created
+          },
+          installedPackages: events.filter((entry) => entry?.type === 'package-complete' && entry.success).map((entry) => entry.package),
+          failedPackages: failures.map((failure) => ({
+            package: failure.package ?? 'unknown',
+            detail: String(failure.detail ?? failure.message ?? 'unknown').slice(-1000)
+          })),
+          events: events.slice(-80),
+          outputTail: output.slice(-2000)
+        })
+      })
+
+      child.on('error', (err: Error) => {
+        console.error('[macos-ai:install-deps] Spawn error:', err.message)
+        resolve({
+          success: false,
+          error: err.message,
+          durationMs: Date.now() - startedAt,
+          python: pythonLabel,
+          script: scriptLabel,
+          runtime: {
+            managed: true,
+            ready: true,
+            created: runtime.created
+          },
+          installedPackages: [],
+          failedPackages: [{ package: 'installer', detail: err.message }],
+          events: [],
+          outputTail: ''
+        })
+      })
+    })
   })
 }

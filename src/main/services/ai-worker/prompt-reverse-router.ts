@@ -6,7 +6,7 @@ export type PromptReverseRoute =
   | { mode: 'llama-openai' | 'openai-compatible'; backend: AiBackendConfig | null }
 
 export function resolvePromptReverseRoute(settings: Pick<AppSettings, 'aiBackends' | 'promptReverseSettings'>): PromptReverseRoute {
-  const mode = settings.promptReverseSettings?.backendMode ?? 'native-qwen3vl'
+  const mode = settings.promptReverseSettings?.backendMode ?? 'llama-openai'
   if (mode === 'native-qwen3vl') {
     return { mode, backend: null }
   }
@@ -27,4 +27,3 @@ export function resolveExternalBackend(
   if (!selected) return null
   return { ...selected, type: backendMode === 'llama-openai' ? 'llama-openai' : selected.type }
 }
-

@@ -40,7 +40,8 @@ export function registerLlamaRuntimeIpc() {
   })
 
   ipcMain.handle(CHANNEL_LLAMA_RUNTIME_GET_STATUS, async () => {
-    return service.getStatus()
+    const selectedBackend = SettingsService.getInstance().getSettings().aiBackends?.find((backend) => backend.type === 'llama-openai' && backend.enabled)
+    return service.getStatusWithHealth(selectedBackend?.baseUrl)
   })
 
   ipcMain.handle(CHANNEL_LLAMA_RUNTIME_START_SERVER, async (_, request?: LlamaServerControlRequest) => {
@@ -97,5 +98,10 @@ export function registerLlamaRuntimeIpc() {
         mmprojDownloadState: mmprojState
       }
     })
+  })
+
+  // Health check for already-running llama-server (e.g. started externally)
+  ipcMain.handle('llama-runtime:health-check', async (_, request?: { baseUrl?: string }) => {
+    return service.checkServerHealth(request?.baseUrl)
   })
 }

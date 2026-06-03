@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 import csv
 import random
@@ -5,6 +6,7 @@ import time
 from typing import List, Dict, Any, Optional
 import numpy as np
 
+from core.mock_policy import guard_mock_inference
 from utils.image_preprocess import prepare_image_for_wd_tagger
 from utils.tag_cleaner import clean_wd_tag, TRANSLATION_MAP
 
@@ -83,7 +85,8 @@ class WDTaggerModel:
         threshold_general: float = 0.35,
         threshold_character: float = 0.35,
         threshold_rating: float = 0.5,
-        max_tags: int = 30
+        max_tags: int = 30,
+        local_path: str | None = None
     ):
         self.model_id = model_id
         self.backend_preference = backend
@@ -94,6 +97,7 @@ class WDTaggerModel:
         self.max_tags = max_tags
         
         self.model_version = "3.0.0" if "v3" in model_id else "2.0.0"
+        self.local_path = local_path
         
         # Determine local cache directories
         safe_dir = model_id.replace("/", "_")
@@ -120,12 +124,19 @@ class WDTaggerModel:
             
         if self.is_mock:
             print(f"[WDTaggerModel] Bypassing real ONNX load as is_mock=True is set.")
+            guard_mock_inference("WD Tagger", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self._load_mock_metadata()
             self.is_loaded = True
             return
             
         print(f"[WDTaggerModel] Preparing to load model '{self.model_id}'...")
+        
+        # If local_path is provided, use it as the cache directory
+        if self.local_path and os.path.isdir(self.local_path):
+            self.cache_dir = self.local_path
+            print(f"[WDTaggerModel] Using local model path: {self.local_path}")
+        
         os.makedirs(self.cache_dir, exist_ok=True)
         
         onnx_path = os.path.join(self.cache_dir, "model.onnx")
@@ -155,6 +166,7 @@ class WDTaggerModel:
                 print(f"[WDTaggerModel] Model weights successfully cached locally at {self.cache_dir}.")
             except Exception as e:
                 print(f"[WDTaggerModel] Hugging Face download failed or offline: {e}. Activating mock fallback.")
+                guard_mock_inference("WD Tagger", str(e))
                 self.is_mock = True
                 self.backend = "mock"
                 self._load_mock_metadata()
@@ -166,6 +178,7 @@ class WDTaggerModel:
             self._load_tags_csv(csv_path)
         except Exception as e:
             print(f"[WDTaggerModel] Failed to parse selected_tags.csv: {e}. Activating mock fallback.")
+            guard_mock_inference("WD Tagger", str(e))
             self.is_mock = True
             self.backend = "mock"
             self._load_mock_metadata()
@@ -213,6 +226,7 @@ class WDTaggerModel:
             print(f"[WDTaggerModel] ONNX Runtime session initialization failed: {e}.")
             # Try timm fallback or go straight to mock
             print("[WDTaggerModel] Fallback to Mock predictions activated.")
+            guard_mock_inference("WD Tagger", str(e))
             self.is_mock = True
             self.backend = "mock"
             self.is_loaded = True
@@ -251,6 +265,7 @@ class WDTaggerModel:
         
         # 1. Handle Mock Fallback predictions
         if self.is_mock:
+            guard_mock_inference("WD Tagger", "No real ONNX session is loaded.")
             for path in image_paths:
                 results.append(self._simulate_mock_prediction(path))
             return results
@@ -469,6 +484,7 @@ class WDTaggerModel:
 
     def _simulate_mock_prediction(self, path: str) -> WDTaggerResult:
         """Simulates an offline predicted tag dictionary for robust fallbacks."""
+        guard_mock_inference("WD Tagger", "Direct mock prediction was requested.")
         # Detect corrupted/missing image path
         if "corrupt" in path or not os.path.exists(path):
             return WDTaggerResult(

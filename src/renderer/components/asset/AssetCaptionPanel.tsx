@@ -6,7 +6,7 @@ type AssetCaptionPanelProps = {
   selectedAsset: Asset;
   updateAssetCaption: (id: string, caption: string) => Promise<void>;
   resetAssetCaptionEdited: (id: string) => Promise<void>;
-  generateMockAiSuggestions: (id: string, engines: string[]) => Promise<void>;
+  generateMockAiSuggestions: (id: string, engines: string[]) => Promise<{ success: boolean; error?: string }>;
 };
 
 export default function AssetCaptionPanel({
@@ -50,7 +50,10 @@ export default function AssetCaptionPanel({
                 // Reset edited lock if any
                 await resetAssetCaptionEdited(selectedAsset.id)
                 // Trigger Florence-2 generation
-                await generateMockAiSuggestions(selectedAsset.id, ['florence2'])
+                const result = await generateMockAiSuggestions(selectedAsset.id, ['florence2'])
+                if (!result.success) {
+                  console.warn('[AssetCaptionPanel] Real caption/tag worker unavailable:', result.error)
+                }
               } catch (e) {
                 console.error(e)
               } finally {

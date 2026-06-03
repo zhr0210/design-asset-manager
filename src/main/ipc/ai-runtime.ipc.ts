@@ -27,13 +27,10 @@ import type {
 import { AiClientService } from '../services/ai-client.service'
 import { AiRuntimeManager } from '../services/ai-runtime/ai-runtime-manager'
 import { DisabledAiRuntimeProvider } from '../services/ai-runtime/providers/disabled-ai-runtime.provider'
-import { ExternalHttpRuntimeProvider } from '../services/ai-runtime/providers/external-http-runtime.provider'
-import { createCustomHttpRuntimeConfig } from '../services/ai-runtime/providers/external-http-runtime-presets'
-import { MockAiRuntimeProvider } from '../services/ai-runtime/providers/mock-ai-runtime.provider'
 import { PythonWorkerRuntimeProvider } from '../services/ai-runtime/providers/python-worker-runtime.provider'
 import { createDefaultPythonWorkerRuntimeConfig } from '../services/ai-runtime/providers/python-worker-runtime-presets'
-import { MockAiRuntimeHttpClient } from '../services/ai-runtime/http/mock-ai-runtime-http-client'
-import { MockAiRuntimeProcessRunner } from '../services/ai-runtime/process/mock-ai-runtime-process-runner'
+import { resolveAiServicePath, resolveAiServiceRoot } from '../services/ai-service-paths'
+import { resolvePythonExecutable } from '../services/ai-python-runtime.service'
 
 function success<T>(data: T): AiRuntimeIpcResponse<T> {
   return { success: true, data }
@@ -44,6 +41,10 @@ function failure(error: unknown): AiRuntimeIpcResponse<never> {
     success: false,
     error: error instanceof Error ? error.message : String(error)
   }
+}
+
+function resolveRuntimePythonExecutable(): string {
+  return resolvePythonExecutable()
 }
 
 function createSafeAiRuntimeManager(): AiRuntimeManager {
@@ -63,24 +64,18 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
       macosAiBranch: macosAiBranchMetadata
     }
   }))
-  manager.registerProvider(new MockAiRuntimeProvider({ id: 'mock-runtime' }))
-  manager.registerProvider(new ExternalHttpRuntimeProvider(
-    createCustomHttpRuntimeConfig({
-      runtimeId: 'mock-external-http-runtime',
-      displayName: 'Mock External HTTP Runtime',
-      baseUrl: null
-    }),
-    new MockAiRuntimeHttpClient()
-  ))
   manager.registerProvider(new PythonWorkerRuntimeProvider(
     createDefaultPythonWorkerRuntimeConfig({
-      runtimeId: 'mock-python-worker-runtime',
-      displayName: 'Mock Python Worker Runtime',
-      pythonPath: 'mock-python',
-      scriptPath: 'mock-ai-worker.py',
-      workingDirectory: 'mock-ai-service'
-    }),
-    new MockAiRuntimeProcessRunner()
+      runtimeId: 'python-worker-runtime',
+      displayName: 'Python AI Worker Runtime',
+      pythonPath: resolveRuntimePythonExecutable(),
+      scriptPath: resolveAiServicePath(['app.py']),
+      workingDirectory: resolveAiServiceRoot(),
+      env: {
+        PYTHONUNBUFFERED: '1',
+        DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1'
+      }
+    })
   ))
 
   manager.selectActiveRuntime('disabled-runtime')

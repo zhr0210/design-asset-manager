@@ -180,6 +180,27 @@ export class LlamaRuntimeInstallService {
     }
   }
 
+  public async getStatusWithHealth(baseUrl?: string): Promise<LlamaInstallStatus> {
+    const status = this.getStatus()
+    const health = await this.checkServerHealth(baseUrl ?? status.baseUrl)
+    return {
+      ...status,
+      phase: health.running && status.phase === 'idle' ? 'complete' : status.phase,
+      message: health.running && status.phase === 'idle' ? 'llama-server 已在本机运行。' : status.message,
+      serverRunning: health.running,
+      serverModels: health.models,
+      serverHealthCheckedAt: new Date().toISOString(),
+      error: health.running
+        ? status.error
+        : status.serverPid
+          ? {
+              code: 'LLAMA_SERVER_HEALTH_FAILED',
+              message: health.error ?? 'llama-server process exists but health check failed.'
+            }
+          : status.error
+    }
+  }
+
   public async startInstall(plan: LlamaInstallPlan, sender: WebContents): Promise<LlamaInstallStatus> {
     if (this.abortController) {
       throw new Error('已有 Llama 安装任务正在运行。')
@@ -454,6 +475,24 @@ export class LlamaRuntimeInstallService {
           message: sanitizeLlamaLog(err?.message ?? String(err))
         }
       }
+    }
+  }
+
+  public async checkServerHealth(baseUrl = 'http://127.0.0.1:8080/v1'): Promise<{ running: boolean; models: string[]; error?: string }> {
+    const normalizedBase = baseUrl.replace(/\/+$/, '')
+    try {
+      const modelsResponse = await fetch(`${normalizedBase}/models`, {
+        headers: { Authorization: 'Bearer local' },
+        signal: AbortSignal.timeout(5000)
+      })
+      if (!modelsResponse.ok) {
+        return { running: false, models: [], error: `HTTP ${modelsResponse.status}` }
+      }
+      const modelsJson: any = await modelsResponse.json()
+      const models = Array.isArray(modelsJson?.data) ? modelsJson.data.map((item: any) => String(item.id)).filter(Boolean) : []
+      return { running: true, models }
+    } catch (err: any) {
+      return { running: false, models: [], error: sanitizeLlamaLog(err?.message ?? String(err)) }
     }
   }
 
@@ -752,12 +791,13 @@ export class LlamaRuntimeInstallService {
       aiBackends: next,
       promptReverseSettings: {
         ...(settings.promptReverseSettings ?? {
-          backendMode: 'native-qwen3vl',
+          backendMode: 'llama-openai',
           maxNewTokens: DEFAULT_PROMPT_REVERSE_MAX_TOKENS,
           maxImageSize: 1024,
           temperature: 0.6,
           topP: 0.9
         }),
+        backendMode: 'llama-openai',
         selectedExternalBackendId: defaultBackend.id,
         selectedExternalModel: defaultBackend.defaultModel
       }

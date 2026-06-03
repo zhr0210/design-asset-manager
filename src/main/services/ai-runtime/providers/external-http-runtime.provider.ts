@@ -7,7 +7,7 @@ import type {
   ExternalHttpClient,
   ExternalHttpRuntimeConfig
 } from '../ai-runtime.types'
-import { MockAiRuntimeHttpClient } from '../http/mock-ai-runtime-http-client'
+import { FetchAiRuntimeHttpClient } from '../http/fetch-ai-runtime-http-client'
 import { createCustomHttpRuntimeConfig } from './external-http-runtime-presets'
 
 function now(): string {
@@ -53,7 +53,7 @@ export class ExternalHttpRuntimeProvider implements AiRuntimeProvider {
   private state: AiRuntimeState
   private readonly httpClient: ExternalHttpClient
 
-  constructor(config: Partial<ExternalHttpRuntimeConfig> = {}, httpClient: ExternalHttpClient = new MockAiRuntimeHttpClient()) {
+  constructor(config: Partial<ExternalHttpRuntimeConfig> = {}, httpClient: ExternalHttpClient = new FetchAiRuntimeHttpClient()) {
     this.config = createCustomHttpRuntimeConfig(config)
     this.httpClient = httpClient
     this.state = this.createState('idle')

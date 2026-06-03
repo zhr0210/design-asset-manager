@@ -1,0 +1,44 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+
+const ipcSource = await fs.readFile('src/main/ipc/ai-worker.ipc.ts', 'utf8')
+const rendererSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
+const installerSource = await fs.readFile('ai-service/tools/install_macos_ai_deps.py', 'utf8')
+
+assert.match(ipcSource, /ipcMain\.handle\('macos-ai:install-deps'/)
+assert.match(ipcSource, /failedPackages/)
+assert.match(ipcSource, /installedPackages/)
+assert.match(ipcSource, /durationMs/)
+assert.match(ipcSource, /outputTail/)
+assert.match(ipcSource, /JSON\.parse\(line\)/)
+assert.match(ipcSource, /PYTHONPYCACHEPREFIX/)
+assert.match(ipcSource, /ensureMacOSAiPythonRuntime/)
+assert.match(ipcSource, /managed-venv-python/)
+assert.match(ipcSource, /runtime:\s*{[\s\S]*managed:\s*true/)
+assert.doesNotMatch(ipcSource, /console\.log\('\[macos-ai:install-deps\] Running:', pythonExe, installScript\)/)
+
+assert.match(installerSource, /"type": "package-complete"/)
+assert.match(installerSource, /"package": pkg/)
+assert.match(installerSource, /sys\.exit\(1\)/)
+
+assert.match(rendererSource, /failedPackages/)
+assert.match(rendererSource, /installedPackages/)
+assert.match(rendererSource, /managed runtime created|managed runtime reused/)
+assert.match(rendererSource, /macOS AI deps install failed/)
+
+const ocrDependencySource = await fs.readFile('src/main/services/ocr-dependency.service.ts', 'utf8')
+const aiRuntimeIpcSource = await fs.readFile('src/main/ipc/ai-runtime.ipc.ts', 'utf8')
+const aiPythonRuntimeSource = await fs.readFile('src/main/services/ai-python-runtime.service.ts', 'utf8')
+const cooperativeModelIpcSource = await fs.readFile('src/main/ipc/cooperative-model.ipc.ts', 'utf8')
+const modelDownloadSource = await fs.readFile('src/main/services/ai-models/ai-model-download.service.ts', 'utf8')
+
+assert.match(ocrDependencySource, /resolveMacOSAiPythonRuntime/)
+assert.match(ocrDependencySource, /resolveBasePythonExecutable/)
+assert.match(ocrDependencySource, /ensureMacOSAiPythonRuntime/)
+assert.match(ocrDependencySource, /app\.getPath\(name\)/)
+assert.match(aiRuntimeIpcSource, /ai-python-runtime\.service/)
+assert.match(aiRuntimeIpcSource, /resolvePythonExecutable/)
+assert.doesNotMatch(aiRuntimeIpcSource, /ocr-dependency\.service/)
+assert.match(aiPythonRuntimeSource, /resolveMacOSAiPythonRuntime/)
+assert.match(cooperativeModelIpcSource, /ensureMacOSAiPythonRuntime/)
+assert.match(modelDownloadSource, /ensureMacOSAiPythonRuntime/)

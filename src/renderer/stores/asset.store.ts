@@ -129,7 +129,7 @@ interface AssetState {
   resetAssetCaptionEdited: (assetId: string) => Promise<void>
 
   // Mock AI Suggestions pipeline
-  generateMockAiSuggestions: (assetId: string, modelsToRun?: string[]) => Promise<void>
+  generateMockAiSuggestions: (assetId: string, modelsToRun?: string[]) => Promise<{ success: boolean; error?: string }>
 
   // Qwen-VL Senior Deep Analysis
   generateDeepAnalysis: (assetId: string) => Promise<void>
@@ -579,53 +579,67 @@ export const useAssetStore = create<AssetState>((set, get) => ({
     }
   },
 
-  // Mock AI Suggestions trigger
+  // Real AI tagging trigger. Mock fallbacks are intentionally blocked in product UI.
   generateMockAiSuggestions: async (assetId, modelsToRun?: string[]) => {
-    if (api) {
-      try {
-        const asset = get().assets.find((a: Asset) => a.id === assetId)
-        if (!asset) return
+    if (!api) {
+      return { success: false, error: 'Electron API is unavailable.' }
+    }
 
-        // 1. Try to contact the active Python REST server first
-        console.log('[Store] Dispatching enqueues to Python AI Worker REST service...')
-        const tagRes = await api.aiEnqueueTag(assetId, asset.filePath, 0, modelsToRun)
-        
-        if (tagRes && tagRes.success) {
-          // If server is responsive, trigger WD Tagger batch processing
-          await api.aiProcessBatch()
-          
-          // Poll the asset status from SQLite until it is synced/completed or failed
-          let isComplete = false
-          const startTime = Date.now()
-          // Maximum wait time of 45 seconds to prevent infinite loop (model preheat might take some time)
-          while (!isComplete && (Date.now() - startTime < 45000)) {
-            // Load the updated assets list
-            await get().loadAssets()
-            const updatedAsset = get().assets.find((a: Asset) => a.id === assetId)
-            
-            if (updatedAsset) {
-              const status = updatedAsset.aiTagStatus
-              if (status === 'synced' || status === 'completed' || status === 'failed') {
-                isComplete = true
-                break
-              }
-            }
-            // Wait 500ms before polling again
-            await new Promise(resolve => setTimeout(resolve, 500))
-          }
-        } else {
-          // Trigger local SQLite mock recommendations fallback directly
-          console.warn('[Store] AI REST server unresponsive. Executing local database mock fallback...')
-          await api.mockAiGenerateSuggestions(assetId)
-        }
-      } catch (err) {
-        console.warn('[Store] AI REST connection failed. Running local database mock fallback...', err)
-        await api.mockAiGenerateSuggestions(assetId)
-      } finally {
-        await get().loadAssetTags(assetId)
-        await get().loadAssets()
-        await get().loadTags()
+    try {
+      const asset = get().assets.find((a: Asset) => a.id === assetId)
+      if (!asset) {
+        return { success: false, error: 'Asset not found in library.' }
       }
+
+      console.log('[Store] Dispatching tag enqueue to Python AI Worker REST service...')
+      const tagRes = await api.aiEnqueueTag(assetId, asset.filePath, 0, modelsToRun)
+      if (!tagRes?.success) {
+        return {
+          success: false,
+          error: tagRes?.error || 'Python AI Worker 未连接，已阻止本地 mock 标签写入。'
+        }
+      }
+
+      const batchRes = await api.aiProcessBatch()
+      if (!batchRes?.success) {
+        return {
+          success: false,
+          error: batchRes?.error || 'Python AI Worker 未能启动真实打标批处理。'
+        }
+      }
+
+      let finalStatus = 'running'
+      const startTime = Date.now()
+      while (Date.now() - startTime < 45000) {
+        await get().loadAssets()
+        const updatedAsset = get().assets.find((a: Asset) => a.id === assetId)
+        if (updatedAsset) {
+          finalStatus = updatedAsset.aiTagStatus
+          if (finalStatus === 'synced' || finalStatus === 'completed' || finalStatus === 'failed') {
+            break
+          }
+        }
+        await new Promise(resolve => setTimeout(resolve, 500))
+      }
+
+      if (finalStatus === 'failed') {
+        return { success: false, error: '真实 AI 打标任务失败，请检查 Python Worker 日志和模型依赖。' }
+      }
+
+      if (finalStatus !== 'synced' && finalStatus !== 'completed') {
+        return { success: false, error: '真实 AI 打标任务超时，未写入 mock 标签。' }
+      }
+
+      return { success: true }
+    } catch (err: any) {
+      return {
+        success: false,
+        error: `真实 AI 打标不可用，已阻止 mock fallback：${err?.message || String(err)}`
+      }
+    } finally {
+      await get().loadAssetTags(assetId)
+      await get().loadAssets()
+      await get().loadTags()
     }
   },
 

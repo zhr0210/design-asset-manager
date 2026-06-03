@@ -92,6 +92,7 @@ export function getPythonModelCacheEnv(): NodeJS.ProcessEnv {
     TORCH_HOME: path.join(root, 'torch'),
     EASYOCR_MODULE_PATH: path.join(root, 'easyocr'),
     PADDLEOCR_HOME: path.join(root, 'paddleocr'),
-    XDG_CACHE_HOME: path.join(root, 'cache')
+    XDG_CACHE_HOME: path.join(root, 'cache'),
+    DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1'
   }
 }

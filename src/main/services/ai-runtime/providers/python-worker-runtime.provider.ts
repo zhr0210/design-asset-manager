@@ -7,7 +7,7 @@ import type {
   PythonWorkerProcessState,
   PythonWorkerRuntimeConfig
 } from '../ai-runtime.types'
-import { MockAiRuntimeProcessRunner } from '../process/mock-ai-runtime-process-runner'
+import { RealAiRuntimeProcessRunner } from '../process/real-ai-runtime-process-runner'
 import type { AiRuntimeProcessRunner } from '../process/ai-runtime-process-runner.types'
 import { createPythonWorkerLaunchPlan } from './python-worker-launch-plan'
 import { createDefaultPythonWorkerRuntimeConfig } from './python-worker-runtime-presets'
@@ -48,7 +48,7 @@ export class PythonWorkerRuntimeProvider implements AiRuntimeProvider {
   private processState: PythonWorkerProcessState | null = null
   private readonly processRunner: AiRuntimeProcessRunner
 
-  constructor(config: Partial<PythonWorkerRuntimeConfig> = {}, processRunner: AiRuntimeProcessRunner = new MockAiRuntimeProcessRunner()) {
+  constructor(config: Partial<PythonWorkerRuntimeConfig> = {}, processRunner: AiRuntimeProcessRunner = new RealAiRuntimeProcessRunner()) {
     this.config = createDefaultPythonWorkerRuntimeConfig(config)
     this.processRunner = processRunner
     this.state = this.createState('idle')
@@ -109,13 +109,13 @@ export class PythonWorkerRuntimeProvider implements AiRuntimeProvider {
       this.state = {
         ...this.createState('failed'),
         healthStatus: 'error',
-        lastError: error instanceof Error ? error.message : 'Python worker mock process spawn failed'
+        lastError: error instanceof Error ? error.message : 'Python worker process spawn failed'
       }
 
       return {
         success: false,
         state: this.getState(),
-        error: this.state.lastError ?? 'Python worker mock process spawn failed'
+        error: this.state.lastError ?? 'Python worker process spawn failed'
       }
     }
   }
@@ -169,7 +169,7 @@ export class PythonWorkerRuntimeProvider implements AiRuntimeProvider {
       return {
         runtimeId: this.config.runtimeId,
         status: 'ok',
-        message: 'Python worker mock process is running',
+        message: 'Python worker process is running',
         checkedAt,
         durationMs: Date.now() - startedAt
       }
@@ -233,7 +233,7 @@ export class PythonWorkerRuntimeProvider implements AiRuntimeProvider {
         ...this.state,
         status: latestProcess.exitCode === 0 ? 'unhealthy' : 'failed',
         healthStatus: latestProcess.exitCode === 0 ? 'warning' : 'error',
-        lastError: `Python worker mock process exited with code ${latestProcess.exitCode}`
+        lastError: `Python worker process exited with code ${latestProcess.exitCode}`
       }
     }
   }

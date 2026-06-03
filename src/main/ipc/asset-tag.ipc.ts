@@ -122,6 +122,12 @@ export function registerAssetTagIpc() {
   // Mock AI predictions trigger
   ipcMain.handle('mock-ai:generate-suggestions', async (_, assetId: string) => {
     try {
+      if (process.env.DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI_TAGS !== '1') {
+        return {
+          success: false,
+          error: 'Mock AI tag generation is disabled. Start and configure the real AI Worker before running smart tagging.'
+        }
+      }
       const suggestions = mockAiService.generateSuggestionsForAsset(assetId)
       return { success: true, suggestions }
     } catch (err) {

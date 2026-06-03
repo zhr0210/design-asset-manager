@@ -1,7 +1,9 @@
+from __future__ import annotations
 import os
 import re
 import random
 from typing import List, Dict, Any
+from core.mock_policy import guard_mock_inference
 
 class Florence2TaggerModel:
     """
@@ -9,8 +11,9 @@ class Florence2TaggerModel:
     visual grounding, detailed captioning, OCR text extraction, 
     and a production-grade robust mock fallback mechanism.
     """
-    def __init__(self, model_id: str = "microsoft/Florence-2-large"):
+    def __init__(self, model_id: str = "microsoft/Florence-2-large", local_path: str | None = None):
         self.model_id = model_id
+        self.local_path = local_path
         self.is_loaded = False
         self.is_mock = False
         self.backend = "mock"
@@ -25,6 +28,7 @@ class Florence2TaggerModel:
             return
             
         if self.is_mock:
+            guard_mock_inference("Florence-2", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
             return
@@ -37,14 +41,19 @@ class Florence2TaggerModel:
             device = "cuda" if torch.cuda.is_available() else "cpu"
             print(f"[Florence2TaggerModel] PyTorch device: {device}")
             
+            # Use local_path if provided, otherwise HF repo id
+            load_source = self.local_path if self.local_path else self.model_id
+            if self.local_path:
+                print(f"[Florence2TaggerModel] Using local model path: {self.local_path}")
+            
             # Florence-2 requires trust_remote_code=True
             self.model = AutoModelForCausalLM.from_pretrained(
-                self.model_id, 
+                load_source, 
                 trust_remote_code=True,
                 torch_dtype=torch.float16 if device == "cuda" else torch.float32,
                 attn_implementation="eager"
             )
-            self.processor = AutoProcessor.from_pretrained(self.model_id, trust_remote_code=True)
+            self.processor = AutoProcessor.from_pretrained(load_source, trust_remote_code=True)
             self.model.to(device)
             
             self.backend = f"Florence-2 PyTorch ({device.upper()})"
@@ -52,6 +61,7 @@ class Florence2TaggerModel:
             print(f"[Florence2TaggerModel] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
             print(f"[Florence2TaggerModel] Failed loading real Florence-2 model: {e}. Activating mock fallback.")
+            guard_mock_inference("Florence-2", str(e))
             self.is_mock = True
             self.backend = "mock"
             self.is_loaded = True
@@ -75,6 +85,7 @@ class Florence2TaggerModel:
 
         # 1. Handle Mock Prediction Fallback
         if self.is_mock or not self.model or not self.processor:
+            guard_mock_inference("Florence-2", "No real Florence-2 model and processor are loaded.")
             return self._simulate_mock_prediction(image_path, task_prompt)
 
         # 2. Real Florence-2 causal generation pass
@@ -127,12 +138,14 @@ class Florence2TaggerModel:
             }
         except Exception as e:
             print(f"[Florence2TaggerModel] Causal generation failed: {e}. Falling back to mock prediction.")
+            guard_mock_inference("Florence-2", str(e))
             return self._simulate_mock_prediction(image_path, task_prompt)
 
     def _simulate_mock_prediction(self, image_path: str, task_prompt: str) -> Dict[str, Any]:
         """
         Create a high-fidelity mock OCR and Caption outputs by extracting Chinese/English characters from filename.
         """
+        guard_mock_inference("Florence-2", "Direct mock prediction was requested.")
         filename = os.path.basename(image_path)
         filename_no_ext, _ = os.path.splitext(filename)
         filename_lower = filename.lower()

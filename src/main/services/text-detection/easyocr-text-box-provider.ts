@@ -1,10 +1,10 @@
 import { ITextBoxProvider } from './text-box-provider.types'
 import type { TextBox } from '../../../shared/types/color-palette.types'
 import { spawn } from 'child_process'
-import path from 'path'
 import fs from 'fs'
 import { resolvePythonExecutable } from '../ocr-dependency.service'
 import { getPythonModelCacheEnv } from '../ai-models/ai-model-registry'
+import { resolveAiServicePath } from '../ai-service-paths'
 
 export class EasyOcrColorTextBoxProvider implements ITextBoxProvider {
   private config: { timeoutMs: number; minConfidence: number; maxTextBoxes: number }
@@ -16,9 +16,7 @@ export class EasyOcrColorTextBoxProvider implements ITextBoxProvider {
   public async detect(imagePath: string, _assetId?: string): Promise<TextBox[]> {
     const pythonExe = resolvePythonExecutable()
     
-    // Resolve absolute path to easyocr_color_worker.py in workspace
-    const workspace = process.cwd()
-    const workerPath = path.resolve(workspace, 'ai-service', 'ocr_workers', 'easyocr_color_worker.py')
+    const workerPath = resolveAiServicePath(['ocr_workers', 'easyocr_color_worker.py'])
     
     console.log(`[EasyOcrColorTextBoxProvider] Spawning easyocr worker: ${workerPath} for image: ${imagePath} using ${pythonExe}`)
 

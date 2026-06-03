@@ -15,6 +15,7 @@ from core.clip_siglip_onnx_compat import probe_clip_siglip_onnx_environment
 from core.python_mps_compat import probe_python_mps_environment
 from core.gpu_monitor import get_gpu_status
 from core.macos_ai_capabilities import probe_macos_ai_capabilities
+from core.mock_policy import is_strict_real_ai
 from schemas.tag_schema import TagEnqueueRequest
 from schemas.prompt_schema import PromptGenerateRequest
 from schemas.analysis_schema import AnalysisGenerateRequest
@@ -49,6 +50,15 @@ app = FastAPI(
 # Core Singletons
 task_queue = TaskQueue()
 model_manager = ModelManager()
+
+@app.get("/health")
+async def health():
+    """Lightweight health endpoint for Electron runtime management."""
+    return {
+        "success": True,
+        "service": "ai-worker",
+        "strict_real_ai": is_strict_real_ai()
+    }
 
 @app.post("/ai/tag/enqueue", status_code=202)
 async def enqueue_tag(request: TagEnqueueRequest):
@@ -94,6 +104,12 @@ async def tag_status():
 @app.post("/ai/prompt/generate", status_code=202)
 async def generate_prompt(request: PromptGenerateRequest, background_tasks: BackgroundTasks):
     """Triggers manual JoyCaption prompt generation in the background."""
+    if is_strict_real_ai():
+        raise HTTPException(
+            status_code=501,
+            detail="Python PromptWorker mock path is disabled in production. Use the Qwen3-VL Llama/OpenAI-compatible prompt route."
+        )
+
     task_id = f"task-prompt-{uuid.uuid4().hex[:8]}"
     task_queue.enqueue(
         task_id=task_id,
@@ -129,6 +145,12 @@ async def prompt_status(task_id: str):
 @app.post("/ai/analysis/generate", status_code=202)
 async def generate_analysis(request: AnalysisGenerateRequest, background_tasks: BackgroundTasks):
     """Triggers manual Qwen2.5-VL layout design analysis in the background."""
+    if is_strict_real_ai():
+        raise HTTPException(
+            status_code=501,
+            detail="Python AnalysisWorker mock path is disabled in production. Use a real VLM analysis backend."
+        )
+
     task_id = f"task-analysis-{uuid.uuid4().hex[:8]}"
     task_queue.enqueue(
         task_id=task_id,
@@ -192,6 +214,7 @@ async def model_status():
         
     return {
         "loaded_models": loaded,
+        "cooperative_models": model_manager.get_cooperative_status(),
         "gpu_status": gpu,
         "wd_tagger_config": {
             "model_id": "SmilingWolf/wd-vit-tagger-v3",

@@ -1,14 +1,17 @@
+from __future__ import annotations
 import os
 import random
 from typing import List, Dict, Any, Tuple
+from core.mock_policy import guard_mock_inference
 
 class CLIPDesignClassifier:
     """
     CLIP / SigLIP zero-shot design classifier supporting ONNX, 
     transformers load strategies, and a premium robust mock fallback mechanism.
     """
-    def __init__(self, model_id: str = "laion/CLIP-ViT-B-32-laion2B-s34B-b79K"):
+    def __init__(self, model_id: str = "laion/CLIP-ViT-B-32-laion2B-s34B-b79K", local_path: str | None = None):
         self.model_id = model_id
+        self.local_path = local_path
         self.is_loaded = False
         self.is_mock = False
         self.backend = "mock"
@@ -24,6 +27,7 @@ class CLIPDesignClassifier:
             return
             
         if self.is_mock:
+            guard_mock_inference("CLIP/SigLIP", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
             return
@@ -37,9 +41,13 @@ class CLIPDesignClassifier:
             device = "cuda" if torch.cuda.is_available() else "cpu"
             print(f"[CLIPDesignClassifier] PyTorch device: {device}")
             
-            # Use local cache or transformers offline mode if available
-            self.model = CLIPModel.from_pretrained(self.model_id, local_files_only=False)
-            self.processor = CLIPProcessor.from_pretrained(self.model_id)
+            # Use local_path if provided, otherwise HF repo id
+            load_source = self.local_path if self.local_path else self.model_id
+            if self.local_path:
+                print(f"[CLIPDesignClassifier] Using local model path: {self.local_path}")
+            
+            self.model = CLIPModel.from_pretrained(load_source, local_files_only=bool(self.local_path))
+            self.processor = CLIPProcessor.from_pretrained(load_source)
             self.model.to(device)
             
             self.backend = f"CLIP PyTorch ({device.upper()})"
@@ -47,6 +55,7 @@ class CLIPDesignClassifier:
             print(f"[CLIPDesignClassifier] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
             print(f"[CLIPDesignClassifier] Failed loading real CLIP model: {e}. Activating mock fallback.")
+            guard_mock_inference("CLIP/SigLIP", str(e))
             self.is_mock = True
             self.backend = "mock"
             self.is_loaded = True
@@ -64,6 +73,7 @@ class CLIPDesignClassifier:
 
         # 1. Handle Mock Classifier Fallback
         if self.is_mock or not self.model or not self.processor:
+            guard_mock_inference("CLIP/SigLIP", "No real CLIP/SigLIP model and processor are loaded.")
             return self._simulate_mock_classification(image_path, candidate_tags, top_n)
 
         # 2. Real CLIP forward pass
@@ -127,12 +137,14 @@ class CLIPDesignClassifier:
             
         except Exception as e:
             print(f"[CLIPDesignClassifier] Inference error: {e}. Falling back to mock calculation.")
+            guard_mock_inference("CLIP/SigLIP", str(e))
             return self._simulate_mock_classification(image_path, candidate_tags, top_n)
 
     def _simulate_mock_classification(self, image_path: str, candidate_tags: List[str], top_n: int) -> List[Tuple[str, float]]:
         """
         Simulate a highly relevant zero-shot similarity matching using filename semantic heuristics.
         """
+        guard_mock_inference("CLIP/SigLIP", "Direct mock classification was requested.")
         filename_lower = os.path.basename(image_path).lower()
         results = []
         

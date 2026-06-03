@@ -5,6 +5,7 @@ import { resolvePythonExecutable } from '../services/ocr-dependency.service'
 import fs from 'fs'
 import path from 'path'
 import { spawn } from 'child_process'
+import { resolveAiServicePath } from '../services/ai-service-paths'
 
 export function registerAiModelIpc() {
   const service = AiModelDownloadService.getInstance()
@@ -62,7 +63,7 @@ export function registerAiModelIpc() {
     }
 
     const pythonPath = resolvePythonExecutable()
-    const scriptPath = path.resolve(process.cwd(), 'ai-service', 'tools', 'check_qwen3vl_model_compat.py')
+    const scriptPath = resolveAiServicePath(['tools', 'check_qwen3vl_model_compat.py'])
 
     return new Promise((resolve) => {
       let stdout = ''

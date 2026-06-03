@@ -3,6 +3,7 @@ import re
 from typing import Dict, Any, List
 from core.model_manager import ModelManager
 from models.clip_design_classifier import CLIPDesignClassifier
+from core.mock_policy import guard_mock_inference
 
 class VisualRouter:
     """
@@ -403,6 +404,7 @@ class VisualRouter:
 
         # 1. Handle Mock Zero-Shot Route Fallback contextually
         if clip_model.is_mock:
+            guard_mock_inference("VisualRouter CLIP classification", "CLIP model is in mock mode.")
             return self._simulate_mock_visual_scores(file_path)
 
         # 2. Real CLIP forward pass
@@ -412,6 +414,7 @@ class VisualRouter:
             
             expanded_path = os.path.expanduser(file_path)
             if not os.path.exists(expanded_path):
+                guard_mock_inference("VisualRouter CLIP classification", "Input image path is unavailable.")
                 return self._simulate_mock_visual_scores(file_path)
 
             image = Image.open(expanded_path).convert("RGB")
@@ -435,6 +438,7 @@ class VisualRouter:
 
         except Exception as e:
             print(f"[VisualRouter] CLIP visual classification failed: {e}. Falling back to mock signals.")
+            guard_mock_inference("VisualRouter CLIP classification", str(e))
             return self._simulate_mock_visual_scores(file_path)
 
     def _simulate_mock_visual_scores(self, file_path: str) -> Dict[str, float]:
@@ -442,6 +446,7 @@ class VisualRouter:
         Simulate a highly robust, realistic visual classification output
         based on filenames and extensions when running in mock mode.
         """
+        guard_mock_inference("VisualRouter CLIP classification", "Direct mock visual scores were requested.")
         filename_lower = os.path.basename(file_path).lower()
         _, ext = os.path.splitext(filename_lower)
         

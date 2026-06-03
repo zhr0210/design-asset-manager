@@ -25,7 +25,7 @@ const defaultLlamaBackend: AiBackendConfig = {
 }
 
 const defaultPromptReverseSettings: AiPromptReverseSettings = {
-  backendMode: 'native-qwen3vl',
+  backendMode: 'llama-openai',
   selectedNativeModelId: 'qwen3-vl-4b-instruct',
   selectedExternalBackendId: 'llama-local-openai',
   selectedExternalModel: '',

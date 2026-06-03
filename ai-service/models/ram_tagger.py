@@ -1,14 +1,18 @@
+from __future__ import annotations
 import os
 import random
+from pathlib import Path
 from typing import List, Dict, Any
+from core.mock_policy import guard_mock_inference
 
 class RAMTaggerModel:
     """
     RAM / RAM++ (Recognize Anything Model) wrapper class
     supporting robust model weights loading and premium mock fallbacks.
     """
-    def __init__(self, model_id: str = "xinyu1205/recognize-anything-plus-model"):
+    def __init__(self, model_id: str = "xinyu1205/recognize-anything-plus-model", local_path: str | None = None):
         self.model_id = model_id
+        self.local_path = local_path
         self.is_loaded = False
         self.is_mock = False
         self.backend = "mock"
@@ -23,6 +27,7 @@ class RAMTaggerModel:
             return
             
         if self.is_mock:
+            guard_mock_inference("RAM++", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
             return
@@ -40,11 +45,20 @@ class RAMTaggerModel:
                 from ram import inference_ram as inference
                 
                 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-                # Try loading from local file
-                # In real scenario we look for model path
-                model_path = os.path.expanduser("~/DesignAssetManager/models/ram_plus_swin_large_14m.pth")
+                
+                # Look for .pth file in local_path if provided, otherwise default
+                if self.local_path and os.path.isdir(self.local_path):
+                    # Find any .pth file in the downloaded directory
+                    pth_files = list(Path(self.local_path).glob("*.pth"))
+                    if pth_files:
+                        model_path = str(pth_files[0])
+                    else:
+                        model_path = self.local_path
+                else:
+                    model_path = os.path.expanduser("~/DesignAssetManager/models/ram_plus_swin_large_14m.pth")
+                
                 if not os.path.exists(model_path):
-                    raise FileNotFoundError(f"RAM weights not cached at: {model_path}")
+                    raise FileNotFoundError(f"RAM weights not found at: {model_path}")
                     
                 self.model = ram_plus(pretrained=model_path, image_size=384, vit='swin_l')
                 self.model.eval()
@@ -61,11 +75,13 @@ class RAMTaggerModel:
                 print(f"[RAMTaggerModel] RAM++ loaded successfully! Backend: {self.backend}")
             except Exception as import_err:
                 print(f"[RAMTaggerModel] Real RAM++ dependencies or weights not resolved: {import_err}. Using mock fallback.")
+                guard_mock_inference("RAM++", str(import_err))
                 self.is_mock = True
                 self.backend = "mock"
                 self.is_loaded = True
         except Exception as e:
             print(f"[RAMTaggerModel] RAM loading failed: {e}. Fallback to mock active.")
+            guard_mock_inference("RAM++", str(e))
             self.is_mock = True
             self.backend = "mock"
             self.is_loaded = True
@@ -82,6 +98,7 @@ class RAMTaggerModel:
         
         # 1. Handle Mock Prediction Fallback
         if self.is_mock or not self.model:
+            guard_mock_inference("RAM++", "No real RAM++ model instance is loaded.")
             for path in image_paths:
                 results.append(self._simulate_mock_prediction(path))
             return results
@@ -129,12 +146,14 @@ class RAMTaggerModel:
             return results
         except Exception as e:
             print(f"[RAMTaggerModel] Batch inference error: {e}. Falling back to mock predictions.")
+            guard_mock_inference("RAM++", str(e))
             return [self._simulate_mock_prediction(path) for path in image_paths]
 
     def _simulate_mock_prediction(self, path: str) -> List[Dict[str, Any]]:
         """
         Contextual mock tagger simulating RAM++ general image tag prediction.
         """
+        guard_mock_inference("RAM++", "Direct mock prediction was requested.")
         filename_lower = os.path.basename(path).lower()
         
         # Default high-quality tags for mock photography/scenery

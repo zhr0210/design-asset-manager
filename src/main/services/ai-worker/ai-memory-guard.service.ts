@@ -1,9 +1,9 @@
 import { spawn } from 'child_process'
 import { resolvePythonExecutable } from '../ocr-dependency.service'
-import path from 'path'
 import fs from 'fs'
 import type { AiGpuMonitorService } from './ai-gpu-monitor.service'
 import type { ClearGpuMemoryResult } from '../../../shared/types/ai-worker.types'
+import { resolveAiServicePath } from '../ai-service-paths'
 
 export class AiMemoryGuardService {
   private pythonExe: string
@@ -11,7 +11,7 @@ export class AiMemoryGuardService {
 
   constructor(private gpuMonitor: AiGpuMonitorService) {
     this.pythonExe = resolvePythonExecutable()
-    this.clearScriptPath = path.resolve(process.cwd(), 'ai-service', 'tools', 'clear_gpu_memory.py')
+    this.clearScriptPath = resolveAiServicePath(['tools', 'clear_gpu_memory.py'])
   }
 
   public async clearGpuMemory(reason: string): Promise<ClearGpuMemoryResult> {

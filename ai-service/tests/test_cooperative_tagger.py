@@ -205,6 +205,10 @@ class TestCooperativeTagger(unittest.IsolatedAsyncioTestCase):
             self.assertIn("role", status[name])
             self.assertIn("loaded", status[name])
             self.assertIn("backend", status[name])
+            self.assertIn("readiness", status[name])
+            self.assertIn("state", status[name]["readiness"])
+            self.assertIn("missing_dependencies", status[name]["readiness"])
+            self.assertIn("missing_files", status[name]["readiness"])
 
 if __name__ == "__main__":
     unittest.main()

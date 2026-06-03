@@ -1,5 +1,6 @@
 import random
 from typing import Dict, Any
+from core.mock_policy import guard_mock_inference
 
 class QwenVL:
     def __init__(self):
@@ -8,6 +9,7 @@ class QwenVL:
 
     def analyze_design(self, image_path: str) -> Dict[str, Any]:
         """Simulates Qwen2.5-VL deep design analysis with the required structured layout, OCR, and tags."""
+        guard_mock_inference("Qwen-VL deep analysis", "The current QwenVL worker is a template-based mock implementation.")
         layouts = [
             {
                 "ocr_text": "面包烘焙 焦糖坚果 Fresh Bread Caramel & Nuts",

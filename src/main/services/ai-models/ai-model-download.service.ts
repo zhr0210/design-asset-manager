@@ -1,9 +1,9 @@
 import { spawn } from 'child_process'
-import { resolvePythonExecutable } from '../ocr-dependency.service'
-import path from 'path'
+import { ensureMacOSAiPythonRuntime } from '../ocr-dependency.service'
 import fs from 'fs'
 import type { WebContents } from 'electron'
 import { getModelLocalPath, getPythonModelCacheEnv, PROMPT_VLM_MODELS } from './ai-model-registry'
+import { resolveAiServicePath } from '../ai-service-paths'
 
 export class AiModelDownloadService {
   private static instance: AiModelDownloadService
@@ -28,8 +28,12 @@ export class AiModelDownloadService {
     }
 
     const localDir = getModelLocalPath(model)
-    const pythonExe = resolvePythonExecutable()
-    const downloadScript = path.resolve(process.cwd(), 'ai-service', 'tools', 'download_hf_model.py')
+    const runtime = await ensureMacOSAiPythonRuntime()
+    if (!runtime.success) {
+      throw new Error(`Managed Python runtime unavailable: ${runtime.error ?? 'unknown'}`)
+    }
+    const pythonExe = runtime.pythonPath
+    const downloadScript = resolveAiServicePath(['tools', 'download_hf_model.py'])
 
     if (!fs.existsSync(downloadScript)) {
       throw new Error(`Download script not found at: ${downloadScript}`)

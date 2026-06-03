@@ -10,6 +10,12 @@ function buildHealthUrl(config: PythonWorkerRuntimeConfig): string | null {
   return `${normalizedBase}${normalizedEndpoint}`
 }
 
+function currentProcessEnv(): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === 'string')
+  )
+}
+
 export function createPythonWorkerLaunchPlan(config: PythonWorkerRuntimeConfig): PythonWorkerLaunchPlan {
   const args = config.scriptPath
     ? [
@@ -26,7 +32,7 @@ export function createPythonWorkerLaunchPlan(config: PythonWorkerRuntimeConfig):
     command: config.pythonPath,
     args,
     cwd: config.workingDirectory,
-    env: { ...config.env },
+    env: { ...currentProcessEnv(), ...config.env },
     healthUrl: buildHealthUrl(config),
     timeoutMs: config.timeoutMs,
     warnings: [],

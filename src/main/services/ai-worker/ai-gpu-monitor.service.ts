@@ -1,8 +1,8 @@
 import { spawn } from 'child_process'
 import { resolvePythonExecutable } from '../ocr-dependency.service'
-import path from 'path'
 import fs from 'fs'
 import type { GpuStatus } from '../../../shared/types/ai-worker.types'
+import { resolveAiServicePath } from '../ai-service-paths'
 
 export class AiGpuMonitorService {
   private pythonExe: string
@@ -10,7 +10,7 @@ export class AiGpuMonitorService {
 
   constructor() {
     this.pythonExe = resolvePythonExecutable()
-    this.scriptPath = path.resolve(process.cwd(), 'ai-service', 'tools', 'gpu_memory_probe.py')
+    this.scriptPath = resolveAiServicePath(['tools', 'gpu_memory_probe.py'])
   }
 
   public async getGpuStatus(): Promise<GpuStatus> {
