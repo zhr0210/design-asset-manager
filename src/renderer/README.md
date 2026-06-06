@@ -18,7 +18,7 @@ React UI for library browsing, downloading, settings, tags, AI console, and asse
 - Preserve existing preload API usage.
 - Renderer should display Platform AI Branch Status projection from main process, not recompute Runtime Probe or Model Readiness meaning.
 - Renderer should use shared Platform AI Branch Status candidate selection for macOS/Windows channel responses instead of inspecting workflow statuses locally.
-- Renderer AI route overview should use shared branch-aware display projection; macOS dependency actions and MPS/MLX diagnostics must not render for Windows or an unknown branch.
+- Renderer AI route overview should use shared branch-aware display projection; macOS dependency actions and MPS diagnostics must not render for Windows or an unknown branch.
 - Renderer cooperative model rows should consume the shared Worker readiness snapshot and combined row projection instead of redeclaring Worker payload fields or composing artifact state locally.
 - Renderer AI runtime panels should consume shared status display projection for macOS capability matrix labels and badge classes instead of defining local status maps.
 - Renderer AI runtime cards should consume shared runtime/health badge, icon-semantic, health-result, and summary projections instead of filtering or labeling runtime states locally.
@@ -38,6 +38,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.9 | 2026-06-06 | Added a manual CLIP/SigLIP real Embedding action and shared evidence display in AI Runtime management. |
 | v1.4.8 | 2026-06-05 | Renamed the real asset-tagging action and left submission normalization in Electron main. |
 | v1.4.7 | 2026-06-05 | Unified cooperative Worker readiness input and model-row composition through shared contracts. |
 | v1.4.6 | 2026-06-05 | Made AI Console route overview branch-aware and removed macOS-only diagnostics/actions from Windows and unknown branch states. |

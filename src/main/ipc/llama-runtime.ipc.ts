@@ -19,6 +19,7 @@ import type {
   LlamaServerControlRequest,
   LlamaStartInstallRequest
 } from '../../shared/contracts/llama-runtime.contract'
+import { recordLlamaMultimodalProbe } from '../services/ai-runtime/llama-multimodal-evidence.store'
 
 export function registerLlamaRuntimeIpc() {
   const service = LlamaRuntimeInstallService.getInstance()
@@ -53,7 +54,9 @@ export function registerLlamaRuntimeIpc() {
   })
 
   ipcMain.handle(CHANNEL_LLAMA_RUNTIME_TEST_SERVER, async (_, request?: LlamaServerControlRequest) => {
-    return service.testServer(request?.baseUrl)
+    const result = await service.testServer(request?.baseUrl)
+    recordLlamaMultimodalProbe(result)
+    return result
   })
 
   ipcMain.handle('llama-runtime:open-install-root', async () => {

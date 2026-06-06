@@ -16,7 +16,10 @@ import {
   projectMacOSAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
   projectPythonMpsExecutionProbeDisplay,
-  projectPythonMpsCompatibilityDisplay
+  projectPythonMpsCompatibilityDisplay,
+  projectPythonCudaCompatibilityDisplay,
+  projectPythonCudaExecutionProbeDisplay,
+  projectWindowsAiWorkerProbeDisplay
 } from '../src/shared/workflows/ai-runtime-status.workflow'
 
 const pythonUnchecked = projectPythonMpsCompatibilityDisplay(null, 'offline')
@@ -126,6 +129,21 @@ const onnxLoaded = projectOnnxModelLoadProbeDisplay({
 assert.equal(onnxLoaded.label, '真实加载通过')
 assert.equal(onnxLoaded.tone, 'good')
 assert.match(onnxLoaded.detail, /CoreMLExecutionProvider/)
+
+const clipEmbeddingLoaded = projectOnnxModelLoadProbeDisplay({
+  success: true,
+  modelFamily: 'clip',
+  status: 'loaded_real',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  providers: ['CPUExecutionProvider'],
+  inputCount: 3,
+  outputCount: 4,
+  operation: 'image_text_embedding',
+  resultFinite: true,
+  embeddingDimension: 512
+})
+assert.equal(clipEmbeddingLoaded.label, '真实 Embedding 通过')
+assert.match(clipEmbeddingLoaded.detail, /512 维/)
 
 const onnxMissing = projectOnnxModelLoadProbeDisplay({
   success: false,
@@ -319,7 +337,6 @@ assert.equal(uncheckedProbe.connectionTone, 'muted')
 assert.equal(uncheckedProbe.mps.valueLabel, '尚未探测')
 assert.equal(uncheckedProbe.onnxRuntime.valueLabel, '尚未探测')
 assert.equal(uncheckedProbe.clipSiglipOnnx.valueLabel, '尚未探测')
-assert.equal(uncheckedProbe.mlx.valueLabel, '尚未探测')
 assert.equal(uncheckedProbe.clipSiglipStatusLabel, '证据不足')
 
 const connectedProbe = projectMacOSAiWorkerProbeDisplay({
@@ -343,11 +360,6 @@ const connectedProbe = projectMacOSAiWorkerProbeDisplay({
     coremlAvailable: true,
     cpuAvailable: true,
     error: null
-  },
-  mlx: {
-    available: false,
-    version: null,
-    error: 'missing'
   },
   clipSiglipOnnx: {
     id: 'clip-siglip-onnx',
@@ -373,7 +385,53 @@ assert.equal(connectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(connectedProbe.onnxRuntime.captionLabel, 'CoreMLExecutionProvider / CPUExecutionProvider')
 assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '依赖缺失')
 assert.equal(connectedProbe.clipSiglipOnnx.captionLabel, '已探测，未报告版本')
-assert.equal(connectedProbe.mlx.valueLabel, '依赖缺失')
+
+// Add Windows capability display tests
+const windowsUncheckedProbe = projectWindowsAiWorkerProbeDisplay(null)
+assert.equal(windowsUncheckedProbe.connected, false)
+assert.equal(windowsUncheckedProbe.cuda.valueLabel, '尚未探测')
+assert.equal(windowsUncheckedProbe.onnxRuntime.valueLabel, '尚未探测')
+
+const windowsConnectedProbe = projectWindowsAiWorkerProbeDisplay({
+  platform: 'win32',
+  machine: 'amd64',
+  isMacOS: false,
+  isAppleSilicon: false,
+  phase: 'worker-probes',
+  torch: {
+    available: true,
+    version: '2.8.0+cu121',
+    cudaAvailable: true,
+    cpuFallback: false,
+    error: null
+  },
+  onnxruntime: {
+    available: true,
+    version: '1.22.0',
+    providers: ['CUDAExecutionProvider', 'CPUExecutionProvider'],
+    cudaAvailable: true,
+    cpuAvailable: true,
+    error: null
+  },
+  clipSiglipOnnx: {
+    id: 'clip-siglip-onnx',
+    label: 'CLIP/SigLIP ONNX',
+    status: 'ready',
+    role: 'embedding',
+    backend: 'optimum',
+    version: '1.22.0',
+    available: true,
+    error: null
+  },
+  lanes: []
+})
+assert.equal(windowsConnectedProbe.connected, true)
+assert.equal(windowsConnectedProbe.connectionLabel, 'Windows 探测已连接')
+assert.equal(windowsConnectedProbe.cuda.valueLabel, '可用')
+assert.equal(windowsConnectedProbe.cuda.captionLabel, 'torch 2.8.0+cu121')
+assert.equal(windowsConnectedProbe.onnxRuntime.valueLabel, '可用')
+assert.equal(windowsConnectedProbe.onnxRuntime.captionLabel, 'CUDAExecutionProvider / CPUExecutionProvider')
+assert.equal(windowsConnectedProbe.clipSiglipOnnx.valueLabel, '就绪')
 
 const settingsPanelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
 const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
@@ -381,6 +439,8 @@ const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx
 assert.match(settingsPanelSource, /projectPythonMpsCompatibilityDisplay/)
 assert.match(settingsPanelSource, /projectPythonMpsExecutionProbeDisplay/)
 assert.match(settingsPanelSource, /projectClipSiglipOnnxCompatibilityDisplay/)
+assert.match(settingsPanelSource, /验证真实 Embedding/)
+assert.match(settingsPanelSource, /runOnnxModelLoadProbe\('clip'\)/)
 assert.match(settingsPanelSource, /projectAiRuntimeStatusDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeSummaryDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeHealthResultDisplay/)

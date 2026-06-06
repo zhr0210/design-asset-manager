@@ -39,6 +39,27 @@ export interface MacOSAiBranchRuntimeMetadata {
   warnings: string[]
 }
 
+export type WindowsAiRuntimeLaneId = 'python-cuda' | 'onnx-runtime' | 'llama'
+
+export interface WindowsAiRuntimeLane {
+  id: WindowsAiRuntimeLaneId
+  label: string
+  status: MacOSAiCapabilityStatus
+  summary: string
+  capabilities: MacOSAiRuntimeCapability[]
+  fallbackCapabilityIds: string[]
+}
+
+export interface WindowsAiBranchRuntimeMetadata {
+  marker: 'windows-ai-branch'
+  phase: 'skeleton' | 'worker-probes' | 'model-download' | 'validated'
+  platform: PlatformName
+  arch: PlatformArch
+  isCurrentPlatform: boolean
+  lanes: WindowsAiRuntimeLane[]
+  warnings: string[]
+}
+
 export interface MacOSAiWorkerCapabilityProbe {
   id: string
   label: string
@@ -81,9 +102,31 @@ export interface MacOSAiWorkerProbeResult {
     cpuAvailable: boolean
     error: string | null
   }
-  mlx: {
+  clipSiglipOnnx: MacOSAiWorkerCapabilityProbe
+  lanes: MacOSAiWorkerLaneProbe[]
+}
+
+export interface WindowsAiWorkerProbeResult {
+  platform: string
+  machine: string
+  isMacOS: boolean
+  isAppleSilicon: boolean
+  phase: 'worker-probes'
+  torch: {
     available: boolean
     version: string | null
+    cudaBuilt: boolean
+    cudaAvailable: boolean
+    cpuFallback: boolean
+    error: string | null
+  }
+  onnxruntime: {
+    available: boolean
+    version: string | null
+    providers: string[]
+    cudaAvailable: boolean
+    dmlAvailable: boolean
+    cpuAvailable: boolean
     error: string | null
   }
   clipSiglipOnnx: MacOSAiWorkerCapabilityProbe

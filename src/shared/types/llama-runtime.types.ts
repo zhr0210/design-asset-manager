@@ -113,7 +113,11 @@ export interface LlamaServerTestResult {
   success: boolean;
   baseUrl: string;
   models: string[];
+  modelId?: string;
   chatOk: boolean;
+  visionOk: boolean;
+  visionInput: 'generated_fixture';
+  checkedAt: string;
   error?: {
     code: string;
     message: string;

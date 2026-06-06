@@ -32,7 +32,6 @@ def main() -> None:
         "transformers",
         "onnxruntime",
         "optimum[onnxruntime]",
-        "mlx",
         "accelerate",
         "safetensors",
         "timm",

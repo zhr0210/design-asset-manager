@@ -30,6 +30,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - AI queue display summaries and row labels should use shared projection so overview and runtime panels show the same queue vocabulary.
 - Download queue status labels, row metadata, file-size labels, progress labels, progress tones, search-result action labels, active counts, and topbar/sidebar download indicators should use shared projection rather than route-local status checks.
 - AI runtime compatibility and Llama runtime display states should use shared projection so Settings and AI Console share the same status vocabulary.
+- Llama service health is runtime evidence only. `real_model_path` requires a fresh successful text plus generated-image inference probe through GGUF/mmproj.
 - macOS AI capability matrix status labels and badge classes should use shared AI Runtime Status projection rather than component-local status maps.
 - AI Runtime panel runtime/health badges, icon semantics, health-result copy, and summary counts should use shared AI Runtime Status projection rather than renderer-local status maps or filters.
 - macOS Worker probe connection and route tiles should use shared projection; a missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
@@ -58,6 +59,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.3 | 2026-06-06 | Extended ONNX probe contracts with CLIP image/text embedding operation, finite-result, and dimension evidence. |
 | v1.8.2 | 2026-06-06 | Added shared MPS real-execution probe contract and display projection without promoting model workflow readiness. |
 | v1.8.1 | 2026-06-06 | Added path-free, time-bounded WD Tagger ONNX real-load evidence for the AI Tag workflow. |
 | v1.8.0 | 2026-06-06 | Added shared executable Platform AI Action Plan projection for model, runtime, backend, and evidence-refresh UI operations. |

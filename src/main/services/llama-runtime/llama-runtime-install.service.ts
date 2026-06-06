@@ -27,6 +27,7 @@ import type {
 } from '../../../shared/types/llama-runtime.types'
 import { llamaRuntimeInstallProgressChannel } from '../../../shared/contracts/llama-runtime.contract'
 import type { AiBackendConfig } from '../../../shared/types/ai-backend.types'
+import { probeLlamaServer } from './llama-runtime-server-probe'
 
 const LLAMA_RELEASES_API = 'https://api.github.com/repos/ggml-org/llama.cpp/releases/latest'
 
@@ -437,45 +438,7 @@ export class LlamaRuntimeInstallService {
   }
 
   public async testServer(baseUrl = 'http://127.0.0.1:8080/v1'): Promise<LlamaServerTestResult> {
-    try {
-      const modelsResponse = await fetch(`${baseUrl.replace(/\/$/, '')}/models`, {
-        signal: AbortSignal.timeout(8000)
-      })
-      if (!modelsResponse.ok) {
-        return { success: false, baseUrl, models: [], chatOk: false, error: { code: 'LLAMA_MODELS_FAILED', message: `HTTP ${modelsResponse.status}` } }
-      }
-      const modelsJson: any = await modelsResponse.json()
-      const models = Array.isArray(modelsJson?.data) ? modelsJson.data.map((item: any) => String(item.id)).filter(Boolean) : []
-      const chatResponse = await fetch(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: models[0] ?? 'local-model',
-          messages: [{ role: 'user', content: 'Reply with OK.' }],
-          max_tokens: 8,
-          temperature: 0
-        }),
-        signal: AbortSignal.timeout(15000)
-      })
-      return {
-        success: chatResponse.ok,
-        baseUrl,
-        models,
-        chatOk: chatResponse.ok,
-        error: chatResponse.ok ? undefined : { code: 'LLAMA_CHAT_FAILED', message: `HTTP ${chatResponse.status}` }
-      }
-    } catch (err: any) {
-      return {
-        success: false,
-        baseUrl,
-        models: [],
-        chatOk: false,
-        error: {
-          code: err?.name === 'TimeoutError' ? 'LLAMA_SERVER_TIMEOUT' : 'LLAMA_SERVER_CONNECTION_FAILED',
-          message: sanitizeLlamaLog(err?.message ?? String(err))
-        }
-      }
-    }
+    return probeLlamaServer(baseUrl)
   }
 
   public async checkServerHealth(baseUrl = 'http://127.0.0.1:8080/v1'): Promise<{ running: boolean; models: string[]; error?: string }> {

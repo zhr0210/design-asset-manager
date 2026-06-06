@@ -5,10 +5,10 @@ import unittest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from core.macos_ai_capabilities import probe_macos_ai_capabilities
+from core.windows_ai_capabilities import probe_windows_ai_capabilities
 
 
-class TestMacOSAiCapabilities(unittest.TestCase):
+class TestWindowsAiCapabilities(unittest.TestCase):
     def fake_import(self, modules):
         def _import(name):
             if name not in modules:
@@ -16,16 +16,15 @@ class TestMacOSAiCapabilities(unittest.TestCase):
             return modules[name]
         return _import
 
-    def test_apple_silicon_full_probe_shape(self):
+    def test_windows_full_probe_shape(self):
         torch = types.SimpleNamespace(
             __version__="2.6.0",
-            backends=types.SimpleNamespace(
-                mps=types.SimpleNamespace(is_built=lambda: True, is_available=lambda: True)
-            ),
+            version=types.SimpleNamespace(cuda="12.4"),
+            cuda=types.SimpleNamespace(is_available=lambda: True),
         )
         ort = types.SimpleNamespace(
             __version__="1.20.0",
-            get_available_providers=lambda: ["CoreMLExecutionProvider", "CPUExecutionProvider"],
+            get_available_providers=lambda: ["CUDAExecutionProvider", "CPUExecutionProvider"],
         )
         optimum_onnxruntime = types.SimpleNamespace(__version__="1.20.1")
         ram = types.SimpleNamespace(__version__="1.0.0")
@@ -35,9 +34,9 @@ class TestMacOSAiCapabilities(unittest.TestCase):
         rapidocr = types.SimpleNamespace(__version__="1.0.0")
         paddleocr = types.SimpleNamespace(__version__="1.0.0")
 
-        result = probe_macos_ai_capabilities(
-            platform_name="darwin",
-            machine="arm64",
+        result = probe_windows_ai_capabilities(
+            platform_name="win32",
+            machine="amd64",
             import_module=self.fake_import({
                 "torch": torch,
                 "onnxruntime": ort,
@@ -52,53 +51,49 @@ class TestMacOSAiCapabilities(unittest.TestCase):
             }),
         )
 
-        self.assertTrue(result["isMacOS"])
-        self.assertTrue(result["isAppleSilicon"])
-        self.assertTrue(result["torch"]["mpsAvailable"])
-        self.assertTrue(result["onnxruntime"]["coremlAvailable"])
+        self.assertFalse(result["isMacOS"])
+        self.assertFalse(result["isAppleSilicon"])
+        self.assertEqual(result["platform"], "win32")
+        self.assertTrue(result["torch"]["cudaBuilt"])
+        self.assertTrue(result["torch"]["cudaAvailable"])
+        self.assertTrue(result["onnxruntime"]["cudaAvailable"])
         self.assertTrue(result["clipSiglipOnnx"]["available"])
         self.assertTrue(result["ram"]["available"])
         self.assertTrue(result["rapidocr"]["available"])
         self.assertTrue(result["paddleocr"]["available"])
-        self.assertEqual([lane["id"] for lane in result["lanes"]], ["python-mps", "onnx-runtime", "llama"])
+        self.assertEqual([lane["id"] for lane in result["lanes"]], ["python-cuda", "onnx-runtime", "llama"])
         self.assertEqual(result["lanes"][0]["capabilities"][0]["status"], "optional")
         self.assertEqual(result["lanes"][1]["capabilities"][0]["status"], "optional")
-        self.assertEqual(result["lanes"][1]["capabilities"][3]["status"], "optional")
         self.assertEqual(result["lanes"][2]["status"], "evidence_insufficient")
         self.assertEqual(result["lanes"][2]["capabilities"][0]["status"], "evidence_insufficient")
-        self.assertEqual(result["lanes"][2]["capabilities"][1]["status"], "fallback")
-        self.assertEqual(result["lanes"][0]["capabilities"][0]["modelFamily"], "RAM++")
-        self.assertEqual(result["lanes"][1]["capabilities"][1]["modelFamily"], "RapidOCR")
 
     def test_missing_modules_still_reports_fallbacks(self):
-        result = probe_macos_ai_capabilities(
-            platform_name="darwin",
+        result = probe_windows_ai_capabilities(
+            platform_name="win32",
             machine="x86_64",
             import_module=self.fake_import({}),
         )
 
-        self.assertTrue(result["isMacOS"])
-        self.assertFalse(result["isAppleSilicon"])
+        self.assertFalse(result["isMacOS"])
         self.assertFalse(result["torch"]["available"])
         self.assertFalse(result["onnxruntime"]["available"])
         self.assertFalse(result["clipSiglipOnnx"]["available"])
         self.assertFalse(result["ram"]["available"])
-        self.assertFalse(result["rapidocr"]["available"])
-        self.assertFalse(result["paddleocr"]["available"])
-        self.assertEqual(result["lanes"][0]["capabilities"][0]["modelFamily"], "RAM++")
         self.assertEqual(result["lanes"][0]["status"], "unavailable")
         self.assertEqual(result["lanes"][1]["status"], "unavailable")
         self.assertEqual(result["lanes"][0]["capabilities"][0]["status"], "dependency_missing")
         self.assertEqual(result["lanes"][1]["capabilities"][3]["status"], "dependency_missing")
         self.assertEqual(result["lanes"][2]["status"], "evidence_insufficient")
 
-    def test_non_macos_marks_llama_unavailable_but_keeps_external_fallback(self):
-        result = probe_macos_ai_capabilities(
-            platform_name="win32",
-            machine="x64",
+    def test_non_windows_marks_lanes_unavailable_except_external_fallback(self):
+        result = probe_windows_ai_capabilities(
+            platform_name="darwin",
+            machine="arm64",
             import_module=self.fake_import({}),
         )
 
+        # On non-windows, is_windows is False, so optional status falls back to unavailable
+        self.assertEqual(result["lanes"][0]["capabilities"][0]["status"], "unavailable")
         llama = next(lane for lane in result["lanes"] if lane["id"] == "llama")
         self.assertEqual(llama["status"], "unavailable")
         self.assertEqual(llama["capabilities"][-1]["label"], "external HTTP fallback")

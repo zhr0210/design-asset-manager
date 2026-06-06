@@ -1,7 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw, RotateCcw, ShieldCheck, Star } from 'lucide-react'
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
-import type { MacOSAiBranchRuntimeMetadata, MacOSAiCapabilityStatus, MacOSAiRuntimeLane, MacOSAiWorkerProbeResult } from '../../../shared/types/macos-ai-runtime.types'
+import type {
+  MacOSAiBranchRuntimeMetadata,
+  WindowsAiBranchRuntimeMetadata,
+  MacOSAiCapabilityStatus,
+  MacOSAiRuntimeLane,
+  MacOSAiWorkerProbeResult,
+  WindowsAiWorkerProbeResult
+} from '../../../shared/types/macos-ai-runtime.types'
 import { MacOSAiCapabilityMatrix } from './MacOSAiCapabilityMatrix'
 import type {
   AiRuntimeActiveRuntimeResponse,
@@ -9,9 +16,12 @@ import type {
   AiRuntimeHealthCheckAllResponse,
   AiRuntimeHealthCheckResponse,
   AiRuntimeMacOSCapabilitiesResponse,
+  AiRuntimeWindowsCapabilitiesResponse,
   AiRuntimeOnnxModelLoadProbeResponse,
   AiRuntimePythonMpsExecutionProbeResponse,
   AiRuntimePythonMpsStatusResponse,
+  AiRuntimePythonCudaStatusResponse,
+  AiRuntimePythonCudaExecutionProbeResponse,
   AiRuntimeIpcResponse,
   AiRuntimeListRuntimesResponse,
   AiRuntimeOperationResponse,
@@ -24,13 +34,17 @@ import {
   projectClipSiglipOnnxCompatibilityDisplay,
   projectMacOSAiCapabilityStatusDisplay,
   projectMacOSAiWorkerProbeDisplay,
+  projectWindowsAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
   projectPythonMpsExecutionProbeDisplay,
   projectPythonMpsCompatibilityDisplay,
+  projectPythonCudaExecutionProbeDisplay,
+  projectPythonCudaCompatibilityDisplay,
   projectAiRuntimeInfoLabel,
   projectAiRuntimeDisplayValue,
   projectAiRuntimeActionLabel,
-  getMacOSAiBranchRuntime
+  getMacOSAiBranchRuntime,
+  getWindowsAiBranchRuntime
 } from '../../../shared/workflows/ai-runtime-status.workflow'
 
 type AiRuntimeApi = {
@@ -38,10 +52,13 @@ type AiRuntimeApi = {
   getRuntimeState: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeStateResponse>>
   getActiveRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimeActiveRuntimeResponse>>
   getMacOSCapabilities: () => Promise<AiRuntimeIpcResponse<AiRuntimeMacOSCapabilitiesResponse>>
+  getWindowsCapabilities: () => Promise<AiRuntimeIpcResponse<AiRuntimeWindowsCapabilitiesResponse>>
   getPythonMpsStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonMpsStatusResponse>>
+  getPythonCudaStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonCudaStatusResponse>>
   probePythonMpsRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonMpsExecutionProbeResponse>>
+  probePythonCudaRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonCudaExecutionProbeResponse>>
   getClipSiglipOnnxStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimeClipSiglipOnnxStatusResponse>>
-  probeOnnxModelLoad: () => Promise<AiRuntimeIpcResponse<AiRuntimeOnnxModelLoadProbeResponse>>
+  probeOnnxModelLoad: (request?: { modelFamily?: AiRuntimeOnnxModelLoadProbeResponse['modelFamily'] }) => Promise<AiRuntimeIpcResponse<AiRuntimeOnnxModelLoadProbeResponse>>
   selectActiveRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   startRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   stopRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
@@ -82,17 +99,20 @@ export default function AiRuntimePanel() {
   const [runtimes, setRuntimes] = useState<AiRuntimeState[]>([])
   const [activeRuntime, setActiveRuntime] = useState<AiRuntimeState | null>(null)
   const [healthResults, setHealthResults] = useState<Record<string, AiRuntimeHealthResult>>({})
-  const [macOSWorkerProbe, setMacOSWorkerProbe] = useState<MacOSAiWorkerProbeResult | null>(null)
+  const [macOSWorkerProbe, setMacOSWorkerProbe] = useState<MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null>(null)
   const [macOSWorkerProbeError, setMacOSWorkerProbeError] = useState<string | null>(null)
-  const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
+  const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse | null>(null)
   const [pythonMpsStatusError, setPythonMpsStatusError] = useState<string | null>(null)
-  const [pythonMpsExecutionProbe, setPythonMpsExecutionProbe] = useState<AiRuntimePythonMpsExecutionProbeResponse | null>(null)
+  const [pythonMpsExecutionProbe, setPythonMpsExecutionProbe] = useState<AiRuntimePythonMpsExecutionProbeResponse | AiRuntimePythonCudaExecutionProbeResponse | null>(null)
   const [pythonMpsExecutionProbeError, setPythonMpsExecutionProbeError] = useState<string | null>(null)
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [clipSiglipOnnxStatusError, setClipSiglipOnnxStatusError] = useState<string | null>(null)
   const [onnxModelLoadProbe, setOnnxModelLoadProbe] = useState<AiRuntimeOnnxModelLoadProbeResponse | null>(null)
   const [onnxModelLoadProbeError, setOnnxModelLoadProbeError] = useState<string | null>(null)
+  const [clipOnnxExecutionProbe, setClipOnnxExecutionProbe] = useState<AiRuntimeOnnxModelLoadProbeResponse | null>(null)
+  const [clipOnnxExecutionProbeError, setClipOnnxExecutionProbeError] = useState<string | null>(null)
   const [probingOnnxModel, setProbingOnnxModel] = useState(false)
+  const [probingClipOnnx, setProbingClipOnnx] = useState(false)
   const [probingPythonMps, setProbingPythonMps] = useState(false)
   const [loading, setLoading] = useState(false)
   const [busyRuntimeId, setBusyRuntimeId] = useState<string | null>(null)
@@ -101,27 +121,44 @@ export default function AiRuntimePanel() {
 
   const activeRuntimeId = activeRuntime?.id ?? null
   const hasRuntimes = runtimes.length > 0
+
+  const isWindows = useMemo(() => {
+    const winBranch = getWindowsAiBranchRuntime(runtimes)
+    return Boolean(winBranch?.isCurrentPlatform)
+  }, [runtimes])
+
   const macosAiBranch = useMemo(() => getMacOSAiBranchRuntime(runtimes), [runtimes])
+  const windowsAiBranch = useMemo(() => getWindowsAiBranchRuntime(runtimes), [runtimes])
 
   const runtimeSummary = useMemo(() => {
     return projectAiRuntimeSummaryDisplay(runtimes)
   }, [runtimes])
 
   const pythonMpsDisplay = useMemo(() => {
-    return projectPythonMpsCompatibilityDisplay(pythonMpsStatus, pythonMpsStatusError)
-  }, [pythonMpsStatus, pythonMpsStatusError])
+    if (isWindows) {
+      return projectPythonCudaCompatibilityDisplay(pythonMpsStatus as AiRuntimePythonCudaStatusResponse, pythonMpsStatusError)
+    }
+    return projectPythonMpsCompatibilityDisplay(pythonMpsStatus as AiRuntimePythonMpsStatusResponse, pythonMpsStatusError)
+  }, [isWindows, pythonMpsStatus, pythonMpsStatusError])
 
   const clipSiglipDisplay = useMemo(() => {
     return projectClipSiglipOnnxCompatibilityDisplay(clipSiglipOnnxStatus, clipSiglipOnnxStatusError)
   }, [clipSiglipOnnxStatus, clipSiglipOnnxStatusError])
 
   const pythonMpsExecutionDisplay = useMemo(() => {
-    return projectPythonMpsExecutionProbeDisplay(pythonMpsExecutionProbe, pythonMpsExecutionProbeError)
-  }, [pythonMpsExecutionProbe, pythonMpsExecutionProbeError])
+    if (isWindows) {
+      return projectPythonCudaExecutionProbeDisplay(pythonMpsExecutionProbe as AiRuntimePythonCudaExecutionProbeResponse, pythonMpsExecutionProbeError)
+    }
+    return projectPythonMpsExecutionProbeDisplay(pythonMpsExecutionProbe as AiRuntimePythonMpsExecutionProbeResponse, pythonMpsExecutionProbeError)
+  }, [isWindows, pythonMpsExecutionProbe, pythonMpsExecutionProbeError])
 
   const onnxModelLoadDisplay = useMemo(() => {
     return projectOnnxModelLoadProbeDisplay(onnxModelLoadProbe, onnxModelLoadProbeError)
   }, [onnxModelLoadProbe, onnxModelLoadProbeError])
+
+  const clipOnnxExecutionDisplay = useMemo(() => {
+    return projectOnnxModelLoadProbeDisplay(clipOnnxExecutionProbe, clipOnnxExecutionProbeError)
+  }, [clipOnnxExecutionProbe, clipOnnxExecutionProbeError])
 
   const loadRuntimes = async () => {
     const api = getAiRuntimeApi()
@@ -136,31 +173,41 @@ export default function AiRuntimePanel() {
     setPythonMpsStatusError(null)
     setClipSiglipOnnxStatusError(null)
     try {
-      const [listResponse, activeResponse, macOSProbeResponse, pythonMpsResponse] = await Promise.all([
-        api.listRuntimes(),
-        api.getActiveRuntime(),
-        api.getMacOSCapabilities(),
-        api.getPythonMpsStatus()
-      ])
+      const listResponse = await api.listRuntimes()
       if (!listResponse.success || !listResponse.data) throw new Error(listResponse.error || '读取 AI 运行时列表失败。')
-      if (!activeResponse.success) throw new Error(activeResponse.error || '读取当前 AI 运行时失败。')
-      setRuntimes(listResponse.data.runtimes)
-      setActiveRuntime(activeResponse.data ?? null)
-      if (macOSProbeResponse.success && macOSProbeResponse.data) {
-        setMacOSWorkerProbe(macOSProbeResponse.data.capabilities)
-        setMacOSWorkerProbeError(macOSProbeResponse.data.error ?? null)
+      const currentRuntimes = listResponse.data.runtimes
+      setRuntimes(currentRuntimes)
+
+      const winMetadata = getWindowsAiBranchRuntime(currentRuntimes)
+      const currentIsWin = Boolean(winMetadata?.isCurrentPlatform)
+
+      const [activeResponse, probeResponse, pythonStatusResponse, clipSiglipResponse] = await Promise.all([
+        api.getActiveRuntime(),
+        currentIsWin ? api.getWindowsCapabilities() : api.getMacOSCapabilities(),
+        currentIsWin ? api.getPythonCudaStatus() : api.getPythonMpsStatus(),
+        api.getClipSiglipOnnxStatus()
+      ])
+
+      if (activeResponse.success) {
+        setActiveRuntime(activeResponse.data ?? null)
+      }
+
+      if (probeResponse.success && probeResponse.data) {
+        setMacOSWorkerProbe(probeResponse.data.capabilities)
+        setMacOSWorkerProbeError(probeResponse.data.error ?? null)
       } else {
         setMacOSWorkerProbe(null)
-        setMacOSWorkerProbeError(macOSProbeResponse.error || '读取 macOS Worker 能力失败。')
+        setMacOSWorkerProbeError(probeResponse.error || (currentIsWin ? '读取 Windows Worker 能力失败。' : '读取 macOS Worker 能力失败。'))
       }
-      if (pythonMpsResponse.success && pythonMpsResponse.data) {
-        setPythonMpsStatus(pythonMpsResponse.data)
-        setPythonMpsStatusError(pythonMpsResponse.data.error ?? null)
+
+      if (pythonStatusResponse.success && pythonStatusResponse.data) {
+        setPythonMpsStatus(pythonStatusResponse.data)
+        setPythonMpsStatusError(pythonStatusResponse.data.error ?? null)
       } else {
         setPythonMpsStatus(null)
-        setPythonMpsStatusError(pythonMpsResponse.error || '读取 Python MPS 兼容性失败。')
+        setPythonMpsStatusError(pythonStatusResponse.error || (currentIsWin ? '读取 Python CUDA 兼容性失败。' : '读取 Python MPS 兼容性失败。'))
       }
-      const clipSiglipResponse = await api.getClipSiglipOnnxStatus()
+
       if (clipSiglipResponse.success && clipSiglipResponse.data) {
         setClipSiglipOnnxStatus(clipSiglipResponse.data)
         setClipSiglipOnnxStatusError(clipSiglipResponse.data.error ?? null)
@@ -259,28 +306,38 @@ export default function AiRuntimePanel() {
     }
   }
 
-  const runOnnxModelLoadProbe = async () => {
+  const runOnnxModelLoadProbe = async (modelFamily: AiRuntimeOnnxModelLoadProbeResponse['modelFamily'] = 'wd_tagger') => {
     const api = getAiRuntimeApi()
     if (!api) {
       setError('当前运行环境未暴露 AI 运行时接口。')
       return
     }
 
-    setProbingOnnxModel(true)
+    const isClip = modelFamily === 'clip'
+    if (isClip) setProbingClipOnnx(true)
+    else setProbingOnnxModel(true)
     setError(null)
-    setOnnxModelLoadProbeError(null)
+    if (isClip) setClipOnnxExecutionProbeError(null)
+    else setOnnxModelLoadProbeError(null)
     try {
-      const response = await api.probeOnnxModelLoad()
+      const response = await api.probeOnnxModelLoad({ modelFamily })
       if (!response.success || !response.data) throw new Error(response.error || 'ONNX 模型加载验证失败。')
-      setOnnxModelLoadProbe(response.data)
-      setLastAction('WD Tagger ONNX 真实加载验证')
+      if (isClip) setClipOnnxExecutionProbe(response.data)
+      else setOnnxModelLoadProbe(response.data)
+      setLastAction(isClip ? 'CLIP/SigLIP ONNX 真实 Embedding 验证' : 'WD Tagger ONNX 真实加载验证')
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
-      setOnnxModelLoadProbe(null)
-      setOnnxModelLoadProbeError(message)
+      if (isClip) {
+        setClipOnnxExecutionProbe(null)
+        setClipOnnxExecutionProbeError(message)
+      } else {
+        setOnnxModelLoadProbe(null)
+        setOnnxModelLoadProbeError(message)
+      }
       setError(message)
     } finally {
-      setProbingOnnxModel(false)
+      if (isClip) setProbingClipOnnx(false)
+      else setProbingOnnxModel(false)
     }
   }
 
@@ -295,10 +352,10 @@ export default function AiRuntimePanel() {
     setError(null)
     setPythonMpsExecutionProbeError(null)
     try {
-      const response = await api.probePythonMpsRuntime()
-      if (!response.success || !response.data) throw new Error(response.error || 'MPS 真实执行验证失败。')
+      const response = isWindows ? await api.probePythonCudaRuntime() : await api.probePythonMpsRuntime()
+      if (!response.success || !response.data) throw new Error(response.error || (isWindows ? 'CUDA 真实执行验证失败。' : 'MPS 真实执行验证失败。'))
       setPythonMpsExecutionProbe(response.data)
-      setLastAction('Python MPS 真实执行验证')
+      setLastAction(isWindows ? 'Python CUDA 真实执行验证' : 'Python MPS 真实执行验证')
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
       setPythonMpsExecutionProbe(null)
@@ -332,14 +389,19 @@ export default function AiRuntimePanel() {
         运行时操作会经过 Electron 主进程的安全 IPC。外部服务、模型下载和运行时安装仍由各自模块管理，不会在本面板自动触发。
       </div>
 
-      {macosAiBranch && <MacOSAiBranchPanel branch={macosAiBranch} />}
-      <MacOSAiWorkerProbePanel probe={macOSWorkerProbe} error={macOSWorkerProbeError} />
+      {macosAiBranch?.isCurrentPlatform && <PlatformAiBranchPanel branch={macosAiBranch} />}
+      {windowsAiBranch?.isCurrentPlatform && <PlatformAiBranchPanel branch={windowsAiBranch} />}
+      <PlatformAiWorkerProbePanel probe={macOSWorkerProbe} error={macOSWorkerProbeError} isWindows={isWindows} />
       <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">Python MPS 兼容性检查</div>
+            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">
+              {isWindows ? 'Python CUDA 兼容性检查' : 'Python MPS 兼容性检查'}
+            </div>
             <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-              这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。
+              {isWindows
+                ? '这个检查器会确认 PyTorch CUDA、torchvision、transformers 与小模型家族是否已经具备可用的 Windows 兼容性。'
+                : '这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。'}
             </div>
           </div>
           <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsDisplay.toneClass}`}>
@@ -366,9 +428,13 @@ export default function AiRuntimePanel() {
       <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
-            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">Python MPS 真实执行验证</div>
+            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">
+              {isWindows ? 'Python CUDA 真实执行验证' : 'Python MPS 真实执行验证'}
+            </div>
             <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-              手动执行一次固定张量运算。该结果只证明 torch.mps 可执行，不代表任何模型已经加载或完成推理。
+              {isWindows
+                ? '手动执行一次固定张量运算。该结果只证明 torch.cuda 可执行，不代表任何模型已经加载或完成推理。'
+                : '手动执行一次固定张量运算。该结果只证明 torch.mps 可执行，不代表任何模型已经加载或完成推理。'}
             </div>
           </div>
           <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsExecutionDisplay.toneClass}`}>
@@ -380,7 +446,7 @@ export default function AiRuntimePanel() {
             {pythonMpsExecutionDisplay.detail}
           </div>
           <PanelButton onClick={runPythonMpsExecutionProbe} disabled={probingPythonMps} icon={probingPythonMps ? Loader2 : Activity}>
-            {probingPythonMps ? '正在验证...' : '验证 MPS 执行'}
+            {probingPythonMps ? '正在验证...' : isWindows ? '验证 CUDA 执行' : '验证 MPS 执行'}
           </PanelButton>
         </div>
       </div>
@@ -390,7 +456,9 @@ export default function AiRuntimePanel() {
           <div>
             <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">CLIP/SigLIP ONNX 兼容性检查</div>
             <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-              这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。
+              {isWindows
+                ? '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 Windows 的 embedding 路线。'
+                : '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。'}
             </div>
           </div>
           <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${clipSiglipDisplay.toneClass}`}>
@@ -412,6 +480,23 @@ export default function AiRuntimePanel() {
             {clipSiglipOnnxStatusError}
           </div>
         )}
+        <div className="mt-3 flex flex-col gap-3 border-t border-slate-100 pt-3 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+          <div className="text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
+            {clipOnnxExecutionDisplay.detail}
+          </div>
+          <PanelButton
+            onClick={() => runOnnxModelLoadProbe('clip')}
+            disabled={probingClipOnnx}
+            icon={probingClipOnnx ? Loader2 : Activity}
+          >
+            {probingClipOnnx ? '正在验证...' : '验证真实 Embedding'}
+          </PanelButton>
+        </div>
+        {clipOnnxExecutionProbe && (
+          <div className={`mt-2 text-[10.5px] font-black ${clipOnnxExecutionDisplay.toneClass}`}>
+            {clipOnnxExecutionDisplay.label}
+          </div>
+        )}
       </div>
 
       <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
@@ -430,7 +515,7 @@ export default function AiRuntimePanel() {
           <div className="text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
             {onnxModelLoadDisplay.detail}
           </div>
-          <PanelButton onClick={runOnnxModelLoadProbe} disabled={probingOnnxModel} icon={probingOnnxModel ? Loader2 : ShieldCheck}>
+          <PanelButton onClick={() => runOnnxModelLoadProbe('wd_tagger')} disabled={probingOnnxModel} icon={probingOnnxModel ? Loader2 : ShieldCheck}>
             {probingOnnxModel ? '正在验证...' : '验证真实加载'}
           </PanelButton>
         </div>
@@ -497,14 +582,20 @@ export default function AiRuntimePanel() {
   )
 }
 
-function MacOSAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata }) {
+function PlatformAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata | WindowsAiBranchRuntimeMetadata }) {
+  const isWindows = branch.marker === 'windows-ai-branch'
   return (
     <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
-          <div className="text-[13px] font-black text-slate-900">macOS AI 分支</div>
+          <div className="text-[13px] font-black text-slate-900">
+            {isWindows ? 'Windows AI 分支' : 'macOS AI 分支'}
+          </div>
           <div className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
-            Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。当前阶段：{branch.phase} / {branch.platform}/{branch.arch}
+            {isWindows
+              ? 'Python CUDA、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。'
+              : 'Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经 macOS 实时探测的条目统一显示为证据不足。'}
+            当前阶段：{branch.phase} / {branch.platform}/{branch.arch}
           </div>
         </div>
         <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${branch.isCurrentPlatform ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-white text-slate-500'}`}>
@@ -525,16 +616,33 @@ function MacOSAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata }
   )
 }
 
-function MacOSAiWorkerProbePanel({ probe, error }: { probe: MacOSAiWorkerProbeResult | null; error: string | null }) {
-  const probeDisplay = useMemo(() => projectMacOSAiWorkerProbeDisplay(probe), [probe])
+function PlatformAiWorkerProbePanel({
+  probe,
+  error,
+  isWindows
+}: {
+  probe: MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null
+  error: string | null
+  isWindows: boolean
+}) {
+  const probeDisplay = useMemo(() => {
+    if (isWindows) {
+      return projectWindowsAiWorkerProbeDisplay(probe as WindowsAiWorkerProbeResult)
+    }
+    return projectMacOSAiWorkerProbeDisplay(probe as MacOSAiWorkerProbeResult)
+  }, [isWindows, probe])
 
   return (
     <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
-          <div className="text-[13px] font-black text-slate-900">macOS Worker 实时探测</div>
+          <div className="text-[13px] font-black text-slate-900">
+            {isWindows ? 'Windows Worker 实时探测' : 'macOS Worker 实时探测'}
+          </div>
           <div className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
-            这里显示 Python Worker 当前探测到的 MPS、ONNX Runtime 和 MLX 状态，帮助确认真实运行时能力是否已经可用。
+            {isWindows
+              ? '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
+              : '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'}
           </div>
         </div>
         <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${probeDisplay.platformBadgeClass}`}>
@@ -558,7 +666,7 @@ function MacOSAiWorkerProbePanel({ probe, error }: { probe: MacOSAiWorkerProbeRe
         </div>
       )}
 
-      <MacOSAiCapabilityMatrix probe={probe} />
+      <MacOSAiCapabilityMatrix probe={probe} isWindows={isWindows} />
 
       {error && (
         <div className="mt-3 rounded-xl border border-amber-100 bg-amber-50/80 p-3 text-[10.5px] font-bold leading-5 text-amber-700">

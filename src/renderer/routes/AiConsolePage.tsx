@@ -1365,6 +1365,9 @@ export default function AiConsolePage() {
         baseUrl: 'http://127.0.0.1:8080/v1',
         models: [],
         chatOk: false,
+        visionOk: false,
+        visionInput: 'generated_fixture',
+        checkedAt: new Date().toISOString(),
         error: { code: 'BRIDGE_UNAVAILABLE', message: '当前环境无法访问桌面端 Llama 连接测试接口。' }
       })
       showToast('Llama 连接测试接口不可用')
@@ -1376,8 +1379,9 @@ export default function AiConsolePage() {
     try {
       const result = await api.llamaRuntimeTestServer({ baseUrl: 'http://127.0.0.1:8080/v1' })
       setLlamaTest(result)
-      showToast(result.success ? 'Llama 连接测试成功' : 'Llama 连接测试失败')
-      pushLog(result.success ? `Llama server test passed: ${result.models.join(', ') || 'no model name'}` : `Llama server test failed: ${result.error?.message || 'unknown error'}`)
+      showToast(result.success ? 'Llama 文本与视觉推理验证成功' : 'Llama 推理验证失败')
+      pushLog(result.success ? `Llama multimodal test passed: ${result.modelId || 'local model'}` : `Llama server test failed: ${result.error?.message || 'unknown error'}`)
+      await fetchConsoleStatus()
     } finally {
       setBusy('llama-test', false)
     }
@@ -1866,7 +1870,6 @@ function OverviewWorkspace(props: {
                 <RuntimeTile label="ONNX Runtime" value={macOSProbeDisplay.onnxRuntime.valueLabel} caption={macOSProbeDisplay.onnxRuntime.captionLabel} />
                 <RuntimeTile label="CLIP/SigLIP ONNX" value={macOSProbeDisplay.clipSiglipOnnx.valueLabel} caption={macOSProbeDisplay.clipSiglipOnnx.captionLabel} />
                 <RuntimeTile label="CLIP/SigLIP 兼容性" value={clipSiglipOnnxDisplay.label} caption={clipSiglipOnnxDisplay.runtimeLabel} />
-                <RuntimeTile label="MLX" value={macOSProbeDisplay.mlx.valueLabel} caption={macOSProbeDisplay.mlx.captionLabel} />
               </>
             ) : routeOverviewDisplay.runtimeLanes.map((lane) => (
               <RuntimeTile
@@ -2646,9 +2649,25 @@ function BackendsWorkspace(props: {
           <div>物理显存：{props.llamaHardware?.totalVramGB ? `${props.llamaHardware.totalVramGB} GB` : '未知'}</div>
           <div>安装方案：{props.llamaPlan ? `${props.llamaPlan.accelerator} / ${props.llamaPlan.recommendedModel.name}` : '尚未生成'}</div>
           <div>服务状态：{llamaDisplay.serviceDetailValue}</div>
-          <div>当前 GGUF：{props.llamaStatus?.modelPath ? props.llamaStatus.modelPath.split(/[\\/]/).pop() : '未选择'}</div>
-          <div>mmproj：{props.llamaStatus?.mmprojPath ? props.llamaStatus.mmprojPath.split(/[\\/]/).pop() : '未加载'}</div>
-          {props.llamaTest && <div className={props.llamaTest.success ? 'text-emerald-600 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-300'}>连接测试：{props.llamaTest.success ? '连接成功' : props.llamaTest.error?.message || '无法连接'}</div>}
+          <div>
+            当前 GGUF：{props.llamaStatus?.modelPath
+              ? props.llamaStatus.modelPath.split(/[\\/]/).pop()
+              : props.llamaTest?.modelId ?? '未选择'}
+          </div>
+          <div>
+            mmproj：{props.llamaStatus?.mmprojPath
+              ? props.llamaStatus.mmprojPath.split(/[\\/]/).pop()
+              : props.llamaTest?.visionOk
+                ? '图像推理已验证'
+                : '未加载'}
+          </div>
+          {props.llamaTest && (
+            <div className={props.llamaTest.success ? 'text-emerald-600 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-300'}>
+              多模态验证：{props.llamaTest.success
+                ? 'GGUF 文本与 mmproj 图像推理通过'
+                : props.llamaTest.error?.message || '验证失败'}
+            </div>
+          )}
         </div>
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
           <div className="mb-3 text-[12px] font-black text-slate-800 dark:text-slate-200">已安装 GGUF 模型</div>

@@ -44,11 +44,10 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
     {
       workflow: 'ai_prompt_task',
       title: 'AI Prompt Task',
-      summary: 'Qwen3-VL prompt reverse through Llama, MLX, native Python experiment, or external HTTP fallback.',
+      summary: 'Qwen3-VL prompt reverse through Llama, native Python experiment, or external HTTP fallback.',
       primaryRuntimeLane: 'llama_metal',
       runtimeLanes: [
         { lane: 'llama_metal', label: 'Llama Metal', runtimeKinds: ['llama-app', 'custom-http'] },
-        { lane: 'mlx', label: 'MLX', runtimeKinds: ['python-worker'] },
         { lane: 'external_http', label: 'External HTTP', runtimeKinds: ['ollama', 'lm-studio', 'custom-http'] },
         { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] }
       ]

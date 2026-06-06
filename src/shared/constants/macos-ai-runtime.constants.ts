@@ -63,11 +63,10 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
       id: 'llama',
       label: 'Llama',
       status: llamaStatus,
-      summary: 'Large vision route for Qwen3-VL GGUF/MLX, Qwen2.5-VL Ollama fallback, and external HTTP fallback.',
+      summary: 'Large vision route for Qwen3-VL GGUF, Qwen2.5-VL Ollama fallback, and external HTTP fallback.',
       fallbackCapabilityIds: ['llama.qwen25-vl-ollama', 'llama.external-http'],
       capabilities: [
         capability('llama.qwen3-vl-gguf', 'Qwen3-VL GGUF', llamaStatus, 'prompt-reverse', 'Qwen3-VL', 'llama.cpp Metal'),
-        capability('llama.qwen3-vl-mlx', 'Qwen3-VL MLX', isAppleSilicon ? 'planned' : 'fallback', 'prompt-reverse', 'Qwen3-VL', 'MLX'),
         capability('llama.qwen25-vl-ollama', 'Qwen2.5-VL Ollama fallback', isMacOS ? 'fallback' : 'unavailable', 'prompt-reverse', 'Qwen2.5-VL', 'Ollama'),
         capability('llama.external-http', 'external HTTP fallback', 'fallback', 'fallback', undefined, 'OpenAI-compatible HTTP')
       ]
@@ -83,7 +82,7 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
     lanes,
     warnings: [
       'Phase 1 exposes macOS AI branch lanes and route metadata only; it does not claim model downloads or worker probes are complete.',
-      'Qwen3-VL large vision should route through llama.cpp Metal, MLX, Ollama fallback, or external HTTP instead of the native CUDA Python path.'
+      'Qwen3-VL large vision should route through llama.cpp Metal, Ollama fallback, or external HTTP instead of the native CUDA Python path.'
     ]
   }
 }

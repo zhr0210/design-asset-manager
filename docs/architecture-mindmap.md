@@ -130,7 +130,6 @@ mindmap
         Python MPS
         ONNX Runtime
         llama.cpp Metal
-        MLX
       External Inference / 外部推理
         Ollama
         LM Studio
@@ -276,15 +275,15 @@ flowchart TB
   WinLarge --> WinService["llama.app / llama.cpp / Ollama quantized service / 量化服务"]
 
   MacBranch --> MacSmall["Small models through Python MPS / ONNX Runtime / 小模型走 Python MPS 或 ONNX Runtime"]
-  MacBranch --> MacLarge["Qwen3-VL large vision through llama.app / llama.cpp Metal / MLX / 大视觉走 Metal 或 MLX"]
+  MacBranch --> MacLarge["Qwen3-VL large vision through llama.cpp Metal / GGUF + mmproj / 大视觉走 Metal 与 GGUF + mmproj"]
   MacBranch --> MacConsole["AI Console lane cards / AI Console 分支卡片"]
   MacSmall --> MacWorker["Capability-routed Python Worker / 能力路由后的 Python Worker"]
-  MacLarge --> MacService["OpenAI-compatible local service or MLX route / OpenAI-compatible 本地服务或 MLX 路线"]
+  MacLarge --> MacService["OpenAI-compatible local service / OpenAI-compatible 本地服务"]
 ```
 
- Windows 和 macOS 共享产品工作流、结果 schema、IPC surface、设置概念和 Electron-owned queue sync。它们不应该共享一个单体模型执行假设：CUDA VRAM policy 是 Windows-specific，而 macOS 需要 MPS、ONNX、Metal 和 MLX-specific capability routing。当前已把 macOS AI branch lanes 作为只读 runtime metadata 接入 AI Console，并通过 worker capability probe bridge 读取实时 MPS / ONNX / MLX 以及 RAM++、Florence-2、CLIP/SigLIP、WD14、RapidOCR、PaddleOCR 的家族级探测结果；AI Console 里也增加了 macOS route overview；模型下载和真实推理验证仍在后续阶段。
+ Windows 和 macOS 共享产品工作流、结果 schema、IPC surface、设置概念和 Electron-owned queue sync。它们不应该共享一个单体模型执行假设：CUDA VRAM policy 是 Windows-specific，而 macOS 需要 MPS、ONNX 和 Metal-specific capability routing。当前已把 macOS AI branch lanes 作为只读 runtime metadata 接入 AI Console，并通过 worker capability probe bridge 读取实时 MPS / ONNX 以及 RAM++、Florence-2、CLIP/SigLIP、WD14、RapidOCR、PaddleOCR 的家族级探测结果；AI Console 里也增加了 macOS route overview。ADR-0007 移除了没有执行闭环的独立 MLX 产品路线。
 
- Windows and macOS share product workflows, result schemas, IPC surfaces, settings concepts, and Electron-owned queue sync. They should not share one monolithic model-execution assumption: CUDA VRAM policy is Windows-specific, while macOS needs MPS, ONNX, Metal, and MLX-specific capability routing. Phase 1 now exposes macOS AI branch lanes as read-only runtime metadata in AI Console; Worker probes now also surface family-level availability for RAM++, Florence-2, CLIP/SigLIP, WD14, RapidOCR, and PaddleOCR; model downloads and real inference validation remain later phases.
+ Windows and macOS share product workflows, result schemas, IPC surfaces, settings concepts, and Electron-owned queue sync. They should not share one monolithic model-execution assumption: CUDA VRAM policy is Windows-specific, while macOS needs MPS, ONNX, and Metal-specific capability routing. Phase 1 exposes macOS AI branch lanes as read-only runtime metadata in AI Console; Worker probes surface family-level availability for RAM++, Florence-2, CLIP/SigLIP, WD14, RapidOCR, and PaddleOCR. ADR-0007 removes the standalone MLX product route until an executable provider has real inference evidence.
 
 ### 运行时治理流程 / Runtime Governance Flow
 
@@ -320,8 +319,8 @@ Runtime governance is plan-first. Remote sources, runtime package downloads, rea
 | AI 模型 / AI models | RAM++, Florence-2, WD Tagger, CLIP, CLIP/SigLIP ONNX, JoyCaption, Qwen-VL/Qwen3-VL | 打标、caption、反推提示词、路由、视觉分析。 / Tagging, captioning, prompt reverse, routing, visual analysis. |
 | 兼容性检查器 / Compatibility checkers | Python MPS Compatibility Checker, CLIP/SigLIP ONNX Compatibility Checker, Qwen3-VL Compatibility Checker | 在下载或运行前验证本地模型文件夹、依赖和 graph 形状，避免把占位状态误当成可运行状态。 / Verify local model folders, dependencies, and graph shape before download or run so placeholder states are not mistaken for runnable ones. |
 | Windows AI 分支 / Windows AI branch | CUDA AI Worker, llama.app / llama.cpp / Ollama quantized service | 保留现有 CUDA AI Worker 主链路；Qwen3-VL 大视觉推理迁移到量化服务后端。 / Keep existing CUDA AI Worker main chain; move Qwen3-VL large visual inference to quantized service backends. |
-| macOS AI 分支 / macOS AI branch | Python MPS, ONNX Runtime, llama.app / llama.cpp Metal, MLX, Ollama fallback, external HTTP fallback | Phase 1 skeleton 已接入 AI Console，且 worker probe bridge 读取实时 MPS / ONNX / MLX 以及 RAM++、Florence-2、CLIP/SigLIP、CLIP/SigLIP ONNX、WD14、RapidOCR、PaddleOCR 的家族级能力；Python MPS compatibility checker 让 MPS 路线可独立验证；小模型走 Python/ONNX，大型 Qwen3-VL 视觉模型走 Metal/MLX-capable services. / Phase 1 skeleton is connected to AI Console, and the worker probe bridge reads live MPS / ONNX / MLX plus family-level RAM++、Florence-2、CLIP/SigLIP、CLIP/SigLIP ONNX、WD14、RapidOCR、PaddleOCR capability data; the Python MPS compatibility checker makes the MPS route independently probeable; small models use Python/ONNX, large Qwen3-VL visual models use Metal/MLX-capable services. |
-| macOS AI 路线概览 / macOS AI route overview | MPS, ONNX Runtime, MLX, Llama route priority, Ollama fallback, external HTTP fallback | AI Console 总览里展示 macOS 路线优先级、就绪状态、Ollama fallback 和 external HTTP fallback 配置/健康摘要，帮助区分可用、已配置与规划中能力。 / The AI Console overview displays macOS route priority, readiness, Ollama fallback, and external HTTP fallback configuration/health summaries so available, configured, and planned capabilities stay visually separated. |
+| macOS AI 分支 / macOS AI branch | Python MPS, ONNX Runtime, llama.cpp Metal, Ollama fallback, external HTTP fallback | Worker probe bridge 读取 MPS / ONNX 和模型家族级能力；小模型走 Python/ONNX，大型 Qwen3-VL 视觉模型走 llama.cpp Metal 的 GGUF/mmproj 服务边界。 / Worker probes expose MPS / ONNX and model-family capabilities; small models use Python/ONNX, while Qwen3-VL uses the llama.cpp Metal GGUF/mmproj service boundary. |
+| macOS AI 路线概览 / macOS AI route overview | MPS, ONNX Runtime, Llama route priority, Ollama fallback, external HTTP fallback | AI Console 总览展示路线优先级、就绪状态和回退配置/健康摘要。 / The AI Console overview displays route priority, readiness, and fallback configuration/health summaries. |
 | OCR/文本 / OCR/text | EasyOCR, RapidOCR, Qwen-VL text blocks, mock/none providers | 文本框、OCR 文本、文本颜色/可读性分析。 / Text boxes, OCR text, text color/readability analysis. |
 | 本地推理运行时 / Local inference runtime | llama.cpp, llama.app, GGUF, MMProj | 本地 Llama-style multimodal inference planning and service control。 / Local Llama-style multimodal inference planning and service control. |
 | 外部推理 / External inference | Ollama, LM Studio, custom OpenAI-compatible HTTP | 用户配置的推理端点。 / User-configured inference endpoints. |

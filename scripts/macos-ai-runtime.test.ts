@@ -27,9 +27,8 @@ assert.ok(onnx.capabilities.some((capability) => capability.label === 'CPU fallb
 const llama = appleSilicon.lanes.find((lane) => lane.id === 'llama')!
 assert.equal(llama.status, 'evidence_insufficient')
 assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL GGUF' && capability.status === 'evidence_insufficient'))
-assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL MLX' && capability.status === 'planned'))
 assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL GGUF'))
-assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL MLX'))
+assert.ok(!llama.capabilities.some((capability) => capability.label.includes('MLX')))
 assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen2.5-VL Ollama fallback'))
 assert.ok(llama.capabilities.some((capability) => capability.label === 'external HTTP fallback'))
 
@@ -41,7 +40,7 @@ const appleProfile = getRuntimeProfile('macos-apple-silicon')!
 assert.ok(appleProfile.capabilities.includes('python-mps'))
 assert.ok(appleProfile.capabilities.includes('onnx-runtime'))
 assert.ok(appleProfile.capabilities.includes('llama-metal'))
-assert.ok(appleProfile.capabilities.includes('mlx'))
+assert.ok(!appleProfile.capabilities.includes('mlx'))
 assert.ok(appleProfile.recommendedRuntimeKinds.includes('python-worker'))
 assert.ok(appleProfile.recommendedRuntimeKinds.includes('llama-app'))
 assert.ok(appleProfile.recommendedRuntimeKinds.includes('ollama'))

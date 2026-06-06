@@ -16,6 +16,7 @@ Business services for local assets, browser capture, tags, settings, downloads, 
 - `settings.service.ts`: settings persistence.
 - `ai-runtime/platform-ai-branch-status.projector.ts`: workflow-first Windows/macOS AI branch status projection.
 - `ai-runtime/model-artifact-readiness.mapper.ts`: maps existing cooperative/Llama artifact state into shared readiness evidence without scanning model caches.
+- `llama-runtime/llama-runtime-server-probe.ts`: performs a user-triggered text and generated-image probe against the existing OpenAI-compatible Llama endpoint; only successful image inference becomes real-model evidence.
 
 ## Rules
 
@@ -43,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.11 | 2026-06-06 | Added CLIP ONNX image/text embedding evidence and sanitized Python Worker exit summaries. |
 | v1.4.10 | 2026-06-06 | Replaced synthetic Python Worker process tracking with real child-process lifecycle management, bounded logs, shutdown cleanup, and a cold-start capability-probe budget. |
 | v1.4.9 | 2026-06-05 | Added Windows CUDA/Llama lane variants to shared model artifact readiness evidence. |
 | v1.4.8 | 2026-06-05 | Reused the shared Worker cooperative readiness snapshot contract in Model Artifact Readiness mapping. |

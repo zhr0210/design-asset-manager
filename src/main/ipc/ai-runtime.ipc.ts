@@ -7,13 +7,16 @@ import {
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
   CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
+  CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES,
   CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
+  CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS,
   CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
   CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD,
   CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION,
+  CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION,
   CHANNEL_AI_RUNTIME_RESTART_RUNTIME,
   CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_START_RUNTIME,
@@ -21,16 +24,20 @@ import {
   CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG
 } from '../../shared/contracts/ai-runtime.contract'
 import { createMacOSAiBranchRuntimeMetadata } from '../../shared/constants/macos-ai-runtime.constants'
+import { createWindowsAiBranchRuntimeMetadata } from '../../shared/constants/windows-ai-runtime.constants'
 import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
 import type {
   AiRuntimeGetStateRequest,
   AiRuntimeHealthCheckRequest,
   AiRuntimeIpcResponse,
   AiRuntimeOperationRequest,
+  AiRuntimeOnnxModelLoadProbeRequest,
   AiRuntimeSelectActiveRequest,
   AiRuntimeUpdateConfigRequest
 } from '../../shared/contracts/ai-runtime.contract'
-import type { AiRuntimeOnnxModelLoadProbeResponse } from '../../shared/contracts/ai-runtime.contract'
+import type {
+  AiRuntimeOnnxModelLoadProbeResponse
+} from '../../shared/contracts/ai-runtime.contract'
 import { AiClientService } from '../services/ai-client.service'
 import { AiRuntimeManager } from '../services/ai-runtime/ai-runtime-manager'
 import { DisabledAiRuntimeProvider } from '../services/ai-runtime/providers/disabled-ai-runtime.provider'
@@ -40,11 +47,13 @@ import { resolveAiServicePath, resolveAiServiceRoot } from '../services/ai-servi
 import { resolvePythonExecutable } from '../services/ai-python-runtime.service'
 import { createPlatformAiBranchStatus } from '../services/ai-runtime/platform-ai-branch-status.projector'
 import {
+  createLlamaMultimodalProbeArtifactReadiness,
   createLlamaRuntimeStatusArtifactReadiness,
   createOnnxModelLoadProbeArtifactReadiness,
   createWorkerModelStatusArtifactReadiness
 } from '../services/ai-runtime/model-artifact-readiness.mapper'
 import { LlamaRuntimeInstallService } from '../services/llama-runtime/llama-runtime-install.service'
+import { getFreshLlamaMultimodalProbe } from '../services/ai-runtime/llama-multimodal-evidence.store'
 
 function success<T>(data: T): AiRuntimeIpcResponse<T> {
   return { success: true, data }
@@ -66,6 +75,12 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
   const currentPlatform = process.platform as PlatformName
   const currentArch = process.arch as PlatformArch
   const macosAiBranchMetadata = createMacOSAiBranchRuntimeMetadata(currentPlatform, currentArch)
+  const windowsAiBranchMetadata = createWindowsAiBranchRuntimeMetadata(currentPlatform, currentArch)
+
+  const isWin = currentPlatform === 'win32'
+  const appDataRoot = isWin
+    ? path.join(os.homedir(), 'AppData', 'Local', 'design-asset-manager', 'runtime')
+    : path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime')
 
   manager.registerProvider(new DisabledAiRuntimeProvider({ id: 'disabled-runtime' }))
   manager.registerProvider(new DisabledAiRuntimeProvider({
@@ -78,6 +93,16 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
       macosAiBranch: macosAiBranchMetadata
     }
   }))
+  manager.registerProvider(new DisabledAiRuntimeProvider({
+    id: 'windows-ai-branch-runtime',
+    displayName: 'Windows AI Branch Runtime',
+    platform: 'win32',
+    profileId: currentPlatform === 'win32' ? 'windows-nvidia-cuda' : null,
+    metadata: {
+      displayName: 'Windows AI Branch',
+      windowsAiBranch: windowsAiBranchMetadata
+    }
+  }))
   manager.registerProvider(new PythonWorkerRuntimeProvider(
     createDefaultPythonWorkerRuntimeConfig({
       runtimeId: 'python-worker-runtime',
@@ -88,16 +113,16 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
       env: {
         PYTHONUNBUFFERED: '1',
         DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1',
-        HF_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'huggingface-cache'),
-        PADDLE_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'paddle-cache'),
-        PADDLEX_HOME: path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime', 'paddlex-cache')
+        HF_HOME: path.join(appDataRoot, 'huggingface-cache'),
+        PADDLE_HOME: path.join(appDataRoot, 'paddle-cache'),
+        PADDLEX_HOME: path.join(appDataRoot, 'paddlex-cache')
       }
     })
   ))
 
-  // Auto-start Python AI Worker on macOS so capabilities probe works
-  const isMacOS = currentPlatform === 'darwin'
-  if (isMacOS) {
+  // Auto-start Python AI Worker on macOS and Windows so capabilities probe works
+  const autoStart = currentPlatform === 'darwin' || currentPlatform === 'win32'
+  if (autoStart) {
     manager.selectActiveRuntime('python-worker-runtime')
     // Fire-and-forget start; failure is non-fatal (worker may already be running
     // or managed-venv may need deps installed first).
@@ -113,7 +138,7 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
 const aiRuntimeManager = createSafeAiRuntimeManager()
 const aiClientService = new AiClientService()
 const llamaRuntimeService = LlamaRuntimeInstallService.getInstance()
-let latestOnnxModelLoadProbe: AiRuntimeOnnxModelLoadProbeResponse | null = null
+const latestOnnxModelLoadProbes: Partial<Record<AiRuntimeOnnxModelLoadProbeResponse['modelFamily'], AiRuntimeOnnxModelLoadProbeResponse>> = {}
 const ONNX_MODEL_LOAD_EVIDENCE_TTL_MS = 5 * 60 * 1000
 
 export async function shutdownAiRuntimes(): Promise<void> {
@@ -124,11 +149,11 @@ export async function shutdownAiRuntimes(): Promise<void> {
   }
 }
 
-function getFreshOnnxModelLoadProbe(): AiRuntimeOnnxModelLoadProbeResponse | null {
-  if (!latestOnnxModelLoadProbe) return null
-  const checkedAt = Date.parse(latestOnnxModelLoadProbe.checkedAt)
-  if (!Number.isFinite(checkedAt) || Date.now() - checkedAt > ONNX_MODEL_LOAD_EVIDENCE_TTL_MS) return null
-  return latestOnnxModelLoadProbe
+function getFreshOnnxModelLoadProbes(): AiRuntimeOnnxModelLoadProbeResponse[] {
+  return Object.values(latestOnnxModelLoadProbes).filter((probe): probe is AiRuntimeOnnxModelLoadProbeResponse => {
+    const checkedAt = Date.parse(probe.checkedAt)
+    return Number.isFinite(checkedAt) && Date.now() - checkedAt <= ONNX_MODEL_LOAD_EVIDENCE_TTL_MS
+  })
 }
 
 async function collectModelReadinessEvidence() {
@@ -137,7 +162,8 @@ async function collectModelReadinessEvidence() {
   return [
     ...createWorkerModelStatusArtifactReadiness(workerStatus),
     ...createLlamaRuntimeStatusArtifactReadiness(llamaStatus),
-    ...createOnnxModelLoadProbeArtifactReadiness(getFreshOnnxModelLoadProbe())
+    ...createLlamaMultimodalProbeArtifactReadiness(getFreshLlamaMultimodalProbe()),
+    ...getFreshOnnxModelLoadProbes().flatMap(createOnnxModelLoadProbeArtifactReadiness)
   ]
 }
 
@@ -174,6 +200,15 @@ export function registerAiRuntimeIpc() {
       return success(await aiClientService.getMacOSCapabilities())
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES, async () => {
+    try {
+      return success(await aiClientService.getWindowsCapabilities())
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES} error:`, err)
       return failure(err)
     }
   })
@@ -217,6 +252,15 @@ export function registerAiRuntimeIpc() {
     }
   })
 
+  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS, async () => {
+    try {
+      return success(await aiClientService.getPythonCudaStatus())
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS} error:`, err)
+      return failure(err)
+    }
+  })
+
   ipcMain.handle(CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS, async () => {
     try {
       return success(await aiClientService.getClipSiglipOnnxStatus())
@@ -226,10 +270,12 @@ export function registerAiRuntimeIpc() {
     }
   })
 
-  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD, async () => {
+  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD, async (_, request?: AiRuntimeOnnxModelLoadProbeRequest) => {
     try {
-      latestOnnxModelLoadProbe = await aiClientService.probeOnnxModelLoad()
-      return success(latestOnnxModelLoadProbe)
+      const modelFamily = request?.modelFamily ?? 'wd_tagger'
+      const probe = await aiClientService.probeOnnxModelLoad(modelFamily)
+      latestOnnxModelLoadProbes[modelFamily] = probe
+      return success(probe)
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD} error:`, err)
       return failure(err)
@@ -241,6 +287,15 @@ export function registerAiRuntimeIpc() {
       return success(await aiClientService.probePythonMpsExecution())
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION, async () => {
+    try {
+      return success(await aiClientService.probePythonCudaExecution())
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION} error:`, err)
       return failure(err)
     }
   })

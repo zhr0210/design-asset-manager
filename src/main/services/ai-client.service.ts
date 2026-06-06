@@ -15,12 +15,14 @@ import {
   syncProjectedAiTaskLifecycle
 } from './ai-client/ai-task-lifecycle-sync.sink'
 import { createAssetTaggingTaskSubmission } from '../../shared/workflows/asset-tagging.workflow'
-import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
+import type { MacOSAiWorkerProbeResult, WindowsAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
 import type {
   AiRuntimeClipSiglipOnnxStatusResponse,
   AiRuntimeOnnxModelLoadProbeResponse,
   AiRuntimePythonMpsExecutionProbeResponse,
-  AiRuntimePythonMpsStatusResponse
+  AiRuntimePythonMpsStatusResponse,
+  AiRuntimePythonCudaStatusResponse,
+  AiRuntimePythonCudaExecutionProbeResponse
 } from '../../shared/contracts/ai-runtime.contract'
 import {
   EVENT_AI_TASK_SYNCED,
@@ -343,10 +345,13 @@ export class AiClientService {
     }
   }
 
-  public async probeOnnxModelLoad(): Promise<AiRuntimeOnnxModelLoadProbeResponse> {
-    const res = await fetch(`${this.pythonUrl}/ai/model/onnx-load-probe`, {
+  public async probeOnnxModelLoad(
+    modelFamily: AiRuntimeOnnxModelLoadProbeResponse['modelFamily'] = 'wd_tagger'
+  ): Promise<AiRuntimeOnnxModelLoadProbeResponse> {
+    const query = new URLSearchParams({ modelFamily })
+    const res = await fetch(`${this.pythonUrl}/ai/model/onnx-load-probe?${query.toString()}`, {
       method: 'POST',
-      signal: AbortSignal.timeout(10_000)
+      signal: AbortSignal.timeout(modelFamily === 'clip' ? 90_000 : 10_000)
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     return await res.json() as AiRuntimeOnnxModelLoadProbeResponse
@@ -359,6 +364,93 @@ export class AiClientService {
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     return await res.json() as AiRuntimePythonMpsExecutionProbeResponse
+  }
+
+  /**
+   * Fetches the Windows AI branch worker capability probe without loading models.
+   */
+  public async getWindowsCapabilities(): Promise<{
+    success: boolean
+    offline: boolean
+    capabilities: WindowsAiWorkerProbeResult | null
+    error?: string
+  }> {
+    try {
+      const res = await fetch(`${this.pythonUrl}/ai/runtime/windows-capabilities`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      return {
+        success: true,
+        offline: false,
+        capabilities: data as WindowsAiWorkerProbeResult
+      }
+    } catch (err) {
+      return {
+        success: true,
+        offline: true,
+        capabilities: null,
+        error: err instanceof Error ? err.message : String(err)
+      }
+    }
+  }
+
+  /**
+   * Fetches the Python CUDA compatibility signal without loading models.
+   */
+  public async getPythonCudaStatus(): Promise<AiRuntimePythonCudaStatusResponse & { offline: boolean; error?: string | null }> {
+    try {
+      const res = await fetch(`${this.pythonUrl}/ai/model/python-cuda/status`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      const compatData = data as {
+        success?: boolean
+        compatible: boolean
+        runtime?: string | null
+        status: AiRuntimePythonCudaStatusResponse['status']
+        diagnostics?: Record<string, unknown>
+        error?: { code?: string; message?: string } | string | null
+      }
+      const errorMessage = typeof compatData.error === 'string'
+        ? compatData.error
+        : compatData.error && typeof compatData.error === 'object'
+          ? String((compatData.error as { message?: unknown }).message ?? null)
+          : null
+      return {
+        success: compatData.success ?? true,
+        offline: false,
+        compatible: compatData.compatible,
+        runtime: compatData.runtime ?? null,
+        status: compatData.status,
+        diagnostics: compatData.diagnostics ?? {},
+        error: errorMessage
+      }
+    } catch (err) {
+      return {
+        success: false,
+        offline: true,
+        compatible: false,
+        runtime: null,
+        status: 'unavailable',
+        diagnostics: {},
+        error: err instanceof Error ? err.message : String(err)
+      }
+    }
+  }
+
+  /**
+   * Explicitly execute a fixed tensor operation on the real CUDA device.
+   */
+  public async probePythonCudaExecution(): Promise<AiRuntimePythonCudaExecutionProbeResponse> {
+    const res = await fetch(`${this.pythonUrl}/ai/model/python-cuda/execution-probe`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json() as AiRuntimePythonCudaExecutionProbeResponse
   }
 
   /**

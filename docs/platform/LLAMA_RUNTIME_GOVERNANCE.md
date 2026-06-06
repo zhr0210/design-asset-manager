@@ -23,6 +23,8 @@ Phase 12B adds a read-only governance plan for llama-runtime. It does not downlo
 
 The existing llama-runtime install service can still download runtime packages and models, update settings, and launch a local llama server when explicitly invoked. This phase records those risks and keeps new governance code side-effect free.
 
+The existing user-triggered `llama-runtime:test-server` operation now performs both a text completion and a generated in-memory image request. It does not read user assets or persist the generated image. A successful image response is retained for five minutes as GGUF/mmproj real-inference evidence; service health alone is not real-model evidence.
+
 ## Next Step
 
 Phase 13A should prepare database path design with `pathRootId`, relative path helpers, legacy absolute path fallback, and dry-run remap planning without schema or data migration.

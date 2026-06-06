@@ -79,7 +79,8 @@ assert.equal(macosDisplay.workflows[0].actionPlan.kind, 'refresh_evidence')
 assert.equal(macosDisplay.workflows[0].actionPlan.enabled, true)
 assert.equal(macosRouteOverview.title, 'macOS 路线概览')
 assert.equal(macosRouteOverview.showMacOSDiagnostics, true)
-assert.match(macosRouteOverview.priorityLabel, /Qwen3-VL MLX/)
+assert.match(macosRouteOverview.priorityLabel, /Qwen3-VL GGUF/)
+assert.doesNotMatch(macosRouteOverview.priorityLabel, /MLX/)
 
 const windowsOnMacStatus = createPlatformAiBranchStatus({
   platformBranch: 'windows',

@@ -32,6 +32,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.3.5 | 2026-06-06 | Extended the registered ONNX probe to accept the shared CLIP family request and return real embedding evidence. |
 | v1.3.4 | 2026-06-06 | Added the user-initiated fixed-tensor Python MPS execution probe channel. |
 | v1.3.3 | 2026-06-06 | Added the user-initiated, registered-model-only WD Tagger ONNX load probe channel. |
 | v1.3.2 | 2026-06-06 | Adopted the shared AI Client channel and request/response contract across handlers and preload. |
@@ -39,5 +40,6 @@ npm run build
 | v1.3.0 | 2026-06-04 | Documented dedicated Platform AI Branch Status IPC rule for Windows/macOS shared response shape. |
 | v1.2.1 | 2026-05-31 | Added settings folder picker IPC for external model storage selection. |
 | v1.2.0 | 2026-05-31 | Added Llama runtime installer IPC for hardware detection, install progress, server control, and tests. |
+| v1.2.1 | 2026-06-06 | Extended the existing Llama server test channel with text plus generated-image inference evidence; no user asset is read or persisted. |
 | v1.1.0 | 2026-05-31 | Added AI backend IPC handlers for external backend settings, health checks, and model lists. |
 | v1.0.0 | 2026-05-31 | Rewrote README as compact IPC ownership and channel-safety notes. |

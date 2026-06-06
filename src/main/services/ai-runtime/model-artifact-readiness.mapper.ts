@@ -4,8 +4,10 @@ import type {
   WorkerModelStatusSnapshot
 } from '../../../shared/types/model-artifact-readiness.types'
 import type { PlatformAiWorkflow } from '../../../shared/types/platform-ai-branch-status.types'
-import type { LlamaInstallStatus } from '../../../shared/types/llama-runtime.types'
-import type { AiRuntimeOnnxModelLoadProbeResponse } from '../../../shared/contracts/ai-runtime.contract'
+import type { LlamaInstallStatus, LlamaServerTestResult } from '../../../shared/types/llama-runtime.types'
+import type {
+  AiRuntimeOnnxModelLoadProbeResponse
+} from '../../../shared/contracts/ai-runtime.contract'
 
 type LlamaLocalModelLike = {
   id: string
@@ -134,12 +136,12 @@ export function createWorkerModelStatusArtifactReadiness(
 export function createLlamaRuntimeStatusArtifactReadiness(status: LlamaInstallStatus | null | undefined): AiModelArtifactReadiness[] {
   if (!status) return []
 
-  const state = status.serverRunning || status.serverPid
-    ? 'loaded_real'
-    : status.modelPath && status.phase === 'complete'
+  const state = status.phase === 'downloading' || status.phase === 'extracting' || status.phase === 'installing'
+    ? 'artifact_downloading'
+    : status.modelPath && status.mmprojPath
       ? 'ready_to_load'
-      : status.phase === 'downloading' || status.phase === 'extracting' || status.phase === 'installing'
-        ? 'artifact_downloading'
+      : status.modelPath
+        ? 'artifact_missing'
         : 'unknown'
 
   return ['llama_metal', 'llama_cuda'].map((runtimeLane) => ({
@@ -149,14 +151,46 @@ export function createLlamaRuntimeStatusArtifactReadiness(status: LlamaInstallSt
     label: 'Llama 当前模型',
     source: 'llama_local_model' as const,
     state,
-    detail: status.serverRunning || status.serverPid ? 'llama-server running' : status.phase,
+    detail: status.serverRunning || status.serverPid
+      ? 'llama-server running; multimodal inference evidence required'
+      : status.phase,
     missing: state === 'artifact_downloading'
       ? [{
           id: 'llama-runtime-current-model',
           label: 'Llama 当前模型下载或安装尚未完成',
           kind: 'model_artifact' as const
         }]
+      : state === 'artifact_missing'
+        ? [{
+            id: 'llama-runtime-current-mmproj',
+            label: 'Llama 当前视觉模型缺少 mmproj artifact',
+            kind: 'model_artifact' as const
+          }]
       : []
+  }))
+}
+
+export function createLlamaMultimodalProbeArtifactReadiness(
+  probe: LlamaServerTestResult | null | undefined
+): AiModelArtifactReadiness[] {
+  if (!probe) return []
+
+  const state = probe.success && probe.chatOk && probe.visionOk
+    ? 'loaded_real'
+    : 'unknown'
+  const detail = state === 'loaded_real'
+    ? `${probe.modelId ?? probe.models[0] ?? 'local-model'} · text + generated-image inference · ${probe.checkedAt}`
+    : probe.error?.code ?? 'multimodal_probe_incomplete'
+
+  return ['llama_metal', 'llama_cuda'].map((runtimeLane) => ({
+    workflow: 'ai_prompt_task' as const,
+    runtimeLane,
+    artifactId: 'llama-runtime-multimodal-inference',
+    label: 'Llama GGUF/mmproj 多模态推理',
+    source: 'explicit_load_probe' as const,
+    state,
+    detail,
+    missing: []
   }))
 }
 
@@ -173,20 +207,27 @@ export function createOnnxModelLoadProbeArtifactReadiness(
         ? 'artifact_missing'
         : 'unknown'
 
+  const isClip = probe.modelFamily === 'clip'
   return [{
-    workflow: 'ai_tag_task',
+    workflow: isClip ? 'search_embedding' : 'ai_tag_task',
     runtimeLane: 'onnx_runtime',
-    artifactId: 'wd-vit-tagger-v3',
-    label: 'WD Tagger v3 ONNX',
+    artifactId: isClip ? 'clip-vit-b-32-onnx' : 'wd-vit-tagger-v3',
+    label: isClip ? 'CLIP ViT-B/32 ONNX' : 'WD Tagger v3 ONNX',
     source: 'explicit_load_probe',
     state,
     detail: probe.status === 'loaded_real'
-      ? `${probe.providers.join(' / ') || 'ONNX Runtime'} · ${probe.inputCount} input / ${probe.outputCount} output`
+      ? isClip
+        ? `${probe.providers.join(' / ') || 'ONNX Runtime'} · image/text embedding ${probe.embeddingDimension ?? 0}d`
+        : `${probe.providers.join(' / ') || 'ONNX Runtime'} · ${probe.inputCount} input / ${probe.outputCount} output`
       : probe.errorCode ?? probe.status,
     missing: state === 'dependency_missing'
-      ? [{ id: 'onnxruntime', label: 'WD Tagger 缺少 ONNX Runtime', kind: 'runtime_dependency' }]
+      ? [{ id: 'onnxruntime', label: `${isClip ? 'CLIP' : 'WD Tagger'} 缺少 ONNX Runtime`, kind: 'runtime_dependency' }]
       : state === 'artifact_missing'
-        ? [{ id: 'wd-vit-tagger-v3', label: 'WD Tagger ONNX artifact 未就绪', kind: 'model_artifact' }]
+        ? [{
+            id: isClip ? 'clip-vit-b-32-onnx' : 'wd-vit-tagger-v3',
+            label: `${isClip ? 'CLIP' : 'WD Tagger'} ONNX artifact 未就绪`,
+            kind: 'model_artifact'
+          }]
         : []
   }]
 }

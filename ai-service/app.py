@@ -13,9 +13,12 @@ from core.model_manager import ModelManager
 from core.batch_scheduler import BatchScheduler
 from core.clip_siglip_onnx_compat import probe_clip_siglip_onnx_environment
 from core.python_mps_compat import probe_python_mps_environment
+from core.python_cuda_compat import probe_python_cuda_environment
 from core.gpu_monitor import get_gpu_status
 from core.macos_ai_capabilities import probe_macos_ai_capabilities
+from core.windows_ai_capabilities import probe_windows_ai_capabilities
 from core.mps_execution_probe import probe_python_mps_execution
+from core.cuda_execution_probe import probe_python_cuda_execution
 from core.onnx_model_load_probe import probe_registered_onnx_model_load
 from core.mock_policy import is_strict_real_ai
 from schemas.tag_schema import TagEnqueueRequest
@@ -256,15 +259,20 @@ async def macos_runtime_capabilities():
     """Return macOS AI branch runtime capability probes without loading models."""
     return probe_macos_ai_capabilities()
 
+@app.get("/ai/runtime/windows-capabilities")
+async def windows_runtime_capabilities():
+    """Return Windows AI branch runtime capability probes without loading models."""
+    return probe_windows_ai_capabilities()
+
 @app.get("/ai/model/clip-siglip-onnx/status")
 async def clip_siglip_onnx_status():
     """Return the CLIP/SigLIP ONNX environment compatibility signal."""
     return probe_clip_siglip_onnx_environment()
 
 @app.post("/ai/model/onnx-load-probe")
-async def onnx_model_load_probe():
-    """Explicitly verify that the registered WD Tagger ONNX artifact can create a real session."""
-    return await asyncio.to_thread(probe_registered_onnx_model_load)
+async def onnx_model_load_probe(modelFamily: str = "wd_tagger"):
+    """Explicitly load a registered ONNX model and run its minimal probe where supported."""
+    return await asyncio.to_thread(probe_registered_onnx_model_load, modelFamily)
 
 @app.get("/ai/model/python-mps/status")
 async def python_mps_status():
@@ -275,6 +283,16 @@ async def python_mps_status():
 async def python_mps_execution_probe():
     """Explicitly execute a fixed tensor operation on the real MPS device."""
     return await asyncio.to_thread(probe_python_mps_execution)
+
+@app.get("/ai/model/python-cuda/status")
+async def python_cuda_status():
+    """Return the Python CUDA environment compatibility signal."""
+    return probe_python_cuda_environment()
+
+@app.post("/ai/model/python-cuda/execution-probe")
+async def python_cuda_execution_probe():
+    """Explicitly execute a fixed tensor operation on the real CUDA device."""
+    return await asyncio.to_thread(probe_python_cuda_execution)
 
 @app.get("/ai/routing/preview")
 async def preview_routing(file_path: str = ""):

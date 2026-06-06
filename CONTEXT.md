@@ -191,7 +191,7 @@ The Windows AI capability branch that keeps the CUDA AI Worker main chain while 
 _Avoid_: Windows build, CUDA mode
 
 **macOS AI Branch**:
-The macOS AI capability branch targeting Python MPS, ONNX Runtime, llama.app, llama.cpp Metal, MLX, Ollama fallback, and external HTTP fallback. Phase 1 exposed lane metadata and AI Console visibility; the current bridge also surfaces live Worker probe results for Python MPS, ONNX Runtime, and MLX availability. Model downloads and real inference validation are later phases.
+The macOS AI capability branch targeting Python MPS, ONNX Runtime, llama.cpp Metal, Ollama fallback, and external HTTP fallback. Phase 1 exposed lane metadata and AI Console visibility; the current bridge also surfaces live Worker probe results for Python MPS and ONNX Runtime availability. Model downloads and real inference validation are later phases.
 _Avoid_: macOS build, MPS mode
 
 **AI Worker**:
@@ -363,7 +363,7 @@ The ONNX-based OCR family used as a macOS-friendly alternative to EasyOCR and as
 _Avoid_: Paddle, generic OCR, text model
 
 **macOS AI Route Overview**:
-The macOS-focused AI Console summary card that surfaces MPS, ONNX Runtime, MLX, and Llama route readiness together with the current route priority.
+The macOS-focused AI Console summary card that surfaces MPS, ONNX Runtime, and Llama route readiness together with the current route priority.
 _Avoid_: Generic model summary, static route note
 
 **macOS AI Runtime Lane**:
@@ -371,7 +371,7 @@ A typed macOS AI branch lane shown in AI Console, such as Python MPS Runtime, ON
 _Avoid_: macOS tab, AI section
 
 **macOS AI Branch Skeleton**:
-The Phase 1 implementation state where macOS AI lanes, runtime metadata, profile capabilities, and AI Console cards exist, with a live Worker probe bridge for Python MPS, ONNX Runtime, and MLX visibility but without claiming that downloads or inference routes are complete.
+The Phase 1 implementation state where macOS AI lanes, runtime metadata, profile capabilities, and AI Console cards exist, with a live Worker probe bridge for Python MPS and ONNX Runtime visibility but without claiming that downloads or inference routes are complete.
 _Avoid_: finished macOS AI, macOS support complete
 
 ### AI Models And Sources
@@ -417,7 +417,7 @@ A selectable Qwen3-VL model option with size, quantization, vision support, and 
 _Avoid_: Model option, GGUF choice
 
 **Qwen3-VL Large Vision Runtime**:
-The large-model visual inference route for Qwen3-VL; it should be served through quantized runtime services on Windows and through Metal or MLX-capable services on macOS rather than treated as a universal Python model.
+The large-model visual inference route for Qwen3-VL; it should be served through quantized runtime services on Windows and through llama.cpp Metal on macOS rather than treated as a universal Python model.
 _Avoid_: Native Qwen3-VL, Python Qwen runtime
 
 **MMProj Model**:
@@ -463,7 +463,7 @@ The cross-platform or macOS-friendly small-model route for models that are bette
 _Avoid_: ONNX model, CPU backend
 
 **MLX Runtime**:
-The Apple Silicon-oriented runtime route for macOS large-model inference where MLX-supported model formats are appropriate.
+Not a current product route. ADR-0007 removes the speculative standalone MLX path; any future provider must supply an executable lifecycle and real inference evidence before re-entering product status.
 _Avoid_: Apple AI backend, macOS model server
 
 **CoreML Fallback**:
@@ -471,7 +471,7 @@ The macOS ONNX-related fallback path for model execution where CoreML provider s
 _Avoid_: Apple fallback, CoreML mode
 
 **Ollama Vision Fallback**:
-The macOS large-vision fallback route that can serve a Qwen2.5-VL compatible model through Ollama when Qwen3-VL GGUF or MLX is not ready.
+The macOS large-vision fallback route that can serve a Qwen2.5-VL compatible model through Ollama when Qwen3-VL GGUF/mmproj is not ready.
 _Avoid_: Ollama primary path, remote model
 
 **Manual Health Check**:

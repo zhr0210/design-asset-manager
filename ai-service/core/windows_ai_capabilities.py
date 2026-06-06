@@ -1,4 +1,4 @@
-"""macOS AI branch capability probes.
+"""Windows AI branch capability probes.
 
 The probes are intentionally side-effect-light: they import runtime libraries and
 inspect provider availability, but they do not download models, load weights, or
@@ -99,21 +99,22 @@ def _probe_torch(import_module: ImportModule) -> CapabilityPayload:
         return {
             "available": False,
             "version": None,
-            "mpsBuilt": False,
-            "mpsAvailable": False,
+            "cudaBuilt": False,
+            "cudaAvailable": False,
             "cpuFallback": False,
             "error": error,
         }
 
     version = _module_version(torch, "torch")
-    mps_backend = getattr(getattr(torch, "backends", None), "mps", None)
-    mps_built = bool(getattr(mps_backend, "is_built", lambda: False)())
-    mps_available = bool(getattr(mps_backend, "is_available", lambda: False)())
+    cuda_backend = getattr(torch, "cuda", None)
+    torch_version = getattr(torch, "version", None)
+    cuda_built = bool(getattr(torch_version, "cuda", None))
+    cuda_available = bool(getattr(cuda_backend, "is_available", lambda: False)()) if cuda_backend is not None else False
     return {
         "available": True,
         "version": version,
-        "mpsBuilt": mps_built,
-        "mpsAvailable": mps_available,
+        "cudaBuilt": cuda_built,
+        "cudaAvailable": cuda_available,
         "cpuFallback": True,
         "error": None,
     }
@@ -126,7 +127,8 @@ def _probe_onnxruntime(import_module: ImportModule) -> CapabilityPayload:
             "available": False,
             "version": None,
             "providers": [],
-            "coremlAvailable": False,
+            "cudaAvailable": False,
+            "dmlAvailable": False,
             "cpuAvailable": False,
             "error": error,
         }
@@ -136,11 +138,11 @@ def _probe_onnxruntime(import_module: ImportModule) -> CapabilityPayload:
         "available": True,
         "version": _module_version(ort, "onnxruntime"),
         "providers": providers,
-        "coremlAvailable": "CoreMLExecutionProvider" in providers,
+        "cudaAvailable": "CUDAExecutionProvider" in providers,
+        "dmlAvailable": "DmlExecutionProvider" in providers,
         "cpuAvailable": "CPUExecutionProvider" in providers,
         "error": None,
     }
-
 
 
 def _probe_clip_siglip_onnx(import_module: ImportModule) -> CapabilityPayload:
@@ -178,21 +180,20 @@ def _probe_clip_siglip_onnx(import_module: ImportModule) -> CapabilityPayload:
     }
 
 
-def _optional_status(is_macos: bool, module_available: bool) -> str:
+def _optional_status(is_windows: bool, module_available: bool) -> str:
     if module_available:
         return "optional"
-    return "dependency_missing" if is_macos else "unavailable"
+    return "dependency_missing" if is_windows else "unavailable"
 
 
-def probe_macos_ai_capabilities(
+def probe_windows_ai_capabilities(
     platform_name: str | None = None,
     machine: str | None = None,
     import_module: ImportModule = importlib.import_module,
 ) -> CapabilityPayload:
     platform_name = platform_name or sys.platform
     machine = machine or platform_module.machine()
-    is_macos = platform_name == "darwin"
-    is_apple_silicon = is_macos and machine in {"arm64", "aarch64"}
+    is_windows = platform_name in {"win32", "windows"}
 
     torch_probe = _probe_torch(import_module)
     onnx_probe = _probe_onnxruntime(import_module)
@@ -204,34 +205,35 @@ def probe_macos_ai_capabilities(
     rapidocr_probe = _probe_optional_module("rapidocr_onnxruntime", import_module, package_name="rapidocr-onnxruntime", backend="RapidOCR ONNX")
     paddleocr_probe = _probe_optional_module("paddleocr", import_module, package_name="paddleocr", backend="PaddleOCR ONNX")
 
-    mps_status = "ready" if torch_probe["mpsAvailable"] else "fallback" if torch_probe["cpuFallback"] else "unavailable"
+    cuda_status = "ready" if torch_probe["cudaAvailable"] else "fallback" if torch_probe["cpuFallback"] else "unavailable"
     onnx_status = "ready" if onnx_probe["available"] else "unavailable"
-    llama_status = "evidence_insufficient" if is_macos else "unavailable"
+    llama_status = "evidence_insufficient" if is_windows else "unavailable"
 
     lanes = [
         _lane(
-            "python-mps",
-            "Python MPS Runtime",
-            mps_status,
-            "PyTorch MPS route for RAM++, Florence-2, CLIP/SigLIP, with CPU fallback.",
+            "python-cuda",
+            "Python CUDA Runtime",
+            cuda_status,
+            "PyTorch CUDA route for RAM++, Florence-2, CLIP/SigLIP, with CPU fallback.",
             [
-                _capability("python-mps.ram-plus", "RAM++ optional", _optional_status(is_macos, ram_probe["available"] and torch_probe["mpsAvailable"]), "tagging", "RAM++", ram_probe["backend"] or "PyTorch MPS"),
-                _capability("python-mps.florence-2", "Florence-2 optional", _optional_status(is_macos, florence_probe["available"] and torch_probe["mpsAvailable"]), "tagging", "Florence-2", florence_probe["backend"] or "PyTorch MPS"),
-                _capability("python-mps.clip-siglip", "CLIP/SigLIP optional", _optional_status(is_macos, clip_probe["available"] and torch_probe["mpsAvailable"]), "embedding", "CLIP/SigLIP", clip_probe["backend"] or "PyTorch MPS"),
-                _capability("python-mps.cpu-fallback", "CPU fallback", "fallback" if torch_probe["cpuFallback"] else "unavailable", "fallback", None, "CPU"),
+                _capability("python-cuda.ram-plus", "RAM++ optional", _optional_status(is_windows, ram_probe["available"] and torch_probe["cudaAvailable"]), "tagging", "RAM++", ram_probe["backend"] or "PyTorch CUDA"),
+                _capability("python-cuda.florence-2", "Florence-2 optional", _optional_status(is_windows, florence_probe["available"] and torch_probe["cudaAvailable"]), "tagging", "Florence-2", florence_probe["backend"] or "PyTorch CUDA"),
+                _capability("python-cuda.clip-siglip", "CLIP/SigLIP optional", _optional_status(is_windows, clip_probe["available"] and torch_probe["cudaAvailable"]), "embedding", "CLIP/SigLIP", clip_probe["backend"] or "PyTorch CUDA"),
+                _capability("python-cuda.cpu-fallback", "CPU fallback", "fallback" if torch_probe["cpuFallback"] else "unavailable", "fallback", None, "CPU"),
             ],
         ),
         _lane(
             "onnx-runtime",
             "ONNX Runtime",
             onnx_status,
-            "ONNX lane for WD14, RapidOCR, PaddleOCR ONNX, CLIP/SigLIP ONNX, with CoreML or CPU fallback.",
+            "ONNX lane for WD14, RapidOCR, PaddleOCR ONNX, CLIP/SigLIP ONNX, with CUDA or DirectML fallback.",
             [
-                _capability("onnx-runtime.wd14", "WD14 Tagger", _optional_status(is_macos, wd_probe["available"] and onnx_probe["available"]), "tagging", "WD14", wd_probe["backend"] or "ONNX Runtime"),
-                _capability("onnx-runtime.rapidocr", "RapidOCR", _optional_status(is_macos, rapidocr_probe["available"] and onnx_probe["available"]), "ocr", "RapidOCR", rapidocr_probe["backend"] or "ONNX Runtime"),
-                _capability("onnx-runtime.paddleocr", "PaddleOCR ONNX", _optional_status(is_macos, paddleocr_probe["available"] and onnx_probe["available"]), "ocr", "PaddleOCR", paddleocr_probe["backend"] or "ONNX Runtime"),
-                _capability("onnx-runtime.clip-siglip", "CLIP/SigLIP ONNX", clip_siglip_onnx_probe["status"] if is_macos else "unavailable", "embedding", "CLIP/SigLIP", clip_siglip_onnx_probe["backend"]),
-                _capability("onnx-runtime.coreml-fallback", "CoreML fallback", "fallback" if onnx_probe["coremlAvailable"] else "unavailable", "fallback", None, "CoreML"),
+                _capability("onnx-runtime.wd14", "WD14 Tagger", _optional_status(is_windows, wd_probe["available"] and onnx_probe["available"]), "tagging", "WD14", wd_probe["backend"] or "ONNX Runtime"),
+                _capability("onnx-runtime.rapidocr", "RapidOCR", _optional_status(is_windows, rapidocr_probe["available"] and onnx_probe["available"]), "ocr", "RapidOCR", rapidocr_probe["backend"] or "ONNX Runtime"),
+                _capability("onnx-runtime.paddleocr", "PaddleOCR ONNX", _optional_status(is_windows, paddleocr_probe["available"] and onnx_probe["available"]), "ocr", "PaddleOCR", paddleocr_probe["backend"] or "ONNX Runtime"),
+                _capability("onnx-runtime.clip-siglip", "CLIP/SigLIP ONNX", clip_siglip_onnx_probe["status"] if is_windows else "unavailable", "embedding", "CLIP/SigLIP", clip_siglip_onnx_probe["backend"]),
+                _capability("onnx-runtime.cuda-fallback", "CUDA fallback", "fallback" if onnx_probe["cudaAvailable"] else "unavailable", "fallback", None, "CUDA"),
+                _capability("onnx-runtime.dml-fallback", "DirectML fallback", "fallback" if onnx_probe["dmlAvailable"] else "unavailable", "fallback", None, "DirectML"),
                 _capability("onnx-runtime.cpu-fallback", "CPU fallback", "fallback" if onnx_probe["cpuAvailable"] else "unavailable", "fallback", None, "CPU"),
             ],
         ),
@@ -241,8 +243,8 @@ def probe_macos_ai_capabilities(
             llama_status,
             "Large vision route for Qwen3-VL GGUF, Qwen2.5-VL Ollama fallback, and external HTTP fallback.",
             [
-                _capability("llama.qwen3-vl-gguf", "Qwen3-VL GGUF", "evidence_insufficient" if is_macos else "unavailable", "prompt-reverse", "Qwen3-VL", "llama.cpp Metal"),
-                _capability("llama.qwen25-vl-ollama", "Qwen2.5-VL Ollama fallback", "fallback" if is_macos else "unavailable", "prompt-reverse", "Qwen2.5-VL", "Ollama"),
+                _capability("llama.qwen3-vl-gguf", "Qwen3-VL GGUF", "evidence_insufficient" if is_windows else "unavailable", "prompt-reverse", "Qwen3-VL", "llama.cpp CUDA"),
+                _capability("llama.qwen25-vl-ollama", "Qwen2.5-VL Ollama fallback", "fallback" if is_windows else "unavailable", "prompt-reverse", "Qwen2.5-VL", "Ollama"),
                 _capability("llama.external-http", "external HTTP fallback", "fallback", "fallback", None, "OpenAI-compatible HTTP"),
             ],
         ),
@@ -251,8 +253,8 @@ def probe_macos_ai_capabilities(
     return {
         "platform": platform_name,
         "machine": machine,
-        "isMacOS": is_macos,
-        "isAppleSilicon": is_apple_silicon,
+        "isMacOS": False,
+        "isAppleSilicon": False,
         "phase": "worker-probes",
         "torch": torch_probe,
         "onnxruntime": onnx_probe,

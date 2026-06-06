@@ -42,7 +42,7 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 ### Phase 7: Real AI Evidence Closure
 
 - Replace evidence-insufficient MPS/ONNX and GGUF/mmproj states with model load or recent inference evidence where the route exists.
-- Decide whether to implement or explicitly remove the Qwen3-VL MLX route; dependency import alone is never completion evidence.
+- Qwen3-VL MLX route decision is closed by ADR-0007: do not expose a separate MLX product route without an executable lifecycle and real inference evidence.
 - Add Windows-host parity validation for CUDA/ONNX/Llama while preserving the shared workflow and action contracts.
 
 ### Phase 1: Platform AI Branch Status
@@ -89,8 +89,12 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-06 evidence-semantics and MLX decision slice completed: fixed-tensor MPS/CUDA probes no longer enter model artifact readiness or promote workflow status to `real_model_path`; ADR-0007 removes the speculative standalone MLX product route; CUDA build presence is now distinct from device availability; the AI Runtime panel shows only the current platform branch.
+- 2026-06-06 macOS GGUF/mmproj application-evidence slice completed: the existing user-triggered Llama server test now sends text plus an in-memory generated PNG through the OpenAI-compatible endpoint. A fresh successful image response is the only Llama probe that promotes `ai_prompt_task` to `real_model_path`; service health alone no longer does so.
+- 2026-06-06 Windows CUDA capability skeleton remains implemented and unit-tested, but Windows-host CUDA/ONNX/Llama execution and Electron screenshot validation are still pending.
 - 2026-06-06 macOS MPS closure slice adds a user-initiated fixed-tensor `torch.mps` execution probe through Worker, shared contract, main IPC, preload, shared display projection, and AI Runtime UI. Runtime execution evidence remains separate from model load/inference evidence.
 - 2026-06-06 macOS ONNX closure slice replaced synthetic Python Worker process tracking with real child-process lifecycle management, bounded output tails, SIGTERM/SIGKILL shutdown, and Electron quit cleanup. The app now gives read-only capability probes a cold-start budget instead of recording first-import latency as an unavailable capability.
+- 2026-06-06 CLIP ONNX embedding closure completed on macOS: a user-triggered generated-image plus text forward pass returns a finite 512-dimensional image embedding. CoreML graph execution failed for this model on the current host, and the explicit CPU provider fallback succeeded without changing the shared Search Embedding workflow.
 - 2026-06-04 architecture review pass is generating a temporary HTML report of deepening opportunities; no repo implementation or public contract changes are in scope.
 - Current grill-with-docs discussion chose a product-level Platform AI Branch Status projection in Electron main process, exposed through new `ai-runtime:get-macos-ai-branch-status` and `ai-runtime:get-windows-ai-branch-status` IPC channels rather than overloading runtime capability probe channels. Both channels should return the same shared response shape: Windows and macOS can differ where AI inference runtime or OS constraints require branches, while the main application architecture, shared product workflows, and product status surfaces should be reused or lightly adapted.
 - The shared Platform AI Branch Status response should be workflow-first, keep platform differences inside `runtimeLanes`, use structured evidence plus separate missing requirements, and keep first-version `nextAction` display-only. A later `PlatformAiActionPlan` can wire UI actions while execution remains in existing operation IPC handlers.
@@ -234,6 +238,8 @@ Run additional focused tests matching the slice being changed. For product-facin
 
 ## Validation Result
 
+- 2026-06-06 macOS GGUF/mmproj application validation passed against the running Qwen3-VL 2B GGUF service: Playwright opened AI Console > Inference Services, clicked `连接测试`, and observed `GGUF 文本与 mmproj 图像推理通过`. The shared macOS branch response reported `ai_prompt_task: real_model_path` with fresh `real_backend_loaded` model-readiness evidence. The UI showed the probed model ID and `mmproj：图像推理已验证`, had no horizontal overflow, and emitted no relevant runtime errors. The probe used a generated in-memory image and did not read or persist user assets.
+- 2026-06-06 evidence-semantics and MLX decision validation passed: `npm run typecheck`, `npm run build`, `npm run ci:test-runtime-safety`, `npm run test-python-unittest` (104 tests), focused AI runtime workflow/panel tests, `git diff --check`, and docs sync all passed. Playwright launched an isolated Electron instance at 1440x1000, opened AI Runtime Management, confirmed only the current macOS branch rendered, found no stale MLX route, mixed-language copy, horizontal overflow, overlap, or clipping. The isolated empty data directory emitted pre-existing database-not-initialized console errors; no product data was read.
 - 2026-06-06 macOS MPS real-execution validation passed: focused Python, contract, IPC, panel, shared-display, typecheck, build, 94 Python unit tests, docs sync, and the full governance suite passed. Playwright launched Electron, opened AI Runtime, clicked `验证 MPS 执行`, observed `真实执行通过` with `torch.mps · 固定张量运算完成`, found no timeout or horizontal overflow, and screenshot review found no overlap or clipping. Closing Electron released the Worker port.
 - 2026-06-06 macOS ONNX closure validation passed: focused real-process, Python Worker runtime, macOS runtime, typecheck, build, 91 Python unit tests, docs sync, and the full governance suite passed. Playwright launched the production Electron build, opened AI Console, clicked `验证真实加载`, observed CLIP/SigLIP ONNX `可兼容` and WD Tagger `真实加载通过` with CoreML/CPU providers, found no horizontal overflow, and screenshot review found no overlap or clipping. Closing Electron released the Worker port. The standalone forbidden-path check remains blocked by the pre-existing missing `.codeindex/forbidden-paths.json`.
 - Asset Tagging color and type projection checks passed. Focused tests verify correctness of ASSET_TAG_PRESET_COLORS, ASSET_TAG_TYPES, and getAssetTagColorClass, and source guards ensure no local variables or maps are defined in TagEditDialog.tsx or TagChip.tsx.
@@ -594,3 +600,14 @@ Additional checks:
 - Current local evidence remains incomplete: the default Python lacks `onnxruntime`, and the ignored repository cache artifact is a 19-byte placeholder rather than a real model. The product must report dependency/artifact gaps until a registered real artifact passes the probe.
 - Focused Python and TypeScript tests, Python unit tests (91/91), typecheck, build, full `ci:governance`, docs sync, and Electron click/screenshot validation passed. The isolated UI correctly rendered `Worker 不可达` without overflow when no Worker evidence was available. Doctor CI reported matching non-blocking Worker port/health warnings.
 - Next smallest slice: complete and verify a registered WD Tagger artifact through the existing model-management flow, then use the same probe pattern for one OCR provider without conflating it with Search Embedding.
+
+## 2026-06-06 CLIP ONNX Real Embedding Evidence
+
+- Extended the existing registered ONNX probe with `modelFamily: clip`; no new IPC channel was added.
+- The probe loads the registered CLIP ONNX graph, generates an in-memory image and local text prompts, runs a real forward pass, and requires finite output plus a positive image-embedding dimension.
+- Main-process evidence is cached for five minutes and promotes only `search_embedding / onnx_runtime` to `real_model_path`.
+- Electron Playwright validation started the app-owned Python Worker, clicked `验证真实 Embedding`, observed `CPUExecutionProvider · 合成图像与文本前向 · 512 维`, and confirmed the branch response contains `real_backend_loaded` for Search Embedding. Screenshot review found no overlap, clipping, or horizontal overflow.
+- Python Worker exit state now includes a bounded, home/app-path-sanitized final stderr line so launch failures are diagnosable without exposing private paths.
+- Validation passed: `npm run typecheck`, `npm run build`, `npm run ci:test-runtime-safety`, `npm run ci:governance`, 106 isolated Python unit tests, focused readiness/display tests, docs sync, and `git diff --check`.
+- `check-agent-context.py` and `check-forbidden-paths.py` remain blocked by the pre-existing missing `.codeindex/module-map.json`, `.codeindex/tests-map.json`, and `.codeindex/forbidden-paths.json`.
+- Remaining platform gap: Windows CUDA/ONNX/Llama real execution and Electron screenshot validation require a Windows host.

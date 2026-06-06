@@ -128,7 +128,7 @@ assert.deepEqual(profiles.find((profile) => profile.id === 'windows-nvidia-cuda'
 assert.deepEqual(profiles.find((profile) => profile.id === 'macos-apple-silicon')?.recommendedRuntimeKinds, ['python-worker', 'llama-app', 'ollama', 'custom-http'])
 assert.ok(profiles.find((profile) => profile.id === 'macos-apple-silicon')?.capabilities.includes('python-mps'))
 assert.ok(profiles.find((profile) => profile.id === 'macos-apple-silicon')?.capabilities.includes('onnx-runtime'))
-assert.ok(profiles.find((profile) => profile.id === 'macos-apple-silicon')?.capabilities.includes('mlx'))
+assert.ok(!profiles.find((profile) => profile.id === 'macos-apple-silicon')?.capabilities.includes('mlx'))
 assert.deepEqual(profiles.find((profile) => profile.id === 'macos-intel')?.recommendedRuntimeKinds, ['custom-http', 'ollama'])
 assert.deepEqual(profiles.find((profile) => profile.id === 'external-inference-only')?.recommendedRuntimeKinds, ['custom-http'])
 

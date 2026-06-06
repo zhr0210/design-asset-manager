@@ -148,7 +148,7 @@ export function projectPlatformAiRouteOverviewDisplay(
     return {
       title: 'macOS 路线概览',
       description: '把 Python MPS、ONNX Runtime 和 Llama 路线放到同一屏里查看。',
-      priorityLabel: '当前 macOS 目标模型优先级：Qwen3-VL GGUF > Qwen3-VL MLX > Qwen2.5-VL Ollama fallback > external HTTP fallback。',
+      priorityLabel: '当前 macOS 目标模型优先级：Qwen3-VL GGUF > Qwen2.5-VL Ollama fallback > external HTTP fallback。',
       showMacOSDiagnostics: true,
       runtimeLanes
     }

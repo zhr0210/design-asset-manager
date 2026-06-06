@@ -3,6 +3,7 @@ import {
   createCooperativeModelArtifactReadiness,
   createLlamaLocalModelArtifactReadiness,
   createLlamaRuntimeStatusArtifactReadiness,
+  createLlamaMultimodalProbeArtifactReadiness,
   createOnnxModelLoadProbeArtifactReadiness,
   createWorkerModelStatusArtifactReadiness
 } from '../src/main/services/ai-runtime/model-artifact-readiness.mapper'
@@ -97,14 +98,29 @@ const llamaRuntimeReadiness = createLlamaRuntimeStatusArtifactReadiness({
   message: 'ready',
   baseUrl: 'http://127.0.0.1:8080/v1',
   modelPath: '/private/model/path/model.gguf',
+  mmprojPath: '/private/model/path/mmproj.gguf',
   serverRunning: true
 })
 
-assert.equal(llamaRuntimeReadiness[0].state, 'loaded_real')
+assert.equal(llamaRuntimeReadiness[0].state, 'ready_to_load')
 assert.deepEqual(
   llamaRuntimeReadiness.map((item) => item.runtimeLane),
   ['llama_metal', 'llama_cuda']
 )
+
+const llamaMultimodalReadiness = createLlamaMultimodalProbeArtifactReadiness({
+  success: true,
+  baseUrl: 'http://127.0.0.1:8080/v1',
+  models: ['Qwen3VL-2B-Instruct-Q4_K_M.gguf'],
+  modelId: 'Qwen3VL-2B-Instruct-Q4_K_M.gguf',
+  chatOk: true,
+  visionOk: true,
+  visionInput: 'generated_fixture',
+  checkedAt: '2026-06-06T00:00:00.000Z'
+})
+assert.equal(llamaMultimodalReadiness[0].state, 'loaded_real')
+assert.equal(llamaMultimodalReadiness[0].source, 'explicit_load_probe')
+assert.match(llamaMultimodalReadiness[0].detail ?? '', /text \+ generated-image inference/)
 
 const onnxLoadReadiness = createOnnxModelLoadProbeArtifactReadiness({
   success: true,
@@ -126,6 +142,31 @@ assert.deepEqual(onnxLoadReadiness.map((item) => ({
   state: 'loaded_real',
   source: 'explicit_load_probe'
 }])
+
+const clipEmbeddingReadiness = createOnnxModelLoadProbeArtifactReadiness({
+  success: true,
+  modelFamily: 'clip',
+  status: 'loaded_real',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  providers: ['CPUExecutionProvider'],
+  inputCount: 3,
+  outputCount: 4,
+  operation: 'image_text_embedding',
+  resultFinite: true,
+  embeddingDimension: 512
+})
+assert.deepEqual(clipEmbeddingReadiness.map((item) => ({
+  workflow: item.workflow,
+  lane: item.runtimeLane,
+  state: item.state,
+  source: item.source
+})), [{
+  workflow: 'search_embedding',
+  lane: 'onnx_runtime',
+  state: 'loaded_real',
+  source: 'explicit_load_probe'
+}])
+assert.match(clipEmbeddingReadiness[0].detail ?? '', /512d/)
 
 const missingOnnxReadiness = createOnnxModelLoadProbeArtifactReadiness({
   success: false,
@@ -160,7 +201,23 @@ assert.equal(
   'evidence_insufficient'
 )
 
-const readinessJson = JSON.stringify([...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness, ...onnxLoadReadiness])
+const clipProbeOnlyProjection = createPlatformAiBranchStatus({
+  platformBranch: 'macos',
+  currentPlatform: 'darwin',
+  generatedAt: '2026-06-06T00:00:00.000Z',
+  runtimes: [],
+  modelReadiness: clipEmbeddingReadiness
+})
+assert.equal(
+  clipProbeOnlyProjection.workflows.find((workflow) => workflow.workflow === 'search_embedding')?.status,
+  'real_model_path'
+)
+assert.equal(
+  clipProbeOnlyProjection.workflows.find((workflow) => workflow.workflow === 'ai_tag_task')?.status,
+  'evidence_insufficient'
+)
+
+const readinessJson = JSON.stringify([...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness, ...llamaMultimodalReadiness, ...onnxLoadReadiness])
 assert.doesNotMatch(readinessJson, /modelPath|localPath|Users|Downloads|Library\/Application Support/)
 assert.doesNotMatch(readinessJson, /private\/model\/path/)
 
@@ -169,7 +226,7 @@ const projected = createPlatformAiBranchStatus({
   currentPlatform: 'darwin',
   generatedAt: '2026-06-04T00:00:00.000Z',
   runtimes: [runtime({})],
-  modelReadiness: [...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness]
+  modelReadiness: [...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness, ...llamaMultimodalReadiness]
 })
 
 const tagWorkflow = projected.workflows.find((workflow) => workflow.workflow === 'ai_tag_task')
@@ -186,7 +243,7 @@ const windowsProjected = createPlatformAiBranchStatus({
   currentPlatform: 'win32',
   generatedAt: '2026-06-04T00:00:00.000Z',
   runtimes: [runtime({})],
-  modelReadiness: [...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness]
+  modelReadiness: [...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness, ...llamaMultimodalReadiness]
 })
 
 const windowsTagWorkflow = windowsProjected.workflows.find((workflow) => workflow.workflow === 'ai_tag_task')

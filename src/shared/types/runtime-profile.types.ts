@@ -21,7 +21,6 @@ export type RuntimeCapability =
   | 'python-mps'
   | 'onnx-runtime'
   | 'llama-metal'
-  | 'mlx'
   | 'coreml'
   | 'cpu-only'
   | 'model-download'

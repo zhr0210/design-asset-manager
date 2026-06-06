@@ -2,7 +2,9 @@ import type {
   AiRuntimeClipSiglipOnnxStatusResponse,
   AiRuntimeOnnxModelLoadProbeResponse,
   AiRuntimePythonMpsExecutionProbeResponse,
-  AiRuntimePythonMpsStatusResponse
+  AiRuntimePythonMpsStatusResponse,
+  AiRuntimePythonCudaStatusResponse,
+  AiRuntimePythonCudaExecutionProbeResponse
 } from '../contracts/ai-runtime.contract'
 import type {
   AiRuntimeHealthResult,
@@ -13,8 +15,10 @@ import type {
 import type { LlamaInstallStatus } from '../types/llama-runtime.types'
 import type {
   MacOSAiBranchRuntimeMetadata,
+  WindowsAiBranchRuntimeMetadata,
   MacOSAiCapabilityStatus,
-  MacOSAiWorkerProbeResult
+  MacOSAiWorkerProbeResult,
+  WindowsAiWorkerProbeResult
 } from '../types/macos-ai-runtime.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
@@ -89,7 +93,6 @@ export interface MacOSAiWorkerProbeDisplay {
   mps: MacOSAiProbeTileDisplay
   onnxRuntime: MacOSAiProbeTileDisplay
   clipSiglipOnnx: MacOSAiProbeTileDisplay
-  mlx: MacOSAiProbeTileDisplay
 }
 
 const TONE_CLASS: Record<AiRuntimeDisplayTone, string> = {
@@ -136,8 +139,15 @@ export function projectOnnxModelLoadProbeDisplay(
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
   if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得模型加载证据。')
-  if (!probe) return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动创建一次真实 ONNX Session。')
+  if (!probe) return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动执行一次真实 ONNX 模型验证。')
   if (probe.status === 'loaded_real') {
+    if (probe.modelFamily === 'clip') {
+      return modelLoadProbeDisplay(
+        '真实 Embedding 通过',
+        'good',
+        `${probe.providers.join(' / ') || 'ONNX Runtime'} · 合成图像与文本前向 · ${probe.embeddingDimension ?? 0} 维`
+      )
+    }
     return modelLoadProbeDisplay(
       '真实加载通过',
       'good',
@@ -148,12 +158,16 @@ export function projectOnnxModelLoadProbeDisplay(
     return modelLoadProbeDisplay('依赖缺失', 'warn', '当前 Worker 缺少 ONNX Runtime。')
   }
   if (probe.status === 'artifact_missing') {
-    return modelLoadProbeDisplay('模型缺失', 'warn', '已登记的 WD Tagger ONNX artifact 尚未就绪。')
+    return modelLoadProbeDisplay('模型缺失', 'warn', `已登记的 ${probe.modelFamily === 'clip' ? 'CLIP' : 'WD Tagger'} ONNX artifact 尚未就绪。`)
   }
   if (probe.status === 'artifact_invalid') {
-    return modelLoadProbeDisplay('模型无效', 'bad', '已登记的 WD Tagger ONNX artifact 不完整或无效。')
+    return modelLoadProbeDisplay('模型无效', 'bad', `已登记的 ${probe.modelFamily === 'clip' ? 'CLIP' : 'WD Tagger'} ONNX artifact 不完整或无效。`)
   }
-  return modelLoadProbeDisplay('加载失败', 'bad', `真实 Session 创建失败：${probe.errorCode ?? probe.status}`)
+  return modelLoadProbeDisplay(
+    probe.modelFamily === 'clip' ? 'Embedding 失败' : '加载失败',
+    'bad',
+    `真实 ONNX 验证失败：${probe.errorCode ?? probe.status}`
+  )
 }
 
 export function projectPythonMpsExecutionProbeDisplay(
@@ -338,8 +352,7 @@ export function projectMacOSAiWorkerProbeDisplay(
       clipSiglipStatusLabel: '证据不足',
       mps: unchecked,
       onnxRuntime: unchecked,
-      clipSiglipOnnx: unchecked,
-      mlx: unchecked
+      clipSiglipOnnx: unchecked
     }
   }
 
@@ -369,10 +382,6 @@ export function projectMacOSAiWorkerProbeDisplay(
       captionLabel: probe.clipSiglipOnnx.version
         ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
         : '已探测，未报告版本'
-    },
-    mlx: {
-      valueLabel: probe.mlx.available ? '依赖可用' : '依赖缺失',
-      captionLabel: probe.mlx.version ? `mlx ${probe.mlx.version}` : '已探测，未报告版本'
     }
   }
 }
@@ -491,4 +500,117 @@ export function getMacOSAiBranchRuntime(runtimes: AiRuntimeState[]): MacOSAiBran
     if (isMacOSAiBranchMetadata(branch)) return branch
   }
   return null
+}
+
+export function isWindowsAiBranchMetadata(value: unknown): value is WindowsAiBranchRuntimeMetadata {
+  return Boolean(value && typeof value === 'object' && (value as { marker?: unknown }).marker === 'windows-ai-branch' && Array.isArray((value as { lanes?: unknown }).lanes))
+}
+
+export function getWindowsAiBranchRuntime(runtimes: AiRuntimeState[]): WindowsAiBranchRuntimeMetadata | null {
+  for (const runtime of runtimes) {
+    const branch = runtime.metadata?.windowsAiBranch
+    if (isWindowsAiBranchMetadata(branch)) return branch
+  }
+  return null
+}
+
+export function projectPythonCudaCompatibilityDisplay(
+  status?: AiRuntimePythonCudaStatusResponse | null,
+  error?: string | null
+): AiRuntimeCompatibilityDisplay {
+  if (!status) {
+    return compatibilityDisplay('未检查', 'muted', 'torch.cuda', 'unknown', 'unchecked', error)
+  }
+
+  if (status.compatible) {
+    return compatibilityDisplay('可兼容', 'good', status.runtime ?? 'torch.cuda', 'compatible', status.status, error)
+  }
+
+  const label = status.status === 'planned' ? '待补齐' : '不可用'
+  return compatibilityDisplay(label, status.status === 'planned' ? 'warn' : 'bad', status.runtime ?? 'torch.cuda', 'incompatible', status.status, error ?? status.error)
+}
+
+export function projectPythonCudaExecutionProbeDisplay(
+  probe?: AiRuntimePythonCudaExecutionProbeResponse | null,
+  error?: string | null
+): AiRuntimeModelLoadProbeDisplay {
+  if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得 CUDA 执行证据。')
+  if (!probe) return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动执行一次固定的 CUDA 张量运算。')
+  if (probe.status === 'executed_real') {
+    return modelLoadProbeDisplay('真实执行通过', 'good', `${probe.runtime ?? 'torch.cuda'} · 固定张量运算完成`)
+  }
+  if (probe.status === 'dependency_missing') {
+    return modelLoadProbeDisplay('依赖缺失', 'warn', '当前 Worker 缺少 PyTorch。')
+  }
+  if (probe.status === 'backend_unavailable') {
+    return modelLoadProbeDisplay('后端不可用', 'warn', 'PyTorch 已存在，但当前设备无法使用 CUDA。')
+  }
+  if (probe.status === 'unsupported') {
+    return modelLoadProbeDisplay('平台不支持', 'muted', 'CUDA 真实执行仅适用于 Windows。')
+  }
+  return modelLoadProbeDisplay('执行失败', 'bad', `CUDA 张量执行失败：${probe.errorCode ?? probe.status}`)
+}
+
+export interface WindowsAiWorkerProbeDisplay {
+  connected: boolean
+  connectionLabel: string
+  connectionTone: AiRuntimeDisplayTone
+  platformBadgeLabel: string
+  platformBadgeClass: string
+  isMacOSLabel: string
+  isAppleSiliconLabel: string
+  clipSiglipStatusLabel: string
+  cuda: MacOSAiProbeTileDisplay
+  onnxRuntime: MacOSAiProbeTileDisplay
+  clipSiglipOnnx: MacOSAiProbeTileDisplay
+}
+
+export function projectWindowsAiWorkerProbeDisplay(
+  probe?: WindowsAiWorkerProbeResult | null
+): WindowsAiWorkerProbeDisplay {
+  if (!probe) {
+    const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
+    return {
+      connected: false,
+      connectionLabel: '等待探测',
+      connectionTone: 'muted',
+      platformBadgeLabel: '等待探测',
+      platformBadgeClass: 'border-slate-200 bg-white text-slate-500',
+      isMacOSLabel: 'unknown',
+      isAppleSiliconLabel: 'unknown',
+      clipSiglipStatusLabel: '证据不足',
+      cuda: unchecked,
+      onnxRuntime: unchecked,
+      clipSiglipOnnx: unchecked
+    }
+  }
+
+  const connected = probe.platform === 'win32' || probe.platform === 'windows'
+  const clipSiglipStatus = projectMacOSAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
+  return {
+    connected,
+    connectionLabel: connected ? 'Windows 探测已连接' : '等待探测',
+    connectionTone: connected ? 'good' : 'muted',
+    platformBadgeLabel: `${probe.platform}/${probe.machine}`,
+    platformBadgeClass: connected
+      ? 'border-indigo-100 bg-white text-indigo-700'
+      : 'border-slate-200 bg-white text-slate-500',
+    isMacOSLabel: probe.isMacOS ? 'yes' : 'no',
+    isAppleSiliconLabel: probe.isAppleSilicon ? 'yes' : 'no',
+    clipSiglipStatusLabel: clipSiglipStatus.label,
+    cuda: {
+      valueLabel: probe.torch.cudaAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
+      captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
+    },
+    onnxRuntime: {
+      valueLabel: probe.onnxruntime.available ? '可用' : '依赖缺失',
+      captionLabel: probe.onnxruntime.providers.join(' / ') || '已探测，未报告 Provider'
+    },
+    clipSiglipOnnx: {
+      valueLabel: clipSiglipStatus.label,
+      captionLabel: probe.clipSiglipOnnx.version
+        ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
+        : '已探测，未报告版本'
+    }
+  }
 }
