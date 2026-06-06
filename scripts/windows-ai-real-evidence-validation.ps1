@@ -208,6 +208,21 @@ try {
   await page.evaluate(() => { location.hash = "#/ai-console"; });
   await page.waitForTimeout(3000);
 
+  const ipcProbe = await page.evaluate(async () => {
+    const aiRuntime = window.electronAPI?.aiRuntime;
+    return {
+      wdTagger: await aiRuntime?.probeOnnxModelLoad?.({ modelFamily: "wd_tagger" }),
+      clip: await aiRuntime?.probeOnnxModelLoad?.({ modelFamily: "clip" }),
+    };
+  });
+  console.log("ONNX_MODEL_LOAD_IPC_START");
+  console.log(redact(ipcProbe));
+  console.log("ONNX_MODEL_LOAD_IPC_END");
+
+  const refreshLabel = "\u5237\u65b0\u72b6\u6001";
+  await page.locator("button").filter({ hasText: refreshLabel }).first().click({ timeout: 10000 });
+  await page.waitForTimeout(3000);
+
   const body = await page.locator("body").innerText();
   console.log("AI_CONSOLE_HAS_WINDOWS_BRANCH", body.includes("Windows") || body.includes("CUDA"));
   console.log("AI_CONSOLE_HAS_RUNTIME_PANEL", body.includes("AI") && body.includes("Runtime"));

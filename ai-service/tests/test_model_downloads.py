@@ -101,6 +101,41 @@ class TestModelDownloads(unittest.TestCase):
         )
         self.assertTrue(all(path.parent == local_dir.resolve() for path in destinations))
 
+    def test_clip_model_family_download_includes_onnx_embedding_artifact(self):
+        local_dir = Path(self.test_dir) / "clip-vit-b-32"
+        downloads = []
+
+        def mock_download_file(repo_id, filename, dest, ctx, num_channels=4):
+            downloads.append((repo_id, filename, Path(dest)))
+            return True
+
+        with patch("sys.argv", [
+            "download_cooperative_hf_model.py",
+            "--repo-id", "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+            "--local-dir", str(local_dir),
+            "--category", "transformers",
+            "--model-family", "clip",
+        ]):
+            with patch("tools.download_cooperative_hf_model.download_file", side_effect=mock_download_file):
+                download_cooperative_hf_model.main()
+
+        self.assertIn(
+            (
+                "Xenova/clip-vit-base-patch32",
+                "onnx/model.onnx",
+                local_dir.resolve() / "onnx" / "model.onnx",
+            ),
+            downloads,
+        )
+        self.assertIn(
+            (
+                "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+                "model.safetensors",
+                local_dir.resolve() / "model.safetensors",
+            ),
+            downloads,
+        )
+
     def test_stream_chunking_and_resume_on_failure(self):
         url = "https://huggingface.co/test-repo/resolve/main/test_model.bin"
         ctx = download_cooperative_hf_model.create_ssl_context()
@@ -221,7 +256,7 @@ class TestModelDownloads(unittest.TestCase):
         # 1. Non-existent file
         self.assertFalse(download_cooperative_hf_model.validate_file(self.dest_path, "model.onnx"))
 
-        # 2. Existing but too small file (for model.onnx expected_min is 780MB)
+        # 2. Existing but too small file (for model.onnx expected_min is 100MB)
         self.dest_path.write_bytes(b"A" * 1000)
         self.assertFalse(download_cooperative_hf_model.validate_file(self.dest_path, "model.onnx"))
         # Verify file got unlinked

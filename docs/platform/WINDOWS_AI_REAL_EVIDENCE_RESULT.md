@@ -1,6 +1,6 @@
 # Windows AI Real Evidence Result
 
-Status: validated on Windows host, WD Tagger ONNX real load closed; CLIP and Llama CUDA still pending
+Status: validated on Windows host, WD Tagger and CLIP ONNX real load closed; Llama CUDA still pending
 
 This file is the GitHub handoff mailbox for Windows-host validation on branch
 `codex/windows-ai-real-evidence`.
@@ -20,8 +20,11 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   reported `success=true`, `status=loaded_real`, provider
   `CPUExecutionProvider`, operation `session_load`, finite result, and 1 input /
   1 output.
-- `onnx_clip_embedding`: `success=false`, `status=artifact_missing`,
-  `errorCode=MODEL_ARTIFACT_MISSING`, `embeddingDimension=0`.
+- `onnx_clip_embedding`: initially reported `artifact_missing`. After the CLIP
+  family download was extended with the app-owned ONNX embedding artifact, the
+  probe reported `success=true`, `status=loaded_real`, provider
+  `CPUExecutionProvider`, operation `image_text_embedding`, finite output, and a
+  512-dimensional image embedding.
 - Windows Platform AI Branch Status IPC: returned `success=true`,
   `platformBranch=windows`.
 - Workflow statuses before the WD artifact download: `ai_tag_task`,
@@ -29,25 +32,24 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `runtime_probe_ready`.
 - Workflow statuses after the WD artifact download and IPC probe:
   `ai_tag_task` reported `real_model_path`; ONNX Runtime lane reported
-  `real_model_path` with real-backend-loaded evidence. `search_embedding`
-  remained `runtime_probe_ready` because the CLIP ONNX artifact route is not
-  closed yet.
+  `real_model_path` with real-backend-loaded evidence.
+- Workflow statuses after the CLIP ONNX artifact download and IPC probe:
+  `search_embedding` reported `real_model_path`; the CLIP/SigLIP ONNX lane
+  reported `real_model_path` with `CPUExecutionProvider` and 512-dimensional
+  embedding evidence.
 - Electron/Playwright AI Console: Windows AI branch status panel was visible;
   screenshot was captured on the Windows desktop.
 - Overflow check: `doc=false`, `body=false`, viewport `1008x725`.
-- Failures/blockers: CLIP ONNX still lacks a real ONNX artifact route on the
-  Windows host; the current cooperative CLIP downloader fetches Transformers
-  files, while the embedding probe expects an ONNX model artifact. Windows
-  Llama CUDA GGUF/mmproj evidence is also still insufficient for `real_model_path`.
-- Next recommended action: add or choose the app-owned Windows CLIP ONNX
-  artifact route, rerun the embedding probe, then validate the Windows Llama
-  CUDA GGUF/mmproj route with real prompt/image evidence.
+- Failures/blockers: Windows Llama CUDA GGUF/mmproj evidence is still
+  insufficient for `real_model_path`.
+- Next recommended action: validate the Windows Llama CUDA GGUF/mmproj route
+  with real prompt/image evidence.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260607-021728.log`, and the screenshot filename is
-`dam-windows-ai-console.png`. The later focused WD Tagger closure was verified
-through direct Python probing and an Electron/Playwright IPC check against
-`ai-runtime:get-windows-ai-branch-status`.
+`dam-windows-ai-validation-20260607-024905.log`, and the screenshot filename is
+`dam-windows-ai-console.png`. A later focused Electron smoke verified that the
+UI refresh path shows Windows real-model evidence after calling the WD Tagger
+and CLIP ONNX preload probes.
 
 ## Re-run Command
 
@@ -93,10 +95,11 @@ cache paths, private image data, or base64/binary payloads.
 
 ## Additional validation run
 
-The 2026-06-07 run also completed `npm ci`, `npm run typecheck`,
-`npm run build`, `npm run ci:test-runtime-safety`, Python unittest discovery
-with 107 tests, direct Windows AI probes, and Electron/Playwright screenshot
-capture. The first full run reported WD Tagger and CLIP ONNX model artifacts as
-missing; after the cooperative path fix and WD Tagger download, WD Tagger is now
-real-load verified. CLIP ONNX remains an artifact-route gap, not a CUDA runtime
-failure.
+The 2026-06-07 runs completed `npm ci`, `npm run typecheck`, `npm run build`,
+`npm run ci:test-runtime-safety`, Python unittest discovery with 111 tests,
+direct Windows AI probes, and Electron/Playwright checks. The final focused
+Electron smoke reported WD Tagger and CLIP as `loaded_real`, CLIP embedding
+dimension 512, `ai_tag_task` and `search_embedding` as `real_model_path`, and no
+horizontal overflow at a 1008x725 viewport. CLIP ONNX is now a closed Windows
+real-evidence route; remaining Windows AI evidence work is Llama CUDA
+GGUF/mmproj prompt/image validation.

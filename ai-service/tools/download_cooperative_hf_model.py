@@ -13,8 +13,8 @@ HF_RESOLVE = "https://huggingface.co/{repo_id}/resolve/main/{filename}"
 
 # Expected minimum file sizes in bytes (validated after download to detect corruption)
 EXPECTED_SIZES: dict[str, int] = {
-    "model.onnx": 780_000_000,  # WD Tagger model.onnx ~800 MB
-    "model.safetensors": 500_000_000,  # CLIP/Florence safetensors
+    "model.onnx": 100_000_000,  # Registered ONNX artifacts vary by provider.
+    "model.safetensors": 100_000_000,  # CLIP/Florence safetensors vary by provider.
 }
 
 COOPERATIVE_FILES = {
@@ -38,6 +38,7 @@ COOPERATIVE_FILES = {
         ("laion/CLIP-ViT-B-32-laion2B-s34B-b79K", "vocab.json"),
         ("laion/CLIP-ViT-B-32-laion2B-s34B-b79K", "merges.txt"),
         ("laion/CLIP-ViT-B-32-laion2B-s34B-b79K", "special_tokens_map.json"),
+        ("Xenova/clip-vit-base-patch32", "onnx/model.onnx"),
     ],
     "wd_tagger": [
         ("SmilingWolf/wd-vit-tagger-v3", "model.onnx"),
