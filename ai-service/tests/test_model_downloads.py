@@ -159,6 +159,16 @@ class TestModelDownloads(unittest.TestCase):
             self.assertTrue(expected_segment.exists())
             self.assertEqual(expected_segment.read_bytes(), b"A" * 100)
 
+    def test_commit_download_part_replaces_existing_target(self):
+        part_path = Path(self.test_dir) / "test_model.bin.part"
+        self.dest_path.write_bytes(b"stale")
+        part_path.write_bytes(b"fresh")
+
+        download_cooperative_hf_model.commit_download_part(part_path, self.dest_path)
+
+        self.assertEqual(self.dest_path.read_bytes(), b"fresh")
+        self.assertFalse(part_path.exists())
+
     def test_download_segment_fails_if_not_206(self):
         url = "https://huggingface.co/test-repo/resolve/main/test_model.bin"
         ctx = download_cooperative_hf_model.create_ssl_context()

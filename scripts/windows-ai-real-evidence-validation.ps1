@@ -34,7 +34,7 @@ try {
 
   Write-Host "== GPU =="
   nvidia-smi
-  python - <<'PY'
+  $gpuProbe = @'
 import sys
 print("python", sys.version)
 try:
@@ -46,7 +46,8 @@ try:
         print("device_name", torch.cuda.get_device_name(0))
 except Exception as exc:
     print("torch_probe_error", type(exc).__name__, str(exc))
-PY
+'@
+  $gpuProbe | python -
 
   Write-Host "== Install Node deps =="
   npm ci
@@ -63,7 +64,7 @@ PY
 
   Write-Host "== Windows AI direct probes =="
   $env:PYTHONPATH = Join-Path $RepoRoot "ai-service"
-  python - <<'PY'
+  $windowsAiProbe = @'
 import json
 from core.windows_ai_capabilities import probe_windows_ai_capabilities
 from core.python_cuda_compat import probe_python_cuda_environment
@@ -80,7 +81,8 @@ checks = {
 print("WINDOWS_AI_DIRECT_PROBES_START")
 print(json.dumps(checks, ensure_ascii=False, indent=2))
 print("WINDOWS_AI_DIRECT_PROBES_END")
-PY
+'@
+  $windowsAiProbe | python -
 
   Write-Host "== Electron/Playwright smoke =="
   $e2e = Join-Path $env:TEMP "dam-windows-ai-runtime-e2e.mjs"
@@ -92,12 +94,19 @@ import fs from "node:fs/promises";
 const repo = process.cwd();
 const userData = path.join(process.env.TEMP || ".", "dam-win-ai-e2e-" + Date.now());
 await fs.mkdir(userData, { recursive: true });
-
-const app = await electron.launch({
+const electronExe = path.join(repo, "node_modules", "electron", "dist", "electron.exe");
+const launchOptions = {
   args: [repo, "--user-data-dir=" + userData],
   cwd: repo,
   timeout: 60000,
-});
+};
+
+try {
+  await fs.access(electronExe);
+  launchOptions.executablePath = electronExe;
+} catch {}
+
+const app = await electron.launch(launchOptions);
 
 try {
   const page = await app.firstWindow();

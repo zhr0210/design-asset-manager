@@ -120,6 +120,11 @@ def check_range_support(url: str, ctx: ssl.SSLContext) -> tuple[bool, Optional[i
     return False, None
 
 
+def commit_download_part(part_path: Path, dest: Path) -> None:
+    """Atomically publish a completed .part file, replacing invalid targets on Windows."""
+    part_path.replace(dest)
+
+
 def download_segment(url: str, dest: Path, num_channels: int, index: int, start: int, end: int, ctx: ssl.SSLContext) -> bool:
     segment_path = dest.parent / f"{dest.name}.part.{num_channels}.{index}.{start}_{end}"
     chunk_size = end - start + 1
@@ -209,7 +214,7 @@ def download_parallel(url: str, dest: Path, total_size: int, num_channels: int, 
         for idx, start, end in segments:
             (dest.parent / f"{dest.name}.part.{num_channels}.{idx}.{start}_{end}").unlink(missing_ok=True)
 
-        part_path.rename(dest)
+        commit_download_part(part_path, dest)
         return True
     except Exception as e:
         emit({"type": "progress", "progress": 0, "message": f"Error merging segments: {e}"})
@@ -226,7 +231,7 @@ def download_stream_single(url: str, dest: Path, ctx: ssl.SSLContext, expected_s
         existing_bytes = part_path.stat().st_size
 
     if expected_size and existing_bytes >= expected_size:
-        part_path.rename(dest)
+        commit_download_part(part_path, dest)
         return True
 
     headers = {}
@@ -254,7 +259,7 @@ def download_stream_single(url: str, dest: Path, ctx: ssl.SSLContext, expected_s
             if expected_size and actual_size < expected_size:
                 raise ValueError(f"Truncated download: got {actual_size} bytes, expected {expected_size}")
 
-            part_path.rename(dest)
+            commit_download_part(part_path, dest)
             return True
     except Exception as e:
         emit({"type": "progress", "progress": 0, "message": f"Error in stream download: {e}"})
