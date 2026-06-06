@@ -1,13 +1,13 @@
 # Windows AI Real Evidence Result
 
-Status: remote result reported, ONNX artifacts still missing
+Status: validated on Windows host, ONNX artifacts still missing
 
 This file is the GitHub handoff mailbox for Windows-host validation on branch
 `codex/windows-ai-real-evidence`.
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-06 evening, Windows host local time.
+- Validation time: 2026-06-07 02:17, Windows host local time.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Torch CUDA execution: `python_cuda_execution` reported `success=true`,
@@ -25,7 +25,7 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `search_embedding` all reported `runtime_probe_ready`.
 - Electron/Playwright AI Console: Windows AI branch status panel was visible;
   screenshot was captured on the Windows desktop.
-- Overflow check: `doc=false`, `body=false`, viewport `1264x793`.
+- Overflow check: `doc=false`, `body=false`, viewport `1008x725`.
 - Failures/blockers: WD Tagger and CLIP ONNX artifacts are missing on the
   Windows host, so ONNX workflows have runtime evidence but not real model
   load or embedding evidence.
@@ -33,9 +33,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   ONNX WD Tagger and CLIP artifacts through app-owned model management, rerun
   this validation, then validate the Windows Llama CUDA GGUF/mmproj route.
 
-The reported Windows-host log filename was
-`dam-windows-ai-validation-20260606-200608.log`, and the reported screenshot
-filename was `dam-windows-ai-console.png`.
+The latest Windows-host log filename is
+`dam-windows-ai-validation-20260607-021728.log`, and the screenshot filename is
+`dam-windows-ai-console.png`.
 
 ## Re-run Command
 
@@ -77,3 +77,8 @@ payloads.
 
 Do not include secrets, tokens, cookies, full private asset paths, full model
 cache paths, private image data, or base64/binary payloads.
+
+
+## Additional validation run
+
+The 2026-06-07 run also completed `npm ci`, `npm run typecheck`, `npm run build`, `npm run ci:test-runtime-safety`, Python unittest discovery with 107 tests, direct Windows AI probes, and Electron/Playwright screenshot capture. The app still reports ONNX WD Tagger and CLIP model artifacts as missing; this is an artifact readiness gap, not a CUDA runtime failure.
