@@ -78,8 +78,14 @@ class VisualRouter:
 
         # 0. Check for custom category override
         custom_category = None
-        db_path = os.path.expanduser("~/DesignAssetManager/design_asset_manager.db")
-        if os.path.exists(db_path):
+        user_data_access_disabled = (
+            os.environ.get("DESIGN_ASSET_MANAGER_DISABLE_USER_DATA_ACCESS") == "1"
+        )
+        default_db_path = "~/DesignAssetManager/design_asset_manager.db"
+        db_path = os.path.expanduser(
+            os.environ.get("DESIGN_ASSET_MANAGER_RUNTIME_DB", default_db_path)
+        )
+        if not user_data_access_disabled and os.path.exists(db_path):
             try:
                 import sqlite3
                 import json
@@ -103,7 +109,13 @@ class VisualRouter:
                 conn.close()
                 
                 if asset_id:
-                    custom_path = os.path.expanduser("~/DesignAssetManager/custom_categories.json")
+                    default_custom_path = "~/DesignAssetManager/custom_categories.json"
+                    custom_path = os.path.expanduser(
+                        os.environ.get(
+                            "DESIGN_ASSET_MANAGER_CUSTOM_CATEGORIES",
+                            default_custom_path
+                        )
+                    )
                     if os.path.exists(custom_path):
                         with open(custom_path, 'r', encoding='utf-8') as f:
                             overrides = json.load(f)
@@ -316,8 +328,9 @@ class VisualRouter:
         Parses auxiliary clues from filename, directory path, web source site,
         image aspect ratios and colors.
         """
-        filename_lower = os.path.basename(file_path).lower()
-        path_lower = os.path.basename(os.path.dirname(file_path)).lower()
+        normalized_path = file_path.replace("\\", "/")
+        filename_lower = os.path.basename(normalized_path).lower()
+        path_lower = os.path.basename(os.path.dirname(normalized_path)).lower()
         
         # Clean suffix (e.g. _mlrfsdqi6)
         filename_clean = re.sub(r'_[a-z0-9]{9}(?=\.[a-z0-9]+$|$)', '', filename_lower)

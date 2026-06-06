@@ -1,12 +1,14 @@
+from __future__ import annotations
 import asyncio
 import time
 import gc
 import os
+import concurrent.futures
 from typing import Dict, Any, Optional
 
 from core.cooperative_model_registry import find_downloaded_model, get_downloaded_models_status
 from core.cooperative_model_readiness import get_cooperative_model_readiness
-from core.mock_policy import guard_mock_inference
+from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
 
 # Estimated actual GPU VRAM weights of loaded models (in MB)
 MODEL_VRAM_OCCUPANCY = {
@@ -20,6 +22,13 @@ MODEL_VRAM_OCCUPANCY = {
 }
 
 class ModelManager:
+    _executor: concurrent.futures.ThreadPoolExecutor | None = None
+
+    @classmethod
+    def _get_executor(cls) -> concurrent.futures.ThreadPoolExecutor:
+        if cls._executor is None:
+            cls._executor = concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix="model-loader")
+        return cls._executor
     _instance: Optional['ModelManager'] = None
 
     def __new__(cls, *args, **kwargs):
@@ -107,49 +116,53 @@ class ModelManager:
                 from models.wd_tagger import WDTaggerModel
                 local_p = find_downloaded_model("wd_tagger")
                 instance = WDTaggerModel(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real WDTaggerModel: {e}. Falling back to mock session.")
                 from models.wd_tagger import WDTaggerModel
                 instance = WDTaggerModel()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "ram":
             try:
                 from models.ram_tagger import RAMTaggerModel
                 local_p = find_downloaded_model("ram")
                 instance = RAMTaggerModel(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real RAMTaggerModel: {e}. Falling back to mock session.")
                 from models.ram_tagger import RAMTaggerModel
                 instance = RAMTaggerModel()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "florence2":
             try:
                 from models.florence2_tagger import Florence2TaggerModel
                 local_p = find_downloaded_model("florence2")
                 instance = Florence2TaggerModel(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real Florence2TaggerModel: {e}. Falling back to mock session.")
                 from models.florence2_tagger import Florence2TaggerModel
                 instance = Florence2TaggerModel()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "clip":
             try:
                 from models.clip_design_classifier import CLIPDesignClassifier
                 local_p = find_downloaded_model("clip")
                 instance = CLIPDesignClassifier(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real CLIPDesignClassifier: {e}. Falling back to mock session.")
                 from models.clip_design_classifier import CLIPDesignClassifier
                 instance = CLIPDesignClassifier()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "translation":
             try:
                 from services.translation_service import TranslationService

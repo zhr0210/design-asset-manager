@@ -42,7 +42,7 @@ class TestMacOSAiCapabilities(unittest.TestCase):
             import_module=self.fake_import({
                 "torch": torch,
                 "onnxruntime": ort,
-                "mlx.core": mlx,
+                "mlx": mlx,
                 "transformers": types.SimpleNamespace(__version__="4.48.0"),
                 "optimum.onnxruntime": optimum_onnxruntime,
                 "models.ram_tagger": ram,

@@ -136,12 +136,16 @@ export function registerAiWorkerIpc() {
             } else if (eventPayload.type === 'error') {
               failures.push({ package: eventPayload.package ?? 'unknown', detail: eventPayload.message ?? eventPayload.detail ?? 'unknown' })
             }
+            // Forward individual JSON event to renderer for real-time display
+            if (!event.sender.isDestroyed()) {
+              event.sender.send(CHANNEL_OCR_INSTALL_LOG_UPDATE, JSON.stringify(eventPayload))
+            }
           } catch {
-            // Keep non-JSON pip output in the tail only.
+            // Non-JSON line: forward as raw log line
+            if (!event.sender.isDestroyed() && line.trim()) {
+              event.sender.send(CHANNEL_OCR_INSTALL_LOG_UPDATE, JSON.stringify({ type: 'pip-log', message: line.trim() }))
+            }
           }
-        }
-        if (!event.sender.isDestroyed()) {
-          event.sender.send(CHANNEL_OCR_INSTALL_LOG_UPDATE, text)
         }
       })
 
@@ -149,7 +153,11 @@ export function registerAiWorkerIpc() {
         const text = chunk.toString()
         output += text
         if (!event.sender.isDestroyed()) {
-          event.sender.send(CHANNEL_OCR_INSTALL_LOG_UPDATE, text)
+          for (const line of text.split(/\r?\n/)) {
+            if (line.trim()) {
+              event.sender.send(CHANNEL_OCR_INSTALL_LOG_UPDATE, JSON.stringify({ type: 'pip-log', message: '[stderr] ' + line.trim() }))
+            }
+          }
         }
       })
 

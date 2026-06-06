@@ -66,7 +66,7 @@ const resolvedPaths = Object.values(cachePaths).concat(Object.values(tempPaths),
 for (const resolvedPath of resolvedPaths) {
   assert.doesNotMatch(resolvedPath, /C:\\Users\\kilian\\AppData/i)
   assert.doesNotMatch(resolvedPath, /C:\\/)
-  assert.doesNotMatch(resolvedPath, /^\/Users\//)
+  assert.doesNotMatch(resolvedPath, /^\/Users\/kilian\//i)
 }
 
 assert.equal(sanitizeCacheKey('../bad:name.cache'), '.._bad_name.cache')

@@ -74,12 +74,21 @@ function createWindow(): void {
   }
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Initialize SQLite database
   try {
     initDatabase()
     console.log('[SQLite] Database successfully loaded.')
     
+    // Resolve python executable on startup for diagnostic logging and packaging validation
+    try {
+      const { resolvePythonExecutable } = await import('./services/ocr-dependency.service')
+      const pyPath = resolvePythonExecutable()
+      console.log(`[resolvePythonExecutable] Startup check resolved path: ${pyPath}`)
+    } catch (pyErr) {
+      console.warn('[resolvePythonExecutable] Failed to resolve Python executable:', pyErr)
+    }
+
     // Automatically scan and extract color palettes for legacy assets that lack them
     ColorPaletteService.runStartupBatchScanner().catch((err) => {
       console.error('[ColorPaletteService] Failed to launch startup batch scanner:', err)
@@ -138,6 +147,7 @@ import { registerLlamaRuntimeIpc } from './ipc/llama-runtime.ipc'
 import { registerDoctorIpc } from './ipc/doctor.ipc'
 import { registerAiRuntimeIpc } from './ipc/ai-runtime.ipc'
 import { registerSettingsMigrationIpc } from './ipc/settings-migration.ipc'
+import { registerPathGovernanceIpc } from './ipc/path-governance.ipc'
 
 function setupIpcHandlers() {
   // Register database IPC handlers
@@ -161,4 +171,5 @@ function setupIpcHandlers() {
   registerDoctorIpc()
   registerAiRuntimeIpc()
   registerSettingsMigrationIpc()
+  registerPathGovernanceIpc()
 }

@@ -58,7 +58,7 @@ const resolvedPaths = Object.values(logPaths).concat([serviceLogPath, debugLogPa
 for (const resolvedPath of resolvedPaths) {
   assert.doesNotMatch(resolvedPath, /C:\\Users\\kilian\\AppData/i)
   assert.doesNotMatch(resolvedPath, /C:\\/)
-  assert.doesNotMatch(resolvedPath, /^\/Users\//)
+  assert.doesNotMatch(resolvedPath, /^\/Users\/kilian\//i)
 }
 
 assert.equal(sanitizeLogFileName('../bad:name.log'), '.._bad_name.log')

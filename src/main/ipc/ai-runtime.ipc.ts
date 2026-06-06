@@ -5,8 +5,10 @@ import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
+  CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
   CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
+  CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
@@ -33,6 +35,12 @@ import { PythonWorkerRuntimeProvider } from '../services/ai-runtime/providers/py
 import { createDefaultPythonWorkerRuntimeConfig } from '../services/ai-runtime/providers/python-worker-runtime-presets'
 import { resolveAiServicePath, resolveAiServiceRoot } from '../services/ai-service-paths'
 import { resolvePythonExecutable } from '../services/ai-python-runtime.service'
+import { createPlatformAiBranchStatus } from '../services/ai-runtime/platform-ai-branch-status.projector'
+import {
+  createLlamaRuntimeStatusArtifactReadiness,
+  createWorkerModelStatusArtifactReadiness
+} from '../services/ai-runtime/model-artifact-readiness.mapper'
+import { LlamaRuntimeInstallService } from '../services/llama-runtime/llama-runtime-install.service'
 
 function success<T>(data: T): AiRuntimeIpcResponse<T> {
   return { success: true, data }
@@ -83,12 +91,33 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
     })
   ))
 
-  manager.selectActiveRuntime('disabled-runtime')
+  // Auto-start Python AI Worker on macOS so capabilities probe works
+  const isMacOS = currentPlatform === 'darwin'
+  if (isMacOS) {
+    manager.selectActiveRuntime('python-worker-runtime')
+    // Fire-and-forget start; failure is non-fatal (worker may already be running
+    // or managed-venv may need deps installed first).
+    manager.startRuntime('python-worker-runtime').catch((err) => {
+      console.warn('[ai-runtime] Could not auto-start python-worker-runtime:', err?.message ?? err)
+    })
+  } else {
+    manager.selectActiveRuntime('disabled-runtime')
+  }
   return manager
 }
 
 const aiRuntimeManager = createSafeAiRuntimeManager()
 const aiClientService = new AiClientService()
+const llamaRuntimeService = LlamaRuntimeInstallService.getInstance()
+
+async function collectModelReadinessEvidence() {
+  const workerStatus = await aiClientService.getModelsStatus().catch(() => null)
+  const llamaStatus = llamaRuntimeService.getStatus()
+  return [
+    ...createWorkerModelStatusArtifactReadiness(workerStatus),
+    ...createLlamaRuntimeStatusArtifactReadiness(llamaStatus)
+  ]
+}
 
 export function registerAiRuntimeIpc() {
   ipcMain.handle(CHANNEL_AI_RUNTIME_LIST_RUNTIMES, async () => {
@@ -123,6 +152,36 @@ export function registerAiRuntimeIpc() {
       return success(await aiClientService.getMacOSCapabilities())
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS, async () => {
+    try {
+      const modelReadiness = await collectModelReadinessEvidence()
+      return success(createPlatformAiBranchStatus({
+        platformBranch: 'macos',
+        currentPlatform: process.platform as PlatformName,
+        runtimes: aiRuntimeManager.listRuntimes(),
+        modelReadiness
+      }))
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS, async () => {
+    try {
+      const modelReadiness = await collectModelReadinessEvidence()
+      return success(createPlatformAiBranchStatus({
+        platformBranch: 'windows',
+        currentPlatform: process.platform as PlatformName,
+        runtimes: aiRuntimeManager.listRuntimes(),
+        modelReadiness
+      }))
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS} error:`, err)
       return failure(err)
     }
   })

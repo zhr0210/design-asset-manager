@@ -178,6 +178,10 @@ _Avoid_: Contrast score, legibility value
 
 ### AI Workflows
 
+**AI Workflow**:
+A product workflow that uses AI or algorithmic analysis to produce user-facing asset output, such as tags, prompt reverse, OCR text, visual analysis, or search embeddings.
+_Avoid_: Runtime lane, model family, backend route
+
 **Platform AI Branch**:
 A platform-specific AI capability branch for Windows or macOS that chooses different runtime backends while preserving shared product workflows where possible.
 _Avoid_: Cross-platform AI, one AI stack
@@ -210,6 +214,42 @@ _Avoid_: Available model, installed runtime, loaded route
 A read-only check that reports whether a runtime dependency, import, service, or hardware hint appears available without proving full model inference.
 _Avoid_: Inference validation, model load, health guarantee
 
+**AI Branch Status**:
+The product-facing state of a platform AI branch or route, combining intent, runtime evidence, model readiness, and whether a real model path is currently usable.
+_Avoid_: UI label, raw probe result, service health
+
+**Platform AI Branch Status**:
+The comparable product-facing status projection for Windows AI Branch and macOS AI Branch workflows.
+_Avoid_: macOS-only status, runtime probe matrix, capability list
+
+**Shared Product Surface**:
+The common product-facing workflows, status surfaces, and main-application architecture reused across Windows and macOS, with platform-specific branches only where runtime or operating-system differences require them.
+_Avoid_: Shared runtime, one AI stack, platform-specific UI fork
+
+**Planned Capability Status**:
+An AI branch status meaning the product intends to support the workflow, but current evidence is not enough to show runtime or model readiness.
+_Avoid_: Available, installed, ready
+
+**Runtime Probe Ready Status**:
+An AI branch status meaning runtime evidence is present, but model readiness has not been proven.
+_Avoid_: Real model path, model loaded, inference validated
+
+**Ready To Load Status**:
+An AI branch status meaning dependencies and model artifacts appear sufficient to attempt loading a model path.
+_Avoid_: Runtime probe, downloaded, inference validated
+
+**Real Model Path Status**:
+An AI branch status meaning the workflow currently has a usable model-backed or explicitly configured external inference path.
+_Avoid_: Planned capability, runtime probe, downloaded model
+
+**Unavailable Status**:
+An AI branch status meaning the current platform, dependencies, configuration, or artifact state clearly prevents the workflow from being usable.
+_Avoid_: Planned capability, unknown
+
+**Model Readiness**:
+The state indicating whether required runtime dependencies and model artifacts are sufficient for a model path to load, without proving full inference output.
+_Avoid_: Downloaded, installed, loaded model, runtime probe
+
 **AI Client**:
 The Electron-side facade that enqueues AI work, records local task state, polls worker results, and notifies the renderer.
 _Avoid_: AI Worker, model client
@@ -229,6 +269,10 @@ _Avoid_: Prompt job
 **AI Analysis Task**:
 An AI task that produces structured visual analysis.
 _Avoid_: Analysis job
+
+**Search Embedding**:
+A vector representation produced from a design asset or query so the Asset Library can support semantic similarity search.
+_Avoid_: CLIP model, embedding route, vector backend
 
 **Queue Sync**:
 The background synchronization of completed AI Worker results into local asset and task state.

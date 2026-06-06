@@ -1,4 +1,4 @@
-name: Release Packaging Dry Run
+name: Release Packaging Dry-Run
 
 on:
   workflow_dispatch:
@@ -7,40 +7,49 @@ permissions:
   contents: read
 
 jobs:
-  package-plan:
-    name: ${{ matrix.target }} ${{ matrix.arch }}
+  dry-run:
+    name: Dry run packaging on ${{ matrix.os }} for ${{ matrix.target }} (${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - target: windows-nsis
-            os: windows-latest
+          - os: windows-latest
+            target: windows-nsis
             arch: x64
-            command: npm run pack:win
-          - target: windows-nsis
-            os: windows-latest
+          - os: windows-latest
+            target: windows-nsis
             arch: arm64
-            command: npm run pack:win
-          - target: macos-dmg
-            os: macos-latest
+          - os: macos-latest
+            target: macos-dmg
             arch: x64
-            command: npm run pack:mac
-          - target: macos-dmg
-            os: macos-latest
+          - os: macos-latest
+            target: macos-dmg
             arch: arm64
-            command: npm run pack:mac
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run build
-      - name: Packaging command reserved
-        run: echo "${{ matrix.command }}"
-      - name: Publish disabled
-        run: echo "publish=false signing=reserved notarization=reserved auto-update=future"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run build
+        run: npm run build
+
+      - name: Build unsigned Windows NSIS package
+        if: matrix.target == 'windows-nsis'
+        run: npm run dist:win -- --${{ matrix.arch }}
+
+      - name: Build unsigned macOS DMG package
+        if: matrix.target == 'macos-dmg'
+        run: npm run dist:mac -- --${{ matrix.arch }}

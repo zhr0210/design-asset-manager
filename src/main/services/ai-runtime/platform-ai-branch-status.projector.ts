@@ -1,0 +1,345 @@
+import type { AiRuntimeState } from '../../../shared/types/ai-runtime.types'
+import type { AiModelArtifactReadiness } from '../../../shared/types/model-artifact-readiness.types'
+import type {
+  PlatformAiBranch,
+  PlatformAiBranchStatus,
+  PlatformAiBranchStatusResponse,
+  PlatformAiMissingRequirement,
+  PlatformAiNextAction,
+  PlatformAiRuntimeLaneEvidence,
+  PlatformAiStatusEvidence,
+  PlatformAiWorkflow,
+  PlatformAiWorkflowStatus
+} from '../../../shared/types/platform-ai-branch-status.types'
+import type { PlatformName } from '../../../shared/types/platform.types'
+
+export interface PlatformAiBranchStatusProjectorInput {
+  platformBranch: PlatformAiBranch
+  currentPlatform: PlatformName
+  generatedAt?: string
+  runtimes: AiRuntimeState[]
+  modelReadiness?: AiModelArtifactReadiness[]
+}
+
+interface WorkflowDefinition {
+  workflow: PlatformAiWorkflow
+  title: string
+  summary: string
+  primaryRuntimeLane: string
+  runtimeLanes: Array<{ lane: string; label: string; runtimeKinds: string[] }>
+}
+
+const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
+  macos: [
+    {
+      workflow: 'ai_tag_task',
+      title: 'AI Tag Task',
+      summary: 'RAM++, Florence-2, CLIP/SigLIP, and WD Tagger tagging routes for macOS.',
+      primaryRuntimeLane: 'python_mps',
+      runtimeLanes: [
+        { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] },
+        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] }
+      ]
+    },
+    {
+      workflow: 'ai_prompt_task',
+      title: 'AI Prompt Task',
+      summary: 'Qwen3-VL prompt reverse through Llama, MLX, native Python experiment, or external HTTP fallback.',
+      primaryRuntimeLane: 'llama_metal',
+      runtimeLanes: [
+        { lane: 'llama_metal', label: 'Llama Metal', runtimeKinds: ['llama-app', 'custom-http'] },
+        { lane: 'mlx', label: 'MLX', runtimeKinds: ['python-worker'] },
+        { lane: 'external_http', label: 'External HTTP', runtimeKinds: ['ollama', 'lm-studio', 'custom-http'] },
+        { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] }
+      ]
+    },
+    {
+      workflow: 'ocr_text_box',
+      title: 'OCR Text / Text Box',
+      summary: 'RapidOCR, PaddleOCR, EasyOCR, or Qwen-VL text-block detection on macOS.',
+      primaryRuntimeLane: 'onnx_runtime',
+      runtimeLanes: [
+        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] },
+        { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] }
+      ]
+    },
+    {
+      workflow: 'search_embedding',
+      title: 'Search Embedding',
+      summary: 'CLIP/SigLIP embedding route for semantic Asset Library search.',
+      primaryRuntimeLane: 'onnx_runtime',
+      runtimeLanes: [
+        { lane: 'onnx_runtime', label: 'CLIP/SigLIP ONNX', runtimeKinds: ['python-worker'] },
+        { lane: 'python_mps', label: 'CLIP/SigLIP PyTorch', runtimeKinds: ['python-worker'] }
+      ]
+    }
+  ],
+  windows: [
+    {
+      workflow: 'ai_tag_task',
+      title: 'AI Tag Task',
+      summary: 'CUDA AI Worker tagging routes for RAM++, Florence-2, CLIP/SigLIP, and WD Tagger.',
+      primaryRuntimeLane: 'python_cuda',
+      runtimeLanes: [
+        { lane: 'python_cuda', label: 'Python CUDA Runtime', runtimeKinds: ['python-worker'] },
+        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] }
+      ]
+    },
+    {
+      workflow: 'ai_prompt_task',
+      title: 'AI Prompt Task',
+      summary: 'Qwen3-VL prompt reverse through CUDA legacy route, Llama CUDA, Ollama, or external HTTP fallback.',
+      primaryRuntimeLane: 'llama_cuda',
+      runtimeLanes: [
+        { lane: 'llama_cuda', label: 'Llama CUDA', runtimeKinds: ['llama-app', 'custom-http'] },
+        { lane: 'ollama', label: 'Ollama', runtimeKinds: ['ollama'] },
+        { lane: 'external_http', label: 'External HTTP', runtimeKinds: ['lm-studio', 'custom-http'] },
+        { lane: 'python_cuda', label: 'Python CUDA Runtime', runtimeKinds: ['python-worker'] }
+      ]
+    },
+    {
+      workflow: 'ocr_text_box',
+      title: 'OCR Text / Text Box',
+      summary: 'RapidOCR, PaddleOCR, EasyOCR, or CUDA-backed text-block detection on Windows.',
+      primaryRuntimeLane: 'onnx_runtime',
+      runtimeLanes: [
+        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] },
+        { lane: 'python_cuda', label: 'Python CUDA Runtime', runtimeKinds: ['python-worker'] }
+      ]
+    },
+    {
+      workflow: 'search_embedding',
+      title: 'Search Embedding',
+      summary: 'CLIP/SigLIP embedding route for semantic Asset Library search.',
+      primaryRuntimeLane: 'python_cuda',
+      runtimeLanes: [
+        { lane: 'python_cuda', label: 'CLIP/SigLIP CUDA', runtimeKinds: ['python-worker'] },
+        { lane: 'onnx_runtime', label: 'CLIP/SigLIP ONNX', runtimeKinds: ['python-worker'] }
+      ]
+    }
+  ]
+}
+
+export function createPlatformAiBranchStatus(input: PlatformAiBranchStatusProjectorInput): PlatformAiBranchStatusResponse {
+  const platformSupported = isCurrentBranch(input.platformBranch, input.currentPlatform)
+  const workflows = WORKFLOWS[input.platformBranch].map((definition) => projectWorkflow(
+    definition,
+    input.runtimes,
+    platformSupported,
+    input.modelReadiness ?? []
+  ))
+
+  return {
+    platformBranch: input.platformBranch,
+    generatedAt: input.generatedAt ?? new Date().toISOString(),
+    workflows
+  }
+}
+
+function projectWorkflow(
+  definition: WorkflowDefinition,
+  runtimes: AiRuntimeState[],
+  platformSupported: boolean,
+  modelReadiness: AiModelArtifactReadiness[]
+): PlatformAiWorkflowStatus {
+  const workflowModelReadiness = modelReadiness.filter((item) => item.workflow === definition.workflow)
+  const runtimeLanes = definition.runtimeLanes.map((lane) => projectLane(lane, runtimes, platformSupported, workflowModelReadiness))
+  const status = projectWorkflowStatus(runtimeLanes, platformSupported)
+  const missing = projectMissingRequirements(definition, runtimeLanes, platformSupported, workflowModelReadiness)
+
+  return {
+    workflow: definition.workflow,
+    status,
+    title: definition.title,
+    summary: definition.summary,
+    primaryRuntimeLane: definition.primaryRuntimeLane,
+    runtimeLanes,
+    evidence: runtimeLanes.flatMap((lane) => lane.evidence),
+    missing,
+    nextAction: createDisplayNextAction(status, missing)
+  }
+}
+
+function projectLane(
+  lane: WorkflowDefinition['runtimeLanes'][number],
+  runtimes: AiRuntimeState[],
+  platformSupported: boolean,
+  modelReadiness: AiModelArtifactReadiness[]
+): PlatformAiRuntimeLaneEvidence {
+  if (!platformSupported) {
+    return {
+      lane: lane.lane,
+      label: lane.label,
+      status: 'unavailable',
+      evidence: [evidence('platform_unsupported', '当前平台不属于该 Platform AI Branch', 'static_metadata')]
+    }
+  }
+
+  const laneModelReadiness = modelReadiness.filter((item) => item.runtimeLane === lane.lane)
+  const matched = runtimes.filter((runtime) => lane.runtimeKinds.includes(runtime.kind))
+  const running = matched.find((runtime) => runtime.status === 'running')
+  if (running) {
+    const readinessEvidence = laneModelReadiness.flatMap(readinessToEvidence)
+    const readinessStatus = projectReadinessStatus(laneModelReadiness)
+    return {
+      lane: lane.lane,
+      label: lane.label,
+      status: maxBranchStatus(['runtime_probe_ready', readinessStatus]),
+      evidence: [
+        evidence('runtime_probe_ready', `${lane.label} 有运行时状态`, 'runtime_health', running.id),
+        evidence('service_running', `${running.id} 正在运行`, 'runtime_health'),
+        ...readinessEvidence
+      ]
+    }
+  }
+
+  if (matched.length > 0) {
+    const readinessEvidence = laneModelReadiness.flatMap(readinessToEvidence)
+    const readinessStatus = projectReadinessStatus(laneModelReadiness)
+    return {
+      lane: lane.lane,
+      label: lane.label,
+      status: maxBranchStatus(['planned_capability', readinessStatus]),
+      evidence: [
+        evidence('planned_capability', `${lane.label} 已注册为计划能力`, 'static_metadata'),
+        evidence('service_unavailable', `${matched[0].id} 当前未运行`, 'runtime_health'),
+        ...readinessEvidence
+      ]
+    }
+  }
+
+  const readinessEvidence = laneModelReadiness.flatMap(readinessToEvidence)
+  const readinessStatus = projectReadinessStatus(laneModelReadiness)
+  return {
+    lane: lane.lane,
+    label: lane.label,
+    status: maxBranchStatus(['planned_capability', readinessStatus]),
+    evidence: [
+      evidence('planned_capability', `${lane.label} 是该工作流的计划运行时路线`, 'static_metadata'),
+      ...readinessEvidence
+    ]
+  }
+}
+
+function projectWorkflowStatus(runtimeLanes: PlatformAiRuntimeLaneEvidence[], platformSupported: boolean): PlatformAiBranchStatus {
+  if (!platformSupported) return 'unavailable'
+  if (runtimeLanes.some((lane) => lane.status === 'real_model_path')) return 'real_model_path'
+  if (runtimeLanes.some((lane) => lane.status === 'ready_to_load')) return 'ready_to_load'
+  if (runtimeLanes.some((lane) => lane.status === 'runtime_probe_ready')) return 'runtime_probe_ready'
+  return 'planned_capability'
+}
+
+function projectMissingRequirements(
+  definition: WorkflowDefinition,
+  runtimeLanes: PlatformAiRuntimeLaneEvidence[],
+  platformSupported: boolean,
+  modelReadiness: AiModelArtifactReadiness[]
+): PlatformAiMissingRequirement[] {
+  if (!platformSupported) {
+    return [{
+      kind: 'platform_support',
+      id: definition.workflow,
+      label: '当前操作系统不匹配'
+    }]
+  }
+
+  if (runtimeLanes.some((lane) => lane.status === 'runtime_probe_ready' || lane.status === 'ready_to_load' || lane.status === 'real_model_path')) {
+    return []
+  }
+
+  const modelMissing = modelReadiness.flatMap((item) => (item.missing ?? []).map((missing) => ({
+    kind: missing.kind,
+    id: missing.id,
+    label: missing.label,
+    detail: missing.detail
+  } satisfies PlatformAiMissingRequirement)))
+
+  return dedupeMissingRequirements([...modelMissing, {
+    kind: 'runtime_service',
+    id: definition.primaryRuntimeLane,
+    label: '等待运行时状态证据'
+  }])
+}
+
+function createDisplayNextAction(status: PlatformAiBranchStatus, missing: PlatformAiMissingRequirement[]): PlatformAiNextAction | undefined {
+  if (status === 'real_model_path') {
+    return { kind: 'none', label: '当前工作流已有 Real Model Path' }
+  }
+  const firstMissing = missing[0]
+  if (!firstMissing) return undefined
+  if (firstMissing.kind === 'platform_support') {
+    return {
+      kind: 'none',
+      label: '切换到匹配的平台分支查看状态',
+      target: { kind: 'workflow', id: firstMissing.id }
+    }
+  }
+  return {
+    kind: 'run_health_check',
+    label: '刷新运行时状态证据',
+    target: { kind: 'runtime_lane', id: firstMissing.id }
+  }
+}
+
+function evidence(
+  code: PlatformAiStatusEvidence['code'],
+  label: string,
+  source: PlatformAiStatusEvidence['source'],
+  detail?: string
+): PlatformAiStatusEvidence {
+  return { code, label, source, detail }
+}
+
+function readinessToEvidence(readiness: AiModelArtifactReadiness): PlatformAiStatusEvidence[] {
+  if (readiness.state === 'loaded_real') {
+    return [evidence('real_backend_loaded', `${readiness.label} 已由真实后端加载`, 'model_readiness', readiness.detail)]
+  }
+  if (readiness.state === 'external_backend_healthy') {
+    return [evidence('external_backend_healthy', `${readiness.label} 外部后端健康`, 'model_readiness', readiness.detail)]
+  }
+  if (readiness.state === 'ready_to_load') {
+    return [evidence('artifact_ready', `${readiness.label} artifact 形态已就绪`, 'model_readiness', readiness.detail)]
+  }
+  if (readiness.state === 'dependency_missing') {
+    return [evidence('dependency_missing', `${readiness.label} 依赖缺失`, 'model_readiness', readiness.detail)]
+  }
+  if (readiness.state === 'artifact_missing') {
+    return [evidence('artifact_missing', `${readiness.label} artifact 缺失`, 'model_readiness', readiness.detail)]
+  }
+  if (readiness.state === 'artifact_downloading') {
+    return [evidence('artifact_missing', `${readiness.label} artifact 下载未完成`, 'model_readiness', readiness.detail)]
+  }
+  return [evidence('unknown', `${readiness.label} 证据不足`, 'model_readiness', readiness.detail)]
+}
+
+function projectReadinessStatus(readiness: AiModelArtifactReadiness[]): PlatformAiBranchStatus {
+  if (readiness.some((item) => item.state === 'loaded_real' || item.state === 'external_backend_healthy')) return 'real_model_path'
+  if (readiness.some((item) => item.state === 'ready_to_load')) return 'ready_to_load'
+  return 'planned_capability'
+}
+
+function maxBranchStatus(statuses: PlatformAiBranchStatus[]): PlatformAiBranchStatus {
+  const priority: Record<PlatformAiBranchStatus, number> = {
+    unavailable: 0,
+    planned_capability: 1,
+    runtime_probe_ready: 2,
+    ready_to_load: 3,
+    real_model_path: 4
+  }
+  return statuses.reduce((best, next) => priority[next] > priority[best] ? next : best, 'planned_capability')
+}
+
+function dedupeMissingRequirements(items: PlatformAiMissingRequirement[]): PlatformAiMissingRequirement[] {
+  const seen = new Set<string>()
+  return items.filter((item) => {
+    const key = `${item.kind}:${item.id}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
+function isCurrentBranch(platformBranch: PlatformAiBranch, currentPlatform: PlatformName): boolean {
+  if (platformBranch === 'macos') return currentPlatform === 'darwin'
+  return currentPlatform === 'win32'
+}

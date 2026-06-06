@@ -1,0 +1,3 @@
+# Platform AI Branch Status Uses Dedicated IPC Channels
+
+Platform AI Branch Status is a product-facing projection, not a raw Runtime Probe or capability list, so Design Asset Manager exposes it through dedicated AI Runtime IPC channels for macOS and Windows. The two channels return the same shared response shape with platform differences kept inside runtime-lane evidence, preserving a Shared Product Surface while allowing Windows and macOS inference runtime branches to differ where OS or model-runtime constraints require it. We chose dedicated channels over extending capability probe responses because tests and renderer modules should ask one clear question: what status each shared AI workflow has on this platform branch.

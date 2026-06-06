@@ -10,6 +10,11 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - `db/`: SQLite connection and schema.
 - `extensions/photoshow/`: bundled third-party browser helper assets; do not inspect `unpacked/` by default.
 
+## Rules
+
+- Keep shared product workflow orchestration in main-process modules where possible; use platform adapters only for real OS/runtime differences.
+- Platform AI Branch Status projectors may read existing status/probe/settings state, but must not start runtimes, install dependencies, download models, or inspect user assets.
+
 ## Tests
 
 ```bash
@@ -21,4 +26,5 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.1.0 | 2026-06-04 | Added shared Windows/macOS orchestration and Platform AI Branch Status projector rules. |
 | v1.0.0 | 2026-05-31 | Rewrote README and documented main-process ownership and extension boundary. |

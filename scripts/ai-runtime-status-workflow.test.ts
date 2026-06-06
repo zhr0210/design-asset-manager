@@ -1,0 +1,364 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+import {
+  projectAiRuntimeHealthResultDisplay,
+  projectAiRuntimeActionLabel,
+  projectAiRuntimeDisplayValue,
+  projectAiRuntimeInfoLabel,
+  projectAiRuntimeStatusDisplay,
+  projectAiRuntimeSummaryDisplay,
+  getMacOSAiBranchRuntime,
+  isMacOSAiBranchMetadata,
+  normalizeMacOSAiCapabilityStatus,
+  projectClipSiglipOnnxCompatibilityDisplay,
+  projectLlamaRuntimeDisplay,
+  projectMacOSAiCapabilityStatusDisplay,
+  projectMacOSAiWorkerProbeDisplay,
+  projectPythonMpsCompatibilityDisplay
+} from '../src/shared/workflows/ai-runtime-status.workflow'
+
+const pythonUnchecked = projectPythonMpsCompatibilityDisplay(null, 'offline')
+assert.equal(pythonUnchecked.label, '未检查')
+assert.equal(pythonUnchecked.tone, 'muted')
+assert.equal(pythonUnchecked.platformValue, 'unknown')
+assert.equal(pythonUnchecked.errorValue, 'offline')
+
+const pythonReady = projectPythonMpsCompatibilityDisplay({
+  success: true,
+  compatible: true,
+  runtime: 'torch.mps',
+  status: 'optional',
+  diagnostics: {}
+})
+assert.equal(pythonReady.label, '可兼容')
+assert.equal(pythonReady.tone, 'good')
+assert.equal(pythonReady.platformValue, 'compatible')
+assert.equal(pythonReady.statusValue, 'optional')
+
+const pythonPlanned = projectPythonMpsCompatibilityDisplay({
+  success: false,
+  compatible: false,
+  runtime: null,
+  status: 'planned',
+  diagnostics: {},
+  error: 'torch missing'
+})
+assert.equal(pythonPlanned.label, '待补齐')
+assert.equal(pythonPlanned.tone, 'warn')
+assert.equal(pythonPlanned.errorValue, 'torch missing')
+
+const pythonUnavailable = projectPythonMpsCompatibilityDisplay({
+  success: false,
+  compatible: false,
+  runtime: null,
+  status: 'unavailable',
+  diagnostics: {}
+})
+assert.equal(pythonUnavailable.label, '不可用')
+assert.equal(pythonUnavailable.tone, 'bad')
+
+const clipReady = projectClipSiglipOnnxCompatibilityDisplay({
+  success: true,
+  compatible: true,
+  runtime: 'optimum.onnxruntime',
+  diagnostics: { onnxruntime: true }
+})
+assert.equal(clipReady.label, '可兼容')
+assert.equal(clipReady.statusValue, 'onnxruntime')
+
+const clipPlanned = projectClipSiglipOnnxCompatibilityDisplay({
+  success: false,
+  compatible: false,
+  runtime: null,
+  diagnostics: {}
+})
+assert.equal(clipPlanned.label, '待补齐')
+assert.equal(clipPlanned.platformValue, 'incompatible')
+assert.equal(clipPlanned.statusValue, 'unknown')
+
+const llamaRunning = projectLlamaRuntimeDisplay({
+  phase: 'complete',
+  progress: 100,
+  message: 'ready',
+  baseUrl: 'http://127.0.0.1:8080/v1',
+  serverPid: 123,
+  serverModels: ['qwen3-vl']
+})
+assert.equal(llamaRunning.running, true)
+assert.equal(llamaRunning.pillTone, 'good')
+assert.equal(llamaRunning.pillLabel, '运行中')
+assert.equal(llamaRunning.routeCaption, 'qwen3-vl 健康检查通过')
+assert.equal(llamaRunning.serviceDetailValue, '进程 PID 123')
+
+const llamaOverride = projectLlamaRuntimeDisplay({
+  phase: 'complete',
+  progress: 100,
+  message: 'ready',
+  baseUrl: 'http://127.0.0.1:8080/v1'
+}, true)
+assert.equal(llamaOverride.running, true)
+assert.equal(llamaOverride.serviceDetailValue, '运行中')
+
+const llamaError = projectLlamaRuntimeDisplay({
+  phase: 'error',
+  progress: 0,
+  message: 'failed',
+  baseUrl: 'http://127.0.0.1:8080/v1',
+  error: { code: 'START_FAILED', message: 'port busy' }
+})
+assert.equal(llamaError.pillTone, 'bad')
+assert.equal(llamaError.pillLabel, '异常')
+assert.equal(llamaError.routeCaption, 'port busy')
+
+const llamaStopped = projectLlamaRuntimeDisplay(null)
+assert.equal(llamaStopped.pillTone, 'muted')
+assert.equal(llamaStopped.pillLabel, '已停止')
+assert.equal(llamaStopped.routeValue, '已停止')
+
+assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('ready'), {
+  status: 'ready',
+  label: '就绪',
+  badgeClass: 'border-emerald-100 bg-emerald-50 text-emerald-700'
+})
+assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('optional'), {
+  status: 'optional',
+  label: '可选',
+  badgeClass: 'border-sky-100 bg-sky-50 text-sky-700'
+})
+assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('planned'), {
+  status: 'planned',
+  label: '规划中',
+  badgeClass: 'border-amber-100 bg-amber-50 text-amber-700'
+})
+assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('fallback'), {
+  status: 'fallback',
+  label: '回退',
+  badgeClass: 'border-slate-200 bg-slate-50 text-slate-600'
+})
+assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('unavailable'), {
+  status: 'unavailable',
+  label: '不可用',
+  badgeClass: 'border-rose-100 bg-rose-50 text-rose-700'
+})
+assert.equal(normalizeMacOSAiCapabilityStatus(null), 'unavailable')
+assert.equal(normalizeMacOSAiCapabilityStatus('ready'), 'ready')
+
+assert.deepEqual(projectAiRuntimeStatusDisplay('running'), {
+  status: 'running',
+  label: '运行中',
+  badgeClass: 'border-emerald-100 bg-emerald-50 text-emerald-700',
+  icon: 'success'
+})
+assert.deepEqual(projectAiRuntimeStatusDisplay('unhealthy'), {
+  status: 'unhealthy',
+  label: '异常',
+  badgeClass: 'border-amber-100 bg-amber-50 text-amber-700',
+  icon: 'warning'
+})
+assert.deepEqual(projectAiRuntimeStatusDisplay('failed'), {
+  status: 'failed',
+  label: '失败',
+  badgeClass: 'border-rose-100 bg-rose-50 text-rose-700',
+  icon: 'warning'
+})
+assert.deepEqual(projectAiRuntimeStatusDisplay('ok'), {
+  status: 'ok',
+  label: '正常',
+  badgeClass: 'border-emerald-100 bg-emerald-50 text-emerald-700',
+  icon: 'success'
+})
+assert.deepEqual(projectAiRuntimeStatusDisplay('warning'), {
+  status: 'warning',
+  label: '提醒',
+  badgeClass: 'border-amber-100 bg-amber-50 text-amber-700',
+  icon: 'warning'
+})
+assert.deepEqual(projectAiRuntimeStatusDisplay(null), {
+  status: 'unknown',
+  label: '未知',
+  badgeClass: 'border-slate-200 bg-slate-50 text-slate-500',
+  icon: 'activity'
+})
+
+const runtimeSummary = projectAiRuntimeSummaryDisplay([
+  runtimeState('running'),
+  runtimeState('failed'),
+  runtimeState('unhealthy'),
+  runtimeState('stopped')
+])
+assert.deepEqual(runtimeSummary, {
+  total: 4,
+  running: 1,
+  issues: 2,
+  runningLabel: '1/4 运行中'
+})
+assert.deepEqual(projectAiRuntimeSummaryDisplay(null), {
+  total: 0,
+  running: 0,
+  issues: 0,
+  runningLabel: '0/0 运行中'
+})
+
+const healthResult = projectAiRuntimeHealthResultDisplay({
+  runtimeId: 'python-worker',
+  status: 'warning',
+  message: '',
+  checkedAt: '2026-06-05T00:00:00.000Z',
+  durationMs: 42
+})
+assert.equal(healthResult.status.label, '提醒')
+assert.equal(healthResult.status.icon, 'warning')
+assert.equal(healthResult.messageLabel, '提醒 (42ms)')
+
+assert.equal(projectAiRuntimeInfoLabel('active'), '当前运行时')
+assert.equal(projectAiRuntimeInfoLabel('displayName'), '显示名称')
+assert.equal(projectAiRuntimeInfoLabel('customField'), 'customField')
+assert.equal(projectAiRuntimeDisplayValue('None'), '无')
+assert.equal(projectAiRuntimeDisplayValue('Never'), '从未检查')
+assert.equal(projectAiRuntimeDisplayValue('unknown'), '未知')
+assert.equal(projectAiRuntimeDisplayValue('ready'), 'ready')
+assert.equal(projectAiRuntimeActionLabel('Set active'), '设为当前')
+assert.equal(projectAiRuntimeActionLabel('Health check all'), '全部健康检查')
+assert.equal(projectAiRuntimeActionLabel('Custom action'), 'Custom action')
+
+const macOSBranch = {
+  marker: 'macos-ai-branch' as const,
+  phase: 'worker-probes' as const,
+  platform: 'darwin' as const,
+  arch: 'arm64' as const,
+  isCurrentPlatform: true,
+  lanes: [],
+  warnings: []
+}
+assert.equal(isMacOSAiBranchMetadata(macOSBranch), true)
+assert.equal(isMacOSAiBranchMetadata({ marker: 'macos-ai-branch', lanes: null }), false)
+assert.equal(getMacOSAiBranchRuntime([
+  runtimeState('stopped'),
+  { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } }
+]), macOSBranch)
+assert.equal(getMacOSAiBranchRuntime([{ ...runtimeState('running'), metadata: { macosAiBranch: { marker: 'other', lanes: [] } } }]), null)
+
+const uncheckedProbe = projectMacOSAiWorkerProbeDisplay(null)
+assert.equal(uncheckedProbe.connected, false)
+assert.equal(uncheckedProbe.connectionLabel, '等待探测')
+assert.equal(uncheckedProbe.connectionTone, 'muted')
+assert.equal(uncheckedProbe.mps.valueLabel, '尚未探测')
+assert.equal(uncheckedProbe.onnxRuntime.valueLabel, '尚未探测')
+assert.equal(uncheckedProbe.clipSiglipOnnx.valueLabel, '尚未探测')
+assert.equal(uncheckedProbe.mlx.valueLabel, '尚未探测')
+assert.equal(uncheckedProbe.clipSiglipStatusLabel, '证据不足')
+
+const connectedProbe = projectMacOSAiWorkerProbeDisplay({
+  platform: 'darwin',
+  machine: 'arm64',
+  isMacOS: true,
+  isAppleSilicon: true,
+  phase: 'worker-probes',
+  torch: {
+    available: true,
+    version: '2.8.0',
+    mpsBuilt: true,
+    mpsAvailable: true,
+    cpuFallback: true,
+    error: null
+  },
+  onnxruntime: {
+    available: true,
+    version: '1.22.0',
+    providers: ['CoreMLExecutionProvider', 'CPUExecutionProvider'],
+    coremlAvailable: true,
+    cpuAvailable: true,
+    error: null
+  },
+  mlx: {
+    available: false,
+    version: null,
+    error: 'missing'
+  },
+  clipSiglipOnnx: {
+    id: 'clip-siglip-onnx',
+    label: 'CLIP/SigLIP ONNX',
+    status: 'planned',
+    role: 'embedding',
+    backend: 'optimum',
+    version: null,
+    available: false,
+    error: null
+  },
+  lanes: []
+})
+assert.equal(connectedProbe.connected, true)
+assert.equal(connectedProbe.connectionLabel, 'macOS 探测已连接')
+assert.equal(connectedProbe.connectionTone, 'good')
+assert.equal(connectedProbe.platformBadgeLabel, 'darwin/arm64')
+assert.equal(connectedProbe.isMacOSLabel, 'yes')
+assert.equal(connectedProbe.isAppleSiliconLabel, 'yes')
+assert.equal(connectedProbe.mps.valueLabel, '可用')
+assert.equal(connectedProbe.mps.captionLabel, 'torch 2.8.0')
+assert.equal(connectedProbe.onnxRuntime.valueLabel, '可用')
+assert.equal(connectedProbe.onnxRuntime.captionLabel, 'CoreMLExecutionProvider / CPUExecutionProvider')
+assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '规划中')
+assert.equal(connectedProbe.clipSiglipOnnx.captionLabel, '已探测，未报告版本')
+assert.equal(connectedProbe.mlx.valueLabel, '规划中')
+
+const settingsPanelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
+const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
+const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
+assert.match(settingsPanelSource, /projectPythonMpsCompatibilityDisplay/)
+assert.match(settingsPanelSource, /projectClipSiglipOnnxCompatibilityDisplay/)
+assert.match(settingsPanelSource, /projectAiRuntimeStatusDisplay/)
+assert.match(settingsPanelSource, /projectAiRuntimeSummaryDisplay/)
+assert.match(settingsPanelSource, /projectAiRuntimeHealthResultDisplay/)
+assert.match(settingsPanelSource, /projectMacOSAiCapabilityStatusDisplay/)
+assert.match(settingsPanelSource, /projectMacOSAiWorkerProbeDisplay/)
+assert.match(settingsPanelSource, /projectAiRuntimeInfoLabel/)
+assert.match(settingsPanelSource, /projectAiRuntimeDisplayValue/)
+assert.match(settingsPanelSource, /projectAiRuntimeActionLabel/)
+assert.match(settingsPanelSource, /getMacOSAiBranchRuntime/)
+assert.match(matrixSource, /projectMacOSAiCapabilityStatusDisplay/)
+assert.match(aiConsoleSource, /projectPythonMpsCompatibilityDisplay/)
+assert.match(aiConsoleSource, /projectClipSiglipOnnxCompatibilityDisplay/)
+assert.match(aiConsoleSource, /projectLlamaRuntimeDisplay/)
+assert.doesNotMatch(settingsPanelSource, /pythonMpsStatus\?\.compatible\s*\?/)
+assert.doesNotMatch(settingsPanelSource, /clipSiglipOnnxStatus\?\.compatible\s*\?/)
+assert.doesNotMatch(settingsPanelSource, /clipSiglipOnnxStatus\.diagnostics\?\.onnxruntime\s*\?/)
+assert.doesNotMatch(settingsPanelSource, /const STATUS_STYLE/)
+assert.doesNotMatch(settingsPanelSource, /const STATUS_LABELS/)
+assert.doesNotMatch(settingsPanelSource, /const INFO_LABELS/)
+assert.doesNotMatch(settingsPanelSource, /function displayValue/)
+assert.doesNotMatch(settingsPanelSource, /function actionLabel/)
+assert.doesNotMatch(settingsPanelSource, /function isMacOSAiBranchMetadata/)
+assert.doesNotMatch(settingsPanelSource, /function getMacOSAiBranchRuntime/)
+assert.doesNotMatch(settingsPanelSource, /metadata\?\.macosAiBranch/)
+assert.doesNotMatch(settingsPanelSource, /runtime\.status === ['"]running['"]/)
+assert.doesNotMatch(settingsPanelSource, /runtime\.status === ['"]failed['"]/)
+assert.doesNotMatch(settingsPanelSource, /function statusText/)
+assert.doesNotMatch(settingsPanelSource, /function branchStatusStyle/)
+assert.doesNotMatch(settingsPanelSource, /probe\?\.isMacOS\s*\?/)
+assert.doesNotMatch(settingsPanelSource, /probe\.isMacOS\s*\?/)
+assert.doesNotMatch(settingsPanelSource, /probe\.isAppleSilicon\s*\?/)
+assert.doesNotMatch(aiConsoleSource, /pythonMpsStatus\?\.compatible\s*\?/)
+assert.doesNotMatch(aiConsoleSource, /clipSiglipOnnxStatus\?\.compatible\s*\?/)
+assert.doesNotMatch(aiConsoleSource, /llamaServerRunning\s*\?/)
+assert.doesNotMatch(aiConsoleSource, /llamaStatus\?\.serverPid\s*\?\s*['"]运行中['"]/)
+assert.doesNotMatch(matrixSource, /const STATUS_LABELS/)
+assert.doesNotMatch(matrixSource, /const STATUS_STYLES/)
+assert.doesNotMatch(matrixSource, /STATUS_LABELS\[/)
+assert.doesNotMatch(matrixSource, /STATUS_STYLES\[/)
+
+console.log('ai-runtime-status-workflow passed')
+
+function runtimeState(status: 'running' | 'failed' | 'unhealthy' | 'stopped') {
+  return {
+    id: status,
+    kind: 'python-worker' as const,
+    status,
+    healthStatus: 'unknown' as const,
+    startedAt: null,
+    stoppedAt: null,
+    lastHealthCheckAt: null,
+    lastError: null,
+    pid: null,
+    baseUrl: null
+  }
+}

@@ -10,7 +10,34 @@ class MockInferenceBlockedError(RuntimeError):
 
 
 def is_strict_real_ai() -> bool:
-    return os.environ.get("DESIGN_ASSET_MANAGER_STRICT_REAL_AI") == "1"
+    if os.environ.get("DESIGN_ASSET_MANAGER_STRICT_REAL_AI") == "1":
+        return True
+    if os.environ.get("NODE_ENV") == "production":
+        return True
+    if os.environ.get("PRODUCTION") == "1":
+        return True
+
+    import sys
+    search_targets = []
+    try:
+        search_targets.append(__file__)
+    except NameError:
+        pass
+    if sys.executable:
+        search_targets.append(sys.executable)
+    if sys.argv and len(sys.argv) > 0 and sys.argv[0]:
+        search_targets.append(sys.argv[0])
+    try:
+        search_targets.append(os.getcwd())
+    except Exception:
+        pass
+
+    for target in search_targets:
+        if target and ("Contents/Resources" in target or "app.asar" in target):
+            return True
+
+    return False
+
 
 
 def is_mock_inference_allowed() -> bool:

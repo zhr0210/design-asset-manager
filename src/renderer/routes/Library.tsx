@@ -9,7 +9,7 @@ import AssetWaterfallGrid from '../components/library/AssetWaterfallGrid'
 import AssetInspectorDrawer from '../components/asset/AssetInspectorDrawer'
 import BulkActionDock from '../components/library/BulkActionDock'
 import BulkActionModal from '../components/library/BulkActionModal'
-import { LIBRARY_TAG_GROUP_TITLES } from '../components/library/library-labels'
+import TagFilterBar from '../components/tag/TagFilterBar'
 
 // Custom hooks
 import { useActivePromptModel } from '../hooks/useActivePromptModel'
@@ -46,7 +46,7 @@ export default function Library() {
     assetRelations,
     updateAssetCaption,
     resetAssetCaptionEdited,
-    generateMockAiSuggestions,
+    generateAiSuggestions,
     generateDeepAnalysis
   } = useAssetStore()
 
@@ -173,17 +173,6 @@ export default function Library() {
     }
   }
 
-  // Group database tags for left panel sidebar navigation
-  const groupedSidebarTags: Record<string, typeof tags> = {}
-  for (const tag of tags) {
-    if (tag.usageCount > 0) {
-      if (!groupedSidebarTags[tag.type]) {
-        groupedSidebarTags[tag.type] = []
-      }
-      groupedSidebarTags[tag.type].push(tag)
-    }
-  }
-
   return (
     <div className="flex-1 flex h-full relative overflow-hidden select-none">
       
@@ -191,9 +180,8 @@ export default function Library() {
       <LibrarySidebar
         selectedAsset={selectedAsset}
         assetsCount={assets.length}
+        tags={tags}
         activeTagSearchQueries={activeTagSearchQueries}
-        groupedSidebarTags={groupedSidebarTags}
-        groupTitles={LIBRARY_TAG_GROUP_TITLES}
         clearActiveTagSearchQueries={clearActiveTagSearchQueries}
         addActiveTagSearchQuery={addActiveTagSearchQuery}
         removeActiveTagSearchQuery={removeActiveTagSearchQuery}
@@ -220,6 +208,7 @@ export default function Library() {
             activeTagSearchQueries={activeTagSearchQueries}
             handleClearFilters={handleClearFilters}
           />
+          <TagFilterBar />
         </div>
 
         {/* Gallery Masonry view */}
@@ -248,7 +237,7 @@ export default function Library() {
             handleRunPromptReverse={handleRunPromptReverse}
             updateAssetCaption={updateAssetCaption}
             resetAssetCaptionEdited={resetAssetCaptionEdited}
-            generateMockAiSuggestions={generateMockAiSuggestions}
+            generateAiSuggestions={generateAiSuggestions}
             generateDeepAnalysis={generateDeepAnalysis}
             confirmAiTag={confirmAiTag}
             rejectAiTag={rejectAiTag}

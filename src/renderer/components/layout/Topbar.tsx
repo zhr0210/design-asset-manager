@@ -2,6 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import { Database, ShieldCheck, Zap } from 'lucide-react'
 import { useDownloadStore } from '../../stores/download.store'
+import { projectDownloadTaskSummaryDisplay } from '../../../shared/workflows/download-status.workflow'
 
 const pageTitles: Record<string, string> = {
   '/dashboard': '仪表盘',
@@ -18,7 +19,7 @@ const pageTitles: Record<string, string> = {
 export default function Topbar() {
   const location = useLocation()
   const tasks = useDownloadStore((s) => s.tasks)
-  const isDownloading = tasks.some((task) => task.status === 'downloading')
+  const downloadSummary = projectDownloadTaskSummaryDisplay(tasks)
   const title = pageTitles[location.pathname] || '设计素材管理器'
 
   return (
@@ -26,10 +27,10 @@ export default function Topbar() {
       <h1 className="min-w-0 truncate text-[15.5px] font-bold tracking-tight text-slate-800 dark:text-slate-100">{title}</h1>
 
       <div className="ml-6 flex shrink-0 items-center gap-3">
-        {isDownloading && (
+        {downloadSummary.isDownloading && (
           <div className="flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-emerald-600 dark:border-emerald-950 dark:bg-emerald-950/40 dark:text-emerald-400">
             <Zap className="h-3.5 w-3.5 fill-emerald-600/10 dark:fill-emerald-400/10" />
-            <span className="text-[11.5px] font-bold tracking-wide">下载中</span>
+            <span className="text-[11.5px] font-bold tracking-wide">{downloadSummary.topbarLabel}</span>
           </div>
         )}
 

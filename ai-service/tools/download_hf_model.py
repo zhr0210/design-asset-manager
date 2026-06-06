@@ -26,7 +26,11 @@ def main():
     parser.add_argument("--local-dir", required=True)
     parser.add_argument("--revision", default=None)
     parser.add_argument("--token", default=None)
+    parser.add_argument("--mirror", default=None)
     args = parser.parse_args()
+
+    if args.mirror:
+        os.environ["HF_ENDPOINT"] = args.mirror
 
     try:
         from huggingface_hub import snapshot_download
@@ -37,10 +41,10 @@ def main():
     local_dir = Path(args.local_dir).expanduser().resolve()
     local_dir.mkdir(parents=True, exist_ok=True)
 
-    emit({"type": "start", "success": True, "repoId": repo_id, "localDir": str(local_dir), "timestamp": time.time()})
+    emit({"type": "start", "success": True, "repoId": repo_id, "timestamp": time.time()})
 
     try:
-        path = snapshot_download(
+        snapshot_download(
             repo_id=repo_id, local_dir=str(local_dir), revision=args.revision,
             token=args.token or os.environ.get("HF_TOKEN"),
             local_dir_use_symlinks=False, resume_download=True,
@@ -50,7 +54,7 @@ def main():
                             "special_tokens_map.json", "*.tiktoken"],
             ignore_patterns=["*.msgpack", "*.h5", "*.ot", "*.onnx", "*.tflite", "*.gguf",
                              "flax_model*", "tf_model*"])
-        emit({"type": "complete", "success": True, "repoId": repo_id, "localPath": path, "timestamp": time.time()})
+        emit({"type": "complete", "success": True, "repoId": repo_id, "timestamp": time.time()})
     except KeyboardInterrupt:
         fail("MODEL_DOWNLOAD_CANCELLED", "Model download cancelled.")
     except Exception as e:

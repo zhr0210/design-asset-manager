@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { useDownloadStore } from '../../stores/download.store'
 import { useUIStore } from '../../stores/ui.store'
+import { projectDownloadTaskSummaryDisplay } from '../../../shared/workflows/download-status.workflow'
 
 const navItems = [
   { to: '/dashboard', label: '仪表盘', icon: LayoutDashboard },
@@ -32,7 +33,7 @@ const navItems = [
 export default function Sidebar() {
   const [isHovered, setIsHovered] = useState(false)
   const tasks = useDownloadStore((s) => s.tasks)
-  const downloadingCount = tasks.filter((task) => task.status === 'downloading' || task.status === 'waiting').length
+  const downloadSummary = projectDownloadTaskSummaryDisplay(tasks)
   const { theme, toggleTheme } = useUIStore()
 
   return (
@@ -56,7 +57,7 @@ export default function Sidebar() {
       <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
         {navItems.map((item) => {
           const Icon = item.icon
-          const badge = item.hasBadge && downloadingCount > 0 ? downloadingCount : undefined
+          const badge = item.hasBadge && downloadSummary.activeCount > 0 ? downloadSummary.activeCount : undefined
           return (
             <NavLink
               key={item.to}

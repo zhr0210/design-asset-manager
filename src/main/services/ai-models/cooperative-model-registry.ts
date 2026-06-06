@@ -47,12 +47,8 @@ export const COOPERATIVE_MODELS: CooperativeModel[] = [
 ]
 
 export function getCooperativeModelRootDir(): string {
-  try {
-    const configured = SettingsService.getInstance().getSettings().modelRootDir
-    if (configured && configured.trim()) return path.join(configured, 'cooperative')
-  } catch {
-    // Fallback before settings initialized
-  }
+  // Cooperative models are system-level and always stored in app userData.
+  // Do NOT use user-configurable modelRootDir — that is for user-facing GGUF models.
   const appData = app.getPath('userData')
   return path.join(appData, 'AIModels', 'cooperative')
 }

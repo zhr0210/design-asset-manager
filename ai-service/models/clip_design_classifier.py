@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 import random
 from typing import List, Dict, Any, Tuple
-from core.mock_policy import guard_mock_inference
+from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
 
 class CLIPDesignClassifier:
     """
@@ -38,7 +38,7 @@ class CLIPDesignClassifier:
             from transformers import CLIPProcessor, CLIPModel
             import torch
             
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+            device = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.is_available() else "cpu")
             print(f"[CLIPDesignClassifier] PyTorch device: {device}")
             
             # Use local_path if provided, otherwise HF repo id
@@ -54,6 +54,7 @@ class CLIPDesignClassifier:
             self.is_loaded = True
             print(f"[CLIPDesignClassifier] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
+            if isinstance(e, MockInferenceBlockedError): raise
             print(f"[CLIPDesignClassifier] Failed loading real CLIP model: {e}. Activating mock fallback.")
             guard_mock_inference("CLIP/SigLIP", str(e))
             self.is_mock = True
@@ -136,6 +137,7 @@ class CLIPDesignClassifier:
             return sorted_tags[:top_n]
             
         except Exception as e:
+            if isinstance(e, MockInferenceBlockedError): raise
             print(f"[CLIPDesignClassifier] Inference error: {e}. Falling back to mock calculation.")
             guard_mock_inference("CLIP/SigLIP", str(e))
             return self._simulate_mock_classification(image_path, candidate_tags, top_n)

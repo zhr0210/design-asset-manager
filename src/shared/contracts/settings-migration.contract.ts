@@ -1,6 +1,5 @@
 import type { AppSettings } from '../types/settings.types'
-import type { SettingsMigrationPlan } from '../types/settings-migration.types'
-import type { CompatibilityReport } from '../../main/services/settings/settings-compatibility.types'
+import type { CompatibilityReport, SettingsMigrationPlan } from '../types/settings-migration.types'
 
 export const CHANNEL_SETTINGS_MIGRATION_CREATE_PLAN = 'settingsMigration:createPlan'
 export const CHANNEL_SETTINGS_MIGRATION_DRY_RUN = 'settingsMigration:dryRun'

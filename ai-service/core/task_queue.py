@@ -1,5 +1,6 @@
 import time
 import threading
+import os
 from typing import Dict, List, Any, Optional
 
 class TaskQueue:
@@ -27,10 +28,15 @@ class TaskQueue:
 
     def _init_cache_db(self) -> None:
         import sqlite3
-        import os
-        cache_dir = os.path.dirname(os.path.abspath(__file__))
-        self.cache_db_path = os.path.join(cache_dir, "tasks_cache.db")
+        default_cache_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "tasks_cache.db"
+        )
+        self.cache_db_path = os.path.expanduser(
+            os.environ.get("DESIGN_ASSET_MANAGER_TASK_CACHE_DB", default_cache_path)
+        )
         try:
+            os.makedirs(os.path.dirname(self.cache_db_path), exist_ok=True)
             conn = sqlite3.connect(self.cache_db_path)
             cursor = conn.cursor()
             cursor.execute("""
@@ -50,19 +56,24 @@ class TaskQueue:
             """)
             conn.commit()
             conn.close()
-            print(f"[TaskQueue] Persistent task cache database initialized at {self.cache_db_path}")
+            print("[TaskQueue] Persistent task cache database initialized.")
         except Exception as e:
-            print(f"[TaskQueue] Failed to initialize persistent tasks cache: {e}")
+            print(f"[TaskQueue] Failed to initialize persistent tasks cache: {type(e).__name__}")
 
     def load_queued_tasks_from_db(self) -> None:
         """Loads any 'queued' tasks from the SQLite database into memory on startup."""
         import sqlite3
-        import os
-        db_path = os.path.expanduser("~/DesignAssetManager/design_asset_manager.db")
+        if os.environ.get("DESIGN_ASSET_MANAGER_DISABLE_USER_DATA_ACCESS") == "1":
+            return
+
+        default_db_path = "~/DesignAssetManager/design_asset_manager.db"
+        db_path = os.path.expanduser(
+            os.environ.get("DESIGN_ASSET_MANAGER_RUNTIME_DB", default_db_path)
+        )
         if not os.path.exists(db_path):
             return
             
-        print(f"[TaskQueue] Connecting to database {db_path} to restore queued tasks...")
+        print("[TaskQueue] Restoring queued tasks from the runtime database.")
         try:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
@@ -140,7 +151,7 @@ class TaskQueue:
             print(f"[TaskQueue] Successfully restored {tag_count} tag tasks, {prompt_count} prompt tasks, {analysis_count} analysis tasks from SQLite!")
             conn.close()
         except Exception as e:
-            print(f"[TaskQueue] Failed to restore queued tasks from SQLite: {e}")
+            print(f"[TaskQueue] Failed to restore queued tasks from SQLite: {type(e).__name__}")
 
     def enqueue(self, task_id: str, asset_id: str, file_path: str, model_name: str, priority: int = 0, models_to_run: Optional[List[str]] = None) -> Dict[str, Any]:
         """Insert new task into queue."""
@@ -310,4 +321,3 @@ class TaskQueue:
                     stats[status] += 1
                 stats["total"] += 1
             return stats
-

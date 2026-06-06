@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { useAssetStore } from './asset.store'
+import { projectDownloadTaskSummaryDisplay } from '../../shared/workflows/download-status.workflow'
 
 export interface DownloadTask {
   id: string
@@ -67,9 +68,10 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
     if (api) {
       try {
         const dbTasks = await api.listDownloads()
+        const tasks = dbTasks.map(mapDbTaskToTask)
         set({
-          tasks: dbTasks.map(mapDbTaskToTask),
-          activeDownloadsCount: dbTasks.filter((t: any) => t.status === 'downloading').length
+          tasks,
+          activeDownloadsCount: projectDownloadTaskSummaryDisplay(tasks).activeCount
         })
       } catch (err) {
         console.error('[Store] Failed to load download tasks from DB:', err)
@@ -81,11 +83,38 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
     console.log('[Store] enqueueDownload starting for:', item)
     const taskId = `dl-${Math.random().toString(36).substr(2, 9)}`
     const fileSuffix = taskId.replace('dl-', '')
+
+    // Existing local mock sanitization for fallback
     const cleanTitle = item.title.toLowerCase()
       .replace(/[\\/:*?"<>|]/g, '') // remove invalid Windows/macOS filename characters
       .replace(/\s+/g, '-')
       .substring(0, 60)
-    const finalFilename = cleanTitle ? `${cleanTitle}_${fileSuffix}.jpg` : `${fileSuffix}.jpg`
+    const fallbackFilename = cleanTitle ? `${cleanTitle}_${fileSuffix}.jpg` : `${fileSuffix}.jpg`
+    const fallbackSavePath = `~/DesignAssetManager/library/${fallbackFilename}`
+
+    let savePath = fallbackSavePath
+
+    if (api && typeof api.getDownloadPathPlan === 'function') {
+      try {
+        let requestedFilename = item.title
+        if (requestedFilename) {
+          const lower = requestedFilename.toLowerCase()
+          if (!lower.endsWith('.jpg') && !lower.endsWith('.jpeg') && !lower.endsWith('.png') && !lower.endsWith('.gif') && !lower.endsWith('.webp')) {
+            requestedFilename += '.jpg'
+          }
+        } else {
+          requestedFilename = `${fileSuffix}.jpg`
+        }
+
+        const plan = await api.getDownloadPathPlan(requestedFilename)
+        if (plan && plan.plannedSavePath) {
+          savePath = plan.plannedSavePath
+        }
+      } catch (err) {
+        console.error('[Store] Failed to retrieve download path plan from IPC:', err)
+      }
+    }
+
     const newTask: DownloadTask = {
       id: taskId,
       assetTitle: item.title,
@@ -93,7 +122,7 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
       sourceSiteName: item.sourceSite,
       sourcePageUrl: item.sourcePageUrl,
       downloadUrl: item.downloadUrl,
-      savePath: `~/DesignAssetManager/library/${finalFilename}`,
+      savePath: savePath,
       status: 'waiting',
       progress: 0,
       retryCount: 0,
@@ -172,7 +201,7 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
           if (t.id === id) {
             const nextProgress = Math.min(t.progress + Math.floor(Math.random() * 15) + 5, 100)
             const nextStatus: DownloadTask['status'] = nextProgress === 100 ? 'completed' : 'downloading'
-            
+
             if (nextProgress === 100) {
               isDone = true
               // Trigger save into local assets DB
@@ -225,7 +254,7 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
           return t
         })
 
-        const activeCount = tasks.filter((t) => t.status === 'downloading').length
+        const activeCount = projectDownloadTaskSummaryDisplay(tasks).activeCount
         return { tasks, activeDownloadsCount: activeCount }
       })
 

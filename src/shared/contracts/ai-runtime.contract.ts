@@ -1,10 +1,13 @@
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../types/ai-runtime.types'
 import type { MacOSAiWorkerProbeResult } from '../types/macos-ai-runtime.types'
+import type { PlatformAiBranchStatusResponse } from '../types/platform-ai-branch-status.types'
 
 export const CHANNEL_AI_RUNTIME_LIST_RUNTIMES = 'aiRuntime:listRuntimes'
 export const CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE = 'aiRuntime:getRuntimeState'
 export const CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME = 'aiRuntime:getActiveRuntime'
 export const CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES = 'aiRuntime:getMacOSCapabilities'
+export const CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS = 'ai-runtime:get-macos-ai-branch-status'
+export const CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS = 'ai-runtime:get-windows-ai-branch-status'
 export const CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS = 'aiRuntime:getPythonMpsStatus'
 export const CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS = 'aiRuntime:getClipSiglipOnnxStatus'
 export const CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME = 'aiRuntime:selectActiveRuntime'
@@ -28,6 +31,8 @@ export interface AiRuntimeMacOSCapabilitiesResponse {
   capabilities: MacOSAiWorkerProbeResult | null
   error?: string
 }
+
+export type AiRuntimePlatformAiBranchStatusResponse = PlatformAiBranchStatusResponse
 
 export interface AiRuntimePythonMpsStatusResponse {
   success: boolean

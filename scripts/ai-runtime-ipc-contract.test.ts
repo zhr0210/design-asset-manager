@@ -5,7 +5,9 @@ import {
   CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
   CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
+  CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
+  CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
@@ -23,6 +25,8 @@ const channels = {
   getClipSiglipOnnxStatus: CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
   getPythonMpsStatus: CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
   getMacOSCapabilities: CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
+  getMacOSAiBranchStatus: CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
+  getWindowsAiBranchStatus: CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS,
   selectActiveRuntime: CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   startRuntime: CHANNEL_AI_RUNTIME_START_RUNTIME,
   stopRuntime: CHANNEL_AI_RUNTIME_STOP_RUNTIME,
@@ -38,6 +42,8 @@ const channelConstants = [
   'CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS',
   'CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS',
   'CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES',
+  'CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS',
+  'CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS',
   'CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME',
   'CHANNEL_AI_RUNTIME_START_RUNTIME',
   'CHANNEL_AI_RUNTIME_STOP_RUNTIME',
@@ -54,6 +60,8 @@ assert.deepEqual(channels, {
   getClipSiglipOnnxStatus: 'aiRuntime:getClipSiglipOnnxStatus',
   getPythonMpsStatus: 'aiRuntime:getPythonMpsStatus',
   getMacOSCapabilities: 'aiRuntime:getMacOSCapabilities',
+  getMacOSAiBranchStatus: 'ai-runtime:get-macos-ai-branch-status',
+  getWindowsAiBranchStatus: 'ai-runtime:get-windows-ai-branch-status',
   selectActiveRuntime: 'aiRuntime:selectActiveRuntime',
   startRuntime: 'aiRuntime:startRuntime',
   stopRuntime: 'aiRuntime:stopRuntime',
@@ -80,10 +88,16 @@ assert.doesNotMatch(handlerSource, /new MockAiRuntimeProvider/)
 assert.doesNotMatch(handlerSource, /new MockAiRuntimeHttpClient/)
 assert.doesNotMatch(handlerSource, /new MockAiRuntimeProcessRunner/)
 assert.match(handlerSource, /getMacOSCapabilities/)
+assert.match(handlerSource, /get-macos-ai-branch-status|getMacOSAiBranchStatus|CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS/)
+assert.match(handlerSource, /get-windows-ai-branch-status|getWindowsAiBranchStatus|CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS/)
 assert.match(handlerSource, /getClipSiglipOnnxStatus/)
 assert.match(handlerSource, /AiClientService/)
+assert.match(handlerSource, /collectModelReadinessEvidence/)
+assert.match(handlerSource, /createWorkerModelStatusArtifactReadiness/)
+assert.match(handlerSource, /createLlamaRuntimeStatusArtifactReadiness/)
 assert.doesNotMatch(handlerSource, /child_process|execFile|runProcess|SettingsService|saveSettings|runtime-registry\.service|RuntimeRegistry|better-sqlite3|src\/main\/db/i)
-assert.doesNotMatch(handlerSource, /ai-worker-manager|llama-runtime-install|ocr-dependency/i)
+assert.doesNotMatch(handlerSource, /ai-worker-manager|ocr-dependency/i)
+assert.doesNotMatch(handlerSource, /list-local-models|startInstall|startServer|detectHardware|createInstallPlan|fs\.|readdir|existsSync/)
 
 assert.match(mainSource, /registerAiRuntimeIpc\(\)/)
 

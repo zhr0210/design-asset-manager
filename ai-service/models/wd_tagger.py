@@ -6,7 +6,7 @@ import time
 from typing import List, Dict, Any, Optional
 import numpy as np
 
-from core.mock_policy import guard_mock_inference
+from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
 from utils.image_preprocess import prepare_image_for_wd_tagger
 from utils.tag_cleaner import clean_wd_tag, TRANSLATION_MAP
 
@@ -165,6 +165,7 @@ class WDTaggerModel:
                 )
                 print(f"[WDTaggerModel] Model weights successfully cached locally at {self.cache_dir}.")
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[WDTaggerModel] Hugging Face download failed or offline: {e}. Activating mock fallback.")
                 guard_mock_inference("WD Tagger", str(e))
                 self.is_mock = True
@@ -177,6 +178,7 @@ class WDTaggerModel:
         try:
             self._load_tags_csv(csv_path)
         except Exception as e:
+            if isinstance(e, MockInferenceBlockedError): raise
             print(f"[WDTaggerModel] Failed to parse selected_tags.csv: {e}. Activating mock fallback.")
             guard_mock_inference("WD Tagger", str(e))
             self.is_mock = True
@@ -223,6 +225,7 @@ class WDTaggerModel:
             self.is_loaded = True
             
         except Exception as e:
+            if isinstance(e, MockInferenceBlockedError): raise
             print(f"[WDTaggerModel] ONNX Runtime session initialization failed: {e}.")
             # Try timm fallback or go straight to mock
             print("[WDTaggerModel] Fallback to Mock predictions activated.")

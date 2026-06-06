@@ -10,6 +10,8 @@ import {
   ExternalLink
 } from 'lucide-react'
 import { Asset, AssetTagRelation } from '../../stores/asset.store'
+import { projectAssetDetailDisplay } from '../../../shared/workflows/asset-display.workflow'
+import type { AssetTaggingModelId } from '../../../shared/workflows/asset-tagging.workflow'
 import type { AppSettings } from '../../../shared/types/settings.types'
 import AssetTagPanel from './AssetTagPanel'
 import { ColorPalettePanel } from '../color/ColorPalettePanel'
@@ -36,7 +38,7 @@ type AssetInspectorDrawerProps = {
   handleRunPromptReverse: (options?: { promptTemplateId?: string; promptTemplateText?: string }) => Promise<void>;
   updateAssetCaption: (id: string, caption: string) => Promise<void>;
   resetAssetCaptionEdited: (id: string) => Promise<void>;
-  generateMockAiSuggestions: (id: string, engines: string[]) => Promise<{ success: boolean; error?: string }>;
+  generateAiSuggestions: (id: string, engines: readonly AssetTaggingModelId[]) => Promise<{ success: boolean; error?: string }>;
   generateDeepAnalysis: (id: string) => Promise<void>;
   confirmAiTag: (relId: string, assetId: string) => Promise<void>;
   rejectAiTag: (relId: string, assetId: string) => Promise<void>;
@@ -54,13 +56,14 @@ export default function AssetInspectorDrawer({
   handleRunPromptReverse,
   updateAssetCaption,
   resetAssetCaptionEdited,
-  generateMockAiSuggestions,
+  generateAiSuggestions,
   generateDeepAnalysis,
   confirmAiTag,
   rejectAiTag,
   deleteAsset
 }: AssetInspectorDrawerProps) {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+  const assetDisplay = projectAssetDetailDisplay(selectedAsset)
 
   return (
     <div className="w-80 border border-slate-200 rounded-2xl bg-white shadow-premium flex flex-col h-full shrink-0 overflow-hidden animate-in slide-in-from-right duration-300 relative select-none">
@@ -81,8 +84,8 @@ export default function AssetInspectorDrawer({
         {/* Mini Image Preview */}
         <div className="mt-5 rounded-xl overflow-hidden bg-slate-50 border border-slate-100 relative group/view">
           <img
-            src={selectedAsset.fileUrl || selectedAsset.thumbnailPath}
-            alt={selectedAsset.title}
+            src={assetDisplay.previewSrc}
+            alt={assetDisplay.titleLabel}
             className="w-full h-auto object-cover max-h-48"
           />
           {/* Direct Open File button */}
@@ -99,7 +102,7 @@ export default function AssetInspectorDrawer({
         {/* Details Specs */}
         <div className="space-y-1">
           <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide">资源名称</span>
-          <h4 className="text-[13px] font-bold text-slate-700 leading-snug">{selectedAsset.title}</h4>
+          <h4 className="text-[13px] font-bold text-slate-700 leading-snug">{assetDisplay.titleLabel}</h4>
         </div>
 
         <div className="space-y-3.5 text-[11.5px] border-t border-slate-50 pt-4">
@@ -109,7 +112,7 @@ export default function AssetInspectorDrawer({
               <span>来源网站:</span>
             </span>
             <span className="text-slate-700 font-bold bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
-              {selectedAsset.sourceSiteName}
+              {assetDisplay.sourceSiteLabel}
             </span>
           </div>
 
@@ -119,7 +122,7 @@ export default function AssetInspectorDrawer({
               <span>图片规格:</span>
             </span>
             <span className="text-slate-700 font-bold">
-              {selectedAsset.width} x {selectedAsset.height} ({selectedAsset.fileType})
+              {assetDisplay.imageSpecLabel}
             </span>
           </div>
 
@@ -129,7 +132,7 @@ export default function AssetInspectorDrawer({
               <span>文件大小:</span>
             </span>
             <span className="text-slate-700 font-bold">
-              {(selectedAsset.fileSize / 1024 / 1024).toFixed(2)} MB
+              {assetDisplay.fileSizeLabel}
             </span>
           </div>
 
@@ -139,7 +142,7 @@ export default function AssetInspectorDrawer({
               <span>下载日期:</span>
             </span>
             <span className="text-slate-700 font-bold">
-              {new Date(selectedAsset.createdAt).toLocaleDateString()}
+              {assetDisplay.createdDateLabel}
             </span>
           </div>
         </div>
@@ -188,12 +191,12 @@ export default function AssetInspectorDrawer({
           selectedAsset={selectedAsset}
           updateAssetCaption={updateAssetCaption}
           resetAssetCaptionEdited={resetAssetCaptionEdited}
-          generateMockAiSuggestions={generateMockAiSuggestions}
+          generateAiSuggestions={generateAiSuggestions}
         />
 
         {/* 自动标签建议 Panel */}
         <div className="border-t border-slate-50 pt-4">
-          <TagSuggestionPanel assetId={selectedAsset.id} />
+          <TagSuggestionPanel key={selectedAsset.id} assetId={selectedAsset.id} />
         </div>
 
       </div>

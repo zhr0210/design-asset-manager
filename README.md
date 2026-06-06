@@ -20,6 +20,12 @@ Local desktop app for managing design assets.
 - Python AI Worker: `ai-service/`
 - Build: Electron Vite + TypeScript
 
+## Architecture Principles
+
+- Keep a Shared Product Surface across Windows and macOS: product workflows, renderer surfaces, main-process orchestration, and shared contracts should be reused unless real platform constraints force a branch.
+- Keep platform differences in adapters, runtime-lane evidence, packaging/native dependency plans, and path/process helpers.
+- Treat AI inference runtime as the main platform branch: Windows and macOS may use different backends, but product workflow status should stay comparable.
+
 ## Commands
 
 ```bash
@@ -59,6 +65,7 @@ python scripts/check-docs-sync.py
 - Do not casually change IPC channels, SQLite schema semantics, or Python AI Worker HTTP API.
 - Do not bypass the Electron poller for AI Worker result sync.
 - Do not run model inference inside Electron main.
+- Platform AI Branch Status uses dedicated AI Runtime IPC channels for Windows/macOS with one shared response shape.
 - `src/main/extensions/photoshow/` is bundled third-party extension content; do not read/refactor `unpacked` by default.
 
 ## Rollback
@@ -69,6 +76,7 @@ Use the nearest module README change log to locate the version, time, changed mo
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.0 | 2026-06-04 | Added compact Windows/macOS shared architecture principles and Platform AI Branch Status contract boundary. |
 | v1.7.0 | 2026-05-31 | Fixed blurry image preview in AssetInspectorDrawer by upgrading the source from a 512px low-resolution thumbnail to the high-resolution fileUrl (with graceful fallback). |
 | v1.6.0 | 2026-05-31 | Removed max-width limits (max-w-7xl, max-w-[1320px], max-w-[1540px]) from AppShell, Settings, and AI Console wrappers, allowing components to adaptively stretch and fill the maximized desktop workspace. |
 | v1.5.0 | 2026-05-31 | Removed sidebar user information card and added a centralized global Day/Night theme toggle button with local storage persistence and full dark mode styling. |

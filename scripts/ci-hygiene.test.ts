@@ -50,7 +50,8 @@ async function assertDistTempIsBounded(allowedEntries: string[]): Promise<void> 
   const distTemp = path.resolve('dist-temp')
   let entries: string[]
   try {
-    entries = await fs.readdir(distTemp)
+    const rawEntries = await fs.readdir(distTemp)
+    entries = rawEntries.filter((e) => e !== '.DS_Store')
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       return

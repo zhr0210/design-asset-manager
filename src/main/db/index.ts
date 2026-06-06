@@ -402,6 +402,10 @@ export function initDatabase(): Database.Database {
   return db
 }
 
+export function setDatabase(newDb: Database.Database): void {
+  db = newDb
+}
+
 export function getDatabase(): Database.Database {
   if (!db) {
     throw new Error('Database not initialized. Please call initDatabase() first.')

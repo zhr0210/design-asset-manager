@@ -15,6 +15,19 @@ import type {
   AiRuntimeOperationResponse,
   AiRuntimeStateResponse
 } from '../../../shared/contracts/ai-runtime.contract'
+import {
+  projectAiRuntimeHealthResultDisplay,
+  projectAiRuntimeStatusDisplay,
+  projectAiRuntimeSummaryDisplay,
+  projectClipSiglipOnnxCompatibilityDisplay,
+  projectMacOSAiCapabilityStatusDisplay,
+  projectMacOSAiWorkerProbeDisplay,
+  projectPythonMpsCompatibilityDisplay,
+  projectAiRuntimeInfoLabel,
+  projectAiRuntimeDisplayValue,
+  projectAiRuntimeActionLabel,
+  getMacOSAiBranchRuntime
+} from '../../../shared/workflows/ai-runtime-status.workflow'
 
 type AiRuntimeApi = {
   listRuntimes: () => Promise<AiRuntimeIpcResponse<AiRuntimeListRuntimesResponse>>
@@ -32,53 +45,6 @@ type AiRuntimeApi = {
   updateRuntimeConfig: (runtimeId: string, config: Partial<AiRuntimeConfig>) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
 }
 
-const STATUS_STYLE: Record<string, string> = {
-  idle: 'border-slate-200 bg-slate-50 text-slate-500',
-  starting: 'border-brand-100 bg-brand-50 text-brand-600',
-  running: 'border-emerald-100 bg-emerald-50 text-emerald-700',
-  stopping: 'border-amber-100 bg-amber-50 text-amber-700',
-  stopped: 'border-slate-200 bg-slate-50 text-slate-500',
-  unhealthy: 'border-amber-100 bg-amber-50 text-amber-700',
-  failed: 'border-rose-100 bg-rose-50 text-rose-700',
-  disabled: 'border-slate-200 bg-slate-100 text-slate-500',
-  ok: 'border-emerald-100 bg-emerald-50 text-emerald-700',
-  warning: 'border-amber-100 bg-amber-50 text-amber-700',
-  error: 'border-rose-100 bg-rose-50 text-rose-700',
-  unknown: 'border-slate-200 bg-slate-50 text-slate-500'
-}
-
-const STATUS_LABELS: Record<string, string> = {
-  idle: '空闲',
-  starting: '启动中',
-  running: '运行中',
-  stopping: '停止中',
-  stopped: '已停止',
-  unhealthy: '异常',
-  failed: '失败',
-  disabled: '已禁用',
-  ok: '正常',
-  warning: '提醒',
-  error: '错误',
-  unknown: '未知'
-}
-
-const INFO_LABELS: Record<string, string> = {
-  active: '当前运行时',
-  total: '总数',
-  running: '运行中',
-  issues: '问题',
-  displayName: '显示名称',
-  baseUrl: '服务地址',
-  lastCheck: '最近检查',
-  pid: '进程 PID',
-  error: '错误',
-  platform: '平台',
-  machine: '机器架构',
-  isMacOS: 'macOS',
-  isAppleSilicon: 'Apple Silicon',
-  clipSiglipOnnx: 'CLIP/SigLIP ONNX'
-}
-
 function getAiRuntimeApi(): AiRuntimeApi | null {
   const electronAPI = (window as unknown as { electronAPI?: { aiRuntime?: AiRuntimeApi } }).electronAPI
   return electronAPI?.aiRuntime ?? null
@@ -91,24 +57,6 @@ function formatDate(value?: string | null) {
   return date.toLocaleString()
 }
 
-function displayValue(value: string) {
-  if (value === 'None') return '无'
-  if (value === 'Never') return '从未检查'
-  if (value === 'unknown') return '未知'
-  return value
-}
-
-function actionLabel(label: string) {
-  return {
-    'Set active': '设为当前',
-    Start: '启动',
-    Stop: '停止',
-    Restart: '重启',
-    'Health check': '健康检查',
-    'Health check all': '全部健康检查'
-  }[label] ?? label
-}
-
 function stringifyMetadata(metadata?: Record<string, unknown>) {
   if (!metadata || Object.keys(metadata).length === 0) return '{}'
   try {
@@ -118,41 +66,9 @@ function stringifyMetadata(metadata?: Record<string, unknown>) {
   }
 }
 
-function isMacOSAiBranchMetadata(value: unknown): value is MacOSAiBranchRuntimeMetadata {
-  return Boolean(value && typeof value === 'object' && (value as { marker?: unknown }).marker === 'macos-ai-branch' && Array.isArray((value as { lanes?: unknown }).lanes))
-}
-
-function getMacOSAiBranchRuntime(runtimes: AiRuntimeState[]): MacOSAiBranchRuntimeMetadata | null {
-  for (const runtime of runtimes) {
-    const branch = runtime.metadata?.macosAiBranch
-    if (isMacOSAiBranchMetadata(branch)) return branch
-  }
-  return null
-}
-
-function statusText(status: MacOSAiCapabilityStatus) {
-  return {
-    ready: '就绪',
-    optional: '可选',
-    planned: '规划中',
-    fallback: '回退',
-    unavailable: '不可用'
-  }[status]
-}
-
-function branchStatusStyle(status: MacOSAiCapabilityStatus) {
-  return {
-    ready: 'border-emerald-100 bg-emerald-50 text-emerald-700',
-    optional: 'border-sky-100 bg-sky-50 text-sky-700',
-    planned: 'border-amber-100 bg-amber-50 text-amber-700',
-    fallback: 'border-slate-200 bg-slate-50 text-slate-600',
-    unavailable: 'border-rose-100 bg-rose-50 text-rose-700'
-  }[status]
-}
-
-function statusIcon(status: string) {
-  if (status === 'running' || status === 'ok') return <CheckCircle2 className="h-3.5 w-3.5" />
-  if (status === 'failed' || status === 'error' || status === 'unhealthy' || status === 'warning') return <AlertTriangle className="h-3.5 w-3.5" />
+function statusIcon(icon: ReturnType<typeof projectAiRuntimeStatusDisplay>['icon']) {
+  if (icon === 'success') return <CheckCircle2 className="h-3.5 w-3.5" />
+  if (icon === 'warning') return <AlertTriangle className="h-3.5 w-3.5" />
   return <Activity className="h-3.5 w-3.5" />
 }
 
@@ -176,10 +92,16 @@ export default function AiRuntimePanel() {
   const macosAiBranch = useMemo(() => getMacOSAiBranchRuntime(runtimes), [runtimes])
 
   const runtimeSummary = useMemo(() => {
-    const running = runtimes.filter((runtime) => runtime.status === 'running').length
-    const failed = runtimes.filter((runtime) => runtime.status === 'failed' || runtime.status === 'unhealthy').length
-    return { running, failed, total: runtimes.length }
+    return projectAiRuntimeSummaryDisplay(runtimes)
   }, [runtimes])
+
+  const pythonMpsDisplay = useMemo(() => {
+    return projectPythonMpsCompatibilityDisplay(pythonMpsStatus, pythonMpsStatusError)
+  }, [pythonMpsStatus, pythonMpsStatusError])
+
+  const clipSiglipDisplay = useMemo(() => {
+    return projectClipSiglipOnnxCompatibilityDisplay(clipSiglipOnnxStatus, clipSiglipOnnxStatusError)
+  }, [clipSiglipOnnxStatus, clipSiglipOnnxStatusError])
 
   const loadRuntimes = async () => {
     const api = getAiRuntimeApi()
@@ -258,10 +180,10 @@ export default function AiRuntimePanel() {
     setError(null)
     try {
       const response = await operation(api, runtimeId)
-      if (!response.success || !response.data) throw new Error(response.error || `${actionLabel(label)}失败。`)
-      if (!response.data.success) throw new Error(response.data.error || `${actionLabel(label)}被运行时拒绝。`)
+      if (!response.success || !response.data) throw new Error(response.error || `${projectAiRuntimeActionLabel(label)}失败。`)
+      if (!response.data.success) throw new Error(response.data.error || `${projectAiRuntimeActionLabel(label)}被运行时拒绝。`)
       replaceRuntimeState(response.data.state)
-      setLastAction(`${actionLabel(label)}：${runtimeId}`)
+      setLastAction(`${projectAiRuntimeActionLabel(label)}：${runtimeId}`)
       if (label === 'Set active') {
         setActiveRuntime(response.data.state)
       }
@@ -332,7 +254,7 @@ export default function AiRuntimePanel() {
           </div>
         </div>
         <span className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-black text-slate-500">
-          {runtimeSummary.running}/{runtimeSummary.total} 运行中
+          {runtimeSummary.runningLabel}
         </span>
       </div>
 
@@ -350,17 +272,17 @@ export default function AiRuntimePanel() {
               这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。
             </div>
           </div>
-          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsStatus?.compatible ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-amber-100 bg-amber-50 text-amber-700'}`}>
-            {pythonMpsStatus?.compatible ? '可兼容' : pythonMpsStatus ? pythonMpsStatus.status === 'planned' ? '待补齐' : '不可用' : '未检查'}
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsDisplay.toneClass}`}>
+            {pythonMpsDisplay.label}
           </span>
         </div>
 
         {pythonMpsStatus && (
           <div className="mt-3 grid grid-cols-2 gap-3 text-[10.5px] font-bold text-slate-500 lg:grid-cols-4">
-            <InfoTile label="displayName" value={pythonMpsStatus.runtime ?? 'torch.mps'} />
-            <InfoTile label="platform" value={pythonMpsStatus.compatible ? 'compatible' : 'incompatible'} />
-            <InfoTile label="machine" value={pythonMpsStatus.status} />
-            <InfoTile label="error" value={pythonMpsStatusError ?? 'None'} wide />
+            <InfoTile label="displayName" value={pythonMpsDisplay.runtimeLabel} />
+            <InfoTile label="platform" value={pythonMpsDisplay.platformValue} />
+            <InfoTile label="machine" value={pythonMpsDisplay.statusValue} />
+            <InfoTile label="error" value={pythonMpsDisplay.errorValue} wide />
           </div>
         )}
 
@@ -379,17 +301,17 @@ export default function AiRuntimePanel() {
               这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。
             </div>
           </div>
-          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${clipSiglipOnnxStatus?.compatible ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-amber-100 bg-amber-50 text-amber-700'}`}>
-            {clipSiglipOnnxStatus?.compatible ? '可兼容' : clipSiglipOnnxStatus ? '待补齐' : '未检查'}
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${clipSiglipDisplay.toneClass}`}>
+            {clipSiglipDisplay.label}
           </span>
         </div>
 
         {clipSiglipOnnxStatus && (
           <div className="mt-3 grid grid-cols-2 gap-3 text-[10.5px] font-bold text-slate-500 lg:grid-cols-4">
-            <InfoTile label="displayName" value={clipSiglipOnnxStatus.runtime ?? 'optimum.onnxruntime'} />
-            <InfoTile label="platform" value={clipSiglipOnnxStatus.compatible ? 'compatible' : 'incompatible'} />
-            <InfoTile label="machine" value={clipSiglipOnnxStatus.diagnostics?.onnxruntime ? 'onnxruntime' : 'unknown'} />
-            <InfoTile label="error" value={clipSiglipOnnxStatusError ?? 'None'} wide />
+            <InfoTile label="displayName" value={clipSiglipDisplay.runtimeLabel} />
+            <InfoTile label="platform" value={clipSiglipDisplay.platformValue} />
+            <InfoTile label="machine" value={clipSiglipDisplay.statusValue} />
+            <InfoTile label="error" value={clipSiglipDisplay.errorValue} wide />
           </div>
         )}
 
@@ -410,7 +332,7 @@ export default function AiRuntimePanel() {
         <InfoTile label="active" value={activeRuntimeId ?? 'None'} wide />
         <InfoTile label="total" value={String(runtimeSummary.total)} />
         <InfoTile label="running" value={String(runtimeSummary.running)} />
-        <InfoTile label="issues" value={String(runtimeSummary.failed)} />
+        <InfoTile label="issues" value={String(runtimeSummary.issues)} />
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
@@ -490,6 +412,8 @@ function MacOSAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata }
 }
 
 function MacOSAiWorkerProbePanel({ probe, error }: { probe: MacOSAiWorkerProbeResult | null; error: string | null }) {
+  const probeDisplay = useMemo(() => projectMacOSAiWorkerProbeDisplay(probe), [probe])
+
   return (
     <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
@@ -499,8 +423,8 @@ function MacOSAiWorkerProbePanel({ probe, error }: { probe: MacOSAiWorkerProbeRe
             这里显示 Python Worker 当前探测到的 MPS、ONNX Runtime 和 MLX 状态，帮助确认真实运行时能力是否已经可用。
           </div>
         </div>
-        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${probe?.isMacOS ? 'border-indigo-100 bg-white text-indigo-700' : 'border-slate-200 bg-white text-slate-500'}`}>
-          {probe ? `${probe.platform}/${probe.machine}` : '等待探测'}
+        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${probeDisplay.platformBadgeClass}`}>
+          {probeDisplay.platformBadgeLabel}
         </span>
       </div>
 
@@ -508,9 +432,9 @@ function MacOSAiWorkerProbePanel({ probe, error }: { probe: MacOSAiWorkerProbeRe
         <div className="mt-4 grid grid-cols-2 gap-3 text-[10.5px] font-bold text-slate-500 lg:grid-cols-5">
           <InfoTile label="platform" value={probe.platform} />
           <InfoTile label="machine" value={probe.machine} />
-          <InfoTile label="isMacOS" value={probe.isMacOS ? 'yes' : 'no'} />
-          <InfoTile label="isAppleSilicon" value={probe.isAppleSilicon ? 'yes' : 'no'} />
-          <InfoTile label="clipSiglipOnnx" value={statusText(probe.clipSiglipOnnx.status)} />
+          <InfoTile label="isMacOS" value={probeDisplay.isMacOSLabel} />
+          <InfoTile label="isAppleSilicon" value={probeDisplay.isAppleSiliconLabel} />
+          <InfoTile label="clipSiglipOnnx" value={probeDisplay.clipSiglipStatusLabel} />
         </div>
       )}
 
@@ -552,6 +476,7 @@ type MacOSAiLaneLike = {
 }
 
 function MacOSAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
+  const laneDisplay = projectMacOSAiCapabilityStatusDisplay(lane.status)
   return (
     <div className="rounded-xl border border-white bg-white p-3 shadow-sm">
       <div className="flex items-start justify-between gap-2">
@@ -559,23 +484,26 @@ function MacOSAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
           <div className="truncate text-[12px] font-black text-slate-900">{lane.label}</div>
           <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500">{lane.summary}</div>
         </div>
-        <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${branchStatusStyle(lane.status)}`}>
-          {statusText(lane.status)}
+        <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${laneDisplay.badgeClass}`}>
+          {laneDisplay.label}
         </span>
       </div>
 
       <div className="mt-3 space-y-1.5">
-        {lane.capabilities.map((capability) => (
-          <div key={capability.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 px-2.5 py-2">
-            <div className="min-w-0">
-              <div className="truncate text-[10.5px] font-black text-slate-700">{capability.label}</div>
-              <div className="mt-0.5 truncate text-[9.5px] font-bold text-slate-400">{capability.backend ?? capability.role}</div>
+        {lane.capabilities.map((capability) => {
+          const capDisplay = projectMacOSAiCapabilityStatusDisplay(capability.status)
+          return (
+            <div key={capability.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 px-2.5 py-2">
+              <div className="min-w-0">
+                <div className="truncate text-[10.5px] font-black text-slate-700">{capability.label}</div>
+                <div className="mt-0.5 truncate text-[9.5px] font-bold text-slate-400">{capability.backend ?? capability.role}</div>
+              </div>
+              <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black ${capDisplay.badgeClass}`}>
+                {capDisplay.label}
+              </span>
             </div>
-            <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black ${branchStatusStyle(capability.status)}`}>
-              {statusText(capability.status)}
-            </span>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
@@ -602,17 +530,21 @@ function RuntimeCard({
   onRestart: () => void
   onHealthCheck: () => void
 }) {
+  const statusDisplay = projectAiRuntimeStatusDisplay(runtime.status)
+  const healthDisplay = projectAiRuntimeStatusDisplay(runtime.healthStatus)
+  const healthResultDisplay = healthResult ? projectAiRuntimeHealthResultDisplay(healthResult) : null
+
   return (
     <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${STATUS_STYLE[runtime.status] ?? STATUS_STYLE.unknown}`}>
-              {statusIcon(runtime.status)}
-              {STATUS_LABELS[runtime.status] ?? runtime.status}
+            <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${statusDisplay.badgeClass}`}>
+              {statusIcon(statusDisplay.icon)}
+              {statusDisplay.label}
             </span>
-            <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${STATUS_STYLE[runtime.healthStatus] ?? STATUS_STYLE.unknown}`}>
-              {STATUS_LABELS[runtime.healthStatus] ?? runtime.healthStatus}
+            <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9.5px] font-black ${healthDisplay.badgeClass}`}>
+              {healthDisplay.label}
             </span>
             {active && (
               <span className="inline-flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-0.5 text-[9.5px] font-black text-indigo-700">
@@ -635,9 +567,9 @@ function RuntimeCard({
         <InfoTile label="error" value={runtime.lastError ?? 'None'} wide />
       </div>
 
-      {healthResult && (
-        <div className={`mt-3 rounded-xl border p-3 text-[10.5px] font-bold leading-5 ${STATUS_STYLE[healthResult.status] ?? STATUS_STYLE.unknown}`}>
-          {healthResult.message || STATUS_LABELS[healthResult.status] || healthResult.status} ({healthResult.durationMs}ms)
+      {healthResultDisplay && (
+        <div className={`mt-3 rounded-xl border p-3 text-[10.5px] font-bold leading-5 ${healthResultDisplay.status.badgeClass}`}>
+          {healthResultDisplay.messageLabel}
         </div>
       )}
 
@@ -664,9 +596,9 @@ function RuntimeCard({
 function InfoTile({ label, value, wide = false }: { label: string; value: string; wide?: boolean }) {
   return (
     <div className={`min-w-0 rounded-xl border border-slate-100 bg-white/80 p-2.5 ${wide ? 'col-span-2' : ''}`}>
-      <div className="text-[9.5px] font-black text-slate-400">{INFO_LABELS[label] ?? label}</div>
+      <div className="text-[9.5px] font-black text-slate-400">{projectAiRuntimeInfoLabel(label)}</div>
       <div className="mt-1 truncate text-[10.5px] font-black text-slate-700" title={value}>
-        {displayValue(value)}
+        {projectAiRuntimeDisplayValue(value)}
       </div>
     </div>
   )

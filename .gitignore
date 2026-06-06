@@ -56,3 +56,11 @@ docs/archive/
 
 # Temporary scratch directories
 scratch/
+
+# Stale root-level build outputs (should only exist under out/)
+/index.js
+/index.cjs
+/index-*.js
+
+# Test scratch files
+src/message.txt

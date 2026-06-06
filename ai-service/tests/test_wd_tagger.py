@@ -7,6 +7,11 @@ import unittest
 import numpy as np
 from PIL import Image
 
+import huggingface_hub
+def mock_hf_hub_download(*args, **kwargs):
+    raise Exception("Offline mock fallback for unit tests")
+huggingface_hub.hf_hub_download = mock_hf_hub_download
+
 from models.wd_tagger import WDTaggerModel, TagPrediction, WDTaggerResult
 from utils.image_preprocess import prepare_image_for_wd_tagger
 from utils.tag_cleaner import clean_wd_tag

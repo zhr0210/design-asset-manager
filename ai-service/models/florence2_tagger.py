@@ -3,7 +3,7 @@ import os
 import re
 import random
 from typing import List, Dict, Any
-from core.mock_policy import guard_mock_inference
+from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
 
 class Florence2TaggerModel:
     """
@@ -38,7 +38,7 @@ class Florence2TaggerModel:
             from transformers import AutoProcessor, AutoModelForCausalLM
             import torch
             
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+            device = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.is_available() else "cpu")
             print(f"[Florence2TaggerModel] PyTorch device: {device}")
             
             # Use local_path if provided, otherwise HF repo id
@@ -50,7 +50,7 @@ class Florence2TaggerModel:
             self.model = AutoModelForCausalLM.from_pretrained(
                 load_source, 
                 trust_remote_code=True,
-                dtype=torch.float16 if device == "cuda" else torch.float32,
+                dtype=torch.float16 if device == "cuda" else (torch.float32 if device == "mps" else torch.float32),
                 attn_implementation="eager"
             )
             self.processor = AutoProcessor.from_pretrained(load_source, trust_remote_code=True)
@@ -60,6 +60,7 @@ class Florence2TaggerModel:
             self.is_loaded = True
             print(f"[Florence2TaggerModel] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
+            if isinstance(e, MockInferenceBlockedError): raise
             print(f"[Florence2TaggerModel] Failed loading real Florence-2 model: {e}. Activating mock fallback.")
             guard_mock_inference("Florence-2", str(e))
             self.is_mock = True
@@ -137,6 +138,7 @@ class Florence2TaggerModel:
                 "raw_text": generated_text
             }
         except Exception as e:
+            if isinstance(e, MockInferenceBlockedError): raise
             print(f"[Florence2TaggerModel] Causal generation failed: {e}. Falling back to mock prediction.")
             guard_mock_inference("Florence-2", str(e))
             return self._simulate_mock_prediction(image_path, task_prompt)
@@ -146,7 +148,8 @@ class Florence2TaggerModel:
         Create a high-fidelity mock OCR and Caption outputs by extracting Chinese/English characters from filename.
         """
         guard_mock_inference("Florence-2", "Direct mock prediction was requested.")
-        filename = os.path.basename(image_path)
+        normalized_path = image_path.replace("\\", "/")
+        filename = os.path.basename(normalized_path)
         filename_no_ext, _ = os.path.splitext(filename)
         filename_lower = filename.lower()
         

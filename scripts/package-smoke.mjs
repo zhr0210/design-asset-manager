@@ -43,22 +43,81 @@ if (buildInstaller) {
   })
 }
 
-await checkFile('installer', installerPath)
-await checkFile('winUnpackedExe', unpackedExe)
+async function findDmgFile() {
+  try {
+    const files = await fs.readdir(distDir)
+    for (const f of files) {
+      if (f.endsWith('.dmg')) {
+        return path.join(distDir, f)
+      }
+    }
+  } catch {}
+  return null
+}
 
-if (await exists(installerPath)) {
+async function findUnpackedBinary() {
+  if (process.platform === 'win32') {
+    const candidates = [
+      path.join(distDir, 'win-unpacked', 'Design Asset Manager.exe'),
+      path.join(distDir, 'win-arm64-unpacked', 'Design Asset Manager.exe')
+    ]
+    for (const c of candidates) {
+      if (await exists(c)) return c
+    }
+    return null
+  } else if (process.platform === 'darwin') {
+    try {
+      const subdirs = await fs.readdir(distDir, { withFileTypes: true })
+      for (const entry of subdirs) {
+        if (entry.isDirectory() && entry.name.startsWith('mac')) {
+          const appPath = path.join(distDir, entry.name, 'Design Asset Manager.app')
+          const binaryPath = path.join(appPath, 'Contents', 'MacOS', 'Design Asset Manager')
+          if (await exists(binaryPath)) {
+            return binaryPath
+          }
+        }
+      }
+    } catch {}
+    const fallbacks = [
+      path.join(distDir, 'mac', 'Design Asset Manager.app', 'Contents', 'MacOS', 'Design Asset Manager'),
+      path.join(distDir, 'mac-arm64', 'Design Asset Manager.app', 'Contents', 'MacOS', 'Design Asset Manager')
+    ]
+    for (const f of fallbacks) {
+      if (await exists(f)) return f
+    }
+    return null
+  }
+  return null
+}
+
+const activeInstaller = process.platform === 'win32'
+  ? installerPath
+  : (await findDmgFile() || path.join(distDir, 'Design Asset Manager-1.0.0-arm64.dmg'))
+
+const activeUnpacked = process.platform === 'win32'
+  ? unpackedExe
+  : (await findUnpackedBinary() || path.join(distDir, 'mac-arm64', 'Design Asset Manager.app'))
+
+await checkFile('installer', activeInstaller)
+if (process.platform === 'win32') {
+  await checkFile('winUnpackedExe', activeUnpacked)
+} else {
+  await checkFile('macUnpackedApp', activeUnpacked)
+}
+
+if (await exists(activeInstaller)) {
   report.artifacts.installer = {
-    fileName: path.basename(installerPath),
-    sizeBytes: (await fs.stat(installerPath)).size,
-    sha256: await sha256(installerPath),
-    signed: await getAuthenticodeStatus(installerPath)
+    fileName: path.basename(activeInstaller),
+    sizeBytes: (await fs.stat(activeInstaller)).size,
+    sha256: await sha256(activeInstaller),
+    signed: await getAuthenticodeStatus(activeInstaller)
   }
 }
 
-if (await exists(path.join(installerPath + '.blockmap'))) {
+if (await exists(path.join(activeInstaller + '.blockmap'))) {
   report.artifacts.blockmap = {
-    fileName: path.basename(installerPath + '.blockmap'),
-    sizeBytes: (await fs.stat(installerPath + '.blockmap')).size
+    fileName: path.basename(activeInstaller + '.blockmap'),
+    sizeBytes: (await fs.stat(activeInstaller + '.blockmap')).size
   }
 }
 
@@ -103,46 +162,96 @@ async function checkFile(id, filePath) {
 }
 
 async function smokeLaunchUnpacked() {
-  if (process.platform !== 'win32') {
-    report.checks.push({ id: 'launch-unpacked', status: 'skipped', detail: 'Windows-only smoke launch.' })
-    return
-  }
-  if (!(await exists(unpackedExe))) {
-    report.checks.push({ id: 'launch-unpacked', status: 'failed', detail: 'win-unpacked executable is missing.' })
+  const binaryPath = await findUnpackedBinary()
+  if (!binaryPath) {
+    report.checks.push({ id: 'launch-unpacked', status: 'failed', detail: 'Unpacked executable binary is missing.' })
     process.exitCode = 1
     return
   }
 
-  const result = await new Promise((resolve) => {
-    const child = spawn(unpackedExe, ['--no-sandbox', '--disable-gpu'], {
-      cwd: path.dirname(unpackedExe),
+  console.log(`Found unpacked binary to launch: ${binaryPath}`)
+
+  const sandboxHome = path.join(distDir, 'temp-smoke-home')
+  await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
+  await fs.mkdir(sandboxHome, { recursive: true })
+
+  const customEnv = {
+    ...process.env,
+    HOME: sandboxHome,
+    USERPROFILE: sandboxHome,
+    APPDATA: path.join(sandboxHome, 'AppData', 'Roaming'),
+    LOCALAPPDATA: path.join(sandboxHome, 'AppData', 'Local')
+  }
+
+  const passed = await new Promise((resolve) => {
+    const child = spawn(binaryPath, ['--no-sandbox', '--disable-gpu'], {
+      cwd: path.dirname(binaryPath),
       shell: false,
       windowsHide: true,
-      stdio: 'ignore'
+      env: customEnv
     })
+
+    let stdoutBuffer = ''
+    let stderrBuffer = ''
+    child.stdout.on('data', (data) => {
+      stdoutBuffer += data.toString()
+    })
+    child.stderr.on('data', (data) => {
+      stderrBuffer += data.toString()
+    })
+
+    const checkOutputs = () => {
+      const fullLog = stdoutBuffer + '\n' + stderrBuffer
+      const hasDbLog = fullLog.includes('[SQLite] Database successfully loaded.') || fullLog.includes('Database successfully loaded.')
+      const hasPyLog = fullLog.includes('[resolvePythonExecutable]') || fullLog.includes('resolvePythonExecutable')
+      return { hasDbLog, hasPyLog, fullLog }
+    }
+
+    let resolved = false
     const timer = setTimeout(() => {
+      if (resolved) return
+      resolved = true
       const running = child.exitCode === null
       if (running) {
         child.kill()
       }
-      resolve({ runningAfterTimeout: running, exitCode: child.exitCode })
+      const { hasDbLog, hasPyLog, fullLog } = checkOutputs()
+      console.log('--- Smoke Test App Log Output ---')
+      console.log(fullLog)
+      console.log('---------------------------------')
+      resolve(hasDbLog && hasPyLog)
     }, launchTimeoutMs)
-    child.on('error', (error) => {
+
+    child.on('error', (err) => {
+      if (resolved) return
+      resolved = true
       clearTimeout(timer)
-      resolve({ runningAfterTimeout: false, error: error.message })
+      console.error('Failed to spawn app process:', err)
+      resolve(false)
     })
+
     child.on('exit', (code) => {
+      if (resolved) return
+      resolved = true
       clearTimeout(timer)
-      resolve({ runningAfterTimeout: false, exitCode: code })
+      const { hasDbLog, hasPyLog, fullLog } = checkOutputs()
+      console.log('--- Smoke Test App Log Output (Exited Early) ---')
+      console.log(fullLog)
+      console.log('------------------------------------------------')
+      resolve(hasDbLog && hasPyLog && code === 0)
     })
   })
 
-  const passed = Boolean(result.runningAfterTimeout)
   report.checks.push({
     id: 'launch-unpacked',
     status: passed ? 'passed' : 'failed',
-    detail: passed ? `Process stayed alive for ${launchTimeoutMs}ms.` : `Process exited early: ${JSON.stringify(result)}`
+    detail: passed
+      ? `Process stayed alive, loaded SQLite database, and resolved python executable.`
+      : `App failed smoke checks. Check stdout/stderr logs for details.`
   })
+
+  await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
+
   if (!passed) process.exitCode = 1
 }
 

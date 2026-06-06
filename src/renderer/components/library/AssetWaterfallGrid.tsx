@@ -1,5 +1,6 @@
 import React from 'react'
 import { Check, Maximize2 } from 'lucide-react'
+import { projectAssetLibraryCardDisplay } from '../../../shared/workflows/asset-display.workflow'
 import { Asset } from '../../stores/asset.store'
 
 type AssetWaterfallGridProps = {
@@ -24,6 +25,7 @@ export default function AssetWaterfallGrid({
           {filteredAssets.map((asset) => {
             const isSelected = selectedAsset?.id === asset.id
             const isChecked = bulkSelectedAssetIds.includes(asset.id)
+            const cardDisplay = projectAssetLibraryCardDisplay(asset)
             
             return (
               <div
@@ -38,14 +40,14 @@ export default function AssetWaterfallGrid({
                 {/* Thumbnail and absolute overlays */}
                 <div className="rounded-xl overflow-hidden bg-slate-50 relative aspect-auto">
                   <img
-                    src={asset.thumbnailPath}
-                    alt={asset.title}
+                    src={cardDisplay.previewSrc}
+                    alt={cardDisplay.titleLabel}
                     className="w-full h-auto object-cover group-hover:scale-[1.02] transition-premium"
                   />
                   
                   {/* Website Source Stamp Badge */}
                   <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur text-[9.5px] font-bold text-slate-500 shadow-sm">
-                    {asset.sourceSiteName}
+                    {cardDisplay.sourceSiteLabel}
                   </div>
 
                   {/* Bulk Selection Checkbox Overlay */}
@@ -67,10 +69,10 @@ export default function AssetWaterfallGrid({
                 {/* Material Card Details */}
                 <div className="mt-3.5 space-y-2">
                   <h4 className="text-[12.5px] font-bold text-slate-700 leading-snug line-clamp-1">
-                    {asset.title}
+                    {cardDisplay.titleLabel}
                   </h4>
                   <div className="flex flex-wrap gap-1">
-                    {asset.tags.slice(0, 3).map((tag, idx) => (
+                    {cardDisplay.tagPreview.visibleTags.map((tag, idx) => (
                       <span
                         key={idx}
                         className="px-2 py-0.5 rounded text-[9.5px] font-semibold bg-slate-50 border border-slate-100 text-slate-500"
@@ -78,9 +80,9 @@ export default function AssetWaterfallGrid({
                         {tag}
                       </span>
                     ))}
-                    {asset.tags.length > 3 && (
+                    {cardDisplay.tagPreview.hasOverflow && (
                       <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-50 text-slate-400">
-                        +{asset.tags.length - 3}
+                        {cardDisplay.tagPreview.overflowLabel}
                       </span>
                     )}
                   </div>

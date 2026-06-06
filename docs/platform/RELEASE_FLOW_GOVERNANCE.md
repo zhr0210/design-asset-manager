@@ -20,4 +20,4 @@ Phase 15A adds a Windows and macOS release packaging dry-run workflow.
 - notarization secrets
 - destructive cleanup
 
-The workflow is manually triggered and currently echoes packaging commands after typecheck and build. It does not publish artifacts.
+The workflow is manually triggered and builds unsigned Windows NSIS and macOS DMG packages after typecheck and build. It does not publish artifacts or read signing/notarization secrets.

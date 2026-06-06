@@ -9,12 +9,15 @@ IPC handlers expose main-process services to the preload bridge and renderer.
 - `download.ipc.ts`: download queue.
 - `settings.ipc.ts`: app settings.
 - `ai-client.ipc.ts`, `ai-worker.ipc.ts`, `ai-model.ipc.ts`: AI controls.
+- `ai-runtime.ipc.ts`: AI Runtime controls and Platform AI Branch Status projection channels.
 - `color-palette.ipc.ts`, `ocr*.ipc.ts`: analysis helpers.
 
 ## Rules
 
 - Do not rename IPC channels without updating preload and shared contracts.
 - Keep validation close to the handler.
+- Use dedicated AI Runtime channels for Platform AI Branch Status; do not overload raw capability probe channels with product workflow status.
+- AI Client handlers must use shared channel constants and request/response types rather than string literals or inline payload types.
 
 ## Tests
 
@@ -27,6 +30,9 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.3.2 | 2026-06-06 | Adopted the shared AI Client channel and request/response contract across handlers and preload. |
+| v1.3.1 | 2026-06-04 | Added Platform AI Branch Status channel guidance for `ai-runtime:get-macos-ai-branch-status` and `ai-runtime:get-windows-ai-branch-status`. |
+| v1.3.0 | 2026-06-04 | Documented dedicated Platform AI Branch Status IPC rule for Windows/macOS shared response shape. |
 | v1.2.1 | 2026-05-31 | Added settings folder picker IPC for external model storage selection. |
 | v1.2.0 | 2026-05-31 | Added Llama runtime installer IPC for hardware detection, install progress, server control, and tests. |
 | v1.1.0 | 2026-05-31 | Added AI backend IPC handlers for external backend settings, health checks, and model lists. |

@@ -3,7 +3,7 @@ import os
 import random
 from pathlib import Path
 from typing import List, Dict, Any
-from core.mock_policy import guard_mock_inference
+from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
 
 class RAMTaggerModel:
     """
@@ -44,7 +44,7 @@ class RAMTaggerModel:
                 from ram.models import ram_plus
                 from ram import inference_ram as inference
                 
-                device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+                device = torch.device('mps' if torch.backends.mps.is_available() else ('cuda' if torch.cuda.is_available() else 'cpu'))
                 
                 # Look for .pth file in local_path if provided, otherwise default
                 if self.local_path and os.path.isdir(self.local_path):
@@ -74,12 +74,14 @@ class RAMTaggerModel:
                 self.is_loaded = True
                 print(f"[RAMTaggerModel] RAM++ loaded successfully! Backend: {self.backend}")
             except Exception as import_err:
+                if isinstance(import_err, MockInferenceBlockedError): raise
                 print(f"[RAMTaggerModel] Real RAM++ dependencies or weights not resolved: {import_err}. Using mock fallback.")
                 guard_mock_inference("RAM++", str(import_err))
                 self.is_mock = True
                 self.backend = "mock"
                 self.is_loaded = True
         except Exception as e:
+            if isinstance(e, MockInferenceBlockedError): raise
             print(f"[RAMTaggerModel] RAM loading failed: {e}. Fallback to mock active.")
             guard_mock_inference("RAM++", str(e))
             self.is_mock = True

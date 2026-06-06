@@ -7,12 +7,42 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - `types/`: shared data shapes.
 - `constants/`: shared enum-like values.
 - `contracts/`: IPC request and response contracts.
+- `workflows/`: shared product workflow planners.
 - `index.ts`: public barrel.
 
 ## Rules
 
 - Keep shared types runtime-free.
 - Do not change exported contract names without updating every caller.
+- Platform AI Branch Status contracts must keep one response shape for Windows and macOS; platform differences belong in runtime-lane evidence.
+- Platform AI Branch Status panel copy, Chinese workflow titles/summaries, status tones, primary-lane flags, evidence summaries, missing summaries, and display-only action labels belong in shared workflow projection; renderer panels should not reinterpret business status or localize it independently.
+- Platform AI route overview titles, descriptions, priorities, macOS-only diagnostic visibility, and Windows runtime-lane summaries belong in shared workflow projection.
+- Platform AI Branch Status channel-response selection belongs in shared workflow code and may only rank `workflow/status/evidence/missing/runtimeLanes`; display-only `title/summary/nextAction` must not affect selection.
+- Model Artifact Readiness vocabulary describes dependency/artifact/load evidence only; it must not expose local model paths or private cache locations.
+- Model Artifact Readiness display projection owns active prompt-model readiness, model-row source/status/action labels, cooperative model readiness details, download progress, and GGUF/mmproj artifact tile labels; renderer model lists should not branch on artifact or Worker readiness states locally.
+- Worker cooperative-model readiness input uses one shared snapshot contract across main-process evidence mapping and renderer row projection; model rows should consume the combined shared row display rather than composing readiness, download, and action state independently.
+- Model artifact evidence may project to multiple platform runtime-lane IDs for the same shared workflow; branch projectors consume only their own lanes so macOS MPS/Metal and Windows CUDA remain platform details rather than separate product workflows.
+- AI task polling should use shared terminal/success/failure classification for `synced`, `completed`, and `failed` instead of hard-coded renderer checks.
+- AI Client IPC channels, request payloads, Worker-shaped responses, queue stats, and task-sync events must use `contracts/ai-client.contract.ts` across main, preload, and service boundaries.
+- AI queue display summaries and row labels should use shared projection so overview and runtime panels show the same queue vocabulary.
+- Download queue status labels, row metadata, file-size labels, progress labels, progress tones, search-result action labels, active counts, and topbar/sidebar download indicators should use shared projection rather than route-local status checks.
+- AI runtime compatibility and Llama runtime display states should use shared projection so Settings and AI Console share the same status vocabulary.
+- macOS AI capability matrix status labels and badge classes should use shared AI Runtime Status projection rather than component-local status maps.
+- AI Runtime panel runtime/health badges, icon semantics, health-result copy, and summary counts should use shared AI Runtime Status projection rather than renderer-local status maps or filters.
+- macOS Worker probe connection and route tiles should use shared projection; a missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
+- AI Console overview status cards should use shared display projection for GPU risk and model readiness vocabulary.
+- Prompt Reverse panel state labels and action suggestions should use shared projection so GGUF/Llama and native routes share one renderer-ready vocabulary.
+- Asset Tagging Workflow pipeline defaults, category/model options, scan-state display, model selection toggles, task submission projection, confirmed tag chips, suggestion review items, pending suggestion projection, and tag type/color options belong in shared workflow planners, not renderer panels.
+- Asset tag chip source, status, confidence, visibility, and pending opacity display should use shared projection rather than local chip-level status checks.
+- Tag Manager list filtering, sorting, category labels, parent labels, alias display, and usage-count tone should use shared projection rather than route-local table rules.
+- Tag Manager AI compute banner status, detail copy, and indicator tone should use shared projection rather than route-local Worker/GPU checks.
+- Tag picker search, grouping, suggestion labels, usage badges, and merge-option labels should use shared projection rather than tag-component-local matching rules.
+- Library tag sidebar groups, shortcut filter states, and active query chip labels should use shared projection rather than library-component-local query parsing.
+- Asset card/detail/original-viewer/caption metadata labels, tag preview overflow, file-size labels, image spec labels, zoom labels, caption source labels, and dashboard recent-asset summaries should use shared projection rather than renderer-local formatting.
+- Visual Analysis Snapshot mappers should hide palette payload version drift, image/theme display summaries, OCR/text-box/readability summaries, text-color panel state rules, swatch role/copy/tooltip formatting, and panel metadata labels from renderer panels.
+- Persisted Visual Analysis palette inputs may retain unknown extension fields for backward compatibility, but snapshot workflow code must narrow them from `unknown` and expose typed renderer-ready output instead of propagating `any`.
+- Doctor and Path Governance panels should use shared display projection for status labels, badge classes, check labels, report dates, details fallback, managed-path summary, and path masking rather than renderer-local dictionaries.
+- Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
 
 ## Tests
 
@@ -25,6 +55,56 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.7.9 | 2026-06-06 | Wired the AI Client IPC contract through main, preload, service responses, queue stats, and task-sync events. |
+| v1.7.8 | 2026-06-05 | Allowed shared model artifact evidence to target both macOS and Windows runtime lanes without splitting workflows. |
+| v1.7.7 | 2026-06-05 | Unified Worker cooperative readiness types and combined model-row projection across main and renderer. |
+| v1.7.6 | 2026-06-05 | Added branch-aware AI route overview projection so Windows does not render macOS-only diagnostics or actions. |
+| v1.7.5 | 2026-06-05 | Replaced Visual Analysis Snapshot payload and renderer `any` boundaries with typed legacy/modern palette inputs and guarded normalization. |
+| v1.7.4 | 2026-06-05 | Completed Chinese Platform AI Branch Status panel and workflow display projection without changing business selection fields. |
+| v1.7.3 | 2026-06-05 | Reused the shared custom-tag color default in AssetTagPanel quick creation. |
+| v1.7.2 | 2026-06-05 | Moved AI Console active-model readiness and model-row artifact source/status/action projection into the shared readiness workflow. |
+| v1.7.1 | 2026-06-05 | Added shared Settings Migration display projection for panel status, plan summary, backup list, and empty labels, and moved compatibility types into shared layer. |
+| v1.7.0 | 2026-06-05 | Added shared Doctor and Path Governance display projection for settings panels. |
+| v1.6.9 | 2026-06-05 | Moved settings panel local display helpers (INFO_LABELS, displayValue, actionLabel) and macOS branch metadata helpers to shared workflow. |
+| v1.6.8 | 2026-06-05 | Moved TagEditDialog local PRESET_COLORS and TAG_TYPES plus TagChip local type-to-color class mapping into shared Asset Tagging Workflow type/color options. |
+| v1.6.7 | 2026-06-05 | Moved remaining renderer-local ColorPalettePanel formatting (OCR count, box ratio, metadata, and background source labels) to shared projection. |
+| v1.6.6 | 2026-06-05 | Added typed Visual Analysis swatch role, copy-value, contrast, confidence, and text-box display projection. |
+| v1.6.5 | 2026-06-05 | Added shared Asset Tagging panel scan-state, category-option, and model-toggle projection. |
+| v1.6.4 | 2026-06-05 | Added shared Platform AI Branch Status candidate selection based only on business status and evidence fields. |
+| v1.6.3 | 2026-06-05 | Added shared macOS Worker probe connection and route-tile projection with evidence-insufficient unchecked states. |
+| v1.6.2 | 2026-06-05 | Added shared AI Runtime panel status, health-result, icon-semantic, and summary-count projection. |
+| v1.6.1 | 2026-06-05 | Moved MacOSAiCapabilityMatrix status labels and badge classes into shared AI Runtime Status projection. |
+| v1.6.0 | 2026-06-05 | Extended Model Artifact Readiness display projection to Smoke GGUF and Vision mmproj artifact tile labels. |
+| v1.5.9 | 2026-06-04 | Extended Model Artifact Readiness display projection to cooperative model download progress visibility, labels, and clamped percentages. |
+| v1.5.8 | 2026-06-04 | Extended shared Asset Display projection to caption text, source labels, restore/regenerate copy, and updated-at labels. |
+| v1.5.7 | 2026-06-04 | Extended shared Download Status projection to queue-row metadata, file-size labels, and progress labels. |
+| v1.5.6 | 2026-06-04 | Extended shared Asset Display projection to original image viewer metadata, preview source, zoom labels, and fit-toggle copy. |
+| v1.5.5 | 2026-06-04 | Added shared Asset Display projection for library cards, dashboard recent assets, tag overflow, file-size labels, dates, and detail specs. |
+| v1.5.4 | 2026-06-04 | Added shared Library tag sidebar and active filter-chip projection for query labels, shortcut states, and usage groups. |
+| v1.5.3 | 2026-06-04 | Added shared Asset Tag picker/input projection for selection groups, suggestions, usage badges, and merge option labels. |
+| v1.5.2 | 2026-06-04 | Added shared Download Status projection for queue rows, search actions, dashboard counts, sidebar badge, and topbar indicator. |
+| v1.5.1 | 2026-06-04 | Added shared Asset Tagging compute banner projection for Tag Manager Worker/GPU status copy and indicator tone. |
+| v1.5.0 | 2026-06-04 | Added shared Tag Manager list projection for filtering, sorting, category labels, parent labels, aliases, and usage-count display. |
+| v1.4.9 | 2026-06-04 | Added shared Asset Tag chip display projection for source labels, confidence, pending/rejected state, and tooltip status. |
+| v1.4.8 | 2026-06-04 | Added shared AI Console overview display projection for GPU risk and model-readiness status cards. |
+| v1.4.7 | 2026-06-04 | Added shared AI runtime compatibility and Llama runtime display projection for Settings and AI Console. |
+| v1.4.6 | 2026-06-04 | Added shared Prompt Reverse panel state projection for loading, error, result, ready, and configuration-needed display. |
+| v1.4.5 | 2026-06-04 | Added shared AI queue status display projection for overview cards and queue preview rows. |
+| v1.4.4 | 2026-06-04 | Added shared AI task status classifier for renderer polling terminal/success/failure rules. |
+| v1.4.3 | 2026-06-04 | Added shared Model Artifact Readiness display projection for cooperative model readiness labels, tones, and details. |
+| v1.4.2 | 2026-06-04 | Added shared Platform AI Branch Status display projection for AI Console status labels, tones, lane badges, evidence, and missing summaries. |
+| v1.4.1 | 2026-06-04 | Added Visual Analysis image/theme display projection for theme pills, dominant color, and image swatches. |
+| v1.4.0 | 2026-06-04 | Added Visual Analysis OCR/text-box/readability summary projection without exposing full OCR text in panel UI. |
+| v1.3.9 | 2026-06-04 | Extended Visual Analysis Snapshot with text-color panel state, skip/failure messages, warnings, and foreground swatch display fields. |
+| v1.3.8 | 2026-06-04 | Added shared confirmed Asset Tag chip projection for dedupe, active names, and search query targets. |
+| v1.3.7 | 2026-06-04 | Added shared Asset Tagging suggestion review item projection for confidence labels and review actions. |
+| v1.3.6 | 2026-06-04 | Added shared Asset Tagging task submission projection for model-list cleanup and task model names. |
+| v1.3.5 | 2026-06-04 | Added shared pending Tag Suggestion projection for Asset Tagging Workflow. |
+| v1.3.4 | 2026-06-04 | Added shared Visual Analysis Snapshot mapper for renderer-ready palette and text-color projection. |
+| v1.3.3 | 2026-06-04 | Added shared Asset Tagging Workflow planner for category-to-model pipeline defaults. |
+| v1.3.2 | 2026-06-04 | Added shared Model Artifact Readiness vocabulary for Platform AI Branch Status evidence and missing requirements. |
+| v1.3.1 | 2026-06-04 | Added shared Platform AI Branch Status types and dedicated AI Runtime IPC contract entries. |
+| v1.3.0 | 2026-06-04 | Documented shared Platform AI Branch Status response-shape rule for Windows/macOS. |
 | v1.2.3 | 2026-05-31 | Added persisted custom prompt reverse template settings and shared default prompt template constants. |
 | v1.2.2 | 2026-05-31 | Added optional official release date metadata to native and GGUF AI model types for AI Console version display. |
 | v1.2.1 | 2026-05-31 | Extended Llama installer plan types with Qwen3-VL candidate and mmproj metadata. |

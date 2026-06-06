@@ -10,6 +10,7 @@ import {
   Check
 } from 'lucide-react'
 import { Asset } from '../../stores/asset.store'
+import { projectAssetOriginalViewerDisplay } from '../../../shared/workflows/asset-display.workflow'
 
 type AssetOriginalViewerModalProps = {
   asset: Asset;
@@ -25,6 +26,12 @@ export default function AssetOriginalViewerModal({
   const [realWidth, setRealWidth] = useState<number>(asset.width || 0)
   const [realHeight, setRealHeight] = useState<number>(asset.height || 0)
   const [copied, setCopied] = useState(false)
+  const viewerDisplay = projectAssetOriginalViewerDisplay(asset, {
+    realWidth,
+    realHeight,
+    scaleMode,
+    scale
+  })
   
   const viewportRef = useRef<HTMLDivElement>(null)
 
@@ -100,10 +107,10 @@ export default function AssetOriginalViewerModal({
         {/* Left Side: Metadata info */}
         <div className="flex flex-col">
           <span className="text-[13px] font-bold text-white max-w-[300px] md:max-w-[450px] truncate">
-            {asset.title}
+            {viewerDisplay.titleLabel}
           </span>
           <span className="text-[10px] text-slate-400 font-semibold tracking-wide mt-0.5">
-            {realWidth} × {realHeight} PX • {(asset.fileSize / 1024 / 1024).toFixed(2)} MB • {asset.fileType}
+            {viewerDisplay.metadataLabel}
           </span>
         </div>
 
@@ -124,7 +131,7 @@ export default function AssetOriginalViewerModal({
             title="重置为 100% 原始尺寸"
             className="px-2.5 h-8 text-[11px] font-bold hover:bg-slate-800 rounded-lg flex items-center justify-center transition-colors min-w-[55px] cursor-pointer"
           >
-            {scaleMode === 'fit' ? '自适应' : `${Math.round(scale * 100)}%`}
+            {viewerDisplay.zoomLabel}
           </button>
 
           {/* Zoom In */}
@@ -141,18 +148,18 @@ export default function AssetOriginalViewerModal({
           {/* Scale mode toggle */}
           <button
             onClick={handleToggleFit}
-            title={scaleMode === 'fit' ? '切换到原图尺寸 (100%)' : '切换到自适应屏幕'}
+            title={viewerDisplay.fitToggleTitle}
             className="px-3 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center gap-1.5 text-[11px] font-bold transition-all cursor-pointer"
           >
-            {scaleMode === 'fit' ? (
+            {viewerDisplay.fitToggleIconKey === 'maximize' ? (
               <>
                 <Maximize2 className="w-3.5 h-3.5" />
-                <span>100% 原图</span>
+                <span>{viewerDisplay.fitToggleLabel}</span>
               </>
             ) : (
               <>
                 <Minimize2 className="w-3.5 h-3.5" />
-                <span>适应屏幕</span>
+                <span>{viewerDisplay.fitToggleLabel}</span>
               </>
             )}
           </button>
@@ -195,8 +202,8 @@ export default function AssetOriginalViewerModal({
       >
         <div className="m-auto relative flex items-center justify-center">
           <img
-            src={asset.fileUrl || asset.thumbnailPath}
-            alt={asset.title}
+            src={viewerDisplay.previewSrc}
+            alt={viewerDisplay.titleLabel}
             onLoad={handleImageLoad}
             className="shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] rounded-lg transition-all duration-75 ease-out select-none border border-slate-800/40"
             style={{

@@ -2,29 +2,17 @@
 
 ## Goal
 
-Deeply develop the macOS AI branch and connect it into AI Console.
+Execute the cross-platform shared architecture roadmap for Design Asset Manager as a long-running agent goal.
 
-Target macOS AI architecture:
+Target state: one Shared Product Surface for Windows and macOS, with shared main-process workflows, shared renderer contracts, and shared product status vocabulary by default. Introduce platform branches only for real OS capabilities, AI inference runtimes, packaging/native dependency handling, path/process adapters, or other differences that cannot be shared without hiding platform constraints.
 
-```text
-macOS AI Worker
-├── Python MPS Runtime
-│   ├── RAM++ optional
-│   ├── Florence-2 optional
-│   ├── CLIP/SigLIP optional
-│   └── CPU fallback
-├── ONNX Runtime
-│   ├── WD14 Tagger
-│   ├── RapidOCR
-│   ├── PaddleOCR ONNX
-│   ├── CLIP/SigLIP ONNX
-│   └── CoreML / CPU fallback
-└── Llama
-    ├── Qwen3-VL GGUF
-    ├── Qwen3-VL MLX
-    ├── Qwen2.5-VL Ollama fallback
-    └── external HTTP fallback
-```
+Execution rule: continue in small slices, ordered by how much Windows/macOS maintenance cost the slice removes. Each slice must leave the app buildable, preserve existing public contracts unless the change is explicitly approved, update nearby docs, and include focused automated validation.
+
+UI validation rule: every product-facing renderer change must be exercised through Playwright or Computer Use when feasible. Capture or inspect screenshots for visible state accuracy, layout overlap, clipped text, stale/mock product claims, and cross-platform wording. If UI validation cannot run, record the concrete blocker and residual risk.
+
+Agent handoff rule: before ending a slice, update this task ledger with the implemented scope, commands run, Playwright/Computer Use screenshot result or skip reason, and the next smallest slice.
+
+Antigravity Subagent may be used through the local REST/SSE sidecar for bounded review, verification, or isolated implementation tasks. Give every subagent an explicit repository path, scope, commands, and no-destructive-change constraints; the primary agent must audit all findings and accepted changes.
 
 ## User-Approved High-Risk Scope
 
@@ -41,37 +29,58 @@ macOS AI Worker
 - Keep model downloads scoped to the smallest useful files for each phase; record what was downloaded and why.
 - Prefer app-managed or task-specific model directories over ad hoc paths.
 
-## Phased Development Plan
+## Long-Running Execution Plan
 
-### Phase 1: macOS AI Branch Skeleton
+### Phase 1: Platform AI Branch Status
 
-- Add shared types/constants for macOS AI runtime lanes and capabilities.
-- Add main-process platform capability detection for Python MPS, ONNX Runtime, Llama Metal, MLX, Ollama/external HTTP fallback, and CPU fallback.
-- Connect macOS AI branch status and lane cards into AI Console without breaking existing Windows/CUDA flows.
-- Add tests for platform capability mapping and AI Console rendering.
+- Complete the shared `PlatformAiBranchStatusResponse` contract, macOS/Windows IPC channels, preload bridge, main-process projector, and focused contract/projector tests.
+- Let AI Console consume the shared response shape without removing old runtime data until the contract is stable.
+- Validate with TypeScript contract tests, typecheck/build, docs sync, and Playwright or Computer Use screenshot review of the AI Console projection.
 
-### Phase 2: Python MPS + ONNX Worker Integration
+### Phase 2: AI Model Artifact Readiness
 
-- Add Worker-side capability probes for PyTorch MPS and ONNX Runtime providers.
-- Route optional RAM++, Florence-2, CLIP/SigLIP, WD14, RapidOCR, PaddleOCR ONNX capabilities into the macOS profile.
-- Preserve CPU fallback where supported.
-- Add focused Python unit tests and TypeScript contract tests.
+- Extract one shared readiness vocabulary for dependency presence, artifact shape, real loaded-model evidence, and missing requirements.
+- Map cooperative model state, Llama local artifacts, ONNX routes, and external fallback readiness into `evidence` and `missing` without treating unknown as failure.
+- Validate with shared type tests, model-readiness projector tests, focused Python checks where model probes are involved, and UI screenshot review for any readiness panels.
 
-### Phase 3: Llama / MLX / External Fallbacks
+### Phase 3: Electron AI Result Sync
 
-- Add Qwen3-VL GGUF, Qwen3-VL MLX, Qwen2.5-VL Ollama fallback, and external HTTP fallback route metadata.
-- Connect Llama/MLX route status and model selection into AI Console.
-- Download the smallest viable model artifact(s) needed for smoke testing through Hugging Face.
+- Split Electron-owned AI task result projection out of broad service code while preserving existing Queue Sync, IPC behavior, and database semantics.
+- Keep platform-specific runtime details outside shared result projection unless the UI needs them as evidence.
+- Validate with result-projection tests, IPC regression tests, typecheck/build, and Playwright or Computer Use interaction through the relevant AI result workflow.
 
-### Phase 4: Real Model And UI Validation
+### Phase 4: Asset Tagging Workflow
 
-- Run model download and health checks.
-- Use approved Downloads-folder images for controlled AI validation without exposing private filenames or full paths.
-- Run Playwright/Computer Use UI tests through AI Console and prompt/tagging workflows.
-- Record validation results and any skipped tests with reasons.
+- Move asset category routing, tag-fusion planning, AI Tag Task submission, and Tag Suggestion projection into a shared workflow boundary.
+- Keep renderer panels focused on display and user intent; keep platform/runtime differences in backend evidence and workflow status.
+- Validate with workflow unit tests, smart-tagging IPC tests, Python Worker smoke checks where approved, and UI click-through screenshots for tagging states.
+
+### Phase 5: Visual Analysis Snapshot
+
+- Add a stable renderer-ready snapshot for Color Palette, Text Box, OCR Text, Text Color Analysis, and Readability Score.
+- Hide stored payload version drift behind a mapper instead of spreading version checks through panels.
+- Validate with snapshot mapper tests, renderer contract tests, and screenshot review of visual-analysis panels using approved test assets only.
+
+### Phase 14C: Media Path Governance
+
+- Implement and verify thumbnail and normalized image path abstractions under the `managed-cache` directory structure.
+- Ensure relative path reference generation matching `thumbnail/asset-id/filename` or `normalized-image/asset-id/filename` with legacy path fallback preserved.
+- Validate with `node scripts/run-ts-test.mjs scripts/path-governance-late-phases.test.ts`.
+
+### Phase 15A: Release Flow Governance
+
+- Establish dry-run workflow planning for Windows (NSIS target) and macOS (DMG target) packaging release flow on x64/arm64 architectures.
+- Ensure that the GitHub Actions packaging dry-run workflow does not expose code signing or notarization secrets, nor use any publish hooks.
+- Validate with `node scripts/run-ts-test.mjs scripts/release-flow-governance.test.ts`.
 
 ## Current Status
 
+- 2026-06-04 architecture review pass is generating a temporary HTML report of deepening opportunities; no repo implementation or public contract changes are in scope.
+- Current grill-with-docs discussion chose a product-level Platform AI Branch Status projection in Electron main process, exposed through new `ai-runtime:get-macos-ai-branch-status` and `ai-runtime:get-windows-ai-branch-status` IPC channels rather than overloading runtime capability probe channels. Both channels should return the same shared response shape: Windows and macOS can differ where AI inference runtime or OS constraints require branches, while the main application architecture, shared product workflows, and product status surfaces should be reused or lightly adapted.
+- The shared Platform AI Branch Status response should be workflow-first, keep platform differences inside `runtimeLanes`, use structured evidence plus separate missing requirements, and keep first-version `nextAction` display-only. A later `PlatformAiActionPlan` can wire UI actions while execution remains in existing operation IPC handlers.
+- Cross-platform planning goal: keep one Shared Product Surface and shared main-application architecture; introduce Windows/macOS branches only for OS capabilities, AI inference runtimes, packaging/native dependency handling, path/process adapters, or other differences that cannot be shared without hiding real platform constraints.
+- Priority 1 first implementation slice is limited to shared types, two AI Runtime IPC channels, preload methods, a main-process projector skeleton, and focused contract tests. AI Console should stay on existing data sources until the Platform AI Branch Status contract stabilizes.
+- Platform AI Branch Status projector boundary: read existing in-memory state, settings, cached status, and side-effect-light status/probe methods aggressively, but do not start runtimes, install dependencies, download models, inspect user assets, or trigger non-user-initiated external network checks.
 - Current audit pass is separating product-visible mock AI paths, silent mock fallbacks, and planned/probe-only AI capabilities before further download fixes.
 - Current implementation pass removes product-visible mock AI Runtime providers and blocks strict-mode Python mock inference output.
 - Current Llama status pass makes AI Console consume main-process Llama health status instead of inferring service readiness only from the installer process PID.
@@ -100,6 +109,7 @@ macOS AI Worker
 - RAM++, Florence-2, WD14, RapidOCR, PaddleOCR, and CLIP/SigLIP status checks now show a clearer split: wrapper modules may be present in `ai-service`, but the current Python environment still needs the actual runtime dependencies and/or weights (`torch`, `onnxruntime`, provider packages, model files) before those model families can be loaded as real backends.
 - The intended Qwen3-VL prompt-reverse route is now clarified as GGUF/mmproj through the Llama OpenAI-compatible interface, not the native Python Transformers worker.
 - The asset smart-tagging UI was confirmed to be using mock fallback data when Python AI Worker tagging was unavailable; the random tag jumps came from local mock generation, not real RAM++ / Florence-2 / WD Tagger inference.
+- 2026-06-05 remediation pass resolved SQLite db connection severing on rollback, cooperative HF model downloader parallel segment resume corruptibility, urllib range request fallback check, and JSON config validation with all tests passing.
 
 ## Validation Plan
 
@@ -108,15 +118,74 @@ Use focused checks as implementation lands:
 ```bash
 npm run typecheck
 npm run build
+node scripts/run-ts-test.mjs scripts/path-governance-late-phases.test.ts
+node scripts/run-ts-test.mjs scripts/release-flow-governance.test.ts
+node scripts/run-ts-test.mjs scripts/ai-runtime-ipc-contract.test.ts
+node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-projector.test.ts
 node scripts/run-ts-test.mjs scripts/llama-runtime-local-models.test.ts
 python -m unittest discover ai-service/tests
 python3 scripts/check-docs-sync.py
 ```
 
-Run additional focused tests if matching scripts exist or are added for macOS AI runtime lanes.
+Run additional focused tests matching the slice being changed. For product-facing renderer changes, also run Playwright or Computer Use simulation, capture screenshots, and inspect them for visible state accuracy, layout overlap, clipped text, and stale/mock product claims. Record skipped checks with reasons and residual risk.
 
 ## Result
 
+- Updated the task ledger goal into a long-running cross-platform shared-architecture objective that agents can continue executing in roadmap order, with automated validation and Playwright/Computer Use screenshot review required for product-facing UI changes.
+- 2026-06-04 architecture review pass generated a temporary HTML report at the OS temp location with five deepening candidates: macOS AI Branch status projection, Electron AI Result Sync, AI model artifact readiness, Asset Tagging Workflow, and Visual Analysis Snapshot. No public contracts or implementation modules were changed.
+- Added ADR-0006 to record the decision that Platform AI Branch Status uses dedicated macOS and Windows IPC channels with one shared response shape, rather than overloading runtime capability probe responses.
+- Added `docs/platform/PLATFORM_SHARED_ARCHITECTURE_ROADMAP.md` to order the five deepening candidates by cross-platform maintenance leverage and record the shared-architecture design rules.
+- Updated `AGENTS.md`, the root `README.md`, and nearby main/shared/IPC/service READMEs with compact Windows/macOS shared-architecture and Platform AI Branch Status guidance.
+- Implemented the Priority 1 first slice: shared Platform AI Branch Status types, dedicated macOS/Windows AI Runtime IPC channels, preload methods, a main-process projector skeleton, and focused contract tests. AI Console still uses existing data sources.
+- Added the second small Platform AI Branch Status slice in AI Console: the overview reads both dedicated branch-status channels, selects the supported platform branch from the shared response shape, and renders a compact workflow-first projection panel without removing the existing macOS route overview or runtime data sources.
+- Continued Platform AI Branch Status adoption by moving AI Console display projection into shared workflow code. `AiConsolePage` now consumes shared branch labels, generated labels, status labels/tones, primary runtime-lane flags, evidence summaries, missing summaries, and display-only next-action labels instead of reinterpreting branch status locally.
+- Started Priority 2 AI Model Artifact Readiness with a shared readiness vocabulary plus main-process mappers for existing cooperative-model and Llama local-model states. The Platform AI Branch Status projector can now accept readiness entries and map artifact-ready evidence to `ready_to_load`, real backend evidence to `real_model_path`, and missing/downloading artifacts to `evidence` plus `missing` without exposing local paths.
+- Wired AI Model Artifact Readiness into the dedicated Platform AI Branch Status IPC channels. The branch-status handlers now collect readiness from existing Worker model status and the in-memory Llama runtime status, then pass it to the shared projector without calling local-model directory listing, starting runtimes, downloading artifacts, or exposing model/cache paths.
+- Continued Priority 2 AI Model Artifact Readiness by moving cooperative model readiness display projection into shared workflow code. `AiConsolePage` now consumes shared readiness labels, tones, and detail text for cooperative model rows instead of branching on Worker readiness state locally.
+- Continued Priority 2 AI Model Artifact Readiness by moving cooperative model download progress display into shared workflow code. `AiConsolePage` now consumes shared progress visibility, clamped progress percent, progress label, and message label instead of interpreting download state locally.
+- Continued Priority 2 AI Model Artifact Readiness by moving Smoke GGUF and Vision mmproj tile labels into shared workflow code. `AiConsolePage` now consumes shared artifact tile labels and captions instead of using local downloaded/downloading/mmproj ternaries.
+- Continued AI runtime shared-surface reduction by moving `MacOSAiCapabilityMatrix` lane/capability status labels and badge classes into shared workflow code; Settings runtime panel and AI Console now render the matrix through the same status display projector instead of component-local status maps.
+- Continued AI runtime shared-surface reduction by moving `AiRuntimePanel` runtime/health badge labels and classes, icon semantics, health-result copy, runtime summary counts, and its remaining macOS capability status display into shared workflow code. Renderer cards now consume renderer-ready projection while operation IPC and platform evidence remain unchanged.
+- Continued Platform AI Branch Status adoption by moving macOS Worker probe connection, platform badge, architecture booleans, and MPS/ONNX/CLIP/MLX route tiles into shared workflow projection. AI Console and AI Runtime Panel now treat a missing probe as evidence-insufficient `尚未探测` instead of incorrectly presenting fallback or planned capability conclusions.
+- Continued Platform AI Branch Status adoption by moving macOS/Windows channel-response selection into shared workflow code. Selection now ranks only `workflow/status/evidence/missing/runtimeLanes`, rejects all-unavailable candidates, and keeps input order as the deterministic final tie-breaker; display-only `title/summary/nextAction` cannot change business selection.
+- Antigravity was briefly prepared in an isolated temporary copy but produced no repository changes or accepted patch. Per the current user instruction, do not use Antigravity for subsequent work.
+- Started Priority 3 Electron AI Result Sync by extracting pure Worker-result projection rules from `AiClientService` into `ai-client/ai-result-sync.projector.ts`. The first slice normalizes Worker timestamps, AI tag model names, cooperative tag suggestions, and Qwen analysis tag suggestions while preserving existing SQLite write order, Queue Sync behavior, and renderer notifications.
+- Continued Priority 3 Electron AI Result Sync by extracting the shared AI tag suggestion sink. `AiClientService` now reuses one helper to insert projected suggestions, ensure tags, and add pending `asset_tags` for both cooperative tag results and Qwen analysis results while preserving the surrounding task sync transactions.
+- Continued Priority 3 Electron AI Result Sync by adding a shared AI task status classifier for renderer polling. `asset.store` now uses shared terminal/success/failure classification for `synced`, `completed`, and `failed` instead of hard-coding polling state checks for tag and analysis workflows.
+- Continued Priority 3 Electron AI Result Sync by moving AI queue display projection into shared workflow code. `AiConsolePage` now consumes shared queue summary labels, status tone, and queue preview rows instead of duplicating queue vocabulary in overview cards and runtime tiles.
+- Continued Priority 3 Electron AI Result Sync by projecting completed tagging and analysis Worker payloads before SQLite sync. `AiClientService` now consumes normalized dimensions, caption user-edit protection, trimmed OCR, source/timestamp fields, serialized analysis JSON, text blocks, and tag suggestions while preserving the existing transaction order, schema, Queue Sync polling, and renderer notifications.
+- Continued Priority 3 Electron AI Result Sync by centralizing Worker task lifecycle classification for tagging and analysis polling. `running`/`processing`, completed-with-result, failed, cancelled, and ignored states now share one projector rule; the long-disabled duplicate Prompt polling block was removed without enabling or changing Prompt task behavior.
+- Continued Priority 3 Electron AI Result Sync by projecting lifecycle-to-SQLite action plans. Tagging and analysis polling now consume normalized local task status, sync status, asset status, default error text, and workflow-specific cancellation behavior while `AiClientService` retains SQL execution and the existing transaction boundaries.
+- Completed the remaining legacy asynchronous Prompt task lifecycle path through the same Electron AI Result Sync projector and sink. Prompt tasks now settle running/completed/failed/cancelled state, persist prompt task results, and update `assets.ai_prompt` without overwriting user-facing `assets.ai_caption`; strict production still rejects creation through the mock Python PromptWorker route.
+- Continued Prompt Reverse shared-surface reduction by moving the asset prompt-reverse panel state display into shared workflow code. `AssetPromptReversePanel` now consumes shared loading, error, result-ready, run-ready, and configuration-needed labels/action suggestions instead of locally interpreting prompt task status and runtime errors.
+- Continued AI runtime shared-surface reduction by moving Python MPS compatibility, CLIP/SigLIP ONNX compatibility, and Llama runtime display states into shared workflow code. Settings runtime panel and AI Console now share compatibility labels, tone classes, Llama route values, status-pill labels, and service detail text instead of duplicating `compatible`, `serverPid`, and `phase` display rules.
+- Continued AI Console overview shared-surface reduction by moving GPU risk and model-readiness display into shared workflow code. AI Console overview cards and the model-page memory guard now share GPU value/caption labels, risk tone, status labels, progress tone, and model/Worker readiness copy instead of duplicating threshold and caption logic in the route component.
+- Started Priority 4 Asset Tagging Workflow by moving category-to-model pipeline defaults, category labels, model labels, and model layer metadata into the shared `asset-tagging.workflow` planner. `TagSuggestionPanel` now consumes the shared plan instead of owning local pipeline maps, while preserving the current UI labels and model checklist behavior.
+- Continued Priority 4 Asset Tagging Workflow by moving pending AI Tag Suggestion filtering and dedupe into the shared `asset-tagging.workflow` projection. `TagSuggestionPanel` now displays projected pending suggestions instead of owning local `pending` filtering rules.
+- Continued Priority 4 Asset Tagging Workflow by moving AI Tag Task submission projection into the shared workflow. `AiClientService` uses the shared projection to normalize model IDs and derive local task model names instead of hand-building custom pipeline strings.
+- Tightened the Asset Tagging ownership boundary: renderer code now exposes a real `generateAiSuggestions` intent and sends selected model IDs unchanged, while Electron main remains the single task-submission normalization owner. The existing IPC channel and payload shape are unchanged.
+- Continued Priority 4 Asset Tagging Workflow by moving AI Tag Suggestion review-item projection into the shared workflow. `TagSuggestionPanel` now renders projected tag names, confidence labels, and confirm/reject action labels instead of formatting them locally.
+- Continued Priority 4 Asset Tagging Workflow by moving confirmed Asset Tag chip projection into the shared workflow. `AssetTagPanel` now consumes projected confirmed tags, active tag names, and tag search query targets instead of owning local relation dedupe and status filtering rules.
+- Continued Priority 4 Asset Tagging Workflow by moving model selection section projection into the shared workflow. `TagSuggestionPanel` now renders shared base/enhanced model sections, model display names, descriptions, and section tone metadata instead of locally grouping models by layer.
+- Continued Priority 4 Asset Tagging Workflow by moving `TagChip` source/status/confidence/visibility display into the shared workflow. `TagChip` now consumes shared chip display projection, and its metadata tooltip uses viewport-fixed positioning so it is not clipped by tag-list scroll containers.
+- Continued Priority 4 Asset Tagging Workflow by moving Tag Manager list filtering, sorting, category labels, parent labels, alias display, empty state, and usage-count tone into the shared workflow. `TagManagerPage` now renders projected rows instead of owning table business rules locally.
+- Continued Priority 4 Asset Tagging Workflow by moving the Tag Manager AI compute banner into the shared workflow. `TagManagerPage` now renders projected Worker/GPU status copy and indicator tone instead of branching locally on Worker offline state, GPU utilization, and queued task count.
+- Continued Priority 4 Asset Tagging Workflow by moving tag picker, tag input, and tag merge option display into the shared workflow. `TagSelector`, `TagInput`, and `TagMergeDialog` now consume shared tag search/grouping, suggestion, usage badge, color-dot, duplicate/create, and merge-option label projections instead of owning local matching and label rules.
+- Continued Priority 4 Asset Tagging Workflow by moving Library tag sidebar/filter display into the shared workflow. `Library`, `LibrarySidebar`, and `TagFilterBar` now consume shared sidebar shortcut, tag usage-group, query string, active state, and filter-chip projections instead of parsing `special:*`, `tag:*`, and type labels locally.
+- Continued Priority 4 Asset Tagging Workflow by moving smart-tagging category options, scan-state display, submit availability, progress copy, empty-state copy, and model selection toggles into the shared workflow. `TagSuggestionPanel` now consumes renderer-ready projection, uses a Chinese title, and is keyed by asset ID so local scan/error state cannot leak when the selected asset changes.
+- Antigravity Subagent REST conversation `f327fcae-7994-436a-b851-fb7ec67af854` completed a read-only review and independently ran the focused Asset Tagging test plus TypeScript typecheck. The primary agent audited its findings; unreachable `routing/classified` presentation was confirmed as pre-existing behavior, while asset-switch state reuse and mixed-language title findings were fixed.
+- Continued shared product-surface reduction by moving asset card/detail display into shared workflow code. `AssetWaterfallGrid`, `Dashboard`, and `AssetInspectorDrawer` now consume shared title, preview source, source label, tag overflow, file-size, image-spec, and date projections instead of formatting these display rules locally.
+- Continued shared product-surface reduction by extending Asset Display projection to the original image viewer. `AssetOriginalViewerModal` now consumes shared title, preview source, metadata label, zoom label, and fit-toggle copy instead of formatting file size, image dimensions, and zoom percentage locally.
+- Continued shared product-surface reduction by extending Asset Display projection to caption display. `AssetCaptionPanel` now consumes shared caption text, placeholder copy, source label/tone, restore/regenerate labels, edit title, and updated-at formatting instead of interpreting caption source and edit state locally.
+- Continued shared product-status reduction by moving Download Status projection into shared workflow code. Download queue rows, search result download actions, dashboard active/completed counts, sidebar badge counts, topbar downloading indicator, and store active-count updates now share one status vocabulary for waiting/downloading/completed/failed tasks.
+- Continued Download Status shared-surface reduction by extending queue-row projection to metadata. `DownloadQueue` now consumes shared title, source, thumbnail, file-size label, progress percent, progress label, and status display instead of formatting file size and progress locally.
+- Started Priority 5 Visual Analysis Snapshot by adding a shared renderer-ready snapshot mapper for color palette payloads. `ColorPalettePanel` now consumes `createVisualAnalysisSnapshot` for image swatches, legacy/new text swatches, text foregrounds, text background fallback, text status, provider, duration, and detected text-box count instead of branching directly on stored payload versions.
+- Continued Priority 5 Visual Analysis Snapshot by moving text-color panel state into the shared snapshot. `ColorPalettePanel` now consumes projected skip/failure/success state, skip/failure messages, warnings, provider/duration/count metadata, and foreground swatch display fields instead of branching on stored text-color payload status codes.
+- Continued Priority 5 Visual Analysis Snapshot by adding OCR/text-box/readability summary projection. `ColorPalettePanel` now displays OCR text length, source, text-box counts, and readability label from `textInsightSummary` without rendering full OCR text.
+- Continued Priority 5 Visual Analysis Snapshot by adding image/theme display projection. `ColorPalettePanel` now consumes projected theme pills, dominant color display fields, and image swatches instead of branching on image palette theme flags or dominant color payload shape.
+- Continued Priority 5 Visual Analysis Snapshot by moving text background display into `textColorPanel.background`. `ColorPalettePanel` now reads foreground swatches, provider/count/duration metadata, and text background display data from the same shared text-color panel projection instead of splitting display judgment across renderer-local snapshot reads.
+- Continued Priority 5 Visual Analysis Snapshot by moving color-swatch role vocabulary, percentage, RGB/HSL copy values, CSS variables, contrast, confidence, and source text-box labels into typed shared projection. `ColorSwatch` no longer formats stored payload fields or uses `as any`; its hover tooltip now portals to `document.body` with viewport-clamped fixed positioning so the inspector scroll container cannot clip it.
+- Antigravity Subagent REST conversation `7998c119-52ba-43fa-83d4-8e182939f962` completed a read-only Priority 5 audit and selected shared swatch projection as the highest-value remaining slice. The primary agent verified the finding against the code, implemented it, and retained panel summary-label formatting as a later optional cleanup.
 - Added typed macOS AI runtime lane metadata for Python MPS Runtime, ONNX Runtime, and Llama.
 - Registered a read-only `macos-ai-branch-runtime` entry through the existing AI Runtime IPC list without changing IPC channel names.
 - Connected macOS AI branch lane cards into the AI Console runtime panel.
@@ -145,12 +214,113 @@ Run additional focused tests if matching scripts exist or are added for macOS AI
 - GGUF model selection now enables the local llama backend, marks vision support, and writes the selected GGUF filename before running prompt reverse, so the backend provider does not reject the run as disabled.
 - Disabled product-path mock AI tag fallback: the asset tagging trigger now fails with a real Worker/model error instead of writing random mock tags, and the mock IPC is blocked unless an explicit development environment variable enables it.
 - Updated the smart-tagging panel progress copy so it no longer pretends that selected model families have actually loaded when only a task submission is happening.
+- Moved TagEditDialog local PRESET_COLORS and TAG_TYPES plus TagChip local type-to-color class mapping into shared Asset Tagging Workflow constants and helper mapping functions, and ensured renderer components consume the shared ready definitions.
 
 ## Validation Result
+
+- Asset Tagging color and type projection checks passed. Focused tests verify correctness of ASSET_TAG_PRESET_COLORS, ASSET_TAG_TYPES, and getAssetTagColorClass, and source guards ensure no local variables or maps are defined in TagEditDialog.tsx or TagChip.tsx.
+
+- Architecture review report smoke check passed: the generated HTML file exists and contains the top recommendation plus the expected candidate sections. The report was opened with the macOS `open` command.
+- `python3 scripts/check-docs-sync.py` passed.
+- `python3 scripts/check-agent-context.py` and `python3 scripts/check-forbidden-paths.py` did not pass because the local `.codeindex` required files are missing; this blocks those checks independently of the temporary report.
+- Priority 1 first-slice checks passed: `node scripts/run-ts-test.mjs scripts/ai-runtime-ipc-contract.test.ts`, `node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-projector.test.ts`, `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, and `python3 scripts/check-docs-sync.py`.
+- `npm run build` passed with existing Vite dynamic-import chunk warnings.
+- `python3 scripts/check-agent-context.py` still fails because `.codeindex/module-map.json`, `.codeindex/forbidden-paths.json`, and `.codeindex/tests-map.json` are missing.
+- AI Console Platform AI Branch Status UI validation passed with Playwright Electron launch: the AI Console route rendered the new panel, the panel contained the selected platform branch, all four workflows, runtime-lane evidence text, missing requirements, and display-only next-action text, and DOM checks found no horizontal overflow. Screenshot review found no obvious overlap or clipping in the full panel.
+- Platform AI Branch Status display projection checks passed. The focused display test now verifies branch labels, status labels/tones, empty projection, macOS runtime-ready display, Windows-on-macOS unavailable display, primary lane flags, evidence summary, missing summary, and guards `AiConsolePage` against local branch status helper functions and direct evidence/missing summarization. Playwright Electron required sandbox escalation for GUI launch, navigated directly to `#/ai-console`, confirmed the Platform AI Branch Status panel, workflow cards, evidence text, missing text, and next-action text render, found no horizontal page overflow, and screenshot review found no obvious overlap or clipping. Temporary screenshots were deleted after review.
+- AI Model Artifact Readiness mapper/projector checks passed. This slice did not add or change product-facing UI, so Playwright/Computer Use screenshot validation was not run for it.
+- AI Model Artifact Readiness IPC wiring checks passed. Contract tests now allow read-only Llama in-memory status in AI Runtime IPC while still blocking local model listing, runtime start/install actions, direct filesystem scans, and model path exposure. This slice did not add or change product-facing UI, so Playwright/Computer Use screenshot validation was not run for it.
+- AI Model Artifact Readiness display projection checks passed. The focused display test now verifies cooperative readiness label/tone/detail projection for loaded real backends, ready-to-load artifacts, dependency missing, file missing, mock-blocked, not-downloaded, unknown, no-readiness states, cooperative download progress visibility/labels/clamped percentages, and Smoke GGUF / Vision mmproj artifact tile labels, and guards `AiConsolePage` against local cooperative readiness helpers, direct readiness-state branching, local download-progress branching, and local GGUF/mmproj downloaded/downloading ternaries. Earlier Playwright Electron validation confirmed the Models tab matrix, RAM++ row, readiness pill, and download controls render without obvious overlap or clipping; this pass could not rerun Playwright because the Electron dev-server escalation was rejected by the current Codex usage limit, so active download-progress plus GGUF/mmproj tile screenshot coverage remains a residual UI validation gap covered by focused projection tests.
+- Electron AI Result Sync projector checks passed. This slice only moved main-process result normalization rules and did not add or change product-facing UI, so Playwright/Computer Use screenshot validation was not run for it.
+- Electron AI Result Sync completion projection checks passed. Focused tests verify tagging dimensions and fallbacks, caption user-edit protection, OCR trimming, cooperative tag suggestions, analysis JSON/OCR/source/text-block projection, Qwen tag suggestions, and source guards against direct Worker result interpretation in `AiClientService`. This slice changed only main-process internal projection and preserved SQLite/IPC/UI behavior, so Playwright/Computer Use screenshot validation was not run.
+- Electron AI Result Sync lifecycle checks passed. Focused tests verify active aliases, completed-result eligibility, failed/cancelled terminals, ignored queued/unknown states, and source guards against direct `task.status` branching in `AiClientService`. The removed Prompt polling block had been fully commented out, so this slice changes no product-facing behavior and did not require Playwright/Computer Use validation.
+- Electron AI Result Sync action-plan checks passed. Focused tests verify active/completed/failed plans, workflow-specific default errors, explicit Worker error preservation, tagging cancellation reset to `not_started`, analysis cancellation remaining ignored, and source guards against local status/error constants in `AiClientService`. This remains an internal main-process refactor with unchanged IPC/UI behavior, so Playwright/Computer Use validation was not run.
+- Legacy asynchronous Prompt result-sync checks cover prompt projection, lifecycle actions, task-table persistence, asset status/prompt updates, and protection against writing the legacy caption into `assets.ai_caption`. This is main-process behavior only, so UI screenshot validation is not required for this slice.
+- Asset Tagging renderer-intent checks passed: the real action no longer carries a mock name, renderer code no longer builds task submissions, and Electron main remains covered as the submission-normalization owner. No visible UI or interaction changed, so screenshot validation was skipped.
+- Primary-agent acceptance completed the shared AI Client IPC boundary: main handlers, preload methods, service return types, queue stats, and task-sync events now consume one contract with Worker-compatible snake_case responses and typed Asset Tagging model IDs.
+- Electron AI Result Sync tag suggestion sink checks passed. This slice only consolidated main-process SQLite sync helper logic and did not add or change product-facing UI, so Playwright/Computer Use screenshot validation was not run for it.
+- Electron AI Result Sync task status classifier checks passed. The focused workflow test verifies terminal/success/failure classification for `synced`, `completed`, `failed`, active worker states, and empty/unknown states, while guarding `asset.store` against local `finalStatus === 'failed'`, `finalStatus !== 'synced'`, and inline `synced/completed/failed` terminal checks. This slice changed renderer store business logic but did not add or change a product-facing UI surface, so Playwright/Computer Use screenshot validation was not run.
+- Electron AI Result Sync queue display projection checks passed. The focused workflow test verifies zero/default queue display, row labels/tone classes, failed-queue warning tone, summary labels, and count normalization while guarding `AiConsolePage` against local queue row arrays, inline queue summary strings, and local failed-tone selection. Playwright Electron required sandbox escalation for GUI launch, navigated directly to `#/ai-console`, confirmed the overview task-list card, queue preview rows, and runtime cockpit queue area render, found no horizontal page overflow, and screenshot review found no obvious overlap or clipping around queue labels/counts. Temporary screenshots were deleted after review.
+- Prompt Reverse panel state projection checks passed. The focused workflow test verifies runtime-starting, inference-running, server error, GPU memory error, result-ready, run-ready, and configuration-needed display projection while guarding `AssetPromptReversePanel` against local running/error/ready prompt-state branching. Playwright Electron opened the library, selected the first asset card, scrolled to the Prompt Reverse panel, confirmed the model selector, custom prompt selector, ready-state copy, and run button render, found no horizontal page overflow, and screenshot review found no obvious overlap or clipping. Temporary screenshots were deleted after review.
+- AI runtime status display projection checks passed. The focused workflow test verifies Python MPS unchecked/compatible/planned/unavailable projection, CLIP/SigLIP ONNX compatible/planned projection, Llama running/override/error/stopped projection, macOS capability matrix status labels/badge classes, and guards Settings plus AI Console against local compatibility, Llama display ternaries, and component-local `STATUS_LABELS` / `STATUS_STYLES` maps. Existing AI Console macOS branch and AI Runtime Panel contract tests still pass. Earlier Playwright Electron opened AI Console overview and AI Console `AI 运行时管理` tab, confirmed Python MPS compatibility, CLIP/SigLIP ONNX compatibility, and Llama route/status text render, found no horizontal page overflow, and screenshot review found no obvious overlap or clipping. A direct Settings-route attempt did not locate the panel, so UI validation used the AI Console Runtime tab that mounts the same `AiRuntimePanel` component. This pass did not rerun Playwright for the matrix badge-label move because recent Electron dev-server escalation was rejected by the current Codex usage limit; visible badge layout remains covered by source/contract tests and the prior runtime-panel screenshot pass.
+- AI Runtime panel shared projection checks now also verify runtime and health badge labels/classes, success/warning/activity icon semantics, unknown-as-insufficient-evidence display, health-result fallback copy, running/issue summary counts, and source guards against local status maps, status filters, or macOS capability helper maps.
+- AI Runtime panel Playwright Electron validation passed using an isolated temporary user-data directory. The script opened AI Console, selected `AI 运行时管理`, confirmed projected runtime status labels render, found no document/body horizontal overflow, and captured a full-page screenshot. Screenshot review found no obvious overlap or clipping in the tab bar, `0/3 运行中` summary badge, macOS lane badges, warning notice, or runtime-management cards. The temporary screenshot was deleted after review.
+- macOS Worker probe shared projection checks passed. Focused tests verify missing-probe evidence renders `等待探测` / `尚未探测`, connected macOS arm64 evidence, MPS and ONNX ready labels, CLIP/MLX planned labels after a real probe, and source guards against renderer-local probe boolean ternaries in AI Console and AI Runtime Panel.
+- macOS Worker probe Playwright Electron validation passed with an isolated temporary user-data directory. AI Console overview rendered the shared connection state plus MPS, ONNX Runtime, CLIP/SigLIP ONNX, and MLX tiles; DOM checks found no document/body horizontal overflow and confirmed a waiting probe would not simultaneously claim MPS fallback. Screenshot review of the real connected-probe state found no obvious overlap or clipping in route tiles, the install action, priority copy, or capability-matrix header. The temporary screenshot was deleted after review.
+- Platform AI Branch Status selection checks passed. Focused tests verify current-platform availability beats an all-unavailable branch, higher workflow maturity wins, all-unavailable candidates return no selection, display-only fields do not affect the result, and exact ties preserve channel input order. Source guards prevent AI Console from reintroducing local `workflows.some(status !== unavailable)` branch selection.
+- Platform AI Branch Status selection Playwright Electron validation passed with an isolated temporary user-data directory. AI Console selected the macOS branch from the two dedicated channel responses, rendered all four workflow cards, and showed the shared branch label/header. DOM checks found no document/body horizontal overflow, and screenshot review found no obvious overlap or clipping in workflow status pills, runtime-lane badges, evidence/missing copy, or the panel header. The temporary screenshot was deleted after review.
+- Antigravity produced no primary-workspace changes and no patch was accepted. It is disabled for future slices by current user instruction.
+- AI Console overview display projection checks passed. The focused workflow test verifies unknown/safe/high-usage/low-free GPU display, model-ready/offline display, and guards AI Console against local GPU threshold, model readiness caption, Worker status caption, and progress-bar tone rules. Existing AI Console macOS branch contract still passes. Playwright Electron opened AI Console overview and Models tab, confirmed GPU/status cards, model-readiness copy, and memory-guard status render, found no horizontal page overflow, and screenshot review found no obvious overlap or clipping. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow shared planner checks passed. Playwright Electron UI validation was attempted, but the current local library had no asset cards, so the right-side Asset Inspector and `TagSuggestionPanel` could not be opened for screenshot review in this pass. Follow-up UI validation needs a non-private fixture asset or a populated local test library.
+- Asset Tagging Workflow pending suggestion projection checks passed. Playwright Electron click-through opened the library and Asset Inspector, confirmed the AI Tag Suggestion panel and pending list render, found no horizontal overflow, and screenshot review of the panel header plus pending list found no obvious text clipping or control overlap. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow task submission projection checks passed. The focused workflow test now verifies model ID cleanup, default category pipeline submission, shared task model-name projection, renderer-store usage, and main-service usage. The real-worker guard still confirms product tagging does not call the mock tag generator. Playwright Electron opened the library and Asset Inspector, toggled a model checkbox without starting a real AI task, found no horizontal overflow, and screenshot review of the model-selection area found no obvious text clipping or control overlap. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow suggestion review projection checks passed. The focused workflow test now verifies review tag-name trimming, confidence label rounding and clamping, confirm/reject action codes, and renderer usage without local confidence formatting. The real-worker guard still passes. Playwright Electron opened the library and Asset Inspector, confirmed the pending review list renders with confirm/reject button titles, found no horizontal overflow, and screenshot review found no obvious tag, percentage, or button overlap/clipping. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow confirmed tag projection checks passed. The focused workflow test now verifies confirmed-only filtering, relation dedupe, active tag names, fallback chip metadata, and tag search query projection while guarding `AssetTagPanel` against local `Set` dedupe and confirmed-status filtering. Playwright Electron opened the library and Asset Inspector, confirmed the tag management panel and input render, found no horizontal overflow, and screenshot review of confirmed tag chips plus the quick-add input found no obvious clipping or overlap. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow model selection section checks passed. The focused workflow test now verifies shared base/enhanced section order, section title/tone metadata, RAM++ base copy, enhanced model order, and WD Tagger copy while guarding `TagSuggestionPanel` against local `BASE_LAYER_MODELS`, `ENHANCED_LAYER_MODELS`, and `model.layer` grouping. Playwright Electron required sandbox escalation for GUI launch, opened the library and Asset Inspector, scrolled to the AI visual-feature panel, confirmed both shared model sections plus RAM++ and Florence-2 labels render, found no horizontal page overflow, and screenshot review found no obvious checkbox, label, or description overlap/clipping. Temporary screenshots were deleted after review.
+- Asset Tagging smart-panel projection checks passed: `node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. The focused test covers all eight category options, model toggle add/remove behavior, idle/routing/classified/tagging/completed display projection, invalid model filtering, Chinese title copy, asset-key remount protection, and source guards against renderer-local lifecycle/category/model-name rules.
+- Playwright Electron opened the library, selected the first available asset, scrolled to `AI 视觉特征分析`, and captured a panel-only screenshot. DOM checks reported `clientWidth === scrollWidth` and `clientHeight === scrollHeight`, all eight category options, both model groups, and an enabled submit action; screenshot review found no overlap, clipping, or stale mixed-language title. The temporary screenshot was deleted after review.
+- Next smallest roadmap slice: run a cross-phase architecture regression pass across Platform AI Branch Status, Model Artifact Readiness, Electron AI Result Sync, Asset Tagging Workflow, and Visual Analysis Snapshot to find any remaining renderer/main-process local product vocabulary before considering the roadmap complete.
+- Asset Tagging Workflow TagChip display checks passed. The focused workflow test now verifies shared chip source labels, confidence clamping, pending/rejected display, fixed tooltip positioning, and guards `TagChip` against local pending/rejected/confidence/source-label branching and clipped `group-hover/chip` tooltip behavior. Playwright Electron opened the library and Asset Inspector, confirmed tag chips and input render without horizontal overflow, found the old tooltip clipping issue, fixed it with viewport-fixed positioning, and screenshot review confirmed the tooltip, chip row, input, and color panel show no obvious clipping or unreadable overlap. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow Tag Manager list checks passed. The focused workflow test verifies shared search, type filtering, usage/name sorting, category labels, parent labels, alias labels, empty label, and usage-count tone while guarding `TagManagerPage` against route-local category maps, filtered tag arrays, parent lookup helpers, and usage-count tone checks. Playwright Electron opened the Tag Manager route, confirmed the table, rows, category filter option, no-match empty state, and no horizontal page overflow; screenshot review found no obvious clipping or overlap in the table or empty state. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow Tag Manager compute banner checks passed. The focused workflow test verifies online/offline banner labels, detail copy, fallback GPU labels, queued counts, and indicator classes while guarding `TagManagerPage` against route-local Worker/GPU status text branching. Playwright Electron opened the Tag Manager route, confirmed the compute banner status/detail render, found no horizontal page overflow, and screenshot review found no obvious clipping or overlap between the table and banner. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow tag picker/input checks passed. The focused workflow test verifies shared search/grouping, suggestions, duplicate/create labels, usage badges, color-dot labels, merge option labels, fixed TagInput dropdown positioning, and source guards for `TagSelector`, `TagInput`, and `TagMergeDialog`. Playwright Electron opened Tag Manager merge dialog, Library asset tag input, and the bulk TagSelector modal; it found no horizontal overflow. Screenshot review caught the TagInput dropdown being clipped at the drawer bottom, which was fixed with viewport-fixed positioning and upward flipping; the rerun showed the suggestion menu visible without obvious overlap or clipping. Temporary screenshots were deleted after review.
+- Asset Tagging Workflow Library sidebar/filter checks passed. The focused workflow test verifies shared shortcut states, tag usage-group ordering, query labels, active chip tone/copy, and source guards for `Library`, `LibrarySidebar`, and `TagFilterBar`. `Library` now mounts `TagFilterBar`, so active query chips are product-visible. Playwright Electron opened Library, confirmed sidebar filter groups and active filter chips render, found no horizontal overflow, and screenshot review found no obvious overlap or clipping in the sidebar or filter bar. Temporary screenshots were deleted after review.
+- Antigravity Subagent REST conversation `2f42e25d-379a-421e-a36b-d8eccbc6dde2` implemented Asset Tagging shared type/color options. The primary agent tightened the result so default/custom color classes are named shared constants and `getAssetTagColorClass` derives from shared type options instead of a duplicate local map.
+- Asset Tagging type/color option checks passed: `node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Playwright Electron opened Tag Manager's create-tag dialog, verified all shared type/color options and default custom selection, then opened Library/Inspector and verified a TagChip tooltip remains within the viewport. Temporary screenshots were deleted after review.
+- Asset Display shared projection checks passed. Focused tests verified library card title/source/tag overflow, dashboard recent-asset limit and metadata labels, detail drawer image spec/file size/date labels, original viewer metadata/zoom labels, caption text/source/timestamp/action labels, shared barrel export, and source guards for `AssetWaterfallGrid`, `Dashboard`, `AssetInspectorDrawer`, `AssetOriginalViewerModal`, and `AssetCaptionPanel`; Playwright screenshot checks verified Dashboard recent assets, Library cards/tag previews, Inspector metadata, original image viewer, and caption panel without obvious clipping or horizontal overflow.
+- Download Status shared projection checks passed. The focused workflow test verifies status normalization, queue-row metadata, file-size labels, progress labels, progress clamping, queue-row classes/progress tones, search-result action labels/classes, active/completed counts, topbar label, empty queue copy, and guards Download Queue, Search, Sidebar, Topbar, Dashboard, and the download store against route-local download status checks or file-size formatting. Playwright Electron opened Download Queue and Dashboard, confirmed completed queue rows, file-size labels, progress bars, dashboard completed/active cards, and no horizontal page overflow; screenshot review found no obvious clipping or overlap. The current local queue had no active download, so active/downloading visible state is covered by focused projection tests rather than screenshot. Temporary screenshots were deleted after review.
+- Visual Analysis Snapshot mapper checks passed. Playwright Electron UI validation was attempted, but the current local library had no asset cards, so the right-side Asset Inspector and `ColorPalettePanel` could not be opened for screenshot review in this pass. Follow-up UI validation needs a non-private fixture asset or a populated local test library.
+- Visual Analysis Snapshot text-color panel checks passed. The focused snapshot test now verifies skipped messages, failed warning projection, success panel state, and foreground swatch display fields while guarding `ColorPalettePanel` against local skip-reason branches, warning reads, and confidence-based swatch formatting. Playwright Electron opened the library and Asset Inspector, confirmed the Color Palette panel renders, found no horizontal overflow, and screenshot review of the current text-color skipped state found no obvious text clipping or overlap. The current local asset did not cover the success text-color palette state in UI; that path is covered by the focused snapshot test. Temporary screenshots were deleted after review.
+- Visual Analysis Snapshot OCR/text-box/readability summary checks passed. The focused snapshot test now verifies OCR text length, OCR source, text-box counts, direct readability average, text-box-derived readability average, and guards the renderer against displaying full OCR text from `textInsightSummary`. Playwright Electron required sandbox escalation for GUI launch, then opened the library and Asset Inspector, confirmed the Color Palette panel renders, found no horizontal overflow, and confirmed the local UI did not expose the test OCR strings. The current local asset did not contain OCR/readability evidence, so the visible summary path is covered by focused snapshot tests rather than screenshot. Temporary screenshots were deleted after review.
+- Visual Analysis Snapshot image/theme display checks passed. The focused snapshot test now verifies theme pill projection, dominant color display fields, image swatch fallback percentage, and guards `ColorPalettePanel` against local theme flag, dominant color, and image swatch fallback branching. Playwright Electron required sandbox escalation for GUI launch, then opened the library and Asset Inspector, confirmed theme pills, dominant color, and full image swatches render, found no horizontal overflow, and screenshot review found no obvious clipping or overlap in the color panel. Temporary screenshots were deleted after review.
+- Visual Analysis Snapshot text-background panel checks passed. The focused snapshot test now verifies `textColorPanel.background` for legacy swatch and modern `background_colors` payloads, and guards `ColorPalettePanel` against reading `snapshot.textBackground` directly. Playwright Electron required sandbox escalation for GUI launch, opened the library and Asset Inspector, scrolled directly to the Color Palette panel, confirmed the panel and full image palette render, found no horizontal page overflow, and screenshot review found no obvious overlap or clipping in the color panel. The current local asset did not include visible text-background evidence, so that visible sub-path is covered by the focused snapshot test. Temporary screenshots were deleted after review.
+- Visual Analysis swatch projection checks passed: `node scripts/run-ts-test.mjs scripts/visual-analysis-snapshot.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Tests verify typed image/text swatch role labels, fallback RGB/HSL values, percentage/copy/CSS labels, contrast, confidence, source text-box labels, and source guards against renderer-local formatting or `as any`.
+- Playwright Electron opened the library and Asset Inspector, hovered the first image swatch, and verified the portaled tooltip bounding rectangle is fully inside the 1280x804 viewport. Screenshot analysis confirmed the tooltip renders above the inspector without clipping or overlap and displays the projected role, percentage, HEX, RGB, HSL, and contrast values. Temporary screenshots containing local asset content were deleted immediately after review.
+- Antigravity Subagent REST conversation `4e55a674-ac29-406a-95ff-f93b4c386e09` implemented the remaining Visual Analysis panel metadata-label projection with write access limited to the approved Visual Analysis slice. The primary agent audited the result and reran validation.
+- Visual Analysis panel metadata-label projection checks passed: `node scripts/run-ts-test.mjs scripts/visual-analysis-snapshot.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check` passed in the primary environment; the focused test and typecheck also passed in the Antigravity subagent. The shared snapshot now owns OCR length labels, text-box ratio labels, provider metadata count labels, duration labels, and text-background source-count labels; `ColorPalettePanel` consumes those ready labels instead of building product text locally.
+- Playwright Electron opened the library and Asset Inspector, confirmed the Color Palette panel has no internal overflow, and verified the swatch tooltip remains portaled and within the viewport. Screenshot review found no obvious clipping or overlap in the visible color panel and tooltip. The current local asset only covered the text-color skipped state, so OCR/text-box summary visibility remains covered by focused snapshot tests. Temporary screenshots containing local asset content were deleted immediately after review.
+- Antigravity Subagent REST conversation `39af9117-65d6-4f81-82ad-4592bea5a580` implemented the AI Runtime Panel shared-helper slice. The primary agent audited the result, removed a test-only renderer comment, and tightened source guards so info labels, display-value fallback, action labels, and macOS branch metadata extraction stay in shared workflow code.
+- AI Runtime Panel shared-helper checks passed: `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Playwright Electron opened AI Console's runtime-management tab, verified shared labels/actions render without page-level horizontal overflow, and screenshot review found no obvious overlap; temporary screenshots were deleted after review.
+- Doctor and Path Governance display checks passed. `DoctorPanel` and `PathGovernanceSummary` now consume shared Doctor display projection for status labels/classes, check labels, date/detail fallback, managed-path summary, Chinese path-governance copy, and path masking instead of owning renderer-local dictionaries or summary logic.
+- Doctor display validation passed: `node scripts/run-ts-test.mjs scripts/doctor-display-workflow.test.ts`, `node scripts/run-ts-test.mjs scripts/doctor-panel-contract.test.ts`, `node scripts/run-ts-test.mjs scripts/path-governance-panel-contract.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Playwright Electron opened Settings, located the Doctor section, confirmed Doctor/path-governance copy is Chinese, found no absolute `/Users/...` path exposure in that panel, and found no page or section horizontal overflow; temporary screenshots were deleted after review.
+- Antigravity Subagent REST conversation `df458f98-82a4-4a6f-abae-0f2aa8b5df77` implemented the Settings Migration shared type/display slice. The primary agent audited the result, replaced loose test fixtures with complete typed fixtures, and removed redundant component prop noise.
+- Settings Migration shared type cleanup + display projector validation passed: `node scripts/run-ts-test.mjs scripts/settings-migration-workflow.test.ts`, `node scripts/run-ts-test.mjs scripts/settings-migration-panel-contract.test.ts`, `node scripts/run-ts-test.mjs scripts/settings-migration-ipc-contract.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Playwright Electron opened Settings, isolated the migration section, confirmed Chinese read-only copy and shared status/action labels, found no legacy English status copy or horizontal overflow, and screenshot review found no obvious clipping or overlap. Temporary screenshots were deleted after review.
+- AI Model Artifact Readiness model-matrix projection checks passed. Shared workflow code now resolves active prompt-model readiness and owns model-row source labels, loaded-state labels/tones, installed-version copy, and cooperative download/cancel/delete action selection; AI Console only renders the projected state and forwards user actions.
+- Model-matrix validation passed: `node scripts/run-ts-test.mjs scripts/model-artifact-readiness-display.test.ts`, `node scripts/run-ts-test.mjs scripts/model-artifact-readiness.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Playwright opened AI Console's Models tab, confirmed shared repository/local-source labels, download actions, loaded-state copy, and installed-version copy, found no page or matrix horizontal overflow, and screenshot review found no obvious clipping or overlap.
+- Asset Tagging quick-create defaults now reuse `CUSTOM_ASSET_TAG_COLOR_CLASS` instead of duplicating the custom-tag color value in `AssetTagPanel`. `node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts`, `npm run typecheck`, docs sync, and scoped diff checks passed. UI action validation was intentionally skipped because creating a tag would mutate the local asset library while the change has no visible-state difference; the focused source guard proves the shared default is consumed.
+- Electron AI Result Sync lifecycle persistence now uses one Electron-owned sink for tagging and analysis task completion records plus active, failed, and supported cancelled task/asset transitions. Workflow-specific completed asset writes, tag suggestion sync, color refresh, transaction boundaries, renderer notifications, database schema, and Worker API paths remain unchanged.
+- Lifecycle sink validation passed: `node scripts/run-ts-test.mjs scripts/ai-task-lifecycle-sync-sink.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-result-sync-projector.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-tag-suggestion-sync-sink.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Tests cover exact tagging/analysis SQL targets and parameter order for active, failed, cancelled, and completed records, no-op handling for ignored/inapplicable lifecycles, and source guards against reintroducing duplicate lifecycle SQL in `AiClientService`. This main-process-only refactor does not change product-facing UI, so Playwright/screenshot validation was not run.
+- Platform AI Branch Status Chinese display adoption is complete at the shared projection boundary. The shared display now owns the panel title/description/prefixes, Chinese branch labels, canonical Chinese workflow titles/summaries, and display-only next-action labels; raw `title/summary/nextAction.label` remain excluded from business selection.
+- Platform AI Branch Status Chinese UI validation passed: `node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-display.test.ts`, `node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-projector.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Playwright opened AI Console, confirmed the real evidence-insufficient empty panel uses Chinese title, description, branch vocabulary, status, and empty copy, found no page or panel horizontal overflow, and screenshot review found no clipping or overlap. The browser renderer has no Electron preload, so the four populated workflow cards are covered by focused projection tests rather than this screenshot pass.
+- Cross-phase completion audit identified Visual Analysis Snapshot payload typing as the next high-value remaining boundary: payload-version drift is centralized, but shared snapshot inputs and intermediate palette/swatches still use broad `any`, weakening contract evidence and allowing future renderer assumptions to bypass compile-time checks.
+- Visual Analysis Snapshot payload typing is now complete for the renderer boundary. Shared persisted palette types cover legacy `swatches` and modern `colors`, theme/text metadata, unknown extension fields, and both `from_boxes` / producer-native `fromBoxes`; the snapshot parser narrows untrusted JSON from `unknown`, projector intermediates are typed, and `ColorPalettePanel` now declares only the asset/API fields it consumes.
+- Visual Analysis payload typing validation passed: `node scripts/run-ts-test.mjs scripts/visual-analysis-snapshot.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. The focused test covers legacy/modern payloads, malformed JSON, readability derivation, text-background fallback, producer-native `fromBoxes`, and source guards against broad `any`. UI screenshot validation was not repeated because this slice changes compile-time input handling only and preserves the already-validated renderer-ready snapshot output; prior Color Palette screenshots remain representative.
+- Cross-platform audit found and fixed a Windows product-surface regression: AI Console selected the correct Platform AI Branch Status response but always rendered the macOS route overview, macOS dependency install action, MPS/MLX diagnostics, and macOS capability matrix. Shared route-overview projection now owns branch title/description/priority and deduplicated runtime-lane summaries; Windows renders CUDA/ONNX/Llama/external lane evidence, while macOS-only controls mount only for the macOS branch.
+- Branch-aware route overview validation passed: `node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-display.test.ts`, `node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-projector.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Browser preview verified the unknown/evidence-insufficient state shows a neutral platform overview, omits the macOS install action and capability matrix, has no page/card horizontal overflow, and has no visible clipping or overlap. Windows populated-state layout is covered by shared projector fixtures because the current host is macOS.
+- UI validation note: starting the Electron development app activated existing startup palette repair and AI task polling against the local runtime database before shutdown. This was within the user-approved test scope, no private asset content was reported, and no rollback was attempted. Future renderer-only screenshot checks should prefer a Vite-only preview to avoid unrelated startup mutations.
+- AI Model Artifact Readiness now uses one shared Worker cooperative readiness snapshot across main-process evidence mapping and AI Console. The renderer no longer redeclares the Worker readiness payload or independently composes readiness, download progress, artifact source, and row action; `projectCooperativeModelRowDisplay` owns that merge while preserving existing visible output and IPC behavior.
+- Cooperative readiness contract validation passed: `node scripts/run-ts-test.mjs scripts/model-artifact-readiness-display.test.ts`, `node scripts/run-ts-test.mjs scripts/model-artifact-readiness.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Tests cover real-loaded, dependency-missing, stale/conflicting download evidence, progress normalization, action precedence, and source guards against renderer/main-local duplicate readiness types. Screenshot validation was not repeated because rendered labels, tones, progress, and actions are unchanged; the previously validated Models tab remains representative.
+- Cross-platform readiness audit found that cooperative and Llama artifact evidence was hard-coded to macOS `python_mps` / `llama_metal` lanes. Because Windows branch definitions use `python_cuda` / `llama_cuda`, valid Worker/model evidence could not raise Windows workflow status above planned capability. Readiness mapping now emits both platform lane variants for the same shared workflow while the branch projector filters to its own lanes.
+- Windows readiness-lane validation passed: `node scripts/run-ts-test.mjs scripts/model-artifact-readiness.test.ts`, `node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-projector.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and scoped `git diff --check`. Tests prove real RAM++ Worker evidence reaches Windows `python_cuda`, real Llama evidence reaches `llama_cuda`, both Windows workflows become `real_model_path`, macOS lanes remain intact, and no local model path leaks into evidence. This changes internal status evidence only, so no additional screenshot was required.
 
 Passed:
 
 ```bash
+node scripts/run-ts-test.mjs scripts/visual-analysis-snapshot.test.ts
+npm run typecheck
+npm run build
+python3 scripts/check-docs-sync.py
+node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts
+node scripts/run-ts-test.mjs scripts/ai-tag-suggestion-sync-sink.test.ts
+node scripts/run-ts-test.mjs scripts/ai-result-sync-projector.test.ts
+node scripts/run-ts-test.mjs scripts/model-artifact-readiness.test.ts
+node scripts/run-ts-test.mjs scripts/prompt-reverse-workflow.test.ts
+node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts
+node scripts/run-ts-test.mjs scripts/ai-console-overview-workflow.test.ts
+node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts
+node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts
+node scripts/run-ts-test.mjs scripts/ai-runtime-ipc-contract.test.ts
+node scripts/run-ts-test.mjs scripts/platform-ai-branch-status-projector.test.ts
 npm run test-ai-console-macos-branch
 npm run test-ai-runtime-panel
 npm run test-ai-runtime-ipc
@@ -164,6 +334,9 @@ python3 -m unittest ai-service/tests/test_macos_ai_capabilities.py
 Additional passed checks in this pass:
 
 ```bash
+node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts
+node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts
+node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts
 npm run typecheck
 npm run build
 python3 scripts/check-docs-sync.py
@@ -287,3 +460,92 @@ Additional checks:
 - `npm run build` passed
 - `npx electron-builder --mac --dir` passed
 - `/Applications/Design Asset Manager.app` deployed with TLS 1.2 fixed scripts
+
+## 2026-06-05 Session: Zombie Process Cleanup & Dev App Restart
+
+### Changes
+- Terminated stuck zombie Python processes on port 8000 (`PID 73355`, `55558`, `70433`, `70432`) running old code.
+- Cleaned up orphaned Electron instances.
+- Restarted the dev server using `npm run dev`.
+- The new Electron instance successfully marked the lost/stuck task `task-tag-a846739c` as `failed` in the SQLite database, resolving the tight polling loop and the application freeze.
+- Verified that the new Python worker process (`PID 69553`) was successfully spawned by Electron and is actively running.
+
+### Verification
+- Independent Victory Audit was executed by Victory Auditor `460191da-1ac5-4179-add3-1e3014a61ba9`, which delivered a **VICTORY CONFIRMED** verdict.
+- Ran all Python unit tests: 80/80 passed.
+- Ran all TypeScript tests: Passed.
+- TypeScript compilation: `npm run typecheck` passed.
+- Electron build: `npm run build` completed successfully.
+
+## 2026-06-06 Session: Media Path & Release Flow Governance Verification (Phase 14C & 15A)
+
+### Changes
+- Configured and verified Phase 14C: Media Path Governance. Thumbnail and normalized-image relative path abstractions are successfully generated under the `managed-cache` layout.
+- Configured and verified Phase 15A: Release Flow Governance. Added `.github/workflows/release-packaging-dry-run.yml` containing dry-run build matrices for macOS DMG and Windows NSIS targets across x64/arm64 architectures, without publishing or credentials/secrets leakage.
+- Updated `PROJECT.md` milestones for Phase 14C and Phase 15A to `DONE`.
+
+### Verification
+- Ran `node scripts/run-ts-test.mjs scripts/path-governance-late-phases.test.ts` - PASSED.
+- Ran `node scripts/run-ts-test.mjs scripts/release-flow-governance.test.ts` - PASSED.
+- TypeScript compilation: `npm run typecheck` - PASSED.
+- Electron build: `npm run build` - PASSED.
+
+## 2026-06-06 Session: Multi-Platform Test Suite Hygiene & 100% CI Green
+
+### Changes
+- Fixed macOS-specific path resolving and platform detection in the test suite:
+  - `scripts/log-path-governance.test.ts` & `scripts/cache-temp-governance.test.ts`: Updated path-privacy assertions to reject the known legacy user-home fixture instead of blocking every macOS user-home path.
+  - `scripts/bootstrap-manager.test.ts` & `scripts/bootstrap-package-plan.test.ts`: Mocked `process.platform` and `process.arch` to keep mock-based Windows package assertions consistent on non-Windows test environments.
+  - `scripts/native-dependency-packaging.test.ts`: Adjusted model-exclusion assertions to match actual package.json filters (extensions-based instead of broad folder-level exclusions).
+  - `scripts/ai-console-macos-branch.test.ts`: Fixed the projection function assertion to match its actual renamed name (`projectAiConsoleModelReadinessDisplay`).
+  - `scripts/ci-hygiene.test.ts`: Ignored `.DS_Store` files in the temporary test directory checks.
+
+### Verification
+- Cleaned up temporary test artifacts (`rm -rf dist-temp/playwright`).
+- Executed the entire repository governance CI suite: `npm run ci:governance` — **PASSED** (100% green).
+
+## 2026-06-06 Session: Path Governance Execution, Apple Entitlements & Downloader Optimization (Phase 16, 15B & Downloader R3)
+
+### Changes
+- Antigravity produced a tested `PathMigrationExecutor` draft with backup, journal, copy, database update, and rollback behavior. Primary-agent acceptance removed its executable IPC/preload exposure because active asset-library and runtime SQLite migration requires separate explicit user approval. Phase 16 remains dormant and is not a product capability.
+- Implemented and configured Phase 15B: Packaged Production Validation & Sign-off. Created Apple Hardened Runtime entitlements plist `build/entitlements.mac.plist` and Apple Notarization afterSign hook `scripts/notarize.js`.
+- Configured electron-builder settings in `package.json` with macOS Hardened Runtime, Gatekeeper bypass, entitlements, and `afterSign` hooks. Updated release dry-run workflow with secrets placeholders.
+- Upgraded cross-platform packaging smoke launch test `scripts/package-smoke.mjs` to work on both macOS/Windows, execute inside an isolated sandbox directory (`dist-packages/temp-smoke-home`), and assert successful SQLite loading and Python executable path checks.
+- Optimized Model Downloader (R3): Enhanced `download_hf_model.py` and `download_cooperative_hf_model.py` with CLI `--mirror` flags, OOM protection chunked streaming (64KB chunks), range-based resume-on-failure (`Range` headers with `'ab'` write mode), and parallel multi-channel segmented downloading (`ThreadPoolExecutor` downloading to `.part.{index}`) for files > 15MB.
+- Added comprehensive Python unit/integration tests in `ai-service/tests/test_model_downloads.py` covering downloader optimizations.
+
+### Verification
+- Executed Node-based CI governance pipeline: `npm run ci:governance` — **PASSED** (100% green).
+- Executed Python-based unit tests: `npm run test-python-unittest` — **PASSED** (100% green, 86/86 tests).
+- Executed cross-platform packaging smoke tests: `npm run package:smoke -- --launch-unpacked` — **PASSED**.
+
+## 2026-06-06 Session: Final Cleanup & Handoff
+
+### Changes
+- Deleted stale test artifact `src/message.txt` (Antigravity GUI test residue).
+- Deleted stale `test_run.log`.
+- Updated `.gitignore` to prevent accidental re-commit of root-level build outputs (`/index.js`, `/index.cjs`, `/index-*.js`) and test scratch files (`src/message.txt`).
+- Identified 3 tracked root-level build outputs (`index-BOIE1D5k.js`, `index.cjs`, `index.js`) that were committed by a previous developer; these are now gitignored but not removed from the index to avoid polluting the working tree.
+
+### Verification
+- `npm run typecheck` — **PASSED**.
+- `npm run build` — **PASSED** (933ms, 1573 modules).
+- `npm run ci:governance` — **PASSED** (100% green, all governance suites).
+- `python3 -m unittest discover ai-service/tests` — **PASSED** (88/88 tests, 3.5s).
+
+### Primary-Agent Acceptance Status
+- The primary-agent completion audit accepts the five shared-architecture roadmap phases: Platform AI Branch Status, AI Model Artifact Readiness, Electron AI Result Sync, Asset Tagging Workflow, and Visual Analysis Snapshot.
+- Phase 16 Path Migration is not accepted as a product capability: its executor remains dormant and its IPC/preload execution surface was removed pending explicit user approval.
+- The shared AI Client IPC contract is now wired through shared types, main handlers, preload, service responses, queue statistics, and task-sync events.
+- Phase 15A dry-run was restored to its no-signing-secret/no-notarization-secret boundary; Phase 15B credential-aware hooks remain separate from the dry-run workflow.
+- Python tests now run through a cross-platform isolated launcher that disables user-data access, redirects task cache and bytecode to a temporary directory, sanitizes local paths in output, and keeps downloader events free of target-directory fields.
+- Final acceptance validation passed: `npm run test-python-unittest` (88/88), `npm run test-python-test-isolation`, `npm run typecheck`, `npm run build`, `npm run ci:governance`, `python3 scripts/check-docs-sync.py`, and `git diff --check`.
+- UI screenshot validation was not repeated for the final acceptance corrections because they change contracts, main/preload wiring, CI/release governance, and test isolation without changing rendered output. Earlier phase-specific Playwright/Electron screenshot results remain the relevant UI evidence.
+- Remaining work outside this goal: Phase 16 activation requires explicit approval; Windows-host packaging/runtime smoke and production signing/notarization require their target environments and credentials.
+
+## 2026-06-06 Local macOS Preview Deployment
+
+- Rebuilt the current workspace as an arm64 unpacked macOS application with the bundled Electron runtime and native dependencies.
+- The isolated packaged-app smoke test passed: the process stayed alive, initialized its sandbox SQLite database, and resolved the Python executable.
+- Replaced the installed local application after closing the development instance, then launched the installed build successfully.
+- Verified the installed `app.asar` hash matches the newly generated package. This is an unsigned local preview build; production signing and notarization remain separate release work.

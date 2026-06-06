@@ -215,15 +215,26 @@ function normalizePromptReverseData(text: string, config: AiBackendConfig, model
   const partial = parsedObject && typeof parsedObject === 'object' ? null : extractPartialPromptReverseObject(text)
   const src = parsedObject && typeof parsedObject === 'object' ? parsedObject : partial ?? {}
 
+  // Normalize tag fields: the GGUF model returns comma-separated strings,
+  // but some backends return JSON arrays. Handle both.
+  const normalizeTags = (value: unknown): string[] => {
+    if (Array.isArray(value)) return value.map(String).filter(Boolean)
+    if (typeof value === 'string') {
+      // Split on Chinese/English commas, semicolons, or newlines
+      return value.split(/[,，;；\n]+/).map(s => s.trim()).filter(Boolean)
+    }
+    return []
+  }
+
   return {
     englishPrompt: String(src.englishPrompt ?? src.prompt ?? text),
     chineseDescription: String(src.chineseDescription ?? src.descriptionZh ?? ''),
     shortCaption: String(src.shortCaption ?? src.caption ?? ''),
-    styleTags: Array.isArray(src.styleTags) ? src.styleTags.map(String) : [],
-    subjectTags: Array.isArray(src.subjectTags) ? src.subjectTags.map(String) : [],
-    compositionTags: Array.isArray(src.compositionTags) ? src.compositionTags.map(String) : [],
-    colorTags: Array.isArray(src.colorTags) ? src.colorTags.map(String) : [],
-    usageTags: Array.isArray(src.usageTags) ? src.usageTags.map(String) : [],
+    styleTags: normalizeTags(src.styleTags),
+    subjectTags: normalizeTags(src.subjectTags),
+    compositionTags: normalizeTags(src.compositionTags),
+    colorTags: normalizeTags(src.colorTags),
+    usageTags: normalizeTags(src.usageTags),
     negativePromptSuggestion: String(src.negativePromptSuggestion ?? ''),
     rawResponse: text,
     modelId,

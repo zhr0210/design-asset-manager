@@ -1,13 +1,13 @@
 import React from 'react'
 import { Compass, Sliders, Sparkles } from 'lucide-react'
+import { projectAssetLibrarySidebar, type AssetLibraryTagFilterIconKey } from '../../../shared/workflows/asset-tagging.workflow'
 import { Asset, Tag } from '../../stores/asset.store'
 
 type LibrarySidebarProps = {
   selectedAsset: Asset | null;
   assetsCount: number;
+  tags: Tag[];
   activeTagSearchQueries: string[];
-  groupedSidebarTags: Record<string, Tag[]>;
-  groupTitles: Record<string, string>;
   clearActiveTagSearchQueries: () => void;
   addActiveTagSearchQuery: (query: string) => void;
   removeActiveTagSearchQuery: (query: string) => void;
@@ -16,13 +16,14 @@ type LibrarySidebarProps = {
 export default function LibrarySidebar({
   selectedAsset,
   assetsCount,
+  tags,
   activeTagSearchQueries,
-  groupedSidebarTags,
-  groupTitles,
   clearActiveTagSearchQueries,
   addActiveTagSearchQuery,
   removeActiveTagSearchQuery
 }: LibrarySidebarProps) {
+  const sidebarProjection = projectAssetLibrarySidebar(tags, { activeQueries: activeTagSearchQueries, assetsCount })
+
   return (
     <div
       className={`transition-all duration-300 ease-in-out flex flex-col h-full shrink-0 font-sans select-none ${
@@ -37,48 +38,28 @@ export default function LibrarySidebar({
           标签智能过滤器
         </span>
         
-        <button
-          onClick={clearActiveTagSearchQueries}
-          className={`w-full text-left px-2.5 py-2 rounded-xl transition-colors flex items-center justify-between cursor-pointer ${
-            activeTagSearchQueries.length === 0
-              ? 'bg-brand-50 text-brand-700 font-bold'
-              : 'hover:bg-slate-50 text-slate-600'
-          }`}
-        >
-          <span className="flex items-center gap-2">
-            <Compass className="w-4 h-4 stroke-[1.8]" />
-            <span>全部素材资源</span>
-          </span>
-          <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded font-bold">{assetsCount}</span>
-        </button>
-
-        <button
-          onClick={() => addActiveTagSearchQuery('special:untagged')}
-          className={`w-full text-left px-2.5 py-2 rounded-xl transition-colors flex items-center justify-between cursor-pointer ${
-            activeTagSearchQueries.includes('special:untagged')
-              ? 'bg-rose-50 text-rose-700 font-bold border border-rose-100'
-              : 'hover:bg-slate-50 text-slate-600'
-          }`}
-        >
-          <span className="flex items-center gap-2">
-            <Sliders className="w-4 h-4 stroke-[1.8] text-rose-400" />
-            <span>无任何标签素材</span>
-          </span>
-        </button>
-
-        <button
-          onClick={() => addActiveTagSearchQuery('special:ai_pending')}
-          className={`w-full text-left px-2.5 py-2 rounded-xl transition-colors flex items-center justify-between cursor-pointer ${
-            activeTagSearchQueries.includes('special:ai_pending')
-              ? 'bg-purple-50 text-purple-700 font-bold border border-purple-100'
-              : 'hover:bg-slate-50 text-slate-600'
-          }`}
-        >
-          <span className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 stroke-[1.8] text-purple-500 animate-pulse" />
-            <span>AI 待确认标签</span>
-          </span>
-        </button>
+        {sidebarProjection.shortcuts.map((shortcut) => {
+          const Icon = getLibraryFilterIcon(shortcut.iconKey)
+          return (
+            <button
+              key={shortcut.code}
+              onClick={shortcut.query ? () => addActiveTagSearchQuery(shortcut.query!) : clearActiveTagSearchQueries}
+              className={`w-full text-left px-2.5 py-2 rounded-xl transition-colors flex items-center justify-between cursor-pointer ${
+                shortcut.isActive ? shortcut.activeClassName : shortcut.idleClassName
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <Icon className={`w-4 h-4 stroke-[1.8] ${shortcut.iconClassName}`} />
+                <span>{shortcut.label}</span>
+              </span>
+              {shortcut.countLabel && (
+                <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded font-bold">
+                  {shortcut.countLabel}
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
 
       {/* Categories tags collection breakdown */}
@@ -88,37 +69,32 @@ export default function LibrarySidebar({
         </span>
 
         <div className="space-y-4 max-h-[50vh] overflow-y-auto px-0.5">
-          {Object.entries(groupTitles).map(([typeKey, title]) => {
-            const list = groupedSidebarTags[typeKey] || []
-            if (list.length === 0) return null
-
+          {sidebarProjection.groups.map((group) => {
             return (
-              <div key={typeKey} className="space-y-1">
+              <div key={group.typeKey} className="space-y-1">
                 <h6 className="text-[9.5px] font-bold text-slate-400 px-2 uppercase tracking-wide">
-                  {title}
+                  {group.title}
                 </h6>
                 <div className="space-y-0.5 pl-1.5">
-                  {list.map((tag) => {
-                    const tagQuery = `tag:${tag.name}`
-                    const isActive = activeTagSearchQueries.includes(tagQuery)
+                  {group.items.map((item) => {
                     return (
                       <button
-                        key={tag.id}
+                        key={item.tag.id}
                         onClick={() => {
-                          if (isActive) {
-                            removeActiveTagSearchQuery(tagQuery)
+                          if (item.isActive) {
+                            removeActiveTagSearchQuery(item.query)
                           } else {
-                            addActiveTagSearchQuery(tagQuery)
+                            addActiveTagSearchQuery(item.query)
                           }
                         }}
                         className={`w-full text-left px-2 py-1.5 rounded-lg text-[11px] font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-                          isActive
-                            ? 'bg-brand-50 text-brand-700 font-bold'
-                            : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+                          item.isActive ? item.activeClassName : item.idleClassName
                         }`}
                       >
-                        <span className="truncate pr-1">#{tag.name}</span>
-                        <span className="text-[9px] bg-slate-100 text-slate-400 px-1 rounded font-bold shrink-0">{tag.usageCount}</span>
+                        <span className="truncate pr-1">{item.label}</span>
+                        <span className="text-[9px] bg-slate-100 text-slate-400 px-1 rounded font-bold shrink-0">
+                          {item.countLabel}
+                        </span>
                       </button>
                     )
                   })}
@@ -130,4 +106,10 @@ export default function LibrarySidebar({
       </div>
     </div>
   )
+}
+
+function getLibraryFilterIcon(iconKey: AssetLibraryTagFilterIconKey) {
+  if (iconKey === 'sparkles') return Sparkles
+  if (iconKey === 'sliders') return Sliders
+  return Compass
 }
