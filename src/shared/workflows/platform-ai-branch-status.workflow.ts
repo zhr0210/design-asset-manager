@@ -181,11 +181,13 @@ export function selectPlatformAiBranchStatus(
 export function projectPlatformAiBranchStatusTone(status: PlatformAiBranchStatus): PlatformAiBranchDisplayTone {
   if (status === 'real_model_path' || status === 'ready_to_load' || status === 'runtime_probe_ready') return 'good'
   if (status === 'unavailable') return 'bad'
+  if (status === 'evidence_insufficient') return 'muted'
   return 'warn'
 }
 
 export function projectPlatformAiBranchStatusLabel(status: PlatformAiBranchStatus): string {
   return {
+    evidence_insufficient: '证据不足',
     planned_capability: '规划能力',
     runtime_probe_ready: '运行时探测就绪',
     ready_to_load: '可尝试加载',
@@ -213,10 +215,11 @@ function scorePlatformAiBranchStatus(
 function platformAiBranchStatusScore(status: PlatformAiBranchStatus): number {
   return {
     unavailable: 0,
-    planned_capability: 1,
-    runtime_probe_ready: 2,
-    ready_to_load: 3,
-    real_model_path: 4
+    evidence_insufficient: 1,
+    planned_capability: 2,
+    runtime_probe_ready: 3,
+    ready_to_load: 4,
+    real_model_path: 5
   }[status]
 }
 

@@ -11,7 +11,7 @@ export function MacOSAiCapabilityMatrix({ probe }: { probe: MacOSAiWorkerProbeRe
         <div>
           <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">macOS 细项能力矩阵</div>
           <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-            把 Python MPS、ONNX Runtime、CLIP/SigLIP ONNX 以及 Llama 路线拆到可见的 optional 能力上，方便确认下一步该补哪一段。
+            区分依赖可用、依赖缺失、证据不足与真正尚未实现的路线，避免把探测缺口误报为功能规划。
           </div>
         </div>
         <div className="text-[10.5px] font-black text-slate-500 dark:text-slate-400">

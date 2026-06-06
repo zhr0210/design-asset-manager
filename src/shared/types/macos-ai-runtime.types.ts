@@ -2,7 +2,14 @@ import type { PlatformArch, PlatformName } from './platform.types'
 
 export type MacOSAiRuntimeLaneId = 'python-mps' | 'onnx-runtime' | 'llama'
 
-export type MacOSAiCapabilityStatus = 'ready' | 'optional' | 'planned' | 'fallback' | 'unavailable'
+export type MacOSAiCapabilityStatus =
+  | 'ready'
+  | 'optional'
+  | 'planned'
+  | 'evidence_insufficient'
+  | 'dependency_missing'
+  | 'fallback'
+  | 'unavailable'
 
 export interface MacOSAiRuntimeCapability {
   id: string

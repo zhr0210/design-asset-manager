@@ -68,6 +68,9 @@ class TestMacOSAiCapabilities(unittest.TestCase):
         self.assertEqual(result["lanes"][0]["capabilities"][0]["status"], "optional")
         self.assertEqual(result["lanes"][1]["capabilities"][0]["status"], "optional")
         self.assertEqual(result["lanes"][1]["capabilities"][3]["status"], "optional")
+        self.assertEqual(result["lanes"][2]["status"], "evidence_insufficient")
+        self.assertEqual(result["lanes"][2]["capabilities"][0]["status"], "evidence_insufficient")
+        self.assertEqual(result["lanes"][2]["capabilities"][1]["status"], "planned")
         self.assertEqual(result["lanes"][0]["capabilities"][0]["modelFamily"], "RAM++")
         self.assertEqual(result["lanes"][1]["capabilities"][1]["modelFamily"], "RapidOCR")
 
@@ -90,7 +93,9 @@ class TestMacOSAiCapabilities(unittest.TestCase):
         self.assertEqual(result["lanes"][0]["capabilities"][0]["modelFamily"], "RAM++")
         self.assertEqual(result["lanes"][0]["status"], "unavailable")
         self.assertEqual(result["lanes"][1]["status"], "unavailable")
-        self.assertEqual(result["lanes"][2]["status"], "planned")
+        self.assertEqual(result["lanes"][0]["capabilities"][0]["status"], "dependency_missing")
+        self.assertEqual(result["lanes"][1]["capabilities"][3]["status"], "dependency_missing")
+        self.assertEqual(result["lanes"][2]["status"], "evidence_insufficient")
 
     def test_non_macos_marks_llama_unavailable_but_keeps_external_fallback(self):
         result = probe_macos_ai_capabilities(

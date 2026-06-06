@@ -3,6 +3,7 @@ export type PlatformAiBranch = 'macos' | 'windows'
 export type PlatformAiWorkflow = 'ai_tag_task' | 'ai_prompt_task' | 'ocr_text_box' | 'search_embedding'
 
 export type PlatformAiBranchStatus =
+  | 'evidence_insufficient'
   | 'planned_capability'
   | 'runtime_probe_ready'
   | 'ready_to_load'

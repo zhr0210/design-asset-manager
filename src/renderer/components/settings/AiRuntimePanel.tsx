@@ -390,7 +390,7 @@ function MacOSAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata }
         <div className="min-w-0">
           <div className="text-[13px] font-black text-slate-900">macOS AI 分支</div>
           <div className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
-            Python MPS、ONNX Runtime 与 Llama 三条路线的阶段性能力图。当前阶段：{branch.phase} / {branch.platform}/{branch.arch}
+            Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。当前阶段：{branch.phase} / {branch.platform}/{branch.arch}
           </div>
         </div>
         <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${branch.isCurrentPlatform ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-white text-slate-500'}`}>

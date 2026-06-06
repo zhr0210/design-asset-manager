@@ -199,9 +199,9 @@ function projectLane(
     return {
       lane: lane.lane,
       label: lane.label,
-      status: maxBranchStatus(['planned_capability', readinessStatus]),
+      status: maxBranchStatus(['evidence_insufficient', readinessStatus]),
       evidence: [
-        evidence('planned_capability', `${lane.label} 已注册为计划能力`, 'static_metadata'),
+        evidence('service_unavailable', `${lane.label} 已注册但当前未运行`, 'runtime_health', matched[0].id),
         evidence('service_unavailable', `${matched[0].id} 当前未运行`, 'runtime_health'),
         ...readinessEvidence
       ]
@@ -213,9 +213,9 @@ function projectLane(
   return {
     lane: lane.lane,
     label: lane.label,
-    status: maxBranchStatus(['planned_capability', readinessStatus]),
+    status: maxBranchStatus(['evidence_insufficient', readinessStatus]),
     evidence: [
-      evidence('planned_capability', `${lane.label} 是该工作流的计划运行时路线`, 'static_metadata'),
+      evidence('unknown', `${lane.label} 已定义，但尚无运行时或模型证据`, 'static_metadata'),
       ...readinessEvidence
     ]
   }
@@ -226,7 +226,7 @@ function projectWorkflowStatus(runtimeLanes: PlatformAiRuntimeLaneEvidence[], pl
   if (runtimeLanes.some((lane) => lane.status === 'real_model_path')) return 'real_model_path'
   if (runtimeLanes.some((lane) => lane.status === 'ready_to_load')) return 'ready_to_load'
   if (runtimeLanes.some((lane) => lane.status === 'runtime_probe_ready')) return 'runtime_probe_ready'
-  return 'planned_capability'
+  return 'evidence_insufficient'
 }
 
 function projectMissingRequirements(
@@ -315,18 +315,19 @@ function readinessToEvidence(readiness: AiModelArtifactReadiness): PlatformAiSta
 function projectReadinessStatus(readiness: AiModelArtifactReadiness[]): PlatformAiBranchStatus {
   if (readiness.some((item) => item.state === 'loaded_real' || item.state === 'external_backend_healthy')) return 'real_model_path'
   if (readiness.some((item) => item.state === 'ready_to_load')) return 'ready_to_load'
-  return 'planned_capability'
+  return 'evidence_insufficient'
 }
 
 function maxBranchStatus(statuses: PlatformAiBranchStatus[]): PlatformAiBranchStatus {
   const priority: Record<PlatformAiBranchStatus, number> = {
     unavailable: 0,
-    planned_capability: 1,
-    runtime_probe_ready: 2,
-    ready_to_load: 3,
-    real_model_path: 4
+    evidence_insufficient: 1,
+    planned_capability: 2,
+    runtime_probe_ready: 3,
+    ready_to_load: 4,
+    real_model_path: 5
   }
-  return statuses.reduce((best, next) => priority[next] > priority[best] ? next : best, 'planned_capability')
+  return statuses.reduce((best, next) => priority[next] > priority[best] ? next : best, 'evidence_insufficient')
 }
 
 function dedupeMissingRequirements(items: PlatformAiMissingRequirement[]): PlatformAiMissingRequirement[] {

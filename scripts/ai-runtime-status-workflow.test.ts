@@ -122,17 +122,27 @@ assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('ready'), {
 })
 assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('optional'), {
   status: 'optional',
-  label: '可选',
+  label: '依赖可用',
   badgeClass: 'border-sky-100 bg-sky-50 text-sky-700'
 })
 assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('planned'), {
   status: 'planned',
-  label: '规划中',
+  label: '尚未实现',
+  badgeClass: 'border-amber-100 bg-amber-50 text-amber-700'
+})
+assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('evidence_insufficient'), {
+  status: 'evidence_insufficient',
+  label: '证据不足',
+  badgeClass: 'border-slate-200 bg-slate-50 text-slate-500'
+})
+assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('dependency_missing'), {
+  status: 'dependency_missing',
+  label: '依赖缺失',
   badgeClass: 'border-amber-100 bg-amber-50 text-amber-700'
 })
 assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('fallback'), {
   status: 'fallback',
-  label: '回退',
+  label: '回退路线',
   badgeClass: 'border-slate-200 bg-slate-50 text-slate-600'
 })
 assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('unavailable'), {
@@ -278,7 +288,7 @@ const connectedProbe = projectMacOSAiWorkerProbeDisplay({
   clipSiglipOnnx: {
     id: 'clip-siglip-onnx',
     label: 'CLIP/SigLIP ONNX',
-    status: 'planned',
+    status: 'dependency_missing',
     role: 'embedding',
     backend: 'optimum',
     version: null,
@@ -297,9 +307,9 @@ assert.equal(connectedProbe.mps.valueLabel, '可用')
 assert.equal(connectedProbe.mps.captionLabel, 'torch 2.8.0')
 assert.equal(connectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(connectedProbe.onnxRuntime.captionLabel, 'CoreMLExecutionProvider / CPUExecutionProvider')
-assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '规划中')
+assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '依赖缺失')
 assert.equal(connectedProbe.clipSiglipOnnx.captionLabel, '已探测，未报告版本')
-assert.equal(connectedProbe.mlx.valueLabel, '规划中')
+assert.equal(connectedProbe.mlx.valueLabel, '依赖缺失')
 
 const settingsPanelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
 const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')

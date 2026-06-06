@@ -168,11 +168,11 @@ def _probe_clip_siglip_onnx(import_module: ImportModule) -> CapabilityPayload:
     if not probe["compatible"]:
         missing = probe.get("error", {})
         if onnxruntime_probe["available"] and transformers_probe["available"]:
-            status = "planned"
+            status = "dependency_missing"
             version = optimum_probe["version"] or onnxruntime_probe["version"]
             error = optimum_probe["error"]
         else:
-            status = "unavailable"
+            status = "dependency_missing"
             version = None
             error = onnxruntime_probe["error"] or transformers_probe["error"]
 
@@ -196,7 +196,7 @@ def _probe_clip_siglip_onnx(import_module: ImportModule) -> CapabilityPayload:
 def _optional_status(is_macos: bool, module_available: bool) -> str:
     if module_available:
         return "optional"
-    return "planned" if is_macos else "unavailable"
+    return "dependency_missing" if is_macos else "unavailable"
 
 
 def probe_macos_ai_capabilities(
@@ -222,7 +222,7 @@ def probe_macos_ai_capabilities(
 
     mps_status = "ready" if torch_probe["mpsAvailable"] else "fallback" if torch_probe["cpuFallback"] else "unavailable"
     onnx_status = "ready" if onnx_probe["available"] else "unavailable"
-    llama_status = "planned" if is_macos else "unavailable"
+    llama_status = "evidence_insufficient" if is_macos else "unavailable"
 
     lanes = [
         _lane(
@@ -257,7 +257,7 @@ def probe_macos_ai_capabilities(
             llama_status,
             "Large vision route for Qwen3-VL GGUF/MLX, Qwen2.5-VL Ollama fallback, and external HTTP fallback.",
             [
-                _capability("llama.qwen3-vl-gguf", "Qwen3-VL GGUF", "planned" if is_macos else "unavailable", "prompt-reverse", "Qwen3-VL", "llama.cpp Metal"),
+                _capability("llama.qwen3-vl-gguf", "Qwen3-VL GGUF", "evidence_insufficient" if is_macos else "unavailable", "prompt-reverse", "Qwen3-VL", "llama.cpp Metal"),
                 _capability("llama.qwen3-vl-mlx", "Qwen3-VL MLX", "planned" if is_apple_silicon or mlx_probe["available"] else "fallback", "prompt-reverse", "Qwen3-VL", "MLX"),
                 _capability("llama.qwen25-vl-ollama", "Qwen2.5-VL Ollama fallback", "fallback" if is_macos else "unavailable", "prompt-reverse", "Qwen2.5-VL", "Ollama"),
                 _capability("llama.external-http", "external HTTP fallback", "fallback", "fallback", None, "OpenAI-compatible HTTP"),

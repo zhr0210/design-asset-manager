@@ -173,15 +173,19 @@ export function projectMacOSAiCapabilityStatusDisplay(
   const normalized = normalizeMacOSAiCapabilityStatus(status)
   const labels: Record<MacOSAiCapabilityStatus, string> = {
     ready: '就绪',
-    optional: '可选',
-    planned: '规划中',
-    fallback: '回退',
+    optional: '依赖可用',
+    planned: '尚未实现',
+    evidence_insufficient: '证据不足',
+    dependency_missing: '依赖缺失',
+    fallback: '回退路线',
     unavailable: '不可用'
   }
   const badgeClasses: Record<MacOSAiCapabilityStatus, string> = {
     ready: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     optional: 'border-sky-100 bg-sky-50 text-sky-700',
     planned: 'border-amber-100 bg-amber-50 text-amber-700',
+    evidence_insufficient: 'border-slate-200 bg-slate-50 text-slate-500',
+    dependency_missing: 'border-amber-100 bg-amber-50 text-amber-700',
     fallback: 'border-slate-200 bg-slate-50 text-slate-600',
     unavailable: 'border-rose-100 bg-rose-50 text-rose-700'
   }
@@ -298,21 +302,21 @@ export function projectMacOSAiWorkerProbeDisplay(
     isAppleSiliconLabel: probe.isAppleSilicon ? 'yes' : 'no',
     clipSiglipStatusLabel: clipSiglipStatus.label,
     mps: {
-      valueLabel: probe.torch.mpsAvailable ? '可用' : '回退',
+      valueLabel: probe.torch.mpsAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
       captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
     },
     onnxRuntime: {
-      valueLabel: probe.onnxruntime.available ? '可用' : '回退',
+      valueLabel: probe.onnxruntime.available ? '可用' : '依赖缺失',
       captionLabel: probe.onnxruntime.providers.join(' / ') || '已探测，未报告 Provider'
     },
     clipSiglipOnnx: {
-      valueLabel: probe.clipSiglipOnnx.available ? '可用' : '规划中',
+      valueLabel: clipSiglipStatus.label,
       captionLabel: probe.clipSiglipOnnx.version
         ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
         : '已探测，未报告版本'
     },
     mlx: {
-      valueLabel: probe.mlx.available ? '可用' : '规划中',
+      valueLabel: probe.mlx.available ? '依赖可用' : '依赖缺失',
       captionLabel: probe.mlx.version ? `mlx ${probe.mlx.version}` : '已探测，未报告版本'
     }
   }
@@ -321,7 +325,13 @@ export function projectMacOSAiWorkerProbeDisplay(
 export function normalizeMacOSAiCapabilityStatus(
   status?: MacOSAiCapabilityStatus | null
 ): MacOSAiCapabilityStatus {
-  return status === 'ready' || status === 'optional' || status === 'planned' || status === 'fallback' || status === 'unavailable'
+  return status === 'ready'
+    || status === 'optional'
+    || status === 'planned'
+    || status === 'evidence_insufficient'
+    || status === 'dependency_missing'
+    || status === 'fallback'
+    || status === 'unavailable'
     ? status
     : 'unavailable'
 }

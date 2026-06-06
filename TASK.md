@@ -549,3 +549,12 @@ Additional checks:
 - The isolated packaged-app smoke test passed: the process stayed alive, initialized its sandbox SQLite database, and resolved the Python executable.
 - Replaced the installed local application after closing the development instance, then launched the installed build successfully.
 - Verified the installed `app.asar` hash matches the newly generated package. This is an unsigned local preview build; production signing and notarization remain separate release work.
+
+## 2026-06-06 AI UI Planned-Status Audit
+
+- Created checkpoint commit `199f1a2` before status corrections. Agent coordination artifacts containing local paths were intentionally excluded.
+- Audited every product-visible `planned` source across static macOS route metadata, Worker probes, Platform AI Branch Status, and shared Chinese display projection.
+- Split the previous overloaded status into `证据不足`, `依赖缺失`, and `尚未实现`. Only the incomplete Qwen3-VL MLX execution route remains `尚未实现`; GGUF/Llama is judged by Llama runtime and artifact evidence instead of the Worker probe.
+- Added `docs/platform/AI_UI_PLANNED_STATUS_AUDIT.md` as the concise classification record.
+- Focused validation passed for runtime display, macOS metadata, Platform AI Branch Status, Model Artifact Readiness, AI Runtime panel contracts, AI Console contracts, Python tests (88/88), typecheck, build, docs sync, and diff checks.
+- Isolated Playwright Electron validation confirmed the static macOS architecture panel renders `证据不足`, `回退路线`, and the single genuine `尚未实现` MLX route without horizontal overflow, clipped badges, or overlap. The isolated Worker probe timed out, so live `依赖缺失/依赖可用` rendering remains covered by focused projection tests rather than fabricated UI data.

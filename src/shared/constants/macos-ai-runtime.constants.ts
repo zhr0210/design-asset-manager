@@ -9,7 +9,7 @@ import type { PlatformArch, PlatformName } from '../types/platform.types'
 function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'apple-silicon' | 'macos'): MacOSAiCapabilityStatus {
   if (platform !== 'darwin') return 'unavailable'
   if (preferred === 'apple-silicon' && arch !== 'arm64') return 'fallback'
-  return 'planned'
+  return 'evidence_insufficient'
 }
 
 function capability(
@@ -38,9 +38,9 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
       summary: 'Optional PyTorch MPS route for RAM++, Florence-2, CLIP/SigLIP, with CPU fallback.',
       fallbackCapabilityIds: ['python-mps.cpu-fallback'],
       capabilities: [
-        capability('python-mps.ram-plus', 'RAM++ optional', isAppleSilicon ? 'optional' : mpsStatus, 'tagging', 'RAM++', 'PyTorch MPS'),
-        capability('python-mps.florence-2', 'Florence-2 optional', isAppleSilicon ? 'optional' : mpsStatus, 'tagging', 'Florence-2', 'PyTorch MPS'),
-        capability('python-mps.clip-siglip', 'CLIP/SigLIP optional', isAppleSilicon ? 'optional' : mpsStatus, 'embedding', 'CLIP/SigLIP', 'PyTorch MPS'),
+        capability('python-mps.ram-plus', 'RAM++ optional', mpsStatus, 'tagging', 'RAM++', 'PyTorch MPS'),
+        capability('python-mps.florence-2', 'Florence-2 optional', mpsStatus, 'tagging', 'Florence-2', 'PyTorch MPS'),
+        capability('python-mps.clip-siglip', 'CLIP/SigLIP optional', mpsStatus, 'embedding', 'CLIP/SigLIP', 'PyTorch MPS'),
         capability('python-mps.cpu-fallback', 'CPU fallback', isMacOS ? 'fallback' : 'unavailable', 'fallback', undefined, 'CPU')
       ]
     },
@@ -51,11 +51,11 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
       summary: 'ONNX lane for WD14, RapidOCR, PaddleOCR ONNX, CLIP/SigLIP ONNX, with CoreML or CPU fallback.',
       fallbackCapabilityIds: ['onnx-runtime.coreml-fallback', 'onnx-runtime.cpu-fallback'],
       capabilities: [
-        capability('onnx-runtime.wd14', 'WD14 Tagger', isMacOS ? 'optional' : 'unavailable', 'tagging', 'WD14', 'ONNX Runtime'),
-        capability('onnx-runtime.rapidocr', 'RapidOCR', isMacOS ? 'optional' : 'unavailable', 'ocr', 'RapidOCR', 'ONNX Runtime'),
-        capability('onnx-runtime.paddleocr', 'PaddleOCR ONNX', isMacOS ? 'planned' : 'unavailable', 'ocr', 'PaddleOCR', 'ONNX Runtime'),
-        capability('onnx-runtime.clip-siglip', 'CLIP/SigLIP ONNX', isMacOS ? 'planned' : 'unavailable', 'embedding', 'CLIP/SigLIP', 'ONNX Runtime'),
-        capability('onnx-runtime.coreml-fallback', 'CoreML fallback', isAppleSilicon ? 'planned' : 'fallback', 'fallback', undefined, 'CoreML'),
+        capability('onnx-runtime.wd14', 'WD14 Tagger', onnxStatus, 'tagging', 'WD14', 'ONNX Runtime'),
+        capability('onnx-runtime.rapidocr', 'RapidOCR', onnxStatus, 'ocr', 'RapidOCR', 'ONNX Runtime'),
+        capability('onnx-runtime.paddleocr', 'PaddleOCR ONNX', onnxStatus, 'ocr', 'PaddleOCR', 'ONNX Runtime'),
+        capability('onnx-runtime.clip-siglip', 'CLIP/SigLIP ONNX', onnxStatus, 'embedding', 'CLIP/SigLIP', 'ONNX Runtime'),
+        capability('onnx-runtime.coreml-fallback', 'CoreML fallback', onnxStatus, 'fallback', undefined, 'CoreML'),
         capability('onnx-runtime.cpu-fallback', 'CPU fallback', isMacOS ? 'fallback' : 'unavailable', 'fallback', undefined, 'CPU')
       ]
     },
@@ -66,7 +66,7 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
       summary: 'Large vision route for Qwen3-VL GGUF/MLX, Qwen2.5-VL Ollama fallback, and external HTTP fallback.',
       fallbackCapabilityIds: ['llama.qwen25-vl-ollama', 'llama.external-http'],
       capabilities: [
-        capability('llama.qwen3-vl-gguf', 'Qwen3-VL GGUF', isMacOS ? 'planned' : 'unavailable', 'prompt-reverse', 'Qwen3-VL', 'llama.cpp Metal'),
+        capability('llama.qwen3-vl-gguf', 'Qwen3-VL GGUF', llamaStatus, 'prompt-reverse', 'Qwen3-VL', 'llama.cpp Metal'),
         capability('llama.qwen3-vl-mlx', 'Qwen3-VL MLX', isAppleSilicon ? 'planned' : 'fallback', 'prompt-reverse', 'Qwen3-VL', 'MLX'),
         capability('llama.qwen25-vl-ollama', 'Qwen2.5-VL Ollama fallback', isMacOS ? 'fallback' : 'unavailable', 'prompt-reverse', 'Qwen2.5-VL', 'Ollama'),
         capability('llama.external-http', 'external HTTP fallback', 'fallback', 'fallback', undefined, 'OpenAI-compatible HTTP')

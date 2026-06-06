@@ -160,7 +160,7 @@ const missingOnly = createPlatformAiBranchStatus({
 })
 
 const missingPromptWorkflow = missingOnly.workflows.find((workflow) => workflow.workflow === 'ai_prompt_task')
-assert.equal(missingPromptWorkflow?.status, 'planned_capability')
+assert.equal(missingPromptWorkflow?.status, 'evidence_insufficient')
 assert.ok(missingPromptWorkflow?.evidence.some((item) => item.code === 'artifact_missing'))
 assert.ok(missingPromptWorkflow?.missing.some((item) => item.kind === 'model_artifact'))
 

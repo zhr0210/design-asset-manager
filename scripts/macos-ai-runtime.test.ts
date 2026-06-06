@@ -10,6 +10,7 @@ assert.equal(appleSilicon.isCurrentPlatform, true)
 assert.deepEqual(appleSilicon.lanes.map((lane) => lane.id), ['python-mps', 'onnx-runtime', 'llama'])
 
 const pythonMps = appleSilicon.lanes.find((lane) => lane.id === 'python-mps')!
+assert.equal(pythonMps.status, 'evidence_insufficient')
 assert.ok(pythonMps.capabilities.some((capability) => capability.label === 'RAM++ optional'))
 assert.ok(pythonMps.capabilities.some((capability) => capability.label === 'Florence-2 optional'))
 assert.ok(pythonMps.capabilities.some((capability) => capability.label === 'CLIP/SigLIP optional'))
@@ -24,6 +25,9 @@ assert.ok(onnx.capabilities.some((capability) => capability.label === 'CoreML fa
 assert.ok(onnx.capabilities.some((capability) => capability.label === 'CPU fallback'))
 
 const llama = appleSilicon.lanes.find((lane) => lane.id === 'llama')!
+assert.equal(llama.status, 'evidence_insufficient')
+assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL GGUF' && capability.status === 'evidence_insufficient'))
+assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL MLX' && capability.status === 'planned'))
 assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL GGUF'))
 assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen3-VL MLX'))
 assert.ok(llama.capabilities.some((capability) => capability.label === 'Qwen2.5-VL Ollama fallback'))

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import os from 'node:os'
 import { createAssetLibraryPathGovernanceReport } from '../src/main/path-migration/asset-library-path-governance'
 import { createDownloadPathDryRunPlan, sanitizeDownloadFilename } from '../src/main/path-migration/download-path-governance'
 import { createMediaPathGovernancePlan } from '../src/main/path-migration/media-path-governance'
@@ -76,8 +77,7 @@ import { getDatabase, setDatabase } from '../src/main/db/index'
 
 async function runPathMigrationExecutorTests() {
   console.log('Running PathMigrationExecutor tests...')
-  const testTempDir = path.join(process.cwd(), 'dist-temp', 'test-migration-' + Date.now())
-  await fs.mkdir(testTempDir, { recursive: true })
+  const testTempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'design-asset-manager-path-migration-'))
 
   const dbFile = path.join(testTempDir, 'test.db')
   const testDb = new Database(dbFile)
