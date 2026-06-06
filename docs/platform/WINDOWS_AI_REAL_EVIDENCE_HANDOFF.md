@@ -32,13 +32,28 @@ powershell -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-vali
 
 ## Evidence To Return
 
-Return the generated desktop log:
+Return evidence through GitHub so the Mac-side Codex can poll the branch without
+reading the remote Codex thread.
+
+1. Open `docs/platform/WINDOWS_AI_REAL_EVIDENCE_RESULT.md`.
+2. Replace the pending template with a sanitized result summary.
+3. Commit and push to `codex/windows-ai-real-evidence`.
+
+Suggested commands:
+
+```powershell
+git add docs/platform/WINDOWS_AI_REAL_EVIDENCE_RESULT.md
+git commit -m "Report Windows AI real evidence validation"
+git push origin codex/windows-ai-real-evidence
+```
+
+Also keep the generated desktop log locally:
 
 ```text
 dam-windows-ai-validation-*.log
 ```
 
-Also preserve this screenshot if generated:
+Preserve this screenshot if generated:
 
 ```text
 dam-windows-ai-console.png
