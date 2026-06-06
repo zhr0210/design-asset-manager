@@ -9,6 +9,7 @@ export const CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES = 'aiRuntime:getMacOSCapa
 export const CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS = 'ai-runtime:get-macos-ai-branch-status'
 export const CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS = 'ai-runtime:get-windows-ai-branch-status'
 export const CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS = 'aiRuntime:getPythonMpsStatus'
+export const CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION = 'aiRuntime:probePythonMpsExecution'
 export const CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS = 'aiRuntime:getClipSiglipOnnxStatus'
 export const CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD = 'aiRuntime:probeOnnxModelLoad'
 export const CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME = 'aiRuntime:selectActiveRuntime'
@@ -50,6 +51,17 @@ export interface AiRuntimeClipSiglipOnnxStatusResponse {
   runtime?: string | null
   diagnostics: Record<string, unknown>
   error?: string | null
+}
+
+export interface AiRuntimePythonMpsExecutionProbeResponse {
+  success: boolean
+  status: 'executed_real' | 'dependency_missing' | 'backend_unavailable' | 'execution_failed' | 'unsupported'
+  checkedAt: string
+  runtime?: string | null
+  operation: 'tensor_square_sum'
+  resultFinite: boolean
+  errorCode?: string | null
+  errorType?: string | null
 }
 
 export interface AiRuntimeOnnxModelLoadProbeResponse {

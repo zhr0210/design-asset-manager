@@ -15,6 +15,7 @@ import {
   projectMacOSAiCapabilityStatusDisplay,
   projectMacOSAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
+  projectPythonMpsExecutionProbeDisplay,
   projectPythonMpsCompatibilityDisplay
 } from '../src/shared/workflows/ai-runtime-status.workflow'
 
@@ -57,6 +58,34 @@ const pythonUnavailable = projectPythonMpsCompatibilityDisplay({
 })
 assert.equal(pythonUnavailable.label, '不可用')
 assert.equal(pythonUnavailable.tone, 'bad')
+
+const mpsExecutionUnchecked = projectPythonMpsExecutionProbeDisplay(null)
+assert.equal(mpsExecutionUnchecked.label, '尚未验证')
+assert.equal(mpsExecutionUnchecked.tone, 'muted')
+
+const mpsExecutionPassed = projectPythonMpsExecutionProbeDisplay({
+  success: true,
+  status: 'executed_real',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  runtime: 'torch.mps',
+  operation: 'tensor_square_sum',
+  resultFinite: true
+})
+assert.equal(mpsExecutionPassed.label, '真实执行通过')
+assert.equal(mpsExecutionPassed.tone, 'good')
+assert.match(mpsExecutionPassed.detail, /torch\.mps/)
+
+const mpsExecutionUnavailable = projectPythonMpsExecutionProbeDisplay({
+  success: false,
+  status: 'backend_unavailable',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  runtime: 'torch.mps',
+  operation: 'tensor_square_sum',
+  resultFinite: false,
+  errorCode: 'MPS_UNAVAILABLE'
+})
+assert.equal(mpsExecutionUnavailable.label, '后端不可用')
+assert.equal(mpsExecutionUnavailable.tone, 'warn')
 
 const clipReady = projectClipSiglipOnnxCompatibilityDisplay({
   success: true,
@@ -350,6 +379,7 @@ const settingsPanelSource = await fs.readFile('src/renderer/components/settings/
 const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(settingsPanelSource, /projectPythonMpsCompatibilityDisplay/)
+assert.match(settingsPanelSource, /projectPythonMpsExecutionProbeDisplay/)
 assert.match(settingsPanelSource, /projectClipSiglipOnnxCompatibilityDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeStatusDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeSummaryDisplay/)

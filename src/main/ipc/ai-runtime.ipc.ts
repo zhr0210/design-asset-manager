@@ -13,6 +13,7 @@ import {
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
   CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD,
+  CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION,
   CHANNEL_AI_RUNTIME_RESTART_RUNTIME,
   CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_START_RUNTIME,
@@ -231,6 +232,15 @@ export function registerAiRuntimeIpc() {
       return success(latestOnnxModelLoadProbe)
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION, async () => {
+    try {
+      return success(await aiClientService.probePythonMpsExecution())
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION} error:`, err)
       return failure(err)
     }
   })

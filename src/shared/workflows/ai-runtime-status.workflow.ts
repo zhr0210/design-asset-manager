@@ -1,6 +1,7 @@
 import type {
   AiRuntimeClipSiglipOnnxStatusResponse,
   AiRuntimeOnnxModelLoadProbeResponse,
+  AiRuntimePythonMpsExecutionProbeResponse,
   AiRuntimePythonMpsStatusResponse
 } from '../contracts/ai-runtime.contract'
 import type {
@@ -153,6 +154,27 @@ export function projectOnnxModelLoadProbeDisplay(
     return modelLoadProbeDisplay('模型无效', 'bad', '已登记的 WD Tagger ONNX artifact 不完整或无效。')
   }
   return modelLoadProbeDisplay('加载失败', 'bad', `真实 Session 创建失败：${probe.errorCode ?? probe.status}`)
+}
+
+export function projectPythonMpsExecutionProbeDisplay(
+  probe?: AiRuntimePythonMpsExecutionProbeResponse | null,
+  error?: string | null
+): AiRuntimeModelLoadProbeDisplay {
+  if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得 MPS 执行证据。')
+  if (!probe) return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动执行一次固定的 MPS 张量运算。')
+  if (probe.status === 'executed_real') {
+    return modelLoadProbeDisplay('真实执行通过', 'good', `${probe.runtime ?? 'torch.mps'} · 固定张量运算完成`)
+  }
+  if (probe.status === 'dependency_missing') {
+    return modelLoadProbeDisplay('依赖缺失', 'warn', '当前 Worker 缺少 PyTorch。')
+  }
+  if (probe.status === 'backend_unavailable') {
+    return modelLoadProbeDisplay('后端不可用', 'warn', 'PyTorch 已存在，但当前设备无法使用 MPS。')
+  }
+  if (probe.status === 'unsupported') {
+    return modelLoadProbeDisplay('平台不支持', 'muted', 'MPS 真实执行仅适用于 macOS。')
+  }
+  return modelLoadProbeDisplay('执行失败', 'bad', `MPS 张量执行失败：${probe.errorCode ?? probe.status}`)
 }
 
 export function projectLlamaRuntimeDisplay(

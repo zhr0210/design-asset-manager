@@ -16,7 +16,12 @@ import {
 } from './ai-client/ai-task-lifecycle-sync.sink'
 import { createAssetTaggingTaskSubmission } from '../../shared/workflows/asset-tagging.workflow'
 import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
-import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimeOnnxModelLoadProbeResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
+import type {
+  AiRuntimeClipSiglipOnnxStatusResponse,
+  AiRuntimeOnnxModelLoadProbeResponse,
+  AiRuntimePythonMpsExecutionProbeResponse,
+  AiRuntimePythonMpsStatusResponse
+} from '../../shared/contracts/ai-runtime.contract'
 import {
   EVENT_AI_TASK_SYNCED,
   type AnalysisGenerateResponse,
@@ -345,6 +350,15 @@ export class AiClientService {
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     return await res.json() as AiRuntimeOnnxModelLoadProbeResponse
+  }
+
+  public async probePythonMpsExecution(): Promise<AiRuntimePythonMpsExecutionProbeResponse> {
+    const res = await fetch(`${this.pythonUrl}/ai/model/python-mps/execution-probe`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json() as AiRuntimePythonMpsExecutionProbeResponse
   }
 
   /**

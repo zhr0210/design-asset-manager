@@ -89,6 +89,7 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-06 macOS MPS closure slice adds a user-initiated fixed-tensor `torch.mps` execution probe through Worker, shared contract, main IPC, preload, shared display projection, and AI Runtime UI. Runtime execution evidence remains separate from model load/inference evidence.
 - 2026-06-06 macOS ONNX closure slice replaced synthetic Python Worker process tracking with real child-process lifecycle management, bounded output tails, SIGTERM/SIGKILL shutdown, and Electron quit cleanup. The app now gives read-only capability probes a cold-start budget instead of recording first-import latency as an unavailable capability.
 - 2026-06-04 architecture review pass is generating a temporary HTML report of deepening opportunities; no repo implementation or public contract changes are in scope.
 - Current grill-with-docs discussion chose a product-level Platform AI Branch Status projection in Electron main process, exposed through new `ai-runtime:get-macos-ai-branch-status` and `ai-runtime:get-windows-ai-branch-status` IPC channels rather than overloading runtime capability probe channels. Both channels should return the same shared response shape: Windows and macOS can differ where AI inference runtime or OS constraints require branches, while the main application architecture, shared product workflows, and product status surfaces should be reused or lightly adapted.
@@ -233,6 +234,7 @@ Run additional focused tests matching the slice being changed. For product-facin
 
 ## Validation Result
 
+- 2026-06-06 macOS MPS real-execution validation passed: focused Python, contract, IPC, panel, shared-display, typecheck, build, 94 Python unit tests, docs sync, and the full governance suite passed. Playwright launched Electron, opened AI Runtime, clicked `验证 MPS 执行`, observed `真实执行通过` with `torch.mps · 固定张量运算完成`, found no timeout or horizontal overflow, and screenshot review found no overlap or clipping. Closing Electron released the Worker port.
 - 2026-06-06 macOS ONNX closure validation passed: focused real-process, Python Worker runtime, macOS runtime, typecheck, build, 91 Python unit tests, docs sync, and the full governance suite passed. Playwright launched the production Electron build, opened AI Console, clicked `验证真实加载`, observed CLIP/SigLIP ONNX `可兼容` and WD Tagger `真实加载通过` with CoreML/CPU providers, found no horizontal overflow, and screenshot review found no overlap or clipping. Closing Electron released the Worker port. The standalone forbidden-path check remains blocked by the pre-existing missing `.codeindex/forbidden-paths.json`.
 - Asset Tagging color and type projection checks passed. Focused tests verify correctness of ASSET_TAG_PRESET_COLORS, ASSET_TAG_TYPES, and getAssetTagColorClass, and source guards ensure no local variables or maps are defined in TagEditDialog.tsx or TagChip.tsx.
 
