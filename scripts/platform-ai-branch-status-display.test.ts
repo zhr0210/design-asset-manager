@@ -9,6 +9,7 @@ import {
   projectPlatformBranchLabel,
   selectPlatformAiBranchStatus
 } from '../src/shared/workflows/platform-ai-branch-status.workflow'
+import { createPlatformAiActionPlan } from '../src/shared/workflows/platform-ai-action-plan.workflow'
 import type { AiRuntimeState } from '../src/shared/types/ai-runtime.types'
 
 function runtime(partial: Partial<AiRuntimeState>): AiRuntimeState {
@@ -74,6 +75,8 @@ assert.equal(macosDisplay.workflows[0].evidenceLabel, 'Python MPS Runtime 有运
 assert.equal(macosDisplay.workflows[0].missingLabel, '无明确缺口')
 assert.equal(macosDisplay.workflows[0].runtimeLanes[0].isPrimary, true)
 assert.equal(macosDisplay.workflows[0].runtimeLanes[0].statusLabel, '运行时探测就绪')
+assert.equal(macosDisplay.workflows[0].actionPlan.kind, 'refresh_evidence')
+assert.equal(macosDisplay.workflows[0].actionPlan.enabled, true)
 assert.equal(macosRouteOverview.title, 'macOS 路线概览')
 assert.equal(macosRouteOverview.showMacOSDiagnostics, true)
 assert.match(macosRouteOverview.priorityLabel, /Qwen3-VL MLX/)
@@ -91,6 +94,8 @@ assert.equal(windowsDisplay.branchLabel, 'Windows AI 分支')
 assert.equal(windowsDisplay.workflows[0].statusTone, 'bad')
 assert.equal(windowsDisplay.workflows[0].statusLabel, '不可用')
 assert.equal(windowsDisplay.workflows[0].missingLabel, '当前操作系统不匹配')
+assert.equal(windowsDisplay.workflows[0].actionPlan.kind, 'none')
+assert.equal(windowsDisplay.workflows[0].actionPlan.enabled, false)
 assert.equal(windowsRouteOverview.title, 'Windows 路线概览')
 assert.equal(windowsRouteOverview.showMacOSDiagnostics, false)
 assert.deepEqual(
@@ -136,10 +141,44 @@ realWindowsStatus.workflows.forEach((workflow) => {
 const realWindowsDisplay = projectPlatformAiBranchStatusDisplay(realWindowsStatus, () => '00:00:00')
 assert.equal(realWindowsDisplay.workflows[0].title, 'AI 标签任务')
 assert.equal(realWindowsDisplay.workflows[0].nextActionLabel, '当前工作流已有真实模型路径')
+assert.equal(realWindowsDisplay.workflows[0].actionPlan.kind, 'none')
 assert.equal(
   selectPlatformAiBranchStatus([plannedMacosStatus, realWindowsStatus])?.platformBranch,
   'windows'
 )
+
+const modelMissingWorkflow = structuredClone(macosStatus.workflows[0])
+modelMissingWorkflow.status = 'evidence_insufficient'
+modelMissingWorkflow.missing = [{
+  kind: 'model_artifact',
+  id: 'ram-plus',
+  label: 'RAM++ 模型缺失'
+}]
+assert.deepEqual(createPlatformAiActionPlan(modelMissingWorkflow), {
+  workflow: 'ai_tag_task',
+  status: 'evidence_insufficient',
+  kind: 'open_model_management',
+  label: '管理模型制品',
+  enabled: true,
+  reasonKind: 'model_artifact',
+  targetId: 'ram-plus'
+})
+
+const dependencyMissingWorkflow = structuredClone(modelMissingWorkflow)
+dependencyMissingWorkflow.missing = [{
+  kind: 'runtime_dependency',
+  id: 'onnxruntime',
+  label: 'ONNX Runtime 缺失'
+}]
+assert.equal(createPlatformAiActionPlan(dependencyMissingWorkflow).kind, 'open_runtime_management')
+
+const backendMissingWorkflow = structuredClone(modelMissingWorkflow)
+backendMissingWorkflow.missing = [{
+  kind: 'backend_configuration',
+  id: 'ollama',
+  label: 'Ollama 尚未配置'
+}]
+assert.equal(createPlatformAiActionPlan(backendMissingWorkflow).kind, 'open_backend_management')
 
 const tiedMacosStatus = structuredClone(plannedMacosStatus)
 const tiedWindowsStatus = structuredClone(plannedMacosStatus)
@@ -155,6 +194,8 @@ assert.equal(
 
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(aiConsoleSource, /projectPlatformAiBranchStatusDisplay/)
+assert.match(aiConsoleSource, /workflow\.actionPlan\.enabled/)
+assert.match(aiConsoleSource, /onAction\(workflow\.actionPlan\.kind\)/)
 assert.match(aiConsoleSource, /projectPlatformAiRouteOverviewDisplay/)
 assert.match(aiConsoleSource, /routeOverviewDisplay\.showMacOSDiagnostics/)
 assert.match(aiConsoleSource, /routeOverviewDisplay\.runtimeLanes\.map/)

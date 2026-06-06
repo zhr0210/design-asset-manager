@@ -4,6 +4,8 @@
 
 Execute the cross-platform shared architecture roadmap for Design Asset Manager as a long-running agent goal.
 
+Current continuation goal: close the gap between accurate AI status labels and real executable evidence. `证据不足` must lead to an explicit evidence-collection action, `依赖缺失` must lead to the existing dependency/runtime management surface, model artifact gaps must lead to model management, and `尚未实现` must remain non-executable until an implementation route is accepted. Windows and macOS continue to share workflow/action contracts while runtime adapters and evidence differ.
+
 Target state: one Shared Product Surface for Windows and macOS, with shared main-process workflows, shared renderer contracts, and shared product status vocabulary by default. Introduce platform branches only for real OS capabilities, AI inference runtimes, packaging/native dependency handling, path/process adapters, or other differences that cannot be shared without hiding platform constraints.
 
 Execution rule: continue in small slices, ordered by how much Windows/macOS maintenance cost the slice removes. Each slice must leave the app buildable, preserve existing public contracts unless the change is explicitly approved, update nearby docs, and include focused automated validation.
@@ -30,6 +32,18 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 - Prefer app-managed or task-specific model directories over ad hoc paths.
 
 ## Long-Running Execution Plan
+
+### Phase 6: Platform AI Action Plan
+
+- Project executable UI actions from `workflow/status/evidence/missing/runtimeLanes`; do not use display-only title, summary, or next-action copy as business input.
+- Reuse existing AI Console model, service, runtime, and manual-refresh operations. Do not add automatic downloads, installs, runtime starts, or network probes.
+- Validate with shared action-plan tests, typecheck/build, and Playwright Electron click/screenshot review.
+
+### Phase 7: Real AI Evidence Closure
+
+- Replace evidence-insufficient MPS/ONNX and GGUF/mmproj states with model load or recent inference evidence where the route exists.
+- Decide whether to implement or explicitly remove the Qwen3-VL MLX route; dependency import alone is never completion evidence.
+- Add Windows-host parity validation for CUDA/ONNX/Llama while preserving the shared workflow and action contracts.
 
 ### Phase 1: Platform AI Branch Status
 
@@ -558,3 +572,12 @@ Additional checks:
 - Added `docs/platform/AI_UI_PLANNED_STATUS_AUDIT.md` as the concise classification record.
 - Focused validation passed for runtime display, macOS metadata, Platform AI Branch Status, Model Artifact Readiness, AI Runtime panel contracts, AI Console contracts, Python tests (88/88), typecheck, build, docs sync, and diff checks.
 - Isolated Playwright Electron validation confirmed the static macOS architecture panel renders `证据不足`, `回退路线`, and the single genuine `尚未实现` MLX route without horizontal overflow, clipped badges, or overlap. The isolated Worker probe timed out, so live `依赖缺失/依赖可用` rendering remains covered by focused projection tests rather than fabricated UI data.
+
+## 2026-06-06 Platform AI Action Plan
+
+- Started the AI evidence-closure goal with a shared `PlatformAiActionPlan` projection.
+- `model_artifact` gaps route to Models, runtime dependency/service gaps route to AI Runtime, backend configuration gaps route to Services, and otherwise unresolved evidence routes to manual refresh.
+- Actions reuse existing AI Console operations. They do not automatically download models, install dependencies, start runtimes, or probe external services.
+- Focused action-plan/status tests, typecheck, build, full `ci:governance`, Python unit tests (88/88), docs sync, and diff checks passed. Doctor CI retained the expected isolated-environment warnings that the AI Worker port and health endpoint were not reachable.
+- Isolated Playwright Electron validation clicked the rendered action, confirmed navigation to AI Runtime, found no page overflow, and screenshot review found no clipped or overlapping action buttons.
+- Next smallest slice: add a real evidence probe for one supported macOS route, starting with ONNX model-load evidence because it can close both OCR and Search Embedding states without introducing an MLX implementation.

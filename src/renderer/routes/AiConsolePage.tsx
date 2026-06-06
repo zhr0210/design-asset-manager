@@ -51,6 +51,7 @@ import type {
 } from '../../shared/types/llama-runtime.types'
 import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
 import type { PlatformAiBranchStatusResponse } from '../../shared/types/platform-ai-branch-status.types'
+import type { PlatformAiActionPlanKind } from '../../shared/types/platform-ai-action-plan.types'
 import type {
   CooperativeWorkerModelStatus,
   WorkerModelStatusSnapshot
@@ -1536,6 +1537,7 @@ export default function AiConsolePage() {
               gpuDisplay={gpuDisplay}
               riskTone={gpuDisplay.riskTone}
               setActiveTab={setActiveTab}
+              onRefreshEvidence={() => fetchConsoleStatus('manual')}
             />
           )}
 
@@ -1761,6 +1763,7 @@ function OverviewWorkspace(props: {
   gpuDisplay: ReturnType<typeof projectAiConsoleGpuDisplay>
   riskTone: 'good' | 'warn' | 'bad'
   setActiveTab: React.Dispatch<React.SetStateAction<ConsoleTab>>
+  onRefreshEvidence: () => void
 }) {
   const smokeGguf = props.installedGgufModels.find((model) => model.id === 'qwen3-vl-2b-instruct-q4-k-m') ?? props.installedGgufModels[0] ?? null
   const llamaDisplay = projectLlamaRuntimeDisplay(props.llamaStatus, props.llamaRunning)
@@ -1817,7 +1820,26 @@ function OverviewWorkspace(props: {
           </div>
         </div>
 
-        <PlatformAiBranchStatusPanel status={props.platformBranchStatus} />
+        <PlatformAiBranchStatusPanel
+          status={props.platformBranchStatus}
+          onAction={(kind) => {
+            if (kind === 'refresh_evidence') {
+              props.onRefreshEvidence()
+              return
+            }
+            if (kind === 'open_model_management') {
+              props.setActiveTab('models')
+              return
+            }
+            if (kind === 'open_runtime_management') {
+              props.setActiveTab('runtime')
+              return
+            }
+            if (kind === 'open_backend_management') {
+              props.setActiveTab('services')
+            }
+          }}
+        />
 
         <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-4 flex items-center justify-between gap-3">
@@ -1899,7 +1921,13 @@ function OverviewWorkspace(props: {
   )
 }
 
-function PlatformAiBranchStatusPanel({ status }: { status: PlatformAiBranchStatusResponse | null }) {
+function PlatformAiBranchStatusPanel({
+  status,
+  onAction
+}: {
+  status: PlatformAiBranchStatusResponse | null
+  onAction: (kind: PlatformAiActionPlanKind) => void
+}) {
   const display = projectPlatformAiBranchStatusDisplay(status)
 
   return (
@@ -1947,6 +1975,18 @@ function PlatformAiBranchStatusPanel({ status }: { status: PlatformAiBranchStatu
                   <div>{display.evidencePrefix}：{workflow.evidenceLabel}</div>
                   <div className="mt-1">{display.missingPrefix}：{workflow.missingLabel}</div>
                   {workflow.nextActionLabel && <div className="mt-1">{display.nextActionPrefix}：{workflow.nextActionLabel}</div>}
+                  {workflow.actionPlan.enabled && (
+                    <button
+                      type="button"
+                      onClick={() => onAction(workflow.actionPlan.kind)}
+                      className="mt-3 inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-black text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                    >
+                      {workflow.actionPlan.kind === 'refresh_evidence'
+                        ? <RefreshCw className="h-3.5 w-3.5" />
+                        : <ChevronRight className="h-3.5 w-3.5" />}
+                      {workflow.actionPlan.label}
+                    </button>
+                  )}
                 </div>
               </div>
             )

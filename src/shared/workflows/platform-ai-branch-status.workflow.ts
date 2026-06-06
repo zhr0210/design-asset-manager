@@ -6,6 +6,8 @@ import type {
   PlatformAiWorkflow,
   PlatformAiWorkflowStatus
 } from '../types/platform-ai-branch-status.types'
+import type { PlatformAiActionPlan } from '../types/platform-ai-action-plan.types'
+import { createPlatformAiActionPlan } from './platform-ai-action-plan.workflow'
 
 export type PlatformAiBranchDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
 
@@ -28,6 +30,7 @@ export interface PlatformAiWorkflowDisplay {
   evidenceLabel: string
   missingLabel: string
   nextActionLabel: string
+  actionPlan: PlatformAiActionPlan
   runtimeLanes: PlatformAiRuntimeLaneDisplay[]
 }
 
@@ -237,6 +240,7 @@ function projectWorkflowDisplay(workflow: PlatformAiWorkflowStatus): PlatformAiW
     evidenceLabel: workflow.evidence[0]?.label ?? '暂无证据',
     missingLabel: workflow.missing.map((item) => item.label).slice(0, 2).join(' / ') || '无明确缺口',
     nextActionLabel: projectNextActionLabel(workflow),
+    actionPlan: createPlatformAiActionPlan(workflow),
     runtimeLanes: workflow.runtimeLanes.map((lane) => projectRuntimeLaneDisplay(lane, primaryLane))
   }
 }
