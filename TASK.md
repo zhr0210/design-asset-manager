@@ -580,4 +580,13 @@ Additional checks:
 - Actions reuse existing AI Console operations. They do not automatically download models, install dependencies, start runtimes, or probe external services.
 - Focused action-plan/status tests, typecheck, build, full `ci:governance`, Python unit tests (88/88), docs sync, and diff checks passed. Doctor CI retained the expected isolated-environment warnings that the AI Worker port and health endpoint were not reachable.
 - Isolated Playwright Electron validation clicked the rendered action, confirmed navigation to AI Runtime, found no page overflow, and screenshot review found no clipped or overlapping action buttons.
-- Next smallest slice: add a real evidence probe for one supported macOS route, starting with ONNX model-load evidence because it can close both OCR and Search Embedding states without introducing an MLX implementation.
+- Next smallest slice: add a real evidence probe for one supported macOS ONNX route without generalizing that evidence to unrelated OCR or Search Embedding models.
+
+## 2026-06-06 WD Tagger ONNX Real-Load Evidence
+
+- Added an explicit registered-model-only ONNX load probe for WD Tagger. It creates and releases a real `InferenceSession`, reports providers and input/output counts, and never returns the model path.
+- Added `aiRuntime:probeOnnxModelLoad`, preload wiring, a shared response contract, renderer-ready display projection, and a manual AI Runtime panel action.
+- The main process caches successful or failed evidence for five minutes and maps it only to `ai_tag_task / onnx_runtime`; it does not promote OCR or Search Embedding.
+- Current local evidence remains incomplete: the default Python lacks `onnxruntime`, and the ignored repository cache artifact is a 19-byte placeholder rather than a real model. The product must report dependency/artifact gaps until a registered real artifact passes the probe.
+- Focused Python and TypeScript tests, Python unit tests (91/91), typecheck, build, full `ci:governance`, docs sync, and Electron click/screenshot validation passed. The isolated UI correctly rendered `Worker 不可达` without overflow when no Worker evidence was available. Doctor CI reported matching non-blocking Worker port/health warnings.
+- Next smallest slice: complete and verify a registered WD Tagger artifact through the existing model-management flow, then use the same probe pattern for one OCR provider without conflating it with Search Embedding.

@@ -15,6 +15,7 @@ from core.clip_siglip_onnx_compat import probe_clip_siglip_onnx_environment
 from core.python_mps_compat import probe_python_mps_environment
 from core.gpu_monitor import get_gpu_status
 from core.macos_ai_capabilities import probe_macos_ai_capabilities
+from core.onnx_model_load_probe import probe_registered_onnx_model_load
 from core.mock_policy import is_strict_real_ai
 from schemas.tag_schema import TagEnqueueRequest
 from schemas.prompt_schema import PromptGenerateRequest
@@ -258,6 +259,11 @@ async def macos_runtime_capabilities():
 async def clip_siglip_onnx_status():
     """Return the CLIP/SigLIP ONNX environment compatibility signal."""
     return probe_clip_siglip_onnx_environment()
+
+@app.post("/ai/model/onnx-load-probe")
+async def onnx_model_load_probe():
+    """Explicitly verify that the registered WD Tagger ONNX artifact can create a real session."""
+    return await asyncio.to_thread(probe_registered_onnx_model_load)
 
 @app.get("/ai/model/python-mps/status")
 async def python_mps_status():

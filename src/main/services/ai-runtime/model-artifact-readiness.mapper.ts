@@ -5,6 +5,7 @@ import type {
 } from '../../../shared/types/model-artifact-readiness.types'
 import type { PlatformAiWorkflow } from '../../../shared/types/platform-ai-branch-status.types'
 import type { LlamaInstallStatus } from '../../../shared/types/llama-runtime.types'
+import type { AiRuntimeOnnxModelLoadProbeResponse } from '../../../shared/contracts/ai-runtime.contract'
 
 type LlamaLocalModelLike = {
   id: string
@@ -157,6 +158,37 @@ export function createLlamaRuntimeStatusArtifactReadiness(status: LlamaInstallSt
         }]
       : []
   }))
+}
+
+export function createOnnxModelLoadProbeArtifactReadiness(
+  probe: AiRuntimeOnnxModelLoadProbeResponse | null | undefined
+): AiModelArtifactReadiness[] {
+  if (!probe) return []
+
+  const state = probe.status === 'loaded_real'
+    ? 'loaded_real'
+    : probe.status === 'dependency_missing'
+      ? 'dependency_missing'
+      : probe.status === 'artifact_missing' || probe.status === 'artifact_invalid'
+        ? 'artifact_missing'
+        : 'unknown'
+
+  return [{
+    workflow: 'ai_tag_task',
+    runtimeLane: 'onnx_runtime',
+    artifactId: 'wd-vit-tagger-v3',
+    label: 'WD Tagger v3 ONNX',
+    source: 'explicit_load_probe',
+    state,
+    detail: probe.status === 'loaded_real'
+      ? `${probe.providers.join(' / ') || 'ONNX Runtime'} · ${probe.inputCount} input / ${probe.outputCount} output`
+      : probe.errorCode ?? probe.status,
+    missing: state === 'dependency_missing'
+      ? [{ id: 'onnxruntime', label: 'WD Tagger 缺少 ONNX Runtime', kind: 'runtime_dependency' }]
+      : state === 'artifact_missing'
+        ? [{ id: 'wd-vit-tagger-v3', label: 'WD Tagger ONNX artifact 未就绪', kind: 'model_artifact' }]
+        : []
+  }]
 }
 
 function cooperativeFamilyFromModelId(modelId: string): string | null {

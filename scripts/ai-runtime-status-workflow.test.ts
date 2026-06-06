@@ -14,6 +14,7 @@ import {
   projectLlamaRuntimeDisplay,
   projectMacOSAiCapabilityStatusDisplay,
   projectMacOSAiWorkerProbeDisplay,
+  projectOnnxModelLoadProbeDisplay,
   projectPythonMpsCompatibilityDisplay
 } from '../src/shared/workflows/ai-runtime-status.workflow'
 
@@ -75,6 +76,40 @@ const clipPlanned = projectClipSiglipOnnxCompatibilityDisplay({
 assert.equal(clipPlanned.label, '待补齐')
 assert.equal(clipPlanned.platformValue, 'incompatible')
 assert.equal(clipPlanned.statusValue, 'unknown')
+
+const onnxUnchecked = projectOnnxModelLoadProbeDisplay(null)
+assert.equal(onnxUnchecked.label, '尚未验证')
+assert.equal(onnxUnchecked.tone, 'muted')
+
+const onnxOffline = projectOnnxModelLoadProbeDisplay(null, 'fetch failed')
+assert.equal(onnxOffline.label, 'Worker 不可达')
+assert.equal(onnxOffline.tone, 'muted')
+
+const onnxLoaded = projectOnnxModelLoadProbeDisplay({
+  success: true,
+  modelFamily: 'wd_tagger',
+  status: 'loaded_real',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  providers: ['CoreMLExecutionProvider', 'CPUExecutionProvider'],
+  inputCount: 1,
+  outputCount: 2
+})
+assert.equal(onnxLoaded.label, '真实加载通过')
+assert.equal(onnxLoaded.tone, 'good')
+assert.match(onnxLoaded.detail, /CoreMLExecutionProvider/)
+
+const onnxMissing = projectOnnxModelLoadProbeDisplay({
+  success: false,
+  modelFamily: 'wd_tagger',
+  status: 'artifact_missing',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  providers: [],
+  inputCount: 0,
+  outputCount: 0,
+  errorCode: 'MODEL_ARTIFACT_MISSING'
+})
+assert.equal(onnxMissing.label, '模型缺失')
+assert.equal(onnxMissing.tone, 'warn')
 
 const llamaRunning = projectLlamaRuntimeDisplay({
   phase: 'complete',

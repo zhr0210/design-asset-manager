@@ -1,5 +1,6 @@
 import type {
   AiRuntimeClipSiglipOnnxStatusResponse,
+  AiRuntimeOnnxModelLoadProbeResponse,
   AiRuntimePythonMpsStatusResponse
 } from '../contracts/ai-runtime.contract'
 import type {
@@ -26,6 +27,13 @@ export interface AiRuntimeCompatibilityDisplay {
   platformValue: 'compatible' | 'incompatible' | 'unknown'
   statusValue: string
   errorValue: string
+}
+
+export interface AiRuntimeModelLoadProbeDisplay {
+  label: string
+  tone: AiRuntimeDisplayTone
+  toneClass: string
+  detail: string
 }
 
 export interface LlamaRuntimeDisplay {
@@ -120,6 +128,31 @@ export function projectClipSiglipOnnxCompatibilityDisplay(
 
   const hasOnnxRuntime = Boolean(status.diagnostics?.onnxruntime)
   return compatibilityDisplay('待补齐', 'warn', status.runtime ?? 'optimum.onnxruntime', 'incompatible', hasOnnxRuntime ? 'onnxruntime' : 'unknown', error ?? status.error)
+}
+
+export function projectOnnxModelLoadProbeDisplay(
+  probe?: AiRuntimeOnnxModelLoadProbeResponse | null,
+  error?: string | null
+): AiRuntimeModelLoadProbeDisplay {
+  if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得模型加载证据。')
+  if (!probe) return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动创建一次真实 ONNX Session。')
+  if (probe.status === 'loaded_real') {
+    return modelLoadProbeDisplay(
+      '真实加载通过',
+      'good',
+      `${probe.providers.join(' / ') || 'ONNX Runtime'} · ${probe.inputCount} 输入 / ${probe.outputCount} 输出`
+    )
+  }
+  if (probe.status === 'dependency_missing') {
+    return modelLoadProbeDisplay('依赖缺失', 'warn', '当前 Worker 缺少 ONNX Runtime。')
+  }
+  if (probe.status === 'artifact_missing') {
+    return modelLoadProbeDisplay('模型缺失', 'warn', '已登记的 WD Tagger ONNX artifact 尚未就绪。')
+  }
+  if (probe.status === 'artifact_invalid') {
+    return modelLoadProbeDisplay('模型无效', 'bad', '已登记的 WD Tagger ONNX artifact 不完整或无效。')
+  }
+  return modelLoadProbeDisplay('加载失败', 'bad', `真实 Session 创建失败：${probe.errorCode ?? probe.status}`)
 }
 
 export function projectLlamaRuntimeDisplay(
@@ -371,6 +404,19 @@ function compatibilityDisplay(
     platformValue,
     statusValue,
     errorValue: error ?? 'None'
+  }
+}
+
+function modelLoadProbeDisplay(
+  label: string,
+  tone: AiRuntimeDisplayTone,
+  detail: string
+): AiRuntimeModelLoadProbeDisplay {
+  return {
+    label,
+    tone,
+    toneClass: TONE_CLASS[tone],
+    detail
   }
 }
 

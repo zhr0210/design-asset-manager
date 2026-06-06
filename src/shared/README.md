@@ -19,6 +19,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Platform AI route overview titles, descriptions, priorities, macOS-only diagnostic visibility, and Windows runtime-lane summaries belong in shared workflow projection.
 - Platform AI Branch Status channel-response selection belongs in shared workflow code and may only rank `workflow/status/evidence/missing/runtimeLanes`; display-only `title/summary/nextAction` must not affect selection.
 - Platform AI Action Plan projection maps status and missing requirements to existing model, runtime, backend, or manual-refresh UI operations. Renderer code executes the projected command but must not infer the destination from labels or evidence text.
+- Explicit model-load probes may promote only the workflow/runtime lane they actually verified. Probe responses must be path-free, time-bounded evidence and must not imply that adjacent OCR or embedding routes passed.
 - Model Artifact Readiness vocabulary describes dependency/artifact/load evidence only; it must not expose local model paths or private cache locations.
 - Model Artifact Readiness display projection owns active prompt-model readiness, model-row source/status/action labels, cooperative model readiness details, download progress, and GGUF/mmproj artifact tile labels; renderer model lists should not branch on artifact or Worker readiness states locally.
 - Worker cooperative-model readiness input uses one shared snapshot contract across main-process evidence mapping and renderer row projection; model rows should consume the combined shared row display rather than composing readiness, download, and action state independently.
@@ -56,6 +57,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.1 | 2026-06-06 | Added path-free, time-bounded WD Tagger ONNX real-load evidence for the AI Tag workflow. |
 | v1.8.0 | 2026-06-06 | Added shared executable Platform AI Action Plan projection for model, runtime, backend, and evidence-refresh UI operations. |
 | v1.7.9 | 2026-06-06 | Wired the AI Client IPC contract through main, preload, service responses, queue stats, and task-sync events. |
 | v1.7.8 | 2026-06-05 | Allowed shared model artifact evidence to target both macOS and Windows runtime lanes without splitting workflows. |

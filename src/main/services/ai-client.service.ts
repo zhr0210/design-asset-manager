@@ -16,7 +16,7 @@ import {
 } from './ai-client/ai-task-lifecycle-sync.sink'
 import { createAssetTaggingTaskSubmission } from '../../shared/workflows/asset-tagging.workflow'
 import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
-import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
+import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimeOnnxModelLoadProbeResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
 import {
   EVENT_AI_TASK_SYNCED,
   type AnalysisGenerateResponse,
@@ -328,6 +328,15 @@ export class AiClientService {
         error: err instanceof Error ? err.message : String(err)
       }
     }
+  }
+
+  public async probeOnnxModelLoad(): Promise<AiRuntimeOnnxModelLoadProbeResponse> {
+    const res = await fetch(`${this.pythonUrl}/ai/model/onnx-load-probe`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(10_000)
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json() as AiRuntimeOnnxModelLoadProbeResponse
   }
 
   /**

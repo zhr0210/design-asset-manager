@@ -12,6 +12,7 @@ import {
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
+  CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD,
   CHANNEL_AI_RUNTIME_RESTART_RUNTIME,
   CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_START_RUNTIME,
@@ -28,6 +29,7 @@ import type {
   AiRuntimeSelectActiveRequest,
   AiRuntimeUpdateConfigRequest
 } from '../../shared/contracts/ai-runtime.contract'
+import type { AiRuntimeOnnxModelLoadProbeResponse } from '../../shared/contracts/ai-runtime.contract'
 import { AiClientService } from '../services/ai-client.service'
 import { AiRuntimeManager } from '../services/ai-runtime/ai-runtime-manager'
 import { DisabledAiRuntimeProvider } from '../services/ai-runtime/providers/disabled-ai-runtime.provider'
@@ -38,6 +40,7 @@ import { resolvePythonExecutable } from '../services/ai-python-runtime.service'
 import { createPlatformAiBranchStatus } from '../services/ai-runtime/platform-ai-branch-status.projector'
 import {
   createLlamaRuntimeStatusArtifactReadiness,
+  createOnnxModelLoadProbeArtifactReadiness,
   createWorkerModelStatusArtifactReadiness
 } from '../services/ai-runtime/model-artifact-readiness.mapper'
 import { LlamaRuntimeInstallService } from '../services/llama-runtime/llama-runtime-install.service'
@@ -109,13 +112,23 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
 const aiRuntimeManager = createSafeAiRuntimeManager()
 const aiClientService = new AiClientService()
 const llamaRuntimeService = LlamaRuntimeInstallService.getInstance()
+let latestOnnxModelLoadProbe: AiRuntimeOnnxModelLoadProbeResponse | null = null
+const ONNX_MODEL_LOAD_EVIDENCE_TTL_MS = 5 * 60 * 1000
+
+function getFreshOnnxModelLoadProbe(): AiRuntimeOnnxModelLoadProbeResponse | null {
+  if (!latestOnnxModelLoadProbe) return null
+  const checkedAt = Date.parse(latestOnnxModelLoadProbe.checkedAt)
+  if (!Number.isFinite(checkedAt) || Date.now() - checkedAt > ONNX_MODEL_LOAD_EVIDENCE_TTL_MS) return null
+  return latestOnnxModelLoadProbe
+}
 
 async function collectModelReadinessEvidence() {
   const workerStatus = await aiClientService.getModelsStatus().catch(() => null)
   const llamaStatus = llamaRuntimeService.getStatus()
   return [
     ...createWorkerModelStatusArtifactReadiness(workerStatus),
-    ...createLlamaRuntimeStatusArtifactReadiness(llamaStatus)
+    ...createLlamaRuntimeStatusArtifactReadiness(llamaStatus),
+    ...createOnnxModelLoadProbeArtifactReadiness(getFreshOnnxModelLoadProbe())
   ]
 }
 
@@ -200,6 +213,16 @@ export function registerAiRuntimeIpc() {
       return success(await aiClientService.getClipSiglipOnnxStatus())
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD, async () => {
+    try {
+      latestOnnxModelLoadProbe = await aiClientService.probeOnnxModelLoad()
+      return success(latestOnnxModelLoadProbe)
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD} error:`, err)
       return failure(err)
     }
   })

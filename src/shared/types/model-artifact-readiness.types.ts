@@ -14,6 +14,7 @@ export type AiModelArtifactReadinessSource =
   | 'llama_local_model'
   | 'external_backend'
   | 'worker_runtime'
+  | 'explicit_load_probe'
 
 export interface AiModelArtifactReadiness {
   workflow: PlatformAiWorkflow

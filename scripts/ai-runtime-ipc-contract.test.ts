@@ -11,6 +11,7 @@ import {
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
+  CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD,
   CHANNEL_AI_RUNTIME_RESTART_RUNTIME,
   CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_START_RUNTIME,
@@ -27,6 +28,7 @@ const channels = {
   getMacOSCapabilities: CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
   getMacOSAiBranchStatus: CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
   getWindowsAiBranchStatus: CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS,
+  probeOnnxModelLoad: CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD,
   selectActiveRuntime: CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   startRuntime: CHANNEL_AI_RUNTIME_START_RUNTIME,
   stopRuntime: CHANNEL_AI_RUNTIME_STOP_RUNTIME,
@@ -44,6 +46,7 @@ const channelConstants = [
   'CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES',
   'CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS',
   'CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS',
+  'CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD',
   'CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME',
   'CHANNEL_AI_RUNTIME_START_RUNTIME',
   'CHANNEL_AI_RUNTIME_STOP_RUNTIME',
@@ -62,6 +65,7 @@ assert.deepEqual(channels, {
   getMacOSCapabilities: 'aiRuntime:getMacOSCapabilities',
   getMacOSAiBranchStatus: 'ai-runtime:get-macos-ai-branch-status',
   getWindowsAiBranchStatus: 'ai-runtime:get-windows-ai-branch-status',
+  probeOnnxModelLoad: 'aiRuntime:probeOnnxModelLoad',
   selectActiveRuntime: 'aiRuntime:selectActiveRuntime',
   startRuntime: 'aiRuntime:startRuntime',
   stopRuntime: 'aiRuntime:stopRuntime',
@@ -91,6 +95,8 @@ assert.match(handlerSource, /getMacOSCapabilities/)
 assert.match(handlerSource, /get-macos-ai-branch-status|getMacOSAiBranchStatus|CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS/)
 assert.match(handlerSource, /get-windows-ai-branch-status|getWindowsAiBranchStatus|CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS/)
 assert.match(handlerSource, /getClipSiglipOnnxStatus/)
+assert.match(handlerSource, /probeOnnxModelLoad/)
+assert.match(handlerSource, /createOnnxModelLoadProbeArtifactReadiness/)
 assert.match(handlerSource, /AiClientService/)
 assert.match(handlerSource, /collectModelReadinessEvidence/)
 assert.match(handlerSource, /createWorkerModelStatusArtifactReadiness/)

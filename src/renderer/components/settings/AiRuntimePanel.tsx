@@ -9,6 +9,7 @@ import type {
   AiRuntimeHealthCheckAllResponse,
   AiRuntimeHealthCheckResponse,
   AiRuntimeMacOSCapabilitiesResponse,
+  AiRuntimeOnnxModelLoadProbeResponse,
   AiRuntimePythonMpsStatusResponse,
   AiRuntimeIpcResponse,
   AiRuntimeListRuntimesResponse,
@@ -22,6 +23,7 @@ import {
   projectClipSiglipOnnxCompatibilityDisplay,
   projectMacOSAiCapabilityStatusDisplay,
   projectMacOSAiWorkerProbeDisplay,
+  projectOnnxModelLoadProbeDisplay,
   projectPythonMpsCompatibilityDisplay,
   projectAiRuntimeInfoLabel,
   projectAiRuntimeDisplayValue,
@@ -36,6 +38,7 @@ type AiRuntimeApi = {
   getMacOSCapabilities: () => Promise<AiRuntimeIpcResponse<AiRuntimeMacOSCapabilitiesResponse>>
   getPythonMpsStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonMpsStatusResponse>>
   getClipSiglipOnnxStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimeClipSiglipOnnxStatusResponse>>
+  probeOnnxModelLoad: () => Promise<AiRuntimeIpcResponse<AiRuntimeOnnxModelLoadProbeResponse>>
   selectActiveRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   startRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   stopRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
@@ -82,6 +85,9 @@ export default function AiRuntimePanel() {
   const [pythonMpsStatusError, setPythonMpsStatusError] = useState<string | null>(null)
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [clipSiglipOnnxStatusError, setClipSiglipOnnxStatusError] = useState<string | null>(null)
+  const [onnxModelLoadProbe, setOnnxModelLoadProbe] = useState<AiRuntimeOnnxModelLoadProbeResponse | null>(null)
+  const [onnxModelLoadProbeError, setOnnxModelLoadProbeError] = useState<string | null>(null)
+  const [probingOnnxModel, setProbingOnnxModel] = useState(false)
   const [loading, setLoading] = useState(false)
   const [busyRuntimeId, setBusyRuntimeId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -102,6 +108,10 @@ export default function AiRuntimePanel() {
   const clipSiglipDisplay = useMemo(() => {
     return projectClipSiglipOnnxCompatibilityDisplay(clipSiglipOnnxStatus, clipSiglipOnnxStatusError)
   }, [clipSiglipOnnxStatus, clipSiglipOnnxStatusError])
+
+  const onnxModelLoadDisplay = useMemo(() => {
+    return projectOnnxModelLoadProbeDisplay(onnxModelLoadProbe, onnxModelLoadProbeError)
+  }, [onnxModelLoadProbe, onnxModelLoadProbeError])
 
   const loadRuntimes = async () => {
     const api = getAiRuntimeApi()
@@ -239,6 +249,31 @@ export default function AiRuntimePanel() {
     }
   }
 
+  const runOnnxModelLoadProbe = async () => {
+    const api = getAiRuntimeApi()
+    if (!api) {
+      setError('当前运行环境未暴露 AI 运行时接口。')
+      return
+    }
+
+    setProbingOnnxModel(true)
+    setError(null)
+    setOnnxModelLoadProbeError(null)
+    try {
+      const response = await api.probeOnnxModelLoad()
+      if (!response.success || !response.data) throw new Error(response.error || 'ONNX 模型加载验证失败。')
+      setOnnxModelLoadProbe(response.data)
+      setLastAction('WD Tagger ONNX 真实加载验证')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      setOnnxModelLoadProbe(null)
+      setOnnxModelLoadProbeError(message)
+      setError(message)
+    } finally {
+      setProbingOnnxModel(false)
+    }
+  }
+
   return (
     <section className="rounded-[24px] border border-white bg-white p-6 shadow-premium dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-start justify-between gap-3">
@@ -320,6 +355,28 @@ export default function AiRuntimePanel() {
             {clipSiglipOnnxStatusError}
           </div>
         )}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">WD Tagger ONNX 真实加载验证</div>
+            <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
+              手动创建并立即释放一次真实 ONNX Session。该结果只证明 AI 标签任务的 WD Tagger 路线，不代表 OCR 或语义检索已经可用。
+            </div>
+          </div>
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${onnxModelLoadDisplay.toneClass}`}>
+            {onnxModelLoadDisplay.label}
+          </span>
+        </div>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
+            {onnxModelLoadDisplay.detail}
+          </div>
+          <PanelButton onClick={runOnnxModelLoadProbe} disabled={probingOnnxModel} icon={probingOnnxModel ? Loader2 : ShieldCheck}>
+            {probingOnnxModel ? '正在验证...' : '验证真实加载'}
+          </PanelButton>
+        </div>
       </div>
 
       {error && (

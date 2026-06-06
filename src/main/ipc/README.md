@@ -17,6 +17,7 @@ IPC handlers expose main-process services to the preload bridge and renderer.
 - Do not rename IPC channels without updating preload and shared contracts.
 - Keep validation close to the handler.
 - Use dedicated AI Runtime channels for Platform AI Branch Status; do not overload raw capability probe channels with product workflow status.
+- Explicit AI Runtime load probes must use registered model identities rather than renderer-provided paths, return sanitized evidence, and require a user action.
 - AI Client handlers must use shared channel constants and request/response types rather than string literals or inline payload types.
 
 ## Tests
@@ -30,6 +31,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.3.3 | 2026-06-06 | Added the user-initiated, registered-model-only WD Tagger ONNX load probe channel. |
 | v1.3.2 | 2026-06-06 | Adopted the shared AI Client channel and request/response contract across handlers and preload. |
 | v1.3.1 | 2026-06-04 | Added Platform AI Branch Status channel guidance for `ai-runtime:get-macos-ai-branch-status` and `ai-runtime:get-windows-ai-branch-status`. |
 | v1.3.0 | 2026-06-04 | Documented dedicated Platform AI Branch Status IPC rule for Windows/macOS shared response shape. |

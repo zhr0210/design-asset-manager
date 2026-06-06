@@ -3,6 +3,7 @@ import {
   createCooperativeModelArtifactReadiness,
   createLlamaLocalModelArtifactReadiness,
   createLlamaRuntimeStatusArtifactReadiness,
+  createOnnxModelLoadProbeArtifactReadiness,
   createWorkerModelStatusArtifactReadiness
 } from '../src/main/services/ai-runtime/model-artifact-readiness.mapper'
 import { createPlatformAiBranchStatus } from '../src/main/services/ai-runtime/platform-ai-branch-status.projector'
@@ -105,7 +106,61 @@ assert.deepEqual(
   ['llama_metal', 'llama_cuda']
 )
 
-const readinessJson = JSON.stringify([...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness])
+const onnxLoadReadiness = createOnnxModelLoadProbeArtifactReadiness({
+  success: true,
+  modelFamily: 'wd_tagger',
+  status: 'loaded_real',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  providers: ['CoreMLExecutionProvider', 'CPUExecutionProvider'],
+  inputCount: 1,
+  outputCount: 1
+})
+assert.deepEqual(onnxLoadReadiness.map((item) => ({
+  workflow: item.workflow,
+  lane: item.runtimeLane,
+  state: item.state,
+  source: item.source
+})), [{
+  workflow: 'ai_tag_task',
+  lane: 'onnx_runtime',
+  state: 'loaded_real',
+  source: 'explicit_load_probe'
+}])
+
+const missingOnnxReadiness = createOnnxModelLoadProbeArtifactReadiness({
+  success: false,
+  modelFamily: 'wd_tagger',
+  status: 'artifact_missing',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  providers: [],
+  inputCount: 0,
+  outputCount: 0,
+  errorCode: 'MODEL_ARTIFACT_MISSING'
+})
+assert.equal(missingOnnxReadiness[0].state, 'artifact_missing')
+assert.equal(missingOnnxReadiness[0].missing?.[0].kind, 'model_artifact')
+
+const onnxProbeOnlyProjection = createPlatformAiBranchStatus({
+  platformBranch: 'macos',
+  currentPlatform: 'darwin',
+  generatedAt: '2026-06-06T00:00:00.000Z',
+  runtimes: [],
+  modelReadiness: onnxLoadReadiness
+})
+assert.equal(
+  onnxProbeOnlyProjection.workflows.find((workflow) => workflow.workflow === 'ai_tag_task')?.status,
+  'real_model_path'
+)
+assert.equal(
+  onnxProbeOnlyProjection.workflows.find((workflow) => workflow.workflow === 'ocr_text_box')?.status,
+  'evidence_insufficient'
+)
+assert.equal(
+  onnxProbeOnlyProjection.workflows.find((workflow) => workflow.workflow === 'search_embedding')?.status,
+  'evidence_insufficient'
+)
+
+const readinessJson = JSON.stringify([...cooperativeReadiness, ...llamaReadiness, ...workerReadiness, ...llamaRuntimeReadiness, ...onnxLoadReadiness])
 assert.doesNotMatch(readinessJson, /modelPath|localPath|Users|Downloads|Library\/Application Support/)
 assert.doesNotMatch(readinessJson, /private\/model\/path/)
 

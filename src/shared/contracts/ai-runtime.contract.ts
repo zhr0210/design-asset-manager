@@ -10,6 +10,7 @@ export const CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS = 'ai-runtime:get-mac
 export const CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS = 'ai-runtime:get-windows-ai-branch-status'
 export const CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS = 'aiRuntime:getPythonMpsStatus'
 export const CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS = 'aiRuntime:getClipSiglipOnnxStatus'
+export const CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD = 'aiRuntime:probeOnnxModelLoad'
 export const CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME = 'aiRuntime:selectActiveRuntime'
 export const CHANNEL_AI_RUNTIME_START_RUNTIME = 'aiRuntime:startRuntime'
 export const CHANNEL_AI_RUNTIME_STOP_RUNTIME = 'aiRuntime:stopRuntime'
@@ -49,6 +50,18 @@ export interface AiRuntimeClipSiglipOnnxStatusResponse {
   runtime?: string | null
   diagnostics: Record<string, unknown>
   error?: string | null
+}
+
+export interface AiRuntimeOnnxModelLoadProbeResponse {
+  success: boolean
+  modelFamily: 'wd_tagger'
+  status: 'loaded_real' | 'artifact_missing' | 'artifact_invalid' | 'dependency_missing' | 'load_failed' | 'unsupported'
+  checkedAt: string
+  providers: string[]
+  inputCount: number
+  outputCount: number
+  errorCode?: string | null
+  errorType?: string | null
 }
 
 export interface AiRuntimeSelectActiveRequest {

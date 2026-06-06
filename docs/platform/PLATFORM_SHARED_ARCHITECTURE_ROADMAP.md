@@ -25,6 +25,7 @@ This roadmap records the refactor order for lowering dual-platform maintenance c
 - Treat unknown evidence as insufficient information, not failure.
 - Keep status `nextAction` display-only. `PlatformAiActionPlan` owns executable UI routing, while execution remains in existing operation IPC handlers and requires explicit user actions.
 - First-version status projectors may read existing in-memory state, settings, cached status, and side-effect-light status/probe methods aggressively, but they must not start runtimes, install dependencies, download models, inspect user assets, or trigger non-user-initiated external network checks.
+- Explicit real-load evidence is user-initiated, path-free, scoped to one registered model route, and expires from the main-process evidence cache after five minutes.
 
 ## Non-Goals
 
