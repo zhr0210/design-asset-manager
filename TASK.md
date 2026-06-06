@@ -621,3 +621,10 @@ Additional checks:
 - Added `docs/platform/WINDOWS_AI_REAL_EVIDENCE_HANDOFF.md` with the remote Codex handoff commands and expected evidence.
 - Added `docs/platform/WINDOWS_AI_REAL_EVIDENCE_RESULT.md` as a GitHub branch mailbox. The Windows-host Codex should update that file with sanitized results, commit, and push to avoid thread-sync dependence.
 - Next step: run the script on Windows and push the updated result file plus screenshot/log summary.
+
+## 2026-06-06 Windows AI Real Evidence Validation
+
+- Windows-host validation on `DESKTOP-3573AOS` reported successful CUDA fixed-tensor execution on NVIDIA RTX 5060 Ti with PyTorch CUDA, plus successful Windows Platform AI Branch Status IPC and Electron/Playwright AI Console screenshot capture.
+- The Windows validation script was hardened on the host with sanitized logging, native-command capture, temporary Python snippets, isolated Python unittest cache/database paths, and Electron screenshot capture from the repository context.
+- ONNX Runtime imported on Windows with `AzureExecutionProvider` and `CPUExecutionProvider`; WD Tagger and CLIP probes still returned `MODEL_ARTIFACT_MISSING` so the shared workflows remain `runtime_probe_ready` until approved model artifacts are installed and real model load/embedding evidence is collected.
+- Latest reported Windows validation artifacts: `dam-windows-ai-validation-20260606-200608.log` and `dam-windows-ai-console.png` on the Windows desktop.

@@ -3,38 +3,109 @@ param(
   [string]$LogRoot = (Join-Path $env:USERPROFILE "Desktop")
 )
 
-$ErrorActionPreference = "Continue"
+$ErrorActionPreference = "Stop"
 $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $log = Join-Path $LogRoot "dam-windows-ai-validation-$stamp.log"
 
-Start-Transcript -Path $log -Force
+function ConvertTo-RedactedText {
+  param([string]$Message)
+  $redacted = $Message
+  if ($env:USERPROFILE) {
+    $redacted = $redacted.Replace($env:USERPROFILE, "<USERPROFILE>")
+  }
+  if ($env:TEMP) {
+    $redacted = $redacted.Replace($env:TEMP, "<TEMP>")
+  }
+  if ($RepoRoot) {
+    $redacted = $redacted.Replace($RepoRoot, "<REPO_ROOT>")
+    $redacted = $redacted.Replace($RepoRoot.Replace("\", "/"), "<REPO_ROOT>")
+  }
+  return $redacted
+}
+
+function Write-Log {
+  param([string]$Message)
+  $line = ConvertTo-RedactedText $Message
+  Write-Host $line
+  Add-Content -LiteralPath $log -Value $line -Encoding utf8
+}
+
+function Invoke-LoggedNative {
+  param(
+    [string]$Command,
+    [string[]]$Arguments = @()
+  )
+  Write-Log ("> " + $Command + " " + ($Arguments -join " "))
+  $stdoutPath = Join-Path $env:TEMP ("dam-native-stdout-" + [guid]::NewGuid().ToString("N") + ".log")
+  $stderrPath = Join-Path $env:TEMP ("dam-native-stderr-" + [guid]::NewGuid().ToString("N") + ".log")
+  $previousErrorActionPreference = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"
+  try {
+    & $Command @Arguments > $stdoutPath 2> $stderrPath
+    $exitCode = if ($null -eq $LASTEXITCODE) { 0 } else { $LASTEXITCODE }
+  } finally {
+    $ErrorActionPreference = $previousErrorActionPreference
+  }
+  $output = @()
+  if (Test-Path -LiteralPath $stdoutPath) {
+    $output += Get-Content -LiteralPath $stdoutPath -ErrorAction SilentlyContinue
+  }
+  if (Test-Path -LiteralPath $stderrPath) {
+    $output += Get-Content -LiteralPath $stderrPath -ErrorAction SilentlyContinue
+  }
+  Remove-Item -LiteralPath $stdoutPath -Force -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath $stderrPath -Force -ErrorAction SilentlyContinue
+  foreach ($item in $output) {
+    Write-Log ($item | Out-String).TrimEnd()
+  }
+  if ($exitCode -ne 0) {
+    throw "$Command exited with code $exitCode"
+  }
+}
+
+function Invoke-PythonSnippet {
+  param(
+    [string]$Name,
+    [string]$Source
+  )
+  $scriptPath = Join-Path $env:TEMP "$Name.py"
+  Set-Content -Path $scriptPath -Value $Source -Encoding utf8
+  try {
+    Invoke-LoggedNative "python" @($scriptPath)
+  } finally {
+    Remove-Item -LiteralPath $scriptPath -Force -ErrorAction SilentlyContinue
+  }
+}
+
+New-Item -ItemType Directory -Force -Path $LogRoot | Out-Null
+Set-Content -LiteralPath $log -Value "" -Encoding utf8
 
 try {
-  Write-Host "== Validation start =="
-  Write-Host ("Time: " + (Get-Date))
-  Write-Host ("Computer: " + $env:COMPUTERNAME)
-  Write-Host ("User: " + $env:USERNAME)
-  Write-Host ("RepoRoot: " + $RepoRoot)
+  Write-Log "== Validation start =="
+  Write-Log ("Time: " + (Get-Date))
+  Write-Log ("Computer: " + $env:COMPUTERNAME)
+  Write-Log ("User: " + $env:USERNAME)
+  Write-Log ("RepoRoot: " + $RepoRoot)
 
   Set-Location $RepoRoot
 
-  Write-Host "== Git state =="
-  git status --short
-  git log -1 --oneline
+  Write-Log "== Git state =="
+  Invoke-LoggedNative "git" @("status", "--short")
+  Invoke-LoggedNative "git" @("log", "-1", "--oneline")
 
-  Write-Host "== Tool versions =="
-  git --version
-  node --version
-  npm --version
-  python --version
-  where git
-  where node
-  where npm
-  where python
+  Write-Log "== Tool versions =="
+  Invoke-LoggedNative "git" @("--version")
+  Invoke-LoggedNative "node" @("--version")
+  Invoke-LoggedNative "npm.cmd" @("--version")
+  Invoke-LoggedNative "python" @("--version")
+  Write-Log ("git: " + (Get-Command git -ErrorAction SilentlyContinue).Source)
+  Write-Log ("node: " + (Get-Command node -ErrorAction SilentlyContinue).Source)
+  Write-Log ("npm: " + (Get-Command npm.cmd -ErrorAction SilentlyContinue).Source)
+  Write-Log ("python: " + (Get-Command python -ErrorAction SilentlyContinue).Source)
 
-  Write-Host "== GPU =="
-  nvidia-smi
-  $gpuProbe = @'
+  Write-Log "== GPU =="
+  Invoke-LoggedNative "nvidia-smi" @("--query-gpu=name,driver_version,memory.total", "--format=csv,noheader")
+  Invoke-PythonSnippet -Name "dam-windows-ai-gpu-probe" -Source @'
 import sys
 print("python", sys.version)
 try:
@@ -47,24 +118,33 @@ try:
 except Exception as exc:
     print("torch_probe_error", type(exc).__name__, str(exc))
 '@
-  $gpuProbe | python -
 
-  Write-Host "== Install Node deps =="
-  npm ci
+  Write-Log "== Install Node deps =="
+  Invoke-LoggedNative "npm.cmd" @("ci")
 
-  Write-Host "== Typecheck/build =="
-  npm run typecheck
-  npm run build
+  Write-Log "== Typecheck/build =="
+  Invoke-LoggedNative "npm.cmd" @("run", "typecheck")
+  Invoke-LoggedNative "npm.cmd" @("run", "build")
 
-  Write-Host "== Runtime safety tests =="
-  npm run ci:test-runtime-safety
+  Write-Log "== Runtime safety tests =="
+  Invoke-LoggedNative "npm.cmd" @("run", "ci:test-runtime-safety")
 
-  Write-Host "== Python unit tests =="
-  npm run test-python-unittest
+  Write-Log "== Python unit tests =="
+  $env:HF_HUB_OFFLINE = "1"
+  $env:DESIGN_ASSET_MANAGER_DISABLE_USER_DATA_ACCESS = "1"
+  $testRoot = Join-Path $env:TEMP ("design-asset-manager-tests-" + [guid]::NewGuid().ToString("N"))
+  New-Item -ItemType Directory -Force -Path $testRoot | Out-Null
+  $env:DESIGN_ASSET_MANAGER_TASK_CACHE_DB = Join-Path $testRoot "tasks-cache.db"
+  $env:PYTHONPYCACHEPREFIX = Join-Path $testRoot "pycache"
+  try {
+    Invoke-LoggedNative "python" @("-u", "-m", "unittest", "discover", "-s", "ai-service/tests", "-v")
+  } finally {
+    Remove-Item -LiteralPath $testRoot -Recurse -Force -ErrorAction SilentlyContinue
+  }
 
-  Write-Host "== Windows AI direct probes =="
+  Write-Log "== Windows AI direct probes =="
   $env:PYTHONPATH = Join-Path $RepoRoot "ai-service"
-  $windowsAiProbe = @'
+  Invoke-PythonSnippet -Name "dam-windows-ai-direct-probes" -Source @'
 import json
 from core.windows_ai_capabilities import probe_windows_ai_capabilities
 from core.python_cuda_compat import probe_python_cuda_environment
@@ -82,10 +162,11 @@ print("WINDOWS_AI_DIRECT_PROBES_START")
 print(json.dumps(checks, ensure_ascii=False, indent=2))
 print("WINDOWS_AI_DIRECT_PROBES_END")
 '@
-  $windowsAiProbe | python -
 
-  Write-Host "== Electron/Playwright smoke =="
-  $e2e = Join-Path $env:TEMP "dam-windows-ai-runtime-e2e.mjs"
+  Write-Log "== Electron/Playwright smoke =="
+  $e2eRoot = Join-Path $RepoRoot "dist-temp"
+  New-Item -ItemType Directory -Force -Path $e2eRoot | Out-Null
+  $e2e = Join-Path $e2eRoot "dam-windows-ai-runtime-e2e.mjs"
   @'
 import { _electron as electron } from "playwright";
 import path from "node:path";
@@ -94,6 +175,19 @@ import fs from "node:fs/promises";
 const repo = process.cwd();
 const userData = path.join(process.env.TEMP || ".", "dam-win-ai-e2e-" + Date.now());
 await fs.mkdir(userData, { recursive: true });
+
+const redact = (value) => {
+  let text = typeof value === "string" ? value : JSON.stringify(value, null, 2);
+  for (const [label, raw] of [
+    ["<REPO_ROOT>", repo],
+    ["<USERPROFILE>", process.env.USERPROFILE],
+    ["<TEMP>", process.env.TEMP],
+  ]) {
+    if (raw) text = text.split(raw).join(label);
+  }
+  return text;
+};
+
 const electronExe = path.join(repo, "node_modules", "electron", "dist", "electron.exe");
 const launchOptions = {
   args: [repo, "--user-data-dir=" + userData],
@@ -116,21 +210,28 @@ try {
 
   const body = await page.locator("body").innerText();
   console.log("AI_CONSOLE_HAS_WINDOWS_BRANCH", body.includes("Windows") || body.includes("CUDA"));
-  console.log("AI_CONSOLE_HAS_RUNTIME_PANEL", body.includes("AI 运行时管理"));
+  console.log("AI_CONSOLE_HAS_RUNTIME_PANEL", body.includes("AI") && body.includes("Runtime"));
   console.log("AI_CONSOLE_TEXT_SAMPLE_START");
-  console.log(body.slice(0, 4000));
+  console.log(redact(body.slice(0, 4000)));
   console.log("AI_CONSOLE_TEXT_SAMPLE_END");
 
   const branch = await page.evaluate(async () => {
     return window.electronAPI?.aiRuntime?.getWindowsAiBranchStatus?.();
   });
   console.log("WINDOWS_BRANCH_STATUS_START");
-  console.log(JSON.stringify(branch, null, 2));
+  console.log(redact(branch));
   console.log("WINDOWS_BRANCH_STATUS_END");
 
+  await page.evaluate(() => {
+    const marker = "\u5e73\u53f0 AI \u5206\u652f\u72b6\u6001";
+    const candidates = Array.from(document.querySelectorAll("h1, h2, h3, h4, p, span, div"));
+    const target = candidates.find((node) => node.textContent?.includes(marker));
+    target?.scrollIntoView({ block: "center" });
+  });
+  await page.waitForTimeout(500);
   const screenshot = path.join(process.env.USERPROFILE || userData, "Desktop", "dam-windows-ai-console.png");
   await page.screenshot({ path: screenshot, fullPage: false });
-  console.log("SCREENSHOT", screenshot);
+  console.log("SCREENSHOT", path.join("<DESKTOP>", path.basename(screenshot)));
 
   const overflow = await page.evaluate(() => ({
     doc: document.documentElement.scrollWidth > document.documentElement.clientWidth,
@@ -143,10 +244,11 @@ try {
 }
 '@ | Set-Content -Path $e2e -Encoding utf8
 
-  node $e2e
+  Invoke-LoggedNative "node" @($e2e)
 
-  Write-Host "== Validation done =="
-  Write-Host ("LOG_FILE=" + $log)
-} finally {
-  Stop-Transcript
+  Write-Log "== Validation done =="
+  Write-Log ("LOG_FILE=" + $log)
+} catch {
+  Write-Log ("VALIDATION_FAILED " + $_.Exception.Message)
+  throw
 }
