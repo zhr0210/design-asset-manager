@@ -344,7 +344,7 @@ def main() -> None:
         emit({"type": "start", "success": True,
               "message": "Downloading all cooperative models"})
         for family, files in COOPERATIVE_FILES.items():
-            family_dir = COOP_ROOT / FAMILY_DIRS[family]
+            family_dir = local_dir / FAMILY_DIRS[family]
             emit({"type": "progress", "progress": 0,
                   "message": f"=== {family} ({len(files)} files) ==="})
             for repo_id, filename in files:
@@ -357,7 +357,7 @@ def main() -> None:
         return
 
     if args.model_family and args.model_family in COOPERATIVE_FILES:
-        family_dir = COOP_ROOT / FAMILY_DIRS[args.model_family]
+        family_dir = local_dir
         emit({"type": "start", "success": True, "repoId": args.repo_id})
         files = COOPERATIVE_FILES[args.model_family]
         for repo_id, filename in files:

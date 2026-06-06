@@ -77,6 +77,30 @@ class TestModelDownloads(unittest.TestCase):
         finally:
             download_cooperative_hf_model.HF_RESOLVE = orig_resolve
 
+    def test_cooperative_model_family_download_uses_local_dir(self):
+        local_dir = Path(self.test_dir) / "wd-vit-tagger-v3"
+        destinations = []
+
+        def mock_download_file(repo_id, filename, dest, ctx, num_channels=4):
+            destinations.append(Path(dest))
+            return True
+
+        with patch("sys.argv", [
+            "download_cooperative_hf_model.py",
+            "--repo-id", "SmilingWolf/wd-vit-tagger-v3",
+            "--local-dir", str(local_dir),
+            "--category", "onnx-csv",
+            "--model-family", "wd_tagger",
+        ]):
+            with patch("tools.download_cooperative_hf_model.download_file", side_effect=mock_download_file):
+                download_cooperative_hf_model.main()
+
+        self.assertEqual(
+            sorted(path.name for path in destinations),
+            ["model.onnx", "selected_tags.csv"],
+        )
+        self.assertTrue(all(path.parent == local_dir.resolve() for path in destinations))
+
     def test_stream_chunking_and_resume_on_failure(self):
         url = "https://huggingface.co/test-repo/resolve/main/test_model.bin"
         ctx = download_cooperative_hf_model.create_ssl_context()
