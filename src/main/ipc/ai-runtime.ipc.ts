@@ -115,6 +115,14 @@ const llamaRuntimeService = LlamaRuntimeInstallService.getInstance()
 let latestOnnxModelLoadProbe: AiRuntimeOnnxModelLoadProbeResponse | null = null
 const ONNX_MODEL_LOAD_EVIDENCE_TTL_MS = 5 * 60 * 1000
 
+export async function shutdownAiRuntimes(): Promise<void> {
+  const results = await aiRuntimeManager.stopAllRuntimes()
+  const failures = results.filter((result) => !result.success)
+  if (failures.length > 0) {
+    console.warn(`[ai-runtime] ${failures.length} runtime(s) did not stop cleanly`)
+  }
+}
+
 function getFreshOnnxModelLoadProbe(): AiRuntimeOnnxModelLoadProbeResponse | null {
   if (!latestOnnxModelLoadProbe) return null
   const checkedAt = Date.parse(latestOnnxModelLoadProbe.checkedAt)

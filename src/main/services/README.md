@@ -43,6 +43,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.10 | 2026-06-06 | Replaced synthetic Python Worker process tracking with real child-process lifecycle management, bounded logs, shutdown cleanup, and a cold-start capability-probe budget. |
 | v1.4.9 | 2026-06-05 | Added Windows CUDA/Llama lane variants to shared model artifact readiness evidence. |
 | v1.4.8 | 2026-06-05 | Reused the shared Worker cooperative readiness snapshot contract in Model Artifact Readiness mapping. |
 | v1.4.7 | 2026-06-05 | Added one lifecycle sink for tagging/analysis task completion records and non-completion status persistence. |

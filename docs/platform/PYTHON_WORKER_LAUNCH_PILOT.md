@@ -1,6 +1,6 @@
 # Python Worker Launch Pilot
 
-Phase 11B adds a controlled Python Worker launch boundary.
+The Python Worker uses a controlled Electron main-process launch boundary.
 
 ## Added Planning
 
@@ -10,13 +10,13 @@ Phase 11B adds a controlled Python Worker launch boundary.
 - environment warning for sensitive-looking keys;
 - crash log plan;
 - stop plan;
-- real process runner adapter.
+- real process runner with operating-system PIDs, bounded output tails, and graceful-stop escalation.
 
 ## Test Boundary
 
-Tests use `MockAiRuntimeProcessRunner`. They do not start a real Python process.
+Provider tests use `MockAiRuntimeProcessRunner`. A focused process-runner test starts a disposable local child process and verifies output bounding plus termination.
 
-`RealAiRuntimeProcessRunner` is an adapter boundary for later manual use. It does not install Python or dependencies.
+On macOS, the registered Python Worker runtime starts automatically. Electron shutdown waits for active runtimes to stop so the Worker does not remain orphaned.
 
 ## Safety Boundaries
 
@@ -24,11 +24,10 @@ This phase does not:
 
 - install Python;
 - install Python dependencies;
-- automatically start the Python Worker;
 - delete temp files during cleanup;
 - download models;
 - change AI Worker HTTP API.
 
-## Next Step
+## Runtime Evidence
 
-Phase 11C should adapt the old AI Client toward AI Runtime through an adapter and mock bridge while preserving old-chain fallback.
+Read-only capability probes allow a 30-second cold-start budget. Real model evidence still requires a dedicated load or inference probe; process-running state alone is not model readiness.

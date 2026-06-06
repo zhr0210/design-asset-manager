@@ -145,9 +145,22 @@ import { registerCooperativeModelIpc } from './ipc/cooperative-model.ipc'
 import { registerAiBackendIpc } from './ipc/ai-backend.ipc'
 import { registerLlamaRuntimeIpc } from './ipc/llama-runtime.ipc'
 import { registerDoctorIpc } from './ipc/doctor.ipc'
-import { registerAiRuntimeIpc } from './ipc/ai-runtime.ipc'
+import { registerAiRuntimeIpc, shutdownAiRuntimes } from './ipc/ai-runtime.ipc'
 import { registerSettingsMigrationIpc } from './ipc/settings-migration.ipc'
 import { registerPathGovernanceIpc } from './ipc/path-governance.ipc'
+let aiRuntimeShutdownStarted = false
+
+app.on('before-quit', (event) => {
+  if (aiRuntimeShutdownStarted) return
+
+  event.preventDefault()
+  aiRuntimeShutdownStarted = true
+  void shutdownAiRuntimes()
+    .catch((error) => {
+      console.warn('[ai-runtime] Failed to stop runtimes during application shutdown:', error)
+    })
+    .finally(() => app.quit())
+})
 
 function setupIpcHandlers() {
   // Register database IPC handlers

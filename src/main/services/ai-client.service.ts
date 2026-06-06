@@ -29,6 +29,8 @@ import {
 } from '../../shared/contracts/ai-client.contract'
 import type { AssetTaggingModelId } from '../../shared/workflows/asset-tagging.workflow'
 
+const AI_CAPABILITY_PROBE_TIMEOUT_MS = 30_000
+
 export class AiClientService {
   private pythonUrl = 'http://127.0.0.1:8000'
   private pollTimeout: NodeJS.Timeout | null = null
@@ -240,7 +242,9 @@ export class AiClientService {
     error?: string
   }> {
     try {
-      const res = await fetch(`${this.pythonUrl}/ai/runtime/macos-capabilities`, { signal: AbortSignal.timeout(1000) })
+      const res = await fetch(`${this.pythonUrl}/ai/runtime/macos-capabilities`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       return {
@@ -263,7 +267,9 @@ export class AiClientService {
    */
   public async getPythonMpsStatus(): Promise<AiRuntimePythonMpsStatusResponse & { offline: boolean; error?: string | null }> {
     try {
-      const res = await fetch(`${this.pythonUrl}/ai/model/python-mps/status`, { signal: AbortSignal.timeout(1000) })
+      const res = await fetch(`${this.pythonUrl}/ai/model/python-mps/status`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const compatData = data as {
@@ -306,7 +312,9 @@ export class AiClientService {
    */
   public async getClipSiglipOnnxStatus(): Promise<AiRuntimeClipSiglipOnnxStatusResponse & { offline: boolean; error?: string | null }> {
     try {
-      const res = await fetch(`${this.pythonUrl}/ai/model/clip-siglip-onnx/status`, { signal: AbortSignal.timeout(1000) })
+      const res = await fetch(`${this.pythonUrl}/ai/model/clip-siglip-onnx/status`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const compatData = data as AiRuntimeClipSiglipOnnxStatusResponse & { error?: { code: string; message: string } | null }
