@@ -611,3 +611,10 @@ Additional checks:
 - Validation passed: `npm run typecheck`, `npm run build`, `npm run ci:test-runtime-safety`, `npm run ci:governance`, 106 isolated Python unit tests, focused readiness/display tests, docs sync, and `git diff --check`.
 - `check-agent-context.py` and `check-forbidden-paths.py` remain blocked by the pre-existing missing `.codeindex/module-map.json`, `.codeindex/tests-map.json`, and `.codeindex/forbidden-paths.json`.
 - Remaining platform gap: Windows CUDA/ONNX/Llama real execution and Electron screenshot validation require a Windows host.
+
+## 2026-06-06 Windows Remote Validation Handoff
+
+- SSH service was enabled on `DESKTOP-3573AOS`, but Mac-to-Windows SSH did not reach the OpenSSH server reliably through the UU/Meta network path.
+- Added `scripts/windows-ai-real-evidence-validation.ps1` so the Windows-host Codex or a local Windows PowerShell can run the full validation without copying a long inline script.
+- Added `docs/platform/WINDOWS_AI_REAL_EVIDENCE_HANDOFF.md` with the remote Codex handoff commands and expected evidence.
+- Next step: run the script on Windows and return the generated `dam-windows-ai-validation-*.log` plus screenshot result.
