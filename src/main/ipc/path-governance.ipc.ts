@@ -6,8 +6,131 @@ import { createDownloadPathDryRunPlan } from '../path-migration/download-path-go
 import fs from 'fs'
 import path from 'path'
 import { homedir } from 'os'
+import { resolveManagedPaths } from '../platform/path-resolver'
+import { PathMigrationExecutor } from '../path-migration/path-migration-executor'
+import { ImageMetadataService } from '../services/image-metadata.service'
 
 export function registerPathGovernanceIpc() {
+  ipcMain.handle('assets:path-migration-report', async () => {
+    try {
+      const db = getDatabase()
+      const managedPaths = resolveManagedPaths()
+      
+      const assets = db.prepare('SELECT id, thumbnail_path, normalized_path FROM assets').all() as Array<{
+        id: string
+        thumbnail_path: string | null
+        normalized_path: string | null
+      }>
+
+      let affectedRows = 0
+      const missingFiles: Array<{ assetId: string; filePath: string }> = []
+      const proposedMappings: Array<{ original: string; proposed: string; isCollision: boolean }> = []
+      const collisions: Array<{ filePath: string; conflictingAssetId: string }> = []
+
+      for (const asset of assets) {
+        const needsThumb = !!(asset.thumbnail_path && !asset.thumbnail_path.startsWith('cache://'))
+        const needsNorm = !!(asset.normalized_path && !asset.normalized_path.startsWith('cache://'))
+
+        if (needsThumb || needsNorm) {
+          affectedRows++
+        }
+
+        if (needsThumb && asset.thumbnail_path) {
+          const original = asset.thumbnail_path
+          const basename = path.basename(original)
+          const proposed = `cache://thumbnail/${asset.id}/${basename}`
+          
+          let srcFile = ImageMetadataService.resolvePath(original)
+          let exists = fs.existsSync(srcFile)
+          if (!exists) {
+            const fallback = path.join(homedir(), 'DesignAssetManager', 'library', 'thumbnails', basename)
+            if (fs.existsSync(fallback)) {
+              exists = true
+              srcFile = fallback
+            }
+          }
+
+          if (!exists) {
+            missingFiles.push({ assetId: asset.id, filePath: original })
+          }
+
+          const destFile = path.join(managedPaths.cacheDir, 'thumbnail', asset.id, basename)
+          const isCollision = fs.existsSync(destFile)
+          if (isCollision) {
+            collisions.push({ filePath: destFile, conflictingAssetId: asset.id })
+          }
+
+          proposedMappings.push({
+            original,
+            proposed,
+            isCollision
+          })
+        }
+
+        if (needsNorm && asset.normalized_path) {
+          const original = asset.normalized_path
+          const basename = path.basename(original)
+          const proposed = `cache://normalized-image/${asset.id}/${basename}`
+          
+          let srcFile = ImageMetadataService.resolvePath(original)
+          let exists = fs.existsSync(srcFile)
+          if (!exists) {
+            const fallback = path.join(homedir(), 'DesignAssetManager', 'library', 'normalized', basename)
+            if (fs.existsSync(fallback)) {
+              exists = true
+              srcFile = fallback
+            }
+          }
+
+          if (!exists) {
+            missingFiles.push({ assetId: asset.id, filePath: original })
+          }
+
+          const destFile = path.join(managedPaths.cacheDir, 'normalized-image', asset.id, basename)
+          const isCollision = fs.existsSync(destFile)
+          if (isCollision) {
+            collisions.push({ filePath: destFile, conflictingAssetId: asset.id })
+          }
+
+          proposedMappings.push({
+            original,
+            proposed,
+            isCollision
+          })
+        }
+      }
+
+      return {
+        success: true,
+        report: {
+          affectedRows,
+          missingFiles,
+          proposedMappings,
+          collisions
+        }
+      }
+    } catch (err: any) {
+      console.error('[IPC] assets:path-migration-report error:', err)
+      return {
+        success: false,
+        error: err?.message || String(err)
+      }
+    }
+  })
+
+  ipcMain.handle('assets:apply-path-migration', async (_, options?: { deleteLegacyFiles?: boolean }) => {
+    try {
+      const db = getDatabase()
+      const managedPaths = resolveManagedPaths()
+      const executor = new PathMigrationExecutor(db, managedPaths)
+      const res = await executor.executeMigration({ deleteLegacyFiles: options?.deleteLegacyFiles })
+      return { success: true, migratedCount: res.migratedCount }
+    } catch (err: any) {
+      console.error('[IPC] assets:apply-path-migration error:', err)
+      return { success: false, error: err?.message || String(err) }
+    }
+  })
+
   ipcMain.handle('assets:path-governance-report', async () => {
     try {
       const db = getDatabase()

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
 import DoctorPanel from '../components/settings/DoctorPanel'
+import PathMigrationPanel from '../components/settings/PathMigrationPanel'
 import SettingsMigrationPanel from '../components/settings/SettingsMigrationPanel'
 
 export default function Settings() {
@@ -215,6 +216,8 @@ export default function Settings() {
             </div>
 
             <DoctorPanel />
+
+            <PathMigrationPanel />
 
             <SettingsMigrationPanel />
 

@@ -331,5 +331,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Path Governance APIs
   getAssetLibraryPathGovernanceReport: () => ipcRenderer.invoke('assets:path-governance-report'),
-  getDownloadPathPlan: (requestedFilename: string) => ipcRenderer.invoke('downloads:get-path-plan', requestedFilename)
+  getDownloadPathPlan: (requestedFilename: string) => ipcRenderer.invoke('downloads:get-path-plan', requestedFilename),
+  applyPathMigration: (options?: { deleteLegacyFiles?: boolean }) => ipcRenderer.invoke('assets:apply-path-migration', options),
+  getPathMigrationReport: () => ipcRenderer.invoke('assets:path-migration-report')
 })

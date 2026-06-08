@@ -205,5 +205,5 @@ await runPathMigrationExecutorTests()
 
 const pathGovernanceIpcSource = await fs.readFile('src/main/ipc/path-governance.ipc.ts', 'utf8')
 const preloadSource = await fs.readFile('src/preload/index.ts', 'utf8')
-assert.doesNotMatch(pathGovernanceIpcSource, /assets:apply-path-migration|PathMigrationExecutor/)
-assert.doesNotMatch(preloadSource, /assets:apply-path-migration|applyPathMigration/)
+assert.match(pathGovernanceIpcSource, /assets:apply-path-migration|PathMigrationExecutor/)
+assert.match(preloadSource, /assets:apply-path-migration|applyPathMigration/)

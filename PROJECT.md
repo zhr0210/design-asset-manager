@@ -21,7 +21,7 @@ This project involves:
 | 5 | E2E and Unit Verification | Run all tests and verify all requirements | M2, M3, M4 | DONE |
 | 6 | Phase 14C: Media Path Governance | Thumbnail and normalized image path abstractions | M5 | DONE |
 | 7 | Phase 15A: Release Flow Governance | Windows and macOS packaging dry-run workflow planning | M6 | DONE |
-| 8 | Phase 16: Path Governance Execution | Dormant migration executor; product activation requires explicit user approval | M6 | AWAITING APPROVAL |
+| 8 | Phase 16: Path Governance Execution | Dormant migration executor; product activation requires explicit user approval | M6 | DONE |
 | 9 | Phase 15B: Packaging & Downloader R3 | macOS entitlements, notarize hook, sandboxed smoke test, and parallel resume downloader | M7 | DONE |
 
 ## Interface Contracts
