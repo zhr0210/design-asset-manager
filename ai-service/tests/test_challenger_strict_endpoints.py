@@ -32,27 +32,31 @@ class TestChallengerStrictEndpoints(unittest.TestCase):
         data = response.json()
         self.assertEqual(data.get("strict_real_ai"), True)
 
-    def test_prompt_generation_blocked_in_strict_mode(self):
+    def test_prompt_generation_allowed_in_strict_mode(self):
         # Sending request to /ai/prompt/generate
         payload = {
             "asset_id": "test-asset-1",
             "file_path": "test.png",
-            "model_name": "JoyCaption-v2"
+            "model_name": "Qwen3-VL"
         }
         response = self.client.post("/ai/prompt/generate", json=payload)
-        self.assertEqual(response.status_code, 501)
-        self.assertIn("Python PromptWorker mock path is disabled in production", response.json()["detail"])
+        self.assertEqual(response.status_code, 202)
+        data = response.json()
+        self.assertEqual(data.get("success"), True)
+        self.assertEqual(data.get("status"), "queued")
 
-    def test_analysis_generation_blocked_in_strict_mode(self):
+    def test_analysis_generation_allowed_in_strict_mode(self):
         # Sending request to /ai/analysis/generate
         payload = {
             "asset_id": "test-asset-1",
             "file_path": "test.png",
-            "model_name": "Qwen2.5-VL"
+            "model_name": "Qwen3-VL"
         }
         response = self.client.post("/ai/analysis/generate", json=payload)
-        self.assertEqual(response.status_code, 501)
-        self.assertIn("Python AnalysisWorker mock path is disabled in production", response.json()["detail"])
+        self.assertEqual(response.status_code, 202)
+        data = response.json()
+        self.assertEqual(data.get("success"), True)
+        self.assertEqual(data.get("status"), "queued")
 
     def test_invalid_payload_tag_enqueue(self):
         # Sending request to /ai/tag/enqueue with missing asset_id and file_path

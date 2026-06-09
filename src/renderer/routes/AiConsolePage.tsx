@@ -171,14 +171,6 @@ const MODEL_ROWS: ModelRow[] = [
     accent: 'bg-pink-50 text-pink-700 border-pink-100 dark:bg-pink-950/30 dark:text-pink-300 dark:border-pink-900/60'
   },
   {
-    id: 'joycaption',
-    name: 'JoyCaption v2',
-    role: '深层提示词反推',
-    capability: '为复杂视觉素材生成提示词和长描述',
-    source: 'Python AI Worker',
-    accent: 'bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-900/60'
-  },
-  {
     id: 'qwen_vl',
     name: 'Qwen3-VL',
     role: '多模态视觉理解',
@@ -2653,49 +2645,67 @@ function BackendsWorkspace(props: {
               </div>
               <StatusPill tone="warn">推荐：{props.llamaPlan.recommendedModel.name}</StatusPill>
             </div>
-            <select
-              value={selectedPlanModel?.id ?? props.llamaPlan.recommendedModel.id}
-              onChange={(event) => props.setSelectedLlamaModelId(event.target.value)}
-              className="control"
-            >
-              {props.llamaPlan.modelCandidates.map((model) => (
-                <option key={model.id} value={model.id}>
-                  {model.name} / {model.quantization} / {model.parameterSize} / {model.estimatedSizeGB} GB
-                </option>
-              ))}
-            </select>
-            {selectedPlanModel && (
-              <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[10.5px] font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-                <div className="truncate font-black text-slate-800 dark:text-slate-200">{selectedPlanModel.name}</div>
-                <div className="mt-1 truncate font-mono text-[10px]">{selectedPlanModel.filename}</div>
-                <div className="mt-1">
-                  {selectedPlanModel.parameterSize} / {selectedPlanModel.quantization} / 约 {selectedPlanModel.estimatedSizeGB} GB / 建议显存 {selectedPlanModel.recommendedMinVramGB} GB / {selectedPlanModel.supportsVision ? '含视觉 mmproj' : '文本模型'}
-                </div>
-              </div>
-            )}
-            <div className="hidden">
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {props.llamaPlan.modelCandidates.map((model) => {
                 const active = (selectedPlanModel?.id ?? props.llamaPlan?.recommendedModel.id) === model.id
                 return (
-                  <button
+                  <div
                     key={model.id}
-                    type="button"
                     onClick={() => props.setSelectedLlamaModelId(model.id)}
-                    className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${
+                    className={`rounded-2xl border p-4 text-left transition-all cursor-pointer flex flex-col justify-between ${
                       active
-                        ? 'border-brand-300 bg-brand-50 text-brand-700 dark:border-brand-800 dark:bg-brand-950/40 dark:text-brand-200'
-                        : 'border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400'
+                        ? 'border-brand-500 bg-brand-50/50 text-brand-900 shadow-premium-sm dark:border-brand-800 dark:bg-brand-950/35 dark:text-brand-100'
+                        : 'border-slate-200 bg-slate-50/30 text-slate-600 hover:border-slate-300 dark:border-slate-800/80 dark:bg-slate-900/40 dark:text-slate-400'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="truncate text-[11.5px] font-black">{model.name}</span>
-                      <span className="shrink-0 rounded-lg bg-white/70 px-2 py-0.5 text-[10px] font-black dark:bg-slate-950/60">{model.quantization}</span>
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[11.5px] font-black tracking-tight">{model.name}</span>
+                        <span className={`shrink-0 rounded-lg px-2 py-0.5 text-[10px] font-black ${
+                          active
+                            ? 'bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300'
+                            : 'bg-slate-200/80 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                        }`}>
+                          {model.quantization}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 truncate font-mono text-[10px] text-slate-400 dark:text-slate-500">{model.filename}</div>
+                      <div className="mt-1 text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                        {model.parameterSize} / 约 {model.estimatedSizeGB} GB / 建议显存 {model.recommendedMinVramGB} GB / {model.supportsVision ? '含视觉 mmproj' : '文本模型'}
+                      </div>
                     </div>
-                    <div className="mt-1 truncate font-mono text-[10px] opacity-75">{model.filename}</div>
-                    <div className="mt-1 text-[10px] font-bold opacity-75">
-                      {model.parameterSize} / 约 {model.estimatedSizeGB} GB / 建议显存 {model.recommendedMinVramGB} GB / {model.supportsVision ? '含视觉 mmproj' : '文本模型'}
-                    </div>
-                  </button>
+
+                    {(model.url || model.mmprojUrl) && (
+                      <div className="mt-3 pt-3 border-t border-dashed border-slate-200 dark:border-slate-800 space-y-1 text-[10px] font-bold">
+                        {model.url && (
+                          <div className="truncate" onClick={(e) => e.stopPropagation()}>
+                            <span className="text-slate-400 dark:text-slate-500">GGUF 链接: </span>
+                            <a
+                              href={model.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-brand-600 hover:underline font-mono text-[9.5px] font-medium"
+                            >
+                              {model.url}
+                            </a>
+                          </div>
+                        )}
+                        {model.mmprojUrl && (
+                          <div className="truncate" onClick={(e) => e.stopPropagation()}>
+                            <span className="text-slate-400 dark:text-slate-500">mmproj 链接: </span>
+                            <a
+                              href={model.mmprojUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-brand-600 hover:underline font-mono text-[9.5px] font-medium"
+                            >
+                              {model.mmprojUrl}
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 )
               })}
             </div>

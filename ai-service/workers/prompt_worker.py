@@ -1,7 +1,7 @@
 import asyncio
 from core.task_queue import TaskQueue
 from core.model_manager import ModelManager
-from models.joycaption import JoyCaption
+from models.qwen_vl import QwenVL
 from utils.image_preprocess import preprocess_image
 from utils.prompt_formatter import format_prompt
 
@@ -11,7 +11,7 @@ class PromptWorker:
         self.model_manager = ModelManager()
 
     async def run_prompt_task(self, task_id: str) -> None:
-        """Asynchronously processes a manual prompt reversal task."""
+        """Asynchronously processes a manual prompt reversal task using Qwen3-VL."""
         task = self.queue.get_task(task_id)
         if not task:
             return
@@ -20,19 +20,16 @@ class PromptWorker:
         print(f"[PromptWorker] Processing manual prompt generation task {task_id}...")
 
         try:
-            # 1. Acquire mutex/lock for manual heavy models and load JoyCaption
+            # 1. Acquire mutex/lock for manual heavy models and load Qwen-VL
             async with self.model_manager.manual_model_lock:
-                await self.model_manager.load_model("joycaption")
+                await self.model_manager.load_model("qwen_vl")
 
                 # Verify image integrity
                 preprocess_image(task["file_path"])
 
-                # Invoke mock JoyCaption
-                joy_caption = JoyCaption()
-                
-                # Simulate heavy inference latency (1.0s)
-                await asyncio.sleep(1.0)
-                res = joy_caption.generate_prompt(task["file_path"])
+                # Invoke Qwen-VL prompt generation
+                qwen_vl = QwenVL()
+                res = qwen_vl.generate_prompt(task["file_path"])
 
                 # Format prompts
                 res["result_prompt"] = format_prompt(res["result_prompt"])
@@ -45,4 +42,4 @@ class PromptWorker:
             print(f"[PromptWorker] Prompt task {task_id} failed: {e}")
             self.queue.update_task_status(task_id, "failed", error_message=str(e))
         finally:
-            self.model_manager.touch_model("joycaption")
+            self.model_manager.touch_model("qwen_vl")

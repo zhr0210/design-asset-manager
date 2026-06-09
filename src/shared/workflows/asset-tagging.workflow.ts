@@ -929,7 +929,7 @@ function projectAssetTagSourceLabel(source: string): string {
   if (source === 'ai_wd_tagger') return 'WD Tagger AI'
   if (source === 'ai_florence') return 'Florence-2 AI'
   if (source === 'ai_joycaption') return 'JoyCaption AI'
-  if (source === 'ai_qwen_vl') return 'Qwen2.5-VL AI'
+  if (source === 'ai_qwen_vl') return 'Qwen3-VL AI'
   if (source === 'filename') return '文件名解析'
   if (source === 'website') return '网页抓取'
   return source

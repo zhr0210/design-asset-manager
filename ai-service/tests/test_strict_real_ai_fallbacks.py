@@ -34,7 +34,8 @@ class TestStrictRealAiFallbacks(unittest.TestCase):
         os.environ.pop("DESIGN_ASSET_MANAGER_STRICT_REAL_AI", None)
         self.assertFalse(is_strict_real_ai())
 
-    def test_ram_mock_blocking_in_strict_mode(self):
+    @patch("core.cooperative_model_registry.find_downloaded_model", return_value=None)
+    def test_ram_mock_blocking_in_strict_mode(self, mock_find):
         os.environ["DESIGN_ASSET_MANAGER_STRICT_REAL_AI"] = "1"
         model = RAMTaggerModel()
         model.is_mock = True
@@ -48,7 +49,8 @@ class TestStrictRealAiFallbacks(unittest.TestCase):
         with self.assertRaises(MockInferenceBlockedError):
             model.load()
 
-    def test_florence2_mock_blocking_in_strict_mode(self):
+    @patch("core.cooperative_model_registry.find_downloaded_model", return_value=None)
+    def test_florence2_mock_blocking_in_strict_mode(self, mock_find):
         os.environ["DESIGN_ASSET_MANAGER_STRICT_REAL_AI"] = "1"
         model = Florence2TaggerModel()
         model.is_mock = True
@@ -61,7 +63,8 @@ class TestStrictRealAiFallbacks(unittest.TestCase):
         with self.assertRaises(MockInferenceBlockedError):
             model.load()
 
-    def test_clip_mock_blocking_in_strict_mode(self):
+    @patch("core.cooperative_model_registry.find_downloaded_model", return_value=None)
+    def test_clip_mock_blocking_in_strict_mode(self, mock_find):
         os.environ["DESIGN_ASSET_MANAGER_STRICT_REAL_AI"] = "1"
         model = CLIPDesignClassifier()
         model.is_mock = True
@@ -74,7 +77,8 @@ class TestStrictRealAiFallbacks(unittest.TestCase):
         with self.assertRaises(MockInferenceBlockedError):
             model.load()
 
-    def test_wd_tagger_mock_blocking_in_strict_mode(self):
+    @patch("core.cooperative_model_registry.find_downloaded_model", return_value=None)
+    def test_wd_tagger_mock_blocking_in_strict_mode(self, mock_find):
         os.environ["DESIGN_ASSET_MANAGER_STRICT_REAL_AI"] = "1"
         model = WDTaggerModel()
         model.is_mock = True

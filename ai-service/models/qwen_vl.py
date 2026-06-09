@@ -1,31 +1,118 @@
 from __future__ import annotations
-import random
 import os
 import json
 import base64
 import urllib.request
 import urllib.error
 from typing import Dict, Any
-from core.mock_policy import guard_mock_inference, is_strict_real_ai, MockInferenceBlockedError
-from models.joycaption import get_openai_backend, extract_json_from_text
+from core.mock_policy import is_strict_real_ai, MockInferenceBlockedError
+
+def get_openai_backend() -> dict:
+    base_url = "http://127.0.0.1:8080/v1"
+    api_key = "local"
+    model = "local-model"
+    enabled = False
+    
+    try:
+        path = os.path.expanduser('~/DesignAssetManager/settings.json')
+        if os.path.exists(path):
+            with open(path, 'r', encoding='utf-8') as f:
+                settings = json.load(f)
+            pr_settings = settings.get("promptReverseSettings", {})
+            backend_id = pr_settings.get("selectedExternalBackendId", "llama-local-openai")
+            
+            backends = settings.get("aiBackends", [])
+            selected_backend = None
+            for b in backends:
+                if b.get("id") == backend_id:
+                    selected_backend = b
+                    break
+            if not selected_backend and backends:
+                selected_backend = backends[0]
+                
+            if selected_backend:
+                base_url = selected_backend.get("baseUrl", base_url)
+                api_key = selected_backend.get("apiKey", api_key)
+                model = selected_backend.get("defaultModel", model)
+                enabled = selected_backend.get("enabled", False)
+    except Exception as e:
+        print(f"[OpenAI Client] Error loading settings.json: {e}")
+        
+    return {
+        "baseUrl": base_url.rstrip("/"),
+        "apiKey": api_key,
+        "defaultModel": model,
+        "enabled": enabled
+    }
+
+def extract_json_from_text(text: str) -> dict | None:
+    trimmed = text.strip()
+    if not trimmed:
+        return None
+    try:
+        return json.loads(trimmed)
+    except Exception:
+        pass
+    
+    # Try markdown json block
+    import re
+    match = re.search(r'```(?:json)?\s*([\s\S]*?)```', trimmed, re.IGNORECASE)
+    if match:
+        try:
+            return json.loads(match.group(1).strip())
+        except Exception:
+            pass
+            
+    # Try finding first { and last }
+    first = trimmed.find('{')
+    last = trimmed.rfind('}')
+    if first >= 0 and last > first:
+        try:
+            return json.loads(trimmed[first:last+1])
+        except Exception:
+            pass
+            
+    return None
 
 class QwenVL:
     def __init__(self):
-        self.model_name = "Qwen2.5-VL"
-        self.version = "2.5.0"
+        self.model_name = "Qwen3-VL"
+        self.version = "3.0.0"
+        self.is_mock = False
+        self.backend = "Qwen3-VL GGUF/Llama"
+        self.is_loaded = False
+
+    def load(self) -> None:
+        self.is_loaded = True
+
+    def unload(self) -> None:
+        self.is_loaded = False
+
+    def analyze(self, image_path: str, reason: str = "") -> Dict[str, Any]:
+        """Unified fallback analysis interface routing to real analyze_design."""
+        res = self.analyze_design(image_path)
+        # Fuse text_tags and design_tags
+        tags = []
+        tags.extend(res.get("text_tags", []))
+        tags.extend(res.get("design_tags", []))
+        return {
+            "tags": tags,
+            "asset_type": res.get("design_type", "unknown"),
+            "caption": res.get("layout_analysis", ""),
+            "reason": reason,
+            "confidence": 0.85
+        }
 
     def analyze_design(self, image_path: str) -> Dict[str, Any]:
-        """Simulates Qwen2.5-VL deep design analysis or runs real local/external OpenAI-compatible backend."""
+        """Runs real local/external OpenAI-compatible Qwen3-VL design analysis."""
         backend = get_openai_backend()
         
         try:
-            # Let's read image and encode to base64
             with open(os.path.expanduser(image_path), "rb") as f:
                 img_data = f.read()
             encoded_image = base64.b64encode(img_data).decode("utf-8")
             image_data_url = f"data:image/png;base64,{encoded_image}"
             
-            # Resolve model ID
             model_name = backend["defaultModel"]
             if not model_name:
                 try:
@@ -108,82 +195,95 @@ class QwenVL:
             else:
                 raise ValueError("Failed to parse visual response into expected JSON format.")
         except Exception as e:
-            # If real inference failed, check if we must block mock inference
-            if is_strict_real_ai() or not backend.get("enabled", False):
-                raise MockInferenceBlockedError(f"Real Qwen-VL inference failed and mock fallback is blocked: {e}")
-                
-            # Otherwise, fall back to mock
-            guard_mock_inference("Qwen-VL deep analysis", "The current QwenVL worker is running in fallback mock mode.")
-            layouts = [
-                {
-                    "ocr_text": "面包烘焙 焦糖坚果 Fresh Bread Caramel & Nuts",
-                    "text_blocks": [
-                        {"text": "面包烘焙", "box": [100, 100, 200, 300]},
-                        {"text": "Fresh Bread", "box": [300, 100, 350, 400]}
-                    ],
-                    "layout_analysis": "居中排版，字体及段落排版均衡，留白充足。",
-                    "design_type": "commercial_poster",
-                    "visual_hierarchy": ["粗体品牌标题 (Bold Brand Title)", "产品实拍图 (Product Photograph)", "营养配料说明 (Nutritional Footnotes)"],
-                    "text_tags": [
-                        {"name": "面包", "confidence": 0.95},
-                        {"name": "坚果", "confidence": 0.90}
-                    ],
-                    "design_tags": [
-                        {"name": "海报/Banner", "confidence": 0.88},
-                        {"name": "居中对齐", "confidence": 0.82}
-                    ],
-                    "evidence": ["High density of textual overlays", "Centered visual symmetry"]
-                },
-                {
-                    "ocr_text": "极简美学 空间感知 Minimalist Space Studio Design",
-                    "text_blocks": [
-                        {"text": "极简美学", "box": [50, 50, 120, 250]},
-                        {"text": "Space Studio", "box": [150, 50, 200, 350]}
-                    ],
-                    "layout_analysis": "非对称排版，大面积艺术留白，高冷质感。",
-                    "design_type": "ui_landing_page",
-                    "visual_hierarchy": ["品牌标识 (Branding Logo)", "抽象几何图形 (Abstract Geometric Element)", "极小字号联系方式 (Small Contact Details)"],
-                    "text_tags": [
-                        {"name": "极简", "confidence": 0.93},
-                        {"name": "空间", "confidence": 0.89}
-                    ],
-                    "design_tags": [
-                        {"name": "UI设计图", "confidence": 0.87},
-                        {"name": "大留白", "confidence": 0.85}
-                    ],
-                    "evidence": ["Asymmetrical layout", "Low density of elements"]
-                },
-                {
-                    "ocr_text": "激情盛夏 运动无界 Power Running Speed Training",
-                    "text_blocks": [
-                        {"text": "激情盛夏", "box": [200, 100, 280, 400]},
-                        {"text": "Power Running", "box": [300, 100, 360, 450]}
-                    ],
-                    "layout_analysis": "斜切对角构图，高饱和度动态排版，极强视觉冲击力。",
-                    "design_type": "sports_banner",
-                    "visual_hierarchy": ["高动态主体角色 (Action Hero Image)", "斜体大字字块 (Slanted Headline Text)", "行动点按钮 (Call To Action Button)"],
-                    "text_tags": [
-                        {"name": "运动", "confidence": 0.96},
-                        {"name": "盛夏", "confidence": 0.91}
-                    ],
-                    "design_tags": [
-                        {"name": "海报", "confidence": 0.89},
-                        {"name": "对角构图", "confidence": 0.84}
-                    ],
-                    "evidence": ["Slanted grids", "High contrast neon palette"]
-                }
-            ]
+            raise MockInferenceBlockedError(f"Real Qwen-VL design analysis failed: {e}")
 
-            selected = random.choice(layouts)
-            return {
-                "ocr_text": selected["ocr_text"],
-                "text_blocks": selected["text_blocks"],
-                "layout_analysis": selected["layout_analysis"],
-                "design_type": selected["design_type"],
-                "visual_hierarchy": selected["visual_hierarchy"],
-                "text_tags": selected["text_tags"],
-                "design_tags": selected["design_tags"],
-                "evidence": selected["evidence"],
-                "model_name": self.model_name,
-                "model_version": self.version
+    def generate_prompt(self, image_path: str) -> Dict[str, Any]:
+        """Generates detailed English prompt, Chinese caption, and style tags using Qwen3-VL unified OpenAI-compatible endpoint."""
+        backend = get_openai_backend()
+        
+        try:
+            with open(os.path.expanduser(image_path), "rb") as f:
+                img_data = f.read()
+            encoded_image = base64.b64encode(img_data).decode("utf-8")
+            image_data_url = f"data:image/png;base64,{encoded_image}"
+            
+            model_name = backend["defaultModel"]
+            if not model_name:
+                try:
+                    req = urllib.request.Request(
+                        f"{backend['baseUrl']}/models",
+                        headers={"Authorization": f"Bearer {backend['apiKey']}"}
+                    )
+                    with urllib.request.urlopen(req, timeout=5) as response:
+                        models_data = json.loads(response.read().decode("utf-8"))
+                        candidates = models_data.get("data", [])
+                        if candidates and isinstance(candidates, list):
+                            model_name = candidates[0].get("id", "local-model")
+                        else:
+                            model_name = "local-model"
+                except Exception:
+                    model_name = "local-model"
+            
+            system_prompt = "You are a professional AI image prompt engineer and senior visual designer."
+            user_prompt = (
+                "Analyze this image and generate a highly detailed prompt suitable for Text-to-Image models describing "
+                "its style, subject, composition, colors, and usage. Respond ONLY with a valid JSON object matching this schema:\n"
+                "{\n"
+                "  \"result_prompt\": \"the detailed English prompt description\",\n"
+                "  \"result_caption\": \"a short Chinese description of the image\",\n"
+                "  \"style_tags\": [\"list\", \"of\", \"5\", \"key\", \"style\", \"tags\"]\n"
+                "}\n"
+                "Remember to return ONLY the JSON block."
+            )
+            
+            payload = {
+                "model": model_name,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": user_prompt},
+                            {"type": "image_url", "image_url": {"url": image_data_url}}
+                        ]
+                    }
+                ],
+                "temperature": 0.6,
+                "max_tokens": 1024
             }
+            
+            url = f"{backend['baseUrl']}/chat/completions"
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {backend['apiKey']}"
+            }
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers=headers,
+                method="POST"
+            )
+            
+            with urllib.request.urlopen(req, timeout=120) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                content = res_data["choices"][0]["message"]["content"]
+                
+            parsed = extract_json_from_text(content)
+            if parsed:
+                return {
+                    "result_prompt": parsed.get("result_prompt", ""),
+                    "result_caption": parsed.get("result_caption", ""),
+                    "style_tags": parsed.get("style_tags", []),
+                    "model_name": self.model_name,
+                    "model_version": self.version
+                }
+            else:
+                return {
+                    "result_prompt": content,
+                    "result_caption": "",
+                    "style_tags": [],
+                    "model_name": self.model_name,
+                    "model_version": self.version
+                }
+        except Exception as e:
+            raise MockInferenceBlockedError(f"Real Qwen-VL prompt generation failed: {e}")

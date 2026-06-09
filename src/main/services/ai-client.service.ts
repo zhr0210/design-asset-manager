@@ -503,7 +503,7 @@ export class AiClientService {
         // Log in ai_prompt_tasks
         db.prepare(`
           INSERT OR REPLACE INTO ai_prompt_tasks (id, asset_id, file_path, status, model_name, created_at, sync_status)
-          VALUES (?, ?, ?, 'queued', 'JoyCaption-v2', ?, 'pending')
+          VALUES (?, ?, ?, 'queued', 'Qwen3-VL', ?, 'pending')
         `).run(data.task_id, assetId, filePath, now)
 
         db.prepare("UPDATE assets SET ai_prompt_status = ? WHERE id = ?").run('queued', assetId)

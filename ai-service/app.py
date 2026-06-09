@@ -108,13 +108,7 @@ async def tag_status():
 
 @app.post("/ai/prompt/generate", status_code=202)
 async def generate_prompt(request: PromptGenerateRequest, background_tasks: BackgroundTasks):
-    """Triggers manual JoyCaption prompt generation in the background."""
-    if is_strict_real_ai():
-        raise HTTPException(
-            status_code=501,
-            detail="Python PromptWorker mock path is disabled in production. Use the Qwen3-VL Llama/OpenAI-compatible prompt route."
-        )
-
+    """Triggers manual Qwen3-VL prompt generation in the background."""
     task_id = f"task-prompt-{uuid.uuid4().hex[:8]}"
     task_queue.enqueue(
         task_id=task_id,
@@ -130,7 +124,7 @@ async def generate_prompt(request: PromptGenerateRequest, background_tasks: Back
 
     return {
         "success": True,
-        "message": "JoyCaption prompt task started asynchronously.",
+        "message": "Qwen3-VL prompt task started asynchronously.",
         "task_id": task_id,
         "status": "queued"
     }
@@ -149,13 +143,7 @@ async def prompt_status(task_id: str):
 
 @app.post("/ai/analysis/generate", status_code=202)
 async def generate_analysis(request: AnalysisGenerateRequest, background_tasks: BackgroundTasks):
-    """Triggers manual Qwen2.5-VL layout design analysis in the background."""
-    if is_strict_real_ai():
-        raise HTTPException(
-            status_code=501,
-            detail="Python AnalysisWorker mock path is disabled in production. Use a real VLM analysis backend."
-        )
-
+    """Triggers manual Qwen3-VL layout design analysis in the background."""
     task_id = f"task-analysis-{uuid.uuid4().hex[:8]}"
     task_queue.enqueue(
         task_id=task_id,
@@ -171,7 +159,7 @@ async def generate_analysis(request: AnalysisGenerateRequest, background_tasks: 
 
     return {
         "success": True,
-        "message": "Qwen2.5-VL deep design sweep task started asynchronously.",
+        "message": "Qwen3-VL deep design sweep task started asynchronously.",
         "task_id": task_id,
         "status": "queued"
     }

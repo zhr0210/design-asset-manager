@@ -115,7 +115,7 @@ class TaskQueue:
                     "file_path": file_path,
                     "status": "queued",
                     "priority": 10,
-                    "model_name": model_name or "JoyCaption-v2",
+                    "model_name": model_name or "Qwen3-VL",
                     "retry_count": 0,
                     "error_message": None,
                     "result": None,

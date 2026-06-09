@@ -16,7 +16,6 @@ MODEL_VRAM_OCCUPANCY = {
     "florence2": 3072,   # 3.0 GB
     "clip": 1228,        # 1.2 GB
     "wd_tagger": 819,    # 0.8 GB
-    "joycaption": 6656,  # 6.5 GB
     "qwen_vl": 7680,     # 7.5 GB
     "translation": 1024, # 1.0 GB
 }
@@ -76,20 +75,15 @@ class ModelManager:
         """
         name = name.lower().strip()
         
-        # Batch taggers keepAlive 60s; JoyCaption / Qwen VL keepAlive 90s; Florence-2, RAM & Translation keepAlive 300s (5 minutes)
+        # Batch taggers keepAlive 60s; Qwen VL keepAlive 90s; Florence-2, RAM & Translation keepAlive 300s (5 minutes)
         if name in ["florence2", "ram", "translation"]:
             keep_alive = 300
         else:
             keep_alive = 60 if name in ["wd_tagger", "clip"] else 90
 
         # Avoid manual models memory clash (unload competitor)
-        if name in ["joycaption", "qwen_vl"]:
-            competitor = "qwen_vl" if name == "joycaption" else "joycaption"
-            if competitor in self.loaded_models:
-                print(f"[ModelManager] Heavy model '{name}' requested while '{competitor}' is loaded. Evicting '{competitor}' from VRAM...")
-                await self.unload_model(competitor)
-            
-            # Also evict lighter taggers to maximize VRAM for heavy model!
+        if name == "qwen_vl":
+            # Evict lighter taggers to maximize VRAM for heavy model!
             for tagger in ["wd_tagger", "florence2"]:
                 if tagger in self.loaded_models:
                     print(f"[ModelManager] Heavy model '{name}' requested. Evicting light tagger '{tagger}' to free VRAM...")
@@ -97,10 +91,9 @@ class ModelManager:
         
         elif name in ["wd_tagger", "florence2", "ram", "clip"]:
             # Lighter taggers cannot run alongside heavy models
-            for heavy in ["joycaption", "qwen_vl"]:
-                if heavy in self.loaded_models:
-                    print(f"[ModelManager] Tagger '{name}' requested. Evicting heavy model '{heavy}' to free VRAM...")
-                    await self.unload_model(heavy)
+            if "qwen_vl" in self.loaded_models:
+                print(f"[ModelManager] Tagger '{name}' requested. Evicting heavy model 'qwen_vl' to free VRAM...")
+                await self.unload_model("qwen_vl")
 
         if name in self.loaded_models:
             # Refresh KeepAlive timer
@@ -176,15 +169,12 @@ class ModelManager:
                 instance.load()
         elif name == "qwen_vl":
             try:
-                from models.qwen_vl_fallback_analyzer import QwenVLFallbackAnalyzer
-                instance = QwenVLFallbackAnalyzer()
+                from models.qwen_vl import QwenVL
+                instance = QwenVL()
                 instance.load()
             except Exception as e:
-                print(f"[ModelManager] Failed loading real QwenVLFallbackAnalyzer: {e}. Falling back to mock session.")
-                from models.qwen_vl_fallback_analyzer import QwenVLFallbackAnalyzer
-                instance = QwenVLFallbackAnalyzer()
-                instance.is_mock = True
-                instance.load()
+                print(f"[ModelManager] Failed loading real QwenVL: {e}.")
+                raise
         else:
             # Simulate mock loading latency for others
             guard_mock_inference(name, "Unknown model names cannot be registered as loaded mock models.")
@@ -212,7 +202,6 @@ class ModelManager:
         # Short model name to task model name mapping
         def map_short_to_task_model(short_name: str) -> list:
             mapping = {
-                "joycaption": ["joycaption", "joycaption-v2"],
                 "qwen_vl": ["qwen_vl", "qwen2.5-vl", "qwen2.5-vl-7b"],
                 "wd_tagger": ["wd_tagger", "wd-tagger-v3"],
                 "florence2": ["florence2", "florence-2-large"]
