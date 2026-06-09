@@ -3,7 +3,7 @@ import os
 import re
 import random
 from typing import List, Dict, Any
-from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
+from core.mock_policy import guard_mock_inference, is_strict_real_ai, MockInferenceBlockedError
 
 class Florence2TaggerModel:
     """
@@ -14,11 +14,36 @@ class Florence2TaggerModel:
     def __init__(self, model_id: str = "microsoft/Florence-2-large", local_path: str | None = None):
         self.model_id = model_id
         self.local_path = local_path
+        self.family_name = "florence2"
+        self.required_packages = ["torch", "transformers", "PIL"]
         self.is_loaded = False
         self.is_mock = False
         self.backend = "mock"
         self.model = None
         self.processor = None
+        self.state = "not_downloaded"
+        self.update_state()
+
+    def update_state(self) -> str:
+        from core.cooperative_model_registry import find_downloaded_model
+        local_path = self.local_path or find_downloaded_model(self.family_name)
+        if not local_path:
+            self.state = "not_downloaded"
+            return self.state
+            
+        from importlib.util import find_spec
+        missing_dep = False
+        for pkg in self.required_packages:
+            if find_spec(pkg) is None:
+                missing_dep = True
+                break
+        if missing_dep:
+            self.state = "dependency_missing"
+            return self.state
+            
+        if not self.is_loaded:
+            self.state = "downloaded"
+        return self.state
 
     def load(self) -> None:
         """
@@ -27,7 +52,11 @@ class Florence2TaggerModel:
         if self.is_loaded:
             return
             
+        self.update_state()
+            
         if self.is_mock:
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError("Mock Florence-2 inference is blocked in strict mode.")
             guard_mock_inference("Florence-2", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
@@ -35,6 +64,11 @@ class Florence2TaggerModel:
 
         print(f"[Florence2TaggerModel] Loading Florence-2 model '{self.model_id}'...")
         try:
+            if self.state == "dependency_missing":
+                raise ImportError("Missing required packages for Florence-2")
+            elif self.state == "not_downloaded":
+                raise FileNotFoundError("Missing weights for Florence-2")
+
             from transformers import AutoProcessor, AutoModelForCausalLM
             import torch
             
@@ -42,11 +76,10 @@ class Florence2TaggerModel:
             print(f"[Florence2TaggerModel] PyTorch device: {device}")
             
             # Use local_path if provided, otherwise HF repo id
-            load_source = self.local_path if self.local_path else self.model_id
-            if self.local_path:
-                print(f"[Florence2TaggerModel] Using local model path: {self.local_path}")
+            from core.cooperative_model_registry import find_downloaded_model
+            local_dir = self.local_path or find_downloaded_model("florence2")
+            load_source = str(local_dir) if local_dir else self.model_id
             
-            # Florence-2 requires trust_remote_code=True
             self.model = AutoModelForCausalLM.from_pretrained(
                 load_source, 
                 trust_remote_code=True,
@@ -58,9 +91,12 @@ class Florence2TaggerModel:
             
             self.backend = f"Florence-2 PyTorch ({device.upper()})"
             self.is_loaded = True
+            self.state = "loaded_real"
             print(f"[Florence2TaggerModel] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
-            if isinstance(e, MockInferenceBlockedError): raise
+            self.state = "load_failed"
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError(f"Failed loading real Florence-2 model, and mock is blocked: {e}")
             print(f"[Florence2TaggerModel] Failed loading real Florence-2 model: {e}. Activating mock fallback.")
             guard_mock_inference("Florence-2", str(e))
             self.is_mock = True
@@ -70,13 +106,6 @@ class Florence2TaggerModel:
     def predict(self, image_path: str, task_prompt: str = "<DETAILED_CAPTION>") -> Dict[str, Any]:
         """
         Runs a Florence-2 causal language model visual grounding task.
-        Prompts: 
-          - '<CAPTION>' (Short description)
-          - '<DETAILED_CAPTION>' (Detailed description)
-          - '<MORE_DETAILED_CAPTION>' (Highly detailed description)
-          - '<OCR>' (Text detection)
-          - '<OCR_WITH_REGION>' (Text with bounding boxes)
-          - '<OD>' (Object Detection)
         """
         if task_prompt in ["<OCR>", "<OCR_WITH_REGION>"]:
             print("[Florence2TaggerModel] WARNING: Florence-2 OCR predictions are deprecated. Use Qwen-VL instead!")
@@ -85,7 +114,9 @@ class Florence2TaggerModel:
             self.load()
 
         # 1. Handle Mock Prediction Fallback
-        if self.is_mock or not self.model or not self.processor:
+        if self.is_mock or not self.model or not self.processor or self.state != "loaded_real":
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError("Mock Florence-2 inference is blocked in strict mode.")
             guard_mock_inference("Florence-2", "No real Florence-2 model and processor are loaded.")
             return self._simulate_mock_prediction(image_path, task_prompt)
 
@@ -103,7 +134,6 @@ class Florence2TaggerModel:
             device = self.model.device
             dtype = self.model.dtype
             
-            # Preprocess image and task prompt
             inputs = self.processor(text=task_prompt, images=image, return_tensors="pt")
             inputs = {k: v.to(device).to(dtype) if k == "pixel_values" else v.to(device) for k, v in inputs.items()}
             
@@ -123,11 +153,8 @@ class Florence2TaggerModel:
                 image_size=(image.width, image.height)
             )
             
-            # Return raw parsed dictionary mapping
-            # e.g., {'<OCR>': 'WAJASS SHAMPOO'}
             raw_result = parsed_answer.get(task_prompt, "")
             
-            # Robust fallback: if parsed_answer mapping is empty, directly use the decoded text
             if not raw_result and task_prompt in ["<OCR>", "<OCR_WITH_REGION>"]:
                 raw_result = generated_text.strip()
             
@@ -138,7 +165,8 @@ class Florence2TaggerModel:
                 "raw_text": generated_text
             }
         except Exception as e:
-            if isinstance(e, MockInferenceBlockedError): raise
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError(f"Florence-2 inference failed, and mock is blocked: {e}")
             print(f"[Florence2TaggerModel] Causal generation failed: {e}. Falling back to mock prediction.")
             guard_mock_inference("Florence-2", str(e))
             return self._simulate_mock_prediction(image_path, task_prompt)
@@ -147,23 +175,20 @@ class Florence2TaggerModel:
         """
         Create a high-fidelity mock OCR and Caption outputs by extracting Chinese/English characters from filename.
         """
+        if is_strict_real_ai():
+            raise MockInferenceBlockedError("Mock Florence-2 inference is blocked in strict mode.")
         guard_mock_inference("Florence-2", "Direct mock prediction was requested.")
         normalized_path = image_path.replace("\\", "/")
         filename = os.path.basename(normalized_path)
         filename_no_ext, _ = os.path.splitext(filename)
         filename_lower = filename.lower()
         
-        # Clean path formatting for visual presentation
         clean_title = filename_no_ext.replace('_', ' ').replace('-', ' ').strip()
         
-        # 1. OCR (Text extraction) task simulation
         if task_prompt in ["<OCR>", "<OCR_WITH_REGION>"]:
-            # Extract all Chinese characters, English words and numbers from filename
-            # e.g., "威傑士染色幕斯WAJASS" -> "威傑士染色幕斯 WAJASS"
             words = re.findall(r'[\u4e00-\u9fff]+|[a-zA-Z0-9]+', clean_title)
             ocr_text = " ".join(words)
             
-            # Avoid empty OCR text
             if not ocr_text or len(ocr_text) < 2:
                 ocr_text = "DESIGN PROMOTIONAL BANNER" if "banner" in filename_lower else "MINIMALIST POSTER ART"
                 
@@ -174,7 +199,6 @@ class Florence2TaggerModel:
                 "raw_text": ocr_text
             }
             
-        # 2. Bounding Box Object Detection simulation
         elif task_prompt == "<OD>":
             objects = []
             if "ring" in filename_lower or "jewelry" in filename_lower:
@@ -194,9 +218,7 @@ class Florence2TaggerModel:
                 "raw_text": str(objects)
             }
             
-        # 3. Caption / Detailed Description simulation
         else:
-            # Create premium designer descriptive sentences
             captions = [
                 f"A professional design layout featuring {clean_title[:30]} elements with clean typography and balanced composition.",
                 f"A minimalist poster artwork showcasing {clean_title[:30]} theme with elegant color harmony and soft lighting.",

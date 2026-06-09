@@ -102,6 +102,17 @@ async function main() {
   assert.equal(plan.runtimePackages[0].verified, true)
   assert.equal(plan.runtimePackages[1].officialUrl.includes('cudart-llama'), true)
 
+  const cdnPlan = createInstallPlan({
+    hardware: profile,
+    release,
+    mirrorManifest,
+    installRoot: 'C:\\Users\\Example\\AppData\\Roaming\\Design Asset Manager\\llama-runtime',
+    downloadSource: 'production-cdn'
+  })
+  assert.equal(cdnPlan.downloadSource, 'production-cdn')
+  assert.ok(cdnPlan.recommendedModel.url.startsWith('https://cdn.design-asset-manager.com'))
+  assert.ok(cdnPlan.recommendedModel.mmprojUrl?.startsWith('https://cdn.design-asset-manager.com'))
+
   const macPlan = createInstallPlan({
     hardware: createHardwareProfile({
       platform: 'darwin',

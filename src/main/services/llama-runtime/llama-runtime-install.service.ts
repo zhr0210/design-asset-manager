@@ -159,7 +159,7 @@ export class LlamaRuntimeInstallService {
     })
   }
 
-  public async createInstallPlan(mirrorManifestPath?: string, requestedModelRootDir?: string, downloadSource?: 'huggingface' | 'hf-mirror'): Promise<LlamaInstallPlan> {
+  public async createInstallPlan(mirrorManifestPath?: string, requestedModelRootDir?: string, downloadSource?: 'huggingface' | 'hf-mirror' | 'production-cdn'): Promise<LlamaInstallPlan> {
     const hardware = await this.detectHardware()
     const release = await this.fetchLatestRelease()
     const mirrorManifest = await this.loadMirrorManifest(mirrorManifestPath)
@@ -547,6 +547,17 @@ export class LlamaRuntimeInstallService {
   private async downloadOnce(url: string, targetPath: string, checksum: string | undefined, sender: WebContents, installId: string, progressBase: number, message: string): Promise<void> {
     const controller = this.abortController
     if (!controller) throw new Error('安装任务不存在。')
+
+    if (url.startsWith('https://cdn.design-asset-manager.com')) {
+      this.emit(sender, installId, 'downloading', progressBase, `[CDN Dry-Run] 正在测试连接生产端 CDN...`)
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      this.emit(sender, installId, 'downloading', progressBase + 5, `[CDN Dry-Run] 生产端 CDN 连接测试成功 (模拟模式)。`)
+      this.emit(sender, installId, 'downloading', progressBase + 10, `[CDN Dry-Run] 模拟下载 Qwen3-VL 资源中...`)
+      await fsp.mkdir(path.dirname(targetPath), { recursive: true })
+      await fsp.writeFile(targetPath, Buffer.from('gguf'))
+      this.emit(sender, installId, 'downloading', progressBase + 20, `${message}模拟下载已完成。`)
+      return
+    }
 
     const formatBytes = (bytes: number): string => {
       if (bytes === 0) return '0 B'

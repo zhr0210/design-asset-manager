@@ -159,10 +159,22 @@ assert.deepEqual(createPlatformAiActionPlan(modelMissingWorkflow), {
   workflow: 'ai_tag_task',
   status: 'evidence_insufficient',
   kind: 'open_model_management',
-  label: '管理模型制品',
+  label: '下载模型',
   enabled: true,
   reasonKind: 'model_artifact',
   targetId: 'ram-plus'
+})
+
+const plannedWorkflow = structuredClone(modelMissingWorkflow)
+plannedWorkflow.status = 'planned_capability'
+assert.deepEqual(createPlatformAiActionPlan(plannedWorkflow), {
+  workflow: 'ai_tag_task',
+  status: 'planned_capability',
+  kind: 'none',
+  label: '尚未实现',
+  enabled: false,
+  reasonKind: undefined,
+  targetId: undefined
 })
 
 const dependencyMissingWorkflow = structuredClone(modelMissingWorkflow)
@@ -172,6 +184,7 @@ dependencyMissingWorkflow.missing = [{
   label: 'ONNX Runtime 缺失'
 }]
 assert.equal(createPlatformAiActionPlan(dependencyMissingWorkflow).kind, 'open_runtime_management')
+assert.equal(createPlatformAiActionPlan(dependencyMissingWorkflow).label, '安装依赖')
 
 const backendMissingWorkflow = structuredClone(modelMissingWorkflow)
 backendMissingWorkflow.missing = [{

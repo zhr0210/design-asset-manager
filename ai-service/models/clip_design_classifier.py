@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 import random
 from typing import List, Dict, Any, Tuple
-from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
+from core.mock_policy import guard_mock_inference, is_strict_real_ai, MockInferenceBlockedError
 
 class CLIPDesignClassifier:
     """
@@ -12,11 +12,36 @@ class CLIPDesignClassifier:
     def __init__(self, model_id: str = "laion/CLIP-ViT-B-32-laion2B-s34B-b79K", local_path: str | None = None):
         self.model_id = model_id
         self.local_path = local_path
+        self.family_name = "clip"
+        self.required_packages = ["torch", "transformers", "PIL"]
         self.is_loaded = False
         self.is_mock = False
         self.backend = "mock"
         self.model = None
         self.processor = None
+        self.state = "not_downloaded"
+        self.update_state()
+
+    def update_state(self) -> str:
+        from core.cooperative_model_registry import find_downloaded_model
+        local_path = self.local_path or find_downloaded_model(self.family_name)
+        if not local_path:
+            self.state = "not_downloaded"
+            return self.state
+            
+        from importlib.util import find_spec
+        missing_dep = False
+        for pkg in self.required_packages:
+            if find_spec(pkg) is None:
+                missing_dep = True
+                break
+        if missing_dep:
+            self.state = "dependency_missing"
+            return self.state
+            
+        if not self.is_loaded:
+            self.state = "downloaded"
+        return self.state
 
     def load(self) -> None:
         """
@@ -26,7 +51,11 @@ class CLIPDesignClassifier:
         if self.is_loaded:
             return
             
+        self.update_state()
+            
         if self.is_mock:
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError("Mock CLIP inference is blocked in strict mode.")
             guard_mock_inference("CLIP/SigLIP", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
@@ -34,7 +63,11 @@ class CLIPDesignClassifier:
 
         print(f"[CLIPDesignClassifier] Loading model '{self.model_id}'...")
         try:
-            # Try importing transformers (optional dependency check)
+            if self.state == "dependency_missing":
+                raise ImportError("Missing required packages for CLIP")
+            elif self.state == "not_downloaded":
+                raise FileNotFoundError("Missing weights for CLIP")
+
             from transformers import CLIPProcessor, CLIPModel
             import torch
             
@@ -42,19 +75,22 @@ class CLIPDesignClassifier:
             print(f"[CLIPDesignClassifier] PyTorch device: {device}")
             
             # Use local_path if provided, otherwise HF repo id
-            load_source = self.local_path if self.local_path else self.model_id
-            if self.local_path:
-                print(f"[CLIPDesignClassifier] Using local model path: {self.local_path}")
+            from core.cooperative_model_registry import find_downloaded_model
+            local_dir = self.local_path or find_downloaded_model("clip")
+            load_source = str(local_dir) if local_dir else self.model_id
             
-            self.model = CLIPModel.from_pretrained(load_source, local_files_only=bool(self.local_path))
+            self.model = CLIPModel.from_pretrained(load_source, local_files_only=bool(local_dir))
             self.processor = CLIPProcessor.from_pretrained(load_source)
             self.model.to(device)
             
             self.backend = f"CLIP PyTorch ({device.upper()})"
             self.is_loaded = True
+            self.state = "loaded_real"
             print(f"[CLIPDesignClassifier] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
-            if isinstance(e, MockInferenceBlockedError): raise
+            self.state = "load_failed"
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError(f"Failed loading real CLIP model, and mock is blocked: {e}")
             print(f"[CLIPDesignClassifier] Failed loading real CLIP model: {e}. Activating mock fallback.")
             guard_mock_inference("CLIP/SigLIP", str(e))
             self.is_mock = True
@@ -73,7 +109,9 @@ class CLIPDesignClassifier:
             return []
 
         # 1. Handle Mock Classifier Fallback
-        if self.is_mock or not self.model or not self.processor:
+        if self.is_mock or not self.model or not self.processor or self.state != "loaded_real":
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError("Mock CLIP inference is blocked in strict mode.")
             guard_mock_inference("CLIP/SigLIP", "No real CLIP/SigLIP model and processor are loaded.")
             return self._simulate_mock_classification(image_path, candidate_tags, top_n)
 
@@ -88,16 +126,12 @@ class CLIPDesignClassifier:
                 
             image = Image.open(image_path).convert("RGB")
             
-            # Map candidate tags to prompt dictionary or direct prompt representations
-            # (We take the first prompt in the design dictionary for each candidate if needed, 
-            # or treat candidate tags directly as prompt text)
             from utils.design_tag_dictionary import DESIGN_TAG_DICTIONARY
             
             prompt_list = []
-            tag_mapping = [] # Index -> Tag Display Name
+            tag_mapping = []
             
             for tag in candidate_tags:
-                # Find matching prompts in any dictionary section
                 prompts = None
                 for section in DESIGN_TAG_DICTIONARY.values():
                     if tag in section:
@@ -105,12 +139,10 @@ class CLIPDesignClassifier:
                         break
                 
                 if prompts:
-                    # Append all prompts mapping to the same tag to increase voting accuracy
                     for p in prompts:
                         prompt_list.append(p)
                         tag_mapping.append(tag)
                 else:
-                    # Fallback direct prompt
                     prompt_list.append(f"a design material of {tag.lower()}")
                     tag_mapping.append(tag)
 
@@ -121,23 +153,21 @@ class CLIPDesignClassifier:
             with torch.no_grad():
                 outputs = self.model(**inputs)
                 
-            # Logits per image is the similarity scores
-            logits_per_image = outputs.logits_per_image # Shape (1, Num_Prompts)
+            logits_per_image = outputs.logits_per_image
             probs = logits_per_image.softmax(dim=-1).cpu().numpy()[0]
             
-            # Aggregate probabilities if multiple prompts mapped to the same tag
             tag_probs = {}
             for prob, tag_name in zip(probs, tag_mapping):
                 if tag_name not in tag_probs:
                     tag_probs[tag_name] = 0.0
                 tag_probs[tag_name] = max(tag_probs[tag_name], float(prob))
                 
-            # Sort tag probabilities
             sorted_tags = sorted(tag_probs.items(), key=lambda x: x[1], reverse=True)
             return sorted_tags[:top_n]
             
         except Exception as e:
-            if isinstance(e, MockInferenceBlockedError): raise
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError(f"CLIP classification failed, and mock is blocked: {e}")
             print(f"[CLIPDesignClassifier] Inference error: {e}. Falling back to mock calculation.")
             guard_mock_inference("CLIP/SigLIP", str(e))
             return self._simulate_mock_classification(image_path, candidate_tags, top_n)
@@ -146,11 +176,12 @@ class CLIPDesignClassifier:
         """
         Simulate a highly relevant zero-shot similarity matching using filename semantic heuristics.
         """
+        if is_strict_real_ai():
+            raise MockInferenceBlockedError("Mock CLIP inference is blocked in strict mode.")
         guard_mock_inference("CLIP/SigLIP", "Direct mock classification was requested.")
         filename_lower = os.path.basename(image_path).lower()
         results = []
         
-        # Soft matching rules to ensure mock output is highly contextual to the actual image filename
         semantic_rules = {
             "极简": ["minimal", "clean", "simple", "极简"],
             "渐变背景": ["gradient", "渐变"],
@@ -169,18 +200,16 @@ class CLIPDesignClassifier:
         }
 
         for tag in candidate_tags:
-            score = 0.05 + random.random() * 0.08 # Baseline probability
+            score = 0.05 + random.random() * 0.08
             
-            # Check if this tag has semantic soft-matching rules
             matched = False
             for rule_tag, keywords in semantic_rules.items():
                 if rule_tag == tag or tag in rule_tag:
                     if any(kw in filename_lower for kw in keywords):
-                        score = 0.78 + random.random() * 0.15 # Strong similarity match
+                        score = 0.78 + random.random() * 0.15
                         matched = True
                         break
             
-            # Slight boost based on character matching overlap
             if not matched:
                 overlap = sum(1 for char in tag if char in filename_lower)
                 if overlap > 0:

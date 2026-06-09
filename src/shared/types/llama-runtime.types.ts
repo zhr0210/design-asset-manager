@@ -74,7 +74,7 @@ export interface LlamaInstallPlan {
   modelDir: string;
   baseUrl: string;
   warnings: string[];
-  downloadSource?: 'huggingface' | 'hf-mirror';
+  downloadSource?: 'huggingface' | 'hf-mirror' | 'production-cdn';
 }
 
 export interface LlamaInstallProgressEvent {

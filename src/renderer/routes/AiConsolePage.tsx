@@ -50,7 +50,7 @@ import type {
   LlamaServerTestResult
 } from '../../shared/types/llama-runtime.types'
 import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
-import type { PlatformAiBranchStatusResponse } from '../../shared/types/platform-ai-branch-status.types'
+import type { PlatformAiBranchStatusResponse, PlatformAiWorkflow } from '../../shared/types/platform-ai-branch-status.types'
 import type { PlatformAiActionPlanKind } from '../../shared/types/platform-ai-action-plan.types'
 import type {
   CooperativeWorkerModelStatus,
@@ -657,6 +657,7 @@ export default function AiConsolePage() {
   const [llamaRunning, setLlamaRunning] = useState(false)
   const [selectedLlamaModelId, setSelectedLlamaModelId] = useState<string>('')
   const [llamaInstallLogs, setLlamaInstallLogs] = useState<string[]>([])
+  const [downloadSource, setDownloadSource] = useState<'huggingface' | 'hf-mirror' | 'production-cdn'>('hf-mirror')
   const [logs, setLogs] = useState<string[]>([])
   const [cooperativeModels, setCooperativeModels] = useState<CooperativeModelDownloadState>({})
   const [cooperativeCleanups, setCooperativeCleanups] = useState<(() => void)[]>([])
@@ -959,6 +960,31 @@ export default function AiConsolePage() {
     }
   }
 
+  const [installingOcr, setInstallingOcr] = useState(false)
+
+  const handleInstallEasyOcr = async () => {
+    const api = (window as any).electronAPI
+    if (!api?.ocrInstallEasyOcr) {
+      showToast('OCR 安装接口不可用')
+      return
+    }
+    setInstallingOcr(true)
+    showToast('正在安装 EasyOCR 及其依赖...')
+    pushLog('OCR EasyOCR installation started')
+    try {
+      await api.ocrInstallEasyOcr()
+      showToast('EasyOCR 安装完成')
+      pushLog('OCR EasyOCR installation completed')
+      await fetchConsoleStatus('manual')
+    } catch (err: any) {
+      const message = err instanceof Error ? err.message : String(err)
+      showToast('EasyOCR 安装失败: ' + message)
+      pushLog(`OCR EasyOCR installation failed: ${message}`)
+    } finally {
+      setInstallingOcr(false)
+    }
+  }
+
   const handleClearGpuMemory = async () => {
     const api = (window as any).electronAPI
     if (!api?.aiWorkerClearGpuMemory) {
@@ -1227,7 +1253,10 @@ export default function AiConsolePage() {
 
     setBusy('llama-plan', true)
     try {
-      const plan = await api.llamaRuntimeCreateInstallPlan({ modelRootDir: settings.modelRootDir })
+      const plan = await api.llamaRuntimeCreateInstallPlan({
+        modelRootDir: settings.modelRootDir,
+        downloadSource
+      })
       setLlamaPlan(plan)
       setSelectedLlamaModelId(plan.recommendedModel.id)
       setLlamaInstallLogs([
@@ -1530,6 +1559,8 @@ export default function AiConsolePage() {
               platformBranchStatus={platformBranchStatus}
               onInstallMacOSDeps={handleInstallMacOSDeps}
               installingMacOSDeps={installingMacOSDeps}
+              onStartLlamaInstall={startLlamaInstall}
+              onInstallEasyOcr={handleInstallEasyOcr}
               pythonMpsStatus={pythonMpsStatus}
               clipSiglipOnnxStatus={clipSiglipOnnxStatus}
               ollamaFallback={ollamaFallback}
@@ -1605,6 +1636,8 @@ export default function AiConsolePage() {
               startLlamaServer={startLlamaServer}
               stopLlamaServer={stopLlamaServer}
               testLlamaServer={testLlamaServer}
+              downloadSource={downloadSource}
+              setDownloadSource={setDownloadSource}
             />
           )}
 
@@ -1756,6 +1789,8 @@ function OverviewWorkspace(props: {
   platformBranchStatus: PlatformAiBranchStatusResponse | null
   onInstallMacOSDeps?: () => Promise<void>
   installingMacOSDeps?: boolean
+  onStartLlamaInstall?: () => Promise<void>
+  onInstallEasyOcr?: () => Promise<void>
   pythonMpsStatus: AiRuntimePythonMpsStatusResponse | null
   clipSiglipOnnxStatus: AiRuntimeClipSiglipOnnxStatusResponse | null
   ollamaFallback: FallbackSummary
@@ -1826,10 +1861,28 @@ function OverviewWorkspace(props: {
 
         <PlatformAiBranchStatusPanel
           status={props.platformBranchStatus}
-          onAction={(kind) => {
+          onAction={(kind, workflow) => {
             if (kind === 'refresh_evidence') {
               props.onRefreshEvidence()
               return
+            }
+            if (workflow === 'ai_prompt_task' && (kind === 'open_model_management' || kind === 'open_runtime_management')) {
+              if (props.onStartLlamaInstall) {
+                props.onStartLlamaInstall()
+                return
+              }
+            }
+            if (workflow === 'ocr_text_box' && kind === 'open_runtime_management') {
+              if (props.onInstallEasyOcr) {
+                props.onInstallEasyOcr()
+                return
+              }
+            }
+            if (workflow === 'ai_tag_task' && kind === 'open_runtime_management') {
+              if (props.onInstallMacOSDeps) {
+                props.onInstallMacOSDeps()
+                return
+              }
             }
             if (kind === 'open_model_management') {
               props.setActiveTab('models')
@@ -1929,7 +1982,7 @@ function PlatformAiBranchStatusPanel({
   onAction
 }: {
   status: PlatformAiBranchStatusResponse | null
-  onAction: (kind: PlatformAiActionPlanKind) => void
+  onAction: (kind: PlatformAiActionPlanKind, workflow: PlatformAiWorkflow) => void
 }) {
   const display = projectPlatformAiBranchStatusDisplay(status)
 
@@ -1978,11 +2031,15 @@ function PlatformAiBranchStatusPanel({
                   <div>{display.evidencePrefix}：{workflow.evidenceLabel}</div>
                   <div className="mt-1">{display.missingPrefix}：{workflow.missingLabel}</div>
                   {workflow.nextActionLabel && <div className="mt-1">{display.nextActionPrefix}：{workflow.nextActionLabel}</div>}
-                  {workflow.actionPlan.enabled && (
+                  {(workflow.actionPlan.kind !== 'none' || workflow.status === 'planned_capability') && (
                     <button
                       type="button"
-                      onClick={() => onAction(workflow.actionPlan.kind)}
-                      className="mt-3 inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-black text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                      disabled={!workflow.actionPlan.enabled}
+                      onClick={() => {
+                        onAction(workflow.actionPlan.kind, workflow.workflow)
+                        // onAction(workflow.actionPlan.kind)
+                      }}
+                      className="mt-3 inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-black text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {workflow.actionPlan.kind === 'refresh_evidence'
                         ? <RefreshCw className="h-3.5 w-3.5" />
@@ -2445,6 +2502,8 @@ function BackendsWorkspace(props: {
   startLlamaServer: () => void
   stopLlamaServer: () => void
   testLlamaServer: () => void
+  downloadSource: 'huggingface' | 'hf-mirror' | 'production-cdn'
+  setDownloadSource: React.Dispatch<React.SetStateAction<'huggingface' | 'hf-mirror' | 'production-cdn'>>
 }) {
   const installedGguf = props.localGgufModels.filter((model) => model.isDownloaded)
   const selectedPlanModel = props.llamaPlan?.modelCandidates.find((model) => model.id === props.selectedLlamaModelId) ?? props.llamaPlan?.recommendedModel ?? null
@@ -2528,6 +2587,26 @@ function BackendsWorkspace(props: {
           <StatusPill tone={llamaDisplay.pillTone}>
             {llamaDisplay.pillLabel}
           </StatusPill>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <Field label="下载源选择 (Download Source)">
+            <select
+              value={props.downloadSource}
+              onChange={(e) => props.setDownloadSource(e.target.value as any)}
+              className="control"
+            >
+              <option value="hf-mirror">HF 国内镜像源 (默认 · hf-mirror.com)</option>
+              <option value="huggingface">Hugging Face 官方源 (huggingface.co)</option>
+              <option value="production-cdn">高精度大模型生产端 CDN 接入 (免真实下载测试)</option>
+            </select>
+          </Field>
+          <Field label="下载策略说明 (Download Info)">
+            <div className="h-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[10.5px] font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+              {props.downloadSource === 'production-cdn'
+                ? '已开启生产端 CDN 接入测试。在此模式下，下载仅执行连接性校验并模拟秒级完成，不会占用实际网络带宽。'
+                : '常规下载源，开始安装后将真实下载大模型资源 (约 2GB - 9GB)。'}
+            </div>
+          </Field>
         </div>
         <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
           <MiniButton onClick={props.detectLlamaHardware} disabled={props.loading['llama-detect']}>

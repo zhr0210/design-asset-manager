@@ -243,7 +243,7 @@ export function createInstallPlan(input: {
   release?: LlamaReleaseInfo
   mirrorManifest?: LlamaMirrorManifest
   installRoot: string
-  downloadSource?: 'huggingface' | 'hf-mirror'
+  downloadSource?: 'huggingface' | 'hf-mirror' | 'production-cdn'
 }): LlamaInstallPlan {
   const release = input.release?.assets?.length ? input.release : DEFAULT_LLAMA_RELEASE
   const accelerator = input.hardware.recommendedAccelerator
@@ -259,7 +259,11 @@ export function createInstallPlan(input: {
   }
 
   const downloadSource = input.downloadSource ?? 'hf-mirror'
-  const sourceHost = downloadSource === 'hf-mirror' ? 'https://hf-mirror.com' : 'https://huggingface.co'
+  const sourceHost = downloadSource === 'production-cdn'
+    ? 'https://cdn.design-asset-manager.com'
+    : downloadSource === 'hf-mirror'
+      ? 'https://hf-mirror.com'
+      : 'https://huggingface.co'
 
   const candidates = QWEN3_VL_GGUF_CANDIDATES.map((m) => {
     return {

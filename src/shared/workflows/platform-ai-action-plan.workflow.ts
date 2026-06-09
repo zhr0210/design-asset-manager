@@ -2,6 +2,10 @@ import type { PlatformAiActionPlan } from '../types/platform-ai-action-plan.type
 import type { PlatformAiWorkflowStatus } from '../types/platform-ai-branch-status.types'
 
 export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): PlatformAiActionPlan {
+  if (workflow.status === 'planned_capability') {
+    return createPlan(workflow, 'none', '尚未实现', false)
+  }
+
   if (workflow.status === 'real_model_path') {
     return createPlan(workflow, 'none', '真实模型路径已就绪', false)
   }
@@ -16,7 +20,7 @@ export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): 
   }
 
   if (missing.kind === 'model_artifact') {
-    return createPlan(workflow, 'open_model_management', '管理模型制品', true, missing.kind, missing.id)
+    return createPlan(workflow, 'open_model_management', '下载模型', true, missing.kind, missing.id)
   }
 
   if (missing.kind === 'backend_configuration') {
@@ -24,7 +28,7 @@ export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): 
   }
 
   if (missing.kind === 'runtime_dependency' || missing.kind === 'runtime_service') {
-    return createPlan(workflow, 'open_runtime_management', '检查运行时与依赖', true, missing.kind, missing.id)
+    return createPlan(workflow, 'open_runtime_management', '安装依赖', true, missing.kind, missing.id)
   }
 
   return createPlan(workflow, 'refresh_evidence', '重新收集状态证据', true, missing.kind, missing.id)
