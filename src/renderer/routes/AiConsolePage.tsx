@@ -634,7 +634,7 @@ export default function AiConsolePage() {
   const [modelsList, setModelsList] = useState<any[]>([])
   const [localGgufModels, setLocalGgufModels] = useState<LocalGgufModel[]>([])
   const [gpuSamples, setGpuSamples] = useState<GpuSample[]>([])
-  const [macOSWorkerProbe, setMacOSWorkerProbe] = useState<MacOSAiWorkerProbeResult | null>(null)
+  const [platformWorkerProbe, setPlatformWorkerProbe] = useState<MacOSAiWorkerProbeResult | null>(null)
   const [platformBranchStatus, setPlatformBranchStatus] = useState<PlatformAiBranchStatusResponse | null>(null)
   const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
@@ -807,9 +807,9 @@ export default function AiConsolePage() {
         }
       }
       if (macOSProbe?.success && macOSProbe.data?.capabilities) {
-        setMacOSWorkerProbe(macOSProbe.data.capabilities)
+        setPlatformWorkerProbe(macOSProbe.data.capabilities)
       } else {
-        setMacOSWorkerProbe(null)
+        setPlatformWorkerProbe(null)
       }
       const projectedBranchStatus = selectPlatformAiBranchStatus(
         [macOSBranchStatus, windowsBranchStatus]
@@ -1548,7 +1548,7 @@ export default function AiConsolePage() {
               isWorkerOffline={isWorkerOffline}
               llamaStatus={llamaStatus}
               llamaRunning={llamaRunning}
-              macOSWorkerProbe={macOSWorkerProbe}
+              platformWorkerProbe={platformWorkerProbe}
               platformBranchStatus={platformBranchStatus}
               onInstallMacOSDeps={handleInstallMacOSDeps}
               installingMacOSDeps={installingMacOSDeps}
@@ -1778,7 +1778,7 @@ function OverviewWorkspace(props: {
   isWorkerOffline: boolean
   llamaStatus: LlamaInstallStatus | null
   llamaRunning?: boolean
-  macOSWorkerProbe: MacOSAiWorkerProbeResult | null
+  platformWorkerProbe: MacOSAiWorkerProbeResult | null
   platformBranchStatus: PlatformAiBranchStatusResponse | null
   onInstallMacOSDeps?: () => Promise<void>
   installingMacOSDeps?: boolean
@@ -1801,7 +1801,7 @@ function OverviewWorkspace(props: {
   const llamaDisplay = projectLlamaRuntimeDisplay(props.llamaStatus, props.llamaRunning)
   const pythonMpsDisplay = projectPythonMpsCompatibilityDisplay(props.pythonMpsStatus)
   const clipSiglipOnnxDisplay = projectClipSiglipOnnxCompatibilityDisplay(props.clipSiglipOnnxStatus)
-  const macOSProbeDisplay = projectMacOSAiWorkerProbeDisplay(props.macOSWorkerProbe)
+  const platformProbeDisplay = projectMacOSAiWorkerProbeDisplay(props.platformWorkerProbe)
   const routeOverviewDisplay = projectPlatformAiRouteOverviewDisplay(props.platformBranchStatus)
   const ggufArtifactDisplay = projectGgufArtifactTileDisplay(smokeGguf)
   const modelReadinessDisplay = projectAiConsoleModelReadinessDisplay({
@@ -1892,7 +1892,7 @@ function OverviewWorkspace(props: {
             </div>
             {routeOverviewDisplay.showMacOSDiagnostics && (
               <div className="flex items-center gap-2">
-                <StatusPill tone={macOSProbeDisplay.connectionTone}>{macOSProbeDisplay.connectionLabel}</StatusPill>
+                <StatusPill tone={platformProbeDisplay.connectionTone}>{platformProbeDisplay.connectionLabel}</StatusPill>
                 <MiniButton tone="primary" onClick={props.onInstallMacOSDeps} disabled={props.installingMacOSDeps}>
                   {props.installingMacOSDeps ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
                   {props.installingMacOSDeps ? routeOverviewDisplay.installingDependenciesLabel : routeOverviewDisplay.installDependenciesLabel}
@@ -1904,10 +1904,10 @@ function OverviewWorkspace(props: {
           <div className="grid gap-3 md:grid-cols-2">
             {routeOverviewDisplay.showMacOSDiagnostics ? (
               <>
-                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={macOSProbeDisplay.mps.valueLabel} caption={macOSProbeDisplay.mps.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={platformProbeDisplay.mps.valueLabel} caption={platformProbeDisplay.mps.captionLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.pythonCompatibilityLabel} value={pythonMpsDisplay.label} caption={pythonMpsDisplay.runtimeLabel} />
-                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.onnxRuntimeLabel} value={macOSProbeDisplay.onnxRuntime.valueLabel} caption={macOSProbeDisplay.onnxRuntime.captionLabel} />
-                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipOnnxLabel} value={macOSProbeDisplay.clipSiglipOnnx.valueLabel} caption={macOSProbeDisplay.clipSiglipOnnx.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.onnxRuntimeLabel} value={platformProbeDisplay.onnxRuntime.valueLabel} caption={platformProbeDisplay.onnxRuntime.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipOnnxLabel} value={platformProbeDisplay.clipSiglipOnnx.valueLabel} caption={platformProbeDisplay.clipSiglipOnnx.captionLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipCompatibilityLabel} value={clipSiglipOnnxDisplay.label} caption={clipSiglipOnnxDisplay.runtimeLabel} />
               </>
             ) : routeOverviewDisplay.runtimeLanes.map((lane) => (
@@ -1930,7 +1930,7 @@ function OverviewWorkspace(props: {
           </div>
 
           {routeOverviewDisplay.showMacOSDiagnostics && (
-            <MacOSAiCapabilityMatrix probe={props.macOSWorkerProbe} />
+            <MacOSAiCapabilityMatrix probe={props.platformWorkerProbe} />
           )}
         </div>
       </div>
