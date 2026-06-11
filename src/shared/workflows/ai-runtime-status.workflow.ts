@@ -80,7 +80,7 @@ export interface PlatformAiProbeTileDisplay {
   captionLabel: string
 }
 
-export interface MacOSAiWorkerProbeDisplay {
+export interface PlatformAiWorkerProbeHeaderDisplay {
   connected: boolean
   connectionLabel: string
   connectionTone: AiRuntimeDisplayTone
@@ -89,6 +89,9 @@ export interface MacOSAiWorkerProbeDisplay {
   isMacOSLabel: string
   isAppleSiliconLabel: string
   clipSiglipStatusLabel: string
+}
+
+export interface MacOSAiWorkerProbeDisplay extends PlatformAiWorkerProbeHeaderDisplay {
   mps: PlatformAiProbeTileDisplay
   onnxRuntime: PlatformAiProbeTileDisplay
   clipSiglipOnnx: PlatformAiProbeTileDisplay
@@ -423,11 +426,12 @@ export function projectAiRuntimeHealthResultDisplay(
   }
 }
 
-export function projectMacOSAiWorkerProbeDisplay(
-  probe?: MacOSAiWorkerProbeResult | null
-): MacOSAiWorkerProbeDisplay {
+function projectPlatformAiWorkerProbeHeaderDisplay(
+  probe: Pick<MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult, 'platform' | 'machine' | 'isMacOS' | 'isAppleSilicon' | 'clipSiglipOnnx'> | null,
+  connected: boolean,
+  connectedLabel: string
+): PlatformAiWorkerProbeHeaderDisplay {
   if (!probe) {
-    const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
     return {
       connected: false,
       connectionLabel: '等待探测',
@@ -436,7 +440,32 @@ export function projectMacOSAiWorkerProbeDisplay(
       platformBadgeClass: 'border-slate-200 bg-white text-slate-500',
       isMacOSLabel: 'unknown',
       isAppleSiliconLabel: 'unknown',
-      clipSiglipStatusLabel: '证据不足',
+      clipSiglipStatusLabel: '证据不足'
+    }
+  }
+
+  const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
+  return {
+    connected,
+    connectionLabel: connected ? connectedLabel : '等待探测',
+    connectionTone: connected ? 'good' : 'muted',
+    platformBadgeLabel: `${probe.platform}/${probe.machine}`,
+    platformBadgeClass: connected
+      ? 'border-indigo-100 bg-white text-indigo-700'
+      : 'border-slate-200 bg-white text-slate-500',
+    isMacOSLabel: probe.isMacOS ? 'yes' : 'no',
+    isAppleSiliconLabel: probe.isAppleSilicon ? 'yes' : 'no',
+    clipSiglipStatusLabel: clipSiglipStatus.label
+  }
+}
+
+export function projectMacOSAiWorkerProbeDisplay(
+  probe?: MacOSAiWorkerProbeResult | null
+): MacOSAiWorkerProbeDisplay {
+  if (!probe) {
+    const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
+    return {
+      ...projectPlatformAiWorkerProbeHeaderDisplay(null, false, 'macOS 探测已连接'),
       mps: unchecked,
       onnxRuntime: unchecked,
       clipSiglipOnnx: unchecked
@@ -446,16 +475,7 @@ export function projectMacOSAiWorkerProbeDisplay(
   const connected = probe.isMacOS
   const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
   return {
-    connected,
-    connectionLabel: connected ? 'macOS 探测已连接' : '等待探测',
-    connectionTone: connected ? 'good' : 'muted',
-    platformBadgeLabel: `${probe.platform}/${probe.machine}`,
-    platformBadgeClass: connected
-      ? 'border-indigo-100 bg-white text-indigo-700'
-      : 'border-slate-200 bg-white text-slate-500',
-    isMacOSLabel: probe.isMacOS ? 'yes' : 'no',
-    isAppleSiliconLabel: probe.isAppleSilicon ? 'yes' : 'no',
-    clipSiglipStatusLabel: clipSiglipStatus.label,
+    ...projectPlatformAiWorkerProbeHeaderDisplay(probe, connected, 'macOS 探测已连接'),
     mps: {
       valueLabel: probe.torch.mpsAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
       captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
@@ -656,15 +676,7 @@ export function projectPythonCudaExecutionProbeDisplay(
   return modelLoadProbeDisplay('执行失败', 'bad', `CUDA 张量执行失败：${probe.errorCode ?? probe.status}`)
 }
 
-export interface WindowsAiWorkerProbeDisplay {
-  connected: boolean
-  connectionLabel: string
-  connectionTone: AiRuntimeDisplayTone
-  platformBadgeLabel: string
-  platformBadgeClass: string
-  isMacOSLabel: string
-  isAppleSiliconLabel: string
-  clipSiglipStatusLabel: string
+export interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeHeaderDisplay {
   cuda: PlatformAiProbeTileDisplay
   onnxRuntime: PlatformAiProbeTileDisplay
   clipSiglipOnnx: PlatformAiProbeTileDisplay
@@ -676,14 +688,7 @@ export function projectWindowsAiWorkerProbeDisplay(
   if (!probe) {
     const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
     return {
-      connected: false,
-      connectionLabel: '等待探测',
-      connectionTone: 'muted',
-      platformBadgeLabel: '等待探测',
-      platformBadgeClass: 'border-slate-200 bg-white text-slate-500',
-      isMacOSLabel: 'unknown',
-      isAppleSiliconLabel: 'unknown',
-      clipSiglipStatusLabel: '证据不足',
+      ...projectPlatformAiWorkerProbeHeaderDisplay(null, false, 'Windows 探测已连接'),
       cuda: unchecked,
       onnxRuntime: unchecked,
       clipSiglipOnnx: unchecked
@@ -693,16 +698,7 @@ export function projectWindowsAiWorkerProbeDisplay(
   const connected = probe.platform === 'win32' || probe.platform === 'windows'
   const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
   return {
-    connected,
-    connectionLabel: connected ? 'Windows 探测已连接' : '等待探测',
-    connectionTone: connected ? 'good' : 'muted',
-    platformBadgeLabel: `${probe.platform}/${probe.machine}`,
-    platformBadgeClass: connected
-      ? 'border-indigo-100 bg-white text-indigo-700'
-      : 'border-slate-200 bg-white text-slate-500',
-    isMacOSLabel: probe.isMacOS ? 'yes' : 'no',
-    isAppleSiliconLabel: probe.isAppleSilicon ? 'yes' : 'no',
-    clipSiglipStatusLabel: clipSiglipStatus.label,
+    ...projectPlatformAiWorkerProbeHeaderDisplay(probe, connected, 'Windows 探测已连接'),
     cuda: {
       valueLabel: probe.torch.cudaAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
       captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
