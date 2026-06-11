@@ -21,6 +21,7 @@ React UI for library browsing, downloading, settings, tags, AI console, and asse
 - Renderer AI route overview should use shared branch-aware display projection; macOS dependency actions and MPS diagnostics must not render for Windows or an unknown branch.
 - Renderer cooperative model rows should consume the shared Worker readiness snapshot and combined row projection instead of redeclaring Worker payload fields or composing artifact state locally.
 - Renderer AI runtime panels should consume shared status display projection for macOS capability matrix labels and badge classes instead of defining local status maps.
+- Renderer shared AI capability matrices should use platform-neutral component names; platform-specific route details belong in shared projection or probe evidence.
 - Renderer AI runtime cards should consume shared runtime/health badge, icon-semantic, health-result, and summary projections instead of filtering or labeling runtime states locally.
 - Renderer macOS probe summaries should consume shared connection and route-tile projection so missing probe evidence renders as `尚未探测` instead of a capability conclusion.
 - Renderer download pages and shell indicators should consume shared Download Status projections instead of formatting row metadata or status copy locally.
@@ -38,6 +39,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.5.0 | 2026-06-11 | Renamed the shared AI capability matrix component to `PlatformAiCapabilityMatrix` for Windows/macOS reuse. |
 | v1.4.9 | 2026-06-06 | Added a manual CLIP/SigLIP real Embedding action and shared evidence display in AI Runtime management. |
 | v1.4.8 | 2026-06-05 | Renamed the real asset-tagging action and left submission normalization in Electron main. |
 | v1.4.7 | 2026-06-05 | Unified cooperative Worker readiness input and model-row composition through shared contracts. |
@@ -45,7 +47,7 @@ npm run build
 | v1.4.5 | 2026-06-05 | Routed macOS/Windows Platform AI Branch Status response selection through shared workflow logic. |
 | v1.4.4 | 2026-06-05 | Routed macOS Worker probe connection and route tiles through shared evidence-aware projection. |
 | v1.4.3 | 2026-06-05 | Routed AI Runtime card status, health results, icon semantics, and summary counts through shared workflow projection. |
-| v1.4.2 | 2026-06-05 | Routed MacOSAiCapabilityMatrix status labels and badge classes through shared workflow projection. |
+| v1.4.2 | 2026-06-05 | Routed PlatformAiCapabilityMatrix status labels and badge classes through shared workflow projection. |
 | v1.4.1 | 2026-06-04 | Added renderer rule for shared Download Status row metadata and status projection. |
 | v1.4.0 | 2026-06-04 | Moved Color Palette image/theme display fields behind the shared Visual Analysis Snapshot. |
 | v1.3.9 | 2026-06-04 | Added renderer rule for consuming Visual Analysis OCR/text-box/readability summary from the shared snapshot. |

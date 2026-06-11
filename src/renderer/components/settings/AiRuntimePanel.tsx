@@ -8,7 +8,7 @@ import type {
   MacOSAiWorkerProbeResult
 } from '../../../shared/types/macos-ai-runtime.types'
 import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
-import { MacOSAiCapabilityMatrix } from './MacOSAiCapabilityMatrix'
+import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
 import type {
   AiRuntimeActiveRuntimeResponse,
   AiRuntimeClipSiglipOnnxStatusResponse,
@@ -588,7 +588,7 @@ function PlatformAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadat
       </div>
 
       <div className="mt-4 grid gap-3 xl:grid-cols-3">
-        {branch.lanes.map((lane) => <MacOSAiLaneCard key={lane.id} lane={lane} />)}
+        {branch.lanes.map((lane) => <PlatformAiLaneCard key={lane.id} lane={lane} />)}
       </div>
 
       {branch.warnings.length > 0 && (
@@ -639,11 +639,11 @@ function PlatformAiWorkerProbePanel({
 
       {probe && (
         <div className="mt-4 grid gap-3 xl:grid-cols-3">
-          {probe.lanes.map((lane) => <MacOSAiLaneCard key={lane.id} lane={lane} />)}
+          {probe.lanes.map((lane) => <PlatformAiLaneCard key={lane.id} lane={lane} />)}
         </div>
       )}
 
-      <MacOSAiCapabilityMatrix probe={probe} isWindows={isWindows} />
+      <PlatformAiCapabilityMatrix probe={probe} isWindows={isWindows} />
 
       {error && (
         <div className="mt-3 rounded-xl border border-amber-100 bg-amber-50/80 p-3 text-[10.5px] font-bold leading-5 text-amber-700">
@@ -674,7 +674,7 @@ type MacOSAiLaneLike = {
   }>
 }
 
-function MacOSAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
+function PlatformAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
   const laneDisplay = projectAiCapabilityStatusDisplay(lane.status)
   return (
     <div className="rounded-xl border border-white bg-white p-3 shadow-sm">

@@ -33,7 +33,7 @@ import {
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
 import AiRuntimePanel from '../components/settings/AiRuntimePanel'
-import { MacOSAiCapabilityMatrix } from '../components/settings/MacOSAiCapabilityMatrix'
+import { PlatformAiCapabilityMatrix } from '../components/settings/PlatformAiCapabilityMatrix'
 import type {
   AiBackendConfig,
   AiBackendType,
@@ -1930,7 +1930,7 @@ function OverviewWorkspace(props: {
           </div>
 
           {routeOverviewDisplay.showMacOSDiagnostics && (
-            <MacOSAiCapabilityMatrix probe={props.platformWorkerProbe} />
+            <PlatformAiCapabilityMatrix probe={props.platformWorkerProbe} />
           )}
         </div>
       </div>

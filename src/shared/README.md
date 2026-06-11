@@ -60,6 +60,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.8 | 2026-06-11 | Renamed the reusable AI capability matrix renderer component to `PlatformAiCapabilityMatrix` while keeping shared projection ownership unchanged. |
 | v1.8.7 | 2026-06-11 | Moved Platform AI route overview dependency labels, diagnostic tile labels, and runtime-lane captions into shared workflow projection. |
 | v1.8.6 | 2026-06-11 | Moved AI capability matrix title and description into shared AI Runtime Status projection. |
 | v1.8.5 | 2026-06-11 | Moved AI Runtime panel platform-specific copy and display selection into shared workflow projection for Windows/macOS parity. |
@@ -86,7 +87,7 @@ npm run build
 | v1.6.4 | 2026-06-05 | Added shared Platform AI Branch Status candidate selection based only on business status and evidence fields. |
 | v1.6.3 | 2026-06-05 | Added shared macOS Worker probe connection and route-tile projection with evidence-insufficient unchecked states. |
 | v1.6.2 | 2026-06-05 | Added shared AI Runtime panel status, health-result, icon-semantic, and summary-count projection. |
-| v1.6.1 | 2026-06-05 | Moved MacOSAiCapabilityMatrix status labels and badge classes into shared AI Runtime Status projection. |
+| v1.6.1 | 2026-06-05 | Moved PlatformAiCapabilityMatrix status labels and badge classes into shared AI Runtime Status projection. |
 | v1.6.0 | 2026-06-05 | Extended Model Artifact Readiness display projection to Smoke GGUF and Vision mmproj artifact tile labels. |
 | v1.5.9 | 2026-06-04 | Extended Model Artifact Readiness display projection to cooperative model download progress visibility, labels, and clamped percentages. |
 | v1.5.8 | 2026-06-04 | Extended shared Asset Display projection to caption text, source labels, restore/regenerate copy, and updated-at labels. |

@@ -2,10 +2,11 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 
 const source = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
-const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
+const matrixSource = await fs.readFile('src/renderer/components/settings/PlatformAiCapabilityMatrix.tsx', 'utf8')
 const branchWorkflowSource = await fs.readFile('src/shared/workflows/platform-ai-branch-status.workflow.ts', 'utf8')
 
-assert.match(source, /MacOSAiCapabilityMatrix/)
+assert.match(source, /PlatformAiCapabilityMatrix/)
+assert.doesNotMatch(source, /MacOSAiCapabilityMatrix/)
 assert.match(source, /getMacOSCapabilities/)
 assert.match(source, /getMacOSAiBranchStatus/)
 assert.match(source, /getWindowsAiBranchStatus/)
@@ -42,6 +43,8 @@ assert.match(source, /projectAiQueueStatusDisplay/)
 assert.match(source, /projectGgufArtifactTileDisplay/)
 assert.match(source, /projectMacOSAiWorkerProbeDisplay/)
 assert.match(matrixSource, /projectAiRuntimeCapabilityMatrixDisplay/)
+assert.match(matrixSource, /export function PlatformAiCapabilityMatrix/)
+assert.doesNotMatch(matrixSource, /MacOSAiCapabilityMatrix/)
 assert.doesNotMatch(matrixSource, /Windows 细项能力矩阵/)
 assert.doesNotMatch(matrixSource, /macOS 细项能力矩阵/)
 assert.match(matrixSource, /probe\.lanes\.map/)

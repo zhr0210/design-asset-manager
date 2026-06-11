@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 
 const panelPath = 'src/renderer/components/settings/AiRuntimePanel.tsx'
-const matrixPath = 'src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx'
+const matrixPath = 'src/renderer/components/settings/PlatformAiCapabilityMatrix.tsx'
 const settingsPath = 'src/renderer/routes/Settings.tsx'
 const aiConsolePath = 'src/renderer/routes/AiConsolePage.tsx'
 const doctorPanelPath = 'src/renderer/components/settings/DoctorPanel.tsx'
@@ -65,7 +65,8 @@ assert.match(panelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
 assert.match(panelSource, /projectPlatformPythonRuntimeExecutionProbeDisplay/)
 assert.match(panelSource, /projectAiRuntimeBranchPanelDisplay/)
 assert.match(panelSource, /projectAiRuntimeWorkerProbePanelDisplay/)
-assert.match(panelSource, /MacOSAiCapabilityMatrix/)
+assert.match(panelSource, /PlatformAiCapabilityMatrix/)
+assert.doesNotMatch(panelSource, /MacOSAiCapabilityMatrix/)
 assert.match(panelSource, /projectAiRuntimeStatusDisplay/)
 assert.match(panelSource, /projectAiRuntimeSummaryDisplay/)
 assert.match(panelSource, /projectAiRuntimeHealthResultDisplay/)
@@ -99,6 +100,9 @@ assert.doesNotMatch(panelSource, /macOS Worker 实时探测/)
 assert.doesNotMatch(panelSource, /Windows AI 分支/)
 assert.doesNotMatch(panelSource, /macOS AI 分支/)
 assert.match(matrixSource, /projectAiRuntimeCapabilityMatrixDisplay/)
+assert.match(matrixSource, /export function PlatformAiCapabilityMatrix/)
+assert.doesNotMatch(matrixSource, /MacOSAiCapabilityMatrix/)
+assert.doesNotMatch(matrixSource, /MacOSAiLaneCard/)
 assert.match(matrixSource, /probe\.lanes\.map/)
 assert.match(matrixSource, /capability\.modelFamily \?\? capability\.backend \?\? capability\.role/)
 assert.match(matrixSource, /capability\.label/)

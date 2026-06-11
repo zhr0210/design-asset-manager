@@ -74,7 +74,7 @@ assert.match(appSource, /probe_python_mps_environment/)
 assert.match(appSource, /probe_python_mps_execution/)
 
 const panelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
-const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
+const matrixSource = await fs.readFile('src/renderer/components/settings/PlatformAiCapabilityMatrix.tsx', 'utf8')
 const runtimeWorkflowSource = await fs.readFile('src/shared/workflows/ai-runtime-status.workflow.ts', 'utf8')
 const sharedTypesSource = await fs.readFile('src/shared/types/macos-ai-runtime.types.ts', 'utf8')
 assert.match(panelSource, /MacOSAiWorkerProbeResult/)

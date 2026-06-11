@@ -542,7 +542,7 @@ assert.equal(projectAiRuntimeCapabilityMatrixDisplay(true).title, 'Windows 细�
 assert.match(projectAiRuntimeCapabilityMatrixDisplay().description, /证据不足/)
 
 const settingsPanelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
-const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
+const matrixSource = await fs.readFile('src/renderer/components/settings/PlatformAiCapabilityMatrix.tsx', 'utf8')
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)

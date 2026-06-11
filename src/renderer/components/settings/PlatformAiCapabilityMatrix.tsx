@@ -8,7 +8,7 @@ import {
   projectAiRuntimeCapabilityMatrixDisplay
 } from '../../../shared/workflows/ai-runtime-status.workflow'
 
-export function MacOSAiCapabilityMatrix({
+export function PlatformAiCapabilityMatrix({
   probe,
   isWindows
 }: {
@@ -36,14 +36,14 @@ export function MacOSAiCapabilityMatrix({
 
       <div className="mt-3 grid gap-2 xl:grid-cols-3">
         {probe.lanes.map((lane) => (
-          <MacOSAiLaneCard key={lane.id} lane={lane} />
+          <PlatformAiLaneCard key={lane.id} lane={lane} />
         ))}
       </div>
     </div>
   )
 }
 
-function MacOSAiLaneCard({ lane }: { lane: NonNullable<MacOSAiWorkerProbeResult['lanes']>[number] }) {
+function PlatformAiLaneCard({ lane }: { lane: NonNullable<MacOSAiWorkerProbeResult['lanes']>[number] }) {
   const laneStatus = projectAiCapabilityStatusDisplay(lane.status)
 
   return (
