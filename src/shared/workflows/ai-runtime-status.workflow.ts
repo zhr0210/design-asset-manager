@@ -75,7 +75,7 @@ export interface AiRuntimeHealthResultDisplay {
   messageLabel: string
 }
 
-export interface MacOSAiProbeTileDisplay {
+export interface PlatformAiProbeTileDisplay {
   valueLabel: string
   captionLabel: string
 }
@@ -89,9 +89,9 @@ export interface MacOSAiWorkerProbeDisplay {
   isMacOSLabel: string
   isAppleSiliconLabel: string
   clipSiglipStatusLabel: string
-  mps: MacOSAiProbeTileDisplay
-  onnxRuntime: MacOSAiProbeTileDisplay
-  clipSiglipOnnx: MacOSAiProbeTileDisplay
+  mps: PlatformAiProbeTileDisplay
+  onnxRuntime: PlatformAiProbeTileDisplay
+  clipSiglipOnnx: PlatformAiProbeTileDisplay
 }
 
 export interface AiRuntimePlatformPanelCopy {
@@ -665,9 +665,9 @@ export interface WindowsAiWorkerProbeDisplay {
   isMacOSLabel: string
   isAppleSiliconLabel: string
   clipSiglipStatusLabel: string
-  cuda: MacOSAiProbeTileDisplay
-  onnxRuntime: MacOSAiProbeTileDisplay
-  clipSiglipOnnx: MacOSAiProbeTileDisplay
+  cuda: PlatformAiProbeTileDisplay
+  onnxRuntime: PlatformAiProbeTileDisplay
+  clipSiglipOnnx: PlatformAiProbeTileDisplay
 }
 
 export function projectWindowsAiWorkerProbeDisplay(
