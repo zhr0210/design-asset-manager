@@ -916,16 +916,16 @@ export default function AiConsolePage() {
     }
   }
 
-  // macOS AI dependency installation
-  const [installingMacOSDeps, setInstallingMacOSDeps] = useState(false)
+  // The shared action is platform-neutral; the current executable installer is macOS-backed.
+  const [installingAiRuntimeDeps, setInstallingAiRuntimeDeps] = useState(false)
 
-  const handleInstallMacOSDeps = async () => {
+  const handleInstallAiRuntimeDeps = async () => {
     const api = (window as any).electronAPI
     if (!api?.macosAiInstallDeps) {
       showToast('安装接口不可用')
       return
     }
-    setInstallingMacOSDeps(true)
+    setInstallingAiRuntimeDeps(true)
     showToast('正在安装 macOS AI 依赖 (torch, transformers, onnxruntime)...')
     pushLog('macOS AI deps installation started')
     try {
@@ -949,7 +949,7 @@ export default function AiConsolePage() {
       showToast('安装失败: ' + String(err))
       pushLog('macOS AI deps install failed: ' + String(err))
     } finally {
-      setInstallingMacOSDeps(false)
+      setInstallingAiRuntimeDeps(false)
     }
   }
 
@@ -1550,8 +1550,8 @@ export default function AiConsolePage() {
               llamaRunning={llamaRunning}
               platformWorkerProbe={platformWorkerProbe}
               platformBranchStatus={platformBranchStatus}
-              onInstallMacOSDeps={handleInstallMacOSDeps}
-              installingMacOSDeps={installingMacOSDeps}
+              onInstallAiRuntimeDeps={handleInstallAiRuntimeDeps}
+              installingAiRuntimeDeps={installingAiRuntimeDeps}
               onStartLlamaInstall={startLlamaInstall}
               onInstallEasyOcr={handleInstallEasyOcr}
               pythonMpsStatus={pythonMpsStatus}
@@ -1780,8 +1780,8 @@ function OverviewWorkspace(props: {
   llamaRunning?: boolean
   platformWorkerProbe: MacOSAiWorkerProbeResult | null
   platformBranchStatus: PlatformAiBranchStatusResponse | null
-  onInstallMacOSDeps?: () => Promise<void>
-  installingMacOSDeps?: boolean
+  onInstallAiRuntimeDeps?: () => Promise<void>
+  installingAiRuntimeDeps?: boolean
   onStartLlamaInstall?: () => Promise<void>
   onInstallEasyOcr?: () => Promise<void>
   pythonMpsStatus: AiRuntimePythonMpsStatusResponse | null
@@ -1873,8 +1873,8 @@ function OverviewWorkspace(props: {
               }
             }
             if (command.kind === 'install_ai_runtime_dependencies') {
-              if (props.onInstallMacOSDeps) {
-                props.onInstallMacOSDeps()
+              if (props.onInstallAiRuntimeDeps) {
+                props.onInstallAiRuntimeDeps()
                 return
               }
             }
@@ -1893,9 +1893,9 @@ function OverviewWorkspace(props: {
             {routeOverviewDisplay.showWorkerProbeDiagnostics && (
               <div className="flex items-center gap-2">
                 <StatusPill tone={platformProbeDisplay.connectionTone}>{platformProbeDisplay.connectionLabel}</StatusPill>
-                <MiniButton tone="primary" onClick={props.onInstallMacOSDeps} disabled={props.installingMacOSDeps}>
-                  {props.installingMacOSDeps ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
-                  {props.installingMacOSDeps ? routeOverviewDisplay.installingDependenciesLabel : routeOverviewDisplay.installDependenciesLabel}
+                <MiniButton tone="primary" onClick={props.onInstallAiRuntimeDeps} disabled={props.installingAiRuntimeDeps}>
+                  {props.installingAiRuntimeDeps ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
+                  {props.installingAiRuntimeDeps ? routeOverviewDisplay.installingDependenciesLabel : routeOverviewDisplay.installDependenciesLabel}
                 </MiniButton>
               </div>
             )}
