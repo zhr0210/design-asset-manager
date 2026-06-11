@@ -222,9 +222,18 @@ try {
   const llamaProbe = await page.evaluate(async () => {
     const api = window.electronAPI;
     try {
-      const start = await api?.llamaRuntimeStartServer?.();
+      let plan = await api?.llamaRuntimeCreateInstallPlan?.({ downloadSource: "huggingface" });
+      const selected = plan?.modelCandidates?.find((model) => model.id === "qwen3-vl-2b-instruct-q4-k-m") ?? plan?.recommendedModel;
+      if (plan && selected) {
+        plan = {
+          ...plan,
+          recommendedModel: selected,
+          modelDir: `${plan.installRoot}\\models\\gguf\\${selected.id}`,
+        };
+      }
+      const start = await api?.llamaRuntimeStartServer?.({ plan });
       const probe = await api?.llamaRuntimeTestServer?.({ baseUrl: start?.baseUrl });
-      return { start, probe };
+      return { selectedModel: selected?.id, start, probe };
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : String(error)
