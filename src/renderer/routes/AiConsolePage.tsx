@@ -1890,7 +1890,7 @@ function OverviewWorkspace(props: {
               <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">{routeOverviewDisplay.title}</h3>
               <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">{routeOverviewDisplay.description}</p>
             </div>
-            {routeOverviewDisplay.showMacOSDiagnostics && (
+            {routeOverviewDisplay.showWorkerProbeDiagnostics && (
               <div className="flex items-center gap-2">
                 <StatusPill tone={platformProbeDisplay.connectionTone}>{platformProbeDisplay.connectionLabel}</StatusPill>
                 <MiniButton tone="primary" onClick={props.onInstallMacOSDeps} disabled={props.installingMacOSDeps}>
@@ -1902,7 +1902,7 @@ function OverviewWorkspace(props: {
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            {routeOverviewDisplay.showMacOSDiagnostics ? (
+            {routeOverviewDisplay.showWorkerProbeDiagnostics ? (
               <>
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={platformProbeDisplay.mps.valueLabel} caption={platformProbeDisplay.mps.captionLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.pythonCompatibilityLabel} value={pythonMpsDisplay.label} caption={pythonMpsDisplay.runtimeLabel} />
@@ -1929,7 +1929,7 @@ function OverviewWorkspace(props: {
             {routeOverviewDisplay.priorityLabel}
           </div>
 
-          {routeOverviewDisplay.showMacOSDiagnostics && (
+          {routeOverviewDisplay.showWorkerProbeDiagnostics && (
             <PlatformAiCapabilityMatrix probe={props.platformWorkerProbe} />
           )}
         </div>

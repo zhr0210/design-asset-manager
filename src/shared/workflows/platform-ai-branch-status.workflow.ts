@@ -52,7 +52,7 @@ export interface PlatformAiRouteOverviewDisplay {
   title: string
   description: string
   priorityLabel: string
-  showMacOSDiagnostics: boolean
+  showWorkerProbeDiagnostics: boolean
   installDependenciesLabel: string
   installingDependenciesLabel: string
   primaryRuntimeLaneCaption: string
@@ -147,7 +147,7 @@ export function projectPlatformAiRouteOverviewDisplay(
       title: '平台路线概览',
       description: '等待当前平台返回 AI 运行路线状态。',
       priorityLabel: '当前平台路线证据不足。',
-      showMacOSDiagnostics: false,
+      showWorkerProbeDiagnostics: false,
       ...routeOverviewSharedCopy(),
       runtimeLanes: []
     }
@@ -161,7 +161,7 @@ export function projectPlatformAiRouteOverviewDisplay(
       title: 'macOS 路线概览',
       description: '把 Python MPS、ONNX Runtime 和 Llama 路线放到同一屏里查看。',
       priorityLabel: '当前 macOS 目标模型优先级：Qwen3-VL GGUF > Qwen2.5-VL Ollama fallback > external HTTP fallback。',
-      showMacOSDiagnostics: true,
+      showWorkerProbeDiagnostics: true,
       ...routeOverviewSharedCopy(),
       runtimeLanes
     }
@@ -171,7 +171,7 @@ export function projectPlatformAiRouteOverviewDisplay(
     title: 'Windows 路线概览',
     description: '汇总 Python CUDA、ONNX Runtime、Llama CUDA 与外部推理路线。',
     priorityLabel: '当前 Windows 路线优先使用可验证的 CUDA / ONNX / Llama 运行时，证据不足时再使用已配置的外部服务。',
-    showMacOSDiagnostics: false,
+    showWorkerProbeDiagnostics: false,
     ...routeOverviewSharedCopy(),
     runtimeLanes
   }

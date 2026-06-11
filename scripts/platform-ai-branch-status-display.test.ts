@@ -78,7 +78,7 @@ assert.equal(macosDisplay.workflows[0].runtimeLanes[0].statusLabel, '运行时�
 assert.equal(macosDisplay.workflows[0].actionPlan.kind, 'refresh_evidence')
 assert.equal(macosDisplay.workflows[0].actionPlan.enabled, true)
 assert.equal(macosRouteOverview.title, 'macOS 路线概览')
-assert.equal(macosRouteOverview.showMacOSDiagnostics, true)
+assert.equal(macosRouteOverview.showWorkerProbeDiagnostics, true)
 assert.equal(macosRouteOverview.installDependenciesLabel, '安装 macOS AI 依赖')
 assert.equal(macosRouteOverview.installingDependenciesLabel, '正在安装依赖')
 assert.equal(macosRouteOverview.primaryRuntimeLaneCaption, '主要运行路线')
@@ -109,7 +109,7 @@ assert.equal(windowsDisplay.workflows[0].missingLabel, '当前操作系统不匹
 assert.equal(windowsDisplay.workflows[0].actionPlan.kind, 'none')
 assert.equal(windowsDisplay.workflows[0].actionPlan.enabled, false)
 assert.equal(windowsRouteOverview.title, 'Windows 路线概览')
-assert.equal(windowsRouteOverview.showMacOSDiagnostics, false)
+assert.equal(windowsRouteOverview.showWorkerProbeDiagnostics, false)
 assert.deepEqual(
   windowsRouteOverview.runtimeLanes.map((lane) => lane.lane),
   ['python_cuda', 'onnx_runtime', 'llama_cuda', 'ollama', 'external_http']
@@ -118,7 +118,7 @@ assert.match(windowsRouteOverview.priorityLabel, /CUDA \/ ONNX \/ Llama/)
 
 const emptyRouteOverview = projectPlatformAiRouteOverviewDisplay(null)
 assert.equal(emptyRouteOverview.title, '平台路线概览')
-assert.equal(emptyRouteOverview.showMacOSDiagnostics, false)
+assert.equal(emptyRouteOverview.showWorkerProbeDiagnostics, false)
 assert.equal(emptyRouteOverview.primaryRuntimeLaneCaption, '主要运行路线')
 assert.deepEqual(emptyRouteOverview.runtimeLanes, [])
 
@@ -223,7 +223,7 @@ assert.match(aiConsoleSource, /projectPlatformAiBranchStatusDisplay/)
 assert.match(aiConsoleSource, /workflow\.actionPlan\.enabled/)
 assert.match(aiConsoleSource, /onAction\(workflow\.actionPlan\)/)
 assert.match(aiConsoleSource, /projectPlatformAiRouteOverviewDisplay/)
-assert.match(aiConsoleSource, /routeOverviewDisplay\.showMacOSDiagnostics/)
+assert.match(aiConsoleSource, /routeOverviewDisplay\.showWorkerProbeDiagnostics/)
 assert.match(aiConsoleSource, /routeOverviewDisplay\.runtimeLanes\.map/)
 assert.match(aiConsoleSource, /selectPlatformAiBranchStatus/)
 assert.doesNotMatch(aiConsoleSource, /function branchStatusTone/)
