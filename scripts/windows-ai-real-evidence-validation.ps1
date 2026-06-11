@@ -231,7 +231,8 @@ try {
           modelDir: `${plan.installRoot}\\models\\gguf\\${selected.id}`,
         };
       }
-      const start = await api?.llamaRuntimeStartServer?.({ plan });
+      const modelPath = plan && selected ? `${plan.modelDir}\\${selected.filename}` : undefined;
+      const start = await api?.llamaRuntimeStartServer?.({ plan, modelPath });
       const probe = await api?.llamaRuntimeTestServer?.({ baseUrl: start?.baseUrl });
       return { selectedModel: selected?.id, start, probe };
     } catch (error) {
