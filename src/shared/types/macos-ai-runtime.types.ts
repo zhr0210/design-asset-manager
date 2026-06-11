@@ -1,9 +1,8 @@
-import type { PlatformArch, PlatformName } from './platform.types'
 import type {
-  AiCapabilityStatus,
-  AiRuntimeCapability,
   AiWorkerCapabilityProbe,
-  AiWorkerLaneProbe
+  AiWorkerLaneProbe,
+  PlatformAiBranchRuntimeMetadataBase,
+  PlatformAiRuntimeLaneBase
 } from './platform-ai-runtime.types'
 
 export type MacOSAiRuntimeLaneId = 'python-mps' | 'onnx-runtime' | 'llama'
@@ -11,27 +10,15 @@ export type {
   AiCapabilityStatus,
   AiRuntimeCapability,
   AiWorkerCapabilityProbe,
-  AiWorkerLaneProbe
+  AiWorkerLaneProbe,
+  PlatformAiBranchRuntimeMetadataBase,
+  PlatformAiRuntimeBranchPhase,
+  PlatformAiRuntimeLaneBase
 } from './platform-ai-runtime.types'
 
-export interface MacOSAiRuntimeLane {
-  id: MacOSAiRuntimeLaneId
-  label: string
-  status: AiCapabilityStatus
-  summary: string
-  capabilities: AiRuntimeCapability[]
-  fallbackCapabilityIds: string[]
-}
+export interface MacOSAiRuntimeLane extends PlatformAiRuntimeLaneBase<MacOSAiRuntimeLaneId> {}
 
-export interface MacOSAiBranchRuntimeMetadata {
-  marker: 'macos-ai-branch'
-  phase: 'skeleton' | 'worker-probes' | 'model-download' | 'validated'
-  platform: PlatformName
-  arch: PlatformArch
-  isCurrentPlatform: boolean
-  lanes: MacOSAiRuntimeLane[]
-  warnings: string[]
-}
+export interface MacOSAiBranchRuntimeMetadata extends PlatformAiBranchRuntimeMetadataBase<'macos-ai-branch', MacOSAiRuntimeLane> {}
 
 export interface MacOSAiWorkerProbeResult {
   platform: string

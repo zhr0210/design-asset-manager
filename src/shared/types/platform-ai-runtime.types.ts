@@ -1,3 +1,5 @@
+import type { PlatformArch, PlatformName } from './platform.types'
+
 export type AiCapabilityStatus =
   | 'ready'
   | 'optional'
@@ -7,6 +9,8 @@ export type AiCapabilityStatus =
   | 'fallback'
   | 'unavailable'
 
+export type PlatformAiRuntimeBranchPhase = 'skeleton' | 'worker-probes' | 'model-download' | 'validated'
+
 export interface AiRuntimeCapability {
   id: string
   label: string
@@ -14,6 +18,25 @@ export interface AiRuntimeCapability {
   role: 'tagging' | 'ocr' | 'embedding' | 'prompt-reverse' | 'fallback'
   modelFamily?: string
   backend?: string
+}
+
+export interface PlatformAiRuntimeLaneBase<TLaneId extends string = string> {
+  id: TLaneId
+  label: string
+  status: AiCapabilityStatus
+  summary: string
+  capabilities: AiRuntimeCapability[]
+  fallbackCapabilityIds: string[]
+}
+
+export interface PlatformAiBranchRuntimeMetadataBase<TMarker extends string, TLane extends PlatformAiRuntimeLaneBase> {
+  marker: TMarker
+  phase: PlatformAiRuntimeBranchPhase
+  platform: PlatformName
+  arch: PlatformArch
+  isCurrentPlatform: boolean
+  lanes: TLane[]
+  warnings: string[]
 }
 
 export interface AiWorkerCapabilityProbe {

@@ -61,6 +61,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.10 | 2026-06-11 | Added platform-neutral AI runtime lane and branch metadata base types for macOS/Windows runtime definitions. |
 | v1.8.9 | 2026-06-11 | Extracted platform-neutral AI runtime capability/probe types so Windows runtime types no longer depend on macOS runtime types. |
 | v1.8.8 | 2026-06-11 | Renamed the reusable AI capability matrix renderer component to `PlatformAiCapabilityMatrix` while keeping shared projection ownership unchanged. |
 | v1.8.7 | 2026-06-11 | Moved Platform AI route overview dependency labels, diagnostic tile labels, and runtime-lane captions into shared workflow projection. |
