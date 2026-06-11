@@ -1,5 +1,6 @@
 import React from 'react'
 import type {
+  AiWorkerLaneProbe,
   MacOSAiWorkerProbeResult
 } from '../../../shared/types/macos-ai-runtime.types'
 import type { WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
@@ -43,7 +44,7 @@ export function PlatformAiCapabilityMatrix({
   )
 }
 
-function PlatformAiLaneCard({ lane }: { lane: NonNullable<MacOSAiWorkerProbeResult['lanes']>[number] }) {
+function PlatformAiLaneCard({ lane }: { lane: AiWorkerLaneProbe }) {
   const laneStatus = projectAiCapabilityStatusDisplay(lane.status)
 
   return (
