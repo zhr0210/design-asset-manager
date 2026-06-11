@@ -97,8 +97,8 @@ export default function AiRuntimePanel() {
   const [runtimes, setRuntimes] = useState<AiRuntimeState[]>([])
   const [activeRuntime, setActiveRuntime] = useState<AiRuntimeState | null>(null)
   const [healthResults, setHealthResults] = useState<Record<string, AiRuntimeHealthResult>>({})
-  const [macOSWorkerProbe, setMacOSWorkerProbe] = useState<MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null>(null)
-  const [macOSWorkerProbeError, setMacOSWorkerProbeError] = useState<string | null>(null)
+  const [platformWorkerProbe, setPlatformWorkerProbe] = useState<MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null>(null)
+  const [platformWorkerProbeError, setPlatformWorkerProbeError] = useState<string | null>(null)
   const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse | null>(null)
   const [pythonMpsStatusError, setPythonMpsStatusError] = useState<string | null>(null)
   const [pythonMpsExecutionProbe, setPythonMpsExecutionProbe] = useState<AiRuntimePythonMpsExecutionProbeResponse | AiRuntimePythonCudaExecutionProbeResponse | null>(null)
@@ -162,7 +162,7 @@ export default function AiRuntimePanel() {
 
     setLoading(true)
     setError(null)
-    setMacOSWorkerProbeError(null)
+    setPlatformWorkerProbeError(null)
     setPythonMpsStatusError(null)
     setClipSiglipOnnxStatusError(null)
     try {
@@ -186,11 +186,11 @@ export default function AiRuntimePanel() {
       }
 
       if (probeResponse.success && probeResponse.data) {
-        setMacOSWorkerProbe(probeResponse.data.capabilities)
-        setMacOSWorkerProbeError(probeResponse.data.error ?? null)
+        setPlatformWorkerProbe(probeResponse.data.capabilities)
+        setPlatformWorkerProbeError(probeResponse.data.error ?? null)
       } else {
-        setMacOSWorkerProbe(null)
-        setMacOSWorkerProbeError(probeResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).workerProbeFailureMessage)
+        setPlatformWorkerProbe(null)
+        setPlatformWorkerProbeError(probeResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).workerProbeFailureMessage)
       }
 
       if (pythonStatusResponse.success && pythonStatusResponse.data) {
@@ -384,7 +384,7 @@ export default function AiRuntimePanel() {
 
       {macosAiBranch?.isCurrentPlatform && <PlatformAiBranchPanel branch={macosAiBranch} />}
       {windowsAiBranch?.isCurrentPlatform && <PlatformAiBranchPanel branch={windowsAiBranch} />}
-      <PlatformAiWorkerProbePanel probe={macOSWorkerProbe} error={macOSWorkerProbeError} isWindows={isWindows} />
+      <PlatformAiWorkerProbePanel probe={platformWorkerProbe} error={platformWorkerProbeError} isWindows={isWindows} />
       <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           <div>
