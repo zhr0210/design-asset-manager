@@ -660,7 +660,7 @@ function PlatformAiWorkerProbePanel({
   )
 }
 
-type MacOSAiLaneLike = {
+type PlatformAiLaneLike = {
   id: string
   label: string
   status: AiCapabilityStatus
@@ -674,7 +674,7 @@ type MacOSAiLaneLike = {
   }>
 }
 
-function PlatformAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
+function PlatformAiLaneCard({ lane }: { lane: PlatformAiLaneLike }) {
   const laneDisplay = projectAiCapabilityStatusDisplay(lane.status)
   return (
     <div className="rounded-xl border border-white bg-white p-3 shadow-sm">
