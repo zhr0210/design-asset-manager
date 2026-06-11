@@ -1,11 +1,40 @@
 # Windows AI Real Evidence Result
 
-Status: validated on Windows host, WD Tagger and CLIP ONNX real load closed; Llama CUDA still pending
+Status: validated on Windows host; CUDA execution, WD Tagger ONNX, CLIP ONNX,
+and Llama CUDA GGUF/mmproj real evidence are closed.
 
 This file is the GitHub handoff mailbox for Windows-host validation on branch
 `codex/windows-ai-real-evidence`.
 
 ## Latest Reported Result
+
+- Validation time: 2026-06-11 11:20, Windows host local time.
+- Commit tested: `e947443`.
+- Windows host: DESKTOP-3573AOS.
+- GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
+- Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
+- Checks passed: `npm ci`, `npm run typecheck`, `npm run build`,
+  `npm run ci:test-runtime-safety`, Python unittest discovery, direct Windows AI
+  probes, and Electron/Playwright AI Console validation.
+- Llama IPC refresh: selected `qwen3-vl-2b-instruct-q4-k-m`, started
+  `llama-server`, and ran text plus generated-image multimodal probe.
+- Llama multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
+  `visionInput=generated_fixture`.
+- Windows Platform AI Branch Status: returned `success=true`,
+  `platformBranch=windows`; `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` reported `real_model_path`.
+- Llama CUDA lane: reported `real_model_path` with `artifact_ready` and
+  `real_backend_loaded` evidence from text plus generated-image inference.
+- Electron/Playwright AI Console: screenshot captured on the Windows desktop.
+- Overflow check: `doc=false`, `body=false`, viewport `1008x725`.
+- Failures/blockers: none for the Windows real-evidence routes covered by this
+  slice.
+
+The latest full Windows-host validation log filename is
+`dam-windows-ai-validation-20260611-112044.log`, and the screenshot filename is
+`dam-windows-ai-console.png`.
+
+## Previous Reported Result
 
 - Validation time: 2026-06-07 02:17, Windows host local time.
 - Windows host: DESKTOP-3573AOS.
@@ -45,7 +74,7 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 - Next recommended action at that time: validate the Windows Llama CUDA
   GGUF/mmproj route with real prompt/image evidence.
 
-The latest full Windows-host validation log filename is
+The previous full Windows-host validation log filename was
 `dam-windows-ai-validation-20260607-024905.log`, and the screenshot filename is
 `dam-windows-ai-console.png`. A later focused Electron smoke verified that the
 UI refresh path shows Windows real-model evidence after calling the WD Tagger
@@ -130,3 +159,7 @@ Sanitized result:
 start/test IPC path before reading Windows Platform AI Branch Status, so future
 full validation runs refresh the in-process Llama multimodal evidence before
 asserting branch status.
+
+The later full run at commit `e947443` confirmed the same route through the full
+Windows validation script: `ai_prompt_task` and the `llama_cuda` lane both
+reported `real_model_path`, and the screenshot overflow check remained clean.
