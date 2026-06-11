@@ -1,9 +1,8 @@
 import type {
   MacOSAiBranchRuntimeMetadata,
-  AiCapabilityStatus,
-  AiRuntimeCapability,
   MacOSAiRuntimeLane
 } from '../types/macos-ai-runtime.types'
+import type { AiCapabilityStatus, AiRuntimeCapability } from '../types/platform-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
 
 function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'apple-silicon' | 'macos'): AiCapabilityStatus {

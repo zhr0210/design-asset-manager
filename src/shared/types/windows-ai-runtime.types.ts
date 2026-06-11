@@ -1,5 +1,5 @@
 import type { PlatformArch, PlatformName } from './platform.types'
-import type { AiCapabilityStatus, AiRuntimeCapability, AiWorkerCapabilityProbe, AiWorkerLaneProbe } from './macos-ai-runtime.types'
+import type { AiCapabilityStatus, AiRuntimeCapability, AiWorkerCapabilityProbe, AiWorkerLaneProbe } from './platform-ai-runtime.types'
 
 export type WindowsAiRuntimeLaneId = 'python-cuda' | 'onnx-runtime' | 'llama'
 

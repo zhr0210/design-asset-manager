@@ -15,9 +15,9 @@ import type {
 import type { LlamaInstallStatus } from '../types/llama-runtime.types'
 import type {
   MacOSAiBranchRuntimeMetadata,
-  AiCapabilityStatus,
   MacOSAiWorkerProbeResult
 } from '../types/macos-ai-runtime.types'
+import type { AiCapabilityStatus } from '../types/platform-ai-runtime.types'
 import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'

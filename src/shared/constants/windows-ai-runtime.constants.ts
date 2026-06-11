@@ -2,7 +2,7 @@ import type {
   WindowsAiBranchRuntimeMetadata,
   WindowsAiRuntimeLane
 } from '../types/windows-ai-runtime.types'
-import type { AiCapabilityStatus, AiRuntimeCapability } from '../types/macos-ai-runtime.types'
+import type { AiCapabilityStatus, AiRuntimeCapability } from '../types/platform-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
 
 function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'windows-cuda' | 'windows'): AiCapabilityStatus {

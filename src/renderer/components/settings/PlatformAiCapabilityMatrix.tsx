@@ -1,8 +1,6 @@
 import React from 'react'
-import type {
-  AiWorkerLaneProbe,
-  MacOSAiWorkerProbeResult
-} from '../../../shared/types/macos-ai-runtime.types'
+import type { MacOSAiWorkerProbeResult } from '../../../shared/types/macos-ai-runtime.types'
+import type { AiWorkerLaneProbe } from '../../../shared/types/platform-ai-runtime.types'
 import type { WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
 import {
   projectAiCapabilityStatusDisplay,

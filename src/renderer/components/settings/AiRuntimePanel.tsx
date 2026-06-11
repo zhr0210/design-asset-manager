@@ -3,10 +3,10 @@ import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw,
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
 import type {
   MacOSAiBranchRuntimeMetadata,
-  AiCapabilityStatus,
   MacOSAiRuntimeLane,
   MacOSAiWorkerProbeResult
 } from '../../../shared/types/macos-ai-runtime.types'
+import type { AiCapabilityStatus } from '../../../shared/types/platform-ai-runtime.types'
 import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
 import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
 import type {

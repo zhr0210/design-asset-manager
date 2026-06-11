@@ -1,24 +1,18 @@
 import type { PlatformArch, PlatformName } from './platform.types'
+import type {
+  AiCapabilityStatus,
+  AiRuntimeCapability,
+  AiWorkerCapabilityProbe,
+  AiWorkerLaneProbe
+} from './platform-ai-runtime.types'
 
 export type MacOSAiRuntimeLaneId = 'python-mps' | 'onnx-runtime' | 'llama'
-
-export type AiCapabilityStatus =
-  | 'ready'
-  | 'optional'
-  | 'planned'
-  | 'evidence_insufficient'
-  | 'dependency_missing'
-  | 'fallback'
-  | 'unavailable'
-
-export interface AiRuntimeCapability {
-  id: string
-  label: string
-  status: AiCapabilityStatus
-  role: 'tagging' | 'ocr' | 'embedding' | 'prompt-reverse' | 'fallback'
-  modelFamily?: string
-  backend?: string
-}
+export type {
+  AiCapabilityStatus,
+  AiRuntimeCapability,
+  AiWorkerCapabilityProbe,
+  AiWorkerLaneProbe
+} from './platform-ai-runtime.types'
 
 export interface MacOSAiRuntimeLane {
   id: MacOSAiRuntimeLaneId
@@ -37,26 +31,6 @@ export interface MacOSAiBranchRuntimeMetadata {
   isCurrentPlatform: boolean
   lanes: MacOSAiRuntimeLane[]
   warnings: string[]
-}
-
-export interface AiWorkerCapabilityProbe {
-  id: string
-  label: string
-  status: AiCapabilityStatus
-  role: 'tagging' | 'ocr' | 'embedding' | 'prompt-reverse' | 'fallback'
-  modelFamily?: string
-  backend?: string
-  version?: string | null
-  available?: boolean
-  error?: string | null
-}
-
-export interface AiWorkerLaneProbe {
-  id: string
-  label: string
-  status: AiCapabilityStatus
-  summary: string
-  capabilities: AiWorkerCapabilityProbe[]
 }
 
 export interface MacOSAiWorkerProbeResult {
