@@ -50,8 +50,8 @@ import type {
   LlamaServerTestResult
 } from '../../shared/types/llama-runtime.types'
 import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
-import type { PlatformAiBranchStatusResponse, PlatformAiWorkflow } from '../../shared/types/platform-ai-branch-status.types'
-import type { PlatformAiActionPlanKind } from '../../shared/types/platform-ai-action-plan.types'
+import type { PlatformAiBranchStatusResponse } from '../../shared/types/platform-ai-branch-status.types'
+import type { PlatformAiActionPlan } from '../../shared/types/platform-ai-action-plan.types'
 import type {
   CooperativeWorkerModelStatus,
   WorkerModelStatusSnapshot
@@ -61,6 +61,7 @@ import {
   projectPlatformAiRouteOverviewDisplay,
   selectPlatformAiBranchStatus
 } from '../../shared/workflows/platform-ai-branch-status.workflow'
+import { resolvePlatformAiActionCommand } from '../../shared/workflows/platform-ai-action-plan.workflow'
 import {
   projectGgufArtifactTileDisplay,
   projectCooperativeModelRowDisplay,
@@ -1853,39 +1854,32 @@ function OverviewWorkspace(props: {
 
         <PlatformAiBranchStatusPanel
           status={props.platformBranchStatus}
-          onAction={(kind, workflow) => {
-            if (kind === 'refresh_evidence') {
+          onAction={(actionPlan) => {
+            const command = resolvePlatformAiActionCommand(actionPlan, props.platformBranchStatus?.platformBranch)
+            if (command.kind === 'refresh_evidence') {
               props.onRefreshEvidence()
               return
             }
-            if (workflow === 'ai_prompt_task' && (kind === 'open_model_management' || kind === 'open_runtime_management')) {
+            if (command.kind === 'start_llama_install') {
               if (props.onStartLlamaInstall) {
                 props.onStartLlamaInstall()
                 return
               }
             }
-            if (workflow === 'ocr_text_box' && kind === 'open_runtime_management') {
+            if (command.kind === 'install_ocr_runtime') {
               if (props.onInstallEasyOcr) {
                 props.onInstallEasyOcr()
                 return
               }
             }
-            if (workflow === 'ai_tag_task' && kind === 'open_runtime_management') {
+            if (command.kind === 'install_ai_runtime_dependencies') {
               if (props.onInstallMacOSDeps) {
                 props.onInstallMacOSDeps()
                 return
               }
             }
-            if (kind === 'open_model_management') {
-              props.setActiveTab('models')
-              return
-            }
-            if (kind === 'open_runtime_management') {
-              props.setActiveTab('runtime')
-              return
-            }
-            if (kind === 'open_backend_management') {
-              props.setActiveTab('services')
+            if (command.kind === 'open_tab' && command.targetTab) {
+              props.setActiveTab(command.targetTab)
             }
           }}
         />
@@ -1974,7 +1968,7 @@ function PlatformAiBranchStatusPanel({
   onAction
 }: {
   status: PlatformAiBranchStatusResponse | null
-  onAction: (kind: PlatformAiActionPlanKind, workflow: PlatformAiWorkflow) => void
+  onAction: (actionPlan: PlatformAiActionPlan) => void
 }) {
   const display = projectPlatformAiBranchStatusDisplay(status)
 
@@ -2028,8 +2022,7 @@ function PlatformAiBranchStatusPanel({
                       type="button"
                       disabled={!workflow.actionPlan.enabled}
                       onClick={() => {
-                        onAction(workflow.actionPlan.kind, workflow.workflow)
-                        // onAction(workflow.actionPlan.kind)
+                        onAction(workflow.actionPlan)
                       }}
                       className="mt-3 inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-black text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >

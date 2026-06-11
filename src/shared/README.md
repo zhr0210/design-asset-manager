@@ -59,6 +59,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.4 | 2026-06-11 | Moved Platform AI Action Plan UI command routing into shared workflow code so renderer actions no longer infer destinations from workflow/kind pairs. |
 | v1.8.3 | 2026-06-06 | Extended ONNX probe contracts with CLIP image/text embedding operation, finite-result, and dimension evidence. |
 | v1.8.2 | 2026-06-06 | Added shared MPS real-execution probe contract and display projection without promoting model workflow readiness. |
 | v1.8.1 | 2026-06-06 | Added path-free, time-bounded WD Tagger ONNX real-load evidence for the AI Tag workflow. |

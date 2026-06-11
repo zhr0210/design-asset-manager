@@ -209,7 +209,7 @@ assert.equal(
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(aiConsoleSource, /projectPlatformAiBranchStatusDisplay/)
 assert.match(aiConsoleSource, /workflow\.actionPlan\.enabled/)
-assert.match(aiConsoleSource, /onAction\(workflow\.actionPlan\.kind\)/)
+assert.match(aiConsoleSource, /onAction\(workflow\.actionPlan\)/)
 assert.match(aiConsoleSource, /projectPlatformAiRouteOverviewDisplay/)
 assert.match(aiConsoleSource, /routeOverviewDisplay\.showMacOSDiagnostics/)
 assert.match(aiConsoleSource, /routeOverviewDisplay\.runtimeLanes\.map/)

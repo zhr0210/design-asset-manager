@@ -1,5 +1,5 @@
-import type { PlatformAiActionPlan } from '../types/platform-ai-action-plan.types'
-import type { PlatformAiWorkflowStatus } from '../types/platform-ai-branch-status.types'
+import type { PlatformAiActionCommand, PlatformAiActionPlan } from '../types/platform-ai-action-plan.types'
+import type { PlatformAiBranch, PlatformAiWorkflowStatus } from '../types/platform-ai-branch-status.types'
 
 export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): PlatformAiActionPlan {
   if (workflow.status === 'planned_capability') {
@@ -32,6 +32,39 @@ export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): 
   }
 
   return createPlan(workflow, 'refresh_evidence', '重新收集状态证据', true, missing.kind, missing.id)
+}
+
+export function resolvePlatformAiActionCommand(
+  actionPlan: PlatformAiActionPlan,
+  platformBranch?: PlatformAiBranch
+): PlatformAiActionCommand {
+  if (!actionPlan.enabled || actionPlan.kind === 'none') return { kind: 'none' }
+  if (actionPlan.kind === 'refresh_evidence') return { kind: 'refresh_evidence' }
+
+  if (
+    actionPlan.workflow === 'ai_prompt_task'
+    && (actionPlan.kind === 'open_model_management' || actionPlan.kind === 'open_runtime_management')
+  ) {
+    return { kind: 'start_llama_install' }
+  }
+
+  if (actionPlan.workflow === 'ocr_text_box' && actionPlan.kind === 'open_runtime_management') {
+    return { kind: 'install_ocr_runtime' }
+  }
+
+  if (
+    platformBranch === 'macos'
+    && actionPlan.workflow === 'ai_tag_task'
+    && actionPlan.kind === 'open_runtime_management'
+  ) {
+    return { kind: 'install_ai_runtime_dependencies' }
+  }
+
+  if (actionPlan.kind === 'open_model_management') return { kind: 'open_tab', targetTab: 'models' }
+  if (actionPlan.kind === 'open_runtime_management') return { kind: 'open_tab', targetTab: 'runtime' }
+  if (actionPlan.kind === 'open_backend_management') return { kind: 'open_tab', targetTab: 'services' }
+
+  return { kind: 'none' }
 }
 
 function selectActionableMissing(workflow: PlatformAiWorkflowStatus) {
