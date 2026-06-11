@@ -551,6 +551,8 @@ assert.match(runtimeWorkflowSource, /interface PlatformAiWorkerProbeHeaderDispla
 assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeHeaderDisplay/)
 assert.match(runtimeWorkflowSource, /interface MacOSAiWorkerProbeDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
 assert.match(runtimeWorkflowSource, /interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
+assert.match(runtimeWorkflowSource, /interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
+assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeExecutionProbeDisplay/)

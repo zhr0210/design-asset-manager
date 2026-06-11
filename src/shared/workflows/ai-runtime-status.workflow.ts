@@ -118,14 +118,9 @@ export interface AiRuntimeBranchPanelDisplay {
   platformBadgeClass: string
 }
 
-export interface AiRuntimeWorkerProbePanelDisplay {
+export interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay {
   title: string
   description: string
-  platformBadgeLabel: string
-  platformBadgeClass: string
-  isMacOSLabel: string
-  isAppleSiliconLabel: string
-  clipSiglipStatusLabel: string
 }
 
 export interface AiRuntimeCapabilityMatrixDisplay {
@@ -722,26 +717,30 @@ export function projectAiRuntimeWorkerProbePanelDisplay(
 ): AiRuntimeWorkerProbePanelDisplay {
   if (isWindows) {
     const display = projectWindowsAiWorkerProbeDisplay(probe as WindowsAiWorkerProbeResult)
-    return {
-      title: 'Windows Worker 实时探测',
-      description: '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。',
-      platformBadgeLabel: display.platformBadgeLabel,
-      platformBadgeClass: display.platformBadgeClass,
-      isMacOSLabel: display.isMacOSLabel,
-      isAppleSiliconLabel: display.isAppleSiliconLabel,
-      clipSiglipStatusLabel: display.clipSiglipStatusLabel
-    }
+    return projectAiRuntimeWorkerProbePanelFromHeader(
+      display,
+      'Windows Worker 实时探测',
+      '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
+    )
   }
 
   const display = projectMacOSAiWorkerProbeDisplay(probe as MacOSAiWorkerProbeResult)
+  return projectAiRuntimeWorkerProbePanelFromHeader(
+    display,
+    'macOS Worker 实时探测',
+    '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
+  )
+}
+
+function projectAiRuntimeWorkerProbePanelFromHeader(
+  header: PlatformAiWorkerProbeHeaderDisplay,
+  title: string,
+  description: string
+): AiRuntimeWorkerProbePanelDisplay {
   return {
-    title: 'macOS Worker 实时探测',
-    description: '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。',
-    platformBadgeLabel: display.platformBadgeLabel,
-    platformBadgeClass: display.platformBadgeClass,
-    isMacOSLabel: display.isMacOSLabel,
-    isAppleSiliconLabel: display.isAppleSiliconLabel,
-    clipSiglipStatusLabel: display.clipSiglipStatusLabel
+    ...header,
+    title,
+    description
   }
 }
 
