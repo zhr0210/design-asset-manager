@@ -219,6 +219,22 @@ try {
   console.log(redact(ipcProbe));
   console.log("ONNX_MODEL_LOAD_IPC_END");
 
+  const llamaProbe = await page.evaluate(async () => {
+    const api = window.electronAPI;
+    try {
+      const start = await api?.llamaRuntimeStartServer?.();
+      const probe = await api?.llamaRuntimeTestServer?.({ baseUrl: start?.baseUrl });
+      return { start, probe };
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : String(error)
+      };
+    }
+  });
+  console.log("LLAMA_MULTIMODAL_IPC_START");
+  console.log(redact(llamaProbe));
+  console.log("LLAMA_MULTIMODAL_IPC_END");
+
   const refreshLabel = "\u5237\u65b0\u72b6\u6001";
   await page.locator("button").filter({ hasText: refreshLabel }).first().click({ timeout: 10000 });
   await page.waitForTimeout(3000);

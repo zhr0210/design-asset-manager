@@ -40,10 +40,10 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 - Electron/Playwright AI Console: Windows AI branch status panel was visible;
   screenshot was captured on the Windows desktop.
 - Overflow check: `doc=false`, `body=false`, viewport `1008x725`.
-- Failures/blockers: Windows Llama CUDA GGUF/mmproj evidence is still
-  insufficient for `real_model_path`.
-- Next recommended action: validate the Windows Llama CUDA GGUF/mmproj route
-  with real prompt/image evidence.
+- Failures/blockers at that time: Windows Llama CUDA GGUF/mmproj evidence was
+  still insufficient for `real_model_path`.
+- Next recommended action at that time: validate the Windows Llama CUDA
+  GGUF/mmproj route with real prompt/image evidence.
 
 The latest full Windows-host validation log filename is
 `dam-windows-ai-validation-20260607-024905.log`, and the screenshot filename is
@@ -101,5 +101,32 @@ direct Windows AI probes, and Electron/Playwright checks. The final focused
 Electron smoke reported WD Tagger and CLIP as `loaded_real`, CLIP embedding
 dimension 512, `ai_tag_task` and `search_embedding` as `real_model_path`, and no
 horizontal overflow at a 1008x725 viewport. CLIP ONNX is now a closed Windows
-real-evidence route; remaining Windows AI evidence work is Llama CUDA
-GGUF/mmproj prompt/image validation.
+real-evidence route.
+
+## Additional Llama GGUF/mmproj validation run
+
+On 2026-06-11, a focused Electron/Playwright run on DESKTOP-3573AOS synced the
+branch to `e350a97`, invoked the existing Llama IPC path, selected Qwen3-VL 2B
+Q4_K_M for the smallest useful Windows evidence slice, installed the llama.cpp
+CUDA 13 runtime plus cudart package, downloaded the matching GGUF and mmproj
+artifacts, started `llama-server`, and ran the shared text plus generated-image
+`probeLlamaServer()` validation.
+
+Sanitized result:
+
+- Hardware: NVIDIA RTX 5060 Ti, CUDA 13.2 reported by the Llama hardware probe.
+- Selected model: `qwen3-vl-2b-instruct-q4-k-m`.
+- Llama server: started through `llamaRuntimeStartServer`, model list returned
+  `Qwen3VL-2B-Instruct-Q4_K_M.gguf`.
+- Multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
+  `visionInput=generated_fixture`.
+- Windows Platform AI Branch Status: `ai_prompt_task` promoted to
+  `real_model_path`; `llama_cuda` lane included `real_backend_loaded` evidence
+  from text plus generated-image inference.
+- Electron/Playwright screenshot: `dam-windows-llama-ai-console.png` captured
+  on the Windows desktop.
+
+`scripts/windows-ai-real-evidence-validation.ps1` now also calls the Llama
+start/test IPC path before reading Windows Platform AI Branch Status, so future
+full validation runs refresh the in-process Llama multimodal evidence before
+asserting branch status.

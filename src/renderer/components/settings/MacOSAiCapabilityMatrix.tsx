@@ -1,6 +1,9 @@
 import React from 'react'
-import type { MacOSAiWorkerProbeResult, WindowsAiWorkerProbeResult } from '../../../shared/types/macos-ai-runtime.types'
-import { projectMacOSAiCapabilityStatusDisplay } from '../../../shared/workflows/ai-runtime-status.workflow'
+import type {
+  MacOSAiWorkerProbeResult
+} from '../../../shared/types/macos-ai-runtime.types'
+import type { WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
+import { projectAiCapabilityStatusDisplay } from '../../../shared/workflows/ai-runtime-status.workflow'
 
 export function MacOSAiCapabilityMatrix({
   probe,
@@ -37,7 +40,7 @@ export function MacOSAiCapabilityMatrix({
 }
 
 function MacOSAiLaneCard({ lane }: { lane: NonNullable<MacOSAiWorkerProbeResult['lanes']>[number] }) {
-  const laneStatus = projectMacOSAiCapabilityStatusDisplay(lane.status)
+  const laneStatus = projectAiCapabilityStatusDisplay(lane.status)
 
   return (
     <div className="rounded-xl border border-slate-200/60 bg-white p-2.5 dark:border-slate-800 dark:bg-slate-900/60">
@@ -52,7 +55,7 @@ function MacOSAiLaneCard({ lane }: { lane: NonNullable<MacOSAiWorkerProbeResult[
 
       <div className="grid gap-1 sm:grid-cols-2">
         {lane.capabilities.map((capability) => {
-          const capabilityStatus = projectMacOSAiCapabilityStatusDisplay(capability.status)
+          const capabilityStatus = projectAiCapabilityStatusDisplay(capability.status)
           return (
             <div key={capability.id} className="flex items-center justify-between gap-1 rounded-md border border-slate-100 bg-slate-50/70 px-2 py-1 dark:border-slate-800 dark:bg-slate-950">
               <div className="min-w-0 truncate">

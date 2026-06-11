@@ -9,10 +9,10 @@ import {
   projectAiRuntimeSummaryDisplay,
   getMacOSAiBranchRuntime,
   isMacOSAiBranchMetadata,
-  normalizeMacOSAiCapabilityStatus,
+  normalizeAiCapabilityStatus,
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
-  projectMacOSAiCapabilityStatusDisplay,
+  projectAiCapabilityStatusDisplay,
   projectMacOSAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
   projectPythonMpsExecutionProbeDisplay,
@@ -197,43 +197,43 @@ assert.equal(llamaStopped.pillTone, 'muted')
 assert.equal(llamaStopped.pillLabel, '已停止')
 assert.equal(llamaStopped.routeValue, '已停止')
 
-assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('ready'), {
+assert.deepEqual(projectAiCapabilityStatusDisplay('ready'), {
   status: 'ready',
   label: '就绪',
   badgeClass: 'border-emerald-100 bg-emerald-50 text-emerald-700'
 })
-assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('optional'), {
+assert.deepEqual(projectAiCapabilityStatusDisplay('optional'), {
   status: 'optional',
   label: '依赖可用',
   badgeClass: 'border-sky-100 bg-sky-50 text-sky-700'
 })
-assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('planned'), {
+assert.deepEqual(projectAiCapabilityStatusDisplay('planned'), {
   status: 'planned',
   label: '尚未实现',
   badgeClass: 'border-amber-100 bg-amber-50 text-amber-700'
 })
-assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('evidence_insufficient'), {
+assert.deepEqual(projectAiCapabilityStatusDisplay('evidence_insufficient'), {
   status: 'evidence_insufficient',
   label: '证据不足',
   badgeClass: 'border-slate-200 bg-slate-50 text-slate-500'
 })
-assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('dependency_missing'), {
+assert.deepEqual(projectAiCapabilityStatusDisplay('dependency_missing'), {
   status: 'dependency_missing',
   label: '依赖缺失',
   badgeClass: 'border-amber-100 bg-amber-50 text-amber-700'
 })
-assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('fallback'), {
+assert.deepEqual(projectAiCapabilityStatusDisplay('fallback'), {
   status: 'fallback',
   label: '回退路线',
   badgeClass: 'border-slate-200 bg-slate-50 text-slate-600'
 })
-assert.deepEqual(projectMacOSAiCapabilityStatusDisplay('unavailable'), {
+assert.deepEqual(projectAiCapabilityStatusDisplay('unavailable'), {
   status: 'unavailable',
   label: '不可用',
   badgeClass: 'border-rose-100 bg-rose-50 text-rose-700'
 })
-assert.equal(normalizeMacOSAiCapabilityStatus(null), 'unavailable')
-assert.equal(normalizeMacOSAiCapabilityStatus('ready'), 'ready')
+assert.equal(normalizeAiCapabilityStatus(null), 'unavailable')
+assert.equal(normalizeAiCapabilityStatus('ready'), 'ready')
 
 assert.deepEqual(projectAiRuntimeStatusDisplay('running'), {
   status: 'running',
@@ -444,13 +444,13 @@ assert.match(settingsPanelSource, /runOnnxModelLoadProbe\('clip'\)/)
 assert.match(settingsPanelSource, /projectAiRuntimeStatusDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeSummaryDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeHealthResultDisplay/)
-assert.match(settingsPanelSource, /projectMacOSAiCapabilityStatusDisplay/)
+assert.match(settingsPanelSource, /projectAiCapabilityStatusDisplay/)
 assert.match(settingsPanelSource, /projectMacOSAiWorkerProbeDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeInfoLabel/)
 assert.match(settingsPanelSource, /projectAiRuntimeDisplayValue/)
 assert.match(settingsPanelSource, /projectAiRuntimeActionLabel/)
 assert.match(settingsPanelSource, /getMacOSAiBranchRuntime/)
-assert.match(matrixSource, /projectMacOSAiCapabilityStatusDisplay/)
+assert.match(matrixSource, /projectAiCapabilityStatusDisplay/)
 assert.match(aiConsoleSource, /projectPythonMpsCompatibilityDisplay/)
 assert.match(aiConsoleSource, /projectClipSiglipOnnxCompatibilityDisplay/)
 assert.match(aiConsoleSource, /projectLlamaRuntimeDisplay/)

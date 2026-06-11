@@ -15,7 +15,10 @@ import {
   syncProjectedAiTaskLifecycle
 } from './ai-client/ai-task-lifecycle-sync.sink'
 import { createAssetTaggingTaskSubmission } from '../../shared/workflows/asset-tagging.workflow'
-import type { MacOSAiWorkerProbeResult, WindowsAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
+import type {
+  MacOSAiWorkerProbeResult
+} from '../../shared/types/macos-ai-runtime.types'
+import type { WindowsAiWorkerProbeResult } from '../../shared/types/windows-ai-runtime.types'
 import type {
   AiRuntimeClipSiglipOnnxStatusResponse,
   AiRuntimeOnnxModelLoadProbeResponse,

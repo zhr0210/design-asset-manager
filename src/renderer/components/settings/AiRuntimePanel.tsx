@@ -3,12 +3,11 @@ import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw,
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
 import type {
   MacOSAiBranchRuntimeMetadata,
-  WindowsAiBranchRuntimeMetadata,
-  MacOSAiCapabilityStatus,
+  AiCapabilityStatus,
   MacOSAiRuntimeLane,
-  MacOSAiWorkerProbeResult,
-  WindowsAiWorkerProbeResult
+  MacOSAiWorkerProbeResult
 } from '../../../shared/types/macos-ai-runtime.types'
+import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
 import { MacOSAiCapabilityMatrix } from './MacOSAiCapabilityMatrix'
 import type {
   AiRuntimeActiveRuntimeResponse,
@@ -32,7 +31,7 @@ import {
   projectAiRuntimeStatusDisplay,
   projectAiRuntimeSummaryDisplay,
   projectClipSiglipOnnxCompatibilityDisplay,
-  projectMacOSAiCapabilityStatusDisplay,
+  projectAiCapabilityStatusDisplay,
   projectMacOSAiWorkerProbeDisplay,
   projectWindowsAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
@@ -686,19 +685,19 @@ function PlatformAiWorkerProbePanel({
 type MacOSAiLaneLike = {
   id: string
   label: string
-  status: MacOSAiCapabilityStatus
+  status: AiCapabilityStatus
   summary: string
   capabilities: Array<{
     id: string
     label: string
-    status: MacOSAiCapabilityStatus
+    status: AiCapabilityStatus
     backend?: string
     role: string
   }>
 }
 
 function MacOSAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
-  const laneDisplay = projectMacOSAiCapabilityStatusDisplay(lane.status)
+  const laneDisplay = projectAiCapabilityStatusDisplay(lane.status)
   return (
     <div className="rounded-xl border border-white bg-white p-3 shadow-sm">
       <div className="flex items-start justify-between gap-2">
@@ -713,7 +712,7 @@ function MacOSAiLaneCard({ lane }: { lane: MacOSAiLaneLike }) {
 
       <div className="mt-3 space-y-1.5">
         {lane.capabilities.map((capability) => {
-          const capDisplay = projectMacOSAiCapabilityStatusDisplay(capability.status)
+          const capDisplay = projectAiCapabilityStatusDisplay(capability.status)
           return (
             <div key={capability.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 px-2.5 py-2">
               <div className="min-w-0">

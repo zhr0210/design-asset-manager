@@ -15,11 +15,10 @@ import type {
 import type { LlamaInstallStatus } from '../types/llama-runtime.types'
 import type {
   MacOSAiBranchRuntimeMetadata,
-  WindowsAiBranchRuntimeMetadata,
-  MacOSAiCapabilityStatus,
-  MacOSAiWorkerProbeResult,
-  WindowsAiWorkerProbeResult
+  AiCapabilityStatus,
+  MacOSAiWorkerProbeResult
 } from '../types/macos-ai-runtime.types'
+import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
 export type AiRuntimeStatusIcon = 'success' | 'warning' | 'activity'
@@ -51,8 +50,8 @@ export interface LlamaRuntimeDisplay {
   serviceDetailValue: string
 }
 
-export interface MacOSAiCapabilityStatusDisplay {
-  status: MacOSAiCapabilityStatus
+export interface AiCapabilityStatusDisplay {
+  status: AiCapabilityStatus
   label: string
   badgeClass: string
 }
@@ -236,11 +235,11 @@ export function projectLlamaRuntimeDisplay(
   }
 }
 
-export function projectMacOSAiCapabilityStatusDisplay(
-  status?: MacOSAiCapabilityStatus | null
-): MacOSAiCapabilityStatusDisplay {
-  const normalized = normalizeMacOSAiCapabilityStatus(status)
-  const labels: Record<MacOSAiCapabilityStatus, string> = {
+export function projectAiCapabilityStatusDisplay(
+  status?: AiCapabilityStatus | null
+): AiCapabilityStatusDisplay {
+  const normalized = normalizeAiCapabilityStatus(status)
+  const labels: Record<AiCapabilityStatus, string> = {
     ready: '就绪',
     optional: '依赖可用',
     planned: '尚未实现',
@@ -249,7 +248,7 @@ export function projectMacOSAiCapabilityStatusDisplay(
     fallback: '回退路线',
     unavailable: '不可用'
   }
-  const badgeClasses: Record<MacOSAiCapabilityStatus, string> = {
+  const badgeClasses: Record<AiCapabilityStatus, string> = {
     ready: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     optional: 'border-sky-100 bg-sky-50 text-sky-700',
     planned: 'border-amber-100 bg-amber-50 text-amber-700',
@@ -357,7 +356,7 @@ export function projectMacOSAiWorkerProbeDisplay(
   }
 
   const connected = probe.isMacOS
-  const clipSiglipStatus = projectMacOSAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
+  const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
   return {
     connected,
     connectionLabel: connected ? 'macOS 探测已连接' : '等待探测',
@@ -386,9 +385,9 @@ export function projectMacOSAiWorkerProbeDisplay(
   }
 }
 
-export function normalizeMacOSAiCapabilityStatus(
-  status?: MacOSAiCapabilityStatus | null
-): MacOSAiCapabilityStatus {
+export function normalizeAiCapabilityStatus(
+  status?: AiCapabilityStatus | null
+): AiCapabilityStatus {
   return status === 'ready'
     || status === 'optional'
     || status === 'planned'
@@ -586,7 +585,7 @@ export function projectWindowsAiWorkerProbeDisplay(
   }
 
   const connected = probe.platform === 'win32' || probe.platform === 'windows'
-  const clipSiglipStatus = projectMacOSAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
+  const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
   return {
     connected,
     connectionLabel: connected ? 'Windows 探测已连接' : '等待探测',

@@ -45,7 +45,7 @@ assert.match(matrixSource, /macOS 细项能力矩阵/)
 assert.match(matrixSource, /probe\.lanes\.map/)
 assert.match(matrixSource, /capability\.modelFamily \?\? capability\.backend \?\? capability\.role/)
 assert.match(matrixSource, /capability\.label/)
-assert.match(matrixSource, /projectMacOSAiCapabilityStatusDisplay/)
+assert.match(matrixSource, /projectAiCapabilityStatusDisplay/)
 assert.doesNotMatch(matrixSource, /const STATUS_LABELS/)
 assert.doesNotMatch(matrixSource, /const STATUS_STYLES/)
 

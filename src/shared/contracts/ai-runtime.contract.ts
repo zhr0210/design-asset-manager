@@ -1,5 +1,8 @@
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../types/ai-runtime.types'
-import type { MacOSAiWorkerProbeResult, WindowsAiWorkerProbeResult } from '../types/macos-ai-runtime.types'
+import type {
+  MacOSAiWorkerProbeResult
+} from '../types/macos-ai-runtime.types'
+import type { WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
 import type { PlatformAiBranchStatusResponse } from '../types/platform-ai-branch-status.types'
 
 export const CHANNEL_AI_RUNTIME_LIST_RUNTIMES = 'aiRuntime:listRuntimes'

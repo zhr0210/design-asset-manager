@@ -1,12 +1,12 @@
 import type {
   MacOSAiBranchRuntimeMetadata,
-  MacOSAiCapabilityStatus,
-  MacOSAiRuntimeCapability,
+  AiCapabilityStatus,
+  AiRuntimeCapability,
   MacOSAiRuntimeLane
 } from '../types/macos-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
 
-function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'apple-silicon' | 'macos'): MacOSAiCapabilityStatus {
+function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'apple-silicon' | 'macos'): AiCapabilityStatus {
   if (platform !== 'darwin') return 'unavailable'
   if (preferred === 'apple-silicon' && arch !== 'arm64') return 'fallback'
   return 'evidence_insufficient'
@@ -15,11 +15,11 @@ function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferre
 function capability(
   id: string,
   label: string,
-  status: MacOSAiCapabilityStatus,
-  role: MacOSAiRuntimeCapability['role'],
+  status: AiCapabilityStatus,
+  role: AiRuntimeCapability['role'],
   modelFamily?: string,
   backend?: string
-): MacOSAiRuntimeCapability {
+): AiRuntimeCapability {
   return { id, label, status, role, modelFamily, backend }
 }
 

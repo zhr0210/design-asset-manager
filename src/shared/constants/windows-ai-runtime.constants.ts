@@ -1,12 +1,11 @@
 import type {
   WindowsAiBranchRuntimeMetadata,
-  MacOSAiCapabilityStatus,
-  MacOSAiRuntimeCapability,
   WindowsAiRuntimeLane
-} from '../types/macos-ai-runtime.types'
+} from '../types/windows-ai-runtime.types'
+import type { AiCapabilityStatus, AiRuntimeCapability } from '../types/macos-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
 
-function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'windows-cuda' | 'windows'): MacOSAiCapabilityStatus {
+function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'windows-cuda' | 'windows'): AiCapabilityStatus {
   if (platform !== 'win32') return 'unavailable'
   return 'evidence_insufficient'
 }
@@ -14,11 +13,11 @@ function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferre
 function capability(
   id: string,
   label: string,
-  status: MacOSAiCapabilityStatus,
-  role: MacOSAiRuntimeCapability['role'],
+  status: AiCapabilityStatus,
+  role: AiRuntimeCapability['role'],
   modelFamily?: string,
   backend?: string
-): MacOSAiRuntimeCapability {
+): AiRuntimeCapability {
   return { id, label, status, role, modelFamily, backend }
 }
 
