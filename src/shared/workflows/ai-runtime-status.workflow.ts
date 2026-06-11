@@ -125,6 +125,11 @@ export interface AiRuntimeWorkerProbePanelDisplay {
   clipSiglipStatusLabel: string
 }
 
+export interface AiRuntimeCapabilityMatrixDisplay {
+  title: string
+  description: string
+}
+
 const TONE_CLASS: Record<AiRuntimeDisplayTone, string> = {
   good: 'border-emerald-100 bg-emerald-50 text-emerald-700',
   warn: 'border-amber-100 bg-amber-50 text-amber-700',
@@ -741,5 +746,12 @@ export function projectAiRuntimeWorkerProbePanelDisplay(
     isMacOSLabel: display.isMacOSLabel,
     isAppleSiliconLabel: display.isAppleSiliconLabel,
     clipSiglipStatusLabel: display.clipSiglipStatusLabel
+  }
+}
+
+export function projectAiRuntimeCapabilityMatrixDisplay(isWindows?: boolean): AiRuntimeCapabilityMatrixDisplay {
+  return {
+    title: isWindows ? 'Windows 细项能力矩阵' : 'macOS 细项能力矩阵',
+    description: '区分依赖可用、依赖缺失、证据不足与真正尚未实现的路线，避免把探测缺口误报为功能规划。'
   }
 }

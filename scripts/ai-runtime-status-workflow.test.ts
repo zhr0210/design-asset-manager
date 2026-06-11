@@ -16,6 +16,7 @@ import {
   projectMacOSAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
   projectAiRuntimeBranchPanelDisplay,
+  projectAiRuntimeCapabilityMatrixDisplay,
   projectAiRuntimePlatformPanelCopy,
   projectAiRuntimeWorkerProbePanelDisplay,
   projectPlatformPythonRuntimeCompatibilityDisplay,
@@ -536,6 +537,9 @@ const windowsWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay(true, windows
 assert.equal(windowsWorkerPanel.title, 'Windows Worker 实时探测')
 assert.equal(windowsWorkerPanel.platformBadgeLabel, 'win32/amd64')
 assert.equal(windowsWorkerPanel.clipSiglipStatusLabel, '就绪')
+assert.equal(projectAiRuntimeCapabilityMatrixDisplay(false).title, 'macOS 细项能力矩阵')
+assert.equal(projectAiRuntimeCapabilityMatrixDisplay(true).title, 'Windows 细项能力矩阵')
+assert.match(projectAiRuntimeCapabilityMatrixDisplay().description, /证据不足/)
 
 const settingsPanelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
 const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
@@ -557,6 +561,9 @@ assert.match(settingsPanelSource, /projectAiRuntimeDisplayValue/)
 assert.match(settingsPanelSource, /projectAiRuntimeActionLabel/)
 assert.match(settingsPanelSource, /getMacOSAiBranchRuntime/)
 assert.match(matrixSource, /projectAiCapabilityStatusDisplay/)
+assert.match(matrixSource, /projectAiRuntimeCapabilityMatrixDisplay/)
+assert.doesNotMatch(matrixSource, /Windows 细项能力矩阵/)
+assert.doesNotMatch(matrixSource, /macOS 细项能力矩阵/)
 assert.match(aiConsoleSource, /projectPythonMpsCompatibilityDisplay/)
 assert.match(aiConsoleSource, /projectClipSiglipOnnxCompatibilityDisplay/)
 assert.match(aiConsoleSource, /projectLlamaRuntimeDisplay/)

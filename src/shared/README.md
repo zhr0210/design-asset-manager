@@ -31,7 +31,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Download queue status labels, row metadata, file-size labels, progress labels, progress tones, search-result action labels, active counts, and topbar/sidebar download indicators should use shared projection rather than route-local status checks.
 - AI runtime compatibility and Llama runtime display states should use shared projection so Settings and AI Console share the same status vocabulary.
 - Llama service health is runtime evidence only. `real_model_path` requires a fresh successful text plus generated-image inference probe through GGUF/mmproj.
-- macOS AI capability matrix status labels and badge classes should use shared AI Runtime Status projection rather than component-local status maps.
+- macOS/Windows AI capability matrix title, description, status labels, and badge classes should use shared AI Runtime Status projection rather than component-local platform copy or status maps.
 - AI Runtime panel runtime/health badges, icon semantics, health-result copy, and summary counts should use shared AI Runtime Status projection rather than renderer-local status maps or filters.
 - AI Runtime panel platform-specific branch titles, Worker probe titles, CUDA/MPS compatibility copy, fixed-tensor execution copy, and default probe failure messages should use shared AI Runtime Status projection rather than renderer-local platform ternaries.
 - macOS Worker probe connection and route tiles should use shared projection; a missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
@@ -60,6 +60,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.6 | 2026-06-11 | Moved AI capability matrix title and description into shared AI Runtime Status projection. |
 | v1.8.5 | 2026-06-11 | Moved AI Runtime panel platform-specific copy and display selection into shared workflow projection for Windows/macOS parity. |
 | v1.8.4 | 2026-06-11 | Moved Platform AI Action Plan UI command routing into shared workflow code so renderer actions no longer infer destinations from workflow/kind pairs. |
 | v1.8.3 | 2026-06-06 | Extended ONNX probe contracts with CLIP image/text embedding operation, finite-result, and dimension evidence. |

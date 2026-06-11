@@ -3,7 +3,10 @@ import type {
   MacOSAiWorkerProbeResult
 } from '../../../shared/types/macos-ai-runtime.types'
 import type { WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
-import { projectAiCapabilityStatusDisplay } from '../../../shared/workflows/ai-runtime-status.workflow'
+import {
+  projectAiCapabilityStatusDisplay,
+  projectAiRuntimeCapabilityMatrixDisplay
+} from '../../../shared/workflows/ai-runtime-status.workflow'
 
 export function MacOSAiCapabilityMatrix({
   probe,
@@ -13,16 +16,17 @@ export function MacOSAiCapabilityMatrix({
   isWindows?: boolean
 }) {
   if (!probe) return null
+  const display = projectAiRuntimeCapabilityMatrixDisplay(isWindows)
 
   return (
     <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950">
       <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">
-            {isWindows ? 'Windows 细项能力矩阵' : 'macOS 细项能力矩阵'}
+            {display.title}
           </div>
           <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-            区分依赖可用、依赖缺失、证据不足与真正尚未实现的路线，避免把探测缺口误报为功能规划。
+            {display.description}
           </div>
         </div>
         <div className="text-[10.5px] font-black text-slate-500 dark:text-slate-400">
