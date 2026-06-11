@@ -94,6 +94,37 @@ export interface MacOSAiWorkerProbeDisplay {
   clipSiglipOnnx: MacOSAiProbeTileDisplay
 }
 
+export interface AiRuntimePlatformPanelCopy {
+  compatibilityTitle: string
+  compatibilityDescription: string
+  compatibilityFailureMessage: string
+  executionTitle: string
+  executionDescription: string
+  executionFailureMessage: string
+  executionLastActionLabel: string
+  executionBusyLabel: string
+  executionButtonLabel: string
+  clipSiglipCompatibilityDescription: string
+  workerProbeFailureMessage: string
+}
+
+export interface AiRuntimeBranchPanelDisplay {
+  title: string
+  description: string
+  platformBadgeLabel: string
+  platformBadgeClass: string
+}
+
+export interface AiRuntimeWorkerProbePanelDisplay {
+  title: string
+  description: string
+  platformBadgeLabel: string
+  platformBadgeClass: string
+  isMacOSLabel: string
+  isAppleSiliconLabel: string
+  clipSiglipStatusLabel: string
+}
+
 const TONE_CLASS: Record<AiRuntimeDisplayTone, string> = {
   good: 'border-emerald-100 bg-emerald-50 text-emerald-700',
   warn: 'border-amber-100 bg-amber-50 text-amber-700',
@@ -115,6 +146,16 @@ export function projectPythonMpsCompatibilityDisplay(
 
   const label = status.status === 'planned' ? '待补齐' : '不可用'
   return compatibilityDisplay(label, status.status === 'planned' ? 'warn' : 'bad', status.runtime ?? 'torch.mps', 'incompatible', status.status, error ?? status.error)
+}
+
+export function projectPlatformPythonRuntimeCompatibilityDisplay(
+  isWindows: boolean,
+  status?: AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse | null,
+  error?: string | null
+): AiRuntimeCompatibilityDisplay {
+  return isWindows
+    ? projectPythonCudaCompatibilityDisplay(status as AiRuntimePythonCudaStatusResponse, error)
+    : projectPythonMpsCompatibilityDisplay(status as AiRuntimePythonMpsStatusResponse, error)
 }
 
 export function projectClipSiglipOnnxCompatibilityDisplay(
@@ -188,6 +229,48 @@ export function projectPythonMpsExecutionProbeDisplay(
     return modelLoadProbeDisplay('平台不支持', 'muted', 'MPS 真实执行仅适用于 macOS。')
   }
   return modelLoadProbeDisplay('执行失败', 'bad', `MPS 张量执行失败：${probe.errorCode ?? probe.status}`)
+}
+
+export function projectPlatformPythonRuntimeExecutionProbeDisplay(
+  isWindows: boolean,
+  probe?: AiRuntimePythonMpsExecutionProbeResponse | AiRuntimePythonCudaExecutionProbeResponse | null,
+  error?: string | null
+): AiRuntimeModelLoadProbeDisplay {
+  return isWindows
+    ? projectPythonCudaExecutionProbeDisplay(probe as AiRuntimePythonCudaExecutionProbeResponse, error)
+    : projectPythonMpsExecutionProbeDisplay(probe as AiRuntimePythonMpsExecutionProbeResponse, error)
+}
+
+export function projectAiRuntimePlatformPanelCopy(isWindows: boolean): AiRuntimePlatformPanelCopy {
+  if (isWindows) {
+    return {
+      compatibilityTitle: 'Python CUDA 兼容性检查',
+      compatibilityDescription: '这个检查器会确认 PyTorch CUDA、torchvision、transformers 与小模型家族是否已经具备可用的 Windows 兼容性。',
+      compatibilityFailureMessage: '读取 Python CUDA 兼容性失败。',
+      executionTitle: 'Python CUDA 真实执行验证',
+      executionDescription: '手动执行一次固定张量运算。该结果只证明 torch.cuda 可执行，不代表任何模型已经加载或完成推理。',
+      executionFailureMessage: 'CUDA 真实执行验证失败。',
+      executionLastActionLabel: 'Python CUDA 真实执行验证',
+      executionBusyLabel: '正在验证...',
+      executionButtonLabel: '验证 CUDA 执行',
+      clipSiglipCompatibilityDescription: '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 Windows 的 embedding 路线。',
+      workerProbeFailureMessage: '读取 Windows Worker 能力失败。'
+    }
+  }
+
+  return {
+    compatibilityTitle: 'Python MPS 兼容性检查',
+    compatibilityDescription: '这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。',
+    compatibilityFailureMessage: '读取 Python MPS 兼容性失败。',
+    executionTitle: 'Python MPS 真实执行验证',
+    executionDescription: '手动执行一次固定张量运算。该结果只证明 torch.mps 可执行，不代表任何模型已经加载或完成推理。',
+    executionFailureMessage: 'MPS 真实执行验证失败。',
+    executionLastActionLabel: 'Python MPS 真实执行验证',
+    executionBusyLabel: '正在验证...',
+    executionButtonLabel: '验证 MPS 执行',
+    clipSiglipCompatibilityDescription: '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。',
+    workerProbeFailureMessage: '读取 macOS Worker 能力失败。'
+  }
 }
 
 export function projectLlamaRuntimeDisplay(
@@ -513,6 +596,24 @@ export function getWindowsAiBranchRuntime(runtimes: AiRuntimeState[]): WindowsAi
   return null
 }
 
+export function projectAiRuntimeBranchPanelDisplay(
+  branch: MacOSAiBranchRuntimeMetadata | WindowsAiBranchRuntimeMetadata
+): AiRuntimeBranchPanelDisplay {
+  const isWindows = branch.marker === 'windows-ai-branch'
+  const routeSummary = isWindows
+    ? 'Python CUDA、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。'
+    : 'Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经 macOS 实时探测的条目统一显示为证据不足。'
+
+  return {
+    title: isWindows ? 'Windows AI 分支' : 'macOS AI 分支',
+    description: `${routeSummary} 当前阶段：${branch.phase} / ${branch.platform}/${branch.arch}`,
+    platformBadgeLabel: branch.isCurrentPlatform ? '当前平台' : '非当前平台',
+    platformBadgeClass: branch.isCurrentPlatform
+      ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
+      : 'border-slate-200 bg-white text-slate-500'
+  }
+}
+
 export function projectPythonCudaCompatibilityDisplay(
   status?: AiRuntimePythonCudaStatusResponse | null,
   error?: string | null
@@ -611,5 +712,34 @@ export function projectWindowsAiWorkerProbeDisplay(
         ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
         : '已探测，未报告版本'
     }
+  }
+}
+
+export function projectAiRuntimeWorkerProbePanelDisplay(
+  isWindows: boolean,
+  probe?: MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null
+): AiRuntimeWorkerProbePanelDisplay {
+  if (isWindows) {
+    const display = projectWindowsAiWorkerProbeDisplay(probe as WindowsAiWorkerProbeResult)
+    return {
+      title: 'Windows Worker 实时探测',
+      description: '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。',
+      platformBadgeLabel: display.platformBadgeLabel,
+      platformBadgeClass: display.platformBadgeClass,
+      isMacOSLabel: display.isMacOSLabel,
+      isAppleSiliconLabel: display.isAppleSiliconLabel,
+      clipSiglipStatusLabel: display.clipSiglipStatusLabel
+    }
+  }
+
+  const display = projectMacOSAiWorkerProbeDisplay(probe as MacOSAiWorkerProbeResult)
+  return {
+    title: 'macOS Worker 实时探测',
+    description: '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。',
+    platformBadgeLabel: display.platformBadgeLabel,
+    platformBadgeClass: display.platformBadgeClass,
+    isMacOSLabel: display.isMacOSLabel,
+    isAppleSiliconLabel: display.isAppleSiliconLabel,
+    clipSiglipStatusLabel: display.clipSiglipStatusLabel
   }
 }

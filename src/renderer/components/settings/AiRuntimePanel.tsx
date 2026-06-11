@@ -32,13 +32,12 @@ import {
   projectAiRuntimeSummaryDisplay,
   projectClipSiglipOnnxCompatibilityDisplay,
   projectAiCapabilityStatusDisplay,
-  projectMacOSAiWorkerProbeDisplay,
-  projectWindowsAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
-  projectPythonMpsExecutionProbeDisplay,
-  projectPythonMpsCompatibilityDisplay,
-  projectPythonCudaExecutionProbeDisplay,
-  projectPythonCudaCompatibilityDisplay,
+  projectPlatformPythonRuntimeCompatibilityDisplay,
+  projectPlatformPythonRuntimeExecutionProbeDisplay,
+  projectAiRuntimePlatformPanelCopy,
+  projectAiRuntimeBranchPanelDisplay,
+  projectAiRuntimeWorkerProbePanelDisplay,
   projectAiRuntimeInfoLabel,
   projectAiRuntimeDisplayValue,
   projectAiRuntimeActionLabel,
@@ -125,6 +124,7 @@ export default function AiRuntimePanel() {
     const winBranch = getWindowsAiBranchRuntime(runtimes)
     return Boolean(winBranch?.isCurrentPlatform)
   }, [runtimes])
+  const platformCopy = useMemo(() => projectAiRuntimePlatformPanelCopy(isWindows), [isWindows])
 
   const macosAiBranch = useMemo(() => getMacOSAiBranchRuntime(runtimes), [runtimes])
   const windowsAiBranch = useMemo(() => getWindowsAiBranchRuntime(runtimes), [runtimes])
@@ -134,10 +134,7 @@ export default function AiRuntimePanel() {
   }, [runtimes])
 
   const pythonMpsDisplay = useMemo(() => {
-    if (isWindows) {
-      return projectPythonCudaCompatibilityDisplay(pythonMpsStatus as AiRuntimePythonCudaStatusResponse, pythonMpsStatusError)
-    }
-    return projectPythonMpsCompatibilityDisplay(pythonMpsStatus as AiRuntimePythonMpsStatusResponse, pythonMpsStatusError)
+    return projectPlatformPythonRuntimeCompatibilityDisplay(isWindows, pythonMpsStatus, pythonMpsStatusError)
   }, [isWindows, pythonMpsStatus, pythonMpsStatusError])
 
   const clipSiglipDisplay = useMemo(() => {
@@ -145,10 +142,7 @@ export default function AiRuntimePanel() {
   }, [clipSiglipOnnxStatus, clipSiglipOnnxStatusError])
 
   const pythonMpsExecutionDisplay = useMemo(() => {
-    if (isWindows) {
-      return projectPythonCudaExecutionProbeDisplay(pythonMpsExecutionProbe as AiRuntimePythonCudaExecutionProbeResponse, pythonMpsExecutionProbeError)
-    }
-    return projectPythonMpsExecutionProbeDisplay(pythonMpsExecutionProbe as AiRuntimePythonMpsExecutionProbeResponse, pythonMpsExecutionProbeError)
+    return projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, pythonMpsExecutionProbe, pythonMpsExecutionProbeError)
   }, [isWindows, pythonMpsExecutionProbe, pythonMpsExecutionProbeError])
 
   const onnxModelLoadDisplay = useMemo(() => {
@@ -196,7 +190,7 @@ export default function AiRuntimePanel() {
         setMacOSWorkerProbeError(probeResponse.data.error ?? null)
       } else {
         setMacOSWorkerProbe(null)
-        setMacOSWorkerProbeError(probeResponse.error || (currentIsWin ? '读取 Windows Worker 能力失败。' : '读取 macOS Worker 能力失败。'))
+        setMacOSWorkerProbeError(probeResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).workerProbeFailureMessage)
       }
 
       if (pythonStatusResponse.success && pythonStatusResponse.data) {
@@ -204,7 +198,7 @@ export default function AiRuntimePanel() {
         setPythonMpsStatusError(pythonStatusResponse.data.error ?? null)
       } else {
         setPythonMpsStatus(null)
-        setPythonMpsStatusError(pythonStatusResponse.error || (currentIsWin ? '读取 Python CUDA 兼容性失败。' : '读取 Python MPS 兼容性失败。'))
+        setPythonMpsStatusError(pythonStatusResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).compatibilityFailureMessage)
       }
 
       if (clipSiglipResponse.success && clipSiglipResponse.data) {
@@ -352,9 +346,9 @@ export default function AiRuntimePanel() {
     setPythonMpsExecutionProbeError(null)
     try {
       const response = isWindows ? await api.probePythonCudaRuntime() : await api.probePythonMpsRuntime()
-      if (!response.success || !response.data) throw new Error(response.error || (isWindows ? 'CUDA 真实执行验证失败。' : 'MPS 真实执行验证失败。'))
+      if (!response.success || !response.data) throw new Error(response.error || platformCopy.executionFailureMessage)
       setPythonMpsExecutionProbe(response.data)
-      setLastAction(isWindows ? 'Python CUDA 真实执行验证' : 'Python MPS 真实执行验证')
+      setLastAction(platformCopy.executionLastActionLabel)
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
       setPythonMpsExecutionProbe(null)
@@ -395,12 +389,10 @@ export default function AiRuntimePanel() {
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">
-              {isWindows ? 'Python CUDA 兼容性检查' : 'Python MPS 兼容性检查'}
+              {platformCopy.compatibilityTitle}
             </div>
             <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-              {isWindows
-                ? '这个检查器会确认 PyTorch CUDA、torchvision、transformers 与小模型家族是否已经具备可用的 Windows 兼容性。'
-                : '这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。'}
+              {platformCopy.compatibilityDescription}
             </div>
           </div>
           <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsDisplay.toneClass}`}>
@@ -428,12 +420,10 @@ export default function AiRuntimePanel() {
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
             <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">
-              {isWindows ? 'Python CUDA 真实执行验证' : 'Python MPS 真实执行验证'}
+              {platformCopy.executionTitle}
             </div>
             <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-              {isWindows
-                ? '手动执行一次固定张量运算。该结果只证明 torch.cuda 可执行，不代表任何模型已经加载或完成推理。'
-                : '手动执行一次固定张量运算。该结果只证明 torch.mps 可执行，不代表任何模型已经加载或完成推理。'}
+              {platformCopy.executionDescription}
             </div>
           </div>
           <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsExecutionDisplay.toneClass}`}>
@@ -445,7 +435,7 @@ export default function AiRuntimePanel() {
             {pythonMpsExecutionDisplay.detail}
           </div>
           <PanelButton onClick={runPythonMpsExecutionProbe} disabled={probingPythonMps} icon={probingPythonMps ? Loader2 : Activity}>
-            {probingPythonMps ? '正在验证...' : isWindows ? '验证 CUDA 执行' : '验证 MPS 执行'}
+            {probingPythonMps ? platformCopy.executionBusyLabel : platformCopy.executionButtonLabel}
           </PanelButton>
         </div>
       </div>
@@ -455,9 +445,7 @@ export default function AiRuntimePanel() {
           <div>
             <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">CLIP/SigLIP ONNX 兼容性检查</div>
             <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-              {isWindows
-                ? '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 Windows 的 embedding 路线。'
-                : '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。'}
+              {platformCopy.clipSiglipCompatibilityDescription}
             </div>
           </div>
           <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${clipSiglipDisplay.toneClass}`}>
@@ -582,23 +570,20 @@ export default function AiRuntimePanel() {
 }
 
 function PlatformAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata | WindowsAiBranchRuntimeMetadata }) {
-  const isWindows = branch.marker === 'windows-ai-branch'
+  const display = useMemo(() => projectAiRuntimeBranchPanelDisplay(branch), [branch])
   return (
     <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="text-[13px] font-black text-slate-900">
-            {isWindows ? 'Windows AI 分支' : 'macOS AI 分支'}
+            {display.title}
           </div>
           <div className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
-            {isWindows
-              ? 'Python CUDA、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。'
-              : 'Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经 macOS 实时探测的条目统一显示为证据不足。'}
-            当前阶段：{branch.phase} / {branch.platform}/{branch.arch}
+            {display.description}
           </div>
         </div>
-        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${branch.isCurrentPlatform ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-white text-slate-500'}`}>
-          {branch.isCurrentPlatform ? '当前平台' : '非当前平台'}
+        <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${display.platformBadgeClass}`}>
+          {display.platformBadgeLabel}
         </span>
       </div>
 
@@ -624,24 +609,17 @@ function PlatformAiWorkerProbePanel({
   error: string | null
   isWindows: boolean
 }) {
-  const probeDisplay = useMemo(() => {
-    if (isWindows) {
-      return projectWindowsAiWorkerProbeDisplay(probe as WindowsAiWorkerProbeResult)
-    }
-    return projectMacOSAiWorkerProbeDisplay(probe as MacOSAiWorkerProbeResult)
-  }, [isWindows, probe])
+  const probeDisplay = useMemo(() => projectAiRuntimeWorkerProbePanelDisplay(isWindows, probe), [isWindows, probe])
 
   return (
     <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="text-[13px] font-black text-slate-900">
-            {isWindows ? 'Windows Worker 实时探测' : 'macOS Worker 实时探测'}
+            {probeDisplay.title}
           </div>
           <div className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
-            {isWindows
-              ? '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
-              : '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'}
+            {probeDisplay.description}
           </div>
         </div>
         <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${probeDisplay.platformBadgeClass}`}>

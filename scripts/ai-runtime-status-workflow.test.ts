@@ -15,6 +15,11 @@ import {
   projectAiCapabilityStatusDisplay,
   projectMacOSAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
+  projectAiRuntimeBranchPanelDisplay,
+  projectAiRuntimePlatformPanelCopy,
+  projectAiRuntimeWorkerProbePanelDisplay,
+  projectPlatformPythonRuntimeCompatibilityDisplay,
+  projectPlatformPythonRuntimeExecutionProbeDisplay,
   projectPythonMpsExecutionProbeDisplay,
   projectPythonMpsCompatibilityDisplay,
   projectPythonCudaCompatibilityDisplay,
@@ -62,18 +67,44 @@ const pythonUnavailable = projectPythonMpsCompatibilityDisplay({
 assert.equal(pythonUnavailable.label, '不可用')
 assert.equal(pythonUnavailable.tone, 'bad')
 
+const macOSPlatformCopy = projectAiRuntimePlatformPanelCopy(false)
+assert.equal(macOSPlatformCopy.compatibilityTitle, 'Python MPS 兼容性检查')
+assert.equal(macOSPlatformCopy.executionTitle, 'Python MPS 真实执行验证')
+assert.equal(macOSPlatformCopy.executionFailureMessage, 'MPS 真实执行验证失败。')
+assert.equal(macOSPlatformCopy.executionButtonLabel, '验证 MPS 执行')
+assert.equal(macOSPlatformCopy.workerProbeFailureMessage, '读取 macOS Worker 能力失败。')
+assert.match(macOSPlatformCopy.clipSiglipCompatibilityDescription, /macOS/)
+
+const windowsPlatformCopy = projectAiRuntimePlatformPanelCopy(true)
+assert.equal(windowsPlatformCopy.compatibilityTitle, 'Python CUDA 兼容性检查')
+assert.equal(windowsPlatformCopy.executionTitle, 'Python CUDA 真实执行验证')
+assert.equal(windowsPlatformCopy.executionFailureMessage, 'CUDA 真实执行验证失败。')
+assert.equal(windowsPlatformCopy.executionButtonLabel, '验证 CUDA 执行')
+assert.equal(windowsPlatformCopy.workerProbeFailureMessage, '读取 Windows Worker 能力失败。')
+assert.match(windowsPlatformCopy.clipSiglipCompatibilityDescription, /Windows/)
+
+assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay(false, pythonReady).runtimeLabel, 'torch.mps')
+assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay(true, {
+  success: true,
+  compatible: true,
+  runtime: 'torch.cuda',
+  status: 'optional',
+  diagnostics: {}
+}).runtimeLabel, 'torch.cuda')
+
 const mpsExecutionUnchecked = projectPythonMpsExecutionProbeDisplay(null)
 assert.equal(mpsExecutionUnchecked.label, '尚未验证')
 assert.equal(mpsExecutionUnchecked.tone, 'muted')
 
-const mpsExecutionPassed = projectPythonMpsExecutionProbeDisplay({
+const mpsExecutionPassedProbe = {
   success: true,
   status: 'executed_real',
   checkedAt: '2026-06-06T00:00:00.000Z',
   runtime: 'torch.mps',
   operation: 'tensor_square_sum',
   resultFinite: true
-})
+} as const
+const mpsExecutionPassed = projectPythonMpsExecutionProbeDisplay(mpsExecutionPassedProbe)
 assert.equal(mpsExecutionPassed.label, '真实执行通过')
 assert.equal(mpsExecutionPassed.tone, 'good')
 assert.match(mpsExecutionPassed.detail, /torch\.mps/)
@@ -89,6 +120,15 @@ const mpsExecutionUnavailable = projectPythonMpsExecutionProbeDisplay({
 })
 assert.equal(mpsExecutionUnavailable.label, '后端不可用')
 assert.equal(mpsExecutionUnavailable.tone, 'warn')
+assert.equal(projectPlatformPythonRuntimeExecutionProbeDisplay(false, mpsExecutionPassedProbe).detail, mpsExecutionPassed.detail)
+assert.match(projectPlatformPythonRuntimeExecutionProbeDisplay(true, {
+  success: true,
+  status: 'executed_real',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  runtime: 'torch.cuda',
+  operation: 'tensor_square_sum',
+  resultFinite: true
+}).detail, /torch\.cuda/)
 
 const clipReady = projectClipSiglipOnnxCompatibilityDisplay({
   success: true,
@@ -323,6 +363,12 @@ const macOSBranch = {
   warnings: []
 }
 assert.equal(isMacOSAiBranchMetadata(macOSBranch), true)
+assert.deepEqual(projectAiRuntimeBranchPanelDisplay(macOSBranch), {
+  title: 'macOS AI 分支',
+  description: 'Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经 macOS 实时探测的条目统一显示为证据不足。 当前阶段：worker-probes / darwin/arm64',
+  platformBadgeLabel: '当前平台',
+  platformBadgeClass: 'border-emerald-100 bg-emerald-50 text-emerald-700'
+})
 assert.equal(isMacOSAiBranchMetadata({ marker: 'macos-ai-branch', lanes: null }), false)
 assert.equal(getMacOSAiBranchRuntime([
   runtimeState('stopped'),
@@ -385,6 +431,43 @@ assert.equal(connectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(connectedProbe.onnxRuntime.captionLabel, 'CoreMLExecutionProvider / CPUExecutionProvider')
 assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '依赖缺失')
 assert.equal(connectedProbe.clipSiglipOnnx.captionLabel, '已探测，未报告版本')
+const macOSWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay(false, {
+  platform: 'darwin',
+  machine: 'arm64',
+  isMacOS: true,
+  isAppleSilicon: true,
+  phase: 'worker-probes',
+  torch: {
+    available: true,
+    version: '2.8.0',
+    mpsBuilt: true,
+    mpsAvailable: true,
+    cpuFallback: true,
+    error: null
+  },
+  onnxruntime: {
+    available: true,
+    version: '1.22.0',
+    providers: ['CoreMLExecutionProvider', 'CPUExecutionProvider'],
+    coremlAvailable: true,
+    cpuAvailable: true,
+    error: null
+  },
+  clipSiglipOnnx: {
+    id: 'clip-siglip-onnx',
+    label: 'CLIP/SigLIP ONNX',
+    status: 'dependency_missing',
+    role: 'embedding',
+    backend: 'optimum',
+    version: null,
+    available: false,
+    error: null
+  },
+  lanes: []
+})
+assert.equal(macOSWorkerPanel.title, 'macOS Worker 实时探测')
+assert.equal(macOSWorkerPanel.platformBadgeLabel, 'darwin/arm64')
+assert.equal(macOSWorkerPanel.clipSiglipStatusLabel, '依赖缺失')
 
 // Add Windows capability display tests
 const windowsUncheckedProbe = projectWindowsAiWorkerProbeDisplay(null)
@@ -392,7 +475,7 @@ assert.equal(windowsUncheckedProbe.connected, false)
 assert.equal(windowsUncheckedProbe.cuda.valueLabel, '尚未探测')
 assert.equal(windowsUncheckedProbe.onnxRuntime.valueLabel, '尚未探测')
 
-const windowsConnectedProbe = projectWindowsAiWorkerProbeDisplay({
+const windowsRawProbe = {
   platform: 'win32',
   machine: 'amd64',
   isMacOS: false,
@@ -424,7 +507,8 @@ const windowsConnectedProbe = projectWindowsAiWorkerProbeDisplay({
     error: null
   },
   lanes: []
-})
+}
+const windowsConnectedProbe = projectWindowsAiWorkerProbeDisplay(windowsRawProbe)
 assert.equal(windowsConnectedProbe.connected, true)
 assert.equal(windowsConnectedProbe.connectionLabel, 'Windows 探测已连接')
 assert.equal(windowsConnectedProbe.cuda.valueLabel, '可用')
@@ -433,11 +517,34 @@ assert.equal(windowsConnectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(windowsConnectedProbe.onnxRuntime.captionLabel, 'CUDAExecutionProvider / CPUExecutionProvider')
 assert.equal(windowsConnectedProbe.clipSiglipOnnx.valueLabel, '就绪')
 
+const windowsBranch = {
+  marker: 'windows-ai-branch' as const,
+  phase: 'worker-probes' as const,
+  platform: 'win32' as const,
+  arch: 'x64' as const,
+  isCurrentPlatform: false,
+  lanes: [],
+  warnings: []
+}
+assert.deepEqual(projectAiRuntimeBranchPanelDisplay(windowsBranch), {
+  title: 'Windows AI 分支',
+  description: 'Python CUDA、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。 当前阶段：worker-probes / win32/x64',
+  platformBadgeLabel: '非当前平台',
+  platformBadgeClass: 'border-slate-200 bg-white text-slate-500'
+})
+const windowsWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay(true, windowsRawProbe)
+assert.equal(windowsWorkerPanel.title, 'Windows Worker 实时探测')
+assert.equal(windowsWorkerPanel.platformBadgeLabel, 'win32/amd64')
+assert.equal(windowsWorkerPanel.clipSiglipStatusLabel, '就绪')
+
 const settingsPanelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
 const matrixSource = await fs.readFile('src/renderer/components/settings/MacOSAiCapabilityMatrix.tsx', 'utf8')
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
-assert.match(settingsPanelSource, /projectPythonMpsCompatibilityDisplay/)
-assert.match(settingsPanelSource, /projectPythonMpsExecutionProbeDisplay/)
+assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
+assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
+assert.match(settingsPanelSource, /projectPlatformPythonRuntimeExecutionProbeDisplay/)
+assert.match(settingsPanelSource, /projectAiRuntimeBranchPanelDisplay/)
+assert.match(settingsPanelSource, /projectAiRuntimeWorkerProbePanelDisplay/)
 assert.match(settingsPanelSource, /projectClipSiglipOnnxCompatibilityDisplay/)
 assert.match(settingsPanelSource, /验证真实 Embedding/)
 assert.match(settingsPanelSource, /runOnnxModelLoadProbe\('clip'\)/)
@@ -445,7 +552,6 @@ assert.match(settingsPanelSource, /projectAiRuntimeStatusDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeSummaryDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeHealthResultDisplay/)
 assert.match(settingsPanelSource, /projectAiCapabilityStatusDisplay/)
-assert.match(settingsPanelSource, /projectMacOSAiWorkerProbeDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeInfoLabel/)
 assert.match(settingsPanelSource, /projectAiRuntimeDisplayValue/)
 assert.match(settingsPanelSource, /projectAiRuntimeActionLabel/)
@@ -472,6 +578,14 @@ assert.doesNotMatch(settingsPanelSource, /function branchStatusStyle/)
 assert.doesNotMatch(settingsPanelSource, /probe\?\.isMacOS\s*\?/)
 assert.doesNotMatch(settingsPanelSource, /probe\.isMacOS\s*\?/)
 assert.doesNotMatch(settingsPanelSource, /probe\.isAppleSilicon\s*\?/)
+assert.doesNotMatch(settingsPanelSource, /Python CUDA 兼容性检查/)
+assert.doesNotMatch(settingsPanelSource, /Python MPS 兼容性检查/)
+assert.doesNotMatch(settingsPanelSource, /Python CUDA 真实执行验证/)
+assert.doesNotMatch(settingsPanelSource, /Python MPS 真实执行验证/)
+assert.doesNotMatch(settingsPanelSource, /Windows Worker 实时探测/)
+assert.doesNotMatch(settingsPanelSource, /macOS Worker 实时探测/)
+assert.doesNotMatch(settingsPanelSource, /Windows AI 分支/)
+assert.doesNotMatch(settingsPanelSource, /macOS AI 分支/)
 assert.doesNotMatch(aiConsoleSource, /pythonMpsStatus\?\.compatible\s*\?/)
 assert.doesNotMatch(aiConsoleSource, /clipSiglipOnnxStatus\?\.compatible\s*\?/)
 assert.doesNotMatch(aiConsoleSource, /llamaServerRunning\s*\?/)
