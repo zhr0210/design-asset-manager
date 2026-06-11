@@ -16,7 +16,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Do not change exported contract names without updating every caller.
 - Platform AI Branch Status contracts must keep one response shape for Windows and macOS; platform differences belong in runtime-lane evidence.
 - Platform AI Branch Status panel copy, Chinese workflow titles/summaries, status tones, primary-lane flags, evidence summaries, missing summaries, and display-only action labels belong in shared workflow projection; renderer panels should not reinterpret business status or localize it independently.
-- Platform AI route overview titles, descriptions, priorities, macOS-only diagnostic visibility, and Windows runtime-lane summaries belong in shared workflow projection.
+- Platform AI route overview titles, descriptions, priorities, dependency action labels, diagnostic tile labels, runtime-lane captions, macOS-only diagnostic visibility, and Windows runtime-lane summaries belong in shared workflow projection.
 - Platform AI Branch Status channel-response selection belongs in shared workflow code and may only rank `workflow/status/evidence/missing/runtimeLanes`; display-only `title/summary/nextAction` must not affect selection.
 - Platform AI Action Plan projection maps status and missing requirements to existing model, runtime, backend, or manual-refresh UI operations. Renderer code executes the projected command but must not infer the destination from labels or evidence text.
 - Explicit model-load probes may promote only the workflow/runtime lane they actually verified. Probe responses must be path-free, time-bounded evidence and must not imply that adjacent OCR or embedding routes passed.
@@ -60,6 +60,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.7 | 2026-06-11 | Moved Platform AI route overview dependency labels, diagnostic tile labels, and runtime-lane captions into shared workflow projection. |
 | v1.8.6 | 2026-06-11 | Moved AI capability matrix title and description into shared AI Runtime Status projection. |
 | v1.8.5 | 2026-06-11 | Moved AI Runtime panel platform-specific copy and display selection into shared workflow projection for Windows/macOS parity. |
 | v1.8.4 | 2026-06-11 | Moved Platform AI Action Plan UI command routing into shared workflow code so renderer actions no longer infer destinations from workflow/kind pairs. |

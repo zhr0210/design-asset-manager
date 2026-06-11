@@ -53,6 +53,17 @@ export interface PlatformAiRouteOverviewDisplay {
   description: string
   priorityLabel: string
   showMacOSDiagnostics: boolean
+  installDependenciesLabel: string
+  installingDependenciesLabel: string
+  primaryRuntimeLaneCaption: string
+  candidateRuntimeLaneCaption: string
+  diagnosticTiles: {
+    mpsLabel: string
+    pythonCompatibilityLabel: string
+    onnxRuntimeLabel: string
+    clipSiglipOnnxLabel: string
+    clipSiglipCompatibilityLabel: string
+  }
   runtimeLanes: PlatformAiRuntimeLaneDisplay[]
 }
 
@@ -137,6 +148,7 @@ export function projectPlatformAiRouteOverviewDisplay(
       description: '等待当前平台返回 AI 运行路线状态。',
       priorityLabel: '当前平台路线证据不足。',
       showMacOSDiagnostics: false,
+      ...routeOverviewSharedCopy(),
       runtimeLanes: []
     }
   }
@@ -150,6 +162,7 @@ export function projectPlatformAiRouteOverviewDisplay(
       description: '把 Python MPS、ONNX Runtime 和 Llama 路线放到同一屏里查看。',
       priorityLabel: '当前 macOS 目标模型优先级：Qwen3-VL GGUF > Qwen2.5-VL Ollama fallback > external HTTP fallback。',
       showMacOSDiagnostics: true,
+      ...routeOverviewSharedCopy(),
       runtimeLanes
     }
   }
@@ -159,6 +172,7 @@ export function projectPlatformAiRouteOverviewDisplay(
     description: '汇总 Python CUDA、ONNX Runtime、Llama CUDA 与外部推理路线。',
     priorityLabel: '当前 Windows 路线优先使用可验证的 CUDA / ONNX / Llama 运行时，证据不足时再使用已配置的外部服务。',
     showMacOSDiagnostics: false,
+    ...routeOverviewSharedCopy(),
     runtimeLanes
   }
 }
@@ -255,6 +269,29 @@ function platformAiPanelCopy(branchLabel: string): Pick<
     evidencePrefix: '证据',
     missingPrefix: '缺口',
     nextActionPrefix: '下一步'
+  }
+}
+
+function routeOverviewSharedCopy(): Pick<
+  PlatformAiRouteOverviewDisplay,
+  | 'installDependenciesLabel'
+  | 'installingDependenciesLabel'
+  | 'primaryRuntimeLaneCaption'
+  | 'candidateRuntimeLaneCaption'
+  | 'diagnosticTiles'
+> {
+  return {
+    installDependenciesLabel: '安装 macOS AI 依赖',
+    installingDependenciesLabel: '正在安装依赖',
+    primaryRuntimeLaneCaption: '主要运行路线',
+    candidateRuntimeLaneCaption: '候选运行路线',
+    diagnosticTiles: {
+      mpsLabel: 'MPS',
+      pythonCompatibilityLabel: 'Python MPS 兼容性',
+      onnxRuntimeLabel: 'ONNX Runtime',
+      clipSiglipOnnxLabel: 'CLIP/SigLIP ONNX',
+      clipSiglipCompatibilityLabel: 'CLIP/SigLIP 兼容性'
+    }
   }
 }
 

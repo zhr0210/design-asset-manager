@@ -79,6 +79,17 @@ assert.equal(macosDisplay.workflows[0].actionPlan.kind, 'refresh_evidence')
 assert.equal(macosDisplay.workflows[0].actionPlan.enabled, true)
 assert.equal(macosRouteOverview.title, 'macOS 路线概览')
 assert.equal(macosRouteOverview.showMacOSDiagnostics, true)
+assert.equal(macosRouteOverview.installDependenciesLabel, '安装 macOS AI 依赖')
+assert.equal(macosRouteOverview.installingDependenciesLabel, '正在安装依赖')
+assert.equal(macosRouteOverview.primaryRuntimeLaneCaption, '主要运行路线')
+assert.equal(macosRouteOverview.candidateRuntimeLaneCaption, '候选运行路线')
+assert.deepEqual(macosRouteOverview.diagnosticTiles, {
+  mpsLabel: 'MPS',
+  pythonCompatibilityLabel: 'Python MPS 兼容性',
+  onnxRuntimeLabel: 'ONNX Runtime',
+  clipSiglipOnnxLabel: 'CLIP/SigLIP ONNX',
+  clipSiglipCompatibilityLabel: 'CLIP/SigLIP 兼容性'
+})
 assert.match(macosRouteOverview.priorityLabel, /Qwen3-VL GGUF/)
 assert.doesNotMatch(macosRouteOverview.priorityLabel, /MLX/)
 
@@ -108,6 +119,7 @@ assert.match(windowsRouteOverview.priorityLabel, /CUDA \/ ONNX \/ Llama/)
 const emptyRouteOverview = projectPlatformAiRouteOverviewDisplay(null)
 assert.equal(emptyRouteOverview.title, '平台路线概览')
 assert.equal(emptyRouteOverview.showMacOSDiagnostics, false)
+assert.equal(emptyRouteOverview.primaryRuntimeLaneCaption, '主要运行路线')
 assert.deepEqual(emptyRouteOverview.runtimeLanes, [])
 
 assert.equal(

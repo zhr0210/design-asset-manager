@@ -1895,7 +1895,7 @@ function OverviewWorkspace(props: {
                 <StatusPill tone={macOSProbeDisplay.connectionTone}>{macOSProbeDisplay.connectionLabel}</StatusPill>
                 <MiniButton tone="primary" onClick={props.onInstallMacOSDeps} disabled={props.installingMacOSDeps}>
                   {props.installingMacOSDeps ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
-                  安装 macOS AI 依赖
+                  {props.installingMacOSDeps ? routeOverviewDisplay.installingDependenciesLabel : routeOverviewDisplay.installDependenciesLabel}
                 </MiniButton>
               </div>
             )}
@@ -1904,18 +1904,18 @@ function OverviewWorkspace(props: {
           <div className="grid gap-3 md:grid-cols-2">
             {routeOverviewDisplay.showMacOSDiagnostics ? (
               <>
-                <RuntimeTile label="MPS" value={macOSProbeDisplay.mps.valueLabel} caption={macOSProbeDisplay.mps.captionLabel} />
-                <RuntimeTile label="Python MPS 兼容性" value={pythonMpsDisplay.label} caption={pythonMpsDisplay.runtimeLabel} />
-                <RuntimeTile label="ONNX Runtime" value={macOSProbeDisplay.onnxRuntime.valueLabel} caption={macOSProbeDisplay.onnxRuntime.captionLabel} />
-                <RuntimeTile label="CLIP/SigLIP ONNX" value={macOSProbeDisplay.clipSiglipOnnx.valueLabel} caption={macOSProbeDisplay.clipSiglipOnnx.captionLabel} />
-                <RuntimeTile label="CLIP/SigLIP 兼容性" value={clipSiglipOnnxDisplay.label} caption={clipSiglipOnnxDisplay.runtimeLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={macOSProbeDisplay.mps.valueLabel} caption={macOSProbeDisplay.mps.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.pythonCompatibilityLabel} value={pythonMpsDisplay.label} caption={pythonMpsDisplay.runtimeLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.onnxRuntimeLabel} value={macOSProbeDisplay.onnxRuntime.valueLabel} caption={macOSProbeDisplay.onnxRuntime.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipOnnxLabel} value={macOSProbeDisplay.clipSiglipOnnx.valueLabel} caption={macOSProbeDisplay.clipSiglipOnnx.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipCompatibilityLabel} value={clipSiglipOnnxDisplay.label} caption={clipSiglipOnnxDisplay.runtimeLabel} />
               </>
             ) : routeOverviewDisplay.runtimeLanes.map((lane) => (
               <RuntimeTile
                 key={lane.lane}
                 label={lane.label}
                 value={lane.statusLabel}
-                caption={lane.isPrimary ? '主要运行路线' : '候选运行路线'}
+                caption={lane.isPrimary ? routeOverviewDisplay.primaryRuntimeLaneCaption : routeOverviewDisplay.candidateRuntimeLaneCaption}
               />
             ))}
             <RuntimeTile label="Llama 路线" value={llamaDisplay.routeValue} caption={llamaDisplay.routeCaption} />
