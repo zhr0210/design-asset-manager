@@ -142,7 +142,9 @@ paths or model cache paths.
    preserving the existing Windows CPU/CUDA and macOS arm64/x64 recommendations
    without a hand-written platform if-chain. Platform profile detection uses
    `PLATFORM_PROFILE_RULES` for the existing win32/darwin/linux profile mapping
-   while preserving the real OS capability booleans.
+   while preserving the real OS capability booleans. Doctor display projection
+   now uses `DOCTOR_PLATFORM_LABELS` for the existing macOS label while keeping
+   raw platform fallback for Windows and other platforms.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

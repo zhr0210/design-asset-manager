@@ -748,8 +748,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/shared/constants/macos-ai-runtime.constants.ts',
   'src/shared/constants/windows-ai-runtime.constants.ts',
   'src/shared/types/doctor.types.ts',
-  'src/shared/workflows/ai-runtime-status.workflow.ts',
-  'src/shared/workflows/doctor-display.workflow.ts'
+  'src/shared/workflows/ai-runtime-status.workflow.ts'
 ])
 assert.match(platformAiRuntimeTypesSource, /export type AiCapabilityStatus/)
 assert.match(platformAiRuntimeTypesSource, /export type PlatformAiRuntimeBranchPhase/)

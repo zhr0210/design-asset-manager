@@ -89,6 +89,19 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Doctor platform label projection to shared metadata.
+  `DOCTOR_PLATFORM_LABELS` now owns the existing `darwin -> macOS` display
+  mapping while other platform names keep the previous raw-label fallback and
+  missing reports still show `未检测`. Doctor summary output, path masking,
+  renderer panels, IPC channels, database schema, AI Worker HTTP API, shared
+  response fields, runtime behavior, and Windows evidence are unchanged.
+  Focused Doctor display tests preserve the macOS label and Windows fallback and
+  prevent the previous inline `platform === "darwin"` ternary from returning.
+  UI validation and the full Windows real-evidence script were not run because
+  this is a shared display projection refactor with no product layout or
+  runtime probing behavior change. Next smallest slice: keep scanning shared
+  display workflows for display-only platform mappings that can move to
+  metadata tables.
 - 2026-06-13 Moved platform profile detection mapping to metadata rules.
   `PLATFORM_PROFILE_RULES` now owns the existing win32/x64, win32/arm64,
   darwin/arm64, darwin/x64, and linux/x64 profile mapping while

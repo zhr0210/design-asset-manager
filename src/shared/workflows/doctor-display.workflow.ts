@@ -1,4 +1,5 @@
 import type { DoctorCheckResult, DoctorCheckStatus, DoctorReport } from '../types/doctor.types'
+import type { PlatformName } from '../types/platform.types'
 
 export type DoctorPanelStatus = DoctorCheckStatus | 'idle' | 'loading'
 export type DoctorPanelStatusIcon = 'activity' | 'loading' | 'success' | 'warning'
@@ -71,6 +72,10 @@ const DOCTOR_INFO_LABELS: Record<string, string> = {
   overall: '总体状态',
   generatedAt: '生成时间',
   lastRunAt: '最近体检'
+}
+
+const DOCTOR_PLATFORM_LABELS: Partial<Record<PlatformName, string>> = {
+  darwin: 'macOS'
 }
 
 const DOCTOR_CHECK_LABELS: Record<string, string> = {
@@ -156,13 +161,18 @@ export function projectDoctorReportSummaryDisplay(
 ): DoctorReportSummaryDisplay {
   const status = loading ? 'loading' : report?.overallStatus ?? 'idle'
   return {
-    platformLabel: report?.platform === 'darwin' ? 'macOS' : report?.platform ?? '未检测',
+    platformLabel: projectDoctorPlatformLabel(report?.platform),
     archLabel: report?.arch ?? '未检测',
     profileLabel: report?.profile ?? '未检测',
     overallLabel: projectDoctorStatusDisplay(status).label,
     generatedAtLabel: projectDoctorDateLabel(report?.generatedAt),
     lastRunAtLabel: projectDoctorDateLabel(report?.generatedAt)
   }
+}
+
+function projectDoctorPlatformLabel(platform?: PlatformName | null): string {
+  if (!platform) return '未检测'
+  return DOCTOR_PLATFORM_LABELS[platform] ?? platform
 }
 
 export function projectDoctorCheckList(

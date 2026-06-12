@@ -76,6 +76,12 @@ assert.equal(reportSummary.archLabel, 'arm64')
 assert.equal(reportSummary.profileLabel, 'macos-apple-silicon')
 assert.equal(reportSummary.overallLabel, '提醒')
 assert.notEqual(reportSummary.generatedAtLabel, '无')
+assert.equal(projectDoctorReportSummaryDisplay({
+  ...report,
+  platform: 'win32',
+  arch: 'x64',
+  profile: 'windows-x64'
+}).platformLabel, 'win32')
 
 const checks = projectDoctorCheckList(report, [{ id: 'custom', label: 'Custom Known' }])
 assert.deepEqual(checks.slice(0, 4).map((item) => item.id), ['system', 'path', 'node', 'python'])
@@ -107,12 +113,17 @@ assert.deepEqual(pathSummary.details, [
 const doctorPanelSource = await fs.readFile('src/renderer/components/settings/DoctorPanel.tsx', 'utf8')
 const pathSummarySource = await fs.readFile('src/renderer/components/settings/PathGovernanceSummary.tsx', 'utf8')
 const sharedIndexSource = await fs.readFile('src/shared/index.ts', 'utf8')
+const workflowSource = await fs.readFile('src/shared/workflows/doctor-display.workflow.ts', 'utf8')
 
 assert.match(doctorPanelSource, /projectDoctorStatusDisplay/)
 assert.match(doctorPanelSource, /projectDoctorCheckList/)
 assert.match(doctorPanelSource, /projectDoctorReportSummaryDisplay/)
 assert.match(pathSummarySource, /projectDoctorPathSummaryDisplay/)
 assert.match(sharedIndexSource, /doctor-display\.workflow/)
+assert.match(workflowSource, /const DOCTOR_PLATFORM_LABELS: Partial<Record<PlatformName, string>>/)
+assert.match(workflowSource, /darwin: 'macOS'/)
+assert.match(workflowSource, /function projectDoctorPlatformLabel/)
+assert.doesNotMatch(workflowSource, /platform === 'darwin' \? 'macOS'/)
 assert.doesNotMatch(doctorPanelSource, /const\s+INFO_LABELS/)
 assert.doesNotMatch(doctorPanelSource, /const\s+CHECK_LABELS/)
 assert.doesNotMatch(doctorPanelSource, /const\s+STATUS_LABELS/)

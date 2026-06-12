@@ -49,7 +49,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Asset card/detail/original-viewer/caption metadata labels, tag preview overflow, file-size labels, image spec labels, zoom labels, caption source labels, and dashboard recent-asset summaries should use shared projection rather than renderer-local formatting.
 - Visual Analysis Snapshot mappers should hide palette payload version drift, image/theme display summaries, OCR/text-box/readability summaries, text-color panel state rules, swatch role/copy/tooltip formatting, and panel metadata labels from renderer panels.
 - Persisted Visual Analysis palette inputs may retain unknown extension fields for backward compatibility, but snapshot workflow code must narrow them from `unknown` and expose typed renderer-ready output instead of propagating `any`.
-- Doctor and Path Governance panels should use shared display projection for status labels, badge classes, check labels, report dates, details fallback, managed-path summary, and path masking rather than renderer-local dictionaries.
+- Doctor and Path Governance panels should use shared display projection for status labels, badge classes, check labels, platform labels, report dates, details fallback, managed-path summary, and path masking rather than renderer-local dictionaries.
 - Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
 
 ## Tests
@@ -63,6 +63,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.20 | 2026-06-13 | Moved Doctor platform label display to shared metadata while preserving macOS label and raw platform fallback. |
 | v1.8.19 | 2026-06-13 | Moved Platform AI branch runtime metadata selection to branch-keyed descriptors and locked the current-branch priority order in shared workflow tests. |
 | v1.8.18 | 2026-06-12 | Normalized Worker diagnostics selection through one branch resolver and branch-indexed probe map. |
 | v1.8.17 | 2026-06-12 | Centralized macOS/Windows Worker probe connection and accelerator reads in branch-keyed accessors. |
