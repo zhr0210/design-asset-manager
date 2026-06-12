@@ -78,6 +78,8 @@ paths or model cache paths.
    those consumers. Shared Python compatibility and execution response bases
    cover display projectors without MPS/CUDA unions or casts, and one shared
    display state machine now handles both accelerators through platform copy.
+   Shared Worker probe diagnostics projection also owns connection, ONNX, and
+   CLIP fields; platform wrappers only read genuine MPS/CUDA device fields.
    Concrete response names remain at main-process, IPC contract, platform
    type-definition, and genuine MPS/CUDA adapter boundaries.
 

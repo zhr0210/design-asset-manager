@@ -770,29 +770,46 @@ assert.doesNotMatch(runtimeWorkflowSource, /projectMacOSAiWorkerProbeDisplay\(pr
 assert.match(runtimeWorkflowSource, /interface MacOSAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
+assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
-const platformProbeDetailFieldPattern = /probe\.(?:torch|onnxruntime)|\.(?:mpsAvailable|cudaAvailable|providers)/
+const platformProbeDeviceFieldPattern = /probe\.torch|\.(?:mpsAvailable|cudaAvailable)/
 for (const helperName of [
   'projectPlatformAiWorkerProbeHeaderDisplay',
+  'projectPlatformAiWorkerProbeDiagnosticsDisplay',
   'projectAiRuntimeWorkerProbePanelDisplay',
   'projectAiRuntimeWorkerProbePanelFromHeader',
   'projectAiRuntimeBranchPanelDisplay'
 ]) {
   assert.doesNotMatch(
     extractFunctionSource(runtimeWorkflowSource, helperName),
-    platformProbeDetailFieldPattern,
+    platformProbeDeviceFieldPattern,
     `${helperName} should stay platform-neutral and not read Worker device detail fields`
   )
 }
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectMacOSAiWorkerProbeDisplay'),
-  /probe\.torch\.mpsAvailable[\s\S]*probe\.onnxruntime\.providers/,
+  /probe\.torch\.mpsAvailable/,
   'macOS Worker detail fields should stay inside the macOS-specific display projector'
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectMacOSAiWorkerProbeDisplay'),
+  /probe\.(?:onnxruntime|clipSiglipOnnx)/,
+  'macOS Worker projector should delegate shared diagnostics fields'
 )
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectWindowsAiWorkerProbeDisplay'),
-  /probe\.torch\.cudaAvailable[\s\S]*probe\.onnxruntime\.providers/,
+  /probe\.torch\.cudaAvailable/,
   'Windows Worker detail fields should stay inside the Windows-specific display projector'
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectWindowsAiWorkerProbeDisplay'),
+  /probe\.(?:onnxruntime|clipSiglipOnnx)/,
+  'Windows Worker projector should delegate shared diagnostics fields'
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
+  /probe\.onnxruntime\.providers[\s\S]*probe\.clipSiglipOnnx\.version/,
+  'shared Worker projector should own shared ONNX and CLIP diagnostics fields'
 )
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)

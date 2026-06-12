@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Moved shared Worker probe diagnostics projection out of the
+  macOS/Windows detail wrappers. One platform-neutral helper now owns the
+  unchecked state, connection header, ONNX Runtime Provider tile, and
+  CLIP/SigLIP status/version tile. The platform wrappers only read the genuine
+  `mpsAvailable` or `cudaAvailable` device fields and retain their existing
+  `mps`/`cuda` display aliases. No IPC channel, AI Worker HTTP API, database
+  schema, shared response field, or renderer behavior changed. Validation
+  passed the required four focused TypeScript tests,
+  `windows-ai-real-evidence-validation-contract.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. The full Windows script passed runtime-safety,
+  Python, ONNX, Llama text/generated-image, and Electron/Playwright checks;
+  `ai_tag_task`, `ai_prompt_task`, and `search_embedding` reported
+  `real_model_path`, no document/body horizontal overflow was found at
+  `1264x793`, and the saved log contained zero raw repository-root or
+  user-profile paths. Next smallest slice: centralize Worker probe connection
+  detection and panel copy that remain duplicated between diagnostics and
+  panel projectors.
 - 2026-06-12 Closed the Windows evidence logger's native stderr redaction gap.
   `Invoke-LoggedNative` now captures native stdout/stderr directly and sends
   each original message through the same `Write-Log` redactor used by saved

@@ -526,30 +526,33 @@ function projectPlatformAiWorkerProbeHeaderDisplay(
   }
 }
 
-export function projectMacOSAiWorkerProbeDisplay(
-  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
-): MacOSAiWorkerProbeDisplay {
+function projectPlatformAiWorkerProbeDiagnosticsDisplay(
+  platformBranch: PlatformAiBranch,
+  probe: PlatformAiWorkerProbeDiagnosticsInput | null,
+  accelerator?: PlatformAiProbeTileDisplay | null
+): PlatformAiWorkerProbeDiagnosticsDisplay {
+  const connectedLabel = platformBranch === 'windows'
+    ? 'Windows 探测已连接'
+    : 'macOS 探测已连接'
+
   if (!probe) {
     const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
     return {
-      ...projectPlatformAiWorkerProbeHeaderDisplay(null, false, 'macOS 探测已连接'),
+      ...projectPlatformAiWorkerProbeHeaderDisplay(null, false, connectedLabel),
       accelerator: unchecked,
-      mps: unchecked,
       onnxRuntime: unchecked,
       clipSiglipOnnx: unchecked
     }
   }
 
-  const connected = probe.isMacOS
+  const connected = platformBranch === 'windows'
+    ? probe.platform === 'win32' || probe.platform === 'windows'
+    : probe.isMacOS
   const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
-  const mps = {
-    valueLabel: probe.torch.mpsAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
-    captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
-  }
+
   return {
-    ...projectPlatformAiWorkerProbeHeaderDisplay(probe, connected, 'macOS 探测已连接'),
-    accelerator: mps,
-    mps,
+    ...projectPlatformAiWorkerProbeHeaderDisplay(probe, connected, connectedLabel),
+    accelerator: accelerator ?? { valueLabel: '尚未探测', captionLabel: '尚未探测' },
     onnxRuntime: {
       valueLabel: probe.onnxruntime.available ? '可用' : '依赖缺失',
       captionLabel: probe.onnxruntime.providers.join(' / ') || '已探测，未报告 Provider'
@@ -560,6 +563,23 @@ export function projectMacOSAiWorkerProbeDisplay(
         ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
         : '已探测，未报告版本'
     }
+  }
+}
+
+export function projectMacOSAiWorkerProbeDisplay(
+  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
+): MacOSAiWorkerProbeDisplay {
+  const mps = probe
+    ? {
+        valueLabel: probe.torch.mpsAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
+        captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
+      }
+    : null
+  const display = projectPlatformAiWorkerProbeDiagnosticsDisplay('macos', probe ?? null, mps)
+
+  return {
+    ...display,
+    mps: display.accelerator
   }
 }
 
@@ -749,37 +769,17 @@ export interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagno
 export function projectWindowsAiWorkerProbeDisplay(
   probe?: PlatformAiWorkerProbeDiagnosticsInput | null
 ): WindowsAiWorkerProbeDisplay {
-  if (!probe) {
-    const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
-    return {
-      ...projectPlatformAiWorkerProbeHeaderDisplay(null, false, 'Windows 探测已连接'),
-      accelerator: unchecked,
-      cuda: unchecked,
-      onnxRuntime: unchecked,
-      clipSiglipOnnx: unchecked
-    }
-  }
+  const cuda = probe
+    ? {
+        valueLabel: probe.torch.cudaAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
+        captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
+      }
+    : null
+  const display = projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', probe ?? null, cuda)
 
-  const connected = probe.platform === 'win32' || probe.platform === 'windows'
-  const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
-  const cuda = {
-    valueLabel: probe.torch.cudaAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
-    captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
-  }
   return {
-    ...projectPlatformAiWorkerProbeHeaderDisplay(probe, connected, 'Windows 探测已连接'),
-    accelerator: cuda,
-    cuda,
-    onnxRuntime: {
-      valueLabel: probe.onnxruntime.available ? '可用' : '依赖缺失',
-      captionLabel: probe.onnxruntime.providers.join(' / ') || '已探测，未报告 Provider'
-    },
-    clipSiglipOnnx: {
-      valueLabel: clipSiglipStatus.label,
-      captionLabel: probe.clipSiglipOnnx.version
-        ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
-        : '已探测，未报告版本'
-    }
+    ...display,
+    cuda: display.accelerator
   }
 }
 
