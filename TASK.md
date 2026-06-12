@@ -89,6 +89,25 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Closed the Windows evidence logger's native stderr redaction gap.
+  `Invoke-LoggedNative` now captures native stdout/stderr directly and sends
+  each original message through the same `Write-Log` redactor used by saved
+  logs and terminal output, avoiding Windows PowerShell's redirected
+  `ErrorRecord` formatting and its inserted path-breaking line wraps. A new
+  contract test is part of `ci:test-runtime-safety` and prevents reintroducing
+  temporary native-output logs or `Out-String` formatting. No product runtime,
+  IPC, AI Worker API, database, or shared response behavior changed.
+  Validation passed the required four focused TypeScript tests, the new
+  `windows-ai-real-evidence-validation-contract.test.ts`, `npm run typecheck`,
+  `npm run build`, `python scripts/check-docs-sync.py`, and
+  `git diff --check`. The full Windows script passed runtime-safety, Python,
+  ONNX, Llama text/generated-image, and Electron/Playwright checks;
+  `ai_tag_task`, `ai_prompt_task`, and `search_embedding` reported
+  `real_model_path`, and no document/body horizontal overflow was found at
+  `1264x793`. A post-run scan found zero raw repository-root or user-profile
+  path occurrences in either slash format. Next smallest slice: resume the
+  renderer/shared type audit at the remaining platform Worker probe
+  projectors, preserving genuine MPS/CUDA capability fields.
 - 2026-06-12 Consolidated the duplicated MPS/CUDA compatibility and execution
   display state machines. One internal platform-copy table now owns the
   default runtime, accelerator name, and supported-platform label; shared

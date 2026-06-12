@@ -36,27 +36,16 @@ function Invoke-LoggedNative {
     [string[]]$Arguments = @()
   )
   Write-Log ("> " + $Command + " " + ($Arguments -join " "))
-  $stdoutPath = Join-Path $env:TEMP ("dam-native-stdout-" + [guid]::NewGuid().ToString("N") + ".log")
-  $stderrPath = Join-Path $env:TEMP ("dam-native-stderr-" + [guid]::NewGuid().ToString("N") + ".log")
   $previousErrorActionPreference = $ErrorActionPreference
   $ErrorActionPreference = "Continue"
   try {
-    & $Command @Arguments > $stdoutPath 2> $stderrPath
+    $output = @(& $Command @Arguments 2>&1)
     $exitCode = if ($null -eq $LASTEXITCODE) { 0 } else { $LASTEXITCODE }
   } finally {
     $ErrorActionPreference = $previousErrorActionPreference
   }
-  $output = @()
-  if (Test-Path -LiteralPath $stdoutPath) {
-    $output += Get-Content -LiteralPath $stdoutPath -ErrorAction SilentlyContinue
-  }
-  if (Test-Path -LiteralPath $stderrPath) {
-    $output += Get-Content -LiteralPath $stderrPath -ErrorAction SilentlyContinue
-  }
-  Remove-Item -LiteralPath $stdoutPath -Force -ErrorAction SilentlyContinue
-  Remove-Item -LiteralPath $stderrPath -Force -ErrorAction SilentlyContinue
   foreach ($item in $output) {
-    Write-Log ($item | Out-String).TrimEnd()
+    Write-Log ([string]$item)
   }
   if ($exitCode -ne 0) {
     throw "$Command exited with code $exitCode"

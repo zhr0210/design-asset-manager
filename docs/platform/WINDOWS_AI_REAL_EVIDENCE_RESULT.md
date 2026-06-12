@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 17:40, Windows host local time.
-- Commit tested: worktree based on `9a6e200`, with the shared MPS/CUDA display
-  projector-helper slice applied.
+- Validation time: 2026-06-12 17:45, Windows host local time.
+- Commit tested: worktree based on `bb49977`, with the native validation-output
+  redaction slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -24,13 +24,16 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   warnings.
 - `npm run ci:test-runtime-safety`: passed.
 - Python unittest discovery: passed.
-- Llama IPC refresh: the isolated validation app profile could not find
-  `llama-server.exe`, so this run did not repeat the text/generated-image
-  multimodal probe.
+- Llama IPC refresh: selected `qwen3-vl-2b-instruct-q4-k-m`, started
+  `llama-server`, and ran text plus generated-image multimodal inference.
+- Llama multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
+  `visionInput=generated_fixture`.
 - Windows Platform AI Branch Status: returned `success=true`,
-  `platformBranch=windows`; `ai_tag_task` and `search_embedding` reported
-  `real_model_path`, while `ai_prompt_task` and `ocr_text_box` reported
+  `platformBranch=windows`; `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` reported `real_model_path`, while `ocr_text_box` reported
   `runtime_probe_ready`.
+- Llama CUDA lane: reported `real_model_path` with `artifact_ready` and
+  `real_backend_loaded` evidence from text plus generated-image inference.
 - Electron/Playwright AI Console: screenshot captured on the Windows desktop.
 - Overflow check: `doc=false`, `body=false`, viewport `1264x793`.
 - Focused validation gate before the full script also passed:
@@ -39,21 +42,20 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: one internal display state machine now projects both
-  MPS and CUDA compatibility/execution results through platform copy. Existing
-  exported MPS/CUDA wrappers and concrete IPC response names remain intact.
-- Failures/blockers: no code-validation blocker. Llama revalidation was
-  unavailable to this isolated run because its app profile had no installed
-  executable. The immediately preceding 17:26 run successfully completed
-  Llama text plus generated-image inference, so the previously closed real
-  evidence remains recorded without treating this environment gap as a code
-  regression.
-- Next recommended action: make native validation output bypass PowerShell's
-  redirected error-record formatting so terminal output and saved logs use the
-  same path redaction.
+- Validation-harness slice: native stdout/stderr now reaches the common
+  redactor before terminal and file output, without redirected PowerShell
+  `ErrorRecord` formatting. The contract test runs in
+  `ci:test-runtime-safety`.
+- Privacy check: zero raw repository-root or user-profile occurrences were
+  found in the saved log in either slash format.
+- Failures/blockers: none for the Windows real-evidence routes covered by this
+  run.
+- Next recommended action: resume the renderer/shared type audit at the
+  remaining platform Worker probe projectors while preserving genuine
+  MPS/CUDA capability fields.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-173840.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-174353.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is
