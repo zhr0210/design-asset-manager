@@ -562,6 +562,7 @@ const windowsProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
   windowsProbe: windowsRawProbe
 })
 assert.equal(windowsProbeSelection.probe, windowsRawProbe)
+assert.equal(windowsProbeSelection.platformBranch, 'windows')
 assert.equal(windowsProbeSelection.display.platformBadgeLabel, 'win32/amd64')
 assert.equal(windowsProbeSelection.display.accelerator.captionLabel, 'torch 2.8.0+cu121')
 
@@ -569,6 +570,7 @@ const inferredWindowsProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSel
   windowsProbe: windowsRawProbe
 })
 assert.equal(inferredWindowsProbeSelection.probe, windowsRawProbe)
+assert.equal(inferredWindowsProbeSelection.platformBranch, 'windows')
 assert.equal(inferredWindowsProbeSelection.display.connected, true)
 
 const uncheckedMacOSProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
@@ -576,6 +578,7 @@ const uncheckedMacOSProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSele
   windowsProbe: windowsRawProbe
 })
 assert.equal(uncheckedMacOSProbeSelection.probe, null)
+assert.equal(uncheckedMacOSProbeSelection.platformBranch, 'macos')
 assert.equal(uncheckedMacOSProbeSelection.display.connected, false)
 
 const windowsBranch = {
@@ -721,7 +724,10 @@ assert.doesNotMatch(matrixSource, /MacOSAiWorkerProbeResult/)
 assert.doesNotMatch(matrixSource, /WindowsAiWorkerProbeResult/)
 assert.doesNotMatch(matrixSource, /Windows 细项能力矩阵/)
 assert.doesNotMatch(matrixSource, /macOS 细项能力矩阵/)
-assert.match(aiConsoleSource, /projectPythonMpsCompatibilityDisplay/)
+assert.match(aiConsoleSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
+assert.match(aiConsoleSource, /AiRuntimeCompatibilityDisplay/)
+assert.doesNotMatch(aiConsoleSource, /projectPythonMpsCompatibilityDisplay/)
+assert.doesNotMatch(aiConsoleSource, /AiRuntimePythonMpsStatusResponse/)
 assert.match(aiConsoleSource, /projectClipSiglipOnnxCompatibilityDisplay/)
 assert.match(aiConsoleSource, /projectLlamaRuntimeDisplay/)
 assert.doesNotMatch(settingsPanelSource, /pythonMpsStatus\?\.compatible\s*\?/)

@@ -104,6 +104,7 @@ export interface PlatformAiWorkerProbeDiagnosticsDisplay extends PlatformAiWorke
 }
 
 export interface PlatformAiWorkerProbeDiagnosticsSelection {
+  platformBranch: PlatformAiBranch
   probe: PlatformAiWorkerProbeWithRuntimeVersions | null
   display: PlatformAiWorkerProbeDiagnosticsDisplay
 }
@@ -740,12 +741,14 @@ export function projectPlatformAiWorkerProbeDiagnosticsSelection(input: {
 
   if (useWindows) {
     return {
+      platformBranch: 'windows',
       probe: input.windowsProbe ?? null,
       display: projectWindowsAiWorkerProbeDisplay(input.windowsProbe)
     }
   }
 
   return {
+    platformBranch: 'macos',
     probe: input.macOSProbe ?? null,
     display: projectMacOSAiWorkerProbeDisplay(input.macOSProbe)
   }

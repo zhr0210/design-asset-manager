@@ -89,6 +89,30 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Closed the AI Console macOS-only Python compatibility status
+  path. The shared Worker probe selection now exposes its resolved
+  `platformBranch`; AI Console uses that result to call the existing
+  `getPythonCudaStatus()` IPC on Windows or `getPythonMpsStatus()` on macOS,
+  then immediately projects the response through
+  `projectPlatformPythonRuntimeCompatibilityDisplay()`. Renderer state and
+  `OverviewWorkspace` props now carry only the shared
+  `AiRuntimeCompatibilityDisplay`, with no MPS/CUDA concrete status union or
+  macOS-named state in the component boundary. No IPC channel, AI Worker HTTP
+  API, database schema, or shared response shape changed. Validation passed
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`, `npm run
+  typecheck`, `npm run build`, `python scripts/check-docs-sync.py`, and `git
+  diff --check`. Windows real-evidence validation also passed via `powershell
+  -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1`;
+  it completed the CUDA/ONNX/Llama probes, captured
+  `dam-windows-ai-console.png`, reported overflow `doc=false`, `body=false` at
+  `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` as `real_model_path`. Next smallest slice: continue
+  auditing renderer/shared platform AI inputs for macOS-named state or direct
+  concrete probe handling, with platform-specific calls remaining only where
+  the runtime capability genuinely differs.
 - 2026-06-12 Closed the AI Console macOS-only Worker probe consumption gap.
   AI Console now requests both existing macOS and Windows capability IPC
   responses, selects the current platform from the shared branch status, and

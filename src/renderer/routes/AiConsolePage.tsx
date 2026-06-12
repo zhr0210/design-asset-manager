@@ -41,7 +41,7 @@ import type {
   PromptReverseBackendMode
 } from '../../shared/types/ai-backend.types'
 import type { AiMemoryPolicy, AiPromptTemplate } from '../../shared/types/settings.types'
-import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
+import type { AiRuntimeClipSiglipOnnxStatusResponse } from '../../shared/contracts/ai-runtime.contract'
 import type {
   LlamaHardwareProfile,
   LlamaInstallPlan,
@@ -71,11 +71,12 @@ import {
 } from '../../shared/workflows/model-artifact-readiness.workflow'
 import { type AiQueueStatsLike, projectAiQueueStatusDisplay } from '../../shared/workflows/ai-queue-status.workflow'
 import {
+  type AiRuntimeCompatibilityDisplay,
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
   projectPlatformAiWorkerProbeDiagnosticsSelection,
+  projectPlatformPythonRuntimeCompatibilityDisplay,
   type PlatformAiWorkerProbeDiagnosticsDisplay,
-  projectPythonMpsCompatibilityDisplay
 } from '../../shared/workflows/ai-runtime-status.workflow'
 import {
   type AiConsoleGpuDisplay,
@@ -643,7 +644,9 @@ export default function AiConsolePage() {
     () => projectPlatformAiWorkerProbeDiagnosticsSelection({}).display
   )
   const [platformBranchStatus, setPlatformBranchStatus] = useState<PlatformAiBranchStatusResponse | null>(null)
-  const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
+  const [platformPythonCompatibilityDisplay, setPlatformPythonCompatibilityDisplay] = useState<AiRuntimeCompatibilityDisplay>(
+    () => projectPlatformPythonRuntimeCompatibilityDisplay(false, null)
+  )
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [loading, setLoading] = useState<Record<string, boolean>>({})
   const [toast, setToast] = useState<string | null>(null)
@@ -827,15 +830,19 @@ export default function AiConsolePage() {
       })
       setPlatformWorkerProbe(probeSelection.probe)
       setPlatformProbeDisplay(probeSelection.display)
-      if (status?.offline === false && api.aiRuntime?.getPythonMpsStatus) {
-        const pythonMps = await api.aiRuntime.getPythonMpsStatus().catch(() => null)
-        if (pythonMps?.success && pythonMps.data) {
-          setPythonMpsStatus(pythonMps.data)
-        } else {
-          setPythonMpsStatus(null)
-        }
+      const isWindowsProbe = probeSelection.platformBranch === 'windows'
+      const getPlatformPythonStatus = isWindowsProbe
+        ? api.aiRuntime?.getPythonCudaStatus
+        : api.aiRuntime?.getPythonMpsStatus
+      if (status?.offline === false && getPlatformPythonStatus) {
+        const platformPythonStatus = await getPlatformPythonStatus().catch(() => null)
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(
+          isWindowsProbe,
+          platformPythonStatus?.success ? platformPythonStatus.data : null,
+          platformPythonStatus?.success ? platformPythonStatus.data?.error : platformPythonStatus?.error
+        ))
       } else {
-        setPythonMpsStatus(null)
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(isWindowsProbe, null))
       }
       if (clipSiglipStatus?.success && clipSiglipStatus.data) {
         setClipSiglipOnnxStatus(clipSiglipStatus.data)
@@ -1565,7 +1572,7 @@ export default function AiConsolePage() {
               installingAiRuntimeDeps={installingAiRuntimeDeps}
               onStartLlamaInstall={startLlamaInstall}
               onInstallEasyOcr={handleInstallEasyOcr}
-              pythonMpsStatus={pythonMpsStatus}
+              pythonCompatibilityDisplay={platformPythonCompatibilityDisplay}
               clipSiglipOnnxStatus={clipSiglipOnnxStatus}
               ollamaFallback={ollamaFallback}
               externalHttpFallback={externalHttpFallback}
@@ -1792,7 +1799,7 @@ function OverviewWorkspace(props: {
   installingAiRuntimeDeps?: boolean
   onStartLlamaInstall?: () => Promise<void>
   onInstallEasyOcr?: () => Promise<void>
-  pythonMpsStatus: AiRuntimePythonMpsStatusResponse | null
+  pythonCompatibilityDisplay: AiRuntimeCompatibilityDisplay
   clipSiglipOnnxStatus: AiRuntimeClipSiglipOnnxStatusResponse | null
   ollamaFallback: FallbackSummary
   externalHttpFallback: FallbackSummary
@@ -1804,7 +1811,6 @@ function OverviewWorkspace(props: {
 }) {
   const smokeGguf = props.installedGgufModels.find((model) => model.id === 'qwen3-vl-2b-instruct-q4-k-m') ?? props.installedGgufModels[0] ?? null
   const llamaDisplay = projectLlamaRuntimeDisplay(props.llamaStatus, props.llamaRunning)
-  const pythonMpsDisplay = projectPythonMpsCompatibilityDisplay(props.pythonMpsStatus)
   const clipSiglipOnnxDisplay = projectClipSiglipOnnxCompatibilityDisplay(props.clipSiglipOnnxStatus)
   const routeOverviewDisplay = projectPlatformAiRouteOverviewDisplay(props.platformBranchStatus)
   const ggufArtifactDisplay = projectGgufArtifactTileDisplay(smokeGguf)
@@ -1906,7 +1912,7 @@ function OverviewWorkspace(props: {
             {routeOverviewDisplay.showWorkerProbeDiagnostics ? (
               <>
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={props.platformProbeDisplay.accelerator.valueLabel} caption={props.platformProbeDisplay.accelerator.captionLabel} />
-                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.pythonCompatibilityLabel} value={pythonMpsDisplay.label} caption={pythonMpsDisplay.runtimeLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.pythonCompatibilityLabel} value={props.pythonCompatibilityDisplay.label} caption={props.pythonCompatibilityDisplay.runtimeLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.onnxRuntimeLabel} value={props.platformProbeDisplay.onnxRuntime.valueLabel} caption={props.platformProbeDisplay.onnxRuntime.captionLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipOnnxLabel} value={props.platformProbeDisplay.clipSiglipOnnx.valueLabel} caption={props.platformProbeDisplay.clipSiglipOnnx.captionLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipCompatibilityLabel} value={clipSiglipOnnxDisplay.label} caption={clipSiglipOnnxDisplay.runtimeLabel} />
