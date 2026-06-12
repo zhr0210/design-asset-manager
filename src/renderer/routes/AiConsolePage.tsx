@@ -77,6 +77,8 @@ import {
   projectPythonMpsCompatibilityDisplay
 } from '../../shared/workflows/ai-runtime-status.workflow'
 import {
+  type AiConsoleGpuDisplay,
+  type AiConsoleModelReadinessDisplayInput,
   projectAiConsoleGpuDisplay,
   projectAiConsoleModelReadinessDisplay
 } from '../../shared/workflows/ai-console-overview.workflow'
@@ -703,6 +705,11 @@ export default function AiConsolePage() {
     llamaServerRunning: Boolean(llamaStatus?.serverPid),
     externalBackendEnabled: selectedBackend?.enabled
   })
+  const modelReadinessInput: AiConsoleModelReadinessDisplayInput = {
+    installedModelCount,
+    currentModelReady,
+    workerOffline: isWorkerOffline
+  }
   const gpuDisplay = projectAiConsoleGpuDisplay({
     telemetryTrusted,
     deviceName: effectiveGpu.deviceName,
@@ -712,11 +719,7 @@ export default function AiConsolePage() {
     maxGpuMemoryUsagePercent: memoryPolicy.maxGpuMemoryUsagePercent,
     minFreeVramGBBeforeQwen8B: memoryPolicy.minFreeVramGBBeforeQwen8B
   })
-  const modelReadinessDisplay = projectAiConsoleModelReadinessDisplay({
-    installedModelCount,
-    currentModelReady,
-    workerOffline: isWorkerOffline
-  })
+  const modelReadinessDisplay = projectAiConsoleModelReadinessDisplay(modelReadinessInput)
   const latestLogLine = logs[0] ?? '暂无本地操作日志'
 
   const pushLog = (message: string) => {
@@ -1487,7 +1490,7 @@ export default function AiConsolePage() {
               title="当前反推模型"
               value={activeReverseModel}
               caption={promptSettings.backendMode === 'native-qwen3vl' ? 'Python Transformers 实验路线' : activeBackendLabel}
-              tone={currentModelReady ? 'good' : 'warn'}
+              tone={modelReadinessDisplay.tone}
               action="查看模型"
               onAction={() => setActiveTab('models')}
             >
@@ -1545,11 +1548,10 @@ export default function AiConsolePage() {
               promptMode={promptSettings.backendMode}
               activeReverseModel={activeReverseModel}
               activeBackendLabel={activeBackendLabel}
-              currentModelReady={currentModelReady}
+              modelReadinessInput={modelReadinessInput}
               installedNativeModels={installedNativeModels}
               installedGgufModels={installedGgufModels}
               queueStats={queueStats}
-              isWorkerOffline={isWorkerOffline}
               llamaStatus={llamaStatus}
               llamaRunning={llamaRunning}
               platformWorkerProbe={platformWorkerProbe}
@@ -1776,11 +1778,10 @@ function OverviewWorkspace(props: {
   promptMode: PromptReverseBackendMode
   activeReverseModel: string
   activeBackendLabel: string
-  currentModelReady: boolean
+  modelReadinessInput: AiConsoleModelReadinessDisplayInput
   installedNativeModels: any[]
   installedGgufModels: LocalGgufModel[]
   queueStats: any
-  isWorkerOffline: boolean
   llamaStatus: LlamaInstallStatus | null
   llamaRunning?: boolean
   platformWorkerProbe: PlatformAiWorkerProbeWithRuntimeVersions | null
@@ -1798,7 +1799,7 @@ function OverviewWorkspace(props: {
   latestLogLine: string
   telemetryTrusted: boolean
   effectiveGpu: ReturnType<typeof normalizeWorkerGpuStatus>
-  gpuDisplay: ReturnType<typeof projectAiConsoleGpuDisplay>
+  gpuDisplay: AiConsoleGpuDisplay
   riskTone: 'good' | 'warn' | 'bad'
   setActiveTab: React.Dispatch<React.SetStateAction<ConsoleTab>>
   onRefreshEvidence: () => void
@@ -1809,10 +1810,7 @@ function OverviewWorkspace(props: {
   const clipSiglipOnnxDisplay = projectClipSiglipOnnxCompatibilityDisplay(props.clipSiglipOnnxStatus)
   const routeOverviewDisplay = projectPlatformAiRouteOverviewDisplay(props.platformBranchStatus)
   const ggufArtifactDisplay = projectGgufArtifactTileDisplay(smokeGguf)
-  const modelReadinessDisplay = projectAiConsoleModelReadinessDisplay({
-    currentModelReady: props.currentModelReady,
-    workerOffline: props.isWorkerOffline
-  })
+  const modelReadinessDisplay = projectAiConsoleModelReadinessDisplay(props.modelReadinessInput)
   const serviceState = props.promptMode === 'llama-openai'
     ? `Llama 服务${llamaDisplay.serviceValue}`
     : props.promptMode === 'openai-compatible'

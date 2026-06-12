@@ -32,6 +32,12 @@ export interface AiConsoleModelReadinessDisplay {
   workerStatusLabel: string
 }
 
+export interface AiConsoleModelReadinessDisplayInput {
+  installedModelCount?: number | null
+  currentModelReady?: boolean | null
+  workerOffline?: boolean | null
+}
+
 export function projectAiConsoleGpuDisplay(input: AiConsoleGpuDisplayInput): AiConsoleGpuDisplay {
   const telemetryTrusted = Boolean(input.telemetryTrusted)
   const totalMb = safeNumber(input.totalMb)
@@ -62,11 +68,7 @@ export function projectAiConsoleGpuDisplay(input: AiConsoleGpuDisplayInput): AiC
   }
 }
 
-export function projectAiConsoleModelReadinessDisplay(input: {
-  installedModelCount?: number | null
-  currentModelReady?: boolean | null
-  workerOffline?: boolean | null
-}): AiConsoleModelReadinessDisplay {
+export function projectAiConsoleModelReadinessDisplay(input: AiConsoleModelReadinessDisplayInput): AiConsoleModelReadinessDisplay {
   const installedModelCount = Math.max(0, Math.floor(safeNumber(input.installedModelCount)))
   const currentModelReady = Boolean(input.currentModelReady)
   const workerOffline = Boolean(input.workerOffline)

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import {
+  type AiConsoleModelReadinessDisplayInput,
   projectAiConsoleGpuDisplay,
   projectAiConsoleModelReadinessDisplay
 } from '../src/shared/workflows/ai-console-overview.workflow'
@@ -55,11 +56,12 @@ assert.equal(lowFreeGpu.riskTone, 'warn')
 assert.equal(lowFreeGpu.statusLabel, '未知')
 assert.equal(lowFreeGpu.barToneClass, 'bg-amber-400')
 
-assert.deepEqual(projectAiConsoleModelReadinessDisplay({
+const readyModelInput: AiConsoleModelReadinessDisplayInput = {
   installedModelCount: 3,
   currentModelReady: true,
   workerOffline: false
-}), {
+}
+assert.deepEqual(projectAiConsoleModelReadinessDisplay(readyModelInput), {
   valueLabel: '3 个已安装',
   captionLabel: '当前模型可用 / Worker 在线',
   tone: 'good',
@@ -68,11 +70,12 @@ assert.deepEqual(projectAiConsoleModelReadinessDisplay({
   workerStatusLabel: 'Worker 在线'
 })
 
-assert.deepEqual(projectAiConsoleModelReadinessDisplay({
+const blockedModelInput: AiConsoleModelReadinessDisplayInput = {
   installedModelCount: 1,
   currentModelReady: false,
   workerOffline: true
-}), {
+}
+assert.deepEqual(projectAiConsoleModelReadinessDisplay(blockedModelInput), {
   valueLabel: '1 个已安装',
   captionLabel: '当前模型未就绪 / Worker 离线',
   tone: 'warn',
@@ -84,11 +87,21 @@ assert.deepEqual(projectAiConsoleModelReadinessDisplay({
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(aiConsoleSource, /projectAiConsoleGpuDisplay/)
 assert.match(aiConsoleSource, /projectAiConsoleModelReadinessDisplay/)
+assert.match(aiConsoleSource, /AiConsoleModelReadinessDisplayInput/)
+assert.match(aiConsoleSource, /const modelReadinessInput: AiConsoleModelReadinessDisplayInput/)
+assert.match(aiConsoleSource, /modelReadinessInput=\{modelReadinessInput\}/)
+assert.match(aiConsoleSource, /modelReadinessInput: AiConsoleModelReadinessDisplayInput/)
+assert.match(aiConsoleSource, /projectAiConsoleModelReadinessDisplay\(props\.modelReadinessInput\)/)
+assert.doesNotMatch(aiConsoleSource, /currentModelReady=\{currentModelReady\}/)
+assert.doesNotMatch(aiConsoleSource, /isWorkerOffline=\{isWorkerOffline\}/)
+assert.doesNotMatch(aiConsoleSource, /currentModelReady: boolean/)
+assert.doesNotMatch(aiConsoleSource, /isWorkerOffline: boolean/)
 assert.doesNotMatch(aiConsoleSource, /effectiveGpu\.usagePercent\s*>=\s*memoryPolicy\.maxGpuMemoryUsagePercent/)
 assert.doesNotMatch(aiConsoleSource, /effectiveGpu\.freeMb\s*>\s*0\s*&&\s*effectiveGpu\.freeMb\s*</)
 assert.doesNotMatch(aiConsoleSource, /currentModelReady\s*\?\s*['"]当前模型可用['"]/)
 assert.doesNotMatch(aiConsoleSource, /isWorkerOffline\s*\?\s*['"]Worker 离线['"]/)
 assert.doesNotMatch(aiConsoleSource, /currentModelReady\s*\?\s*['"]可执行['"]/)
+assert.doesNotMatch(aiConsoleSource, /tone=\{currentModelReady\s*\?\s*['"]good['"]\s*:\s*['"]warn['"]\}/)
 assert.doesNotMatch(aiConsoleSource, /当前占用 \$\{effectiveGpu\.usagePercent/)
 assert.doesNotMatch(aiConsoleSource, /riskTone === 'bad' \? 'bg-rose-500'/)
 
