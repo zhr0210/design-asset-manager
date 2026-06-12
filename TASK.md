@@ -89,6 +89,31 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Closed the AI Console macOS-only Worker probe consumption gap.
+  AI Console now requests both existing macOS and Windows capability IPC
+  responses, selects the current platform from the shared branch status, and
+  consumes the platform-neutral `{ probe, display }` result from
+  `projectPlatformAiWorkerProbeDiagnosticsSelection()`. Concrete
+  `MacOSAiWorkerProbeResult` and `WindowsAiWorkerProbeResult` inputs remain
+  inside the shared projector boundary; renderer state and component props
+  continue to use `PlatformAiWorkerProbeWithRuntimeVersions` and
+  `PlatformAiWorkerProbeDiagnosticsDisplay`. If branch status is unavailable,
+  the selector uses the only available platform probe. No IPC channel, AI
+  Worker HTTP API, database schema, or shared response shape changed.
+  Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation also passed via `powershell -ExecutionPolicy Bypass
+  -File .\scripts\windows-ai-real-evidence-validation.ps1`; it completed the
+  Windows capability/runtime probes, captured `dam-windows-ai-console.png`,
+  reported overflow `doc=false`, `body=false` at `1264x793`, and confirmed
+  `ai_tag_task`, `ai_prompt_task`, and `search_embedding` as
+  `real_model_path`. Next smallest slice: audit the AI Console
+  Python compatibility status path, which still uses macOS-named state and
+  may need the same platform-neutral selection pattern for CUDA versus MPS.
 - 2026-06-12 Continued AI Console model list type cleanup. AI Console now
   types the page-level native model list, `OverviewWorkspace` installed native
   model props, and `QwenVersionCollection` native model props as shared

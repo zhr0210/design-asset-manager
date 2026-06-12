@@ -73,7 +73,7 @@ import { type AiQueueStatsLike, projectAiQueueStatusDisplay } from '../../shared
 import {
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
-  projectMacOSAiWorkerProbeDisplay,
+  projectPlatformAiWorkerProbeDiagnosticsSelection,
   type PlatformAiWorkerProbeDiagnosticsDisplay,
   projectPythonMpsCompatibilityDisplay
 } from '../../shared/workflows/ai-runtime-status.workflow'
@@ -639,7 +639,9 @@ export default function AiConsolePage() {
   const [localGgufModels, setLocalGgufModels] = useState<LocalGgufModel[]>([])
   const [gpuSamples, setGpuSamples] = useState<GpuSample[]>([])
   const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
-  const [platformProbeDisplay, setPlatformProbeDisplay] = useState<PlatformAiWorkerProbeDiagnosticsDisplay>(() => projectMacOSAiWorkerProbeDisplay(null))
+  const [platformProbeDisplay, setPlatformProbeDisplay] = useState<PlatformAiWorkerProbeDiagnosticsDisplay>(
+    () => projectPlatformAiWorkerProbeDiagnosticsSelection({}).display
+  )
   const [platformBranchStatus, setPlatformBranchStatus] = useState<PlatformAiBranchStatusResponse | null>(null)
   const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
@@ -790,13 +792,14 @@ export default function AiConsolePage() {
         return
       }
 
-      const [status, gpu, models, llama, ggufModels, macOSProbe, macOSBranchStatus, windowsBranchStatus, clipSiglipStatus] = await Promise.all([
+      const [status, gpu, models, llama, ggufModels, macOSProbe, windowsProbe, macOSBranchStatus, windowsBranchStatus, clipSiglipStatus] = await Promise.all([
         api.aiModelStatus?.().catch((err: any) => ({ offline: true, error: String(err) })),
         api.aiWorkerGetGpuStatus?.().catch(() => null),
         api.aiModelList?.().catch(() => []),
         api.llamaRuntimeGetStatus?.().catch(() => null),
         api.llamaRuntimeListLocalModels?.().catch(() => []),
         api.aiRuntime?.getMacOSCapabilities ? api.aiRuntime.getMacOSCapabilities().catch(() => null) : Promise.resolve(null),
+        api.aiRuntime?.getWindowsCapabilities ? api.aiRuntime.getWindowsCapabilities().catch(() => null) : Promise.resolve(null),
         api.aiRuntime?.getMacOSAiBranchStatus ? api.aiRuntime.getMacOSAiBranchStatus().catch(() => null) : Promise.resolve(null),
         api.aiRuntime?.getWindowsAiBranchStatus ? api.aiRuntime.getWindowsAiBranchStatus().catch(() => null) : Promise.resolve(null),
         api.aiRuntime?.getClipSiglipOnnxStatus ? api.aiRuntime.getClipSiglipOnnxStatus().catch(() => null) : Promise.resolve(null)
@@ -812,18 +815,18 @@ export default function AiConsolePage() {
           setLlamaRunning(llama.serverRunning)
         }
       }
-      if (macOSProbe?.success && macOSProbe.data?.capabilities) {
-        setPlatformWorkerProbe(macOSProbe.data.capabilities)
-        setPlatformProbeDisplay(projectMacOSAiWorkerProbeDisplay(macOSProbe.data.capabilities))
-      } else {
-        setPlatformWorkerProbe(null)
-        setPlatformProbeDisplay(projectMacOSAiWorkerProbeDisplay(null))
-      }
       const projectedBranchStatus = selectPlatformAiBranchStatus(
         [macOSBranchStatus, windowsBranchStatus]
           .map((response: any) => response?.success && response.data ? response.data as PlatformAiBranchStatusResponse : null)
       )
       setPlatformBranchStatus(projectedBranchStatus)
+      const probeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
+        platformBranch: projectedBranchStatus?.platformBranch,
+        macOSProbe: macOSProbe?.success ? macOSProbe.data?.capabilities : null,
+        windowsProbe: windowsProbe?.success ? windowsProbe.data?.capabilities : null
+      })
+      setPlatformWorkerProbe(probeSelection.probe)
+      setPlatformProbeDisplay(probeSelection.display)
       if (status?.offline === false && api.aiRuntime?.getPythonMpsStatus) {
         const pythonMps = await api.aiRuntime.getPythonMpsStatus().catch(() => null)
         if (pythonMps?.success && pythonMps.data) {

@@ -20,6 +20,7 @@ import {
   projectAiRuntimeCapabilityMatrixDisplay,
   projectAiRuntimePlatformPanelCopy,
   projectAiRuntimeWorkerProbePanelDisplay,
+  projectPlatformAiWorkerProbeDiagnosticsSelection,
   projectPlatformPythonRuntimeCompatibilityDisplay,
   projectPlatformPythonRuntimeExecutionProbeDisplay,
   projectPythonMpsExecutionProbeDisplay,
@@ -555,6 +556,27 @@ assert.equal(windowsConnectedProbe.cuda.captionLabel, 'torch 2.8.0+cu121')
 assert.equal(windowsConnectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(windowsConnectedProbe.onnxRuntime.captionLabel, 'CUDAExecutionProvider / CPUExecutionProvider')
 assert.equal(windowsConnectedProbe.clipSiglipOnnx.valueLabel, '就绪')
+
+const windowsProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
+  platformBranch: 'windows',
+  windowsProbe: windowsRawProbe
+})
+assert.equal(windowsProbeSelection.probe, windowsRawProbe)
+assert.equal(windowsProbeSelection.display.platformBadgeLabel, 'win32/amd64')
+assert.equal(windowsProbeSelection.display.accelerator.captionLabel, 'torch 2.8.0+cu121')
+
+const inferredWindowsProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
+  windowsProbe: windowsRawProbe
+})
+assert.equal(inferredWindowsProbeSelection.probe, windowsRawProbe)
+assert.equal(inferredWindowsProbeSelection.display.connected, true)
+
+const uncheckedMacOSProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
+  platformBranch: 'macos',
+  windowsProbe: windowsRawProbe
+})
+assert.equal(uncheckedMacOSProbeSelection.probe, null)
+assert.equal(uncheckedMacOSProbeSelection.display.connected, false)
 
 const windowsBranch = {
   marker: 'windows-ai-branch' as const,

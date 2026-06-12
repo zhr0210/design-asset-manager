@@ -20,8 +20,10 @@ import type {
 import type {
   AiCapabilityStatus,
   PlatformAiBranchRuntimeMetadata,
-  PlatformAiWorkerProbeResultBase
+  PlatformAiWorkerProbeResultBase,
+  PlatformAiWorkerProbeWithRuntimeVersions
 } from '../types/platform-ai-runtime.types'
+import type { PlatformAiBranch } from '../types/platform-ai-branch-status.types'
 import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
@@ -99,6 +101,11 @@ export interface PlatformAiWorkerProbeDiagnosticsDisplay extends PlatformAiWorke
   accelerator: PlatformAiProbeTileDisplay
   onnxRuntime: PlatformAiProbeTileDisplay
   clipSiglipOnnx: PlatformAiProbeTileDisplay
+}
+
+export interface PlatformAiWorkerProbeDiagnosticsSelection {
+  probe: PlatformAiWorkerProbeWithRuntimeVersions | null
+  display: PlatformAiWorkerProbeDiagnosticsDisplay
 }
 
 export interface MacOSAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay {
@@ -720,6 +727,27 @@ export function projectWindowsAiWorkerProbeDisplay(
         ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
         : '已探测，未报告版本'
     }
+  }
+}
+
+export function projectPlatformAiWorkerProbeDiagnosticsSelection(input: {
+  platformBranch?: PlatformAiBranch | null
+  macOSProbe?: MacOSAiWorkerProbeResult | null
+  windowsProbe?: WindowsAiWorkerProbeResult | null
+}): PlatformAiWorkerProbeDiagnosticsSelection {
+  const useWindows = input.platformBranch === 'windows'
+    || (input.platformBranch !== 'macos' && Boolean(input.windowsProbe) && !input.macOSProbe)
+
+  if (useWindows) {
+    return {
+      probe: input.windowsProbe ?? null,
+      display: projectWindowsAiWorkerProbeDisplay(input.windowsProbe)
+    }
+  }
+
+  return {
+    probe: input.macOSProbe ?? null,
+    display: projectMacOSAiWorkerProbeDisplay(input.macOSProbe)
   }
 }
 
