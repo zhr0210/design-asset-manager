@@ -14,20 +14,19 @@ import {
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
   projectAiCapabilityStatusDisplay,
-  projectMacOSAiWorkerProbeDisplay,
   projectOnnxModelLoadProbeDisplay,
   projectAiRuntimeBranchPanelDisplay,
   projectAiRuntimeCapabilityMatrixDisplay,
   projectAiRuntimePlatformPanelCopy,
   projectAiRuntimeWorkerProbePanelDisplay,
+  projectPlatformAiWorkerProbeDiagnosticsDisplay,
   projectPlatformAiWorkerProbeDiagnosticsSelection,
   projectPlatformPythonRuntimeCompatibilityDisplay,
   projectPlatformPythonRuntimeExecutionProbeDisplay,
   projectPythonMpsExecutionProbeDisplay,
   projectPythonMpsCompatibilityDisplay,
   projectPythonCudaCompatibilityDisplay,
-  projectPythonCudaExecutionProbeDisplay,
-  projectWindowsAiWorkerProbeDisplay
+  projectPythonCudaExecutionProbeDisplay
 } from '../src/shared/workflows/ai-runtime-status.workflow'
 
 async function listSourceFiles(dir: string): Promise<string[]> {
@@ -439,17 +438,16 @@ assert.equal(getCurrentPlatformAiBranchRuntime([
   { ...runtimeState('running'), metadata: { macosAiBranch: { ...macOSBranch, marker: 'other' } } }
 ]), null)
 
-const uncheckedProbe = projectMacOSAiWorkerProbeDisplay(null)
+const uncheckedProbe = projectPlatformAiWorkerProbeDiagnosticsDisplay('macos', null)
 assert.equal(uncheckedProbe.connected, false)
 assert.equal(uncheckedProbe.connectionLabel, '等待探测')
 assert.equal(uncheckedProbe.connectionTone, 'muted')
 assert.equal(uncheckedProbe.accelerator.valueLabel, '尚未探测')
-assert.equal(uncheckedProbe.mps.valueLabel, '尚未探测')
 assert.equal(uncheckedProbe.onnxRuntime.valueLabel, '尚未探测')
 assert.equal(uncheckedProbe.clipSiglipOnnx.valueLabel, '尚未探测')
 assert.equal(uncheckedProbe.clipSiglipStatusLabel, '证据不足')
 
-const connectedProbe = projectMacOSAiWorkerProbeDisplay({
+const connectedProbe = projectPlatformAiWorkerProbeDiagnosticsDisplay('macos', {
   platform: 'darwin',
   machine: 'arm64',
   isMacOS: true,
@@ -491,8 +489,6 @@ assert.equal(connectedProbe.isMacOSLabel, 'yes')
 assert.equal(connectedProbe.isAppleSiliconLabel, 'yes')
 assert.equal(connectedProbe.accelerator.valueLabel, '可用')
 assert.equal(connectedProbe.accelerator.captionLabel, 'torch 2.8.0')
-assert.equal(connectedProbe.mps.valueLabel, '可用')
-assert.equal(connectedProbe.mps.captionLabel, 'torch 2.8.0')
 assert.equal(connectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(connectedProbe.onnxRuntime.captionLabel, 'CoreMLExecutionProvider / CPUExecutionProvider')
 assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '依赖缺失')
@@ -536,10 +532,9 @@ assert.equal(macOSWorkerPanel.platformBadgeLabel, 'darwin/arm64')
 assert.equal(macOSWorkerPanel.clipSiglipStatusLabel, '依赖缺失')
 
 // Add Windows capability display tests
-const windowsUncheckedProbe = projectWindowsAiWorkerProbeDisplay(null)
+const windowsUncheckedProbe = projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', null)
 assert.equal(windowsUncheckedProbe.connected, false)
 assert.equal(windowsUncheckedProbe.accelerator.valueLabel, '尚未探测')
-assert.equal(windowsUncheckedProbe.cuda.valueLabel, '尚未探测')
 assert.equal(windowsUncheckedProbe.onnxRuntime.valueLabel, '尚未探测')
 
 const windowsRawProbe = {
@@ -575,13 +570,11 @@ const windowsRawProbe = {
   },
   lanes: []
 }
-const windowsConnectedProbe = projectWindowsAiWorkerProbeDisplay(windowsRawProbe)
+const windowsConnectedProbe = projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', windowsRawProbe)
 assert.equal(windowsConnectedProbe.connected, true)
 assert.equal(windowsConnectedProbe.connectionLabel, 'Windows 探测已连接')
 assert.equal(windowsConnectedProbe.accelerator.valueLabel, '可用')
 assert.equal(windowsConnectedProbe.accelerator.captionLabel, 'torch 2.8.0+cu121')
-assert.equal(windowsConnectedProbe.cuda.valueLabel, '可用')
-assert.equal(windowsConnectedProbe.cuda.captionLabel, 'torch 2.8.0+cu121')
 assert.equal(windowsConnectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(windowsConnectedProbe.onnxRuntime.captionLabel, 'CUDAExecutionProvider / CPUExecutionProvider')
 assert.equal(windowsConnectedProbe.clipSiglipOnnx.valueLabel, '就绪')
@@ -765,10 +758,10 @@ assert.match(runtimeWorkflowSource, /Pick<PlatformAiWorkerProbeResultBase/)
 assert.doesNotMatch(runtimeWorkflowSource, /Pick<MacOSAiWorkerProbeResult \| WindowsAiWorkerProbeResult/)
 assert.match(runtimeWorkflowSource, /probe\?: PlatformAiWorkerProbeResultBase \| null/)
 assert.doesNotMatch(runtimeWorkflowSource, /projectAiRuntimeWorkerProbePanelDisplay\(\s*isWindows: boolean,\s*probe\?: MacOSAiWorkerProbeResult \| WindowsAiWorkerProbeResult \| null/)
-assert.doesNotMatch(runtimeWorkflowSource, /projectWindowsAiWorkerProbeDisplay\(probe as WindowsAiWorkerProbeResult\)/)
-assert.doesNotMatch(runtimeWorkflowSource, /projectMacOSAiWorkerProbeDisplay\(probe as MacOSAiWorkerProbeResult\)/)
-assert.match(runtimeWorkflowSource, /interface MacOSAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay/)
-assert.match(runtimeWorkflowSource, /interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay/)
+assert.doesNotMatch(runtimeWorkflowSource, /\bMacOSAiWorkerProbeDisplay\b/)
+assert.doesNotMatch(runtimeWorkflowSource, /\bWindowsAiWorkerProbeDisplay\b/)
+assert.doesNotMatch(runtimeWorkflowSource, /\bprojectMacOSAiWorkerProbeDisplay\b/)
+assert.doesNotMatch(runtimeWorkflowSource, /\bprojectWindowsAiWorkerProbeDisplay\b/)
 assert.match(runtimeWorkflowSource, /interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
 assert.match(runtimeWorkflowSource, /const PLATFORM_AI_WORKER_PROBE_COPY: Record<PlatformAiBranch, PlatformAiWorkerProbeCopy>/)
 assert.match(runtimeWorkflowSource, /function isPlatformAiWorkerProbeConnected/)
@@ -778,7 +771,6 @@ const platformProbeDeviceFieldPattern = /probe\.torch|\.(?:mpsAvailable|cudaAvai
 for (const helperName of [
   'projectPlatformAiWorkerProbeHeaderDisplay',
   'isPlatformAiWorkerProbeConnected',
-  'projectPlatformAiWorkerProbeDiagnosticsDisplay',
   'projectAiRuntimeWorkerProbePanelDisplay',
   'projectAiRuntimeWorkerProbePanelFromHeader',
   'projectAiRuntimeBranchPanelDisplay'
@@ -790,29 +782,9 @@ for (const helperName of [
   )
 }
 assert.match(
-  extractFunctionSource(runtimeWorkflowSource, 'projectMacOSAiWorkerProbeDisplay'),
-  /probe\.torch\.mpsAvailable/,
-  'macOS Worker detail fields should stay inside the macOS-specific display projector'
-)
-assert.doesNotMatch(
-  extractFunctionSource(runtimeWorkflowSource, 'projectMacOSAiWorkerProbeDisplay'),
-  /probe\.(?:onnxruntime|clipSiglipOnnx)/,
-  'macOS Worker projector should delegate shared diagnostics fields'
-)
-assert.match(
-  extractFunctionSource(runtimeWorkflowSource, 'projectWindowsAiWorkerProbeDisplay'),
-  /probe\.torch\.cudaAvailable/,
-  'Windows Worker detail fields should stay inside the Windows-specific display projector'
-)
-assert.doesNotMatch(
-  extractFunctionSource(runtimeWorkflowSource, 'projectWindowsAiWorkerProbeDisplay'),
-  /probe\.(?:onnxruntime|clipSiglipOnnx)/,
-  'Windows Worker projector should delegate shared diagnostics fields'
-)
-assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
-  /probe\.onnxruntime\.providers[\s\S]*probe\.clipSiglipOnnx\.version/,
-  'shared Worker projector should own shared ONNX and CLIP diagnostics fields'
+  /probe\.torch\.cudaAvailable[\s\S]*probe\.torch\.mpsAvailable[\s\S]*probe\.onnxruntime\.providers[\s\S]*probe\.clipSiglipOnnx\.version/,
+  'shared Worker projector should own the branch-selected accelerator plus shared ONNX and CLIP diagnostics fields'
 )
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeWorkerProbePanelDisplay'),
@@ -822,9 +794,9 @@ assert.doesNotMatch(
   extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeWorkerProbePanelDisplay'),
   /platformBranch === 'windows'|if \(isWindows\)/
 )
-assert.doesNotMatch(
+assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
-  /platformBranch === 'windows'/
+  /platformBranch === 'windows'[\s\S]*probe\.torch\.cudaAvailable[\s\S]*probe\.torch\.mpsAvailable/
 )
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)

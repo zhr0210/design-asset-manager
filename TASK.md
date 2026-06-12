@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Removed the unused concrete macOS/Windows Worker diagnostics
+  display aliases and wrappers. `projectPlatformAiWorkerProbeDiagnosticsDisplay`
+  is now the single exported projector and selects only the genuine
+  `mpsAvailable`/`cudaAvailable` accelerator field from `PlatformAiBranch`;
+  connection, ONNX, and CLIP diagnostics remain shared. The selection workflow
+  and focused tests now consume `PlatformAiWorkerProbeDiagnosticsDisplay`
+  directly. No IPC channel, AI Worker HTTP API, database schema, shared
+  response field, or renderer behavior changed. Validation passed the required
+  four focused TypeScript tests, the Windows validation privacy contract,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. The full Windows script passed runtime-safety,
+  Python, ONNX, Llama text/generated-image, and Electron/Playwright checks;
+  `ai_tag_task`, `ai_prompt_task`, and `search_embedding` reported
+  `real_model_path`, no document/body horizontal overflow was found at
+  `1264x793`, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: audit shared branch-panel and capability-matrix projectors
+  for repeated platform copy/branch checks that can derive from
+  `PlatformAiBranch` without moving runtime evidence.
 - 2026-06-12 Centralized Worker probe connection detection and panel copy.
   `PLATFORM_AI_WORKER_PROBE_COPY` now owns the macOS/Windows connected label,
   panel title, and description, while

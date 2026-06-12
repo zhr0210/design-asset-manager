@@ -103,10 +103,6 @@ export interface PlatformAiWorkerProbeDiagnosticsSelection {
   display: PlatformAiWorkerProbeDiagnosticsDisplay
 }
 
-export interface MacOSAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay {
-  mps: PlatformAiProbeTileDisplay
-}
-
 export interface AiRuntimePlatformPanelCopy {
   compatibilityTitle: string
   compatibilityDescription: string
@@ -555,10 +551,9 @@ function isPlatformAiWorkerProbeConnected(
     : probe.isMacOS
 }
 
-function projectPlatformAiWorkerProbeDiagnosticsDisplay(
+export function projectPlatformAiWorkerProbeDiagnosticsDisplay(
   platformBranch: PlatformAiBranch,
-  probe: PlatformAiWorkerProbeDiagnosticsInput | null,
-  accelerator?: PlatformAiProbeTileDisplay | null
+  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
 ): PlatformAiWorkerProbeDiagnosticsDisplay {
   const { connectedLabel } = PLATFORM_AI_WORKER_PROBE_COPY[platformBranch]
 
@@ -574,10 +569,16 @@ function projectPlatformAiWorkerProbeDiagnosticsDisplay(
 
   const connected = isPlatformAiWorkerProbeConnected(platformBranch, probe)
   const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
+  const acceleratorAvailable = platformBranch === 'windows'
+    ? probe.torch.cudaAvailable
+    : probe.torch.mpsAvailable
 
   return {
     ...projectPlatformAiWorkerProbeHeaderDisplay(probe, connected, connectedLabel),
-    accelerator: accelerator ?? { valueLabel: '尚未探测', captionLabel: '尚未探测' },
+    accelerator: {
+      valueLabel: acceleratorAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
+      captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
+    },
     onnxRuntime: {
       valueLabel: probe.onnxruntime.available ? '可用' : '依赖缺失',
       captionLabel: probe.onnxruntime.providers.join(' / ') || '已探测，未报告 Provider'
@@ -588,23 +589,6 @@ function projectPlatformAiWorkerProbeDiagnosticsDisplay(
         ? `${probe.clipSiglipOnnx.backend ?? 'optimum'} ${probe.clipSiglipOnnx.version}`
         : '已探测，未报告版本'
     }
-  }
-}
-
-export function projectMacOSAiWorkerProbeDisplay(
-  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
-): MacOSAiWorkerProbeDisplay {
-  const mps = probe
-    ? {
-        valueLabel: probe.torch.mpsAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
-        captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
-      }
-    : null
-  const display = projectPlatformAiWorkerProbeDiagnosticsDisplay('macos', probe ?? null, mps)
-
-  return {
-    ...display,
-    mps: display.accelerator
   }
 }
 
@@ -787,27 +771,6 @@ export function projectPythonCudaExecutionProbeDisplay(
   return projectPythonRuntimeExecutionProbeDisplay('windows', probe, error)
 }
 
-export interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay {
-  cuda: PlatformAiProbeTileDisplay
-}
-
-export function projectWindowsAiWorkerProbeDisplay(
-  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
-): WindowsAiWorkerProbeDisplay {
-  const cuda = probe
-    ? {
-        valueLabel: probe.torch.cudaAvailable ? '可用' : probe.torch.cpuFallback ? 'CPU 回退' : '依赖缺失',
-        captionLabel: probe.torch.version ? `torch ${probe.torch.version}` : '已探测，未报告版本'
-      }
-    : null
-  const display = projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', probe ?? null, cuda)
-
-  return {
-    ...display,
-    cuda: display.accelerator
-  }
-}
-
 export function projectPlatformAiWorkerProbeDiagnosticsSelection(input: {
   platformBranch?: PlatformAiBranch | null
   macOSProbe?: PlatformAiWorkerProbeDiagnosticsInput | null
@@ -820,14 +783,14 @@ export function projectPlatformAiWorkerProbeDiagnosticsSelection(input: {
     return {
       platformBranch: 'windows',
       probe: input.windowsProbe ?? null,
-      display: projectWindowsAiWorkerProbeDisplay(input.windowsProbe)
+      display: projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', input.windowsProbe)
     }
   }
 
   return {
     platformBranch: 'macos',
     probe: input.macOSProbe ?? null,
-    display: projectMacOSAiWorkerProbeDisplay(input.macOSProbe)
+    display: projectPlatformAiWorkerProbeDiagnosticsDisplay('macos', input.macOSProbe)
   }
 }
 

@@ -80,9 +80,11 @@ paths or model cache paths.
    display state machine now handles both accelerators through platform copy.
    Shared Worker probe diagnostics projection also owns connection, ONNX, and
    CLIP fields. One platform copy table and connection matcher serve both
-   diagnostics and panel projectors; platform wrappers only read genuine
-   MPS/CUDA device fields. Concrete response names remain at main-process, IPC
-   contract, platform type-definition, and genuine MPS/CUDA adapter boundaries.
+   diagnostics and panel projectors. The concrete macOS/Windows diagnostics
+   display aliases and wrappers are removed; one shared projector selects only
+   the genuine MPS/CUDA device field from `PlatformAiBranch`. Concrete response
+   names remain at main-process, IPC contract, platform type-definition, and
+   genuine MPS/CUDA adapter boundaries.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
