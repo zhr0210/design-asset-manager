@@ -635,6 +635,16 @@ export function getWindowsAiBranchRuntime(runtimes: AiRuntimeState[]): WindowsAi
   return null
 }
 
+export function getCurrentPlatformAiBranchRuntime(
+  runtimes: AiRuntimeState[]
+): PlatformAiBranchRuntimeMetadata | null {
+  const windowsBranch = getWindowsAiBranchRuntime(runtimes)
+  if (windowsBranch?.isCurrentPlatform) return windowsBranch
+
+  const macOSBranch = getMacOSAiBranchRuntime(runtimes)
+  return macOSBranch?.isCurrentPlatform ? macOSBranch : null
+}
+
 export function projectAiRuntimeBranchPanelDisplay(
   branch: PlatformAiBranchRuntimeMetadata
 ): AiRuntimeBranchPanelDisplay {

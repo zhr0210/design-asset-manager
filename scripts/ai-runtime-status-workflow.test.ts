@@ -8,6 +8,7 @@ import {
   projectAiRuntimeInfoLabel,
   projectAiRuntimeStatusDisplay,
   projectAiRuntimeSummaryDisplay,
+  getCurrentPlatformAiBranchRuntime,
   getMacOSAiBranchRuntime,
   isMacOSAiBranchMetadata,
   normalizeAiCapabilityStatus,
@@ -409,6 +410,9 @@ assert.equal(getMacOSAiBranchRuntime([
   { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } }
 ]), macOSBranch)
 assert.equal(getMacOSAiBranchRuntime([{ ...runtimeState('running'), metadata: { macosAiBranch: { marker: 'other', lanes: [] } } }]), null)
+assert.equal(getCurrentPlatformAiBranchRuntime([
+  { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } }
+]), macOSBranch)
 
 const uncheckedProbe = projectMacOSAiWorkerProbeDisplay(null)
 assert.equal(uncheckedProbe.connected, false)
@@ -590,6 +594,18 @@ const windowsBranch = {
   lanes: [],
   warnings: []
 }
+const currentWindowsBranch = {
+  ...windowsBranch,
+  isCurrentPlatform: true
+}
+assert.equal(getCurrentPlatformAiBranchRuntime([
+  { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } },
+  { ...runtimeState('running'), metadata: { windowsAiBranch: currentWindowsBranch } }
+]), currentWindowsBranch)
+assert.equal(getCurrentPlatformAiBranchRuntime([
+  { ...runtimeState('running'), metadata: { windowsAiBranch: windowsBranch } },
+  { ...runtimeState('running'), metadata: { macosAiBranch: { ...macOSBranch, isCurrentPlatform: false } } }
+]), null)
 assert.deepEqual(projectAiRuntimeBranchPanelDisplay(windowsBranch), {
   title: 'Windows AI 分支',
   description: 'Python CUDA、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。 当前阶段：worker-probes / win32/x64',
@@ -716,7 +732,12 @@ assert.match(settingsPanelSource, /projectAiCapabilityStatusDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeInfoLabel/)
 assert.match(settingsPanelSource, /projectAiRuntimeDisplayValue/)
 assert.match(settingsPanelSource, /projectAiRuntimeActionLabel/)
-assert.match(settingsPanelSource, /getMacOSAiBranchRuntime/)
+assert.match(settingsPanelSource, /getCurrentPlatformAiBranchRuntime/)
+assert.doesNotMatch(settingsPanelSource, /getMacOSAiBranchRuntime/)
+assert.doesNotMatch(settingsPanelSource, /getWindowsAiBranchRuntime/)
+assert.match(settingsPanelSource, /<PlatformAiBranchPanel branch=\{currentPlatformAiBranch\} \/>/)
+assert.doesNotMatch(settingsPanelSource, /\bmacosAiBranch\b/)
+assert.doesNotMatch(settingsPanelSource, /\bwindowsAiBranch\b/)
 assert.match(matrixSource, /projectAiCapabilityStatusDisplay/)
 assert.match(matrixSource, /projectAiRuntimeCapabilityMatrixDisplay/)
 assert.match(matrixSource, /PlatformAiWorkerProbeWithRuntimeVersions/)

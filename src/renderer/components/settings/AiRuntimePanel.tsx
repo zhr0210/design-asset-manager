@@ -40,8 +40,7 @@ import {
   projectAiRuntimeInfoLabel,
   projectAiRuntimeDisplayValue,
   projectAiRuntimeActionLabel,
-  getMacOSAiBranchRuntime,
-  getWindowsAiBranchRuntime
+  getCurrentPlatformAiBranchRuntime
 } from '../../../shared/workflows/ai-runtime-status.workflow'
 
 type AiRuntimeApi = {
@@ -123,14 +122,9 @@ export default function AiRuntimePanel() {
   const activeRuntimeId = activeRuntime?.id ?? null
   const hasRuntimes = runtimes.length > 0
 
-  const isWindows = useMemo(() => {
-    const winBranch = getWindowsAiBranchRuntime(runtimes)
-    return Boolean(winBranch?.isCurrentPlatform)
-  }, [runtimes])
+  const currentPlatformAiBranch = useMemo(() => getCurrentPlatformAiBranchRuntime(runtimes), [runtimes])
+  const isWindows = currentPlatformAiBranch?.marker === 'windows-ai-branch'
   const platformCopy = useMemo(() => projectAiRuntimePlatformPanelCopy(isWindows), [isWindows])
-
-  const macosAiBranch = useMemo(() => getMacOSAiBranchRuntime(runtimes), [runtimes])
-  const windowsAiBranch = useMemo(() => getWindowsAiBranchRuntime(runtimes), [runtimes])
 
   const runtimeSummary = useMemo(() => {
     return projectAiRuntimeSummaryDisplay(runtimes)
@@ -166,8 +160,8 @@ export default function AiRuntimePanel() {
       const currentRuntimes = listResponse.data.runtimes
       setRuntimes(currentRuntimes)
 
-      const winMetadata = getWindowsAiBranchRuntime(currentRuntimes)
-      const currentIsWin = Boolean(winMetadata?.isCurrentPlatform)
+      const currentBranch = getCurrentPlatformAiBranchRuntime(currentRuntimes)
+      const currentIsWin = currentBranch?.marker === 'windows-ai-branch'
 
       const [activeResponse, probeResponse, pythonStatusResponse, clipSiglipResponse] = await Promise.all([
         api.getActiveRuntime(),
@@ -386,8 +380,7 @@ export default function AiRuntimePanel() {
         运行时操作会经过 Electron 主进程的安全 IPC。外部服务、模型下载和运行时安装仍由各自模块管理，不会在本面板自动触发。
       </div>
 
-      {macosAiBranch?.isCurrentPlatform && <PlatformAiBranchPanel branch={macosAiBranch} />}
-      {windowsAiBranch?.isCurrentPlatform && <PlatformAiBranchPanel branch={windowsAiBranch} />}
+      {currentPlatformAiBranch && <PlatformAiBranchPanel branch={currentPlatformAiBranch} />}
       <PlatformAiWorkerProbePanel probe={platformWorkerProbe} error={platformWorkerProbeError} isWindows={isWindows} />
       <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">

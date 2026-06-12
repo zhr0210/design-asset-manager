@@ -89,6 +89,33 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Collapsed Settings AI Runtime current-platform branch selection
+  into the shared workflow boundary. The new
+  `getCurrentPlatformAiBranchRuntime()` returns one platform-neutral
+  `PlatformAiBranchRuntimeMetadata` value; `AiRuntimePanel` now uses that
+  value for platform copy, existing CUDA/MPS capability and compatibility IPC
+  routing, and a single `PlatformAiBranchPanel` render. The renderer no longer
+  imports or stores separate macOS/Windows branch selectors or branch values.
+  No IPC channel, AI Worker HTTP API, database schema, or shared response shape
+  changed. Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation completed via `powershell -ExecutionPolicy Bypass
+  -File .\scripts\windows-ai-real-evidence-validation.ps1`; runtime safety,
+  Python tests, WD Tagger/CLIP real ONNX probes, Electron/Playwright capture,
+  and overflow checks passed. The current host could not refresh Llama evidence
+  because `llama-server.exe` was absent, so this run reported
+  `ai_prompt_task=runtime_probe_ready` while `ai_tag_task` and
+  `search_embedding` remained `real_model_path`; the earlier successful Llama
+  closure remains historical evidence, not evidence refreshed by this run.
+  The screenshot reported no document/body horizontal overflow at `1264x793`.
+  Next smallest slice: audit shared workflow platform selector inputs and
+  renderer component props for any remaining concrete platform types that only
+  contribute shared fields, while keeping concrete probe responses at IPC and
+  platform-specific projector boundaries.
 - 2026-06-12 Continued Settings AI Runtime platform state cleanup.
   `AiRuntimePanel` keeps concrete MPS/CUDA response types only in its
   `AiRuntimeApi` IPC boundary. React state for Python compatibility and real

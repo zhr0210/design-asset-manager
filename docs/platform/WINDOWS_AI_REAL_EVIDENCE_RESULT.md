@@ -1,16 +1,17 @@
 # Windows AI Real Evidence Result
 
-Status: validated on Windows host; CUDA execution, WD Tagger ONNX, CLIP ONNX,
-and Llama CUDA GGUF/mmproj real evidence are closed.
+Status: validated on Windows host. WD Tagger and CLIP ONNX real evidence passed
+in the latest run; the previously closed Llama CUDA GGUF/mmproj route could not
+be refreshed because the local `llama-server.exe` runtime was absent.
 
 This file is the GitHub handoff mailbox for Windows-host validation on branch
 `codex/windows-ai-real-evidence`.
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 17:04, Windows host local time.
-- Commit tested: worktree based on `6f789f6`, with the Settings AI Runtime
-  platform display-state slice applied.
+- Validation time: 2026-06-12 17:09, Windows host local time.
+- Commit tested: worktree based on `dfa5ca7`, with the shared current-platform
+  AI branch selector slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -24,15 +25,15 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   warnings.
 - `npm run ci:test-runtime-safety`: passed.
 - Python unittest discovery: passed.
-- Llama IPC refresh: selected `qwen3-vl-2b-instruct-q4-k-m`, started
-  `llama-server`, and ran text plus generated-image multimodal probe.
-- Llama multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
-  `visionInput=generated_fixture`.
+- Llama IPC refresh: could not start because `llama-server.exe` was not present
+  in the current Windows runtime state. No runtime was installed or downloaded
+  by this slice.
 - Windows Platform AI Branch Status: returned `success=true`,
-  `platformBranch=windows`; `ai_tag_task`, `ai_prompt_task`, and
-  `search_embedding` reported `real_model_path`.
-- Llama CUDA lane: reported `real_model_path` with `artifact_ready` and
-  `real_backend_loaded` evidence from text plus generated-image inference.
+  `platformBranch=windows`; `ai_tag_task` and `search_embedding` reported
+  `real_model_path`, while `ai_prompt_task` reported `runtime_probe_ready`.
+- Llama CUDA lane: reported `evidence_insufficient` in this run because the
+  local executable was unavailable. Earlier successful multimodal evidence
+  remains recorded below, but was not refreshed by this validation.
 - Electron/Playwright AI Console: screenshot captured on the Windows desktop.
 - Overflow check: `doc=false`, `body=false`, viewport `1264x793`.
 - Focused validation gate before the full script also passed:
@@ -41,18 +42,19 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: Settings `AiRuntimePanel` now stores shared
-  compatibility/execution display values instead of MPS/CUDA concrete response
-  unions; concrete response types remain at the renderer IPC API boundary.
-- Failures/blockers: none for the Windows real-evidence routes covered by this
-  slice.
-- Next recommended action: continue auditing remaining AI Console and Settings
-  component props for shared renderer-ready display/input types while
-  keeping concrete macOS/Windows probe result types at IPC and
-  platform-specific projector boundaries.
+- Shared-surface slice: Settings `AiRuntimePanel` now consumes one shared
+  current-platform branch value for platform copy, existing capability/status
+  IPC routing, and branch-panel rendering. Separate macOS/Windows branch values
+  remain inside the shared workflow selector.
+- Failures/blockers: the local Llama executable was absent, so the Windows
+  script could not refresh the previously closed Llama multimodal route.
+- Next recommended action: continue auditing shared workflow selector inputs
+  and renderer component props for concrete platform types that only
+  contribute shared fields; restore the app-managed Llama runtime before the
+  next full real-evidence refresh.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-170405.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-170910.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result
