@@ -9,6 +9,20 @@ export interface PlatformDetection {
   isAppleSilicon: boolean
 }
 
+interface PlatformProfileRule {
+  platform: PlatformName
+  arch: PlatformArch
+  profile: PlatformProfile
+}
+
+const PLATFORM_PROFILE_RULES: PlatformProfileRule[] = [
+  { platform: 'win32', arch: 'x64', profile: 'windows-x64' },
+  { platform: 'win32', arch: 'arm64', profile: 'windows-arm64' },
+  { platform: 'darwin', arch: 'arm64', profile: 'macos-apple-silicon' },
+  { platform: 'darwin', arch: 'x64', profile: 'macos-intel' },
+  { platform: 'linux', arch: 'x64', profile: 'linux-x64' }
+]
+
 export function normalizePlatformName(value: string): PlatformName {
   if (value === 'win32' || value === 'darwin' || value === 'linux') return value
   return 'unknown'
@@ -20,12 +34,9 @@ export function normalizePlatformArch(value: string): PlatformArch {
 }
 
 export function getPlatformProfile(platform: PlatformName, arch: PlatformArch): PlatformProfile {
-  if (platform === 'win32' && arch === 'x64') return 'windows-x64'
-  if (platform === 'win32' && arch === 'arm64') return 'windows-arm64'
-  if (platform === 'darwin' && arch === 'arm64') return 'macos-apple-silicon'
-  if (platform === 'darwin' && arch === 'x64') return 'macos-intel'
-  if (platform === 'linux' && arch === 'x64') return 'linux-x64'
-  return 'unknown'
+  return PLATFORM_PROFILE_RULES.find((rule) => {
+    return rule.platform === platform && rule.arch === arch
+  })?.profile ?? 'unknown'
 }
 
 export function detectPlatform(rawPlatform = process.platform, rawArch = process.arch): PlatformDetection {

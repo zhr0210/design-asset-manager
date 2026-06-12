@@ -140,7 +140,9 @@ paths or model cache paths.
    Runtime profile defaults and hardware-hint overrides now use
    `DEFAULT_RUNTIME_PROFILE_RULES` and `HARDWARE_RUNTIME_PROFILE_RULES`,
    preserving the existing Windows CPU/CUDA and macOS arm64/x64 recommendations
-   without a hand-written platform if-chain.
+   without a hand-written platform if-chain. Platform profile detection uses
+   `PLATFORM_PROFILE_RULES` for the existing win32/darwin/linux profile mapping
+   while preserving the real OS capability booleans.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

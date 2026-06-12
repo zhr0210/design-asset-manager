@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved platform profile detection mapping to metadata rules.
+  `PLATFORM_PROFILE_RULES` now owns the existing win32/x64, win32/arm64,
+  darwin/arm64, darwin/x64, and linux/x64 profile mapping while
+  `detectPlatform()` keeps the genuine OS capability booleans. Platform
+  profile outputs, Doctor/bootstrap consumers, runtime profile recommendation,
+  IPC channels, database schema, AI Worker HTTP API, shared response fields,
+  runtime behavior, and renderer output are unchanged. Focused platform-detector
+  tests preserve every existing profile mapping and prevent the hand-written
+  profile if-chain from returning. UI validation and the full Windows
+  real-evidence script were not run because this detector metadata refactor
+  does not change product-facing renderer output or runtime probing behavior.
+  Next smallest slice: keep remaining direct platform checks confined to true
+  OS capability, path/process, native dependency, and runtime installer
+  boundaries.
 - 2026-06-13 Moved runtime profile platform/default selection to ordered
   metadata rules. `DEFAULT_RUNTIME_PROFILE_RULES` now maps the existing
   Windows CPU, macOS Apple Silicon, and macOS Intel defaults, while

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 import {
   detectPlatform,
   getPlatformProfile,
@@ -26,3 +27,14 @@ assert.equal(mac.profile, 'macos-apple-silicon')
 const windows = detectPlatform('win32', 'x64')
 assert.equal(windows.isWindows, true)
 assert.equal(windows.profile, 'windows-x64')
+
+const source = await fs.readFile('src/main/platform/platform-detector.ts', 'utf8')
+assert.match(source, /const PLATFORM_PROFILE_RULES: PlatformProfileRule\[\]/)
+assert.match(source, /platform: 'win32'[\s\S]*arch: 'x64'[\s\S]*profile: 'windows-x64'/)
+assert.match(source, /platform: 'win32'[\s\S]*arch: 'arm64'[\s\S]*profile: 'windows-arm64'/)
+assert.match(source, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*profile: 'macos-apple-silicon'/)
+assert.match(source, /platform: 'darwin'[\s\S]*arch: 'x64'[\s\S]*profile: 'macos-intel'/)
+assert.match(source, /platform: 'linux'[\s\S]*arch: 'x64'[\s\S]*profile: 'linux-x64'/)
+assert.match(source, /PLATFORM_PROFILE_RULES\.find/)
+assert.doesNotMatch(source, /if \(platform === 'win32' && arch === 'x64'\)/)
+assert.doesNotMatch(source, /if \(platform === 'darwin' && arch === 'arm64'\)/)
