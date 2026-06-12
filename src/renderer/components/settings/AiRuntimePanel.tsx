@@ -3,7 +3,11 @@ import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw,
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
 import type { PlatformAiBranchRuntimeMetadata, PlatformAiLaneDisplayInput, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
 import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
-import type { AiRuntimeStatusIcon } from '../../../shared/workflows/ai-runtime-status.workflow'
+import type {
+  AiRuntimeCompatibilityDisplay,
+  AiRuntimeModelLoadProbeDisplay,
+  AiRuntimeStatusIcon
+} from '../../../shared/workflows/ai-runtime-status.workflow'
 import type {
   AiRuntimeActiveRuntimeResponse,
   AiRuntimeClipSiglipOnnxStatusResponse,
@@ -94,10 +98,14 @@ export default function AiRuntimePanel() {
   const [healthResults, setHealthResults] = useState<Record<string, AiRuntimeHealthResult>>({})
   const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
   const [platformWorkerProbeError, setPlatformWorkerProbeError] = useState<string | null>(null)
-  const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse | null>(null)
-  const [pythonMpsStatusError, setPythonMpsStatusError] = useState<string | null>(null)
-  const [pythonMpsExecutionProbe, setPythonMpsExecutionProbe] = useState<AiRuntimePythonMpsExecutionProbeResponse | AiRuntimePythonCudaExecutionProbeResponse | null>(null)
-  const [pythonMpsExecutionProbeError, setPythonMpsExecutionProbeError] = useState<string | null>(null)
+  const [platformPythonCompatibilityDisplay, setPlatformPythonCompatibilityDisplay] = useState<AiRuntimeCompatibilityDisplay>(
+    () => projectPlatformPythonRuntimeCompatibilityDisplay(false, null)
+  )
+  const [platformPythonStatusChecked, setPlatformPythonStatusChecked] = useState(false)
+  const [platformPythonStatusError, setPlatformPythonStatusError] = useState<string | null>(null)
+  const [platformPythonExecutionDisplay, setPlatformPythonExecutionDisplay] = useState<AiRuntimeModelLoadProbeDisplay>(
+    () => projectPlatformPythonRuntimeExecutionProbeDisplay(false, null)
+  )
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [clipSiglipOnnxStatusError, setClipSiglipOnnxStatusError] = useState<string | null>(null)
   const [onnxModelLoadProbe, setOnnxModelLoadProbe] = useState<AiRuntimeOnnxModelLoadProbeResponse | null>(null)
@@ -106,7 +114,7 @@ export default function AiRuntimePanel() {
   const [clipOnnxExecutionProbeError, setClipOnnxExecutionProbeError] = useState<string | null>(null)
   const [probingOnnxModel, setProbingOnnxModel] = useState(false)
   const [probingClipOnnx, setProbingClipOnnx] = useState(false)
-  const [probingPythonMps, setProbingPythonMps] = useState(false)
+  const [probingPlatformPython, setProbingPlatformPython] = useState(false)
   const [loading, setLoading] = useState(false)
   const [busyRuntimeId, setBusyRuntimeId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -128,17 +136,9 @@ export default function AiRuntimePanel() {
     return projectAiRuntimeSummaryDisplay(runtimes)
   }, [runtimes])
 
-  const pythonMpsDisplay = useMemo(() => {
-    return projectPlatformPythonRuntimeCompatibilityDisplay(isWindows, pythonMpsStatus, pythonMpsStatusError)
-  }, [isWindows, pythonMpsStatus, pythonMpsStatusError])
-
   const clipSiglipDisplay = useMemo(() => {
     return projectClipSiglipOnnxCompatibilityDisplay(clipSiglipOnnxStatus, clipSiglipOnnxStatusError)
   }, [clipSiglipOnnxStatus, clipSiglipOnnxStatusError])
-
-  const pythonMpsExecutionDisplay = useMemo(() => {
-    return projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, pythonMpsExecutionProbe, pythonMpsExecutionProbeError)
-  }, [isWindows, pythonMpsExecutionProbe, pythonMpsExecutionProbeError])
 
   const onnxModelLoadDisplay = useMemo(() => {
     return projectOnnxModelLoadProbeDisplay(onnxModelLoadProbe, onnxModelLoadProbeError)
@@ -158,7 +158,7 @@ export default function AiRuntimePanel() {
     setLoading(true)
     setError(null)
     setPlatformWorkerProbeError(null)
-    setPythonMpsStatusError(null)
+    setPlatformPythonStatusError(null)
     setClipSiglipOnnxStatusError(null)
     try {
       const listResponse = await api.listRuntimes()
@@ -189,11 +189,18 @@ export default function AiRuntimePanel() {
       }
 
       if (pythonStatusResponse.success && pythonStatusResponse.data) {
-        setPythonMpsStatus(pythonStatusResponse.data)
-        setPythonMpsStatusError(pythonStatusResponse.data.error ?? null)
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(
+          currentIsWin,
+          pythonStatusResponse.data,
+          pythonStatusResponse.data.error
+        ))
+        setPlatformPythonStatusChecked(true)
+        setPlatformPythonStatusError(pythonStatusResponse.data.error ?? null)
       } else {
-        setPythonMpsStatus(null)
-        setPythonMpsStatusError(pythonStatusResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).compatibilityFailureMessage)
+        const message = pythonStatusResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).compatibilityFailureMessage
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(currentIsWin, null, message))
+        setPlatformPythonStatusChecked(false)
+        setPlatformPythonStatusError(message)
       }
 
       if (clipSiglipResponse.success && clipSiglipResponse.data) {
@@ -213,6 +220,10 @@ export default function AiRuntimePanel() {
   useEffect(() => {
     void loadRuntimes()
   }, [])
+
+  useEffect(() => {
+    setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, null))
+  }, [isWindows])
 
   const replaceRuntimeState = (state: AiRuntimeState | null | undefined) => {
     if (!state) return
@@ -329,28 +340,26 @@ export default function AiRuntimePanel() {
     }
   }
 
-  const runPythonMpsExecutionProbe = async () => {
+  const runPlatformPythonExecutionProbe = async () => {
     const api = getAiRuntimeApi()
     if (!api) {
       setError('当前运行环境未暴露 AI 运行时接口。')
       return
     }
 
-    setProbingPythonMps(true)
+    setProbingPlatformPython(true)
     setError(null)
-    setPythonMpsExecutionProbeError(null)
     try {
       const response = isWindows ? await api.probePythonCudaRuntime() : await api.probePythonMpsRuntime()
       if (!response.success || !response.data) throw new Error(response.error || platformCopy.executionFailureMessage)
-      setPythonMpsExecutionProbe(response.data)
+      setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, response.data))
       setLastAction(platformCopy.executionLastActionLabel)
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
-      setPythonMpsExecutionProbe(null)
-      setPythonMpsExecutionProbeError(message)
+      setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, null, message))
       setError(message)
     } finally {
-      setProbingPythonMps(false)
+      setProbingPlatformPython(false)
     }
   }
 
@@ -390,23 +399,23 @@ export default function AiRuntimePanel() {
               {platformCopy.compatibilityDescription}
             </div>
           </div>
-          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsDisplay.toneClass}`}>
-            {pythonMpsDisplay.label}
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${platformPythonCompatibilityDisplay.toneClass}`}>
+            {platformPythonCompatibilityDisplay.label}
           </span>
         </div>
 
-        {pythonMpsStatus && (
+        {platformPythonStatusChecked && (
           <div className="mt-3 grid grid-cols-2 gap-3 text-[10.5px] font-bold text-slate-500 lg:grid-cols-4">
-            <InfoTile label="displayName" value={pythonMpsDisplay.runtimeLabel} />
-            <InfoTile label="platform" value={pythonMpsDisplay.platformValue} />
-            <InfoTile label="machine" value={pythonMpsDisplay.statusValue} />
-            <InfoTile label="error" value={pythonMpsDisplay.errorValue} wide />
+            <InfoTile label="displayName" value={platformPythonCompatibilityDisplay.runtimeLabel} />
+            <InfoTile label="platform" value={platformPythonCompatibilityDisplay.platformValue} />
+            <InfoTile label="machine" value={platformPythonCompatibilityDisplay.statusValue} />
+            <InfoTile label="error" value={platformPythonCompatibilityDisplay.errorValue} wide />
           </div>
         )}
 
-        {!pythonMpsStatus && pythonMpsStatusError && (
+        {!platformPythonStatusChecked && platformPythonStatusError && (
           <div className="mt-3 rounded-xl border border-amber-100 bg-amber-50/80 p-3 text-[10.5px] font-bold leading-5 text-amber-700">
-            {pythonMpsStatusError}
+            {platformPythonStatusError}
           </div>
         )}
       </div>
@@ -421,16 +430,16 @@ export default function AiRuntimePanel() {
               {platformCopy.executionDescription}
             </div>
           </div>
-          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${pythonMpsExecutionDisplay.toneClass}`}>
-            {pythonMpsExecutionDisplay.label}
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${platformPythonExecutionDisplay.toneClass}`}>
+            {platformPythonExecutionDisplay.label}
           </span>
         </div>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
-            {pythonMpsExecutionDisplay.detail}
+            {platformPythonExecutionDisplay.detail}
           </div>
-          <PanelButton onClick={runPythonMpsExecutionProbe} disabled={probingPythonMps} icon={probingPythonMps ? Loader2 : Activity}>
-            {probingPythonMps ? platformCopy.executionBusyLabel : platformCopy.executionButtonLabel}
+          <PanelButton onClick={runPlatformPythonExecutionProbe} disabled={probingPlatformPython} icon={probingPlatformPython ? Loader2 : Activity}>
+            {probingPlatformPython ? platformCopy.executionBusyLabel : platformCopy.executionButtonLabel}
           </PanelButton>
         </div>
       </div>

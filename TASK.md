@@ -89,6 +89,31 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued Settings AI Runtime platform state cleanup.
+  `AiRuntimePanel` keeps concrete MPS/CUDA response types only in its
+  `AiRuntimeApi` IPC boundary. React state for Python compatibility and real
+  execution now stores shared `AiRuntimeCompatibilityDisplay` and
+  `AiRuntimeModelLoadProbeDisplay` values plus platform-neutral
+  checked/error/busy state. The panel no longer keeps
+  `AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse` or
+  execution-probe unions in component state, and the execution display resets
+  to the correct CUDA/MPS unchecked copy when the current platform metadata
+  resolves. No IPC channel, AI Worker HTTP API, database schema, or shared
+  response shape changed. Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation also passed via `powershell -ExecutionPolicy Bypass
+  -File .\scripts\windows-ai-real-evidence-validation.ps1`; it completed the
+  CUDA/ONNX/Llama probes, captured `dam-windows-ai-console.png`, reported
+  overflow `doc=false`, `body=false` at `1264x793`, and confirmed
+  `ai_tag_task`, `ai_prompt_task`, and `search_embedding` as
+  `real_model_path`. Next smallest slice: collapse the separate
+  `macosAiBranch`/`windowsAiBranch` renderer selection in `AiRuntimePanel`
+  into one shared current-branch metadata value while preserving concrete
+  branch discovery at the workflow boundary.
 - 2026-06-12 Closed the AI Console macOS-only Python compatibility status
   path. The shared Worker probe selection now exposes its resolved
   `platformBranch`; AI Console uses that result to call the existing
