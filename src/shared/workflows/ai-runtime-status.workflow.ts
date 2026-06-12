@@ -717,9 +717,35 @@ export function projectAiRuntimeActionLabel(label: string): string {
   }[label] ?? label
 }
 
+type PlatformAiBranchRuntimeMarker = 'macos-ai-branch' | 'windows-ai-branch'
+type PlatformAiBranchRuntimeMetadataKey = 'macosAiBranch' | 'windowsAiBranch'
+
+interface PlatformAiBranchRuntimeDescriptor {
+  metadataKey: PlatformAiBranchRuntimeMetadataKey
+  marker: PlatformAiBranchRuntimeMarker
+}
+
+const PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS: Record<PlatformAiBranch, PlatformAiBranchRuntimeDescriptor> = {
+  macos: {
+    metadataKey: 'macosAiBranch',
+    marker: 'macos-ai-branch'
+  },
+  windows: {
+    metadataKey: 'windowsAiBranch',
+    marker: 'windows-ai-branch'
+  }
+}
+
+const CURRENT_PLATFORM_AI_BRANCH_PRIORITY: PlatformAiBranch[] = ['windows', 'macos']
+
+const PLATFORM_AI_BRANCH_BY_MARKER: Record<PlatformAiBranchRuntimeMarker, PlatformAiBranch> = {
+  'macos-ai-branch': 'macos',
+  'windows-ai-branch': 'windows'
+}
+
 function isPlatformAiBranchMetadata(
   value: unknown,
-  marker: 'macos-ai-branch' | 'windows-ai-branch'
+  marker: PlatformAiBranchRuntimeMarker
 ): value is PlatformAiBranchRuntimeMetadata {
   if (!value || typeof value !== 'object') return false
   const branch = value as Partial<PlatformAiBranchRuntimeMetadata>
@@ -734,12 +760,11 @@ function isPlatformAiBranchMetadata(
 
 function getPlatformAiBranchRuntime(
   runtimes: AiRuntimeState[],
-  metadataKey: 'macosAiBranch' | 'windowsAiBranch',
-  marker: 'macos-ai-branch' | 'windows-ai-branch'
+  descriptor: PlatformAiBranchRuntimeDescriptor
 ): PlatformAiBranchRuntimeMetadata | null {
   for (const runtime of runtimes) {
-    const branch = runtime.metadata?.[metadataKey]
-    if (isPlatformAiBranchMetadata(branch, marker)) return branch
+    const branch = runtime.metadata?.[descriptor.metadataKey]
+    if (isPlatformAiBranchMetadata(branch, descriptor.marker)) return branch
   }
   return null
 }
@@ -747,17 +772,22 @@ function getPlatformAiBranchRuntime(
 export function getCurrentPlatformAiBranchRuntime(
   runtimes: AiRuntimeState[]
 ): PlatformAiBranchRuntimeMetadata | null {
-  const windowsBranch = getPlatformAiBranchRuntime(runtimes, 'windowsAiBranch', 'windows-ai-branch')
-  if (windowsBranch?.isCurrentPlatform) return windowsBranch
-
-  const macOSBranch = getPlatformAiBranchRuntime(runtimes, 'macosAiBranch', 'macos-ai-branch')
-  return macOSBranch?.isCurrentPlatform ? macOSBranch : null
+  for (const platformBranch of CURRENT_PLATFORM_AI_BRANCH_PRIORITY) {
+    const branch = getPlatformAiBranchRuntime(
+      runtimes,
+      PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS[platformBranch]
+    )
+    if (branch?.isCurrentPlatform) return branch
+  }
+  return null
 }
 
 export function resolvePlatformAiBranch(
   branch?: PlatformAiBranchRuntimeMetadata | null
 ): PlatformAiBranch {
-  return branch?.marker === 'windows-ai-branch' ? 'windows' : 'macos'
+  return branch?.marker
+    ? PLATFORM_AI_BRANCH_BY_MARKER[branch.marker as PlatformAiBranchRuntimeMarker] ?? 'macos'
+    : 'macos'
 }
 
 export function projectAiRuntimeBranchPanelDisplay(

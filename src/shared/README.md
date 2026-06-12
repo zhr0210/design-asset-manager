@@ -37,6 +37,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - AI Runtime panel runtime/health badges, icon semantics, health-result copy, and summary counts should use shared AI Runtime Status projection rather than renderer-local status maps or filters.
 - AI Runtime panel platform-specific branch titles, Worker probe titles, CUDA/MPS compatibility copy, fixed-tensor execution copy, and default probe failure messages should use shared AI Runtime Status projection rather than renderer-local platform ternaries.
 - Worker probe connection headers should use the platform-neutral Worker probe envelope; platform-specific probe displays may add MPS/CUDA/ONNX route tiles. A missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
+- Platform AI branch runtime metadata selection should use branch-keyed descriptors for metadata keys and markers; renderer/shared workflow callers should not hand-roll macOS/Windows branch lookup order.
 - AI Console overview status cards should use shared display projection for GPU risk and model readiness vocabulary.
 - Prompt Reverse panel state labels and action suggestions should use shared projection so GGUF/Llama and native routes share one renderer-ready vocabulary.
 - Asset Tagging Workflow pipeline defaults, category/model options, scan-state display, model selection toggles, task submission projection, confirmed tag chips, suggestion review items, pending suggestion projection, and tag type/color options belong in shared workflow planners, not renderer panels.
@@ -62,6 +63,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.19 | 2026-06-13 | Moved Platform AI branch runtime metadata selection to branch-keyed descriptors and locked the current-branch priority order in shared workflow tests. |
 | v1.8.18 | 2026-06-12 | Normalized Worker diagnostics selection through one branch resolver and branch-indexed probe map. |
 | v1.8.17 | 2026-06-12 | Centralized macOS/Windows Worker probe connection and accelerator reads in branch-keyed accessors. |
 | v1.8.16 | 2026-06-12 | Moved the macOS-specific Platform AI runtime-install command into branch-keyed action metadata. |

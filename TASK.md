@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved shared Platform AI branch-runtime metadata selection to
+  branch-keyed descriptors. `PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS` now owns
+  the macOS/Windows metadata keys and markers, `CURRENT_PLATFORM_AI_BRANCH_PRIORITY`
+  preserves the existing Windows-then-macOS current-platform lookup order, and
+  `PLATFORM_AI_BRANCH_BY_MARKER` resolves the shared branch id without a
+  hard-coded marker conditional. Renderer callers still use
+  `getCurrentPlatformAiBranchRuntime()` and `resolvePlatformAiBranch()`.
+  Concrete metadata keys, markers, IPC channels, database schema, AI Worker HTTP
+  API, shared response fields, runtime behavior, and displayed output are
+  unchanged. Focused source contracts preserve the descriptor tables and prevent
+  the hand-written metadata-key lookup from returning. UI validation and the
+  full Windows real-evidence script were not run for this shared workflow
+  refactor because no product-facing renderer output or runtime code changed.
+  Next smallest slice: continue scanning shared workflow helpers for hand-coded
+  platform lookup order that can become branch metadata without hiding genuine
+  OS/runtime/path/process boundaries.
 - 2026-06-13 Completed the remaining platform-boundary audit for the current
   Platform AI runtime sharing slice. A focused source contract now proves that
   renderer/shared Platform AI surfaces no longer contain direct

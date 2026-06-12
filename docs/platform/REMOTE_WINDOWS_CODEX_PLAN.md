@@ -127,7 +127,11 @@ paths or model cache paths.
    platform detection, Doctor, OCR/Llama runtime installation, branch-status
    OS matching, shared platform metadata constants, and Doctor display masking
    boundaries. These remaining checks are genuine OS/runtime/path/process
-   adapters, not renderer/shared workflow type branching.
+   adapters, not renderer/shared workflow type branching. Shared current-branch
+   runtime metadata lookup now also uses `PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS`
+   and `CURRENT_PLATFORM_AI_BRANCH_PRIORITY` instead of hand-written
+   macOS/Windows metadata-key calls; marker-to-branch resolution uses
+   `PLATFORM_AI_BRANCH_BY_MARKER`.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

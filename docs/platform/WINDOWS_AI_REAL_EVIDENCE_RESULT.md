@@ -71,6 +71,13 @@ runtime code, IPC channels, shared response fields, database schema, or AI
 Worker HTTP API shapes, so no new Windows screenshot or runtime-evidence claim
 is added here.
 
+A later 2026-06-13 shared-workflow refactor moved current branch-runtime
+metadata lookup to branch-keyed descriptors and preserved the existing
+Windows-then-macOS current-platform lookup order in a focused source contract.
+That change also did not alter renderer output, runtime behavior, IPC channels,
+shared response fields, database schema, or AI Worker HTTP API shapes, so the
+latest full Windows evidence remains the validation run reported above.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

@@ -788,6 +788,25 @@ assert.match(runtimeWorkflowSource, /branch: PlatformAiBranchRuntimeMetadata/)
 assert.doesNotMatch(runtimeWorkflowSource, /branch: MacOSAiBranchRuntimeMetadata \| WindowsAiBranchRuntimeMetadata/)
 assert.match(runtimeWorkflowSource, /function getPlatformAiBranchRuntime/)
 assert.match(runtimeWorkflowSource, /function resolvePlatformAiBranch/)
+assert.match(runtimeWorkflowSource, /const PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS: Record<PlatformAiBranch, PlatformAiBranchRuntimeDescriptor>/)
+assert.match(runtimeWorkflowSource, /const CURRENT_PLATFORM_AI_BRANCH_PRIORITY: PlatformAiBranch\[\] = \['windows', 'macos'\]/)
+assert.match(runtimeWorkflowSource, /const PLATFORM_AI_BRANCH_BY_MARKER: Record<PlatformAiBranchRuntimeMarker, PlatformAiBranch>/)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'getCurrentPlatformAiBranchRuntime'),
+  /CURRENT_PLATFORM_AI_BRANCH_PRIORITY[\s\S]*PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS\[platformBranch\]/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'getCurrentPlatformAiBranchRuntime'),
+  /getPlatformAiBranchRuntime\(runtimes, 'windowsAiBranch'|getPlatformAiBranchRuntime\(runtimes, 'macosAiBranch'/
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'resolvePlatformAiBranch'),
+  /PLATFORM_AI_BRANCH_BY_MARKER/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'resolvePlatformAiBranch'),
+  /marker === 'windows-ai-branch'/
+)
 assert.doesNotMatch(runtimeWorkflowSource, /projectAiRuntimePlatformPanelCopy\(isWindows: boolean/)
 assert.doesNotMatch(runtimeWorkflowSource, /projectPlatformPythonRuntimeCompatibilityDisplay\(\s*isWindows: boolean/)
 assert.doesNotMatch(runtimeWorkflowSource, /projectPlatformPythonRuntimeExecutionProbeDisplay\(\s*isWindows: boolean/)
