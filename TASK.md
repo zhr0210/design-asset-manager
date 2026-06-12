@@ -89,6 +89,30 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Shared the detailed Worker probe input used by AI Runtime status
+  workflows. `PlatformAiWorkerProbeDiagnosticsInput` now owns the common torch
+  and ONNX Runtime diagnostic fields; macOS and Windows concrete probe response
+  types extend it only with MPS/CoreML or CUDA/DirectML fields. The shared
+  workflow no longer imports `MacOSAiWorkerProbeResult` or
+  `WindowsAiWorkerProbeResult`, while platform-specific display projectors keep
+  the genuine `mpsAvailable`/`cudaAvailable` branches. No IPC channel, AI
+  Worker HTTP API, database schema, runtime response field, or shared response
+  shape changed. Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation passed via `powershell -ExecutionPolicy Bypass -File
+  .\scripts\windows-ai-real-evidence-validation.ps1`; WD Tagger and CLIP ONNX
+  loaded through real backends, Llama completed text plus generated-image
+  multimodal inference, `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` reported `real_model_path`, and Electron/Playwright
+  reported no document/body horizontal overflow at `1264x793`. Next smallest
+  slice: audit shared branch metadata discovery helpers, which still return
+  concrete macOS/Windows types even when callers only need the shared branch
+  metadata shape, without weakening marker validation at the ingestion
+  boundary.
 - 2026-06-12 Collapsed Settings AI Runtime current-platform branch selection
   into the shared workflow boundary. The new
   `getCurrentPlatformAiBranchRuntime()` returns one platform-neutral

@@ -13,18 +13,16 @@ import type {
   AiRuntimeStatus
 } from '../types/ai-runtime.types'
 import type { LlamaInstallStatus } from '../types/llama-runtime.types'
-import type {
-  MacOSAiBranchRuntimeMetadata,
-  MacOSAiWorkerProbeResult
-} from '../types/macos-ai-runtime.types'
+import type { MacOSAiBranchRuntimeMetadata } from '../types/macos-ai-runtime.types'
 import type {
   AiCapabilityStatus,
   PlatformAiBranchRuntimeMetadata,
+  PlatformAiWorkerProbeDiagnosticsInput,
   PlatformAiWorkerProbeResultBase,
   PlatformAiWorkerProbeWithRuntimeVersions
 } from '../types/platform-ai-runtime.types'
 import type { PlatformAiBranch } from '../types/platform-ai-branch-status.types'
-import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
+import type { WindowsAiBranchRuntimeMetadata } from '../types/windows-ai-runtime.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
 export type AiRuntimeStatusIcon = 'success' | 'warning' | 'activity'
@@ -471,7 +469,7 @@ function projectPlatformAiWorkerProbeHeaderDisplay(
 }
 
 export function projectMacOSAiWorkerProbeDisplay(
-  probe?: MacOSAiWorkerProbeResult | null
+  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
 ): MacOSAiWorkerProbeDisplay {
   if (!probe) {
     const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
@@ -705,7 +703,7 @@ export interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagno
 }
 
 export function projectWindowsAiWorkerProbeDisplay(
-  probe?: WindowsAiWorkerProbeResult | null
+  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
 ): WindowsAiWorkerProbeDisplay {
   if (!probe) {
     const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
@@ -743,8 +741,8 @@ export function projectWindowsAiWorkerProbeDisplay(
 
 export function projectPlatformAiWorkerProbeDiagnosticsSelection(input: {
   platformBranch?: PlatformAiBranch | null
-  macOSProbe?: MacOSAiWorkerProbeResult | null
-  windowsProbe?: WindowsAiWorkerProbeResult | null
+  macOSProbe?: PlatformAiWorkerProbeDiagnosticsInput | null
+  windowsProbe?: PlatformAiWorkerProbeDiagnosticsInput | null
 }): PlatformAiWorkerProbeDiagnosticsSelection {
   const useWindows = input.platformBranch === 'windows'
     || (input.platformBranch !== 'macos' && Boolean(input.windowsProbe) && !input.macOSProbe)

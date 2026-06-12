@@ -91,6 +91,26 @@ export interface PlatformAiWorkerRuntimeVersionProbe {
   version: string | null
 }
 
+export interface PlatformAiWorkerTorchProbe extends PlatformAiWorkerRuntimeVersionProbe {
+  available: boolean
+  cpuFallback: boolean
+  error: string | null
+  mpsAvailable?: boolean
+  cudaAvailable?: boolean
+}
+
+export interface PlatformAiWorkerOnnxRuntimeProbe extends PlatformAiWorkerRuntimeVersionProbe {
+  available: boolean
+  providers: string[]
+  cpuAvailable: boolean
+  error: string | null
+}
+
+export interface PlatformAiWorkerProbeDiagnosticsInput extends PlatformAiWorkerProbeResultBase {
+  torch: PlatformAiWorkerTorchProbe
+  onnxruntime: PlatformAiWorkerOnnxRuntimeProbe
+}
+
 export type PlatformAiWorkerProbeWithRuntimeVersions = PlatformAiWorkerProbeResultBase & {
   torch: PlatformAiWorkerRuntimeVersionProbe
   onnxruntime: PlatformAiWorkerRuntimeVersionProbe

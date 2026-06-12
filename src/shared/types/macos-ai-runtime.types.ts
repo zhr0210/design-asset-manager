@@ -1,7 +1,7 @@
 import type {
   PlatformAiBranchRuntimeMetadataBase,
   PlatformAiRuntimeLaneBase,
-  PlatformAiWorkerProbeResultBase
+  PlatformAiWorkerProbeDiagnosticsInput
 } from './platform-ai-runtime.types'
 
 export type MacOSAiRuntimeLaneId = 'python-mps' | 'onnx-runtime' | 'llama'
@@ -20,21 +20,12 @@ export interface MacOSAiRuntimeLane extends PlatformAiRuntimeLaneBase<MacOSAiRun
 
 export interface MacOSAiBranchRuntimeMetadata extends PlatformAiBranchRuntimeMetadataBase<'macos-ai-branch', MacOSAiRuntimeLane> {}
 
-export interface MacOSAiWorkerProbeResult extends PlatformAiWorkerProbeResultBase {
-  torch: {
-    available: boolean
-    version: string | null
+export interface MacOSAiWorkerProbeResult extends PlatformAiWorkerProbeDiagnosticsInput {
+  torch: PlatformAiWorkerProbeDiagnosticsInput['torch'] & {
     mpsBuilt: boolean
     mpsAvailable: boolean
-    cpuFallback: boolean
-    error: string | null
   }
-  onnxruntime: {
-    available: boolean
-    version: string | null
-    providers: string[]
+  onnxruntime: PlatformAiWorkerProbeDiagnosticsInput['onnxruntime'] & {
     coremlAvailable: boolean
-    cpuAvailable: boolean
-    error: string | null
   }
 }
