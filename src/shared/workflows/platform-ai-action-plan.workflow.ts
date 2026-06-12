@@ -1,5 +1,23 @@
 import type { PlatformAiActionCommand, PlatformAiActionPlan } from '../types/platform-ai-action-plan.types'
-import type { PlatformAiBranch, PlatformAiWorkflowStatus } from '../types/platform-ai-branch-status.types'
+import type {
+  PlatformAiBranch,
+  PlatformAiWorkflow,
+  PlatformAiWorkflowStatus
+} from '../types/platform-ai-branch-status.types'
+
+type PlatformActionCommandOverrides = Partial<Record<
+  PlatformAiWorkflow,
+  Partial<Record<PlatformAiActionPlan['kind'], PlatformAiActionCommand>>
+>>
+
+const PLATFORM_ACTION_COMMAND_OVERRIDES: Record<PlatformAiBranch, PlatformActionCommandOverrides> = {
+  macos: {
+    ai_tag_task: {
+      open_runtime_management: { kind: 'install_ai_runtime_dependencies' }
+    }
+  },
+  windows: {}
+}
 
 export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): PlatformAiActionPlan {
   if (workflow.status === 'planned_capability') {
@@ -52,13 +70,10 @@ export function resolvePlatformAiActionCommand(
     return { kind: 'install_ocr_runtime' }
   }
 
-  if (
-    platformBranch === 'macos'
-    && actionPlan.workflow === 'ai_tag_task'
-    && actionPlan.kind === 'open_runtime_management'
-  ) {
-    return { kind: 'install_ai_runtime_dependencies' }
-  }
+  const platformOverride = platformBranch
+    ? PLATFORM_ACTION_COMMAND_OVERRIDES[platformBranch][actionPlan.workflow]?.[actionPlan.kind]
+    : undefined
+  if (platformOverride) return { ...platformOverride }
 
   if (actionPlan.kind === 'open_model_management') return { kind: 'open_tab', targetTab: 'models' }
   if (actionPlan.kind === 'open_runtime_management') return { kind: 'open_tab', targetTab: 'runtime' }

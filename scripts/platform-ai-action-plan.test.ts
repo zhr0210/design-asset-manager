@@ -106,6 +106,27 @@ assert.deepEqual(
   }), 'windows'),
   { kind: 'open_tab', targetTab: 'runtime' }
 )
+assert.deepEqual(
+  resolvePlatformAiActionCommand(plan({
+    workflow: 'ai_tag_task',
+    kind: 'open_runtime_management'
+  })),
+  { kind: 'open_tab', targetTab: 'runtime' }
+)
+
+const actionPlanWorkflowSource = await fs.readFile(
+  'src/shared/workflows/platform-ai-action-plan.workflow.ts',
+  'utf8'
+)
+assert.match(
+  actionPlanWorkflowSource,
+  /const PLATFORM_ACTION_COMMAND_OVERRIDES: Record<PlatformAiBranch, PlatformActionCommandOverrides>/
+)
+assert.match(
+  actionPlanWorkflowSource,
+  /PLATFORM_ACTION_COMMAND_OVERRIDES\[platformBranch\]\[actionPlan\.workflow\]\?\.\[actionPlan\.kind\]/
+)
+assert.doesNotMatch(actionPlanWorkflowSource, /platformBranch === 'macos'/)
 
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(aiConsoleSource, /resolvePlatformAiActionCommand/)

@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Moved the sole platform-specific Platform AI action command
+  exception into typed branch metadata. `PLATFORM_ACTION_COMMAND_OVERRIDES`
+  now declares the existing macOS AI Tag runtime-dependency installer command;
+  Windows and unspecified branches still use the shared Runtime management tab.
+  Prompt-model installation, OCR runtime installation, command priority, UI
+  handlers, command kinds, and public response shapes are unchanged. Focused
+  tests cover macOS, Windows, and unspecified-branch behavior and prevent the
+  display/control-flow platform conditional from returning. The required four
+  focused TypeScript tests, action-plan test, Windows validation privacy
+  contract, typecheck, build, docs sync, and diff checks passed. The full
+  Windows script passed runtime-safety, Python, ONNX, Llama
+  text/generated-image, and Electron/Playwright checks; `chatOk` and `visionOk`
+  were true, Tag/Prompt/Search reported `real_model_path`, OCR reported
+  `runtime_probe_ready`, the `1264x793` viewport had no horizontal overflow,
+  and the saved log contained zero absolute Windows paths. Next smallest
+  slice: centralize Worker probe connection and accelerator-field selection in
+  branch-keyed accessors while preserving genuine MPS/CUDA fields.
 - 2026-06-12 Added one platform-neutral `PlatformAiRuntimeLaneId` type and
   centralized dual-platform model-readiness route families.
   `PYTHON_ACCELERATOR_RUNTIME_LANES`,

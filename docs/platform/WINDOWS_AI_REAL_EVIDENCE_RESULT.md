@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 23:21, Windows host local time.
-- Commit tested: worktree based on `c2b3fa1`, with the shared runtime lane ID
-  and model-readiness route-family consolidation applied.
+- Validation time: 2026-06-12 23:26, Windows host local time.
+- Commit tested: worktree based on `d8046a8`, with branch-keyed Platform AI
+  action command override metadata applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,20 +42,19 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: one platform-neutral `PlatformAiRuntimeLaneId` now
-  covers main-process lane metadata and model-readiness routes. Shared Python
-  and Llama accelerator lane families replace repeated MPS/CUDA and Metal/CUDA
-  route literals while preserving simultaneous evidence projection for both
-  branches.
+- Shared-surface slice: `PLATFORM_ACTION_COMMAND_OVERRIDES` now owns the
+  existing macOS AI Tag runtime-dependency installer command. Windows and
+  unspecified branches continue to resolve the same action plan to the shared
+  Runtime management tab.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: audit the single macOS-only runtime-install
-  exception in `resolvePlatformAiActionCommand()` for branch-keyed command
-  metadata while preserving every existing action command.
+- Next recommended action: centralize Worker probe connection and
+  accelerator-field selection in branch-keyed accessors while preserving
+  genuine MPS/CUDA fields.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-232015.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-232500.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

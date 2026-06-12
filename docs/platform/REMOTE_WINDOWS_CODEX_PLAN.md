@@ -106,7 +106,10 @@ paths or model cache paths.
    and model-readiness routes. The readiness mapper uses shared Python and
    Llama accelerator lane families while intentionally emitting evidence for
    both branches; the branch projector remains responsible for selecting the
-   applicable platform topology.
+   applicable platform topology. Platform AI action command routing now keeps
+   its sole macOS-specific AI Tag runtime installer in
+   `PLATFORM_ACTION_COMMAND_OVERRIDES`; Windows and unspecified branches retain
+   the shared Runtime management command.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
