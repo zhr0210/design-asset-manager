@@ -89,6 +89,29 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued AI Console model list type cleanup. AI Console now
+  types the page-level native model list, `OverviewWorkspace` installed native
+  model props, and `QwenVersionCollection` native model props as shared
+  `PromptVlmModel[]`; `ModelsWorkspace.loadedModels` is narrowed to
+  `Record<string, unknown>` because the renderer only checks model-load
+  presence. This removes another renderer `any` path without changing the
+  model list response shape, IPC channels, AI Worker HTTP API, database schema,
+  or shared response shape. Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-console-overview-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-queue-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation also passed via `powershell -ExecutionPolicy Bypass
+  -File .\scripts\windows-ai-real-evidence-validation.ps1`; it captured
+  `dam-windows-ai-console.png`, reported overflow `doc=false`, `body=false` at
+  `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` as `real_model_path`. Next smallest slice: look for
+  renderer props that consume shared display/input fields only; defer broader
+  AI status typing until there is a shared status snapshot boundary worth
+  extracting.
 - 2026-06-12 Continued AI Runtime panel icon type cleanup. Settings
   `AiRuntimePanel` now uses the shared `AiRuntimeStatusIcon` type for
   `statusIcon()` instead of deriving the icon union from

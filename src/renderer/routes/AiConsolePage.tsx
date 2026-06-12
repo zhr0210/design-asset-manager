@@ -56,6 +56,7 @@ import type {
   CooperativeWorkerModelStatus,
   WorkerModelStatusSnapshot
 } from '../../shared/types/model-artifact-readiness.types'
+import type { PromptVlmModel } from '../../shared/types/ai-model.types'
 import {
   projectPlatformAiBranchStatusDisplay,
   projectPlatformAiRouteOverviewDisplay,
@@ -634,7 +635,7 @@ export default function AiConsolePage() {
   const [expandedModelFamilies, setExpandedModelFamilies] = useState<Record<string, boolean>>({ qwen_vl: true })
   const [aiStatus, setAiStatus] = useState<any>(null)
   const [gpuStatus, setGpuStatus] = useState<GpuStatus | null>(null)
-  const [modelsList, setModelsList] = useState<any[]>([])
+  const [modelsList, setModelsList] = useState<PromptVlmModel[]>([])
   const [localGgufModels, setLocalGgufModels] = useState<LocalGgufModel[]>([])
   const [gpuSamples, setGpuSamples] = useState<GpuSample[]>([])
   const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
@@ -1776,7 +1777,7 @@ function OverviewWorkspace(props: {
   activeReverseModel: string
   activeBackendLabel: string
   modelReadinessInput: AiConsoleModelReadinessDisplayInput
-  installedNativeModels: any[]
+  installedNativeModels: PromptVlmModel[]
   installedGgufModels: LocalGgufModel[]
   queueStats: AiQueueStatsLike
   llamaStatus: LlamaInstallStatus | null
@@ -2050,9 +2051,9 @@ function RuntimeTile({ label, value, caption }: { label: string; value: string; 
 }
 
 function ModelsWorkspace(props: {
-  modelsList: any[]
+  modelsList: PromptVlmModel[]
   localGgufModels: LocalGgufModel[]
-  loadedModels: Record<string, any>
+  loadedModels: Record<string, unknown>
   cooperativeRuntimeModels: CooperativeRuntimeStatus
   selectedModel?: ModelRow | null
   selectedModelId: string | null
@@ -2247,7 +2248,7 @@ function ModelsWorkspace(props: {
 }
 
 function QwenVersionCollection(props: {
-  nativeModels: any[]
+  nativeModels: PromptVlmModel[]
   ggufModels: LocalGgufModel[]
   selectedPromptModelId: string
   promptSettings: AiPromptReverseSettings

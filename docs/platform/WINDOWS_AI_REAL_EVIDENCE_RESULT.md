@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 16:23, Windows host local time.
-- Commit tested: worktree based on `daa5239`, with the shared AI Runtime
-  status icon type slice applied.
+- Validation time: 2026-06-12 16:27, Windows host local time.
+- Commit tested: worktree based on `be05c7e`, with the shared AI Console model
+  list type slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -41,9 +41,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: Settings `AiRuntimePanel` now uses the shared
-  `AiRuntimeStatusIcon` type instead of deriving the icon union from the
-  runtime status projector `ReturnType`.
+- Shared-surface slice: AI Console native model list props now use the shared
+  `PromptVlmModel` type, and loaded-model presence is narrowed to
+  `Record<string, unknown>`.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   slice.
 - Next recommended action: continue auditing remaining AI Console and Settings
@@ -52,7 +52,7 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   platform-specific projector boundaries.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-162335.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-162715.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result
