@@ -119,6 +119,15 @@ paths or model cache paths.
    now maps branches to the existing concrete preload methods through
    `PLATFORM_AI_RUNTIME_REQUEST_METHODS`, and the main branch-status projector
    maps branches to real OS platform names through `PLATFORM_BRANCH_PLATFORMS`.
+   The follow-up completion audit is also covered by
+   `scripts/ai-runtime-status-workflow.test.ts`: renderer/shared Platform AI
+   surfaces must not reintroduce direct `platformBranch === "windows"` or
+   `platformBranch === "macos"` control flow, and remaining platform checks are
+   locked to audited runtime registry/resolution, provider registration,
+   platform detection, Doctor, OCR/Llama runtime installation, branch-status
+   OS matching, shared platform metadata constants, and Doctor display masking
+   boundaries. These remaining checks are genuine OS/runtime/path/process
+   adapters, not renderer/shared workflow type branching.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
@@ -135,7 +144,10 @@ paths or model cache paths.
 4. **Re-run Windows evidence after each shared-surface slice.**
    At minimum run the focused TypeScript tests and typecheck/build on Windows.
    For product-facing UI changes, use Electron/Playwright screenshots and check
-   document/body horizontal overflow.
+   document/body horizontal overflow. For audit-only test/docs slices that do
+   not change product-facing renderer or runtime code, record the focused source
+   contract validation and skip the full real-evidence script unless runtime
+   state and time make a re-run useful.
 
 5. **Update the task ledger, not root docs.**
    Record each slice, commands run, screenshot result or skip reason, Windows

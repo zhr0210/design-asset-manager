@@ -698,10 +698,27 @@ const macosAiRuntimeTypesSource = await fs.readFile('src/shared/types/macos-ai-r
 const windowsAiRuntimeTypesSource = await fs.readFile('src/shared/types/windows-ai-runtime.types.ts', 'utf8')
 const windowsAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/windows-ai-runtime.constants.ts', 'utf8')
 const concretePlatformRuntimeTypePattern = /MacOSAiWorkerProbeResult|WindowsAiWorkerProbeResult|MacOSAiBranchRuntimeMetadata|WindowsAiBranchRuntimeMetadata|MacOSAiRuntimeLane|WindowsAiRuntimeLane/
+const platformBranchControlFlowPattern = /\bplatformBranch\s*(?:===|!==)\s*['"](?:windows|macos)['"]|['"](?:windows|macos)['"]\s*(?:===|!==)\s*platformBranch\b/
+const platformBoundaryPattern = /\bisWindows\b|process\.platform|(?:\bplatform\b|\bcurrentPlatform\b)\s*(?:={2,3}|!==?)|\.platform\s*(?:={2,3}|!==?)/
 const concretePlatformRuntimeTypeFiles = (await Promise.all(
   (await listSourceFiles('src')).map(async (file) => {
     const source = await fs.readFile(file, 'utf8')
     return concretePlatformRuntimeTypePattern.test(source) ? file : null
+  })
+)).filter((file): file is string => Boolean(file)).sort()
+const rendererSharedPlatformBranchControlFlowFiles = (await Promise.all(
+  [
+    ...await listSourceFiles('src/renderer'),
+    ...await listSourceFiles('src/shared')
+  ].map(async (file) => {
+    const source = await fs.readFile(file, 'utf8')
+    return platformBranchControlFlowPattern.test(source) ? file : null
+  })
+)).filter((file): file is string => Boolean(file)).sort()
+const remainingPlatformBoundaryFiles = (await Promise.all(
+  (await listSourceFiles('src')).map(async (file) => {
+    const source = await fs.readFile(file, 'utf8')
+    return platformBoundaryPattern.test(source) ? file : null
   })
 )).filter((file): file is string => Boolean(file)).sort()
 assert.deepEqual(concretePlatformRuntimeTypeFiles, [
@@ -712,6 +729,27 @@ assert.deepEqual(concretePlatformRuntimeTypeFiles, [
   'src/shared/contracts/ai-runtime.contract.ts',
   'src/shared/types/macos-ai-runtime.types.ts',
   'src/shared/types/windows-ai-runtime.types.ts'
+])
+assert.deepEqual(rendererSharedPlatformBranchControlFlowFiles, [])
+assert.deepEqual(remainingPlatformBoundaryFiles, [
+  'src/main/bootstrap/runtime-registry.validator.ts',
+  'src/main/doctor/checks/node.check.ts',
+  'src/main/doctor/checks/python.check.ts',
+  'src/main/index.ts',
+  'src/main/ipc/ai-runtime.ipc.ts',
+  'src/main/platform/platform-detector.ts',
+  'src/main/runtime/runtime-profile-registry.ts',
+  'src/main/runtime/runtime-profile-resolver.ts',
+  'src/main/services/ai-runtime/platform-ai-branch-status.projector.ts',
+  'src/main/services/llama-runtime/llama-runtime-governance.ts',
+  'src/main/services/llama-runtime/llama-runtime-install.service.ts',
+  'src/main/services/llama-runtime/llama-runtime-planner.ts',
+  'src/main/services/ocr-dependency.service.ts',
+  'src/shared/constants/macos-ai-runtime.constants.ts',
+  'src/shared/constants/windows-ai-runtime.constants.ts',
+  'src/shared/types/doctor.types.ts',
+  'src/shared/workflows/ai-runtime-status.workflow.ts',
+  'src/shared/workflows/doctor-display.workflow.ts'
 ])
 assert.match(platformAiRuntimeTypesSource, /export type AiCapabilityStatus/)
 assert.match(platformAiRuntimeTypesSource, /export type PlatformAiRuntimeBranchPhase/)

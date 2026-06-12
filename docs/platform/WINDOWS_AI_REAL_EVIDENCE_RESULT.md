@@ -50,13 +50,26 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: run a completion audit across remaining `isWindows`
-  and platform checks to distinguish genuine OS/runtime boundaries from any
-  remaining removable renderer/main/shared workflow branching.
+- Next recommended action: keep future slices focused on any newly discovered
+  renderer/shared product workflow branching; the remaining audited platform
+  checks are genuine OS/runtime/path/process boundaries unless new evidence
+  contradicts that classification.
 
 The latest full Windows-host validation log filename is
 `dam-windows-ai-validation-20260613-001631.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
+
+## Post-Validation Audit-Only Update
+
+On 2026-06-13, after the full Windows validation above, a source-contract audit
+was added to `scripts/ai-runtime-status-workflow.test.ts`. It confirms that
+renderer/shared Platform AI surfaces do not contain direct
+`platformBranch === "windows"` or `platformBranch === "macos"` control flow,
+and records the remaining platform-check files as audited OS/runtime/path/process
+boundaries. This audit-only slice did not change product-facing renderer code,
+runtime code, IPC channels, shared response fields, database schema, or AI
+Worker HTTP API shapes, so no new Windows screenshot or runtime-evidence claim
+is added here.
 
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded

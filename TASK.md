@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Completed the remaining platform-boundary audit for the current
+  Platform AI runtime sharing slice. A focused source contract now proves that
+  renderer/shared Platform AI surfaces no longer contain direct
+  `platformBranch === "windows"` or `platformBranch === "macos"` control-flow
+  checks, while the remaining concrete macOS/Windows runtime/probe types stay
+  limited to IPC, AI client, shared contract/type definitions, and platform
+  runtime metadata constants. The same test records the audited platform
+  boundary files where OS checks remain intentional: runtime
+  registry/resolution, main-process provider registration, platform detection,
+  Doctor process adapters, OCR and Llama native/runtime installers, branch
+  status OS matching, platform runtime metadata constants, and Doctor display
+  masking. No IPC channel, database schema, AI Worker HTTP API, shared response
+  field, runtime behavior, or renderer output changed. Focused validation:
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`
+  passed. UI validation and the full Windows real-evidence script were not run
+  for this audit-only test/docs slice because no product-facing renderer or
+  runtime code changed. Next smallest slice: continue only if a future audit
+  finds a concrete product workflow crossing a renderer/shared boundary;
+  otherwise keep the remaining checks as genuine OS/runtime/path/process
+  adapters.
 - 2026-06-13 Converted the last audited Platform AI branch control-flow checks
   into branch-keyed metadata while preserving the real platform boundaries.
   `PLATFORM_AI_RUNTIME_REQUEST_METHODS` now maps `PlatformAiBranch` to the
