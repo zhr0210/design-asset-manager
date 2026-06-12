@@ -8,6 +8,8 @@ assert.match(source, /\.Replace\(\$env:USERPROFILE, "<USERPROFILE>"\)/)
 assert.match(source, /\.Replace\(\$env:TEMP, "<TEMP>"\)/)
 assert.match(source, /\.Replace\(\$RepoRoot, "<REPO_ROOT>"\)/)
 assert.ok(source.includes('$redacted = $redacted.Replace($RepoRoot.Replace("\\", "/"), "<REPO_ROOT>")'))
+assert.ok(source.includes("[regex]::Replace($redacted, '(?i)\\b[A-Z]:[\\\\/][^\"\\r\\n]*', '<LOCAL_PATH>')"))
+assert.ok(source.includes('text.replace(/\\b[A-Z]:[\\\\/][^"\\r\\n]*/gi, "<LOCAL_PATH>")'))
 
 assert.match(source, /\$output = @\(& \$Command @Arguments 2>&1\)/)
 assert.match(source, /Write-Log \(\[string\]\$item\)/)

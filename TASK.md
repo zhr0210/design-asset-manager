@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Extended Windows evidence redaction beyond repository and user
+  roots. Both the PowerShell logger and embedded Electron/Playwright serializer
+  now replace any absolute Windows path with `<LOCAL_PATH>`, covering model
+  runtime/cache directories located outside the user profile. The validation
+  contract test asserts both redactors. No product runtime, IPC, AI Worker API,
+  database, or shared response behavior changed. The required focused tests,
+  typecheck, build, docs sync, and diff checks passed. A full Windows run also
+  passed runtime-safety, Python, ONNX, Llama text/generated-image, and
+  Electron/Playwright checks; `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` reported `real_model_path`, no horizontal overflow was
+  found at `1264x793`, and a post-run scan found zero absolute Windows paths
+  in the saved log. Next smallest slice: centralize Worker probe connection
+  detection and panel copy that remain duplicated between diagnostics and
+  panel projectors.
 - 2026-06-12 Moved shared Worker probe diagnostics projection out of the
   macOS/Windows detail wrappers. One platform-neutral helper now owns the
   unchecked state, connection header, ONNX Runtime Provider tile, and

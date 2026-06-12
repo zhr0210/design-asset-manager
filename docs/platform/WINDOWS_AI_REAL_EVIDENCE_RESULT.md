@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 17:50, Windows host local time.
-- Commit tested: worktree based on `b7a6082`, with the shared Worker probe
-  diagnostics projector slice applied.
+- Validation time: 2026-06-12 17:57, Windows host local time.
+- Commit tested: worktree based on `d516399`, with absolute Windows path
+  redaction hardening applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,19 +42,17 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: one platform-neutral Worker probe helper now projects
-  unchecked state, connection header, ONNX Runtime Provider, and CLIP/SigLIP
-  diagnostics. macOS/Windows wrappers only read MPS/CUDA device fields and
-  retain their existing display aliases.
-- Privacy check: zero raw repository-root or user-profile occurrences were
-  found in the saved log in either slash format.
+- Validation-harness slice: PowerShell and embedded Electron/Playwright
+  redactors now replace every absolute Windows path, including model runtime
+  and cache locations outside the user profile.
+- Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
 - Next recommended action: centralize Worker probe connection detection and
   panel copy that remain duplicated between diagnostics and panel projectors.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-174901.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-175547.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

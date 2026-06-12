@@ -20,6 +20,7 @@ function ConvertTo-RedactedText {
     $redacted = $redacted.Replace($RepoRoot, "<REPO_ROOT>")
     $redacted = $redacted.Replace($RepoRoot.Replace("\", "/"), "<REPO_ROOT>")
   }
+  $redacted = [regex]::Replace($redacted, '(?i)\b[A-Z]:[\\/][^"\r\n]*', '<LOCAL_PATH>')
   return $redacted
 }
 
@@ -174,7 +175,7 @@ const redact = (value) => {
   ]) {
     if (raw) text = text.split(raw).join(label);
   }
-  return text;
+  return text.replace(/\b[A-Z]:[\\/][^"\r\n]*/gi, "<LOCAL_PATH>");
 };
 
 const electronExe = path.join(repo, "node_modules", "electron", "dist", "electron.exe");
