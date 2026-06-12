@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 17:32, Windows host local time.
-- Commit tested: worktree based on `7864980`, with the shared Python runtime
-  compatibility/execution response-base slice applied.
+- Validation time: 2026-06-12 17:40, Windows host local time.
+- Commit tested: worktree based on `9a6e200`, with the shared MPS/CUDA display
+  projector-helper slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -39,22 +39,21 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: shared Python compatibility and execution response
-  bases now cover the fields consumed by display projectors. Concrete MPS/CUDA
-  response names remain on IPC methods, while the shared workflow contains no
-  concrete response union or cast.
+- Shared-surface slice: one internal display state machine now projects both
+  MPS and CUDA compatibility/execution results through platform copy. Existing
+  exported MPS/CUDA wrappers and concrete IPC response names remain intact.
 - Failures/blockers: no code-validation blocker. Llama revalidation was
   unavailable to this isolated run because its app profile had no installed
   executable. The immediately preceding 17:26 run successfully completed
   Llama text plus generated-image inference, so the previously closed real
   evidence remains recorded without treating this environment gap as a code
   regression.
-- Next recommended action: consolidate duplicated MPS/CUDA compatibility and
-  execution display logic behind shared helpers while preserving
-  platform-specific copy and exported wrappers.
+- Next recommended action: make native validation output bypass PowerShell's
+  redirected error-record formatting so terminal output and saved logs use the
+  same path redaction.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-173047.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-173840.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

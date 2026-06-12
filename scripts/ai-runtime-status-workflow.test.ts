@@ -118,13 +118,22 @@ assert.equal(windowsPlatformCopy.workerProbeFailureMessage, '读取 Windows Work
 assert.match(windowsPlatformCopy.clipSiglipCompatibilityDescription, /Windows/)
 
 assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('macos', pythonReady).runtimeLabel, 'torch.mps')
-assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('windows', {
+const pythonCudaReady = {
   success: true,
   compatible: true,
   runtime: 'torch.cuda',
   status: 'optional',
   diagnostics: {}
-}).runtimeLabel, 'torch.cuda')
+} as const
+assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('windows', pythonCudaReady).runtimeLabel, 'torch.cuda')
+assert.deepEqual(
+  projectPlatformPythonRuntimeCompatibilityDisplay('macos', null, 'offline'),
+  projectPythonMpsCompatibilityDisplay(null, 'offline')
+)
+assert.deepEqual(
+  projectPlatformPythonRuntimeCompatibilityDisplay('windows', pythonCudaReady),
+  projectPythonCudaCompatibilityDisplay(pythonCudaReady)
+)
 
 const mpsExecutionUnchecked = projectPythonMpsExecutionProbeDisplay(null)
 assert.equal(mpsExecutionUnchecked.label, '尚未验证')
@@ -163,6 +172,21 @@ assert.match(projectPlatformPythonRuntimeExecutionProbeDisplay('windows', {
   operation: 'tensor_square_sum',
   resultFinite: true
 }).detail, /torch\.cuda/)
+const cudaExecutionUnsupportedProbe = {
+  success: false,
+  status: 'unsupported',
+  checkedAt: '2026-06-06T00:00:00.000Z',
+  runtime: null,
+  operation: 'tensor_square_sum',
+  resultFinite: false
+} as const
+const cudaExecutionUnsupported = projectPythonCudaExecutionProbeDisplay(cudaExecutionUnsupportedProbe)
+assert.equal(cudaExecutionUnsupported.label, '平台不支持')
+assert.equal(cudaExecutionUnsupported.detail, 'CUDA 真实执行仅适用于 Windows。')
+assert.deepEqual(
+  projectPlatformPythonRuntimeExecutionProbeDisplay('windows', cudaExecutionUnsupportedProbe),
+  cudaExecutionUnsupported
+)
 
 const clipReady = projectClipSiglipOnnxCompatibilityDisplay({
   success: true,
@@ -696,6 +720,33 @@ assert.match(runtimeWorkflowSource, /PlatformAiWorkerProbeResultBase/)
 assert.match(runtimeWorkflowSource, /PlatformAiWorkerProbeDiagnosticsInput/)
 assert.match(runtimeWorkflowSource, /AiRuntimePythonCompatibilityStatusResponseBase/)
 assert.match(runtimeWorkflowSource, /AiRuntimePythonExecutionProbeResponseBase/)
+assert.match(runtimeWorkflowSource, /const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplayCopy>/)
+assert.match(runtimeWorkflowSource, /function projectPythonRuntimeCompatibilityDisplay\(/)
+assert.match(runtimeWorkflowSource, /function projectPythonRuntimeExecutionProbeDisplay\(/)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPythonMpsCompatibilityDisplay'),
+  /return projectPythonRuntimeCompatibilityDisplay\('macos', status, error\)/
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPythonCudaCompatibilityDisplay'),
+  /return projectPythonRuntimeCompatibilityDisplay\('windows', status, error\)/
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPythonMpsExecutionProbeDisplay'),
+  /return projectPythonRuntimeExecutionProbeDisplay\('macos', probe, error\)/
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPythonCudaExecutionProbeDisplay'),
+  /return projectPythonRuntimeExecutionProbeDisplay\('windows', probe, error\)/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPlatformPythonRuntimeCompatibilityDisplay'),
+  /projectPython(?:Mps|Cuda)CompatibilityDisplay/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPlatformPythonRuntimeExecutionProbeDisplay'),
+  /projectPython(?:Mps|Cuda)ExecutionProbeDisplay/
+)
 assert.doesNotMatch(runtimeWorkflowSource, /\bAiRuntimePythonMpsStatusResponse\b/)
 assert.doesNotMatch(runtimeWorkflowSource, /\bAiRuntimePythonCudaStatusResponse\b/)
 assert.doesNotMatch(runtimeWorkflowSource, /\bAiRuntimePythonMpsExecutionProbeResponse\b/)

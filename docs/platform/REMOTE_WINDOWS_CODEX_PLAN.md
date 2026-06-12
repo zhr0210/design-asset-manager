@@ -76,8 +76,9 @@ paths or model cache paths.
    macOS/Windows branch or Worker probe result types. Shared branch metadata,
    Worker diagnostics input, runtime-version probe, and display types now cover
    those consumers. Shared Python compatibility and execution response bases
-   also cover display projectors without MPS/CUDA unions or casts. Concrete
-   response names remain at main-process, IPC contract, platform
+   cover display projectors without MPS/CUDA unions or casts, and one shared
+   display state machine now handles both accelerators through platform copy.
+   Concrete response names remain at main-process, IPC contract, platform
    type-definition, and genuine MPS/CUDA adapter boundaries.
 
 2. **Completed: audit AI Console platform probe consumption.**

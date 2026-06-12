@@ -89,6 +89,28 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Consolidated the duplicated MPS/CUDA compatibility and execution
+  display state machines. One internal platform-copy table now owns the
+  default runtime, accelerator name, and supported-platform label; shared
+  compatibility/execution helpers project every status, while the existing
+  exported MPS/CUDA functions remain thin wrappers for compatibility. The
+  platform-neutral entry points call the shared helpers directly. No IPC
+  channel, AI Worker HTTP API, database schema, shared response field, or
+  renderer behavior changed. Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. The Windows
+  validation script also passed runtime-safety, Python, ONNX, and
+  Electron/Playwright checks; WD Tagger and CLIP reported real model paths,
+  and no document/body horizontal overflow was found at `1264x793`. Llama
+  remained unavailable to the isolated app profile because
+  `llama-server.exe` was not installed there. During this run, native stderr
+  formatting exposed a terminal-only path-redaction gap even though the saved
+  log was sanitized. Next smallest slice: capture native validation output
+  directly instead of through PowerShell's redirected error-record formatter,
+  then assert saved and terminal output stay redacted.
 - 2026-06-12 Shared the Python runtime compatibility and execution projector
   inputs without changing their concrete IPC method signatures.
   `AiRuntimePythonCompatibilityStatusResponseBase` and

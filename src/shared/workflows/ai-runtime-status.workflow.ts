@@ -145,20 +145,100 @@ const TONE_CLASS: Record<AiRuntimeDisplayTone, string> = {
   muted: 'border-slate-200 bg-slate-50 text-slate-500'
 }
 
+interface PythonRuntimeDisplayCopy {
+  runtimeLabel: string
+  acceleratorLabel: string
+  supportedPlatformLabel: string
+}
+
+const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplayCopy> = {
+  macos: {
+    runtimeLabel: 'torch.mps',
+    acceleratorLabel: 'MPS',
+    supportedPlatformLabel: 'macOS'
+  },
+  windows: {
+    runtimeLabel: 'torch.cuda',
+    acceleratorLabel: 'CUDA',
+    supportedPlatformLabel: 'Windows'
+  }
+}
+
+function projectPythonRuntimeCompatibilityDisplay(
+  platformBranch: PlatformAiBranch,
+  status?: AiRuntimePythonCompatibilityStatusResponseBase | null,
+  error?: string | null
+): AiRuntimeCompatibilityDisplay {
+  const { runtimeLabel } = PYTHON_RUNTIME_DISPLAY_COPY[platformBranch]
+
+  if (!status) {
+    return compatibilityDisplay('未检查', 'muted', runtimeLabel, 'unknown', 'unchecked', error)
+  }
+
+  if (status.compatible) {
+    return compatibilityDisplay('可兼容', 'good', status.runtime ?? runtimeLabel, 'compatible', status.status, error)
+  }
+
+  const label = status.status === 'planned' ? '待补齐' : '不可用'
+  return compatibilityDisplay(
+    label,
+    status.status === 'planned' ? 'warn' : 'bad',
+    status.runtime ?? runtimeLabel,
+    'incompatible',
+    status.status,
+    error ?? status.error
+  )
+}
+
+function projectPythonRuntimeExecutionProbeDisplay(
+  platformBranch: PlatformAiBranch,
+  probe?: AiRuntimePythonExecutionProbeResponseBase | null,
+  error?: string | null
+): AiRuntimeModelLoadProbeDisplay {
+  const {
+    runtimeLabel,
+    acceleratorLabel,
+    supportedPlatformLabel
+  } = PYTHON_RUNTIME_DISPLAY_COPY[platformBranch]
+
+  if (!probe && error) {
+    return modelLoadProbeDisplay(
+      'Worker 不可达',
+      'muted',
+      `当前无法连接 AI Worker，尚未获得 ${acceleratorLabel} 执行证据。`
+    )
+  }
+  if (!probe) {
+    return modelLoadProbeDisplay(
+      '尚未验证',
+      'muted',
+      `需要用户手动执行一次固定的 ${acceleratorLabel} 张量运算。`
+    )
+  }
+  if (probe.status === 'executed_real') {
+    return modelLoadProbeDisplay('真实执行通过', 'good', `${probe.runtime ?? runtimeLabel} · 固定张量运算完成`)
+  }
+  if (probe.status === 'dependency_missing') {
+    return modelLoadProbeDisplay('依赖缺失', 'warn', '当前 Worker 缺少 PyTorch。')
+  }
+  if (probe.status === 'backend_unavailable') {
+    return modelLoadProbeDisplay('后端不可用', 'warn', `PyTorch 已存在，但当前设备无法使用 ${acceleratorLabel}。`)
+  }
+  if (probe.status === 'unsupported') {
+    return modelLoadProbeDisplay('平台不支持', 'muted', `${acceleratorLabel} 真实执行仅适用于 ${supportedPlatformLabel}。`)
+  }
+  return modelLoadProbeDisplay(
+    '执行失败',
+    'bad',
+    `${acceleratorLabel} 张量执行失败：${probe.errorCode ?? probe.status}`
+  )
+}
+
 export function projectPythonMpsCompatibilityDisplay(
   status?: AiRuntimePythonCompatibilityStatusResponseBase | null,
   error?: string | null
 ): AiRuntimeCompatibilityDisplay {
-  if (!status) {
-    return compatibilityDisplay('未检查', 'muted', 'torch.mps', 'unknown', 'unchecked', error)
-  }
-
-  if (status.compatible) {
-    return compatibilityDisplay('可兼容', 'good', status.runtime ?? 'torch.mps', 'compatible', status.status, error)
-  }
-
-  const label = status.status === 'planned' ? '待补齐' : '不可用'
-  return compatibilityDisplay(label, status.status === 'planned' ? 'warn' : 'bad', status.runtime ?? 'torch.mps', 'incompatible', status.status, error ?? status.error)
+  return projectPythonRuntimeCompatibilityDisplay('macos', status, error)
 }
 
 export function projectPlatformPythonRuntimeCompatibilityDisplay(
@@ -166,9 +246,7 @@ export function projectPlatformPythonRuntimeCompatibilityDisplay(
   status?: AiRuntimePythonCompatibilityStatusResponseBase | null,
   error?: string | null
 ): AiRuntimeCompatibilityDisplay {
-  return platformBranch === 'windows'
-    ? projectPythonCudaCompatibilityDisplay(status, error)
-    : projectPythonMpsCompatibilityDisplay(status, error)
+  return projectPythonRuntimeCompatibilityDisplay(platformBranch, status, error)
 }
 
 export function projectClipSiglipOnnxCompatibilityDisplay(
@@ -227,21 +305,7 @@ export function projectPythonMpsExecutionProbeDisplay(
   probe?: AiRuntimePythonExecutionProbeResponseBase | null,
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
-  if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得 MPS 执行证据。')
-  if (!probe) return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动执行一次固定的 MPS 张量运算。')
-  if (probe.status === 'executed_real') {
-    return modelLoadProbeDisplay('真实执行通过', 'good', `${probe.runtime ?? 'torch.mps'} · 固定张量运算完成`)
-  }
-  if (probe.status === 'dependency_missing') {
-    return modelLoadProbeDisplay('依赖缺失', 'warn', '当前 Worker 缺少 PyTorch。')
-  }
-  if (probe.status === 'backend_unavailable') {
-    return modelLoadProbeDisplay('后端不可用', 'warn', 'PyTorch 已存在，但当前设备无法使用 MPS。')
-  }
-  if (probe.status === 'unsupported') {
-    return modelLoadProbeDisplay('平台不支持', 'muted', 'MPS 真实执行仅适用于 macOS。')
-  }
-  return modelLoadProbeDisplay('执行失败', 'bad', `MPS 张量执行失败：${probe.errorCode ?? probe.status}`)
+  return projectPythonRuntimeExecutionProbeDisplay('macos', probe, error)
 }
 
 export function projectPlatformPythonRuntimeExecutionProbeDisplay(
@@ -249,9 +313,7 @@ export function projectPlatformPythonRuntimeExecutionProbeDisplay(
   probe?: AiRuntimePythonExecutionProbeResponseBase | null,
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
-  return platformBranch === 'windows'
-    ? projectPythonCudaExecutionProbeDisplay(probe, error)
-    : projectPythonMpsExecutionProbeDisplay(probe, error)
+  return projectPythonRuntimeExecutionProbeDisplay(platformBranch, probe, error)
 }
 
 export function projectAiRuntimePlatformPanelCopy(platformBranch: PlatformAiBranch): AiRuntimePlatformPanelCopy {
@@ -670,37 +732,14 @@ export function projectPythonCudaCompatibilityDisplay(
   status?: AiRuntimePythonCompatibilityStatusResponseBase | null,
   error?: string | null
 ): AiRuntimeCompatibilityDisplay {
-  if (!status) {
-    return compatibilityDisplay('未检查', 'muted', 'torch.cuda', 'unknown', 'unchecked', error)
-  }
-
-  if (status.compatible) {
-    return compatibilityDisplay('可兼容', 'good', status.runtime ?? 'torch.cuda', 'compatible', status.status, error)
-  }
-
-  const label = status.status === 'planned' ? '待补齐' : '不可用'
-  return compatibilityDisplay(label, status.status === 'planned' ? 'warn' : 'bad', status.runtime ?? 'torch.cuda', 'incompatible', status.status, error ?? status.error)
+  return projectPythonRuntimeCompatibilityDisplay('windows', status, error)
 }
 
 export function projectPythonCudaExecutionProbeDisplay(
   probe?: AiRuntimePythonExecutionProbeResponseBase | null,
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
-  if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得 CUDA 执行证据。')
-  if (!probe) return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动执行一次固定的 CUDA 张量运算。')
-  if (probe.status === 'executed_real') {
-    return modelLoadProbeDisplay('真实执行通过', 'good', `${probe.runtime ?? 'torch.cuda'} · 固定张量运算完成`)
-  }
-  if (probe.status === 'dependency_missing') {
-    return modelLoadProbeDisplay('依赖缺失', 'warn', '当前 Worker 缺少 PyTorch。')
-  }
-  if (probe.status === 'backend_unavailable') {
-    return modelLoadProbeDisplay('后端不可用', 'warn', 'PyTorch 已存在，但当前设备无法使用 CUDA。')
-  }
-  if (probe.status === 'unsupported') {
-    return modelLoadProbeDisplay('平台不支持', 'muted', 'CUDA 真实执行仅适用于 Windows。')
-  }
-  return modelLoadProbeDisplay('执行失败', 'bad', `CUDA 张量执行失败：${probe.errorCode ?? probe.status}`)
+  return projectPythonRuntimeExecutionProbeDisplay('windows', probe, error)
 }
 
 export interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay {
