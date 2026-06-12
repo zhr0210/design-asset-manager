@@ -151,6 +151,12 @@ interface PythonRuntimeDisplayCopy {
   supportedPlatformLabel: string
 }
 
+interface PlatformAiWorkerProbeCopy {
+  connectedLabel: string
+  panelTitle: string
+  panelDescription: string
+}
+
 const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplayCopy> = {
   macos: {
     runtimeLabel: 'torch.mps',
@@ -161,6 +167,19 @@ const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplay
     runtimeLabel: 'torch.cuda',
     acceleratorLabel: 'CUDA',
     supportedPlatformLabel: 'Windows'
+  }
+}
+
+const PLATFORM_AI_WORKER_PROBE_COPY: Record<PlatformAiBranch, PlatformAiWorkerProbeCopy> = {
+  macos: {
+    connectedLabel: 'macOS 探测已连接',
+    panelTitle: 'macOS Worker 实时探测',
+    panelDescription: '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
+  },
+  windows: {
+    connectedLabel: 'Windows 探测已连接',
+    panelTitle: 'Windows Worker 实时探测',
+    panelDescription: '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
   }
 }
 
@@ -526,14 +545,22 @@ function projectPlatformAiWorkerProbeHeaderDisplay(
   }
 }
 
+function isPlatformAiWorkerProbeConnected(
+  platformBranch: PlatformAiBranch,
+  probe?: Pick<PlatformAiWorkerProbeResultBase, 'platform' | 'isMacOS'> | null
+): boolean {
+  if (!probe) return false
+  return platformBranch === 'windows'
+    ? probe.platform === 'win32' || probe.platform === 'windows'
+    : probe.isMacOS
+}
+
 function projectPlatformAiWorkerProbeDiagnosticsDisplay(
   platformBranch: PlatformAiBranch,
   probe: PlatformAiWorkerProbeDiagnosticsInput | null,
   accelerator?: PlatformAiProbeTileDisplay | null
 ): PlatformAiWorkerProbeDiagnosticsDisplay {
-  const connectedLabel = platformBranch === 'windows'
-    ? 'Windows 探测已连接'
-    : 'macOS 探测已连接'
+  const { connectedLabel } = PLATFORM_AI_WORKER_PROBE_COPY[platformBranch]
 
   if (!probe) {
     const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
@@ -545,9 +572,7 @@ function projectPlatformAiWorkerProbeDiagnosticsDisplay(
     }
   }
 
-  const connected = platformBranch === 'windows'
-    ? probe.platform === 'win32' || probe.platform === 'windows'
-    : probe.isMacOS
+  const connected = isPlatformAiWorkerProbeConnected(platformBranch, probe)
   const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
 
   return {
@@ -810,30 +835,17 @@ export function projectAiRuntimeWorkerProbePanelDisplay(
   platformBranch: PlatformAiBranch,
   probe?: PlatformAiWorkerProbeResultBase | null
 ): AiRuntimeWorkerProbePanelDisplay {
-  const isWindows = platformBranch === 'windows'
-  const connected = probe
-    ? isWindows
-      ? probe.platform === 'win32' || probe.platform === 'windows'
-      : probe.isMacOS
-    : false
+  const copy = PLATFORM_AI_WORKER_PROBE_COPY[platformBranch]
   const display = projectPlatformAiWorkerProbeHeaderDisplay(
     probe ?? null,
-    connected,
-    isWindows ? 'Windows 探测已连接' : 'macOS 探测已连接'
+    isPlatformAiWorkerProbeConnected(platformBranch, probe),
+    copy.connectedLabel
   )
-
-  if (isWindows) {
-    return projectAiRuntimeWorkerProbePanelFromHeader(
-      display,
-      'Windows Worker 实时探测',
-      '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
-    )
-  }
 
   return projectAiRuntimeWorkerProbePanelFromHeader(
     display,
-    'macOS Worker 实时探测',
-    '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
+    copy.panelTitle,
+    copy.panelDescription
   )
 }
 

@@ -79,9 +79,10 @@ paths or model cache paths.
    cover display projectors without MPS/CUDA unions or casts, and one shared
    display state machine now handles both accelerators through platform copy.
    Shared Worker probe diagnostics projection also owns connection, ONNX, and
-   CLIP fields; platform wrappers only read genuine MPS/CUDA device fields.
-   Concrete response names remain at main-process, IPC contract, platform
-   type-definition, and genuine MPS/CUDA adapter boundaries.
+   CLIP fields. One platform copy table and connection matcher serve both
+   diagnostics and panel projectors; platform wrappers only read genuine
+   MPS/CUDA device fields. Concrete response names remain at main-process, IPC
+   contract, platform type-definition, and genuine MPS/CUDA adapter boundaries.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Centralized Worker probe connection detection and panel copy.
+  `PLATFORM_AI_WORKER_PROBE_COPY` now owns the macOS/Windows connected label,
+  panel title, and description, while
+  `isPlatformAiWorkerProbeConnected()` owns the shared platform match.
+  Diagnostics and panel projectors no longer duplicate Windows/macOS
+  conditionals. Genuine MPS/CUDA device fields remain in their platform
+  wrappers. No IPC channel, AI Worker HTTP API, database schema, shared
+  response field, or renderer behavior changed. Validation passed the required
+  focused tests, the Windows validation privacy contract, typecheck, build,
+  docs sync, and diff checks. The full Windows run passed runtime-safety,
+  Python, ONNX, Llama text/generated-image, and Electron/Playwright checks;
+  Tag/Prompt/Search reported `real_model_path`, the `1264x793` viewport had no
+  horizontal overflow, and the log contained zero absolute Windows paths.
+  Next smallest slice: audit the remaining exported concrete Worker display
+  aliases and wrappers for consumers that only need the shared diagnostics
+  display, without removing compatibility fields.
 - 2026-06-12 Extended Windows evidence redaction beyond repository and user
   roots. Both the PowerShell logger and embedded Electron/Playwright serializer
   now replace any absolute Windows path with `<LOCAL_PATH>`, covering model

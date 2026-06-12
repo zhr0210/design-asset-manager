@@ -9,8 +9,8 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 ## Latest Reported Result
 
 - Validation time: 2026-06-12 17:57, Windows host local time.
-- Commit tested: worktree based on `d516399`, with absolute Windows path
-  redaction hardening applied.
+- Commit tested: worktree based on `6391084`, with the shared Worker probe
+  platform-copy and connection-matcher slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,14 +42,15 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Validation-harness slice: PowerShell and embedded Electron/Playwright
-  redactors now replace every absolute Windows path, including model runtime
-  and cache locations outside the user profile.
+- Shared-surface slice: one platform copy table and connection matcher now
+  serve Worker diagnostics and panel projectors. Genuine MPS/CUDA device fields
+  remain in their platform wrappers.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: centralize Worker probe connection detection and
-  panel copy that remain duplicated between diagnostics and panel projectors.
+- Next recommended action: audit remaining exported concrete Worker display
+  aliases and wrappers for consumers that only need the shared diagnostics
+  display, without removing compatibility fields.
 
 The latest full Windows-host validation log filename is
 `dam-windows-ai-validation-20260612-175547.log`, and the screenshot filename is

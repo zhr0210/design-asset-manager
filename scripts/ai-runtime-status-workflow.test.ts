@@ -770,11 +770,14 @@ assert.doesNotMatch(runtimeWorkflowSource, /projectMacOSAiWorkerProbeDisplay\(pr
 assert.match(runtimeWorkflowSource, /interface MacOSAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
+assert.match(runtimeWorkflowSource, /const PLATFORM_AI_WORKER_PROBE_COPY: Record<PlatformAiBranch, PlatformAiWorkerProbeCopy>/)
+assert.match(runtimeWorkflowSource, /function isPlatformAiWorkerProbeConnected/)
 assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
 const platformProbeDeviceFieldPattern = /probe\.torch|\.(?:mpsAvailable|cudaAvailable)/
 for (const helperName of [
   'projectPlatformAiWorkerProbeHeaderDisplay',
+  'isPlatformAiWorkerProbeConnected',
   'projectPlatformAiWorkerProbeDiagnosticsDisplay',
   'projectAiRuntimeWorkerProbePanelDisplay',
   'projectAiRuntimeWorkerProbePanelFromHeader',
@@ -810,6 +813,18 @@ assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
   /probe\.onnxruntime\.providers[\s\S]*probe\.clipSiglipOnnx\.version/,
   'shared Worker projector should own shared ONNX and CLIP diagnostics fields'
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeWorkerProbePanelDisplay'),
+  /PLATFORM_AI_WORKER_PROBE_COPY\[platformBranch\][\s\S]*isPlatformAiWorkerProbeConnected/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeWorkerProbePanelDisplay'),
+  /platformBranch === 'windows'|if \(isWindows\)/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
+  /platformBranch === 'windows'/
 )
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
