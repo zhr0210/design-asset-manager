@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 17:14, Windows host local time.
-- Commit tested: worktree based on `42c6ee0`, with the shared Worker probe
-  diagnostics input slice applied.
+- Validation time: 2026-06-12 17:18, Windows host local time.
+- Commit tested: worktree based on `3ecdbdb`, with the platform-neutral branch
+  metadata discovery slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -41,19 +41,18 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: shared Worker probe diagnostics now use one
-  platform-neutral input type for common torch and ONNX fields. Concrete
-  macOS/Windows response types add only their genuine accelerator-specific
-  fields, and the shared workflow no longer imports either concrete Worker
-  result type.
+- Shared-surface slice: shared branch metadata discovery now uses one
+  platform-neutral helper with marker and shape validation. The shared
+  runtime-status workflow no longer imports concrete macOS/Windows branch or
+  Worker probe result types.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   slice.
-- Next recommended action: audit shared branch metadata discovery helpers for
-  concrete return types that can safely narrow to the platform-neutral branch
-  shape while retaining concrete marker validation at ingestion boundaries.
+- Next recommended action: audit shared branch/probe panel inputs and selectors
+  for redundant platform booleans that can derive from the shared branch
+  marker, while retaining genuine MPS/CUDA runtime detail projectors.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-171408.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-171846.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result

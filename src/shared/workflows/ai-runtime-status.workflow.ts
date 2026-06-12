@@ -13,7 +13,6 @@ import type {
   AiRuntimeStatus
 } from '../types/ai-runtime.types'
 import type { LlamaInstallStatus } from '../types/llama-runtime.types'
-import type { MacOSAiBranchRuntimeMetadata } from '../types/macos-ai-runtime.types'
 import type {
   AiCapabilityStatus,
   PlatformAiBranchRuntimeMetadata,
@@ -22,7 +21,6 @@ import type {
   PlatformAiWorkerProbeWithRuntimeVersions
 } from '../types/platform-ai-runtime.types'
 import type { PlatformAiBranch } from '../types/platform-ai-branch-status.types'
-import type { WindowsAiBranchRuntimeMetadata } from '../types/windows-ai-runtime.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
 export type AiRuntimeStatusIcon = 'success' | 'warning' | 'activity'
@@ -609,26 +607,29 @@ export function projectAiRuntimeActionLabel(label: string): string {
   }[label] ?? label
 }
 
-export function isMacOSAiBranchMetadata(value: unknown): value is MacOSAiBranchRuntimeMetadata {
-  return Boolean(value && typeof value === 'object' && (value as { marker?: unknown }).marker === 'macos-ai-branch' && Array.isArray((value as { lanes?: unknown }).lanes))
+function isPlatformAiBranchMetadata(
+  value: unknown,
+  marker: 'macos-ai-branch' | 'windows-ai-branch'
+): value is PlatformAiBranchRuntimeMetadata {
+  if (!value || typeof value !== 'object') return false
+  const branch = value as Partial<PlatformAiBranchRuntimeMetadata>
+  return branch.marker === marker
+    && typeof branch.phase === 'string'
+    && typeof branch.platform === 'string'
+    && typeof branch.arch === 'string'
+    && typeof branch.isCurrentPlatform === 'boolean'
+    && Array.isArray(branch.lanes)
+    && Array.isArray(branch.warnings)
 }
 
-export function getMacOSAiBranchRuntime(runtimes: AiRuntimeState[]): MacOSAiBranchRuntimeMetadata | null {
+function getPlatformAiBranchRuntime(
+  runtimes: AiRuntimeState[],
+  metadataKey: 'macosAiBranch' | 'windowsAiBranch',
+  marker: 'macos-ai-branch' | 'windows-ai-branch'
+): PlatformAiBranchRuntimeMetadata | null {
   for (const runtime of runtimes) {
-    const branch = runtime.metadata?.macosAiBranch
-    if (isMacOSAiBranchMetadata(branch)) return branch
-  }
-  return null
-}
-
-export function isWindowsAiBranchMetadata(value: unknown): value is WindowsAiBranchRuntimeMetadata {
-  return Boolean(value && typeof value === 'object' && (value as { marker?: unknown }).marker === 'windows-ai-branch' && Array.isArray((value as { lanes?: unknown }).lanes))
-}
-
-export function getWindowsAiBranchRuntime(runtimes: AiRuntimeState[]): WindowsAiBranchRuntimeMetadata | null {
-  for (const runtime of runtimes) {
-    const branch = runtime.metadata?.windowsAiBranch
-    if (isWindowsAiBranchMetadata(branch)) return branch
+    const branch = runtime.metadata?.[metadataKey]
+    if (isPlatformAiBranchMetadata(branch, marker)) return branch
   }
   return null
 }
@@ -636,10 +637,10 @@ export function getWindowsAiBranchRuntime(runtimes: AiRuntimeState[]): WindowsAi
 export function getCurrentPlatformAiBranchRuntime(
   runtimes: AiRuntimeState[]
 ): PlatformAiBranchRuntimeMetadata | null {
-  const windowsBranch = getWindowsAiBranchRuntime(runtimes)
+  const windowsBranch = getPlatformAiBranchRuntime(runtimes, 'windowsAiBranch', 'windows-ai-branch')
   if (windowsBranch?.isCurrentPlatform) return windowsBranch
 
-  const macOSBranch = getMacOSAiBranchRuntime(runtimes)
+  const macOSBranch = getPlatformAiBranchRuntime(runtimes, 'macosAiBranch', 'macos-ai-branch')
   return macOSBranch?.isCurrentPlatform ? macOSBranch : null
 }
 

@@ -71,11 +71,12 @@ paths or model cache paths.
 
 ## Remaining Work, Ordered By Maintenance-Cost Reduction
 
-1. **Finish Platform AI runtime type sharing.**
-   Remove remaining renderer/shared workflow references to concrete
-   macOS/Windows probe result unions when the code only needs
-   `PlatformAiWorkerProbeResultBase` or a small shared view type. Keep concrete
-   types at IPC boundaries and platform-specific runtime detail projectors.
+1. **Completed: finish Platform AI runtime type sharing.**
+   Renderer and shared runtime-status workflows no longer reference concrete
+   macOS/Windows branch or Worker probe result types. Shared branch metadata,
+   Worker diagnostics input, runtime-version probe, and display types now cover
+   those consumers. Concrete response types remain at main-process, IPC
+   contract, platform type-definition, and genuine MPS/CUDA detail boundaries.
 
 2. **Audit AI Console platform probe consumption.**
    Identify places where AI Console still treats macOS Worker probe data as the

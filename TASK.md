@@ -89,6 +89,32 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Completed the remaining concrete Platform AI branch metadata
+  cleanup in the shared runtime-status workflow. The duplicated exported
+  macOS/Windows metadata guards and getters were replaced by one private
+  platform-neutral discovery helper that validates marker, phase, platform,
+  architecture, current-platform flag, lanes, and warnings before returning
+  `PlatformAiBranchRuntimeMetadata`. `getCurrentPlatformAiBranchRuntime()`
+  remains the renderer-facing API. The workflow now imports no concrete
+  macOS/Windows branch or Worker probe result type; concrete response types
+  remain in main-process, IPC contract, and platform type-definition
+  boundaries. No IPC channel, AI Worker HTTP API, database schema, or shared
+  response shape changed. Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation passed via `powershell -ExecutionPolicy Bypass -File
+  .\scripts\windows-ai-real-evidence-validation.ps1`; WD Tagger/CLIP real ONNX
+  probes and Llama text plus generated-image inference passed,
+  `ai_tag_task`, `ai_prompt_task`, and `search_embedding` reported
+  `real_model_path`, and Electron/Playwright reported no document/body
+  horizontal overflow at `1264x793`. Remote Windows Remaining Work item 1 is
+  now complete. Next smallest slice: audit the shared branch/probe panel input
+  types and selectors for redundant platform booleans that can derive from the
+  shared branch marker without moving genuine MPS/CUDA evidence out of its
+  platform projector.
 - 2026-06-12 Shared the detailed Worker probe input used by AI Runtime status
   workflows. `PlatformAiWorkerProbeDiagnosticsInput` now owns the common torch
   and ONNX Runtime diagnostic fields; macOS and Windows concrete probe response

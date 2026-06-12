@@ -9,8 +9,6 @@ import {
   projectAiRuntimeStatusDisplay,
   projectAiRuntimeSummaryDisplay,
   getCurrentPlatformAiBranchRuntime,
-  getMacOSAiBranchRuntime,
-  isMacOSAiBranchMetadata,
   normalizeAiCapabilityStatus,
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
@@ -397,22 +395,22 @@ const macOSBranch = {
   lanes: [],
   warnings: []
 }
-assert.equal(isMacOSAiBranchMetadata(macOSBranch), true)
 assert.deepEqual(projectAiRuntimeBranchPanelDisplay(macOSBranch), {
   title: 'macOS AI 分支',
   description: 'Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经 macOS 实时探测的条目统一显示为证据不足。 当前阶段：worker-probes / darwin/arm64',
   platformBadgeLabel: '当前平台',
   platformBadgeClass: 'border-emerald-100 bg-emerald-50 text-emerald-700'
 })
-assert.equal(isMacOSAiBranchMetadata({ marker: 'macos-ai-branch', lanes: null }), false)
-assert.equal(getMacOSAiBranchRuntime([
+assert.equal(getCurrentPlatformAiBranchRuntime([
   runtimeState('stopped'),
   { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } }
 ]), macOSBranch)
-assert.equal(getMacOSAiBranchRuntime([{ ...runtimeState('running'), metadata: { macosAiBranch: { marker: 'other', lanes: [] } } }]), null)
 assert.equal(getCurrentPlatformAiBranchRuntime([
-  { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } }
-]), macOSBranch)
+  { ...runtimeState('running'), metadata: { macosAiBranch: { ...macOSBranch, lanes: null } } }
+]), null)
+assert.equal(getCurrentPlatformAiBranchRuntime([
+  { ...runtimeState('running'), metadata: { macosAiBranch: { ...macOSBranch, marker: 'other' } } }
+]), null)
 
 const uncheckedProbe = projectMacOSAiWorkerProbeDisplay(null)
 assert.equal(uncheckedProbe.connected, false)
@@ -642,8 +640,7 @@ assert.deepEqual(concretePlatformRuntimeTypeFiles, [
   'src/shared/constants/windows-ai-runtime.constants.ts',
   'src/shared/contracts/ai-runtime.contract.ts',
   'src/shared/types/macos-ai-runtime.types.ts',
-  'src/shared/types/windows-ai-runtime.types.ts',
-  'src/shared/workflows/ai-runtime-status.workflow.ts'
+  'src/shared/types/windows-ai-runtime.types.ts'
 ])
 assert.match(platformAiRuntimeTypesSource, /export type AiCapabilityStatus/)
 assert.match(platformAiRuntimeTypesSource, /export type PlatformAiRuntimeBranchPhase/)
@@ -680,6 +677,11 @@ assert.match(runtimeWorkflowSource, /interface PlatformAiWorkerProbeDiagnosticsD
 assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeHeaderDisplay/)
 assert.match(runtimeWorkflowSource, /branch: PlatformAiBranchRuntimeMetadata/)
 assert.doesNotMatch(runtimeWorkflowSource, /branch: MacOSAiBranchRuntimeMetadata \| WindowsAiBranchRuntimeMetadata/)
+assert.match(runtimeWorkflowSource, /function getPlatformAiBranchRuntime/)
+assert.doesNotMatch(runtimeWorkflowSource, /\bMacOSAiBranchRuntimeMetadata\b/)
+assert.doesNotMatch(runtimeWorkflowSource, /\bWindowsAiBranchRuntimeMetadata\b/)
+assert.doesNotMatch(runtimeWorkflowSource, /function getMacOSAiBranchRuntime/)
+assert.doesNotMatch(runtimeWorkflowSource, /function getWindowsAiBranchRuntime/)
 assert.match(runtimeWorkflowSource, /PlatformAiWorkerProbeResultBase/)
 assert.match(runtimeWorkflowSource, /PlatformAiWorkerProbeDiagnosticsInput/)
 assert.doesNotMatch(runtimeWorkflowSource, /\bMacOSAiWorkerProbeResult\b/)
