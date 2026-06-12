@@ -39,6 +39,8 @@ export interface PlatformAiBranchRuntimeMetadataBase<TMarker extends string, TLa
   warnings: string[]
 }
 
+export type PlatformAiBranchRuntimeMetadata = PlatformAiBranchRuntimeMetadataBase<string, PlatformAiRuntimeLaneBase>
+
 export interface AiWorkerCapabilityProbe {
   id: string
   label: string

@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued shared branch panel type sharing in Settings. Added the
+  platform-neutral `PlatformAiBranchRuntimeMetadata` alias and moved
+  `PlatformAiBranchPanel` plus `projectAiRuntimeBranchPanelDisplay()` to that
+  shared branch-panel input shape instead of a concrete macOS/Windows branch
+  metadata union. Concrete branch metadata types remain at runtime metadata
+  extraction boundaries (`getMacOSAiBranchRuntime()` and
+  `getWindowsAiBranchRuntime()`). Validation passed
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. Windows real-evidence validation also passed via
+  `powershell -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1`;
+  it captured `dam-windows-ai-console.png`, reported overflow `doc=false`,
+  `body=false` at `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`,
+  and `search_embedding` as `real_model_path`. Next smallest slice: audit the
+  remaining platform-specific Worker detail projectors and branch extraction
+  helpers to confirm they are true platform boundaries rather than renderer
+  shared-surface leakage.
 - 2026-06-12 Continued Remaining Work item 2 by reducing AI Console overview
   coupling to macOS concrete Worker probe data. `AiConsolePage` now stores the
   raw Worker probe used by overview/matrix as

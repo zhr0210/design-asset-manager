@@ -19,6 +19,7 @@ import type {
 } from '../types/macos-ai-runtime.types'
 import type {
   AiCapabilityStatus,
+  PlatformAiBranchRuntimeMetadata,
   PlatformAiWorkerProbeResultBase
 } from '../types/platform-ai-runtime.types'
 import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
@@ -620,7 +621,7 @@ export function getWindowsAiBranchRuntime(runtimes: AiRuntimeState[]): WindowsAi
 }
 
 export function projectAiRuntimeBranchPanelDisplay(
-  branch: MacOSAiBranchRuntimeMetadata | WindowsAiBranchRuntimeMetadata
+  branch: PlatformAiBranchRuntimeMetadata
 ): AiRuntimeBranchPanelDisplay {
   const isWindows = branch.marker === 'windows-ai-branch'
   const routeSummary = isWindows

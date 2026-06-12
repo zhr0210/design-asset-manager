@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 14:54, Windows host local time.
-- Commit tested: worktree based on `5d3ec39`, with the AI Console shared Worker
-  probe overview slice applied.
+- Validation time: 2026-06-12 14:59, Windows host local time.
+- Commit tested: worktree based on `cb466ae`, with the shared AI branch panel
+  metadata type slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -41,10 +41,10 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: AI Console now keeps the raw Worker probe passed to
-  overview as `PlatformAiWorkerProbeWithRuntimeVersions` and passes a
-  renderer-ready `MacOSAiWorkerProbeDisplay` for macOS-only diagnostic tiles,
-  keeping the concrete macOS Worker probe result at the IPC projection boundary.
+- Shared-surface slice: `PlatformAiBranchRuntimeMetadata` now names the shared
+  branch-panel input shape, and Settings branch panel/display projection accepts
+  that platform-neutral metadata instead of a concrete macOS/Windows branch
+  metadata union.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   slice.
 - Next recommended action: continue auditing AI Console and Settings component
@@ -52,7 +52,7 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   probe result types at IPC and platform-specific projector boundaries.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-145446.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-145922.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result

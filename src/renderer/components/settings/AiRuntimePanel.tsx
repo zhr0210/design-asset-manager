@@ -1,12 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw, RotateCcw, ShieldCheck, Star } from 'lucide-react'
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
-import type {
-  MacOSAiBranchRuntimeMetadata,
-  MacOSAiRuntimeLane
-} from '../../../shared/types/macos-ai-runtime.types'
-import type { AiCapabilityStatus, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
-import type { WindowsAiBranchRuntimeMetadata } from '../../../shared/types/windows-ai-runtime.types'
+import type { AiCapabilityStatus, PlatformAiBranchRuntimeMetadata, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
 import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
 import type {
   AiRuntimeActiveRuntimeResponse,
@@ -568,7 +563,7 @@ export default function AiRuntimePanel() {
   )
 }
 
-function PlatformAiBranchPanel({ branch }: { branch: MacOSAiBranchRuntimeMetadata | WindowsAiBranchRuntimeMetadata }) {
+function PlatformAiBranchPanel({ branch }: { branch: PlatformAiBranchRuntimeMetadata }) {
   const display = useMemo(() => projectAiRuntimeBranchPanelDisplay(branch), [branch])
   return (
     <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
