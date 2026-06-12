@@ -154,6 +154,7 @@ interface PlatformAiSurfaceCopy {
   connectedLabel: string
   panelTitle: string
   panelDescription: string
+  runtimePanel: AiRuntimePlatformPanelCopy
 }
 
 const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplayCopy> = {
@@ -176,7 +177,20 @@ const PLATFORM_AI_SURFACE_COPY: Record<PlatformAiBranch, PlatformAiSurfaceCopy> 
     capabilityMatrixTitle: 'macOS 细项能力矩阵',
     connectedLabel: 'macOS 探测已连接',
     panelTitle: 'macOS Worker 实时探测',
-    panelDescription: '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
+    panelDescription: '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。',
+    runtimePanel: {
+      compatibilityTitle: 'Python MPS 兼容性检查',
+      compatibilityDescription: '这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。',
+      compatibilityFailureMessage: '读取 Python MPS 兼容性失败。',
+      executionTitle: 'Python MPS 真实执行验证',
+      executionDescription: '手动执行一次固定张量运算。该结果只证明 torch.mps 可执行，不代表任何模型已经加载或完成推理。',
+      executionFailureMessage: 'MPS 真实执行验证失败。',
+      executionLastActionLabel: 'Python MPS 真实执行验证',
+      executionBusyLabel: '正在验证...',
+      executionButtonLabel: '验证 MPS 执行',
+      clipSiglipCompatibilityDescription: '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。',
+      workerProbeFailureMessage: '读取 macOS Worker 能力失败。'
+    }
   },
   windows: {
     branchTitle: 'Windows AI 分支',
@@ -184,7 +198,20 @@ const PLATFORM_AI_SURFACE_COPY: Record<PlatformAiBranch, PlatformAiSurfaceCopy> 
     capabilityMatrixTitle: 'Windows 细项能力矩阵',
     connectedLabel: 'Windows 探测已连接',
     panelTitle: 'Windows Worker 实时探测',
-    panelDescription: '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
+    panelDescription: '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。',
+    runtimePanel: {
+      compatibilityTitle: 'Python CUDA 兼容性检查',
+      compatibilityDescription: '这个检查器会确认 PyTorch CUDA、torchvision、transformers 与小模型家族是否已经具备可用的 Windows 兼容性。',
+      compatibilityFailureMessage: '读取 Python CUDA 兼容性失败。',
+      executionTitle: 'Python CUDA 真实执行验证',
+      executionDescription: '手动执行一次固定张量运算。该结果只证明 torch.cuda 可执行，不代表任何模型已经加载或完成推理。',
+      executionFailureMessage: 'CUDA 真实执行验证失败。',
+      executionLastActionLabel: 'Python CUDA 真实执行验证',
+      executionBusyLabel: '正在验证...',
+      executionButtonLabel: '验证 CUDA 执行',
+      clipSiglipCompatibilityDescription: '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 Windows 的 embedding 路线。',
+      workerProbeFailureMessage: '读取 Windows Worker 能力失败。'
+    }
   }
 }
 
@@ -341,35 +368,7 @@ export function projectPlatformPythonRuntimeExecutionProbeDisplay(
 }
 
 export function projectAiRuntimePlatformPanelCopy(platformBranch: PlatformAiBranch): AiRuntimePlatformPanelCopy {
-  if (platformBranch === 'windows') {
-    return {
-      compatibilityTitle: 'Python CUDA 兼容性检查',
-      compatibilityDescription: '这个检查器会确认 PyTorch CUDA、torchvision、transformers 与小模型家族是否已经具备可用的 Windows 兼容性。',
-      compatibilityFailureMessage: '读取 Python CUDA 兼容性失败。',
-      executionTitle: 'Python CUDA 真实执行验证',
-      executionDescription: '手动执行一次固定张量运算。该结果只证明 torch.cuda 可执行，不代表任何模型已经加载或完成推理。',
-      executionFailureMessage: 'CUDA 真实执行验证失败。',
-      executionLastActionLabel: 'Python CUDA 真实执行验证',
-      executionBusyLabel: '正在验证...',
-      executionButtonLabel: '验证 CUDA 执行',
-      clipSiglipCompatibilityDescription: '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 Windows 的 embedding 路线。',
-      workerProbeFailureMessage: '读取 Windows Worker 能力失败。'
-    }
-  }
-
-  return {
-    compatibilityTitle: 'Python MPS 兼容性检查',
-    compatibilityDescription: '这个检查器会确认 PyTorch MPS、torchvision、transformers 与小模型家族是否已经具备可用的 macOS 兼容性。',
-    compatibilityFailureMessage: '读取 Python MPS 兼容性失败。',
-    executionTitle: 'Python MPS 真实执行验证',
-    executionDescription: '手动执行一次固定张量运算。该结果只证明 torch.mps 可执行，不代表任何模型已经加载或完成推理。',
-    executionFailureMessage: 'MPS 真实执行验证失败。',
-    executionLastActionLabel: 'Python MPS 真实执行验证',
-    executionBusyLabel: '正在验证...',
-    executionButtonLabel: '验证 MPS 执行',
-    clipSiglipCompatibilityDescription: '这个检查器会确认本地 Python 依赖和 ONNX 图结构是否足以支撑 macOS 的 embedding 路线。',
-    workerProbeFailureMessage: '读取 macOS Worker 能力失败。'
-  }
+  return PLATFORM_AI_SURFACE_COPY[platformBranch].runtimePanel
 }
 
 export function projectLlamaRuntimeDisplay(

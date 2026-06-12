@@ -82,12 +82,13 @@ paths or model cache paths.
    CLIP fields. One platform copy table and connection matcher serve both
    diagnostics and panel projectors. Branch-panel, Worker-panel, and
    capability-matrix display copy now comes from one
-   `PLATFORM_AI_SURFACE_COPY` table keyed by `PlatformAiBranch`. The concrete
-   macOS/Windows diagnostics display aliases and wrappers are removed; one
-   shared projector selects only the genuine MPS/CUDA device field from
-   `PlatformAiBranch`. Concrete response names remain at main-process, IPC
-   contract, platform type-definition, and genuine MPS/CUDA adapter
-   boundaries.
+   `PLATFORM_AI_SURFACE_COPY` table keyed by `PlatformAiBranch`; the full AI
+   Runtime settings-panel title, description, error, and action copy is now a
+   nested entry in that same table. The concrete macOS/Windows diagnostics
+   display aliases and wrappers are removed; one shared projector selects only
+   the genuine MPS/CUDA device field from `PlatformAiBranch`. Concrete response
+   names remain at main-process, IPC contract, platform type-definition, and
+   genuine MPS/CUDA adapter boundaries.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

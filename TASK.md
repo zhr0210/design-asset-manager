@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Moved the remaining AI Runtime settings-panel copy into
+  `PLATFORM_AI_SURFACE_COPY`. `projectAiRuntimePlatformPanelCopy()` now returns
+  the nested `runtimePanel` entry keyed by `PlatformAiBranch`, removing its
+  final display-only Windows/macOS conditional while preserving all existing
+  titles, descriptions, error messages, and button labels. Concrete
+  capability/status/probe IPC selection remains in renderer adapters because
+  those channels expose genuine platform runtimes. No IPC channel, AI Worker
+  HTTP API, database schema, shared response field, runtime evidence behavior,
+  or renderer output changed. The required four focused TypeScript tests,
+  Windows validation privacy contract, typecheck, build, docs sync, and diff
+  checks passed. The full Windows script passed runtime-safety, Python, ONNX,
+  Llama text/generated-image, and Electron/Playwright checks; `chatOk` and
+  `visionOk` were true, Tag/Prompt/Search reported `real_model_path`, OCR
+  reported `runtime_probe_ready`, the `1264x793` viewport had no horizontal
+  overflow, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: centralize the remaining display-only title/route-overview
+  copy in `platform-ai-branch-status.workflow.ts` without changing lane or
+  evidence projection.
 - 2026-06-12 Centralized shared Platform AI surface copy for the branch panel,
   Worker probe panel, and capability matrix. `PLATFORM_AI_SURFACE_COPY` now
   owns the macOS/Windows titles, route summary, connected label, and panel

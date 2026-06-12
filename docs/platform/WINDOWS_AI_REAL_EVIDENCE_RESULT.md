@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 22:47, Windows host local time.
-- Commit tested: worktree based on `29adfb2`, with the shared Platform AI
-  surface-copy consolidation applied.
+- Validation time: 2026-06-12 22:53, Windows host local time.
+- Commit tested: worktree based on `d550759`, with the AI Runtime
+  settings-panel copy consolidation applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,19 +42,19 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: branch-panel, Worker-panel, and capability-matrix
-  display copy now comes from one table keyed by `PlatformAiBranch`. Genuine
-  MPS/CUDA probe-field selection and concrete IPC adapters remain at their
-  platform boundaries.
+- Shared-surface slice: the remaining AI Runtime settings-panel title,
+  description, error, and action copy now comes from the shared table keyed by
+  `PlatformAiBranch`. Concrete capability/status/probe IPC selection and
+  MPS/CUDA probe-field selection remain at genuine platform boundaries.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: consolidate the remaining display-only branch in
-  `projectAiRuntimePlatformPanelCopy` into the shared platform copy table
-  without moving concrete IPC adapters or runtime evidence selection.
+- Next recommended action: centralize the remaining display-only title and
+  route-overview copy in `platform-ai-branch-status.workflow.ts` without
+  changing lane or evidence projection.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-224603.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-225138.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

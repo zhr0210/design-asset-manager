@@ -811,6 +811,14 @@ assert.doesNotMatch(
   /platformBranch === 'windows'/
 )
 assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimePlatformPanelCopy'),
+  /PLATFORM_AI_SURFACE_COPY\[platformBranch\]\.runtimePanel/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimePlatformPanelCopy'),
+  /platformBranch === 'windows'|if \(/
+)
+assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
   /platformBranch === 'windows'[\s\S]*probe\.torch\.cudaAvailable[\s\S]*probe\.torch\.mpsAvailable/
 )
