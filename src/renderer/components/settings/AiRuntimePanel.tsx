@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw, RotateCcw, ShieldCheck, Star } from 'lucide-react'
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
-import type { AiCapabilityStatus, PlatformAiBranchRuntimeMetadata, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
+import type { PlatformAiBranchRuntimeMetadata, PlatformAiLaneDisplayInput, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
 import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
 import type {
   AiRuntimeActiveRuntimeResponse,
@@ -654,21 +654,7 @@ function PlatformAiWorkerProbePanel({
   )
 }
 
-type PlatformAiLaneLike = {
-  id: string
-  label: string
-  status: AiCapabilityStatus
-  summary: string
-  capabilities: Array<{
-    id: string
-    label: string
-    status: AiCapabilityStatus
-    backend?: string
-    role: string
-  }>
-}
-
-function PlatformAiLaneCard({ lane }: { lane: PlatformAiLaneLike }) {
+function PlatformAiLaneCard({ lane }: { lane: PlatformAiLaneDisplayInput }) {
   const laneDisplay = projectAiCapabilityStatusDisplay(lane.status)
   return (
     <div className="rounded-xl border border-white bg-white p-3 shadow-sm">

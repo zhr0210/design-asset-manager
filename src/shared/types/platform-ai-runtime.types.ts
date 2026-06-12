@@ -61,6 +61,22 @@ export interface AiWorkerLaneProbe {
   capabilities: AiWorkerCapabilityProbe[]
 }
 
+export interface PlatformAiLaneDisplayCapability {
+  id: string
+  label: string
+  status: AiCapabilityStatus
+  backend?: string
+  role: string
+}
+
+export interface PlatformAiLaneDisplayInput {
+  id: string
+  label: string
+  status: AiCapabilityStatus
+  summary: string
+  capabilities: PlatformAiLaneDisplayCapability[]
+}
+
 export interface PlatformAiWorkerProbeResultBase {
   platform: string
   machine: string

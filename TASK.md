@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued Settings shared renderer-ready type cleanup. Added
+  `PlatformAiLaneDisplayCapability` and `PlatformAiLaneDisplayInput` to the
+  platform AI runtime shared types, then moved the Settings
+  `PlatformAiLaneCard` from its renderer-local `PlatformAiLaneLike` structure
+  to the shared lane-card input shape. The card still renders the same shared
+  lane fields from branch lanes and Worker probe lanes; no IPC, response shape,
+  or platform runtime detail semantics changed. Validation passed
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. Windows real-evidence validation also passed via
+  `powershell -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1`;
+  it captured `dam-windows-ai-console.png`, reported overflow `doc=false`,
+  `body=false` at `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`,
+  and `search_embedding` as `real_model_path`. Next smallest slice: audit the
+  remaining concrete Platform AI runtime usages and add guardrails that keep
+  them limited to IPC contracts, platform constants, runtime extraction helpers,
+  and platform-specific detail projectors.
 - 2026-06-12 Continued shared branch panel type sharing in Settings. Added the
   platform-neutral `PlatformAiBranchRuntimeMetadata` alias and moved
   `PlatformAiBranchPanel` plus `projectAiRuntimeBranchPanelDisplay()` to that
