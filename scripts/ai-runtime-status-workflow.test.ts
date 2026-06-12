@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
+import path from 'node:path'
 import {
   projectAiRuntimeHealthResultDisplay,
   projectAiRuntimeActionLabel,
@@ -27,6 +28,17 @@ import {
   projectPythonCudaExecutionProbeDisplay,
   projectWindowsAiWorkerProbeDisplay
 } from '../src/shared/workflows/ai-runtime-status.workflow'
+
+async function listSourceFiles(dir: string): Promise<string[]> {
+  const entries = await fs.readdir(dir, { withFileTypes: true })
+  const files = await Promise.all(entries.map(async (entry) => {
+    const entryPath = path.join(dir, entry.name)
+    if (entry.isDirectory()) return listSourceFiles(entryPath)
+    if (entry.isFile() && /\.(ts|tsx)$/.test(entry.name)) return [entryPath.replace(/\\/g, '/')]
+    return []
+  }))
+  return files.flat()
+}
 
 const pythonUnchecked = projectPythonMpsCompatibilityDisplay(null, 'offline')
 assert.equal(pythonUnchecked.label, '未检查')
@@ -549,6 +561,23 @@ const platformAiRuntimeTypesSource = await fs.readFile('src/shared/types/platfor
 const macosAiRuntimeTypesSource = await fs.readFile('src/shared/types/macos-ai-runtime.types.ts', 'utf8')
 const windowsAiRuntimeTypesSource = await fs.readFile('src/shared/types/windows-ai-runtime.types.ts', 'utf8')
 const windowsAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/windows-ai-runtime.constants.ts', 'utf8')
+const concretePlatformRuntimeTypePattern = /MacOSAiWorkerProbeResult|WindowsAiWorkerProbeResult|MacOSAiBranchRuntimeMetadata|WindowsAiBranchRuntimeMetadata|MacOSAiRuntimeLane|WindowsAiRuntimeLane/
+const concretePlatformRuntimeTypeFiles = (await Promise.all(
+  (await listSourceFiles('src')).map(async (file) => {
+    const source = await fs.readFile(file, 'utf8')
+    return concretePlatformRuntimeTypePattern.test(source) ? file : null
+  })
+)).filter((file): file is string => Boolean(file)).sort()
+assert.deepEqual(concretePlatformRuntimeTypeFiles, [
+  'src/main/ipc/ai-runtime.ipc.ts',
+  'src/main/services/ai-client.service.ts',
+  'src/shared/constants/macos-ai-runtime.constants.ts',
+  'src/shared/constants/windows-ai-runtime.constants.ts',
+  'src/shared/contracts/ai-runtime.contract.ts',
+  'src/shared/types/macos-ai-runtime.types.ts',
+  'src/shared/types/windows-ai-runtime.types.ts',
+  'src/shared/workflows/ai-runtime-status.workflow.ts'
+])
 assert.match(platformAiRuntimeTypesSource, /export type AiCapabilityStatus/)
 assert.match(platformAiRuntimeTypesSource, /export type PlatformAiRuntimeBranchPhase/)
 assert.match(platformAiRuntimeTypesSource, /export interface PlatformAiRuntimeLaneBase/)

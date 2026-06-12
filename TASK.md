@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Added a guardrail for the remaining concrete Platform AI runtime
+  type usages. `scripts/ai-runtime-status-workflow.test.ts` now scans `src`
+  and allows concrete macOS/Windows runtime types only in IPC contracts,
+  platform constants/types, main-process runtime wiring, and the shared
+  platform-specific detail projector/extraction boundary. This protects the
+  newly shared renderer surfaces from reintroducing concrete macOS/Windows
+  probe or branch unions. Validation passed
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `npm run typecheck`, `npm run build`, and `git diff --check`. Windows
+  real-evidence validation was not repeated for this test-only guardrail
+  change because no product renderer, IPC, runtime, or response shape code
+  changed; the latest screenshot/overflow evidence from the previous renderer
+  slice remains applicable. Next smallest slice: continue the boundary audit
+  by checking whether any shared workflow projector still mixes platform detail
+  evidence into platform-neutral display helpers.
 - 2026-06-12 Continued Settings shared renderer-ready type cleanup. Added
   `PlatformAiLaneDisplayCapability` and `PlatformAiLaneDisplayInput` to the
   platform AI runtime shared types, then moved the Settings
