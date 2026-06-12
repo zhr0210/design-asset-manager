@@ -26,6 +26,7 @@ import {
 import { createMacOSAiBranchRuntimeMetadata } from '../../shared/constants/macos-ai-runtime.constants'
 import { createWindowsAiBranchRuntimeMetadata } from '../../shared/constants/windows-ai-runtime.constants'
 import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
+import type { RuntimeProfileId } from '../../shared/types/runtime-profile.types'
 import type {
   AiRuntimeGetStateRequest,
   AiRuntimeHealthCheckRequest,
@@ -70,12 +71,53 @@ function resolveRuntimePythonExecutable(): string {
   return resolvePythonExecutable()
 }
 
+interface PlatformAiBranchRuntimeProviderDescriptor {
+  id: string
+  displayName: string
+  platform: PlatformName
+  resolveProfileId: (currentPlatform: PlatformName, currentArch: PlatformArch) => RuntimeProfileId | null
+  createMetadata: (currentPlatform: PlatformName, currentArch: PlatformArch) => Record<string, unknown>
+}
+
+function resolveMacOSAiBranchProfileId(
+  currentPlatform: PlatformName,
+  currentArch: PlatformArch
+): RuntimeProfileId | null {
+  if (currentPlatform !== 'darwin') return null
+  return currentArch === 'arm64' ? 'macos-apple-silicon' : 'macos-intel'
+}
+
+function resolveWindowsAiBranchProfileId(currentPlatform: PlatformName): RuntimeProfileId | null {
+  return currentPlatform === 'win32' ? 'windows-nvidia-cuda' : null
+}
+
+const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimeProviderDescriptor[] = [
+  {
+    id: 'macos-ai-branch-runtime',
+    displayName: 'macOS AI Branch Runtime',
+    platform: 'darwin',
+    resolveProfileId: resolveMacOSAiBranchProfileId,
+    createMetadata: (currentPlatform, currentArch) => ({
+      displayName: 'macOS AI Branch',
+      macosAiBranch: createMacOSAiBranchRuntimeMetadata(currentPlatform, currentArch)
+    })
+  },
+  {
+    id: 'windows-ai-branch-runtime',
+    displayName: 'Windows AI Branch Runtime',
+    platform: 'win32',
+    resolveProfileId: resolveWindowsAiBranchProfileId,
+    createMetadata: (currentPlatform, currentArch) => ({
+      displayName: 'Windows AI Branch',
+      windowsAiBranch: createWindowsAiBranchRuntimeMetadata(currentPlatform, currentArch)
+    })
+  }
+]
+
 function createSafeAiRuntimeManager(): AiRuntimeManager {
   const manager = new AiRuntimeManager()
   const currentPlatform = process.platform as PlatformName
   const currentArch = process.arch as PlatformArch
-  const macosAiBranchMetadata = createMacOSAiBranchRuntimeMetadata(currentPlatform, currentArch)
-  const windowsAiBranchMetadata = createWindowsAiBranchRuntimeMetadata(currentPlatform, currentArch)
 
   const isWin = currentPlatform === 'win32'
   const appDataRoot = isWin
@@ -83,26 +125,15 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
     : path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime')
 
   manager.registerProvider(new DisabledAiRuntimeProvider({ id: 'disabled-runtime' }))
-  manager.registerProvider(new DisabledAiRuntimeProvider({
-    id: 'macos-ai-branch-runtime',
-    displayName: 'macOS AI Branch Runtime',
-    platform: 'darwin',
-    profileId: currentPlatform === 'darwin' ? (currentArch === 'arm64' ? 'macos-apple-silicon' : 'macos-intel') : null,
-    metadata: {
-      displayName: 'macOS AI Branch',
-      macosAiBranch: macosAiBranchMetadata
-    }
-  }))
-  manager.registerProvider(new DisabledAiRuntimeProvider({
-    id: 'windows-ai-branch-runtime',
-    displayName: 'Windows AI Branch Runtime',
-    platform: 'win32',
-    profileId: currentPlatform === 'win32' ? 'windows-nvidia-cuda' : null,
-    metadata: {
-      displayName: 'Windows AI Branch',
-      windowsAiBranch: windowsAiBranchMetadata
-    }
-  }))
+  for (const descriptor of PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS) {
+    manager.registerProvider(new DisabledAiRuntimeProvider({
+      id: descriptor.id,
+      displayName: descriptor.displayName,
+      platform: descriptor.platform,
+      profileId: descriptor.resolveProfileId(currentPlatform, currentArch),
+      metadata: descriptor.createMetadata(currentPlatform, currentArch)
+    }))
+  }
   manager.registerProvider(new PythonWorkerRuntimeProvider(
     createDefaultPythonWorkerRuntimeConfig({
       runtimeId: 'python-worker-runtime',

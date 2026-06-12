@@ -131,7 +131,10 @@ paths or model cache paths.
    runtime metadata lookup now also uses `PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS`
    and `CURRENT_PLATFORM_AI_BRANCH_PRIORITY` instead of hand-written
    macOS/Windows metadata-key calls; marker-to-branch resolution uses
-   `PLATFORM_AI_BRANCH_BY_MARKER`.
+   `PLATFORM_AI_BRANCH_BY_MARKER`. Main-process disabled branch runtime
+   provider registration now uses `PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS`
+   so the existing runtime ids, platforms, metadata keys, and profile rules are
+   registered through one shared loop.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

@@ -78,6 +78,13 @@ That change also did not alter renderer output, runtime behavior, IPC channels,
 shared response fields, database schema, or AI Worker HTTP API shapes, so the
 latest full Windows evidence remains the validation run reported above.
 
+Another 2026-06-13 main-process refactor moved Platform AI branch runtime
+provider registration to descriptors while preserving the existing runtime ids,
+platforms, profile rules, and metadata keys. That registration-only change did
+not alter renderer output, runtime probing, IPC channels, shared response
+fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
+evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

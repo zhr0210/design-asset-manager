@@ -89,6 +89,21 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved main-process Platform AI branch runtime provider
+  registration to descriptor metadata. `PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS`
+  now owns the existing macOS and Windows disabled branch runtime ids,
+  display names, platforms, metadata factories, and profile-id rules, while the
+  registration loop remains shared. The existing runtime ids
+  `macos-ai-branch-runtime` and `windows-ai-branch-runtime`, metadata keys,
+  profile semantics, IPC channels, database schema, AI Worker HTTP API, shared
+  response fields, runtime behavior, and displayed output are unchanged.
+  Focused IPC source contracts preserve the descriptor table and prevent the
+  old per-platform metadata variables from returning. UI validation and the
+  full Windows real-evidence script were not run for this main-process
+  registration refactor because no product-facing renderer output or runtime
+  probe behavior changed. Next smallest slice: continue auditing only the
+  remaining main/shared platform checks that are not true path/process/runtime
+  adapters.
 - 2026-06-13 Moved shared Platform AI branch-runtime metadata selection to
   branch-keyed descriptors. `PLATFORM_AI_BRANCH_RUNTIME_DESCRIPTORS` now owns
   the macOS/Windows metadata keys and markers, `CURRENT_PLATFORM_AI_BRANCH_PRIORITY`
