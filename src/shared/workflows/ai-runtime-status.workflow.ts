@@ -1,10 +1,8 @@
 import type {
   AiRuntimeClipSiglipOnnxStatusResponse,
   AiRuntimeOnnxModelLoadProbeResponse,
-  AiRuntimePythonMpsExecutionProbeResponse,
-  AiRuntimePythonMpsStatusResponse,
-  AiRuntimePythonCudaStatusResponse,
-  AiRuntimePythonCudaExecutionProbeResponse
+  AiRuntimePythonCompatibilityStatusResponseBase,
+  AiRuntimePythonExecutionProbeResponseBase
 } from '../contracts/ai-runtime.contract'
 import type {
   AiRuntimeHealthResult,
@@ -148,7 +146,7 @@ const TONE_CLASS: Record<AiRuntimeDisplayTone, string> = {
 }
 
 export function projectPythonMpsCompatibilityDisplay(
-  status?: AiRuntimePythonMpsStatusResponse | null,
+  status?: AiRuntimePythonCompatibilityStatusResponseBase | null,
   error?: string | null
 ): AiRuntimeCompatibilityDisplay {
   if (!status) {
@@ -165,12 +163,12 @@ export function projectPythonMpsCompatibilityDisplay(
 
 export function projectPlatformPythonRuntimeCompatibilityDisplay(
   platformBranch: PlatformAiBranch,
-  status?: AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse | null,
+  status?: AiRuntimePythonCompatibilityStatusResponseBase | null,
   error?: string | null
 ): AiRuntimeCompatibilityDisplay {
   return platformBranch === 'windows'
-    ? projectPythonCudaCompatibilityDisplay(status as AiRuntimePythonCudaStatusResponse, error)
-    : projectPythonMpsCompatibilityDisplay(status as AiRuntimePythonMpsStatusResponse, error)
+    ? projectPythonCudaCompatibilityDisplay(status, error)
+    : projectPythonMpsCompatibilityDisplay(status, error)
 }
 
 export function projectClipSiglipOnnxCompatibilityDisplay(
@@ -226,7 +224,7 @@ export function projectOnnxModelLoadProbeDisplay(
 }
 
 export function projectPythonMpsExecutionProbeDisplay(
-  probe?: AiRuntimePythonMpsExecutionProbeResponse | null,
+  probe?: AiRuntimePythonExecutionProbeResponseBase | null,
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
   if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得 MPS 执行证据。')
@@ -248,12 +246,12 @@ export function projectPythonMpsExecutionProbeDisplay(
 
 export function projectPlatformPythonRuntimeExecutionProbeDisplay(
   platformBranch: PlatformAiBranch,
-  probe?: AiRuntimePythonMpsExecutionProbeResponse | AiRuntimePythonCudaExecutionProbeResponse | null,
+  probe?: AiRuntimePythonExecutionProbeResponseBase | null,
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
   return platformBranch === 'windows'
-    ? projectPythonCudaExecutionProbeDisplay(probe as AiRuntimePythonCudaExecutionProbeResponse, error)
-    : projectPythonMpsExecutionProbeDisplay(probe as AiRuntimePythonMpsExecutionProbeResponse, error)
+    ? projectPythonCudaExecutionProbeDisplay(probe, error)
+    : projectPythonMpsExecutionProbeDisplay(probe, error)
 }
 
 export function projectAiRuntimePlatformPanelCopy(platformBranch: PlatformAiBranch): AiRuntimePlatformPanelCopy {
@@ -669,7 +667,7 @@ export function projectAiRuntimeBranchPanelDisplay(
 }
 
 export function projectPythonCudaCompatibilityDisplay(
-  status?: AiRuntimePythonCudaStatusResponse | null,
+  status?: AiRuntimePythonCompatibilityStatusResponseBase | null,
   error?: string | null
 ): AiRuntimeCompatibilityDisplay {
   if (!status) {
@@ -685,7 +683,7 @@ export function projectPythonCudaCompatibilityDisplay(
 }
 
 export function projectPythonCudaExecutionProbeDisplay(
-  probe?: AiRuntimePythonCudaExecutionProbeResponse | null,
+  probe?: AiRuntimePythonExecutionProbeResponseBase | null,
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
   if (!probe && error) return modelLoadProbeDisplay('Worker 不可达', 'muted', '当前无法连接 AI Worker，尚未获得 CUDA 执行证据。')

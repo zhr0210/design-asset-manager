@@ -89,6 +89,30 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Shared the Python runtime compatibility and execution projector
+  inputs without changing their concrete IPC method signatures.
+  `AiRuntimePythonCompatibilityStatusResponseBase` and
+  `AiRuntimePythonExecutionProbeResponseBase` now own the fields consumed by
+  shared display workflows; the existing MPS/CUDA response interfaces extend
+  those bases at the contract boundary. The runtime-status workflow no longer
+  imports concrete MPS/CUDA response types or casts between them. No IPC
+  channel, AI Worker HTTP API, database schema, or shared response field
+  changed. Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-ipc-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. The Windows
+  full validation script completed its build, runtime-safety, Python, ONNX,
+  and Electron/Playwright checks; WD Tagger/CLIP workflows remained
+  `real_model_path`, and no document/body horizontal overflow was found at
+  `1264x793`. Its isolated app profile could not find `llama-server.exe`, so
+  this run left `ai_prompt_task` at `runtime_probe_ready` instead of repeating
+  the successful Llama text/image evidence from the immediately preceding
+  17:26 run. Next smallest slice: consolidate the duplicated MPS/CUDA
+  compatibility and execution display implementations behind shared helpers
+  while preserving platform-specific copy and exported wrapper names.
 - 2026-06-12 Replaced renderer/shared AI Runtime panel platform booleans with
   the shared `PlatformAiBranch` domain type. `resolvePlatformAiBranch()` now
   converts current branch metadata once; Settings passes that value through

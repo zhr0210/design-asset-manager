@@ -75,8 +75,10 @@ paths or model cache paths.
    Renderer and shared runtime-status workflows no longer reference concrete
    macOS/Windows branch or Worker probe result types. Shared branch metadata,
    Worker diagnostics input, runtime-version probe, and display types now cover
-   those consumers. Concrete response types remain at main-process, IPC
-   contract, platform type-definition, and genuine MPS/CUDA detail boundaries.
+   those consumers. Shared Python compatibility and execution response bases
+   also cover display projectors without MPS/CUDA unions or casts. Concrete
+   response names remain at main-process, IPC contract, platform
+   type-definition, and genuine MPS/CUDA adapter boundaries.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

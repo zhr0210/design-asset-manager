@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 17:26, Windows host local time.
-- Commit tested: worktree based on `b26d016`, with the shared
-  `PlatformAiBranch` panel/projector input slice applied.
+- Validation time: 2026-06-12 17:32, Windows host local time.
+- Commit tested: worktree based on `7864980`, with the shared Python runtime
+  compatibility/execution response-base slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -24,15 +24,13 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   warnings.
 - `npm run ci:test-runtime-safety`: passed.
 - Python unittest discovery: passed.
-- Llama IPC refresh: selected `qwen3-vl-2b-instruct-q4-k-m`, started
-  `llama-server`, and ran text plus generated-image multimodal probe.
-- Llama multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
-  `visionInput=generated_fixture`.
+- Llama IPC refresh: the isolated validation app profile could not find
+  `llama-server.exe`, so this run did not repeat the text/generated-image
+  multimodal probe.
 - Windows Platform AI Branch Status: returned `success=true`,
-  `platformBranch=windows`; `ai_tag_task`, `ai_prompt_task`, and
-  `search_embedding` reported `real_model_path`.
-- Llama CUDA lane: reported `real_model_path` with `artifact_ready` and
-  `real_backend_loaded` evidence from text plus generated-image inference.
+  `platformBranch=windows`; `ai_tag_task` and `search_embedding` reported
+  `real_model_path`, while `ai_prompt_task` and `ocr_text_box` reported
+  `runtime_probe_ready`.
 - Electron/Playwright AI Console: screenshot captured on the Windows desktop.
 - Overflow check: `doc=false`, `body=false`, viewport `1264x793`.
 - Focused validation gate before the full script also passed:
@@ -41,19 +39,28 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: Settings and AI Console now pass the shared
-  `PlatformAiBranch` value through Worker probe panels, capability matrices,
-  platform copy, and compatibility/execution display projectors instead of
-  renderer `isWindows` props.
-- Failures/blockers: none for the Windows real-evidence routes covered by this
-  slice.
-- Next recommended action: audit platform Python compatibility/execution
-  projector inputs for a shared response subset that can remove remaining
-  MPS/CUDA response unions and casts while preserving concrete IPC signatures.
+- Shared-surface slice: shared Python compatibility and execution response
+  bases now cover the fields consumed by display projectors. Concrete MPS/CUDA
+  response names remain on IPC methods, while the shared workflow contains no
+  concrete response union or cast.
+- Failures/blockers: no code-validation blocker. Llama revalidation was
+  unavailable to this isolated run because its app profile had no installed
+  executable. The immediately preceding 17:26 run successfully completed
+  Llama text plus generated-image inference, so the previously closed real
+  evidence remains recorded without treating this environment gap as a code
+  regression.
+- Next recommended action: consolidate duplicated MPS/CUDA compatibility and
+  execution display logic behind shared helpers while preserving
+  platform-specific copy and exported wrappers.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-172616.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-173047.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
+
+The immediately preceding full-route success log is
+`dam-windows-ai-validation-20260612-172616.log`; it recorded
+`chatOk=true`, `visionOk=true`, `success=true`, and
+`ai_prompt_task=real_model_path`.
 
 ## Previous Reported Result
 

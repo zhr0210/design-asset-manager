@@ -48,7 +48,7 @@ export interface AiRuntimeWindowsCapabilitiesResponse {
 
 export type AiRuntimePlatformAiBranchStatusResponse = PlatformAiBranchStatusResponse
 
-export interface AiRuntimePythonMpsStatusResponse {
+export interface AiRuntimePythonCompatibilityStatusResponseBase {
   success: boolean
   compatible: boolean
   runtime?: string | null
@@ -57,14 +57,9 @@ export interface AiRuntimePythonMpsStatusResponse {
   error?: string | null
 }
 
-export interface AiRuntimePythonCudaStatusResponse {
-  success: boolean
-  compatible: boolean
-  runtime?: string | null
-  status: 'optional' | 'planned' | 'unavailable'
-  diagnostics: Record<string, unknown>
-  error?: string | null
-}
+export interface AiRuntimePythonMpsStatusResponse extends AiRuntimePythonCompatibilityStatusResponseBase {}
+
+export interface AiRuntimePythonCudaStatusResponse extends AiRuntimePythonCompatibilityStatusResponseBase {}
 
 export interface AiRuntimeClipSiglipOnnxStatusResponse {
   success: boolean
@@ -74,7 +69,7 @@ export interface AiRuntimeClipSiglipOnnxStatusResponse {
   error?: string | null
 }
 
-export interface AiRuntimePythonMpsExecutionProbeResponse {
+export interface AiRuntimePythonExecutionProbeResponseBase {
   success: boolean
   status: 'executed_real' | 'dependency_missing' | 'backend_unavailable' | 'execution_failed' | 'unsupported'
   checkedAt: string
@@ -85,16 +80,9 @@ export interface AiRuntimePythonMpsExecutionProbeResponse {
   errorType?: string | null
 }
 
-export interface AiRuntimePythonCudaExecutionProbeResponse {
-  success: boolean
-  status: 'executed_real' | 'dependency_missing' | 'backend_unavailable' | 'execution_failed' | 'unsupported'
-  checkedAt: string
-  runtime?: string | null
-  operation: 'tensor_square_sum'
-  resultFinite: boolean
-  errorCode?: string | null
-  errorType?: string | null
-}
+export interface AiRuntimePythonMpsExecutionProbeResponse extends AiRuntimePythonExecutionProbeResponseBase {}
+
+export interface AiRuntimePythonCudaExecutionProbeResponse extends AiRuntimePythonExecutionProbeResponseBase {}
 
 export interface AiRuntimeOnnxModelLoadProbeResponse {
   success: boolean
