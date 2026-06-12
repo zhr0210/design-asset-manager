@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 23:26, Windows host local time.
-- Commit tested: worktree based on `d8046a8`, with branch-keyed Platform AI
-  action command override metadata applied.
+- Validation time: 2026-06-12 23:30, Windows host local time.
+- Commit tested: worktree based on `2b9b512`, with branch-keyed Worker probe
+  connection and accelerator accessors applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,19 +42,19 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: `PLATFORM_ACTION_COMMAND_OVERRIDES` now owns the
-  existing macOS AI Tag runtime-dependency installer command. Windows and
-  unspecified branches continue to resolve the same action plan to the shared
-  Runtime management tab.
+- Shared-surface slice: `PLATFORM_AI_WORKER_PROBE_ACCESSORS` now owns the
+  genuine macOS connection/MPS reads and Windows connection/CUDA reads. Shared
+  diagnostics projection remains responsible for the common ONNX and CLIP
+  display fields.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: centralize Worker probe connection and
-  accelerator-field selection in branch-keyed accessors while preserving
-  genuine MPS/CUDA fields.
+- Next recommended action: replace diagnostics-selection `useWindows` control
+  flow with a branch-indexed probe map and explicit branch resolver while
+  preserving current fallback inference.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-232500.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-232915.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

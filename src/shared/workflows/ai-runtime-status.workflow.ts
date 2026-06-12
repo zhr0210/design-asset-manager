@@ -549,14 +549,28 @@ function projectPlatformAiWorkerProbeHeaderDisplay(
   }
 }
 
+interface PlatformAiWorkerProbeAccessors {
+  isConnected: (probe: Pick<PlatformAiWorkerProbeResultBase, 'platform' | 'isMacOS'>) => boolean
+  isAcceleratorAvailable: (probe: PlatformAiWorkerProbeDiagnosticsInput) => boolean
+}
+
+const PLATFORM_AI_WORKER_PROBE_ACCESSORS: Record<PlatformAiBranch, PlatformAiWorkerProbeAccessors> = {
+  macos: {
+    isConnected: (probe) => probe.isMacOS,
+    isAcceleratorAvailable: (probe) => Boolean(probe.torch.mpsAvailable)
+  },
+  windows: {
+    isConnected: (probe) => probe.platform === 'win32' || probe.platform === 'windows',
+    isAcceleratorAvailable: (probe) => Boolean(probe.torch.cudaAvailable)
+  }
+}
+
 function isPlatformAiWorkerProbeConnected(
   platformBranch: PlatformAiBranch,
   probe?: Pick<PlatformAiWorkerProbeResultBase, 'platform' | 'isMacOS'> | null
 ): boolean {
   if (!probe) return false
-  return platformBranch === 'windows'
-    ? probe.platform === 'win32' || probe.platform === 'windows'
-    : probe.isMacOS
+  return PLATFORM_AI_WORKER_PROBE_ACCESSORS[platformBranch].isConnected(probe)
 }
 
 export function projectPlatformAiWorkerProbeDiagnosticsDisplay(
@@ -577,9 +591,8 @@ export function projectPlatformAiWorkerProbeDiagnosticsDisplay(
 
   const connected = isPlatformAiWorkerProbeConnected(platformBranch, probe)
   const clipSiglipStatus = projectAiCapabilityStatusDisplay(probe.clipSiglipOnnx.status)
-  const acceleratorAvailable = platformBranch === 'windows'
-    ? probe.torch.cudaAvailable
-    : probe.torch.mpsAvailable
+  const acceleratorAvailable = PLATFORM_AI_WORKER_PROBE_ACCESSORS[platformBranch]
+    .isAcceleratorAvailable(probe)
 
   return {
     ...projectPlatformAiWorkerProbeHeaderDisplay(probe, connected, connectedLabel),

@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Centralized shared Worker probe platform field selection.
+  `PLATFORM_AI_WORKER_PROBE_ACCESSORS` now owns macOS connection/MPS reads and
+  Windows connection/CUDA reads. Shared diagnostics and Worker-panel projectors
+  select those accessors by `PlatformAiBranch` while continuing to project the
+  same ONNX and CLIP fields. Genuine platform fields remain explicit in the
+  accessor table; probe inputs, display output, IPC channels, response shapes,
+  and runtime behavior are unchanged. Focused source contracts prevent
+  Windows/macOS conditions from returning to the shared diagnostics projector.
+  The required four focused TypeScript tests, Windows validation privacy
+  contract, typecheck, build, docs sync, and diff checks passed. The full
+  Windows script passed runtime-safety, Python, ONNX, Llama
+  text/generated-image, and Electron/Playwright checks; `chatOk` and `visionOk`
+  were true, Tag/Prompt/Search reported `real_model_path`, OCR reported
+  `runtime_probe_ready`, the `1264x793` viewport had no horizontal overflow,
+  and the saved log contained zero absolute Windows paths. Next smallest
+  slice: replace the diagnostics-selection `useWindows` control branch with a
+  branch-indexed probe map and explicit branch resolver while preserving
+  current fallback inference.
 - 2026-06-12 Moved the sole platform-specific Platform AI action command
   exception into typed branch metadata. `PLATFORM_ACTION_COMMAND_OVERRIDES`
   now declares the existing macOS AI Tag runtime-dependency installer command;

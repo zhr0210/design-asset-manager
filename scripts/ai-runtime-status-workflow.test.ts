@@ -785,6 +785,7 @@ assert.doesNotMatch(runtimeWorkflowSource, /\bprojectMacOSAiWorkerProbeDisplay\b
 assert.doesNotMatch(runtimeWorkflowSource, /\bprojectWindowsAiWorkerProbeDisplay\b/)
 assert.match(runtimeWorkflowSource, /interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
 assert.match(runtimeWorkflowSource, /const PLATFORM_AI_SURFACE_COPY: Record<PlatformAiBranch, PlatformAiSurfaceCopy>/)
+assert.match(runtimeWorkflowSource, /const PLATFORM_AI_WORKER_PROBE_ACCESSORS: Record<PlatformAiBranch, PlatformAiWorkerProbeAccessors>/)
 assert.match(runtimeWorkflowSource, /function isPlatformAiWorkerProbeConnected/)
 assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
@@ -804,8 +805,8 @@ for (const helperName of [
 }
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
-  /probe\.torch\.cudaAvailable[\s\S]*probe\.torch\.mpsAvailable[\s\S]*probe\.onnxruntime\.providers[\s\S]*probe\.clipSiglipOnnx\.version/,
-  'shared Worker projector should own the branch-selected accelerator plus shared ONNX and CLIP diagnostics fields'
+  /PLATFORM_AI_WORKER_PROBE_ACCESSORS\[platformBranch\][\s\S]*probe\.onnxruntime\.providers[\s\S]*probe\.clipSiglipOnnx\.version/,
+  'shared Worker projector should use branch accessors plus shared ONNX and CLIP diagnostics fields'
 )
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeWorkerProbePanelDisplay'),
@@ -840,8 +841,12 @@ assert.doesNotMatch(
   /platformBranch === 'windows'|if \(/
 )
 assert.match(
+  runtimeWorkflowSource,
+  /macos:[\s\S]*probe\.isMacOS[\s\S]*probe\.torch\.mpsAvailable[\s\S]*windows:[\s\S]*probe\.platform === 'win32'[\s\S]*probe\.torch\.cudaAvailable/
+)
+assert.doesNotMatch(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
-  /platformBranch === 'windows'[\s\S]*probe\.torch\.cudaAvailable[\s\S]*probe\.torch\.mpsAvailable/
+  /platformBranch === 'windows'/
 )
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /selectPlatformAiRuntimeRequests/)

@@ -109,7 +109,10 @@ paths or model cache paths.
    applicable platform topology. Platform AI action command routing now keeps
    its sole macOS-specific AI Tag runtime installer in
    `PLATFORM_ACTION_COMMAND_OVERRIDES`; Windows and unspecified branches retain
-   the shared Runtime management command.
+   the shared Runtime management command. Worker diagnostics now use
+   `PLATFORM_AI_WORKER_PROBE_ACCESSORS` for the genuine macOS
+   `isMacOS`/MPS fields and Windows platform/CUDA fields, leaving the shared
+   projector free of platform control-flow branches.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
