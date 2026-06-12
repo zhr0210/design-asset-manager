@@ -8,8 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 14:32, Windows host local time.
-- Commit tested: `21ee6d9`.
+- Validation time: 2026-06-12 14:49, Windows host local time.
+- Commit tested: worktree based on `9315845`, with the shared Worker probe
+  panel input type slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -40,6 +41,11 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
+- Shared-surface slice: `AiRuntimePanel` now stores/passes Worker probe data as
+  `PlatformAiWorkerProbeWithRuntimeVersions`, and
+  `projectAiRuntimeWorkerProbePanelDisplay()` accepts
+  `PlatformAiWorkerProbeResultBase` instead of a concrete macOS/Windows Worker
+  probe union.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   slice.
 - Next recommended action: continue Remaining Work item 1 by moving
@@ -48,7 +54,7 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   result types at IPC and platform-specific projector boundaries.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-143229.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-144921.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result

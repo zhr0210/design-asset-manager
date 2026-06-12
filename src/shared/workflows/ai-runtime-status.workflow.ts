@@ -716,10 +716,20 @@ export function projectWindowsAiWorkerProbeDisplay(
 
 export function projectAiRuntimeWorkerProbePanelDisplay(
   isWindows: boolean,
-  probe?: MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null
+  probe?: PlatformAiWorkerProbeResultBase | null
 ): AiRuntimeWorkerProbePanelDisplay {
+  const connected = probe
+    ? isWindows
+      ? probe.platform === 'win32' || probe.platform === 'windows'
+      : probe.isMacOS
+    : false
+  const display = projectPlatformAiWorkerProbeHeaderDisplay(
+    probe ?? null,
+    connected,
+    isWindows ? 'Windows 探测已连接' : 'macOS 探测已连接'
+  )
+
   if (isWindows) {
-    const display = projectWindowsAiWorkerProbeDisplay(probe as WindowsAiWorkerProbeResult)
     return projectAiRuntimeWorkerProbePanelFromHeader(
       display,
       'Windows Worker 实时探测',
@@ -727,7 +737,6 @@ export function projectAiRuntimeWorkerProbePanelDisplay(
     )
   }
 
-  const display = projectMacOSAiWorkerProbeDisplay(probe as MacOSAiWorkerProbeResult)
   return projectAiRuntimeWorkerProbePanelFromHeader(
     display,
     'macOS Worker 实时探测',

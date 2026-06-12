@@ -3,11 +3,10 @@ import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw,
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
 import type {
   MacOSAiBranchRuntimeMetadata,
-  MacOSAiRuntimeLane,
-  MacOSAiWorkerProbeResult
+  MacOSAiRuntimeLane
 } from '../../../shared/types/macos-ai-runtime.types'
-import type { AiCapabilityStatus } from '../../../shared/types/platform-ai-runtime.types'
-import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
+import type { AiCapabilityStatus, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
+import type { WindowsAiBranchRuntimeMetadata } from '../../../shared/types/windows-ai-runtime.types'
 import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
 import type {
   AiRuntimeActiveRuntimeResponse,
@@ -97,7 +96,7 @@ export default function AiRuntimePanel() {
   const [runtimes, setRuntimes] = useState<AiRuntimeState[]>([])
   const [activeRuntime, setActiveRuntime] = useState<AiRuntimeState | null>(null)
   const [healthResults, setHealthResults] = useState<Record<string, AiRuntimeHealthResult>>({})
-  const [platformWorkerProbe, setPlatformWorkerProbe] = useState<MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null>(null)
+  const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
   const [platformWorkerProbeError, setPlatformWorkerProbeError] = useState<string | null>(null)
   const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse | null>(null)
   const [pythonMpsStatusError, setPythonMpsStatusError] = useState<string | null>(null)
@@ -605,7 +604,7 @@ function PlatformAiWorkerProbePanel({
   error,
   isWindows
 }: {
-  probe: MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null
+  probe: PlatformAiWorkerProbeWithRuntimeVersions | null
   error: string | null
   isWindows: boolean
 }) {

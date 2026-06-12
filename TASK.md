@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued Remaining Work item 1 by removing another renderer/shared
+  workflow dependency on concrete macOS/Windows Worker probe result unions.
+  `AiRuntimePanel` now stores and passes Worker probe data as
+  `PlatformAiWorkerProbeWithRuntimeVersions`, while
+  `projectAiRuntimeWorkerProbePanelDisplay()` only requires
+  `PlatformAiWorkerProbeResultBase`; concrete macOS/Windows probe result types
+  remain at IPC response and platform-specific detail projector boundaries.
+  Focused validation passed
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. Windows real-evidence validation also passed via
+  `powershell -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1`;
+  it confirmed `ai_tag_task`, `ai_prompt_task`, and `search_embedding` as
+  `real_model_path`, captured `dam-windows-ai-console.png`, and reported
+  overflow `doc=false`, `body=false` at `1264x793`. Next smallest slice:
+  inspect AI Console platform probe consumption for shared-view candidates
+  without changing IPC channels or response shapes.
 - 2026-06-12 Windows-host Codex fast-forwarded `codex/windows-ai-real-evidence`
   to `21ee6d9` and completed the validation-only gate for the latest Mac-side
   shared Platform AI runtime type/projection changes. Passed:
