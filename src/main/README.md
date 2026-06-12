@@ -28,6 +28,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.1.3 | 2026-06-12 | Reused shared Python and Llama accelerator lane families for model-readiness projection. |
 | v1.1.2 | 2026-06-12 | Centralized Platform AI runtime lane labels and runtime-kind matching while preserving platform topology. |
 | v1.1.1 | 2026-06-12 | Separated shared Platform AI workflow metadata from macOS/Windows runtime lane definitions. |
 | v1.1.0 | 2026-06-04 | Added shared Windows/macOS orchestration and Platform AI Branch Status projector rules. |

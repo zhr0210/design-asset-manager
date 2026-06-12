@@ -6,6 +6,7 @@ import type {
   PlatformAiBranchStatusResponse,
   PlatformAiMissingRequirement,
   PlatformAiNextAction,
+  PlatformAiRuntimeLaneId,
   PlatformAiRuntimeLaneEvidence,
   PlatformAiStatusEvidence,
   PlatformAiWorkflow,
@@ -23,21 +24,12 @@ export interface PlatformAiBranchStatusProjectorInput {
 
 interface WorkflowDefinition {
   workflow: PlatformAiWorkflow
-  primaryRuntimeLane: string
+  primaryRuntimeLane: PlatformAiRuntimeLaneId
   runtimeLanes: RuntimeLaneDefinition[]
 }
 
-type RuntimeLaneId =
-  | 'python_mps'
-  | 'python_cuda'
-  | 'onnx_runtime'
-  | 'llama_metal'
-  | 'llama_cuda'
-  | 'ollama'
-  | 'external_http'
-
 interface RuntimeLaneDefinition {
-  lane: RuntimeLaneId
+  lane: PlatformAiRuntimeLaneId
   label: string
   runtimeKinds: readonly AiRuntimeKind[]
 }
@@ -48,7 +40,7 @@ interface RuntimeLaneMetadata {
   branchRuntimeKinds?: Partial<Record<PlatformAiBranch, readonly AiRuntimeKind[]>>
 }
 
-const RUNTIME_LANE_METADATA: Record<RuntimeLaneId, RuntimeLaneMetadata> = {
+const RUNTIME_LANE_METADATA: Record<PlatformAiRuntimeLaneId, RuntimeLaneMetadata> = {
   python_mps: {
     label: 'Python MPS Runtime',
     runtimeKinds: ['python-worker']
@@ -84,7 +76,7 @@ const RUNTIME_LANE_METADATA: Record<RuntimeLaneId, RuntimeLaneMetadata> = {
 
 function runtimeLane(
   platformBranch: PlatformAiBranch,
-  lane: RuntimeLaneId,
+  lane: PlatformAiRuntimeLaneId,
   label?: string
 ): RuntimeLaneDefinition {
   const metadata = RUNTIME_LANE_METADATA[lane]

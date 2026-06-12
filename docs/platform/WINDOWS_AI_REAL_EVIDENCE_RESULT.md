@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 23:14, Windows host local time.
-- Commit tested: worktree based on `1dde5ef`, with the main-process shared
-  runtime lane metadata consolidation applied.
+- Validation time: 2026-06-12 23:21, Windows host local time.
+- Commit tested: worktree based on `c2b3fa1`, with the shared runtime lane ID
+  and model-readiness route-family consolidation applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,20 +42,20 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: `RUNTIME_LANE_METADATA` now owns default lane labels
-  and runtime kinds, including the existing macOS external-HTTP Ollama
-  fallback. The macOS/Windows `WORKFLOWS` tables retain genuine lane
-  membership, order, primary-lane selection, and workflow-specific CLIP
-  labels.
+- Shared-surface slice: one platform-neutral `PlatformAiRuntimeLaneId` now
+  covers main-process lane metadata and model-readiness routes. Shared Python
+  and Llama accelerator lane families replace repeated MPS/CUDA and Metal/CUDA
+  route literals while preserving simultaneous evidence projection for both
+  branches.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: audit repeated macOS/Windows lane pairs in
-  `model-artifact-readiness.mapper.ts` for a branch-keyed shared selector while
-  preserving artifact evidence semantics.
+- Next recommended action: audit the single macOS-only runtime-install
+  exception in `resolvePlatformAiActionCommand()` for branch-keyed command
+  metadata while preserving every existing action command.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-231312.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-232015.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

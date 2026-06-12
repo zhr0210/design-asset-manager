@@ -324,5 +324,9 @@ const readinessMapperSource = await fs.readFile(
 )
 assert.match(readinessMapperSource, /WorkerModelStatusSnapshot/)
 assert.doesNotMatch(readinessMapperSource, /type WorkerModelStatusLike\s*=/)
+assert.match(readinessMapperSource, /const PYTHON_ACCELERATOR_RUNTIME_LANES =/)
+assert.match(readinessMapperSource, /const LLAMA_ACCELERATOR_RUNTIME_LANES =/)
+assert.match(readinessMapperSource, /function acceleratedRuntimeRoutes\(/)
+assert.doesNotMatch(readinessMapperSource, /\['llama_metal', 'llama_cuda'\]\.map/)
 
 console.log('model-artifact-readiness-display passed')

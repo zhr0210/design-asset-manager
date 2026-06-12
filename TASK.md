@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Added one platform-neutral `PlatformAiRuntimeLaneId` type and
+  centralized dual-platform model-readiness route families.
+  `PYTHON_ACCELERATOR_RUNTIME_LANES`,
+  `LLAMA_ACCELERATOR_RUNTIME_LANES`, and `acceleratedRuntimeRoutes()` now
+  replace repeated MPS/CUDA and Metal/CUDA route literals. The readiness mapper
+  intentionally still emits evidence for both platform branches; branch-status
+  projection selects the applicable topology later. Public response fields,
+  lane order, artifact evidence, status scoring, IPC channels, AI Worker HTTP
+  API, and database schema are unchanged. Focused readiness, display, and
+  branch-status tests lock the existing cooperative and Llama lane order. The
+  required four focused TypeScript tests, Windows validation privacy contract,
+  typecheck, build, docs sync, and diff checks passed. The full Windows script
+  passed runtime-safety, Python, ONNX, Llama text/generated-image, and
+  Electron/Playwright checks; `chatOk` and `visionOk` were true,
+  Tag/Prompt/Search reported `real_model_path`, OCR reported
+  `runtime_probe_ready`, the `1264x793` viewport had no horizontal overflow,
+  and the saved log contained zero absolute Windows paths. Next smallest
+  slice: audit the single macOS-only runtime-install exception in
+  `resolvePlatformAiActionCommand()` for branch-keyed command metadata while
+  preserving every existing action command.
 - 2026-06-12 Centralized Platform AI runtime lane metadata in the main-process
   branch-status projector. `RUNTIME_LANE_METADATA` now owns default lane labels
   and runtime kinds, including the existing macOS external-HTTP Ollama fallback,

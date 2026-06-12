@@ -49,6 +49,14 @@ const cooperativeReadiness = createCooperativeModelArtifactReadiness([
 assert.ok(cooperativeReadiness.some((item) => item.workflow === 'ai_tag_task' && item.runtimeLane === 'python_mps' && item.state === 'ready_to_load'))
 assert.ok(cooperativeReadiness.some((item) => item.workflow === 'ai_tag_task' && item.runtimeLane === 'python_cuda' && item.state === 'ready_to_load'))
 assert.ok(cooperativeReadiness.some((item) => item.workflow === 'ai_tag_task' && item.runtimeLane === 'onnx_runtime' && item.state === 'artifact_missing'))
+assert.deepEqual(
+  cooperativeReadiness.map((item) => [item.artifactId, item.workflow, item.runtimeLane]),
+  [
+    ['ram-plus', 'ai_tag_task', 'python_mps'],
+    ['ram-plus', 'ai_tag_task', 'python_cuda'],
+    ['wd-vit-tagger-v3', 'ai_tag_task', 'onnx_runtime']
+  ]
+)
 
 const llamaReadiness = createLlamaLocalModelArtifactReadiness([
   {
@@ -72,6 +80,15 @@ const llamaReadiness = createLlamaLocalModelArtifactReadiness([
 assert.ok(llamaReadiness.some((item) => item.artifactId === 'qwen3-vl-2b' && item.runtimeLane === 'llama_metal' && item.state === 'ready_to_load'))
 assert.ok(llamaReadiness.some((item) => item.artifactId === 'qwen3-vl-2b' && item.runtimeLane === 'llama_cuda' && item.state === 'ready_to_load'))
 assert.ok(llamaReadiness.some((item) => item.artifactId === 'qwen3-vl-8b' && item.state === 'artifact_downloading'))
+assert.deepEqual(
+  llamaReadiness.map((item) => [item.artifactId, item.runtimeLane]),
+  [
+    ['qwen3-vl-2b', 'llama_metal'],
+    ['qwen3-vl-2b', 'llama_cuda'],
+    ['qwen3-vl-8b', 'llama_metal'],
+    ['qwen3-vl-8b', 'llama_cuda']
+  ]
+)
 
 const workerReadiness = createWorkerModelStatusArtifactReadiness({
   cooperative_models: {

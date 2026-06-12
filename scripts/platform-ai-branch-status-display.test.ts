@@ -231,7 +231,7 @@ assert.match(
 )
 assert.match(
   branchProjectorSource,
-  /const RUNTIME_LANE_METADATA: Record<RuntimeLaneId, RuntimeLaneMetadata>/
+  /const RUNTIME_LANE_METADATA: Record<PlatformAiRuntimeLaneId, RuntimeLaneMetadata>/
 )
 assert.match(
   branchProjectorSource,

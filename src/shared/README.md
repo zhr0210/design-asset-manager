@@ -62,6 +62,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.15 | 2026-06-12 | Added a platform-neutral Platform AI runtime lane ID type for shared main-process metadata and readiness routes. |
 | v1.8.14 | 2026-06-12 | Moved shared Worker probe header projection from macOS/Windows concrete probe unions to the platform-neutral Worker probe envelope. |
 | v1.8.13 | 2026-06-12 | Added a platform-neutral Worker probe-with-runtime-versions type for shared AI capability matrix inputs. |
 | v1.8.12 | 2026-06-12 | Moved the shared AI capability matrix prop type from macOS/Windows concrete probe unions to a platform-neutral Worker probe envelope plus minimal runtime version fields. |

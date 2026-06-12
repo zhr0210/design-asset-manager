@@ -3,7 +3,10 @@ import type {
   AiModelArtifactReadiness,
   WorkerModelStatusSnapshot
 } from '../../../shared/types/model-artifact-readiness.types'
-import type { PlatformAiWorkflow } from '../../../shared/types/platform-ai-branch-status.types'
+import type {
+  PlatformAiRuntimeLaneId,
+  PlatformAiWorkflow
+} from '../../../shared/types/platform-ai-branch-status.types'
 import type { LlamaInstallStatus, LlamaServerTestResult } from '../../../shared/types/llama-runtime.types'
 import type {
   AiRuntimeOnnxModelLoadProbeResponse
@@ -19,23 +22,38 @@ type LlamaLocalModelLike = {
   mmprojDownloadState?: 'missing' | 'downloading' | 'downloaded' | string
 }
 
-const COOPERATIVE_MODEL_WORKFLOW_BY_FAMILY: Record<string, Array<{ workflow: PlatformAiWorkflow; runtimeLane: string }>> = {
-  ram: [
-    { workflow: 'ai_tag_task', runtimeLane: 'python_mps' },
-    { workflow: 'ai_tag_task', runtimeLane: 'python_cuda' }
-  ],
+interface ModelWorkflowRoute {
+  workflow: PlatformAiWorkflow
+  runtimeLane: PlatformAiRuntimeLaneId
+}
+
+const PYTHON_ACCELERATOR_RUNTIME_LANES = [
+  'python_mps',
+  'python_cuda'
+] as const satisfies readonly PlatformAiRuntimeLaneId[]
+
+const LLAMA_ACCELERATOR_RUNTIME_LANES = [
+  'llama_metal',
+  'llama_cuda'
+] as const satisfies readonly PlatformAiRuntimeLaneId[]
+
+function acceleratedRuntimeRoutes(
+  workflow: PlatformAiWorkflow,
+  runtimeLanes: readonly PlatformAiRuntimeLaneId[]
+): ModelWorkflowRoute[] {
+  return runtimeLanes.map((runtimeLane) => ({ workflow, runtimeLane }))
+}
+
+const COOPERATIVE_MODEL_WORKFLOW_BY_FAMILY: Record<string, ModelWorkflowRoute[]> = {
+  ram: acceleratedRuntimeRoutes('ai_tag_task', PYTHON_ACCELERATOR_RUNTIME_LANES),
   florence2: [
-    { workflow: 'ai_tag_task', runtimeLane: 'python_mps' },
-    { workflow: 'ai_tag_task', runtimeLane: 'python_cuda' },
-    { workflow: 'ocr_text_box', runtimeLane: 'python_mps' },
-    { workflow: 'ocr_text_box', runtimeLane: 'python_cuda' }
+    ...acceleratedRuntimeRoutes('ai_tag_task', PYTHON_ACCELERATOR_RUNTIME_LANES),
+    ...acceleratedRuntimeRoutes('ocr_text_box', PYTHON_ACCELERATOR_RUNTIME_LANES)
   ],
   clip: [
-    { workflow: 'ai_tag_task', runtimeLane: 'python_mps' },
-    { workflow: 'ai_tag_task', runtimeLane: 'python_cuda' },
+    ...acceleratedRuntimeRoutes('ai_tag_task', PYTHON_ACCELERATOR_RUNTIME_LANES),
     { workflow: 'search_embedding', runtimeLane: 'onnx_runtime' },
-    { workflow: 'search_embedding', runtimeLane: 'python_mps' },
-    { workflow: 'search_embedding', runtimeLane: 'python_cuda' }
+    ...acceleratedRuntimeRoutes('search_embedding', PYTHON_ACCELERATOR_RUNTIME_LANES)
   ],
   wd_tagger: [{ workflow: 'ai_tag_task', runtimeLane: 'onnx_runtime' }]
 }
@@ -70,7 +88,7 @@ export function createLlamaLocalModelArtifactReadiness(models: LlamaLocalModelLi
         ? 'artifact_downloading'
         : 'artifact_missing'
 
-    return ['llama_metal', 'llama_cuda'].map((runtimeLane) => ({
+    return LLAMA_ACCELERATOR_RUNTIME_LANES.map((runtimeLane) => ({
       workflow: 'ai_prompt_task' as const,
       runtimeLane,
       artifactId: model.id,
@@ -144,7 +162,7 @@ export function createLlamaRuntimeStatusArtifactReadiness(status: LlamaInstallSt
         ? 'artifact_missing'
         : 'unknown'
 
-  return ['llama_metal', 'llama_cuda'].map((runtimeLane) => ({
+  return LLAMA_ACCELERATOR_RUNTIME_LANES.map((runtimeLane) => ({
     workflow: 'ai_prompt_task' as const,
     runtimeLane,
     artifactId: 'llama-runtime-current-model',
@@ -182,7 +200,7 @@ export function createLlamaMultimodalProbeArtifactReadiness(
     ? `${probe.modelId ?? probe.models[0] ?? 'local-model'} · text + generated-image inference · ${probe.checkedAt}`
     : probe.error?.code ?? 'multimodal_probe_incomplete'
 
-  return ['llama_metal', 'llama_cuda'].map((runtimeLane) => ({
+  return LLAMA_ACCELERATOR_RUNTIME_LANES.map((runtimeLane) => ({
     workflow: 'ai_prompt_task' as const,
     runtimeLane,
     artifactId: 'llama-runtime-multimodal-inference',

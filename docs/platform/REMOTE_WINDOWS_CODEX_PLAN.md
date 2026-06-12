@@ -101,7 +101,12 @@ paths or model cache paths.
    `RUNTIME_LANE_METADATA` now also owns default lane labels and runtime kinds,
    with a branch-specific override only for the existing macOS external-HTTP
    Ollama fallback. The platform tables still own lane membership, ordering,
-   primary-lane selection, and workflow-specific CLIP labels.
+   primary-lane selection, and workflow-specific CLIP labels. Shared
+   `PlatformAiRuntimeLaneId` typing now also covers main-process lane metadata
+   and model-readiness routes. The readiness mapper uses shared Python and
+   Llama accelerator lane families while intentionally emitting evidence for
+   both branches; the branch projector remains responsible for selecting the
+   applicable platform topology.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
