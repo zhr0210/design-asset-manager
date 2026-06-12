@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Centralized Platform AI Branch Status display copy.
+  `PLATFORM_BRANCH_DISPLAY_COPY` now owns each branch label plus route-overview
+  title, description, priority text, and Worker-diagnostics visibility.
+  `projectPlatformBranchLabel()` and
+  `projectPlatformAiRouteOverviewDisplay()` select that copy by
+  `PlatformAiBranch` without display-only macOS/Windows conditionals. Runtime
+  lane definitions, status scoring, evidence projection, current-OS mapping,
+  and platform-specific action commands remain unchanged at their genuine
+  boundaries. No IPC channel, AI Worker HTTP API, database schema, shared
+  response field, runtime evidence behavior, or renderer output changed. The
+  required four focused TypeScript tests, branch-status display test, Windows
+  validation privacy contract, typecheck, build, docs sync, and diff checks
+  passed. The full Windows script passed runtime-safety, Python, ONNX, Llama
+  text/generated-image, and Electron/Playwright checks; `chatOk` and
+  `visionOk` were true, Tag/Prompt/Search reported `real_model_path`, OCR
+  reported `runtime_probe_ready`, the `1264x793` viewport had no horizontal
+  overflow, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: audit the duplicated renderer platform IPC selection in AI
+  Console and AI Runtime settings for a shared local adapter that preserves
+  every existing concrete channel and response shape.
 - 2026-06-12 Moved the remaining AI Runtime settings-panel copy into
   `PLATFORM_AI_SURFACE_COPY`. `projectAiRuntimePlatformPanelCopy()` now returns
   the nested `runtimePanel` entry keyed by `PlatformAiBranch`, removing its

@@ -75,6 +75,35 @@ export interface PlatformAiBranchStatusSelection {
   missingCount: number
 }
 
+interface PlatformAiBranchDisplayCopy {
+  branchLabel: string
+  routeOverview: Pick<
+    PlatformAiRouteOverviewDisplay,
+    'title' | 'description' | 'priorityLabel' | 'showWorkerProbeDiagnostics'
+  >
+}
+
+const PLATFORM_BRANCH_DISPLAY_COPY: Record<PlatformAiBranch, PlatformAiBranchDisplayCopy> = {
+  macos: {
+    branchLabel: 'macOS AI 分支',
+    routeOverview: {
+      title: 'macOS 路线概览',
+      description: '把 Python MPS、ONNX Runtime 和 Llama 路线放到同一屏里查看。',
+      priorityLabel: '当前 macOS 目标模型优先级：Qwen3-VL GGUF > Qwen2.5-VL Ollama fallback > external HTTP fallback。',
+      showWorkerProbeDiagnostics: true
+    }
+  },
+  windows: {
+    branchLabel: 'Windows AI 分支',
+    routeOverview: {
+      title: 'Windows 路线概览',
+      description: '汇总 Python CUDA、ONNX Runtime、Llama CUDA 与外部推理路线。',
+      priorityLabel: '当前 Windows 路线优先使用可验证的 CUDA / ONNX / Llama 运行时，证据不足时再使用已配置的外部服务。',
+      showWorkerProbeDiagnostics: false
+    }
+  }
+}
+
 const WORKFLOW_DISPLAY_COPY: Record<PlatformAiWorkflow, {
   label: string
   title: string
@@ -134,9 +163,7 @@ export function projectPlatformAiBranchStatusDisplay(
 }
 
 export function projectPlatformBranchLabel(platformBranch?: PlatformAiBranch): string {
-  if (platformBranch === 'windows') return 'Windows AI 分支'
-  if (platformBranch === 'macos') return 'macOS AI 分支'
-  return '平台 AI 分支'
+  return platformBranch ? PLATFORM_BRANCH_DISPLAY_COPY[platformBranch].branchLabel : '平台 AI 分支'
 }
 
 export function projectPlatformAiRouteOverviewDisplay(
@@ -155,23 +182,10 @@ export function projectPlatformAiRouteOverviewDisplay(
 
   const display = projectPlatformAiBranchStatusDisplay(status)
   const runtimeLanes = dedupeRuntimeLanes(display.workflows.flatMap((workflow) => workflow.runtimeLanes))
-
-  if (status.platformBranch === 'macos') {
-    return {
-      title: 'macOS 路线概览',
-      description: '把 Python MPS、ONNX Runtime 和 Llama 路线放到同一屏里查看。',
-      priorityLabel: '当前 macOS 目标模型优先级：Qwen3-VL GGUF > Qwen2.5-VL Ollama fallback > external HTTP fallback。',
-      showWorkerProbeDiagnostics: true,
-      ...routeOverviewSharedCopy(),
-      runtimeLanes
-    }
-  }
+  const copy = PLATFORM_BRANCH_DISPLAY_COPY[status.platformBranch].routeOverview
 
   return {
-    title: 'Windows 路线概览',
-    description: '汇总 Python CUDA、ONNX Runtime、Llama CUDA 与外部推理路线。',
-    priorityLabel: '当前 Windows 路线优先使用可验证的 CUDA / ONNX / Llama 运行时，证据不足时再使用已配置的外部服务。',
-    showWorkerProbeDiagnostics: false,
+    ...copy,
     ...routeOverviewSharedCopy(),
     runtimeLanes
   }

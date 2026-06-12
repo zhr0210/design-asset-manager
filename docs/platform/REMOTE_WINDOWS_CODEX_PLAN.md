@@ -88,7 +88,10 @@ paths or model cache paths.
    display aliases and wrappers are removed; one shared projector selects only
    the genuine MPS/CUDA device field from `PlatformAiBranch`. Concrete response
    names remain at main-process, IPC contract, platform type-definition, and
-   genuine MPS/CUDA adapter boundaries.
+   genuine MPS/CUDA adapter boundaries. Platform AI Branch Status labels and
+   route-overview copy also come from one branch-keyed display table; runtime
+   lane definitions, evidence scoring, current-OS mapping, and platform action
+   commands remain intentionally concrete.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

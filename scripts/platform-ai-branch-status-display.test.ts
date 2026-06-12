@@ -219,6 +219,23 @@ assert.equal(
 )
 
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
+const branchWorkflowSource = await fs.readFile('src/shared/workflows/platform-ai-branch-status.workflow.ts', 'utf8')
+assert.match(
+  branchWorkflowSource,
+  /const PLATFORM_BRANCH_DISPLAY_COPY: Record<PlatformAiBranch, PlatformAiBranchDisplayCopy>/
+)
+assert.match(
+  branchWorkflowSource,
+  /PLATFORM_BRANCH_DISPLAY_COPY\[platformBranch\]\.branchLabel/
+)
+assert.match(
+  branchWorkflowSource,
+  /PLATFORM_BRANCH_DISPLAY_COPY\[status\.platformBranch\]\.routeOverview/
+)
+assert.doesNotMatch(
+  branchWorkflowSource,
+  /platformBranch === 'windows'|platformBranch === 'macos'|status\.platformBranch === 'macos'/
+)
 assert.match(aiConsoleSource, /projectPlatformAiBranchStatusDisplay/)
 assert.match(aiConsoleSource, /workflow\.actionPlan\.enabled/)
 assert.match(aiConsoleSource, /onAction\(workflow\.actionPlan\)/)
