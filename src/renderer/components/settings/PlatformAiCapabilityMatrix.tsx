@@ -3,6 +3,7 @@ import type {
   AiWorkerLaneProbe,
   PlatformAiWorkerProbeWithRuntimeVersions
 } from '../../../shared/types/platform-ai-runtime.types'
+import type { PlatformAiBranch } from '../../../shared/types/platform-ai-branch-status.types'
 import {
   projectAiCapabilityStatusDisplay,
   projectAiRuntimeCapabilityMatrixDisplay
@@ -10,13 +11,13 @@ import {
 
 export function PlatformAiCapabilityMatrix({
   probe,
-  isWindows
+  platformBranch
 }: {
   probe: PlatformAiWorkerProbeWithRuntimeVersions | null
-  isWindows?: boolean
+  platformBranch: PlatformAiBranch
 }) {
   if (!probe) return null
-  const display = projectAiRuntimeCapabilityMatrixDisplay(isWindows)
+  const display = projectAiRuntimeCapabilityMatrixDisplay(platformBranch)
 
   return (
     <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950">

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw, RotateCcw, ShieldCheck, Star } from 'lucide-react'
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
+import type { PlatformAiBranch } from '../../../shared/types/platform-ai-branch-status.types'
 import type { PlatformAiBranchRuntimeMetadata, PlatformAiLaneDisplayInput, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
 import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
 import type {
@@ -40,7 +41,8 @@ import {
   projectAiRuntimeInfoLabel,
   projectAiRuntimeDisplayValue,
   projectAiRuntimeActionLabel,
-  getCurrentPlatformAiBranchRuntime
+  getCurrentPlatformAiBranchRuntime,
+  resolvePlatformAiBranch
 } from '../../../shared/workflows/ai-runtime-status.workflow'
 
 type AiRuntimeApi = {
@@ -98,12 +100,12 @@ export default function AiRuntimePanel() {
   const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
   const [platformWorkerProbeError, setPlatformWorkerProbeError] = useState<string | null>(null)
   const [platformPythonCompatibilityDisplay, setPlatformPythonCompatibilityDisplay] = useState<AiRuntimeCompatibilityDisplay>(
-    () => projectPlatformPythonRuntimeCompatibilityDisplay(false, null)
+    () => projectPlatformPythonRuntimeCompatibilityDisplay('macos', null)
   )
   const [platformPythonStatusChecked, setPlatformPythonStatusChecked] = useState(false)
   const [platformPythonStatusError, setPlatformPythonStatusError] = useState<string | null>(null)
   const [platformPythonExecutionDisplay, setPlatformPythonExecutionDisplay] = useState<AiRuntimeModelLoadProbeDisplay>(
-    () => projectPlatformPythonRuntimeExecutionProbeDisplay(false, null)
+    () => projectPlatformPythonRuntimeExecutionProbeDisplay('macos', null)
   )
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [clipSiglipOnnxStatusError, setClipSiglipOnnxStatusError] = useState<string | null>(null)
@@ -123,8 +125,8 @@ export default function AiRuntimePanel() {
   const hasRuntimes = runtimes.length > 0
 
   const currentPlatformAiBranch = useMemo(() => getCurrentPlatformAiBranchRuntime(runtimes), [runtimes])
-  const isWindows = currentPlatformAiBranch?.marker === 'windows-ai-branch'
-  const platformCopy = useMemo(() => projectAiRuntimePlatformPanelCopy(isWindows), [isWindows])
+  const platformBranch = resolvePlatformAiBranch(currentPlatformAiBranch)
+  const platformCopy = useMemo(() => projectAiRuntimePlatformPanelCopy(platformBranch), [platformBranch])
 
   const runtimeSummary = useMemo(() => {
     return projectAiRuntimeSummaryDisplay(runtimes)
@@ -161,12 +163,13 @@ export default function AiRuntimePanel() {
       setRuntimes(currentRuntimes)
 
       const currentBranch = getCurrentPlatformAiBranchRuntime(currentRuntimes)
-      const currentIsWin = currentBranch?.marker === 'windows-ai-branch'
+      const currentPlatformBranch = resolvePlatformAiBranch(currentBranch)
+      const useWindowsRuntime = currentPlatformBranch === 'windows'
 
       const [activeResponse, probeResponse, pythonStatusResponse, clipSiglipResponse] = await Promise.all([
         api.getActiveRuntime(),
-        currentIsWin ? api.getWindowsCapabilities() : api.getMacOSCapabilities(),
-        currentIsWin ? api.getPythonCudaStatus() : api.getPythonMpsStatus(),
+        useWindowsRuntime ? api.getWindowsCapabilities() : api.getMacOSCapabilities(),
+        useWindowsRuntime ? api.getPythonCudaStatus() : api.getPythonMpsStatus(),
         api.getClipSiglipOnnxStatus()
       ])
 
@@ -179,20 +182,20 @@ export default function AiRuntimePanel() {
         setPlatformWorkerProbeError(probeResponse.data.error ?? null)
       } else {
         setPlatformWorkerProbe(null)
-        setPlatformWorkerProbeError(probeResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).workerProbeFailureMessage)
+        setPlatformWorkerProbeError(probeResponse.error || projectAiRuntimePlatformPanelCopy(currentPlatformBranch).workerProbeFailureMessage)
       }
 
       if (pythonStatusResponse.success && pythonStatusResponse.data) {
         setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(
-          currentIsWin,
+          currentPlatformBranch,
           pythonStatusResponse.data,
           pythonStatusResponse.data.error
         ))
         setPlatformPythonStatusChecked(true)
         setPlatformPythonStatusError(pythonStatusResponse.data.error ?? null)
       } else {
-        const message = pythonStatusResponse.error || projectAiRuntimePlatformPanelCopy(currentIsWin).compatibilityFailureMessage
-        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(currentIsWin, null, message))
+        const message = pythonStatusResponse.error || projectAiRuntimePlatformPanelCopy(currentPlatformBranch).compatibilityFailureMessage
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(currentPlatformBranch, null, message))
         setPlatformPythonStatusChecked(false)
         setPlatformPythonStatusError(message)
       }
@@ -216,8 +219,8 @@ export default function AiRuntimePanel() {
   }, [])
 
   useEffect(() => {
-    setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, null))
-  }, [isWindows])
+    setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(platformBranch, null))
+  }, [platformBranch])
 
   const replaceRuntimeState = (state: AiRuntimeState | null | undefined) => {
     if (!state) return
@@ -344,13 +347,13 @@ export default function AiRuntimePanel() {
     setProbingPlatformPython(true)
     setError(null)
     try {
-      const response = isWindows ? await api.probePythonCudaRuntime() : await api.probePythonMpsRuntime()
+      const response = platformBranch === 'windows' ? await api.probePythonCudaRuntime() : await api.probePythonMpsRuntime()
       if (!response.success || !response.data) throw new Error(response.error || platformCopy.executionFailureMessage)
-      setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, response.data))
+      setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(platformBranch, response.data))
       setLastAction(platformCopy.executionLastActionLabel)
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
-      setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(isWindows, null, message))
+      setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(platformBranch, null, message))
       setError(message)
     } finally {
       setProbingPlatformPython(false)
@@ -381,7 +384,7 @@ export default function AiRuntimePanel() {
       </div>
 
       {currentPlatformAiBranch && <PlatformAiBranchPanel branch={currentPlatformAiBranch} />}
-      <PlatformAiWorkerProbePanel probe={platformWorkerProbe} error={platformWorkerProbeError} isWindows={isWindows} />
+      <PlatformAiWorkerProbePanel probe={platformWorkerProbe} error={platformWorkerProbeError} platformBranch={platformBranch} />
       <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -600,13 +603,16 @@ function PlatformAiBranchPanel({ branch }: { branch: PlatformAiBranchRuntimeMeta
 function PlatformAiWorkerProbePanel({
   probe,
   error,
-  isWindows
+  platformBranch
 }: {
   probe: PlatformAiWorkerProbeWithRuntimeVersions | null
   error: string | null
-  isWindows: boolean
+  platformBranch: PlatformAiBranch
 }) {
-  const probeDisplay = useMemo(() => projectAiRuntimeWorkerProbePanelDisplay(isWindows, probe), [isWindows, probe])
+  const probeDisplay = useMemo(
+    () => projectAiRuntimeWorkerProbePanelDisplay(platformBranch, probe),
+    [platformBranch, probe]
+  )
 
   return (
     <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4">
@@ -640,7 +646,7 @@ function PlatformAiWorkerProbePanel({
         </div>
       )}
 
-      <PlatformAiCapabilityMatrix probe={probe} isWindows={isWindows} />
+      <PlatformAiCapabilityMatrix probe={probe} platformBranch={platformBranch} />
 
       {error && (
         <div className="mt-3 rounded-xl border border-amber-100 bg-amber-50/80 p-3 text-[10.5px] font-bold leading-5 text-amber-700">

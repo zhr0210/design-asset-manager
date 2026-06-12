@@ -89,6 +89,31 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Replaced renderer/shared AI Runtime panel platform booleans with
+  the shared `PlatformAiBranch` domain type. `resolvePlatformAiBranch()` now
+  converts current branch metadata once; Settings passes that value through
+  platform copy, compatibility/execution display projectors, Worker probe
+  panel, and capability matrix inputs. AI Console stores the branch selected
+  alongside its shared Worker probe view so the overview capability matrix
+  does not infer Windows/macOS from an unrelated status object. Boolean checks
+  remain only at the actual CUDA/MPS IPC adapter choice. No IPC channel, AI
+  Worker HTTP API, database schema, or shared response shape changed.
+  Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation passed via `powershell -ExecutionPolicy Bypass -File
+  .\scripts\windows-ai-real-evidence-validation.ps1`; WD Tagger/CLIP real ONNX
+  probes and Llama text plus generated-image inference passed,
+  `ai_tag_task`, `ai_prompt_task`, and `search_embedding` reported
+  `real_model_path`, and Electron/Playwright reported no document/body
+  horizontal overflow at `1264x793`. Remote Windows Remaining Work items 2 and
+  3 are now complete. Next smallest slice: audit the platform Python
+  compatibility/execution projector inputs for a shared response subset that
+  can remove the remaining MPS/CUDA response unions and casts while retaining
+  concrete IPC method signatures.
 - 2026-06-12 Completed the remaining concrete Platform AI branch metadata
   cleanup in the shared runtime-status workflow. The duplicated exported
   macOS/Windows metadata guards and getters were replaced by one private

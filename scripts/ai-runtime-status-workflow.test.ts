@@ -9,6 +9,7 @@ import {
   projectAiRuntimeStatusDisplay,
   projectAiRuntimeSummaryDisplay,
   getCurrentPlatformAiBranchRuntime,
+  resolvePlatformAiBranch,
   normalizeAiCapabilityStatus,
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
@@ -100,7 +101,7 @@ const pythonUnavailable = projectPythonMpsCompatibilityDisplay({
 assert.equal(pythonUnavailable.label, '不可用')
 assert.equal(pythonUnavailable.tone, 'bad')
 
-const macOSPlatformCopy = projectAiRuntimePlatformPanelCopy(false)
+const macOSPlatformCopy = projectAiRuntimePlatformPanelCopy('macos')
 assert.equal(macOSPlatformCopy.compatibilityTitle, 'Python MPS 兼容性检查')
 assert.equal(macOSPlatformCopy.executionTitle, 'Python MPS 真实执行验证')
 assert.equal(macOSPlatformCopy.executionFailureMessage, 'MPS 真实执行验证失败。')
@@ -108,7 +109,7 @@ assert.equal(macOSPlatformCopy.executionButtonLabel, '验证 MPS 执行')
 assert.equal(macOSPlatformCopy.workerProbeFailureMessage, '读取 macOS Worker 能力失败。')
 assert.match(macOSPlatformCopy.clipSiglipCompatibilityDescription, /macOS/)
 
-const windowsPlatformCopy = projectAiRuntimePlatformPanelCopy(true)
+const windowsPlatformCopy = projectAiRuntimePlatformPanelCopy('windows')
 assert.equal(windowsPlatformCopy.compatibilityTitle, 'Python CUDA 兼容性检查')
 assert.equal(windowsPlatformCopy.executionTitle, 'Python CUDA 真实执行验证')
 assert.equal(windowsPlatformCopy.executionFailureMessage, 'CUDA 真实执行验证失败。')
@@ -116,8 +117,8 @@ assert.equal(windowsPlatformCopy.executionButtonLabel, '验证 CUDA 执行')
 assert.equal(windowsPlatformCopy.workerProbeFailureMessage, '读取 Windows Worker 能力失败。')
 assert.match(windowsPlatformCopy.clipSiglipCompatibilityDescription, /Windows/)
 
-assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay(false, pythonReady).runtimeLabel, 'torch.mps')
-assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay(true, {
+assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('macos', pythonReady).runtimeLabel, 'torch.mps')
+assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('windows', {
   success: true,
   compatible: true,
   runtime: 'torch.cuda',
@@ -153,8 +154,8 @@ const mpsExecutionUnavailable = projectPythonMpsExecutionProbeDisplay({
 })
 assert.equal(mpsExecutionUnavailable.label, '后端不可用')
 assert.equal(mpsExecutionUnavailable.tone, 'warn')
-assert.equal(projectPlatformPythonRuntimeExecutionProbeDisplay(false, mpsExecutionPassedProbe).detail, mpsExecutionPassed.detail)
-assert.match(projectPlatformPythonRuntimeExecutionProbeDisplay(true, {
+assert.equal(projectPlatformPythonRuntimeExecutionProbeDisplay('macos', mpsExecutionPassedProbe).detail, mpsExecutionPassed.detail)
+assert.match(projectPlatformPythonRuntimeExecutionProbeDisplay('windows', {
   success: true,
   status: 'executed_real',
   checkedAt: '2026-06-06T00:00:00.000Z',
@@ -405,6 +406,8 @@ assert.equal(getCurrentPlatformAiBranchRuntime([
   runtimeState('stopped'),
   { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } }
 ]), macOSBranch)
+assert.equal(resolvePlatformAiBranch(macOSBranch), 'macos')
+assert.equal(resolvePlatformAiBranch(null), 'macos')
 assert.equal(getCurrentPlatformAiBranchRuntime([
   { ...runtimeState('running'), metadata: { macosAiBranch: { ...macOSBranch, lanes: null } } }
 ]), null)
@@ -470,7 +473,7 @@ assert.equal(connectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(connectedProbe.onnxRuntime.captionLabel, 'CoreMLExecutionProvider / CPUExecutionProvider')
 assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '依赖缺失')
 assert.equal(connectedProbe.clipSiglipOnnx.captionLabel, '已探测，未报告版本')
-const macOSWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay(false, {
+const macOSWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay('macos', {
   platform: 'darwin',
   machine: 'arm64',
   isMacOS: true,
@@ -600,6 +603,7 @@ assert.equal(getCurrentPlatformAiBranchRuntime([
   { ...runtimeState('running'), metadata: { macosAiBranch: macOSBranch } },
   { ...runtimeState('running'), metadata: { windowsAiBranch: currentWindowsBranch } }
 ]), currentWindowsBranch)
+assert.equal(resolvePlatformAiBranch(currentWindowsBranch), 'windows')
 assert.equal(getCurrentPlatformAiBranchRuntime([
   { ...runtimeState('running'), metadata: { windowsAiBranch: windowsBranch } },
   { ...runtimeState('running'), metadata: { macosAiBranch: { ...macOSBranch, isCurrentPlatform: false } } }
@@ -610,12 +614,12 @@ assert.deepEqual(projectAiRuntimeBranchPanelDisplay(windowsBranch), {
   platformBadgeLabel: '非当前平台',
   platformBadgeClass: 'border-slate-200 bg-white text-slate-500'
 })
-const windowsWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay(true, windowsRawProbe)
+const windowsWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay('windows', windowsRawProbe)
 assert.equal(windowsWorkerPanel.title, 'Windows Worker 实时探测')
 assert.equal(windowsWorkerPanel.platformBadgeLabel, 'win32/amd64')
 assert.equal(windowsWorkerPanel.clipSiglipStatusLabel, '就绪')
-assert.equal(projectAiRuntimeCapabilityMatrixDisplay(false).title, 'macOS 细项能力矩阵')
-assert.equal(projectAiRuntimeCapabilityMatrixDisplay(true).title, 'Windows 细项能力矩阵')
+assert.equal(projectAiRuntimeCapabilityMatrixDisplay('macos').title, 'macOS 细项能力矩阵')
+assert.equal(projectAiRuntimeCapabilityMatrixDisplay('windows').title, 'Windows 细项能力矩阵')
 assert.match(projectAiRuntimeCapabilityMatrixDisplay().description, /证据不足/)
 
 const settingsPanelSource = await fs.readFile('src/renderer/components/settings/AiRuntimePanel.tsx', 'utf8')
@@ -678,6 +682,11 @@ assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeHeader
 assert.match(runtimeWorkflowSource, /branch: PlatformAiBranchRuntimeMetadata/)
 assert.doesNotMatch(runtimeWorkflowSource, /branch: MacOSAiBranchRuntimeMetadata \| WindowsAiBranchRuntimeMetadata/)
 assert.match(runtimeWorkflowSource, /function getPlatformAiBranchRuntime/)
+assert.match(runtimeWorkflowSource, /function resolvePlatformAiBranch/)
+assert.doesNotMatch(runtimeWorkflowSource, /projectAiRuntimePlatformPanelCopy\(isWindows: boolean/)
+assert.doesNotMatch(runtimeWorkflowSource, /projectPlatformPythonRuntimeCompatibilityDisplay\(\s*isWindows: boolean/)
+assert.doesNotMatch(runtimeWorkflowSource, /projectPlatformPythonRuntimeExecutionProbeDisplay\(\s*isWindows: boolean/)
+assert.doesNotMatch(runtimeWorkflowSource, /projectAiRuntimeWorkerProbePanelDisplay\(\s*isWindows: boolean/)
 assert.doesNotMatch(runtimeWorkflowSource, /\bMacOSAiBranchRuntimeMetadata\b/)
 assert.doesNotMatch(runtimeWorkflowSource, /\bWindowsAiBranchRuntimeMetadata\b/)
 assert.doesNotMatch(runtimeWorkflowSource, /function getMacOSAiBranchRuntime/)
@@ -741,6 +750,10 @@ assert.match(settingsPanelSource, /projectAiRuntimeInfoLabel/)
 assert.match(settingsPanelSource, /projectAiRuntimeDisplayValue/)
 assert.match(settingsPanelSource, /projectAiRuntimeActionLabel/)
 assert.match(settingsPanelSource, /getCurrentPlatformAiBranchRuntime/)
+assert.match(settingsPanelSource, /resolvePlatformAiBranch/)
+assert.match(settingsPanelSource, /platformBranch: PlatformAiBranch/)
+assert.doesNotMatch(settingsPanelSource, /isWindows: boolean/)
+assert.doesNotMatch(settingsPanelSource, /<PlatformAiWorkerProbePanel[^>]*isWindows=/)
 assert.doesNotMatch(settingsPanelSource, /getMacOSAiBranchRuntime/)
 assert.doesNotMatch(settingsPanelSource, /getWindowsAiBranchRuntime/)
 assert.match(settingsPanelSource, /<PlatformAiBranchPanel branch=\{currentPlatformAiBranch\} \/>/)
@@ -749,6 +762,8 @@ assert.doesNotMatch(settingsPanelSource, /\bwindowsAiBranch\b/)
 assert.match(matrixSource, /projectAiCapabilityStatusDisplay/)
 assert.match(matrixSource, /projectAiRuntimeCapabilityMatrixDisplay/)
 assert.match(matrixSource, /PlatformAiWorkerProbeWithRuntimeVersions/)
+assert.match(matrixSource, /platformBranch: PlatformAiBranch/)
+assert.doesNotMatch(matrixSource, /isWindows\??: boolean/)
 assert.doesNotMatch(matrixSource, /MacOSAiWorkerProbeResult/)
 assert.doesNotMatch(matrixSource, /WindowsAiWorkerProbeResult/)
 assert.doesNotMatch(matrixSource, /Windows 细项能力矩阵/)

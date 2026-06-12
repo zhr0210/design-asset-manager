@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 17:18, Windows host local time.
-- Commit tested: worktree based on `3ecdbdb`, with the platform-neutral branch
-  metadata discovery slice applied.
+- Validation time: 2026-06-12 17:26, Windows host local time.
+- Commit tested: worktree based on `b26d016`, with the shared
+  `PlatformAiBranch` panel/projector input slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -41,18 +41,18 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: shared branch metadata discovery now uses one
-  platform-neutral helper with marker and shape validation. The shared
-  runtime-status workflow no longer imports concrete macOS/Windows branch or
-  Worker probe result types.
+- Shared-surface slice: Settings and AI Console now pass the shared
+  `PlatformAiBranch` value through Worker probe panels, capability matrices,
+  platform copy, and compatibility/execution display projectors instead of
+  renderer `isWindows` props.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   slice.
-- Next recommended action: audit shared branch/probe panel inputs and selectors
-  for redundant platform booleans that can derive from the shared branch
-  marker, while retaining genuine MPS/CUDA runtime detail projectors.
+- Next recommended action: audit platform Python compatibility/execution
+  projector inputs for a shared response subset that can remove remaining
+  MPS/CUDA response unions and casts while preserving concrete IPC signatures.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-171846.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-172616.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result

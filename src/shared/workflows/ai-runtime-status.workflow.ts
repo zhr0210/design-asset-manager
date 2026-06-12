@@ -164,11 +164,11 @@ export function projectPythonMpsCompatibilityDisplay(
 }
 
 export function projectPlatformPythonRuntimeCompatibilityDisplay(
-  isWindows: boolean,
+  platformBranch: PlatformAiBranch,
   status?: AiRuntimePythonMpsStatusResponse | AiRuntimePythonCudaStatusResponse | null,
   error?: string | null
 ): AiRuntimeCompatibilityDisplay {
-  return isWindows
+  return platformBranch === 'windows'
     ? projectPythonCudaCompatibilityDisplay(status as AiRuntimePythonCudaStatusResponse, error)
     : projectPythonMpsCompatibilityDisplay(status as AiRuntimePythonMpsStatusResponse, error)
 }
@@ -247,17 +247,17 @@ export function projectPythonMpsExecutionProbeDisplay(
 }
 
 export function projectPlatformPythonRuntimeExecutionProbeDisplay(
-  isWindows: boolean,
+  platformBranch: PlatformAiBranch,
   probe?: AiRuntimePythonMpsExecutionProbeResponse | AiRuntimePythonCudaExecutionProbeResponse | null,
   error?: string | null
 ): AiRuntimeModelLoadProbeDisplay {
-  return isWindows
+  return platformBranch === 'windows'
     ? projectPythonCudaExecutionProbeDisplay(probe as AiRuntimePythonCudaExecutionProbeResponse, error)
     : projectPythonMpsExecutionProbeDisplay(probe as AiRuntimePythonMpsExecutionProbeResponse, error)
 }
 
-export function projectAiRuntimePlatformPanelCopy(isWindows: boolean): AiRuntimePlatformPanelCopy {
-  if (isWindows) {
+export function projectAiRuntimePlatformPanelCopy(platformBranch: PlatformAiBranch): AiRuntimePlatformPanelCopy {
+  if (platformBranch === 'windows') {
     return {
       compatibilityTitle: 'Python CUDA 兼容性检查',
       compatibilityDescription: '这个检查器会确认 PyTorch CUDA、torchvision、transformers 与小模型家族是否已经具备可用的 Windows 兼容性。',
@@ -644,6 +644,12 @@ export function getCurrentPlatformAiBranchRuntime(
   return macOSBranch?.isCurrentPlatform ? macOSBranch : null
 }
 
+export function resolvePlatformAiBranch(
+  branch?: PlatformAiBranchRuntimeMetadata | null
+): PlatformAiBranch {
+  return branch?.marker === 'windows-ai-branch' ? 'windows' : 'macos'
+}
+
 export function projectAiRuntimeBranchPanelDisplay(
   branch: PlatformAiBranchRuntimeMetadata
 ): AiRuntimeBranchPanelDisplay {
@@ -764,9 +770,10 @@ export function projectPlatformAiWorkerProbeDiagnosticsSelection(input: {
 }
 
 export function projectAiRuntimeWorkerProbePanelDisplay(
-  isWindows: boolean,
+  platformBranch: PlatformAiBranch,
   probe?: PlatformAiWorkerProbeResultBase | null
 ): AiRuntimeWorkerProbePanelDisplay {
+  const isWindows = platformBranch === 'windows'
   const connected = probe
     ? isWindows
       ? probe.platform === 'win32' || probe.platform === 'windows'
@@ -805,9 +812,11 @@ function projectAiRuntimeWorkerProbePanelFromHeader(
   }
 }
 
-export function projectAiRuntimeCapabilityMatrixDisplay(isWindows?: boolean): AiRuntimeCapabilityMatrixDisplay {
+export function projectAiRuntimeCapabilityMatrixDisplay(
+  platformBranch: PlatformAiBranch = 'macos'
+): AiRuntimeCapabilityMatrixDisplay {
   return {
-    title: isWindows ? 'Windows 细项能力矩阵' : 'macOS 细项能力矩阵',
+    title: platformBranch === 'windows' ? 'Windows 细项能力矩阵' : 'macOS 细项能力矩阵',
     description: '区分依赖可用、依赖缺失、证据不足与真正尚未实现的路线，避免把探测缺口误报为功能规划。'
   }
 }

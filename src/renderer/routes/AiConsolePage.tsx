@@ -50,7 +50,7 @@ import type {
   LlamaServerTestResult
 } from '../../shared/types/llama-runtime.types'
 import type { PlatformAiWorkerProbeWithRuntimeVersions } from '../../shared/types/platform-ai-runtime.types'
-import type { PlatformAiBranchStatusResponse } from '../../shared/types/platform-ai-branch-status.types'
+import type { PlatformAiBranch, PlatformAiBranchStatusResponse } from '../../shared/types/platform-ai-branch-status.types'
 import type { PlatformAiActionPlan } from '../../shared/types/platform-ai-action-plan.types'
 import type {
   CooperativeWorkerModelStatus,
@@ -643,9 +643,10 @@ export default function AiConsolePage() {
   const [platformProbeDisplay, setPlatformProbeDisplay] = useState<PlatformAiWorkerProbeDiagnosticsDisplay>(
     () => projectPlatformAiWorkerProbeDiagnosticsSelection({}).display
   )
+  const [platformWorkerProbeBranch, setPlatformWorkerProbeBranch] = useState<PlatformAiBranch>('macos')
   const [platformBranchStatus, setPlatformBranchStatus] = useState<PlatformAiBranchStatusResponse | null>(null)
   const [platformPythonCompatibilityDisplay, setPlatformPythonCompatibilityDisplay] = useState<AiRuntimeCompatibilityDisplay>(
-    () => projectPlatformPythonRuntimeCompatibilityDisplay(false, null)
+    () => projectPlatformPythonRuntimeCompatibilityDisplay('macos', null)
   )
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [loading, setLoading] = useState<Record<string, boolean>>({})
@@ -830,19 +831,19 @@ export default function AiConsolePage() {
       })
       setPlatformWorkerProbe(probeSelection.probe)
       setPlatformProbeDisplay(probeSelection.display)
-      const isWindowsProbe = probeSelection.platformBranch === 'windows'
-      const getPlatformPythonStatus = isWindowsProbe
+      setPlatformWorkerProbeBranch(probeSelection.platformBranch)
+      const getPlatformPythonStatus = probeSelection.platformBranch === 'windows'
         ? api.aiRuntime?.getPythonCudaStatus
         : api.aiRuntime?.getPythonMpsStatus
       if (status?.offline === false && getPlatformPythonStatus) {
         const platformPythonStatus = await getPlatformPythonStatus().catch(() => null)
         setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(
-          isWindowsProbe,
+          probeSelection.platformBranch,
           platformPythonStatus?.success ? platformPythonStatus.data : null,
           platformPythonStatus?.success ? platformPythonStatus.data?.error : platformPythonStatus?.error
         ))
       } else {
-        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(isWindowsProbe, null))
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(probeSelection.platformBranch, null))
       }
       if (clipSiglipStatus?.success && clipSiglipStatus.data) {
         setClipSiglipOnnxStatus(clipSiglipStatus.data)
@@ -1566,6 +1567,7 @@ export default function AiConsolePage() {
               llamaStatus={llamaStatus}
               llamaRunning={llamaRunning}
               platformWorkerProbe={platformWorkerProbe}
+              platformWorkerProbeBranch={platformWorkerProbeBranch}
               platformProbeDisplay={platformProbeDisplay}
               platformBranchStatus={platformBranchStatus}
               onInstallAiRuntimeDeps={handleInstallAiRuntimeDeps}
@@ -1793,6 +1795,7 @@ function OverviewWorkspace(props: {
   llamaStatus: LlamaInstallStatus | null
   llamaRunning?: boolean
   platformWorkerProbe: PlatformAiWorkerProbeWithRuntimeVersions | null
+  platformWorkerProbeBranch: PlatformAiBranch
   platformProbeDisplay: PlatformAiWorkerProbeDiagnosticsDisplay
   platformBranchStatus: PlatformAiBranchStatusResponse | null
   onInstallAiRuntimeDeps?: () => Promise<void>
@@ -1937,7 +1940,10 @@ function OverviewWorkspace(props: {
           </div>
 
           {routeOverviewDisplay.showWorkerProbeDiagnostics && (
-            <PlatformAiCapabilityMatrix probe={props.platformWorkerProbe} />
+            <PlatformAiCapabilityMatrix
+              probe={props.platformWorkerProbe}
+              platformBranch={props.platformWorkerProbeBranch}
+            />
           )}
         </div>
       </div>

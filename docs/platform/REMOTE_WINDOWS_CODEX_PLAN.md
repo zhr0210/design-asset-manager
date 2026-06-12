@@ -78,16 +78,17 @@ paths or model cache paths.
    those consumers. Concrete response types remain at main-process, IPC
    contract, platform type-definition, and genuine MPS/CUDA detail boundaries.
 
-2. **Audit AI Console platform probe consumption.**
-   Identify places where AI Console still treats macOS Worker probe data as the
-   only concrete source. If Windows data can use the same shared view model,
-   introduce a shared renderer-ready type and tests. Do not change existing IPC
-   response shapes.
+2. **Completed: audit AI Console platform probe consumption.**
+   AI Console requests both existing platform probe IPC responses, selects the
+   current branch through the shared workflow, and stores shared probe/display
+   values plus the selected `PlatformAiBranch`. Concrete IPC response shapes
+   remain unchanged.
 
-3. **Promote shared branch/probe panel input types.**
-   Where Settings or AI Console components only render shared fields, move those
-   component props to shared platform-neutral types. Keep CUDA/MPS/Llama route
-   details in platform-specific lane evidence.
+3. **Completed: promote shared branch/probe panel input types.**
+   Settings and AI Console branch/probe panels use shared metadata, Worker
+   probe, display, lane, and `PlatformAiBranch` inputs. Platform booleans no
+   longer cross those renderer component or shared projector boundaries.
+   CUDA/MPS/Llama details remain in their runtime adapters and lane evidence.
 
 4. **Re-run Windows evidence after each shared-surface slice.**
    At minimum run the focused TypeScript tests and typecheck/build on Windows.
