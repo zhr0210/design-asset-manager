@@ -14,13 +14,7 @@ import type {
   AiRuntimeClipSiglipOnnxStatusResponse,
   AiRuntimeHealthCheckAllResponse,
   AiRuntimeHealthCheckResponse,
-  AiRuntimeMacOSCapabilitiesResponse,
-  AiRuntimeWindowsCapabilitiesResponse,
   AiRuntimeOnnxModelLoadProbeResponse,
-  AiRuntimePythonMpsExecutionProbeResponse,
-  AiRuntimePythonMpsStatusResponse,
-  AiRuntimePythonCudaStatusResponse,
-  AiRuntimePythonCudaExecutionProbeResponse,
   AiRuntimeIpcResponse,
   AiRuntimeListRuntimesResponse,
   AiRuntimeOperationResponse,
@@ -44,17 +38,15 @@ import {
   getCurrentPlatformAiBranchRuntime,
   resolvePlatformAiBranch
 } from '../../../shared/workflows/ai-runtime-status.workflow'
+import {
+  selectPlatformAiRuntimeRequests,
+  type PlatformAiRuntimeAdapterApi
+} from '../../platform-ai-runtime.adapter'
 
-type AiRuntimeApi = {
+type AiRuntimeApi = Required<PlatformAiRuntimeAdapterApi> & {
   listRuntimes: () => Promise<AiRuntimeIpcResponse<AiRuntimeListRuntimesResponse>>
   getRuntimeState: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeStateResponse>>
   getActiveRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimeActiveRuntimeResponse>>
-  getMacOSCapabilities: () => Promise<AiRuntimeIpcResponse<AiRuntimeMacOSCapabilitiesResponse>>
-  getWindowsCapabilities: () => Promise<AiRuntimeIpcResponse<AiRuntimeWindowsCapabilitiesResponse>>
-  getPythonMpsStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonMpsStatusResponse>>
-  getPythonCudaStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonCudaStatusResponse>>
-  probePythonMpsRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonMpsExecutionProbeResponse>>
-  probePythonCudaRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonCudaExecutionProbeResponse>>
   getClipSiglipOnnxStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimeClipSiglipOnnxStatusResponse>>
   probeOnnxModelLoad: (request?: { modelFamily?: AiRuntimeOnnxModelLoadProbeResponse['modelFamily'] }) => Promise<AiRuntimeIpcResponse<AiRuntimeOnnxModelLoadProbeResponse>>
   selectActiveRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
@@ -164,12 +156,12 @@ export default function AiRuntimePanel() {
 
       const currentBranch = getCurrentPlatformAiBranchRuntime(currentRuntimes)
       const currentPlatformBranch = resolvePlatformAiBranch(currentBranch)
-      const useWindowsRuntime = currentPlatformBranch === 'windows'
+      const platformRequests = selectPlatformAiRuntimeRequests(api, currentPlatformBranch)
 
       const [activeResponse, probeResponse, pythonStatusResponse, clipSiglipResponse] = await Promise.all([
         api.getActiveRuntime(),
-        useWindowsRuntime ? api.getWindowsCapabilities() : api.getMacOSCapabilities(),
-        useWindowsRuntime ? api.getPythonCudaStatus() : api.getPythonMpsStatus(),
+        platformRequests.getCapabilities(),
+        platformRequests.getPythonStatus(),
         api.getClipSiglipOnnxStatus()
       ])
 
@@ -347,7 +339,7 @@ export default function AiRuntimePanel() {
     setProbingPlatformPython(true)
     setError(null)
     try {
-      const response = platformBranch === 'windows' ? await api.probePythonCudaRuntime() : await api.probePythonMpsRuntime()
+      const response = await selectPlatformAiRuntimeRequests(api, platformBranch).probePythonRuntime()
       if (!response.success || !response.data) throw new Error(response.error || platformCopy.executionFailureMessage)
       setPlatformPythonExecutionDisplay(projectPlatformPythonRuntimeExecutionProbeDisplay(platformBranch, response.data))
       setLastAction(platformCopy.executionLastActionLabel)

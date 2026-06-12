@@ -89,6 +89,25 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Added one renderer-local Platform AI Runtime request adapter.
+  `selectPlatformAiRuntimeRequests()` now selects the existing macOS/Windows
+  capability, Python compatibility, and Python execution-probe methods by
+  `PlatformAiBranch`. AI Console and AI Runtime settings consume the same
+  platform-neutral request bundle instead of duplicating three renderer
+  conditionals. The adapter retains all six concrete preload method signatures
+  and projects only their existing shared base response fields; no IPC channel
+  or response shape changed. Focused adapter behavior and source-contract tests
+  cover both branches and prevent concrete selection logic from returning to
+  the pages. The required four focused TypeScript tests, branch-status display
+  test, Windows validation privacy contract, typecheck, build, and diff checks
+  passed. The full Windows script passed runtime-safety, Python, ONNX, Llama
+  text/generated-image, and Electron/Playwright checks; `chatOk` and
+  `visionOk` were true, Tag/Prompt/Search reported `real_model_path`, OCR
+  reported `runtime_probe_ready`, the `1264x793` viewport had no horizontal
+  overflow, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: audit the main-process `WORKFLOWS` branch tables for shared
+  workflow metadata that can be separated from genuine MPS/CUDA lane
+  definitions.
 - 2026-06-12 Centralized Platform AI Branch Status display copy.
   `PLATFORM_BRANCH_DISPLAY_COPY` now owns each branch label plus route-overview
   title, description, priority text, and Worker-diagnostics visibility.

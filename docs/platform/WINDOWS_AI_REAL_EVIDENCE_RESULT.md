@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 22:57, Windows host local time.
-- Commit tested: worktree based on `9a72b13`, with the Platform AI Branch
-  Status display-copy consolidation applied.
+- Validation time: 2026-06-12 23:03, Windows host local time.
+- Commit tested: worktree based on `c626416`, with the renderer-local Platform
+  AI Runtime request adapter applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,20 +42,19 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: branch labels and route-overview title, description,
-  priority text, and Worker-diagnostics visibility now come from one display
-  table keyed by `PlatformAiBranch`. Runtime lane definitions, evidence
-  scoring, current-OS mapping, and platform action commands remain at genuine
-  platform boundaries.
+- Shared-surface slice: AI Console and AI Runtime settings now share one
+  renderer-local adapter that selects the existing capability, Python
+  compatibility, and Python execution-probe methods by `PlatformAiBranch`.
+  All six concrete preload methods and their response shapes remain unchanged.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: audit duplicated renderer platform IPC selection in
-  AI Console and AI Runtime settings for a shared local adapter that preserves
-  every existing concrete channel and response shape.
+- Next recommended action: audit the main-process `WORKFLOWS` branch tables for
+  shared workflow metadata that can be separated from genuine MPS/CUDA lane
+  definitions.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-225553.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-230154.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

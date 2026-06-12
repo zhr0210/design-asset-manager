@@ -21,6 +21,7 @@ React UI for library browsing, downloading, settings, tags, AI console, and asse
 - Renderer AI route overview should use shared branch-aware display projection; macOS dependency actions and MPS diagnostics must not render for Windows or an unknown branch.
 - Renderer cooperative model rows should consume the shared Worker readiness snapshot and combined row projection instead of redeclaring Worker payload fields or composing artifact state locally.
 - Renderer AI runtime panels should consume shared status display projection for macOS capability matrix labels and badge classes instead of defining local status maps.
+- Renderer AI runtime consumers should use the local Platform AI Runtime request adapter to select existing macOS/Windows capability, Python status, and execution-probe preload methods.
 - Renderer shared AI capability matrices should use platform-neutral component names; platform-specific route details belong in shared projection or probe evidence.
 - Renderer AI runtime cards should consume shared runtime/health badge, icon-semantic, health-result, and summary projections instead of filtering or labeling runtime states locally.
 - Renderer macOS probe summaries should consume shared connection and route-tile projection so missing probe evidence renders as `尚未探测` instead of a capability conclusion.
@@ -39,6 +40,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.5.1 | 2026-06-12 | Centralized renderer selection of existing macOS/Windows Platform AI Runtime requests in one local adapter. |
 | v1.5.0 | 2026-06-11 | Renamed the shared AI capability matrix component to `PlatformAiCapabilityMatrix` for Windows/macOS reuse. |
 | v1.4.9 | 2026-06-06 | Added a manual CLIP/SigLIP real Embedding action and shared evidence display in AI Runtime management. |
 | v1.4.8 | 2026-06-05 | Renamed the real asset-tagging action and left submission normalization in Electron main. |

@@ -64,6 +64,10 @@ import {
 } from '../../shared/workflows/platform-ai-branch-status.workflow'
 import { resolvePlatformAiActionCommand } from '../../shared/workflows/platform-ai-action-plan.workflow'
 import {
+  selectPlatformAiRuntimeRequests,
+  type PlatformAiRuntimeAdapterApi
+} from '../platform-ai-runtime.adapter'
+import {
   projectGgufArtifactTileDisplay,
   projectCooperativeModelRowDisplay,
   projectModelArtifactRowDisplay,
@@ -832,9 +836,13 @@ export default function AiConsolePage() {
       setPlatformWorkerProbe(probeSelection.probe)
       setPlatformProbeDisplay(probeSelection.display)
       setPlatformWorkerProbeBranch(probeSelection.platformBranch)
-      const getPlatformPythonStatus = probeSelection.platformBranch === 'windows'
-        ? api.aiRuntime?.getPythonCudaStatus
-        : api.aiRuntime?.getPythonMpsStatus
+      const platformRequests = api.aiRuntime
+        ? selectPlatformAiRuntimeRequests(
+            api.aiRuntime as PlatformAiRuntimeAdapterApi,
+            probeSelection.platformBranch
+          )
+        : null
+      const getPlatformPythonStatus = platformRequests?.getPythonStatus
       if (status?.offline === false && getPlatformPythonStatus) {
         const platformPythonStatus = await getPlatformPythonStatus().catch(() => null)
         setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(

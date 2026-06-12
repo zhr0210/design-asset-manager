@@ -91,7 +91,10 @@ paths or model cache paths.
    genuine MPS/CUDA adapter boundaries. Platform AI Branch Status labels and
    route-overview copy also come from one branch-keyed display table; runtime
    lane definitions, evidence scoring, current-OS mapping, and platform action
-   commands remain intentionally concrete.
+   commands remain intentionally concrete. AI Console and AI Runtime settings
+   now share one renderer-local request adapter that selects the existing
+   capability, Python status, and Python execution-probe methods by
+   `PlatformAiBranch`; all concrete preload channel methods remain unchanged.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

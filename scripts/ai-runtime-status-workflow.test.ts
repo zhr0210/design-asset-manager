@@ -28,6 +28,10 @@ import {
   projectPythonCudaCompatibilityDisplay,
   projectPythonCudaExecutionProbeDisplay
 } from '../src/shared/workflows/ai-runtime-status.workflow'
+import {
+  selectPlatformAiRuntimeRequests,
+  type PlatformAiRuntimeAdapterApi
+} from '../src/renderer/platform-ai-runtime.adapter'
 
 async function listSourceFiles(dir: string): Promise<string[]> {
   const entries = await fs.readdir(dir, { withFileTypes: true })
@@ -115,6 +119,23 @@ assert.equal(windowsPlatformCopy.executionFailureMessage, 'CUDA 真实执行验�
 assert.equal(windowsPlatformCopy.executionButtonLabel, '验证 CUDA 执行')
 assert.equal(windowsPlatformCopy.workerProbeFailureMessage, '读取 Windows Worker 能力失败。')
 assert.match(windowsPlatformCopy.clipSiglipCompatibilityDescription, /Windows/)
+
+const adapterApi = {
+  getMacOSCapabilities: async () => ({ success: false }),
+  getWindowsCapabilities: async () => ({ success: false }),
+  getPythonMpsStatus: async () => ({ success: false }),
+  getPythonCudaStatus: async () => ({ success: false }),
+  probePythonMpsRuntime: async () => ({ success: false }),
+  probePythonCudaRuntime: async () => ({ success: false })
+} satisfies Required<PlatformAiRuntimeAdapterApi>
+const macOSRuntimeRequests = selectPlatformAiRuntimeRequests(adapterApi, 'macos')
+assert.equal(macOSRuntimeRequests.getCapabilities, adapterApi.getMacOSCapabilities)
+assert.equal(macOSRuntimeRequests.getPythonStatus, adapterApi.getPythonMpsStatus)
+assert.equal(macOSRuntimeRequests.probePythonRuntime, adapterApi.probePythonMpsRuntime)
+const windowsRuntimeRequests = selectPlatformAiRuntimeRequests(adapterApi, 'windows')
+assert.equal(windowsRuntimeRequests.getCapabilities, adapterApi.getWindowsCapabilities)
+assert.equal(windowsRuntimeRequests.getPythonStatus, adapterApi.getPythonCudaStatus)
+assert.equal(windowsRuntimeRequests.probePythonRuntime, adapterApi.probePythonCudaRuntime)
 
 assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('macos', pythonReady).runtimeLabel, 'torch.mps')
 const pythonCudaReady = {
@@ -823,6 +844,8 @@ assert.match(
   /platformBranch === 'windows'[\s\S]*probe\.torch\.cudaAvailable[\s\S]*probe\.torch\.mpsAvailable/
 )
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
+assert.match(settingsPanelSource, /selectPlatformAiRuntimeRequests/)
+assert.doesNotMatch(settingsPanelSource, /useWindowsRuntime|platformBranch === 'windows'/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeExecutionProbeDisplay/)
 assert.match(settingsPanelSource, /projectAiRuntimeBranchPanelDisplay/)
@@ -863,6 +886,8 @@ assert.doesNotMatch(matrixSource, /WindowsAiWorkerProbeResult/)
 assert.doesNotMatch(matrixSource, /Windows 细项能力矩阵/)
 assert.doesNotMatch(matrixSource, /macOS 细项能力矩阵/)
 assert.match(aiConsoleSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
+assert.match(aiConsoleSource, /selectPlatformAiRuntimeRequests/)
+assert.doesNotMatch(aiConsoleSource, /probeSelection\.platformBranch === 'windows'/)
 assert.match(aiConsoleSource, /AiRuntimeCompatibilityDisplay/)
 assert.doesNotMatch(aiConsoleSource, /projectPythonMpsCompatibilityDisplay/)
 assert.doesNotMatch(aiConsoleSource, /AiRuntimePythonMpsStatusResponse/)
