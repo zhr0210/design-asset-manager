@@ -23,18 +23,48 @@ export interface PlatformAiBranchStatusProjectorInput {
 
 interface WorkflowDefinition {
   workflow: PlatformAiWorkflow
-  title: string
-  summary: string
   primaryRuntimeLane: string
   runtimeLanes: Array<{ lane: string; label: string; runtimeKinds: string[] }>
+}
+
+const WORKFLOW_METADATA: Record<PlatformAiWorkflow, {
+  title: string
+  summary: Record<PlatformAiBranch, string>
+}> = {
+  ai_tag_task: {
+    title: 'AI Tag Task',
+    summary: {
+      macos: 'RAM++, Florence-2, CLIP/SigLIP, and WD Tagger tagging routes for macOS.',
+      windows: 'CUDA AI Worker tagging routes for RAM++, Florence-2, CLIP/SigLIP, and WD Tagger.'
+    }
+  },
+  ai_prompt_task: {
+    title: 'AI Prompt Task',
+    summary: {
+      macos: 'Qwen3-VL prompt reverse through Llama, native Python experiment, or external HTTP fallback.',
+      windows: 'Qwen3-VL prompt reverse through CUDA legacy route, Llama CUDA, Ollama, or external HTTP fallback.'
+    }
+  },
+  ocr_text_box: {
+    title: 'OCR Text / Text Box',
+    summary: {
+      macos: 'RapidOCR, PaddleOCR, EasyOCR, or Qwen-VL text-block detection on macOS.',
+      windows: 'RapidOCR, PaddleOCR, EasyOCR, or CUDA-backed text-block detection on Windows.'
+    }
+  },
+  search_embedding: {
+    title: 'Search Embedding',
+    summary: {
+      macos: 'CLIP/SigLIP embedding route for semantic Asset Library search.',
+      windows: 'CLIP/SigLIP embedding route for semantic Asset Library search.'
+    }
+  }
 }
 
 const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
   macos: [
     {
       workflow: 'ai_tag_task',
-      title: 'AI Tag Task',
-      summary: 'RAM++, Florence-2, CLIP/SigLIP, and WD Tagger tagging routes for macOS.',
       primaryRuntimeLane: 'python_mps',
       runtimeLanes: [
         { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] },
@@ -43,8 +73,6 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
     },
     {
       workflow: 'ai_prompt_task',
-      title: 'AI Prompt Task',
-      summary: 'Qwen3-VL prompt reverse through Llama, native Python experiment, or external HTTP fallback.',
       primaryRuntimeLane: 'llama_metal',
       runtimeLanes: [
         { lane: 'llama_metal', label: 'Llama Metal', runtimeKinds: ['llama-app', 'custom-http'] },
@@ -54,8 +82,6 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
     },
     {
       workflow: 'ocr_text_box',
-      title: 'OCR Text / Text Box',
-      summary: 'RapidOCR, PaddleOCR, EasyOCR, or Qwen-VL text-block detection on macOS.',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
         { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] },
@@ -64,8 +90,6 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
     },
     {
       workflow: 'search_embedding',
-      title: 'Search Embedding',
-      summary: 'CLIP/SigLIP embedding route for semantic Asset Library search.',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
         { lane: 'onnx_runtime', label: 'CLIP/SigLIP ONNX', runtimeKinds: ['python-worker'] },
@@ -76,8 +100,6 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
   windows: [
     {
       workflow: 'ai_tag_task',
-      title: 'AI Tag Task',
-      summary: 'CUDA AI Worker tagging routes for RAM++, Florence-2, CLIP/SigLIP, and WD Tagger.',
       primaryRuntimeLane: 'python_cuda',
       runtimeLanes: [
         { lane: 'python_cuda', label: 'Python CUDA Runtime', runtimeKinds: ['python-worker'] },
@@ -86,8 +108,6 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
     },
     {
       workflow: 'ai_prompt_task',
-      title: 'AI Prompt Task',
-      summary: 'Qwen3-VL prompt reverse through CUDA legacy route, Llama CUDA, Ollama, or external HTTP fallback.',
       primaryRuntimeLane: 'llama_cuda',
       runtimeLanes: [
         { lane: 'llama_cuda', label: 'Llama CUDA', runtimeKinds: ['llama-app', 'custom-http'] },
@@ -98,8 +118,6 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
     },
     {
       workflow: 'ocr_text_box',
-      title: 'OCR Text / Text Box',
-      summary: 'RapidOCR, PaddleOCR, EasyOCR, or CUDA-backed text-block detection on Windows.',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
         { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] },
@@ -108,8 +126,6 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
     },
     {
       workflow: 'search_embedding',
-      title: 'Search Embedding',
-      summary: 'CLIP/SigLIP embedding route for semantic Asset Library search.',
       primaryRuntimeLane: 'python_cuda',
       runtimeLanes: [
         { lane: 'python_cuda', label: 'CLIP/SigLIP CUDA', runtimeKinds: ['python-worker'] },
@@ -123,6 +139,7 @@ export function createPlatformAiBranchStatus(input: PlatformAiBranchStatusProjec
   const platformSupported = isCurrentBranch(input.platformBranch, input.currentPlatform)
   const workflows = WORKFLOWS[input.platformBranch].map((definition) => projectWorkflow(
     definition,
+    input.platformBranch,
     input.runtimes,
     platformSupported,
     input.modelReadiness ?? []
@@ -137,10 +154,12 @@ export function createPlatformAiBranchStatus(input: PlatformAiBranchStatusProjec
 
 function projectWorkflow(
   definition: WorkflowDefinition,
+  platformBranch: PlatformAiBranch,
   runtimes: AiRuntimeState[],
   platformSupported: boolean,
   modelReadiness: AiModelArtifactReadiness[]
 ): PlatformAiWorkflowStatus {
+  const metadata = WORKFLOW_METADATA[definition.workflow]
   const workflowModelReadiness = modelReadiness.filter((item) => item.workflow === definition.workflow)
   const runtimeLanes = definition.runtimeLanes.map((lane) => projectLane(lane, runtimes, platformSupported, workflowModelReadiness))
   const status = projectWorkflowStatus(runtimeLanes, platformSupported)
@@ -149,8 +168,8 @@ function projectWorkflow(
   return {
     workflow: definition.workflow,
     status,
-    title: definition.title,
-    summary: definition.summary,
+    title: metadata.title,
+    summary: metadata.summary[platformBranch],
     primaryRuntimeLane: definition.primaryRuntimeLane,
     runtimeLanes,
     evidence: runtimeLanes.flatMap((lane) => lane.evidence),

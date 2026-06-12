@@ -220,6 +220,22 @@ assert.equal(
 
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 const branchWorkflowSource = await fs.readFile('src/shared/workflows/platform-ai-branch-status.workflow.ts', 'utf8')
+const branchProjectorSource = await fs.readFile('src/main/services/ai-runtime/platform-ai-branch-status.projector.ts', 'utf8')
+assert.match(
+  branchProjectorSource,
+  /const WORKFLOW_METADATA: Record<PlatformAiWorkflow/
+)
+assert.match(
+  branchProjectorSource,
+  /summary: metadata\.summary\[platformBranch\]/
+)
+assert.doesNotMatch(
+  branchProjectorSource.slice(
+    branchProjectorSource.indexOf('const WORKFLOWS:'),
+    branchProjectorSource.indexOf('export function createPlatformAiBranchStatus')
+  ),
+  /\btitle:|\bsummary:/
+)
 assert.match(
   branchWorkflowSource,
   /const PLATFORM_BRANCH_DISPLAY_COPY: Record<PlatformAiBranch, PlatformAiBranchDisplayCopy>/

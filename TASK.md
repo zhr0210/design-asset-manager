@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Separated shared Platform AI workflow product metadata from
+  main-process runtime lane definitions. `WORKFLOW_METADATA` now owns each
+  workflow title and branch-aware summary, while the macOS/Windows `WORKFLOWS`
+  tables contain only `workflow`, `primaryRuntimeLane`, and concrete lane
+  definitions. Status scoring, model-readiness matching, lane order, primary
+  lanes, runtime kinds, and shared response fields are unchanged. A focused
+  source contract prevents title/summary copy from returning to the platform
+  lane tables. The required four focused TypeScript tests, branch-status
+  display test, Windows validation privacy contract, typecheck, build, and diff
+  checks passed. The full Windows script passed runtime-safety, Python, ONNX,
+  Llama text/generated-image, and Electron/Playwright checks; `chatOk` and
+  `visionOk` were true, Tag/Prompt/Search reported `real_model_path`, OCR
+  reported `runtime_probe_ready`, the `1264x793` viewport had no horizontal
+  overflow, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: audit repeated lane labels and `runtimeKinds` for shared lane
+  metadata while preserving platform lane membership, order, and primary-lane
+  selection.
 - 2026-06-12 Added one renderer-local Platform AI Runtime request adapter.
   `selectPlatformAiRuntimeRequests()` now selects the existing macOS/Windows
   capability, Python compatibility, and Python execution-probe methods by

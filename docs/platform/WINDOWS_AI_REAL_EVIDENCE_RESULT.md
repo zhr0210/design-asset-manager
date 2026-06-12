@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 23:03, Windows host local time.
-- Commit tested: worktree based on `c626416`, with the renderer-local Platform
-  AI Runtime request adapter applied.
+- Validation time: 2026-06-12 23:08, Windows host local time.
+- Commit tested: worktree based on `ed3eb60`, with the main-process shared
+  workflow metadata extraction applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,19 +42,18 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: AI Console and AI Runtime settings now share one
-  renderer-local adapter that selects the existing capability, Python
-  compatibility, and Python execution-probe methods by `PlatformAiBranch`.
-  All six concrete preload methods and their response shapes remain unchanged.
+- Shared-surface slice: shared workflow titles and branch-aware summaries now
+  live in `WORKFLOW_METADATA`; the macOS/Windows `WORKFLOWS` tables contain
+  only workflow identity, primary lane, and concrete lane definitions.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: audit the main-process `WORKFLOWS` branch tables for
-  shared workflow metadata that can be separated from genuine MPS/CUDA lane
-  definitions.
+- Next recommended action: audit repeated lane labels and `runtimeKinds` for
+  shared lane metadata while preserving platform lane membership, order, and
+  primary-lane selection.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-230154.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-230636.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

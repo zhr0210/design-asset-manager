@@ -95,6 +95,9 @@ paths or model cache paths.
    now share one renderer-local request adapter that selects the existing
    capability, Python status, and Python execution-probe methods by
    `PlatformAiBranch`; all concrete preload channel methods remain unchanged.
+   The main Platform AI Branch Status projector now keeps shared workflow
+   titles and branch-aware summaries in `WORKFLOW_METADATA`, leaving the
+   per-platform `WORKFLOWS` tables focused on concrete lane topology.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
