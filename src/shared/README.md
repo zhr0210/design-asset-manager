@@ -62,6 +62,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.18 | 2026-06-12 | Normalized Worker diagnostics selection through one branch resolver and branch-indexed probe map. |
 | v1.8.17 | 2026-06-12 | Centralized macOS/Windows Worker probe connection and accelerator reads in branch-keyed accessors. |
 | v1.8.16 | 2026-06-12 | Moved the macOS-specific Platform AI runtime-install command into branch-keyed action metadata. |
 | v1.8.15 | 2026-06-12 | Added a platform-neutral Platform AI runtime lane ID type for shared main-process metadata and readiness routes. |

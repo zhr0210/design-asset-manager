@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Normalized shared Worker diagnostics probe selection.
+  `resolvePlatformAiWorkerProbeDiagnosticsBranch()` now applies the existing
+  explicit-branch and Windows-only-probe fallback rules, while
+  `projectPlatformAiWorkerProbeDiagnosticsSelection()` selects from a
+  branch-indexed probe map. The previous `useWindows` control branch is removed.
+  Focused tests preserve explicit Windows selection, inferred Windows
+  selection, explicit unchecked macOS selection, and the existing ambiguous
+  dual-probe default to macOS. Probe shapes, renderer state, IPC channels,
+  display output, and runtime behavior are unchanged. The required four focused
+  TypeScript tests, Windows validation privacy contract, typecheck, build, docs
+  sync, and diff checks passed. The full Windows script passed runtime-safety,
+  Python, ONNX, Llama text/generated-image, and Electron/Playwright checks;
+  `chatOk` and `visionOk` were true, Tag/Prompt/Search reported
+  `real_model_path`, OCR reported `runtime_probe_ready`, the `1264x793`
+  viewport had no horizontal overflow, and the saved log contained zero
+  absolute Windows paths. Next smallest slice: audit the two remaining
+  platform conditions in the renderer concrete IPC adapter and main
+  branch-to-OS matcher; retain them if they remain genuine platform boundaries.
 - 2026-06-12 Centralized shared Worker probe platform field selection.
   `PLATFORM_AI_WORKER_PROBE_ACCESSORS` now owns macOS connection/MPS reads and
   Windows connection/CUDA reads. Shared diagnostics and Worker-panel projectors

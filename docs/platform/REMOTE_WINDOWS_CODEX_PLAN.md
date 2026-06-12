@@ -112,7 +112,10 @@ paths or model cache paths.
    the shared Runtime management command. Worker diagnostics now use
    `PLATFORM_AI_WORKER_PROBE_ACCESSORS` for the genuine macOS
    `isMacOS`/MPS fields and Windows platform/CUDA fields, leaving the shared
-   projector free of platform control-flow branches.
+   projector free of platform control-flow branches. Diagnostics selection now
+   resolves the branch once and selects from a branch-indexed probe map,
+   preserving explicit branch priority, Windows-only inference, and the
+   ambiguous dual-probe macOS default.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

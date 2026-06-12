@@ -624,6 +624,26 @@ assert.equal(uncheckedMacOSProbeSelection.probe, null)
 assert.equal(uncheckedMacOSProbeSelection.platformBranch, 'macos')
 assert.equal(uncheckedMacOSProbeSelection.display.connected, false)
 
+const macOSRawProbe = {
+  ...windowsRawProbe,
+  platform: 'darwin',
+  machine: 'arm64',
+  isMacOS: true,
+  isAppleSilicon: true,
+  torch: {
+    ...windowsRawProbe.torch,
+    mpsAvailable: true,
+    cudaAvailable: false
+  }
+}
+const ambiguousProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
+  macOSProbe: macOSRawProbe,
+  windowsProbe: windowsRawProbe
+})
+assert.equal(ambiguousProbeSelection.probe, macOSRawProbe)
+assert.equal(ambiguousProbeSelection.platformBranch, 'macos')
+assert.equal(ambiguousProbeSelection.display.connected, true)
+
 const windowsBranch = {
   marker: 'windows-ai-branch' as const,
   phase: 'worker-probes' as const,
@@ -847,6 +867,15 @@ assert.match(
 assert.doesNotMatch(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
   /platformBranch === 'windows'/
+)
+assert.match(runtimeWorkflowSource, /function resolvePlatformAiWorkerProbeDiagnosticsBranch\(/)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsSelection'),
+  /const probes: Record<PlatformAiBranch[\s\S]*const probe = probes\[platformBranch\]/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsSelection'),
+  /useWindows|platformBranch === 'windows'|if \(useWindows\)/
 )
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /selectPlatformAiRuntimeRequests/)

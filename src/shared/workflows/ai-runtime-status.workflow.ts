@@ -789,26 +789,33 @@ export function projectPythonCudaExecutionProbeDisplay(
   return projectPythonRuntimeExecutionProbeDisplay('windows', probe, error)
 }
 
-export function projectPlatformAiWorkerProbeDiagnosticsSelection(input: {
+interface PlatformAiWorkerProbeDiagnosticsSelectionInput {
   platformBranch?: PlatformAiBranch | null
   macOSProbe?: PlatformAiWorkerProbeDiagnosticsInput | null
   windowsProbe?: PlatformAiWorkerProbeDiagnosticsInput | null
-}): PlatformAiWorkerProbeDiagnosticsSelection {
-  const useWindows = input.platformBranch === 'windows'
-    || (input.platformBranch !== 'macos' && Boolean(input.windowsProbe) && !input.macOSProbe)
+}
 
-  if (useWindows) {
-    return {
-      platformBranch: 'windows',
-      probe: input.windowsProbe ?? null,
-      display: projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', input.windowsProbe)
-    }
+function resolvePlatformAiWorkerProbeDiagnosticsBranch(
+  input: PlatformAiWorkerProbeDiagnosticsSelectionInput
+): PlatformAiBranch {
+  if (input.platformBranch) return input.platformBranch
+  return input.windowsProbe && !input.macOSProbe ? 'windows' : 'macos'
+}
+
+export function projectPlatformAiWorkerProbeDiagnosticsSelection(
+  input: PlatformAiWorkerProbeDiagnosticsSelectionInput
+): PlatformAiWorkerProbeDiagnosticsSelection {
+  const probes: Record<PlatformAiBranch, PlatformAiWorkerProbeDiagnosticsInput | null> = {
+    macos: input.macOSProbe ?? null,
+    windows: input.windowsProbe ?? null
   }
+  const platformBranch = resolvePlatformAiWorkerProbeDiagnosticsBranch(input)
+  const probe = probes[platformBranch]
 
   return {
-    platformBranch: 'macos',
-    probe: input.macOSProbe ?? null,
-    display: projectPlatformAiWorkerProbeDiagnosticsDisplay('macos', input.macOSProbe)
+    platformBranch,
+    probe,
+    display: projectPlatformAiWorkerProbeDiagnosticsDisplay(platformBranch, probe)
   }
 }
 
