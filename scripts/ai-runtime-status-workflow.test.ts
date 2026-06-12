@@ -40,6 +40,26 @@ async function listSourceFiles(dir: string): Promise<string[]> {
   return files.flat()
 }
 
+function extractFunctionSource(source: string, name: string): string {
+  const start = source.search(new RegExp(`(?:export\\s+)?function\\s+${name}\\s*\\(`))
+  assert.notEqual(start, -1, `Expected to find function ${name}`)
+
+  const bodyStart = source.indexOf('{', start)
+  assert.notEqual(bodyStart, -1, `Expected to find body for function ${name}`)
+
+  let depth = 0
+  for (let index = bodyStart; index < source.length; index += 1) {
+    const char = source[index]
+    if (char === '{') depth += 1
+    if (char === '}') {
+      depth -= 1
+      if (depth === 0) return source.slice(start, index + 1)
+    }
+  }
+
+  assert.fail(`Expected function ${name} body to close`)
+}
+
 const pythonUnchecked = projectPythonMpsCompatibilityDisplay(null, 'offline')
 assert.equal(pythonUnchecked.label, '未检查')
 assert.equal(pythonUnchecked.tone, 'muted')
@@ -620,6 +640,29 @@ assert.match(runtimeWorkflowSource, /interface MacOSAiWorkerProbeDisplay extends
 assert.match(runtimeWorkflowSource, /interface WindowsAiWorkerProbeDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
 assert.match(runtimeWorkflowSource, /interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
+const platformProbeDetailFieldPattern = /probe\.(?:torch|onnxruntime)|\.(?:mpsAvailable|cudaAvailable|providers)/
+for (const helperName of [
+  'projectPlatformAiWorkerProbeHeaderDisplay',
+  'projectAiRuntimeWorkerProbePanelDisplay',
+  'projectAiRuntimeWorkerProbePanelFromHeader',
+  'projectAiRuntimeBranchPanelDisplay'
+]) {
+  assert.doesNotMatch(
+    extractFunctionSource(runtimeWorkflowSource, helperName),
+    platformProbeDetailFieldPattern,
+    `${helperName} should stay platform-neutral and not read Worker device detail fields`
+  )
+}
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectMacOSAiWorkerProbeDisplay'),
+  /probe\.torch\.mpsAvailable[\s\S]*probe\.onnxruntime\.providers/,
+  'macOS Worker detail fields should stay inside the macOS-specific display projector'
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectWindowsAiWorkerProbeDisplay'),
+  /probe\.torch\.cudaAvailable[\s\S]*probe\.onnxruntime\.providers/,
+  'Windows Worker detail fields should stay inside the Windows-specific display projector'
+)
 assert.match(settingsPanelSource, /projectAiRuntimePlatformPanelCopy/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
 assert.match(settingsPanelSource, /projectPlatformPythonRuntimeExecutionProbeDisplay/)

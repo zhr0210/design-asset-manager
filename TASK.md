@@ -89,6 +89,27 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Added a tighter Platform AI shared workflow boundary guardrail.
+  `scripts/ai-runtime-status-workflow.test.ts` now extracts individual helper
+  function bodies and asserts that platform-neutral Worker probe helpers
+  (`projectPlatformAiWorkerProbeHeaderDisplay()`,
+  `projectAiRuntimeWorkerProbePanelDisplay()`,
+  `projectAiRuntimeWorkerProbePanelFromHeader()`, and
+  `projectAiRuntimeBranchPanelDisplay()`) do not read platform-specific Worker
+  device detail fields such as `torch`, `onnxruntime`, MPS, CUDA, or provider
+  lists. The same test confirms those detail fields remain inside the macOS and
+  Windows specific Worker display projectors. Validation passed
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. Windows real-evidence validation was not repeated
+  because this is a test-only guardrail with no product renderer, IPC, runtime,
+  response-shape, or docs evidence change. Next smallest slice: audit whether
+  remaining AI Console model/runtime summary helpers can consume a shared
+  renderer-ready input shape without pulling platform detail evidence into
+  platform-neutral display code.
 - 2026-06-12 Added a guardrail for the remaining concrete Platform AI runtime
   type usages. `scripts/ai-runtime-status-workflow.test.ts` now scans `src`
   and allows concrete macOS/Windows runtime types only in IPC contracts,
