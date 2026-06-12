@@ -73,7 +73,7 @@ import {
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
   projectMacOSAiWorkerProbeDisplay,
-  type MacOSAiWorkerProbeDisplay,
+  type PlatformAiWorkerProbeDiagnosticsDisplay,
   projectPythonMpsCompatibilityDisplay
 } from '../../shared/workflows/ai-runtime-status.workflow'
 import {
@@ -636,7 +636,7 @@ export default function AiConsolePage() {
   const [localGgufModels, setLocalGgufModels] = useState<LocalGgufModel[]>([])
   const [gpuSamples, setGpuSamples] = useState<GpuSample[]>([])
   const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
-  const [platformProbeDisplay, setPlatformProbeDisplay] = useState<MacOSAiWorkerProbeDisplay>(() => projectMacOSAiWorkerProbeDisplay(null))
+  const [platformProbeDisplay, setPlatformProbeDisplay] = useState<PlatformAiWorkerProbeDiagnosticsDisplay>(() => projectMacOSAiWorkerProbeDisplay(null))
   const [platformBranchStatus, setPlatformBranchStatus] = useState<PlatformAiBranchStatusResponse | null>(null)
   const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
@@ -1784,7 +1784,7 @@ function OverviewWorkspace(props: {
   llamaStatus: LlamaInstallStatus | null
   llamaRunning?: boolean
   platformWorkerProbe: PlatformAiWorkerProbeWithRuntimeVersions | null
-  platformProbeDisplay: MacOSAiWorkerProbeDisplay
+  platformProbeDisplay: PlatformAiWorkerProbeDiagnosticsDisplay
   platformBranchStatus: PlatformAiBranchStatusResponse | null
   onInstallAiRuntimeDeps?: () => Promise<void>
   installingAiRuntimeDeps?: boolean
@@ -1909,7 +1909,7 @@ function OverviewWorkspace(props: {
           <div className="grid gap-3 md:grid-cols-2">
             {routeOverviewDisplay.showWorkerProbeDiagnostics ? (
               <>
-                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={props.platformProbeDisplay.mps.valueLabel} caption={props.platformProbeDisplay.mps.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={props.platformProbeDisplay.accelerator.valueLabel} caption={props.platformProbeDisplay.accelerator.captionLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.pythonCompatibilityLabel} value={pythonMpsDisplay.label} caption={pythonMpsDisplay.runtimeLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.onnxRuntimeLabel} value={props.platformProbeDisplay.onnxRuntime.valueLabel} caption={props.platformProbeDisplay.onnxRuntime.captionLabel} />
                 <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipOnnxLabel} value={props.platformProbeDisplay.clipSiglipOnnx.valueLabel} caption={props.platformProbeDisplay.clipSiglipOnnx.captionLabel} />

@@ -89,6 +89,29 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued AI Console shared renderer-ready type cleanup. Added
+  `PlatformAiWorkerProbeDiagnosticsDisplay` as the shared Worker probe
+  diagnostics display shape for overview consumers, with a platform-neutral
+  `accelerator` tile plus ONNX Runtime and CLIP/SigLIP tiles. macOS and Windows
+  detail projectors now map MPS/CUDA into `accelerator` while preserving their
+  existing platform-specific `mps` and `cuda` fields at the platform projector
+  boundary. `OverviewWorkspace` now consumes the shared diagnostics display
+  instead of typing the prop as `MacOSAiWorkerProbeDisplay`; no IPC channel,
+  AI Worker HTTP API, database schema, or shared response shape changed.
+  Validation passed `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs
+  scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. Windows
+  real-evidence validation also passed via `powershell -ExecutionPolicy Bypass
+  -File .\scripts\windows-ai-real-evidence-validation.ps1`; it captured
+  `dam-windows-ai-console.png`, reported overflow `doc=false`, `body=false` at
+  `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` as `real_model_path`. Next smallest slice: continue
+  auditing AI Console model/runtime summary helpers for shared renderer-ready
+  inputs without pulling platform detail evidence into platform-neutral display
+  code.
 - 2026-06-12 Added a tighter Platform AI shared workflow boundary guardrail.
   `scripts/ai-runtime-status-workflow.test.ts` now extracts individual helper
   function bodies and asserts that platform-neutral Worker probe helpers
