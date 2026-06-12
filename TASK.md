@@ -89,6 +89,25 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued Remaining Work item 2 by reducing AI Console overview
+  coupling to macOS concrete Worker probe data. `AiConsolePage` now stores the
+  raw Worker probe used by overview/matrix as
+  `PlatformAiWorkerProbeWithRuntimeVersions` and passes a renderer-ready
+  `MacOSAiWorkerProbeDisplay` for the macOS-only diagnostic tiles; the concrete
+  macOS Worker probe result remains confined to the `getMacOSCapabilities()`
+  IPC response projection point. Validation passed
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. Windows real-evidence validation also passed via
+  `powershell -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1`;
+  it captured `dam-windows-ai-console.png`, reported overflow `doc=false`,
+  `body=false` at `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`,
+  and `search_embedding` as `real_model_path`. Next smallest slice: continue
+  auditing AI Console/Settings component props for shared renderer-ready types
+  while leaving platform-specific runtime detail projectors intact.
 - 2026-06-12 Continued Remaining Work item 1 by removing another renderer/shared
   workflow dependency on concrete macOS/Windows Worker probe result unions.
   `AiRuntimePanel` now stores and passes Worker probe data as
