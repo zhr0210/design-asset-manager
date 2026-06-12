@@ -17,7 +17,10 @@ import type {
   MacOSAiBranchRuntimeMetadata,
   MacOSAiWorkerProbeResult
 } from '../types/macos-ai-runtime.types'
-import type { AiCapabilityStatus } from '../types/platform-ai-runtime.types'
+import type {
+  AiCapabilityStatus,
+  PlatformAiWorkerProbeResultBase
+} from '../types/platform-ai-runtime.types'
 import type { WindowsAiBranchRuntimeMetadata, WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
@@ -422,7 +425,7 @@ export function projectAiRuntimeHealthResultDisplay(
 }
 
 function projectPlatformAiWorkerProbeHeaderDisplay(
-  probe: Pick<MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult, 'platform' | 'machine' | 'isMacOS' | 'isAppleSilicon' | 'clipSiglipOnnx'> | null,
+  probe: Pick<PlatformAiWorkerProbeResultBase, 'platform' | 'machine' | 'isMacOS' | 'isAppleSilicon' | 'clipSiglipOnnx'> | null,
   connected: boolean,
   connectedLabel: string
 ): PlatformAiWorkerProbeHeaderDisplay {

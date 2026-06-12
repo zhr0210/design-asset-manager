@@ -1,7 +1,8 @@
 import React from 'react'
-import type { MacOSAiWorkerProbeResult } from '../../../shared/types/macos-ai-runtime.types'
-import type { AiWorkerLaneProbe } from '../../../shared/types/platform-ai-runtime.types'
-import type { WindowsAiWorkerProbeResult } from '../../../shared/types/windows-ai-runtime.types'
+import type {
+  AiWorkerLaneProbe,
+  PlatformAiWorkerProbeWithRuntimeVersions
+} from '../../../shared/types/platform-ai-runtime.types'
 import {
   projectAiCapabilityStatusDisplay,
   projectAiRuntimeCapabilityMatrixDisplay
@@ -11,7 +12,7 @@ export function PlatformAiCapabilityMatrix({
   probe,
   isWindows
 }: {
-  probe: MacOSAiWorkerProbeResult | WindowsAiWorkerProbeResult | null
+  probe: PlatformAiWorkerProbeWithRuntimeVersions | null
   isWindows?: boolean
 }) {
   if (!probe) return null

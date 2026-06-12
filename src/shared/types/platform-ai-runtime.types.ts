@@ -68,3 +68,12 @@ export interface PlatformAiWorkerProbeResultBase {
   clipSiglipOnnx: AiWorkerCapabilityProbe
   lanes: AiWorkerLaneProbe[]
 }
+
+export interface PlatformAiWorkerRuntimeVersionProbe {
+  version: string | null
+}
+
+export type PlatformAiWorkerProbeWithRuntimeVersions = PlatformAiWorkerProbeResultBase & {
+  torch: PlatformAiWorkerRuntimeVersionProbe
+  onnxruntime: PlatformAiWorkerRuntimeVersionProbe
+}

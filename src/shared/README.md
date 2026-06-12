@@ -32,10 +32,11 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - AI runtime compatibility and Llama runtime display states should use shared projection so Settings and AI Console share the same status vocabulary.
 - Llama service health is runtime evidence only. `real_model_path` requires a fresh successful text plus generated-image inference probe through GGUF/mmproj.
 - macOS/Windows AI capability matrix title, description, status labels, and badge classes should use shared AI Runtime Status projection rather than component-local platform copy or status maps.
+- Shared AI capability matrix renderer inputs should use the platform-neutral Worker probe-with-runtime-versions shape, not macOS/Windows concrete probe result unions or renderer-local cross-platform probe types.
 - AI runtime capability status, capability rows, Worker capability probes, Worker lane probes, and Worker probe result envelopes should live in platform-neutral runtime types; macOS/Windows runtime type files may add platform-specific lane IDs, metadata, and device details only.
 - AI Runtime panel runtime/health badges, icon semantics, health-result copy, and summary counts should use shared AI Runtime Status projection rather than renderer-local status maps or filters.
 - AI Runtime panel platform-specific branch titles, Worker probe titles, CUDA/MPS compatibility copy, fixed-tensor execution copy, and default probe failure messages should use shared AI Runtime Status projection rather than renderer-local platform ternaries.
-- macOS Worker probe connection and route tiles should use shared projection; a missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
+- Worker probe connection headers should use the platform-neutral Worker probe envelope; platform-specific probe displays may add MPS/CUDA/ONNX route tiles. A missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
 - AI Console overview status cards should use shared display projection for GPU risk and model readiness vocabulary.
 - Prompt Reverse panel state labels and action suggestions should use shared projection so GGUF/Llama and native routes share one renderer-ready vocabulary.
 - Asset Tagging Workflow pipeline defaults, category/model options, scan-state display, model selection toggles, task submission projection, confirmed tag chips, suggestion review items, pending suggestion projection, and tag type/color options belong in shared workflow planners, not renderer panels.
@@ -61,6 +62,9 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.14 | 2026-06-12 | Moved shared Worker probe header projection from macOS/Windows concrete probe unions to the platform-neutral Worker probe envelope. |
+| v1.8.13 | 2026-06-12 | Added a platform-neutral Worker probe-with-runtime-versions type for shared AI capability matrix inputs. |
+| v1.8.12 | 2026-06-12 | Moved the shared AI capability matrix prop type from macOS/Windows concrete probe unions to a platform-neutral Worker probe envelope plus minimal runtime version fields. |
 | v1.8.11 | 2026-06-12 | Added a platform-neutral Worker probe result base type so macOS/Windows runtime probes share one envelope while keeping device details platform-specific. |
 | v1.8.10 | 2026-06-11 | Added platform-neutral AI runtime lane and branch metadata base types for macOS/Windows runtime definitions. |
 | v1.8.9 | 2026-06-11 | Extracted platform-neutral AI runtime capability/probe types so Windows runtime types no longer depend on macOS runtime types. |
