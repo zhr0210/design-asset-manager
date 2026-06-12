@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued AI Runtime panel icon type cleanup. Settings
+  `AiRuntimePanel` now uses the shared `AiRuntimeStatusIcon` type for
+  `statusIcon()` instead of deriving the icon union from
+  `ReturnType<typeof projectAiRuntimeStatusDisplay>`. This keeps the renderer
+  helper tied to the named shared workflow display contract and leaves runtime
+  status projection unchanged. No IPC channel, AI Worker HTTP API, database
+  schema, or shared response shape changed. Validation passed `node
+  scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`, `node
+  scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`, `node
+  scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`, `node
+  scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`, `npm run
+  typecheck`, `npm run build`, `python scripts/check-docs-sync.py`, and `git
+  diff --check`. Windows real-evidence validation also passed via `powershell
+  -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1`;
+  it captured `dam-windows-ai-console.png`, reported overflow `doc=false`,
+  `body=false` at `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`,
+  and `search_embedding` as `real_model_path`. Next smallest slice: continue
+  auditing AI Console model/native model props for shared renderer-ready
+  display/input types, but avoid broad `any` cleanup unless it reduces
+  cross-platform probe or workflow coupling.
 - 2026-06-12 Continued AI Console GPU display prop type cleanup.
   `ModelsWorkspace` and `MemoryGuardPanel` now use the shared
   `AiConsoleGpuDisplay` prop type instead of anonymous

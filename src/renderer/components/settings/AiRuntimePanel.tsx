@@ -3,6 +3,7 @@ import { Activity, AlertTriangle, CheckCircle2, Loader2, Play, Power, RefreshCw,
 import type { AiRuntimeConfig, AiRuntimeHealthResult, AiRuntimeOperationResult, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
 import type { PlatformAiBranchRuntimeMetadata, PlatformAiLaneDisplayInput, PlatformAiWorkerProbeWithRuntimeVersions } from '../../../shared/types/platform-ai-runtime.types'
 import { PlatformAiCapabilityMatrix } from './PlatformAiCapabilityMatrix'
+import type { AiRuntimeStatusIcon } from '../../../shared/workflows/ai-runtime-status.workflow'
 import type {
   AiRuntimeActiveRuntimeResponse,
   AiRuntimeClipSiglipOnnxStatusResponse,
@@ -81,7 +82,7 @@ function stringifyMetadata(metadata?: Record<string, unknown>) {
   }
 }
 
-function statusIcon(icon: ReturnType<typeof projectAiRuntimeStatusDisplay>['icon']) {
+function statusIcon(icon: AiRuntimeStatusIcon) {
   if (icon === 'success') return <CheckCircle2 className="h-3.5 w-3.5" />
   if (icon === 'warning') return <AlertTriangle className="h-3.5 w-3.5" />
   return <Activity className="h-3.5 w-3.5" />
