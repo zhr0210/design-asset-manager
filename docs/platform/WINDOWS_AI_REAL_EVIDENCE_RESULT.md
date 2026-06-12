@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 16:04, Windows host local time.
-- Commit tested: worktree based on `f49251d`, with the shared AI Console model
-  readiness input slice applied.
+- Validation time: 2026-06-12 16:08, Windows host local time.
+- Commit tested: worktree based on `d6d1823`, with the shared AI Console queue
+  stats input slice applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -41,19 +41,18 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: `AiConsoleModelReadinessDisplayInput` now names the
-  shared AI Console model-readiness projector input. AI Console overview passes
-  that shared input through its component boundary and reuses the shared
-  readiness tone instead of branching on model-ready booleans in renderer UI.
+- Shared-surface slice: AI Console queue summaries now use the shared
+  `AiQueueStatsLike` input type across the page-level queue snapshot,
+  `TaskListPreview`, and `OverviewWorkspace` instead of renderer `any` props.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   slice.
 - Next recommended action: continue auditing remaining AI Console overview
-  props for shared renderer-ready display/input types, especially queue and GPU
-  summaries, while keeping concrete macOS/Windows probe result types at IPC and
+  props for shared renderer-ready display/input types, especially GPU summary
+  inputs, while keeping concrete macOS/Windows probe result types at IPC and
   platform-specific projector boundaries.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-160457.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-160859.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result

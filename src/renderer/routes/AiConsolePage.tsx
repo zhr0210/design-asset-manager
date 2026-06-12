@@ -68,7 +68,7 @@ import {
   projectModelArtifactRowDisplay,
   resolveActivePromptModelArtifactReady
 } from '../../shared/workflows/model-artifact-readiness.workflow'
-import { projectAiQueueStatusDisplay } from '../../shared/workflows/ai-queue-status.workflow'
+import { type AiQueueStatsLike, projectAiQueueStatusDisplay } from '../../shared/workflows/ai-queue-status.workflow'
 import {
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
@@ -442,7 +442,7 @@ function PromptPreview({ title, text }: { title: string; text: string }) {
   )
 }
 
-function TaskListPreview({ queueStats }: { queueStats: any }) {
+function TaskListPreview({ queueStats }: { queueStats: AiQueueStatsLike }) {
   const display = projectAiQueueStatusDisplay(queueStats)
 
   return (
@@ -679,7 +679,7 @@ export default function AiConsolePage() {
   const cooperativeRuntimeModels: CooperativeRuntimeStatus = (
     aiStatus as WorkerModelStatusSnapshot | null
   )?.cooperative_models ?? {}
-  const queueStats = aiStatus?.queue_stats ?? { queued: 0, running: 0, completed: 0, failed: 0 }
+  const queueStats: AiQueueStatsLike = aiStatus?.queue_stats ?? { queued: 0, running: 0, completed: 0, failed: 0 }
   const queueStatusDisplay = projectAiQueueStatusDisplay(queueStats)
   const selectedBackend = aiBackends.find((backend) => backend.id === promptSettings.selectedExternalBackendId)
   const ollamaFallback = useMemo(() => summarizeOllamaFallback(aiBackends, backendResults), [aiBackends, backendResults])
@@ -1781,7 +1781,7 @@ function OverviewWorkspace(props: {
   modelReadinessInput: AiConsoleModelReadinessDisplayInput
   installedNativeModels: any[]
   installedGgufModels: LocalGgufModel[]
-  queueStats: any
+  queueStats: AiQueueStatsLike
   llamaStatus: LlamaInstallStatus | null
   llamaRunning?: boolean
   platformWorkerProbe: PlatformAiWorkerProbeWithRuntimeVersions | null

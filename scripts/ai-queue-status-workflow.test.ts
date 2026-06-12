@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import { projectAiQueueStatusDisplay } from '../src/shared/workflows/ai-queue-status.workflow'
+import {
+  type AiQueueStatsLike,
+  projectAiQueueStatusDisplay
+} from '../src/shared/workflows/ai-queue-status.workflow'
 
 const emptyDisplay = projectAiQueueStatusDisplay(null)
 assert.equal(emptyDisplay.valueLabel, '0 运行 / 0 排队')
@@ -18,12 +21,13 @@ assert.deepEqual(emptyDisplay.rows.map((row) => ({
   { code: 'failed', label: '失败', value: 0, toneClass: 'bg-rose-500' }
 ])
 
-const activeDisplay = projectAiQueueStatusDisplay({
+const activeQueueStats: AiQueueStatsLike = {
   running: 2,
   queued: 3,
   completed: 13,
   failed: 1
-})
+}
+const activeDisplay = projectAiQueueStatusDisplay(activeQueueStats)
 
 assert.equal(activeDisplay.valueLabel, '2 运行 / 3 排队')
 assert.equal(activeDisplay.captionLabel, '13 完成 / 1 失败')
@@ -41,6 +45,11 @@ assert.equal(normalizedDisplay.statusTone, 'good')
 
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(aiConsoleSource, /projectAiQueueStatusDisplay/)
+assert.match(aiConsoleSource, /AiQueueStatsLike/)
+assert.match(aiConsoleSource, /const queueStats: AiQueueStatsLike/)
+assert.match(aiConsoleSource, /function TaskListPreview\(\{ queueStats \}: \{ queueStats: AiQueueStatsLike \}\)/)
+assert.match(aiConsoleSource, /queueStats: AiQueueStatsLike/)
+assert.doesNotMatch(aiConsoleSource, /queueStats: any/)
 assert.doesNotMatch(aiConsoleSource, /const rows = \[/)
 assert.doesNotMatch(aiConsoleSource, /queueStats\.failed \? 'warn' : 'good'/)
 assert.doesNotMatch(aiConsoleSource, /\$\{queueStats\.running \|\| 0\} 运行/)
