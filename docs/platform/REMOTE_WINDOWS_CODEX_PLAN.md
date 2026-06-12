@@ -98,6 +98,10 @@ paths or model cache paths.
    The main Platform AI Branch Status projector now keeps shared workflow
    titles and branch-aware summaries in `WORKFLOW_METADATA`, leaving the
    per-platform `WORKFLOWS` tables focused on concrete lane topology.
+   `RUNTIME_LANE_METADATA` now also owns default lane labels and runtime kinds,
+   with a branch-specific override only for the existing macOS external-HTTP
+   Ollama fallback. The platform tables still own lane membership, ordering,
+   primary-lane selection, and workflow-specific CLIP labels.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

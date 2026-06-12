@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 23:08, Windows host local time.
-- Commit tested: worktree based on `ed3eb60`, with the main-process shared
-  workflow metadata extraction applied.
+- Validation time: 2026-06-12 23:14, Windows host local time.
+- Commit tested: worktree based on `1dde5ef`, with the main-process shared
+  runtime lane metadata consolidation applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -42,18 +42,20 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: shared workflow titles and branch-aware summaries now
-  live in `WORKFLOW_METADATA`; the macOS/Windows `WORKFLOWS` tables contain
-  only workflow identity, primary lane, and concrete lane definitions.
+- Shared-surface slice: `RUNTIME_LANE_METADATA` now owns default lane labels
+  and runtime kinds, including the existing macOS external-HTTP Ollama
+  fallback. The macOS/Windows `WORKFLOWS` tables retain genuine lane
+  membership, order, primary-lane selection, and workflow-specific CLIP
+  labels.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: audit repeated lane labels and `runtimeKinds` for
-  shared lane metadata while preserving platform lane membership, order, and
-  primary-lane selection.
+- Next recommended action: audit repeated macOS/Windows lane pairs in
+  `model-artifact-readiness.mapper.ts` for a branch-keyed shared selector while
+  preserving artifact evidence semantics.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-230636.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-231312.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

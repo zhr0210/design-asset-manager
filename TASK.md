@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Centralized Platform AI runtime lane metadata in the main-process
+  branch-status projector. `RUNTIME_LANE_METADATA` now owns default lane labels
+  and runtime kinds, including the existing macOS external-HTTP Ollama fallback,
+  while the per-platform `WORKFLOWS` tables retain genuine lane membership,
+  order, primary-lane selection, and workflow-specific CLIP labels. Focused
+  behavior tests preserve the macOS external-fallback behavior and the separate
+  Windows Ollama lane. No IPC channel, AI Worker HTTP API, database schema,
+  shared response field, status scoring, or evidence semantics changed. The
+  required four focused TypeScript tests, branch-status projector/display
+  tests, Windows validation privacy contract, typecheck, build, docs sync, and
+  diff checks passed. The full Windows script passed runtime-safety, Python,
+  ONNX, Llama text/generated-image, and Electron/Playwright checks; `chatOk`
+  and `visionOk` were true, Tag/Prompt/Search reported `real_model_path`, OCR
+  reported `runtime_probe_ready`, the `1264x793` viewport had no horizontal
+  overflow, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: audit repeated macOS/Windows lane pairs in
+  `model-artifact-readiness.mapper.ts` for a branch-keyed shared selector while
+  preserving artifact evidence semantics.
 - 2026-06-12 Separated shared Platform AI workflow product metadata from
   main-process runtime lane definitions. `WORKFLOW_METADATA` now owns each
   workflow title and branch-aware summary, while the macOS/Windows `WORKFLOWS`

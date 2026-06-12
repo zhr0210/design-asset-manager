@@ -229,12 +229,20 @@ assert.match(
   branchProjectorSource,
   /summary: metadata\.summary\[platformBranch\]/
 )
+assert.match(
+  branchProjectorSource,
+  /const RUNTIME_LANE_METADATA: Record<RuntimeLaneId, RuntimeLaneMetadata>/
+)
+assert.match(
+  branchProjectorSource,
+  /metadata\.branchRuntimeKinds\?\.\[platformBranch\] \?\? metadata\.runtimeKinds/
+)
 assert.doesNotMatch(
   branchProjectorSource.slice(
     branchProjectorSource.indexOf('const WORKFLOWS:'),
     branchProjectorSource.indexOf('export function createPlatformAiBranchStatus')
   ),
-  /\btitle:|\bsummary:/
+  /\btitle:|\bsummary:|\bruntimeKinds:/
 )
 assert.match(
   branchWorkflowSource,

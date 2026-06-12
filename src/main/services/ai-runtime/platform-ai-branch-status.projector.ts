@@ -1,4 +1,4 @@
-import type { AiRuntimeState } from '../../../shared/types/ai-runtime.types'
+import type { AiRuntimeKind, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
 import type { AiModelArtifactReadiness } from '../../../shared/types/model-artifact-readiness.types'
 import type {
   PlatformAiBranch,
@@ -24,7 +24,75 @@ export interface PlatformAiBranchStatusProjectorInput {
 interface WorkflowDefinition {
   workflow: PlatformAiWorkflow
   primaryRuntimeLane: string
-  runtimeLanes: Array<{ lane: string; label: string; runtimeKinds: string[] }>
+  runtimeLanes: RuntimeLaneDefinition[]
+}
+
+type RuntimeLaneId =
+  | 'python_mps'
+  | 'python_cuda'
+  | 'onnx_runtime'
+  | 'llama_metal'
+  | 'llama_cuda'
+  | 'ollama'
+  | 'external_http'
+
+interface RuntimeLaneDefinition {
+  lane: RuntimeLaneId
+  label: string
+  runtimeKinds: readonly AiRuntimeKind[]
+}
+
+interface RuntimeLaneMetadata {
+  label: string
+  runtimeKinds: readonly AiRuntimeKind[]
+  branchRuntimeKinds?: Partial<Record<PlatformAiBranch, readonly AiRuntimeKind[]>>
+}
+
+const RUNTIME_LANE_METADATA: Record<RuntimeLaneId, RuntimeLaneMetadata> = {
+  python_mps: {
+    label: 'Python MPS Runtime',
+    runtimeKinds: ['python-worker']
+  },
+  python_cuda: {
+    label: 'Python CUDA Runtime',
+    runtimeKinds: ['python-worker']
+  },
+  onnx_runtime: {
+    label: 'ONNX Runtime',
+    runtimeKinds: ['python-worker']
+  },
+  llama_metal: {
+    label: 'Llama Metal',
+    runtimeKinds: ['llama-app', 'custom-http']
+  },
+  llama_cuda: {
+    label: 'Llama CUDA',
+    runtimeKinds: ['llama-app', 'custom-http']
+  },
+  ollama: {
+    label: 'Ollama',
+    runtimeKinds: ['ollama']
+  },
+  external_http: {
+    label: 'External HTTP',
+    runtimeKinds: ['lm-studio', 'custom-http'],
+    branchRuntimeKinds: {
+      macos: ['ollama', 'lm-studio', 'custom-http']
+    }
+  }
+}
+
+function runtimeLane(
+  platformBranch: PlatformAiBranch,
+  lane: RuntimeLaneId,
+  label?: string
+): RuntimeLaneDefinition {
+  const metadata = RUNTIME_LANE_METADATA[lane]
+  return {
+    lane,
+    label: label ?? metadata.label,
+    runtimeKinds: metadata.branchRuntimeKinds?.[platformBranch] ?? metadata.runtimeKinds
+  }
 }
 
 const WORKFLOW_METADATA: Record<PlatformAiWorkflow, {
@@ -67,33 +135,33 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
       workflow: 'ai_tag_task',
       primaryRuntimeLane: 'python_mps',
       runtimeLanes: [
-        { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] },
-        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] }
+        runtimeLane('macos', 'python_mps'),
+        runtimeLane('macos', 'onnx_runtime')
       ]
     },
     {
       workflow: 'ai_prompt_task',
       primaryRuntimeLane: 'llama_metal',
       runtimeLanes: [
-        { lane: 'llama_metal', label: 'Llama Metal', runtimeKinds: ['llama-app', 'custom-http'] },
-        { lane: 'external_http', label: 'External HTTP', runtimeKinds: ['ollama', 'lm-studio', 'custom-http'] },
-        { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] }
+        runtimeLane('macos', 'llama_metal'),
+        runtimeLane('macos', 'external_http'),
+        runtimeLane('macos', 'python_mps')
       ]
     },
     {
       workflow: 'ocr_text_box',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
-        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] },
-        { lane: 'python_mps', label: 'Python MPS Runtime', runtimeKinds: ['python-worker'] }
+        runtimeLane('macos', 'onnx_runtime'),
+        runtimeLane('macos', 'python_mps')
       ]
     },
     {
       workflow: 'search_embedding',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
-        { lane: 'onnx_runtime', label: 'CLIP/SigLIP ONNX', runtimeKinds: ['python-worker'] },
-        { lane: 'python_mps', label: 'CLIP/SigLIP PyTorch', runtimeKinds: ['python-worker'] }
+        runtimeLane('macos', 'onnx_runtime', 'CLIP/SigLIP ONNX'),
+        runtimeLane('macos', 'python_mps', 'CLIP/SigLIP PyTorch')
       ]
     }
   ],
@@ -102,34 +170,34 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
       workflow: 'ai_tag_task',
       primaryRuntimeLane: 'python_cuda',
       runtimeLanes: [
-        { lane: 'python_cuda', label: 'Python CUDA Runtime', runtimeKinds: ['python-worker'] },
-        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] }
+        runtimeLane('windows', 'python_cuda'),
+        runtimeLane('windows', 'onnx_runtime')
       ]
     },
     {
       workflow: 'ai_prompt_task',
       primaryRuntimeLane: 'llama_cuda',
       runtimeLanes: [
-        { lane: 'llama_cuda', label: 'Llama CUDA', runtimeKinds: ['llama-app', 'custom-http'] },
-        { lane: 'ollama', label: 'Ollama', runtimeKinds: ['ollama'] },
-        { lane: 'external_http', label: 'External HTTP', runtimeKinds: ['lm-studio', 'custom-http'] },
-        { lane: 'python_cuda', label: 'Python CUDA Runtime', runtimeKinds: ['python-worker'] }
+        runtimeLane('windows', 'llama_cuda'),
+        runtimeLane('windows', 'ollama'),
+        runtimeLane('windows', 'external_http'),
+        runtimeLane('windows', 'python_cuda')
       ]
     },
     {
       workflow: 'ocr_text_box',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
-        { lane: 'onnx_runtime', label: 'ONNX Runtime', runtimeKinds: ['python-worker'] },
-        { lane: 'python_cuda', label: 'Python CUDA Runtime', runtimeKinds: ['python-worker'] }
+        runtimeLane('windows', 'onnx_runtime'),
+        runtimeLane('windows', 'python_cuda')
       ]
     },
     {
       workflow: 'search_embedding',
       primaryRuntimeLane: 'python_cuda',
       runtimeLanes: [
-        { lane: 'python_cuda', label: 'CLIP/SigLIP CUDA', runtimeKinds: ['python-worker'] },
-        { lane: 'onnx_runtime', label: 'CLIP/SigLIP ONNX', runtimeKinds: ['python-worker'] }
+        runtimeLane('windows', 'python_cuda', 'CLIP/SigLIP CUDA'),
+        runtimeLane('windows', 'onnx_runtime', 'CLIP/SigLIP ONNX')
       ]
     }
   ]

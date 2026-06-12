@@ -37,6 +37,15 @@ assert.deepEqual(macos.workflows.map((workflow) => workflow.workflow), [
 assert.equal(macos.workflows[0].status, 'runtime_probe_ready')
 assert.ok(macos.workflows[0].runtimeLanes.some((lane) => lane.lane === 'python_mps'))
 assert.ok(macos.workflows[0].evidence.some((item) => item.code === 'runtime_probe_ready' && item.source === 'runtime_health'))
+assert.deepEqual(
+  macos.workflows.map((workflow) => workflow.runtimeLanes.map((lane) => [lane.lane, lane.label])),
+  [
+    [['python_mps', 'Python MPS Runtime'], ['onnx_runtime', 'ONNX Runtime']],
+    [['llama_metal', 'Llama Metal'], ['external_http', 'External HTTP'], ['python_mps', 'Python MPS Runtime']],
+    [['onnx_runtime', 'ONNX Runtime'], ['python_mps', 'Python MPS Runtime']],
+    [['onnx_runtime', 'CLIP/SigLIP ONNX'], ['python_mps', 'CLIP/SigLIP PyTorch']]
+  ]
+)
 
 const windows = createPlatformAiBranchStatus({
   platformBranch: 'windows',
@@ -56,6 +65,45 @@ assert.notDeepEqual(
   windows.workflows[0].runtimeLanes.map((lane) => lane.lane),
   macos.workflows[0].runtimeLanes.map((lane) => lane.lane)
 )
+assert.deepEqual(
+  windows.workflows.map((workflow) => workflow.runtimeLanes.map((lane) => [lane.lane, lane.label])),
+  [
+    [['python_cuda', 'Python CUDA Runtime'], ['onnx_runtime', 'ONNX Runtime']],
+    [['llama_cuda', 'Llama CUDA'], ['ollama', 'Ollama'], ['external_http', 'External HTTP'], ['python_cuda', 'Python CUDA Runtime']],
+    [['onnx_runtime', 'ONNX Runtime'], ['python_cuda', 'Python CUDA Runtime']],
+    [['python_cuda', 'CLIP/SigLIP CUDA'], ['onnx_runtime', 'CLIP/SigLIP ONNX']]
+  ]
+)
+
+const runningOllama = runtime({
+  id: 'ollama-runtime',
+  kind: 'ollama'
+})
+const macosWithOllama = createPlatformAiBranchStatus({
+  platformBranch: 'macos',
+  currentPlatform: 'darwin',
+  generatedAt: '2026-06-04T00:00:00.000Z',
+  runtimes: [runningOllama]
+})
+assert.equal(
+  macosWithOllama.workflows
+    .find((workflow) => workflow.workflow === 'ai_prompt_task')
+    ?.runtimeLanes.find((lane) => lane.lane === 'external_http')
+    ?.status,
+  'runtime_probe_ready'
+)
+
+const windowsWithOllama = createPlatformAiBranchStatus({
+  platformBranch: 'windows',
+  currentPlatform: 'win32',
+  generatedAt: '2026-06-04T00:00:00.000Z',
+  runtimes: [runningOllama]
+})
+const windowsPromptLanes = windowsWithOllama.workflows
+  .find((workflow) => workflow.workflow === 'ai_prompt_task')
+  ?.runtimeLanes
+assert.equal(windowsPromptLanes?.find((lane) => lane.lane === 'ollama')?.status, 'runtime_probe_ready')
+assert.equal(windowsPromptLanes?.find((lane) => lane.lane === 'external_http')?.status, 'evidence_insufficient')
 
 const windowsOnMac = createPlatformAiBranchStatus({
   platformBranch: 'windows',
