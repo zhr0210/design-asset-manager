@@ -89,6 +89,24 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Centralized shared Platform AI surface copy for the branch panel,
+  Worker probe panel, and capability matrix. `PLATFORM_AI_SURFACE_COPY` now
+  owns the macOS/Windows titles, route summary, connected label, and panel
+  description, so those projectors derive display copy from
+  `PlatformAiBranch` without repeating platform conditionals. Genuine
+  MPS/CUDA probe-field selection and concrete IPC adapters remain at their
+  platform boundaries. No IPC channel, AI Worker HTTP API, database schema,
+  shared response field, runtime evidence behavior, or renderer output
+  changed. The required four focused TypeScript tests, Windows validation
+  privacy contract, typecheck, build, docs sync, and diff checks passed. The
+  full Windows script also passed runtime-safety, Python, ONNX, Llama
+  text/generated-image, and Electron/Playwright checks; `chatOk` and
+  `visionOk` were true, Tag/Prompt/Search reported `real_model_path`, OCR
+  reported `runtime_probe_ready`, the `1264x793` viewport had no horizontal
+  overflow, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: consolidate the remaining display-only branch in
+  `projectAiRuntimePlatformPanelCopy` into the shared platform copy table
+  while preserving concrete IPC adapters and runtime evidence selection.
 - 2026-06-12 Removed the unused concrete macOS/Windows Worker diagnostics
   display aliases and wrappers. `projectPlatformAiWorkerProbeDiagnosticsDisplay`
   is now the single exported projector and selects only the genuine

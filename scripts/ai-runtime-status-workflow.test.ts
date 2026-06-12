@@ -763,7 +763,7 @@ assert.doesNotMatch(runtimeWorkflowSource, /\bWindowsAiWorkerProbeDisplay\b/)
 assert.doesNotMatch(runtimeWorkflowSource, /\bprojectMacOSAiWorkerProbeDisplay\b/)
 assert.doesNotMatch(runtimeWorkflowSource, /\bprojectWindowsAiWorkerProbeDisplay\b/)
 assert.match(runtimeWorkflowSource, /interface AiRuntimeWorkerProbePanelDisplay extends PlatformAiWorkerProbeHeaderDisplay/)
-assert.match(runtimeWorkflowSource, /const PLATFORM_AI_WORKER_PROBE_COPY: Record<PlatformAiBranch, PlatformAiWorkerProbeCopy>/)
+assert.match(runtimeWorkflowSource, /const PLATFORM_AI_SURFACE_COPY: Record<PlatformAiBranch, PlatformAiSurfaceCopy>/)
 assert.match(runtimeWorkflowSource, /function isPlatformAiWorkerProbeConnected/)
 assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
@@ -788,11 +788,27 @@ assert.match(
 )
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeWorkerProbePanelDisplay'),
-  /PLATFORM_AI_WORKER_PROBE_COPY\[platformBranch\][\s\S]*isPlatformAiWorkerProbeConnected/
+  /PLATFORM_AI_SURFACE_COPY\[platformBranch\][\s\S]*isPlatformAiWorkerProbeConnected/
 )
 assert.doesNotMatch(
   extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeWorkerProbePanelDisplay'),
   /platformBranch === 'windows'|if \(isWindows\)/
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeBranchPanelDisplay'),
+  /PLATFORM_AI_SURFACE_COPY\[resolvePlatformAiBranch\(branch\)\]/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeBranchPanelDisplay'),
+  /marker === 'windows-ai-branch'|isWindows/
+)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeCapabilityMatrixDisplay'),
+  /PLATFORM_AI_SURFACE_COPY\[platformBranch\]\.capabilityMatrixTitle/
+)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectAiRuntimeCapabilityMatrixDisplay'),
+  /platformBranch === 'windows'/
 )
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),

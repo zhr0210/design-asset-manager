@@ -147,7 +147,10 @@ interface PythonRuntimeDisplayCopy {
   supportedPlatformLabel: string
 }
 
-interface PlatformAiWorkerProbeCopy {
+interface PlatformAiSurfaceCopy {
+  branchTitle: string
+  branchRouteSummary: string
+  capabilityMatrixTitle: string
   connectedLabel: string
   panelTitle: string
   panelDescription: string
@@ -166,13 +169,19 @@ const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplay
   }
 }
 
-const PLATFORM_AI_WORKER_PROBE_COPY: Record<PlatformAiBranch, PlatformAiWorkerProbeCopy> = {
+const PLATFORM_AI_SURFACE_COPY: Record<PlatformAiBranch, PlatformAiSurfaceCopy> = {
   macos: {
+    branchTitle: 'macOS AI 分支',
+    branchRouteSummary: 'Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经 macOS 实时探测的条目统一显示为证据不足。',
+    capabilityMatrixTitle: 'macOS 细项能力矩阵',
     connectedLabel: 'macOS 探测已连接',
     panelTitle: 'macOS Worker 实时探测',
     panelDescription: '这里显示 Python Worker 当前探测到的 MPS 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
   },
   windows: {
+    branchTitle: 'Windows AI 分支',
+    branchRouteSummary: 'Python CUDA、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。',
+    capabilityMatrixTitle: 'Windows 细项能力矩阵',
     connectedLabel: 'Windows 探测已连接',
     panelTitle: 'Windows Worker 实时探测',
     panelDescription: '这里显示 Python Worker 当前探测到的 CUDA 和 ONNX Runtime 状态，帮助确认真实运行时能力是否已经可用。'
@@ -555,7 +564,7 @@ export function projectPlatformAiWorkerProbeDiagnosticsDisplay(
   platformBranch: PlatformAiBranch,
   probe?: PlatformAiWorkerProbeDiagnosticsInput | null
 ): PlatformAiWorkerProbeDiagnosticsDisplay {
-  const { connectedLabel } = PLATFORM_AI_WORKER_PROBE_COPY[platformBranch]
+  const { connectedLabel } = PLATFORM_AI_SURFACE_COPY[platformBranch]
 
   if (!probe) {
     const unchecked = { valueLabel: '尚未探测', captionLabel: '尚未探测' }
@@ -742,14 +751,11 @@ export function resolvePlatformAiBranch(
 export function projectAiRuntimeBranchPanelDisplay(
   branch: PlatformAiBranchRuntimeMetadata
 ): AiRuntimeBranchPanelDisplay {
-  const isWindows = branch.marker === 'windows-ai-branch'
-  const routeSummary = isWindows
-    ? 'Python CUDA、ONNX Runtime 与 Llama 三条路线的架构定义；未经过实时探测的条目统一显示为证据不足。'
-    : 'Python MPS、ONNX Runtime 与 Llama 三条路线的架构定义；未经 macOS 实时探测的条目统一显示为证据不足。'
+  const copy = PLATFORM_AI_SURFACE_COPY[resolvePlatformAiBranch(branch)]
 
   return {
-    title: isWindows ? 'Windows AI 分支' : 'macOS AI 分支',
-    description: `${routeSummary} 当前阶段：${branch.phase} / ${branch.platform}/${branch.arch}`,
+    title: copy.branchTitle,
+    description: `${copy.branchRouteSummary} 当前阶段：${branch.phase} / ${branch.platform}/${branch.arch}`,
     platformBadgeLabel: branch.isCurrentPlatform ? '当前平台' : '非当前平台',
     platformBadgeClass: branch.isCurrentPlatform
       ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
@@ -798,7 +804,7 @@ export function projectAiRuntimeWorkerProbePanelDisplay(
   platformBranch: PlatformAiBranch,
   probe?: PlatformAiWorkerProbeResultBase | null
 ): AiRuntimeWorkerProbePanelDisplay {
-  const copy = PLATFORM_AI_WORKER_PROBE_COPY[platformBranch]
+  const copy = PLATFORM_AI_SURFACE_COPY[platformBranch]
   const display = projectPlatformAiWorkerProbeHeaderDisplay(
     probe ?? null,
     isPlatformAiWorkerProbeConnected(platformBranch, probe),
@@ -828,7 +834,7 @@ export function projectAiRuntimeCapabilityMatrixDisplay(
   platformBranch: PlatformAiBranch = 'macos'
 ): AiRuntimeCapabilityMatrixDisplay {
   return {
-    title: platformBranch === 'windows' ? 'Windows 细项能力矩阵' : 'macOS 细项能力矩阵',
+    title: PLATFORM_AI_SURFACE_COPY[platformBranch].capabilityMatrixTitle,
     description: '区分依赖可用、依赖缺失、证据不足与真正尚未实现的路线，避免把探测缺口误报为功能规划。'
   }
 }
