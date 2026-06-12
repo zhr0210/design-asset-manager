@@ -114,5 +114,6 @@ assert.doesNotMatch(overviewSlice, /telemetryTrusted: boolean/)
 assert.doesNotMatch(overviewSlice, /effectiveGpu: ReturnType/)
 assert.doesNotMatch(overviewSlice, /riskTone: 'good' \| 'warn' \| 'bad'/)
 assert.doesNotMatch(overviewSlice, /props\.riskTone/)
+assert.doesNotMatch(aiConsoleSource, /gpuDisplay: ReturnType<typeof projectAiConsoleGpuDisplay>/)
 
 console.log('ai-console-overview-workflow passed')

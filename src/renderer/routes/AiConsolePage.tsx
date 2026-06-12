@@ -2065,7 +2065,7 @@ function ModelsWorkspace(props: {
   isMockTelemetry: boolean
   devMockEnabled: boolean
   effectiveGpu: ReturnType<typeof normalizeWorkerGpuStatus>
-  gpuDisplay: ReturnType<typeof projectAiConsoleGpuDisplay>
+  gpuDisplay: AiConsoleGpuDisplay
   riskTone: 'good' | 'warn' | 'bad'
   clearResult: ClearGpuMemoryResult | null
   loading: Record<string, boolean>
@@ -2379,7 +2379,7 @@ function MemoryGuardPanel({
   effectiveGpu: ReturnType<typeof normalizeWorkerGpuStatus>
   memoryPolicy: AiMemoryPolicy
   setMemoryPolicy: React.Dispatch<React.SetStateAction<AiMemoryPolicy>>
-  gpuDisplay: ReturnType<typeof projectAiConsoleGpuDisplay>
+  gpuDisplay: AiConsoleGpuDisplay
   riskTone: 'good' | 'warn' | 'bad'
   clearResult: ClearGpuMemoryResult | null
   onClear: () => void

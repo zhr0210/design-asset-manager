@@ -89,6 +89,30 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Continued AI Console GPU display prop type cleanup.
+  `ModelsWorkspace` and `MemoryGuardPanel` now use the shared
+  `AiConsoleGpuDisplay` prop type instead of anonymous
+  `ReturnType<typeof projectAiConsoleGpuDisplay>` props. This keeps renderer
+  component contracts tied to the shared AI Console overview workflow view type
+  while leaving concrete GPU/runtime probe evidence at the existing projector
+  and IPC boundaries. No IPC channel, AI Worker HTTP API, database schema, or
+  shared response shape changed. Validation passed `node
+  scripts/run-ts-test.mjs scripts/ai-console-overview-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-queue-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. Windows real-evidence validation also passed via
+  `powershell -ExecutionPolicy Bypass -File
+  .\scripts\windows-ai-real-evidence-validation.ps1`; it captured
+  `dam-windows-ai-console.png`, reported overflow `doc=false`, `body=false` at
+  `1264x793`, and confirmed `ai_tag_task`, `ai_prompt_task`, and
+  `search_embedding` as `real_model_path`. Next smallest slice: continue
+  auditing remaining AI Console and Settings component props for shared
+  renderer-ready display/input types while keeping concrete platform runtime
+  evidence at IPC and platform-specific projector boundaries.
 - 2026-06-12 Continued AI Console overview GPU display cleanup.
   `OverviewWorkspace` now consumes the shared `AiConsoleGpuDisplay` object
   directly and no longer receives redundant `telemetryTrusted`, `effectiveGpu`,
