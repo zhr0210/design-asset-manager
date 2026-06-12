@@ -8,14 +8,21 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-11 11:20, Windows host local time.
-- Commit tested: `e947443`.
+- Validation time: 2026-06-12 14:32, Windows host local time.
+- Commit tested: `21ee6d9`.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
 - Checks passed: `npm ci`, `npm run typecheck`, `npm run build`,
   `npm run ci:test-runtime-safety`, Python unittest discovery, direct Windows AI
-  probes, and Electron/Playwright AI Console validation.
+  probes, focused Electron/Playwright AI Console validation, and the required
+  preflight TypeScript/shared-contract validation gate.
+- `npm ci`: passed with npm audit/deprecation warnings.
+- `npm run typecheck`: passed.
+- `npm run build`: passed with existing Vite mixed dynamic/static import
+  warnings.
+- `npm run ci:test-runtime-safety`: passed.
+- Python unittest discovery: passed.
 - Llama IPC refresh: selected `qwen3-vl-2b-instruct-q4-k-m`, started
   `llama-server`, and ran text plus generated-image multimodal probe.
 - Llama multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
@@ -26,12 +33,22 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 - Llama CUDA lane: reported `real_model_path` with `artifact_ready` and
   `real_backend_loaded` evidence from text plus generated-image inference.
 - Electron/Playwright AI Console: screenshot captured on the Windows desktop.
-- Overflow check: `doc=false`, `body=false`, viewport `1008x725`.
+- Overflow check: `doc=false`, `body=false`, viewport `1264x793`.
+- Focused validation gate before the full script also passed:
+  `scripts/ai-runtime-status-workflow.test.ts`,
+  `scripts/ai-runtime-panel-contract.test.ts`,
+  `scripts/ai-console-macos-branch.test.ts`,
+  `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   slice.
+- Next recommended action: continue Remaining Work item 1 by moving
+  renderer/shared workflow consumers that only need shared Worker fields to
+  platform-neutral shared types while keeping concrete macOS/Windows probe
+  result types at IPC and platform-specific projector boundaries.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260611-112044.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260612-143229.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Previous Reported Result

@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-12 Windows-host Codex fast-forwarded `codex/windows-ai-real-evidence`
+  to `21ee6d9` and completed the validation-only gate for the latest Mac-side
+  shared Platform AI runtime type/projection changes. Passed:
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`,
+  `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`,
+  `npm run typecheck`, `npm run build`, `python scripts/check-docs-sync.py`,
+  and `git diff --check`. Then ran
+  `powershell -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1`;
+  it passed `npm ci`, typecheck, build, runtime-safety tests, Python unittest
+  discovery, direct CUDA/ONNX/Llama probes, and Electron/Playwright AI Console
+  validation. Windows Platform AI Branch Status returned `ai_tag_task`,
+  `ai_prompt_task`, and `search_embedding` as `real_model_path`; the screenshot
+  filename was `dam-windows-ai-console.png`, and overflow was `doc=false`,
+  `body=false` at `1264x793`. The sanitized Windows result mailbox was updated.
+  Next smallest slice: continue Remaining Work item 1 by moving consumers that
+  only need shared Worker probe fields to platform-neutral shared types, keeping
+  concrete macOS/Windows probe result types at IPC and platform-specific
+  projector boundaries.
 - 2026-06-12 Added `docs/platform/REMOTE_WINDOWS_CODEX_PLAN.md` as the Windows-host Codex handoff. The remote host should fast-forward from GitHub before doing any work, validate the Mac-authored shared AI runtime type/projection changes with focused TypeScript tests plus typecheck/build/docs/diff checks, then run the Windows real-evidence script when runtime state and time allow. The remaining work is ordered toward reducing concrete macOS/Windows probe unions in renderer/shared workflow boundaries while keeping public IPC and response contracts stable.
 - 2026-06-12 Moved shared Worker probe header projection away from macOS/Windows concrete probe unions. The internal header helper now uses the platform-neutral Worker probe envelope for connection, platform badge, Apple Silicon/macOS labels, and CLIP/SigLIP status; platform-specific display projectors still own their MPS/CUDA/ONNX route tiles. Validation passed `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and `git diff --check`. Playwright UI validation was attempted, but starting the local preview server required approval and the approval reviewer timed out twice; no new screenshot was captured for this type-only shared workflow change.
 - 2026-06-12 Moved `PlatformAiCapabilityMatrix` away from macOS/Windows concrete Worker probe result unions and renderer-local cross-platform probe types. The shared renderer component now consumes `PlatformAiWorkerProbeWithRuntimeVersions` from `platform-ai-runtime.types.ts`, while macOS/Windows concrete probe result types stay at the caller boundary. Validation passed `node scripts/run-ts-test.mjs scripts/ai-runtime-panel-contract.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-runtime-status-workflow.test.ts`, `node scripts/run-ts-test.mjs scripts/ai-console-macos-branch.test.ts`, `node scripts/run-ts-test.mjs scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`, `python3 scripts/check-docs-sync.py`, and `git diff --check`. Playwright UI validation was attempted, but starting the local preview server required approval and the approval reviewer timed out twice; no new screenshot was captured for this prop/type-only renderer change.
