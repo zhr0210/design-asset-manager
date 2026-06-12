@@ -134,7 +134,9 @@ paths or model cache paths.
    `PLATFORM_AI_BRANCH_BY_MARKER`. Main-process disabled branch runtime
    provider registration now uses `PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS`
    so the existing runtime ids, platforms, metadata keys, and profile rules are
-   registered through one shared loop.
+   registered through one shared loop. Python Worker auto-start support is now
+   also represented by `PYTHON_WORKER_AUTOSTART_PLATFORMS`, preserving the
+   existing macOS/Windows auto-start set without an inline bootstrap branch.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

@@ -114,6 +114,8 @@ const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimePr
   }
 ]
 
+const PYTHON_WORKER_AUTOSTART_PLATFORMS = new Set<PlatformName>(['darwin', 'win32'])
+
 function createSafeAiRuntimeManager(): AiRuntimeManager {
   const manager = new AiRuntimeManager()
   const currentPlatform = process.platform as PlatformName
@@ -152,7 +154,7 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
   ))
 
   // Auto-start Python AI Worker on macOS and Windows so capabilities probe works
-  const autoStart = currentPlatform === 'darwin' || currentPlatform === 'win32'
+  const autoStart = PYTHON_WORKER_AUTOSTART_PLATFORMS.has(currentPlatform)
   if (autoStart) {
     manager.selectActiveRuntime('python-worker-runtime')
     // Fire-and-forget start; failure is non-fatal (worker may already be running

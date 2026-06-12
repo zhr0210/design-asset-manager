@@ -89,6 +89,19 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Python Worker auto-start platform support to one
+  main-process allowlist. `PYTHON_WORKER_AUTOSTART_PLATFORMS` now owns the
+  existing macOS/Windows auto-start set, and `createSafeAiRuntimeManager()`
+  checks that metadata instead of repeating a platform conditional. Auto-start
+  behavior, active-runtime selection, runtime ids, IPC channels, database
+  schema, AI Worker HTTP API, shared response fields, and renderer output are
+  unchanged. Focused IPC source contracts preserve the allowlist and prevent
+  the inline `darwin || win32` condition from returning. UI validation and the
+  full Windows real-evidence script were not run because this bootstrap
+  allowlist refactor does not change product-facing renderer output or runtime
+  probing behavior. Next smallest slice: continue auditing remaining platform
+  checks only where they can become explicit metadata without hiding genuine
+  path/process/runtime differences.
 - 2026-06-13 Moved main-process Platform AI branch runtime provider
   registration to descriptor metadata. `PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS`
   now owns the existing macOS and Windows disabled branch runtime ids,

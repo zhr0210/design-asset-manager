@@ -18,6 +18,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep reusable runtime lane labels and runtime-kind matching in shared lane metadata; leave platform tables responsible for genuine topology and primary-lane differences.
 - Keep branch-to-OS support checks table-driven so the projector exposes real platform support without scattering branch conditionals.
 - Keep Platform AI branch runtime provider registration descriptor-driven; concrete metadata keys and profile rules belong in descriptors, not duplicated provider blocks.
+- Keep Python Worker auto-start platform support in one allowlist so adding or removing OS support does not scatter bootstrap conditionals.
 
 ## Tests
 
@@ -30,6 +31,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.1.6 | 2026-06-13 | Moved Python Worker auto-start platform support to one allowlist while preserving macOS/Windows behavior. |
 | v1.1.5 | 2026-06-13 | Moved Platform AI branch runtime provider registration to descriptors while preserving runtime ids, profile rules, and metadata keys. |
 | v1.1.4 | 2026-06-13 | Mapped Platform AI branches to real OS platform names through branch metadata. |
 | v1.1.3 | 2026-06-12 | Reused shared Python and Llama accelerator lane families for model-readiness projection. |
