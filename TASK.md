@@ -89,6 +89,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Converted the last audited Platform AI branch control-flow checks
+  into branch-keyed metadata while preserving the real platform boundaries.
+  `PLATFORM_AI_RUNTIME_REQUEST_METHODS` now maps `PlatformAiBranch` to the
+  existing concrete preload methods for capabilities, Python status, and Python
+  execution probes. `PLATFORM_BRANCH_PLATFORMS` now maps branch status
+  projection to the real OS platform names. The concrete IPC methods, channel
+  names, response shapes, current-OS support semantics, and runtime evidence
+  behavior are unchanged. Focused source contracts verify that the adapter and
+  main branch matcher no longer use `platformBranch === ...` control flow while
+  still selecting the original macOS/Windows methods and unsupported-platform
+  statuses. The required four focused TypeScript tests, branch-status projector
+  test, Windows validation privacy contract, typecheck, build, docs sync, and
+  diff checks passed. The full Windows script passed runtime-safety, Python,
+  ONNX, Llama text/generated-image, and Electron/Playwright checks; `chatOk`
+  and `visionOk` were true, Tag/Prompt/Search reported `real_model_path`, OCR
+  reported `runtime_probe_ready`, the `1266x795` viewport had no horizontal
+  overflow, and the saved log contained zero absolute Windows paths. Next
+  smallest slice: run a completion audit across remaining `isWindows` and
+  platform checks to distinguish genuine OS/runtime boundaries from any
+  remaining removable renderer/main/shared workflow branching.
 - 2026-06-12 Normalized shared Worker diagnostics probe selection.
   `resolvePlatformAiWorkerProbeDiagnosticsBranch()` now applies the existing
   explicit-branch and Windows-only-probe fallback rules, while

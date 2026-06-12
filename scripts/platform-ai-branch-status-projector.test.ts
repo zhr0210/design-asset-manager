@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 import { createPlatformAiBranchStatus } from '../src/main/services/ai-runtime/platform-ai-branch-status.projector'
 import type { AiRuntimeState } from '../src/shared/types/ai-runtime.types'
 
@@ -115,6 +116,23 @@ const windowsOnMac = createPlatformAiBranchStatus({
 assert.equal(windowsOnMac.workflows[0].status, 'unavailable')
 assert.ok(windowsOnMac.workflows[0].evidence.some((item) => item.code === 'platform_unsupported'))
 assert.ok(windowsOnMac.workflows[0].missing.some((item) => item.kind === 'platform_support'))
+
+const macosOnWindows = createPlatformAiBranchStatus({
+  platformBranch: 'macos',
+  currentPlatform: 'win32',
+  generatedAt: '2026-06-04T00:00:00.000Z',
+  runtimes: [runningPython]
+})
+assert.equal(macosOnWindows.workflows[0].status, 'unavailable')
+
+const projectorSource = await fs.readFile(
+  'src/main/services/ai-runtime/platform-ai-branch-status.projector.ts',
+  'utf8'
+)
+assert.match(projectorSource, /const PLATFORM_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName>/)
+assert.match(projectorSource, /macos: 'darwin'[\s\S]*windows: 'win32'/)
+assert.match(projectorSource, /currentPlatform === PLATFORM_BRANCH_PLATFORMS\[platformBranch\]/)
+assert.doesNotMatch(projectorSource, /platformBranch === 'macos'/)
 
 for (const response of [macos, windows, windowsOnMac]) {
   const encoded = JSON.stringify(response)

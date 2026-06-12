@@ -8,9 +8,9 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-12 23:35, Windows host local time.
-- Commit tested: worktree based on `a7c5216`, with normalized shared Worker
-  diagnostics probe selection applied.
+- Validation time: 2026-06-13 00:17, Windows host local time.
+- Commit tested: worktree based on `2f07e8d`, with branch-keyed Platform AI
+  runtime request and branch-to-OS metadata applied.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -35,26 +35,27 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 - Llama CUDA lane: reported `real_model_path` with `artifact_ready` and
   `real_backend_loaded` evidence from text plus generated-image inference.
 - Electron/Playwright AI Console: screenshot captured on the Windows desktop.
-- Overflow check: `doc=false`, `body=false`, viewport `1264x793`.
+- Overflow check: `doc=false`, `body=false`, viewport `1266x795`.
 - Focused validation gate before the full script also passed:
   `scripts/ai-runtime-status-workflow.test.ts`,
   `scripts/ai-runtime-panel-contract.test.ts`,
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: diagnostics selection now resolves
-  `PlatformAiBranch` once and selects the corresponding input from a
-  branch-indexed probe map. Explicit branch priority, Windows-only inference,
-  and the ambiguous dual-probe macOS default are unchanged.
+- Shared-surface slice: `PLATFORM_AI_RUNTIME_REQUEST_METHODS` now maps
+  `PlatformAiBranch` to the existing concrete preload methods, and
+  `PLATFORM_BRANCH_PLATFORMS` maps branch status projection to real OS platform
+  names. Concrete IPC methods, channel names, response shapes, and
+  unsupported-platform semantics are unchanged.
 - Privacy check: zero absolute Windows paths were found in the saved log.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: audit the two remaining platform conditions in the
-  renderer concrete IPC adapter and main branch-to-OS matcher; retain them if
-  they remain genuine platform boundaries.
+- Next recommended action: run a completion audit across remaining `isWindows`
+  and platform checks to distinguish genuine OS/runtime boundaries from any
+  remaining removable renderer/main/shared workflow branching.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260612-233333.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260613-001631.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 The immediately preceding full-route success log is

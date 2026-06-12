@@ -74,6 +74,11 @@ const RUNTIME_LANE_METADATA: Record<PlatformAiRuntimeLaneId, RuntimeLaneMetadata
   }
 }
 
+const PLATFORM_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName> = {
+  macos: 'darwin',
+  windows: 'win32'
+}
+
 function runtimeLane(
   platformBranch: PlatformAiBranch,
   lane: PlatformAiRuntimeLaneId,
@@ -419,6 +424,5 @@ function dedupeMissingRequirements(items: PlatformAiMissingRequirement[]): Platf
 }
 
 function isCurrentBranch(platformBranch: PlatformAiBranch, currentPlatform: PlatformName): boolean {
-  if (platformBranch === 'macos') return currentPlatform === 'darwin'
-  return currentPlatform === 'win32'
+  return currentPlatform === PLATFORM_BRANCH_PLATFORMS[platformBranch]
 }

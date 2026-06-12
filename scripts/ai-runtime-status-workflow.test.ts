@@ -136,6 +136,14 @@ const windowsRuntimeRequests = selectPlatformAiRuntimeRequests(adapterApi, 'wind
 assert.equal(windowsRuntimeRequests.getCapabilities, adapterApi.getWindowsCapabilities)
 assert.equal(windowsRuntimeRequests.getPythonStatus, adapterApi.getPythonCudaStatus)
 assert.equal(windowsRuntimeRequests.probePythonRuntime, adapterApi.probePythonCudaRuntime)
+const platformAdapterSource = await fs.readFile('src/renderer/platform-ai-runtime.adapter.ts', 'utf8')
+assert.match(
+  platformAdapterSource,
+  /const PLATFORM_AI_RUNTIME_REQUEST_METHODS: Record<PlatformAiBranch, PlatformAiRuntimeRequestMethods>/
+)
+assert.match(platformAdapterSource, /capabilities: 'getMacOSCapabilities'[\s\S]*capabilities: 'getWindowsCapabilities'/)
+assert.match(platformAdapterSource, /api\[methods\.capabilities\][\s\S]*api\[methods\.pythonStatus\][\s\S]*api\[methods\.pythonRuntimeProbe\]/)
+assert.doesNotMatch(platformAdapterSource, /platformBranch === 'windows'|if \(platformBranch/)
 
 assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('macos', pythonReady).runtimeLabel, 'torch.mps')
 const pythonCudaReady = {

@@ -33,6 +33,25 @@ export interface PlatformAiRuntimeRequests {
   probePythonRuntime?: () => Promise<AiRuntimeIpcResponse<AiRuntimePythonExecutionProbeResponseBase>>
 }
 
+interface PlatformAiRuntimeRequestMethods {
+  capabilities: 'getMacOSCapabilities' | 'getWindowsCapabilities'
+  pythonStatus: 'getPythonMpsStatus' | 'getPythonCudaStatus'
+  pythonRuntimeProbe: 'probePythonMpsRuntime' | 'probePythonCudaRuntime'
+}
+
+const PLATFORM_AI_RUNTIME_REQUEST_METHODS: Record<PlatformAiBranch, PlatformAiRuntimeRequestMethods> = {
+  macos: {
+    capabilities: 'getMacOSCapabilities',
+    pythonStatus: 'getPythonMpsStatus',
+    pythonRuntimeProbe: 'probePythonMpsRuntime'
+  },
+  windows: {
+    capabilities: 'getWindowsCapabilities',
+    pythonStatus: 'getPythonCudaStatus',
+    pythonRuntimeProbe: 'probePythonCudaRuntime'
+  }
+}
+
 export function selectPlatformAiRuntimeRequests(
   api: Required<PlatformAiRuntimeAdapterApi>,
   platformBranch: PlatformAiBranch
@@ -45,17 +64,11 @@ export function selectPlatformAiRuntimeRequests(
   api: PlatformAiRuntimeAdapterApi,
   platformBranch: PlatformAiBranch
 ): PlatformAiRuntimeRequests {
-  if (platformBranch === 'windows') {
-    return {
-      getCapabilities: api.getWindowsCapabilities,
-      getPythonStatus: api.getPythonCudaStatus,
-      probePythonRuntime: api.probePythonCudaRuntime
-    }
-  }
+  const methods = PLATFORM_AI_RUNTIME_REQUEST_METHODS[platformBranch]
 
   return {
-    getCapabilities: api.getMacOSCapabilities,
-    getPythonStatus: api.getPythonMpsStatus,
-    probePythonRuntime: api.probePythonMpsRuntime
+    getCapabilities: api[methods.capabilities],
+    getPythonStatus: api[methods.pythonStatus],
+    probePythonRuntime: api[methods.pythonRuntimeProbe]
   }
 }

@@ -115,7 +115,10 @@ paths or model cache paths.
    projector free of platform control-flow branches. Diagnostics selection now
    resolves the branch once and selects from a branch-indexed probe map,
    preserving explicit branch priority, Windows-only inference, and the
-   ambiguous dual-probe macOS default.
+   ambiguous dual-probe macOS default. The renderer Platform AI Runtime adapter
+   now maps branches to the existing concrete preload methods through
+   `PLATFORM_AI_RUNTIME_REQUEST_METHODS`, and the main branch-status projector
+   maps branches to real OS platform names through `PLATFORM_BRANCH_PLATFORMS`.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
