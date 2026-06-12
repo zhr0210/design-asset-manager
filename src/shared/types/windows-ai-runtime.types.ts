@@ -1,8 +1,7 @@
 import type {
-  AiWorkerCapabilityProbe,
-  AiWorkerLaneProbe,
   PlatformAiBranchRuntimeMetadataBase,
-  PlatformAiRuntimeLaneBase
+  PlatformAiRuntimeLaneBase,
+  PlatformAiWorkerProbeResultBase
 } from './platform-ai-runtime.types'
 
 export type WindowsAiRuntimeLaneId = 'python-cuda' | 'onnx-runtime' | 'llama'
@@ -11,12 +10,7 @@ export interface WindowsAiRuntimeLane extends PlatformAiRuntimeLaneBase<WindowsA
 
 export interface WindowsAiBranchRuntimeMetadata extends PlatformAiBranchRuntimeMetadataBase<'windows-ai-branch', WindowsAiRuntimeLane> {}
 
-export interface WindowsAiWorkerProbeResult {
-  platform: string
-  machine: string
-  isMacOS: boolean
-  isAppleSilicon: boolean
-  phase: 'worker-probes'
+export interface WindowsAiWorkerProbeResult extends PlatformAiWorkerProbeResultBase {
   torch: {
     available: boolean
     version: string | null
@@ -34,6 +28,4 @@ export interface WindowsAiWorkerProbeResult {
     cpuAvailable: boolean
     error: string | null
   }
-  clipSiglipOnnx: AiWorkerCapabilityProbe
-  lanes: AiWorkerLaneProbe[]
 }

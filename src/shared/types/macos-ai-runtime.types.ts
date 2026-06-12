@@ -1,8 +1,7 @@
 import type {
-  AiWorkerCapabilityProbe,
-  AiWorkerLaneProbe,
   PlatformAiBranchRuntimeMetadataBase,
-  PlatformAiRuntimeLaneBase
+  PlatformAiRuntimeLaneBase,
+  PlatformAiWorkerProbeResultBase
 } from './platform-ai-runtime.types'
 
 export type MacOSAiRuntimeLaneId = 'python-mps' | 'onnx-runtime' | 'llama'
@@ -13,19 +12,15 @@ export type {
   AiWorkerLaneProbe,
   PlatformAiBranchRuntimeMetadataBase,
   PlatformAiRuntimeBranchPhase,
-  PlatformAiRuntimeLaneBase
+  PlatformAiRuntimeLaneBase,
+  PlatformAiWorkerProbeResultBase
 } from './platform-ai-runtime.types'
 
 export interface MacOSAiRuntimeLane extends PlatformAiRuntimeLaneBase<MacOSAiRuntimeLaneId> {}
 
 export interface MacOSAiBranchRuntimeMetadata extends PlatformAiBranchRuntimeMetadataBase<'macos-ai-branch', MacOSAiRuntimeLane> {}
 
-export interface MacOSAiWorkerProbeResult {
-  platform: string
-  machine: string
-  isMacOS: boolean
-  isAppleSilicon: boolean
-  phase: 'worker-probes'
+export interface MacOSAiWorkerProbeResult extends PlatformAiWorkerProbeResultBase {
   torch: {
     available: boolean
     version: string | null
@@ -42,6 +37,4 @@ export interface MacOSAiWorkerProbeResult {
     cpuAvailable: boolean
     error: string | null
   }
-  clipSiglipOnnx: AiWorkerCapabilityProbe
-  lanes: AiWorkerLaneProbe[]
 }

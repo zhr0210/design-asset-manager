@@ -32,7 +32,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - AI runtime compatibility and Llama runtime display states should use shared projection so Settings and AI Console share the same status vocabulary.
 - Llama service health is runtime evidence only. `real_model_path` requires a fresh successful text plus generated-image inference probe through GGUF/mmproj.
 - macOS/Windows AI capability matrix title, description, status labels, and badge classes should use shared AI Runtime Status projection rather than component-local platform copy or status maps.
-- AI runtime capability status, capability rows, Worker capability probes, and Worker lane probes should live in platform-neutral runtime types; macOS/Windows runtime type files may add platform-specific lane IDs, metadata, and device details only.
+- AI runtime capability status, capability rows, Worker capability probes, Worker lane probes, and Worker probe result envelopes should live in platform-neutral runtime types; macOS/Windows runtime type files may add platform-specific lane IDs, metadata, and device details only.
 - AI Runtime panel runtime/health badges, icon semantics, health-result copy, and summary counts should use shared AI Runtime Status projection rather than renderer-local status maps or filters.
 - AI Runtime panel platform-specific branch titles, Worker probe titles, CUDA/MPS compatibility copy, fixed-tensor execution copy, and default probe failure messages should use shared AI Runtime Status projection rather than renderer-local platform ternaries.
 - macOS Worker probe connection and route tiles should use shared projection; a missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
@@ -61,6 +61,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.11 | 2026-06-12 | Added a platform-neutral Worker probe result base type so macOS/Windows runtime probes share one envelope while keeping device details platform-specific. |
 | v1.8.10 | 2026-06-11 | Added platform-neutral AI runtime lane and branch metadata base types for macOS/Windows runtime definitions. |
 | v1.8.9 | 2026-06-11 | Extracted platform-neutral AI runtime capability/probe types so Windows runtime types no longer depend on macOS runtime types. |
 | v1.8.8 | 2026-06-11 | Renamed the reusable AI capability matrix renderer component to `PlatformAiCapabilityMatrix` while keeping shared projection ownership unchanged. |

@@ -58,3 +58,13 @@ export interface AiWorkerLaneProbe {
   summary: string
   capabilities: AiWorkerCapabilityProbe[]
 }
+
+export interface PlatformAiWorkerProbeResultBase {
+  platform: string
+  machine: string
+  isMacOS: boolean
+  isAppleSilicon: boolean
+  phase: 'worker-probes'
+  clipSiglipOnnx: AiWorkerCapabilityProbe
+  lanes: AiWorkerLaneProbe[]
+}
