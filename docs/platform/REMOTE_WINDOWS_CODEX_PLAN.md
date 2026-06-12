@@ -137,6 +137,10 @@ paths or model cache paths.
    registered through one shared loop. Python Worker auto-start support is now
    also represented by `PYTHON_WORKER_AUTOSTART_PLATFORMS`, preserving the
    existing macOS/Windows auto-start set without an inline bootstrap branch.
+   Runtime profile defaults and hardware-hint overrides now use
+   `DEFAULT_RUNTIME_PROFILE_RULES` and `HARDWARE_RUNTIME_PROFILE_RULES`,
+   preserving the existing Windows CPU/CUDA and macOS arm64/x64 recommendations
+   without a hand-written platform if-chain.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

@@ -91,6 +91,13 @@ Windows behavior. It did not alter renderer output, runtime probing, IPC
 channels, shared response fields, database schema, or AI Worker HTTP API shapes;
 no new Windows runtime evidence is claimed for it.
 
+A subsequent 2026-06-13 runtime resolver refactor moved default profile and
+hardware-hint selection into ordered metadata rules while preserving the
+existing Windows CPU/CUDA and macOS arm64/x64 recommendations. It did not alter
+renderer output, runtime probing, IPC channels, shared response fields,
+database schema, or AI Worker HTTP API shapes; no new Windows runtime evidence
+is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

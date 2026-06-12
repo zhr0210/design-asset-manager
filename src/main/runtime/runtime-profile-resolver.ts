@@ -4,6 +4,30 @@ import { getProfilesForPlatform, getRuntimeProfile, listRuntimeProfiles } from '
 
 const BLOCKING_CHECK_IDS = new Set(['path', 'permission', 'system', 'node'])
 
+interface RuntimeProfilePlatformRule {
+  platform: PlatformName
+  arch?: PlatformArch
+  profileId: RuntimeProfileId
+}
+
+interface RuntimeProfileHardwareRule {
+  profileId: RuntimeProfileId
+  matches: (input: RuntimeProfileResolverInput) => boolean
+}
+
+const DEFAULT_RUNTIME_PROFILE_RULES: RuntimeProfilePlatformRule[] = [
+  { platform: 'win32', profileId: 'windows-cpu' },
+  { platform: 'darwin', arch: 'arm64', profileId: 'macos-apple-silicon' },
+  { platform: 'darwin', arch: 'x64', profileId: 'macos-intel' }
+]
+
+const HARDWARE_RUNTIME_PROFILE_RULES: RuntimeProfileHardwareRule[] = [
+  {
+    profileId: 'windows-nvidia-cuda',
+    matches: (input) => Boolean(input.hardwareHints?.nvidiaGpu && input.platformInfo.platform === 'win32')
+  }
+]
+
 function checkStatus(input: RuntimeProfileResolverInput, id: string, status: 'warning' | 'error') {
   return input.doctorReport.checks.some((check) => check.id === id && check.status === status)
 }
@@ -21,10 +45,9 @@ function warningMessages(input: RuntimeProfileResolverInput): string[] {
 }
 
 export function getDefaultRuntimeProfileForPlatform(platform: PlatformName, arch: PlatformArch): RuntimeProfileId {
-  if (platform === 'win32') return 'windows-cpu'
-  if (platform === 'darwin' && arch === 'arm64') return 'macos-apple-silicon'
-  if (platform === 'darwin' && arch === 'x64') return 'macos-intel'
-  return 'external-inference-only'
+  return DEFAULT_RUNTIME_PROFILE_RULES.find((rule) => {
+    return rule.platform === platform && (rule.arch === undefined || rule.arch === arch)
+  })?.profileId ?? 'external-inference-only'
 }
 
 export function rankRuntimeProfiles(input: RuntimeProfileResolverInput): RuntimeProfile[] {
@@ -77,7 +100,8 @@ export function resolveRuntimeProfileRecommendation(input: RuntimeProfileResolve
 
 function resolvePreferredProfileId(input: RuntimeProfileResolverInput): RuntimeProfileId {
   if (input.userPreference === 'external-inference-only') return 'external-inference-only'
-  if (input.hardwareHints?.nvidiaGpu && input.platformInfo.platform === 'win32') return 'windows-nvidia-cuda'
+  const hardwareRule = HARDWARE_RUNTIME_PROFILE_RULES.find((rule) => rule.matches(input))
+  if (hardwareRule) return hardwareRule.profileId
   return getDefaultRuntimeProfileForPlatform(input.platformInfo.platform, input.platformInfo.arch)
 }
 

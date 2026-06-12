@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved runtime profile platform/default selection to ordered
+  metadata rules. `DEFAULT_RUNTIME_PROFILE_RULES` now maps the existing
+  Windows CPU, macOS Apple Silicon, and macOS Intel defaults, while
+  `HARDWARE_RUNTIME_PROFILE_RULES` owns the existing Windows NVIDIA CUDA
+  override. Runtime profile IDs, recommendation behavior, bootstrap behavior,
+  IPC channels, database schema, AI Worker HTTP API, shared response fields,
+  runtime behavior, and renderer output are unchanged. Focused runtime-profile
+  tests preserve the existing Windows CPU/CUDA and macOS arm64/x64
+  recommendations and prevent the previous hand-written platform if-chain from
+  returning. UI validation and the full Windows real-evidence script were not
+  run because this resolver refactor does not change product-facing renderer
+  output or runtime probing behavior. Next smallest slice: keep only true OS,
+  path, process, native dependency, and runtime installer checks as platform
+  branches.
 - 2026-06-13 Moved Python Worker auto-start platform support to one
   main-process allowlist. `PYTHON_WORKER_AUTOSTART_PLATFORMS` now owns the
   existing macOS/Windows auto-start set, and `createSafeAiRuntimeManager()`

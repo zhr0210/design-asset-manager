@@ -130,6 +130,18 @@ const registryProfile: RuntimeRegistry = { ...registry(), selectedProfileId: 'wi
 assert.equal(registryProfile.selectedProfileId, 'windows-cpu')
 
 const resolverSource = await fs.readFile('src/main/runtime/runtime-profile-resolver.ts', 'utf8')
+assert.match(resolverSource, /const DEFAULT_RUNTIME_PROFILE_RULES: RuntimeProfilePlatformRule\[\]/)
+assert.match(resolverSource, /const HARDWARE_RUNTIME_PROFILE_RULES: RuntimeProfileHardwareRule\[\]/)
+assert.match(resolverSource, /platform: 'win32'[\s\S]*profileId: 'windows-cpu'/)
+assert.match(resolverSource, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*profileId: 'macos-apple-silicon'/)
+assert.match(resolverSource, /platform: 'darwin'[\s\S]*arch: 'x64'[\s\S]*profileId: 'macos-intel'/)
+assert.match(resolverSource, /profileId: 'windows-nvidia-cuda'[\s\S]*hardwareHints\?\.nvidiaGpu/)
+assert.match(resolverSource, /DEFAULT_RUNTIME_PROFILE_RULES\.find/)
+assert.match(resolverSource, /HARDWARE_RUNTIME_PROFILE_RULES\.find/)
+assert.doesNotMatch(
+  resolverSource,
+  /if \(platform === 'win32'\) return 'windows-cpu'|if \(platform === 'darwin' && arch === 'arm64'\)|if \(input\.hardwareHints\?\.nvidiaGpu && input\.platformInfo\.platform === 'win32'\)/
+)
 assert.doesNotMatch(resolverSource, /install\w*\s*\(/i)
 assert.doesNotMatch(resolverSource, /download\w*\s*\(/i)
 assert.doesNotMatch(resolverSource, /model\w*\s*\(/i)
