@@ -1567,10 +1567,7 @@ export default function AiConsolePage() {
               externalHttpFallback={externalHttpFallback}
               selectedBackend={selectedBackend}
               latestLogLine={latestLogLine}
-              telemetryTrusted={telemetryTrusted}
-              effectiveGpu={effectiveGpu}
               gpuDisplay={gpuDisplay}
-              riskTone={gpuDisplay.riskTone}
               setActiveTab={setActiveTab}
               onRefreshEvidence={() => fetchConsoleStatus('manual')}
             />
@@ -1797,10 +1794,7 @@ function OverviewWorkspace(props: {
   externalHttpFallback: FallbackSummary
   selectedBackend?: AiBackendConfig
   latestLogLine: string
-  telemetryTrusted: boolean
-  effectiveGpu: ReturnType<typeof normalizeWorkerGpuStatus>
   gpuDisplay: AiConsoleGpuDisplay
-  riskTone: 'good' | 'warn' | 'bad'
   setActiveTab: React.Dispatch<React.SetStateAction<ConsoleTab>>
   onRefreshEvidence: () => void
 }) {
@@ -1942,7 +1936,7 @@ function OverviewWorkspace(props: {
         <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">服务健康</h3>
-            <StatusPill tone={props.riskTone}>{props.riskTone === 'good' ? '正常' : props.riskTone === 'bad' ? '关注' : '未知'}</StatusPill>
+            <StatusPill tone={props.gpuDisplay.riskTone}>{props.gpuDisplay.riskTone === 'good' ? '正常' : props.gpuDisplay.riskTone === 'bad' ? '关注' : '未知'}</StatusPill>
           </div>
           <div className="space-y-3 text-[12px] font-bold text-slate-500 dark:text-slate-400">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">Python Worker：{modelReadinessDisplay.workerStatusLabel.replace('Worker ', '')}</div>

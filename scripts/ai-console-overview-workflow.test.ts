@@ -85,6 +85,10 @@ assert.deepEqual(projectAiConsoleModelReadinessDisplay(blockedModelInput), {
 })
 
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
+const overviewSliceStart = aiConsoleSource.indexOf('function OverviewWorkspace')
+const overviewSliceEnd = aiConsoleSource.indexOf('function PlatformAiBranchStatusPanel', overviewSliceStart)
+const overviewSlice = aiConsoleSource.slice(overviewSliceStart, overviewSliceEnd)
+
 assert.match(aiConsoleSource, /projectAiConsoleGpuDisplay/)
 assert.match(aiConsoleSource, /projectAiConsoleModelReadinessDisplay/)
 assert.match(aiConsoleSource, /AiConsoleModelReadinessDisplayInput/)
@@ -104,5 +108,11 @@ assert.doesNotMatch(aiConsoleSource, /currentModelReady\s*\?\s*['"]可执行['"]
 assert.doesNotMatch(aiConsoleSource, /tone=\{currentModelReady\s*\?\s*['"]good['"]\s*:\s*['"]warn['"]\}/)
 assert.doesNotMatch(aiConsoleSource, /当前占用 \$\{effectiveGpu\.usagePercent/)
 assert.doesNotMatch(aiConsoleSource, /riskTone === 'bad' \? 'bg-rose-500'/)
+assert.match(overviewSlice, /gpuDisplay: AiConsoleGpuDisplay/)
+assert.match(overviewSlice, /props\.gpuDisplay\.riskTone/)
+assert.doesNotMatch(overviewSlice, /telemetryTrusted: boolean/)
+assert.doesNotMatch(overviewSlice, /effectiveGpu: ReturnType/)
+assert.doesNotMatch(overviewSlice, /riskTone: 'good' \| 'warn' \| 'bad'/)
+assert.doesNotMatch(overviewSlice, /props\.riskTone/)
 
 console.log('ai-console-overview-workflow passed')
