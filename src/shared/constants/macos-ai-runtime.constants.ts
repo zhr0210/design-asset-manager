@@ -2,32 +2,28 @@ import type {
   MacOSAiBranchRuntimeMetadata,
   MacOSAiRuntimeLane
 } from '../types/macos-ai-runtime.types'
-import type { AiCapabilityStatus, AiRuntimeCapability } from '../types/platform-ai-runtime.types'
+import type { AiCapabilityStatus } from '../types/platform-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
+import {
+  createAiRuntimeCapability as capability,
+  currentPlatformEvidenceStatus,
+  currentPlatformFallbackStatus,
+  isPlatformName
+} from './platform-ai-runtime-metadata.constants'
 
 function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'apple-silicon' | 'macos'): AiCapabilityStatus {
-  if (platform !== 'darwin') return 'unavailable'
+  const isCurrentPlatform = isPlatformName(platform, 'darwin')
+  if (!isCurrentPlatform) return 'unavailable'
   if (preferred === 'apple-silicon' && arch !== 'arm64') return 'fallback'
-  return 'evidence_insufficient'
-}
-
-function capability(
-  id: string,
-  label: string,
-  status: AiCapabilityStatus,
-  role: AiRuntimeCapability['role'],
-  modelFamily?: string,
-  backend?: string
-): AiRuntimeCapability {
-  return { id, label, status, role, modelFamily, backend }
+  return currentPlatformEvidenceStatus(isCurrentPlatform)
 }
 
 export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch: PlatformArch): MacOSAiBranchRuntimeMetadata {
-  const isMacOS = platform === 'darwin'
-  const isAppleSilicon = isMacOS && arch === 'arm64'
+  const isCurrentPlatform = isPlatformName(platform, 'darwin')
   const mpsStatus = platformLaneStatus(platform, arch, 'apple-silicon')
   const onnxStatus = platformLaneStatus(platform, arch, 'macos')
   const llamaStatus = platformLaneStatus(platform, arch, 'macos')
+  const platformFallbackStatus = currentPlatformFallbackStatus(isCurrentPlatform)
 
   const lanes: MacOSAiRuntimeLane[] = [
     {
@@ -40,7 +36,7 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
         capability('python-mps.ram-plus', 'RAM++ optional', mpsStatus, 'tagging', 'RAM++', 'PyTorch MPS'),
         capability('python-mps.florence-2', 'Florence-2 optional', mpsStatus, 'tagging', 'Florence-2', 'PyTorch MPS'),
         capability('python-mps.clip-siglip', 'CLIP/SigLIP optional', mpsStatus, 'embedding', 'CLIP/SigLIP', 'PyTorch MPS'),
-        capability('python-mps.cpu-fallback', 'CPU fallback', isMacOS ? 'fallback' : 'unavailable', 'fallback', undefined, 'CPU')
+        capability('python-mps.cpu-fallback', 'CPU fallback', platformFallbackStatus, 'fallback', undefined, 'CPU')
       ]
     },
     {
@@ -55,7 +51,7 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
         capability('onnx-runtime.paddleocr', 'PaddleOCR ONNX', onnxStatus, 'ocr', 'PaddleOCR', 'ONNX Runtime'),
         capability('onnx-runtime.clip-siglip', 'CLIP/SigLIP ONNX', onnxStatus, 'embedding', 'CLIP/SigLIP', 'ONNX Runtime'),
         capability('onnx-runtime.coreml-fallback', 'CoreML fallback', onnxStatus, 'fallback', undefined, 'CoreML'),
-        capability('onnx-runtime.cpu-fallback', 'CPU fallback', isMacOS ? 'fallback' : 'unavailable', 'fallback', undefined, 'CPU')
+        capability('onnx-runtime.cpu-fallback', 'CPU fallback', platformFallbackStatus, 'fallback', undefined, 'CPU')
       ]
     },
     {
@@ -66,7 +62,7 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
       fallbackCapabilityIds: ['llama.qwen25-vl-ollama', 'llama.external-http'],
       capabilities: [
         capability('llama.qwen3-vl-gguf', 'Qwen3-VL GGUF', llamaStatus, 'prompt-reverse', 'Qwen3-VL', 'llama.cpp Metal'),
-        capability('llama.qwen25-vl-ollama', 'Qwen2.5-VL Ollama fallback', isMacOS ? 'fallback' : 'unavailable', 'prompt-reverse', 'Qwen2.5-VL', 'Ollama'),
+        capability('llama.qwen25-vl-ollama', 'Qwen2.5-VL Ollama fallback', platformFallbackStatus, 'prompt-reverse', 'Qwen2.5-VL', 'Ollama'),
         capability('llama.external-http', 'external HTTP fallback', 'fallback', 'fallback', undefined, 'OpenAI-compatible HTTP')
       ]
     }
@@ -77,7 +73,7 @@ export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch:
     phase: 'skeleton',
     platform,
     arch,
-    isCurrentPlatform: isMacOS,
+    isCurrentPlatform,
     lanes,
     warnings: [
       'Phase 1 exposes macOS AI branch lanes and route metadata only; it does not claim model downloads or worker probes are complete.',

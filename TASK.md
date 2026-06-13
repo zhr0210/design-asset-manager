@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved shared Platform AI runtime metadata helpers out of concrete
+  macOS/Windows constants. `platform-ai-runtime-metadata.constants.ts` now owns
+  the shared capability builder, current-platform matcher, fallback-status
+  helper, and evidence-status helper, while the concrete macOS/Windows runtime
+  constants keep lane IDs, lane membership, labels, backend names, warnings, and
+  real platform topology. Metadata outputs, IPC channels, database schema, AI
+  Worker HTTP API, shared response fields, runtime probing, renderer output,
+  installer behavior, download behavior, and process startup behavior are
+  unchanged. Focused AI runtime workflow and macOS runtime tests preserve the
+  existing macOS/Windows metadata outputs and lock the helper usage so local
+  duplicate `capability()` builders and inline platform fallback variables do
+  not return. UI validation and the full Windows real-evidence script were not
+  run because this is a shared-constant metadata refactor with no product
+  layout, runtime probing, dependency install, download, or AI process startup
+  behavior change. Next smallest slice: continue the completion audit for
+  remaining platform constants and main-process adapter lookups before marking
+  the long-running shared-surface goal complete.
 - 2026-06-13 Added a completion-audit source contract for direct
   `process.platform` branching. `scripts/ai-runtime-status-workflow.test.ts`
   now separately proves that `src/main`, `src/shared`, and `src/renderer` do

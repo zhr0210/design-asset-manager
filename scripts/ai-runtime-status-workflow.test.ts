@@ -700,6 +700,8 @@ const platformAiRuntimeTypesSource = await fs.readFile('src/shared/types/platfor
 const macosAiRuntimeTypesSource = await fs.readFile('src/shared/types/macos-ai-runtime.types.ts', 'utf8')
 const windowsAiRuntimeTypesSource = await fs.readFile('src/shared/types/windows-ai-runtime.types.ts', 'utf8')
 const windowsAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/windows-ai-runtime.constants.ts', 'utf8')
+const macosAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/macos-ai-runtime.constants.ts', 'utf8')
+const platformAiRuntimeMetadataConstantsSource = await fs.readFile('src/shared/constants/platform-ai-runtime-metadata.constants.ts', 'utf8')
 const concretePlatformRuntimeTypePattern = /MacOSAiWorkerProbeResult|WindowsAiWorkerProbeResult|MacOSAiBranchRuntimeMetadata|WindowsAiBranchRuntimeMetadata|MacOSAiRuntimeLane|WindowsAiRuntimeLane/
 const platformBranchControlFlowPattern = /\bplatformBranch\s*(?:===|!==)\s*['"](?:windows|macos)['"]|['"](?:windows|macos)['"]\s*(?:===|!==)\s*platformBranch\b/
 const directProcessPlatformBranchPattern = /process\.platform\s*(?:={2,3}|!={1,2})\s*['"](?:win32|darwin)['"]|['"](?:win32|darwin)['"]\s*(?:={2,3}|!={1,2})\s*process\.platform/
@@ -756,8 +758,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/services/llama-runtime/llama-runtime-install.service.ts',
   'src/main/services/llama-runtime/llama-runtime-planner.ts',
   'src/main/services/ocr-dependency.service.ts',
-  'src/shared/constants/macos-ai-runtime.constants.ts',
-  'src/shared/constants/windows-ai-runtime.constants.ts',
+  'src/shared/constants/platform-ai-runtime-metadata.constants.ts',
   'src/shared/types/doctor.types.ts',
   'src/shared/workflows/ai-runtime-status.workflow.ts'
 ])
@@ -789,6 +790,16 @@ assert.doesNotMatch(windowsAiRuntimeTypesSource, /from '.\/macos-ai-runtime\.typ
 assert.doesNotMatch(windowsAiRuntimeTypesSource, /phase: 'skeleton' \| 'worker-probes' \| 'model-download' \| 'validated'/)
 assert.doesNotMatch(windowsAiRuntimeTypesSource, /phase: 'worker-probes'/)
 assert.doesNotMatch(windowsAiRuntimeConstantsSource, /from '..\/types\/macos-ai-runtime\.types'/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /function createAiRuntimeCapability/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformName/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformFallbackStatus/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformEvidenceStatus/)
+assert.match(macosAiRuntimeConstantsSource, /createAiRuntimeCapability as capability/)
+assert.match(windowsAiRuntimeConstantsSource, /createAiRuntimeCapability as capability/)
+assert.doesNotMatch(macosAiRuntimeConstantsSource, /function capability/)
+assert.doesNotMatch(windowsAiRuntimeConstantsSource, /function capability/)
+assert.doesNotMatch(macosAiRuntimeConstantsSource, /const isMacOS = platform === 'darwin'/)
+assert.doesNotMatch(windowsAiRuntimeConstantsSource, /const isWindows = platform === 'win32'/)
 assert.match(runtimeWorkflowSource, /interface PlatformAiProbeTileDisplay/)
 assert.doesNotMatch(runtimeWorkflowSource, /MacOSAiProbeTileDisplay/)
 assert.match(runtimeWorkflowSource, /interface PlatformAiWorkerProbeHeaderDisplay/)

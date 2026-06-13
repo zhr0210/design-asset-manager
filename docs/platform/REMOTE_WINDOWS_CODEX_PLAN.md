@@ -188,6 +188,10 @@ paths or model cache paths.
    `process.platform ===/!== "win32"/"darwin"` control-flow branches; remaining
    `process.platform` usages are adapter lookup/default-parameter, platform
    detection, IPC current-platform reporting, or runtime metadata boundaries.
+   Shared Platform AI runtime metadata helper functions now also live in
+   `platform-ai-runtime-metadata.constants.ts`, preserving the concrete
+   macOS/Windows lane topology while removing duplicate capability-builder and
+   fallback-status policy from the concrete runtime constant files.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

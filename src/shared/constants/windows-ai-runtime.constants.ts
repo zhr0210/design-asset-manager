@@ -2,30 +2,25 @@ import type {
   WindowsAiBranchRuntimeMetadata,
   WindowsAiRuntimeLane
 } from '../types/windows-ai-runtime.types'
-import type { AiCapabilityStatus, AiRuntimeCapability } from '../types/platform-ai-runtime.types'
+import type { AiCapabilityStatus } from '../types/platform-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
+import {
+  createAiRuntimeCapability as capability,
+  currentPlatformEvidenceStatus,
+  currentPlatformFallbackStatus,
+  isPlatformName
+} from './platform-ai-runtime-metadata.constants'
 
-function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'windows-cuda' | 'windows'): AiCapabilityStatus {
-  if (platform !== 'win32') return 'unavailable'
-  return 'evidence_insufficient'
-}
-
-function capability(
-  id: string,
-  label: string,
-  status: AiCapabilityStatus,
-  role: AiRuntimeCapability['role'],
-  modelFamily?: string,
-  backend?: string
-): AiRuntimeCapability {
-  return { id, label, status, role, modelFamily, backend }
+function platformLaneStatus(platform: PlatformName): AiCapabilityStatus {
+  return currentPlatformEvidenceStatus(isPlatformName(platform, 'win32'))
 }
 
 export function createWindowsAiBranchRuntimeMetadata(platform: PlatformName, arch: PlatformArch): WindowsAiBranchRuntimeMetadata {
-  const isWindows = platform === 'win32'
-  const cudaStatus = platformLaneStatus(platform, arch, 'windows-cuda')
-  const onnxStatus = platformLaneStatus(platform, arch, 'windows')
-  const llamaStatus = platformLaneStatus(platform, arch, 'windows')
+  const isCurrentPlatform = isPlatformName(platform, 'win32')
+  const cudaStatus = platformLaneStatus(platform)
+  const onnxStatus = platformLaneStatus(platform)
+  const llamaStatus = platformLaneStatus(platform)
+  const platformFallbackStatus = currentPlatformFallbackStatus(isCurrentPlatform)
 
   const lanes: WindowsAiRuntimeLane[] = [
     {
@@ -38,7 +33,7 @@ export function createWindowsAiBranchRuntimeMetadata(platform: PlatformName, arc
         capability('python-cuda.ram-plus', 'RAM++ optional', cudaStatus, 'tagging', 'RAM++', 'PyTorch CUDA'),
         capability('python-cuda.florence-2', 'Florence-2 optional', cudaStatus, 'tagging', 'Florence-2', 'PyTorch CUDA'),
         capability('python-cuda.clip-siglip', 'CLIP/SigLIP optional', cudaStatus, 'embedding', 'CLIP/SigLIP', 'PyTorch CUDA'),
-        capability('python-cuda.cpu-fallback', 'CPU fallback', isWindows ? 'fallback' : 'unavailable', 'fallback', undefined, 'CPU')
+        capability('python-cuda.cpu-fallback', 'CPU fallback', platformFallbackStatus, 'fallback', undefined, 'CPU')
       ]
     },
     {
@@ -54,7 +49,7 @@ export function createWindowsAiBranchRuntimeMetadata(platform: PlatformName, arc
         capability('onnx-runtime.clip-siglip', 'CLIP/SigLIP ONNX', onnxStatus, 'embedding', 'CLIP/SigLIP', 'ONNX Runtime'),
         capability('onnx-runtime.cuda-fallback', 'CUDA fallback', onnxStatus, 'fallback', undefined, 'CUDA'),
         capability('onnx-runtime.dml-fallback', 'DirectML fallback', onnxStatus, 'fallback', undefined, 'DirectML'),
-        capability('onnx-runtime.cpu-fallback', 'CPU fallback', isWindows ? 'fallback' : 'unavailable', 'fallback', undefined, 'CPU')
+        capability('onnx-runtime.cpu-fallback', 'CPU fallback', platformFallbackStatus, 'fallback', undefined, 'CPU')
       ]
     },
     {
@@ -65,7 +60,7 @@ export function createWindowsAiBranchRuntimeMetadata(platform: PlatformName, arc
       fallbackCapabilityIds: ['llama.qwen25-vl-ollama', 'llama.external-http'],
       capabilities: [
         capability('llama.qwen3-vl-gguf', 'Qwen3-VL GGUF', llamaStatus, 'prompt-reverse', 'Qwen3-VL', 'llama.cpp CUDA'),
-        capability('llama.qwen25-vl-ollama', 'Qwen2.5-VL Ollama fallback', isWindows ? 'fallback' : 'unavailable', 'prompt-reverse', 'Qwen2.5-VL', 'Ollama'),
+        capability('llama.qwen25-vl-ollama', 'Qwen2.5-VL Ollama fallback', platformFallbackStatus, 'prompt-reverse', 'Qwen2.5-VL', 'Ollama'),
         capability('llama.external-http', 'external HTTP fallback', 'fallback', 'fallback', undefined, 'OpenAI-compatible HTTP')
       ]
     }
@@ -76,7 +71,7 @@ export function createWindowsAiBranchRuntimeMetadata(platform: PlatformName, arc
     phase: 'skeleton',
     platform,
     arch,
-    isCurrentPlatform: isWindows,
+    isCurrentPlatform,
     lanes,
     warnings: [
       'Phase 1 exposes Windows AI branch lanes and route metadata only; it does not claim model downloads or worker probes are complete.',

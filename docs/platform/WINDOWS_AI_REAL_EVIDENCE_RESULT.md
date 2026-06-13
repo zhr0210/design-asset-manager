@@ -215,6 +215,16 @@ IPC channels, shared response fields, database schema, AI Worker HTTP API
 shapes, dependency installation, or process startup; no new Windows runtime
 evidence is claimed for it.
 
+A later 2026-06-13 shared constants refactor moved the shared Platform AI
+runtime capability builder, current-platform matcher, fallback-status helper,
+and evidence-status helper to `platform-ai-runtime-metadata.constants.ts`.
+Concrete macOS/Windows runtime constants still own lane IDs, lane membership,
+labels, backend names, warnings, and platform topology. It did not alter
+product code, renderer output, runtime probing, IPC channels, shared response
+fields, database schema, AI Worker HTTP API shapes, dependency installation,
+download behavior, or process startup; no new Windows runtime evidence is
+claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and
