@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved no-GPU Llama accelerator default selection to metadata.
+  `DEFAULT_LLAMA_ACCELERATOR_RULES` now owns the existing Windows Vulkan
+  default and cross-platform CPU fallback when no NVIDIA GPU is detected, while
+  CUDA major-version selection, Llama artifact selection, path handling,
+  installer behavior, process startup, IPC channels, database schema, AI Worker
+  HTTP API, shared response fields, runtime probing, and renderer output are
+  unchanged. Focused Llama installer tests preserve the existing
+  `recommendAccelerator()` behavior and prevent the previous inline
+  `process.platform === "win32" ? "vulkan" : "cpu"` branch from returning. UI
+  validation and the full Windows real-evidence script were not run because
+  this is a main-process planner metadata refactor with no product layout,
+  runtime probing, download, or process behavior change. Next smallest slice:
+  continue the completion audit; leave Llama artifact patterns, executable
+  names, installer paths, and launch adapters as true platform-specific logic.
 - 2026-06-13 Moved runtime profile recommendation reason copy to metadata.
   `RUNTIME_PROFILE_REASON_MESSAGES` now owns the existing Windows CUDA,
   Windows CPU, macOS Apple Silicon, macOS Intel, and external-inference

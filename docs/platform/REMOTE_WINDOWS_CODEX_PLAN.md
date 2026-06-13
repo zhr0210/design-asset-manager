@@ -158,7 +158,10 @@ paths or model cache paths.
    recommendation reason copy now also lives in `RUNTIME_PROFILE_REASON_MESSAGES`,
    preserving the existing Windows CUDA, Windows CPU, macOS Apple Silicon,
    macOS Intel, and external-inference reason strings without a profile-id
-   if-chain.
+   if-chain. Llama no-GPU accelerator default selection now lives in
+   `DEFAULT_LLAMA_ACCELERATOR_RULES`, preserving the existing Windows Vulkan
+   default and cross-platform CPU fallback while keeping artifact/path/process
+   differences inside the Llama runtime adapters.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

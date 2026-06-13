@@ -139,6 +139,13 @@ external-inference reason strings. It did not alter renderer output, runtime
 probing, IPC channels, shared response fields, database schema, or AI Worker
 HTTP API shapes; no new Windows runtime evidence is claimed for it.
 
+A later 2026-06-13 Llama planner refactor moved no-GPU accelerator defaults to
+`DEFAULT_LLAMA_ACCELERATOR_RULES`, preserving the existing Windows Vulkan
+default and cross-platform CPU fallback. It did not alter renderer output,
+runtime probing, IPC channels, shared response fields, database schema, AI
+Worker HTTP API shapes, artifact selection, download behavior, or process
+startup; no new Windows runtime evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

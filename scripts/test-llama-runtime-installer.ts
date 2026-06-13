@@ -1,4 +1,5 @@
 import assert from 'assert/strict'
+import fs from 'fs/promises'
 import http from 'http'
 import {
   assertSafeZipEntries,
@@ -70,6 +71,12 @@ async function main() {
   assert.equal(recommendAccelerator('13.2', true), 'cuda13')
   assert.equal(recommendAccelerator('12.4', true), 'cuda12')
   assert.equal(recommendAccelerator(undefined, false), process.platform === 'win32' ? 'vulkan' : 'cpu')
+
+  const plannerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-planner.ts', 'utf8')
+  assert.match(plannerSource, /const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule\[\]/)
+  assert.match(plannerSource, /platform: 'win32'[\s\S]*accelerator: 'vulkan'/)
+  assert.match(plannerSource, /DEFAULT_LLAMA_ACCELERATOR_RULES\.find/)
+  assert.doesNotMatch(plannerSource, /process\.platform === 'win32' \? 'vulkan' : 'cpu'/)
 
   const profile = createHardwareProfile({
     platform: 'win32',

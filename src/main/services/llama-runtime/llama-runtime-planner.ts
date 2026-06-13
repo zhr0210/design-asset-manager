@@ -31,6 +31,16 @@ export interface LlamaMirrorManifest {
   mirrors: LlamaMirrorEntry[]
 }
 
+interface LlamaDefaultAcceleratorRule {
+  platform?: NodeJS.Platform | string
+  accelerator: LlamaRuntimeAccelerator
+}
+
+const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule[] = [
+  { platform: 'win32', accelerator: 'vulkan' },
+  { accelerator: 'cpu' }
+]
+
 const DEFAULT_LLAMA_RELEASE: LlamaReleaseInfo = {
   tag_name: 'b9437',
   assets: [
@@ -150,7 +160,9 @@ export function createHardwareProfile(input: Partial<LlamaHardwareProfile> = {})
 }
 
 export function recommendAccelerator(cudaVersion?: string, hasNvidiaGpu = false): LlamaRuntimeAccelerator {
-  if (!hasNvidiaGpu) return process.platform === 'win32' ? 'vulkan' : 'cpu'
+  if (!hasNvidiaGpu) {
+    return DEFAULT_LLAMA_ACCELERATOR_RULES.find((rule) => !rule.platform || rule.platform === process.platform)?.accelerator ?? 'cpu'
+  }
   const major = Number((cudaVersion ?? '').split('.')[0])
   if (major >= 13) return 'cuda13'
   if (major >= 12) return 'cuda12'
