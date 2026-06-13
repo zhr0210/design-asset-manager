@@ -31,6 +31,38 @@ import { probeLlamaServer } from './llama-runtime-server-probe'
 
 const LLAMA_RELEASES_API = 'https://api.github.com/repos/ggml-org/llama.cpp/releases/latest'
 
+interface LlamaServerProcessAdapter {
+  platform?: NodeJS.Platform | string
+  executableName: string
+  missingExecutableMessage: string
+  forceStopCommand?: {
+    command: string
+    args: string[]
+    shell: boolean
+  }
+}
+
+const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
+  {
+    platform: 'win32',
+    executableName: 'llama-server.exe',
+    missingExecutableMessage: '未找到 llama-server.exe，请先完成安装。',
+    forceStopCommand: {
+      command: 'taskkill',
+      args: ['/F', '/IM', 'llama-server.exe'],
+      shell: true
+    }
+  },
+  {
+    executableName: 'llama-server',
+    missingExecutableMessage: '未找到 llama-server，请先完成安装。'
+  }
+]
+
+function resolveLlamaServerProcessAdapter(platform: NodeJS.Platform | string = process.platform): LlamaServerProcessAdapter {
+  return LLAMA_SERVER_PROCESS_ADAPTERS.find((adapter) => !adapter.platform || adapter.platform === platform) ?? LLAMA_SERVER_PROCESS_ADAPTERS[1]
+}
+
 export class LlamaRuntimeInstallService {
   private static instance: LlamaRuntimeInstallService
   private abortController: AbortController | null = null
@@ -354,7 +386,7 @@ export class LlamaRuntimeInstallService {
     }
 
     if (!exePath || !fs.existsSync(exePath)) {
-      throw new Error(process.platform === 'win32' ? '未找到 llama-server.exe，请先完成安装。' : '未找到 llama-server，请先完成安装。')
+      throw new Error(resolveLlamaServerProcessAdapter().missingExecutableMessage)
     }
     if (!fs.existsSync(ggufPath)) {
       throw new Error('未找到 GGUF 模型文件，请先完成模型下载。')
@@ -419,10 +451,10 @@ export class LlamaRuntimeInstallService {
       this.serverProcess = null
     }
     
-    // Synchronously launch taskkill in background to force close any dangling llama-server.exe processes
-    if (process.platform === 'win32') {
+    const forceStopCommand = resolveLlamaServerProcessAdapter().forceStopCommand
+    if (forceStopCommand) {
       try {
-        spawn('taskkill', ['/F', '/IM', 'llama-server.exe'], { shell: true })
+        spawn(forceStopCommand.command, forceStopCommand.args, { shell: forceStopCommand.shell })
       } catch (e) {
         // ignore
       }
@@ -702,7 +734,7 @@ export class LlamaRuntimeInstallService {
   }
 
   private findServerExecutable(runtimeDir: string): string | null {
-    const executableName = process.platform === 'win32' ? 'llama-server.exe' : 'llama-server'
+    const executableName = resolveLlamaServerProcessAdapter().executableName
     const directCandidates = [
       path.join(runtimeDir, executableName),
       path.join(runtimeDir, 'bin', executableName),

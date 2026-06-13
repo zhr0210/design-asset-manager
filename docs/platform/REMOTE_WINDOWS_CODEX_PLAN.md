@@ -168,7 +168,10 @@ paths or model cache paths.
    path selection now lives in `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS`,
    preserving the existing Windows `Scripts/python.exe` and cross-platform
    `bin/python` paths while keeping interpreter discovery and installer
-   processes in OCR platform adapters.
+   processes in OCR platform adapters. Llama server executable selection,
+   missing-executable copy, and Windows force-stop command now live in
+   `LLAMA_SERVER_PROCESS_ADAPTERS`, preserving the existing Windows
+   `llama-server.exe` and cross-platform `llama-server` process behavior.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

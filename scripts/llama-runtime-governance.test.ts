@@ -48,6 +48,13 @@ assert.doesNotMatch(governanceSource, /fetch\s*\(|spawn\s*\(|execSync\s*\(|downl
 assert.doesNotMatch(governanceSource, /C:\\Users\\[A-Za-z0-9_.-]+/i)
 
 const installerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-install.service.ts', 'utf8')
+assert.match(installerSource, /const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter\[\]/)
+assert.match(installerSource, /platform: 'win32'[\s\S]*executableName: 'llama-server\.exe'[\s\S]*command: 'taskkill'/)
+assert.match(installerSource, /executableName: 'llama-server'/)
+assert.match(installerSource, /resolveLlamaServerProcessAdapter\(\)\.missingExecutableMessage/)
+assert.match(installerSource, /resolveLlamaServerProcessAdapter\(\)\.executableName/)
+assert.doesNotMatch(installerSource, /process\.platform === 'win32' \? 'llama-server\.exe' : 'llama-server'/)
+assert.doesNotMatch(installerSource, /process\.platform === 'win32' \? '未找到 llama-server\.exe/)
 assert.match(installerSource, /llama-server\.exe/)
 assert.match(installerSource, /downloadPackage|downloadUrl/)
 

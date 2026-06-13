@@ -14,6 +14,11 @@ The platform-local adapters are selected through `LLAMA_RUNTIME_PLATFORM_ADAPTER
 Adding or removing a read-only platform adapter should update that descriptor
 table instead of adding platform conditionals to the plan flow.
 
+Server executable and force-stop process metadata are selected through
+`LLAMA_SERVER_PROCESS_ADAPTERS`. Keep executable names, missing-executable copy,
+and Windows task cleanup there; keep install, download, and launch actions
+explicitly user-triggered.
+
 ## Governance Rules
 
 - `externalInferencePreferred: true`

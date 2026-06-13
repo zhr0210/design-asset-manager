@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Llama server process metadata to descriptors.
+  `LLAMA_SERVER_PROCESS_ADAPTERS` now owns the existing Windows
+  `llama-server.exe` executable name, default `llama-server` executable name,
+  missing-executable messages, and Windows force-stop command metadata, while
+  server start arguments, model/mmproj selection, artifact extraction, download
+  behavior, installer behavior, IPC channels, database schema, AI Worker HTTP
+  API, shared response fields, runtime probing, and renderer output are
+  unchanged. Focused Llama governance source contracts preserve the descriptor
+  table and prevent the previous server executable and missing-message ternaries
+  from returning. UI validation and the full Windows real-evidence script were
+  not run because this is a main-process process-metadata refactor with no
+  product layout, runtime probing, dependency install, download, or server
+  startup behavior change. Next smallest slice: continue the completion audit
+  for remaining direct platform checks in hardware detection, chmod/process
+  permission handling, Python interpreter discovery, Electron startup, platform
+  detection, and platform runtime constants.
 - 2026-06-13 Moved managed OCR/Python venv executable path selection to
   metadata. `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS` now owns the existing
   Windows `Scripts/python.exe` and cross-platform `bin/python` path parts used
