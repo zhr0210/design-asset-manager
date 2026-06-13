@@ -24,12 +24,12 @@ runtime, native dependency, path, or process differences.
 
 Remove the product mock-tag generation surface:
 
-1. Remove `mock-ai:generate-suggestions` registration from production IPC.
-2. Remove the production preload method and shared channel constant.
-3. Keep mock implementations only in test-owned locations where still needed.
-4. Preserve the real Asset Tagging Workflow, Queue Sync, tag confirmation, and
+1. Removed `mock-ai:generate-suggestions` registration from production IPC.
+2. Removed the production preload method and shared channel constant.
+3. Kept mock implementations only in test-owned locations where still needed.
+4. Preserved the real Asset Tagging Workflow, Queue Sync, tag confirmation, and
    existing public real-AI contracts.
-5. Add focused source and contract tests proving packaged product code cannot
+5. Added focused source and contract tests proving packaged product code cannot
    register or invoke mock tag generation.
 
 Do not change database schema, AI Worker HTTP APIs, Platform AI Branch Status

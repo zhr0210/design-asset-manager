@@ -178,9 +178,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   tagSearchUntagged: () => ipcRenderer.invoke('tag-search:untagged'),
   tagSearchAiPending: () => ipcRenderer.invoke('tag-search:ai-pending'),
 
-  // Mock AI predictions trigger
-  mockAiGenerateSuggestions: (assetId: string) => ipcRenderer.invoke('mock-ai:generate-suggestions', assetId),
-
   // REST AI Client IPC API
   aiEnqueueTag: (assetId: string, filePath: string, priority?: number, modelsToRun?: EnqueueTagRequest['modelsToRun']) => ipcRenderer.invoke(
     CHANNEL_AI_ENQUEUE_TAG,
