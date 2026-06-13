@@ -16,9 +16,20 @@ interface OcrManagedPythonRuntimeAdapter {
   pythonPathParts: string[]
 }
 
+interface OcrBasePythonResolver {
+  platform?: NodeJS.Platform | string
+  resolve: () => string | null
+}
+
 const OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS: OcrManagedPythonRuntimeAdapter[] = [
   { platform: 'win32', pythonPathParts: ['Scripts', 'python.exe'] },
   { pythonPathParts: ['bin', 'python'] }
+]
+
+const OCR_BASE_PYTHON_RESOLVERS: OcrBasePythonResolver[] = [
+  { platform: 'win32', resolve: resolveWindowsBasePythonExecutable },
+  { platform: 'darwin', resolve: resolveMacOSHomebrewPythonExecutable },
+  { resolve: resolveDefaultBasePythonExecutable }
 ]
 
 function redactDebugMessage(msg: string): string {
@@ -62,8 +73,6 @@ function findEnvCheckScriptPath(): string {
 }
 
 function searchWindowsPythonPaths(): string | null {
-  if (process.platform !== 'win32') return null
-
   const userProfile = process.env.USERPROFILE || process.env.HOMEPATH || ''
   if (!userProfile) return null
 
@@ -128,6 +137,56 @@ function searchWindowsPythonPaths(): string | null {
   return null
 }
 
+function resolveWindowsBasePythonExecutable(): string | null {
+  try {
+    writeDebugLog('[resolvePythonExecutable] platform is win32, running execSync("where python")...')
+    const output = execSync('where python', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+    writeDebugLog(`[resolvePythonExecutable] "where python" raw output:\n${output}`)
+    const lines = output.split(/\r?\n/).map(l => l.trim()).filter(Boolean)
+    for (const line of lines) {
+      if (line.toLowerCase().endsWith('python.exe') && !line.toLowerCase().includes('microsoft\\windowsapps')) {
+        writeDebugLog(`[resolvePythonExecutable] WindowsApps bypass resolved: ${line}`)
+        return line
+      }
+    }
+  } catch (e: any) {
+    writeDebugLog(`[resolvePythonExecutable] execSync("where python") failed: ${e?.message || String(e)}`)
+  }
+
+  return searchWindowsPythonPaths()
+}
+
+function resolveMacOSHomebrewPythonExecutable(): string {
+  writeDebugLog('[resolvePythonExecutable] Falling back to default "python"')
+
+  const homebrewPython313 = "/opt/homebrew/bin/python3.13"
+  if (fs.existsSync(homebrewPython313)) {
+    writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3.13")
+    return homebrewPython313
+  }
+  const homebrewPython3 = "/opt/homebrew/bin/python3"
+  if (fs.existsSync(homebrewPython3)) {
+    writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3")
+    return homebrewPython3
+  }
+
+  return 'python'
+}
+
+function resolveDefaultBasePythonExecutable(): string {
+  writeDebugLog('[resolvePythonExecutable] Falling back to default "python"')
+  return 'python'
+}
+
+function resolvePlatformBasePythonExecutable(platform: NodeJS.Platform | string = process.platform): string {
+  for (const resolver of OCR_BASE_PYTHON_RESOLVERS) {
+    if (resolver.platform && resolver.platform !== platform) continue
+    const resolved = resolver.resolve()
+    if (resolved) return resolved
+  }
+  return 'python'
+}
+
 function resolveManagedVenvPythonPath(venvDir: string): string {
   return path.join(venvDir, ...resolveManagedVenvPythonPathParts())
 }
@@ -189,44 +248,7 @@ export function resolveBasePythonExecutable(): string {
     }
   }
 
-  if (process.platform === 'win32') {
-    try {
-      writeDebugLog('[resolvePythonExecutable] platform is win32, running execSync("where python")...')
-      const output = execSync('where python', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
-      writeDebugLog(`[resolvePythonExecutable] "where python" raw output:\n${output}`)
-      const lines = output.split(/\r?\n/).map(l => l.trim()).filter(Boolean)
-      for (const line of lines) {
-        if (line.toLowerCase().endsWith('python.exe') && !line.toLowerCase().includes('microsoft\\windowsapps')) {
-          writeDebugLog(`[resolvePythonExecutable] WindowsApps bypass resolved: ${line}`)
-          return line
-        }
-      }
-    } catch (e: any) {
-      writeDebugLog(`[resolvePythonExecutable] execSync("where python") failed: ${e?.message || String(e)}`)
-    }
-
-    const searchedPath = searchWindowsPythonPaths()
-    if (searchedPath) {
-      return searchedPath
-    }
-  }
-
-  writeDebugLog('[resolvePythonExecutable] Falling back to default "python"')
-
-  if (process.platform === "darwin") {
-    const homebrewPython313 = "/opt/homebrew/bin/python3.13"
-    if (fs.existsSync(homebrewPython313)) {
-      writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3.13")
-      return homebrewPython313
-    }
-    const homebrewPython3 = "/opt/homebrew/bin/python3"
-    if (fs.existsSync(homebrewPython3)) {
-      writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3")
-      return homebrewPython3
-    }
-  }
-
-  return 'python'
+  return resolvePlatformBasePythonExecutable()
 }
 
 export function resolvePythonExecutable(): string {

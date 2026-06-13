@@ -168,7 +168,10 @@ paths or model cache paths.
    path selection now lives in `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS`,
    preserving the existing Windows `Scripts/python.exe` and cross-platform
    `bin/python` paths while keeping interpreter discovery and installer
-   processes in OCR platform adapters. Llama server executable selection,
+   processes in OCR platform adapters. OCR base Python discovery selection now
+   also lives in `OCR_BASE_PYTHON_RESOLVERS`, preserving Windows `where python`
+   and common install-root search, macOS Homebrew fallback, and the
+   cross-platform `python` fallback. Llama server executable selection,
    missing-executable copy, chmod-before-spawn policy, zip extraction command
    choice, and Windows force-stop command now live in
    `LLAMA_SERVER_PROCESS_ADAPTERS`, preserving the existing Windows

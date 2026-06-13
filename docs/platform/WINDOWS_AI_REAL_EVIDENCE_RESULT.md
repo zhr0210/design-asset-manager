@@ -162,6 +162,15 @@ database schema, AI Worker HTTP API shapes, Python interpreter discovery,
 dependency installation, or process startup; no new Windows runtime evidence is
 claimed for it.
 
+A later 2026-06-13 OCR dependency refactor moved base Python discovery
+selection to `OCR_BASE_PYTHON_RESOLVERS`, preserving the existing Windows
+`where python` check, Windows common install-root search, macOS Homebrew
+fallback, environment-variable precedence, and cross-platform `python`
+fallback. It did not alter renderer output, runtime probing, IPC channels,
+shared response fields, database schema, AI Worker HTTP API shapes, dependency
+installation, or AI process startup; no new Windows runtime evidence is claimed
+for it.
+
 A later 2026-06-13 Llama installer refactor moved server executable metadata
 and Windows force-stop command metadata to `LLAMA_SERVER_PROCESS_ADAPTERS`,
 preserving the existing Windows `llama-server.exe`, cross-platform

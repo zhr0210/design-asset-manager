@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved OCR base Python discovery selection to descriptors.
+  `OCR_BASE_PYTHON_RESOLVERS` now selects the existing Windows `where python`
+  and common install-root search, macOS Homebrew fallback, and cross-platform
+  `python` fallback through one shared resolver flow. Managed venv path
+  selection, environment variable precedence, Windows search paths, macOS
+  Homebrew candidates, fallback venv behavior, installer process behavior, IPC
+  channels, database schema, AI Worker HTTP API, shared response fields,
+  runtime probing, and renderer output are unchanged. Focused macOS AI deps
+  source contracts preserve the resolver table and prevent the previous inline
+  Windows/macOS `process.platform` branches from returning. UI validation and
+  the full Windows real-evidence script were not run because this is a
+  main-process interpreter-discovery metadata refactor with no product layout,
+  runtime probing, dependency install, download, or AI process startup behavior
+  change. Next smallest slice: completion audit the remaining platform checks
+  in platform detection, AI runtime IPC current-platform reporting, Llama
+  artifact matching, and platform runtime constants; leave them only if they
+  are true OS/runtime metadata boundaries.
 - 2026-06-13 Moved Llama chmod and zip extraction process policy to
   descriptors. `LLAMA_SERVER_PROCESS_ADAPTERS` now owns the existing
   non-Windows chmod-before-spawn behavior, Windows no-chmod behavior,
