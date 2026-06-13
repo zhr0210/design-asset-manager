@@ -10,6 +10,7 @@ Phase 12A audits OCR dependency risks and adds governance planning. It does not 
 | Windows-only Python search | High | Existing OCR dependency resolution searches Windows Python install roots. |
 | pip install IPC exposure | High | Existing OCR install methods can spawn `python -m pip install ...`; installer work remains deferred. |
 | PaddleOCR dependency branch | Medium | PaddleOCR ONNX is now treated as a first-class local OCR capability and checked without auto-installing or changing IPC behavior. |
+| Managed venv executable path | Low | Managed runtime `Scripts/python.exe` and `bin/python` selection is descriptor-driven by `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS`. |
 
 ## Governance Plan
 
@@ -22,6 +23,7 @@ The new governance plan records:
 - managed debug log routing;
 - redacted evidence only.
 - explicit `paddleocr` capability checks and runner dry-runs without package installation.
+- descriptor-driven managed venv executable path selection without changing interpreter discovery.
 
 ## Safety Boundaries
 

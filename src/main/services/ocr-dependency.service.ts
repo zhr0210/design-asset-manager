@@ -11,6 +11,16 @@ import {
 } from '../../shared/contracts/ocr-dependency.contract'
 import { resolveAiServicePath } from './ai-service-paths'
 
+interface OcrManagedPythonRuntimeAdapter {
+  platform?: NodeJS.Platform | string
+  pythonPathParts: string[]
+}
+
+const OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS: OcrManagedPythonRuntimeAdapter[] = [
+  { platform: 'win32', pythonPathParts: ['Scripts', 'python.exe'] },
+  { pythonPathParts: ['bin', 'python'] }
+]
+
 function redactDebugMessage(msg: string): string {
   const homeLikeValues = [
     process.env.USERPROFILE,
@@ -118,6 +128,15 @@ function searchWindowsPythonPaths(): string | null {
   return null
 }
 
+function resolveManagedVenvPythonPath(venvDir: string): string {
+  return path.join(venvDir, ...resolveManagedVenvPythonPathParts())
+}
+
+function resolveManagedVenvPythonPathParts(): string[] {
+  const adapter = OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS.find((item) => !item.platform || item.platform === process.platform)
+  return adapter?.pythonPathParts ?? ['bin', 'python']
+}
+
 export function resolveMacOSAiPythonRuntime(): {
   runtimeDir: string
   venvDir: string
@@ -127,9 +146,7 @@ export function resolveMacOSAiPythonRuntime(): {
   const managedPaths = resolveElectronManagedPaths()
   const runtimeDir = path.join(managedPaths.runtimeDir, 'macos-ai-python')
   const venvDir = path.join(runtimeDir, '.venv')
-  const pythonPath = process.platform === 'win32'
-    ? path.join(venvDir, 'Scripts', 'python.exe')
-    : path.join(venvDir, 'bin', 'python')
+  const pythonPath = resolveManagedVenvPythonPath(venvDir)
 
   return {
     runtimeDir,
@@ -146,7 +163,7 @@ function resolveFallbackVenvPython(): string | null {
     managedPaths.runtimeDir,
     'macos-ai-python',
     '.venv.old',
-    process.platform === 'win32' ? path.join('Scripts', 'python.exe') : path.join('bin', 'python')
+    ...resolveManagedVenvPythonPathParts()
   )
   if (!fs.existsSync(oldVenvPython)) return null
   try {

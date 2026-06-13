@@ -154,6 +154,14 @@ fields, database schema, AI Worker HTTP API shapes, artifact selection, download
 behavior, installation, or process startup; no new Windows runtime evidence is
 claimed for it.
 
+A later 2026-06-13 OCR dependency refactor moved managed venv executable path
+selection to `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS`, preserving the existing
+Windows `Scripts/python.exe` and cross-platform `bin/python` paths. It did not
+alter renderer output, runtime probing, IPC channels, shared response fields,
+database schema, AI Worker HTTP API shapes, Python interpreter discovery,
+dependency installation, or process startup; no new Windows runtime evidence is
+claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

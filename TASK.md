@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved managed OCR/Python venv executable path selection to
+  metadata. `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS` now owns the existing
+  Windows `Scripts/python.exe` and cross-platform `bin/python` path parts used
+  for the managed AI Python venv and fallback venv, while Python interpreter
+  discovery, Windows search behavior, Homebrew fallback, pip install commands,
+  installer process behavior, IPC channels, database schema, AI Worker HTTP API,
+  shared response fields, runtime probing, and renderer output are unchanged.
+  Focused macOS AI deps installer source contracts preserve the descriptor
+  table and prevent the previous managed-venv path ternary from returning. UI
+  validation and the full Windows real-evidence script were not run because
+  this is a main-process path metadata refactor with no product layout, runtime
+  probing, dependency install, or process startup behavior change. Next smallest
+  slice: continue the completion audit for remaining direct platform checks in
+  interpreter discovery, OCR installer processes, Llama installer
+  artifact/process adapters, Electron startup, platform detection, and platform
+  runtime constants.
 - 2026-06-13 Moved read-only Llama governance adapter selection to metadata.
   `LLAMA_RUNTIME_PLATFORM_ADAPTERS` now owns the existing macOS llama.app and
   Windows llama.cpp governance adapter selection, while the shared plan flow

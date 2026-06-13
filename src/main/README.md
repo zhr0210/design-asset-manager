@@ -23,6 +23,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
 - Keep Llama runtime accelerator defaults in metadata rules; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
 - Keep read-only Llama governance adapter selection descriptor-driven; platform conditionals belong in concrete runtime adapters, not the governance plan flow.
+- Keep managed OCR/Python venv executable paths descriptor-driven; leave Python interpreter discovery and installer processes in their platform adapters.
 
 ## Tests
 
@@ -35,6 +36,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.4 | 2026-06-13 | Moved managed OCR/Python venv executable path selection to descriptors while preserving interpreter discovery. |
 | v1.2.3 | 2026-06-13 | Moved read-only Llama governance platform adapter selection to descriptors while preserving adapter output. |
 | v1.2.2 | 2026-06-13 | Moved no-GPU Llama accelerator default selection to metadata while preserving Windows Vulkan and cross-platform CPU fallback. |
 | v1.2.1 | 2026-06-13 | Moved runtime profile recommendation reason copy to metadata while preserving recommendations. |

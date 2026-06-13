@@ -164,7 +164,11 @@ paths or model cache paths.
    differences inside the Llama runtime adapters. The read-only Llama
    governance plan now also selects macOS llama.app and Windows llama.cpp
    adapters through `LLAMA_RUNTIME_PLATFORM_ADAPTERS`, preserving adapter output
-   without plan-flow platform conditionals.
+   without plan-flow platform conditionals. Managed OCR/Python venv executable
+   path selection now lives in `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS`,
+   preserving the existing Windows `Scripts/python.exe` and cross-platform
+   `bin/python` paths while keeping interpreter discovery and installer
+   processes in OCR platform adapters.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
