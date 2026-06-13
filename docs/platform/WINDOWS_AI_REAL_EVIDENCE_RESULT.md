@@ -49,6 +49,34 @@ The sanitized full-run log filename is
 `dam-windows-ai-validation-20260613-203039.log`. The log and screenshot remain
 outside the repository.
 
+## Bounded CUDA Evidence Follow-Up
+
+On 2026-06-13, two path-free evidence tools were added for explicit,
+user-initiated validation with registered local models:
+
+- `compare_clip_tf32_quality.py` compared the real CLIP PyTorch model under
+  exact float32 and `DAM_CUDA_TF32=1` using four generated in-memory images and
+  six prompts. Top-1 agreement was 1.0, logit cosine similarity was
+  0.999999642, maximum absolute logit difference was 0.054901, mean absolute
+  logit difference was 0.013283, and all outputs were finite. This generated
+  fixture set is not broad enough to change the default; TF32 remains opt-in.
+- `probe_onnx_cuda_profile.py` ran inside an isolated explicit
+  `onnxruntime-gpu` 1.26.0 environment. CUDA provider availability was
+  confirmed. WD Tagger loaded through `CUDAExecutionProvider` with 1 input and
+  1 output. CLIP image/text embedding ran through `CUDAExecutionProvider`,
+  returned finite output, and produced a 512-dimensional embedding. The
+  isolated environment was removed after validation, and the CPU-safe default
+  environment was unchanged.
+
+OCR was also checked without allowing model downloads. RapidOCR was not
+installed. EasyOCR was installed but could not load its local English
+recognition weight with `download_enabled=False`. PaddleOCR was importable but
+was not initialized because initialization may fetch missing model weights.
+Therefore OCR correctly remains `runtime_probe_ready`.
+
+No user asset, private path, model-cache path, image payload, or new model
+weight was included in the output or repository.
+
 ## Latest Reported Result
 
 - Validation time: 2026-06-13 18:40, Windows host local time.

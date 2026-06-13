@@ -30,10 +30,23 @@ Local Python FastAPI worker for AI tagging, prompt reverse, visual analysis, rou
 python -m unittest discover ai-service/tests
 ```
 
+## Windows CUDA Evidence
+
+The evidence tools use registered local models only and never download weights:
+
+```bash
+python ai-service/tools/compare_clip_tf32_quality.py
+python ai-service/tools/probe_onnx_cuda_profile.py
+```
+
+The ONNX CUDA probe must run in an explicit environment where
+`onnxruntime-gpu` is selected. Neither tool emits model paths or image payloads.
+
 ## Change Log
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.2 | 2026-06-13 | Added path-free CLIP TF32 quality and explicit ONNX CUDA model evidence probes using generated inputs and registered local artifacts. |
 | v1.2.1 | 2026-06-13 | Made TF32 and the Windows CUDA ONNX dependency profile explicit opt-ins; the default install remains exact and CPU-safe. |
 | v1.2.0 | 2026-06-13 | Added centralized CUDA inference policy and inference-mode execution. |
 | v1.1.0 | 2026-06-06 | Added a user-initiated fixed-tensor MPS execution probe that is separate from model inference evidence. |

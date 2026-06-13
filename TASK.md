@@ -96,6 +96,29 @@ Remaining evidence work is optional and bounded: obtain real OCR model
 load/inference evidence before promotion, and perform model-level quality
 comparisons before reconsidering TF32 as a default.
 
+The first bounded follow-up is complete:
+
+- A registered CLIP PyTorch model compared exact float32 and TF32 on four
+  generated in-memory images and six text prompts. Top-1 agreement was 1.0,
+  logit cosine similarity was 0.999999642, maximum absolute logit difference
+  was 0.054901, and all outputs were finite. This is useful model-level
+  evidence but is not representative product-asset coverage, so TF32 remains
+  opt-in.
+- An isolated explicit `onnxruntime-gpu` environment loaded the registered WD
+  Tagger session through `CUDAExecutionProvider` and ran the registered CLIP
+  image/text embedding through the same provider with a finite 512-dimensional
+  output. The CPU-safe default environment was not modified.
+- OCR remains `runtime_probe_ready`: RapidOCR is absent, and EasyOCR could not
+  load its local recognition weight with downloads disabled. PaddleOCR was not
+  initialized because doing so could fetch missing model weights.
+- Reusable path-free evidence tools now live under `ai-service/tools/`; they
+  use generated inputs and registered local artifacts only.
+- Validation passed 133 Python tests, `npm run typecheck`, `npm run build`,
+  `npm run ci:test-runtime-safety`, agent-context, docs-sync, and diff checks.
+  The forbidden-path check reported the expected task-owned platform evidence
+  document under the configured `docs/` prefix. The full Electron validation
+  was not repeated because no product runtime or renderer code changed.
+
 ## Completion Rule
 
 The stabilization acceptance criteria are complete:
