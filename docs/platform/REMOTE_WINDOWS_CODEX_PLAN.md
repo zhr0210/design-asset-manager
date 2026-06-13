@@ -169,7 +169,8 @@ paths or model cache paths.
    preserving the existing Windows `Scripts/python.exe` and cross-platform
    `bin/python` paths while keeping interpreter discovery and installer
    processes in OCR platform adapters. Llama server executable selection,
-   missing-executable copy, and Windows force-stop command now live in
+   missing-executable copy, chmod-before-spawn policy, zip extraction command
+   choice, and Windows force-stop command now live in
    `LLAMA_SERVER_PROCESS_ADAPTERS`, preserving the existing Windows
    `llama-server.exe` and cross-platform `llama-server` process behavior.
    Llama hardware detection dispatch now also uses the internal

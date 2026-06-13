@@ -35,6 +35,8 @@ interface LlamaServerProcessAdapter {
   platform?: NodeJS.Platform | string
   executableName: string
   missingExecutableMessage: string
+  chmodExecutableBeforeSpawn: boolean
+  zipExtractor: 'powershell-expand-archive' | 'unzip'
   forceStopCommand?: {
     command: string
     args: string[]
@@ -51,6 +53,8 @@ const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
   {
     platform: 'win32',
     executableName: 'llama-server.exe',
+    chmodExecutableBeforeSpawn: false,
+    zipExtractor: 'powershell-expand-archive',
     missingExecutableMessage: '未找到 llama-server.exe，请先完成安装。',
     forceStopCommand: {
       command: 'taskkill',
@@ -60,6 +64,8 @@ const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
   },
   {
     executableName: 'llama-server',
+    chmodExecutableBeforeSpawn: true,
+    zipExtractor: 'unzip',
     missingExecutableMessage: '未找到 llama-server，请先完成安装。'
   }
 ]
@@ -409,7 +415,7 @@ export class LlamaRuntimeInstallService {
       args.push('--mmproj', mmprojPath)
     }
     args.push('--host', '127.0.0.1', '--port', '8080', '-c', '4096', '-ngl', '999')
-    if (process.platform !== 'win32') {
+    if (resolveLlamaServerProcessAdapter().chmodExecutableBeforeSpawn) {
       try {
         fs.chmodSync(exePath, 0o755)
       } catch {
@@ -719,7 +725,7 @@ export class LlamaRuntimeInstallService {
     const buffer = await fsp.readFile(zipPath)
     assertSafeZipEntries(listZipEntries(buffer), destinationDir)
     await fsp.mkdir(destinationDir, { recursive: true })
-    if (process.platform !== 'win32') {
+    if (resolveLlamaServerProcessAdapter().zipExtractor === 'unzip') {
       await new Promise<void>((resolve, reject) => {
         const child = spawn('unzip', ['-o', zipPath, '-d', destinationDir], { shell: false })
         let stderr = ''

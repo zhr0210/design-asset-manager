@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Llama chmod and zip extraction process policy to
+  descriptors. `LLAMA_SERVER_PROCESS_ADAPTERS` now owns the existing
+  non-Windows chmod-before-spawn behavior, Windows no-chmod behavior,
+  non-Windows `unzip` extraction, and Windows PowerShell `Expand-Archive`
+  extraction choice, alongside the existing executable and force-stop process
+  metadata. Artifact selection, archive safety checks, extraction commands,
+  server start arguments, model/mmproj selection, download behavior, installer
+  triggering, IPC channels, database schema, AI Worker HTTP API, shared
+  response fields, runtime probing, and renderer output are unchanged. Focused
+  Llama governance source contracts preserve the descriptor fields and prevent
+  the previous inline `process.platform !== "win32"` installer branches from
+  returning. UI validation and the full Windows real-evidence script were not
+  run because this is a main-process process-policy metadata refactor with no
+  product layout, runtime probing, dependency install, download, or AI process
+  startup behavior change. Next smallest slice: continue the completion audit
+  for remaining direct platform checks in OCR interpreter discovery, platform
+  detection, and platform runtime constants.
 - 2026-06-13 Moved Electron app lifecycle policy to descriptors.
   `ELECTRON_APP_LIFECYCLE_POLICIES` now owns the existing Windows
   AppUserModelId value, Windows/default quit-on-all-windows-closed behavior,

@@ -16,8 +16,9 @@ table instead of adding platform conditionals to the plan flow.
 
 Server executable and force-stop process metadata are selected through
 `LLAMA_SERVER_PROCESS_ADAPTERS`. Keep executable names, missing-executable copy,
-and Windows task cleanup there; keep install, download, and launch actions
-explicitly user-triggered.
+chmod-before-spawn policy, zip extraction command choice, and Windows task
+cleanup there; keep install, download, and launch actions explicitly
+user-triggered.
 
 Hardware detection dispatch is selected through the internal
 `hardwareDetectionAdapters` table. Keep macOS, Windows, and generic CPU fallback

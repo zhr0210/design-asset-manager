@@ -171,6 +171,15 @@ database schema, AI Worker HTTP API shapes, artifact selection, download
 behavior, installation, or process startup; no new Windows runtime evidence is
 claimed for it.
 
+A later 2026-06-13 Llama installer refactor also moved chmod-before-spawn
+policy and zip extraction command choice to `LLAMA_SERVER_PROCESS_ADAPTERS`,
+preserving the existing non-Windows chmod behavior, Windows no-chmod behavior,
+non-Windows `unzip` extraction, and Windows PowerShell `Expand-Archive`
+extraction. It did not alter renderer output, runtime probing, IPC channels,
+shared response fields, database schema, AI Worker HTTP API shapes, artifact
+selection, download behavior, installation triggering, or process startup; no
+new Windows runtime evidence is claimed for it.
+
 A later 2026-06-13 Llama installer refactor moved hardware detection dispatch
 to the internal `hardwareDetectionAdapters` table, preserving the existing macOS
 hardware probe, Windows NVIDIA/CUDA probe, and generic CPU fallback behavior. It
