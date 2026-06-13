@@ -6,6 +6,19 @@ host should fast-forward from GitHub, validate parity, and only implement
 Windows-specific fixes when the current branch already proves the shared
 contract on macOS.
 
+## Current Validation Assignment
+
+The Mac-side stabilization follow-up supersedes the previous TF32-default and
+OS-only ONNX dependency policies:
+
+- Exact float32 is the default; `DAM_CUDA_TF32=1` enables TF32 explicitly.
+- `requirements.txt` is CPU-safe.
+- `requirements-windows-cuda.txt` is the explicit NVIDIA Windows profile.
+
+The Windows host should validate these policies, not redesign them. Do not make
+TF32 the default without model-level quality comparisons, and do not restore
+OS-only GPU dependency selection.
+
 ## Ground Rules
 
 - Start by reading `AGENTS.md`, `TASK.md`, this file, and
@@ -241,8 +254,9 @@ paths or model cache paths.
    Record each slice, commands run, screenshot result or skip reason, Windows
    validation result, and the next smallest slice in `TASK.md`.
 
-All ordered work in this handoff is complete. Future cross-platform changes are
-new scoped work and should preserve the same default-shared architecture rule.
+The earlier shared-surface work is complete. The current assignment is a
+stabilization validation: dependency profile resolution, exact/TF32 execution,
+existing model evidence, OCR status accuracy, and Electron/Playwright layout.
 
 ## Commit Rules
 

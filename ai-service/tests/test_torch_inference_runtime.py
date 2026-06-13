@@ -24,41 +24,41 @@ def fake_torch(cuda_available=True):
 
 
 class TestTorchInferenceRuntime(unittest.TestCase):
-    def test_cuda_defaults_enable_tf32_without_variable_shape_autotune(self):
+    def test_cuda_defaults_preserve_exact_matmul_without_variable_shape_autotune(self):
         torch, precision_calls, matmul, cudnn = fake_torch()
 
         result = configure_torch_inference_runtime(torch, env={})
 
-        self.assertEqual(precision_calls, ["high"])
-        self.assertTrue(matmul.allow_tf32)
-        self.assertTrue(cudnn.allow_tf32)
+        self.assertEqual(precision_calls, ["highest"])
+        self.assertFalse(matmul.allow_tf32)
+        self.assertFalse(cudnn.allow_tf32)
         self.assertFalse(cudnn.benchmark)
         self.assertEqual(
             result,
             {
                 "cuda_available": True,
-                "tf32_enabled": True,
-                "matmul_precision": "high",
+                "tf32_enabled": False,
+                "matmul_precision": "highest",
                 "cudnn_benchmark": False,
             },
         )
 
-    def test_environment_can_restore_exact_matmul_and_enable_autotune(self):
+    def test_environment_can_enable_tf32_and_autotune(self):
         torch, precision_calls, matmul, cudnn = fake_torch()
 
         result = configure_torch_inference_runtime(
             torch,
             env={
-                "DAM_CUDA_TF32": "0",
+                "DAM_CUDA_TF32": "1",
                 "DAM_CUDNN_BENCHMARK": "1",
             },
         )
 
-        self.assertEqual(precision_calls, ["highest"])
-        self.assertFalse(matmul.allow_tf32)
-        self.assertFalse(cudnn.allow_tf32)
+        self.assertEqual(precision_calls, ["high"])
+        self.assertTrue(matmul.allow_tf32)
+        self.assertTrue(cudnn.allow_tf32)
         self.assertTrue(cudnn.benchmark)
-        self.assertFalse(result["tf32_enabled"])
+        self.assertTrue(result["tf32_enabled"])
         self.assertTrue(result["cudnn_benchmark"])
 
     def test_cpu_runtime_remains_unchanged(self):
@@ -71,6 +71,24 @@ class TestTorchInferenceRuntime(unittest.TestCase):
         self.assertFalse(cudnn.allow_tf32)
         self.assertFalse(cudnn.benchmark)
         self.assertFalse(result["cuda_available"])
+
+    def test_unknown_environment_values_do_not_enable_optimizations(self):
+        torch, precision_calls, matmul, cudnn = fake_torch()
+
+        result = configure_torch_inference_runtime(
+            torch,
+            env={
+                "DAM_CUDA_TF32": "unexpected",
+                "DAM_CUDNN_BENCHMARK": "unexpected",
+            },
+        )
+
+        self.assertEqual(precision_calls, ["highest"])
+        self.assertFalse(matmul.allow_tf32)
+        self.assertFalse(cudnn.allow_tf32)
+        self.assertFalse(cudnn.benchmark)
+        self.assertFalse(result["tf32_enabled"])
+        self.assertFalse(result["cudnn_benchmark"])
 
 
 if __name__ == "__main__":

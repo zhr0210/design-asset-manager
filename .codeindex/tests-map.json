@@ -1,0 +1,14 @@
+{
+  "shared_ai_runtime": [
+    "scripts/ai-runtime-status-workflow.test.ts",
+    "scripts/ai-runtime-panel-contract.test.ts",
+    "scripts/ai-console-macos-branch.test.ts",
+    "scripts/macos-ai-runtime.test.ts"
+  ],
+  "python_ai_worker": [
+    "python3 -m unittest discover ai-service/tests"
+  ],
+  "cross_platform_runtime": [
+    "npm run ci:test-runtime-safety"
+  ]
+}

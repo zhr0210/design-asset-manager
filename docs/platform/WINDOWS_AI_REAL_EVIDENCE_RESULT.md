@@ -6,6 +6,26 @@ and Llama CUDA GGUF/mmproj real evidence are closed.
 This file is the GitHub handoff mailbox for Windows-host validation on branch
 `codex/windows-ai-real-evidence`.
 
+## Pending Mac-Side Stabilization Validation
+
+The Mac-side follow-up after commit `e4ae1be` changes two policies that require
+a fresh Windows run:
+
+- TF32 is no longer the default. Exact float32 remains the default, and
+  `DAM_CUDA_TF32=1` explicitly enables the measured optimization.
+- `ai-service/requirements.txt` is CPU-safe on every platform.
+  `ai-service/requirements-windows-cuda.txt` is the explicit NVIDIA Windows
+  dependency profile.
+
+The previous synthetic TF32 timing remains useful performance evidence, but it
+is not model-level quality evidence and does not justify a global default. The
+previous OS-only Windows ONNX dependency selection is superseded by the
+explicit capability profile.
+
+The next Windows report must validate both dependency profiles, exact/default
+and TF32 opt-in execution, existing WD Tagger/CLIP/Llama evidence, OCR status,
+and Electron/Playwright overflow on the same commit.
+
 ## Latest Reported Result
 
 - Validation time: 2026-06-13 18:40, Windows host local time.
@@ -61,24 +81,24 @@ The latest full Windows-host validation log filename is
 ## CUDA Optimization Update
 
 On 2026-06-13, the AI Worker gained a centralized CUDA inference policy used by
-both FastAPI startup and the standalone Qwen3-VL worker. CUDA now defaults to
-TF32-backed `high` float32 matmul precision, with an exact-mode opt-out through
-`DAM_CUDA_TF32=0`. cuDNN variable-shape autotuning remains disabled by default
-and can be explicitly enabled with `DAM_CUDNN_BENCHMARK=1`. Pure inference
-blocks for CLIP, RAM++, Florence-2, Visual Router CLIP, and Qwen3-VL use
-`torch.inference_mode()`.
+both FastAPI startup and the standalone Qwen3-VL worker. The original commit
+enabled TF32-backed `high` float32 matmul precision by default. A Mac-side
+stabilization follow-up makes TF32 explicit opt-in pending model-level quality
+evidence. cuDNN variable-shape autotuning remains disabled by default. Pure
+inference blocks for CLIP, RAM++, Florence-2, Visual Router CLIP, and Qwen3-VL
+use `torch.inference_mode()`.
 
 A fixed synthetic 4096x4096 FP32 matmul check on the Windows NVIDIA host
 measured 9.438 ms per operation in exact mode and 6.522 ms with the committed
 default policy, a 1.447x speedup. The sampled maximum absolute difference was
 0.074776. No user asset, model cache, local path, or private payload was read.
 
-Windows dependency resolution now selects `onnxruntime-gpu` and
-`optimum[onnxruntime-gpu]`, while non-Windows environments retain the CPU ONNX
-Runtime packages. A Windows `pip --dry-run` confirmed the GPU package selection
-without modifying the installed environment. The currently installed ONNX
-Runtime still reports CPU-only providers, so this update does not claim a new
-ONNX CUDA model execution result.
+The original update selected GPU ONNX packages by Windows OS marker. The
+Mac-side stabilization follow-up replaces that policy with a CPU-safe default
+requirements file and an explicit NVIDIA Windows CUDA profile. A fresh Windows
+dry-run is required before accepting the new profile. The currently installed
+ONNX Runtime still reports CPU-only providers, so no ONNX CUDA model execution
+result is claimed.
 
 The full Windows validation script was rerun after the optimization. It passed
 runtime-safety checks, 128 Python tests, CUDA execution, real WD Tagger and

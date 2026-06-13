@@ -5,25 +5,42 @@ from packaging.requirements import Requirement
 
 
 REQUIREMENTS_PATH = Path(__file__).resolve().parents[1] / "requirements.txt"
+CUDA_REQUIREMENTS_PATH = (
+    Path(__file__).resolve().parents[1] / "requirements-windows-cuda.txt"
+)
 
 
-def selected_requirements(platform_system):
+def load_requirements(path):
     selected = []
-    for raw_line in REQUIREMENTS_PATH.read_text(encoding="utf-8").splitlines():
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
         line = raw_line.strip()
         if not line or line.startswith("#"):
             continue
+        if line.startswith("-r "):
+            selected.extend(load_requirements(path.parent / line[3:].strip()))
+            continue
         requirement = Requirement(line)
-        if requirement.marker is None or requirement.marker.evaluate(
-            {"platform_system": platform_system}
-        ):
-            selected.append(requirement)
+        selected.append(requirement)
     return selected
 
 
 class TestWindowsCudaRequirements(unittest.TestCase):
-    def test_windows_selects_gpu_onnx_runtime(self):
-        requirements = selected_requirements("Windows")
+    def test_default_requirements_are_cpu_safe_on_every_platform(self):
+        requirements = load_requirements(REQUIREMENTS_PATH)
+        names = {requirement.name for requirement in requirements}
+        optimum = next(
+            requirement
+            for requirement in requirements
+            if requirement.name == "optimum"
+        )
+
+        self.assertIn("onnxruntime", names)
+        self.assertNotIn("onnxruntime-gpu", names)
+        self.assertIn("onnxruntime", optimum.extras)
+        self.assertNotIn("onnxruntime-gpu", optimum.extras)
+
+    def test_windows_cuda_profile_selects_gpu_onnx_runtime(self):
+        requirements = load_requirements(CUDA_REQUIREMENTS_PATH)
         names = {requirement.name for requirement in requirements}
         optimum = next(
             requirement
@@ -35,22 +52,6 @@ class TestWindowsCudaRequirements(unittest.TestCase):
         self.assertNotIn("onnxruntime", names)
         self.assertIn("onnxruntime-gpu", optimum.extras)
         self.assertNotIn("onnxruntime", optimum.extras)
-
-    def test_non_windows_keeps_cpu_onnx_runtime(self):
-        for platform_system in ("Darwin", "Linux"):
-            with self.subTest(platform_system=platform_system):
-                requirements = selected_requirements(platform_system)
-                names = {requirement.name for requirement in requirements}
-                optimum = next(
-                    requirement
-                    for requirement in requirements
-                    if requirement.name == "optimum"
-                )
-
-                self.assertIn("onnxruntime", names)
-                self.assertNotIn("onnxruntime-gpu", names)
-                self.assertIn("onnxruntime", optimum.extras)
-                self.assertNotIn("onnxruntime-gpu", optimum.extras)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,15 @@
+{
+  "current_context": {
+    "files_read": [
+      "AGENTS.md",
+      "TASK.md"
+    ]
+  },
+  "modules": {
+    "electron_main": "src/main/",
+    "renderer": "src/renderer/",
+    "preload": "src/preload/",
+    "shared": "src/shared/",
+    "ai_worker": "ai-service/"
+  }
+}

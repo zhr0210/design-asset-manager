@@ -5,6 +5,7 @@ from typing import Any, Mapping
 
 
 _FALSE_VALUES = {"0", "false", "no", "off"}
+_TRUE_VALUES = {"1", "true", "yes", "on"}
 
 
 def _env_enabled(
@@ -16,7 +17,12 @@ def _env_enabled(
     value = env.get(name)
     if value is None:
         return default
-    return value.strip().lower() not in _FALSE_VALUES
+    normalized = value.strip().lower()
+    if normalized in _TRUE_VALUES:
+        return True
+    if normalized in _FALSE_VALUES:
+        return False
+    return default
 
 
 def configure_torch_inference_runtime(
@@ -40,7 +46,7 @@ def configure_torch_inference_runtime(
             "cudnn_benchmark": False,
         }
 
-    tf32_enabled = _env_enabled(runtime_env, "DAM_CUDA_TF32", default=True)
+    tf32_enabled = _env_enabled(runtime_env, "DAM_CUDA_TF32", default=False)
     matmul_precision = "high" if tf32_enabled else "highest"
     set_matmul_precision = getattr(
         torch_module,
