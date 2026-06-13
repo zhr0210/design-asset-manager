@@ -609,6 +609,14 @@ assert.equal(windowsConnectedProbe.accelerator.captionLabel, 'torch 2.8.0+cu121'
 assert.equal(windowsConnectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(windowsConnectedProbe.onnxRuntime.captionLabel, 'CUDAExecutionProvider / CPUExecutionProvider')
 assert.equal(windowsConnectedProbe.clipSiglipOnnx.valueLabel, '就绪')
+assert.equal(projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', {
+  ...windowsRawProbe,
+  platform: 'windows'
+}).connected, true)
+assert.equal(projectPlatformAiWorkerProbeDiagnosticsDisplay('windows', {
+  ...windowsRawProbe,
+  platform: 'linux'
+}).connected, false)
 
 const windowsProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
   platformBranch: 'windows',
@@ -967,7 +975,12 @@ assert.doesNotMatch(
 )
 assert.match(
   runtimeWorkflowSource,
-  /macos:[\s\S]*probe\.isMacOS[\s\S]*probe\.torch\.mpsAvailable[\s\S]*windows:[\s\S]*probe\.platform === 'win32'[\s\S]*probe\.torch\.cudaAvailable/
+  /macos:[\s\S]*connectionPlatforms: \[\][\s\S]*connectionFlag: 'isMacOS'[\s\S]*probe\.torch\.mpsAvailable[\s\S]*windows:[\s\S]*connectionPlatforms: \['win32', 'windows'\][\s\S]*probe\.torch\.cudaAvailable/
+)
+assert.doesNotMatch(runtimeWorkflowSource, /probe\.platform === '(?:win32|windows|darwin)'/)
+assert.match(
+  extractFunctionSource(runtimeWorkflowSource, 'isPlatformAiWorkerProbeConnected'),
+  /connectionPlatforms\.includes\(probe\.platform\)[\s\S]*connectionFlag/
 )
 assert.doesNotMatch(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),

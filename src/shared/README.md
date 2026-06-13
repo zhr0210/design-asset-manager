@@ -38,7 +38,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - AI Runtime panel platform-specific branch titles, Worker probe titles, CUDA/MPS compatibility copy, fixed-tensor execution copy, and default probe failure messages should use shared AI Runtime Status projection rather than renderer-local platform ternaries.
 - Platform AI default branch fallback should use `DEFAULT_PLATFORM_AI_BRANCH` from shared AI Runtime Status projection so renderer entry points and shared projectors do not hand-write default branch policy.
 - Platform AI runtime metadata constants should use shared capability, current-platform, fallback-status, and lane-status helpers; concrete macOS/Windows constant files should keep lane topology and platform runtime labels only.
-- Worker probe connection headers should use the platform-neutral Worker probe envelope; platform-specific probe displays may add MPS/CUDA/ONNX route tiles. A missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
+- Worker probe connection headers should use the platform-neutral Worker probe envelope and branch-keyed connection marker metadata; shared workflow code should not compare concrete OS marker strings directly. Platform-specific probe displays may add MPS/CUDA/ONNX route tiles. A missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
 - Platform AI branch runtime metadata selection should use branch-keyed descriptors for metadata keys and markers; renderer/shared workflow callers should not hand-roll macOS/Windows branch lookup order.
 - AI Console overview status cards should use shared display projection for GPU risk and model readiness vocabulary.
 - Prompt Reverse panel state labels and action suggestions should use shared projection so GGUF/Llama and native routes share one renderer-ready vocabulary.
@@ -65,6 +65,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.24 | 2026-06-13 | Moved Worker probe connection recognition to branch-keyed marker metadata without changing probe semantics. |
 | v1.8.23 | 2026-06-13 | Moved Platform AI runtime lane-status policy into shared constants while preserving concrete lane topology. |
 | v1.8.22 | 2026-06-13 | Moved Platform AI runtime metadata capability and fallback-status helpers into shared constants while preserving concrete lane topology. |
 | v1.8.21 | 2026-06-13 | Moved Platform AI default branch fallback to `DEFAULT_PLATFORM_AI_BRANCH` for shared projectors and renderer initial state. |

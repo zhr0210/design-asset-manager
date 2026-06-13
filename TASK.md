@@ -89,6 +89,28 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved shared Worker probe connection recognition to declarative
+  adapter metadata. `PLATFORM_AI_WORKER_PROBE_ACCESSORS` now owns the accepted
+  Windows `win32` / `windows` platform markers and the existing macOS
+  `isMacOS` evidence flag, while `isPlatformAiWorkerProbeConnected()` evaluates
+  the selected branch rule without direct platform equality checks. Connection
+  labels, platform badges, accelerator evidence, ONNX/CLIP diagnostics, probe
+  selection priority, IPC channels, database schema, AI Worker HTTP API,
+  shared response fields, renderer output, runtime probing, dependency
+  installation, download behavior, and process startup behavior are unchanged.
+  Focused shared-workflow tests cover both accepted Windows markers and a
+  non-matching platform, and source contracts prevent direct Worker platform
+  equality checks from returning. Validation passed:
+  `scripts/ai-runtime-status-workflow.test.ts`,
+  `scripts/ai-runtime-panel-contract.test.ts`,
+  `scripts/ai-console-macos-branch.test.ts`,
+  `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
+  `python scripts/check-docs-sync.py`, and `git diff --check`. UI validation
+  and the full Windows real-evidence script were not run because this is a
+  behavior-preserving shared-workflow metadata refactor with no product
+  layout, runtime probe execution, dependency install, download, or AI process
+  startup behavior change. Next smallest slice: completion-audit the remaining
+  platform checks and retain only true OS/runtime/path/process adapters.
 - 2026-06-13 Moved Doctor Node/Python platform command selection to adapters.
   `NPM_COMMAND_ADAPTERS` now owns the existing Windows `npm.cmd` and default
   `npm` CLI choice, and `PYTHON_LAUNCHER_ADAPTERS` now owns the existing

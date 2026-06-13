@@ -552,17 +552,19 @@ function projectPlatformAiWorkerProbeHeaderDisplay(
 }
 
 interface PlatformAiWorkerProbeAccessors {
-  isConnected: (probe: Pick<PlatformAiWorkerProbeResultBase, 'platform' | 'isMacOS'>) => boolean
+  connectionPlatforms: readonly string[]
+  connectionFlag?: 'isMacOS'
   isAcceleratorAvailable: (probe: PlatformAiWorkerProbeDiagnosticsInput) => boolean
 }
 
 const PLATFORM_AI_WORKER_PROBE_ACCESSORS: Record<PlatformAiBranch, PlatformAiWorkerProbeAccessors> = {
   macos: {
-    isConnected: (probe) => probe.isMacOS,
+    connectionPlatforms: [],
+    connectionFlag: 'isMacOS',
     isAcceleratorAvailable: (probe) => Boolean(probe.torch.mpsAvailable)
   },
   windows: {
-    isConnected: (probe) => probe.platform === 'win32' || probe.platform === 'windows',
+    connectionPlatforms: ['win32', 'windows'],
     isAcceleratorAvailable: (probe) => Boolean(probe.torch.cudaAvailable)
   }
 }
@@ -572,7 +574,9 @@ function isPlatformAiWorkerProbeConnected(
   probe?: Pick<PlatformAiWorkerProbeResultBase, 'platform' | 'isMacOS'> | null
 ): boolean {
   if (!probe) return false
-  return PLATFORM_AI_WORKER_PROBE_ACCESSORS[platformBranch].isConnected(probe)
+  const { connectionPlatforms, connectionFlag } = PLATFORM_AI_WORKER_PROBE_ACCESSORS[platformBranch]
+  return connectionPlatforms.includes(probe.platform)
+    || Boolean(connectionFlag && probe[connectionFlag])
 }
 
 export function projectPlatformAiWorkerProbeDiagnosticsDisplay(

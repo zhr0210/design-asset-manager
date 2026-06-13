@@ -210,6 +210,10 @@ paths or model cache paths.
    `NPM_COMMAND_ADAPTERS` and `PYTHON_LAUNCHER_ADAPTERS`, preserving the
    existing Windows `npm.cmd` / `py` choices and default `npm` /
    skipped-`py` behavior without inline Doctor check platform ternaries.
+   Shared Worker probe connection recognition now also uses declarative
+   `connectionPlatforms` / `connectionFlag` metadata, preserving the existing
+   Windows `win32` / `windows` markers and macOS `isMacOS` evidence semantics
+   without direct Worker platform equality checks in shared workflow code.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

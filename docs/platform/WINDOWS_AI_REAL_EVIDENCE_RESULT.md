@@ -267,6 +267,17 @@ channels, shared response fields, database schema, AI Worker HTTP API shapes,
 dependency installation, download behavior, installer triggering, or process
 startup; no new Windows runtime evidence is claimed for it.
 
+A later 2026-06-13 shared-workflow refactor moved Worker probe connection
+recognition to declarative `connectionPlatforms` / `connectionFlag` metadata,
+preserving the existing Windows `win32` / `windows` markers and macOS
+`isMacOS` evidence semantics. It did not alter renderer output, runtime probe
+execution, IPC channels, shared response fields, database schema, AI Worker
+HTTP API shapes, dependency installation, download behavior, installer
+triggering, or process startup. The required focused TypeScript gate,
+typecheck, build, docs sync, and diff checks passed on Windows. The full
+real-evidence script was not rerun, and no new Windows runtime evidence is
+claimed for this metadata-only slice.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and
