@@ -172,6 +172,9 @@ paths or model cache paths.
    missing-executable copy, and Windows force-stop command now live in
    `LLAMA_SERVER_PROCESS_ADAPTERS`, preserving the existing Windows
    `llama-server.exe` and cross-platform `llama-server` process behavior.
+   Llama hardware detection dispatch now also uses the internal
+   `hardwareDetectionAdapters` table, preserving macOS, Windows, and generic
+   CPU fallback probe behavior while keeping OS commands in concrete adapters.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

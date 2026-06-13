@@ -42,6 +42,11 @@ interface LlamaServerProcessAdapter {
   }
 }
 
+interface LlamaHardwareDetectionAdapter {
+  platform?: NodeJS.Platform | string
+  detect: (service: LlamaRuntimeInstallService) => Promise<LlamaHardwareProfile>
+}
+
 const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
   {
     platform: 'win32',
@@ -65,6 +70,12 @@ function resolveLlamaServerProcessAdapter(platform: NodeJS.Platform | string = p
 
 export class LlamaRuntimeInstallService {
   private static instance: LlamaRuntimeInstallService
+  private static readonly hardwareDetectionAdapters: LlamaHardwareDetectionAdapter[] = [
+    { platform: 'darwin', detect: (service) => service.detectMacHardware() },
+    { platform: 'win32', detect: (service) => service.detectWindowsHardware() },
+    { detect: (service) => service.detectGenericHardware() }
+  ]
+
   private abortController: AbortController | null = null
   private serverProcess: ChildProcessWithoutNullStreams | null = null
   private status: LlamaInstallStatus = {
@@ -82,20 +93,11 @@ export class LlamaRuntimeInstallService {
   }
 
   public async detectHardware(): Promise<LlamaHardwareProfile> {
-    if (process.platform === 'darwin') {
-      return this.detectMacHardware()
-    }
+    const adapter = LlamaRuntimeInstallService.hardwareDetectionAdapters.find((item) => !item.platform || item.platform === process.platform)
+    return (adapter ?? LlamaRuntimeInstallService.hardwareDetectionAdapters[2]).detect(this)
+  }
 
-    if (process.platform !== 'win32') {
-      return createHardwareProfile({
-        platform: process.platform,
-        arch: process.arch,
-        cpuThreads: os.cpus().length,
-        totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
-        warnings: ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
-      })
-    }
-
+  private async detectWindowsHardware(): Promise<LlamaHardwareProfile> {
     const warnings: string[] = []
     let gpuName: string | undefined
     let totalVramGB: number | undefined
@@ -128,6 +130,16 @@ export class LlamaRuntimeInstallService {
       driverVersion,
       cudaVersion,
       warnings
+    })
+  }
+
+  private async detectGenericHardware(): Promise<LlamaHardwareProfile> {
+    return createHardwareProfile({
+      platform: process.platform,
+      arch: process.arch,
+      cpuThreads: os.cpus().length,
+      totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
+      warnings: ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
     })
   }
 

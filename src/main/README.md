@@ -25,6 +25,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep read-only Llama governance adapter selection descriptor-driven; platform conditionals belong in concrete runtime adapters, not the governance plan flow.
 - Keep managed OCR/Python venv executable paths descriptor-driven; leave Python interpreter discovery and installer processes in their platform adapters.
 - Keep Llama server executable and force-stop process metadata descriptor-driven; do not scatter executable-name branches through installer flow.
+- Keep Llama hardware detection dispatch descriptor-driven; leave actual OS probes in macOS, Windows, and generic hardware adapters.
 
 ## Tests
 
@@ -37,6 +38,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.6 | 2026-06-13 | Moved Llama hardware detection dispatch to descriptors while preserving platform probe behavior. |
 | v1.2.5 | 2026-06-13 | Moved Llama server executable and force-stop process metadata to descriptors while preserving start/stop behavior. |
 | v1.2.4 | 2026-06-13 | Moved managed OCR/Python venv executable path selection to descriptors while preserving interpreter discovery. |
 | v1.2.3 | 2026-06-13 | Moved read-only Llama governance platform adapter selection to descriptors while preserving adapter output. |

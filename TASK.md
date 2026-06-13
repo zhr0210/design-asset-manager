@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Llama hardware detection dispatch to descriptors.
+  `hardwareDetectionAdapters` now selects the existing macOS hardware probe,
+  Windows NVIDIA/CUDA probe, and generic CPU fallback probe, while the concrete
+  OS probing commands stay inside `detectMacHardware()`, `detectWindowsHardware()`,
+  and `detectGenericHardware()`. Hardware profile shape, warnings, accelerator
+  recommendation, artifact extraction, download behavior, installer behavior,
+  server startup, IPC channels, database schema, AI Worker HTTP API, shared
+  response fields, runtime probing, and renderer output are unchanged. Focused
+  Llama governance source contracts preserve the adapter table and prevent the
+  previous `detectHardware()` platform if-flow from returning. UI validation and
+  the full Windows real-evidence script were not run because this is a
+  main-process dispatch metadata refactor with no product layout, runtime
+  probing, dependency install, download, or process startup behavior change.
+  Next smallest slice: continue the completion audit for remaining direct
+  platform checks in chmod/process permission handling, Python interpreter
+  discovery, Electron startup, platform detection, and platform runtime
+  constants.
 - 2026-06-13 Moved Llama server process metadata to descriptors.
   `LLAMA_SERVER_PROCESS_ADAPTERS` now owns the existing Windows
   `llama-server.exe` executable name, default `llama-server` executable name,

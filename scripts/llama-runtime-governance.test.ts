@@ -48,6 +48,13 @@ assert.doesNotMatch(governanceSource, /fetch\s*\(|spawn\s*\(|execSync\s*\(|downl
 assert.doesNotMatch(governanceSource, /C:\\Users\\[A-Za-z0-9_.-]+/i)
 
 const installerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-install.service.ts', 'utf8')
+assert.match(installerSource, /private static readonly hardwareDetectionAdapters: LlamaHardwareDetectionAdapter\[\]/)
+assert.match(installerSource, /platform: 'darwin'[\s\S]*detect: \(service\) => service\.detectMacHardware\(\)/)
+assert.match(installerSource, /platform: 'win32'[\s\S]*detect: \(service\) => service\.detectWindowsHardware\(\)/)
+assert.match(installerSource, /detect: \(service\) => service\.detectGenericHardware\(\)/)
+assert.match(installerSource, /hardwareDetectionAdapters\.find\(\(item\) => !item\.platform \|\| item\.platform === process\.platform\)/)
+assert.doesNotMatch(installerSource, /if \(process\.platform === 'darwin'\)[\s\S]*return this\.detectMacHardware\(\)/)
+assert.doesNotMatch(installerSource, /if \(process\.platform !== 'win32'\)[\s\S]*return createHardwareProfile/)
 assert.match(installerSource, /const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter\[\]/)
 assert.match(installerSource, /platform: 'win32'[\s\S]*executableName: 'llama-server\.exe'[\s\S]*command: 'taskkill'/)
 assert.match(installerSource, /executableName: 'llama-server'/)

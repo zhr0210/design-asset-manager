@@ -19,6 +19,11 @@ Server executable and force-stop process metadata are selected through
 and Windows task cleanup there; keep install, download, and launch actions
 explicitly user-triggered.
 
+Hardware detection dispatch is selected through the internal
+`hardwareDetectionAdapters` table. Keep macOS, Windows, and generic CPU fallback
+detectors as concrete adapters so OS probing commands stay out of shared flow
+control.
+
 ## Governance Rules
 
 - `externalInferencePreferred: true`
