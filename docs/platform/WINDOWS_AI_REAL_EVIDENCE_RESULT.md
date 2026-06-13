@@ -179,6 +179,14 @@ fields, database schema, AI Worker HTTP API shapes, artifact selection, download
 behavior, installation, or process startup; no new Windows runtime evidence is
 claimed for it.
 
+A later 2026-06-13 Electron bootstrap refactor moved AppUserModelId and
+quit-on-all-windows-closed behavior to `ELECTRON_APP_LIFECYCLE_POLICIES`,
+preserving the existing Windows AppUserModelId value, Windows/default quit
+behavior, and macOS keep-running behavior. It did not alter renderer output,
+runtime probing, IPC channels, shared response fields, database schema, AI
+Worker HTTP API shapes, AI artifact handling, dependency installation, or AI
+process startup; no new Windows runtime evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

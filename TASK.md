@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Electron app lifecycle policy to descriptors.
+  `ELECTRON_APP_LIFECYCLE_POLICIES` now owns the existing Windows
+  AppUserModelId value, Windows/default quit-on-all-windows-closed behavior,
+  and macOS keep-running behavior, while main-process bootstrap uses one shared
+  resolver. Window creation, IPC registration, SQLite startup, AI runtime
+  shutdown, IPC channels, database schema, AI Worker HTTP API, shared response
+  fields, renderer output, runtime probing, and packaging config are unchanged.
+  Focused Electron lifecycle source contracts preserve the descriptor table and
+  prevent the previous inline `process.platform === "win32"` /
+  `process.platform !== "darwin"` entry-point branches from returning. UI
+  validation and the full Windows real-evidence script were not run because
+  this is a main-process lifecycle-policy metadata refactor with no product
+  layout, runtime probing, dependency install, download, or AI process startup
+  behavior change. Next smallest slice: continue the completion audit for
+  remaining direct platform checks in OCR interpreter discovery, Llama chmod and
+  artifact/process adapters, platform detection, and platform runtime
+  constants.
 - 2026-06-13 Moved Llama hardware detection dispatch to descriptors.
   `hardwareDetectionAdapters` now selects the existing macOS hardware probe,
   Windows NVIDIA/CUDA probe, and generic CPU fallback probe, while the concrete

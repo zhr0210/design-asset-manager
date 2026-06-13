@@ -26,6 +26,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep managed OCR/Python venv executable paths descriptor-driven; leave Python interpreter discovery and installer processes in their platform adapters.
 - Keep Llama server executable and force-stop process metadata descriptor-driven; do not scatter executable-name branches through installer flow.
 - Keep Llama hardware detection dispatch descriptor-driven; leave actual OS probes in macOS, Windows, and generic hardware adapters.
+- Keep Electron app lifecycle policy descriptor-driven; platform-specific AppUserModelId and quit-on-close behavior belong in startup policy metadata, not inline entry-point branches.
 
 ## Tests
 
@@ -38,6 +39,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.7 | 2026-06-13 | Moved Electron app lifecycle policy to descriptors while preserving Windows AppUserModelId and macOS quit behavior. |
 | v1.2.6 | 2026-06-13 | Moved Llama hardware detection dispatch to descriptors while preserving platform probe behavior. |
 | v1.2.5 | 2026-06-13 | Moved Llama server executable and force-stop process metadata to descriptors while preserving start/stop behavior. |
 | v1.2.4 | 2026-06-13 | Moved managed OCR/Python venv executable path selection to descriptors while preserving interpreter discovery. |

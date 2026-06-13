@@ -33,6 +33,31 @@ protocol.registerSchemesAsPrivileged([
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
+type ElectronAppLifecyclePolicy = {
+  platform?: NodeJS.Platform | string
+  appUserModelId?: string
+  quitOnAllWindowsClosed: boolean
+}
+
+const ELECTRON_APP_LIFECYCLE_POLICIES: ElectronAppLifecyclePolicy[] = [
+  {
+    platform: 'win32',
+    appUserModelId: 'com.antigravity.designassetmanager',
+    quitOnAllWindowsClosed: true
+  },
+  {
+    platform: 'darwin',
+    quitOnAllWindowsClosed: false
+  },
+  {
+    quitOnAllWindowsClosed: true
+  }
+]
+
+function resolveElectronAppLifecyclePolicy(platform: NodeJS.Platform | string = process.platform): ElectronAppLifecyclePolicy {
+  return ELECTRON_APP_LIFECYCLE_POLICIES.find((policy) => !policy.platform || policy.platform === platform)!
+}
+
 function createWindow(): void {
   const preloadPath = join(__dirname, '../preload/index.cjs')
 
@@ -97,8 +122,10 @@ app.whenReady().then(async () => {
     console.error('[SQLite] Failed to initialize database:', err)
   }
 
-  if (process.platform === 'win32') {
-    app.setAppUserModelId('com.antigravity.designassetmanager')
+  const appLifecyclePolicy = resolveElectronAppLifecyclePolicy()
+
+  if (appLifecyclePolicy.appUserModelId) {
+    app.setAppUserModelId(appLifecyclePolicy.appUserModelId)
   }
 
   app.on('browser-window-created', (_, window) => {
@@ -131,7 +158,7 @@ app.whenReady().then(async () => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (resolveElectronAppLifecyclePolicy().quitOnAllWindowsClosed) {
     app.quit()
   }
 })

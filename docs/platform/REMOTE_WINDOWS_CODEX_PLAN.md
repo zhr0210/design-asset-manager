@@ -175,6 +175,11 @@ paths or model cache paths.
    Llama hardware detection dispatch now also uses the internal
    `hardwareDetectionAdapters` table, preserving macOS, Windows, and generic
    CPU fallback probe behavior while keeping OS commands in concrete adapters.
+   Electron app lifecycle policy now lives in
+   `ELECTRON_APP_LIFECYCLE_POLICIES`, preserving the existing Windows
+   AppUserModelId value, Windows/default quit-on-all-windows-closed behavior,
+   and macOS keep-running behavior without inline entry-point platform
+   branches.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
