@@ -22,20 +22,17 @@ runtime, native dependency, path, or process differences.
 
 ## Current Slice
 
-Remove stale Electron product routes that bypass the real prompt-reverse
-provider:
+Completion audit for Product AI Truthfulness Closure:
 
-1. The unused `ai:prompt-generate` Electron IPC route is removed.
-2. The unrendered `generateDeepAnalysis` path and `ai:analysis-generate`
-   Electron IPC route are removed.
-3. The AI Worker HTTP endpoints remain unchanged for compatibility.
-4. Prompt reverse continues through `AiWorkerManager`, native Qwen3-VL, or the
-   configured Llama/OpenAI-compatible backend.
-5. Historical prompt and analysis task polling remains available for existing
-   database rows.
-
-Do not change database schema, AI Worker HTTP APIs, Platform AI Branch Status
-shape, or existing real-AI IPC channel semantics.
+1. Stale prompt/deep-analysis Electron routes and product mock tagging are
+   removed.
+2. Model-wrapper simulation is explicit opt-in and blocked in product mode.
+3. Mock OCR text boxes are removed from product settings; persisted historical
+   values normalize to `none`.
+4. Platform AI actions navigate to existing management surfaces without
+   directly starting side effects.
+5. Windows OCR evidence remains truthful at `runtime_probe_ready` until a
+   separately approved local artifact can complete generated-image inference.
 
 ## Later Slices
 
@@ -99,6 +96,13 @@ python3 scripts/check-docs-sync.py
 git diff --check
 ```
 
-Renderer behavior did not change in the evidence-tool correction. The mock-tag
-removal slice requires focused Electron/renderer contract validation and a UI
-smoke check only if a visible control or state changes.
+Completion audit result:
+
+- `npm run ci:governance`, `npm run typecheck`, `npm run build`, and
+  `scripts/verify-platform-mac.sh`: passed.
+- Python unittest discovery: 141 tests passed.
+- Electron/Playwright at `1280x804`: AI settings exposed only none, EasyOCR,
+  RapidOCR, and PaddleOCR; no mock option or horizontal overflow was present.
+- Doctor CI warnings were limited to the intentionally stopped AI Worker and a
+  managed-path write-permission warning; they did not invalidate the tested
+  product behavior.

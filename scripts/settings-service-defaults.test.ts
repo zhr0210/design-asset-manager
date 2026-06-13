@@ -6,7 +6,8 @@ import {
 } from '../src/main/services/settings/settings-defaults.builder'
 import {
   createDefaultLlamaBackendConfig,
-  createDefaultPromptReverseSettings
+  createDefaultPromptReverseSettings,
+  normalizeProductTextBoxProvider
 } from '../src/main/services/settings.service'
 
 const legacyDefaults = createLegacyAppSettingsDefaults()
@@ -44,6 +45,8 @@ assert.equal(newInstallDefaults.doctorSettings?.showInSettings, true)
 
 assert.equal(createDefaultLlamaBackendConfig().enabled, false)
 assert.equal(createDefaultPromptReverseSettings().backendMode, 'llama-openai')
+assert.equal(normalizeProductTextBoxProvider('mock'), 'none')
+assert.equal(normalizeProductTextBoxProvider('easyocr'), 'easyocr')
 
 const settingsServiceSource = await fs.readFile('src/main/services/settings.service.ts', 'utf8')
 const builderSource = await fs.readFile('src/main/services/settings/settings-defaults.builder.ts', 'utf8')

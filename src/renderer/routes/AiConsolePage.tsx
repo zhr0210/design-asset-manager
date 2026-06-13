@@ -40,7 +40,7 @@ import type {
   AiPromptReverseSettings,
   PromptReverseBackendMode
 } from '../../shared/types/ai-backend.types'
-import type { AiMemoryPolicy, AiPromptTemplate } from '../../shared/types/settings.types'
+import type { AiMemoryPolicy, AiPromptTemplate, AppSettings } from '../../shared/types/settings.types'
 import type { AiRuntimeClipSiglipOnnxStatusResponse } from '../../shared/contracts/ai-runtime.contract'
 import type {
   LlamaHardwareProfile,
@@ -93,7 +93,13 @@ import type { ClearGpuMemoryResult, GpuStatus } from '../../shared/types/ai-work
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS, DEFAULT_PROMPT_TEMPLATE_ID, DEFAULT_QWEN3VL_DESIGN_PROMPT, OPENAI_COMPATIBLE_REVERSE_PROMPT } from '../../shared/constants/prompt-templates.constants'
 
 type ConsoleTab = 'overview' | 'models' | 'services' | 'runtime' | 'prompts' | 'logs'
-type TextBoxProvider = 'none' | 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'
+type TextBoxProvider = 'none' | 'easyocr' | 'rapidocr' | 'paddleocr'
+
+function normalizeProductTextBoxProvider(
+  provider: AppSettings['textBoxProvider'] | undefined
+): TextBoxProvider {
+  return !provider || provider === 'mock' ? 'none' : provider
+}
 
 type ModelRow = {
   id: string
@@ -671,7 +677,9 @@ export default function AiConsolePage() {
   const [cooperativeModels, setCooperativeModels] = useState<CooperativeModelDownloadState>({})
   const [cooperativeCleanups, setCooperativeCleanups] = useState<(() => void)[]>([])
 
-  const [textBoxProvider, setTextBoxProvider] = useState<TextBoxProvider>(settings.textBoxProvider ?? 'easyocr')
+  const [textBoxProvider, setTextBoxProvider] = useState<TextBoxProvider>(
+    normalizeProductTextBoxProvider(settings.textBoxProvider)
+  )
   const [enableTextColorAnalysis, setEnableTextColorAnalysis] = useState(settings.enableTextColorAnalysis ?? true)
   const [ocrTimeoutMs, setOcrTimeoutMs] = useState(settings.ocrTimeoutMs ?? 15000)
   const [maxTextBoxesPerImage, setMaxTextBoxesPerImage] = useState(settings.maxTextBoxesPerImage ?? 30)
@@ -910,7 +918,7 @@ export default function AiConsolePage() {
   }, [])
 
   useEffect(() => {
-    setTextBoxProvider(settings.textBoxProvider ?? 'easyocr')
+    setTextBoxProvider(normalizeProductTextBoxProvider(settings.textBoxProvider))
     setEnableTextColorAnalysis(settings.enableTextColorAnalysis ?? true)
     setOcrTimeoutMs(settings.ocrTimeoutMs ?? 15000)
     setMaxTextBoxesPerImage(settings.maxTextBoxesPerImage ?? 30)
@@ -1710,7 +1718,6 @@ export default function AiConsolePage() {
                     <option value="easyocr">EasyOCR（推荐）</option>
                     <option value="rapidocr">RapidOCR</option>
                     <option value="paddleocr">PaddleOCR ONNX</option>
-                    <option value="mock">开发者虚拟检测框</option>
                   </select>
                 </Field>
                 <Field label="最大定位框数量">

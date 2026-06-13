@@ -44,6 +44,12 @@ export function createDefaultPromptReverseSettings(): AiPromptReverseSettings {
   }
 }
 
+export function normalizeProductTextBoxProvider(
+  provider: AppSettings['textBoxProvider']
+): Exclude<AppSettings['textBoxProvider'], 'mock'> {
+  return provider === 'mock' ? 'none' : provider
+}
+
 export class SettingsService {
   private static instance: SettingsService
   private configPath: string
@@ -166,7 +172,7 @@ export class SettingsService {
 
       // R3.0 parameters parsing
       const enableAnalysisVal = parsed.enableTextColorAnalysis ?? defaults.enableTextColorAnalysis
-      const boxProviderVal = parsed.textBoxProvider ?? defaults.textBoxProvider
+      const boxProviderVal = normalizeProductTextBoxProvider(parsed.textBoxProvider ?? defaults.textBoxProvider)
       const ocrTimeoutVal = parsed.ocrTimeoutMs ?? defaults.ocrTimeoutMs
       const maxBoxesImageVal = parsed.maxTextBoxesPerImage ?? defaults.maxTextBoxesPerImage
       const autoInstallAllowedVal = parsed.autoInstallAllowed ?? defaults.autoInstallAllowed
@@ -249,7 +255,7 @@ export class SettingsService {
 
     // R3.0 options parsing
     const enableAnalysisVal = settings.enableTextColorAnalysis ?? current.enableTextColorAnalysis
-    const boxProviderVal = settings.textBoxProvider ?? current.textBoxProvider
+    const boxProviderVal = normalizeProductTextBoxProvider(settings.textBoxProvider ?? current.textBoxProvider)
     const ocrTimeoutVal = settings.ocrTimeoutMs ?? current.ocrTimeoutMs
     const maxBoxesImageVal = settings.maxTextBoxesPerImage ?? current.maxTextBoxesPerImage
     const autoInstallAllowedVal = settings.autoInstallAllowed ?? current.autoInstallAllowed

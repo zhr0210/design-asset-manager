@@ -9,14 +9,18 @@ This audit separates user-visible AI features into four implementation states:
 
 ## Executive Summary
 
-The app currently contains several product-visible AI surfaces that look implemented but are not real model-backed paths yet.
+This document began as a gap audit. The product-facing closure is now:
 
-- Qwen3-VL 2B through the Llama/OpenAI-compatible route is a real model path when the local Llama service and GGUF/mmproj are running.
-- Python Worker manual prompt reverse and deep analysis still use pure mock model classes.
-- Cooperative tagging wrappers for RAM++, Florence-2, CLIP, WD Tagger, translation, and Qwen-VL fallback can silently degrade into mock output.
-- AI Runtime Management registers mock runtime providers in the product IPC manager, so runtime start and health checks can report mock health.
-- macOS capability cards are mostly runtime probes and planned capability metadata; they do not prove models are downloaded, loaded, or usable.
-- GPU/MPS telemetry is not random mock data, but Apple Silicon memory reporting is incomplete and does not show true process-level Metal/MPS memory.
+- Prompt reverse routes through native Qwen3-VL or configured
+  Llama/OpenAI-compatible backends; the stale Python Worker Electron route is
+  removed.
+- The unrendered deep-analysis Electron route is removed.
+- Product mock-tag IPC and its service are removed.
+- Model-wrapper simulation remains available only to explicit development/test
+  harnesses. Product mode and default local runs fail closed.
+- Mock OCR text boxes are no longer selectable or persistable from product
+  settings; historical `mock` values migrate to `none`.
+- Runtime probes remain distinct from real-model evidence.
 
 ## Current Remediation Status
 
@@ -30,16 +34,18 @@ The app currently contains several product-visible AI surfaces that look impleme
 
 | Surface | Current state | Evidence | User impact | Required next step |
 | --- | --- | --- | --- | --- |
-| Manual prompt reverse via Python Worker | Pure mock inference path | `ai-service/workers/prompt_worker.py` loads `joycaption`, then instantiates `models.joycaption.JoyCaption`; `ai-service/models/joycaption.py` randomly chooses template prompts. | Results can look polished but are unrelated to the asset image. | Replace with a real JoyCaption-compatible model path, or route the UI exclusively to the real Qwen3-VL Llama path. |
-| Manual deep visual analysis via Python Worker | Pure mock inference path | `ai-service/workers/analysis_worker.py` instantiates `models.qwen_vl.QwenVL`; `ai-service/models/qwen_vl.py` randomly chooses structured OCR/layout/tag payloads. | OCR text, layout tags, and evidence can be completely fabricated. | Remove from production UI until a real VLM backend is wired, or route to Qwen3-VL Llama/OpenAI-compatible analysis. |
-| Product mock tag generator | Blocked by env guard, but still present as a product IPC/API surface | `src/main/ipc/asset-tag.ipc.ts` registers `mock-ai:generate-suggestions`; `src/main/services/mock-ai-tag.service.ts` writes random tag suggestions and mock captions/analysis; renderer still uses the method name `generateMockAiSuggestions`. | The UI naming and IPC shape still imply mock tagging is part of the feature. | Rename renderer/store API to real tagging, remove product IPC exposure, keep mock service only in tests. |
+| Manual prompt reverse via Python Worker | Removed from Electron product surface | Prompt reverse now uses the real provider chain; historical Worker task polling remains for compatibility. | The product cannot enqueue the stale simulated prompt worker. | Keep the Worker HTTP shape only until a separately versioned API cleanup. |
+| Manual deep visual analysis via Python Worker | Removed from Electron product surface | The unrendered action, preload method, IPC route, and client method are removed. | The product cannot enqueue simulated deep-analysis output. | Add a new real VLM operation only with executable evidence. |
+| Product mock tag generator | Removed | Product IPC, preload exposure, renderer call, contract, and service are absent. | Tagging fails closed when the real Worker is unavailable. | Keep source-contract regression coverage. |
 | AI Runtime Management mock runtime | Removed from product IPC | Product registration no longer creates `MockAiRuntimeProvider`, `MockAiRuntimeHttpClient`, or `MockAiRuntimeProcessRunner`. | Mock runtime cards should no longer appear from the product runtime list. | Keep mock provider classes test-only and guard against product re-registration. |
 | Mock Python Worker runtime | Removed from product IPC | Product registration now creates `python-worker-runtime` with the real AI Worker entrypoint and strict-real-AI env. | Runtime start no longer represents a fake Python process. | Improve process stop/health behavior and surface real Worker logs. |
 | Mock external HTTP runtime | Removed from product IPC | `ExternalHttpRuntimeProvider` defaults to a fetch-backed real HTTP client; tests can still inject the mock client. | External runtime health checks no longer use mock routes unless a test injects them. | Keep manual health checks explicit and user-initiated. |
 
 ## Model Wrappers With Silent Mock Fallbacks
 
-These wrappers contain real-model loading attempts, but failure paths currently return simulated output instead of failing closed.
+These wrappers retain simulation code for explicit development and tests.
+Default and product execution fail closed unless
+`DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI=1` is explicitly set outside strict mode.
 
 | Model family | Current fallback behavior | Evidence | User impact | Required next step |
 | --- | --- | --- | --- | --- |
@@ -67,7 +73,7 @@ These wrappers contain real-model loading attempts, but failure paths currently 
 
 | Area | Current state | Evidence | Product guidance |
 | --- | --- | --- | --- |
-| Mock text boxes | Dev/test mock provider with production guard. | `src/main/services/text-detection/mock-text-box-provider.ts` returns empty in packaged production. | Keep test-only; remove from product provider selection unless developer mode is active. |
+| Mock text boxes | Test-only provider. | The provider remains directly constructible by tests; product settings hide it and normalize persisted `mock` to `none`. | Do not restore it to product selection. |
 | Color palette mock quantizer | Non-AI algorithm fallback when native image packages fail. | `src/main/services/color-palette.service.ts` generates `mock_fallback` palettes and queues refresh later. | Acceptable as a visual-analysis fallback if clearly labeled and refreshed when native deps are available. |
 | Browser/search/download web-environment mocks | Renderer fallback for non-Electron or demo environments. | Renderer stores contain web fallback mocks. | Not part of AI Worker, but should not appear in packaged production feature validation. |
 
