@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Completed the cross-platform shared-architecture completion
+  audit on Windows at `c7296b8`. Renderer/shared Platform AI surfaces contain
+  no direct macOS/Windows branch comparison control flow, and main/shared/
+  renderer contain no direct `process.platform ===/!== "win32"/"darwin"`
+  control flow. The remaining audited platform-aware modules are real platform
+  detection, runtime profile, IPC current-platform metadata, Doctor command,
+  OCR interpreter/path, Llama package/process/hardware, managed-path audit, or
+  concrete runtime-lane metadata adapters. The full Windows real-evidence
+  validation passed on the current commit: runtime-safety tests, 123 isolated
+  Python tests, CUDA execution, WD Tagger ONNX load, CLIP ONNX embedding,
+  Llama GGUF/mmproj text plus generated-image inference, Platform AI Branch
+  Status IPC, Electron/Playwright screenshot capture, and a clean
+  `1266x795` overflow check. No IPC channel, database schema, AI Worker HTTP
+  API, or shared response shape changed. This closes the ordered shared-surface
+  work in `docs/platform/REMOTE_WINDOWS_CODEX_PLAN.md`; future platform
+  changes should be treated as new scoped work and must preserve the same
+  default-shared rule.
 - 2026-06-13 Moved shared Worker probe connection recognition to declarative
   adapter metadata. `PLATFORM_AI_WORKER_PROBE_ACCESSORS` now owns the accepted
   Windows `win32` / `windows` platform markers and the existing macOS
@@ -105,12 +122,9 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
   `scripts/ai-runtime-panel-contract.test.ts`,
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
-  `python scripts/check-docs-sync.py`, and `git diff --check`. UI validation
-  and the full Windows real-evidence script were not run because this is a
-  behavior-preserving shared-workflow metadata refactor with no product
-  layout, runtime probe execution, dependency install, download, or AI process
-  startup behavior change. Next smallest slice: completion-audit the remaining
-  platform checks and retain only true OS/runtime/path/process adapters.
+  `python scripts/check-docs-sync.py`, and `git diff --check`. The full Windows
+  real-evidence script was then run for the completion audit and passed without
+  requiring a Windows-specific product fix.
 - 2026-06-13 Moved Doctor Node/Python platform command selection to adapters.
   `NPM_COMMAND_ADAPTERS` now owns the existing Windows `npm.cmd` and default
   `npm` CLI choice, and `PYTHON_LAUNCHER_ADAPTERS` now owns the existing

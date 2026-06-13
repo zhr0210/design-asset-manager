@@ -8,9 +8,8 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 
 ## Latest Reported Result
 
-- Validation time: 2026-06-13 00:17, Windows host local time.
-- Commit tested: worktree based on `2f07e8d`, with branch-keyed Platform AI
-  runtime request and branch-to-OS metadata applied.
+- Validation time: 2026-06-13 18:40, Windows host local time.
+- Commit tested: `c7296b8`.
 - Windows host: DESKTOP-3573AOS.
 - GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
 - Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
@@ -23,7 +22,7 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
 - `npm run build`: passed with existing Vite mixed dynamic/static import
   warnings.
 - `npm run ci:test-runtime-safety`: passed.
-- Python unittest discovery: passed.
+- Python unittest discovery: passed, 123 tests.
 - Llama IPC refresh: selected `qwen3-vl-2b-instruct-q4-k-m`, started
   `llama-server`, and ran text plus generated-image multimodal inference.
 - Llama multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
@@ -42,21 +41,21 @@ This file is the GitHub handoff mailbox for Windows-host validation on branch
   `scripts/ai-console-macos-branch.test.ts`,
   `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
   `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: `PLATFORM_AI_RUNTIME_REQUEST_METHODS` now maps
-  `PlatformAiBranch` to the existing concrete preload methods, and
-  `PLATFORM_BRANCH_PLATFORMS` maps branch status projection to real OS platform
-  names. Concrete IPC methods, channel names, response shapes, and
-  unsupported-platform semantics are unchanged.
-- Privacy check: zero absolute Windows paths were found in the saved log.
+- Shared-surface slice: Worker probe connection recognition now uses
+  branch-keyed `connectionPlatforms` / `connectionFlag` metadata. Concrete IPC
+  methods, channel names, response shapes, and probe semantics are unchanged.
+- Completion audit: renderer/shared Platform AI surfaces have no direct branch
+  comparison control flow, and remaining platform-aware modules are audited
+  OS/runtime/path/process or runtime-metadata adapters.
+- Privacy check: saved output uses sanitized path placeholders; no full local
+  or model-cache paths are recorded here.
 - Failures/blockers: none for the Windows real-evidence routes covered by this
   run.
-- Next recommended action: keep future slices focused on any newly discovered
-  renderer/shared product workflow branching; the remaining audited platform
-  checks are genuine OS/runtime/path/process boundaries unless new evidence
-  contradicts that classification.
+- Next recommended action: treat future platform work as a new scoped change
+  and preserve the default-shared architecture rule.
 
 The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260613-001631.log`, and the screenshot filename is
+`dam-windows-ai-validation-20260613-184043.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
 ## Post-Validation Audit-Only Update

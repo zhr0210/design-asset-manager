@@ -227,17 +227,22 @@ paths or model cache paths.
    longer cross those renderer component or shared projector boundaries.
    CUDA/MPS/Llama details remain in their runtime adapters and lane evidence.
 
-4. **Re-run Windows evidence after each shared-surface slice.**
+4. **Completed: re-run Windows evidence after shared-surface slices.**
    At minimum run the focused TypeScript tests and typecheck/build on Windows.
    For product-facing UI changes, use Electron/Playwright screenshots and check
    document/body horizontal overflow. For audit-only test/docs slices that do
    not change product-facing renderer or runtime code, record the focused source
    contract validation and skip the full real-evidence script unless runtime
-   state and time make a re-run useful.
+   state and time make a re-run useful. The final completion audit reran the
+   full script at `c7296b8`; CUDA, ONNX, Llama multimodal, IPC, screenshot, and
+   overflow evidence all passed.
 
-5. **Update the task ledger, not root docs.**
+5. **Completed: update the task ledger, not root docs.**
    Record each slice, commands run, screenshot result or skip reason, Windows
    validation result, and the next smallest slice in `TASK.md`.
+
+All ordered work in this handoff is complete. Future cross-platform changes are
+new scoped work and should preserve the same default-shared architecture rule.
 
 ## Commit Rules
 
