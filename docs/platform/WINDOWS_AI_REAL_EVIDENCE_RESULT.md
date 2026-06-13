@@ -132,6 +132,13 @@ runtime-kind matching. It did not alter renderer output, runtime probing, IPC
 channels, shared response fields, database schema, or AI Worker HTTP API
 shapes; no new Windows runtime evidence is claimed for it.
 
+A later 2026-06-13 main-process resolver refactor moved runtime profile
+recommendation reason copy to `RUNTIME_PROFILE_REASON_MESSAGES`, preserving the
+existing Windows CUDA, Windows CPU, macOS Apple Silicon, macOS Intel, and
+external-inference reason strings. It did not alter renderer output, runtime
+probing, IPC channels, shared response fields, database schema, or AI Worker
+HTTP API shapes; no new Windows runtime evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

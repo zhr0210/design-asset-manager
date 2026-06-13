@@ -19,7 +19,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep branch-to-OS support checks table-driven so the projector exposes real platform support without scattering branch conditionals.
 - Keep Platform AI branch runtime provider registration descriptor-driven; concrete metadata keys and profile rules belong in descriptors, not duplicated provider blocks or resolver functions.
 - Keep Python Worker auto-start platform support in one allowlist so adding or removing OS support does not scatter bootstrap conditionals.
-- Keep runtime profile default and hardware-hint selection in ordered metadata rules; do not hand-code Windows/macOS profile branches in resolver flow.
+- Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; do not hand-code Windows/macOS profile branches in resolver flow.
 - Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
 
 ## Tests
@@ -33,6 +33,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.1 | 2026-06-13 | Moved runtime profile recommendation reason copy to metadata while preserving recommendations. |
 | v1.2.0 | 2026-06-13 | Split Platform AI branch workflow topology from shared runtime-lane resolution while preserving lane membership. |
 | v1.1.9 | 2026-06-13 | Moved Platform AI branch provider profile selection into descriptor rules while preserving runtime ids and profile mapping. |
 | v1.1.8 | 2026-06-13 | Moved platform profile detection mappings to metadata rules while preserving OS capability booleans. |

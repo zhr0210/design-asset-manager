@@ -154,7 +154,11 @@ paths or model cache paths.
    Platform AI branch workflow topology now also stays separate from
    `resolveWorkflowDefinition()` / `resolveRuntimeLane()`, so platform tables
    keep genuine lane membership and primary-lane differences while shared
-   runtime-kind and default-label resolution happens once.
+   runtime-kind and default-label resolution happens once. Runtime profile
+   recommendation reason copy now also lives in `RUNTIME_PROFILE_REASON_MESSAGES`,
+   preserving the existing Windows CUDA, Windows CPU, macOS Apple Silicon,
+   macOS Intel, and external-inference reason strings without a profile-id
+   if-chain.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

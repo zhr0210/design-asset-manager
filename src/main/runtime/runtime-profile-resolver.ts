@@ -28,6 +28,14 @@ const HARDWARE_RUNTIME_PROFILE_RULES: RuntimeProfileHardwareRule[] = [
   }
 ]
 
+const RUNTIME_PROFILE_REASON_MESSAGES: Partial<Record<RuntimeProfileId, string>> = {
+  'windows-nvidia-cuda': 'Windows NVIDIA hint is present, so the CUDA-capable profile is the best metadata match.',
+  'windows-cpu': 'Windows without a GPU hint defaults to the CPU profile.',
+  'macos-apple-silicon': 'macOS arm64 maps to the Apple Silicon profile.',
+  'macos-intel': 'macOS x64 maps to the Intel profile with external inference fallback.',
+  'external-inference-only': 'External inference only was selected or is the safest fallback.'
+}
+
 function checkStatus(input: RuntimeProfileResolverInput, id: string, status: 'warning' | 'error') {
   return input.doctorReport.checks.some((check) => check.id === id && check.status === status)
 }
@@ -107,11 +115,7 @@ function resolvePreferredProfileId(input: RuntimeProfileResolverInput): RuntimeP
 
 function buildReason(platform: PlatformName, arch: PlatformArch, profile: RuntimeProfile, blocking: string[]) {
   if (blocking.length > 0) return `Blocking Doctor issues require a conservative fallback profile for ${platform}/${arch}.`
-  if (profile.id === 'windows-nvidia-cuda') return 'Windows NVIDIA hint is present, so the CUDA-capable profile is the best metadata match.'
-  if (profile.id === 'windows-cpu') return 'Windows without a GPU hint defaults to the CPU profile.'
-  if (profile.id === 'macos-apple-silicon') return 'macOS arm64 maps to the Apple Silicon profile.'
-  if (profile.id === 'macos-intel') return 'macOS x64 maps to the Intel profile with external inference fallback.'
-  return 'External inference only was selected or is the safest fallback.'
+  return RUNTIME_PROFILE_REASON_MESSAGES[profile.id] ?? RUNTIME_PROFILE_REASON_MESSAGES['external-inference-only']!
 }
 
 export function listKnownRuntimeProfilesForResolver(): RuntimeProfile[] {

@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved runtime profile recommendation reason copy to metadata.
+  `RUNTIME_PROFILE_REASON_MESSAGES` now owns the existing Windows CUDA,
+  Windows CPU, macOS Apple Silicon, macOS Intel, and external-inference
+  explanation text, while `buildReason()` keeps only the Doctor-blocking
+  dynamic fallback. Recommended profile IDs, reason strings, confidence,
+  fallback profile selection, IPC channels, database schema, AI Worker HTTP API,
+  shared response fields, runtime behavior, and renderer output are unchanged.
+  Focused runtime-profile tests preserve every existing recommendation and
+  reason string and prevent the previous profile-id reason if-chain from
+  returning. UI validation and the full Windows real-evidence script were not
+  run because this is a main-process resolver metadata refactor with no product
+  layout or runtime probing behavior change. Next smallest slice: continue the
+  completion audit and only move remaining platform checks when they represent
+  duplicated policy rather than true OS/runtime/path/process adapter logic.
 - 2026-06-13 Split Platform AI branch workflow topology from shared runtime-lane
   resolution. `PLATFORM_WORKFLOW_TOPOLOGY` now keeps the genuine macOS/Windows
   lane membership, primary-lane, and CLIP label differences, while

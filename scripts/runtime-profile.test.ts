@@ -64,6 +64,7 @@ const windowsNvidia = resolveRuntimeProfileRecommendation({
   hardwareHints: { nvidiaGpu: true }
 })
 assert.equal(windowsNvidia.recommendedProfileId, 'windows-nvidia-cuda')
+assert.equal(windowsNvidia.reason, 'Windows NVIDIA hint is present, so the CUDA-capable profile is the best metadata match.')
 
 const windowsCpu = resolveRuntimeProfileRecommendation({
   platformInfo: { platform: 'win32', arch: 'x64' },
@@ -71,25 +72,32 @@ const windowsCpu = resolveRuntimeProfileRecommendation({
   runtimeRegistry: registry()
 })
 assert.equal(windowsCpu.recommendedProfileId, 'windows-cpu')
+assert.equal(windowsCpu.reason, 'Windows without a GPU hint defaults to the CPU profile.')
 
-assert.equal(resolveRuntimeProfileRecommendation({
+const macAppleSilicon = resolveRuntimeProfileRecommendation({
   platformInfo: { platform: 'darwin', arch: 'arm64' },
   doctorReport: okReport,
   runtimeRegistry: { ...registry(), platform: 'darwin', arch: 'arm64', profile: 'macos-apple-silicon' }
-}).recommendedProfileId, 'macos-apple-silicon')
+})
+assert.equal(macAppleSilicon.recommendedProfileId, 'macos-apple-silicon')
+assert.equal(macAppleSilicon.reason, 'macOS arm64 maps to the Apple Silicon profile.')
 
-assert.equal(resolveRuntimeProfileRecommendation({
+const macIntel = resolveRuntimeProfileRecommendation({
   platformInfo: { platform: 'darwin', arch: 'x64' },
   doctorReport: okReport,
   runtimeRegistry: { ...registry(), platform: 'darwin', arch: 'x64', profile: 'macos-intel' }
-}).recommendedProfileId, 'macos-intel')
+})
+assert.equal(macIntel.recommendedProfileId, 'macos-intel')
+assert.equal(macIntel.reason, 'macOS x64 maps to the Intel profile with external inference fallback.')
 
-assert.equal(resolveRuntimeProfileRecommendation({
+const externalPreference = resolveRuntimeProfileRecommendation({
   platformInfo: { platform: 'win32', arch: 'x64' },
   doctorReport: okReport,
   runtimeRegistry: registry(),
   userPreference: 'external-inference-only'
-}).recommendedProfileId, 'external-inference-only')
+})
+assert.equal(externalPreference.recommendedProfileId, 'external-inference-only')
+assert.equal(externalPreference.reason, 'External inference only was selected or is the safest fallback.')
 
 const blocking = resolveRuntimeProfileRecommendation({
   platformInfo: { platform: 'win32', arch: 'x64' },
@@ -132,15 +140,17 @@ assert.equal(registryProfile.selectedProfileId, 'windows-cpu')
 const resolverSource = await fs.readFile('src/main/runtime/runtime-profile-resolver.ts', 'utf8')
 assert.match(resolverSource, /const DEFAULT_RUNTIME_PROFILE_RULES: RuntimeProfilePlatformRule\[\]/)
 assert.match(resolverSource, /const HARDWARE_RUNTIME_PROFILE_RULES: RuntimeProfileHardwareRule\[\]/)
+assert.match(resolverSource, /const RUNTIME_PROFILE_REASON_MESSAGES: Partial<Record<RuntimeProfileId, string>>/)
 assert.match(resolverSource, /platform: 'win32'[\s\S]*profileId: 'windows-cpu'/)
 assert.match(resolverSource, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*profileId: 'macos-apple-silicon'/)
 assert.match(resolverSource, /platform: 'darwin'[\s\S]*arch: 'x64'[\s\S]*profileId: 'macos-intel'/)
 assert.match(resolverSource, /profileId: 'windows-nvidia-cuda'[\s\S]*hardwareHints\?\.nvidiaGpu/)
 assert.match(resolverSource, /DEFAULT_RUNTIME_PROFILE_RULES\.find/)
 assert.match(resolverSource, /HARDWARE_RUNTIME_PROFILE_RULES\.find/)
+assert.match(resolverSource, /RUNTIME_PROFILE_REASON_MESSAGES\[profile\.id\]/)
 assert.doesNotMatch(
   resolverSource,
-  /if \(platform === 'win32'\) return 'windows-cpu'|if \(platform === 'darwin' && arch === 'arm64'\)|if \(input\.hardwareHints\?\.nvidiaGpu && input\.platformInfo\.platform === 'win32'\)/
+  /if \(platform === 'win32'\) return 'windows-cpu'|if \(platform === 'darwin' && arch === 'arm64'\)|if \(input\.hardwareHints\?\.nvidiaGpu && input\.platformInfo\.platform === 'win32'\)|if \(profile\.id === 'windows-nvidia-cuda'\)|if \(profile\.id === 'macos-apple-silicon'\)/
 )
 assert.doesNotMatch(resolverSource, /install\w*\s*\(/i)
 assert.doesNotMatch(resolverSource, /download\w*\s*\(/i)
