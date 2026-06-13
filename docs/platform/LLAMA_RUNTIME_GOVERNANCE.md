@@ -28,7 +28,9 @@ control.
 Runtime package artifact matching is selected through
 `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES`. Keep OS, architecture, and accelerator
 release filename patterns in that ordered table instead of adding platform
-conditionals to the planner flow.
+conditionals to the planner flow. CUDA runtime sidecar matching is selected
+through `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES`; keep CUDA sidecar release
+filename patterns there instead of branching in planner flow.
 
 ## Governance Rules
 

@@ -43,6 +43,11 @@ interface LlamaRuntimePackagePatternRule {
   patterns: RegExp[]
 }
 
+interface LlamaCudaRuntimePackagePatternRule {
+  accelerator: LlamaRuntimeAccelerator
+  patterns: RegExp[]
+}
+
 const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule[] = [
   { platform: 'win32', accelerator: 'vulkan' },
   { accelerator: 'cpu' }
@@ -81,6 +86,17 @@ const LLAMA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaRuntimePackagePatternRule[] = [
   },
   {
     patterns: [/^llama-.*bin-win-cpu-x64\.zip/i]
+  }
+]
+
+const LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaCudaRuntimePackagePatternRule[] = [
+  {
+    accelerator: 'cuda13',
+    patterns: [/^cudart-llama-bin-win-cuda-13[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu13[\d.]*-x64\.zip/i]
+  },
+  {
+    accelerator: 'cuda12',
+    patterns: [/^cudart-llama-bin-win-cuda-12[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu12[\d.]*-x64\.zip/i]
   }
 ]
 
@@ -232,13 +248,9 @@ function runtimePatterns(accelerator: LlamaRuntimeAccelerator, platform: string 
 }
 
 function cudaRuntimePatterns(accelerator: LlamaRuntimeAccelerator): RegExp[] {
-  if (accelerator === 'cuda13') {
-    return [/^cudart-llama-bin-win-cuda-13[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu13[\d.]*-x64\.zip/i]
-  }
-  if (accelerator === 'cuda12') {
-    return [/^cudart-llama-bin-win-cuda-12[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu12[\d.]*-x64\.zip/i]
-  }
-  return []
+  return LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES.find((rule) => {
+    return rule.accelerator === accelerator
+  })?.patterns ?? []
 }
 
 function findAsset(release: LlamaReleaseInfo, patterns: RegExp[]): LlamaReleaseAsset | null {

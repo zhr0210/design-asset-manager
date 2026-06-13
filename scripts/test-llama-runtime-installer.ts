@@ -87,6 +87,12 @@ async function main() {
   assert.match(plannerSource, /accelerator: 'cuda13'[\s\S]*bin-win-cuda-13/)
   assert.match(plannerSource, /LLAMA_RUNTIME_PACKAGE_PATTERN_RULES\.find/)
   assert.doesNotMatch(plannerSource, /if \(platform === 'darwin'\)|if \(platform === 'linux'\)/)
+  assert.match(plannerSource, /const LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaCudaRuntimePackagePatternRule\[\]/)
+  assert.match(plannerSource, /accelerator: 'cuda13'[\s\S]*cudart-llama-bin-win-cuda-13/)
+  assert.match(plannerSource, /accelerator: 'cuda12'[\s\S]*cudart-llama-bin-win-cuda-12/)
+  assert.match(plannerSource, /LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES\.find/)
+  assert.doesNotMatch(plannerSource, /function cudaRuntimePatterns[\s\S]*if \(accelerator === 'cuda13'\)/)
+  assert.doesNotMatch(plannerSource, /function cudaRuntimePatterns[\s\S]*if \(accelerator === 'cuda12'\)/)
 
   const profile = createHardwareProfile({
     platform: 'win32',

@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Llama CUDA runtime sidecar artifact matching to ordered
+  metadata. `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES` now owns the existing
+  Windows CUDA 13 and CUDA 12 cudart release filename patterns, while
+  `cudaRuntimePatterns()` selects the first matching sidecar rule by
+  accelerator. Runtime package names, primary runtime package matching, model
+  candidate selection, mirror mapping, install plan shape, IPC channels,
+  database schema, AI Worker HTTP API, shared response fields, renderer
+  output, download behavior, installer triggering, and process startup
+  behavior are unchanged. Focused Llama installer tests lock the sidecar
+  pattern table and keep asserting the CUDA runtime sidecar is included in the
+  Windows CUDA install plan. UI validation and the full Windows real-evidence
+  script were not run because this is a main-process artifact-pattern metadata
+  refactor with no product layout, runtime probing, dependency install,
+  download, or AI process startup behavior change. Next smallest slice:
+  continue auditing remaining platform checks and leave only true
+  OS/runtime/path/process adapter boundaries.
 - 2026-06-13 Moved Llama runtime package artifact matching to ordered
   metadata. `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES` now owns the existing
   macOS arm64/x64, Linux arm64/x64, Windows CUDA 13, Windows CUDA 12, Windows

@@ -202,7 +202,11 @@ paths or model cache paths.
    creation. Llama runtime package artifact matching now uses
    `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES`, preserving the existing macOS,
    Linux, Windows CUDA, Windows Vulkan, and Windows CPU release filename
-   matching without platform conditionals in the planner flow.
+   matching without platform conditionals in the planner flow. CUDA runtime
+   sidecar artifact matching now uses
+   `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES`, preserving the existing Windows
+   CUDA 13 and CUDA 12 cudart release filename matching without an accelerator
+   if-chain in the planner flow.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the
