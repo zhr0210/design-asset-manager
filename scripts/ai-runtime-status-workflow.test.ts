@@ -702,6 +702,7 @@ const windowsAiRuntimeTypesSource = await fs.readFile('src/shared/types/windows-
 const windowsAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/windows-ai-runtime.constants.ts', 'utf8')
 const macosAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/macos-ai-runtime.constants.ts', 'utf8')
 const platformAiRuntimeMetadataConstantsSource = await fs.readFile('src/shared/constants/platform-ai-runtime-metadata.constants.ts', 'utf8')
+const aiRuntimeIpcSource = await fs.readFile('src/main/ipc/ai-runtime.ipc.ts', 'utf8')
 const concretePlatformRuntimeTypePattern = /MacOSAiWorkerProbeResult|WindowsAiWorkerProbeResult|MacOSAiBranchRuntimeMetadata|WindowsAiBranchRuntimeMetadata|MacOSAiRuntimeLane|WindowsAiRuntimeLane/
 const platformBranchControlFlowPattern = /\bplatformBranch\s*(?:===|!==)\s*['"](?:windows|macos)['"]|['"](?:windows|macos)['"]\s*(?:===|!==)\s*platformBranch\b/
 const directProcessPlatformBranchPattern = /process\.platform\s*(?:={2,3}|!={1,2})\s*['"](?:win32|darwin)['"]|['"](?:win32|darwin)['"]\s*(?:={2,3}|!={1,2})\s*process\.platform/
@@ -805,6 +806,10 @@ assert.doesNotMatch(macosAiRuntimeConstantsSource, /function platformLaneStatus/
 assert.doesNotMatch(windowsAiRuntimeConstantsSource, /function platformLaneStatus/)
 assert.doesNotMatch(macosAiRuntimeConstantsSource, /const isMacOS = platform === 'darwin'/)
 assert.doesNotMatch(windowsAiRuntimeConstantsSource, /const isWindows = platform === 'win32'/)
+assert.match(aiRuntimeIpcSource, /const AI_RUNTIME_APP_DATA_ROOT_ADAPTERS: AiRuntimeAppDataRootAdapter\[\]/)
+assert.match(aiRuntimeIpcSource, /function resolveAiRuntimeAppDataRoot/)
+assert.doesNotMatch(aiRuntimeIpcSource, /const isWin = currentPlatform === 'win32'/)
+assert.doesNotMatch(aiRuntimeIpcSource, /isWin\s*\?/)
 assert.match(runtimeWorkflowSource, /interface PlatformAiProbeTileDisplay/)
 assert.doesNotMatch(runtimeWorkflowSource, /MacOSAiProbeTileDisplay/)
 assert.match(runtimeWorkflowSource, /interface PlatformAiWorkerProbeHeaderDisplay/)

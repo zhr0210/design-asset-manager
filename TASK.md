@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved AI Runtime app-data root path selection to adapter
+  metadata. `AI_RUNTIME_APP_DATA_ROOT_ADAPTERS` now owns the existing Windows
+  app-managed runtime directory parts and default macOS app-managed runtime
+  directory parts, while `createSafeAiRuntimeManager()` resolves one app-data
+  root before setting Python Worker cache environment variables. Cache env
+  keys, runtime ids, provider registration, auto-start policy, IPC channels,
+  database schema, AI Worker HTTP API, shared response fields, runtime
+  probing, renderer output, dependency installation, download behavior, and
+  process startup behavior are unchanged. Focused source contracts now lock
+  the adapter table and prevent the previous local `isWin` path ternary from
+  returning. UI validation and the full Windows real-evidence script were not
+  run because this is a main-process path-selection metadata refactor with no
+  product layout, runtime probing, dependency install, download, or AI process
+  startup behavior change. Next smallest slice: continue auditing remaining
+  platform adapter lookups and artifact-pattern selection before marking the
+  long-running shared-surface goal complete.
 - 2026-06-13 Moved Platform AI runtime lane-status policy into shared
   metadata helpers. `currentPlatformLaneStatus()` now owns the common
   current-platform, required-arch fallback, and evidence-insufficient

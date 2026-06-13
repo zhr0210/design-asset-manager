@@ -195,7 +195,11 @@ paths or model cache paths.
    `currentPlatformLaneStatus()` now also owns the common unavailable,
    required-arch fallback, and evidence-insufficient lane-status policy while
    the concrete macOS/Windows constants retain genuine lane membership,
-   ordering, labels, backend names, warnings, and topology.
+   ordering, labels, backend names, warnings, and topology. AI Runtime
+   app-data root path selection now uses `AI_RUNTIME_APP_DATA_ROOT_ADAPTERS`,
+   preserving the existing Windows and default macOS app-managed runtime
+   directory semantics without a local `isWin` ternary in runtime manager
+   creation.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

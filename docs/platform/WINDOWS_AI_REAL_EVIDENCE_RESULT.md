@@ -235,6 +235,14 @@ output, runtime probing, IPC channels, shared response fields, database schema,
 AI Worker HTTP API shapes, dependency installation, download behavior, or
 process startup; no new Windows runtime evidence is claimed for it.
 
+A later 2026-06-13 main-process path refactor moved AI Runtime app-data root
+selection into `AI_RUNTIME_APP_DATA_ROOT_ADAPTERS`, preserving the existing
+Windows and default macOS app-managed runtime directory semantics before the
+Python Worker cache environment is built. It did not alter renderer output,
+runtime probing, IPC channels, shared response fields, database schema, AI
+Worker HTTP API shapes, dependency installation, download behavior, or process
+startup; no new Windows runtime evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

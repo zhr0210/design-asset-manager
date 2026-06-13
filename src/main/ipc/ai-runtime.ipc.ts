@@ -85,6 +85,11 @@ interface PlatformAiBranchRuntimeProviderProfileRule {
   profileId: RuntimeProfileId
 }
 
+interface AiRuntimeAppDataRootAdapter {
+  platform?: PlatformName
+  pathParts: string[]
+}
+
 function resolvePlatformAiBranchProviderProfileId(
   descriptor: PlatformAiBranchRuntimeProviderDescriptor,
   currentPlatform: PlatformName,
@@ -127,15 +132,29 @@ const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimePr
 
 const PYTHON_WORKER_AUTOSTART_PLATFORMS = new Set<PlatformName>(['darwin', 'win32'])
 
+const AI_RUNTIME_APP_DATA_ROOT_ADAPTERS: AiRuntimeAppDataRootAdapter[] = [
+  {
+    platform: 'win32',
+    pathParts: ['AppData', 'Local', 'design-asset-manager', 'runtime']
+  },
+  {
+    pathParts: ['Library', 'Application Support', 'design-asset-manager', 'runtime']
+  }
+]
+
+function resolveAiRuntimeAppDataRoot(platform: PlatformName, homeDir: string): string {
+  const adapter = AI_RUNTIME_APP_DATA_ROOT_ADAPTERS.find((candidate) => {
+    return !candidate.platform || candidate.platform === platform
+  })!
+  return path.join(homeDir, ...adapter.pathParts)
+}
+
 function createSafeAiRuntimeManager(): AiRuntimeManager {
   const manager = new AiRuntimeManager()
   const currentPlatform = process.platform as PlatformName
   const currentArch = process.arch as PlatformArch
 
-  const isWin = currentPlatform === 'win32'
-  const appDataRoot = isWin
-    ? path.join(os.homedir(), 'AppData', 'Local', 'design-asset-manager', 'runtime')
-    : path.join(os.homedir(), 'Library', 'Application Support', 'design-asset-manager', 'runtime')
+  const appDataRoot = resolveAiRuntimeAppDataRoot(currentPlatform, os.homedir())
 
   manager.registerProvider(new DisabledAiRuntimeProvider({ id: 'disabled-runtime' }))
   for (const descriptor of PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS) {
