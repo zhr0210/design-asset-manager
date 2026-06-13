@@ -74,23 +74,31 @@ content. Do not delete or stage unrelated user files to make that check pass.
 
 ## Current Result
 
-Mac validation on the stabilization commit candidate:
+Mac and Windows stabilization validation now pass on commit `13610a4`.
 
-- Python test suite: 128 tests passed.
-- TypeScript typecheck and production build: passed.
-- Runtime-safety contract suite: passed.
-- Agent-context, documentation-sync, and diff checks: passed.
-- Forbidden-path check: expected warning because the required platform
-  documentation and pre-existing untracked `docs/agents/` files are under the
-  configured `docs/` forbidden prefix.
+- Windows typecheck, production build, runtime-safety contracts, and 129 Python
+  tests passed.
+- The default requirements dry-run selected CPU ONNX only. The explicit
+  Windows CUDA profile selected GPU ONNX only.
+- Real CUDA execution confirmed exact float32 is the default and
+  `DAM_CUDA_TF32=1` is required to enable TF32.
+- WD Tagger ONNX, CLIP ONNX embedding, and Llama GGUF/mmproj text plus
+  generated-image evidence remain valid.
+- OCR remains accurately classified as `runtime_probe_ready`; no real OCR
+  model load plus minimal generated-image inference was available.
+- Electron/Playwright clicked AI Console refresh without `page.reload()`.
+  Screenshot review and DOM checks found no horizontal clipping, overlap, or
+  document/body overflow at `1266x795`.
+- No user asset was read, no new model weight was downloaded, and generated
+  logs/screenshots remain outside the repository.
 
-No renderer behavior changed in this slice, so local UI screenshots are not a
-Mac acceptance requirement. Windows Electron/Playwright evidence remains
-required after the host fast-forwards to the pushed commit.
+Remaining evidence work is optional and bounded: obtain real OCR model
+load/inference evidence before promotion, and perform model-level quality
+comparisons before reconsidering TF32 as a default.
 
 ## Completion Rule
 
-Do not mark the long-running roadmap complete until:
+The stabilization acceptance criteria are complete:
 
 - Mac validation passes.
 - Windows validation passes on the same commit.

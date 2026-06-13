@@ -6,25 +6,48 @@ and Llama CUDA GGUF/mmproj real evidence are closed.
 This file is the GitHub handoff mailbox for Windows-host validation on branch
 `codex/windows-ai-real-evidence`.
 
-## Pending Mac-Side Stabilization Validation
+## Stabilization Validation
 
-The Mac-side follow-up after commit `e4ae1be` changes two policies that require
-a fresh Windows run:
+- Validation time: 2026-06-13 20:30, Windows host local time.
+- Commit tested: `13610a4`.
+- GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available with CUDA 12.8.
+- `npm run typecheck`: passed.
+- `npm run build`: passed with the existing Vite mixed dynamic/static import
+  warnings.
+- Python unittest discovery: passed, 129 tests.
+- `npm run ci:test-runtime-safety`: passed.
+- Full `scripts/windows-ai-real-evidence-validation.ps1`: passed.
+- Default requirements dry-run: selected `onnxruntime` and did not select
+  `onnxruntime-gpu`.
+- Explicit Windows CUDA requirements dry-run: selected `onnxruntime-gpu` and
+  did not select the CPU package.
+- CUDA policy: the default used exact float32 (`highest`, TF32 disabled);
+  `DAM_CUDA_TF32=1` used `high` precision with TF32 enabled. Both fixed
+  synthetic tensor executions returned finite results. Unknown environment
+  values did not enable TF32.
+- WD Tagger ONNX: real session load remained valid through
+  `CPUExecutionProvider`, with 1 input and 1 output.
+- CLIP ONNX: real image/text embedding remained valid through
+  `CPUExecutionProvider`, with a finite 512-dimensional embedding.
+- Llama CUDA: GGUF/mmproj text plus generated-image inference remained valid;
+  `chatOk=true`, `visionOk=true`, and `ai_prompt_task=real_model_path`.
+- OCR: remained `runtime_probe_ready`. No real OCR model load plus minimal
+  generated-image inference was completed, so no promotion was made.
+- Electron/Playwright clicked the AI Console refresh button. It did not use
+  `page.reload()`.
+- Screenshot: `dam-windows-ai-console.png`, generated outside the repository
+  and not staged.
+- Screenshot review: refresh-success feedback was visible; cards, controls,
+  model names, and status text showed no horizontal clipping or overlap.
+- Overflow check: `doc=false`, `body=false`, viewport `1266x795`.
+- Privacy: only generated imagery and existing registered model evidence were
+  used. No user asset was read and no new model weight was downloaded.
+- Remaining evidence gaps: OCR real-model inference is still open. TF32
+  model-level quality comparison is also open, so TF32 remains opt-in.
 
-- TF32 is no longer the default. Exact float32 remains the default, and
-  `DAM_CUDA_TF32=1` explicitly enables the measured optimization.
-- `ai-service/requirements.txt` is CPU-safe on every platform.
-  `ai-service/requirements-windows-cuda.txt` is the explicit NVIDIA Windows
-  dependency profile.
-
-The previous synthetic TF32 timing remains useful performance evidence, but it
-is not model-level quality evidence and does not justify a global default. The
-previous OS-only Windows ONNX dependency selection is superseded by the
-explicit capability profile.
-
-The next Windows report must validate both dependency profiles, exact/default
-and TF32 opt-in execution, existing WD Tagger/CLIP/Llama evidence, OCR status,
-and Electron/Playwright overflow on the same commit.
+The sanitized full-run log filename is
+`dam-windows-ai-validation-20260613-203039.log`. The log and screenshot remain
+outside the repository.
 
 ## Latest Reported Result
 
