@@ -144,7 +144,10 @@ paths or model cache paths.
    `PLATFORM_PROFILE_RULES` for the existing win32/darwin/linux profile mapping
    while preserving the real OS capability booleans. Doctor display projection
    now uses `DOCTOR_PLATFORM_LABELS` for the existing macOS label while keeping
-   raw platform fallback for Windows and other platforms.
+   raw platform fallback for Windows and other platforms. Platform AI default
+   branch fallback now uses `DEFAULT_PLATFORM_AI_BRANCH` across shared
+   projectors and renderer initial state, preserving the existing macOS default
+   without duplicating default policy at each call site.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

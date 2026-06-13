@@ -75,6 +75,7 @@ import {
 } from '../../shared/workflows/model-artifact-readiness.workflow'
 import { type AiQueueStatsLike, projectAiQueueStatusDisplay } from '../../shared/workflows/ai-queue-status.workflow'
 import {
+  DEFAULT_PLATFORM_AI_BRANCH,
   type AiRuntimeCompatibilityDisplay,
   projectClipSiglipOnnxCompatibilityDisplay,
   projectLlamaRuntimeDisplay,
@@ -647,10 +648,10 @@ export default function AiConsolePage() {
   const [platformProbeDisplay, setPlatformProbeDisplay] = useState<PlatformAiWorkerProbeDiagnosticsDisplay>(
     () => projectPlatformAiWorkerProbeDiagnosticsSelection({}).display
   )
-  const [platformWorkerProbeBranch, setPlatformWorkerProbeBranch] = useState<PlatformAiBranch>('macos')
+  const [platformWorkerProbeBranch, setPlatformWorkerProbeBranch] = useState<PlatformAiBranch>(DEFAULT_PLATFORM_AI_BRANCH)
   const [platformBranchStatus, setPlatformBranchStatus] = useState<PlatformAiBranchStatusResponse | null>(null)
   const [platformPythonCompatibilityDisplay, setPlatformPythonCompatibilityDisplay] = useState<AiRuntimeCompatibilityDisplay>(
-    () => projectPlatformPythonRuntimeCompatibilityDisplay('macos', null)
+    () => projectPlatformPythonRuntimeCompatibilityDisplay(DEFAULT_PLATFORM_AI_BRANCH, null)
   )
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [loading, setLoading] = useState<Record<string, boolean>>({})

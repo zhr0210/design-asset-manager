@@ -21,6 +21,7 @@ import type {
   AiRuntimeStateResponse
 } from '../../../shared/contracts/ai-runtime.contract'
 import {
+  DEFAULT_PLATFORM_AI_BRANCH,
   projectAiRuntimeHealthResultDisplay,
   projectAiRuntimeStatusDisplay,
   projectAiRuntimeSummaryDisplay,
@@ -92,12 +93,12 @@ export default function AiRuntimePanel() {
   const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
   const [platformWorkerProbeError, setPlatformWorkerProbeError] = useState<string | null>(null)
   const [platformPythonCompatibilityDisplay, setPlatformPythonCompatibilityDisplay] = useState<AiRuntimeCompatibilityDisplay>(
-    () => projectPlatformPythonRuntimeCompatibilityDisplay('macos', null)
+    () => projectPlatformPythonRuntimeCompatibilityDisplay(DEFAULT_PLATFORM_AI_BRANCH, null)
   )
   const [platformPythonStatusChecked, setPlatformPythonStatusChecked] = useState(false)
   const [platformPythonStatusError, setPlatformPythonStatusError] = useState<string | null>(null)
   const [platformPythonExecutionDisplay, setPlatformPythonExecutionDisplay] = useState<AiRuntimeModelLoadProbeDisplay>(
-    () => projectPlatformPythonRuntimeExecutionProbeDisplay('macos', null)
+    () => projectPlatformPythonRuntimeExecutionProbeDisplay(DEFAULT_PLATFORM_AI_BRANCH, null)
   )
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [clipSiglipOnnxStatusError, setClipSiglipOnnxStatusError] = useState<string | null>(null)

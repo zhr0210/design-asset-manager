@@ -110,6 +110,14 @@ platform fallback. It did not alter renderer layout, runtime probing, IPC
 channels, shared response fields, database schema, or AI Worker HTTP API shapes;
 no new Windows runtime evidence is claimed for it.
 
+A later 2026-06-13 shared default-policy refactor moved the Platform AI default
+branch fallback to `DEFAULT_PLATFORM_AI_BRANCH`, preserving the existing macOS
+fallback for branch resolution, Worker diagnostics selection, capability-matrix
+defaults, AI Runtime settings initial state, and AI Console initial state. It
+did not alter renderer layout, runtime probing, IPC channels, shared response
+fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
+evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

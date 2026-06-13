@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Platform AI default-branch policy to a shared workflow
+  constant. `DEFAULT_PLATFORM_AI_BRANCH` now owns the existing macOS fallback
+  used by branch-marker resolution, Worker diagnostics selection,
+  capability-matrix defaults, AI Runtime settings initial state, and AI Console
+  initial state. The default value, runtime request selection after real branch
+  evidence, IPC channels, database schema, AI Worker HTTP API, shared response
+  fields, runtime behavior, and renderer layout are unchanged. Focused source
+  contracts preserve the constant, verify the previous macOS fallback behavior,
+  and ensure renderer entry points consume the shared default instead of
+  hand-writing it. UI validation and the full Windows real-evidence script were
+  not run because this is a shared default-policy refactor with no product
+  layout or runtime probing behavior change. Next smallest slice: continue the
+  completion audit and keep remaining platform checks only where they represent
+  real OS/runtime/path/process adapters.
 - 2026-06-13 Moved Doctor platform label projection to shared metadata.
   `DOCTOR_PLATFORM_LABELS` now owns the existing `darwin -> macOS` display
   mapping while other platform names keep the previous raw-label fallback and

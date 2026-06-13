@@ -23,6 +23,8 @@ import type { PlatformAiBranch } from '../types/platform-ai-branch-status.types'
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
 export type AiRuntimeStatusIcon = 'success' | 'warning' | 'activity'
 
+export const DEFAULT_PLATFORM_AI_BRANCH: PlatformAiBranch = 'macos'
+
 export interface AiRuntimeCompatibilityDisplay {
   label: string
   tone: AiRuntimeDisplayTone
@@ -786,8 +788,8 @@ export function resolvePlatformAiBranch(
   branch?: PlatformAiBranchRuntimeMetadata | null
 ): PlatformAiBranch {
   return branch?.marker
-    ? PLATFORM_AI_BRANCH_BY_MARKER[branch.marker as PlatformAiBranchRuntimeMarker] ?? 'macos'
-    : 'macos'
+    ? PLATFORM_AI_BRANCH_BY_MARKER[branch.marker as PlatformAiBranchRuntimeMarker] ?? DEFAULT_PLATFORM_AI_BRANCH
+    : DEFAULT_PLATFORM_AI_BRANCH
 }
 
 export function projectAiRuntimeBranchPanelDisplay(
@@ -829,7 +831,7 @@ function resolvePlatformAiWorkerProbeDiagnosticsBranch(
   input: PlatformAiWorkerProbeDiagnosticsSelectionInput
 ): PlatformAiBranch {
   if (input.platformBranch) return input.platformBranch
-  return input.windowsProbe && !input.macOSProbe ? 'windows' : 'macos'
+  return input.windowsProbe && !input.macOSProbe ? 'windows' : DEFAULT_PLATFORM_AI_BRANCH
 }
 
 export function projectPlatformAiWorkerProbeDiagnosticsSelection(
@@ -880,7 +882,7 @@ function projectAiRuntimeWorkerProbePanelFromHeader(
 }
 
 export function projectAiRuntimeCapabilityMatrixDisplay(
-  platformBranch: PlatformAiBranch = 'macos'
+  platformBranch: PlatformAiBranch = DEFAULT_PLATFORM_AI_BRANCH
 ): AiRuntimeCapabilityMatrixDisplay {
   return {
     title: PLATFORM_AI_SURFACE_COPY[platformBranch].capabilityMatrixTitle,
