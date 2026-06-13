@@ -2,27 +2,19 @@ import type {
   MacOSAiBranchRuntimeMetadata,
   MacOSAiRuntimeLane
 } from '../types/macos-ai-runtime.types'
-import type { AiCapabilityStatus } from '../types/platform-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
 import {
   createAiRuntimeCapability as capability,
-  currentPlatformEvidenceStatus,
   currentPlatformFallbackStatus,
+  currentPlatformLaneStatus,
   isPlatformName
 } from './platform-ai-runtime-metadata.constants'
 
-function platformLaneStatus(platform: PlatformName, arch: PlatformArch, preferred: 'apple-silicon' | 'macos'): AiCapabilityStatus {
-  const isCurrentPlatform = isPlatformName(platform, 'darwin')
-  if (!isCurrentPlatform) return 'unavailable'
-  if (preferred === 'apple-silicon' && arch !== 'arm64') return 'fallback'
-  return currentPlatformEvidenceStatus(isCurrentPlatform)
-}
-
 export function createMacOSAiBranchRuntimeMetadata(platform: PlatformName, arch: PlatformArch): MacOSAiBranchRuntimeMetadata {
   const isCurrentPlatform = isPlatformName(platform, 'darwin')
-  const mpsStatus = platformLaneStatus(platform, arch, 'apple-silicon')
-  const onnxStatus = platformLaneStatus(platform, arch, 'macos')
-  const llamaStatus = platformLaneStatus(platform, arch, 'macos')
+  const mpsStatus = currentPlatformLaneStatus({ isCurrentPlatform, arch, requiredArch: 'arm64' })
+  const onnxStatus = currentPlatformLaneStatus({ isCurrentPlatform })
+  const llamaStatus = currentPlatformLaneStatus({ isCurrentPlatform })
   const platformFallbackStatus = currentPlatformFallbackStatus(isCurrentPlatform)
 
   const lanes: MacOSAiRuntimeLane[] = [

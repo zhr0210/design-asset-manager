@@ -2,24 +2,19 @@ import type {
   WindowsAiBranchRuntimeMetadata,
   WindowsAiRuntimeLane
 } from '../types/windows-ai-runtime.types'
-import type { AiCapabilityStatus } from '../types/platform-ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
 import {
   createAiRuntimeCapability as capability,
-  currentPlatformEvidenceStatus,
   currentPlatformFallbackStatus,
+  currentPlatformLaneStatus,
   isPlatformName
 } from './platform-ai-runtime-metadata.constants'
 
-function platformLaneStatus(platform: PlatformName): AiCapabilityStatus {
-  return currentPlatformEvidenceStatus(isPlatformName(platform, 'win32'))
-}
-
 export function createWindowsAiBranchRuntimeMetadata(platform: PlatformName, arch: PlatformArch): WindowsAiBranchRuntimeMetadata {
   const isCurrentPlatform = isPlatformName(platform, 'win32')
-  const cudaStatus = platformLaneStatus(platform)
-  const onnxStatus = platformLaneStatus(platform)
-  const llamaStatus = platformLaneStatus(platform)
+  const cudaStatus = currentPlatformLaneStatus({ isCurrentPlatform })
+  const onnxStatus = currentPlatformLaneStatus({ isCurrentPlatform })
+  const llamaStatus = currentPlatformLaneStatus({ isCurrentPlatform })
   const platformFallbackStatus = currentPlatformFallbackStatus(isCurrentPlatform)
 
   const lanes: WindowsAiRuntimeLane[] = [

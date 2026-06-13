@@ -191,7 +191,11 @@ paths or model cache paths.
    Shared Platform AI runtime metadata helper functions now also live in
    `platform-ai-runtime-metadata.constants.ts`, preserving the concrete
    macOS/Windows lane topology while removing duplicate capability-builder and
-   fallback-status policy from the concrete runtime constant files.
+   fallback-status policy from the concrete runtime constant files. Shared
+   `currentPlatformLaneStatus()` now also owns the common unavailable,
+   required-arch fallback, and evidence-insufficient lane-status policy while
+   the concrete macOS/Windows constants retain genuine lane membership,
+   ordering, labels, backend names, warnings, and topology.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

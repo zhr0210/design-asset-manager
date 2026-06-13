@@ -225,6 +225,16 @@ fields, database schema, AI Worker HTTP API shapes, dependency installation,
 download behavior, or process startup; no new Windows runtime evidence is
 claimed for it.
 
+A later 2026-06-13 shared constants refactor moved common Platform AI runtime
+lane-status policy into `currentPlatformLaneStatus()`, preserving the existing
+non-current-platform `unavailable`, required-architecture `fallback`, and
+current-platform `evidence_insufficient` outcomes. Concrete macOS/Windows
+runtime constants still own lane IDs, lane membership, labels, backend names,
+warnings, and platform topology. It did not alter product code, renderer
+output, runtime probing, IPC channels, shared response fields, database schema,
+AI Worker HTTP API shapes, dependency installation, download behavior, or
+process startup; no new Windows runtime evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

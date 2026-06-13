@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Platform AI runtime lane-status policy into shared
+  metadata helpers. `currentPlatformLaneStatus()` now owns the common
+  current-platform, required-arch fallback, and evidence-insufficient
+  status rules used by macOS and Windows runtime metadata, while concrete
+  macOS/Windows constants keep lane IDs, lane membership, labels, backend
+  names, warnings, and platform topology. Metadata outputs, IPC channels,
+  database schema, AI Worker HTTP API, shared response fields, runtime
+  probing, renderer output, installer behavior, download behavior, and
+  process startup behavior are unchanged. Focused source contracts now lock
+  the shared helper and prevent local `platformLaneStatus()` functions from
+  returning to concrete runtime constant files. UI validation and the full
+  Windows real-evidence script were not run because this is a shared-constant
+  metadata refactor with no product layout, runtime probing, dependency
+  install, download, or AI process startup behavior change. Next smallest
+  slice: continue the completion audit for remaining platform constants and
+  main-process adapter lookups before marking the long-running shared-surface
+  goal complete.
 - 2026-06-13 Moved shared Platform AI runtime metadata helpers out of concrete
   macOS/Windows constants. `platform-ai-runtime-metadata.constants.ts` now owns
   the shared capability builder, current-platform matcher, fallback-status
