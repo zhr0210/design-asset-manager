@@ -28,10 +28,21 @@ interface WorkflowDefinition {
   runtimeLanes: RuntimeLaneDefinition[]
 }
 
+interface WorkflowTopologyDefinition {
+  workflow: PlatformAiWorkflow
+  primaryRuntimeLane: PlatformAiRuntimeLaneId
+  runtimeLanes: RuntimeLaneTopology[]
+}
+
 interface RuntimeLaneDefinition {
   lane: PlatformAiRuntimeLaneId
   label: string
   runtimeKinds: readonly AiRuntimeKind[]
+}
+
+interface RuntimeLaneTopology {
+  lane: PlatformAiRuntimeLaneId
+  label?: string
 }
 
 interface RuntimeLaneMetadata {
@@ -79,15 +90,14 @@ const PLATFORM_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName> = {
   windows: 'win32'
 }
 
-function runtimeLane(
+function resolveRuntimeLane(
   platformBranch: PlatformAiBranch,
-  lane: PlatformAiRuntimeLaneId,
-  label?: string
+  topology: RuntimeLaneTopology
 ): RuntimeLaneDefinition {
-  const metadata = RUNTIME_LANE_METADATA[lane]
+  const metadata = RUNTIME_LANE_METADATA[topology.lane]
   return {
-    lane,
-    label: label ?? metadata.label,
+    lane: topology.lane,
+    label: topology.label ?? metadata.label,
     runtimeKinds: metadata.branchRuntimeKinds?.[platformBranch] ?? metadata.runtimeKinds
   }
 }
@@ -126,39 +136,39 @@ const WORKFLOW_METADATA: Record<PlatformAiWorkflow, {
   }
 }
 
-const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
+const PLATFORM_WORKFLOW_TOPOLOGY: Record<PlatformAiBranch, WorkflowTopologyDefinition[]> = {
   macos: [
     {
       workflow: 'ai_tag_task',
       primaryRuntimeLane: 'python_mps',
       runtimeLanes: [
-        runtimeLane('macos', 'python_mps'),
-        runtimeLane('macos', 'onnx_runtime')
+        { lane: 'python_mps' },
+        { lane: 'onnx_runtime' }
       ]
     },
     {
       workflow: 'ai_prompt_task',
       primaryRuntimeLane: 'llama_metal',
       runtimeLanes: [
-        runtimeLane('macos', 'llama_metal'),
-        runtimeLane('macos', 'external_http'),
-        runtimeLane('macos', 'python_mps')
+        { lane: 'llama_metal' },
+        { lane: 'external_http' },
+        { lane: 'python_mps' }
       ]
     },
     {
       workflow: 'ocr_text_box',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
-        runtimeLane('macos', 'onnx_runtime'),
-        runtimeLane('macos', 'python_mps')
+        { lane: 'onnx_runtime' },
+        { lane: 'python_mps' }
       ]
     },
     {
       workflow: 'search_embedding',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
-        runtimeLane('macos', 'onnx_runtime', 'CLIP/SigLIP ONNX'),
-        runtimeLane('macos', 'python_mps', 'CLIP/SigLIP PyTorch')
+        { lane: 'onnx_runtime', label: 'CLIP/SigLIP ONNX' },
+        { lane: 'python_mps', label: 'CLIP/SigLIP PyTorch' }
       ]
     }
   ],
@@ -167,34 +177,34 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
       workflow: 'ai_tag_task',
       primaryRuntimeLane: 'python_cuda',
       runtimeLanes: [
-        runtimeLane('windows', 'python_cuda'),
-        runtimeLane('windows', 'onnx_runtime')
+        { lane: 'python_cuda' },
+        { lane: 'onnx_runtime' }
       ]
     },
     {
       workflow: 'ai_prompt_task',
       primaryRuntimeLane: 'llama_cuda',
       runtimeLanes: [
-        runtimeLane('windows', 'llama_cuda'),
-        runtimeLane('windows', 'ollama'),
-        runtimeLane('windows', 'external_http'),
-        runtimeLane('windows', 'python_cuda')
+        { lane: 'llama_cuda' },
+        { lane: 'ollama' },
+        { lane: 'external_http' },
+        { lane: 'python_cuda' }
       ]
     },
     {
       workflow: 'ocr_text_box',
       primaryRuntimeLane: 'onnx_runtime',
       runtimeLanes: [
-        runtimeLane('windows', 'onnx_runtime'),
-        runtimeLane('windows', 'python_cuda')
+        { lane: 'onnx_runtime' },
+        { lane: 'python_cuda' }
       ]
     },
     {
       workflow: 'search_embedding',
       primaryRuntimeLane: 'python_cuda',
       runtimeLanes: [
-        runtimeLane('windows', 'python_cuda', 'CLIP/SigLIP CUDA'),
-        runtimeLane('windows', 'onnx_runtime', 'CLIP/SigLIP ONNX')
+        { lane: 'python_cuda', label: 'CLIP/SigLIP CUDA' },
+        { lane: 'onnx_runtime', label: 'CLIP/SigLIP ONNX' }
       ]
     }
   ]
@@ -202,8 +212,8 @@ const WORKFLOWS: Record<PlatformAiBranch, WorkflowDefinition[]> = {
 
 export function createPlatformAiBranchStatus(input: PlatformAiBranchStatusProjectorInput): PlatformAiBranchStatusResponse {
   const platformSupported = isCurrentBranch(input.platformBranch, input.currentPlatform)
-  const workflows = WORKFLOWS[input.platformBranch].map((definition) => projectWorkflow(
-    definition,
+  const workflows = PLATFORM_WORKFLOW_TOPOLOGY[input.platformBranch].map((definition) => projectWorkflow(
+    resolveWorkflowDefinition(input.platformBranch, definition),
     input.platformBranch,
     input.runtimes,
     platformSupported,
@@ -214,6 +224,17 @@ export function createPlatformAiBranchStatus(input: PlatformAiBranchStatusProjec
     platformBranch: input.platformBranch,
     generatedAt: input.generatedAt ?? new Date().toISOString(),
     workflows
+  }
+}
+
+function resolveWorkflowDefinition(
+  platformBranch: PlatformAiBranch,
+  definition: WorkflowTopologyDefinition
+): WorkflowDefinition {
+  return {
+    workflow: definition.workflow,
+    primaryRuntimeLane: definition.primaryRuntimeLane,
+    runtimeLanes: definition.runtimeLanes.map((lane) => resolveRuntimeLane(platformBranch, lane))
   }
 }
 

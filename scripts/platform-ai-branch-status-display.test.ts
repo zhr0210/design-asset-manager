@@ -239,11 +239,16 @@ assert.match(
 )
 assert.doesNotMatch(
   branchProjectorSource.slice(
-    branchProjectorSource.indexOf('const WORKFLOWS:'),
+    branchProjectorSource.indexOf('const PLATFORM_WORKFLOW_TOPOLOGY:'),
     branchProjectorSource.indexOf('export function createPlatformAiBranchStatus')
   ),
   /\btitle:|\bsummary:|\bruntimeKinds:/
 )
+assert.match(
+  branchProjectorSource,
+  /definition\.runtimeLanes\.map\(\(lane\) => resolveRuntimeLane\(platformBranch, lane\)\)/
+)
+assert.doesNotMatch(branchProjectorSource, /runtimeLane\('macos'|runtimeLane\('windows'/)
 assert.match(
   branchWorkflowSource,
   /const PLATFORM_BRANCH_DISPLAY_COPY: Record<PlatformAiBranch, PlatformAiBranchDisplayCopy>/

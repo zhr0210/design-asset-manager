@@ -132,6 +132,11 @@ const projectorSource = await fs.readFile(
 assert.match(projectorSource, /const PLATFORM_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName>/)
 assert.match(projectorSource, /macos: 'darwin'[\s\S]*windows: 'win32'/)
 assert.match(projectorSource, /currentPlatform === PLATFORM_BRANCH_PLATFORMS\[platformBranch\]/)
+assert.match(projectorSource, /const PLATFORM_WORKFLOW_TOPOLOGY: Record<PlatformAiBranch, WorkflowTopologyDefinition\[\]>/)
+assert.match(projectorSource, /function resolveWorkflowDefinition/)
+assert.match(projectorSource, /function resolveRuntimeLane/)
+assert.match(projectorSource, /definition\.runtimeLanes\.map\(\(lane\) => resolveRuntimeLane\(platformBranch, lane\)\)/)
+assert.doesNotMatch(projectorSource, /runtimeLane\('macos'|runtimeLane\('windows'/)
 assert.doesNotMatch(projectorSource, /platformBranch === 'macos'/)
 
 for (const response of [macos, windows, windowsOnMac]) {

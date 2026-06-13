@@ -125,6 +125,13 @@ did not alter renderer output, runtime probing, IPC channels, shared response
 fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
 evidence is claimed for it.
 
+A later 2026-06-13 main-process projector refactor split Platform AI branch
+workflow topology from shared runtime-lane resolution, preserving the existing
+macOS and Windows workflow order, lane membership, primary lanes, labels, and
+runtime-kind matching. It did not alter renderer output, runtime probing, IPC
+channels, shared response fields, database schema, or AI Worker HTTP API
+shapes; no new Windows runtime evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

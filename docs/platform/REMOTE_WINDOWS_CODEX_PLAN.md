@@ -151,6 +151,10 @@ paths or model cache paths.
    runtime provider profile selection now also lives in descriptor
    `profileRules`, preserving the existing macOS Apple Silicon, macOS Intel,
    and Windows CUDA profile outputs without per-branch resolver functions.
+   Platform AI branch workflow topology now also stays separate from
+   `resolveWorkflowDefinition()` / `resolveRuntimeLane()`, so platform tables
+   keep genuine lane membership and primary-lane differences while shared
+   runtime-kind and default-label resolution happens once.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

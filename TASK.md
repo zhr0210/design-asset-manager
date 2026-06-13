@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Split Platform AI branch workflow topology from shared runtime-lane
+  resolution. `PLATFORM_WORKFLOW_TOPOLOGY` now keeps the genuine macOS/Windows
+  lane membership, primary-lane, and CLIP label differences, while
+  `resolveWorkflowDefinition()` and `resolveRuntimeLane()` apply branch-specific
+  runtime-kind overrides and default lane labels through one shared resolver.
+  Workflow order, lane membership, primary lanes, labels, runtime-kind matching,
+  IPC channels, database schema, AI Worker HTTP API, shared response fields,
+  runtime behavior, and renderer output are unchanged. Focused branch-status
+  projector/display tests preserve the existing macOS and Windows lane output
+  and prevent per-lane `runtimeLane('macos'...)` / `runtimeLane('windows'...)`
+  resolver calls from returning. UI validation and the full Windows
+  real-evidence script were not run because this is a main-process topology
+  resolver refactor with no product layout or runtime probing behavior change.
+  Next smallest slice: continue the completion audit and only refactor remaining
+  branch checks when they reduce duplicated policy without hiding real
+  OS/runtime/path/process adapter constraints.
 - 2026-06-13 Moved Platform AI branch provider profile selection into
   descriptor rules. `PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS` now owns
   the existing macOS Apple Silicon, macOS Intel, and Windows CUDA profile
