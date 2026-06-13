@@ -41,7 +41,10 @@ def is_strict_real_ai() -> bool:
 
 
 def is_mock_inference_allowed() -> bool:
-    return os.environ.get("DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI") == "1" or not is_strict_real_ai()
+    return (
+        not is_strict_real_ai()
+        and os.environ.get("DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI") == "1"
+    )
 
 
 def guard_mock_inference(model_name: str, reason: str) -> None:

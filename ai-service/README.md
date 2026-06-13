@@ -17,6 +17,9 @@ Local Python FastAPI worker for AI tagging, prompt reverse, visual analysis, rou
 - Do not read or modify `models_cache/` by default.
 - Do not change API response shapes without updating Electron callers.
 - Runtime execution probes must use fixed synthetic inputs, return path-free evidence, and must not claim that a model route passed.
+- Simulated inference is disabled by default. Tests or explicit development
+  harnesses must set `DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI=1`; this flag never
+  overrides strict product mode.
 - CUDA inference defaults to exact float32 matmul precision. Set
   `DAM_CUDA_TF32=1` only after model-level quality validation. Variable-shape
   cuDNN autotuning remains off unless `DAM_CUDNN_BENCHMARK=1` is explicitly set.
@@ -46,6 +49,7 @@ The ONNX CUDA probe must run in an explicit environment where
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.4 | 2026-06-14 | Made simulated inference explicit opt-in for tests/development and prevented the opt-in flag from overriding strict product mode. |
 | v1.2.3 | 2026-06-14 | Made evidence probe failures structured and path-free; non-finite CLIP comparison output can no longer report success. |
 | v1.2.2 | 2026-06-13 | Added path-free CLIP TF32 quality and explicit ONNX CUDA model evidence probes using generated inputs and registered local artifacts. |
 | v1.2.1 | 2026-06-13 | Made TF32 and the Windows CUDA ONNX dependency profile explicit opt-ins; the default install remains exact and CPU-safe. |

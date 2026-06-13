@@ -39,13 +39,19 @@ shape, or existing real-AI IPC channel semantics.
 
 ## Later Slices
 
-1. Route or hide pure mock prompt-reverse and deep-analysis Worker endpoints.
-2. Make remaining model-wrapper mock fallbacks fail closed in product mode
-   while retaining explicit test fixtures.
-3. Implement Platform AI Action Plan as user-initiated routing to existing
+1. Implement Platform AI Action Plan as user-initiated routing to existing
    Models, Runtime, Services, and refresh operations.
-4. Close OCR real-model evidence on Windows only when approved artifacts and a
+2. Close OCR real-model evidence on Windows only when approved artifacts and a
    generated-image inference are available.
+
+## Product Fail-Closed Policy
+
+- Product Electron routes no longer expose the stale prompt/analysis Worker
+  queue operations.
+- Model-wrapper mock fallbacks are disabled by default.
+- Tests and explicit development harnesses must opt in with
+  `DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI=1`.
+- The mock opt-in flag never overrides strict product mode.
 
 ## Remote Evidence Audit
 

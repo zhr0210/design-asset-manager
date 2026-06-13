@@ -6,7 +6,11 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from core.mock_policy import is_strict_real_ai, MockInferenceBlockedError
+from core.mock_policy import (
+    is_mock_inference_allowed,
+    is_strict_real_ai,
+    MockInferenceBlockedError,
+)
 from models.ram_tagger import RAMTaggerModel
 from models.florence2_tagger import Florence2TaggerModel
 from models.clip_design_classifier import CLIPDesignClassifier
@@ -17,12 +21,17 @@ from services.tag_localization_service import TagLocalizationService
 class TestStrictRealAiFallbacks(unittest.TestCase):
     def setUp(self):
         self._orig_env = os.environ.get("DESIGN_ASSET_MANAGER_STRICT_REAL_AI")
+        self._orig_allow_mock = os.environ.get("DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI")
 
     def tearDown(self):
         if self._orig_env is None:
             os.environ.pop("DESIGN_ASSET_MANAGER_STRICT_REAL_AI", None)
         else:
             os.environ["DESIGN_ASSET_MANAGER_STRICT_REAL_AI"] = self._orig_env
+        if self._orig_allow_mock is None:
+            os.environ.pop("DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI", None)
+        else:
+            os.environ["DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI"] = self._orig_allow_mock
 
     def test_strict_real_ai_policy_resolution(self):
         os.environ["DESIGN_ASSET_MANAGER_STRICT_REAL_AI"] = "1"
@@ -33,6 +42,17 @@ class TestStrictRealAiFallbacks(unittest.TestCase):
 
         os.environ.pop("DESIGN_ASSET_MANAGER_STRICT_REAL_AI", None)
         self.assertFalse(is_strict_real_ai())
+
+    def test_mock_requires_explicit_opt_in_and_never_overrides_strict_mode(self):
+        os.environ.pop("DESIGN_ASSET_MANAGER_STRICT_REAL_AI", None)
+        os.environ.pop("DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI", None)
+        self.assertFalse(is_mock_inference_allowed())
+
+        os.environ["DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI"] = "1"
+        self.assertTrue(is_mock_inference_allowed())
+
+        os.environ["DESIGN_ASSET_MANAGER_STRICT_REAL_AI"] = "1"
+        self.assertFalse(is_mock_inference_allowed())
 
     @patch("core.cooperative_model_registry.find_downloaded_model", return_value=None)
     def test_ram_mock_blocking_in_strict_mode(self, mock_find):
