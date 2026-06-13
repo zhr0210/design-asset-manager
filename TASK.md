@@ -22,15 +22,17 @@ runtime, native dependency, path, or process differences.
 
 ## Current Slice
 
-Remove the product mock-tag generation surface:
+Remove stale Electron product routes that bypass the real prompt-reverse
+provider:
 
-1. Removed `mock-ai:generate-suggestions` registration from production IPC.
-2. Removed the production preload method and shared channel constant.
-3. Kept mock implementations only in test-owned locations where still needed.
-4. Preserved the real Asset Tagging Workflow, Queue Sync, tag confirmation, and
-   existing public real-AI contracts.
-5. Added focused source and contract tests proving packaged product code cannot
-   register or invoke mock tag generation.
+1. The unused `ai:prompt-generate` Electron IPC route is removed.
+2. The unrendered `generateDeepAnalysis` path and `ai:analysis-generate`
+   Electron IPC route are removed.
+3. The AI Worker HTTP endpoints remain unchanged for compatibility.
+4. Prompt reverse continues through `AiWorkerManager`, native Qwen3-VL, or the
+   configured Llama/OpenAI-compatible backend.
+5. Historical prompt and analysis task polling remains available for existing
+   database rows.
 
 Do not change database schema, AI Worker HTTP APIs, Platform AI Branch Status
 shape, or existing real-AI IPC channel semantics.

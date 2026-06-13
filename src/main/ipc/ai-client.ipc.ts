@@ -1,21 +1,15 @@
 import { ipcMain } from 'electron'
 import { AiClientService } from '../services/ai-client.service'
 import {
-  CHANNEL_AI_ANALYSIS_GENERATE,
   CHANNEL_AI_ENQUEUE_TAG,
   CHANNEL_AI_MODEL_STATUS,
   CHANNEL_AI_MODEL_UNLOAD,
   CHANNEL_AI_PROCESS_BATCH,
-  CHANNEL_AI_PROMPT_GENERATE,
   CHANNEL_AI_ROUTING_PREVIEW,
-  type AnalysisGenerateRequest,
-  type AnalysisGenerateResponse,
   type EnqueueTagRequest,
   type EnqueueTagResponse,
   type ModelStatusResponse,
   type ProcessBatchResponse,
-  type PromptGenerateRequest,
-  type PromptGenerateResponse,
   type RoutingPreviewRequest,
   type RoutingPreviewResponse,
   type UnloadModelResponse
@@ -81,24 +75,6 @@ export function registerAiClientIpc() {
       return await service.unloadModels()
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_MODEL_UNLOAD} error:`, err)
-      return { success: false, error: String(err) }
-    }
-  })
-
-  ipcMain.handle(CHANNEL_AI_PROMPT_GENERATE, async (_, request: PromptGenerateRequest): Promise<PromptGenerateResponse> => {
-    try {
-      return await service.generatePrompt(request.assetId, request.filePath)
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_PROMPT_GENERATE} error:`, err)
-      return { success: false, error: String(err) }
-    }
-  })
-
-  ipcMain.handle(CHANNEL_AI_ANALYSIS_GENERATE, async (_, request: AnalysisGenerateRequest): Promise<AnalysisGenerateResponse> => {
-    try {
-      return await service.generateAnalysis(request.assetId, request.filePath)
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_ANALYSIS_GENERATE} error:`, err)
       return { success: false, error: String(err) }
     }
   })

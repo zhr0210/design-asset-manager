@@ -8,8 +8,6 @@ export const CHANNEL_AI_ENQUEUE_TAG = 'ai:enqueue-tag'
 export const CHANNEL_AI_PROCESS_BATCH = 'ai:process-batch'
 export const CHANNEL_AI_MODEL_STATUS = 'ai:model-status'
 export const CHANNEL_AI_MODEL_UNLOAD = 'ai:model-unload'
-export const CHANNEL_AI_PROMPT_GENERATE = 'ai:prompt-generate'
-export const CHANNEL_AI_ANALYSIS_GENERATE = 'ai:analysis-generate'
 export const CHANNEL_AI_ROUTING_PREVIEW = 'ai:routing-preview'
 
 export const EVENT_AI_TASK_SYNCED = 'ai:task-synced'
@@ -70,32 +68,6 @@ export interface UnloadModelResponse {
   success: boolean
   message?: string
   unloaded_models?: string[]
-  error?: string
-}
-
-export interface PromptGenerateRequest {
-  assetId: string
-  filePath: string
-}
-
-export interface PromptGenerateResponse {
-  success: boolean
-  message?: string
-  task_id?: string
-  status?: string
-  error?: string
-}
-
-export interface AnalysisGenerateRequest {
-  assetId: string
-  filePath: string
-}
-
-export interface AnalysisGenerateResponse {
-  success: boolean
-  message?: string
-  task_id?: string
-  status?: string
   error?: string
 }
 

@@ -46,8 +46,7 @@ export default function Library() {
     assetRelations,
     updateAssetCaption,
     resetAssetCaptionEdited,
-    generateAiSuggestions,
-    generateDeepAnalysis
+    generateAiSuggestions
   } = useAssetStore()
 
   // Collapsible filters drawer state
@@ -238,7 +237,6 @@ export default function Library() {
             updateAssetCaption={updateAssetCaption}
             resetAssetCaptionEdited={resetAssetCaptionEdited}
             generateAiSuggestions={generateAiSuggestions}
-            generateDeepAnalysis={generateDeepAnalysis}
             confirmAiTag={confirmAiTag}
             rejectAiTag={rejectAiTag}
             deleteAsset={deleteAsset}

@@ -29,11 +29,9 @@ import type {
 } from '../../shared/contracts/ai-runtime.contract'
 import {
   EVENT_AI_TASK_SYNCED,
-  type AnalysisGenerateResponse,
   type EnqueueTagResponse,
   type ModelStatusResponse,
   type ProcessBatchResponse,
-  type PromptGenerateResponse,
   type RoutingPreviewResponse,
   type UnloadModelResponse
 } from '../../shared/contracts/ai-client.contract'
@@ -484,76 +482,6 @@ export class AiClientService {
     }
   }
 
-
-  /**
-   * Triggers manual prompt reversal.
-   */
-  public async generatePrompt(assetId: string, filePath: string): Promise<PromptGenerateResponse> {
-    const db = this.getDb()
-    const now = new Date().toISOString()
-
-    try {
-      const res = await fetch(`${this.pythonUrl}/ai/prompt/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ asset_id: assetId, file_path: filePath })
-      })
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-
-      if (data.success) {
-        // Log in ai_prompt_tasks
-        db.prepare(`
-          INSERT OR REPLACE INTO ai_prompt_tasks (id, asset_id, file_path, status, model_name, created_at, sync_status)
-          VALUES (?, ?, ?, 'queued', 'Qwen3-VL', ?, 'pending')
-        `).run(data.task_id, assetId, filePath, now)
-
-        db.prepare("UPDATE assets SET ai_prompt_status = ? WHERE id = ?").run('queued', assetId)
-        
-        this.notifyRenderer(assetId)
-      }
-      return data
-    } catch (err) {
-      console.error('[AIClient] Generate prompt failed:', err)
-      return { success: false, error: String(err) }
-    }
-  }
-
-  /**
-   * Triggers manual deep design sweep.
-   */
-  public async generateAnalysis(assetId: string, filePath: string): Promise<AnalysisGenerateResponse> {
-    const db = this.getDb()
-    const now = new Date().toISOString()
-
-    try {
-      const res = await fetch(`${this.pythonUrl}/ai/analysis/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ asset_id: assetId, file_path: filePath })
-      })
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-
-      if (data.success) {
-        // Log in ai_analysis_tasks
-        db.prepare(`
-          INSERT OR REPLACE INTO ai_analysis_tasks (id, asset_id, file_path, status, model_name, created_at, sync_status)
-          VALUES (?, ?, ?, 'queued', 'Qwen2.5-VL', ?, 'pending')
-        `).run(data.task_id, assetId, filePath, now)
-
-        db.prepare("UPDATE assets SET ai_analysis_status = ? WHERE id = ?").run('queued', assetId)
-        
-        this.notifyRenderer(assetId)
-      }
-      return data
-    } catch (err) {
-      console.error('[AIClient] Generate analysis failed:', err)
-      return { success: false, error: String(err) }
-    }
-  }
 
   /**
    * Periodically queries Python status and synchronizes completed batch tag, prompt, and analysis jobs.

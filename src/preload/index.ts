@@ -62,18 +62,14 @@ import {
   type AiRuntimeOnnxModelLoadProbeRequest
 } from '../shared/contracts/ai-runtime.contract'
 import {
-  CHANNEL_AI_ANALYSIS_GENERATE,
   CHANNEL_AI_ENQUEUE_TAG,
   CHANNEL_AI_MODEL_STATUS,
   CHANNEL_AI_MODEL_UNLOAD,
   CHANNEL_AI_PROCESS_BATCH,
-  CHANNEL_AI_PROMPT_GENERATE,
   CHANNEL_AI_ROUTING_PREVIEW,
   EVENT_AI_TASK_SYNCED,
   type AiTaskSyncedEvent,
-  type AnalysisGenerateRequest,
   type EnqueueTagRequest,
-  type PromptGenerateRequest,
   type RoutingPreviewRequest
 } from '../shared/contracts/ai-client.contract'
 import type { AiRuntimeConfig } from '../shared/types/ai-runtime.types'
@@ -186,14 +182,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   aiProcessBatch: () => ipcRenderer.invoke(CHANNEL_AI_PROCESS_BATCH),
   aiModelStatus: () => ipcRenderer.invoke(CHANNEL_AI_MODEL_STATUS),
   aiModelUnload: () => ipcRenderer.invoke(CHANNEL_AI_MODEL_UNLOAD),
-  aiPromptGenerate: (assetId: string, filePath: string) => ipcRenderer.invoke(
-    CHANNEL_AI_PROMPT_GENERATE,
-    { assetId, filePath } satisfies PromptGenerateRequest
-  ),
-  aiAnalysisGenerate: (assetId: string, filePath: string) => ipcRenderer.invoke(
-    CHANNEL_AI_ANALYSIS_GENERATE,
-    { assetId, filePath } satisfies AnalysisGenerateRequest
-  ),
   aiRoutingPreview: (filePath: string) => ipcRenderer.invoke(
     CHANNEL_AI_ROUTING_PREVIEW,
     { filePath } satisfies RoutingPreviewRequest

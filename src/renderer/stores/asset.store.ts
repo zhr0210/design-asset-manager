@@ -133,9 +133,6 @@ interface AssetState {
   // Real AI tagging pipeline
   generateAiSuggestions: (assetId: string, modelsToRun?: readonly AssetTaggingModelId[]) => Promise<{ success: boolean; error?: string }>
 
-  // Qwen-VL Senior Deep Analysis
-  generateDeepAnalysis: (assetId: string) => Promise<void>
-
   // Qwen3-VL Advanced Prompt Reverse
   runPromptReverse: (assetId: string, modelId: string, modelPath: string, options?: { promptTemplateId?: string; promptTemplateText?: string }) => Promise<any>
 }
@@ -643,45 +640,6 @@ export const useAssetStore = create<AssetState>((set, get) => ({
       await get().loadAssetTags(assetId)
       await get().loadAssets()
       await get().loadTags()
-    }
-  },
-
-  generateDeepAnalysis: async (assetId: string) => {
-    if (api) {
-      try {
-        const asset = get().assets.find((a: Asset) => a.id === assetId)
-        if (!asset) return
-
-        console.log('[Store] Dispatching generateDeepAnalysis to Qwen-VL analysis worker...')
-        const res = await api.aiAnalysisGenerate(assetId, asset.filePath)
-        
-        if (res && res.success) {
-          // Trigger immediate batch processing
-          await api.aiProcessBatch()
-          
-          // Poll the asset status from SQLite until synced or failed
-          let isComplete = false
-          const startTime = Date.now()
-          while (!isComplete && (Date.now() - startTime < 45000)) {
-            await get().loadAssets()
-            const updatedAsset = get().assets.find((a: Asset) => a.id === assetId)
-            if (updatedAsset) {
-              const status = updatedAsset.aiAnalysisStatus
-              if (isAiTaskTerminalStatus(status)) {
-                isComplete = true
-                break
-              }
-            }
-            await new Promise(resolve => setTimeout(resolve, 500))
-          }
-        }
-      } catch (err) {
-        console.error('[Store] Failed to generate Qwen-VL deep analysis:', err)
-      } finally {
-        await get().loadAssetTags(assetId)
-        await get().loadAssets()
-        await get().loadTags()
-      }
     }
   },
 

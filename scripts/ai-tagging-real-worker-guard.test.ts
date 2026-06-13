@@ -9,7 +9,7 @@ const preloadSource = await fs.readFile('src/preload/index.ts', 'utf8')
 const tagContractSource = await fs.readFile('src/shared/contracts/tag.contract.ts', 'utf8')
 
 const generateStart = storeSource.indexOf('generateAiSuggestions: async')
-const generateEnd = storeSource.indexOf('generateDeepAnalysis:', generateStart)
+const generateEnd = storeSource.indexOf('runPromptReverse: async', generateStart)
 const generateBlock = storeSource.slice(generateStart, generateEnd)
 
 assert.ok(generateStart > 0, 'asset store should expose the tagging trigger')

@@ -39,7 +39,6 @@ type AssetInspectorDrawerProps = {
   updateAssetCaption: (id: string, caption: string) => Promise<void>;
   resetAssetCaptionEdited: (id: string) => Promise<void>;
   generateAiSuggestions: (id: string, engines: readonly AssetTaggingModelId[]) => Promise<{ success: boolean; error?: string }>;
-  generateDeepAnalysis: (id: string) => Promise<void>;
   confirmAiTag: (relId: string, assetId: string) => Promise<void>;
   rejectAiTag: (relId: string, assetId: string) => Promise<void>;
   deleteAsset: (id: string) => Promise<void>;
@@ -57,7 +56,6 @@ export default function AssetInspectorDrawer({
   updateAssetCaption,
   resetAssetCaptionEdited,
   generateAiSuggestions,
-  generateDeepAnalysis,
   confirmAiTag,
   rejectAiTag,
   deleteAsset
