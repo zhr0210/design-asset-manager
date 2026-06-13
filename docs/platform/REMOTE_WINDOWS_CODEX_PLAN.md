@@ -206,7 +206,10 @@ paths or model cache paths.
    sidecar artifact matching now uses
    `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES`, preserving the existing Windows
    CUDA 13 and CUDA 12 cudart release filename matching without an accelerator
-   if-chain in the planner flow.
+   if-chain in the planner flow. Doctor Node/Python command selection now uses
+   `NPM_COMMAND_ADAPTERS` and `PYTHON_LAUNCHER_ADAPTERS`, preserving the
+   existing Windows `npm.cmd` / `py` choices and default `npm` /
+   skipped-`py` behavior without inline Doctor check platform ternaries.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

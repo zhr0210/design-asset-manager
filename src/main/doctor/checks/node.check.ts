@@ -1,6 +1,16 @@
 import { runProcess } from '../../platform/process-runner'
 import type { RegisteredDoctorCheck } from '../doctor.types'
 
+interface NpmCommandAdapter {
+  isWindows?: boolean
+  command: string
+}
+
+const NPM_COMMAND_ADAPTERS: NpmCommandAdapter[] = [
+  { isWindows: true, command: 'npm.cmd' },
+  { command: 'npm' }
+]
+
 async function versionFor(command: string, args: string[], timeoutMs: number) {
   try {
     const result = await runProcess(command, args, { timeoutMs })
@@ -16,6 +26,10 @@ async function versionFor(command: string, args: string[], timeoutMs: number) {
       error: err instanceof Error ? err.message : String(err)
     }
   }
+}
+
+function resolveNpmCommand(isWindows: boolean): string {
+  return NPM_COMMAND_ADAPTERS.find((adapter) => adapter.isWindows === undefined || adapter.isWindows === isWindows)!.command
 }
 
 export const nodeCheck: RegisteredDoctorCheck = {
@@ -41,7 +55,7 @@ export const nodeCheck: RegisteredDoctorCheck = {
             skipped: true,
             reason: 'Packaged Electron app uses bundled Node; npm CLI is not required at runtime.'
           }
-        : await versionFor(context.platformInfo.isWindows ? 'npm.cmd' : 'npm', ['--version'], timeoutMs)
+        : await versionFor(resolveNpmCommand(context.platformInfo.isWindows), ['--version'], timeoutMs)
     const status = node.available && npm.available ? 'ok' : 'warning'
 
     return {

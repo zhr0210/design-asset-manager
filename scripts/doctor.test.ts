@@ -76,6 +76,36 @@ const noPythonContext = { ...context, platformInfo: { ...context.platformInfo, i
 const pythonResult = await pythonCheck.run(noPythonContext)
 assert.equal(pythonResult.status, 'warning')
 
+const nonWindowsPythonCommands: string[] = []
+const nonWindowsPythonCheck = createPythonCheck(async (command) => {
+  nonWindowsPythonCommands.push(command)
+  return { available: false, error: 'not found' }
+})
+await nonWindowsPythonCheck.run(noPythonContext)
+assert.deepEqual(nonWindowsPythonCommands, ['python', 'python3', 'python'])
+
+const windowsPythonCommands: string[] = []
+const windowsPythonCheck = createPythonCheck(async (command) => {
+  windowsPythonCommands.push(command)
+  return { available: command === 'py' }
+})
+const windowsPythonResult = await windowsPythonCheck.run(context)
+assert.equal(windowsPythonResult.status, 'ok')
+assert.deepEqual(windowsPythonCommands, ['python', 'python3', 'py', 'python'])
+
+const nodeCheckSource = await fs.readFile('src/main/doctor/checks/node.check.ts', 'utf8')
+assert.match(nodeCheckSource, /const NPM_COMMAND_ADAPTERS: NpmCommandAdapter\[\]/)
+assert.match(nodeCheckSource, /isWindows: true[\s\S]*command: 'npm\.cmd'/)
+assert.match(nodeCheckSource, /command: 'npm'/)
+assert.match(nodeCheckSource, /function resolveNpmCommand/)
+assert.doesNotMatch(nodeCheckSource, /context\.platformInfo\.isWindows\s*\?\s*'npm\.cmd'\s*:\s*'npm'/)
+
+const pythonCheckSource = await fs.readFile('src/main/doctor/checks/python.check.ts', 'utf8')
+assert.match(pythonCheckSource, /const PYTHON_LAUNCHER_ADAPTERS: PythonLauncherAdapter\[\]/)
+assert.match(pythonCheckSource, /isWindows: true[\s\S]*command: 'py'/)
+assert.match(pythonCheckSource, /function checkPyLauncher/)
+assert.doesNotMatch(pythonCheckSource, /context\.platformInfo\.isWindows[\s\S]*\?[\s\S]*checkCommand\('py'/)
+
 const nativeDepsCheck = createNativeDepsCheck(async () => {
   throw new Error('native import failed')
 })

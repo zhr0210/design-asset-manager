@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Doctor Node/Python platform command selection to adapters.
+  `NPM_COMMAND_ADAPTERS` now owns the existing Windows `npm.cmd` and default
+  `npm` CLI choice, and `PYTHON_LAUNCHER_ADAPTERS` now owns the existing
+  Windows `py` launcher check plus the non-Windows skipped result. Doctor check
+  ids, labels, status logic, timeout behavior, npm exec-path behavior, packaged
+  Electron npm skip behavior, Python/pip commands, result detail shape, fix
+  suggestions, IPC channels, database schema, AI Worker HTTP API, shared
+  response fields, renderer output, dependency installation, download behavior,
+  and process startup behavior are unchanged. Focused Doctor tests now lock the
+  adapter tables, prove non-Windows does not invoke `py`, and prove Windows
+  still treats the `py` launcher as valid Python evidence. UI validation and
+  the full Windows real-evidence script were not run because this is a
+  main-process Doctor command-selection metadata refactor with no product
+  layout, runtime probing, dependency install, download, or AI process startup
+  behavior change. Next smallest slice: continue auditing remaining platform
+  checks and leave only true OS/runtime/path/process adapter boundaries.
 - 2026-06-13 Moved Llama CUDA runtime sidecar artifact matching to ordered
   metadata. `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES` now owns the existing
   Windows CUDA 13 and CUDA 12 cudart release filename patterns, while

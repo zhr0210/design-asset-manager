@@ -3,6 +3,17 @@ import type { RegisteredDoctorCheck } from '../doctor.types'
 
 export type PythonCommandChecker = (command: string, args: string[], timeoutMs: number) => Promise<Record<string, unknown>>
 
+interface PythonLauncherAdapter {
+  isWindows?: boolean
+  command?: string
+  skipped?: Record<string, unknown>
+}
+
+const PYTHON_LAUNCHER_ADAPTERS: PythonLauncherAdapter[] = [
+  { isWindows: true, command: 'py' },
+  { skipped: { available: false, skipped: true, reason: 'py launcher is Windows-only.' } }
+]
+
 async function defaultCheckCommand(command: string, args: string[], timeoutMs: number) {
   try {
     const result = await runProcess(command, args, { timeoutMs })
@@ -20,6 +31,13 @@ async function defaultCheckCommand(command: string, args: string[], timeoutMs: n
   }
 }
 
+async function checkPyLauncher(isWindows: boolean, checkCommand: PythonCommandChecker, timeoutMs: number): Promise<Record<string, unknown>> {
+  const adapter = PYTHON_LAUNCHER_ADAPTERS.find((item) => item.isWindows === undefined || item.isWindows === isWindows)!
+  return adapter.command
+    ? checkCommand(adapter.command, ['--version'], timeoutMs)
+    : adapter.skipped!
+}
+
 export function createPythonCheck(checkCommand: PythonCommandChecker = defaultCheckCommand): RegisteredDoctorCheck {
   return {
     id: 'python',
@@ -29,9 +47,7 @@ export function createPythonCheck(checkCommand: PythonCommandChecker = defaultCh
       const timeoutMs = Math.min(context.timeoutMs, 5000)
       const python = await checkCommand('python', ['--version'], timeoutMs)
       const python3 = await checkCommand('python3', ['--version'], timeoutMs)
-      const pyLauncher = context.platformInfo.isWindows
-        ? await checkCommand('py', ['--version'], timeoutMs)
-        : { available: false, skipped: true, reason: 'py launcher is Windows-only.' }
+      const pyLauncher = await checkPyLauncher(context.platformInfo.isWindows, checkCommand, timeoutMs)
       const pip = await checkCommand('python', ['-m', 'pip', '--version'], timeoutMs)
       const anyPython = python.available || python3.available || pyLauncher.available
 
