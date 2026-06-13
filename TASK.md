@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Platform AI branch provider profile selection into
+  descriptor rules. `PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS` now owns
+  the existing macOS Apple Silicon, macOS Intel, and Windows CUDA profile
+  mapping, while provider registration resolves the profile through one shared
+  rule matcher. Runtime ids, display names, platform names, metadata keys,
+  profile outputs, IPC channels, database schema, AI Worker HTTP API, shared
+  response fields, runtime behavior, and renderer output are unchanged.
+  Focused IPC source contracts preserve the descriptor profile rules and
+  prevent the previous per-branch profile resolver functions from returning.
+  UI validation and the full Windows real-evidence script were not run because
+  this is a main-process provider metadata refactor with no product layout or
+  runtime probing behavior change. Next smallest slice: continue the completion
+  audit and leave remaining platform checks only at real OS/runtime/path/process
+  adapter seams.
 - 2026-06-13 Moved Platform AI default-branch policy to a shared workflow
   constant. `DEFAULT_PLATFORM_AI_BRANCH` now owns the existing macOS fallback
   used by branch-marker resolution, Worker diagnostics selection,

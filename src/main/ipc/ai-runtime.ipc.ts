@@ -75,20 +75,26 @@ interface PlatformAiBranchRuntimeProviderDescriptor {
   id: string
   displayName: string
   platform: PlatformName
-  resolveProfileId: (currentPlatform: PlatformName, currentArch: PlatformArch) => RuntimeProfileId | null
+  profileRules: PlatformAiBranchRuntimeProviderProfileRule[]
   createMetadata: (currentPlatform: PlatformName, currentArch: PlatformArch) => Record<string, unknown>
 }
 
-function resolveMacOSAiBranchProfileId(
+interface PlatformAiBranchRuntimeProviderProfileRule {
+  platform: PlatformName
+  arch?: PlatformArch
+  profileId: RuntimeProfileId
+}
+
+function resolvePlatformAiBranchProviderProfileId(
+  descriptor: PlatformAiBranchRuntimeProviderDescriptor,
   currentPlatform: PlatformName,
   currentArch: PlatformArch
 ): RuntimeProfileId | null {
-  if (currentPlatform !== 'darwin') return null
-  return currentArch === 'arm64' ? 'macos-apple-silicon' : 'macos-intel'
-}
-
-function resolveWindowsAiBranchProfileId(currentPlatform: PlatformName): RuntimeProfileId | null {
-  return currentPlatform === 'win32' ? 'windows-nvidia-cuda' : null
+  const rule = descriptor.profileRules.find((candidate) => {
+    return candidate.platform === currentPlatform
+      && (candidate.arch === undefined || candidate.arch === currentArch)
+  })
+  return rule?.profileId ?? null
 }
 
 const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimeProviderDescriptor[] = [
@@ -96,7 +102,10 @@ const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimePr
     id: 'macos-ai-branch-runtime',
     displayName: 'macOS AI Branch Runtime',
     platform: 'darwin',
-    resolveProfileId: resolveMacOSAiBranchProfileId,
+    profileRules: [
+      { platform: 'darwin', arch: 'arm64', profileId: 'macos-apple-silicon' },
+      { platform: 'darwin', profileId: 'macos-intel' }
+    ],
     createMetadata: (currentPlatform, currentArch) => ({
       displayName: 'macOS AI Branch',
       macosAiBranch: createMacOSAiBranchRuntimeMetadata(currentPlatform, currentArch)
@@ -106,7 +115,9 @@ const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimePr
     id: 'windows-ai-branch-runtime',
     displayName: 'Windows AI Branch Runtime',
     platform: 'win32',
-    resolveProfileId: resolveWindowsAiBranchProfileId,
+    profileRules: [
+      { platform: 'win32', profileId: 'windows-nvidia-cuda' }
+    ],
     createMetadata: (currentPlatform, currentArch) => ({
       displayName: 'Windows AI Branch',
       windowsAiBranch: createWindowsAiBranchRuntimeMetadata(currentPlatform, currentArch)
@@ -132,7 +143,7 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
       id: descriptor.id,
       displayName: descriptor.displayName,
       platform: descriptor.platform,
-      profileId: descriptor.resolveProfileId(currentPlatform, currentArch),
+      profileId: resolvePlatformAiBranchProviderProfileId(descriptor, currentPlatform, currentArch),
       metadata: descriptor.createMetadata(currentPlatform, currentArch)
     }))
   }

@@ -147,7 +147,10 @@ paths or model cache paths.
    raw platform fallback for Windows and other platforms. Platform AI default
    branch fallback now uses `DEFAULT_PLATFORM_AI_BRANCH` across shared
    projectors and renderer initial state, preserving the existing macOS default
-   without duplicating default policy at each call site.
+   without duplicating default policy at each call site. Platform AI branch
+   runtime provider profile selection now also lives in descriptor
+   `profileRules`, preserving the existing macOS Apple Silicon, macOS Intel,
+   and Windows CUDA profile outputs without per-branch resolver functions.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

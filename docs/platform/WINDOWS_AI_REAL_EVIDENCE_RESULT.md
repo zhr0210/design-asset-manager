@@ -118,6 +118,13 @@ did not alter renderer layout, runtime probing, IPC channels, shared response
 fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
 evidence is claimed for it.
 
+A later 2026-06-13 main-process provider refactor moved Platform AI branch
+provider profile selection into descriptor `profileRules`, preserving the
+existing macOS Apple Silicon, macOS Intel, and Windows CUDA profile outputs. It
+did not alter renderer output, runtime probing, IPC channels, shared response
+fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
+evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and
