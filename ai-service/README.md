@@ -46,6 +46,7 @@ The ONNX CUDA probe must run in an explicit environment where
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.3 | 2026-06-14 | Made evidence probe failures structured and path-free; non-finite CLIP comparison output can no longer report success. |
 | v1.2.2 | 2026-06-13 | Added path-free CLIP TF32 quality and explicit ONNX CUDA model evidence probes using generated inputs and registered local artifacts. |
 | v1.2.1 | 2026-06-13 | Made TF32 and the Windows CUDA ONNX dependency profile explicit opt-ins; the default install remains exact and CPU-safe. |
 | v1.2.0 | 2026-06-13 | Added centralized CUDA inference policy and inference-mode execution. |

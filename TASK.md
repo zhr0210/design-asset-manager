@@ -2,62 +2,60 @@
 
 ## Goal
 
-Stabilize the completed Windows/macOS shared-architecture work before declaring
-the long-running roadmap complete.
+Close product-visible simulated AI paths before wiring Platform AI
+`nextAction` suggestions to executable UI operations.
 
-The product rule remains: default to shared main-process workflows, renderer
-contracts, product status vocabulary, and UI surfaces. Branch only for real OS
-capabilities, inference runtimes, packaging/native dependencies, paths, or
-process behavior.
+The architecture rule remains: Windows and macOS share product workflows,
+contracts, main-process orchestration, and UI state. Branch only for real OS,
+runtime, native dependency, path, or process differences.
 
-## Current Scope
+## Accepted Baseline
 
-1. Keep CUDA numerical optimizations capability-driven and evidence-backed.
-2. Keep the default Python dependency install CPU-safe on every platform.
-3. Use an explicit NVIDIA Windows CUDA dependency profile only on a compatible
-   host.
-4. Close Windows OCR real-model evidence or leave it accurately classified as
-   `runtime_probe_ready`.
-5. Preserve all existing IPC channel names, database schema semantics, AI Worker
-   HTTP APIs, and Platform AI Branch Status response fields.
+- Platform AI Branch Status contracts and dedicated macOS/Windows IPC channels
+  are stable.
+- Windows CUDA, WD Tagger ONNX, CLIP ONNX, and Llama GGUF/mmproj evidence are
+  validated.
+- TF32 remains opt-in despite the bounded CLIP comparison.
+- OCR remains accurately classified as `runtime_probe_ready`.
+- Default Python dependencies are CPU-safe; NVIDIA Windows uses an explicit
+  CUDA profile.
 
-## Mac-Side Stabilization
+## Current Slice
 
-- `torch.inference_mode()` remains enabled for pure inference blocks.
-- TF32 is opt-in through `DAM_CUDA_TF32=1`; exact float32 remains the default
-  until model-level quality comparisons justify a broader default.
-- cuDNN variable-shape autotuning remains opt-in through
-  `DAM_CUDNN_BENCHMARK=1`.
-- `ai-service/requirements.txt` is the CPU-safe default.
-- `ai-service/requirements-windows-cuda.txt` is the explicit NVIDIA Windows
-  profile.
-- Minimal `.codeindex` context files are restored so agent-context governance
-  can run again.
+Remove the product mock-tag generation surface:
 
-## Windows Validation Required
+1. Remove `mock-ai:generate-suggestions` registration from production IPC.
+2. Remove the production preload method and shared channel constant.
+3. Keep mock implementations only in test-owned locations where still needed.
+4. Preserve the real Asset Tagging Workflow, Queue Sync, tag confirmation, and
+   existing public real-AI contracts.
+5. Add focused source and contract tests proving packaged product code cannot
+   register or invoke mock tag generation.
 
-The Windows host must fast-forward from GitHub before validation.
+Do not change database schema, AI Worker HTTP APIs, Platform AI Branch Status
+shape, or existing real-AI IPC channel semantics.
 
-Required evidence:
+## Later Slices
 
-- Default requirements resolve to CPU ONNX packages.
-- Windows CUDA profile resolves to GPU ONNX packages on the NVIDIA host.
-- Existing CUDA fixed-tensor execution still succeeds.
-- TF32 exact/default and opt-in modes both execute; model-level output
-  comparisons must be reported before recommending TF32 as a default.
-- WD Tagger and CLIP ONNX real evidence remain valid.
-- OCR remains `runtime_probe_ready` unless a real OCR model session and minimal
-  image inference succeed.
-- Llama GGUF/mmproj text plus generated-image evidence remains valid.
-- Electron/Playwright AI Console has no document/body horizontal overflow.
+1. Route or hide pure mock prompt-reverse and deep-analysis Worker endpoints.
+2. Make remaining model-wrapper mock fallbacks fail closed in product mode
+   while retaining explicit test fixtures.
+3. Implement Platform AI Action Plan as user-initiated routing to existing
+   Models, Runtime, Services, and refresh operations.
+4. Close OCR real-model evidence on Windows only when approved artifacts and a
+   generated-image inference are available.
 
-Update `docs/platform/WINDOWS_AI_REAL_EVIDENCE_RESULT.md` with a sanitized
-summary. Do not include secrets, full private paths, model-cache paths, private
-asset data, or binary payloads.
+## Remote Evidence Audit
+
+The Windows host pushed commits through `ccf7561`. Mac review found and fixed:
+
+- CLIP comparison success no longer permits non-finite output.
+- Evidence-tool failures return structured error types without exception
+  messages, local paths, or traceback output.
+- The ONNX probe now documents that importing PyTorch exposes bundled CUDA DLLs
+  before ONNX Runtime provider initialization.
 
 ## Validation
-
-Mac checks:
 
 ```bash
 python3 -m unittest discover ai-service/tests
@@ -69,64 +67,6 @@ python3 scripts/check-docs-sync.py
 git diff --check
 ```
 
-`check-forbidden-paths.py` may report pre-existing untracked `docs/agents/`
-content. Do not delete or stage unrelated user files to make that check pass.
-
-## Current Result
-
-Mac and Windows stabilization validation now pass on commit `13610a4`.
-
-- Windows typecheck, production build, runtime-safety contracts, and 129 Python
-  tests passed.
-- The default requirements dry-run selected CPU ONNX only. The explicit
-  Windows CUDA profile selected GPU ONNX only.
-- Real CUDA execution confirmed exact float32 is the default and
-  `DAM_CUDA_TF32=1` is required to enable TF32.
-- WD Tagger ONNX, CLIP ONNX embedding, and Llama GGUF/mmproj text plus
-  generated-image evidence remain valid.
-- OCR remains accurately classified as `runtime_probe_ready`; no real OCR
-  model load plus minimal generated-image inference was available.
-- Electron/Playwright clicked AI Console refresh without `page.reload()`.
-  Screenshot review and DOM checks found no horizontal clipping, overlap, or
-  document/body overflow at `1266x795`.
-- No user asset was read, no new model weight was downloaded, and generated
-  logs/screenshots remain outside the repository.
-
-Remaining evidence work is optional and bounded: obtain real OCR model
-load/inference evidence before promotion, and perform model-level quality
-comparisons before reconsidering TF32 as a default.
-
-The first bounded follow-up is complete:
-
-- A registered CLIP PyTorch model compared exact float32 and TF32 on four
-  generated in-memory images and six text prompts. Top-1 agreement was 1.0,
-  logit cosine similarity was 0.999999642, maximum absolute logit difference
-  was 0.054901, and all outputs were finite. This is useful model-level
-  evidence but is not representative product-asset coverage, so TF32 remains
-  opt-in.
-- An isolated explicit `onnxruntime-gpu` environment loaded the registered WD
-  Tagger session through `CUDAExecutionProvider` and ran the registered CLIP
-  image/text embedding through the same provider with a finite 512-dimensional
-  output. The CPU-safe default environment was not modified.
-- OCR remains `runtime_probe_ready`: RapidOCR is absent, and EasyOCR could not
-  load its local recognition weight with downloads disabled. PaddleOCR was not
-  initialized because doing so could fetch missing model weights.
-- Reusable path-free evidence tools now live under `ai-service/tools/`; they
-  use generated inputs and registered local artifacts only.
-- Validation passed 133 Python tests, `npm run typecheck`, `npm run build`,
-  `npm run ci:test-runtime-safety`, agent-context, docs-sync, and diff checks.
-  The forbidden-path check reported the expected task-owned platform evidence
-  document under the configured `docs/` prefix. The full Electron validation
-  was not repeated because no product runtime or renderer code changed.
-
-## Completion Rule
-
-The stabilization acceptance criteria are complete:
-
-- Mac validation passes.
-- Windows validation passes on the same commit.
-- TF32 policy has either model-quality evidence or remains opt-in.
-- Windows dependency selection is capability/profile-driven rather than
-  selected only by OS.
-- OCR status is backed by real evidence or remains explicitly incomplete.
-- No required public contract changed unintentionally.
+Renderer behavior did not change in the evidence-tool correction. The mock-tag
+removal slice requires focused Electron/renderer contract validation and a UI
+smoke check only if a visible control or state changes.

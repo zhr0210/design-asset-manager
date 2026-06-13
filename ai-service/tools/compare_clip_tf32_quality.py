@@ -28,6 +28,21 @@ PROMPTS = [
 ]
 
 
+def _failure(status: str, error: Exception | None = None) -> dict[str, Any]:
+    return {
+        "success": False,
+        "status": status,
+        "errorType": error.__class__.__name__ if error is not None else None,
+    }
+
+
+def _comparison_outcome(all_finite: bool) -> tuple[bool, str]:
+    return (
+        all_finite,
+        "compared_real_model" if all_finite else "output_invalid",
+    )
+
+
 def _generated_images() -> list[Image.Image]:
     images: list[Image.Image] = []
 
@@ -87,76 +102,83 @@ def _run_forward(
 
 
 def compare_clip_tf32_quality() -> dict[str, Any]:
-    import torch
-    from transformers import CLIPModel, CLIPProcessor
+    try:
+        import torch
+        from transformers import CLIPModel, CLIPProcessor
+    except Exception as exc:
+        return _failure("dependency_missing", exc)
 
     if not torch.cuda.is_available():
-        return {
-            "success": False,
-            "status": "cuda_unavailable",
-        }
+        return _failure("cuda_unavailable")
 
     model_root = find_downloaded_model("clip")
     if model_root is None:
-        return {
-            "success": False,
-            "status": "artifact_missing",
-        }
+        return _failure("artifact_missing")
 
-    model = CLIPModel.from_pretrained(str(model_root), local_files_only=True)
-    processor = CLIPProcessor.from_pretrained(str(model_root), local_files_only=True)
-    model.to("cuda")
-    model.eval()
-    images = _generated_images()
+    try:
+        model = CLIPModel.from_pretrained(str(model_root), local_files_only=True)
+        processor = CLIPProcessor.from_pretrained(
+            str(model_root),
+            local_files_only=True,
+        )
+        model.to("cuda")
+        model.eval()
+    except Exception as exc:
+        return _failure("model_load_failed", exc)
 
-    exact_policy, exact_logits = _run_forward(
-        torch,
-        model,
-        processor,
-        images,
-        tf32=False,
-    )
-    tf32_policy, tf32_logits = _run_forward(
-        torch,
-        model,
-        processor,
-        images,
-        tf32=True,
-    )
+    try:
+        images = _generated_images()
+        exact_policy, exact_logits = _run_forward(
+            torch,
+            model,
+            processor,
+            images,
+            tf32=False,
+        )
+        tf32_policy, tf32_logits = _run_forward(
+            torch,
+            model,
+            processor,
+            images,
+            tf32=True,
+        )
 
-    difference = (exact_logits - tf32_logits).abs()
-    exact_top1 = exact_logits.argmax(dim=-1)
-    tf32_top1 = tf32_logits.argmax(dim=-1)
-    top1_agreement = float((exact_top1 == tf32_top1).float().mean().item())
-    cosine_similarity = float(
-        torch.nn.functional.cosine_similarity(
-            exact_logits.flatten().unsqueeze(0),
-            tf32_logits.flatten().unsqueeze(0),
-        ).item()
-    )
-
-    result = {
-        "success": True,
-        "status": "compared_real_model",
-        "modelFamily": "clip",
-        "fixtureType": "generated_in_memory",
-        "imageCount": len(images),
-        "promptCount": len(PROMPTS),
-        "exactPolicy": exact_policy,
-        "tf32Policy": tf32_policy,
-        "top1Agreement": round(top1_agreement, 6),
-        "logitCosineSimilarity": round(cosine_similarity, 9),
-        "maxAbsLogitDiff": round(float(difference.max().item()), 6),
-        "meanAbsLogitDiff": round(float(difference.mean().item()), 6),
-        "allFinite": bool(
+        difference = (exact_logits - tf32_logits).abs()
+        exact_top1 = exact_logits.argmax(dim=-1)
+        tf32_top1 = tf32_logits.argmax(dim=-1)
+        top1_agreement = float((exact_top1 == tf32_top1).float().mean().item())
+        cosine_similarity = float(
+            torch.nn.functional.cosine_similarity(
+                exact_logits.flatten().unsqueeze(0),
+                tf32_logits.flatten().unsqueeze(0),
+            ).item()
+        )
+        all_finite = bool(
             torch.isfinite(exact_logits).all().item()
             and torch.isfinite(tf32_logits).all().item()
-        ),
-    }
+        )
+        success, status = _comparison_outcome(all_finite)
 
-    del model, processor, exact_logits, tf32_logits, difference
-    torch.cuda.empty_cache()
-    return result
+        return {
+            "success": success,
+            "status": status,
+            "modelFamily": "clip",
+            "fixtureType": "generated_in_memory",
+            "imageCount": len(images),
+            "promptCount": len(PROMPTS),
+            "exactPolicy": exact_policy,
+            "tf32Policy": tf32_policy,
+            "top1Agreement": round(top1_agreement, 6),
+            "logitCosineSimilarity": round(cosine_similarity, 9),
+            "maxAbsLogitDiff": round(float(difference.max().item()), 6),
+            "meanAbsLogitDiff": round(float(difference.mean().item()), 6),
+            "allFinite": all_finite,
+        }
+    except Exception as exc:
+        return _failure("inference_failed", exc)
+    finally:
+        del model, processor
+        torch.cuda.empty_cache()
 
 
 def main() -> int:

@@ -13,8 +13,9 @@ This roadmap records the refactor order for lowering dual-platform maintenance c
 | 3 | Electron AI Result Sync | Electron-owned projection from AI Worker task results into Asset Library state. | Split task result projection rules out of `AiClientService` while preserving existing Queue Sync and IPC behavior. |
 | 4 | Asset Tagging Workflow | One workflow module for Asset Category routing, Tag Fusion plan, AI Tag Task submission, and Tag Suggestion projection. | Move category-to-model pipeline and pending Tag Suggestion projection out of renderer panels into a shared workflow interface. |
 | 5 | Visual Analysis Snapshot | Stable renderer-ready projection for Color Palette, Text Box, OCR Text, Text Color Analysis, and Readability Score. | Add a snapshot mapper that hides stored payload version drift from `ColorPalettePanel`. |
-| 6 | Platform AI Action Plan | Shared mapping from workflow evidence gaps to existing user-initiated UI operations. | Route model artifacts to Models, runtime dependencies/services to Runtime, backend configuration to Services, and unresolved evidence to manual refresh. |
-| 7 | Real AI Evidence Closure | Real load or inference evidence for supported MPS/ONNX and GGUF/mmproj routes, plus a clear MLX decision and Windows parity validation. | Replace evidence-insufficient states one route at a time without changing the shared workflow shape. |
+| 6 | Product AI Truthfulness Closure | Product IPC and Worker paths must not expose simulated output as a usable AI operation. | Remove the product mock-tag IPC surface while preserving test-only mocks and the real Asset Tagging Workflow. |
+| 7 | Platform AI Action Plan | Shared mapping from workflow evidence gaps to existing user-initiated UI operations. | Route model artifacts to Models, runtime dependencies/services to Runtime, backend configuration to Services, and unresolved evidence to manual refresh. |
+| 8 | Real AI Evidence Closure | Real load or inference evidence for supported MPS/ONNX, OCR, and GGUF/mmproj routes, plus Windows parity validation. | Replace evidence-insufficient states one route at a time without changing the shared workflow shape. |
 
 ## Design Rules
 

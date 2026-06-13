@@ -7,7 +7,7 @@ from pathlib import Path
 AI_SERVICE_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, os.fspath(AI_SERVICE_ROOT))
 
-from tools.probe_onnx_cuda_profile import _model_summary
+from tools.probe_onnx_cuda_profile import _failure, _model_summary
 
 
 class TestOnnxCudaProfileProbe(unittest.TestCase):
@@ -41,6 +41,16 @@ class TestOnnxCudaProfileProbe(unittest.TestCase):
         self.assertNotIn("pip install", source)
         self.assertNotIn("snapshot_download", source)
         self.assertNotIn('"modelPath"', source)
+
+    def test_failure_evidence_does_not_include_exception_message_or_path(self):
+        result = _failure(
+            "probe_failed",
+            RuntimeError("failed at C:/private/model/cache"),
+        )
+
+        self.assertEqual(result["errorType"], "RuntimeError")
+        self.assertNotIn("C:/private", str(result))
+        self.assertNotIn("traceback", str(result).lower())
 
 
 if __name__ == "__main__":
