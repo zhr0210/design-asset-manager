@@ -50,6 +50,11 @@ shape, or existing real-AI IPC channel semantics.
   `download_enabled=False`.
 - The Windows full-validation script records the result, but the product status
   remains unchanged until real host evidence is reviewed and mapped.
+- Windows host validation at commit `f266423` returned
+  `OCR_MODEL_ARTIFACT_MISSING`: RapidOCR was not installed, while EasyOCR was
+  installed without its required local model artifact. OCR therefore remains
+  `runtime_probe_ready`; closing it requires separately approved dependency or
+  model-weight acquisition.
 
 ## Platform AI Action Plan
 

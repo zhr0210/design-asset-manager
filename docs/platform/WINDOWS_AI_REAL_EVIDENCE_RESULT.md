@@ -6,6 +6,23 @@ and Llama CUDA GGUF/mmproj real evidence are closed.
 This file is the GitHub handoff mailbox for Windows-host validation on branch
 `codex/windows-ai-real-evidence`.
 
+## OCR Generated-Image Probe
+
+- Validation date: 2026-06-14.
+- Commit tested: `f266423`.
+- The explicit probe used a generated temporary image and kept
+  `downloadsAllowed=false`.
+- Result: `success=false`, `status=artifact_missing`,
+  `errorCode=OCR_MODEL_ARTIFACT_MISSING`.
+- RapidOCR reported `dependency_missing`.
+- EasyOCR was importable but reported `artifact_missing` with downloads
+  disabled.
+- No user asset, private path, model-cache path, image payload, package
+  installation, or model download was used.
+- Product status remains `runtime_probe_ready`. A later slice must obtain
+  explicit approval before installing an OCR dependency or downloading model
+  weights, then rerun the generated-image probe before any status promotion.
+
 ## Stabilization Validation
 
 - Validation time: 2026-06-13 20:30, Windows host local time.
