@@ -243,6 +243,14 @@ runtime probing, IPC channels, shared response fields, database schema, AI
 Worker HTTP API shapes, dependency installation, download behavior, or process
 startup; no new Windows runtime evidence is claimed for it.
 
+A later 2026-06-13 Llama planner refactor moved runtime package artifact
+matching into `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES`, preserving the existing
+macOS, Linux, Windows CUDA, Windows Vulkan, and Windows CPU release filename
+matching. It did not alter renderer output, runtime probing, IPC channels,
+shared response fields, database schema, AI Worker HTTP API shapes, dependency
+installation, download behavior, installer triggering, or process startup; no
+new Windows runtime evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

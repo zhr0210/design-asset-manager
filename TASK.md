@@ -89,6 +89,23 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved Llama runtime package artifact matching to ordered
+  metadata. `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES` now owns the existing
+  macOS arm64/x64, Linux arm64/x64, Windows CUDA 13, Windows CUDA 12, Windows
+  Vulkan, and Windows CPU release filename patterns, while `runtimePatterns()`
+  selects the first matching rule by platform, architecture, and accelerator.
+  Runtime package names, model candidate selection, mirror mapping, CUDA
+  runtime sidecar matching, install plan shape, IPC channels, database schema,
+  AI Worker HTTP API, shared response fields, renderer output, download
+  behavior, installer triggering, and process startup behavior are unchanged.
+  Focused Llama installer tests now lock the pattern table and exercise Linux
+  x64 package matching in addition to existing Windows CUDA and macOS Metal
+  install plans. UI validation and the full Windows real-evidence script were
+  not run because this is a main-process artifact-pattern metadata refactor
+  with no product layout, runtime probing, dependency install, download, or AI
+  process startup behavior change. Next smallest slice: continue auditing
+  remaining platform checks and leave only true OS/runtime/path/process
+  adapter boundaries.
 - 2026-06-13 Moved AI Runtime app-data root path selection to adapter
   metadata. `AI_RUNTIME_APP_DATA_ROOT_ADAPTERS` now owns the existing Windows
   app-managed runtime directory parts and default macOS app-managed runtime

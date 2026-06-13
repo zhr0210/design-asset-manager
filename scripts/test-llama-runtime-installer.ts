@@ -36,6 +36,10 @@ const release: LlamaReleaseInfo = {
     {
       name: 'llama-b9999-bin-macos-arm64.zip',
       browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9999/llama-b9999-bin-macos-arm64.zip'
+    },
+    {
+      name: 'llama-b9999-bin-linux-x64.zip',
+      browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9999/llama-b9999-bin-linux-x64.zip'
     }
   ]
 }
@@ -77,6 +81,12 @@ async function main() {
   assert.match(plannerSource, /platform: 'win32'[\s\S]*accelerator: 'vulkan'/)
   assert.match(plannerSource, /DEFAULT_LLAMA_ACCELERATOR_RULES\.find/)
   assert.doesNotMatch(plannerSource, /process\.platform === 'win32' \? 'vulkan' : 'cpu'/)
+  assert.match(plannerSource, /const LLAMA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaRuntimePackagePatternRule\[\]/)
+  assert.match(plannerSource, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*bin-macos-arm64/)
+  assert.match(plannerSource, /platform: 'linux'[\s\S]*arch: 'arm64'[\s\S]*bin-linux-arm64/)
+  assert.match(plannerSource, /accelerator: 'cuda13'[\s\S]*bin-win-cuda-13/)
+  assert.match(plannerSource, /LLAMA_RUNTIME_PACKAGE_PATTERN_RULES\.find/)
+  assert.doesNotMatch(plannerSource, /if \(platform === 'darwin'\)|if \(platform === 'linux'\)/)
 
   const profile = createHardwareProfile({
     platform: 'win32',
@@ -136,6 +146,19 @@ async function main() {
   assert.equal(macPlan.accelerator, 'metal')
   assert.equal(macPlan.runtimePackages[0].filename, 'llama-b9999-bin-macos-arm64.zip')
   assert.equal(macPlan.recommendedModel.id, 'qwen3-vl-4b-instruct-q4-k-m')
+
+  const linuxPlan = createInstallPlan({
+    hardware: createHardwareProfile({
+      platform: 'linux',
+      arch: 'x64',
+      totalMemoryGB: 16,
+      hasNvidiaGpu: false,
+      recommendedAccelerator: 'cpu'
+    }),
+    release,
+    installRoot: '/tmp/design-asset-manager/llama-runtime'
+  })
+  assert.equal(linuxPlan.runtimePackages[0].filename, 'llama-b9999-bin-linux-x64.zip')
 
   assert.throws(
     () => createInstallPlan({

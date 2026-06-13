@@ -199,7 +199,10 @@ paths or model cache paths.
    app-data root path selection now uses `AI_RUNTIME_APP_DATA_ROOT_ADAPTERS`,
    preserving the existing Windows and default macOS app-managed runtime
    directory semantics without a local `isWin` ternary in runtime manager
-   creation.
+   creation. Llama runtime package artifact matching now uses
+   `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES`, preserving the existing macOS,
+   Linux, Windows CUDA, Windows Vulkan, and Windows CPU release filename
+   matching without platform conditionals in the planner flow.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

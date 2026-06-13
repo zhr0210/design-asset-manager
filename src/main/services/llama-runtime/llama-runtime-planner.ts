@@ -36,9 +36,52 @@ interface LlamaDefaultAcceleratorRule {
   accelerator: LlamaRuntimeAccelerator
 }
 
+interface LlamaRuntimePackagePatternRule {
+  platform?: NodeJS.Platform | string
+  arch?: string
+  accelerator?: LlamaRuntimeAccelerator
+  patterns: RegExp[]
+}
+
 const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule[] = [
   { platform: 'win32', accelerator: 'vulkan' },
   { accelerator: 'cpu' }
+]
+
+const LLAMA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaRuntimePackagePatternRule[] = [
+  {
+    platform: 'darwin',
+    arch: 'arm64',
+    patterns: [/^llama-.*bin-macos-arm64\.zip/i, /^llama-.*bin-macos.*arm64.*\.zip/i]
+  },
+  {
+    platform: 'darwin',
+    patterns: [/^llama-.*bin-macos-x64\.zip/i, /^llama-.*bin-macos.*x64.*\.zip/i]
+  },
+  {
+    platform: 'linux',
+    arch: 'arm64',
+    patterns: [/^llama-.*bin-linux-arm64\.zip/i, /^llama-.*bin-linux.*arm64.*\.zip/i]
+  },
+  {
+    platform: 'linux',
+    patterns: [/^llama-.*bin-linux-x64\.zip/i, /^llama-.*bin-linux.*x64.*\.zip/i]
+  },
+  {
+    accelerator: 'cuda13',
+    patterns: [/^llama-.*bin-win-cuda-13[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu13[\d.]*-x64\.zip/i]
+  },
+  {
+    accelerator: 'cuda12',
+    patterns: [/^llama-.*bin-win-cuda-12[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu12[\d.]*-x64\.zip/i]
+  },
+  {
+    accelerator: 'vulkan',
+    patterns: [/^llama-.*bin-win-vulkan-x64\.zip/i]
+  },
+  {
+    patterns: [/^llama-.*bin-win-cpu-x64\.zip/i]
+  }
 ]
 
 const DEFAULT_LLAMA_RELEASE: LlamaReleaseInfo = {
@@ -180,24 +223,12 @@ export function selectModelCandidate(profile: LlamaHardwareProfile): LlamaModelC
 }
 
 function runtimePatterns(accelerator: LlamaRuntimeAccelerator, platform: string = process.platform, arch: string = process.arch): RegExp[] {
-  if (platform === 'darwin') {
-    return arch === 'arm64'
-      ? [/^llama-.*bin-macos-arm64\.zip/i, /^llama-.*bin-macos.*arm64.*\.zip/i]
-      : [/^llama-.*bin-macos-x64\.zip/i, /^llama-.*bin-macos.*x64.*\.zip/i]
-  }
-  if (platform === 'linux') {
-    return arch === 'arm64'
-      ? [/^llama-.*bin-linux-arm64\.zip/i, /^llama-.*bin-linux.*arm64.*\.zip/i]
-      : [/^llama-.*bin-linux-x64\.zip/i, /^llama-.*bin-linux.*x64.*\.zip/i]
-  }
-  if (accelerator === 'cuda13') {
-    return [/^llama-.*bin-win-cuda-13[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu13[\d.]*-x64\.zip/i]
-  }
-  if (accelerator === 'cuda12') {
-    return [/^llama-.*bin-win-cuda-12[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu12[\d.]*-x64\.zip/i]
-  }
-  if (accelerator === 'vulkan') return [/^llama-.*bin-win-vulkan-x64\.zip/i]
-  return [/^llama-.*bin-win-cpu-x64\.zip/i]
+  const rule = LLAMA_RUNTIME_PACKAGE_PATTERN_RULES.find((candidate) => {
+    return (!candidate.platform || candidate.platform === platform)
+      && (!candidate.arch || candidate.arch === arch)
+      && (!candidate.accelerator || candidate.accelerator === accelerator)
+  })
+  return rule?.patterns ?? []
 }
 
 function cudaRuntimePatterns(accelerator: LlamaRuntimeAccelerator): RegExp[] {
