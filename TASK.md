@@ -39,8 +39,17 @@ shape, or existing real-AI IPC channel semantics.
 
 ## Later Slices
 
-1. Close OCR real-model evidence on Windows only when approved artifacts and a
-   generated-image inference are available.
+1. Run the explicit Windows OCR evidence probe against local artifacts. Promote
+   OCR only after a generated-image inference returns finite text boxes.
+
+## Windows OCR Evidence Slice
+
+- `probe_ocr_real_evidence.py` uses only a generated temporary image.
+- It never enables model downloads and never emits model-cache or fixture paths.
+- It prefers local RapidOCR and falls back to EasyOCR with
+  `download_enabled=False`.
+- The Windows full-validation script records the result, but the product status
+  remains unchanged until real host evidence is reviewed and mapped.
 
 ## Platform AI Action Plan
 

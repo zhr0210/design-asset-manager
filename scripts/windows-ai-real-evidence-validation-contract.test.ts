@@ -16,5 +16,6 @@ assert.match(source, /Write-Log \(\[string\]\$item\)/)
 assert.doesNotMatch(source, /dam-native-(?:stdout|stderr)/)
 assert.doesNotMatch(source, /> \$stdoutPath 2> \$stderrPath/)
 assert.doesNotMatch(source, /\(\$item \| Out-String\)\.TrimEnd\(\)/)
+assert.match(source, /probe_ocr_real_evidence\.py", "--provider", "auto"/)
 
 console.log('windows-ai-real-evidence-validation-contract passed')

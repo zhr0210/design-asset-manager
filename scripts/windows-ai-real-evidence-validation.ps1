@@ -152,6 +152,8 @@ print("WINDOWS_AI_DIRECT_PROBES_START")
 print(json.dumps(checks, ensure_ascii=False, indent=2))
 print("WINDOWS_AI_DIRECT_PROBES_END")
 '@
+  Write-Log "== OCR generated-image real evidence probe =="
+  Invoke-LoggedNative "python" @("ai-service/tools/probe_ocr_real_evidence.py", "--provider", "auto")
 
   Write-Log "== Electron/Playwright smoke =="
   $e2eRoot = Join-Path $RepoRoot "dist-temp"

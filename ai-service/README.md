@@ -2,6 +2,10 @@
 
 Local Python FastAPI worker for AI tagging, prompt reverse, visual analysis, routing, OCR helpers, and translation support.
 
+`tools/probe_ocr_real_evidence.py` is an explicit, path-free validation tool
+that runs generated-image OCR against already-local RapidOCR or EasyOCR
+artifacts. It does not download model weights or change product status.
+
 ## Entry Files
 
 - `app.py`: FastAPI entry.
