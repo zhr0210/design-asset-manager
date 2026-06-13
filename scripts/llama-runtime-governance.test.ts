@@ -39,6 +39,11 @@ assert.equal(manifest.autoStart, false)
 assert.equal(manifest.privacy?.containsRealUserPaths, false)
 
 const governanceSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-governance.ts', 'utf8')
+assert.match(governanceSource, /const LLAMA_RUNTIME_PLATFORM_ADAPTERS: LlamaRuntimePlatformAdapterDescriptor\[\]/)
+assert.match(governanceSource, /platform: 'darwin'[\s\S]*createAdapter: createMacLlamaAppAdapter/)
+assert.match(governanceSource, /platform: 'win32'[\s\S]*createAdapter: createWindowsLlamaCppAdapter/)
+assert.match(governanceSource, /LLAMA_RUNTIME_PLATFORM_ADAPTERS[\s\S]*\.filter\(\(adapter\) => adapter\.platform === normalized\)/)
+assert.doesNotMatch(governanceSource, /if \(normalized === 'darwin'\)|if \(normalized === 'win32'\)/)
 assert.doesNotMatch(governanceSource, /fetch\s*\(|spawn\s*\(|execSync\s*\(|downloadOnce|startInstall|startServer|saveSettings/)
 assert.doesNotMatch(governanceSource, /C:\\Users\\[A-Za-z0-9_.-]+/i)
 

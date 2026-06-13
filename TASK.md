@@ -89,6 +89,22 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Moved read-only Llama governance adapter selection to metadata.
+  `LLAMA_RUNTIME_PLATFORM_ADAPTERS` now owns the existing macOS llama.app and
+  Windows llama.cpp governance adapter selection, while the shared plan flow
+  always adds the external OpenAI-compatible adapter first and filters the
+  descriptor table by normalized platform. Adapter ids, priority order,
+  side-effect-free governance flags, IPC channels, database schema, AI Worker
+  HTTP API, shared response fields, runtime probing, installer behavior,
+  process startup, and renderer output are unchanged. Focused governance tests
+  preserve the Windows/macOS/Linux adapter output, prove the descriptor table is
+  used, and prevent the previous `normalized === "darwin"/"win32"` plan-flow
+  branches from returning. UI validation and the full Windows real-evidence
+  script were not run because this is a read-only governance metadata refactor
+  with no product layout, runtime probing, download, install, or process
+  behavior change. Next smallest slice: audit only remaining platform checks in
+  Llama/OCR installer modules, Electron startup, platform detection, and
+  platform runtime constants before considering the shared-surface goal closed.
 - 2026-06-13 Moved no-GPU Llama accelerator default selection to metadata.
   `DEFAULT_LLAMA_ACCELERATOR_RULES` now owns the existing Windows Vulkan
   default and cross-platform CPU fallback when no NVIDIA GPU is detected, while

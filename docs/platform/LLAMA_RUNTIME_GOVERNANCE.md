@@ -10,6 +10,10 @@ Phase 12B adds a read-only governance plan for llama-runtime. It does not downlo
 | llama.app | macOS | Second | Treat as an already-running local external endpoint. |
 | llama.cpp | Windows | Third | Existing installer/start behavior stays behind explicit user action. |
 
+The platform-local adapters are selected through `LLAMA_RUNTIME_PLATFORM_ADAPTERS`.
+Adding or removing a read-only platform adapter should update that descriptor
+table instead of adding platform conditionals to the plan flow.
+
 ## Governance Rules
 
 - `externalInferencePreferred: true`

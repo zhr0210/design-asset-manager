@@ -161,7 +161,10 @@ paths or model cache paths.
    if-chain. Llama no-GPU accelerator default selection now lives in
    `DEFAULT_LLAMA_ACCELERATOR_RULES`, preserving the existing Windows Vulkan
    default and cross-platform CPU fallback while keeping artifact/path/process
-   differences inside the Llama runtime adapters.
+   differences inside the Llama runtime adapters. The read-only Llama
+   governance plan now also selects macOS llama.app and Windows llama.cpp
+   adapters through `LLAMA_RUNTIME_PLATFORM_ADAPTERS`, preserving adapter output
+   without plan-flow platform conditionals.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

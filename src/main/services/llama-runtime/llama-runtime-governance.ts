@@ -37,6 +37,11 @@ export interface LlamaRuntimeGovernancePlan {
   }>
 }
 
+interface LlamaRuntimePlatformAdapterDescriptor {
+  platform: LlamaRuntimeGovernancePlatform
+  createAdapter: () => LlamaRuntimeAdapterDesign
+}
+
 function normalizePlatform(platform: NodeJS.Platform | string): LlamaRuntimeGovernancePlatform {
   if (platform === 'win32' || platform === 'darwin' || platform === 'linux') return platform
   return 'unknown'
@@ -108,11 +113,19 @@ function createWindowsLlamaCppAdapter(): LlamaRuntimeAdapterDesign {
   }
 }
 
+const LLAMA_RUNTIME_PLATFORM_ADAPTERS: LlamaRuntimePlatformAdapterDescriptor[] = [
+  { platform: 'darwin', createAdapter: createMacLlamaAppAdapter },
+  { platform: 'win32', createAdapter: createWindowsLlamaCppAdapter }
+]
+
 export function createLlamaRuntimeGovernancePlan(platform: NodeJS.Platform | string): LlamaRuntimeGovernancePlan {
   const normalized = normalizePlatform(platform)
-  const adapters = [createExternalAdapter()]
-  if (normalized === 'darwin') adapters.push(createMacLlamaAppAdapter())
-  if (normalized === 'win32') adapters.push(createWindowsLlamaCppAdapter())
+  const adapters = [
+    createExternalAdapter(),
+    ...LLAMA_RUNTIME_PLATFORM_ADAPTERS
+      .filter((adapter) => adapter.platform === normalized)
+      .map((adapter) => adapter.createAdapter())
+  ]
 
   return {
     phase: '12B',
