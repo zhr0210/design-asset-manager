@@ -205,6 +205,16 @@ runtime probing, IPC channels, shared response fields, database schema, AI
 Worker HTTP API shapes, AI artifact handling, dependency installation, or AI
 process startup; no new Windows runtime evidence is claimed for it.
 
+A later 2026-06-13 audit-only source contract update added an explicit check
+that `src/main`, `src/shared`, and `src/renderer` contain no direct
+`process.platform ===/!== "win32"/"darwin"` control-flow branches. Remaining
+`process.platform` usages are recorded as adapter lookup/default-parameter,
+platform detection, IPC current-platform reporting, or runtime metadata
+boundaries. It did not alter product code, renderer output, runtime probing,
+IPC channels, shared response fields, database schema, AI Worker HTTP API
+shapes, dependency installation, or process startup; no new Windows runtime
+evidence is claimed for it.
+
 The immediately preceding full-route success log is
 `dam-windows-ai-validation-20260612-172616.log`; it recorded
 `chatOk=true`, `visionOk=true`, `success=true`, and

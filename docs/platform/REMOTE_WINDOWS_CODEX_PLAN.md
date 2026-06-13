@@ -183,7 +183,11 @@ paths or model cache paths.
    `ELECTRON_APP_LIFECYCLE_POLICIES`, preserving the existing Windows
    AppUserModelId value, Windows/default quit-on-all-windows-closed behavior,
    and macOS keep-running behavior without inline entry-point platform
-   branches.
+   branches. The completion-audit source contract now also separately proves
+   `src/main`, `src/shared`, and `src/renderer` have no direct
+   `process.platform ===/!== "win32"/"darwin"` control-flow branches; remaining
+   `process.platform` usages are adapter lookup/default-parameter, platform
+   detection, IPC current-platform reporting, or runtime metadata boundaries.
 
 2. **Completed: audit AI Console platform probe consumption.**
    AI Console requests both existing platform probe IPC responses, selects the

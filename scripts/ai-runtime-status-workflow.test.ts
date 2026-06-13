@@ -702,6 +702,7 @@ const windowsAiRuntimeTypesSource = await fs.readFile('src/shared/types/windows-
 const windowsAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/windows-ai-runtime.constants.ts', 'utf8')
 const concretePlatformRuntimeTypePattern = /MacOSAiWorkerProbeResult|WindowsAiWorkerProbeResult|MacOSAiBranchRuntimeMetadata|WindowsAiBranchRuntimeMetadata|MacOSAiRuntimeLane|WindowsAiRuntimeLane/
 const platformBranchControlFlowPattern = /\bplatformBranch\s*(?:===|!==)\s*['"](?:windows|macos)['"]|['"](?:windows|macos)['"]\s*(?:===|!==)\s*platformBranch\b/
+const directProcessPlatformBranchPattern = /process\.platform\s*(?:={2,3}|!={1,2})\s*['"](?:win32|darwin)['"]|['"](?:win32|darwin)['"]\s*(?:={2,3}|!={1,2})\s*process\.platform/
 const platformBoundaryPattern = /\bisWindows\b|process\.platform|(?:\bplatform\b|\bcurrentPlatform\b)\s*(?:={2,3}|!==?)|\.platform\s*(?:={2,3}|!==?)/
 const concretePlatformRuntimeTypeFiles = (await Promise.all(
   (await listSourceFiles('src')).map(async (file) => {
@@ -716,6 +717,12 @@ const rendererSharedPlatformBranchControlFlowFiles = (await Promise.all(
   ].map(async (file) => {
     const source = await fs.readFile(file, 'utf8')
     return platformBranchControlFlowPattern.test(source) ? file : null
+  })
+)).filter((file): file is string => Boolean(file)).sort()
+const directProcessPlatformBranchFiles = (await Promise.all(
+  (await listSourceFiles('src')).map(async (file) => {
+    const source = await fs.readFile(file, 'utf8')
+    return directProcessPlatformBranchPattern.test(source) ? file : null
   })
 )).filter((file): file is string => Boolean(file)).sort()
 const remainingPlatformBoundaryFiles = (await Promise.all(
@@ -734,6 +741,7 @@ assert.deepEqual(concretePlatformRuntimeTypeFiles, [
   'src/shared/types/windows-ai-runtime.types.ts'
 ])
 assert.deepEqual(rendererSharedPlatformBranchControlFlowFiles, [])
+assert.deepEqual(directProcessPlatformBranchFiles, [])
 assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/bootstrap/runtime-registry.validator.ts',
   'src/main/doctor/checks/node.check.ts',

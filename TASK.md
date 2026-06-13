@@ -89,6 +89,20 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Added a completion-audit source contract for direct
+  `process.platform` branching. `scripts/ai-runtime-status-workflow.test.ts`
+  now separately proves that `src/main`, `src/shared`, and `src/renderer` do
+  not contain naked `process.platform ===/!== "win32"/"darwin"` control-flow
+  branches, while the broader platform-boundary file list still records
+  legitimate adapter lookup/default-parameter, platform detection, IPC
+  current-platform reporting, and runtime metadata boundaries. No product code,
+  IPC channels, database schema, AI Worker HTTP API, shared response fields,
+  renderer output, runtime probing, installer behavior, download behavior, or
+  process startup behavior changed. UI validation and the full Windows
+  real-evidence script were not run because this is an audit-only test/docs
+  slice. Next smallest slice: keep completion auditing the remaining
+  `process.platform` usages and platform constants as true OS/runtime metadata
+  boundaries before considering the long-running shared-surface goal complete.
 - 2026-06-13 Moved OCR base Python discovery selection to descriptors.
   `OCR_BASE_PYTHON_RESOLVERS` now selects the existing Windows `where python`
   and common install-root search, macOS Homebrew fallback, and cross-platform
