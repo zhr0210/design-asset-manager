@@ -14,9 +14,6 @@ export type PlatformAiActionPlanKind =
 export type PlatformAiActionCommandKind =
   | 'refresh_evidence'
   | 'open_tab'
-  | 'start_llama_install'
-  | 'install_ocr_runtime'
-  | 'install_ai_runtime_dependencies'
   | 'none'
 
 export type PlatformAiActionCommandTab = 'models' | 'runtime' | 'services'

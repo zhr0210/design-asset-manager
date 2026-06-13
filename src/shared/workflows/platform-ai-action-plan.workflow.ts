@@ -1,23 +1,5 @@
 import type { PlatformAiActionCommand, PlatformAiActionPlan } from '../types/platform-ai-action-plan.types'
-import type {
-  PlatformAiBranch,
-  PlatformAiWorkflow,
-  PlatformAiWorkflowStatus
-} from '../types/platform-ai-branch-status.types'
-
-type PlatformActionCommandOverrides = Partial<Record<
-  PlatformAiWorkflow,
-  Partial<Record<PlatformAiActionPlan['kind'], PlatformAiActionCommand>>
->>
-
-const PLATFORM_ACTION_COMMAND_OVERRIDES: Record<PlatformAiBranch, PlatformActionCommandOverrides> = {
-  macos: {
-    ai_tag_task: {
-      open_runtime_management: { kind: 'install_ai_runtime_dependencies' }
-    }
-  },
-  windows: {}
-}
+import type { PlatformAiWorkflowStatus } from '../types/platform-ai-branch-status.types'
 
 export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): PlatformAiActionPlan {
   if (workflow.status === 'planned_capability') {
@@ -53,27 +35,10 @@ export function createPlatformAiActionPlan(workflow: PlatformAiWorkflowStatus): 
 }
 
 export function resolvePlatformAiActionCommand(
-  actionPlan: PlatformAiActionPlan,
-  platformBranch?: PlatformAiBranch
+  actionPlan: PlatformAiActionPlan
 ): PlatformAiActionCommand {
   if (!actionPlan.enabled || actionPlan.kind === 'none') return { kind: 'none' }
   if (actionPlan.kind === 'refresh_evidence') return { kind: 'refresh_evidence' }
-
-  if (
-    actionPlan.workflow === 'ai_prompt_task'
-    && (actionPlan.kind === 'open_model_management' || actionPlan.kind === 'open_runtime_management')
-  ) {
-    return { kind: 'start_llama_install' }
-  }
-
-  if (actionPlan.workflow === 'ocr_text_box' && actionPlan.kind === 'open_runtime_management') {
-    return { kind: 'install_ocr_runtime' }
-  }
-
-  const platformOverride = platformBranch
-    ? PLATFORM_ACTION_COMMAND_OVERRIDES[platformBranch][actionPlan.workflow]?.[actionPlan.kind]
-    : undefined
-  if (platformOverride) return { ...platformOverride }
 
   if (actionPlan.kind === 'open_model_management') return { kind: 'open_tab', targetTab: 'models' }
   if (actionPlan.kind === 'open_runtime_management') return { kind: 'open_tab', targetTab: 'runtime' }

@@ -64,7 +64,7 @@ assert.deepEqual(
   { kind: 'open_tab', targetTab: 'models' }
 )
 assert.deepEqual(
-  resolvePlatformAiActionCommand(plan({ kind: 'open_runtime_management' }), 'windows'),
+  resolvePlatformAiActionCommand(plan({ kind: 'open_runtime_management' })),
   { kind: 'open_tab', targetTab: 'runtime' }
 )
 assert.deepEqual(
@@ -76,34 +76,20 @@ assert.deepEqual(
     workflow: 'ai_prompt_task',
     kind: 'open_model_management'
   })),
-  { kind: 'start_llama_install' }
+  { kind: 'open_tab', targetTab: 'models' }
 )
 assert.deepEqual(
   resolvePlatformAiActionCommand(plan({
     workflow: 'ai_prompt_task',
     kind: 'open_runtime_management'
   })),
-  { kind: 'start_llama_install' }
+  { kind: 'open_tab', targetTab: 'runtime' }
 )
 assert.deepEqual(
   resolvePlatformAiActionCommand(plan({
     workflow: 'ocr_text_box',
     kind: 'open_runtime_management'
   })),
-  { kind: 'install_ocr_runtime' }
-)
-assert.deepEqual(
-  resolvePlatformAiActionCommand(plan({
-    workflow: 'ai_tag_task',
-    kind: 'open_runtime_management'
-  }), 'macos'),
-  { kind: 'install_ai_runtime_dependencies' }
-)
-assert.deepEqual(
-  resolvePlatformAiActionCommand(plan({
-    workflow: 'ai_tag_task',
-    kind: 'open_runtime_management'
-  }), 'windows'),
   { kind: 'open_tab', targetTab: 'runtime' }
 )
 assert.deepEqual(
@@ -113,20 +99,6 @@ assert.deepEqual(
   })),
   { kind: 'open_tab', targetTab: 'runtime' }
 )
-
-const actionPlanWorkflowSource = await fs.readFile(
-  'src/shared/workflows/platform-ai-action-plan.workflow.ts',
-  'utf8'
-)
-assert.match(
-  actionPlanWorkflowSource,
-  /const PLATFORM_ACTION_COMMAND_OVERRIDES: Record<PlatformAiBranch, PlatformActionCommandOverrides>/
-)
-assert.match(
-  actionPlanWorkflowSource,
-  /PLATFORM_ACTION_COMMAND_OVERRIDES\[platformBranch\]\[actionPlan\.workflow\]\?\.\[actionPlan\.kind\]/
-)
-assert.doesNotMatch(actionPlanWorkflowSource, /platformBranch === 'macos'/)
 
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 assert.match(aiConsoleSource, /resolvePlatformAiActionCommand/)
@@ -138,5 +110,6 @@ assert.doesNotMatch(aiConsoleSource, /workflow === 'ai_tag_task'/)
 assert.doesNotMatch(aiConsoleSource, /kind === 'open_model_management'/)
 assert.doesNotMatch(aiConsoleSource, /kind === 'open_runtime_management'/)
 assert.doesNotMatch(aiConsoleSource, /kind === 'open_backend_management'/)
+assert.doesNotMatch(aiConsoleSource, /command\.kind === 'install_|command\.kind === 'start_llama_install'/)
 
 console.log('platform-ai-action-plan passed')

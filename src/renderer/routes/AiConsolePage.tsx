@@ -1581,8 +1581,6 @@ export default function AiConsolePage() {
               platformBranchStatus={platformBranchStatus}
               onInstallAiRuntimeDeps={handleInstallAiRuntimeDeps}
               installingAiRuntimeDeps={installingAiRuntimeDeps}
-              onStartLlamaInstall={startLlamaInstall}
-              onInstallEasyOcr={handleInstallEasyOcr}
               pythonCompatibilityDisplay={platformPythonCompatibilityDisplay}
               clipSiglipOnnxStatus={clipSiglipOnnxStatus}
               ollamaFallback={ollamaFallback}
@@ -1809,8 +1807,6 @@ function OverviewWorkspace(props: {
   platformBranchStatus: PlatformAiBranchStatusResponse | null
   onInstallAiRuntimeDeps?: () => Promise<void>
   installingAiRuntimeDeps?: boolean
-  onStartLlamaInstall?: () => Promise<void>
-  onInstallEasyOcr?: () => Promise<void>
   pythonCompatibilityDisplay: AiRuntimeCompatibilityDisplay
   clipSiglipOnnxStatus: AiRuntimeClipSiglipOnnxStatusResponse | null
   ollamaFallback: FallbackSummary
@@ -1874,28 +1870,10 @@ function OverviewWorkspace(props: {
         <PlatformAiBranchStatusPanel
           status={props.platformBranchStatus}
           onAction={(actionPlan) => {
-            const command = resolvePlatformAiActionCommand(actionPlan, props.platformBranchStatus?.platformBranch)
+            const command = resolvePlatformAiActionCommand(actionPlan)
             if (command.kind === 'refresh_evidence') {
               props.onRefreshEvidence()
               return
-            }
-            if (command.kind === 'start_llama_install') {
-              if (props.onStartLlamaInstall) {
-                props.onStartLlamaInstall()
-                return
-              }
-            }
-            if (command.kind === 'install_ocr_runtime') {
-              if (props.onInstallEasyOcr) {
-                props.onInstallEasyOcr()
-                return
-              }
-            }
-            if (command.kind === 'install_ai_runtime_dependencies') {
-              if (props.onInstallAiRuntimeDeps) {
-                props.onInstallAiRuntimeDeps()
-                return
-              }
             }
             if (command.kind === 'open_tab' && command.targetTab) {
               props.setActiveTab(command.targetTab)

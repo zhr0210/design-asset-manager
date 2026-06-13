@@ -39,10 +39,20 @@ shape, or existing real-AI IPC channel semantics.
 
 ## Later Slices
 
-1. Implement Platform AI Action Plan as user-initiated routing to existing
-   Models, Runtime, Services, and refresh operations.
-2. Close OCR real-model evidence on Windows only when approved artifacts and a
+1. Close OCR real-model evidence on Windows only when approved artifacts and a
    generated-image inference are available.
+
+## Platform AI Action Plan
+
+- Evidence gaps map to Models, Runtime, Services, or manual evidence refresh.
+- Status-card actions navigate to the existing management surface.
+- The status card never starts downloads or installers directly.
+- Downloads, dependency installation, runtime launch, and health checks remain
+  explicit user actions in their existing management surfaces.
+- macOS Electron verification at `1280x804` confirmed that evidence refresh
+  produced no install/download progress and no document/body horizontal
+  overflow. The current machine exposed only refresh actions; focused contract
+  tests cover the Models, Runtime, and Services routing cases.
 
 ## Product Fail-Closed Policy
 
