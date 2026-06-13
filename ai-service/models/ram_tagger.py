@@ -152,7 +152,7 @@ class RAMTaggerModel:
                     image = Image.open(expanded).convert("RGB")
                     input_tensor = self.transform(image).unsqueeze(0).to(device)
                     
-                    with torch.no_grad():
+                    with torch.inference_mode():
                         res_tags = inference(input_tensor, self.model)
                         predicted_str = res_tags[0] if isinstance(res_tags, tuple) else res_tags
                         

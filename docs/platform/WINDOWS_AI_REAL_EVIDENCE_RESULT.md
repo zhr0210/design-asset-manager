@@ -58,6 +58,37 @@ The latest full Windows-host validation log filename is
 `dam-windows-ai-validation-20260613-184043.log`, and the screenshot filename is
 `dam-windows-ai-console.png`.
 
+## CUDA Optimization Update
+
+On 2026-06-13, the AI Worker gained a centralized CUDA inference policy used by
+both FastAPI startup and the standalone Qwen3-VL worker. CUDA now defaults to
+TF32-backed `high` float32 matmul precision, with an exact-mode opt-out through
+`DAM_CUDA_TF32=0`. cuDNN variable-shape autotuning remains disabled by default
+and can be explicitly enabled with `DAM_CUDNN_BENCHMARK=1`. Pure inference
+blocks for CLIP, RAM++, Florence-2, Visual Router CLIP, and Qwen3-VL use
+`torch.inference_mode()`.
+
+A fixed synthetic 4096x4096 FP32 matmul check on the Windows NVIDIA host
+measured 9.438 ms per operation in exact mode and 6.522 ms with the committed
+default policy, a 1.447x speedup. The sampled maximum absolute difference was
+0.074776. No user asset, model cache, local path, or private payload was read.
+
+Windows dependency resolution now selects `onnxruntime-gpu` and
+`optimum[onnxruntime-gpu]`, while non-Windows environments retain the CPU ONNX
+Runtime packages. A Windows `pip --dry-run` confirmed the GPU package selection
+without modifying the installed environment. The currently installed ONNX
+Runtime still reports CPU-only providers, so this update does not claim a new
+ONNX CUDA model execution result.
+
+The full Windows validation script was rerun after the optimization. It passed
+runtime-safety checks, 128 Python tests, CUDA execution, real WD Tagger and
+CLIP ONNX loads through the currently installed CPU provider, Llama CUDA text
+plus generated-image inference, Platform AI Branch Status, and the focused
+Electron/Playwright AI Console capture. The overflow result remained
+`doc=false`, `body=false` at `1266x795`. The sanitized log filename is
+`dam-windows-ai-validation-20260613-190230.log`; the screenshot filename remains
+`dam-windows-ai-console.png`.
+
 ## Post-Validation Audit-Only Update
 
 On 2026-06-13, after the full Windows validation above, a source-contract audit

@@ -440,7 +440,7 @@ class VisualRouter:
             inputs = clip_model.processor(text=prompts, images=image, return_tensors="pt", padding=True)
             inputs = {k: v.to(device) for k, v in inputs.items()}
 
-            with torch.no_grad():
+            with torch.inference_mode():
                 outputs = clip_model.model(**inputs)
             
             # Extract probability softmax

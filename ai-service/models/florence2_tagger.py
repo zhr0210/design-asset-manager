@@ -137,7 +137,7 @@ class Florence2TaggerModel:
             inputs = self.processor(text=task_prompt, images=image, return_tensors="pt")
             inputs = {k: v.to(device).to(dtype) if k == "pixel_values" else v.to(device) for k, v in inputs.items()}
             
-            with torch.no_grad():
+            with torch.inference_mode():
                 generated_ids = self.model.generate(
                     input_ids=inputs["input_ids"],
                     pixel_values=inputs["pixel_values"],

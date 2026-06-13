@@ -21,6 +21,7 @@ from core.mps_execution_probe import probe_python_mps_execution
 from core.cuda_execution_probe import probe_python_cuda_execution
 from core.onnx_model_load_probe import probe_registered_onnx_model_load
 from core.mock_policy import is_strict_real_ai
+from core.torch_inference_runtime import configure_torch_inference_runtime
 from schemas.tag_schema import TagEnqueueRequest
 from schemas.prompt_schema import PromptGenerateRequest
 from schemas.analysis_schema import AnalysisGenerateRequest
@@ -31,6 +32,17 @@ from models.asset_type_router import AssetTypeRouter
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle startup and shutdown hooks for FastAPI."""
+    try:
+        cuda_policy = configure_torch_inference_runtime()
+        if cuda_policy["cuda_available"]:
+            print(
+                "[CUDA] inference policy:"
+                f" matmul={cuda_policy['matmul_precision']},"
+                f" cudnn_benchmark={cuda_policy['cudnn_benchmark']}"
+            )
+    except Exception as e:
+        print(f"[CUDA] inference policy unavailable: {type(e).__name__}")
+
     # Startup: Patch tqdm with premium TUI progress display
     try:
         from utils.progress_bar import patch_tqdm_for_tui

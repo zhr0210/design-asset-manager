@@ -4,7 +4,12 @@
 
 Execute the cross-platform shared architecture roadmap for Design Asset Manager as a long-running agent goal.
 
-Current continuation goal: close the gap between accurate AI status labels and real executable evidence. `证据不足` must lead to an explicit evidence-collection action, `依赖缺失` must lead to the existing dependency/runtime management surface, model artifact gaps must lead to model management, and `尚未实现` must remain non-executable until an implementation route is accepted. Windows and macOS continue to share workflow/action contracts while runtime adapters and evidence differ.
+Current continuation goal: optimize the Windows NVIDIA CUDA inference path
+without changing shared product contracts. Prefer measured improvements to
+PyTorch CUDA execution, memory behavior, ONNX Runtime provider readiness, and
+Llama CUDA runtime policy. Keep macOS behavior unchanged, preserve explicit CPU
+fallbacks, and require focused Windows GPU evidence before claiming a speed or
+memory improvement.
 
 Target state: one Shared Product Surface for Windows and macOS, with shared main-process workflows, shared renderer contracts, and shared product status vocabulary by default. Introduce platform branches only for real OS capabilities, AI inference runtimes, packaging/native dependency handling, path/process adapters, or other differences that cannot be shared without hiding platform constraints.
 
@@ -89,6 +94,26 @@ Antigravity Subagent may be used through the local REST/SSE sidecar for bounded 
 
 ## Current Status
 
+- 2026-06-13 Optimized the Windows NVIDIA CUDA inference path without changing
+  IPC channels, database schema, AI Worker HTTP APIs, or shared response
+  shapes. FastAPI startup and the standalone Qwen3-VL worker now apply one
+  centralized policy: CUDA uses TF32-backed `high` float32 matmul precision by
+  default, `DAM_CUDA_TF32=0` restores `highest` precision, and variable-shape
+  cuDNN autotuning remains opt-in through `DAM_CUDNN_BENCHMARK=1`. CLIP, RAM++,
+  Florence-2, Visual Router CLIP, and Qwen3-VL pure inference blocks now use
+  `torch.inference_mode()`. A fixed synthetic 4096x4096 FP32 matmul benchmark
+  on the Windows NVIDIA host improved from 9.438 ms to 6.522 ms per operation,
+  or 1.447x, through the committed policy path. Windows requirements now select
+  `onnxruntime-gpu` and `optimum[onnxruntime-gpu]`; macOS/Linux retain the CPU
+  packages. Dependency resolution was dry-run only, so this slice does not
+  claim a new ONNX CUDA model execution result. Full Windows validation then
+  passed runtime-safety checks, 128 Python tests, CUDA execution, real WD
+  Tagger and CLIP ONNX loads through the currently installed CPU provider,
+  Llama CUDA text plus generated-image inference, Platform AI Branch Status,
+  Electron/Playwright capture, and the `1266x795` no-overflow check.
+  `check-agent-context.py` and `check-forbidden-paths.py` could not complete
+  because the current branch does not contain the required `.codeindex`
+  module-map, tests-map, and forbidden-paths configuration files.
 - 2026-06-13 Completed the cross-platform shared-architecture completion
   audit on Windows at `c7296b8`. Renderer/shared Platform AI surfaces contain
   no direct macOS/Windows branch comparison control flow, and main/shared/

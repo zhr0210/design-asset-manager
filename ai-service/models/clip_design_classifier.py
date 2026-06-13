@@ -150,7 +150,7 @@ class CLIPDesignClassifier:
             inputs = self.processor(text=prompt_list, images=image, return_tensors="pt", padding=True)
             inputs = {k: v.to(device) for k, v in inputs.items()}
             
-            with torch.no_grad():
+            with torch.inference_mode():
                 outputs = self.model(**inputs)
                 
             logits_per_image = outputs.logits_per_image
