@@ -391,12 +391,17 @@ function projectMissingRequirements(
     }]
   }
 
-  const modelMissing = modelReadiness.flatMap((item) => (item.missing ?? []).map((missing) => ({
-    kind: missing.kind,
-    id: missing.id,
-    label: missing.label,
-    detail: missing.detail
-  } satisfies PlatformAiMissingRequirement)))
+  const modelMissing = [...modelReadiness]
+    .sort((left, right) => (
+      Number(right.runtimeLane === definition.primaryRuntimeLane)
+      - Number(left.runtimeLane === definition.primaryRuntimeLane)
+    ))
+    .flatMap((item) => (item.missing ?? []).map((missing) => ({
+      kind: missing.kind,
+      id: missing.id,
+      label: missing.label,
+      detail: missing.detail
+    } satisfies PlatformAiMissingRequirement)))
 
   if (runtimeLanes.some((lane) => lane.status === 'real_model_path')) {
     return []
@@ -424,6 +429,27 @@ function createDisplayNextAction(status: PlatformAiBranchStatus, missing: Platfo
       kind: 'none',
       label: '切换到匹配的平台分支查看状态',
       target: { kind: 'workflow', id: firstMissing.id }
+    }
+  }
+  if (firstMissing.kind === 'model_artifact') {
+    return {
+      kind: 'download_model_artifact',
+      label: '补齐本地模型工件',
+      target: { kind: 'model_artifact', id: firstMissing.id }
+    }
+  }
+  if (firstMissing.kind === 'runtime_dependency') {
+    return {
+      kind: 'install_dependencies',
+      label: '补齐本地运行时依赖',
+      target: { kind: 'runtime_lane', id: firstMissing.id }
+    }
+  }
+  if (firstMissing.kind === 'backend_configuration') {
+    return {
+      kind: 'configure_external_backend',
+      label: '配置外部推理后端',
+      target: { kind: 'backend', id: firstMissing.id }
     }
   }
   return {

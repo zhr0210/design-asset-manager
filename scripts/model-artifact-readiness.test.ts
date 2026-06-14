@@ -268,6 +268,9 @@ assert.equal(windowsMissingOcrWorkflow?.status, 'runtime_probe_ready')
 assert.ok(windowsMissingOcrWorkflow?.missing.some((item) => (
   item.kind === 'model_artifact' && item.id === 'ocr-model-artifact'
 )))
+assert.equal(windowsMissingOcrWorkflow?.missing[0]?.id, 'ocr-model-artifact')
+assert.equal(windowsMissingOcrWorkflow?.nextAction?.kind, 'download_model_artifact')
+assert.equal(windowsMissingOcrWorkflow?.nextAction?.target?.id, 'ocr-model-artifact')
 
 const ocrProbeOnlyProjection = createPlatformAiBranchStatus({
   platformBranch: 'macos',

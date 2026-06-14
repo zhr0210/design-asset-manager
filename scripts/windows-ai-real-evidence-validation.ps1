@@ -309,6 +309,13 @@ try {
   if (!ocr?.missing?.some((item) => item.kind === "model_artifact" && item.id === "ocr-model-artifact")) {
     throw new Error("Windows branch status did not retain the OCR model artifact missing requirement");
   }
+  if (
+    ocr?.missing?.[0]?.id !== "ocr-model-artifact"
+    || ocr?.nextAction?.kind !== "download_model_artifact"
+    || ocr?.nextAction?.target?.id !== "ocr-model-artifact"
+  ) {
+    throw new Error("Windows OCR next action did not prioritize the primary-lane model artifact");
+  }
 
   const branchStatusPanel = page.getByTestId("platform-ai-branch-status");
   if (await branchStatusPanel.count() === 0) {

@@ -28,6 +28,7 @@ assert.match(source, /llamaProbe\?\.probe\?\.success === true && prompt\?\.statu
 assert.match(source, /ocr\?\.status === "real_model_path"/)
 assert.match(source, /structured OCR missing evidence/)
 assert.match(source, /OCR model artifact missing requirement/)
+assert.match(source, /primary-lane model artifact/)
 assert.match(source, /getByTestId\("platform-ai-branch-status"\)/)
 assert.match(source, /branchStatusPanel\.scrollIntoViewIfNeeded\(\)/)
 assert.match(source, /"--disable-gpu"/)

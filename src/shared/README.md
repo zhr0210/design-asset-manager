@@ -22,6 +22,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Explicit model-load probes may promote only the workflow/runtime lane they actually verified. Probe responses must be path-free, time-bounded evidence and must not imply that adjacent OCR or embedding routes passed.
 - OCR real evidence uses one shared generated-image response shape. Promotion requires a finite result with at least one detected text box; dependency or artifact gaps remain missing requirements.
 - Runtime readiness must not suppress model dependency/artifact missing requirements; only a real model path may hide gaps from unused alternative lanes.
+- Missing requirements and display-only next actions prioritize the workflow's primary runtime lane before alternative-lane gaps.
 - `aiRuntime:probeOcrRealEvidence` is an additive, user-triggered operation shared by Windows and macOS; it does not alter the Platform AI Branch Status response shape.
 - MPS/CUDA fixed-tensor execution is runtime evidence only. It may prove `runtime_probe_ready`, but cannot promote any workflow to `real_model_path`.
 - Runtime execution probes prove only that a runtime/device can execute fixed synthetic work; they must remain separate from real-model load or inference evidence.
