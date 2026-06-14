@@ -51,8 +51,7 @@ Close the approved explicit OCR evidence operation:
 
 ## Remaining Validation
 
-1. Push the shared slice and verify it on Windows without installing OCR
-   packages or downloading weights.
+None for this slice.
 
 ## macOS OCR Operation Result
 
@@ -65,6 +64,21 @@ Close the approved explicit OCR evidence operation:
 - The operation did not read user assets, install packages, download weights,
   or launch an external service.
 - Document and body horizontal overflow were both absent.
+
+## Windows OCR Operation Result
+
+- The Windows host fast-forwarded to the shared branch and passed typecheck,
+  production build, runtime-safety contracts, and 142 Python tests.
+- CUDA fixed-tensor execution, WD Tagger ONNX load, CLIP 512-dimensional
+  embedding, and Llama text plus generated-image inference remained green.
+- The OCR IPC preserved `generatedFixture=true` and `downloadsAllowed=false`.
+  RapidOCR lacked its dependency and EasyOCR lacked a local model artifact, so
+  OCR stayed `runtime_probe_ready` with structured `artifact_missing` evidence
+  and an `ocr-model-artifact` missing requirement.
+- The Electron branch-status screenshot was captured from the target element
+  with software rendering at `1008x725`; all four workflows were visible and
+  document/body horizontal overflow were absent.
+- No OCR dependency or model weight was installed or downloaded.
 
 ## Windows OCR Evidence Slice
 

@@ -391,16 +391,20 @@ function projectMissingRequirements(
     }]
   }
 
-  if (runtimeLanes.some((lane) => lane.status === 'runtime_probe_ready' || lane.status === 'ready_to_load' || lane.status === 'real_model_path')) {
-    return []
-  }
-
   const modelMissing = modelReadiness.flatMap((item) => (item.missing ?? []).map((missing) => ({
     kind: missing.kind,
     id: missing.id,
     label: missing.label,
     detail: missing.detail
   } satisfies PlatformAiMissingRequirement)))
+
+  if (runtimeLanes.some((lane) => lane.status === 'real_model_path')) {
+    return []
+  }
+
+  if (runtimeLanes.some((lane) => lane.status === 'runtime_probe_ready' || lane.status === 'ready_to_load')) {
+    return dedupeMissingRequirements(modelMissing)
+  }
 
   return dedupeMissingRequirements([...modelMissing, {
     kind: 'runtime_service',

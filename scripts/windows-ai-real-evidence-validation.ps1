@@ -306,6 +306,9 @@ try {
   if (!ocrEvidence) {
     throw new Error("Windows branch status did not project structured OCR missing evidence");
   }
+  if (!ocr?.missing?.some((item) => item.kind === "model_artifact" && item.id === "ocr-model-artifact")) {
+    throw new Error("Windows branch status did not retain the OCR model artifact missing requirement");
+  }
 
   const branchStatusPanel = page.getByTestId("platform-ai-branch-status");
   if (await branchStatusPanel.count() === 0) {

@@ -254,6 +254,21 @@ const missingOcrReadiness = createOcrRealEvidenceArtifactReadiness({
 assert.equal(missingOcrReadiness[0].state, 'artifact_missing')
 assert.equal(missingOcrReadiness[0].missing?.[0].kind, 'model_artifact')
 
+const windowsMissingOcrProjection = createPlatformAiBranchStatus({
+  platformBranch: 'windows',
+  currentPlatform: 'win32',
+  generatedAt: '2026-06-14T00:00:00.000Z',
+  runtimes: [runtime({ status: 'running' })],
+  modelReadiness: missingOcrReadiness
+})
+const windowsMissingOcrWorkflow = windowsMissingOcrProjection.workflows.find(
+  (workflow) => workflow.workflow === 'ocr_text_box'
+)
+assert.equal(windowsMissingOcrWorkflow?.status, 'runtime_probe_ready')
+assert.ok(windowsMissingOcrWorkflow?.missing.some((item) => (
+  item.kind === 'model_artifact' && item.id === 'ocr-model-artifact'
+)))
+
 const ocrProbeOnlyProjection = createPlatformAiBranchStatus({
   platformBranch: 'macos',
   currentPlatform: 'darwin',

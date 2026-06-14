@@ -21,6 +21,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Platform AI Action Plan projection maps status and missing requirements to existing model, runtime, backend, or manual-refresh UI operations. Renderer code executes the projected command but must not infer the destination from labels or evidence text.
 - Explicit model-load probes may promote only the workflow/runtime lane they actually verified. Probe responses must be path-free, time-bounded evidence and must not imply that adjacent OCR or embedding routes passed.
 - OCR real evidence uses one shared generated-image response shape. Promotion requires a finite result with at least one detected text box; dependency or artifact gaps remain missing requirements.
+- Runtime readiness must not suppress model dependency/artifact missing requirements; only a real model path may hide gaps from unused alternative lanes.
 - `aiRuntime:probeOcrRealEvidence` is an additive, user-triggered operation shared by Windows and macOS; it does not alter the Platform AI Branch Status response shape.
 - MPS/CUDA fixed-tensor execution is runtime evidence only. It may prove `runtime_probe_ready`, but cannot promote any workflow to `real_model_path`.
 - Runtime execution probes prove only that a runtime/device can execute fixed synthetic work; they must remain separate from real-model load or inference evidence.
@@ -68,6 +69,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.8 | 2026-06-14 | Preserved model dependency and artifact gaps when a workflow has runtime evidence but no real model path. |
 | v1.8.7 | 2026-06-14 | Added the shared explicit OCR real-evidence IPC contract and Chinese display projection. |
 | v1.8.24 | 2026-06-13 | Moved Worker probe connection recognition to branch-keyed marker metadata without changing probe semantics. |
 | v1.8.23 | 2026-06-13 | Moved Platform AI runtime lane-status policy into shared constants while preserving concrete lane topology. |
