@@ -605,5 +605,9 @@ A package smoke variant that runs installer validation inside a disposable sandb
 _Avoid_: Host install test, E2E install
 
 **Release Flow**:
-The governed packaging path for Windows and macOS artifacts, with publishing, signing, notarization, and auto-update explicitly reserved until configured.
+The governed packaging path for Windows and macOS artifacts. One shared
+promotion invariant owns `blocked`, `candidate_ready`, `distribution_ready`,
+and `publish_ready`; platform gates own Authenticode/Sandbox or Developer
+ID/notarization/Gatekeeper evidence. Publishing still requires explicit
+approval.
 _Avoid_: Build pipeline, distribution

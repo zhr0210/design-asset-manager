@@ -3,7 +3,9 @@ import fs from 'node:fs/promises'
 import { createReleaseFlowGovernancePlan } from '../src/main/packaging/release-flow-governance'
 
 const plan = createReleaseFlowGovernancePlan()
-assert.equal(plan.phase, '15A')
+assert.equal(plan.phase, '15B')
+assert.equal(plan.promotionInvariant, true)
+assert.equal(plan.unsignedCandidateArtifacts, true)
 assert.equal(plan.signingReserved, true)
 assert.equal(plan.notarizationReserved, true)
 assert.equal(plan.universalMacOptional, true)
@@ -15,6 +17,7 @@ assert.ok(plan.matrix.some((entry) => entry.target === 'windows-nsis' && entry.a
 assert.ok(plan.matrix.some((entry) => entry.target === 'windows-nsis' && entry.arch === 'arm64'))
 assert.ok(plan.matrix.some((entry) => entry.target === 'macos-dmg' && entry.arch === 'x64'))
 assert.ok(plan.matrix.some((entry) => entry.target === 'macos-dmg' && entry.arch === 'arm64'))
+assert.ok(plan.matrix.every((entry) => entry.command.startsWith('npm run dist:')))
 
 const manifest = JSON.parse(await fs.readFile('.codeindex/release-flow-governance.json', 'utf8')) as {
   windowsNsis?: boolean
@@ -39,11 +42,16 @@ assert.match(workflow, /if: matrix\.target == 'windows-nsis'/)
 assert.match(workflow, /npm run dist:win/)
 assert.match(workflow, /if: matrix\.target == 'macos-dmg'/)
 assert.match(workflow, /npm run dist:mac/)
+assert.match(workflow, /write-release-checksums\.mjs/)
+assert.match(workflow, /npm run package:smoke/)
+assert.match(workflow, /actions\/upload-artifact@v4/)
+assert.match(workflow, /unsigned-candidate/)
+assert.match(workflow, /DAM_DISABLE_MODEL_DOWNLOADS/)
 assert.doesNotMatch(workflow, /if \[/)
 assert.doesNotMatch(workflow, /electron-builder.*--publish|notarize|APPLE_ID|APPLE_TEAM_ID|CSC_LINK|CSC_KEY_PASSWORD|GH_TOKEN|GITHUB_TOKEN/)
 
 const source = await fs.readFile('src/main/packaging/release-flow-governance.ts', 'utf8')
-assert.doesNotMatch(source, /rm\s|Remove-Item|unlink\s*\(|rmdir\s*\(|--publish|publish:\s*true/i)
+assert.doesNotMatch(source, /(?:^|\s)rm\s|Remove-Item|unlink\s*\(|rmdir\s*\(|--publish|publish:\s*true/im)
 assert.doesNotMatch(source, /C:\\Users\\[A-Za-z0-9_.-]+/i)
 
 const doc = await fs.readFile('docs/platform/RELEASE_FLOW_GOVERNANCE.md', 'utf8')

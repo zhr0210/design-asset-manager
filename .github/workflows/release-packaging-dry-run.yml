@@ -6,6 +6,15 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+  DAM_CI_SAFE: true
+  DAM_DISABLE_MODEL_DOWNLOADS: true
+  DAM_DISABLE_RUNTIME_DOWNLOADS: true
+  DAM_DISABLE_REAL_AI_WORKER: true
+  DAM_DISABLE_EXTERNAL_INFERENCE: true
+  CSC_IDENTITY_AUTO_DISCOVERY: false
+
 jobs:
   dry-run:
     name: Dry run packaging on ${{ matrix.os }} for ${{ matrix.target }} (${{ matrix.arch }})
@@ -46,6 +55,9 @@ jobs:
       - name: Run build
         run: npm run build
 
+      - name: Run release governance checks
+        run: npm run test-release-flow-governance && npm run test-release-candidate-governance && npm run test-release-checksums && npm run test-package-smoke
+
       - name: Build unsigned Windows NSIS package
         if: matrix.target == 'windows-nsis'
         run: npm run dist:win -- --${{ matrix.arch }}
@@ -53,3 +65,26 @@ jobs:
       - name: Build unsigned macOS DMG package
         if: matrix.target == 'macos-dmg'
         run: npm run dist:mac -- --${{ matrix.arch }}
+
+      - name: Write Windows checksum manifest
+        if: matrix.target == 'windows-nsis'
+        run: node scripts/write-release-checksums.mjs --platform=windows --arch=${{ matrix.arch }}
+
+      - name: Write macOS checksum manifest
+        if: matrix.target == 'macos-dmg'
+        run: node scripts/write-release-checksums.mjs --platform=macos --arch=${{ matrix.arch }}
+
+      - name: Run static Package Smoke
+        run: npm run package:smoke -- --arch=${{ matrix.arch }}
+
+      - name: Upload unsigned release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-asset-manager-${{ matrix.target }}-${{ matrix.arch }}-unsigned-candidate
+          path: |
+            dist-packages/*.exe
+            dist-packages/*.dmg
+            dist-packages/*.blockmap
+            dist-packages/release-checksums-*.json
+          if-no-files-found: error
+          retention-days: 14

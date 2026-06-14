@@ -2,7 +2,12 @@ import { spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
+import os from 'node:os'
 
+const root = process.cwd()
+const packageManifest = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'))
+const productName = packageManifest.build?.productName ?? packageManifest.name
+const version = packageManifest.version
 const args = new Set(process.argv.slice(2))
 const buildInstaller = args.has('--build')
 const launchUnpacked = args.has('--launch-unpacked')
@@ -11,13 +16,20 @@ const generateSandbox = args.has('--sandbox') || args.has('--generate-sandbox') 
 const openSandbox = args.has('--open-sandbox')
 const timeoutArg = process.argv.find((arg) => arg.startsWith('--timeout-ms='))
 const launchTimeoutMs = timeoutArg ? Number(timeoutArg.replace('--timeout-ms=', '')) : 8000
+const archArg = process.argv.find((arg) => arg.startsWith('--arch='))
+const requestedArch = archArg?.replace('--arch=', '') ?? process.arch
+if (!['x64', 'arm64'].includes(requestedArch)) {
+  throw new Error('--arch must be x64 or arm64.')
+}
 
-const root = process.cwd()
 const distDir = path.join(root, 'dist-packages')
-const installerPath = path.join(distDir, 'Design Asset Manager Setup 1.0.0.exe')
-const unpackedExe = path.join(distDir, 'win-unpacked', 'Design Asset Manager.exe')
+const installerPath = path.join(distDir, `${productName} Setup ${version}.exe`)
+const windowsUnpackedDir = requestedArch === 'arm64' ? 'win-arm64-unpacked' : 'win-unpacked'
+const unpackedExe = path.join(distDir, windowsUnpackedDir, `${productName}.exe`)
 const workRootArg = process.argv.find((arg) => arg.startsWith('--work-root='))
-const workRoot = path.resolve(workRootArg?.replace('--work-root=', '') || 'G:\\codex\\DesignAssetManagerPackageSmoke')
+const workRoot = path.resolve(
+  workRootArg?.replace('--work-root=', '') || path.join(os.tmpdir(), 'DesignAssetManagerPackageSmoke')
+)
 const sandboxDir = path.join(workRoot, 'sandbox')
 const sandboxSharedDir = path.join(sandboxDir, 'shared')
 const sandboxWsbPath = path.join(sandboxDir, 'DesignAssetManagerPackageSmoke.wsb')
@@ -46,21 +58,25 @@ if (buildInstaller) {
 async function findDmgFile() {
   try {
     const files = await fs.readdir(distDir)
-    for (const f of files) {
-      if (f.endsWith('.dmg')) {
-        return path.join(distDir, f)
-      }
-    }
+    const dmgFiles = files.filter((fileName) => fileName.endsWith('.dmg'))
+    const architectureMatch = dmgFiles.find((fileName) => fileName.includes(requestedArch))
+    const selected = architectureMatch ?? dmgFiles[0]
+    return selected ? path.join(distDir, selected) : null
   } catch {}
   return null
 }
 
 async function findUnpackedBinary() {
   if (process.platform === 'win32') {
-    const candidates = [
-      path.join(distDir, 'win-unpacked', 'Design Asset Manager.exe'),
-      path.join(distDir, 'win-arm64-unpacked', 'Design Asset Manager.exe')
-    ]
+    const candidates = requestedArch === 'arm64'
+      ? [
+          path.join(distDir, 'win-arm64-unpacked', `${productName}.exe`),
+          path.join(distDir, 'win-unpacked', `${productName}.exe`)
+        ]
+      : [
+          path.join(distDir, 'win-unpacked', `${productName}.exe`),
+          path.join(distDir, 'win-x64-unpacked', `${productName}.exe`)
+        ]
     for (const c of candidates) {
       if (await exists(c)) return c
     }
@@ -70,8 +86,8 @@ async function findUnpackedBinary() {
       const subdirs = await fs.readdir(distDir, { withFileTypes: true })
       for (const entry of subdirs) {
         if (entry.isDirectory() && entry.name.startsWith('mac')) {
-          const appPath = path.join(distDir, entry.name, 'Design Asset Manager.app')
-          const binaryPath = path.join(appPath, 'Contents', 'MacOS', 'Design Asset Manager')
+          const appPath = path.join(distDir, entry.name, `${productName}.app`)
+          const binaryPath = path.join(appPath, 'Contents', 'MacOS', productName)
           if (await exists(binaryPath)) {
             return binaryPath
           }
@@ -79,8 +95,8 @@ async function findUnpackedBinary() {
       }
     } catch {}
     const fallbacks = [
-      path.join(distDir, 'mac', 'Design Asset Manager.app', 'Contents', 'MacOS', 'Design Asset Manager'),
-      path.join(distDir, 'mac-arm64', 'Design Asset Manager.app', 'Contents', 'MacOS', 'Design Asset Manager')
+      path.join(distDir, 'mac', `${productName}.app`, 'Contents', 'MacOS', productName),
+      path.join(distDir, 'mac-arm64', `${productName}.app`, 'Contents', 'MacOS', productName)
     ]
     for (const f of fallbacks) {
       if (await exists(f)) return f
@@ -92,11 +108,11 @@ async function findUnpackedBinary() {
 
 const activeInstaller = process.platform === 'win32'
   ? installerPath
-  : (await findDmgFile() || path.join(distDir, 'Design Asset Manager-1.0.0-arm64.dmg'))
+  : (await findDmgFile() || path.join(distDir, `${productName}-${version}-${requestedArch}.dmg`))
 
 const activeUnpacked = process.platform === 'win32'
   ? unpackedExe
-  : (await findUnpackedBinary() || path.join(distDir, 'mac-arm64', 'Design Asset Manager.app'))
+  : (await findUnpackedBinary() || path.join(distDir, `mac-${requestedArch}`, `${productName}.app`))
 
 await checkFile('installer', activeInstaller)
 if (process.platform === 'win32') {
@@ -169,7 +185,7 @@ async function smokeLaunchUnpacked() {
     return
   }
 
-  console.log(`Found unpacked binary to launch: ${binaryPath}`)
+  console.log(`Found unpacked binary to launch: ${path.basename(binaryPath)}`)
 
   const sandboxHome = path.join(distDir, 'temp-smoke-home')
   await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
@@ -278,10 +294,10 @@ async function generateSandboxFiles() {
   await fs.writeFile(sandboxScriptPath, sandboxScript(), 'utf8')
   await fs.writeFile(sandboxWsbPath, sandboxConfig(), 'utf8')
   report.artifacts.sandbox = {
-    workRoot,
-    config: sandboxWsbPath,
-    sharedDir: sandboxSharedDir,
-    launchCommand: `WindowsSandbox.exe "${sandboxWsbPath}"`
+    workRoot: workRootArg ? '<CUSTOM_WORK_ROOT>' : '<TEMP>',
+    config: path.basename(sandboxWsbPath),
+    sharedDir: path.basename(sandboxSharedDir),
+    launchCommand: `WindowsSandbox.exe "${path.basename(sandboxWsbPath)}"`
   }
   report.checks.push({ id: 'sandbox-files', status: 'passed', detail: 'Sandbox config and smoke script generated.' })
 }
@@ -311,13 +327,13 @@ function sandboxScript() {
     ? `
 if (Test-Path $installer) {
   $installParent = Join-Path $root 'install-parent'
-  $expectedInstallDir = Join-Path $installParent 'Design Asset Manager'
+  $expectedInstallDir = Join-Path $installParent '${productName}'
   Remove-Item -LiteralPath $installParent -Recurse -Force -ErrorAction SilentlyContinue
   New-Item -ItemType Directory -Force -Path $installParent | Out-Null
   $installerProcess = Start-Process -FilePath $installer -ArgumentList @('/S', ('/D=' + $installParent)) -PassThru -Wait
   Add-Check 'installer-run' ($(if ($installerProcess.ExitCode -eq 0) { 'passed' } else { 'failed' })) ('Installer exited with code ' + $installerProcess.ExitCode)
   Add-Check 'installer-subfolder' ($(if (Test-Path $expectedInstallDir) { 'passed' } else { 'failed' })) $expectedInstallDir
-  Add-Check 'installed-exe' ($(if (Test-Path (Join-Path $expectedInstallDir 'Design Asset Manager.exe')) { 'passed' } else { 'failed' })) 'Installed executable under normalized subfolder.'
+  Add-Check 'installed-exe' ($(if (Test-Path (Join-Path $expectedInstallDir '${productName}.exe')) { 'passed' } else { 'failed' })) 'Installed executable under normalized subfolder.'
 }
 `
     : ''
@@ -326,7 +342,7 @@ Start-Sleep -Seconds 15
 $root = 'C:\\Users\\WDAGUtilityAccount\\Desktop\\package-smoke'
 $report = Join-Path $root 'sandbox-report.json'
 $installer = Join-Path $root '${path.basename(installerPath)}'
-$unpacked = Join-Path $root 'win-unpacked\\Design Asset Manager.exe'
+$unpacked = Join-Path $root '${windowsUnpackedDir}\\${productName}.exe'
 $checks = @()
 
 function Add-Check($id, $status, $detail) {

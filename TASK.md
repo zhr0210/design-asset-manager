@@ -113,6 +113,27 @@ may use platform adapters.
 3. Deepen Release Flow around signed Windows artifacts, signed/notarized macOS
    artifacts, Package Smoke, gated publishing, and update metadata.
 
+## Release Candidate Governance Result
+
+- Added one shared promotion invariant for Windows and macOS with structured
+  missing gates and four truthful stages.
+- Added a path-free SHA-256 artifact manifest writer for NSIS/DMG candidates.
+- The manual packaging workflow now runs release-focused tests and retains
+  unsigned candidate artifacts for 14 days after architecture-aware static
+  Package Smoke, without signing or publishing.
+- Unsigned artifacts can reach only `candidate_ready`. Distribution and
+  publishing remain blocked until platform trust evidence, update metadata,
+  and explicit publish approval exist.
+- The inspected local macOS app is ad hoc signed, has no Team ID, and is not a
+  distribution artifact. Local Gatekeeper output was inconclusive because
+  system security assessment is disabled.
+- A real unsigned macOS arm64 DMG and blockmap were built locally. The
+  architecture-scoped checksum manifest and static Package Smoke passed;
+  strict bundle signature verification failed as expected for the unsigned
+  candidate, so its truthful ceiling is `candidate_ready`.
+- The complete `ci:governance` suite passed with the release invariant,
+  checksum, Package Smoke, and workflow contract tests included.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

@@ -11,5 +11,11 @@
   "cross_platform_runtime": [
     "npm run ci:test-runtime-safety",
     "npm run test-runtime-package-executor"
+  ],
+  "release_flow": [
+    "npm run test-release-flow-governance",
+    "npm run test-release-candidate-governance",
+    "npm run test-release-checksums",
+    "npm run test-package-smoke"
   ]
 }

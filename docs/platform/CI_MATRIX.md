@@ -44,4 +44,9 @@ These variables document CI intent and give future runtime/downloader code stabl
 
 `.github/workflows/macos-package-artifact.yml` is a manual workflow for packaging unsigned macOS DMG artifacts on a GitHub-hosted macOS runner. It uploads the `.dmg` and `.blockmap` files as GitHub Actions artifact downloads and keeps release publishing, signing, and notarization disabled.
 
+`.github/workflows/release-packaging-dry-run.yml` builds unsigned NSIS/DMG
+candidates for x64 and arm64, writes architecture-scoped SHA-256 manifests,
+runs static Package Smoke, and retains candidate artifacts for 14 days. It
+does not sign, notarize, publish, or read release secrets.
+
 `npm run test-ci-governance` verifies that the workflow and npm scripts keep these boundaries intact.

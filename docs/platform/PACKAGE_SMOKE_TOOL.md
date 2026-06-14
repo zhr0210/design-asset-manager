@@ -31,13 +31,13 @@ node scripts/package-smoke.mjs --sandbox
 By default, sandbox staging files are written outside the repo under:
 
 ```text
-G:\codex\DesignAssetManagerPackageSmoke
+the operating-system temporary directory
 ```
 
 You can override it with:
 
 ```bash
-node scripts/package-smoke.mjs --sandbox --work-root=G:\codex\another-package-smoke-folder
+node scripts/package-smoke.mjs --sandbox --work-root=<disposable-work-root>
 ```
 
 Open Windows Sandbox when `WindowsSandbox.exe` is available:
@@ -49,7 +49,7 @@ node scripts/package-smoke.mjs --sandbox --open-sandbox
 Generate a Sandbox install E2E script:
 
 ```bash
-node scripts/package-smoke.mjs --sandbox-install --work-root=G:\codex\DesignAssetManagerPackageSmokeInstall
+node scripts/package-smoke.mjs --sandbox-install --work-root=<disposable-work-root>
 ```
 
 With `--sandbox-install`, the generated Sandbox script runs the NSIS installer inside Windows Sandbox with a parent install directory and verifies that the final install path is the `Design Asset Manager` subfolder.
@@ -58,7 +58,9 @@ With `--sandbox-install`, the generated Sandbox script runs the NSIS installer i
 
 - The host tool does not run the NSIS installer.
 - The host launch smoke only starts `win-unpacked` and stops it after the timeout.
-- Sandbox staging is created under `G:\codex` by default.
+- Sandbox staging uses the operating-system temporary directory by default.
+- `--arch=x64` and `--arch=arm64` select the expected unpacked directory and
+  artifact architecture.
 - The sandbox script checks installer presence, hash, signature status, and `win-unpacked` startup.
 - The sandbox script runs the NSIS installer only when generated with `--sandbox-install`; this happens inside Windows Sandbox, not on the host.
 - The generated Sandbox profile disables vGPU and waits briefly after login before running smoke checks, which avoids coupling the smoke result to flaky Sandbox display acceleration.
