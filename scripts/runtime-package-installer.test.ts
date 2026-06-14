@@ -64,4 +64,5 @@ assert.doesNotMatch(sourceFile, /RuntimeRegistry|runtime-registry|saveSettings|S
 const doc = await fs.readFile('docs/platform/RUNTIME_PACKAGE_INSTALLER.md', 'utf8')
 assert.match(doc, /writeRegistry: false/)
 assert.match(doc, /install Python/)
-assert.match(doc, /Phase 11A/)
+assert.match(doc, /Runtime\s+Package\s+Executor/)
+assert.match(doc, /planning and execution separate/)

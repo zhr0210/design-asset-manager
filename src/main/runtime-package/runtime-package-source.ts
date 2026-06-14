@@ -11,7 +11,7 @@ export function createLocalRuntimePackageSource(id: string, directoryPath: strin
     enabled: true,
     trusted: false,
     networkAccess: 'never',
-    warnings: ['Local sources are metadata-only until downloader and verifier phases are complete.'],
+    warnings: ['Local sources require explicit confirmation and SHA-256 verification before execution.'],
     metadata: {}
   }
 }
@@ -41,7 +41,7 @@ export function createReservedRemoteRuntimePackageSource(id: string, url: string
     enabled: false,
     trusted: false,
     networkAccess: 'reserved',
-    warnings: ['Remote runtime package sources are reserved metadata only; network access is disabled in Phase 10A.'],
+    warnings: ['Remote runtime package sources remain reserved; network access requires a separately approved adapter.'],
     metadata: {}
   }
 }
@@ -56,7 +56,7 @@ export function resolveRuntimePackageSources(sources: RuntimePackageSource[]): R
     if (!source.id.trim()) blockingIssues.push('Runtime package source id is required.')
     if (source.type === 'remote') {
       reservedRemoteSources.push(source)
-      if (source.enabled) blockingIssues.push(`${source.id} is remote and must remain disabled in Phase 10A.`)
+      if (source.enabled) blockingIssues.push(`${source.id} is remote and must remain disabled.`)
       if (source.networkAccess !== 'reserved') blockingIssues.push(`${source.id} must use reserved network access.`)
       continue
     }

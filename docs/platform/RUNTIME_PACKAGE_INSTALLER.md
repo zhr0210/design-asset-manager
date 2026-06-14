@@ -1,6 +1,8 @@
-# Runtime Package Installer Skeleton
+# Runtime Package Install Planner
 
-Phase 10D adds an installer planning layer. It combines source, download, verification, extraction, registry metadata, and rollback planning without performing a real install.
+This module remains the side-effect-free Runtime Package Install Plan builder.
+It combines source, download, verification, extraction, registry metadata, and
+rollback planning without performing a real install.
 
 ## State Machine
 
@@ -41,6 +43,10 @@ This phase does not:
 - execute package scripts;
 - start a real AI Worker.
 
-## Next Step
+## Executable Module
 
-Phase 11A should add manual external HTTP runtime health checks. It must require user-triggered access and must not automatically contact external inference endpoints.
+Executable local/bundled transactions live in the separate Runtime Package
+Executor. Keeping planning and execution separate allows callers to inspect a
+plan without granting file-system mutation.
+
+See `docs/platform/RUNTIME_PACKAGE_EXECUTOR.md`.

@@ -9,6 +9,7 @@
     "python3 -m unittest discover ai-service/tests"
   ],
   "cross_platform_runtime": [
-    "npm run ci:test-runtime-safety"
+    "npm run ci:test-runtime-safety",
+    "npm run test-runtime-package-executor"
   ]
 }

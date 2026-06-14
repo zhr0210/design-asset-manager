@@ -29,6 +29,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep Llama server executable, force-stop, chmod, and zip extraction process metadata descriptor-driven; do not scatter process branches through installer flow.
 - Keep Llama hardware detection dispatch descriptor-driven; leave actual OS probes in macOS, Windows, and generic hardware adapters.
 - Keep Electron app lifecycle policy descriptor-driven; platform-specific AppUserModelId and quit-on-close behavior belong in startup policy metadata, not inline entry-point branches.
+- Keep executable Runtime Package transactions inside `FileSystemRuntimePackageExecutor`; callers receive path-free progress while checksum, staging, extraction, promotion, registry commit, and rollback stay local to the module.
 
 ## Tests
 
@@ -41,6 +42,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.0 | 2026-06-14 | Added the local/bundled Runtime Package Executor transaction with safe ZIP extraction and rollback. |
 | v1.3.0 | 2026-06-14 | Exposed the explicit, offline OCR generated-image evidence operation through AI Runtime IPC. |
 | v1.2.9 | 2026-06-13 | Moved OCR base Python discovery selection to descriptors while preserving Windows and macOS lookup behavior. |
 | v1.2.8 | 2026-06-13 | Moved Llama chmod and zip extraction process policy to descriptors while preserving installer behavior. |

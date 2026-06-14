@@ -75,6 +75,35 @@ Any renderer operation must remain user-triggered. Windows and macOS share the
 executor workflow while archive, executable, quarantine, and signing behavior
 may use platform adapters.
 
+## Runtime Package Executor Result
+
+- Added a shared execution interface and structured, path-free progress/result
+  vocabulary.
+- Added filesystem and in-memory adapters.
+- Filesystem execution is limited to explicitly confirmed local/bundled ZIP
+  packages and blocks model packages, remote sources, package scripts, and
+  automatic runtime start.
+- Relative bundled sources resolve from an injected or Electron resource root;
+  local and bundled source/access pairs are validated before file access.
+- SHA-256 verification, safe extraction, atomic promotion, Runtime Registry
+  commit, and rollback are implemented behind one module interface.
+- Filesystem executions are serialized inside the main process so concurrent
+  package requests cannot overwrite each other's Runtime Registry snapshot.
+- Generated ZIP tests cover success, duplicate install, checksum mismatch,
+  traversal, Windows drive paths, case collisions, symbolic links, entry
+  and expanded-size limits, source-root escape, managed-parent symlinks,
+  platform mismatch, and registry rollback.
+- Typecheck, production build, runtime-safety tests, 142 Python tests, and
+  unsigned macOS packaging passed. The complete `ci:governance` suite also
+  passed after restoring the local `better-sqlite3` Node ABI changed by the
+  packaging step.
+- The packaged app contains `extract-zip` and its runtime dependencies. An
+  isolated temporary-home startup remained running without module errors.
+- An earlier non-isolated startup smoke unintentionally reached the existing
+  default runtime SQLite initialization path before termination. No database
+  content or user asset was inspected, and no cleanup or rollback was
+  attempted. Future package smoke must use isolated roots only.
+
 ## Later Slices
 
 1. Validate the Runtime Package Executor on macOS and Windows with generated

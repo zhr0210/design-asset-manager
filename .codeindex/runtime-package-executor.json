@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "scope": "local and bundled runtime package execution",
+  "networkAccess": false,
+  "remoteSources": false,
+  "modelInstall": false,
+  "packageScripts": false,
+  "explicitConfirmation": true,
+  "checksumVerification": "sha256",
+  "safeExtraction": true,
+  "atomicPromotion": true,
+  "registryCommitAfterPromotion": true,
+  "rollbackRequired": true,
+  "adapters": [
+    "FileSystemRuntimePackageExecutor",
+    "InMemoryRuntimePackageExecutor"
+  ]
+}

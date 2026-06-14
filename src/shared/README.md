@@ -70,6 +70,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.25 | 2026-06-14 | Added shared Runtime Package Executor request, progress, result, stage, and error-code types. |
 | v1.8.8 | 2026-06-14 | Preserved model dependency and artifact gaps when a workflow has runtime evidence but no real model path. |
 | v1.8.7 | 2026-06-14 | Added the shared explicit OCR real-evidence IPC contract and Chinese display projection. |
 | v1.8.24 | 2026-06-13 | Moved Worker probe connection recognition to branch-keyed marker metadata without changing probe semantics. |
