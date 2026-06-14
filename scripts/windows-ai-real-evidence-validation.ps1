@@ -293,12 +293,12 @@ try {
     throw new Error("Insufficient OCR evidence was incorrectly promoted to real_model_path");
   }
 
-  await page.evaluate(() => {
-    const marker = "\u5e73\u53f0 AI \u5206\u652f\u72b6\u6001";
-    const candidates = Array.from(document.querySelectorAll("h1, h2, h3, h4, p, span, div"));
-    const target = candidates.find((node) => node.textContent?.includes(marker));
-    target?.scrollIntoView({ block: "center" });
-  });
+  const branchStatusLabel = "\u5e73\u53f0 AI \u5206\u652f\u72b6\u6001";
+  const branchStatusTarget = page.getByText(branchStatusLabel, { exact: true }).first();
+  if (await branchStatusTarget.count() === 0) {
+    throw new Error("Platform AI branch status heading was not found");
+  }
+  await branchStatusTarget.scrollIntoViewIfNeeded();
   await page.waitForTimeout(500);
   const screenshot = path.join(process.env.USERPROFILE || userData, "Desktop", "dam-windows-ai-console.png");
   await page.screenshot({ path: screenshot, fullPage: false });
