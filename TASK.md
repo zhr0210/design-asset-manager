@@ -63,13 +63,20 @@ Build the shared OCR evidence core before exposing a user trigger:
   `download_enabled=False`.
 - The Windows full-validation script records the result, but the product status
   remains unchanged until real host evidence is reviewed and mapped.
-- Windows host validation at commit `59e397d` passed TypeScript type checking
-  and the focused OCR/runtime-evidence contract tests. The generated-image
-  probe returned
+- Windows host validation through commit `a3c6250` passed type checking,
+  production build, runtime-safety contracts, 141 Python tests, direct probes,
+  and Electron/Playwright verification.
+- The Electron flow wrote finite CUDA execution evidence into the main-process
+  cache through the existing IPC and verified `worker_probe` projection.
+- WD Tagger and CLIP ONNX retained `real_model_path`; a successful generated
+  image Llama multimodal probe promoted only the prompt workflow.
+- The generated-image OCR probe returned
   `OCR_MODEL_ARTIFACT_MISSING`: RapidOCR was not installed, while EasyOCR was
   installed without its required local model artifact. OCR therefore remains
   `runtime_probe_ready`; closing it requires separately approved dependency or
   model-weight acquisition.
+- The Windows branch-status screenshot showed all four workflows at
+  `1008x725`, with no document/body horizontal overflow.
 
 ## Platform AI Action Plan
 
