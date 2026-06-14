@@ -34,6 +34,20 @@ Build the shared OCR evidence core before exposing a user trigger:
    runtime evidence. Fixed-tensor success can reach only `runtime_probe_ready`,
    never `real_model_path`.
 
+## macOS Evidence Result
+
+- Electron/Playwright clicked the existing MPS, WD Tagger ONNX, and CLIP ONNX
+  validation controls at `1280x804`.
+- MPS fixed-tensor execution produced `worker_probe` evidence and remained
+  `runtime_probe_ready`.
+- WD Tagger loaded a real ONNX Session through CoreML/CPU providers, promoting
+  only `ai_tag_task` to `real_model_path`.
+- CLIP completed a finite 512-dimensional image/text embedding through the CPU
+  provider, promoting only `search_embedding` to `real_model_path`.
+- `ocr_text_box` remained `runtime_probe_ready`; adjacent ONNX evidence did not
+  promote it.
+- No document/body horizontal overflow was present.
+
 ## Later Slices
 
 1. Add one explicit user-triggered OCR evidence operation after its additive
