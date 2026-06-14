@@ -267,7 +267,7 @@ Prompt reverse produces reusable prompt language and design descriptors. Deep vi
 flowchart TB
   SharedUI["Shared AI Console / Asset Workflows / 共享 AI Console 与资产工作流"] --> RuntimeRouter["Platform AI Runtime Router / 平台 AI 运行时路由器"]
   RuntimeRouter --> WindowsBranch["Windows AI Branch - developed baseline / Windows AI 分支 - 已开发基线"]
-  RuntimeRouter --> MacBranch["macOS AI Branch - Phase 1 skeleton + worker probe bridge / macOS AI 分支 - Phase 1 骨架 + worker 探测桥"]
+  RuntimeRouter --> MacBranch["macOS AI Branch - shared status + scoped real evidence / macOS AI 分支 - 共享状态与范围化真实证据"]
 
   WindowsBranch --> WinSmall["CUDA AI Worker main chain / CUDA AI Worker 主链路"]
   WindowsBranch --> WinLarge["Qwen3-VL large vision service route / Qwen3-VL 大视觉服务路线"]
@@ -281,9 +281,9 @@ flowchart TB
   MacLarge --> MacService["OpenAI-compatible local service / OpenAI-compatible 本地服务"]
 ```
 
- Windows 和 macOS 共享产品工作流、结果 schema、IPC surface、设置概念和 Electron-owned queue sync。它们不应该共享一个单体模型执行假设：CUDA VRAM policy 是 Windows-specific，而 macOS 需要 MPS、ONNX 和 Metal-specific capability routing。当前已把 macOS AI branch lanes 作为只读 runtime metadata 接入 AI Console，并通过 worker capability probe bridge 读取实时 MPS / ONNX 以及 RAM++、Florence-2、CLIP/SigLIP、WD14、RapidOCR、PaddleOCR 的家族级探测结果；AI Console 里也增加了 macOS route overview。ADR-0007 移除了没有执行闭环的独立 MLX 产品路线。
+ Windows 和 macOS 共享产品工作流、结果 schema、IPC surface、设置概念和 Electron-owned queue sync。它们不共享单体模型执行假设：CUDA VRAM policy 属于 Windows adapter，macOS 使用 MPS、ONNX 和 Metal adapter。两个 Platform AI Branch Status channel 返回同一共享形状，平台差异保留在 runtime-lane evidence。macOS 已具有 WD Tagger ONNX、CLIP ONNX 和 Llama GGUF/mmproj 的范围化真实证据；OCR 等未闭环路线继续显示结构化证据缺口。ADR-0007 移除了没有执行闭环的独立 MLX 产品路线。
 
- Windows and macOS share product workflows, result schemas, IPC surfaces, settings concepts, and Electron-owned queue sync. They should not share one monolithic model-execution assumption: CUDA VRAM policy is Windows-specific, while macOS needs MPS, ONNX, and Metal-specific capability routing. Phase 1 exposes macOS AI branch lanes as read-only runtime metadata in AI Console; Worker probes surface family-level availability for RAM++, Florence-2, CLIP/SigLIP, WD14, RapidOCR, and PaddleOCR. ADR-0007 removes the standalone MLX product route until an executable provider has real inference evidence.
+ Windows and macOS share product workflows, result schemas, IPC surfaces, settings concepts, and Electron-owned queue sync. They do not share one monolithic model-execution assumption: CUDA VRAM policy belongs to a Windows adapter, while macOS uses MPS, ONNX, and Metal adapters. Both Platform AI Branch Status channels return one shared shape and keep platform differences in runtime-lane evidence. macOS now has scoped real evidence for WD Tagger ONNX, CLIP ONNX, and Llama GGUF/mmproj; routes such as OCR retain structured evidence gaps. ADR-0007 removes the standalone MLX product route until an executable provider has real inference evidence.
 
 ### 运行时治理流程 / Runtime Governance Flow
 

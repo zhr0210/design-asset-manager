@@ -191,7 +191,7 @@ The Windows AI capability branch that keeps the CUDA AI Worker main chain while 
 _Avoid_: Windows build, CUDA mode
 
 **macOS AI Branch**:
-The macOS AI capability branch targeting Python MPS, ONNX Runtime, llama.cpp Metal, Ollama fallback, and external HTTP fallback. Phase 1 exposed lane metadata and AI Console visibility; the current bridge also surfaces live Worker probe results for Python MPS and ONNX Runtime availability. Model downloads and real inference validation are later phases.
+The macOS AI capability branch using Python MPS, ONNX Runtime, llama.cpp Metal, Ollama fallback, and external HTTP fallback behind shared product workflows. It exposes Platform AI Branch Status and scoped real evidence for supported WD Tagger ONNX, CLIP ONNX, and Llama GGUF/mmproj routes while retaining explicit evidence gaps for unproven routes such as OCR.
 _Avoid_: macOS build, MPS mode
 
 **AI Worker**:
@@ -371,8 +371,8 @@ A typed macOS AI branch lane shown in AI Console, such as Python MPS Runtime, ON
 _Avoid_: macOS tab, AI section
 
 **macOS AI Branch Skeleton**:
-The Phase 1 implementation state where macOS AI lanes, runtime metadata, profile capabilities, and AI Console cards exist, with a live Worker probe bridge for Python MPS and ONNX Runtime visibility but without claiming that downloads or inference routes are complete.
-_Avoid_: finished macOS AI, macOS support complete
+A historical Phase 1 term for the earlier metadata-and-probe-only state. Do not use it for the current branch, which now has shared workflow status and scoped Real Model Path evidence.
+_Avoid_: current macOS AI branch, finished macOS AI
 
 ### AI Models And Sources
 
@@ -525,6 +525,10 @@ _Avoid_: Install set, dependency list
 **Runtime Package Install Plan**:
 A dry-run plan that combines download, verification, extraction, registry metadata, rollback, warnings, and blocking issues.
 _Avoid_: Installation, setup
+
+**Runtime Package Executor**:
+The Electron main-process module that performs an explicitly approved Runtime Package transaction through staging, verification, safe extraction, atomic promotion, Runtime Registry commit, and rollback. The shared interface owns workflow state while platform adapters own real archive, executable, quarantine, and signing differences.
+_Avoid_: Package script, automatic installer, model downloader
 
 **Bootstrap**:
 The initial environment decision flow that combines doctor results, runtime profiles, package planning, and user choices.

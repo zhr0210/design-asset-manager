@@ -1,532 +1,65 @@
 # Windows AI Real Evidence Result
 
-Status: validated on Windows host; CUDA execution, WD Tagger ONNX, CLIP ONNX,
-and Llama CUDA GGUF/mmproj real evidence are closed.
+Status: validated through commit `8d53d03` on 2026-06-14.
 
-This file is the GitHub handoff mailbox for Windows-host validation on branch
-`codex/windows-ai-real-evidence`.
-
-## OCR Generated-Image Probe
-
-- Validation date: 2026-06-14.
-- Commit tested: `f266423`.
-- The explicit probe used a generated temporary image and kept
-  `downloadsAllowed=false`.
-- Result: `success=false`, `status=artifact_missing`,
-  `errorCode=OCR_MODEL_ARTIFACT_MISSING`.
-- RapidOCR reported `dependency_missing`.
-- EasyOCR was importable but reported `artifact_missing` with downloads
-  disabled.
-- No user asset, private path, model-cache path, image payload, package
-  installation, or model download was used.
-- Product status remains `runtime_probe_ready`. A later slice must obtain
-  explicit approval before installing an OCR dependency or downloading model
-  weights, then rerun the generated-image probe before any status promotion.
-
-## Stabilization Validation
-
-- Validation time: 2026-06-13 20:30, Windows host local time.
-- Commit tested: `13610a4`.
-- GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available with CUDA 12.8.
-- `npm run typecheck`: passed.
-- `npm run build`: passed with the existing Vite mixed dynamic/static import
-  warnings.
-- Python unittest discovery: passed, 129 tests.
-- `npm run ci:test-runtime-safety`: passed.
-- Full `scripts/windows-ai-real-evidence-validation.ps1`: passed.
-- Default requirements dry-run: selected `onnxruntime` and did not select
-  `onnxruntime-gpu`.
-- Explicit Windows CUDA requirements dry-run: selected `onnxruntime-gpu` and
-  did not select the CPU package.
-- CUDA policy: the default used exact float32 (`highest`, TF32 disabled);
-  `DAM_CUDA_TF32=1` used `high` precision with TF32 enabled. Both fixed
-  synthetic tensor executions returned finite results. Unknown environment
-  values did not enable TF32.
-- WD Tagger ONNX: real session load remained valid through
-  `CPUExecutionProvider`, with 1 input and 1 output.
-- CLIP ONNX: real image/text embedding remained valid through
-  `CPUExecutionProvider`, with a finite 512-dimensional embedding.
-- Llama CUDA: GGUF/mmproj text plus generated-image inference remained valid;
-  `chatOk=true`, `visionOk=true`, and `ai_prompt_task=real_model_path`.
-- OCR: remained `runtime_probe_ready`. No real OCR model load plus minimal
-  generated-image inference was completed, so no promotion was made.
-- Electron/Playwright clicked the AI Console refresh button. It did not use
-  `page.reload()`.
-- Screenshot: `dam-windows-ai-console.png`, generated outside the repository
-  and not staged.
-- Screenshot review: refresh-success feedback was visible; cards, controls,
-  model names, and status text showed no horizontal clipping or overlap.
-- Overflow check: `doc=false`, `body=false`, viewport `1266x795`.
-- Privacy: only generated imagery and existing registered model evidence were
-  used. No user asset was read and no new model weight was downloaded.
-- Remaining evidence gaps: OCR real-model inference is still open. TF32
-  model-level quality comparison is also open, so TF32 remains opt-in.
-
-The sanitized full-run log filename is
-`dam-windows-ai-validation-20260613-203039.log`. The log and screenshot remain
+This is the sanitized Windows evidence baseline for the
+`codex/windows-ai-real-evidence` branch. Detailed logs and screenshots remain
 outside the repository.
 
-## Bounded CUDA Evidence Follow-Up
+## Validation Gate
 
-On 2026-06-13, two path-free evidence tools were added for explicit,
-user-initiated validation with registered local models:
-
-- `compare_clip_tf32_quality.py` compared the real CLIP PyTorch model under
-  exact float32 and `DAM_CUDA_TF32=1` using four generated in-memory images and
-  six prompts. Top-1 agreement was 1.0, logit cosine similarity was
-  0.999999642, maximum absolute logit difference was 0.054901, mean absolute
-  logit difference was 0.013283, and all outputs were finite. This generated
-  fixture set is not broad enough to change the default; TF32 remains opt-in.
-- `probe_onnx_cuda_profile.py` ran inside an isolated explicit
-  `onnxruntime-gpu` 1.26.0 environment. CUDA provider availability was
-  confirmed. WD Tagger loaded through `CUDAExecutionProvider` with 1 input and
-  1 output. CLIP image/text embedding ran through `CUDAExecutionProvider`,
-  returned finite output, and produced a 512-dimensional embedding. The
-  isolated environment was removed after validation, and the CPU-safe default
-  environment was unchanged.
-
-OCR was also checked without allowing model downloads. RapidOCR was not
-installed. EasyOCR was installed but could not load its local English
-recognition weight with `download_enabled=False`. PaddleOCR was importable but
-was not initialized because initialization may fetch missing model weights.
-Therefore OCR correctly remains `runtime_probe_ready`.
-
-No user asset, private path, model-cache path, image payload, or new model
-weight was included in the output or repository.
-
-## Latest Reported Result
-
-- Validation time: 2026-06-13 18:40, Windows host local time.
-- Commit tested: `c7296b8`.
-- Windows host: DESKTOP-3573AOS.
-- GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
-- Validation command: `scripts/windows-ai-real-evidence-validation.ps1`.
-- Checks passed: `npm ci`, `npm run typecheck`, `npm run build`,
-  `npm run ci:test-runtime-safety`, Python unittest discovery, direct Windows AI
-  probes, focused Electron/Playwright AI Console validation, and the required
-  preflight TypeScript/shared-contract validation gate.
-- `npm ci`: passed with npm audit/deprecation warnings.
+- `npm ci`: passed.
 - `npm run typecheck`: passed.
-- `npm run build`: passed with existing Vite mixed dynamic/static import
-  warnings.
+- `npm run build`: passed.
 - `npm run ci:test-runtime-safety`: passed.
-- Python unittest discovery: passed, 123 tests.
-- Llama IPC refresh: selected `qwen3-vl-2b-instruct-q4-k-m`, started
-  `llama-server`, and ran text plus generated-image multimodal inference.
-- Llama multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
-  `visionInput=generated_fixture`.
-- Windows Platform AI Branch Status: returned `success=true`,
-  `platformBranch=windows`; `ai_tag_task`, `ai_prompt_task`, and
-  `search_embedding` reported `real_model_path`, while `ocr_text_box` reported
-  `runtime_probe_ready`.
-- Llama CUDA lane: reported `real_model_path` with `artifact_ready` and
-  `real_backend_loaded` evidence from text plus generated-image inference.
-- Electron/Playwright AI Console: screenshot captured on the Windows desktop.
-- Overflow check: `doc=false`, `body=false`, viewport `1266x795`.
-- Focused validation gate before the full script also passed:
-  `scripts/ai-runtime-status-workflow.test.ts`,
-  `scripts/ai-runtime-panel-contract.test.ts`,
-  `scripts/ai-console-macos-branch.test.ts`,
-  `scripts/macos-ai-runtime.test.ts`, `npm run typecheck`, `npm run build`,
-  `python scripts/check-docs-sync.py`, and `git diff --check`.
-- Shared-surface slice: Worker probe connection recognition now uses
-  branch-keyed `connectionPlatforms` / `connectionFlag` metadata. Concrete IPC
-  methods, channel names, response shapes, and probe semantics are unchanged.
-- Completion audit: renderer/shared Platform AI surfaces have no direct branch
-  comparison control flow, and remaining platform-aware modules are audited
-  OS/runtime/path/process or runtime-metadata adapters.
-- Privacy check: saved output uses sanitized path placeholders; no full local
-  or model-cache paths are recorded here.
-- Failures/blockers: none for the Windows real-evidence routes covered by this
-  run.
-- Next recommended action: treat future platform work as a new scoped change
-  and preserve the default-shared architecture rule.
+- Python unittest discovery: 142 tests passed.
+- Full `scripts/windows-ai-real-evidence-validation.ps1`: passed.
+- Electron/Playwright viewport: `1008x725`.
+- Document/body horizontal overflow: absent.
 
-The latest full Windows-host validation log filename is
-`dam-windows-ai-validation-20260613-184043.log`, and the screenshot filename is
-`dam-windows-ai-console.png`.
+## Real Evidence
 
-## CUDA Optimization Update
+| Workflow | Evidence | Status |
+| --- | --- | --- |
+| AI Tag Task | WD Tagger ONNX Session loaded; real provider input/output shape validated. | `real_model_path` |
+| Search Embedding | CLIP ONNX generated-image/text execution returned finite 512-dimensional output. | `real_model_path` |
+| AI Prompt Task | Llama CUDA loaded GGUF/mmproj and completed text plus generated-image inference. | `real_model_path` |
+| OCR Text Box | Explicit generated-image probe ran without downloads; dependency/artifact requirements were incomplete. | `runtime_probe_ready` |
 
-On 2026-06-13, the AI Worker gained a centralized CUDA inference policy used by
-both FastAPI startup and the standalone Qwen3-VL worker. The original commit
-enabled TF32-backed `high` float32 matmul precision by default. A Mac-side
-stabilization follow-up makes TF32 explicit opt-in pending model-level quality
-evidence. cuDNN variable-shape autotuning remains disabled by default. Pure
-inference blocks for CLIP, RAM++, Florence-2, Visual Router CLIP, and Qwen3-VL
-use `torch.inference_mode()`.
+CUDA fixed-tensor execution also completed with finite output. Runtime
+execution evidence was kept separate from model-load and inference evidence.
 
-A fixed synthetic 4096x4096 FP32 matmul check on the Windows NVIDIA host
-measured 9.438 ms per operation in exact mode and 6.522 ms with the committed
-default policy, a 1.447x speedup. The sampled maximum absolute difference was
-0.074776. No user asset, model cache, local path, or private payload was read.
+## OCR Result
 
-The original update selected GPU ONNX packages by Windows OS marker. The
-Mac-side stabilization follow-up replaces that policy with a CPU-safe default
-requirements file and an explicit NVIDIA Windows CUDA profile. A fresh Windows
-dry-run is required before accepting the new profile. The currently installed
-ONNX Runtime still reports CPU-only providers, so no ONNX CUDA model execution
-result is claimed.
+- The product operation was explicitly triggered.
+- The input was a generated temporary PNG.
+- `generatedFixture=true`.
+- `downloadsAllowed=false`.
+- RapidOCR reported a missing dependency.
+- EasyOCR reported a missing local model artifact.
+- The branch status retained structured `artifact_missing` evidence and an
+  `ocr-model-artifact` missing requirement.
+- No user asset, model-cache path, package installation, external service, or
+  model download was used.
 
-The full Windows validation script was rerun after the optimization. It passed
-runtime-safety checks, 128 Python tests, CUDA execution, real WD Tagger and
-CLIP ONNX loads through the currently installed CPU provider, Llama CUDA text
-plus generated-image inference, Platform AI Branch Status, and the focused
-Electron/Playwright AI Console capture. The overflow result remained
-`doc=false`, `body=false` at `1266x795`. The sanitized log filename is
-`dam-windows-ai-validation-20260613-190230.log`; the screenshot filename remains
-`dam-windows-ai-console.png`.
+OCR must not be promoted until a separately approved dependency/artifact slice
+installs the required local resources and the generated-image probe completes
+finite inference with at least one Text Box.
 
-## Post-Validation Audit-Only Update
+## Product Surface
 
-On 2026-06-13, after the full Windows validation above, a source-contract audit
-was added to `scripts/ai-runtime-status-workflow.test.ts`. It confirms that
-renderer/shared Platform AI surfaces do not contain direct
-`platformBranch === "windows"` or `platformBranch === "macos"` control flow,
-and records the remaining platform-check files as audited OS/runtime/path/process
-boundaries. This audit-only slice did not change product-facing renderer code,
-runtime code, IPC channels, shared response fields, database schema, or AI
-Worker HTTP API shapes, so no new Windows screenshot or runtime-evidence claim
-is added here.
+Electron/Playwright verified that:
 
-A later 2026-06-13 shared-workflow refactor moved current branch-runtime
-metadata lookup to branch-keyed descriptors and preserved the existing
-Windows-then-macOS current-platform lookup order in a focused source contract.
-That change also did not alter renderer output, runtime behavior, IPC channels,
-shared response fields, database schema, or AI Worker HTTP API shapes, so the
-latest full Windows evidence remains the validation run reported above.
+- all four shared workflows were visible;
+- Windows platform evidence appeared inside runtime lanes rather than changing
+  the shared workflow shape;
+- status labels and actions fit without overlap;
+- refresh preserved the in-process evidence cache;
+- no automatic install or download was triggered.
 
-Another 2026-06-13 main-process refactor moved Platform AI branch runtime
-provider registration to descriptors while preserving the existing runtime ids,
-platforms, profile rules, and metadata keys. That registration-only change did
-not alter renderer output, runtime probing, IPC channels, shared response
-fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
-evidence is claimed for it.
+## Remaining Decision
 
-A further 2026-06-13 bootstrap refactor moved the Python Worker auto-start OS
-set to `PYTHON_WORKER_AUTOSTART_PLATFORMS`, preserving the existing macOS and
-Windows behavior. It did not alter renderer output, runtime probing, IPC
-channels, shared response fields, database schema, or AI Worker HTTP API shapes;
-no new Windows runtime evidence is claimed for it.
-
-A subsequent 2026-06-13 runtime resolver refactor moved default profile and
-hardware-hint selection into ordered metadata rules while preserving the
-existing Windows CPU/CUDA and macOS arm64/x64 recommendations. It did not alter
-renderer output, runtime probing, IPC channels, shared response fields,
-database schema, or AI Worker HTTP API shapes; no new Windows runtime evidence
-is claimed for it.
-
-A later 2026-06-13 platform detector refactor moved platform-profile mapping
-to `PLATFORM_PROFILE_RULES`, preserving existing win32/darwin/linux profile
-outputs and the real OS capability booleans. It did not alter renderer output,
-runtime probing, IPC channels, shared response fields, database schema, or AI
-Worker HTTP API shapes; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 Doctor display refactor moved platform-label projection to
-`DOCTOR_PLATFORM_LABELS`, preserving the macOS display label and Windows raw
-platform fallback. It did not alter renderer layout, runtime probing, IPC
-channels, shared response fields, database schema, or AI Worker HTTP API shapes;
-no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 shared default-policy refactor moved the Platform AI default
-branch fallback to `DEFAULT_PLATFORM_AI_BRANCH`, preserving the existing macOS
-fallback for branch resolution, Worker diagnostics selection, capability-matrix
-defaults, AI Runtime settings initial state, and AI Console initial state. It
-did not alter renderer layout, runtime probing, IPC channels, shared response
-fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
-evidence is claimed for it.
-
-A later 2026-06-13 main-process provider refactor moved Platform AI branch
-provider profile selection into descriptor `profileRules`, preserving the
-existing macOS Apple Silicon, macOS Intel, and Windows CUDA profile outputs. It
-did not alter renderer output, runtime probing, IPC channels, shared response
-fields, database schema, or AI Worker HTTP API shapes; no new Windows runtime
-evidence is claimed for it.
-
-A later 2026-06-13 main-process projector refactor split Platform AI branch
-workflow topology from shared runtime-lane resolution, preserving the existing
-macOS and Windows workflow order, lane membership, primary lanes, labels, and
-runtime-kind matching. It did not alter renderer output, runtime probing, IPC
-channels, shared response fields, database schema, or AI Worker HTTP API
-shapes; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 main-process resolver refactor moved runtime profile
-recommendation reason copy to `RUNTIME_PROFILE_REASON_MESSAGES`, preserving the
-existing Windows CUDA, Windows CPU, macOS Apple Silicon, macOS Intel, and
-external-inference reason strings. It did not alter renderer output, runtime
-probing, IPC channels, shared response fields, database schema, or AI Worker
-HTTP API shapes; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 Llama planner refactor moved no-GPU accelerator defaults to
-`DEFAULT_LLAMA_ACCELERATOR_RULES`, preserving the existing Windows Vulkan
-default and cross-platform CPU fallback. It did not alter renderer output,
-runtime probing, IPC channels, shared response fields, database schema, AI
-Worker HTTP API shapes, artifact selection, download behavior, or process
-startup; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 read-only Llama governance refactor moved macOS llama.app
-and Windows llama.cpp adapter selection to `LLAMA_RUNTIME_PLATFORM_ADAPTERS`,
-preserving the existing adapter output and side-effect-free governance rules. It
-did not alter renderer output, runtime probing, IPC channels, shared response
-fields, database schema, AI Worker HTTP API shapes, artifact selection, download
-behavior, installation, or process startup; no new Windows runtime evidence is
-claimed for it.
-
-A later 2026-06-13 OCR dependency refactor moved managed venv executable path
-selection to `OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS`, preserving the existing
-Windows `Scripts/python.exe` and cross-platform `bin/python` paths. It did not
-alter renderer output, runtime probing, IPC channels, shared response fields,
-database schema, AI Worker HTTP API shapes, Python interpreter discovery,
-dependency installation, or process startup; no new Windows runtime evidence is
-claimed for it.
-
-A later 2026-06-13 OCR dependency refactor moved base Python discovery
-selection to `OCR_BASE_PYTHON_RESOLVERS`, preserving the existing Windows
-`where python` check, Windows common install-root search, macOS Homebrew
-fallback, environment-variable precedence, and cross-platform `python`
-fallback. It did not alter renderer output, runtime probing, IPC channels,
-shared response fields, database schema, AI Worker HTTP API shapes, dependency
-installation, or AI process startup; no new Windows runtime evidence is claimed
-for it.
-
-A later 2026-06-13 Llama installer refactor moved server executable metadata
-and Windows force-stop command metadata to `LLAMA_SERVER_PROCESS_ADAPTERS`,
-preserving the existing Windows `llama-server.exe`, cross-platform
-`llama-server`, missing-executable copy, and task cleanup behavior. It did not
-alter renderer output, runtime probing, IPC channels, shared response fields,
-database schema, AI Worker HTTP API shapes, artifact selection, download
-behavior, installation, or process startup; no new Windows runtime evidence is
-claimed for it.
-
-A later 2026-06-13 Llama installer refactor also moved chmod-before-spawn
-policy and zip extraction command choice to `LLAMA_SERVER_PROCESS_ADAPTERS`,
-preserving the existing non-Windows chmod behavior, Windows no-chmod behavior,
-non-Windows `unzip` extraction, and Windows PowerShell `Expand-Archive`
-extraction. It did not alter renderer output, runtime probing, IPC channels,
-shared response fields, database schema, AI Worker HTTP API shapes, artifact
-selection, download behavior, installation triggering, or process startup; no
-new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 Llama installer refactor moved hardware detection dispatch
-to the internal `hardwareDetectionAdapters` table, preserving the existing macOS
-hardware probe, Windows NVIDIA/CUDA probe, and generic CPU fallback behavior. It
-did not alter renderer output, runtime probing, IPC channels, shared response
-fields, database schema, AI Worker HTTP API shapes, artifact selection, download
-behavior, installation, or process startup; no new Windows runtime evidence is
-claimed for it.
-
-A later 2026-06-13 Electron bootstrap refactor moved AppUserModelId and
-quit-on-all-windows-closed behavior to `ELECTRON_APP_LIFECYCLE_POLICIES`,
-preserving the existing Windows AppUserModelId value, Windows/default quit
-behavior, and macOS keep-running behavior. It did not alter renderer output,
-runtime probing, IPC channels, shared response fields, database schema, AI
-Worker HTTP API shapes, AI artifact handling, dependency installation, or AI
-process startup; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 audit-only source contract update added an explicit check
-that `src/main`, `src/shared`, and `src/renderer` contain no direct
-`process.platform ===/!== "win32"/"darwin"` control-flow branches. Remaining
-`process.platform` usages are recorded as adapter lookup/default-parameter,
-platform detection, IPC current-platform reporting, or runtime metadata
-boundaries. It did not alter product code, renderer output, runtime probing,
-IPC channels, shared response fields, database schema, AI Worker HTTP API
-shapes, dependency installation, or process startup; no new Windows runtime
-evidence is claimed for it.
-
-A later 2026-06-13 shared constants refactor moved the shared Platform AI
-runtime capability builder, current-platform matcher, fallback-status helper,
-and evidence-status helper to `platform-ai-runtime-metadata.constants.ts`.
-Concrete macOS/Windows runtime constants still own lane IDs, lane membership,
-labels, backend names, warnings, and platform topology. It did not alter
-product code, renderer output, runtime probing, IPC channels, shared response
-fields, database schema, AI Worker HTTP API shapes, dependency installation,
-download behavior, or process startup; no new Windows runtime evidence is
-claimed for it.
-
-A later 2026-06-13 shared constants refactor moved common Platform AI runtime
-lane-status policy into `currentPlatformLaneStatus()`, preserving the existing
-non-current-platform `unavailable`, required-architecture `fallback`, and
-current-platform `evidence_insufficient` outcomes. Concrete macOS/Windows
-runtime constants still own lane IDs, lane membership, labels, backend names,
-warnings, and platform topology. It did not alter product code, renderer
-output, runtime probing, IPC channels, shared response fields, database schema,
-AI Worker HTTP API shapes, dependency installation, download behavior, or
-process startup; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 main-process path refactor moved AI Runtime app-data root
-selection into `AI_RUNTIME_APP_DATA_ROOT_ADAPTERS`, preserving the existing
-Windows and default macOS app-managed runtime directory semantics before the
-Python Worker cache environment is built. It did not alter renderer output,
-runtime probing, IPC channels, shared response fields, database schema, AI
-Worker HTTP API shapes, dependency installation, download behavior, or process
-startup; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 Llama planner refactor moved runtime package artifact
-matching into `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES`, preserving the existing
-macOS, Linux, Windows CUDA, Windows Vulkan, and Windows CPU release filename
-matching. It did not alter renderer output, runtime probing, IPC channels,
-shared response fields, database schema, AI Worker HTTP API shapes, dependency
-installation, download behavior, installer triggering, or process startup; no
-new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 Llama planner refactor moved CUDA runtime sidecar artifact
-matching into `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES`, preserving the
-existing Windows CUDA 13 and CUDA 12 cudart release filename matching. It did
-not alter renderer output, runtime probing, IPC channels, shared response
-fields, database schema, AI Worker HTTP API shapes, dependency installation,
-download behavior, installer triggering, or process startup; no new Windows
-runtime evidence is claimed for it.
-
-A later 2026-06-13 Doctor refactor moved Node and Python platform command
-selection into `NPM_COMMAND_ADAPTERS` and `PYTHON_LAUNCHER_ADAPTERS`,
-preserving the existing Windows `npm.cmd` / `py` checks and default `npm` /
-skipped-`py` behavior. It did not alter renderer output, runtime probing, IPC
-channels, shared response fields, database schema, AI Worker HTTP API shapes,
-dependency installation, download behavior, installer triggering, or process
-startup; no new Windows runtime evidence is claimed for it.
-
-A later 2026-06-13 shared-workflow refactor moved Worker probe connection
-recognition to declarative `connectionPlatforms` / `connectionFlag` metadata,
-preserving the existing Windows `win32` / `windows` markers and macOS
-`isMacOS` evidence semantics. It did not alter renderer output, runtime probe
-execution, IPC channels, shared response fields, database schema, AI Worker
-HTTP API shapes, dependency installation, download behavior, installer
-triggering, or process startup. The required focused TypeScript gate,
-typecheck, build, docs sync, and diff checks passed on Windows. The full
-real-evidence script was not rerun, and no new Windows runtime evidence is
-claimed for this metadata-only slice.
-
-The immediately preceding full-route success log is
-`dam-windows-ai-validation-20260612-172616.log`; it recorded
-`chatOk=true`, `visionOk=true`, `success=true`, and
-`ai_prompt_task=real_model_path`.
-
-## Previous Reported Result
-
-- Validation time: 2026-06-07 02:17, Windows host local time.
-- Windows host: DESKTOP-3573AOS.
-- GPU/CUDA: NVIDIA RTX 5060 Ti detected; PyTorch CUDA available.
-- Torch CUDA execution: `python_cuda_execution` reported `success=true`,
-  `status=executed_real`, `runtime=torch.cuda`, operation
-  `tensor_square_sum`, and finite output.
-- ONNX Runtime: importable; reported providers were `AzureExecutionProvider`
-  and `CPUExecutionProvider`.
-- `onnx_wd_tagger_load`: initially reported `artifact_missing`. After the
-  app-owned cooperative WD Tagger artifact download, the direct Python probe
-  reported `success=true`, `status=loaded_real`, provider
-  `CPUExecutionProvider`, operation `session_load`, finite result, and 1 input /
-  1 output.
-- `onnx_clip_embedding`: initially reported `artifact_missing`. After the CLIP
-  family download was extended with the app-owned ONNX embedding artifact, the
-  probe reported `success=true`, `status=loaded_real`, provider
-  `CPUExecutionProvider`, operation `image_text_embedding`, finite output, and a
-  512-dimensional image embedding.
-- Windows Platform AI Branch Status IPC: returned `success=true`,
-  `platformBranch=windows`.
-- Workflow statuses before the WD artifact download: `ai_tag_task`,
-  `ai_prompt_task`, `ocr_text_box`, and `search_embedding` all reported
-  `runtime_probe_ready`.
-- Workflow statuses after the WD artifact download and IPC probe:
-  `ai_tag_task` reported `real_model_path`; ONNX Runtime lane reported
-  `real_model_path` with real-backend-loaded evidence.
-- Workflow statuses after the CLIP ONNX artifact download and IPC probe:
-  `search_embedding` reported `real_model_path`; the CLIP/SigLIP ONNX lane
-  reported `real_model_path` with `CPUExecutionProvider` and 512-dimensional
-  embedding evidence.
-- Electron/Playwright AI Console: Windows AI branch status panel was visible;
-  screenshot was captured on the Windows desktop.
-- Overflow check: `doc=false`, `body=false`, viewport `1008x725`.
-- Failures/blockers at that time: Windows Llama CUDA GGUF/mmproj evidence was
-  still insufficient for `real_model_path`.
-- Next recommended action at that time: validate the Windows Llama CUDA
-  GGUF/mmproj route with real prompt/image evidence.
-
-The previous full Windows-host validation log filename was
-`dam-windows-ai-validation-20260607-024905.log`, and the screenshot filename is
-`dam-windows-ai-console.png`. A later focused Electron smoke verified that the
-UI refresh path shows Windows real-model evidence after calling the WD Tagger
-and CLIP ONNX preload probes.
-
-## Re-run Command
-
-The Windows-host Codex can rerun:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\windows-ai-real-evidence-validation.ps1
-```
-
-Then update this file with a sanitized result summary and push it to the same
-branch. Do not include secrets, full private paths, model cache paths, or image
-payloads.
-
-## Required Result Summary
-
-- Validation time:
-- Windows host:
-- Commit tested:
-- `npm ci`:
-- `npm run typecheck`:
-- `npm run build`:
-- `npm run ci:test-runtime-safety`:
-- `npm run test-python-unittest`:
-- `nvidia-smi` summary:
-- Torch CUDA summary:
-- `windows_capabilities`:
-- `python_cuda_status`:
-- `python_cuda_execution`:
-- `onnx_wd_tagger_load`:
-- `onnx_clip_embedding`:
-- Windows Platform AI Branch Status workflows:
-- Electron/Playwright AI Console:
-- Screenshot:
-- Overflow check:
-- Failures/blockers:
-- Next recommended action:
-
-## Privacy Rules
-
-Do not include secrets, tokens, cookies, full private asset paths, full model
-cache paths, private image data, or base64/binary payloads.
-
-
-## Additional validation run
-
-The 2026-06-07 runs completed `npm ci`, `npm run typecheck`, `npm run build`,
-`npm run ci:test-runtime-safety`, Python unittest discovery with 111 tests,
-direct Windows AI probes, and Electron/Playwright checks. The final focused
-Electron smoke reported WD Tagger and CLIP as `loaded_real`, CLIP embedding
-dimension 512, `ai_tag_task` and `search_embedding` as `real_model_path`, and no
-horizontal overflow at a 1008x725 viewport. CLIP ONNX is now a closed Windows
-real-evidence route.
-
-## Additional Llama GGUF/mmproj validation run
-
-On 2026-06-11, a focused Electron/Playwright run on DESKTOP-3573AOS synced the
-branch to `e350a97`, invoked the existing Llama IPC path, selected Qwen3-VL 2B
-Q4_K_M for the smallest useful Windows evidence slice, installed the llama.cpp
-CUDA 13 runtime plus cudart package, downloaded the matching GGUF and mmproj
-artifacts, started `llama-server`, and ran the shared text plus generated-image
-`probeLlamaServer()` validation.
-
-Sanitized result:
-
-- Hardware: NVIDIA RTX 5060 Ti, CUDA 13.2 reported by the Llama hardware probe.
-- Selected model: `qwen3-vl-2b-instruct-q4-k-m`.
-- Llama server: started through `llamaRuntimeStartServer`, model list returned
-  `Qwen3VL-2B-Instruct-Q4_K_M.gguf`.
-- Multimodal probe: `chatOk=true`, `visionOk=true`, `success=true`,
-  `visionInput=generated_fixture`.
-- Windows Platform AI Branch Status: `ai_prompt_task` promoted to
-  `real_model_path`; `llama_cuda` lane included `real_backend_loaded` evidence
-  from text plus generated-image inference.
-- Electron/Playwright screenshot: `dam-windows-llama-ai-console.png` captured
-  on the Windows desktop.
-
-`scripts/windows-ai-real-evidence-validation.ps1` now also calls the Llama
-start/test IPC path before reading Windows Platform AI Branch Status, so future
-full validation runs refresh the in-process Llama multimodal evidence before
-asserting branch status.
-
-The later full run at commit `e947443` confirmed the same route through the full
-Windows validation script: `ai_prompt_task` and the `llama_cuda` lane both
-reported `real_model_path`, and the screenshot overflow check remained clean.
+The Windows AI validation assignment is complete. The only open AI evidence
+decision is whether to authorize OCR dependency and model-artifact acquisition.
+That decision is independent from the next shared Runtime Package Executor
+slice.
