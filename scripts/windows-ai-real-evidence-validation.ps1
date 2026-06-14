@@ -286,8 +286,11 @@ try {
   if (tagging?.status !== "real_model_path" || embedding?.status !== "real_model_path") {
     throw new Error("Windows ONNX workflows did not retain real_model_path status");
   }
-  if (prompt?.status === "real_model_path" || ocr?.status === "real_model_path") {
-    throw new Error("Insufficient prompt/OCR evidence was incorrectly promoted to real_model_path");
+  if (llamaProbe?.probe?.success === true && prompt?.status !== "real_model_path") {
+    throw new Error("Successful Llama multimodal evidence did not promote the prompt workflow");
+  }
+  if (ocr?.status === "real_model_path") {
+    throw new Error("Insufficient OCR evidence was incorrectly promoted to real_model_path");
   }
 
   await page.evaluate(() => {

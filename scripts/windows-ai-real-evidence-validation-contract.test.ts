@@ -21,6 +21,7 @@ assert.match(source, /probePythonCudaRuntime/)
 assert.match(source, /status !== "executed_real"/)
 assert.match(source, /source === "worker_probe" && item\.code === "runtime_probe_ready"/)
 assert.match(source, /tagging\?\.status !== "real_model_path"/)
-assert.match(source, /prompt\?\.status === "real_model_path" \|\| ocr\?\.status === "real_model_path"/)
+assert.match(source, /llamaProbe\?\.probe\?\.success === true && prompt\?\.status !== "real_model_path"/)
+assert.match(source, /ocr\?\.status === "real_model_path"/)
 
 console.log('windows-ai-real-evidence-validation-contract passed')
