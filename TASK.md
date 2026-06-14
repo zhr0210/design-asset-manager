@@ -30,6 +30,9 @@ Build the shared OCR evidence core before exposing a user trigger:
 4. Only finite inference with at least one text box maps to `loaded_real`.
 5. Dependency and artifact gaps remain structured missing requirements.
 6. No new IPC handler is registered in this slice.
+7. Existing user-triggered MPS/CUDA execution probes now retain five-minute
+   runtime evidence. Fixed-tensor success can reach only `runtime_probe_ready`,
+   never `real_model_path`.
 
 ## Later Slices
 

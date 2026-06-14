@@ -13,6 +13,7 @@ import type {
   PlatformAiWorkflowStatus
 } from '../../../shared/types/platform-ai-branch-status.types'
 import type { PlatformName } from '../../../shared/types/platform.types'
+import type { PythonExecutionEvidence } from './python-execution-evidence.store'
 
 export interface PlatformAiBranchStatusProjectorInput {
   platformBranch: PlatformAiBranch
@@ -20,6 +21,7 @@ export interface PlatformAiBranchStatusProjectorInput {
   generatedAt?: string
   runtimes: AiRuntimeState[]
   modelReadiness?: AiModelArtifactReadiness[]
+  pythonExecutionEvidence?: PythonExecutionEvidence[]
 }
 
 interface WorkflowDefinition {
@@ -217,7 +219,8 @@ export function createPlatformAiBranchStatus(input: PlatformAiBranchStatusProjec
     input.platformBranch,
     input.runtimes,
     platformSupported,
-    input.modelReadiness ?? []
+    input.modelReadiness ?? [],
+    input.pythonExecutionEvidence ?? []
   ))
 
   return {
@@ -243,11 +246,18 @@ function projectWorkflow(
   platformBranch: PlatformAiBranch,
   runtimes: AiRuntimeState[],
   platformSupported: boolean,
-  modelReadiness: AiModelArtifactReadiness[]
+  modelReadiness: AiModelArtifactReadiness[],
+  pythonExecutionEvidence: PythonExecutionEvidence[]
 ): PlatformAiWorkflowStatus {
   const metadata = WORKFLOW_METADATA[definition.workflow]
   const workflowModelReadiness = modelReadiness.filter((item) => item.workflow === definition.workflow)
-  const runtimeLanes = definition.runtimeLanes.map((lane) => projectLane(lane, runtimes, platformSupported, workflowModelReadiness))
+  const runtimeLanes = definition.runtimeLanes.map((lane) => projectLane(
+    lane,
+    runtimes,
+    platformSupported,
+    workflowModelReadiness,
+    pythonExecutionEvidence
+  ))
   const status = projectWorkflowStatus(runtimeLanes, platformSupported)
   const missing = projectMissingRequirements(definition, runtimeLanes, platformSupported, workflowModelReadiness)
 
@@ -268,7 +278,8 @@ function projectLane(
   lane: WorkflowDefinition['runtimeLanes'][number],
   runtimes: AiRuntimeState[],
   platformSupported: boolean,
-  modelReadiness: AiModelArtifactReadiness[]
+  modelReadiness: AiModelArtifactReadiness[],
+  pythonExecutionEvidence: PythonExecutionEvidence[]
 ): PlatformAiRuntimeLaneEvidence {
   if (!platformSupported) {
     return {
@@ -280,6 +291,15 @@ function projectLane(
   }
 
   const laneModelReadiness = modelReadiness.filter((item) => item.runtimeLane === lane.lane)
+  const executionEvidence = pythonExecutionEvidence.find((item) => item.lane === lane.lane)
+  const projectedExecutionEvidence = executionEvidence
+    ? pythonExecutionProbeToEvidence(executionEvidence)
+    : []
+  const executionStatus: PlatformAiBranchStatus = executionEvidence?.probe.status === 'executed_real'
+    && executionEvidence.probe.success
+    && executionEvidence.probe.resultFinite
+    ? 'runtime_probe_ready'
+    : 'evidence_insufficient'
   const matched = runtimes.filter((runtime) => lane.runtimeKinds.includes(runtime.kind))
   const running = matched.find((runtime) => runtime.status === 'running')
   if (running) {
@@ -292,6 +312,7 @@ function projectLane(
       evidence: [
         evidence('runtime_probe_ready', `${lane.label} 有运行时状态`, 'runtime_health', running.id),
         evidence('service_running', `${running.id} 正在运行`, 'runtime_health'),
+        ...projectedExecutionEvidence,
         ...readinessEvidence
       ]
     }
@@ -303,10 +324,11 @@ function projectLane(
     return {
       lane: lane.lane,
       label: lane.label,
-      status: maxBranchStatus(['evidence_insufficient', readinessStatus]),
+      status: maxBranchStatus(['evidence_insufficient', executionStatus, readinessStatus]),
       evidence: [
         evidence('service_unavailable', `${lane.label} 已注册但当前未运行`, 'runtime_health', matched[0].id),
         evidence('service_unavailable', `${matched[0].id} 当前未运行`, 'runtime_health'),
+        ...projectedExecutionEvidence,
         ...readinessEvidence
       ]
     }
@@ -317,12 +339,34 @@ function projectLane(
   return {
     lane: lane.lane,
     label: lane.label,
-    status: maxBranchStatus(['evidence_insufficient', readinessStatus]),
+    status: maxBranchStatus(['evidence_insufficient', executionStatus, readinessStatus]),
     evidence: [
       evidence('unknown', `${lane.label} 已定义，但尚无运行时或模型证据`, 'static_metadata'),
+      ...projectedExecutionEvidence,
       ...readinessEvidence
     ]
   }
+}
+
+function pythonExecutionProbeToEvidence(
+  executionEvidence: PythonExecutionEvidence
+): PlatformAiStatusEvidence[] {
+  const probe = executionEvidence.probe
+  if (probe.status === 'executed_real' && probe.success && probe.resultFinite) {
+    return [evidence(
+      'runtime_probe_ready',
+      `${executionEvidence.lane} 已完成真实固定张量执行`,
+      'worker_probe',
+      `${probe.runtime ?? executionEvidence.lane} · ${probe.operation} · ${probe.checkedAt}`
+    )]
+  }
+  if (probe.status === 'dependency_missing') {
+    return [evidence('dependency_missing', `${executionEvidence.lane} 缺少运行时依赖`, 'worker_probe', probe.errorCode ?? undefined)]
+  }
+  if (probe.status === 'backend_unavailable') {
+    return [evidence('service_unavailable', `${executionEvidence.lane} 后端不可用`, 'worker_probe', probe.errorCode ?? undefined)]
+  }
+  return [evidence('unknown', `${executionEvidence.lane} 固定张量执行证据不足`, 'worker_probe', probe.errorCode ?? probe.status)]
 }
 
 function projectWorkflowStatus(runtimeLanes: PlatformAiRuntimeLaneEvidence[], platformSupported: boolean): PlatformAiBranchStatus {

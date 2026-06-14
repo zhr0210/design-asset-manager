@@ -21,6 +21,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Platform AI Action Plan projection maps status and missing requirements to existing model, runtime, backend, or manual-refresh UI operations. Renderer code executes the projected command but must not infer the destination from labels or evidence text.
 - Explicit model-load probes may promote only the workflow/runtime lane they actually verified. Probe responses must be path-free, time-bounded evidence and must not imply that adjacent OCR or embedding routes passed.
 - OCR real evidence uses one shared generated-image response shape. Promotion requires a finite result with at least one detected text box; dependency or artifact gaps remain missing requirements.
+- MPS/CUDA fixed-tensor execution is runtime evidence only. It may prove `runtime_probe_ready`, but cannot promote any workflow to `real_model_path`.
 - Runtime execution probes prove only that a runtime/device can execute fixed synthetic work; they must remain separate from real-model load or inference evidence.
 - Model Artifact Readiness vocabulary describes dependency/artifact/load evidence only; it must not expose local model paths or private cache locations.
 - Model Artifact Readiness display projection owns active prompt-model readiness, model-row source/status/action labels, cooperative model readiness details, download progress, and GGUF/mmproj artifact tile labels; renderer model lists should not branch on artifact or Worker readiness states locally.

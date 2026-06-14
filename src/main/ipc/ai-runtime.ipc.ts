@@ -57,6 +57,10 @@ import {
 import { LlamaRuntimeInstallService } from '../services/llama-runtime/llama-runtime-install.service'
 import { getFreshLlamaMultimodalProbe } from '../services/ai-runtime/llama-multimodal-evidence.store'
 import { getFreshOcrRealEvidence } from '../services/ai-runtime/ocr-real-evidence.store'
+import {
+  getFreshPythonExecutionEvidence,
+  recordPythonExecutionEvidence
+} from '../services/ai-runtime/python-execution-evidence.store'
 
 function success<T>(data: T): AiRuntimeIpcResponse<T> {
   return { success: true, data }
@@ -286,7 +290,8 @@ export function registerAiRuntimeIpc() {
         platformBranch: 'macos',
         currentPlatform: process.platform as PlatformName,
         runtimes: aiRuntimeManager.listRuntimes(),
-        modelReadiness
+        modelReadiness,
+        pythonExecutionEvidence: getFreshPythonExecutionEvidence()
       }))
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS} error:`, err)
@@ -301,7 +306,8 @@ export function registerAiRuntimeIpc() {
         platformBranch: 'windows',
         currentPlatform: process.platform as PlatformName,
         runtimes: aiRuntimeManager.listRuntimes(),
-        modelReadiness
+        modelReadiness,
+        pythonExecutionEvidence: getFreshPythonExecutionEvidence()
       }))
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS} error:`, err)
@@ -350,7 +356,9 @@ export function registerAiRuntimeIpc() {
 
   ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION, async () => {
     try {
-      return success(await aiClientService.probePythonMpsExecution())
+      const probe = await aiClientService.probePythonMpsExecution()
+      recordPythonExecutionEvidence({ lane: 'python_mps', probe })
+      return success(probe)
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION} error:`, err)
       return failure(err)
@@ -359,7 +367,9 @@ export function registerAiRuntimeIpc() {
 
   ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION, async () => {
     try {
-      return success(await aiClientService.probePythonCudaExecution())
+      const probe = await aiClientService.probePythonCudaExecution()
+      recordPythonExecutionEvidence({ lane: 'python_cuda', probe })
+      return success(probe)
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION} error:`, err)
       return failure(err)
