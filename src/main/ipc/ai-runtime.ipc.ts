@@ -50,11 +50,13 @@ import { createPlatformAiBranchStatus } from '../services/ai-runtime/platform-ai
 import {
   createLlamaMultimodalProbeArtifactReadiness,
   createLlamaRuntimeStatusArtifactReadiness,
+  createOcrRealEvidenceArtifactReadiness,
   createOnnxModelLoadProbeArtifactReadiness,
   createWorkerModelStatusArtifactReadiness
 } from '../services/ai-runtime/model-artifact-readiness.mapper'
 import { LlamaRuntimeInstallService } from '../services/llama-runtime/llama-runtime-install.service'
 import { getFreshLlamaMultimodalProbe } from '../services/ai-runtime/llama-multimodal-evidence.store'
+import { getFreshOcrRealEvidence } from '../services/ai-runtime/ocr-real-evidence.store'
 
 function success<T>(data: T): AiRuntimeIpcResponse<T> {
   return { success: true, data }
@@ -226,6 +228,7 @@ async function collectModelReadinessEvidence() {
     ...createWorkerModelStatusArtifactReadiness(workerStatus),
     ...createLlamaRuntimeStatusArtifactReadiness(llamaStatus),
     ...createLlamaMultimodalProbeArtifactReadiness(getFreshLlamaMultimodalProbe()),
+    ...createOcrRealEvidenceArtifactReadiness(getFreshOcrRealEvidence()),
     ...getFreshOnnxModelLoadProbes().flatMap(createOnnxModelLoadProbeArtifactReadiness)
   ]
 }

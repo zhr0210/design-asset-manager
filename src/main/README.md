@@ -24,6 +24,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep Llama runtime accelerator defaults in metadata rules; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
 - Keep read-only Llama governance adapter selection descriptor-driven; platform conditionals belong in concrete runtime adapters, not the governance plan flow.
 - Keep OCR/Python managed venv executable paths and base interpreter discovery descriptor-driven; leave actual Windows search and macOS Homebrew probing inside platform adapters.
+- Keep explicit OCR evidence execution in main process, offline and timeout-bounded. Cache only path-free generated-image results for five minutes before projecting them into shared workflow status.
 - Keep Llama server executable, force-stop, chmod, and zip extraction process metadata descriptor-driven; do not scatter process branches through installer flow.
 - Keep Llama hardware detection dispatch descriptor-driven; leave actual OS probes in macOS, Windows, and generic hardware adapters.
 - Keep Electron app lifecycle policy descriptor-driven; platform-specific AppUserModelId and quit-on-close behavior belong in startup policy metadata, not inline entry-point branches.

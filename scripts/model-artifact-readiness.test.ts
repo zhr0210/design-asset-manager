@@ -4,6 +4,7 @@ import {
   createLlamaLocalModelArtifactReadiness,
   createLlamaRuntimeStatusArtifactReadiness,
   createLlamaMultimodalProbeArtifactReadiness,
+  createOcrRealEvidenceArtifactReadiness,
   createOnnxModelLoadProbeArtifactReadiness,
   createWorkerModelStatusArtifactReadiness
 } from '../src/main/services/ai-runtime/model-artifact-readiness.mapper'
@@ -197,6 +198,73 @@ const missingOnnxReadiness = createOnnxModelLoadProbeArtifactReadiness({
 })
 assert.equal(missingOnnxReadiness[0].state, 'artifact_missing')
 assert.equal(missingOnnxReadiness[0].missing?.[0].kind, 'model_artifact')
+
+const ocrReadiness = createOcrRealEvidenceArtifactReadiness({
+  success: true,
+  status: 'loaded_real',
+  provider: 'rapidocr',
+  operation: 'generated_image_text_detection',
+  generatedFixture: true,
+  downloadsAllowed: false,
+  boxCount: 2,
+  resultFinite: true,
+  attempts: [],
+  checkedAt: '2026-06-14T00:00:00.000Z',
+  durationMs: 100
+})
+assert.deepEqual(ocrReadiness.map((item) => ({
+  workflow: item.workflow,
+  lane: item.runtimeLane,
+  state: item.state
+})), [{
+  workflow: 'ocr_text_box',
+  lane: 'onnx_runtime',
+  state: 'loaded_real'
+}])
+
+const invalidOcrReadiness = createOcrRealEvidenceArtifactReadiness({
+  success: true,
+  status: 'loaded_real',
+  provider: 'easyocr',
+  operation: 'generated_image_text_detection',
+  generatedFixture: true,
+  downloadsAllowed: false,
+  boxCount: 0,
+  resultFinite: true,
+  attempts: [],
+  checkedAt: '2026-06-14T00:00:00.000Z',
+  durationMs: 100
+})
+assert.equal(invalidOcrReadiness[0].state, 'unknown')
+
+const missingOcrReadiness = createOcrRealEvidenceArtifactReadiness({
+  success: false,
+  status: 'artifact_missing',
+  provider: null,
+  operation: 'generated_image_text_detection',
+  generatedFixture: true,
+  downloadsAllowed: false,
+  boxCount: 0,
+  resultFinite: false,
+  errorCode: 'OCR_MODEL_ARTIFACT_MISSING',
+  attempts: [],
+  checkedAt: '2026-06-14T00:00:00.000Z',
+  durationMs: 100
+})
+assert.equal(missingOcrReadiness[0].state, 'artifact_missing')
+assert.equal(missingOcrReadiness[0].missing?.[0].kind, 'model_artifact')
+
+const ocrProbeOnlyProjection = createPlatformAiBranchStatus({
+  platformBranch: 'macos',
+  currentPlatform: 'darwin',
+  generatedAt: '2026-06-14T00:00:00.000Z',
+  runtimes: [],
+  modelReadiness: ocrReadiness
+})
+assert.equal(
+  ocrProbeOnlyProjection.workflows.find((workflow) => workflow.workflow === 'ocr_text_box')?.status,
+  'real_model_path'
+)
 
 const onnxProbeOnlyProjection = createPlatformAiBranchStatus({
   platformBranch: 'macos',

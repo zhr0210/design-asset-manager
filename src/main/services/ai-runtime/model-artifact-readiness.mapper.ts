@@ -11,6 +11,7 @@ import type { LlamaInstallStatus, LlamaServerTestResult } from '../../../shared/
 import type {
   AiRuntimeOnnxModelLoadProbeResponse
 } from '../../../shared/contracts/ai-runtime.contract'
+import type { OcrRealEvidenceProbeResponse } from '../../../shared/types/ocr-real-evidence.types'
 
 type LlamaLocalModelLike = {
   id: string
@@ -244,6 +245,45 @@ export function createOnnxModelLoadProbeArtifactReadiness(
         ? [{
             id: isClip ? 'clip-vit-b-32-onnx' : 'wd-vit-tagger-v3',
             label: `${isClip ? 'CLIP' : 'WD Tagger'} ONNX artifact 未就绪`,
+            kind: 'model_artifact'
+          }]
+        : []
+  }]
+}
+
+export function createOcrRealEvidenceArtifactReadiness(
+  probe: OcrRealEvidenceProbeResponse | null | undefined
+): AiModelArtifactReadiness[] {
+  if (!probe) return []
+
+  const state = probe.status === 'loaded_real' && probe.success && probe.resultFinite && probe.boxCount > 0
+    ? 'loaded_real'
+    : probe.status === 'dependency_missing'
+      ? 'dependency_missing'
+      : probe.status === 'artifact_missing'
+        ? 'artifact_missing'
+        : 'unknown'
+
+  return [{
+    workflow: 'ocr_text_box',
+    runtimeLane: 'onnx_runtime',
+    artifactId: 'ocr-generated-image-inference',
+    label: 'OCR 生成图片文字检测',
+    source: 'explicit_load_probe',
+    state,
+    detail: state === 'loaded_real'
+      ? `${probe.provider ?? 'OCR'} · generated-image inference · ${probe.boxCount} boxes`
+      : probe.errorCode ?? probe.status,
+    missing: state === 'dependency_missing'
+      ? [{
+          id: 'ocr-runtime',
+          label: 'OCR 缺少本地运行时依赖',
+          kind: 'runtime_dependency'
+        }]
+      : state === 'artifact_missing'
+        ? [{
+            id: 'ocr-model-artifact',
+            label: 'OCR 本地模型 artifact 未就绪',
             kind: 'model_artifact'
           }]
         : []

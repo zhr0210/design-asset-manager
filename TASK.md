@@ -2,8 +2,8 @@
 
 ## Goal
 
-Close product-visible simulated AI paths before wiring Platform AI
-`nextAction` suggestions to executable UI operations.
+Complete Real AI Evidence Closure Phase 2 without changing the shared Platform
+AI Branch Status response shape.
 
 The architecture rule remains: Windows and macOS share product workflows,
 contracts, main-process orchestration, and UI state. Branch only for real OS,
@@ -22,22 +22,21 @@ runtime, native dependency, path, or process differences.
 
 ## Current Slice
 
-Completion audit for Product AI Truthfulness Closure:
+Build the shared OCR evidence core before exposing a user trigger:
 
-1. Stale prompt/deep-analysis Electron routes and product mock tagging are
-   removed.
-2. Model-wrapper simulation is explicit opt-in and blocked in product mode.
-3. Mock OCR text boxes are removed from product settings; persisted historical
-   values normalize to `none`.
-4. Platform AI actions navigate to existing management surfaces without
-   directly starting side effects.
-5. Windows OCR evidence remains truthful at `runtime_probe_ready` until a
-   separately approved local artifact can complete generated-image inference.
+1. The generated-image Python probe returns a timestamped, path-free response.
+2. Main process owns a timeout-bounded, offline probe service.
+3. OCR evidence expires after five minutes.
+4. Only finite inference with at least one text box maps to `loaded_real`.
+5. Dependency and artifact gaps remain structured missing requirements.
+6. No new IPC handler is registered in this slice.
 
 ## Later Slices
 
-1. Run the explicit Windows OCR evidence probe against local artifacts. Promote
-   OCR only after a generated-image inference returns finite text boxes.
+1. Add one explicit user-triggered OCR evidence operation after its additive
+   IPC contract is approved.
+2. Verify the shared operation on macOS and Windows without installing packages
+   or downloading weights.
 
 ## Windows OCR Evidence Slice
 

@@ -20,6 +20,7 @@ class OcrRealEvidenceProbeTest(unittest.TestCase):
         self.assertTrue(result["generatedFixture"])
         self.assertFalse(result["downloadsAllowed"])
         self.assertEqual(result["boxCount"], 2)
+        self.assertRegex(result["checkedAt"], r"^\d{4}-\d{2}-\d{2}T")
 
     def test_falls_back_to_easyocr_without_promoting_failed_rapidocr(self):
         result = probe_ocr_real_evidence(

@@ -4,6 +4,7 @@ import importlib
 import math
 import tempfile
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
@@ -231,5 +232,6 @@ def _result(
         "resultFinite": result_finite,
         "errorCode": error_code,
         "attempts": attempts,
+        "checkedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "durationMs": int((time.perf_counter() - started_at) * 1000),
     }
