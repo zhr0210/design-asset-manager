@@ -24,6 +24,7 @@ assert.match(source, /tagging\?\.status !== "real_model_path"/)
 assert.match(source, /llamaProbe\?\.probe\?\.success === true && prompt\?\.status !== "real_model_path"/)
 assert.match(source, /ocr\?\.status === "real_model_path"/)
 assert.match(source, /getByTestId\("platform-ai-branch-status"\)/)
-assert.match(source, /branchStatusPanel\.screenshot\(\{ path: screenshot \}\)/)
+assert.match(source, /branchStatusPanel\.scrollIntoViewIfNeeded\(\)/)
+assert.match(source, /page\.screenshot\(\{ path: screenshot, fullPage: false \}\)/)
 
 console.log('windows-ai-real-evidence-validation-contract passed')

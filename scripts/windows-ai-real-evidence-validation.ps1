@@ -297,8 +297,10 @@ try {
   if (await branchStatusPanel.count() === 0) {
     throw new Error("Platform AI branch status panel was not found");
   }
+  await branchStatusPanel.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1000);
   const screenshot = path.join(process.env.USERPROFILE || userData, "Desktop", "dam-windows-ai-console.png");
-  await branchStatusPanel.screenshot({ path: screenshot });
+  await page.screenshot({ path: screenshot, fullPage: false });
   console.log("SCREENSHOT", path.join("<DESKTOP>", path.basename(screenshot)));
 
   const overflow = await page.evaluate(() => ({
