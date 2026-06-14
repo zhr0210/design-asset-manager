@@ -1980,7 +1980,10 @@ function PlatformAiBranchStatusPanel({
   const display = projectPlatformAiBranchStatusDisplay(status)
 
   return (
-    <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
+    <div
+      data-testid="platform-ai-branch-status"
+      className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900"
+    >
       <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">{display.panelTitle}</h3>

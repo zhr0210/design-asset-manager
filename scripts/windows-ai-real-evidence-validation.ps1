@@ -293,14 +293,7 @@ try {
     throw new Error("Insufficient OCR evidence was incorrectly promoted to real_model_path");
   }
 
-  const branchStatusLabel = "\u5e73\u53f0 AI \u5206\u652f\u72b6\u6001";
-  const branchStatusTarget = page.getByText(branchStatusLabel, { exact: true }).first();
-  if (await branchStatusTarget.count() === 0) {
-    throw new Error("Platform AI branch status heading was not found");
-  }
-  const branchStatusPanel = branchStatusTarget.locator(
-    "xpath=ancestor::div[contains(@class, 'shadow-premium')][1]"
-  );
+  const branchStatusPanel = page.getByTestId("platform-ai-branch-status");
   if (await branchStatusPanel.count() === 0) {
     throw new Error("Platform AI branch status panel was not found");
   }
