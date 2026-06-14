@@ -182,7 +182,7 @@ const redact = (value) => {
 
 const electronExe = path.join(repo, "node_modules", "electron", "dist", "electron.exe");
 const launchOptions = {
-  args: [repo, "--user-data-dir=" + userData],
+  args: [repo, "--user-data-dir=" + userData, "--disable-gpu"],
   cwd: repo,
   timeout: 60000,
 };
@@ -196,6 +196,7 @@ const app = await electron.launch(launchOptions);
 
 try {
   const page = await app.firstWindow();
+  await page.bringToFront();
   await page.waitForLoadState("domcontentloaded", { timeout: 30000 });
   await page.evaluate(() => { location.hash = "#/ai-console"; });
   await page.waitForTimeout(3000);
@@ -313,7 +314,7 @@ try {
   await branchStatusPanel.scrollIntoViewIfNeeded();
   await page.waitForTimeout(1000);
   const screenshot = path.join(process.env.USERPROFILE || userData, "Desktop", "dam-windows-ai-console.png");
-  await page.screenshot({ path: screenshot, fullPage: false });
+  await branchStatusPanel.screenshot({ path: screenshot });
   console.log("SCREENSHOT", path.join("<DESKTOP>", path.basename(screenshot)));
 
   const overflow = await page.evaluate(() => ({
