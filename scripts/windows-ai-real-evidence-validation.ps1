@@ -298,10 +298,14 @@ try {
   if (await branchStatusTarget.count() === 0) {
     throw new Error("Platform AI branch status heading was not found");
   }
-  await branchStatusTarget.scrollIntoViewIfNeeded();
-  await page.waitForTimeout(500);
+  const branchStatusPanel = branchStatusTarget.locator(
+    "xpath=ancestor::div[contains(@class, 'shadow-premium')][1]"
+  );
+  if (await branchStatusPanel.count() === 0) {
+    throw new Error("Platform AI branch status panel was not found");
+  }
   const screenshot = path.join(process.env.USERPROFILE || userData, "Desktop", "dam-windows-ai-console.png");
-  await page.screenshot({ path: screenshot, fullPage: false });
+  await branchStatusPanel.screenshot({ path: screenshot });
   console.log("SCREENSHOT", path.join("<DESKTOP>", path.basename(screenshot)));
 
   const overflow = await page.evaluate(() => ({
