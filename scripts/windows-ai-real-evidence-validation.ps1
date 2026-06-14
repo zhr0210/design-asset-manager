@@ -206,6 +206,7 @@ try {
       cuda: await aiRuntime?.probePythonCudaRuntime?.(),
       wdTagger: await aiRuntime?.probeOnnxModelLoad?.({ modelFamily: "wd_tagger" }),
       clip: await aiRuntime?.probeOnnxModelLoad?.({ modelFamily: "clip" }),
+      ocr: await aiRuntime?.probeOcrRealEvidence?.(),
     };
   });
   console.log("RUNTIME_EVIDENCE_IPC_START");
@@ -224,6 +225,12 @@ try {
     || ipcProbe.clip?.data?.embeddingDimension !== 512
   ) {
     throw new Error("CLIP ONNX IPC did not produce finite 512d loaded_real evidence");
+  }
+  if (
+    ipcProbe.ocr?.data?.generatedFixture !== true
+    || ipcProbe.ocr?.data?.downloadsAllowed !== false
+  ) {
+    throw new Error("OCR IPC did not preserve generated-fixture and no-download safety");
   }
 
   const llamaProbe = await page.evaluate(async () => {
@@ -291,6 +298,12 @@ try {
   }
   if (ocr?.status === "real_model_path") {
     throw new Error("Insufficient OCR evidence was incorrectly promoted to real_model_path");
+  }
+  const ocrEvidence = ocr?.runtimeLanes
+    ?.flatMap((lane) => lane.evidence ?? [])
+    ?.find((item) => item.code === "artifact_missing" || item.code === "dependency_missing");
+  if (!ocrEvidence) {
+    throw new Error("Windows branch status did not project structured OCR missing evidence");
   }
 
   const branchStatusPanel = page.getByTestId("platform-ai-branch-status");

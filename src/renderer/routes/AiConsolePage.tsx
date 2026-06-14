@@ -1666,7 +1666,7 @@ export default function AiConsolePage() {
             />
           )}
 
-          {activeTab === 'runtime' && <AiRuntimePanel />}
+          {activeTab === 'runtime' && <AiRuntimePanel onEvidenceChanged={() => fetchConsoleStatus('manual')} />}
 
           {activeTab === 'prompts' && (
             <PromptSystemPanel

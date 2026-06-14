@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import binascii
 import importlib
 import math
+import struct
 import tempfile
 import time
+import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
@@ -80,18 +83,57 @@ def _provider_candidates(provider: str) -> list[str]:
 
 
 def _create_generated_fixture(path: Path) -> None:
-    image_module = importlib.import_module("PIL.Image")
-    draw_module = importlib.import_module("PIL.ImageDraw")
-    font_module = importlib.import_module("PIL.ImageFont")
+    glyphs = {
+        "0": ("01110", "10001", "10011", "10101", "11001", "10001", "01110"),
+        "2": ("01110", "10001", "00001", "00010", "00100", "01000", "11111"),
+        "6": ("00110", "01000", "10000", "11110", "10001", "10001", "01110"),
+        "A": ("01110", "10001", "10001", "11111", "10001", "10001", "10001"),
+        "C": ("01111", "10000", "10000", "10000", "10000", "10000", "01111"),
+        "D": ("11110", "10001", "10001", "10001", "10001", "10001", "11110"),
+        "M": ("10001", "11011", "10101", "10101", "10001", "10001", "10001"),
+        "O": ("01110", "10001", "10001", "10001", "10001", "10001", "01110"),
+        "R": ("11110", "10001", "10001", "11110", "10100", "10010", "10001"),
+        " ": ("00000",) * 7,
+    }
+    text = "DAM OCR 2026"
+    scale = 12
+    margin = 36
+    glyph_width = 5
+    glyph_height = 7
+    spacing = scale
+    width = margin * 2 + len(text) * glyph_width * scale + (len(text) - 1) * spacing
+    height = margin * 2 + glyph_height * scale
+    pixels = bytearray([255] * (width * height))
 
-    image = image_module.new("RGB", (960, 280), "white")
-    draw = draw_module.Draw(image)
-    try:
-        font = font_module.truetype("DejaVuSans.ttf", 72)
-    except OSError:
-        font = font_module.load_default()
-    draw.text((44, 80), "DAM OCR 2026", fill="black", font=font)
-    image.save(path, format="PNG")
+    x_origin = margin
+    for character in text:
+        glyph = glyphs[character]
+        for row_index, row in enumerate(glyph):
+            for column_index, enabled in enumerate(row):
+                if enabled != "1":
+                    continue
+                for y_offset in range(scale):
+                    row_start = (margin + row_index * scale + y_offset) * width
+                    for x_offset in range(scale):
+                        pixels[row_start + x_origin + column_index * scale + x_offset] = 0
+        x_origin += glyph_width * scale + spacing
+
+    scanlines = b"".join(
+        b"\x00" + bytes(pixels[row * width:(row + 1) * width])
+        for row in range(height)
+    )
+    png = (
+        b"\x89PNG\r\n\x1a\n"
+        + _png_chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0))
+        + _png_chunk(b"IDAT", zlib.compress(scanlines, level=9))
+        + _png_chunk(b"IEND", b"")
+    )
+    path.write_bytes(png)
+
+
+def _png_chunk(chunk_type: bytes, payload: bytes) -> bytes:
+    checksum = binascii.crc32(chunk_type + payload) & 0xFFFFFFFF
+    return struct.pack(">I", len(payload)) + chunk_type + payload + struct.pack(">I", checksum)
 
 
 def _run_rapidocr(image_path: Path) -> dict[str, Any]:

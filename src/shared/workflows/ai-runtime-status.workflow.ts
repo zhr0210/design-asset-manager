@@ -19,6 +19,7 @@ import type {
   PlatformAiWorkerProbeWithRuntimeVersions
 } from '../types/platform-ai-runtime.types'
 import type { PlatformAiBranch } from '../types/platform-ai-branch-status.types'
+import type { OcrRealEvidenceProbeResponse } from '../types/ocr-real-evidence.types'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
 export type AiRuntimeStatusIcon = 'success' | 'warning' | 'activity'
@@ -352,6 +353,39 @@ export function projectOnnxModelLoadProbeDisplay(
     'bad',
     `真实 ONNX 验证失败：${probe.errorCode ?? probe.status}`
   )
+}
+
+export function projectOcrRealEvidenceProbeDisplay(
+  probe?: OcrRealEvidenceProbeResponse | null,
+  error?: string | null
+): AiRuntimeModelLoadProbeDisplay {
+  if (!probe && error) {
+    return modelLoadProbeDisplay('验证不可用', 'muted', '当前未获得 OCR 真实推理证据。')
+  }
+  if (!probe) {
+    return modelLoadProbeDisplay('尚未验证', 'muted', '需要用户手动使用程序生成的临时图片执行一次本地 OCR 推理。')
+  }
+  if (probe.status === 'loaded_real') {
+    return modelLoadProbeDisplay(
+      '真实推理通过',
+      'good',
+      `${probe.provider ?? 'OCR'} · 检出 ${probe.boxCount} 个文本框 · 结果有效`
+    )
+  }
+  if (probe.status === 'dependency_missing') {
+    return modelLoadProbeDisplay('依赖缺失', 'warn', formatOcrProbeAttempts(probe))
+  }
+  if (probe.status === 'artifact_missing') {
+    return modelLoadProbeDisplay('模型工件缺失', 'warn', formatOcrProbeAttempts(probe))
+  }
+  return modelLoadProbeDisplay('推理失败', 'bad', formatOcrProbeAttempts(probe))
+}
+
+function formatOcrProbeAttempts(probe: OcrRealEvidenceProbeResponse): string {
+  const attempts = probe.attempts
+    .map((attempt) => `${attempt.provider}: ${attempt.errorCode ?? attempt.status}`)
+    .join(' / ')
+  return attempts || `OCR 验证未通过：${probe.errorCode ?? probe.status}`
 }
 
 export function projectPythonMpsExecutionProbeDisplay(

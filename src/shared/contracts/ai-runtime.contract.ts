@@ -4,6 +4,7 @@ import type {
 } from '../types/macos-ai-runtime.types'
 import type { WindowsAiWorkerProbeResult } from '../types/windows-ai-runtime.types'
 import type { PlatformAiBranchStatusResponse } from '../types/platform-ai-branch-status.types'
+import type { OcrRealEvidenceProbeResponse } from '../types/ocr-real-evidence.types'
 
 export const CHANNEL_AI_RUNTIME_LIST_RUNTIMES = 'aiRuntime:listRuntimes'
 export const CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE = 'aiRuntime:getRuntimeState'
@@ -18,6 +19,7 @@ export const CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION = 'aiRuntime:probePyt
 export const CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION = 'aiRuntime:probePythonCudaExecution'
 export const CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS = 'aiRuntime:getClipSiglipOnnxStatus'
 export const CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD = 'aiRuntime:probeOnnxModelLoad'
+export const CHANNEL_AI_RUNTIME_PROBE_OCR_REAL_EVIDENCE = 'aiRuntime:probeOcrRealEvidence'
 export const CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME = 'aiRuntime:selectActiveRuntime'
 export const CHANNEL_AI_RUNTIME_START_RUNTIME = 'aiRuntime:startRuntime'
 export const CHANNEL_AI_RUNTIME_STOP_RUNTIME = 'aiRuntime:stopRuntime'
@@ -47,6 +49,7 @@ export interface AiRuntimeWindowsCapabilitiesResponse {
 }
 
 export type AiRuntimePlatformAiBranchStatusResponse = PlatformAiBranchStatusResponse
+export type AiRuntimeOcrRealEvidenceProbeResponse = OcrRealEvidenceProbeResponse
 
 export interface AiRuntimePythonCompatibilityStatusResponseBase {
   success: boolean

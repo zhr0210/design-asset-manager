@@ -22,17 +22,18 @@ runtime, native dependency, path, or process differences.
 
 ## Current Slice
 
-Build the shared OCR evidence core before exposing a user trigger:
+Close the approved explicit OCR evidence operation:
 
-1. The generated-image Python probe returns a timestamped, path-free response.
-2. Main process owns a timeout-bounded, offline probe service.
-3. OCR evidence expires after five minutes.
-4. Only finite inference with at least one text box maps to `loaded_real`.
-5. Dependency and artifact gaps remain structured missing requirements.
-6. No new IPC handler is registered in this slice.
-7. Existing user-triggered MPS/CUDA execution probes now retain five-minute
-   runtime evidence. Fixed-tensor success can reach only `runtime_probe_ready`,
-   never `real_model_path`.
+1. `aiRuntime:probeOcrRealEvidence` is shared by Windows and macOS.
+2. The operation runs only after a user click and uses a generated temporary
+   image.
+3. Main process keeps the offline, timeout-bounded result for five minutes.
+4. No user asset read, dependency install, model download, or external service
+   launch is permitted.
+5. The AI Runtime panel displays the result in Chinese and refreshes Platform
+   AI Branch Status after the probe.
+6. Only finite inference with at least one text box maps to `loaded_real`;
+   dependency and artifact gaps stay structured and evidence-insufficient.
 
 ## macOS Evidence Result
 
@@ -48,12 +49,22 @@ Build the shared OCR evidence core before exposing a user trigger:
   promote it.
 - No document/body horizontal overflow was present.
 
-## Later Slices
+## Remaining Validation
 
-1. Add one explicit user-triggered OCR evidence operation after its additive
-   IPC contract is approved.
-2. Verify the shared operation on macOS and Windows without installing packages
-   or downloading weights.
+1. Push the shared slice and verify it on Windows without installing OCR
+   packages or downloading weights.
+
+## macOS OCR Operation Result
+
+- Electron/Playwright clicked `验证 OCR 真实推理` at `1280x804`.
+- The generated PNG is encoded with the Python standard library, so fixture
+  generation does not depend on Pillow or any OCR package.
+- The current managed runtime reported both RapidOCR and EasyOCR dependencies
+  missing. The workflow stayed `evidence_insufficient` and exposed structured
+  `dependency_missing` evidence plus the `ocr-runtime` missing requirement.
+- The operation did not read user assets, install packages, download weights,
+  or launch an external service.
+- Document and body horizontal overflow were both absent.
 
 ## Windows OCR Evidence Slice
 

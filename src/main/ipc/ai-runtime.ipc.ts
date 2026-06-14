@@ -15,6 +15,7 @@ import {
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
   CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD,
+  CHANNEL_AI_RUNTIME_PROBE_OCR_REAL_EVIDENCE,
   CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION,
   CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION,
   CHANNEL_AI_RUNTIME_RESTART_RUNTIME,
@@ -56,7 +57,11 @@ import {
 } from '../services/ai-runtime/model-artifact-readiness.mapper'
 import { LlamaRuntimeInstallService } from '../services/llama-runtime/llama-runtime-install.service'
 import { getFreshLlamaMultimodalProbe } from '../services/ai-runtime/llama-multimodal-evidence.store'
-import { getFreshOcrRealEvidence } from '../services/ai-runtime/ocr-real-evidence.store'
+import {
+  getFreshOcrRealEvidence,
+  recordOcrRealEvidence
+} from '../services/ai-runtime/ocr-real-evidence.store'
+import { createOcrRealEvidenceProbeService } from '../services/ai-runtime/ocr-real-evidence-probe.factory'
 import {
   getFreshPythonExecutionEvidence,
   recordPythonExecutionEvidence
@@ -207,6 +212,7 @@ function createSafeAiRuntimeManager(): AiRuntimeManager {
 const aiRuntimeManager = createSafeAiRuntimeManager()
 const aiClientService = new AiClientService()
 const llamaRuntimeService = LlamaRuntimeInstallService.getInstance()
+const ocrRealEvidenceProbeService = createOcrRealEvidenceProbeService()
 const latestOnnxModelLoadProbes: Partial<Record<AiRuntimeOnnxModelLoadProbeResponse['modelFamily'], AiRuntimeOnnxModelLoadProbeResponse>> = {}
 const ONNX_MODEL_LOAD_EVIDENCE_TTL_MS = 5 * 60 * 1000
 
@@ -350,6 +356,17 @@ export function registerAiRuntimeIpc() {
       return success(probe)
     } catch (err) {
       console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD} error:`, err)
+      return failure(err)
+    }
+  })
+
+  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_OCR_REAL_EVIDENCE, async () => {
+    try {
+      const probe = await ocrRealEvidenceProbeService.probe()
+      recordOcrRealEvidence(probe)
+      return success(probe)
+    } catch (err) {
+      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_OCR_REAL_EVIDENCE} error:`, err)
       return failure(err)
     }
   })

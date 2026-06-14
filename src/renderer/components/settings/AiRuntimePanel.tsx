@@ -15,6 +15,7 @@ import type {
   AiRuntimeHealthCheckAllResponse,
   AiRuntimeHealthCheckResponse,
   AiRuntimeOnnxModelLoadProbeResponse,
+  AiRuntimeOcrRealEvidenceProbeResponse,
   AiRuntimeIpcResponse,
   AiRuntimeListRuntimesResponse,
   AiRuntimeOperationResponse,
@@ -28,6 +29,7 @@ import {
   projectClipSiglipOnnxCompatibilityDisplay,
   projectAiCapabilityStatusDisplay,
   projectOnnxModelLoadProbeDisplay,
+  projectOcrRealEvidenceProbeDisplay,
   projectPlatformPythonRuntimeCompatibilityDisplay,
   projectPlatformPythonRuntimeExecutionProbeDisplay,
   projectAiRuntimePlatformPanelCopy,
@@ -50,6 +52,7 @@ type AiRuntimeApi = Required<PlatformAiRuntimeAdapterApi> & {
   getActiveRuntime: () => Promise<AiRuntimeIpcResponse<AiRuntimeActiveRuntimeResponse>>
   getClipSiglipOnnxStatus: () => Promise<AiRuntimeIpcResponse<AiRuntimeClipSiglipOnnxStatusResponse>>
   probeOnnxModelLoad: (request?: { modelFamily?: AiRuntimeOnnxModelLoadProbeResponse['modelFamily'] }) => Promise<AiRuntimeIpcResponse<AiRuntimeOnnxModelLoadProbeResponse>>
+  probeOcrRealEvidence: () => Promise<AiRuntimeIpcResponse<AiRuntimeOcrRealEvidenceProbeResponse>>
   selectActiveRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   startRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
   stopRuntime: (runtimeId: string) => Promise<AiRuntimeIpcResponse<AiRuntimeOperationResponse>>
@@ -86,7 +89,7 @@ function statusIcon(icon: AiRuntimeStatusIcon) {
   return <Activity className="h-3.5 w-3.5" />
 }
 
-export default function AiRuntimePanel() {
+export default function AiRuntimePanel({ onEvidenceChanged }: { onEvidenceChanged?: () => void | Promise<void> }) {
   const [runtimes, setRuntimes] = useState<AiRuntimeState[]>([])
   const [activeRuntime, setActiveRuntime] = useState<AiRuntimeState | null>(null)
   const [healthResults, setHealthResults] = useState<Record<string, AiRuntimeHealthResult>>({})
@@ -109,6 +112,9 @@ export default function AiRuntimePanel() {
   const [probingOnnxModel, setProbingOnnxModel] = useState(false)
   const [probingClipOnnx, setProbingClipOnnx] = useState(false)
   const [probingPlatformPython, setProbingPlatformPython] = useState(false)
+  const [ocrRealEvidenceProbe, setOcrRealEvidenceProbe] = useState<AiRuntimeOcrRealEvidenceProbeResponse | null>(null)
+  const [ocrRealEvidenceProbeError, setOcrRealEvidenceProbeError] = useState<string | null>(null)
+  const [probingOcrRealEvidence, setProbingOcrRealEvidence] = useState(false)
   const [loading, setLoading] = useState(false)
   const [busyRuntimeId, setBusyRuntimeId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -136,6 +142,10 @@ export default function AiRuntimePanel() {
   const clipOnnxExecutionDisplay = useMemo(() => {
     return projectOnnxModelLoadProbeDisplay(clipOnnxExecutionProbe, clipOnnxExecutionProbeError)
   }, [clipOnnxExecutionProbe, clipOnnxExecutionProbeError])
+
+  const ocrRealEvidenceDisplay = useMemo(() => {
+    return projectOcrRealEvidenceProbeDisplay(ocrRealEvidenceProbe, ocrRealEvidenceProbeError)
+  }, [ocrRealEvidenceProbe, ocrRealEvidenceProbeError])
 
   const loadRuntimes = async () => {
     const api = getAiRuntimeApi()
@@ -353,6 +363,32 @@ export default function AiRuntimePanel() {
     }
   }
 
+  const runOcrRealEvidenceProbe = async () => {
+    const api = getAiRuntimeApi()
+    if (!api) {
+      setError('当前运行环境未暴露 AI 运行时接口。')
+      return
+    }
+
+    setProbingOcrRealEvidence(true)
+    setError(null)
+    setOcrRealEvidenceProbeError(null)
+    try {
+      const response = await api.probeOcrRealEvidence()
+      if (!response.success || !response.data) throw new Error(response.error || 'OCR 真实推理验证失败。')
+      setOcrRealEvidenceProbe(response.data)
+      setLastAction('OCR 真实推理验证')
+      await onEvidenceChanged?.()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      setOcrRealEvidenceProbe(null)
+      setOcrRealEvidenceProbeError(message)
+      setError(message)
+    } finally {
+      setProbingOcrRealEvidence(false)
+    }
+  }
+
   return (
     <section className="rounded-[24px] border border-white bg-white p-6 shadow-premium dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-start justify-between gap-3">
@@ -407,6 +443,32 @@ export default function AiRuntimePanel() {
             {platformPythonStatusError}
           </div>
         )}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="text-[12px] font-black text-slate-800 dark:text-slate-200">OCR 真实推理验证</div>
+            <div className="mt-1 text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
+              仅使用程序生成的临时图片执行一次本地 OCR 推理；不会读取素材库、安装依赖或下载模型。
+            </div>
+          </div>
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-black ${ocrRealEvidenceDisplay.toneClass}`}>
+            {ocrRealEvidenceDisplay.label}
+          </span>
+        </div>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-[10.5px] font-bold leading-5 text-slate-500 dark:text-slate-400">
+            {ocrRealEvidenceDisplay.detail}
+          </div>
+          <PanelButton
+            onClick={runOcrRealEvidenceProbe}
+            disabled={probingOcrRealEvidence}
+            icon={probingOcrRealEvidence ? Loader2 : ShieldCheck}
+          >
+            {probingOcrRealEvidence ? '正在验证...' : '验证 OCR 真实推理'}
+          </PanelButton>
+        </div>
       </div>
 
       <div className="mt-4 rounded-2xl border border-slate-100 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900">

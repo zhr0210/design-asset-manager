@@ -1,9 +1,20 @@
 import unittest
+import tempfile
+from pathlib import Path
 
-from core.ocr_real_evidence_probe import probe_ocr_real_evidence
+from core.ocr_real_evidence_probe import _create_generated_fixture, probe_ocr_real_evidence
 
 
 class OcrRealEvidenceProbeTest(unittest.TestCase):
+    def test_generated_fixture_uses_a_valid_stdlib_png(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            fixture = Path(temp_dir) / "fixture.png"
+            _create_generated_fixture(fixture)
+            payload = fixture.read_bytes()
+
+        self.assertTrue(payload.startswith(b"\x89PNG\r\n\x1a\n"))
+        self.assertGreater(len(payload), 100)
+
     def test_promotes_only_finite_generated_image_inference(self):
         result = probe_ocr_real_evidence(
             rapidocr_runner=lambda _path: {

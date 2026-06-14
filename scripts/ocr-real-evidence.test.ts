@@ -7,6 +7,7 @@ import {
   recordOcrRealEvidence
 } from '../src/main/services/ai-runtime/ocr-real-evidence.store'
 import type { OcrRealEvidenceProbeResponse } from '../src/shared/types/ocr-real-evidence.types'
+import { projectOcrRealEvidenceProbeDisplay } from '../src/shared/workflows/ai-runtime-status.workflow'
 
 const checkedAt = '2026-06-14T00:00:00.000Z'
 const loadedProbe: OcrRealEvidenceProbeResponse = {
@@ -47,6 +48,27 @@ assert.equal(capturedOptions?.env.HF_HUB_OFFLINE, '1')
 assert.equal(capturedOptions?.env.TRANSFORMERS_OFFLINE, '1')
 assert.equal(capturedOptions?.env.DESIGN_ASSET_MANAGER_DISABLE_USER_DATA_ACCESS, '1')
 assert.equal(capturedOptions?.timeoutMs, 60_000)
+assert.equal(projectOcrRealEvidenceProbeDisplay(loadedProbe).label, '真实推理通过')
+
+const artifactMissingProbe: OcrRealEvidenceProbeResponse = {
+  ...loadedProbe,
+  success: false,
+  status: 'artifact_missing',
+  provider: null,
+  boxCount: 0,
+  resultFinite: false,
+  errorCode: 'OCR_MODEL_ARTIFACT_MISSING',
+  attempts: [{
+    provider: 'easyocr',
+    status: 'artifact_missing',
+    boxCount: 0,
+    resultFinite: false,
+    errorCode: 'OCR_MODEL_ARTIFACT_MISSING'
+  }]
+}
+const artifactMissingDisplay = projectOcrRealEvidenceProbeDisplay(artifactMissingProbe)
+assert.equal(artifactMissingDisplay.label, '模型工件缺失')
+assert.match(artifactMissingDisplay.detail, /OCR_MODEL_ARTIFACT_MISSING/)
 
 const invalidService = new OcrRealEvidenceProbeService({
   runCommand: async () => ({
