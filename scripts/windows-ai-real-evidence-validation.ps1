@@ -203,13 +203,28 @@ try {
   const ipcProbe = await page.evaluate(async () => {
     const aiRuntime = window.electronAPI?.aiRuntime;
     return {
+      cuda: await aiRuntime?.probePythonCudaRuntime?.(),
       wdTagger: await aiRuntime?.probeOnnxModelLoad?.({ modelFamily: "wd_tagger" }),
       clip: await aiRuntime?.probeOnnxModelLoad?.({ modelFamily: "clip" }),
     };
   });
-  console.log("ONNX_MODEL_LOAD_IPC_START");
+  console.log("RUNTIME_EVIDENCE_IPC_START");
   console.log(redact(ipcProbe));
-  console.log("ONNX_MODEL_LOAD_IPC_END");
+  console.log("RUNTIME_EVIDENCE_IPC_END");
+
+  if (ipcProbe.cuda?.data?.status !== "executed_real" || ipcProbe.cuda?.data?.resultFinite !== true) {
+    throw new Error("CUDA execution IPC did not produce finite executed_real evidence");
+  }
+  if (ipcProbe.wdTagger?.data?.status !== "loaded_real") {
+    throw new Error("WD Tagger ONNX IPC did not produce loaded_real evidence");
+  }
+  if (
+    ipcProbe.clip?.data?.status !== "loaded_real"
+    || ipcProbe.clip?.data?.resultFinite !== true
+    || ipcProbe.clip?.data?.embeddingDimension !== 512
+  ) {
+    throw new Error("CLIP ONNX IPC did not produce finite 512d loaded_real evidence");
+  }
 
   const llamaProbe = await page.evaluate(async () => {
     const api = window.electronAPI;
@@ -254,6 +269,26 @@ try {
   console.log("WINDOWS_BRANCH_STATUS_START");
   console.log(redact(branch));
   console.log("WINDOWS_BRANCH_STATUS_END");
+
+  const workflows = branch?.data?.workflows ?? [];
+  const tagging = workflows.find((item) => item.workflow === "ai_tag_task");
+  const prompt = workflows.find((item) => item.workflow === "ai_prompt_task");
+  const ocr = workflows.find((item) => item.workflow === "ocr_text_box");
+  const embedding = workflows.find((item) => item.workflow === "search_embedding");
+  const cudaEvidence = workflows
+    .flatMap((item) => item.runtimeLanes ?? [])
+    .filter((lane) => lane.lane === "python_cuda")
+    .flatMap((lane) => lane.evidence ?? []);
+
+  if (!cudaEvidence.some((item) => item.source === "worker_probe" && item.code === "runtime_probe_ready")) {
+    throw new Error("Windows branch status did not project cached CUDA worker_probe evidence");
+  }
+  if (tagging?.status !== "real_model_path" || embedding?.status !== "real_model_path") {
+    throw new Error("Windows ONNX workflows did not retain real_model_path status");
+  }
+  if (prompt?.status === "real_model_path" || ocr?.status === "real_model_path") {
+    throw new Error("Insufficient prompt/OCR evidence was incorrectly promoted to real_model_path");
+  }
 
   await page.evaluate(() => {
     const marker = "\u5e73\u53f0 AI \u5206\u652f\u72b6\u6001";
