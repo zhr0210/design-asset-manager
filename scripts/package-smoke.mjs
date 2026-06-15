@@ -11,6 +11,7 @@ const version = packageManifest.version
 const args = new Set(process.argv.slice(2))
 const buildInstaller = args.has('--build')
 const launchUnpacked = args.has('--launch-unpacked')
+const dmgInstallSmoke = args.has('--dmg-install-smoke')
 const sandboxInstall = args.has('--sandbox-install')
 const generateSandbox = args.has('--sandbox') || args.has('--generate-sandbox') || sandboxInstall
 const openSandbox = args.has('--open-sandbox')
@@ -150,6 +151,10 @@ if (launchUnpacked) {
   await smokeLaunchUnpacked()
 }
 
+if (dmgInstallSmoke) {
+  await smokeInstallDmg()
+}
+
 if (generateSandbox || openSandbox) {
   await generateSandboxFiles()
 }
@@ -192,9 +197,112 @@ async function smokeLaunchUnpacked() {
     return
   }
 
-  console.log(`Found unpacked binary to launch: ${path.basename(binaryPath)}`)
-
   const sandboxHome = path.join(distDir, 'temp-smoke-home')
+  const passed = await launchPackagedBinary(binaryPath, sandboxHome)
+
+  report.checks.push({
+    id: 'launch-unpacked',
+    status: passed ? 'passed' : 'failed',
+    detail: passed
+      ? `Process stayed alive, loaded SQLite database, and resolved python executable.`
+      : `App failed smoke checks or required startup evidence was incomplete.`
+  })
+
+  await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
+
+  if (!passed) process.exitCode = 1
+}
+
+async function smokeInstallDmg() {
+  if (process.platform !== 'darwin') {
+    report.checks.push({
+      id: 'dmg-install-smoke',
+      status: 'skipped',
+      detail: 'DMG install smoke is available only on macOS.'
+    })
+    return
+  }
+
+  const dmgPath = await findDmgFile()
+  if (!dmgPath) {
+    report.checks.push({ id: 'dmg-mount', status: 'failed', detail: 'DMG artifact is missing.' })
+    process.exitCode = 1
+    return
+  }
+
+  const smokeRoot = path.join(workRoot, 'macos-dmg-install')
+  const mountPoint = path.join(smokeRoot, 'mount')
+  const installRoot = path.join(smokeRoot, 'installed')
+  const sandboxHome = path.join(smokeRoot, 'home')
+  const mountedApp = path.join(mountPoint, `${productName}.app`)
+  const installedApp = path.join(installRoot, `${productName}.app`)
+  const installedBinary = path.join(installedApp, 'Contents', 'MacOS', productName)
+  await fs.rm(smokeRoot, { recursive: true, force: true }).catch(() => {})
+  await fs.mkdir(mountPoint, { recursive: true })
+
+  let mounted = false
+  try {
+    const mountResult = await runCaptured('hdiutil', [
+      'attach',
+      '-readonly',
+      '-nobrowse',
+      '-mountpoint',
+      mountPoint,
+      dmgPath
+    ])
+    mounted = mountResult === 0
+    report.checks.push({
+      id: 'dmg-mount',
+      status: mounted ? 'passed' : 'failed',
+      detail: mounted ? 'DMG mounted read-only.' : 'DMG mount failed.'
+    })
+    if (!mounted) {
+      process.exitCode = 1
+      return
+    }
+
+    const sourcePresent = await exists(mountedApp)
+    if (sourcePresent) {
+      await fs.mkdir(installRoot, { recursive: true })
+      await fs.cp(mountedApp, installedApp, { recursive: true, force: true })
+    }
+    const installed = sourcePresent && await exists(installedBinary)
+    report.checks.push({
+      id: 'dmg-copy',
+      status: installed ? 'passed' : 'failed',
+      detail: installed
+        ? 'Application copied into the disposable install root.'
+        : 'Application copy or installed executable check failed.'
+    })
+    if (!installed) {
+      process.exitCode = 1
+      return
+    }
+
+    const launched = await launchPackagedBinary(installedBinary, sandboxHome)
+    report.checks.push({
+      id: 'dmg-installed-launch',
+      status: launched ? 'passed' : 'failed',
+      detail: launched
+        ? 'Installed application launched with isolated app data.'
+        : 'Installed application failed isolated launch checks.'
+    })
+    if (!launched) process.exitCode = 1
+  } finally {
+    if (mounted) {
+      const detached = await runCaptured('hdiutil', ['detach', '-force', mountPoint]) === 0
+      report.checks.push({
+        id: 'dmg-detach',
+        status: detached ? 'passed' : 'failed',
+        detail: detached ? 'DMG detached.' : 'DMG detach failed.'
+      })
+      if (!detached) process.exitCode = 1
+    }
+    await fs.rm(smokeRoot, { recursive: true, force: true }).catch(() => {})
+  }
+}
+
+async function launchPackagedBinary(binaryPath, sandboxHome) {
   await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
   await fs.mkdir(sandboxHome, { recursive: true })
 
@@ -206,7 +314,7 @@ async function smokeLaunchUnpacked() {
     LOCALAPPDATA: path.join(sandboxHome, 'AppData', 'Local')
   }
 
-  const passed = await new Promise((resolve) => {
+  return new Promise((resolve) => {
     const child = spawn(binaryPath, ['--no-sandbox', '--disable-gpu'], {
       cwd: path.dirname(binaryPath),
       shell: false,
@@ -216,66 +324,50 @@ async function smokeLaunchUnpacked() {
 
     let stdoutBuffer = ''
     let stderrBuffer = ''
-    child.stdout.on('data', (data) => {
-      stdoutBuffer += data.toString()
-    })
-    child.stderr.on('data', (data) => {
-      stderrBuffer += data.toString()
-    })
+    child.stdout.on('data', (data) => { stdoutBuffer += data.toString() })
+    child.stderr.on('data', (data) => { stderrBuffer += data.toString() })
 
-    const checkOutputs = () => {
-      const fullLog = stdoutBuffer + '\n' + stderrBuffer
-      const hasDbLog = fullLog.includes('[SQLite] Database successfully loaded.') || fullLog.includes('Database successfully loaded.')
-      const hasPyLog = fullLog.includes('[resolvePythonExecutable]') || fullLog.includes('resolvePythonExecutable')
-      return { hasDbLog, hasPyLog, fullLog }
+    const hasRequiredStartupEvidence = () => {
+      const fullLog = `${stdoutBuffer}\n${stderrBuffer}`
+      const hasDbLog = fullLog.includes('[SQLite] Database successfully loaded.')
+        || fullLog.includes('Database successfully loaded.')
+      const hasPyLog = fullLog.includes('[resolvePythonExecutable]')
+        || fullLog.includes('resolvePythonExecutable')
+      return hasDbLog && hasPyLog
     }
 
     let resolved = false
-    const timer = setTimeout(() => {
+    let timedOut = false
+    let runningAtTimeout = false
+    let evidenceAtTimeout = false
+    let killFallback = null
+    let timer = null
+    const finish = (passed) => {
       if (resolved) return
       resolved = true
-      const running = child.exitCode === null
-      if (running) {
-        child.kill()
+      if (timer) clearTimeout(timer)
+      if (killFallback) clearTimeout(killFallback)
+      resolve(passed)
+    }
+    timer = setTimeout(() => {
+      timedOut = true
+      runningAtTimeout = child.exitCode === null
+      evidenceAtTimeout = hasRequiredStartupEvidence()
+      if (!runningAtTimeout) {
+        finish(false)
+        return
       }
-      const { hasDbLog, hasPyLog, fullLog } = checkOutputs()
-      console.log('--- Smoke Test App Log Output ---')
-      console.log(fullLog)
-      console.log('---------------------------------')
-      resolve(hasDbLog && hasPyLog)
+      child.kill('SIGKILL')
+      killFallback = setTimeout(() => finish(evidenceAtTimeout), 2_000)
     }, launchTimeoutMs)
 
-    child.on('error', (err) => {
-      if (resolved) return
-      resolved = true
-      clearTimeout(timer)
-      console.error('Failed to spawn app process:', err)
-      resolve(false)
-    })
-
-    child.on('exit', (code) => {
-      if (resolved) return
-      resolved = true
-      clearTimeout(timer)
-      const { hasDbLog, hasPyLog, fullLog } = checkOutputs()
-      console.log('--- Smoke Test App Log Output (Exited Early) ---')
-      console.log(fullLog)
-      console.log('------------------------------------------------')
-      resolve(hasDbLog && hasPyLog && code === 0)
+    child.on('error', () => finish(false))
+    child.on('close', (code) => {
+      finish(timedOut
+        ? runningAtTimeout && evidenceAtTimeout
+        : code === 0 && hasRequiredStartupEvidence())
     })
   })
-
-  report.checks.push({
-    id: 'launch-unpacked',
-    status: passed ? 'passed' : 'failed',
-    detail: passed
-      ? `Process stayed alive, loaded SQLite database, and resolved python executable.`
-      : `App failed smoke checks. Check stdout/stderr logs for details.`
-  })
-
-  await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
-
-  if (!passed) process.exitCode = 1
 }
 
 async function generateSandboxFiles() {
@@ -424,6 +516,19 @@ async function runStep(id, command, stepArgs, options = {}) {
     detail: `${command} ${stepArgs.join(' ')} exited with ${exitCode}.`
   })
   if (exitCode !== 0) process.exitCode = Number(exitCode) || 1
+}
+
+async function runCaptured(command, stepArgs) {
+  return new Promise((resolve) => {
+    const child = spawn(command, stepArgs, {
+      cwd: root,
+      env: process.env,
+      shell: false,
+      stdio: 'ignore'
+    })
+    child.on('error', () => resolve(127))
+    child.on('close', (code) => resolve(code ?? 1))
+  })
 }
 
 async function commandExists(command) {

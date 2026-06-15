@@ -45,3 +45,8 @@ distribution requires Developer ID signing, Hardened Runtime, nested signature
 validation, notarization, staple, Gatekeeper, DMG smoke, approved release
 branding, and update metadata.
 Publishing always requires a separate explicit approval.
+
+Package Smoke now includes disposable install validation on both platforms:
+Windows uses Windows Sandbox, while macOS mounts the DMG read-only, copies the
+app into a temporary install root, launches with isolated app data, detaches,
+and removes the temporary root.

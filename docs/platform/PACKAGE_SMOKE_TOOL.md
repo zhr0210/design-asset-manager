@@ -22,6 +22,13 @@ Run an unpacked launch smoke test:
 node scripts/package-smoke.mjs --launch-unpacked
 ```
 
+Mount a macOS DMG read-only, copy the app into a disposable install root, and
+run an isolated launch check:
+
+```bash
+node scripts/package-smoke.mjs --dmg-install-smoke --arch=arm64
+```
+
 Generate Windows Sandbox files:
 
 ```bash
@@ -63,6 +70,11 @@ node scripts/package-smoke.mjs --sandbox-install --sandbox-install-timeout-ms=18
 
 - The host tool does not run the NSIS installer.
 - The host launch smoke only starts `win-unpacked` and stops it after the timeout.
+- The macOS DMG install smoke mounts the image read-only, copies the app only
+  into the disposable install root, uses isolated app-data paths, detaches the
+  image, and removes the temporary root.
+- App startup logs are evaluated in memory and are not printed, preventing
+  local paths from leaking into reports.
 - Sandbox staging uses the operating-system temporary directory by default.
 - `--arch=x64` and `--arch=arm64` select the expected unpacked directory and
   artifact architecture.

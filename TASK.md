@@ -59,6 +59,9 @@ real release credentials:
   minimum; broader protection-disabling entitlements were removed.
 - A real unsigned macOS arm64 pack succeeded even with invalid fixture signing
   variables present, proving the default runner scrubs them before packaging.
+- A current unsigned macOS arm64 DMG passed read-only mount, disposable app
+  copy, isolated launch, detach, and temporary-root cleanup. Package Smoke no
+  longer prints captured startup logs or local paths.
 - Full governance, typecheck, production build, release-focused tests, plist
   validation, 142 Python tests, docs sync, and diff checks passed.
 - No real signing or notarization credentials were read or used.
@@ -131,8 +134,9 @@ and Release Update Metadata pass.
   system security assessment is disabled.
 - A real unsigned macOS arm64 DMG and blockmap were built locally. The
   architecture-scoped checksum manifest and static Package Smoke passed;
-  strict bundle signature verification failed as expected for the unsigned
-  candidate, so its truthful ceiling is `candidate_ready`.
+  read-only DMG installation and isolated launch also passed. Strict bundle
+  signature verification failed as expected for the unsigned candidate, so
+  its truthful ceiling is `candidate_ready`.
 - The complete `ci:governance` suite passed with the release invariant,
   checksum, Package Smoke, and workflow contract tests included.
 - Windows full-governance validation exposed and fixed a CRLF-sensitive
