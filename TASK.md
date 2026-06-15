@@ -66,10 +66,12 @@ exposing public IPC before the exact channel contract is approved:
   `python3 scripts/check-docs-sync.py`, and `git diff --check` passed.
 - `python3 scripts/check-forbidden-paths.py` reported changed docs paths,
   including this slice's docs and pre-existing untracked `docs/agents` files.
-- A full non-sandbox `npm run ci:governance` rerun passed. Doctor CI reported
-  the expected warning that the AI Worker health endpoint was not running.
-- Windows remote validation on `7309810` pulled the branch and passed
-  `npm run test-runtime-package-session` and `npm run typecheck`.
+- A full non-sandbox `npm run ci:governance` rerun passed on `37afdcd`.
+  Doctor CI reported the expected warning that the AI Worker health endpoint
+  was not running.
+- Windows remote validation on `37afdcd` pulled the branch and passed
+  `npm run test-runtime-package-ipc-governance`,
+  `npm run test-runtime-package-session`, and `npm run typecheck`.
 
 ## Signed Candidate Architecture Result
 
