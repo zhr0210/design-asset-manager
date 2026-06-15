@@ -28,52 +28,39 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Establish one truthful integration and documentation baseline before adding
-new runtime installation behavior:
+Close the unsigned cross-platform release-candidate path before adding a new
+renderer-facing Runtime Package contract:
 
-1. Replace stale Phase 1 and historical validation language in active docs.
-2. Mark completed shared-architecture roadmap slices as complete.
-3. Keep only the latest sanitized Windows evidence and a reusable validation
-   guide.
-4. Record the next implementation seam as Runtime Package Executor.
-5. Do not change source behavior, IPC channels, AI Worker HTTP contracts,
-   database schema semantics, or user data.
+1. Keep Windows and macOS on one packaging runner.
+2. Build real unsigned candidates without publishing or signing credentials.
+3. Verify artifact checksums and static package structure.
+4. Run the Windows installer only inside Windows Sandbox.
+5. Record remaining formal distribution gates truthfully.
 
 ## Current Slice Result
 
-- Active architecture and evidence docs now describe the implemented baseline.
-- Historical Windows handoff/result documents were reduced to reusable
-  validation instructions and the latest sanitized evidence.
-- The shared architecture roadmap now separates completed AI foundation work
-  from Runtime Package Executor and Release Flow work.
-- Agent context, docs sync, diff checks, path-governance docs, release
-  governance, and runtime-package installer contract tests passed.
-- `check-forbidden-paths.py` reported the expected approved `docs/` edits and
-  unrelated pre-existing `docs/agents/` files; no forbidden runtime or user
-  data was read or modified.
+- One shared packaging runner now uses the installed Electron distribution,
+  removes inherited proxy variables, and forces no signing or publishing.
+- A real unsigned macOS arm64 candidate passed packaging, checksum, and static
+  Package Smoke checks.
+- Windows full governance passed after fixing CRLF-sensitive contracts and
+  restoring the Node native-module ABI before tests.
+- A real Windows x64 NSIS candidate and blockmap were built. Checksum and
+  static Package Smoke checks passed.
+- Windows Sandbox verified the unpacked app launch, installer hash, silent
+  install, normalized product subfolder, and installed executable. Unsigned
+  signature evidence remains a truthful warning.
+- Sandbox reports now persist incrementally, enforce application/installer
+  timeouts, and expose a final `completed` marker.
 
 ## Next Implementation Slice
 
-Deepen Runtime Package installation behind one main-process Runtime Package
-Executor interface.
-
-The first executable slice is limited to explicitly selected local or bundled
-packages. It must provide:
-
-- staging under an app-managed temporary root;
-- SHA-256 verification before extraction;
-- archive traversal and target-root checks;
-- atomic promotion into an app-managed runtime root;
-- Runtime Registry metadata update only after promotion succeeds;
-- rollback of created files and metadata on failure;
-- structured progress and failure results;
-- an in-memory adapter for interface-level tests;
-- no remote download, package script execution, privilege escalation, model
-  download, or automatic runtime start.
-
-Any renderer operation must remain user-triggered. Windows and macOS share the
-executor workflow while archive, executable, quarantine, and signing behavior
-may use platform adapters.
+Expose the completed Runtime Package Executor to the renderer only after the
+new public IPC channel names and response contract are explicitly approved.
+That slice must add shared types, main-process handlers, preload methods,
+focused contract tests, one user-triggered UI flow, and Electron/Playwright
+evidence on macOS and Windows. It must not add remote downloads, package
+scripts, privilege escalation, model downloads, or automatic runtime start.
 
 ## Runtime Package Executor Result
 
@@ -146,6 +133,9 @@ may use platform adapters.
   distribution. All packaging entry points now share one runner that derives
   the installed Electron version, uses its local dist, disables signing and
   publishing, and removes inherited proxy variables.
+- Windows x64 NSIS packaging, artifact checksum generation, static Package
+  Smoke, and disposable Windows Sandbox installation all passed. Signing is
+  intentionally absent, so the candidate remains below distribution-ready.
 
 ## Safety Boundaries
 

@@ -390,7 +390,7 @@ try {
     $hash = (Get-FileHash $installer -Algorithm SHA256).Hash
     $sig = Get-AuthenticodeSignature $installer
     Add-Check 'installer-hash' 'passed' $hash
-    Add-Check 'installer-signature' ($(if ($sig.Status -eq 'Valid') { 'passed' } else { 'warning' })) $sig.Status
+    Add-Check 'installer-signature' ($(if ($sig.Status -eq 'Valid') { 'passed' } else { 'warning' })) $sig.Status.ToString()
   }
 ${sandboxInstallBlock}
 } catch {

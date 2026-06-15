@@ -20,6 +20,12 @@ removes inherited proxy variables before invoking electron-builder. This keeps
 Windows and macOS packaging behavior aligned and avoids a second Electron
 download.
 
+The shared runner has produced a real unsigned macOS arm64 candidate and a real
+Windows x64 NSIS candidate. Windows checksum/static checks passed, and Windows
+Sandbox verified unpacked startup plus silent installation into the normalized
+product subfolder. The signature warning is expected until formal signing is
+configured.
+
 An explicit electron-builder config is declared in `package.json` `build`.
 
 Packaging scripts are declared for `pack:win`, `pack:mac`, `dist:win`, and `dist:mac`.
