@@ -126,6 +126,31 @@ const invalidJson = await service.selectLocalManifest(invalidJsonManifestPath)
 assert.equal(invalidJson.success, false)
 assert.equal(invalidJson.errorCode, 'MANIFEST_INVALID')
 
+const multiPackageManifestPath = path.join(packageDir, 'multi-package.json')
+await fs.writeFile(
+  multiPackageManifestPath,
+  JSON.stringify(
+    createManifest([
+      entry,
+      {
+        ...entry,
+        id: 'session-runtime-alt',
+        name: 'Session Runtime Alt',
+        provides: ['session-runtime-alt']
+      }
+    ]),
+    null,
+    2
+  )
+)
+const ambiguousPackage = await service.selectLocalManifest(multiPackageManifestPath)
+assert.equal(ambiguousPackage.success, false)
+assert.equal(ambiguousPackage.errorCode, 'PACKAGE_NOT_FOUND')
+const selectedAltPackage = await service.selectLocalManifest(multiPackageManifestPath, 'session-runtime-alt')
+assert.equal(selectedAltPackage.success, true)
+assert.equal(selectedAltPackage.selection?.packageId, 'session-runtime-alt')
+assert.equal(JSON.stringify(selectedAltPackage).includes(base), false)
+
 const nestedArchiveManifestPath = path.join(packageDir, 'nested-archive.json')
 await fs.writeFile(
   nestedArchiveManifestPath,
