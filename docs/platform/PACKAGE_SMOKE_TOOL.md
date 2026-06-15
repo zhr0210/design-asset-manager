@@ -53,6 +53,11 @@ node scripts/package-smoke.mjs --sandbox-install --work-root=<disposable-work-ro
 ```
 
 With `--sandbox-install`, the generated Sandbox script runs the NSIS installer inside Windows Sandbox with a parent install directory and verifies that the final install path is the `Design Asset Manager` subfolder.
+The installer has a 120-second timeout by default. Override it only for slow disposable environments:
+
+```bash
+node scripts/package-smoke.mjs --sandbox-install --sandbox-install-timeout-ms=180000
+```
 
 ## Boundaries
 
@@ -63,6 +68,7 @@ With `--sandbox-install`, the generated Sandbox script runs the NSIS installer i
   artifact architecture.
 - The sandbox script checks installer presence, hash, signature status, and `win-unpacked` startup.
 - The sandbox script runs the NSIS installer only when generated with `--sandbox-install`; this happens inside Windows Sandbox, not on the host.
+- The sandbox report is written incrementally with `completed: false`, then finalized with `completed: true` after errors or success, so a stalled installer or failed launch remains observable without treating partial results as complete.
 - The generated Sandbox profile disables vGPU and waits briefly after login before running smoke checks, which avoids coupling the smoke result to flaky Sandbox display acceleration.
 - Signing may report `warning` until code signing is configured.
 - Full installer execution should happen only in a disposable VM or sandbox.

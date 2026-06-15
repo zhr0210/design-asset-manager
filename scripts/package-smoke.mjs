@@ -16,6 +16,16 @@ const generateSandbox = args.has('--sandbox') || args.has('--generate-sandbox') 
 const openSandbox = args.has('--open-sandbox')
 const timeoutArg = process.argv.find((arg) => arg.startsWith('--timeout-ms='))
 const launchTimeoutMs = timeoutArg ? Number(timeoutArg.replace('--timeout-ms=', '')) : 8000
+const sandboxInstallTimeoutArg = process.argv.find((arg) => arg.startsWith('--sandbox-install-timeout-ms='))
+const sandboxInstallTimeoutMs = sandboxInstallTimeoutArg
+  ? Number(sandboxInstallTimeoutArg.replace('--sandbox-install-timeout-ms=', ''))
+  : 120_000
+if (!Number.isFinite(launchTimeoutMs) || launchTimeoutMs <= 0) {
+  throw new Error('--timeout-ms must be a positive number.')
+}
+if (!Number.isFinite(sandboxInstallTimeoutMs) || sandboxInstallTimeoutMs <= 0) {
+  throw new Error('--sandbox-install-timeout-ms must be a positive number.')
+}
 const archArg = process.argv.find((arg) => arg.startsWith('--arch='))
 const requestedArch = archArg?.replace('--arch=', '') ?? process.arch
 if (!['x64', 'arm64'].includes(requestedArch)) {
@@ -327,10 +337,15 @@ if (Test-Path $installer) {
   $expectedInstallDir = Join-Path $installParent '${productName}'
   Remove-Item -LiteralPath $installParent -Recurse -Force -ErrorAction SilentlyContinue
   New-Item -ItemType Directory -Force -Path $installParent | Out-Null
-  $installerProcess = Start-Process -FilePath $installer -ArgumentList @('/S', ('/D=' + $installParent)) -PassThru -Wait
-  Add-Check 'installer-run' ($(if ($installerProcess.ExitCode -eq 0) { 'passed' } else { 'failed' })) ('Installer exited with code ' + $installerProcess.ExitCode)
-  Add-Check 'installer-subfolder' ($(if (Test-Path $expectedInstallDir) { 'passed' } else { 'failed' })) $expectedInstallDir
-  Add-Check 'installed-exe' ($(if (Test-Path (Join-Path $expectedInstallDir '${productName}.exe')) { 'passed' } else { 'failed' })) 'Installed executable under normalized subfolder.'
+  $installerProcess = Start-Process -FilePath $installer -ArgumentList @('/S', ('/D=' + $installParent)) -PassThru
+  if ($installerProcess.WaitForExit(${sandboxInstallTimeoutMs})) {
+    Add-Check 'installer-run' ($(if ($installerProcess.ExitCode -eq 0) { 'passed' } else { 'failed' })) ('Installer exited with code ' + $installerProcess.ExitCode)
+    Add-Check 'installer-subfolder' ($(if (Test-Path $expectedInstallDir) { 'passed' } else { 'failed' })) 'Installer used the normalized product subfolder.'
+    Add-Check 'installed-exe' ($(if (Test-Path (Join-Path $expectedInstallDir '${productName}.exe')) { 'passed' } else { 'failed' })) 'Installed executable exists under the normalized product subfolder.'
+  } else {
+    Stop-Process -Id $installerProcess.Id -Force -ErrorAction SilentlyContinue
+    Add-Check 'installer-run' 'failed' 'Installer exceeded the ${sandboxInstallTimeoutMs} ms timeout.'
+  }
 }
 `
     : ''
@@ -338,40 +353,51 @@ if (Test-Path $installer) {
 Start-Sleep -Seconds 15
 $root = 'C:\\Users\\WDAGUtilityAccount\\Desktop\\package-smoke'
 $report = Join-Path $root 'sandbox-report.json'
+$reportTemp = Join-Path $root 'sandbox-report.json.tmp'
 $installer = Join-Path $root '${path.basename(installerPath)}'
 $unpacked = Join-Path $root '${windowsUnpackedDir}\\${productName}.exe'
 $checks = @()
 
+function Write-Report([bool]$completed = $false) {
+  [pscustomobject]@{
+    generatedAt = (Get-Date).ToString('o')
+    completed = $completed
+    checks = $script:checks
+  } | ConvertTo-Json -Depth 5 | Set-Content -Path $reportTemp -Encoding UTF8
+  Move-Item -LiteralPath $reportTemp -Destination $report -Force
+}
+
 function Add-Check($id, $status, $detail) {
   $script:checks += [pscustomobject]@{ id = $id; status = $status; detail = $detail }
+  Write-Report $false
 }
 
-Add-Check 'installer-present' ($(if (Test-Path $installer) { 'passed' } else { 'failed' })) 'Installer presence check.'
-Add-Check 'unpacked-present' ($(if (Test-Path $unpacked) { 'passed' } else { 'failed' })) 'Unpacked executable presence check.'
+try {
+  Add-Check 'installer-present' ($(if (Test-Path $installer) { 'passed' } else { 'failed' })) 'Installer presence check.'
+  Add-Check 'unpacked-present' ($(if (Test-Path $unpacked) { 'passed' } else { 'failed' })) 'Unpacked executable presence check.'
 
-if (Test-Path $unpacked) {
-  $p = Start-Process -FilePath $unpacked -ArgumentList @('--no-sandbox','--disable-gpu') -PassThru -WindowStyle Hidden
-  Start-Sleep -Seconds 8
-  if (-not $p.HasExited) {
-    Stop-Process -Id $p.Id -Force
-    Add-Check 'unpacked-launch' 'passed' 'Unpacked app stayed alive for 8 seconds.'
-  } else {
-    Add-Check 'unpacked-launch' 'failed' ('Unpacked app exited early with code ' + $p.ExitCode)
+  if (Test-Path $unpacked) {
+    $p = Start-Process -FilePath $unpacked -ArgumentList @('--no-sandbox','--disable-gpu') -PassThru -WindowStyle Hidden
+    if (-not $p.WaitForExit(${launchTimeoutMs})) {
+      Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+      Add-Check 'unpacked-launch' 'passed' 'Unpacked app stayed alive for ${launchTimeoutMs} ms.'
+    } else {
+      Add-Check 'unpacked-launch' 'failed' ('Unpacked app exited early with code ' + $p.ExitCode)
+    }
   }
-}
 
-if (Test-Path $installer) {
-  $hash = (Get-FileHash $installer -Algorithm SHA256).Hash
-  $sig = Get-AuthenticodeSignature $installer
-  Add-Check 'installer-hash' 'passed' $hash
-  Add-Check 'installer-signature' ($(if ($sig.Status -eq 'Valid') { 'passed' } else { 'warning' })) $sig.Status
-}
+  if (Test-Path $installer) {
+    $hash = (Get-FileHash $installer -Algorithm SHA256).Hash
+    $sig = Get-AuthenticodeSignature $installer
+    Add-Check 'installer-hash' 'passed' $hash
+    Add-Check 'installer-signature' ($(if ($sig.Status -eq 'Valid') { 'passed' } else { 'warning' })) $sig.Status
+  }
 ${sandboxInstallBlock}
-
-[pscustomobject]@{
-  generatedAt = (Get-Date).ToString('o')
-  checks = $checks
-} | ConvertTo-Json -Depth 5 | Set-Content -Path $report -Encoding UTF8
+} catch {
+  Add-Check 'sandbox-script' 'failed' $_.Exception.Message
+} finally {
+  Write-Report $true
+}
 `
 }
 
