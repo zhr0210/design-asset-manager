@@ -136,6 +136,10 @@ may use platform adapters.
 - Windows full-governance validation exposed and fixed a CRLF-sensitive
   Settings Migration preload contract test. The test now normalizes line
   endings and fails explicitly when its structural boundaries are absent.
+- Windows also exposed a native ABI ordering gap: `npm ci` rebuilt
+  `better-sqlite3` for Electron before Node-driven governance tests.
+  `ci:governance` now begins with `ci:prepare-native-deps`; packaging still
+  rebuilds Electron native dependencies when producing the artifact.
 
 ## Safety Boundaries
 

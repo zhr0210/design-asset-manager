@@ -22,6 +22,7 @@ assert.match(workflow, /npm run build/)
 assert.match(workflow, /npm run ci:governance/)
 
 for (const requiredScript of [
+  'ci:prepare-native-deps',
   'ci:test-governance',
   'ci:test-runtime-safety',
   'ci:governance',
@@ -30,6 +31,9 @@ for (const requiredScript of [
 ]) {
   assert.ok(packageJson.scripts?.[requiredScript], `Missing npm script: ${requiredScript}`)
 }
+
+assert.equal(packageJson.scripts?.['ci:prepare-native-deps'], 'npm rebuild better-sqlite3')
+assert.match(packageJson.scripts?.['ci:governance'] ?? '', /^npm run ci:prepare-native-deps &&/)
 
 assert.match(doctorCi, /doctor-check\.mjs/)
 assert.match(doctorCi, /--json/)

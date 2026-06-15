@@ -36,6 +36,12 @@ These variables document CI intent and give future runtime/downloader code stabl
 
 `npm run ci:hygiene` checks that CI did not leave denied artifacts in the project root and that workflow commands stay validation-only.
 
+`npm run ci:prepare-native-deps` restores the current Node ABI for
+`better-sqlite3` before Node-driven governance tests. `npm ci` runs
+electron-builder's postinstall and may leave the module rebuilt for Electron;
+packaging commands rebuild Electron native dependencies again before creating
+an app artifact.
+
 `npm run verify:platform` runs the local common verifier: `ci:governance`, `typecheck`, and `build`.
 
 `npm run verify:platform:win` and `npm run verify:platform:mac` wrap the same common verifier for platform-specific local use. `npm run verify:platform:clean` first removes only known `dist-temp` scratch subdirectories.
