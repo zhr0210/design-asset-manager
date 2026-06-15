@@ -56,11 +56,16 @@ The first session slice does not register IPC channels, does not add cancel
 semantics, and does not weaken the executor policy for remote packages, model
 packages, package scripts, or automatic runtime start.
 
+`npm run test-runtime-package-ipc-governance` keeps that boundary explicit. It
+fails if a `runtime-package:*` IPC channel, preload API, renderer caller, or
+shared IPC contract appears before the public channel contract is approved.
+
 ## Validation
 
 ```bash
 npm run test-runtime-package-executor
 npm run test-runtime-package-session
+npm run test-runtime-package-ipc-governance
 npm run test-runtime-registry
 npm run typecheck
 npm run build

@@ -10,7 +10,9 @@
   ],
   "cross_platform_runtime": [
     "npm run ci:test-runtime-safety",
-    "npm run test-runtime-package-executor"
+    "npm run test-runtime-package-executor",
+    "npm run test-runtime-package-session",
+    "npm run test-runtime-package-ipc-governance"
   ],
   "release_flow": [
     "npm run test-release-flow-governance",

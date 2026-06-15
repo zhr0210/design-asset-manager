@@ -53,6 +53,9 @@ exposing public IPC before the exact channel contract is approved:
   only inside a bounded main-process cache by age and count.
 - The session currently registers no IPC channels and no preload API. It is the
   approved-boundary skeleton for the next public contract slice.
+- A Runtime Package IPC governance test now fails if `runtime-package:*`
+  channels, preload APIs, renderer callers, or shared IPC contracts appear
+  before the public channel contract is approved.
 - Focused session tests cover selection, token expiry, one-time use,
   confirmation, checksum mismatch, nested archive rejection, model-package
   blocking, multi-package manifest disambiguation, path-free responses,
@@ -223,6 +226,7 @@ npm run test-runtime-package-verifier-extractor
 npm run test-runtime-package-installer
 npm run ci:test-runtime-safety
 npm run test-runtime-package-session
+npm run test-runtime-package-ipc-governance
 python3 -m unittest discover ai-service/tests
 ```
 
