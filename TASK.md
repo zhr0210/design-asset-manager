@@ -65,7 +65,7 @@ exposing public IPC before the exact channel contract is approved:
   including this slice's docs and pre-existing untracked `docs/agents` files.
 - A full non-sandbox `npm run ci:governance` rerun passed. Doctor CI reported
   the expected warning that the AI Worker health endpoint was not running.
-- Windows remote validation on `a3b3d13` pulled the branch and passed
+- Windows remote validation on `7309810` pulled the branch and passed
   `npm run test-runtime-package-session` and `npm run typecheck`.
 
 ## Signed Candidate Architecture Result
