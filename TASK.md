@@ -93,6 +93,9 @@ exposing public IPC before the exact channel contract is approved:
   passed locally. A full `ci:governance` rerun reached the Llama server probe,
   where sandboxed loopback listening was denied; two required sandbox
   escalation requests timed out before approval.
+- Windows fast-forwarded to `6c03cb1` and passed the branding evidence,
+  release-flow governance, signed-workflow, typecheck, and diff checks with a
+  clean worktree.
 - The manual signed-candidate workflow is gated by explicit dispatch input and
   platform GitHub Environment approval. It has read-only repository
   permissions and no publishing step.
