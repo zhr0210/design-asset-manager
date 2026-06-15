@@ -40,6 +40,10 @@ candidate. It still has read-only repository permissions and cannot publish.
 It also verifies release branding evidence. Missing or malformed
 `build/icon.ico` or `build/icon.icns` blocks the signed-candidate workflow
 rather than allowing a default Electron icon to reach distribution gates.
+The two icons must also match the SHA-256 values in the shared
+`build/release-branding.json` approval record. The verifier parses the ICO and
+ICNS containers and emits only path-free approval/check results; it does not
+emit icon digests or local paths.
 
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and

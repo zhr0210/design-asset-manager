@@ -28,50 +28,37 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Prepare the Runtime Package Executor for a renderer product flow without
-exposing public IPC before the exact channel contract is approved:
+Harden Release Branding Evidence so a structurally plausible icon cannot be
+treated as approved branding:
 
-1. Keep package selection and trusted metadata inside the Electron main
-   process.
-2. Accept only a user-selected sidecar `runtime-package.json` and a sibling ZIP
-   bound by size and SHA-256.
-3. Return opaque, expiring selection tokens and path-free package previews.
-4. Execute selected packages through the existing rollback-capable executor.
-5. Cache path-free execution snapshots for future UI polling or events.
+1. Require one shared `build/release-branding.json` approval record for both
+   Windows and macOS.
+2. Validate platform icon container structure and required high-resolution
+   entries.
+3. Bind each icon to its approved SHA-256 without exposing paths or digests in
+   generated evidence.
+4. Keep final assets absent until a human-approved brand source is provided.
 
 ## Current Slice Result
 
-- Added an internal main-process Runtime Package Session Service.
-- Local manifest selection validates schema, requires one selected package
-  entry, blocks non-executable package types/modes, requires sibling ZIP
-  archives, verifies size and SHA-256, and stores archive paths only in main
-  memory.
-- Execution consumes the selection token, requires explicit confirmation,
-  emits path-free snapshots, and commits through the existing Runtime Package
-  Executor and Runtime Registry.
-- Running executions are kept queryable, while terminal snapshots are retained
-  only inside a bounded main-process cache by age and count.
-- The session currently registers no IPC channels and no preload API. It is the
-  approved-boundary skeleton for the next public contract slice.
-- A Runtime Package IPC governance test now fails if `runtime-package:*`
-  channels, preload APIs, renderer callers, or shared IPC contracts appear
-  before the public channel contract is approved.
-- Focused session tests cover selection, token expiry, one-time use,
-  confirmation, checksum mismatch, nested archive rejection, model-package
-  blocking, multi-package manifest disambiguation, path-free responses,
-  execution completion, bounded snapshot retention, and registry commit.
-- `npm run test-runtime-package-session`, `npm run test-runtime-package-executor`,
-  `npm run typecheck`, `npm run build`, `python3 -m unittest discover
-  ai-service/tests`, `python3 scripts/check-agent-context.py`,
-  `python3 scripts/check-docs-sync.py`, and `git diff --check` passed.
-- `python3 scripts/check-forbidden-paths.py` reported changed docs paths,
-  including this slice's docs and pre-existing untracked `docs/agents` files.
-- A full non-sandbox `npm run ci:governance` rerun passed on `37afdcd`.
-  Doctor CI reported the expected warning that the AI Worker health endpoint
-  was not running.
-- Windows remote validation on `37afdcd` pulled the branch and passed
-  `npm run test-runtime-package-ipc-governance`,
-  `npm run test-runtime-package-session`, and `npm run typecheck`.
+- Release branding verification now requires schema-valid approval metadata,
+  a shared approval ID/date, fixed platform filenames, and SHA-256 bindings
+  for both platform icons.
+- ICO verification checks the image directory, payload boundaries, supported
+  PNG/DIB payloads, and a 256x256 entry.
+- ICNS verification checks container/chunk sizes and a high-resolution PNG
+  chunk.
+- Generated evidence contains only platform, architecture, approval metadata,
+  and structured check results; it omits paths and digests.
+- Missing approval, fake-header ICO, malformed containers, and digest mismatch
+  fail closed in focused tests.
+- No final branding assets or approval record have been added because no
+  human-approved brand source exists in the repository.
+- Focused release tests, typecheck, production build, docs/context checks,
+  Runtime Package regression, packaging governance, and 142 Python tests
+  passed locally. The full governance wrapper stopped only where the sandbox
+  denied the Llama probe's loopback listener; all later subchecks were rerun
+  directly and passed.
 
 ## Signed Candidate Architecture Result
 
@@ -85,9 +72,9 @@ exposing public IPC before the exact channel contract is approved:
 - Release Trust Evidence verifies Authenticode on Windows and Developer ID,
   Hardened Runtime, nested signatures, notarization/staple, Gatekeeper, and
   DMG integrity on macOS without exposing certificate values or paths.
-- Release Branding Evidence verifies platform release icons as path-free
-  evidence. Missing `build/icon.ico` or `build/icon.icns` blocks signed
-  candidates from being treated as distributable.
+- Release Branding Evidence verifies platform icon structure and binds both
+  icons to one path-free approval record. Missing assets, missing approval, or
+  SHA-256 mismatch blocks signed candidates from being distributable.
 - Release Branding Evidence focused tests, signed-workflow governance tests,
   typecheck, production build, docs sync, agent context check, and diff check
   passed locally. A full `ci:governance` rerun reached the Llama server probe,
@@ -120,8 +107,8 @@ Three gated slices remain:
    candidate after credentials and platform environments are provisioned.
 2. Expose Runtime Package Executor to the renderer only after the exact public
    IPC channel names and response contract are explicitly approved.
-3. Add approved Windows `.ico` and macOS `.icns` branding; default Electron
-   icons now keep candidates below `distribution_ready`.
+3. Add human-approved Windows `.ico`, macOS `.icns`, and their shared approval
+   record; default Electron icons remain below `distribution_ready`.
 
 Publishing remains a separate per-release approval after distribution gates
 and Release Update Metadata pass.

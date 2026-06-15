@@ -67,6 +67,7 @@ assert.match(signedWorkflow, /release-signing-macos/)
 assert.match(signedWorkflow, /write-release-update-metadata\.mjs/)
 assert.match(signedWorkflow, /verify-release-trust\.mjs/)
 assert.match(signedWorkflow, /verify-release-branding\.mjs/)
+assert.match(signedWorkflow, /build\/release-branding\.json/)
 assert.match(signedWorkflow, /release-branding-evidence-\*\.json/)
 assert.doesNotMatch(signedWorkflow, /contents: write|gh release|create-release|--publish always/i)
 

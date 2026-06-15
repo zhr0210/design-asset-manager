@@ -81,7 +81,7 @@ jobs:
         run: node scripts/verify-release-trust.mjs --platform=windows --arch=${{ inputs.arch }}
 
       - name: Verify release branding evidence
-        run: node scripts/verify-release-branding.mjs --platform=windows --arch=${{ inputs.arch }}
+        run: node scripts/verify-release-branding.mjs --platform=windows --arch=${{ inputs.arch }} --approval=build/release-branding.json
 
       - name: Run static Package Smoke
         run: npm run package:smoke -- --arch=${{ inputs.arch }}
@@ -143,7 +143,7 @@ jobs:
         run: node scripts/verify-release-trust.mjs --platform=macos --arch=${{ inputs.arch }}
 
       - name: Verify release branding evidence
-        run: node scripts/verify-release-branding.mjs --platform=macos --arch=${{ inputs.arch }}
+        run: node scripts/verify-release-branding.mjs --platform=macos --arch=${{ inputs.arch }} --approval=build/release-branding.json
 
       - name: Run static Package Smoke
         run: npm run package:smoke -- --arch=${{ inputs.arch }}
