@@ -52,6 +52,11 @@ current native dependency toolchain:
   is Node 24, while their configured application test runtime remains Node 20.
 - Focused workflow contracts, release-flow contracts, typecheck, production
   build, docs/context checks, and diff checks pass locally.
+- Windows fast-forwarded to `47b41e5` and passed the CI/release workflow
+  contracts, typecheck, and diff checks with a clean worktree.
+- Draft PR #1 run 12 passed both `windows-2022 / Node 20` and
+  `macos-latest / Node 20`, including clean dependency installation,
+  typecheck, production build, and the complete governance suite.
 
 ## Signed Candidate Architecture Result
 
