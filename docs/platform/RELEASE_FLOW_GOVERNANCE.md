@@ -37,6 +37,9 @@ The separate `release-signed-candidate.yml` workflow requires both the
 environment. It builds with `--signing=required`, verifies platform trust
 evidence, writes Release Update Metadata, and uploads a retained signed
 candidate. It still has read-only repository permissions and cannot publish.
+It also verifies release branding evidence. Missing or malformed
+`build/icon.ico` or `build/icon.icns` blocks the signed-candidate workflow
+rather than allowing a default Electron icon to reach distribution gates.
 
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and

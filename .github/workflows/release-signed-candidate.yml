@@ -80,6 +80,9 @@ jobs:
       - name: Verify Authenticode evidence
         run: node scripts/verify-release-trust.mjs --platform=windows --arch=${{ inputs.arch }}
 
+      - name: Verify release branding evidence
+        run: node scripts/verify-release-branding.mjs --platform=windows --arch=${{ inputs.arch }}
+
       - name: Run static Package Smoke
         run: npm run package:smoke -- --arch=${{ inputs.arch }}
 
@@ -93,6 +96,7 @@ jobs:
             dist-packages/release-checksums-*.json
             dist-packages/release-update-metadata-*.json
             dist-packages/release-trust-evidence-*.json
+            dist-packages/release-branding-evidence-*.json
           if-no-files-found: error
           retention-days: 14
 
@@ -138,6 +142,9 @@ jobs:
       - name: Verify macOS trust evidence
         run: node scripts/verify-release-trust.mjs --platform=macos --arch=${{ inputs.arch }}
 
+      - name: Verify release branding evidence
+        run: node scripts/verify-release-branding.mjs --platform=macos --arch=${{ inputs.arch }}
+
       - name: Run static Package Smoke
         run: npm run package:smoke -- --arch=${{ inputs.arch }}
 
@@ -151,5 +158,6 @@ jobs:
             dist-packages/release-checksums-*.json
             dist-packages/release-update-metadata-*.json
             dist-packages/release-trust-evidence-*.json
+            dist-packages/release-branding-evidence-*.json
           if-no-files-found: error
           retention-days: 14

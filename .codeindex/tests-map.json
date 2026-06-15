@@ -20,6 +20,7 @@
     "npm run test-release-checksums",
     "npm run test-release-update-metadata",
     "npm run test-release-trust-evidence",
+    "npm run test-release-branding-evidence",
     "npm run test-signed-release-workflow",
     "npm run test-macos-signing-entitlements",
     "npm run test-package-smoke"

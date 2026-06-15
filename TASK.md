@@ -85,6 +85,14 @@ exposing public IPC before the exact channel contract is approved:
 - Release Trust Evidence verifies Authenticode on Windows and Developer ID,
   Hardened Runtime, nested signatures, notarization/staple, Gatekeeper, and
   DMG integrity on macOS without exposing certificate values or paths.
+- Release Branding Evidence verifies platform release icons as path-free
+  evidence. Missing `build/icon.ico` or `build/icon.icns` blocks signed
+  candidates from being treated as distributable.
+- Release Branding Evidence focused tests, signed-workflow governance tests,
+  typecheck, production build, docs sync, agent context check, and diff check
+  passed locally. A full `ci:governance` rerun reached the Llama server probe,
+  where sandboxed loopback listening was denied; two required sandbox
+  escalation requests timed out before approval.
 - The manual signed-candidate workflow is gated by explicit dispatch input and
   platform GitHub Environment approval. It has read-only repository
   permissions and no publishing step.
