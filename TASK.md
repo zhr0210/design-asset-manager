@@ -60,10 +60,8 @@ exposing public IPC before the exact channel contract is approved:
   `python3 scripts/check-docs-sync.py`, and `git diff --check` passed.
 - `python3 scripts/check-forbidden-paths.py` reported changed docs paths,
   including this slice's docs and pre-existing untracked `docs/agents` files.
-- A full `npm run ci:governance` attempt reached the existing
-  `test-llama-runtime-server-probe` step and stopped because the current
-  sandbox denied local `127.0.0.1` listening. Non-sandbox rerun remains needed
-  before claiming full local governance for this slice.
+- A full non-sandbox `npm run ci:governance` rerun passed. Doctor CI reported
+  the expected warning that the AI Worker health endpoint was not running.
 - Windows remote validation on `a3b3d13` pulled the branch and passed
   `npm run test-runtime-package-session` and `npm run typecheck`.
 
