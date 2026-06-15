@@ -28,40 +28,30 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Harden Release Branding Evidence so a structurally plausible icon cannot be
-treated as approved branding:
+Restore authoritative Windows/macOS pull-request validation after the
+Windows hosted runner moved to a Visual Studio version unsupported by the
+current native dependency toolchain:
 
-1. Require one shared `build/release-branding.json` approval record for both
-   Windows and macOS.
-2. Validate platform icon container structure and required high-resolution
-   entries.
-3. Bind each icon to its approved SHA-256 without exposing paths or digests in
-   generated evidence.
-4. Keep final assets absent until a human-approved brand source is provided.
+1. Keep application compatibility testing on Node 20.
+2. Pin Windows governance and release jobs to `windows-2022` until the current
+   `node-gyp` can recognize Visual Studio 2026.
+3. Upgrade GitHub JavaScript actions to their Node 24 runtime versions.
+4. Preserve the same tests, packaging targets, release gates, and no-publish
+   boundaries.
 
 ## Current Slice Result
 
-- Release branding verification now requires schema-valid approval metadata,
-  a shared approval ID/date, fixed platform filenames, and SHA-256 bindings
-  for both platform icons.
-- ICO verification checks the image directory, payload boundaries, supported
-  PNG/DIB payloads, and a 256x256 entry.
-- ICNS verification checks container/chunk sizes and a high-resolution PNG
-  chunk.
-- Generated evidence contains only platform, architecture, approval metadata,
-  and structured check results; it omits paths and digests.
-- Missing approval, fake-header ICO, malformed containers, and digest mismatch
-  fail closed in focused tests.
-- No final branding assets or approval record have been added because no
-  human-approved brand source exists in the repository.
-- Focused release tests, typecheck, production build, docs/context checks,
-  Runtime Package regression, packaging governance, and 142 Python tests
-  passed locally. The full governance wrapper stopped only where the sandbox
-  denied the Llama probe's loopback listener; all later subchecks were rerun
-  directly and passed.
-- Windows fast-forwarded to `7715dbf` and passed the complete
-  `npm run ci:governance` suite, including the Llama loopback probe, with a
-  clean worktree. Doctor reported only the expected inactive AI Worker warning.
+- Draft PR #1 is mergeable, but its first cross-platform governance run
+  failed during Windows `npm ci` before project tests started.
+- The GitHub job log proves `better-sqlite3` missed a Node 20 prebuild and
+  `node-gyp` 10 could not recognize Visual Studio 18/2026 on the current
+  `windows-latest` image. The macOS job passed.
+- Governance, unsigned packaging, and signed-candidate Windows jobs now use
+  `windows-2022`; macOS remains on `macos-latest`.
+- All workflows now use `checkout@v6` and `setup-node@v6`, whose action runtime
+  is Node 24, while their configured application test runtime remains Node 20.
+- Focused workflow contracts, release-flow contracts, typecheck, production
+  build, docs/context checks, and diff checks pass locally.
 
 ## Signed Candidate Architecture Result
 

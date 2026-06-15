@@ -13,9 +13,10 @@ const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8')) as {
   scripts?: Record<string, string>
 }
 
-assert.match(workflow, /windows-latest/)
+assert.match(workflow, /windows-2022/)
 assert.match(workflow, /macos-latest/)
-assert.match(workflow, /actions\/setup-node@v4/)
+assert.match(workflow, /actions\/checkout@v6/)
+assert.match(workflow, /actions\/setup-node@v6/)
 assert.match(workflow, /npm ci/)
 assert.match(workflow, /npm run typecheck/)
 assert.match(workflow, /npm run build/)

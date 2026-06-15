@@ -5,7 +5,7 @@ Phase 8A adds a GitHub Actions workflow for cross-platform governance checks.
 ## Workflow
 
 - Workflow: `.github/workflows/cross-platform-governance.yml`
-- Platforms: `windows-latest`, `macos-latest`
+- Platforms: `windows-2022`, `macos-latest`
 - Node: `20`
 - Entry points:
   - `npm run typecheck`
@@ -41,6 +41,12 @@ These variables document CI intent and give future runtime/downloader code stabl
 electron-builder's postinstall and may leave the module rebuilt for Electron;
 packaging commands rebuild Electron native dependencies again before creating
 an app artifact.
+
+Windows jobs are pinned to `windows-2022` while `node-gyp` 10 is unable to
+recognize the Visual Studio 2026 installation on the current
+`windows-latest` image. This is a CI toolchain constraint, not an application
+support boundary. Workflows use `checkout@v6` and `setup-node@v6` so the action
+runtime is Node 24 while the tested application runtime remains Node 20.
 
 `npm run verify:platform` runs the local common verifier: `ci:governance`, `typecheck`, and `build`.
 

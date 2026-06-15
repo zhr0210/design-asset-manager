@@ -3,7 +3,7 @@ export type ReleasePackagingArch = 'x64' | 'arm64'
 
 export interface ReleasePackagingMatrixEntry {
   target: ReleasePackagingTarget
-  os: 'windows-latest' | 'macos-latest'
+  os: 'windows-2022' | 'macos-latest'
   arch: ReleasePackagingArch
   command: 'npm run dist:win' | 'npm run dist:mac'
 }
@@ -29,8 +29,8 @@ export function createReleaseFlowGovernancePlan(): ReleaseFlowGovernancePlan {
   return {
     phase: '15C',
     matrix: [
-      { target: 'windows-nsis', os: 'windows-latest', arch: 'x64', command: 'npm run dist:win' },
-      { target: 'windows-nsis', os: 'windows-latest', arch: 'arm64', command: 'npm run dist:win' },
+      { target: 'windows-nsis', os: 'windows-2022', arch: 'x64', command: 'npm run dist:win' },
+      { target: 'windows-nsis', os: 'windows-2022', arch: 'arm64', command: 'npm run dist:win' },
       { target: 'macos-dmg', os: 'macos-latest', arch: 'x64', command: 'npm run dist:mac' },
       { target: 'macos-dmg', os: 'macos-latest', arch: 'arm64', command: 'npm run dist:mac' }
     ],
