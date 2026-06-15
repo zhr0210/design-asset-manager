@@ -64,6 +64,8 @@ exposing public IPC before the exact channel contract is approved:
   `test-llama-runtime-server-probe` step and stopped because the current
   sandbox denied local `127.0.0.1` listening. Non-sandbox rerun remains needed
   before claiming full local governance for this slice.
+- Windows remote validation on `a3b3d13` pulled the branch and passed
+  `npm run test-runtime-package-session` and `npm run typecheck`.
 
 ## Signed Candidate Architecture Result
 
