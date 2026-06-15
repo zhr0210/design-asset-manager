@@ -18,7 +18,7 @@ export default async function notarizing(context) {
   const appName = context.packager.appInfo.productFilename;
   const appPath = path.join(appOutDir, `${appName}.app`);
 
-  console.log(`Notarizing ${appPath}...`);
+  console.log(`Notarizing ${path.basename(appPath)}...`);
   try {
     const { notarize } = await import('@electron/notarize');
     await notarize({
@@ -29,7 +29,8 @@ export default async function notarizing(context) {
     });
     console.log('Apple notarization completed successfully.');
   } catch (error) {
-    console.error('Apple notarization failed:', error);
+    const message = error instanceof Error ? error.message.split('\n')[0] : 'Unknown notarization error';
+    console.error(`Apple notarization failed: ${message}`);
     throw error;
   }
 }

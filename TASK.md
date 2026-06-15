@@ -28,39 +28,54 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Close the unsigned cross-platform release-candidate path before adding a new
-renderer-facing Runtime Package contract:
+Establish the formal signed-candidate architecture without reading or using
+real release credentials:
 
-1. Keep Windows and macOS on one packaging runner.
-2. Build real unsigned candidates without publishing or signing credentials.
-3. Verify artifact checksums and static package structure.
-4. Run the Windows installer only inside Windows Sandbox.
-5. Record remaining formal distribution gates truthfully.
+1. Keep unsigned packaging as the safe default and scrub signing credentials.
+2. Require explicit approval and complete platform credential presence before
+   signed packaging can start.
+3. Generate checksum-bound Release Update Metadata.
+4. Verify path-free Windows/macOS Release Trust Evidence.
+5. Keep publishing disabled and separately approved.
 
 ## Current Slice Result
 
-- One shared packaging runner now uses the installed Electron distribution,
-  removes inherited proxy variables, and forces no signing or publishing.
-- A real unsigned macOS arm64 candidate passed packaging, checksum, and static
-  Package Smoke checks.
-- Windows full governance passed after fixing CRLF-sensitive contracts and
-  restoring the Node native-module ABI before tests.
-- A real Windows x64 NSIS candidate and blockmap were built. Checksum and
-  static Package Smoke checks passed.
-- Windows Sandbox verified the unpacked app launch, installer hash, silent
-  install, normalized product subfolder, and installed executable. Unsigned
-  signature evidence remains a truthful warning.
-- Sandbox reports now persist incrementally, enforce application/installer
-  timeouts, and expose a final `completed` marker.
+- The shared builder runner defaults to unsigned mode, scrubs signing and
+  notarization variables, rejects protected option overrides, and always uses
+  `--publish never`.
+- Signed mode requires `DAM_RELEASE_SIGNING_APPROVED=true` and all
+  platform-specific credential variables before electron-builder starts.
+- Release Update Metadata binds version, product, channel, platform,
+  architecture, artifact, blockmap, sizes, and SHA-256 values without paths.
+- Release Trust Evidence verifies Authenticode on Windows and Developer ID,
+  Hardened Runtime, nested signatures, notarization/staple, Gatekeeper, and
+  DMG integrity on macOS without exposing certificate values or paths.
+- The manual signed-candidate workflow is gated by explicit dispatch input and
+  platform GitHub Environment approval. It has read-only repository
+  permissions and no publishing step.
+- Signing secrets are scoped only to the signed build step, and signed jobs
+  accept only `main` or `v*` tag refs.
+- macOS Hardened Runtime entitlements were reduced to the Electron JIT memory
+  minimum; broader protection-disabling entitlements were removed.
+- A real unsigned macOS arm64 pack succeeded even with invalid fixture signing
+  variables present, proving the default runner scrubs them before packaging.
+- Full governance, typecheck, production build, release-focused tests, plist
+  validation, 142 Python tests, docs sync, and diff checks passed.
+- No real signing or notarization credentials were read or used.
 
 ## Next Implementation Slice
 
-Expose the completed Runtime Package Executor to the renderer only after the
-new public IPC channel names and response contract are explicitly approved.
-That slice must add shared types, main-process handlers, preload methods,
-focused contract tests, one user-triggered UI flow, and Electron/Playwright
-evidence on macOS and Windows. It must not add remote downloads, package
-scripts, privilege escalation, model downloads, or automatic runtime start.
+Two gated slices remain:
+
+1. Run one real signed Windows candidate and one real signed/notarized macOS
+   candidate after credentials and platform environments are provisioned.
+2. Expose Runtime Package Executor to the renderer only after the exact public
+   IPC channel names and response contract are explicitly approved.
+3. Add approved Windows `.ico` and macOS `.icns` branding; default Electron
+   icons now keep candidates below `distribution_ready`.
+
+Publishing remains a separate per-release approval after distribution gates
+and Release Update Metadata pass.
 
 ## Runtime Package Executor Result
 

@@ -1,7 +1,7 @@
 # Release Flow Governance
 
-Phase 15B adds a shared release-promotion invariant and retained unsigned
-candidate artifacts for Windows and macOS.
+Phase 15C keeps the shared release-promotion invariant and adds an explicitly
+approved signed-candidate path for Windows and macOS.
 
 ## Covered
 
@@ -13,16 +13,17 @@ candidate artifacts for Windows and macOS.
 - shared `blocked` / `candidate_ready` / `distribution_ready` /
   `publish_ready` states
 - 14-day unsigned candidate artifacts for manual inspection
-- code signing reserved
-- notarization reserved
-- release workflow skeleton
+- signed-candidate workflow behind GitHub Environment approval
+- path-free Release Update Metadata
+- structured Authenticode and macOS trust evidence
+- macOS notarization and staple verification
+- minimal Electron Hardened Runtime entitlements
 
 ## Disabled
 
 - publish
 - auto update
-- signing secrets
-- notarization secrets
+- signing or notarization without explicit workflow approval
 - destructive cleanup
 
 The workflow is manually triggered and builds unsigned Windows NSIS and macOS
@@ -31,8 +32,16 @@ generation, and static Package Smoke. It writes path-free checksum manifests
 and uploads short-lived candidate artifacts. It does not publish, sign,
 notarize, or read release secrets.
 
+The separate `release-signed-candidate.yml` workflow requires both the
+`signing_approved` dispatch input and approval for the platform signing
+environment. It builds with `--signing=required`, verifies platform trust
+evidence, writes Release Update Metadata, and uploads a retained signed
+candidate. It still has read-only repository permissions and cannot publish.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
-requires Authenticode, Sandbox install smoke, and update metadata. macOS
+requires Authenticode, Sandbox install smoke, approved release branding, and
+update metadata. macOS
 distribution requires Developer ID signing, Hardened Runtime, nested signature
-validation, notarization, staple, Gatekeeper, DMG smoke, and update metadata.
+validation, notarization, staple, Gatekeeper, DMG smoke, approved release
+branding, and update metadata.
 Publishing always requires a separate explicit approval.

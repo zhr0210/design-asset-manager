@@ -9,12 +9,15 @@ export interface ReleasePackagingMatrixEntry {
 }
 
 export interface ReleaseFlowGovernancePlan {
-  phase: '15B'
+  phase: '15C'
   matrix: ReleasePackagingMatrixEntry[]
   promotionInvariant: true
   unsignedCandidateArtifacts: true
-  signingReserved: true
-  notarizationReserved: true
+  signedCandidateWorkflow: true
+  signingEnvironmentApproval: true
+  trustEvidence: true
+  notarizationEvidence: true
+  releaseUpdateMetadata: true
   universalMacOptional: true
   releaseWorkflow: true
   publishEnabled: false
@@ -24,7 +27,7 @@ export interface ReleaseFlowGovernancePlan {
 
 export function createReleaseFlowGovernancePlan(): ReleaseFlowGovernancePlan {
   return {
-    phase: '15B',
+    phase: '15C',
     matrix: [
       { target: 'windows-nsis', os: 'windows-latest', arch: 'x64', command: 'npm run dist:win' },
       { target: 'windows-nsis', os: 'windows-latest', arch: 'arm64', command: 'npm run dist:win' },
@@ -33,8 +36,11 @@ export function createReleaseFlowGovernancePlan(): ReleaseFlowGovernancePlan {
     ],
     promotionInvariant: true,
     unsignedCandidateArtifacts: true,
-    signingReserved: true,
-    notarizationReserved: true,
+    signedCandidateWorkflow: true,
+    signingEnvironmentApproval: true,
+    trustEvidence: true,
+    notarizationEvidence: true,
+    releaseUpdateMetadata: true,
     universalMacOptional: true,
     releaseWorkflow: true,
     publishEnabled: false,
@@ -53,6 +59,7 @@ export type ReleaseGateId =
   | 'artifact'
   | 'checksum'
   | 'package_smoke'
+  | 'branding'
   | 'installer_smoke'
   | 'signature'
   | 'hardened_runtime'
@@ -68,6 +75,7 @@ export interface ReleaseCandidateChecks {
   artifact: ReleaseCheckStatus
   checksum: ReleaseCheckStatus
   packageSmoke: ReleaseCheckStatus
+  branding: ReleaseCheckStatus
   installerSmoke: ReleaseCheckStatus
   signature: ReleaseCheckStatus
   hardenedRuntime: ReleaseCheckStatus
@@ -112,6 +120,7 @@ const COMMON_CANDIDATE_GATES: Array<[keyof ReleaseCandidateChecks, ReleaseGateId
 const WINDOWS_DISTRIBUTION_GATES: Array<[keyof ReleaseCandidateChecks, ReleaseGateId, string]> = [
   ['installerSmoke', 'installer_smoke', 'Windows Sandbox 安装验证'],
   ['signature', 'signature', 'Authenticode 签名'],
+  ['branding', 'branding', '正式应用图标'],
   ['updateMetadata', 'update_metadata', '更新元数据']
 ]
 
@@ -123,6 +132,7 @@ const MACOS_DISTRIBUTION_GATES: Array<[keyof ReleaseCandidateChecks, ReleaseGate
   ['notarization', 'notarization', 'Apple 公证'],
   ['staple', 'staple', '公证票据装订'],
   ['gatekeeper', 'gatekeeper', 'Gatekeeper 验证'],
+  ['branding', 'branding', '正式应用图标'],
   ['updateMetadata', 'update_metadata', '更新元数据']
 ]
 

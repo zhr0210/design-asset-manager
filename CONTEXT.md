@@ -611,3 +611,21 @@ and `publish_ready`; platform gates own Authenticode/Sandbox or Developer
 ID/notarization/Gatekeeper evidence. Publishing still requires explicit
 approval.
 _Avoid_: Build pipeline, distribution
+
+**Release Update Metadata**:
+A path-free, checksum-bound description of one versioned release artifact and
+its blockmap for a specific platform, architecture, and release channel. It is
+required release evidence but does not itself enable auto update or publishing.
+_Avoid_: Latest file, publish config, download manifest
+
+**Signed Release Candidate**:
+A retained release artifact built only after explicit dispatch confirmation
+and approval for the platform signing environment. It remains unpublished
+until every Release Flow gate and separate publish approval pass.
+_Avoid_: Release, production build, published installer
+
+**Release Trust Evidence**:
+Structured, path-free verification results for platform trust gates such as
+Authenticode, Developer ID, Hardened Runtime, nested signatures, notarization,
+staple, Gatekeeper, and DMG integrity.
+_Avoid_: Signing log, certificate dump, security output

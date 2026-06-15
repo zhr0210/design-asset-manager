@@ -43,6 +43,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.2 | 2026-06-15 | Added the explicitly approved Signed Release Candidate workflow, Release Update Metadata, and structured platform trust evidence. |
 | v1.4.1 | 2026-06-14 | Added the shared release-candidate promotion invariant for Windows and macOS. |
 | v1.4.0 | 2026-06-14 | Added the local/bundled Runtime Package Executor transaction with safe ZIP extraction and rollback. |
 | v1.3.0 | 2026-06-14 | Exposed the explicit, offline OCR generated-image evidence operation through AI Runtime IPC. |

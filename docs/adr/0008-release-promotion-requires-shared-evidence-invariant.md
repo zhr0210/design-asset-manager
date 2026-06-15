@@ -5,6 +5,8 @@ Windows and macOS release candidates use one promotion state machine:
 Platform-specific trust evidence stays in platform gates: Authenticode and
 Sandbox install validation on Windows; Developer ID, Hardened Runtime, nested
 signatures, notarization, staple, Gatekeeper, and DMG validation on macOS.
+Both platforms also require approved release branding rather than the default
+Electron icon.
 
 Unsigned artifacts may be retained as candidates after build, governance,
 checksum, and Package Smoke pass. They must never be treated as distributable

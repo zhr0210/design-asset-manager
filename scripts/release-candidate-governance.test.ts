@@ -7,6 +7,7 @@ const notRunChecks: ReleaseCandidateChecks = {
   artifact: 'not_run',
   checksum: 'not_run',
   packageSmoke: 'not_run',
+  branding: 'not_run',
   installerSmoke: 'not_run',
   signature: 'not_run',
   hardenedRuntime: 'not_run',
@@ -47,7 +48,7 @@ assert.equal(unsignedWindows.candidateArtifactAllowed, true)
 assert.equal(unsignedWindows.distributionAllowed, false)
 assert.deepEqual(
   unsignedWindows.missing.map((item) => item.code),
-  ['installer_smoke', 'signature', 'update_metadata']
+  ['installer_smoke', 'signature', 'branding', 'update_metadata']
 )
 
 const distributionWindows = evaluateReleaseCandidate({
@@ -57,6 +58,7 @@ const distributionWindows = evaluateReleaseCandidate({
     ...commonPassed,
     installerSmoke: 'passed',
     signature: 'passed',
+    branding: 'passed',
     updateMetadata: 'passed'
   },
   explicitPublishApproval: false
@@ -78,6 +80,7 @@ const publishMac = evaluateReleaseCandidate({
     notarization: 'passed',
     staple: 'passed',
     gatekeeper: 'passed',
+    branding: 'passed',
     updateMetadata: 'passed'
   },
   explicitPublishApproval: true

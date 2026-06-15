@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+
+const workflow = await fs.readFile('.github/workflows/release-signed-candidate.yml', 'utf8')
+const runner = await fs.readFile('scripts/run-electron-builder.mjs', 'utf8')
+const notarizeHook = await fs.readFile('scripts/notarize.js', 'utf8')
+
+assert.match(workflow, /workflow_dispatch/)
+assert.match(workflow, /signing_approved/)
+assert.match(workflow, /refs\/heads\/main/)
+assert.match(workflow, /refs\/tags\/v/)
+assert.match(workflow, /environment: release-signing-windows/)
+assert.match(workflow, /environment: release-signing-macos/)
+assert.match(workflow, /permissions:\s+contents: read/)
+assert.match(workflow, /--signing=required/)
+assert.match(workflow, /DAM_RELEASE_SIGNING_APPROVED: true/)
+assert.match(workflow, /write-release-update-metadata\.mjs/)
+assert.match(workflow, /verify-release-trust\.mjs/)
+assert.match(workflow, /release-trust-evidence-\*\.json/)
+assert.match(workflow, /APPLE_APP_SPECIFIC_PASSWORD/)
+assert.match(workflow, /WINDOWS_CSC_LINK/)
+assert.match(workflow, /MACOS_CSC_LINK/)
+assert.doesNotMatch(workflow, /contents: write|gh release|create-release|--publish always|npm publish/i)
+
+const installDependencies = workflow.match(/- name: Install dependencies[\s\S]*?(?=\n      - name:)/)?.[0] ?? ''
+const governance = workflow.match(/- name: Run release governance[\s\S]*?(?=\n      - name:)/)?.[0] ?? ''
+assert.doesNotMatch(installDependencies, /CSC_LINK|APPLE_ID|APPLE_TEAM_ID/)
+assert.doesNotMatch(governance, /CSC_LINK|APPLE_ID|APPLE_TEAM_ID/)
+
+assert.match(runner, /--publish/)
+assert.match(runner, /never/)
+assert.match(runner, /DAM_RELEASE_SIGNING_APPROVED/)
+assert.match(runner, /SIGNING_ENV_KEYS/)
+assert.match(notarizeHook, /path\.basename\(appPath\)/)
+assert.doesNotMatch(notarizeHook, /console\.error\('Apple notarization failed:', error\)/)

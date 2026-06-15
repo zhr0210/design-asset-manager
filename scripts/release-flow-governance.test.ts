@@ -3,11 +3,14 @@ import fs from 'node:fs/promises'
 import { createReleaseFlowGovernancePlan } from '../src/main/packaging/release-flow-governance'
 
 const plan = createReleaseFlowGovernancePlan()
-assert.equal(plan.phase, '15B')
+assert.equal(plan.phase, '15C')
 assert.equal(plan.promotionInvariant, true)
 assert.equal(plan.unsignedCandidateArtifacts, true)
-assert.equal(plan.signingReserved, true)
-assert.equal(plan.notarizationReserved, true)
+assert.equal(plan.signedCandidateWorkflow, true)
+assert.equal(plan.signingEnvironmentApproval, true)
+assert.equal(plan.trustEvidence, true)
+assert.equal(plan.notarizationEvidence, true)
+assert.equal(plan.releaseUpdateMetadata, true)
 assert.equal(plan.universalMacOptional, true)
 assert.equal(plan.releaseWorkflow, true)
 assert.equal(plan.publishEnabled, false)
@@ -22,17 +25,26 @@ assert.ok(plan.matrix.every((entry) => entry.command.startsWith('npm run dist:')
 const manifest = JSON.parse(await fs.readFile('.codeindex/release-flow-governance.json', 'utf8')) as {
   windowsNsis?: boolean
   macosDmg?: boolean
+  signedCandidateWorkflow?: string
+  signingEnvironmentApproval?: boolean
+  trustEvidence?: boolean
+  releaseUpdateMetadata?: boolean
   publishEnabled?: boolean
   autoUpdateEnabled?: boolean
   privacy?: { containsSecrets?: boolean }
 }
 assert.equal(manifest.windowsNsis, true)
 assert.equal(manifest.macosDmg, true)
+assert.equal(manifest.signedCandidateWorkflow, '.github/workflows/release-signed-candidate.yml')
+assert.equal(manifest.signingEnvironmentApproval, true)
+assert.equal(manifest.trustEvidence, true)
+assert.equal(manifest.releaseUpdateMetadata, true)
 assert.equal(manifest.publishEnabled, false)
 assert.equal(manifest.autoUpdateEnabled, false)
 assert.equal(manifest.privacy?.containsSecrets, false)
 
 const workflow = await fs.readFile('.github/workflows/release-packaging-dry-run.yml', 'utf8')
+const signedWorkflow = await fs.readFile('.github/workflows/release-signed-candidate.yml', 'utf8')
 assert.match(workflow, /workflow_dispatch/)
 assert.match(workflow, /windows-nsis/)
 assert.match(workflow, /macos-dmg/)
@@ -49,6 +61,12 @@ assert.match(workflow, /unsigned-candidate/)
 assert.match(workflow, /DAM_DISABLE_MODEL_DOWNLOADS/)
 assert.doesNotMatch(workflow, /if \[/)
 assert.doesNotMatch(workflow, /electron-builder.*--publish|notarize|APPLE_ID|APPLE_TEAM_ID|CSC_LINK|CSC_KEY_PASSWORD|GH_TOKEN|GITHUB_TOKEN/)
+assert.match(signedWorkflow, /signing_approved/)
+assert.match(signedWorkflow, /release-signing-windows/)
+assert.match(signedWorkflow, /release-signing-macos/)
+assert.match(signedWorkflow, /write-release-update-metadata\.mjs/)
+assert.match(signedWorkflow, /verify-release-trust\.mjs/)
+assert.doesNotMatch(signedWorkflow, /contents: write|gh release|create-release|--publish always/i)
 
 const source = await fs.readFile('src/main/packaging/release-flow-governance.ts', 'utf8')
 assert.doesNotMatch(source, /(?:^|\s)rm\s|Remove-Item|unlink\s*\(|rmdir\s*\(|--publish|publish:\s*true/im)

@@ -24,11 +24,11 @@ Unknown or missing evidence remains evidence-insufficient rather than failure.
 
 ## Next Horizon
 
-| Order | Deepening candidate | First executable slice |
+| Order | Deepening candidate | Status |
 | --- | --- | --- |
-| 1 | Runtime Package Executor | Execute explicitly selected local/bundled packages through staging, SHA-256 verification, safe extraction, atomic promotion, Runtime Registry commit, and rollback. |
-| 2 | Runtime Package Product Flow | Add user-triggered progress, cancellation, recovery, and Windows/macOS validation against the shared executor interface. |
-| 3 | Release Flow | Gate signed Windows packaging, macOS signing/notarization, Package Smoke, publishing, and update metadata behind one release invariant. |
+| 1 | Runtime Package Executor | Complete for explicitly selected local/bundled packages with verification, safe extraction, atomic promotion, registry commit, and rollback. |
+| 2 | Runtime Package Product Flow | Pending exact IPC contract approval; UI progress, cancellation, recovery, and dual-platform Playwright evidence remain. |
+| 3 | Release Flow | Signed-candidate workflow, Release Update Metadata, and trust-evidence Modules are implemented; real credential runs and per-release publishing approval remain. |
 
 OCR dependency or model acquisition is a separate product decision. It must
 not block the shared Runtime Package Executor, and it remains subject to
