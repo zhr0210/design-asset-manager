@@ -16,6 +16,8 @@ import { validateRuntimePackageManifest } from './runtime-package-manifest.valid
 import { createLocalRuntimePackageSource } from './runtime-package-source'
 
 const DEFAULT_SELECTION_TTL_MS = 10 * 60 * 1000
+const DEFAULT_EXECUTION_RETENTION_MS = 60 * 60 * 1000
+const DEFAULT_MAX_COMPLETED_EXECUTIONS = 50
 const MAX_MANIFEST_BYTES = 2 * 1024 * 1024
 
 export type RuntimePackageSessionErrorCode =
@@ -86,6 +88,8 @@ export type RuntimePackageSessionProgressListener = (snapshot: RuntimePackageExe
 export interface RuntimePackageSessionServiceOptions {
   executor?: RuntimePackageExecutor
   selectionTtlMs?: number
+  executionRetentionMs?: number
+  maxCompletedExecutions?: number
   now?: () => number
   createSelectionId?: () => string
   createExecutionId?: () => string
@@ -98,6 +102,11 @@ interface StoredSelection {
   expiresAtMs: number
 }
 
+interface StoredExecution {
+  snapshot: RuntimePackageExecutionSnapshot
+  updatedAtMs: number
+}
+
 type RuntimePackageEntrySelection =
   | { ok: true; entry: RuntimePackageEntry }
   | { ok: false; response: RuntimePackageSelectLocalManifestResponse }
@@ -105,17 +114,21 @@ type RuntimePackageEntrySelection =
 export class RuntimePackageSessionService {
   private readonly executor: RuntimePackageExecutor
   private readonly selectionTtlMs: number
+  private readonly executionRetentionMs: number
+  private readonly maxCompletedExecutions: number
   private readonly now: () => number
   private readonly createSelectionId: () => string
   private readonly createExecutionId: () => string
   private readonly onProgress?: RuntimePackageSessionProgressListener
   private readonly selections = new Map<string, StoredSelection>()
-  private readonly executions = new Map<string, RuntimePackageExecutionSnapshot>()
+  private readonly executions = new Map<string, StoredExecution>()
   private readonly running = new Map<string, Promise<RuntimePackageExecutionSnapshot>>()
 
   constructor(options: RuntimePackageSessionServiceOptions = {}) {
     this.executor = options.executor ?? new FileSystemRuntimePackageExecutor()
     this.selectionTtlMs = options.selectionTtlMs ?? DEFAULT_SELECTION_TTL_MS
+    this.executionRetentionMs = Math.max(0, options.executionRetentionMs ?? DEFAULT_EXECUTION_RETENTION_MS)
+    this.maxCompletedExecutions = Math.max(1, options.maxCompletedExecutions ?? DEFAULT_MAX_COMPLETED_EXECUTIONS)
     this.now = options.now ?? Date.now
     this.createSelectionId = options.createSelectionId ?? randomUUID
     this.createExecutionId = options.createExecutionId ?? randomUUID
@@ -241,7 +254,8 @@ export class RuntimePackageSessionService {
   }
 
   getExecutionStatus(executionId: string): RuntimePackageGetExecutionStatusResponse {
-    const execution = this.executions.get(executionId)
+    this.pruneExecutions()
+    const execution = this.executions.get(executionId)?.snapshot
     if (!execution) {
       return {
         success: false,
@@ -260,7 +274,8 @@ export class RuntimePackageSessionService {
   async waitForExecution(executionId: string): Promise<RuntimePackageExecutionSnapshot | null> {
     const running = this.running.get(executionId)
     if (running) return running
-    return this.executions.get(executionId) ?? null
+    this.pruneExecutions()
+    return this.executions.get(executionId)?.snapshot ?? null
   }
 
   private async runExecution(
@@ -273,6 +288,7 @@ export class RuntimePackageSessionService {
       })
       const finalSnapshot = this.updateExecution(executionId, snapshotFromResult(executionId, result))
       this.running.delete(executionId)
+      this.pruneExecutions()
       return finalSnapshot
     } catch {
       const failed = this.updateExecution(executionId, {
@@ -284,13 +300,18 @@ export class RuntimePackageSessionService {
         terminal: true
       })
       this.running.delete(executionId)
+      this.pruneExecutions()
       return failed
     }
   }
 
   private updateExecution(executionId: string, snapshot: RuntimePackageExecutionSnapshot): RuntimePackageExecutionSnapshot {
-    this.executions.set(executionId, snapshot)
+    this.executions.set(executionId, {
+      snapshot,
+      updatedAtMs: this.now()
+    })
     this.onProgress?.(snapshot)
+    this.pruneExecutions()
     return snapshot
   }
 
@@ -298,6 +319,26 @@ export class RuntimePackageSessionService {
     const now = this.now()
     for (const [selectionId, selection] of this.selections.entries()) {
       if (selection.expiresAtMs <= now) this.selections.delete(selectionId)
+    }
+  }
+
+  private pruneExecutions(): void {
+    const now = this.now()
+    for (const [executionId, execution] of this.executions.entries()) {
+      if (this.running.has(executionId)) continue
+      if (!execution.snapshot.terminal) continue
+      if (now - execution.updatedAtMs > this.executionRetentionMs) {
+        this.executions.delete(executionId)
+      }
+    }
+
+    const completed = Array.from(this.executions.entries())
+      .filter(([executionId]) => !this.running.has(executionId))
+      .filter(([, execution]) => execution.snapshot.terminal)
+      .sort(([, left], [, right]) => left.updatedAtMs - right.updatedAtMs)
+    while (completed.length > this.maxCompletedExecutions) {
+      const [executionId] = completed.shift()!
+      this.executions.delete(executionId)
     }
   }
 }

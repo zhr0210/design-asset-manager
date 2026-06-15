@@ -47,6 +47,11 @@ records a path-free execution snapshot. The service caches progress and final
 result by execution id so a future UI can poll or subscribe without receiving
 local paths or trusted package metadata from the renderer.
 
+Completed execution snapshots are retained only inside a bounded main-process
+cache. Running executions are protected from pruning; terminal snapshots are
+removed after the configured retention window or when the completed-execution
+limit is exceeded.
+
 The first session slice does not register IPC channels, does not add cancel
 semantics, and does not weaken the executor policy for remote packages, model
 packages, package scripts, or automatic runtime start.
@@ -65,5 +70,6 @@ The focused test generates ZIP fixtures at runtime and covers success,
 duplicate install, checksum mismatch, traversal rejection, remote/model
 blocking, managed-path symlink rejection, explicit confirmation, in-memory
 interface behavior, and rollback. The session test covers sidecar manifest
-selection, token expiry and one-time use, checksum binding, path-free
-responses, execution snapshots, and Runtime Registry commit.
+selection, token expiry and one-time use, checksum binding, multi-package
+manifest disambiguation, path-free responses, execution snapshots, bounded
+snapshot retention, and Runtime Registry commit.

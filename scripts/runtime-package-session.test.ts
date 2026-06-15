@@ -3,9 +3,16 @@ import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { ManagedPaths } from '../src/shared/types/platform.types'
-import type { RuntimePackageEntry, RuntimePackageManifest } from '../src/shared/types/runtime-package.types'
+import type {
+  RuntimePackageEntry,
+  RuntimePackageExecutor,
+  RuntimePackageManifest
+} from '../src/shared/types/runtime-package.types'
 import { RuntimeRegistryService } from '../src/main/bootstrap/runtime-registry.service'
-import { FileSystemRuntimePackageExecutor } from '../src/main/runtime-package/runtime-package-executor'
+import {
+  FileSystemRuntimePackageExecutor,
+  InMemoryRuntimePackageExecutor
+} from '../src/main/runtime-package/runtime-package-executor'
 import { RuntimePackageSessionService } from '../src/main/runtime-package/runtime-package-session.service'
 
 const base = path.join(process.cwd(), 'dist-temp', 'runtime-package-session-tests')
@@ -168,6 +175,77 @@ await fs.writeFile(
 const modelSelection = await service.selectLocalManifest(modelManifestPath)
 assert.equal(modelSelection.success, false)
 assert.equal(modelSelection.errorCode, 'PACKAGE_NOT_SELECTABLE')
+
+let releaseSlowExecution: (() => void) | null = null
+const slowExecutor = {
+  execute: async (request, onProgress) => {
+    onProgress?.({
+      packageId: request.entry.id,
+      stage: 'validating',
+      percent: 5,
+      message: 'Runtime package execution is still running.'
+    })
+    await new Promise<void>((resolve) => {
+      releaseSlowExecution = resolve
+    })
+    return {
+      success: true,
+      packageId: request.entry.id,
+      stage: 'completed',
+      installedVersion: request.entry.version,
+      message: 'Runtime package installed.',
+      rolledBack: false,
+      progress: []
+    }
+  }
+} satisfies RuntimePackageExecutor
+const runningRetentionService = new RuntimePackageSessionService({
+  executor: slowExecutor,
+  executionRetentionMs: 0,
+  maxCompletedExecutions: 1,
+  createSelectionId: () => 'selection-running-retention',
+  createExecutionId: () => 'execution-running-retention'
+})
+await runningRetentionService.selectLocalManifest(manifestPath)
+await runningRetentionService.executeSelection({ selectionId: 'selection-running-retention', confirmed: true })
+assert.equal(runningRetentionService.getExecutionStatus('execution-running-retention').success, true)
+releaseSlowExecution?.()
+await runningRetentionService.waitForExecution('execution-running-retention')
+
+let retentionNow = Date.parse('2026-06-15T00:00:00.000Z')
+const retentionService = new RuntimePackageSessionService({
+  executor: new InMemoryRuntimePackageExecutor(),
+  executionRetentionMs: 1,
+  now: () => retentionNow,
+  createSelectionId: () => 'selection-retention',
+  createExecutionId: () => 'execution-retention'
+})
+await retentionService.selectLocalManifest(manifestPath)
+const retentionExecution = await retentionService.executeSelection({ selectionId: 'selection-retention', confirmed: true })
+assert.equal(retentionExecution.accepted, true)
+await retentionService.waitForExecution('execution-retention')
+assert.equal(retentionService.getExecutionStatus('execution-retention').success, true)
+retentionNow = Date.parse('2026-06-15T00:00:00.002Z')
+const expiredStatus = retentionService.getExecutionStatus('execution-retention')
+assert.equal(expiredStatus.success, false)
+assert.equal(expiredStatus.errorCode, 'EXECUTION_NOT_FOUND')
+
+let selectionCounter = 0
+let executionCounter = 0
+const maxService = new RuntimePackageSessionService({
+  executor: new InMemoryRuntimePackageExecutor(),
+  maxCompletedExecutions: 1,
+  createSelectionId: () => `selection-max-${selectionCounter += 1}`,
+  createExecutionId: () => `execution-max-${executionCounter += 1}`
+})
+await maxService.selectLocalManifest(manifestPath)
+await maxService.executeSelection({ selectionId: 'selection-max-1', confirmed: true })
+await maxService.waitForExecution('execution-max-1')
+await maxService.selectLocalManifest(manifestPath)
+await maxService.executeSelection({ selectionId: 'selection-max-2', confirmed: true })
+await maxService.waitForExecution('execution-max-2')
+assert.equal(maxService.getExecutionStatus('execution-max-1').success, false)
+assert.equal(maxService.getExecutionStatus('execution-max-2').success, true)
 
 await fs.rm(base, { recursive: true, force: true })
 

@@ -49,12 +49,14 @@ exposing public IPC before the exact channel contract is approved:
 - Execution consumes the selection token, requires explicit confirmation,
   emits path-free snapshots, and commits through the existing Runtime Package
   Executor and Runtime Registry.
+- Running executions are kept queryable, while terminal snapshots are retained
+  only inside a bounded main-process cache by age and count.
 - The session currently registers no IPC channels and no preload API. It is the
   approved-boundary skeleton for the next public contract slice.
 - Focused session tests cover selection, token expiry, one-time use,
   confirmation, checksum mismatch, nested archive rejection, model-package
   blocking, multi-package manifest disambiguation, path-free responses,
-  execution completion, and registry commit.
+  execution completion, bounded snapshot retention, and registry commit.
 - `npm run test-runtime-package-session`, `npm run test-runtime-package-executor`,
   `npm run typecheck`, `npm run build`, `python3 -m unittest discover
   ai-service/tests`, `python3 scripts/check-agent-context.py`,
