@@ -13,6 +13,13 @@ Phase 9A is a read-only audit. It records the current packaging state and future
 
 `electron-builder` is installed and `postinstall` runs `electron-builder install-app-deps`.
 
+All four packaging scripts and Package Smoke call
+`scripts/run-electron-builder.mjs`. The runner reads the installed Electron
+version, uses `node_modules/electron/dist`, disables publishing/signing, and
+removes inherited proxy variables before invoking electron-builder. This keeps
+Windows and macOS packaging behavior aligned and avoids a second Electron
+download.
+
 An explicit electron-builder config is declared in `package.json` `build`.
 
 Packaging scripts are declared for `pack:win`, `pack:mac`, `dist:win`, and `dist:mac`.

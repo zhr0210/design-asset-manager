@@ -5,28 +5,28 @@
   "runsPackagingInCI": false,
   "scripts": {
     "pack:win": {
-      "command": "npm run build && electron-builder --win --dir",
+      "command": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dir",
       "publishes": false,
       "signs": false,
       "notarizes": false,
       "releaseWorkflow": false
     },
     "pack:mac": {
-      "command": "npm run build && electron-builder --mac --dir --config.mac.identity=null",
+      "command": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dir",
       "publishes": false,
       "signs": false,
       "notarizes": false,
       "releaseWorkflow": false
     },
     "dist:win": {
-      "command": "npm run build && electron-builder --win",
+      "command": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dist",
       "publishes": false,
       "signs": false,
       "notarizes": false,
       "releaseWorkflow": false
     },
     "dist:mac": {
-      "command": "npm run build && electron-builder --mac --config.mac.identity=null",
+      "command": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dist",
       "publishes": false,
       "signs": false,
       "notarizes": false,

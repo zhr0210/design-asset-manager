@@ -140,6 +140,12 @@ may use platform adapters.
   `better-sqlite3` for Electron before Node-driven governance tests.
   `ci:governance` now begins with `ci:prepare-native-deps`; packaging still
   rebuilds Electron native dependencies when producing the artifact.
+- Windows NSIS packaging then exposed a second divergent path: the npm dist
+  script attempted a redundant Electron download through an invalid inherited
+  proxy while Package Smoke already knew how to use the installed Electron
+  distribution. All packaging entry points now share one runner that derives
+  the installed Electron version, uses its local dist, disables signing and
+  publishing, and removes inherited proxy variables.
 
 ## Safety Boundaries
 

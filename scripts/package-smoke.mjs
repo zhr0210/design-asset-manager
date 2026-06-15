@@ -45,11 +45,10 @@ if (buildInstaller) {
   await runStep('build:renderer-main-preload', process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'build'], {
     env: safeBuilderEnv()
   })
-  await runStep('build:windows-installer', process.platform === 'win32' ? 'npx.cmd' : 'npx', [
-    'electron-builder',
-    '--win',
-    '--config.electronDist=node_modules/electron/dist',
-    '--config.electronVersion=30.5.1'
+  await runStep('build:windows-installer', process.execPath, [
+    'scripts/run-electron-builder.mjs',
+    '--platform=win',
+    '--mode=dist'
   ], {
     env: safeBuilderEnv()
   })
@@ -152,17 +151,15 @@ if (openSandbox) {
 console.log(JSON.stringify(report, null, 2))
 
 function safeBuilderEnv() {
-  return {
+  const env = {
     ...process.env,
     NO_PROXY: '*',
-    no_proxy: '*',
-    HTTP_PROXY: '',
-    HTTPS_PROXY: '',
-    ALL_PROXY: '',
-    http_proxy: '',
-    https_proxy: '',
-    all_proxy: ''
+    no_proxy: '*'
   }
+  for (const key of ['HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'http_proxy', 'https_proxy', 'all_proxy']) {
+    delete env[key]
+  }
+  return env
 }
 
 async function checkFile(id, filePath) {

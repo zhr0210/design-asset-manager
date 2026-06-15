@@ -47,6 +47,8 @@ an app artifact.
 `npm run verify:platform:win` and `npm run verify:platform:mac` wrap the same common verifier for platform-specific local use. `npm run verify:platform:clean` first removes only known `dist-temp` scratch subdirectories.
 
 `pack:win`, `pack:mac`, `dist:win`, and `dist:mac` are packaging entry points for manual use. The governance workflow does not run them.
+They share `scripts/run-electron-builder.mjs`, which uses the Electron
+distribution installed by `npm ci` and derives its version at runtime.
 
 `.github/workflows/macos-package-artifact.yml` is a manual workflow for packaging unsigned macOS DMG artifacts on a GitHub-hosted macOS runner. It uploads the `.dmg` and `.blockmap` files as GitHub Actions artifact downloads and keeps release publishing, signing, and notarization disabled.
 
