@@ -59,6 +59,9 @@ treated as approved branding:
   passed locally. The full governance wrapper stopped only where the sandbox
   denied the Llama probe's loopback listener; all later subchecks were rerun
   directly and passed.
+- Windows fast-forwarded to `7715dbf` and passed the complete
+  `npm run ci:governance` suite, including the Llama loopback probe, with a
+  clean worktree. Doctor reported only the expected inactive AI Worker warning.
 
 ## Signed Candidate Architecture Result
 
