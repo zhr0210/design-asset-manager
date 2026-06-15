@@ -133,6 +133,9 @@ may use platform adapters.
   candidate, so its truthful ceiling is `candidate_ready`.
 - The complete `ci:governance` suite passed with the release invariant,
   checksum, Package Smoke, and workflow contract tests included.
+- Windows full-governance validation exposed and fixed a CRLF-sensitive
+  Settings Migration preload contract test. The test now normalizes line
+  endings and fails explicitly when its structural boundaries are absent.
 
 ## Safety Boundaries
 
