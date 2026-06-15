@@ -17,7 +17,9 @@ It keeps the existing dry-run planner and adds a separate transaction module.
 - main-process serialization to prevent concurrent Runtime Registry lost updates;
 - Runtime Registry commit after promotion;
 - filesystem and in-memory adapters;
-- rollback when registry commit fails.
+- rollback when registry commit fails;
+- main-process local manifest sessions that keep manifest paths, archive
+  paths, and source roots out of renderer-facing responses.
 
 ## Blocked
 
@@ -32,10 +34,28 @@ It keeps the existing dry-run planner and adds a separate transaction module.
 Execution results are structured and path-free. Full install paths remain
 inside the Runtime Registry and are not emitted as progress or result text.
 
+## Local Manifest Session
+
+`RuntimePackageSessionService` is the internal main-process boundary intended
+for the future renderer IPC surface. It accepts a user-selected sidecar
+`runtime-package.json`, validates the manifest, requires exactly one selected
+entry, binds it to a sibling ZIP by size and SHA-256, and returns only an
+opaque selection token plus path-free package preview.
+
+Executing a selection consumes the token, requires explicit confirmation, and
+records a path-free execution snapshot. The service caches progress and final
+result by execution id so a future UI can poll or subscribe without receiving
+local paths or trusted package metadata from the renderer.
+
+The first session slice does not register IPC channels, does not add cancel
+semantics, and does not weaken the executor policy for remote packages, model
+packages, package scripts, or automatic runtime start.
+
 ## Validation
 
 ```bash
 npm run test-runtime-package-executor
+npm run test-runtime-package-session
 npm run test-runtime-registry
 npm run typecheck
 npm run build
@@ -44,4 +64,6 @@ npm run build
 The focused test generates ZIP fixtures at runtime and covers success,
 duplicate install, checksum mismatch, traversal rejection, remote/model
 blocking, managed-path symlink rejection, explicit confirmation, in-memory
-interface behavior, and rollback.
+interface behavior, and rollback. The session test covers sidecar manifest
+selection, token expiry and one-time use, checksum binding, path-free
+responses, execution snapshots, and Runtime Registry commit.

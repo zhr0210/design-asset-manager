@@ -28,17 +28,44 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Establish the formal signed-candidate architecture without reading or using
-real release credentials:
+Prepare the Runtime Package Executor for a renderer product flow without
+exposing public IPC before the exact channel contract is approved:
 
-1. Keep unsigned packaging as the safe default and scrub signing credentials.
-2. Require explicit approval and complete platform credential presence before
-   signed packaging can start.
-3. Generate checksum-bound Release Update Metadata.
-4. Verify path-free Windows/macOS Release Trust Evidence.
-5. Keep publishing disabled and separately approved.
+1. Keep package selection and trusted metadata inside the Electron main
+   process.
+2. Accept only a user-selected sidecar `runtime-package.json` and a sibling ZIP
+   bound by size and SHA-256.
+3. Return opaque, expiring selection tokens and path-free package previews.
+4. Execute selected packages through the existing rollback-capable executor.
+5. Cache path-free execution snapshots for future UI polling or events.
 
 ## Current Slice Result
+
+- Added an internal main-process Runtime Package Session Service.
+- Local manifest selection validates schema, requires one selected package
+  entry, blocks non-executable package types/modes, requires sibling ZIP
+  archives, verifies size and SHA-256, and stores archive paths only in main
+  memory.
+- Execution consumes the selection token, requires explicit confirmation,
+  emits path-free snapshots, and commits through the existing Runtime Package
+  Executor and Runtime Registry.
+- The session currently registers no IPC channels and no preload API. It is the
+  approved-boundary skeleton for the next public contract slice.
+- Focused session tests cover selection, token expiry, one-time use,
+  confirmation, checksum mismatch, nested archive rejection, model-package
+  blocking, path-free responses, execution completion, and registry commit.
+- `npm run test-runtime-package-session`, `npm run test-runtime-package-executor`,
+  `npm run typecheck`, `npm run build`, `python3 -m unittest discover
+  ai-service/tests`, `python3 scripts/check-agent-context.py`,
+  `python3 scripts/check-docs-sync.py`, and `git diff --check` passed.
+- `python3 scripts/check-forbidden-paths.py` reported changed docs paths,
+  including this slice's docs and pre-existing untracked `docs/agents` files.
+- A full `npm run ci:governance` attempt reached the existing
+  `test-llama-runtime-server-probe` step and stopped because the current
+  sandbox denied local `127.0.0.1` listening. Non-sandbox rerun remains needed
+  before claiming full local governance for this slice.
+
+## Signed Candidate Architecture Result
 
 - The shared builder runner defaults to unsigned mode, scrubs signing and
   notarization variables, rejects protected option overrides, and always uses
@@ -68,7 +95,7 @@ real release credentials:
 
 ## Next Implementation Slice
 
-Two gated slices remain:
+Three gated slices remain:
 
 1. Run one real signed Windows candidate and one real signed/notarized macOS
    candidate after credentials and platform environments are provisioned.
@@ -108,6 +135,9 @@ and Release Update Metadata pass.
   default runtime SQLite initialization path before termination. No database
   content or user asset was inspected, and no cleanup or rollback was
   attempted. Future package smoke must use isolated roots only.
+- A main-process session boundary now adapts a user-selected local manifest
+  into opaque selection tokens and path-free execution snapshots, but it is not
+  exposed to renderer IPC until the channel contract is explicitly approved.
 
 ## Later Slices
 
@@ -189,6 +219,7 @@ npm run test-runtime-package-downloader
 npm run test-runtime-package-verifier-extractor
 npm run test-runtime-package-installer
 npm run ci:test-runtime-safety
+npm run test-runtime-package-session
 python3 -m unittest discover ai-service/tests
 ```
 

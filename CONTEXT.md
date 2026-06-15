@@ -530,6 +530,10 @@ _Avoid_: Installation, setup
 The Electron main-process module that performs an explicitly approved Runtime Package transaction through staging, verification, safe extraction, atomic promotion, Runtime Registry commit, and rollback. The shared interface owns workflow state while platform adapters own real archive, executable, quarantine, and signing differences.
 _Avoid_: Package script, automatic installer, model downloader
 
+**Runtime Package Session**:
+The Electron main-process selection and execution boundary that turns a user-selected local package manifest into an opaque, expiring selection token and path-free execution snapshots.
+_Avoid_: Renderer package parser, raw archive path, trusted UI metadata
+
 **Bootstrap**:
 The initial environment decision flow that combines doctor results, runtime profiles, package planning, and user choices.
 _Avoid_: Startup, onboarding
