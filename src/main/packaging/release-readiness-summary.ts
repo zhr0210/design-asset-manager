@@ -18,6 +18,8 @@ export interface ReleaseReadinessInput {
   explicitPublishApproval: boolean
 }
 
+export type ReleaseReadinessSource = 'release-flow-governance' | 'release-readiness-evidence'
+
 export interface ReleaseReadinessBlocker extends ReleaseCandidateMissing {
   phase: ReleaseReadinessPhase
   severity: 'blocking'
@@ -37,12 +39,13 @@ export interface ReleaseReadinessPlatformSummary {
   requiredSecretNames: string[]
   brandingApprovalFile: 'release-branding.json'
   brandingIconFileName: 'icon.ico' | 'icon.icns'
+  checks: ReleaseCandidateChecks
   blockers: ReleaseReadinessBlocker[]
 }
 
 export interface ReleaseReadinessSummary {
   schemaVersion: 1
-  source: 'release-flow-governance'
+  source: ReleaseReadinessSource
   publishEnabled: false
   readsSecretValues: false
   readsBrandingAssetBytes: false
@@ -59,13 +62,14 @@ const CANDIDATE_GATE_CODES = new Set([
 ])
 
 export function createReleaseReadinessSummary(
-  inputs: ReleaseReadinessInput[]
+  inputs: ReleaseReadinessInput[],
+  source: ReleaseReadinessSource = 'release-flow-governance'
 ): ReleaseReadinessSummary {
   const brandingPreflight = createReleaseBrandingPreflight()
 
   return {
     schemaVersion: 1,
-    source: 'release-flow-governance',
+    source,
     publishEnabled: false,
     readsSecretValues: false,
     readsBrandingAssetBytes: false,
@@ -95,6 +99,7 @@ export function createReleaseReadinessSummary(
         requiredSecretNames: [...signedPreflight.requiredSecretNames],
         brandingApprovalFile: brandingPreflight.approvalFileName,
         brandingIconFileName: brandingRequirement.iconFileName,
+        checks: { ...input.checks },
         blockers: evaluation.missing.map(toReadinessBlocker)
       }
     })

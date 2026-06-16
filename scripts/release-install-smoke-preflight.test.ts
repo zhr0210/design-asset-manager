@@ -55,10 +55,11 @@ for (const checkId of [...windows.requiredCheckIds, ...macos.requiredCheckIds]) 
 assert.match(packageSmokeSource, /disposable install root/i)
 assert.match(packageSmokeSource, /Installed application launched with isolated app data\./)
 
-const readinessWriterSource = await fs.readFile('scripts/write-release-readiness-summary.mjs', 'utf8')
+const readinessWriterSource = await fs.readFile('scripts/write-release-readiness-summary.ts', 'utf8')
 for (const checkId of [...windows.requiredCheckIds, ...macos.requiredCheckIds]) {
-  assert.match(readinessWriterSource, new RegExp(`['"]${escapeRegExp(checkId)}['"]`))
+  assert.doesNotMatch(readinessWriterSource, new RegExp(`['"]${escapeRegExp(checkId)}['"]`))
 }
+assert.match(readinessWriterSource, /createReleaseInstallSmokePreflight/)
 assert.match(readinessWriterSource, /function hasInstallSmoke/)
 assert.doesNotMatch(readinessWriterSource, /process\.env|secrets\.|createReadStream/)
 

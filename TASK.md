@@ -28,37 +28,39 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Prepare the Runtime Package renderer boundary without creating an unapproved
-public IPC surface:
+Bind the retained Release Readiness Summary writer back to the shared release
+contracts:
 
-1. Project internal session responses through an explicit main-process
-   allowlist.
-2. Prove local paths, archive metadata, digests, progress history, rollback
-   details, and unknown future fields cannot leak to the renderer.
-3. Fix the proposed channel names and polling model in the nearest module
-   documentation.
-4. Keep IPC registration, shared public contracts, preload methods, renderer
-   callers, and UI out of scope until explicit approval.
+1. Keep `scripts/write-release-readiness-summary.mjs` as the stable workflow
+   entrypoint.
+2. Move the evidence-derived summary logic into a TypeScript writer that
+   reuses shared readiness and install-smoke preflight modules.
+3. Prove platform install-smoke check IDs are not hardcoded in the writer.
+4. Keep signing, notarization, publishing, real icon approval, IPC, preload,
+   renderer callers, and UI out of scope.
 
 ## Current Slice Result
 
-- Added a main-process-only projector for selection, execution acceptance, and
-  execution status responses.
-- Renderer-facing objects are reconstructed from a stable allowlist; internal
-  session and executor objects are never returned by reference.
-- Focused tests inject private paths, archive names, SHA-256 values, progress
-  history, rollback plans, internal free-text messages, and unknown fields and
-  prove they are removed.
-- The proposed v1 channels are `runtime-package:select-local-manifest`,
-  `runtime-package:execute-selection`, and
-  `runtime-package:get-execution-status`, using polling without a progress
-  event.
-- No Runtime Package IPC channel, shared public IPC contract, preload method,
-  renderer caller, executable action, or UI was added.
-- Focused Runtime Package tests, typecheck, production build, 142 Python
-  tests, docs/context checks, and the complete `ci:governance` suite pass.
+- `scripts/write-release-readiness-summary.mjs` is now a stable thin wrapper
+  that bundles and executes `scripts/write-release-readiness-summary.ts`
+  without writing a new `dist-temp` entry.
+- The TypeScript writer derives the output shape through
+  `createReleaseReadinessSummary(..., 'release-readiness-evidence')` and uses
+  `createReleaseInstallSmokePreflight()` for platform install-smoke check IDs.
+- Release Readiness Summary now includes the evidence-derived `checks` object
+  inside the same path-free platform summary used by both Windows and macOS.
+- Focused tests prove the writer no longer hardcodes Windows
+  `installer-run`/`installer-subfolder`/`installed-exe` or macOS
+  `dmg-mount`/`dmg-copy`/`dmg-installed-launch`/`dmg-detach` check IDs.
+- No signing, notarization, publishing, real icon approval, IPC, preload,
+  renderer caller, UI surface, model download, or user-asset access was added.
+- Focused release tests, typecheck, production build, 142 Python tests, docs
+  sync, agent context, diff check, and the complete `ci:governance` suite
+  pass. Full governance required unsandboxed local loopback for the Llama
+  server probe; Doctor CI still reports the expected AI Worker not-reachable
+  warning because the worker is not started for this slice.
 - Electron/Playwright UI validation is intentionally skipped because this
-  pre-approval slice has no renderer or UI surface.
+  slice changes only release artifact writers and has no renderer surface.
 
 ## Signed Candidate Architecture Result
 

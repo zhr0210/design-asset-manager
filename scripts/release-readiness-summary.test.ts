@@ -77,6 +77,7 @@ assert.equal(windows.refGate, 'main-or-version-tag')
 assert.deepEqual(windows.requiredSecretNames, ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD'])
 assert.equal(windows.brandingApprovalFile, 'release-branding.json')
 assert.equal(windows.brandingIconFileName, 'icon.ico')
+assert.deepEqual(windows.checks, unsignedWindows.checks)
 assert.ok(windows.requiredEvidence.includes('release-trust-evidence'))
 assert.ok(windows.requiredEvidence.includes('release-branding-evidence'))
 assert.ok(windows.blockers.some((item) => item.code === 'signature' && item.phase === 'distribution'))
@@ -120,6 +121,10 @@ const blockedCandidate = createReleaseReadinessSummary([{
 assert.equal(blockedCandidate.stage, 'blocked')
 assert.equal(blockedCandidate.candidateArtifactAllowed, false)
 assert.ok(blockedCandidate.blockers.some((item) => item.code === 'build' && item.phase === 'candidate'))
+
+const evidenceSummary = createReleaseReadinessSummary([unsignedWindows], 'release-readiness-evidence')
+assert.equal(evidenceSummary.source, 'release-readiness-evidence')
+assert.deepEqual(evidenceSummary.platforms[0].checks, unsignedWindows.checks)
 
 const source = await fs.readFile('src/main/packaging/release-readiness-summary.ts', 'utf8')
 assert.doesNotMatch(source, /process\.env|fs\.|readFile|stat|createReadStream/)

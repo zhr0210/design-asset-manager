@@ -7,7 +7,7 @@ type Platform = 'windows' | 'macos'
 type Arch = 'x64' | 'arm64'
 type Check = { id: string, status: 'passed' | 'failed' | 'skipped', detail: string }
 
-const root = path.join(process.cwd(), 'dist-temp', 'release-readiness-writer-test')
+const root = path.join(process.cwd(), 'dist-temp', 'tests', 'release-readiness-writer-test')
 await fs.rm(root, { recursive: true, force: true })
 await fs.mkdir(root, { recursive: true })
 
@@ -16,6 +16,7 @@ const windowsStatic = await createFixture('windows-static', 'windows', 'x64', {
 })
 const windowsStaticSummary = await runAndRead(windowsStatic)
 const windowsStaticPlatform = windowsStaticSummary.platforms[0]
+assert.equal(windowsStaticSummary.source, 'release-readiness-evidence')
 assert.equal(windowsStaticPlatform.platform, 'windows')
 assert.equal(windowsStaticPlatform.arch, 'x64')
 assert.equal(windowsStaticPlatform.stage, 'candidate_ready')
@@ -111,7 +112,13 @@ assert.equal(blocked.candidateArtifactAllowed, false)
 assert.ok(blocked.blockers.some((item: { code: string }) => item.code === 'build'))
 
 const source = await fs.readFile('scripts/write-release-readiness-summary.mjs', 'utf8')
+const typedSource = await fs.readFile('scripts/write-release-readiness-summary.ts', 'utf8')
 assert.doesNotMatch(source, /process\.env|secrets\.|readFile\(.*icon|createReadStream/)
+assert.match(source, /write-release-readiness-summary\.ts/)
+assert.match(typedSource, /createReleaseReadinessSummary/)
+assert.match(typedSource, /createReleaseInstallSmokePreflight/)
+assert.doesNotMatch(typedSource, /installer-run|installer-subfolder|installed-exe|dmg-mount|dmg-copy|dmg-installed-launch|dmg-detach/)
+assert.doesNotMatch(typedSource, /process\.env|secrets\.|readFile\(.*icon|createReadStream/)
 
 await fs.rm(root, { recursive: true, force: true })
 

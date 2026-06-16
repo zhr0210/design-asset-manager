@@ -68,13 +68,16 @@ branding approval file, platform icon name, and structured blockers. It does
 not read secret values, icon bytes, candidate artifacts, or local paths.
 
 `write-release-readiness-summary.mjs` turns the generated evidence files into a
-retained release-readiness artifact. It reads checksum, update metadata, trust,
-branding, and Package Smoke reports, derives the shared release gates, and
-writes `release-readiness-summary-<platform>-<arch>.json`. Signed-candidate
-workflows upload this summary next to the other release evidence. Static
-Package Smoke alone satisfies the common Package Smoke gate; Windows Sandbox
-installer checks or macOS DMG install checks are still required before the
-distribution gate can pass.
+retained release-readiness artifact. Its entrypoint is a thin wrapper around
+the TypeScript writer, which reuses `release-readiness-summary.ts` and
+`release-install-smoke-preflight.ts` instead of duplicating platform gates.
+It reads checksum, update metadata, trust, branding, and Package Smoke reports,
+derives the shared release gates, and writes
+`release-readiness-summary-<platform>-<arch>.json`. Signed-candidate workflows
+upload this summary next to the other release evidence. Static Package Smoke
+alone satisfies the common Package Smoke gate; Windows Sandbox installer checks
+or macOS DMG install checks are still required before the distribution gate can
+pass.
 
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
