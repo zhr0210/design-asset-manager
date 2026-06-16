@@ -1,6 +1,11 @@
 import type { ReleasePackagingArch, ReleasePlatform } from './release-flow-governance'
 import { createReleaseBrandingPreflight } from './release-branding-preflight'
 import {
+  createReleaseInstallSmokePreflight,
+  type ReleaseDistributionInstallSmoke,
+  type ReleaseInstallSmokeCheckId
+} from './release-install-smoke-preflight'
+import {
   createReleaseSignedCandidatePreflight,
   type ReleaseSignedCandidateEnvironment,
   type ReleaseSignedCandidateEvidence
@@ -9,10 +14,6 @@ import {
 export type ReleaseEnvironmentApproval =
   | 'github_environment_review'
   | 'workflow_dispatch_signing_approval'
-
-export type ReleaseEnvironmentDistributionSmoke =
-  | 'windows_sandbox_installer_smoke'
-  | 'macos_dmg_install_smoke'
 
 export interface ReleaseEnvironmentManifestEntry {
   platform: ReleasePlatform
@@ -27,7 +28,9 @@ export interface ReleaseEnvironmentManifestEntry {
   requiredSecretNames: string[]
   secretValuesPolicy: 'names_only_never_read'
   requiredEvidence: ReleaseSignedCandidateEvidence[]
-  requiredDistributionSmoke: ReleaseEnvironmentDistributionSmoke
+  requiredDistributionSmoke: ReleaseDistributionInstallSmoke
+  distributionSmokeEvidenceSource: 'package-smoke'
+  distributionSmokeCheckIds: ReleaseInstallSmokeCheckId[]
   brandingApprovalFile: 'release-branding.json'
   brandingIconFileName: 'icon.ico' | 'icon.icns'
   artifactNamePattern:
@@ -70,6 +73,7 @@ export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
       if (!brandingRequirement) {
         throw new Error(`Missing release branding preflight for platform: ${platform}`)
       }
+      const installSmokePreflight = createReleaseInstallSmokePreflight(platform)
 
       return {
         platform,
@@ -87,9 +91,9 @@ export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
         requiredSecretNames: [...signedPreflight.requiredSecretNames],
         secretValuesPolicy: 'names_only_never_read',
         requiredEvidence: [...signedPreflight.requiredEvidence],
-        requiredDistributionSmoke: platform === 'windows'
-          ? 'windows_sandbox_installer_smoke'
-          : 'macos_dmg_install_smoke',
+        requiredDistributionSmoke: installSmokePreflight.distributionSmoke,
+        distributionSmokeEvidenceSource: installSmokePreflight.evidenceSource,
+        distributionSmokeCheckIds: [...installSmokePreflight.requiredCheckIds],
         brandingApprovalFile: brandingPreflight.approvalFileName,
         brandingIconFileName: brandingRequirement.iconFileName,
         artifactNamePattern: platform === 'windows'

@@ -274,6 +274,22 @@ and Release Update Metadata pass.
   reports the expected warning that the AI Worker port is not reachable because
   the worker was not started for this slice.
 
+## Release Install Smoke Preflight Result
+
+- Added a shared release install-smoke preflight that names the Windows
+  Sandbox installer-smoke and macOS DMG install-smoke gates, their
+  `package-smoke` evidence source, required check IDs, execution host, and
+  disposable isolated-install behavior.
+- Release Environment Manifest now consumes this shared preflight instead of
+  hardcoding platform install-smoke branches, while still keeping the platform
+  differences limited to the smoke lane and check IDs.
+- Focused install-smoke/environment/readiness-writer/Package Smoke tests,
+  typecheck, production build, 142 Python tests, agent context, docs sync,
+  diff check, and the complete `ci:governance` suite pass. The full
+  governance run required unsandboxed local loopback for the Llama server
+  probe; Doctor CI still reports the expected warning that the AI Worker port
+  is not reachable because the worker was not started for this slice.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result

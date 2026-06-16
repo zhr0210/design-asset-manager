@@ -29,6 +29,7 @@
     "npm run test-release-branding-evidence",
     "npm run test-release-signed-candidate-preflight",
     "npm run test-release-environment-manifest",
+    "npm run test-release-install-smoke-preflight",
     "npm run test-signed-release-workflow",
     "npm run test-macos-signing-entitlements",
     "npm run test-package-smoke"

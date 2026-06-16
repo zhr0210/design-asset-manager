@@ -30,6 +30,8 @@ assert.equal(windows.signingApprovalInput, 'signing_approved')
 assert.deepEqual(windows.requiredSecretNames, ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD'])
 assert.equal(windows.secretValuesPolicy, 'names_only_never_read')
 assert.equal(windows.requiredDistributionSmoke, 'windows_sandbox_installer_smoke')
+assert.equal(windows.distributionSmokeEvidenceSource, 'package-smoke')
+assert.deepEqual(windows.distributionSmokeCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe'])
 assert.equal(windows.brandingApprovalFile, 'release-branding.json')
 assert.equal(windows.brandingIconFileName, 'icon.ico')
 assert.equal(windows.artifactNamePattern, 'design-asset-manager-windows-${arch}-signed-candidate')
@@ -49,6 +51,8 @@ assert.deepEqual(macos.requiredSecretNames, [
   'APPLE_TEAM_ID'
 ])
 assert.equal(macos.requiredDistributionSmoke, 'macos_dmg_install_smoke')
+assert.equal(macos.distributionSmokeEvidenceSource, 'package-smoke')
+assert.deepEqual(macos.distributionSmokeCheckIds, ['dmg-mount', 'dmg-copy', 'dmg-installed-launch', 'dmg-detach'])
 assert.equal(macos.brandingIconFileName, 'icon.icns')
 assert.equal(macos.artifactNamePattern, 'design-asset-manager-macos-${arch}-signed-candidate')
 
