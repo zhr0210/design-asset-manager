@@ -1,0 +1,116 @@
+import {
+  evaluateReleaseCandidate,
+  type ReleaseCandidateChecks,
+  type ReleaseCandidateEvaluation,
+  type ReleaseCandidateMissing,
+  type ReleasePackagingArch,
+  type ReleasePlatform
+} from './release-flow-governance'
+import { createReleaseBrandingPreflight } from './release-branding-preflight'
+import { createReleaseSignedCandidatePreflight } from './release-signed-candidate-preflight'
+
+export type ReleaseReadinessPhase = 'candidate' | 'distribution' | 'publish'
+
+export interface ReleaseReadinessInput {
+  platform: ReleasePlatform
+  arch: ReleasePackagingArch
+  checks: ReleaseCandidateChecks
+  explicitPublishApproval: boolean
+}
+
+export interface ReleaseReadinessBlocker extends ReleaseCandidateMissing {
+  phase: ReleaseReadinessPhase
+  severity: 'blocking'
+}
+
+export interface ReleaseReadinessPlatformSummary {
+  platform: ReleasePlatform
+  arch: ReleasePackagingArch
+  stage: ReleaseCandidateEvaluation['stage']
+  candidateArtifactAllowed: boolean
+  distributionAllowed: boolean
+  publishAllowed: boolean
+  signingEnvironment: string
+  signingApprovalInput: 'signing_approved'
+  refGate: 'main-or-version-tag'
+  requiredEvidence: string[]
+  requiredSecretNames: string[]
+  brandingApprovalFile: 'release-branding.json'
+  brandingIconFileName: 'icon.ico' | 'icon.icns'
+  blockers: ReleaseReadinessBlocker[]
+}
+
+export interface ReleaseReadinessSummary {
+  schemaVersion: 1
+  source: 'release-flow-governance'
+  publishEnabled: false
+  readsSecretValues: false
+  readsBrandingAssetBytes: false
+  emitsLocalPaths: false
+  platforms: ReleaseReadinessPlatformSummary[]
+}
+
+const CANDIDATE_GATE_CODES = new Set([
+  'build',
+  'governance',
+  'artifact',
+  'checksum',
+  'package_smoke'
+])
+
+export function createReleaseReadinessSummary(
+  inputs: ReleaseReadinessInput[]
+): ReleaseReadinessSummary {
+  const brandingPreflight = createReleaseBrandingPreflight()
+
+  return {
+    schemaVersion: 1,
+    source: 'release-flow-governance',
+    publishEnabled: false,
+    readsSecretValues: false,
+    readsBrandingAssetBytes: false,
+    emitsLocalPaths: false,
+    platforms: inputs.map((input) => {
+      const evaluation = evaluateReleaseCandidate(input)
+      const signedPreflight = createReleaseSignedCandidatePreflight(input.platform, input.arch)
+      const brandingRequirement = brandingPreflight.platforms.find(
+        (item) => item.platform === input.platform
+      )
+
+      if (!brandingRequirement) {
+        throw new Error(`Missing release branding preflight for platform: ${input.platform}`)
+      }
+
+      return {
+        platform: input.platform,
+        arch: input.arch,
+        stage: evaluation.stage,
+        candidateArtifactAllowed: evaluation.candidateArtifactAllowed,
+        distributionAllowed: evaluation.distributionAllowed,
+        publishAllowed: evaluation.publishAllowed,
+        signingEnvironment: signedPreflight.environment,
+        signingApprovalInput: signedPreflight.signingApprovalInput,
+        refGate: signedPreflight.refGate,
+        requiredEvidence: [...signedPreflight.requiredEvidence],
+        requiredSecretNames: [...signedPreflight.requiredSecretNames],
+        brandingApprovalFile: brandingPreflight.approvalFileName,
+        brandingIconFileName: brandingRequirement.iconFileName,
+        blockers: evaluation.missing.map(toReadinessBlocker)
+      }
+    })
+  }
+}
+
+function toReadinessBlocker(missing: ReleaseCandidateMissing): ReleaseReadinessBlocker {
+  return {
+    ...missing,
+    phase: blockerPhase(missing.code),
+    severity: 'blocking'
+  }
+}
+
+function blockerPhase(code: ReleaseCandidateMissing['code']): ReleaseReadinessPhase {
+  if (code === 'publish_approval') return 'publish'
+  if (CANDIDATE_GATE_CODES.has(code)) return 'candidate'
+  return 'distribution'
+}

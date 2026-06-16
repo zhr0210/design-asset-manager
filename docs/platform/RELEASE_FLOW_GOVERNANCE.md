@@ -60,6 +60,13 @@ approval schema and evidence prefix, and keeps `defaultElectronIconAllowed:
 false`. The evidence verifier still owns the real container and SHA-256
 checks.
 
+`release-readiness-summary.ts` combines the shared release-promotion state
+machine with the signed-candidate and branding preflight shapes. It emits one
+path-free readiness summary for Windows and macOS with the stage,
+distribution/publish booleans, required evidence, approval gates, secret names,
+branding approval file, platform icon name, and structured blockers. It does
+not read secret values, icon bytes, candidate artifacts, or local paths.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS
@@ -72,3 +79,12 @@ Package Smoke now includes disposable install validation on both platforms:
 Windows uses Windows Sandbox, while macOS mounts the DMG read-only, copies the
 app into a temporary install root, launches with isolated app data, detaches,
 and removes the temporary root.
+
+## Validation
+
+```bash
+npm run test-release-readiness-summary
+npm run test-release-flow-governance
+npm run test-release-signed-candidate-preflight
+npm run test-release-branding-preflight
+```

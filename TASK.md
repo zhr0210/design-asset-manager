@@ -156,6 +156,26 @@ and Release Update Metadata pass.
   the expected warning that the AI Worker port is not reachable because the
   worker was not started for this slice.
 
+## Release Readiness Summary Result
+
+- Added a shared release readiness summary that combines the existing
+  release-promotion state machine with signed-candidate and branding preflight
+  shapes.
+- The summary emits one path-free shape for Windows and macOS with stage,
+  candidate/distribution/publish booleans, signing environment, approval gate,
+  required evidence, required secret names, branding approval file, platform
+  icon file name, and structured blockers split by candidate/distribution/
+  publish phase.
+- The summary does not read secret values, icon bytes, candidate artifacts, or
+  local paths. It is a readiness projection only and does not sign, notarize,
+  publish, or validate real branding assets.
+- Focused readiness/flow/signed-preflight/branding-preflight tests, typecheck,
+  production build, 142 Python tests, agent context, docs sync, diff check, and
+  the complete `ci:governance` suite pass. The full governance run required
+  unsandboxed local loopback for the llama server probe; Doctor CI still reports
+  the expected warning that the AI Worker port is not reachable because the
+  worker was not started for this slice.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result
