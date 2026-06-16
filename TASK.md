@@ -257,6 +257,23 @@ and Release Update Metadata pass.
   `check-forbidden-paths` remains blocked by pre-existing untracked
   `docs/agents` files outside this slice.
 
+## Release Environment Manifest Result
+
+- Added a shared release environment manifest that maps Windows and macOS
+  signed-candidate requirements to GitHub Environment names, workflow jobs,
+  runners, supported architectures, approval gates, required secret names,
+  required evidence artifacts, branding files, and platform install-smoke
+  gates.
+- The manifest is a read-only configuration contract: it does not read secret
+  values, signing assets, branding bytes, local paths, or GitHub settings, and
+  it does not sign, notarize, publish, or modify repository environments.
+- Focused manifest/preflight/readiness/workflow tests, typecheck, production
+  build, 142 Python tests, agent context, docs sync, diff check, and the
+  complete `ci:governance` suite pass. The full governance run required
+  unsandboxed local loopback for the Llama server probe; Doctor CI still
+  reports the expected warning that the AI Worker port is not reachable because
+  the worker was not started for this slice.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result
