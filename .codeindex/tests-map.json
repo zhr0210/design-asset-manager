@@ -13,6 +13,7 @@
     "npm run test-runtime-package-executor",
     "npm run test-runtime-package-session",
     "npm run test-runtime-package-session-projector",
+    "npm run test-runtime-package-ipc-contract-preflight",
     "npm run test-runtime-package-ipc-governance"
   ],
   "release_flow": [

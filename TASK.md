@@ -141,6 +141,21 @@ and Release Update Metadata pass.
   instead of relying on a fixed short sleep observed as flaky during full
   governance.
 
+## Runtime Package IPC Preflight Result
+
+- Added a pending-approval Runtime Package IPC contract preflight that records
+  the three proposed channel names, polling-only v1 shape, no progress event or
+  cancellation, main-owned native dialog behavior, renderer field allowlists,
+  and excluded path/digest/message/progress/rollback fields.
+- This remains main-process local only. It does not register IPC, add a shared
+  public contract, expose preload APIs, or add renderer callers.
+- Focused Runtime Package IPC preflight/projector/no-IPC governance tests,
+  typecheck, production build, 142 Python tests, docs sync, diff check, and the
+  complete `ci:governance` suite pass. The full governance run required
+  unsandboxed local loopback for the llama server probe; Doctor CI still reports
+  the expected warning that the AI Worker port is not reachable because the
+  worker was not started for this slice.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result
@@ -254,6 +269,7 @@ npm run test-runtime-package-verifier-extractor
 npm run test-runtime-package-installer
 npm run ci:test-runtime-safety
 npm run test-runtime-package-session
+npm run test-runtime-package-ipc-contract-preflight
 npm run test-runtime-package-ipc-governance
 python3 -m unittest discover ai-service/tests
 ```

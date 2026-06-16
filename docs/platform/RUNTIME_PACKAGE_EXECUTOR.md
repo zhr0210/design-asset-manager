@@ -77,6 +77,13 @@ renderer supplies only a selection token for confirmed execution and an
 execution id for status polling. No public contract, preload method, renderer
 caller, or IPC registration exists yet.
 
+`runtime-package-ipc-contract-preflight.ts` records that future shape as a
+pending-approval contract candidate. It is main-process local, is not a shared
+public contract, and is tested alongside the no-IPC governance gate. The
+preflight locks the channel names, polling-only progress model, renderer-visible
+field allowlists, and excluded path/digest/message/progress/rollback fields
+before any public IPC approval.
+
 `npm run test-runtime-package-ipc-governance` keeps that boundary explicit. It
 fails if a `runtime-package:*` IPC channel, preload API, renderer caller, or
 shared IPC contract appears before the public channel contract is approved.
@@ -87,6 +94,7 @@ shared IPC contract appears before the public channel contract is approved.
 npm run test-runtime-package-executor
 npm run test-runtime-package-session
 npm run test-runtime-package-session-projector
+npm run test-runtime-package-ipc-contract-preflight
 npm run test-runtime-package-ipc-governance
 npm run test-runtime-registry
 npm run typecheck
