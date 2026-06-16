@@ -32,11 +32,44 @@ assert.match(workflow, /APPLE_APP_SPECIFIC_PASSWORD/)
 assert.match(workflow, /WINDOWS_CSC_LINK/)
 assert.match(workflow, /MACOS_CSC_LINK/)
 assert.doesNotMatch(workflow, /contents: write|gh release|create-release|--publish always|npm publish/i)
+assert.doesNotMatch(workflow, /publish-approved=true/)
 
 const installDependencies = workflow.match(/- name: Install dependencies[\s\S]*?(?=\n      - name:)/)?.[0] ?? ''
 const governance = workflow.match(/- name: Run release governance[\s\S]*?(?=\n      - name:)/)?.[0] ?? ''
 assert.doesNotMatch(installDependencies, /CSC_LINK|APPLE_ID|APPLE_TEAM_ID/)
 assert.doesNotMatch(governance, /CSC_LINK|APPLE_ID|APPLE_TEAM_ID/)
+
+const windowsJob = extractJob('windows-signed-candidate', 'macos-signed-candidate')
+assertWorkflowOrder(windowsJob, [
+  'Run release governance',
+  'Build signed NSIS candidate',
+  'Write checksum manifest',
+  'Write Release Update Metadata',
+  'Verify Authenticode evidence',
+  'Verify release branding evidence',
+  'Run static Package Smoke',
+  'Write Release Readiness Summary',
+  'Upload signed Windows candidate'
+])
+assert.match(windowsJob, /npm run package:smoke -- --arch=\$\{\{ inputs\.arch \}\} --output=dist-packages\/package-smoke-windows-\$\{\{ inputs\.arch \}\}\.json/)
+assert.match(windowsJob, /node scripts\/write-release-readiness-summary\.mjs --platform=windows --arch=\$\{\{ inputs\.arch \}\} --governance=passed/)
+assert.doesNotMatch(windowsJob, /package:smoke[^\n]*(sandbox-install|dmg-install-smoke)|write-release-readiness-summary\.mjs[^\n]*publish-approved=true/)
+
+const macosJob = extractJob('macos-signed-candidate')
+assertWorkflowOrder(macosJob, [
+  'Run release governance',
+  'Build signed and notarized DMG candidate',
+  'Write checksum manifest',
+  'Write Release Update Metadata',
+  'Verify macOS trust evidence',
+  'Verify release branding evidence',
+  'Run static Package Smoke',
+  'Write Release Readiness Summary',
+  'Upload signed macOS candidate'
+])
+assert.match(macosJob, /npm run package:smoke -- --arch=\$\{\{ inputs\.arch \}\} --output=dist-packages\/package-smoke-macos-\$\{\{ inputs\.arch \}\}\.json/)
+assert.match(macosJob, /node scripts\/write-release-readiness-summary\.mjs --platform=macos --arch=\$\{\{ inputs\.arch \}\} --governance=passed/)
+assert.doesNotMatch(macosJob, /package:smoke[^\n]*(sandbox-install|dmg-install-smoke)|write-release-readiness-summary\.mjs[^\n]*publish-approved=true/)
 
 assert.match(runner, /--publish/)
 assert.match(runner, /never/)
@@ -44,3 +77,24 @@ assert.match(runner, /DAM_RELEASE_SIGNING_APPROVED/)
 assert.match(runner, /SIGNING_ENV_KEYS/)
 assert.match(notarizeHook, /path\.basename\(appPath\)/)
 assert.doesNotMatch(notarizeHook, /console\.error\('Apple notarization failed:', error\)/)
+
+function extractJob(startName: string, nextName?: string): string {
+  const start = workflow.indexOf(`  ${startName}:`)
+  assert.notEqual(start, -1, `Missing workflow job: ${startName}`)
+
+  if (!nextName) return workflow.slice(start)
+
+  const end = workflow.indexOf(`  ${nextName}:`, start + startName.length)
+  assert.notEqual(end, -1, `Missing workflow job: ${nextName}`)
+  return workflow.slice(start, end)
+}
+
+function assertWorkflowOrder(block: string, stepNames: string[]): void {
+  let previous = -1
+  for (const stepName of stepNames) {
+    const current = block.indexOf(`- name: ${stepName}`)
+    assert.notEqual(current, -1, `Missing workflow step: ${stepName}`)
+    assert.ok(current > previous, `Workflow step out of order: ${stepName}`)
+    previous = current
+  }
+}

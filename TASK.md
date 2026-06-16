@@ -220,6 +220,26 @@ and Release Update Metadata pass.
   `check-forbidden-paths` remains blocked by pre-existing untracked
   `docs/agents` files outside this slice.
 
+## Signed Candidate Workflow Ordering Result
+
+- Strengthened the signed-candidate workflow contract test so both Windows and
+  macOS jobs must run governance, signed packaging, checksum, update metadata,
+  trust evidence, branding evidence, static Package Smoke, release readiness
+  writing, and artifact upload in that order.
+- The workflow test now proves Release Readiness Summary consumes the static
+  Package Smoke JSON before upload and that the signed-candidate workflow does
+  not pass `publish-approved=true`.
+- Static Package Smoke remains a candidate evidence gate only; Windows Sandbox
+  installer smoke, macOS DMG install smoke, and explicit publish approval stay
+  separate gates.
+- This slice adds no signing, notarization, public IPC, UI surface, release
+  publishing, model downloads, or user-asset access.
+- Focused signed workflow/preflight/readiness writer tests, typecheck,
+  production build, 142 Python tests, agent context, docs sync, diff check,
+  and the complete `ci:governance` suite pass. Manual
+  `check-forbidden-paths` remains blocked by pre-existing untracked
+  `docs/agents` files outside this slice.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result
