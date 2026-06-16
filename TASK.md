@@ -127,6 +127,20 @@ and Release Update Metadata pass.
   typecheck, production build, 142 Python tests, docs sync, agent context,
   diff checks, and the complete `ci:governance` suite pass.
 
+## Release Branding Preflight Result
+
+- Added a shared release-branding preflight shape that records the required
+  approval file, Windows `.ico`, macOS `.icns`, approval fields, evidence
+  checks, and default Electron icon block without reading real icon assets.
+- The existing branding evidence verifier remains responsible for real
+  container validation and approved SHA-256 matching.
+- Focused branding preflight/evidence tests, typecheck, production build,
+  142 Python tests, agent context, docs sync, diff check, and the complete
+  `ci:governance` suite pass.
+- Hardened the real AI runtime process runner test to wait for stdout evidence
+  instead of relying on a fixed short sleep observed as flaky during full
+  governance.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result

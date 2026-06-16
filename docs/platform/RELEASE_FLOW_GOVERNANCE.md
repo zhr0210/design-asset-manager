@@ -53,6 +53,13 @@ required secret names, path-free evidence files, Package Smoke, and
 shape so future maintenance does not accidentally weaken one platform while
 changing the other.
 
+`release-branding-preflight.ts` records the shared branding gate without
+reading real icon assets. It requires `build/release-branding.json`,
+`build/icon.ico`, and `build/icon.icns`, binds both platforms to the same
+approval schema and evidence prefix, and keeps `defaultElectronIconAllowed:
+false`. The evidence verifier still owns the real container and SHA-256
+checks.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS

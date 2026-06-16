@@ -14,8 +14,7 @@ const processState = await runner.spawn(execPath, [
 assert.ok(processState.pid > 0)
 assert.notEqual(processState.pid, process.pid)
 
-await new Promise((resolve) => setTimeout(resolve, 150))
-const running = runner.getProcess(processState.pid)
+const running = await waitForProcessOutput(processState.pid)
 assert.equal(running?.exitedAt, null)
 assert.ok((running?.stdoutTail.length ?? 0) <= 20)
 assert.ok(running?.stdoutTail.at(-1)?.startsWith('line-'))
@@ -26,3 +25,13 @@ assert.ok(stopped?.exitedAt)
 assert.ok(stopped?.signal === 'SIGTERM' || stopped?.signal === 'SIGKILL')
 
 console.log('real-ai-runtime-process-runner passed')
+
+async function waitForProcessOutput(processId: number): Promise<ReturnType<typeof runner.getProcess>> {
+  const deadline = Date.now() + 2_000
+  let process = runner.getProcess(processId)
+  while (!process?.stdoutTail.some((line) => line.startsWith('line-')) && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 25))
+    process = runner.getProcess(processId)
+  }
+  return process
+}
