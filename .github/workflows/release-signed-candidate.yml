@@ -84,7 +84,10 @@ jobs:
         run: node scripts/verify-release-branding.mjs --platform=windows --arch=${{ inputs.arch }} --approval=build/release-branding.json
 
       - name: Run static Package Smoke
-        run: npm run package:smoke -- --arch=${{ inputs.arch }}
+        run: npm run package:smoke -- --arch=${{ inputs.arch }} --output=dist-packages/package-smoke-windows-${{ inputs.arch }}.json
+
+      - name: Write Release Readiness Summary
+        run: node scripts/write-release-readiness-summary.mjs --platform=windows --arch=${{ inputs.arch }} --governance=passed
 
       - name: Upload signed Windows candidate
         uses: actions/upload-artifact@v4
@@ -97,6 +100,8 @@ jobs:
             dist-packages/release-update-metadata-*.json
             dist-packages/release-trust-evidence-*.json
             dist-packages/release-branding-evidence-*.json
+            dist-packages/package-smoke-*.json
+            dist-packages/release-readiness-summary-*.json
           if-no-files-found: error
           retention-days: 14
 
@@ -146,7 +151,10 @@ jobs:
         run: node scripts/verify-release-branding.mjs --platform=macos --arch=${{ inputs.arch }} --approval=build/release-branding.json
 
       - name: Run static Package Smoke
-        run: npm run package:smoke -- --arch=${{ inputs.arch }}
+        run: npm run package:smoke -- --arch=${{ inputs.arch }} --output=dist-packages/package-smoke-macos-${{ inputs.arch }}.json
+
+      - name: Write Release Readiness Summary
+        run: node scripts/write-release-readiness-summary.mjs --platform=macos --arch=${{ inputs.arch }} --governance=passed
 
       - name: Upload signed macOS candidate
         uses: actions/upload-artifact@v4
@@ -159,5 +167,7 @@ jobs:
             dist-packages/release-update-metadata-*.json
             dist-packages/release-trust-evidence-*.json
             dist-packages/release-branding-evidence-*.json
+            dist-packages/package-smoke-*.json
+            dist-packages/release-readiness-summary-*.json
           if-no-files-found: error
           retention-days: 14

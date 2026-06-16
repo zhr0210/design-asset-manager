@@ -32,6 +32,8 @@ const requestedArch = archArg?.replace('--arch=', '') ?? process.arch
 if (!['x64', 'arm64'].includes(requestedArch)) {
   throw new Error('--arch must be x64 or arm64.')
 }
+const outputArg = process.argv.find((arg) => arg.startsWith('--output='))
+const outputPath = outputArg ? path.resolve(outputArg.replace('--output=', '')) : null
 
 const distDir = path.join(root, 'dist-packages')
 const installerPath = path.join(distDir, `${productName} Setup ${version}.exe`)
@@ -163,6 +165,10 @@ if (openSandbox) {
   await runStep('open:windows-sandbox', 'WindowsSandbox.exe', [sandboxWsbPath], { allowMissing: false })
 }
 
+if (outputPath) {
+  await fs.mkdir(path.dirname(outputPath), { recursive: true })
+  await fs.writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8')
+}
 console.log(JSON.stringify(report, null, 2))
 
 function safeBuilderEnv() {

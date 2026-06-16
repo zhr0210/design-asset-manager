@@ -36,7 +36,10 @@ assert.match(workflow, /release-checksums-\*\.json/)
 assert.match(workflow, /release-update-metadata-\*\.json/)
 assert.match(workflow, /release-trust-evidence-\*\.json/)
 assert.match(workflow, /release-branding-evidence-\*\.json/)
+assert.match(workflow, /release-readiness-summary-\*\.json/)
+assert.match(workflow, /package-smoke-\*\.json/)
 assert.match(workflow, /npm run package:smoke/)
+assert.match(workflow, /write-release-readiness-summary\.mjs/)
 assert.doesNotMatch(workflow, /contents: write|gh release|create-release|--publish always|npm publish/i)
 
 const preflightSource = await fs.readFile('src/main/packaging/release-signed-candidate-preflight.ts', 'utf8')
@@ -48,6 +51,7 @@ function assertRequiredEvidence(evidence: ReleaseSignedCandidateEvidence[]): voi
     'release-update-metadata',
     'release-trust-evidence',
     'release-branding-evidence',
+    'release-readiness-summary',
     'package-smoke'
   ])
 }

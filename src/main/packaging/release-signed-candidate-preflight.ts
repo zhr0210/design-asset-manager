@@ -7,6 +7,7 @@ export type ReleaseSignedCandidateEvidence =
   | 'release-update-metadata'
   | 'release-trust-evidence'
   | 'release-branding-evidence'
+  | 'release-readiness-summary'
   | 'package-smoke'
 
 export interface ReleaseSignedCandidatePreflight {
@@ -45,6 +46,7 @@ export function createReleaseSignedCandidatePreflight(
       'release-update-metadata',
       'release-trust-evidence',
       'release-branding-evidence',
+      'release-readiness-summary',
       'package-smoke'
     ],
     publishEnabled: false,

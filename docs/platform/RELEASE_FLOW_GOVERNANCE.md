@@ -67,6 +67,15 @@ distribution/publish booleans, required evidence, approval gates, secret names,
 branding approval file, platform icon name, and structured blockers. It does
 not read secret values, icon bytes, candidate artifacts, or local paths.
 
+`write-release-readiness-summary.mjs` turns the generated evidence files into a
+retained release-readiness artifact. It reads checksum, update metadata, trust,
+branding, and Package Smoke reports, derives the shared release gates, and
+writes `release-readiness-summary-<platform>-<arch>.json`. Signed-candidate
+workflows upload this summary next to the other release evidence. Static
+Package Smoke alone satisfies the common Package Smoke gate; Windows Sandbox
+installer checks or macOS DMG install checks are still required before the
+distribution gate can pass.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS
@@ -84,6 +93,7 @@ and removes the temporary root.
 
 ```bash
 npm run test-release-readiness-summary
+npm run test-release-readiness-writer
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight

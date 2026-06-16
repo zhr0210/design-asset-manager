@@ -176,6 +176,30 @@ and Release Update Metadata pass.
   the expected warning that the AI Worker port is not reachable because the
   worker was not started for this slice.
 
+## Release Readiness Evidence Writer Result
+
+- Added a path-free `write-release-readiness-summary.mjs` artifact writer that
+  reads generated checksum, update metadata, trust, branding, and Package Smoke
+  evidence and writes `release-readiness-summary-<platform>-<arch>.json`.
+- Added `--output=<path>` to Package Smoke so signed-candidate workflows can
+  retain Package Smoke evidence without shell redirection.
+- Signed Windows and macOS candidate workflows now upload Package Smoke and
+  release-readiness summary JSON next to the checksum, update metadata, trust,
+  and branding evidence.
+- Static Package Smoke satisfies only the common Package Smoke gate. Windows
+  Sandbox installer checks or macOS DMG install checks are still required for
+  the distribution gate to pass.
+- The writer does not read secret values, icon bytes, candidate binaries
+  directly, model artifacts, user assets, or local paths; it consumes generated
+  path-free evidence files.
+- Focused release readiness writer, signed-candidate preflight, signed
+  workflow, release-flow, Package Smoke tests, typecheck, production build,
+  142 Python tests, agent context, docs sync, diff check, and the complete
+  `ci:governance` suite pass. The full governance run required unsandboxed
+  local loopback for the llama server probe; Doctor CI still reports the
+  expected warning that the AI Worker port is not reachable because the worker
+  was not started for this slice.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result

@@ -22,6 +22,12 @@ Run an unpacked launch smoke test:
 node scripts/package-smoke.mjs --launch-unpacked
 ```
 
+Write a path-free Package Smoke evidence file:
+
+```bash
+node scripts/package-smoke.mjs --arch=arm64 --output=dist-packages/package-smoke-macos-arm64.json
+```
+
 Mount a macOS DMG read-only, copy the app into a disposable install root, and
 run an isolated launch check:
 
@@ -81,6 +87,7 @@ node scripts/package-smoke.mjs --sandbox-install --sandbox-install-timeout-ms=18
 - The sandbox script checks installer presence, hash, signature status, and `win-unpacked` startup.
 - The sandbox script runs the NSIS installer only when generated with `--sandbox-install`; this happens inside Windows Sandbox, not on the host.
 - The sandbox report is written incrementally with `completed: false`, then finalized with `completed: true` after errors or success, so a stalled installer or failed launch remains observable without treating partial results as complete.
+- `--output=<path>` writes the same path-free JSON report that is printed to stdout. The report uses artifact file names, sizes, hashes, placeholders, and structured check ids; it does not emit local install, app-data, or mount paths.
 - The generated Sandbox profile disables vGPU and waits briefly after login before running smoke checks, which avoids coupling the smoke result to flaky Sandbox display acceleration.
 - Signing may report `warning` until code signing is configured.
 - Full installer execution should happen only in a disposable VM or sandbox.
