@@ -12,6 +12,7 @@
     "npm run ci:test-runtime-safety",
     "npm run test-runtime-package-executor",
     "npm run test-runtime-package-session",
+    "npm run test-runtime-package-session-projector",
     "npm run test-runtime-package-ipc-governance"
   ],
   "release_flow": [
@@ -21,6 +22,7 @@
     "npm run test-release-update-metadata",
     "npm run test-release-trust-evidence",
     "npm run test-release-branding-evidence",
+    "npm run test-release-signed-candidate-preflight",
     "npm run test-signed-release-workflow",
     "npm run test-macos-signing-entitlements",
     "npm run test-package-smoke"

@@ -56,6 +56,27 @@ The first session slice does not register IPC channels, does not add cancel
 semantics, and does not weaken the executor policy for remote packages, model
 packages, package scripts, or automatic runtime start.
 
+`runtime-package-session.projector.ts` defines the main-process-only
+renderer projection for that future surface. It reconstructs selection and
+execution responses from an explicit allowlist instead of passing session
+objects through. Archive names, SHA-256 values, local paths, progress history,
+rollback details, internal free-text messages, and unknown future executor
+fields remain inside the main process. A future Chinese UI should derive
+localized copy from structured stage and error codes rather than displaying
+internal English messages.
+
+The proposed first public surface is still awaiting explicit approval:
+
+- `runtime-package:select-local-manifest`;
+- `runtime-package:execute-selection`;
+- `runtime-package:get-execution-status`.
+
+The first version should use status polling rather than a progress event.
+Selection opens and owns the native file dialog in the main process; the
+renderer supplies only a selection token for confirmed execution and an
+execution id for status polling. No public contract, preload method, renderer
+caller, or IPC registration exists yet.
+
 `npm run test-runtime-package-ipc-governance` keeps that boundary explicit. It
 fails if a `runtime-package:*` IPC channel, preload API, renderer caller, or
 shared IPC contract appears before the public channel contract is approved.
@@ -65,6 +86,7 @@ shared IPC contract appears before the public channel contract is approved.
 ```bash
 npm run test-runtime-package-executor
 npm run test-runtime-package-session
+npm run test-runtime-package-session-projector
 npm run test-runtime-package-ipc-governance
 npm run test-runtime-registry
 npm run typecheck
@@ -78,3 +100,7 @@ interface behavior, and rollback. The session test covers sidecar manifest
 selection, token expiry and one-time use, checksum binding, multi-package
 manifest disambiguation, path-free responses, execution snapshots, bounded
 snapshot retention, and Runtime Registry commit.
+
+The projector test injects private paths, archive metadata, digest values,
+progress history, and rollback details into internal objects and proves none
+of them cross the proposed renderer boundary.

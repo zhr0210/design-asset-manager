@@ -28,35 +28,40 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Restore authoritative Windows/macOS pull-request validation after the
-Windows hosted runner moved to a Visual Studio version unsupported by the
-current native dependency toolchain:
+Prepare the Runtime Package renderer boundary without creating an unapproved
+public IPC surface:
 
-1. Keep application compatibility testing on Node 20.
-2. Pin Windows governance and release jobs to `windows-2022` until the current
-   `node-gyp` can recognize Visual Studio 2026.
-3. Upgrade GitHub JavaScript actions to their Node 24 runtime versions.
-4. Preserve the same tests, packaging targets, release gates, and no-publish
-   boundaries.
+1. Project internal session responses through an explicit main-process
+   allowlist.
+2. Prove local paths, archive metadata, digests, progress history, rollback
+   details, and unknown future fields cannot leak to the renderer.
+3. Fix the proposed channel names and polling model in the nearest module
+   documentation.
+4. Keep IPC registration, shared public contracts, preload methods, renderer
+   callers, and UI out of scope until explicit approval.
 
 ## Current Slice Result
 
-- Draft PR #1 is mergeable, but its first cross-platform governance run
-  failed during Windows `npm ci` before project tests started.
-- The GitHub job log proves `better-sqlite3` missed a Node 20 prebuild and
-  `node-gyp` 10 could not recognize Visual Studio 18/2026 on the current
-  `windows-latest` image. The macOS job passed.
-- Governance, unsigned packaging, and signed-candidate Windows jobs now use
-  `windows-2022`; macOS remains on `macos-latest`.
-- All workflows now use `checkout@v6` and `setup-node@v6`, whose action runtime
-  is Node 24, while their configured application test runtime remains Node 20.
-- Focused workflow contracts, release-flow contracts, typecheck, production
-  build, docs/context checks, and diff checks pass locally.
-- Windows fast-forwarded to `47b41e5` and passed the CI/release workflow
-  contracts, typecheck, and diff checks with a clean worktree.
-- Draft PR #1 run 12 passed both `windows-2022 / Node 20` and
-  `macos-latest / Node 20`, including clean dependency installation,
-  typecheck, production build, and the complete governance suite.
+- Added a main-process-only projector for selection, execution acceptance, and
+  execution status responses.
+- Renderer-facing objects are reconstructed from a stable allowlist; internal
+  session and executor objects are never returned by reference.
+- Focused tests inject private paths, archive names, SHA-256 values, progress
+  history, rollback plans, internal free-text messages, and unknown fields and
+  prove they are removed.
+- The proposed v1 channels are `runtime-package:select-local-manifest`,
+  `runtime-package:execute-selection`, and
+  `runtime-package:get-execution-status`, using polling without a progress
+  event.
+- No Runtime Package IPC channel, shared public IPC contract, preload method,
+  renderer caller, executable action, or UI was added.
+- Focused Runtime Package tests, typecheck, production build, 142 Python
+  tests, and docs/context checks pass. The complete `ci:governance` suite
+  passed before the signed-candidate preflight addition; the latest rerun is
+  pending because sandbox escalation for the local Llama loopback probe timed
+  out twice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  pre-approval slice has no renderer or UI surface.
 
 ## Signed Candidate Architecture Result
 
@@ -110,6 +115,21 @@ Three gated slices remain:
 
 Publishing remains a separate per-release approval after distribution gates
 and Release Update Metadata pass.
+
+## Signed Candidate Preflight Result
+
+- Added a shared signed-candidate preflight shape for Windows and macOS that
+  records required environment names, approval input, ref gate, required
+  evidence files, Package Smoke, and disabled publishing without reading
+  secret values.
+- Added a focused workflow contract test that checks both platforms remain
+  behind GitHub Environment approval, `signing_approved`, `main` or `v*` refs,
+  release evidence artifacts, Package Smoke, read-only repository permissions,
+  and no publish command.
+- Focused release preflight tests, signed-workflow tests, release-flow tests,
+  typecheck, production build, 142 Python tests, docs sync, agent context, and
+  diff checks pass. The complete `ci:governance` rerun is pending sandbox
+  escalation for local loopback.
 
 ## Runtime Package Executor Result
 

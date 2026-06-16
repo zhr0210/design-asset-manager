@@ -45,6 +45,14 @@ The two icons must also match the SHA-256 values in the shared
 ICNS containers and emits only path-free approval/check results; it does not
 emit icon digests or local paths.
 
+`release-signed-candidate-preflight.ts` records the shared signed-candidate
+shape without reading secret values. It binds each platform to its GitHub
+Environment, explicit `signing_approved` input, main-or-version-tag ref gate,
+required secret names, path-free evidence files, Package Smoke, and
+`publishEnabled: false`. The preflight test checks the workflow against that
+shape so future maintenance does not accidentally weaken one platform while
+changing the other.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS
