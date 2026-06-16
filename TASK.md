@@ -56,10 +56,7 @@ public IPC surface:
 - No Runtime Package IPC channel, shared public IPC contract, preload method,
   renderer caller, executable action, or UI was added.
 - Focused Runtime Package tests, typecheck, production build, 142 Python
-  tests, and docs/context checks pass. The complete `ci:governance` suite
-  passed before the signed-candidate preflight addition; the latest rerun is
-  pending because sandbox escalation for the local Llama loopback probe timed
-  out twice.
+  tests, docs/context checks, and the complete `ci:governance` suite pass.
 - Electron/Playwright UI validation is intentionally skipped because this
   pre-approval slice has no renderer or UI surface.
 
@@ -127,9 +124,8 @@ and Release Update Metadata pass.
   release evidence artifacts, Package Smoke, read-only repository permissions,
   and no publish command.
 - Focused release preflight tests, signed-workflow tests, release-flow tests,
-  typecheck, production build, 142 Python tests, docs sync, agent context, and
-  diff checks pass. The complete `ci:governance` rerun is pending sandbox
-  escalation for local loopback.
+  typecheck, production build, 142 Python tests, docs sync, agent context,
+  diff checks, and the complete `ci:governance` suite pass.
 
 ## Runtime Package Executor Result
 
