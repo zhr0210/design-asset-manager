@@ -240,6 +240,23 @@ and Release Update Metadata pass.
   `check-forbidden-paths` remains blocked by pre-existing untracked
   `docs/agents` files outside this slice.
 
+## Release Branding Approval Template Result
+
+- Added `build/release-branding.example.json` as the shared Windows/macOS
+  human approval template for release icon digests.
+- The template intentionally contains invalid placeholder SHA-256 values so it
+  cannot be used as a real `build/release-branding.json` approval record.
+- Added a focused test that generates valid ICO/ICNS containers, runs the real
+  branding verifier with the example template, and proves the template blocks
+  at `branding_approval`/`approved_digest` while still keeping output path-free.
+- This slice adds no real icon assets, signing, notarization, public IPC, UI
+  surface, release publishing, model downloads, or user-asset access.
+- Focused release branding template/preflight/evidence tests, typecheck,
+  production build, 142 Python tests, agent context, docs sync, diff check,
+  and the complete `ci:governance` suite pass. Manual
+  `check-forbidden-paths` remains blocked by pre-existing untracked
+  `docs/agents` files outside this slice.
+
 ## Runtime Package Executor Result
 
 - Added a shared execution interface and structured, path-free progress/result
