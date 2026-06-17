@@ -28,21 +28,51 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Release Evidence Bundle Status verifier:
+Add a shared Release Signing Environment Status verifier:
 
-1. Verify a collected set of retained `release-external-gate-status-*.json`
-   files against an explicit Windows/macOS platform and architecture
-   requirement.
-2. Support `distribution_ready` and `publish_ready` target stages.
-3. Emit a path-free aggregate result with per-platform satisfaction, counts,
-   and missing external actions.
+1. Validate a manually supplied, sanitized
+   `release-signing-environment-evidence.json` record against the shared
+   Windows/macOS release environment manifest.
+2. Check GitHub Environment presence, reviewer approval, and required signing
+   secret names without reading secret values.
+3. Emit a path-free `release-signing-environment-status.json` result for
+   reviewers before triggering a real signed candidate run.
 4. Add a CLI writer, focused tests, governance wiring, and release docs.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, candidate binary reads, release secrets, GitHub Environment
-   mutation, signing, notarization, workflow execution, and publishing out of
-   scope.
+   user assets, candidate binary reads, release secrets, GitHub settings
+   reads/mutation, signing, notarization, workflow execution, and publishing
+   out of scope.
 
 ## Current Slice Result
+
+- Added `release-signing-environment-status.ts`, a shared path-free verifier
+  for sanitized GitHub signing environment evidence.
+- Added `write-release-signing-environment-status.mjs`, which consumes
+  `release-signing-environment-evidence.json` and writes
+  `release-signing-environment-status.json` before a real signed candidate
+  run.
+- The verifier checks GitHub Environment presence, reviewer approval, and
+  required signing secret names for Windows and macOS. It reads names only and
+  never reads secret values, signing assets, GitHub settings, local paths,
+  candidate binaries, user assets, model artifacts, or runtime databases; it
+  also does not mutate GitHub settings, execute workflows, sign, notarize,
+  publish, or expose IPC/UI.
+- Added focused signing-environment status/writer coverage and wired it into
+  `.codeindex/tests-map.json` and `ci:governance`.
+- Updated release governance and CI matrix docs with the pre-dispatch signing
+  environment verification step.
+- Focused signing-environment, environment manifest, signed-candidate
+  preflight, external-gate, evidence-bundle, and release-flow tests,
+  typecheck, production build, 142 Python tests, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Full governance required loopback permission
+  for the Llama server probe. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes release evidence artifacts and CLI governance only and has no
+  renderer surface.
+
+## Release Evidence Bundle Status Result
 
 - Added `release-evidence-bundle-status.ts`, a shared path-free verifier for
   collected `release-external-gate-status-*.json` evidence.

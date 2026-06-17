@@ -95,6 +95,17 @@ distribution smoke checks, and publish approval from
 read secret values, read signing assets, read icon bytes, emit local paths,
 execute workflows, or publish releases.
 
+`release-signing-environment-status.ts` validates a manually supplied,
+sanitized `release-signing-environment-evidence.json` record against the
+shared release environment manifest. It checks only that the required GitHub
+Environment names are represented, reviewer approval is configured, and the
+required signing secret names are present. It never reads secret values,
+signing assets, GitHub settings, or local paths, and it does not mutate
+environments or run workflows. The companion
+`write-release-signing-environment-status.mjs` writes
+`release-signing-environment-status.json` for reviewers before triggering a
+real signed candidate run.
+
 `release-external-gate-status.ts` combines that plan with
 `release-readiness-summary.ts` to produce a display-only gate status for each
 platform and architecture. A gate is marked satisfied only when readiness
@@ -146,6 +157,7 @@ npm run test-release-publish-approval
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight
+npm run test-release-signing-environment-status
 npm run test-release-external-gate-plan
 npm run test-release-external-gate-status
 npm run test-release-external-gate-status-writer

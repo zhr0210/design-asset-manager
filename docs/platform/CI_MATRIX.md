@@ -70,6 +70,13 @@ Metadata, structured trust evidence, readiness summary, and external gate
 status, then retain the result for review. It has read-only repository
 permissions and does not publish.
 
+Before dispatching a signed candidate, reviewers can create a sanitized
+`release-signing-environment-evidence.json` record and run
+`write-release-signing-environment-status.mjs` to check that both release
+signing environments have reviewer approval and the expected secret names. The
+verifier reads names only, never secret values, and does not query or mutate
+GitHub settings.
+
 Release readiness can consume a structured `release-publish-approval.json`
 record for the final publish gate, but this remains evidence only. No current
 workflow publishes a release or requests write permissions.
