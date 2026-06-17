@@ -28,44 +28,46 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared external release gate status artifact writer for signed-candidate
-review:
+Add structured publish approval evidence for the final release gate:
 
-1. Read the generated release readiness summary and write
-   `release-external-gate-status-<platform>-<arch>.json`.
-2. Upload that status next to signed-candidate readiness/trust/branding
-   evidence in the manual signed workflow.
-3. Add it to the shared signed-candidate required evidence list.
-4. Add focused writer/workflow coverage and wire it into `ci:governance`.
+1. Validate an optional `release-publish-approval.json` record for platform,
+   architecture, `distribution_ready`, approval id, timestamp, and
+   `publishApproved: true`.
+2. Let `write-release-readiness-summary.mjs` consume the structured approval
+   through `--publish-approval=<path>` while preserving the existing
+   `--publish-approved=true` compatibility flag.
+3. Keep the approval evidence path-free and non-executable: no release
+   publishing, no GitHub settings mutation, no signing/notarization, and no
+   secret reads.
+4. Add focused approval and writer coverage and wire it into `ci:governance`.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, release secrets, GitHub Environment mutation, signing,
    notarization, and publishing out of scope.
 
 ## Current Slice Result
 
-- Added `write-release-external-gate-status.ts` and its `.mjs` wrapper. The
-  writer reads a generated `release-readiness-summary-<platform>-<arch>.json`
-  and writes `release-external-gate-status-<platform>-<arch>.json`.
-- Signed-candidate workflows now generate and upload external gate status JSON
-  next to checksum, update metadata, trust, branding, Package Smoke, and
-  readiness evidence.
-- Added `release-external-gate-status` to the shared signed-candidate
-  required evidence list, which also flows into the release environment
-  manifest and external gate plan.
-- Added `test-release-external-gate-status-writer` with real CLI wrapper
-  coverage, workflow ordering/upload assertions, path-free output checks, and
-  mismatch failure coverage.
-- Updated signed workflow, release preflight, environment manifest, release
-  flow, and external gate tests to require the retained status artifact.
+- Added `release-publish-approval.ts`, a shared path-free validator for
+  optional `release-publish-approval.json` records.
+- A valid publish approval must match platform and architecture, use schema
+  version 1, include a safe approval id, ISO approval timestamp,
+  `distributionStage: distribution_ready`, and `publishApproved: true`.
+- `write-release-readiness-summary.mjs` now supports
+  `--publish-approval=<path>` and can use that structured approval evidence to
+  mark a distribution-ready candidate as `publish_ready`.
+- The existing `--publish-approved=true` compatibility flag is preserved.
+- Added `test-release-publish-approval` and strengthened
+  `test-release-readiness-writer` with structured approval success and
+  mismatch coverage.
+- Wired the publish approval test into `.codeindex/tests-map.json` and
+  `ci:governance`.
 - Updated `docs/platform/RELEASE_FLOW_GOVERNANCE.md` and
-  `docs/platform/CI_MATRIX.md` with the new artifact writer and workflow
-  output.
+  `docs/platform/CI_MATRIX.md` to document structured publish approval as
+  evidence only.
 - No runtime behavior, IPC, preload, renderer caller, UI surface, model
   download, user asset, signing, notarization, GitHub Environment mutation, or
-  publishing behavior changed.
-- Focused external gate status writer/projector tests, signed workflow,
-  signed preflight, environment manifest, release-flow, readiness writer,
-  typecheck, production build, 142 Python tests, docs sync, agent context,
+  release publishing behavior changed.
+- Focused publish approval/readiness writer/external gate tests, typecheck,
+  production build, 142 Python tests, docs sync, agent context,
   forbidden-path advisory check, diff check, and the complete
   `ci:governance` suite pass. The first sandboxed `ci:governance` attempt
   failed because the Llama server probe could not listen on `127.0.0.1`; the
@@ -73,8 +75,8 @@ review:
   reports the expected AI Worker not-reachable warning because the worker is
   not started for this slice.
 - Electron/Playwright UI validation is intentionally skipped because this
-  slice changes release workflow artifacts and CLI governance only and has no
-  renderer surface.
+  slice changes release evidence and CLI governance only and has no renderer
+  surface.
 
 ## Signed Candidate Architecture Result
 

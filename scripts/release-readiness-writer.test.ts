@@ -43,6 +43,41 @@ assert.equal(windowsInstallPlatform.publishAllowed, false)
 assert.deepEqual(windowsInstallPlatform.blockers.map((item: { code: string }) => item.code), ['publish_approval'])
 assert.equal(JSON.stringify(windowsInstallSummary).includes(root), false)
 
+const publishApprovalPath = path.join(windowsInstall.distDir, 'release-publish-approval.json')
+await writeJson(windowsInstall.distDir, 'release-publish-approval.json', {
+  schemaVersion: 1,
+  approvalId: 'release-1.0.0-windows-x64',
+  approvedAt: '2026-06-17T00:00:00.000Z',
+  platform: 'windows',
+  arch: 'x64',
+  distributionStage: 'distribution_ready',
+  publishApproved: true
+})
+const windowsStructuredPublishOutput = path.join(windowsInstall.distDir, 'readiness-structured-publish-ready.json')
+assert.equal(await runWriter(windowsInstall, windowsStructuredPublishOutput, false, [
+  `--publish-approval=${publishApprovalPath}`
+]), 0)
+const windowsStructuredPublish = JSON.parse(await fs.readFile(windowsStructuredPublishOutput, 'utf8'))
+assert.equal(windowsStructuredPublish.platforms[0].stage, 'publish_ready')
+assert.deepEqual(windowsStructuredPublish.platforms[0].blockers, [])
+
+await writeJson(windowsInstall.distDir, 'release-publish-approval-mismatch.json', {
+  schemaVersion: 1,
+  approvalId: 'release-1.0.0-windows-arm64',
+  approvedAt: '2026-06-17T00:00:00.000Z',
+  platform: 'windows',
+  arch: 'arm64',
+  distributionStage: 'distribution_ready',
+  publishApproved: true
+})
+const windowsMismatchedPublishOutput = path.join(windowsInstall.distDir, 'readiness-mismatched-publish.json')
+assert.equal(await runWriter(windowsInstall, windowsMismatchedPublishOutput, false, [
+  `--publish-approval=${path.join(windowsInstall.distDir, 'release-publish-approval-mismatch.json')}`
+]), 0)
+const windowsMismatchedPublish = JSON.parse(await fs.readFile(windowsMismatchedPublishOutput, 'utf8'))
+assert.equal(windowsMismatchedPublish.platforms[0].stage, 'distribution_ready')
+assert.deepEqual(windowsMismatchedPublish.platforms[0].blockers.map((item: { code: string }) => item.code), ['publish_approval'])
+
 const windowsPublishSummary = await runAndRead(windowsInstall, true)
 assert.equal(windowsPublishSummary.platforms[0].stage, 'publish_ready')
 assert.deepEqual(windowsPublishSummary.platforms[0].blockers, [])
@@ -117,6 +152,8 @@ assert.doesNotMatch(source, /process\.env|secrets\.|readFile\(.*icon|createReadS
 assert.match(source, /write-release-readiness-summary\.ts/)
 assert.match(typedSource, /createReleaseReadinessSummary/)
 assert.match(typedSource, /createReleaseInstallSmokePreflight/)
+assert.match(typedSource, /evaluateReleasePublishApproval/)
+assert.match(typedSource, /publish-approval/)
 assert.doesNotMatch(typedSource, /installer-run|installer-subfolder|installed-exe|dmg-mount|dmg-copy|dmg-installed-launch|dmg-detach/)
 assert.doesNotMatch(typedSource, /process\.env|secrets\.|readFile\(.*icon|createReadStream/)
 
@@ -221,7 +258,8 @@ async function runAndRead(
 async function runWriter(
   fixture: { distDir: string, platform: Platform, arch: Arch },
   output: string,
-  publishApproved = false
+  publishApproved = false,
+  extraArgs: string[] = []
 ): Promise<number> {
   return await new Promise<number>((resolve, reject) => {
     const child = spawn(process.execPath, [
@@ -231,7 +269,8 @@ async function runWriter(
       '--governance=passed',
       `--dist-dir=${fixture.distDir}`,
       `--output=${output}`,
-      `--publish-approved=${publishApproved ? 'true' : 'false'}`
+      `--publish-approved=${publishApproved ? 'true' : 'false'}`,
+      ...extraArgs
     ], {
       cwd: process.cwd(),
       stdio: 'ignore'

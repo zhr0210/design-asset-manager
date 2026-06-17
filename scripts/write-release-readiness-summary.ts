@@ -8,6 +8,7 @@ import {
   type ReleasePlatform
 } from '../src/main/packaging/release-flow-governance'
 import { createReleaseInstallSmokePreflight } from '../src/main/packaging/release-install-smoke-preflight'
+import { evaluateReleasePublishApproval } from '../src/main/packaging/release-publish-approval'
 import { createReleaseReadinessSummary } from '../src/main/packaging/release-readiness-summary'
 
 interface EvidenceReport {
@@ -25,7 +26,6 @@ const platform = requireChoice(options.platform, ['windows', 'macos'], '--platfo
 const arch = requireChoice(options.arch, ['x64', 'arm64'], '--arch') as ReleasePackagingArch
 const distDir = path.resolve(options['dist-dir'] ?? 'dist-packages')
 const governanceStatus = requireCheckStatus(options.governance ?? 'not_run', '--governance')
-const explicitPublishApproval = options['publish-approved'] === 'true'
 const outputPath = path.resolve(
   options.output ?? path.join(distDir, `release-readiness-summary-${platform}-${arch}.json`)
 )
@@ -35,8 +35,14 @@ const reports = {
   updateMetadata: await readOptionalJson(options.metadata ?? path.join(distDir, `release-update-metadata-${platform}-${arch}.json`)),
   trustEvidence: await readOptionalJson(options.trust ?? path.join(distDir, `release-trust-evidence-${platform}-${arch}.json`)),
   brandingEvidence: await readOptionalJson(options.branding ?? path.join(distDir, `release-branding-evidence-${platform}-${arch}.json`)),
-  packageSmoke: await readOptionalJson(options['package-smoke'] ?? path.join(distDir, `package-smoke-${platform}-${arch}.json`))
+  packageSmoke: await readOptionalJson(options['package-smoke'] ?? path.join(distDir, `package-smoke-${platform}-${arch}.json`)),
+  publishApproval: options['publish-approval']
+    ? await readOptionalJson(path.resolve(options['publish-approval']))
+    : { exists: false, value: null }
 }
+
+const publishApproval = evaluateReleasePublishApproval(reports.publishApproval.value, platform, arch)
+const explicitPublishApproval = options['publish-approved'] === 'true' || publishApproval.approved
 
 const checksumsValid = isValidChecksums(reports.checksums.value)
 const checks: ReleaseCandidateChecks = {

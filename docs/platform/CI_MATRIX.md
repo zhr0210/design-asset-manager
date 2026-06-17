@@ -70,4 +70,8 @@ Metadata, structured trust evidence, readiness summary, and external gate
 status, then retain the result for review. It has read-only repository
 permissions and does not publish.
 
+Release readiness can consume a structured `release-publish-approval.json`
+record for the final publish gate, but this remains evidence only. No current
+workflow publishes a release or requests write permissions.
+
 `npm run test-ci-governance` verifies that the workflow and npm scripts keep these boundaries intact.

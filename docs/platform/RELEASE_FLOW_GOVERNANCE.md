@@ -79,6 +79,14 @@ alone satisfies the common Package Smoke gate; Windows Sandbox installer checks
 or macOS DMG install checks are still required before the distribution gate can
 pass.
 
+`release-publish-approval.ts` validates an optional
+`release-publish-approval.json` record for the final publish gate. The record
+must match the platform and architecture, declare `distribution_ready`, and set
+`publishApproved: true`. The readiness writer can consume it with
+`--publish-approval=<path>` to mark a distribution-ready candidate as
+`publish_ready`. This is still evidence only: it does not publish, mutate
+GitHub settings, or read release secrets.
+
 `release-external-gate-plan.ts` projects the remaining external release work
 into one shared, display-only plan for Windows and macOS. It derives platform
 environment names, workflow names, required secret names, branding files,
@@ -120,6 +128,7 @@ and removes the temporary root.
 ```bash
 npm run test-release-readiness-summary
 npm run test-release-readiness-writer
+npm run test-release-publish-approval
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight
