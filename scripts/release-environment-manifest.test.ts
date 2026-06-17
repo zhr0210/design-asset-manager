@@ -62,6 +62,7 @@ for (const entry of manifest.environments) {
   assert.ok(entry.requiredEvidence.includes('release-trust-evidence'))
   assert.ok(entry.requiredEvidence.includes('release-branding-evidence'))
   assert.ok(entry.requiredEvidence.includes('release-readiness-summary'))
+  assert.ok(entry.requiredEvidence.includes('release-external-gate-status'))
   assert.ok(entry.requiredEvidence.includes('package-smoke'))
 }
 
@@ -77,6 +78,7 @@ for (const entry of manifest.environments) {
 assert.match(workflow, /refs\/heads\/main/)
 assert.match(workflow, /startsWith\(github\.ref, 'refs\/tags\/v'\)/)
 assert.match(workflow, /release-readiness-summary-\*\.json/)
+assert.match(workflow, /release-external-gate-status-\*\.json/)
 assert.doesNotMatch(workflow, /contents: write|gh release|create-release|--publish always|npm publish/i)
 
 const source = await fs.readFile('src/main/packaging/release-environment-manifest.ts', 'utf8')

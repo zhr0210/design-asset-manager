@@ -94,6 +94,14 @@ evidence proves it; otherwise it remains `external_action_required` or blocked
 by an earlier candidate/distribution gate. This keeps remaining human and
 platform-host work visible without treating planned work as completed.
 
+`write-release-external-gate-status.mjs` turns the retained readiness summary
+into `release-external-gate-status-<platform>-<arch>.json`. Signed-candidate
+workflows upload this status next to the readiness summary so reviewers can see
+which external gates remain after a candidate run. The writer reads only the
+generated readiness summary; it does not read secrets, signing assets, icon
+bytes, candidate binaries, local paths, or GitHub settings, and it does not
+execute workflows or publish releases.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS
@@ -117,4 +125,5 @@ npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight
 npm run test-release-external-gate-plan
 npm run test-release-external-gate-status
+npm run test-release-external-gate-status-writer
 ```

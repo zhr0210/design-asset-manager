@@ -28,43 +28,43 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared external release gate status projector for the remaining
-Windows/macOS release actions that cannot be executed safely from the app or
-this branch:
+Add a shared external release gate status artifact writer for signed-candidate
+review:
 
-1. Combine the shared external release gate plan with release readiness
-   summaries.
-2. Emit per-platform/per-arch statuses for branding assets, signing
-   environments, signed-candidate workflow dispatch, platform install-smoke
-   evidence, and publish approval.
-3. Mark a gate `satisfied` only when readiness evidence proves it; otherwise
-   keep it `external_action_required` or blocked by an earlier
-   candidate/distribution gate.
-4. Add focused contract coverage and wire it into `ci:governance`.
+1. Read the generated release readiness summary and write
+   `release-external-gate-status-<platform>-<arch>.json`.
+2. Upload that status next to signed-candidate readiness/trust/branding
+   evidence in the manual signed workflow.
+3. Add it to the shared signed-candidate required evidence list.
+4. Add focused writer/workflow coverage and wire it into `ci:governance`.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, release secrets, and actual signing/notarization out of scope.
+   user assets, release secrets, GitHub Environment mutation, signing,
+   notarization, and publishing out of scope.
 
 ## Current Slice Result
 
-- Added `release-external-gate-status.ts`, a shared projector that combines
-  `release-external-gate-plan.ts` with `release-readiness-summary.ts`.
-- The status shape emits per-platform/per-arch gate statuses for branding
-  assets, signing environment review, signed-candidate workflow evidence,
-  distribution install smoke, and separate publish approval.
-- Gates are marked `satisfied` only when readiness evidence proves them.
-  Otherwise they remain `external_action_required`, `blocked_by_candidate`,
-  `blocked_by_signed_candidate`, or `blocked_by_distribution`.
-- Added `test-release-external-gate-status` with Windows/macOS coverage for
-  `blocked`, `candidate_ready`, `distribution_ready`, and `publish_ready`
-  states, plus source checks proving the projector does not read secrets,
-  local paths, signing assets, icon bytes, or execute workflow/publish tools.
-- Wired the test into `.codeindex/tests-map.json` and `ci:governance`.
-- Updated `docs/platform/RELEASE_FLOW_GOVERNANCE.md` with the shared external
-  gate status projector and validation command.
+- Added `write-release-external-gate-status.ts` and its `.mjs` wrapper. The
+  writer reads a generated `release-readiness-summary-<platform>-<arch>.json`
+  and writes `release-external-gate-status-<platform>-<arch>.json`.
+- Signed-candidate workflows now generate and upload external gate status JSON
+  next to checksum, update metadata, trust, branding, Package Smoke, and
+  readiness evidence.
+- Added `release-external-gate-status` to the shared signed-candidate
+  required evidence list, which also flows into the release environment
+  manifest and external gate plan.
+- Added `test-release-external-gate-status-writer` with real CLI wrapper
+  coverage, workflow ordering/upload assertions, path-free output checks, and
+  mismatch failure coverage.
+- Updated signed workflow, release preflight, environment manifest, release
+  flow, and external gate tests to require the retained status artifact.
+- Updated `docs/platform/RELEASE_FLOW_GOVERNANCE.md` and
+  `docs/platform/CI_MATRIX.md` with the new artifact writer and workflow
+  output.
 - No runtime behavior, IPC, preload, renderer caller, UI surface, model
-  download, user asset, signing, notarization, GitHub Environment, or
+  download, user asset, signing, notarization, GitHub Environment mutation, or
   publishing behavior changed.
-- Focused external gate status/plan tests, neighboring release tests,
+- Focused external gate status writer/projector tests, signed workflow,
+  signed preflight, environment manifest, release-flow, readiness writer,
   typecheck, production build, 142 Python tests, docs sync, agent context,
   forbidden-path advisory check, diff check, and the complete
   `ci:governance` suite pass. The first sandboxed `ci:governance` attempt
@@ -73,7 +73,8 @@ this branch:
   reports the expected AI Worker not-reachable warning because the worker is
   not started for this slice.
 - Electron/Playwright UI validation is intentionally skipped because this
-  slice changes release governance contracts only and has no renderer surface.
+  slice changes release workflow artifacts and CLI governance only and has no
+  renderer surface.
 
 ## Signed Candidate Architecture Result
 

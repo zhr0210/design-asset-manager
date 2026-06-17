@@ -66,7 +66,8 @@ does not sign, notarize, publish, or read release secrets.
 `.github/workflows/release-signed-candidate.yml` is manual and requires both
 an explicit `signing_approved` input and approval for the selected platform
 signing environment. It can build a signed candidate, produce Release Update
-Metadata and structured trust evidence, and retain the result for review. It
-has read-only repository permissions and does not publish.
+Metadata, structured trust evidence, readiness summary, and external gate
+status, then retain the result for review. It has read-only repository
+permissions and does not publish.
 
 `npm run test-ci-governance` verifies that the workflow and npm scripts keep these boundaries intact.

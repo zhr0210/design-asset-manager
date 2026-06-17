@@ -27,6 +27,8 @@ assert.match(workflow, /--output=dist-packages\/package-smoke-windows-\$\{\{ inp
 assert.match(workflow, /--output=dist-packages\/package-smoke-macos-\$\{\{ inputs\.arch \}\}\.json/)
 assert.match(workflow, /write-release-readiness-summary\.mjs/)
 assert.match(workflow, /release-readiness-summary-\*\.json/)
+assert.match(workflow, /write-release-external-gate-status\.mjs/)
+assert.match(workflow, /release-external-gate-status-\*\.json/)
 assert.match(workflow, /package-smoke-\*\.json/)
 assert.match(workflow, /APPLE_APP_SPECIFIC_PASSWORD/)
 assert.match(workflow, /WINDOWS_CSC_LINK/)
@@ -49,11 +51,13 @@ assertWorkflowOrder(windowsJob, [
   'Verify release branding evidence',
   'Run static Package Smoke',
   'Write Release Readiness Summary',
+  'Write External Gate Status',
   'Upload signed Windows candidate'
 ])
 assert.match(windowsJob, /npm run package:smoke -- --arch=\$\{\{ inputs\.arch \}\} --output=dist-packages\/package-smoke-windows-\$\{\{ inputs\.arch \}\}\.json/)
 assert.match(windowsJob, /node scripts\/write-release-readiness-summary\.mjs --platform=windows --arch=\$\{\{ inputs\.arch \}\} --governance=passed/)
-assert.doesNotMatch(windowsJob, /package:smoke[^\n]*(sandbox-install|dmg-install-smoke)|write-release-readiness-summary\.mjs[^\n]*publish-approved=true/)
+assert.match(windowsJob, /node scripts\/write-release-external-gate-status\.mjs --platform=windows --arch=\$\{\{ inputs\.arch \}\}/)
+assert.doesNotMatch(windowsJob, /package:smoke[^\n]*(sandbox-install|dmg-install-smoke)|write-release-readiness-summary\.mjs[^\n]*publish-approved=true|write-release-external-gate-status\.mjs[^\n]*publish-approved=true/)
 
 const macosJob = extractJob('macos-signed-candidate')
 assertWorkflowOrder(macosJob, [
@@ -65,11 +69,13 @@ assertWorkflowOrder(macosJob, [
   'Verify release branding evidence',
   'Run static Package Smoke',
   'Write Release Readiness Summary',
+  'Write External Gate Status',
   'Upload signed macOS candidate'
 ])
 assert.match(macosJob, /npm run package:smoke -- --arch=\$\{\{ inputs\.arch \}\} --output=dist-packages\/package-smoke-macos-\$\{\{ inputs\.arch \}\}\.json/)
 assert.match(macosJob, /node scripts\/write-release-readiness-summary\.mjs --platform=macos --arch=\$\{\{ inputs\.arch \}\} --governance=passed/)
-assert.doesNotMatch(macosJob, /package:smoke[^\n]*(sandbox-install|dmg-install-smoke)|write-release-readiness-summary\.mjs[^\n]*publish-approved=true/)
+assert.match(macosJob, /node scripts\/write-release-external-gate-status\.mjs --platform=macos --arch=\$\{\{ inputs\.arch \}\}/)
+assert.doesNotMatch(macosJob, /package:smoke[^\n]*(sandbox-install|dmg-install-smoke)|write-release-readiness-summary\.mjs[^\n]*publish-approved=true|write-release-external-gate-status\.mjs[^\n]*publish-approved=true/)
 
 assert.match(runner, /--publish/)
 assert.match(runner, /never/)
