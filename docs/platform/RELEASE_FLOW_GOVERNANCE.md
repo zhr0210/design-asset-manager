@@ -99,8 +99,11 @@ execute workflows, or publish releases.
 `release-readiness-summary.ts` to produce a display-only gate status for each
 platform and architecture. A gate is marked satisfied only when readiness
 evidence proves it; otherwise it remains `external_action_required` or blocked
-by an earlier candidate/distribution gate. This keeps remaining human and
-platform-host work visible without treating planned work as completed.
+by an earlier candidate/distribution gate. The same artifact also includes a
+shared cross-platform summary with aggregate counts, overall status, and the
+next external actions. This keeps remaining human and platform-host work
+visible without treating planned work as completed or requiring Windows and
+macOS callers to interpret separate branch-specific gate rules.
 
 `write-release-external-gate-status.mjs` turns the retained readiness summary
 into `release-external-gate-status-<platform>-<arch>.json`. Signed-candidate

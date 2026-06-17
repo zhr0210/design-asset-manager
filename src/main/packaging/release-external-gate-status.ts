@@ -22,6 +22,13 @@ export type ReleaseExternalGateStatusCode =
   | 'blocked_by_signed_candidate'
   | 'blocked_by_distribution'
 
+export type ReleaseExternalGateOverallStatus =
+  | 'publish_ready'
+  | 'external_action_required'
+  | 'blocked_by_candidate'
+  | 'blocked_by_signed_candidate'
+  | 'blocked_by_distribution'
+
 export type ReleaseExternalGateStatusSource =
   | 'release-readiness-summary'
   | 'release-external-gate-plan'
@@ -48,6 +55,28 @@ export interface ReleaseExternalGatePlatformStatus {
   gates: ReleaseExternalGateStatusEntry[]
 }
 
+export interface ReleaseExternalGateNextAction {
+  platform: ReleasePlatform
+  arch: ReleasePackagingArch
+  code: ReleaseExternalGateCode
+  phase: ReleaseExternalGate['phase']
+  actor: ReleaseExternalGate['actor']
+  requiredBefore: ReleaseExternalGate['requiredBefore']
+  label: string
+  detail: string
+  status: Exclude<ReleaseExternalGateStatusCode, 'satisfied'>
+  missing: ReleaseExternalGateStatusMissing[]
+}
+
+export interface ReleaseExternalGateStatusSummary {
+  overallStatus: ReleaseExternalGateOverallStatus
+  totalGates: number
+  satisfiedGates: number
+  externalActionRequiredGates: number
+  blockedGates: number
+  nextExternalActions: ReleaseExternalGateNextAction[]
+}
+
 export interface ReleaseExternalGateStatus {
   schemaVersion: 1
   source: 'release-readiness-summary'
@@ -59,6 +88,7 @@ export interface ReleaseExternalGateStatus {
   emitsLocalPaths: false
   executesWorkflow: false
   publishesRelease: false
+  summary: ReleaseExternalGateStatusSummary
   platforms: ReleaseExternalGatePlatformStatus[]
 }
 
@@ -82,6 +112,25 @@ export function createReleaseExternalGateStatus(
   readinessSummary: ReleaseReadinessSummary
 ): ReleaseExternalGateStatus {
   const plan = createReleaseExternalGatePlan()
+  const platforms = readinessSummary.platforms.map((summary) => {
+    const platformPlan = plan.platforms.find((item) => item.platform === summary.platform)
+    if (!platformPlan) {
+      throw new Error(`Missing external gate plan for platform: ${summary.platform}`)
+    }
+
+    const signedCandidateSatisfied = isSignedCandidateEvidenceSatisfied(summary)
+    return {
+      platform: summary.platform,
+      arch: summary.arch,
+      stage: summary.stage,
+      candidateArtifactAllowed: summary.candidateArtifactAllowed,
+      distributionAllowed: summary.distributionAllowed,
+      publishAllowed: summary.publishAllowed,
+      gates: platformPlan.gates.map((gate) =>
+        evaluateGate(gate, summary, signedCandidateSatisfied)
+      )
+    }
+  })
 
   return {
     schemaVersion: 1,
@@ -94,26 +143,75 @@ export function createReleaseExternalGateStatus(
     emitsLocalPaths: false,
     executesWorkflow: false,
     publishesRelease: false,
-    platforms: readinessSummary.platforms.map((summary) => {
-      const platformPlan = plan.platforms.find((item) => item.platform === summary.platform)
-      if (!platformPlan) {
-        throw new Error(`Missing external gate plan for platform: ${summary.platform}`)
-      }
-
-      const signedCandidateSatisfied = isSignedCandidateEvidenceSatisfied(summary)
-      return {
-        platform: summary.platform,
-        arch: summary.arch,
-        stage: summary.stage,
-        candidateArtifactAllowed: summary.candidateArtifactAllowed,
-        distributionAllowed: summary.distributionAllowed,
-        publishAllowed: summary.publishAllowed,
-        gates: platformPlan.gates.map((gate) =>
-          evaluateGate(gate, summary, signedCandidateSatisfied)
-        )
-      }
-    })
+    summary: summarizeGateStatus(platforms),
+    platforms
   }
+}
+
+function summarizeGateStatus(
+  platforms: ReleaseExternalGatePlatformStatus[]
+): ReleaseExternalGateStatusSummary {
+  const gates = platforms.flatMap((platform) =>
+    platform.gates.map((gate) => ({ platform, gate }))
+  )
+  const nextExternalActions = gates
+    .filter(isOpenGate)
+    .map(({ platform, gate }) => ({
+      platform: platform.platform,
+      arch: platform.arch,
+      code: gate.code,
+      phase: gate.phase,
+      actor: gate.actor,
+      requiredBefore: gate.requiredBefore,
+      label: gate.label,
+      detail: gate.detail,
+      status: gate.status,
+      missing: gate.missing
+    }))
+
+  const satisfiedGates = gates.filter(({ gate }) => gate.status === 'satisfied').length
+  const externalActionRequiredGates = gates.filter(
+    ({ gate }) => gate.status === 'external_action_required'
+  ).length
+  const blockedGates = gates.length - satisfiedGates - externalActionRequiredGates
+
+  return {
+    overallStatus: overallStatusFor(platforms, nextExternalActions),
+    totalGates: gates.length,
+    satisfiedGates,
+    externalActionRequiredGates,
+    blockedGates,
+    nextExternalActions
+  }
+}
+
+function isOpenGate(
+  value: {
+    platform: ReleaseExternalGatePlatformStatus
+    gate: ReleaseExternalGateStatusEntry
+  }
+): value is {
+  platform: ReleaseExternalGatePlatformStatus
+  gate: ReleaseExternalGateStatusEntry & {
+    status: Exclude<ReleaseExternalGateStatusCode, 'satisfied'>
+  }
+} {
+  return value.gate.status !== 'satisfied'
+}
+
+function overallStatusFor(
+  platforms: ReleaseExternalGatePlatformStatus[],
+  nextExternalActions: ReleaseExternalGateNextAction[]
+): ReleaseExternalGateOverallStatus {
+  if (platforms.length > 0 && platforms.every((platform) => platform.publishAllowed)) {
+    return 'publish_ready'
+  }
+
+  const statuses = nextExternalActions.map((action) => action.status)
+  if (statuses.includes('blocked_by_candidate')) return 'blocked_by_candidate'
+  if (statuses.includes('blocked_by_signed_candidate')) return 'blocked_by_signed_candidate'
+  if (statuses.includes('blocked_by_distribution')) return 'blocked_by_distribution'
+  return 'external_action_required'
 }
 
 function evaluateGate(

@@ -84,6 +84,24 @@ assert.equal(status.emitsLocalPaths, false)
 assert.equal(status.executesWorkflow, false)
 assert.equal(status.publishesRelease, false)
 assert.equal(status.platforms.length, 2)
+assert.equal(status.summary.overallStatus, 'blocked_by_signed_candidate')
+assert.equal(status.summary.totalGates, 10)
+assert.equal(status.summary.satisfiedGates, 0)
+assert.equal(status.summary.externalActionRequiredGates, 6)
+assert.equal(status.summary.blockedGates, 4)
+assert.ok(status.summary.nextExternalActions.some((item) =>
+  item.platform === 'windows'
+  && item.arch === 'x64'
+  && item.code === 'signed_candidate_workflow'
+  && item.actor === 'github_actions'
+  && item.status === 'external_action_required'
+))
+assert.ok(status.summary.nextExternalActions.some((item) =>
+  item.platform === 'macos'
+  && item.arch === 'arm64'
+  && item.code === 'distribution_install_smoke'
+  && item.status === 'blocked_by_signed_candidate'
+))
 
 const windowsCandidate = status.platforms.find((item) => item.platform === 'windows')
 assert.ok(windowsCandidate)
@@ -114,15 +132,21 @@ assert.equal(gateStatus(blockedStatus, 'signed_candidate_workflow'), 'blocked_by
 assert.ok(gateMissing(blockedStatus, 'signed_candidate_workflow').some((item) => item.code === 'build'))
 assert.equal(gateStatus(blockedStatus, 'distribution_install_smoke'), 'blocked_by_signed_candidate')
 assert.equal(gateStatus(blockedStatus, 'publish_approval'), 'blocked_by_distribution')
+const blockedSummary = createReleaseExternalGateStatus(
+  createReleaseReadinessSummary([blockedWindows])
+).summary
+assert.equal(blockedSummary.overallStatus, 'blocked_by_candidate')
+assert.ok(blockedSummary.nextExternalActions.some((item) => item.status === 'blocked_by_candidate'))
 
-const windowsDistribution = createReleaseExternalGateStatus(
+const windowsDistributionStatus = createReleaseExternalGateStatus(
   createReleaseReadinessSummary([{
     platform: 'windows',
     arch: 'x64',
     checks: passedChecks,
     explicitPublishApproval: false
   }])
-).platforms[0]
+)
+const windowsDistribution = windowsDistributionStatus.platforms[0]
 assert.equal(windowsDistribution.stage, 'distribution_ready')
 assert.equal(gateStatus(windowsDistribution, 'branding_assets'), 'satisfied')
 assert.equal(gateStatus(windowsDistribution, 'signing_environment'), 'satisfied')
@@ -130,17 +154,28 @@ assert.equal(gateStatus(windowsDistribution, 'signed_candidate_workflow'), 'sati
 assert.equal(gateStatus(windowsDistribution, 'distribution_install_smoke'), 'satisfied')
 assert.equal(gateStatus(windowsDistribution, 'publish_approval'), 'external_action_required')
 assert.ok(gateMissing(windowsDistribution, 'publish_approval').some((item) => item.code === 'publish_approval'))
+assert.equal(windowsDistributionStatus.summary.overallStatus, 'external_action_required')
+assert.equal(windowsDistributionStatus.summary.satisfiedGates, 4)
+assert.equal(windowsDistributionStatus.summary.externalActionRequiredGates, 1)
+assert.equal(windowsDistributionStatus.summary.blockedGates, 0)
+assert.deepEqual(
+  windowsDistributionStatus.summary.nextExternalActions.map((item) => item.code),
+  ['publish_approval']
+)
 
-const windowsPublish = createReleaseExternalGateStatus(
+const windowsPublishStatus = createReleaseExternalGateStatus(
   createReleaseReadinessSummary([{
     platform: 'windows',
     arch: 'x64',
     checks: passedChecks,
     explicitPublishApproval: true
   }])
-).platforms[0]
+)
+const windowsPublish = windowsPublishStatus.platforms[0]
 assert.equal(windowsPublish.stage, 'publish_ready')
 assert.ok(windowsPublish.gates.every((gate) => gate.status === 'satisfied'))
+assert.equal(windowsPublishStatus.summary.overallStatus, 'publish_ready')
+assert.equal(windowsPublishStatus.summary.nextExternalActions.length, 0)
 
 const serialized = JSON.stringify(status)
 assert.equal(serialized.includes('/Users/'), false)

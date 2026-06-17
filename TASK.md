@@ -28,23 +28,39 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add structured publish approval evidence for the final release gate:
+Add a shared aggregate status to Release External Gate Status:
 
-1. Validate an optional `release-publish-approval.json` record for platform,
-   architecture, `distribution_ready`, approval id, timestamp, and
-   `publishApproved: true`.
-2. Let `write-release-readiness-summary.mjs` consume the structured approval
-   through `--publish-approval=<path>` while preserving the existing
-   `--publish-approved=true` compatibility flag.
-3. Keep the approval evidence path-free and non-executable: no release
-   publishing, no GitHub settings mutation, no signing/notarization, and no
-   secret reads.
-4. Add focused approval and writer coverage and wire it into `ci:governance`.
+1. Summarize all Windows/macOS external gates into one path-free status block.
+2. Expose aggregate counts and the next external actions without executing
+   workflows, reading secrets, reading signing/branding assets, or publishing.
+3. Keep platform differences inside the existing per-platform gate evidence.
+4. Update focused tests and release governance docs.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, release secrets, GitHub Environment mutation, signing,
    notarization, and publishing out of scope.
 
 ## Current Slice Result
+
+- Added a shared aggregate `summary` to Release External Gate Status with
+  `overallStatus`, gate counts, and structured `nextExternalActions`.
+- The aggregate summary is derived from the existing per-platform readiness
+  evidence and keeps platform differences inside each gate entry.
+- The status remains display-only and path-free: no workflow execution, GitHub
+  mutation, release publishing, secret reads, signing asset reads, branding
+  asset byte reads, runtime behavior, IPC, preload, renderer caller, UI,
+  model download, or user asset behavior changed.
+- Focused external gate status/writer tests, typecheck, production build,
+  142 Python tests, docs sync, agent context, forbidden-path advisory check,
+  diff check, and the complete `ci:governance` suite pass. The first sandboxed
+  `ci:governance` attempt failed because the Llama server probe could not
+  listen on `127.0.0.1`; the same command passed after loopback permission was
+  granted. Doctor CI still reports the expected AI Worker not-reachable
+  warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes release evidence artifacts and CLI governance only and has no
+  renderer surface.
+
+## Structured Publish Approval Result
 
 - Added `release-publish-approval.ts`, a shared path-free validator for
   optional `release-publish-approval.json` records.
