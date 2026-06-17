@@ -15,7 +15,7 @@ import {
 } from '../src/main/runtime-package/runtime-package-executor'
 import { RuntimePackageSessionService } from '../src/main/runtime-package/runtime-package-session.service'
 
-const base = path.join(process.cwd(), 'dist-temp', 'runtime-package-session-tests')
+const base = path.join(process.cwd(), 'dist-temp', 'tests', 'runtime-package-session-tests')
 await fs.rm(base, { recursive: true, force: true })
 await fs.mkdir(base, { recursive: true })
 

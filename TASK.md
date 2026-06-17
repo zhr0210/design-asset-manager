@@ -28,39 +28,36 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Bind the retained Release Readiness Summary writer back to the shared release
-contracts:
+Harden Runtime Package test fixture hygiene for cross-platform governance:
 
-1. Keep `scripts/write-release-readiness-summary.mjs` as the stable workflow
-   entrypoint.
-2. Move the evidence-derived summary logic into a TypeScript writer that
-   reuses shared readiness and install-smoke preflight modules.
-3. Prove platform install-smoke check IDs are not hardcoded in the writer.
-4. Keep signing, notarization, publishing, real icon approval, IPC, preload,
-   renderer callers, and UI out of scope.
+1. Keep generated Runtime Package fixtures under the existing
+   `dist-temp/tests` CI hygiene allowance.
+2. Add a focused governance test so Runtime Package tests cannot reintroduce
+   top-level `dist-temp/runtime-*` or `dist-temp/outside-*` paths.
+3. Wire that check into `ci:governance` and the cross-platform runtime test
+   map.
+4. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
+   user assets, and release secrets out of scope.
 
 ## Current Slice Result
 
-- `scripts/write-release-readiness-summary.mjs` is now a stable thin wrapper
-  that bundles and executes `scripts/write-release-readiness-summary.ts`
-  without writing a new `dist-temp` entry.
-- The TypeScript writer derives the output shape through
-  `createReleaseReadinessSummary(..., 'release-readiness-evidence')` and uses
-  `createReleaseInstallSmokePreflight()` for platform install-smoke check IDs.
-- Release Readiness Summary now includes the evidence-derived `checks` object
-  inside the same path-free platform summary used by both Windows and macOS.
-- Focused tests prove the writer no longer hardcodes Windows
-  `installer-run`/`installer-subfolder`/`installed-exe` or macOS
-  `dmg-mount`/`dmg-copy`/`dmg-installed-launch`/`dmg-detach` check IDs.
-- No signing, notarization, publishing, real icon approval, IPC, preload,
-  renderer caller, UI surface, model download, or user-asset access was added.
-- Focused release tests, typecheck, production build, 142 Python tests, docs
-  sync, agent context, diff check, and the complete `ci:governance` suite
-  pass. Full governance required unsandboxed local loopback for the Llama
-  server probe; Doctor CI still reports the expected AI Worker not-reachable
-  warning because the worker is not started for this slice.
+- Runtime Package generated fixtures now use `dist-temp/tests/...` across the
+  downloader, verifier/extractor, installer, executor, and session tests.
+- Added `test-runtime-package-test-hygiene` to prove those tests do not
+  reintroduce top-level `dist-temp/runtime-*` or `dist-temp/outside-*` paths
+  that can poison a later governance run after interruption.
+- Wired the hygiene check into `ci:governance` and
+  `.codeindex/tests-map.json` under `cross_platform_runtime`.
+- Updated the Runtime Package Executor documentation to name the
+  `dist-temp/tests` fixture policy and validation command.
+- No runtime behavior, IPC, preload, renderer caller, UI surface, model
+  download, user asset, signing, notarization, or publishing behavior changed.
+- Focused Runtime Package tests, `ci:hygiene`, typecheck, production build,
+  142 Python tests, docs sync, agent context, diff check, and the complete
+  `ci:governance` suite pass. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
 - Electron/Playwright UI validation is intentionally skipped because this
-  slice changes only release artifact writers and has no renderer surface.
+  slice changes test fixture governance only and has no renderer surface.
 
 ## Signed Candidate Architecture Result
 

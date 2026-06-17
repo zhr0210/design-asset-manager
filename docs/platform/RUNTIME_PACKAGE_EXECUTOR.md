@@ -94,6 +94,7 @@ shared IPC contract appears before the public channel contract is approved.
 npm run test-runtime-package-executor
 npm run test-runtime-package-session
 npm run test-runtime-package-session-projector
+npm run test-runtime-package-test-hygiene
 npm run test-runtime-package-ipc-contract-preflight
 npm run test-runtime-package-ipc-governance
 npm run test-runtime-registry
@@ -101,13 +102,19 @@ npm run typecheck
 npm run build
 ```
 
-The focused test generates ZIP fixtures at runtime and covers success,
+The focused test generates ZIP fixtures under `dist-temp/tests` at runtime and
+covers success,
 duplicate install, checksum mismatch, traversal rejection, remote/model
 blocking, managed-path symlink rejection, explicit confirmation, in-memory
 interface behavior, and rollback. The session test covers sidecar manifest
 selection, token expiry and one-time use, checksum binding, multi-package
 manifest disambiguation, path-free responses, execution snapshots, bounded
 snapshot retention, and Runtime Registry commit.
+
+`npm run test-runtime-package-test-hygiene` keeps those generated fixtures
+inside the existing CI hygiene allowance. It fails if Runtime Package tests
+reintroduce top-level `dist-temp/runtime-*` or `dist-temp/outside-*` paths that
+can poison a later governance run after an interrupted test.
 
 The projector test injects private paths, archive metadata, digest values,
 progress history, and rollback details into internal objects and proves none

@@ -16,7 +16,7 @@ import {
   createReservedRemoteRuntimePackageSource
 } from '../src/main/runtime-package/runtime-package-source'
 
-const base = path.join(process.cwd(), 'dist-temp', 'runtime-package-executor-tests')
+const base = path.join(process.cwd(), 'dist-temp', 'tests', 'runtime-package-executor-tests')
 await fs.rm(base, { recursive: true, force: true })
 
 const managedPaths: ManagedPaths = {
