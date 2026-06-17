@@ -87,6 +87,13 @@ distribution smoke checks, and publish approval from
 read secret values, read signing assets, read icon bytes, emit local paths,
 execute workflows, or publish releases.
 
+`release-external-gate-status.ts` combines that plan with
+`release-readiness-summary.ts` to produce a display-only gate status for each
+platform and architecture. A gate is marked satisfied only when readiness
+evidence proves it; otherwise it remains `external_action_required` or blocked
+by an earlier candidate/distribution gate. This keeps remaining human and
+platform-host work visible without treating planned work as completed.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS
@@ -109,4 +116,5 @@ npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight
 npm run test-release-external-gate-plan
+npm run test-release-external-gate-status
 ```

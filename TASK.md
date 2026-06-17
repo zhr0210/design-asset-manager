@@ -28,41 +28,48 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared external release gate plan for the remaining Windows/macOS
-release actions that cannot be executed safely from the app or this branch:
+Add a shared external release gate status projector for the remaining
+Windows/macOS release actions that cannot be executed safely from the app or
+this branch:
 
-1. Derive Windows and macOS external gates from the shared release environment
-   manifest.
-2. Cover branding assets, signing environments, signed-candidate workflow
-   dispatch, platform install-smoke evidence, and publish approval.
-3. Keep the plan display-only: no GitHub settings writes, no secret reads, no
-   signing asset reads, no icon byte reads, no local paths, no workflow
-   execution, and no release publishing.
+1. Combine the shared external release gate plan with release readiness
+   summaries.
+2. Emit per-platform/per-arch statuses for branding assets, signing
+   environments, signed-candidate workflow dispatch, platform install-smoke
+   evidence, and publish approval.
+3. Mark a gate `satisfied` only when readiness evidence proves it; otherwise
+   keep it `external_action_required` or blocked by an earlier
+   candidate/distribution gate.
 4. Add focused contract coverage and wire it into `ci:governance`.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, release secrets, and actual signing/notarization out of scope.
 
 ## Current Slice Result
 
-- Added `release-external-gate-plan.ts` as a shared, path-free projection of
-  the external release gates still required for Windows and macOS.
-- The plan derives from `release-environment-manifest.ts` and covers branding
-  assets, signing environment provisioning, signed-candidate workflow
-  dispatch, platform install-smoke evidence, and separate publish approval.
-- The plan is display-only and records that it does not write GitHub settings,
-  read secret values, read signing assets, read branding bytes, emit local
-  paths, execute workflows, or publish releases.
-- Added focused contract coverage and wired
-  `test-release-external-gate-plan` into `.codeindex/tests-map.json` and
-  `ci:governance`.
+- Added `release-external-gate-status.ts`, a shared projector that combines
+  `release-external-gate-plan.ts` with `release-readiness-summary.ts`.
+- The status shape emits per-platform/per-arch gate statuses for branding
+  assets, signing environment review, signed-candidate workflow evidence,
+  distribution install smoke, and separate publish approval.
+- Gates are marked `satisfied` only when readiness evidence proves them.
+  Otherwise they remain `external_action_required`, `blocked_by_candidate`,
+  `blocked_by_signed_candidate`, or `blocked_by_distribution`.
+- Added `test-release-external-gate-status` with Windows/macOS coverage for
+  `blocked`, `candidate_ready`, `distribution_ready`, and `publish_ready`
+  states, plus source checks proving the projector does not read secrets,
+  local paths, signing assets, icon bytes, or execute workflow/publish tools.
+- Wired the test into `.codeindex/tests-map.json` and `ci:governance`.
 - Updated `docs/platform/RELEASE_FLOW_GOVERNANCE.md` with the shared external
-  gate plan and validation command.
+  gate status projector and validation command.
 - No runtime behavior, IPC, preload, renderer caller, UI surface, model
   download, user asset, signing, notarization, GitHub Environment, or
   publishing behavior changed.
-- Focused external gate, neighboring release, typecheck, production build,
-  142 Python tests, docs sync, agent context, forbidden-path advisory check,
-  diff check, and the complete `ci:governance` suite pass. Doctor CI still
+- Focused external gate status/plan tests, neighboring release tests,
+  typecheck, production build, 142 Python tests, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. The first sandboxed `ci:governance` attempt
+  failed because the Llama server probe could not listen on `127.0.0.1`; the
+  same command passed after loopback permission was granted. Doctor CI still
   reports the expected AI Worker not-reachable warning because the worker is
   not started for this slice.
 - Electron/Playwright UI validation is intentionally skipped because this

@@ -32,6 +32,7 @@
     "npm run test-release-environment-manifest",
     "npm run test-release-install-smoke-preflight",
     "npm run test-release-external-gate-plan",
+    "npm run test-release-external-gate-status",
     "npm run test-signed-release-workflow",
     "npm run test-macos-signing-entitlements",
     "npm run test-package-smoke"
