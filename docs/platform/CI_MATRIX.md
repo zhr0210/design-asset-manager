@@ -75,7 +75,9 @@ Before dispatching a signed candidate, reviewers can create a sanitized
 `write-release-signing-environment-status.mjs` to check that both release
 signing environments have reviewer approval and the expected secret names. The
 verifier reads names only, never secret values, and does not query or mutate
-GitHub settings.
+GitHub settings. `build/release-signing-environment.example.json` provides the
+safe starting shape and defaults to `reviewersConfigured: false`, so it cannot
+pass as ready evidence without an explicit human update.
 
 Release readiness can consume a structured `release-publish-approval.json`
 record for the final publish gate, but this remains evidence only. No current

@@ -105,6 +105,11 @@ environments or run workflows. The companion
 `write-release-signing-environment-status.mjs` writes
 `release-signing-environment-status.json` for reviewers before triggering a
 real signed candidate run.
+`build/release-signing-environment.example.json` is the fill-in template for
+that sanitized evidence. It lists the required secret names but no secret
+values. Its `reviewersConfigured: false` defaults intentionally keep the
+example below `ready` until a human records the actual reviewed environment
+state.
 
 `release-external-gate-status.ts` combines that plan with
 `release-readiness-summary.ts` to produce a display-only gate status for each
@@ -158,6 +163,7 @@ npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight
 npm run test-release-signing-environment-status
+npm run test-release-signing-environment-template
 npm run test-release-external-gate-plan
 npm run test-release-external-gate-status
 npm run test-release-external-gate-status-writer

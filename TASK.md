@@ -28,22 +28,46 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Release Signing Environment Status verifier:
+Add a shared Release Signing Environment Evidence template:
 
-1. Validate a manually supplied, sanitized
-   `release-signing-environment-evidence.json` record against the shared
-   Windows/macOS release environment manifest.
-2. Check GitHub Environment presence, reviewer approval, and required signing
-   secret names without reading secret values.
-3. Emit a path-free `release-signing-environment-status.json` result for
-   reviewers before triggering a real signed candidate run.
-4. Add a CLI writer, focused tests, governance wiring, and release docs.
+1. Provide `build/release-signing-environment.example.json` as the safe
+   fill-in shape for sanitized GitHub signing environment evidence.
+2. Include required Windows/macOS environment names and signing secret names,
+   but no secret values.
+3. Keep `reviewersConfigured: false` by default so the example cannot pass as
+   ready evidence.
+4. Add focused template coverage, governance wiring, and release docs.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, candidate binary reads, release secrets, GitHub settings
-   reads/mutation, signing, notarization, workflow execution, and publishing
-   out of scope.
+   user assets, candidate binary reads, release secrets, GitHub settings reads
+   or mutation, signing, notarization, workflow execution, and publishing out
+   of scope.
 
 ## Current Slice Result
+
+- Added `build/release-signing-environment.example.json`, a safe fill-in
+  template for sanitized signing environment evidence.
+- The template lists the required Windows/macOS GitHub Environment names and
+  required signing secret names, but contains no secret values, credentials,
+  signing assets, local paths, or GitHub settings.
+- The template defaults `reviewersConfigured: false`, so it cannot pass as
+  ready signing-environment evidence without an explicit human update after
+  real environment review is configured.
+- Added focused template coverage that checks the template matches the shared
+  release environment manifest, remains below `ready`, stays path-free, and
+  stays wired into `ci:governance`.
+- Updated release governance and CI matrix docs with the template usage and
+  safety default.
+- Focused signing-environment template/status/environment tests, typecheck,
+  production build, 142 Python tests, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Full governance required loopback permission
+  for the Llama server probe. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes release evidence templates and CLI governance only and has no
+  renderer surface.
+
+## Release Signing Environment Status Result
 
 - Added `release-signing-environment-status.ts`, a shared path-free verifier
   for sanitized GitHub signing environment evidence.
