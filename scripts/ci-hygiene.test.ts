@@ -39,10 +39,15 @@ for (const guardrail of denylist.requiredWorkflowGuardrails ?? []) {
 
 assert.ok(packageJson.scripts?.['ci:hygiene'], 'Missing npm script: ci:hygiene')
 assert.match(packageJson.scripts?.['ci:governance'] ?? '', /ci:hygiene/)
+assert.match(packageJson.scripts?.['ci:hygiene'] ?? '', /test-ci-hygiene/)
+assert.match(packageJson.scripts?.['ci:hygiene'] ?? '', /test-forbidden-paths/)
 
 const docsText = (await Promise.all(ciDocs.map((docPath) => fs.readFile(docPath, 'utf8')))).join('\n')
 assert.match(docsText, /ci-artifact-denylist\.json/)
 assert.match(docsText, /dist-temp/)
+assert.match(docsText, /check-forbidden-paths\.py/)
+assert.match(docsText, /advisory/)
+assert.match(docsText, /blocking/)
 assert.match(docsText, /DAM_DISABLE_MODEL_DOWNLOADS/)
 assert.match(docsText, /DAM_DISABLE_REAL_AI_WORKER/)
 

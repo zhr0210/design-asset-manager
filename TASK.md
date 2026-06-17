@@ -28,36 +28,42 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Harden Runtime Package test fixture hygiene for cross-platform governance:
+Refine forbidden-path governance so documentation sync is visible but not a
+false blocker:
 
-1. Keep generated Runtime Package fixtures under the existing
-   `dist-temp/tests` CI hygiene allowance.
-2. Add a focused governance test so Runtime Package tests cannot reintroduce
-   top-level `dist-temp/runtime-*` or `dist-temp/outside-*` paths.
-3. Wire that check into `ci:governance` and the cross-platform runtime test
-   map.
-4. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
+1. Keep `docs/` monitored by `.codeindex/forbidden-paths.json`.
+2. Classify docs-only changes as advisory and return success.
+3. Keep generated outputs, model weights, SQLite databases, model caches,
+   `dist-packages`, `dist-temp`, and `runtime-data` as blocking findings.
+4. Add focused classifier tests and wire them into `ci:hygiene`.
+5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, and release secrets out of scope.
 
 ## Current Slice Result
 
-- Runtime Package generated fixtures now use `dist-temp/tests/...` across the
-  downloader, verifier/extractor, installer, executor, and session tests.
-- Added `test-runtime-package-test-hygiene` to prove those tests do not
-  reintroduce top-level `dist-temp/runtime-*` or `dist-temp/outside-*` paths
-  that can poison a later governance run after interruption.
-- Wired the hygiene check into `ci:governance` and
-  `.codeindex/tests-map.json` under `cross_platform_runtime`.
-- Updated the Runtime Package Executor documentation to name the
-  `dist-temp/tests` fixture policy and validation command.
+- `check-forbidden-paths.py` now classifies monitored paths as either
+  advisory or blocking.
+- `docs/` remains listed in `.codeindex/forbidden-paths.json` and is still
+  reported, but docs-only changes return success so required documentation
+  sync no longer creates a false verification failure.
+- Generated outputs, model weights, SQLite databases, model caches,
+  `dist-packages`, `dist-temp`, and `runtime-data` remain blocking findings.
+- Added `test-forbidden-paths` with focused classifier coverage for docs-only,
+  sensitive directory, model/database suffix, and mixed advisory/blocking
+  changes.
+- `ci:hygiene` now runs both artifact hygiene and forbidden-path classifier
+  tests; `ci:governance` continues to include `ci:hygiene`.
+- Updated `docs/platform/CI_HYGIENE.md` to document advisory vs blocking
+  path handling.
 - No runtime behavior, IPC, preload, renderer caller, UI surface, model
   download, user asset, signing, notarization, or publishing behavior changed.
-- Focused Runtime Package tests, `ci:hygiene`, typecheck, production build,
-  142 Python tests, docs sync, agent context, diff check, and the complete
-  `ci:governance` suite pass. Doctor CI still reports the expected AI Worker
-  not-reachable warning because the worker is not started for this slice.
+- Focused forbidden-path tests, actual `check-forbidden-paths.py`,
+  `ci:hygiene`, typecheck, production build, 142 Python tests, docs sync,
+  agent context, diff check, and the complete `ci:governance` suite pass.
+  Doctor CI still reports the expected AI Worker not-reachable warning because
+  the worker is not started for this slice.
 - Electron/Playwright UI validation is intentionally skipped because this
-  slice changes test fixture governance only and has no renderer surface.
+  slice changes CLI governance only and has no renderer surface.
 
 ## Signed Candidate Architecture Result
 
