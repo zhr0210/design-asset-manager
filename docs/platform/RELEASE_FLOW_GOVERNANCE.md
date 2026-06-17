@@ -113,6 +113,17 @@ generated readiness summary; it does not read secrets, signing assets, icon
 bytes, candidate binaries, local paths, or GitHub settings, and it does not
 execute workflows or publish releases.
 
+`release-evidence-bundle-status.ts` verifies a collected set of retained
+`release-external-gate-status-*.json` files against an explicit
+Windows/macOS platform and architecture requirement. The companion
+`write-release-evidence-bundle-status.mjs` command can be run after signed
+candidate artifacts are downloaded or collected into one directory. It emits a
+path-free `release-evidence-bundle-status.json` with the target stage,
+per-platform satisfaction, aggregate counts, and missing external actions. It
+reads only generated JSON evidence files, not candidate binaries, signing
+assets, icon bytes, GitHub settings, or secrets, and it does not trigger
+workflows or publish releases.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS
@@ -138,4 +149,5 @@ npm run test-release-branding-preflight
 npm run test-release-external-gate-plan
 npm run test-release-external-gate-status
 npm run test-release-external-gate-status-writer
+npm run test-release-evidence-bundle-status
 ```

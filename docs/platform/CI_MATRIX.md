@@ -74,4 +74,12 @@ Release readiness can consume a structured `release-publish-approval.json`
 record for the final publish gate, but this remains evidence only. No current
 workflow publishes a release or requests write permissions.
 
+After signed candidate artifacts are collected, reviewers can run
+`write-release-evidence-bundle-status.mjs` against the retained
+`release-external-gate-status-*.json` files to verify that the required
+Windows/macOS platform and architecture set reaches `distribution_ready` or
+`publish_ready`. This post-run verifier reads generated JSON evidence only and
+does not read release secrets, candidate binaries, signing assets, or GitHub
+settings.
+
 `npm run test-ci-governance` verifies that the workflow and npm scripts keep these boundaries intact.

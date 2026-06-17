@@ -28,18 +28,47 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared aggregate status to Release External Gate Status:
+Add a shared Release Evidence Bundle Status verifier:
 
-1. Summarize all Windows/macOS external gates into one path-free status block.
-2. Expose aggregate counts and the next external actions without executing
-   workflows, reading secrets, reading signing/branding assets, or publishing.
-3. Keep platform differences inside the existing per-platform gate evidence.
-4. Update focused tests and release governance docs.
+1. Verify a collected set of retained `release-external-gate-status-*.json`
+   files against an explicit Windows/macOS platform and architecture
+   requirement.
+2. Support `distribution_ready` and `publish_ready` target stages.
+3. Emit a path-free aggregate result with per-platform satisfaction, counts,
+   and missing external actions.
+4. Add a CLI writer, focused tests, governance wiring, and release docs.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, release secrets, GitHub Environment mutation, signing,
-   notarization, and publishing out of scope.
+   user assets, candidate binary reads, release secrets, GitHub Environment
+   mutation, signing, notarization, workflow execution, and publishing out of
+   scope.
 
 ## Current Slice Result
+
+- Added `release-evidence-bundle-status.ts`, a shared path-free verifier for
+  collected `release-external-gate-status-*.json` evidence.
+- Added `write-release-evidence-bundle-status.mjs`, which verifies an explicit
+  Windows/macOS platform and architecture set against `distribution_ready` or
+  `publish_ready` and writes `release-evidence-bundle-status.json`.
+- The verifier reads generated JSON evidence only. It does not read candidate
+  binaries, release secrets, signing assets, branding asset bytes, GitHub
+  settings, user assets, model artifacts, runtime databases, or local paths
+  into output; it also does not execute workflows, sign, notarize, mutate
+  GitHub settings, publish, or expose IPC/UI.
+- Added focused bundle verifier/writer coverage and wired it into
+  `.codeindex/tests-map.json` and `ci:governance`.
+- Updated release governance and CI matrix docs with the post-run bundle
+  verification step.
+- Focused bundle, external-gate, readiness, and release-flow tests, typecheck,
+  production build, 142 Python tests, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Full governance required loopback permission
+  for the Llama server probe. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes release evidence artifacts and CLI governance only and has no
+  renderer surface.
+
+## Aggregate Release Gate Status Result
 
 - Added a shared aggregate `summary` to Release External Gate Status with
   `overallStatus`, gate counts, and structured `nextExternalActions`.
