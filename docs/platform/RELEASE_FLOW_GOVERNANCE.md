@@ -79,6 +79,14 @@ alone satisfies the common Package Smoke gate; Windows Sandbox installer checks
 or macOS DMG install checks are still required before the distribution gate can
 pass.
 
+`release-external-gate-plan.ts` projects the remaining external release work
+into one shared, display-only plan for Windows and macOS. It derives platform
+environment names, workflow names, required secret names, branding files,
+distribution smoke checks, and publish approval from
+`release-environment-manifest.ts`. The plan does not write GitHub settings,
+read secret values, read signing assets, read icon bytes, emit local paths,
+execute workflows, or publish releases.
+
 Unsigned artifacts can reach only `candidate_ready`. Windows distribution
 requires Authenticode, Sandbox install smoke, approved release branding, and
 update metadata. macOS
@@ -100,4 +108,5 @@ npm run test-release-readiness-writer
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight
+npm run test-release-external-gate-plan
 ```

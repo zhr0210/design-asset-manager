@@ -28,42 +28,45 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Refine forbidden-path governance so documentation sync is visible but not a
-false blocker:
+Add a shared external release gate plan for the remaining Windows/macOS
+release actions that cannot be executed safely from the app or this branch:
 
-1. Keep `docs/` monitored by `.codeindex/forbidden-paths.json`.
-2. Classify docs-only changes as advisory and return success.
-3. Keep generated outputs, model weights, SQLite databases, model caches,
-   `dist-packages`, `dist-temp`, and `runtime-data` as blocking findings.
-4. Add focused classifier tests and wire them into `ci:hygiene`.
+1. Derive Windows and macOS external gates from the shared release environment
+   manifest.
+2. Cover branding assets, signing environments, signed-candidate workflow
+   dispatch, platform install-smoke evidence, and publish approval.
+3. Keep the plan display-only: no GitHub settings writes, no secret reads, no
+   signing asset reads, no icon byte reads, no local paths, no workflow
+   execution, and no release publishing.
+4. Add focused contract coverage and wire it into `ci:governance`.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, and release secrets out of scope.
+   user assets, release secrets, and actual signing/notarization out of scope.
 
 ## Current Slice Result
 
-- `check-forbidden-paths.py` now classifies monitored paths as either
-  advisory or blocking.
-- `docs/` remains listed in `.codeindex/forbidden-paths.json` and is still
-  reported, but docs-only changes return success so required documentation
-  sync no longer creates a false verification failure.
-- Generated outputs, model weights, SQLite databases, model caches,
-  `dist-packages`, `dist-temp`, and `runtime-data` remain blocking findings.
-- Added `test-forbidden-paths` with focused classifier coverage for docs-only,
-  sensitive directory, model/database suffix, and mixed advisory/blocking
-  changes.
-- `ci:hygiene` now runs both artifact hygiene and forbidden-path classifier
-  tests; `ci:governance` continues to include `ci:hygiene`.
-- Updated `docs/platform/CI_HYGIENE.md` to document advisory vs blocking
-  path handling.
+- Added `release-external-gate-plan.ts` as a shared, path-free projection of
+  the external release gates still required for Windows and macOS.
+- The plan derives from `release-environment-manifest.ts` and covers branding
+  assets, signing environment provisioning, signed-candidate workflow
+  dispatch, platform install-smoke evidence, and separate publish approval.
+- The plan is display-only and records that it does not write GitHub settings,
+  read secret values, read signing assets, read branding bytes, emit local
+  paths, execute workflows, or publish releases.
+- Added focused contract coverage and wired
+  `test-release-external-gate-plan` into `.codeindex/tests-map.json` and
+  `ci:governance`.
+- Updated `docs/platform/RELEASE_FLOW_GOVERNANCE.md` with the shared external
+  gate plan and validation command.
 - No runtime behavior, IPC, preload, renderer caller, UI surface, model
-  download, user asset, signing, notarization, or publishing behavior changed.
-- Focused forbidden-path tests, actual `check-forbidden-paths.py`,
-  `ci:hygiene`, typecheck, production build, 142 Python tests, docs sync,
-  agent context, diff check, and the complete `ci:governance` suite pass.
-  Doctor CI still reports the expected AI Worker not-reachable warning because
-  the worker is not started for this slice.
+  download, user asset, signing, notarization, GitHub Environment, or
+  publishing behavior changed.
+- Focused external gate, neighboring release, typecheck, production build,
+  142 Python tests, docs sync, agent context, forbidden-path advisory check,
+  diff check, and the complete `ci:governance` suite pass. Doctor CI still
+  reports the expected AI Worker not-reachable warning because the worker is
+  not started for this slice.
 - Electron/Playwright UI validation is intentionally skipped because this
-  slice changes CLI governance only and has no renderer surface.
+  slice changes release governance contracts only and has no renderer surface.
 
 ## Signed Candidate Architecture Result
 
