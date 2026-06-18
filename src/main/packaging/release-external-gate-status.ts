@@ -108,6 +108,36 @@ const SIGNED_CANDIDATE_BLOCKER_CODES = new Set<ReleaseCandidateMissing['code']>(
   'update_metadata'
 ])
 
+type ReleaseSignedCandidateEvidenceCheck = keyof ReleaseCandidateChecks
+
+const SIGNED_CANDIDATE_EVIDENCE_CHECKS_BY_PLATFORM: Record<ReleasePlatform, ReleaseSignedCandidateEvidenceCheck[]> = {
+  windows: [
+    'build',
+    'governance',
+    'artifact',
+    'checksum',
+    'packageSmoke',
+    'branding',
+    'signature',
+    'updateMetadata'
+  ],
+  macos: [
+    'build',
+    'governance',
+    'artifact',
+    'checksum',
+    'packageSmoke',
+    'branding',
+    'signature',
+    'hardenedRuntime',
+    'nestedSignatures',
+    'notarization',
+    'staple',
+    'gatekeeper',
+    'updateMetadata'
+  ]
+}
+
 export function createReleaseExternalGateStatus(
   readinessSummary: ReleaseReadinessSummary
 ): ReleaseExternalGateStatus {
@@ -311,21 +341,13 @@ function missingByCodes(
   return summary.blockers.filter((item) => expected.has(item.code))
 }
 
+export function listReleaseSignedCandidateEvidenceChecks(
+  platform: ReleasePlatform
+): ReleaseSignedCandidateEvidenceCheck[] {
+  return [...SIGNED_CANDIDATE_EVIDENCE_CHECKS_BY_PLATFORM[platform]]
+}
+
 function isSignedCandidateEvidenceSatisfied(summary: ReleaseReadinessPlatformSummary): boolean {
-  const checks: Array<keyof ReleaseCandidateChecks> = [
-    'build',
-    'governance',
-    'artifact',
-    'checksum',
-    'packageSmoke',
-    'branding',
-    'signature',
-    'updateMetadata'
-  ]
-
-  if (summary.platform === 'macos') {
-    checks.push('hardenedRuntime', 'nestedSignatures', 'notarization', 'staple', 'gatekeeper')
-  }
-
+  const checks = listReleaseSignedCandidateEvidenceChecks(summary.platform)
   return checks.every((check) => summary.checks[check] === 'passed')
 }

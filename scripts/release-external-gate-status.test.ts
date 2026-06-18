@@ -6,7 +6,10 @@ import {
   createReleaseReadinessSummary,
   type ReleaseReadinessInput
 } from '../src/main/packaging/release-readiness-summary'
-import { createReleaseExternalGateStatus } from '../src/main/packaging/release-external-gate-status'
+import {
+  createReleaseExternalGateStatus,
+  listReleaseSignedCandidateEvidenceChecks
+} from '../src/main/packaging/release-external-gate-status'
 
 const passedChecks: ReleaseCandidateChecks = {
   build: 'passed',
@@ -177,6 +180,41 @@ assert.ok(windowsPublish.gates.every((gate) => gate.status === 'satisfied'))
 assert.equal(windowsPublishStatus.summary.overallStatus, 'publish_ready')
 assert.equal(windowsPublishStatus.summary.nextExternalActions.length, 0)
 
+assert.deepEqual(
+  listReleaseSignedCandidateEvidenceChecks('windows'),
+  [
+    'build',
+    'governance',
+    'artifact',
+    'checksum',
+    'packageSmoke',
+    'branding',
+    'signature',
+    'updateMetadata'
+  ]
+)
+assert.deepEqual(
+  listReleaseSignedCandidateEvidenceChecks('macos'),
+  [
+    'build',
+    'governance',
+    'artifact',
+    'checksum',
+    'packageSmoke',
+    'branding',
+    'signature',
+    'hardenedRuntime',
+    'nestedSignatures',
+    'notarization',
+    'staple',
+    'gatekeeper',
+    'updateMetadata'
+  ]
+)
+const mutableSignedCandidateChecks = listReleaseSignedCandidateEvidenceChecks('macos')
+mutableSignedCandidateChecks.pop()
+assert.equal(listReleaseSignedCandidateEvidenceChecks('macos').includes('gatekeeper'), true)
+
 const serialized = JSON.stringify(status)
 assert.equal(serialized.includes('/Users/'), false)
 assert.equal(serialized.includes('C:\\Users\\'), false)
@@ -185,6 +223,10 @@ assert.equal(serialized.includes('WINDOWS_CSC_KEY_PASSWORD='), false)
 
 const source = await fs.readFile('src/main/packaging/release-external-gate-status.ts', 'utf8')
 assert.match(source, /createReleaseExternalGatePlan/)
+assert.match(source, /SIGNED_CANDIDATE_EVIDENCE_CHECKS_BY_PLATFORM/)
+assert.match(source, /listReleaseSignedCandidateEvidenceChecks\(summary\.platform\)/)
+assert.doesNotMatch(source, /summary\.platform === 'macos'/)
+assert.doesNotMatch(source, /checks\.push\('hardenedRuntime'/)
 assert.doesNotMatch(
   source,
   /process\.env|\bfs\.|\breadFile\b|\bstat\b|\bcreateReadStream\b|\bexecFile\b|\bspawn\b/

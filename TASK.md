@@ -28,21 +28,49 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Convert Release Candidate Distribution Gates to a shared data registry:
+Convert Release External Gate signed-candidate evidence checks to a shared data
+registry:
 
-1. Keep Windows and macOS distribution gate definitions in one platform data
-   registry.
-2. Preserve `evaluateReleaseCandidate` stages, blockers, and publish approval
-   behavior.
-3. Add list helpers for common and platform distribution gates with
-   clone-on-read behavior.
-4. Strengthen focused tests against reintroducing direct platform control flow.
+1. Keep Windows and macOS signed-candidate evidence check lists in one platform
+   data registry.
+2. Preserve external gate statuses, missing evidence, aggregate counts, and
+   next external action behavior.
+3. Add a list helper with clone-on-read behavior so future status projectors
+   can reuse the required check list without mutating shared state.
+4. Strengthen focused tests against reintroducing direct platform control flow
+   for macOS-only signed-candidate checks.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings
    reads/mutation, Package Smoke execution, signing, notarization, workflow
    execution, and publishing out of scope.
 
 ## Current Slice Result
+
+- Converted `release-external-gate-status.ts` signed-candidate evidence
+  satisfaction from direct `summary.platform === 'macos'` control flow to a
+  shared platform data registry.
+- Added `listReleaseSignedCandidateEvidenceChecks` with clone-on-read behavior
+  so tests and future status projectors can reuse the required check list
+  without mutating shared state.
+- Existing Windows/macOS external gate statuses, missing evidence, aggregate
+  counts, overall status, next external actions, safety flags, and path-free
+  output shape are preserved.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, Package Smoke execution, signing, notarization, workflow
+  execution, or publishing behavior changed.
+- Updated the release governance doc with the data-backed signed-candidate
+  evidence check boundary.
+- Focused release external gate plan/status/status-writer and readiness
+  summary tests, typecheck, production build, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete `ci:governance`
+  suite pass. Doctor CI still reports the expected AI Worker not-reachable
+  warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal release governance data only and has no renderer
+  surface.
+
+## Release Candidate Distribution Gates Result
 
 - Converted `release-flow-governance.ts` distribution gate selection from
   direct `input.platform === 'windows'` control flow to a shared platform data
