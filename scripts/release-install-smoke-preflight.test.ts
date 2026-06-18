@@ -2,7 +2,10 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 
 import { createReleaseEnvironmentManifest } from '../src/main/packaging/release-environment-manifest'
-import { createReleaseInstallSmokePreflight } from '../src/main/packaging/release-install-smoke-preflight'
+import {
+  createReleaseInstallSmokePreflight,
+  listReleaseInstallSmokePreflights
+} from '../src/main/packaging/release-install-smoke-preflight'
 
 const windows = createReleaseInstallSmokePreflight('windows')
 assert.equal(windows.platform, 'windows')
@@ -33,6 +36,11 @@ assert.equal(macos.disposableInstallRoot, true)
 assert.equal(macos.launchUsesIsolatedAppData, true)
 assert.equal(macos.writesLocalPaths, false)
 assert.equal(macos.readsSigningSecrets, false)
+
+const preflights = listReleaseInstallSmokePreflights()
+assert.deepEqual(preflights.map((item) => item.platform), ['windows', 'macos'])
+preflights[0].requiredCheckIds.push('dmg-mount')
+assert.deepEqual(createReleaseInstallSmokePreflight('windows').requiredCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe'])
 
 const manifest = createReleaseEnvironmentManifest()
 const manifestWindows = manifest.environments.find((item) => item.platform === 'windows')
@@ -66,6 +74,9 @@ assert.doesNotMatch(readinessWriterSource, /process\.env|secrets\.|createReadStr
 const preflightSource = await fs.readFile('src/main/packaging/release-install-smoke-preflight.ts', 'utf8')
 assert.doesNotMatch(preflightSource, /process\.env|secrets\.|fs\.|readFile|stat|createReadStream/)
 assert.doesNotMatch(preflightSource, /C:\\Users\\[A-Za-z0-9_.-]+|\/Users\/[A-Za-z0-9_.-]+/)
+assert.match(preflightSource, /RELEASE_INSTALL_SMOKE_PREFLIGHTS/)
+assert.match(preflightSource, /listReleaseInstallSmokePreflights/)
+assert.doesNotMatch(preflightSource, /if \(platform === 'windows'\)|platform === 'macos'/)
 
 console.log('release-install-smoke-preflight passed')
 

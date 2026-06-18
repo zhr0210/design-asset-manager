@@ -28,20 +28,47 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Electron Builder Runner Options helper:
+Convert Release Install Smoke Preflight to a shared data registry:
 
-1. Keep the Electron Builder runner's platform flags, mode/signing choices,
-   and platform signing environment requirements on one direct workflow helper.
-2. Apply the helper to `run-electron-builder.mjs`.
-3. Preserve existing CLI flags, default file names, output shapes, and public
-   `pack:*`/`dist:*` workflow semantics.
-4. Add focused helper/runner tests and governance wiring.
+1. Keep Windows Sandbox and macOS DMG install smoke requirements in one
+   platform data registry.
+2. Preserve `createReleaseInstallSmokePreflight` output shape and downstream
+   release environment/readiness behavior.
+3. Add clone/list helpers so consumers cannot mutate shared definitions.
+4. Strengthen focused tests against reintroducing direct platform control flow.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, candidate binary reads, release secrets, GitHub settings reads
-   or mutation, signing, notarization, workflow execution, and publishing out
-   of scope.
+   user assets, candidate binary reads, release secrets, GitHub settings
+   reads/mutation, Package Smoke execution, Windows Sandbox execution, DMG
+   mounting, signing, notarization, workflow execution, and publishing out of
+   scope.
 
 ## Current Slice Result
+
+- Converted `release-install-smoke-preflight.ts` from direct
+  `platform === 'windows'` control flow to a shared platform data registry.
+- Added `listReleaseInstallSmokePreflights` and clone-on-read behavior so
+  release environment/readiness consumers can reuse definitions without
+  mutating shared state.
+- Existing Windows Sandbox and macOS DMG install smoke ids, commands,
+  execution hosts, path/secret policies, and downstream release environment
+  manifest output are preserved.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, Package Smoke execution, Windows Sandbox execution, DMG
+  mounting, signing, notarization, workflow execution, or publishing behavior
+  changed.
+- Updated the release governance doc with the data-backed install smoke
+  preflight boundary.
+- Focused release install smoke preflight/environment manifest/readiness
+  writer/external gate plan tests, typecheck, production build, docs sync,
+  agent context, forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal release governance data only and has no renderer
+  surface.
+
+## Electron Builder Runner Options Result
 
 - Added `electron-builder-runner-options.mjs`, a shared helper for the direct
   Electron Builder runner's platform choices, build modes, signing modes,

@@ -96,7 +96,8 @@ not read secret values, icon bytes, candidate artifacts, or local paths.
 `write-release-readiness-summary.mjs` turns the generated evidence files into a
 retained release-readiness artifact. Its entrypoint is a thin wrapper around
 the TypeScript writer, which reuses `release-readiness-summary.ts` and
-`release-install-smoke-preflight.ts` instead of duplicating platform gates.
+the data-backed `release-install-smoke-preflight.ts` registry instead of
+duplicating platform gates.
 It reads checksum, update metadata, trust, branding, and Package Smoke reports,
 derives the shared release gates, and writes
 `release-readiness-summary-<platform>-<arch>.json`. Signed-candidate workflows
