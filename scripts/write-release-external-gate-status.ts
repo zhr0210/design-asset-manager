@@ -1,22 +1,21 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import type {
-  ReleasePackagingArch,
-  ReleasePlatform
-} from '../src/main/packaging/release-flow-governance'
 import { createReleaseExternalGateStatus } from '../src/main/packaging/release-external-gate-status'
 import type { ReleaseReadinessSummary } from '../src/main/packaging/release-readiness-summary'
+import {
+  parseReleaseTargetSelection,
+  releaseEvidenceFileName
+} from '../src/main/packaging/release-target-selection'
 
 const options = parseArgs(process.argv.slice(2))
-const platform = requireChoice(options.platform, ['windows', 'macos'], '--platform') as ReleasePlatform
-const arch = requireChoice(options.arch, ['x64', 'arm64'], '--arch') as ReleasePackagingArch
+const { platform, arch } = parseReleaseTargetSelection(options)
 const distDir = path.resolve(options['dist-dir'] ?? 'dist-packages')
 const readinessPath = path.resolve(
-  options.readiness ?? path.join(distDir, `release-readiness-summary-${platform}-${arch}.json`)
+  options.readiness ?? path.join(distDir, releaseEvidenceFileName('release-readiness-summary', { platform, arch }))
 )
 const outputPath = path.resolve(
-  options.output ?? path.join(distDir, `release-external-gate-status-${platform}-${arch}.json`)
+  options.output ?? path.join(distDir, releaseEvidenceFileName('release-external-gate-status', { platform, arch }))
 )
 
 const readinessSummary = JSON.parse(await fs.readFile(readinessPath, 'utf8')) as ReleaseReadinessSummary
@@ -42,11 +41,4 @@ function parseArgs(args: string[]): Record<string, string> {
     if (!match) throw new Error(`Invalid argument: ${arg}`)
     return [match[1], match[2]]
   }))
-}
-
-function requireChoice(value: string | undefined, choices: readonly string[], flag: string): string {
-  if (!choices.includes(value ?? '')) {
-    throw new Error(`${flag} must be one of: ${choices.join(', ')}`)
-  }
-  return value as string
 }

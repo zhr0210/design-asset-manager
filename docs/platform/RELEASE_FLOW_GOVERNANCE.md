@@ -52,6 +52,13 @@ container, but release preflight, environment manifest, branding preflight,
 and dispatch status all consume the same target definitions instead of
 re-encoding platform branches.
 
+`release-target-selection.ts` is the shared internal CLI target selector for
+release evidence writers. It parses the existing `--platform`, `--arch`, and
+`--required=platform:arch` inputs, formats path-free evidence file names, and
+derives the default evidence-bundle target set from the platform registry. It
+does not add public IPC, change CLI arguments, read artifacts, or execute
+release actions.
+
 `release-signed-candidate-preflight.ts` records the shared signed-candidate
 shape without reading secret values. It binds each platform to its GitHub
 Environment, explicit `signing_approved` input, main-or-version-tag ref gate,
@@ -177,6 +184,7 @@ npm run test-release-readiness-summary
 npm run test-release-readiness-writer
 npm run test-release-publish-approval
 npm run test-release-platform-targets
+npm run test-release-target-selection
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight

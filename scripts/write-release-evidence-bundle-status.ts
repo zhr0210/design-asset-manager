@@ -1,16 +1,16 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import type {
-  ReleasePackagingArch,
-  ReleasePlatform
-} from '../src/main/packaging/release-flow-governance'
 import type { ReleaseExternalGateStatus } from '../src/main/packaging/release-external-gate-status'
 import {
   createReleaseEvidenceBundleStatus,
-  type ReleaseEvidenceBundleRequirement,
   type ReleaseEvidenceBundleTargetStage
 } from '../src/main/packaging/release-evidence-bundle-status'
+import {
+  createDefaultReleaseEvidenceBundleRequirements,
+  formatReleaseEvidenceBundleRequirements,
+  parseReleaseEvidenceBundleRequirements
+} from '../src/main/packaging/release-target-selection'
 
 const options = parseArgs(process.argv.slice(2))
 const distDir = path.resolve(options['dist-dir'] ?? 'dist-packages')
@@ -19,7 +19,10 @@ const targetStage = requireChoice(
   ['distribution_ready', 'publish_ready'],
   '--target-stage'
 ) as ReleaseEvidenceBundleTargetStage
-const requirements = parseRequirements(options.required ?? 'windows:x64,macos:arm64')
+const defaultRequirements = formatReleaseEvidenceBundleRequirements(
+  createDefaultReleaseEvidenceBundleRequirements()
+)
+const requirements = parseReleaseEvidenceBundleRequirements(options.required ?? defaultRequirements)
 const outputPath = path.resolve(
   options.output ?? path.join(distDir, 'release-evidence-bundle-status.json')
 )
@@ -41,22 +44,6 @@ async function readGateStatuses(targetDir: string): Promise<ReleaseExternalGateS
   return await Promise.all(statusFileNames.map(async (fileName) =>
     JSON.parse(await fs.readFile(path.join(targetDir, fileName), 'utf8')) as ReleaseExternalGateStatus
   ))
-}
-
-function parseRequirements(value: string): ReleaseEvidenceBundleRequirement[] {
-  const requirements = value.split(',').filter(Boolean).map((entry) => {
-    const [platform, arch] = entry.split(':')
-    return {
-      platform: requireChoice(platform, ['windows', 'macos'], '--required platform') as ReleasePlatform,
-      arch: requireChoice(arch, ['x64', 'arm64'], '--required arch') as ReleasePackagingArch
-    }
-  })
-
-  if (requirements.length === 0) {
-    throw new Error('--required must include at least one platform:arch entry.')
-  }
-
-  return requirements
 }
 
 function parseArgs(args: string[]): Record<string, string> {

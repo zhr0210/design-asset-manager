@@ -24,6 +24,7 @@ export interface ReleasePlatformTargetDefinition {
   runnerLabel: ReleaseRunnerLabel
   distCommand: ReleaseDistCommand
   supportedArches: readonly ReleasePackagingArch[]
+  defaultEvidenceBundleArch: ReleasePackagingArch
   signedCandidateEnvironment: ReleaseSignedCandidateEnvironment
   signedCandidateJobName: ReleaseSignedCandidateJobName
   signedCandidateArtifactNamePattern: ReleaseSignedCandidateArtifactNamePattern
@@ -41,6 +42,7 @@ export const RELEASE_PLATFORM_TARGETS: readonly ReleasePlatformTargetDefinition[
     runnerLabel: 'windows-2022',
     distCommand: 'npm run dist:win',
     supportedArches: RELEASE_PACKAGING_ARCHES,
+    defaultEvidenceBundleArch: 'x64',
     signedCandidateEnvironment: 'release-signing-windows',
     signedCandidateJobName: 'windows-signed-candidate',
     signedCandidateArtifactNamePattern: 'design-asset-manager-windows-${arch}-signed-candidate',
@@ -54,6 +56,7 @@ export const RELEASE_PLATFORM_TARGETS: readonly ReleasePlatformTargetDefinition[
     runnerLabel: 'macos-latest',
     distCommand: 'npm run dist:mac',
     supportedArches: RELEASE_PACKAGING_ARCHES,
+    defaultEvidenceBundleArch: 'arm64',
     signedCandidateEnvironment: 'release-signing-macos',
     signedCandidateJobName: 'macos-signed-candidate',
     signedCandidateArtifactNamePattern: 'design-asset-manager-macos-${arch}-signed-candidate',

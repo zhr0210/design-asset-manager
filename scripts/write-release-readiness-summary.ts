@@ -4,12 +4,15 @@ import path from 'node:path'
 import {
   type ReleaseCandidateChecks,
   type ReleaseCheckStatus,
-  type ReleasePackagingArch,
   type ReleasePlatform
 } from '../src/main/packaging/release-flow-governance'
 import { createReleaseInstallSmokePreflight } from '../src/main/packaging/release-install-smoke-preflight'
 import { evaluateReleasePublishApproval } from '../src/main/packaging/release-publish-approval'
 import { createReleaseReadinessSummary } from '../src/main/packaging/release-readiness-summary'
+import {
+  parseReleaseTargetSelection,
+  releaseEvidenceFileName
+} from '../src/main/packaging/release-target-selection'
 
 interface EvidenceReport {
   exists: boolean
@@ -22,20 +25,19 @@ interface JsonCheck {
 }
 
 const options = parseArgs(process.argv.slice(2))
-const platform = requireChoice(options.platform, ['windows', 'macos'], '--platform') as ReleasePlatform
-const arch = requireChoice(options.arch, ['x64', 'arm64'], '--arch') as ReleasePackagingArch
+const { platform, arch } = parseReleaseTargetSelection(options)
 const distDir = path.resolve(options['dist-dir'] ?? 'dist-packages')
 const governanceStatus = requireCheckStatus(options.governance ?? 'not_run', '--governance')
 const outputPath = path.resolve(
-  options.output ?? path.join(distDir, `release-readiness-summary-${platform}-${arch}.json`)
+  options.output ?? path.join(distDir, releaseEvidenceFileName('release-readiness-summary', { platform, arch }))
 )
 
 const reports = {
-  checksums: await readOptionalJson(options.checksums ?? path.join(distDir, `release-checksums-${platform}-${arch}.json`)),
-  updateMetadata: await readOptionalJson(options.metadata ?? path.join(distDir, `release-update-metadata-${platform}-${arch}.json`)),
-  trustEvidence: await readOptionalJson(options.trust ?? path.join(distDir, `release-trust-evidence-${platform}-${arch}.json`)),
-  brandingEvidence: await readOptionalJson(options.branding ?? path.join(distDir, `release-branding-evidence-${platform}-${arch}.json`)),
-  packageSmoke: await readOptionalJson(options['package-smoke'] ?? path.join(distDir, `package-smoke-${platform}-${arch}.json`)),
+  checksums: await readOptionalJson(options.checksums ?? path.join(distDir, releaseEvidenceFileName('release-checksums', { platform, arch }))),
+  updateMetadata: await readOptionalJson(options.metadata ?? path.join(distDir, releaseEvidenceFileName('release-update-metadata', { platform, arch }))),
+  trustEvidence: await readOptionalJson(options.trust ?? path.join(distDir, releaseEvidenceFileName('release-trust-evidence', { platform, arch }))),
+  brandingEvidence: await readOptionalJson(options.branding ?? path.join(distDir, releaseEvidenceFileName('release-branding-evidence', { platform, arch }))),
+  packageSmoke: await readOptionalJson(options['package-smoke'] ?? path.join(distDir, releaseEvidenceFileName('package-smoke', { platform, arch }))),
   publishApproval: options['publish-approval']
     ? await readOptionalJson(path.resolve(options['publish-approval']))
     : { exists: false, value: null }
@@ -154,15 +156,15 @@ function parseArgs(args: string[]): Record<string, string> {
   }))
 }
 
-function requireChoice(value: string | undefined, choices: readonly string[], flag: string): string {
+function requireChoice(value: string | undefined, choices: readonly ReleaseCheckStatus[], flag: string): ReleaseCheckStatus {
   if (!choices.includes(value ?? '')) {
     throw new Error(`${flag} must be one of: ${choices.join(', ')}`)
   }
-  return value as string
+  return value as ReleaseCheckStatus
 }
 
 function requireCheckStatus(value: string, flag: string): ReleaseCheckStatus {
-  return requireChoice(value, ['passed', 'failed', 'not_run', 'not_applicable'], flag) as ReleaseCheckStatus
+  return requireChoice(value, ['passed', 'failed', 'not_run', 'not_applicable'], flag)
 }
 
 function isSafeFileName(value: unknown): value is string {
