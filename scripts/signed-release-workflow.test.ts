@@ -80,7 +80,8 @@ assert.doesNotMatch(macosJob, /package:smoke[^\n]*(sandbox-install|dmg-install-s
 assert.match(runner, /--publish/)
 assert.match(runner, /never/)
 assert.match(runner, /DAM_RELEASE_SIGNING_APPROVED/)
-assert.match(runner, /SIGNING_ENV_KEYS/)
+assert.match(runner, /listElectronBuilderSigningEnvKeys/)
+assert.match(runner, /getElectronBuilderPlatformOptions/)
 assert.match(notarizeHook, /path\.basename\(appPath\)/)
 assert.doesNotMatch(notarizeHook, /console\.error\('Apple notarization failed:', error\)/)
 

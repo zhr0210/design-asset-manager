@@ -1,25 +1,16 @@
 import { spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
-const SIGNING_ENV_KEYS = [
-  'CSC_LINK',
-  'CSC_NAME',
-  'CSC_KEY_PASSWORD',
-  'WIN_CSC_LINK',
-  'WIN_CSC_NAME',
-  'WIN_CSC_KEY_PASSWORD',
-  'APPLE_ID',
-  'APPLE_APP_SPECIFIC_PASSWORD',
-  'APPLE_TEAM_ID',
-  'DAM_MAC_SIGNING_IDENTITY'
-]
+import {
+  getElectronBuilderPlatformOptions,
+  listElectronBuilderSigningEnvKeys,
+  parseElectronBuilderRunnerOptions
+} from './electron-builder-runner-options.mjs'
 
 const root = process.cwd()
 const options = parseArgs(process.argv.slice(2))
-const platform = requireChoice(options.platform, ['win', 'mac'], '--platform')
-const mode = requireChoice(options.mode, ['dir', 'dist'], '--mode')
-const signing = requireChoice(options.signing, ['disabled', 'required'], '--signing')
+const { platform, mode, signing } = parseElectronBuilderRunnerOptions(options)
+const platformOptions = getElectronBuilderPlatformOptions(platform)
 assertSafePassthrough(options.passthrough)
 const electronPackagePath = path.join(root, 'node_modules', 'electron', 'package.json')
 const electronDist = path.join(root, 'node_modules', 'electron', 'dist')
@@ -31,7 +22,7 @@ await assertFile(builderCli, 'electron-builder CLI')
 
 const builderArgs = [
   builderCli,
-  platform === 'win' ? '--win' : '--mac'
+  platformOptions.builderFlag
 ]
 if (options.target) builderArgs.push(options.target)
 if (mode === 'dir') builderArgs.push('--dir')
@@ -43,10 +34,10 @@ builderArgs.push(
 )
 if (signing === 'required') {
   assertSigningApproval(platform)
-  if (platform === 'mac') {
+  if (platformOptions.usesMacIdentity) {
     builderArgs.push(`--config.mac.identity=${process.env.DAM_MAC_SIGNING_IDENTITY}`)
   }
-} else if (platform === 'mac') {
+} else if (platformOptions.usesMacIdentity) {
   builderArgs.push('--config.mac.identity=null')
 }
 builderArgs.push(...options.passthrough)
@@ -104,13 +95,6 @@ function parseArgs(args) {
   return parsed
 }
 
-function requireChoice(value, choices, flag) {
-  if (!choices.includes(value)) {
-    throw new Error(`${flag} must be one of: ${choices.join(', ')}`)
-  }
-  return value
-}
-
 function createBuilderEnv() {
   const env = {
     ...process.env,
@@ -129,7 +113,7 @@ function createBuilderEnv() {
   }
   if (signing === 'disabled') {
     env.CSC_IDENTITY_AUTO_DISCOVERY = 'false'
-    for (const key of SIGNING_ENV_KEYS) delete env[key]
+    for (const key of listElectronBuilderSigningEnvKeys()) delete env[key]
   } else {
     delete env.CSC_IDENTITY_AUTO_DISCOVERY
   }
@@ -140,16 +124,7 @@ function assertSigningApproval(targetPlatform) {
   if (process.env.DAM_RELEASE_SIGNING_APPROVED !== 'true') {
     throw new Error('Signed packaging requires DAM_RELEASE_SIGNING_APPROVED=true.')
   }
-  const required = targetPlatform === 'win'
-    ? ['CSC_LINK', 'CSC_KEY_PASSWORD']
-    : [
-        'CSC_LINK',
-        'CSC_KEY_PASSWORD',
-        'APPLE_ID',
-        'APPLE_APP_SPECIFIC_PASSWORD',
-        'APPLE_TEAM_ID',
-        'DAM_MAC_SIGNING_IDENTITY'
-      ]
+  const required = getElectronBuilderPlatformOptions(targetPlatform).requiredSigningEnvKeys
   const missing = required.filter((key) => !process.env[key])
   if (missing.length > 0) {
     throw new Error(`Signed ${targetPlatform} packaging is missing required environment variables: ${missing.join(', ')}.`)

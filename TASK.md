@@ -28,20 +28,51 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Release Trust Evidence Check helper:
+Add a shared Electron Builder Runner Options helper:
 
-1. Keep trust evidence check ids and readiness bindings on one shared direct
-   workflow helper.
-2. Apply the helper to the trust verifier and readiness writer.
+1. Keep the Electron Builder runner's platform flags, mode/signing choices,
+   and platform signing environment requirements on one direct workflow helper.
+2. Apply the helper to `run-electron-builder.mjs`.
 3. Preserve existing CLI flags, default file names, output shapes, and public
-   workflow semantics.
-4. Add focused helper/verifier/writer tests and governance wiring.
+   `pack:*`/`dist:*` workflow semantics.
+4. Add focused helper/runner tests and governance wiring.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings reads
    or mutation, signing, notarization, workflow execution, and publishing out
    of scope.
 
 ## Current Slice Result
+
+- Added `electron-builder-runner-options.mjs`, a shared helper for the direct
+  Electron Builder runner's platform choices, build modes, signing modes,
+  builder flags, signing environment scrub list, and platform signing
+  requirements.
+- `run-electron-builder.mjs` now consumes the helper instead of inlining
+  Windows/macOS builder flags and signing environment requirements.
+- Existing `pack:win`, `pack:mac`, `dist:win`, `dist:mac`, dry-run output,
+  protected passthrough options, publishing-disabled behavior, signing
+  approval gate, and macOS identity behavior are preserved.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, signing, notarization, workflow execution, or publishing
+  behavior changed.
+- Added focused Electron Builder runner option coverage and wired it into
+  `.codeindex/tests-map.json` and `ci:governance`.
+- Updated Electron packaging audit and CI matrix docs with the shared runner
+  option boundary.
+- Focused Electron Builder runner option/runner/package-script/signed-release
+  workflow tests, typecheck, production build, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete `ci:governance`
+  suite pass. The first `ci:governance` attempt failed because an existing
+  signed-release workflow test still expected the old inline signing env
+  constant; the assertion was updated to the shared helper and the same command
+  then passed. Doctor CI still reports the expected AI Worker not-reachable
+  warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal packaging CLI governance only and has no renderer
+  surface.
+
+## Release Trust Evidence Check Result
 
 - Added `release-trust-evidence-checks.mjs`, a shared trust-evidence check id
   and readiness-binding registry for direct release workflow scripts.

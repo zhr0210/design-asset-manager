@@ -73,6 +73,9 @@ runtime is Node 24 while the tested application runtime remains Node 20.
 `pack:win`, `pack:mac`, `dist:win`, and `dist:mac` are packaging entry points for manual use. The governance workflow does not run them.
 They share `scripts/run-electron-builder.mjs`, which uses the Electron
 distribution installed by `npm ci` and derives its version at runtime.
+`npm run test-electron-builder-runner-options` keeps the runner's platform
+flags, mode/signing choices, and platform signing environment requirements in
+one shared helper without changing the public `pack:*` or `dist:*` commands.
 
 `.github/workflows/macos-package-artifact.yml` is a manual workflow for packaging unsigned macOS DMG artifacts on a GitHub-hosted macOS runner. It uploads the `.dmg` and `.blockmap` files as GitHub Actions artifact downloads and keeps release publishing, signing, and notarization disabled.
 
