@@ -33,6 +33,7 @@
     "npm run test-release-environment-manifest",
     "npm run test-release-signing-environment-status",
     "npm run test-release-signing-environment-template",
+    "npm run test-release-signed-candidate-dispatch-status",
     "npm run test-release-install-smoke-preflight",
     "npm run test-release-external-gate-plan",
     "npm run test-release-external-gate-status",

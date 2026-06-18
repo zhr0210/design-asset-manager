@@ -28,21 +28,48 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Release Signing Environment Evidence template:
+Add a shared Release Signed Candidate Dispatch Status verifier:
 
-1. Provide `build/release-signing-environment.example.json` as the safe
-   fill-in shape for sanitized GitHub signing environment evidence.
-2. Include required Windows/macOS environment names and signing secret names,
-   but no secret values.
-3. Keep `reviewersConfigured: false` by default so the example cannot pass as
-   ready evidence.
-4. Add focused template coverage, governance wiring, and release docs.
+1. Combine signed-candidate preflight, sanitized signing-environment status,
+   release branding evidence, ref gate, and `signing_approved` intent into
+   one path-free pre-dispatch status.
+2. Support Windows/macOS and x64/arm64 without executing GitHub workflows.
+3. Emit `release-signed-candidate-dispatch-status-<platform>-<arch>.json`
+   before reviewers trigger the real signed-candidate workflow.
+4. Add a CLI writer, focused tests, governance wiring, and release docs.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings reads
    or mutation, signing, notarization, workflow execution, and publishing out
    of scope.
 
 ## Current Slice Result
+
+- Added `release-signed-candidate-dispatch-status.ts`, a shared path-free
+  pre-dispatch verifier for signed candidate workflow readiness.
+- Added `write-release-signed-candidate-dispatch-status.mjs`, which combines
+  the target platform/architecture, ref gate, `signing_approved` intent,
+  sanitized signing-environment status, and generated branding evidence into
+  `release-signed-candidate-dispatch-status-<platform>-<arch>.json`.
+- The verifier is display-only. It reads generated JSON evidence only and
+  never reads secret values, signing assets, branding asset bytes, candidate
+  binaries, GitHub settings, user assets, model artifacts, runtime databases,
+  or local paths into output; it also does not mutate GitHub settings, execute
+  workflows, sign, notarize, publish, or expose IPC/UI.
+- Added focused dispatch status/writer coverage and wired it into
+  `.codeindex/tests-map.json` and `ci:governance`.
+- Updated release governance and CI matrix docs with the pre-dispatch
+  readiness step.
+- Focused dispatch/preflight/signing-environment/branding/release-flow tests,
+  typecheck, production build, 142 Python tests, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Full governance required loopback permission
+  for the Llama server probe. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes release evidence artifacts and CLI governance only and has no
+  renderer surface.
+
+## Release Signing Environment Evidence Template Result
 
 - Added `build/release-signing-environment.example.json`, a safe fill-in
   template for sanitized signing environment evidence.

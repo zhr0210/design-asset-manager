@@ -111,6 +111,16 @@ values. Its `reviewersConfigured: false` defaults intentionally keep the
 example below `ready` until a human records the actual reviewed environment
 state.
 
+`release-signed-candidate-dispatch-status.ts` combines the signed-candidate
+preflight shape, sanitized signing-environment status, release branding
+evidence, the ref gate, and the `signing_approved` input into one display-only
+dispatch readiness result. The companion
+`write-release-signed-candidate-dispatch-status.mjs` writes
+`release-signed-candidate-dispatch-status-<platform>-<arch>.json` before a
+manual signed-candidate workflow dispatch. It reads generated JSON evidence
+only; it does not query GitHub, read secret values, read signing assets, read
+icon bytes, execute workflows, or publish releases.
+
 `release-external-gate-status.ts` combines that plan with
 `release-readiness-summary.ts` to produce a display-only gate status for each
 platform and architecture. A gate is marked satisfied only when readiness
@@ -164,6 +174,7 @@ npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight
 npm run test-release-signing-environment-status
 npm run test-release-signing-environment-template
+npm run test-release-signed-candidate-dispatch-status
 npm run test-release-external-gate-plan
 npm run test-release-external-gate-status
 npm run test-release-external-gate-status-writer

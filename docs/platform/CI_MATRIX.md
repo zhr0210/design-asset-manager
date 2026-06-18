@@ -79,6 +79,12 @@ GitHub settings. `build/release-signing-environment.example.json` provides the
 safe starting shape and defaults to `reviewersConfigured: false`, so it cannot
 pass as ready evidence without an explicit human update.
 
+Reviewers can then run `write-release-signed-candidate-dispatch-status.mjs`
+for the selected platform and architecture. It combines the ref gate,
+`signing_approved` intent, sanitized signing environment status, and generated
+branding evidence into a path-free pre-dispatch result. It is still
+display-only and does not trigger the signed workflow.
+
 Release readiness can consume a structured `release-publish-approval.json`
 record for the final publish gate, but this remains evidence only. No current
 workflow publishes a release or requests write permissions.
