@@ -87,8 +87,9 @@ false`. The evidence verifier still owns the real container and SHA-256
 checks.
 
 `release-readiness-summary.ts` combines the shared release-promotion state
-machine with the signed-candidate and branding preflight shapes. It emits one
-path-free readiness summary for Windows and macOS with the stage,
+machine, data-backed distribution gate registry, and the signed-candidate and
+branding preflight shapes. It emits one path-free readiness summary for
+Windows and macOS with the stage,
 distribution/publish booleans, required evidence, approval gates, secret names,
 branding approval file, platform icon name, and structured blockers. It does
 not read secret values, icon bytes, candidate artifacts, or local paths.

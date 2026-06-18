@@ -1,5 +1,11 @@
 import assert from 'node:assert/strict'
-import { evaluateReleaseCandidate, type ReleaseCandidateChecks } from '../src/main/packaging/release-flow-governance'
+import fs from 'node:fs/promises'
+import {
+  evaluateReleaseCandidate,
+  listReleaseCandidateCommonGates,
+  listReleaseCandidateDistributionGates,
+  type ReleaseCandidateChecks
+} from '../src/main/packaging/release-flow-governance'
 
 const notRunChecks: ReleaseCandidateChecks = {
   build: 'not_run',
@@ -88,3 +94,38 @@ const publishMac = evaluateReleaseCandidate({
 assert.equal(publishMac.stage, 'publish_ready')
 assert.equal(publishMac.publishAllowed, true)
 assert.deepEqual(publishMac.missing, [])
+
+assert.deepEqual(
+  listReleaseCandidateCommonGates().map(([, code]) => code),
+  ['build', 'governance', 'artifact', 'checksum', 'package_smoke']
+)
+assert.deepEqual(
+  listReleaseCandidateDistributionGates('windows').map(([, code]) => code),
+  ['installer_smoke', 'signature', 'branding', 'update_metadata']
+)
+assert.deepEqual(
+  listReleaseCandidateDistributionGates('macos').map(([, code]) => code),
+  [
+    'installer_smoke',
+    'signature',
+    'hardened_runtime',
+    'nested_signatures',
+    'notarization',
+    'staple',
+    'gatekeeper',
+    'branding',
+    'update_metadata'
+  ]
+)
+
+const mutableGates = listReleaseCandidateDistributionGates('windows')
+mutableGates[0][1] = 'gatekeeper'
+assert.deepEqual(
+  listReleaseCandidateDistributionGates('windows').map(([, code]) => code),
+  ['installer_smoke', 'signature', 'branding', 'update_metadata']
+)
+
+const source = await fs.readFile('src/main/packaging/release-flow-governance.ts', 'utf8')
+assert.match(source, /DISTRIBUTION_GATES_BY_PLATFORM/)
+assert.match(source, /listReleaseCandidateDistributionGates\(input\.platform\)/)
+assert.doesNotMatch(source, /input\.platform === 'windows'|WINDOWS_DISTRIBUTION_GATES|MACOS_DISTRIBUTION_GATES/)

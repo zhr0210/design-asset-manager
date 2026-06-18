@@ -188,7 +188,9 @@ export interface ReleaseCandidateEvaluation {
   missing: ReleaseCandidateMissing[]
 }
 
-const COMMON_CANDIDATE_GATES: Array<[keyof ReleaseCandidateChecks, ReleaseGateId, string]> = [
+type ReleaseCandidateGate = [keyof ReleaseCandidateChecks, ReleaseGateId, string]
+
+const COMMON_CANDIDATE_GATES: ReleaseCandidateGate[] = [
   ['build', 'build', '生产构建'],
   ['governance', 'governance', '治理回归'],
   ['artifact', 'artifact', '发行制品'],
@@ -196,24 +198,25 @@ const COMMON_CANDIDATE_GATES: Array<[keyof ReleaseCandidateChecks, ReleaseGateId
   ['packageSmoke', 'package_smoke', 'Package Smoke']
 ]
 
-const WINDOWS_DISTRIBUTION_GATES: Array<[keyof ReleaseCandidateChecks, ReleaseGateId, string]> = [
-  ['installerSmoke', 'installer_smoke', 'Windows Sandbox 安装验证'],
-  ['signature', 'signature', 'Authenticode 签名'],
-  ['branding', 'branding', '正式应用图标'],
-  ['updateMetadata', 'update_metadata', '更新元数据']
-]
-
-const MACOS_DISTRIBUTION_GATES: Array<[keyof ReleaseCandidateChecks, ReleaseGateId, string]> = [
-  ['installerSmoke', 'installer_smoke', 'DMG 安装验证'],
-  ['signature', 'signature', 'Developer ID 签名'],
-  ['hardenedRuntime', 'hardened_runtime', 'Hardened Runtime'],
-  ['nestedSignatures', 'nested_signatures', '嵌套代码签名'],
-  ['notarization', 'notarization', 'Apple 公证'],
-  ['staple', 'staple', '公证票据装订'],
-  ['gatekeeper', 'gatekeeper', 'Gatekeeper 验证'],
-  ['branding', 'branding', '正式应用图标'],
-  ['updateMetadata', 'update_metadata', '更新元数据']
-]
+const DISTRIBUTION_GATES_BY_PLATFORM: Record<ReleasePlatform, ReleaseCandidateGate[]> = {
+  windows: [
+    ['installerSmoke', 'installer_smoke', 'Windows Sandbox 安装验证'],
+    ['signature', 'signature', 'Authenticode 签名'],
+    ['branding', 'branding', '正式应用图标'],
+    ['updateMetadata', 'update_metadata', '更新元数据']
+  ],
+  macos: [
+    ['installerSmoke', 'installer_smoke', 'DMG 安装验证'],
+    ['signature', 'signature', 'Developer ID 签名'],
+    ['hardenedRuntime', 'hardened_runtime', 'Hardened Runtime'],
+    ['nestedSignatures', 'nested_signatures', '嵌套代码签名'],
+    ['notarization', 'notarization', 'Apple 公证'],
+    ['staple', 'staple', '公证票据装订'],
+    ['gatekeeper', 'gatekeeper', 'Gatekeeper 验证'],
+    ['branding', 'branding', '正式应用图标'],
+    ['updateMetadata', 'update_metadata', '更新元数据']
+  ]
+}
 
 export function evaluateReleaseCandidate(input: ReleaseCandidateInput): ReleaseCandidateEvaluation {
   const commonMissing = collectMissing(input.checks, COMMON_CANDIDATE_GATES)
@@ -221,9 +224,7 @@ export function evaluateReleaseCandidate(input: ReleaseCandidateInput): ReleaseC
     return releaseEvaluation(input, 'blocked', commonMissing)
   }
 
-  const distributionGates = input.platform === 'windows'
-    ? WINDOWS_DISTRIBUTION_GATES
-    : MACOS_DISTRIBUTION_GATES
+  const distributionGates = listReleaseCandidateDistributionGates(input.platform)
   const distributionMissing = collectMissing(input.checks, distributionGates)
   if (distributionMissing.length > 0) {
     return releaseEvaluation(input, 'candidate_ready', distributionMissing)
@@ -240,9 +241,17 @@ export function evaluateReleaseCandidate(input: ReleaseCandidateInput): ReleaseC
   return releaseEvaluation(input, 'publish_ready', [])
 }
 
+export function listReleaseCandidateDistributionGates(platform: ReleasePlatform): ReleaseCandidateGate[] {
+  return cloneReleaseCandidateGates(DISTRIBUTION_GATES_BY_PLATFORM[platform])
+}
+
+export function listReleaseCandidateCommonGates(): ReleaseCandidateGate[] {
+  return cloneReleaseCandidateGates(COMMON_CANDIDATE_GATES)
+}
+
 function collectMissing(
   checks: ReleaseCandidateChecks,
-  gates: Array<[keyof ReleaseCandidateChecks, ReleaseGateId, string]>
+  gates: ReleaseCandidateGate[]
 ): ReleaseCandidateMissing[] {
   return gates
     .filter(([key]) => checks[key] !== 'passed')
@@ -251,6 +260,10 @@ function collectMissing(
       label,
       detail: `${label}未通过，当前状态为 ${checks[key]}。`
     }))
+}
+
+function cloneReleaseCandidateGates(gates: ReleaseCandidateGate[]): ReleaseCandidateGate[] {
+  return gates.map(([key, code, label]) => [key, code, label])
 }
 
 function releaseEvaluation(

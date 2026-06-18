@@ -28,21 +28,48 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Convert Release Install Smoke Preflight to a shared data registry:
+Convert Release Candidate Distribution Gates to a shared data registry:
 
-1. Keep Windows Sandbox and macOS DMG install smoke requirements in one
-   platform data registry.
-2. Preserve `createReleaseInstallSmokePreflight` output shape and downstream
-   release environment/readiness behavior.
-3. Add clone/list helpers so consumers cannot mutate shared definitions.
+1. Keep Windows and macOS distribution gate definitions in one platform data
+   registry.
+2. Preserve `evaluateReleaseCandidate` stages, blockers, and publish approval
+   behavior.
+3. Add list helpers for common and platform distribution gates with
+   clone-on-read behavior.
 4. Strengthen focused tests against reintroducing direct platform control flow.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings
-   reads/mutation, Package Smoke execution, Windows Sandbox execution, DMG
-   mounting, signing, notarization, workflow execution, and publishing out of
-   scope.
+   reads/mutation, Package Smoke execution, signing, notarization, workflow
+   execution, and publishing out of scope.
 
 ## Current Slice Result
+
+- Converted `release-flow-governance.ts` distribution gate selection from
+  direct `input.platform === 'windows'` control flow to a shared platform data
+  registry.
+- Added `listReleaseCandidateDistributionGates` and
+  `listReleaseCandidateCommonGates` clone-on-read helpers so tests and future
+  governance projectors can reuse gate definitions without mutating shared
+  state.
+- Existing Windows candidate, Windows distribution, macOS publish-ready,
+  blocker order, stage transitions, publish approval behavior, gate labels, and
+  output shapes are preserved.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, Package Smoke execution, signing, notarization, workflow
+  execution, or publishing behavior changed.
+- Updated the release governance doc with the data-backed distribution gate
+  boundary.
+- Focused release candidate governance/readiness summary/readiness writer/
+  external gate status tests, typecheck, production build, docs sync, agent
+  context, forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal release governance data only and has no renderer
+  surface.
+
+## Release Install Smoke Preflight Result
 
 - Converted `release-install-smoke-preflight.ts` from direct
   `platform === 'windows'` control flow to a shared platform data registry.
