@@ -1,18 +1,22 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import {
+  parseReleaseScriptTarget,
+  releaseScriptEvidenceFileName,
+  requireChoice
+} from './release-script-targets.mjs'
 
 const options = parseArgs(process.argv.slice(2))
-const platform = requireChoice(options.platform, ['windows', 'macos'], '--platform')
-const arch = requireChoice(options.arch, ['x64', 'arm64'], '--arch')
+const { platform, arch } = parseReleaseScriptTarget(options)
 const channel = requireChoice(options.channel ?? 'stable', ['stable'], '--channel')
 const packageManifest = JSON.parse(await fs.readFile('package.json', 'utf8'))
 const version = requireVersion(packageManifest.version)
 const productName = requireProductName(packageManifest.build?.productName ?? packageManifest.name)
 const checksumPath = path.resolve(
-  options.checksums ?? `dist-packages/release-checksums-${platform}-${arch}.json`
+  options.checksums ?? path.join('dist-packages', releaseScriptEvidenceFileName('release-checksums', { platform, arch }))
 )
 const outputPath = path.resolve(
-  options.output ?? `dist-packages/release-update-metadata-${platform}-${arch}.json`
+  options.output ?? path.join('dist-packages', releaseScriptEvidenceFileName('release-update-metadata', { platform, arch }))
 )
 const checksums = JSON.parse(await fs.readFile(checksumPath, 'utf8'))
 
@@ -63,13 +67,6 @@ function parseArgs(args) {
     if (!match) throw new Error(`Invalid argument: ${arg}`)
     return [match[1], match[2]]
   }))
-}
-
-function requireChoice(value, choices, flag) {
-  if (!choices.includes(value)) {
-    throw new Error(`${flag} must be one of: ${choices.join(', ')}`)
-  }
-  return value
 }
 
 function requireVersion(value) {

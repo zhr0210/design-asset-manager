@@ -59,6 +59,12 @@ derives the default evidence-bundle target set from the platform registry. It
 does not add public IPC, change CLI arguments, read artifacts, or execute
 release actions.
 
+`release-script-targets.mjs` applies the same target-selection boundary to the
+plain Node release scripts that are executed directly from workflows. It keeps
+checksum, update metadata, trust evidence, and branding evidence scripts on
+one target parser while preserving their existing CLI flags and evidence file
+names.
+
 `release-signed-candidate-preflight.ts` records the shared signed-candidate
 shape without reading secret values. It binds each platform to its GitHub
 Environment, explicit `signing_approved` input, main-or-version-tag ref gate,
@@ -185,6 +191,7 @@ npm run test-release-readiness-writer
 npm run test-release-publish-approval
 npm run test-release-platform-targets
 npm run test-release-target-selection
+npm run test-release-script-targets
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight

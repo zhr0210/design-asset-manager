@@ -2,16 +2,19 @@ import { spawn } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import {
+  parseReleaseScriptTarget,
+  releaseScriptEvidenceFileName
+} from './release-script-targets.mjs'
 
 const options = parseArgs(process.argv.slice(2))
-const platform = requireChoice(options.platform, ['windows', 'macos'], '--platform')
-const arch = requireChoice(options.arch, ['x64', 'arm64'], '--arch')
+const { platform, arch } = parseReleaseScriptTarget(options)
 const distDir = path.resolve(options['dist-dir'] ?? 'dist-packages')
 const metadataPath = path.resolve(
-  options.metadata ?? path.join(distDir, `release-update-metadata-${platform}-${arch}.json`)
+  options.metadata ?? path.join(distDir, releaseScriptEvidenceFileName('release-update-metadata', { platform, arch }))
 )
 const outputPath = path.resolve(
-  options.output ?? path.join(distDir, `release-trust-evidence-${platform}-${arch}.json`)
+  options.output ?? path.join(distDir, releaseScriptEvidenceFileName('release-trust-evidence', { platform, arch }))
 )
 const metadata = JSON.parse(await fs.readFile(metadataPath, 'utf8'))
 validateMetadata(metadata)
@@ -183,13 +186,6 @@ function parseArgs(args) {
     if (!match) throw new Error(`Invalid argument: ${arg}`)
     return [match[1], match[2]]
   }))
-}
-
-function requireChoice(value, choices, flag) {
-  if (!choices.includes(value)) {
-    throw new Error(`${flag} must be one of: ${choices.join(', ')}`)
-  }
-  return value
 }
 
 async function run(command, args, extraEnv = {}) {

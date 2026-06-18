@@ -28,6 +28,7 @@
     "npm run test-release-publish-approval",
     "npm run test-release-platform-targets",
     "npm run test-release-target-selection",
+    "npm run test-release-script-targets",
     "npm run test-release-branding-preflight",
     "npm run test-release-branding-approval-template",
     "npm run test-release-branding-evidence",

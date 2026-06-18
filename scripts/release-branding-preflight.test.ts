@@ -24,7 +24,7 @@ assert.match(verifier, /icon\.ico/)
 assert.match(verifier, /icon\.icns/)
 assert.match(verifier, /branding_approval/)
 assert.match(verifier, /approved_digest/)
-assert.match(verifier, /release-branding-evidence-\$\{platform\}-\$\{arch\}\.json/)
+assert.match(verifier, /releaseScriptEvidenceFileName\('release-branding-evidence'/)
 assert.doesNotMatch(verifier, /console\.log\(.*actualDigest|digest\(icns\)|digest\(ico\)/)
 
 const signedWorkflow = await fs.readFile('.github/workflows/release-signed-candidate.yml', 'utf8')

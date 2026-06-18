@@ -28,20 +28,49 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Release Target Selection helper:
+Add a shared Release Script Target helper:
 
-1. Keep release evidence writer platform/architecture parsing on the shared
-   release target registry.
-2. Derive default evidence-bundle requirements from the target registry.
+1. Keep direct workflow `.mjs` release scripts on one target parser.
+2. Apply the helper to checksum, update metadata, trust evidence, and branding
+   evidence scripts.
 3. Preserve existing CLI flags, default file names, output shapes, and public
    workflow semantics.
-4. Add focused helper/writer tests and governance wiring.
+4. Add focused helper/script tests and governance wiring.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings reads
    or mutation, signing, notarization, workflow execution, and publishing out
    of scope.
 
 ## Current Slice Result
+
+- Added `release-script-targets.mjs`, a shared target parser and evidence
+  file-name helper for plain Node release scripts executed directly by
+  workflows.
+- Checksum, update metadata, trust evidence, and branding evidence scripts now
+  consume the shared script helper instead of each hard-coding Windows/macOS
+  and x64/arm64 target choices.
+- Existing CLI flags, default output file names, output shapes, and workflow
+  semantics are preserved. Real platform differences such as Windows ICO vs
+  macOS ICNS validation remain inside the branding verifier.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, signing, notarization, workflow execution, or publishing
+  behavior changed.
+- Added focused release script target coverage and wired it into
+  `.codeindex/tests-map.json` and `ci:governance`.
+- Updated release governance and CI matrix docs with the shared script target
+  boundary.
+- Focused release script target/checksum/update metadata/trust evidence/
+  branding evidence tests, typecheck, production build, 142 Python tests, docs
+  sync, agent context, forbidden-path advisory check, diff check, and the
+  complete `ci:governance` suite pass. Full governance required loopback
+  permission for the Llama server probe. Doctor CI still reports the expected
+  AI Worker not-reachable warning because the worker is not started for this
+  slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal release CLI scripts only and has no renderer surface.
+
+## Release Target Selection Result
 
 - Added `release-target-selection.ts`, an internal release evidence writer
   helper for shared platform/architecture parsing, evidence file-name
