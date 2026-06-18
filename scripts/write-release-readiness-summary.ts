@@ -13,6 +13,10 @@ import {
   parseReleaseTargetSelection,
   releaseEvidenceFileName
 } from '../src/main/packaging/release-target-selection'
+import {
+  listReleaseTrustReadinessBindings,
+  RELEASE_TRUST_READINESS_CHECK_KEYS
+} from './release-trust-evidence-checks.mjs'
 
 interface EvidenceReport {
   exists: boolean
@@ -45,6 +49,7 @@ const reports = {
 
 const publishApproval = evaluateReleasePublishApproval(reports.publishApproval.value, platform, arch)
 const explicitPublishApproval = options['publish-approved'] === 'true' || publishApproval.approved
+const trustReadinessChecks = projectTrustReadinessChecks()
 
 const checksumsValid = isValidChecksums(reports.checksums.value)
 const checks: ReleaseCandidateChecks = {
@@ -55,22 +60,12 @@ const checks: ReleaseCandidateChecks = {
   packageSmoke: statusFromBoolean(hasNoFailedChecks(reports.packageSmoke.value), reports.packageSmoke.exists),
   branding: statusFromBoolean(hasNoFailedChecks(reports.brandingEvidence.value), reports.brandingEvidence.exists),
   installerSmoke: statusFromBoolean(hasInstallSmoke(reports.packageSmoke.value, platform), reports.packageSmoke.exists),
-  signature: statusFromBoolean(hasPassedCheck(reports.trustEvidence.value, 'signature'), reports.trustEvidence.exists),
-  hardenedRuntime: platform === 'macos'
-    ? statusFromBoolean(hasPassedCheck(reports.trustEvidence.value, 'hardened_runtime'), reports.trustEvidence.exists)
-    : 'not_applicable',
-  nestedSignatures: platform === 'macos'
-    ? statusFromBoolean(hasPassedCheck(reports.trustEvidence.value, 'nested_signatures'), reports.trustEvidence.exists)
-    : 'not_applicable',
-  notarization: platform === 'macos'
-    ? statusFromBoolean(hasPassedCheck(reports.trustEvidence.value, 'notarization'), reports.trustEvidence.exists)
-    : 'not_applicable',
-  staple: platform === 'macos'
-    ? statusFromBoolean(hasPassedCheck(reports.trustEvidence.value, 'staple'), reports.trustEvidence.exists)
-    : 'not_applicable',
-  gatekeeper: platform === 'macos'
-    ? statusFromBoolean(hasPassedCheck(reports.trustEvidence.value, 'gatekeeper'), reports.trustEvidence.exists)
-    : 'not_applicable',
+  signature: trustReadinessChecks.signature,
+  hardenedRuntime: trustReadinessChecks.hardenedRuntime,
+  nestedSignatures: trustReadinessChecks.nestedSignatures,
+  notarization: trustReadinessChecks.notarization,
+  staple: trustReadinessChecks.staple,
+  gatekeeper: trustReadinessChecks.gatekeeper,
   updateMetadata: statusFromBoolean(isValidUpdateMetadata(reports.updateMetadata.value), reports.updateMetadata.exists)
 }
 
@@ -136,6 +131,27 @@ function hasInstallSmoke(value: unknown, targetPlatform: ReleasePlatform): boole
 
 function hasPassedCheck(value: unknown, id: string): boolean {
   return extractChecks(value).some((check) => check.id === id && check.status === 'passed')
+}
+
+function projectTrustReadinessChecks(): Pick<
+ReleaseCandidateChecks,
+'signature' | 'hardenedRuntime' | 'nestedSignatures' | 'notarization' | 'staple' | 'gatekeeper'
+> {
+  const checks = Object.fromEntries(
+    RELEASE_TRUST_READINESS_CHECK_KEYS.map((key: string) => [key, 'not_applicable'])
+  ) as Pick<
+    ReleaseCandidateChecks,
+    'signature' | 'hardenedRuntime' | 'nestedSignatures' | 'notarization' | 'staple' | 'gatekeeper'
+  >
+
+  for (const binding of listReleaseTrustReadinessBindings(platform)) {
+    checks[binding.checkKey as keyof typeof checks] = statusFromBoolean(
+      hasPassedCheck(reports.trustEvidence.value, binding.evidenceCheckId),
+      reports.trustEvidence.exists
+    )
+  }
+
+  return checks
 }
 
 function extractChecks(value: unknown): JsonCheck[] {

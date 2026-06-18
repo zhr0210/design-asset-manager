@@ -45,6 +45,11 @@ changing existing CLI flags or triggering release actions.
 workflow `.mjs` scripts for checksums, update metadata, trust evidence, and
 branding evidence.
 
+`npm run test-release-trust-evidence-checks` keeps release trust evidence
+check ids and readiness bindings shared between the trust verifier and
+readiness writer while leaving Windows Authenticode and macOS notarization/
+Gatekeeper differences as explicit platform data.
+
 `npm run doctor:ci` runs the doctor in JSON mode and fails only when at least one check reports `error`. A warning-only doctor report is acceptable in CI because Python, the default AI Worker health endpoint, or permission probes may be unavailable in a hosted runner.
 
 `npm run ci:hygiene` checks that CI did not leave denied artifacts in the project root and that workflow commands stay validation-only.

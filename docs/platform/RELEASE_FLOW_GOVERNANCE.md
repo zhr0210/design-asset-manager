@@ -65,6 +65,12 @@ checksum, update metadata, trust evidence, and branding evidence scripts on
 one target parser while preserving their existing CLI flags and evidence file
 names.
 
+`release-trust-evidence-checks.mjs` is the shared trust-evidence check
+registry for direct release scripts. The trust verifier and readiness writer
+consume the same check ids and readiness bindings, so Windows Authenticode and
+macOS Developer ID, Hardened Runtime, notarization, staple, and Gatekeeper
+requirements remain explicit platform data instead of duplicated control flow.
+
 `release-signed-candidate-preflight.ts` records the shared signed-candidate
 shape without reading secret values. It binds each platform to its GitHub
 Environment, explicit `signing_approved` input, main-or-version-tag ref gate,
@@ -192,6 +198,7 @@ npm run test-release-publish-approval
 npm run test-release-platform-targets
 npm run test-release-target-selection
 npm run test-release-script-targets
+npm run test-release-trust-evidence-checks
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight

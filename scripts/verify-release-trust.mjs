@@ -6,6 +6,7 @@ import {
   parseReleaseScriptTarget,
   releaseScriptEvidenceFileName
 } from './release-script-targets.mjs'
+import { RELEASE_TRUST_CHECK_IDS } from './release-trust-evidence-checks.mjs'
 
 const options = parseArgs(process.argv.slice(2))
 const { platform, arch } = parseReleaseScriptTarget(options)
@@ -21,8 +22,8 @@ validateMetadata(metadata)
 const artifactPath = path.join(distDir, metadata.artifact.fileName)
 const blockmapPath = path.join(distDir, metadata.artifact.blockmap.fileName)
 const artifactChecks = [
-  await verifyBoundFile('artifact_checksum', artifactPath, metadata.artifact),
-  await verifyBoundFile('blockmap_checksum', blockmapPath, metadata.artifact.blockmap)
+  await verifyBoundFile(RELEASE_TRUST_CHECK_IDS.artifactChecksum, artifactPath, metadata.artifact),
+  await verifyBoundFile(RELEASE_TRUST_CHECK_IDS.blockmapChecksum, blockmapPath, metadata.artifact.blockmap)
 ]
 const platformChecks = artifactChecks.every((check) => check.status === 'passed')
   ? (platform === 'windows'
@@ -52,15 +53,15 @@ async function verifyWindows(target) {
     DAM_RELEASE_ARTIFACT: target
   })
   if (result.code !== 0) {
-    return [failed('signature', 'Authenticode verification command failed.')]
+    return [failed(RELEASE_TRUST_CHECK_IDS.signature, 'Authenticode verification command failed.')]
   }
   try {
     const signature = JSON.parse(result.stdout.trim())
     return [signature.status === 'Valid'
-      ? passed('signature', 'Authenticode signature is valid.')
-      : failed('signature', `Authenticode signature status is ${String(signature.status || 'Unknown')}.`)]
+      ? passed(RELEASE_TRUST_CHECK_IDS.signature, 'Authenticode signature is valid.')
+      : failed(RELEASE_TRUST_CHECK_IDS.signature, `Authenticode signature status is ${String(signature.status || 'Unknown')}.`)]
   } catch {
-    return [failed('signature', 'Authenticode verification returned invalid structured output.')]
+    return [failed(RELEASE_TRUST_CHECK_IDS.signature, 'Authenticode verification returned invalid structured output.')]
   }
 }
 
@@ -69,11 +70,11 @@ async function verifyMacos(target) {
   const checks = []
   const strict = await run('codesign', ['--verify', '--deep', '--strict', '--verbose=2', appPath])
   checks.push(strict.code === 0
-    ? passed('signature', 'Developer ID signature verification passed.')
-    : failed('signature', 'Developer ID signature verification failed.'))
+    ? passed(RELEASE_TRUST_CHECK_IDS.signature, 'Developer ID signature verification passed.')
+    : failed(RELEASE_TRUST_CHECK_IDS.signature, 'Developer ID signature verification failed.'))
   checks.push(strict.code === 0
-    ? passed('nested_signatures', 'Nested signature verification passed.')
-    : failed('nested_signatures', 'Nested signature verification failed.'))
+    ? passed(RELEASE_TRUST_CHECK_IDS.nestedSignatures, 'Nested signature verification passed.')
+    : failed(RELEASE_TRUST_CHECK_IDS.nestedSignatures, 'Nested signature verification failed.'))
 
   const details = await run('codesign', ['--display', '--verbose=4', appPath])
   const signingDetails = `${details.stdout}\n${details.stderr}`
@@ -81,16 +82,16 @@ async function verifyMacos(target) {
     && /flags=.*\bruntime\b/i.test(signingDetails)
     && /TeamIdentifier=(?!not set)(?!$).+/im.test(signingDetails)
   checks.push(hardened
-    ? passed('hardened_runtime', 'Hardened Runtime and Team ID evidence are present.')
-    : failed('hardened_runtime', 'Hardened Runtime or Team ID evidence is missing.'))
+    ? passed(RELEASE_TRUST_CHECK_IDS.hardenedRuntime, 'Hardened Runtime and Team ID evidence are present.')
+    : failed(RELEASE_TRUST_CHECK_IDS.hardenedRuntime, 'Hardened Runtime or Team ID evidence is missing.'))
 
   const staple = await run('xcrun', ['stapler', 'validate', appPath])
   checks.push(staple.code === 0
-    ? passed('notarization', 'A valid notarization ticket is attached.')
-    : failed('notarization', 'Notarization ticket validation failed.'))
+    ? passed(RELEASE_TRUST_CHECK_IDS.notarization, 'A valid notarization ticket is attached.')
+    : failed(RELEASE_TRUST_CHECK_IDS.notarization, 'Notarization ticket validation failed.'))
   checks.push(staple.code === 0
-    ? passed('staple', 'Stapled ticket validation passed.')
-    : failed('staple', 'Stapled ticket validation failed.'))
+    ? passed(RELEASE_TRUST_CHECK_IDS.staple, 'Stapled ticket validation passed.')
+    : failed(RELEASE_TRUST_CHECK_IDS.staple, 'Stapled ticket validation failed.'))
 
   const gatekeeper = await run('spctl', [
     '--assess',
@@ -100,13 +101,13 @@ async function verifyMacos(target) {
     appPath
   ])
   checks.push(gatekeeper.code === 0
-    ? passed('gatekeeper', 'Gatekeeper assessment passed.')
-    : failed('gatekeeper', 'Gatekeeper assessment failed.'))
+    ? passed(RELEASE_TRUST_CHECK_IDS.gatekeeper, 'Gatekeeper assessment passed.')
+    : failed(RELEASE_TRUST_CHECK_IDS.gatekeeper, 'Gatekeeper assessment failed.'))
 
   const dmg = await run('hdiutil', ['verify', target])
   checks.push(dmg.code === 0
-    ? passed('dmg_integrity', 'DMG integrity verification passed.')
-    : failed('dmg_integrity', 'DMG integrity verification failed.'))
+    ? passed(RELEASE_TRUST_CHECK_IDS.dmgIntegrity, 'DMG integrity verification passed.')
+    : failed(RELEASE_TRUST_CHECK_IDS.dmgIntegrity, 'DMG integrity verification failed.'))
   return checks
 }
 

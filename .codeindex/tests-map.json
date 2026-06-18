@@ -22,6 +22,7 @@
     "npm run test-release-candidate-governance",
     "npm run test-release-checksums",
     "npm run test-release-update-metadata",
+    "npm run test-release-trust-evidence-checks",
     "npm run test-release-trust-evidence",
     "npm run test-release-readiness-summary",
     "npm run test-release-readiness-writer",

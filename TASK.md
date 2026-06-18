@@ -28,20 +28,50 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Release Script Target helper:
+Add a shared Release Trust Evidence Check helper:
 
-1. Keep direct workflow `.mjs` release scripts on one target parser.
-2. Apply the helper to checksum, update metadata, trust evidence, and branding
-   evidence scripts.
+1. Keep trust evidence check ids and readiness bindings on one shared direct
+   workflow helper.
+2. Apply the helper to the trust verifier and readiness writer.
 3. Preserve existing CLI flags, default file names, output shapes, and public
    workflow semantics.
-4. Add focused helper/script tests and governance wiring.
+4. Add focused helper/verifier/writer tests and governance wiring.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings reads
    or mutation, signing, notarization, workflow execution, and publishing out
    of scope.
 
 ## Current Slice Result
+
+- Added `release-trust-evidence-checks.mjs`, a shared trust-evidence check id
+  and readiness-binding registry for direct release workflow scripts.
+- The trust verifier and readiness writer now consume the same trust check ids
+  and platform readiness bindings. Windows Authenticode and macOS Developer ID,
+  Hardened Runtime, notarization, staple, Gatekeeper, and DMG integrity remain
+  explicit platform data, but the mapping is no longer duplicated in multiple
+  scripts.
+- Existing CLI flags, default output file names, output shapes, and workflow
+  semantics are preserved.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, signing, notarization, workflow execution, or publishing
+  behavior changed.
+- Added focused release trust evidence check coverage and wired it into
+  `.codeindex/tests-map.json` and `ci:governance`.
+- Updated release governance and CI matrix docs with the shared trust evidence
+  check boundary.
+- Focused release trust evidence check/trust verifier/readiness writer tests,
+  typecheck, production build, docs sync, agent context, forbidden-path
+  advisory check, diff check, and the complete `ci:governance` suite pass. The
+  first sandboxed `ci:governance` attempt failed because the Llama server probe
+  could not listen on `127.0.0.1`; the same command passed after loopback
+  permission was granted. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal release CLI governance only and has no renderer
+  surface.
+
+## Release Script Target Result
 
 - Added `release-script-targets.mjs`, a shared target parser and evidence
   file-name helper for plain Node release scripts executed directly by
