@@ -1,4 +1,14 @@
-import type { ReleasePackagingArch, ReleasePlatform } from './release-flow-governance'
+import {
+  getReleasePlatformTarget,
+  listReleasePlatformTargets,
+  type ReleaseBrandingIconFileName,
+  type ReleasePackagingArch,
+  type ReleasePlatform,
+  type ReleaseRunnerLabel,
+  type ReleaseSignedCandidateArtifactNamePattern,
+  type ReleaseSignedCandidateEnvironment,
+  type ReleaseSignedCandidateJobName
+} from './release-flow-governance'
 import { createReleaseBrandingPreflight } from './release-branding-preflight'
 import {
   createReleaseInstallSmokePreflight,
@@ -7,7 +17,6 @@ import {
 } from './release-install-smoke-preflight'
 import {
   createReleaseSignedCandidatePreflight,
-  type ReleaseSignedCandidateEnvironment,
   type ReleaseSignedCandidateEvidence
 } from './release-signed-candidate-preflight'
 
@@ -19,8 +28,8 @@ export interface ReleaseEnvironmentManifestEntry {
   platform: ReleasePlatform
   environment: ReleaseSignedCandidateEnvironment
   workflowFileName: 'release-signed-candidate.yml'
-  jobName: 'windows-signed-candidate' | 'macos-signed-candidate'
-  runnerLabel: 'windows-2022' | 'macos-latest'
+  jobName: ReleaseSignedCandidateJobName
+  runnerLabel: ReleaseRunnerLabel
   supportedArches: ReleasePackagingArch[]
   refGate: 'main-or-version-tag'
   approvalGates: ReleaseEnvironmentApproval[]
@@ -32,10 +41,8 @@ export interface ReleaseEnvironmentManifestEntry {
   distributionSmokeEvidenceSource: 'package-smoke'
   distributionSmokeCheckIds: ReleaseInstallSmokeCheckId[]
   brandingApprovalFile: 'release-branding.json'
-  brandingIconFileName: 'icon.ico' | 'icon.icns'
-  artifactNamePattern:
-    | 'design-asset-manager-windows-${arch}-signed-candidate'
-    | 'design-asset-manager-macos-${arch}-signed-candidate'
+  brandingIconFileName: ReleaseBrandingIconFileName
+  artifactNamePattern: ReleaseSignedCandidateArtifactNamePattern
   publishEnabled: false
   repositoryPermissions: 'contents:read'
 }
@@ -51,8 +58,6 @@ export interface ReleaseEnvironmentManifest {
   environments: ReleaseEnvironmentManifestEntry[]
 }
 
-const SUPPORTED_ARCHES: ReleasePackagingArch[] = ['x64', 'arm64']
-
 export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
   const brandingPreflight = createReleaseBrandingPreflight()
 
@@ -64,7 +69,8 @@ export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
     readsSigningAssets: false,
     readsBrandingAssetBytes: false,
     emitsLocalPaths: false,
-    environments: (['windows', 'macos'] as const).map((platform) => {
+    environments: listReleasePlatformTargets().map(({ platform }) => {
+      const target = getReleasePlatformTarget(platform)
       const signedPreflight = createReleaseSignedCandidatePreflight(platform, 'x64')
       const brandingRequirement = brandingPreflight.platforms.find(
         (item) => item.platform === platform
@@ -79,9 +85,9 @@ export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
         platform,
         environment: signedPreflight.environment,
         workflowFileName: 'release-signed-candidate.yml',
-        jobName: platform === 'windows' ? 'windows-signed-candidate' : 'macos-signed-candidate',
-        runnerLabel: platform === 'windows' ? 'windows-2022' : 'macos-latest',
-        supportedArches: [...SUPPORTED_ARCHES],
+        jobName: target.signedCandidateJobName,
+        runnerLabel: target.runnerLabel,
+        supportedArches: [...target.supportedArches],
         refGate: signedPreflight.refGate,
         approvalGates: [
           'github_environment_review',
@@ -96,9 +102,7 @@ export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
         distributionSmokeCheckIds: [...installSmokePreflight.requiredCheckIds],
         brandingApprovalFile: brandingPreflight.approvalFileName,
         brandingIconFileName: brandingRequirement.iconFileName,
-        artifactNamePattern: platform === 'windows'
-          ? 'design-asset-manager-windows-${arch}-signed-candidate'
-          : 'design-asset-manager-macos-${arch}-signed-candidate',
+        artifactNamePattern: target.signedCandidateArtifactNamePattern,
         publishEnabled: false,
         repositoryPermissions: 'contents:read'
       }

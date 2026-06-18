@@ -45,6 +45,13 @@ The two icons must also match the SHA-256 values in the shared
 ICNS containers and emits only path-free approval/check results; it does not
 emit icon digests or local paths.
 
+`release-flow-governance.ts` owns the shared release platform target registry.
+Windows and macOS still differ in runner label, packaging target, signing
+environment, signed-candidate job, signing secret names, and branding icon
+container, but release preflight, environment manifest, branding preflight,
+and dispatch status all consume the same target definitions instead of
+re-encoding platform branches.
+
 `release-signed-candidate-preflight.ts` records the shared signed-candidate
 shape without reading secret values. It binds each platform to its GitHub
 Environment, explicit `signing_approved` input, main-or-version-tag ref gate,
@@ -169,6 +176,7 @@ and removes the temporary root.
 npm run test-release-readiness-summary
 npm run test-release-readiness-writer
 npm run test-release-publish-approval
+npm run test-release-platform-targets
 npm run test-release-flow-governance
 npm run test-release-signed-candidate-preflight
 npm run test-release-branding-preflight

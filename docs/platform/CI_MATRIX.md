@@ -32,6 +32,11 @@ These variables document CI intent and give future runtime/downloader code stabl
 
 `npm run ci:test-runtime-safety` runs bootstrap, runtime profile/package, and mock/safe AI runtime checks.
 
+`npm run test-release-platform-targets` keeps release platform differences in
+one target registry so CI, signed-candidate preflight, environment manifests,
+branding evidence, and dispatch status do not drift into separate Windows and
+macOS branches.
+
 `npm run doctor:ci` runs the doctor in JSON mode and fails only when at least one check reports `error`. A warning-only doctor report is acceptable in CI because Python, the default AI Worker health endpoint, or permission probes may be unavailable in a hosted runner.
 
 `npm run ci:hygiene` checks that CI did not leave denied artifacts in the project root and that workflow commands stay validation-only.

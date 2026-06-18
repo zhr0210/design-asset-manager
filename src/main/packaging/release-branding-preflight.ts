@@ -1,4 +1,6 @@
-export type ReleaseBrandingPlatform = 'windows' | 'macos'
+import { listReleasePlatformTargets, type ReleasePlatform } from './release-flow-governance'
+
+export type ReleaseBrandingPlatform = ReleasePlatform
 
 export type ReleaseBrandingEvidenceCheck =
   | 'branding_approval'
@@ -38,18 +40,12 @@ export function createReleaseBrandingPreflight(): ReleaseBrandingPreflight {
       'icons.macos.sha256'
     ],
     platforms: [
-      {
-        platform: 'windows',
-        iconFileName: 'icon.ico',
-        iconFormat: 'ico',
-        outputEvidencePrefix: 'release-branding-evidence'
-      },
-      {
-        platform: 'macos',
-        iconFileName: 'icon.icns',
-        iconFormat: 'icns',
-        outputEvidencePrefix: 'release-branding-evidence'
-      }
+      ...listReleasePlatformTargets().map((target) => ({
+        platform: target.platform,
+        iconFileName: target.brandingIconFileName,
+        iconFormat: target.brandingIconFileName === 'icon.ico' ? 'ico' as const : 'icns' as const,
+        outputEvidencePrefix: 'release-branding-evidence' as const
+      }))
     ],
     requiredChecks: [
       'branding_approval',

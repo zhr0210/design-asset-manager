@@ -1,11 +1,86 @@
 export type ReleasePackagingTarget = 'windows-nsis' | 'macos-dmg'
 export type ReleasePackagingArch = 'x64' | 'arm64'
+export type ReleasePlatform = 'windows' | 'macos'
+export type ReleaseRunnerLabel = 'windows-2022' | 'macos-latest'
+export type ReleaseDistCommand = 'npm run dist:win' | 'npm run dist:mac'
+export type ReleaseSignedCandidateEnvironment = 'release-signing-windows' | 'release-signing-macos'
+export type ReleaseSignedCandidateJobName = 'windows-signed-candidate' | 'macos-signed-candidate'
+export type ReleaseBrandingIconFileName = 'icon.ico' | 'icon.icns'
+export type ReleaseBrandingEvidenceIconCheckId = 'windows_icon' | 'macos_icon'
+export type ReleaseSignedCandidateArtifactNamePattern =
+  | 'design-asset-manager-windows-${arch}-signed-candidate'
+  | 'design-asset-manager-macos-${arch}-signed-candidate'
 
 export interface ReleasePackagingMatrixEntry {
   target: ReleasePackagingTarget
-  os: 'windows-2022' | 'macos-latest'
+  os: ReleaseRunnerLabel
   arch: ReleasePackagingArch
-  command: 'npm run dist:win' | 'npm run dist:mac'
+  command: ReleaseDistCommand
+}
+
+export interface ReleasePlatformTargetDefinition {
+  platform: ReleasePlatform
+  packagingTarget: ReleasePackagingTarget
+  runnerLabel: ReleaseRunnerLabel
+  distCommand: ReleaseDistCommand
+  supportedArches: readonly ReleasePackagingArch[]
+  signedCandidateEnvironment: ReleaseSignedCandidateEnvironment
+  signedCandidateJobName: ReleaseSignedCandidateJobName
+  signedCandidateArtifactNamePattern: ReleaseSignedCandidateArtifactNamePattern
+  requiredSecretNames: readonly string[]
+  brandingIconFileName: ReleaseBrandingIconFileName
+  brandingEvidenceIconCheckId: ReleaseBrandingEvidenceIconCheckId
+}
+
+export const RELEASE_PACKAGING_ARCHES: readonly ReleasePackagingArch[] = ['x64', 'arm64']
+
+export const RELEASE_PLATFORM_TARGETS: readonly ReleasePlatformTargetDefinition[] = [
+  {
+    platform: 'windows',
+    packagingTarget: 'windows-nsis',
+    runnerLabel: 'windows-2022',
+    distCommand: 'npm run dist:win',
+    supportedArches: RELEASE_PACKAGING_ARCHES,
+    signedCandidateEnvironment: 'release-signing-windows',
+    signedCandidateJobName: 'windows-signed-candidate',
+    signedCandidateArtifactNamePattern: 'design-asset-manager-windows-${arch}-signed-candidate',
+    requiredSecretNames: ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD'],
+    brandingIconFileName: 'icon.ico',
+    brandingEvidenceIconCheckId: 'windows_icon'
+  },
+  {
+    platform: 'macos',
+    packagingTarget: 'macos-dmg',
+    runnerLabel: 'macos-latest',
+    distCommand: 'npm run dist:mac',
+    supportedArches: RELEASE_PACKAGING_ARCHES,
+    signedCandidateEnvironment: 'release-signing-macos',
+    signedCandidateJobName: 'macos-signed-candidate',
+    signedCandidateArtifactNamePattern: 'design-asset-manager-macos-${arch}-signed-candidate',
+    requiredSecretNames: [
+      'MACOS_CSC_LINK',
+      'MACOS_CSC_KEY_PASSWORD',
+      'APPLE_ID',
+      'APPLE_APP_SPECIFIC_PASSWORD',
+      'APPLE_TEAM_ID'
+    ],
+    brandingIconFileName: 'icon.icns',
+    brandingEvidenceIconCheckId: 'macos_icon'
+  }
+]
+
+export function listReleasePlatformTargets(): ReleasePlatformTargetDefinition[] {
+  return RELEASE_PLATFORM_TARGETS.map((target) => ({
+    ...target,
+    supportedArches: [...target.supportedArches],
+    requiredSecretNames: [...target.requiredSecretNames]
+  }))
+}
+
+export function getReleasePlatformTarget(platform: ReleasePlatform): ReleasePlatformTargetDefinition {
+  const target = RELEASE_PLATFORM_TARGETS.find((item) => item.platform === platform)
+  if (!target) throw new Error(`Unsupported release platform: ${platform}`)
+  return target
 }
 
 export interface ReleaseFlowGovernancePlan {
@@ -28,12 +103,14 @@ export interface ReleaseFlowGovernancePlan {
 export function createReleaseFlowGovernancePlan(): ReleaseFlowGovernancePlan {
   return {
     phase: '15C',
-    matrix: [
-      { target: 'windows-nsis', os: 'windows-2022', arch: 'x64', command: 'npm run dist:win' },
-      { target: 'windows-nsis', os: 'windows-2022', arch: 'arm64', command: 'npm run dist:win' },
-      { target: 'macos-dmg', os: 'macos-latest', arch: 'x64', command: 'npm run dist:mac' },
-      { target: 'macos-dmg', os: 'macos-latest', arch: 'arm64', command: 'npm run dist:mac' }
-    ],
+    matrix: RELEASE_PLATFORM_TARGETS.flatMap((target) =>
+      target.supportedArches.map((arch) => ({
+        target: target.packagingTarget,
+        os: target.runnerLabel,
+        arch,
+        command: target.distCommand
+      }))
+    ),
     promotionInvariant: true,
     unsignedCandidateArtifacts: true,
     signedCandidateWorkflow: true,
@@ -49,7 +126,6 @@ export function createReleaseFlowGovernancePlan(): ReleaseFlowGovernancePlan {
   }
 }
 
-export type ReleasePlatform = 'windows' | 'macos'
 export type ReleaseCheckStatus = 'passed' | 'failed' | 'not_run' | 'not_applicable'
 export type ReleaseCandidateStage = 'blocked' | 'candidate_ready' | 'distribution_ready' | 'publish_ready'
 

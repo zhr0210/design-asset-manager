@@ -28,21 +28,46 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Add a shared Release Signed Candidate Dispatch Status verifier:
+Add a shared Release Platform Target Registry:
 
-1. Combine signed-candidate preflight, sanitized signing-environment status,
-   release branding evidence, ref gate, and `signing_approved` intent into
-   one path-free pre-dispatch status.
-2. Support Windows/macOS and x64/arm64 without executing GitHub workflows.
-3. Emit `release-signed-candidate-dispatch-status-<platform>-<arch>.json`
-   before reviewers trigger the real signed-candidate workflow.
-4. Add a CLI writer, focused tests, governance wiring, and release docs.
+1. Keep Windows/macOS release differences in one internal target registry.
+2. Derive packaging matrix, signed-candidate preflight, environment manifest,
+   branding preflight, and dispatch status from the same target definitions.
+3. Preserve existing output shapes and public workflow semantics.
+4. Add focused registry tests and governance wiring.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings reads
    or mutation, signing, notarization, workflow execution, and publishing out
    of scope.
 
 ## Current Slice Result
+
+- Added a shared release platform target registry in
+  `release-flow-governance.ts`.
+- The packaging matrix, signed-candidate preflight, release environment
+  manifest, release branding preflight, and dispatch status now derive
+  platform-specific runner labels, workflow job names, signing environment
+  names, secret-name lists, supported architectures, artifact name patterns,
+  and branding icon metadata from the same target definitions.
+- Existing output shapes and workflow semantics are preserved. No runtime
+  behavior, IPC, preload, renderer caller, UI, model download, user asset,
+  candidate binary read, release secret read, GitHub settings read/mutation,
+  signing, notarization, workflow execution, or publishing behavior changed.
+- Added focused release platform target coverage and wired it into
+  `.codeindex/tests-map.json` and `ci:governance`.
+- Updated release governance and CI matrix docs with the shared target
+  registry boundary.
+- Focused release platform target/preflight/manifest/branding/dispatch tests,
+  typecheck, production build, 142 Python tests, docs sync, agent context,
+  forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Full governance required loopback permission
+  for the Llama server probe. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal release governance projections only and has no
+  renderer surface.
+
+## Release Signed Candidate Dispatch Status Result
 
 - Added `release-signed-candidate-dispatch-status.ts`, a shared path-free
   pre-dispatch verifier for signed candidate workflow readiness.

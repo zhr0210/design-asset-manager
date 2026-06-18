@@ -1,6 +1,11 @@
-import type { ReleasePackagingArch, ReleasePlatform } from './release-flow-governance'
+import {
+  getReleasePlatformTarget,
+  type ReleasePackagingArch,
+  type ReleasePlatform,
+  type ReleaseSignedCandidateEnvironment
+} from './release-flow-governance'
 
-export type ReleaseSignedCandidateEnvironment = 'release-signing-windows' | 'release-signing-macos'
+export type { ReleaseSignedCandidateEnvironment } from './release-flow-governance'
 
 export type ReleaseSignedCandidateEvidence =
   | 'release-checksums'
@@ -27,21 +32,15 @@ export function createReleaseSignedCandidatePreflight(
   platform: ReleasePlatform,
   arch: ReleasePackagingArch
 ): ReleaseSignedCandidatePreflight {
+  const target = getReleasePlatformTarget(platform)
+
   return {
     platform,
     arch,
     refGate: 'main-or-version-tag',
     signingApprovalInput: 'signing_approved',
-    environment: platform === 'windows' ? 'release-signing-windows' : 'release-signing-macos',
-    requiredSecretNames: platform === 'windows'
-      ? ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD']
-      : [
-          'MACOS_CSC_LINK',
-          'MACOS_CSC_KEY_PASSWORD',
-          'APPLE_ID',
-          'APPLE_APP_SPECIFIC_PASSWORD',
-          'APPLE_TEAM_ID'
-        ],
+    environment: target.signedCandidateEnvironment,
+    requiredSecretNames: [...target.requiredSecretNames],
     requiredEvidence: [
       'release-checksums',
       'release-update-metadata',

@@ -1,7 +1,9 @@
 import type {
   ReleasePackagingArch,
-  ReleasePlatform
+  ReleasePlatform,
+  ReleaseSignedCandidateJobName
 } from './release-flow-governance'
+import { getReleasePlatformTarget } from './release-flow-governance'
 import { createReleaseSignedCandidatePreflight } from './release-signed-candidate-preflight'
 import type { ReleaseSigningEnvironmentStatus } from './release-signing-environment-status'
 
@@ -50,7 +52,7 @@ export interface ReleaseSignedCandidateDispatchStatus {
   signingApproved: boolean
   environment: string
   workflowFileName: 'release-signed-candidate.yml'
-  jobName: 'windows-signed-candidate' | 'macos-signed-candidate'
+  jobName: ReleaseSignedCandidateJobName
   requiredEvidence: string[]
   dispatchReady: boolean
   missing: ReleaseSignedCandidateDispatchMissing[]
@@ -67,6 +69,7 @@ export function createReleaseSignedCandidateDispatchStatus(
   input: ReleaseSignedCandidateDispatchInput
 ): ReleaseSignedCandidateDispatchStatus {
   const preflight = createReleaseSignedCandidatePreflight(input.platform, input.arch)
+  const target = getReleasePlatformTarget(input.platform)
   const missing = [
     ...missingRefGate(input.ref),
     ...missingSigningApproval(input.signingApproved),
@@ -94,7 +97,7 @@ export function createReleaseSignedCandidateDispatchStatus(
     signingApproved: input.signingApproved,
     environment: preflight.environment,
     workflowFileName: 'release-signed-candidate.yml',
-    jobName: input.platform === 'windows' ? 'windows-signed-candidate' : 'macos-signed-candidate',
+    jobName: target.signedCandidateJobName,
     requiredEvidence: [
       'release-signing-environment-status',
       'release-branding-evidence'
@@ -162,7 +165,7 @@ function missingBrandingEvidence(
   }
 
   const checks = extractChecks(value)
-  const requiredIconCheck = platform === 'windows' ? 'windows_icon' : 'macos_icon'
+  const requiredIconCheck = getReleasePlatformTarget(platform).brandingEvidenceIconCheckId
   const requiredChecks = ['branding_approval', requiredIconCheck, 'approved_digest']
   if (requiredChecks.every((id) => checks.some((check) => check.id === id && check.status === 'passed'))) {
     return []
