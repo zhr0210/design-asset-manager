@@ -3,20 +3,24 @@ import crypto from 'node:crypto'
 import path from 'node:path'
 import {
   parseReleaseScriptTarget,
-  releaseScriptEvidenceFileName
+  releaseScriptEvidenceFileName,
+  resolveReleaseScriptPlatformTarget
 } from './release-script-targets.mjs'
 
 const options = parseArgs(process.argv.slice(2))
 const { platform, arch } = parseReleaseScriptTarget(options)
+const platformTarget = resolveReleaseScriptPlatformTarget(platform)
 const buildDir = path.resolve(options['build-dir'] ?? 'build')
 const approvalPath = path.resolve(options.approval ?? path.join(buildDir, 'release-branding.json'))
 const outputPath = path.resolve(
   options.output ?? path.join('dist-packages', releaseScriptEvidenceFileName('release-branding-evidence', { platform, arch }))
 )
 
-const required = platform === 'windows'
-  ? { id: 'windows_icon', fileName: 'icon.ico', format: 'ico' }
-  : { id: 'macos_icon', fileName: 'icon.icns', format: 'icns' }
+const required = {
+  id: platformTarget.brandingEvidenceIconCheckId,
+  fileName: platformTarget.brandingIconFileName,
+  format: platformTarget.brandingIconFormat
+}
 const approval = await readApproval(approvalPath, platform, required.fileName)
 const icon = await verifyIcon(path.join(buildDir, required.fileName), required, approval.digest)
 const report = {
@@ -40,7 +44,7 @@ async function readApproval(target, platform, expectedFileName) {
     const approvedAt = typeof parsed?.approvedAt === 'string' ? parsed.approvedAt : ''
     const windowsEntry = parsed?.icons?.windows
     const macosEntry = parsed?.icons?.macos
-    const entry = platform === 'windows' ? windowsEntry : macosEntry
+    const entry = parsed?.icons?.[platform]
     const digest = typeof entry?.sha256 === 'string' ? entry.sha256.toLowerCase() : ''
     if (
       parsed?.schemaVersion !== 1 ||

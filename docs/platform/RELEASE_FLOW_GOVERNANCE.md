@@ -63,7 +63,10 @@ release actions.
 plain Node release scripts that are executed directly from workflows. It keeps
 checksum, update metadata, trust evidence, and branding evidence scripts on
 one target parser while preserving their existing CLI flags and evidence file
-names.
+names. Its script-side target registry also owns primary and allowed artifact
+extensions plus branding icon file, format, and evidence check id, so checksum,
+metadata, and branding consumers do not encode separate platform ternaries.
+Platform trust commands remain explicit adapters in the trust verifier.
 
 `release-trust-evidence-checks.mjs` is the shared trust-evidence check
 registry for direct release scripts. The trust verifier and readiness writer

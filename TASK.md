@@ -28,23 +28,50 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Convert Package Smoke host platform defaults to a shared data registry:
+Deepen the direct Node release-script target module with shared artifact and
+branding definitions:
 
-1. Keep host npm command, unpacked artifact check id, PATH executable
-   extensions, and Authenticode availability in one platform data registry.
-2. Preserve Package Smoke report shape, artifact checks, build command,
-   launch behavior, sandbox generation, DMG install smoke, and exit-code
-   behavior.
-3. Add helper coverage so future package-smoke changes can reuse host
-   defaults without mutating shared state.
-4. Strengthen focused tests against reintroducing direct platform ternaries
-   for host defaults.
+1. Keep the primary artifact extension, allowed checksum extensions, branding
+   icon file, icon format, and evidence check id in one script-side platform
+   target registry.
+2. Make checksum, update-metadata, and branding-evidence scripts consume the
+   registry instead of re-encoding Windows/macOS ternaries.
+3. Preserve all CLI flags, evidence file names, report shapes, validation
+   semantics, exit codes, and workflow behavior.
+4. Add clone-on-read helper coverage and source guardrails against restoring
+   direct platform selection in those consumers.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings
-   reads/mutation, sandbox execution, DMG mounting, signing, notarization,
-   workflow execution, and publishing out of scope.
+   reads/mutation, Package Smoke execution, signing, notarization, workflow
+   execution, and publishing out of scope.
 
 ## Current Slice Result
+
+- Deepened `release-script-targets.mjs` with one script-side platform target
+  registry for primary/allowed artifact extensions and branding icon file,
+  format, and evidence check id.
+- Checksum, update-metadata, and branding-evidence scripts now consume the
+  registry instead of re-encoding Windows/macOS artifact-selection ternaries.
+- The registry remains private and exposes clone-on-read resolve/list helpers;
+  focused tests prove returned extension lists cannot mutate shared state.
+- Existing CLI flags, evidence file names, report shapes, validation behavior,
+  exit codes, and workflow behavior are preserved. Trust verification commands
+  remain explicit platform adapters.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, Package Smoke execution, signing, notarization, workflow
+  execution, or publishing behavior changed.
+- Updated Release Flow Governance with the deeper script target module.
+- Focused target/checksum/update-metadata/branding tests, typecheck, production
+  build, 142 Python tests, docs sync, agent context, forbidden-path advisory
+  check, diff check, and the complete `ci:governance` suite pass. Doctor CI
+  still reports the expected AI Worker not-reachable warning because the
+  worker is not started for this slice.
+- Electron/Playwright UI validation and Windows host validation are
+  intentionally skipped because this slice changes internal, platform-neutral
+  release script data only and has no renderer or host-action surface.
+
+## Package Smoke Host Defaults Result
 
 - Added `package-smoke-host-defaults.mjs`, a shared host-default registry for
   Package Smoke platform choices.

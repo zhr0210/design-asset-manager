@@ -3,19 +3,19 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import {
   parseReleaseScriptTarget,
-  releaseScriptEvidenceFileName
+  releaseScriptEvidenceFileName,
+  resolveReleaseScriptPlatformTarget
 } from './release-script-targets.mjs'
 
 const options = parseArgs(process.argv.slice(2))
 const { platform, arch } = parseReleaseScriptTarget(options)
+const platformTarget = resolveReleaseScriptPlatformTarget(platform)
 const distDir = path.resolve(options['dist-dir'] ?? 'dist-packages')
 const outputPath = path.resolve(
   options.output ?? path.join(distDir, releaseScriptEvidenceFileName('release-checksums', { platform, arch }))
 )
-const allowedExtensions = platform === 'windows'
-  ? new Set(['.exe', '.blockmap'])
-  : new Set(['.dmg', '.blockmap'])
-const primaryExtension = platform === 'windows' ? '.exe' : '.dmg'
+const allowedExtensions = new Set(platformTarget.artifactExtensions)
+const primaryExtension = platformTarget.primaryArtifactExtension
 
 const entries = await fs.readdir(distDir, { withFileTypes: true })
 const availableArtifactNames = entries

@@ -3,11 +3,13 @@ import path from 'node:path'
 import {
   parseReleaseScriptTarget,
   releaseScriptEvidenceFileName,
-  requireChoice
+  requireChoice,
+  resolveReleaseScriptPlatformTarget
 } from './release-script-targets.mjs'
 
 const options = parseArgs(process.argv.slice(2))
 const { platform, arch } = parseReleaseScriptTarget(options)
+const platformTarget = resolveReleaseScriptPlatformTarget(platform)
 const channel = requireChoice(options.channel ?? 'stable', ['stable'], '--channel')
 const packageManifest = JSON.parse(await fs.readFile('package.json', 'utf8'))
 const version = requireVersion(packageManifest.version)
@@ -27,7 +29,7 @@ if (checksums.platform !== platform || checksums.arch !== arch) {
   throw new Error('Checksum manifest platform and architecture must match the requested metadata.')
 }
 
-const primaryExtension = platform === 'windows' ? '.exe' : '.dmg'
+const primaryExtension = platformTarget.primaryArtifactExtension
 const artifacts = requireArtifacts(checksums.artifacts)
 const primary = artifacts.filter((artifact) => artifact.fileName.toLowerCase().endsWith(primaryExtension))
 if (primary.length !== 1) {
