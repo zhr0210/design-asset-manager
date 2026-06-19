@@ -39,7 +39,10 @@ Model Path evidence remain separate states.
 
 ## Shared Through Adapters
 
-- CUDA and MPS execution probes.
+- CUDA and MPS compatibility/execution probes behind shared descriptor-driven
+  IPC flows, with platform response types and evidence lanes kept distinct.
+  The focused Python execution evidence test runs in cross-platform runtime
+  safety CI.
 - macOS and Windows raw capability probes behind one descriptor-driven IPC
   registration flow while retaining separate probe methods and response types.
 - ONNX execution-provider selection.

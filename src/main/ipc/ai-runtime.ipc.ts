@@ -36,6 +36,10 @@ import type {
   AiRuntimeMacOSCapabilitiesResponse,
   AiRuntimeOperationRequest,
   AiRuntimeOnnxModelLoadProbeRequest,
+  AiRuntimePythonCudaExecutionProbeResponse,
+  AiRuntimePythonCudaStatusResponse,
+  AiRuntimePythonMpsExecutionProbeResponse,
+  AiRuntimePythonMpsStatusResponse,
   AiRuntimeSelectActiveRequest,
   AiRuntimeUpdateConfigRequest,
   AiRuntimeWindowsCapabilitiesResponse
@@ -119,6 +123,28 @@ type PlatformAiCapabilitiesIpcDescriptor =
   | {
       channel: typeof CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES
       getCapabilities: () => Promise<AiRuntimeWindowsCapabilitiesResponse>
+    }
+
+type PythonCompatibilityStatusIpcDescriptor =
+  | {
+      channel: typeof CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS
+      getStatus: () => Promise<AiRuntimePythonMpsStatusResponse>
+    }
+  | {
+      channel: typeof CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS
+      getStatus: () => Promise<AiRuntimePythonCudaStatusResponse>
+    }
+
+type PythonExecutionProbeIpcDescriptor =
+  | {
+      channel: typeof CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION
+      evidenceLane: 'python_mps'
+      probe: () => Promise<AiRuntimePythonMpsExecutionProbeResponse>
+    }
+  | {
+      channel: typeof CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION
+      evidenceLane: 'python_cuda'
+      probe: () => Promise<AiRuntimePythonCudaExecutionProbeResponse>
     }
 
 function resolvePlatformAiBranchProviderProfileId(
@@ -256,6 +282,28 @@ const PLATFORM_AI_CAPABILITIES_IPC_DESCRIPTORS: PlatformAiCapabilitiesIpcDescrip
     getCapabilities: () => aiClientService.getWindowsCapabilities()
   }
 ]
+const PYTHON_COMPATIBILITY_STATUS_IPC_DESCRIPTORS: PythonCompatibilityStatusIpcDescriptor[] = [
+  {
+    channel: CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
+    getStatus: () => aiClientService.getPythonMpsStatus()
+  },
+  {
+    channel: CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS,
+    getStatus: () => aiClientService.getPythonCudaStatus()
+  }
+]
+const PYTHON_EXECUTION_PROBE_IPC_DESCRIPTORS: PythonExecutionProbeIpcDescriptor[] = [
+  {
+    channel: CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION,
+    evidenceLane: 'python_mps',
+    probe: () => aiClientService.probePythonMpsExecution()
+  },
+  {
+    channel: CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION,
+    evidenceLane: 'python_cuda',
+    probe: () => aiClientService.probePythonCudaExecution()
+  }
+]
 
 export async function shutdownAiRuntimes(): Promise<void> {
   const results = await aiRuntimeManager.stopAllRuntimes()
@@ -317,6 +365,34 @@ function createPlatformAiCapabilitiesIpcHandler(
   }
 }
 
+function createPythonCompatibilityStatusIpcHandler(
+  descriptor: PythonCompatibilityStatusIpcDescriptor
+) {
+  return async () => {
+    try {
+      return success(await descriptor.getStatus())
+    } catch (err) {
+      console.error(`[IPC] ${descriptor.channel} error:`, err)
+      return failure(err)
+    }
+  }
+}
+
+function createPythonExecutionProbeIpcHandler(
+  descriptor: PythonExecutionProbeIpcDescriptor
+) {
+  return async () => {
+    try {
+      const probe = await descriptor.probe()
+      recordPythonExecutionEvidence({ lane: descriptor.evidenceLane, probe })
+      return success(probe)
+    } catch (err) {
+      console.error(`[IPC] ${descriptor.channel} error:`, err)
+      return failure(err)
+    }
+  }
+}
+
 export function registerAiRuntimeIpc() {
   ipcMain.handle(CHANNEL_AI_RUNTIME_LIST_RUNTIMES, async () => {
     try {
@@ -353,23 +429,9 @@ export function registerAiRuntimeIpc() {
     ipcMain.handle(descriptor.channel, createPlatformAiBranchStatusIpcHandler(descriptor))
   }
 
-  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS, async () => {
-    try {
-      return success(await aiClientService.getPythonMpsStatus())
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS} error:`, err)
-      return failure(err)
-    }
-  })
-
-  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS, async () => {
-    try {
-      return success(await aiClientService.getPythonCudaStatus())
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS} error:`, err)
-      return failure(err)
-    }
-  })
+  for (const descriptor of PYTHON_COMPATIBILITY_STATUS_IPC_DESCRIPTORS) {
+    ipcMain.handle(descriptor.channel, createPythonCompatibilityStatusIpcHandler(descriptor))
+  }
 
   ipcMain.handle(CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS, async () => {
     try {
@@ -403,27 +465,9 @@ export function registerAiRuntimeIpc() {
     }
   })
 
-  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION, async () => {
-    try {
-      const probe = await aiClientService.probePythonMpsExecution()
-      recordPythonExecutionEvidence({ lane: 'python_mps', probe })
-      return success(probe)
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION} error:`, err)
-      return failure(err)
-    }
-  })
-
-  ipcMain.handle(CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION, async () => {
-    try {
-      const probe = await aiClientService.probePythonCudaExecution()
-      recordPythonExecutionEvidence({ lane: 'python_cuda', probe })
-      return success(probe)
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION} error:`, err)
-      return failure(err)
-    }
-  })
+  for (const descriptor of PYTHON_EXECUTION_PROBE_IPC_DESCRIPTORS) {
+    ipcMain.handle(descriptor.channel, createPythonExecutionProbeIpcHandler(descriptor))
+  }
 
   ipcMain.handle(CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME, async (_, request: AiRuntimeSelectActiveRequest) => {
     try {

@@ -28,21 +28,48 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Share raw platform capability IPC registration while retaining separate probes:
+Share Python MPS/CUDA status and execution-probe IPC orchestration:
 
-1. Keep the existing macOS and Windows capability channel names and AI Client
-   probe methods as descriptor data.
-2. Register both descriptors through one success/failure handler factory.
-3. Preserve each capability response type, timeout/offline behavior, error
-   logging, preload methods, and the semantic separation from Platform AI
-   Branch Status.
-4. Strengthen the IPC contract test against restoring copied capability
-   handler bodies.
+1. Keep the four existing MPS/CUDA status and execution channel names.
+2. Bind each channel to its AI Client method and, for execution probes, its
+   evidence lane through discriminated descriptor unions.
+3. Register status and execution descriptors through shared handler factories
+   while preserving success/failure and evidence recording behavior.
+4. Strengthen the IPC contract test against restoring copied MPS/CUDA
+   handlers or cross-wiring their evidence lanes.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, capability probe implementation, local service start, settings
-   mutation, and public contract changes out of scope.
+   user assets, probe implementation, local service start, settings mutation,
+   and public contract changes out of scope.
 
 ## Current Slice Result
+
+- Added separate discriminated descriptor registries for the existing Python
+  MPS/CUDA compatibility-status and execution-probe channel bindings.
+- Status descriptors preserve the exact AI Client status method and response
+  type for each platform lane. Execution descriptors additionally bind each
+  probe method to its exact `python_mps` or `python_cuda` evidence lane.
+- Both descriptor groups now register through shared handler factories while
+  preserving success/failure wrapping, channel-specific logging, and execution
+  evidence recording.
+- Strengthened the IPC contract test to require the descriptor/factory flow,
+  reject copied direct handlers, and guard against cross-wiring MPS/CUDA
+  methods or evidence lanes.
+- Added the existing Python execution evidence behavior test to package
+  scripts, the cross-platform runtime-safety CI suite, and the test map.
+- Existing IPC channel names, shared response types, AI Client probe methods,
+  preload/renderer callers, evidence freshness rules, and runtime behavior are
+  unchanged.
+- Focused IPC/evidence tests, typecheck, production build, 142 Python tests,
+  docs sync, agent context, forbidden-path advisory check, diff check, and the
+  complete `ci:governance` suite pass. Doctor CI still reports the expected AI
+  Worker not-reachable warning because the worker is not started for this
+  slice.
+- Electron/Playwright UI validation and a dedicated Windows host run are
+  intentionally skipped because this slice changes internal main-process IPC
+  registration only, has no renderer surface, and is covered by the same
+  cross-platform runtime-safety CI entry on both platform runners.
+
+## Raw Platform Capability IPC Registration Result
 
 - Added one descriptor registry for the existing macOS and Windows raw
   capability channel/probe-method pairs.
