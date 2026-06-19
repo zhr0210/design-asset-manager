@@ -32,6 +32,14 @@ conditionals to the planner flow. CUDA runtime sidecar matching is selected
 through `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES`; keep CUDA sidecar release
 filename patterns there instead of branching in planner flow.
 
+Hardware profile planning resolves its target platform before selecting a
+default accelerator. Explicit Windows plans therefore default to Vulkan and
+macOS/Linux plans default to CPU without inheriting the host running the
+planner; CUDA selection and explicit accelerator overrides remain unchanged.
+The focused installer/planner test runs inside `ci:test-runtime-safety` on both
+Windows and macOS so target-platform defaults cannot regress into host-derived
+behavior.
+
 ## Governance Rules
 
 - `externalInferencePreferred: true`

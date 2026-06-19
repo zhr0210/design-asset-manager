@@ -74,12 +74,27 @@ async function withMockServer(handler: http.RequestListener, run: (baseUrl: stri
 async function main() {
   assert.equal(recommendAccelerator('13.2', true), 'cuda13')
   assert.equal(recommendAccelerator('12.4', true), 'cuda12')
-  assert.equal(recommendAccelerator(undefined, false), process.platform === 'win32' ? 'vulkan' : 'cpu')
+  assert.equal(recommendAccelerator(undefined, false, 'win32'), 'vulkan')
+  assert.equal(recommendAccelerator(undefined, false, 'darwin'), 'cpu')
+  assert.equal(recommendAccelerator(undefined, false, 'linux'), 'cpu')
+
+  assert.equal(createHardwareProfile({
+    platform: 'win32',
+    arch: 'x64',
+    hasNvidiaGpu: false
+  }).recommendedAccelerator, 'vulkan')
+  assert.equal(createHardwareProfile({
+    platform: 'darwin',
+    arch: 'arm64',
+    hasNvidiaGpu: false
+  }).recommendedAccelerator, 'cpu')
 
   const plannerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-planner.ts', 'utf8')
   assert.match(plannerSource, /const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule\[\]/)
   assert.match(plannerSource, /platform: 'win32'[\s\S]*accelerator: 'vulkan'/)
   assert.match(plannerSource, /DEFAULT_LLAMA_ACCELERATOR_RULES\.find/)
+  assert.match(plannerSource, /recommendAccelerator\(input\.cudaVersion, input\.hasNvidiaGpu, platform\)/)
+  assert.doesNotMatch(plannerSource, /rule\.platform === process\.platform/)
   assert.doesNotMatch(plannerSource, /process\.platform === 'win32' \? 'vulkan' : 'cpu'/)
   assert.match(plannerSource, /const LLAMA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaRuntimePackagePatternRule\[\]/)
   assert.match(plannerSource, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*bin-macos-arm64/)

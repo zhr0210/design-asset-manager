@@ -28,24 +28,49 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Create one shared Node CLI host-default module:
+Make Llama hardware planning deterministic for an explicit target platform:
 
-1. Keep npm command name, PATH executable extensions, and isolated Python
-   unittest launcher candidates in one host platform registry.
-2. Make Package Smoke defaults, local platform verification, and the Python
-   unittest runner consume the shared registry instead of re-encoding host
-   selection.
-3. Keep Package Smoke-specific artifact checks and Authenticode availability
-   in its own module; preserve all CLI flags, output, execution ordering,
-   isolation, and exit behavior.
-4. Add deep clone-on-read coverage and consumer source guardrails, then wire
-   the focused test into governance and the test map.
+1. Resolve the target platform and architecture before choosing the default
+   Llama accelerator.
+2. Make `recommendAccelerator` accept an optional target platform while
+   preserving existing callers and host-default behavior.
+3. Prove Windows defaults to Vulkan and macOS/Linux default to CPU when no
+   NVIDIA GPU exists, independent of the machine running the planner.
+4. Preserve CUDA version selection, explicit accelerator overrides, runtime
+   package matching, plan shape, error behavior, and public contracts.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, candidate binary reads, release secrets, GitHub settings
-   reads/mutation, Package Smoke host actions, signing, notarization, workflow
-   execution, and publishing out of scope.
+   user assets, hardware command execution, local service start, and settings
+   mutation out of scope.
 
 ## Current Slice Result
+
+- `createHardwareProfile` now resolves its target platform and architecture
+  before selecting the default Llama accelerator.
+- `recommendAccelerator` accepts an optional target platform while preserving
+  its existing two-argument callers and host-default behavior.
+- Explicit Windows plans without NVIDIA evidence select Vulkan; explicit
+  macOS and Linux plans select CPU regardless of the host executing the
+  planner. CUDA 12/13 selection and explicit accelerator overrides are
+  unchanged.
+- Focused tests cover cross-host Windows/macOS/Linux recommendations, profile
+  creation, existing runtime package selection, local models, governance, and
+  server probe behavior, with a source guard against reading `process.platform`
+  inside the target-platform rule lookup.
+- Added `test-llama-runtime-installer` to `ci:test-runtime-safety` and the test
+  map so both GitHub platform runners execute the target-platform contract.
+- Updated Llama Runtime Governance with the deterministic planning rule.
+- No IPC, preload, renderer, shared response type, hardware command execution,
+  model download, local service start, settings mutation, or user asset access
+  changed.
+- Focused Llama tests, typecheck, production build, 142 Python tests, docs
+  sync, agent context, forbidden-path advisory check, diff check, and the
+  complete `ci:governance` suite pass. Doctor CI still reports the expected AI
+  Worker not-reachable warning because the worker is not started for this
+  slice.
+- Electron/Playwright UI validation is intentionally skipped because this is
+  a pure main-process planning change with no renderer surface.
+
+## Node CLI Host Defaults Result
 
 - Added `node-host-platform-defaults.mjs`, one shared Node CLI registry for npm
   command names, PATH executable extensions, and isolated Python unittest

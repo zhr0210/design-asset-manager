@@ -201,11 +201,14 @@ export const QWEN3_VL_GGUF_CANDIDATES: LlamaModelCandidate[] = qwen3VlSizes.flat
 )
 
 export function createHardwareProfile(input: Partial<LlamaHardwareProfile> = {}): LlamaHardwareProfile {
+  const platform = input.platform ?? process.platform
+  const arch = input.arch ?? process.arch
   const totalMemoryGB = input.totalMemoryGB ?? Math.round(os.totalmem() / 1024 / 1024 / 1024)
-  const recommendedAccelerator = input.recommendedAccelerator ?? recommendAccelerator(input.cudaVersion, input.hasNvidiaGpu)
+  const recommendedAccelerator = input.recommendedAccelerator
+    ?? recommendAccelerator(input.cudaVersion, input.hasNvidiaGpu, platform)
   return {
-    platform: input.platform ?? process.platform,
-    arch: input.arch ?? process.arch,
+    platform,
+    arch,
     cpuThreads: input.cpuThreads ?? os.cpus().length,
     totalMemoryGB,
     hasNvidiaGpu: input.hasNvidiaGpu ?? false,
@@ -218,9 +221,15 @@ export function createHardwareProfile(input: Partial<LlamaHardwareProfile> = {})
   }
 }
 
-export function recommendAccelerator(cudaVersion?: string, hasNvidiaGpu = false): LlamaRuntimeAccelerator {
+export function recommendAccelerator(
+  cudaVersion?: string,
+  hasNvidiaGpu = false,
+  platform: NodeJS.Platform | string = process.platform
+): LlamaRuntimeAccelerator {
   if (!hasNvidiaGpu) {
-    return DEFAULT_LLAMA_ACCELERATOR_RULES.find((rule) => !rule.platform || rule.platform === process.platform)?.accelerator ?? 'cpu'
+    return DEFAULT_LLAMA_ACCELERATOR_RULES.find((rule) => {
+      return !rule.platform || rule.platform === platform
+    })?.accelerator ?? 'cpu'
   }
   const major = Number((cudaVersion ?? '').split('.')[0])
   if (major >= 13) return 'cuda13'
