@@ -27,6 +27,7 @@ import {
 import { createMacOSAiBranchRuntimeMetadata } from '../../shared/constants/macos-ai-runtime.constants'
 import { createWindowsAiBranchRuntimeMetadata } from '../../shared/constants/windows-ai-runtime.constants'
 import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
+import type { PlatformAiBranch } from '../../shared/types/platform-ai-branch-status.types'
 import type { RuntimeProfileId } from '../../shared/types/runtime-profile.types'
 import type {
   AiRuntimeGetStateRequest,
@@ -101,6 +102,13 @@ interface AiRuntimeAppDataRootAdapter {
   pathParts: string[]
 }
 
+interface PlatformAiBranchStatusIpcDescriptor {
+  channel:
+    | typeof CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS
+    | typeof CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS
+  platformBranch: PlatformAiBranch
+}
+
 function resolvePlatformAiBranchProviderProfileId(
   descriptor: PlatformAiBranchRuntimeProviderDescriptor,
   currentPlatform: PlatformName,
@@ -142,6 +150,17 @@ const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimePr
 ]
 
 const PYTHON_WORKER_AUTOSTART_PLATFORMS = new Set<PlatformName>(['darwin', 'win32'])
+
+const PLATFORM_AI_BRANCH_STATUS_IPC_DESCRIPTORS: PlatformAiBranchStatusIpcDescriptor[] = [
+  {
+    channel: CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
+    platformBranch: 'macos'
+  },
+  {
+    channel: CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS,
+    platformBranch: 'windows'
+  }
+]
 
 const AI_RUNTIME_APP_DATA_ROOT_ADAPTERS: AiRuntimeAppDataRootAdapter[] = [
   {
@@ -243,6 +262,26 @@ async function collectModelReadinessEvidence() {
   ]
 }
 
+function createPlatformAiBranchStatusIpcHandler(
+  descriptor: PlatformAiBranchStatusIpcDescriptor
+) {
+  return async () => {
+    try {
+      const modelReadiness = await collectModelReadinessEvidence()
+      return success(createPlatformAiBranchStatus({
+        platformBranch: descriptor.platformBranch,
+        currentPlatform: process.platform as PlatformName,
+        runtimes: aiRuntimeManager.listRuntimes(),
+        modelReadiness,
+        pythonExecutionEvidence: getFreshPythonExecutionEvidence()
+      }))
+    } catch (err) {
+      console.error(`[IPC] ${descriptor.channel} error:`, err)
+      return failure(err)
+    }
+  }
+}
+
 export function registerAiRuntimeIpc() {
   ipcMain.handle(CHANNEL_AI_RUNTIME_LIST_RUNTIMES, async () => {
     try {
@@ -289,37 +328,9 @@ export function registerAiRuntimeIpc() {
     }
   })
 
-  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS, async () => {
-    try {
-      const modelReadiness = await collectModelReadinessEvidence()
-      return success(createPlatformAiBranchStatus({
-        platformBranch: 'macos',
-        currentPlatform: process.platform as PlatformName,
-        runtimes: aiRuntimeManager.listRuntimes(),
-        modelReadiness,
-        pythonExecutionEvidence: getFreshPythonExecutionEvidence()
-      }))
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS} error:`, err)
-      return failure(err)
-    }
-  })
-
-  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS, async () => {
-    try {
-      const modelReadiness = await collectModelReadinessEvidence()
-      return success(createPlatformAiBranchStatus({
-        platformBranch: 'windows',
-        currentPlatform: process.platform as PlatformName,
-        runtimes: aiRuntimeManager.listRuntimes(),
-        modelReadiness,
-        pythonExecutionEvidence: getFreshPythonExecutionEvidence()
-      }))
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS} error:`, err)
-      return failure(err)
-    }
-  })
+  for (const descriptor of PLATFORM_AI_BRANCH_STATUS_IPC_DESCRIPTORS) {
+    ipcMain.handle(descriptor.channel, createPlatformAiBranchStatusIpcHandler(descriptor))
+  }
 
   ipcMain.handle(CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS, async () => {
     try {

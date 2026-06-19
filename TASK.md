@@ -28,21 +28,48 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Make Llama hardware planning deterministic for an explicit target platform:
+Share Platform AI Branch Status IPC orchestration while retaining dedicated
+channels:
 
-1. Resolve the target platform and architecture before choosing the default
-   Llama accelerator.
-2. Make `recommendAccelerator` accept an optional target platform while
-   preserving existing callers and host-default behavior.
-3. Prove Windows defaults to Vulkan and macOS/Linux default to CPU when no
-   NVIDIA GPU exists, independent of the machine running the planner.
-4. Preserve CUDA version selection, explicit accelerator overrides, runtime
-   package matching, plan shape, error behavior, and public contracts.
+1. Keep the approved macOS and Windows channel names as separate descriptors.
+2. Register both descriptors through one handler factory that collects the
+   same evidence snapshot and invokes the shared projector.
+3. Preserve the complete shared response shape, per-channel platformBranch,
+   failure semantics, evidence/missing behavior, and read-only policy.
+4. Strengthen the IPC contract test against restoring two copied handler
+   bodies.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, hardware command execution, local service start, and settings
-   mutation out of scope.
+   user assets, hardware probes, local service start, settings mutation, and
+   public contract changes out of scope.
 
 ## Current Slice Result
+
+- Added one descriptor registry for the approved macOS and Windows Platform AI
+  Branch Status IPC channel/platformBranch pairs.
+- Both dedicated channels now register through one handler factory for model
+  readiness collection, runtime snapshots, Python execution evidence,
+  projection, success wrapping, logging, and failure wrapping.
+- Existing channel names, preload methods, response shape, per-channel
+  `platformBranch`, evidence/missing semantics, and read-only behavior are
+  preserved.
+- Strengthened the IPC contract test to require descriptor-driven registration,
+  exactly one projector orchestration body, and no copied direct registration
+  for the two branch-status channels.
+- Updated ADR-0006 to record that dedicated public channels share internal
+  main-process orchestration.
+- No runtime action, public IPC contract, preload, renderer, UI, hardware
+  probe, model download, local service start, settings mutation, or user asset
+  access changed.
+- Focused IPC/display/AI Console/panel tests, typecheck, production build, 142
+  Python tests, docs sync, agent context, forbidden-path advisory check, diff
+  check, and the complete `ci:governance` suite pass. Doctor CI still reports
+  the expected AI Worker not-reachable warning because the worker is not
+  started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice has no renderer change and the repository has no isolated Electron UI
+  harness that avoids the existing user database.
+
+## Llama Target Platform Planning Result
 
 - `createHardwareProfile` now resolves its target platform and architecture
   before selecting the default Llama accelerator.
