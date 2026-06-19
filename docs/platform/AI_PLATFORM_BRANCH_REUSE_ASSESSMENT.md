@@ -40,6 +40,8 @@ Model Path evidence remain separate states.
 ## Shared Through Adapters
 
 - CUDA and MPS execution probes.
+- macOS and Windows raw capability probes behind one descriptor-driven IPC
+  registration flow while retaining separate probe methods and response types.
 - ONNX execution-provider selection.
 - Llama package selection and process launch.
 - OCR interpreter and dependency discovery.

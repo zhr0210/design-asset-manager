@@ -28,21 +28,48 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Share Platform AI Branch Status IPC orchestration while retaining dedicated
-channels:
+Share raw platform capability IPC registration while retaining separate probes:
 
-1. Keep the approved macOS and Windows channel names as separate descriptors.
-2. Register both descriptors through one handler factory that collects the
-   same evidence snapshot and invokes the shared projector.
-3. Preserve the complete shared response shape, per-channel platformBranch,
-   failure semantics, evidence/missing behavior, and read-only policy.
-4. Strengthen the IPC contract test against restoring two copied handler
-   bodies.
+1. Keep the existing macOS and Windows capability channel names and AI Client
+   probe methods as descriptor data.
+2. Register both descriptors through one success/failure handler factory.
+3. Preserve each capability response type, timeout/offline behavior, error
+   logging, preload methods, and the semantic separation from Platform AI
+   Branch Status.
+4. Strengthen the IPC contract test against restoring copied capability
+   handler bodies.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, hardware probes, local service start, settings mutation, and
-   public contract changes out of scope.
+   user assets, capability probe implementation, local service start, settings
+   mutation, and public contract changes out of scope.
 
 ## Current Slice Result
+
+- Added one descriptor registry for the existing macOS and Windows raw
+  capability channel/probe-method pairs.
+- A discriminated descriptor union binds each channel to its platform-specific
+  capability response type, preventing cross-platform probe/response pairing.
+- Both capability channels now register through one handler factory for
+  success wrapping, channel-specific error logging, and failure wrapping.
+- Existing channel names, AI Client methods, capability response types,
+  timeout/offline behavior, preload methods, and the semantic separation from
+  Platform AI Branch Status are preserved.
+- Strengthened the IPC contract test to require descriptor-driven capability
+  registration and reject copied direct handlers for either platform.
+- Updated the AI Platform Branch Reuse Assessment to record the shared
+  registration flow while retaining distinct capability adapters.
+- No capability probe implementation, runtime action, public IPC contract,
+  preload, renderer, UI, model download, local service start, settings
+  mutation, or user asset access changed.
+- Focused IPC/macOS runtime/AI Console/panel tests, typecheck, production
+  build, 142 Python tests, docs sync, agent context, forbidden-path advisory
+  check, diff check, and the complete `ci:governance` suite pass. Doctor CI
+  still reports the expected AI Worker not-reachable warning because the
+  worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice has no renderer change and the repository has no isolated Electron UI
+  harness that avoids the existing user database.
+
+## Platform AI Branch Status IPC Orchestration Result
 
 - Added one descriptor registry for the approved macOS and Windows Platform AI
   Branch Status IPC channel/platformBranch pairs.

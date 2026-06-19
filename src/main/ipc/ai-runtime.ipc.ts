@@ -33,10 +33,12 @@ import type {
   AiRuntimeGetStateRequest,
   AiRuntimeHealthCheckRequest,
   AiRuntimeIpcResponse,
+  AiRuntimeMacOSCapabilitiesResponse,
   AiRuntimeOperationRequest,
   AiRuntimeOnnxModelLoadProbeRequest,
   AiRuntimeSelectActiveRequest,
-  AiRuntimeUpdateConfigRequest
+  AiRuntimeUpdateConfigRequest,
+  AiRuntimeWindowsCapabilitiesResponse
 } from '../../shared/contracts/ai-runtime.contract'
 import type {
   AiRuntimeOnnxModelLoadProbeResponse
@@ -108,6 +110,16 @@ interface PlatformAiBranchStatusIpcDescriptor {
     | typeof CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS
   platformBranch: PlatformAiBranch
 }
+
+type PlatformAiCapabilitiesIpcDescriptor =
+  | {
+      channel: typeof CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES
+      getCapabilities: () => Promise<AiRuntimeMacOSCapabilitiesResponse>
+    }
+  | {
+      channel: typeof CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES
+      getCapabilities: () => Promise<AiRuntimeWindowsCapabilitiesResponse>
+    }
 
 function resolvePlatformAiBranchProviderProfileId(
   descriptor: PlatformAiBranchRuntimeProviderDescriptor,
@@ -234,6 +246,16 @@ const llamaRuntimeService = LlamaRuntimeInstallService.getInstance()
 const ocrRealEvidenceProbeService = createOcrRealEvidenceProbeService()
 const latestOnnxModelLoadProbes: Partial<Record<AiRuntimeOnnxModelLoadProbeResponse['modelFamily'], AiRuntimeOnnxModelLoadProbeResponse>> = {}
 const ONNX_MODEL_LOAD_EVIDENCE_TTL_MS = 5 * 60 * 1000
+const PLATFORM_AI_CAPABILITIES_IPC_DESCRIPTORS: PlatformAiCapabilitiesIpcDescriptor[] = [
+  {
+    channel: CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
+    getCapabilities: () => aiClientService.getMacOSCapabilities()
+  },
+  {
+    channel: CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES,
+    getCapabilities: () => aiClientService.getWindowsCapabilities()
+  }
+]
 
 export async function shutdownAiRuntimes(): Promise<void> {
   const results = await aiRuntimeManager.stopAllRuntimes()
@@ -282,6 +304,19 @@ function createPlatformAiBranchStatusIpcHandler(
   }
 }
 
+function createPlatformAiCapabilitiesIpcHandler(
+  descriptor: PlatformAiCapabilitiesIpcDescriptor
+) {
+  return async () => {
+    try {
+      return success(await descriptor.getCapabilities())
+    } catch (err) {
+      console.error(`[IPC] ${descriptor.channel} error:`, err)
+      return failure(err)
+    }
+  }
+}
+
 export function registerAiRuntimeIpc() {
   ipcMain.handle(CHANNEL_AI_RUNTIME_LIST_RUNTIMES, async () => {
     try {
@@ -310,23 +345,9 @@ export function registerAiRuntimeIpc() {
     }
   })
 
-  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES, async () => {
-    try {
-      return success(await aiClientService.getMacOSCapabilities())
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES} error:`, err)
-      return failure(err)
-    }
-  })
-
-  ipcMain.handle(CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES, async () => {
-    try {
-      return success(await aiClientService.getWindowsCapabilities())
-    } catch (err) {
-      console.error(`[IPC] ${CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES} error:`, err)
-      return failure(err)
-    }
-  })
+  for (const descriptor of PLATFORM_AI_CAPABILITIES_IPC_DESCRIPTORS) {
+    ipcMain.handle(descriptor.channel, createPlatformAiCapabilitiesIpcHandler(descriptor))
+  }
 
   for (const descriptor of PLATFORM_AI_BRANCH_STATUS_IPC_DESCRIPTORS) {
     ipcMain.handle(descriptor.channel, createPlatformAiBranchStatusIpcHandler(descriptor))
