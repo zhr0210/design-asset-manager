@@ -28,24 +28,54 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Deepen the direct Node release-script target module with shared artifact and
-branding definitions:
+Create one shared Node CLI host-default module:
 
-1. Keep the primary artifact extension, allowed checksum extensions, branding
-   icon file, icon format, and evidence check id in one script-side platform
-   target registry.
-2. Make checksum, update-metadata, and branding-evidence scripts consume the
-   registry instead of re-encoding Windows/macOS ternaries.
-3. Preserve all CLI flags, evidence file names, report shapes, validation
-   semantics, exit codes, and workflow behavior.
-4. Add clone-on-read helper coverage and source guardrails against restoring
-   direct platform selection in those consumers.
+1. Keep npm command name, PATH executable extensions, and isolated Python
+   unittest launcher candidates in one host platform registry.
+2. Make Package Smoke defaults, local platform verification, and the Python
+   unittest runner consume the shared registry instead of re-encoding host
+   selection.
+3. Keep Package Smoke-specific artifact checks and Authenticode availability
+   in its own module; preserve all CLI flags, output, execution ordering,
+   isolation, and exit behavior.
+4. Add deep clone-on-read coverage and consumer source guardrails, then wire
+   the focused test into governance and the test map.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings
-   reads/mutation, Package Smoke execution, signing, notarization, workflow
+   reads/mutation, Package Smoke host actions, signing, notarization, workflow
    execution, and publishing out of scope.
 
 ## Current Slice Result
+
+- Added `node-host-platform-defaults.mjs`, one shared Node CLI registry for npm
+  command names, PATH executable extensions, and isolated Python unittest
+  launcher candidates on Windows, macOS, and other hosts.
+- Package Smoke host defaults now compose the shared CLI defaults with only
+  Package Smoke-specific artifact check ids and Authenticode availability.
+- Local platform verification and the Python unittest runner consume the same
+  host registry instead of branching directly on `process.platform`.
+- Resolve/list helpers deeply clone executable extension lists, Python
+  candidate arrays, and candidate arguments; focused tests prove callers
+  cannot mutate shared state and guard all three consumers against restoring
+  direct host comparisons.
+- Existing CLI flags, npm/Python candidate ordering, Package Smoke output,
+  execution ordering, test isolation, and exit behavior are preserved.
+- Added `test-node-host-platform-defaults` to `ci:governance` and the test map,
+  and updated CI Matrix and Package Smoke documentation.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, Package Smoke host action, signing, notarization, workflow
+  execution, or publishing behavior changed.
+- Focused host-default/Package Smoke/platform-script/Python-isolation tests,
+  the real 142-test Python unittest runner, typecheck, production build, docs
+  sync, agent context, forbidden-path advisory check, diff check, and the
+  complete `ci:governance` suite pass. Doctor CI still reports the expected AI
+  Worker not-reachable warning because the worker is not started for this
+  slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal CLI host data only and has no renderer surface.
+
+## Release Script Artifact Definitions Result
 
 - Deepened `release-script-targets.mjs` with one script-side platform target
   registry for primary/allowed artifact extensions and branding icon file,

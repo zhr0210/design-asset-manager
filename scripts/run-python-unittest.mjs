@@ -2,18 +2,10 @@ import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { resolveNodeHostPlatformDefaults } from './node-host-platform-defaults.mjs'
 
 const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'design-asset-manager-tests-'))
-const candidates = process.platform === 'win32'
-  ? [
-      { command: 'py', args: ['-3'] },
-      { command: 'python', args: [] },
-      { command: 'python3', args: [] }
-    ]
-  : [
-      { command: 'python3', args: [] },
-      { command: 'python', args: [] }
-    ]
+const candidates = resolveNodeHostPlatformDefaults(process.platform).pythonUnitTestCandidates
 
 const testArgs = ['-u', '-m', 'unittest', 'discover', '-s', 'ai-service/tests', '-v']
 const env = {

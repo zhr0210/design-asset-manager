@@ -16,7 +16,8 @@ assert.equal(packageJson.scripts['test-python-unittest'], 'node scripts/run-pyth
 assert.match(runnerSource, /DESIGN_ASSET_MANAGER_DISABLE_USER_DATA_ACCESS/)
 assert.match(runnerSource, /DESIGN_ASSET_MANAGER_TASK_CACHE_DB/)
 assert.match(runnerSource, /PYTHONPYCACHEPREFIX/)
-assert.match(runnerSource, /process\.platform === 'win32'/)
+assert.match(runnerSource, /resolveNodeHostPlatformDefaults\(process\.platform\)/)
+assert.doesNotMatch(runnerSource, /process\.platform === 'win32'/)
 assert.match(runnerSource, /os\.homedir\(\)/)
 
 assert.match(taskQueueSource, /DESIGN_ASSET_MANAGER_DISABLE_USER_DATA_ACCESS/)

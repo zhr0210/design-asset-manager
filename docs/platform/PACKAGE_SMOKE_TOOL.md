@@ -74,8 +74,9 @@ node scripts/package-smoke.mjs --sandbox-install --sandbox-install-timeout-ms=18
 
 ## Boundaries
 
-- Host defaults such as npm command name, unpacked artifact check id, PATH
-  executable extensions, and Authenticode availability come from
+- Shared Node CLI host defaults such as npm command name and PATH executable
+  extensions come from `node-host-platform-defaults.mjs`. Package Smoke adds
+  its unpacked artifact check id and Authenticode availability through
   `package-smoke-host-defaults.mjs`; platform-specific install actions remain
   explicit in the smoke script.
 - The host tool does not run the NSIS installer.

@@ -54,6 +54,12 @@ Gatekeeper differences as explicit platform data.
 
 `npm run ci:hygiene` checks that CI did not leave denied artifacts in the project root and that workflow commands stay validation-only.
 
+`npm run test-node-host-platform-defaults` keeps npm command names, PATH
+executable extensions, and isolated Python unittest launcher candidates in one
+Node CLI host registry. Package Smoke, local platform verification, and the
+Python test runner consume the same defaults while retaining their own
+platform-specific actions.
+
 `npm run ci:prepare-native-deps` restores the current Node ABI for
 `better-sqlite3` before Node-driven governance tests. `npm ci` runs
 electron-builder's postinstall and may leave the module rebuilt for Electron;

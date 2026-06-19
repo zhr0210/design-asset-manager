@@ -1,15 +1,17 @@
 import { spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { resolveNodeHostPlatformDefaults } from './node-host-platform-defaults.mjs'
 
 const args = new Set(process.argv.slice(2))
 const clean = args.has('--clean')
 const platformArg = process.argv.find((arg) => arg.startsWith('--platform='))
 const requestedPlatform = platformArg?.replace('--platform=', '') || process.platform
+const hostDefaults = resolveNodeHostPlatformDefaults(process.platform)
 
 const startedAt = Date.now()
 const summary = []
-const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm'
+const npmCommand = hostDefaults.npmCommand
 
 const verifyEnv = {
   ...process.env,

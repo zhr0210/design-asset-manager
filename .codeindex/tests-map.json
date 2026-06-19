@@ -10,6 +10,7 @@
   ],
   "cross_platform_runtime": [
     "npm run ci:test-runtime-safety",
+    "npm run test-node-host-platform-defaults",
     "npm run test-runtime-package-executor",
     "npm run test-runtime-package-session",
     "npm run test-runtime-package-session-projector",
