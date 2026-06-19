@@ -28,23 +28,49 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Convert Release External Gate signed-candidate evidence checks to a shared data
-registry:
+Convert Package Smoke host platform defaults to a shared data registry:
 
-1. Keep Windows and macOS signed-candidate evidence check lists in one platform
-   data registry.
-2. Preserve external gate statuses, missing evidence, aggregate counts, and
-   next external action behavior.
-3. Add a list helper with clone-on-read behavior so future status projectors
-   can reuse the required check list without mutating shared state.
-4. Strengthen focused tests against reintroducing direct platform control flow
-   for macOS-only signed-candidate checks.
+1. Keep host npm command, unpacked artifact check id, PATH executable
+   extensions, and Authenticode availability in one platform data registry.
+2. Preserve Package Smoke report shape, artifact checks, build command,
+   launch behavior, sandbox generation, DMG install smoke, and exit-code
+   behavior.
+3. Add helper coverage so future package-smoke changes can reuse host
+   defaults without mutating shared state.
+4. Strengthen focused tests against reintroducing direct platform ternaries
+   for host defaults.
 5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
    user assets, candidate binary reads, release secrets, GitHub settings
-   reads/mutation, Package Smoke execution, signing, notarization, workflow
-   execution, and publishing out of scope.
+   reads/mutation, sandbox execution, DMG mounting, signing, notarization,
+   workflow execution, and publishing out of scope.
 
 ## Current Slice Result
+
+- Added `package-smoke-host-defaults.mjs`, a shared host-default registry for
+  Package Smoke platform choices.
+- `package-smoke.mjs` now consumes that registry for host npm command name,
+  unpacked artifact check id, PATH executable extensions, and Authenticode
+  availability instead of inlining direct platform ternaries for those
+  defaults.
+- Existing Package Smoke report shape, artifact checks, build command,
+  launch behavior, sandbox generation, DMG install smoke, and exit-code
+  behavior are preserved. Windows Sandbox execution, DMG mounting, and
+  Authenticode probing remain explicit platform actions in the smoke script.
+- No runtime behavior, IPC, preload, renderer caller, UI, model download, user
+  asset, candidate binary read, release secret read, GitHub settings
+  read/mutation, signing, notarization, workflow execution, or publishing
+  behavior changed.
+- Updated the Package Smoke tool doc with the host-default registry boundary.
+- Focused Package Smoke, signed-release workflow, install-smoke preflight, and
+  release readiness writer tests, typecheck, production build, docs sync,
+  agent context, forbidden-path advisory check, diff check, and the complete
+  `ci:governance` suite pass. Doctor CI still reports the expected AI Worker
+  not-reachable warning because the worker is not started for this slice.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal release/package smoke script defaults only and has no
+  renderer surface.
+
+## Release External Gate Evidence Checks Result
 
 - Converted `release-external-gate-status.ts` signed-candidate evidence
   satisfaction from direct `summary.platform === 'macos'` control flow to a

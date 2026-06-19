@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
+import {
+  listPackageSmokeHostDefaults,
+  resolvePackageSmokeHostDefaults
+} from './package-smoke-host-defaults.mjs'
 
 const source = await fs.readFile('scripts/package-smoke.mjs', 'utf8')
 
 assert.match(source, /package-smoke/)
+assert.match(source, /resolvePackageSmokeHostDefaults\(process\.platform\)/)
 assert.match(source, /--build/)
 assert.match(source, /--launch-unpacked/)
 assert.match(source, /--dmg-install-smoke/)
@@ -27,6 +32,8 @@ assert.match(source, /<VGpu>Disable<\/VGpu>/)
 assert.match(source, /Start-Sleep -Seconds 15/)
 assert.match(source, /NO_PROXY: '\*'/)
 assert.match(source, /run-electron-builder\.mjs/)
+assert.doesNotMatch(source, /process\.platform === 'win32' \? 'npm\.cmd' : 'npm'/)
+assert.doesNotMatch(source, /process\.platform === 'win32' \? \['\.exe', '\.cmd', '\.bat', ''\] : \[''\]/)
 assert.doesNotMatch(source, /30\.5\.1/)
 assert.match(source, /Get-AuthenticodeSignature/)
 assert.match(source, /\$sig\.Status\.ToString\(\)/)
@@ -40,6 +47,35 @@ assert.match(source, /Move-Item -LiteralPath \$reportTemp -Destination \$report 
 assert.match(source, /finally \{\s+Write-Report \$true/)
 assert.doesNotMatch(source, /spawn\(installerPath/)
 assert.doesNotMatch(source, /console\.log\(fullLog\)/)
+
+assert.deepEqual(resolvePackageSmokeHostDefaults('win32'), {
+  platform: 'win32',
+  npmCommand: 'npm.cmd',
+  unpackedCheckId: 'winUnpackedExe',
+  pathExecutableExtensions: ['.exe', '.cmd', '.bat', ''],
+  authenticodeAvailable: true
+})
+assert.deepEqual(resolvePackageSmokeHostDefaults('darwin'), {
+  platform: 'darwin',
+  npmCommand: 'npm',
+  unpackedCheckId: 'macUnpackedApp',
+  pathExecutableExtensions: [''],
+  authenticodeAvailable: false
+})
+assert.deepEqual(resolvePackageSmokeHostDefaults('linux'), {
+  platform: 'other',
+  npmCommand: 'npm',
+  unpackedCheckId: 'macUnpackedApp',
+  pathExecutableExtensions: [''],
+  authenticodeAvailable: false
+})
+const mutableDefaults = resolvePackageSmokeHostDefaults('win32')
+mutableDefaults.pathExecutableExtensions.pop()
+assert.deepEqual(resolvePackageSmokeHostDefaults('win32').pathExecutableExtensions, ['.exe', '.cmd', '.bat', ''])
+assert.deepEqual(
+  listPackageSmokeHostDefaults().map((defaults) => defaults.platform),
+  ['win32', 'darwin', 'other']
+)
 
 const doc = await fs.readFile('docs/platform/PACKAGE_SMOKE_TOOL.md', 'utf8')
 assert.match(doc, /node scripts\/package-smoke\.mjs --sandbox/)

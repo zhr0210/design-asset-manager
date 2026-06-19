@@ -74,6 +74,10 @@ node scripts/package-smoke.mjs --sandbox-install --sandbox-install-timeout-ms=18
 
 ## Boundaries
 
+- Host defaults such as npm command name, unpacked artifact check id, PATH
+  executable extensions, and Authenticode availability come from
+  `package-smoke-host-defaults.mjs`; platform-specific install actions remain
+  explicit in the smoke script.
 - The host tool does not run the NSIS installer.
 - The host launch smoke only starts `win-unpacked` and stops it after the timeout.
 - The macOS DMG install smoke mounts the image read-only, copies the app only

@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
 import os from 'node:os'
+import { resolvePackageSmokeHostDefaults } from './package-smoke-host-defaults.mjs'
 
 const root = process.cwd()
 const packageManifest = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'))
@@ -53,9 +54,10 @@ const report = {
   checks: [],
   artifacts: {}
 }
+const hostDefaults = resolvePackageSmokeHostDefaults(process.platform)
 
 if (buildInstaller) {
-  await runStep('build:renderer-main-preload', process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'build'], {
+  await runStep('build:renderer-main-preload', hostDefaults.npmCommand, ['run', 'build'], {
     env: safeBuilderEnv()
   })
   await runStep('build:windows-installer', process.execPath, [
@@ -127,11 +129,7 @@ const activeUnpacked = process.platform === 'win32'
   : (await findUnpackedBinary() || path.join(distDir, `mac-${requestedArch}`, `${productName}.app`))
 
 await checkFile('installer', activeInstaller)
-if (process.platform === 'win32') {
-  await checkFile('winUnpackedExe', activeUnpacked)
-} else {
-  await checkFile('macUnpackedApp', activeUnpacked)
-}
+await checkFile(hostDefaults.unpackedCheckId, activeUnpacked)
 
 if (await exists(activeInstaller)) {
   report.artifacts.installer = {
@@ -540,7 +538,7 @@ async function runCaptured(command, stepArgs) {
 async function commandExists(command) {
   if (command.includes(path.sep) || command.includes('/')) return exists(command)
   const pathEntries = (process.env.PATH ?? '').split(path.delimiter)
-  const extensions = process.platform === 'win32' ? ['.exe', '.cmd', '.bat', ''] : ['']
+  const extensions = hostDefaults.pathExecutableExtensions
   for (const entry of pathEntries) {
     for (const ext of extensions) {
       if (await exists(path.join(entry, command.endsWith(ext) ? command : `${command}${ext}`))) {
@@ -565,7 +563,7 @@ async function sha256(filePath) {
 }
 
 async function getAuthenticodeStatus(filePath) {
-  if (process.platform !== 'win32') return 'skipped-non-windows'
+  if (!hostDefaults.authenticodeAvailable) return 'skipped-non-windows'
   const script = `Get-AuthenticodeSignature -LiteralPath '${filePath.replace(/'/g, "''")}' | Select-Object -ExpandProperty Status`
   return new Promise((resolve) => {
     const child = spawn('powershell.exe', ['-NoProfile', '-Command', script], {
