@@ -52,6 +52,11 @@ Gatekeeper differences as explicit platform data.
 
 `npm run doctor:ci` runs the doctor in JSON mode and fails only when at least one check reports `error`. A warning-only doctor report is acceptable in CI because Python, the default AI Worker health endpoint, or permission probes may be unavailable in a hosted runner.
 
+The Python Doctor check resolves an ordered launcher adapter per host. Windows
+prefers `py`; macOS and other hosts prefer `python3`. Fallback launcher and pip
+checks share a bounded fraction of the outer Doctor timeout so a hanging
+launcher alias cannot consume the entire check budget.
+
 `npm run ci:hygiene` checks that CI did not leave denied artifacts in the project root and that workflow commands stay validation-only.
 
 `npm run test-node-host-platform-defaults` keeps npm command names, PATH

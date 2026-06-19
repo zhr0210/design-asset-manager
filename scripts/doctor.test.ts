@@ -81,8 +81,9 @@ const nonWindowsPythonCheck = createPythonCheck(async (command) => {
   nonWindowsPythonCommands.push(command)
   return { available: false, error: 'not found' }
 })
-await nonWindowsPythonCheck.run(noPythonContext)
-assert.deepEqual(nonWindowsPythonCommands, ['python', 'python3', 'python'])
+const missingNonWindowsPython = await nonWindowsPythonCheck.run(noPythonContext)
+assert.deepEqual(nonWindowsPythonCommands, ['python3', 'python'])
+assert.equal((missingNonWindowsPython.details?.pip as any).skipped, true)
 
 const windowsPythonCommands: string[] = []
 const windowsPythonCheck = createPythonCheck(async (command) => {
@@ -91,7 +92,43 @@ const windowsPythonCheck = createPythonCheck(async (command) => {
 })
 const windowsPythonResult = await windowsPythonCheck.run(context)
 assert.equal(windowsPythonResult.status, 'ok')
-assert.deepEqual(windowsPythonCommands, ['python', 'python3', 'py', 'python'])
+assert.deepEqual(windowsPythonCommands, ['py', 'py'])
+assert.equal((windowsPythonResult.details?.pyLauncher as any).available, true)
+assert.equal((windowsPythonResult.details?.python as any).skipped, true)
+assert.equal((windowsPythonResult.details?.python3 as any).skipped, true)
+
+const windowsFallbackCommands: string[] = []
+const windowsFallbackCheck = createPythonCheck(async (command, args) => {
+  windowsFallbackCommands.push(`${command} ${args.join(' ')}`)
+  return { available: command === 'python' }
+})
+const windowsFallbackResult = await windowsFallbackCheck.run(context)
+assert.equal(windowsFallbackResult.status, 'ok')
+assert.deepEqual(windowsFallbackCommands, [
+  'py --version',
+  'python --version',
+  'python -m pip --version'
+])
+
+const nonWindowsPreferredCommands: string[] = []
+const nonWindowsPreferredCheck = createPythonCheck(async (command, args) => {
+  nonWindowsPreferredCommands.push(`${command} ${args.join(' ')}`)
+  return { available: command === 'python3' }
+})
+const nonWindowsPreferredResult = await nonWindowsPreferredCheck.run(noPythonContext)
+assert.equal(nonWindowsPreferredResult.status, 'ok')
+assert.deepEqual(nonWindowsPreferredCommands, [
+  'python3 --version',
+  'python3 -m pip --version'
+])
+
+const timeoutBudgets: number[] = []
+const budgetedPythonCheck = createPythonCheck(async (command, _args, timeoutMs) => {
+  timeoutBudgets.push(timeoutMs)
+  return { available: command === 'python3' }
+})
+await budgetedPythonCheck.run(context)
+assert.ok(timeoutBudgets.reduce((sum, timeoutMs) => sum + timeoutMs, 0) < context.timeoutMs)
 
 const nodeCheckSource = await fs.readFile('src/main/doctor/checks/node.check.ts', 'utf8')
 assert.match(nodeCheckSource, /const NPM_COMMAND_ADAPTERS: NpmCommandAdapter\[\]/)
@@ -103,8 +140,10 @@ assert.doesNotMatch(nodeCheckSource, /context\.platformInfo\.isWindows\s*\?\s*'n
 const pythonCheckSource = await fs.readFile('src/main/doctor/checks/python.check.ts', 'utf8')
 assert.match(pythonCheckSource, /const PYTHON_LAUNCHER_ADAPTERS: PythonLauncherAdapter\[\]/)
 assert.match(pythonCheckSource, /isWindows: true[\s\S]*command: 'py'/)
-assert.match(pythonCheckSource, /function checkPyLauncher/)
-assert.doesNotMatch(pythonCheckSource, /context\.platformInfo\.isWindows[\s\S]*\?[\s\S]*checkCommand\('py'/)
+assert.match(pythonCheckSource, /function resolvePythonLauncherAdapter/)
+assert.match(pythonCheckSource, /function resolvePythonCommandTimeout/)
+assert.match(pythonCheckSource, /detected\.candidate\.command, \['-m', 'pip', '--version'\]/)
+assert.doesNotMatch(pythonCheckSource, /checkCommand\('python', \['-m', 'pip', '--version'\]/)
 
 const nativeDepsCheck = createNativeDepsCheck(async () => {
   throw new Error('native import failed')

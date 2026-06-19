@@ -28,20 +28,51 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Share Python MPS/CUDA status and execution-probe IPC orchestration:
+Harden the shared Doctor Python probe after a reproducible Windows CI timeout:
 
-1. Keep the four existing MPS/CUDA status and execution channel names.
-2. Bind each channel to its AI Client method and, for execution probes, its
-   evidence lane through discriminated descriptor unions.
-3. Register status and execution descriptors through shared handler factories
-   while preserving success/failure and evidence recording behavior.
-4. Strengthen the IPC contract test against restoring copied MPS/CUDA
-   handlers or cross-wiring their evidence lanes.
-5. Keep runtime behavior, IPC, preload, renderer callers, UI, model downloads,
-   user assets, probe implementation, local service start, settings mutation,
-   and public contract changes out of scope.
+1. Keep the existing Doctor check id, result shape, warning semantics, and
+   five-second outer check budget.
+2. Move Python command preference into platform adapters: Windows prefers
+   `py`; macOS and other hosts prefer `python3`.
+3. Probe fallback launchers sequentially within an explicit fraction of the
+   outer budget instead of allowing one command to consume the full budget.
+4. Check pip through the selected interpreter and mark unneeded candidates as
+   skipped while preserving the `python`, `python3`, `pyLauncher`, and `pip`
+   detail keys.
+5. Keep IPC, preload, renderer, settings, runtime startup, dependency install,
+   downloads, user data, and public contract changes out of scope.
 
 ## Current Slice Result
+
+- The Windows governance job reproduced the same failure on its first run and
+  failed-job rerun: all runtime-safety tests passed, then the Python Doctor
+  check exhausted its five-second outer timeout before reaching a usable
+  launcher.
+- Replaced the single Windows-only `py` metadata entry with ordered launcher
+  adapters. Windows now prefers `py` before `python`/`python3`; macOS and other
+  hosts prefer `python3` before `python`.
+- Launcher fallbacks run sequentially with per-command timeouts derived from a
+  bounded fraction of the existing outer check budget. The worst-case version
+  probes plus pip probe remain below that outer budget.
+- Pip is checked through the detected launcher rather than always invoking
+  `python`; unneeded candidates remain visible as skipped while the existing
+  `python`, `python3`, `pyLauncher`, and `pip` detail keys are preserved.
+- Focused tests cover Windows preferred/fallback launchers, non-Windows
+  preference, missing-Python behavior, selected-interpreter pip routing, and
+  worst-case timeout allocation.
+- Existing Doctor check id, warning/error aggregation, shared response shape,
+  IPC/preload/renderer callers, settings, runtime startup, install/download
+  behavior, and user data access are unchanged.
+- Focused Doctor/service tests, local Doctor CI, typecheck, production build,
+  142 Python tests, docs sync, agent context, forbidden-path advisory check,
+  diff check, and the complete `ci:governance` suite pass. Local Doctor retains
+  the expected warnings for the intentionally stopped AI Worker.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes a main-process command probe only and has no renderer surface.
+  The Windows and macOS GitHub jobs are the required dual-platform acceptance
+  gate after the fix is pushed.
+
+## Python MPS/CUDA IPC Orchestration Result
 
 - Added separate discriminated descriptor registries for the existing Python
   MPS/CUDA compatibility-status and execution-probe channel bindings.
