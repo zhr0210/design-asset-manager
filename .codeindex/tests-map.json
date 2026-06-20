@@ -18,7 +18,10 @@
     "npm run test-runtime-package-session-projector",
     "npm run test-runtime-package-test-hygiene",
     "npm run test-runtime-package-ipc-contract-preflight",
-    "npm run test-runtime-package-ipc-governance"
+    "npm run test-runtime-package-ipc-governance",
+    "npm run test-runtime-package-ipc-handlers",
+    "npm run test-runtime-package-product-workflow",
+    "npm run test-runtime-package-panel"
   ],
   "release_flow": [
     "npm run test-release-flow-governance",

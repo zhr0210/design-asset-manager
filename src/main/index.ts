@@ -175,6 +175,7 @@ import { registerDoctorIpc } from './ipc/doctor.ipc'
 import { registerAiRuntimeIpc, shutdownAiRuntimes } from './ipc/ai-runtime.ipc'
 import { registerSettingsMigrationIpc } from './ipc/settings-migration.ipc'
 import { registerPathGovernanceIpc } from './ipc/path-governance.ipc'
+import { registerRuntimePackageIpc } from './ipc/runtime-package.ipc'
 let aiRuntimeShutdownStarted = false
 
 app.on('before-quit', (event) => {
@@ -212,4 +213,5 @@ function setupIpcHandlers() {
   registerAiRuntimeIpc()
   registerSettingsMigrationIpc()
   registerPathGovernanceIpc()
+  registerRuntimePackageIpc()
 }

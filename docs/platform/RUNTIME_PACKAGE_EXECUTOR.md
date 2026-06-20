@@ -52,41 +52,40 @@ cache. Running executions are protected from pruning; terminal snapshots are
 removed after the configured retention window or when the completed-execution
 limit is exceeded.
 
-The first session slice does not register IPC channels, does not add cancel
-semantics, and does not weaken the executor policy for remote packages, model
+The approved product flow registers polling-only IPC channels without adding
+cancel semantics or weakening the executor policy for remote packages, model
 packages, package scripts, or automatic runtime start.
 
-`runtime-package-session.projector.ts` defines the main-process-only
-renderer projection for that future surface. It reconstructs selection and
+`runtime-package-session.projector.ts` defines the main-process-owned renderer
+projection for the public surface. It reconstructs selection and
 execution responses from an explicit allowlist instead of passing session
 objects through. Archive names, SHA-256 values, local paths, progress history,
 rollback details, internal free-text messages, and unknown future executor
-fields remain inside the main process. A future Chinese UI should derive
-localized copy from structured stage and error codes rather than displaying
-internal English messages.
+fields remain inside the main process. The Chinese UI derives localized copy
+from structured stage and error codes rather than displaying internal English
+messages.
 
-The proposed first public surface is still awaiting explicit approval:
+GitHub Issue #3 approved the first public surface:
 
 - `runtime-package:select-local-manifest`;
 - `runtime-package:execute-selection`;
 - `runtime-package:get-execution-status`.
 
-The first version should use status polling rather than a progress event.
+The first version uses status polling rather than a progress event.
 Selection opens and owns the native file dialog in the main process; the
 renderer supplies only a selection token for confirmed execution and an
-execution id for status polling. No public contract, preload method, renderer
-caller, or IPC registration exists yet.
+execution id for status polling. The shared contract, main-process IPC,
+preload methods, and AI Console Runtime panel all use the same Windows/macOS
+surface.
 
-`runtime-package-ipc-contract-preflight.ts` records that future shape as a
-pending-approval contract candidate. It is main-process local, is not a shared
-public contract, and is tested alongside the no-IPC governance gate. The
-preflight locks the channel names, polling-only progress model, renderer-visible
-field allowlists, and excluded path/digest/message/progress/rollback fields
-before any public IPC approval.
+`runtime-package-ipc-contract-preflight.ts` now records the approved v1 shape.
+The shared contract locks the channel names, polling model, renderer-visible
+field allowlists, and excluded path/digest/message/progress/rollback fields.
 
 `npm run test-runtime-package-ipc-governance` keeps that boundary explicit. It
-fails if a `runtime-package:*` IPC channel, preload API, renderer caller, or
-shared IPC contract appears before the public channel contract is approved.
+fails if the three channel literals drift, the main/preload/renderer wiring is
+missing, or renderer code accesses private path, digest, session, executor, or
+rollback fields.
 
 ## Validation
 
@@ -97,6 +96,9 @@ npm run test-runtime-package-session-projector
 npm run test-runtime-package-test-hygiene
 npm run test-runtime-package-ipc-contract-preflight
 npm run test-runtime-package-ipc-governance
+npm run test-runtime-package-ipc-handlers
+npm run test-runtime-package-product-workflow
+npm run test-runtime-package-panel
 npm run test-runtime-registry
 npm run typecheck
 npm run build
@@ -118,4 +120,10 @@ can poison a later governance run after an interrupted test.
 
 The projector test injects private paths, archive metadata, digest values,
 progress history, and rollback details into internal objects and proves none
-of them cross the proposed renderer boundary.
+of them cross the renderer boundary.
+
+The product-flow tests additionally prove native-dialog cancellation remains a
+structured response, opaque ids are validated, internal messages remain
+private, piped execution snapshots preserve the allowlist, Chinese labels come
+from structured stage/error codes, polling stops at terminal state, and the
+panel does not access physical paths or hashes.

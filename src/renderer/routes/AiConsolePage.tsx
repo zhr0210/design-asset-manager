@@ -33,6 +33,7 @@ import {
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
 import AiRuntimePanel from '../components/settings/AiRuntimePanel'
+import RuntimePackagePanel from '../components/settings/RuntimePackagePanel'
 import { PlatformAiCapabilityMatrix } from '../components/settings/PlatformAiCapabilityMatrix'
 import type {
   AiBackendConfig,
@@ -1666,7 +1667,12 @@ export default function AiConsolePage() {
             />
           )}
 
-          {activeTab === 'runtime' && <AiRuntimePanel onEvidenceChanged={() => fetchConsoleStatus('manual')} />}
+          {activeTab === 'runtime' && (
+            <div className="space-y-4">
+              <AiRuntimePanel onEvidenceChanged={() => fetchConsoleStatus('manual')} />
+              <RuntimePackagePanel />
+            </div>
+          )}
 
           {activeTab === 'prompts' && (
             <PromptSystemPanel

@@ -86,6 +86,15 @@ import type {
   SettingsMigrationDryRunRequest,
   SettingsMigrationListBackupsRequest
 } from '../shared/contracts/settings-migration.contract'
+import {
+  CHANNEL_RUNTIME_PACKAGE_EXECUTE_SELECTION,
+  CHANNEL_RUNTIME_PACKAGE_GET_EXECUTION_STATUS,
+  CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST
+} from '../shared/contracts/runtime-package.contract'
+import type {
+  RuntimePackageExecuteSelectionRequest,
+  RuntimePackageGetExecutionStatusRequest
+} from '../shared/contracts/runtime-package.contract'
 
 // Expose safe APIs to the React renderer
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -276,6 +285,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
     healthCheck: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK, { runtimeId }),
     healthCheckAll: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL),
     updateRuntimeConfig: (runtimeId: string, config: Partial<AiRuntimeConfig>) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG, { runtimeId, config })
+  },
+
+  // Runtime Package IPC API
+  runtimePackage: {
+    selectLocalManifest: () => ipcRenderer.invoke(CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST),
+    executeSelection: (request: RuntimePackageExecuteSelectionRequest) => ipcRenderer.invoke(
+      CHANNEL_RUNTIME_PACKAGE_EXECUTE_SELECTION,
+      request
+    ),
+    getExecutionStatus: (request: RuntimePackageGetExecutionStatusRequest) => ipcRenderer.invoke(
+      CHANNEL_RUNTIME_PACKAGE_GET_EXECUTION_STATUS,
+      request
+    )
   },
 
   // Settings Migration IPC API

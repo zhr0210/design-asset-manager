@@ -5,7 +5,7 @@ import { createRuntimePackageIpcContractPreflight } from '../src/main/runtime-pa
 
 const preflight = createRuntimePackageIpcContractPreflight()
 
-assert.equal(preflight.status, 'pending-approval')
+assert.equal(preflight.status, 'approved')
 assert.deepEqual(preflight.channels, [
   'runtime-package:select-local-manifest',
   'runtime-package:execute-selection',
@@ -19,7 +19,7 @@ assert.equal(preflight.cancellation, false)
 assert.equal(preflight.mainOwnsNativeDialog, true)
 assert.equal(preflight.rendererSuppliesPaths, false)
 assert.equal(preflight.rendererReceivesPaths, false)
-assert.equal(preflight.sharedPublicContractRegistered, false)
+assert.equal(preflight.sharedPublicContractRegistered, true)
 
 assert.deepEqual(preflight.selectionFields, [
   'selectionId',
@@ -87,7 +87,7 @@ for (const field of ['archiveFileName', 'sha256', 'message', 'progress', 'rollba
 }
 
 const ipcGovernanceSource = await fs.readFile('scripts/runtime-package-ipc-governance.test.ts', 'utf8')
-assert.match(ipcGovernanceSource, /assert\.doesNotMatch\(mainIpcSurface, \/runtime-package:\//)
-assert.match(ipcGovernanceSource, /assert\.doesNotMatch\(preloadSource, \/runtimePackage\\s\*:\//)
-assert.match(ipcGovernanceSource, /assert\.doesNotMatch\(rendererSurface, \/runtime-package:\//)
-assert.match(ipcGovernanceSource, /assert\.doesNotMatch\(sharedContractSurface, \/runtime-package:\//)
+assert.match(ipcGovernanceSource, /CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST/)
+assert.match(ipcGovernanceSource, /CHANNEL_RUNTIME_PACKAGE_EXECUTE_SELECTION/)
+assert.match(ipcGovernanceSource, /CHANNEL_RUNTIME_PACKAGE_GET_EXECUTION_STATUS/)
+assert.match(ipcGovernanceSource, /assert\.doesNotMatch\(rendererSurface, \/\\\.manifestPath/)

@@ -14,24 +14,12 @@ import type {
 import { FileSystemRuntimePackageExecutor } from './runtime-package-executor'
 import { validateRuntimePackageManifest } from './runtime-package-manifest.validator'
 import { createLocalRuntimePackageSource } from './runtime-package-source'
+import type { RuntimePackageSessionErrorCode } from '../../shared/contracts/runtime-package.contract'
 
 const DEFAULT_SELECTION_TTL_MS = 10 * 60 * 1000
 const DEFAULT_EXECUTION_RETENTION_MS = 60 * 60 * 1000
 const DEFAULT_MAX_COMPLETED_EXECUTIONS = 50
 const MAX_MANIFEST_BYTES = 2 * 1024 * 1024
-
-export type RuntimePackageSessionErrorCode =
-  | 'CONFIRMATION_REQUIRED'
-  | 'MANIFEST_INVALID'
-  | 'MANIFEST_UNREADABLE'
-  | 'PACKAGE_NOT_FOUND'
-  | 'PACKAGE_NOT_SELECTABLE'
-  | 'ARCHIVE_INVALID'
-  | 'ARCHIVE_MISSING'
-  | 'CHECKSUM_MISMATCH'
-  | 'SELECTION_EXPIRED'
-  | 'EXECUTION_NOT_FOUND'
-  | 'EXECUTION_FAILED'
 
 export interface RuntimePackageLocalManifestSelection {
   selectionId: string

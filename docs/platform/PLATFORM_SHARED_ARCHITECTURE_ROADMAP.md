@@ -27,7 +27,7 @@ Unknown or missing evidence remains evidence-insufficient rather than failure.
 | Order | Deepening candidate | Status |
 | --- | --- | --- |
 | 1 | Runtime Package Executor | Complete for explicitly selected local/bundled packages with verification, safe extraction, atomic promotion, registry commit, and rollback. |
-| 2 | Runtime Package Product Flow | Pending exact IPC contract approval; UI progress, cancellation, recovery, and dual-platform Playwright evidence remain. |
+| 2 | Runtime Package Product Flow | Complete for approved polling-only v1: shared contract, main-owned native dialog/session, preload, Chinese UI, and path-free tests. Progress events and cancellation require a later contract. |
 | 3 | Release Flow | Signed-candidate workflow, Release Update Metadata, and trust-evidence Modules are implemented; real credential runs and per-release publishing approval remain. |
 
 OCR dependency or model acquisition is a separate product decision. It must

@@ -28,21 +28,46 @@ runtime, native dependency, packaging, path, or process differences.
 
 ## Current Slice
 
-Harden the shared Doctor Python probe after a reproducible Windows CI timeout:
+Implement the explicitly approved Runtime Package Product Flow from GitHub
+Issue #3:
 
-1. Keep the existing Doctor check id, result shape, warning semantics, and
-   five-second outer check budget.
-2. Move Python command preference into platform adapters: Windows prefers
-   `py`; macOS and other hosts prefer `python3`.
-3. Probe fallback launchers sequentially within an explicit fraction of the
-   outer budget instead of allowing one command to consume the full budget.
-4. Check pip through the selected interpreter and mark unneeded candidates as
-   skipped while preserving the `python`, `python3`, `pyLauncher`, and `pip`
-   detail keys.
-5. Keep IPC, preload, renderer, settings, runtime startup, dependency install,
-   downloads, user data, and public contract changes out of scope.
+1. Register the three approved polling-only v1 IPC channels with one shared
+   public response shape.
+2. Keep native file selection, manifest/archive paths, validation, SHA-256,
+   execution, rollback, cache, and pruning inside the Electron main process.
+3. Expose only opaque selection/execution ids and the approved renderer field
+   allowlists through preload.
+4. Add a shared Chinese display workflow and one Windows/macOS renderer panel
+   in the AI Console Runtime view.
+5. Keep progress events, cancellation, remote/model packages, package scripts,
+   automatic runtime start, raw executor objects, internal messages, and paths
+   out of scope.
 
-## Current Slice Result
+## Runtime Package Product Flow Result
+
+- Added the three approved shared IPC channels, a path-free discriminated
+  response contract, main-process native manifest selection, allowlist
+  projection, preload methods, and one shared Windows/macOS renderer flow.
+- The Chinese UI supports local selection, preview, explicit confirmation,
+  polling, progress, success, structured failure, and rollback states. It
+  does not expose paths, hashes, internal messages, raw executor data,
+  progress events, cancellation, remote/model packages, scripts, or automatic
+  runtime start.
+- Focused handler, leakage, workflow, panel, preflight, governance, session,
+  and AI Runtime IPC tests pass. Typecheck, production build, 142 Python
+  tests, docs sync, agent context, forbidden-path advisory check, diff check,
+  and the complete `ci:governance` suite pass. Doctor CI retains the expected
+  warnings for the intentionally stopped AI Worker.
+- Renderer interaction was verified in isolated Chrome with a preload mock at
+  1280x720 and 1008x725: selection, confirmation, polling, completion, 100%
+  progress, and horizontal-overflow checks all passed. Screenshots and the
+  temporary harness remain outside the repository.
+- A renderer-only dev command unexpectedly launched Electron. Native database
+  initialization failed before any contents were read or modified; the
+  process was stopped immediately. Subsequent UI checks used isolated Chrome
+  only.
+
+## Shared Doctor Python Probe Result
 
 - The Windows governance job reproduced the same failure on its first run and
   failed-job rerun: all runtime-safety tests passed, then the Python Doctor

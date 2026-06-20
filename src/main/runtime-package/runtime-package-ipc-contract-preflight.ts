@@ -4,7 +4,7 @@ export type RuntimePackageIpcChannel =
   | 'runtime-package:get-execution-status'
 
 export interface RuntimePackageIpcContractPreflight {
-  status: 'pending-approval'
+  status: 'approved'
   channels: RuntimePackageIpcChannel[]
   version: 'v1'
   transport: 'ipc-invoke'
@@ -14,7 +14,7 @@ export interface RuntimePackageIpcContractPreflight {
   mainOwnsNativeDialog: true
   rendererSuppliesPaths: false
   rendererReceivesPaths: false
-  sharedPublicContractRegistered: false
+  sharedPublicContractRegistered: true
   selectionFields: string[]
   executionSnapshotFields: string[]
   executionResultFields: string[]
@@ -24,7 +24,7 @@ export interface RuntimePackageIpcContractPreflight {
 
 export function createRuntimePackageIpcContractPreflight(): RuntimePackageIpcContractPreflight {
   return {
-    status: 'pending-approval',
+    status: 'approved',
     channels: [
       'runtime-package:select-local-manifest',
       'runtime-package:execute-selection',
@@ -38,7 +38,7 @@ export function createRuntimePackageIpcContractPreflight(): RuntimePackageIpcCon
     mainOwnsNativeDialog: true,
     rendererSuppliesPaths: false,
     rendererReceivesPaths: false,
-    sharedPublicContractRegistered: false,
+    sharedPublicContractRegistered: true,
     selectionFields: [
       'selectionId',
       'packageId',

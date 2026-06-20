@@ -180,7 +180,10 @@ for (const methodName of Object.keys(channels)) {
   assert.match(preloadSource, new RegExp(`${methodName}:\\s*\\(`))
 }
 
-const aiRuntimeBlock = preloadSource.slice(preloadSource.indexOf('aiRuntime: {'), preloadSource.indexOf('// AI Model IPC API'))
+const aiRuntimeBlock = preloadSource.slice(
+  preloadSource.indexOf('aiRuntime: {'),
+  preloadSource.indexOf('// Runtime Package IPC API')
+)
 assert.doesNotMatch(aiRuntimeBlock, /invoke:\s*\(|send:\s*\(|on:\s*\(/)
 for (const channelConstant of channelConstants) {
   assert.ok(aiRuntimeBlock.includes(channelConstant) || preloadSource.includes(channelConstant))
