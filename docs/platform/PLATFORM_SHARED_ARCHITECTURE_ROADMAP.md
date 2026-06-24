@@ -18,6 +18,7 @@ process differences.
 | 7 | Platform AI Action Plan | Complete: evidence gaps route to existing Models, Runtime, Services, or refresh operations. |
 | 8 | Real AI Evidence Closure Phase 2 | Complete: supported CUDA, MPS, ONNX, and GGUF/mmproj routes have scoped evidence; OCR gaps remain explicit. |
 | 9 | AI Runtime Bootstrap | Complete: one main-process Module assembles both platform branch Providers, cache roots, profiles, and Worker autostart from explicit host facts. |
+| 10 | AI Python Environment | Complete: one Interface resolves managed runtimes and base Python for all main-process callers while host differences remain in adapters. |
 
 Completion means the shared architecture and evidence contracts are closed. It
 does not mean every optional model dependency or model artifact is installed.

@@ -107,7 +107,7 @@ app.whenReady().then(async () => {
     
     // Resolve python executable on startup for diagnostic logging and packaging validation
     try {
-      const { resolvePythonExecutable } = await import('./services/ocr-dependency.service')
+      const { resolvePythonExecutable } = await import('./services/ai-python-runtime.service')
       const pyPath = resolvePythonExecutable()
       console.log(`[resolvePythonExecutable] Startup check resolved path: ${pyPath}`)
     } catch (pyErr) {

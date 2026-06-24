@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { spawn } from 'child_process'
+import { resolvePythonExecutable } from './ai-python-runtime.service'
 
 function findScriptPath(): string {
   const starts = [process.cwd()]
@@ -28,20 +29,6 @@ function findScriptPath(): string {
   }
 
   return path.resolve(process.cwd(), 'scripts', 'check-text-ocr-providers.py')
-}
-
-function resolvePythonExecutable(): string {
-  const envs = [
-    process.env.DESIGN_ASSET_MANAGER_PYTHON,
-    process.env.TEXT_OCR_PYTHON,
-    process.env.PYTHON
-  ]
-  for (const env of envs) {
-    if (env && env.trim()) {
-      return env.trim()
-    }
-  }
-  return 'python'
 }
 
 export interface OcrHealthcheckResult {

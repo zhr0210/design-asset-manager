@@ -1,66 +1,19 @@
 import path from 'path'
 import fs from 'fs'
-import { spawn, execSync } from 'child_process'
+import { spawn } from 'child_process'
 import { app, type WebContents } from 'electron'
 import { SettingsService } from './settings.service'
 import { resolveManagedPaths } from '../platform/path-resolver'
-import { resolveDebugLogPath } from '../platform/log-path-resolver'
 import type { OcrEnvPayload } from '../../shared/contracts/ocr-dependency.contract'
 import {
   CHANNEL_OCR_INSTALL_LOG_UPDATE
 } from '../../shared/contracts/ocr-dependency.contract'
 import { resolveAiServicePath } from './ai-service-paths'
-
-interface OcrManagedPythonRuntimeAdapter {
-  platform?: NodeJS.Platform | string
-  pythonPathParts: string[]
-}
-
-interface OcrBasePythonResolver {
-  platform?: NodeJS.Platform | string
-  resolve: () => string | null
-}
-
-const OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS: OcrManagedPythonRuntimeAdapter[] = [
-  { platform: 'win32', pythonPathParts: ['Scripts', 'python.exe'] },
-  { pythonPathParts: ['bin', 'python'] }
-]
-
-const OCR_BASE_PYTHON_RESOLVERS: OcrBasePythonResolver[] = [
-  { platform: 'win32', resolve: resolveWindowsBasePythonExecutable },
-  { platform: 'darwin', resolve: resolveMacOSHomebrewPythonExecutable },
-  { resolve: resolveDefaultBasePythonExecutable }
-]
-
-function redactDebugMessage(msg: string): string {
-  const homeLikeValues = [
-    process.env.USERPROFILE,
-    process.env.HOME,
-    process.env.HOMEPATH
-  ].filter((value): value is string => Boolean(value && value.trim()))
-
-  return homeLikeValues.reduce((current, value) => {
-    return current.split(value).join('<user-home>')
-  }, msg)
-}
-
-function writeDebugLog(msg: string): void {
-  try {
-    const managedPaths = resolveManagedPaths()
-    const logPath = resolveDebugLogPath('ocr-dependency', {
-      managedPaths,
-      fileName: 'ocr-dependency.log'
-    })
-    const dir = path.dirname(logPath)
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true })
-    }
-    const timestamp = new Date().toISOString()
-    fs.appendFileSync(logPath, `[${timestamp}] ${redactDebugMessage(msg)}\n`, 'utf8')
-  } catch (err) {
-    // Ignore
-  }
-}
+import {
+  resolveBasePythonExecutable,
+  resolveManagedAiPythonRuntime,
+  resolvePythonExecutable
+} from './ai-python-runtime.service'
 
 function resolveElectronManagedPaths() {
   return resolveManagedPaths({
@@ -72,218 +25,14 @@ function findEnvCheckScriptPath(): string {
   return resolveAiServicePath(['tools', 'check_ocr_env.py'])
 }
 
-function searchWindowsPythonPaths(): string | null {
-  const userProfile = process.env.USERPROFILE || process.env.HOMEPATH || ''
-  if (!userProfile) return null
-
-  writeDebugLog('[resolvePythonExecutable] Searching in common Windows programs Python directories...')
-
-  // 1. Check User Local Programs Python directory
-  const localProgramsPythonDir = path.join(userProfile, 'AppData', 'Local', 'Programs', 'Python')
-  if (fs.existsSync(localProgramsPythonDir)) {
-    try {
-      const dirs = fs.readdirSync(localProgramsPythonDir)
-      dirs.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }))
-      for (const dir of dirs) {
-        if (dir.toLowerCase().startsWith('python')) {
-          const exePath = path.join(localProgramsPythonDir, dir, 'python.exe')
-          if (fs.existsSync(exePath)) {
-            writeDebugLog(`[resolvePythonExecutable] Found Python in User Programs: ${exePath}`)
-            return exePath
-          }
-        }
-      }
-    } catch (err: any) {
-      writeDebugLog(`[resolvePythonExecutable] Error reading local programs Python dir: ${err.message}`)
-    }
-  }
-
-  // 2. Check System Program Files Python directory
-  const programFilesPythonDir = 'C:\\Program Files\\Python'
-  if (fs.existsSync(programFilesPythonDir)) {
-    try {
-      const dirs = fs.readdirSync(programFilesPythonDir)
-      dirs.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }))
-      for (const dir of dirs) {
-        if (dir.toLowerCase().startsWith('python')) {
-          const exePath = path.join(programFilesPythonDir, dir, 'python.exe')
-          if (fs.existsSync(exePath)) {
-            writeDebugLog(`[resolvePythonExecutable] Found Python in Program Files: ${exePath}`)
-            return exePath
-          }
-        }
-      }
-    } catch (err: any) {
-      writeDebugLog(`[resolvePythonExecutable] Error reading Program Files Python dir: ${err.message}`)
-    }
-  }
-
-  // 3. Check C:\Python* common root paths
-  try {
-    const rootDirs = fs.readdirSync('C:\\')
-    const pyDirs = rootDirs.filter(d => d.toLowerCase().startsWith('python'))
-    pyDirs.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }))
-    for (const dir of pyDirs) {
-      const exePath = path.join('C:\\', dir, 'python.exe')
-      if (fs.existsSync(exePath)) {
-        writeDebugLog(`[resolvePythonExecutable] Found Python in C:\\ root: ${exePath}`)
-        return exePath
-      }
-    }
-  } catch (err: any) {
-    writeDebugLog(`[resolvePythonExecutable] Error reading C:\\ root dir: ${err.message}`)
-  }
-
-  return null
-}
-
-function resolveWindowsBasePythonExecutable(): string | null {
-  try {
-    writeDebugLog('[resolvePythonExecutable] platform is win32, running execSync("where python")...')
-    const output = execSync('where python', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
-    writeDebugLog(`[resolvePythonExecutable] "where python" raw output:\n${output}`)
-    const lines = output.split(/\r?\n/).map(l => l.trim()).filter(Boolean)
-    for (const line of lines) {
-      if (line.toLowerCase().endsWith('python.exe') && !line.toLowerCase().includes('microsoft\\windowsapps')) {
-        writeDebugLog(`[resolvePythonExecutable] WindowsApps bypass resolved: ${line}`)
-        return line
-      }
-    }
-  } catch (e: any) {
-    writeDebugLog(`[resolvePythonExecutable] execSync("where python") failed: ${e?.message || String(e)}`)
-  }
-
-  return searchWindowsPythonPaths()
-}
-
-function resolveMacOSHomebrewPythonExecutable(): string {
-  writeDebugLog('[resolvePythonExecutable] Falling back to default "python"')
-
-  const homebrewPython313 = "/opt/homebrew/bin/python3.13"
-  if (fs.existsSync(homebrewPython313)) {
-    writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3.13")
-    return homebrewPython313
-  }
-  const homebrewPython3 = "/opt/homebrew/bin/python3"
-  if (fs.existsSync(homebrewPython3)) {
-    writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3")
-    return homebrewPython3
-  }
-
-  return 'python'
-}
-
-function resolveDefaultBasePythonExecutable(): string {
-  writeDebugLog('[resolvePythonExecutable] Falling back to default "python"')
-  return 'python'
-}
-
-function resolvePlatformBasePythonExecutable(platform: NodeJS.Platform | string = process.platform): string {
-  for (const resolver of OCR_BASE_PYTHON_RESOLVERS) {
-    if (resolver.platform && resolver.platform !== platform) continue
-    const resolved = resolver.resolve()
-    if (resolved) return resolved
-  }
-  return 'python'
-}
-
-function resolveManagedVenvPythonPath(venvDir: string): string {
-  return path.join(venvDir, ...resolveManagedVenvPythonPathParts())
-}
-
-function resolveManagedVenvPythonPathParts(): string[] {
-  const adapter = OCR_MANAGED_PYTHON_RUNTIME_ADAPTERS.find((item) => !item.platform || item.platform === process.platform)
-  return adapter?.pythonPathParts ?? ['bin', 'python']
-}
-
-export function resolveMacOSAiPythonRuntime(): {
-  runtimeDir: string
-  venvDir: string
-  pythonPath: string
-  exists: boolean
-} {
-  const managedPaths = resolveElectronManagedPaths()
-  const runtimeDir = path.join(managedPaths.runtimeDir, 'macos-ai-python')
-  const venvDir = path.join(runtimeDir, '.venv')
-  const pythonPath = resolveManagedVenvPythonPath(venvDir)
-
-  return {
-    runtimeDir,
-    venvDir,
-    pythonPath,
-    exists: fs.existsSync(pythonPath)
-  }
-}
-
-/** Resolve an older venv that already has torch installed as a fallback. */
-function resolveFallbackVenvPython(): string | null {
-  const managedPaths = resolveElectronManagedPaths()
-  const oldVenvPython = path.join(
-    managedPaths.runtimeDir,
-    'macos-ai-python',
-    '.venv.old',
-    ...resolveManagedVenvPythonPathParts()
-  )
-  if (!fs.existsSync(oldVenvPython)) return null
-  try {
-    execSync(`"${oldVenvPython}" -c "import torch"`, { timeout: 5000, stdio: 'ignore' })
-    writeDebugLog('[resolvePythonExecutable] Fallback old venv has torch, preferring it.')
-    return oldVenvPython
-  } catch {
-    return null
-  }
-}
-
-export function resolveBasePythonExecutable(): string {
-  writeDebugLog('[resolvePythonExecutable] Resolving Python executable...')
-  const envs = [
-    process.env.DESIGN_ASSET_MANAGER_PYTHON,
-    process.env.TEXT_OCR_PYTHON,
-    process.env.PYTHON
-  ]
-  for (const [idx, env] of envs.entries()) {
-    if (env && env.trim()) {
-      writeDebugLog(`[resolvePythonExecutable] Found env key index ${idx}: ${env}`)
-      return env.trim()
-    }
-  }
-
-  return resolvePlatformBasePythonExecutable()
-}
-
-export function resolvePythonExecutable(): string {
-  const explicit = process.env.DESIGN_ASSET_MANAGER_PYTHON
-  if (explicit && explicit.trim()) return explicit.trim()
-
-  const managedRuntime = resolveMacOSAiPythonRuntime()
-  if (managedRuntime.exists) {
-    try {
-      execSync(`"${managedRuntime.pythonPath}" -c "import torch"`, {
-        timeout: 5000,
-        stdio: 'ignore'
-      })
-      writeDebugLog('[resolvePythonExecutable] Using managed macOS AI Python runtime.')
-      return managedRuntime.pythonPath
-    } catch {
-      writeDebugLog('[resolvePythonExecutable] Managed venv missing torch, trying fallback...')
-      const fallback = resolveFallbackVenvPython()
-      if (fallback) return fallback
-      writeDebugLog('[resolvePythonExecutable] Fallback also missing torch, using managed venv.')
-      return managedRuntime.pythonPath
-    }
-  }
-
-  return resolveBasePythonExecutable()
-}
-
-export async function ensureMacOSAiPythonRuntime(): Promise<{
+export async function ensureManagedAiPythonRuntime(): Promise<{
   success: boolean
   pythonPath: string
   runtimeDir: string
   created: boolean
   error?: string
 }> {
-  const managedRuntime = resolveMacOSAiPythonRuntime()
+  const managedRuntime = resolveManagedAiPythonRuntime()
   if (managedRuntime.exists) {
     return {
       success: true,
@@ -332,6 +81,8 @@ export async function ensureMacOSAiPythonRuntime(): Promise<{
     })
   })
 }
+
+export const ensureMacOSAiPythonRuntime = ensureManagedAiPythonRuntime
 
 export class OcrDependencyService {
   private static instance: OcrDependencyService

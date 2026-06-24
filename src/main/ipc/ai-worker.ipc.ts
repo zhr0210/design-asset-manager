@@ -81,12 +81,12 @@ export function registerAiWorkerIpc() {
 
   // macOS AI dependency installer (torch, transformers, onnxruntime, etc.)
   ipcMain.handle('macos-ai:install-deps', async (event) => {
-    const { ensureMacOSAiPythonRuntime } = await import('../services/ocr-dependency.service')
+    const { ensureManagedAiPythonRuntime } = await import('../services/ocr-dependency.service')
     const { resolveAiServicePath } = await import('../services/ai-service-paths')
     const installScript = resolveAiServicePath(['tools', 'install_macos_ai_deps.py'])
     const startedAt = Date.now()
     const scriptLabel = 'ai-service/tools/install_macos_ai_deps.py'
-    const runtime = await ensureMacOSAiPythonRuntime()
+    const runtime = await ensureManagedAiPythonRuntime()
     const pythonExe = runtime.pythonPath
     const pythonLabel = runtime.success ? 'managed-venv-python' : path.basename(pythonExe)
 

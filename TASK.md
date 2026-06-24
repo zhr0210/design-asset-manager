@@ -26,24 +26,27 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
-## AI Runtime Bootstrap Module Result
+## AI Python Environment Module Result
 
-- Moved platform branch Provider descriptors, profile selection, runtime cache
-  path adaptation, Python Worker configuration, and host autostart policy from
-  the AI Runtime IPC Module into one shared bootstrap Module.
-- The bootstrap Interface accepts explicit host facts and resolved executable
-  locations. It does not read `process.platform`, Electron IPC, settings,
-  runtime databases, user assets, model caches, or model weights.
-- macOS and Windows retain their real profile, metadata, and cache-path
-  Adapters while sharing manager assembly and autostart implementation. Other
-  hosts continue to select the disabled runtime and do not start a Worker.
-- Focused behavior tests assemble real runtime managers with a mock process
-  Adapter for macOS arm64/x64, Windows x64, and Linux. They verify Provider
-  registration, current-platform metadata, profile ids, managed cache roots,
-  active runtime selection, autostart, and fail-closed behavior.
-- Existing IPC channels, response shapes, preload/renderer callers, evidence
-  semantics, and runtime behavior are unchanged. The focused test is part of
-  cross-platform Runtime Safety CI.
+- Deepened the former pass-through AI Python Runtime Module into one shared
+  AI Python Environment Interface with a pure implementation and Electron IO
+  Adapter.
+- Managed-runtime preference, environment overrides, torch import validation,
+  old-venv fallback, Windows PATH/install-root search, macOS Homebrew fallback,
+  and platform executable layout now have one locality.
+- AI Worker, runtime bootstrap, GPU/Memory Guard, model operations, EasyOCR,
+  PaddleOCR, RapidOCR, OCR Healthcheck, and OCR dependency workflows now use
+  the same resolver. Duplicate RapidOCR and Healthcheck implementations were
+  removed.
+- The existing managed directory name remains unchanged for compatibility;
+  callers and new exports use platform-neutral terminology. The old macOS
+  export names remain aliases for internal compatibility.
+- Focused in-memory behavior tests cover macOS managed/current/old runtimes,
+  Homebrew and environment precedence, Windows managed layout, WindowsApps
+  filtering and install-root fallback, plus Linux default behavior.
+- Existing IPC channels, response shapes, explicit installation actions,
+  renderer behavior, model caches, and user assets are unchanged. The new
+  focused test runs in cross-platform Runtime Safety CI.
 - Focused tests, typecheck, production build, complete governance, 142 Python
   tests, docs sync, agent context, forbidden-path advisory, and diff checks
   pass. Doctor retains the expected stopped-worker warnings.

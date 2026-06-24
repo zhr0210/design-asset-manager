@@ -55,7 +55,9 @@ Model Path evidence remain separate states.
   only descriptor and path Adapter values differ.
 - ONNX execution-provider selection.
 - Llama package selection and process launch.
-- OCR interpreter and dependency discovery.
+- AI Python Environment resolution for OCR, AI Worker, runtime bootstrap,
+  health checks, and model operations; Windows PATH/install-root search and
+  macOS Homebrew fallback remain concrete adapters.
 - Runtime archive and executable handling.
 - Windows Sandbox and macOS packaged-app smoke.
 - Signing, quarantine, and notarization checks.

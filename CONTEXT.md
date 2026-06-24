@@ -482,6 +482,10 @@ _Avoid_: Auto probe, startup ping
 The runtime provider shape for launching or health-checking the local Python AI Worker.
 _Avoid_: AI Worker, Python service
 
+**AI Python Environment**:
+The shared main-process module that resolves the preferred Python executable and managed Python runtime layout from explicit host facts, while Windows and macOS filesystem and command differences remain behind adapters.
+_Avoid_: OCR Python, macOS Python environment, Python finder
+
 **Llama Runtime**:
 The local Llama-oriented runtime capability for planning, installing, starting, and testing GGUF-based inference services.
 _Avoid_: llama.cpp, llama server
