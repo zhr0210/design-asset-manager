@@ -26,28 +26,29 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
-## Current Platform AI Runtime Request Selection Result
+## AI Runtime Bootstrap Module Result
 
-- Extended the renderer Adapter to bind Platform AI Branch Status alongside
-  capability, Python compatibility, and Python execution requests.
-- AI Console and AI Runtime Panel now resolve the current platform once from
-  runtime metadata and reuse the same request selection. Missing current-host
-  metadata fails closed instead of falling back to macOS requests.
-- Focused tests prove macOS and Windows select their own complete request set,
-  AI Console contains no direct platform request calls, and runtime-safety CI
-  executes the selection contract on both platform runners.
-- Isolated Chrome/Playwright checks at the default 1280x720 desktop viewport
-  show the correct Chinese branch panel for both platforms. Each run called
-  only its capability, branch-status, and Python-status methods; opposite-host
-  call counts were zero and the panel was not clipped.
-- Typecheck, production build, complete governance, focused renderer/workflow
-  tests, 142 Python tests, docs sync, agent context, forbidden-path advisory,
-  and diff checks pass. Doctor retains the expected stopped-worker warnings.
-- Existing IPC channels, response shapes, evidence semantics, actions, and
-  renderer layout are unchanged. A diagnostic at the 1008px content viewport
-  confirmed the pre-existing mismatch between Electron's 1024px outer-window
-  minimum and AppShell's 1120px desktop minimum; address that separately as a
-  global responsive-layout decision.
+- Moved platform branch Provider descriptors, profile selection, runtime cache
+  path adaptation, Python Worker configuration, and host autostart policy from
+  the AI Runtime IPC Module into one shared bootstrap Module.
+- The bootstrap Interface accepts explicit host facts and resolved executable
+  locations. It does not read `process.platform`, Electron IPC, settings,
+  runtime databases, user assets, model caches, or model weights.
+- macOS and Windows retain their real profile, metadata, and cache-path
+  Adapters while sharing manager assembly and autostart implementation. Other
+  hosts continue to select the disabled runtime and do not start a Worker.
+- Focused behavior tests assemble real runtime managers with a mock process
+  Adapter for macOS arm64/x64, Windows x64, and Linux. They verify Provider
+  registration, current-platform metadata, profile ids, managed cache roots,
+  active runtime selection, autostart, and fail-closed behavior.
+- Existing IPC channels, response shapes, preload/renderer callers, evidence
+  semantics, and runtime behavior are unchanged. The focused test is part of
+  cross-platform Runtime Safety CI.
+- Focused tests, typecheck, production build, complete governance, 142 Python
+  tests, docs sync, agent context, forbidden-path advisory, and diff checks
+  pass. Doctor retains the expected stopped-worker warnings.
+- This slice has no renderer change, so UI screenshot validation is skipped;
+  Windows and macOS GitHub CI are the host acceptance gate after push.
 
 ## Runtime Package Product Flow Result
 

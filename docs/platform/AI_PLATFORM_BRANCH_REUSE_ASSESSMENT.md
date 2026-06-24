@@ -49,6 +49,10 @@ Model Path evidence remain separate states.
   capability, Platform AI Branch Status, Python compatibility, and execution
   probes. AI Console and AI Runtime Panel reuse that Module instead of calling
   both platform channel groups.
+- AI Runtime bootstrap uses one main-process Module for Provider registration,
+  profile selection, managed cache roots, Python Worker configuration, and
+  host autostart. Windows and macOS facts enter through the same Interface;
+  only descriptor and path Adapter values differ.
 - ONNX execution-provider selection.
 - Llama package selection and process launch.
 - OCR interpreter and dependency discovery.

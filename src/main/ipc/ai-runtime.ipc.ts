@@ -1,4 +1,3 @@
-import path from 'path'
 import os from 'os'
 import { ipcMain } from 'electron'
 import {
@@ -24,11 +23,8 @@ import {
   CHANNEL_AI_RUNTIME_STOP_RUNTIME,
   CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG
 } from '../../shared/contracts/ai-runtime.contract'
-import { createMacOSAiBranchRuntimeMetadata } from '../../shared/constants/macos-ai-runtime.constants'
-import { createWindowsAiBranchRuntimeMetadata } from '../../shared/constants/windows-ai-runtime.constants'
 import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
 import type { PlatformAiBranch } from '../../shared/types/platform-ai-branch-status.types'
-import type { RuntimeProfileId } from '../../shared/types/runtime-profile.types'
 import type {
   AiRuntimeGetStateRequest,
   AiRuntimeHealthCheckRequest,
@@ -48,11 +44,8 @@ import type {
   AiRuntimeOnnxModelLoadProbeResponse
 } from '../../shared/contracts/ai-runtime.contract'
 import { AiClientService } from '../services/ai-client.service'
-import { AiRuntimeManager } from '../services/ai-runtime/ai-runtime-manager'
-import { DisabledAiRuntimeProvider } from '../services/ai-runtime/providers/disabled-ai-runtime.provider'
-import { PythonWorkerRuntimeProvider } from '../services/ai-runtime/providers/python-worker-runtime.provider'
-import { createDefaultPythonWorkerRuntimeConfig } from '../services/ai-runtime/providers/python-worker-runtime-presets'
-import { resolveAiServicePath, resolveAiServiceRoot } from '../services/ai-service-paths'
+import { bootstrapAiRuntimeManager } from '../services/ai-runtime/ai-runtime-bootstrap'
+import { resolveAiServiceRoot } from '../services/ai-service-paths'
 import { resolvePythonExecutable } from '../services/ai-python-runtime.service'
 import { createPlatformAiBranchStatus } from '../services/ai-runtime/platform-ai-branch-status.projector'
 import {
@@ -87,25 +80,6 @@ function failure(error: unknown): AiRuntimeIpcResponse<never> {
 
 function resolveRuntimePythonExecutable(): string {
   return resolvePythonExecutable()
-}
-
-interface PlatformAiBranchRuntimeProviderDescriptor {
-  id: string
-  displayName: string
-  platform: PlatformName
-  profileRules: PlatformAiBranchRuntimeProviderProfileRule[]
-  createMetadata: (currentPlatform: PlatformName, currentArch: PlatformArch) => Record<string, unknown>
-}
-
-interface PlatformAiBranchRuntimeProviderProfileRule {
-  platform: PlatformName
-  arch?: PlatformArch
-  profileId: RuntimeProfileId
-}
-
-interface AiRuntimeAppDataRootAdapter {
-  platform?: PlatformName
-  pathParts: string[]
 }
 
 interface PlatformAiBranchStatusIpcDescriptor {
@@ -147,48 +121,6 @@ type PythonExecutionProbeIpcDescriptor =
       probe: () => Promise<AiRuntimePythonCudaExecutionProbeResponse>
     }
 
-function resolvePlatformAiBranchProviderProfileId(
-  descriptor: PlatformAiBranchRuntimeProviderDescriptor,
-  currentPlatform: PlatformName,
-  currentArch: PlatformArch
-): RuntimeProfileId | null {
-  const rule = descriptor.profileRules.find((candidate) => {
-    return candidate.platform === currentPlatform
-      && (candidate.arch === undefined || candidate.arch === currentArch)
-  })
-  return rule?.profileId ?? null
-}
-
-const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimeProviderDescriptor[] = [
-  {
-    id: 'macos-ai-branch-runtime',
-    displayName: 'macOS AI Branch Runtime',
-    platform: 'darwin',
-    profileRules: [
-      { platform: 'darwin', arch: 'arm64', profileId: 'macos-apple-silicon' },
-      { platform: 'darwin', profileId: 'macos-intel' }
-    ],
-    createMetadata: (currentPlatform, currentArch) => ({
-      displayName: 'macOS AI Branch',
-      macosAiBranch: createMacOSAiBranchRuntimeMetadata(currentPlatform, currentArch)
-    })
-  },
-  {
-    id: 'windows-ai-branch-runtime',
-    displayName: 'Windows AI Branch Runtime',
-    platform: 'win32',
-    profileRules: [
-      { platform: 'win32', profileId: 'windows-nvidia-cuda' }
-    ],
-    createMetadata: (currentPlatform, currentArch) => ({
-      displayName: 'Windows AI Branch',
-      windowsAiBranch: createWindowsAiBranchRuntimeMetadata(currentPlatform, currentArch)
-    })
-  }
-]
-
-const PYTHON_WORKER_AUTOSTART_PLATFORMS = new Set<PlatformName>(['darwin', 'win32'])
-
 const PLATFORM_AI_BRANCH_STATUS_IPC_DESCRIPTORS: PlatformAiBranchStatusIpcDescriptor[] = [
   {
     channel: CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
@@ -200,73 +132,18 @@ const PLATFORM_AI_BRANCH_STATUS_IPC_DESCRIPTORS: PlatformAiBranchStatusIpcDescri
   }
 ]
 
-const AI_RUNTIME_APP_DATA_ROOT_ADAPTERS: AiRuntimeAppDataRootAdapter[] = [
-  {
-    platform: 'win32',
-    pathParts: ['AppData', 'Local', 'design-asset-manager', 'runtime']
-  },
-  {
-    pathParts: ['Library', 'Application Support', 'design-asset-manager', 'runtime']
+const { manager: aiRuntimeManager } = bootstrapAiRuntimeManager({
+  platform: process.platform as PlatformName,
+  arch: process.arch as PlatformArch,
+  homeDir: os.homedir(),
+  pythonExecutable: resolveRuntimePythonExecutable(),
+  aiServiceRoot: resolveAiServiceRoot()
+}, {
+  onAutoStartError: (error) => {
+    const message = error instanceof Error ? error.message : String(error)
+    console.warn('[ai-runtime] Could not auto-start python-worker-runtime:', message)
   }
-]
-
-function resolveAiRuntimeAppDataRoot(platform: PlatformName, homeDir: string): string {
-  const adapter = AI_RUNTIME_APP_DATA_ROOT_ADAPTERS.find((candidate) => {
-    return !candidate.platform || candidate.platform === platform
-  })!
-  return path.join(homeDir, ...adapter.pathParts)
-}
-
-function createSafeAiRuntimeManager(): AiRuntimeManager {
-  const manager = new AiRuntimeManager()
-  const currentPlatform = process.platform as PlatformName
-  const currentArch = process.arch as PlatformArch
-
-  const appDataRoot = resolveAiRuntimeAppDataRoot(currentPlatform, os.homedir())
-
-  manager.registerProvider(new DisabledAiRuntimeProvider({ id: 'disabled-runtime' }))
-  for (const descriptor of PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS) {
-    manager.registerProvider(new DisabledAiRuntimeProvider({
-      id: descriptor.id,
-      displayName: descriptor.displayName,
-      platform: descriptor.platform,
-      profileId: resolvePlatformAiBranchProviderProfileId(descriptor, currentPlatform, currentArch),
-      metadata: descriptor.createMetadata(currentPlatform, currentArch)
-    }))
-  }
-  manager.registerProvider(new PythonWorkerRuntimeProvider(
-    createDefaultPythonWorkerRuntimeConfig({
-      runtimeId: 'python-worker-runtime',
-      displayName: 'Python AI Worker Runtime',
-      pythonPath: resolveRuntimePythonExecutable(),
-      scriptPath: resolveAiServicePath(['app.py']),
-      workingDirectory: resolveAiServiceRoot(),
-      env: {
-        PYTHONUNBUFFERED: '1',
-        DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1',
-        HF_HOME: path.join(appDataRoot, 'huggingface-cache'),
-        PADDLE_HOME: path.join(appDataRoot, 'paddle-cache'),
-        PADDLEX_HOME: path.join(appDataRoot, 'paddlex-cache')
-      }
-    })
-  ))
-
-  // Auto-start Python AI Worker on macOS and Windows so capabilities probe works
-  const autoStart = PYTHON_WORKER_AUTOSTART_PLATFORMS.has(currentPlatform)
-  if (autoStart) {
-    manager.selectActiveRuntime('python-worker-runtime')
-    // Fire-and-forget start; failure is non-fatal (worker may already be running
-    // or managed-venv may need deps installed first).
-    manager.startRuntime('python-worker-runtime').catch((err) => {
-      console.warn('[ai-runtime] Could not auto-start python-worker-runtime:', err?.message ?? err)
-    })
-  } else {
-    manager.selectActiveRuntime('disabled-runtime')
-  }
-  return manager
-}
-
-const aiRuntimeManager = createSafeAiRuntimeManager()
+})
 const aiClientService = new AiClientService()
 const llamaRuntimeService = LlamaRuntimeInstallService.getInstance()
 const ocrRealEvidenceProbeService = createOcrRealEvidenceProbeService()

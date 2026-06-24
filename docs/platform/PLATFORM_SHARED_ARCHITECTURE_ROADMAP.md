@@ -17,6 +17,7 @@ process differences.
 | 6 | Product AI Truthfulness Closure | Complete: product execution fails closed instead of returning simulated AI output. |
 | 7 | Platform AI Action Plan | Complete: evidence gaps route to existing Models, Runtime, Services, or refresh operations. |
 | 8 | Real AI Evidence Closure Phase 2 | Complete: supported CUDA, MPS, ONNX, and GGUF/mmproj routes have scoped evidence; OCR gaps remain explicit. |
+| 9 | AI Runtime Bootstrap | Complete: one main-process Module assembles both platform branch Providers, cache roots, profiles, and Worker autostart from explicit host facts. |
 
 Completion means the shared architecture and evidence contracts are closed. It
 does not mean every optional model dependency or model artifact is installed.
