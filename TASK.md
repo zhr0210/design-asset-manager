@@ -986,6 +986,17 @@ and Release Update Metadata pass.
   Smoke, and disposable Windows Sandbox installation all passed. Signing is
   intentionally absent, so the candidate remains below distribution-ready.
 
+## Platform AI Branch Calling Constraints Result
+
+- Modified `src/renderer/routes/AiConsolePage.tsx` to conditionally load platform-specific AI runtime capabilities based on listRuntimes platform branch detection.
+- Imported `getCurrentPlatformAiBranchRuntime` and `resolvePlatformAiBranch` from `../../shared/workflows/ai-runtime-status.workflow`.
+- Added `api.aiRuntime.listRuntimes()` to the parallel `Promise.all` alongside `status`, `gpu`, `models`, `llama`, `ggufModels`, and `clipSiglipStatus`, and removed the initial calls to the four platform-specific getters (`getMacOSCapabilities`, `getWindowsCapabilities`, `getMacOSAiBranchStatus`, `getWindowsAiBranchStatus`).
+- Resolved `currentPlatformBranch` from the runtimes list response and conditionally queried the active platform's specific getters in parallel:
+  - If `macos`: called macOS capabilities and branch status, set windows capabilities and status to `null`.
+  - If `windows`: called Windows capabilities and branch status, set macOS capabilities and status to `null`.
+- Focused tests passed: `test-ai-console-macos-branch`, `test-platform-ai-branch-status-display`, `test-ai-client-runtime-adapter`, `test-ai-runtime-ipc`, `test-ai-runtime-panel`, and `test-windows-ai-real-evidence-validation`.
+- Full governance suite `npm run ci:governance` and python tests `python3 -m unittest discover ai-service/tests` all passed successfully.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

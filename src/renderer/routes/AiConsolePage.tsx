@@ -83,6 +83,8 @@ import {
   projectPlatformAiWorkerProbeDiagnosticsSelection,
   projectPlatformPythonRuntimeCompatibilityDisplay,
   type PlatformAiWorkerProbeDiagnosticsDisplay,
+  getCurrentPlatformAiBranchRuntime,
+  resolvePlatformAiBranch
 } from '../../shared/workflows/ai-runtime-status.workflow'
 import {
   type AiConsoleGpuDisplay,
@@ -810,18 +812,44 @@ export default function AiConsolePage() {
         return
       }
 
-      const [status, gpu, models, llama, ggufModels, macOSProbe, windowsProbe, macOSBranchStatus, windowsBranchStatus, clipSiglipStatus] = await Promise.all([
+      let macOSProbe: any = null
+      let windowsProbe: any = null
+      let macOSBranchStatus: any = null
+      let windowsBranchStatus: any = null
+
+      const [status, gpu, models, llama, ggufModels, runtimesResponse, clipSiglipStatus] = await Promise.all([
         api.aiModelStatus?.().catch((err: any) => ({ offline: true, error: String(err) })),
         api.aiWorkerGetGpuStatus?.().catch(() => null),
         api.aiModelList?.().catch(() => []),
         api.llamaRuntimeGetStatus?.().catch(() => null),
         api.llamaRuntimeListLocalModels?.().catch(() => []),
-        api.aiRuntime?.getMacOSCapabilities ? api.aiRuntime.getMacOSCapabilities().catch(() => null) : Promise.resolve(null),
-        api.aiRuntime?.getWindowsCapabilities ? api.aiRuntime.getWindowsCapabilities().catch(() => null) : Promise.resolve(null),
-        api.aiRuntime?.getMacOSAiBranchStatus ? api.aiRuntime.getMacOSAiBranchStatus().catch(() => null) : Promise.resolve(null),
-        api.aiRuntime?.getWindowsAiBranchStatus ? api.aiRuntime.getWindowsAiBranchStatus().catch(() => null) : Promise.resolve(null),
+        api.aiRuntime?.listRuntimes ? api.aiRuntime.listRuntimes().catch(() => null) : Promise.resolve(null),
         api.aiRuntime?.getClipSiglipOnnxStatus ? api.aiRuntime.getClipSiglipOnnxStatus().catch(() => null) : Promise.resolve(null)
       ])
+
+      const currentRuntimes = runtimesResponse?.success && runtimesResponse.data ? runtimesResponse.data.runtimes : []
+      const currentBranch = getCurrentPlatformAiBranchRuntime(currentRuntimes)
+      const currentPlatformBranch = resolvePlatformAiBranch(currentBranch)
+
+      if (currentPlatformBranch === 'macos') {
+        const [macOSCapabilitiesRes, macOSBranchStatusRes] = await Promise.all([
+          api.aiRuntime?.getMacOSCapabilities ? api.aiRuntime.getMacOSCapabilities().catch(() => null) : Promise.resolve(null),
+          api.aiRuntime?.getMacOSAiBranchStatus ? api.aiRuntime.getMacOSAiBranchStatus().catch(() => null) : Promise.resolve(null)
+        ])
+        macOSProbe = macOSCapabilitiesRes
+        macOSBranchStatus = macOSBranchStatusRes
+        windowsProbe = null
+        windowsBranchStatus = null
+      } else if (currentPlatformBranch === 'windows') {
+        const [windowsCapabilitiesRes, windowsBranchStatusRes] = await Promise.all([
+          api.aiRuntime?.getWindowsCapabilities ? api.aiRuntime.getWindowsCapabilities().catch(() => null) : Promise.resolve(null),
+          api.aiRuntime?.getWindowsAiBranchStatus ? api.aiRuntime.getWindowsAiBranchStatus().catch(() => null) : Promise.resolve(null)
+        ])
+        windowsProbe = windowsCapabilitiesRes
+        windowsBranchStatus = windowsBranchStatusRes
+        macOSProbe = null
+        macOSBranchStatus = null
+      }
 
       setAiStatus(status)
       setGpuStatus(gpu)
