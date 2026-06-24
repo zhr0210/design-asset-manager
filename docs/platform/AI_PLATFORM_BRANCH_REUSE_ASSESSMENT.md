@@ -29,6 +29,7 @@ Model Path evidence remain separate states.
 ## Shared As-Is
 
 - AI Console workflow and status surfaces.
+- The AI Console detects the active Platform AI Branch from `listRuntimes` metadata and conditionally invokes capability, branch-status, and Python-status getters exclusively for the active platform.
 - Dedicated platform status IPC channels with one response shape.
 - Platform AI Action Plan routing.
 - AI task and Queue Sync contracts.
