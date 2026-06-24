@@ -45,6 +45,10 @@ Model Path evidence remain separate states.
   safety CI.
 - macOS and Windows raw capability probes behind one descriptor-driven IPC
   registration flow while retaining separate probe methods and response types.
+- Renderer runtime metadata selects one current-platform request Adapter for
+  capability, Platform AI Branch Status, Python compatibility, and execution
+  probes. AI Console and AI Runtime Panel reuse that Module instead of calling
+  both platform channel groups.
 - ONNX execution-provider selection.
 - Llama package selection and process launch.
 - OCR interpreter and dependency discovery.
@@ -68,15 +72,10 @@ for these differences.
 
 ## Current Recommendation
 
-The AI branch architecture is complete enough to stop broad platform refactors.
-The next maintenance-cost reduction is a shared Runtime Package Executor:
-
-- one transaction interface;
-- one workflow and progress vocabulary;
-- local/bundled and in-memory adapters first;
-- platform adapters only for archive, executable, quarantine, and signing
-  behavior;
-- no implicit model download or runtime start.
+The AI branch architecture and polling-only Runtime Package Product Flow now
+share their product surfaces across Windows and macOS. Keep future work
+focused on proven platform differences and the externally gated Release Flow;
+do not restore dual-platform renderer probing or separate product workflows.
 
 ADR-0007 remains authoritative: MLX is not a separate product route without an
 executable lifecycle and real inference evidence.

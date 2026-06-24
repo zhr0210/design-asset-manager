@@ -26,22 +26,28 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
-## Current Slice
+## Current Platform AI Runtime Request Selection Result
 
-Implement the explicitly approved Runtime Package Product Flow from GitHub
-Issue #3:
-
-1. Register the three approved polling-only v1 IPC channels with one shared
-   public response shape.
-2. Keep native file selection, manifest/archive paths, validation, SHA-256,
-   execution, rollback, cache, and pruning inside the Electron main process.
-3. Expose only opaque selection/execution ids and the approved renderer field
-   allowlists through preload.
-4. Add a shared Chinese display workflow and one Windows/macOS renderer panel
-   in the AI Console Runtime view.
-5. Keep progress events, cancellation, remote/model packages, package scripts,
-   automatic runtime start, raw executor objects, internal messages, and paths
-   out of scope.
+- Extended the renderer Adapter to bind Platform AI Branch Status alongside
+  capability, Python compatibility, and Python execution requests.
+- AI Console and AI Runtime Panel now resolve the current platform once from
+  runtime metadata and reuse the same request selection. Missing current-host
+  metadata fails closed instead of falling back to macOS requests.
+- Focused tests prove macOS and Windows select their own complete request set,
+  AI Console contains no direct platform request calls, and runtime-safety CI
+  executes the selection contract on both platform runners.
+- Isolated Chrome/Playwright checks at the default 1280x720 desktop viewport
+  show the correct Chinese branch panel for both platforms. Each run called
+  only its capability, branch-status, and Python-status methods; opposite-host
+  call counts were zero and the panel was not clipped.
+- Typecheck, production build, complete governance, focused renderer/workflow
+  tests, 142 Python tests, docs sync, agent context, forbidden-path advisory,
+  and diff checks pass. Doctor retains the expected stopped-worker warnings.
+- Existing IPC channels, response shapes, evidence semantics, actions, and
+  renderer layout are unchanged. A diagnostic at the 1008px content viewport
+  confirmed the pre-existing mismatch between Electron's 1024px outer-window
+  minimum and AppShell's 1120px desktop minimum; address that separately as a
+  global responsive-layout decision.
 
 ## Runtime Package Product Flow Result
 

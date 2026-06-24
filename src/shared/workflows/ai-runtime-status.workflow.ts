@@ -861,6 +861,7 @@ export function projectPythonCudaExecutionProbeDisplay(
 
 interface PlatformAiWorkerProbeDiagnosticsSelectionInput {
   platformBranch?: PlatformAiBranch | null
+  probe?: PlatformAiWorkerProbeDiagnosticsInput | null
   macOSProbe?: PlatformAiWorkerProbeDiagnosticsInput | null
   windowsProbe?: PlatformAiWorkerProbeDiagnosticsInput | null
 }
@@ -880,7 +881,7 @@ export function projectPlatformAiWorkerProbeDiagnosticsSelection(
     windows: input.windowsProbe ?? null
   }
   const platformBranch = resolvePlatformAiWorkerProbeDiagnosticsBranch(input)
-  const probe = probes[platformBranch]
+  const probe = input.probe ?? probes[platformBranch]
 
   return {
     platformBranch,

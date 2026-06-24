@@ -42,6 +42,7 @@ import {
   resolvePlatformAiBranch
 } from '../../../shared/workflows/ai-runtime-status.workflow'
 import {
+  selectCurrentPlatformAiRuntimeRequests,
   selectPlatformAiRuntimeRequests,
   type PlatformAiRuntimeAdapterApi
 } from '../../platform-ai-runtime.adapter'
@@ -165,9 +166,9 @@ export default function AiRuntimePanel({ onEvidenceChanged }: { onEvidenceChange
       const currentRuntimes = listResponse.data.runtimes
       setRuntimes(currentRuntimes)
 
-      const currentBranch = getCurrentPlatformAiBranchRuntime(currentRuntimes)
-      const currentPlatformBranch = resolvePlatformAiBranch(currentBranch)
-      const platformRequests = selectPlatformAiRuntimeRequests(api, currentPlatformBranch)
+      const currentPlatformSelection = selectCurrentPlatformAiRuntimeRequests(api, currentRuntimes)
+      if (!currentPlatformSelection) throw new Error('未找到当前平台 AI 运行时。')
+      const { platformBranch: currentPlatformBranch, requests: platformRequests } = currentPlatformSelection
 
       const [activeResponse, probeResponse, pythonStatusResponse, clipSiglipResponse] = await Promise.all([
         api.getActiveRuntime(),

@@ -124,6 +124,8 @@ assert.match(windowsPlatformCopy.clipSiglipCompatibilityDescription, /Windows/)
 const adapterApi = {
   getMacOSCapabilities: async () => ({ success: false }),
   getWindowsCapabilities: async () => ({ success: false }),
+  getMacOSAiBranchStatus: async () => ({ success: false }),
+  getWindowsAiBranchStatus: async () => ({ success: false }),
   getPythonMpsStatus: async () => ({ success: false }),
   getPythonCudaStatus: async () => ({ success: false }),
   probePythonMpsRuntime: async () => ({ success: false }),
@@ -131,10 +133,12 @@ const adapterApi = {
 } satisfies Required<PlatformAiRuntimeAdapterApi>
 const macOSRuntimeRequests = selectPlatformAiRuntimeRequests(adapterApi, 'macos')
 assert.equal(macOSRuntimeRequests.getCapabilities, adapterApi.getMacOSCapabilities)
+assert.equal(macOSRuntimeRequests.getBranchStatus, adapterApi.getMacOSAiBranchStatus)
 assert.equal(macOSRuntimeRequests.getPythonStatus, adapterApi.getPythonMpsStatus)
 assert.equal(macOSRuntimeRequests.probePythonRuntime, adapterApi.probePythonMpsRuntime)
 const windowsRuntimeRequests = selectPlatformAiRuntimeRequests(adapterApi, 'windows')
 assert.equal(windowsRuntimeRequests.getCapabilities, adapterApi.getWindowsCapabilities)
+assert.equal(windowsRuntimeRequests.getBranchStatus, adapterApi.getWindowsAiBranchStatus)
 assert.equal(windowsRuntimeRequests.getPythonStatus, adapterApi.getPythonCudaStatus)
 assert.equal(windowsRuntimeRequests.probePythonRuntime, adapterApi.probePythonCudaRuntime)
 const platformAdapterSource = await fs.readFile('src/renderer/platform-ai-runtime.adapter.ts', 'utf8')
@@ -143,7 +147,8 @@ assert.match(
   /const PLATFORM_AI_RUNTIME_REQUEST_METHODS: Record<PlatformAiBranch, PlatformAiRuntimeRequestMethods>/
 )
 assert.match(platformAdapterSource, /capabilities: 'getMacOSCapabilities'[\s\S]*capabilities: 'getWindowsCapabilities'/)
-assert.match(platformAdapterSource, /api\[methods\.capabilities\][\s\S]*api\[methods\.pythonStatus\][\s\S]*api\[methods\.pythonRuntimeProbe\]/)
+assert.match(platformAdapterSource, /branchStatus: 'getMacOSAiBranchStatus'[\s\S]*branchStatus: 'getWindowsAiBranchStatus'/)
+assert.match(platformAdapterSource, /api\[methods\.capabilities\][\s\S]*api\[methods\.branchStatus\][\s\S]*api\[methods\.pythonStatus\][\s\S]*api\[methods\.pythonRuntimeProbe\]/)
 assert.doesNotMatch(platformAdapterSource, /platformBranch === 'windows'|if \(platformBranch/)
 
 assert.equal(projectPlatformPythonRuntimeCompatibilityDisplay('macos', pythonReady).runtimeLabel, 'torch.mps')
@@ -627,6 +632,14 @@ assert.equal(windowsProbeSelection.platformBranch, 'windows')
 assert.equal(windowsProbeSelection.display.platformBadgeLabel, 'win32/amd64')
 assert.equal(windowsProbeSelection.display.accelerator.captionLabel, 'torch 2.8.0+cu121')
 
+const currentPlatformProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
+  platformBranch: 'windows',
+  probe: windowsRawProbe
+})
+assert.equal(currentPlatformProbeSelection.probe, windowsRawProbe)
+assert.equal(currentPlatformProbeSelection.platformBranch, 'windows')
+assert.equal(currentPlatformProbeSelection.display.connected, true)
+
 const inferredWindowsProbeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
   windowsProbe: windowsRawProbe
 })
@@ -759,6 +772,12 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/doctor/checks/python.check.ts',
   'src/main/index.ts',
   'src/main/ipc/ai-runtime.ipc.ts',
+  'src/main/packaging/release-environment-manifest.ts',
+  'src/main/packaging/release-external-gate-status.ts',
+  'src/main/packaging/release-flow-governance.ts',
+  'src/main/packaging/release-publish-approval.ts',
+  'src/main/packaging/release-readiness-summary.ts',
+  'src/main/packaging/release-signed-candidate-dispatch-status.ts',
   'src/main/platform/platform-detector.ts',
   'src/main/runtime/runtime-profile-registry.ts',
   'src/main/runtime/runtime-profile-resolver.ts',
@@ -993,7 +1012,7 @@ assert.match(
 )
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsSelection'),
-  /const probes: Record<PlatformAiBranch[\s\S]*const probe = probes\[platformBranch\]/
+  /const probes: Record<PlatformAiBranch[\s\S]*const probe = input\.probe \?\? probes\[platformBranch\]/
 )
 assert.doesNotMatch(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsSelection'),
@@ -1044,7 +1063,9 @@ assert.doesNotMatch(matrixSource, /Windows 细项能力矩阵/)
 assert.doesNotMatch(matrixSource, /macOS 细项能力矩阵/)
 assert.match(aiConsoleSource, /projectPlatformPythonRuntimeCompatibilityDisplay/)
 assert.match(aiConsoleSource, /DEFAULT_PLATFORM_AI_BRANCH/)
-assert.match(aiConsoleSource, /selectPlatformAiRuntimeRequests/)
+assert.match(aiConsoleSource, /selectCurrentPlatformAiRuntimeRequests/)
+assert.doesNotMatch(aiConsoleSource, /getMacOSCapabilities|getWindowsCapabilities/)
+assert.doesNotMatch(aiConsoleSource, /getMacOSAiBranchStatus|getWindowsAiBranchStatus/)
 assert.doesNotMatch(aiConsoleSource, /probeSelection\.platformBranch === 'windows'/)
 assert.match(aiConsoleSource, /AiRuntimeCompatibilityDisplay/)
 assert.doesNotMatch(aiConsoleSource, /projectPythonMpsCompatibilityDisplay/)

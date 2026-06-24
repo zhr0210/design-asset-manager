@@ -60,12 +60,11 @@ import type {
 import type { PromptVlmModel } from '../../shared/types/ai-model.types'
 import {
   projectPlatformAiBranchStatusDisplay,
-  projectPlatformAiRouteOverviewDisplay,
-  selectPlatformAiBranchStatus
+  projectPlatformAiRouteOverviewDisplay
 } from '../../shared/workflows/platform-ai-branch-status.workflow'
 import { resolvePlatformAiActionCommand } from '../../shared/workflows/platform-ai-action-plan.workflow'
 import {
-  selectPlatformAiRuntimeRequests,
+  selectCurrentPlatformAiRuntimeRequests,
   type PlatformAiRuntimeAdapterApi
 } from '../platform-ai-runtime.adapter'
 import {
@@ -810,16 +809,29 @@ export default function AiConsolePage() {
         return
       }
 
-      const [status, gpu, models, llama, ggufModels, macOSProbe, windowsProbe, macOSBranchStatus, windowsBranchStatus, clipSiglipStatus] = await Promise.all([
+      const runtimeListResponse = api.aiRuntime?.listRuntimes
+        ? await api.aiRuntime.listRuntimes().catch(() => null)
+        : null
+      const currentRuntimes = runtimeListResponse?.success && Array.isArray(runtimeListResponse.data?.runtimes)
+        ? runtimeListResponse.data.runtimes
+        : []
+      const currentPlatformSelection = api.aiRuntime
+        ? selectCurrentPlatformAiRuntimeRequests(
+            api.aiRuntime as PlatformAiRuntimeAdapterApi,
+            currentRuntimes
+          )
+        : null
+      const getPlatformCapabilities = currentPlatformSelection?.requests.getCapabilities
+      const getPlatformBranchStatus = currentPlatformSelection?.requests.getBranchStatus
+
+      const [status, gpu, models, llama, ggufModels, platformProbeResponse, platformBranchStatusResponse, clipSiglipStatus] = await Promise.all([
         api.aiModelStatus?.().catch((err: any) => ({ offline: true, error: String(err) })),
         api.aiWorkerGetGpuStatus?.().catch(() => null),
         api.aiModelList?.().catch(() => []),
         api.llamaRuntimeGetStatus?.().catch(() => null),
         api.llamaRuntimeListLocalModels?.().catch(() => []),
-        api.aiRuntime?.getMacOSCapabilities ? api.aiRuntime.getMacOSCapabilities().catch(() => null) : Promise.resolve(null),
-        api.aiRuntime?.getWindowsCapabilities ? api.aiRuntime.getWindowsCapabilities().catch(() => null) : Promise.resolve(null),
-        api.aiRuntime?.getMacOSAiBranchStatus ? api.aiRuntime.getMacOSAiBranchStatus().catch(() => null) : Promise.resolve(null),
-        api.aiRuntime?.getWindowsAiBranchStatus ? api.aiRuntime.getWindowsAiBranchStatus().catch(() => null) : Promise.resolve(null),
+        getPlatformCapabilities ? getPlatformCapabilities().catch(() => null) : Promise.resolve(null),
+        getPlatformBranchStatus ? getPlatformBranchStatus().catch(() => null) : Promise.resolve(null),
         api.aiRuntime?.getClipSiglipOnnxStatus ? api.aiRuntime.getClipSiglipOnnxStatus().catch(() => null) : Promise.resolve(null)
       ])
 
@@ -833,26 +845,19 @@ export default function AiConsolePage() {
           setLlamaRunning(llama.serverRunning)
         }
       }
-      const projectedBranchStatus = selectPlatformAiBranchStatus(
-        [macOSBranchStatus, windowsBranchStatus]
-          .map((response: any) => response?.success && response.data ? response.data as PlatformAiBranchStatusResponse : null)
-      )
+      const projectedBranchStatus = platformBranchStatusResponse?.success
+        && platformBranchStatusResponse.data?.platformBranch === currentPlatformSelection?.platformBranch
+        ? platformBranchStatusResponse.data as PlatformAiBranchStatusResponse
+        : null
       setPlatformBranchStatus(projectedBranchStatus)
       const probeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
-        platformBranch: projectedBranchStatus?.platformBranch,
-        macOSProbe: macOSProbe?.success ? macOSProbe.data?.capabilities : null,
-        windowsProbe: windowsProbe?.success ? windowsProbe.data?.capabilities : null
+        platformBranch: currentPlatformSelection?.platformBranch ?? projectedBranchStatus?.platformBranch,
+        probe: platformProbeResponse?.success ? platformProbeResponse.data?.capabilities : null
       })
       setPlatformWorkerProbe(probeSelection.probe)
       setPlatformProbeDisplay(probeSelection.display)
       setPlatformWorkerProbeBranch(probeSelection.platformBranch)
-      const platformRequests = api.aiRuntime
-        ? selectPlatformAiRuntimeRequests(
-            api.aiRuntime as PlatformAiRuntimeAdapterApi,
-            probeSelection.platformBranch
-          )
-        : null
-      const getPlatformPythonStatus = platformRequests?.getPythonStatus
+      const getPlatformPythonStatus = currentPlatformSelection?.requests.getPythonStatus
       if (status?.offline === false && getPlatformPythonStatus) {
         const platformPythonStatus = await getPlatformPythonStatus().catch(() => null)
         setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(
