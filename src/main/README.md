@@ -43,6 +43,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.3 | 2026-06-25 | Consumed shared Electron app lifecycle policy from shared workflow metadata while preserving Windows AppUserModelId and macOS quit behavior. |
 | v1.4.2 | 2026-06-15 | Added the explicitly approved Signed Release Candidate workflow, Release Update Metadata, and structured platform trust evidence. |
 | v1.4.1 | 2026-06-14 | Added the shared release-candidate promotion invariant for Windows and macOS. |
 | v1.4.0 | 2026-06-14 | Added the local/bundled Runtime Package Executor transaction with safe ZIP extraction and rollback. |

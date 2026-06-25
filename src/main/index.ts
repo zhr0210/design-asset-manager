@@ -17,6 +17,7 @@ import { registerColorPaletteIpc } from './ipc/color-palette.ipc'
 import { EmbeddedBrowserManager } from './services/browser-view.manager'
 import { ImageMetadataService } from './services/image-metadata.service'
 import { DESKTOP_VIEWPORT_POLICY } from '../shared/desktop-viewport-policy'
+import { resolveElectronAppLifecyclePolicy } from '../shared/workflows/electron-app-lifecycle.workflow'
 
 // Register local-file scheme as privileged before app is ready
 protocol.registerSchemesAsPrivileged([
@@ -33,31 +34,6 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
-
-type ElectronAppLifecyclePolicy = {
-  platform?: NodeJS.Platform | string
-  appUserModelId?: string
-  quitOnAllWindowsClosed: boolean
-}
-
-const ELECTRON_APP_LIFECYCLE_POLICIES: ElectronAppLifecyclePolicy[] = [
-  {
-    platform: 'win32',
-    appUserModelId: 'com.antigravity.designassetmanager',
-    quitOnAllWindowsClosed: true
-  },
-  {
-    platform: 'darwin',
-    quitOnAllWindowsClosed: false
-  },
-  {
-    quitOnAllWindowsClosed: true
-  }
-]
-
-function resolveElectronAppLifecyclePolicy(platform: NodeJS.Platform | string = process.platform): ElectronAppLifecyclePolicy {
-  return ELECTRON_APP_LIFECYCLE_POLICIES.find((policy) => !policy.platform || policy.platform === platform)!
-}
 
 function createWindow(): void {
   const preloadPath = join(__dirname, '../preload/index.cjs')
@@ -123,7 +99,7 @@ app.whenReady().then(async () => {
     console.error('[SQLite] Failed to initialize database:', err)
   }
 
-  const appLifecyclePolicy = resolveElectronAppLifecyclePolicy()
+  const appLifecyclePolicy = resolveElectronAppLifecyclePolicy(process.platform)
 
   if (appLifecyclePolicy.appUserModelId) {
     app.setAppUserModelId(appLifecyclePolicy.appUserModelId)
@@ -159,7 +135,7 @@ app.whenReady().then(async () => {
 })
 
 app.on('window-all-closed', () => {
-  if (resolveElectronAppLifecyclePolicy().quitOnAllWindowsClosed) {
+  if (resolveElectronAppLifecyclePolicy(process.platform).quitOnAllWindowsClosed) {
     app.quit()
   }
 })

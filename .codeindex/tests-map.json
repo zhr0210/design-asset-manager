@@ -14,7 +14,8 @@
   ],
   "desktop_shell": [
     "npm run test-desktop-viewport-policy",
-    "npm run test-app-navigation-workflow"
+    "npm run test-app-navigation-workflow",
+    "npm run test-electron-main-lifecycle-policy"
   ],
   "cross_platform_runtime": [
     "npm run ci:test-runtime-safety",

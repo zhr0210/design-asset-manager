@@ -47,6 +47,7 @@ export * from './workflows/asset-display.workflow'
 export * from './workflows/doctor-display.workflow'
 export * from './workflows/settings-migration.workflow'
 export * from './workflows/app-navigation.workflow'
+export * from './workflows/electron-app-lifecycle.workflow'
 
 // Export Contracts
 export * from './contracts/asset.contract'

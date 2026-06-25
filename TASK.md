@@ -72,6 +72,25 @@ runtime, native dependency, packaging, path, or process differences.
   no-Topbar/no-Sidebar browser shell. Screenshots were saved outside the
   repository.
 
+## Electron App Lifecycle Policy Result
+
+- Moved Electron app lifecycle policy into shared workflow metadata for
+  platform, Windows AppUserModelId, macOS quit-on-close behavior, and default
+  quit behavior.
+- Main process startup now consumes `resolveElectronAppLifecyclePolicy` from
+  shared code instead of keeping local Windows/macOS policy tables in
+  `src/main/index.ts`.
+- Existing startup behavior is preserved: Windows sets the existing
+  AppUserModelId and quits when all windows close; macOS keeps the app active
+  after all windows close; other platforms quit by default.
+- No IPC channel, renderer route, runtime behavior, database, model cache,
+  packaging output, user asset, or public response shape changed.
+- Focused lifecycle, app-navigation, and desktop-viewport tests, typecheck,
+  production build, governance subset, docs sync, agent-context check,
+  forbidden-path advisory check, and diff check pass.
+- UI screenshot validation is intentionally skipped because this slice changes
+  main-process startup policy selection only and has no renderer surface.
+
 ## AI Python Environment Module Result
 
 - Deepened the former pass-through AI Python Runtime Module into one shared

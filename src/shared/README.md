@@ -61,6 +61,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
 - Electron BrowserWindow defaults and the renderer desktop shell minimum viewport should use `DESKTOP_VIEWPORT_POLICY` rather than main/renderer-local hard-coded window sizes.
 - App route path, sidebar label, topbar title, browser-shell, and topbar-visibility policy should use `app-navigation.workflow.ts` rather than renderer-local route tables.
+- Electron app lifecycle policy should use `electron-app-lifecycle.workflow.ts` so Windows AppUserModelId and macOS quit-on-close behavior stay in one shared policy.
 
 ## Tests
 
@@ -73,6 +74,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.28 | 2026-06-25 | Moved Electron app lifecycle policy into shared workflow metadata for main-process startup. |
 | v1.8.27 | 2026-06-25 | Added shared app navigation workflow for route paths, sidebar labels, topbar titles, and shell visibility policy. |
 | v1.8.26 | 2026-06-25 | Added shared desktop viewport policy for Electron window defaults and renderer AppShell minimum sizes. |
 | v1.8.25 | 2026-06-14 | Added shared Runtime Package Executor request, progress, result, stage, and error-code types. |
