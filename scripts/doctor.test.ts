@@ -131,18 +131,15 @@ await budgetedPythonCheck.run(context)
 assert.ok(timeoutBudgets.reduce((sum, timeoutMs) => sum + timeoutMs, 0) < context.timeoutMs)
 
 const nodeCheckSource = await fs.readFile('src/main/doctor/checks/node.check.ts', 'utf8')
-assert.match(nodeCheckSource, /const NPM_COMMAND_ADAPTERS: NpmCommandAdapter\[\]/)
-assert.match(nodeCheckSource, /isWindows: true[\s\S]*command: 'npm\.cmd'/)
-assert.match(nodeCheckSource, /command: 'npm'/)
-assert.match(nodeCheckSource, /function resolveNpmCommand/)
+assert.match(nodeCheckSource, /resolveDoctorNpmCommand\(context\.platformInfo\.isWindows\)/)
+assert.doesNotMatch(nodeCheckSource, /NPM_COMMAND_ADAPTERS|function resolveNpmCommand|npm\.cmd/)
 assert.doesNotMatch(nodeCheckSource, /context\.platformInfo\.isWindows\s*\?\s*'npm\.cmd'\s*:\s*'npm'/)
 
 const pythonCheckSource = await fs.readFile('src/main/doctor/checks/python.check.ts', 'utf8')
-assert.match(pythonCheckSource, /const PYTHON_LAUNCHER_ADAPTERS: PythonLauncherAdapter\[\]/)
-assert.match(pythonCheckSource, /isWindows: true[\s\S]*command: 'py'/)
-assert.match(pythonCheckSource, /function resolvePythonLauncherAdapter/)
-assert.match(pythonCheckSource, /function resolvePythonCommandTimeout/)
+assert.match(pythonCheckSource, /resolveDoctorPythonLauncherAdapter\(context\.platformInfo\.isWindows\)/)
+assert.match(pythonCheckSource, /resolveDoctorPythonCommandTimeout\(context\.timeoutMs, adapter\.candidates\.length\)/)
 assert.match(pythonCheckSource, /detected\.candidate\.command, \['-m', 'pip', '--version'\]/)
+assert.doesNotMatch(pythonCheckSource, /PYTHON_LAUNCHER_ADAPTERS|function resolvePythonLauncherAdapter|function resolvePythonCommandTimeout/)
 assert.doesNotMatch(pythonCheckSource, /checkCommand\('python', \['-m', 'pip', '--version'\]/)
 
 const nativeDepsCheck = createNativeDepsCheck(async () => {

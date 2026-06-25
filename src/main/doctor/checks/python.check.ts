@@ -1,4 +1,10 @@
 import { runProcess } from '../../platform/process-runner'
+import {
+  type PythonLauncherAdapter,
+  type PythonLauncherDetailKey,
+  resolveDoctorPythonCommandTimeout,
+  resolveDoctorPythonLauncherAdapter
+} from '../doctor-command-resolver'
 import type { RegisteredDoctorCheck } from '../doctor.types'
 
 interface PythonCommandResult extends Record<string, unknown> {
@@ -6,38 +12,6 @@ interface PythonCommandResult extends Record<string, unknown> {
 }
 
 export type PythonCommandChecker = (command: string, args: string[], timeoutMs: number) => Promise<PythonCommandResult>
-
-type PythonLauncherDetailKey = 'python' | 'python3' | 'pyLauncher'
-
-interface PythonLauncherCandidate {
-  detailKey: PythonLauncherDetailKey
-  command: string
-}
-
-interface PythonLauncherAdapter {
-  isWindows?: boolean
-  candidates: PythonLauncherCandidate[]
-}
-
-const PYTHON_LAUNCHER_ADAPTERS: PythonLauncherAdapter[] = [
-  {
-    isWindows: true,
-    candidates: [
-      { detailKey: 'pyLauncher', command: 'py' },
-      { detailKey: 'python', command: 'python' },
-      { detailKey: 'python3', command: 'python3' }
-    ]
-  },
-  {
-    candidates: [
-      { detailKey: 'python3', command: 'python3' },
-      { detailKey: 'python', command: 'python' }
-    ]
-  }
-]
-
-const MAX_PYTHON_CHECK_TIMEOUT_MS = 5000
-const PYTHON_COMMAND_BUDGET_RATIO = 0.8
 
 function skippedResult(reason: string): PythonCommandResult {
   return { available: false, skipped: true, reason }
@@ -58,17 +32,6 @@ async function defaultCheckCommand(command: string, args: string[], timeoutMs: n
       error: err instanceof Error ? err.message : String(err)
     }
   }
-}
-
-function resolvePythonLauncherAdapter(isWindows: boolean): PythonLauncherAdapter {
-  return PYTHON_LAUNCHER_ADAPTERS.find((adapter) => (
-    adapter.isWindows === undefined || adapter.isWindows === isWindows
-  ))!
-}
-
-function resolvePythonCommandTimeout(totalTimeoutMs: number, candidateCount: number): number {
-  const checkBudgetMs = Math.min(totalTimeoutMs, MAX_PYTHON_CHECK_TIMEOUT_MS)
-  return Math.max(1, Math.floor((checkBudgetMs * PYTHON_COMMAND_BUDGET_RATIO) / (candidateCount + 1)))
 }
 
 async function detectPythonLauncher(
@@ -102,8 +65,8 @@ export function createPythonCheck(checkCommand: PythonCommandChecker = defaultCh
     label: 'Python runtime',
     async run(context) {
       const startedAt = Date.now()
-      const adapter = resolvePythonLauncherAdapter(context.platformInfo.isWindows)
-      const timeoutMs = resolvePythonCommandTimeout(context.timeoutMs, adapter.candidates.length)
+      const adapter = resolveDoctorPythonLauncherAdapter(context.platformInfo.isWindows)
+      const timeoutMs = resolveDoctorPythonCommandTimeout(context.timeoutMs, adapter.candidates.length)
       const detected = await detectPythonLauncher(
         adapter,
         checkCommand,

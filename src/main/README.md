@@ -20,6 +20,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep Platform AI branch runtime provider registration descriptor-driven; concrete metadata keys and profile rules belong in descriptors, not duplicated provider blocks or resolver functions.
 - Keep Python Worker auto-start platform support in one allowlist so adding or removing OS support does not scatter bootstrap conditionals.
 - Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; do not hand-code Windows/macOS profile branches in resolver flow.
+- Keep Doctor command selection for npm and Python launchers in one resolver; individual checks should execute commands and shape results, not maintain separate Windows/macOS command tables.
 - Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
 - Keep Llama runtime accelerator defaults in metadata rules; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
 - Keep read-only Llama governance adapter selection descriptor-driven; platform conditionals belong in concrete runtime adapters, not the governance plan flow.
@@ -43,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.4 | 2026-06-25 | Moved Doctor npm/Python launcher command selection into one shared main-process resolver. |
 | v1.4.3 | 2026-06-25 | Consumed shared Electron app lifecycle policy from shared workflow metadata while preserving Windows AppUserModelId and macOS quit behavior. |
 | v1.4.2 | 2026-06-15 | Added the explicitly approved Signed Release Candidate workflow, Release Update Metadata, and structured platform trust evidence. |
 | v1.4.1 | 2026-06-14 | Added the shared release-candidate promotion invariant for Windows and macOS. |

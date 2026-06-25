@@ -14,6 +14,11 @@
   "python_ai_worker": [
     "python3 -m unittest discover ai-service/tests"
   ],
+  "doctor_governance": [
+    "npm run test-doctor",
+    "npm run test-doctor-command-resolver",
+    "npm run test-doctor-service"
+  ],
   "desktop_shell": [
     "npm run test-desktop-viewport-policy",
     "npm run test-app-navigation-workflow",

@@ -119,6 +119,27 @@ runtime, native dependency, packaging, path, or process differences.
   horizontal overflow. The test did not click the install button or start any
   dependency installation.
 
+## Doctor Command Resolver Result
+
+- Moved Doctor npm command selection, Python launcher priority, and Python
+  command timeout budgeting into one shared main-process command resolver.
+- Node and Python checks now execute the resolved commands while keeping their
+  existing check ids, labels, detail keys, warning behavior, packaged-Electron
+  npm skip behavior, pip routing through the detected launcher, and public
+  Doctor report shape unchanged.
+- Added a focused command-resolver test and wired it into npm scripts,
+  `ci:test-governance`, and the test map.
+- No IPC channel, renderer UI, runtime startup, dependency installation,
+  model download, database access, user asset access, or public response shape
+  changed.
+- Focused Doctor command, Doctor aggregate/service, governance subset,
+  typecheck, production build, Doctor CI, docs sync, agent-context check,
+  forbidden-path advisory check, and diff check pass. Doctor CI retains the
+  expected stopped-worker warnings.
+- Electron/Playwright UI validation is intentionally skipped because this
+  slice changes main-process Doctor command resolution only and has no
+  renderer surface.
+
 ## AI Python Environment Module Result
 
 - Deepened the former pass-through AI Python Runtime Module into one shared
