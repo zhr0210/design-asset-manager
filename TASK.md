@@ -136,6 +136,11 @@ runtime, native dependency, packaging, path, or process differences.
   typecheck, production build, Doctor CI, docs sync, agent-context check,
   forbidden-path advisory check, and diff check pass. Doctor CI retains the
   expected stopped-worker warnings.
+- The first GitHub governance run failed on both platforms because the
+  AI Runtime platform-boundary ledger did not yet include the new shared Doctor
+  command resolver. The ledger now records that legitimate main-process
+  platform adapter while the focused Doctor command-resolver test keeps command
+  selection centralized.
 - Electron/Playwright UI validation is intentionally skipped because this
   slice changes main-process Doctor command resolution only and has no
   renderer surface.
