@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs/promises'
 import {
   listNodeHostPlatformDefaults,
@@ -52,14 +53,23 @@ assert.deepEqual(
   ['win32', 'darwin', 'other']
 )
 
+const windowsCliDefaults = JSON.parse(execFileSync(
+  process.execPath,
+  ['scripts/node-host-platform-defaults.mjs', '--platform=win32'],
+  { encoding: 'utf8' }
+))
+assert.equal(windowsCliDefaults.npmCommand, 'npm.cmd')
+assert.deepEqual(windowsCliDefaults.pathExecutableExtensions, ['.exe', '.cmd', '.bat', ''])
+
 for (const consumerPath of [
   'scripts/package-smoke-host-defaults.mjs',
   'scripts/verify-platform-common.mjs',
-  'scripts/run-python-unittest.mjs'
+  'scripts/run-python-unittest.mjs',
+  'scripts/run-text-color-tests.py'
 ]) {
   const source = await fs.readFile(consumerPath, 'utf8')
   assert.match(source, /node-host-platform-defaults\.mjs/)
-  assert.doesNotMatch(source, /process\.platform\s*(?:===|!==)\s*['"]win32['"]/)
+  assert.doesNotMatch(source, /process\.platform\s*(?:===|!==)\s*['"]win32['"]|sys\.platform\s*==\s*["']win32["']/)
 }
 
 const packageSmokeDefaultsSource = await fs.readFile('scripts/package-smoke-host-defaults.mjs', 'utf8')

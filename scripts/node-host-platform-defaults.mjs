@@ -1,3 +1,6 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 const NODE_HOST_PLATFORM_DEFAULTS = {
   win32: {
     platform: 'win32',
@@ -48,4 +51,10 @@ function cloneNodeHostPlatformDefaults(defaults) {
       args: [...candidate.args]
     }))
   }
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const platformArg = process.argv.find((arg) => arg.startsWith('--platform='))
+  const platform = platformArg?.replace('--platform=', '') ?? process.platform
+  process.stdout.write(`${JSON.stringify(resolveNodeHostPlatformDefaults(platform))}\n`)
 }

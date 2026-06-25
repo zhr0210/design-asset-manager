@@ -145,6 +145,30 @@ runtime, native dependency, packaging, path, or process differences.
   slice changes main-process Doctor command resolution only and has no
   renderer surface.
 
+## Text Color QA Host Defaults Result
+
+- Exposed the shared Node CLI host defaults as a read-only JSON CLI so
+  non-Node helper scripts can consume the same host command registry.
+- `run-text-color-tests.py` now resolves its npm command through
+  `node-host-platform-defaults.mjs` instead of keeping a Python-side
+  Windows/macOS ternary.
+- Existing text-color QA checks, typecheck/build execution, output shape, and
+  exit-code behavior are preserved.
+- The script's stale static guards now check the current AI Console
+  text-box-provider normalizer and shared Visual Analysis Snapshot projector
+  instead of old Settings/ColorPalettePanel-local strings.
+- Added focused source and CLI assertions to `test-node-host-platform-defaults`
+  so Package Smoke, local platform verification, Python unittest, and
+  text-color QA helpers stay on the shared host defaults.
+- No renderer, Electron main process, IPC, AI runtime, model download,
+  package smoke action, release action, database access, or user asset access
+  changed.
+- Focused host-default tests, the text-color QA helper, Visual Analysis
+  Snapshot test, governance subset, typecheck/build, docs sync, agent-context
+  check, forbidden-path advisory check, and diff check pass. Electron/
+  Playwright UI validation is intentionally skipped because this slice changes
+  internal script host defaults and static QA guards only.
+
 ## AI Python Environment Module Result
 
 - Deepened the former pass-through AI Python Runtime Module into one shared

@@ -63,7 +63,9 @@ launcher alias cannot consume the entire check budget.
 executable extensions, and isolated Python unittest launcher candidates in one
 Node CLI host registry. Package Smoke, local platform verification, and the
 Python test runner consume the same defaults while retaining their own
-platform-specific actions.
+platform-specific actions. Python QA helpers that need the npm command read
+the same registry through its JSON CLI instead of carrying a second
+Windows/macOS command table.
 
 `npm run ci:prepare-native-deps` restores the current Node ABI for
 `better-sqlite3` before Node-driven governance tests. `npm ci` runs
