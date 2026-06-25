@@ -13,7 +13,8 @@
     "python3 -m unittest discover ai-service/tests"
   ],
   "desktop_shell": [
-    "npm run test-desktop-viewport-policy"
+    "npm run test-desktop-viewport-policy",
+    "npm run test-app-navigation-workflow"
   ],
   "cross_platform_runtime": [
     "npm run ci:test-runtime-safety",

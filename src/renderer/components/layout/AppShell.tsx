@@ -3,11 +3,15 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 import { DESKTOP_VIEWPORT_POLICY } from '../../../shared/desktop-viewport-policy'
+import {
+  isAppBrowserShellRoute,
+  shouldShowAppTopbar
+} from '../../../shared/workflows/app-navigation.workflow'
 
 export default function AppShell() {
   const location = useLocation()
-  const isBrowserRoute = location.pathname === '/browser'
-  const shouldShowTopbar = location.pathname !== '/library'
+  const isBrowserRoute = isAppBrowserShellRoute(location.pathname)
+  const shouldShowTopbar = shouldShowAppTopbar(location.pathname)
 
   if (isBrowserRoute) {
     return (

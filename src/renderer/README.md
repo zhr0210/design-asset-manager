@@ -29,6 +29,7 @@ React UI for library browsing, downloading, settings, tags, AI console, and asse
 - Renderer download pages and shell indicators should consume shared Download Status projections instead of formatting row metadata or status copy locally.
 - Renderer tag panels should consume the shared Asset Tagging Workflow plan instead of owning category-to-model pipeline defaults.
 - Renderer visual-analysis panels should consume shared snapshots instead of branching on stored palette payload versions, image/theme payload fields, OCR/text-box/readability fields, or text-color status codes.
+- Renderer shell route paths, sidebar labels, topbar titles, browser-shell detection, and topbar visibility should consume shared App Navigation workflow metadata instead of local route/title maps.
 
 ## Tests
 
@@ -41,6 +42,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.5.3 | 2026-06-25 | Routed AppShell, Sidebar, Topbar, and App route paths through shared App Navigation workflow metadata. |
 | v1.5.2 | 2026-06-13 | Mapped Platform AI Runtime branches to existing concrete preload methods through adapter metadata. |
 | v1.5.1 | 2026-06-12 | Centralized renderer selection of existing macOS/Windows Platform AI Runtime requests in one local adapter. |
 | v1.5.0 | 2026-06-11 | Renamed the shared AI capability matrix component to `PlatformAiCapabilityMatrix` for Windows/macOS reuse. |

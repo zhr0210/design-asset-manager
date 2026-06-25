@@ -3,24 +3,13 @@ import { useLocation } from 'react-router-dom'
 import { Database, ShieldCheck, Zap } from 'lucide-react'
 import { useDownloadStore } from '../../stores/download.store'
 import { projectDownloadTaskSummaryDisplay } from '../../../shared/workflows/download-status.workflow'
-
-const pageTitles: Record<string, string> = {
-  '/dashboard': '仪表盘',
-  '/sites': '网站账号管理',
-  '/browser': '素材浏览器',
-  '/search': '全网素材检索',
-  '/downloads': '下载队列',
-  '/library': '本地素材库',
-  '/tag-manager': '标签管理中心',
-  '/ai-console': 'AI 控制台',
-  '/settings': '系统偏好设置'
-}
+import { getAppTopbarTitle } from '../../../shared/workflows/app-navigation.workflow'
 
 export default function Topbar() {
   const location = useLocation()
   const tasks = useDownloadStore((s) => s.tasks)
   const downloadSummary = projectDownloadTaskSummaryDisplay(tasks)
-  const title = pageTitles[location.pathname] || '设计素材管理器'
+  const title = getAppTopbarTitle(location.pathname)
 
   return (
     <header className="flex h-16 shrink-0 select-none items-center justify-between border-b border-slate-200 bg-white px-8 transition-colors dark:border-slate-800 dark:bg-slate-950">

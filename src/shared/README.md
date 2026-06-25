@@ -60,6 +60,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Doctor and Path Governance panels should use shared display projection for status labels, badge classes, check labels, platform labels, report dates, details fallback, managed-path summary, and path masking rather than renderer-local dictionaries.
 - Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
 - Electron BrowserWindow defaults and the renderer desktop shell minimum viewport should use `DESKTOP_VIEWPORT_POLICY` rather than main/renderer-local hard-coded window sizes.
+- App route path, sidebar label, topbar title, browser-shell, and topbar-visibility policy should use `app-navigation.workflow.ts` rather than renderer-local route tables.
 
 ## Tests
 
@@ -72,6 +73,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.27 | 2026-06-25 | Added shared app navigation workflow for route paths, sidebar labels, topbar titles, and shell visibility policy. |
 | v1.8.26 | 2026-06-25 | Added shared desktop viewport policy for Electron window defaults and renderer AppShell minimum sizes. |
 | v1.8.25 | 2026-06-14 | Added shared Runtime Package Executor request, progress, result, stage, and error-code types. |
 | v1.8.8 | 2026-06-14 | Preserved model dependency and artifact gaps when a workflow has runtime evidence but no real model path. |

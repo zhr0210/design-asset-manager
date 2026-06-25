@@ -10,23 +10,34 @@ import Library from './routes/Library'
 import Settings from './routes/Settings'
 import TagManagerPage from './routes/TagManagerPage'
 import AiConsolePage from './routes/AiConsolePage'
+import {
+  APP_DEFAULT_ROUTE,
+  APP_NAVIGATION_ITEMS,
+  type AppRouteId
+} from '../shared/workflows/app-navigation.workflow'
+
+const routeElements: Record<AppRouteId, React.ReactElement> = {
+  dashboard: <Dashboard />,
+  sites: <Sites />,
+  browser: <BrowserPage />,
+  search: <Search />,
+  downloads: <DownloadQueue />,
+  library: <Library />,
+  'tag-manager': <TagManagerPage />,
+  'ai-console': <AiConsolePage />,
+  settings: <Settings />
+}
 
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<AppShell />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="sites" element={<Sites />} />
-          <Route path="browser" element={<BrowserPage />} />
-          <Route path="search" element={<Search />} />
-          <Route path="downloads" element={<DownloadQueue />} />
-          <Route path="library" element={<Library />} />
-          <Route path="tag-manager" element={<TagManagerPage />} />
-          <Route path="ai-console" element={<AiConsolePage />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route index element={<Navigate to={APP_DEFAULT_ROUTE.path} replace />} />
+          {APP_NAVIGATION_ITEMS.map((item) => (
+            <Route key={item.id} path={item.routeSegment} element={routeElements[item.id]} />
+          ))}
+          <Route path="*" element={<Navigate to={APP_DEFAULT_ROUTE.path} replace />} />
         </Route>
       </Routes>
     </Router>

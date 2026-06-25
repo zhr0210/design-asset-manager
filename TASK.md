@@ -49,6 +49,29 @@ runtime, native dependency, packaging, path, or process differences.
   Platform AI Branch Status was visible, and the screenshot was saved outside
   the repository.
 
+## App Navigation Workflow Result
+
+- Added one shared App Navigation workflow for route ids, absolute paths,
+  nested route segments, sidebar labels, topbar titles, browser-shell routing,
+  topbar visibility, default route, fallback title, and download-badge
+  visibility.
+- App route registration, AppShell browser/topbar decisions, Sidebar
+  navigation labels/badges, and Topbar titles now consume the same shared
+  navigation metadata. Renderer-owned icon mapping remains local to avoid
+  moving lucide UI dependencies into shared code.
+- Windows and macOS keep one shared renderer navigation surface; no
+  platform-specific route, IPC, AI runtime, packaging, database, model cache,
+  or user asset behavior changed.
+- Focused navigation and desktop-shell tests, typecheck, production build,
+  governance subset, docs sync, agent-context check, forbidden-path advisory
+  check, and diff check pass.
+- Isolated Playwright UI validation served the built renderer only and opened
+  `#/dashboard`, `#/ai-console`, and `#/browser` at `1120x720`: document/body
+  horizontal overflow were absent on all three routes, dashboard and AI
+  Console showed the shared Topbar/Sidebar, and browser route used the
+  no-Topbar/no-Sidebar browser shell. Screenshots were saved outside the
+  repository.
+
 ## AI Python Environment Module Result
 
 - Deepened the former pass-through AI Python Runtime Module into one shared
