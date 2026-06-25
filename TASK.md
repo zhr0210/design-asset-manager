@@ -26,6 +26,29 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
+## Desktop Viewport Policy Result
+
+- Added one shared Desktop Viewport Policy for Electron BrowserWindow default
+  and minimum outer sizes plus renderer AppShell minimum content sizes.
+- Main-process window creation and renderer desktop shell layout now consume
+  the same policy instead of carrying separate hard-coded width and height
+  constants.
+- The policy keeps platform differences out of the UI state surface: Windows
+  and macOS use the same desktop shell dimensions, with only a small outer
+  window frame allowance encoded once for Electron.
+- Added a focused contract test that verifies policy relationships, main and
+  renderer imports, npm script wiring, and prevents the prior `1024`/`700` and
+  `DESKTOP_MIN_WIDTH`/Tailwind `min-w` drift from returning.
+- Existing IPC channels, AI runtime contracts, renderer routes, model caches,
+  runtime databases, user assets, and public response shapes are unchanged.
+- Focused policy test, `ci:test-governance`, typecheck, production build,
+  docs sync, agent-context check, forbidden-path advisory check, and diff
+  check pass.
+- Isolated Playwright UI validation served the built renderer only and opened
+  AI Console at `1120x720`: document/body horizontal overflow were absent,
+  Platform AI Branch Status was visible, and the screenshot was saved outside
+  the repository.
+
 ## AI Python Environment Module Result
 
 - Deepened the former pass-through AI Python Runtime Module into one shared

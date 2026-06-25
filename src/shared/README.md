@@ -9,6 +9,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - `contracts/`: IPC request and response contracts.
 - `workflows/`: shared product workflow planners.
 - `index.ts`: public barrel.
+- `desktop-viewport-policy.ts`: shared Electron window and renderer desktop shell viewport policy.
 
 ## Rules
 
@@ -58,6 +59,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Persisted Visual Analysis palette inputs may retain unknown extension fields for backward compatibility, but snapshot workflow code must narrow them from `unknown` and expose typed renderer-ready output instead of propagating `any`.
 - Doctor and Path Governance panels should use shared display projection for status labels, badge classes, check labels, platform labels, report dates, details fallback, managed-path summary, and path masking rather than renderer-local dictionaries.
 - Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
+- Electron BrowserWindow defaults and the renderer desktop shell minimum viewport should use `DESKTOP_VIEWPORT_POLICY` rather than main/renderer-local hard-coded window sizes.
 
 ## Tests
 
@@ -70,6 +72,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.26 | 2026-06-25 | Added shared desktop viewport policy for Electron window defaults and renderer AppShell minimum sizes. |
 | v1.8.25 | 2026-06-14 | Added shared Runtime Package Executor request, progress, result, stage, and error-code types. |
 | v1.8.8 | 2026-06-14 | Preserved model dependency and artifact gaps when a workflow has runtime evidence but no real model path. |
 | v1.8.7 | 2026-06-14 | Added the shared explicit OCR real-evidence IPC contract and Chinese display projection. |

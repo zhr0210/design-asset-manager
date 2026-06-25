@@ -16,6 +16,7 @@ import { registerAiClientIpc } from './ipc/ai-client.ipc'
 import { registerColorPaletteIpc } from './ipc/color-palette.ipc'
 import { EmbeddedBrowserManager } from './services/browser-view.manager'
 import { ImageMetadataService } from './services/image-metadata.service'
+import { DESKTOP_VIEWPORT_POLICY } from '../shared/desktop-viewport-policy'
 
 // Register local-file scheme as privileged before app is ready
 protocol.registerSchemesAsPrivileged([
@@ -62,10 +63,10 @@ function createWindow(): void {
   const preloadPath = join(__dirname, '../preload/index.cjs')
 
   const mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 832,
-    minWidth: 1024,
-    minHeight: 700,
+    width: DESKTOP_VIEWPORT_POLICY.window.defaultWidth,
+    height: DESKTOP_VIEWPORT_POLICY.window.defaultHeight,
+    minWidth: DESKTOP_VIEWPORT_POLICY.window.minOuterWidth,
+    minHeight: DESKTOP_VIEWPORT_POLICY.window.minOuterHeight,
     show: false,
     autoHideMenuBar: true,
     title: 'Design Asset Manager',
