@@ -7,6 +7,8 @@
     "scripts/platform-ai-runtime-request-selection.test.ts",
     "scripts/python-execution-evidence.test.ts",
     "scripts/ai-console-macos-branch.test.ts",
+    "npm run test-ai-console-overview-workflow",
+    "npm run test-macos-ai-deps-installer-contract",
     "scripts/macos-ai-runtime.test.ts"
   ],
   "python_ai_worker": [

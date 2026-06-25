@@ -3,7 +3,10 @@ import fs from 'node:fs/promises'
 import {
   type AiConsoleModelReadinessDisplayInput,
   projectAiConsoleGpuDisplay,
-  projectAiConsoleModelReadinessDisplay
+  projectAiConsoleModelReadinessDisplay,
+  projectAiConsoleDependencyInstallCopy,
+  projectDependencyInstallFailedPackageMessage,
+  projectDependencyInstallFailureMessage
 } from '../src/shared/workflows/ai-console-overview.workflow'
 
 const unknownGpu = projectAiConsoleGpuDisplay({ telemetryTrusted: false })
@@ -84,6 +87,40 @@ assert.deepEqual(projectAiConsoleModelReadinessDisplay(blockedModelInput), {
   workerStatusLabel: 'Worker 离线'
 })
 
+const dependencyInstallCopy = projectAiConsoleDependencyInstallCopy('macos')
+assert.equal(dependencyInstallCopy.unavailableToast, '安装接口不可用')
+assert.equal(dependencyInstallCopy.startToast, '正在安装 macOS AI 依赖 (torch, transformers, onnxruntime)...')
+assert.equal(dependencyInstallCopy.startedLog, 'macOS AI deps installation started')
+assert.equal(dependencyInstallCopy.successToast, 'macOS AI 依赖安装完成')
+assert.equal(dependencyInstallCopy.completedLog({
+  installedPackages: ['torch', 'transformers'],
+  runtime: { created: true },
+  durationMs: 12_345
+}), 'macOS AI deps installation completed (2 package checks, managed runtime created, 12s)')
+assert.equal(projectDependencyInstallFailedPackageMessage({
+  failedPackages: [{ package: 'torch' }, { package: 'onnxruntime' }, { package: null }]
+}), 'torch, onnxruntime')
+assert.equal(projectDependencyInstallFailedPackageMessage({ failedPackages: [] }), 'unknown package')
+assert.equal(projectDependencyInstallFailureMessage({
+  error: 'network unavailable',
+  exitCode: 2,
+  failedPackages: [{ package: 'torch' }]
+}), 'network unavailable')
+assert.equal(projectDependencyInstallFailureMessage({
+  exitCode: 2,
+  failedPackages: [{ package: 'torch' }]
+}), 'exit=2 failed=torch')
+assert.equal(dependencyInstallCopy.failureToast({
+  exitCode: 2,
+  failedPackages: [{ package: 'torch' }]
+}), '安装失败：exit=2 failed=torch')
+assert.equal(dependencyInstallCopy.failedLog({
+  durationMs: 2345,
+  failedPackages: [{ package: 'torch' }]
+}), 'macOS AI deps install failed (2s): torch')
+assert.equal(dependencyInstallCopy.exceptionToast(new Error('boom')), '安装失败: Error: boom')
+assert.equal(dependencyInstallCopy.exceptionLog('boom'), 'macOS AI deps install failed: boom')
+
 const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
 const overviewSliceStart = aiConsoleSource.indexOf('function OverviewWorkspace')
 const overviewSliceEnd = aiConsoleSource.indexOf('function PlatformAiBranchStatusPanel', overviewSliceStart)
@@ -91,6 +128,11 @@ const overviewSlice = aiConsoleSource.slice(overviewSliceStart, overviewSliceEnd
 
 assert.match(aiConsoleSource, /projectAiConsoleGpuDisplay/)
 assert.match(aiConsoleSource, /projectAiConsoleModelReadinessDisplay/)
+assert.match(aiConsoleSource, /projectAiConsoleDependencyInstallCopy/)
+assert.match(aiConsoleSource, /projectAiConsoleDependencyInstallCopy\('macos'\)/)
+assert.match(aiConsoleSource, /aiDependencyInstallCopy\.completedLog\(result\)/)
+assert.match(aiConsoleSource, /aiDependencyInstallCopy\.failedLog\(result\)/)
+assert.match(aiConsoleSource, /aiDependencyInstallCopy\.exceptionLog\(err\)/)
 assert.match(aiConsoleSource, /AiConsoleModelReadinessDisplayInput/)
 assert.match(aiConsoleSource, /const modelReadinessInput: AiConsoleModelReadinessDisplayInput/)
 assert.match(aiConsoleSource, /modelReadinessInput=\{modelReadinessInput\}/)
@@ -108,6 +150,10 @@ assert.doesNotMatch(aiConsoleSource, /currentModelReady\s*\?\s*['"]可执行['"]
 assert.doesNotMatch(aiConsoleSource, /tone=\{currentModelReady\s*\?\s*['"]good['"]\s*:\s*['"]warn['"]\}/)
 assert.doesNotMatch(aiConsoleSource, /当前占用 \$\{effectiveGpu\.usagePercent/)
 assert.doesNotMatch(aiConsoleSource, /riskTone === 'bad' \? 'bg-rose-500'/)
+assert.doesNotMatch(aiConsoleSource, /failedPackages\.map/)
+assert.doesNotMatch(aiConsoleSource, /managed runtime created|managed runtime reused/)
+assert.doesNotMatch(aiConsoleSource, /macOS AI deps installation completed/)
+assert.doesNotMatch(aiConsoleSource, /macOS AI deps install failed/)
 assert.match(overviewSlice, /gpuDisplay: AiConsoleGpuDisplay/)
 assert.match(overviewSlice, /props\.gpuDisplay\.riskTone/)
 assert.doesNotMatch(overviewSlice, /telemetryTrusted: boolean/)

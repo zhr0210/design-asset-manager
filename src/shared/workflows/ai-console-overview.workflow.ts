@@ -38,6 +38,32 @@ export interface AiConsoleModelReadinessDisplayInput {
   workerOffline?: boolean | null
 }
 
+export interface AiConsoleDependencyInstallResultInput {
+  success?: boolean | null
+  installedPackages?: unknown[] | null
+  failedPackages?: unknown[] | null
+  runtime?: {
+    created?: boolean | null
+  } | null
+  durationMs?: number | null
+  exitCode?: unknown
+  error?: unknown
+}
+
+export type AiConsoleDependencyInstallTarget = 'macos'
+
+export interface AiConsoleDependencyInstallCopy {
+  unavailableToast: string
+  startToast: string
+  startedLog: string
+  successToast: string
+  completedLog: (result: AiConsoleDependencyInstallResultInput) => string
+  failureToast: (result: AiConsoleDependencyInstallResultInput | null | undefined) => string
+  failedLog: (result: AiConsoleDependencyInstallResultInput | null | undefined) => string
+  exceptionToast: (error: unknown) => string
+  exceptionLog: (error: unknown) => string
+}
+
 export function projectAiConsoleGpuDisplay(input: AiConsoleGpuDisplayInput): AiConsoleGpuDisplay {
   const telemetryTrusted = Boolean(input.telemetryTrusted)
   const totalMb = safeNumber(input.totalMb)
@@ -85,6 +111,41 @@ export function projectAiConsoleModelReadinessDisplay(input: AiConsoleModelReadi
   }
 }
 
+const AI_CONSOLE_DEPENDENCY_INSTALL_COPY: Record<AiConsoleDependencyInstallTarget, AiConsoleDependencyInstallCopy> = {
+  macos: {
+    unavailableToast: '安装接口不可用',
+    startToast: '正在安装 macOS AI 依赖 (torch, transformers, onnxruntime)...',
+    startedLog: 'macOS AI deps installation started',
+    successToast: 'macOS AI 依赖安装完成',
+    completedLog: (result) => {
+      const installedCount = Array.isArray(result.installedPackages) ? result.installedPackages.length : 0
+      const runtimeLabel = result.runtime?.created ? 'managed runtime created' : 'managed runtime reused'
+      return `macOS AI deps installation completed (${installedCount} package checks, ${runtimeLabel}, ${formatDurationSeconds(result.durationMs)}s)`
+    },
+    failureToast: (result) => `安装失败：${projectDependencyInstallFailureMessage(result).slice(0, 120)}`,
+    failedLog: (result) => `macOS AI deps install failed (${formatDurationSeconds(result?.durationMs)}s): ${projectDependencyInstallFailedPackageMessage(result)}`,
+    exceptionToast: (error) => `安装失败: ${String(error)}`,
+    exceptionLog: (error) => `macOS AI deps install failed: ${String(error)}`
+  }
+}
+
+export function projectAiConsoleDependencyInstallCopy(target: AiConsoleDependencyInstallTarget): AiConsoleDependencyInstallCopy {
+  return AI_CONSOLE_DEPENDENCY_INSTALL_COPY[target]
+}
+
+export function projectDependencyInstallFailedPackageMessage(result: AiConsoleDependencyInstallResultInput | null | undefined): string {
+  const failedPackages = Array.isArray(result?.failedPackages)
+    ? result.failedPackages.map((item) => packageNameFromUnknown(item)).filter(Boolean)
+    : []
+
+  return failedPackages.length ? failedPackages.join(', ') : 'unknown package'
+}
+
+export function projectDependencyInstallFailureMessage(result: AiConsoleDependencyInstallResultInput | null | undefined): string {
+  if (result?.error) return String(result.error)
+  return `exit=${String(result?.exitCode ?? 'unknown')} failed=${projectDependencyInstallFailedPackageMessage(result)}`
+}
+
 function projectGpuRiskTone(input: {
   telemetryTrusted: boolean
   freeMb: number
@@ -96,6 +157,16 @@ function projectGpuRiskTone(input: {
   if (input.maxUsage > 0 && input.usagePercent >= input.maxUsage) return 'bad'
   if (input.freeMb > 0 && input.minFreeMb > 0 && input.freeMb < input.minFreeMb) return 'warn'
   return 'good'
+}
+
+function packageNameFromUnknown(value: unknown): string {
+  if (!value || typeof value !== 'object' || !('package' in value)) return ''
+  const packageValue = (value as { package?: unknown }).package
+  return typeof packageValue === 'string' ? packageValue : ''
+}
+
+function formatDurationSeconds(value?: number | null): number {
+  return Math.round(safeNumber(value) / 1000)
 }
 
 function formatGb(mb: number): string {

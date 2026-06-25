@@ -97,6 +97,28 @@ runtime, native dependency, packaging, path, or process differences.
 - UI screenshot validation is intentionally skipped because this slice changes
   main-process startup policy selection only and has no renderer surface.
 
+## AI Console Dependency Install Display Result
+
+- Moved AI Console runtime dependency install toast copy, log copy, duration
+  formatting, package-failure summaries, and managed-runtime labels into the
+  shared AI Console overview workflow projection.
+- The renderer still calls the existing explicit `macosAiInstallDeps` preload
+  method; no Windows install action, IPC channel, runtime download, model
+  download, database access, user asset access, or public response shape
+  changed.
+- Added the existing AI Console overview workflow and macOS dependency
+  installer contract tests to npm scripts, cross-platform runtime-safety CI,
+  and the test map so the shared renderer projection runs on both platform
+  runners.
+- Focused overview/install/display tests, runtime-safety subset, typecheck,
+  production build, docs sync, agent-context check, forbidden-path advisory
+  check, and diff check pass.
+- Isolated Playwright validation served the built renderer only with a minimal
+  preload mock at `1120x720`: Platform AI Branch Status, macOS route overview,
+  and the dependency install button were visible with no document/body
+  horizontal overflow. The test did not click the install button or start any
+  dependency installation.
+
 ## AI Python Environment Module Result
 
 - Deepened the former pass-through AI Python Runtime Module into one shared

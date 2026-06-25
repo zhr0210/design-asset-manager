@@ -47,6 +47,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Worker probe connection headers should use the platform-neutral Worker probe envelope and branch-keyed connection marker metadata; shared workflow code should not compare concrete OS marker strings directly. Platform-specific probe displays may add MPS/CUDA/ONNX route tiles. A missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
 - Platform AI branch runtime metadata selection should use branch-keyed descriptors for metadata keys and markers; renderer/shared workflow callers should not hand-roll macOS/Windows branch lookup order.
 - AI Console overview status cards should use shared display projection for GPU risk and model readiness vocabulary.
+- AI Console runtime dependency install toast/log copy and result summaries should use shared display projection; renderer handlers may call existing platform-specific preload methods but should not format package failures, durations, or managed-runtime labels locally.
 - Prompt Reverse panel state labels and action suggestions should use shared projection so GGUF/Llama and native routes share one renderer-ready vocabulary.
 - Asset Tagging Workflow pipeline defaults, category/model options, scan-state display, model selection toggles, task submission projection, confirmed tag chips, suggestion review items, pending suggestion projection, and tag type/color options belong in shared workflow planners, not renderer panels.
 - Asset tag chip source, status, confidence, visibility, and pending opacity display should use shared projection rather than local chip-level status checks.
@@ -74,6 +75,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.29 | 2026-06-25 | Moved AI Console runtime dependency install toast/log display into shared overview workflow projection. |
 | v1.8.28 | 2026-06-25 | Moved Electron app lifecycle policy into shared workflow metadata for main-process startup. |
 | v1.8.27 | 2026-06-25 | Added shared app navigation workflow for route paths, sidebar labels, topbar titles, and shell visibility policy. |
 | v1.8.26 | 2026-06-25 | Added shared desktop viewport policy for Electron window defaults and renderer AppShell minimum sizes. |

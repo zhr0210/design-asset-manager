@@ -87,7 +87,8 @@ import {
   type AiConsoleGpuDisplay,
   type AiConsoleModelReadinessDisplayInput,
   projectAiConsoleGpuDisplay,
-  projectAiConsoleModelReadinessDisplay
+  projectAiConsoleModelReadinessDisplay,
+  projectAiConsoleDependencyInstallCopy
 } from '../../shared/workflows/ai-console-overview.workflow'
 import type { ClearGpuMemoryResult, GpuStatus } from '../../shared/types/ai-worker.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS, DEFAULT_PROMPT_TEMPLATE_ID, DEFAULT_QWEN3VL_DESIGN_PROMPT, OPENAI_COMPATIBLE_REVERSE_PROMPT } from '../../shared/constants/prompt-templates.constants'
@@ -958,38 +959,31 @@ export default function AiConsolePage() {
     }
   }
 
-  // The shared action is platform-neutral; the current executable installer is macOS-backed.
   const [installingAiRuntimeDeps, setInstallingAiRuntimeDeps] = useState(false)
+  const aiDependencyInstallCopy = projectAiConsoleDependencyInstallCopy('macos')
 
   const handleInstallAiRuntimeDeps = async () => {
     const api = (window as any).electronAPI
     if (!api?.macosAiInstallDeps) {
-      showToast('安装接口不可用')
+      showToast(aiDependencyInstallCopy.unavailableToast)
       return
     }
     setInstallingAiRuntimeDeps(true)
-    showToast('正在安装 macOS AI 依赖 (torch, transformers, onnxruntime)...')
-    pushLog('macOS AI deps installation started')
+    showToast(aiDependencyInstallCopy.startToast)
+    pushLog(aiDependencyInstallCopy.startedLog)
     try {
       const result = await api.macosAiInstallDeps()
       if (result?.success) {
-        showToast('macOS AI 依赖安装完成')
-        const installedCount = Array.isArray(result.installedPackages) ? result.installedPackages.length : 0
-        const runtimeLabel = result.runtime?.created ? 'managed runtime created' : 'managed runtime reused'
-        pushLog(`macOS AI deps installation completed (${installedCount} package checks, ${runtimeLabel}, ${Math.round((result.durationMs ?? 0) / 1000)}s)`)
+        showToast(aiDependencyInstallCopy.successToast)
+        pushLog(aiDependencyInstallCopy.completedLog(result))
       } else {
-        const failedPackages = Array.isArray(result?.failedPackages)
-          ? result.failedPackages.map((item: any) => item?.package).filter(Boolean)
-          : []
-        const packageMessage = failedPackages.length ? failedPackages.join(', ') : 'unknown package'
-        const message = result?.error || `exit=${result?.exitCode ?? 'unknown'} failed=${packageMessage}`
-        showToast('安装失败：' + String(message).slice(0, 120))
-        pushLog(`macOS AI deps install failed (${Math.round((result?.durationMs ?? 0) / 1000)}s): ${packageMessage}`)
+        showToast(aiDependencyInstallCopy.failureToast(result))
+        pushLog(aiDependencyInstallCopy.failedLog(result))
       }
       await fetchConsoleStatus('manual')
     } catch (err: any) {
-      showToast('安装失败: ' + String(err))
-      pushLog('macOS AI deps install failed: ' + String(err))
+      showToast(aiDependencyInstallCopy.exceptionToast(err))
+      pushLog(aiDependencyInstallCopy.exceptionLog(err))
     } finally {
       setInstallingAiRuntimeDeps(false)
     }
