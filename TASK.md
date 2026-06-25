@@ -88,6 +88,12 @@ runtime, native dependency, packaging, path, or process differences.
 - Focused lifecycle, app-navigation, and desktop-viewport tests, typecheck,
   production build, governance subset, docs sync, agent-context check,
   forbidden-path advisory check, and diff check pass.
+- The first GitHub governance run failed on both platforms because the
+  AI Runtime platform-boundary ledger did not yet include the new shared
+  Electron lifecycle policy file. The ledger now records that legitimate
+  non-runtime platform boundary while the dedicated lifecycle test keeps the
+  policy Electron-free. The focused status-workflow test and complete
+  `ci:governance` suite pass after the ledger update.
 - UI screenshot validation is intentionally skipped because this slice changes
   main-process startup policy selection only and has no renderer surface.
 
