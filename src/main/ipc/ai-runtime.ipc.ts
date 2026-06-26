@@ -1,4 +1,3 @@
-import os from 'os'
 import { ipcMain } from 'electron'
 import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
@@ -23,7 +22,6 @@ import {
   CHANNEL_AI_RUNTIME_STOP_RUNTIME,
   CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG
 } from '../../shared/contracts/ai-runtime.contract'
-import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
 import type { PlatformAiBranch } from '../../shared/types/platform-ai-branch-status.types'
 import type {
   AiRuntimeGetStateRequest,
@@ -66,6 +64,7 @@ import {
   getFreshPythonExecutionEvidence,
   recordPythonExecutionEvidence
 } from '../services/ai-runtime/python-execution-evidence.store'
+import { createAiRuntimeHostContext } from '../services/ai-runtime/ai-runtime-host-context'
 
 function success<T>(data: T): AiRuntimeIpcResponse<T> {
   return { success: true, data }
@@ -132,10 +131,11 @@ const PLATFORM_AI_BRANCH_STATUS_IPC_DESCRIPTORS: PlatformAiBranchStatusIpcDescri
   }
 ]
 
+const aiRuntimeHostContext = createAiRuntimeHostContext()
 const { manager: aiRuntimeManager } = bootstrapAiRuntimeManager({
-  platform: process.platform as PlatformName,
-  arch: process.arch as PlatformArch,
-  homeDir: os.homedir(),
+  platform: aiRuntimeHostContext.platform,
+  arch: aiRuntimeHostContext.arch,
+  homeDir: aiRuntimeHostContext.homeDir,
   pythonExecutable: resolveRuntimePythonExecutable(),
   aiServiceRoot: resolveAiServiceRoot()
 }, {
@@ -217,7 +217,7 @@ function createPlatformAiBranchStatusIpcHandler(
       const modelReadiness = await collectModelReadinessEvidence()
       return success(createPlatformAiBranchStatus({
         platformBranch: descriptor.platformBranch,
-        currentPlatform: process.platform as PlatformName,
+        currentPlatform: aiRuntimeHostContext.platform,
         runtimes: aiRuntimeManager.listRuntimes(),
         modelReadiness,
         pythonExecutionEvidence: getFreshPythonExecutionEvidence()

@@ -13,6 +13,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 ## Rules
 
 - Keep shared product workflow orchestration in main-process modules where possible; use platform adapters only for real OS/runtime differences.
+- Keep AI Runtime IPC host platform, architecture, and home-dir reads inside the AI Runtime host-context helper; IPC handlers should consume that snapshot instead of reading Node globals directly.
 - Platform AI Branch Status projectors may read existing status/probe/settings state, but must not start runtimes, install dependencies, download models, or inspect user assets.
 - Keep shared Platform AI workflow titles and summaries separate from platform-specific runtime lane topology.
 - Keep reusable runtime lane labels and runtime-kind matching in shared lane metadata; leave platform topology tables responsible for genuine lane membership and primary-lane differences, then resolve lane definitions through one shared resolver.
@@ -45,6 +46,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.14 | 2026-06-26 | Moved AI Runtime IPC host platform/architecture/home-dir reads behind one host-context helper. |
 | v1.4.13 | 2026-06-26 | Moved Llama planner default host platform/architecture/CPU/memory reads to the shared host-context helper. |
 | v1.4.12 | 2026-06-26 | Moved Llama installer host platform/architecture/CPU/memory reads behind one host-context helper. |
 | v1.4.11 | 2026-06-26 | Moved Platform AI Branch Status branch-to-OS current-platform mapping into shared runtime metadata. |

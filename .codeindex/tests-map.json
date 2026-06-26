@@ -2,6 +2,7 @@
   "shared_ai_runtime": [
     "scripts/ai-runtime-status-workflow.test.ts",
     "scripts/ai-python-environment.test.ts",
+    "npm run test-ai-runtime-host-context",
     "scripts/ai-runtime-bootstrap.test.ts",
     "scripts/ai-runtime-panel-contract.test.ts",
     "scripts/platform-ai-runtime-request-selection.test.ts",

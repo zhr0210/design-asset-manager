@@ -82,6 +82,28 @@ runtime, native dependency, packaging, path, or process differences.
   skipped because this slice changes internal main-process planning defaults
   only and has no renderer surface.
 
+## AI Runtime IPC Host Context Result
+
+- Added one AI Runtime host-context helper for current platform, architecture,
+  and home directory reads.
+- AI Runtime IPC bootstrap and Platform AI Branch Status projection now
+  consume the shared host context instead of reading Node process/os globals
+  directly in `ai-runtime.ipc.ts`.
+- Existing AI Runtime IPC channel names, request/response contracts,
+  bootstrap provider registration, branch-status response shape, runtime
+  startup policy, model evidence collection, renderer/preload callers,
+  databases, model caches, and user assets are unchanged.
+- Added focused host-context and IPC contract tests, wired the host-context
+  test into runtime-safety CI and the test map, and updated the platform
+  boundary ledger to record the helper as the legitimate AI Runtime IPC host
+  boundary.
+- Focused AI Runtime host-context/IPC/status-workflow tests, typecheck,
+  production build, runtime-safety subset, complete governance, docs sync,
+  agent-context check, forbidden-path advisory check, and diff check pass.
+  Electron/Playwright UI validation is intentionally skipped because this
+  slice changes internal main-process host-context plumbing only and has no
+  renderer surface.
+
 ## Desktop Viewport Policy Result
 
 - Added one shared Desktop Viewport Policy for Electron BrowserWindow default

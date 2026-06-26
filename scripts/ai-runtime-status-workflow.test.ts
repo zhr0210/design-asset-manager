@@ -724,6 +724,7 @@ const windowsAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/
 const macosAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/macos-ai-runtime.constants.ts', 'utf8')
 const platformAiRuntimeMetadataConstantsSource = await fs.readFile('src/shared/constants/platform-ai-runtime-metadata.constants.ts', 'utf8')
 const aiRuntimeIpcSource = await fs.readFile('src/main/ipc/ai-runtime.ipc.ts', 'utf8')
+const aiRuntimeHostContextSource = await fs.readFile('src/main/services/ai-runtime/ai-runtime-host-context.ts', 'utf8')
 const aiRuntimeBootstrapSource = await fs.readFile('src/main/services/ai-runtime/ai-runtime-bootstrap.ts', 'utf8')
 const llamaRuntimeHostContextSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-host-context.ts', 'utf8')
 const concretePlatformRuntimeTypePattern = /MacOSAiWorkerProbeResult|WindowsAiWorkerProbeResult|MacOSAiBranchRuntimeMetadata|WindowsAiBranchRuntimeMetadata|MacOSAiRuntimeLane|WindowsAiRuntimeLane/
@@ -772,7 +773,6 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/bootstrap/runtime-registry.validator.ts',
   'src/main/doctor/doctor-command-resolver.ts',
   'src/main/index.ts',
-  'src/main/ipc/ai-runtime.ipc.ts',
   'src/main/packaging/release-environment-manifest.ts',
   'src/main/packaging/release-external-gate-status.ts',
   'src/main/packaging/release-flow-governance.ts',
@@ -785,6 +785,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/services/ai-python-environment.ts',
   'src/main/services/ai-python-runtime.service.ts',
   'src/main/services/ai-runtime/ai-runtime-bootstrap.ts',
+  'src/main/services/ai-runtime/ai-runtime-host-context.ts',
   'src/main/services/llama-runtime/llama-runtime-governance.ts',
   'src/main/services/llama-runtime/llama-runtime-host-context.ts',
   'src/main/services/llama-runtime/llama-runtime-install.service.ts',
@@ -845,6 +846,11 @@ assert.match(aiRuntimeBootstrapSource, /autoStartPythonWorker/)
 assert.match(aiRuntimeBootstrapSource, /function resolveAiRuntimeAppDataRoot/)
 assert.doesNotMatch(aiRuntimeBootstrapSource, /const isWin = host\.platform === 'win32'/)
 assert.doesNotMatch(aiRuntimeBootstrapSource, /isWin\s*\?/)
+assert.match(aiRuntimeHostContextSource, /export function createAiRuntimeHostContext/)
+assert.match(aiRuntimeHostContextSource, /platform: input\.platform \?\? process\.platform as PlatformName/)
+assert.match(aiRuntimeHostContextSource, /arch: input\.arch \?\? process\.arch as PlatformArch/)
+assert.match(aiRuntimeIpcSource, /const aiRuntimeHostContext = createAiRuntimeHostContext\(\)/)
+assert.doesNotMatch(aiRuntimeIpcSource, /process\.platform|process\.arch|os\.homedir/)
 assert.match(llamaRuntimeHostContextSource, /export function createLlamaRuntimeHostContext/)
 assert.match(llamaRuntimeHostContextSource, /platform: input\.platform \?\? process\.platform/)
 assert.match(llamaRuntimeHostContextSource, /arch: input\.arch \?\? process\.arch/)
