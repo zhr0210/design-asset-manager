@@ -1139,6 +1139,23 @@ and Release Update Metadata pass.
   Smoke, and disposable Windows Sandbox installation all passed. Signing is
   intentionally absent, so the candidate remains below distribution-ready.
 
+## Package Smoke Artifact Plan Result
+
+- Moved Package Smoke installer and unpacked artifact path selection, fallback
+  binary candidates, and Sandbox staging names into
+  `package-smoke-host-defaults.mjs`.
+- `package-smoke.mjs` now consumes one shared artifact plan for active
+  installer, unpacked binary candidates, and Sandbox file generation.
+- Windows Sandbox execution and macOS DMG mount/copy/launch checks remain
+  explicit platform actions inside the smoke script because they are real
+  OS-specific behavior.
+- Existing CLI flags, path-free report shape, static artifact checks,
+  launch-smoke behavior, Sandbox generation, DMG install smoke,
+  Authenticode probe behavior, and exit-code behavior are preserved.
+- No IPC, preload, renderer UI, model download, user asset, runtime database,
+  model cache, signing, notarization, publishing, or GitHub settings behavior
+  changed in this slice.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

@@ -1,6 +1,6 @@
 # Package Smoke Tool
 
-`scripts/package-smoke.mjs` is a callable packaging validation helper for Windows release candidates.
+`scripts/package-smoke.mjs` is a callable packaging validation helper for Windows and macOS release candidates.
 
 ## Commands
 
@@ -76,8 +76,9 @@ node scripts/package-smoke.mjs --sandbox-install --sandbox-install-timeout-ms=18
 
 - Shared Node CLI host defaults such as npm command name and PATH executable
   extensions come from `node-host-platform-defaults.mjs`. Package Smoke adds
-  its unpacked artifact check id and Authenticode availability through
-  `package-smoke-host-defaults.mjs`; platform-specific install actions remain
+  its unpacked artifact check id, Authenticode availability, installer path,
+  unpacked artifact path, and fallback binary candidates through
+  `package-smoke-host-defaults.mjs`. Platform-specific install actions remain
   explicit in the smoke script.
 - The host tool does not run the NSIS installer.
 - The host launch smoke only starts `win-unpacked` and stops it after the timeout.

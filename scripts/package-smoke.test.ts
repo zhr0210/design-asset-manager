@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
+import path from 'node:path'
 import {
   listPackageSmokeHostDefaults,
+  resolvePackageSmokeArtifactPlan,
   resolvePackageSmokeHostDefaults
 } from './package-smoke-host-defaults.mjs'
 
@@ -21,7 +23,7 @@ assert.match(source, /fs\.writeFile\(outputPath/)
 assert.match(source, /os\.tmpdir\(\)/)
 assert.match(source, /--arch=/)
 assert.match(source, /packageManifest\.version/)
-assert.match(source, /win-arm64-unpacked/)
+assert.match(source, /resolvePackageSmokeArtifactPlan\(process\.platform/)
 assert.match(source, /WindowsSandbox\.exe/)
 assert.match(source, /hdiutil/)
 assert.match(source, /DMG mounted read-only/)
@@ -34,6 +36,9 @@ assert.match(source, /NO_PROXY: '\*'/)
 assert.match(source, /run-electron-builder\.mjs/)
 assert.doesNotMatch(source, /process\.platform === 'win32' \? 'npm\.cmd' : 'npm'/)
 assert.doesNotMatch(source, /process\.platform === 'win32' \? \['\.exe', '\.cmd', '\.bat', ''\] : \[''\]/)
+assert.doesNotMatch(source, /const activeInstaller = process\.platform === 'win32'/)
+assert.doesNotMatch(source, /const activeUnpacked = process\.platform === 'win32'/)
+assert.doesNotMatch(source, /requestedArch === 'arm64' \? 'win-arm64-unpacked' : 'win-unpacked'/)
 assert.doesNotMatch(source, /30\.5\.1/)
 assert.match(source, /Get-AuthenticodeSignature/)
 assert.match(source, /\$sig\.Status\.ToString\(\)/)
@@ -69,6 +74,73 @@ assert.deepEqual(resolvePackageSmokeHostDefaults('linux'), {
   pathExecutableExtensions: [''],
   authenticodeAvailable: false
 })
+assert.deepEqual(resolvePackageSmokeArtifactPlan('win32', {
+  distDir: '/dist',
+  productName: 'Design Asset Manager',
+  version: '1.0.0',
+  arch: 'arm64'
+}), {
+  platform: 'win32',
+  arch: 'arm64',
+  installerPath: path.join('/dist', 'Design Asset Manager Setup 1.0.0.exe'),
+  unpackedArtifactPath: path.join('/dist', 'win-arm64-unpacked', 'Design Asset Manager.exe'),
+  unpackedBinaryCandidates: [
+    path.join('/dist', 'win-arm64-unpacked', 'Design Asset Manager.exe'),
+    path.join('/dist', 'win-unpacked', 'Design Asset Manager.exe')
+  ],
+  scanDmgFiles: false,
+  scanMacUnpackedDirs: false,
+  sandboxUnpackedDir: 'win-arm64-unpacked',
+  sandboxUnpackedExecutablePath: path.join('/dist', 'win-arm64-unpacked', 'Design Asset Manager.exe')
+})
+assert.deepEqual(resolvePackageSmokeArtifactPlan('darwin', {
+  distDir: '/dist',
+  productName: 'Design Asset Manager',
+  version: '1.0.0',
+  arch: 'x64'
+}), {
+  platform: 'darwin',
+  arch: 'x64',
+  installerPath: path.join('/dist', 'Design Asset Manager-1.0.0-x64.dmg'),
+  unpackedArtifactPath: path.join('/dist', 'mac-x64', 'Design Asset Manager.app'),
+  unpackedBinaryCandidates: [
+    path.join('/dist', 'mac', 'Design Asset Manager.app', 'Contents', 'MacOS', 'Design Asset Manager'),
+    path.join('/dist', 'mac-arm64', 'Design Asset Manager.app', 'Contents', 'MacOS', 'Design Asset Manager')
+  ],
+  scanDmgFiles: true,
+  scanMacUnpackedDirs: true,
+  macUnpackedDirectoryPrefix: 'mac',
+  sandboxUnpackedDir: 'win-unpacked',
+  sandboxUnpackedExecutablePath: path.join('/dist', 'win-unpacked', 'Design Asset Manager.exe')
+})
+const mutableArtifactPlan = resolvePackageSmokeArtifactPlan('win32', {
+  distDir: '/dist',
+  productName: 'Design Asset Manager',
+  version: '1.0.0',
+  arch: 'x64'
+})
+mutableArtifactPlan.unpackedBinaryCandidates.pop()
+assert.deepEqual(
+  resolvePackageSmokeArtifactPlan('win32', {
+    distDir: '/dist',
+    productName: 'Design Asset Manager',
+    version: '1.0.0',
+    arch: 'x64'
+  }).unpackedBinaryCandidates,
+  [
+    path.join('/dist', 'win-unpacked', 'Design Asset Manager.exe'),
+    path.join('/dist', 'win-x64-unpacked', 'Design Asset Manager.exe')
+  ]
+)
+assert.throws(
+  () => resolvePackageSmokeArtifactPlan('win32', {
+    distDir: '/dist',
+    productName: 'Design Asset Manager',
+    version: '1.0.0',
+    arch: 'ia32'
+  }),
+  /--arch must be x64 or arm64/
+)
 const mutableDefaults = resolvePackageSmokeHostDefaults('win32')
 mutableDefaults.pathExecutableExtensions.pop()
 assert.deepEqual(resolvePackageSmokeHostDefaults('win32').pathExecutableExtensions, ['.exe', '.cmd', '.bat', ''])

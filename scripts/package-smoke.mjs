@@ -3,7 +3,10 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
 import os from 'node:os'
-import { resolvePackageSmokeHostDefaults } from './package-smoke-host-defaults.mjs'
+import {
+  resolvePackageSmokeArtifactPlan,
+  resolvePackageSmokeHostDefaults
+} from './package-smoke-host-defaults.mjs'
 
 const root = process.cwd()
 const packageManifest = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'))
@@ -37,9 +40,6 @@ const outputArg = process.argv.find((arg) => arg.startsWith('--output='))
 const outputPath = outputArg ? path.resolve(outputArg.replace('--output=', '')) : null
 
 const distDir = path.join(root, 'dist-packages')
-const installerPath = path.join(distDir, `${productName} Setup ${version}.exe`)
-const windowsUnpackedDir = requestedArch === 'arm64' ? 'win-arm64-unpacked' : 'win-unpacked'
-const unpackedExe = path.join(distDir, windowsUnpackedDir, `${productName}.exe`)
 const workRootArg = process.argv.find((arg) => arg.startsWith('--work-root='))
 const workRoot = path.resolve(
   workRootArg?.replace('--work-root=', '') || path.join(os.tmpdir(), 'DesignAssetManagerPackageSmoke')
@@ -55,6 +55,12 @@ const report = {
   artifacts: {}
 }
 const hostDefaults = resolvePackageSmokeHostDefaults(process.platform)
+const artifactPlan = resolvePackageSmokeArtifactPlan(process.platform, {
+  distDir,
+  productName,
+  version,
+  arch: requestedArch
+})
 
 if (buildInstaller) {
   await runStep('build:renderer-main-preload', hostDefaults.npmCommand, ['run', 'build'], {
@@ -70,10 +76,11 @@ if (buildInstaller) {
 }
 
 async function findDmgFile() {
+  if (!artifactPlan.scanDmgFiles) return null
   try {
     const files = await fs.readdir(distDir)
     const dmgFiles = files.filter((fileName) => fileName.endsWith('.dmg'))
-    const architectureMatch = dmgFiles.find((fileName) => fileName.includes(requestedArch))
+    const architectureMatch = dmgFiles.find((fileName) => fileName.includes(artifactPlan.arch))
     const selected = architectureMatch ?? dmgFiles[0]
     return selected ? path.join(distDir, selected) : null
   } catch {}
@@ -81,25 +88,11 @@ async function findDmgFile() {
 }
 
 async function findUnpackedBinary() {
-  if (process.platform === 'win32') {
-    const candidates = requestedArch === 'arm64'
-      ? [
-          path.join(distDir, 'win-arm64-unpacked', `${productName}.exe`),
-          path.join(distDir, 'win-unpacked', `${productName}.exe`)
-        ]
-      : [
-          path.join(distDir, 'win-unpacked', `${productName}.exe`),
-          path.join(distDir, 'win-x64-unpacked', `${productName}.exe`)
-        ]
-    for (const c of candidates) {
-      if (await exists(c)) return c
-    }
-    return null
-  } else if (process.platform === 'darwin') {
+  if (artifactPlan.scanMacUnpackedDirs) {
     try {
       const subdirs = await fs.readdir(distDir, { withFileTypes: true })
       for (const entry of subdirs) {
-        if (entry.isDirectory() && entry.name.startsWith('mac')) {
+        if (entry.isDirectory() && entry.name.startsWith(artifactPlan.macUnpackedDirectoryPrefix)) {
           const appPath = path.join(distDir, entry.name, `${productName}.app`)
           const binaryPath = path.join(appPath, 'Contents', 'MacOS', productName)
           if (await exists(binaryPath)) {
@@ -108,25 +101,16 @@ async function findUnpackedBinary() {
         }
       }
     } catch {}
-    const fallbacks = [
-      path.join(distDir, 'mac', `${productName}.app`, 'Contents', 'MacOS', productName),
-      path.join(distDir, 'mac-arm64', `${productName}.app`, 'Contents', 'MacOS', productName)
-    ]
-    for (const f of fallbacks) {
-      if (await exists(f)) return f
-    }
-    return null
+  }
+
+  for (const candidate of artifactPlan.unpackedBinaryCandidates) {
+    if (await exists(candidate)) return candidate
   }
   return null
 }
 
-const activeInstaller = process.platform === 'win32'
-  ? installerPath
-  : (await findDmgFile() || path.join(distDir, `${productName}-${version}-${requestedArch}.dmg`))
-
-const activeUnpacked = process.platform === 'win32'
-  ? unpackedExe
-  : (await findUnpackedBinary() || path.join(distDir, `mac-${requestedArch}`, `${productName}.app`))
+const activeInstaller = await findDmgFile() || artifactPlan.installerPath
+const activeUnpacked = await findUnpackedBinary() || artifactPlan.unpackedArtifactPath
 
 await checkFile('installer', activeInstaller)
 await checkFile(hostDefaults.unpackedCheckId, activeUnpacked)
@@ -381,17 +365,17 @@ async function generateSandboxFiles() {
   }
 
   await fs.mkdir(sandboxSharedDir, { recursive: true })
-  const sandboxInstallerPath = path.join(sandboxSharedDir, path.basename(installerPath))
-  const sandboxUnpackedDir = path.join(sandboxSharedDir, 'win-unpacked')
+  const sandboxInstallerPath = path.join(sandboxSharedDir, path.basename(artifactPlan.installerPath))
+  const sandboxUnpackedDir = path.join(sandboxSharedDir, artifactPlan.sandboxUnpackedDir)
 
-  if (await exists(installerPath)) {
-    await fs.copyFile(installerPath, sandboxInstallerPath)
+  if (await exists(artifactPlan.installerPath)) {
+    await fs.copyFile(artifactPlan.installerPath, sandboxInstallerPath)
   }
-  if (await exists(path.join(installerPath + '.blockmap'))) {
-    await fs.copyFile(path.join(installerPath + '.blockmap'), path.join(sandboxSharedDir, path.basename(installerPath + '.blockmap')))
+  if (await exists(path.join(artifactPlan.installerPath + '.blockmap'))) {
+    await fs.copyFile(path.join(artifactPlan.installerPath + '.blockmap'), path.join(sandboxSharedDir, path.basename(artifactPlan.installerPath + '.blockmap')))
   }
-  if (await exists(path.dirname(unpackedExe))) {
-    await copyDir(path.dirname(unpackedExe), sandboxUnpackedDir)
+  if (await exists(path.dirname(artifactPlan.sandboxUnpackedExecutablePath))) {
+    await copyDir(path.dirname(artifactPlan.sandboxUnpackedExecutablePath), sandboxUnpackedDir)
   }
 
   await fs.writeFile(sandboxScriptPath, sandboxScript(), 'utf8')
@@ -450,8 +434,8 @@ Start-Sleep -Seconds 15
 $root = 'C:\\Users\\WDAGUtilityAccount\\Desktop\\package-smoke'
 $report = Join-Path $root 'sandbox-report.json'
 $reportTemp = Join-Path $root 'sandbox-report.json.tmp'
-$installer = Join-Path $root '${path.basename(installerPath)}'
-$unpacked = Join-Path $root '${windowsUnpackedDir}\\${productName}.exe'
+$installer = Join-Path $root '${path.basename(artifactPlan.installerPath)}'
+$unpacked = Join-Path $root '${artifactPlan.sandboxUnpackedDir}\\${productName}.exe'
 $checks = @()
 
 function Write-Report([bool]$completed = $false) {
