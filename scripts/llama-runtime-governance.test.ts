@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import { createLlamaRuntimeGovernancePlan } from '../src/main/services/llama-runtime/llama-runtime-governance'
+import {
+  createLlamaRuntimeGovernancePlan,
+  LLAMA_RUNTIME_GOVERNANCE_PLATFORMS
+} from '../src/main/services/llama-runtime/llama-runtime-governance'
+
+assert.deepEqual(LLAMA_RUNTIME_GOVERNANCE_PLATFORMS, ['win32', 'darwin', 'linux'])
 
 const winPlan = createLlamaRuntimeGovernancePlan('win32')
 assert.equal(winPlan.phase, '12B')
@@ -23,6 +28,10 @@ assert.ok(!macPlan.adapters.some((adapter) => adapter.id === 'windows-llama-cpp'
 const linuxPlan = createLlamaRuntimeGovernancePlan('linux')
 assert.deepEqual(linuxPlan.adapters.map((adapter) => adapter.id), ['external-openai-compatible'])
 
+const unknownPlan = createLlamaRuntimeGovernancePlan('freebsd')
+assert.equal(unknownPlan.platform, 'unknown')
+assert.deepEqual(unknownPlan.adapters.map((adapter) => adapter.id), ['external-openai-compatible'])
+
 const manifest = JSON.parse(await fs.readFile('.codeindex/llama-runtime-governance.json', 'utf8')) as {
   readOnlyAudit?: boolean
   externalInferencePreferred?: boolean
@@ -39,11 +48,14 @@ assert.equal(manifest.autoStart, false)
 assert.equal(manifest.privacy?.containsRealUserPaths, false)
 
 const governanceSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-governance.ts', 'utf8')
+assert.match(governanceSource, /LLAMA_RUNTIME_GOVERNANCE_PLATFORMS = \['win32', 'darwin', 'linux'\] as const/)
+assert.match(governanceSource, /LLAMA_RUNTIME_GOVERNANCE_PLATFORMS\.find\(\(candidate\) => candidate === platform\) \?\? 'unknown'/)
 assert.match(governanceSource, /const LLAMA_RUNTIME_PLATFORM_ADAPTERS: LlamaRuntimePlatformAdapterDescriptor\[\]/)
 assert.match(governanceSource, /platform: 'darwin'[\s\S]*createAdapter: createMacLlamaAppAdapter/)
 assert.match(governanceSource, /platform: 'win32'[\s\S]*createAdapter: createWindowsLlamaCppAdapter/)
 assert.match(governanceSource, /LLAMA_RUNTIME_PLATFORM_ADAPTERS[\s\S]*\.filter\(\(adapter\) => adapter\.platform === normalized\)/)
 assert.doesNotMatch(governanceSource, /if \(normalized === 'darwin'\)|if \(normalized === 'win32'\)/)
+assert.doesNotMatch(governanceSource, /platform === 'win32' \|\| platform === 'darwin' \|\| platform === 'linux'/)
 assert.doesNotMatch(governanceSource, /fetch\s*\(|spawn\s*\(|execSync\s*\(|downloadOnce|startInstall|startServer|saveSettings/)
 assert.doesNotMatch(governanceSource, /C:\\Users\\[A-Za-z0-9_.-]+/i)
 

@@ -1,4 +1,6 @@
-export type LlamaRuntimeGovernancePlatform = 'win32' | 'darwin' | 'linux' | 'unknown'
+export const LLAMA_RUNTIME_GOVERNANCE_PLATFORMS = ['win32', 'darwin', 'linux'] as const
+
+export type LlamaRuntimeGovernancePlatform = typeof LLAMA_RUNTIME_GOVERNANCE_PLATFORMS[number] | 'unknown'
 export type LlamaRuntimeGovernanceMode = 'external-inference' | 'llama-app' | 'llama-cpp' | 'disabled'
 
 export interface LlamaRuntimeAdapterDesign {
@@ -43,8 +45,7 @@ interface LlamaRuntimePlatformAdapterDescriptor {
 }
 
 function normalizePlatform(platform: NodeJS.Platform | string): LlamaRuntimeGovernancePlatform {
-  if (platform === 'win32' || platform === 'darwin' || platform === 'linux') return platform
-  return 'unknown'
+  return LLAMA_RUNTIME_GOVERNANCE_PLATFORMS.find((candidate) => candidate === platform) ?? 'unknown'
 }
 
 function createExternalAdapter(): LlamaRuntimeAdapterDesign {

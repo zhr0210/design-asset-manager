@@ -47,6 +47,24 @@ runtime, native dependency, packaging, path, or process differences.
   changes internal main-process host-context plumbing only and has no renderer
   surface.
 
+## Llama Governance Platform Registry Result
+
+- Converted Llama Runtime Governance platform normalization from inline
+  Windows/macOS/Linux control flow to one explicit supported-platform
+  registry.
+- Unknown platforms still normalize to `unknown` and keep the external
+  OpenAI-compatible adapter as the only governance adapter. Windows and macOS
+  adapter selection, external-inference preference, read-only audit policy,
+  and disabled auto-download/install/start behavior are unchanged.
+- Strengthened the focused Llama governance test to cover the supported
+  platform registry, unknown-platform fallback, and a guard against restoring
+  inline `platform === ... || ...` normalization.
+- Focused Llama governance and AI Runtime status-workflow tests, typecheck,
+  production build, docs sync, agent context check, forbidden-path advisory
+  check, and diff check pass. Electron/Playwright UI validation is
+  intentionally skipped because this changes internal main-process governance
+  data only and has no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
