@@ -725,6 +725,7 @@ const macosAiRuntimeConstantsSource = await fs.readFile('src/shared/constants/ma
 const platformAiRuntimeMetadataConstantsSource = await fs.readFile('src/shared/constants/platform-ai-runtime-metadata.constants.ts', 'utf8')
 const aiRuntimeIpcSource = await fs.readFile('src/main/ipc/ai-runtime.ipc.ts', 'utf8')
 const aiRuntimeBootstrapSource = await fs.readFile('src/main/services/ai-runtime/ai-runtime-bootstrap.ts', 'utf8')
+const llamaRuntimeHostContextSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-host-context.ts', 'utf8')
 const concretePlatformRuntimeTypePattern = /MacOSAiWorkerProbeResult|WindowsAiWorkerProbeResult|MacOSAiBranchRuntimeMetadata|WindowsAiBranchRuntimeMetadata|MacOSAiRuntimeLane|WindowsAiRuntimeLane/
 const platformBranchControlFlowPattern = /\bplatformBranch\s*(?:===|!==)\s*['"](?:windows|macos)['"]|['"](?:windows|macos)['"]\s*(?:===|!==)\s*platformBranch\b/
 const directProcessPlatformBranchPattern = /process\.platform\s*(?:={2,3}|!={1,2})\s*['"](?:win32|darwin)['"]|['"](?:win32|darwin)['"]\s*(?:={2,3}|!={1,2})\s*process\.platform/
@@ -785,6 +786,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/services/ai-python-runtime.service.ts',
   'src/main/services/ai-runtime/ai-runtime-bootstrap.ts',
   'src/main/services/llama-runtime/llama-runtime-governance.ts',
+  'src/main/services/llama-runtime/llama-runtime-host-context.ts',
   'src/main/services/llama-runtime/llama-runtime-install.service.ts',
   'src/main/services/llama-runtime/llama-runtime-planner.ts',
   'src/shared/constants/platform-ai-runtime-metadata.constants.ts',
@@ -843,6 +845,9 @@ assert.match(aiRuntimeBootstrapSource, /autoStartPythonWorker/)
 assert.match(aiRuntimeBootstrapSource, /function resolveAiRuntimeAppDataRoot/)
 assert.doesNotMatch(aiRuntimeBootstrapSource, /const isWin = host\.platform === 'win32'/)
 assert.doesNotMatch(aiRuntimeBootstrapSource, /isWin\s*\?/)
+assert.match(llamaRuntimeHostContextSource, /export function createLlamaRuntimeHostContext/)
+assert.match(llamaRuntimeHostContextSource, /platform: input\.platform \?\? process\.platform/)
+assert.match(llamaRuntimeHostContextSource, /arch: input\.arch \?\? process\.arch/)
 assert.doesNotMatch(aiRuntimeIpcSource, /AI_RUNTIME_BOOTSTRAP_PLATFORM_ADAPTERS|resolveAiRuntimeBootstrapPlatformAdapter|resolveAiRuntimeAppDataRoot/)
 assert.match(runtimeWorkflowSource, /interface PlatformAiProbeTileDisplay/)
 assert.doesNotMatch(runtimeWorkflowSource, /MacOSAiProbeTileDisplay/)

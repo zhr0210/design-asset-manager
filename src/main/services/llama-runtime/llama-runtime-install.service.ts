@@ -2,7 +2,6 @@ import { app, shell, type WebContents } from 'electron'
 import fs from 'fs'
 import fsp from 'fs/promises'
 import crypto from 'crypto'
-import os from 'os'
 import path from 'path'
 import { spawn, type ChildProcessWithoutNullStreams } from 'child_process'
 import {
@@ -28,6 +27,7 @@ import type {
 import { llamaRuntimeInstallProgressChannel } from '../../../shared/contracts/llama-runtime.contract'
 import type { AiBackendConfig } from '../../../shared/types/ai-backend.types'
 import { probeLlamaServer } from './llama-runtime-server-probe'
+import { createLlamaRuntimeHostContext, type LlamaRuntimeHostContext } from './llama-runtime-host-context'
 
 const LLAMA_RELEASES_API = 'https://api.github.com/repos/ggml-org/llama.cpp/releases/latest'
 
@@ -46,7 +46,7 @@ interface LlamaServerProcessAdapter {
 
 interface LlamaHardwareDetectionAdapter {
   platform?: NodeJS.Platform | string
-  detect: (service: LlamaRuntimeInstallService) => Promise<LlamaHardwareProfile>
+  detect: (service: LlamaRuntimeInstallService, hostContext: LlamaRuntimeHostContext) => Promise<LlamaHardwareProfile>
 }
 
 const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
@@ -70,16 +70,16 @@ const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
   }
 ]
 
-function resolveLlamaServerProcessAdapter(platform: NodeJS.Platform | string = process.platform): LlamaServerProcessAdapter {
-  return LLAMA_SERVER_PROCESS_ADAPTERS.find((adapter) => !adapter.platform || adapter.platform === platform) ?? LLAMA_SERVER_PROCESS_ADAPTERS[1]
+function resolveLlamaServerProcessAdapter(hostContext = createLlamaRuntimeHostContext()): LlamaServerProcessAdapter {
+  return LLAMA_SERVER_PROCESS_ADAPTERS.find((adapter) => !adapter.platform || adapter.platform === hostContext.platform) ?? LLAMA_SERVER_PROCESS_ADAPTERS[1]
 }
 
 export class LlamaRuntimeInstallService {
   private static instance: LlamaRuntimeInstallService
   private static readonly hardwareDetectionAdapters: LlamaHardwareDetectionAdapter[] = [
-    { platform: 'darwin', detect: (service) => service.detectMacHardware() },
-    { platform: 'win32', detect: (service) => service.detectWindowsHardware() },
-    { detect: (service) => service.detectGenericHardware() }
+    { platform: 'darwin', detect: (service, hostContext) => service.detectMacHardware(hostContext) },
+    { platform: 'win32', detect: (service, hostContext) => service.detectWindowsHardware(hostContext) },
+    { detect: (service, hostContext) => service.detectGenericHardware(hostContext) }
   ]
 
   private abortController: AbortController | null = null
@@ -99,11 +99,12 @@ export class LlamaRuntimeInstallService {
   }
 
   public async detectHardware(): Promise<LlamaHardwareProfile> {
-    const adapter = LlamaRuntimeInstallService.hardwareDetectionAdapters.find((item) => !item.platform || item.platform === process.platform)
-    return (adapter ?? LlamaRuntimeInstallService.hardwareDetectionAdapters[2]).detect(this)
+    const hostContext = createLlamaRuntimeHostContext()
+    const adapter = LlamaRuntimeInstallService.hardwareDetectionAdapters.find((item) => !item.platform || item.platform === hostContext.platform)
+    return (adapter ?? LlamaRuntimeInstallService.hardwareDetectionAdapters[2]).detect(this, hostContext)
   }
 
-  private async detectWindowsHardware(): Promise<LlamaHardwareProfile> {
+  private async detectWindowsHardware(hostContext: LlamaRuntimeHostContext): Promise<LlamaHardwareProfile> {
     const warnings: string[] = []
     let gpuName: string | undefined
     let totalVramGB: number | undefined
@@ -126,10 +127,10 @@ export class LlamaRuntimeInstallService {
     }
 
     return createHardwareProfile({
-      platform: process.platform,
-      arch: process.arch,
-      cpuThreads: os.cpus().length,
-      totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
+      platform: hostContext.platform,
+      arch: hostContext.arch,
+      cpuThreads: hostContext.cpuThreads,
+      totalMemoryGB: hostContext.totalMemoryGB,
       hasNvidiaGpu: Boolean(gpuName),
       gpuName,
       totalVramGB,
@@ -139,21 +140,21 @@ export class LlamaRuntimeInstallService {
     })
   }
 
-  private async detectGenericHardware(): Promise<LlamaHardwareProfile> {
+  private async detectGenericHardware(hostContext: LlamaRuntimeHostContext): Promise<LlamaHardwareProfile> {
     return createHardwareProfile({
-      platform: process.platform,
-      arch: process.arch,
-      cpuThreads: os.cpus().length,
-      totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
+      platform: hostContext.platform,
+      arch: hostContext.arch,
+      cpuThreads: hostContext.cpuThreads,
+      totalMemoryGB: hostContext.totalMemoryGB,
       warnings: ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
     })
   }
 
-  private async detectMacHardware(): Promise<LlamaHardwareProfile> {
+  private async detectMacHardware(hostContext: LlamaRuntimeHostContext): Promise<LlamaHardwareProfile> {
     const warnings: string[] = []
-    const totalMemoryGB = Math.round(os.totalmem() / 1024 / 1024 / 1024)
-    const cpuThreads = os.cpus().length
-    let chipName = os.cpus()[0]?.model || 'Apple Silicon / Intel Mac'
+    const totalMemoryGB = hostContext.totalMemoryGB
+    const cpuThreads = hostContext.cpuThreads
+    let chipName = hostContext.cpuModel || 'Apple Silicon / Intel Mac'
     let coreSummary = `${cpuThreads} 线程`
     let displaySummary = ''
 
@@ -186,15 +187,15 @@ export class LlamaRuntimeInstallService {
       // Display profiler data is optional for llama runtime planning.
     }
 
-    const isAppleSilicon = process.arch === 'arm64' || /Apple\s+M\d|Apple\s+Silicon/i.test(chipName)
+    const isAppleSilicon = hostContext.arch === 'arm64' || /Apple\s+M\d|Apple\s+Silicon/i.test(chipName)
     const estimatedUnifiedVramGB = isAppleSilicon
       ? Math.max(4, Math.round(totalMemoryGB * 0.65 * 10) / 10)
       : undefined
     const recommendedAccelerator = isAppleSilicon ? 'metal' : 'cpu'
 
     return createHardwareProfile({
-      platform: process.platform,
-      arch: process.arch,
+      platform: hostContext.platform,
+      arch: hostContext.arch,
       cpuThreads,
       totalMemoryGB,
       hasNvidiaGpu: false,
@@ -403,8 +404,9 @@ export class LlamaRuntimeInstallService {
       }
     }
 
+    const processAdapter = resolveLlamaServerProcessAdapter()
     if (!exePath || !fs.existsSync(exePath)) {
-      throw new Error(resolveLlamaServerProcessAdapter().missingExecutableMessage)
+      throw new Error(processAdapter.missingExecutableMessage)
     }
     if (!fs.existsSync(ggufPath)) {
       throw new Error('未找到 GGUF 模型文件，请先完成模型下载。')
@@ -415,7 +417,7 @@ export class LlamaRuntimeInstallService {
       args.push('--mmproj', mmprojPath)
     }
     args.push('--host', '127.0.0.1', '--port', '8080', '-c', '4096', '-ngl', '999')
-    if (resolveLlamaServerProcessAdapter().chmodExecutableBeforeSpawn) {
+    if (processAdapter.chmodExecutableBeforeSpawn) {
       try {
         fs.chmodSync(exePath, 0o755)
       } catch {

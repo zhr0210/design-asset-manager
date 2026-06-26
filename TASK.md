@@ -45,6 +45,24 @@ runtime, native dependency, packaging, path, or process differences.
   because this slice changes shared/main-process projection ownership only and
   has no renderer surface.
 
+## Llama Runtime Host Context Result
+
+- Added one Llama runtime host-context helper for current platform,
+  architecture, CPU-thread count, CPU model, and memory reads.
+- Llama installer hardware detection and process adapter selection now consume
+  the shared host context instead of reading Node process/os globals through
+  installer flow. macOS, Windows, and generic hardware probes remain concrete
+  adapters, and user-triggered download/install/start behavior is unchanged.
+- Added focused host-context and governance tests, wired the host-context test
+  into runtime-safety CI and the test map, and updated the platform-boundary
+  ledger to record the new helper as the legitimate Llama host boundary.
+- Focused Llama host-context/governance/installer and AI Runtime status
+  workflow tests, typecheck, production build, runtime-safety subset, complete
+  governance, docs sync, agent-context check, forbidden-path advisory check,
+  and diff check pass. Electron/Playwright UI validation is intentionally
+  skipped because this slice changes internal main-process host-context
+  plumbing only and has no renderer surface.
+
 ## Desktop Viewport Policy Result
 
 - Added one shared Desktop Viewport Policy for Electron BrowserWindow default

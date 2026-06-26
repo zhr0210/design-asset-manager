@@ -24,6 +24,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
 - Keep Llama runtime accelerator defaults and package pattern selection in metadata rules with one matcher; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
 - Keep read-only Llama governance adapter selection descriptor-driven; platform conditionals belong in concrete runtime adapters, not the governance plan flow.
+- Keep Llama runtime host platform, architecture, CPU, and memory reads inside the host-context helper; installer flow should consume the context instead of reading Node globals directly.
 - Keep OCR/Python managed venv executable paths and base interpreter discovery descriptor-driven; leave actual Windows search and macOS Homebrew probing inside platform adapters.
 - Keep explicit OCR evidence execution in main process, offline and timeout-bounded. Cache only path-free generated-image results for five minutes before projecting them into shared workflow status.
 - Expose OCR evidence only through the user-triggered `aiRuntime:probeOcrRealEvidence` channel; the operation must not read user assets, install dependencies, or enable model downloads.
@@ -44,6 +45,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.12 | 2026-06-26 | Moved Llama installer host platform/architecture/CPU/memory reads behind one host-context helper. |
 | v1.4.11 | 2026-06-26 | Moved Platform AI Branch Status branch-to-OS current-platform mapping into shared runtime metadata. |
 | v1.4.10 | 2026-06-26 | Moved Llama runtime planner platform, architecture, and accelerator rule matching behind one matcher. |
 | v1.4.9 | 2026-06-26 | Moved Runtime Profile hardware hint matching to descriptor fields while preserving Windows NVIDIA CUDA recommendation behavior. |
