@@ -42,7 +42,7 @@ export const nodeCheck: RegisteredDoctorCheck = {
             skipped: true,
             reason: 'Packaged Electron app uses bundled Node; npm CLI is not required at runtime.'
           }
-        : await versionFor(resolveDoctorNpmCommand(context.platformInfo.isWindows), ['--version'], timeoutMs)
+        : await versionFor(resolveDoctorNpmCommand(context.platformInfo.platform), ['--version'], timeoutMs)
     const status = node.available && npm.available ? 'ok' : 'warning'
 
     return {

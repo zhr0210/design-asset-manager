@@ -1,5 +1,7 @@
+import type { PlatformName } from '../../shared/types/platform.types'
+
 export interface DoctorPlatformCommandAdapter {
-  isWindows?: boolean
+  platform?: PlatformName
   command: string
 }
 
@@ -11,18 +13,18 @@ export interface PythonLauncherCandidate {
 }
 
 export interface PythonLauncherAdapter {
-  isWindows?: boolean
+  platform?: PlatformName
   candidates: PythonLauncherCandidate[]
 }
 
 export const DOCTOR_NPM_COMMAND_ADAPTERS: readonly DoctorPlatformCommandAdapter[] = [
-  { isWindows: true, command: 'npm.cmd' },
+  { platform: 'win32', command: 'npm.cmd' },
   { command: 'npm' }
 ] as const
 
 export const DOCTOR_PYTHON_LAUNCHER_ADAPTERS: readonly PythonLauncherAdapter[] = [
   {
-    isWindows: true,
+    platform: 'win32',
     candidates: [
       { detailKey: 'pyLauncher', command: 'py' },
       { detailKey: 'python', command: 'python' },
@@ -40,12 +42,12 @@ export const DOCTOR_PYTHON_LAUNCHER_ADAPTERS: readonly PythonLauncherAdapter[] =
 export const MAX_DOCTOR_PYTHON_CHECK_TIMEOUT_MS = 5000
 export const DOCTOR_PYTHON_COMMAND_BUDGET_RATIO = 0.8
 
-export function resolveDoctorNpmCommand(isWindows: boolean): string {
-  return resolveDoctorPlatformCommand(DOCTOR_NPM_COMMAND_ADAPTERS, isWindows).command
+export function resolveDoctorNpmCommand(platform: PlatformName): string {
+  return resolveDoctorPlatformCommand(DOCTOR_NPM_COMMAND_ADAPTERS, platform).command
 }
 
-export function resolveDoctorPythonLauncherAdapter(isWindows: boolean): PythonLauncherAdapter {
-  return resolveDoctorPlatformCommand(DOCTOR_PYTHON_LAUNCHER_ADAPTERS, isWindows)
+export function resolveDoctorPythonLauncherAdapter(platform: PlatformName): PythonLauncherAdapter {
+  return resolveDoctorPlatformCommand(DOCTOR_PYTHON_LAUNCHER_ADAPTERS, platform)
 }
 
 export function resolveDoctorPythonCommandTimeout(totalTimeoutMs: number, candidateCount: number): number {
@@ -53,16 +55,16 @@ export function resolveDoctorPythonCommandTimeout(totalTimeoutMs: number, candid
   return Math.max(1, Math.floor((checkBudgetMs * DOCTOR_PYTHON_COMMAND_BUDGET_RATIO) / (candidateCount + 1)))
 }
 
-function resolveDoctorPlatformCommand<T extends { isWindows?: boolean }>(
+function resolveDoctorPlatformCommand<T extends { platform?: PlatformName }>(
   adapters: readonly T[],
-  isWindows: boolean
+  platform: PlatformName
 ): T {
   const adapter = adapters.find((candidate) => (
-    candidate.isWindows === undefined || candidate.isWindows === isWindows
+    candidate.platform === undefined || candidate.platform === platform
   ))
 
   if (!adapter) {
-    throw new Error(`No Doctor command adapter configured for ${isWindows ? 'Windows' : 'non-Windows'} platform.`)
+    throw new Error(`No Doctor command adapter configured for ${platform} platform.`)
   }
 
   return adapter

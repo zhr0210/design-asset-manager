@@ -37,13 +37,13 @@ async function defaultCheckCommand(command: string, args: string[], timeoutMs: n
 async function detectPythonLauncher(
   adapter: PythonLauncherAdapter,
   checkCommand: PythonCommandChecker,
-  timeoutMs: number,
-  isWindows: boolean
+  timeoutMs: number
 ) {
+  const checksPyLauncher = adapter.candidates.some((candidate) => candidate.detailKey === 'pyLauncher')
   const details: Record<PythonLauncherDetailKey, PythonCommandResult> = {
     python: skippedResult('Not checked because a higher-priority Python launcher was detected.'),
     python3: skippedResult('Not checked because a higher-priority Python launcher was detected.'),
-    pyLauncher: isWindows
+    pyLauncher: checksPyLauncher
       ? skippedResult('Not checked because a higher-priority Python launcher was detected.')
       : skippedResult('py launcher is Windows-only.')
   }
@@ -65,13 +65,12 @@ export function createPythonCheck(checkCommand: PythonCommandChecker = defaultCh
     label: 'Python runtime',
     async run(context) {
       const startedAt = Date.now()
-      const adapter = resolveDoctorPythonLauncherAdapter(context.platformInfo.isWindows)
+      const adapter = resolveDoctorPythonLauncherAdapter(context.platformInfo.platform)
       const timeoutMs = resolveDoctorPythonCommandTimeout(context.timeoutMs, adapter.candidates.length)
       const detected = await detectPythonLauncher(
         adapter,
         checkCommand,
-        timeoutMs,
-        context.platformInfo.isWindows
+        timeoutMs
       )
       const pip = detected.candidate
         ? await checkCommand(detected.candidate.command, ['-m', 'pip', '--version'], timeoutMs)

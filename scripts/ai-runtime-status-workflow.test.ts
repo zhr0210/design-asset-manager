@@ -769,8 +769,6 @@ assert.deepEqual(rendererSharedPlatformBranchControlFlowFiles, [])
 assert.deepEqual(directProcessPlatformBranchFiles, [])
 assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/bootstrap/runtime-registry.validator.ts',
-  'src/main/doctor/checks/node.check.ts',
-  'src/main/doctor/checks/python.check.ts',
   'src/main/doctor/doctor-command-resolver.ts',
   'src/main/index.ts',
   'src/main/ipc/ai-runtime.ipc.ts',

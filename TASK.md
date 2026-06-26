@@ -1205,6 +1205,31 @@ and Release Update Metadata pass.
   installer contract tests passed. UI screenshot validation is not applicable
   because this slice changes main-process Python executable resolution only.
 
+## Doctor Platform-Name Command Resolver Result
+
+- Moved Doctor npm command and Python launcher resolver inputs from
+  `isWindows` booleans to shared platform-name descriptors.
+- Node and Python Doctor checks now pass `context.platformInfo.platform` to
+  the resolver. Windows remains the only platform that selects `npm.cmd` and
+  the `py` launcher; macOS, Linux, and unknown platforms keep the existing
+  default `npm`, `python3`, then `python` order.
+- Python launcher detail projection no longer needs a caller-provided Windows
+  boolean; it derives the `pyLauncher` skipped reason from the selected
+  adapter's candidates while preserving existing detail keys and pip routing.
+- AI Runtime platform-boundary ledger now confirms Node and Python Doctor
+  checks are no longer platform-boundary files; the only remaining Doctor
+  command platform boundary is the shared resolver.
+- Existing Doctor check ids, report shape, timeout budgeting, packaged
+  Electron npm skip behavior, IPC/preload/renderer callers, runtime startup,
+  install/download behavior, databases, model caches, and user assets are
+  unchanged.
+- Focused Doctor command-resolver, Doctor aggregate/service, AI Runtime Status
+  workflow ledger, typecheck, production build, Doctor CI, governance subset,
+  docs sync, agent-context check, forbidden-path advisory check, diff check,
+  and complete `ci:governance` passed. UI screenshot validation is not
+  applicable because this slice changes main-process command selection only
+  and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model
