@@ -26,6 +26,27 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
+## AI Python Runtime Host Context Result
+
+- Added one AI Python Runtime host-context helper for current platform and
+  environment reads.
+- The Electron AI Python runtime adapter now consumes that helper when
+  creating `AiPythonEnvironment`, instead of passing `process.platform` and
+  `process.env` directly into the environment resolver.
+- Existing Python executable selection, managed runtime directory
+  compatibility, environment override precedence, Windows PATH/install-root
+  search, macOS Homebrew fallback, IPC/preload/renderer callers, runtime
+  startup policy, model downloads, databases, and user assets are unchanged.
+- Added focused host-context coverage and wired it into runtime-safety CI and
+  the test map so the host boundary remains explicit on both platform
+  runners.
+- Focused host-context and AI Python environment tests, complete
+  `ci:test-runtime-safety`, typecheck, production build, docs sync, agent
+  context check, forbidden-path advisory check, and diff check pass.
+  Electron/Playwright UI validation is intentionally skipped because this
+  changes internal main-process host-context plumbing only and has no renderer
+  surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

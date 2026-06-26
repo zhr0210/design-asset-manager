@@ -8,6 +8,7 @@ import {
   AiPythonEnvironment,
   type ManagedAiPythonRuntime
 } from './ai-python-environment'
+import { createAiPythonRuntimeHostContext } from './ai-python-runtime-host-context'
 
 function resolveElectronManagedPaths() {
   return resolveManagedPaths({
@@ -40,10 +41,11 @@ function writeDebugLog(message: string): void {
 
 function createAiPythonEnvironment(): AiPythonEnvironment {
   const managedPaths = resolveElectronManagedPaths()
+  const hostContext = createAiPythonRuntimeHostContext()
   return new AiPythonEnvironment({
-    platform: process.platform,
+    platform: hostContext.platform,
     runtimeRoot: managedPaths.runtimeDir,
-    environment: process.env
+    environment: hostContext.environment
   }, {
     exists: (candidate) => fs.existsSync(candidate),
     readDirectory: (directory) => fs.readdirSync(directory),

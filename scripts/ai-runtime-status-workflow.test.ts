@@ -783,7 +783,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/runtime/runtime-profile-registry.ts',
   'src/main/runtime/runtime-profile-resolver.ts',
   'src/main/services/ai-python-environment.ts',
-  'src/main/services/ai-python-runtime.service.ts',
+  'src/main/services/ai-python-runtime-host-context.ts',
   'src/main/services/ai-runtime/ai-runtime-bootstrap.ts',
   'src/main/services/ai-runtime/ai-runtime-host-context.ts',
   'src/main/services/llama-runtime/llama-runtime-governance.ts',
