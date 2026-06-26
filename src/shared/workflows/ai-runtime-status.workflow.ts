@@ -579,8 +579,8 @@ function projectPlatformAiWorkerProbeHeaderDisplay(
     platformBadgeClass: connected
       ? 'border-indigo-100 bg-white text-indigo-700'
       : 'border-slate-200 bg-white text-slate-500',
-    isMacOSLabel: probe.isMacOS ? 'yes' : 'no',
-    isAppleSiliconLabel: probe.isAppleSilicon ? 'yes' : 'no',
+    isMacOSLabel: projectAiRuntimeBooleanProbeLabel(probe.isMacOS),
+    isAppleSiliconLabel: projectAiRuntimeBooleanProbeLabel(probe.isAppleSilicon),
     clipSiglipStatusLabel: clipSiglipStatus.label
   }
 }
@@ -733,6 +733,15 @@ const AI_RUNTIME_INFO_LABELS: Record<string, string> = {
   isMacOS: 'macOS',
   isAppleSilicon: 'Apple Silicon',
   clipSiglipOnnx: 'CLIP/SigLIP ONNX'
+}
+
+const AI_RUNTIME_BOOLEAN_PROBE_LABELS: Record<'true' | 'false', string> = {
+  true: 'yes',
+  false: 'no'
+}
+
+function projectAiRuntimeBooleanProbeLabel(value: boolean): string {
+  return AI_RUNTIME_BOOLEAN_PROBE_LABELS[String(value) as 'true' | 'false']
 }
 
 export function projectAiRuntimeInfoLabel(label: string): string {

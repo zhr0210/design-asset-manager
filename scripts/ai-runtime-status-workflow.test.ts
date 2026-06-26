@@ -706,6 +706,8 @@ assert.deepEqual(projectAiRuntimeBranchPanelDisplay(windowsBranch), {
 const windowsWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay('windows', windowsRawProbe)
 assert.equal(windowsWorkerPanel.title, 'Windows Worker 实时探测')
 assert.equal(windowsWorkerPanel.platformBadgeLabel, 'win32/amd64')
+assert.equal(windowsWorkerPanel.isMacOSLabel, 'no')
+assert.equal(windowsWorkerPanel.isAppleSiliconLabel, 'no')
 assert.equal(windowsWorkerPanel.clipSiglipStatusLabel, '就绪')
 assert.equal(projectAiRuntimeCapabilityMatrixDisplay('macos').title, 'macOS 细项能力矩阵')
 assert.equal(projectAiRuntimeCapabilityMatrixDisplay('windows').title, 'Windows 细项能力矩阵')
@@ -955,6 +957,10 @@ assert.match(runtimeWorkflowSource, /const PLATFORM_AI_WORKER_PROBE_ACCESSORS: R
 assert.match(runtimeWorkflowSource, /function isPlatformAiWorkerProbeConnected/)
 assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
+assert.match(runtimeWorkflowSource, /const AI_RUNTIME_BOOLEAN_PROBE_LABELS: Record<'true' \| 'false', string>/)
+assert.match(runtimeWorkflowSource, /function projectAiRuntimeBooleanProbeLabel/)
+assert.doesNotMatch(runtimeWorkflowSource, /probe\.isMacOS\s*\?\s*'yes'\s*:\s*'no'/)
+assert.doesNotMatch(runtimeWorkflowSource, /probe\.isAppleSilicon\s*\?\s*'yes'\s*:\s*'no'/)
 const platformProbeDeviceFieldPattern = /probe\.torch|\.(?:mpsAvailable|cudaAvailable)/
 for (const helperName of [
   'projectPlatformAiWorkerProbeHeaderDisplay',

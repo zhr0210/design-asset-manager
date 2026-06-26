@@ -106,6 +106,28 @@ runtime, native dependency, packaging, path, or process differences.
   because this changes internal main-process platform detection data only and
   has no renderer surface.
 
+## Worker Probe Boolean Label Projection Result
+
+- Added one shared AI Runtime boolean probe label projection table for Worker
+  probe display fields.
+- Worker probe header display now derives `isMacOSLabel` and
+  `isAppleSiliconLabel` through the shared projection helper instead of local
+  ternary expressions in the header projector.
+- Existing Worker probe response shape, `isMacOS` and `isAppleSilicon`
+  evidence fields, branch connection rules, status labels, renderer callers,
+  IPC contracts, runtime startup, databases, model caches, and user assets are
+  unchanged.
+- Strengthened the focused AI Runtime status-workflow test to cover Windows
+  false-label projection and guard against restoring direct boolean ternaries
+  in the shared workflow. The AI Runtime panel contract test still confirms
+  renderer components consume projected display fields.
+- Focused AI Runtime status-workflow and panel contract tests, complete
+  `ci:test-runtime-safety`, typecheck, production build, docs sync, agent
+  context check, forbidden-path advisory check, and diff check pass.
+  Electron/Playwright UI validation is intentionally skipped because this
+  changes shared display projection internals only and does not alter the
+  rendered UI surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
