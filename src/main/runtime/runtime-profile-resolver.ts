@@ -11,8 +11,10 @@ interface RuntimeProfilePlatformRule {
 }
 
 interface RuntimeProfileHardwareRule {
+  platform?: PlatformName
+  arch?: PlatformArch
+  requiresNvidiaGpu?: boolean
   profileId: RuntimeProfileId
-  matches: (input: RuntimeProfileResolverInput) => boolean
 }
 
 const DEFAULT_RUNTIME_PROFILE_RULES: RuntimeProfilePlatformRule[] = [
@@ -23,8 +25,9 @@ const DEFAULT_RUNTIME_PROFILE_RULES: RuntimeProfilePlatformRule[] = [
 
 const HARDWARE_RUNTIME_PROFILE_RULES: RuntimeProfileHardwareRule[] = [
   {
-    profileId: 'windows-nvidia-cuda',
-    matches: (input) => Boolean(input.hardwareHints?.nvidiaGpu && input.platformInfo.platform === 'win32')
+    platform: 'win32',
+    requiresNvidiaGpu: true,
+    profileId: 'windows-nvidia-cuda'
   }
 ]
 
@@ -108,9 +111,16 @@ export function resolveRuntimeProfileRecommendation(input: RuntimeProfileResolve
 
 function resolvePreferredProfileId(input: RuntimeProfileResolverInput): RuntimeProfileId {
   if (input.userPreference === 'external-inference-only') return 'external-inference-only'
-  const hardwareRule = HARDWARE_RUNTIME_PROFILE_RULES.find((rule) => rule.matches(input))
+  const hardwareRule = HARDWARE_RUNTIME_PROFILE_RULES.find((rule) => runtimeProfileHardwareRuleMatches(rule, input))
   if (hardwareRule) return hardwareRule.profileId
   return getDefaultRuntimeProfileForPlatform(input.platformInfo.platform, input.platformInfo.arch)
+}
+
+function runtimeProfileHardwareRuleMatches(rule: RuntimeProfileHardwareRule, input: RuntimeProfileResolverInput): boolean {
+  if (rule.platform && rule.platform !== input.platformInfo.platform) return false
+  if (rule.arch && rule.arch !== input.platformInfo.arch) return false
+  if (rule.requiresNvidiaGpu && !input.hardwareHints?.nvidiaGpu) return false
+  return true
 }
 
 function buildReason(platform: PlatformName, arch: PlatformArch, profile: RuntimeProfile, blocking: string[]) {

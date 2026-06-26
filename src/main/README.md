@@ -19,7 +19,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep branch-to-OS support checks table-driven so the projector exposes real platform support without scattering branch conditionals.
 - Keep Platform AI branch runtime provider registration descriptor-driven; concrete metadata keys and profile rules belong in descriptors, not duplicated provider blocks or resolver functions.
 - Keep Python Worker auto-start support and runtime app-data root selection in one bootstrap platform adapter so adding or removing OS support does not scatter bootstrap conditionals.
-- Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; do not hand-code Windows/macOS profile branches in resolver flow.
+- Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; hardware rules should use descriptor fields, not hand-coded Windows/macOS profile branches in resolver flow.
 - Keep Doctor command selection for npm and Python launchers in one platform-name resolver; individual checks should execute commands and shape results, not maintain separate Windows/macOS command tables or pass platform booleans.
 - Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
 - Keep Llama runtime accelerator defaults in metadata rules; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
@@ -44,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.9 | 2026-06-26 | Moved Runtime Profile hardware hint matching to descriptor fields while preserving Windows NVIDIA CUDA recommendation behavior. |
 | v1.4.8 | 2026-06-26 | Moved Doctor npm/Python launcher resolver inputs from Windows booleans to platform-name descriptors. |
 | v1.4.7 | 2026-06-26 | Moved AI Python Environment base interpreter discovery into the same platform adapter as managed runtime path selection. |
 | v1.4.6 | 2026-06-26 | Moved AI Runtime Bootstrap auto-start support and runtime app-data root selection into one platform adapter. |

@@ -1230,6 +1230,24 @@ and Release Update Metadata pass.
   applicable because this slice changes main-process command selection only
   and has no renderer surface.
 
+## Runtime Profile Hardware Rule Descriptor Result
+
+- Moved Runtime Profile hardware-hint matching from an inline Windows/NVIDIA
+  lambda to descriptor fields consumed by one shared matcher.
+- Preserved the existing recommendation behavior: Windows with an NVIDIA hint
+  selects `windows-nvidia-cuda`; Windows without that hint selects
+  `windows-cpu`; macOS arm64 and x64 keep their existing profile mappings;
+  user-selected external inference and Doctor blocking fallback are unchanged.
+- Existing Runtime Registry shape, Doctor report shape, IPC/preload/renderer
+  callers, runtime startup, installation/download behavior, databases, model
+  caches, and user assets are unchanged.
+- Focused Runtime Profile, Bootstrap Package Plan, Bootstrap Manager, AI
+  Runtime Status workflow, typecheck, production build, runtime-safety,
+  governance subset, docs sync, agent-context check, forbidden-path advisory
+  check, diff check, and complete `ci:governance` passed. UI screenshot
+  validation is not applicable because this slice changes main-process
+  recommendation metadata only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model
