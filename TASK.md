@@ -1248,6 +1248,26 @@ and Release Update Metadata pass.
   validation is not applicable because this slice changes main-process
   recommendation metadata only and has no renderer surface.
 
+## Llama Runtime Planner Rule Matcher Result
+
+- Moved Llama runtime planner platform, architecture, and accelerator rule
+  matching into one shared matcher used by default accelerator selection,
+  runtime package pattern selection, and CUDA runtime package pattern
+  selection.
+- Preserved existing planner behavior: Windows without NVIDIA still defaults
+  to Vulkan, macOS/Linux without NVIDIA still default to CPU, CUDA 12/13
+  selection remains version-based, and Windows CUDA, macOS arm64, and Linux
+  x64 runtime package selection are unchanged.
+- Existing Llama install plan shape, public IPC/preload/renderer callers,
+  runtime startup, downloads, model choices, databases, model caches, and user
+  assets are unchanged.
+- Focused Llama runtime installer/governance/local-model tests, AI Runtime
+  Status workflow, typecheck, production build, runtime-safety, governance
+  subset, docs sync, agent-context check, forbidden-path advisory check, diff
+  check, and complete `ci:governance` passed. UI screenshot validation is not
+  applicable because this slice changes main-process planner metadata matching
+  only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

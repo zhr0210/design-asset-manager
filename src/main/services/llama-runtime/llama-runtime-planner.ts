@@ -48,6 +48,12 @@ interface LlamaCudaRuntimePackagePatternRule {
   patterns: RegExp[]
 }
 
+interface LlamaRuntimeRuleMatchInput {
+  platform?: NodeJS.Platform | string
+  arch?: string
+  accelerator?: LlamaRuntimeAccelerator
+}
+
 const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule[] = [
   { platform: 'win32', accelerator: 'vulkan' },
   { accelerator: 'cpu' }
@@ -227,9 +233,7 @@ export function recommendAccelerator(
   platform: NodeJS.Platform | string = process.platform
 ): LlamaRuntimeAccelerator {
   if (!hasNvidiaGpu) {
-    return DEFAULT_LLAMA_ACCELERATOR_RULES.find((rule) => {
-      return !rule.platform || rule.platform === platform
-    })?.accelerator ?? 'cpu'
+    return DEFAULT_LLAMA_ACCELERATOR_RULES.find((rule) => llamaRuntimeRuleMatches({ platform: rule.platform }, { platform }))?.accelerator ?? 'cpu'
   }
   const major = Number((cudaVersion ?? '').split('.')[0])
   if (major >= 13) return 'cuda13'
@@ -248,18 +252,22 @@ export function selectModelCandidate(profile: LlamaHardwareProfile): LlamaModelC
 }
 
 function runtimePatterns(accelerator: LlamaRuntimeAccelerator, platform: string = process.platform, arch: string = process.arch): RegExp[] {
-  const rule = LLAMA_RUNTIME_PACKAGE_PATTERN_RULES.find((candidate) => {
-    return (!candidate.platform || candidate.platform === platform)
-      && (!candidate.arch || candidate.arch === arch)
-      && (!candidate.accelerator || candidate.accelerator === accelerator)
-  })
+  const rule = LLAMA_RUNTIME_PACKAGE_PATTERN_RULES.find((candidate) => llamaRuntimeRuleMatches(candidate, { platform, arch, accelerator }))
   return rule?.patterns ?? []
 }
 
 function cudaRuntimePatterns(accelerator: LlamaRuntimeAccelerator): RegExp[] {
-  return LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES.find((rule) => {
-    return rule.accelerator === accelerator
-  })?.patterns ?? []
+  return LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES.find((rule) => llamaRuntimeRuleMatches(rule, { accelerator }))?.patterns ?? []
+}
+
+function llamaRuntimeRuleMatches(
+  rule: Partial<LlamaRuntimeRuleMatchInput>,
+  input: LlamaRuntimeRuleMatchInput
+): boolean {
+  if (rule.platform && rule.platform !== input.platform) return false
+  if (rule.arch && rule.arch !== input.arch) return false
+  if (rule.accelerator && rule.accelerator !== input.accelerator) return false
+  return true
 }
 
 function findAsset(release: LlamaReleaseInfo, patterns: RegExp[]): LlamaReleaseAsset | null {

@@ -22,7 +22,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; hardware rules should use descriptor fields, not hand-coded Windows/macOS profile branches in resolver flow.
 - Keep Doctor command selection for npm and Python launchers in one platform-name resolver; individual checks should execute commands and shape results, not maintain separate Windows/macOS command tables or pass platform booleans.
 - Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
-- Keep Llama runtime accelerator defaults in metadata rules; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
+- Keep Llama runtime accelerator defaults and package pattern selection in metadata rules with one matcher; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
 - Keep read-only Llama governance adapter selection descriptor-driven; platform conditionals belong in concrete runtime adapters, not the governance plan flow.
 - Keep OCR/Python managed venv executable paths and base interpreter discovery descriptor-driven; leave actual Windows search and macOS Homebrew probing inside platform adapters.
 - Keep explicit OCR evidence execution in main process, offline and timeout-bounded. Cache only path-free generated-image results for five minutes before projecting them into shared workflow status.
@@ -44,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.10 | 2026-06-26 | Moved Llama runtime planner platform, architecture, and accelerator rule matching behind one matcher. |
 | v1.4.9 | 2026-06-26 | Moved Runtime Profile hardware hint matching to descriptor fields while preserving Windows NVIDIA CUDA recommendation behavior. |
 | v1.4.8 | 2026-06-26 | Moved Doctor npm/Python launcher resolver inputs from Windows booleans to platform-name descriptors. |
 | v1.4.7 | 2026-06-26 | Moved AI Python Environment base interpreter discovery into the same platform adapter as managed runtime path selection. |
