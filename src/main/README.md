@@ -44,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.7 | 2026-06-26 | Moved AI Python Environment base interpreter discovery into the same platform adapter as managed runtime path selection. |
 | v1.4.6 | 2026-06-26 | Moved AI Runtime Bootstrap auto-start support and runtime app-data root selection into one platform adapter. |
 | v1.4.5 | 2026-06-26 | Moved AI Python Environment platform path and managed venv layout selection into one adapter seam while preserving Python discovery behavior. |
 | v1.4.4 | 2026-06-25 | Moved Doctor npm/Python launcher command selection into one shared main-process resolver. |

@@ -26,11 +26,17 @@ interface AiPythonEnvironmentPlatformAdapter {
   pathApi: typeof path.posix
   managedPythonPathParts: string[]
   basePythonSearchRoots?: (host: AiPythonEnvironmentHost, pathApi: typeof path.posix) => string[]
+  resolveBasePythonExecutable: (input: BasePythonResolverInput) => string | null
 }
 
-interface BasePythonResolver {
-  platform?: NodeJS.Platform | string
-  resolve: () => string | null
+interface BasePythonResolverInput {
+  host: AiPythonEnvironmentHost
+  io: AiPythonEnvironmentIo
+  pathApi: typeof path.posix
+  searchBasePythonInstallRoots: () => string | null
+  log: (message: string) => void
+  errorMessage: (error: unknown) => string
+  defaultPythonExecutable: () => string
 }
 
 const AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS: AiPythonEnvironmentPlatformAdapter[] = [
@@ -45,11 +51,19 @@ const AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS: AiPythonEnvironmentPlatformAdapte
         : []
       roots.push('C:\\Program Files\\Python', 'C:\\')
       return roots
-    }
+    },
+    resolveBasePythonExecutable: resolveWindowsBasePythonExecutable
+  },
+  {
+    platform: 'darwin',
+    pathApi: path.posix,
+    managedPythonPathParts: ['bin', 'python'],
+    resolveBasePythonExecutable: resolveMacOSHomebrewPythonExecutable
   },
   {
     pathApi: path.posix,
-    managedPythonPathParts: ['bin', 'python']
+    managedPythonPathParts: ['bin', 'python'],
+    resolveBasePythonExecutable: ({ defaultPythonExecutable }) => defaultPythonExecutable()
   }
 ]
 
@@ -92,17 +106,16 @@ export class AiPythonEnvironment {
       }
     }
 
-    const resolvers: BasePythonResolver[] = [
-      { platform: 'win32', resolve: () => this.resolveWindowsBasePythonExecutable() },
-      { platform: 'darwin', resolve: () => this.resolveMacOSHomebrewPythonExecutable() },
-      { resolve: () => this.resolveDefaultBasePythonExecutable() }
-    ]
-    for (const resolver of resolvers) {
-      if (resolver.platform && resolver.platform !== this.host.platform) continue
-      const resolved = resolver.resolve()
-      if (resolved) return resolved
-    }
-    return 'python'
+    const resolved = this.platformAdapter.resolveBasePythonExecutable({
+      host: this.host,
+      io: this.io,
+      pathApi: this.pathApi,
+      searchBasePythonInstallRoots: () => this.searchBasePythonInstallRoots(),
+      log: (message) => this.log(message),
+      errorMessage: (error) => this.errorMessage(error),
+      defaultPythonExecutable: () => this.resolveDefaultBasePythonExecutable()
+    })
+    return resolved ?? this.resolveDefaultBasePythonExecutable()
   }
 
   resolvePythonExecutable(): string {
@@ -141,29 +154,6 @@ export class AiPythonEnvironment {
     return pythonPath
   }
 
-  private resolveWindowsBasePythonExecutable(): string | null {
-    try {
-      this.log('[resolvePythonExecutable] platform is win32, running "where python"...')
-      const output = this.io.findPythonOnPath()
-      this.log(`[resolvePythonExecutable] "where python" raw output:\n${output}`)
-      const resolved = output
-        .split(/\r?\n/)
-        .map((line) => line.trim())
-        .find((line) => {
-          const normalized = line.toLowerCase()
-          return normalized.endsWith('python.exe') && !normalized.includes('microsoft\\windowsapps')
-        })
-      if (resolved) {
-        this.log(`[resolvePythonExecutable] WindowsApps bypass resolved: ${resolved}`)
-        return resolved
-      }
-    } catch (error) {
-      this.log(`[resolvePythonExecutable] "where python" failed: ${this.errorMessage(error)}`)
-    }
-
-    return this.searchBasePythonInstallRoots()
-  }
-
   private searchBasePythonInstallRoots(): string | null {
     const roots = this.platformAdapter.basePythonSearchRoots?.(this.host, this.pathApi) ?? []
     for (const root of roots) {
@@ -184,16 +174,6 @@ export class AiPythonEnvironment {
       }
     }
     return null
-  }
-
-  private resolveMacOSHomebrewPythonExecutable(): string {
-    const candidates = ['/opt/homebrew/bin/python3.13', '/opt/homebrew/bin/python3']
-    const resolved = candidates.find((candidate) => this.io.exists(candidate))
-    if (resolved) {
-      this.log(`[resolvePythonExecutable] Found Homebrew Python: ${resolved}`)
-      return resolved
-    }
-    return this.resolveDefaultBasePythonExecutable()
   }
 
   private resolveDefaultBasePythonExecutable(): string {
@@ -218,4 +198,37 @@ function resolveAiPythonEnvironmentPlatformAdapter(platform: NodeJS.Platform | s
   return AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS.find((candidate) => {
     return !candidate.platform || candidate.platform === platform
   })!
+}
+
+function resolveWindowsBasePythonExecutable(input: BasePythonResolverInput): string | null {
+  try {
+    input.log('[resolvePythonExecutable] platform is win32, running "where python"...')
+    const output = input.io.findPythonOnPath()
+    input.log(`[resolvePythonExecutable] "where python" raw output:\n${output}`)
+    const resolved = output
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .find((line) => {
+        const normalized = line.toLowerCase()
+        return normalized.endsWith('python.exe') && !normalized.includes('microsoft\\windowsapps')
+      })
+    if (resolved) {
+      input.log(`[resolvePythonExecutable] WindowsApps bypass resolved: ${resolved}`)
+      return resolved
+    }
+  } catch (error) {
+    input.log(`[resolvePythonExecutable] "where python" failed: ${input.errorMessage(error)}`)
+  }
+
+  return input.searchBasePythonInstallRoots()
+}
+
+function resolveMacOSHomebrewPythonExecutable(input: BasePythonResolverInput): string {
+  const candidates = ['/opt/homebrew/bin/python3.13', '/opt/homebrew/bin/python3']
+  const resolved = candidates.find((candidate) => input.io.exists(candidate))
+  if (resolved) {
+    input.log(`[resolvePythonExecutable] Found Homebrew Python: ${resolved}`)
+    return resolved
+  }
+  return input.defaultPythonExecutable()
 }

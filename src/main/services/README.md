@@ -34,7 +34,7 @@ Business services for local assets, browser capture, tags, settings, downloads, 
 - Worker task lifecycle aliases (`running`/`processing`) and terminal-result eligibility should be classified once in the result projector before polling branches choose SQLite actions.
 - Worker lifecycle-to-local task/asset status, sync status, cancellation behavior, and default error messages should come from a pure sync action plan; non-completion SQL execution should reuse the lifecycle sink.
 - Reuse the AI tag suggestion sink when multiple Worker workflows produce pending tag suggestions.
-- Keep AI Python managed venv paths, path API selection, and platform-specific base Python search roots inside the AI Python Environment adapter seam.
+- Keep AI Python managed venv paths, path API selection, platform-specific base Python discovery, and platform-specific search roots inside the AI Python Environment adapter seam.
 - Keep AI Runtime Bootstrap platform policy in one adapter that owns Python Worker auto-start support and runtime app-data root path parts.
 
 ## Tests
@@ -48,6 +48,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.14 | 2026-06-26 | Moved AI Python Environment base interpreter discovery into the same platform adapter as path API, managed venv layout, and search roots. |
 | v1.4.13 | 2026-06-26 | Moved AI Runtime Bootstrap Python Worker auto-start support and runtime app-data root path parts into one platform adapter. |
 | v1.4.12 | 2026-06-26 | Moved AI Python Environment path API, managed venv executable layout, and Python search roots into one platform adapter seam. |
 | v1.4.11 | 2026-06-06 | Added CLIP ONNX image/text embedding evidence and sanitized Python Worker exit summaries. |

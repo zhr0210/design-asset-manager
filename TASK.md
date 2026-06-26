@@ -1189,6 +1189,22 @@ and Release Update Metadata pass.
   workflow tests passed. UI screenshot validation is not applicable because
   this slice changes main-process bootstrap policy only.
 
+## AI Python Environment Base Discovery Adapter Result
+
+- Moved AI Python Environment base interpreter discovery into the same
+  internal platform adapter that owns path API selection, managed venv
+  executable layout, and platform-specific Python search roots.
+- Preserved environment-variable priority, WindowsApps bypass, Windows
+  user/Profile and Program Files search, macOS Homebrew preference, managed
+  runtime fallback behavior, and default `python` fallback.
+- `AiPythonEnvironment` callers still use the same host/io interface. No IPC
+  channel, preload bridge, renderer UI, AI Worker HTTP API, model download,
+  user asset, runtime database, model cache, signing, notarization,
+  publishing, or GitHub settings behavior changed in this slice.
+- Focused AI Python Environment, OCR dependency governance, and macOS AI deps
+  installer contract tests passed. UI screenshot validation is not applicable
+  because this slice changes main-process Python executable resolution only.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model
