@@ -53,6 +53,14 @@ assert.match(source, /finally \{\s+Write-Report \$true/)
 assert.doesNotMatch(source, /spawn\(installerPath/)
 assert.doesNotMatch(source, /console\.log\(fullLog\)/)
 
+const hostDefaultsSource = await fs.readFile('scripts/package-smoke-host-defaults.mjs', 'utf8')
+assert.match(hostDefaultsSource, /const PACKAGE_SMOKE_ARTIFACT_PLAN_BUILDERS_BY_PLATFORM/)
+assert.match(hostDefaultsSource, /win32: createWindowsPackageSmokeArtifactPlan/)
+assert.match(hostDefaultsSource, /darwin: createMacPackageSmokeArtifactPlan/)
+assert.match(hostDefaultsSource, /other: createMacPackageSmokeArtifactPlan/)
+assert.match(hostDefaultsSource, /const artifactPlanBuilder = PACKAGE_SMOKE_ARTIFACT_PLAN_BUILDERS_BY_PLATFORM\[hostDefaults\.platform\]/)
+assert.doesNotMatch(hostDefaultsSource, /if \(hostDefaults\.platform === 'win32'\)/)
+
 assert.deepEqual(resolvePackageSmokeHostDefaults('win32'), {
   platform: 'win32',
   npmCommand: 'npm.cmd',

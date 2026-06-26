@@ -22,6 +22,12 @@ const PACKAGE_SMOKE_HOST_DEFAULTS_BY_PLATFORM = {
   }
 }
 
+const PACKAGE_SMOKE_ARTIFACT_PLAN_BUILDERS_BY_PLATFORM = {
+  win32: createWindowsPackageSmokeArtifactPlan,
+  darwin: createMacPackageSmokeArtifactPlan,
+  other: createMacPackageSmokeArtifactPlan
+}
+
 export function resolvePackageSmokeHostDefaults(platform) {
   return combinePackageSmokeHostDefaults(resolveNodeHostPlatformDefaults(platform))
 }
@@ -35,39 +41,50 @@ export function resolvePackageSmokeArtifactPlan(platform, input) {
   const arch = requirePackageSmokeArch(input.arch)
   const windowsUnpackedDir = arch === 'arm64' ? 'win-arm64-unpacked' : 'win-unpacked'
   const windowsUnpackedFallbackDir = arch === 'arm64' ? 'win-unpacked' : 'win-x64-unpacked'
+  const artifactPlanBuilder = PACKAGE_SMOKE_ARTIFACT_PLAN_BUILDERS_BY_PLATFORM[hostDefaults.platform]
 
-  if (hostDefaults.platform === 'win32') {
-    return clonePackageSmokeArtifactPlan({
-      platform: hostDefaults.platform,
-      arch,
-      installerPath: path.join(input.distDir, `${input.productName} Setup ${input.version}.exe`),
-      unpackedArtifactPath: path.join(input.distDir, windowsUnpackedDir, `${input.productName}.exe`),
-      unpackedBinaryCandidates: [
-        path.join(input.distDir, windowsUnpackedDir, `${input.productName}.exe`),
-        path.join(input.distDir, windowsUnpackedFallbackDir, `${input.productName}.exe`)
-      ],
-      scanDmgFiles: false,
-      scanMacUnpackedDirs: false,
-      sandboxUnpackedDir: windowsUnpackedDir,
-      sandboxUnpackedExecutablePath: path.join(input.distDir, windowsUnpackedDir, `${input.productName}.exe`)
-    })
-  }
-
-  return clonePackageSmokeArtifactPlan({
-    platform: hostDefaults.platform,
+  return clonePackageSmokeArtifactPlan(artifactPlanBuilder({
+    hostDefaults,
+    input,
     arch,
-    installerPath: path.join(input.distDir, `${input.productName}-${input.version}-${arch}.dmg`),
-    unpackedArtifactPath: path.join(input.distDir, `mac-${arch}`, `${input.productName}.app`),
+    windowsUnpackedDir,
+    windowsUnpackedFallbackDir
+  }))
+}
+
+function createWindowsPackageSmokeArtifactPlan(context) {
+  return {
+    platform: context.hostDefaults.platform,
+    arch: context.arch,
+    installerPath: path.join(context.input.distDir, `${context.input.productName} Setup ${context.input.version}.exe`),
+    unpackedArtifactPath: path.join(context.input.distDir, context.windowsUnpackedDir, `${context.input.productName}.exe`),
     unpackedBinaryCandidates: [
-      path.join(input.distDir, 'mac', `${input.productName}.app`, 'Contents', 'MacOS', input.productName),
-      path.join(input.distDir, 'mac-arm64', `${input.productName}.app`, 'Contents', 'MacOS', input.productName)
+      path.join(context.input.distDir, context.windowsUnpackedDir, `${context.input.productName}.exe`),
+      path.join(context.input.distDir, context.windowsUnpackedFallbackDir, `${context.input.productName}.exe`)
+    ],
+    scanDmgFiles: false,
+    scanMacUnpackedDirs: false,
+    sandboxUnpackedDir: context.windowsUnpackedDir,
+    sandboxUnpackedExecutablePath: path.join(context.input.distDir, context.windowsUnpackedDir, `${context.input.productName}.exe`)
+  }
+}
+
+function createMacPackageSmokeArtifactPlan(context) {
+  return {
+    platform: context.hostDefaults.platform,
+    arch: context.arch,
+    installerPath: path.join(context.input.distDir, `${context.input.productName}-${context.input.version}-${context.arch}.dmg`),
+    unpackedArtifactPath: path.join(context.input.distDir, `mac-${context.arch}`, `${context.input.productName}.app`),
+    unpackedBinaryCandidates: [
+      path.join(context.input.distDir, 'mac', `${context.input.productName}.app`, 'Contents', 'MacOS', context.input.productName),
+      path.join(context.input.distDir, 'mac-arm64', `${context.input.productName}.app`, 'Contents', 'MacOS', context.input.productName)
     ],
     scanDmgFiles: true,
     scanMacUnpackedDirs: true,
     macUnpackedDirectoryPrefix: 'mac',
-    sandboxUnpackedDir: windowsUnpackedDir,
-    sandboxUnpackedExecutablePath: path.join(input.distDir, windowsUnpackedDir, `${input.productName}.exe`)
-  })
+    sandboxUnpackedDir: context.windowsUnpackedDir,
+    sandboxUnpackedExecutablePath: path.join(context.input.distDir, context.windowsUnpackedDir, `${context.input.productName}.exe`)
+  }
 }
 
 function combinePackageSmokeHostDefaults(nodeDefaults) {

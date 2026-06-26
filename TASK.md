@@ -128,6 +128,24 @@ runtime, native dependency, packaging, path, or process differences.
   changes shared display projection internals only and does not alter the
   rendered UI surface.
 
+## Package Smoke Artifact Plan Builder Result
+
+- Converted Package Smoke artifact-plan selection from inline
+  `hostDefaults.platform === 'win32'` control flow to one platform-keyed
+  artifact-plan builder registry.
+- Existing Windows installer/unpacked candidate paths, macOS DMG/app
+  candidate paths, fallback `other` behavior, sandbox executable metadata,
+  host defaults, CLI flags, report shape, Package Smoke execution, signing
+  checks, DMG mount checks, Windows Sandbox behavior, user assets, runtime
+  behavior, and public contracts are unchanged.
+- Strengthened the Package Smoke focused test to require the builder registry
+  and reject restoring the direct Windows platform branch.
+- Focused Package Smoke and Node host-platform defaults tests, typecheck,
+  production build, docs sync, agent context check, forbidden-path advisory
+  check, and diff check pass. Electron/Playwright UI validation is
+  intentionally skipped because this changes internal delivery script data
+  flow only and has no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
