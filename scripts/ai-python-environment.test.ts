@@ -132,6 +132,25 @@ assert.equal(
   `${programFilesPythonRoot}\\Python312\\python.exe`
 )
 
+const homePathPythonRoot = '\\Users\\PathOnly\\AppData\\Local\\Programs\\Python'
+const windowsHomePathSearch = new AiPythonEnvironment(host({
+  ...windowsHost,
+  environment: { HOMEPATH: '\\Users\\PathOnly' }
+}), fakeIo({
+  whereError: 'not on PATH',
+  existing: [
+    homePathPythonRoot,
+    `${homePathPythonRoot}\\Python310\\python.exe`
+  ],
+  directories: {
+    [homePathPythonRoot]: ['Python310']
+  }
+}))
+assert.equal(
+  windowsHomePathSearch.resolveBasePythonExecutable(),
+  `${homePathPythonRoot}\\Python310\\python.exe`
+)
+
 const linux = new AiPythonEnvironment(host({ platform: 'linux' }), fakeIo())
 assert.equal(linux.resolveManagedRuntime().pythonPath, '/managed/runtime/macos-ai-python/.venv/bin/python')
 assert.equal(linux.resolveBasePythonExecutable(), 'python')
@@ -142,6 +161,10 @@ const dependencySource = await fs.readFile('src/main/services/ocr-dependency.ser
 const rapidOcrSource = await fs.readFile('src/main/services/text-detection/rapidocr-text-box-provider.ts', 'utf8')
 const healthcheckSource = await fs.readFile('src/main/services/ocr-healthcheck.service.ts', 'utf8')
 assert.doesNotMatch(coreSource, /from ['"]electron['"]|child_process|node:child_process|process\.platform|process\.env|execSync|spawn\s*\(/)
+assert.match(coreSource, /AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS/)
+assert.match(coreSource, /resolveAiPythonEnvironmentPlatformAdapter/)
+assert.doesNotMatch(coreSource, /host\.platform === 'win32' \? path\.win32 : path\.posix/)
+assert.doesNotMatch(coreSource, /MANAGED_PYTHON_PATH_ADAPTERS/)
 assert.match(adapterSource, /new AiPythonEnvironment/)
 assert.match(adapterSource, /execFileSync\(pythonExecutable, \['-c', `import \$\{moduleName\}`\]/)
 assert.doesNotMatch(dependencySource, /MANAGED_PYTHON_PATH_ADAPTERS|OCR_BASE_PYTHON_RESOLVERS|searchWindowsPythonPaths|resolveWindowsBasePythonExecutable/)

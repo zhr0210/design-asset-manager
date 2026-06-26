@@ -17,6 +17,7 @@ Business services for local assets, browser capture, tags, settings, downloads, 
 - `ai-runtime/platform-ai-branch-status.projector.ts`: workflow-first Windows/macOS AI branch status projection.
 - `ai-runtime/model-artifact-readiness.mapper.ts`: maps existing cooperative/Llama artifact state into shared readiness evidence without scanning model caches.
 - `llama-runtime/llama-runtime-server-probe.ts`: performs a user-triggered text and generated-image probe against the existing OpenAI-compatible Llama endpoint; only successful image inference becomes real-model evidence.
+- `ai-python-environment.ts`: resolves managed AI Python runtimes and base Python executables through one platform adapter seam.
 
 ## Rules
 
@@ -32,6 +33,7 @@ Business services for local assets, browser capture, tags, settings, downloads, 
 - Worker task lifecycle aliases (`running`/`processing`) and terminal-result eligibility should be classified once in the result projector before polling branches choose SQLite actions.
 - Worker lifecycle-to-local task/asset status, sync status, cancellation behavior, and default error messages should come from a pure sync action plan; non-completion SQL execution should reuse the lifecycle sink.
 - Reuse the AI tag suggestion sink when multiple Worker workflows produce pending tag suggestions.
+- Keep AI Python managed venv paths, path API selection, and platform-specific base Python search roots inside the AI Python Environment adapter seam.
 
 ## Tests
 
@@ -44,6 +46,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.12 | 2026-06-26 | Moved AI Python Environment path API, managed venv executable layout, and Python search roots into one platform adapter seam. |
 | v1.4.11 | 2026-06-06 | Added CLIP ONNX image/text embedding evidence and sanitized Python Worker exit summaries. |
 | v1.4.10 | 2026-06-06 | Replaced synthetic Python Worker process tracking with real child-process lifecycle management, bounded logs, shutdown cleanup, and a cold-start capability-probe budget. |
 | v1.4.9 | 2026-06-05 | Added Windows CUDA/Llama lane variants to shared model artifact readiness evidence. |

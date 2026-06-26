@@ -1156,6 +1156,23 @@ and Release Update Metadata pass.
   model cache, signing, notarization, publishing, or GitHub settings behavior
   changed in this slice.
 
+## AI Python Environment Platform Adapter Result
+
+- Moved AI Python Environment path API selection, managed venv executable
+  layout, and Windows base-Python search roots into one internal platform
+  adapter seam.
+- Preserved the existing managed runtime directory name, environment-variable
+  priority, WindowsApps bypass, Windows user/Profile and Program Files search,
+  macOS Homebrew preference, fallback venv behavior, and default `python`
+  fallback.
+- `AiPythonEnvironment` callers still use the same host/io interface; no IPC,
+  renderer UI, AI Worker HTTP API, model download, user asset, runtime
+  database, model cache, signing, notarization, publishing, or GitHub settings
+  behavior changed in this slice.
+- Focused AI Python Environment and OCR dependency governance tests passed.
+  UI screenshot validation is not applicable because this slice changes
+  main-process path resolution only.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

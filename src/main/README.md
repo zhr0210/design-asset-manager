@@ -44,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.5 | 2026-06-26 | Moved AI Python Environment platform path and managed venv layout selection into one adapter seam while preserving Python discovery behavior. |
 | v1.4.4 | 2026-06-25 | Moved Doctor npm/Python launcher command selection into one shared main-process resolver. |
 | v1.4.3 | 2026-06-25 | Consumed shared Electron app lifecycle policy from shared workflow metadata while preserving Windows AppUserModelId and macOS quit behavior. |
 | v1.4.2 | 2026-06-15 | Added the explicitly approved Signed Release Candidate workflow, Release Update Metadata, and structured platform trust evidence. |

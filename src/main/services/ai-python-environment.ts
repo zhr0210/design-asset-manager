@@ -21,9 +21,11 @@ export interface AiPythonEnvironmentIo {
   log?: (message: string) => void
 }
 
-interface ManagedPythonPathAdapter {
+interface AiPythonEnvironmentPlatformAdapter {
   platform?: NodeJS.Platform | string
-  pathParts: string[]
+  pathApi: typeof path.posix
+  managedPythonPathParts: string[]
+  basePythonSearchRoots?: (host: AiPythonEnvironmentHost, pathApi: typeof path.posix) => string[]
 }
 
 interface BasePythonResolver {
@@ -31,22 +33,37 @@ interface BasePythonResolver {
   resolve: () => string | null
 }
 
-const MANAGED_PYTHON_PATH_ADAPTERS: ManagedPythonPathAdapter[] = [
-  { platform: 'win32', pathParts: ['Scripts', 'python.exe'] },
-  { pathParts: ['bin', 'python'] }
+const AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS: AiPythonEnvironmentPlatformAdapter[] = [
+  {
+    platform: 'win32',
+    pathApi: path.win32,
+    managedPythonPathParts: ['Scripts', 'python.exe'],
+    basePythonSearchRoots: (host, pathApi) => {
+      const userProfile = host.environment.USERPROFILE || host.environment.HOMEPATH || ''
+      const roots = userProfile
+        ? [pathApi.join(userProfile, 'AppData', 'Local', 'Programs', 'Python')]
+        : []
+      roots.push('C:\\Program Files\\Python', 'C:\\')
+      return roots
+    }
+  },
+  {
+    pathApi: path.posix,
+    managedPythonPathParts: ['bin', 'python']
+  }
 ]
 
 // Keep the legacy directory name so existing managed environments remain usable.
 const MANAGED_AI_PYTHON_DIRECTORY = 'macos-ai-python'
 
 export class AiPythonEnvironment {
-  private readonly pathApi: typeof path.posix
+  private readonly platformAdapter: AiPythonEnvironmentPlatformAdapter
 
   constructor(
     private readonly host: AiPythonEnvironmentHost,
     private readonly io: AiPythonEnvironmentIo
   ) {
-    this.pathApi = host.platform === 'win32' ? path.win32 : path.posix
+    this.platformAdapter = resolveAiPythonEnvironmentPlatformAdapter(host.platform)
   }
 
   resolveManagedRuntime(): ManagedAiPythonRuntime {
@@ -108,10 +125,7 @@ export class AiPythonEnvironment {
   }
 
   private resolveManagedPythonPath(venvDir: string): string {
-    const adapter = MANAGED_PYTHON_PATH_ADAPTERS.find((candidate) => {
-      return !candidate.platform || candidate.platform === this.host.platform
-    })!
-    return this.pathApi.join(venvDir, ...adapter.pathParts)
+    return this.pathApi.join(venvDir, ...this.platformAdapter.managedPythonPathParts)
   }
 
   private resolveFallbackVenvPython(): string | null {
@@ -147,16 +161,11 @@ export class AiPythonEnvironment {
       this.log(`[resolvePythonExecutable] "where python" failed: ${this.errorMessage(error)}`)
     }
 
-    return this.searchWindowsPythonPaths()
+    return this.searchBasePythonInstallRoots()
   }
 
-  private searchWindowsPythonPaths(): string | null {
-    const userProfile = this.host.environment.USERPROFILE || this.host.environment.HOMEPATH || ''
-    const roots = userProfile
-      ? [this.pathApi.join(userProfile, 'AppData', 'Local', 'Programs', 'Python')]
-      : []
-    roots.push('C:\\Program Files\\Python', 'C:\\')
-
+  private searchBasePythonInstallRoots(): string | null {
+    const roots = this.platformAdapter.basePythonSearchRoots?.(this.host, this.pathApi) ?? []
     for (const root of roots) {
       try {
         if (root !== 'C:\\' && !this.io.exists(root)) continue
@@ -196,7 +205,17 @@ export class AiPythonEnvironment {
     this.io.log?.(message)
   }
 
+  private get pathApi(): typeof path.posix {
+    return this.platformAdapter.pathApi
+  }
+
   private errorMessage(error: unknown): string {
     return error instanceof Error ? error.message : String(error)
   }
+}
+
+function resolveAiPythonEnvironmentPlatformAdapter(platform: NodeJS.Platform | string): AiPythonEnvironmentPlatformAdapter {
+  return AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS.find((candidate) => {
+    return !candidate.platform || candidate.platform === platform
+  })!
 }
