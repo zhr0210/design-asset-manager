@@ -65,6 +65,26 @@ runtime, native dependency, packaging, path, or process differences.
   intentionally skipped because this changes internal main-process governance
   data only and has no renderer surface.
 
+## Electron Main Host Context Result
+
+- Added one Electron main-process host-context helper for current platform
+  reads.
+- Main startup and `window-all-closed` lifecycle handling now resolve the
+  shared Electron app lifecycle policy from that host context instead of
+  reading `process.platform` directly in `src/main/index.ts`.
+- Existing Windows AppUserModelId behavior, macOS keep-alive behavior, default
+  quit behavior, BrowserWindow creation, IPC registration, runtime startup,
+  databases, model caches, user assets, and public contracts are unchanged.
+- Strengthened the focused lifecycle test to cover the host-context helper,
+  require main to consume it, and guard against restoring direct
+  `process.platform` reads in the entrypoint. The platform-boundary ledger now
+  records the new helper as the legitimate Electron main host boundary.
+- Focused Electron lifecycle and AI Runtime status-workflow tests, governance
+  subset, typecheck, production build, docs sync, agent context check,
+  forbidden-path advisory check, and diff check pass. Electron/Playwright UI
+  validation is intentionally skipped because this changes internal
+  main-process lifecycle policy plumbing only and has no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

@@ -4,6 +4,7 @@ import {
   ELECTRON_APP_LIFECYCLE_POLICIES,
   resolveElectronAppLifecyclePolicy
 } from '../src/shared/workflows/electron-app-lifecycle.workflow'
+import { createElectronMainHostContext } from '../src/main/electron-main-host-context'
 
 assert.deepEqual(ELECTRON_APP_LIFECYCLE_POLICIES, [
   {
@@ -24,16 +25,22 @@ assert.deepEqual(resolveElectronAppLifecyclePolicy('win32'), ELECTRON_APP_LIFECY
 assert.deepEqual(resolveElectronAppLifecyclePolicy('darwin'), ELECTRON_APP_LIFECYCLE_POLICIES[1])
 assert.deepEqual(resolveElectronAppLifecyclePolicy('linux'), ELECTRON_APP_LIFECYCLE_POLICIES[2])
 assert.deepEqual(resolveElectronAppLifecyclePolicy('freebsd'), ELECTRON_APP_LIFECYCLE_POLICIES[2])
+assert.deepEqual(createElectronMainHostContext({ platform: 'win32' }), { platform: 'win32' })
+assert.equal(createElectronMainHostContext().platform, process.platform)
 
 const mainSource = await fs.readFile('src/main/index.ts', 'utf8')
+const hostContextSource = await fs.readFile('src/main/electron-main-host-context.ts', 'utf8')
 const sharedSource = await fs.readFile('src/shared/workflows/electron-app-lifecycle.workflow.ts', 'utf8')
 
-assert.match(mainSource, /resolveElectronAppLifecyclePolicy\(process\.platform\)/)
+assert.match(mainSource, /createElectronMainHostContext\(\)/)
+assert.match(mainSource, /resolveElectronAppLifecyclePolicy\(electronMainHostContext\.platform\)/)
 assert.match(mainSource, /app\.setAppUserModelId\(appLifecyclePolicy\.appUserModelId\)/)
-assert.match(mainSource, /resolveElectronAppLifecyclePolicy\(process\.platform\)\.quitOnAllWindowsClosed/)
+assert.match(mainSource, /resolveElectronAppLifecyclePolicy\(electronMainHostContext\.platform\)\.quitOnAllWindowsClosed/)
 assert.doesNotMatch(mainSource, /ELECTRON_APP_LIFECYCLE_POLICIES|type ElectronAppLifecyclePolicy|platform: 'win32'|platform: 'darwin'/)
+assert.doesNotMatch(mainSource, /process\.platform/)
 assert.doesNotMatch(mainSource, /process\.platform\s*={2,3}\s*['"]win32['"]/)
 assert.doesNotMatch(mainSource, /process\.platform\s*!={1,2}\s*['"]darwin['"]/)
+assert.match(hostContextSource, /platform: input\.platform \?\? process\.platform/)
 
 assert.match(sharedSource, /ELECTRON_APP_LIFECYCLE_POLICIES/)
 assert.match(sharedSource, /appUserModelId: 'com\.antigravity\.designassetmanager'/)

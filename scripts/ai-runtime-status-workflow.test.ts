@@ -772,7 +772,7 @@ assert.deepEqual(directProcessPlatformBranchFiles, [])
 assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/bootstrap/runtime-registry.validator.ts',
   'src/main/doctor/doctor-command-resolver.ts',
-  'src/main/index.ts',
+  'src/main/electron-main-host-context.ts',
   'src/main/packaging/release-environment-manifest.ts',
   'src/main/packaging/release-external-gate-status.ts',
   'src/main/packaging/release-flow-governance.ts',

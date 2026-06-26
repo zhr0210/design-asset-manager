@@ -18,6 +18,7 @@ import { EmbeddedBrowserManager } from './services/browser-view.manager'
 import { ImageMetadataService } from './services/image-metadata.service'
 import { DESKTOP_VIEWPORT_POLICY } from '../shared/desktop-viewport-policy'
 import { resolveElectronAppLifecyclePolicy } from '../shared/workflows/electron-app-lifecycle.workflow'
+import { createElectronMainHostContext } from './electron-main-host-context'
 
 // Register local-file scheme as privileged before app is ready
 protocol.registerSchemesAsPrivileged([
@@ -34,6 +35,7 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+const electronMainHostContext = createElectronMainHostContext()
 
 function createWindow(): void {
   const preloadPath = join(__dirname, '../preload/index.cjs')
@@ -99,7 +101,7 @@ app.whenReady().then(async () => {
     console.error('[SQLite] Failed to initialize database:', err)
   }
 
-  const appLifecyclePolicy = resolveElectronAppLifecyclePolicy(process.platform)
+  const appLifecyclePolicy = resolveElectronAppLifecyclePolicy(electronMainHostContext.platform)
 
   if (appLifecyclePolicy.appUserModelId) {
     app.setAppUserModelId(appLifecyclePolicy.appUserModelId)
@@ -135,7 +137,7 @@ app.whenReady().then(async () => {
 })
 
 app.on('window-all-closed', () => {
-  if (resolveElectronAppLifecyclePolicy(process.platform).quitOnAllWindowsClosed) {
+  if (resolveElectronAppLifecyclePolicy(electronMainHostContext.platform).quitOnAllWindowsClosed) {
     app.quit()
   }
 })
