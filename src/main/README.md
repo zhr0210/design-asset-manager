@@ -18,7 +18,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Keep reusable runtime lane labels and runtime-kind matching in shared lane metadata; leave platform topology tables responsible for genuine lane membership and primary-lane differences, then resolve lane definitions through one shared resolver.
 - Keep branch-to-OS support checks table-driven so the projector exposes real platform support without scattering branch conditionals.
 - Keep Platform AI branch runtime provider registration descriptor-driven; concrete metadata keys and profile rules belong in descriptors, not duplicated provider blocks or resolver functions.
-- Keep Python Worker auto-start platform support in one allowlist so adding or removing OS support does not scatter bootstrap conditionals.
+- Keep Python Worker auto-start support and runtime app-data root selection in one bootstrap platform adapter so adding or removing OS support does not scatter bootstrap conditionals.
 - Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; do not hand-code Windows/macOS profile branches in resolver flow.
 - Keep Doctor command selection for npm and Python launchers in one resolver; individual checks should execute commands and shape results, not maintain separate Windows/macOS command tables.
 - Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
@@ -44,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.6 | 2026-06-26 | Moved AI Runtime Bootstrap auto-start support and runtime app-data root selection into one platform adapter. |
 | v1.4.5 | 2026-06-26 | Moved AI Python Environment platform path and managed venv layout selection into one adapter seam while preserving Python discovery behavior. |
 | v1.4.4 | 2026-06-25 | Moved Doctor npm/Python launcher command selection into one shared main-process resolver. |
 | v1.4.3 | 2026-06-25 | Consumed shared Electron app lifecycle policy from shared workflow metadata while preserving Windows AppUserModelId and macOS quit behavior. |

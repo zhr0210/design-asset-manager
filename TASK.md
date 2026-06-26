@@ -1173,6 +1173,22 @@ and Release Update Metadata pass.
   UI screenshot validation is not applicable because this slice changes
   main-process path resolution only.
 
+## AI Runtime Bootstrap Platform Adapter Result
+
+- Moved AI Runtime Bootstrap Python Worker auto-start support and runtime
+  app-data root path parts into one internal platform adapter.
+- Preserved macOS and Windows Python Worker auto-start, Linux/default disabled
+  runtime selection, macOS `Library/Application Support` runtime data roots,
+  Windows `AppData/Local` runtime data roots, Platform AI branch provider
+  registration, profile selection, and runtime metadata projection.
+- `bootstrapAiRuntimeManager` callers still provide the same host/dependency
+  interface. No IPC channel, preload bridge, renderer UI, AI Worker HTTP API,
+  model download, user asset, runtime database, model cache, signing,
+  notarization, publishing, or GitHub settings behavior changed in this slice.
+- Focused AI Runtime Bootstrap, AI Runtime IPC contract, and AI Runtime Status
+  workflow tests passed. UI screenshot validation is not applicable because
+  this slice changes main-process bootstrap policy only.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

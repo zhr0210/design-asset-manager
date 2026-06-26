@@ -23,8 +23,9 @@ interface PlatformAiBranchRuntimeProviderDescriptor {
   createMetadata: (currentPlatform: PlatformName, currentArch: PlatformArch) => Record<string, unknown>
 }
 
-interface AiRuntimeAppDataRootAdapter {
+interface AiRuntimeBootstrapPlatformAdapter {
   platform?: PlatformName
+  autoStartPythonWorker: boolean
   pathParts: string[]
 }
 
@@ -75,14 +76,19 @@ const PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS: PlatformAiBranchRuntimePr
   }
 ]
 
-const PYTHON_WORKER_AUTOSTART_PLATFORMS = new Set<PlatformName>(['darwin', 'win32'])
-
-const AI_RUNTIME_APP_DATA_ROOT_ADAPTERS: AiRuntimeAppDataRootAdapter[] = [
+const AI_RUNTIME_BOOTSTRAP_PLATFORM_ADAPTERS: AiRuntimeBootstrapPlatformAdapter[] = [
   {
     platform: 'win32',
+    autoStartPythonWorker: true,
     pathParts: ['AppData', 'Local', 'design-asset-manager', 'runtime']
   },
   {
+    platform: 'darwin',
+    autoStartPythonWorker: true,
+    pathParts: ['Library', 'Application Support', 'design-asset-manager', 'runtime']
+  },
+  {
+    autoStartPythonWorker: false,
     pathParts: ['Library', 'Application Support', 'design-asset-manager', 'runtime']
   }
 ]
@@ -99,10 +105,13 @@ function resolvePlatformAiBranchProviderProfileId(
   return rule?.profileId ?? null
 }
 
-function resolveAiRuntimeAppDataRoot(platform: PlatformName, homeDir: string): string {
-  const adapter = AI_RUNTIME_APP_DATA_ROOT_ADAPTERS.find((candidate) => {
+function resolveAiRuntimeBootstrapPlatformAdapter(platform: PlatformName): AiRuntimeBootstrapPlatformAdapter {
+  return AI_RUNTIME_BOOTSTRAP_PLATFORM_ADAPTERS.find((candidate) => {
     return !candidate.platform || candidate.platform === platform
   })!
+}
+
+function resolveAiRuntimeAppDataRoot(adapter: AiRuntimeBootstrapPlatformAdapter, homeDir: string): string {
   return path.join(homeDir, ...adapter.pathParts)
 }
 
@@ -113,7 +122,8 @@ export function bootstrapAiRuntimeManager(
   const manager = dependencies.manager ?? new AiRuntimeManager()
   const createPythonWorkerProvider = dependencies.createPythonWorkerProvider
     ?? ((config: PythonWorkerRuntimeConfig) => new PythonWorkerRuntimeProvider(config))
-  const appDataRoot = resolveAiRuntimeAppDataRoot(host.platform, host.homeDir)
+  const platformAdapter = resolveAiRuntimeBootstrapPlatformAdapter(host.platform)
+  const appDataRoot = resolveAiRuntimeAppDataRoot(platformAdapter, host.homeDir)
 
   manager.registerProvider(new DisabledAiRuntimeProvider({ id: 'disabled-runtime' }))
   for (const descriptor of PLATFORM_AI_BRANCH_RUNTIME_PROVIDER_DESCRIPTORS) {
@@ -142,7 +152,7 @@ export function bootstrapAiRuntimeManager(
     })
   ))
 
-  if (!PYTHON_WORKER_AUTOSTART_PLATFORMS.has(host.platform)) {
+  if (!platformAdapter.autoStartPythonWorker) {
     manager.selectActiveRuntime('disabled-runtime')
     return { manager, autoStartResult: null }
   }
