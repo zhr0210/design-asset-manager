@@ -85,6 +85,27 @@ runtime, native dependency, packaging, path, or process differences.
   validation is intentionally skipped because this changes internal
   main-process lifecycle policy plumbing only and has no renderer surface.
 
+## Platform Detector Flag Registry Result
+
+- Expanded the main-process platform detector from a profile-only registry to
+  one data-backed platform/profile flag registry.
+- `detectPlatform` now derives `isWindows`, `isMacOS`, and
+  `isAppleSilicon` from platform/profile records instead of hard-coded
+  platform and architecture comparisons in the return object.
+- Existing `PlatformDetection` shape, normalized platform and architecture
+  values, Windows/macOS/Linux profile ids, unknown-platform fallback, path
+  adapters, runtime registry callers, Doctor callers, settings defaults,
+  runtime package executor callers, IPC contracts, renderer behavior,
+  databases, model caches, and user assets are unchanged.
+- Strengthened the focused platform test to cover unknown-architecture
+  Windows/macOS behavior and guard against restoring direct boolean flag
+  comparisons.
+- Focused platform validation, governance subset, typecheck, production
+  build, docs sync, agent context check, forbidden-path advisory check, and
+  diff check pass. Electron/Playwright UI validation is intentionally skipped
+  because this changes internal main-process platform detection data only and
+  has no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
