@@ -1,4 +1,3 @@
-import os from 'os'
 import path from 'path'
 import type {
   LlamaHardwareProfile,
@@ -7,6 +6,7 @@ import type {
   LlamaRuntimeAccelerator,
   LlamaRuntimePackage
 } from '../../../shared/types/llama-runtime.types'
+import { createLlamaRuntimeHostContext } from './llama-runtime-host-context'
 
 export interface LlamaReleaseAsset {
   name: string
@@ -207,15 +207,21 @@ export const QWEN3_VL_GGUF_CANDIDATES: LlamaModelCandidate[] = qwen3VlSizes.flat
 )
 
 export function createHardwareProfile(input: Partial<LlamaHardwareProfile> = {}): LlamaHardwareProfile {
-  const platform = input.platform ?? process.platform
-  const arch = input.arch ?? process.arch
-  const totalMemoryGB = input.totalMemoryGB ?? Math.round(os.totalmem() / 1024 / 1024 / 1024)
+  const hostContext = createLlamaRuntimeHostContext({
+    platform: input.platform,
+    arch: input.arch,
+    cpuThreads: input.cpuThreads,
+    totalMemoryGB: input.totalMemoryGB
+  })
+  const platform = hostContext.platform
+  const arch = hostContext.arch
+  const totalMemoryGB = hostContext.totalMemoryGB
   const recommendedAccelerator = input.recommendedAccelerator
     ?? recommendAccelerator(input.cudaVersion, input.hasNvidiaGpu, platform)
   return {
     platform,
     arch,
-    cpuThreads: input.cpuThreads ?? os.cpus().length,
+    cpuThreads: hostContext.cpuThreads,
     totalMemoryGB,
     hasNvidiaGpu: input.hasNvidiaGpu ?? false,
     gpuName: input.gpuName,
@@ -230,7 +236,7 @@ export function createHardwareProfile(input: Partial<LlamaHardwareProfile> = {})
 export function recommendAccelerator(
   cudaVersion?: string,
   hasNvidiaGpu = false,
-  platform: NodeJS.Platform | string = process.platform
+  platform: NodeJS.Platform | string = createLlamaRuntimeHostContext().platform
 ): LlamaRuntimeAccelerator {
   if (!hasNvidiaGpu) {
     return DEFAULT_LLAMA_ACCELERATOR_RULES.find((rule) => llamaRuntimeRuleMatches({ platform: rule.platform }, { platform }))?.accelerator ?? 'cpu'
@@ -251,8 +257,21 @@ export function selectModelCandidate(profile: LlamaHardwareProfile): LlamaModelC
   return QWEN3_VL_GGUF_CANDIDATES.find((model) => model.id === preferred) ?? QWEN3_VL_GGUF_CANDIDATES[0]
 }
 
-function runtimePatterns(accelerator: LlamaRuntimeAccelerator, platform: string = process.platform, arch: string = process.arch): RegExp[] {
-  const rule = LLAMA_RUNTIME_PACKAGE_PATTERN_RULES.find((candidate) => llamaRuntimeRuleMatches(candidate, { platform, arch, accelerator }))
+function runtimePatterns(
+  accelerator: LlamaRuntimeAccelerator,
+  platform?: string,
+  arch?: string
+): RegExp[] {
+  const hostContext = platform && arch
+    ? null
+    : createLlamaRuntimeHostContext({ platform, arch })
+  const resolvedPlatform = platform ?? hostContext?.platform
+  const resolvedArch = arch ?? hostContext?.arch
+  const rule = LLAMA_RUNTIME_PACKAGE_PATTERN_RULES.find((candidate) => llamaRuntimeRuleMatches(candidate, {
+    platform: resolvedPlatform,
+    arch: resolvedArch,
+    accelerator
+  }))
   return rule?.patterns ?? []
 }
 

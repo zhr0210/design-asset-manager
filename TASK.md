@@ -63,6 +63,25 @@ runtime, native dependency, packaging, path, or process differences.
   skipped because this slice changes internal main-process host-context
   plumbing only and has no renderer surface.
 
+## Llama Planner Host Defaults Result
+
+- Extended the Llama runtime host-context helper to planner defaults so
+  hardware-profile creation, default accelerator selection, and runtime
+  package pattern defaults no longer read Node process/os globals directly.
+- Existing explicit target-platform planning remains unchanged: callers can
+  still pass platform, architecture, CPU, and memory values, and Windows
+  without NVIDIA evidence still defaults to Vulkan while macOS/Linux default
+  to CPU.
+- Strengthened Llama planner and host-context tests so planner source must
+  consume `createLlamaRuntimeHostContext` and must not restore direct
+  `process.platform`, `process.arch`, `os.cpus`, or `os.totalmem` reads.
+- Focused Llama host-context/installer/governance and AI Runtime status
+  workflow tests, typecheck, production build, runtime-safety subset, complete
+  governance, docs sync, agent-context check, forbidden-path advisory check,
+  and diff check pass. Electron/Playwright UI validation is intentionally
+  skipped because this slice changes internal main-process planning defaults
+  only and has no renderer surface.
+
 ## Desktop Viewport Policy Result
 
 - Added one shared Desktop Viewport Policy for Electron BrowserWindow default

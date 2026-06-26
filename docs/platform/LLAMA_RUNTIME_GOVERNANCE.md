@@ -25,10 +25,11 @@ Hardware detection dispatch is selected through the internal
 detectors as concrete adapters so OS probing commands stay out of shared flow
 control.
 
-The installer reads the current host through `createLlamaRuntimeHostContext`.
+The installer and planner read the current host through
+`createLlamaRuntimeHostContext`.
 Keep platform, architecture, CPU-thread, CPU-model, and memory reads in that
 helper so hardware detection and process adapter selection share the same host
-snapshot instead of reading Node globals throughout the installer.
+snapshot instead of reading Node globals throughout Llama runtime flow.
 
 Runtime package artifact matching is selected through
 `LLAMA_RUNTIME_PACKAGE_PATTERN_RULES`. Keep OS, architecture, and accelerator

@@ -90,6 +90,8 @@ async function main() {
   }).recommendedAccelerator, 'cpu')
 
   const plannerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-planner.ts', 'utf8')
+  assert.match(plannerSource, /createLlamaRuntimeHostContext/)
+  assert.doesNotMatch(plannerSource, /process\.platform|process\.arch|os\.cpus|os\.totalmem/)
   assert.match(plannerSource, /const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule\[\]/)
   assert.match(plannerSource, /platform: 'win32'[\s\S]*accelerator: 'vulkan'/)
   assert.match(plannerSource, /DEFAULT_LLAMA_ACCELERATOR_RULES\.find\(\(rule\) => llamaRuntimeRuleMatches\(\{ platform: rule\.platform \}, \{ platform \}\)\)/)
@@ -101,7 +103,8 @@ async function main() {
   assert.match(plannerSource, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*bin-macos-arm64/)
   assert.match(plannerSource, /platform: 'linux'[\s\S]*arch: 'arm64'[\s\S]*bin-linux-arm64/)
   assert.match(plannerSource, /accelerator: 'cuda13'[\s\S]*bin-win-cuda-13/)
-  assert.match(plannerSource, /LLAMA_RUNTIME_PACKAGE_PATTERN_RULES\.find\(\(candidate\) => llamaRuntimeRuleMatches\(candidate, \{ platform, arch, accelerator \}\)\)/)
+  assert.match(plannerSource, /LLAMA_RUNTIME_PACKAGE_PATTERN_RULES\.find\(\(candidate\) => llamaRuntimeRuleMatches\(candidate/)
+  assert.match(plannerSource, /platform: resolvedPlatform[\s\S]*arch: resolvedArch[\s\S]*accelerator/)
   assert.doesNotMatch(plannerSource, /if \(platform === 'darwin'\)|if \(platform === 'linux'\)/)
   assert.doesNotMatch(plannerSource, /\(!candidate\.platform \|\| candidate\.platform === platform\)/)
   assert.match(plannerSource, /const LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaCudaRuntimePackagePatternRule\[\]/)
