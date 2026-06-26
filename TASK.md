@@ -26,6 +26,25 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
+## Platform AI Branch Platform Helper Result
+
+- Moved Platform AI Branch Status branch-to-OS current-platform mapping into
+  shared Platform AI runtime metadata constants.
+- Main-process branch-status projection now consumes
+  `isPlatformAiBranchCurrentPlatform`; workflow topology, runtime-lane
+  evidence/missing projection, dedicated IPC channel names, preload methods,
+  renderer behavior, runtime startup, model downloads, model caches,
+  databases, and user assets are unchanged.
+- Focused projector/status-workflow tests guard that the shared helper owns
+  the macOS/windows platform mapping and that the projector does not restore
+  local branch-platform maps.
+- Focused projector/display/status-workflow and AI Runtime IPC tests,
+  typecheck, production build, runtime-safety subset, complete governance,
+  docs sync, agent-context check, forbidden-path advisory check, and diff
+  check pass. Electron/Playwright UI validation is intentionally skipped
+  because this slice changes shared/main-process projection ownership only and
+  has no renderer surface.
+
 ## Desktop Viewport Policy Result
 
 - Added one shared Desktop Viewport Policy for Electron BrowserWindow default

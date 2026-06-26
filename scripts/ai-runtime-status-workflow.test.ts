@@ -784,7 +784,6 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/services/ai-python-environment.ts',
   'src/main/services/ai-python-runtime.service.ts',
   'src/main/services/ai-runtime/ai-runtime-bootstrap.ts',
-  'src/main/services/ai-runtime/platform-ai-branch-status.projector.ts',
   'src/main/services/llama-runtime/llama-runtime-governance.ts',
   'src/main/services/llama-runtime/llama-runtime-install.service.ts',
   'src/main/services/llama-runtime/llama-runtime-planner.ts',
@@ -822,6 +821,8 @@ assert.doesNotMatch(windowsAiRuntimeTypesSource, /phase: 'skeleton' \| 'worker-p
 assert.doesNotMatch(windowsAiRuntimeTypesSource, /phase: 'worker-probes'/)
 assert.doesNotMatch(windowsAiRuntimeConstantsSource, /from '..\/types\/macos-ai-runtime\.types'/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function createAiRuntimeCapability/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /export const PLATFORM_AI_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName>/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformAiBranchCurrentPlatform/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformName/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformFallbackStatus/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformEvidenceStatus/)

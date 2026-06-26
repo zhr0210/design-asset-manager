@@ -16,7 +16,7 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - Platform AI Branch Status projectors may read existing status/probe/settings state, but must not start runtimes, install dependencies, download models, or inspect user assets.
 - Keep shared Platform AI workflow titles and summaries separate from platform-specific runtime lane topology.
 - Keep reusable runtime lane labels and runtime-kind matching in shared lane metadata; leave platform topology tables responsible for genuine lane membership and primary-lane differences, then resolve lane definitions through one shared resolver.
-- Keep branch-to-OS support checks table-driven so the projector exposes real platform support without scattering branch conditionals.
+- Keep branch-to-OS support checks in shared Platform AI runtime metadata so the projector consumes branch/platform semantics without local OS maps.
 - Keep Platform AI branch runtime provider registration descriptor-driven; concrete metadata keys and profile rules belong in descriptors, not duplicated provider blocks or resolver functions.
 - Keep Python Worker auto-start support and runtime app-data root selection in one bootstrap platform adapter so adding or removing OS support does not scatter bootstrap conditionals.
 - Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; hardware rules should use descriptor fields, not hand-coded Windows/macOS profile branches in resolver flow.
@@ -44,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.11 | 2026-06-26 | Moved Platform AI Branch Status branch-to-OS current-platform mapping into shared runtime metadata. |
 | v1.4.10 | 2026-06-26 | Moved Llama runtime planner platform, architecture, and accelerator rule matching behind one matcher. |
 | v1.4.9 | 2026-06-26 | Moved Runtime Profile hardware hint matching to descriptor fields while preserving Windows NVIDIA CUDA recommendation behavior. |
 | v1.4.8 | 2026-06-26 | Moved Doctor npm/Python launcher resolver inputs from Windows booleans to platform-name descriptors. |

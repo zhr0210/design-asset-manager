@@ -129,9 +129,18 @@ const projectorSource = await fs.readFile(
   'src/main/services/ai-runtime/platform-ai-branch-status.projector.ts',
   'utf8'
 )
-assert.match(projectorSource, /const PLATFORM_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName>/)
-assert.match(projectorSource, /macos: 'darwin'[\s\S]*windows: 'win32'/)
-assert.match(projectorSource, /currentPlatform === PLATFORM_BRANCH_PLATFORMS\[platformBranch\]/)
+const platformRuntimeMetadataSource = await fs.readFile(
+  'src/shared/constants/platform-ai-runtime-metadata.constants.ts',
+  'utf8'
+)
+assert.match(platformRuntimeMetadataSource, /export const PLATFORM_AI_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName>/)
+assert.match(platformRuntimeMetadataSource, /macos: 'darwin'[\s\S]*windows: 'win32'/)
+assert.match(platformRuntimeMetadataSource, /function isPlatformAiBranchCurrentPlatform/)
+assert.match(platformRuntimeMetadataSource, /isPlatformName\(currentPlatform, PLATFORM_AI_BRANCH_PLATFORMS\[platformBranch\]\)/)
+assert.match(projectorSource, /isPlatformAiBranchCurrentPlatform\(input\.platformBranch, input\.currentPlatform\)/)
+assert.doesNotMatch(projectorSource, /PLATFORM_BRANCH_PLATFORMS/)
+assert.doesNotMatch(projectorSource, /currentPlatform === PLATFORM_BRANCH_PLATFORMS\[platformBranch\]/)
+assert.doesNotMatch(projectorSource, /function isCurrentBranch/)
 assert.match(projectorSource, /const PLATFORM_WORKFLOW_TOPOLOGY: Record<PlatformAiBranch, WorkflowTopologyDefinition\[\]>/)
 assert.match(projectorSource, /function resolveWorkflowDefinition/)
 assert.match(projectorSource, /function resolveRuntimeLane/)

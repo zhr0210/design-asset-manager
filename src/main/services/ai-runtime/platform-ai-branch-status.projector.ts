@@ -1,4 +1,5 @@
 import type { AiRuntimeKind, AiRuntimeState } from '../../../shared/types/ai-runtime.types'
+import { isPlatformAiBranchCurrentPlatform } from '../../../shared/constants/platform-ai-runtime-metadata.constants'
 import type { AiModelArtifactReadiness } from '../../../shared/types/model-artifact-readiness.types'
 import type {
   PlatformAiBranch,
@@ -85,11 +86,6 @@ const RUNTIME_LANE_METADATA: Record<PlatformAiRuntimeLaneId, RuntimeLaneMetadata
       macos: ['ollama', 'lm-studio', 'custom-http']
     }
   }
-}
-
-const PLATFORM_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName> = {
-  macos: 'darwin',
-  windows: 'win32'
 }
 
 function resolveRuntimeLane(
@@ -213,7 +209,7 @@ const PLATFORM_WORKFLOW_TOPOLOGY: Record<PlatformAiBranch, WorkflowTopologyDefin
 }
 
 export function createPlatformAiBranchStatus(input: PlatformAiBranchStatusProjectorInput): PlatformAiBranchStatusResponse {
-  const platformSupported = isCurrentBranch(input.platformBranch, input.currentPlatform)
+  const platformSupported = isPlatformAiBranchCurrentPlatform(input.platformBranch, input.currentPlatform)
   const workflows = PLATFORM_WORKFLOW_TOPOLOGY[input.platformBranch].map((definition) => projectWorkflow(
     resolveWorkflowDefinition(input.platformBranch, definition),
     input.platformBranch,
@@ -516,8 +512,4 @@ function dedupeMissingRequirements(items: PlatformAiMissingRequirement[]): Platf
     seen.add(key)
     return true
   })
-}
-
-function isCurrentBranch(platformBranch: PlatformAiBranch, currentPlatform: PlatformName): boolean {
-  return currentPlatform === PLATFORM_BRANCH_PLATFORMS[platformBranch]
 }
