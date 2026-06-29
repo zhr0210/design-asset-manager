@@ -150,6 +150,11 @@ interface PythonRuntimeDisplayCopy {
   supportedPlatformLabel: string
 }
 
+interface PythonRuntimeIncompatibleDisplayMetadata {
+  label: string
+  tone: AiRuntimeDisplayTone
+}
+
 interface PlatformAiSurfaceCopy {
   branchTitle: string
   branchRouteSummary: string
@@ -158,6 +163,11 @@ interface PlatformAiSurfaceCopy {
   panelTitle: string
   panelDescription: string
   runtimePanel: AiRuntimePlatformPanelCopy
+}
+
+const DEFAULT_PYTHON_RUNTIME_INCOMPATIBLE_DISPLAY: PythonRuntimeIncompatibleDisplayMetadata = {
+  label: '不可用',
+  tone: 'bad'
 }
 
 const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplayCopy> = {
@@ -171,6 +181,18 @@ const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplay
     acceleratorLabel: 'CUDA',
     supportedPlatformLabel: 'Windows'
   }
+}
+
+const PYTHON_RUNTIME_INCOMPATIBLE_DISPLAY_BY_STATUS: Record<
+  AiRuntimePythonCompatibilityStatusResponseBase['status'],
+  PythonRuntimeIncompatibleDisplayMetadata
+> = {
+  optional: DEFAULT_PYTHON_RUNTIME_INCOMPATIBLE_DISPLAY,
+  planned: {
+    label: '待补齐',
+    tone: 'warn'
+  },
+  unavailable: DEFAULT_PYTHON_RUNTIME_INCOMPATIBLE_DISPLAY
 }
 
 const PLATFORM_AI_SURFACE_COPY: Record<PlatformAiBranch, PlatformAiSurfaceCopy> = {
@@ -233,10 +255,11 @@ function projectPythonRuntimeCompatibilityDisplay(
     return compatibilityDisplay('可兼容', 'good', status.runtime ?? runtimeLabel, 'compatible', status.status, error)
   }
 
-  const label = status.status === 'planned' ? '待补齐' : '不可用'
+  const metadata = PYTHON_RUNTIME_INCOMPATIBLE_DISPLAY_BY_STATUS[status.status]
+    ?? DEFAULT_PYTHON_RUNTIME_INCOMPATIBLE_DISPLAY
   return compatibilityDisplay(
-    label,
-    status.status === 'planned' ? 'warn' : 'bad',
+    metadata.label,
+    metadata.tone,
     status.runtime ?? runtimeLabel,
     'incompatible',
     status.status,

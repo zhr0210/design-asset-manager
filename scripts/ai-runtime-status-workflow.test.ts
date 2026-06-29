@@ -105,6 +105,16 @@ const pythonUnavailable = projectPythonMpsCompatibilityDisplay({
 assert.equal(pythonUnavailable.label, '不可用')
 assert.equal(pythonUnavailable.tone, 'bad')
 
+const pythonOptionalIncompatible = projectPythonMpsCompatibilityDisplay({
+  success: false,
+  compatible: false,
+  runtime: null,
+  status: 'optional',
+  diagnostics: {}
+})
+assert.equal(pythonOptionalIncompatible.label, '不可用')
+assert.equal(pythonOptionalIncompatible.tone, 'bad')
+
 const macOSPlatformCopy = projectAiRuntimePlatformPanelCopy('macos')
 assert.equal(macOSPlatformCopy.compatibilityTitle, 'Python MPS 兼容性检查')
 assert.equal(macOSPlatformCopy.executionTitle, 'Python MPS 真实执行验证')
@@ -935,8 +945,13 @@ assert.match(runtimeWorkflowSource, /PlatformAiWorkerProbeDiagnosticsInput/)
 assert.match(runtimeWorkflowSource, /AiRuntimePythonCompatibilityStatusResponseBase/)
 assert.match(runtimeWorkflowSource, /AiRuntimePythonExecutionProbeResponseBase/)
 assert.match(runtimeWorkflowSource, /const PYTHON_RUNTIME_DISPLAY_COPY: Record<PlatformAiBranch, PythonRuntimeDisplayCopy>/)
+assert.match(runtimeWorkflowSource, /PYTHON_RUNTIME_INCOMPATIBLE_DISPLAY_BY_STATUS/)
 assert.match(runtimeWorkflowSource, /function projectPythonRuntimeCompatibilityDisplay\(/)
 assert.match(runtimeWorkflowSource, /function projectPythonRuntimeExecutionProbeDisplay\(/)
+assert.doesNotMatch(
+  extractFunctionSource(runtimeWorkflowSource, 'projectPythonRuntimeCompatibilityDisplay'),
+  /status\.status === 'planned'/
+)
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'projectPythonMpsCompatibilityDisplay'),
   /return projectPythonRuntimeCompatibilityDisplay\('macos', status, error\)/

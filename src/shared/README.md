@@ -35,7 +35,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - AI Client IPC channels, request payloads, Worker-shaped responses, queue stats, and task-sync events must use `contracts/ai-client.contract.ts` across main, preload, and service boundaries.
 - AI queue display summaries and row labels should use shared projection so overview and runtime panels show the same queue vocabulary.
 - Download queue status labels, row metadata, file-size labels, progress labels, progress tones, search-result action labels, active counts, and topbar/sidebar download indicators should use shared projection rather than route-local status checks.
-- AI runtime compatibility and Llama runtime display states should use shared projection so Settings and AI Console share the same status vocabulary.
+- AI runtime compatibility, incompatible-status metadata, and Llama runtime display states should use shared projection so Settings and AI Console share the same status vocabulary.
 - Llama service health is runtime evidence only. `real_model_path` requires a fresh successful text plus generated-image inference probe through GGUF/mmproj.
 - macOS/Windows AI capability matrix title, description, status labels, and badge classes should use shared AI Runtime Status projection rather than component-local platform copy or status maps.
 - Shared AI capability matrix renderer inputs should use the platform-neutral Worker probe-with-runtime-versions shape, not macOS/Windows concrete probe result unions or renderer-local cross-platform probe types.
@@ -80,6 +80,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.37 | 2026-06-29 | Moved Python runtime incompatible compatibility display copy and tone into shared status metadata. |
 | v1.8.36 | 2026-06-29 | Consolidated text-box provider execution planning into one descriptor table for provider type, availability, skip reason, and mock marker policy. |
 | v1.8.35 | 2026-06-29 | Moved Visual Analysis text-color skip reason copy into shared table-driven metadata. |
 | v1.8.34 | 2026-06-29 | Moved text-box provider execution planning into shared workflow metadata consumed by Color Palette OCR detection. |

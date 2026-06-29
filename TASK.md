@@ -329,6 +329,20 @@ runtime, native dependency, packaging, path, or process differences.
   because this changes shared text-box provider execution-plan metadata only
   and does not alter the rendered UI surface.
 
+## Python Runtime Compatibility Status Metadata Result
+
+- Python MPS/CUDA compatibility display now reads incompatible-state label
+  and tone from one shared status metadata table instead of branching on
+  `planned` inside the shared projector.
+- Existing macOS/Windows runtime labels, compatible and unchecked display
+  behavior, platform runtime request selection, IPC contracts, databases,
+  model caches, and user assets are unchanged.
+- Focused AI Runtime status workflow test, typecheck, production build,
+  docs sync, agent context check, forbidden-path advisory check, and diff
+  check pass. Electron/Playwright UI validation is intentionally skipped
+  because this changes shared compatibility display metadata only and does
+  not alter the rendered UI surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
