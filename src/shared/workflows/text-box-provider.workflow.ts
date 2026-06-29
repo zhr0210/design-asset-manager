@@ -30,6 +30,13 @@ export type ProductTextBoxProviderExecutionPlan =
     isMockProvider: boolean
   }
 
+interface TextBoxProviderExecutionDescriptor {
+  providerType: TextBoxExecutionProvider
+  isMockProvider: boolean
+  skipReason?: ProductTextBoxProviderSkipReason
+  isAvailable?: (providers: OcrEnvPayload['providers']) => boolean
+}
+
 const PRODUCT_TEXT_BOX_PROVIDER_NORMALIZATION: Record<AppSettings['textBoxProvider'], ProductTextBoxProvider> = {
   none: 'none',
   easyocr: 'easyocr',
@@ -38,28 +45,39 @@ const PRODUCT_TEXT_BOX_PROVIDER_NORMALIZATION: Record<AppSettings['textBoxProvid
   mock: 'none'
 }
 
-const TEXT_BOX_EXECUTION_PROVIDER_BY_PRODUCT_PROVIDER: Record<ProductTextBoxProviderSelection, TextBoxExecutionProvider> = {
-  none: 'none',
-  easyocr: 'easyocr_detection',
-  rapidocr: 'rapidocr_detection',
-  paddleocr: 'paddleocr_detection',
-  mock: 'mock_text_boxes',
-  qwen_vl_text_blocks: 'qwen_vl_text_blocks'
-}
-
-const TEXT_BOX_PROVIDER_UNAVAILABLE_SKIP_REASONS: Partial<Record<ProductTextBoxProviderSelection, ProductTextBoxProviderSkipReason>> = {
-  easyocr: 'easyocr_not_installed',
-  rapidocr: 'rapidocr_not_installed',
-  paddleocr: 'paddleocr_not_installed'
-}
-
-const TEXT_BOX_PROVIDER_AVAILABILITY_READERS: Partial<Record<
-  ProductTextBoxProviderSelection,
-  (providers: OcrEnvPayload['providers']) => boolean
->> = {
-  easyocr: (providers) => providers.easyocr.available,
-  rapidocr: (providers) => providers.rapidocr.available,
-  paddleocr: (providers) => providers.paddleocr.available
+const TEXT_BOX_PROVIDER_EXECUTION_DESCRIPTORS: Record<ProductTextBoxProviderSelection, TextBoxProviderExecutionDescriptor> = {
+  none: {
+    providerType: 'none',
+    isMockProvider: false,
+    skipReason: 'provider_none',
+    isAvailable: () => false
+  },
+  easyocr: {
+    providerType: 'easyocr_detection',
+    isMockProvider: false,
+    skipReason: 'easyocr_not_installed',
+    isAvailable: (providers) => providers.easyocr.available
+  },
+  rapidocr: {
+    providerType: 'rapidocr_detection',
+    isMockProvider: false,
+    skipReason: 'rapidocr_not_installed',
+    isAvailable: (providers) => providers.rapidocr.available
+  },
+  paddleocr: {
+    providerType: 'paddleocr_detection',
+    isMockProvider: false,
+    skipReason: 'paddleocr_not_installed',
+    isAvailable: (providers) => providers.paddleocr.available
+  },
+  mock: {
+    providerType: 'mock_text_boxes',
+    isMockProvider: true
+  },
+  qwen_vl_text_blocks: {
+    providerType: 'qwen_vl_text_blocks',
+    isMockProvider: false
+  }
 }
 
 export function normalizeProductTextBoxProvider(
@@ -72,17 +90,9 @@ export function projectProductTextBoxProviderExecutionPlan(
   provider: ProductTextBoxProviderSelection,
   providers: OcrEnvPayload['providers']
 ): ProductTextBoxProviderExecutionPlan {
-  if (provider === 'none') {
-    return {
-      action: 'skip',
-      detectionProvider: 'none',
-      textStatus: 'skipped',
-      skipReason: 'provider_none'
-    }
-  }
-
-  const isAvailable = TEXT_BOX_PROVIDER_AVAILABILITY_READERS[provider]?.(providers) ?? true
-  const skipReason = TEXT_BOX_PROVIDER_UNAVAILABLE_SKIP_REASONS[provider]
+  const descriptor = TEXT_BOX_PROVIDER_EXECUTION_DESCRIPTORS[provider]
+  const isAvailable = descriptor.isAvailable?.(providers) ?? true
+  const skipReason = descriptor.skipReason
   if (!isAvailable && skipReason) {
     return {
       action: 'skip',
@@ -95,7 +105,7 @@ export function projectProductTextBoxProviderExecutionPlan(
   return {
     action: 'run',
     detectionProvider: provider,
-    providerType: TEXT_BOX_EXECUTION_PROVIDER_BY_PRODUCT_PROVIDER[provider],
-    isMockProvider: provider === 'mock'
+    providerType: descriptor.providerType,
+    isMockProvider: descriptor.isMockProvider
   }
 }

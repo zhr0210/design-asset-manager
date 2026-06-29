@@ -314,6 +314,21 @@ runtime, native dependency, packaging, path, or process differences.
   this changes shared copy projection internals only and does not alter the
   rendered UI surface.
 
+## Text-Box Provider Execution Descriptor Result
+
+- Text-box provider execution planning now uses one descriptor table for
+  execution provider type, availability reader, unavailable skip reason, and
+  mock-provider marker instead of separate maps plus provider comparisons.
+- Existing product provider normalization, Color Palette execution behavior,
+  OCR dependency evidence use, text-detection provider strings, skipped
+  statuses, IPC contracts, databases, model caches, and user assets are
+  unchanged.
+- Focused text-box provider workflow test, typecheck, production build,
+  docs sync, agent context check, forbidden-path advisory check, and diff
+  check pass. Electron/Playwright UI validation is intentionally skipped
+  because this changes shared text-box provider execution-plan metadata only
+  and does not alter the rendered UI surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

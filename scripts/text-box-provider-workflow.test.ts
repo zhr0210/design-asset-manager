@@ -62,11 +62,13 @@ const workflowSource = await fs.readFile('src/shared/workflows/text-box-provider
 const colorPaletteSource = await fs.readFile('src/main/services/color-palette.service.ts', 'utf8')
 const textBoxProviderTypesSource = await fs.readFile('src/main/services/text-detection/text-box-provider.types.ts', 'utf8')
 
-assert.match(workflowSource, /TEXT_BOX_EXECUTION_PROVIDER_BY_PRODUCT_PROVIDER/)
-assert.match(workflowSource, /TEXT_BOX_PROVIDER_UNAVAILABLE_SKIP_REASONS/)
-assert.match(workflowSource, /TEXT_BOX_PROVIDER_AVAILABILITY_READERS/)
+assert.match(workflowSource, /TEXT_BOX_PROVIDER_EXECUTION_DESCRIPTORS/)
+assert.match(workflowSource, /mock:[\s\S]*isMockProvider: true/)
+assert.match(workflowSource, /none:[\s\S]*skipReason: 'provider_none'/)
+assert.match(workflowSource, /paddleocr:[\s\S]*skipReason: 'paddleocr_not_installed'[\s\S]*providers\.paddleocr\.available/)
 assert.match(colorPaletteSource, /projectProductTextBoxProviderExecutionPlan/)
 assert.match(textBoxProviderTypesSource, /TextBoxExecutionProvider/)
+assert.doesNotMatch(workflowSource, /provider === 'none'|provider === 'mock'/)
 assert.doesNotMatch(colorPaletteSource, /rawProvider === 'easyocr'|rawProvider === 'rapidocr'|rawProvider === 'paddleocr'|rawProvider === 'mock'|providerType: any/)
 
 console.log('text-box-provider-workflow passed')

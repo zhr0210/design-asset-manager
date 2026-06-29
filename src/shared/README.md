@@ -64,7 +64,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
 - Product text-box provider normalization should use `text-box-provider.workflow.ts` so main-process settings loading/saving and AI Console state treat legacy `mock` as `none` through one shared rule.
 - OCR dependency selected-provider availability should use `ocr-dependency.workflow.ts`; main-process environment checks should build provider evidence and let shared projection decide `selectedProviderAvailable`.
-- Text-box provider execution planning should use `text-box-provider.workflow.ts` so product provider, execution provider, unavailable skip reason, and mock marker policy stay shared.
+- Text-box provider execution planning should use descriptor metadata in `text-box-provider.workflow.ts` so product provider, execution provider, unavailable skip reason, availability reader, and mock marker policy stay shared.
 - Electron BrowserWindow defaults and the renderer desktop shell minimum viewport should use `DESKTOP_VIEWPORT_POLICY` rather than main/renderer-local hard-coded window sizes.
 - App route path, sidebar label, topbar title, browser-shell, and topbar-visibility policy should use `app-navigation.workflow.ts` rather than renderer-local route tables.
 - Electron app lifecycle policy should use `electron-app-lifecycle.workflow.ts` so Windows AppUserModelId and macOS quit-on-close behavior stay in one shared policy.
@@ -80,6 +80,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.36 | 2026-06-29 | Consolidated text-box provider execution planning into one descriptor table for provider type, availability, skip reason, and mock marker policy. |
 | v1.8.35 | 2026-06-29 | Moved Visual Analysis text-color skip reason copy into shared table-driven metadata. |
 | v1.8.34 | 2026-06-29 | Moved text-box provider execution planning into shared workflow metadata consumed by Color Palette OCR detection. |
 | v1.8.33 | 2026-06-29 | Moved OCR dependency selected-provider availability projection into a shared workflow. |
