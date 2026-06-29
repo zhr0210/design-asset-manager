@@ -13,6 +13,7 @@ export interface AiConsoleGpuDisplayInput {
 export interface AiConsoleGpuDisplay {
   riskTone: Exclude<AiConsoleOverviewTone, 'muted'>
   statusLabel: string
+  healthLabel: string
   deviceLabel: string
   usageLabel: string
   valueLabel: string
@@ -21,6 +22,12 @@ export interface AiConsoleGpuDisplay {
   totalLabel: string
   barToneClass: string
   barWidthPercent: number
+}
+
+interface AiConsoleGpuRiskDisplayMetadata {
+  statusLabel: string
+  healthLabel: string
+  barToneClass: string
 }
 
 export interface AiConsoleModelReadinessDisplay {
@@ -64,6 +71,27 @@ export interface AiConsoleDependencyInstallCopy {
   exceptionLog: (error: unknown) => string
 }
 
+const AI_CONSOLE_GPU_RISK_DISPLAY: Record<
+  AiConsoleGpuDisplay['riskTone'],
+  AiConsoleGpuRiskDisplayMetadata
+> = {
+  good: {
+    statusLabel: '安全',
+    healthLabel: '正常',
+    barToneClass: 'bg-emerald-500'
+  },
+  warn: {
+    statusLabel: '未知',
+    healthLabel: '未知',
+    barToneClass: 'bg-amber-400'
+  },
+  bad: {
+    statusLabel: '高负载',
+    healthLabel: '关注',
+    barToneClass: 'bg-rose-500'
+  }
+}
+
 export function projectAiConsoleGpuDisplay(input: AiConsoleGpuDisplayInput): AiConsoleGpuDisplay {
   const telemetryTrusted = Boolean(input.telemetryTrusted)
   const totalMb = safeNumber(input.totalMb)
@@ -79,17 +107,19 @@ export function projectAiConsoleGpuDisplay(input: AiConsoleGpuDisplayInput): AiC
     maxUsage,
     minFreeMb
   })
+  const riskDisplay = AI_CONSOLE_GPU_RISK_DISPLAY[riskTone]
 
   return {
     riskTone,
-    statusLabel: riskTone === 'good' ? '安全' : riskTone === 'bad' ? '高负载' : '未知',
+    statusLabel: riskDisplay.statusLabel,
+    healthLabel: riskDisplay.healthLabel,
     deviceLabel: telemetryTrusted ? (input.deviceName || 'Unknown GPU') : '物理 GPU 状态未识别',
     usageLabel: telemetryTrusted ? `${usagePercent.toFixed(0)}%` : 'Unknown',
     valueLabel: telemetryTrusted ? `${formatGb(usedMb)} / ${formatGb(totalMb)}` : 'Unknown',
     captionLabel: telemetryTrusted ? `当前占用 ${usagePercent.toFixed(0)}%，可用 ${formatGb(freeMb)}` : '暂无可信物理显存指标',
     freeLabel: telemetryTrusted ? formatGb(freeMb) : '未知',
     totalLabel: telemetryTrusted ? formatGb(totalMb) : '未知',
-    barToneClass: riskTone === 'bad' ? 'bg-rose-500' : riskTone === 'warn' ? 'bg-amber-400' : 'bg-emerald-500',
+    barToneClass: riskDisplay.barToneClass,
     barWidthPercent: telemetryTrusted ? Math.min(100, Math.max(0, usagePercent)) : 0
   }
 }

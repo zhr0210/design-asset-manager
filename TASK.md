@@ -358,6 +358,20 @@ runtime, native dependency, packaging, path, or process differences.
   provide an isolated temporary-userData Electron smoke harness; launching
   the desktop app directly could touch real local app data.
 
+## AI Console GPU Health Display Metadata Result
+
+- AI Console GPU risk status, service-health label, and bar tone now come
+  from shared overview display metadata instead of renderer-local or
+  projector-local ternary expressions.
+- Existing GPU telemetry inputs, risk thresholds, overview card layout, IPC
+  contracts, databases, model caches, and user assets are unchanged.
+- Focused AI Console overview workflow and macOS branch contract tests,
+  typecheck, production build, docs sync, agent context check, forbidden-path
+  advisory check, and diff check pass. Playwright UI validation is
+  intentionally skipped because the repository does not yet provide an
+  isolated temporary-userData Electron smoke harness; launching the desktop
+  app directly could touch real local app data.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

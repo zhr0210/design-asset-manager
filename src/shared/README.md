@@ -48,7 +48,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Worker probe connection headers should use the platform-neutral Worker probe envelope and branch-keyed connection marker metadata; shared workflow code should not compare concrete OS marker strings directly. Platform-specific probe displays may add MPS/CUDA/ONNX route tiles. A missing probe is evidence-insufficient (`尚未探测`), not fallback, planned, or failure.
 - Platform AI branch runtime metadata selection should use branch-keyed descriptors for metadata keys and markers; renderer/shared workflow callers should not hand-roll macOS/Windows branch lookup order.
 - Platform AI branch status workflow cards should use shared display metadata for action button visibility and icon intent; renderer panels should not branch on workflow status or action-plan kind to decide card controls.
-- AI Console overview status cards should use shared display projection for GPU risk and model readiness vocabulary.
+- AI Console overview status cards should use shared display projection for GPU risk, service-health labels, and model readiness vocabulary.
 - AI Console runtime dependency install toast/log copy and result summaries should use shared display projection; renderer handlers may call existing platform-specific preload methods but should not format package failures, durations, or managed-runtime labels locally.
 - Prompt Reverse panel state labels and action suggestions should use shared projection so GGUF/Llama and native routes share one renderer-ready vocabulary.
 - Asset Tagging Workflow pipeline defaults, category/model options, scan-state display, model selection toggles, task submission projection, confirmed tag chips, suggestion review items, pending suggestion projection, and tag type/color options belong in shared workflow planners, not renderer panels.
@@ -81,6 +81,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.39 | 2026-06-30 | Moved AI Console GPU risk status, service-health label, and bar tone metadata into shared overview projection. |
 | v1.8.38 | 2026-06-30 | Moved Platform AI branch workflow action-button visibility and icon intent into shared display projection. |
 | v1.8.37 | 2026-06-29 | Moved Python runtime incompatible compatibility display copy and tone into shared status metadata. |
 | v1.8.36 | 2026-06-29 | Consolidated text-box provider execution planning into one descriptor table for provider type, availability, skip reason, and mock marker policy. |
