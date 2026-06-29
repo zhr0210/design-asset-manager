@@ -146,6 +146,26 @@ runtime, native dependency, packaging, path, or process differences.
   intentionally skipped because this changes internal delivery script data
   flow only and has no renderer surface.
 
+## Llama macOS Hardware Profile Projection Result
+
+- Moved Apple Silicon detection, unified-memory VRAM estimation, macOS GPU
+  display naming, and Metal/CPU accelerator recommendation into one pure
+  Llama macOS hardware-profile projector.
+- The Llama installer now consumes that projector inside the existing macOS
+  hardware-detection adapter. Existing sysctl/system_profiler reads, Windows
+  hardware detection, generic fallback detection, install planning, downloads,
+  server startup, model caches, databases, public IPC contracts, and renderer
+  behavior are unchanged.
+- Added focused projector coverage for Apple Silicon, Intel Mac display
+  summaries, and minimum unified-memory VRAM estimation, plus source guards
+  against restoring the Apple Silicon rules inline in the installer.
+- Focused Llama macOS hardware-profile, Llama governance, and Llama
+  host-context tests, complete runtime-safety CI, typecheck, production build,
+  docs sync, agent context check, forbidden-path advisory check, and diff
+  check pass. Electron/Playwright UI validation is intentionally skipped
+  because this changes internal main-process hardware-profile projection only
+  and has no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

@@ -28,6 +28,7 @@ import { llamaRuntimeInstallProgressChannel } from '../../../shared/contracts/ll
 import type { AiBackendConfig } from '../../../shared/types/ai-backend.types'
 import { probeLlamaServer } from './llama-runtime-server-probe'
 import { createLlamaRuntimeHostContext, type LlamaRuntimeHostContext } from './llama-runtime-host-context'
+import { projectLlamaMacHardwareProfile } from './llama-runtime-macos-hardware-profile'
 
 const LLAMA_RELEASES_API = 'https://api.github.com/repos/ggml-org/llama.cpp/releases/latest'
 
@@ -187,11 +188,12 @@ export class LlamaRuntimeInstallService {
       // Display profiler data is optional for llama runtime planning.
     }
 
-    const isAppleSilicon = hostContext.arch === 'arm64' || /Apple\s+M\d|Apple\s+Silicon/i.test(chipName)
-    const estimatedUnifiedVramGB = isAppleSilicon
-      ? Math.max(4, Math.round(totalMemoryGB * 0.65 * 10) / 10)
-      : undefined
-    const recommendedAccelerator = isAppleSilicon ? 'metal' : 'cpu'
+    const macHardwareProfile = projectLlamaMacHardwareProfile({
+      arch: hostContext.arch,
+      chipName,
+      displaySummary,
+      totalMemoryGB
+    })
 
     return createHardwareProfile({
       platform: hostContext.platform,
@@ -199,12 +201,12 @@ export class LlamaRuntimeInstallService {
       cpuThreads,
       totalMemoryGB,
       hasNvidiaGpu: false,
-      gpuName: displaySummary || `${chipName}${isAppleSilicon ? ' 统一内存 GPU' : ''}`,
-      totalVramGB: estimatedUnifiedVramGB,
-      recommendedAccelerator,
+      gpuName: macHardwareProfile.gpuName,
+      totalVramGB: macHardwareProfile.totalVramGB,
+      recommendedAccelerator: macHardwareProfile.recommendedAccelerator,
       warnings: [
         `macOS 硬件检测完成：${chipName}，${coreSummary}，系统内存约 ${totalMemoryGB} GB。`,
-        ...(estimatedUnifiedVramGB ? [`按 Apple 统一内存估算可用于本地推理的显存预算约 ${estimatedUnifiedVramGB} GB。`] : []),
+        ...(macHardwareProfile.unifiedMemoryWarning ? [macHardwareProfile.unifiedMemoryWarning] : []),
         ...warnings
       ]
     })
