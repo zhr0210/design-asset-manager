@@ -166,6 +166,26 @@ runtime, native dependency, packaging, path, or process differences.
   because this changes internal main-process hardware-profile projection only
   and has no renderer surface.
 
+## Worker Probe Connection Predicate Result
+
+- Replaced mixed Worker probe connection accessors
+  (`connectionPlatforms` plus `connectionFlag`) with one branch-keyed
+  `isConnected` predicate per Platform AI branch.
+- macOS still treats `isMacOS` as the connection evidence, and Windows still
+  accepts `win32`/`windows` platform markers. Worker probe response shapes,
+  branch selection, runtime-lane evidence, accelerator tiles, renderer
+  components, IPC contracts, databases, model caches, and user assets are
+  unchanged.
+- Strengthened the focused AI Runtime status-workflow test so a `darwin`
+  probe with `isMacOS=false` remains disconnected and source guards reject
+  restoring `connectionFlag` or `connectionPlatforms`.
+- Focused AI Runtime status-workflow, AI Runtime panel, and AI Console macOS
+  branch tests, complete runtime-safety CI, typecheck, production build,
+  docs sync, agent context check, forbidden-path advisory check, and diff
+  check pass. Electron/Playwright UI validation is intentionally skipped
+  because this changes shared projection internals only and does not alter
+  the rendered UI surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

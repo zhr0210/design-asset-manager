@@ -76,6 +76,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.31 | 2026-06-29 | Normalized Worker probe connection accessors to branch-keyed predicates without changing macOS/Windows connection evidence. |
 | v1.8.30 | 2026-06-26 | Moved Platform AI branch-to-OS current-platform mapping into shared runtime metadata helpers. |
 | v1.8.29 | 2026-06-25 | Moved AI Console runtime dependency install toast/log display into shared overview workflow projection. |
 | v1.8.28 | 2026-06-25 | Moved Electron app lifecycle policy into shared workflow metadata for main-process startup. |

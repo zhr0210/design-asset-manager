@@ -529,6 +529,40 @@ assert.equal(connectedProbe.onnxRuntime.valueLabel, '可用')
 assert.equal(connectedProbe.onnxRuntime.captionLabel, 'CoreMLExecutionProvider / CPUExecutionProvider')
 assert.equal(connectedProbe.clipSiglipOnnx.valueLabel, '依赖缺失')
 assert.equal(connectedProbe.clipSiglipOnnx.captionLabel, '已探测，未报告版本')
+assert.equal(projectPlatformAiWorkerProbeDiagnosticsDisplay('macos', {
+  platform: 'darwin',
+  machine: 'arm64',
+  isMacOS: false,
+  isAppleSilicon: true,
+  phase: 'worker-probes',
+  torch: {
+    available: true,
+    version: '2.8.0',
+    mpsBuilt: true,
+    mpsAvailable: true,
+    cpuFallback: true,
+    error: null
+  },
+  onnxruntime: {
+    available: true,
+    version: '1.22.0',
+    providers: ['CoreMLExecutionProvider', 'CPUExecutionProvider'],
+    coremlAvailable: true,
+    cpuAvailable: true,
+    error: null
+  },
+  clipSiglipOnnx: {
+    id: 'clip-siglip-onnx',
+    label: 'CLIP/SigLIP ONNX',
+    status: 'dependency_missing',
+    role: 'embedding',
+    backend: 'optimum',
+    version: null,
+    available: false,
+    error: null
+  },
+  lanes: []
+}).connected, false)
 const macOSWorkerPanel = projectAiRuntimeWorkerProbePanelDisplay('macos', {
   platform: 'darwin',
   machine: 'arm64',
@@ -957,6 +991,7 @@ assert.match(runtimeWorkflowSource, /const PLATFORM_AI_WORKER_PROBE_ACCESSORS: R
 assert.match(runtimeWorkflowSource, /function isPlatformAiWorkerProbeConnected/)
 assert.match(runtimeWorkflowSource, /function projectPlatformAiWorkerProbeDiagnosticsDisplay/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeWorkerProbePanelFromHeader/)
+assert.match(runtimeWorkflowSource, /isConnected: \(probe: Pick<PlatformAiWorkerProbeResultBase, 'platform' \| 'isMacOS'>\) => boolean/)
 assert.match(runtimeWorkflowSource, /const AI_RUNTIME_BOOLEAN_PROBE_LABELS: Record<'true' \| 'false', string>/)
 assert.match(runtimeWorkflowSource, /function projectAiRuntimeBooleanProbeLabel/)
 assert.doesNotMatch(runtimeWorkflowSource, /probe\.isMacOS\s*\?\s*'yes'\s*:\s*'no'/)
@@ -1018,12 +1053,14 @@ assert.doesNotMatch(
 )
 assert.match(
   runtimeWorkflowSource,
-  /macos:[\s\S]*connectionPlatforms: \[\][\s\S]*connectionFlag: 'isMacOS'[\s\S]*probe\.torch\.mpsAvailable[\s\S]*windows:[\s\S]*connectionPlatforms: \['win32', 'windows'\][\s\S]*probe\.torch\.cudaAvailable/
+  /macos:[\s\S]*isConnected: \(probe\) => probe\.isMacOS[\s\S]*probe\.torch\.mpsAvailable[\s\S]*windows:[\s\S]*isConnected: \(probe\) => \['win32', 'windows'\]\.includes\(probe\.platform\)[\s\S]*probe\.torch\.cudaAvailable/
 )
 assert.doesNotMatch(runtimeWorkflowSource, /probe\.platform === '(?:win32|windows|darwin)'/)
+assert.doesNotMatch(runtimeWorkflowSource, /connectionFlag/)
+assert.doesNotMatch(runtimeWorkflowSource, /connectionPlatforms/)
 assert.match(
   extractFunctionSource(runtimeWorkflowSource, 'isPlatformAiWorkerProbeConnected'),
-  /connectionPlatforms\.includes\(probe\.platform\)[\s\S]*connectionFlag/
+  /PLATFORM_AI_WORKER_PROBE_ACCESSORS\[platformBranch\]\.isConnected\(probe\)/
 )
 assert.doesNotMatch(
   extractFunctionSource(runtimeWorkflowSource, 'projectPlatformAiWorkerProbeDiagnosticsDisplay'),
