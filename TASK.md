@@ -372,6 +372,19 @@ runtime, native dependency, packaging, path, or process differences.
   isolated temporary-userData Electron smoke harness; launching the desktop
   app directly could touch real local app data.
 
+## AI Console Isolated UI Smoke Harness Result
+
+- Added a reusable Electron/Playwright AI Console smoke harness that launches
+  the app with a temporary `userData` profile, opens the AI Console, captures
+  the Platform AI Branch Status panel screenshot under `dist-temp`, checks
+  viewport overflow, and removes the temporary profile on exit.
+- The harness does not start model services, install dependencies, download
+  model artifacts, or call runtime probe IPC; it only verifies the shared UI
+  surface can render safely in an isolated desktop profile.
+- Focused smoke-harness contract test, typecheck, production build, isolated
+  Electron/Playwright AI Console smoke screenshot, docs sync, agent context
+  check, forbidden-path advisory check, and diff check pass.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
