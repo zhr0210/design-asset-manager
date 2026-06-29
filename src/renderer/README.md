@@ -31,6 +31,7 @@ React UI for library browsing, downloading, settings, tags, AI console, and asse
 - Renderer visual-analysis panels should consume shared snapshots instead of branching on stored palette payload versions, image/theme payload fields, OCR/text-box/readability fields, or text-color status codes.
 - Renderer shell route paths, sidebar labels, topbar titles, browser-shell detection, and topbar visibility should consume shared App Navigation workflow metadata instead of local route/title maps.
 - Renderer AI Console runtime dependency install handlers should consume shared overview workflow copy for toast/log/result summaries while keeping the existing platform-specific preload method call explicit.
+- Renderer AI Console text-box provider state should consume shared product provider normalization instead of mapping legacy `mock` locally.
 
 ## Tests
 
@@ -43,6 +44,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.5.5 | 2026-06-29 | Routed AI Console text-box provider normalization through the shared workflow used by settings. |
 | v1.5.4 | 2026-06-25 | Routed AI Console runtime dependency install toast/log summaries through shared overview workflow projection. |
 | v1.5.3 | 2026-06-25 | Routed AppShell, Sidebar, Topbar, and App route paths through shared App Navigation workflow metadata. |
 | v1.5.2 | 2026-06-13 | Mapped Platform AI Runtime branches to existing concrete preload methods through adapter metadata. |

@@ -4,9 +4,12 @@ import { homedir } from 'os'
 import type { AppSettings } from '../../shared/types/settings.types'
 import type { AiBackendConfig, AiPromptReverseSettings } from '../../shared/types/ai-backend.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../shared/constants/prompt-templates.constants'
+import { normalizeProductTextBoxProvider } from '../../shared/workflows/text-box-provider.workflow'
 import { createNewInstallAppSettingsDefaults } from './settings/settings-defaults.builder'
 import { SettingsMigrationService } from './settings/settings-migration.service'
 import type { SettingsMigrationApplyResult, SettingsMigrationPlan, SettingsMigrationRollbackResult } from './settings/settings-migration.types'
+
+export { normalizeProductTextBoxProvider } from '../../shared/workflows/text-box-provider.workflow'
 
 export function createDefaultLlamaBackendConfig(): AiBackendConfig {
   return {
@@ -42,12 +45,6 @@ export function createDefaultPromptReverseSettings(): AiPromptReverseSettings {
     temperature: 0.6,
     topP: 0.9
   }
-}
-
-export function normalizeProductTextBoxProvider(
-  provider: AppSettings['textBoxProvider']
-): Exclude<AppSettings['textBoxProvider'], 'mock'> {
-  return provider === 'mock' ? 'none' : provider
 }
 
 export class SettingsService {

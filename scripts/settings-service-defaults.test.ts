@@ -47,14 +47,23 @@ assert.equal(createDefaultLlamaBackendConfig().enabled, false)
 assert.equal(createDefaultPromptReverseSettings().backendMode, 'llama-openai')
 assert.equal(normalizeProductTextBoxProvider('mock'), 'none')
 assert.equal(normalizeProductTextBoxProvider('easyocr'), 'easyocr')
+assert.equal(normalizeProductTextBoxProvider(undefined), 'none')
 
 const settingsServiceSource = await fs.readFile('src/main/services/settings.service.ts', 'utf8')
+const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
+const sharedTextBoxProviderSource = await fs.readFile('src/shared/workflows/text-box-provider.workflow.ts', 'utf8')
 const builderSource = await fs.readFile('src/main/services/settings/settings-defaults.builder.ts', 'utf8')
 const combinedSource = [settingsServiceSource, builderSource].join('\n')
 
 assert.doesNotMatch(builderSource, /C:\\|\/Users\/|\/Applications\/|\/usr\/local/)
 
 assert.match(settingsServiceSource, /const newInstallDefaults = createNewInstallAppSettingsDefaults\(\)/)
+assert.match(settingsServiceSource, /shared\/workflows\/text-box-provider\.workflow/)
+assert.match(aiConsoleSource, /shared\/workflows\/text-box-provider\.workflow/)
+assert.match(sharedTextBoxProviderSource, /PRODUCT_TEXT_BOX_PROVIDER_NORMALIZATION/)
+assert.doesNotMatch(aiConsoleSource, /function normalizeProductTextBoxProvider/)
+assert.doesNotMatch(aiConsoleSource, /provider === 'mock'/)
+assert.doesNotMatch(settingsServiceSource, /provider === 'mock' \? 'none' : provider/)
 assert.match(settingsServiceSource, /if \(!fs\.existsSync\(this\.configPath\)\)/)
 assert.doesNotMatch(settingsServiceSource, /dryRunUpgradeSettings|dryRunInjectCrossPlatformDefaults|runtime-registry/)
 

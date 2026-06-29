@@ -247,6 +247,23 @@ runtime, native dependency, packaging, path, or process differences.
   this changes internal read-only OCR governance projection only and has no
   renderer surface.
 
+## Product Text-Box Provider Normalization Result
+
+- Product text-box provider normalization now lives in one shared workflow
+  consumed by main-process settings loading/saving and the AI Console route,
+  replacing duplicated renderer/main `mock` to `none` fallback rules.
+- The settings service keeps its existing `normalizeProductTextBoxProvider`
+  export as a compatibility re-export while using the shared implementation.
+- Existing persisted settings shape, selectable AI Console OCR providers,
+  legacy `mock` fallback behavior, IPC contracts, databases, model caches,
+  and user assets are unchanged.
+- Focused settings-defaults, real-worker guard, node host-platform defaults,
+  typecheck, production build, docs sync, agent context check,
+  forbidden-path advisory check, and diff check pass. Electron/Playwright UI
+  validation is intentionally skipped because this changes shared
+  normalization ownership only and does not alter the rendered provider
+  controls.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

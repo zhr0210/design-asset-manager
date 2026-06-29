@@ -115,17 +115,21 @@ def main():
     # 4. Text-box provider fallback guard
     settings_path = os.path.join(workspace, "src/renderer/routes/AiConsolePage.tsx")
     settings_types_path = os.path.join(workspace, "src/shared/types/settings.types.ts")
+    text_box_provider_workflow_path = os.path.join(workspace, "src/shared/workflows/text-box-provider.workflow.ts")
     settings_guard = "FAIL"
-    if os.path.exists(settings_path) and os.path.exists(settings_types_path):
+    if os.path.exists(settings_path) and os.path.exists(settings_types_path) and os.path.exists(text_box_provider_workflow_path):
         try:
             with open(settings_path, "r", encoding="utf-8") as f:
                 ai_console_content = f.read()
             with open(settings_types_path, "r", encoding="utf-8") as f:
                 settings_types_content = f.read()
-            has_normalizer = "function normalizeProductTextBoxProvider" in ai_console_content
-            maps_missing_or_mock_to_none = "return !provider || provider === 'mock' ? 'none' : provider" in ai_console_content
+            with open(text_box_provider_workflow_path, "r", encoding="utf-8") as f:
+                text_box_provider_workflow_content = f.read()
+            has_shared_normalizer = "function normalizeProductTextBoxProvider" in text_box_provider_workflow_content
+            maps_missing_or_mock_to_none = "mock: 'none'" in text_box_provider_workflow_content and "provider ?? 'none'" in text_box_provider_workflow_content
+            ai_console_uses_shared_normalizer = "shared/workflows/text-box-provider.workflow" in ai_console_content
             has_none_provider_type = "textBoxProvider: 'none'" in settings_types_content
-            if has_normalizer and maps_missing_or_mock_to_none and has_none_provider_type:
+            if has_shared_normalizer and maps_missing_or_mock_to_none and ai_console_uses_shared_normalizer and has_none_provider_type:
                 settings_guard = "PASS"
         except Exception:
             pass

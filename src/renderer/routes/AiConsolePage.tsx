@@ -90,17 +90,14 @@ import {
   projectAiConsoleModelReadinessDisplay,
   projectAiConsoleDependencyInstallCopy
 } from '../../shared/workflows/ai-console-overview.workflow'
+import {
+  normalizeProductTextBoxProvider,
+  type ProductTextBoxProvider
+} from '../../shared/workflows/text-box-provider.workflow'
 import type { ClearGpuMemoryResult, GpuStatus } from '../../shared/types/ai-worker.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS, DEFAULT_PROMPT_TEMPLATE_ID, DEFAULT_QWEN3VL_DESIGN_PROMPT, OPENAI_COMPATIBLE_REVERSE_PROMPT } from '../../shared/constants/prompt-templates.constants'
 
 type ConsoleTab = 'overview' | 'models' | 'services' | 'runtime' | 'prompts' | 'logs'
-type TextBoxProvider = 'none' | 'easyocr' | 'rapidocr' | 'paddleocr'
-
-function normalizeProductTextBoxProvider(
-  provider: AppSettings['textBoxProvider'] | undefined
-): TextBoxProvider {
-  return !provider || provider === 'mock' ? 'none' : provider
-}
 
 type ModelRow = {
   id: string
@@ -678,7 +675,7 @@ export default function AiConsolePage() {
   const [cooperativeModels, setCooperativeModels] = useState<CooperativeModelDownloadState>({})
   const [cooperativeCleanups, setCooperativeCleanups] = useState<(() => void)[]>([])
 
-  const [textBoxProvider, setTextBoxProvider] = useState<TextBoxProvider>(
+  const [textBoxProvider, setTextBoxProvider] = useState<ProductTextBoxProvider>(
     normalizeProductTextBoxProvider(settings.textBoxProvider)
   )
   const [enableTextColorAnalysis, setEnableTextColorAnalysis] = useState(settings.enableTextColorAnalysis ?? true)
@@ -1718,7 +1715,7 @@ export default function AiConsolePage() {
                   <input type="checkbox" checked={enableTextColorAnalysis} onChange={(event) => setEnableTextColorAnalysis(event.target.checked)} className="h-4 w-4 accent-brand-500" />
                 </label>
                 <Field label="文字定位引擎">
-                  <select value={textBoxProvider} onChange={(event) => setTextBoxProvider(event.target.value as TextBoxProvider)} className="control">
+                  <select value={textBoxProvider} onChange={(event) => setTextBoxProvider(event.target.value as ProductTextBoxProvider)} className="control">
                     <option value="none">暂不启用</option>
                     <option value="easyocr">EasyOCR（推荐）</option>
                     <option value="rapidocr">RapidOCR</option>
