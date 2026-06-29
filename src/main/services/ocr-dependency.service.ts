@@ -8,6 +8,7 @@ import type { OcrEnvPayload } from '../../shared/contracts/ocr-dependency.contra
 import {
   CHANNEL_OCR_INSTALL_LOG_UPDATE
 } from '../../shared/contracts/ocr-dependency.contract'
+import { projectOcrSelectedProviderAvailability } from '../../shared/workflows/ocr-dependency.workflow'
 import { resolveAiServicePath } from './ai-service-paths'
 import {
   resolveBasePythonExecutable,
@@ -185,11 +186,25 @@ export class OcrDependencyService {
           const realPythonPath = parsed.python?.executable ?? pythonExe
 
           const selectedProvider = settings.textBoxProvider ?? 'easyocr'
-          let selectedProviderAvailable = false
-          if (selectedProvider === 'easyocr') selectedProviderAvailable = isEasyAvailable
-          else if (selectedProvider === 'rapidocr') selectedProviderAvailable = isRapidAvailable
-          else if (selectedProvider === 'paddleocr') selectedProviderAvailable = isPaddleAvailable
-          else if (selectedProvider === 'mock') selectedProviderAvailable = true
+          const providers: OcrEnvPayload['providers'] = {
+            easyocr: {
+              installed: isEasyAvailable,
+              version: parsed.easyocr?.version ?? null,
+              available: isEasyAvailable,
+              installCommand: `${pythonExe} -m pip install easyocr opencv-python numpy`
+            },
+            rapidocr: {
+              installed: isRapidAvailable,
+              version: parsed.rapidocr?.version ?? null,
+              available: isRapidAvailable
+            },
+            paddleocr: {
+              installed: isPaddleAvailable,
+              version: parsed.paddleocr?.version ?? null,
+              available: isPaddleAvailable,
+              installCommand: `${pythonExe} -m pip install paddleocr opencv-python numpy`
+            }
+          }
 
           const payload: OcrEnvPayload = {
             python: {
@@ -197,27 +212,9 @@ export class OcrDependencyService {
               version: pythonVersion,
               path: realPythonPath
             },
-            providers: {
-              easyocr: {
-                installed: isEasyAvailable,
-                version: parsed.easyocr?.version ?? null,
-                available: isEasyAvailable,
-                installCommand: `${pythonExe} -m pip install easyocr opencv-python numpy`
-              },
-              rapidocr: {
-                installed: isRapidAvailable,
-                version: parsed.rapidocr?.version ?? null,
-                available: isRapidAvailable
-              },
-              paddleocr: {
-                installed: isPaddleAvailable,
-                version: parsed.paddleocr?.version ?? null,
-                available: isPaddleAvailable,
-                installCommand: `${pythonExe} -m pip install paddleocr opencv-python numpy`
-              }
-            },
+            providers,
             selectedProvider,
-            selectedProviderAvailable,
+            selectedProviderAvailable: projectOcrSelectedProviderAvailability(selectedProvider, providers),
             checkedAt: new Date().toISOString()
           }
 

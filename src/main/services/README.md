@@ -37,6 +37,7 @@ Business services for local assets, browser capture, tags, settings, downloads, 
 - Keep AI Python managed venv paths, path API selection, platform-specific base Python discovery, and platform-specific search roots inside the AI Python Environment adapter seam.
 - Keep AI Runtime Bootstrap platform policy in one adapter that owns Python Worker auto-start support and runtime app-data root path parts.
 - Keep OCR dependency governance provider policy and risk evidence table-driven; the governance projector must remain read-only and must not spawn installers.
+- Keep OCR environment checks focused on collecting provider evidence; selected-provider availability should be projected by the shared OCR dependency workflow.
 
 ## Tests
 
@@ -49,6 +50,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.16 | 2026-06-29 | Moved OCR selected-provider availability projection into shared workflow metadata consumed by the dependency service. |
 | v1.4.15 | 2026-06-29 | Moved OCR dependency governance provider policy and risk evidence into table-driven projection metadata. |
 | v1.4.14 | 2026-06-26 | Moved AI Python Environment base interpreter discovery into the same platform adapter as path API, managed venv layout, and search roots. |
 | v1.4.13 | 2026-06-26 | Moved AI Runtime Bootstrap Python Worker auto-start support and runtime app-data root path parts into one platform adapter. |

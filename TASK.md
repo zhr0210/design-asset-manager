@@ -264,6 +264,24 @@ runtime, native dependency, packaging, path, or process differences.
   normalization ownership only and does not alter the rendered provider
   controls.
 
+## OCR Selected-Provider Availability Projection Result
+
+- OCR dependency selected-provider availability now lives in one shared
+  workflow that projects `selectedProviderAvailable` from existing provider
+  evidence, replacing the dependency service's local provider if/else chain.
+- The dependency service still owns Python environment probing, provider
+  evidence construction, cached OCR environment writes, install commands, and
+  failure defaults. The shared workflow only interprets the already-collected
+  provider availability fields.
+- Existing OCR IPC contracts, payload shape, EasyOCR/RapidOCR/PaddleOCR/mock
+  availability semantics, installer behavior, runtime startup, databases,
+  model caches, and user assets are unchanged.
+- Focused OCR dependency governance test, typecheck, production build, docs
+  sync, agent context check, forbidden-path advisory check, and diff check
+  pass. Electron/Playwright UI validation is intentionally skipped because
+  this changes internal OCR dependency payload projection ownership only and
+  has no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

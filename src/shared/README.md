@@ -62,6 +62,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Doctor and Path Governance panels should use shared display projection for status labels, badge classes, check labels, platform labels, report dates, details fallback, managed-path summary, and path masking rather than renderer-local dictionaries.
 - Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
 - Product text-box provider normalization should use `text-box-provider.workflow.ts` so main-process settings loading/saving and AI Console state treat legacy `mock` as `none` through one shared rule.
+- OCR dependency selected-provider availability should use `ocr-dependency.workflow.ts`; main-process environment checks should build provider evidence and let shared projection decide `selectedProviderAvailable`.
 - Electron BrowserWindow defaults and the renderer desktop shell minimum viewport should use `DESKTOP_VIEWPORT_POLICY` rather than main/renderer-local hard-coded window sizes.
 - App route path, sidebar label, topbar title, browser-shell, and topbar-visibility policy should use `app-navigation.workflow.ts` rather than renderer-local route tables.
 - Electron app lifecycle policy should use `electron-app-lifecycle.workflow.ts` so Windows AppUserModelId and macOS quit-on-close behavior stay in one shared policy.
@@ -77,6 +78,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.33 | 2026-06-29 | Moved OCR dependency selected-provider availability projection into a shared workflow. |
 | v1.8.32 | 2026-06-29 | Moved product text-box provider normalization into a shared workflow consumed by settings and AI Console. |
 | v1.8.31 | 2026-06-29 | Normalized Worker probe connection accessors to branch-keyed predicates without changing macOS/Windows connection evidence. |
 | v1.8.30 | 2026-06-26 | Moved Platform AI branch-to-OS current-platform mapping into shared runtime metadata helpers. |
