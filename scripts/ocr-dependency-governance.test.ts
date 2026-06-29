@@ -14,6 +14,13 @@ const mockPlan = createOcrDependencyGovernancePlan('mock')
 assert.equal(mockPlan.runtimeProfile, 'mock-only')
 assert.equal(mockPlan.blockingIssues.length, 0)
 
+const mutablePlan = createOcrDependencyGovernancePlan('easyocr')
+mutablePlan.risks[0].id = 'mutated-risk'
+mutablePlan.blockingIssues.push('mutated-blocker')
+const freshPlan = createOcrDependencyGovernancePlan('easyocr')
+assert.notEqual(freshPlan.risks[0].id, 'mutated-risk')
+assert.equal(freshPlan.blockingIssues.length, 1)
+
 const paddlePlan = createOcrDependencyGovernancePlan('paddleocr')
 assert.equal(paddlePlan.provider, 'paddleocr')
 assert.equal(paddlePlan.runtimeProfile, 'local-ocr')
@@ -37,8 +44,11 @@ assert.equal(manifest.installerDeferred, true)
 assert.equal(manifest.privacy?.containsRealUserPaths, false)
 
 const governanceSource = await fs.readFile('src/main/services/ocr-governance.service.ts', 'utf8')
+assert.match(governanceSource, /OCR_DEPENDENCY_PROVIDER_GOVERNANCE_POLICIES/)
+assert.match(governanceSource, /OCR_DEPENDENCY_RISK_REGISTRY/)
 assert.doesNotMatch(governanceSource, /spawn\s*\(|execSync\s*\(|writeFile\s*\(|appendFile\s*\(|mkdirSync\s*\(/)
 assert.doesNotMatch(governanceSource, /C:\\Users\\[A-Za-z0-9_.-]+/i)
+assert.doesNotMatch(governanceSource, /provider === 'mock'|provider !== 'mock'/)
 
 const dependencySource = await fs.readFile('src/main/services/ocr-dependency.service.ts', 'utf8')
 const pythonEnvironmentSource = await fs.readFile('src/main/services/ai-python-environment.ts', 'utf8')

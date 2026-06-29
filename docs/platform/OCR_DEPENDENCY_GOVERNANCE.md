@@ -28,6 +28,7 @@ The new governance plan records:
 - one shared AI Python Environment Interface for managed runtime and base Python discovery;
 - deterministic Windows/macOS path adapters with an in-memory test seam;
 - compatibility with the existing `macos-ai-python` managed directory while callers use platform-neutral names.
+- table-driven provider policy and risk evidence projection, so mock/local OCR differences are data-owned and remain read-only.
 
 ## Safety Boundaries
 

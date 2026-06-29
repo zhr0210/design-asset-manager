@@ -229,6 +229,24 @@ runtime, native dependency, packaging, path, or process differences.
   because this changes internal release-governance metadata derivation only
   and has no renderer surface.
 
+## OCR Dependency Governance Metadata Result
+
+- OCR dependency governance now projects provider runtime profile and blocking
+  issue policy from one provider-keyed metadata table instead of branching on
+  the mock provider inside the plan factory.
+- OCR dependency risk evidence now comes from one read-only risk registry and
+  is copied per plan result, preserving redacted evidence while preventing
+  caller mutation from leaking into later projections.
+- Existing EasyOCR/RapidOCR/PaddleOCR local runtime profile behavior, mock-only
+  behavior, `autoInstall: false`, deferred installer policy, Doctor check
+  intent, IPC behavior, runtime startup, databases, model caches, and user
+  assets are unchanged.
+- Focused OCR dependency governance test, typecheck, production build, docs
+  sync, agent context check, forbidden-path advisory check, and diff check
+  pass. Electron/Playwright UI validation is intentionally skipped because
+  this changes internal read-only OCR governance projection only and has no
+  renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
