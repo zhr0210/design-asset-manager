@@ -8,6 +8,7 @@ import { ImageMetadataService } from './image-metadata.service'
 import { classifyColorFamily, getColorDistance, getContrastRatio, hslToRgb, parseRgb, parseTextBoxes, rgbToHex, rgbToHsl } from './color-palette/color-utils'
 export { classifyColorFamily, getColorDistance, getContrastRatio, hexToRgb, hslToRgb, parseRgb, parseTextBoxes, rgbToHex, rgbToHsl } from './color-palette/color-utils'
 import { ImageNormalizeService } from './image-normalize.service'
+import { projectProductTextBoxProviderExecutionPlan } from '../../shared/workflows/text-box-provider.workflow'
 
 export interface ColorSwatch {
   hex: string
@@ -281,34 +282,20 @@ export class ColorPaletteService {
       if (finalBoxes.length === 0) {
         const { OcrDependencyService } = await import('./ocr-dependency.service')
         const env = OcrDependencyService.getInstance().getCachedOcrEnvironment()
+        const executionPlan = projectProductTextBoxProviderExecutionPlan(rawProvider, env.providers)
 
-        if (rawProvider === 'easyocr' && !env.providers.easyocr.available) {
-          skipReason = 'easyocr_not_installed'
-          textStatus = 'skipped'
-          detectionProvider = 'easyocr'
-        } else if (rawProvider === 'rapidocr' && !env.providers.rapidocr.available) {
-          skipReason = 'rapidocr_not_installed'
-          textStatus = 'skipped'
-          detectionProvider = 'rapidocr'
-        } else if (rawProvider === 'paddleocr' && !env.providers.paddleocr.available) {
-          skipReason = 'paddleocr_not_installed'
-          textStatus = 'skipped'
-          detectionProvider = 'paddleocr'
+        if (executionPlan.action === 'skip') {
+          skipReason = executionPlan.skipReason
+          textStatus = executionPlan.textStatus
+          detectionProvider = executionPlan.detectionProvider
         } else {
           // All checks passed, execute actual OCR!
           try {
-            detectionProvider = rawProvider
-            // Map rawProvider to TextBoxProvider factory type:
-            let providerType: any = 'none'
-            if (rawProvider === 'easyocr') providerType = 'easyocr_detection'
-            else if (rawProvider === 'rapidocr') providerType = 'rapidocr_detection'
-            else if (rawProvider === 'paddleocr') providerType = 'paddleocr_detection'
-            else if (rawProvider === 'mock') providerType = 'mock_text_boxes'
-            else if (rawProvider === 'qwen_vl_text_blocks') providerType = 'qwen_vl_text_blocks'
+            detectionProvider = executionPlan.detectionProvider
 
             const { TextBoxProvider } = await import('./text-box-provider.service')
             const providerInstance = new TextBoxProvider({
-              provider: providerType,
+              provider: executionPlan.providerType,
               timeoutMs: settings.ocrTimeoutMs ?? 3000,
               maxTextBoxes: settings.maxTextBoxesPerImage ?? 30,
               minConfidence: settings.minTextBoxConfidence ?? 0.5
@@ -316,7 +303,7 @@ export class ColorPaletteService {
 
             const detected = await providerInstance.detectTextBoxes(resolvedPath, assetId)
             finalBoxes = parseTextBoxes(detected.boxes)
-            isMockText = detected.isMock || rawProvider === 'mock'
+            isMockText = detected.isMock || executionPlan.isMockProvider
 
             if (detected.warnings && detected.warnings.some(w => w.includes('timeout'))) {
               textStatus = 'timeout'

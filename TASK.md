@@ -282,6 +282,25 @@ runtime, native dependency, packaging, path, or process differences.
   this changes internal OCR dependency payload projection ownership only and
   has no renderer surface.
 
+## Text-Box Provider Execution Plan Projection Result
+
+- Color Palette text-box detection now consumes a shared execution plan that
+  maps product provider selection to execution provider type, unavailable
+  skip reason, and mock-provider marker instead of maintaining local
+  provider if/else chains.
+- Main-process text-detection provider types now reuse the shared execution
+  provider union so factory strings and product workflow projection stay
+  aligned.
+- Existing text-color analysis settings, OCR dependency checks, manual text
+  box input behavior, provider execution, skip/failure statuses, IPC
+  contracts, databases, model caches, and user assets are unchanged.
+- Focused text-box provider workflow, settings-defaults, OCR dependency
+  governance tests, typecheck, production build, docs sync, agent context
+  check, forbidden-path advisory check, and diff check pass.
+  Electron/Playwright UI validation is intentionally skipped because this
+  changes internal text-color provider execution planning only and has no
+  renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

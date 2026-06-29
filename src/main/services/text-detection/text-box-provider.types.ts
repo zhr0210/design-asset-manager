@@ -1,7 +1,8 @@
 import type { TextBox } from '../../../shared/types/color-palette.types'
+import type { TextBoxExecutionProvider } from '../../../shared/workflows/text-box-provider.workflow'
 export type { TextBox }
 
-export type TextDetectionProvider = 'easyocr_detection' | 'rapidocr_detection' | 'paddleocr_detection' | 'qwen_vl_text_blocks' | 'mock_text_boxes' | 'none'
+export type TextDetectionProvider = TextBoxExecutionProvider
 
 export interface TextBoxProviderConfig {
   provider: TextDetectionProvider
