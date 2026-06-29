@@ -1705,6 +1705,23 @@ and Release Update Metadata pass.
   applicable because this slice changes main-process planner metadata matching
   only and has no renderer surface.
 
+## Worker Probe Connection Marker Metadata Result
+
+- Moved Worker probe branch connection markers into shared Platform AI runtime
+  metadata.
+- AI Runtime status projection now asks the shared helper whether a Worker
+  probe belongs to the macOS or Windows branch instead of keeping concrete
+  `win32`/`windows` marker strings inside the workflow implementation.
+- Existing macOS `isMacOS` connection evidence, Windows `win32`/`windows`
+  probe compatibility, accelerator tile projection, IPC/preload/renderer
+  callers, runtime startup, downloads, databases, model caches, and user
+  assets are unchanged.
+- Focused AI Runtime status workflow tests, complete runtime-safety subset,
+  typecheck, production build, docs sync, agent-context check, forbidden-path
+  advisory check, and diff check passed. UI screenshot validation is
+  intentionally skipped because this changes shared projection metadata only
+  and does not alter the rendered surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

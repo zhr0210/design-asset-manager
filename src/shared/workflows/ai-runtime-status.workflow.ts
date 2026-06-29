@@ -20,6 +20,7 @@ import type {
 } from '../types/platform-ai-runtime.types'
 import type { PlatformAiBranch } from '../types/platform-ai-branch-status.types'
 import type { OcrRealEvidenceProbeResponse } from '../types/ocr-real-evidence.types'
+import { isPlatformAiWorkerProbeConnectionMarker } from '../constants/platform-ai-runtime-metadata.constants'
 
 export type AiRuntimeDisplayTone = 'good' | 'warn' | 'bad' | 'muted'
 export type AiRuntimeStatusIcon = 'success' | 'warning' | 'activity'
@@ -615,11 +616,11 @@ interface PlatformAiWorkerProbeAccessors {
 
 const PLATFORM_AI_WORKER_PROBE_ACCESSORS: Record<PlatformAiBranch, PlatformAiWorkerProbeAccessors> = {
   macos: {
-    isConnected: (probe) => probe.isMacOS,
+    isConnected: (probe) => isPlatformAiWorkerProbeConnectionMarker('macos', probe),
     isAcceleratorAvailable: (probe) => Boolean(probe.torch.mpsAvailable)
   },
   windows: {
-    isConnected: (probe) => ['win32', 'windows'].includes(probe.platform),
+    isConnected: (probe) => isPlatformAiWorkerProbeConnectionMarker('windows', probe),
     isAcceleratorAvailable: (probe) => Boolean(probe.torch.cudaAvailable)
   }
 }

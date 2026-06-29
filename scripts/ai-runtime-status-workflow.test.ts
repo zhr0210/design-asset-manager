@@ -869,7 +869,9 @@ assert.doesNotMatch(windowsAiRuntimeTypesSource, /phase: 'worker-probes'/)
 assert.doesNotMatch(windowsAiRuntimeConstantsSource, /from '..\/types\/macos-ai-runtime\.types'/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function createAiRuntimeCapability/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /export const PLATFORM_AI_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName>/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /export const PLATFORM_AI_WORKER_PROBE_CONNECTION_MARKERS: Record<PlatformAiBranch, PlatformAiWorkerProbeConnectionMarker>/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformAiBranchCurrentPlatform/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformAiWorkerProbeConnectionMarker/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformName/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformFallbackStatus/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformEvidenceStatus/)
@@ -1066,9 +1068,14 @@ assert.doesNotMatch(
 )
 assert.match(
   runtimeWorkflowSource,
-  /macos:[\s\S]*isConnected: \(probe\) => probe\.isMacOS[\s\S]*probe\.torch\.mpsAvailable[\s\S]*windows:[\s\S]*isConnected: \(probe\) => \['win32', 'windows'\]\.includes\(probe\.platform\)[\s\S]*probe\.torch\.cudaAvailable/
+  /macos:[\s\S]*isConnected: \(probe\) => isPlatformAiWorkerProbeConnectionMarker\('macos', probe\)[\s\S]*probe\.torch\.mpsAvailable[\s\S]*windows:[\s\S]*isConnected: \(probe\) => isPlatformAiWorkerProbeConnectionMarker\('windows', probe\)[\s\S]*probe\.torch\.cudaAvailable/
+)
+assert.match(
+  platformAiRuntimeMetadataConstantsSource,
+  /macos:[\s\S]*macOSFlag: 'isMacOS'[\s\S]*windows:[\s\S]*platformMarkers: \['win32', 'windows'\]/
 )
 assert.doesNotMatch(runtimeWorkflowSource, /probe\.platform === '(?:win32|windows|darwin)'/)
+assert.doesNotMatch(runtimeWorkflowSource, /\['win32', 'windows'\]/)
 assert.doesNotMatch(runtimeWorkflowSource, /connectionFlag/)
 assert.doesNotMatch(runtimeWorkflowSource, /connectionPlatforms/)
 assert.match(
