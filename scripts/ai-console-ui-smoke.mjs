@@ -2,6 +2,7 @@ import { _electron as electron } from 'playwright'
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
+import { resolveNodeElectronExecutableCandidates } from './node-host-platform-defaults.mjs'
 
 const repo = process.cwd()
 const outputRoot = path.join(repo, 'dist-temp', 'ai-console-ui-smoke')
@@ -34,13 +35,7 @@ async function pathExists(candidate) {
 }
 
 async function resolveElectronExecutable() {
-  const candidates = {
-    win32: [path.join(repo, 'node_modules', 'electron', 'dist', 'electron.exe')],
-    darwin: [path.join(repo, 'node_modules', 'electron', 'dist', 'Electron.app', 'Contents', 'MacOS', 'Electron')],
-    linux: [path.join(repo, 'node_modules', 'electron', 'dist', 'electron')]
-  }[process.platform] ?? []
-
-  for (const candidate of candidates) {
+  for (const candidate of resolveNodeElectronExecutableCandidates(process.platform, repo)) {
     if (await pathExists(candidate)) return candidate
   }
 

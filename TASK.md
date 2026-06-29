@@ -1722,6 +1722,25 @@ and Release Update Metadata pass.
   intentionally skipped because this changes shared projection metadata only
   and does not alter the rendered surface.
 
+## AI Console Smoke Host Defaults Result
+
+- Moved AI Console UI smoke Electron executable candidate paths into the
+  shared Node host platform defaults helper.
+- The smoke harness now resolves Windows, macOS, and fallback Electron
+  executable candidates through the same script-level host defaults seam used
+  by other cross-platform verification helpers instead of keeping its own
+  platform path table.
+- Existing temporary user-data isolation, AI Console route selection,
+  Platform AI Branch Status screenshot, overflow check, redacted output,
+  IPC/runtime behavior, model downloads, databases, model caches, and user
+  assets are unchanged.
+- Focused Node host defaults, AI Console smoke contract, verify-platform
+  scripts, Package Smoke source tests, complete runtime-safety subset,
+  typecheck, production build, docs sync, agent-context check, forbidden-path
+  advisory check, and diff check passed. Isolated Electron/Playwright AI
+  Console smoke also passed: Platform AI Branch Status screenshot rendered
+  with no document/body horizontal overflow.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

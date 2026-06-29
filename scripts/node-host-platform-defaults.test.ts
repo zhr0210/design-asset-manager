@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs/promises'
+import path from 'node:path'
 import {
   listNodeHostPlatformDefaults,
+  resolveNodeElectronExecutableCandidates,
   resolveNodeHostPlatformDefaults
 } from './node-host-platform-defaults.mjs'
 
@@ -52,6 +54,15 @@ assert.deepEqual(
   listNodeHostPlatformDefaults().map((defaults) => defaults.platform),
   ['win32', 'darwin', 'other']
 )
+assert.deepEqual(resolveNodeElectronExecutableCandidates('win32', '/repo'), [
+  path.join('/repo', 'node_modules', 'electron', 'dist', 'electron.exe')
+])
+assert.deepEqual(resolveNodeElectronExecutableCandidates('darwin', '/repo'), [
+  path.join('/repo', 'node_modules', 'electron', 'dist', 'Electron.app', 'Contents', 'MacOS', 'Electron')
+])
+assert.deepEqual(resolveNodeElectronExecutableCandidates('linux', '/repo'), [
+  path.join('/repo', 'node_modules', 'electron', 'dist', 'electron')
+])
 
 const windowsCliDefaults = JSON.parse(execFileSync(
   process.execPath,
@@ -65,7 +76,8 @@ for (const consumerPath of [
   'scripts/package-smoke-host-defaults.mjs',
   'scripts/verify-platform-common.mjs',
   'scripts/run-python-unittest.mjs',
-  'scripts/run-text-color-tests.py'
+  'scripts/run-text-color-tests.py',
+  'scripts/ai-console-ui-smoke.mjs'
 ]) {
   const source = await fs.readFile(consumerPath, 'utf8')
   assert.match(source, /node-host-platform-defaults\.mjs/)

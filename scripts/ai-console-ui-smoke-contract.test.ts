@@ -13,6 +13,8 @@ assert.equal(
 )
 
 assert.match(smokeSource, /from 'playwright'/)
+assert.match(smokeSource, /node-host-platform-defaults\.mjs/)
+assert.match(smokeSource, /resolveNodeElectronExecutableCandidates\(process\.platform, repo\)/)
 assert.match(smokeSource, /dist-temp', 'ai-console-ui-smoke'/)
 assert.match(smokeSource, /dam-ai-console-smoke-/)
 assert.match(smokeSource, /--user-data-dir=\$\{userData\}/)
@@ -25,5 +27,6 @@ assert.match(smokeSource, /AI_CONSOLE_UI_SMOKE_SCREENSHOT/)
 assert.match(smokeSource, /AI_CONSOLE_UI_SMOKE_OVERFLOW/)
 assert.doesNotMatch(smokeSource, /USERPROFILE|Desktop|Downloads|Library\/Application Support/)
 assert.doesNotMatch(smokeSource, /llamaRuntimeStartServer|probePythonCudaRuntime|probeOnnxModelLoad|macosAiInstallDeps/)
+assert.doesNotMatch(smokeSource, /electron\.exe|Electron\.app|dist', 'electron'/)
 
 console.log('ai-console-ui-smoke-contract passed')

@@ -32,6 +32,18 @@ const NODE_HOST_PLATFORM_DEFAULTS = {
   }
 }
 
+const NODE_ELECTRON_EXECUTABLE_PATH_PARTS_BY_PLATFORM = {
+  win32: [
+    ['node_modules', 'electron', 'dist', 'electron.exe']
+  ],
+  darwin: [
+    ['node_modules', 'electron', 'dist', 'Electron.app', 'Contents', 'MacOS', 'Electron']
+  ],
+  other: [
+    ['node_modules', 'electron', 'dist', 'electron']
+  ]
+}
+
 export function resolveNodeHostPlatformDefaults(platform) {
   const defaults = NODE_HOST_PLATFORM_DEFAULTS[platform]
     ?? NODE_HOST_PLATFORM_DEFAULTS.other
@@ -40,6 +52,13 @@ export function resolveNodeHostPlatformDefaults(platform) {
 
 export function listNodeHostPlatformDefaults() {
   return Object.values(NODE_HOST_PLATFORM_DEFAULTS).map(cloneNodeHostPlatformDefaults)
+}
+
+export function resolveNodeElectronExecutableCandidates(platform, repoRoot) {
+  const hostPlatform = resolveNodeHostPlatformDefaults(platform).platform
+  const candidatePathParts = NODE_ELECTRON_EXECUTABLE_PATH_PARTS_BY_PLATFORM[hostPlatform]
+    ?? NODE_ELECTRON_EXECUTABLE_PATH_PARTS_BY_PLATFORM.other
+  return candidatePathParts.map((parts) => path.join(repoRoot, ...parts))
 }
 
 function cloneNodeHostPlatformDefaults(defaults) {
