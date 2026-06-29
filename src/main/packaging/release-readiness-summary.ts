@@ -1,5 +1,6 @@
 import {
   evaluateReleaseCandidate,
+  getReleasePlatformTarget,
   type ReleaseCandidateChecks,
   type ReleaseCandidateEvaluation,
   type ReleaseCandidateMissing,
@@ -76,14 +77,8 @@ export function createReleaseReadinessSummary(
     emitsLocalPaths: false,
     platforms: inputs.map((input) => {
       const evaluation = evaluateReleaseCandidate(input)
+      const target = getReleasePlatformTarget(input.platform)
       const signedPreflight = createReleaseSignedCandidatePreflight(input.platform, input.arch)
-      const brandingRequirement = brandingPreflight.platforms.find(
-        (item) => item.platform === input.platform
-      )
-
-      if (!brandingRequirement) {
-        throw new Error(`Missing release branding preflight for platform: ${input.platform}`)
-      }
 
       return {
         platform: input.platform,
@@ -98,7 +93,7 @@ export function createReleaseReadinessSummary(
         requiredEvidence: [...signedPreflight.requiredEvidence],
         requiredSecretNames: [...signedPreflight.requiredSecretNames],
         brandingApprovalFile: brandingPreflight.approvalFileName,
-        brandingIconFileName: brandingRequirement.iconFileName,
+        brandingIconFileName: target.brandingIconFileName,
         checks: { ...input.checks },
         blockers: evaluation.missing.map(toReadinessBlocker)
       }

@@ -72,13 +72,6 @@ export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
     environments: listReleasePlatformTargets().map(({ platform }) => {
       const target = getReleasePlatformTarget(platform)
       const signedPreflight = createReleaseSignedCandidatePreflight(platform, 'x64')
-      const brandingRequirement = brandingPreflight.platforms.find(
-        (item) => item.platform === platform
-      )
-
-      if (!brandingRequirement) {
-        throw new Error(`Missing release branding preflight for platform: ${platform}`)
-      }
       const installSmokePreflight = createReleaseInstallSmokePreflight(platform)
 
       return {
@@ -101,7 +94,7 @@ export function createReleaseEnvironmentManifest(): ReleaseEnvironmentManifest {
         distributionSmokeEvidenceSource: installSmokePreflight.evidenceSource,
         distributionSmokeCheckIds: [...installSmokePreflight.requiredCheckIds],
         brandingApprovalFile: brandingPreflight.approvalFileName,
-        brandingIconFileName: brandingRequirement.iconFileName,
+        brandingIconFileName: target.brandingIconFileName,
         artifactNamePattern: target.signedCandidateArtifactNamePattern,
         publishEnabled: false,
         repositoryPermissions: 'contents:read'

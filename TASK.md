@@ -186,6 +186,27 @@ runtime, native dependency, packaging, path, or process differences.
   because this changes shared projection internals only and does not alter
   the rendered UI surface.
 
+## Release Branding Icon Target Metadata Result
+
+- Release readiness summaries and release environment manifests now read
+  platform branding icon filenames from the shared release platform target
+  metadata instead of re-querying branding preflight platform requirements.
+- Branding preflight still owns approval-file and branding-check definitions;
+  release platform targets own Windows/macOS artifact, runner, signing,
+  secret-name, and icon-file metadata. Release evidence shapes, workflow
+  dispatch policy, signing gates, package smoke requirements, public scripts,
+  renderer behavior, databases, model caches, and user assets are unchanged.
+- Strengthened focused release readiness and environment-manifest tests so
+  these modules consume `getReleasePlatformTarget` for icon filenames and do
+  not restore `brandingPreflight.platforms.find(...)` platform lookups.
+- Focused release readiness, release environment manifest, release platform
+  targets, release branding preflight, release external-gate status, and
+  signed-candidate dispatch-status tests, typecheck, production build, docs
+  sync, agent context check, forbidden-path advisory check, and diff check
+  pass. Electron/Playwright UI validation is intentionally skipped because
+  this changes internal release-governance metadata projection only and has
+  no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
