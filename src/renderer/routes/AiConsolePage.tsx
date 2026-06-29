@@ -2029,7 +2029,7 @@ function PlatformAiBranchStatusPanel({
                   <div>{display.evidencePrefix}：{workflow.evidenceLabel}</div>
                   <div className="mt-1">{display.missingPrefix}：{workflow.missingLabel}</div>
                   {workflow.nextActionLabel && <div className="mt-1">{display.nextActionPrefix}：{workflow.nextActionLabel}</div>}
-                  {(workflow.actionPlan.kind !== 'none' || workflow.status === 'planned_capability') && (
+                  {workflow.actionButtonVisible && (
                     <button
                       type="button"
                       disabled={!workflow.actionPlan.enabled}
@@ -2038,7 +2038,7 @@ function PlatformAiBranchStatusPanel({
                       }}
                       className="mt-3 inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-black text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {workflow.actionPlan.kind === 'refresh_evidence'
+                      {workflow.actionButtonIcon === 'refresh'
                         ? <RefreshCw className="h-3.5 w-3.5" />
                         : <ChevronRight className="h-3.5 w-3.5" />}
                       {workflow.actionPlan.label}

@@ -77,6 +77,8 @@ assert.equal(macosDisplay.workflows[0].runtimeLanes[0].isPrimary, true)
 assert.equal(macosDisplay.workflows[0].runtimeLanes[0].statusLabel, '运行时探测就绪')
 assert.equal(macosDisplay.workflows[0].actionPlan.kind, 'refresh_evidence')
 assert.equal(macosDisplay.workflows[0].actionPlan.enabled, true)
+assert.equal(macosDisplay.workflows[0].actionButtonVisible, true)
+assert.equal(macosDisplay.workflows[0].actionButtonIcon, 'refresh')
 assert.equal(macosRouteOverview.title, 'macOS 路线概览')
 assert.equal(macosRouteOverview.showWorkerProbeDiagnostics, true)
 assert.equal(macosRouteOverview.installDependenciesLabel, '安装 macOS AI 依赖')
@@ -108,6 +110,8 @@ assert.equal(windowsDisplay.workflows[0].statusLabel, '不可用')
 assert.equal(windowsDisplay.workflows[0].missingLabel, '当前操作系统不匹配')
 assert.equal(windowsDisplay.workflows[0].actionPlan.kind, 'none')
 assert.equal(windowsDisplay.workflows[0].actionPlan.enabled, false)
+assert.equal(windowsDisplay.workflows[0].actionButtonVisible, false)
+assert.equal(windowsDisplay.workflows[0].actionButtonIcon, 'navigate')
 assert.equal(windowsRouteOverview.title, 'Windows 路线概览')
 assert.equal(windowsRouteOverview.showWorkerProbeDiagnostics, false)
 assert.deepEqual(
@@ -155,6 +159,7 @@ const realWindowsDisplay = projectPlatformAiBranchStatusDisplay(realWindowsStatu
 assert.equal(realWindowsDisplay.workflows[0].title, 'AI 标签任务')
 assert.equal(realWindowsDisplay.workflows[0].nextActionLabel, '当前工作流已有真实模型路径')
 assert.equal(realWindowsDisplay.workflows[0].actionPlan.kind, 'none')
+assert.equal(realWindowsDisplay.workflows[0].actionButtonVisible, false)
 assert.equal(
   selectPlatformAiBranchStatus([plannedMacosStatus, realWindowsStatus])?.platformBranch,
   'windows'
@@ -188,6 +193,12 @@ assert.deepEqual(createPlatformAiActionPlan(plannedWorkflow), {
   reasonKind: undefined,
   targetId: undefined
 })
+const plannedWorkflowDisplay = projectPlatformAiBranchStatusDisplay({
+  ...macosStatus,
+  workflows: [plannedWorkflow]
+}, () => '00:00:00')
+assert.equal(plannedWorkflowDisplay.workflows[0].actionButtonVisible, true)
+assert.equal(plannedWorkflowDisplay.workflows[0].actionButtonIcon, 'navigate')
 
 const dependencyMissingWorkflow = structuredClone(modelMissingWorkflow)
 dependencyMissingWorkflow.missing = [{
@@ -261,12 +272,16 @@ assert.match(
   branchWorkflowSource,
   /PLATFORM_BRANCH_DISPLAY_COPY\[status\.platformBranch\]\.routeOverview/
 )
+assert.match(branchWorkflowSource, /actionButtonVisible: actionPlan\.kind !== 'none' \|\| workflow\.status === 'planned_capability'/)
+assert.match(branchWorkflowSource, /actionButtonIcon: actionPlan\.kind === 'refresh_evidence' \? 'refresh' : 'navigate'/)
 assert.doesNotMatch(
   branchWorkflowSource,
   /platformBranch === 'windows'|platformBranch === 'macos'|status\.platformBranch === 'macos'/
 )
 assert.match(aiConsoleSource, /projectPlatformAiBranchStatusDisplay/)
 assert.match(aiConsoleSource, /workflow\.actionPlan\.enabled/)
+assert.match(aiConsoleSource, /workflow\.actionButtonVisible/)
+assert.match(aiConsoleSource, /workflow\.actionButtonIcon === 'refresh'/)
 assert.match(aiConsoleSource, /onAction\(workflow\.actionPlan\)/)
 assert.match(aiConsoleSource, /projectPlatformAiRouteOverviewDisplay/)
 assert.match(aiConsoleSource, /routeOverviewDisplay\.showWorkerProbeDiagnostics/)
@@ -278,6 +293,7 @@ assert.doesNotMatch(aiConsoleSource, /function branchStatusLabel/)
 assert.doesNotMatch(aiConsoleSource, /function branchWorkflowTitle/)
 assert.doesNotMatch(aiConsoleSource, /workflow\.missing\.map/)
 assert.doesNotMatch(aiConsoleSource, /workflow\.evidence\[0\]/)
+assert.doesNotMatch(aiConsoleSource, /workflow\.actionPlan\.kind !== 'none'|workflow\.status === 'planned_capability'|workflow\.actionPlan\.kind === 'refresh_evidence'/)
 assert.doesNotMatch(aiConsoleSource, /\.find\(\(branch: PlatformAiBranchStatusResponse/)
 assert.doesNotMatch(aiConsoleSource, /branch\?\.workflows\.some/)
 assert.doesNotMatch(aiConsoleSource, />Platform AI Branch Status</)

@@ -343,6 +343,21 @@ runtime, native dependency, packaging, path, or process differences.
   because this changes shared compatibility display metadata only and does
   not alter the rendered UI surface.
 
+## Platform AI Branch Action Button Display Metadata Result
+
+- Platform AI branch workflow cards now receive action-button visibility and
+  icon intent from shared display projection instead of branching on workflow
+  status and action-plan kind inside the AI Console renderer.
+- Existing action-plan kinds, command routing, disabled planned-capability
+  behavior, runtime-lane display, IPC contracts, databases, model caches, and
+  user assets are unchanged.
+- Focused Platform AI branch display and AI Console macOS branch contract
+  tests, typecheck, production build, docs sync, agent context check,
+  forbidden-path advisory check, and diff check pass. Playwright UI
+  validation is intentionally skipped because the repository does not yet
+  provide an isolated temporary-userData Electron smoke harness; launching
+  the desktop app directly could touch real local app data.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

@@ -31,6 +31,8 @@ export interface PlatformAiWorkflowDisplay {
   missingLabel: string
   nextActionLabel: string
   actionPlan: PlatformAiActionPlan
+  actionButtonVisible: boolean
+  actionButtonIcon: 'refresh' | 'navigate'
   runtimeLanes: PlatformAiRuntimeLaneDisplay[]
 }
 
@@ -257,6 +259,7 @@ function platformAiBranchStatusScore(status: PlatformAiBranchStatus): number {
 function projectWorkflowDisplay(workflow: PlatformAiWorkflowStatus): PlatformAiWorkflowDisplay {
   const primaryLane = workflow.runtimeLanes.find((lane) => lane.lane === workflow.primaryRuntimeLane) ?? workflow.runtimeLanes[0]
   const copy = WORKFLOW_DISPLAY_COPY[workflow.workflow]
+  const actionPlan = createPlatformAiActionPlan(workflow)
   return {
     workflow: workflow.workflow,
     workflowLabel: copy.label,
@@ -268,7 +271,9 @@ function projectWorkflowDisplay(workflow: PlatformAiWorkflowStatus): PlatformAiW
     evidenceLabel: workflow.evidence[0]?.label ?? '暂无证据',
     missingLabel: workflow.missing.map((item) => item.label).slice(0, 2).join(' / ') || '无明确缺口',
     nextActionLabel: projectNextActionLabel(workflow),
-    actionPlan: createPlatformAiActionPlan(workflow),
+    actionPlan,
+    actionButtonVisible: actionPlan.kind !== 'none' || workflow.status === 'planned_capability',
+    actionButtonIcon: actionPlan.kind === 'refresh_evidence' ? 'refresh' : 'navigate',
     runtimeLanes: workflow.runtimeLanes.map((lane) => projectRuntimeLaneDisplay(lane, primaryLane))
   }
 }
