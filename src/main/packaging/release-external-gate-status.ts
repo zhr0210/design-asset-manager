@@ -6,6 +6,10 @@ import type {
   ReleasePlatform
 } from './release-flow-governance'
 import {
+  listReleaseCandidateCommonGates,
+  listReleaseCandidateDistributionGates
+} from './release-flow-governance'
+import {
   createReleaseExternalGatePlan,
   type ReleaseExternalGate,
   type ReleaseExternalGateCode
@@ -110,33 +114,25 @@ const SIGNED_CANDIDATE_BLOCKER_CODES = new Set<ReleaseCandidateMissing['code']>(
 
 type ReleaseSignedCandidateEvidenceCheck = keyof ReleaseCandidateChecks
 
-const SIGNED_CANDIDATE_EVIDENCE_CHECKS_BY_PLATFORM: Record<ReleasePlatform, ReleaseSignedCandidateEvidenceCheck[]> = {
-  windows: [
-    'build',
-    'governance',
-    'artifact',
-    'checksum',
-    'packageSmoke',
-    'branding',
-    'signature',
-    'updateMetadata'
-  ],
-  macos: [
-    'build',
-    'governance',
-    'artifact',
-    'checksum',
-    'packageSmoke',
-    'branding',
-    'signature',
-    'hardenedRuntime',
-    'nestedSignatures',
-    'notarization',
-    'staple',
-    'gatekeeper',
-    'updateMetadata'
-  ]
-}
+const SIGNED_CANDIDATE_EXCLUDED_DISTRIBUTION_CHECKS = new Set<ReleaseSignedCandidateEvidenceCheck>([
+  'installerSmoke'
+])
+
+const SIGNED_CANDIDATE_EVIDENCE_CHECK_ORDER: ReleaseSignedCandidateEvidenceCheck[] = [
+  'build',
+  'governance',
+  'artifact',
+  'checksum',
+  'packageSmoke',
+  'branding',
+  'signature',
+  'hardenedRuntime',
+  'nestedSignatures',
+  'notarization',
+  'staple',
+  'gatekeeper',
+  'updateMetadata'
+]
 
 export function createReleaseExternalGateStatus(
   readinessSummary: ReleaseReadinessSummary
@@ -344,7 +340,13 @@ function missingByCodes(
 export function listReleaseSignedCandidateEvidenceChecks(
   platform: ReleasePlatform
 ): ReleaseSignedCandidateEvidenceCheck[] {
-  return [...SIGNED_CANDIDATE_EVIDENCE_CHECKS_BY_PLATFORM[platform]]
+  const checks = [
+    ...listReleaseCandidateCommonGates().map(([check]) => check),
+    ...listReleaseCandidateDistributionGates(platform)
+      .map(([check]) => check)
+      .filter((check) => !SIGNED_CANDIDATE_EXCLUDED_DISTRIBUTION_CHECKS.has(check))
+  ]
+  return SIGNED_CANDIDATE_EVIDENCE_CHECK_ORDER.filter((check) => checks.includes(check))
 }
 
 function isSignedCandidateEvidenceSatisfied(summary: ReleaseReadinessPlatformSummary): boolean {

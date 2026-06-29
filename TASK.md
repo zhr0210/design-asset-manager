@@ -207,6 +207,28 @@ runtime, native dependency, packaging, path, or process differences.
   this changes internal release-governance metadata projection only and has
   no renderer surface.
 
+## Release Signed-Candidate Evidence Check Derivation Result
+
+- Release external-gate status now derives signed-candidate evidence checks
+  from shared release candidate common and distribution gate metadata instead
+  of maintaining a second Windows/macOS evidence-check table.
+- `installerSmoke` remains excluded from signed-candidate evidence and stays
+  owned by the distribution install-smoke gate. Prior exported check ordering,
+  release evidence shapes, workflow dispatch policy, signing gates, publish
+  gates, public scripts, renderer behavior, databases, model caches, and user
+  assets are unchanged.
+- Strengthened the focused release external-gate status test so the module
+  consumes `listReleaseCandidateCommonGates` and
+  `listReleaseCandidateDistributionGates`, while rejecting restoration of the
+  old platform-specific evidence-check table.
+- Focused release external-gate status, release candidate governance, release
+  flow governance, release readiness summary, release external-gate status
+  writer, and release evidence-bundle status tests, typecheck, production
+  build, docs sync, agent context check, forbidden-path advisory check, and
+  diff check pass. Electron/Playwright UI validation is intentionally skipped
+  because this changes internal release-governance metadata derivation only
+  and has no renderer surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into

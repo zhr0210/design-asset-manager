@@ -46,6 +46,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.16 | 2026-06-29 | Derived signed-candidate evidence checks from shared release candidate gate metadata while preserving prior check order. |
 | v1.4.15 | 2026-06-29 | Reused release platform target metadata for readiness/environment branding icon filenames instead of re-querying platform branding requirements. |
 | v1.4.14 | 2026-06-26 | Moved AI Runtime IPC host platform/architecture/home-dir reads behind one host-context helper. |
 | v1.4.13 | 2026-06-26 | Moved Llama planner default host platform/architecture/CPU/memory reads to the shared host-context helper. |
