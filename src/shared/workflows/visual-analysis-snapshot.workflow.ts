@@ -255,20 +255,16 @@ function projectTextColorPanel(input: {
   }
 }
 
+const TEXT_SKIP_REASON_MESSAGES: Record<string, string> = {
+  paddleocr_not_installed: '文字颜色分析已跳过：PaddleOCR 未安装',
+  rapidocr_not_installed: '文字颜色分析已跳过：RapidOCR 未安装',
+  disabled_by_user: '文字颜色分析已关闭',
+  provider_none: '文字颜色分析已关闭',
+  no_text_detected: '文字颜色分析已跳过：未检测到任何文字'
+}
+
 function projectTextSkipMessage(skipReason?: string): string {
-  switch (skipReason) {
-    case 'paddleocr_not_installed':
-      return '文字颜色分析已跳过：PaddleOCR 未安装'
-    case 'rapidocr_not_installed':
-      return '文字颜色分析已跳过：RapidOCR 未安装'
-    case 'disabled_by_user':
-    case 'provider_none':
-      return '文字颜色分析已关闭'
-    case 'no_text_detected':
-      return '文字颜色分析已跳过：未检测到任何文字'
-    default:
-      return '文字颜色分析已跳过'
-  }
+  return TEXT_SKIP_REASON_MESSAGES[skipReason ?? ''] ?? '文字颜色分析已跳过'
 }
 
 function projectTextForegroundSwatch(color: PersistedColorSwatch): VisualAnalysisTextForegroundSwatch {

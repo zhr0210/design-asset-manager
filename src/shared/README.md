@@ -58,6 +58,7 @@ Shared TypeScript types, constants, and IPC contracts used by main, preload, and
 - Library tag sidebar groups, shortcut filter states, and active query chip labels should use shared projection rather than library-component-local query parsing.
 - Asset card/detail/original-viewer/caption metadata labels, tag preview overflow, file-size labels, image spec labels, zoom labels, caption source labels, and dashboard recent-asset summaries should use shared projection rather than renderer-local formatting.
 - Visual Analysis Snapshot mappers should hide palette payload version drift, image/theme display summaries, OCR/text-box/readability summaries, text-color panel state rules, swatch role/copy/tooltip formatting, and panel metadata labels from renderer panels.
+- Visual Analysis Snapshot text-color skip reason copy should stay table-driven inside the shared workflow so renderer panels and persisted payload variants do not branch on skip codes.
 - Persisted Visual Analysis palette inputs may retain unknown extension fields for backward compatibility, but snapshot workflow code must narrow them from `unknown` and expose typed renderer-ready output instead of propagating `any`.
 - Doctor and Path Governance panels should use shared display projection for status labels, badge classes, check labels, platform labels, report dates, details fallback, managed-path summary, and path masking rather than renderer-local dictionaries.
 - Settings Migration panels and plans should use shared display projection for status badge styling/labels, plan/report status resolution, plan summary key-value labels, backup list formatting, and list empty labels rather than component-local status maps or size formatters.
@@ -79,6 +80,7 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.8.35 | 2026-06-29 | Moved Visual Analysis text-color skip reason copy into shared table-driven metadata. |
 | v1.8.34 | 2026-06-29 | Moved text-box provider execution planning into shared workflow metadata consumed by Color Palette OCR detection. |
 | v1.8.33 | 2026-06-29 | Moved OCR dependency selected-provider availability projection into a shared workflow. |
 | v1.8.32 | 2026-06-29 | Moved product text-box provider normalization into a shared workflow consumed by settings and AI Console. |

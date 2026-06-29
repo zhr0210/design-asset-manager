@@ -142,6 +142,26 @@ assert.equal(skippedSnapshot.textColorPanel.state, 'skipped')
 assert.equal(skippedSnapshot.textColorPanel.message, '文字颜色分析已跳过：未检测到任何文字')
 assert.equal(skippedSnapshot.textColorPanel.showTextPalette, false)
 
+const skipReasonMessages = [
+  ['paddleocr_not_installed', '文字颜色分析已跳过：PaddleOCR 未安装'],
+  ['rapidocr_not_installed', '文字颜色分析已跳过：RapidOCR 未安装'],
+  ['disabled_by_user', '文字颜色分析已关闭'],
+  ['provider_none', '文字颜色分析已关闭'],
+  ['unknown_reason', '文字颜色分析已跳过']
+] as const
+
+for (const [skipReason, message] of skipReasonMessages) {
+  const snapshot = createVisualAnalysisSnapshot({
+    colorPaletteJson: {
+      text_palette: {
+        status: 'skipped',
+        skipReason
+      }
+    }
+  })
+  assert.equal(snapshot.textColorPanel.message, message)
+}
+
 const failedSnapshot = createVisualAnalysisSnapshot({
   colorPaletteJson: {
     text_palette: {
@@ -227,6 +247,8 @@ assert.doesNotMatch(swatchSource, /hsl\[/)
 assert.doesNotMatch(swatchSource, /absolute z-20 bottom-24/)
 
 const workflowSource = await fs.readFile('src/shared/workflows/visual-analysis-snapshot.workflow.ts', 'utf8')
+assert.match(workflowSource, /TEXT_SKIP_REASON_MESSAGES/)
+assert.doesNotMatch(workflowSource, /switch \(skipReason\)/)
 assert.doesNotMatch(workflowSource, /\bany\b/)
 
 console.log('visual-analysis-snapshot passed')

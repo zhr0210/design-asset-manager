@@ -301,6 +301,19 @@ runtime, native dependency, packaging, path, or process differences.
   changes internal text-color provider execution planning only and has no
   renderer surface.
 
+## Visual Analysis Skip Reason Copy Metadata Result
+
+- Visual Analysis Snapshot text-color skipped-state copy now comes from one
+  shared skip-reason message table instead of a local switch.
+- Existing persisted palette parsing, renderer snapshot shape, skipped and
+  failed panel states, foreground/background swatch projection, IPC contracts,
+  databases, model caches, and user assets are unchanged.
+- Focused Visual Analysis Snapshot test, typecheck, production build, docs
+  sync, agent context check, forbidden-path advisory check, and diff check
+  pass. Electron/Playwright UI validation is intentionally skipped because
+  this changes shared copy projection internals only and does not alter the
+  rendered UI surface.
+
 ## Platform AI Branch Platform Helper Result
 
 - Moved Platform AI Branch Status branch-to-OS current-platform mapping into
