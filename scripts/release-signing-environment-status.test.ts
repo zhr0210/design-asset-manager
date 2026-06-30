@@ -4,7 +4,10 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { createReleaseEnvironmentManifest } from '../src/main/packaging/release-environment-manifest'
-import { createReleaseSigningEnvironmentStatus } from '../src/main/packaging/release-signing-environment-status'
+import {
+  createReleaseSigningEnvironmentStatus,
+  getReleaseSigningEnvironmentPlatformStatus
+} from '../src/main/packaging/release-signing-environment-status'
 
 const manifest = createReleaseEnvironmentManifest()
 const readyEvidence = {
@@ -44,6 +47,22 @@ assert.ok(ready.environments.some((environment) =>
   && environment.environment === 'release-signing-macos'
   && environment.requiredSecretNames.includes('APPLE_TEAM_ID')
 ))
+
+const mutableWindowsEnvironment = getReleaseSigningEnvironmentPlatformStatus(ready, 'windows')
+assert.ok(mutableWindowsEnvironment)
+mutableWindowsEnvironment.requiredSecretNames.pop()
+mutableWindowsEnvironment.secretNamesPresent.pop()
+mutableWindowsEnvironment.missing.push({
+  code: 'secret_name',
+  label: 'mutated',
+  detail: 'mutated'
+})
+const windowsEnvironment = getReleaseSigningEnvironmentPlatformStatus(ready, 'windows')
+assert.ok(windowsEnvironment)
+assert.ok(windowsEnvironment.requiredSecretNames.includes('WINDOWS_CSC_LINK'))
+assert.ok(windowsEnvironment.secretNamesPresent.includes('WINDOWS_CSC_LINK'))
+assert.equal(windowsEnvironment.missing.some((item) => item.label === 'mutated'), false)
+assert.equal(getReleaseSigningEnvironmentPlatformStatus(ready, 'macos')?.environment, 'release-signing-macos')
 
 const missingReviewEvidence = {
   schemaVersion: 1,
@@ -113,6 +132,8 @@ const source = await fs.readFile('src/main/packaging/release-signing-environment
 const writer = await fs.readFile('scripts/write-release-signing-environment-status.ts', 'utf8')
 const wrapper = await fs.readFile('scripts/write-release-signing-environment-status.mjs', 'utf8')
 assert.match(source, /createReleaseEnvironmentManifest/)
+assert.match(source, /function getReleaseSigningEnvironmentPlatformStatus/)
+assert.match(source, /function cloneReleaseSigningEnvironmentPlatformStatus/)
 assert.match(writer, /createReleaseSigningEnvironmentStatus/)
 assert.match(wrapper, /write-release-signing-environment-status\.ts/)
 assert.doesNotMatch(source, /process\.env|\bfs\.|\breadFile\b|\bcreateReadStream\b|\bexecFile\b|\bspawn\b|gh\s+api|gh\s+secret/)

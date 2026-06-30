@@ -1765,6 +1765,28 @@ and Release Update Metadata pass.
   applicable because this changes release-governance projection and CI hygiene
   metadata only and has no renderer surface.
 
+## Release Signing Environment Platform Status Result
+
+- Moved Release Signing Environment platform-status lookup behind the signing
+  environment status module's exported helper.
+- Release Signed Candidate Dispatch Status now consumes
+  `getReleaseSigningEnvironmentPlatformStatus` instead of hand-rolling a
+  platform `.find` over the environment status list. The helper clones
+  required secret names, present secret names, and missing entries so caller
+  mutation cannot leak back into the status result.
+- Existing dispatch input shape, dispatch status shape, ref gate, signing
+  approval gate, branding evidence gate, environment readiness semantics,
+  display-only policy, GitHub settings behavior, signing/branding asset
+  privacy, IPC/preload/renderer callers, runtime startup, downloads,
+  databases, model caches, and user assets are unchanged.
+- Focused Release Signing Environment Status, Release Signed Candidate
+  Dispatch Status, Release Platform Targets, and AI Runtime status workflow
+  boundary-ledger tests passed. Complete `ci:governance`, typecheck,
+  production build, docs sync, agent-context check, forbidden-path advisory
+  check, and diff check pass. UI screenshot validation is not applicable
+  because this changes release-governance projection only and has no renderer
+  surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

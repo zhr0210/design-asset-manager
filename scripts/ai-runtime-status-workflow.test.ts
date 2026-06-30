@@ -823,6 +823,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/packaging/release-flow-governance.ts',
   'src/main/packaging/release-publish-approval.ts',
   'src/main/packaging/release-signed-candidate-dispatch-status.ts',
+  'src/main/packaging/release-signing-environment-status.ts',
   'src/main/platform/platform-detector.ts',
   'src/main/runtime/runtime-profile-registry.ts',
   'src/main/runtime/runtime-profile-resolver.ts',

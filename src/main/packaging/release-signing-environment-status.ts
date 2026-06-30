@@ -87,6 +87,25 @@ export function createReleaseSigningEnvironmentStatus(
   }
 }
 
+export function getReleaseSigningEnvironmentPlatformStatus(
+  status: ReleaseSigningEnvironmentStatus,
+  platform: ReleaseSigningEnvironmentPlatformStatus['platform']
+): ReleaseSigningEnvironmentPlatformStatus | null {
+  const environment = status.environments.find((item) => item.platform === platform)
+  return environment ? cloneReleaseSigningEnvironmentPlatformStatus(environment) : null
+}
+
+function cloneReleaseSigningEnvironmentPlatformStatus(
+  environment: ReleaseSigningEnvironmentPlatformStatus
+): ReleaseSigningEnvironmentPlatformStatus {
+  return {
+    ...environment,
+    requiredSecretNames: [...environment.requiredSecretNames],
+    secretNamesPresent: [...environment.secretNamesPresent],
+    missing: environment.missing.map((item) => ({ ...item }))
+  }
+}
+
 function evaluateEnvironment(
   manifest: ReleaseEnvironmentManifestEntry,
   evidence: ReleaseSigningEnvironmentEvidence | null

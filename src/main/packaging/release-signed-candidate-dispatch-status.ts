@@ -5,7 +5,10 @@ import type {
 } from './release-flow-governance'
 import { getReleasePlatformTarget } from './release-flow-governance'
 import { createReleaseSignedCandidatePreflight } from './release-signed-candidate-preflight'
-import type { ReleaseSigningEnvironmentStatus } from './release-signing-environment-status'
+import {
+  getReleaseSigningEnvironmentPlatformStatus,
+  type ReleaseSigningEnvironmentStatus
+} from './release-signing-environment-status'
 
 export type ReleaseSignedCandidateDispatchStatusCode =
   | 'ready'
@@ -141,7 +144,7 @@ function missingSigningEnvironment(
     }]
   }
 
-  const environment = value.environments.find((item) => item.platform === platform)
+  const environment = getReleaseSigningEnvironmentPlatformStatus(value, platform)
   if (environment?.status === 'ready') return []
 
   return [{
