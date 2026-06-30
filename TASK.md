@@ -1892,6 +1892,25 @@ and Release Update Metadata pass.
   diff check pass. UI screenshot validation is not applicable because this
   changes release-governance target lookup only and has no renderer surface.
 
+## Runtime Profile Target Matcher Result
+
+- Added one shared Runtime Profile target matcher for profile support checks
+  and resolver rule checks.
+- Runtime Profile Registry and Runtime Profile Resolver now consume that
+  matcher instead of separately comparing platform and architecture fields.
+- The AI Runtime status workflow boundary ledger now confirms
+  `runtime-profile-registry.ts` and `runtime-profile-resolver.ts` no longer
+  contain detected platform-boundary comparisons.
+- Existing runtime profile ids, recommendation ordering, NVIDIA hint behavior,
+  external-inference fallback behavior, Doctor blocking semantics, IPC/preload/
+  renderer callers, runtime startup, downloads, databases, model caches, and
+  user assets are unchanged.
+- Focused Runtime Profile and AI Runtime status workflow boundary-ledger tests
+  passed. Complete governance, typecheck, production build, docs sync,
+  agent-context check, forbidden-path advisory check, and diff check pass. UI
+  screenshot validation is not applicable because this changes internal
+  runtime profile matching only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

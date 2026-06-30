@@ -6,6 +6,7 @@ import type { RuntimeProfileId } from '../src/shared/types/runtime-profile.types
 import { resolveBootstrapRecommendation } from '../src/main/bootstrap/bootstrap-profile-resolver'
 import { getFallbackProfile, listRuntimeProfiles } from '../src/main/runtime/runtime-profile-registry'
 import { resolveRuntimeProfileRecommendation } from '../src/main/runtime/runtime-profile-resolver'
+import { runtimeProfileRuleMatchesTarget, runtimeProfileSupportsTarget } from '../src/main/runtime/runtime-profile-selection'
 
 function reportWith(checks: DoctorReport['checks']): DoctorReport {
   return {
@@ -56,6 +57,12 @@ const okReport = reportWith([
 ])
 
 assert.equal(listRuntimeProfiles().length, 5)
+assert.equal(runtimeProfileSupportsTarget({ platform: 'all', arch: 'all' }, { platform: 'win32', arch: 'x64' }), true)
+assert.equal(runtimeProfileSupportsTarget({ platform: 'darwin', arch: 'arm64' }, { platform: 'darwin', arch: 'arm64' }), true)
+assert.equal(runtimeProfileSupportsTarget({ platform: 'darwin', arch: 'arm64' }, { platform: 'win32', arch: 'x64' }), false)
+assert.equal(runtimeProfileSupportsTarget({ platform: 'win32', arch: 'unknown' }, { platform: 'win32', arch: 'arm64' }), true)
+assert.equal(runtimeProfileRuleMatchesTarget({ platform: 'darwin' }, { platform: 'darwin', arch: 'x64' }), true)
+assert.equal(runtimeProfileRuleMatchesTarget({ platform: 'darwin', arch: 'arm64' }, { platform: 'darwin', arch: 'x64' }), false)
 
 const windowsNvidia = resolveRuntimeProfileRecommendation({
   platformInfo: { platform: 'win32', arch: 'x64' },
@@ -137,7 +144,13 @@ assert.equal(bootstrapRecommendation.recommendedProfileId, 'windows-cpu')
 const registryProfile: RuntimeRegistry = { ...registry(), selectedProfileId: 'windows-cpu', recommendedProfileId: 'windows-cpu' }
 assert.equal(registryProfile.selectedProfileId, 'windows-cpu')
 
+const registrySource = await fs.readFile('src/main/runtime/runtime-profile-registry.ts', 'utf8')
 const resolverSource = await fs.readFile('src/main/runtime/runtime-profile-resolver.ts', 'utf8')
+const selectionSource = await fs.readFile('src/main/runtime/runtime-profile-selection.ts', 'utf8')
+assert.match(registrySource, /runtimeProfileSupportsTarget\(profile, \{ platform, arch \}\)/)
+assert.match(resolverSource, /runtimeProfileRuleMatchesTarget\(rule, \{ platform, arch \}\)/)
+assert.match(resolverSource, /runtimeProfileRuleMatchesTarget\(rule, input\.platformInfo\)/)
+assert.match(selectionSource, /function runtimeProfilePartMatches/)
 assert.match(resolverSource, /const DEFAULT_RUNTIME_PROFILE_RULES: RuntimeProfilePlatformRule\[\]/)
 assert.match(resolverSource, /const HARDWARE_RUNTIME_PROFILE_RULES: RuntimeProfileHardwareRule\[\]/)
 assert.match(resolverSource, /const RUNTIME_PROFILE_REASON_MESSAGES: Partial<Record<RuntimeProfileId, string>>/)
@@ -153,6 +166,8 @@ assert.doesNotMatch(
   resolverSource,
   /if \(platform === 'win32'\) return 'windows-cpu'|if \(platform === 'darwin' && arch === 'arm64'\)|input\.platformInfo\.platform === 'win32'|input\.hardwareHints\?\.nvidiaGpu && input\.platformInfo\.platform|if \(profile\.id === 'windows-nvidia-cuda'\)|if \(profile\.id === 'macos-apple-silicon'\)/
 )
+assert.doesNotMatch(registrySource, /profile\.platform === 'all'|profile\.platform === platform|profile\.arch === arch/)
+assert.doesNotMatch(resolverSource, /rule\.platform === platform|rule\.platform !== input\.platformInfo\.platform|rule\.arch === arch|rule\.arch !== input\.platformInfo\.arch/)
 assert.doesNotMatch(resolverSource, /install\w*\s*\(/i)
 assert.doesNotMatch(resolverSource, /download\w*\s*\(/i)
 assert.doesNotMatch(resolverSource, /model\w*\s*\(/i)

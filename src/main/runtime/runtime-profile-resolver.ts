@@ -1,6 +1,7 @@
 import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
 import type { RuntimeProfile, RuntimeProfileId, RuntimeProfileRecommendation, RuntimeProfileResolverInput } from './runtime-profile.types'
 import { getProfilesForPlatform, getRuntimeProfile, listRuntimeProfiles } from './runtime-profile-registry'
+import { runtimeProfileRuleMatchesTarget } from './runtime-profile-selection'
 
 const BLOCKING_CHECK_IDS = new Set(['path', 'permission', 'system', 'node'])
 
@@ -56,9 +57,7 @@ function warningMessages(input: RuntimeProfileResolverInput): string[] {
 }
 
 export function getDefaultRuntimeProfileForPlatform(platform: PlatformName, arch: PlatformArch): RuntimeProfileId {
-  return DEFAULT_RUNTIME_PROFILE_RULES.find((rule) => {
-    return rule.platform === platform && (rule.arch === undefined || rule.arch === arch)
-  })?.profileId ?? 'external-inference-only'
+  return DEFAULT_RUNTIME_PROFILE_RULES.find((rule) => runtimeProfileRuleMatchesTarget(rule, { platform, arch }))?.profileId ?? 'external-inference-only'
 }
 
 export function rankRuntimeProfiles(input: RuntimeProfileResolverInput): RuntimeProfile[] {
@@ -117,8 +116,7 @@ function resolvePreferredProfileId(input: RuntimeProfileResolverInput): RuntimeP
 }
 
 function runtimeProfileHardwareRuleMatches(rule: RuntimeProfileHardwareRule, input: RuntimeProfileResolverInput): boolean {
-  if (rule.platform && rule.platform !== input.platformInfo.platform) return false
-  if (rule.arch && rule.arch !== input.platformInfo.arch) return false
+  if (!runtimeProfileRuleMatchesTarget(rule, input.platformInfo)) return false
   if (rule.requiresNvidiaGpu && !input.hardwareHints?.nvidiaGpu) return false
   return true
 }

@@ -820,8 +820,6 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/doctor/doctor-command-resolver.ts',
   'src/main/electron-main-host-context.ts',
   'src/main/platform/platform-detector.ts',
-  'src/main/runtime/runtime-profile-registry.ts',
-  'src/main/runtime/runtime-profile-resolver.ts',
   'src/main/services/ai-python-environment.ts',
   'src/main/services/ai-python-runtime-host-context.ts',
   'src/main/services/ai-runtime/ai-runtime-bootstrap.ts',
