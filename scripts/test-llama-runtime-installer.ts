@@ -91,6 +91,7 @@ async function main() {
 
   const plannerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-planner.ts', 'utf8')
   assert.match(plannerSource, /createLlamaRuntimeHostContext/)
+  assert.match(plannerSource, /platformAdapterMatchesCurrentPlatform/)
   assert.doesNotMatch(plannerSource, /process\.platform|process\.arch|os\.cpus|os\.totalmem/)
   assert.match(plannerSource, /const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule\[\]/)
   assert.match(plannerSource, /platform: 'win32'[\s\S]*accelerator: 'vulkan'/)
@@ -99,6 +100,8 @@ async function main() {
   assert.doesNotMatch(plannerSource, /rule\.platform === process\.platform/)
   assert.doesNotMatch(plannerSource, /process\.platform === 'win32' \? 'vulkan' : 'cpu'/)
   assert.match(plannerSource, /function llamaRuntimeRuleMatches/)
+  assert.match(plannerSource, /platformAdapterMatchesCurrentPlatform\(rule, \{ currentPlatform: input\.platform \?\? '' \}\)/)
+  assert.doesNotMatch(plannerSource, /rule\.platform\s*!==\s*input\.platform|rule\.platform\s*===\s*input\.platform/)
   assert.match(plannerSource, /const LLAMA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaRuntimePackagePatternRule\[\]/)
   assert.match(plannerSource, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*bin-macos-arm64/)
   assert.match(plannerSource, /platform: 'linux'[\s\S]*arch: 'arm64'[\s\S]*bin-linux-arm64/)

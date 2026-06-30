@@ -26,6 +26,26 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
+## Llama Runtime Planner Rule Matcher Result
+
+- Llama runtime install planning now reuses the shared main-process platform
+  adapter matcher when applying default accelerator and runtime package
+  selection rules.
+- Platform differences remain in the existing rule tables; architecture and
+  accelerator matching remain local to the planner because they are runtime
+  package dimensions rather than OS branch orchestration.
+- Existing Windows Vulkan fallback, macOS/Linux CPU fallback, CUDA runtime
+  package selection, GGUF/mmproj model candidate projection, mirror handling,
+  install roots, downloads, IPC contracts, renderer behavior, databases,
+  model caches, and user assets are unchanged.
+- Focused Llama installer tests now require the shared matcher and reject
+  restoring direct `rule.platform === input.platform` planner comparisons.
+  The AI Runtime status-workflow boundary ledger no longer lists the planner
+  as an unresolved platform boundary.
+- Electron/Playwright UI validation is intentionally skipped because this
+  changes internal main-process install-plan rule matching only and has no
+  renderer surface.
+
 ## AI Python Runtime Host Context Result
 
 - Added one AI Python Runtime host-context helper for current platform and

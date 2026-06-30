@@ -6,6 +6,7 @@ import type {
   LlamaRuntimeAccelerator,
   LlamaRuntimePackage
 } from '../../../shared/types/llama-runtime.types'
+import { platformAdapterMatchesCurrentPlatform } from '../../platform/platform-adapter-selection'
 import { createLlamaRuntimeHostContext } from './llama-runtime-host-context'
 
 export interface LlamaReleaseAsset {
@@ -283,7 +284,7 @@ function llamaRuntimeRuleMatches(
   rule: Partial<LlamaRuntimeRuleMatchInput>,
   input: LlamaRuntimeRuleMatchInput
 ): boolean {
-  if (rule.platform && rule.platform !== input.platform) return false
+  if (!platformAdapterMatchesCurrentPlatform(rule, { currentPlatform: input.platform ?? '' })) return false
   if (rule.arch && rule.arch !== input.arch) return false
   if (rule.accelerator && rule.accelerator !== input.accelerator) return false
   return true
