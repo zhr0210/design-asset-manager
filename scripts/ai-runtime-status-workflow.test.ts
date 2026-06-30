@@ -817,7 +817,6 @@ assert.deepEqual(rendererSharedPlatformBranchControlFlowFiles, [])
 assert.deepEqual(directProcessPlatformBranchFiles, [])
 assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/bootstrap/runtime-registry.validator.ts',
-  'src/main/doctor/doctor-command-resolver.ts',
   'src/main/electron-main-host-context.ts',
   'src/main/platform/platform-detector.ts',
   'src/main/services/ai-python-runtime-host-context.ts',

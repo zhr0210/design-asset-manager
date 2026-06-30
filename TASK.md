@@ -26,6 +26,22 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
+## Doctor Command Adapter Matcher Result
+
+- Doctor command resolution now reuses the shared main-process platform
+  adapter matcher for npm and Python launcher adapter selection.
+- Existing Windows `npm.cmd` and `py/python/python3` probe order,
+  non-Windows `npm` and `python3/python` probe order, timeout budgeting,
+  Doctor check behavior, IPC contracts, renderer behavior, databases, model
+  caches, and user assets are unchanged.
+- Focused Doctor command resolver tests now require the shared matcher and
+  reject restoring direct `candidate.platform === platform` comparisons.
+  The AI Runtime status-workflow boundary ledger no longer lists the Doctor
+  resolver as an unresolved platform boundary.
+- Electron/Playwright UI validation is intentionally skipped because this
+  changes internal main-process Doctor command selection only and has no
+  renderer surface.
+
 ## Llama Runtime Planner Rule Matcher Result
 
 - Llama runtime install planning now reuses the shared main-process platform

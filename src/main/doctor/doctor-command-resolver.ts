@@ -1,4 +1,5 @@
 import type { PlatformName } from '../../shared/types/platform.types'
+import { platformAdapterMatchesCurrentPlatform } from '../platform/platform-adapter-selection'
 
 export interface DoctorPlatformCommandAdapter {
   platform?: PlatformName
@@ -59,9 +60,7 @@ function resolveDoctorPlatformCommand<T extends { platform?: PlatformName }>(
   adapters: readonly T[],
   platform: PlatformName
 ): T {
-  const adapter = adapters.find((candidate) => (
-    candidate.platform === undefined || candidate.platform === platform
-  ))
+  const adapter = adapters.find((candidate) => platformAdapterMatchesCurrentPlatform(candidate, { currentPlatform: platform }))
 
   if (!adapter) {
     throw new Error(`No Doctor command adapter configured for ${platform} platform.`)
