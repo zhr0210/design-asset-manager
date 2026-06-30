@@ -26,6 +26,7 @@ import type {
 } from '../../../shared/types/llama-runtime.types'
 import { llamaRuntimeInstallProgressChannel } from '../../../shared/contracts/llama-runtime.contract'
 import type { AiBackendConfig } from '../../../shared/types/ai-backend.types'
+import { platformAdapterMatchesCurrentPlatform } from '../../platform/platform-adapter-selection'
 import { probeLlamaServer } from './llama-runtime-server-probe'
 import { createLlamaRuntimeHostContext, type LlamaRuntimeHostContext } from './llama-runtime-host-context'
 import { projectLlamaMacHardwareProfile } from './llama-runtime-macos-hardware-profile'
@@ -72,7 +73,9 @@ const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
 ]
 
 function resolveLlamaServerProcessAdapter(hostContext = createLlamaRuntimeHostContext()): LlamaServerProcessAdapter {
-  return LLAMA_SERVER_PROCESS_ADAPTERS.find((adapter) => !adapter.platform || adapter.platform === hostContext.platform) ?? LLAMA_SERVER_PROCESS_ADAPTERS[1]
+  return LLAMA_SERVER_PROCESS_ADAPTERS.find((adapter) =>
+    platformAdapterMatchesCurrentPlatform(adapter, { currentPlatform: hostContext.platform })
+  ) ?? LLAMA_SERVER_PROCESS_ADAPTERS[1]
 }
 
 export class LlamaRuntimeInstallService {
@@ -101,7 +104,9 @@ export class LlamaRuntimeInstallService {
 
   public async detectHardware(): Promise<LlamaHardwareProfile> {
     const hostContext = createLlamaRuntimeHostContext()
-    const adapter = LlamaRuntimeInstallService.hardwareDetectionAdapters.find((item) => !item.platform || item.platform === hostContext.platform)
+    const adapter = LlamaRuntimeInstallService.hardwareDetectionAdapters.find((item) =>
+      platformAdapterMatchesCurrentPlatform(item, { currentPlatform: hostContext.platform })
+    )
     return (adapter ?? LlamaRuntimeInstallService.hardwareDetectionAdapters[2]).detect(this, hostContext)
   }
 

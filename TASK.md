@@ -1949,6 +1949,27 @@ and Release Update Metadata pass.
   because this changes internal main-process adapter matching only and has no
   renderer surface.
 
+## Llama Runtime Installer Adapter Matcher Result
+
+- Llama Runtime Installer server-process adapter selection and hardware
+  detection adapter selection now reuse the shared main-process platform
+  adapter matcher.
+- The Windows llama-server executable, taskkill force-stop command,
+  PowerShell zip extractor, macOS/Linux unzip path, macOS hardware detection,
+  Windows nvidia-smi detection, generic fallback detection, install/start
+  lifecycle, IPC/preload/renderer callers, downloads, databases, model caches,
+  and user assets are unchanged.
+- The AI Runtime status workflow boundary ledger now confirms
+  `llama-runtime-install.service.ts` no longer contains detected
+  platform-boundary comparisons. Platform-specific installer adapter data
+  remains explicit and unchanged.
+- Focused Llama Runtime Governance, Llama Runtime Installer, and AI Runtime
+  status workflow boundary-ledger tests passed. Complete runtime-safety/
+  governance, typecheck, production build, docs sync, agent-context check,
+  forbidden-path advisory check, and diff check pass. UI screenshot validation
+  is not applicable because this changes internal installer adapter matching
+  only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

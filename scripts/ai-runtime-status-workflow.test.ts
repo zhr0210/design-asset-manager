@@ -824,7 +824,6 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/services/ai-runtime/ai-runtime-host-context.ts',
   'src/main/services/llama-runtime/llama-runtime-governance.ts',
   'src/main/services/llama-runtime/llama-runtime-host-context.ts',
-  'src/main/services/llama-runtime/llama-runtime-install.service.ts',
   'src/main/services/llama-runtime/llama-runtime-planner.ts',
   'src/shared/constants/platform-ai-runtime-metadata.constants.ts',
   'src/shared/types/doctor.types.ts',
