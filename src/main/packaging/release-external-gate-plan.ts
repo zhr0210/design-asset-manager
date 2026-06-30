@@ -1,5 +1,6 @@
 import type { ReleasePackagingArch, ReleasePlatform } from './release-flow-governance'
 import { createReleaseEnvironmentManifest } from './release-environment-manifest'
+import { releaseTargetPlatformMatches } from './release-target-selection'
 
 export type ReleaseExternalGateCode =
   | 'branding_assets'
@@ -156,7 +157,7 @@ export function getReleaseExternalGatePlatformPlan(
   plan: ReleaseExternalGatePlan,
   platform: ReleasePlatform
 ): ReleaseExternalGatePlatformPlan {
-  const platformPlan = plan.platforms.find((item) => item.platform === platform)
+  const platformPlan = plan.platforms.find((item) => releaseTargetPlatformMatches(item, { platform }))
   if (!platformPlan) {
     throw new Error(`Missing external gate plan for platform: ${platform}`)
   }

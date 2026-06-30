@@ -1855,6 +1855,25 @@ and Release Update Metadata pass.
   applicable because this changes release-governance target metadata lookup
   only and has no renderer surface.
 
+## Release External Gate Plan Target Lookup Result
+
+- Release External Gate Plan platform lookup now reuses the shared Release
+  Target platform matcher instead of hand-rolling a platform comparison inside
+  the plan lookup helper.
+- The AI Runtime status workflow boundary ledger now confirms
+  `release-external-gate-plan.ts` no longer contains detected platform-boundary
+  comparisons.
+- Existing external gate plan JSON shape, gate ordering, display-only policy,
+  environment manifest projection, release readiness/status consumers,
+  workflow order, IPC/preload/renderer callers, runtime startup, downloads,
+  databases, model caches, and user assets are unchanged.
+- Focused Release External Gate Plan, Release External Gate Status, and AI
+  Runtime status workflow boundary-ledger tests passed. Complete
+  `ci:governance`, typecheck, production build, docs sync, agent-context
+  check, forbidden-path advisory check, and diff check pass. UI screenshot
+  validation is not applicable because this changes release-governance target
+  lookup only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

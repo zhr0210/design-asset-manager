@@ -87,8 +87,10 @@ assert.equal(serialized.includes('WINDOWS_CSC_KEY_PASSWORD='), false)
 
 const source = await fs.readFile('src/main/packaging/release-external-gate-plan.ts', 'utf8')
 assert.match(source, /createReleaseEnvironmentManifest/)
+assert.match(source, /releaseTargetPlatformMatches\(item, \{ platform \}\)/)
 assert.match(source, /function getReleaseExternalGatePlatformPlan/)
 assert.match(source, /function cloneReleaseExternalGatePlatformPlan/)
+assert.doesNotMatch(source, /item\.platform === platform/)
 assert.doesNotMatch(
   source,
   /process\.env|\bfs\.|\breadFile\b|\bstat\b|\bcreateReadStream\b|\bexecFile\b|\bspawn\b/
