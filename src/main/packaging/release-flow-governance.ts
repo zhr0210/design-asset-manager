@@ -35,55 +35,68 @@ export interface ReleasePlatformTargetDefinition {
 
 export const RELEASE_PACKAGING_ARCHES: readonly ReleasePackagingArch[] = ['x64', 'arm64']
 
+const WINDOWS_RELEASE_PLATFORM_TARGET: ReleasePlatformTargetDefinition = {
+  platform: 'windows',
+  packagingTarget: 'windows-nsis',
+  runnerLabel: 'windows-2022',
+  distCommand: 'npm run dist:win',
+  supportedArches: RELEASE_PACKAGING_ARCHES,
+  defaultEvidenceBundleArch: 'x64',
+  signedCandidateEnvironment: 'release-signing-windows',
+  signedCandidateJobName: 'windows-signed-candidate',
+  signedCandidateArtifactNamePattern: 'design-asset-manager-windows-${arch}-signed-candidate',
+  requiredSecretNames: ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD'],
+  brandingIconFileName: 'icon.ico',
+  brandingEvidenceIconCheckId: 'windows_icon'
+}
+
+const MACOS_RELEASE_PLATFORM_TARGET: ReleasePlatformTargetDefinition = {
+  platform: 'macos',
+  packagingTarget: 'macos-dmg',
+  runnerLabel: 'macos-latest',
+  distCommand: 'npm run dist:mac',
+  supportedArches: RELEASE_PACKAGING_ARCHES,
+  defaultEvidenceBundleArch: 'arm64',
+  signedCandidateEnvironment: 'release-signing-macos',
+  signedCandidateJobName: 'macos-signed-candidate',
+  signedCandidateArtifactNamePattern: 'design-asset-manager-macos-${arch}-signed-candidate',
+  requiredSecretNames: [
+    'MACOS_CSC_LINK',
+    'MACOS_CSC_KEY_PASSWORD',
+    'APPLE_ID',
+    'APPLE_APP_SPECIFIC_PASSWORD',
+    'APPLE_TEAM_ID'
+  ],
+  brandingIconFileName: 'icon.icns',
+  brandingEvidenceIconCheckId: 'macos_icon'
+}
+
 export const RELEASE_PLATFORM_TARGETS: readonly ReleasePlatformTargetDefinition[] = [
-  {
-    platform: 'windows',
-    packagingTarget: 'windows-nsis',
-    runnerLabel: 'windows-2022',
-    distCommand: 'npm run dist:win',
-    supportedArches: RELEASE_PACKAGING_ARCHES,
-    defaultEvidenceBundleArch: 'x64',
-    signedCandidateEnvironment: 'release-signing-windows',
-    signedCandidateJobName: 'windows-signed-candidate',
-    signedCandidateArtifactNamePattern: 'design-asset-manager-windows-${arch}-signed-candidate',
-    requiredSecretNames: ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD'],
-    brandingIconFileName: 'icon.ico',
-    brandingEvidenceIconCheckId: 'windows_icon'
-  },
-  {
-    platform: 'macos',
-    packagingTarget: 'macos-dmg',
-    runnerLabel: 'macos-latest',
-    distCommand: 'npm run dist:mac',
-    supportedArches: RELEASE_PACKAGING_ARCHES,
-    defaultEvidenceBundleArch: 'arm64',
-    signedCandidateEnvironment: 'release-signing-macos',
-    signedCandidateJobName: 'macos-signed-candidate',
-    signedCandidateArtifactNamePattern: 'design-asset-manager-macos-${arch}-signed-candidate',
-    requiredSecretNames: [
-      'MACOS_CSC_LINK',
-      'MACOS_CSC_KEY_PASSWORD',
-      'APPLE_ID',
-      'APPLE_APP_SPECIFIC_PASSWORD',
-      'APPLE_TEAM_ID'
-    ],
-    brandingIconFileName: 'icon.icns',
-    brandingEvidenceIconCheckId: 'macos_icon'
-  }
+  WINDOWS_RELEASE_PLATFORM_TARGET,
+  MACOS_RELEASE_PLATFORM_TARGET
 ]
 
+const RELEASE_PLATFORM_TARGETS_BY_PLATFORM: Readonly<Record<ReleasePlatform, ReleasePlatformTargetDefinition>> = {
+  windows: WINDOWS_RELEASE_PLATFORM_TARGET,
+  macos: MACOS_RELEASE_PLATFORM_TARGET
+}
+
 export function listReleasePlatformTargets(): ReleasePlatformTargetDefinition[] {
-  return RELEASE_PLATFORM_TARGETS.map((target) => ({
-    ...target,
-    supportedArches: [...target.supportedArches],
-    requiredSecretNames: [...target.requiredSecretNames]
-  }))
+  return RELEASE_PLATFORM_TARGETS.map(cloneReleasePlatformTarget)
 }
 
 export function getReleasePlatformTarget(platform: ReleasePlatform): ReleasePlatformTargetDefinition {
-  const target = RELEASE_PLATFORM_TARGETS.find((item) => item.platform === platform)
+  const target = RELEASE_PLATFORM_TARGETS_BY_PLATFORM[platform]
   if (!target) throw new Error(`Unsupported release platform: ${platform}`)
-  return target
+  return cloneReleasePlatformTarget(target)
+}
+
+function cloneReleasePlatformTarget(target: ReleasePlatformTargetDefinition): ReleasePlatformTargetDefinition {
+  return {
+    ...target,
+    supportedArches: [...target.supportedArches],
+    requiredSecretNames: [...target.requiredSecretNames]
+  }
 }
 
 export interface ReleaseFlowGovernancePlan {

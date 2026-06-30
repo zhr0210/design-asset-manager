@@ -25,6 +25,10 @@ assert.equal(windows.signedCandidateJobName, 'windows-signed-candidate')
 assert.equal(windows.brandingIconFileName, 'icon.ico')
 assert.equal(windows.brandingEvidenceIconCheckId, 'windows_icon')
 assert.deepEqual(windows.requiredSecretNames, ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD'])
+;(windows.requiredSecretNames as string[]).pop()
+;(windows.supportedArches as string[]).pop()
+assert.deepEqual(getReleasePlatformTarget('windows').requiredSecretNames, ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_KEY_PASSWORD'])
+assert.deepEqual(getReleasePlatformTarget('windows').supportedArches, RELEASE_PACKAGING_ARCHES)
 
 const macos = getReleasePlatformTarget('macos')
 assert.equal(macos.packagingTarget, 'macos-dmg')
@@ -90,6 +94,12 @@ for (const file of filesThatShouldConsumeRegistry) {
   assert.doesNotMatch(source, /'release-signing-windows'\s*:\s*'release-signing-macos'/)
   assert.doesNotMatch(source, /'windows-signed-candidate'\s*:\s*'macos-signed-candidate'/)
 }
+
+const governanceSource = await fs.readFile('src/main/packaging/release-flow-governance.ts', 'utf8')
+assert.match(governanceSource, /RELEASE_PLATFORM_TARGETS_BY_PLATFORM/)
+assert.match(governanceSource, /function cloneReleasePlatformTarget/)
+assert.doesNotMatch(governanceSource, /RELEASE_PLATFORM_TARGETS\.find/)
+assert.doesNotMatch(governanceSource, /item\.platform === platform/)
 
 const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8')) as {
   scripts?: Record<string, string>

@@ -1832,6 +1832,29 @@ and Release Update Metadata pass.
   pass. UI screenshot validation is not applicable because this changes
   release-governance target matching only and has no renderer surface.
 
+## Release Platform Target Registry Result
+
+- Split release platform target metadata into explicit Windows and macOS target
+  records, then exposed them through one platform-keyed registry.
+- `getReleasePlatformTarget` now uses the registry instead of scanning
+  `RELEASE_PLATFORM_TARGETS` with a platform comparison. Both target listing
+  and single-target lookup now return cloned array fields, so caller mutation
+  cannot leak back into the shared registry.
+- The AI Runtime status workflow boundary ledger now confirms
+  `release-flow-governance.ts` no longer contains detected platform-boundary
+  comparisons.
+- Existing release platform target values, release matrix generation,
+  signed-candidate environment/job metadata, branding metadata, distribution
+  gate metadata, JSON shapes, workflow order, IPC/preload/renderer callers,
+  runtime startup, downloads, databases, model caches, and user assets are
+  unchanged.
+- Focused Release Platform Targets, Release Flow Governance, and AI Runtime
+  status workflow boundary-ledger tests passed. Complete `ci:governance`,
+  typecheck, production build, docs sync, agent-context check, forbidden-path
+  advisory check, and diff check pass. UI screenshot validation is not
+  applicable because this changes release-governance target metadata lookup
+  only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model
