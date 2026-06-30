@@ -5,6 +5,7 @@ import {
   type AiPythonEnvironmentHost,
   type AiPythonEnvironmentIo
 } from '../src/main/services/ai-python-environment'
+import { platformAdapterMatchesCurrentPlatform } from '../src/main/platform/platform-adapter-selection'
 
 interface FakeIoOptions {
   existing?: string[]
@@ -154,8 +155,12 @@ assert.equal(
 const linux = new AiPythonEnvironment(host({ platform: 'linux' }), fakeIo())
 assert.equal(linux.resolveManagedRuntime().pythonPath, '/managed/runtime/macos-ai-python/.venv/bin/python')
 assert.equal(linux.resolveBasePythonExecutable(), 'python')
+assert.equal(platformAdapterMatchesCurrentPlatform({ platform: 'win32' }, { currentPlatform: 'win32' }), true)
+assert.equal(platformAdapterMatchesCurrentPlatform({ platform: 'darwin' }, { currentPlatform: 'win32' }), false)
+assert.equal(platformAdapterMatchesCurrentPlatform({}, { currentPlatform: 'linux' }), true)
 
 const coreSource = await fs.readFile('src/main/services/ai-python-environment.ts', 'utf8')
+const platformAdapterSelectionSource = await fs.readFile('src/main/platform/platform-adapter-selection.ts', 'utf8')
 const adapterSource = await fs.readFile('src/main/services/ai-python-runtime.service.ts', 'utf8')
 const hostContextSource = await fs.readFile('src/main/services/ai-python-runtime-host-context.ts', 'utf8')
 const dependencySource = await fs.readFile('src/main/services/ocr-dependency.service.ts', 'utf8')
@@ -164,10 +169,13 @@ const healthcheckSource = await fs.readFile('src/main/services/ocr-healthcheck.s
 assert.doesNotMatch(coreSource, /from ['"]electron['"]|child_process|node:child_process|process\.platform|process\.env|execSync|spawn\s*\(/)
 assert.match(coreSource, /AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS/)
 assert.match(coreSource, /resolveAiPythonEnvironmentPlatformAdapter/)
+assert.match(coreSource, /platformAdapterMatchesCurrentPlatform\(candidate, \{ currentPlatform: platform \}\)/)
+assert.match(platformAdapterSelectionSource, /function platformAdapterMatchesCurrentPlatform/)
 assert.match(coreSource, /resolveBasePythonExecutable: resolveWindowsBasePythonExecutable/)
 assert.match(coreSource, /resolveBasePythonExecutable: resolveMacOSHomebrewPythonExecutable/)
 assert.match(coreSource, /resolveBasePythonExecutable: \(\{ defaultPythonExecutable \}\) => defaultPythonExecutable\(\)/)
 assert.doesNotMatch(coreSource, /host\.platform === 'win32' \? path\.win32 : path\.posix/)
+assert.doesNotMatch(coreSource, /!candidate\.platform \|\| candidate\.platform === platform/)
 assert.doesNotMatch(coreSource, /MANAGED_PYTHON_PATH_ADAPTERS/)
 assert.doesNotMatch(coreSource, /const resolvers: BasePythonResolver\[\]/)
 assert.match(adapterSource, /new AiPythonEnvironment/)

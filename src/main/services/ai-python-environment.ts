@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { platformAdapterMatchesCurrentPlatform } from '../platform/platform-adapter-selection'
 
 export interface ManagedAiPythonRuntime {
   runtimeDir: string
@@ -195,9 +196,9 @@ export class AiPythonEnvironment {
 }
 
 function resolveAiPythonEnvironmentPlatformAdapter(platform: NodeJS.Platform | string): AiPythonEnvironmentPlatformAdapter {
-  return AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS.find((candidate) => {
-    return !candidate.platform || candidate.platform === platform
-  })!
+  return AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS.find((candidate) =>
+    platformAdapterMatchesCurrentPlatform(candidate, { currentPlatform: platform })
+  )!
 }
 
 function resolveWindowsBasePythonExecutable(input: BasePythonResolverInput): string | null {

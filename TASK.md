@@ -1926,6 +1926,29 @@ and Release Update Metadata pass.
   diff check pass. UI screenshot validation is not applicable because this
   changes internal runtime bootstrap matching only and has no renderer surface.
 
+## Main Platform Adapter Matcher Result
+
+- Added one shared main-process platform adapter matcher for optional
+  platform-specific adapter records with a fallback adapter.
+- AI Python Environment and AI Runtime Bootstrap platform adapter selection
+  now consume that matcher instead of each hand-rolling
+  `!candidate.platform || candidate.platform === ...` comparisons.
+- The AI Runtime status workflow boundary ledger now confirms
+  `ai-python-environment.ts` and `ai-runtime-bootstrap.ts` no longer contain
+  detected platform-boundary comparisons. Their platform-specific adapter data
+  remains explicit and unchanged.
+- Existing managed AI Python paths, Windows Python discovery, macOS Homebrew
+  Python fallback, Python Worker auto-start policy, runtime cache path layout,
+  IPC/preload/renderer callers, runtime startup behavior, downloads,
+  databases, model caches, and user assets are unchanged.
+- Focused AI Python Environment, AI Runtime Bootstrap, AI Runtime IPC contract,
+  macOS dependency installer contract, and AI Runtime status workflow
+  boundary-ledger tests passed. Complete runtime-safety/governance, typecheck,
+  production build, docs sync, agent-context check, forbidden-path advisory
+  check, and diff check pass. UI screenshot validation is not applicable
+  because this changes internal main-process adapter matching only and has no
+  renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

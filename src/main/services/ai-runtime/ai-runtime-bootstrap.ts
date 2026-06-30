@@ -4,6 +4,7 @@ import { createWindowsAiBranchRuntimeMetadata } from '../../../shared/constants/
 import type { AiRuntimeOperationResult, AiRuntimeProvider, PythonWorkerRuntimeConfig } from '../../../shared/types/ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../../../shared/types/platform.types'
 import type { RuntimeProfileId } from '../../../shared/types/runtime-profile.types'
+import { platformAdapterMatchesCurrentPlatform } from '../../platform/platform-adapter-selection'
 import { runtimeProfileRuleMatchesTarget } from '../../runtime/runtime-profile-selection'
 import { AiRuntimeManager } from './ai-runtime-manager'
 import { DisabledAiRuntimeProvider } from './providers/disabled-ai-runtime.provider'
@@ -107,9 +108,9 @@ function resolvePlatformAiBranchProviderProfileId(
 }
 
 function resolveAiRuntimeBootstrapPlatformAdapter(platform: PlatformName): AiRuntimeBootstrapPlatformAdapter {
-  return AI_RUNTIME_BOOTSTRAP_PLATFORM_ADAPTERS.find((candidate) => {
-    return !candidate.platform || candidate.platform === platform
-  })!
+  return AI_RUNTIME_BOOTSTRAP_PLATFORM_ADAPTERS.find((candidate) =>
+    platformAdapterMatchesCurrentPlatform(candidate, { currentPlatform: platform })
+  )!
 }
 
 function resolveAiRuntimeAppDataRoot(adapter: AiRuntimeBootstrapPlatformAdapter, homeDir: string): string {
