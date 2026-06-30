@@ -822,7 +822,6 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/services/ai-python-runtime-host-context.ts',
   'src/main/services/ai-runtime/ai-runtime-host-context.ts',
   'src/main/services/llama-runtime/llama-runtime-host-context.ts',
-  'src/shared/constants/platform-ai-runtime-metadata.constants.ts',
   'src/shared/types/doctor.types.ts',
   'src/shared/workflows/ai-runtime-status.workflow.ts'
 ])
@@ -860,6 +859,8 @@ assert.match(platformAiRuntimeMetadataConstantsSource, /export const PLATFORM_AI
 assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformAiBranchCurrentPlatform/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformAiWorkerProbeConnectionMarker/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function isPlatformName/)
+assert.match(platformAiRuntimeMetadataConstantsSource, /platformAdapterMatchesCurrentPlatform\(\{ platform \}, \{ currentPlatform: expectedPlatform \}\)/)
+assert.doesNotMatch(platformAiRuntimeMetadataConstantsSource, /platform\s*===\s*expectedPlatform|platform\s*!==\s*expectedPlatform/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformFallbackStatus/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformEvidenceStatus/)
 assert.match(platformAiRuntimeMetadataConstantsSource, /function currentPlatformLaneStatus/)

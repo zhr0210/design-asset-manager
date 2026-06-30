@@ -26,6 +26,23 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
+## Platform AI Metadata Matcher Result
+
+- Platform AI runtime metadata now reuses the shared platform adapter matcher
+  for platform-name equality instead of keeping a local `platform === ...`
+  comparison in shared constants.
+- Existing macOS/windows branch platform mapping, Worker probe connection
+  marker rules, lane status projection, Platform AI Branch Status IPC
+  contracts, renderer behavior, databases, model caches, and user assets are
+  unchanged.
+- Focused AI Runtime status-workflow tests now require the shared matcher and
+  reject restoring direct `platform === expectedPlatform` comparisons. The
+  boundary ledger no longer lists Platform AI metadata constants as an
+  unresolved platform boundary.
+- Electron/Playwright UI validation is intentionally skipped because this
+  changes shared metadata predicate internals only and does not alter the
+  rendered UI surface.
+
 ## Shared Platform Adapter Matcher Result
 
 - Moved the platform adapter matcher into shared workflow code and kept the

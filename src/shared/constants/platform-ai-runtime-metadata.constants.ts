@@ -5,6 +5,7 @@ import type {
 } from '../types/platform-ai-runtime.types'
 import type { PlatformAiBranch } from '../types/platform-ai-branch-status.types'
 import type { PlatformArch, PlatformName } from '../types/platform.types'
+import { platformAdapterMatchesCurrentPlatform } from '../workflows/platform-adapter-selection.workflow'
 
 export const PLATFORM_AI_BRANCH_PLATFORMS: Record<PlatformAiBranch, PlatformName> = {
   macos: 'darwin',
@@ -37,7 +38,7 @@ export function createAiRuntimeCapability(
 }
 
 export function isPlatformName(platform: PlatformName, expectedPlatform: PlatformName): boolean {
-  return platform === expectedPlatform
+  return platformAdapterMatchesCurrentPlatform({ platform }, { currentPlatform: expectedPlatform })
 }
 
 export function isPlatformAiBranchCurrentPlatform(platformBranch: PlatformAiBranch, currentPlatform: PlatformName): boolean {
