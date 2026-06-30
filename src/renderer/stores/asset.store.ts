@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import type { AssetTaggingModelId } from '../../shared/workflows/asset-tagging.workflow'
+import { classifyAiTaskStatus, isAiTaskTerminalStatus } from '../../shared/workflows/ai-task-status.workflow'
 
 export interface Asset {
   id: string
@@ -128,11 +130,8 @@ interface AssetState {
   updateAssetCaption: (assetId: string, caption: string) => Promise<void>
   resetAssetCaptionEdited: (assetId: string) => Promise<void>
 
-  // Mock AI Suggestions pipeline
-  generateMockAiSuggestions: (assetId: string, modelsToRun?: string[]) => Promise<{ success: boolean; error?: string }>
-
-  // Qwen-VL Senior Deep Analysis
-  generateDeepAnalysis: (assetId: string) => Promise<void>
+  // Real AI tagging pipeline
+  generateAiSuggestions: (assetId: string, modelsToRun?: readonly AssetTaggingModelId[]) => Promise<{ success: boolean; error?: string }>
 
   // Qwen3-VL Advanced Prompt Reverse
   runPromptReverse: (assetId: string, modelId: string, modelPath: string, options?: { promptTemplateId?: string; promptTemplateText?: string }) => Promise<any>
@@ -580,7 +579,7 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   // Real AI tagging trigger. Mock fallbacks are intentionally blocked in product UI.
-  generateMockAiSuggestions: async (assetId, modelsToRun?: string[]) => {
+  generateAiSuggestions: async (assetId, modelsToRun) => {
     if (!api) {
       return { success: false, error: 'Electron API is unavailable.' }
     }
@@ -615,18 +614,19 @@ export const useAssetStore = create<AssetState>((set, get) => ({
         const updatedAsset = get().assets.find((a: Asset) => a.id === assetId)
         if (updatedAsset) {
           finalStatus = updatedAsset.aiTagStatus
-          if (finalStatus === 'synced' || finalStatus === 'completed' || finalStatus === 'failed') {
+          if (isAiTaskTerminalStatus(finalStatus)) {
             break
           }
         }
         await new Promise(resolve => setTimeout(resolve, 500))
       }
 
-      if (finalStatus === 'failed') {
+      const finalClassification = classifyAiTaskStatus(finalStatus)
+      if (finalClassification.isFailure) {
         return { success: false, error: '真实 AI 打标任务失败，请检查 Python Worker 日志和模型依赖。' }
       }
 
-      if (finalStatus !== 'synced' && finalStatus !== 'completed') {
+      if (!finalClassification.isSuccess) {
         return { success: false, error: '真实 AI 打标任务超时，未写入 mock 标签。' }
       }
 
@@ -640,45 +640,6 @@ export const useAssetStore = create<AssetState>((set, get) => ({
       await get().loadAssetTags(assetId)
       await get().loadAssets()
       await get().loadTags()
-    }
-  },
-
-  generateDeepAnalysis: async (assetId: string) => {
-    if (api) {
-      try {
-        const asset = get().assets.find((a: Asset) => a.id === assetId)
-        if (!asset) return
-
-        console.log('[Store] Dispatching generateDeepAnalysis to Qwen-VL analysis worker...')
-        const res = await api.aiAnalysisGenerate(assetId, asset.filePath)
-        
-        if (res && res.success) {
-          // Trigger immediate batch processing
-          await api.aiProcessBatch()
-          
-          // Poll the asset status from SQLite until synced or failed
-          let isComplete = false
-          const startTime = Date.now()
-          while (!isComplete && (Date.now() - startTime < 45000)) {
-            await get().loadAssets()
-            const updatedAsset = get().assets.find((a: Asset) => a.id === assetId)
-            if (updatedAsset) {
-              const status = updatedAsset.aiAnalysisStatus
-              if (status === 'synced' || status === 'completed' || status === 'failed') {
-                isComplete = true
-                break
-              }
-            }
-            await new Promise(resolve => setTimeout(resolve, 500))
-          }
-        }
-      } catch (err) {
-        console.error('[Store] Failed to generate Qwen-VL deep analysis:', err)
-      } finally {
-        await get().loadAssetTags(assetId)
-        await get().loadAssets()
-        await get().loadTags()
-      }
     }
   },
 

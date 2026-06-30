@@ -14,25 +14,31 @@ import {
   Sun,
   Tag
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useDownloadStore } from '../../stores/download.store'
 import { useUIStore } from '../../stores/ui.store'
+import { projectDownloadTaskSummaryDisplay } from '../../../shared/workflows/download-status.workflow'
+import {
+  APP_NAVIGATION_ITEMS,
+  type AppRouteId
+} from '../../../shared/workflows/app-navigation.workflow'
 
-const navItems = [
-  { to: '/dashboard', label: '仪表盘', icon: LayoutDashboard },
-  { to: '/sites', label: '网站账号', icon: Globe },
-  { to: '/browser', label: '素材浏览器', icon: Compass },
-  { to: '/search', label: '传统搜索', icon: Search },
-  { to: '/downloads', label: '下载队列', icon: DownloadCloud, hasBadge: true },
-  { to: '/library', label: '本地素材库', icon: ImageIcon },
-  { to: '/tag-manager', label: '标签管理', icon: Tag },
-  { to: '/ai-console', label: 'AI 控制台', icon: Cpu },
-  { to: '/settings', label: '设置', icon: Settings }
-]
+const navIcons: Record<AppRouteId, LucideIcon> = {
+  dashboard: LayoutDashboard,
+  sites: Globe,
+  browser: Compass,
+  search: Search,
+  downloads: DownloadCloud,
+  library: ImageIcon,
+  'tag-manager': Tag,
+  'ai-console': Cpu,
+  settings: Settings
+}
 
 export default function Sidebar() {
   const [isHovered, setIsHovered] = useState(false)
   const tasks = useDownloadStore((s) => s.tasks)
-  const downloadingCount = tasks.filter((task) => task.status === 'downloading' || task.status === 'waiting').length
+  const downloadSummary = projectDownloadTaskSummaryDisplay(tasks)
   const { theme, toggleTheme } = useUIStore()
 
   return (
@@ -54,14 +60,14 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
-        {navItems.map((item) => {
-          const Icon = item.icon
-          const badge = item.hasBadge && downloadingCount > 0 ? downloadingCount : undefined
+        {APP_NAVIGATION_ITEMS.map((item) => {
+          const Icon = navIcons[item.id]
+          const badge = item.showDownloadBadge && downloadSummary.activeCount > 0 ? downloadSummary.activeCount : undefined
           return (
             <NavLink
-              key={item.to}
-              to={item.to}
-              title={item.label}
+              key={item.id}
+              to={item.path}
+              title={item.sidebarLabel}
               className={({ isActive }) =>
                 `flex min-h-[40px] items-center justify-between rounded-xl px-3.5 py-2.5 text-[13.5px] font-semibold transition-premium ${
                   isActive
@@ -72,7 +78,7 @@ export default function Sidebar() {
             >
               <div className="flex min-w-0 items-center gap-3">
                 <Icon className="h-4.5 w-4.5 shrink-0 stroke-[2]" />
-                <span className="truncate">{item.label}</span>
+                <span className="truncate">{item.sidebarLabel}</span>
               </div>
               {badge !== undefined && <span className="ml-2 rounded-full bg-brand-500 px-2 py-0.5 text-[10.5px] font-bold text-white">{badge}</span>}
             </NavLink>

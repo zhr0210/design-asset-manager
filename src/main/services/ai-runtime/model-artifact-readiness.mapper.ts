@@ -1,0 +1,307 @@
+import type { CooperativeModel } from '../../../shared/types/cooperative-model.types'
+import type {
+  AiModelArtifactReadiness,
+  WorkerModelStatusSnapshot
+} from '../../../shared/types/model-artifact-readiness.types'
+import type {
+  PlatformAiRuntimeLaneId,
+  PlatformAiWorkflow
+} from '../../../shared/types/platform-ai-branch-status.types'
+import type { LlamaInstallStatus, LlamaServerTestResult } from '../../../shared/types/llama-runtime.types'
+import type {
+  AiRuntimeOnnxModelLoadProbeResponse
+} from '../../../shared/contracts/ai-runtime.contract'
+import type { OcrRealEvidenceProbeResponse } from '../../../shared/types/ocr-real-evidence.types'
+
+type LlamaLocalModelLike = {
+  id: string
+  name?: string
+  filename?: string
+  isDownloaded?: boolean
+  isDownloading?: boolean
+  ggufDownloadState?: 'missing' | 'downloading' | 'downloaded' | string
+  mmprojDownloadState?: 'missing' | 'downloading' | 'downloaded' | string
+}
+
+interface ModelWorkflowRoute {
+  workflow: PlatformAiWorkflow
+  runtimeLane: PlatformAiRuntimeLaneId
+}
+
+const PYTHON_ACCELERATOR_RUNTIME_LANES = [
+  'python_mps',
+  'python_cuda'
+] as const satisfies readonly PlatformAiRuntimeLaneId[]
+
+const LLAMA_ACCELERATOR_RUNTIME_LANES = [
+  'llama_metal',
+  'llama_cuda'
+] as const satisfies readonly PlatformAiRuntimeLaneId[]
+
+function acceleratedRuntimeRoutes(
+  workflow: PlatformAiWorkflow,
+  runtimeLanes: readonly PlatformAiRuntimeLaneId[]
+): ModelWorkflowRoute[] {
+  return runtimeLanes.map((runtimeLane) => ({ workflow, runtimeLane }))
+}
+
+const COOPERATIVE_MODEL_WORKFLOW_BY_FAMILY: Record<string, ModelWorkflowRoute[]> = {
+  ram: acceleratedRuntimeRoutes('ai_tag_task', PYTHON_ACCELERATOR_RUNTIME_LANES),
+  florence2: [
+    ...acceleratedRuntimeRoutes('ai_tag_task', PYTHON_ACCELERATOR_RUNTIME_LANES),
+    ...acceleratedRuntimeRoutes('ocr_text_box', PYTHON_ACCELERATOR_RUNTIME_LANES)
+  ],
+  clip: [
+    ...acceleratedRuntimeRoutes('ai_tag_task', PYTHON_ACCELERATOR_RUNTIME_LANES),
+    { workflow: 'search_embedding', runtimeLane: 'onnx_runtime' },
+    ...acceleratedRuntimeRoutes('search_embedding', PYTHON_ACCELERATOR_RUNTIME_LANES)
+  ],
+  wd_tagger: [{ workflow: 'ai_tag_task', runtimeLane: 'onnx_runtime' }]
+}
+
+export function createCooperativeModelArtifactReadiness(models: CooperativeModel[]): AiModelArtifactReadiness[] {
+  return models.flatMap((model) => {
+    const routes = COOPERATIVE_MODEL_WORKFLOW_BY_FAMILY[model.modelFamily] ?? []
+    return routes.map((route) => ({
+      workflow: route.workflow,
+      runtimeLane: route.runtimeLane,
+      artifactId: model.id,
+      label: model.displayName,
+      source: 'cooperative_model' as const,
+      state: model.isDownloaded ? 'ready_to_load' as const : 'artifact_missing' as const,
+      missing: model.isDownloaded
+        ? []
+        : [{
+            id: model.id,
+            label: `${model.displayName} 权重未就绪`,
+            kind: 'model_artifact' as const
+          }]
+    }))
+  })
+}
+
+export function createLlamaLocalModelArtifactReadiness(models: LlamaLocalModelLike[]): AiModelArtifactReadiness[] {
+  return models.flatMap((model) => {
+    const label = model.name || model.filename || model.id
+    const state = model.isDownloaded
+      ? 'ready_to_load'
+      : model.isDownloading || model.ggufDownloadState === 'downloading' || model.mmprojDownloadState === 'downloading'
+        ? 'artifact_downloading'
+        : 'artifact_missing'
+
+    return LLAMA_ACCELERATOR_RUNTIME_LANES.map((runtimeLane) => ({
+      workflow: 'ai_prompt_task' as const,
+      runtimeLane,
+      artifactId: model.id,
+      label,
+      source: 'llama_local_model' as const,
+      state,
+      missing: state === 'ready_to_load'
+        ? []
+        : [{
+            id: model.id,
+            label: state === 'artifact_downloading' ? `${label} 下载尚未完成` : `${label} GGUF/mmproj 未就绪`,
+            kind: 'model_artifact' as const
+          }]
+    }))
+  })
+}
+
+export function createWorkerModelStatusArtifactReadiness(
+  status: WorkerModelStatusSnapshot | null | undefined
+): AiModelArtifactReadiness[] {
+  if (!status) return []
+
+  return Object.entries(status.cooperative_models ?? {}).flatMap(([modelId, modelStatus]) => {
+    const family = cooperativeFamilyFromModelId(modelId)
+    const routes = family ? COOPERATIVE_MODEL_WORKFLOW_BY_FAMILY[family] ?? [] : []
+    const label = cooperativeLabelFromModelId(modelId)
+    const readinessState = modelStatus.readiness?.state
+    const state = modelStatus.loaded && !modelStatus.is_mock
+      ? 'loaded_real'
+      : readinessState === 'ready_to_load'
+        ? 'ready_to_load'
+        : readinessState === 'missing_dependencies'
+          ? 'dependency_missing'
+          : readinessState === 'missing_files' || readinessState === 'not_downloaded'
+            ? 'artifact_missing'
+            : 'unknown'
+
+    return routes.map((route) => ({
+      workflow: route.workflow,
+      runtimeLane: route.runtimeLane,
+      artifactId: modelId,
+      label,
+      source: 'worker_runtime' as const,
+      state,
+      detail: modelStatus.backend,
+      missing: state === 'dependency_missing'
+        ? (modelStatus.readiness?.missing_dependencies ?? ['unknown']).map((id) => ({
+            id,
+            label: `${label} 缺少依赖 ${id}`,
+            kind: 'runtime_dependency' as const
+          }))
+        : state === 'artifact_missing'
+          ? (modelStatus.readiness?.missing_files ?? [modelId]).map((id) => ({
+              id,
+              label: `${label} 缺少模型 artifact`,
+              kind: 'model_artifact' as const
+            }))
+          : []
+    }))
+  })
+}
+
+export function createLlamaRuntimeStatusArtifactReadiness(status: LlamaInstallStatus | null | undefined): AiModelArtifactReadiness[] {
+  if (!status) return []
+
+  const state = status.phase === 'downloading' || status.phase === 'extracting' || status.phase === 'installing'
+    ? 'artifact_downloading'
+    : status.modelPath && status.mmprojPath
+      ? 'ready_to_load'
+      : status.modelPath
+        ? 'artifact_missing'
+        : 'unknown'
+
+  return LLAMA_ACCELERATOR_RUNTIME_LANES.map((runtimeLane) => ({
+    workflow: 'ai_prompt_task' as const,
+    runtimeLane,
+    artifactId: 'llama-runtime-current-model',
+    label: 'Llama 当前模型',
+    source: 'llama_local_model' as const,
+    state,
+    detail: status.serverRunning || status.serverPid
+      ? 'llama-server running; multimodal inference evidence required'
+      : status.phase,
+    missing: state === 'artifact_downloading'
+      ? [{
+          id: 'llama-runtime-current-model',
+          label: 'Llama 当前模型下载或安装尚未完成',
+          kind: 'model_artifact' as const
+        }]
+      : state === 'artifact_missing'
+        ? [{
+            id: 'llama-runtime-current-mmproj',
+            label: 'Llama 当前视觉模型缺少 mmproj artifact',
+            kind: 'model_artifact' as const
+          }]
+      : []
+  }))
+}
+
+export function createLlamaMultimodalProbeArtifactReadiness(
+  probe: LlamaServerTestResult | null | undefined
+): AiModelArtifactReadiness[] {
+  if (!probe) return []
+
+  const state = probe.success && probe.chatOk && probe.visionOk
+    ? 'loaded_real'
+    : 'unknown'
+  const detail = state === 'loaded_real'
+    ? `${probe.modelId ?? probe.models[0] ?? 'local-model'} · text + generated-image inference · ${probe.checkedAt}`
+    : probe.error?.code ?? 'multimodal_probe_incomplete'
+
+  return LLAMA_ACCELERATOR_RUNTIME_LANES.map((runtimeLane) => ({
+    workflow: 'ai_prompt_task' as const,
+    runtimeLane,
+    artifactId: 'llama-runtime-multimodal-inference',
+    label: 'Llama GGUF/mmproj 多模态推理',
+    source: 'explicit_load_probe' as const,
+    state,
+    detail,
+    missing: []
+  }))
+}
+
+export function createOnnxModelLoadProbeArtifactReadiness(
+  probe: AiRuntimeOnnxModelLoadProbeResponse | null | undefined
+): AiModelArtifactReadiness[] {
+  if (!probe) return []
+
+  const state = probe.status === 'loaded_real'
+    ? 'loaded_real'
+    : probe.status === 'dependency_missing'
+      ? 'dependency_missing'
+      : probe.status === 'artifact_missing' || probe.status === 'artifact_invalid'
+        ? 'artifact_missing'
+        : 'unknown'
+
+  const isClip = probe.modelFamily === 'clip'
+  return [{
+    workflow: isClip ? 'search_embedding' : 'ai_tag_task',
+    runtimeLane: 'onnx_runtime',
+    artifactId: isClip ? 'clip-vit-b-32-onnx' : 'wd-vit-tagger-v3',
+    label: isClip ? 'CLIP ViT-B/32 ONNX' : 'WD Tagger v3 ONNX',
+    source: 'explicit_load_probe',
+    state,
+    detail: probe.status === 'loaded_real'
+      ? isClip
+        ? `${probe.providers.join(' / ') || 'ONNX Runtime'} · image/text embedding ${probe.embeddingDimension ?? 0}d`
+        : `${probe.providers.join(' / ') || 'ONNX Runtime'} · ${probe.inputCount} input / ${probe.outputCount} output`
+      : probe.errorCode ?? probe.status,
+    missing: state === 'dependency_missing'
+      ? [{ id: 'onnxruntime', label: `${isClip ? 'CLIP' : 'WD Tagger'} 缺少 ONNX Runtime`, kind: 'runtime_dependency' }]
+      : state === 'artifact_missing'
+        ? [{
+            id: isClip ? 'clip-vit-b-32-onnx' : 'wd-vit-tagger-v3',
+            label: `${isClip ? 'CLIP' : 'WD Tagger'} ONNX artifact 未就绪`,
+            kind: 'model_artifact'
+          }]
+        : []
+  }]
+}
+
+export function createOcrRealEvidenceArtifactReadiness(
+  probe: OcrRealEvidenceProbeResponse | null | undefined
+): AiModelArtifactReadiness[] {
+  if (!probe) return []
+
+  const state = probe.status === 'loaded_real' && probe.success && probe.resultFinite && probe.boxCount > 0
+    ? 'loaded_real'
+    : probe.status === 'dependency_missing'
+      ? 'dependency_missing'
+      : probe.status === 'artifact_missing'
+        ? 'artifact_missing'
+        : 'unknown'
+
+  return [{
+    workflow: 'ocr_text_box',
+    runtimeLane: 'onnx_runtime',
+    artifactId: 'ocr-generated-image-inference',
+    label: 'OCR 生成图片文字检测',
+    source: 'explicit_load_probe',
+    state,
+    detail: state === 'loaded_real'
+      ? `${probe.provider ?? 'OCR'} · generated-image inference · ${probe.boxCount} boxes`
+      : probe.errorCode ?? probe.status,
+    missing: state === 'dependency_missing'
+      ? [{
+          id: 'ocr-runtime',
+          label: 'OCR 缺少本地运行时依赖',
+          kind: 'runtime_dependency'
+        }]
+      : state === 'artifact_missing'
+        ? [{
+            id: 'ocr-model-artifact',
+            label: 'OCR 本地模型 artifact 未就绪',
+            kind: 'model_artifact'
+          }]
+        : []
+  }]
+}
+
+function cooperativeFamilyFromModelId(modelId: string): string | null {
+  if (/ram/i.test(modelId)) return 'ram'
+  if (/florence/i.test(modelId)) return 'florence2'
+  if (/clip|siglip/i.test(modelId)) return 'clip'
+  if (/wd|tagger/i.test(modelId)) return 'wd_tagger'
+  return null
+}
+
+function cooperativeLabelFromModelId(modelId: string): string {
+  if (modelId === 'ram-plus') return 'RAM++'
+  if (modelId === 'florence-2-large') return 'Florence-2 Large'
+  if (modelId === 'clip-vit-b-32') return 'CLIP ViT-B/32'
+  if (modelId === 'wd-vit-tagger-v3') return 'WD Tagger v3'
+  return modelId
+}

@@ -1,8 +1,44 @@
 import type { PlatformArch, PlatformName } from '../../shared/types/platform.types'
 import type { RuntimeProfile, RuntimeProfileId, RuntimeProfileRecommendation, RuntimeProfileResolverInput } from './runtime-profile.types'
 import { getProfilesForPlatform, getRuntimeProfile, listRuntimeProfiles } from './runtime-profile-registry'
+import { runtimeProfileRuleMatchesTarget } from './runtime-profile-selection'
 
 const BLOCKING_CHECK_IDS = new Set(['path', 'permission', 'system', 'node'])
+
+interface RuntimeProfilePlatformRule {
+  platform: PlatformName
+  arch?: PlatformArch
+  profileId: RuntimeProfileId
+}
+
+interface RuntimeProfileHardwareRule {
+  platform?: PlatformName
+  arch?: PlatformArch
+  requiresNvidiaGpu?: boolean
+  profileId: RuntimeProfileId
+}
+
+const DEFAULT_RUNTIME_PROFILE_RULES: RuntimeProfilePlatformRule[] = [
+  { platform: 'win32', profileId: 'windows-cpu' },
+  { platform: 'darwin', arch: 'arm64', profileId: 'macos-apple-silicon' },
+  { platform: 'darwin', arch: 'x64', profileId: 'macos-intel' }
+]
+
+const HARDWARE_RUNTIME_PROFILE_RULES: RuntimeProfileHardwareRule[] = [
+  {
+    platform: 'win32',
+    requiresNvidiaGpu: true,
+    profileId: 'windows-nvidia-cuda'
+  }
+]
+
+const RUNTIME_PROFILE_REASON_MESSAGES: Partial<Record<RuntimeProfileId, string>> = {
+  'windows-nvidia-cuda': 'Windows NVIDIA hint is present, so the CUDA-capable profile is the best metadata match.',
+  'windows-cpu': 'Windows without a GPU hint defaults to the CPU profile.',
+  'macos-apple-silicon': 'macOS arm64 maps to the Apple Silicon profile.',
+  'macos-intel': 'macOS x64 maps to the Intel profile with external inference fallback.',
+  'external-inference-only': 'External inference only was selected or is the safest fallback.'
+}
 
 function checkStatus(input: RuntimeProfileResolverInput, id: string, status: 'warning' | 'error') {
   return input.doctorReport.checks.some((check) => check.id === id && check.status === status)
@@ -21,10 +57,7 @@ function warningMessages(input: RuntimeProfileResolverInput): string[] {
 }
 
 export function getDefaultRuntimeProfileForPlatform(platform: PlatformName, arch: PlatformArch): RuntimeProfileId {
-  if (platform === 'win32') return 'windows-cpu'
-  if (platform === 'darwin' && arch === 'arm64') return 'macos-apple-silicon'
-  if (platform === 'darwin' && arch === 'x64') return 'macos-intel'
-  return 'external-inference-only'
+  return DEFAULT_RUNTIME_PROFILE_RULES.find((rule) => runtimeProfileRuleMatchesTarget(rule, { platform, arch }))?.profileId ?? 'external-inference-only'
 }
 
 export function rankRuntimeProfiles(input: RuntimeProfileResolverInput): RuntimeProfile[] {
@@ -77,17 +110,20 @@ export function resolveRuntimeProfileRecommendation(input: RuntimeProfileResolve
 
 function resolvePreferredProfileId(input: RuntimeProfileResolverInput): RuntimeProfileId {
   if (input.userPreference === 'external-inference-only') return 'external-inference-only'
-  if (input.hardwareHints?.nvidiaGpu && input.platformInfo.platform === 'win32') return 'windows-nvidia-cuda'
+  const hardwareRule = HARDWARE_RUNTIME_PROFILE_RULES.find((rule) => runtimeProfileHardwareRuleMatches(rule, input))
+  if (hardwareRule) return hardwareRule.profileId
   return getDefaultRuntimeProfileForPlatform(input.platformInfo.platform, input.platformInfo.arch)
+}
+
+function runtimeProfileHardwareRuleMatches(rule: RuntimeProfileHardwareRule, input: RuntimeProfileResolverInput): boolean {
+  if (!runtimeProfileRuleMatchesTarget(rule, input.platformInfo)) return false
+  if (rule.requiresNvidiaGpu && !input.hardwareHints?.nvidiaGpu) return false
+  return true
 }
 
 function buildReason(platform: PlatformName, arch: PlatformArch, profile: RuntimeProfile, blocking: string[]) {
   if (blocking.length > 0) return `Blocking Doctor issues require a conservative fallback profile for ${platform}/${arch}.`
-  if (profile.id === 'windows-nvidia-cuda') return 'Windows NVIDIA hint is present, so the CUDA-capable profile is the best metadata match.'
-  if (profile.id === 'windows-cpu') return 'Windows without a GPU hint defaults to the CPU profile.'
-  if (profile.id === 'macos-apple-silicon') return 'macOS arm64 maps to the Apple Silicon profile.'
-  if (profile.id === 'macos-intel') return 'macOS x64 maps to the Intel profile with external inference fallback.'
-  return 'External inference only was selected or is the safest fallback.'
+  return RUNTIME_PROFILE_REASON_MESSAGES[profile.id] ?? RUNTIME_PROFILE_REASON_MESSAGES['external-inference-only']!
 }
 
 export function listKnownRuntimeProfilesForResolver(): RuntimeProfile[] {

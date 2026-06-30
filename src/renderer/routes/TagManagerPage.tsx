@@ -10,24 +10,24 @@ import {
   Sliders,
   Compass,
   AlertCircle,
-  HelpCircle,
-  User,
-  Settings,
-  Cpu,
-  RefreshCw,
-  Sparkles
+  Cpu
 } from 'lucide-react'
 import { useAssetStore, Tag } from '../stores/asset.store'
 import TagEditDialog from '../components/tag/TagEditDialog'
 import TagMergeDialog from '../components/tag/TagMergeDialog'
 import TagChip from '../components/tag/TagChip'
+import {
+  AssetTagManagerSortOrder,
+  projectAssetTagManager,
+  projectAssetTaggingComputeBanner
+} from '../../shared/workflows/asset-tagging.workflow'
 
 export default function TagManagerPage() {
   const { tags, deleteTag } = useAssetStore()
 
   const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState('')
-  const [sortOrder, setSortOrder] = useState<'usage' | 'name'>('usage')
+  const [sortOrder, setSortOrder] = useState<AssetTagManagerSortOrder>('usage')
 
   // Modals status
   const [isEditOpen, setIsEditOpen] = useState(false)
@@ -37,7 +37,6 @@ export default function TagManagerPage() {
 
   // AI Service & GPU Status state
   const [aiStatus, setAiStatus] = useState<any>(null)
-  const [isUnloading, setIsUnloading] = useState(false)
 
   // Polling effect for GPU VRAM and queue stats
   useEffect(() => {
@@ -60,62 +59,19 @@ export default function TagManagerPage() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleForceUnload = async () => {
-    const api = (window as any).electronAPI
-    if (api && api.aiModelUnload) {
-      setIsUnloading(true)
-      try {
-        await api.aiModelUnload()
-        const res = await api.aiModelStatus()
-        if (res) setAiStatus(res)
-      } catch (e) {
-        alert('释放失败: ' + e)
-      } finally {
-        setIsUnloading(false)
-      }
-    }
-  }
-
-  const handleManualRefresh = async () => {
-    const api = (window as any).electronAPI
-    if (api && api.aiModelStatus) {
-      const res = await api.aiModelStatus()
-      if (res) {
-        setAiStatus(res)
-      }
-    }
-  }
-
-  // Map category keys to human-friendly Chinese names
-  const categoryNames: Record<string, string> = {
-    style: '风格 (Style)',
-    color: '色彩 (Color)',
-    usage: '用途 (Usage)',
-    layout: '版式 (Layout)',
-    scene: '场景 (Scene)',
-    source: '来源 (Source)',
-    ai: 'AI 智能打标',
-    custom: '用户自定义 (Custom)'
-  }
-
-  // Filter & Sort computation
-  const filteredTags = tags
-    .filter((t) => {
-      const matchSearch =
-        t.name.toLowerCase().includes(search.toLowerCase()) ||
-        t.aliases.some((a) => a.toLowerCase().includes(search.toLowerCase())) ||
-        (t.shorthand || '').toLowerCase().includes(search.toLowerCase())
-
-      const matchType = filterType ? t.type === filterType : true
-      return matchSearch && matchType
-    })
-    .sort((a, b) => {
-      if (sortOrder === 'usage') {
-        return b.usageCount - a.usageCount || a.name.localeCompare(b.name)
-      } else {
-        return a.name.localeCompare(b.name)
-      }
-    })
+  const tagManagerProjection = React.useMemo(
+    () => projectAssetTagManager(tags, { search, filterType, sortOrder }),
+    [tags, search, filterType, sortOrder]
+  )
+  const computeBanner = React.useMemo(
+    () => projectAssetTaggingComputeBanner({
+      workerOffline: aiStatus?.offline,
+      gpuDeviceName: aiStatus?.gpu_status?.device_name,
+      gpuUtilizationPercent: aiStatus?.gpu_status?.utilization_percent,
+      queuedTaskCount: aiStatus?.queue_stats?.queued
+    }),
+    [aiStatus]
+  )
 
   const handleCreateNew = () => {
     setEditingTag(null)
@@ -140,13 +96,6 @@ export default function TagManagerPage() {
         alert(`删除失败: ${err}`)
       }
     }
-  }
-
-  // Find Parent tag name
-  const getParentName = (parentId?: string | null) => {
-    if (!parentId) return '-'
-    const p = tags.find((t) => t.id === parentId)
-    return p ? p.name : '-'
   }
 
   return (
@@ -208,9 +157,9 @@ export default function TagManagerPage() {
             className="w-full pl-10 pr-4 py-2.5 text-[12px] font-bold bg-white border border-slate-200 rounded-xl outline-none transition-premium cursor-pointer text-slate-600 appearance-none"
           >
             <option value="">全部类别类型</option>
-            {Object.entries(categoryNames).map(([key, val]) => (
-              <option key={key} value={key}>
-                {val}
+            {tagManagerProjection.typeOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
@@ -246,17 +195,17 @@ export default function TagManagerPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-[11.5px] text-slate-600 font-medium">
-              {filteredTags.map((tag) => (
+              {tagManagerProjection.rows.map((row) => (
                 <tr
-                  key={tag.id}
+                  key={row.tag.id}
                   className="hover:bg-slate-50/50 transition-colors group/row"
                 >
                   {/* Tag Chip column */}
                   <td className="px-6 py-3.5">
                     <TagChip
-                      name={tag.name}
-                      type={tag.type}
-                      colorClass={tag.color}
+                      name={row.tag.name}
+                      type={row.tag.type}
+                      colorClass={row.tag.color}
                       source="manual"
                       status="confirmed"
                       showHoverTooltip={false}
@@ -265,48 +214,44 @@ export default function TagManagerPage() {
 
                   {/* Category Type column */}
                   <td className="px-6 py-3.5 text-slate-500 font-bold uppercase tracking-wider text-[10.5px]">
-                    {categoryNames[tag.type]?.split(' ')[0] || tag.type}
+                    {row.categoryLabel}
                   </td>
 
                   {/* Shorthand column */}
                   <td className="px-6 py-3.5 font-mono text-[10.5px] text-slate-400">
-                    {tag.shorthand || '-'}
+                    {row.shorthandLabel}
                   </td>
 
                   {/* Aliases array list */}
                   <td className="px-6 py-3.5 text-slate-400 truncate max-w-xs">
-                    {tag.aliases && tag.aliases.length > 0 ? (
+                    {row.aliasLabels.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
-                        {tag.aliases.map((a) => (
+                        {row.aliasLabels.map((a) => (
                           <span key={a} className="bg-slate-100/80 px-1.5 py-0.5 rounded text-[9.5px] text-slate-500">
                             {a}
                           </span>
                         ))}
                       </div>
                     ) : (
-                      <span className="italic text-[10px] text-slate-300">无</span>
+                      <span className="italic text-[10px] text-slate-300">{row.emptyAliasesLabel}</span>
                     )}
                   </td>
 
                   {/* Parent name column */}
                   <td className="px-6 py-3.5 font-semibold text-slate-500">
-                    {tag.isCategory ? (
+                    {row.isCategoryParent ? (
                       <span className="text-[9.5px] bg-brand-50 text-brand-600 border border-brand-100 px-1.5 py-0.5 rounded-md font-bold">
-                        大类(目录)
+                        {row.parentLabel}
                       </span>
                     ) : (
-                      getParentName(tag.parentId)
+                      row.parentLabel
                     )}
                   </td>
 
                   {/* Usage count column */}
                   <td className="px-6 py-3.5 text-center">
-                    <span className={`px-2 py-0.5 font-extrabold text-[10.5px] rounded-md ${
-                      tag.usageCount > 0
-                        ? 'bg-brand-50 text-brand-700 border border-brand-100'
-                        : 'bg-slate-100 text-slate-400'
-                    }`}>
-                      {tag.usageCount} 次
+                    <span className={`px-2 py-0.5 font-extrabold text-[10.5px] rounded-md ${row.usageToneClass}`}>
+                      {row.usageLabel}
                     </span>
                   </td>
 
@@ -316,7 +261,7 @@ export default function TagManagerPage() {
                       
                       {/* Edit Button */}
                       <button
-                        onClick={() => handleEdit(tag)}
+                        onClick={() => handleEdit(row.tag)}
                         className="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                         title="修改标签参数"
                       >
@@ -325,7 +270,7 @@ export default function TagManagerPage() {
 
                       {/* Merge Button */}
                       <button
-                        onClick={() => handleMerge(tag)}
+                        onClick={() => handleMerge(row.tag)}
                         className="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                         title="此标签向其他标签合并"
                       >
@@ -334,7 +279,7 @@ export default function TagManagerPage() {
 
                       {/* Delete button (Avoid deleting pre-seeded system definitions if required, or allow with warnings) */}
                       <button
-                        onClick={() => handleDelete(tag.id, tag.name)}
+                        onClick={() => handleDelete(row.tag.id, row.tag.name)}
                         className="w-7 h-7 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors cursor-pointer"
                         title="彻底移除此标签"
                       >
@@ -346,12 +291,12 @@ export default function TagManagerPage() {
                 </tr>
               ))}
 
-              {filteredTags.length === 0 && (
+              {tagManagerProjection.rows.length === 0 && (
                 <tr>
                   <td colSpan={7} className="py-24 text-center text-slate-400 font-semibold flex-col gap-3">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <AlertCircle className="w-8 h-8 stroke-[1.5]" />
-                      <span>素材库中暂未匹配到对应的标签词汇</span>
+                      <span>{tagManagerProjection.emptyLabel}</span>
                     </div>
                   </td>
                 </tr>
@@ -388,17 +333,14 @@ export default function TagManagerPage() {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-[12.5px] font-black text-slate-700">AI 智能打标算力状态</span>
-              <span className={`w-1.5 h-1.5 rounded-full ${aiStatus?.offline ? 'bg-rose-400 animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+              <span className="text-[12.5px] font-black text-slate-700">{computeBanner.titleLabel}</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${computeBanner.indicatorClass}`} />
               <span className="text-[9.5px] font-bold text-slate-400 leading-none">
-                {aiStatus?.offline ? '离线 (本地降级)' : '运行中'}
+                {computeBanner.statusLabel}
               </span>
             </div>
             <span className="text-[10px] text-slate-400 font-semibold mt-0.5 leading-none">
-              {aiStatus?.offline 
-                ? '本地打标服务未开启，暂时无法使用反推。'
-                : `GPU: ${aiStatus?.gpu_status?.device_name || 'NVIDIA Card'} • 显存利用: ${aiStatus?.gpu_status?.utilization_percent || 0}% • 任务积压: ${aiStatus?.queue_stats?.queued || 0} 个`
-              }
+              {computeBanner.detailLabel}
             </span>
           </div>
         </div>

@@ -12,7 +12,7 @@ assert.ok(entry)
 
 const downloader = new MockRuntimePackageDownloader()
 const localSource = createLocalRuntimePackageSource('local-source', 'fixtures/runtime-packages')
-const plan = downloader.createPlan(entry, localSource, 'dist-temp/runtime-packages/ai-worker-core.zip')
+const plan = downloader.createPlan(entry, localSource, 'dist-temp/tests/runtime-packages/ai-worker-core.zip')
 
 assert.equal(plan.packageId, entry.id)
 assert.equal(plan.sourceId, localSource.id)
@@ -31,7 +31,7 @@ const invalidChecksumPlan = createRuntimePackageChecksumPlan({ ...entry, sha256:
 assert.ok(invalidChecksumPlan.blockingIssues.some((issue) => issue.includes('invalid sha256')))
 
 const remoteSource = createReservedRemoteRuntimePackageSource('remote-source', 'https://example.invalid/package.zip')
-const remotePlan = downloader.createPlan(entry, remoteSource, 'dist-temp/runtime-packages/remote.zip')
+const remotePlan = downloader.createPlan(entry, remoteSource, 'dist-temp/tests/runtime-packages/remote.zip')
 const remoteProgress = await downloader.dryRun(remotePlan)
 assert.equal(remoteProgress[0].status, 'blocked')
 assert.match(remoteProgress[0].message, /reserved remote/)

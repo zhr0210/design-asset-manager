@@ -19,6 +19,7 @@ The denylist covers:
 
 `dist-temp` is allowed only as a bounded test/build scratch area. The hygiene check accepts these subdirectories:
 
+- `ai-console-ui-smoke`
 - `doctor`
 - `platform-tests`
 - `settings-migration-tests`
@@ -28,4 +29,13 @@ Root files or unknown subdirectories under `dist-temp` fail the hygiene check. P
 
 ## CI Entry
 
-`npm run ci:hygiene` runs the focused hygiene test. `npm run ci:governance` includes it after the governance/runtime safety checks and CI-safe doctor.
+`npm run ci:hygiene` runs the focused artifact hygiene test and the
+`check-forbidden-paths.py` classifier tests. `npm run ci:governance` includes
+it after the governance/runtime safety checks and CI-safe doctor.
+
+`check-forbidden-paths.py` keeps changed and untracked paths visible without
+turning required documentation sync into a false blocker. Documentation under
+`docs/` is advisory: the script prints it so reviewers can notice broad doc
+edits, but docs-only changes return success. Generated outputs, model weights,
+SQLite databases, model caches, `dist-packages`, `dist-temp`, and
+`runtime-data` remain blocking findings.

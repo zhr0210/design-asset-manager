@@ -11,14 +11,14 @@ import {
 import { useAssetStore } from '../stores/asset.store'
 import { useSiteStore } from '../stores/site.store'
 import { useDownloadStore } from '../stores/download.store'
+import { projectDownloadTaskSummaryDisplay } from '../../shared/workflows/download-status.workflow'
+import { projectDashboardRecentAssetDisplays } from '../../shared/workflows/asset-display.workflow'
 
 export default function Dashboard() {
   const assets = useAssetStore((s) => s.assets)
   const sites = useSiteStore((s) => s.sites)
   const tasks = useDownloadStore((s) => s.tasks)
-
-  const activeDownloads = tasks.filter((t) => t.status === 'downloading' || t.status === 'waiting').length
-  const completedCount = tasks.filter((t) => t.status === 'completed').length
+  const downloadSummary = projectDownloadTaskSummaryDisplay(tasks)
 
   const stats = [
     {
@@ -37,22 +37,21 @@ export default function Dashboard() {
     },
     {
       label: '今日已完成下载',
-      value: completedCount,
+      value: downloadSummary.completedCount,
       icon: DownloadCloud,
       color: 'from-emerald-500 to-teal-600',
       shadow: 'shadow-emerald-500/10'
     },
     {
       label: '活跃下载任务',
-      value: activeDownloads,
+      value: downloadSummary.activeCount,
       icon: TrendingUp,
       color: 'from-amber-500 to-orange-600',
       shadow: 'shadow-amber-500/10'
     }
   ]
 
-  // Take the 4 most recent assets for dashboard preview
-  const recentAssets = assets.slice(0, 4)
+  const recentAssetDisplays = projectDashboardRecentAssetDisplays(assets, { limit: 4 })
 
   return (
     <div className="space-y-8 select-none flex-1 flex flex-col">
@@ -114,28 +113,28 @@ export default function Dashboard() {
             </Link>
           </div>
 
-          {recentAssets.length > 0 ? (
+          {recentAssetDisplays.length > 0 ? (
             <div className="grid grid-cols-2 gap-4">
-              {recentAssets.map((asset) => (
+              {recentAssetDisplays.map((asset) => (
                 <div
                   key={asset.id}
                   className="group relative rounded-2xl overflow-hidden border border-slate-100 bg-white shadow-premium hover:shadow-card-hover transition-premium p-3"
                 >
                   <div className="aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 relative">
                     <img
-                      src={asset.thumbnailPath}
-                      alt={asset.title}
+                      src={asset.previewSrc}
+                      alt={asset.titleLabel}
                       className="w-full h-full object-cover group-hover:scale-105 transition-premium"
                     />
                     <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-white/90 backdrop-blur text-[9.5px] font-bold text-slate-600 shadow-sm">
-                      {asset.sourceSiteName}
+                      {asset.sourceSiteLabel}
                     </span>
                   </div>
                   <div className="mt-3 space-y-1">
-                    <h4 className="text-[12.5px] font-bold text-slate-700 truncate">{asset.title}</h4>
+                    <h4 className="text-[12.5px] font-bold text-slate-700 truncate">{asset.titleLabel}</h4>
                     <div className="flex items-center justify-between text-[10px] text-slate-400 font-medium">
-                      <span>{asset.fileType} • {(asset.fileSize / 1024 / 1024).toFixed(1)}MB</span>
-                      <span>{new Date(asset.createdAt).toLocaleDateString()}</span>
+                      <span>{asset.fileSummaryLabel}</span>
+                      <span>{asset.createdDateLabel}</span>
                     </div>
                   </div>
                 </div>

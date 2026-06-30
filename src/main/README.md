@@ -10,6 +10,31 @@ Electron main process for windows, IPC registration, local files, SQLite-backed 
 - `db/`: SQLite connection and schema.
 - `extensions/photoshow/`: bundled third-party browser helper assets; do not inspect `unpacked/` by default.
 
+## Rules
+
+- Keep shared product workflow orchestration in main-process modules where possible; use platform adapters only for real OS/runtime differences.
+- Keep AI Runtime IPC host platform, architecture, and home-dir reads inside the AI Runtime host-context helper; IPC handlers should consume that snapshot instead of reading Node globals directly.
+- Platform AI Branch Status projectors may read existing status/probe/settings state, but must not start runtimes, install dependencies, download models, or inspect user assets.
+- Keep shared Platform AI workflow titles and summaries separate from platform-specific runtime lane topology.
+- Keep reusable runtime lane labels and runtime-kind matching in shared lane metadata; leave platform topology tables responsible for genuine lane membership and primary-lane differences, then resolve lane definitions through one shared resolver.
+- Keep branch-to-OS support checks in shared Platform AI runtime metadata so the projector consumes branch/platform semantics without local OS maps.
+- Keep Platform AI branch runtime provider registration descriptor-driven; concrete metadata keys and profile rules belong in descriptors, not duplicated provider blocks or resolver functions.
+- Keep Python Worker auto-start support and runtime app-data root selection in one bootstrap platform adapter so adding or removing OS support does not scatter bootstrap conditionals.
+- Keep runtime profile default, hardware-hint selection, and recommendation reason copy in ordered metadata/rule tables; hardware rules should use descriptor fields, not hand-coded Windows/macOS profile branches in resolver flow.
+- Keep Doctor command selection for npm and Python launchers in one platform-name resolver; individual checks should execute commands and shape results, not maintain separate Windows/macOS command tables or pass platform booleans.
+- Keep platform profile detection mappings in metadata rules; reserve direct platform checks in the detector for normalized OS capability booleans.
+- Keep Llama runtime accelerator defaults and package pattern selection in metadata rules with one matcher; reserve direct platform checks in Llama modules for artifact selection, paths, process names, and native installer adapters.
+- Keep read-only Llama governance adapter selection descriptor-driven; platform conditionals belong in concrete runtime adapters, not the governance plan flow.
+- Keep Llama runtime host platform, architecture, CPU, and memory reads inside the host-context helper; installer and planner flow should consume the context instead of reading Node globals directly.
+- Keep OCR/Python managed venv executable paths and base interpreter discovery descriptor-driven; leave actual Windows search and macOS Homebrew probing inside platform adapters.
+- Keep explicit OCR evidence execution in main process, offline and timeout-bounded. Cache only path-free generated-image results for five minutes before projecting them into shared workflow status.
+- Expose OCR evidence only through the user-triggered `aiRuntime:probeOcrRealEvidence` channel; the operation must not read user assets, install dependencies, or enable model downloads.
+- Keep Llama server executable, force-stop, chmod, and zip extraction process metadata descriptor-driven; do not scatter process branches through installer flow.
+- Keep Llama hardware detection dispatch descriptor-driven; leave actual OS probes in macOS, Windows, and generic hardware adapters.
+- Keep Electron app lifecycle policy descriptor-driven; platform-specific AppUserModelId and quit-on-close behavior belong in startup policy metadata, not inline entry-point branches.
+- Keep executable Runtime Package transactions inside `FileSystemRuntimePackageExecutor`; callers receive path-free progress while checksum, staging, extraction, promotion, registry commit, and rollback stay local to the module.
+- Keep release promotion behind `evaluateReleaseCandidate`; shared candidate stages own workflow truth while Windows and macOS trust checks remain platform gates.
+
 ## Tests
 
 ```bash
@@ -21,4 +46,42 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.16 | 2026-06-29 | Derived signed-candidate evidence checks from shared release candidate gate metadata while preserving prior check order. |
+| v1.4.15 | 2026-06-29 | Reused release platform target metadata for readiness/environment branding icon filenames instead of re-querying platform branding requirements. |
+| v1.4.14 | 2026-06-26 | Moved AI Runtime IPC host platform/architecture/home-dir reads behind one host-context helper. |
+| v1.4.13 | 2026-06-26 | Moved Llama planner default host platform/architecture/CPU/memory reads to the shared host-context helper. |
+| v1.4.12 | 2026-06-26 | Moved Llama installer host platform/architecture/CPU/memory reads behind one host-context helper. |
+| v1.4.11 | 2026-06-26 | Moved Platform AI Branch Status branch-to-OS current-platform mapping into shared runtime metadata. |
+| v1.4.10 | 2026-06-26 | Moved Llama runtime planner platform, architecture, and accelerator rule matching behind one matcher. |
+| v1.4.9 | 2026-06-26 | Moved Runtime Profile hardware hint matching to descriptor fields while preserving Windows NVIDIA CUDA recommendation behavior. |
+| v1.4.8 | 2026-06-26 | Moved Doctor npm/Python launcher resolver inputs from Windows booleans to platform-name descriptors. |
+| v1.4.7 | 2026-06-26 | Moved AI Python Environment base interpreter discovery into the same platform adapter as managed runtime path selection. |
+| v1.4.6 | 2026-06-26 | Moved AI Runtime Bootstrap auto-start support and runtime app-data root selection into one platform adapter. |
+| v1.4.5 | 2026-06-26 | Moved AI Python Environment platform path and managed venv layout selection into one adapter seam while preserving Python discovery behavior. |
+| v1.4.4 | 2026-06-25 | Moved Doctor npm/Python launcher command selection into one shared main-process resolver. |
+| v1.4.3 | 2026-06-25 | Consumed shared Electron app lifecycle policy from shared workflow metadata while preserving Windows AppUserModelId and macOS quit behavior. |
+| v1.4.2 | 2026-06-15 | Added the explicitly approved Signed Release Candidate workflow, Release Update Metadata, and structured platform trust evidence. |
+| v1.4.1 | 2026-06-14 | Added the shared release-candidate promotion invariant for Windows and macOS. |
+| v1.4.0 | 2026-06-14 | Added the local/bundled Runtime Package Executor transaction with safe ZIP extraction and rollback. |
+| v1.3.0 | 2026-06-14 | Exposed the explicit, offline OCR generated-image evidence operation through AI Runtime IPC. |
+| v1.2.9 | 2026-06-13 | Moved OCR base Python discovery selection to descriptors while preserving Windows and macOS lookup behavior. |
+| v1.2.8 | 2026-06-13 | Moved Llama chmod and zip extraction process policy to descriptors while preserving installer behavior. |
+| v1.2.7 | 2026-06-13 | Moved Electron app lifecycle policy to descriptors while preserving Windows AppUserModelId and macOS quit behavior. |
+| v1.2.6 | 2026-06-13 | Moved Llama hardware detection dispatch to descriptors while preserving platform probe behavior. |
+| v1.2.5 | 2026-06-13 | Moved Llama server executable and force-stop process metadata to descriptors while preserving start/stop behavior. |
+| v1.2.4 | 2026-06-13 | Moved managed OCR/Python venv executable path selection to descriptors while preserving interpreter discovery. |
+| v1.2.3 | 2026-06-13 | Moved read-only Llama governance platform adapter selection to descriptors while preserving adapter output. |
+| v1.2.2 | 2026-06-13 | Moved no-GPU Llama accelerator default selection to metadata while preserving Windows Vulkan and cross-platform CPU fallback. |
+| v1.2.1 | 2026-06-13 | Moved runtime profile recommendation reason copy to metadata while preserving recommendations. |
+| v1.2.0 | 2026-06-13 | Split Platform AI branch workflow topology from shared runtime-lane resolution while preserving lane membership. |
+| v1.1.9 | 2026-06-13 | Moved Platform AI branch provider profile selection into descriptor rules while preserving runtime ids and profile mapping. |
+| v1.1.8 | 2026-06-13 | Moved platform profile detection mappings to metadata rules while preserving OS capability booleans. |
+| v1.1.7 | 2026-06-13 | Moved runtime profile default and hardware-hint selection to ordered metadata rules. |
+| v1.1.6 | 2026-06-13 | Moved Python Worker auto-start platform support to one allowlist while preserving macOS/Windows behavior. |
+| v1.1.5 | 2026-06-13 | Moved Platform AI branch runtime provider registration to descriptors while preserving runtime ids, profile rules, and metadata keys. |
+| v1.1.4 | 2026-06-13 | Mapped Platform AI branches to real OS platform names through branch metadata. |
+| v1.1.3 | 2026-06-12 | Reused shared Python and Llama accelerator lane families for model-readiness projection. |
+| v1.1.2 | 2026-06-12 | Centralized Platform AI runtime lane labels and runtime-kind matching while preserving platform topology. |
+| v1.1.1 | 2026-06-12 | Separated shared Platform AI workflow metadata from macOS/Windows runtime lane definitions. |
+| v1.1.0 | 2026-06-04 | Added shared Windows/macOS orchestration and Platform AI Branch Status projector rules. |
 | v1.0.0 | 2026-05-31 | Rewrote README and documented main-process ownership and extension boundary. |

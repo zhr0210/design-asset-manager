@@ -13,15 +13,17 @@ const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8')) as {
   scripts?: Record<string, string>
 }
 
-assert.match(workflow, /windows-latest/)
+assert.match(workflow, /windows-2022/)
 assert.match(workflow, /macos-latest/)
-assert.match(workflow, /actions\/setup-node@v4/)
+assert.match(workflow, /actions\/checkout@v6/)
+assert.match(workflow, /actions\/setup-node@v6/)
 assert.match(workflow, /npm ci/)
 assert.match(workflow, /npm run typecheck/)
 assert.match(workflow, /npm run build/)
 assert.match(workflow, /npm run ci:governance/)
 
 for (const requiredScript of [
+  'ci:prepare-native-deps',
   'ci:test-governance',
   'ci:test-runtime-safety',
   'ci:governance',
@@ -30,6 +32,9 @@ for (const requiredScript of [
 ]) {
   assert.ok(packageJson.scripts?.[requiredScript], `Missing npm script: ${requiredScript}`)
 }
+
+assert.equal(packageJson.scripts?.['ci:prepare-native-deps'], 'npm rebuild better-sqlite3')
+assert.match(packageJson.scripts?.['ci:governance'] ?? '', /^npm run ci:prepare-native-deps &&/)
 
 assert.match(doctorCi, /doctor-check\.mjs/)
 assert.match(doctorCi, /--json/)

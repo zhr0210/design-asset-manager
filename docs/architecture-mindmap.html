@@ -772,20 +772,19 @@
         x: 800,
         y: 190,
         color: 'platform',
-        detail: 'Windows 和 macOS 不是同一条 AI 执行栈：Windows 保留 CUDA AI Worker 主链路，但 Qwen3-VL 大视觉模型应走 llama.app / llama.cpp / Ollama 量化服务；macOS AI 分支现在已经接入 lane metadata 和 worker probe bridge，目标是 Python MPS + ONNX Runtime + llama.app / llama.cpp Metal / MLX 三层混合架构，并把 Python MPS 和 CLIP/SigLIP ONNX 作为独立可见能力面，同时配套独立的兼容性检查器。',
+        detail: 'Windows 和 macOS 不是同一条 AI 执行栈：Windows 保留 CUDA AI Worker 主链路，但 Qwen3-VL 大视觉模型应走 llama.app / llama.cpp / Ollama 量化服务；macOS AI 分支使用 Python MPS + ONNX Runtime + llama.cpp Metal，并把 Python MPS 和 CLIP/SigLIP ONNX 作为独立可见能力面。ADR-0007 移除了没有执行闭环的独立 MLX 产品路线。',
         terms: [
           ['Platform AI Branch', '按系统拆分 AI 运行时后端，同时尽量保留共享产品工作流。'],
           ['Windows AI Branch', '已开发基线：保留 CUDA AI Worker 主链路，Qwen3-VL 大视觉模型转向量化服务。'],
-          ['macOS AI Branch', '已接入 AI Console 与 Worker probe bridge：目标是 Python MPS、ONNX Runtime、Metal/MLX 服务混合架构，并带有独立的 Python MPS 兼容性检查器。'],
-          ['Qwen3-VL Large Vision Runtime', '不应被当成通用 Python 模型，应按平台走量化服务、Metal 或 MLX。'],
+          ['macOS AI Branch', '已接入 AI Console 与 Worker probe bridge：使用 Python MPS、ONNX Runtime 与 llama.cpp Metal，并带有独立的 Python MPS 兼容性检查器。'],
+          ['Qwen3-VL Large Vision Runtime', '不应被当成通用 Python 模型，应按平台走量化服务或 llama.cpp Metal。'],
           ['Python MPS Runtime', 'macOS 小模型可选的 PyTorch MPS 推理路径。'],
           ['Python MPS Compatibility Checker', '用于判断当前环境是否真的具备 PyTorch MPS 与可选模型家族导入能力。'],
-          ['ONNX Runtime Route', '适合小模型或跨平台模型图的推理路径。'],
-          ['MLX Runtime', 'Apple Silicon 上大模型推理的候选运行时路线。']
+          ['ONNX Runtime Route', '适合小模型或跨平台模型图的推理路径。']
         ],
         children: [
           ['Windows AI Branch', 'CUDA AI Worker main chain / Qwen3-VL via llama.app, llama.cpp, Ollama'],
-          ['macOS AI Branch', 'AI Console lane cards + worker probe bridge / Python MPS + ONNX + CLIP/SigLIP ONNX + Metal + MLX + Ollama fallback + external HTTP fallback + compatibility checkers'],
+          ['macOS AI Branch', 'AI Console lane cards + worker probe bridge / Python MPS + ONNX + CLIP/SigLIP ONNX + llama.cpp Metal + Ollama fallback + external HTTP fallback + compatibility checkers'],
           ['Shared Reuse', 'UI / IPC / settings / result schema / queue sync'],
           ['Non-Reusable AI Parts', 'Native Python Qwen3-VL / CUDA memory guard / Windows Python discovery']
         ]

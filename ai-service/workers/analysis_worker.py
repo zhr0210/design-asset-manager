@@ -10,7 +10,7 @@ class AnalysisWorker:
         self.model_manager = ModelManager()
 
     async def run_analysis_task(self, task_id: str) -> None:
-        """Asynchronously processes a manual design analysis task."""
+        """Asynchronously processes a manual design analysis task using Qwen3-VL."""
         task = self.queue.get_task(task_id)
         if not task:
             return
@@ -26,11 +26,8 @@ class AnalysisWorker:
                 # Verify image integrity
                 preprocess_image(task["file_path"])
 
-                # Invoke mock Qwen-VL
+                # Invoke Qwen-VL design analysis
                 qwen_vl = QwenVL()
-                
-                # Simulate heavy layout parsing latency (1.2s)
-                await asyncio.sleep(1.2)
                 res = qwen_vl.analyze_design(task["file_path"])
 
                 # Complete task

@@ -9,14 +9,36 @@ Business services for local assets, browser capture, tags, settings, downloads, 
 - `browser-preview-injection.ts`: injected browser preview script.
 - `color-palette.service.ts`: color palette facade.
 - `ai-client.service.ts`: Electron-side AI polling facade.
+- `ai-client/ai-result-sync.projector.ts`: pure projection rules for Worker task results before SQLite sync.
+- `ai-client/ai-task-lifecycle-sync.sink.ts`: shared persistence for projected task completion records plus active, failed, and cancelled task/asset lifecycle state.
+- `ai-client/ai-tag-suggestion-sync.sink.ts`: shared sink for projected AI tag suggestions into `tag_suggestions`, `tags`, and pending `asset_tags`.
 - `tag*.service.ts`: tag and suggestion services.
 - `settings.service.ts`: settings persistence.
+- `ai-runtime/platform-ai-branch-status.projector.ts`: workflow-first Windows/macOS AI branch status projection.
+- `ai-runtime/ai-runtime-bootstrap.ts`: registers shared AI Runtime providers and resolves platform bootstrap policy through one adapter.
+- `ai-runtime/model-artifact-readiness.mapper.ts`: maps existing cooperative/Llama artifact state into shared readiness evidence without scanning model caches.
+- `llama-runtime/llama-runtime-server-probe.ts`: performs a user-triggered text and generated-image probe against the existing OpenAI-compatible Llama endpoint; only successful image inference becomes real-model evidence.
+- `ai-python-environment.ts`: resolves managed AI Python runtimes and base Python executables through one platform adapter seam.
 
 ## Rules
 
 - Keep public service methods stable.
 - Split helper logic into small local modules before changing behavior.
 - Do not change database schema or AI polling semantics from this folder.
+- Keep Platform AI Branch Status projection in main-process services; renderer should consume projected workflow status instead of recomputing probe/readiness meaning.
+- Model Artifact Readiness mappers should accept existing service state and avoid exposing local filesystem paths in projected evidence.
+- Worker model status mapping should use the shared cooperative readiness snapshot contract instead of declaring a main-process-only approximation.
+- Readiness mappers should emit platform-specific lane variants for shared model evidence when both macOS and Windows can consume the artifact; do not hard-code MPS/Metal lanes as universal.
+- Keep AI Worker result shape normalization in projector helpers before writing Queue Sync and Asset Library state.
+- Completed tagging and analysis results should be projected into normalized caption/OCR/dimension/JSON/text-block/tag-suggestion plans before SQLite transactions interpret them.
+- Worker task lifecycle aliases (`running`/`processing`) and terminal-result eligibility should be classified once in the result projector before polling branches choose SQLite actions.
+- Worker lifecycle-to-local task/asset status, sync status, cancellation behavior, and default error messages should come from a pure sync action plan; non-completion SQL execution should reuse the lifecycle sink.
+- Reuse the AI tag suggestion sink when multiple Worker workflows produce pending tag suggestions.
+- Keep AI Python managed venv paths, path API selection, platform-specific base Python discovery, and platform-specific search roots inside the AI Python Environment adapter seam.
+- Keep AI Runtime Bootstrap platform policy in one adapter that owns Python Worker auto-start support and runtime app-data root path parts.
+- Keep OCR dependency governance provider policy and risk evidence table-driven; the governance projector must remain read-only and must not spawn installers.
+- Keep OCR environment checks focused on collecting provider evidence; selected-provider availability should be projected by the shared OCR dependency workflow.
+- Keep Color Palette text-box detection provider execution plans in shared workflow metadata; the service should execute the selected plan rather than map OCR provider strings locally.
 
 ## Tests
 
@@ -29,6 +51,25 @@ npm run build
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.4.17 | 2026-06-29 | Routed Color Palette OCR provider execution planning through the shared text-box provider workflow. |
+| v1.4.16 | 2026-06-29 | Moved OCR selected-provider availability projection into shared workflow metadata consumed by the dependency service. |
+| v1.4.15 | 2026-06-29 | Moved OCR dependency governance provider policy and risk evidence into table-driven projection metadata. |
+| v1.4.14 | 2026-06-26 | Moved AI Python Environment base interpreter discovery into the same platform adapter as path API, managed venv layout, and search roots. |
+| v1.4.13 | 2026-06-26 | Moved AI Runtime Bootstrap Python Worker auto-start support and runtime app-data root path parts into one platform adapter. |
+| v1.4.12 | 2026-06-26 | Moved AI Python Environment path API, managed venv executable layout, and Python search roots into one platform adapter seam. |
+| v1.4.11 | 2026-06-06 | Added CLIP ONNX image/text embedding evidence and sanitized Python Worker exit summaries. |
+| v1.4.10 | 2026-06-06 | Replaced synthetic Python Worker process tracking with real child-process lifecycle management, bounded logs, shutdown cleanup, and a cold-start capability-probe budget. |
+| v1.4.9 | 2026-06-05 | Added Windows CUDA/Llama lane variants to shared model artifact readiness evidence. |
+| v1.4.8 | 2026-06-05 | Reused the shared Worker cooperative readiness snapshot contract in Model Artifact Readiness mapping. |
+| v1.4.7 | 2026-06-05 | Added one lifecycle sink for tagging/analysis task completion records and non-completion status persistence. |
+| v1.4.6 | 2026-06-05 | Added pure lifecycle-to-SQLite action plans for tagging and analysis result sync. |
+| v1.4.5 | 2026-06-05 | Added shared Worker task lifecycle classification and removed the dead Prompt polling copy. |
+| v1.4.4 | 2026-06-05 | Extended Electron AI Result Sync projection to completed tagging and analysis asset-update plans. |
+| v1.4.3 | 2026-06-04 | Added shared AI tag suggestion sync sink for Electron AI Result Sync. |
+| v1.4.2 | 2026-06-04 | Added Electron AI Result Sync projector boundary for Worker task result normalization. |
+| v1.4.1 | 2026-06-04 | Added Model Artifact Readiness mapper guidance for feeding shared branch-status evidence without exposing local paths. |
+| v1.4.0 | 2026-06-04 | Added Platform AI Branch Status projector entry for shared Windows/macOS workflow status. |
+| v1.3.9 | 2026-06-04 | Documented main-process ownership of Platform AI Branch Status projection. |
 | v1.3.8 | 2026-05-31 | Stopped reporting mock GPU telemetry when the Python AI Worker is offline so AI Console safety checks treat unavailable telemetry as unknown instead of real. |
 | v1.3.7 | 2026-05-31 | Optimized download performance by routing runtime package downloads to a shared, persistent directory and implementing pre-download checks to verify and reuse existing files via SHA256 hashes or size match. |
 | v1.3.6 | 2026-05-31 | Fixed a critical regex asset matching bug by adding ^ anchors, preventing cudart-llama zip assets from being incorrectly matched as the main llama runtime. |

@@ -1,0 +1,76 @@
+{
+  "shared_ai_runtime": [
+    "scripts/ai-runtime-status-workflow.test.ts",
+    "scripts/ai-python-environment.test.ts",
+    "npm run test-ai-python-runtime-host-context",
+    "npm run test-ai-runtime-host-context",
+    "scripts/ai-runtime-bootstrap.test.ts",
+    "scripts/ai-runtime-panel-contract.test.ts",
+    "scripts/platform-ai-runtime-request-selection.test.ts",
+    "scripts/python-execution-evidence.test.ts",
+    "scripts/ai-console-macos-branch.test.ts",
+    "npm run test-ai-console-overview-workflow",
+    "npm run test-macos-ai-deps-installer-contract",
+    "scripts/macos-ai-runtime.test.ts"
+  ],
+  "python_ai_worker": [
+    "python3 -m unittest discover ai-service/tests"
+  ],
+  "doctor_governance": [
+    "npm run test-doctor",
+    "npm run test-doctor-command-resolver",
+    "npm run test-doctor-service"
+  ],
+  "desktop_shell": [
+    "npm run test-desktop-viewport-policy",
+    "npm run test-app-navigation-workflow",
+    "npm run test-electron-main-lifecycle-policy"
+  ],
+  "cross_platform_runtime": [
+    "npm run ci:test-runtime-safety",
+    "npm run test-node-host-platform-defaults",
+    "npm run test-llama-runtime-host-context",
+    "npm run test-llama-runtime-macos-hardware-profile",
+    "npm run test-llama-runtime-installer",
+    "npm run test-runtime-package-executor",
+    "npm run test-runtime-package-session",
+    "npm run test-runtime-package-session-projector",
+    "npm run test-runtime-package-test-hygiene",
+    "npm run test-runtime-package-ipc-contract-preflight",
+    "npm run test-runtime-package-ipc-governance",
+    "npm run test-runtime-package-ipc-handlers",
+    "npm run test-runtime-package-product-workflow",
+    "npm run test-runtime-package-panel"
+  ],
+  "release_flow": [
+    "npm run test-release-flow-governance",
+    "npm run test-release-candidate-governance",
+    "npm run test-release-checksums",
+    "npm run test-release-update-metadata",
+    "npm run test-release-trust-evidence-checks",
+    "npm run test-release-trust-evidence",
+    "npm run test-release-readiness-summary",
+    "npm run test-release-readiness-writer",
+    "npm run test-release-publish-approval",
+    "npm run test-release-platform-targets",
+    "npm run test-release-target-selection",
+    "npm run test-release-script-targets",
+    "npm run test-electron-builder-runner-options",
+    "npm run test-release-branding-preflight",
+    "npm run test-release-branding-approval-template",
+    "npm run test-release-branding-evidence",
+    "npm run test-release-signed-candidate-preflight",
+    "npm run test-release-environment-manifest",
+    "npm run test-release-signing-environment-status",
+    "npm run test-release-signing-environment-template",
+    "npm run test-release-signed-candidate-dispatch-status",
+    "npm run test-release-install-smoke-preflight",
+    "npm run test-release-external-gate-plan",
+    "npm run test-release-external-gate-status",
+    "npm run test-release-external-gate-status-writer",
+    "npm run test-release-evidence-bundle-status",
+    "npm run test-signed-release-workflow",
+    "npm run test-macos-signing-entitlements",
+    "npm run test-package-smoke"
+  ]
+}

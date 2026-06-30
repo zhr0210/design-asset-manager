@@ -3,7 +3,7 @@ import { spawn } from 'child_process'
 import path from 'path'
 import fs from 'fs'
 import { COOPERATIVE_MODELS, getCooperativeModelLocalPath } from '../services/ai-models/cooperative-model-registry'
-import { ensureMacOSAiPythonRuntime } from '../services/ocr-dependency.service'
+import { ensureManagedAiPythonRuntime } from '../services/ocr-dependency.service'
 import { resolveAiServicePath } from '../services/ai-service-paths'
 import { getPythonModelCacheEnv } from '../services/ai-models/ai-model-registry'
 
@@ -29,7 +29,7 @@ export function registerCooperativeModelIpc() {
     if (!model) return { success: false, error: `Model not found: ${modelId}` }
 
     const localDir = getCooperativeModelLocalPath(model)
-    const runtime = await ensureMacOSAiPythonRuntime()
+      const runtime = await ensureManagedAiPythonRuntime()
     if (!runtime.success) {
       return { success: false, error: `Managed Python runtime unavailable: ${runtime.error ?? 'unknown'}` }
     }

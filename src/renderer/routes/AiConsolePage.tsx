@@ -33,15 +33,16 @@ import {
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settings.store'
 import AiRuntimePanel from '../components/settings/AiRuntimePanel'
-import { MacOSAiCapabilityMatrix } from '../components/settings/MacOSAiCapabilityMatrix'
+import RuntimePackagePanel from '../components/settings/RuntimePackagePanel'
+import { PlatformAiCapabilityMatrix } from '../components/settings/PlatformAiCapabilityMatrix'
 import type {
   AiBackendConfig,
   AiBackendType,
   AiPromptReverseSettings,
   PromptReverseBackendMode
 } from '../../shared/types/ai-backend.types'
-import type { AiMemoryPolicy, AiPromptTemplate } from '../../shared/types/settings.types'
-import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
+import type { AiMemoryPolicy, AiPromptTemplate, AppSettings } from '../../shared/types/settings.types'
+import type { AiRuntimeClipSiglipOnnxStatusResponse } from '../../shared/contracts/ai-runtime.contract'
 import type {
   LlamaHardwareProfile,
   LlamaInstallPlan,
@@ -49,12 +50,54 @@ import type {
   LlamaInstallStatus,
   LlamaServerTestResult
 } from '../../shared/types/llama-runtime.types'
-import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
+import type { PlatformAiWorkerProbeWithRuntimeVersions } from '../../shared/types/platform-ai-runtime.types'
+import type { PlatformAiBranch, PlatformAiBranchStatusResponse } from '../../shared/types/platform-ai-branch-status.types'
+import type { PlatformAiActionPlan } from '../../shared/types/platform-ai-action-plan.types'
+import type {
+  CooperativeWorkerModelStatus,
+  WorkerModelStatusSnapshot
+} from '../../shared/types/model-artifact-readiness.types'
+import type { PromptVlmModel } from '../../shared/types/ai-model.types'
+import {
+  projectPlatformAiBranchStatusDisplay,
+  projectPlatformAiRouteOverviewDisplay
+} from '../../shared/workflows/platform-ai-branch-status.workflow'
+import { resolvePlatformAiActionCommand } from '../../shared/workflows/platform-ai-action-plan.workflow'
+import {
+  selectCurrentPlatformAiRuntimeRequests,
+  type PlatformAiRuntimeAdapterApi
+} from '../platform-ai-runtime.adapter'
+import {
+  projectGgufArtifactTileDisplay,
+  projectCooperativeModelRowDisplay,
+  projectModelArtifactRowDisplay,
+  resolveActivePromptModelArtifactReady
+} from '../../shared/workflows/model-artifact-readiness.workflow'
+import { type AiQueueStatsLike, projectAiQueueStatusDisplay } from '../../shared/workflows/ai-queue-status.workflow'
+import {
+  DEFAULT_PLATFORM_AI_BRANCH,
+  type AiRuntimeCompatibilityDisplay,
+  projectClipSiglipOnnxCompatibilityDisplay,
+  projectLlamaRuntimeDisplay,
+  projectPlatformAiWorkerProbeDiagnosticsSelection,
+  projectPlatformPythonRuntimeCompatibilityDisplay,
+  type PlatformAiWorkerProbeDiagnosticsDisplay,
+} from '../../shared/workflows/ai-runtime-status.workflow'
+import {
+  type AiConsoleGpuDisplay,
+  type AiConsoleModelReadinessDisplayInput,
+  projectAiConsoleGpuDisplay,
+  projectAiConsoleModelReadinessDisplay,
+  projectAiConsoleDependencyInstallCopy
+} from '../../shared/workflows/ai-console-overview.workflow'
+import {
+  normalizeProductTextBoxProvider,
+  type ProductTextBoxProvider
+} from '../../shared/workflows/text-box-provider.workflow'
 import type { ClearGpuMemoryResult, GpuStatus } from '../../shared/types/ai-worker.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS, DEFAULT_PROMPT_TEMPLATE_ID, DEFAULT_QWEN3VL_DESIGN_PROMPT, OPENAI_COMPATIBLE_REVERSE_PROMPT } from '../../shared/constants/prompt-templates.constants'
 
 type ConsoleTab = 'overview' | 'models' | 'services' | 'runtime' | 'prompts' | 'logs'
-type TextBoxProvider = 'none' | 'easyocr' | 'rapidocr' | 'paddleocr' | 'mock'
 
 type ModelRow = {
   id: string
@@ -100,24 +143,7 @@ type CooperativeModelDownloadState = Record<string, {
   localPath?: string
 }>
 
-type CooperativeModelReadiness = {
-  state?: string
-  label?: string
-  dependency_ready?: boolean
-  files_ready?: boolean
-  missing_dependencies?: string[]
-  missing_files?: string[]
-  backend?: string
-  is_mock?: boolean | null
-}
-
-type CooperativeRuntimeStatus = Record<string, {
-  loaded?: boolean
-  backend?: string
-  is_mock?: boolean | null
-  downloaded?: boolean
-  readiness?: CooperativeModelReadiness
-}>
+type CooperativeRuntimeStatus = NonNullable<WorkerModelStatusSnapshot['cooperative_models']>
 
 const COOPERATIVE_MODEL_ID_BY_ROW_ID: Record<string, string> = {
   ram: 'ram-plus',
@@ -158,14 +184,6 @@ const MODEL_ROWS: ModelRow[] = [
     capability: '插画、角色、姿态和图像标签预测',
     source: 'Python AI Worker',
     accent: 'bg-pink-50 text-pink-700 border-pink-100 dark:bg-pink-950/30 dark:text-pink-300 dark:border-pink-900/60'
-  },
-  {
-    id: 'joycaption',
-    name: 'JoyCaption v2',
-    role: '深层提示词反推',
-    capability: '为复杂视觉素材生成提示词和长描述',
-    source: 'Python AI Worker',
-    accent: 'bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-900/60'
   },
   {
     id: 'qwen_vl',
@@ -435,20 +453,15 @@ function PromptPreview({ title, text }: { title: string; text: string }) {
   )
 }
 
-function TaskListPreview({ queueStats }: { queueStats: any }) {
-  const rows = [
-    { label: '运行中', value: queueStats.running || 0, tone: 'bg-emerald-500' },
-    { label: '排队中', value: queueStats.queued || 0, tone: 'bg-sky-500' },
-    { label: '已完成', value: queueStats.completed || 0, tone: 'bg-slate-400' },
-    { label: '失败', value: queueStats.failed || 0, tone: 'bg-rose-500' }
-  ]
+function TaskListPreview({ queueStats }: { queueStats: AiQueueStatsLike }) {
+  const display = projectAiQueueStatusDisplay(queueStats)
 
   return (
     <div className="grid grid-cols-2 gap-2">
-      {rows.map((row) => (
-        <div key={row.label} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] font-black text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300">
+      {display.rows.map((row) => (
+        <div key={row.code} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] font-black text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300">
           <span className="flex min-w-0 items-center gap-2">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${row.tone}`} />
+            <span className={`h-2 w-2 shrink-0 rounded-full ${row.toneClass}`} />
             <span className="truncate">{row.label}</span>
           </span>
           <span className="font-mono text-slate-950 dark:text-slate-50">{row.value}</span>
@@ -594,28 +607,6 @@ function StatusPill({ tone, children }: { tone: 'good' | 'warn' | 'bad' | 'muted
   return <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[10.5px] font-extrabold ${statusTone(tone)}`}>{children}</span>
 }
 
-function cooperativeReadinessTone(state?: string, loaded?: boolean): 'good' | 'warn' | 'bad' | 'muted' {
-  if (state === 'loaded_real' || state === 'ready_to_load' || loaded) return 'good'
-  if (state === 'missing_dependencies' || state === 'missing_files' || state === 'loaded_mock_blocked') return 'bad'
-  if (state === 'not_downloaded') return 'muted'
-  return 'warn'
-}
-
-function cooperativeReadinessDetail(readiness?: CooperativeModelReadiness): string {
-  if (!readiness) return 'Worker readiness 待刷新'
-  if (readiness.state === 'loaded_real') return `真实后端：${readiness.backend || 'ready'}`
-  if (readiness.state === 'ready_to_load') return '依赖与权重形态已满足'
-  if (readiness.state === 'loaded_mock_blocked') return '生产 strict 模式已阻断 mock 输出'
-  if (readiness.state === 'missing_dependencies') {
-    return `依赖缺失：${(readiness.missing_dependencies ?? []).slice(0, 4).join(', ') || 'unknown'}`
-  }
-  if (readiness.state === 'missing_files') {
-    return `权重缺失：${(readiness.missing_files ?? []).slice(0, 3).join(', ') || 'unknown'}`
-  }
-  if (readiness.state === 'not_downloaded') return '尚未下载权重'
-  return readiness.label || '等待 Worker 检查'
-}
-
 function MiniButton({
   children,
   onClick,
@@ -654,11 +645,18 @@ export default function AiConsolePage() {
   const [expandedModelFamilies, setExpandedModelFamilies] = useState<Record<string, boolean>>({ qwen_vl: true })
   const [aiStatus, setAiStatus] = useState<any>(null)
   const [gpuStatus, setGpuStatus] = useState<GpuStatus | null>(null)
-  const [modelsList, setModelsList] = useState<any[]>([])
+  const [modelsList, setModelsList] = useState<PromptVlmModel[]>([])
   const [localGgufModels, setLocalGgufModels] = useState<LocalGgufModel[]>([])
   const [gpuSamples, setGpuSamples] = useState<GpuSample[]>([])
-  const [macOSWorkerProbe, setMacOSWorkerProbe] = useState<MacOSAiWorkerProbeResult | null>(null)
-  const [pythonMpsStatus, setPythonMpsStatus] = useState<AiRuntimePythonMpsStatusResponse | null>(null)
+  const [platformWorkerProbe, setPlatformWorkerProbe] = useState<PlatformAiWorkerProbeWithRuntimeVersions | null>(null)
+  const [platformProbeDisplay, setPlatformProbeDisplay] = useState<PlatformAiWorkerProbeDiagnosticsDisplay>(
+    () => projectPlatformAiWorkerProbeDiagnosticsSelection({}).display
+  )
+  const [platformWorkerProbeBranch, setPlatformWorkerProbeBranch] = useState<PlatformAiBranch>(DEFAULT_PLATFORM_AI_BRANCH)
+  const [platformBranchStatus, setPlatformBranchStatus] = useState<PlatformAiBranchStatusResponse | null>(null)
+  const [platformPythonCompatibilityDisplay, setPlatformPythonCompatibilityDisplay] = useState<AiRuntimeCompatibilityDisplay>(
+    () => projectPlatformPythonRuntimeCompatibilityDisplay(DEFAULT_PLATFORM_AI_BRANCH, null)
+  )
   const [clipSiglipOnnxStatus, setClipSiglipOnnxStatus] = useState<AiRuntimeClipSiglipOnnxStatusResponse | null>(null)
   const [loading, setLoading] = useState<Record<string, boolean>>({})
   const [toast, setToast] = useState<string | null>(null)
@@ -672,11 +670,14 @@ export default function AiConsolePage() {
   const [llamaRunning, setLlamaRunning] = useState(false)
   const [selectedLlamaModelId, setSelectedLlamaModelId] = useState<string>('')
   const [llamaInstallLogs, setLlamaInstallLogs] = useState<string[]>([])
+  const [downloadSource, setDownloadSource] = useState<'huggingface' | 'hf-mirror' | 'production-cdn'>('hf-mirror')
   const [logs, setLogs] = useState<string[]>([])
   const [cooperativeModels, setCooperativeModels] = useState<CooperativeModelDownloadState>({})
   const [cooperativeCleanups, setCooperativeCleanups] = useState<(() => void)[]>([])
 
-  const [textBoxProvider, setTextBoxProvider] = useState<TextBoxProvider>(settings.textBoxProvider ?? 'easyocr')
+  const [textBoxProvider, setTextBoxProvider] = useState<ProductTextBoxProvider>(
+    normalizeProductTextBoxProvider(settings.textBoxProvider)
+  )
   const [enableTextColorAnalysis, setEnableTextColorAnalysis] = useState(settings.enableTextColorAnalysis ?? true)
   const [ocrTimeoutMs, setOcrTimeoutMs] = useState(settings.ocrTimeoutMs ?? 15000)
   const [maxTextBoxesPerImage, setMaxTextBoxesPerImage] = useState(settings.maxTextBoxesPerImage ?? 30)
@@ -693,8 +694,11 @@ export default function AiConsolePage() {
   const isMockTelemetry = effectiveGpu.isMock
   const telemetryTrusted = effectiveGpu.available && (!effectiveGpu.isMock || devMockEnabled)
   const loadedModels = aiStatus?.loaded_models ?? {}
-  const cooperativeRuntimeModels: CooperativeRuntimeStatus = aiStatus?.cooperative_models ?? {}
-  const queueStats = aiStatus?.queue_stats ?? { queued: 0, running: 0, completed: 0, failed: 0 }
+  const cooperativeRuntimeModels: CooperativeRuntimeStatus = (
+    aiStatus as WorkerModelStatusSnapshot | null
+  )?.cooperative_models ?? {}
+  const queueStats: AiQueueStatsLike = aiStatus?.queue_stats ?? { queued: 0, running: 0, completed: 0, failed: 0 }
+  const queueStatusDisplay = projectAiQueueStatusDisplay(queueStats)
   const selectedBackend = aiBackends.find((backend) => backend.id === promptSettings.selectedExternalBackendId)
   const ollamaFallback = useMemo(() => summarizeOllamaFallback(aiBackends, backendResults), [aiBackends, backendResults])
   const externalHttpFallback = useMemo(() => summarizeExternalHttpFallback(aiBackends, backendResults), [aiBackends, backendResults])
@@ -705,13 +709,6 @@ export default function AiConsolePage() {
   const activeReverseModel = currentReverseModelCode(promptSettings, selectedPromptModelId, selectedBackend)
   const activePromptPreview = currentReversePromptPreview(promptSettings)
 
-  const riskTone = useMemo(() => {
-    if (!telemetryTrusted) return 'warn'
-    if (effectiveGpu.usagePercent >= memoryPolicy.maxGpuMemoryUsagePercent) return 'bad'
-    if (effectiveGpu.freeMb > 0 && effectiveGpu.freeMb < memoryPolicy.minFreeVramGBBeforeQwen8B * 1024) return 'warn'
-    return 'good'
-  }, [effectiveGpu.freeMb, effectiveGpu.usagePercent, memoryPolicy.maxGpuMemoryUsagePercent, memoryPolicy.minFreeVramGBBeforeQwen8B, telemetryTrusted])
-
   const selectedModel = selectedModelId ? MODEL_ROWS.find((model) => model.id === selectedModelId) : null
   const selectedExternalModels = promptSettings.selectedExternalBackendId ? backendModelLists[promptSettings.selectedExternalBackendId] ?? [] : []
   const installedNativeModels = modelsList.filter((model) => model.isDownloaded)
@@ -719,11 +716,28 @@ export default function AiConsolePage() {
   const installedModelCount = installedNativeModels.length + installedGgufModels.length
   const currentNativeModel = modelsList.find((model) => model.id === selectedPromptModelId)
   const currentGgufModel = localGgufModels.find((model) => model.filename === promptSettings.selectedExternalModel || model.id === promptSettings.selectedExternalModel)
-  const currentModelReady = promptSettings.backendMode === 'native-qwen3vl'
-    ? Boolean(currentNativeModel?.isDownloaded)
-    : promptSettings.backendMode === 'llama-openai'
-      ? Boolean(currentGgufModel?.isDownloaded || llamaStatus?.serverPid)
-      : Boolean(selectedBackend?.enabled)
+  const currentModelReady = resolveActivePromptModelArtifactReady({
+    backendMode: promptSettings.backendMode,
+    nativeModelDownloaded: currentNativeModel?.isDownloaded,
+    ggufModelDownloaded: currentGgufModel?.isDownloaded,
+    llamaServerRunning: Boolean(llamaStatus?.serverPid),
+    externalBackendEnabled: selectedBackend?.enabled
+  })
+  const modelReadinessInput: AiConsoleModelReadinessDisplayInput = {
+    installedModelCount,
+    currentModelReady,
+    workerOffline: isWorkerOffline
+  }
+  const gpuDisplay = projectAiConsoleGpuDisplay({
+    telemetryTrusted,
+    deviceName: effectiveGpu.deviceName,
+    totalMb: effectiveGpu.totalMb,
+    freeMb: effectiveGpu.freeMb,
+    usagePercent: effectiveGpu.usagePercent,
+    maxGpuMemoryUsagePercent: memoryPolicy.maxGpuMemoryUsagePercent,
+    minFreeVramGBBeforeQwen8B: memoryPolicy.minFreeVramGBBeforeQwen8B
+  })
+  const modelReadinessDisplay = projectAiConsoleModelReadinessDisplay(modelReadinessInput)
   const latestLogLine = logs[0] ?? '暂无本地操作日志'
 
   const pushLog = (message: string) => {
@@ -733,6 +747,41 @@ export default function AiConsolePage() {
   const pushLlamaInstallLog = (message: string) => {
     setLlamaInstallLogs((prev) => [`${new Date().toLocaleTimeString()} ${message}`, ...prev].slice(0, 160))
   }
+
+
+  // Listen for macOS AI dependency install log events (real-time pip output)
+  useEffect(() => {
+    const api = (window as any).electronAPI
+    if (!api?.onOcrInstallLog) return
+    const handler = (_event: any, message: string) => {
+      const trimmed = message.trim()
+      if (!trimmed) return
+      // Try to parse JSON lines from the new streaming installer
+      for (const line of trimmed.split(/\r?\n/)) {
+        if (!line.trim()) continue
+        try {
+          const parsed = JSON.parse(line.trim())
+          if (parsed.type === 'pip-log') {
+            pushLog(`[pip] ${parsed.message}`)
+          } else if (parsed.type === 'progress') {
+            pushLog(`[pip ${parsed.progress}%] ${parsed.message}`)
+          } else if (parsed.type === 'error') {
+            pushLog(`[pip ERR] ${parsed.package ?? ''}: ${parsed.message}`)
+          } else if (parsed.type === 'complete') {
+            pushLog(`[pip] ${parsed.success ? '✓' : '✗'} ${parsed.message}`)
+          } else {
+            pushLog(`[pip] ${line.trim().slice(0, 200)}`)
+          }
+        } catch {
+          // Raw pip output
+          pushLog(`[pip] ${line.trim().slice(0, 200)}`)
+        }
+      }
+    }
+    api.onOcrInstallLog(handler)
+    // Note: preload does not expose removeListener for this channel;
+    // this effect intentionally persists for the component lifetime.
+  }, [])
 
   const showToast = (message: string) => {
     setToast(message)
@@ -758,13 +807,29 @@ export default function AiConsolePage() {
         return
       }
 
-      const [status, gpu, models, llama, ggufModels, macOSProbe, clipSiglipStatus] = await Promise.all([
+      const runtimeListResponse = api.aiRuntime?.listRuntimes
+        ? await api.aiRuntime.listRuntimes().catch(() => null)
+        : null
+      const currentRuntimes = runtimeListResponse?.success && Array.isArray(runtimeListResponse.data?.runtimes)
+        ? runtimeListResponse.data.runtimes
+        : []
+      const currentPlatformSelection = api.aiRuntime
+        ? selectCurrentPlatformAiRuntimeRequests(
+            api.aiRuntime as PlatformAiRuntimeAdapterApi,
+            currentRuntimes
+          )
+        : null
+      const getPlatformCapabilities = currentPlatformSelection?.requests.getCapabilities
+      const getPlatformBranchStatus = currentPlatformSelection?.requests.getBranchStatus
+
+      const [status, gpu, models, llama, ggufModels, platformProbeResponse, platformBranchStatusResponse, clipSiglipStatus] = await Promise.all([
         api.aiModelStatus?.().catch((err: any) => ({ offline: true, error: String(err) })),
         api.aiWorkerGetGpuStatus?.().catch(() => null),
         api.aiModelList?.().catch(() => []),
         api.llamaRuntimeGetStatus?.().catch(() => null),
         api.llamaRuntimeListLocalModels?.().catch(() => []),
-        api.aiRuntime?.getMacOSCapabilities ? api.aiRuntime.getMacOSCapabilities().catch(() => null) : Promise.resolve(null),
+        getPlatformCapabilities ? getPlatformCapabilities().catch(() => null) : Promise.resolve(null),
+        getPlatformBranchStatus ? getPlatformBranchStatus().catch(() => null) : Promise.resolve(null),
         api.aiRuntime?.getClipSiglipOnnxStatus ? api.aiRuntime.getClipSiglipOnnxStatus().catch(() => null) : Promise.resolve(null)
       ])
 
@@ -778,20 +843,28 @@ export default function AiConsolePage() {
           setLlamaRunning(llama.serverRunning)
         }
       }
-      if (macOSProbe?.success && macOSProbe.data?.capabilities) {
-        setMacOSWorkerProbe(macOSProbe.data.capabilities)
+      const projectedBranchStatus = platformBranchStatusResponse?.success
+        && platformBranchStatusResponse.data?.platformBranch === currentPlatformSelection?.platformBranch
+        ? platformBranchStatusResponse.data as PlatformAiBranchStatusResponse
+        : null
+      setPlatformBranchStatus(projectedBranchStatus)
+      const probeSelection = projectPlatformAiWorkerProbeDiagnosticsSelection({
+        platformBranch: currentPlatformSelection?.platformBranch ?? projectedBranchStatus?.platformBranch,
+        probe: platformProbeResponse?.success ? platformProbeResponse.data?.capabilities : null
+      })
+      setPlatformWorkerProbe(probeSelection.probe)
+      setPlatformProbeDisplay(probeSelection.display)
+      setPlatformWorkerProbeBranch(probeSelection.platformBranch)
+      const getPlatformPythonStatus = currentPlatformSelection?.requests.getPythonStatus
+      if (status?.offline === false && getPlatformPythonStatus) {
+        const platformPythonStatus = await getPlatformPythonStatus().catch(() => null)
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(
+          probeSelection.platformBranch,
+          platformPythonStatus?.success ? platformPythonStatus.data : null,
+          platformPythonStatus?.success ? platformPythonStatus.data?.error : platformPythonStatus?.error
+        ))
       } else {
-        setMacOSWorkerProbe(null)
-      }
-      if (status?.offline === false && api.aiRuntime?.getPythonMpsStatus) {
-        const pythonMps = await api.aiRuntime.getPythonMpsStatus().catch(() => null)
-        if (pythonMps?.success && pythonMps.data) {
-          setPythonMpsStatus(pythonMps.data)
-        } else {
-          setPythonMpsStatus(null)
-        }
-      } else {
-        setPythonMpsStatus(null)
+        setPlatformPythonCompatibilityDisplay(projectPlatformPythonRuntimeCompatibilityDisplay(probeSelection.platformBranch, null))
       }
       if (clipSiglipStatus?.success && clipSiglipStatus.data) {
         setClipSiglipOnnxStatus(clipSiglipStatus.data)
@@ -849,7 +922,7 @@ export default function AiConsolePage() {
   }, [])
 
   useEffect(() => {
-    setTextBoxProvider(settings.textBoxProvider ?? 'easyocr')
+    setTextBoxProvider(normalizeProductTextBoxProvider(settings.textBoxProvider))
     setEnableTextColorAnalysis(settings.enableTextColorAnalysis ?? true)
     setOcrTimeoutMs(settings.ocrTimeoutMs ?? 15000)
     setMaxTextBoxesPerImage(settings.maxTextBoxesPerImage ?? 30)
@@ -883,40 +956,58 @@ export default function AiConsolePage() {
     }
   }
 
-  // macOS AI dependency installation
-  const [installingMacOSDeps, setInstallingMacOSDeps] = useState(false)
+  const [installingAiRuntimeDeps, setInstallingAiRuntimeDeps] = useState(false)
+  const aiDependencyInstallCopy = projectAiConsoleDependencyInstallCopy('macos')
 
-  const handleInstallMacOSDeps = async () => {
+  const handleInstallAiRuntimeDeps = async () => {
     const api = (window as any).electronAPI
     if (!api?.macosAiInstallDeps) {
-      showToast('安装接口不可用')
+      showToast(aiDependencyInstallCopy.unavailableToast)
       return
     }
-    setInstallingMacOSDeps(true)
-    showToast('正在安装 macOS AI 依赖 (torch, transformers, onnxruntime)...')
-    pushLog('macOS AI deps installation started')
+    setInstallingAiRuntimeDeps(true)
+    showToast(aiDependencyInstallCopy.startToast)
+    pushLog(aiDependencyInstallCopy.startedLog)
     try {
       const result = await api.macosAiInstallDeps()
       if (result?.success) {
-        showToast('macOS AI 依赖安装完成')
-        const installedCount = Array.isArray(result.installedPackages) ? result.installedPackages.length : 0
-        const runtimeLabel = result.runtime?.created ? 'managed runtime created' : 'managed runtime reused'
-        pushLog(`macOS AI deps installation completed (${installedCount} package checks, ${runtimeLabel}, ${Math.round((result.durationMs ?? 0) / 1000)}s)`)
+        showToast(aiDependencyInstallCopy.successToast)
+        pushLog(aiDependencyInstallCopy.completedLog(result))
       } else {
-        const failedPackages = Array.isArray(result?.failedPackages)
-          ? result.failedPackages.map((item: any) => item?.package).filter(Boolean)
-          : []
-        const packageMessage = failedPackages.length ? failedPackages.join(', ') : 'unknown package'
-        const message = result?.error || `exit=${result?.exitCode ?? 'unknown'} failed=${packageMessage}`
-        showToast('安装失败：' + String(message).slice(0, 120))
-        pushLog(`macOS AI deps install failed (${Math.round((result?.durationMs ?? 0) / 1000)}s): ${packageMessage}`)
+        showToast(aiDependencyInstallCopy.failureToast(result))
+        pushLog(aiDependencyInstallCopy.failedLog(result))
       }
       await fetchConsoleStatus('manual')
     } catch (err: any) {
-      showToast('安装失败: ' + String(err))
-      pushLog('macOS AI deps install failed: ' + String(err))
+      showToast(aiDependencyInstallCopy.exceptionToast(err))
+      pushLog(aiDependencyInstallCopy.exceptionLog(err))
     } finally {
-      setInstallingMacOSDeps(false)
+      setInstallingAiRuntimeDeps(false)
+    }
+  }
+
+  const [installingOcr, setInstallingOcr] = useState(false)
+
+  const handleInstallEasyOcr = async () => {
+    const api = (window as any).electronAPI
+    if (!api?.ocrInstallEasyOcr) {
+      showToast('OCR 安装接口不可用')
+      return
+    }
+    setInstallingOcr(true)
+    showToast('正在安装 EasyOCR 及其依赖...')
+    pushLog('OCR EasyOCR installation started')
+    try {
+      await api.ocrInstallEasyOcr()
+      showToast('EasyOCR 安装完成')
+      pushLog('OCR EasyOCR installation completed')
+      await fetchConsoleStatus('manual')
+    } catch (err: any) {
+      const message = err instanceof Error ? err.message : String(err)
+      showToast('EasyOCR 安装失败: ' + message)
+      pushLog(`OCR EasyOCR installation failed: ${message}`)
+    } finally {
+      setInstallingOcr(false)
     }
   }
 
@@ -1188,7 +1279,10 @@ export default function AiConsolePage() {
 
     setBusy('llama-plan', true)
     try {
-      const plan = await api.llamaRuntimeCreateInstallPlan({ modelRootDir: settings.modelRootDir })
+      const plan = await api.llamaRuntimeCreateInstallPlan({
+        modelRootDir: settings.modelRootDir,
+        downloadSource
+      })
       setLlamaPlan(plan)
       setSelectedLlamaModelId(plan.recommendedModel.id)
       setLlamaInstallLogs([
@@ -1326,6 +1420,9 @@ export default function AiConsolePage() {
         baseUrl: 'http://127.0.0.1:8080/v1',
         models: [],
         chatOk: false,
+        visionOk: false,
+        visionInput: 'generated_fixture',
+        checkedAt: new Date().toISOString(),
         error: { code: 'BRIDGE_UNAVAILABLE', message: '当前环境无法访问桌面端 Llama 连接测试接口。' }
       })
       showToast('Llama 连接测试接口不可用')
@@ -1337,8 +1434,9 @@ export default function AiConsolePage() {
     try {
       const result = await api.llamaRuntimeTestServer({ baseUrl: 'http://127.0.0.1:8080/v1' })
       setLlamaTest(result)
-      showToast(result.success ? 'Llama 连接测试成功' : 'Llama 连接测试失败')
-      pushLog(result.success ? `Llama server test passed: ${result.models.join(', ') || 'no model name'}` : `Llama server test failed: ${result.error?.message || 'unknown error'}`)
+      showToast(result.success ? 'Llama 文本与视觉推理验证成功' : 'Llama 推理验证失败')
+      pushLog(result.success ? `Llama multimodal test passed: ${result.modelId || 'local model'}` : `Llama server test failed: ${result.error?.message || 'unknown error'}`)
+      await fetchConsoleStatus()
     } finally {
       setBusy('llama-test', false)
     }
@@ -1402,9 +1500,9 @@ export default function AiConsolePage() {
             <StatusCard
               icon={<Gauge className="h-4 w-4" />}
               title="GPU 与显存"
-              value={telemetryTrusted ? `${formatGb(effectiveGpu.totalMb - effectiveGpu.freeMb)} / ${formatGb(effectiveGpu.totalMb)}` : 'Unknown'}
-              caption={telemetryTrusted ? `当前占用 ${effectiveGpu.usagePercent.toFixed(0)}%，可用 ${formatGb(effectiveGpu.freeMb)}` : '暂无可信物理显存指标'}
-              tone={!telemetryTrusted ? 'warn' : riskTone}
+              value={gpuDisplay.valueLabel}
+              caption={gpuDisplay.captionLabel}
+              tone={gpuDisplay.riskTone}
               action="查看日志"
               onAction={() => {
                 setActiveTab('logs')
@@ -1418,7 +1516,7 @@ export default function AiConsolePage() {
               title="当前反推模型"
               value={activeReverseModel}
               caption={promptSettings.backendMode === 'native-qwen3vl' ? 'Python Transformers 实验路线' : activeBackendLabel}
-              tone={currentModelReady ? 'good' : 'warn'}
+              tone={modelReadinessDisplay.tone}
               action="查看模型"
               onAction={() => setActiveTab('models')}
             >
@@ -1427,9 +1525,9 @@ export default function AiConsolePage() {
             <StatusCard
               icon={<ListChecks className="h-4 w-4" />}
               title="任务列表"
-              value={`${queueStats.running || 0} 运行 / ${queueStats.queued || 0} 排队`}
-              caption={`${queueStats.completed || 0} 完成 / ${queueStats.failed || 0} 失败`}
-              tone={queueStats.failed ? 'warn' : 'good'}
+              value={queueStatusDisplay.valueLabel}
+              caption={queueStatusDisplay.captionLabel}
+              tone={queueStatusDisplay.statusTone}
               action="查看运行日志"
               onAction={() => setActiveTab('logs')}
             >
@@ -1438,9 +1536,9 @@ export default function AiConsolePage() {
             <StatusCard
               icon={<Boxes className="h-4 w-4" />}
               title="模型就绪"
-              value={`${installedModelCount} 个已安装`}
-              caption={`${currentModelReady ? '当前模型可用' : '当前模型未就绪'} / ${isWorkerOffline ? 'Worker 离线' : 'Worker 在线'}`}
-              tone={currentModelReady && !isWorkerOffline ? 'good' : 'warn'}
+              value={modelReadinessDisplay.valueLabel}
+              caption={modelReadinessDisplay.captionLabel}
+              tone={modelReadinessDisplay.tone}
               action="管理模型"
               onAction={() => setActiveTab('models')}
             />
@@ -1476,26 +1574,27 @@ export default function AiConsolePage() {
               promptMode={promptSettings.backendMode}
               activeReverseModel={activeReverseModel}
               activeBackendLabel={activeBackendLabel}
-              currentModelReady={currentModelReady}
+              modelReadinessInput={modelReadinessInput}
               installedNativeModels={installedNativeModels}
               installedGgufModels={installedGgufModels}
               queueStats={queueStats}
-              isWorkerOffline={isWorkerOffline}
               llamaStatus={llamaStatus}
               llamaRunning={llamaRunning}
-              macOSWorkerProbe={macOSWorkerProbe}
-              onInstallMacOSDeps={handleInstallMacOSDeps}
-              installingMacOSDeps={installingMacOSDeps}
-              pythonMpsStatus={pythonMpsStatus}
+              platformWorkerProbe={platformWorkerProbe}
+              platformWorkerProbeBranch={platformWorkerProbeBranch}
+              platformProbeDisplay={platformProbeDisplay}
+              platformBranchStatus={platformBranchStatus}
+              onInstallAiRuntimeDeps={handleInstallAiRuntimeDeps}
+              installingAiRuntimeDeps={installingAiRuntimeDeps}
+              pythonCompatibilityDisplay={platformPythonCompatibilityDisplay}
               clipSiglipOnnxStatus={clipSiglipOnnxStatus}
               ollamaFallback={ollamaFallback}
               externalHttpFallback={externalHttpFallback}
               selectedBackend={selectedBackend}
               latestLogLine={latestLogLine}
-              telemetryTrusted={telemetryTrusted}
-              effectiveGpu={effectiveGpu}
-              riskTone={riskTone}
+              gpuDisplay={gpuDisplay}
               setActiveTab={setActiveTab}
+              onRefreshEvidence={() => fetchConsoleStatus('manual')}
             />
           )}
 
@@ -1516,7 +1615,8 @@ export default function AiConsolePage() {
               isMockTelemetry={isMockTelemetry}
               devMockEnabled={devMockEnabled}
               effectiveGpu={effectiveGpu}
-              riskTone={riskTone}
+              gpuDisplay={gpuDisplay}
+              riskTone={gpuDisplay.riskTone}
               clearResult={clearResult}
               loading={loading}
               openModelDetail={openModelDetail}
@@ -1558,10 +1658,17 @@ export default function AiConsolePage() {
               startLlamaServer={startLlamaServer}
               stopLlamaServer={stopLlamaServer}
               testLlamaServer={testLlamaServer}
+              downloadSource={downloadSource}
+              setDownloadSource={setDownloadSource}
             />
           )}
 
-          {activeTab === 'runtime' && <AiRuntimePanel />}
+          {activeTab === 'runtime' && (
+            <div className="space-y-4">
+              <AiRuntimePanel onEvidenceChanged={() => fetchConsoleStatus('manual')} />
+              <RuntimePackagePanel />
+            </div>
+          )}
 
           {activeTab === 'prompts' && (
             <PromptSystemPanel
@@ -1608,12 +1715,11 @@ export default function AiConsolePage() {
                   <input type="checkbox" checked={enableTextColorAnalysis} onChange={(event) => setEnableTextColorAnalysis(event.target.checked)} className="h-4 w-4 accent-brand-500" />
                 </label>
                 <Field label="文字定位引擎">
-                  <select value={textBoxProvider} onChange={(event) => setTextBoxProvider(event.target.value as TextBoxProvider)} className="control">
+                  <select value={textBoxProvider} onChange={(event) => setTextBoxProvider(event.target.value as ProductTextBoxProvider)} className="control">
                     <option value="none">暂不启用</option>
                     <option value="easyocr">EasyOCR（推荐）</option>
                     <option value="rapidocr">RapidOCR</option>
                     <option value="paddleocr">PaddleOCR ONNX</option>
-                    <option value="mock">开发者虚拟检测框</option>
                   </select>
                 </Field>
                 <Field label="最大定位框数量">
@@ -1698,34 +1804,40 @@ function OverviewWorkspace(props: {
   promptMode: PromptReverseBackendMode
   activeReverseModel: string
   activeBackendLabel: string
-  currentModelReady: boolean
-  installedNativeModels: any[]
+  modelReadinessInput: AiConsoleModelReadinessDisplayInput
+  installedNativeModels: PromptVlmModel[]
   installedGgufModels: LocalGgufModel[]
-  queueStats: any
-  isWorkerOffline: boolean
+  queueStats: AiQueueStatsLike
   llamaStatus: LlamaInstallStatus | null
   llamaRunning?: boolean
-  macOSWorkerProbe: MacOSAiWorkerProbeResult | null
-  onInstallMacOSDeps?: () => Promise<void>
-  installingMacOSDeps?: boolean
-  pythonMpsStatus: AiRuntimePythonMpsStatusResponse | null
+  platformWorkerProbe: PlatformAiWorkerProbeWithRuntimeVersions | null
+  platformWorkerProbeBranch: PlatformAiBranch
+  platformProbeDisplay: PlatformAiWorkerProbeDiagnosticsDisplay
+  platformBranchStatus: PlatformAiBranchStatusResponse | null
+  onInstallAiRuntimeDeps?: () => Promise<void>
+  installingAiRuntimeDeps?: boolean
+  pythonCompatibilityDisplay: AiRuntimeCompatibilityDisplay
   clipSiglipOnnxStatus: AiRuntimeClipSiglipOnnxStatusResponse | null
   ollamaFallback: FallbackSummary
   externalHttpFallback: FallbackSummary
   selectedBackend?: AiBackendConfig
   latestLogLine: string
-  telemetryTrusted: boolean
-  effectiveGpu: ReturnType<typeof normalizeWorkerGpuStatus>
-  riskTone: 'good' | 'warn' | 'bad'
+  gpuDisplay: AiConsoleGpuDisplay
   setActiveTab: React.Dispatch<React.SetStateAction<ConsoleTab>>
+  onRefreshEvidence: () => void
 }) {
   const smokeGguf = props.installedGgufModels.find((model) => model.id === 'qwen3-vl-2b-instruct-q4-k-m') ?? props.installedGgufModels[0] ?? null
-  const llamaServerRunning = props.llamaRunning ?? Boolean(props.llamaStatus?.serverRunning || props.llamaStatus?.serverPid)
+  const llamaDisplay = projectLlamaRuntimeDisplay(props.llamaStatus, props.llamaRunning)
+  const clipSiglipOnnxDisplay = projectClipSiglipOnnxCompatibilityDisplay(props.clipSiglipOnnxStatus)
+  const routeOverviewDisplay = projectPlatformAiRouteOverviewDisplay(props.platformBranchStatus)
+  const ggufArtifactDisplay = projectGgufArtifactTileDisplay(smokeGguf)
+  const modelReadinessDisplay = projectAiConsoleModelReadinessDisplay(props.modelReadinessInput)
   const serviceState = props.promptMode === 'llama-openai'
-    ? llamaServerRunning ? 'Llama 服务运行中' : 'Llama 服务未运行'
+    ? `Llama 服务${llamaDisplay.serviceValue}`
     : props.promptMode === 'openai-compatible'
       ? props.selectedBackend?.enabled ? '外部服务已启用' : '外部服务未启用'
-      : props.isWorkerOffline ? 'Worker 离线' : 'Worker 在线'
+      : modelReadinessDisplay.workerStatusLabel
+  const queueStatusDisplay = projectAiQueueStatusDisplay(props.queueStats)
 
   return (
     <section className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
@@ -1736,14 +1848,14 @@ function OverviewWorkspace(props: {
               <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">运行驾驶舱</h3>
               <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">聚合当前反推链路、服务健康、任务队列与模型就绪状态。</p>
             </div>
-            <StatusPill tone={props.currentModelReady ? 'good' : 'warn'}>{props.currentModelReady ? '可执行' : '需配置'}</StatusPill>
+            <StatusPill tone={modelReadinessDisplay.tone}>{modelReadinessDisplay.executableLabel}</StatusPill>
           </div>
 
           <div className="mt-5 grid gap-3 md:grid-cols-2">
             <RuntimeTile label="当前反推链路" value={props.activeReverseModel} caption={props.activeBackendLabel} />
             <RuntimeTile label="服务状态" value={serviceState} caption={props.promptMode === 'native-qwen3vl' ? 'Python Worker' : 'OpenAI-compatible API'} />
-            <RuntimeTile label="任务队列" value={`${props.queueStats.running || 0} 运行 / ${props.queueStats.queued || 0} 排队`} caption={`${props.queueStats.completed || 0} 完成 / ${props.queueStats.failed || 0} 失败`} />
-            <RuntimeTile label="显存水位" value={props.telemetryTrusted ? `${props.effectiveGpu.usagePercent.toFixed(0)}%` : 'Unknown'} caption={props.telemetryTrusted ? `${formatGb(props.effectiveGpu.freeMb)} 可用` : '未知状态按风险处理'} />
+            <RuntimeTile label="任务队列" value={queueStatusDisplay.valueLabel} caption={queueStatusDisplay.captionLabel} />
+            <RuntimeTile label="显存水位" value={props.gpuDisplay.usageLabel} caption={props.gpuDisplay.freeLabel === '未知' ? '未知状态按风险处理' : `${props.gpuDisplay.freeLabel} 可用`} />
           </div>
         </div>
 
@@ -1764,40 +1876,71 @@ function OverviewWorkspace(props: {
           </div>
         </div>
 
+        <PlatformAiBranchStatusPanel
+          status={props.platformBranchStatus}
+          onAction={(actionPlan) => {
+            const command = resolvePlatformAiActionCommand(actionPlan)
+            if (command.kind === 'refresh_evidence') {
+              props.onRefreshEvidence()
+              return
+            }
+            if (command.kind === 'open_tab' && command.targetTab) {
+              props.setActiveTab(command.targetTab)
+            }
+          }}
+        />
+
         <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">macOS 路线概览</h3>
-              <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">把 Python MPS、ONNX Runtime 和 Llama 路线放到同一屏里查看。</p>
+              <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">{routeOverviewDisplay.title}</h3>
+              <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">{routeOverviewDisplay.description}</p>
             </div>
-            <div className="flex items-center gap-2">
-              <StatusPill tone={props.macOSWorkerProbe?.isMacOS ? 'good' : 'muted'}>{props.macOSWorkerProbe?.isMacOS ? 'macOS 探测已连接' : '等待探测'}</StatusPill>
-              <MiniButton tone="primary" onClick={props.onInstallMacOSDeps} disabled={props.installingMacOSDeps}>
-                {props.installingMacOSDeps ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
-                安装 macOS AI 依赖
-              </MiniButton>
-            </div>
+            {routeOverviewDisplay.showWorkerProbeDiagnostics && (
+              <div className="flex items-center gap-2">
+                <StatusPill tone={props.platformProbeDisplay.connectionTone}>{props.platformProbeDisplay.connectionLabel}</StatusPill>
+                <MiniButton tone="primary" onClick={props.onInstallAiRuntimeDeps} disabled={props.installingAiRuntimeDeps}>
+                  {props.installingAiRuntimeDeps ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
+                  {props.installingAiRuntimeDeps ? routeOverviewDisplay.installingDependenciesLabel : routeOverviewDisplay.installDependenciesLabel}
+                </MiniButton>
+              </div>
+            )}
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            <RuntimeTile label="MPS" value={props.macOSWorkerProbe?.torch.mpsAvailable ? '可用' : '回退'} caption={props.macOSWorkerProbe?.torch.version ? `torch ${props.macOSWorkerProbe.torch.version}` : '尚未探测'} />
-            <RuntimeTile label="Python MPS 兼容性" value={props.pythonMpsStatus?.compatible ? '可兼容' : props.pythonMpsStatus ? props.pythonMpsStatus.status === 'planned' ? '待补齐' : '不可用' : '未检查'} caption={props.pythonMpsStatus?.runtime ?? 'ai/model/python-mps/status'} />
-            <RuntimeTile label="ONNX Runtime" value={props.macOSWorkerProbe?.onnxruntime.available ? '可用' : '回退'} caption={props.macOSWorkerProbe?.onnxruntime.providers.join(' / ') || '尚未探测'} />
-            <RuntimeTile label="CLIP/SigLIP ONNX" value={props.macOSWorkerProbe?.clipSiglipOnnx.available ? '可用' : '规划中'} caption={props.macOSWorkerProbe?.clipSiglipOnnx.version ? `${props.macOSWorkerProbe.clipSiglipOnnx.backend ?? 'optimum'} ${props.macOSWorkerProbe.clipSiglipOnnx.version}` : '尚未探测'} />
-            <RuntimeTile label="CLIP/SigLIP 兼容性" value={props.clipSiglipOnnxStatus?.compatible ? '可兼容' : props.clipSiglipOnnxStatus ? '待补齐' : '未检查'} caption={props.clipSiglipOnnxStatus?.runtime ?? 'ai/model/clip-siglip-onnx/status'} />
-            <RuntimeTile label="MLX" value={props.macOSWorkerProbe?.mlx.available ? '可用' : '规划中'} caption={props.macOSWorkerProbe?.mlx.version ? `mlx ${props.macOSWorkerProbe.mlx.version}` : '尚未探测'} />
-            <RuntimeTile label="Llama 路线" value={llamaServerRunning ? '运行中' : (props.llamaStatus?.phase || '未启动')} caption={llamaServerRunning ? `${props.llamaStatus?.serverModels?.slice(0, 1).join('') || 'llama-server'} 健康检查通过` : (props.llamaStatus?.serverPid ? `PID ${props.llamaStatus.serverPid}` : 'llama.app / llama.cpp Metal / Ollama')} />
+            {routeOverviewDisplay.showWorkerProbeDiagnostics ? (
+              <>
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.mpsLabel} value={props.platformProbeDisplay.accelerator.valueLabel} caption={props.platformProbeDisplay.accelerator.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.pythonCompatibilityLabel} value={props.pythonCompatibilityDisplay.label} caption={props.pythonCompatibilityDisplay.runtimeLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.onnxRuntimeLabel} value={props.platformProbeDisplay.onnxRuntime.valueLabel} caption={props.platformProbeDisplay.onnxRuntime.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipOnnxLabel} value={props.platformProbeDisplay.clipSiglipOnnx.valueLabel} caption={props.platformProbeDisplay.clipSiglipOnnx.captionLabel} />
+                <RuntimeTile label={routeOverviewDisplay.diagnosticTiles.clipSiglipCompatibilityLabel} value={clipSiglipOnnxDisplay.label} caption={clipSiglipOnnxDisplay.runtimeLabel} />
+              </>
+            ) : routeOverviewDisplay.runtimeLanes.map((lane) => (
+              <RuntimeTile
+                key={lane.lane}
+                label={lane.label}
+                value={lane.statusLabel}
+                caption={lane.isPrimary ? routeOverviewDisplay.primaryRuntimeLaneCaption : routeOverviewDisplay.candidateRuntimeLaneCaption}
+              />
+            ))}
+            <RuntimeTile label="Llama 路线" value={llamaDisplay.routeValue} caption={llamaDisplay.routeCaption} />
             <RuntimeTile label="Qwen2.5-VL Ollama fallback" value={props.ollamaFallback.value} caption={props.ollamaFallback.caption} />
             <RuntimeTile label="external HTTP fallback" value={props.externalHttpFallback.value} caption={props.externalHttpFallback.caption} />
-            <RuntimeTile label="Smoke GGUF" value={smokeGguf?.isDownloaded ? '已下载' : smokeGguf?.isDownloading ? '下载中' : '未下载'} caption={smokeGguf ? smokeGguf.name : 'Qwen3-VL 2B Q4_K_M'} />
-            <RuntimeTile label="Vision mmproj" value={smokeGguf?.mmprojFilename ? (smokeGguf.isDownloaded ? '已就绪' : smokeGguf.isDownloading ? '下载中' : '待下载') : '无需'} caption={smokeGguf?.mmprojFilename || 'mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf'} />
+            <RuntimeTile label="Smoke GGUF" value={ggufArtifactDisplay.smokeValueLabel} caption={ggufArtifactDisplay.smokeCaptionLabel} />
+            <RuntimeTile label="Vision mmproj" value={ggufArtifactDisplay.mmprojValueLabel} caption={ggufArtifactDisplay.mmprojCaptionLabel} />
           </div>
 
           <div className="mt-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 text-[11px] font-bold leading-6 text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
-            当前 macOS 目标模型优先级：Qwen3-VL GGUF {'>'} Qwen3-VL MLX {'>'} Qwen2.5-VL Ollama fallback {'>'} external HTTP fallback。
+            {routeOverviewDisplay.priorityLabel}
           </div>
 
-          <MacOSAiCapabilityMatrix probe={props.macOSWorkerProbe} />
+          {routeOverviewDisplay.showWorkerProbeDiagnostics && (
+            <PlatformAiCapabilityMatrix
+              probe={props.platformWorkerProbe}
+              platformBranch={props.platformWorkerProbeBranch}
+            />
+          )}
         </div>
       </div>
 
@@ -1805,11 +1948,11 @@ function OverviewWorkspace(props: {
         <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">服务健康</h3>
-            <StatusPill tone={props.riskTone}>{props.riskTone === 'good' ? '正常' : props.riskTone === 'bad' ? '关注' : '未知'}</StatusPill>
+            <StatusPill tone={props.gpuDisplay.riskTone}>{props.gpuDisplay.healthLabel}</StatusPill>
           </div>
           <div className="space-y-3 text-[12px] font-bold text-slate-500 dark:text-slate-400">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">Python Worker：{props.isWorkerOffline ? '离线' : '在线'}</div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">Llama 服务：{llamaServerRunning ? '运行中' : (props.llamaStatus?.phase || '未运行')}</div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">Python Worker：{modelReadinessDisplay.workerStatusLabel.replace('Worker ', '')}</div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">Llama 服务：{llamaDisplay.serviceValue}</div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">外部服务：{props.selectedBackend?.name || '未选择'}</div>
           </div>
         </div>
@@ -1829,6 +1972,88 @@ function OverviewWorkspace(props: {
   )
 }
 
+function PlatformAiBranchStatusPanel({
+  status,
+  onAction
+}: {
+  status: PlatformAiBranchStatusResponse | null
+  onAction: (actionPlan: PlatformAiActionPlan) => void
+}) {
+  const display = projectPlatformAiBranchStatusDisplay(status)
+
+  return (
+    <div
+      data-testid="platform-ai-branch-status"
+      className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900"
+    >
+      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">{display.panelTitle}</h3>
+          <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">
+            {display.panelDescription}
+          </p>
+        </div>
+        <StatusPill tone={display.headerStatusTone}>{display.headerStatusLabel}</StatusPill>
+      </div>
+
+      {!status && (
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-[12px] font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
+          {display.emptyLabel}
+        </div>
+      )}
+
+      {status && (
+        <div className="grid gap-3 md:grid-cols-2">
+          {display.workflows.map((workflow) => {
+            return (
+              <div key={workflow.workflow} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/60">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-[10.5px] font-black text-slate-400 dark:text-slate-500">{workflow.workflowLabel}</div>
+                    <div className="mt-2 truncate text-[15px] font-black text-slate-950 dark:text-slate-50">{workflow.title}</div>
+                  </div>
+                  <StatusPill tone={workflow.statusTone}>{workflow.statusLabel}</StatusPill>
+                </div>
+                <p className="mt-2 line-clamp-2 text-[11px] font-semibold leading-5 text-slate-500 dark:text-slate-400">{workflow.summary}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {workflow.runtimeLanes.map((lane) => (
+                    <span
+                      key={lane.lane}
+                      className={`rounded-full border px-2 py-0.5 text-[10px] font-black ${lane.isPrimary ? 'border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-950' : 'border-slate-200 bg-white text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400'}`}
+                    >
+                      {lane.label}: {lane.statusLabel}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-[11px] font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+                  <div>{display.evidencePrefix}：{workflow.evidenceLabel}</div>
+                  <div className="mt-1">{display.missingPrefix}：{workflow.missingLabel}</div>
+                  {workflow.nextActionLabel && <div className="mt-1">{display.nextActionPrefix}：{workflow.nextActionLabel}</div>}
+                  {workflow.actionButtonVisible && (
+                    <button
+                      type="button"
+                      disabled={!workflow.actionPlan.enabled}
+                      onClick={() => {
+                        onAction(workflow.actionPlan)
+                      }}
+                      className="mt-3 inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-black text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {workflow.actionButtonIcon === 'refresh'
+                        ? <RefreshCw className="h-3.5 w-3.5" />
+                        : <ChevronRight className="h-3.5 w-3.5" />}
+                      {workflow.actionPlan.label}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function RuntimeTile({ label, value, caption }: { label: string; value: string; caption: string }) {
   return (
     <div className="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/60">
@@ -1840,9 +2065,9 @@ function RuntimeTile({ label, value, caption }: { label: string; value: string; 
 }
 
 function ModelsWorkspace(props: {
-  modelsList: any[]
+  modelsList: PromptVlmModel[]
   localGgufModels: LocalGgufModel[]
-  loadedModels: Record<string, any>
+  loadedModels: Record<string, unknown>
   cooperativeRuntimeModels: CooperativeRuntimeStatus
   selectedModel?: ModelRow | null
   selectedModelId: string | null
@@ -1855,6 +2080,7 @@ function ModelsWorkspace(props: {
   isMockTelemetry: boolean
   devMockEnabled: boolean
   effectiveGpu: ReturnType<typeof normalizeWorkerGpuStatus>
+  gpuDisplay: AiConsoleGpuDisplay
   riskTone: 'good' | 'warn' | 'bad'
   clearResult: ClearGpuMemoryResult | null
   loading: Record<string, boolean>
@@ -1900,15 +2126,25 @@ function ModelsWorkspace(props: {
             const isCooperative = model.id === 'ram' || model.id === 'florence2' || model.id === 'clip' || model.id === 'wd_tagger'
             const cooperativeRegistryId = COOPERATIVE_MODEL_ID_BY_ROW_ID[model.id] ?? model.id
             const coopState = isCooperative ? props.cooperativeModels[cooperativeRegistryId] : undefined
-            const runtimeCoopState = isCooperative ? props.cooperativeRuntimeModels[model.id] : undefined
-            const readiness = runtimeCoopState?.readiness
-            const isDownloaded = coopState?.isDownloaded ?? false
-            const isDownloading = coopState?.isDownloading ?? false
-            const downloadProgress = coopState?.progress ?? 0
-            const downloadMessage = coopState?.message ?? ''
-            const readinessLabel = readiness?.label ?? (isDownloaded ? '等待 Worker 检查' : '未下载')
-            const readinessToneValue = cooperativeReadinessTone(readiness?.state, runtimeCoopState?.loaded)
-            const readinessDetail = cooperativeReadinessDetail(readiness)
+            const runtimeCoopState: CooperativeWorkerModelStatus | undefined = isCooperative
+              ? props.cooperativeRuntimeModels[model.id]
+              : undefined
+            const cooperativeDisplay = isCooperative
+              ? projectCooperativeModelRowDisplay({
+                  runtimeStatus: runtimeCoopState,
+                  downloadState: coopState,
+                  sourceLabel: model.source,
+                  installedVersionCount: installedCount
+                })
+              : null
+            const readinessDisplay = cooperativeDisplay?.readiness
+            const downloadProgressDisplay = cooperativeDisplay?.downloadProgress
+            const artifactDisplay = cooperativeDisplay?.artifact ?? projectModelArtifactRowDisplay({
+              isCooperative: false,
+              isLoaded: loaded,
+              sourceLabel: model.source,
+              installedVersionCount: installedCount
+            })
 
             return (
               <div key={model.id} className="space-y-2">
@@ -1927,56 +2163,56 @@ function ModelsWorkspace(props: {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className={`text-[13px] font-black ${isSelected ? 'text-slate-950 dark:text-slate-50' : 'text-slate-800 dark:text-slate-200'}`}>{model.name}</span>
                       <span className={`text-[10px] font-extrabold ${isSelected ? 'text-brand-700 dark:text-brand-200' : 'text-slate-400 dark:text-slate-500'}`}>{model.role}</span>
-                      {model.id === 'qwen_vl' && <StatusPill tone={installedCount ? 'good' : 'muted'}>{installedCount} 个已安装版本</StatusPill>}
+                      {model.id === 'qwen_vl' && <StatusPill tone={installedCount ? 'good' : 'muted'}>{artifactDisplay.installedVersionsLabel}</StatusPill>}
                     </div>
                     <div className={`mt-1 flex flex-wrap items-center gap-2 text-[10.5px] font-bold ${isSelected ? 'text-slate-700 dark:text-slate-200' : 'text-slate-400 dark:text-slate-500'}`}>
                       <span>{model.capability}</span>
                       <span className="h-1 w-1 rounded-full bg-current opacity-40" />
-                      <span>{isCooperative ? (isDownloaded ? '已安装 · 本地文件' : 'HuggingFace 仓库') : model.source}</span>
+                      <span>{artifactDisplay.sourceLabel}</span>
                       {isCooperative && (
                         <>
                           <span className="h-1 w-1 rounded-full bg-current opacity-40" />
-                          <span>{readinessDetail}</span>
+                          <span>{readinessDisplay?.detail}</span>
                         </>
                       )}
                     </div>
                     {/* Cooperative model download progress bar */}
-                    {isCooperative && (isDownloading || (downloadProgress > 0 && downloadProgress < 100)) && (
+                    {isCooperative && downloadProgressDisplay?.shouldShow && (
                       <div className="mt-2 w-full">
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                           <div
                             className="h-full rounded-full bg-brand-500 transition-all duration-300"
-                            style={{ width: `${downloadProgress}%` }}
+                            style={{ width: `${downloadProgressDisplay.progressPercent}%` }}
                           />
                         </div>
-                        <div className="mt-0.5 text-[9.5px] font-bold text-slate-400 dark:text-slate-500">{downloadMessage}</div>
+                        <div className="mt-0.5 text-[9.5px] font-bold text-slate-400 dark:text-slate-500">{downloadProgressDisplay.messageLabel}</div>
                       </div>
                     )}
                   </div>
                   <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                     {isCooperative ? (
                       <>
-                        <StatusPill tone={readinessToneValue}>{readinessLabel}</StatusPill>
-                        {isDownloaded ? (
+                        <StatusPill tone={readinessDisplay?.tone ?? 'warn'}>{readinessDisplay?.label ?? '证据不足'}</StatusPill>
+                        {artifactDisplay.action === 'delete' ? (
                           <MiniButton tone="danger" onClick={() => props.onDeleteCooperativeModel(model.id)}>
                             <Trash2 className="h-3 w-3" />
-                            删除
+                            {artifactDisplay.actionLabel}
                           </MiniButton>
-                        ) : isDownloading ? (
+                        ) : artifactDisplay.action === 'cancel' ? (
                           <MiniButton tone="default" onClick={() => props.onCancelCooperativeDownload(model.id)}>
                             <Square className="h-3 w-3" />
-                            取消
+                            {artifactDisplay.actionLabel}
                           </MiniButton>
                         ) : (
                           <MiniButton tone="primary" onClick={() => props.onDownloadCooperativeModel(model.id)}>
                             <Download className="h-3 w-3" />
-                            下载
+                            {artifactDisplay.actionLabel}
                           </MiniButton>
                         )}
                       </>
                     ) : (
                       <>
-                        <StatusPill tone={loaded ? 'good' : 'muted'}>{loaded ? '已加载' : '未加载'}</StatusPill>
+                        <StatusPill tone={artifactDisplay.runtimeStatusTone}>{artifactDisplay.runtimeStatusLabel}</StatusPill>
                         {model.id === 'qwen_vl' ? <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${qwenExpanded ? 'rotate-180' : ''}`} /> : <ChevronRight className="h-4 w-4 text-slate-300 dark:text-slate-600" />}
                       </>
                     )}
@@ -2004,6 +2240,7 @@ function ModelsWorkspace(props: {
           effectiveGpu={props.effectiveGpu}
           memoryPolicy={props.memoryPolicy}
           setMemoryPolicy={props.setMemoryPolicy}
+          gpuDisplay={props.gpuDisplay}
           riskTone={props.riskTone}
           clearResult={props.clearResult}
           onClear={props.handleClearGpuMemory}
@@ -2025,7 +2262,7 @@ function ModelsWorkspace(props: {
 }
 
 function QwenVersionCollection(props: {
-  nativeModels: any[]
+  nativeModels: PromptVlmModel[]
   ggufModels: LocalGgufModel[]
   selectedPromptModelId: string
   promptSettings: AiPromptReverseSettings
@@ -2144,6 +2381,7 @@ function MemoryGuardPanel({
   effectiveGpu,
   memoryPolicy,
   setMemoryPolicy,
+  gpuDisplay,
   riskTone,
   clearResult,
   onClear,
@@ -2156,6 +2394,7 @@ function MemoryGuardPanel({
   effectiveGpu: ReturnType<typeof normalizeWorkerGpuStatus>
   memoryPolicy: AiMemoryPolicy
   setMemoryPolicy: React.Dispatch<React.SetStateAction<AiMemoryPolicy>>
+  gpuDisplay: AiConsoleGpuDisplay
   riskTone: 'good' | 'warn' | 'bad'
   clearResult: ClearGpuMemoryResult | null
   onClear: () => void
@@ -2172,23 +2411,23 @@ function MemoryGuardPanel({
           </h3>
           <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">跟随模型配置使用，不再作为独立模块。</p>
         </div>
-        <StatusPill tone={riskTone}>{riskTone === 'good' ? '安全' : riskTone === 'bad' ? '高负载' : '未知'}</StatusPill>
+        <StatusPill tone={riskTone}>{gpuDisplay.statusLabel}</StatusPill>
       </div>
 
       <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
         <div className="flex items-center justify-between text-[12px] font-black text-slate-700 dark:text-slate-300">
-          <span>{telemetryTrusted ? effectiveGpu.deviceName : '物理 GPU 状态未识别'}</span>
-          <span>{telemetryTrusted ? `${effectiveGpu.usagePercent.toFixed(0)}%` : 'Unknown'}</span>
+          <span>{gpuDisplay.deviceLabel}</span>
+          <span>{gpuDisplay.usageLabel}</span>
         </div>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
           <div
-            className={`h-full rounded-full ${riskTone === 'bad' ? 'bg-rose-500' : riskTone === 'warn' ? 'bg-amber-400' : 'bg-emerald-500'}`}
-            style={{ width: `${telemetryTrusted ? Math.min(100, Math.max(0, effectiveGpu.usagePercent)) : 0}%` }}
+            className={`h-full rounded-full ${gpuDisplay.barToneClass}`}
+            style={{ width: `${gpuDisplay.barWidthPercent}%` }}
           />
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2 text-[10.5px] font-bold text-slate-500 dark:text-slate-400">
-          <span>空闲：{telemetryTrusted ? formatGb(effectiveGpu.freeMb) : '未知'}</span>
-          <span>总量：{telemetryTrusted ? formatGb(effectiveGpu.totalMb) : '未知'}</span>
+          <span>空闲：{gpuDisplay.freeLabel}</span>
+          <span>总量：{gpuDisplay.totalLabel}</span>
         </div>
         {isMockTelemetry && (
           <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[10.5px] font-extrabold text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-300">
@@ -2260,10 +2499,13 @@ function BackendsWorkspace(props: {
   startLlamaServer: () => void
   stopLlamaServer: () => void
   testLlamaServer: () => void
+  downloadSource: 'huggingface' | 'hf-mirror' | 'production-cdn'
+  setDownloadSource: React.Dispatch<React.SetStateAction<'huggingface' | 'hf-mirror' | 'production-cdn'>>
 }) {
   const installedGguf = props.localGgufModels.filter((model) => model.isDownloaded)
   const selectedPlanModel = props.llamaPlan?.modelCandidates.find((model) => model.id === props.selectedLlamaModelId) ?? props.llamaPlan?.recommendedModel ?? null
   const installInProgress = props.llamaStatus ? ['detecting', 'planning', 'downloading', 'extracting', 'installing'].includes(props.llamaStatus.phase) : false
+  const llamaDisplay = projectLlamaRuntimeDisplay(props.llamaStatus)
 
   return (
     <section className="space-y-5">
@@ -2339,9 +2581,29 @@ function BackendsWorkspace(props: {
             <h3 className="text-[15px] font-black text-slate-950 dark:text-slate-50">Llama 本地推理服务</h3>
             <p className="mt-1 text-[11.5px] font-semibold text-slate-400 dark:text-slate-500">管理 llama.cpp、GGUF 模型、视觉 mmproj 与本地 OpenAI 接口。</p>
           </div>
-          <StatusPill tone={props.llamaStatus?.serverPid ? 'good' : props.llamaStatus?.phase === 'error' ? 'bad' : 'muted'}>
-            {props.llamaStatus?.serverPid ? '运行中' : props.llamaStatus?.phase === 'error' ? '异常' : '已停止'}
+          <StatusPill tone={llamaDisplay.pillTone}>
+            {llamaDisplay.pillLabel}
           </StatusPill>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <Field label="下载源选择 (Download Source)">
+            <select
+              value={props.downloadSource}
+              onChange={(e) => props.setDownloadSource(e.target.value as any)}
+              className="control"
+            >
+              <option value="hf-mirror">HF 国内镜像源 (默认 · hf-mirror.com)</option>
+              <option value="huggingface">Hugging Face 官方源 (huggingface.co)</option>
+              <option value="production-cdn">高精度大模型生产端 CDN 接入 (免真实下载测试)</option>
+            </select>
+          </Field>
+          <Field label="下载策略说明 (Download Info)">
+            <div className="h-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[10.5px] font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+              {props.downloadSource === 'production-cdn'
+                ? '已开启生产端 CDN 接入测试。在此模式下，下载仅执行连接性校验并模拟秒级完成，不会占用实际网络带宽。'
+                : '常规下载源，开始安装后将真实下载大模型资源 (约 2GB - 9GB)。'}
+            </div>
+          </Field>
         </div>
         <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
           <MiniButton onClick={props.detectLlamaHardware} disabled={props.loading['llama-detect']}>
@@ -2388,49 +2650,67 @@ function BackendsWorkspace(props: {
               </div>
               <StatusPill tone="warn">推荐：{props.llamaPlan.recommendedModel.name}</StatusPill>
             </div>
-            <select
-              value={selectedPlanModel?.id ?? props.llamaPlan.recommendedModel.id}
-              onChange={(event) => props.setSelectedLlamaModelId(event.target.value)}
-              className="control"
-            >
-              {props.llamaPlan.modelCandidates.map((model) => (
-                <option key={model.id} value={model.id}>
-                  {model.name} / {model.quantization} / {model.parameterSize} / {model.estimatedSizeGB} GB
-                </option>
-              ))}
-            </select>
-            {selectedPlanModel && (
-              <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[10.5px] font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-                <div className="truncate font-black text-slate-800 dark:text-slate-200">{selectedPlanModel.name}</div>
-                <div className="mt-1 truncate font-mono text-[10px]">{selectedPlanModel.filename}</div>
-                <div className="mt-1">
-                  {selectedPlanModel.parameterSize} / {selectedPlanModel.quantization} / 约 {selectedPlanModel.estimatedSizeGB} GB / 建议显存 {selectedPlanModel.recommendedMinVramGB} GB / {selectedPlanModel.supportsVision ? '含视觉 mmproj' : '文本模型'}
-                </div>
-              </div>
-            )}
-            <div className="hidden">
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {props.llamaPlan.modelCandidates.map((model) => {
                 const active = (selectedPlanModel?.id ?? props.llamaPlan?.recommendedModel.id) === model.id
                 return (
-                  <button
+                  <div
                     key={model.id}
-                    type="button"
                     onClick={() => props.setSelectedLlamaModelId(model.id)}
-                    className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${
+                    className={`rounded-2xl border p-4 text-left transition-all cursor-pointer flex flex-col justify-between ${
                       active
-                        ? 'border-brand-300 bg-brand-50 text-brand-700 dark:border-brand-800 dark:bg-brand-950/40 dark:text-brand-200'
-                        : 'border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400'
+                        ? 'border-brand-500 bg-brand-50/50 text-brand-900 shadow-premium-sm dark:border-brand-800 dark:bg-brand-950/35 dark:text-brand-100'
+                        : 'border-slate-200 bg-slate-50/30 text-slate-600 hover:border-slate-300 dark:border-slate-800/80 dark:bg-slate-900/40 dark:text-slate-400'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="truncate text-[11.5px] font-black">{model.name}</span>
-                      <span className="shrink-0 rounded-lg bg-white/70 px-2 py-0.5 text-[10px] font-black dark:bg-slate-950/60">{model.quantization}</span>
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[11.5px] font-black tracking-tight">{model.name}</span>
+                        <span className={`shrink-0 rounded-lg px-2 py-0.5 text-[10px] font-black ${
+                          active
+                            ? 'bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300'
+                            : 'bg-slate-200/80 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                        }`}>
+                          {model.quantization}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 truncate font-mono text-[10px] text-slate-400 dark:text-slate-500">{model.filename}</div>
+                      <div className="mt-1 text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                        {model.parameterSize} / 约 {model.estimatedSizeGB} GB / 建议显存 {model.recommendedMinVramGB} GB / {model.supportsVision ? '含视觉 mmproj' : '文本模型'}
+                      </div>
                     </div>
-                    <div className="mt-1 truncate font-mono text-[10px] opacity-75">{model.filename}</div>
-                    <div className="mt-1 text-[10px] font-bold opacity-75">
-                      {model.parameterSize} / 约 {model.estimatedSizeGB} GB / 建议显存 {model.recommendedMinVramGB} GB / {model.supportsVision ? '含视觉 mmproj' : '文本模型'}
-                    </div>
-                  </button>
+
+                    {(model.url || model.mmprojUrl) && (
+                      <div className="mt-3 pt-3 border-t border-dashed border-slate-200 dark:border-slate-800 space-y-1 text-[10px] font-bold">
+                        {model.url && (
+                          <div className="truncate" onClick={(e) => e.stopPropagation()}>
+                            <span className="text-slate-400 dark:text-slate-500">GGUF 链接: </span>
+                            <a
+                              href={model.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-brand-600 hover:underline font-mono text-[9.5px] font-medium"
+                            >
+                              {model.url}
+                            </a>
+                          </div>
+                        )}
+                        {model.mmprojUrl && (
+                          <div className="truncate" onClick={(e) => e.stopPropagation()}>
+                            <span className="text-slate-400 dark:text-slate-500">mmproj 链接: </span>
+                            <a
+                              href={model.mmprojUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-brand-600 hover:underline font-mono text-[9.5px] font-medium"
+                            >
+                              {model.mmprojUrl}
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 )
               })}
             </div>
@@ -2462,10 +2742,26 @@ function BackendsWorkspace(props: {
           <div>当前显卡：{props.llamaHardware?.gpuName || '尚未检测'}</div>
           <div>物理显存：{props.llamaHardware?.totalVramGB ? `${props.llamaHardware.totalVramGB} GB` : '未知'}</div>
           <div>安装方案：{props.llamaPlan ? `${props.llamaPlan.accelerator} / ${props.llamaPlan.recommendedModel.name}` : '尚未生成'}</div>
-          <div>服务状态：{props.llamaStatus?.serverPid ? `进程 PID ${props.llamaStatus.serverPid}` : props.llamaStatus?.phase || '已停止'}</div>
-          <div>当前 GGUF：{props.llamaStatus?.modelPath ? props.llamaStatus.modelPath.split(/[\\/]/).pop() : '未选择'}</div>
-          <div>mmproj：{props.llamaStatus?.mmprojPath ? props.llamaStatus.mmprojPath.split(/[\\/]/).pop() : '未加载'}</div>
-          {props.llamaTest && <div className={props.llamaTest.success ? 'text-emerald-600 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-300'}>连接测试：{props.llamaTest.success ? '连接成功' : props.llamaTest.error?.message || '无法连接'}</div>}
+          <div>服务状态：{llamaDisplay.serviceDetailValue}</div>
+          <div>
+            当前 GGUF：{props.llamaStatus?.modelPath
+              ? props.llamaStatus.modelPath.split(/[\\/]/).pop()
+              : props.llamaTest?.modelId ?? '未选择'}
+          </div>
+          <div>
+            mmproj：{props.llamaStatus?.mmprojPath
+              ? props.llamaStatus.mmprojPath.split(/[\\/]/).pop()
+              : props.llamaTest?.visionOk
+                ? '图像推理已验证'
+                : '未加载'}
+          </div>
+          {props.llamaTest && (
+            <div className={props.llamaTest.success ? 'text-emerald-600 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-300'}>
+              多模态验证：{props.llamaTest.success
+                ? 'GGUF 文本与 mmproj 图像推理通过'
+                : props.llamaTest.error?.message || '验证失败'}
+            </div>
+          )}
         </div>
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
           <div className="mb-3 text-[12px] font-black text-slate-800 dark:text-slate-200">已安装 GGUF 模型</div>

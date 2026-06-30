@@ -3,7 +3,7 @@ import type { TextBox } from '../../../shared/types/color-palette.types'
 import { spawn } from 'child_process'
 import path from 'path'
 import fs from 'fs'
-import { resolvePythonExecutable } from '../ocr-dependency.service'
+import { resolvePythonExecutable } from '../ai-python-runtime.service'
 import { getPythonModelCacheEnv } from '../ai-models/ai-model-registry'
 
 export class PaddleOcrColorTextBoxProvider implements ITextBoxProvider {

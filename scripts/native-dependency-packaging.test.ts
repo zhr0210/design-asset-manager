@@ -61,7 +61,7 @@ assert.match(doc, /Phase 13/)
 const aiServiceResource = packageJson.build?.extraResources?.find((resource) => resource.from === 'ai-service')
 assert.ok(aiServiceResource)
 assert.equal(aiServiceResource?.to, 'ai-service')
-assert.ok(aiServiceResource?.filter?.includes('!**/models/**'))
+assert.ok(aiServiceResource?.filter?.some((f) => f.includes('!**/models/**/*.onnx') || f.includes('!**/models/**/*.safetensors')))
 assert.ok(aiServiceResource?.filter?.includes('!**/.venv/**'))
 assert.ok(aiServiceResource?.filter?.includes('!**/__pycache__/**'))
 

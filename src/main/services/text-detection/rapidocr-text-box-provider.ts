@@ -4,6 +4,7 @@ import { spawn } from 'child_process'
 import path from 'path'
 import fs from 'fs'
 import { getPythonModelCacheEnv } from '../ai-models/ai-model-registry'
+import { resolvePythonExecutable } from '../ai-python-runtime.service'
 
 function findRunnerPath(): string {
   const starts = [process.cwd()]
@@ -31,20 +32,6 @@ function findRunnerPath(): string {
   }
 
   return path.resolve(process.cwd(), 'tools', 'ocr', 'rapidocr_detect.py')
-}
-
-function resolvePythonExecutable(): string {
-  const envs = [
-    process.env.DESIGN_ASSET_MANAGER_PYTHON,
-    process.env.TEXT_OCR_PYTHON,
-    process.env.PYTHON
-  ]
-  for (const env of envs) {
-    if (env && env.trim()) {
-      return env.trim()
-    }
-  }
-  return 'python'
 }
 
 export class RapidOcrTextBoxProvider implements ITextBoxProvider {

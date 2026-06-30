@@ -16,6 +16,9 @@ import { registerAiClientIpc } from './ipc/ai-client.ipc'
 import { registerColorPaletteIpc } from './ipc/color-palette.ipc'
 import { EmbeddedBrowserManager } from './services/browser-view.manager'
 import { ImageMetadataService } from './services/image-metadata.service'
+import { DESKTOP_VIEWPORT_POLICY } from '../shared/desktop-viewport-policy'
+import { resolveElectronAppLifecyclePolicy } from '../shared/workflows/electron-app-lifecycle.workflow'
+import { createElectronMainHostContext } from './electron-main-host-context'
 
 // Register local-file scheme as privileged before app is ready
 protocol.registerSchemesAsPrivileged([
@@ -32,15 +35,16 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+const electronMainHostContext = createElectronMainHostContext()
 
 function createWindow(): void {
   const preloadPath = join(__dirname, '../preload/index.cjs')
 
   const mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 832,
-    minWidth: 1024,
-    minHeight: 700,
+    width: DESKTOP_VIEWPORT_POLICY.window.defaultWidth,
+    height: DESKTOP_VIEWPORT_POLICY.window.defaultHeight,
+    minWidth: DESKTOP_VIEWPORT_POLICY.window.minOuterWidth,
+    minHeight: DESKTOP_VIEWPORT_POLICY.window.minOuterHeight,
     show: false,
     autoHideMenuBar: true,
     title: 'Design Asset Manager',
@@ -74,12 +78,21 @@ function createWindow(): void {
   }
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Initialize SQLite database
   try {
     initDatabase()
     console.log('[SQLite] Database successfully loaded.')
     
+    // Resolve python executable on startup for diagnostic logging and packaging validation
+    try {
+      const { resolvePythonExecutable } = await import('./services/ai-python-runtime.service')
+      const pyPath = resolvePythonExecutable()
+      console.log(`[resolvePythonExecutable] Startup check resolved path: ${pyPath}`)
+    } catch (pyErr) {
+      console.warn('[resolvePythonExecutable] Failed to resolve Python executable:', pyErr)
+    }
+
     // Automatically scan and extract color palettes for legacy assets that lack them
     ColorPaletteService.runStartupBatchScanner().catch((err) => {
       console.error('[ColorPaletteService] Failed to launch startup batch scanner:', err)
@@ -88,8 +101,10 @@ app.whenReady().then(() => {
     console.error('[SQLite] Failed to initialize database:', err)
   }
 
-  if (process.platform === 'win32') {
-    app.setAppUserModelId('com.antigravity.designassetmanager')
+  const appLifecyclePolicy = resolveElectronAppLifecyclePolicy(electronMainHostContext.platform)
+
+  if (appLifecyclePolicy.appUserModelId) {
+    app.setAppUserModelId(appLifecyclePolicy.appUserModelId)
   }
 
   app.on('browser-window-created', (_, window) => {
@@ -122,7 +137,7 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (resolveElectronAppLifecyclePolicy(electronMainHostContext.platform).quitOnAllWindowsClosed) {
     app.quit()
   }
 })
@@ -136,8 +151,23 @@ import { registerCooperativeModelIpc } from './ipc/cooperative-model.ipc'
 import { registerAiBackendIpc } from './ipc/ai-backend.ipc'
 import { registerLlamaRuntimeIpc } from './ipc/llama-runtime.ipc'
 import { registerDoctorIpc } from './ipc/doctor.ipc'
-import { registerAiRuntimeIpc } from './ipc/ai-runtime.ipc'
+import { registerAiRuntimeIpc, shutdownAiRuntimes } from './ipc/ai-runtime.ipc'
 import { registerSettingsMigrationIpc } from './ipc/settings-migration.ipc'
+import { registerPathGovernanceIpc } from './ipc/path-governance.ipc'
+import { registerRuntimePackageIpc } from './ipc/runtime-package.ipc'
+let aiRuntimeShutdownStarted = false
+
+app.on('before-quit', (event) => {
+  if (aiRuntimeShutdownStarted) return
+
+  event.preventDefault()
+  aiRuntimeShutdownStarted = true
+  void shutdownAiRuntimes()
+    .catch((error) => {
+      console.warn('[ai-runtime] Failed to stop runtimes during application shutdown:', error)
+    })
+    .finally(() => app.quit())
+})
 
 function setupIpcHandlers() {
   // Register database IPC handlers
@@ -161,4 +191,6 @@ function setupIpcHandlers() {
   registerDoctorIpc()
   registerAiRuntimeIpc()
   registerSettingsMigrationIpc()
+  registerPathGovernanceIpc()
+  registerRuntimePackageIpc()
 }

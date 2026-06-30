@@ -6,28 +6,12 @@ import type { RuntimeProfileId } from '../../../shared/types/runtime-profile.typ
 
 export const SETTINGS_COMPATIBILITY_TARGET_VERSION = 2
 
-export type SettingsCompatibilityChangeType = 'add' | 'normalize' | 'preserve' | 'warning'
-
-export interface SettingsCompatibilityChange {
-  field: string
-  type: SettingsCompatibilityChangeType
-  message: string
-}
-
-export interface CompatibilityReport {
-  originalVersion: number | null
-  targetVersion: number
-  changes: SettingsCompatibilityChange[]
-  warnings: string[]
-  blockingIssues: string[]
-  wouldChange: boolean
-  safeToApplyLater: boolean
-}
-
-export interface SettingsCompatibilityResult {
-  settings: Partial<AppSettings>
-  report: CompatibilityReport
-}
+export type {
+  CompatibilityReport,
+  SettingsCompatibilityChange,
+  SettingsCompatibilityChangeType,
+  SettingsCompatibilityResult
+} from '../../../shared/types/settings-migration.types'
 
 export interface SettingsPathDefaults {
   managedPaths: Partial<ManagedPaths>

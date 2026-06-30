@@ -4,9 +4,12 @@ import { homedir } from 'os'
 import type { AppSettings } from '../../shared/types/settings.types'
 import type { AiBackendConfig, AiPromptReverseSettings } from '../../shared/types/ai-backend.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../shared/constants/prompt-templates.constants'
+import { normalizeProductTextBoxProvider } from '../../shared/workflows/text-box-provider.workflow'
 import { createNewInstallAppSettingsDefaults } from './settings/settings-defaults.builder'
 import { SettingsMigrationService } from './settings/settings-migration.service'
 import type { SettingsMigrationApplyResult, SettingsMigrationPlan, SettingsMigrationRollbackResult } from './settings/settings-migration.types'
+
+export { normalizeProductTextBoxProvider } from '../../shared/workflows/text-box-provider.workflow'
 
 export function createDefaultLlamaBackendConfig(): AiBackendConfig {
   return {
@@ -166,7 +169,7 @@ export class SettingsService {
 
       // R3.0 parameters parsing
       const enableAnalysisVal = parsed.enableTextColorAnalysis ?? defaults.enableTextColorAnalysis
-      const boxProviderVal = parsed.textBoxProvider ?? defaults.textBoxProvider
+      const boxProviderVal = normalizeProductTextBoxProvider(parsed.textBoxProvider ?? defaults.textBoxProvider)
       const ocrTimeoutVal = parsed.ocrTimeoutMs ?? defaults.ocrTimeoutMs
       const maxBoxesImageVal = parsed.maxTextBoxesPerImage ?? defaults.maxTextBoxesPerImage
       const autoInstallAllowedVal = parsed.autoInstallAllowed ?? defaults.autoInstallAllowed
@@ -249,7 +252,7 @@ export class SettingsService {
 
     // R3.0 options parsing
     const enableAnalysisVal = settings.enableTextColorAnalysis ?? current.enableTextColorAnalysis
-    const boxProviderVal = settings.textBoxProvider ?? current.textBoxProvider
+    const boxProviderVal = normalizeProductTextBoxProvider(settings.textBoxProvider ?? current.textBoxProvider)
     const ocrTimeoutVal = settings.ocrTimeoutMs ?? current.ocrTimeoutMs
     const maxBoxesImageVal = settings.maxTextBoxesPerImage ?? current.maxTextBoxesPerImage
     const autoInstallAllowedVal = settings.autoInstallAllowed ?? current.autoInstallAllowed

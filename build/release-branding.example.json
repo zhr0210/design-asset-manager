@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "approvalId": "replace-with-human-approval-id",
+  "approvedAt": "YYYY-MM-DD",
+  "icons": {
+    "windows": {
+      "file": "icon.ico",
+      "sha256": "<sha256-of-approved-build-icon.ico>"
+    },
+    "macos": {
+      "file": "icon.icns",
+      "sha256": "<sha256-of-approved-build-icon.icns>"
+    }
+  }
+}

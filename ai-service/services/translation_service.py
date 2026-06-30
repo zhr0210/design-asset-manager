@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Any, Union, Optional
-from core.mock_policy import guard_mock_inference
+from core.mock_policy import guard_mock_inference, is_strict_real_ai, MockInferenceBlockedError
 from utils.design_translation_dictionary import DESIGN_TRANSLATION_MAP
 
 class TranslationService:
@@ -25,6 +25,8 @@ class TranslationService:
             return
             
         if self.is_mock:
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError("OPUS-MT mock translation is blocked in strict mode.")
             guard_mock_inference("OPUS-MT translation", "The model was explicitly placed in mock mode before load.")
             self.backend = "mock"
             self.is_loaded = True
@@ -46,6 +48,8 @@ class TranslationService:
             self.is_loaded = True
             print(f"[TranslationService] Model successfully loaded. Backend: {self.backend}")
         except Exception as e:
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError(f"Failed loading real OPUS-MT model, and mock is blocked: {e}")
             print(f"[TranslationService] Failed loading real OPUS-MT model: {e}. Activating mock fallback.")
             guard_mock_inference("OPUS-MT translation", str(e))
             self.is_mock = True
@@ -82,6 +86,8 @@ class TranslationService:
 
         # Handle Mock translation fallback
         if self.is_mock or not self.model or not self.tokenizer:
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError("OPUS-MT mock translation is blocked in strict mode.")
             guard_mock_inference("OPUS-MT translation", "No real translation model and tokenizer are loaded.")
             return self._translate_batch_mock(cleaned_texts, source_lang, target_lang)
 
@@ -90,8 +96,6 @@ class TranslationService:
             import torch
             device = self.model.device
             
-            # Prepare inputs
-            # Helsinki OPUS MT expects normal English inputs (no prefix necessary for en-zh)
             inputs = self.tokenizer(cleaned_texts, return_tensors="pt", padding=True, truncation=True)
             inputs = {k: v.to(device) for k, v in inputs.items()}
             
@@ -101,6 +105,8 @@ class TranslationService:
             decoded = self.tokenizer.batch_decode(translated, skip_special_tokens=True)
             return [d.strip() if d else cleaned_texts[i] for i, d in enumerate(decoded)]
         except Exception as e:
+            if is_strict_real_ai():
+                raise MockInferenceBlockedError(f"OPUS-MT translation failed, and mock is blocked: {e}")
             print(f"[TranslationService] Error during batch translation: {e}. Falling back to mock.")
             guard_mock_inference("OPUS-MT translation", str(e))
             return self._translate_batch_mock(cleaned_texts, source_lang, target_lang)
@@ -115,6 +121,8 @@ class TranslationService:
 
     def _translate_batch_mock(self, texts: List[str], source_lang: str, target_lang: str) -> List[str]:
         """Fallbacks to local dictionary matching or mock translation rules."""
+        if is_strict_real_ai():
+            raise MockInferenceBlockedError("OPUS-MT mock translation is blocked in strict mode.")
         guard_mock_inference("OPUS-MT translation", "Direct mock translation was requested.")
         results = []
         for text in texts:
@@ -122,14 +130,11 @@ class TranslationService:
                 results.append("")
                 continue
             
-            # 1. Check exact dictionary match first
             normalized = text.lower().strip()
             if normalized in DESIGN_TRANSLATION_MAP:
                 results.append(DESIGN_TRANSLATION_MAP[normalized])
                 continue
 
-            # 2. Heuristic sentence translator for Mock
-            # If it's a tag-like word, title-case or direct mock
             if "minimalist" in normalized:
                 results.append("极简风格的画面")
             elif "milk tea" in normalized:
@@ -143,7 +148,6 @@ class TranslationService:
             elif "A modern logo" in text:
                 results.append("一个现代风格的标志")
             elif len(text.split()) <= 3:
-                # Try word-by-word substitution for mock tags
                 words = normalized.split()
                 translated_words = []
                 for w in words:
@@ -153,6 +157,5 @@ class TranslationService:
                         translated_words.append(w)
                 results.append(" ".join(translated_words))
             else:
-                # Fallback to appending a translated tag suffix to simulate
                 results.append(f"【翻译】{text}")
         return results

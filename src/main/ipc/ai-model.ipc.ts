@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron'
 import { AiModelDownloadService } from '../services/ai-models/ai-model-download.service'
 import { PROMPT_VLM_MODELS, getModelLocalPath } from '../services/ai-models/ai-model-registry'
-import { resolvePythonExecutable } from '../services/ocr-dependency.service'
+import { resolvePythonExecutable } from '../services/ai-python-runtime.service'
 import fs from 'fs'
 import path from 'path'
 import { spawn } from 'child_process'

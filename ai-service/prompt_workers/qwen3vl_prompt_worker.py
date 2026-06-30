@@ -4,6 +4,10 @@ import json
 import time
 import gc
 
+AI_SERVICE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if AI_SERVICE_DIR not in sys.path:
+    sys.path.insert(0, AI_SERVICE_DIR)
+
 # Reconfigure standard streams to use UTF-8 to prevent CP936 (GBK) decoding corruption on Windows
 if hasattr(sys.stdin, 'reconfigure'):
     try:
@@ -90,6 +94,9 @@ def main():
     try:
         import torch
         import transformers
+        from core.torch_inference_runtime import configure_torch_inference_runtime
+
+        configure_torch_inference_runtime(torch)
         torch_version = torch.__version__
         transformers_version = transformers.__version__
         cuda_available = torch.cuda.is_available()
@@ -215,13 +222,14 @@ def main():
         inputs = inputs.to(device)
 
         # Run inference
-        generated_ids = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=top_p,
-            do_sample=True
-        )
+        with torch.inference_mode():
+            generated_ids = model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                temperature=temperature,
+                top_p=top_p,
+                do_sample=True
+            )
         generated_ids_trimmed = [
             out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
         ]

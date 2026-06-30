@@ -178,6 +178,10 @@ _Avoid_: Contrast score, legibility value
 
 ### AI Workflows
 
+**AI Workflow**:
+A product workflow that uses AI or algorithmic analysis to produce user-facing asset output, such as tags, prompt reverse, OCR text, visual analysis, or search embeddings.
+_Avoid_: Runtime lane, model family, backend route
+
 **Platform AI Branch**:
 A platform-specific AI capability branch for Windows or macOS that chooses different runtime backends while preserving shared product workflows where possible.
 _Avoid_: Cross-platform AI, one AI stack
@@ -187,7 +191,7 @@ The Windows AI capability branch that keeps the CUDA AI Worker main chain while 
 _Avoid_: Windows build, CUDA mode
 
 **macOS AI Branch**:
-The macOS AI capability branch targeting Python MPS, ONNX Runtime, llama.app, llama.cpp Metal, MLX, Ollama fallback, and external HTTP fallback. Phase 1 exposed lane metadata and AI Console visibility; the current bridge also surfaces live Worker probe results for Python MPS, ONNX Runtime, and MLX availability. Model downloads and real inference validation are later phases.
+The macOS AI capability branch using Python MPS, ONNX Runtime, llama.cpp Metal, Ollama fallback, and external HTTP fallback behind shared product workflows. It exposes Platform AI Branch Status and scoped real evidence for supported WD Tagger ONNX, CLIP ONNX, and Llama GGUF/mmproj routes while retaining explicit evidence gaps for unproven routes such as OCR.
 _Avoid_: macOS build, MPS mode
 
 **AI Worker**:
@@ -210,6 +214,42 @@ _Avoid_: Available model, installed runtime, loaded route
 A read-only check that reports whether a runtime dependency, import, service, or hardware hint appears available without proving full model inference.
 _Avoid_: Inference validation, model load, health guarantee
 
+**AI Branch Status**:
+The product-facing state of a platform AI branch or route, combining intent, runtime evidence, model readiness, and whether a real model path is currently usable.
+_Avoid_: UI label, raw probe result, service health
+
+**Platform AI Branch Status**:
+The comparable product-facing status projection for Windows AI Branch and macOS AI Branch workflows.
+_Avoid_: macOS-only status, runtime probe matrix, capability list
+
+**Shared Product Surface**:
+The common product-facing workflows, status surfaces, and main-application architecture reused across Windows and macOS, with platform-specific branches only where runtime or operating-system differences require them.
+_Avoid_: Shared runtime, one AI stack, platform-specific UI fork
+
+**Planned Capability Status**:
+An AI branch status meaning the product intends to support the workflow, but current evidence is not enough to show runtime or model readiness.
+_Avoid_: Available, installed, ready
+
+**Runtime Probe Ready Status**:
+An AI branch status meaning runtime evidence is present, but model readiness has not been proven.
+_Avoid_: Real model path, model loaded, inference validated
+
+**Ready To Load Status**:
+An AI branch status meaning dependencies and model artifacts appear sufficient to attempt loading a model path.
+_Avoid_: Runtime probe, downloaded, inference validated
+
+**Real Model Path Status**:
+An AI branch status meaning the workflow currently has a usable model-backed or explicitly configured external inference path.
+_Avoid_: Planned capability, runtime probe, downloaded model
+
+**Unavailable Status**:
+An AI branch status meaning the current platform, dependencies, configuration, or artifact state clearly prevents the workflow from being usable.
+_Avoid_: Planned capability, unknown
+
+**Model Readiness**:
+The state indicating whether required runtime dependencies and model artifacts are sufficient for a model path to load, without proving full inference output.
+_Avoid_: Downloaded, installed, loaded model, runtime probe
+
 **AI Client**:
 The Electron-side facade that enqueues AI work, records local task state, polls worker results, and notifies the renderer.
 _Avoid_: AI Worker, model client
@@ -229,6 +269,10 @@ _Avoid_: Prompt job
 **AI Analysis Task**:
 An AI task that produces structured visual analysis.
 _Avoid_: Analysis job
+
+**Search Embedding**:
+A vector representation produced from a design asset or query so the Asset Library can support semantic similarity search.
+_Avoid_: CLIP model, embedding route, vector backend
 
 **Queue Sync**:
 The background synchronization of completed AI Worker results into local asset and task state.
@@ -319,7 +363,7 @@ The ONNX-based OCR family used as a macOS-friendly alternative to EasyOCR and as
 _Avoid_: Paddle, generic OCR, text model
 
 **macOS AI Route Overview**:
-The macOS-focused AI Console summary card that surfaces MPS, ONNX Runtime, MLX, and Llama route readiness together with the current route priority.
+The macOS-focused AI Console summary card that surfaces MPS, ONNX Runtime, and Llama route readiness together with the current route priority.
 _Avoid_: Generic model summary, static route note
 
 **macOS AI Runtime Lane**:
@@ -327,8 +371,8 @@ A typed macOS AI branch lane shown in AI Console, such as Python MPS Runtime, ON
 _Avoid_: macOS tab, AI section
 
 **macOS AI Branch Skeleton**:
-The Phase 1 implementation state where macOS AI lanes, runtime metadata, profile capabilities, and AI Console cards exist, with a live Worker probe bridge for Python MPS, ONNX Runtime, and MLX visibility but without claiming that downloads or inference routes are complete.
-_Avoid_: finished macOS AI, macOS support complete
+A historical Phase 1 term for the earlier metadata-and-probe-only state. Do not use it for the current branch, which now has shared workflow status and scoped Real Model Path evidence.
+_Avoid_: current macOS AI branch, finished macOS AI
 
 ### AI Models And Sources
 
@@ -373,7 +417,7 @@ A selectable Qwen3-VL model option with size, quantization, vision support, and 
 _Avoid_: Model option, GGUF choice
 
 **Qwen3-VL Large Vision Runtime**:
-The large-model visual inference route for Qwen3-VL; it should be served through quantized runtime services on Windows and through Metal or MLX-capable services on macOS rather than treated as a universal Python model.
+The large-model visual inference route for Qwen3-VL; it should be served through quantized runtime services on Windows and through llama.cpp Metal on macOS rather than treated as a universal Python model.
 _Avoid_: Native Qwen3-VL, Python Qwen runtime
 
 **MMProj Model**:
@@ -419,7 +463,7 @@ The cross-platform or macOS-friendly small-model route for models that are bette
 _Avoid_: ONNX model, CPU backend
 
 **MLX Runtime**:
-The Apple Silicon-oriented runtime route for macOS large-model inference where MLX-supported model formats are appropriate.
+Not a current product route. ADR-0007 removes the speculative standalone MLX path; any future provider must supply an executable lifecycle and real inference evidence before re-entering product status.
 _Avoid_: Apple AI backend, macOS model server
 
 **CoreML Fallback**:
@@ -427,7 +471,7 @@ The macOS ONNX-related fallback path for model execution where CoreML provider s
 _Avoid_: Apple fallback, CoreML mode
 
 **Ollama Vision Fallback**:
-The macOS large-vision fallback route that can serve a Qwen2.5-VL compatible model through Ollama when Qwen3-VL GGUF or MLX is not ready.
+The macOS large-vision fallback route that can serve a Qwen2.5-VL compatible model through Ollama when Qwen3-VL GGUF/mmproj is not ready.
 _Avoid_: Ollama primary path, remote model
 
 **Manual Health Check**:
@@ -437,6 +481,10 @@ _Avoid_: Auto probe, startup ping
 **Python Worker Runtime**:
 The runtime provider shape for launching or health-checking the local Python AI Worker.
 _Avoid_: AI Worker, Python service
+
+**AI Python Environment**:
+The shared main-process module that resolves the preferred Python executable and managed Python runtime layout from explicit host facts, while Windows and macOS filesystem and command differences remain behind adapters.
+_Avoid_: OCR Python, macOS Python environment, Python finder
 
 **Llama Runtime**:
 The local Llama-oriented runtime capability for planning, installing, starting, and testing GGUF-based inference services.
@@ -481,6 +529,14 @@ _Avoid_: Install set, dependency list
 **Runtime Package Install Plan**:
 A dry-run plan that combines download, verification, extraction, registry metadata, rollback, warnings, and blocking issues.
 _Avoid_: Installation, setup
+
+**Runtime Package Executor**:
+The Electron main-process module that performs an explicitly approved Runtime Package transaction through staging, verification, safe extraction, atomic promotion, Runtime Registry commit, and rollback. The shared interface owns workflow state while platform adapters own real archive, executable, quarantine, and signing differences.
+_Avoid_: Package script, automatic installer, model downloader
+
+**Runtime Package Session**:
+The Electron main-process selection and execution boundary that turns a user-selected local package manifest into an opaque, expiring selection token and path-free execution snapshots.
+_Avoid_: Renderer package parser, raw archive path, trusted UI metadata
 
 **Bootstrap**:
 The initial environment decision flow that combines doctor results, runtime profiles, package planning, and user choices.
@@ -557,5 +613,27 @@ A package smoke variant that runs installer validation inside a disposable sandb
 _Avoid_: Host install test, E2E install
 
 **Release Flow**:
-The governed packaging path for Windows and macOS artifacts, with publishing, signing, notarization, and auto-update explicitly reserved until configured.
+The governed packaging path for Windows and macOS artifacts. One shared
+promotion invariant owns `blocked`, `candidate_ready`, `distribution_ready`,
+and `publish_ready`; platform gates own Authenticode/Sandbox or Developer
+ID/notarization/Gatekeeper evidence. Publishing still requires explicit
+approval.
 _Avoid_: Build pipeline, distribution
+
+**Release Update Metadata**:
+A path-free, checksum-bound description of one versioned release artifact and
+its blockmap for a specific platform, architecture, and release channel. It is
+required release evidence but does not itself enable auto update or publishing.
+_Avoid_: Latest file, publish config, download manifest
+
+**Signed Release Candidate**:
+A retained release artifact built only after explicit dispatch confirmation
+and approval for the platform signing environment. It remains unpublished
+until every Release Flow gate and separate publish approval pass.
+_Avoid_: Release, production build, published installer
+
+**Release Trust Evidence**:
+Structured, path-free verification results for platform trust gates such as
+Authenticode, Developer ID, Hardened Runtime, nested signatures, notarization,
+staple, Gatekeeper, and DMG integrity.
+_Avoid_: Signing log, certificate dump, security output

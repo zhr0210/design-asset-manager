@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 import { CHANNEL_SETTINGS_LOAD, CHANNEL_SETTINGS_SAVE } from '../shared/contracts/settings.contract'
 import type { SaveSettingsRequest } from '../shared/contracts/settings.contract'
 import {
@@ -42,17 +42,37 @@ import {
   CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS,
   CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE,
+  CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES,
+  CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES,
   CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS,
+  CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS,
+  CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK,
   CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL,
   CHANNEL_AI_RUNTIME_LIST_RUNTIMES,
+  CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD,
+  CHANNEL_AI_RUNTIME_PROBE_OCR_REAL_EVIDENCE,
+  CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION,
+  CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION,
   CHANNEL_AI_RUNTIME_RESTART_RUNTIME,
   CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME,
   CHANNEL_AI_RUNTIME_START_RUNTIME,
   CHANNEL_AI_RUNTIME_STOP_RUNTIME,
-  CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG
+  CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG,
+  type AiRuntimeOnnxModelLoadProbeRequest
 } from '../shared/contracts/ai-runtime.contract'
+import {
+  CHANNEL_AI_ENQUEUE_TAG,
+  CHANNEL_AI_MODEL_STATUS,
+  CHANNEL_AI_MODEL_UNLOAD,
+  CHANNEL_AI_PROCESS_BATCH,
+  CHANNEL_AI_ROUTING_PREVIEW,
+  EVENT_AI_TASK_SYNCED,
+  type AiTaskSyncedEvent,
+  type EnqueueTagRequest,
+  type RoutingPreviewRequest
+} from '../shared/contracts/ai-client.contract'
 import type { AiRuntimeConfig } from '../shared/types/ai-runtime.types'
 import {
   CHANNEL_SETTINGS_MIGRATION_ANALYZE,
@@ -66,6 +86,15 @@ import type {
   SettingsMigrationDryRunRequest,
   SettingsMigrationListBackupsRequest
 } from '../shared/contracts/settings-migration.contract'
+import {
+  CHANNEL_RUNTIME_PACKAGE_EXECUTE_SELECTION,
+  CHANNEL_RUNTIME_PACKAGE_GET_EXECUTION_STATUS,
+  CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST
+} from '../shared/contracts/runtime-package.contract'
+import type {
+  RuntimePackageExecuteSelectionRequest,
+  RuntimePackageGetExecutionStatusRequest
+} from '../shared/contracts/runtime-package.contract'
 
 // Expose safe APIs to the React renderer
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -118,10 +147,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 
   // Listen for AI task completion and SQLite sync event
-  onAiTaskSynced: (callback: (event: any, data: { assetId: string }) => void) => {
-    ipcRenderer.on('ai:task-synced', callback)
+  onAiTaskSynced: (callback: (event: IpcRendererEvent, data: AiTaskSyncedEvent) => void) => {
+    ipcRenderer.on(EVENT_AI_TASK_SYNCED, callback)
     return () => {
-      ipcRenderer.removeListener('ai:task-synced', callback)
+      ipcRenderer.removeListener(EVENT_AI_TASK_SYNCED, callback)
     }
   },
 
@@ -155,17 +184,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
   tagSearchUntagged: () => ipcRenderer.invoke('tag-search:untagged'),
   tagSearchAiPending: () => ipcRenderer.invoke('tag-search:ai-pending'),
 
-  // Mock AI predictions trigger
-  mockAiGenerateSuggestions: (assetId: string) => ipcRenderer.invoke('mock-ai:generate-suggestions', assetId),
-
   // REST AI Client IPC API
-  aiEnqueueTag: (assetId: string, filePath: string, priority?: number, modelsToRun?: string[]) => ipcRenderer.invoke('ai:enqueue-tag', { assetId, filePath, priority, modelsToRun }),
-  aiProcessBatch: () => ipcRenderer.invoke('ai:process-batch'),
-  aiModelStatus: () => ipcRenderer.invoke('ai:model-status'),
-  aiModelUnload: () => ipcRenderer.invoke('ai:model-unload'),
-  aiPromptGenerate: (assetId: string, filePath: string) => ipcRenderer.invoke('ai:prompt-generate', { assetId, filePath }),
-  aiAnalysisGenerate: (assetId: string, filePath: string) => ipcRenderer.invoke('ai:analysis-generate', { assetId, filePath }),
-  aiRoutingPreview: (filePath: string) => ipcRenderer.invoke('ai:routing-preview', { filePath }),
+  aiEnqueueTag: (assetId: string, filePath: string, priority?: number, modelsToRun?: EnqueueTagRequest['modelsToRun']) => ipcRenderer.invoke(
+    CHANNEL_AI_ENQUEUE_TAG,
+    { assetId, filePath, priority, modelsToRun } satisfies EnqueueTagRequest
+  ),
+  aiProcessBatch: () => ipcRenderer.invoke(CHANNEL_AI_PROCESS_BATCH),
+  aiModelStatus: () => ipcRenderer.invoke(CHANNEL_AI_MODEL_STATUS),
+  aiModelUnload: () => ipcRenderer.invoke(CHANNEL_AI_MODEL_UNLOAD),
+  aiRoutingPreview: (filePath: string) => ipcRenderer.invoke(
+    CHANNEL_AI_ROUTING_PREVIEW,
+    { filePath } satisfies RoutingPreviewRequest
+  ),
 
   // Custom Category Overrides API
   assetsSaveCustomCategory: (assetId: string, category: string) => ipcRenderer.invoke('assets:save-custom-category', { assetId, category }),
@@ -238,8 +268,16 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getRuntimeState: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_RUNTIME_STATE, { runtimeId }),
     getActiveRuntime: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_ACTIVE_RUNTIME),
     getMacOSCapabilities: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_MACOS_CAPABILITIES),
+    getWindowsCapabilities: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_WINDOWS_CAPABILITIES),
+    getMacOSAiBranchStatus: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_MACOS_AI_BRANCH_STATUS),
+    getWindowsAiBranchStatus: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_WINDOWS_AI_BRANCH_STATUS),
     getPythonMpsStatus: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_PYTHON_MPS_STATUS),
+    getPythonCudaStatus: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_PYTHON_CUDA_STATUS),
+    probePythonMpsRuntime: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_PROBE_PYTHON_MPS_EXECUTION),
+    probePythonCudaRuntime: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_PROBE_PYTHON_CUDA_EXECUTION),
     getClipSiglipOnnxStatus: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_GET_CLIP_SIGLIP_ONNX_STATUS),
+    probeOnnxModelLoad: (request?: AiRuntimeOnnxModelLoadProbeRequest) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_PROBE_ONNX_MODEL_LOAD, request),
+    probeOcrRealEvidence: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_PROBE_OCR_REAL_EVIDENCE),
     selectActiveRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_SELECT_ACTIVE_RUNTIME, { runtimeId }),
     startRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_START_RUNTIME, { runtimeId }),
     stopRuntime: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_STOP_RUNTIME, { runtimeId }),
@@ -247,6 +285,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
     healthCheck: (runtimeId: string) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK, { runtimeId }),
     healthCheckAll: () => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_HEALTH_CHECK_ALL),
     updateRuntimeConfig: (runtimeId: string, config: Partial<AiRuntimeConfig>) => ipcRenderer.invoke(CHANNEL_AI_RUNTIME_UPDATE_RUNTIME_CONFIG, { runtimeId, config })
+  },
+
+  // Runtime Package IPC API
+  runtimePackage: {
+    selectLocalManifest: () => ipcRenderer.invoke(CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST),
+    executeSelection: (request: RuntimePackageExecuteSelectionRequest) => ipcRenderer.invoke(
+      CHANNEL_RUNTIME_PACKAGE_EXECUTE_SELECTION,
+      request
+    ),
+    getExecutionStatus: (request: RuntimePackageGetExecutionStatusRequest) => ipcRenderer.invoke(
+      CHANNEL_RUNTIME_PACKAGE_GET_EXECUTION_STATUS,
+      request
+    )
   },
 
   // Settings Migration IPC API
@@ -285,5 +336,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 
   // macOS AI dependency installer
-  macosAiInstallDeps: () => ipcRenderer.invoke('macos-ai:install-deps')
+  macosAiInstallDeps: () => ipcRenderer.invoke('macos-ai:install-deps'),
+
+  // Path Governance APIs
+  getAssetLibraryPathGovernanceReport: () => ipcRenderer.invoke('assets:path-governance-report'),
+  getDownloadPathPlan: (requestedFilename: string) => ipcRenderer.invoke('downloads:get-path-plan', requestedFilename),
+  applyPathMigration: (options?: { deleteLegacyFiles?: boolean }) => ipcRenderer.invoke('assets:apply-path-migration', options),
+  getPathMigrationReport: () => ipcRenderer.invoke('assets:path-migration-report')
 })

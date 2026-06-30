@@ -1,9 +1,11 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+os.environ["DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI"] = "1"
 
 # -*- coding: utf-8 -*-
 import unittest
+from unittest.mock import patch
 import os
 import sys
 import sqlite3
@@ -97,10 +99,11 @@ class TestFlorence2Tagger(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(res_ocr["success"])
         self.assertIn("wajass shampoo", res_ocr["result"].lower())
 
-    def test_model_missing_warning(self):
+    @patch("core.cooperative_model_registry.find_downloaded_model", return_value=None)
+    def test_model_missing_warning(self, mock_find):
         """2. Clear warning or fallback handling when loading a missing model."""
         # Intentionally load an invalid model ID to trigger load failure fallback
-        model = Florence2TaggerModel(model_id="invalid/model-id-123456789")
+        model = Florence2TaggerModel(model_id="invalid/model-id-123456789", local_path="invalid/path")
         
         # Load should print failure warning and set is_mock to True
         model.load()

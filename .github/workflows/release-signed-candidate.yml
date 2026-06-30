@@ -1,0 +1,181 @@
+name: Signed Release Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Platform to package
+        required: true
+        default: windows
+        type: choice
+        options:
+          - windows
+          - macos
+      arch:
+        description: Artifact architecture
+        required: true
+        default: x64
+        type: choice
+        options:
+          - x64
+          - arm64
+      signing_approved:
+        description: Confirm this run may access the selected signing environment
+        required: true
+        default: false
+        type: boolean
+      mac_identity:
+        description: Developer ID identity selector for macOS
+        required: false
+        default: Developer ID Application
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  DAM_CI_SAFE: true
+  DAM_DISABLE_MODEL_DOWNLOADS: true
+  DAM_DISABLE_RUNTIME_DOWNLOADS: true
+  DAM_DISABLE_REAL_AI_WORKER: true
+  DAM_DISABLE_EXTERNAL_INFERENCE: true
+
+jobs:
+  windows-signed-candidate:
+    if: ${{ inputs.platform == 'windows' && inputs.signing_approved && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
+    name: Windows signed candidate (${{ inputs.arch }})
+    runs-on: windows-2022
+    timeout-minutes: 60
+    environment: release-signing-windows
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run release governance
+        run: npm run ci:governance
+
+      - name: Build signed NSIS candidate
+        run: node scripts/run-electron-builder.mjs --platform=win --mode=dist --target=nsis --signing=required --${{ inputs.arch }}
+        env:
+          DAM_RELEASE_SIGNING_APPROVED: true
+          CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
+
+      - name: Write checksum manifest
+        run: node scripts/write-release-checksums.mjs --platform=windows --arch=${{ inputs.arch }}
+
+      - name: Write Release Update Metadata
+        run: node scripts/write-release-update-metadata.mjs --platform=windows --arch=${{ inputs.arch }}
+
+      - name: Verify Authenticode evidence
+        run: node scripts/verify-release-trust.mjs --platform=windows --arch=${{ inputs.arch }}
+
+      - name: Verify release branding evidence
+        run: node scripts/verify-release-branding.mjs --platform=windows --arch=${{ inputs.arch }} --approval=build/release-branding.json
+
+      - name: Run static Package Smoke
+        run: npm run package:smoke -- --arch=${{ inputs.arch }} --output=dist-packages/package-smoke-windows-${{ inputs.arch }}.json
+
+      - name: Write Release Readiness Summary
+        run: node scripts/write-release-readiness-summary.mjs --platform=windows --arch=${{ inputs.arch }} --governance=passed
+
+      - name: Write External Gate Status
+        run: node scripts/write-release-external-gate-status.mjs --platform=windows --arch=${{ inputs.arch }}
+
+      - name: Upload signed Windows candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-asset-manager-windows-${{ inputs.arch }}-signed-candidate
+          path: |
+            dist-packages/*.exe
+            dist-packages/*.blockmap
+            dist-packages/release-checksums-*.json
+            dist-packages/release-update-metadata-*.json
+            dist-packages/release-trust-evidence-*.json
+            dist-packages/release-branding-evidence-*.json
+            dist-packages/package-smoke-*.json
+            dist-packages/release-readiness-summary-*.json
+            dist-packages/release-external-gate-status-*.json
+          if-no-files-found: error
+          retention-days: 14
+
+  macos-signed-candidate:
+    if: ${{ inputs.platform == 'macos' && inputs.signing_approved && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
+    name: macOS signed and notarized candidate (${{ inputs.arch }})
+    runs-on: macos-latest
+    timeout-minutes: 60
+    environment: release-signing-macos
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run release governance
+        run: npm run ci:governance
+
+      - name: Build signed and notarized DMG candidate
+        run: node scripts/run-electron-builder.mjs --platform=mac --mode=dist --target=dmg --signing=required --${{ inputs.arch }}
+        env:
+          DAM_RELEASE_SIGNING_APPROVED: true
+          CSC_LINK: ${{ secrets.MACOS_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.MACOS_CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          DAM_MAC_SIGNING_IDENTITY: ${{ inputs.mac_identity }}
+
+      - name: Write checksum manifest
+        run: node scripts/write-release-checksums.mjs --platform=macos --arch=${{ inputs.arch }}
+
+      - name: Write Release Update Metadata
+        run: node scripts/write-release-update-metadata.mjs --platform=macos --arch=${{ inputs.arch }}
+
+      - name: Verify macOS trust evidence
+        run: node scripts/verify-release-trust.mjs --platform=macos --arch=${{ inputs.arch }}
+
+      - name: Verify release branding evidence
+        run: node scripts/verify-release-branding.mjs --platform=macos --arch=${{ inputs.arch }} --approval=build/release-branding.json
+
+      - name: Run static Package Smoke
+        run: npm run package:smoke -- --arch=${{ inputs.arch }} --output=dist-packages/package-smoke-macos-${{ inputs.arch }}.json
+
+      - name: Write Release Readiness Summary
+        run: node scripts/write-release-readiness-summary.mjs --platform=macos --arch=${{ inputs.arch }} --governance=passed
+
+      - name: Write External Gate Status
+        run: node scripts/write-release-external-gate-status.mjs --platform=macos --arch=${{ inputs.arch }}
+
+      - name: Upload signed macOS candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-asset-manager-macos-${{ inputs.arch }}-signed-candidate
+          path: |
+            dist-packages/*.dmg
+            dist-packages/*.blockmap
+            dist-packages/release-checksums-*.json
+            dist-packages/release-update-metadata-*.json
+            dist-packages/release-trust-evidence-*.json
+            dist-packages/release-branding-evidence-*.json
+            dist-packages/package-smoke-*.json
+            dist-packages/release-readiness-summary-*.json
+            dist-packages/release-external-gate-status-*.json
+          if-no-files-found: error
+          retention-days: 14

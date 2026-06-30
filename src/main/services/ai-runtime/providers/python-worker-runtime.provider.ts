@@ -1,3 +1,4 @@
+import os from 'node:os'
 import type {
   AiRuntimeConfig,
   AiRuntimeHealthResult,
@@ -14,6 +15,18 @@ import { createDefaultPythonWorkerRuntimeConfig } from './python-worker-runtime-
 
 function now(): string {
   return new Date().toISOString()
+}
+
+function summarizeProcessExit(processState: PythonWorkerProcessState): string {
+  const baseMessage = `Python worker process exited with code ${processState.exitCode}`
+  const lastError = processState.stderrTail.at(-1)?.trim()
+  if (!lastError) return baseMessage
+
+  const sanitized = lastError
+    .replaceAll(process.cwd(), '<app>')
+    .replaceAll(os.homedir(), '<home>')
+    .slice(0, 240)
+  return `${baseMessage}: ${sanitized}`
 }
 
 function toAiRuntimeConfig(config: PythonWorkerRuntimeConfig): AiRuntimeConfig {
@@ -233,7 +246,7 @@ export class PythonWorkerRuntimeProvider implements AiRuntimeProvider {
         ...this.state,
         status: latestProcess.exitCode === 0 ? 'unhealthy' : 'failed',
         healthStatus: latestProcess.exitCode === 0 ? 'warning' : 'error',
-        lastError: `Python worker process exited with code ${latestProcess.exitCode}`
+        lastError: summarizeProcessExit(latestProcess)
       }
     }
   }

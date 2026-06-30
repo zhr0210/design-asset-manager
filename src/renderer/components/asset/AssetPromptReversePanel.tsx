@@ -4,6 +4,7 @@ import { Asset } from '../../stores/asset.store'
 import type { AppSettings } from '../../../shared/types/settings.types'
 import { useSettingsStore } from '../../stores/settings.store'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../../shared/constants/prompt-templates.constants'
+import { projectPromptReversePanelState } from '../../../shared/workflows/prompt-reverse.workflow'
 
 type AssetPromptReversePanelProps = {
   selectedAsset: Asset;
@@ -101,6 +102,17 @@ export default function AssetPromptReversePanel({
     : `native:${settings.selectedPromptModelId || ''}`
 
   const selectedOption = dropdownOptions.find(o => o.value === activeValue) || dropdownOptions[0]
+  const selectedModelName = selectedOption?.model?.name || selectedOption?.model?.displayName || ''
+  const promptReverseDisplay = projectPromptReversePanelState({
+    aiPromptStatus: selectedAsset.aiPromptStatus,
+    hasPromptResult: Boolean(selectedAsset.aiPrompt),
+    selectedModelDownloaded: Boolean(selectedOption?.isDownloaded),
+    selectedModelName,
+    startingRuntime: startingServer,
+    promptReverseLoading,
+    serverError,
+    promptReverseError
+  })
 
   const buildGgufSettings = (model: any): AppSettings => {
     const backends = settings.aiBackends ?? []
@@ -333,50 +345,45 @@ export default function AssetPromptReversePanel({
       </div>
 
       {(() => {
-        const status = selectedAsset.aiPromptStatus || 'not_started'
-
-        if (startingServer) {
+        if (promptReverseDisplay.mode === 'starting_runtime') {
           return (
             <div className="rounded-2xl p-4 bg-brand-500/[0.02] border border-brand-500/10 flex flex-col items-center justify-center gap-3 text-center min-h-[140px] animate-pulse">
               <Loader2 className="w-6 h-6 animate-spin text-brand-500" />
               <div className="space-y-1">
-                <p className="text-[11.5px] font-bold text-brand-700">⚡ 正在启动并加载本地量化引擎...</p>
-                <p className="text-[9.5px] text-slate-400 font-medium">首次加载或切换模型需要加载显存，请耐心等待 (约数秒)</p>
+                <p className="text-[11.5px] font-bold text-brand-700">⚡ {promptReverseDisplay.title}</p>
+                <p className="text-[9.5px] text-slate-400 font-medium">{promptReverseDisplay.detail}</p>
               </div>
             </div>
           )
         }
 
-        if (promptReverseLoading || status === 'running') {
+        if (promptReverseDisplay.mode === 'running_inference') {
           return (
             <div className="rounded-2xl p-4 bg-brand-500/[0.02] border border-brand-500/10 flex flex-col items-center justify-center gap-3 text-center min-h-[140px] animate-pulse">
               <Loader2 className="w-6 h-6 animate-spin text-brand-500" />
               <div className="space-y-1">
-                <p className="text-[11.5px] font-bold text-brand-700">⚡ 正在执行高级图像反推...</p>
-                <p className="text-[9.5px] text-slate-400 font-medium">正在分析风格、主体与画面细节 (推理中)</p>
+                <p className="text-[11.5px] font-bold text-brand-700">⚡ {promptReverseDisplay.title}</p>
+                <p className="text-[9.5px] text-slate-400 font-medium">{promptReverseDisplay.detail}</p>
               </div>
             </div>
           )
         }
 
-        if (serverError || promptReverseError) {
-          const err = serverError ? { message: serverError } : promptReverseError
+        if (promptReverseDisplay.mode === 'error') {
           return (
             <div className="rounded-2xl p-4 bg-rose-50 border border-rose-100 flex flex-col gap-2 font-sans select-none">
-              <p className="text-[11.5px] font-extrabold text-rose-700">❌ 反推失败</p>
+              <p className="text-[11.5px] font-extrabold text-rose-700">❌ {promptReverseDisplay.title}</p>
               <p className="text-[10px] text-rose-500 leading-relaxed font-semibold">
-                {err.code === 'GPU_MEMORY_INSUFFICIENT' || err.code === 'CUDA_OUT_OF_MEMORY'
-                  ? '显存不足！请关闭其他占用显卡的程序，或改用 Qwen3-VL-4B/2B 系列模型。'
-                  : err.message || '推理运行出错，请确认依赖包与模型文件完整。'}
+                {promptReverseDisplay.detail}
               </p>
-              {err.stderr && (
+              {promptReverseDisplay.errorLog && (
                 <details className="mt-1 group cursor-pointer">
                   <summary className="text-[9px] text-rose-600 font-bold hover:text-rose-800 transition-colors select-none outline-none flex items-center gap-1 cursor-pointer">
                     <span>📋 查看完整错误日志 (Terminal Console Log)</span>
                     <span className="text-[7px] inline-block transform group-open:rotate-90 transition-transform">▶</span>
                   </summary>
                   <pre className="mt-1.5 p-2 bg-slate-900 border border-slate-800 text-[8.5px] text-rose-400 font-mono rounded-lg max-h-[140px] overflow-auto select-text whitespace-pre-wrap leading-normal cursor-text">
-                    {err.stderr}
+                    {promptReverseDisplay.errorLog}
                   </pre>
                 </details>
               )}
@@ -384,13 +391,13 @@ export default function AssetPromptReversePanel({
                 onClick={() => handleRun()}
                 className="mt-1 w-full py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold text-[11px] transition-all cursor-pointer shadow-sm"
               >
-                重试反推
+                {promptReverseDisplay.primaryActionLabel}
               </button>
             </div>
           )
         }
 
-        if (selectedAsset.aiPrompt) {
+        if (promptReverseDisplay.mode === 'result_ready') {
           let promptData: any = {}
           try {
             promptData = JSON.parse(selectedAsset.aiPrompt)
@@ -514,31 +521,30 @@ export default function AssetPromptReversePanel({
 
               {/* Source model & memory release details */}
               <div className="flex items-center justify-between text-[9px] text-slate-400 pt-1.5 border-t border-slate-50 select-none">
-                <span>模型: <span className="text-brand-500 font-bold">{selectedOption?.model?.name || selectedOption?.model?.displayName || '未知'}</span></span>
+                <span>模型: <span className="text-brand-500 font-bold">{selectedModelName || '未知'}</span></span>
                 <button
                   onClick={() => handleRun()}
                   className="px-2.5 py-1 bg-brand-50 hover:bg-brand-100 text-brand-600 rounded-lg font-bold transition-all cursor-pointer shadow-sm"
                 >
-                  重新反推
+                  {promptReverseDisplay.primaryActionLabel}
                 </button>
               </div>
             </div>
           )
         }
 
-        // Default: not_started
-        if (selectedOption?.isDownloaded) {
+        if (promptReverseDisplay.mode === 'ready_to_run') {
           return (
             <div className="bg-slate-50/50 border border-dashed border-slate-200 p-4 text-center rounded-2xl space-y-2.5 font-sans select-none">
               <p className="text-[10px] text-slate-400 font-semibold leading-relaxed">
-                已就绪！当前高级反推激活模型为 {selectedOption.model.name || selectedOption.model.displayName}。
+                {promptReverseDisplay.detail}
               </p>
               <button
                 onClick={() => handleRun()}
                 className="w-full py-2 bg-gradient-to-r from-brand-500 to-indigo-600 hover:from-brand-600 hover:to-indigo-700 text-white rounded-xl shadow-sm hover:shadow text-[11.5px] font-bold transition-premium flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
               >
                 <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>🚀 开始图片反推</span>
+                <span>🚀 {promptReverseDisplay.primaryActionLabel}</span>
               </button>
             </div>
           )
@@ -547,7 +553,7 @@ export default function AssetPromptReversePanel({
         return (
           <div className="bg-slate-50/50 border border-dashed border-slate-200 p-4 text-center rounded-2xl space-y-2.5 font-sans select-none">
             <p className="text-[10px] text-slate-400 font-semibold leading-relaxed">
-              请先前往 AI 控制台配置或下载高级反推模型 {selectedOption?.model?.name || selectedOption?.model?.displayName || ''}。
+              {promptReverseDisplay.detail}
             </p>
             <button
               type="button"
@@ -558,7 +564,7 @@ export default function AssetPromptReversePanel({
               className="w-full py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-[11px] font-bold transition-premium flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
             >
               <Settings className="w-3.5 h-3.5 text-slate-400" />
-              <span>前往 AI 控制台配置</span>
+              <span>{promptReverseDisplay.primaryActionLabel}</span>
             </button>
           </div>
         )

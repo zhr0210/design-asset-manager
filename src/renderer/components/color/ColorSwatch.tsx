@@ -1,35 +1,22 @@
 import React, { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Copy, Check, MoreVertical } from 'lucide-react'
-
-export interface ColorSwatchData {
-  hex: string
-  rgb: [number, number, number]
-  hsl: [number, number, number]
-  percentage: number
-  role: string
-  family: string
-  isDark: boolean
-  textColor: string
-  contrastWhite?: number
-  contrastBlack?: number
-}
+import type { VisualAnalysisImageSwatch } from '../../../shared/workflows/visual-analysis-snapshot.workflow'
 
 interface ColorSwatchProps {
-  color: ColorSwatchData
+  color: VisualAnalysisImageSwatch
   onCopy?: (text: string) => void
 }
 
 export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
-  const [hovered, setHovered] = useState(false)
+  const swatchRef = React.useRef<HTMLDivElement | null>(null)
   const [showOptions, setShowOptions] = useState(false)
   const [copiedFormat, setCopiedFormat] = useState<string | null>(null)
-
-  const rgb = Array.isArray(color.rgb) ? color.rgb : [0, 0, 0]
-  const hsl = Array.isArray(color.hsl) ? color.hsl : [0, 0, 0]
-
-  const rgbStr = `rgb(${rgb.join(', ')})`
-  const hslStr = `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`
-  const cssVarStr = `--color-${color.role || 'swatch'}: ${color.hex};`
+  const [tooltipPosition, setTooltipPosition] = useState<{
+    left: number
+    top: number
+    placement: 'above' | 'below'
+  } | null>(null)
 
   const handleCopy = async (text: string, format: string, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -45,28 +32,36 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
     setShowOptions(false)
   }
 
-  // Determine user friendly role label
-  const getRoleLabel = (role: string) => {
-    switch (role) {
-      case 'background': return '主背景色'
-      case 'primary': return '主色调'
-      case 'secondary': return '辅助色'
-      case 'accent': return '点缀色'
-      default: return '配色'
-    }
+  const showTooltip = () => {
+    if (!swatchRef.current) return
+
+    const rect = swatchRef.current.getBoundingClientRect()
+    const tooltipWidth = 192
+    const viewportPadding = 12
+    const left = Math.min(
+      Math.max(rect.left + rect.width / 2, viewportPadding + tooltipWidth / 2),
+      window.innerWidth - viewportPadding - tooltipWidth / 2
+    )
+    const placement = rect.top > 190 ? 'above' : 'below'
+    setTooltipPosition({
+      left,
+      top: placement === 'above' ? rect.top - 8 : rect.bottom + 8,
+      placement
+    })
   }
 
   return (
     <div 
       className="relative group flex flex-col items-center"
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={showTooltip}
       onMouseLeave={() => {
-        setHovered(false)
+        setTooltipPosition(null)
         setShowOptions(false)
       }}
     >
       {/* Visual Swatch Card */}
       <div 
+        ref={swatchRef}
         onClick={(e) => handleCopy(color.hex, 'HEX', e)}
         className="relative w-16 h-16 rounded-xl shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:-translate-y-1 active:scale-95 border border-white/10 flex items-center justify-center overflow-hidden"
         style={{ backgroundColor: color.hex }}
@@ -83,7 +78,7 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
           className="absolute bottom-1 right-1.5 text-[9px] font-mono select-none"
           style={{ color: color.textColor, opacity: 0.6 }}
         >
-          {color.percentage}%
+          {color.percentageLabel}
         </span>
 
         {/* Quick Menu Button */}
@@ -92,6 +87,7 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
             e.stopPropagation()
             e.preventDefault()
             setShowOptions(!showOptions)
+            setTooltipPosition(null)
           }}
           className="absolute top-1 right-1 p-0.5 rounded-full hover:bg-black/20 text-white/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
           style={{ color: color.textColor }}
@@ -122,21 +118,21 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
             <Copy className="w-3 h-3 text-slate-500" />
           </button>
           <button 
-            onClick={(e) => handleCopy(rgbStr, 'RGB', e)}
+            onClick={(e) => handleCopy(color.rgbCopyValue, 'RGB', e)}
             className="flex items-center justify-between px-2.5 py-1.5 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-all text-left"
           >
             <span>RGB</span>
             <Copy className="w-3 h-3 text-slate-500" />
           </button>
           <button 
-            onClick={(e) => handleCopy(hslStr, 'HSL', e)}
+            onClick={(e) => handleCopy(color.hslCopyValue, 'HSL', e)}
             className="flex items-center justify-between px-2.5 py-1.5 text-xs rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-all text-left"
           >
             <span>HSL</span>
             <Copy className="w-3 h-3 text-slate-500" />
           </button>
           <button 
-            onClick={(e) => handleCopy(cssVarStr, 'CSS', e)}
+            onClick={(e) => handleCopy(color.cssVariable, 'CSS', e)}
             className="flex items-center justify-between px-2.5 py-1.5 text-[11px] font-mono rounded-lg text-amber-300 hover:bg-white/10 transition-all text-left"
           >
             <span>CSS 变量</span>
@@ -146,12 +142,22 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
       )}
 
       {/* 2. Glassmorphism Tooltip Popover on Hover */}
-      {hovered && !showOptions && (
-        <div className="absolute z-20 bottom-24 bg-slate-950/85 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl p-3 flex flex-col gap-1 w-48 text-left animate-fade-in pointer-events-none select-none">
+      {tooltipPosition && !showOptions && createPortal(
+        <div
+          className="fixed z-[9999] bg-slate-950/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl p-3 flex flex-col gap-1 w-48 text-left animate-fade-in pointer-events-none select-none"
+          style={{
+            left: tooltipPosition.left,
+            top: tooltipPosition.top,
+            transform:
+              tooltipPosition.placement === 'above'
+                ? 'translate(-50%, -100%)'
+                : 'translate(-50%, 0)'
+          }}
+        >
           <div className="flex items-center justify-between border-b border-white/10 pb-1.5 mb-1.5">
-            <span className="text-xs font-bold text-slate-100">{getRoleLabel(color.role)}</span>
+            <span className="text-xs font-bold text-slate-100">{color.roleLabel}</span>
             <span className="text-[10px] font-mono bg-white/10 text-slate-300 px-1.5 py-0.5 rounded-full">
-              {color.percentage}%
+              {color.percentageLabel}
             </span>
           </div>
           <div className="grid grid-cols-3 text-[10px] text-slate-400 gap-y-1 gap-x-2 font-mono">
@@ -159,34 +165,34 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
             <span className="col-span-2 text-slate-200 text-right">{color.hex}</span>
             
             <span>RGB:</span>
-            <span className="col-span-2 text-slate-200 text-right">{rgb.join(', ')}</span>
+            <span className="col-span-2 text-slate-200 text-right">{color.rgbValueLabel}</span>
             
             <span>HSL:</span>
-            <span className="col-span-2 text-slate-200 text-right">{hsl[0]}°, {hsl[1]}%, {hsl[2]}%</span>
+            <span className="col-span-2 text-slate-200 text-right">{color.hslValueLabel}</span>
             
-            {color.contrastWhite !== undefined && color.contrastBlack !== undefined && (
+            {color.contrastLabel && (
               <>
                 <span className="col-span-2">对比白/黑:</span>
                 <span className="text-slate-200 text-right font-medium">
-                  {color.contrastWhite}:{color.contrastBlack}
+                  {color.contrastLabel}
                 </span>
               </>
             )}
 
-            {(color as any).confidence !== undefined && (
+            {color.confidenceLabel && (
               <>
                 <span>置信度:</span>
                 <span className="col-span-2 text-slate-200 text-right font-medium">
-                  {Math.round((color as any).confidence * 100)}%
+                  {color.confidenceLabel}
                 </span>
               </>
             )}
 
-            {(color as any).from_boxes !== undefined && (
+            {color.textBoxesLabel && (
               <>
                 <span>文字框数:</span>
                 <span className="col-span-2 text-slate-200 text-right font-medium">
-                  {(color as any).from_boxes} 个
+                  {color.textBoxesLabel}
                 </span>
               </>
             )}
@@ -194,7 +200,15 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({ color, onCopy }) => {
           <div className="mt-1.5 border-t border-white/5 pt-1.5 text-[9.5px] text-slate-500 italic text-center">
             点击复制 HEX 色值
           </div>
-        </div>
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 border-4 border-transparent ${
+              tooltipPosition.placement === 'above'
+                ? 'top-full -mt-1 border-t-slate-950/95'
+                : 'bottom-full -mb-1 border-b-slate-950/95'
+            }`}
+          />
+        </div>,
+        document.body
       )}
     </div>
   )

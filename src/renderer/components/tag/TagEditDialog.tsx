@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { X, Plus, AlertCircle, Trash2 } from 'lucide-react'
 import { useAssetStore, Tag } from '../../stores/asset.store'
+import {
+  ASSET_TAG_PRESET_COLORS,
+  ASSET_TAG_TYPES,
+  CUSTOM_ASSET_TAG_COLOR_CLASS,
+  DEFAULT_ASSET_TAG_COLOR_CLASS
+} from '../../../shared/workflows/asset-tagging.workflow'
 
 interface TagEditDialogProps {
   tag?: Tag | null // If null, we are in "Create" mode
@@ -8,34 +14,12 @@ interface TagEditDialogProps {
   onClose: () => void
 }
 
-const PRESET_COLORS = [
-  { label: '靛蓝 (Style)', value: 'bg-indigo-50 text-indigo-700 border border-indigo-200' },
-  { label: '薄荷 (Color)', value: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
-  { label: '海蓝 (Usage)', value: 'bg-blue-50 text-blue-700 border border-blue-200' },
-  { label: '琥珀 (Layout)', value: 'bg-amber-50 text-amber-700 border border-amber-200' },
-  { label: '玫瑰 (Scene)', value: 'bg-rose-50 text-rose-700 border border-rose-200' },
-  { label: '石板 (Source)', value: 'bg-slate-100 text-slate-700 border border-slate-200' },
-  { label: '丁香 (AI)', value: 'bg-purple-50 text-purple-700 border border-purple-200' },
-  { label: '粉红 (Custom)', value: 'bg-pink-50 text-pink-700 border border-pink-200' }
-]
-
-const TAG_TYPES = [
-  { label: '风格 (Style)', value: 'style' },
-  { label: '色彩 (Color)', value: 'color' },
-  { label: '用途 (Usage)', value: 'usage' },
-  { label: '版式 (Layout)', value: 'layout' },
-  { label: '场景 (Scene)', value: 'scene' },
-  { label: '来源 (Source)', value: 'source' },
-  { label: 'AI (AI Generated)', value: 'ai' },
-  { label: '自定义 (Custom)', value: 'custom' }
-]
-
 export default function TagEditDialog({ tag, isOpen, onClose }: TagEditDialogProps) {
   const { createTag, updateTag, tags } = useAssetStore()
 
   const [name, setName] = useState('')
   const [type, setType] = useState('custom')
-  const [color, setColor] = useState(PRESET_COLORS[0].value)
+  const [color, setColor] = useState(DEFAULT_ASSET_TAG_COLOR_CLASS)
   const [description, setDescription] = useState('')
   const [shorthand, setShorthand] = useState('')
   const [parentId, setParentId] = useState('')
@@ -62,7 +46,7 @@ export default function TagEditDialog({ tag, isOpen, onClose }: TagEditDialogPro
         // Reset for create mode
         setName('')
         setType('custom')
-        setColor(PRESET_COLORS[7].value) // Pink/Custom
+        setColor(CUSTOM_ASSET_TAG_COLOR_CLASS)
         setDescription('')
         setShorthand('')
         setParentId('')
@@ -201,7 +185,7 @@ export default function TagEditDialog({ tag, isOpen, onClose }: TagEditDialogPro
                 onChange={(e) => setType(e.target.value)}
                 className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl outline-none text-slate-600 font-semibold cursor-pointer"
               >
-                {TAG_TYPES.map((t) => (
+                {ASSET_TAG_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
                     {t.label}
                   </option>
@@ -227,7 +211,7 @@ export default function TagEditDialog({ tag, isOpen, onClose }: TagEditDialogPro
           <div className="space-y-1.5">
             <label className="font-bold text-slate-500 uppercase tracking-wider">色彩配置</label>
             <div className="grid grid-cols-4 gap-2">
-              {PRESET_COLORS.map((item) => (
+              {ASSET_TAG_PRESET_COLORS.map((item) => (
                 <button
                   key={item.value}
                   type="button"

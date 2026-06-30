@@ -1,5 +1,5 @@
 import { spawn } from 'child_process'
-import { ensureMacOSAiPythonRuntime } from '../ocr-dependency.service'
+import { ensureManagedAiPythonRuntime } from '../ocr-dependency.service'
 import fs from 'fs'
 import type { WebContents } from 'electron'
 import { getModelLocalPath, getPythonModelCacheEnv, PROMPT_VLM_MODELS } from './ai-model-registry'
@@ -28,7 +28,7 @@ export class AiModelDownloadService {
     }
 
     const localDir = getModelLocalPath(model)
-    const runtime = await ensureMacOSAiPythonRuntime()
+    const runtime = await ensureManagedAiPythonRuntime()
     if (!runtime.success) {
       throw new Error(`Managed Python runtime unavailable: ${runtime.error ?? 'unknown'}`)
     }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Check, Search, Tag as TagIcon, X } from 'lucide-react'
-import { useAssetStore, Tag } from '../../stores/asset.store'
+import { projectAssetTagPicker } from '../../../shared/workflows/asset-tagging.workflow'
+import { useAssetStore } from '../../stores/asset.store'
 
 interface TagSelectorProps {
   selectedTagIds: string[]
@@ -17,36 +18,7 @@ export default function TagSelector({
 }: TagSelectorProps) {
   const tags = useAssetStore((s) => s.tags)
   const [search, setSearch] = useState('')
-
-  // Map category keys to human-friendly Chinese names
-  const categoryNames: Record<string, string> = {
-    style: '风格 (Style)',
-    color: '色彩 (Color)',
-    usage: '用途 (Usage)',
-    layout: '版式 (Layout)',
-    scene: '场景 (Scene)',
-    source: '来源 (Source)',
-    ai: 'AI 智能打标',
-    custom: '用户自定义 (Custom)'
-  }
-
-  // Filter tags by search term
-  const filteredTags = tags.filter((t) =>
-    t.name.toLowerCase().includes(search.toLowerCase()) ||
-    t.aliases.some(a => a.toLowerCase().includes(search.toLowerCase()))
-  )
-
-  // Group tags by their type
-  const groupedTags: Record<string, Tag[]> = {}
-  for (const tag of filteredTags) {
-    if (!groupedTags[tag.type]) {
-      groupedTags[tag.type] = []
-    }
-    groupedTags[tag.type].push(tag)
-  }
-
-  // Define logical order for displaying categories
-  const categoryOrder = ['style', 'color', 'usage', 'layout', 'scene', 'source', 'ai', 'custom']
+  const tagPicker = projectAssetTagPicker(tags, { search })
 
   return (
     <div className="w-full flex flex-col h-96 bg-white rounded-2xl border border-slate-100 shadow-premium overflow-hidden font-sans">
@@ -82,22 +54,19 @@ export default function TagSelector({
 
       {/* Grid Content */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {categoryOrder.map((catKey) => {
-          const catTags = groupedTags[catKey] || []
-          if (catTags.length === 0) return null
-
+        {tagPicker.groups.map((group) => {
           return (
-            <div key={catKey} className="space-y-1.5">
+            <div key={group.categoryKey} className="space-y-1.5">
               <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-wide px-1">
-                {categoryNames[catKey] || catKey}
+                {group.categoryLabel}
               </h5>
               <div className="flex flex-wrap gap-1.5">
-                {catTags.map((tag) => {
-                  const isSelected = selectedTagIds.includes(tag.id)
+                {group.options.map((option) => {
+                  const isSelected = selectedTagIds.includes(option.tag.id)
                   return (
                     <button
-                      key={tag.id}
-                      onClick={() => onToggleTag(tag.id)}
+                      key={option.tag.id}
+                      onClick={() => onToggleTag(option.tag.id)}
                       className={`inline-flex items-center gap-1 px-3 py-1 rounded-xl text-[11px] font-semibold transition-all border ${
                         isSelected
                           ? 'bg-brand-50 text-brand-700 border-brand-300 shadow-sm font-bold scale-[1.01]'
@@ -105,12 +74,12 @@ export default function TagSelector({
                       }`}
                     >
                       {isSelected && <Check className="w-3 h-3 text-brand-600 stroke-[2.5]" />}
-                      <span>{tag.name}</span>
-                      {tag.usageCount > 0 && (
+                      <span>{option.tag.name}</span>
+                      {option.showUsageCount && (
                         <span className={`text-[8.5px] px-1 rounded font-bold ${
                           isSelected ? 'bg-brand-100 text-brand-800' : 'bg-slate-100 text-slate-400'
                         }`}>
-                          {tag.usageCount}
+                          {option.usageLabel}
                         </span>
                       )}
                     </button>
@@ -121,9 +90,9 @@ export default function TagSelector({
           )
         })}
 
-        {filteredTags.length === 0 && (
+        {tagPicker.options.length === 0 && (
           <div className="py-16 text-center text-slate-400 text-[11px] font-medium">
-            没有匹配的标签，您可以尝试在详情面板中直接创建。
+            {tagPicker.emptyLabel}
           </div>
         )}
       </div>

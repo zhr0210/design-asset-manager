@@ -27,7 +27,6 @@ class TestMacOSAiCapabilities(unittest.TestCase):
             __version__="1.20.0",
             get_available_providers=lambda: ["CoreMLExecutionProvider", "CPUExecutionProvider"],
         )
-        mlx = types.SimpleNamespace(__version__="0.22.0")
         optimum_onnxruntime = types.SimpleNamespace(__version__="1.20.1")
         ram = types.SimpleNamespace(__version__="1.0.0")
         florence = types.SimpleNamespace(__version__="1.0.0")
@@ -42,7 +41,6 @@ class TestMacOSAiCapabilities(unittest.TestCase):
             import_module=self.fake_import({
                 "torch": torch,
                 "onnxruntime": ort,
-                "mlx.core": mlx,
                 "transformers": types.SimpleNamespace(__version__="4.48.0"),
                 "optimum.onnxruntime": optimum_onnxruntime,
                 "models.ram_tagger": ram,
@@ -58,16 +56,17 @@ class TestMacOSAiCapabilities(unittest.TestCase):
         self.assertTrue(result["isAppleSilicon"])
         self.assertTrue(result["torch"]["mpsAvailable"])
         self.assertTrue(result["onnxruntime"]["coremlAvailable"])
-        self.assertTrue(result["mlx"]["available"])
         self.assertTrue(result["clipSiglipOnnx"]["available"])
         self.assertTrue(result["ram"]["available"])
         self.assertTrue(result["rapidocr"]["available"])
         self.assertTrue(result["paddleocr"]["available"])
         self.assertEqual([lane["id"] for lane in result["lanes"]], ["python-mps", "onnx-runtime", "llama"])
-        self.assertIn("Qwen3-VL MLX", [cap["label"] for cap in result["lanes"][2]["capabilities"]])
         self.assertEqual(result["lanes"][0]["capabilities"][0]["status"], "optional")
         self.assertEqual(result["lanes"][1]["capabilities"][0]["status"], "optional")
         self.assertEqual(result["lanes"][1]["capabilities"][3]["status"], "optional")
+        self.assertEqual(result["lanes"][2]["status"], "evidence_insufficient")
+        self.assertEqual(result["lanes"][2]["capabilities"][0]["status"], "evidence_insufficient")
+        self.assertEqual(result["lanes"][2]["capabilities"][1]["status"], "fallback")
         self.assertEqual(result["lanes"][0]["capabilities"][0]["modelFamily"], "RAM++")
         self.assertEqual(result["lanes"][1]["capabilities"][1]["modelFamily"], "RapidOCR")
 
@@ -82,7 +81,6 @@ class TestMacOSAiCapabilities(unittest.TestCase):
         self.assertFalse(result["isAppleSilicon"])
         self.assertFalse(result["torch"]["available"])
         self.assertFalse(result["onnxruntime"]["available"])
-        self.assertFalse(result["mlx"]["available"])
         self.assertFalse(result["clipSiglipOnnx"]["available"])
         self.assertFalse(result["ram"]["available"])
         self.assertFalse(result["rapidocr"]["available"])
@@ -90,7 +88,9 @@ class TestMacOSAiCapabilities(unittest.TestCase):
         self.assertEqual(result["lanes"][0]["capabilities"][0]["modelFamily"], "RAM++")
         self.assertEqual(result["lanes"][0]["status"], "unavailable")
         self.assertEqual(result["lanes"][1]["status"], "unavailable")
-        self.assertEqual(result["lanes"][2]["status"], "planned")
+        self.assertEqual(result["lanes"][0]["capabilities"][0]["status"], "dependency_missing")
+        self.assertEqual(result["lanes"][1]["capabilities"][3]["status"], "dependency_missing")
+        self.assertEqual(result["lanes"][2]["status"], "evidence_insufficient")
 
     def test_non_macos_marks_llama_unavailable_but_keeps_external_fallback(self):
         result = probe_macos_ai_capabilities(

@@ -3,6 +3,10 @@ import { Search as SearchIcon, Globe, Download, Clock, Image as ImageIcon, Loade
 import { useSearchStore } from '../stores/search.store'
 import { useSiteStore } from '../stores/site.store'
 import { useDownloadStore } from '../stores/download.store'
+import {
+  DownloadSearchActionDisplay,
+  projectDownloadSearchActionDisplay
+} from '../../shared/workflows/download-status.workflow'
 
 export default function Search() {
   const sites = useSiteStore((s) => s.sites)
@@ -86,6 +90,7 @@ export default function Search() {
           <div className="waterfall-grid">
             {results.map((item) => {
               const status = getTaskStatus(item.imageUrl || '')
+              const actionDisplay = projectDownloadSearchActionDisplay(status)
               return (
                 <div
                   key={item.id}
@@ -126,31 +131,11 @@ export default function Search() {
                             thumbnailUrl: item.thumbnailUrl
                           })
                         }
-                        disabled={status !== null}
-                        className={`flex-1 py-2 px-3 rounded-lg font-bold text-[11.5px] transition-premium flex items-center justify-center gap-1.5 ${
-                          status === 'completed'
-                            ? 'bg-slate-100 text-slate-500'
-                            : status !== null
-                            ? 'bg-brand-50 text-brand-600'
-                            : 'bg-brand-500 hover:bg-brand-600 text-white shadow-sm'
-                        }`}
+                        disabled={actionDisplay.disabled}
+                        className={`flex-1 py-2 px-3 rounded-lg font-bold text-[11.5px] transition-premium flex items-center justify-center gap-1.5 ${actionDisplay.buttonClass}`}
                       >
-                        {status === 'completed' ? (
-                          <>
-                            <ImageIcon className="w-3.5 h-3.5" />
-                            <span>已在库中</span>
-                          </>
-                        ) : status !== null ? (
-                          <>
-                            <Clock className="w-3.5 h-3.5 animate-pulse" />
-                            <span>下载中...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Download className="w-3.5 h-3.5" />
-                            <span>抓取下载</span>
-                          </>
-                        )}
+                        <SearchDownloadActionIcon actionDisplay={actionDisplay} />
+                        <span>{actionDisplay.label}</span>
                       </button>
                     </div>
                   </div>
@@ -168,4 +153,10 @@ export default function Search() {
       </div>
     </div>
   )
+}
+
+function SearchDownloadActionIcon({ actionDisplay }: { actionDisplay: DownloadSearchActionDisplay }) {
+  if (actionDisplay.iconKey === 'image') return <ImageIcon className="w-3.5 h-3.5" />
+  if (actionDisplay.iconKey === 'clock') return <Clock className="w-3.5 h-3.5 animate-pulse" />
+  return <Download className="w-3.5 h-3.5" />
 }

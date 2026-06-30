@@ -6,7 +6,7 @@
   "testsUseMockRunner": true,
   "autoInstallPython": false,
   "autoInstallDependencies": false,
-  "autoStartWorker": false,
+  "autoStartWorker": true,
   "cleanupDeletesFiles": false,
   "features": [
     "args array launch plan",
@@ -15,6 +15,9 @@
     "configurable port",
     "health URL planning",
     "stop plan",
-    "crash log plan"
+    "crash log plan",
+    "operating-system pid tracking",
+    "bounded output tails",
+    "graceful shutdown escalation"
   ]
 }

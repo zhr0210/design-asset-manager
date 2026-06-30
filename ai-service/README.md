@@ -2,6 +2,10 @@
 
 Local Python FastAPI worker for AI tagging, prompt reverse, visual analysis, routing, OCR helpers, and translation support.
 
+`tools/probe_ocr_real_evidence.py` is an explicit, path-free validation tool
+that runs generated-image OCR against already-local RapidOCR or EasyOCR
+artifacts. It does not download model weights or change product status.
+
 ## Entry Files
 
 - `app.py`: FastAPI entry.
@@ -16,6 +20,16 @@ Local Python FastAPI worker for AI tagging, prompt reverse, visual analysis, rou
 - Keep inference in Python, not Electron main.
 - Do not read or modify `models_cache/` by default.
 - Do not change API response shapes without updating Electron callers.
+- Runtime execution probes must use fixed synthetic inputs, return path-free evidence, and must not claim that a model route passed.
+- Simulated inference is disabled by default. Tests or explicit development
+  harnesses must set `DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI=1`; this flag never
+  overrides strict product mode.
+- CUDA inference defaults to exact float32 matmul precision. Set
+  `DAM_CUDA_TF32=1` only after model-level quality validation. Variable-shape
+  cuDNN autotuning remains off unless `DAM_CUDNN_BENCHMARK=1` is explicitly set.
+- `requirements.txt` is the CPU-safe default on every platform. NVIDIA Windows
+  hosts may explicitly use `requirements-windows-cuda.txt`; Windows alone is
+  not evidence that a CUDA dependency profile is appropriate.
 
 ## Tests
 
@@ -23,8 +37,26 @@ Local Python FastAPI worker for AI tagging, prompt reverse, visual analysis, rou
 python -m unittest discover ai-service/tests
 ```
 
+## Windows CUDA Evidence
+
+The evidence tools use registered local models only and never download weights:
+
+```bash
+python ai-service/tools/compare_clip_tf32_quality.py
+python ai-service/tools/probe_onnx_cuda_profile.py
+```
+
+The ONNX CUDA probe must run in an explicit environment where
+`onnxruntime-gpu` is selected. Neither tool emits model paths or image payloads.
+
 ## Change Log
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.4 | 2026-06-14 | Made simulated inference explicit opt-in for tests/development and prevented the opt-in flag from overriding strict product mode. |
+| v1.2.3 | 2026-06-14 | Made evidence probe failures structured and path-free; non-finite CLIP comparison output can no longer report success. |
+| v1.2.2 | 2026-06-13 | Added path-free CLIP TF32 quality and explicit ONNX CUDA model evidence probes using generated inputs and registered local artifacts. |
+| v1.2.1 | 2026-06-13 | Made TF32 and the Windows CUDA ONNX dependency profile explicit opt-ins; the default install remains exact and CPU-safe. |
+| v1.2.0 | 2026-06-13 | Added centralized CUDA inference policy and inference-mode execution. |
+| v1.1.0 | 2026-06-06 | Added a user-initiated fixed-tensor MPS execution probe that is separate from model inference evidence. |
 | v1.0.0 | 2026-05-31 | Rewrote README as compact AI Worker map with safety rules. |

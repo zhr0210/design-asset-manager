@@ -1,61 +1,30 @@
 import React, { useState } from 'react'
-import { Sparkles, Check, X, RefreshCw, Terminal, Eye, Brain, ChevronDown, Layers } from 'lucide-react'
-import { useAssetStore, AssetTagRelation } from '../../stores/asset.store'
+import { Sparkles, Check, X, RefreshCw, Brain, ChevronDown, Layers } from 'lucide-react'
+import { useAssetStore } from '../../stores/asset.store'
+import {
+  createAssetTaggingPlan,
+  projectAssetTaggingCategoryOptions,
+  projectAssetTaggingModelSelectionSections,
+  projectAssetTaggingPanelDisplay,
+  projectAssetTaggingSuggestionReviewItems,
+  toggleAssetTaggingModelSelection,
+  type AssetTaggingScanState,
+  type AssetTaggingModelId
+} from '../../../shared/workflows/asset-tagging.workflow'
 
 interface TagSuggestionPanelProps {
   assetId: string
-}
-
-const TYPE_LABEL_MAP: Record<string, { type: string, model: string }> = {
-  design: { type: "商业设计图 (DESIGN)", model: "Florence-2 & CLIP" },
-  ui: { type: "界面截图 (UI)", model: "Florence-2" },
-  document: { type: "文档大图 (DOCUMENT)", model: "Florence-2" },
-  anime: { type: "动漫原画 (ANIME)", model: "WD Tagger" },
-  illustration: { type: "手绘插画 (ILLUSTRATION)", model: "RAM++" },
-  photo: { type: "摄影照片 (PHOTO)", model: "RAM++" },
-  product: { type: "商品展示 (PRODUCT)", model: "RAM++" },
-  unknown: { type: "未知类别 (UNKNOWN)", model: "Rule-based Fallback" }
-}
-
-const PIPELINE_MAP: Record<string, string[]> = {
-  anime: ["wd_tagger"],
-  illustration: ["ram", "design_rule"],
-  photo: ["ram", "design_rule"],
-  product: ["ram", "design_rule"],
-  design: ["ram", "florence2", "design_rule"],
-  ui: ["ram", "florence2", "design_rule"],
-  document: ["ram", "florence2", "design_rule"],
-  unknown: ["ram", "design_rule"]
-}
-
-const BASE_LAYER_MODELS = {
-  ram: { name: "RAM++ 通用标签", desc: "通用图像与多标签泛用推理，建议大多数素材开启。" }
-}
-
-const ENHANCED_LAYER_MODELS = {
-  florence2: { name: "Florence-2 画面描述 / 设计语义", desc: "图片场景详细描述、设计图语义复判。" },
-  design_rule: { name: "DesignRule 设计规则", desc: "排版、版式、比例、来源、设计用途规则辅助。" },
-  wd_tagger: { name: "WD Tagger 动漫标签", desc: "二次元 / 动漫 / 角色特征提取，仅动漫素材建议开启。" },
-  clip: { name: "CLIP Classifier 设计词典分类", desc: "零样本分类与自定义设计词典匹配。" }
-}
-
-const MODEL_DISPLAY_NAMES: Record<string, { name: string, desc: string }> = {
-  ram: { name: "RAM++", desc: "通用画风与多标签反推" },
-  florence2: { name: "Florence-2", desc: "图片场景详细描述" },
-  wd_tagger: { name: "WD Tagger", desc: "二次元/动漫特征提取" },
-  clip: { name: "CLIP Classifier", desc: "零样本特征分类器" },
-  design_rule: { name: "DesignRule", desc: "排版与版式规则辅助" }
 }
 
 export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps) {
   const api = (window as any).electronAPI
   const selectedAsset = useAssetStore((s) => s.selectedAsset)
   const assetRelations = useAssetStore((s) => s.assetRelations)
-  const { confirmAiTag, rejectAiTag, generateMockAiSuggestions } = useAssetStore()
+  const { confirmAiTag, rejectAiTag, generateAiSuggestions } = useAssetStore()
 
-  const [scanningState, setScanningState] = useState<'idle' | 'routing' | 'classified' | 'tagging' | 'completed'>('idle')
+  const [scanningState, setScanningState] = useState<AssetTaggingScanState>('idle')
   const [detectedType, setDetectedType] = useState<string>('')
-  const [customModels, setCustomModels] = useState<string[]>([])
+  const [customModels, setCustomModels] = useState<AssetTaggingModelId[]>([])
   const [taggingError, setTaggingError] = useState<string | null>(null)
 
   // Load custom categories or routing on mount and change
@@ -94,27 +63,29 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
 
   // Automatically update checked models checklist based on category pipeline defaults
   React.useEffect(() => {
-    if (detectedType && PIPELINE_MAP[detectedType]) {
-      setCustomModels(PIPELINE_MAP[detectedType])
-    } else {
-      setCustomModels(["ram", "clip"])
-    }
+    setCustomModels(createAssetTaggingPlan(detectedType).modelsToRun)
   }, [detectedType])
 
-  if (!selectedAsset) return null
-
-  // Filter pending relations for this asset and deduplicate by tag name
   const relations = assetRelations[assetId] || []
-  const pendingSuggestions = React.useMemo(() => {
-    const pending = relations.filter((r) => r.status === 'pending')
-    const seen = new Set<string>()
-    return pending.filter((r) => {
-      const name = r.tag_name.toLowerCase().trim()
-      if (seen.has(name)) return false
-      seen.add(name)
-      return true
-    })
-  }, [relations])
+  const suggestionReviewItems = React.useMemo(
+    () => projectAssetTaggingSuggestionReviewItems(relations),
+    [relations]
+  )
+  const modelSelectionSections = React.useMemo(
+    () => projectAssetTaggingModelSelectionSections(),
+    []
+  )
+  const categoryOptions = React.useMemo(
+    () => projectAssetTaggingCategoryOptions(),
+    []
+  )
+  const panelDisplay = projectAssetTaggingPanelDisplay({
+    scanState: scanningState,
+    category: detectedType,
+    selectedModels: customModels
+  })
+
+  if (!selectedAsset) return null
 
   const handleCategoryChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCategory = e.target.value
@@ -128,14 +99,8 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
     }
   }
 
-  const handleModelToggle = (model: string) => {
-    setCustomModels((prev) => {
-      if (prev.includes(model)) {
-        return prev.filter((m) => m !== model)
-      } else {
-        return [...prev, model]
-      }
-    })
+  const handleModelToggle = (model: AssetTaggingModelId) => {
+    setCustomModels((previousModels) => toggleAssetTaggingModelSelection(previousModels, model))
   }
 
   const triggerAiTagging = async () => {
@@ -144,7 +109,7 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
     
     try {
       setScanningState('tagging')
-      const result = await generateMockAiSuggestions(assetId, customModels)
+      const result = await generateAiSuggestions(assetId, customModels)
       if (!result.success) {
         setTaggingError(result.error || '真实 AI 打标不可用。')
         return
@@ -158,25 +123,23 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
     }
   }
 
-  const scanning = scanningState !== 'idle'
-
   return (
     <div className="space-y-4 font-sans text-[12px] border-t border-slate-100 pt-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-purple-500 animate-pulse" />
-          <span>AI 视觉特征 analysis</span>
+          <span>AI 视觉特征分析</span>
         </span>
         
         <button
           type="button"
-          disabled={scanning || customModels.length === 0}
+          disabled={panelDisplay.submitDisabled}
           onClick={triggerAiTagging}
           className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold rounded-xl shadow-sm hover:shadow transition-all inline-flex items-center gap-1 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <RefreshCw className={`w-3 h-3 ${scanning ? 'animate-spin' : ''}`} />
-          <span>{scanning ? '分析中...' : 'AI 智能打标'}</span>
+          <RefreshCw className={`w-3 h-3 ${panelDisplay.isScanning ? 'animate-spin' : ''}`} />
+          <span>{panelDisplay.submitLabel}</span>
         </button>
       </div>
 
@@ -187,7 +150,7 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
       )}
 
       {/* Premium Category Overwrite and Selector */}
-      {!scanning && (
+      {!panelDisplay.isScanning && (
         <div className="mt-1 animate-in fade-in slide-in-from-top-1 duration-300">
           <div className="rounded-2xl p-3 bg-slate-50/50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2.5">
             {/* Category Dropdown Selector */}
@@ -198,14 +161,14 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
               </div>
               <div className="relative shrink-0">
                 <select
-                  disabled={scanning}
+                  disabled={panelDisplay.isScanning}
                   value={detectedType || 'unknown'}
                   onChange={handleCategoryChange}
                   className="appearance-none pl-3 pr-8 py-1.5 bg-white border border-slate-200 hover:border-purple-300 text-purple-700 font-bold rounded-xl shadow-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-purple-300 transition-all text-[11px]"
                 >
-                  {Object.entries(TYPE_LABEL_MAP).map(([key, item]) => (
-                    <option key={key} value={key} className="font-semibold text-slate-700">
-                      {item.type.split(" (")[0]}
+                  {categoryOptions.map((option) => (
+                    <option key={option.value} value={option.value} className="font-semibold text-slate-700">
+                      {option.label}
                     </option>
                   ))}
                 </select>
@@ -215,19 +178,20 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
 
             {/* Model Selection Frosted-glass Grid Checklist */}
             <div className="border-t border-slate-100 dark:border-slate-800/80 pt-2.5 space-y-3">
-              {/* Group 1: 基础标签层 */}
-              <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-                  <Layers className="w-3 h-3 text-purple-400" />
-                  <span>第一组：基础标签层</span>
-                </span>
-                <div className="grid grid-cols-1 gap-1.5">
-                  {Object.entries(BASE_LAYER_MODELS).map(([key, model]) => {
-                    const isChecked = customModels.includes(key)
+              {modelSelectionSections.map((section) => (
+                <div key={section.code}>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1.5 flex items-center gap-1">
+                    <Layers className={`w-3 h-3 ${section.iconTone === 'purple' ? 'text-purple-400' : 'text-indigo-400'}`} />
+                    <span>{section.title}</span>
+                  </span>
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {section.items.map((model) => {
+                    const modelId = model.id
+                    const isChecked = customModels.includes(modelId)
                     return (
                       <div
-                        key={key}
-                        onClick={() => !scanning && handleModelToggle(key)}
+                        key={model.id}
+                        onClick={() => !panelDisplay.isScanning && handleModelToggle(modelId)}
                         className={`flex flex-col p-2 rounded-xl border transition-all duration-200 cursor-pointer select-none ${
                           isChecked
                             ? "bg-purple-500/[0.04] border-purple-200/90 text-purple-700 font-bold"
@@ -249,57 +213,20 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
                         <span className="text-[9px] text-slate-400 mt-0.5 leading-tight">{model.desc}</span>
                       </div>
                     )
-                  })}
+                    })}
+                  </div>
                 </div>
-              </div>
-
-              {/* Group 2: 专项增强层 */}
-              <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-                  <Layers className="w-3 h-3 text-indigo-400" />
-                  <span>第二组：专项增强层</span>
-                </span>
-                <div className="grid grid-cols-1 gap-1.5">
-                  {Object.entries(ENHANCED_LAYER_MODELS).map(([key, model]) => {
-                    const isChecked = customModels.includes(key)
-                    return (
-                      <div
-                        key={key}
-                        onClick={() => !scanning && handleModelToggle(key)}
-                        className={`flex flex-col p-2 rounded-xl border transition-all duration-200 cursor-pointer select-none ${
-                          isChecked
-                            ? "bg-purple-500/[0.04] border-purple-200/90 text-purple-700 font-bold"
-                            : "bg-white border-slate-200/80 text-slate-500 hover:bg-slate-50 hover:border-slate-300"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-[10.5px]">{model.name}</span>
-                          <div
-                            className={`w-3.5 h-3.5 rounded-md border flex items-center justify-center transition-all ${
-                              isChecked
-                                ? "bg-purple-600 border-purple-600 text-white"
-                                : "border-slate-300"
-                            }`}
-                          >
-                            {isChecked && <Check className="w-2.5 h-2.5 stroke-[4.5]" />}
-                          </div>
-                        </div>
-                        <span className="text-[9px] text-slate-400 mt-0.5 leading-tight">{model.desc}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       )}
 
       {/* Progress visualizer during scan */}
-      {scanning && (
+      {panelDisplay.isScanning && (
         <div className="mt-1 animate-in fade-in slide-in-from-top-3 duration-300">
           <div className="rounded-2xl px-4 py-3 flex items-center gap-3 border text-[11px] font-semibold bg-white/40 border-purple-500/20 text-purple-700 shadow-md shadow-purple-500/5 backdrop-blur-md">
-            {scanningState !== 'completed' ? (
+            {!panelDisplay.progressComplete ? (
               <RefreshCw className="w-4 h-4 animate-spin text-purple-500 shrink-0" />
             ) : (
               <div className="w-4.5 h-4.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
@@ -308,17 +235,14 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
             )}
             
             <span className="leading-relaxed leading-none transition-all duration-300">
-              {scanningState === 'routing' && '正在提交真实 AI Worker 打标任务...'}
-              {scanningState === 'classified' && `已识别/锁定类型: ${TYPE_LABEL_MAP[detectedType]?.type || detectedType.toUpperCase()}`}
-              {scanningState === 'tagging' && `正在等待真实模型返回：[${customModels.map(m => MODEL_DISPLAY_NAMES[m]?.name || m).join(', ')}]`}
-              {scanningState === 'completed' && '真实 AI 标签建议已完成。'}
+              {panelDisplay.progressLabel}
             </span>
           </div>
         </div>
       )}
 
       {/* Suggested Pending Tags list */}
-      {pendingSuggestions.length > 0 && (
+      {suggestionReviewItems.length > 0 && (
         <div className="space-y-2 bg-purple-50/20 border border-purple-100/50 p-3 rounded-2xl">
           <span className="text-[10px] font-bold text-purple-600 flex items-center gap-1">
             <Brain className="w-3.5 h-3.5" />
@@ -326,22 +250,22 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
           </span>
 
           <div className="flex flex-wrap gap-1.5 pt-1">
-            {pendingSuggestions.map((rel) => (
+            {suggestionReviewItems.map((item) => (
               <div
-                key={rel.id}
+                key={item.id}
                 className="inline-flex items-center gap-1 pl-2.5 pr-1 py-0.5 rounded-full text-[10px] font-semibold bg-white text-slate-600 border border-dashed border-purple-200 shadow-sm"
               >
-                <span>{rel.tag_name}</span>
+                <span>{item.tagName}</span>
                 <span className="text-[8px] bg-purple-100 text-purple-800 px-1 rounded ml-0.5">
-                  {(rel.confidence * 100).toFixed(0)}%
+                  {item.confidenceLabel}
                 </span>
                 
                 {/* Accept AI tag button */}
                 <button
                   type="button"
-                  onClick={() => confirmAiTag(rel.id, assetId)}
+                  onClick={() => confirmAiTag(item.id, assetId)}
                   className="w-4.5 h-4.5 rounded-full hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 inline-flex items-center justify-center transition-colors cursor-pointer"
-                  title="确认采纳此标签"
+                  title={item.confirmAction.label}
                 >
                   <Check className="w-2.5 h-2.5 stroke-[3]" />
                 </button>
@@ -349,9 +273,9 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
                 {/* Reject AI tag button */}
                 <button
                   type="button"
-                  onClick={() => rejectAiTag(rel.id, assetId)}
+                  onClick={() => rejectAiTag(item.id, assetId)}
                   className="w-4.5 h-4.5 rounded-full hover:bg-rose-50 text-slate-400 hover:text-rose-600 inline-flex items-center justify-center transition-colors cursor-pointer"
-                  title="拒绝此标签"
+                  title={item.rejectAction.label}
                 >
                   <X className="w-2.5 h-2.5" />
                 </button>
@@ -361,9 +285,9 @@ export default function TagSuggestionPanel({ assetId }: TagSuggestionPanelProps)
         </div>
       )}
 
-      {pendingSuggestions.length === 0 && (
+      {suggestionReviewItems.length === 0 && (
         <div className="p-3 border border-dashed border-slate-200 bg-white text-center rounded-xl text-[10.5px] text-slate-400 font-medium">
-          该素材暂无 AI 智能标签建议。点击上方“AI 智能打标”生成推荐标签。
+          {panelDisplay.emptySuggestionLabel}
         </div>
       )}
     </div>

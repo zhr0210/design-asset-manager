@@ -1,0 +1,9 @@
+{
+  "forbidden_directories": [
+    "docs/",
+    "ai-service/models_cache/",
+    "dist-packages/",
+    "dist-temp/",
+    "runtime-data/"
+  ]
+}

@@ -1,4 +1,4 @@
-import { Tag, AssetTagRelation, TagSuggestion } from '../types/tag.types'
+import { Tag, AssetTagRelation } from '../types/tag.types'
 import { Asset } from '../types/asset.types'
 
 /**
@@ -31,9 +31,6 @@ export const CHANNEL_ASSET_TAG_REJECT_AI = 'asset-tag:reject-ai'
 export const CHANNEL_TAG_SEARCH_ASSETS = 'tag-search:assets'
 export const CHANNEL_TAG_SEARCH_UNTAGGED = 'tag-search:untagged'
 export const CHANNEL_TAG_SEARCH_AI_PENDING = 'tag-search:ai-pending'
-
-// Mock AI suggestions Channels
-export const CHANNEL_MOCK_AI_GENERATE_SUGGESTIONS = 'mock-ai:generate-suggestions'
 
 // DTOs
 export interface CreateTagRequest {
@@ -112,11 +109,5 @@ export interface ListAssetTagsResponse {
 export interface TagSearchAssetsResponse {
   success: boolean
   assets?: Asset[]
-  error?: string
-}
-
-export interface MockAiSuggestionsResponse {
-  success: boolean
-  suggestions?: TagSuggestion[]
   error?: string
 }

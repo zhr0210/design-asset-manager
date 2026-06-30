@@ -121,6 +121,15 @@ export class AiRuntimeManager {
     return Promise.all(checks)
   }
 
+  async stopAllRuntimes(): Promise<AiRuntimeOperationResult[]> {
+    const runningProviders = this.providers.listProviders().filter((provider) => {
+      const status = provider.getState().status
+      return status === 'starting' || status === 'running' || status === 'unhealthy'
+    })
+
+    return Promise.all(runningProviders.map((provider) => this.stopRuntime(provider.getConfig().id)))
+  }
+
   async updateRuntimeConfig(runtimeId: string, partialConfig: Partial<AiRuntimeConfig>): Promise<AiRuntimeOperationResult> {
     return this.runRuntimeOperation(runtimeId, (provider) => provider.updateConfig(partialConfig))
   }

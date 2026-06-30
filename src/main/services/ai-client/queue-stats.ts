@@ -1,9 +1,4 @@
-export interface AiQueueStats {
-  queued: number
-  running: number
-  completed: number
-  failed: number
-}
+import type { AiQueueStats } from '../../../shared/contracts/ai-client.contract'
 
 const EMPTY_QUEUE_STATS: AiQueueStats = {
   queued: 0,

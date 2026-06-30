@@ -1,4 +1,3 @@
-import os from 'os'
 import path from 'path'
 import type {
   LlamaHardwareProfile,
@@ -7,6 +6,8 @@ import type {
   LlamaRuntimeAccelerator,
   LlamaRuntimePackage
 } from '../../../shared/types/llama-runtime.types'
+import { platformAdapterMatchesCurrentPlatform } from '../../platform/platform-adapter-selection'
+import { createLlamaRuntimeHostContext } from './llama-runtime-host-context'
 
 export interface LlamaReleaseAsset {
   name: string
@@ -30,6 +31,81 @@ export interface LlamaMirrorEntry {
 export interface LlamaMirrorManifest {
   mirrors: LlamaMirrorEntry[]
 }
+
+interface LlamaDefaultAcceleratorRule {
+  platform?: NodeJS.Platform | string
+  accelerator: LlamaRuntimeAccelerator
+}
+
+interface LlamaRuntimePackagePatternRule {
+  platform?: NodeJS.Platform | string
+  arch?: string
+  accelerator?: LlamaRuntimeAccelerator
+  patterns: RegExp[]
+}
+
+interface LlamaCudaRuntimePackagePatternRule {
+  accelerator: LlamaRuntimeAccelerator
+  patterns: RegExp[]
+}
+
+interface LlamaRuntimeRuleMatchInput {
+  platform?: NodeJS.Platform | string
+  arch?: string
+  accelerator?: LlamaRuntimeAccelerator
+}
+
+const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule[] = [
+  { platform: 'win32', accelerator: 'vulkan' },
+  { accelerator: 'cpu' }
+]
+
+const LLAMA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaRuntimePackagePatternRule[] = [
+  {
+    platform: 'darwin',
+    arch: 'arm64',
+    patterns: [/^llama-.*bin-macos-arm64\.zip/i, /^llama-.*bin-macos.*arm64.*\.zip/i]
+  },
+  {
+    platform: 'darwin',
+    patterns: [/^llama-.*bin-macos-x64\.zip/i, /^llama-.*bin-macos.*x64.*\.zip/i]
+  },
+  {
+    platform: 'linux',
+    arch: 'arm64',
+    patterns: [/^llama-.*bin-linux-arm64\.zip/i, /^llama-.*bin-linux.*arm64.*\.zip/i]
+  },
+  {
+    platform: 'linux',
+    patterns: [/^llama-.*bin-linux-x64\.zip/i, /^llama-.*bin-linux.*x64.*\.zip/i]
+  },
+  {
+    accelerator: 'cuda13',
+    patterns: [/^llama-.*bin-win-cuda-13[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu13[\d.]*-x64\.zip/i]
+  },
+  {
+    accelerator: 'cuda12',
+    patterns: [/^llama-.*bin-win-cuda-12[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu12[\d.]*-x64\.zip/i]
+  },
+  {
+    accelerator: 'vulkan',
+    patterns: [/^llama-.*bin-win-vulkan-x64\.zip/i]
+  },
+  {
+    patterns: [/^llama-.*bin-win-cpu-x64\.zip/i]
+  }
+]
+
+const LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaCudaRuntimePackagePatternRule[] = [
+  {
+    accelerator: 'cuda13',
+    patterns: [/^cudart-llama-bin-win-cuda-13[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu13[\d.]*-x64\.zip/i]
+  },
+  {
+    accelerator: 'cuda12',
+    patterns: [/^cudart-llama-bin-win-cuda-12[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu12[\d.]*-x64\.zip/i]
+  }
+]
 
 const DEFAULT_LLAMA_RELEASE: LlamaReleaseInfo = {
   tag_name: 'b9437',
@@ -132,12 +208,21 @@ export const QWEN3_VL_GGUF_CANDIDATES: LlamaModelCandidate[] = qwen3VlSizes.flat
 )
 
 export function createHardwareProfile(input: Partial<LlamaHardwareProfile> = {}): LlamaHardwareProfile {
-  const totalMemoryGB = input.totalMemoryGB ?? Math.round(os.totalmem() / 1024 / 1024 / 1024)
-  const recommendedAccelerator = input.recommendedAccelerator ?? recommendAccelerator(input.cudaVersion, input.hasNvidiaGpu)
+  const hostContext = createLlamaRuntimeHostContext({
+    platform: input.platform,
+    arch: input.arch,
+    cpuThreads: input.cpuThreads,
+    totalMemoryGB: input.totalMemoryGB
+  })
+  const platform = hostContext.platform
+  const arch = hostContext.arch
+  const totalMemoryGB = hostContext.totalMemoryGB
+  const recommendedAccelerator = input.recommendedAccelerator
+    ?? recommendAccelerator(input.cudaVersion, input.hasNvidiaGpu, platform)
   return {
-    platform: input.platform ?? process.platform,
-    arch: input.arch ?? process.arch,
-    cpuThreads: input.cpuThreads ?? os.cpus().length,
+    platform,
+    arch,
+    cpuThreads: hostContext.cpuThreads,
     totalMemoryGB,
     hasNvidiaGpu: input.hasNvidiaGpu ?? false,
     gpuName: input.gpuName,
@@ -149,8 +234,14 @@ export function createHardwareProfile(input: Partial<LlamaHardwareProfile> = {})
   }
 }
 
-export function recommendAccelerator(cudaVersion?: string, hasNvidiaGpu = false): LlamaRuntimeAccelerator {
-  if (!hasNvidiaGpu) return process.platform === 'win32' ? 'vulkan' : 'cpu'
+export function recommendAccelerator(
+  cudaVersion?: string,
+  hasNvidiaGpu = false,
+  platform: NodeJS.Platform | string = createLlamaRuntimeHostContext().platform
+): LlamaRuntimeAccelerator {
+  if (!hasNvidiaGpu) {
+    return DEFAULT_LLAMA_ACCELERATOR_RULES.find((rule) => llamaRuntimeRuleMatches({ platform: rule.platform }, { platform }))?.accelerator ?? 'cpu'
+  }
   const major = Number((cudaVersion ?? '').split('.')[0])
   if (major >= 13) return 'cuda13'
   if (major >= 12) return 'cuda12'
@@ -167,35 +258,36 @@ export function selectModelCandidate(profile: LlamaHardwareProfile): LlamaModelC
   return QWEN3_VL_GGUF_CANDIDATES.find((model) => model.id === preferred) ?? QWEN3_VL_GGUF_CANDIDATES[0]
 }
 
-function runtimePatterns(accelerator: LlamaRuntimeAccelerator, platform: string = process.platform, arch: string = process.arch): RegExp[] {
-  if (platform === 'darwin') {
-    return arch === 'arm64'
-      ? [/^llama-.*bin-macos-arm64\.zip/i, /^llama-.*bin-macos.*arm64.*\.zip/i]
-      : [/^llama-.*bin-macos-x64\.zip/i, /^llama-.*bin-macos.*x64.*\.zip/i]
-  }
-  if (platform === 'linux') {
-    return arch === 'arm64'
-      ? [/^llama-.*bin-linux-arm64\.zip/i, /^llama-.*bin-linux.*arm64.*\.zip/i]
-      : [/^llama-.*bin-linux-x64\.zip/i, /^llama-.*bin-linux.*x64.*\.zip/i]
-  }
-  if (accelerator === 'cuda13') {
-    return [/^llama-.*bin-win-cuda-13[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu13[\d.]*-x64\.zip/i]
-  }
-  if (accelerator === 'cuda12') {
-    return [/^llama-.*bin-win-cuda-12[\d.]*-x64\.zip/i, /^llama-.*bin-win-cu12[\d.]*-x64\.zip/i]
-  }
-  if (accelerator === 'vulkan') return [/^llama-.*bin-win-vulkan-x64\.zip/i]
-  return [/^llama-.*bin-win-cpu-x64\.zip/i]
+function runtimePatterns(
+  accelerator: LlamaRuntimeAccelerator,
+  platform?: string,
+  arch?: string
+): RegExp[] {
+  const hostContext = platform && arch
+    ? null
+    : createLlamaRuntimeHostContext({ platform, arch })
+  const resolvedPlatform = platform ?? hostContext?.platform
+  const resolvedArch = arch ?? hostContext?.arch
+  const rule = LLAMA_RUNTIME_PACKAGE_PATTERN_RULES.find((candidate) => llamaRuntimeRuleMatches(candidate, {
+    platform: resolvedPlatform,
+    arch: resolvedArch,
+    accelerator
+  }))
+  return rule?.patterns ?? []
 }
 
 function cudaRuntimePatterns(accelerator: LlamaRuntimeAccelerator): RegExp[] {
-  if (accelerator === 'cuda13') {
-    return [/^cudart-llama-bin-win-cuda-13[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu13[\d.]*-x64\.zip/i]
-  }
-  if (accelerator === 'cuda12') {
-    return [/^cudart-llama-bin-win-cuda-12[\d.]*-x64\.zip/i, /^cudart-llama-bin-win-cu12[\d.]*-x64\.zip/i]
-  }
-  return []
+  return LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES.find((rule) => llamaRuntimeRuleMatches(rule, { accelerator }))?.patterns ?? []
+}
+
+function llamaRuntimeRuleMatches(
+  rule: Partial<LlamaRuntimeRuleMatchInput>,
+  input: LlamaRuntimeRuleMatchInput
+): boolean {
+  if (!platformAdapterMatchesCurrentPlatform(rule, { currentPlatform: input.platform ?? '' })) return false
+  if (rule.arch && rule.arch !== input.arch) return false
+  if (rule.accelerator && rule.accelerator !== input.accelerator) return false
+  return true
 }
 
 function findAsset(release: LlamaReleaseInfo, patterns: RegExp[]): LlamaReleaseAsset | null {
@@ -243,7 +335,7 @@ export function createInstallPlan(input: {
   release?: LlamaReleaseInfo
   mirrorManifest?: LlamaMirrorManifest
   installRoot: string
-  downloadSource?: 'huggingface' | 'hf-mirror'
+  downloadSource?: 'huggingface' | 'hf-mirror' | 'production-cdn'
 }): LlamaInstallPlan {
   const release = input.release?.assets?.length ? input.release : DEFAULT_LLAMA_RELEASE
   const accelerator = input.hardware.recommendedAccelerator
@@ -259,7 +351,11 @@ export function createInstallPlan(input: {
   }
 
   const downloadSource = input.downloadSource ?? 'hf-mirror'
-  const sourceHost = downloadSource === 'hf-mirror' ? 'https://hf-mirror.com' : 'https://huggingface.co'
+  const sourceHost = downloadSource === 'production-cdn'
+    ? 'https://cdn.design-asset-manager.com'
+    : downloadSource === 'hf-mirror'
+      ? 'https://hf-mirror.com'
+      : 'https://huggingface.co'
 
   const candidates = QWEN3_VL_GGUF_CANDIDATES.map((m) => {
     return {
