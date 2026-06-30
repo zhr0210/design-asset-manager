@@ -26,6 +26,24 @@ runtime, native dependency, packaging, path, or process differences.
   output.
 - The current branch is pushed to GitHub but is not contained in `main`.
 
+## Shared Platform Adapter Matcher Result
+
+- Moved the platform adapter matcher into shared workflow code and kept the
+  existing main-process import path as a compatibility re-export.
+- Electron app lifecycle policy resolution now uses the shared matcher for
+  exact platform and default fallback selection instead of local
+  `policy.platform === ...` comparisons.
+- Existing Windows AppUserModelId behavior, macOS keep-alive behavior,
+  default quit behavior, main-process imports, IPC contracts, renderer
+  behavior, databases, model caches, and user assets are unchanged.
+- Focused lifecycle and AI Python environment tests now prove both the shared
+  implementation and the main-process re-export. The AI Runtime
+  status-workflow boundary ledger no longer lists the Electron lifecycle
+  workflow as an unresolved platform boundary.
+- Electron/Playwright UI validation is intentionally skipped because this
+  changes shared policy selection internals only and does not alter the
+  rendered UI surface.
+
 ## Doctor Command Adapter Matcher Result
 
 - Doctor command resolution now reuses the shared main-process platform

@@ -1,3 +1,5 @@
+import { platformAdapterMatchesCurrentPlatform } from './platform-adapter-selection.workflow'
+
 export type ElectronAppLifecyclePlatform = 'win32' | 'darwin' | 'default'
 
 export interface ElectronAppLifecyclePolicy {
@@ -23,6 +25,10 @@ export const ELECTRON_APP_LIFECYCLE_POLICIES: readonly ElectronAppLifecyclePolic
 ] as const
 
 export function resolveElectronAppLifecyclePolicy(platform: string): ElectronAppLifecyclePolicy {
-  return ELECTRON_APP_LIFECYCLE_POLICIES.find((policy) => policy.platform === platform)
-    ?? ELECTRON_APP_LIFECYCLE_POLICIES.find((policy) => policy.platform === 'default')!
+  return ELECTRON_APP_LIFECYCLE_POLICIES.find((policy) =>
+    platformAdapterMatchesCurrentPlatform(policy, { currentPlatform: platform })
+  )
+    ?? ELECTRON_APP_LIFECYCLE_POLICIES.find((policy) =>
+      platformAdapterMatchesCurrentPlatform(policy, { currentPlatform: 'default' })
+    )!
 }

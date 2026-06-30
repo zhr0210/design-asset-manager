@@ -161,6 +161,7 @@ assert.equal(platformAdapterMatchesCurrentPlatform({}, { currentPlatform: 'linux
 
 const coreSource = await fs.readFile('src/main/services/ai-python-environment.ts', 'utf8')
 const platformAdapterSelectionSource = await fs.readFile('src/main/platform/platform-adapter-selection.ts', 'utf8')
+const sharedPlatformAdapterSelectionSource = await fs.readFile('src/shared/workflows/platform-adapter-selection.workflow.ts', 'utf8')
 const adapterSource = await fs.readFile('src/main/services/ai-python-runtime.service.ts', 'utf8')
 const hostContextSource = await fs.readFile('src/main/services/ai-python-runtime-host-context.ts', 'utf8')
 const dependencySource = await fs.readFile('src/main/services/ocr-dependency.service.ts', 'utf8')
@@ -170,7 +171,8 @@ assert.doesNotMatch(coreSource, /from ['"]electron['"]|child_process|node:child_
 assert.match(coreSource, /AI_PYTHON_ENVIRONMENT_PLATFORM_ADAPTERS/)
 assert.match(coreSource, /resolveAiPythonEnvironmentPlatformAdapter/)
 assert.match(coreSource, /platformAdapterMatchesCurrentPlatform\(candidate, \{ currentPlatform: platform \}\)/)
-assert.match(platformAdapterSelectionSource, /function platformAdapterMatchesCurrentPlatform/)
+assert.match(platformAdapterSelectionSource, /platformAdapterMatchesCurrentPlatform[\s\S]*from '..\/..\/shared\/workflows\/platform-adapter-selection\.workflow'/)
+assert.match(sharedPlatformAdapterSelectionSource, /function platformAdapterMatchesCurrentPlatform/)
 assert.match(coreSource, /resolveBasePythonExecutable: resolveWindowsBasePythonExecutable/)
 assert.match(coreSource, /resolveBasePythonExecutable: resolveMacOSHomebrewPythonExecutable/)
 assert.match(coreSource, /resolveBasePythonExecutable: \(\{ defaultPythonExecutable \}\) => defaultPythonExecutable\(\)/)

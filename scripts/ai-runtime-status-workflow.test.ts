@@ -824,8 +824,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/services/llama-runtime/llama-runtime-host-context.ts',
   'src/shared/constants/platform-ai-runtime-metadata.constants.ts',
   'src/shared/types/doctor.types.ts',
-  'src/shared/workflows/ai-runtime-status.workflow.ts',
-  'src/shared/workflows/electron-app-lifecycle.workflow.ts'
+  'src/shared/workflows/ai-runtime-status.workflow.ts'
 ])
 assert.match(platformAiRuntimeTypesSource, /export type AiCapabilityStatus/)
 assert.match(platformAiRuntimeTypesSource, /export type PlatformAiRuntimeBranchPhase/)

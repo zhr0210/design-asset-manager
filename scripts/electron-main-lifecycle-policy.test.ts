@@ -31,6 +31,7 @@ assert.equal(createElectronMainHostContext().platform, process.platform)
 const mainSource = await fs.readFile('src/main/index.ts', 'utf8')
 const hostContextSource = await fs.readFile('src/main/electron-main-host-context.ts', 'utf8')
 const sharedSource = await fs.readFile('src/shared/workflows/electron-app-lifecycle.workflow.ts', 'utf8')
+const sharedMatcherSource = await fs.readFile('src/shared/workflows/platform-adapter-selection.workflow.ts', 'utf8')
 
 assert.match(mainSource, /createElectronMainHostContext\(\)/)
 assert.match(mainSource, /resolveElectronAppLifecyclePolicy\(electronMainHostContext\.platform\)/)
@@ -44,7 +45,11 @@ assert.match(hostContextSource, /platform: input\.platform \?\? process\.platfor
 
 assert.match(sharedSource, /ELECTRON_APP_LIFECYCLE_POLICIES/)
 assert.match(sharedSource, /appUserModelId: 'com\.antigravity\.designassetmanager'/)
+assert.match(sharedSource, /platformAdapterMatchesCurrentPlatform\(policy, \{ currentPlatform: platform \}\)/)
+assert.match(sharedSource, /platformAdapterMatchesCurrentPlatform\(policy, \{ currentPlatform: 'default' \}\)/)
+assert.doesNotMatch(sharedSource, /policy\.platform\s*===\s*platform|policy\.platform\s*!==\s*platform/)
 assert.doesNotMatch(sharedSource, /from 'electron'|from "electron"|app\.|BrowserWindow/)
+assert.match(sharedMatcherSource, /function platformAdapterMatchesCurrentPlatform/)
 
 const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8')) as {
   scripts?: Record<string, string>
