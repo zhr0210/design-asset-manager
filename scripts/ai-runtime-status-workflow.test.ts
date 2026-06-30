@@ -819,7 +819,7 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/bootstrap/runtime-registry.validator.ts',
   'src/main/doctor/doctor-command-resolver.ts',
   'src/main/electron-main-host-context.ts',
-  'src/main/packaging/release-external-gate-status.ts',
+  'src/main/packaging/release-external-gate-plan.ts',
   'src/main/packaging/release-flow-governance.ts',
   'src/main/packaging/release-publish-approval.ts',
   'src/main/packaging/release-signed-candidate-dispatch-status.ts',

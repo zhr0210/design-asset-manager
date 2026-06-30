@@ -2,7 +2,10 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 
 import { createReleaseEnvironmentManifest } from '../src/main/packaging/release-environment-manifest'
-import { createReleaseExternalGatePlan } from '../src/main/packaging/release-external-gate-plan'
+import {
+  createReleaseExternalGatePlan,
+  getReleaseExternalGatePlatformPlan
+} from '../src/main/packaging/release-external-gate-plan'
 
 const plan = createReleaseExternalGatePlan()
 const manifest = createReleaseEnvironmentManifest()
@@ -20,8 +23,7 @@ assert.equal(plan.publishesRelease, false)
 assert.equal(plan.platforms.length, 2)
 
 for (const environment of manifest.environments) {
-  const platformPlan = plan.platforms.find((item) => item.platform === environment.platform)
-  assert.ok(platformPlan, `Missing external gate plan for ${environment.platform}`)
+  const platformPlan = getReleaseExternalGatePlatformPlan(plan, environment.platform)
   assert.equal(platformPlan.environment, environment.environment)
   assert.equal(platformPlan.workflowFileName, environment.workflowFileName)
   assert.deepEqual(platformPlan.supportedArches, environment.supportedArches)
@@ -63,6 +65,20 @@ for (const environment of manifest.environments) {
   assert.equal(publishGate.requiredBefore, 'publish_ready')
 }
 
+const mutableWindowsPlan = getReleaseExternalGatePlatformPlan(plan, 'windows')
+mutableWindowsPlan.supportedArches.pop()
+mutableWindowsPlan.distributionSmokeCheckIds.pop()
+mutableWindowsPlan.gates[0].requiredEvidence.pop()
+assert.deepEqual(getReleaseExternalGatePlatformPlan(plan, 'windows').supportedArches, ['x64', 'arm64'])
+assert.equal(
+  getReleaseExternalGatePlatformPlan(plan, 'windows').distributionSmokeCheckIds.includes('installer-run'),
+  true
+)
+assert.equal(
+  getReleaseExternalGatePlatformPlan(plan, 'windows').gates[0].requiredEvidence.includes('release-branding-evidence'),
+  true
+)
+
 const serialized = JSON.stringify(plan)
 assert.equal(serialized.includes('/Users/'), false)
 assert.equal(serialized.includes('C:\\Users\\'), false)
@@ -71,6 +87,8 @@ assert.equal(serialized.includes('WINDOWS_CSC_KEY_PASSWORD='), false)
 
 const source = await fs.readFile('src/main/packaging/release-external-gate-plan.ts', 'utf8')
 assert.match(source, /createReleaseEnvironmentManifest/)
+assert.match(source, /function getReleaseExternalGatePlatformPlan/)
+assert.match(source, /function cloneReleaseExternalGatePlatformPlan/)
 assert.doesNotMatch(
   source,
   /process\.env|\bfs\.|\breadFile\b|\bstat\b|\bcreateReadStream\b|\bexecFile\b|\bspawn\b/

@@ -151,3 +151,29 @@ export function createReleaseExternalGatePlan(): ReleaseExternalGatePlan {
     }))
   }
 }
+
+export function getReleaseExternalGatePlatformPlan(
+  plan: ReleaseExternalGatePlan,
+  platform: ReleasePlatform
+): ReleaseExternalGatePlatformPlan {
+  const platformPlan = plan.platforms.find((item) => item.platform === platform)
+  if (!platformPlan) {
+    throw new Error(`Missing external gate plan for platform: ${platform}`)
+  }
+  return cloneReleaseExternalGatePlatformPlan(platformPlan)
+}
+
+function cloneReleaseExternalGatePlatformPlan(
+  platformPlan: ReleaseExternalGatePlatformPlan
+): ReleaseExternalGatePlatformPlan {
+  return {
+    ...platformPlan,
+    supportedArches: [...platformPlan.supportedArches],
+    distributionSmokeCheckIds: [...platformPlan.distributionSmokeCheckIds],
+    gates: platformPlan.gates.map((gate) => ({
+      ...gate,
+      requiredSecretNames: [...gate.requiredSecretNames],
+      requiredEvidence: [...gate.requiredEvidence]
+    }))
+  }
+}

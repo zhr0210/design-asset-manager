@@ -223,6 +223,7 @@ assert.equal(serialized.includes('WINDOWS_CSC_KEY_PASSWORD='), false)
 
 const source = await fs.readFile('src/main/packaging/release-external-gate-status.ts', 'utf8')
 assert.match(source, /createReleaseExternalGatePlan/)
+assert.match(source, /getReleaseExternalGatePlatformPlan\(plan, summary\.platform\)/)
 assert.match(source, /listReleaseCandidateCommonGates/)
 assert.match(source, /listReleaseCandidateDistributionGates\(platform\)/)
 assert.match(source, /SIGNED_CANDIDATE_EXCLUDED_DISTRIBUTION_CHECKS/)
@@ -230,6 +231,7 @@ assert.match(source, /listReleaseSignedCandidateEvidenceChecks\(summary\.platfor
 assert.doesNotMatch(source, /SIGNED_CANDIDATE_EVIDENCE_CHECKS_BY_PLATFORM/)
 assert.doesNotMatch(source, /windows:\s*\[[\s\S]*'signature'[\s\S]*macos:\s*\[/)
 assert.doesNotMatch(source, /summary\.platform === 'macos'/)
+assert.doesNotMatch(source, /plan\.platforms\.find/)
 assert.doesNotMatch(source, /checks\.push\('hardenedRuntime'/)
 assert.doesNotMatch(
   source,

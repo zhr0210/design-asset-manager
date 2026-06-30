@@ -19,6 +19,7 @@ The denylist covers:
 
 `dist-temp` is allowed only as a bounded test/build scratch area. The hygiene check accepts these subdirectories:
 
+- `ai-console-ui-smoke`
 - `doctor`
 - `platform-tests`
 - `settings-migration-tests`

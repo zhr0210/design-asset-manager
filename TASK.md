@@ -1741,6 +1741,30 @@ and Release Update Metadata pass.
   Console smoke also passed: Platform AI Branch Status screenshot rendered
   with no document/body horizontal overflow.
 
+## Release External Gate Platform Plan Result
+
+- Moved Release External Gate platform-plan lookup behind the external gate
+  plan module's exported helper.
+- Release External Gate Status now consumes `getReleaseExternalGatePlatformPlan`
+  instead of hand-rolling a platform `.find` over the plan's platform list.
+  The helper clones supported arches, distribution smoke check ids, gates, and
+  nested evidence/secret-name arrays so caller mutations cannot leak back into
+  the plan.
+- Existing release-readiness input shape, external gate status shape, gate
+  ordering, signed-candidate evidence checks, display-only policy, GitHub
+  settings behavior, signing/branding asset privacy, IPC/preload/renderer
+  callers, runtime startup, downloads, databases, model caches, and user
+  assets are unchanged.
+- The existing AI Console smoke output directory is now included in the
+  bounded `dist-temp` hygiene policy so running isolated UI smoke before
+  local governance checks does not create a false hygiene failure.
+- Focused Release External Gate plan and status tests, AI Runtime status
+  workflow boundary ledger, typecheck, production build, docs sync,
+  agent-context check, forbidden-path advisory check, diff check, `ci:hygiene`,
+  and complete `ci:governance` passed. UI screenshot validation is not
+  applicable because this changes release-governance projection and CI hygiene
+  metadata only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

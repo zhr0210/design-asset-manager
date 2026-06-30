@@ -11,6 +11,7 @@ import {
 } from './release-flow-governance'
 import {
   createReleaseExternalGatePlan,
+  getReleaseExternalGatePlatformPlan,
   type ReleaseExternalGate,
   type ReleaseExternalGateCode
 } from './release-external-gate-plan'
@@ -139,11 +140,7 @@ export function createReleaseExternalGateStatus(
 ): ReleaseExternalGateStatus {
   const plan = createReleaseExternalGatePlan()
   const platforms = readinessSummary.platforms.map((summary) => {
-    const platformPlan = plan.platforms.find((item) => item.platform === summary.platform)
-    if (!platformPlan) {
-      throw new Error(`Missing external gate plan for platform: ${summary.platform}`)
-    }
-
+    const platformPlan = getReleaseExternalGatePlatformPlan(plan, summary.platform)
     const signedCandidateSatisfied = isSignedCandidateEvidenceSatisfied(summary)
     return {
       platform: summary.platform,
