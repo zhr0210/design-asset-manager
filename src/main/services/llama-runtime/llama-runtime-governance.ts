@@ -1,3 +1,5 @@
+import { platformAdapterMatchesCurrentPlatform } from '../../platform/platform-adapter-selection'
+
 export const LLAMA_RUNTIME_GOVERNANCE_PLATFORMS = ['win32', 'darwin', 'linux'] as const
 
 export type LlamaRuntimeGovernancePlatform = typeof LLAMA_RUNTIME_GOVERNANCE_PLATFORMS[number] | 'unknown'
@@ -124,7 +126,7 @@ export function createLlamaRuntimeGovernancePlan(platform: NodeJS.Platform | str
   const adapters = [
     createExternalAdapter(),
     ...LLAMA_RUNTIME_PLATFORM_ADAPTERS
-      .filter((adapter) => adapter.platform === normalized)
+      .filter((adapter) => platformAdapterMatchesCurrentPlatform(adapter, { currentPlatform: normalized }))
       .map((adapter) => adapter.createAdapter())
   ]
 

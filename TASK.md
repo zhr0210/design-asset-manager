@@ -1970,6 +1970,28 @@ and Release Update Metadata pass.
   is not applicable because this changes internal installer adapter matching
   only and has no renderer surface.
 
+## Llama Runtime Governance Adapter Matcher Result
+
+- Llama Runtime Governance platform-adapter filtering now reuses the shared
+  main-process platform adapter matcher instead of hand-rolling
+  `adapter.platform === normalized`.
+- External inference remains the default governance adapter for every
+  platform, while macOS and Windows llama adapters remain explicit
+  platform-specific records.
+- The AI Runtime status workflow boundary ledger now confirms
+  `llama-runtime-governance.ts` no longer contains detected platform-boundary
+  comparisons.
+- Existing read-only governance policy, `autoDownload: false`,
+  `autoInstall: false`, `autoStart: false`, manual health-check policy,
+  adapter ids, IPC/preload/renderer callers, runtime startup behavior,
+  downloads, databases, model caches, and user assets are unchanged.
+- Focused Llama Runtime Governance and AI Runtime status workflow
+  boundary-ledger tests passed. Complete runtime-safety/governance, typecheck,
+  production build, docs sync, agent-context check, forbidden-path advisory
+  check, and diff check pass. UI screenshot validation is not applicable
+  because this changes internal governance adapter matching only and has no
+  renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model
