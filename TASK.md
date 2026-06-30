@@ -1874,6 +1874,24 @@ and Release Update Metadata pass.
   validation is not applicable because this changes release-governance target
   lookup only and has no renderer surface.
 
+## Release Signing Environment Target Lookup Result
+
+- Release Signing Environment platform lookup now reuses the shared Release
+  Target platform matcher instead of hand-rolling a platform comparison inside
+  the status lookup helper.
+- The AI Runtime status workflow boundary ledger now confirms
+  `release-signing-environment-status.ts` no longer contains detected
+  platform-boundary comparisons.
+- Existing signing environment JSON shape, display-only policy, secret-name
+  evidence policy, GitHub settings behavior, workflow order, IPC/preload/
+  renderer callers, runtime startup, downloads, databases, model caches, and
+  user assets are unchanged.
+- Focused Release Signing Environment Status and AI Runtime status workflow
+  boundary-ledger tests passed. Complete governance, typecheck, production
+  build, docs sync, agent-context check, forbidden-path advisory check, and
+  diff check pass. UI screenshot validation is not applicable because this
+  changes release-governance target lookup only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

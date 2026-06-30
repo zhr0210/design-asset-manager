@@ -2,6 +2,7 @@ import {
   createReleaseEnvironmentManifest,
   type ReleaseEnvironmentManifestEntry
 } from './release-environment-manifest'
+import { releaseTargetPlatformMatches } from './release-target-selection'
 
 export interface ReleaseSigningEnvironmentEvidence {
   schemaVersion: 1
@@ -91,7 +92,7 @@ export function getReleaseSigningEnvironmentPlatformStatus(
   status: ReleaseSigningEnvironmentStatus,
   platform: ReleaseSigningEnvironmentPlatformStatus['platform']
 ): ReleaseSigningEnvironmentPlatformStatus | null {
-  const environment = status.environments.find((item) => item.platform === platform)
+  const environment = status.environments.find((item) => releaseTargetPlatformMatches(item, { platform }))
   return environment ? cloneReleaseSigningEnvironmentPlatformStatus(environment) : null
 }
 

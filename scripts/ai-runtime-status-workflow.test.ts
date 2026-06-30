@@ -819,7 +819,6 @@ assert.deepEqual(remainingPlatformBoundaryFiles, [
   'src/main/bootstrap/runtime-registry.validator.ts',
   'src/main/doctor/doctor-command-resolver.ts',
   'src/main/electron-main-host-context.ts',
-  'src/main/packaging/release-signing-environment-status.ts',
   'src/main/platform/platform-detector.ts',
   'src/main/runtime/runtime-profile-registry.ts',
   'src/main/runtime/runtime-profile-resolver.ts',
