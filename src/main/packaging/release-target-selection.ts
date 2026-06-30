@@ -46,6 +46,31 @@ export function releaseTargetSuffix(target: ReleaseTargetSelection): string {
   return `${target.platform}-${target.arch}`
 }
 
+export function releaseTargetKey(target: Pick<ReleaseTargetSelection, 'platform' | 'arch'>): string {
+  return `${target.platform}:${target.arch}`
+}
+
+export function releaseTargetsMatch(
+  actual: { platform?: unknown, arch?: unknown },
+  expected: ReleaseTargetSelection
+): boolean {
+  return releaseTargetUnknownKey(actual) === releaseTargetKey(expected)
+}
+
+export function releaseTargetPlatformMatches(
+  actual: { platform?: unknown },
+  expected: Pick<ReleaseTargetSelection, 'platform'>
+): boolean {
+  return releaseTargetPartKey(actual.platform) === releaseTargetPartKey(expected.platform)
+}
+
+export function releaseTargetArchMatches(
+  actual: { arch?: unknown },
+  expected: Pick<ReleaseTargetSelection, 'arch'>
+): boolean {
+  return releaseTargetPartKey(actual.arch) === releaseTargetPartKey(expected.arch)
+}
+
 export function releaseEvidenceFileName(
   prefix: string,
   target: ReleaseTargetSelection
@@ -80,6 +105,14 @@ export function parseReleaseEvidenceBundleRequirements(value: string): ReleaseTa
   }
 
   return requirements
+}
+
+function releaseTargetUnknownKey(target: { platform?: unknown, arch?: unknown }): string {
+  return `${releaseTargetPartKey(target.platform)}:${releaseTargetPartKey(target.arch)}`
+}
+
+function releaseTargetPartKey(value: unknown): string {
+  return String(value)
 }
 
 function requireChoice<T extends string>(

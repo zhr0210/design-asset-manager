@@ -8,8 +8,12 @@ import {
   parseReleaseTargetSelection,
   releaseArchChoices,
   releaseEvidenceFileName,
+  releaseTargetArchMatches,
   releasePlatformChoices,
-  releaseTargetSuffix
+  releaseTargetKey,
+  releaseTargetPlatformMatches,
+  releaseTargetSuffix,
+  releaseTargetsMatch
 } from '../src/main/packaging/release-target-selection'
 
 assert.deepEqual(releasePlatformChoices(), ['windows', 'macos'])
@@ -18,6 +22,14 @@ assert.deepEqual(releaseArchChoices(), ['x64', 'arm64'])
 const windows = parseReleaseTargetSelection({ platform: 'windows', arch: 'x64' })
 assert.deepEqual(windows, { platform: 'windows', arch: 'x64' })
 assert.equal(releaseTargetSuffix(windows), 'windows-x64')
+assert.equal(releaseTargetKey(windows), 'windows:x64')
+assert.equal(releaseTargetsMatch({ platform: 'windows', arch: 'x64' }, windows), true)
+assert.equal(releaseTargetsMatch({ platform: 'windows', arch: 'arm64' }, windows), false)
+assert.equal(releaseTargetsMatch({ platform: 'macos', arch: 'x64' }, windows), false)
+assert.equal(releaseTargetPlatformMatches({ platform: 'windows' }, windows), true)
+assert.equal(releaseTargetPlatformMatches({ platform: 'macos' }, windows), false)
+assert.equal(releaseTargetArchMatches({ arch: 'x64' }, windows), true)
+assert.equal(releaseTargetArchMatches({ arch: 'arm64' }, windows), false)
 assert.equal(
   releaseEvidenceFileName('release-readiness-summary', windows),
   'release-readiness-summary-windows-x64.json'
@@ -63,6 +75,11 @@ assert.throws(
 const helperSource = await fs.readFile('src/main/packaging/release-target-selection.ts', 'utf8')
 assert.match(helperSource, /listReleasePlatformTargets/)
 assert.match(helperSource, /RELEASE_PACKAGING_ARCHES/)
+assert.match(helperSource, /function releaseTargetKey/)
+assert.match(helperSource, /function releaseTargetsMatch/)
+assert.match(helperSource, /function releaseTargetPlatformMatches/)
+assert.match(helperSource, /function releaseTargetArchMatches/)
+assert.doesNotMatch(helperSource, /actual\.platform === expected\.platform|actual\.arch === expected\.arch/)
 assert.doesNotMatch(helperSource, /process\.env|\bfs\.|\breadFile\b|\breaddir\b|\bcreateReadStream\b/)
 assert.doesNotMatch(helperSource, /\/Users\/[A-Za-z0-9_.-]+|C:\\Users\\[A-Za-z0-9_.-]+/)
 

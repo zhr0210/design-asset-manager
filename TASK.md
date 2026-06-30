@@ -1809,6 +1809,29 @@ and Release Update Metadata pass.
   applicable because this changes release-governance writer validation only
   and has no renderer surface.
 
+## Release Target Match Helper Result
+
+- Added shared Release Target key and match helpers for full target,
+  platform-only, and arch-only comparisons.
+- Release Publish Approval now uses platform-only and arch-only target
+  matching instead of hand-rolling platform and architecture comparisons over
+  approval JSON. Release Signed Candidate Dispatch Status now uses the full
+  target matcher for branding evidence validation.
+- The AI Runtime status workflow boundary ledger now confirms
+  `release-publish-approval.ts` and
+  `release-signed-candidate-dispatch-status.ts` no longer contain detected
+  platform-boundary comparisons.
+- Existing release target parsing, evidence file names, publish approval
+  statuses, signed-candidate dispatch statuses, branding evidence semantics,
+  JSON shapes, workflow order, IPC/preload/renderer callers, runtime startup,
+  downloads, databases, model caches, and user assets are unchanged.
+- Focused Release Target Selection, Release Publish Approval, Release Signed
+  Candidate Dispatch Status, and AI Runtime status workflow boundary-ledger
+  tests passed. Complete `ci:governance`, typecheck, production build, docs
+  sync, agent-context check, forbidden-path advisory check, and diff check
+  pass. UI screenshot validation is not applicable because this changes
+  release-governance target matching only and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

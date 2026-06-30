@@ -1,4 +1,8 @@
 import type { ReleasePackagingArch, ReleasePlatform } from './release-flow-governance'
+import {
+  releaseTargetArchMatches,
+  releaseTargetPlatformMatches
+} from './release-target-selection'
 
 export type ReleasePublishApprovalStatus =
   | 'approved'
@@ -77,10 +81,10 @@ function validateApproval(
   if (!isIsoTimestamp(value.approvedAt)) {
     result.push(missing('approved_at', 'Approval timestamp', 'approvedAt must be an ISO timestamp.'))
   }
-  if (value.platform !== platform) {
+  if (!releaseTargetPlatformMatches(value, { platform })) {
     result.push(missing('platform', 'Approval platform', `platform must be ${platform}.`))
   }
-  if (value.arch !== arch) {
+  if (!releaseTargetArchMatches(value, { arch })) {
     result.push(missing('arch', 'Approval architecture', `arch must be ${arch}.`))
   }
   if (value.distributionStage !== 'distribution_ready') {

@@ -60,6 +60,10 @@ assert.equal(serialized.includes('APPLE_APP_SPECIFIC_PASSWORD='), false)
 assert.equal(serialized.includes('WINDOWS_CSC_KEY_PASSWORD='), false)
 
 const source = await fs.readFile('src/main/packaging/release-publish-approval.ts', 'utf8')
+assert.match(source, /releaseTargetPlatformMatches/)
+assert.match(source, /releaseTargetArchMatches/)
+assert.doesNotMatch(source, /value\.platform !== platform/)
+assert.doesNotMatch(source, /value\.arch !== arch/)
 assert.doesNotMatch(
   source,
   /process\.env|\bfs\.|\breadFile\b|\bcreateReadStream\b|\bexecFile\b|\bspawn\b/

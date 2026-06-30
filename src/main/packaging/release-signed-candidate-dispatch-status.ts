@@ -5,6 +5,7 @@ import type {
 } from './release-flow-governance'
 import { getReleasePlatformTarget } from './release-flow-governance'
 import { createReleaseSignedCandidatePreflight } from './release-signed-candidate-preflight'
+import { releaseTargetsMatch } from './release-target-selection'
 import {
   getReleaseSigningEnvironmentPlatformStatus,
   type ReleaseSigningEnvironmentStatus
@@ -159,7 +160,7 @@ function missingBrandingEvidence(
   platform: ReleasePlatform,
   arch: ReleasePackagingArch
 ): ReleaseSignedCandidateDispatchMissing[] {
-  if (!isRecord(value) || value.schemaVersion !== 1 || value.platform !== platform || value.arch !== arch) {
+  if (!isRecord(value) || value.schemaVersion !== 1 || !releaseTargetsMatch(value, { platform, arch })) {
     return [{
       code: 'release_branding_evidence',
       label: 'Release branding evidence',
