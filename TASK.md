@@ -9,6 +9,20 @@ Windows and macOS should share product workflows, contracts, main-process
 orchestration, UI state, and tests by default. Branch only for real OS,
 runtime, native dependency, packaging, path, or process differences.
 
+## Goal Closure Boundary
+
+This goal is now in closure mode. Do not start new matcher, registry,
+metadata, host-default, or platform-boundary cleanup slices just because more
+small architecture improvements are possible.
+
+Only continue work that directly advances one of the remaining gated slices in
+`Next Implementation Slice`. If a remaining slice requires credentials,
+platform environments, explicit IPC contract approval, real icon assets, or
+human release approval, record it as blocked by that external input instead of
+opening adjacent cleanup work. If all remaining gated slices are either
+complete or externally blocked, stop and report the goal as complete or
+blocked with the exact unresolved human actions.
+
 ## Accepted Baseline
 
 - Real AI Evidence Closure Phase 2 is complete on
@@ -1390,6 +1404,39 @@ Three gated slices remain:
 
 Publishing remains a separate per-release approval after distribution gates
 and Release Update Metadata pass.
+
+Do not treat unrelated platform matcher/registry/metadata refactors as next
+implementation slices. They are out of scope unless they are strictly required
+to complete one of the three gated items above.
+
+## Goal Closure Audit Result
+
+No executable code-level gated slice remains under the current closure
+boundary.
+
+- Blocked: real signed Windows candidate and signed/notarized macOS candidate.
+  Existing signed-candidate preflight, release environment manifest, readiness
+  summary, trust evidence, branding evidence, and manual workflow governance
+  are already implemented. The remaining gate requires provisioned Windows and
+  macOS signing environments, required signing/notarization credentials, human
+  environment approval, and real platform candidate execution.
+- Blocked: renderer exposure for Runtime Package Executor. The executor,
+  session boundary, product workflow, panel contract, IPC handlers, governance
+  tests, and pending IPC contract preflight are already implemented. Public
+  preload/renderer exposure remains blocked until the exact IPC channel names
+  and response contract receive explicit approval.
+- Blocked: release branding assets. Branding preflight, verifier, approval
+  template, evidence writer integration, release readiness binding, and signed
+  workflow checks are already implemented. The remaining gate requires
+  human-approved `build/icon.ico`, `build/icon.icns`, and a matching
+  `build/release-branding.json` approval record with approved SHA-256 values.
+- Blocked: publishing. Publishing remains a separate per-release approval
+  after signed distribution gates, install-smoke gates, release update
+  metadata, and explicit publish approval pass.
+
+No new matcher, registry, metadata, host-default, or platform-boundary cleanup
+slice should be opened for this goal. Future work should resume only when one
+of the external inputs above is supplied or explicitly approved.
 
 ## Signed Candidate Preflight Result
 
