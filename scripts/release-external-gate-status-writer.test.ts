@@ -110,6 +110,10 @@ const source = await fs.readFile('scripts/write-release-external-gate-status.ts'
 const wrapper = await fs.readFile('scripts/write-release-external-gate-status.mjs', 'utf8')
 assert.match(wrapper, /write-release-external-gate-status\.ts/)
 assert.match(source, /createReleaseExternalGateStatus/)
+assert.match(source, /assertReleaseReadinessSummaryTarget\(readinessSummary, \{ platform, arch, source: 'release-readiness-evidence' \}\)/)
+assert.doesNotMatch(source, /platformSummary/)
+assert.doesNotMatch(source, /readinessSummary\.platforms\.length !== 1/)
+assert.doesNotMatch(source, /platformSummary\?\.platform !== platform|platformSummary\?\.arch !== arch/)
 assert.doesNotMatch(source, /process\.env|secrets\.|readFile\(.*icon|createReadStream|gh\s+workflow|gh\s+release|notarytool|codesign|signtool/)
 assert.doesNotMatch(source, /\/Users\/[A-Za-z0-9_.-]+|C:\\Users\\[A-Za-z0-9_.-]+/)
 

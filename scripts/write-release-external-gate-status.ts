@@ -2,7 +2,10 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { createReleaseExternalGateStatus } from '../src/main/packaging/release-external-gate-status'
-import type { ReleaseReadinessSummary } from '../src/main/packaging/release-readiness-summary'
+import {
+  assertReleaseReadinessSummaryTarget,
+  type ReleaseReadinessSummary
+} from '../src/main/packaging/release-readiness-summary'
 import {
   parseReleaseTargetSelection,
   releaseEvidenceFileName
@@ -19,16 +22,7 @@ const outputPath = path.resolve(
 )
 
 const readinessSummary = JSON.parse(await fs.readFile(readinessPath, 'utf8')) as ReleaseReadinessSummary
-const platformSummary = readinessSummary.platforms?.[0]
-if (
-  readinessSummary.schemaVersion !== 1
-  || readinessSummary.source !== 'release-readiness-evidence'
-  || readinessSummary.platforms.length !== 1
-  || platformSummary?.platform !== platform
-  || platformSummary?.arch !== arch
-) {
-  throw new Error('Release readiness summary does not match the requested platform and architecture.')
-}
+assertReleaseReadinessSummaryTarget(readinessSummary, { platform, arch, source: 'release-readiness-evidence' })
 
 const status = createReleaseExternalGateStatus(readinessSummary)
 await fs.mkdir(path.dirname(outputPath), { recursive: true })

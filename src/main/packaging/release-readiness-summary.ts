@@ -54,6 +54,12 @@ export interface ReleaseReadinessSummary {
   platforms: ReleaseReadinessPlatformSummary[]
 }
 
+export interface ReleaseReadinessSummaryTarget {
+  platform: ReleasePlatform
+  arch: ReleasePackagingArch
+  source?: ReleaseReadinessSource
+}
+
 const CANDIDATE_GATE_CODES = new Set([
   'build',
   'governance',
@@ -101,6 +107,43 @@ export function createReleaseReadinessSummary(
   }
 }
 
+export function assertReleaseReadinessSummaryTarget(
+  summary: ReleaseReadinessSummary,
+  target: ReleaseReadinessSummaryTarget
+): ReleaseReadinessPlatformSummary {
+  const platformSummary = getReleaseReadinessSummaryTarget(summary, target)
+  if (!platformSummary) {
+    throw new Error('Release readiness summary does not match the requested platform and architecture.')
+  }
+  return platformSummary
+}
+
+export function getReleaseReadinessSummaryTarget(
+  summary: ReleaseReadinessSummary,
+  target: ReleaseReadinessSummaryTarget
+): ReleaseReadinessPlatformSummary | null {
+  if (
+    summary.schemaVersion !== 1
+    || (target.source !== undefined && summary.source !== target.source)
+    || summary.platforms.length !== 1
+  ) {
+    return null
+  }
+
+  const platformSummary = summary.platforms[0]
+  if (releaseReadinessSummaryTargetKey(platformSummary) !== releaseReadinessSummaryTargetKey(target)) {
+    return null
+  }
+
+  return cloneReleaseReadinessPlatformSummary(platformSummary)
+}
+
+function releaseReadinessSummaryTargetKey(
+  target: Pick<ReleaseReadinessSummaryTarget, 'platform' | 'arch'>
+): string {
+  return `${target.platform}:${target.arch}`
+}
+
 function toReadinessBlocker(missing: ReleaseCandidateMissing): ReleaseReadinessBlocker {
   return {
     ...missing,
@@ -113,4 +156,16 @@ function blockerPhase(code: ReleaseCandidateMissing['code']): ReleaseReadinessPh
   if (code === 'publish_approval') return 'publish'
   if (CANDIDATE_GATE_CODES.has(code)) return 'candidate'
   return 'distribution'
+}
+
+function cloneReleaseReadinessPlatformSummary(
+  platformSummary: ReleaseReadinessPlatformSummary
+): ReleaseReadinessPlatformSummary {
+  return {
+    ...platformSummary,
+    requiredEvidence: [...platformSummary.requiredEvidence],
+    requiredSecretNames: [...platformSummary.requiredSecretNames],
+    checks: { ...platformSummary.checks },
+    blockers: platformSummary.blockers.map((blocker) => ({ ...blocker }))
+  }
 }

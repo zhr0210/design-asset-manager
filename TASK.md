@@ -1787,6 +1787,28 @@ and Release Update Metadata pass.
   because this changes release-governance projection only and has no renderer
   surface.
 
+## Release Readiness Summary Target Assertion Result
+
+- Moved Release Readiness Summary target matching for source, platform, arch,
+  and single-platform summary shape into the release readiness summary module.
+- The Release External Gate Status writer now calls
+  `assertReleaseReadinessSummaryTarget` instead of hand-rolling platform and
+  architecture checks over the parsed readiness summary. The helper returns a
+  cloned platform summary so caller mutation cannot leak back into the
+  readiness summary result.
+- Existing release readiness JSON shape, external gate status JSON shape,
+  target selection, evidence file naming, workflow order, display-only policy,
+  GitHub settings behavior, signing/branding asset privacy, IPC/preload/
+  renderer callers, runtime startup, downloads, databases, model caches, and
+  user assets are unchanged.
+- Focused Release Readiness Summary, Release External Gate Status Writer,
+  Release External Gate Status, and Release Readiness Writer tests passed.
+  AI Runtime status workflow boundary-ledger test, complete `ci:governance`,
+  typecheck, production build, docs sync, agent-context check, forbidden-path
+  advisory check, and diff check pass. UI screenshot validation is not
+  applicable because this changes release-governance writer validation only
+  and has no renderer surface.
+
 ## Safety Boundaries
 
 - Do not inspect user assets, runtime databases, model caches, or model

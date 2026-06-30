@@ -2,7 +2,9 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 
 import {
+  assertReleaseReadinessSummaryTarget,
   createReleaseReadinessSummary,
+  getReleaseReadinessSummaryTarget,
   type ReleaseReadinessInput
 } from '../src/main/packaging/release-readiness-summary'
 import type { ReleaseCandidateChecks } from '../src/main/packaging/release-flow-governance'
@@ -125,11 +127,61 @@ assert.ok(blockedCandidate.blockers.some((item) => item.code === 'build' && item
 const evidenceSummary = createReleaseReadinessSummary([unsignedWindows], 'release-readiness-evidence')
 assert.equal(evidenceSummary.source, 'release-readiness-evidence')
 assert.deepEqual(evidenceSummary.platforms[0].checks, unsignedWindows.checks)
+const mutableEvidenceTarget = assertReleaseReadinessSummaryTarget(evidenceSummary, {
+  platform: 'windows',
+  arch: 'x64',
+  source: 'release-readiness-evidence'
+})
+mutableEvidenceTarget.requiredEvidence.pop()
+mutableEvidenceTarget.requiredSecretNames.pop()
+mutableEvidenceTarget.checks.signature = 'passed'
+mutableEvidenceTarget.blockers.push({
+  code: 'signature',
+  label: 'mutated',
+  detail: 'mutated',
+  phase: 'distribution',
+  severity: 'blocking'
+})
+const evidenceTarget = getReleaseReadinessSummaryTarget(evidenceSummary, {
+  platform: 'windows',
+  arch: 'x64',
+  source: 'release-readiness-evidence'
+})
+assert.ok(evidenceTarget)
+assert.ok(evidenceTarget.requiredEvidence.includes('release-trust-evidence'))
+assert.ok(evidenceTarget.requiredSecretNames.includes('WINDOWS_CSC_LINK'))
+assert.equal(evidenceTarget.checks.signature, 'not_run')
+assert.equal(evidenceTarget.blockers.some((item) => item.label === 'mutated'), false)
+assert.equal(getReleaseReadinessSummaryTarget(evidenceSummary, {
+  platform: 'macos',
+  arch: 'x64',
+  source: 'release-readiness-evidence'
+}), null)
+assert.equal(getReleaseReadinessSummaryTarget(evidenceSummary, {
+  platform: 'windows',
+  arch: 'arm64',
+  source: 'release-readiness-evidence'
+}), null)
+assert.equal(getReleaseReadinessSummaryTarget(summary, {
+  platform: 'windows',
+  arch: 'x64',
+  source: 'release-readiness-evidence'
+}), null)
+assert.throws(() => assertReleaseReadinessSummaryTarget(summary, {
+  platform: 'windows',
+  arch: 'x64',
+  source: 'release-readiness-evidence'
+}), /Release readiness summary does not match/)
 
 const source = await fs.readFile('src/main/packaging/release-readiness-summary.ts', 'utf8')
 assert.match(source, /getReleasePlatformTarget/)
 assert.match(source, /brandingIconFileName: target\.brandingIconFileName/)
+assert.match(source, /function assertReleaseReadinessSummaryTarget/)
+assert.match(source, /function getReleaseReadinessSummaryTarget/)
+assert.match(source, /function releaseReadinessSummaryTargetKey/)
+assert.match(source, /function cloneReleaseReadinessPlatformSummary/)
 assert.doesNotMatch(source, /brandingPreflight\.platforms\.find/)
 assert.doesNotMatch(source, /Missing release branding preflight/)
+assert.doesNotMatch(source, /platformSummary\.platform !== target\.platform|platformSummary\.arch !== target\.arch/)
 assert.doesNotMatch(source, /process\.env|fs\.|readFile|stat|createReadStream/)
 assert.doesNotMatch(source, /C:\\Users\\[A-Za-z0-9_.-]+|\/Users\/[A-Za-z0-9_.-]+/)
