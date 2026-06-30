@@ -4,6 +4,7 @@ import { createWindowsAiBranchRuntimeMetadata } from '../../../shared/constants/
 import type { AiRuntimeOperationResult, AiRuntimeProvider, PythonWorkerRuntimeConfig } from '../../../shared/types/ai-runtime.types'
 import type { PlatformArch, PlatformName } from '../../../shared/types/platform.types'
 import type { RuntimeProfileId } from '../../../shared/types/runtime-profile.types'
+import { runtimeProfileRuleMatchesTarget } from '../../runtime/runtime-profile-selection'
 import { AiRuntimeManager } from './ai-runtime-manager'
 import { DisabledAiRuntimeProvider } from './providers/disabled-ai-runtime.provider'
 import { PythonWorkerRuntimeProvider } from './providers/python-worker-runtime.provider'
@@ -98,10 +99,10 @@ function resolvePlatformAiBranchProviderProfileId(
   currentPlatform: PlatformName,
   currentArch: PlatformArch
 ): RuntimeProfileId | null {
-  const rule = descriptor.profileRules.find((candidate) => {
-    return candidate.platform === currentPlatform
-      && (candidate.arch === undefined || candidate.arch === currentArch)
-  })
+  const rule = descriptor.profileRules.find((candidate) => runtimeProfileRuleMatchesTarget(candidate, {
+    platform: currentPlatform,
+    arch: currentArch
+  }))
   return rule?.profileId ?? null
 }
 
