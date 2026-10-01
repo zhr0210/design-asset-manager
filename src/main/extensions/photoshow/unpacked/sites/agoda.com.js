@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"agoda.com":{srcMatching:[{srcRegExp:"(//.+?\\.bstatic\\.com/.+/)\\w+(/\\d+@IMG@.*)",processor:"$1max3000$2"},{srcRegExp:"([^?]+)\\?.+",processor:({trigger:c})=>["$1",r=>r.width*r.height<=c.width*c.height]}]}};

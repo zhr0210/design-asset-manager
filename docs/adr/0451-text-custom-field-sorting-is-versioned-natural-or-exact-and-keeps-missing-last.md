@@ -1,0 +1,11 @@
+# Text Custom Field Sorting Is Versioned Natural or Exact and Keeps Missing Last
+
+Text Custom Fields support ascending and descending **Text Custom Field Sort** with an explicit **Text Custom Field Sort Mode** of Natural or Exact Unicode. Natural is the default and uses numeric-aware, versioned Unicode collation tailored by one canonical stored language tag, so `Project 2` precedes `Project 10` in ascending order while case, diacritics and punctuation remain later ordering distinctions rather than discarded equality. Creating a Natural sort visibly proposes the current interface language, lets the user choose another supported language or the root collation, and freezes the resolved language/tailoring plus Unicode/collation-data versions; another device or later interface-language change never substitutes its operating-system collator.
+
+Exact Unicode compares the authoritative ADR 0440 NFC scalar sequence without locale, numeric segmentation or ADR 0450 comparison transforms. For Natural ties, the requested direction also applies to the authoritative NFC scalar sequence; any remaining equal-value tie uses opaque stable owner identity in fixed ascending order. Missing is always placed last in both directions instead of flooding the top of a descending view. Whitespace-only Text remains a present sortable value, and Conforming, Out-of-Constraint or Unknown validation status never changes value order.
+
+Temporary and saved sorts retain the exact field identity, direction, mode and relevant language/version evidence. A Saved Search or User Smart Filter therefore follows ADR 0421 when that field is archived, deleted or remapped and never falls back to a same-name field or unrelated sort. Sort changes remain presentation-only under ADR 0081 when membership is unchanged; ADR 0181 result generations freeze their ordering, and a newer value/index generation is adopted only through that surface's normal explicit refresh. An unavailable or upgraded collation policy requires an explicit compatible selection or reviewed policy migration rather than silent reinterpretation.
+
+ADR 0452 uses an explicit Natural or Exact Unicode mode to order browser
+entries, with the same stable tie and version rules, but that session-only
+display order is not automatically copied into the resulting asset filter.

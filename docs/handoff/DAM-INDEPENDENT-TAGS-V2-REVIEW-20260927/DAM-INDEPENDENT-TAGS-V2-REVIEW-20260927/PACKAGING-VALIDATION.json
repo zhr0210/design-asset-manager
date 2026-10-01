@@ -1,0 +1,26 @@
+{
+  "validatedAt": "2026-09-26T17:00:14.543974+00:00",
+  "scope": "portable package / current links / byte fidelity / standalone SPEC checker only",
+  "minimalSpecRerun": {
+    "command": [
+      "python3",
+      "-B",
+      "checks/minimal-spec-checks.py"
+    ],
+    "cwd": "revision-v2",
+    "exitCode": 0,
+    "stdout": {
+      "counterexamplesReproduced": 2,
+      "minimalSpecCases": 8,
+      "result": "PASS",
+      "productionTests": "NOT_RUN"
+    }
+  },
+  "originalRevisionFiles": 62,
+  "revisionBytesPreserved": true,
+  "originalInputHashMatches": true,
+  "currentMarkdownLinks": "PASS",
+  "historicalInputLinks": "preserved verbatim; resolve with enclosed original full archive",
+  "businessOrModelTests": "NOT_RUN",
+  "result": "PASS"
+}

@@ -1,0 +1,307 @@
+{
+  "mode": "SPEC",
+  "specStatus": "revised-draft-ready-for-review",
+  "breakdownStatus": "draft-awaiting-user-approval",
+  "implementationStatus": "not_started",
+  "publicationStatus": "not_published",
+  "trackerConfigured": "GitHub",
+  "seam": "trusted controller/Host product intent with injected Provider/clock and real temporary library",
+  "tickets": [
+    {
+      "id": "01",
+      "slug": "preserve-combined-provider",
+      "title": "保持现有综合分析行为，抽取可替换推理入口",
+      "blockers": [],
+      "stories": [
+        22,
+        23,
+        25,
+        26,
+        28
+      ],
+      "deliver": "用户继续执行综合分析和反推，结果/错误/重试表现保持兼容；内部形成可注入单次Provider的测试边界。",
+      "criteria": [
+        "旧综合与反推完整响应仍保存一次，截断最多重试一次且共用时限。",
+        "prepare零外发，取消/失效owner零晚提交，旧异常不泄露原始响应。",
+        "临时库与合成Provider回归证明人工描述/OCR/confirmed关系保持。",
+        "不改公共契约/schema或恢复旧Worker；通过现有行为测试与类型检查。"
+      ],
+      "testing": "旧控制器/Host集成及transport协议回归；不增加依赖于私有函数结构的测试。"
+    },
+    {
+      "id": "02",
+      "slug": "persist-reviewed-tag-intent",
+      "title": "确认后保存独立标签任务，并在重开后查看",
+      "blockers": [
+        "01"
+      ],
+      "stories": [
+        2,
+        3,
+        4,
+        5,
+        13,
+        18,
+        19,
+        20,
+        24,
+        28
+      ],
+      "deliver": "用户可审阅单素材标签操作、明确存储升级后保存任务；暂未具备执行条件时如实等待，关闭重开仍可查看。",
+      "criteria": [
+        "主窗口/卡片范围经正式Preload与Main检查；卡片不能查看其他素材。",
+        "迁移有精确版本登记、一致备份、空间/失败处理，普通读取不升级。",
+        "同requestId相同输入只有一个意图；不同payload拒绝；session/lease与持久generation分开。",
+        "新版程序对其升级后的已知目标profile必须保持原OCR/人工修订、Notebook、WorkSet、组织、下载/副本恢复可用并验证；旧二进制未知新profile安全拒写单列，不可替代新版兼容通过。",
+        "临时库关开后任务可见但零自动网络请求；不访问真实库。",
+        "相同libraryGeneration重开取得新hostSessionId/leaseIdentity；旧claim/attemptToken不能恢复授权，任务读取使用当前scope。"
+      ],
+      "testing": "临时Managed库生命周期集成+最小正式Electron确认/任务读取；包含迁移回滚与旧profile拒写。",
+      "checkpoints": [
+        {
+          "id": "02A",
+          "kind": "decision-before-implementation",
+          "requirements": [
+            "最新工作区/profile及白名单核对",
+            "实际增量DDL/迁移ID/digest/版本分配依据",
+            "首写触发、备份校验/空间和提交失败语义",
+            "新版现有功能兼容矩阵与旧二进制拒写矩阵分开",
+            "代码模式回退与备份恢复数据损失说明"
+          ],
+          "exitGate": "记录可审阅任务级schema方案后才能进入02B；本轮没有分配版本",
+          "status": "not_started"
+        },
+        {
+          "id": "02B",
+          "kind": "persistent-intent-implementation",
+          "blockedByInternal": [
+            "02A"
+          ],
+          "requirements": [
+            "获准IMPLEMENT范围内实现确认持久意图与重开读取",
+            "真实临时库执行迁移/事务失败/关开矩阵",
+            "现有能力保持可用而非统一安全拒绝"
+          ],
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "slug": "single-tag-result",
+      "title": "单素材标签分析成功后形成可读取的持久建议",
+      "blockers": [
+        "02"
+      ],
+      "stories": [
+        1,
+        3,
+        4,
+        6,
+        10,
+        11,
+        12,
+        17,
+        21,
+        22,
+        23,
+        27
+      ],
+      "deliver": "用户运行单素材标签任务，完整有效结果经Host提交后在原Inspector显示；失败、取消和通知丢失不清空旧结果。",
+      "criteria": [
+        "P03新Recipe与Profile冻结，受控输入/有界预算与已授权服务执行；缺条件进入waiting。",
+        "Evidence/current/Job/回执/Outbox一次事务；重复结果只生效一次，不同payload冲突。",
+        "开始就具备requestGeneration、当前session/claim与cancel写前检查，不能把安全防线推迟到后续票。",
+        "模型输出仅写AI建议，不改变caption/OCR/prompt/confirmed用户状态。",
+        "完整性拒绝残片、空数组按配方表达；远端可能已执行的超时不盲重发。",
+        "首次新写前停止新旧视觉准入、撤销旧receipt、drain在途旧提交，切至唯一Host tags writer/current；正式综合路径与tags-only共用代次/效果规则，禁止双发或双写。",
+        "交叉路径验收：旧综合先发新标签后发，新标签先完成时旧响应不能夺回current；新标签失败仅保留此前已提交结果，不复活旧在途。历史bundle保持来源，不伪造混合结果。",
+        "首次并存前新旧路径共用Main最小准入：HTTP总槽上限2/新tags最多1、预处理槽1、冻结字节总账和有界等待/取消/释放；任务03必须用生产合成夹具确定有限AdmissionProfile参数，未知值禁止新写开启，不声称控制外部服务显存。",
+        "同libraryGeneration重开旧session/claim拒绝；closing屏障后拒绝新业务效果，关闭前私有协调记录与已提交效果只读须按AC-05区分，不用closed重复回执绕过授权。"
+      ],
+      "testing": "产品意图→合成Provider→真实临时SQLite→Inspector重读；取消、源变化、通知失败及预算失败注入。 必须先通过G01/G02交叉路径及共享准入；现有generation/session/claim/cancel断言保留。",
+      "enablementGates": [
+        "G01-single-writer",
+        "G02-shared-admission",
+        "G03-session-fence",
+        "G04-schema-checkpoints",
+        "G07-close-write-kinds"
+      ]
+    },
+    {
+      "id": "04",
+      "slug": "find-review-tag-suggestions",
+      "title": "标签建议可检索、分类、确认与拒绝",
+      "blockers": [
+        "03"
+      ],
+      "stories": [
+        7,
+        8,
+        9,
+        10,
+        24,
+        25
+      ],
+      "deliver": "新建议立即用于现有搜索与AI文件夹；用户确认/拒绝后所有正式表面一致更新，旧综合证据继续可读。",
+      "criteria": [
+        "AI建议和confirmed关系独立，只有显式确认增加用户关系。",
+        "拒绝按内容/来源族生效，同族重跑不立即重复；旧拒绝不被错误扩大。",
+        "新标签和旧caption/OCR/prompt保持各自来源，不生成假的综合Evidence。",
+        "复用任务03已验收的唯一tags writer/current及切换屏障；此票只增加用户决定/检索分类与共享展示整合，不延后03门槛，不增加03依赖04。",
+        "确认、拒绝、搜索与分类在临时库重开后保持一致，删除/复制素材零副作用。"
+      ],
+      "testing": "Host用户决定与纯检索投影对照，正式Electron搜索/AI分类/卡片权限回归。"
+    },
+    {
+      "id": "05",
+      "slug": "bounded-batch-and-rerun",
+      "title": "有界批次、强制重跑及乱序结果保护",
+      "blockers": [
+        "03"
+      ],
+      "stories": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        27
+      ],
+      "deliver": "用户手动选择1–8素材批量标签分析，独立显示成功/失败/等待；重跑新意图不会被旧任务迟到覆盖。",
+      "criteria": [
+        "范围冻结，重复点击不新增代次；force-rerun才产生新requestId/代次。",
+        "基于任务03已生效的共享准入扩展1–8批次与混合压力测试：新tags最多1、新旧总槽2、预处理/保留字节预算不超，等待取消和重复释放可验证；不是此票首次增加准入。",
+        "一个素材失败不撤销其他已成功结果；取消只阻止未提交任务。",
+        "两请求先发后到、取消/commit竞争、scope切换均保留用户最新意图。",
+        "进度与当前有效结果分开，旧成功在重跑失败时继续可用。"
+      ],
+      "testing": "可控延迟合成Provider+临时库并发故障，正式批次进度与取消；不跑高负载真实基准。"
+    },
+    {
+      "id": "06",
+      "slug": "resume-unfinished-safely",
+      "title": "重启后只恢复未完成标签任务",
+      "blockers": [
+        "05"
+      ],
+      "stories": [
+        18,
+        19,
+        20,
+        21,
+        27,
+        28
+      ],
+      "deliver": "关闭或进程中断后，用户在重新审阅范围与服务条件后继续未完成标签；成功项不重复推理，未知远端状态明确待核对。",
+      "criteria": [
+        "同libraryGeneration重开也新session/claim，旧worker结果拒绝。",
+        "认领前后、发送意图后、提交前后故障分别按持久事实恢复，不伪造成功。",
+        "Outbox重投刷新结果且不重跑模型；重复消费者不重复效果。",
+        "provider/model/content/auth变化要求重新核对；unknown结果不能通过暂停/恢复绕过。",
+        "热日志/损坏库保持安全恢复要求，不删sidecar来让测试过。",
+        "完整恢复验证区分关闭前私有pause/unknown记录、普通业务提交、旧DB关闭后拒读、新会话合法回执重读；不能一律禁止关闭前协调写，也不能允许close后新效果。"
+      ],
+      "testing": "临时库+测试拥有的进程进行崩溃切点与正常重开；正式Electron重启恢复，不终止用户服务。"
+    },
+    {
+      "id": "07",
+      "slug": "accept-independent-tags",
+      "title": "完成正式链路与获准真实模型验收",
+      "blockers": [
+        "04",
+        "06"
+      ],
+      "stories": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "deliver": "获得可复核的独立标签功能交付报告，覆盖正式界面、持久数据、恢复和限定真实模型；不足之处准确保留。",
+      "criteria": [
+        "正式Main/Preload/Inspector/卡片/搜索/AI文件夹采用生成素材与临时库完成真实联动，视觉与数据验收分开。",
+        "完成相关typecheck/回归与规格、标准两轴代码审查；保留失败日志和未覆盖项。",
+        "真实模型仅在核对已有授权目标/素材/服务范围后执行，结构/语言/语义/性能分开；条件缺失写NOT_RUN。",
+        "旧综合/反推/OCR/人工状态回归保持，不能因新功能通过牺牲现有行为。",
+        "按实际实施同步最近说明与TASK；不自动提交无关工作、不发布或删除旧代码。"
+      ],
+      "testing": "按风险选择完整本轮验收集合；真实模型/Windows/签名与真实库迁移各自分级，后两者不在本轮放行。"
+    }
+  ],
+  "userStoryCount": 28,
+  "runtimeTests": "NOT_RUN",
+  "originalBranch": "codex/product-reassessment-20260905",
+  "originalHead": "3fa00df3bbb605478da6d0af18724d64021e723c",
+  "documentVersion": 2,
+  "currentContract": "ACTIVE-CONTRACT-ADDENDUM.md",
+  "supersedesIndex": "SUPERSEDES.json",
+  "revisionSource": "User authorized bounded SPEC revisions after supplying complete handoff; no IMPLEMENT authorization",
+  "schemaVersionAllocation": null,
+  "realProductionTests": "NOT_RUN",
+  "newGlobalPrerequisitesForTask01": [],
+  "revisions": [
+    {
+      "ticket": "01",
+      "changed": false,
+      "scope": "acceptance/checkpoint clarification only; id/title/blockers/stories retained"
+    },
+    {
+      "ticket": "02",
+      "changed": true,
+      "scope": "acceptance/checkpoint clarification only; id/title/blockers/stories retained"
+    },
+    {
+      "ticket": "03",
+      "changed": true,
+      "scope": "acceptance/checkpoint clarification only; id/title/blockers/stories retained"
+    },
+    {
+      "ticket": "04",
+      "changed": true,
+      "scope": "acceptance/checkpoint clarification only; id/title/blockers/stories retained"
+    },
+    {
+      "ticket": "05",
+      "changed": true,
+      "scope": "acceptance/checkpoint clarification only; id/title/blockers/stories retained"
+    },
+    {
+      "ticket": "06",
+      "changed": true,
+      "scope": "acceptance/checkpoint clarification only; id/title/blockers/stories retained"
+    },
+    {
+      "ticket": "07",
+      "changed": false,
+      "scope": "acceptance/checkpoint clarification only; id/title/blockers/stories retained"
+    }
+  ]
+}

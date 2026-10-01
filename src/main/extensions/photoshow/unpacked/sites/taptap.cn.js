@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"taptap.cn":{srcMatching:[{thumbType:"posters",processor:({trigger:e})=>e.querySelector(".tap-player__poster-image"),selectors:".tap-player"}]}};

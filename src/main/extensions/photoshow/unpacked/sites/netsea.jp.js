@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"netsea.jp":{srcMatching:[{srcRegExp:"//\\D+(\\d+\\.netsea.jp/)(?:image/\\d+/\\d+/)?(.+/)(?:\\D+_)?(.+@IMG@)",processor:"//img$1$2$3"}]}};

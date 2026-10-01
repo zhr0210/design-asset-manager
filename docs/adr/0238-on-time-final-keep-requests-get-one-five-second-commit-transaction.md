@@ -1,0 +1,21 @@
+# On-Time Final Keep Requests Get One Five-Second Commit Transaction
+
+An ADR 0236 final Confirm Keep Copy request qualifies only when the host receives and validates the exact target, retention episode, decision-hold generation, confirmation generation and unconsumed attempt before ADR 0235's 60-second deadline. A renderer click time, queued IPC message, animation state or request arriving after the deadline does not qualify.
+
+On acceptance, the host atomically consumes the one attempt and replaces the Post-Cleanup Keep Decision Hold with one **Keep Commit In Flight** transaction pin. This handoff preserves the exact target and ADR 0229 Storage Resolution Volume Slot without an owner-safety gap. The 60-second decision deadline may then expire without cancelling the already accepted request.
+
+Keep Commit In Flight lasts until the request reaches a terminal result or five elapsed seconds from host acceptance, whichever occurs first. It is a non-renewable commit bound, not another decision period, cleanup hold, ADR 0234 drain, warning grace, retry or addition to ADR 0228's cumulative budget. Another renderer, process, request or reconnection cannot restart or extend it.
+
+During the transaction the host performs only ADR 0237's fresh Final Keep Commit Snapshot, ADR 0226 admission and the atomic pending-owner-to-Keep-owner transition. It moves or rewrites no package payload and accepts no Install, Delete, cleanup selection, target switch, cancellation or second Keep request. The UI may show Finalizing Keep with the hard commit deadline but has no cancel action.
+
+Renderer disconnect, result-surface closure, window hiding or the original 60-second expiry after acceptance does not cancel this host transaction. The same affected volume slot remains occupied so another Clean Up And Keep workflow cannot race its final owner evidence. Duplicate submissions resolve to the same accepted attempt and never create parallel commits.
+
+If admission or owner transition reaches a terminal result within five seconds, success commits the Kept Verified Package Copy Pin and ends the retention episode; a typed failure leaves the Awaiting Install Decision owner unchanged. Either result ends the transaction pin and releases the volume slot, after which ADR 0235's normal terminal outcome applies and no decision hold or attempt returns.
+
+The Keep owner transition must be one local generation-checked metadata transaction that is safe to roll back before durable commit. If five seconds elapse before durable owner commit, the host aborts/rolls back the incomplete transaction, preserves the pending owner, releases the transaction pin and volume slot, and returns a Commit Timed Out failure for ordinary retention reevaluation. It never leaves an indefinite in-flight owner or treats an uncertain partial state as success.
+
+If Explicit Quit or main-process termination interrupts the transaction, no helper or background process continues it. Minimal device-local journal evidence records opaque commit identity, target/episode, pre-transition owner generation, attempt-consumed state and original hard deadline solely so ADR 0239 can reconcile whether the atomic owner commit completed before expiry cleanup or another target action. Restart never reruns admission, restarts five seconds or grants another attempt, and the one recovered result is explanatory rather than a transaction continuation.
+
+Keep Commit In Flight state and its terminal result contain no managed paths, package content, credentials, user attention or click history and are excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs. Immediate UI projection uses only opaque package/volume identities, coarse stage/reason and path-free final byte evidence.
+
+The current Runtime Package executor has process-local non-cancellable install executions and rollback, but no Keep admission, owner transaction, volume slot, five-second commit deadline or reconciliation journal. It is not reused as evidence that this policy exists. This ADR changes documentation only: it accepts/commits no real Keep, reads no package/cache/private state and changes no public IPC/schema/AI Worker API.

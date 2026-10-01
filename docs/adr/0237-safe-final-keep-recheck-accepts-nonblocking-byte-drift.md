@@ -1,0 +1,19 @@
+# Safe Final Keep Recheck Accepts Nonblocking Byte Drift
+
+ADR 0236's displayed Post-Cleanup Keep Confirmation is an explanatory impact snapshot. When its final Confirm Keep Copy request is host-accepted before the decision deadline, ADR 0238 creates one maximum-five-second transaction in which the host computes a fresh atomic **Final Keep Commit Snapshot** under ADR 0226 Keep Pin Admission. The commit snapshot, not equality with the displayed byte counts, determines whether Keep may proceed.
+
+Availability, effective Storage Safety Reserve, shared/already-protected bytes and newly protected physical bytes may change between display and final recheck because of unrelated filesystem activity, policy refresh or owner-graph changes. The host does not require another confirmation merely because one or more of those byte values moved upward or downward.
+
+Nonblocking drift is accepted only when the same Awaiting Install Decision target and retention episode remain authoritative, the exact managed package content identity and integrity still match, affected stable physical-volume identity has not changed, the requested owner transition is still permitted, storage remains assessable and the fresh commit snapshot preserves the effective Storage Safety Reserve on every affected volume. Unrelated owner changes may alter the physical delta but cannot substitute another target, volume or package.
+
+When all gates still pass, the host atomically commits the Kept Verified Package Copy Pin using the fresh owner/volume evidence even if the confirmation numbers differ. There is no drift threshold, byte-by-byte equality requirement, warning-only reconfirmation or attempt refund. Requiring exact equality would make a bounded 60-second decision unreliable on an active volume without improving the reserve invariant.
+
+The success result shows the actual committed per-volume availability, effective reserve, newly protected physical bytes, shared/already-protected bytes and reserve remaining after Keep. If any displayed value changed, the result may mark it as Updated During Final Check, but it does not retain a long-term before/after activity trail or imply that the earlier projection was an error.
+
+If the final snapshot would create or enlarge a reserve shortfall, storage is no longer assessable, target/episode/volume identity changed, integrity no longer matches or the pending owner is no longer authoritative, the host does not commit Keep. It returns the corresponding typed path-free failure and follows ADR 0235's consumed-attempt terminal behavior. A safer but different package, owner or volume is never accepted as equivalent.
+
+The final calculation and owner transition share one generation-checked transaction boundary so another write or owner mutation cannot be inserted between the successful admission result and Keep owner commit. Ordinary writes not governed by the package owner transaction may still occur afterward; like every accepted ADR 0226 pin, later low-disk pressure does not retroactively invalidate the committed Keep owner.
+
+Final Keep Commit Snapshot state is minimal device-local operational evidence. Only the immediate result needs the final path-free byte values and an Updated During Final Check marker; it stores no managed paths, filesystem event history, unrelated owner identities, asset content, credentials or attention evidence and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
+
+The current Runtime Package session validates and executes a selected install but has no Keep owner registry, free-space/reserve adapter, owner-graph transaction or displayed-versus-commit storage snapshots. This ADR changes documentation only: it calculates/commits no real Keep, reads no package/cache/private state and changes no public IPC/schema/AI Worker API.

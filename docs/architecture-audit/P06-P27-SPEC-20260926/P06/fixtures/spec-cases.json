@@ -1,0 +1,346 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "I01",
+      "input": {
+        "op": "map",
+        "size": [
+          100,
+          50
+        ],
+        "point": [
+          20,
+          10
+        ],
+        "crop": [
+          0,
+          0,
+          100,
+          50
+        ],
+        "scale": [
+          2,
+          2
+        ],
+        "padding": [
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "mapped": [
+          43,
+          24
+        ],
+        "roundtrip": [
+          20,
+          10
+        ]
+      }
+    },
+    {
+      "id": "I02",
+      "input": {
+        "op": "map",
+        "size": [
+          100,
+          50
+        ],
+        "point": [
+          20,
+          10
+        ],
+        "crop": [
+          0,
+          0,
+          50,
+          100
+        ],
+        "scale": [
+          2,
+          2
+        ],
+        "padding": [
+          3,
+          4
+        ],
+        "exif": 6
+      },
+      "expected": {
+        "mapped": [
+          83,
+          44
+        ],
+        "roundtrip": [
+          20,
+          10
+        ]
+      }
+    },
+    {
+      "id": "I03",
+      "input": {
+        "op": "map",
+        "size": [
+          100,
+          50
+        ],
+        "point": [
+          20,
+          10
+        ],
+        "crop": [
+          0,
+          0,
+          100,
+          50
+        ],
+        "scale": [
+          2,
+          2
+        ],
+        "padding": [
+          3,
+          4
+        ],
+        "exif": 2
+      },
+      "expected": {
+        "mapped": [
+          163,
+          24
+        ],
+        "roundtrip": [
+          20,
+          10
+        ]
+      }
+    },
+    {
+      "id": "I04",
+      "input": {
+        "op": "map",
+        "size": [
+          100,
+          50
+        ],
+        "point": [
+          20,
+          10
+        ],
+        "crop": [
+          10,
+          5,
+          50,
+          20
+        ],
+        "scale": [
+          2,
+          2
+        ],
+        "padding": [
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "mapped": [
+          23,
+          14
+        ],
+        "roundtrip": [
+          20,
+          10
+        ]
+      }
+    },
+    {
+      "id": "I05",
+      "input": {
+        "op": "map",
+        "size": [
+          100,
+          50
+        ],
+        "point": [
+          20,
+          10
+        ],
+        "crop": [
+          99,
+          0,
+          5,
+          10
+        ],
+        "scale": [
+          2,
+          2
+        ],
+        "padding": [
+          3,
+          4
+        ]
+      },
+      "expected": "invalid"
+    },
+    {
+      "id": "I06",
+      "input": {
+        "op": "map",
+        "size": [
+          100,
+          50
+        ],
+        "point": [
+          20,
+          10
+        ],
+        "crop": [
+          0,
+          0,
+          100,
+          50
+        ],
+        "scale": [
+          0,
+          1
+        ],
+        "padding": [
+          3,
+          4
+        ]
+      },
+      "expected": "invalid"
+    },
+    {
+      "id": "I07",
+      "input": {
+        "op": "grant",
+        "scope": [
+          "L",
+          "S",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "current": [
+          "L",
+          "S",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": true
+    },
+    {
+      "id": "I08",
+      "input": {
+        "op": "grant",
+        "scope": [
+          "L",
+          "S",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "current": [
+          "L",
+          "NEW",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": false
+    },
+    {
+      "id": "I09",
+      "input": {
+        "op": "grant",
+        "scope": [
+          "L",
+          "S",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "current": [
+          "OTHER",
+          "S",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": false
+    },
+    {
+      "id": "I10",
+      "input": {
+        "op": "grant",
+        "scope": [
+          "L",
+          "S",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "current": [
+          "L",
+          "S",
+          "A",
+          "C",
+          "ocr"
+        ],
+        "now": 2,
+        "expiry": 2
+      },
+      "expected": false
+    },
+    {
+      "id": "I11",
+      "input": {
+        "op": "gc",
+        "owned": true,
+        "temporary": true,
+        "holders": 0,
+        "evidenceRefs": 0,
+        "recoveryRefs": 0
+      },
+      "expected": true
+    },
+    {
+      "id": "I12",
+      "input": {
+        "op": "gc",
+        "owned": true,
+        "temporary": true,
+        "holders": 0,
+        "evidenceRefs": 1,
+        "recoveryRefs": 0
+      },
+      "expected": false
+    },
+    {
+      "id": "I13",
+      "input": {
+        "op": "gc",
+        "owned": true,
+        "temporary": false,
+        "holders": 0,
+        "evidenceRefs": 0,
+        "recoveryRefs": 0
+      },
+      "expected": false
+    }
+  ]
+}

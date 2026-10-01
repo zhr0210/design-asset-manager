@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"4chan.org":{srcMatching:[{processor:({trigger:r})=>r.closest(".fileThumb").href,selectors:".fileThumb>img"},{srcRegExp:"(//i\\.4cdn\\.org/.+)[a-z](@IMG@)",processor:"$1$2"}]}};

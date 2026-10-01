@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"shutterstock.com":{srcMatching:[{processor:({trigger:e})=>e.querySelector("image,img,picture"),selectors:':has(>picture[style*="pointer-events"])'},{srcRegExp:"(//.+\\.shutterstock\\.com/.+/)(?:stock-photo-)?([-\\w]+?)(?:\\d+\\w+)(-\\d+@IMG@)",processor:"$1$21000w$3"}]}};

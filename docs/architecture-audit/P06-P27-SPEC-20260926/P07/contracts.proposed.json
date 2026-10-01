@@ -1,0 +1,13 @@
+{
+  "stage": "P07",
+  "status": "proposed",
+  "units": "bytes",
+  "scope": [
+    "physical-pool",
+    "adapter-budget",
+    "process-instance"
+  ],
+  "unknownIsZero": false,
+  "freshnessClock": "monotonic+bootSession",
+  "actualPlatformsTested": []
+}

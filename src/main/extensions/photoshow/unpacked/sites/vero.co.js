@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"vero.co":{srcMatching:[{srcRegExp:"(//.+?\\.cloudfront\\.net/.+)_.+@IMG@",processor:"$1"}]}};

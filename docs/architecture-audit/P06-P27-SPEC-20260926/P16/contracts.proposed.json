@@ -1,0 +1,14 @@
+{
+  "stage": "P16",
+  "status": "proposed",
+  "cursorFields": [
+    "library",
+    "session",
+    "queryDigest",
+    "indexGeneration",
+    "projectionRevision",
+    "lastKey"
+  ],
+  "tokenizerSelected": null,
+  "ftsRuntimeValidated": false
+}

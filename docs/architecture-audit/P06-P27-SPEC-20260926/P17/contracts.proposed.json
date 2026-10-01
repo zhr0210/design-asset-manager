@@ -1,0 +1,16 @@
+{
+  "stage": "P17",
+  "status": "proposed",
+  "engineSelected": null,
+  "spaceFields": [
+    "model",
+    "weights",
+    "dimension",
+    "normalization",
+    "preprocess",
+    "modality",
+    "metric"
+  ],
+  "sameDimensionImpliesCompatible": false,
+  "productionVectorTests": "NOT_RUN"
+}

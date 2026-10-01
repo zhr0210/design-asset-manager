@@ -1,0 +1,228 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "F01",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "admit",
+            "id": "download",
+            "cost": 1
+          },
+          {
+            "op": "admit",
+            "id": "decode",
+            "cost": 4
+          },
+          {
+            "op": "admit",
+            "id": "ocr",
+            "cost": 3
+          },
+          {
+            "op": "admit",
+            "id": "vlm",
+            "cost": 6
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "admitted",
+          "admitted",
+          "admitted",
+          "waiting-or-revoked"
+        ],
+        "used": 8,
+        "effects": 0,
+        "closed": false
+      }
+    },
+    {
+      "id": "F02",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "closing"
+          },
+          {
+            "op": "admit",
+            "id": "x",
+            "cost": 1
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "revoked",
+          "waiting-or-revoked"
+        ],
+        "used": 0,
+        "effects": 0,
+        "closed": false
+      }
+    },
+    {
+      "id": "F03",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "admit",
+            "id": "commit",
+            "cost": 1
+          },
+          {
+            "op": "closing"
+          },
+          {
+            "op": "close"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "admitted",
+          "revoked",
+          "drain-required"
+        ],
+        "used": 1,
+        "effects": 0,
+        "closed": false
+      }
+    },
+    {
+      "id": "F04",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "admit",
+            "id": "commit",
+            "cost": 1
+          },
+          {
+            "op": "closing"
+          },
+          {
+            "op": "finish",
+            "id": "commit"
+          },
+          {
+            "op": "close"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "admitted",
+          "revoked",
+          "drained",
+          "closed"
+        ],
+        "used": 0,
+        "effects": 0,
+        "closed": true
+      }
+    },
+    {
+      "id": "F05",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "commit",
+            "id": "capture1"
+          },
+          {
+            "op": "commit",
+            "id": "capture1"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "new-effect",
+          "existing-effect"
+        ],
+        "used": 0,
+        "effects": 1,
+        "closed": false
+      }
+    },
+    {
+      "id": "F06",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "admit",
+            "id": "x",
+            "cost": 11
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "waiting-or-revoked"
+        ],
+        "used": 0,
+        "effects": 0,
+        "closed": false
+      }
+    },
+    {
+      "id": "F07",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "closing"
+          },
+          {
+            "op": "close"
+          },
+          {
+            "op": "admit",
+            "id": "x",
+            "cost": 1
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "revoked",
+          "closed",
+          "waiting-or-revoked"
+        ],
+        "used": 0,
+        "effects": 0,
+        "closed": true
+      }
+    },
+    {
+      "id": "F08",
+      "input": {
+        "capacity": 10,
+        "events": [
+          {
+            "op": "finish",
+            "id": "unknown"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "drained"
+        ],
+        "used": 0,
+        "effects": 0,
+        "closed": false
+      }
+    }
+  ]
+}

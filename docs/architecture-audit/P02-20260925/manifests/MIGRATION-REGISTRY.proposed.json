@@ -1,0 +1,335 @@
+{
+  "status": "proposed",
+  "mode": "SPEC",
+  "domain": "managed-library",
+  "knownVersions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "newVersionAllocated": false,
+  "initialCreation": {
+    "targetVersion": 1,
+    "notAnExistingLibraryMigration": true
+  },
+  "entries": [
+    {
+      "migrationId": "managed.v1-to-v2.visual-evidence.r1",
+      "definitionStatus": "proposed-registration-of-existing-DDL",
+      "domain": "managed-library",
+      "fromVersion": 1,
+      "toVersion": 2,
+      "feature": "visual-evidence",
+      "preconditions": [
+        "exact managed:v1 profile",
+        "active exclusive Host lease",
+        "fresh reviewed feature authorization",
+        "verified consistent backup for actual upgrade",
+        "no unreconciled migration/filesystem state"
+      ],
+      "postconditions": [
+        "exact managed:v2 profile",
+        "application_id unchanged",
+        "library/control/lineage identities unchanged",
+        "existing user rows/references preserved",
+        "no new inference/egress/job implied by schema presence"
+      ],
+      "existingSource": {
+        "path": "src/main/visual-ai/visual-ai-storage.ts",
+        "symbol": "enableVisualAiStorage",
+        "fileSha256": "664eb98d6ab35f9d26ae6061021d70245eec2f19eaac84964a6d08dde8a57c76"
+      },
+      "objectChanges": {
+        "tablesAdded": [
+          "visual_ai_evidence"
+        ],
+        "namedIndexesAdded": [
+          "visual_ai_evidence_asset"
+        ],
+        "triggersAdded": []
+      },
+      "seedData": [],
+      "transactionGroup": "all missing steps + existing first domain write in one synchronous outer transaction; v2 retains schema-only confirmed-run behavior",
+      "fileSideEffects": "none for these DDL steps; caller staging/backup have separate journals",
+      "backupRequirement": "consistent SQLite backup before any DDL; files coverage classified separately",
+      "destructiveDownMigration": false,
+      "definitionDigestScope": "canonical JSON registration + referenced source hashes, not a runtime database schema signature",
+      "definitionDigest": "28750c8c1b9cc42a33758e90ca1352c9199658bb2f7ceedb2f0cfd06f23a0044"
+    },
+    {
+      "migrationId": "managed.v2-to-v3.persistent-download.r1",
+      "definitionStatus": "proposed-registration-of-existing-DDL",
+      "domain": "managed-library",
+      "fromVersion": 2,
+      "toVersion": 3,
+      "feature": "persistent-download",
+      "preconditions": [
+        "exact managed:v2 profile",
+        "active exclusive Host lease",
+        "fresh reviewed feature authorization",
+        "verified consistent backup for actual upgrade",
+        "no unreconciled migration/filesystem state"
+      ],
+      "postconditions": [
+        "exact managed:v3 profile",
+        "application_id unchanged",
+        "library/control/lineage identities unchanged",
+        "existing user rows/references preserved",
+        "no new inference/egress/job implied by schema presence"
+      ],
+      "existingSource": {
+        "path": "src/main/managed-download/download-journal.schema.ts",
+        "symbol": "enableDownloadJournal",
+        "fileSha256": "1d86fc76d34430b252cbc94b7bbbe6f0626c9ebe600bb7724548837a311e35c1"
+      },
+      "objectChanges": {
+        "tablesAdded": [
+          "managed_download_intents",
+          "managed_download_chunks"
+        ],
+        "namedIndexesAdded": [
+          "managed_download_intents_library"
+        ],
+        "triggersAdded": [
+          "managed_download_intent_identity_immutable"
+        ]
+      },
+      "seedData": [],
+      "transactionGroup": "all missing steps + existing first domain write in one synchronous outer transaction; v2 retains schema-only confirmed-run behavior",
+      "fileSideEffects": "none for these DDL steps; caller staging/backup have separate journals",
+      "backupRequirement": "consistent SQLite backup before any DDL; files coverage classified separately",
+      "destructiveDownMigration": false,
+      "definitionDigestScope": "canonical JSON registration + referenced source hashes, not a runtime database schema signature",
+      "definitionDigest": "6f8e68f1bebe218d30c8b0d1df2b84c4c7191c31de269cebea4f860eea2b15bb"
+    },
+    {
+      "migrationId": "managed.v3-to-v4.variant-intents.r1",
+      "definitionStatus": "proposed-registration-of-existing-DDL",
+      "domain": "managed-library",
+      "fromVersion": 3,
+      "toVersion": 4,
+      "feature": "variant-intents",
+      "preconditions": [
+        "exact managed:v3 profile",
+        "active exclusive Host lease",
+        "fresh reviewed feature authorization",
+        "verified consistent backup for actual upgrade",
+        "no unreconciled migration/filesystem state"
+      ],
+      "postconditions": [
+        "exact managed:v4 profile",
+        "application_id unchanged",
+        "library/control/lineage identities unchanged",
+        "existing user rows/references preserved",
+        "no new inference/egress/job implied by schema presence"
+      ],
+      "existingSource": {
+        "path": "src/main/library-lifecycle/intake-recovery.schema.ts",
+        "symbol": "enableIntakeRecoveryStorage",
+        "fileSha256": "2c1b01feb88d25621e5ae1617f7964a8b735290f113ea9e0b8b33f40635f861e"
+      },
+      "objectChanges": {
+        "tablesAdded": [
+          "image_variant_intents"
+        ],
+        "namedIndexesAdded": [],
+        "triggersAdded": [
+          "image_variant_intent_immutable"
+        ]
+      },
+      "seedData": [],
+      "transactionGroup": "all missing steps + existing first domain write in one synchronous outer transaction; v2 retains schema-only confirmed-run behavior",
+      "fileSideEffects": "none for these DDL steps; caller staging/backup have separate journals",
+      "backupRequirement": "consistent SQLite backup before any DDL; files coverage classified separately",
+      "destructiveDownMigration": false,
+      "definitionDigestScope": "canonical JSON registration + referenced source hashes, not a runtime database schema signature",
+      "definitionDigest": "a2ab52668b05ecb6762535f8ca7f08396c178ea16aa39b796d1d2c6839400935"
+    },
+    {
+      "migrationId": "managed.v4-to-v5.notebooks.r1",
+      "definitionStatus": "proposed-registration-of-existing-DDL",
+      "domain": "managed-library",
+      "fromVersion": 4,
+      "toVersion": 5,
+      "feature": "notebooks",
+      "preconditions": [
+        "exact managed:v4 profile",
+        "active exclusive Host lease",
+        "fresh reviewed feature authorization",
+        "verified consistent backup for actual upgrade",
+        "no unreconciled migration/filesystem state"
+      ],
+      "postconditions": [
+        "exact managed:v5 profile",
+        "application_id unchanged",
+        "library/control/lineage identities unchanged",
+        "existing user rows/references preserved",
+        "no new inference/egress/job implied by schema presence"
+      ],
+      "existingSource": {
+        "path": "src/main/library-lifecycle/asset-notebook.schema.ts",
+        "symbol": "enableNotebookStorage",
+        "fileSha256": "0bcac39ec7d7faa06c38a6ff81b4a6c541c9e39b6cc203ee0410caaeb372f71a"
+      },
+      "objectChanges": {
+        "tablesAdded": [
+          "asset_notebooks"
+        ],
+        "namedIndexesAdded": [],
+        "triggersAdded": []
+      },
+      "seedData": [],
+      "transactionGroup": "all missing steps + existing first domain write in one synchronous outer transaction; v2 retains schema-only confirmed-run behavior",
+      "fileSideEffects": "none for these DDL steps; caller staging/backup have separate journals",
+      "backupRequirement": "consistent SQLite backup before any DDL; files coverage classified separately",
+      "destructiveDownMigration": false,
+      "definitionDigestScope": "canonical JSON registration + referenced source hashes, not a runtime database schema signature",
+      "definitionDigest": "6f604b3944a17aa1f9534b29946b71018c8851d7b5c95aad57e0e749d4316afc"
+    },
+    {
+      "migrationId": "managed.v5-to-v6.organization.r1",
+      "definitionStatus": "proposed-registration-of-existing-DDL",
+      "domain": "managed-library",
+      "fromVersion": 5,
+      "toVersion": 6,
+      "feature": "organization",
+      "preconditions": [
+        "exact managed:v5 profile",
+        "active exclusive Host lease",
+        "fresh reviewed feature authorization",
+        "verified consistent backup for actual upgrade",
+        "no unreconciled migration/filesystem state"
+      ],
+      "postconditions": [
+        "exact managed:v6 profile",
+        "application_id unchanged",
+        "library/control/lineage identities unchanged",
+        "existing user rows/references preserved",
+        "no new inference/egress/job implied by schema presence"
+      ],
+      "existingSource": {
+        "path": "src/main/library-lifecycle/library-organization.schema.ts",
+        "symbol": "enableOrganizationStorage",
+        "fileSha256": "7e7af7b7d4909de5711f02206617887df21e21c5ee3870e8f185715110ac2aa4"
+      },
+      "objectChanges": {
+        "tablesAdded": [
+          "library_organization_state",
+          "library_folders",
+          "library_folder_assets",
+          "library_palette_colors"
+        ],
+        "namedIndexesAdded": [
+          "library_folder_names",
+          "library_folder_asset_lookup"
+        ],
+        "triggersAdded": []
+      },
+      "seedData": [
+        {
+          "table": "library_organization_state",
+          "singleton": 1,
+          "revision": 0
+        }
+      ],
+      "transactionGroup": "all missing steps + existing first domain write in one synchronous outer transaction; v2 retains schema-only confirmed-run behavior",
+      "fileSideEffects": "none for these DDL steps; caller staging/backup have separate journals",
+      "backupRequirement": "consistent SQLite backup before any DDL; files coverage classified separately",
+      "destructiveDownMigration": false,
+      "definitionDigestScope": "canonical JSON registration + referenced source hashes, not a runtime database schema signature",
+      "definitionDigest": "ef2770b9f817165582bf04c5588cb8b62d699137285727f059c36a08001651a3"
+    },
+    {
+      "migrationId": "managed.v6-to-v7.work-sets.r1",
+      "definitionStatus": "proposed-registration-of-existing-DDL",
+      "domain": "managed-library",
+      "fromVersion": 6,
+      "toVersion": 7,
+      "feature": "work-sets",
+      "preconditions": [
+        "exact managed:v6 profile",
+        "active exclusive Host lease",
+        "fresh reviewed feature authorization",
+        "verified consistent backup for actual upgrade",
+        "no unreconciled migration/filesystem state"
+      ],
+      "postconditions": [
+        "exact managed:v7 profile",
+        "application_id unchanged",
+        "library/control/lineage identities unchanged",
+        "existing user rows/references preserved",
+        "no new inference/egress/job implied by schema presence"
+      ],
+      "existingSource": {
+        "path": "src/main/library-lifecycle/work-set.schema.ts",
+        "symbol": "enableWorkSetStorage",
+        "fileSha256": "0fcf4c20bca7d3392d5576e89c83efe101afd1f91b3e2ebf3aed2bbea406dc41"
+      },
+      "objectChanges": {
+        "tablesAdded": [
+          "work_sets",
+          "work_set_members",
+          "work_window_layouts"
+        ],
+        "namedIndexesAdded": [],
+        "triggersAdded": []
+      },
+      "seedData": [],
+      "transactionGroup": "all missing steps + existing first domain write in one synchronous outer transaction; v2 retains schema-only confirmed-run behavior",
+      "fileSideEffects": "none for these DDL steps; caller staging/backup have separate journals",
+      "backupRequirement": "consistent SQLite backup before any DDL; files coverage classified separately",
+      "destructiveDownMigration": false,
+      "definitionDigestScope": "canonical JSON registration + referenced source hashes, not a runtime database schema signature",
+      "definitionDigest": "13dc4a785701ee763298a8a4ee34bbffb945d1d39d7c47e0f60b9fd69ca0f528"
+    },
+    {
+      "migrationId": "managed.v7-to-v8.dedicated-ocr.r1",
+      "definitionStatus": "proposed-registration-of-existing-DDL",
+      "domain": "managed-library",
+      "fromVersion": 7,
+      "toVersion": 8,
+      "feature": "dedicated-ocr",
+      "preconditions": [
+        "exact managed:v7 profile",
+        "active exclusive Host lease",
+        "fresh reviewed feature authorization",
+        "verified consistent backup for actual upgrade",
+        "no unreconciled migration/filesystem state"
+      ],
+      "postconditions": [
+        "exact managed:v8 profile",
+        "application_id unchanged",
+        "library/control/lineage identities unchanged",
+        "existing user rows/references preserved",
+        "no new inference/egress/job implied by schema presence"
+      ],
+      "existingSource": {
+        "path": "src/main/ocr/ocr.schema.ts",
+        "symbol": "enableOcrStorage",
+        "fileSha256": "e3c8780202b09ac7bce4c6fe5a35a1a2a787e9ed2ac42c854daec13d98a5f18c"
+      },
+      "objectChanges": {
+        "tablesAdded": [
+          "asset_ocr_evidence",
+          "asset_ocr_state"
+        ],
+        "namedIndexesAdded": [
+          "asset_ocr_evidence_asset"
+        ],
+        "triggersAdded": []
+      },
+      "seedData": [],
+      "transactionGroup": "all missing steps + existing first domain write in one synchronous outer transaction; v2 retains schema-only confirmed-run behavior",
+      "fileSideEffects": "none for these DDL steps; caller staging/backup have separate journals",
+      "backupRequirement": "consistent SQLite backup before any DDL; files coverage classified separately",
+      "destructiveDownMigration": false,
+      "definitionDigestScope": "canonical JSON registration + referenced source hashes, not a runtime database schema signature",
+      "definitionDigest": "1d48a70121cf9e95a281272f5e6f57603c340df2a9b6515cb1851ed7784939a7"
+    }
+  ]
+}

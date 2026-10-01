@@ -1,7 +1,10 @@
 import { create } from 'zustand'
+import type { AssetTaggingModelId } from '../../shared/workflows/asset-tagging.workflow'
+import { classifyAiTaskStatus, isAiTaskTerminalStatus } from '../../shared/workflows/ai-task-status.workflow'
 
 export interface Asset {
   id: string
+  revision?: string
   title: string
   fileName: string
   filePath: string
@@ -26,6 +29,9 @@ export interface Asset {
   aiCaptionSource?: string
   aiCaptionUpdatedAt?: string
   aiCaptionIsUserEdited?: number
+  tagAnalysis?:import('../../shared/contracts/tag-execution.contract').TagCurrentSummary|null
+  visualAi?: import('../../shared/contracts/visual-ai.contract').VisualAiSummary
+  ocr?: import('../../shared/contracts/asset-ocr.contract').OcrSummary
   aiOcrText?: string
   aiOcrSource?: string
   aiOcrUpdatedAt?: string
@@ -34,6 +40,7 @@ export interface Asset {
   lastTagUpdatedAt: string
   color_palette_json?: string
   tags: string[]
+  tagAliases?: string[]
   createdAt: string
 }
 
@@ -72,9 +79,12 @@ export interface AssetTagRelation {
   tag_color: string
 }
 
+export type AssetLoadStatus = 'idle' | 'loading' | 'ready' | 'error'
+
 interface AssetState {
   assets: Asset[]
   tags: Tag[]
+  tagLoadError: string | null
   selectedAsset: Asset | null
   activeTagSearchQueries: string[]
   bulkSelectedAssetIds: string[]
@@ -83,7 +93,11 @@ interface AssetState {
   filterSite: string
   filterTag: string
   includePending: boolean
+  assetLoadStatus: AssetLoadStatus
+  assetLoadError: string | null
+  hasLoadedAssets: boolean
 
+  resetForLibraryTransition: () => void
   setSelectedAsset: (asset: Asset | null) => void
   setSearchQuery: (query: string) => void
   setFilterSite: (site: string) => void
@@ -128,11 +142,8 @@ interface AssetState {
   updateAssetCaption: (assetId: string, caption: string) => Promise<void>
   resetAssetCaptionEdited: (assetId: string) => Promise<void>
 
-  // Mock AI Suggestions pipeline
-  generateMockAiSuggestions: (assetId: string, modelsToRun?: string[]) => Promise<{ success: boolean; error?: string }>
-
-  // Qwen-VL Senior Deep Analysis
-  generateDeepAnalysis: (assetId: string) => Promise<void>
+  // Real AI tagging pipeline
+  generateAiSuggestions: (assetId: string, modelsToRun?: readonly AssetTaggingModelId[]) => Promise<{ success: boolean; error?: string }>
 
   // Qwen3-VL Advanced Prompt Reverse
   runPromptReverse: (assetId: string, modelId: string, modelPath: string, options?: { promptTemplateId?: string; promptTemplateText?: string }) => Promise<any>
@@ -140,18 +151,19 @@ interface AssetState {
 
 const api = (window as any).electronAPI
 
+let latestAssetLoadRequestId = 0
+let latestTagLoadRequestId = 0
+let latestLibraryEpoch = 0
+
 // Mapper to map database snake_case structures to camelCase
 function mapDbAssetToAsset(dbAsset: any): Asset {
-  const isHttp = (p: string) => p && (p.startsWith('http://') || p.startsWith('https://'))
-  const thumbnailPath = dbAsset.thumbnail_path
-    ? (isHttp(dbAsset.thumbnail_path) ? dbAsset.thumbnail_path : `local-file://${dbAsset.thumbnail_path}`)
-    : ''
-  const fileUrl = dbAsset.file_path
-    ? (isHttp(dbAsset.file_path) ? dbAsset.file_path : `local-file://${dbAsset.file_path}`)
-    : ''
+  const isControlledPreview = (p: string) => p && p.startsWith('dam-preview://')
+  const thumbnailPath = isControlledPreview(dbAsset.thumbnail_path) ? dbAsset.thumbnail_path : ''
+  const fileUrl = thumbnailPath
 
   return {
     id: dbAsset.id,
+    revision: dbAsset.revision,
     title: dbAsset.title,
     fileName: dbAsset.file_name,
     filePath: dbAsset.file_path,
@@ -172,6 +184,9 @@ function mapDbAssetToAsset(dbAsset: any): Asset {
     aiTaggedAt: dbAsset.ai_tagged_at || '',
     aiPromptStatus: dbAsset.ai_prompt_status || 'not_started',
     aiPrompt: dbAsset.ai_prompt || '',
+    visualAi: dbAsset.visualAi,
+    tagAnalysis:dbAsset.tagAnalysis,
+    ocr: dbAsset.ocr,
     aiCaption: dbAsset.ai_caption || '',
     aiCaptionSource: dbAsset.ai_caption_source || '',
     aiCaptionUpdatedAt: dbAsset.ai_caption_updated_at || '',
@@ -184,6 +199,7 @@ function mapDbAssetToAsset(dbAsset: any): Asset {
     lastTagUpdatedAt: dbAsset.last_tag_updated_at || '',
     color_palette_json: dbAsset.color_palette_json || '',
     tags: dbAsset.tags || [],
+    tagAliases: dbAsset.tagAliases || [],
     createdAt: dbAsset.created_at
   }
 }
@@ -206,10 +222,10 @@ function mapDbTagToTag(dbTag: any): Tag {
     description: dbTag.description || '',
     shorthand: dbTag.shorthand || '',
     aliases: parsedAliases,
-    parentId: dbTag.parent_id || null,
+    parentId: dbTag.parentId ?? dbTag.parent_id ?? null,
     isCategory: !!dbTag.is_category,
-    isSystem: !!dbTag.is_system,
-    usageCount: dbTag.usage_count || 0,
+    isSystem: !!(dbTag.isSystem ?? dbTag.is_system),
+    usageCount: dbTag.usage_count ?? dbTag.usageCount ?? 0,
     createdAt: dbTag.created_at,
     updatedAt: dbTag.updated_at || dbTag.created_at
   }
@@ -218,6 +234,7 @@ function mapDbTagToTag(dbTag: any): Tag {
 export const useAssetStore = create<AssetState>((set, get) => ({
   assets: [],
   tags: [],
+  tagLoadError: null,
   selectedAsset: null,
   activeTagSearchQueries: [],
   bulkSelectedAssetIds: [],
@@ -226,6 +243,30 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   filterSite: '',
   filterTag: '',
   includePending: false,
+  assetLoadStatus: 'idle',
+  assetLoadError: null,
+  hasLoadedAssets: false,
+
+  resetForLibraryTransition: () => {
+    latestLibraryEpoch += 1
+    latestAssetLoadRequestId += 1
+    latestTagLoadRequestId += 1
+    set({
+      assets: [],
+      tags: [], tagLoadError: null,
+      selectedAsset: null,
+      activeTagSearchQueries: [],
+      bulkSelectedAssetIds: [],
+      assetRelations: {},
+      searchQuery: '',
+      filterSite: '',
+      filterTag: '',
+      includePending: false,
+      assetLoadStatus: 'idle',
+      assetLoadError: null,
+      hasLoadedAssets: false
+    })
+  },
 
   setSelectedAsset: (asset) => {
     set({ selectedAsset: asset })
@@ -285,98 +326,129 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   loadAssets: async () => {
-    if (api) {
-      try {
-        const queries = get().activeTagSearchQueries
-        const includePending = get().includePending
-        const dbAssets = await api.listAssets({
-          keyword: queries.length > 0 ? queries.join(' ') : undefined,
-          includePending
+    const requestId = ++latestAssetLoadRequestId
+    set({
+      assetLoadStatus: 'loading',
+      assetLoadError: null
+    })
+
+    const queries = get().activeTagSearchQueries
+    const includePending = get().includePending
+
+    const currentApi = typeof window !== 'undefined' ? (window as any).electronAPI : undefined
+    if (!currentApi || typeof currentApi.listAssets !== 'function') {
+      if (requestId === latestAssetLoadRequestId) {
+        set({
+          assetLoadStatus: 'error',
+          assetLoadError: '素材服务不可用，请稍后重试'
         })
-        const mappedAssets = dbAssets.map(mapDbAssetToAsset)
-        set({ assets: mappedAssets })
-        
-        // Refresh selectedAsset if loaded
-        const currentSel = get().selectedAsset
-        if (currentSel) {
-          const matched = mappedAssets.find((a: Asset) => a.id === currentSel.id)
-          if (matched) {
-            set({ selectedAsset: matched })
-          }
+      }
+      return
+    }
+
+    try {
+      const dbAssets = await currentApi.listAssets({
+        keyword: queries.length > 0 ? queries.join(' ') : undefined,
+        includePending
+      })
+
+      if (requestId !== latestAssetLoadRequestId) {
+        return
+      }
+
+      if (!Array.isArray(dbAssets)) {
+        set({
+          assetLoadStatus: 'error',
+          assetLoadError: '素材数据格式异常，请稍后重试'
+        })
+        return
+      }
+
+      const mappedAssets = dbAssets.map(mapDbAssetToAsset)
+
+      const currentSel = get().selectedAsset
+      let updatedSelected: Asset | null = null
+      if (currentSel) {
+        const matched = mappedAssets.find((a: Asset) => a.id === currentSel.id)
+        if (matched) {
+          updatedSelected = matched
         }
-      } catch (err) {
-        console.error('[Store] Failed to load assets from DB:', err)
+      }
+
+      const currentBulkIds = get().bulkSelectedAssetIds
+      const validIdSet = new Set(mappedAssets.map((a: Asset) => a.id))
+      const updatedBulkIds = currentBulkIds.filter((id) => validIdSet.has(id))
+
+      set({
+        assets: mappedAssets,
+        assetLoadStatus: 'ready',
+        assetLoadError: null,
+        hasLoadedAssets: true,
+        selectedAsset: updatedSelected,
+        bulkSelectedAssetIds: updatedBulkIds
+      })
+    } catch {
+      if (requestId === latestAssetLoadRequestId) {
+        console.error('[Store] Failed to load assets from DB')
+        set({
+          assetLoadStatus: 'error',
+          assetLoadError: '加载素材库失败，请重试'
+        })
       }
     }
   },
 
   addAsset: async (assetData) => {
-    const assetId = `ast-${Math.random().toString(36).substr(2, 9)}`
-    
-    // Map to DB snake_case schema
-    const newDbAsset = {
-      id: assetId,
-      title: assetData.title,
-      file_name: assetData.fileName,
-      file_path: assetData.filePath,
-      thumbnail_path: assetData.thumbnailPath,
-      source_site_id: assetData.sourceSiteId,
-      source_site_name: assetData.sourceSiteName,
-      source_page_url: assetData.sourcePageUrl,
-      original_url: assetData.originalUrl,
-      width: assetData.width,
-      height: assetData.height,
-      file_size: assetData.fileSize,
-      file_type: assetData.fileType,
-      dominant_color: assetData.dominantColor,
-      browser_page_title: assetData.browserPageTitle || null,
-      capture_method: assetData.captureMethod || 'search'
-    }
-
-    if (api) {
-      try {
-        const res = await api.saveAsset(newDbAsset, assetData.tags)
-        if (res.success) {
-          await get().loadAssets()
-          await get().loadTags()
-        }
-      } catch (err) {
-        console.error('[Store] Failed to save asset via IPC:', err)
-      }
-    }
+    void assetData
+    console.warn('[Store] Direct Asset writes are disabled; use the Main-owned Copy Into Library workflow.')
   },
 
   deleteAsset: async (id) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       try {
-        const res = await api.deleteAsset(id)
-        if (res.success) {
+        const asset = get().assets.find((candidate) => candidate.id === id)
+        const libraryApi = api.library
+        if (!asset || !libraryApi) throw new Error('素材回收服务不可用。')
+        const current = await libraryApi.trashInspect(id)
+        if (!current?.revision) throw new Error('Library Asset revision unavailable.')
+        const plan = await libraryApi.trashPrepare({ designAssetIdentity: id, expectedRevision: current.revision })
+        if (!plan?.plan?.receipt) throw new Error(plan?.error || 'Asset Trash plan unavailable.')
+        const res = await libraryApi.trashDispatch({ kind: 'confirm-plan', planReceipt: plan.plan.receipt })
+        if (epoch !== latestLibraryEpoch) return
+        if (res?.state === 'trash') {
           await get().loadAssets()
           await get().loadTags()
+          return
         }
-      } catch (err) {
-        console.error('[Store] Failed to delete asset via IPC:', err)
+        throw new Error('素材未能移到回收站。')
+      } catch {
+        console.error('[Store] Failed to move an Asset to Trash.')
+        throw new Error('素材未能移到回收站。')
       }
     }
   },
 
   // Tag CRUD Operations
   loadTags: async () => {
-    if (api) {
-      try {
-        const res = await api.tagList()
-        if (res.success) {
-          set({ tags: res.tags.map(mapDbTagToTag) })
-        }
-      } catch (err) {
-        console.error('[Store] Failed to load tags:', err)
-      }
+    const requestId = ++latestTagLoadRequestId
+    set({ tagLoadError: null })
+    try {
+      if (!api) throw new Error('TAG_API_UNAVAILABLE')
+      const res = await api.tagList()
+      if (requestId !== latestTagLoadRequestId) return
+      if (!res?.success || !Array.isArray(res.tags)) throw new Error('TAG_LIST_UNAVAILABLE')
+      set({ tags: res.tags.map(mapDbTagToTag), tagLoadError: null })
+    } catch {
+      if (requestId === latestTagLoadRequestId) set({ tagLoadError: '标签加载失败，当前内容可能未更新，请重试。' })
     }
   },
 
   createTag: async (input) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.tagCreate(input)
+      if (epoch !== latestLibraryEpoch) return undefined
       if (res.success) {
         await get().loadTags()
         return res.tag
@@ -386,8 +458,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   updateTag: async (id, input) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.tagUpdate(id, input)
+      if (epoch !== latestLibraryEpoch) return undefined
       if (res.success) {
         await get().loadTags()
         await get().loadAssets()
@@ -401,8 +475,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   deleteTag: async (id) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.tagDelete(id)
+      if (epoch !== latestLibraryEpoch) return undefined
       if (res.success) {
         await get().loadTags()
         await get().loadAssets()
@@ -416,8 +492,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   mergeTags: async (sourceTagId, targetTagId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.tagMerge(sourceTagId, targetTagId)
+      if (epoch !== latestLibraryEpoch) return { success: false, error: '资料库已切换，请重新打开标签。' }
       if (res.success) {
         await get().loadTags()
         await get().loadAssets()
@@ -430,8 +508,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   createAlias: async (tagId, alias) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.tagCreateAlias(tagId, alias)
+      if (epoch !== latestLibraryEpoch) return { success: false, error: '资料库已切换，请重新打开标签。' }
       if (res.success) {
         await get().loadTags()
       }
@@ -440,8 +520,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   removeAlias: async (tagId, alias) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.tagRemoveAlias(tagId, alias)
+      if (epoch !== latestLibraryEpoch) return { success: false, error: '资料库已切换，请重新打开标签。' }
       if (res.success) {
         await get().loadTags()
       }
@@ -450,8 +532,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   setParent: async (tagId, parentId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.tagSetParent(tagId, parentId)
+      if (epoch !== latestLibraryEpoch) return { success: false, error: '资料库已切换，请重新打开标签。' }
       if (res.success) {
         await get().loadTags()
       }
@@ -461,10 +545,11 @@ export const useAssetStore = create<AssetState>((set, get) => ({
 
   // Relations
   loadAssetTags: async (assetId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       try {
         const res = await api.assetTagListByAsset(assetId)
-        if (res.success) {
+        if (epoch === latestLibraryEpoch && get().selectedAsset?.id === assetId && res.success) {
           set((state) => ({
             assetRelations: {
               ...state.assetRelations,
@@ -472,15 +557,17 @@ export const useAssetStore = create<AssetState>((set, get) => ({
             }
           }))
         }
-      } catch (err) {
-        console.error('[Store] Failed to load asset tags relations:', err)
+      } catch {
+        console.error('[Store] Failed to load Asset Tag relations.')
       }
     }
   },
 
   addTagToAsset: async (assetId, tagId, options) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.assetTagAdd(assetId, tagId, options)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssetTags(assetId)
         await get().loadAssets()
@@ -490,8 +577,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   removeTagFromAsset: async (assetId, tagId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.assetTagRemove(assetId, tagId)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssetTags(assetId)
         await get().loadAssets()
@@ -501,8 +590,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   batchAddTagsToAssets: async (assetIds, tagIds, options) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.assetTagBatchAdd(assetIds, tagIds, options)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssets()
         await get().loadTags()
@@ -514,8 +605,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   batchRemoveTagsFromAssets: async (assetIds, tagIds) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.assetTagBatchRemove(assetIds, tagIds)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssets()
         await get().loadTags()
@@ -527,8 +620,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   replaceTagsForAssets: async (assetIds, oldTagId, newTagId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.assetTagReplace(assetIds, oldTagId, newTagId)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssets()
         await get().loadTags()
@@ -540,8 +635,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   confirmAiTag: async (assetTagId, assetId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.assetTagConfirmAi(assetTagId)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssetTags(assetId)
         await get().loadAssets()
@@ -551,8 +648,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   rejectAiTag: async (assetTagId, assetId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.assetTagRejectAi(assetTagId)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssetTags(assetId)
         await get().loadAssets()
@@ -562,8 +661,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   updateAssetCaption: async (assetId, caption) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.updateAssetCaption(assetId, caption)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssets()
       }
@@ -571,8 +672,10 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   resetAssetCaptionEdited: async (assetId) => {
+    const epoch = latestLibraryEpoch
     if (api) {
       const res = await api.resetAssetCaptionEdited(assetId)
+      if (epoch !== latestLibraryEpoch) return
       if (res.success) {
         await get().loadAssets()
       }
@@ -580,7 +683,7 @@ export const useAssetStore = create<AssetState>((set, get) => ({
   },
 
   // Real AI tagging trigger. Mock fallbacks are intentionally blocked in product UI.
-  generateMockAiSuggestions: async (assetId, modelsToRun?: string[]) => {
+  generateAiSuggestions: async (assetId, modelsToRun) => {
     if (!api) {
       return { success: false, error: 'Electron API is unavailable.' }
     }
@@ -615,18 +718,19 @@ export const useAssetStore = create<AssetState>((set, get) => ({
         const updatedAsset = get().assets.find((a: Asset) => a.id === assetId)
         if (updatedAsset) {
           finalStatus = updatedAsset.aiTagStatus
-          if (finalStatus === 'synced' || finalStatus === 'completed' || finalStatus === 'failed') {
+          if (isAiTaskTerminalStatus(finalStatus)) {
             break
           }
         }
         await new Promise(resolve => setTimeout(resolve, 500))
       }
 
-      if (finalStatus === 'failed') {
+      const finalClassification = classifyAiTaskStatus(finalStatus)
+      if (finalClassification.isFailure) {
         return { success: false, error: '真实 AI 打标任务失败，请检查 Python Worker 日志和模型依赖。' }
       }
 
-      if (finalStatus !== 'synced' && finalStatus !== 'completed') {
+      if (!finalClassification.isSuccess) {
         return { success: false, error: '真实 AI 打标任务超时，未写入 mock 标签。' }
       }
 
@@ -640,45 +744,6 @@ export const useAssetStore = create<AssetState>((set, get) => ({
       await get().loadAssetTags(assetId)
       await get().loadAssets()
       await get().loadTags()
-    }
-  },
-
-  generateDeepAnalysis: async (assetId: string) => {
-    if (api) {
-      try {
-        const asset = get().assets.find((a: Asset) => a.id === assetId)
-        if (!asset) return
-
-        console.log('[Store] Dispatching generateDeepAnalysis to Qwen-VL analysis worker...')
-        const res = await api.aiAnalysisGenerate(assetId, asset.filePath)
-        
-        if (res && res.success) {
-          // Trigger immediate batch processing
-          await api.aiProcessBatch()
-          
-          // Poll the asset status from SQLite until synced or failed
-          let isComplete = false
-          const startTime = Date.now()
-          while (!isComplete && (Date.now() - startTime < 45000)) {
-            await get().loadAssets()
-            const updatedAsset = get().assets.find((a: Asset) => a.id === assetId)
-            if (updatedAsset) {
-              const status = updatedAsset.aiAnalysisStatus
-              if (status === 'synced' || status === 'completed' || status === 'failed') {
-                isComplete = true
-                break
-              }
-            }
-            await new Promise(resolve => setTimeout(resolve, 500))
-          }
-        }
-      } catch (err) {
-        console.error('[Store] Failed to generate Qwen-VL deep analysis:', err)
-      } finally {
-        await get().loadAssetTags(assetId)
-        await get().loadAssets()
-        await get().loadTags()
-      }
     }
   },
 

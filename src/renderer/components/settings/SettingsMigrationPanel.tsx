@@ -17,11 +17,19 @@ import type {
   SettingsMigrationDryRunResponse,
   SettingsMigrationListBackupsResponse
 } from '../../../shared/contracts/settings-migration.contract'
-import type { SettingsMigrationPlan } from '../../../shared/types/settings-migration.types'
+import type { SettingsMigrationPlan, SettingsCompatibilityChange } from '../../../shared/types/settings-migration.types'
+import {
+  projectSettingsMigrationBackups,
+  projectSettingsMigrationStatus,
+  projectSettingsMigrationSummary,
+  resolvePlanPanelStatus,
+  resolveReportPanelStatus,
+  SETTINGS_MIGRATION_EMPTY_LABELS
+} from '../../../shared/workflows/settings-migration.workflow'
+import type { SettingsMigrationPanelStatus } from '../../../shared/workflows/settings-migration.workflow'
 
-type PanelStatus = 'not_analyzed' | 'loading' | 'safe_to_apply' | 'blocked' | 'failed' | 'no_changes'
+type PanelStatus = SettingsMigrationPanelStatus
 type CompatibilityReport = NonNullable<SettingsMigrationAnalyzeResponse['data']>
-type SettingsCompatibilityChange = SettingsMigrationPlan['changes'][number]
 
 type SettingsMigrationApi = {
   createPlan: () => Promise<SettingsMigrationCreatePlanResponse>
@@ -34,24 +42,6 @@ type ElectronApiWindow = Window & {
   electronAPI?: {
     settingsMigration?: SettingsMigrationApi
   }
-}
-
-const statusStyles: Record<PanelStatus, string> = {
-  not_analyzed: 'border-slate-200 bg-slate-50 text-slate-600',
-  loading: 'border-blue-200 bg-blue-50 text-blue-700',
-  safe_to_apply: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  blocked: 'border-amber-200 bg-amber-50 text-amber-700',
-  failed: 'border-rose-200 bg-rose-50 text-rose-700',
-  no_changes: 'border-slate-200 bg-white text-slate-600'
-}
-
-const statusLabels: Record<PanelStatus, string> = {
-  not_analyzed: 'Not analyzed',
-  loading: 'Checking',
-  safe_to_apply: 'Safe to apply later',
-  blocked: 'Blocked',
-  failed: 'Failed',
-  no_changes: 'No changes'
 }
 
 export default function SettingsMigrationPanel() {
@@ -77,7 +67,7 @@ export default function SettingsMigrationPanel() {
   const runAction = async (label: string, action: () => Promise<void>) => {
     if (!api) {
       setStatus('failed')
-      setError('Settings migration API is unavailable in preload.')
+      setError('设置迁移 API 在预加载层中不可用。')
       return
     }
 
@@ -98,39 +88,39 @@ export default function SettingsMigrationPanel() {
     runAction('Analyzing', async () => {
       const response = await api!.analyze()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Analyze failed.')
+        throw new Error(response.error ?? '分析失败。')
       }
       setAnalysis(response.data)
-      setStatus(getReportPanelStatus(response.data))
+      setStatus(resolveReportPanelStatus(response.data))
     })
 
   const handleCreatePlan = () =>
     runAction('Creating plan', async () => {
       const response = await api!.createPlan()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Plan creation failed.')
+        throw new Error(response.error ?? '创建迁移方案失败。')
       }
       setPlan(response.data)
       setAnalysis(response.data.dryRunResult.report)
-      setStatus(getPlanPanelStatus(response.data))
+      setStatus(resolvePlanPanelStatus(response.data))
     })
 
   const handleDryRun = () =>
     runAction('Dry run', async () => {
       const response = await api!.dryRun()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Dry run failed.')
+        throw new Error(response.error ?? '演练失败。')
       }
       setPlan(response.data)
       setAnalysis(response.data.dryRunResult.report)
-      setStatus(getPlanPanelStatus(response.data))
+      setStatus(resolvePlanPanelStatus(response.data))
     })
 
   const handleRefreshBackups = () =>
     runAction('Refreshing backups', async () => {
       const response = await api!.listBackups()
       if (!response.success || !response.data) {
-        throw new Error(response.error ?? 'Backup refresh failed.')
+        throw new Error(response.error ?? '刷新备份失败。')
       }
       setBackups(response.data.backups)
       setStatus((current) => (current === 'loading' ? 'not_analyzed' : current))
@@ -144,9 +134,9 @@ export default function SettingsMigrationPanel() {
             <ClipboardCheck className="h-5 w-5" />
           </div>
           <div>
-            <h4 className="text-[14px] font-black text-slate-900">Settings migration dry run</h4>
+            <h4 className="text-[14px] font-black text-slate-900">设置迁移演练</h4>
             <p className="mt-1 text-[11px] font-semibold leading-5 text-slate-400">
-              Read-only compatibility checks for future cross-platform settings migration.
+              用于未来跨平台设置迁移的只读兼容性检查。
             </p>
           </div>
         </div>
@@ -154,14 +144,14 @@ export default function SettingsMigrationPanel() {
       </div>
 
       <div className="mt-4 rounded-2xl border border-cyan-100 bg-cyan-50/70 p-3 text-[10.5px] font-bold leading-5 text-cyan-800">
-        This panel is read-only. It does not write settings.json, does not auto-migrate, does not overwrite paths, and exposes no write or restore controls.
+        此面板为只读。它不会写入 settings.json，不会自动迁移，不会覆盖路径，且不提供任何写入或恢复控件。
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <ActionButton label="Analyze" icon={<FileSearch className="h-3.5 w-3.5" />} busy={activeAction === 'Analyzing'} disabled={isBusy} onClick={handleAnalyze} />
-        <ActionButton label="Plan" icon={<ClipboardCheck className="h-3.5 w-3.5" />} busy={activeAction === 'Creating plan'} disabled={isBusy} onClick={handleCreatePlan} />
-        <ActionButton label="Dry run" icon={<ShieldCheck className="h-3.5 w-3.5" />} busy={activeAction === 'Dry run'} disabled={isBusy} onClick={handleDryRun} />
-        <ActionButton label="Backups" icon={<RefreshCw className="h-3.5 w-3.5" />} busy={activeAction === 'Refreshing backups'} disabled={isBusy} onClick={handleRefreshBackups} />
+        <ActionButton label="分析" icon={<FileSearch className="h-3.5 w-3.5" />} busy={activeAction === 'Analyzing'} disabled={isBusy} onClick={handleAnalyze} />
+        <ActionButton label="规划" icon={<ClipboardCheck className="h-3.5 w-3.5" />} busy={activeAction === 'Creating plan'} disabled={isBusy} onClick={handleCreatePlan} />
+        <ActionButton label="演练" icon={<ShieldCheck className="h-3.5 w-3.5" />} busy={activeAction === 'Dry run'} disabled={isBusy} onClick={handleDryRun} />
+        <ActionButton label="备份列表" icon={<RefreshCw className="h-3.5 w-3.5" />} busy={activeAction === 'Refreshing backups'} disabled={isBusy} onClick={handleRefreshBackups} />
       </div>
 
       {error && (
@@ -174,8 +164,8 @@ export default function SettingsMigrationPanel() {
       <div className="mt-4 space-y-3">
         <PlanSummary plan={plan} analysis={analysis} />
         <ChangeList changes={displayedChanges} />
-        <TextList title="Warnings" items={displayedWarnings} tone="warning" />
-        <TextList title="Blocking issues" items={displayedBlockingIssues} tone="blocked" />
+        <TextList items={displayedWarnings} tone="warning" />
+        <TextList items={displayedBlockingIssues} tone="blocked" />
         <BackupList backups={backups} />
       </div>
     </section>
@@ -186,34 +176,23 @@ function getSettingsMigrationApi(): SettingsMigrationApi | null {
   return (window as ElectronApiWindow).electronAPI?.settingsMigration ?? null
 }
 
-function getPlanPanelStatus(plan: SettingsMigrationPlan): PanelStatus {
-  if (plan.blockingIssues.length > 0 || !plan.canApply) return 'blocked'
-  if (!plan.changes.length && !plan.warnings.length) return 'no_changes'
-  return 'safe_to_apply'
-}
-
-function getReportPanelStatus(report: CompatibilityReport): PanelStatus {
-  if (report.blockingIssues.length > 0 || !report.safeToApplyLater) return 'blocked'
-  if (!report.wouldChange && !report.warnings.length) return 'no_changes'
-  return 'safe_to_apply'
-}
-
 function StatusBadge({ status }: { status: PanelStatus }) {
+  const display = projectSettingsMigrationStatus(status)
   const icon =
-    status === 'failed' ? (
+    display.iconName === 'x-circle' ? (
       <XCircle className="h-3.5 w-3.5" />
-    ) : status === 'blocked' ? (
+    ) : display.iconName === 'alert-triangle' ? (
       <AlertTriangle className="h-3.5 w-3.5" />
-    ) : status === 'loading' ? (
+    ) : display.iconName === 'loader' ? (
       <Loader2 className="h-3.5 w-3.5 animate-spin" />
     ) : (
       <CheckCircle2 className="h-3.5 w-3.5" />
     )
 
   return (
-    <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-black ${statusStyles[status]}`}>
+    <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-black ${display.className}`}>
       {icon}
-      {statusLabels[status]}
+      {display.label}
     </span>
   )
 }
@@ -245,18 +224,14 @@ function ActionButton({
 }
 
 function PlanSummary({ plan, analysis }: { plan: SettingsMigrationPlan | null; analysis: CompatibilityReport | null }) {
+  const fields = projectSettingsMigrationSummary(plan, analysis)
   return (
     <details className="rounded-2xl border border-slate-100 bg-slate-50/80 p-3">
-      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">Plan summary</summary>
+      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">方案摘要</summary>
       <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[10.5px] font-bold text-slate-500">
-        <KeyValue label="id" value={plan?.id ?? '-'} />
-        <KeyValue label="generatedAt" value={plan?.generatedAt ?? '-'} />
-        <KeyValue label="sourceVersion" value={String(plan?.sourceVersion ?? analysis?.originalVersion ?? '-')} />
-        <KeyValue label="targetVersion" value={String(plan?.targetVersion ?? analysis?.targetVersion ?? '-')} />
-        <KeyValue label="status" value={plan?.status ?? '-'} />
-        <KeyValue label="canApply" value={plan ? String(plan.canApply) : '-'} />
-        <KeyValue label="canRollback" value={plan ? String(plan.canRollback) : '-'} />
-        <KeyValue label="backupRequired" value={plan ? String(plan.backupRequired) : '-'} />
+        {fields.map((field) => (
+          <KeyValue key={field.key} label={field.label} value={field.value} />
+        ))}
       </dl>
     </details>
   )
@@ -276,7 +251,7 @@ function KeyValue({ label, value }: { label: string; value: string }) {
 function ChangeList({ changes }: { changes: SettingsCompatibilityChange[] }) {
   return (
     <details className="rounded-2xl border border-slate-100 bg-white p-3">
-      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">Changes ({changes.length})</summary>
+      <summary className="cursor-pointer text-[11.5px] font-black text-slate-700">变更列表 ({changes.length})</summary>
       {changes.length ? (
         <ul className="mt-3 space-y-2">
           {changes.map((change) => (
@@ -288,18 +263,20 @@ function ChangeList({ changes }: { changes: SettingsCompatibilityChange[] }) {
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-[10.5px] font-bold text-slate-400">No changes loaded.</p>
+        <p className="mt-3 text-[10.5px] font-bold text-slate-400">{SETTINGS_MIGRATION_EMPTY_LABELS.changes}</p>
       )}
     </details>
   )
 }
 
-function TextList({ title, items, tone }: { title: string; items: string[]; tone: 'warning' | 'blocked' }) {
+function TextList({ items, tone }: { items: string[]; tone: 'warning' | 'blocked' }) {
   const colorClass = tone === 'warning' ? 'text-amber-700 bg-amber-50 border-amber-100' : 'text-rose-700 bg-rose-50 border-rose-100'
+  const displayTitle = tone === 'warning' ? '警告' : '阻断问题'
+  const emptyLabel = tone === 'warning' ? SETTINGS_MIGRATION_EMPTY_LABELS.warnings : SETTINGS_MIGRATION_EMPTY_LABELS.blockingIssues
 
   return (
     <details className={`rounded-2xl border p-3 ${items.length ? colorClass : 'border-slate-100 bg-white text-slate-500'}`}>
-      <summary className="cursor-pointer text-[11.5px] font-black">{title} ({items.length})</summary>
+      <summary className="cursor-pointer text-[11.5px] font-black">{displayTitle} ({items.length})</summary>
       {items.length ? (
         <ul className="mt-3 space-y-1.5 text-[10.5px] font-bold leading-5">
           {items.map((item) => (
@@ -307,43 +284,37 @@ function TextList({ title, items, tone }: { title: string; items: string[]; tone
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-[10.5px] font-bold text-slate-400">None reported.</p>
+        <p className="mt-3 text-[10.5px] font-bold text-slate-400">{emptyLabel}</p>
       )}
     </details>
   )
 }
 
 function BackupList({ backups }: { backups: SettingsMigrationBackupInfo[] }) {
+  const displayedBackups = projectSettingsMigrationBackups(backups)
   return (
     <details className="rounded-2xl border border-slate-100 bg-white p-3">
       <summary className="flex cursor-pointer items-center gap-2 text-[11.5px] font-black text-slate-700">
         <Archive className="h-3.5 w-3.5" />
-        Backups ({backups.length})
+        备份历史 ({displayedBackups.length})
       </summary>
-      {backups.length ? (
+      {displayedBackups.length ? (
         <ul className="mt-3 space-y-2">
-          {backups.map((backup) => (
+          {displayedBackups.map((backup) => (
             <li key={backup.name} className="rounded-xl bg-slate-50 p-2 text-[10.5px] font-bold leading-5 text-slate-500">
               <div className="truncate font-black text-slate-700" title={backup.name}>
                 {backup.name}
               </div>
               <div className="mt-1 flex justify-between gap-2">
-                <span>{backup.createdAt ?? 'Unknown time'}</span>
-                <span>{formatSize(backup.sizeBytes)}</span>
+                <span>{backup.createdAtLabel}</span>
+                <span>{backup.sizeLabel}</span>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-[10.5px] font-bold text-slate-400">No backup summaries loaded.</p>
+        <p className="mt-3 text-[10.5px] font-bold text-slate-400">{SETTINGS_MIGRATION_EMPTY_LABELS.backups}</p>
       )}
     </details>
   )
-}
-
-function formatSize(sizeBytes: number): string {
-  if (!Number.isFinite(sizeBytes) || sizeBytes <= 0) return '0 B'
-  if (sizeBytes < 1024) return `${sizeBytes} B`
-  if (sizeBytes < 1024 * 1024) return `${(sizeBytes / 1024).toFixed(1)} KB`
-  return `${(sizeBytes / 1024 / 1024).toFixed(1)} MB`
 }

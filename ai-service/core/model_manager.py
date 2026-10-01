@@ -1,12 +1,14 @@
+from __future__ import annotations
 import asyncio
 import time
 import gc
 import os
+import concurrent.futures
 from typing import Dict, Any, Optional
 
 from core.cooperative_model_registry import find_downloaded_model, get_downloaded_models_status
 from core.cooperative_model_readiness import get_cooperative_model_readiness
-from core.mock_policy import guard_mock_inference
+from core.mock_policy import guard_mock_inference, MockInferenceBlockedError
 
 # Estimated actual GPU VRAM weights of loaded models (in MB)
 MODEL_VRAM_OCCUPANCY = {
@@ -14,12 +16,18 @@ MODEL_VRAM_OCCUPANCY = {
     "florence2": 3072,   # 3.0 GB
     "clip": 1228,        # 1.2 GB
     "wd_tagger": 819,    # 0.8 GB
-    "joycaption": 6656,  # 6.5 GB
     "qwen_vl": 7680,     # 7.5 GB
     "translation": 1024, # 1.0 GB
 }
 
 class ModelManager:
+    _executor: concurrent.futures.ThreadPoolExecutor | None = None
+
+    @classmethod
+    def _get_executor(cls) -> concurrent.futures.ThreadPoolExecutor:
+        if cls._executor is None:
+            cls._executor = concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix="model-loader")
+        return cls._executor
     _instance: Optional['ModelManager'] = None
 
     def __new__(cls, *args, **kwargs):
@@ -67,20 +75,15 @@ class ModelManager:
         """
         name = name.lower().strip()
         
-        # Batch taggers keepAlive 60s; JoyCaption / Qwen VL keepAlive 90s; Florence-2, RAM & Translation keepAlive 300s (5 minutes)
+        # Batch taggers keepAlive 60s; Qwen VL keepAlive 90s; Florence-2, RAM & Translation keepAlive 300s (5 minutes)
         if name in ["florence2", "ram", "translation"]:
             keep_alive = 300
         else:
             keep_alive = 60 if name in ["wd_tagger", "clip"] else 90
 
         # Avoid manual models memory clash (unload competitor)
-        if name in ["joycaption", "qwen_vl"]:
-            competitor = "qwen_vl" if name == "joycaption" else "joycaption"
-            if competitor in self.loaded_models:
-                print(f"[ModelManager] Heavy model '{name}' requested while '{competitor}' is loaded. Evicting '{competitor}' from VRAM...")
-                await self.unload_model(competitor)
-            
-            # Also evict lighter taggers to maximize VRAM for heavy model!
+        if name == "qwen_vl":
+            # Evict lighter taggers to maximize VRAM for heavy model!
             for tagger in ["wd_tagger", "florence2"]:
                 if tagger in self.loaded_models:
                     print(f"[ModelManager] Heavy model '{name}' requested. Evicting light tagger '{tagger}' to free VRAM...")
@@ -88,10 +91,9 @@ class ModelManager:
         
         elif name in ["wd_tagger", "florence2", "ram", "clip"]:
             # Lighter taggers cannot run alongside heavy models
-            for heavy in ["joycaption", "qwen_vl"]:
-                if heavy in self.loaded_models:
-                    print(f"[ModelManager] Tagger '{name}' requested. Evicting heavy model '{heavy}' to free VRAM...")
-                    await self.unload_model(heavy)
+            if "qwen_vl" in self.loaded_models:
+                print(f"[ModelManager] Tagger '{name}' requested. Evicting heavy model 'qwen_vl' to free VRAM...")
+                await self.unload_model("qwen_vl")
 
         if name in self.loaded_models:
             # Refresh KeepAlive timer
@@ -107,49 +109,53 @@ class ModelManager:
                 from models.wd_tagger import WDTaggerModel
                 local_p = find_downloaded_model("wd_tagger")
                 instance = WDTaggerModel(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real WDTaggerModel: {e}. Falling back to mock session.")
                 from models.wd_tagger import WDTaggerModel
                 instance = WDTaggerModel()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "ram":
             try:
                 from models.ram_tagger import RAMTaggerModel
                 local_p = find_downloaded_model("ram")
                 instance = RAMTaggerModel(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real RAMTaggerModel: {e}. Falling back to mock session.")
                 from models.ram_tagger import RAMTaggerModel
                 instance = RAMTaggerModel()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "florence2":
             try:
                 from models.florence2_tagger import Florence2TaggerModel
                 local_p = find_downloaded_model("florence2")
                 instance = Florence2TaggerModel(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real Florence2TaggerModel: {e}. Falling back to mock session.")
                 from models.florence2_tagger import Florence2TaggerModel
                 instance = Florence2TaggerModel()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "clip":
             try:
                 from models.clip_design_classifier import CLIPDesignClassifier
                 local_p = find_downloaded_model("clip")
                 instance = CLIPDesignClassifier(local_path=str(local_p) if local_p else None)
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
             except Exception as e:
+                if isinstance(e, MockInferenceBlockedError): raise
                 print(f"[ModelManager] Failed loading real CLIPDesignClassifier: {e}. Falling back to mock session.")
                 from models.clip_design_classifier import CLIPDesignClassifier
                 instance = CLIPDesignClassifier()
                 instance.is_mock = True
-                instance.load()
+                await asyncio.get_running_loop().run_in_executor(ModelManager._get_executor(), instance.load)
         elif name == "translation":
             try:
                 from services.translation_service import TranslationService
@@ -163,15 +169,12 @@ class ModelManager:
                 instance.load()
         elif name == "qwen_vl":
             try:
-                from models.qwen_vl_fallback_analyzer import QwenVLFallbackAnalyzer
-                instance = QwenVLFallbackAnalyzer()
+                from models.qwen_vl import QwenVL
+                instance = QwenVL()
                 instance.load()
             except Exception as e:
-                print(f"[ModelManager] Failed loading real QwenVLFallbackAnalyzer: {e}. Falling back to mock session.")
-                from models.qwen_vl_fallback_analyzer import QwenVLFallbackAnalyzer
-                instance = QwenVLFallbackAnalyzer()
-                instance.is_mock = True
-                instance.load()
+                print(f"[ModelManager] Failed loading real QwenVL: {e}.")
+                raise
         else:
             # Simulate mock loading latency for others
             guard_mock_inference(name, "Unknown model names cannot be registered as loaded mock models.")
@@ -199,7 +202,6 @@ class ModelManager:
         # Short model name to task model name mapping
         def map_short_to_task_model(short_name: str) -> list:
             mapping = {
-                "joycaption": ["joycaption", "joycaption-v2"],
                 "qwen_vl": ["qwen_vl", "qwen2.5-vl", "qwen2.5-vl-7b"],
                 "wd_tagger": ["wd_tagger", "wd-tagger-v3"],
                 "florence2": ["florence2", "florence-2-large"]

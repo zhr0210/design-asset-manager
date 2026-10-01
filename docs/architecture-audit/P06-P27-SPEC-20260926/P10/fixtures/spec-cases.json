@@ -1,0 +1,159 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "V01",
+      "input": {
+        "duplicate": false,
+        "scope": true,
+        "cancelled": false,
+        "ready": true,
+        "permit": true,
+        "complete": true,
+        "valid": true
+      },
+      "expected": {
+        "status": "succeeded",
+        "newEvidence": 1,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V02",
+      "input": {
+        "duplicate": false,
+        "scope": false,
+        "cancelled": false,
+        "ready": true,
+        "permit": true,
+        "complete": true,
+        "valid": true
+      },
+      "expected": {
+        "status": "rejected",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V03",
+      "input": {
+        "duplicate": false,
+        "scope": true,
+        "cancelled": true,
+        "ready": true,
+        "permit": true,
+        "complete": true,
+        "valid": true
+      },
+      "expected": {
+        "status": "rejected",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V04",
+      "input": {
+        "duplicate": false,
+        "scope": true,
+        "cancelled": false,
+        "ready": false,
+        "permit": true,
+        "complete": true,
+        "valid": true
+      },
+      "expected": {
+        "status": "waiting",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V05",
+      "input": {
+        "duplicate": false,
+        "scope": true,
+        "cancelled": false,
+        "ready": true,
+        "permit": false,
+        "complete": true,
+        "valid": true
+      },
+      "expected": {
+        "status": "waiting",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V06",
+      "input": {
+        "duplicate": false,
+        "scope": true,
+        "cancelled": false,
+        "ready": true,
+        "permit": true,
+        "complete": false,
+        "valid": true
+      },
+      "expected": {
+        "status": "failed",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V07",
+      "input": {
+        "duplicate": false,
+        "scope": true,
+        "cancelled": false,
+        "ready": true,
+        "permit": true,
+        "complete": true,
+        "valid": false
+      },
+      "expected": {
+        "status": "failed",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V08",
+      "input": {
+        "duplicate": true,
+        "scope": true,
+        "cancelled": false,
+        "ready": true,
+        "permit": true,
+        "complete": true,
+        "valid": true
+      },
+      "expected": {
+        "status": "already-committed",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    },
+    {
+      "id": "V09",
+      "input": {
+        "duplicate": true,
+        "scope": false,
+        "cancelled": false,
+        "ready": true,
+        "permit": true,
+        "complete": true,
+        "valid": true
+      },
+      "expected": {
+        "status": "rejected",
+        "newEvidence": 0,
+        "confirmedWrites": 0
+      }
+    }
+  ]
+}

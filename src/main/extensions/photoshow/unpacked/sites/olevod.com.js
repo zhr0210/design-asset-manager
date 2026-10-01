@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"olevod.com":{srcMatching:[{processor:({trigger:e})=>e.querySelector("image,img,picture"),selectors:".case-img"}]}};

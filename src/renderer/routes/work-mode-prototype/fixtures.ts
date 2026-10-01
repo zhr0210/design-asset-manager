@@ -1,0 +1,32 @@
+// Original synthetic artwork, not user assets or third-party product screenshots.
+export interface DemoAsset { id: string; title: string; category: string; tags: string[]; description: string; prompt: string; colors: string[]; src: string; kind: 'image' | 'video' | 'text' | 'font' | 'document'; format?:string }
+const palettes = [['#232923','#b6c9a2','#e8ebdf'],['#deddf6','#5767bc','#20264b'],['#e95d36','#f1ddd0','#272522'],['#1c3c44','#a8d5c3','#e2f2eb'],['#e8ddce','#6b4739','#faf4e8'],['#171925','#987cf3','#e6d6ff'],['#c5d4de','#263e53','#eef3f5'],['#e2b2b6','#762e44','#faf0ed']]
+export function artwork(index: number) {
+ const [a,b,c]=palettes[index%palettes.length]
+ const names=['TERRA','SOFT FORM','STUDIO 04','SLOW','OBJECTS','CHROMA','NEW TIDE','FORME']
+ const shape=index%4===0?`<path d="M100 380V190a120 120 0 0 1 240 0v190" fill="${b}"/><path d="M154 380V220a66 66 0 0 1 132 0v160" fill="${c}"/>`:index%4===1?`<ellipse cx="264" cy="213" rx="135" ry="92" fill="url(#g)" transform="rotate(-30 264 213)"/><ellipse cx="240" cy="275" rx="150" ry="62" fill="${c}" opacity=".65"/>`:index%4===2?`<rect x="110" y="130" width="242" height="242" rx="60" fill="${b}" transform="rotate(-15 230 250)"/><circle cx="230" cy="250" r="75" fill="${c}"/><circle cx="230" cy="250" r="35" fill="${a}"/>`:`<path d="M0 240 Q130 100 245 240T480 240V460H0" fill="${b}"/><path d="M0 290 Q130 170 245 290T480 290V460H0" fill="${c}" opacity=".7"/><circle cx="330" cy="130" r="40" fill="${c}"/>`
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="480" height="560" viewBox="0 0 480 560"><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="${b}"/><stop offset="1" stop-color="${c}"/></linearGradient></defs><rect width="480" height="560" fill="${a}"/><text x="30" y="42" font-size="11" font-family="Arial" fill="${c}">DESIGN STUDIES  /  ${String(index+1).padStart(2,'0')}</text>${shape}<rect x="25" y="450" width="430" height="1" fill="${c}" opacity=".5"/><text x="25" y="499" font-size="39" font-weight="bold" font-family="Arial" fill="${c}">${names[index%8]}</text><text x="28" y="531" font-size="12" font-family="Arial" fill="${c}">Independent forms. Everyday inspiration.</text></svg>`
+ return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
+}
+const titles=['Terra · 自然建筑视觉','Soft Form · 玻璃形态','Studio 04 · 几何海报','Slow · 动态首页研究','Objects · 材质与留白','Chroma · 渐变光影','New Tide · 编辑排版','Forme · 品牌色彩']
+export const assets:DemoAsset[]=titles.map((title,i)=>({id:`a${i}`,title,category:['品牌视觉','界面设计','平面设计','界面设计'][i%4],tags:[['绿色','建筑','自然'],['蓝色','玻璃','渐变'],['橙色','几何','海报'],['绿色','动效','网页'],['材质','留白','建筑'],['紫色','渐变','光影'],['蓝色','排版','留白'],['粉色','品牌','几何']][i],description:['绿色建筑拱形与克制留白形成安静的品牌视觉。','蓝紫色半透明形态，通过柔和渐变表达轻盈材质。','橙色几何构成配合明确的版式层级。','绿色波浪与缓慢位移，展示网页首屏的节奏。','温暖的材质色和建筑轮廓强调内容留白。','紫色光影渐变与圆润形态构成视觉中心。','冷蓝色几何与清晰标题组成编辑页面。','柔和粉色形态构成温暖的品牌识别。'][i],prompt:`${title.split(' · ')[0]}, ${['architectural shapes, muted green','translucent glass, soft blue gradient','geometric composition, warm orange','gentle motion, organic waves','warm materials, generous whitespace','violet glow, soft form','editorial typography, cool blue','soft pink, organic brand'][i]}, editorial visual study`,colors:palettes[i],src:artwork(i),kind:i===3?'video':'image'}))
+export interface WorkSet { id:string; name:string; ids:string[]; note:string; x:number; y:number; w:number; h:number; pinned:boolean; open:boolean; frames:number[]; swatches?:string[] }
+export const starterSets:WorkSet[]=[{id:'set-one',name:'品牌方向 · Terra',ids:['a0','a4','a6'],note:'关注留白、字体层级，以及温暖的材质关系。',x:30,y:40,w:390,h:500,pinned:true,open:true,frames:[]},{id:'set-two',name:'首页与动效参考',ids:['a1','a3','a5'],note:'首屏以轻盈、缓慢、有呼吸感的形态为主。',x:455,y:110,w:390,h:500,pinned:true,open:true,frames:[]}]
+
+// AI-folder eligibility is explicit; having a title/description alone is not analysis evidence.
+export const analyzedIds = ['a0','a1','a2','a3','a5','a6']
+export const confirmedTagIds = ['a0','a2']
+export const manualFolders = [{id:'brand',name:'品牌与视觉',ids:['a0','a4','a7'],children:[{id:'brand-layout',name:'排版参考',ids:['a6']}]},{id:'web',name:'网页与动效',ids:['a1','a3'],children:[]},{id:'poster',name:'平面设计',ids:['a2'],children:[]}]
+export const aiFolders = [{id:'analyzed',name:'全部已分析',tag:''},{id:'pending',name:'标签待确认',tag:''},{id:'ai-gradient',name:'渐变与光影',tag:'渐变'},{id:'ai-nature',name:'自然与建筑',tag:'建筑'},{id:'ai-blue',name:'蓝色视觉',tag:'蓝色'}]
+export interface PaletteFolder {id:string;name:string;colors:string[]}
+export const initialPalettes:PaletteFolder[]=[{id:'palette-brand',name:'品牌配色',colors:['#232923','#b6c9a2','#e8ebdf']},{id:'palette-web',name:'界面灵感',colors:['#deddf6','#5767bc','#20264b']}]
+
+const escapeXml=(s:string)=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+const specimen=(title:string,body:string,bg:string,serif=false)=>`data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="480" height="560"><rect width="480" height="560" fill="${bg}"/><text x="35" y="65" fill="#555" font-family="sans-serif" font-size="13">STUDIO / ORIGINAL SPECIMEN</text><text x="35" y="205" fill="#25262b" font-family="${serif?'serif':'sans-serif'}" font-size="${serif?76:32}">${escapeXml(title)}</text><text x="35" y="270" fill="#555" font-family="sans-serif" font-size="18">${escapeXml(body)}</text><path d="M35 330H410M35 360H390M35 390H430" stroke="#888" opacity=".25" stroke-width="4"/></svg>`)}`
+assets.push(
+{id:'a8',title:'关于留白的一段笔记',category:'创作文字',tags:['留白','笔记'],description:'把注意力留给重要的内容。留白让画面有呼吸，也让信息更有层次。',prompt:'',colors:[],src:specimen('留一点空间。','给想法，也给下一次创作。','#f0ece4'),kind:'text',format:'TXT'},
+{id:'a9',title:'Serif · 字体参考',category:'字体',tags:['字体','排版'],description:'系统衬线字体的排版样张，用于展示字形参考；未加载外部字体文件。',prompt:'',colors:[],src:specimen('Aa Bb','The shape of everyday ideas.','#e8edf0',true),kind:'font',format:'字体样张'},
+{id:'a10',title:'品牌提案 · 文档参考',category:'文档',tags:['品牌','文档'],description:'合成的文档封面示意；并非通用PDF解码证明。',prompt:'',colors:['#e8ddce','#6b4739','#faf4e8'],src:specimen('STUDIO / 2026','Brand direction & visual notes.','#e8e6e1'),kind:'document',format:'PDF示例'},
+{id:'a11',title:'界面微文案备忘',category:'创作文字',tags:['文字','界面'],description:'让状态可理解，让下一步可发现。优秀的界面文案不要求用户猜测。',prompt:'',colors:[],src:specimen('让下一步清晰。','Words are part of the interface.','#e6e9df'),kind:'text',format:'TXT'}
+)
+manualFolders.push({id:'words',name:'文字与字体',ids:['a8','a9','a11'],children:[]},{id:'documents',name:'文档参考',ids:['a10'],children:[]})

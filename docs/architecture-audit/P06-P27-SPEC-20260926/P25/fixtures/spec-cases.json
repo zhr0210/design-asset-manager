@@ -1,0 +1,108 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "OBS01",
+      "input": {
+        "op": "redact",
+        "event": {
+          "phase": "infer",
+          "reason": "WAIT_RESOURCE",
+          "durationMs": 5,
+          "apiKey": "SYNTHETIC_SECRET",
+          "ocr": "SYNTHETIC_PRIVATE"
+        }
+      },
+      "expected": {
+        "phase": "infer",
+        "reason": "WAIT_RESOURCE",
+        "durationMs": 5
+      }
+    },
+    {
+      "id": "OBS02",
+      "input": {
+        "op": "redact",
+        "event": {
+          "phase": "SYNTHETIC_PATH",
+          "reason": "SYNTHETIC_SECRET",
+          "details": {
+            "secret": "x"
+          }
+        }
+      },
+      "expected": {
+        "reason": "UNKNOWN_ERROR"
+      }
+    },
+    {
+      "id": "OBS03",
+      "input": {
+        "op": "redact",
+        "event": {
+          "phase": "wait",
+          "durationMs": -1
+        }
+      },
+      "expected": {
+        "phase": "wait",
+        "reason": "UNKNOWN_ERROR"
+      }
+    },
+    {
+      "id": "OBS04",
+      "input": {
+        "op": "status",
+        "committed": true,
+        "notified": false
+      },
+      "expected": "succeeded-with-notify-warning"
+    },
+    {
+      "id": "OBS05",
+      "input": {
+        "op": "status",
+        "committed": false,
+        "notified": true
+      },
+      "expected": "uncommitted"
+    },
+    {
+      "id": "OBS06",
+      "input": {
+        "op": "evidence",
+        "historical": false,
+        "realModel": false,
+        "command": true,
+        "exitCode": 0,
+        "hardware": true
+      },
+      "expected": "not-real-model-evidence"
+    },
+    {
+      "id": "OBS07",
+      "input": {
+        "op": "evidence",
+        "historical": true,
+        "realModel": true,
+        "command": true,
+        "exitCode": 0,
+        "hardware": true
+      },
+      "expected": "historical-reported"
+    },
+    {
+      "id": "OBS08",
+      "input": {
+        "op": "evidence",
+        "historical": false,
+        "realModel": true,
+        "command": true,
+        "exitCode": 0,
+        "hardware": false
+      },
+      "expected": "not-real-model-evidence"
+    }
+  ]
+}

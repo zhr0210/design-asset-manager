@@ -1,0 +1,161 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "C01",
+      "input": {
+        "op": "key",
+        "domain": "L1",
+        "digest": "hash",
+        "transform": "v1",
+        "recipe": "r1",
+        "model": "m1",
+        "format": "f1"
+      },
+      "expected": [
+        "L1",
+        "hash",
+        "v1",
+        "r1",
+        "m1",
+        "f1"
+      ]
+    },
+    {
+      "id": "C02",
+      "input": {
+        "op": "key",
+        "domain": "L2",
+        "digest": "hash",
+        "transform": "v1",
+        "recipe": "r1",
+        "model": "m1",
+        "format": "f1"
+      },
+      "expected": [
+        "L2",
+        "hash",
+        "v1",
+        "r1",
+        "m1",
+        "f1"
+      ]
+    },
+    {
+      "id": "C03",
+      "input": {
+        "op": "key",
+        "domain": "L1",
+        "digest": "hash",
+        "transform": "v1",
+        "recipe": "r1",
+        "model": "m2",
+        "format": "f1"
+      },
+      "expected": [
+        "L1",
+        "hash",
+        "v1",
+        "r1",
+        "m2",
+        "f1"
+      ]
+    },
+    {
+      "id": "C04",
+      "input": {
+        "op": "gc",
+        "owned": true,
+        "rebuildable": true,
+        "expired": true,
+        "evidence": 0,
+        "jobs": 0,
+        "holders": 0,
+        "activeIndex": 0,
+        "requiredPreview": false
+      },
+      "expected": true
+    },
+    {
+      "id": "C05",
+      "input": {
+        "op": "gc",
+        "owned": true,
+        "rebuildable": true,
+        "expired": true,
+        "evidence": 1,
+        "jobs": 0,
+        "holders": 0,
+        "activeIndex": 0,
+        "requiredPreview": false
+      },
+      "expected": false
+    },
+    {
+      "id": "C06",
+      "input": {
+        "op": "gc",
+        "owned": true,
+        "rebuildable": true,
+        "expired": true,
+        "evidence": 0,
+        "jobs": 0,
+        "holders": 1,
+        "activeIndex": 0,
+        "requiredPreview": false
+      },
+      "expected": false
+    },
+    {
+      "id": "C07",
+      "input": {
+        "op": "gc",
+        "owned": true,
+        "rebuildable": true,
+        "expired": true,
+        "evidence": 0,
+        "jobs": 0,
+        "holders": 0,
+        "activeIndex": 0,
+        "requiredPreview": true
+      },
+      "expected": false
+    },
+    {
+      "id": "C08",
+      "input": {
+        "op": "gc",
+        "owned": false,
+        "rebuildable": true,
+        "expired": true,
+        "evidence": 0,
+        "jobs": 0,
+        "holders": 0,
+        "activeIndex": 0,
+        "requiredPreview": false
+      },
+      "expected": false
+    },
+    {
+      "id": "C09",
+      "input": {
+        "op": "duplicate",
+        "a": "h1",
+        "b": "h2",
+        "similar": true
+      },
+      "expected": "similar-candidate"
+    },
+    {
+      "id": "C10",
+      "input": {
+        "op": "duplicate",
+        "a": "h1",
+        "b": "h1",
+        "similar": true
+      },
+      "expected": "same-bytes-candidate"
+    }
+  ]
+}

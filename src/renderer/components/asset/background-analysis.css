@@ -1,0 +1,6 @@
+.visual-ai-panel.background-analysis-panel { font-size:13px; }
+.visual-ai-panel.background-analysis-panel > header { font-size:13px; flex-wrap:wrap; gap:8px; }
+.visual-ai-panel.background-analysis-panel p { font-size:13px; line-height:1.6; color:var(--ui-text); }
+.visual-ai-panel.background-analysis-panel label,
+.visual-ai-panel.background-analysis-panel button,
+.visual-ai-panel.background-analysis-panel summary { font-size:12px; }

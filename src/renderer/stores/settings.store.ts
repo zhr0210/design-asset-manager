@@ -96,7 +96,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       try {
         const loaded = await api.settingsLoad()
         set({ settings: loaded })
-        console.log('[SettingsStore] Settings loaded from backend:', loaded)
+        console.log('[SettingsStore] Settings loaded from backend.')
       } catch (err) {
         console.error('[SettingsStore] Failed to load settings:', err)
       }
@@ -112,7 +112,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       try {
         const saved = await api.settingsSave(newSettings)
         set({ settings: saved })
-        console.log('[SettingsStore] Settings saved to backend:', saved)
+        console.log('[SettingsStore] Settings saved to backend.')
       } catch (err) {
         set({ settings: previous })
         console.error('[SettingsStore] Failed to save settings to backend, rolled back:', err)

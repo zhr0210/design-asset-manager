@@ -1,0 +1,101 @@
+{
+  "documentStatus": "proposed-compatibility-profile",
+  "enabled": false,
+  "profileId": "dam.openai-chat.compat",
+  "profileVersion": "2026-09-26.1",
+  "recipeRef": {
+    "id": "dam.visual-bundle.compat",
+    "version": "2026-09-26.1",
+    "digest": "eb1635449558ab4199f031da88f5a72bbe0d4e6262b3fcfdec8b824a68cba5dc"
+  },
+  "provider": {
+    "adapterId": "openai-chat-completions",
+    "adapterVersion": "proposed-extraction-1",
+    "protocol": "openai-compatible-chat",
+    "ownership": "unknown",
+    "executionLocation": "unknown",
+    "bindingResolution": "reviewed-frozen-service-handle-at-execution",
+    "secretValuesEmbedded": false,
+    "grantsEmbedded": false
+  },
+  "model": {
+    "requestedAlias": null,
+    "weightsDigest": null,
+    "visionProjectorDigest": null,
+    "tokenizerDigest": null,
+    "quantization": null,
+    "identityEvidence": "opaque-at-runtime"
+  },
+  "runtime": {
+    "engine": null,
+    "version": null,
+    "buildCommit": null,
+    "platform": null,
+    "architecture": null,
+    "hardwareBackend": null,
+    "identityEvidence": "unknown"
+  },
+  "request": {
+    "temperature": 0.2,
+    "maxOutputTokensByAttempt": [
+      1536,
+      3072
+    ],
+    "omittedParameters": [
+      "top_p",
+      "seed",
+      "response_format",
+      "stream",
+      "tools"
+    ],
+    "modelResolution": "trim(input.model || backend.defaultModel || empty), nonempty and <=256 UTF16 units",
+    "pathRule": "append /chat/completions to base pathname after removing trailing slashes",
+    "redirect": "error",
+    "responseMaxBytesPerCall": 512000
+  },
+  "serverParameters": {
+    "contextTokens": null,
+    "threads": null,
+    "parallelSlots": null,
+    "seed": null,
+    "kvStrategy": null,
+    "cacheStrategy": null,
+    "source": "not set or probed by current formal request"
+  },
+  "hostPolicy": {
+    "batchAssetsMax": 8,
+    "activeBatchesMax": 2,
+    "receiptTtlMs": 300000,
+    "perItemTimeout": {
+      "configuredBy": "backend.timeoutMs",
+      "nonFiniteFallbackMs": 120000,
+      "minimumMs": 1000,
+      "maximumMs": 120000,
+      "sharedAcrossAttempts": true
+    },
+    "retry": {
+      "maximumPhysicalCalls": 2,
+      "onlyFailure": "AI_RESPONSE_TRUNCATED",
+      "sameServiceModelAndInput": true,
+      "adapterInternalRetry": false,
+      "restartFromBeginning": true,
+      "includesShorterPromptVariant": true
+    }
+  },
+  "readiness": {
+    "configuration": "not-inspected-this-stage",
+    "modelList": "not-run",
+    "visionExecution": "unverified",
+    "outputQuality": "unverified",
+    "modelOrRuntimeInstalledNow": "unknown"
+  },
+  "compatibility": {
+    "defaultSelectionChanged": false,
+    "evidenceSchemaChanged": false,
+    "additionalCapabilitiesEnabled": false,
+    "experimentalOptionsAdded": false
+  },
+  "historicalEvidence": [],
+  "contentDigest": "68198508f45250f55185227e362151935443029e8e567daaf2b1b689865e0be3",
+  "documentFormatVersion": 1
+}

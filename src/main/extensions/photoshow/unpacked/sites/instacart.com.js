@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"instacart.com":{srcMatching:[{srcRegExp:".+/(\\w+\\.cloudfront\\.net/.+/file/)\\w+?_(.+@IMG@)",processor:"//$1$2"},{srcRegExp:".+/(\\w+\\.cloudfront\\.net/.+@IMG@)",processor:"//$1"}]}};

@@ -2,8 +2,42 @@ import { getDatabase } from '../db'
 import { TagService } from './tag.service'
 import { AssetTagService } from './asset-tag.service'
 import { readAiQueueStats } from './ai-client/queue-stats'
-import type { MacOSAiWorkerProbeResult } from '../../shared/types/macos-ai-runtime.types'
-import type { AiRuntimeClipSiglipOnnxStatusResponse, AiRuntimePythonMpsStatusResponse } from '../../shared/contracts/ai-runtime.contract'
+import {
+  projectAiAnalysisCompletion,
+  projectAiPromptCompletion,
+  projectAiTaskSyncAction,
+  projectAiTaggingCompletion,
+  workerEpochSecondsToIso
+} from './ai-client/ai-result-sync.projector'
+import { syncProjectedAiTagSuggestion } from './ai-client/ai-tag-suggestion-sync.sink'
+import {
+  syncProjectedAiTaskCompletionRecord,
+  syncProjectedAiTaskLifecycle
+} from './ai-client/ai-task-lifecycle-sync.sink'
+import { createAssetTaggingTaskSubmission } from '../../shared/workflows/asset-tagging.workflow'
+import type {
+  MacOSAiWorkerProbeResult
+} from '../../shared/types/macos-ai-runtime.types'
+import type { WindowsAiWorkerProbeResult } from '../../shared/types/windows-ai-runtime.types'
+import type {
+  AiRuntimeClipSiglipOnnxStatusResponse,
+  AiRuntimeOnnxModelLoadProbeResponse,
+  AiRuntimePythonMpsExecutionProbeResponse,
+  AiRuntimePythonMpsStatusResponse,
+  AiRuntimePythonCudaStatusResponse,
+  AiRuntimePythonCudaExecutionProbeResponse
+} from '../../shared/contracts/ai-runtime.contract'
+import {
+  EVENT_AI_TASK_SYNCED,
+  type EnqueueTagResponse,
+  type ModelStatusResponse,
+  type ProcessBatchResponse,
+  type RoutingPreviewResponse,
+  type UnloadModelResponse
+} from '../../shared/contracts/ai-client.contract'
+import type { AssetTaggingModelId } from '../../shared/workflows/asset-tagging.workflow'
+
+const AI_CAPABILITY_PROBE_TIMEOUT_MS = 30_000
 
 export class AiClientService {
   private pythonUrl = 'http://127.0.0.1:8000'
@@ -98,7 +132,7 @@ export class AiClientService {
       const { BrowserWindow } = require('electron')
       BrowserWindow.getAllWindows().forEach((win: any) => {
         if (!win.isDestroyed()) {
-          win.webContents.send('ai:task-synced', { assetId })
+          win.webContents.send(EVENT_AI_TASK_SYNCED, { assetId })
         }
       })
     } catch (err) {
@@ -109,7 +143,12 @@ export class AiClientService {
   /**
    * Enqueues an asset for background batch tagging in Python.
    */
-  public async enqueueTagging(assetId: string, filePath: string, priority: number = 0, modelsToRun?: string[]): Promise<any> {
+  public async enqueueTagging(
+    assetId: string,
+    filePath: string,
+    priority: number = 0,
+    modelsToRun?: AssetTaggingModelId[]
+  ): Promise<EnqueueTagResponse> {
     const db = this.getDb()
     const now = new Date().toISOString()
     
@@ -124,10 +163,10 @@ export class AiClientService {
       const data = await res.json()
 
       if (data.success) {
-        // If modelsToRun is passed, we format model_name as custom_pipeline:...
-        const resolvedModelName = modelsToRun && modelsToRun.length > 0 
-          ? `custom_pipeline:${modelsToRun.join(',')}`
-          : (data.model_name || 'WD-Tagger-v3')
+        const submission = createAssetTaggingTaskSubmission({ modelsToRun })
+        const resolvedModelName = modelsToRun && modelsToRun.length > 0
+          ? submission.modelName
+          : (data.model_name || submission.modelName)
 
         // Log inside local ai_tag_tasks table
         db.prepare(`
@@ -150,7 +189,7 @@ export class AiClientService {
   /**
    * Manually trigger batch processing in Python.
    */
-  public async processBatch(): Promise<any> {
+  public async processBatch(): Promise<ProcessBatchResponse> {
     try {
       const res = await fetch(`${this.pythonUrl}/ai/tag/process-batch`, { method: 'POST' })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -164,7 +203,7 @@ export class AiClientService {
   /**
    * Fetch active loaded models and VRAM usage.
    */
-  public async getModelsStatus(): Promise<any> {
+  public async getModelsStatus(): Promise<ModelStatusResponse> {
     const db = this.getDb()
     const queueStats = readAiQueueStats(db)
 
@@ -211,7 +250,9 @@ export class AiClientService {
     error?: string
   }> {
     try {
-      const res = await fetch(`${this.pythonUrl}/ai/runtime/macos-capabilities`, { signal: AbortSignal.timeout(1000) })
+      const res = await fetch(`${this.pythonUrl}/ai/runtime/macos-capabilities`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       return {
@@ -234,7 +275,9 @@ export class AiClientService {
    */
   public async getPythonMpsStatus(): Promise<AiRuntimePythonMpsStatusResponse & { offline: boolean; error?: string | null }> {
     try {
-      const res = await fetch(`${this.pythonUrl}/ai/model/python-mps/status`, { signal: AbortSignal.timeout(1000) })
+      const res = await fetch(`${this.pythonUrl}/ai/model/python-mps/status`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const compatData = data as {
@@ -277,7 +320,9 @@ export class AiClientService {
    */
   public async getClipSiglipOnnxStatus(): Promise<AiRuntimeClipSiglipOnnxStatusResponse & { offline: boolean; error?: string | null }> {
     try {
-      const res = await fetch(`${this.pythonUrl}/ai/model/clip-siglip-onnx/status`, { signal: AbortSignal.timeout(1000) })
+      const res = await fetch(`${this.pythonUrl}/ai/model/clip-siglip-onnx/status`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const compatData = data as AiRuntimeClipSiglipOnnxStatusResponse & { error?: { code: string; message: string } | null }
@@ -301,10 +346,118 @@ export class AiClientService {
     }
   }
 
+  public async probeOnnxModelLoad(
+    modelFamily: AiRuntimeOnnxModelLoadProbeResponse['modelFamily'] = 'wd_tagger'
+  ): Promise<AiRuntimeOnnxModelLoadProbeResponse> {
+    const query = new URLSearchParams({ modelFamily })
+    const res = await fetch(`${this.pythonUrl}/ai/model/onnx-load-probe?${query.toString()}`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(modelFamily === 'clip' ? 90_000 : 10_000)
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json() as AiRuntimeOnnxModelLoadProbeResponse
+  }
+
+  public async probePythonMpsExecution(): Promise<AiRuntimePythonMpsExecutionProbeResponse> {
+    const res = await fetch(`${this.pythonUrl}/ai/model/python-mps/execution-probe`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json() as AiRuntimePythonMpsExecutionProbeResponse
+  }
+
+  /**
+   * Fetches the Windows AI branch worker capability probe without loading models.
+   */
+  public async getWindowsCapabilities(): Promise<{
+    success: boolean
+    offline: boolean
+    capabilities: WindowsAiWorkerProbeResult | null
+    error?: string
+  }> {
+    try {
+      const res = await fetch(`${this.pythonUrl}/ai/runtime/windows-capabilities`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      return {
+        success: true,
+        offline: false,
+        capabilities: data as WindowsAiWorkerProbeResult
+      }
+    } catch (err) {
+      return {
+        success: true,
+        offline: true,
+        capabilities: null,
+        error: err instanceof Error ? err.message : String(err)
+      }
+    }
+  }
+
+  /**
+   * Fetches the Python CUDA compatibility signal without loading models.
+   */
+  public async getPythonCudaStatus(): Promise<AiRuntimePythonCudaStatusResponse & { offline: boolean; error?: string | null }> {
+    try {
+      const res = await fetch(`${this.pythonUrl}/ai/model/python-cuda/status`, {
+        signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      const compatData = data as {
+        success?: boolean
+        compatible: boolean
+        runtime?: string | null
+        status: AiRuntimePythonCudaStatusResponse['status']
+        diagnostics?: Record<string, unknown>
+        error?: { code?: string; message?: string } | string | null
+      }
+      const errorMessage = typeof compatData.error === 'string'
+        ? compatData.error
+        : compatData.error && typeof compatData.error === 'object'
+          ? String((compatData.error as { message?: unknown }).message ?? null)
+          : null
+      return {
+        success: compatData.success ?? true,
+        offline: false,
+        compatible: compatData.compatible,
+        runtime: compatData.runtime ?? null,
+        status: compatData.status,
+        diagnostics: compatData.diagnostics ?? {},
+        error: errorMessage
+      }
+    } catch (err) {
+      return {
+        success: false,
+        offline: true,
+        compatible: false,
+        runtime: null,
+        status: 'unavailable',
+        diagnostics: {},
+        error: err instanceof Error ? err.message : String(err)
+      }
+    }
+  }
+
+  /**
+   * Explicitly execute a fixed tensor operation on the real CUDA device.
+   */
+  public async probePythonCudaExecution(): Promise<AiRuntimePythonCudaExecutionProbeResponse> {
+    const res = await fetch(`${this.pythonUrl}/ai/model/python-cuda/execution-probe`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(AI_CAPABILITY_PROBE_TIMEOUT_MS)
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json() as AiRuntimePythonCudaExecutionProbeResponse
+  }
+
   /**
    * Forcibly release loaded model memory.
    */
-  public async unloadModels(): Promise<any> {
+  public async unloadModels(): Promise<UnloadModelResponse> {
     try {
       const res = await fetch(`${this.pythonUrl}/ai/model/unload`, { method: 'POST' })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -318,7 +471,7 @@ export class AiClientService {
   /**
    * Preview how a given file path would be routed in the VisualRouter.
    */
-  public async getRoutingPreview(filePath: string): Promise<any> {
+  public async getRoutingPreview(filePath: string): Promise<RoutingPreviewResponse> {
     try {
       const res = await fetch(`${this.pythonUrl}/ai/routing/preview?file_path=${encodeURIComponent(filePath)}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -329,76 +482,6 @@ export class AiClientService {
     }
   }
 
-
-  /**
-   * Triggers manual prompt reversal.
-   */
-  public async generatePrompt(assetId: string, filePath: string): Promise<any> {
-    const db = this.getDb()
-    const now = new Date().toISOString()
-
-    try {
-      const res = await fetch(`${this.pythonUrl}/ai/prompt/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ asset_id: assetId, file_path: filePath })
-      })
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-
-      if (data.success) {
-        // Log in ai_prompt_tasks
-        db.prepare(`
-          INSERT OR REPLACE INTO ai_prompt_tasks (id, asset_id, file_path, status, model_name, created_at, sync_status)
-          VALUES (?, ?, ?, 'queued', 'JoyCaption-v2', ?, 'pending')
-        `).run(data.task_id, assetId, filePath, now)
-
-        db.prepare("UPDATE assets SET ai_prompt_status = ? WHERE id = ?").run('queued', assetId)
-        
-        this.notifyRenderer(assetId)
-      }
-      return data
-    } catch (err) {
-      console.error('[AIClient] Generate prompt failed:', err)
-      return { success: false, error: String(err) }
-    }
-  }
-
-  /**
-   * Triggers manual deep design sweep.
-   */
-  public async generateAnalysis(assetId: string, filePath: string): Promise<any> {
-    const db = this.getDb()
-    const now = new Date().toISOString()
-
-    try {
-      const res = await fetch(`${this.pythonUrl}/ai/analysis/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ asset_id: assetId, file_path: filePath })
-      })
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-
-      if (data.success) {
-        // Log in ai_analysis_tasks
-        db.prepare(`
-          INSERT OR REPLACE INTO ai_analysis_tasks (id, asset_id, file_path, status, model_name, created_at, sync_status)
-          VALUES (?, ?, ?, 'queued', 'Qwen2.5-VL', ?, 'pending')
-        `).run(data.task_id, assetId, filePath, now)
-
-        db.prepare("UPDATE assets SET ai_analysis_status = ? WHERE id = ?").run('queued', assetId)
-        
-        this.notifyRenderer(assetId)
-      }
-      return data
-    } catch (err) {
-      console.error('[AIClient] Generate analysis failed:', err)
-      return { success: false, error: String(err) }
-    }
-  }
 
   /**
    * Periodically queries Python status and synchronizes completed batch tag, prompt, and analysis jobs.
@@ -428,134 +511,85 @@ export class AiClientService {
         
         const task = await res.json()
         
-        if (task.status === 'running' || task.status === 'processing') {
-          db.prepare("UPDATE ai_tag_tasks SET status = 'running' WHERE id = ?").run(t.id)
-          db.prepare("UPDATE assets SET ai_tag_status = 'running' WHERE id = ?").run(t.asset_id)
+        const action = projectAiTaskSyncAction({
+          workflow: 'tagging',
+          workerStatus: task.status,
+          hasResult: Boolean(task.result),
+          errorMessage: task.error_message
+        })
+        if (syncProjectedAiTaskLifecycle({
+          db,
+          workflow: 'tagging',
+          taskId: t.id,
+          assetId: t.asset_id,
+          action
+        })) {
           this.notifyRenderer(t.asset_id)
-        } else if (task.status === 'completed' && task.result) {
+          continue
+        }
+
+        if (action.lifecycle === 'completed') {
           const r = task.result
           
           db.transaction(() => {
-            // Update task status inside transaction
-            db.prepare(`
-              UPDATE ai_tag_tasks
-              SET status = 'completed', sync_status = 'synced', synced_at = ?, started_at = ?, completed_at = ?
-              WHERE id = ?
-            `).run(now, task.started_at ? new Date(task.started_at * 1000).toISOString() : null, task.completed_at ? new Date(task.completed_at * 1000).toISOString() : null, t.id)
+            syncProjectedAiTaskCompletionRecord({
+              db,
+              workflow: 'tagging',
+              taskId: t.id,
+              action,
+              syncedAt: now,
+              startedAt: workerEpochSecondsToIso(task.started_at),
+              completedAt: workerEpochSecondsToIso(task.completed_at)
+            })
 
-            const insertSuggestion = db.prepare(`
-              INSERT INTO tag_suggestions (id, asset_id, tag_name, tag_type, source, confidence, status, model_name, raw_payload, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?)
-            `)
+            // Query existing user edits for caption safety override.
+            const assetData = db.prepare(`
+              SELECT ai_caption_is_user_edited FROM assets WHERE id = ?
+            `).get(t.asset_id) as { ai_caption_is_user_edited?: number } | undefined
+            const completion = projectAiTaggingCompletion(r, {
+              isCaptionUserEdited: assetData?.ai_caption_is_user_edited === 1,
+              now
+            })
 
-            for (const item of r.tags || []) {
-              const source = item.source || 'ai_wd_tagger'
-              let modelName = item.model_name
-              if (!modelName) {
-                if (source === 'ai_ram') {
-                  modelName = 'RAM++'
-                } else if (source === 'ai_wd_tagger') {
-                  modelName = 'WD-Tagger-v3'
-                } else if (source === 'ai_florence') {
-                  modelName = 'Florence-2'
-                } else if (source === 'ai_clip_design') {
-                  modelName = 'CLIP Classifier'
-                } else if (source === 'design_rule') {
-                  modelName = 'DesignRule'
-                } else {
-                  modelName = 'Cooperative-Tagger'
-                }
-              }
-              
-              // 1. Idempotency Check for tag_suggestions
-              const sugExists = db.prepare(`
-                SELECT 1 FROM tag_suggestions 
-                WHERE asset_id = ? AND tag_name = ? AND source = ? AND model_name = ?
-              `).get(t.asset_id, item.name, source, modelName)
-
-              if (!sugExists) {
-                const sugId = `sug-${Math.random().toString(36).substr(2, 9)}`
-                insertSuggestion.run(
-                  sugId,
-                  t.asset_id,
-                  item.name,
-                  item.type,
-                  source,
-                  item.confidence,
-                  modelName,
-                  JSON.stringify(item),
-                  now,
-                  now
-                )
-              }
-
-              // Verify tag exists in tags table
-              const tagList = tagService.listTags({ searchQuery: item.name, type: item.type })
-              let tagId = ''
-              if (tagList.length > 0) {
-                tagId = tagList[0].id
-              } else {
-                const newTag = tagService.createTag({
-                  name: item.name,
-                  type: item.type,
-                  color: 'bg-purple-50 text-purple-700 border border-purple-200'
-                })
-                tagId = newTag.id
-              }
-
-              // 2. Idempotency Check for asset_tags (addTagToAsset does it automatically, but let's be explicit)
-              assetTagService.addTagToAsset(t.asset_id, tagId, {
-                source,
-                confidence: item.confidence,
-                status: 'pending',
-                modelName,
-                createdBy: 'ai'
+            for (const suggestion of completion.suggestions) {
+              syncProjectedAiTagSuggestion({
+                db,
+                tagService,
+                assetTagService,
+                assetId: t.asset_id,
+                suggestion,
+                now
               })
             }
-
-            // Query existing user edits and ocr states for safety overrides
-            const assetData = db.prepare(`
-              SELECT ai_caption_is_user_edited, ai_ocr_text FROM assets WHERE id = ?
-            `).get(t.asset_id) as { ai_caption_is_user_edited?: number, ai_ocr_text?: string } | undefined
-
-            const isUserEdited = assetData?.ai_caption_is_user_edited === 1
-            const existingOcr = assetData?.ai_ocr_text || ''
 
             let updateCaptionSql = ''
             const params: any[] = []
 
-            if (!isUserEdited && r.caption) {
+            if (completion.caption) {
               updateCaptionSql += `, ai_caption = ?, ai_caption_en = ?, ai_caption_translated_by = ?, ai_caption_source = ?, ai_caption_updated_at = ?`
-              params.push(r.caption, r.caption_en || '', r.caption_translated_by || 'none', 'ai_florence', now)
+              params.push(
+                completion.caption.value,
+                completion.caption.englishValue,
+                completion.caption.translatedBy,
+                completion.caption.source,
+                completion.caption.updatedAt
+              )
             }
 
-            if (r.ocr_text && r.ocr_text.trim()) {
+            if (completion.ocr) {
               updateCaptionSql += `, ai_ocr_text = ?, ai_ocr_source = ?, ai_ocr_updated_at = ?`
-              params.push(r.ocr_text.trim(), 'ai_florence_ocr', now)
+              params.push(completion.ocr.text, completion.ocr.source, completion.ocr.updatedAt)
             }
 
             // Update assets columns status, including the real physical image dimensions returned by the Python AI worker!
             db.prepare(`
               UPDATE assets
-              SET ai_tag_status = 'synced', ai_tagged_at = ?, width = ?, height = ? ${updateCaptionSql}
+              SET ai_tag_status = ?, ai_tagged_at = ?, width = ?, height = ? ${updateCaptionSql}
               WHERE id = ?
-            `).run(now, r.width || 1920, r.height || 1080, ...params, t.asset_id)
+            `).run(action.assetStatus, now, completion.width, completion.height, ...params, t.asset_id)
           })()
           
           console.log(`[AIClient] Batch tagging task ${t.id} successfully synced into SQLite library.`)
-          this.notifyRenderer(t.asset_id)
-          
-        } else if (task.status === 'failed') {
-          db.prepare(`
-            UPDATE ai_tag_tasks 
-            SET status = 'failed', sync_status = 'failed', error_message = ? 
-            WHERE id = ?
-          `).run(task.error_message || 'Inference error on Python AI worker', t.id)
-          db.prepare("UPDATE assets SET ai_tag_status = 'failed' WHERE id = ?").run(t.asset_id)
-          this.notifyRenderer(t.asset_id)
-        } else if (task.status === 'cancelled') {
-          db.prepare("UPDATE ai_tag_tasks SET status = 'cancelled' WHERE id = ?").run(t.id)
-          db.prepare("UPDATE assets SET ai_tag_status = 'not_started' WHERE id = ?").run(t.asset_id)
           this.notifyRenderer(t.asset_id)
         }
       } catch (err) {
@@ -563,58 +597,60 @@ export class AiClientService {
       }
     }
 
-    // 3. Poll Prompt Reversal Tasks (Commented out to focus strictly on WD Tagger)
-    /*
-    const localPromptTasks = db.prepare("SELECT id, asset_id FROM ai_prompt_tasks WHERE status IN ('queued', 'running', 'processing')").all() as Array<{ id: string; asset_id: string }>
+    // 3. Poll legacy asynchronous Prompt Tasks.
+    const localPromptTasks = db.prepare("SELECT id, asset_id FROM ai_prompt_tasks WHERE status IN ('queued', 'running', 'processing', 'waiting')").all() as Array<{ id: string; asset_id: string }>
     for (const t of localPromptTasks) {
       try {
         const res = await fetch(`${this.pythonUrl}/ai/prompt/status/${t.id}`)
         if (!res.ok) continue
-        
+
         const task = await res.json()
-        if (task.status === 'running' || task.status === 'processing') {
-          db.prepare("UPDATE ai_prompt_tasks SET status = 'running' WHERE id = ?").run(t.id)
-          db.prepare("UPDATE assets SET ai_prompt_status = 'running' WHERE id = ?").run(t.asset_id)
+        const action = projectAiTaskSyncAction({
+          workflow: 'prompt',
+          workerStatus: task.status,
+          hasResult: Boolean(task.result),
+          errorMessage: task.error_message
+        })
+        if (syncProjectedAiTaskLifecycle({
+          db,
+          workflow: 'prompt',
+          taskId: t.id,
+          assetId: t.asset_id,
+          action
+        })) {
           this.notifyRenderer(t.asset_id)
-        } else if (task.status === 'completed' && task.result) {
-          const r = task.result
+          continue
+        }
+
+        if (action.lifecycle === 'completed') {
+          const completion = projectAiPromptCompletion(task.result)
           db.transaction(() => {
-            db.prepare(`
-              UPDATE ai_prompt_tasks
-              SET status = 'completed', sync_status = 'synced', synced_at = ?, started_at = ?, completed_at = ?, result_prompt = ?, result_caption = ?
-              WHERE id = ?
-            `).run(
-              now,
-              task.started_at ? new Date(task.started_at * 1000).toISOString() : null,
-              task.completed_at ? new Date(task.completed_at * 1000).toISOString() : null,
-              r.result_prompt,
-              r.result_caption,
-              t.id
-            )
+            syncProjectedAiTaskCompletionRecord({
+              db,
+              workflow: 'prompt',
+              taskId: t.id,
+              action,
+              syncedAt: now,
+              startedAt: workerEpochSecondsToIso(task.started_at),
+              completedAt: workerEpochSecondsToIso(task.completed_at),
+              resultPrompt: completion.prompt,
+              resultCaption: completion.caption
+            })
 
             db.prepare(`
               UPDATE assets
-              SET ai_prompt_status = 'synced', ai_prompt = ?, ai_caption = ?
+              SET ai_prompt_status = ?, ai_prompt = ?
               WHERE id = ?
-            `).run(r.result_prompt, r.result_caption, t.asset_id)
+            `).run(action.assetStatus, completion.prompt, t.asset_id)
           })()
-          
-          console.log(`[AIClient] Prompt task ${t.id} successfully synced into SQLite.`)
-          this.notifyRenderer(t.asset_id)
-        } else if (task.status === 'failed') {
-          db.prepare(`
-            UPDATE ai_prompt_tasks
-            SET status = 'failed', sync_status = 'failed', error_message = ?
-            WHERE id = ?
-          `).run(task.error_message || 'JoyCaption inference failed', t.id)
-          db.prepare("UPDATE assets SET ai_prompt_status = 'failed' WHERE id = ?").run(t.asset_id)
+
+          console.log(`[AIClient] Legacy prompt task ${t.id} successfully synced into SQLite.`)
           this.notifyRenderer(t.asset_id)
         }
       } catch (err) {
         console.error(`[AIClient] Error polling completed prompt task ${t.id}:`, err)
       }
     }
-    */
 
     // 4. Poll Deep Layout Sweep Tasks
     const localAnalysisTasks = db.prepare("SELECT id, asset_id FROM ai_analysis_tasks WHERE status IN ('queued', 'running', 'processing')").all() as Array<{ id: string; asset_id: string }>
@@ -624,111 +660,64 @@ export class AiClientService {
         if (!res.ok) continue
         
         const task = await res.json()
-        if (task.status === 'running' || task.status === 'processing') {
-          db.prepare("UPDATE ai_analysis_tasks SET status = 'running' WHERE id = ?").run(t.id)
-          db.prepare("UPDATE assets SET ai_analysis_status = 'running' WHERE id = ?").run(t.asset_id)
+        const action = projectAiTaskSyncAction({
+          workflow: 'analysis',
+          workerStatus: task.status,
+          hasResult: Boolean(task.result),
+          errorMessage: task.error_message
+        })
+        if (syncProjectedAiTaskLifecycle({
+          db,
+          workflow: 'analysis',
+          taskId: t.id,
+          assetId: t.asset_id,
+          action
+        })) {
           this.notifyRenderer(t.asset_id)
-        } else if (task.status === 'completed' && task.result) {
+          continue
+        }
+
+        if (action.lifecycle === 'completed') {
           const r = task.result
+          const completion = projectAiAnalysisCompletion(r, now)
           db.transaction(() => {
-            db.prepare(`
-              UPDATE ai_analysis_tasks
-              SET status = 'completed', sync_status = 'synced', synced_at = ?, started_at = ?, completed_at = ?, result_json = ?
-              WHERE id = ?
-            `).run(
-              now,
-              task.started_at ? new Date(task.started_at * 1000).toISOString() : null,
-              task.completed_at ? new Date(task.completed_at * 1000).toISOString() : null,
-              JSON.stringify(r),
-              t.id
-            )
+            syncProjectedAiTaskCompletionRecord({
+              db,
+              workflow: 'analysis',
+              taskId: t.id,
+              action,
+              syncedAt: now,
+              startedAt: workerEpochSecondsToIso(task.started_at),
+              completedAt: workerEpochSecondsToIso(task.completed_at),
+              resultJson: completion.resultJson
+            })
 
             db.prepare(`
               UPDATE assets
-              SET ai_analysis_status = 'synced', 
+              SET ai_analysis_status = ?,
                   ai_analysis_json = ?,
                   ai_ocr_text = ?,
-                  ai_ocr_source = 'ai_qwen_vl',
+                  ai_ocr_source = ?,
                   ai_ocr_updated_at = ?
               WHERE id = ?
-            `).run(JSON.stringify(r), r.ocr_text || '', now, t.asset_id)
+            `).run(
+              action.assetStatus,
+              completion.resultJson,
+              completion.ocrText,
+              completion.ocrSource,
+              completion.ocrUpdatedAt,
+              t.asset_id
+            )
 
             // Sync text_tags and design_tags to tag_suggestions as pending
-            const qwenTags: Array<{ name: string; type: string; confidence: number }> = []
-            
-            if (Array.isArray(r.text_tags)) {
-              for (const tag of r.text_tags) {
-                if (tag && tag.name) {
-                  qwenTags.push({
-                    name: tag.name,
-                    type: 'subject',
-                    confidence: typeof tag.confidence === 'number' ? tag.confidence : 0.90
-                  })
-                }
-              }
-            }
-            if (Array.isArray(r.design_tags)) {
-              for (const tag of r.design_tags) {
-                if (tag && tag.name) {
-                  qwenTags.push({
-                    name: tag.name,
-                    type: 'layout',
-                    confidence: typeof tag.confidence === 'number' ? tag.confidence : 0.88
-                  })
-                }
-              }
-            }
-
-            const insertSuggestion = db.prepare(`
-              INSERT INTO tag_suggestions (id, asset_id, tag_name, tag_type, source, confidence, status, model_name, raw_payload, created_at, updated_at)
-              VALUES (?, ?, ?, ?, 'ai_qwen_vl', ?, 'pending', 'Qwen2.5-VL', ?, ?, ?)
-            `)
-
-            for (const item of qwenTags) {
-              const modelName = 'Qwen2.5-VL'
-              const source = 'ai_qwen_vl'
-              
-              // 1. Idempotency Check for tag_suggestions
-              const sugExists = db.prepare(`
-                SELECT 1 FROM tag_suggestions 
-                WHERE asset_id = ? AND tag_name = ? AND source = ? AND model_name = ?
-              `).get(t.asset_id, item.name, source, modelName)
-
-              if (!sugExists) {
-                const sugId = `sug-${Math.random().toString(36).substr(2, 9)}`
-                insertSuggestion.run(
-                  sugId,
-                  t.asset_id,
-                  item.name,
-                  item.type,
-                  item.confidence,
-                  JSON.stringify(item),
-                  now,
-                  now
-                )
-              }
-
-              // Verify tag exists in tags table
-              const tagList = tagService.listTags({ searchQuery: item.name, type: item.type })
-              let tagId = ''
-              if (tagList.length > 0) {
-                tagId = tagList[0].id
-              } else {
-                const newTag = tagService.createTag({
-                  name: item.name,
-                  type: item.type,
-                  color: 'bg-purple-50 text-purple-700 border border-purple-200'
-                })
-                tagId = newTag.id
-              }
-
-              // 2. Idempotency Check for asset_tags (addTagToAsset does it automatically, but let's be explicit)
-              assetTagService.addTagToAsset(t.asset_id, tagId, {
-                source,
-                confidence: item.confidence,
-                status: 'pending',
-                modelName,
-                createdBy: 'ai'
+            for (const item of completion.suggestions) {
+              syncProjectedAiTagSuggestion({
+                db,
+                tagService,
+                assetTagService,
+                assetId: t.asset_id,
+                suggestion: item,
+                now
               })
             }
           })()
@@ -740,7 +729,7 @@ export class AiClientService {
               (async () => {
                 const { ColorPaletteService } = await import('./color-palette.service')
                 const paletteService = new ColorPaletteService()
-                await paletteService.refreshTextPaletteFromTextBlocks(t.asset_id, r.text_blocks)
+                await paletteService.refreshTextPaletteFromTextBlocks(t.asset_id, completion.textBlocks)
               })().catch((err: any) => {
                 console.error('[AIClient] Failed background color palette extraction on AI analysis completion:', err)
               })
@@ -750,14 +739,6 @@ export class AiClientService {
           }
 
           console.log(`[AIClient] Deep analysis task ${t.id} successfully synced into SQLite.`)
-          this.notifyRenderer(t.asset_id)
-        } else if (task.status === 'failed') {
-          db.prepare(`
-            UPDATE ai_analysis_tasks
-            SET status = 'failed', sync_status = 'failed', error_message = ?
-            WHERE id = ?
-          `).run(task.error_message || 'Qwen-VL design analysis failed', t.id)
-          db.prepare("UPDATE assets SET ai_analysis_status = 'failed' WHERE id = ?").run(t.asset_id)
           this.notifyRenderer(t.asset_id)
         }
       } catch (err) {

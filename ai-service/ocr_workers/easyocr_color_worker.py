@@ -23,6 +23,30 @@ def write_debug(msg):
     sys.stderr.write(f"[DEBUG] {msg}\n")
     sys.stderr.flush()
 
+def create_local_easyocr_reader(easyocr_module, languages, gpu_active, environment=None):
+    """Create an EasyOCR reader without permitting implicit model acquisition."""
+    env = os.environ if environment is None else environment
+    module_path = str(env.get("EASYOCR_MODULE_PATH") or "").strip()
+    model_storage_directory = os.path.join(module_path, "model") if module_path else ""
+    try:
+        if not model_storage_directory:
+            has_local_model_file = False
+        else:
+            with os.scandir(model_storage_directory) as entries:
+                has_local_model_file = any(entry.is_file() for entry in entries)
+    except OSError:
+        has_local_model_file = False
+    if not has_local_model_file:
+        raise FileNotFoundError("Local EasyOCR model files unavailable")
+
+    return easyocr_module.Reader(
+        languages,
+        gpu=gpu_active,
+        download_enabled=False,
+        verbose=False,
+        model_storage_directory=model_storage_directory,
+    )
+
 def rgb_to_hex(rgb):
     return "#{:02X}{:02X}{:02X}".format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
@@ -225,7 +249,7 @@ def main():
         device_name = "cuda" if gpu_active else "cpu"
         
         write_debug(f"Initializing EasyOCR with langs={languages}, gpu={gpu_active}")
-        reader = easyocr.Reader(languages, gpu=gpu_active)
+        reader = create_local_easyocr_reader(easyocr, languages, gpu_active)
         
         write_debug(f"Executing EasyOCR text detection on preloaded BGR numpy array")
         # readtext returns: [([[x,y], [x,y], [x,y], [x,y]], "text", confidence_score), ...]

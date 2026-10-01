@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"whatsapp.com":{srcMatching:[{processor:({trigger:e})=>e.querySelector('button [style*="blob:"]'),selectors:'[role="listitem"][aria-label*="Image"]'}]}};

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"hiraki.co.jp":{srcMatching:[{srcRegExp:"(//.+?\\.hiraki\\.co\\.jp/.+_)[A-Z](\\d+@IMG@)",processor:"$1O$2"},{srcRegExp:"(//.+?\\.hiraki\\.co\\.jp/.+_)[A-Z](@IMG@)",processor:"$1O1$2"}]}};

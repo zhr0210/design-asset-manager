@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"netflix.com":{srcMatching:[{processor:({trigger:e})=>{const t=/(?<=\/title\/)\d+/.exec(e.href)?.[0];return tools.fetchHdImageFromPageMeta(t,e.href)},selectors:'a[href*="netflix.com/title/"]'}]}};

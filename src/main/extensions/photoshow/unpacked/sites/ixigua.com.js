@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"ixigua.com":{srcMatching:[{srcRegExp:"(//.+\\.bdxiguastatic\\.com/img/user-avatar/.+?~)\\d+x\\d+(.*)",processor:"$10x0$2"}]}};

@@ -12,7 +12,8 @@ export default defineConfig({
       rollupOptions: {
         input: {
           index: resolve(__dirname, 'src/preload/index.ts'),
-          browser: resolve(__dirname, 'src/preload/browser.ts')
+          'asset-card': resolve(__dirname, 'src/preload/asset-card.ts'),
+          'work-window': resolve(__dirname, 'src/preload/work-window.ts')
         },
         output: {
           format: 'cjs',

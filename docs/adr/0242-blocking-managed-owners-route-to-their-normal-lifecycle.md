@@ -1,0 +1,21 @@
+# Blocking Managed Owners Route To Their Normal Lifecycle
+
+When ADR 0241 Recovery-Protected Owner Scan finds one or more authoritative owners, Delete Recovery-Protected Managed Copy remains unavailable. Storage Management projects each **Blocking Managed Owner** by path-free owner category and routes the user to that owner's existing lifecycle surface; the recovery page never removes, cancels or weakens the owner itself.
+
+Owner categories include Installed/Active Package, Last Known Good or Other Rollback, Active Transfer/Install/Delete/Keep Transaction, Other Pending/Kept Managed Copy, and any additional declared package-byte owner. Shared immutable bytes may list more than one category. Categories come from host owner evidence and are not inferred from filenames, directories, process names, displayed package similarity or physical file presence.
+
+Installed/Active Package routes to the relevant Model Library, Extension Library or AI Runtime package detail where ordinary disable/uninstall/replacement rules apply. Rollback routes to its governed rollback or Storage Management surface, including ADR 0191 health, time and explicit early-reclaim gates. Active Transaction routes to its existing activity/progress surface, where cancellation appears only if that transaction's own policy permits it. Other Pending/Kept Copy routes to its normal managed-copy decision review.
+
+The projection shows coarse owner category, exact package relationship when safely available, why it prevents advanced deletion, and the appropriate Open Management action. It exposes no managed path, database key, process token, transaction journal payload, credential or unrelated owner details. Multiple references of one category may be grouped with a count while still preserving distinct lifecycle destinations when action is required.
+
+Opening a management destination does not preselect Uninstall, Release Rollback, Cancel Transaction, Unpin or Delete. It carries no remembered destructive consent, typed package-name confirmation, background cleanup request or promise that releasing one owner will reclaim the displayed bytes. Every destination repeats its own current integrity, dependency, active-job, rollback, trust and shared-owner gates.
+
+There is no Continue Anyway or Force Remove control in the recovery page, Developer Mode, low-disk UI or command routing. A referenced owner must be removed through its normal lifecycle and safe terminal boundary. An active transaction that cannot be cancelled remains blocking until it completes; a required rollback owner remains blocking until ADR 0191 independently permits and the user completes its governed release.
+
+Any owner generation change invalidates the prior Recovery-Protected Owner Scan and its reclaim projection. ADR 0243 returns the target as Recovery Owner Changed: returning to the recovery page never scans automatically, reuses the earlier absence proof or retains final delete confirmation. The user must explicitly run a new complete scan and, if it proves no owner, retype the package name. The ADR 0240 safety gate remains until that freshly confirmed ADR 0241 deletion commits or ordinary reconciliation proves Kept/Pending.
+
+ADR 0248's Unassessable Delete Finalization Owner Scan uses the same owner categories and routing boundary after ADR 0247 repair remains unresolved. A real owner keeps finalization disabled and must be handled through this ADR's ordinary lifecycle; neither the neutral reconciliation gate nor the new exact-name confirmation can waive it.
+
+Routing state is session-bound and contains only opaque target identity, coarse owner categories, destination codes and scan generation. It creates no owner activity history, cross-package browsing trail, telemetry, publisher feedback or support-log record and is excluded from Full Library Backup, export/merge/sync and synchronization.
+
+The current Runtime Package/session UI has no managed-copy owner graph, blocking-owner classifier, rollback/package/transaction recovery routing or recovery-protected delete action. This ADR changes documentation only: it removes/cancels/routes no real owner, reads no runtime database/package/cache/private state and changes no public IPC/schema/AI Worker API.

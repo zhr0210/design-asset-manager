@@ -1,0 +1,1211 @@
+[
+  {
+    "id": "P00",
+    "title": "核实工作区、正式调用链与证据基线",
+    "dependencies": [],
+    "chapters": [
+      "SYS-01",
+      "HOST-03",
+      "DEV-21",
+      "MIG-23"
+    ],
+    "references": [
+      "S00",
+      "U01"
+    ],
+    "source_navigation": "AGENTS.md / CONTEXT.md / TASK.md / package.json / 锁文件 / src/main/index.ts / ipc composition / .codeindex",
+    "goal": "取得可追溯现状，区分已接线、旧链路、验证实现与目标，不修改业务代码。",
+    "work": "记录分支、HEAD、已有 staged/unstaged/untracked 清单及与任务相关的工作区摘要；不得自动提交、暂存、清理或把含密钥的文件打包。核对原稿与当前源码差异，按真实入口跟踪 visual-ai、ocr、Host、模型库、关闭、查询、工作集和外部库。\n生成 current/legacy/tracer/prototype/unknown 模块表、主要调用链、数据写入权威、真实测试脚本及证据层级。先确认工作区完整，再讨论哪些代码冗余；链接但缺失的报告标未取得。\nSPEC 只读源码并写评审文档；可核对历史测试记录，但不把其当作本次执行结果。IMPLEMENT 在此阶段也不改业务代码，只可在已允许的隔离范围内补跑聚焦基线。",
+    "checks": "检查所有“正式”结论均有入口与调用方；没有把未跟踪文件漏作不存在；对每个缺失证据写出影响。无完整工作区时仍交付基于现有材料的报告，但源码核查状态必须 BLOCKED。\n确认旧受限 IPC、退休网页能力和 Legacy 只读约束没有被当作待恢复功能。",
+    "rollback": "没有业务改动；新增文档与既有用户文件冲突时使用独立目录，不覆盖。",
+    "outputs": "CURRENT-STATE-AUDIT.md、MODULE-REACHABILITY.md、BASELINE-MATRIX.md、初始阶段报告",
+    "test_ids": [
+      "T01",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P00.md",
+    "report_target": "reports/P00-REPORT.md"
+  },
+  {
+    "id": "P01",
+    "title": "固定模块边界、公共契约与错误信封",
+    "dependencies": [
+      "P00"
+    ],
+    "chapters": [
+      "CONTRACT-04",
+      "HOST-03",
+      "DEV-21",
+      "OBS-18"
+    ],
+    "references": [
+      "S00",
+      "S18",
+      "S24",
+      "S30"
+    ],
+    "source_navigation": "src/shared/contracts / types / workflows；src/preload；现有 Result 与错误类型；模块说明",
+    "goal": "建立可执行的边界与最小共用契约，但不生成所有远景模块的空壳。",
+    "work": "选择一个实际跨进程请求作为样本，定义 schema/version、requestId/traceId、成功与失败信封；错误区分等待条件、可重试失败、无权限、取消和提交后通知失败。\n比较现有验证工具与 JSON Schema 的适配成本，优先复用已验证依赖；跨 TS/Python 的样例从同一契约验证，不能仅靠 TS 类型。旧 ok/value 与 success/error 在边界适配，不一口气修改所有调用方。\n为实际模块建立依赖规则和清单，先阻止 Renderer/Worker 绕过 Host。追踪只定义不含私密内容的字段，不强制部署遥测服务。",
+    "checks": "无效字段、未知版本、非法错误码、跨语言样例不一致必须被拒绝；兼容入口仍返回其原契约。依赖检查需真实运行在少量当前模块，而不是用字符串扫描冒充权限测试。\n验证日志字段不需要原件路径、图片内容或密钥。",
+    "rollback": "保留兼容转换器；可以停用新接口而不改变原有数据；不回滚用户文件。",
+    "outputs": "契约 ADR、至少一对请求/结果 schema 及夹具、模块依赖清单、兼容映射",
+    "test_ids": [
+      "T01",
+      "T02",
+      "T21",
+      "T22"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P01.md",
+    "report_target": "reports/P01-REPORT.md"
+  },
+  {
+    "id": "P02",
+    "title": "集中 schema 能力查询与安全演进",
+    "dependencies": [
+      "P01"
+    ],
+    "chapters": [
+      "DATA-12",
+      "HOST-03",
+      "MIG-23"
+    ],
+    "references": [
+      "S00",
+      "S22",
+      "S23"
+    ],
+    "source_navigation": "library-lifecycle 的 schema/inspection/materialization；app-storage；现有 v1–v8 启用路径",
+    "goal": "建立单一迁移与能力判定入口，同时保留既有版本语义和显式升级条件。",
+    "work": "逐项清点 schema 版本、实际表、启用动作、较高版本保留策略和旧版拒写规则。先集中查询和编排，不臆造 v9 或统一把所有库升到最高版本。\n规定 migration ID、前置/后置条件、事务范围、恢复检查点和备份验证。SQLite 备份与原件/派生文件备份分别定义，不能把复制活动 DB 主文件当成一致备份。\nManaged 才能进入对应迁移；Eagle 独立索引迁移独立注册，Legacy 永远只读。新 feature schema 是否需要首次确认沿用产品规则，不因后台调度自动绕过。",
+    "checks": "使用临时 v1–v8 及未知较高版本夹具，验证不降级、较高版本拒绝不安全写入、失败后重开、备份可校验。半完成文件操作需日志恢复，不假设全局文件/DB 原子事务。\n真实用户库迁移未授权则 NOT_RUN。",
+    "rollback": "源码回退、索引重建、数据库恢复三种回退分开；回到旧二进制前必须核对其能否读取新 schema。",
+    "outputs": "迁移登记 ADR、版本/能力矩阵、临时库迁移与失败夹具、备份恢复说明",
+    "test_ids": [
+      "T02",
+      "T03",
+      "T07"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P02.md",
+    "report_target": "reports/P02-REPORT.md"
+  },
+  {
+    "id": "P03",
+    "title": "抽出分析配方、执行配置与 Provider",
+    "dependencies": [
+      "P01"
+    ],
+    "chapters": [
+      "AI-05",
+      "AI-06",
+      "CONTRACT-04"
+    ],
+    "references": [
+      "S00",
+      "S01",
+      "S02"
+    ],
+    "source_navigation": "visual-ai 正式 controller/transport/parser；services/ai-backends；旧 Provider 中已验证的策略",
+    "goal": "使当前视觉行为可版本化、可替换后端，不改变默认模型或静默增加能力。",
+    "work": "从源码确认当前预处理、提示、语言、输出上限、超时、一次截断重试和完整 JSON 规则；把观察结果固化为兼容 baseline Recipe/Profile，而不是把原稿数值机械覆盖源码。\n分离模型服务配置、配方、执行配置与能力就绪；Provider 只翻译请求和响应，不获取 DB 写口。记录模型/投影/Runtime/profile/recipe 的实际版本，无法探知远端权重时如实记录 opaque/unknown。\n增加可替换 Provider 端口与合成后端。旧调用方先经过兼容适配，不同时引入 MLX/新 OCR/新模型安装。",
+    "checks": "既有完整输出可读；截断 JSON 拒绝；超时与取消保留；同一次兼容重试不自动换服务、模型或图像；模型列表成功不标视觉 ready。\n真实模型基线无授权或二进制缺失则仅完成 L1–L3，并标明 L5 缺口。",
+    "rollback": "通过单写路径的兼容开关回到旧执行策略；保留新旧配置可追溯，不恢复旧全局 DB 写入。",
+    "outputs": "Recipe/Profile/Provider 契约、兼容配置、解析夹具、旧策略继承对照",
+    "test_ids": [
+      "T04",
+      "T05",
+      "T12",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P03.md",
+    "report_target": "reports/P03-REPORT.md"
+  },
+  {
+    "id": "P04",
+    "title": "独立分析证据与用户覆盖层",
+    "dependencies": [
+      "P02",
+      "P03"
+    ],
+    "chapters": [
+      "EVIDENCE-11",
+      "AI-06",
+      "DATA-12"
+    ],
+    "references": [
+      "S00",
+      "U01"
+    ],
+    "source_navigation": "visual-ai 与 OCR 保存路径；active-library-asset-queries；标签建议、用户描述和 OCR 修订",
+    "goal": "允许每种能力独立保存、生效和失败，同时保护用户状态及旧有效结果。",
+    "work": "为标签、描述、OCR、反推定义独立 Evidence 与当前选择规则，分清 observed/measured/inferred/creative/user。历史综合结果通过兼容读取投影展开；缺失历史模型/配方信息不能伪造。\n用请求代次和显式选用规则判断新旧结果，不能按最后完成时间覆盖。强制重跑失败保留上次有效结果；用户已确认/拒绝的标签、编辑描述和 OCR 修订不被自动覆盖。\n规划 schema 增量交由 P02 登记。新旧读入口可并存，但相同操作只能有一个权威写口。",
+    "checks": "标签成功而描述失败；OCR 空文字有效；新任务先完成旧任务迟到；内容版本变化；重跑不清空人工修订；旧综合证据仍能读取。\nAI 标签立即参与分类不等于生成用户确认关系。",
+    "rollback": "保持旧证据可读；不批量删除旧表或历史结果。投影切回需证明不会丢失新增能力的有效状态。",
+    "outputs": "Evidence schema/validator、当前结果选择器、用户覆盖规则、兼容读测试",
+    "test_ids": [
+      "T02",
+      "T04",
+      "T05",
+      "T06"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P04.md",
+    "report_target": "reports/P04-REPORT.md"
+  },
+  {
+    "id": "P05",
+    "title": "持久任务、幂等提交与中断恢复",
+    "dependencies": [
+      "P02",
+      "P04"
+    ],
+    "chapters": [
+      "JOB-07",
+      "DATA-12",
+      "SEC-10"
+    ],
+    "references": [
+      "S00",
+      "U01",
+      "S23"
+    ],
+    "source_navigation": "Host 生命周期与事务；现有视觉/OCR取消；下载 Journal 作边界参考而非直接通用替换",
+    "goal": "把分析意图与尝试记录落库，让崩溃、重开和重试不造成重复结果或越权。",
+    "work": "定义 batch/job/attempt/physical invocation 的不同身份，事务内 claim epoch、attempt token、request generation 与幂等键；强制重跑与同一请求重投分开。\n实现或细化 queued/waiting/running/validating/committing/succeeded 等状态，等待资源/模型/授权不是失败。结果、任务成功和 Outbox 在 Host 同一事务提交，消费者支持重复事件。\n重启与重开核对库 identity/generation、内容修订、配置、模型和外发授权；持久化的是意图，不是会话 token。关库撤权后不能因为队列存在继续写入。",
+    "checks": "在认领前后、响应后提交前、提交后通知前分别崩溃；同任务并发认领、旧 worker 晚到、强制重跑、Outbox 重发、库关闭/切换。\n云超时先建 outcome_unknown 状态，不宣称任意 API exactly-once 或立即无成本重试。",
+    "rollback": "停止新任务准入并 drain；保留未完成意图和旧证据；不清空日志来“修复”失败。迁移回退按 P02。",
+    "outputs": "任务状态机、journal/claim/commit 接口、Outbox 消费协议、恢复故障夹具",
+    "test_ids": [
+      "T06",
+      "T07",
+      "T08",
+      "T13"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P05.md",
+    "report_target": "reports/P05-REPORT.md"
+  },
+  {
+    "id": "P06",
+    "title": "受控分析输入与派生物来源",
+    "dependencies": [
+      "P03",
+      "P04"
+    ],
+    "chapters": [
+      "AI-06",
+      "DATA-13",
+      "SEC-10"
+    ],
+    "references": [
+      "S00",
+      "S14"
+    ],
+    "source_navigation": "受控预览协议、图片工具/Sharp、OCR 区域坐标、visual-ai 输入准备",
+    "goal": "为不同能力提供适当且有来源的输入，禁止 Worker 任意读取原件。",
+    "work": "定义 PreparedInput/InputGrant，绑定库/素材/内容版本、输入哈希、有效范围和临时材料生命周期。Renderer 不能拿任意原件路径；Worker 只获得指定材料或窄读取能力。\n标签/描述整体图、OCR 高清或分块、颜色测量、区域裁剪各自声明预处理；完整记录缩放、旋转、裁剪、padding 坐标变换及原始尺寸。\n对字节、像素、页/帧/块数和解码开销设可配置上界。预处理也消耗资源，必须能提交资源申请；缓存完整策略留 P19。",
+    "checks": "跨库复用 grant、过期 generation、原件变化、EXIF 旋转、边界裁剪、无效图片、超大解码、关库后临时文件清理；OCR 坐标往返可验证。\n不把低分辨率预览测量写成原件全像素测量。",
+    "rollback": "旧输入预处理作为明确版本配置可选；不删除仍被已提交证据引用的派生物。",
+    "outputs": "输入/变换契约、能力预处理器、边界夹具、临时材料回收规则",
+    "test_ids": [
+      "T02",
+      "T05",
+      "T18"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P06.md",
+    "report_target": "reports/P06-REPORT.md"
+  },
+  {
+    "id": "P07",
+    "title": "跨平台资源遥测与物理内存池",
+    "dependencies": [
+      "P01"
+    ],
+    "chapters": [
+      "RES-08",
+      "PLATFORM-19"
+    ],
+    "references": [
+      "S04",
+      "S05",
+      "S07",
+      "S09",
+      "S20"
+    ],
+    "source_navigation": "platform、Electron powerMonitor、旧 ai-service/core 探测、已存在进程统计",
+    "goal": "建立可信的资源读数层，先可测试再接真实平台，不把未知读数当空闲。",
+    "work": "定义 ResourceSnapshot，包括物理 poolId、设备/进程范围、使用/预算、内存压力、电源、温度、时间戳、置信度、单位与 unknown 原因。\nMac Apple Silicon 统一内存与独显Windows分别建模，避免 CPU/GPU 共享内存重复计量；区分 Main 与实际 Worker 的预算，DXGI 应用预算不是全设备空闲。\n先做假时钟/可重放遥测源，再以小平台适配层接实际 API。对 OS/硬件不支持或权限不足显式降级；不安装未知驱动/需要提权的工具。",
+    "checks": "陈旧读数、采样失败、负值/单位错误、多GPU、共享内存、PID复用、Worker死亡、睡眠唤醒、无温度数据；缺数据不能反向提高并发。\n真实平台测试只标实际运行平台。",
+    "rollback": "遥测故障退到保守策略或停止后台准入，不虚构资源；旧无资源任务路径不能作为无限制回退。",
+    "outputs": "TelemetryPort、资源拓扑说明、合成轨迹、平台能力与缺口表",
+    "test_ids": [
+      "T09",
+      "T11",
+      "T22",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P07.md",
+    "report_target": "reports/P07-REPORT.md"
+  },
+  {
+    "id": "P08",
+    "title": "原子资源准入与驻留许可",
+    "dependencies": [
+      "P05",
+      "P07"
+    ],
+    "chapters": [
+      "RES-08",
+      "AI-09"
+    ],
+    "references": [
+      "S05",
+      "S09",
+      "S12"
+    ],
+    "source_navigation": "新 jobs 调度端口、资源 ledger、Runtime 抽象、模型与任务峰值估算",
+    "goal": "保证多个 DAM 工作负载不能同时使用同一份未预留余量。",
+    "work": "建立统一资源 ledger，RAM/各物理显存池/线程/并发一次原子申请，全成或全拒；定义公平排队、取消等待、资源不足原因和估算校准输入。\n分开 model-residency permit 与 compute permit：任务完成只归还计算增量，模型确认卸载后才归还驻留预算。许可过期/心跳丢失进入 suspect/reconcile，不能立即当作物理内存释放。\n定义预留百分比为 DAM 软预算目标，并与系统动态压力取较严格条件；0%不代表无安全余量，100%不能使基础应用消失，通常意味着禁止新增后台模型占用。共享池和已观测占用不要重复扣减。",
+    "checks": "并发两任务抢相同余量、跨池申请失败回滚、重复释放、许可超时但进程仍在、异常终止、模型切换双驻留峰值、配置变小、预算不足等待。\n用可重放测试证明 ledger 不超卖，不用单次 GUI 截图证明。",
+    "rollback": "停新准入并保留当前持有记录至核对完成；不能删除 ledger 让所有任务重新启动。",
+    "outputs": "ResourcePermit/lease 状态机、估算及预算公式、原子准入实现或规格、并发故障测试",
+    "test_ids": [
+      "T09",
+      "T10",
+      "T11"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P08.md",
+    "report_target": "reports/P08-REPORT.md"
+  },
+  {
+    "id": "P09",
+    "title": "Runtime 托管、驻留、取消与重启核对",
+    "dependencies": [
+      "P03",
+      "P08"
+    ],
+    "chapters": [
+      "AI-09",
+      "HOST-03",
+      "SEC-10"
+    ],
+    "references": [
+      "S01",
+      "S10",
+      "S11",
+      "S13",
+      "S19"
+    ],
+    "source_navigation": "现有 llama-runtime/ai-runtime、OCR 子进程管理、服务配置与 owned process 生命周期",
+    "goal": "统一管理 DAM 自己启动的运行时，并明确用户外部服务不能被擅自接管。",
+    "work": "定义 dam-managed/user-managed/remote 后端所有权。仅 dam-managed 可默认由 DAM 启停/卸载；外部服务只限请求、探测和已明确授权的动作。\n分开 installed/starting/loaded/capability-tested/ready；启动认证、健康、版本、进程身份与父子进程组关联。utilityProcess仅用于适合Node的隔离组件，Python按受控子进程适配。\n以 P08 驻留许可执行加载/卸载、TTL与切换冷却，取消能力按后端声明。重启核对实际进程与占用，识别孤儿进程；不靠PID相同判断归属。",
+    "checks": "模型加载超时、服务假ready、进程崩溃/重启风暴、卸载命令成功但仍占用、外部服务拒绝管理、共享调用取消、库关闭时敏感缓存处理。\n用假Runtime完整覆盖；真实启停只对获准 DAM 管理的测试进程。",
+    "rollback": "停止接入新托管服务，保留安全的外部服务兼容入口和任务日志；不杀用户进程。",
+    "outputs": "RuntimeSupervisor/adapter、生命周期能力表、reconcile 测试、缓存/退出说明",
+    "test_ids": [
+      "T07",
+      "T10",
+      "T12",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P09.md",
+    "report_target": "reports/P09-REPORT.md"
+  },
+  {
+    "id": "P10",
+    "title": "打通首个“独立标签”纵向链路",
+    "dependencies": [
+      "P04",
+      "P05",
+      "P06",
+      "P09"
+    ],
+    "chapters": [
+      "AI-06",
+      "JOB-07",
+      "RES-08",
+      "EVIDENCE-11"
+    ],
+    "references": [
+      "S00",
+      "U01"
+    ],
+    "source_navigation": "标签分析正式入口、Host证据保存、既有AI分类和检索投影、兼容visual-ai入口",
+    "goal": "用一个真实业务能力证明框架能贯通，暂不把所有功能同时迁移。",
+    "work": "打通：用户请求→逻辑标签Job→Profile选择→资源许可→受控输入→已有Provider→完整结果验证→Host幂等提交→Outbox→原界面重读。\n单一写路径可用版本化开关切换；旧综合分析仍可使用，不能一个动作同时启动新旧推理或双写。将标签结果尽快作为AI建议加入检索/动态分类，非用户确认标签。\n这一阶段只接静态保守调度和已就绪后端，不等待高级自适应/所有安装器；但不得绕过资源与权限基础。",
+    "checks": "成功、无效标签、截断、取消、重复点击、关库、重开、人工标签保护、异步通知失败。正式Electron路径展示的结果必须来自临时库真实提交，不是仅前端mock。\nL5没有授权则记录待验证，不妨碍报告L1–L4的真实结果。",
+    "rollback": "切回旧入口前 drain 新尝试；已生成证据继续可读，未完成任务保留，不启动双消费者。",
+    "outputs": "首个纵向验收报告、实际时序与状态记录、单写切换点、标签兼容测试",
+    "test_ids": [
+      "T02",
+      "T04",
+      "T05",
+      "T06",
+      "T07",
+      "T08",
+      "T09"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P10.md",
+    "report_target": "reports/P10-REPORT.md"
+  },
+  {
+    "id": "P11",
+    "title": "基础自动分析：描述、OCR 与独立成功",
+    "dependencies": [
+      "P10"
+    ],
+    "chapters": [
+      "AI-06",
+      "JOB-07",
+      "EVIDENCE-11",
+      "MEDIA-16"
+    ],
+    "references": [
+      "S00",
+      "U01"
+    ],
+    "source_navigation": "OCR正式入口和v8修订；caption保存；Capture Promotion提交事件；基础分析入口",
+    "goal": "默认基础分析包含标签、描述、OCR，按能力完成和恢复，不自动做高级反推。",
+    "work": "把描述和专用OCR接到与标签一致的任务/资源/提交生命周期，保留各自输入和结果契约。入库Promotion提交后通过可靠事件创建基础任务，不能让AI阻塞入库事务。\n允许用户独立触发、重跑与取消；批次表达partial/completed-with-failures，并聚合通知。历史全库回填按分页有界生成意图，不一口气读取全库到内存。\n只有完整响应+独立validator通过才允许复用合并物理调用；先可用的独立请求优先，不为节省请求牺牲失败隔离。首次后台分析启用、schema与外发仍按产品授权规则。",
+    "checks": "三能力各自失败组合、OCR有效空、事件重复、入库成功AI失败、旧OCR修订保留、基础入口不生成反推任务、重开仅续未完成能力、批量分页上界。",
+    "rollback": "可停自动任务生成但不删除已存意图/结果；单项手动入口保留；兼容投影不覆盖人工状态。",
+    "outputs": "基础计划定义、Promotion订阅、独立能力集成、批次通知与回填策略",
+    "test_ids": [
+      "T02",
+      "T04",
+      "T05",
+      "T06",
+      "T07",
+      "T08"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P11.md",
+    "report_target": "reports/P11-REPORT.md"
+  },
+  {
+    "id": "P12",
+    "title": "高级提示词反推与批量恢复",
+    "dependencies": [
+      "P11"
+    ],
+    "chapters": [
+      "AI-06",
+      "JOB-07",
+      "EVIDENCE-11"
+    ],
+    "references": [
+      "U01",
+      "S00"
+    ],
+    "source_navigation": "反推入口/原综合prompt字段；批次任务与独立结果；高级Recipe",
+    "goal": "使反推成为手动启动、独立预算、可批量恢复的高级能力。",
+    "work": "定义高级反推Recipe及较长输出预算，保留来源为creative/inferred，不能声称找回原始prompt。与基础分析使用不同Job，可共享授权输入和已验证驻留但不强制一起执行。\n批量请求固定素材范围/内容版本，采用有界分页、进度、暂停/取消与续跑规则。失败保留原有效结果；切换模型记录新尝试，资源不足等待或提示已授权方案。\n默认优先级可作为配置提案，不让大批手动任务永久饿死其他工作。",
+    "checks": "默认基础分析不会调用；手动多选范围冻结；长输出截断拒绝；部分成功续跑；关库后重开确认；手动固定模型资源不足不绕过预算。",
+    "rollback": "保留独立结果与任务；停用新的高级入口可读旧prompt证据，不降级合并人工字段。",
+    "outputs": "高级Recipe/Profile、批次状态与恢复测试、结果来源约定",
+    "test_ids": [
+      "T04",
+      "T05",
+      "T07",
+      "T12"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P12.md",
+    "report_target": "reports/P12-REPORT.md"
+  },
+  {
+    "id": "P13",
+    "title": "闲忙自适应、模型路由与公平调度",
+    "dependencies": [
+      "P11",
+      "P12",
+      "P07",
+      "P08",
+      "P09"
+    ],
+    "chapters": [
+      "RES-08",
+      "JOB-07",
+      "AI-09"
+    ],
+    "references": [
+      "S04",
+      "S05",
+      "S09",
+      "S10",
+      "S12",
+      "S20"
+    ],
+    "source_navigation": "资源策略、scheduler、Runtime驻留、用户资源设置、任务优先级",
+    "goal": "在用户软预算内随系统压力调节，避免模型切换抖动和后台任务饥饿。",
+    "work": "实现busy/balanced/idle/pressure/thermal-or-battery/unknown状态和快速降速、缓慢恢复的迟滞。闲置必须结合系统压力，不仅依据无键鼠输入；读数缺失保守降级。\n路由先过滤能力、质量、授权、可运行条件，再比较资源/时延/切换成本。手动固定不可越过安全预算；自动切换限任务边界，不暗中上云，不用大模型控制调度。\n引入aging、公平份额、交互资源余量、模型最小驻留/冷却和取消后公平重排。提供通用WorkloadAdmission端口，但暂不改写所有下载/收录状态机。参数先做可配置与实验，不伪造默认最优值。",
+    "checks": "回放外部应用负载突然升高、电池/温度、资源恢复、小大模型交替、长队列、前台长任务、读数缺失、取消不支持；观察新准入及时降低且不会无限暂停/重启同一任务。\n实际吞吐/体验仅在指定硬件测量，并与无后台基线比较。",
+    "rollback": "关闭自适应路由改为保守固定Profile/低并发，保留资源硬边界和等待解释；不回到无限制队列。",
+    "outputs": "策略状态机、参数ADR、遥测回放集、调节原因代码、模型选择测试",
+    "test_ids": [
+      "T09",
+      "T10",
+      "T11",
+      "T12",
+      "T22",
+      "T23"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P13.md",
+    "report_target": "reports/P13-REPORT.md"
+  },
+  {
+    "id": "P14",
+    "title": "云推理、外发授权与成本边界",
+    "dependencies": [
+      "P05",
+      "P06",
+      "P13"
+    ],
+    "chapters": [
+      "SEC-10",
+      "CONTRACT-04",
+      "JOB-07"
+    ],
+    "references": [
+      "S11",
+      "S14",
+      "S18"
+    ],
+    "source_navigation": "服务配置与密钥、Provider HTTP、受控输入grant、任务attempt与授权",
+    "goal": "支持明确授权的云端推理，不把本地不足等同上传许可。",
+    "work": "定义EgressGrant绑定来源库/素材/能力/目的地/输入等级/用途/期限及可续跑范围；保存API Key和连接检查不授权上传。云请求也受本地预处理、并发及费用预算控制。\n识别local-only、外部本地服务可能转发、明确remote三类信息，unknown不冒充完全本地。TLS、重定向、DNS变化/SSRF、错误日志脱敏和密钥存储按边界设计；模型服务可授权loopback，不机械复用下载拒绝所有内网规则。\n费用估算预留→结算/未知，记录provider请求ID；超时不能保证未执行。未选择厂商/费率时只做可配置契约和合成API，不写死价格或承诺自动省钱。",
+    "checks": "无授权、过期/撤销、目的地改变、关库后迟到、云服务429/5xx、网络中断、重复提交、金额未知、不可取消请求、localhost转发声明；测试不得发送私密素材或花真实费用。",
+    "rollback": "撤销新外发准入，已发请求如实显示不可撤回/未知；保留本地能力，不删成本或审计记录。",
+    "outputs": "授权与成本ADR、CloudProvider契约、合成HTTP故障测试、外发诊断",
+    "test_ids": [
+      "T02",
+      "T07",
+      "T13",
+      "T21",
+      "T22"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P14.md",
+    "report_target": "reports/P14-REPORT.md"
+  },
+  {
+    "id": "P15",
+    "title": "验证组合目录、模型安装与高级配置手册",
+    "dependencies": [
+      "P03",
+      "P09",
+      "P14"
+    ],
+    "chapters": [
+      "PLATFORM-19",
+      "AI-05",
+      "AI-09"
+    ],
+    "references": [
+      "S00",
+      "S01",
+      "S02",
+      "S06",
+      "S10",
+      "S11"
+    ],
+    "source_navigation": "model-library、model-library-workspace、runtime-package、已有下载与平台治理",
+    "goal": "建立少量可信组合及下载到能力就绪闭环，不把“页面存在”当安装完成。",
+    "work": "定义Preset manifest：模型/投影/tokenizer/Runtime版本、平台条件、能力、Profile、质量/资源证据、许可来源；没有证据的组合只能experimental/unverified。\n安装流程：用户选择与授权→可信来源/尺寸和空间检查→下载校验→安全解包→隔离启动→内置非敏感能力样例→就绪。校验hash不等于来源可信；拒绝路径穿越、默认远程脚本和任意remote-code。\n安装失败可恢复、取消不污染活动版本；下载/模型可执行包/素材数据分开。普通手册只列实际验证组合，高级手册说明URL/密钥/参数/检测/风险与回退；不在本阶段自动下载大模型来填报告。",
+    "checks": "损坏hash、签名/来源异常、zip穿越、空间不足、中断、版本不兼容、只有/models成功、结构有效但能力不达标、激活回退；真实模型安装明确授权才运行。",
+    "rollback": "保留前一个验证组合与制品引用；新版本通过后才激活；清理只删确认无人引用的临时安装内容。",
+    "outputs": "Preset/安装状态机、可信目录规则、能力探针、普通与高级配置手册",
+    "test_ids": [
+      "T05",
+      "T10",
+      "T14",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P15.md",
+    "report_target": "reports/P15-REPORT.md"
+  },
+  {
+    "id": "P16",
+    "title": "主进程查询、分页与中文全文检索",
+    "dependencies": [
+      "P02",
+      "P04",
+      "P05"
+    ],
+    "chapters": [
+      "SEARCH-14",
+      "HOST-03"
+    ],
+    "references": [
+      "S00",
+      "S21"
+    ],
+    "source_navigation": "active-library-asset-queries、asset-discovery.workflow、Renderer asset.store、现有分类投影",
+    "goal": "把大库查询移入受控查询服务，保持原词法语义及命中说明。",
+    "work": "建立QuerySpec/QueryPage/命中证据契约，分页排序含稳定tie-breaker，游标绑定过滤条件、索引/库generation；处理列表变化而不是永久持有写事务快照。\n以现有语义做对照，评估FTS5实际编译与中文分词，转义/参数化查询，不让用户文本成为任意SQL/FTS表达式。确认标签、AI标签、OCR与描述字段分清来源及用户覆盖。\n索引从权威数据重建，更新经Outbox幂等投影；Renderer逐步改为有限页面与选择状态，不重做界面。",
+    "checks": "中文无空格、别名、OCR、引号/运算符、分页同值排序、插入删除/回收站、跨库游标、旧索引、水位变化、增量更新与全重建一致；合成规模并不等于真实素材性能。",
+    "rollback": "可切回兼容查询服务，保留索引状态与来源；读旧投影不授权旧数据库写口。",
+    "outputs": "查询契约、中文tokenizer对照与ADR、FTS投影/分页实现、语义一致性报告",
+    "test_ids": [
+      "T02",
+      "T08",
+      "T15",
+      "T17",
+      "T23"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P16.md",
+    "report_target": "reports/P16-REPORT.md"
+  },
+  {
+    "id": "P17",
+    "title": "Embedding 空间、索引代际与安全重建",
+    "dependencies": [
+      "P13",
+      "P15",
+      "P16"
+    ],
+    "chapters": [
+      "SEARCH-14",
+      "DATA-12",
+      "EVIDENCE-11"
+    ],
+    "references": [
+      "S15",
+      "S21"
+    ],
+    "source_navigation": "搜索QueryPort、新Embedding能力、模型目录、索引投影与资源准入",
+    "goal": "建立不能混用模型空间的向量检索基础，选择实现依据实际基准。",
+    "work": "定义EmbeddingSpaceId包含模型/版本/维度/归一化/预处理/模态规则，IndexGeneration独立；同维度不同模型不能混检。\n比较少量嵌入式候选的平台打包、更新删除、过滤、内存、重建和许可，实际选型写ADR，不因热门直接引入远程向量服务。\n将Embedding作为独立可恢复任务，模型切换创建新代际后台回填、记录覆盖率、核对水位再切换；原件改动/删除生成索引更新。查询编码器不可用则保持词法功能，不擅自上云编码。",
+    "checks": "同维不同空间拒绝、部分覆盖、删除tombstone、切换中断、新旧代际、非法NaN/维度向量、重复Outbox、恢复重建、过滤范围一致；真实Embedding质量单独验证。",
+    "rollback": "保留旧有效代际到验证完成；旧空间不能服务新模型查询，失败退词法或明确选旧空间。",
+    "outputs": "EmbeddingSpace/IndexGeneration契约、选型实验、重建与切换状态机、过滤/删除测试",
+    "test_ids": [
+      "T07",
+      "T08",
+      "T16",
+      "T23",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P17.md",
+    "report_target": "reports/P17-REPORT.md"
+  },
+  {
+    "id": "P18",
+    "title": "混合检索、以图找图与证据解释",
+    "dependencies": [
+      "P16",
+      "P17"
+    ],
+    "chapters": [
+      "SEARCH-14",
+      "EVIDENCE-11"
+    ],
+    "references": [
+      "S15",
+      "S21"
+    ],
+    "source_navigation": "QueryPort、全文/向量投影、用户标签/OCR/证据读取、可选reranker",
+    "goal": "组合词法、向量和结构化过滤，并能说明真实命中依据。",
+    "work": "设计统一SearchPlan与分支超时预算；使用可解释的分数校准或排名融合，不把不同量纲分数直接相加。检索LLM/reranker是可选增强，不成为普通查询前置。\n以图/区域查询复用受控输入和来源映射；权限过滤在暴露候选之前完成。Explanation来自词法字段、OCR区域、确认/AI标签或向量分支，不由模型编造确定性理由。\n固定中文设计检索标注集比较词法、语义和混合；维护旧有效证据与来源标记，不把相似度解释为事实置信度。",
+    "checks": "多分支部分失败、预算不足、无query模型、图像修改、跨库范围、命中已删除结果、解释与实际字段不一致；记录Recall@K/相关性及人工解释正确性。",
+    "rollback": "随时退到受控词法查询，保留用户过滤/排序语义；不因向量失败隐藏库内素材。",
+    "outputs": "SearchPlan/融合ADR、图像查询契约、命中证据格式、评测集与报告",
+    "test_ids": [
+      "T02",
+      "T15",
+      "T16",
+      "T17",
+      "T23"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P18.md",
+    "report_target": "reports/P18-REPORT.md"
+  },
+  {
+    "id": "P19",
+    "title": "统一缓存、来源关系、去重与清理",
+    "dependencies": [
+      "P06",
+      "P17",
+      "P18"
+    ],
+    "chapters": [
+      "DATA-13",
+      "EVIDENCE-11",
+      "AI-09"
+    ],
+    "references": [
+      "S03",
+      "S00"
+    ],
+    "source_navigation": "预览与派生物、模型输入缓存、Evidence输入引用、索引制品、垃圾回收",
+    "goal": "减少重复处理但不牺牲内容正确性、授权隔离或被引用文件安全。",
+    "work": "统一记录Original/Preview/Variant/PreparedInput/FeatureCache/索引制品的来源和生命周期，不强制合并成同一物理仓库。\n缓存键绑定内容hash、预处理、模型/投影/缓存格式版本和授权域；外部路径不能作为唯一键。内存、磁盘、模型敏感KV/视觉缓存分开清理，关库撤权/外部服务无法清理时如实说明。\n精确重复依据字节hash，感知相似只提供候选；建立live reference、保留策略和可恢复清理日志，保护当前证据、未完成任务、已发布索引和安装活动版本。",
+    "checks": "同路径内容变、更换模型/预处理、跨库同图、关库grant过期、cache stampede、取消中途、并发GC和正在使用的制品、误相似不删原件、删除后恢复。",
+    "rollback": "可禁用缓存直接重算，但要保持资源准入；禁用GC不影响基本功能；不能回滚成跨域缓存。",
+    "outputs": "来源/缓存键契约、制品引用/GC策略、去重候选接口、缓存正确性测试",
+    "test_ids": [
+      "T02",
+      "T07",
+      "T10",
+      "T18"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P19.md",
+    "report_target": "reports/P19-REPORT.md"
+  },
+  {
+    "id": "P20",
+    "title": "组织、笔记与多窗口工作集的领域整理",
+    "dependencies": [
+      "P04",
+      "P16",
+      "P19"
+    ],
+    "chapters": [
+      "ORG-15",
+      "HOST-03",
+      "EVIDENCE-11"
+    ],
+    "references": [
+      "S00"
+    ],
+    "source_navigation": "library-organization、tag-metadata、asset-notebook、work-sets、work-mode、相关Store",
+    "goal": "让已有组织和参考工作能力以稳定应用服务运行，而非按大文件行数重构。",
+    "work": "按数据所有权提取标签/别名/层级、文件夹、色板、笔记、WorkSet应用服务，保持既有IPC兼容和唯一Host事务。\n标签合并/删除的身份保留、父子循环、别名冲突单列规则；Notebook草稿与已提交修订分开，OCR修订和用户描述不跨域写入。\nWorkSet内容是库内引用，设备布局单独归属；多窗口token绑定成员和generation，成员变更/关库重新验证。保留既有窗口/成员限制，调整须另记ADR；不重画界面。",
+    "checks": "删除工作集不删素材、关闭窗口不删成员、外部/回收素材引用、并发revision冲突、草稿未保存、成员撤权、跨窗口消息/恶意sender、标签层级循环与人工状态。",
+    "rollback": "兼容门面可返回旧实现，但不能有双写；新事件消费者需可停用，持久数据遵循P02。",
+    "outputs": "组织应用服务边界、窗口/内容契约、状态拆分图、已有功能回归记录",
+    "test_ids": [
+      "T02",
+      "T06",
+      "T19",
+      "T21"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P20.md",
+    "report_target": "reports/P20-REPORT.md"
+  },
+  {
+    "id": "P21",
+    "title": "设计助手：需求到有证据的工作集提议",
+    "dependencies": [
+      "P12",
+      "P14",
+      "P18",
+      "P20"
+    ],
+    "chapters": [
+      "DESIGN-17",
+      "SEC-10",
+      "JOB-07"
+    ],
+    "references": [
+      "S25",
+      "S26",
+      "U01"
+    ],
+    "source_navigation": "检索QueryPort、Evidence读取、WorkSet应用服务、任务/云授权、窄工具契约",
+    "goal": "用有限步骤的AI辅助设计工作流验证扩展边界，不引入任意操作库的通用Agent。",
+    "work": "定义DesignBrief→结构化检索约束→命中素材及证据→比较/缺口说明→WorkSetProposal→用户审阅确认。可先规则编排，LangGraph仅作为有明确收益的可选实现。\n工具只开放searchAssets/getAssetEvidence/proposeWorkSet等窄动作；确认凭据绑定提议内容、版本和范围，模型不能自行生成审批。禁止任意SQL、文件路径、删除或后台上传工具。\n素材/OCR/网页文本均不可信数据，不能重写系统策略。设步骤、token、工具次数、费用和取消预算；任何外部调用仍走P14。",
+    "checks": "恶意OCR指令、越权assetID、编造证据、提议过期、重复确认、工具无限循环、重开状态、用户修改被覆盖、云权限撤销；没有真实LLM时用恶意合成Provider检查安全链。",
+    "rollback": "禁用助手不影响手动搜索/工作集；提议与已确认修改分开，不自动撤销用户后续编辑。",
+    "outputs": "工作流规格与持久状态、工具schema、提议/确认协议、防注入与预算测试",
+    "test_ids": [
+      "T02",
+      "T07",
+      "T13",
+      "T17",
+      "T19",
+      "T20"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P21.md",
+    "report_target": "reports/P21-REPORT.md"
+  },
+  {
+    "id": "P22",
+    "title": "收窄 IPC 与沙箱兼容加固",
+    "dependencies": [
+      "P01",
+      "P10",
+      "P20",
+      "P21"
+    ],
+    "chapters": [
+      "HOST-03",
+      "SEC-10",
+      "PLATFORM-19"
+    ],
+    "references": [
+      "S18",
+      "S19",
+      "S00"
+    ],
+    "source_navigation": "preload/index、trusted-sender、各窗口Bridge、受控协议、CSP/权限、Electron锁版本",
+    "goal": "把目标权限落实到正式入口，逐步改善当前主窗口 sandbox=false 的边界。",
+    "work": "先从当前实际Electron版本审查可用API与兼容问题；宽主Preload按功能拆窄，所有handler做sender/frame/schema/library scope校验。\n梳理调用方再迁移sandbox，必要的版本升级单独切片并核对原生ABI，不把更改布尔值当完整安全完成。Worker进程隔离不等于OS沙箱，外部服务权限独立。\n受控预览URL/窗口成员token在关库和撤权时失效；明确CSP、导航、外链、权限请求与敏感原件访问边界。UI行为保持不变。",
+    "checks": "伪sender/frame、任意IPC字符串、非法schema、窃取旧预览URL、窗口跨成员、Renderer读文件、外链/网络、关闭库迟到；正式Electron路径与现有窗口回归，平台缺失如实标注。",
+    "rollback": "按桥接适配器切回已知安全入口；安全能力未达成不能通过关闭校验“临时兼容”。Electron升级回退核对ABI与数据兼容。",
+    "outputs": "IPC权限清单、sandbox迁移ADR、窗口安全测试、API与ABI兼容报告",
+    "test_ids": [
+      "T02",
+      "T07",
+      "T19",
+      "T20",
+      "T21",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P22.md",
+    "report_target": "reports/P22-REPORT.md"
+  },
+  {
+    "id": "P23",
+    "title": "Apple Silicon 的 MLX 后端与优化实验",
+    "dependencies": [
+      "P09",
+      "P13",
+      "P15",
+      "P19"
+    ],
+    "chapters": [
+      "AI-05",
+      "RES-08",
+      "AI-09",
+      "VAL-22"
+    ],
+    "references": [
+      "S03",
+      "S04",
+      "S05",
+      "S16",
+      "S28",
+      "S29"
+    ],
+    "source_navigation": "Provider/Runtime adapters、Preset、资源遥测与基准、缓存制品",
+    "goal": "把MLX作为可选后端验证适配边界，并对缓存/解码优化逐项实测。",
+    "work": "仅在合适Apple Silicon环境接MLX-VLM，锁定实际版本与模型组合；复用Profile、InputGrant、ResourcePermit和Evidence，不改素材业务层。\n先与同等任务的现有基线比较冷启动、稳态、峰值和质量，再一次启用一种优化，如视觉特征缓存。推测解码/KV压缩等只有当前版本和模型明确支持才试，不把论文效果当实现。\nMLX内存limit是指导，不替代DAM整体预算；统一池不能重复算GPU/CPU。没有硬件/授权则交付接口和实验计划，状态BLOCKED或NOT_APPLICABLE，不伪造性能。",
+    "checks": "模型加载/卸载真实峰值、取消、输入复用失效、跨库缓存、连续运行压力、有效JSON/语言/语义、冷热吞吐；逐实验记录版本、样本权利、成本及回退。",
+    "rollback": "禁用MLX适配/Preset，保留原已验证后端；不要卸载用户既有全局Python环境。",
+    "outputs": "MLX adapter或详细规格、兼容矩阵、受控实验报告、收益/限制ADR",
+    "test_ids": [
+      "T05",
+      "T10",
+      "T11",
+      "T12",
+      "T18",
+      "T23",
+      "T24"
+    ],
+    "optional": true,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P23.md",
+    "report_target": "reports/P23-REPORT.md"
+  },
+  {
+    "id": "P24",
+    "title": "Windows 专用模型与硬件执行提供程序",
+    "dependencies": [
+      "P09",
+      "P13",
+      "P15",
+      "P17"
+    ],
+    "chapters": [
+      "AI-05",
+      "RES-08",
+      "PLATFORM-19",
+      "VAL-22"
+    ],
+    "references": [
+      "S06",
+      "S07",
+      "S08",
+      "S09"
+    ],
+    "source_navigation": "Windows platform、OCR/Embedding Provider、ONNX Runtime或Windows ML候选、打包/native依赖",
+    "goal": "优先验证OCR/Embedding等专用模型的Windows硬件路径，而非强行统一全部VLM。",
+    "work": "依据实际Windows版本、CPU/GPU/NPU与驱动检测执行提供程序；DirectML支持和Windows ML硬件优化EP要求分开表达，不承诺所有机器都有NPU。\n从一个专用模型建立适配：模型算子/格式、预处理、精度、设备选择、线程与资源预算，输出复用既有能力契约。执行提供程序发生fallback时必须记录实际设备，不能CPU执行却报告NPU加速。\n锁定二进制/依赖ABI和许可证，隔离缓存/安装，测加载与推理全链而非仅kernel。无Windows或目标硬件时规格可完成但验证不通过。",
+    "checks": "EP不可用、算子不支持、CPUfallback、独显/集显共享池、不同Worker预算、进程失联、取消、模型卸载、真实OCR/向量一致性与打包可运行。",
+    "rollback": "回到已验证CPU或外部服务Profile；不强改驱动或安装全局运行环境；保留实际设备与失败原因。",
+    "outputs": "Windows适配规格/实现、OS/EP/硬件矩阵、真实或待执行基准、依赖清单",
+    "test_ids": [
+      "T05",
+      "T10",
+      "T11",
+      "T12",
+      "T16",
+      "T23",
+      "T24"
+    ],
+    "optional": true,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P24.md",
+    "report_target": "reports/P24-REPORT.md"
+  },
+  {
+    "id": "P25",
+    "title": "统一诊断、资源与能力质量评测",
+    "dependencies": [
+      "P13",
+      "P14",
+      "P18",
+      "P21"
+    ],
+    "chapters": [
+      "OBS-18",
+      "VAL-22",
+      "DEV-21"
+    ],
+    "references": [
+      "S27",
+      "S30",
+      "S00"
+    ],
+    "source_navigation": "P01 trace字段、scheduler/runtime/job/evidence/search记录、已有tests/脚本、AI Console内部状态",
+    "goal": "把分散执行记录汇成可解释且不泄露素材的诊断与基准体系。",
+    "work": "贯通计划/等待/加载/输入/推理/验证/提交/通知spans与原因码；默认本地，按保留期聚合，不把完整prompt/OCR/图片/API Key写日志。\n为每个Preset建立结构/语言/语义/资源/恢复不同的证据状态。选带授权且去标识的开发/验收集，避免用同一组样例反复调参后宣称泛化。\n测试路由按风险选择脚本：类型、临时库、合成、Electron、真实模型、平台包分层；诊断界面仅复用现有页面数据接口，不做视觉重设计。",
+    "checks": "错误链与任务一致、提交成功通知失败、日志中注入敏感字符串的脱敏、unknown成本/资源显示、基准缺硬件NOT_RUN、不用mock结果标真实通过；追踪开销有测量。",
+    "rollback": "可降低采样/禁用非必要追踪但保留关键审计和任务恢复数据；不能靠删失败报告提升成功率。",
+    "outputs": "诊断字段与原因目录、脱敏测试、评测夹具/报告模板、测试路由manifest",
+    "test_ids": [
+      "T05",
+      "T17",
+      "T22",
+      "T23",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P25.md",
+    "report_target": "reports/P25-REPORT.md"
+  },
+  {
+    "id": "P26",
+    "title": "全应用后台负载协调与故障联测",
+    "dependencies": [
+      "P13",
+      "P19",
+      "P20",
+      "P22",
+      "P25"
+    ],
+    "chapters": [
+      "RES-08",
+      "MEDIA-16",
+      "JOB-07",
+      "HOST-03"
+    ],
+    "references": [
+      "S00",
+      "U01"
+    ],
+    "source_navigation": "Capture/下载/预览/Sharp/OCR/索引/工作窗口、WorkloadAdmission、关闭drain",
+    "goal": "验证资源框架服务整个DAM，而不只是大模型；保持各业务恢复语义。",
+    "work": "让缩略图解码、图片工具、索引重建和必要文件处理按实际阶段申请CPU/内存/IO预算；下载网络并发与图像解码分别限流。不要用AI Job替换Capture/Download的既有幂等身份和恢复Journal。\n为入库、查询和当前交互保留资源，后台任务有界等待；正在提交的事务/文件发布按可安全中断点处理，不任意kill造成半提交。\n将关库/退出协调固定为撤权→停止准入→取消/收敛→提交/Outbox协调→释放Host，持久任务留待合法重开。",
+    "checks": "同时下载/解码/OCR/VLM/索引/浏览搜索；内存压力、满盘、模型崩溃、取消、库切换、系统睡眠；检查来源文件不改、Capture不重复、资源不超卖、用户状态不丢。\n真实设备体验须对比无后台基线，不能保证任意外部软件始终流畅。",
+    "rollback": "各工作负载可单独退保守并发，但不能绕过关键资源准入与Host权限；保留原业务Journal用于恢复。",
+    "outputs": "全负载时序/预算图、混合场景故障报告、退出一致性矩阵、性能观察",
+    "test_ids": [
+      "T02",
+      "T07",
+      "T08",
+      "T09",
+      "T10",
+      "T11",
+      "T18",
+      "T19",
+      "T23"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P26.md",
+    "report_target": "reports/P26-REPORT.md"
+  },
+  {
+    "id": "P27",
+    "title": "架构验收、旧代码清理与开源交接",
+    "dependencies": [
+      "P22",
+      "P25",
+      "P26"
+    ],
+    "chapters": [
+      "MIG-23",
+      "DEV-21",
+      "PLATFORM-19",
+      "VAL-22"
+    ],
+    "references": [
+      "S00",
+      "S18",
+      "S22",
+      "S27"
+    ],
+    "source_navigation": "P00可达性基线、所有阶段报告、现存旧服务/脚本/文档、CI与许可/安装说明",
+    "goal": "把目标与实际对齐，完成可接手的架构状态，不把本轮称为全平台发布验收。",
+    "work": "对照R需求/T测试/ADR，逐条标implemented/spec-only/blocked/not-applicable。P23/P24必须有明确能力与证据状态，但无对应硬件不强迫主线伪装完成。\n逐项证明旧入口不可达、替代行为已测、外部契约无调用者后再清理；旧历史证据保留来源，不按目录名批量删除。检查版本化开关、旧数据兼容和回退说明可执行。\n更新AGENTS/CONTEXT/TASK/模块导航与真实命令；记录OSS依赖/模型权重/Runtime许可、SBOM候选和安全报告入口，不替用户选择许可证或承诺可以重新分发所有模型。",
+    "checks": "所有需求有实现或明确未来边界；所有PASS有日志/环境；所有删除有证据；缺Windows/签名包/真实库升级仍缺而不被build替代。随机挑一模型后端、一能力变更验证修改范围是否仍局部。",
+    "rollback": "对清理独立提交/补丁；数据迁移遵守P02，禁止hard reset丢用户工作；保留最后验证配置与明确兼容版本。",
+    "outputs": "目标-实际差异报告、删除/保留证据、完整追踪矩阵、更新交接包和开源准备清单",
+    "test_ids": [
+      "T01",
+      "T02",
+      "T03",
+      "T21",
+      "T23",
+      "T24"
+    ],
+    "optional": false,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/P27.md",
+    "report_target": "reports/P27-REPORT.md"
+  },
+  {
+    "id": "X01",
+    "title": "未来手机端、云分析与同步契约",
+    "dependencies": [
+      "P14",
+      "P17",
+      "P20"
+    ],
+    "chapters": [
+      "EXT-20",
+      "DATA-12",
+      "SEC-10"
+    ],
+    "references": [
+      "U01",
+      "S14",
+      "S23"
+    ],
+    "source_navigation": "共享domain/contracts；CaptureIntent；云Provider；修订/设备/删除标记；不依赖Electron入口",
+    "goal": "仅细化移动端收集管理与云推理边界，先比较同步形态再建设服务。",
+    "work": "比较桌面配对、自托管、托管同步三种形态及信任/离线/运维成本；用户尚未选定，不直接部署。\n定义稳定ID、离线意图、幂等上传、内容hash、每对象revision、tombstone、冲突及恢复。同步存储与云模型外发分别授权；设备布局和密钥默认不跨端。\n移动端复用业务契约，不复用Electron IPC/绝对路径/活动SQLite文件；云结果来源、未知状态和人工编辑优先同桌面。",
+    "checks": "离线重复上传、断网续传、同对象并发编辑、删除后迟到上传、云分析失败但收录成功、过期权限、跨账号隔离。先出契约夹具和验收计划。",
+    "rollback": "不影响桌面单机数据；同步能力禁用后本地仍可用。实施必须另选形态并分小阶段授权。",
+    "outputs": "移动/同步形态ADR候选、共享契约、冲突/授权矩阵、后续实施任务",
+    "test_ids": [
+      "T02",
+      "T06",
+      "T07",
+      "T13",
+      "T24"
+    ],
+    "optional": true,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/X01.md",
+    "report_target": "reports/X01-REPORT.md"
+  },
+  {
+    "id": "X02",
+    "title": "MCP 与专业连接器的最小边界",
+    "dependencies": [
+      "P21",
+      "P22"
+    ],
+    "chapters": [
+      "EXT-20",
+      "DESIGN-17",
+      "SEC-10"
+    ],
+    "references": [
+      "S26",
+      "S18",
+      "S00"
+    ],
+    "source_navigation": "窄设计工具/权限、Eagle专用Adapter、连接器版本清单",
+    "goal": "设计受控外部能力出口，而不是宣称通用插件SDK已完成。",
+    "work": "锁定实际MCP规范版本和SDK候选；只读搜索/证据/工作集提议先行，写入必须复用Host审阅确认。\n定义客户端身份、工具scope、origin/transport认证、速率、审计、撤销、协议兼容；外部模型不能把assetID当无限授权。Eagle继续专用配对和外部原件权威。\nFigma/Adobe等需真实API及许可调研，未知接口不得编造。任意脚本/SQL/文件操作、插件市场与依赖安装不属本阶段。",
+    "checks": "伪客户端、跨库ID、提示注入工具调用、重复确认、过期提议、协议不兼容、连接断开、调用预算耗尽；先合成客户端验证。",
+    "rollback": "关闭外部入口不影响内部设计工具；撤销grant和连接，已确认用户编辑不自动回滚。",
+    "outputs": "连接器/MCP权限ADR、工具schema、威胁模型和兼容测试计划",
+    "test_ids": [
+      "T02",
+      "T13",
+      "T20",
+      "T21",
+      "T24"
+    ],
+    "optional": true,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/X02.md",
+    "report_target": "reports/X02-REPORT.md"
+  },
+  {
+    "id": "X03",
+    "title": "视频、音频、录屏和图像生成类派生物",
+    "dependencies": [
+      "P06",
+      "P19",
+      "P20",
+      "P26"
+    ],
+    "chapters": [
+      "EXT-20",
+      "DATA-13",
+      "MEDIA-16"
+    ],
+    "references": [
+      "S00",
+      "U01"
+    ],
+    "source_navigation": "MediaDescriptor、派生物/坐标、工作集引用、资源调度；现有图片链路不能直接当视频实现",
+    "goal": "为新增媒体能力定义真实最小闭环，保留原件和资源/格式边界。",
+    "work": "拆分视频帧/时间片、音频转写、录屏、抠图/图层等能力，不将它们作为同一万能模型任务。每次只选择一种做规格；录屏需明确OS权限和录制状态。\n定义时间基、帧/片段ID、输入版本、派生谱系、可恢复最小单元和工作集引用；音频转写不是OCR。编码/解码/导出都通过资源准入。\n比较必要编解码依赖/许可/打包与复杂输入安全；不重启已退休内置网页浏览/登录采集。",
+    "checks": "可变帧率/时间定位、截断媒体、超长输入、磁盘不足、取消恢复、源文件变更、音视频权限拒绝、派生保存不覆盖原件。",
+    "rollback": "按新增media capability禁用，不影响图片和已有证据；不通过删原件回收空间。",
+    "outputs": "单能力规格、媒体/时间契约、资源/许可风险表、隔离验证计划",
+    "test_ids": [
+      "T02",
+      "T07",
+      "T18",
+      "T23",
+      "T24"
+    ],
+    "optional": true,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/X03.md",
+    "report_target": "reports/X03-REPORT.md"
+  },
+  {
+    "id": "X04",
+    "title": "自托管推理服务与前沿加速基准",
+    "dependencies": [
+      "P14",
+      "P15",
+      "P25"
+    ],
+    "chapters": [
+      "EXT-20",
+      "AI-05",
+      "VAL-22"
+    ],
+    "references": [
+      "S14",
+      "S16",
+      "S17",
+      "S28",
+      "S29"
+    ],
+    "source_navigation": "CloudProvider、共享推理契约、成本/权限、脱敏基准；服务端部署独立于桌面",
+    "goal": "评估vLLM/SGLang与前沿缓存/解码技术，不让服务器依赖进入桌面主包。",
+    "work": "定义认证、多租户/资料库隔离、配额、输入TTL、网络与存储权限、任务队列、日志/费用及取消语义；不能照搬裸远程ML服务直接公网暴露。\n选具体模型/硬件/负载后比较候选runtime，逐项测试批处理、缓存、推测解码、KV量化的质量和容量/延迟/吞吐取舍。作者论文数值不得直接成为DAM承诺。\n桌面只复用Provider接口；真正部署、购买算力、上传样本必须单独明确授权。",
+    "checks": "跨租户缓存泄漏、队列过载、未知执行、重试计费、凭据撤销、输入过期清理、冷启动、长短请求公平性、压缩后质量；无设备则只出可复现计划。",
+    "rollback": "远端服务撤下后桌面本地/其他获准API仍可用；未知远端任务与费用不能从账上抹除。",
+    "outputs": "自托管ADR、威胁模型、基准方案、按证据选择/排除技术的记录",
+    "test_ids": [
+      "T05",
+      "T07",
+      "T13",
+      "T22",
+      "T23",
+      "T24"
+    ],
+    "optional": true,
+    "default_mode": "SPEC",
+    "implementation_status": "not_started",
+    "design_review_status": "not_started",
+    "prompt_file": "prompts/X04.md",
+    "report_target": "reports/X04-REPORT.md"
+  }
+]

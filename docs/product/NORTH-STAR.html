@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Design Asset Manager · Product North Star</title>
+  <style>
+    :root {
+      --ink: #10131a;
+      --muted: #626b7a;
+      --paper: #f4f4ef;
+      --card: #fff;
+      --line: rgba(16, 19, 26, .12);
+      --violet: #7048e8;
+      --violet-soft: #ede8ff;
+      --lime: #c8ff57;
+      --cyan: #1db9c3;
+      --coral: #ff725e;
+      --amber: #ffcf4a;
+      --green: #19a974;
+      --shadow: 0 24px 80px rgba(16, 19, 26, .1);
+      --radius: 28px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(200,255,87,.26), transparent 34rem),
+        radial-gradient(circle at 92% 15%, rgba(112,72,232,.13), transparent 34rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    .wrap { width: min(1240px, calc(100% - 40px)); margin: 0 auto; }
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 86%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .nav-inner {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { font-size: 13px; font-weight: 900; letter-spacing: -.02em; }
+    .nav-links { display: flex; gap: 18px; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .nav-links a { text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+    .date-pill { border-radius: 999px; background: var(--ink); color: white; padding: 7px 11px; font-size: 10px; font-weight: 900; }
+    .hero {
+      position: relative;
+      min-height: 760px;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .45;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; padding: 92px 0 120px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--violet);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 26px; height: 3px; border-radius: 99px; background: currentColor; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 1040px;
+      margin: 22px 0 0;
+      font-size: clamp(52px, 8.4vw, 108px);
+      line-height: .94;
+      letter-spacing: -.065em;
+      font-weight: 950;
+    }
+    h1 span { color: var(--violet); }
+    .hero-copy {
+      max-width: 720px;
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.65;
+      font-weight: 600;
+    }
+    .hero-badges { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 9px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 850;
+    }
+    .badge.primary { border-color: transparent; background: var(--lime); color: var(--ink); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .north-card {
+      margin-top: -58px;
+      position: relative;
+      z-index: 4;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+    }
+    .north-copy { padding: 42px; }
+    .north-copy .label { color: var(--violet); font-size: 11px; font-weight: 950; letter-spacing: .16em; }
+    .north-copy h2 { margin: 14px 0 0; max-width: 680px; font-size: clamp(30px, 4vw, 54px); line-height: 1.02; letter-spacing: -.04em; }
+    .north-copy p { margin: 20px 0 0; color: var(--muted); font-size: 15px; line-height: 1.8; font-weight: 600; }
+    .north-score {
+      padding: 38px;
+      color: white;
+      background: var(--ink);
+      display: grid;
+      align-content: center;
+    }
+    .score-num { font-size: clamp(72px, 10vw, 132px); line-height: .8; letter-spacing: -.08em; font-weight: 950; color: var(--lime); }
+    .score-num small { font-size: .22em; letter-spacing: -.02em; color: white; }
+    .score-title { margin-top: 24px; font-size: 18px; font-weight: 900; }
+    .score-copy { margin-top: 8px; color: #b9c0cc; font-size: 13px; line-height: 1.7; font-weight: 600; }
+    section { padding: 106px 0; }
+    section.flush { padding-top: 70px; }
+    section.white { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    section.dark { background: var(--ink); color: white; }
+    .section-head { max-width: 850px; }
+    .section-head h2 { margin: 15px 0 0; font-size: clamp(38px, 5vw, 66px); line-height: .98; letter-spacing: -.05em; }
+    .section-head p { margin: 22px 0 0; max-width: 760px; color: var(--muted); font-size: 16px; line-height: 1.8; font-weight: 600; }
+    .dark .section-head p { color: #aeb7c4; }
+    .status-legend { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .current { background: #e3f8ef; color: #0f754f; }
+    .alpha { background: var(--lime); color: #233004; }
+    .next { background: #dff7fa; color: #096f75; }
+    .future { background: var(--violet-soft); color: #5930cf; }
+    .explore { background: #fff0cf; color: #8b5d00; }
+    .unvalidated { background: #ffe5e1; color: #b43d2d; }
+    .loop {
+      margin-top: 54px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .loop-card {
+      position: relative;
+      min-height: 210px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+    }
+    .loop-card:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      right: -20px;
+      z-index: 2;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: var(--ink);
+      font-weight: 950;
+    }
+    .loop-index { color: var(--violet); font-size: 12px; font-weight: 950; }
+    .loop-card h3 { margin: 35px 0 0; font-size: 22px; letter-spacing: -.03em; }
+    .loop-card p { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; font-weight: 600; }
+    .persona-grid { margin-top: 50px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .persona {
+      min-height: 270px;
+      border-radius: var(--radius);
+      padding: 24px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .persona:nth-child(1) { background: #7048e8; }
+    .persona:nth-child(2) { background: #0b8490; }
+    .persona:nth-child(3) { background: #da5947; }
+    .persona:nth-child(4) { background: #1b2738; }
+    .persona .icon { font-size: 34px; }
+    .persona h3 { margin: 22px 0 0; font-size: 25px; letter-spacing: -.035em; }
+    .persona p { margin: 10px 0 0; color: rgba(255,255,255,.76); font-size: 13px; line-height: 1.7; font-weight: 600; }
+    .persona .job { padding-top: 22px; border-top: 1px solid rgba(255,255,255,.2); font-size: 11px; line-height: 1.6; font-weight: 850; }
+    .surface-layout { margin-top: 54px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 20px; }
+    .workspace {
+      overflow: hidden;
+      min-height: 600px;
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      background: #e9ebef;
+      box-shadow: var(--shadow);
+    }
+    .windowbar { height: 42px; display: flex; align-items: center; gap: 7px; padding: 0 15px; background: #f8f8f8; border-bottom: 1px solid var(--line); }
+    .windowbar i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+    .windowbar i:nth-child(1) { background: #ff655a; }
+    .windowbar i:nth-child(2) { background: #ffc04b; }
+    .windowbar i:nth-child(3) { background: #31c75b; }
+    .workspace-ui { height: 558px; display: grid; grid-template-columns: 155px 1fr 220px; }
+    .rail { padding: 16px 12px; background: #171b23; color: #aeb7c4; }
+    .rail b { display: block; margin: 3px 8px 18px; color: white; font-size: 12px; }
+    .rail span { display: block; border-radius: 9px; padding: 9px 10px; font-size: 10px; font-weight: 750; }
+    .rail span.active { color: white; background: #7048e8; }
+    .canvas { padding: 16px; min-width: 0; }
+    .searchbox { height: 45px; border-radius: 13px; background: white; padding: 0 15px; display: flex; align-items: center; justify-content: space-between; color: #626b7a; font-size: 10px; font-weight: 700; box-shadow: 0 6px 20px rgba(16,19,26,.06); }
+    .searchbox em { font-style: normal; color: #7048e8; }
+    .results-note { margin: 13px 0 9px; display: flex; justify-content: space-between; color: #626b7a; font-size: 9px; font-weight: 750; }
+    .asset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .asset { overflow: hidden; border-radius: 13px; background: white; }
+    .asset-visual { aspect-ratio: 1.15; position: relative; }
+    .asset:nth-child(1) .asset-visual { background: linear-gradient(140deg,#ffb66e,#6949e8); }
+    .asset:nth-child(2) .asset-visual { background: radial-gradient(circle at 65% 30%,#cafbff,#168996 45%,#07262d); }
+    .asset:nth-child(3) .asset-visual { background: linear-gradient(135deg,#ece8df 50%,#ff655a 50%); }
+    .asset:nth-child(4) .asset-visual { background: radial-gradient(circle,#c8ff57 0 18%,#20252e 19% 45%,#f3f3ee 46%); }
+    .asset:nth-child(5) .asset-visual { background: linear-gradient(45deg,#151820,#151820 30%,#f9d45b 31% 60%,#7048e8 61%); }
+    .asset:nth-child(6) .asset-visual { background: linear-gradient(160deg,#e5c7ff,#ff8787,#ffcf4a); }
+    .asset-meta { padding: 9px; font-size: 8px; line-height: 1.5; font-weight: 800; }
+    .asset-meta small { display: block; color: #818a98; font-size: 7px; }
+    .inspector { padding: 16px; background: white; border-left: 1px solid var(--line); }
+    .inspect-preview { aspect-ratio: 1.2; border-radius: 14px; background: linear-gradient(140deg,#ffb66e,#6949e8); }
+    .inspect-title { margin-top: 14px; font-size: 12px; font-weight: 900; }
+    .explain { margin-top: 12px; border-radius: 12px; background: var(--violet-soft); padding: 11px; color: #5633bd; font-size: 8px; line-height: 1.6; font-weight: 750; }
+    .inspect-line { margin-top: 10px; height: 8px; border-radius: 5px; background: #eceef2; }
+    .inspect-line.short { width: 65%; }
+    .surface-list { display: grid; gap: 12px; }
+    .surface-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--card);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .surface-num { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: var(--ink); color: var(--lime); font-size: 12px; font-weight: 950; }
+    .surface-card h3 { margin: 1px 0 0; font-size: 16px; }
+    .surface-card p { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; font-weight: 600; }
+    .filters { margin-top: 38px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter-btn { cursor: pointer; border: 1px solid var(--line); border-radius: 999px; background: var(--card); padding: 9px 13px; color: var(--muted); font-size: 11px; font-weight: 900; }
+    .filter-btn.active { border-color: var(--ink); background: var(--ink); color: white; }
+    .feature-grid { margin-top: 26px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .feature {
+      min-height: 265px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 23px;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .feature.hidden { display: none; }
+    .feature:hover { transform: translateY(-3px); }
+    .feature-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+    .feature h3 { margin: 26px 0 0; font-size: 22px; line-height: 1.1; letter-spacing: -.035em; }
+    .feature p { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.75; font-weight: 600; }
+    .feature ul { margin: 16px 0 0; padding-left: 17px; color: var(--muted); font-size: 11px; line-height: 1.8; font-weight: 650; }
+    .feature .adr { color: #959dab; font-size: 9px; font-weight: 800; }
+    .innovation-grid { margin-top: 52px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .innovation {
+      min-height: 310px;
+      border-radius: 30px;
+      padding: 28px;
+      color: white;
+      background: #1b2230;
+      position: relative;
+      overflow: hidden;
+    }
+    .innovation:nth-child(2) { background: #643bd8; }
+    .innovation:nth-child(3) { background: #087d87; }
+    .innovation:nth-child(4) { background: #d65a47; }
+    .innovation:nth-child(5) { background: #354006; }
+    .innovation:nth-child(6) { background: #592e66; }
+    .innovation::after { content: attr(data-mark); position: absolute; right: 18px; bottom: -28px; color: rgba(255,255,255,.09); font-size: 140px; line-height: 1; font-weight: 950; }
+    .innovation .stage { display: inline-flex; border-radius: 999px; padding: 7px 10px; background: rgba(255,255,255,.14); font-size: 9px; font-weight: 950; letter-spacing: .07em; }
+    .innovation h3 { margin: 40px 0 0; max-width: 430px; font-size: 30px; line-height: 1.04; letter-spacing: -.04em; }
+    .innovation p { margin: 15px 0 0; max-width: 480px; color: rgba(255,255,255,.72); font-size: 13px; line-height: 1.75; font-weight: 600; }
+    .model-table { margin-top: 48px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 26px; }
+    .model-row { display: grid; grid-template-columns: .75fr 1.15fr 1.1fr; border-bottom: 1px solid rgba(255,255,255,.13); }
+    .model-row:last-child { border-bottom: 0; }
+    .model-row > div { padding: 17px 19px; color: #bbc4d0; font-size: 12px; line-height: 1.6; font-weight: 600; }
+    .model-row > div:first-child { color: white; font-weight: 900; }
+    .model-row.head { background: rgba(255,255,255,.08); }
+    .model-row.head > div { color: white; font-size: 10px; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
+    .model-sources { margin-top: 18px; color: #9fa9b7; font-size: 10px; line-height: 1.8; font-weight: 700; }
+    .model-sources a { color: var(--lime); text-underline-offset: 3px; }
+    .architecture { margin-top: 52px; display: grid; gap: 12px; }
+    .arch-row { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: stretch; }
+    .arch-label { border-radius: 18px; padding: 18px; background: var(--ink); color: white; font-size: 12px; font-weight: 900; display: flex; align-items: center; }
+    .arch-modules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .arch-module { border: 1px solid var(--line); border-radius: 18px; background: var(--card); padding: 17px; font-size: 11px; line-height: 1.5; font-weight: 850; }
+    .arch-module small { display: block; margin-top: 5px; color: var(--muted); font-size: 9px; font-weight: 650; }
+    .principles { margin-top: 52px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }
+    .principle { border-top: 3px solid var(--violet); padding: 18px 5px 0; }
+    .principle h3 { font-size: 17px; }
+    .principle p { color: var(--muted); font-size: 12px; line-height: 1.7; font-weight: 600; }
+    .roadmap { margin-top: 52px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .phase { min-height: 260px; border-radius: 24px; padding: 20px; background: rgba(255,255,255,.08); }
+    .phase .day { color: var(--lime); font-size: 10px; font-weight: 950; letter-spacing: .07em; }
+    .phase h3 { margin: 18px 0 0; font-size: 18px; }
+    .phase p { margin: 10px 0 0; color: #aeb7c4; font-size: 11px; line-height: 1.7; font-weight: 600; }
+    .phase .gate { margin-top: 18px; padding-top: 13px; border-top: 1px solid rgba(255,255,255,.13); color: white; font-size: 10px; line-height: 1.6; font-weight: 850; }
+    .acceptance { margin-top: 44px; border: 1px solid rgba(255,255,255,.16); border-radius: 28px; padding: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .acceptance strong { display: block; color: var(--lime); font-size: 34px; letter-spacing: -.04em; }
+    .acceptance span { display: block; margin-top: 7px; color: #b6bfcc; font-size: 11px; line-height: 1.6; font-weight: 650; }
+    .truth-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .truth { border: 1px solid var(--line); border-radius: 24px; background: var(--card); padding: 23px; }
+    .truth h3 { font-size: 17px; }
+    .truth p { color: var(--muted); font-size: 12px; line-height: 1.75; font-weight: 600; }
+    .truth b { color: var(--ink); }
+    footer { border-top: 1px solid var(--line); padding: 40px 0; color: var(--muted); font-size: 11px; font-weight: 750; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+    @media (max-width: 1000px) {
+      .nav-links { display: none; }
+      .north-card, .surface-layout { grid-template-columns: 1fr; }
+      .loop { grid-template-columns: repeat(2, 1fr); }
+      .loop-card:not(:last-child)::after { display: none; }
+      .persona-grid, .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .roadmap { grid-template-columns: repeat(2, 1fr); }
+      .architecture .arch-row { grid-template-columns: 1fr; }
+      .arch-modules { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .wrap { width: min(100% - 24px, 1240px); }
+      .hero { min-height: 650px; }
+      .hero-content { padding: 72px 0 100px; }
+      section { padding: 78px 0; }
+      .north-copy, .north-score { padding: 27px; }
+      .loop, .persona-grid, .feature-grid, .innovation-grid, .principles, .roadmap, .truth-grid { grid-template-columns: 1fr; }
+      .workspace-ui { grid-template-columns: 90px 1fr; }
+      .inspector { display: none; }
+      .asset-grid { grid-template-columns: repeat(2, 1fr); }
+      .model-row { grid-template-columns: 1fr; padding: 12px 0; }
+      .model-row > div { padding: 5px 16px; }
+      .model-row.head { display: none; }
+      .acceptance { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { display: block; }
+    }
+    @media print {
+      .nav, .filters { display: none; }
+      body { background: white; }
+      section, .hero { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <aside aria-label="当前产品定位" style="padding:12px 20px;border-bottom:1px solid #888;font:14px/1.6 system-ui">
+    2026-09-14：本页保留历史愿景，不代表当前实现或执行计划。当前范围见
+    <a href="PRODUCT-FOUNDATION.md">产品基准</a>及ADR 0483/0484：AI+为内置核心，高阶工具插件化，云端开发接口与社区分发暂缓。
+  </aside>
+
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand">DESIGN ASSET MANAGER / NORTH STAR</div>
+      <div class="nav-links">
+        <a href="#promise">产品承诺</a>
+        <a href="#experience">体验架构</a>
+        <a href="#capabilities">能力地图</a>
+        <a href="#innovations">大胆创新</a>
+        <a href="#architecture">软件架构</a>
+        <a href="#roadmap">Alpha</a>
+      </div>
+      <div class="date-pill">VISION · 2026</div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-content">
+      <div class="eyebrow">Product North Star</div>
+      <h1>让视觉创作者<br /><span>记得住、找得到、用得快。</span></h1>
+      <p class="hero-copy">
+        一个真正本地优先、由 AI 增强的视觉素材工作台：它理解图片、视频、版式、文字、颜色、镜头与创作上下文，
+        让设计师、剪辑师和编导从“我记得见过”直接抵达“就是这一份”。
+      </p>
+      <div class="hero-badges">
+        <span class="badge primary"><span class="dot"></span>本地优先，不默认上传</span>
+        <span class="badge">Eagle 式高密度资产体验</span>
+        <span class="badge">自然语言 + 以图搜图 + 关键词</span>
+        <span class="badge">AI 解释为何命中</span>
+        <span class="badge">原始素材永不被静默改动</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <article id="promise" class="north-card">
+        <div class="north-copy">
+          <div class="label">NORTH STAR PROMISE</div>
+          <h2>一批混乱素材进入后，十分钟内用一句自然语言找到想要的那一份。</h2>
+          <p>
+            不要求先建文件夹、不要求手工打标签、不要求理解模型或运行时。用户能看到结果为何匹配：
+            可能来自画面语义、OCR 文字、视觉相似、颜色、来源、时间、已确认标签或项目上下文。
+            如果 AI 尚未完成，产品仍以词法和元数据工作，并诚实显示覆盖范围。
+          </p>
+        </div>
+        <div class="north-score">
+          <div class="score-num">10<small>分钟</small></div>
+          <div class="score-title">第一次“原来它真的懂我的素材”</div>
+          <div class="score-copy">Private Alpha 的首个成功，不是模型安装成功，而是创作者找回一个原本会丢失的创意线索。</div>
+        </div>
+      </article>
+    </div>
+
+    <section class="flush">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Core loop</div>
+          <h2>从采集到复用，一条完整闭环。</h2>
+          <p>
+            每个阶段都必须逐步可用。入库不等待所有 AI；AI 不抢走用户控制；检索不依赖某一个模型；
+            任何会改变素材、元数据或外部状态的动作都先预览，再确认。
+          </p>
+        </div>
+        <div class="loop">
+          <div class="loop-card">
+            <div class="loop-index">01 / INTAKE</div>
+            <h3>收进来</h3>
+            <p>文件、文件夹、浏览器、剪贴板、拖放和后续插件统一进入安全 Intake。普通添加默认 Copy Into Library。</p>
+          </div>
+          <div class="loop-card">
+            <div class="loop-index">02 / UNDERSTAND</div>
+            <h3>逐步理解</h3>
+            <p>预览先可见，随后颜色、OCR、标签、短描述、embedding 各自完成；失败互不伪装成成功。</p>
+          </div>
+          <div class="loop-card">
+            <div class="loop-index">03 / DISCOVER</div>
+            <h3>快速找回</h3>
+            <p>关键词、自然语言、图片、颜色、构图、镜头和结构化条件汇入一个 Workspace 查询。</p>
+          </div>
+          <div class="loop-card">
+            <div class="loop-index">04 / DECIDE</div>
+            <h3>比较判断</h3>
+            <p>大图预览、候选对比、相似族、版本关系和为何命中，让选择来自证据而非黑盒排序。</p>
+          </div>
+          <div class="loop-card">
+            <div class="loop-index">05 / REUSE</div>
+            <h3>带着上下文复用</h3>
+            <p>原件交付、兼容导出、拖入创作工具、生成 Brief Pack；来源、许可和原始身份不丢失。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="white">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Who it serves</div>
+          <h2>不是“管理图片”，而是保存创作记忆。</h2>
+          <p>同一资产对不同职业意味着不同线索。产品以统一资产底座服务差异化工作流，而不是为每个职业复制一套应用。</p>
+        </div>
+        <div class="persona-grid">
+          <article class="persona">
+            <div>
+              <div class="icon">◫</div>
+              <h3>设计师 / 参考收集者</h3>
+              <p>搜版式、色彩、字体气质、材质、构图和品牌参考；高密度扫图比“聊天”更重要。</p>
+            </div>
+            <div class="job">“找那张暖色、粗体排版、像独立杂志封面的参考。”</div>
+          </article>
+          <article class="persona">
+            <div>
+              <div class="icon">▶</div>
+              <h3>剪辑师 / 动效师</h3>
+              <p>搜镜头、转场、动作、景别、台词、节奏和 B-roll；静态关键帧与时间轴语义需要同时存在。</p>
+            </div>
+            <div class="job">“找夜景里从特写拉到全景、能接这句旁白的镜头。”</div>
+          </article>
+          <article class="persona">
+            <div>
+              <div class="icon">⌁</div>
+              <h3>编导 / 创意策划</h3>
+              <p>从 Brief、故事节拍、人物、场景和情绪组织视觉证据，快速拼成可讲述的提案与分镜参考。</p>
+            </div>
+            <div class="job">“给第二幕找压迫感逐渐增强的空间与人物关系参考。”</div>
+          </article>
+          <article class="persona">
+            <div>
+              <div class="icon">◇</div>
+              <h3>品牌与创意团队</h3>
+              <p>保留风格 DNA、来源、许可、审批与版本关系；协作是未来层，不牺牲本地所有权和单人速度。</p>
+            </div>
+            <div class="job">“哪些素材符合品牌的克制科技感，同时没有许可风险？”</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Experience architecture</div>
+          <h2>Asset Workspace 是家，AI 在上下文里工作。</h2>
+          <p>
+            浏览器、下载队列、模型安装和诊断都不是产品首页。首页是资产本身：左侧是范围与组织，中间是高密度素材，
+            右侧是 Inspector 和上下文 AI；搜索框同时理解关键词、自然语言与图片。
+          </p>
+        </div>
+
+        <div class="surface-layout">
+          <div class="workspace" aria-label="Asset Workspace 概念示意">
+            <div class="windowbar"><i></i><i></i><i></i></div>
+            <div class="workspace-ui">
+              <aside class="rail">
+                <b>Asset Workspace</b>
+                <span class="active">全部素材</span>
+                <span>最近加入</span>
+                <span>Capture Inbox</span>
+                <span>相似族</span>
+                <span>智能筛选</span>
+                <span>Collections</span>
+                <span>Web Capture</span>
+                <span>Activity</span>
+              </aside>
+              <div class="canvas">
+                <div class="searchbox">
+                  <span>⌕ 暖色、粗体、独立杂志感的封面</span>
+                  <em>自然语言 · 以图搜图</em>
+                </div>
+                <div class="results-note"><span>48 个结果 · 部分 AI 索引仍在进行</span><span>混合相关度 ↓</span></div>
+                <div class="asset-grid">
+                  <div class="asset"><div class="asset-visual"></div><div class="asset-meta">Editorial cover<small>语义 92% · 色彩 86%</small></div></div>
+                  <div class="asset"><div class="asset-visual"></div><div class="asset-meta">Night campaign<small>视觉相似 · OCR “NEW”</small></div></div>
+                  <div class="asset"><div class="asset-visual"></div><div class="asset-meta">Swiss poster<small>版式 · 已确认标签</small></div></div>
+                  <div class="asset"><div class="asset-visual"></div><div class="asset-meta">Graphic system<small>形状 · 对比色</small></div></div>
+                  <div class="asset"><div class="asset-visual"></div><div class="asset-meta">Type study<small>OCR · 字体气质</small></div></div>
+                  <div class="asset"><div class="asset-visual"></div><div class="asset-meta">Gradient mood<small>颜色 · 来源上下文</small></div></div>
+                </div>
+              </div>
+              <aside class="inspector">
+                <div class="inspect-preview"></div>
+                <div class="inspect-title">Editorial cover 07</div>
+                <div class="explain"><b>为何命中</b><br />画面被描述为“warm editorial poster”；OCR 检出大号标题；主色与查询接近；同一相似族中曾被你收藏。</div>
+                <div class="inspect-line"></div>
+                <div class="inspect-line short"></div>
+                <div class="inspect-line"></div>
+                <div class="inspect-line short"></div>
+              </aside>
+            </div>
+          </div>
+
+          <div class="surface-list">
+            <article class="surface-card">
+              <div class="surface-num">01</div>
+              <div><h3>Capture Inbox</h3><p>独立工作区入口；验证、去重信号、批量确认与失败恢复，不变成强制整理队列。</p></div>
+            </article>
+            <article class="surface-card">
+              <div class="surface-num">02</div>
+              <div><h3>Asset Discovery</h3><p>统一词法、OCR、元数据、语义和视觉通道；Source Discovery/Web Search 使用不同名称与入口。</p></div>
+            </article>
+            <article class="surface-card">
+              <div class="surface-num">03</div>
+              <div><h3>Inspector + Contextual AI</h3><p>围绕当前选择进行比较、解释、补充和批量计划；任何写入先预览、后确认。</p></div>
+            </article>
+            <article class="surface-card">
+              <div class="surface-num">04</div>
+              <div><h3>Activity & Recovery</h3><p>只展示真正需要注意的失败、冲突和长任务；“最近加入”不伪装成未完成工作。</p></div>
+            </article>
+            <article class="surface-card">
+              <div class="surface-num">05</div>
+              <div><h3>Model & Diagnostics</h3><p>AI Console 降级为模型、能力、资源和故障诊断；不承担主检索或聊天入口。</p></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="capabilities" class="white">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Capability horizons</div>
+          <h2>现在、Alpha、下一步与未来，明确分层。</h2>
+          <p>
+            下列标签不是承诺日期，而是防止 AI coding 把所有想法同时实现。Current 表示代码中已有真实切片；
+            Alpha 是首个闭环必需；Future/Explore 只有在核心留存被证明后进入开发。
+          </p>
+          <div class="status-legend">
+            <span class="status current">Current</span>
+            <span class="status alpha">Private Alpha</span>
+            <span class="status next">Next</span>
+            <span class="status future">Future</span>
+            <span class="status explore">Explore</span>
+            <span class="status unvalidated">Unvalidated</span>
+          </div>
+        </div>
+
+        <div class="filters" aria-label="能力阶段筛选">
+          <button class="filter-btn active" data-filter="all">全部</button>
+          <button class="filter-btn" data-filter="current">Current</button>
+          <button class="filter-btn" data-filter="alpha">Private Alpha</button>
+          <button class="filter-btn" data-filter="next">Next</button>
+          <button class="filter-btn" data-filter="future">Future</button>
+          <button class="filter-btn" data-filter="explore">Explore</button>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature" data-stage="current">
+            <div class="feature-top"><span class="status current">Current</span><span class="adr">CODE</span></div>
+            <h3>本地桌面基础</h3>
+            <p>Electron、React、SQLite、Preload、Python Worker、标签和基础素材库已存在，但产品面和目标域仍不一致。</p>
+            <ul><li>基础 Asset Grid / Inspector</li><li>标签建议确认/拒绝切片</li><li>运行时与跨平台治理</li></ul>
+          </article>
+          <article class="feature" data-stage="current">
+            <div class="feature-top"><span class="status current">Current</span><span class="adr">PARTIAL</span></div>
+            <h3>Web Capture 与来源</h3>
+            <p>嵌入浏览器、站点配置、网页检索与下载表存在；当前还有模拟成功和产品主次颠倒。</p>
+            <ul><li>Web Capture Entry</li><li>站点插件/抓取</li><li>需统一进入真实 Intake</li></ul>
+          </article>
+          <article class="feature" data-stage="alpha">
+            <div class="feature-top"><span class="status alpha">Private Alpha</span><span class="adr">ADR 0292 / 0335</span></div>
+            <h3>Safe Copy Intake</h3>
+            <p>普通 Add Assets 推荐并预选 Copy Into Library，外部来源保持不变；逐项验证、逐项激活、逐步可搜。</p>
+            <ul><li>真实文件/文件夹选择</li><li>冲突与容量预检</li><li>无 basename 覆盖</li></ul>
+          </article>
+          <article class="feature" data-stage="alpha">
+            <div class="feature-top"><span class="status alpha">Private Alpha</span><span class="adr">ADR 0168–0169</span></div>
+            <h3>Progressive Understanding</h3>
+            <p>Tag Suggestions、Embedding、bounded OCR、Short Description 四条独立本地能力，不互相阻塞。</p>
+            <ul><li>先预览、后 enrichment</li><li>等待/失败真实可见</li><li>不伪造 empty 或 success</li></ul>
+          </article>
+          <article class="feature" data-stage="alpha">
+            <div class="feature-top"><span class="status alpha">Private Alpha</span><span class="adr">ADR 0181–0184</span></div>
+            <h3>Explainable Asset Search</h3>
+            <p>一个框接收关键词、自然语言和图片；混合排序同时展示为何命中与索引覆盖。</p>
+            <ul><li>词法永远可用</li><li>兼容 embedding space</li><li>Top-K 解释</li></ul>
+          </article>
+          <article class="feature" data-stage="alpha">
+            <div class="feature-top"><span class="status alpha">Private Alpha</span><span class="adr">PRODUCT</span></div>
+            <h3>Contextual AI Panel</h3>
+            <p>在当前结果或选择中继续“更极简”“排除人物”“比较这三张”“预览批量标签”，不是脱离上下文聊天。</p>
+            <ul><li>只读分析可直接执行</li><li>写入给出计划预览</li><li>外部 AI 每次授权</li></ul>
+          </article>
+          <article class="feature" data-stage="next">
+            <div class="feature-top"><span class="status next">Next</span><span class="adr">EAGLE+</span></div>
+            <h3>Visual Family & Versions</h3>
+            <p>把 exact duplicate、近似图、裁切、调色、改版和真实版本关系分开；快速在族内挑最佳而非堆一地重复项。</p>
+            <ul><li>相似族瀑布</li><li>差异热区</li><li>保留用户确认关系</li></ul>
+          </article>
+          <article class="feature" data-stage="next">
+            <div class="feature-top"><span class="status next">Next</span><span class="adr">WORKFLOW</span></div>
+            <h3>Brief-to-Board</h3>
+            <p>输入创意 Brief，系统拆成视觉意图、场景、情绪和禁用项，从库中生成可解释候选板，用户拖拽定稿。</p>
+            <ul><li>不自动修改库</li><li>每个候选有依据</li><li>导出来源清单</li></ul>
+          </article>
+          <article class="feature" data-stage="next">
+            <div class="feature-top"><span class="status next">Next</span><span class="adr">CREATOR</span></div>
+            <h3>Creative App Handoff</h3>
+            <p>从 Figma、After Effects、Premiere、DaVinci Resolve 等工具按原件或明确兼容输出交付，回链使用上下文。</p>
+            <ul><li>Original 不被 Preview 冒充</li><li>使用记录本地保存</li><li>不静默改源文件</li></ul>
+          </article>
+          <article class="feature" data-stage="future">
+            <div class="feature-top"><span class="status future">Future</span><span class="adr">VIDEO</span></div>
+            <h3>Video Intelligence</h3>
+            <p>镜头切分、关键帧、人物/物体、动作、景别、台词、声音和节奏统一进入时间感知检索。</p>
+            <ul><li>搜索命中到精确 timecode</li><li>相似镜头探索</li><li>可控抽帧与算力预算</li></ul>
+          </article>
+          <article class="feature" data-stage="future">
+            <div class="feature-top"><span class="status future">Future</span><span class="adr">TRUST</span></div>
+            <h3>Rights & Provenance Shield</h3>
+            <p>把来源、作者、许可、使用限制、过期和生成/编辑 provenance 作为交付前风险提示，而非素材卡上的噪声。</p>
+            <ul><li>证据与用户声明分离</li><li>批量交付检查</li><li>不做虚假法律结论</li></ul>
+          </article>
+          <article class="feature" data-stage="future">
+            <div class="feature-top"><span class="status future">Future</span><span class="adr">TEAM</span></div>
+            <h3>Local-first Collaboration</h3>
+            <p>共享库、评论、选择板与审批在保持可移植库所有权的前提下出现；离线单人体验不依赖云端。</p>
+            <ul><li>库身份与设备身份分离</li><li>冲突显式</li><li>同步不是所有权</li></ul>
+          </article>
+          <article class="feature" data-stage="explore">
+            <div class="feature-top"><span class="status explore">Explore</span><span class="adr">UNVALIDATED</span></div>
+            <h3>Creative Memory Agent</h3>
+            <p>长期记住“你在什么项目里为什么选了什么”，在新 Brief 出现时主动提示可复用证据，但默认不持久化私密搜索内容。</p>
+            <ul><li>需要显式启用</li><li>可查看、编辑、清除记忆</li><li>价值与隐私尚需验证</li></ul>
+          </article>
+          <article class="feature" data-stage="explore">
+            <div class="feature-top"><span class="status explore">Explore</span><span class="adr">UNVALIDATED</span></div>
+            <h3>Style DNA</h3>
+            <p>从用户确认的参考中提取色彩、密度、构图、字体气质、材质和运动语言，形成可解释风格空间而非单一向量。</p>
+            <ul><li>可比较品牌/项目</li><li>显示形成依据</li><li>不宣称审美真理</li></ul>
+          </article>
+          <article class="feature" data-stage="explore">
+            <div class="feature-top"><span class="status explore">Explore</span><span class="adr">UNVALIDATED</span></div>
+            <h3>Missing Shot Finder</h3>
+            <p>读取分镜/脚本或粗剪结构，对照本地素材库，指出叙事节拍缺失、视觉重复和可替代镜头候选。</p>
+            <ul><li>编导/剪辑专属高价值</li><li>建议而非自动剪辑</li><li>需真实项目验证</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="innovations">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Bold innovations</div>
+          <h2>从“素材仓库”升级为“创作记忆基础设施”。</h2>
+          <p>这些方向建立在可靠 Intake、Discovery 和原始素材安全之上。它们值得大胆探索，但不允许抢跑成为 Alpha 依赖。</p>
+        </div>
+        <div class="innovation-grid">
+          <article class="innovation" data-mark="↗">
+            <span class="stage">NEXT / HIGH POTENTIAL</span>
+            <h3>Creative Memory Graph</h3>
+            <p>连接资产、来源、相似族、项目、选择、拒绝、导出和实际使用。它回答的不只是“这是什么”，还包括“我为什么曾经喜欢它、在什么语境用过、和哪些东西一起出现”。</p>
+          </article>
+          <article class="innovation" data-mark="⌁">
+            <span class="stage">NEXT / HIGH POTENTIAL</span>
+            <h3>Brief Packs, not chat transcripts</h3>
+            <p>AI 将 Brief 转成可编辑视觉意图与检索计划，产出候选板、依据、缺口和来源清单。成果是可操作对象，不是一段难以复用的聊天记录。</p>
+          </article>
+          <article class="innovation" data-mark="▶">
+            <span class="stage">FUTURE / VIDEO</span>
+            <h3>Time-aware visual search</h3>
+            <p>视频不再只是“一个文件”。镜头、动作、台词、声音、时间码和情绪变化成为一等检索证据，可直接跳转到命中区间并比较相似节拍。</p>
+          </article>
+          <article class="innovation" data-mark="◎">
+            <span class="stage">FUTURE / TRUST</span>
+            <h3>Provenance-aware reuse</h3>
+            <p>产品在交付时主动聚合来源、许可、生成/改写证据与缺失项。它不冒充法律顾问，但让创作者在错误发生前看到不确定性。</p>
+          </article>
+          <article class="innovation" data-mark="◇">
+            <span class="stage">EXPLORE / AESTHETICS</span>
+            <h3>Explainable Style DNA</h3>
+            <p>用多个可解释维度表达品牌或项目风格：冷暖、留白、构图、排版密度、材质、镜头运动、节奏。用户可以纠正每个维度，而不是接受黑盒“像/不像”。</p>
+          </article>
+          <article class="innovation" data-mark="✦">
+            <span class="stage">EXPLORE / AGENTIC</span>
+            <h3>Reviewable Creative Agent</h3>
+            <p>Agent 可以提出“整理这一批”“找出重复变体”“为这个 Brief 建候选板”的冻结计划，展示预计变化与证据；没有确认，它只有建议权，没有写入权。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow" style="color:var(--lime)">AI capability strategy</div>
+          <h2>模型会变，产品能力与证据契约不变。</h2>
+          <p>
+            不把“最佳 AI”写死为一个模型名。每个 capability 都有质量门、硬件档位、真实评测集、许可与资源预算；
+            Adapter 可以替换模型，而 Workspace、索引和证据 Interface 保持稳定。
+          </p>
+        </div>
+        <div class="model-table">
+          <div class="model-row head"><div>Capability</div><div>Alpha 本地候选</div><div>质量 / 未来 Lane</div></div>
+          <div class="model-row"><div>Embedding / Retrieval</div><div>SigLIP 2 小/中型或已验证 CLIP/SigLIP ONNX；中文设计查询需自建评测</div><div>Qwen3-VL-Embedding 2B + 可选 Reranker；大模型不是默认硬件要求</div></div>
+          <div class="model-row"><div>OCR</div><div>轻量 OCR，保留区域、脚本、原文与置信证据；无结果不能伪装成不支持</div><div>PaddleOCR-VL 用于海报、复杂版式和文档；按需能力，不阻塞普通图片</div></div>
+          <div class="model-row"><div>Tagging</div><div>WD Tagger + 版本化设计词表 + 本地阈值校准</div><div>小型 VLM 提议风格/用途标签，始终带 provenance 且需用户确认</div></div>
+          <div class="model-row"><div>Short Description</div><div>小型本地 VLM，允许 abstain；只生成短、可检索、可解释描述</div><div>Qwen3-VL 2B/4B 或设备适配模型，用于复杂版式/视觉问答</div></div>
+          <div class="model-row"><div>Segmentation</div><div>非 Alpha 依赖；优先使用确定性裁切与缩略图</div><div>SAM 2 用于主体提取、镜头对象跟踪和版面元素选择</div></div>
+          <div class="model-row"><div>Video / Audio</div><div>Alpha 后：抽帧 embedding、基础 shot boundary、离线转写</div><div>多模态视频理解、时间定位、说话人/声音事件和跨模态检索</div></div>
+          <div class="model-row"><div>External AI</div><div>默认不用；本地不可用时给出诚实状态和显式选择</div><div>当前可见任务/批次逐次授权；披露 provider、资产、输入视图和目的</div></div>
+        </div>
+        <div class="model-sources">
+          研究入口：
+          <a href="https://arxiv.org/abs/2502.14786">SigLIP 2</a> ·
+          <a href="https://github.com/QwenLM/Qwen3-VL-Embedding">Qwen3-VL-Embedding / Reranker</a> ·
+          <a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL</a> ·
+          <a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR</a> ·
+          <a href="https://github.com/facebookresearch/sam2">SAM 2</a>。
+          型号仅是候选；正式默认必须通过本地设计素材评测、许可、安装体积和真实设备性能门。
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Software architecture</div>
+          <h2>深 Module、小 Interface、清晰 Seam。</h2>
+          <p>
+            Electron Main 继续拥有可信写入，Renderer 负责交互，Python Worker 负责推理。
+            但产品调用应围绕能力与工作流，不围绕 MPS/CUDA/HTTP/文件路径等实现细节。
+          </p>
+        </div>
+        <div class="architecture">
+          <div class="arch-row">
+            <div class="arch-label">Product Surfaces</div>
+            <div class="arch-modules">
+              <div class="arch-module">Asset Workspace<small>Browse · Search · Compare</small></div>
+              <div class="arch-module">Capture Inbox<small>Review · Promote · Recover</small></div>
+              <div class="arch-module">Contextual AI<small>Explain · Refine · Plan</small></div>
+              <div class="arch-module">Activity / Diagnostics<small>Attention · Models · Runtime</small></div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-label">Deep Workflow Modules</div>
+            <div class="arch-modules">
+              <div class="arch-module">Asset Intake<small>Identity · Ownership · Staging</small></div>
+              <div class="arch-module">Asset Discovery<small>Lexical · Semantic · Visual</small></div>
+              <div class="arch-module">AI Capabilities<small>Intent · Evidence · Routing</small></div>
+              <div class="arch-module">Operation Framework<small>Plan · Commit · Recovery</small></div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-label">Trusted Core</div>
+            <div class="arch-modules">
+              <div class="arch-module">Library & SQLite<small>Authoritative local state</small></div>
+              <div class="arch-module">Preview Broker<small>Generation · Coverage · Color</small></div>
+              <div class="arch-module">Source Safety<small>Original · Trash · Receipt</small></div>
+              <div class="arch-module">Capability Registry<small>Model space · Quality gates</small></div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-label">Adapters</div>
+            <div class="arch-modules">
+              <div class="arch-module">macOS / Windows<small>Only real platform differences</small></div>
+              <div class="arch-module">Local AI Runtimes<small>ONNX · MLX/MPS · CUDA · CPU</small></div>
+              <div class="arch-module">External Providers<small>Per-task explicit grant</small></div>
+              <div class="arch-module">Creator Apps / Sources<small>Capture · Handoff · Export</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="principles">
+          <article class="principle"><h3>Locality</h3><p>一个能力的规则、状态与测试放在同一领域附近。不要在 Renderer、Main、Worker 和 README 各保留一份不同事实。</p></article>
+          <article class="principle"><h3>Depth</h3><p>调用方说“生成 embedding”或“导入这批素材”，不需要知道模型文件、临时目录、GPU probe 或 SQLite 语句。</p></article>
+          <article class="principle"><h3>Evidence</h3><p>每个 AI 结果带模型空间、配方、来源 generation、覆盖与执行位置。UI 只投影必要证据，不制造确定性。</p></article>
+          <article class="principle"><h3>Original Safety</h3><p>外部来源不是 cleanup target。Preview、normalized copy 与 export 不能冒充 Original；破坏性动作必须有独立授权。</p></article>
+          <article class="principle"><h3>Progressive Availability</h3><p>素材先可见、再可词法搜索、再得到 OCR/语义/视觉增强。缺少模型不应让整个产品不可用。</p></article>
+          <article class="principle"><h3>One Commit, Two Profiles</h3><p>Dev 与 Stable 来自同一 commit。Stable 用明确 runtime allowlist，不打包 ADR、测试、工具、缓存或私密本地内容。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="dark">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow" style="color:var(--lime)">Private Alpha</div>
+          <h2>三十天，只证明一件事：它真的能帮人找回素材。</h2>
+          <p>架构基线只占前三天；之后每一阶段都要交付可看见的产品纵切、自动验证、Git commit 和可回滚证据。</p>
+        </div>
+        <div class="roadmap">
+          <article class="phase">
+            <div class="day">DAY 0–3</div>
+            <h3>Architecture Baseline</h3>
+            <p>知识路由、产品主轴、Local-first、Current/Target 分离、Dev/Stable 产物边界。</p>
+            <div class="gate">Gate：AI 新任务只读相关 ADR，不再默认吞全库。</div>
+          </article>
+          <article class="phase">
+            <div class="day">DAY 4–10</div>
+            <h3>Safe Intake</h3>
+            <p>真实 Copy Into Library、来源保留、唯一命名、逐项激活、失败可见；移除模拟成功。</p>
+            <div class="gate">Gate：导入失败绝不显示成功，外部来源字节不变。</div>
+          </article>
+          <article class="phase">
+            <div class="day">DAY 8–18</div>
+            <h3>Asset Discovery</h3>
+            <p>词法/元数据先行，加入 OCR、embedding、视觉 query、混合排序和 Match Explanation。</p>
+            <div class="gate">Gate：目标素材 Top-K 命中，用户能理解为何命中。</div>
+          </article>
+          <article class="phase">
+            <div class="day">DAY 16–25</div>
+            <h3>Contextual AI</h3>
+            <p>Workspace 内 refine、compare、batch suggestion；所有写入计划可预览，外部 AI 单次授权。</p>
+            <div class="gate">Gate：AI 不需要独立聊天页也能完成核心任务。</div>
+          </article>
+          <article class="phase">
+            <div class="day">DAY 26–30</div>
+            <h3>Alpha Closure</h3>
+            <p>真实模型路径、性能、隐私、打包、回归、首次使用和十分钟任务验证。</p>
+            <div class="gate">Gate：Stable 包无开发语料/缓存，核心任务可重复通过。</div>
+          </article>
+        </div>
+        <div class="acceptance">
+          <div><strong>≤10m</strong><span>从首次批量 Add Assets 到用自然语言找回目标素材。</span></div>
+          <div><strong>0</strong><span>来源静默删除、移动、重写或云端上传。</span></div>
+          <div><strong>100%</strong><span>Top-K 结果拥有至少一种可理解 Match Evidence 或明确无证据状态。</span></div>
+          <div><strong>1</strong><span>产品主表面：Asset Workspace。Web、Runtime、模型都服务它。</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Truth and guardrails</div>
+          <h2>未来可以大胆，事实必须克制。</h2>
+          <p>这些规则比任何单一功能更重要。它们决定产品能否被视觉创作者长期信任。</p>
+        </div>
+        <div class="truth-grid">
+          <article class="truth"><h3>原始素材</h3><p><b>Copy 不等于 Move。</b> 选中的外部来源始终保持不变。Reference 是高级显式模式。任何 rewrite、delete 或 ownership conversion 都是新的、独立确认的工作流。</p></article>
+          <article class="truth"><h3>AI 与云端</h3><p><b>配置 provider 不等于同意上传。</b> 默认使用本地能力；云端只服务当前披露的动作或批次，不记住隐形授权，不静默 fallback。</p></article>
+          <article class="truth"><h3>搜索与分类</h3><p><b>Unsorted 是正常状态。</b> 不打标签、不建文件夹、不接受 AI 建议，都不能让完整资产变成次等素材或阻塞检索。</p></article>
+          <article class="truth"><h3>AI 结果</h3><p><b>建议不是事实。</b> 保留 provenance、model space、coverage 和 confidence；模型更新或信任变化不能静默改写已经提交的用户状态。</p></article>
+          <article class="truth"><h3>开发事实</h3><p><b>ADR Accepted 不等于 Implemented。</b> 每个产品声明都要有当前代码、真实模型路径和聚焦测试证据；Runtime Probe 只能证明 probe。</p></article>
+          <article class="truth"><h3>产品优先级</h3><p><b>长尾不能阻塞主循环。</b> Custom Field、复杂 Export、跨库、插件市场和高级来源操作保留设计位置，但必须在核心留存之后交付。</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>Design Asset Manager · Product North Star · Development reference only</span>
+      <span>Source-controlled, excluded from Stable runtime packaging</span>
+    </div>
+  </footer>
+
+  <script>
+    const buttons = Array.from(document.querySelectorAll('.filter-btn'));
+    const features = Array.from(document.querySelectorAll('.feature'));
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        buttons.forEach((item) => item.classList.toggle('active', item === button));
+        features.forEach((feature) => {
+          feature.classList.toggle('hidden', filter !== 'all' && feature.dataset.stage !== filter);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

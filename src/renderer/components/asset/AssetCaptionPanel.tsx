@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Sparkles, Edit2 } from 'lucide-react'
 import { Asset } from '../../stores/asset.store'
+import { projectAssetCaptionDisplay } from '../../../shared/workflows/asset-display.workflow'
+import type { AssetTaggingModelId } from '../../../shared/workflows/asset-tagging.workflow'
 
 type AssetCaptionPanelProps = {
   selectedAsset: Asset;
   updateAssetCaption: (id: string, caption: string) => Promise<void>;
   resetAssetCaptionEdited: (id: string) => Promise<void>;
-  generateMockAiSuggestions: (id: string, engines: string[]) => Promise<{ success: boolean; error?: string }>;
+  generateAiSuggestions: (id: string, engines: readonly AssetTaggingModelId[]) => Promise<{ success: boolean; error?: string }>;
+  aiActionsEnabled?: boolean;
 };
 
 export default function AssetCaptionPanel({
   selectedAsset,
   updateAssetCaption,
   resetAssetCaptionEdited,
-  generateMockAiSuggestions
+  generateAiSuggestions,
+  aiActionsEnabled = true
 }: AssetCaptionPanelProps) {
   const [isEditingCaption, setIsEditingCaption] = useState(false)
   const [tempCaption, setTempCaption] = useState('')
   const [isRegeneratingCaption, setIsRegeneratingCaption] = useState(false)
+  const captionDisplay = projectAssetCaptionDisplay(selectedAsset, { isRegenerating: isRegeneratingCaption })
 
   // Reset internal states on asset transition
   useEffect(() => {
@@ -32,25 +37,25 @@ export default function AssetCaptionPanel({
           <span>画面描述</span>
         </span>
         <div className="flex items-center gap-1.5">
-          {selectedAsset.aiCaptionIsUserEdited === 1 && (
+          {captionDisplay.showRestoreAction && (
             <button
               onClick={async () => {
                 await resetAssetCaptionEdited(selectedAsset.id)
               }}
               className="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-bold transition-all cursor-pointer"
-              title="恢复为 AI 默认生成的描述"
+              title={aiActionsEnabled ? '恢复为 AI 默认生成的描述' : '保留当前描述，并允许下次确认的 AI 分析更新描述'}
             >
-              恢复AI描述
+              {aiActionsEnabled ? captionDisplay.restoreActionLabel : '允许 AI 更新'}
             </button>
           )}
-          <button
+          {aiActionsEnabled && <button
             onClick={async () => {
               setIsRegeneratingCaption(true)
               try {
                 // Reset edited lock if any
                 await resetAssetCaptionEdited(selectedAsset.id)
                 // Trigger Florence-2 generation
-                const result = await generateMockAiSuggestions(selectedAsset.id, ['florence2'])
+                const result = await generateAiSuggestions(selectedAsset.id, ['florence2'])
                 if (!result.success) {
                   console.warn('[AssetCaptionPanel] Real caption/tag worker unavailable:', result.error)
                 }
@@ -63,8 +68,8 @@ export default function AssetCaptionPanel({
             disabled={isRegeneratingCaption}
             className="px-2 py-0.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded text-[10px] font-bold transition-all disabled:opacity-50 cursor-pointer"
           >
-            {isRegeneratingCaption ? '生成中...' : '重新生成'}
-          </button>
+            {captionDisplay.regenerateActionLabel}
+          </button>}
         </div>
       </div>
 
@@ -97,8 +102,8 @@ export default function AssetCaptionPanel({
       ) : (
         <div className="bg-slate-50/50 border border-slate-100 p-3 rounded-2xl space-y-2 relative group/caption">
           <p className="text-[11.5px] text-slate-600 leading-relaxed font-sans select-text whitespace-pre-wrap">
-            {selectedAsset.aiCaption || (
-              <span className="text-slate-400 italic">暂无画面描述。点击“重新生成”或“编辑”添加描述。</span>
+            {captionDisplay.hasCaption ? captionDisplay.captionText : (
+              <span className="text-slate-400 italic">{aiActionsEnabled?captionDisplay.placeholderLabel:'暂无画面描述。点击编辑添加。'}</span>
             )}
           </p>
 
@@ -106,16 +111,10 @@ export default function AssetCaptionPanel({
             <div className="flex items-center justify-between">
               <span>
                 来源:{' '}
-                {selectedAsset.aiCaptionIsUserEdited === 1 ? (
-                  <span className="text-amber-600 font-bold">用户已编辑，AI不会自动覆盖</span>
-                ) : selectedAsset.aiCaptionSource === 'ai_florence' ? (
-                  <span className="text-indigo-600 font-bold">Florence-2</span>
-                ) : (
-                  '未知'
-                )}
+                <span className={captionDisplay.sourceToneClass}>{captionDisplay.sourceLabel}</span>
               </span>
-              {selectedAsset.aiCaptionUpdatedAt && (
-                <span>{new Date(selectedAsset.aiCaptionUpdatedAt).toLocaleString()}</span>
+              {captionDisplay.hasUpdatedAt && (
+                <span>{captionDisplay.updatedAtLabel}</span>
               )}
             </div>
           </div>
@@ -126,7 +125,7 @@ export default function AssetCaptionPanel({
               setIsEditingCaption(true)
             }}
             className="absolute top-2.5 right-2.5 w-6 h-6 rounded-lg bg-white shadow-sm border border-slate-100 hover:border-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-all opacity-0 group-hover/caption:opacity-100 cursor-pointer"
-            title="编辑描述"
+            title={captionDisplay.editActionLabel}
           >
             <Edit2 className="w-3 h-3" />
           </button>

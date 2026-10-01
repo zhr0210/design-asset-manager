@@ -74,7 +74,7 @@ export interface LlamaInstallPlan {
   modelDir: string;
   baseUrl: string;
   warnings: string[];
-  downloadSource?: 'huggingface' | 'hf-mirror';
+  downloadSource?: 'huggingface' | 'hf-mirror' | 'production-cdn';
 }
 
 export interface LlamaInstallProgressEvent {
@@ -113,7 +113,11 @@ export interface LlamaServerTestResult {
   success: boolean;
   baseUrl: string;
   models: string[];
+  modelId?: string;
   chatOk: boolean;
+  visionOk: boolean;
+  visionInput: 'generated_fixture';
+  checkedAt: string;
   error?: {
     code: string;
     message: string;

@@ -1,0 +1,30 @@
+{
+  "forbidden_directories": [
+    "docs/",
+    "ai-service/models_cache/",
+    "dist-packages/",
+    "dist-temp/",
+    "runtime-data/"
+  ],
+  "context_protected_directories": [
+    "ai-service/models_cache/",
+    "dist-packages/",
+    "dist-temp/",
+    "runtime-data/",
+    "src/main/extensions/photoshow/unpacked/"
+  ],
+  "blocking_suffixes": [
+    ".onnx",
+    ".safetensors",
+    ".pt",
+    ".pth",
+    ".ckpt",
+    ".bin",
+    ".gguf",
+    ".db",
+    ".sqlite",
+    ".sqlite-journal",
+    ".sqlite-wal",
+    ".sqlite-shm"
+  ]
+}

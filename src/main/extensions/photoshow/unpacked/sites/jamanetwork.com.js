@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"jamanetwork.com":{srcMatching:[{srcRegExp:"//cdn\\.jamanetwork\\.com/.+@IMG@.*",processor:({srcRegExpObj:r,trigger:c,triggerSrc:e})=>r.exec(c.closest("a")?.href)?.[0]||e}]}};

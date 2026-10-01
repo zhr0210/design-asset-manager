@@ -1,0 +1,50 @@
+{
+  "documentStatus": "historical-reported-combination-not-active-preset",
+  "enabled": false,
+  "recordId": "qwen3vl-2b-q4km-b11057-history",
+  "model": {
+    "name": "Qwen3-VL-2B-Instruct",
+    "weightsDigest": "089d75c52f4b7ffc56ba998ffc50aae89fcafc755f9e7208aacca281dca6c2ae",
+    "visionProjectorDigest": "c3d5afbef5287953acd57b4043d2269456e5761a4eaccb3b71b062996970aea5",
+    "tokenizerDigest": null,
+    "quantization": "Q4_K_M",
+    "digestEvidence": "historical-public-artifact-manifest; not read or verified model bytes in P03"
+  },
+  "runtime": {
+    "engine": "llama.cpp",
+    "version": "b11057",
+    "buildCommit": "59657a613",
+    "platform": "macOS",
+    "architecture": "arm64",
+    "hardwareBackend": "Metal",
+    "versionEvidence": "historical test report"
+  },
+  "reportedParameters": {
+    "contextTokens": [
+      4096,
+      8192
+    ],
+    "serverSeed": 42,
+    "temperature": 0.2,
+    "parallelSlots": 1
+  },
+  "recipeAtHistoricalExecution": {
+    "storedLiteral": "visual-ai-v1",
+    "exactDigest": null,
+    "status": "legacy-detail-not-proven",
+    "compatibleCurrentCandidate": {
+      "recipeId": "dam.visual-bundle.compat",
+      "recipeVersion": "2026-09-26.1",
+      "notRetroactiveIdentity": true
+    }
+  },
+  "manifestPath": "docs/product/LOCAL-AI-EVALUATION-20260920.manifest.json",
+  "manifestSha256": "c5ae6d8c3e6431f16c951b579d0c35f719d7df0a92faedd7c2128ce6d49c54ea",
+  "reportPaths": [
+    "docs/product/evidence/qwen-comparison-20260924/2b-generated-report.json",
+    "docs/product/evidence/qwen-comparison-20260924/2b-real-eight-metrics.json"
+  ],
+  "currentReadiness": "unknown-not-probed",
+  "semanticQuality": "not-accepted",
+  "executionThisStage": "NOT_RUN"
+}

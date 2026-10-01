@@ -1,0 +1,226 @@
+{
+  "status": "planned_NOT_RUN",
+  "strategy": "temporary generated library and controlled process boundaries, no private inputs; not executed",
+  "cases": [
+    {
+      "id": "R01",
+      "crashOrRecoveryPoint": "before enqueue commit",
+      "expected": "no partial intent; repeated same request yields one complete receipt",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R02",
+      "crashOrRecoveryPoint": "after enqueue before UI acknowledgement",
+      "expected": "stable request lookup; no second generation",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R03",
+      "crashOrRecoveryPoint": "during claim transaction",
+      "expected": "either no claim or complete attempt/slot/job tuple",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R04",
+      "crashOrRecoveryPoint": "after claim before dispatch-intent",
+      "expected": "old session token invalid; safe fresh claim only after verifying send protocol",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R05",
+      "crashOrRecoveryPoint": "after dispatch-intent before actual send",
+      "expected": "possible send conservatively unknown for remote; no automatic free replay",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R06",
+      "crashOrRecoveryPoint": "after actual send before provider request ID saved",
+      "expected": "missing ID is not proof of unsent; unknown retained",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R07",
+      "crashOrRecoveryPoint": "after complete response before validating state persisted",
+      "expected": "no result receipt; local retry needs current permission, remote reconcile first",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R08",
+      "crashOrRecoveryPoint": "after validating recorded before commit",
+      "expected": "validating is not success; raw response absent means cannot fabricate evidence",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R09",
+      "crashOrRecoveryPoint": "after Evidence insert before current pointer update",
+      "expected": "single transaction rollback all result/job/outbox effect",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R10",
+      "crashOrRecoveryPoint": "after pointer update before Job success",
+      "expected": "single transaction rollback, prior current stays",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R11",
+      "crashOrRecoveryPoint": "after Job success before Outbox insert",
+      "expected": "single transaction rollback; no success without event",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R12",
+      "crashOrRecoveryPoint": "after Outbox insert before transaction commit",
+      "expected": "all or none by readable database facts; no runtime durability assertion here",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R13",
+      "crashOrRecoveryPoint": "after commit before notification",
+      "expected": "success and outbox survive; replay notification not inference",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R14",
+      "crashOrRecoveryPoint": "after index publication before checkpoint ack",
+      "expected": "idempotent replay; no duplicate index effect",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R15",
+      "crashOrRecoveryPoint": "after checkpoint commit before dispatcher sees reply",
+      "expected": "read checkpoint and resume after known consumed sequence",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R16",
+      "crashOrRecoveryPoint": "graceful close with committing task",
+      "expected": "linearization preserves earlier commit or rejects revoked claim; no deadlock",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R17",
+      "crashOrRecoveryPoint": "reopen same libraryGeneration with new lease",
+      "expected": "old attempt rejected by hostSession/lease/token even generation unchanged",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R18",
+      "crashOrRecoveryPoint": "close marker fails to persist",
+      "expected": "old session claims never trusted on next open; no false pause success",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R19",
+      "crashOrRecoveryPoint": "reopen with SQLite recovery sidecar",
+      "expected": "library recovery required before Job scanning; do not delete sidecar",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "R20",
+      "crashOrRecoveryPoint": "reopen with changed profile/config/auth",
+      "expected": "waiting/review, never silently dispatch using old grant",
+      "testIds": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

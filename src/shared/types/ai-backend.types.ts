@@ -1,3 +1,4 @@
+import type {PiProviderKind,PiAuthMode} from '../contracts/ai-connection.contract'
 export type AiBackendType =
   | 'native-python'
   | 'openai-compatible'
@@ -21,7 +22,15 @@ export type AiBackendConfig = {
   type: AiBackendType;
   enabled: boolean;
   baseUrl: string;
+  /** Legacy Main-only value. Never returned in Renderer settings. */
   apiKey?: string;
+  modelValidation?:{model:string;bindingSha256:string;vision:boolean;jsonOutput:boolean;testedAt:string;generatedInput:true}
+  processingLocation?:'local-service'|'external-service';
+  transport?: 'pi' | 'legacy';
+  providerKind?:PiProviderKind;
+  authMode?:PiAuthMode;
+  credentialRef?:string;
+  credentialRevision?:number;
   defaultModel?: string;
   timeoutMs: number;
   capabilities: AiBackendCapability;

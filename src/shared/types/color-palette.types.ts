@@ -30,3 +30,74 @@ export interface ColorExtractionResult {
   textBoxes?: TextBox[]                  // 包含色彩与背景可读性分析的文本框体
   readabilityAverage?: number            // 整体排版可读性平均值
 }
+
+export type ColorTriplet = [number, number, number]
+
+export interface PersistedColorSwatch {
+  [key: string]: unknown
+  hex?: string
+  rgb?: ColorTriplet | number[]
+  hsl?: ColorTriplet | number[]
+  percentage?: number
+  ratio?: number
+  role?: string
+  family?: string
+  contrastWhite?: number
+  contrastBlack?: number
+  confidence?: number
+  from_boxes?: number
+  fromBoxes?: number
+  sourceCount?: number
+}
+
+export interface PersistedColorThemes {
+  [key: string]: unknown
+  isWarm?: boolean
+  isCool?: boolean
+  isNeutral?: boolean
+  isHighSaturation?: boolean
+  isLowSaturation?: boolean
+  hasBlackGold?: boolean
+  hasBluePurpleGradient?: boolean
+  hasRedOrangeTone?: boolean
+  backgroundType?: string
+}
+
+export interface PersistedTextBox {
+  [key: string]: unknown
+  readability_score?: number
+}
+
+export interface PersistedImagePalette {
+  [key: string]: unknown
+  dominant?: PersistedColorSwatch
+  colors?: PersistedColorSwatch[]
+  swatches?: PersistedColorSwatch[]
+  themes?: PersistedColorThemes
+}
+
+export interface PersistedTextPalette {
+  [key: string]: unknown
+  colors?: PersistedColorSwatch[]
+  swatches?: PersistedColorSwatch[]
+  background_colors?: string[]
+  status?: string
+  textColorStatus?: string
+  skipReason?: string
+  provider?: string
+  duration_ms?: number
+  detected_text_box_count?: number
+  processed_text_box_count?: number
+  readabilityAverage?: number
+  readability_average?: number
+  warnings?: unknown[]
+  isMock?: boolean
+  text_boxes?: PersistedTextBox[]
+  textBoxes?: PersistedTextBox[]
+}
+
+export interface PersistedColorPalettePayload {
+  [key: string]: unknown
+  image_palette?: PersistedImagePalette
+  text_palette?: PersistedTextPalette
+}

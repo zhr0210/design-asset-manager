@@ -1,0 +1,430 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.design-asset-manager.invalid/p01/common.v1.schema.json",
+  "$comment": "P01 SPEC Proposed; offline namespace, never fetch. Not production registered.",
+  "definitions": {
+    "opaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9:._-]*$",
+      "not": {
+        "pattern": "[\\r\\n]"
+      }
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 36,
+      "maxLength": 36,
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 32,
+      "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+    },
+    "tagLabel": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "[^ ]",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f]"
+      }
+    },
+    "notificationWarning": {
+      "enum": [
+        "NOTIFICATION_DELIVERY_FAILED"
+      ]
+    },
+    "commandError": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "INVALID_REQUEST"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "validation"
+            },
+            "retry": {
+              "const": "never"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "请求格式无效，请重新提交。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "UNSUPPORTED_VERSION"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "validation"
+            },
+            "retry": {
+              "const": "never"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "当前接口不支持该契约版本。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "UNTRUSTED_SENDER"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "permission"
+            },
+            "retry": {
+              "const": "never"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "当前窗口没有此操作权限。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "SCOPE_DENIED"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "permission"
+            },
+            "retry": {
+              "const": "never"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "当前窗口不能操作所选素材。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "LIBRARY_SCOPE_CHANGED"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "conflict"
+            },
+            "retry": {
+              "const": "after-condition"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "资料库会话已变化，请重新选择素材。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "LIBRARY_NOT_READY"
+            },
+            "kind": {
+              "const": "waiting"
+            },
+            "category": {
+              "const": "availability"
+            },
+            "retry": {
+              "const": "after-condition"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "资料库暂不可用，请打开并核对后重试。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "LIBRARY_BUSY"
+            },
+            "kind": {
+              "const": "waiting"
+            },
+            "category": {
+              "const": "availability"
+            },
+            "retry": {
+              "const": "after-condition"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "资料库正在处理其他操作，请稍后重试。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "SUGGESTION_UNAVAILABLE"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "conflict"
+            },
+            "retry": {
+              "const": "after-condition"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "建议已失效，请刷新当前分析结果。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "STORAGE_WRITE_FAILED"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "storage"
+            },
+            "retry": {
+              "const": "bounded"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "保存失败且未提交，请在条件允许时重试。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "CANCELLED"
+            },
+            "kind": {
+              "const": "cancelled"
+            },
+            "category": {
+              "const": "cancelled"
+            },
+            "retry": {
+              "const": "never"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "操作已取消，未提交本次更改。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "INTERNAL_FAILURE"
+            },
+            "kind": {
+              "const": "failed"
+            },
+            "category": {
+              "const": "internal"
+            },
+            "retry": {
+              "const": "never"
+            },
+            "commitState": {
+              "const": "not-committed"
+            },
+            "safeMessage": {
+              "const": "操作未完成且未提交，请检查后重试。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "const": "COMMIT_OUTCOME_UNKNOWN"
+            },
+            "kind": {
+              "const": "indeterminate"
+            },
+            "category": {
+              "const": "storage"
+            },
+            "retry": {
+              "const": "reconcile"
+            },
+            "commitState": {
+              "const": "unknown"
+            },
+            "safeMessage": {
+              "const": "提交状态尚未确认，请先核对当前结果。"
+            }
+          },
+          "required": [
+            "code",
+            "kind",
+            "category",
+            "retry",
+            "commitState",
+            "safeMessage"
+          ]
+        }
+      ]
+    }
+  }
+}

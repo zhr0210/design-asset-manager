@@ -1,0 +1,27 @@
+{
+  "status": "proposed-not-enabled",
+  "scope": "Main-owned local visual preparation and request admission across combined+tags-only",
+  "owner": "one VisualAdmission instance",
+  "sessionBinding": [
+    "hostSessionId",
+    "leaseIdentity"
+  ],
+  "sharedRequestSlotsMax": 2,
+  "tagsOnlySlotsMax": 1,
+  "preprocessingSlotsMax": 1,
+  "sourceBytesMax": 33554432,
+  "decodedPixelsMax": 50000000,
+  "normalizedMaxEdge": 1024,
+  "encoding": "jpeg",
+  "jpegQuality": 85,
+  "maxPreparedBytesPerReceipt": null,
+  "maxPreparedBytesTotal": null,
+  "maxLocalPreparationBytes": null,
+  "maxPendingReceipts": null,
+  "codecOverheadBasis": null,
+  "newCoexistenceEnabled": false,
+  "nullPolicy": "deny new coexistence until finite limits and real temporary-fixture basis frozen in task03",
+  "userManagedVramHardLimitClaimed": false,
+  "backendInFlightUnknownSeparateFromLocalRequestRelease": true,
+  "productionValidation": "NOT_RUN"
+}

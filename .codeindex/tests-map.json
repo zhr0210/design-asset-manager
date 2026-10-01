@@ -1,0 +1,215 @@
+{
+  "agent_context_router": [
+    "npm run test-agent-context-router",
+    "npm run context:check"
+  ],
+  "asset_workspace": [
+    "npm run test-asset-card",
+    "npm run test-asset-description-draft",
+    "npm run test-app-navigation-workflow",
+    "npm run test-native-open-dialog",
+    "npm run test-asset-store-loading",
+    "npm run test-asset-library-keyboard",
+    "node scripts/run-ts-test.mjs scripts/asset-display-workflow.test.ts",
+    "node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts"
+  ],
+  "external_connected_library": [
+    "npm run test-external-connected-library-core",
+    "npm run test-eagle-adapter-companion",
+    "npm run test-external-connected-library-ipc",
+    "npm run test-legacy-readonly-workspace"
+  ],
+  "asset_discovery": [
+    "npm run test-asset-discovery-workflow",
+    "npm run test-scoped-asset-reads"
+  ],
+  "asset_trash": [
+    "npm run test-asset-authority-baseline",
+    "npm run test-asset-trash-lifecycle",
+    "npm run test-asset-trash-sqlite-persistence"
+  ],
+  "library_start": [
+    "npm run test-library-start-foundation",
+    "npm run test-library-filesystem-inspection"
+  ],
+  "library_creation": [
+    "npm run test-library-creation-planner",
+    "npm run test-library-start-foundation"
+  ],
+  "capture_intake": [
+    "npm run test-asset-authority-baseline",
+    "npm run test-intake-recovery",
+    "npm run test-active-library-session",
+    "npm run test-active-library-capture-composition",
+    "npm run test-capture-intake-workflow",
+    "npm run test-capture-intake-sqlite-persistence"
+  ],
+  "source_discovery": [
+    "npm run test-web-retirement",
+    "npm run test-download-store-integrity",
+    "npm run test-managed-download-resume",
+    "npm run test-download-space-management",
+    "npm run test-persistent-download",
+    "npm run test-owned-download-recovery",
+    "npm run test-asset-authority-baseline"
+  ],
+  "ai_analysis": [
+    "npm run test-ai-client-ipc-contract",
+    "node scripts/run-ts-test.mjs scripts/ai-result-sync-projector.test.ts",
+    "node scripts/run-ts-test.mjs scripts/ai-tag-suggestion-sync-sink.test.ts"
+  ],
+  "prompt_reverse": [
+    "npm run test-prompt-reverse-workflow",
+    "npm run test-openai-compatible-provider",
+    "npm run test-llama-openai-backend",
+    "npm run test-python-unittest"
+  ],
+  "model_library": [
+    "npm run test-legacy-model-management-containment",
+    "npm run test-model-acquisition-local-only",
+    "npm run test-model-artifact-readiness",
+    "npm run test-model-artifact-readiness-display"
+  ],
+  "model_library_core_tracer": [
+    "npm run test-model-library-catalog-admission-tracer",
+    "npm run test-model-library-core-tracer",
+    "npm run test-model-library-verified-blob-store-tracer",
+    "npm run test-model-library-storage-authority-tracer",
+    "npm run test-model-library-core-governance"
+  ],
+  "model_library_root_registry_tracer": [
+    "npm run test-model-library-root-registry-tracer",
+    "npm run test-model-library-storage-authority-tracer",
+    "npm run test-model-library-core-tracer",
+    "npm run test-model-library-verified-blob-store-tracer",
+    "npm run test-model-library-core-governance"
+  ],
+  "model_library_product_pilot": [
+    "npm run test-model-library-product-pilot",
+    "npm run test-model-library-product-pilot-storage",
+    "npm run test-model-library-core-governance",
+    "npm run test-app-navigation-workflow"
+  ],
+  "settings_paths": [
+    "npm run test-ai-backend-restoration",
+    "npm run test-settings-compatibility",
+    "npm run test-settings-migration",
+    "npm run test-path-governance-docs",
+    "node scripts/run-ts-test.mjs scripts/settings-service-defaults.test.ts"
+  ],
+  "shared_ai_runtime": [
+    "npm run test-ai-runtime-status-workflow",
+    "npm run test-ai-console-status-module",
+    "npm run test-ai-python-environment",
+    "npm run test-ai-python-runtime-host-context",
+    "npm run test-ai-runtime-host-context",
+    "npm run test-ai-runtime-bootstrap",
+    "npm run test-ai-runtime-panel",
+    "npm run test-platform-ai-runtime-request-selection",
+    "npm run test-python-execution-evidence",
+    "npm run test-ai-console-macos-branch",
+    "npm run test-ai-console-overview-workflow",
+    "npm run test-macos-ai-deps-installer-contract",
+    "npm run test-macos-ai-runtime"
+  ],
+  "python_ai_worker": [
+    "npm run test-python-unittest"
+  ],
+  "doctor_governance": [
+    "npm run test-doctor",
+    "npm run test-doctor-command-resolver",
+    "npm run test-doctor-service"
+  ],
+  "desktop_shell": [
+    "npm run test-desktop-viewport-policy",
+    "npm run test-app-navigation-workflow",
+    "npm run test-electron-main-lifecycle-policy"
+  ],
+  "main_ipc_registration": [
+    "npm run test-app-ipc-registration",
+    "npm run test-app-settings-model-workspace"
+  ],
+  "asset_storage_safety": [
+    "npm run test-image-normalize-source-retention"
+  ],
+  "asset_lifecycle": [
+    "npm run test-active-library-session",
+    "npm run test-active-library-tags",
+    "npm run test-active-library-capture-composition",
+    "npm run test-asset-trash-lifecycle",
+    "npm run test-asset-trash-sqlite-persistence",
+    "npm run test-capture-intake-workflow",
+    "npm run test-capture-intake-sqlite-persistence",
+    "npm run test-asset-discovery-workflow"
+  ],
+  "architecture_knowledge": [
+    "python3 scripts/check-adr-router.py",
+    "python3 scripts/check-agent-context.py",
+    "python3 scripts/check-docs-sync.py --mode phase-summary"
+  ],
+  "runtime_package": [
+    "npm run test-runtime-package-session",
+    "npm run test-runtime-package-executor",
+    "npm run test-runtime-package-ipc-governance",
+    "npm run test-runtime-package-panel"
+  ],
+  "cross_platform_runtime": [
+    "npm run ci:test-runtime-safety",
+    "npm run test-node-host-platform-defaults",
+    "npm run test-llama-runtime-host-context",
+    "npm run test-llama-runtime-macos-hardware-profile",
+    "npm run test-llama-runtime-installer",
+    "npm run test-runtime-package-executor",
+    "npm run test-runtime-package-session",
+    "npm run test-runtime-package-session-projector",
+    "npm run test-runtime-package-test-hygiene",
+    "npm run test-runtime-package-ipc-contract-preflight",
+    "npm run test-runtime-package-ipc-governance",
+    "npm run test-runtime-package-ipc-handlers",
+    "npm run test-runtime-package-product-workflow",
+    "npm run test-runtime-package-panel"
+  ],
+  "release_flow": [
+    "npm run test-release-flow-governance",
+    "npm run test-release-candidate-governance",
+    "npm run test-release-checksums",
+    "npm run test-package-smoke",
+    "npm run test-release-update-metadata",
+    "npm run test-release-trust-evidence-checks",
+    "npm run test-release-trust-evidence",
+    "npm run test-release-readiness-summary",
+    "npm run test-release-readiness-writer",
+    "npm run test-release-publish-approval",
+    "npm run test-release-platform-targets",
+    "npm run test-release-target-selection",
+    "npm run test-release-script-targets",
+    "npm run test-electron-builder-runner-options",
+    "npm run test-release-branding-preflight",
+    "npm run test-release-branding-approval-template",
+    "npm run test-release-branding-evidence",
+    "npm run test-release-signed-candidate-preflight",
+    "npm run test-release-environment-manifest",
+    "npm run test-release-signing-environment-status",
+    "npm run test-release-signing-environment-template",
+    "npm run test-release-signed-candidate-dispatch-status",
+    "npm run test-release-install-smoke-preflight",
+    "npm run test-release-external-gate-plan",
+    "npm run test-release-external-gate-status",
+    "npm run test-release-external-gate-status-writer",
+    "npm run test-release-evidence-bundle-status",
+    "npm run test-signed-release-workflow",
+    "npm run test-macos-signing-entitlements"
+  ],
+  "official_model_catalog_release": [
+    "npm run test-official-model-catalog-release-gate",
+    "npm run test-official-model-catalog-release-evidence",
+    "npm run test-official-model-catalog-release-preparation",
+    "npm run test-official-model-catalog-release-preparation-cli",
+    "npm run test-official-model-catalog-release-preparation-safety",
+    "npm run test-official-model-catalog-release-preparation-governance",
+    "npm run test-release-candidate-governance",
+    "npm run test-release-readiness-writer",
+    "npm run test-release-signed-candidate-preflight",
+    "npm run test-signed-release-workflow"
+  ]
+}

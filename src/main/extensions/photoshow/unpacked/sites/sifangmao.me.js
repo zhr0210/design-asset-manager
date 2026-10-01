@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"sifangmao.me":{srcMatching:[{srcRegExp:"(//.+?\\.sfmao\\.net/.+@IMG@!)(?:thumbnail_)?(.+)",processor:"$1$2"}]}};

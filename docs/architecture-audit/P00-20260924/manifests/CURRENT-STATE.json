@@ -1,0 +1,63 @@
+{
+  "packageId": "DAM-ARCH-20260924",
+  "packageVersion": "1.0.0",
+  "updatedOn": "2026-09-24",
+  "architectureDocumentStatus": "authored_target_proposal_pending_source_review",
+  "sourceMaterialStatus": {
+    "handoffRead": true,
+    "completeWorktreeObtained": true,
+    "completeWorktreeMeaning": "local non-sparse working tree available for P00; not a portable archive; no whole-program audit claim",
+    "linkedPrivateReportsRead": false,
+    "scopedHistoricalReportsRead": 10,
+    "allS00RelativeLinkTargetsExist": true,
+    "privateOriginalsRead": false,
+    "publicPrimaryReferencesReviewedThisRun": 0
+  },
+  "originalSnapshot": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df",
+    "dirtyWorktreeReported": true,
+    "headAloneReproducible": false
+  },
+  "repositoryChangesPerformed": false,
+  "damBusinessTestsRun": false,
+  "newModelBenchmarksRun": false,
+  "realLibraryAccessed": false,
+  "defaultMode": "SPEC",
+  "nextStage": null,
+  "activeStage": null,
+  "reviewedDesignStages": [],
+  "acceptedImplementationStages": [],
+  "stageRegistry": "stages.json",
+  "requirementRegistry": "requirements.json",
+  "decisionRegistry": "decisions.json",
+  "latestStageReport": "reports/P00-REPORT.md",
+  "externalActionsAuthorization": {
+    "realLibraryMutation": false,
+    "privateAssetUpload": false,
+    "paidCloudRequests": false,
+    "largeModelDownload": false,
+    "untrustedScriptExecution": false,
+    "userExternalServiceTermination": false
+  },
+  "notes": [
+    "原包CURRENT-STATE保留在inputs中，不被本状态覆盖。",
+    "repositoryChangesPerformed沿原包含义表示未改既有仓库实现；本轮仅新增审计目录。",
+    "历史执行字段为reported，本轮模型/业务/平台测试均NOT_RUN。",
+    "P00文档完成待审，不自动进入P01。"
+  ],
+  "nextStageCandidate": "P01",
+  "nextAction": "review_P00_only",
+  "nextStageAuthorization": "not_granted",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "auditDocumentsCreated": true,
+  "businessSourceChangesPerformed": false,
+  "stoppedAfterStage": "P00",
+  "worktree": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df3bbb605478da6d0af18724d64021e723c",
+    "headAloneReproducible": false,
+    "protectedSnapshot": "../evidence/WORKTREE-BEFORE.json"
+  }
+}

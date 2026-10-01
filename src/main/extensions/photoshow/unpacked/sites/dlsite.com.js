@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"dlsite.com":{srcMatching:[{srcRegExp:"(//img\\.dlsite\\.jp/)resize(/.+)_\\d+x\\d+(@IMG@)",processor:"$1modpub$2$3"}]}};

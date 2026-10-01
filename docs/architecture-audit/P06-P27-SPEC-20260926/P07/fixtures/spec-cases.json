@@ -1,0 +1,182 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "T01",
+      "input": {
+        "op": "sample",
+        "unit": "bytes",
+        "now": 10,
+        "at": 9,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startA",
+        "used": 40,
+        "total": 100
+      },
+      "expected": 60
+    },
+    {
+      "id": "T02",
+      "input": {
+        "op": "sample",
+        "unit": "bytes",
+        "now": 10,
+        "at": 9,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startA",
+        "used": 40,
+        "total": 100,
+        "error": "probe-failed"
+      },
+      "expected": "unknown"
+    },
+    {
+      "id": "T03",
+      "input": {
+        "op": "sample",
+        "unit": "bytes",
+        "now": 10,
+        "at": 6,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startA",
+        "used": 40,
+        "total": 100
+      },
+      "expected": "unknown"
+    },
+    {
+      "id": "T04",
+      "input": {
+        "op": "sample",
+        "unit": "bytes",
+        "now": 10,
+        "at": 12,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startA",
+        "used": 40,
+        "total": 100
+      },
+      "expected": "unknown"
+    },
+    {
+      "id": "T05",
+      "input": {
+        "op": "sample",
+        "unit": "MiB",
+        "now": 10,
+        "at": 9,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startA",
+        "used": 40,
+        "total": 100
+      },
+      "expected": "unknown"
+    },
+    {
+      "id": "T06",
+      "input": {
+        "op": "sample",
+        "unit": "bytes",
+        "now": 10,
+        "at": 9,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startA",
+        "used": -1,
+        "total": 100
+      },
+      "expected": "unknown"
+    },
+    {
+      "id": "T07",
+      "input": {
+        "op": "sample",
+        "unit": "bytes",
+        "now": 10,
+        "at": 9,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startA",
+        "used": 101,
+        "total": 100
+      },
+      "expected": "unknown"
+    },
+    {
+      "id": "T08",
+      "input": {
+        "op": "sample",
+        "unit": "bytes",
+        "now": 10,
+        "at": 9,
+        "ttl": 2,
+        "instance": "pid1-startA",
+        "current": "pid1-startB",
+        "used": 40,
+        "total": 100
+      },
+      "expected": "unknown"
+    },
+    {
+      "id": "T09",
+      "input": {
+        "op": "pools",
+        "pools": [
+          {
+            "id": "unified",
+            "total": 100
+          },
+          {
+            "id": "unified",
+            "total": 100
+          }
+        ]
+      },
+      "expected": 100
+    },
+    {
+      "id": "T10",
+      "input": {
+        "op": "pools",
+        "pools": [
+          {
+            "id": "ram",
+            "total": 100
+          },
+          {
+            "id": "gpu0",
+            "total": 30
+          },
+          {
+            "id": "gpu1",
+            "total": 30
+          }
+        ]
+      },
+      "expected": 160
+    },
+    {
+      "id": "T11",
+      "input": {
+        "op": "pools",
+        "pools": [
+          {
+            "id": "ram",
+            "total": 100
+          },
+          {
+            "id": "ram",
+            "total": 90
+          }
+        ]
+      },
+      "expected": "conflict"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+
+const manifest=JSON.parse(await fs.readFile('eagle-companion/manifest.json','utf8'))
+const html=await fs.readFile('eagle-companion/index.html','utf8')
+const source=await fs.readFile('eagle-companion/js/plugin.cjs','utf8')
+assert.equal(manifest.id,'DAMCONNECTEDLIBRARY')
+assert.equal(manifest.main.serviceMode,true)
+assert.equal(manifest.main.runAfterInstall,false)
+assert.equal(manifest.devTools,false)
+assert.match(html,/Pairing required/)
+assert.match(source,/item\.replaceFile/)
+assert.match(source,/onLibraryChanged/)
+assert.match(source,/127\.0\.0\.1/)
+assert.match(source,/STAGING_PATH_REJECTED/)
+assert.doesNotMatch(source,/metadata\.json/)
+assert.doesNotMatch(source,/0\.0\.0\.0|listen\([^,]+\)|eval\(|new Function|child_process|exec\(|spawn\(/)
+assert.doesNotMatch(source,/https?:\/\/(?!127\.0\.0\.1)/)
+assert.doesNotMatch(JSON.stringify(manifest)+html+source,/synthetic-e2e-session-token|api[_-]?key|authorizationHeader/i)
+console.log('Eagle companion artifact governance passed')

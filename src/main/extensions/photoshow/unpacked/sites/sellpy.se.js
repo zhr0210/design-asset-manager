@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"sellpy.se":{srcMatching:[{srcRegExp:"(//.+?\\.sellpy\\.net/)fit-in/\\d+x\\d+/(.+@IMG@)",processor:"$1$2"}]}};

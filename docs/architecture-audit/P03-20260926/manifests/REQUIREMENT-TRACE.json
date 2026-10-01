@@ -1,0 +1,67 @@
+{
+  "stage": "P03",
+  "requirements": [
+    {
+      "id": "R05",
+      "requirement": "自动/手动大小模型切换，质量与资源同时约束",
+      "basis": "U01",
+      "chapters": [
+        "AI-05",
+        "AI-06",
+        "RES-08",
+        "AI-09"
+      ],
+      "stages": [
+        "P03",
+        "P09",
+        "P13",
+        "P15"
+      ],
+      "tests": [
+        "T05",
+        "T10",
+        "T12"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P03Evidence": [
+        "RECIPE-PROFILE-PROVIDER.md",
+        "CURRENT-BASELINE.md",
+        "LEGACY-STRATEGY-MAP.md",
+        "VALIDATION-PLAN.md"
+      ],
+      "scopeLimit": "only compatibility contract design; no auto routing/verified preset/runtime installed"
+    },
+    {
+      "id": "R12",
+      "requirement": "普通模式少量验证组合，高级模式开放配置并有手册",
+      "basis": "U01",
+      "chapters": [
+        "AI-05",
+        "AI-09",
+        "PLATFORM-19"
+      ],
+      "stages": [
+        "P03",
+        "P09",
+        "P15"
+      ],
+      "tests": [
+        "T05",
+        "T14",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P03Evidence": [
+        "RECIPE-PROFILE-PROVIDER.md",
+        "CURRENT-BASELINE.md",
+        "LEGACY-STRATEGY-MAP.md",
+        "VALIDATION-PLAN.md"
+      ],
+      "scopeLimit": "only compatibility contract design; no auto routing/verified preset/runtime installed"
+    }
+  ]
+}

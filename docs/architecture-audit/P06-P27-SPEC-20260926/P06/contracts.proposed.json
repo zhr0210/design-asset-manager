@@ -1,0 +1,22 @@
+{
+  "stage": "P06",
+  "status": "proposed",
+  "grantFields": [
+    "libraryId",
+    "hostSessionId",
+    "assetId",
+    "contentKey",
+    "capability",
+    "artifactDigest",
+    "expiry"
+  ],
+  "coordinateConvention": "pixel-edge",
+  "transformOrder": [
+    "exif",
+    "rotate",
+    "crop",
+    "resize",
+    "padding"
+  ],
+  "productionImplementation": "not_started"
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"leshetu.net":{srcMatching:[{srcRegExp:"(//.+?\\.sfmao\\.net/.+@IMG@!)(?:thumbnail_)?(.+)",processor:"$1$2"}]}};

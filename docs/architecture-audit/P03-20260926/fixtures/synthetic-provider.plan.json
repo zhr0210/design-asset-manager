@@ -1,0 +1,29 @@
+{
+  "status": "design_only_not_implemented",
+  "registration": "development dependency injection only; never production fallback",
+  "input": "frozen synthetic service/model/input tokens and AbortSignal",
+  "supportedScripts": [
+    "one-complete-response",
+    "length-then-complete",
+    "always-length",
+    "http-error",
+    "malformed-body",
+    "oversized-body",
+    "delayed-response-with-cancel"
+  ],
+  "capturedMetadata": [
+    "invocationCount",
+    "modelAliasEquality",
+    "inputTokenEquality",
+    "remainingDeadline",
+    "requestedBudget"
+  ],
+  "forbiddenEffects": [
+    "database",
+    "filesystem originals",
+    "service start",
+    "model download",
+    "credentials logging"
+  ],
+  "note": "No mock endpoint or process started in this stage"
+}

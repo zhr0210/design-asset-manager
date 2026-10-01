@@ -13,6 +13,23 @@ Phase 9A is a read-only audit. It records the current packaging state and future
 
 `electron-builder` is installed and `postinstall` runs `electron-builder install-app-deps`.
 
+All four packaging scripts and Package Smoke call
+`scripts/run-electron-builder.mjs`. The runner reads the installed Electron
+version, uses `node_modules/electron/dist`, disables publishing, and removes
+inherited proxy variables before invoking electron-builder. The runner's
+platform flags, mode/signing choices, and platform signing environment
+requirements are kept in `scripts/electron-builder-runner-options.mjs`.
+Unsigned mode also scrubs signing/notarization variables. Signed mode is
+available only with the explicit approval flag and complete platform
+credential environment. This keeps Windows and macOS packaging behavior
+aligned and avoids a second Electron download.
+
+The shared runner has produced a real unsigned macOS arm64 candidate and a real
+Windows x64 NSIS candidate. Windows checksum/static checks passed, and Windows
+Sandbox verified unpacked startup plus silent installation into the normalized
+product subfolder. The signature warning is expected until formal signing is
+configured.
+
 An explicit electron-builder config is declared in `package.json` `build`.
 
 Packaging scripts are declared for `pack:win`, `pack:mac`, `dist:win`, and `dist:mac`.

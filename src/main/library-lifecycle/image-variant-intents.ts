@@ -1,0 +1,24 @@
+import { isKnownLibrarySchemaVersion } from './library-schema-version'
+import type Database from 'better-sqlite3'
+import { createHash } from 'node:crypto'
+import { enableIntakeRecoveryStorage } from './intake-recovery.schema'
+export interface VariantIntent { request_id: string; library_identity: string; file_name: string; byte_length: number; sha256: string; metadata_json: string; state: 'pending' | 'completed'; created_at: string }
+export function recordVariantIntent(db: Database.Database, library: string, input: { requestId: string; fileName: string; bytes: Uint8Array; metadata: Record<string, unknown> }) {
+  const json = JSON.stringify(input.metadata)
+  if (json.length > 16384) throw new Error('VARIANT_INTENT_INVALID')
+  const hash = createHash('sha256').update(input.bytes).digest('hex')
+  db.transaction(() => {
+    enableIntakeRecoveryStorage(db)
+    const old = readVariantIntent(db, library, input.requestId)
+    if (old) {
+      if (old.file_name !== input.fileName || old.byte_length !== input.bytes.length || old.sha256 !== hash || old.metadata_json !== json) throw new Error('VARIANT_INTENT_CONFLICT')
+      return
+    }
+    db.prepare("INSERT INTO image_variant_intents VALUES (?,?,?,?,?,?,'pending',?)").run(input.requestId, library, input.fileName, input.bytes.length, hash, json, new Date().toISOString())
+  })()
+}
+export function readVariantIntent(db: Database.Database, library: string, id: string): VariantIntent | undefined {
+  if (!isKnownLibrarySchemaVersion(Number(db.pragma('user_version', { simple: true })),4)) return
+  return db.prepare('SELECT * FROM image_variant_intents WHERE request_id=? AND library_identity=?').get(id, library) as VariantIntent | undefined
+}
+export function completeVariantIntent(db: Database.Database, id: string) { db.prepare("UPDATE image_variant_intents SET state='completed' WHERE request_id=?").run(id) }

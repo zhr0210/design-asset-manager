@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"51yuansu.com":{referrerAddedHostnames:["51yuansu.com"],srcMatching:[{srcRegExp:"(//.+?\\.51yuansu\\.com/.+?_)\\d+(@IMG@).*",processor:"$1800$2"}]}};

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"58pic.com":{srcMatching:[{srcRegExp:"(//preview\\.qiantucdn\\.com/.+@IMG@)!.*",processor:"$1!w1024_nowater"}]}};

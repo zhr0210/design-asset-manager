@@ -1,0 +1,17 @@
+{
+  "stage": "P26",
+  "status": "proposed",
+  "workloads": [
+    "download",
+    "decode",
+    "image-tools",
+    "ocr",
+    "vlm",
+    "index",
+    "query",
+    "work-window"
+  ],
+  "replaceDomainJournals": false,
+  "mixedRuntimeTests": "NOT_RUN",
+  "performanceThisRun": null
+}

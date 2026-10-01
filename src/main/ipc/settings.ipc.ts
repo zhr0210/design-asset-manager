@@ -1,39 +1,50 @@
-import { dialog, ipcMain } from 'electron'
-import { SettingsService } from '../services/settings.service'
+import {publicSettings,mergePublicBackends} from '../ai-credentials/public-settings'
+import type { IpcMainInvokeEvent } from 'electron'
 import { CHANNEL_SETTINGS_LOAD, CHANNEL_SETTINGS_SAVE } from '../../shared/contracts/settings.contract'
 import type { AppSettings } from '../../shared/types/settings.types'
+import type { MainIpcHandleRegistrar } from './ipc-registrar'
 
-export function registerSettingsIpc() {
-  const service = SettingsService.getInstance()
+export interface SettingsServicePort {
+  getSettings(): AppSettings
+  saveSettings(settings: Partial<AppSettings>): AppSettings
+}
+
+export interface SettingsFolderSelectionPort {
+  (request?: { defaultPath?: string }): Promise<{ canceled: boolean; path: string }>
+}
+
+export function registerSettingsIpc(
+  service: SettingsServicePort,
+  selectFolder: SettingsFolderSelectionPort,
+  handle: MainIpcHandleRegistrar,
+  isTrustedSender:(event:IpcMainInvokeEvent)=>boolean=()=>false,
+  onAiChanged?:()=>void
+) {
 
   // Load settings
-  ipcMain.handle(CHANNEL_SETTINGS_LOAD, async () => {
+  handle(CHANNEL_SETTINGS_LOAD, async (_event: IpcMainInvokeEvent) => {
     try {
-      return service.getSettings()
+      if(!isTrustedSender(_event))throw Error('UNTRUSTED_SENDER')
+      return publicSettings(service.getSettings())
     } catch (err) {
-      console.error(`[IPC] ${CHANNEL_SETTINGS_LOAD} error:`, err)
+      console.error('Settings read failed')
       throw err
     }
   })
 
   // Save settings
-  ipcMain.handle(CHANNEL_SETTINGS_SAVE, async (_, newSettings: Partial<AppSettings>) => {
+  handle(CHANNEL_SETTINGS_SAVE, async (_event: IpcMainInvokeEvent, newSettings: Partial<AppSettings>) => {
     try {
-      return service.saveSettings(newSettings)
+      if(!isTrustedSender(_event))throw Error('UNTRUSTED_SENDER')
+      if(!newSettings||typeof newSettings!=='object')throw Error('INVALID_SETTINGS')
+      if(newSettings.aiTaskModels){for(const[task,choice]of Object.entries(newSettings.aiTaskModels)){if(!['analyze','reverse','tags'].includes(task)||!choice||typeof choice.backendId!=='string'||typeof choice.model!=='string'||choice.model.length>256)throw Error('INVALID_MODEL_ASSIGNMENT')}}
+      if(newSettings.aiBackends){newSettings={...newSettings,aiBackends:mergePublicBackends(service.getSettings().aiBackends??[],newSettings.aiBackends)}}
+      const saved=service.saveSettings(newSettings);if(newSettings.aiBackends||newSettings.aiTaskModels)onAiChanged?.();return publicSettings(saved)
     } catch (err) {
-      console.error(`[IPC] ${CHANNEL_SETTINGS_SAVE} error:`, err)
+      console.error('Settings write failed')
       throw err
     }
   })
 
-  ipcMain.handle('settings:select-folder', async (_, request?: { defaultPath?: string }) => {
-    const result = await dialog.showOpenDialog({
-      defaultPath: request?.defaultPath,
-      properties: ['openDirectory', 'createDirectory']
-    })
-    if (result.canceled || result.filePaths.length === 0) {
-      return { canceled: true, path: '' }
-    }
-    return { canceled: false, path: result.filePaths[0] }
-  })
+  handle('settings:select-folder', async (_event: IpcMainInvokeEvent, request?: { defaultPath?: string }) => {if(!isTrustedSender(_event))throw Error('UNTRUSTED_SENDER');return selectFolder(request)})
 }

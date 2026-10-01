@@ -1,0 +1,302 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.design-asset-manager.invalid/p04/user-decision.v1.schema.json",
+  "$comment": "Proposed additive action shape; no IPC registered. Confirmed tags keep existing authority. Evidence capability/reference/session ownership validated in Host.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "libraryId",
+    "libraryGeneration",
+    "assetId",
+    "expectedOverlayRevision",
+    "action"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "libraryId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "libraryGeneration": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "assetId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "expectedOverlayRevision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ],
+          "properties": {
+            "kind": {
+              "const": "caption-set"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 16000
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "caption-release-for-next-ai"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "evidenceRef"
+          ],
+          "properties": {
+            "kind": {
+              "const": "caption-adopt"
+            },
+            "evidenceRef": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "id",
+                "capability"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "new",
+                    "legacy-visual",
+                    "legacy-ocr"
+                  ]
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "capability": {
+                  "enum": [
+                    "tags",
+                    "caption",
+                    "ocr",
+                    "prompt"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "evidenceRef"
+          ],
+          "properties": {
+            "kind": {
+              "const": "pin"
+            },
+            "evidenceRef": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "id",
+                "capability"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "new",
+                    "legacy-visual",
+                    "legacy-ocr"
+                  ]
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "capability": {
+                  "enum": [
+                    "tags",
+                    "caption",
+                    "ocr",
+                    "prompt"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "capability"
+          ],
+          "properties": {
+            "kind": {
+              "const": "unpin"
+            },
+            "capability": {
+              "enum": [
+                "tags",
+                "caption",
+                "ocr",
+                "prompt"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "contentKey",
+            "label",
+            "sourceFamily",
+            "normalizationVersion"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tag-reject"
+            },
+            "contentKey": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "sourceFamily": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "normalizationVersion": {
+              "const": "label-key-v1"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "decisionId"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tag-unreject"
+            },
+            "decisionId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "evidenceRef",
+            "contentKey",
+            "text"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ocr-correct"
+            },
+            "evidenceRef": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "id",
+                "capability"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "new",
+                    "legacy-visual",
+                    "legacy-ocr"
+                  ]
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "capability": {
+                  "enum": [
+                    "tags",
+                    "caption",
+                    "ocr",
+                    "prompt"
+                  ]
+                }
+              }
+            },
+            "contentKey": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "text": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 16000
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

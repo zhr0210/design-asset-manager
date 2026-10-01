@@ -1,0 +1,250 @@
+{
+  "mode": "SPEC",
+  "authorization": "2026-09-26 user authorizes sequential P06 through P27 with tests after every stage; prior per-stage stop instruction overridden, no IMPLEMENT authorized",
+  "completed": [
+    {
+      "stage": "P06",
+      "title": "受控分析输入与派生物来源",
+      "specCases": 13,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P06/reports/P06-REPORT.md"
+    },
+    {
+      "stage": "P07",
+      "title": "跨平台资源遥测与物理内存池",
+      "specCases": 11,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P07/reports/P07-REPORT.md"
+    },
+    {
+      "stage": "P08",
+      "title": "原子资源准入与驻留许可",
+      "specCases": 10,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P08/reports/P08-REPORT.md"
+    },
+    {
+      "stage": "P09",
+      "title": "Runtime 托管、驻留、取消与重启核对",
+      "specCases": 11,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P09/reports/P09-REPORT.md"
+    },
+    {
+      "stage": "P10",
+      "title": "打通首个“独立标签”纵向链路",
+      "specCases": 9,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P10/reports/P10-REPORT.md"
+    },
+    {
+      "stage": "P11",
+      "title": "基础自动分析：描述、OCR 与独立成功",
+      "specCases": 10,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P11/reports/P11-REPORT.md"
+    },
+    {
+      "stage": "P12",
+      "title": "高级提示词反推与批量恢复",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P12/reports/P12-REPORT.md"
+    },
+    {
+      "stage": "P13",
+      "title": "闲忙自适应、模型路由与公平调度",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P13/reports/P13-REPORT.md"
+    },
+    {
+      "stage": "P14",
+      "title": "云推理、外发授权与成本边界",
+      "specCases": 9,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P14/reports/P14-REPORT.md"
+    },
+    {
+      "stage": "P15",
+      "title": "验证组合目录、模型安装与高级配置手册",
+      "specCases": 10,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P15/reports/P15-REPORT.md"
+    },
+    {
+      "stage": "P16",
+      "title": "主进程查询、分页与中文全文检索",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P16/reports/P16-REPORT.md"
+    },
+    {
+      "stage": "P17",
+      "title": "Embedding 空间、索引代际与安全重建",
+      "specCases": 11,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P17/reports/P17-REPORT.md"
+    },
+    {
+      "stage": "P18",
+      "title": "混合检索、以图找图与证据解释",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P18/reports/P18-REPORT.md"
+    },
+    {
+      "stage": "P19",
+      "title": "统一缓存、来源关系、去重与清理",
+      "specCases": 10,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P19/reports/P19-REPORT.md"
+    },
+    {
+      "stage": "P20",
+      "title": "组织、笔记与多窗口工作集的领域整理",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P20/reports/P20-REPORT.md"
+    },
+    {
+      "stage": "P21",
+      "title": "设计助手：需求到有证据的工作集提议",
+      "specCases": 11,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P21/reports/P21-REPORT.md"
+    },
+    {
+      "stage": "P22",
+      "title": "收窄 IPC 与沙箱兼容加固",
+      "specCases": 9,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P22/reports/P22-REPORT.md"
+    },
+    {
+      "stage": "P23",
+      "title": "Apple Silicon 的 MLX 后端与优化实验",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P23/reports/P23-REPORT.md"
+    },
+    {
+      "stage": "P24",
+      "title": "Windows 专用模型与硬件执行提供程序",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P24/reports/P24-REPORT.md"
+    },
+    {
+      "stage": "P25",
+      "title": "统一诊断、资源与能力质量评测",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P25/reports/P25-REPORT.md"
+    },
+    {
+      "stage": "P26",
+      "title": "全应用后台负载协调与故障联测",
+      "specCases": 8,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P26/reports/P26-REPORT.md"
+    },
+    {
+      "stage": "P27",
+      "title": "架构验收、旧代码清理与开源交接",
+      "specCases": 9,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "specTests": "PASS",
+      "documentChecks": "PASS",
+      "productionTests": "NOT_RUN",
+      "report": "P27/reports/P27-REPORT.md"
+    }
+  ],
+  "next": null,
+  "businessTests": "NOT_RUN"
+}

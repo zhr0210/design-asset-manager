@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"dhgate.com":{srcMatching:[{srcRegExp:"(//.+?\\.dhresource\\.com/.*?)\\d+x\\d+(/.+@IMG@)",processor:"$1$2"}]}};

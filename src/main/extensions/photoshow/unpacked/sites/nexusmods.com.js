@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"nexusmods.com":{srcMatching:[{srcRegExp:"(//.+?\\.nexusmods\\.com/.+/)(?:t/(?:med|large|small)|thumbnails)/(.+@IMG@)",processor:"$1$2"}]}};

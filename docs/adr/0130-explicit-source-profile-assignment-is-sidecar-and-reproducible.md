@@ -1,0 +1,9 @@
+# Explicit Source Profile Assignment Is Sidecar And Reproducible
+
+An explicit user-selected Source Color Profile is stored as a Sidecar Profile Assignment and never embedded into, stripped from, or used to rewrite the original Candidate Artifact or Design Asset file. Before assignment, the backend validates the exact ICC bytes under the bounded color-evidence rules and copies the accepted profile into an application-managed Color Profile Store keyed and deduplicated by a cryptographic content hash. Assignments reference that immutable Managed Color Profile rather than an external filesystem or operating-system profile path that may later disappear or change.
+
+The assignment record preserves target identity, profile content hash, user-selected provenance, assignment time, validation result, and the preceding color evidence state. Original embedded, missing, invalid, and conflicting evidence remains available as source provenance and is not erased by the sidecar. Candidate Promotion transfers the assignment and provenance to the resulting Design Asset without modifying the original. Replacing or removing an assignment is explicit and reversible: removal restores resolution from the preserved original evidence instead of substituting a default profile.
+
+Every successful assignment change creates a new Color Derivation Generation. Preview masters, display derivatives, thumbnails, palettes, and other color-dependent analysis from the previous generation become stale and are regenerated from the unchanged original plus the newly selected Managed Color Profile. New derived media becomes active only after validation succeeds; failed transformation keeps the last valid generation when one exists, exposes the failure, and never commits a partial mixed-profile generation.
+
+Batch use of one Managed Color Profile is governed by ADR 0131 and does not weaken per-item validation or generation atomicity.

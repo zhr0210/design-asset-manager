@@ -1,0 +1,44 @@
+{
+  "status": "proposed-not-registered-in-runtime",
+  "mode": "SPEC",
+  "ownerStage": "P02",
+  "proposalStage": "P04",
+  "baseRegistry": "docs/architecture-audit/P02-20260925/manifests/MIGRATION-REGISTRY.proposed.json",
+  "baseRegistrySha256": "f9a4943281c524efcc0ce54edf2fa8f75eca2810a2f159c24e892709ea5ad79d",
+  "domain": "managed-library",
+  "feature": "independent-analysis-evidence",
+  "migrationId": "managed.independent-analysis-evidence.draft1",
+  "fromVersion": null,
+  "toVersion": null,
+  "versionAllocation": "pending review and current source recheck; v9 not reserved",
+  "ddlDigest": null,
+  "tablesProposed": [
+    "analysis_evidence",
+    "analysis_capability_state",
+    "analysis_user_decisions"
+  ],
+  "existingAuthoritiesRetained": [
+    "assets manual caption fields",
+    "asset_tags confirmed relations",
+    "legacy visual evidence",
+    "legacy OCR evidence and historical correction state"
+  ],
+  "preconditions": [
+    "P02/P03 reviewed and required implementation verified",
+    "schema exact profile known and version explicitly allocated",
+    "Managed Host valid exclusive lease and reviewed feature upgrade",
+    "verified consistent backup before DDL",
+    "old analysis admission stopped and in-flight drained",
+    "read projections and both old controllers adapted to sole writer"
+  ],
+  "postconditions": [
+    "old rows preserved",
+    "legacy seeds retain source ref and unknown provenance",
+    "one authoritative writer per operation",
+    "new independent state and user edits read consistently",
+    "older incompatible writer refuses schema"
+  ],
+  "rollback": "no destructive down migration; compatibility-aware code or separately authorized backup restoration",
+  "implementationStatus": "not_started",
+  "actualDatabaseAccess": false
+}

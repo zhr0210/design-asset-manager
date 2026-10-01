@@ -1,0 +1,672 @@
+[
+  {
+    "id": "R01",
+    "requirement": "保留本地优先与现有技术主线，不以目录整理代替架构优化",
+    "basis": "U01 / S00 §2、5",
+    "chapters": [
+      "SYS-01",
+      "HOST-03",
+      "MIG-23"
+    ],
+    "stages": [
+      "P00",
+      "P01",
+      "P27"
+    ],
+    "tests": [
+      "T01",
+      "T02",
+      "T24"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R02",
+    "requirement": "面向macOS与Windows；不能将macOS验证推广为Windows通过",
+    "basis": "U01 / S00 §3、10",
+    "chapters": [
+      "PLATFORM-19",
+      "VAL-22"
+    ],
+    "stages": [
+      "P07",
+      "P22",
+      "P23",
+      "P24",
+      "P27"
+    ],
+    "tests": [
+      "T11",
+      "T21",
+      "T24"
+    ],
+    "scope": "当前目标；硬件适用",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R03",
+    "requirement": "资源预留比例、低配后台分析与正常交互",
+    "basis": "U01",
+    "chapters": [
+      "RES-08"
+    ],
+    "stages": [
+      "P07",
+      "P08",
+      "P13",
+      "P26"
+    ],
+    "tests": [
+      "T09",
+      "T10",
+      "T11",
+      "T23"
+    ],
+    "scope": "当前目标；软预算",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R04",
+    "requirement": "闲时加快、忙时放缓、温度/电池与缺失遥测",
+    "basis": "U01 / S20",
+    "chapters": [
+      "RES-08"
+    ],
+    "stages": [
+      "P07",
+      "P13",
+      "P26"
+    ],
+    "tests": [
+      "T11",
+      "T22",
+      "T23"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R05",
+    "requirement": "自动/手动大小模型切换，质量与资源同时约束",
+    "basis": "U01",
+    "chapters": [
+      "AI-05",
+      "AI-06",
+      "RES-08",
+      "AI-09"
+    ],
+    "stages": [
+      "P03",
+      "P09",
+      "P13",
+      "P15"
+    ],
+    "tests": [
+      "T05",
+      "T10",
+      "T12"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R06",
+    "requirement": "用户可显式使用云API，不静默外发",
+    "basis": "U01 / S00 §2.2",
+    "chapters": [
+      "SEC-10",
+      "JOB-07"
+    ],
+    "stages": [
+      "P14"
+    ],
+    "tests": [
+      "T02",
+      "T07",
+      "T13"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R07",
+    "requirement": "基础分析默认标签、描述、OCR，不默认反推",
+    "basis": "U01",
+    "chapters": [
+      "PRODUCT-02",
+      "AI-06",
+      "MEDIA-16"
+    ],
+    "stages": [
+      "P10",
+      "P11"
+    ],
+    "tests": [
+      "T04",
+      "T05",
+      "T08"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R08",
+    "requirement": "一键与单项触发并存，逻辑独立、允许物理合并",
+    "basis": "U01",
+    "chapters": [
+      "AI-06",
+      "JOB-07"
+    ],
+    "stages": [
+      "P10",
+      "P11",
+      "P12"
+    ],
+    "tests": [
+      "T04",
+      "T05",
+      "T06"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R09",
+    "requirement": "单能力成功立即可用，失败独立提醒与重试",
+    "basis": "U01",
+    "chapters": [
+      "EVIDENCE-11",
+      "JOB-07",
+      "OBS-18"
+    ],
+    "stages": [
+      "P04",
+      "P10",
+      "P11",
+      "P12",
+      "P25"
+    ],
+    "tests": [
+      "T04",
+      "T05",
+      "T06",
+      "T22"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R10",
+    "requirement": "高级提示词反推手动批量，明确是创作推演",
+    "basis": "U01 / S00 §2.2",
+    "chapters": [
+      "AI-06",
+      "EVIDENCE-11"
+    ],
+    "stages": [
+      "P12"
+    ],
+    "tests": [
+      "T04",
+      "T05",
+      "T12"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R11",
+    "requirement": "任务持久化、关库/崩溃后仅恢复未完成部分",
+    "basis": "U01 / S00 §8.3",
+    "chapters": [
+      "JOB-07",
+      "HOST-03"
+    ],
+    "stages": [
+      "P05",
+      "P10",
+      "P11",
+      "P12",
+      "P26"
+    ],
+    "tests": [
+      "T06",
+      "T07",
+      "T08"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R12",
+    "requirement": "普通模式少量验证组合，高级模式开放配置并有手册",
+    "basis": "U01",
+    "chapters": [
+      "AI-05",
+      "AI-09",
+      "PLATFORM-19"
+    ],
+    "stages": [
+      "P03",
+      "P09",
+      "P15"
+    ],
+    "tests": [
+      "T05",
+      "T14",
+      "T24"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R13",
+    "requirement": "原件/预览/派生物、Copy和三种库边界",
+    "basis": "S00 §2.2、7",
+    "chapters": [
+      "HOST-03",
+      "DATA-12",
+      "DATA-13",
+      "MEDIA-16"
+    ],
+    "stages": [
+      "P02",
+      "P06",
+      "P19",
+      "P26",
+      "P27"
+    ],
+    "tests": [
+      "T02",
+      "T03",
+      "T18"
+    ],
+    "scope": "必须保留",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R14",
+    "requirement": "用户描述/确认标签/OCR修订不被重跑覆盖",
+    "basis": "S00 §2.2、9 / U01",
+    "chapters": [
+      "EVIDENCE-11",
+      "ORG-15"
+    ],
+    "stages": [
+      "P04",
+      "P11",
+      "P20"
+    ],
+    "tests": [
+      "T02",
+      "T04",
+      "T06",
+      "T19"
+    ],
+    "scope": "必须保留",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R15",
+    "requirement": "确定性配色与带来源的OCR区域",
+    "basis": "S00 §9",
+    "chapters": [
+      "AI-06",
+      "DATA-13"
+    ],
+    "stages": [
+      "P06",
+      "P11",
+      "P19"
+    ],
+    "tests": [
+      "T05",
+      "T18"
+    ],
+    "scope": "必须保留并整理",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R16",
+    "requirement": "Host分页、中文词法检索与增量投影",
+    "basis": "建议，用户认可 / S00 §8.2",
+    "chapters": [
+      "SEARCH-14"
+    ],
+    "stages": [
+      "P16"
+    ],
+    "tests": [
+      "T08",
+      "T15",
+      "T23"
+    ],
+    "scope": "纳入目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R17",
+    "requirement": "Embedding/图文与区域相似，模型空间隔离",
+    "basis": "建议，用户认可 / S15",
+    "chapters": [
+      "SEARCH-14"
+    ],
+    "stages": [
+      "P17",
+      "P18"
+    ],
+    "tests": [
+      "T16",
+      "T17",
+      "T23"
+    ],
+    "scope": "纳入目标；具体引擎待测",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R18",
+    "requirement": "混合检索与可追溯命中说明",
+    "basis": "建议，用户认可",
+    "chapters": [
+      "SEARCH-14",
+      "EVIDENCE-11"
+    ],
+    "stages": [
+      "P18"
+    ],
+    "tests": [
+      "T15",
+      "T16",
+      "T17"
+    ],
+    "scope": "纳入目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R19",
+    "requirement": "派生谱系、缓存一致性与重复候选",
+    "basis": "建议，用户认可",
+    "chapters": [
+      "DATA-13"
+    ],
+    "stages": [
+      "P06",
+      "P19"
+    ],
+    "tests": [
+      "T02",
+      "T18"
+    ],
+    "scope": "纳入目标；不自动删原件",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R20",
+    "requirement": "组织/笔记/工作集/原生窗口稳定边界",
+    "basis": "S00 §2、7、8",
+    "chapters": [
+      "ORG-15"
+    ],
+    "stages": [
+      "P20",
+      "P22"
+    ],
+    "tests": [
+      "T02",
+      "T19",
+      "T21"
+    ],
+    "scope": "必须保留并整理",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R21",
+    "requirement": "AI设计需求解析、比较与工作集提议",
+    "basis": "建议，用户认可",
+    "chapters": [
+      "DESIGN-17"
+    ],
+    "stages": [
+      "P21"
+    ],
+    "tests": [
+      "T13",
+      "T17",
+      "T19",
+      "T20"
+    ],
+    "scope": "纳入目标；受控而非任意Agent",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R22",
+    "requirement": "收录/下载/图片工具/回收站不被AI统一队列破坏",
+    "basis": "S00 §8 / 建议",
+    "chapters": [
+      "MEDIA-16",
+      "RES-08"
+    ],
+    "stages": [
+      "P11",
+      "P19",
+      "P26"
+    ],
+    "tests": [
+      "T02",
+      "T07",
+      "T08",
+      "T18"
+    ],
+    "scope": "必须保留并纳入资源协调",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R23",
+    "requirement": "进程托管所有权、模型安装与能力验证分离",
+    "basis": "建议，用户认可 / S00 §9",
+    "chapters": [
+      "AI-09",
+      "PLATFORM-19"
+    ],
+    "stages": [
+      "P09",
+      "P15"
+    ],
+    "tests": [
+      "T10",
+      "T14",
+      "T24"
+    ],
+    "scope": "纳入目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R24",
+    "requirement": "IPC、沙箱、密钥与外部服务安全",
+    "basis": "S00 §5.3 / 建议",
+    "chapters": [
+      "HOST-03",
+      "SEC-10",
+      "PLATFORM-19"
+    ],
+    "stages": [
+      "P01",
+      "P14",
+      "P22"
+    ],
+    "tests": [
+      "T02",
+      "T13",
+      "T21"
+    ],
+    "scope": "纳入目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R25",
+    "requirement": "诊断、资源/能力质量基准与证据分级",
+    "basis": "建议，用户认可 / S00 §10",
+    "chapters": [
+      "OBS-18",
+      "VAL-22"
+    ],
+    "stages": [
+      "P07",
+      "P25",
+      "P26",
+      "P27"
+    ],
+    "tests": [
+      "T05",
+      "T22",
+      "T23",
+      "T24"
+    ],
+    "scope": "纳入目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R26",
+    "requirement": "AI编码为主、允许并行新增功能、可跨会话接手",
+    "basis": "U01",
+    "chapters": [
+      "DEV-21",
+      "MIG-23"
+    ],
+    "stages": [
+      "P00",
+      "P01",
+      "P27"
+    ],
+    "tests": [
+      "T01",
+      "T24"
+    ],
+    "scope": "当前目标",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R27",
+    "requirement": "未来开源：依赖/模型许可、平台产物与贡献治理",
+    "basis": "U01",
+    "chapters": [
+      "PLATFORM-19",
+      "DEV-21"
+    ],
+    "stages": [
+      "P15",
+      "P24",
+      "P27"
+    ],
+    "tests": [
+      "T14",
+      "T24"
+    ],
+    "scope": "准备边界；不做许可证决定",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R28",
+    "requirement": "未来iOS/Android收集管理、云推理与同步",
+    "basis": "U01",
+    "chapters": [
+      "EXT-20",
+      "SEC-10"
+    ],
+    "stages": [
+      "X01"
+    ],
+    "tests": [
+      "T02",
+      "T06",
+      "T07",
+      "T13",
+      "T24"
+    ],
+    "scope": "未来独立阶段",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R29",
+    "requirement": "未来MCP、专业工具连接器、外部AI接入",
+    "basis": "建议，用户认可 / S00 §2",
+    "chapters": [
+      "EXT-20",
+      "DESIGN-17"
+    ],
+    "stages": [
+      "X02"
+    ],
+    "tests": [
+      "T02",
+      "T20",
+      "T21",
+      "T24"
+    ],
+    "scope": "未来独立阶段",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R30",
+    "requirement": "视频/帧/音频/录屏/抠图/可编辑层",
+    "basis": "S00 §2目标 / 扩展建议",
+    "chapters": [
+      "EXT-20",
+      "DATA-13"
+    ],
+    "stages": [
+      "X03"
+    ],
+    "tests": [
+      "T02",
+      "T07",
+      "T18",
+      "T23"
+    ],
+    "scope": "未来；逐项另定范围",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R31",
+    "requirement": "自托管推理与推测解码/KV压缩等前沿实验",
+    "basis": "调研候选，不是必须启用 / S16 S17 S28 S29",
+    "chapters": [
+      "AI-05",
+      "EXT-20",
+      "VAL-22"
+    ],
+    "stages": [
+      "P23",
+      "P24",
+      "X04"
+    ],
+    "tests": [
+      "T05",
+      "T12",
+      "T23",
+      "T24"
+    ],
+    "scope": "实验/未来；需实际支持",
+    "implementation_status": "unverified"
+  },
+  {
+    "id": "R32",
+    "requirement": "本轮只细化代码框架，不针对UI/UX或交付版本排期",
+    "basis": "U01",
+    "chapters": [
+      "SYS-01",
+      "MIG-23"
+    ],
+    "stages": [
+      "P00",
+      "P01",
+      "P27"
+    ],
+    "tests": [
+      "T01"
+    ],
+    "scope": "整个任务约束",
+    "implementation_status": "unverified"
+  }
+]

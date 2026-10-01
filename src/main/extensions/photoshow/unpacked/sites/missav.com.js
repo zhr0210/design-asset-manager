@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"missav.com":{srcMatching:[{processor:({trigger:e})=>e.querySelector("image,img,picture"),selectors:".thumbnail>div:has(img)"},{srcRegExp:"(//fivetiu\\.com/.+/\\w+)-\\w+(@IMG@)",processor:"$1$2"}]}};

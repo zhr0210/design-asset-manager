@@ -1,0 +1,19 @@
+# Physical Reclaim Retries At One Five Thirty Minutes Then Six-Hour Intervals
+
+After ADR 0252's immediate physical-reclaim attempt ends with a retryable transient I/O, busy-file or permission outcome and scoped bytes remain, **Physical Reclaim Retry Backoff** schedules the next active-application attempts after 1 minute, then 5 minutes, then 30 minutes, and thereafter no more than once every 6 hours. Each interval starts from the host's durable terminal commit of the previous attempt, not from opening Storage Management or observing its result.
+
+The host tracks the deadline with monotonic elapsed time plus a conservative wall-time ceiling. Sleep, clock/timezone changes, renderer stalls or application inactivity cannot create multiple catch-up attempts or shorten the interval. A deadline may elapse while the app is inactive, but at the next eligible active state the host runs at most one coalesced attempt and then computes the next step from that actual terminal outcome.
+
+Application startup after required reconciliation, exact stable-volume remount and explicit Retry Physical Reclaim may request one immediate check without waiting for the current timer deadline. They still coalesce with an existing target attempt and do not queue a second run. A manual or lifecycle-triggered attempt by itself does not reset the backoff ladder; if it again ends with the same retryable no-progress class, the persisted current step advances normally up to the six-hour ceiling.
+
+Any safely committed partial byte reclamation resets the remaining target to the 1-minute step because forward progress changed its physical scope. An authoritative owner-generation, managed-byte identity or stable-volume availability change also clears the old delay; after ADR 0252's complete revalidation finds the new state eligible, one immediate attempt may run and a later retryable failure starts again at 1 minute.
+
+Physical Reclaim Blocked By Owner, Physical Reclaim Not Assessable and Physical Reclaim Waiting For Volume pause timer retry rather than advancing an interval. No elapsed paused time is accumulated for catch-up. When the relevant authoritative owner/evidence/volume change makes evaluation possible, the old schedule is discarded and current state is revalidated before one immediate attempt; it never resumes an unlink solely because the previous clock deadline passed.
+
+Concurrent commit, startup, mount, timer and manual triggers for one target collapse into the same target lease and produce no queued follow-up. Distinct targets remain subject to ordinary bounded storage-I/O governance. The six-hour ceiling limits frequency, not record lifetime: pending cleanup still has no automatic abandonment date, hidden helper, network dependency or background execution after the application exits.
+
+Backoff state retains only opaque target and stable-volume identities, current step class, last terminal monotonic/wall anchors, next deadline class and latest typed reason. It contains no path, payload, owner evidence, credentials, user content, attempt timeline or attention history and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs. A new terminal attempt replaces these fields rather than appending history.
+
+ADR 0254 atomically clears this ladder and its latest reason once authoritative managed-object evidence completes physical reclaim. Its one-viewing-or-24-hour result cannot restart a cleared timer or reuse the target lease.
+
+The current project has no Physical Reclaim Pending scheduler, lifecycle-trigger coalescing or persisted reclaim backoff. This ADR changes documentation only: it starts/times/retries/unlinks no real bytes, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.

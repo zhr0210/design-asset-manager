@@ -1,0 +1,215 @@
+{
+  "status": "designed_NOT_RUN",
+  "cases": [
+    {
+      "id": "M01",
+      "testId": "T03",
+      "given": "known v1 request notebooks without confirmation",
+      "expected": "no DDL, no backup file, version remains1",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M02",
+      "testId": "T03",
+      "given": "v1 to work-sets confirmed",
+      "expected": "apply v2..v7 within group; no v8, no OCR run",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M03",
+      "testId": "T03",
+      "given": "v8 request visual evidence",
+      "expected": "no-op plan; keep v8; no backup or DDL",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M04",
+      "testId": "T03",
+      "given": "version99 with plausible familiar tables",
+      "expected": "unsupported before any write; never set version8",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M05",
+      "testId": "T02",
+      "given": "wrong library/generation/expired receipt after plan",
+      "expected": "reject; do not execute on newly selected library",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M06",
+      "testId": "T07",
+      "given": "lease lost before backup/DDL",
+      "expected": "abort without migration; retain diagnostic record only",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M07",
+      "testId": "T03",
+      "given": "backup quota exhausted or backup validation fails",
+      "expected": "no DDL; preserve sources and partial owned backup for reviewed cleanup",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M08",
+      "testId": "T07",
+      "given": "cancel during backup",
+      "expected": "abort owned backup operation; source schema unchanged",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M09",
+      "testId": "T03",
+      "given": "inject DDL error at intermediate step in v1→v7",
+      "expected": "outer transaction rollback; original v1 exact schema and user rows",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M10",
+      "testId": "T03",
+      "given": "inject first domain write error after DDL",
+      "expected": "v3/v4/v5/v6/v7/v8 upgrade rolls back with that initial row as currently required",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M11",
+      "testId": "T03",
+      "given": "v2 visual model later fails after confirmed run enabled schema",
+      "expected": "v2 schema may remain; do not incorrectly restore to v1",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M12",
+      "testId": "T07",
+      "given": "crash after backup_verified before migration transaction",
+      "expected": "source exact known profile; old authorization invalid; review a fresh attempt",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M13",
+      "testId": "T07",
+      "given": "crash inside DB transaction with leftover recovery sidecar",
+      "expected": "current ordinary opener refuses; isolated approved recovery required, no raw file deletion",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M14",
+      "testId": "T07",
+      "given": "DB commits but local operation record is not finalized",
+      "expected": "inspect exact target and intended domain receipt; outcome unknown until reconciled; never replay first business command blindly",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M15",
+      "testId": "T07",
+      "given": "backup manifest durable but backup bytes replaced/truncated",
+      "expected": "reject restore; keep current library; no overwrite",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M16",
+      "testId": "T02",
+      "given": "late notification/cancel after migration commit",
+      "expected": "record committed result; do not automatically downgrade or call success a rollback",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M17",
+      "testId": "T02",
+      "given": "Eagle or Legacy sent to managed migration planner",
+      "expected": "deny wrong authority domain; Legacy never writes",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M18",
+      "testId": "T03",
+      "given": "new binary opening old profile",
+      "expected": "known exact profile accepted per verified adapter; query alone no upgrade",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M19",
+      "testId": "T03",
+      "given": "old binary opening newer unknown profile",
+      "expected": "reject safe writes; no fabricated historical reader support",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M20",
+      "testId": "T07",
+      "given": "v8 pending image variant list then prepare recovery",
+      "expected": "regression fixture: current readVariantIntent returns undefined; desired after approved fix returns matching record",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M21",
+      "testId": "T07",
+      "given": "v8 repeated pending variant registration",
+      "expected": "check existing record and conflict as v4–v7; no blind INSERT solely because reader skipped v8",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M22",
+      "testId": "T07",
+      "given": "new staged file exists but DB intent did not commit",
+      "expected": "retain owned staging/reconcile; do not claim global file/DB atomic rollback",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M23",
+      "testId": "T03",
+      "given": "nested existing helper inside new coordinator transaction",
+      "expected": "no async await inside DB transaction; entire missing chain rolls back together",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M24",
+      "testId": "T07",
+      "given": "close while migration waiting for in-flight operations",
+      "expected": "no self-wait deadlock; stop new admissions and settle/abort before releasing lease",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M25",
+      "testId": "T03",
+      "given": "external writer changes DB during backup",
+      "expected": "source epoch/data_version guard invalidates review; backup is not silently reused for changed source",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M26",
+      "testId": "T07",
+      "given": "restoring old backup after later user edits",
+      "expected": "explicit loss disclosure/approval; no automatic rollback or replacement",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M27",
+      "testId": "T03",
+      "given": "add unregistered migration table to current v8 without version evolution",
+      "expected": "exact-profile check rejects; P02 must not sneak in table under existing version",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M28",
+      "testId": "T03",
+      "given": "same migration ID has a different definition digest",
+      "expected": "reject stale plan/registry mismatch, require new reviewed definition",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M29",
+      "testId": "T02",
+      "given": "backup receiver provided as arbitrary Renderer path",
+      "expected": "reject; destination is a Main-owned selected capability",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "M30",
+      "testId": "T07",
+      "given": "source restored with old generation/session fields",
+      "expected": "new Host session and confirmation required; persisted record does not grant write or network rights",
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

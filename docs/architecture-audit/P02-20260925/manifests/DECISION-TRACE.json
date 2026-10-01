@@ -1,0 +1,28 @@
+{
+  "stage": "P02",
+  "decisions": [
+    {
+      "id": "P02-SCHEMA-GOVERNANCE",
+      "repositoryAdrId": null,
+      "status": "Proposed",
+      "path": "../adr/ADR-P02-SCHEMA-GOVERNANCE.proposed.md",
+      "references": [
+        "DAM-A002",
+        "DAM-A006"
+      ],
+      "implementationStatus": "not_started",
+      "notImplemented": [
+        "Outbox",
+        "new schema version",
+        "backup adapter",
+        "migration coordinator"
+      ],
+      "approvalRequired": [
+        "internal/public seam scope",
+        "backup destination and storage policy",
+        "resume/recovery authorization",
+        "any actual user library migration"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "noNewParentTickets": true,
+  "items": [
+    {
+      "id": "DEFER-16",
+      "sourceRefs": [
+        "B-P16",
+        "B-REVIEW"
+      ],
+      "classification": "design-inference-not-runtime-result",
+      "owner": "future P16 query design",
+      "task01Blocker": false,
+      "issue": "Unrelated background AI updates may invalidate global projectionRevision cursors continuously",
+      "requiredBeforeOwnDelivery": "Separate query membership/sort revision from row display updates or bounded ID snapshot; test progress under continual unrelated updates and immediate permission/Trash revocation",
+      "status": "registered-not-implemented"
+    },
+    {
+      "id": "DEFER-V8",
+      "sourceRefs": [
+        "S-VARIANT",
+        "B-REVIEW"
+      ],
+      "classification": "source-fact-with-runtime-impact-unverified",
+      "owner": "independent managed variant recovery reproduction; task02 compatibility surface if affected",
+      "task01Blocker": false,
+      "issue": "readVariantIntent accepts4..7 but not8",
+      "requiredBeforeOwnDelivery": "Minimal synthetic v8 pending intent replay, then same-path compatibility on future profile; do not claim all save paths fail or real data damaged",
+      "status": "registered-NOT_RUN"
+    },
+    {
+      "id": "DEFER-EAGLE",
+      "sourceRefs": [
+        "S-EAGLE",
+        "B-REVIEW"
+      ],
+      "classification": "source-order-fact-with-runtime-impact-unverified",
+      "owner": "independent Eagle index schema reproduction",
+      "task01Blocker": false,
+      "issue": "CREATE IF NOT EXISTS executes before user_version guard",
+      "requiredBeforeOwnDelivery": "Temporary unknown-version index and missing-object scenario; observe zero writes requirement independently; no real Eagle access",
+      "status": "registered-NOT_RUN"
+    },
+    {
+      "id": "DEFER-AUTO",
+      "sourceRefs": [
+        "S-ADR",
+        "B-REVIEW"
+      ],
+      "classification": "explicit-user-target-and-legacy-clause-conflict",
+      "owner": "future P11/P17 ADR update",
+      "task01Blocker": false,
+      "issue": "Default three-capability target replaces automatic Embedding inclusion only",
+      "requiredBeforeOwnDelivery": "Record narrowed supersedes; activate embedding only with explicit semantic-search enablement and valid conditions, retain historical vectors/jobs",
+      "status": "target-recorded-formal-ADR-update-deferred"
+    },
+    {
+      "id": "DEFER-FAIR",
+      "sourceRefs": [
+        "B-P13",
+        "B-COUNTER"
+      ],
+      "classification": "reference-counterexample; production-unverified",
+      "owner": "future P13 scheduler acceptance",
+      "task01Blocker": false,
+      "issue": "priority gap > capped aging may starve background",
+      "requiredBeforeOwnDelivery": "Specify quota/rotation guarantee and assumptions; same scenario on future actual scheduler, no required progress when resource/permission unavailable",
+      "status": "registered-NOT_RUN"
+    }
+  ]
+}

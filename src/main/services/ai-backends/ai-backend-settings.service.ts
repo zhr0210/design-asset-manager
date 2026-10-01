@@ -1,13 +1,15 @@
+import {mergePublicBackends} from '../../ai-credentials/public-settings'
 import { SettingsService, createDefaultLlamaBackendConfig } from '../settings.service'
 import type { AiBackendConfig } from '../../../shared/types/ai-backend.types'
+import type { SettingsServicePort } from '../../ipc/settings.ipc'
 
 export class AiBackendSettingsService {
-  private readonly settingsService = SettingsService.getInstance()
+  constructor(private readonly settingsService: SettingsServicePort = SettingsService.getInstance()) {}
 
   public listBackends(): AiBackendConfig[] {
     const settings = this.settingsService.getSettings()
     const backends = settings.aiBackends && settings.aiBackends.length > 0
-      ? settings.aiBackends
+      ? settings.aiBackends.map(backend => ({ ...backend, capabilities: { ...backend.capabilities } }))
       : [createDefaultLlamaBackendConfig()]
 
     return backends.sort((a, b) => a.priority - b.priority)
@@ -24,8 +26,9 @@ export class AiBackendSettingsService {
       ? backends.map((backend) => (backend.id === config.id ? config : backend))
       : [...backends, config]
 
-    this.settingsService.saveSettings({ aiBackends: next })
-    return next.sort((a, b) => a.priority - b.priority)
+    const merged=mergePublicBackends(backends,next)
+    this.settingsService.saveSettings({ aiBackends: merged })
+    return merged.sort((a, b) => a.priority - b.priority)
   }
 
   public deleteBackend(id: string): AiBackendConfig[] {
@@ -35,4 +38,3 @@ export class AiBackendSettingsService {
     return normalized.sort((a, b) => a.priority - b.priority)
   }
 }
-

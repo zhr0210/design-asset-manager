@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"nmbxd1.com":{srcMatching:[{srcRegExp:"(//image\\.nmb\\.best/)thumb(/.+@IMG@)",processor:"$1image$2"}]}};

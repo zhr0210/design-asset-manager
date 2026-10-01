@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"craigslist.org":{srcMatching:[{srcRegExp:"(//images\\.craigslist\\.org/.+_)\\w+(@IMG@)",processor:"$11200x900$2"}]}};

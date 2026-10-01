@@ -1,0 +1,38 @@
+{
+  "stage": "P05",
+  "mode": "SPEC",
+  "updatedOn": "2026-09-26",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "stoppedAfterStage": "P05",
+  "nextStage": null,
+  "latestStageReport": "reports/P05-REPORT.md",
+  "predecessors": [
+    {
+      "stage": "P02",
+      "directDependency": true,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started"
+    },
+    {
+      "stage": "P04",
+      "directDependency": true,
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started"
+    }
+  ],
+  "businessCodeChanged": false,
+  "damBusinessTestsRun": false,
+  "newModelBenchmarksRun": false,
+  "realLibraryAccessed": false,
+  "sqliteOpened": false,
+  "stateMachineExecution": "NOT_RUN",
+  "schemaEngineValidation": "NOT_RUN",
+  "recoveryRuntimeTests": "NOT_RUN",
+  "outboxRuntimeTests": "NOT_RUN",
+  "remoteApiTests": "NOT_RUN",
+  "externalActionsThisStage": [
+    "read public SQLite WAL documentation S23"
+  ],
+  "authorization": "continue next stage SPEC only; no design acceptance/IMPLEMENT inferred"
+}

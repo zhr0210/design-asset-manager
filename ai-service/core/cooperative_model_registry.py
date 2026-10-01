@@ -6,6 +6,7 @@ can discover downloaded model weights and route them to the right wrappers.
 """
 
 import os
+import sys
 from pathlib import Path
 from typing import Dict, Optional
 
@@ -56,9 +57,21 @@ def _cooperative_root() -> Path:
     if configured:
         return Path(configured) / "cooperative"
 
-    # Default: userData/AIModels/cooperative
+    return _default_user_data_root() / "AIModels" / "cooperative"
+
+
+def _default_user_data_root() -> Path:
+    """Best-effort mirror of Electron app.getPath('userData') for worker-only probes."""
     home = Path.home()
-    return home / "Library" / "Application Support" / "design-asset-manager" / "AIModels" / "cooperative"
+    if sys.platform == "win32":
+        appdata = os.environ.get("APPDATA")
+        base = Path(appdata) if appdata else home / "AppData" / "Roaming"
+        return base / "design-asset-manager"
+    if sys.platform == "darwin":
+        return home / "Library" / "Application Support" / "design-asset-manager"
+    xdg_config_home = os.environ.get("XDG_CONFIG_HOME")
+    base = Path(xdg_config_home) if xdg_config_home else home / ".config"
+    return base / "design-asset-manager"
 
 
 def get_cooperative_model_path(entry: dict) -> Optional[Path]:

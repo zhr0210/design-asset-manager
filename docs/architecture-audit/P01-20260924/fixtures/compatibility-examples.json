@@ -1,0 +1,50 @@
+{
+  "status": "design_only_NOT_RUN",
+  "currentUnversionedRequest": {
+    "libraryIdentity": "library:fixture-a",
+    "generation": "generation:fixture-1",
+    "assetId": "design-asset:fixture-1",
+    "evidenceId": "evidence:fixture-1",
+    "tag": "几何"
+  },
+  "newVersionedRequest": {
+    "schemaVersion": 1,
+    "operation": "visual-ai.confirm-tag",
+    "requestId": "11111111-1111-4111-8111-111111111111",
+    "payload": {
+      "libraryIdentity": "library:fixture-a",
+      "generation": "generation:fixture-1",
+      "assetId": "design-asset:fixture-1",
+      "evidenceId": "evidence:fixture-1",
+      "tag": "几何"
+    }
+  },
+  "newSuccessResult": {
+    "schemaVersion": 1,
+    "operation": "visual-ai.confirm-tag",
+    "requestId": "11111111-1111-4111-8111-111111111111",
+    "traceId": "1234567890abcdef1234567890abcdef",
+    "ok": true,
+    "effect": "committed",
+    "value": {
+      "assetId": "design-asset:fixture-1",
+      "evidenceId": "evidence:fixture-1",
+      "confirmation": "confirmed"
+    },
+    "warnings": []
+  },
+  "legacySuccessExpectation": {
+    "language": "JavaScript/Electron structured clone",
+    "expression": "result.ok === true && Object.hasOwn(result, \"value\") && result.value === undefined",
+    "jsonNote": "undefined is not JSON null; do not compare using JSON serialization"
+  },
+  "legacyFailureExample": {
+    "ok": false,
+    "error": "当前窗口没有分析权限。"
+  },
+  "hostFailureExample": {
+    "success": false,
+    "error": "The Active Library operation failed.",
+    "code": "LIBRARY_OPERATION_FAILED"
+  }
+}

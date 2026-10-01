@@ -1,0 +1,24 @@
+# Portability Shared Objects Require Reviewed Stable Mapping
+
+Before a Metadata Portability Import Item may add a Tag Concept association, Collection Membership or compatible collection hierarchy relationship, a **Portability Shared Object Review** resolves every referenced Tag Concept, Collection Group and Asset Collection into the target library. Relationship records never identify these objects by display label, normalized spelling, translation, collection name, hierarchy position or similarity, and an unresolved shared object keeps every dependent relationship pending or explicitly excluded rather than blocking unrelated scalar metadata.
+
+An exact same-lineage stable object identity with a compatible object type may propose reuse of the existing target object. A Built-In Tag Concept may propose reuse only from its immutable catalog identity plus a compatible signed vocabulary definition/version; an import cannot replace or privately extend the target catalog definition. Protected System Collections and other system-owned objects map only through an exact compatible system role in the target library or are excluded—they are never created, renamed, reparented or overwritten from source metadata.
+
+For a cross-lineage User Tag Concept, Collection Group or Asset Collection, the review offers exactly three semantic choices: Map To Existing Object, Create New User Object, or Exclude Object And Dependent Relationships. Name/label equality never preselects Map To Existing. The recommended proposal is Create New User Object because it preserves distinct intent; it receives a new target identity while retaining the source lineage/object identity as import provenance. The user must still confirm it, and an incomplete, unsupported or internally inconsistent object definition cannot be created.
+
+ADR 0418 applies the same reviewed ownership boundary to a portable Custom Field
+Definition Proposal. Compatible type/validation/option evidence is required
+before Map To Existing can be offered; name equality alone never maps or mutates
+a target definition. Create New produces user-owned target-library schema, while
+Exclude also excludes dependent field values from commit unless they are mapped
+through another explicitly confirmed definition. Create New must also resolve
+ADR 0422 active-display-name uniqueness before commit; it never auto-suffixes,
+merges or replaces a colliding definition.
+
+A newly created User Tag Concept preserves supported language-tagged preferred labels, aliases, semantic relations and source provenance without becoming Built-In, auto-translated or merged with a possible duplicate. A newly created Asset Collection/Collection Group preserves only compatible reviewed organization and hierarchy after every referenced parent is resolved; it never creates a physical folder, Source Tree relation, Original Asset copy or Collection Board layout unless that separate object class has an explicitly supported portability schema. Target naming, hierarchy, lifecycle or single-parent conflicts remain visible shared-object conflicts rather than triggering silent suffixing or restructuring.
+
+Every confirmed reuse, manual map or new-object result writes a library-owned **Portability Object Mapping** from exact source Portable Library Lineage Identity, source stable object identity and object type to the target object identity. Later imports from that lineage may reuse this mapping as a deterministic proposal instead of creating another object, but still enter the ordinary import review. A missing, deleted, type-changed, incompatible or otherwise stale target invalidates the proposal; Tag Concept redirects may resolve only through their declared target-library redirect semantics, never by falling back to a label.
+
+Shared-object resolution/materialization completes before dependent asset items become executable. ADR 0377 then compares set membership through the resolved target identities, and ADR 0378 commits only the resulting relationships atomically with each mapped Design Asset; the asset item itself never creates or guesses a shared object. ADR 0381 commits shared objects and mappings in dependency-safe atomic units, requires explicit naming-conflict choices and removes them during undo only while their effects remain exclusively import-owned.
+
+The current application has no Portability Shared Object Review, cross-lineage object creator or Portability Object Mapping. This ADR records target architecture only and reads or imports no actual package, maps or creates no runtime tag/collection, and selects, analyzes, stages, writes, rewrites, converts, moves, deletes or changes no runtime/user file, credential, sidecar, directory, database, cache, backup, metadata value, analysis result or source relationship and changes no public IPC, database schema or AI Worker API.

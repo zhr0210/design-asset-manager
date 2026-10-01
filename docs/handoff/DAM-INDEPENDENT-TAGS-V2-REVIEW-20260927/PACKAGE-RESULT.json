@@ -1,0 +1,11 @@
+{
+  "archive": "/Users/meigong/Documents/design-asset-manager/docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927.zip",
+  "bytes": 3668274,
+  "sha256": "29bf9b335aebb5af26be0a2c5871e7038c6663c10dbd9467b13e5fa596ec6be2",
+  "entries": 69,
+  "zipCRC": "PASS",
+  "manifestVerification": "PASS",
+  "currentLinks": "PASS",
+  "originalFilesAndGitIndexDiffsUnchanged": true,
+  "portableSpecRerun": "2 counterexamples reproduced / 8 cases PASS; production NOT_RUN"
+}

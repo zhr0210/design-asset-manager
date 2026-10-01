@@ -1,0 +1,34 @@
+{
+  "stage": "P04",
+  "mode": "SPEC",
+  "updatedOn": "2026-09-26",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "stoppedAfterStage": "P04",
+  "nextStage": null,
+  "latestStageReport": "reports/P04-REPORT.md",
+  "predecessors": [
+    {
+      "stage": "P02",
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "directDependency": true
+    },
+    {
+      "stage": "P03",
+      "design_review_status": "ready_for_review",
+      "implementation_status": "not_started",
+      "directDependency": true
+    }
+  ],
+  "authorization": "User continuation within existing SPEC mode; no design review acceptance or IMPLEMENT authorization inferred",
+  "businessCodeChanged": false,
+  "damBusinessTestsRun": false,
+  "newModelBenchmarksRun": false,
+  "realLibraryAccessed": false,
+  "sqliteOpened": false,
+  "schemaEngineValidation": "NOT_RUN",
+  "selectorExecution": "NOT_RUN",
+  "compatibilityRuntimeTests": "NOT_RUN",
+  "externalActionsThisStage": []
+}

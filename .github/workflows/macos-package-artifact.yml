@@ -44,11 +44,11 @@ jobs:
 
       - name: Checkout
         if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
         if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
@@ -67,7 +67,7 @@ jobs:
 
       - name: Package unsigned DMG
         if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}
-        run: npx electron-builder --mac dmg --${{ matrix.arch }} --config.mac.identity=null --publish never
+        run: node scripts/run-electron-builder.mjs --platform=mac --mode=dist --target=dmg --${{ matrix.arch }}
 
       - name: Upload macOS package artifact
         if: ${{ github.event.inputs.arch == 'all' || github.event.inputs.arch == matrix.arch }}

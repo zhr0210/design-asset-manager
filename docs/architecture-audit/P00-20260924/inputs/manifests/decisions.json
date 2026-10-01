@@ -1,0 +1,307 @@
+[
+  {
+    "id": "DAM-A001",
+    "decision": "保留模块化单体宿主，计算隔离但不先微服务化",
+    "chapters": [
+      "SYS-01",
+      "HOST-03"
+    ],
+    "sources": [
+      "S00",
+      "U01"
+    ],
+    "tradeoff": "增量兼容优于无证据重写；真正多客户端共享出现后再评估守护服务。",
+    "stages": "P00 P01 P27",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A002",
+    "decision": "Library Host保持权威；Managed/Eagle/Legacy独立",
+    "chapters": [
+      "HOST-03",
+      "DATA-12"
+    ],
+    "sources": [
+      "S00"
+    ],
+    "tradeoff": "共用领域读取不等于共享任意写口；跨库失败与授权各自处理。",
+    "stages": "P02 P22 P26",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A003",
+    "decision": "能力逻辑独立，完整响应可复用物理执行",
+    "chapters": [
+      "AI-06"
+    ],
+    "sources": [
+      "U01",
+      "S00"
+    ],
+    "tradeoff": "降低重复计算不允许截断JSON救字段；取消共享调用按订阅者处理。",
+    "stages": "P03 P04 P10 P11",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A004",
+    "decision": "Recipe/Profile/Backend/Runtime/Readiness分别版本化",
+    "chapters": [
+      "CONTRACT-04",
+      "AI-05",
+      "AI-09"
+    ],
+    "sources": [
+      "S00",
+      "S01",
+      "S02"
+    ],
+    "tradeoff": "模型列表不是视觉质量；未知远端版本明确标unknown。",
+    "stages": "P03 P09 P15",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A005",
+    "decision": "持久任务采用可重试执行与幂等结果效果",
+    "chapters": [
+      "JOB-07"
+    ],
+    "sources": [
+      "U01",
+      "S00"
+    ],
+    "tradeoff": "不承诺任意远端API exactly-once；请求身份与强制重跑代次分离。",
+    "stages": "P05 P10 P14",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A006",
+    "decision": "证据、成功状态和Outbox在Host事务提交",
+    "chapters": [
+      "JOB-07",
+      "DATA-12"
+    ],
+    "sources": [
+      "S00"
+    ],
+    "tradeoff": "事件重复不重复效果；文件系统发布由独立staging/journal协调。",
+    "stages": "P02 P05 P26",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A007",
+    "decision": "持久任务意图不携带永久库/外发权限",
+    "chapters": [
+      "JOB-07",
+      "SEC-10"
+    ],
+    "sources": [
+      "S00",
+      "U01"
+    ],
+    "tradeoff": "关库撤权；重开重新核对generation和范围，不因自动恢复跳过授权。",
+    "stages": "P05 P11 P14",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A008",
+    "decision": "资源预算是DAM约束，非操作系统全局硬预留",
+    "chapters": [
+      "RES-08"
+    ],
+    "sources": [
+      "S04",
+      "S05",
+      "S09",
+      "U01"
+    ],
+    "tradeoff": "根据统一池/独显/进程预算及压力保守核算，不能保证任意应用永不卡顿。",
+    "stages": "P07 P08 P13",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A009",
+    "decision": "原子多资源准入与驻留/计算双许可",
+    "chapters": [
+      "RES-08",
+      "AI-09"
+    ],
+    "sources": [
+      "S09",
+      "S10",
+      "S12"
+    ],
+    "tradeoff": "任务结束不释放模型预算，失联先核对；避免重复计量已观测与已预留。",
+    "stages": "P08 P09",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A010",
+    "decision": "规则与迟滞优先，模型路由受质量/授权/资源约束",
+    "chapters": [
+      "RES-08"
+    ],
+    "sources": [
+      "U01",
+      "S20"
+    ],
+    "tradeoff": "不让大模型实时调度大模型；手动固定也不绕过资源；切换在任务边界。",
+    "stages": "P13",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A011",
+    "decision": "托管本地、用户本地、远端服务的控制权不同",
+    "chapters": [
+      "AI-09",
+      "SEC-10"
+    ],
+    "sources": [
+      "S10",
+      "S11",
+      "S14"
+    ],
+    "tradeoff": "不得为释放内存终止用户外部进程；localhost也可能转云。",
+    "stages": "P09 P14",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A012",
+    "decision": "不可变AI证据与用户覆盖层分离",
+    "chapters": [
+      "EVIDENCE-11"
+    ],
+    "sources": [
+      "S00",
+      "U01"
+    ],
+    "tradeoff": "AI标签立即可检索但不是已确认；旧有效结果不因重跑失败消失。",
+    "stages": "P04 P11 P20",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A013",
+    "decision": "输入/缓存按内容与授权域识别，不仅按路径",
+    "chapters": [
+      "DATA-13",
+      "AI-06"
+    ],
+    "sources": [
+      "S00",
+      "S03"
+    ],
+    "tradeoff": "跨库缓存存在授权与隐私风险；坐标/预处理/模型版本均入键或来源。",
+    "stages": "P06 P19",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A014",
+    "decision": "查询在Host，索引可重建且空间/代际隔离",
+    "chapters": [
+      "SEARCH-14"
+    ],
+    "sources": [
+      "S00",
+      "S15",
+      "S21"
+    ],
+    "tradeoff": "FTS中文需实测；同维向量不可混；索引实现由基准选而非先拍板。",
+    "stages": "P16 P17 P18",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A015",
+    "decision": "设计助手先提供证据与提议，再用户确认写入",
+    "chapters": [
+      "DESIGN-17"
+    ],
+    "sources": [
+      "S25",
+      "S26",
+      "U01"
+    ],
+    "tradeoff": "不直接开放SQL/任意路径；工具协议或Agent库不替代权限。",
+    "stages": "P21 X02",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A016",
+    "decision": "先使用验证组合；前沿优化为可回退实验",
+    "chapters": [
+      "AI-05",
+      "PLATFORM-19",
+      "VAL-22"
+    ],
+    "sources": [
+      "S01",
+      "S03",
+      "S06",
+      "S16",
+      "S28",
+      "S29"
+    ],
+    "tradeoff": "不同硬件/模型/上下文不可外推，安装成功不等于能力可用。",
+    "stages": "P15 P23 P24 X04",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A017",
+    "decision": "手机共享领域契约，不共享Electron进程和活动DB文件",
+    "chapters": [
+      "EXT-20"
+    ],
+    "sources": [
+      "U01",
+      "S23"
+    ],
+    "tradeoff": "同步存储与推理外发独立；部署和冲突形态尚未选定。",
+    "stages": "X01",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A018",
+    "decision": "AI实施按小切片与证据推进，设计完成不等于代码通过",
+    "chapters": [
+      "DEV-21",
+      "MIG-23"
+    ],
+    "sources": [
+      "U01",
+      "S00",
+      "S27"
+    ],
+    "tradeoff": "保留用户工作区，阶段状态独立；缺环境不虚构验证。",
+    "stages": "所有P阶段",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A019",
+    "decision": "资源协调覆盖所有DAM负载，但不替代各域恢复状态机",
+    "chapters": [
+      "RES-08",
+      "MEDIA-16"
+    ],
+    "sources": [
+      "S00",
+      "U01"
+    ],
+    "tradeoff": "Capture/下载既有幂等身份与Promotion语义保留，分阶段申请资源。",
+    "stages": "P13 P26",
+    "status": "proposed_pending_source_review"
+  },
+  {
+    "id": "DAM-A020",
+    "decision": "安全升级和平台依赖必须按实际锁版本验证",
+    "chapters": [
+      "SEC-10",
+      "PLATFORM-19"
+    ],
+    "sources": [
+      "S00",
+      "S18",
+      "S19"
+    ],
+    "tradeoff": "不能用新文档默认行为替代旧Electron现状；ABI与打包证据独立。",
+    "stages": "P01 P22 P24 P27",
+    "status": "proposed_pending_source_review"
+  }
+]

@@ -1,0 +1,3 @@
+# Local Capture API Is Explicitly Enabled
+
+Local Capture API must be disabled by default and may listen only after the user enables External Capture Integrations. Once enabled, it may start with the desktop application but remains loopback-bound and exists only while the application is running; application exit closes the service. A new External Capture Producer may pair only during a short-lived, user-initiated Pairing Window, while all unpaired requests remain rejected outside that window. Disabling External Capture Integrations suspends the external service without deleting existing producer pairings, and Producer Access Management keeps pairing revocation as a separate explicit action.

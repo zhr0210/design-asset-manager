@@ -1,0 +1,19 @@
+{
+  "stage": "P09",
+  "status": "proposed",
+  "ownership": [
+    "dam-managed",
+    "user-managed",
+    "remote"
+  ],
+  "readyGates": [
+    "installed",
+    "loaded",
+    "capabilityTested",
+    "identityVerified",
+    "healthy",
+    "permit"
+  ],
+  "releaseRequires": "verified-exit-or-unload+resource-confirmation",
+  "defaultKillExternal": false
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"stock.adobe.com":{srcMatching:[{srcRegExp:"//.+?(\\.ftcdn\\.net/)(.+/)\\d+(_.+@IMG@)",processor:"//as2$1v2/$21000$3"}]}};

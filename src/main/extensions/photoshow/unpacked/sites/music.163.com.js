@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"music.163.com":{ignore:".u-cover :not(img)"}};

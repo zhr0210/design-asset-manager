@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"booking.com":{srcMatching:[{srcRegExp:"(//.+?\\.bstatic\\.com/.+/)\\w+(/\\d+@IMG@.*)",processor:"$1max3000$2"}]}};

@@ -1,0 +1,19 @@
+# Physical Reclaim Page Prefetch Uses a Three-Page Session Memory Cache
+
+Each expanded ADR 0257 Physical Reclaim Completion Summary may use one **Physical Reclaim Page Window** for its currently selected ADR 0268 All/outcome filter. The window exists only in renderer memory for the current usable Storage Management surface session and contains at most the successfully rendered current page, its valid immediately previous page and its valid immediately next page: no more than three 50-row responses.
+
+After an exact current page has rendered successfully, the summary is still expanded and no user-demand page request is waiting, the renderer may issue low-priority prefetches for either missing adjacent page. User navigation, filtering, collapse, leaving the surface and memory-pressure handling always take priority. Prefetch is opportunistic, never required for a usable header or detail page and never delays an explicit page request.
+
+Every cached or prefetched page is keyed by the exact opaque summary generation, stable-volume identity, immutable member-set digest, selected outcome filter and page index. Only a complete successful response matching all keys enters the window. A duplicate in-flight or already-cached page is not requested again; stale, partial, failed or mismatched responses are discarded and cannot replace visible rows or populate the cache.
+
+When navigation successfully makes another page current, the window recenters on that page and evicts every response outside its new immediately previous/current/immediately next range. A valid direct jump therefore does not retain the intervening pages. ADR 0269 navigation may use an exact cached adjacent page immediately; a cache miss follows the normal bound host request and never falls back to a page from another filter, summary or snapshot.
+
+Changing or clearing the ADR 0268 filter immediately discards every page from the old filter before requesting page one for the new filter. Collapsing a summary stops new prefetch work but may retain its exact three-page window so same-session re-expansion can restore inspection. A new summary generation, volume identity, member digest or renderer session cannot inherit any previous window.
+
+Leaving Storage Management, closing or losing the renderer session, restarting the host, or receiving memory-pressure cleanup clears the relevant page windows. Memory pressure may drop prefetched pages first or clear all cached page responses; it never changes authoritative host result state, acknowledgement or expiry. The currently painted rows may remain visible until ordinary navigation or surface teardown, but their discarded response is no longer reusable as a cache hit.
+
+Prefetch failure is silent: it creates no error banner, retry prompt, badge or notification and does not alter the current page. A later explicit navigation to that page performs ADR 0271's ordinary user-demand load with stable current rows and visible inline retry on failure. Cache hit, miss, eviction and prefetch activity create no Activity History, telemetry, support payload or proof of viewing.
+
+No Physical Reclaim page response is written to SQLite, another database, the filesystem, browser storage, settings, Full Library Backup, export/merge/sync state or any long-lived cache. The cache holds only the path-free detail projection already permitted by ADR 0258 and does not acknowledge results, extend a 24-hour expiry, change ADR 0256 closure or create a public browse history.
+
+The current project has no Physical Reclaim Completion Summary, page prefetch or renderer page window. This ADR changes documentation only: it fetches/caches/evicts no real result, reads no user asset, runtime database, package/cache/model/private state and changes no public IPC/schema/AI Worker API. ADR 0271 defines user-demand loading, visible failure and retry without changing this prefetch policy.

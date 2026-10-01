@@ -1,0 +1,494 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.design-asset-manager.invalid/p03/profile-document.v1.schema.json",
+  "$comment": "Proposed P03 document contract only; semantic/engine validation NOT_RUN.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "documentStatus",
+    "enabled",
+    "profileId",
+    "profileVersion",
+    "recipeRef",
+    "provider",
+    "model",
+    "runtime",
+    "request",
+    "serverParameters",
+    "hostPolicy",
+    "readiness",
+    "compatibility",
+    "historicalEvidence",
+    "contentDigest",
+    "documentFormatVersion"
+  ],
+  "properties": {
+    "documentStatus": {
+      "const": "proposed-compatibility-profile"
+    },
+    "enabled": {
+      "const": false
+    },
+    "profileId": {
+      "type": "string"
+    },
+    "profileVersion": {
+      "type": "string"
+    },
+    "recipeRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapterId",
+        "adapterVersion",
+        "protocol",
+        "ownership",
+        "executionLocation",
+        "bindingResolution",
+        "secretValuesEmbedded",
+        "grantsEmbedded"
+      ],
+      "properties": {
+        "adapterId": {
+          "type": "string"
+        },
+        "adapterVersion": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "ownership": {
+          "enum": [
+            "dam-managed",
+            "user-managed",
+            "remote",
+            "unknown"
+          ]
+        },
+        "executionLocation": {
+          "enum": [
+            "verified-local",
+            "remote",
+            "unknown"
+          ]
+        },
+        "bindingResolution": {
+          "type": "string"
+        },
+        "secretValuesEmbedded": {
+          "const": false
+        },
+        "grantsEmbedded": {
+          "const": false
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requestedAlias",
+        "weightsDigest",
+        "visionProjectorDigest",
+        "tokenizerDigest",
+        "quantization",
+        "identityEvidence"
+      ],
+      "properties": {
+        "requestedAlias": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "weightsDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "visionProjectorDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tokenizerDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quantization": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "identityEvidence": {
+          "type": "string"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine",
+        "version",
+        "buildCommit",
+        "platform",
+        "architecture",
+        "hardwareBackend",
+        "identityEvidence"
+      ],
+      "properties": {
+        "engine": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "buildCommit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "platform": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "architecture": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hardwareBackend": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "identityEvidence": {
+          "type": "string"
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "temperature",
+        "maxOutputTokensByAttempt",
+        "omittedParameters",
+        "modelResolution",
+        "pathRule",
+        "redirect",
+        "responseMaxBytesPerCall"
+      ],
+      "properties": {
+        "temperature": {
+          "const": 0.2
+        },
+        "maxOutputTokensByAttempt": {
+          "const": [
+            1536,
+            3072
+          ]
+        },
+        "omittedParameters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "modelResolution": {
+          "type": "string"
+        },
+        "pathRule": {
+          "type": "string"
+        },
+        "redirect": {
+          "type": "string"
+        },
+        "responseMaxBytesPerCall": {
+          "const": 512000
+        }
+      }
+    },
+    "serverParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contextTokens",
+        "threads",
+        "parallelSlots",
+        "seed",
+        "kvStrategy",
+        "cacheStrategy",
+        "source"
+      ],
+      "properties": {
+        "contextTokens": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "threads": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parallelSlots": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "seed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "kvStrategy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cacheStrategy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "hostPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "batchAssetsMax",
+        "activeBatchesMax",
+        "receiptTtlMs",
+        "perItemTimeout",
+        "retry"
+      ],
+      "properties": {
+        "batchAssetsMax": {
+          "type": "integer"
+        },
+        "activeBatchesMax": {
+          "type": "integer"
+        },
+        "receiptTtlMs": {
+          "type": "integer"
+        },
+        "perItemTimeout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "configuredBy",
+            "nonFiniteFallbackMs",
+            "minimumMs",
+            "maximumMs",
+            "sharedAcrossAttempts"
+          ],
+          "properties": {
+            "configuredBy": {
+              "type": "string"
+            },
+            "nonFiniteFallbackMs": {
+              "type": "integer"
+            },
+            "minimumMs": {
+              "type": "integer"
+            },
+            "maximumMs": {
+              "type": "integer"
+            },
+            "sharedAcrossAttempts": {
+              "type": "boolean"
+            }
+          }
+        },
+        "retry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maximumPhysicalCalls",
+            "onlyFailure",
+            "sameServiceModelAndInput",
+            "adapterInternalRetry",
+            "restartFromBeginning",
+            "includesShorterPromptVariant"
+          ],
+          "properties": {
+            "maximumPhysicalCalls": {
+              "const": 2
+            },
+            "onlyFailure": {
+              "type": "string"
+            },
+            "sameServiceModelAndInput": {
+              "type": "boolean"
+            },
+            "adapterInternalRetry": {
+              "type": "boolean"
+            },
+            "restartFromBeginning": {
+              "type": "boolean"
+            },
+            "includesShorterPromptVariant": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configuration",
+        "modelList",
+        "visionExecution",
+        "outputQuality",
+        "modelOrRuntimeInstalledNow"
+      ],
+      "properties": {
+        "configuration": {
+          "type": "string"
+        },
+        "modelList": {
+          "type": "string"
+        },
+        "visionExecution": {
+          "type": "string"
+        },
+        "outputQuality": {
+          "type": "string"
+        },
+        "modelOrRuntimeInstalledNow": {
+          "type": "string"
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defaultSelectionChanged",
+        "evidenceSchemaChanged",
+        "additionalCapabilitiesEnabled",
+        "experimentalOptionsAdded"
+      ],
+      "properties": {
+        "defaultSelectionChanged": {
+          "type": "boolean"
+        },
+        "evidenceSchemaChanged": {
+          "type": "boolean"
+        },
+        "additionalCapabilitiesEnabled": {
+          "type": "boolean"
+        },
+        "experimentalOptionsAdded": {
+          "type": "boolean"
+        }
+      }
+    },
+    "historicalEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "contentDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "documentFormatVersion": {
+      "type": "integer",
+      "const": 1
+    }
+  }
+}

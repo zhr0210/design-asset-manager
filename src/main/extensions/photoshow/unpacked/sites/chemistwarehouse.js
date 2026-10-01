@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={chemistwarehouse:{ignore:".lb-nav",srcMatching:[{srcRegExp:"(//static\\.chemistwarehouse\\.(?:co\\.nz|com\\.au)/.+_)\\d+(@IMG@)",processor:"$1800$2"}]}};

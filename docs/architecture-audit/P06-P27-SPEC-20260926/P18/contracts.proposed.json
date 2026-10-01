@@ -1,0 +1,9 @@
+{
+  "stage": "P18",
+  "status": "proposed",
+  "fusion": "weighted-RRF candidate",
+  "productionK": null,
+  "explanationSource": "actual-branch-evidence",
+  "qualityMetricsThisRun": null,
+  "rerankerRequired": false
+}

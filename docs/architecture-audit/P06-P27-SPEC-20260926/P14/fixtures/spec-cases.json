@@ -1,0 +1,269 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "E01",
+      "input": {
+        "op": "grant",
+        "revoked": false,
+        "now": 1,
+        "expiry": 2,
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "requested": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ],
+        "allowed": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "id": "E02",
+      "input": {
+        "op": "grant",
+        "revoked": true,
+        "now": 1,
+        "expiry": 2,
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "requested": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ],
+        "allowed": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "E03",
+      "input": {
+        "op": "grant",
+        "revoked": false,
+        "now": 2,
+        "expiry": 2,
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "requested": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ],
+        "allowed": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "E04",
+      "input": {
+        "op": "grant",
+        "revoked": false,
+        "now": 1,
+        "expiry": 2,
+        "scope": [
+          "L",
+          "old"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "requested": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ],
+        "allowed": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "E05",
+      "input": {
+        "op": "grant",
+        "revoked": false,
+        "now": 1,
+        "expiry": 2,
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "requested": [
+          "provider",
+          "config2",
+          "preview",
+          "tags"
+        ],
+        "allowed": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "E06",
+      "input": {
+        "op": "grant",
+        "revoked": false,
+        "now": 1,
+        "expiry": 2,
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "requested": [
+          "provider",
+          "config1",
+          "original",
+          "tags"
+        ],
+        "allowed": [
+          "provider",
+          "config1",
+          "preview",
+          "tags"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "E07",
+      "input": {
+        "op": "ledger",
+        "limit": 1,
+        "events": [
+          {
+            "op": "reserve",
+            "id": "a",
+            "amount": 3
+          },
+          {
+            "op": "reserve",
+            "id": "a",
+            "amount": 3
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "reserved",
+          "same"
+        ],
+        "unsettled": 3
+      }
+    },
+    {
+      "id": "E08",
+      "input": {
+        "op": "ledger",
+        "limit": 1,
+        "events": [
+          {
+            "op": "reserve",
+            "id": "a",
+            "amount": 3
+          },
+          {
+            "op": "unknown",
+            "id": "a"
+          },
+          {
+            "op": "reserve",
+            "id": "b",
+            "amount": 3
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "reserved",
+          "unknown",
+          "waiting"
+        ],
+        "unsettled": 3
+      }
+    },
+    {
+      "id": "E09",
+      "input": {
+        "op": "ledger",
+        "limit": 2,
+        "events": [
+          {
+            "op": "reserve",
+            "id": "a",
+            "amount": 3
+          },
+          {
+            "op": "reserve",
+            "id": "a",
+            "amount": 4
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "reserved",
+          "conflict"
+        ],
+        "unsettled": 3
+      }
+    }
+  ]
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"f95zone.to":{srcMatching:[{srcRegExp:"(//(?:.+\\.)?f95zone\\.to/data/avatars/)\\w+(/.+@IMG@)",processor:"$1o$2"},{srcRegExp:"(//(?:.+\\.)?f95zone\\.to/.+/)thumb/(.+@IMG@)",processor:"$1$2"}]}};

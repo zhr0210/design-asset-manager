@@ -1,0 +1,23 @@
+# Not Yet Covered Selections May Execute As Explicit Partial Cleanup
+
+An ADR 0230 selection may open irreversible deletion confirmation whenever it contains at least one currently eligible managed package-copy reference and the ADR 0231 owner-graph generation is fresh. ADR 0232 Keep Shortfall Coverage State does not gate the action. A Not Yet Covered selection is an explicit **Partial Managed Copy Cleanup**, not an invalid or automatically enlarged plan.
+
+The primary action is labelled Delete Selected Managed Copies. It is never labelled Free Enough Space, Fix Storage, Continue To Keep or another phrase implying that the current selection will satisfy admission. An empty selection, a selection containing no currently eligible rows, a recalculating/stale owner generation or an active conflicting delete transaction keeps the action disabled for its actual reason.
+
+For a Not Yet Covered selection, the confirmation sheet shows each affected volume's current Keep Pin Storage Shortfall, projected Owner-Aware Batch Reclaimable Bytes and projected remaining shortfall after the selected deletion. It explicitly states that this batch is projected to be only a partial cleanup step and that Keep Pin Admission will still require a new storage check. The sheet does not add candidates, preselect more rows or claim that a projection is guaranteed actual reclamation.
+
+Covered and Covered With Excess selections keep ADR 0232's corresponding confirmation explanation. All coverage states use the same irreversible ADR 0230 item list, selected/eligible/excluded counts, no-Trash/no-Undo consequence and explicit final confirmation. Coverage changes wording and byte comparison, not deletion authority or per-item owner boundaries.
+
+Execution remains item-atomic and freshly revalidated under ADR 0230. A row excluded at execution is skipped with its reason; a failed reference remains unchanged; successful reference removals and owner-safe blob reclamation are not rolled back merely because the batch still leaves a shortfall. Partial cleanup never reaches an unselected copy or starts a second batch automatically.
+
+After execution, the workflow returns to the cleanup list with an inline Mixed Managed Copy Delete Result. Successfully deleted rows leave the active selection, while failed and excluded rows remain selected at their stable keyed positions with reasons; focus moves to the first unresolved selected row or, when none remains, the next visible eligible candidate. This adapts ADR 0084 outcome-based selection without offering Undo for irreversible deletion.
+
+The host refreshes actual per-volume availability, candidates, Owner-Aware Batch Reclaimable Bytes and Keep Pin Storage Shortfall. If the result remains Not Yet Covered, the user may explicitly select and confirm another partial batch while interactive hold budget remains. If it becomes Covered during ADR 0234's terminal drain, ADR 0235 may expose one renderer-acknowledged maximum-60-second Keep Now opportunity; otherwise the ordinary UI may expose the separate Retry Keep action only while its original workflow still exists. No batch result invokes Keep Pin Admission automatically.
+
+Each later partial batch requires a new explicit selection scope and confirmation from a fresh owner generation. There is no remembered “delete until enough” intent, automatic queue, candidate refill or background continuation. ADR 0227 hold time and ADR 0228 cumulative budget continue under their existing elapsed-time rules and are not paused or extended by choosing a partial plan.
+
+ADR 0234 gives an already accepted non-terminal batch one Cleanup Batch Drain Hold when the ADR 0227 hold/budget expires. It protects only the target until the batch terminates or for at most five additional elapsed minutes, seals the existing scope and allows no new selection/batch/Keep action; selected-item transaction safety continues even after the drain ends.
+
+Partial/coverage explanation, projected remaining bytes, selected identities and immediate result focus are session-bound operational UI state excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs. No partial plan stores paths, content, credentials, hidden candidates or future deletion intent.
+
+The current project has no managed package-copy registry, partial cleanup confirmation, owner-aware batch delete or post-delete shortfall workflow. Existing Candidate Batch Action result rules do not provide package-owner deletion. This ADR changes documentation only: it partially/full deletes no real copy, reads no package/private state and changes no public IPC/schema/AI Worker API.

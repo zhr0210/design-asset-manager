@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"nimo.tv":{srcMatching:[{srcRegExp:"(//.+?\\.nimo\\.tv/.+\\w+)_\\d+_\\d+(@IMG@)",processor:"$1$2"},{srcRegExp:"(//.+?\\.nimo\\.tv/.+\\w+@IMG@/)\\w+(/img@IMG@)",processor:"$1$2"}]}};

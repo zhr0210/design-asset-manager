@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"allhistory.com":{srcMatching:[{srcRegExp:"((?:pic|img)\\.allhistory\\.com/[^?]+).*",processor:"$1"}]}};

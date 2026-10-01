@@ -1,0 +1,68 @@
+{
+  "templateOnly": true,
+  "enabled": false,
+  "documentFormatVersion": "1.0.0",
+  "warning": "架构示例，不是可直接装载的生产配置；实际schema须在P03设计并通过运行时校验。",
+  "profileId": null,
+  "profileVersion": null,
+  "capability": null,
+  "recipe": {
+    "id": null,
+    "version": null,
+    "digest": null
+  },
+  "backend": {
+    "id": null,
+    "ownership": null,
+    "egressClass": "unknown",
+    "supportedOwnershipValues": [
+      "dam-managed",
+      "user-managed",
+      "remote"
+    ]
+  },
+  "model": {
+    "artifactId": null,
+    "digest": null,
+    "remoteIdentity": null,
+    "quantization": null,
+    "visionProjectorDigest": null
+  },
+  "runtime": {
+    "adapterId": null,
+    "version": null,
+    "platform": null,
+    "architecture": null
+  },
+  "execution": {
+    "contextTokens": null,
+    "maxOutputTokens": null,
+    "inputProfileId": null,
+    "threadLimit": null,
+    "concurrency": null
+  },
+  "resourceEstimate": {
+    "physicalPools": [],
+    "residentBytes": null,
+    "peakIncrementBytes": null,
+    "measurementEvidenceId": null,
+    "confidence": "unknown"
+  },
+  "quality": {
+    "structural": "unverified",
+    "language": "unverified",
+    "semantic": "unverified",
+    "benchmarkReport": null
+  },
+  "compatibility": {
+    "verifiedCombinations": [],
+    "experimental": true,
+    "knownLimits": []
+  },
+  "authorization": {
+    "grantsEmbedded": false,
+    "secretValuesEmbedded": false,
+    "resolutionAtExecutionRequired": true
+  },
+  "references": []
+}

@@ -1,0 +1,3 @@
+# Successful Capture Activity Is Ephemeral
+
+Successful Candidate Activation should remain only as Recent Capture Completion in a collapsed Capture Activity section for the current application session or at most 24 hours, whichever ends first, and must not create a second durable activity history. Long-term trace stays with Capture Batch and Candidate History. An Unresolved Acquisition Failure remains visible and contributes to Capture Attention Badge until retry succeeds, the user cancels the intake, or the user explicitly acknowledges that no further recovery is needed. Resolving attention does not erase the stable Candidate Identity or minimal failure trace required for recovery evidence and idempotency.

@@ -1,0 +1,25 @@
+# Interrupted Unassessable Delete Finalization Reconciles Once And Restores Neutral Safety
+
+When ADR 0249 Unassessable Delete Finalization In Flight is interrupted by main-process termination or an unclean application exit, the next host performs one idempotent **Interrupted Unassessable Delete Finalization Reconciliation** before cleanup, physical reclaim, recovery actions or another owner mutation may act on that exact target. Reconciliation reads only the minimal device-local owner generations and finalization journal needed to determine whether the atomic terminal-normalization boundary durably committed.
+
+If durable evidence proves that normalization committed, the target becomes **Recovered Finalization As Deleted**. The terminal deletion evidence remains authoritative; no ambiguous reference, ADR 0240 gate or ADR 0247 neutral gate is recreated. Already removed bytes remain removed, while any unowned managed bytes still present continue only through owner-safe physical cleanup or ADR 0230-style Physical Reclaim Pending.
+
+That continuation follows ADR 0252 and begins only after this startup reconciliation proves commit. Its retry may remove unowned managed bytes but cannot reinterpret this result, repeat normalization or bypass a newly observed owner.
+
+If durable evidence proves that normalization did not commit, the host establishes **Recovered Finalization As Gated** by preserving or restoring the ADR 0247 Recovery Delete Reconciliation Safety Gate as the only recovery authority. Restoring this neutral gate does not recreate an ambiguous managed-copy reference, choose the old interrupted-delete outcome or assert that finalization failed before every internal write; it only prevents mutation while the original target remains unassessable.
+
+If neither committed nor uncommitted normalization can be proved, the host also installs or reasserts the ADR 0247 neutral safety gate before any target action. It emits no false recovered outcome, changes no reference or bytes and keeps Recovery Delete Reconciliation Not Assessable visible with a typed path-free evidence reason. Package-byte presence, missing records, timestamps and prior user intent are not used to choose either side.
+
+All three branches consume the interrupted ADR 0249 attempt. Reconciliation never reruns ADR 0247 repair, ADR 0248's owner scan or confirmation, restarts the five-second transaction, repeats normalization or grants a new finalization authorization. Later finalization remains possible only through the full separately explicit ADR 0247 and ADR 0248 prerequisites.
+
+ADR 0251 adds no permanent attempt cap or hidden cooldown after a gated/unprovable outcome, but it requires those prerequisites to be repeated against the latest generations and permits only one active review/transaction for the target. Only the latest path-free failure class survives; this recovered result is not a retry shortcut.
+
+After a proven committed or uncommitted outcome, Storage Management receives one path-free **Recovered Unassessable Delete Finalization Result** with Recovered Finalization As Deleted or Recovered Finalization As Gated status. It identifies the package in ordinary path-free terms, states that an interrupted finalization was reconciled rather than retried and shows the current terminal/gated and physical-reclaim class. It never presents the earlier owner-scan projection as actual reclaimed bytes.
+
+The result expires at the earlier of one usable Storage Management viewing opportunity or 24 elapsed hours after reconciliation. A viewing opportunity begins only when a usable renderer acknowledges projection; the card remains stable for that surface session and is removed after dismissal or leaving the surface. If never projected, the hard cap removes it. An unprovable reconciliation creates no recovered-result card because no terminal outcome was established.
+
+The result is explanatory only. It creates no startup modal, OS notification, badge-driven urgency, Activity History entry, owner, scan, cleanup authority, retry or storage reservation. Dismissal or expiry changes neither terminal deletion and physical cleanup nor the restored neutral safety gate.
+
+The reconciliation/result record retains only opaque transaction, target, prior-gate, scan, owner-generation and stable-volume/byte identities, committed/uncommitted/unprovable class, coarse physical-reclaim class, reconciliation/expiry times and renderer-projection acknowledgement. It contains no typed package-name content, paths, payload, owner evidence, credentials, user content, filesystem event trail or attention history and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
+
+The current Runtime Package/session implementation has no finalization journal, startup normalization reconciliation, neutral-gate restoration or 24-hour finalization result. This ADR changes documentation only: it reconciles/retries/normalizes/deletes no real reference or bytes, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.

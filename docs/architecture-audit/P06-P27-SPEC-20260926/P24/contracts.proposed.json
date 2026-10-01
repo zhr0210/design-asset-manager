@@ -1,0 +1,9 @@
+{
+  "stage": "P24",
+  "status": "proposed",
+  "actualWindowsTests": "NOT_RUN",
+  "selectedRuntimeVersion": null,
+  "selectedEP": null,
+  "requestedDeviceIsProof": false,
+  "dependencyLockComplete": false
+}

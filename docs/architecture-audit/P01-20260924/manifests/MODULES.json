@@ -1,0 +1,676 @@
+{
+  "stage": "P01",
+  "mode": "SPEC",
+  "targetRulesNotRuntimeEnforcement": true,
+  "modules": [
+    {
+      "templateOnly": false,
+      "moduleId": "shared.visual-ai-contract",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "样本跨进程数据与纯类型；schema本轮仅为提案",
+      "publicEntrypoints": [
+        "src/shared/contracts/visual-ai.contract.ts",
+        "src/shared/contracts/asset-ocr.contract.ts"
+      ],
+      "dataOwner": "无持久权威",
+      "allowedDependencies": [
+        "shared-pure-types"
+      ],
+      "forbiddenCapabilities": [
+        "electron",
+        "filesystem",
+        "database",
+        "process",
+        "network"
+      ],
+      "compatibilityCallers": [
+        "VisualAiPanel",
+        "Main/Preload",
+        "development conformance only"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/shared/contracts/visual-ai.contract.ts",
+          "sha256": "377357b336ebc63bbb0a054dcf7e06e4bcf97495feb695cd9dee15cf53c264e0"
+        },
+        {
+          "path": "src/shared/contracts/asset-ocr.contract.ts",
+          "sha256": "eb1b01661b521dc9563df4474bd3bb7b9905bb7b7789ccd2e4466003f9601104"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-app-ipc-registration",
+          "command": "node scripts/run-electron-node-test.mjs scripts/app-ipc-registration.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T01",
+        "T21"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "renderer.visual-ai-panel",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "显示建议并发起明确确认",
+      "publicEntrypoints": [
+        "src/renderer/components/asset/VisualAiPanel.tsx"
+      ],
+      "dataOwner": "界面状态",
+      "allowedDependencies": [
+        "react",
+        "shared.visual-ai-contract",
+        "preload.visual-ai"
+      ],
+      "forbiddenCapabilities": [
+        "node-builtins",
+        "sqlite",
+        "model-http",
+        "arbitrary-channel"
+      ],
+      "compatibilityCallers": [
+        "Library",
+        "AssetCardWindow"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/renderer/components/asset/VisualAiPanel.tsx",
+          "sha256": "6c8af175d0a27270a292d5aa018e70479876255811be5b2af929f620f61d1c49"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-library-canvas-electron",
+          "command": "node scripts/library-canvas-electron.e2e.test.mjs",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T02",
+        "T21"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "preload.visual-ai",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "主窗与卡片窄方法",
+      "publicEntrypoints": [
+        "src/preload/index.ts",
+        "src/preload/asset-card.ts"
+      ],
+      "dataOwner": "无库写权",
+      "allowedDependencies": [
+        "electron-contextBridge-ipcRenderer",
+        "shared.visual-ai-contract"
+      ],
+      "forbiddenCapabilities": [
+        "raw-event-exposure",
+        "arbitrary-invoke",
+        "filesystem",
+        "database",
+        "model-runtime"
+      ],
+      "compatibilityCallers": [
+        "VisualAiPanel"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/preload/index.ts",
+          "sha256": "78dcdac5eb864a6df6bb15ef4a682ee10b8eb380d2665b56b3dc746f5c04d922"
+        },
+        {
+          "path": "src/preload/asset-card.ts",
+          "sha256": "49094a2d1592b1c47991cdb086e7c39e7b8753fd9e04b20f2e0312be710b9368"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-app-ipc-registration",
+          "command": "node scripts/run-electron-node-test.mjs scripts/app-ipc-registration.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        },
+        {
+          "name": "test-asset-card",
+          "command": "node scripts/run-electron-node-test.mjs scripts/asset-card.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T01",
+        "T21"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "main.visual-ai-ipc",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "sender/frame/卡片范围与版本适配边界",
+      "publicEntrypoints": [
+        "src/main/ipc/visual-ai.ipc.ts",
+        "src/main/trusted-sender.ts"
+      ],
+      "dataOwner": "窗口来源校验",
+      "allowedDependencies": [
+        "main.visual-ai-application",
+        "shared.visual-ai-contract",
+        "asset-card-trust-port"
+      ],
+      "forbiddenCapabilities": [
+        "direct-sql",
+        "provider-fallback",
+        "arbitrary-spawn"
+      ],
+      "compatibilityCallers": [
+        "registerMainIpcComposition"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/main/ipc/visual-ai.ipc.ts",
+          "sha256": "4ca6ab828b902cfad53fc93aa86b86127927e66724bab2ad6d24ee41326cd92a"
+        },
+        {
+          "path": "src/main/trusted-sender.ts",
+          "sha256": "62970030784de48a6fb99c77377c276daeb0c02d5da20bb447e138eef3604b76"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-app-ipc-registration",
+          "command": "node scripts/run-electron-node-test.mjs scripts/app-ipc-registration.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        },
+        {
+          "name": "test-visual-ai-download-integration",
+          "command": "node scripts/run-electron-node-test.mjs scripts/visual-ai-download.integration.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T02",
+        "T21",
+        "T22"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "main.visual-ai-application",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "scope与确认意图、提交后通知；推理控制仍保留现状",
+      "publicEntrypoints": [
+        "src/main/visual-ai/visual-ai-controller.ts"
+      ],
+      "dataOwner": "非数据库权威",
+      "allowedDependencies": [
+        "main.library-host",
+        "shared.visual-ai-contract",
+        "node:crypto",
+        "sharp",
+        "vision-transport"
+      ],
+      "forbiddenCapabilities": [
+        "global-getDatabase",
+        "open-new-library-connection",
+        "eagle-original-write"
+      ],
+      "compatibilityCallers": [
+        "main.visual-ai-ipc"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/main/visual-ai/visual-ai-controller.ts",
+          "sha256": "cbcfe93afb74fb209bd81e76fa9d537b05081765358ef2176ce9c42c5a7f695f"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-visual-ai-download-integration",
+          "command": "node scripts/run-electron-node-test.mjs scripts/visual-ai-download.integration.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T02",
+        "T22"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "main.library-host",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "活动库连接、lease、generation、提交准入",
+      "publicEntrypoints": [
+        "src/main/library-lifecycle/active-library-host.ts"
+      ],
+      "dataOwner": "Managed Active Library",
+      "allowedDependencies": [
+        "main.visual-ai-storage",
+        "library-lifecycle-adapters",
+        "shared-contracts"
+      ],
+      "forbiddenCapabilities": [
+        "renderer-controlled-db",
+        "worker-db-capability",
+        "silent-old-writer-fallback"
+      ],
+      "compatibilityCallers": [
+        "main.visual-ai-application",
+        "ocr",
+        "work-mode"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/main/library-lifecycle/active-library-host.ts",
+          "sha256": "9b5d07da61a2d58bdd6b6986f8ae35ad2bc30553d86a4515fc3833c2068d049f"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-active-library-host",
+          "command": "node scripts/run-electron-node-test.mjs scripts/active-library-host.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T02"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "main.visual-ai-storage",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "复用库内证据与标签确认事务",
+      "publicEntrypoints": [
+        "src/main/visual-ai/visual-ai-storage.ts"
+      ],
+      "dataOwner": "仅Host注入当前连接内事务",
+      "allowedDependencies": [
+        "better-sqlite3-type",
+        "node:crypto",
+        "shared.visual-ai-contract"
+      ],
+      "forbiddenCapabilities": [
+        "getDatabase",
+        "open-extra-connection",
+        "renderer-callable-sql",
+        "model-execution"
+      ],
+      "compatibilityCallers": [
+        "main.library-host"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/main/visual-ai/visual-ai-storage.ts",
+          "sha256": "664eb98d6ab35f9d26ae6061021d70245eec2f19eaac84964a6d08dde8a57c76"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-visual-ai-download-integration",
+          "command": "node scripts/run-electron-node-test.mjs scripts/visual-ai-download.integration.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T02",
+        "T22"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "main.vision-transport",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "兼容HTTP请求与完整结果解析",
+      "publicEntrypoints": [
+        "src/main/visual-ai/openai-vision.transport.ts",
+        "src/main/visual-ai/vision-response.ts"
+      ],
+      "dataOwner": "无业务写入权",
+      "allowedDependencies": [
+        "shared-visual-output",
+        "bounded-fetch"
+      ],
+      "forbiddenCapabilities": [
+        "asset-tag-confirm",
+        "library-db",
+        "implicit-provider-switch"
+      ],
+      "compatibilityCallers": [
+        "main.visual-ai-application"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/main/visual-ai/openai-vision.transport.ts",
+          "sha256": "f80761e54dc5c5f6096891904e61a915cc9fe5f7d90312d6b98b44ad07c5a4b2"
+        },
+        {
+          "path": "src/main/visual-ai/vision-response.ts",
+          "sha256": "4df13306c7a5bd2cceb9063c39caea09492465ac2af7073b61d855becb73f578"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [],
+      "plannedTestIds": [
+        "T02"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "python.dedicated-ocr-runner",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "本地OCR结构结果，本样本只作禁止越权对照",
+      "publicEntrypoints": [
+        "ai-service/tools/local_ocr_worker.py"
+      ],
+      "dataOwner": "无权威素材写入权",
+      "allowedDependencies": [
+        "approved-local-models",
+        "bounded-stdin-stdout"
+      ],
+      "forbiddenCapabilities": [
+        "active-library-sqlite",
+        "confirm-tag-ipc",
+        "unreviewed-egress"
+      ],
+      "compatibilityCallers": [
+        "main/ocr/local-ocr-process.ts"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "ai-service/tools/local_ocr_worker.py",
+          "sha256": "a13c1585d88441dbb6599e9e27f76aa752cd3835e64827a53ff2a5d54f0747e7"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-python-unittest",
+          "command": "node scripts/run-python-unittest.mjs",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T02",
+        "T21"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    },
+    {
+      "templateOnly": false,
+      "moduleId": "main.composition",
+      "runtimeStatus": "current",
+      "designStatus": "proposed_rules_for_existing_module",
+      "enforcementStatus": "design_only_NOT_RUN",
+      "responsibility": "注入具体模块、窗口与可信IPC依赖",
+      "publicEntrypoints": [
+        "src/main/index.ts",
+        "src/main/ipc/main-ipc-composition.ts"
+      ],
+      "dataOwner": "宿主生命周期装配",
+      "allowedDependencies": [
+        "main-module-factories",
+        "platform-adapters"
+      ],
+      "forbiddenCapabilities": [
+        "client-self-declared-authority",
+        "duplicate-business-write"
+      ],
+      "compatibilityCallers": [
+        "Electron lifecycle"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/main/index.ts",
+          "sha256": "cfd547804a709e0b40b0a15e3557975282626b5a164a3cd385ae03471ac847b3"
+        },
+        {
+          "path": "src/main/ipc/main-ipc-composition.ts",
+          "sha256": "c3a00299353a04226e2462c211800014430eda1061e1eee6d54b78622d4caf58"
+        }
+      ],
+      "testCommandsVerifiedInPackageJson": [
+        {
+          "name": "test-app-ipc-registration",
+          "command": "node scripts/run-electron-node-test.mjs scripts/app-ipc-registration.test.ts",
+          "executionStatus": "NOT_RUN",
+          "coverageNote": "existing regression entry, not proof of proposed v1 coverage"
+        }
+      ],
+      "plannedTestIds": [
+        "T01",
+        "T21"
+      ],
+      "latestEvidence": {
+        "kind": "source-reading",
+        "newRuntimeValidation": "NOT_RUN",
+        "predecessor": "../P00-20260924/MODULE-REACHABILITY.md"
+      },
+      "knownGaps": [
+        "No new dependency enforcement or v1 handler implemented",
+        "Manifest is not an exhaustive whole-program graph"
+      ],
+      "plannedDependencyCheck": {
+        "input": "listed publicEntrypoints and resolved transitive local imports",
+        "tsResolver": "TypeScript AST and module resolution from existing locked compiler",
+        "pythonResolver": "AST imports where applicable; not full filesystem authority proof",
+        "dynamicUnresolved": "UNKNOWN_REVIEW_REQUIRED",
+        "status": "NOT_IMPLEMENTED_NOT_RUN"
+      }
+    }
+  ],
+  "sampleRuleFixtures": [
+    {
+      "id": "D01",
+      "from": "src/shared/contracts/visual-ai.contract.ts",
+      "injectedImport": "../../main/db",
+      "expected": "forbidden",
+      "executed": false
+    },
+    {
+      "id": "D02",
+      "from": "src/renderer/components/asset/VisualAiPanel.tsx",
+      "injectedImport": "better-sqlite3",
+      "expected": "forbidden",
+      "executed": false
+    },
+    {
+      "id": "D03",
+      "from": "src/preload/asset-card.ts",
+      "injectedExport": "invoke(channel: string, payload: unknown)",
+      "expected": "forbidden-capability-review",
+      "executed": false
+    },
+    {
+      "id": "D04",
+      "from": "src/main/ipc/visual-ai.ipc.ts",
+      "injectedImport": "../db",
+      "expected": "forbidden",
+      "executed": false
+    },
+    {
+      "id": "D07",
+      "from": "src/main/visual-ai/openai-vision.transport.ts",
+      "injectedImport": "../library-lifecycle/active-library-host",
+      "expected": "forbidden",
+      "executed": false
+    },
+    {
+      "id": "DYNAMIC",
+      "from": "src/main/visual-ai/openai-vision.transport.ts",
+      "injectedImport": "import(variablePath)",
+      "expected": "UNKNOWN_REVIEW_REQUIRED",
+      "executed": false
+    }
+  ]
+}

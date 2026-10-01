@@ -1,0 +1,24 @@
+# Search History Is Session Only And Durable Searches Are Explicit
+
+Ordinary Asset Library query text, filter edits, result navigation and Search By Image activity are Ephemeral Search Session state by default. They may support a bounded in-memory back/forward stack while the application process and relevant search session remain alive, but are not written to SQLite, settings, localStorage, logs, telemetry, crash reports or a “recent searches” list. Explicit Quit clears the state; restart recovery does not reconstruct private query history.
+
+The ephemeral stack stores only what is needed to restore local UI/query-plan state and is bounded by entry count and memory. Text/filter entries may restore query text, criteria, mode, scope, sort and index-generation reference. ADR 0182 external image queries retain their query pixels/vector/grant only for the active image-search session; leaving/closing that session releases them, and a later back action requires reselecting the external file rather than persisting its path, thumbnail, vector or temporary render. Library-asset image queries may retain only the opaque owner/Query Visual Scope reference in memory.
+
+Durable reuse requires an explicit **Save Search** action and uses the existing user-owned Smart Filter model from ADR 0041 rather than a second hidden history system. The save preview shows and stores the user-selected name, original query text, normalized versioned query-plan/filter criteria, library/collection scope, search mode/lane preferences, pending-suggestion option, sort and any stable library-asset Query Visual Scope reference. It stores neither a result snapshot nor search scores, OCR snippets, thumbnails, external file paths, external query vectors or asset content.
+
+When that sort is an ADR 0451 Text Custom Field sort, the saved plan also
+retains the exact field dependency, direction, Natural/Exact mode, explicit
+Natural language/tailoring and collation-policy versions. Reopening does not
+reinterpret it from the current interface or operating-system locale.
+
+An external Search By Image query cannot be saved. The user must first explicitly import the file as a Candidate/Design Asset, then choose that managed asset and stable scope as the saved query source. Import remains a separate reviewed action and Save Search never performs it. If a referenced library asset/unit is later trashed, changed or permanently deleted, the Saved Search reports source unavailable/stale and offers reviewed replacement; it never retains a hidden copy of the query image.
+
+Saved Search execution is dynamic. Lexical criteria, Tag Concept identities and hard filters follow their stable contracts, while semantic mode records the requested capability and last evaluated Active Embedding Space/query-plan generation rather than freezing a query vector or old result ordering. When search schema, embedding space, vocabulary or referenced scope changes, the UI reports that results may differ or the semantic lane is unavailable; it does not silently compare old/new scores or store both query vectors. Opening a saved search runs the current compatible plan locally.
+
+ADR 0421 applies to every saved Custom Field criterion. An archived or missing definition keeps the Saved Search visible but non-executable until the exact archived identity is restored or the user explicitly removes/remaps the dependency; execution never drops that criterion or binds a same-name field automatically.
+
+User Saved Searches follow ADR 0042 and ADR 0047: library-wide by default, collection scope is explicit criteria, and users may edit, duplicate, reorder or delete them. Delete removes only the saved query definition and navigation entry, never assets, tags, analysis results, vectors or indexes. System Smart Filters remain application-owned, read-only review workflows and cannot capture arbitrary user query text by implication.
+
+Search suggestions may be derived live from current local Tag Labels, collections and indexed metadata, but they are not personal query history unless the user saved them. No model provider, plugin or extension receives recent/ephemeral queries without a separately declared API surface and permission; this ADR creates none. External AI is never used to complete or rank query history.
+
+The current renderer keeps `searchQuery` and active tag queries in in-memory asset-store state, while localStorage is used for unrelated UI language/theme. There is no durable search history, recent-query database, bounded session navigation stack, Saved Search persistence or complete Smart Filter implementation. This partially matches non-persistence but not the full lifecycle. This ADR records target behavior without changing stores/schema/APIs, saving a query or reading user search/runtime/library data.

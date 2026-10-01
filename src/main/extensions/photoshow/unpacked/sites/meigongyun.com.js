@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"meigongyun.com":{ignore:".card-figure .hover",referrerAddedHostnames:["meigongyun.com"],srcMatching:[{srcRegExp:"(//src\\.meigongyun\\.com/.+@IMG@)-cover",processor:"$1"},{srcRegExp:"(/avatar\\.php\\?.*size=).*",processor:"$1big"}]}};

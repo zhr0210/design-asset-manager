@@ -1,11 +1,17 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+os.environ["DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI"] = "1"
 
 import os
 import unittest
 import numpy as np
 from PIL import Image
+
+import huggingface_hub
+def mock_hf_hub_download(*args, **kwargs):
+    raise Exception("Offline mock fallback for unit tests")
+huggingface_hub.hf_hub_download = mock_hf_hub_download
 
 from models.wd_tagger import WDTaggerModel, TagPrediction, WDTaggerResult
 from utils.image_preprocess import prepare_image_for_wd_tagger

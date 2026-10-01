@@ -1,0 +1,38 @@
+{
+  "stage": "P02",
+  "requirements": [
+    {
+      "id": "R13",
+      "requirement": "原件/预览/派生物、Copy和三种库边界",
+      "basis": "S00 §2.2、7",
+      "chapters": [
+        "HOST-03",
+        "DATA-12",
+        "DATA-13",
+        "MEDIA-16"
+      ],
+      "stages": [
+        "P02",
+        "P06",
+        "P19",
+        "P26",
+        "P27"
+      ],
+      "tests": [
+        "T02",
+        "T03",
+        "T18"
+      ],
+      "scope": "必须保留",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P02Evidence": [
+        "VERSION-CAPABILITY-MATRIX.md",
+        "SCHEMA-GOVERNANCE-SPEC.md",
+        "BACKUP-RECOVERY.md",
+        "VALIDATION-PLAN.md"
+      ],
+      "limitation": "only SPEC design; no actual migration or recovery accepted"
+    }
+  ]
+}

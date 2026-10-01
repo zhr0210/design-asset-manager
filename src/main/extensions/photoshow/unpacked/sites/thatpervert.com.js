@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"thatpervert.com":{referrerAddedHostnames:["thatpervert.com"],srcMatching:[{srcRegExp:"(//.+?/pics/post/)(?:full/)?([^/]+@IMG@)",processor:"$1full/$2"}]}};

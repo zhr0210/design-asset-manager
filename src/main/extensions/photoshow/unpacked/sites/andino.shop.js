@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"andino.shop":{srcMatching:[{srcRegExp:".+?\\?remote=([^&]+)",processor:({srcRegExpObj:e,triggerSrc:r})=>e.test(r)&&decodeURIComponent(RegExp.$1)},{srcRegExp:"(/storage/images/.+?\\?.+?)width=.*",processor:"$1"}]}};

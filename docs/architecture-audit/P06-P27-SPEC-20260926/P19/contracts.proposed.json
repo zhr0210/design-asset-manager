@@ -1,0 +1,15 @@
+{
+  "stage": "P19",
+  "status": "proposed",
+  "cacheKeyFields": [
+    "domain",
+    "digest",
+    "transform",
+    "recipe",
+    "model",
+    "format"
+  ],
+  "pathIsIdentity": false,
+  "autoMergeOrDeleteDuplicates": false,
+  "gcRequiresRecheck": true
+}

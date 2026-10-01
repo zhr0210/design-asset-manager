@@ -1,0 +1,1141 @@
+{
+  "status": "planned_not_executed",
+  "cases": [
+    {
+      "id": "VC-v1-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 1,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v1-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 2,
+        "migrationIds": [
+          "managed.v1-to-v2.visual-evidence.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v1-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 3,
+        "migrationIds": [
+          "managed.v1-to-v2.visual-evidence.r1",
+          "managed.v2-to-v3.persistent-download.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v1-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 4,
+        "migrationIds": [
+          "managed.v1-to-v2.visual-evidence.r1",
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v1-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 5,
+        "migrationIds": [
+          "managed.v1-to-v2.visual-evidence.r1",
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v1-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 6,
+        "migrationIds": [
+          "managed.v1-to-v2.visual-evidence.r1",
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v1-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 7,
+        "migrationIds": [
+          "managed.v1-to-v2.visual-evidence.r1",
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v1-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v1",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 1,
+        "toVersion": 8,
+        "migrationIds": [
+          "managed.v1-to-v2.visual-evidence.r1",
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1",
+          "managed.v7-to-v8.dedicated-ocr.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 2,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 2,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 3,
+        "migrationIds": [
+          "managed.v2-to-v3.persistent-download.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 4,
+        "migrationIds": [
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 5,
+        "migrationIds": [
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 6,
+        "migrationIds": [
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 7,
+        "migrationIds": [
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v2-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v2",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 2,
+        "toVersion": 8,
+        "migrationIds": [
+          "managed.v2-to-v3.persistent-download.r1",
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1",
+          "managed.v7-to-v8.dedicated-ocr.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 3,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 3,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 3,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 4,
+        "migrationIds": [
+          "managed.v3-to-v4.variant-intents.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 5,
+        "migrationIds": [
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 6,
+        "migrationIds": [
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 7,
+        "migrationIds": [
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v3-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v3",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 3,
+        "toVersion": 8,
+        "migrationIds": [
+          "managed.v3-to-v4.variant-intents.r1",
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1",
+          "managed.v7-to-v8.dedicated-ocr.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 4,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 4,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 4,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 4,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 5,
+        "migrationIds": [
+          "managed.v4-to-v5.notebooks.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 6,
+        "migrationIds": [
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 7,
+        "migrationIds": [
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v4-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v4",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 4,
+        "toVersion": 8,
+        "migrationIds": [
+          "managed.v4-to-v5.notebooks.r1",
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1",
+          "managed.v7-to-v8.dedicated-ocr.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 5,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 5,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 5,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 5,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 5,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 6,
+        "migrationIds": [
+          "managed.v5-to-v6.organization.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 7,
+        "migrationIds": [
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v5-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v5",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 5,
+        "toVersion": 8,
+        "migrationIds": [
+          "managed.v5-to-v6.organization.r1",
+          "managed.v6-to-v7.work-sets.r1",
+          "managed.v7-to-v8.dedicated-ocr.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 6,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 6,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 6,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 6,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 6,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 6,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 7,
+        "migrationIds": [
+          "managed.v6-to-v7.work-sets.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v6-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v6",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 6,
+        "toVersion": 8,
+        "migrationIds": [
+          "managed.v6-to-v7.work-sets.r1",
+          "managed.v7-to-v8.dedicated-ocr.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 7,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 7,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 7,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 7,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 7,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 7,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 7,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v7-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v7",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "upgrade-required",
+      "expectedPlan": {
+        "fromVersion": 7,
+        "toVersion": 8,
+        "migrationIds": [
+          "managed.v7-to-v8.dedicated-ocr.r1"
+        ]
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-core",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "core",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-visual-evidence",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "visual-evidence",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-persistent-download",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "persistent-download",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-variant-intents",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "variant-intents",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": "F02-VARIANT-READ-V8",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-notebooks",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "notebooks",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-organization",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "organization",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-work-sets",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "work-sets",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "VC-v8-dedicated-ocr",
+      "domain": "managed-library",
+      "fixtureProfile": "managed:v8",
+      "requestedFeature": "dedicated-ocr",
+      "profileInspection": "exact-match",
+      "expectedSchemaState": "present",
+      "expectedPlan": {
+        "fromVersion": 8,
+        "toVersion": 8,
+        "migrationIds": []
+      },
+      "expectedReadOnlyInspectionWrites": 0,
+      "knownCaveat": null,
+      "executionStatus": "NOT_RUN"
+    }
+  ]
+}

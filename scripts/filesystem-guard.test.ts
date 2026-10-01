@@ -4,6 +4,7 @@ import path from 'node:path'
 import {
   assertInsideManagedRoot,
   ensureDirectory,
+  ensureDirectoryInsideExistingManagedRoot,
   isWritableDirectory,
   safeRemoveInsideRoot
 } from '../src/main/platform/filesystem-guard'
@@ -27,5 +28,18 @@ const removable = path.join(inside, 'remove-me')
 await ensureDirectory(removable)
 await safeRemoveInsideRoot(root, removable)
 await assert.rejects(() => fs.stat(removable))
+
+const concurrentRoot = path.join(base, 'concurrent-root')
+const concurrentTarget = path.join(concurrentRoot, 'shared', 'nested')
+await fs.mkdir(concurrentRoot)
+await Promise.all(
+  Array.from({ length: 20 }, () =>
+    ensureDirectoryInsideExistingManagedRoot(
+      concurrentRoot,
+      concurrentTarget
+    )
+  )
+)
+assert.equal((await fs.stat(concurrentTarget)).isDirectory(), true)
 
 await fs.rm(base, { recursive: true, force: true })

@@ -1,0 +1,125 @@
+{
+  "stage": "P01",
+  "scope": "only requirements touched by P01",
+  "requirements": [
+    {
+      "id": "R01",
+      "requirement": "保留本地优先与现有技术主线，不以目录整理代替架构优化",
+      "basis": "U01 / S00 §2、5",
+      "chapters": [
+        "SYS-01",
+        "HOST-03",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01",
+        "T02",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P01_design_evidence": [
+        "adr/ADR-P01-CONTRACT-BOUNDARY.proposed.md",
+        "CONTRACT-SPEC.md",
+        "COMPATIBILITY-MAP.md",
+        "MODULE-DEPENDENCIES.md",
+        "VALIDATION-PLAN.md"
+      ],
+      "fulfillmentClaim": "SPEC draft only; not implemented or accepted"
+    },
+    {
+      "id": "R24",
+      "requirement": "IPC、沙箱、密钥与外部服务安全",
+      "basis": "S00 §5.3 / 建议",
+      "chapters": [
+        "HOST-03",
+        "SEC-10",
+        "PLATFORM-19"
+      ],
+      "stages": [
+        "P01",
+        "P14",
+        "P22"
+      ],
+      "tests": [
+        "T02",
+        "T13",
+        "T21"
+      ],
+      "scope": "纳入目标",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P01_design_evidence": [
+        "adr/ADR-P01-CONTRACT-BOUNDARY.proposed.md",
+        "CONTRACT-SPEC.md",
+        "COMPATIBILITY-MAP.md",
+        "MODULE-DEPENDENCIES.md",
+        "VALIDATION-PLAN.md"
+      ],
+      "fulfillmentClaim": "SPEC draft only; not implemented or accepted"
+    },
+    {
+      "id": "R26",
+      "requirement": "AI编码为主、允许并行新增功能、可跨会话接手",
+      "basis": "U01",
+      "chapters": [
+        "DEV-21",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P01_design_evidence": [
+        "adr/ADR-P01-CONTRACT-BOUNDARY.proposed.md",
+        "CONTRACT-SPEC.md",
+        "COMPATIBILITY-MAP.md",
+        "MODULE-DEPENDENCIES.md",
+        "VALIDATION-PLAN.md"
+      ],
+      "fulfillmentClaim": "SPEC draft only; not implemented or accepted"
+    },
+    {
+      "id": "R32",
+      "requirement": "本轮只细化代码框架，不针对UI/UX或交付版本排期",
+      "basis": "U01",
+      "chapters": [
+        "SYS-01",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01"
+      ],
+      "scope": "整个任务约束",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P01_design_evidence": [
+        "adr/ADR-P01-CONTRACT-BOUNDARY.proposed.md",
+        "CONTRACT-SPEC.md",
+        "COMPATIBILITY-MAP.md",
+        "MODULE-DEPENDENCIES.md",
+        "VALIDATION-PLAN.md"
+      ],
+      "fulfillmentClaim": "SPEC draft only; not implemented or accepted"
+    }
+  ]
+}

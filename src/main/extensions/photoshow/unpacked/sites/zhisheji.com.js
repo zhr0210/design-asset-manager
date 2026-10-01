@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"zhisheji.com":{srcMatching:[{srcRegExp:"(//.+?\\.zhisheji\\.com/uc_server/data/avatar/.+_avatar_)(?:big|middle|small)(@IMG@).*",processor:"$1big$2"}]}};

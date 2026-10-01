@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"zhipin.com":{srcMatching:[{srcRegExp:"(//img\\.bosszhipin\\.com/.+?)(?:_s)?(@IMG@).*",processor:"$1$2"}]}};

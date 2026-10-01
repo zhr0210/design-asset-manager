@@ -56,3 +56,32 @@ docs/archive/
 
 # Temporary scratch directories
 scratch/
+
+# Stale root-level build outputs (should only exist under out/)
+/index.js
+/index.cjs
+/index-*.js
+
+# Test scratch files
+src/message.txt
+
+# Application-owned Pi dependency/runtime artifacts; sources and lockfile remain tracked.
+/pi-runtime/node_modules/
+/pi-runtime/runtime/
+/pi-runtime/runtime-artifact.json
+
+# Local audit/profile artifacts excluded from public source snapshots
+/.ai-run/
+/delivery/
+/.agents/
+/docs/**/evidence/
+/docs/design/artifacts/
+*.zip
+*.sqlite3
+*.db-wal
+*.db-shm
+*.pem
+*.key
+.env
+.env.*
+!.env.example

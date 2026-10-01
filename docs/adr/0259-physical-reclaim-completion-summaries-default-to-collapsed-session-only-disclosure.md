@@ -1,0 +1,15 @@
+# Physical Reclaim Completion Summaries Default To Collapsed Session-Only Disclosure
+
+Every newly projected ADR 0257 Physical Reclaim Completion Summary initially renders **collapsed**. The authoritative header remains fully visible using ADR 0260's two fixed complete metric lines, while the path-free target rows and ADR 0258 paging controls stay behind one explicit disclosure action. This default applies equally to small and large summaries.
+
+The system never auto-expands a summary because of target count, actual reclaimed bytes, Already Absent or Mixed outcomes, Completed As Shared constituents, shared-retained bytes, zero newly freed storage or any other result class. Those values remain visible through the complete header projection; expansion is optional explanation and not an attention, safety, acknowledgement or ADR 0256 closure gate.
+
+A usable collapsed header still qualifies as the ADR 0258 authoritative all-member projection. Its exact header acknowledgement may consume every represented constituent's viewing opportunity without the user opening details, changing pages or scrolling. Expanding or collapsing does not create another acknowledgement, extend a result's 24-hour deadline or change the frozen member snapshot.
+
+Only an explicit user disclosure action expands the target details. For a particular summary during the current usable Storage Management surface session, the renderer may retain its expanded/collapsed state, ADR 0268 outcome filter, ADR 0269 valid selected page and detail-scroll position. Collapsing and reopening that same summary in the same session restores its filter, current page and position so inspection is not needlessly restarted; invalid page-input editing text and validation are discarded. ADR 0270 may also retain the exact three-page memory window through collapse, while collapse stops new prefetch work.
+
+Leaving Storage Management, closing its window, losing the renderer session or restarting the host discards all disclosure state and every ADR 0270 page window. A later visit begins collapsed on page one at the top, using whatever recomputed still-unacknowledged/unexpired projection ADR 0258 permits. A newly projected summary or different generation/volume also begins collapsed and inherits no state by package, publisher or volume identity.
+
+Disclosure state is ephemeral renderer presentation state. It is not written to the host result record, settings, database, filesystem, Full Library Backup, export/merge/sync, Activity History, telemetry, publisher feedback or support logs. The application records no row visibility, dwell time, page traversal or proof of reading.
+
+The current project has no Physical Reclaim Completion Summary or disclosure state. This ADR changes documentation only: it expands/acknowledges/expires no real result, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API. ADR 0260 defines the collapsed header's fixed two-line metric structure without changing this disclosure behavior.

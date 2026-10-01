@@ -40,7 +40,7 @@ assert.doesNotMatch(handlerSource, /better-sqlite3|runtime-registry|src\/main\/d
 const mainSource = await fs.readFile('src/main/index.ts', 'utf8')
 assert.match(mainSource, /registerSettingsMigrationIpc/)
 
-const preloadSource = await fs.readFile('src/preload/index.ts', 'utf8')
+const preloadSource = (await fs.readFile('src/preload/index.ts', 'utf8')).replace(/\r\n/g, '\n')
 assert.match(preloadSource, /settingsMigration: \{/)
 assert.match(preloadSource, /createPlan: /)
 assert.match(preloadSource, /dryRun: /)
@@ -49,6 +49,8 @@ assert.match(preloadSource, /listBackups: /)
 
 const settingsMigrationBlockStart = preloadSource.indexOf('settingsMigration: {')
 const settingsMigrationBlockEnd = preloadSource.indexOf('\n  },\n\n  // AI Model IPC API', settingsMigrationBlockStart)
+assert.notEqual(settingsMigrationBlockStart, -1)
+assert.notEqual(settingsMigrationBlockEnd, -1)
 const settingsMigrationBlock = preloadSource.slice(settingsMigrationBlockStart, settingsMigrationBlockEnd)
 assert.doesNotMatch(settingsMigrationBlock, /apply|rollback/)
 assert.doesNotMatch(settingsMigrationBlock, /ipcRenderer\.invoke\(\s*(channel|request\.channel|.*\[.*\])/)

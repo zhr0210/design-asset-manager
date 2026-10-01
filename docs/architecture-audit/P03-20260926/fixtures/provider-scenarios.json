@@ -1,0 +1,317 @@
+{
+  "status": "planned_NOT_RUN",
+  "cases": [
+    {
+      "id": "C01",
+      "given": "initial length then full JSON",
+      "expected": "2 physical calls, identical model/service/input, shorter second prompt, one commit",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C02",
+      "given": "both attempts truncated",
+      "expected": "2 calls maximum, fail, preserve previous evidence",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C03",
+      "given": "valid JSON but missing required field",
+      "expected": "1 call, fail invalid; no schema-repair retry",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C04",
+      "given": "HTTP401/403/429/5xx",
+      "expected": "one call, no automatic transport retry or alternate provider",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C05",
+      "given": "outer HTTP body malformed JSON",
+      "expected": "AI_RESPONSE_INVALID, no truncation retry",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C06",
+      "given": "response >512000 bytes",
+      "expected": "cancel reader, AI_RESPONSE_TOO_LARGE, no commit",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C07",
+      "given": "abort before first fetch",
+      "expected": "zero requests",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C08",
+      "given": "abort during retry/body read",
+      "expected": "shared signal stops local await; zero late commit; physical server cancellation unknown",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C09",
+      "given": "configured timeout nonfinite",
+      "expected": "120000ms fallback; clamp finite settings1000..120000",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C10",
+      "given": "first attempt consumes shared deadline",
+      "expected": "no fresh120s allowance for retry",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C11",
+      "given": "backend edited after prepare before run",
+      "expected": "fingerprint mismatch rejects review",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C12",
+      "given": "backend edited during a running batch",
+      "expected": "frozen reviewed binding preserved; never silently switch; explicit invalidation policy change requires separate approval",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C13",
+      "given": "library switch or card release",
+      "expected": "invalidate plan/cancel owner; no stale writes",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C14",
+      "given": "commit succeeds then notification throws",
+      "expected": "committed item remains completed",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C15",
+      "given": "models endpoint returns IDs",
+      "expected": "modelListSucceeded only, vision/quality unverified",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C16",
+      "given": "loopback service with opaque upstream",
+      "expected": "executionLocation unknown; no verified-local claim",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C17",
+      "given": "server weight hash unavailable",
+      "expected": "record opaque/unknown; do not invent digest from alias",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C18",
+      "given": "profile asks unsupported new flag",
+      "expected": "reject candidate parameter/profile; never silently ignore or assume b11057 supports latest flags",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C19",
+      "given": "same old evidence recipe visual-ai-v1",
+      "expected": "read old result unchanged; do not assign new exact recipe digest retrospectively",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C20",
+      "given": "Provider attempts DB/Original access",
+      "expected": "deny by port/dependency boundary; no Host DB handle or arbitrary path",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C21",
+      "given": "Provider retries plus coordinator retry",
+      "expected": "forbid hidden retry; max2 physical calls for compatibility operation",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C22",
+      "given": "enabled=false synthetic Provider in production",
+      "expected": "not registered; development injection only",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C23",
+      "given": "two equivalent normalized output paths",
+      "expected": "old/new execution compared offline with synthetic fixtures; no parallel real inference or double writes",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C24",
+      "given": "provider completion fields repeat user content in metadata",
+      "expected": "bounded raw payload stays ephemeral; diagnostic allowlist rejects raw text/headers/paths",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C25",
+      "given": "wrong-language but otherwise valid output",
+      "expected": "compat mode retains current structural success; quality remains unverified/insufficient, not approved Chinese quality",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C26",
+      "given": "malformed candidate result returned by provider",
+      "expected": "Host application validates before evidence creation and commit",
+      "tests": [
+        "T04",
+        "T05",
+        "T12",
+        "T24"
+      ],
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

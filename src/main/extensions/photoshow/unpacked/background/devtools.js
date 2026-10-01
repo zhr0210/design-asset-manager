@@ -1,1 +1,0 @@
-(()=>{"use strict";!function e(){chrome.runtime.connect({name:`DEVTOOLS_PAGE_${chrome.devtools.inspectedWindow.tabId}`}).onDisconnect.addListener(e)}()})();

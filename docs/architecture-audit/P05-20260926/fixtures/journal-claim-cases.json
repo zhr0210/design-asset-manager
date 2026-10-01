@@ -1,0 +1,305 @@
+{
+  "status": "planned_NOT_RUN",
+  "cases": [
+    {
+      "id": "J01",
+      "sequence": [
+        "enqueue id R same payload twice"
+      ],
+      "expected": "same batch/jobs; generation increments once",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J02",
+      "sequence": [
+        "enqueue R payload A",
+        "enqueue R payload B"
+      ],
+      "expected": "CONFLICT, original intent immutable",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J03",
+      "sequence": [
+        "force rerun with new R2"
+      ],
+      "expected": "new generation; old inflight superseded; old success retained",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J04",
+      "sequence": [
+        "repeat cancelled request R"
+      ],
+      "expected": "return cancelled receipt; no new job or send",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J05",
+      "sequence": [
+        "two simultaneous claimReady same expected revision"
+      ],
+      "expected": "one granted, one conflict; one current epoch",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J06",
+      "sequence": [
+        "new attempt fences old",
+        "old worker completes"
+      ],
+      "expected": "old commit stale even earlier completion timestamp",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J07",
+      "sequence": [
+        "commit same job/value twice"
+      ],
+      "expected": "one Evidence/Job success/Outbox; same receipt",
+      "testIds": [
+        "T06",
+        "T08"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J08",
+      "sequence": [
+        "commit same effect with altered value"
+      ],
+      "expected": "conflict; no second effect",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J09",
+      "sequence": [
+        "commit succeeds",
+        "client response lost",
+        "new scope reads receipt"
+      ],
+      "expected": "lookup completed effect, no new inference",
+      "testIds": [
+        "T06",
+        "T08"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J10",
+      "sequence": [
+        "tags and caption share physical",
+        "tags succeeds",
+        "caption invalid"
+      ],
+      "expected": "tags usable; caption fails; one physical reservation",
+      "testIds": [
+        "T06",
+        "T08"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J11",
+      "sequence": [
+        "shared physical response truncated after tags"
+      ],
+      "expected": "no subscriber rescues partial JSON",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J12",
+      "sequence": [
+        "same physical tags/caption",
+        "tags cancelled"
+      ],
+      "expected": "tags cannot commit; caption may finish; abort only when all invalid",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J13",
+      "sequence": [
+        "two batches reuse one job",
+        "cancel one batch"
+      ],
+      "expected": "remove only its subscription; remaining intent stays",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J14",
+      "sequence": [
+        "user caption/OCR correction changes during validation"
+      ],
+      "expected": "AI commit preserves overlay/CAS rules",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J15",
+      "sequence": [
+        "source becomes Trash or content changes"
+      ],
+      "expected": "commit refused; no user field deletion",
+      "testIds": [
+        "T07"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J16",
+      "sequence": [
+        "waiting model/resource/authorization"
+      ],
+      "expected": "waiting reasons, zero sends, not failed",
+      "testIds": [
+        "T13"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J17",
+      "sequence": [
+        "Provider first truncation then complete"
+      ],
+      "expected": "at most two physical attempts; same deadline/service/model/input",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J18",
+      "sequence": [
+        "Provider 401 or malformed closed JSON"
+      ],
+      "expected": "no newly added retry under P03 compatibility policy",
+      "testIds": [
+        "T13"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J19",
+      "sequence": [
+        "quality held valid evidence"
+      ],
+      "expected": "history retained, failed_final QUALITY_HELD, prior current remains",
+      "testIds": [
+        "T06",
+        "T08"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J20",
+      "sequence": [
+        "safe integer epoch limit reached"
+      ],
+      "expected": "fail closed, no wraparound",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J21",
+      "sequence": [
+        "resume terminal failed_final/cancelled job"
+      ],
+      "expected": "reject in-place revival; explicit new request/generation needed",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J22",
+      "sequence": [
+        "reuse valid prior evidence for new authorized intent"
+      ],
+      "expected": "same evidence ref, new unique job receipt if created; no fake model attempt",
+      "testIds": [
+        "T06"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J23",
+      "sequence": [
+        "profile or input reference hash mismatch"
+      ],
+      "expected": "wait/review or fail explicit; no silent version replacement",
+      "testIds": [
+        "T13"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "J24",
+      "sequence": [
+        "unsupported schema or Legacy/Eagle target"
+      ],
+      "expected": "no Managed Journal DDL/write",
+      "testIds": [
+        "T07"
+      ],
+      "plannedEvidenceLevel": "L2/L3",
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

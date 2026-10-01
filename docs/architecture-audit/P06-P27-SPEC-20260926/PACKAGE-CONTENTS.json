@@ -1,0 +1,2016 @@
+{
+  "packageKind": "SPEC handoff, not application/source snapshot",
+  "fileCountExcludingThisManifest": 402,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 632,
+      "sha256": "f705f2868b42ddda9dc4666c69b68de50cf7337d04384d4a62cf7a9aae4d7348"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/BASELINE-MATRIX.md",
+      "bytes": 6140,
+      "sha256": "e80cb5a2554a9bfd15131feea9047f2992ebae3384013cd5e6191f8736a3750b"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/CURRENT-STATE-AUDIT.md",
+      "bytes": 8881,
+      "sha256": "c7326e24a36c749966237600ec2139ada58466458bf0394d6e72c432e7df153f"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/MODULE-REACHABILITY.md",
+      "bytes": 8604,
+      "sha256": "8d4e4c76e75fcc41e773cbb8212066fd6c1c4b449c51e3a9df31b7772d83f917"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/evidence/HISTORICAL-REPORT-INVENTORY.json",
+      "bytes": 8503,
+      "sha256": "e3bcd36d906f7e72a9363bdaa7181cd90ab510d11294afef3121eec67a47c9de"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/evidence/PACKAGE-PROVENANCE.json",
+      "bytes": 2743,
+      "sha256": "a23100ecb8d56d920c4c0f96284f05cc88ce982cfa1ae58eacb9c95837d28c2a"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/evidence/S00-LINK-INVENTORY.json",
+      "bytes": 5591,
+      "sha256": "63dca510fc81e1d3956bb03d2a22669dfb82b4b2629a53f93266cb13807ec492"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/evidence/STATIC-CHECKS.json",
+      "bytes": 7302,
+      "sha256": "7389c1a75324b217ac23357ee38a36d884d7c0341a77946b3e593fc810926b18"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/01-OVERALL-ARCHITECTURE.md",
+      "bytes": 75956,
+      "sha256": "e1481ee523b2a98e3b95c4f3c84f41ec053c0bcb6c59995dcffe3cfe7a11809a"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/03-REFERENCES.md",
+      "bytes": 16354,
+      "sha256": "f2f4c9fcdf2b9b07ab373c5eddfe40dfeba6153745ecd360787260729d14cd03"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/05-AI-CONTEXT-HANDOFF.md",
+      "bytes": 5783,
+      "sha256": "bed37dce32ce0a21fbd357866f2e448331fb755f337db3d435d9cb7dc7eb38f6"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/manifests/CURRENT-STATE.json",
+      "bytes": 1439,
+      "sha256": "6cec8dfc0c5ef76dc9ca4889f4a59ab91186fcf5846b6719894929c2b27d5d7d"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/manifests/decisions.json",
+      "bytes": 7910,
+      "sha256": "14c150cfdc746237fd0fd71f28cdcd374c78be7633bab2116a29ebb57ac809cb"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/manifests/requirements.json",
+      "bytes": 12551,
+      "sha256": "267438b413afb01615fa5c5cf86fccb441d320d4871f97d1a68c2eb06683aa81"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/manifests/stages.json",
+      "bytes": 61040,
+      "sha256": "5457b615b3ea3deb11833dd35881c0ddd72ca45a87d445cf40cf3cdb071763c9"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/prompts/00-COMMON-INSTRUCTIONS.md",
+      "bytes": 2685,
+      "sha256": "cb9dddd6ae2634b92bceb14862f5ba449cda8662e43ba5f5780b30b7afcb1fa5"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/prompts/P00.md",
+      "bytes": 5313,
+      "sha256": "19f45ff64300d42a3d60e66c5a2bf0c3a9fe929f96871ed5ec0cc1c6ef955de7"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/sources/PROJECT-ARCHITECTURE-HANDOFF-20260924.md",
+      "bytes": 44463,
+      "sha256": "ed6ac1b91c10ee6c9ef7771862ee6d50adf2cb5b7dd8281986c05f76551b2c34"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/sources/USER-REQUIREMENTS-20260924.md",
+      "bytes": 2586,
+      "sha256": "b2f7b04d064f121363eaeca806b499495d25ebd4d38be137377172b5fed8b2e5"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/inputs/templates/STAGE-REPORT.template.md",
+      "bytes": 2129,
+      "sha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/manifests/CURRENT-STATE.json",
+      "bytes": 2357,
+      "sha256": "57b1543c0dd78de52564a00380fef30adc383256b2e0805ec7cb835d01b25892"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/manifests/REQUIREMENT-TRACE.json",
+      "bytes": 2393,
+      "sha256": "a42478f17d9e05b090ab71d46b1d093fe2682f355b29b11ed66dca7249d6ff92"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/manifests/stages.json",
+      "bytes": 61194,
+      "sha256": "814ab3202d805ec78c7e56acd1f15c2c2e9fab5bc0016465d105afe2fa8cb052"
+    },
+    {
+      "path": "docs/architecture-audit/P00-20260924/reports/P00-REPORT.md",
+      "bytes": 8765,
+      "sha256": "fbbef019503ba35d447e7882fb9a3aaa0200bb43a9a02d2afabe570a80629c29"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/COMPATIBILITY-MAP.md",
+      "bytes": 5942,
+      "sha256": "e0ee10957ce0d3a8ae8b44e26c753baa0e05db9cbd8785817816a59d2ee6e8cc"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/CONTRACT-SPEC.md",
+      "bytes": 9560,
+      "sha256": "6a2c1c121e18199a731c9539c0e6036a49e44d1a53b575ccbadb43f3b1b33371"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/MODULE-DEPENDENCIES.md",
+      "bytes": 3788,
+      "sha256": "83625657d2d3bcab28899d5cfb7831031e12fb23f368edf40003b35f31093ec9"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/README.md",
+      "bytes": 2304,
+      "sha256": "6cba354ea232893825439d93a15c4807b04e324520e08c628d6f7969bdc634e7"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/REFERENCES.md",
+      "bytes": 2743,
+      "sha256": "9a70f44714b61370bf65eca308a0e3d60273ff3c1503a7fb434cf9063d9024d5"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/VALIDATION-PLAN.md",
+      "bytes": 4231,
+      "sha256": "9e09647688935daccc8ef02f74e9a941c41b1bd0056f299872bb606192a87ec0"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/adr/ADR-P01-CONTRACT-BOUNDARY.proposed.md",
+      "bytes": 6995,
+      "sha256": "5974dc5df7677edb3be544d14f02dc0b67d4d14a4d7e1f1db529a0e3829827ab"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/evidence/SOURCE-VERSIONS.json",
+      "bytes": 2421,
+      "sha256": "51fb0d361118b57df7f572e40b4fc1fab80065632429dde3830904e51e99ede8"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/evidence/STATIC-CHECKS.json",
+      "bytes": 5677,
+      "sha256": "12e7ba3996a13a2e2f6e694adc87d046aa0f4df341fce18ea9239c829dfa8800"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/fixtures/behavior-scenarios.json",
+      "bytes": 5410,
+      "sha256": "73f99a478a77f09ae97a1beb71d5613fd8eaed4c7c3cab76e5a0b6f6ea749420"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/fixtures/compatibility-examples.json",
+      "bytes": 1573,
+      "sha256": "38849d0bd6c52fc5d4143b12862c9ade31560517609527452a42a348441fa376"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/fixtures/contract-cases.json",
+      "bytes": 42053,
+      "sha256": "cd1e91afb707dc4b5634c6694e851326a4efdc3533ca67824f205fab63e5a162"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/inputs/prompts/P01.md",
+      "bytes": 5126,
+      "sha256": "01c62ad7d93237e8ee0c5dbfd7b1dffb210853fe0d48af1c7d041d7e42a69543"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/inputs/templates/ADR.template.md",
+      "bytes": 1331,
+      "sha256": "7613a884134bb7de7656b6b8284a33685eb7c9803cf066f15c8684fadf607472"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/inputs/templates/MODULE-MANIFEST.template.json",
+      "bytes": 353,
+      "sha256": "cda6ae5744f7afdfab02ff0964662c73edc70ed52bed9e69c184415fcc837b8c"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/inputs/templates/STAGE-REPORT.template.md",
+      "bytes": 2129,
+      "sha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/manifests/CURRENT-STATE.json",
+      "bytes": 3445,
+      "sha256": "66b7e3733083f277ef1277df433b865243fc5e0da5383b7d3320b454078c73c1"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/manifests/DECISION-TRACE.json",
+      "bytes": 613,
+      "sha256": "d4280673eb10d27fcb314da72b3c1feee299ea44889e4da48bfc66e1db39514c"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/manifests/ERROR-CATALOG.json",
+      "bytes": 3301,
+      "sha256": "ef0f0b56dcb9084fe78e9c2044509ee72a9c3840153f0ce8900ce6a7ad59a3ff"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/manifests/MODULES.json",
+      "bytes": 23966,
+      "sha256": "419c124ee6dc460f1a0c2dd9e94c9718b66e82edfdd6b68b7c7c15411854adc6"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/manifests/REQUIREMENT-TRACE.json",
+      "bytes": 3168,
+      "sha256": "a659505a1bfb2774b713b9b4679c4fbbf26e3cce95b319fd0c1820c04924633b"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/manifests/stages.json",
+      "bytes": 61412,
+      "sha256": "0049989685212de2acabc3b483fe47ad9adfd67af6c7cf069419c3b3d275e085"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/reports/P01-REPORT.md",
+      "bytes": 8778,
+      "sha256": "03dbdcc19f63ae9aa4bbb2920d3d500a4b0c14dad833b84e2952c8cbdee106e4"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/schemas/common.v1.schema.json",
+      "bytes": 10725,
+      "sha256": "4dd59756c1922b0936a75292c3bda538ac6c228c8263d0e474ebe166d24574fb"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/schemas/confirm-ai-tag.request.v1.schema.json",
+      "bytes": 1380,
+      "sha256": "15c0874751677f031ded9b27d0eeddb2dfeab2e71df601e3c04bfe1cde978505"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/schemas/confirm-ai-tag.result.v1.schema.json",
+      "bytes": 2754,
+      "sha256": "67fd0d0ba912df72cab08ffa97aa23296b5b43a22a880909d1b6dc9e3c9a3962"
+    },
+    {
+      "path": "docs/architecture-audit/P01-20260924/schemas/safe-trace-event.v1.schema.json",
+      "bytes": 1838,
+      "sha256": "8893a9c1c467d277a086769e851d3aee9b51ff830646aa8a918493e1f89eeca2"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/BACKUP-RECOVERY.md",
+      "bytes": 5881,
+      "sha256": "f5eea038a2d09ed88c557caa90d5b3fb874ea1172bbcb087e92a62c5cf79d379"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/README.md",
+      "bytes": 1574,
+      "sha256": "aa619b711b4a183be71173a3784904c43ec1cd5f8d77471866e145d9aa1c7893"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/REFERENCES.md",
+      "bytes": 1679,
+      "sha256": "3d8198741cb3b613c081b3d3eae4e11667b36838a57a33f98acd7b73ce1dac3e"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+      "bytes": 8739,
+      "sha256": "4246e76fadb47c73d1f34a131baaa97fca1939758fadfc0d36833b958858a9b2"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/SOURCE-FINDINGS.md",
+      "bytes": 4299,
+      "sha256": "f5a751f1d652a2d84fba34bc106051aae4ccf361d9876378bb4489eddc643b1f"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/VALIDATION-PLAN.md",
+      "bytes": 4021,
+      "sha256": "1af38116715f1ad0d069121512a24c1a579cbab0d2d5b0c4076f24a5d696ad2a"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/VERSION-CAPABILITY-MATRIX.md",
+      "bytes": 6488,
+      "sha256": "054355b5cbd4bbcab5ec7922eaec01d772912531fb543889a15c150285b69557"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/adr/ADR-P02-SCHEMA-GOVERNANCE.proposed.md",
+      "bytes": 5394,
+      "sha256": "dec0ea5d3acedf1aff7c523e9c11b1177efa5894b83123739ff8cf82c4ae20d4"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/evidence/SCHEMA-SOURCE-INVENTORY.json",
+      "bytes": 5198,
+      "sha256": "fe9cf9e4c7be15f353254e3155d175e4cd4ba8d6751eab95d597cc90075c4770"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/evidence/STATIC-CHECKS.json",
+      "bytes": 5642,
+      "sha256": "b3fb53cba08e6e519820f9bc0d1d178062f1e988833cb0a639e8f04dcbaa35d2"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/evidence/TEST-ENTRY-INVENTORY.json",
+      "bytes": 2227,
+      "sha256": "dfd3647d73d2977a3f4119ecbf1cb693d61d9215f94a1b13b3544df4439319f9"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/fixtures/backup-recovery-cases.json",
+      "bytes": 3343,
+      "sha256": "1187e3c6cb6c80c5bd815a51da531e20d0dfc9ee10094465dafb3e47acf83908"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/fixtures/migration-failure-cases.json",
+      "bytes": 7399,
+      "sha256": "b503ec28e7ce7c00255bdf81005533fe2ff38a866c537e3660837ad41fa36124"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/fixtures/temp-library-recipes.json",
+      "bytes": 12157,
+      "sha256": "ad7691276804f682bac5da4c520d326e3659810517da3cd2fb9a417c62ecf119"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/fixtures/version-capability-cases.json",
+      "bytes": 33990,
+      "sha256": "22f1aa2e2e5f329c3a19c09538c1eaf882a1e0240ad28e2bab6b399b33c5a6c8"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/inputs/prompts/P02.md",
+      "bytes": 5067,
+      "sha256": "045cdb8afb3d7740ae636502e082faba43cb0c0ebc2ac524ee7edc1cc997720c"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/inputs/templates/ADR.template.md",
+      "bytes": 1331,
+      "sha256": "7613a884134bb7de7656b6b8284a33685eb7c9803cf066f15c8684fadf607472"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/inputs/templates/STAGE-REPORT.template.md",
+      "bytes": 2129,
+      "sha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/manifests/CURRENT-STATE.json",
+      "bytes": 3410,
+      "sha256": "1ef7d2d92f752265f3752c94d451492f98f80afe0823c5fc1b147cf781170a04"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/manifests/DECISION-TRACE.json",
+      "bytes": 677,
+      "sha256": "561699189fd1e552b4fce15c096c821e97e4aa8a8bfa544f62545fb3a98df9bc"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/manifests/MIGRATION-REGISTRY.proposed.json",
+      "bytes": 13949,
+      "sha256": "f9a4943281c524efcc0ce54edf2fa8f75eca2810a2f159c24e892709ea5ad79d"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/manifests/REQUIREMENT-TRACE.json",
+      "bytes": 833,
+      "sha256": "32195589adfb620ebe6fec4e09c24b634586e6cec057bb522c9215256aa03da6"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/manifests/VERSION-CAPABILITIES.json",
+      "bytes": 17359,
+      "sha256": "6cd8299e06cb07c9b037b2805f0b869fcaf8ee5a9073d79f78fb26b067bb0b7e"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/manifests/stages.json",
+      "bytes": 61628,
+      "sha256": "075ed52383356d83b3c82da0830fbe17edd955951c3ab5265c798c379c52c628"
+    },
+    {
+      "path": "docs/architecture-audit/P02-20260925/reports/P02-REPORT.md",
+      "bytes": 8589,
+      "sha256": "b3116c14e550099a1204c86724b0ab6e1119ed8b3af5afc454a4d93b9d33cca9"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/CURRENT-BASELINE.md",
+      "bytes": 6093,
+      "sha256": "aa8900c49fd874384d716f35a0a446719769f6b7d76e6439fea0c76edf864997"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/LEGACY-STRATEGY-MAP.md",
+      "bytes": 4041,
+      "sha256": "2743af42ea52b6045b3861f6fa4c809d9177a194386a44dd3eba7eadca83aa68"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/README.md",
+      "bytes": 1497,
+      "sha256": "79ee84823e1f80a763ba0276fc9f847a491ce426acd69675a91a633b59d97ce2"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/RECIPE-PROFILE-PROVIDER.md",
+      "bytes": 8291,
+      "sha256": "a03a7a1ca760fae2caf5020dcd031f32f872944c378bc04b5d8ce52bd185dd3c"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/REFERENCES.md",
+      "bytes": 1925,
+      "sha256": "f9564960a427d5718b1ceb171ef093d42e0deb1fc0e73bb59035d35a987ae7fb"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/VALIDATION-PLAN.md",
+      "bytes": 3423,
+      "sha256": "8647b024e0b12f340c72e2591629841cb86d8a2760d93e70e9ac82861fb3c90f"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/adr/ADR-P03-VISION-PROVIDER-SEAM.proposed.md",
+      "bytes": 4164,
+      "sha256": "fc71ffd09ef92363a6dd757aed445c4bb96344ed91b6162b51e9a20f6ec3c816"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/evidence/SOURCE-INVENTORY.json",
+      "bytes": 2857,
+      "sha256": "9597fa5f520a28763890a5c2af0535212848e071088938cb1695c6b3fc2e15ef"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/evidence/STATIC-CHECKS.json",
+      "bytes": 5392,
+      "sha256": "6d587b4837639655a9a6d018ad491ccc01afe36b164e7519323ef091e19e4f36"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/evidence/TEST-ENTRY-INVENTORY.json",
+      "bytes": 750,
+      "sha256": "fc42bbc8e7bd239ec573c48e27cf877e8ace9424e293388d7f56b1f18427a4dc"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/fixtures/parser-cases.json",
+      "bytes": 39509,
+      "sha256": "3b6a166732d3fbc5e1b626dbc222bfd5c46f10c8e9b9a3b521cd5bc9bf25fcfb"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/fixtures/provider-scenarios.json",
+      "bytes": 7501,
+      "sha256": "d899652644f3c7667ef025550afa7efaefcc1a7ffe870ba9e921cddcd4f13a77"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/fixtures/request-goldens.json",
+      "bytes": 7520,
+      "sha256": "ad69b96d45df2ba7d76992c3f05d29ba67653bb53112653eab948ae89f710efb"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/fixtures/synthetic-provider.plan.json",
+      "bytes": 766,
+      "sha256": "ce53685eaf81fafeb1247e9d1d8bab4c6971f006f37df05e03f11128d3ea9448"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/inputs/prompts/P03.md",
+      "bytes": 5080,
+      "sha256": "6669d45d8e90e4a41242e9e018daffea88b1aa1c27a5ede2d713c62fb4dd9ac3"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/inputs/templates/ADR.template.md",
+      "bytes": 1331,
+      "sha256": "7613a884134bb7de7656b6b8284a33685eb7c9803cf066f15c8684fadf607472"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/inputs/templates/EXECUTION-PROFILE.template.json",
+      "bytes": 1529,
+      "sha256": "6b48a7472b633a0520b07fe41accc97e3ba2946e301cfd8de7df657c00ce3dc2"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/inputs/templates/STAGE-REPORT.template.md",
+      "bytes": 2129,
+      "sha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/manifests/CURRENT-STATE.json",
+      "bytes": 3536,
+      "sha256": "a8a92163367a2d8f1f5abb61939ea11cb9e0f32dbb74dc4a805fb12a40b2bd48"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/manifests/DECISION-TRACE.json",
+      "bytes": 599,
+      "sha256": "67c2015dad0466c45ee34cc4cb6006ba18951179a9f540f69c87e92894d0677b"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/manifests/REQUIREMENT-TRACE.json",
+      "bytes": 1608,
+      "sha256": "397fa7c08e03973f0ce5bbd4c73dcd21bfd8e371b3e35e61763253d0a7fe5f23"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/manifests/stages.json",
+      "bytes": 61872,
+      "sha256": "72c55581a5fc407b2f68eed366f8e33770db0c409ab3103902b157d988e9985a"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/profiles/current-service.compat.json",
+      "bytes": 2906,
+      "sha256": "767ce1056c8dd1a4584d53d48ecc1da299cb817592d4333743683536e3e1aa1c"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/profiles/historical-qwen3vl-2b.json",
+      "bytes": 1707,
+      "sha256": "dc483f5ca1e95bd183b43e8b5e04a49fa74715441840542b680faf12726a04ac"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/profiles/historical-qwen3vl-8b.json",
+      "bytes": 1698,
+      "sha256": "458be842e413e8dab1c5652ff99902d4a39cec818f6607e0efc9a94bfc857a02"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/recipes/visual-bundle.compat.json",
+      "bytes": 4274,
+      "sha256": "e3205ae876efdbd555a2e2cb8ee1868949bb596860e3a12a182914247f44957b"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/reports/P03-REPORT.md",
+      "bytes": 8382,
+      "sha256": "2d8f99f942b5d365033503dd15f3437577810a1c54bc8c5b71664779999cbbe1"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/schemas/profile-document.v1.schema.json",
+      "bytes": 10731,
+      "sha256": "7c9b00fee8170329124119ea915bcd85c431dfc580a217f7387aab7e01fb6fbb"
+    },
+    {
+      "path": "docs/architecture-audit/P03-20260926/schemas/recipe-document.v1.schema.json",
+      "bytes": 8395,
+      "sha256": "a26f5275cd56a7fa3e7e186659486dc3ae6e377f100b3d71a67b437d3dac789c"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/COMPATIBILITY-MIGRATION.md",
+      "bytes": 5534,
+      "sha256": "dc8c1ea146943c1e48e05dfce8cc849d04f13cf7fcdf36858efe9c808a207bab"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/CURRENT-BASELINE.md",
+      "bytes": 4651,
+      "sha256": "e46ec1b74d99c6e2dd0b01b4e4736f10d18c659dc6b86419dacc0a90227d1b69"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/CURRENT-SELECTION.md",
+      "bytes": 5393,
+      "sha256": "1a3d5d1cc7fa87fa1d9cc21527becf5511003655cca8b2675c8f11feacde3855"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/EVIDENCE-CONTRACT.md",
+      "bytes": 7329,
+      "sha256": "826d7f669f060942c2ee2669c9b7a487626da10d9fb2e7414924e902bc1db72d"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/README.md",
+      "bytes": 2129,
+      "sha256": "dc92405991e98bca3764b222fe1f7bc34d61546c426fe842f8ce8127f3222896"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/REFERENCES.md",
+      "bytes": 2035,
+      "sha256": "9298ae7ec76cf5eabd5f9fbdc33887654c1a049f0e46b66eaf85d43d9aa3e69b"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/USER-OVERLAYS.md",
+      "bytes": 4741,
+      "sha256": "5b5907e78980b2ac5824803f9029a9e4b6e68cba3d2456b1a143cca7ebbf5748"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/VALIDATION-PLAN.md",
+      "bytes": 4444,
+      "sha256": "8e13005e9a217e6cf5d3218dc0614b04a4ccc466e6b05595df6e57ab0627794a"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/adr/ADR-P04-EVIDENCE-AND-OVERLAY.proposed.md",
+      "bytes": 1925,
+      "sha256": "b43399c1b5dd3007164bad1f369a6ef3bcf14984fa3512b6dee0fe60fa94f5d1"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/evidence/SOURCE-INVENTORY.json",
+      "bytes": 5325,
+      "sha256": "736f52533dcd44d1721539c939f8a1e8605417fa7de44bdc1c45283131dafb1b"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/evidence/STATIC-CHECKS.json",
+      "bytes": 5280,
+      "sha256": "5235d56b61356c8b4651642902c397c0242a9701382954a19f36d9d038da9857"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/evidence/TEST-ENTRY-INVENTORY.json",
+      "bytes": 1216,
+      "sha256": "b81048bc911035915cfe6d01cf4408583caf25fd6d03fe3b8571045d9cecf76e"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/fixtures/compatibility-cases.json",
+      "bytes": 4720,
+      "sha256": "d19630ad88607e5ee018440704bd121e474b4f6b97a35dfd9b98e38e921ca562"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/fixtures/evidence-examples.json",
+      "bytes": 8157,
+      "sha256": "6bac561bd9b8957e47197d681f8b7016fb3fc1540e84745066b2364a2b653682"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/fixtures/selection-scenarios.json",
+      "bytes": 9836,
+      "sha256": "f767847ccf7a638dfb592566921e13bdf75fdab28c8ef2c69435ca3292d3c37f"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/fixtures/validator-cases.json",
+      "bytes": 33232,
+      "sha256": "088e81e134f987cb149309bf4ba56f216f935d96bb4d7ef2bf788946e8d9985b"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/inputs/P04.md",
+      "bytes": 5009,
+      "sha256": "1a49a93eaea64a02569ba76c9f0998ec2bba34dd76b817723526e5382ef34fd4"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/inputs/STAGE-REPORT.template.md",
+      "bytes": 2129,
+      "sha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/manifests/CURRENT-STATE.json",
+      "bytes": 1038,
+      "sha256": "b5d148a9202750981d0c28639654f193c377257721d7ba5f5a266c2ca0a7603d"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/manifests/DECISION-TRACE.json",
+      "bytes": 1278,
+      "sha256": "55b6ae578c4a72d74f95c4f787e005f0c41c15ccb2a49387caf4b4cba1000f45"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/manifests/MIGRATION-ADDENDUM.proposed.json",
+      "bytes": 1783,
+      "sha256": "17de66a76291d5bd237de71231c5ab2fc8c94b8684233f012542bba76915e25c"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/manifests/REQUIREMENT-TRACE.json",
+      "bytes": 1405,
+      "sha256": "2f7802b057b262c40a2eca8fe9ef3937111acb502a7d4a5be843a0d3dda25c9b"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/manifests/stages.json",
+      "bytes": 62093,
+      "sha256": "ad5af17c81446d607699b4f2d9c7967c08f0794b77bf0de35ec453c222ab4072"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/reports/P04-REPORT.md",
+      "bytes": 7845,
+      "sha256": "5e6527b9057d76b0d32aea986e6466e503793b1afa1193bce08501dbb9ec79f2"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/schemas/analysis-evidence.v1.schema.json",
+      "bytes": 13523,
+      "sha256": "51e8828497c071ea6ac2eefb81acf6e440e141a2c2ea54d52172488701b3bd7e"
+    },
+    {
+      "path": "docs/architecture-audit/P04-20260926/schemas/user-decision.v1.schema.json",
+      "bytes": 7350,
+      "sha256": "b7fe2f88ceb43fbb9902fa42b099fc60df9abea1d23f47eb4a18688d5a4ef856"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/COMPATIBILITY-MIGRATION.md",
+      "bytes": 2914,
+      "sha256": "487c3251789349e545abd825c005ec10ee59c9b52b662410ab56179f2872a3d5"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/CURRENT-BASELINE.md",
+      "bytes": 3463,
+      "sha256": "5d56ac30d226fdad6068135c0cad5b617a8123ccf8c92032db6991ac5cb7c23c"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/JOB-STATE-MACHINE.md",
+      "bytes": 5272,
+      "sha256": "8fa57f77e9bfcdfaa6eada308b7e3ad37de9aa6e57aa1c1e03bab2f0c0fd3e27"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/JOURNAL-CONTRACT.md",
+      "bytes": 6714,
+      "sha256": "2bb860fbb3d187f237caacb9af04aa4637cd0ec0ba4629e2ea13cdf1bb34e82b"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/OUTBOX-PROTOCOL.md",
+      "bytes": 3770,
+      "sha256": "28a3ce6f1f178b81df05ca4c7ea00bd851685bd438ca613ed41a79521540d444"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/README.md",
+      "bytes": 1935,
+      "sha256": "78e3b739735c12fafb582c8c6b4812ee3fc71ddd156aa08b0f5b2991d502da17"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/RECOVERY-AND-AUTHORITY.md",
+      "bytes": 5613,
+      "sha256": "9724f358d28f3ef1617010c090f2a1363766d3a209f08f5106f651cdc06fea3f"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/REFERENCES.md",
+      "bytes": 1657,
+      "sha256": "cc19a2b6c6c638664b64a275f12ef19d81dece66c1c1c7d49183b1a66f7329e3"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/VALIDATION-PLAN.md",
+      "bytes": 3240,
+      "sha256": "cfac0239f30fccd5dfbe73bc1a0c4fa550b6e7852357dc7d8ea29bc9065de4d8"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/adr/ADR-P05-JOURNAL-COMMIT.proposed.md",
+      "bytes": 1696,
+      "sha256": "3906e88fe99e10c2828d619456270b0b9921b40d7f5165d65fd93b9decd3e60a"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/contracts/identity-map.proposed.json",
+      "bytes": 1267,
+      "sha256": "75a0b400610d60d0f38844c2d32af35d3b029e97c2f8e12f7c14025899380836"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/contracts/job-state-machine.proposed.json",
+      "bytes": 8263,
+      "sha256": "b071ce57a34eef32399e54d3313a749cabcd6d0d789ba05753baebb1c2ad928c"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/contracts/outbox-event.v1.schema.json",
+      "bytes": 4201,
+      "sha256": "90ffa38c29ab0ddd38ff86fbaf100a28dab764d821c0ec94044483b33836dcce"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/evidence/SOURCE-INVENTORY.json",
+      "bytes": 3943,
+      "sha256": "d03239e9b9c584249fd7706fdd7e95b848fe557c477572636adced5c26a8835a"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/evidence/STATIC-CHECKS.json",
+      "bytes": 5793,
+      "sha256": "d1abfd47827cc963dc0281673bdf8ff88684f0486679e1fffdf7e63a1835733d"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/evidence/TEST-ENTRY-INVENTORY.json",
+      "bytes": 1094,
+      "sha256": "6d78a8c987239a064798a694da59b22426d123248e26056a120872afc24fc683"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/fixtures/journal-claim-cases.json",
+      "bytes": 7270,
+      "sha256": "a7b842af2b26c5b707cb180c138b0e60b44011afd93ac89ab7a4f4d0490fd58f"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/fixtures/outbox-cases.json",
+      "bytes": 3304,
+      "sha256": "a69c63b78762f60da26833d7ae95581e8ee88c544ecffe57d2ec3942cb34a42c"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/fixtures/recovery-fault-cases.json",
+      "bytes": 6046,
+      "sha256": "d4b84d24f98459e9f294d4a7491026e5f231c94e8fbaf87d0ec75cdd273772e2"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/fixtures/remote-unknown-cases.json",
+      "bytes": 2993,
+      "sha256": "5c71856c780594db4ec2d402698633747dd5feadd344efcc885f83e371780e34"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/inputs/P05.md",
+      "bytes": 5100,
+      "sha256": "f540fc09f6e5432933bdc9718e3734f4eb55e95159c8603a148a61f64950ec3b"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/inputs/STAGE-REPORT.template.md",
+      "bytes": 2129,
+      "sha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/manifests/CURRENT-STATE.json",
+      "bytes": 1115,
+      "sha256": "0835e8c14a46a73f8a106ef14542eaca89b2fe798d6321db086d971add5bae75"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/manifests/DECISION-TRACE.json",
+      "bytes": 1886,
+      "sha256": "a77d92cdcc06c7796c79f54acc4977fbc33d0ee63822dd99db0d873be8f8c27b"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/manifests/MIGRATION-ADDENDUM.proposed.json",
+      "bytes": 1381,
+      "sha256": "448f907996a03994c29176715e2591e5f7797b32790582af5c3df0b6d6203845"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/manifests/REQUIREMENT-TRACE.json",
+      "bytes": 749,
+      "sha256": "516ec2b7ef975ab392f0a119f8a1562fa716089207f6c72d58815bcaa3467bc5"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/manifests/stages.json",
+      "bytes": 62288,
+      "sha256": "ddec1c6645f533042fc5f9be63bd2e3aea7e5b0145019a8d8d3e55235f6ece8c"
+    },
+    {
+      "path": "docs/architecture-audit/P05-20260926/reports/P05-REPORT.md",
+      "bytes": 6828,
+      "sha256": "33dc3c6623a364d3e4420043784a014aa0a96cf3bc0c5923345fd572af566a3c"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/FINAL-VALIDATION.json",
+      "bytes": 10131,
+      "sha256": "03e98ce1ea1715f4314046fe3d0e8ee3098d0bf5b514e32197f9796f59fdc829"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/HANDOFF.md",
+      "bytes": 3516,
+      "sha256": "8d143d2f114a29050536424bb8f797fc516048171367a68d0b358d50a474775e"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/DESIGN.md",
+      "bytes": 3673,
+      "sha256": "63cd6519c74ed1fc57a44d76d10df4684a44ccf45cbac40f8649a9b1399c5502"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/STATE.json",
+      "bytes": 523,
+      "sha256": "858824efd6a20f4eb9df22b2d256ebf8eb084d4ddbdd9dbe8c5b1ee1613b26e6"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/contracts.proposed.json",
+      "bytes": 371,
+      "sha256": "c1cbfe9df71c2cc567de2c54250854ffbddde1ce1df0625d0c06329c8169e338"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/evidence/SOURCES.json",
+      "bytes": 1086,
+      "sha256": "8464cb44a4728687e7a21b81d303198de5536354a53dc31513036adece885e16"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/evidence/SPEC-TESTS.json",
+      "bytes": 3005,
+      "sha256": "b2199c585b0a026d903751c406c992b327fb2e9eb195334d9c5e9a8cc57887bf"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/evidence/spec-model.py",
+      "bytes": 1608,
+      "sha256": "2898d196210c29897468e58ab556d68dda8586102932b92956d429effb890efb"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/fixtures/spec-cases.json",
+      "bytes": 5234,
+      "sha256": "264bcbbfca3a3a0e107f2f8e8f0db60a7fc7a219e2d8d32e2fcdb2d7de301774"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/inputs/P06.md",
+      "bytes": 4922,
+      "sha256": "45af0056c1f42cc139b985fd4886af4ffeac424350eedddc3abff81603d46235"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P06/reports/P06-REPORT.md",
+      "bytes": 3002,
+      "sha256": "a58667203800949c44bd5be67970e7005d2beb0bf5aa101f2a6f7ed3b6b67b93"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/DESIGN.md",
+      "bytes": 3526,
+      "sha256": "7468e0079ba0d2f38285ebdddf55da71477ee51084a1d3583cac4f546d570cc4"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/STATE.json",
+      "bytes": 534,
+      "sha256": "ce061f01006e210237d1ff498915234ab723d51e1dc5f583eb8f0c9f6b4ac227"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/contracts.proposed.json",
+      "bytes": 251,
+      "sha256": "1fb3572016e2885548eee377c36ad88eb6f79437c6edf6d113745ec0948177d0"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/evidence/SOURCES.json",
+      "bytes": 1483,
+      "sha256": "59d0f9213acffac29e2b680f29b82460a5da8f8a61321bca74d3b3a694ee06ba"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/evidence/SPEC-TESTS.json",
+      "bytes": 1677,
+      "sha256": "e234fd63958e2635ad06db5da2a47aab8341d942fa0047218be406631ba5a76c"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/evidence/spec-model.py",
+      "bytes": 1264,
+      "sha256": "b054b4b10a235aaaeed04eee0612a3a967fa20f77e2d9095548cea431c09df5c"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/fixtures/spec-cases.json",
+      "bytes": 3470,
+      "sha256": "a784d97d67628182109743b28355b5abd2456f5de3784798a117c0810e822ff8"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/inputs/P07.md",
+      "bytes": 4945,
+      "sha256": "7e4877bf4deee8de95f6e31e305a9d7e0927345291ba177025f8b8e3513f5ce7"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P07/reports/P07-REPORT.md",
+      "bytes": 2939,
+      "sha256": "3380be9cece77adae4ede1823459cabf05b5a71246c810f0c5a39cb53d256d5f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/DESIGN.md",
+      "bytes": 2860,
+      "sha256": "78e746cda137f6a7275c1212a1580ce357c3013962c2d7b8cab111bff72ce507"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/STATE.json",
+      "bytes": 517,
+      "sha256": "e19f2a71e873e278b8d7c0ea398b82eb8e0552ea8d7ee0e72d9719863b11336a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/contracts.proposed.json",
+      "bytes": 264,
+      "sha256": "b9c95fddfc769ba997c9b68fd1ecdef559a9df6de9c34c231046504c8d1094d5"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/evidence/SOURCES.json",
+      "bytes": 719,
+      "sha256": "e3a831edfd0ec9aef8f7ace3e97292cfa819725c80bbbf5c8e95e0ea2c61edc4"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/evidence/SPEC-TESTS.json",
+      "bytes": 3806,
+      "sha256": "a3b12a9e9c98993cfaf541acb085de7047e9dc8c57b5093fe6f6f435532551fd"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/evidence/spec-model.py",
+      "bytes": 1717,
+      "sha256": "cfc7ceaac33dbcb57e6f58771d0e49ec4f692334e1c884d6c52401859299116b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/fixtures/spec-cases.json",
+      "bytes": 5391,
+      "sha256": "7e13b366ca7514ccc92a17d45b879780d8f79966d5f0a76d1837f317a06bf7b0"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/inputs/P08.md",
+      "bytes": 5071,
+      "sha256": "9257851ce41b1d26813f957e54b3eec3797e7b63486ff8d425abcfc8b431ce4d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/reports/P08-REPORT.md",
+      "bytes": 2936,
+      "sha256": "7b04dda4ce5f48aeb8740087474860896604fa3a5c16653e2e9c82a73391d24b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/DESIGN.md",
+      "bytes": 3477,
+      "sha256": "9137029396c4c45efe2d4e34f55d1c06c6b7cafd6d4634a5ed5a490e4d2d0eb1"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/STATE.json",
+      "bytes": 566,
+      "sha256": "163bd7930dff389f88526cee090c3dcc79060d43bd044f7806a6f0061274a1b1"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/contracts.proposed.json",
+      "bytes": 351,
+      "sha256": "b63aa7c09ac65bb6a4ff96228ed2e845b8092acfb118d9bd29c40125bab1d2dc"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/evidence/SOURCES.json",
+      "bytes": 712,
+      "sha256": "fe68b0f62cfb2e633fc1acc4b9b3ece4a80bbd9c70bd95f3f7e7060470da2a84"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/evidence/SPEC-TESTS.json",
+      "bytes": 1685,
+      "sha256": "ca461bd48b9f1491aa01025537d1991fbe7a2bc8b59a186059f9226792d656fd"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/evidence/spec-model.py",
+      "bytes": 1227,
+      "sha256": "42c8c049e3e70d3c57f3dd7da1a82e1f8e7bfc82606edc25815dd0389bd83fcf"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/fixtures/spec-cases.json",
+      "bytes": 2761,
+      "sha256": "1bf9e19fad1b7e9218048dcf0195b2fb79bb6af0bb9c54fd66e4f163e677332b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/inputs/P09.md",
+      "bytes": 5056,
+      "sha256": "a9fbdf028fcc1c1560037087a206b8be191aec423940fcd2ce0f6d77cd5f4bca"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P09/reports/P09-REPORT.md",
+      "bytes": 3028,
+      "sha256": "ce27a1299523e549e406aad96ee123c06dbab803e4b2682e083a81e5e4fd1999"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/DESIGN.md",
+      "bytes": 2838,
+      "sha256": "209b1ff6a069bb2ee8a16e33ad06a9cdd87e8f4ac9e3e7b3714927cd540ea7bd"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/STATE.json",
+      "bytes": 616,
+      "sha256": "100b53a2fda03fb560c98a6ca74bb4ee7afa17caf196e602bfc395fb6218d3fd"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/contracts.proposed.json",
+      "bytes": 186,
+      "sha256": "91fa2ddac0186c204753176a341dac301b74fa11156a09038375b6cc479c25ad"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/evidence/SOURCES.json",
+      "bytes": 731,
+      "sha256": "7a2bb5fb404af8064a0d4cbc0c84dac60dee1f7d54028437400d376f44bdd7c6"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/evidence/SPEC-TESTS.json",
+      "bytes": 3237,
+      "sha256": "07d8a0e8ba7dd043c018032be1f976519d6f3b8299d8bb319efbbc2af3cc1ed0"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/evidence/spec-model.py",
+      "bytes": 1389,
+      "sha256": "ce2344f10c9d1170a2f007b5c0c567bd103151f2b019fda9c722e6e931461eba"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/fixtures/spec-cases.json",
+      "bytes": 3232,
+      "sha256": "7ac2ae9a9487bb4409095db011bcfcbe1e2feb185b95952f5b0c2ca2937ecc8d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/inputs/P10.md",
+      "bytes": 5059,
+      "sha256": "525b3d2426c12966c8f06fb61b1a3695508e046d134e84ab9098e33c62969e78"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P10/reports/P10-REPORT.md",
+      "bytes": 3045,
+      "sha256": "b3c943f17811623b0ec696735663c19f85f538a568e95c99d7c7bb6dcfbb4935"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/DESIGN.md",
+      "bytes": 2628,
+      "sha256": "eccb8e613bc20c76282844d4a960eced26663480c6ec237835310490a038c12e"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/STATE.json",
+      "bytes": 621,
+      "sha256": "018964b21b37c67ee8b5f8f6a16c33b69b9c58a6538335595b032ab7364bc44d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/contracts.proposed.json",
+      "bytes": 225,
+      "sha256": "6f4e5bfd2445e3b9fb1c21cdc67f9a8e5a0ede6fde02a8c18e544fff621cc56a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/evidence/SOURCES.json",
+      "bytes": 690,
+      "sha256": "ebe258d39a865d65bfb5d5d6bcbb4e2e46df4473fc77d688366aaf79fa1a9034"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/evidence/SPEC-TESTS.json",
+      "bytes": 1742,
+      "sha256": "7aed926bfa38142b555fc8e9257d5a89c2456b4b9b39ec7956919e7514c03ba9"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/evidence/spec-model.py",
+      "bytes": 1428,
+      "sha256": "3f4da32489b17834bcc60892e1f94234d242777853350b5e291f6a90e4afb1f5"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/fixtures/spec-cases.json",
+      "bytes": 2096,
+      "sha256": "955d18ba3b7db51f4270e4100304ca50a6cdecf738a899cf4c1f7050134cd93d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/inputs/P11.md",
+      "bytes": 5064,
+      "sha256": "23f46b1404929a8c38b5721d7bdb050debd407122c8e33486bc3ec582b4d1750"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P11/reports/P11-REPORT.md",
+      "bytes": 2987,
+      "sha256": "1997bd82a00759c4f0445f6f7b49629167e1552438aeb0842291982c91837def"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/DESIGN.md",
+      "bytes": 2418,
+      "sha256": "857f9fa7127e0507accb1c4bd56e2ec26ae60892b920e5a3785035dfeb23b296"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/STATE.json",
+      "bytes": 516,
+      "sha256": "2f14c706f571347ee32559685f872c03cd3316936eaa87067f5e7534e8d1749a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/contracts.proposed.json",
+      "bytes": 217,
+      "sha256": "2886f767583625135bc05abcc9658a700641a2a52e8e5cf811d316302ea7837f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/evidence/SOURCES.json",
+      "bytes": 512,
+      "sha256": "730715c309f0b04ce7eb2651abb2f04e29ff6244306187d1a7fae758137dee49"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/evidence/SPEC-TESTS.json",
+      "bytes": 2572,
+      "sha256": "53b75fc7686e1e8dda9e53876186676cf8ebeb994a0d3b5cc7d9bf55792ea1b9"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/evidence/spec-model.py",
+      "bytes": 1234,
+      "sha256": "b0dd50d877faa63749b3f518792da176cc5de2fc743a7d0fe98e661c18bc4621"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/fixtures/spec-cases.json",
+      "bytes": 3118,
+      "sha256": "89c949eca5da6f3db9da2a9fb2a1f2a1b18dab5300c5ccde6f44ac96c874cb2c"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/inputs/P12.md",
+      "bytes": 4828,
+      "sha256": "2c2fa360c73af75892e81642fa66933fb6556d372e76da8b9ba8a00d9169f5f7"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P12/reports/P12-REPORT.md",
+      "bytes": 2961,
+      "sha256": "9ae6503abc94c53d9f3dc1cef34dd1e1227504a5adc893ebe7c8e0c4a7f4f723"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/DESIGN.md",
+      "bytes": 2498,
+      "sha256": "bb8a6b67065fa0a2f268c83b01662134537bc1523043d8c71bfacee42d6e4a83"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/STATE.json",
+      "bytes": 621,
+      "sha256": "5083717f470ea1b9503c2047387458e8593aa079b865f1c86a86a9bf0303da4f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/contracts.proposed.json",
+      "bytes": 255,
+      "sha256": "e2f7a3e8d9a324d62c52b92925d2897d79381ecc4264fd6c6c6b7aedf8de3767"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/evidence/SOURCES.json",
+      "bytes": 699,
+      "sha256": "4c74a249cc01ed512305c6ea2b58058c2c6b21821c3b603e5191fbc238b5f184"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/evidence/SPEC-TESTS.json",
+      "bytes": 1618,
+      "sha256": "431b150f025878033f30424b550d0df7054770edb275d62951d69c7928135438"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/evidence/spec-model.py",
+      "bytes": 1508,
+      "sha256": "47ee7834abb4060ff47d80227284a4ee72a07dbda7202f5108bd1922e2f968e5"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/fixtures/spec-cases.json",
+      "bytes": 3854,
+      "sha256": "75e497b49e2cc64de17586492be47c7ecc3a74bd8488b7367b13753598da18f5"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/inputs/P13.md",
+      "bytes": 5211,
+      "sha256": "621a36842d0b289fc217094da3c9c7b58cd8f12deaeacebb2618599ce27219b7"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/reports/P13-REPORT.md",
+      "bytes": 2965,
+      "sha256": "585ad9f32e96c136365ead961f47f1f2003bfca3d3ce1117c2102c796e7f6343"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/DESIGN.md",
+      "bytes": 3220,
+      "sha256": "749de30d157440bdd76ee35ab9a36891de8f4aff03fdccc11f62d0d81ef50c4c"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/STATE.json",
+      "bytes": 577,
+      "sha256": "39b7aa616321bd99cd7b6ff5b0baa0c73cc9aaa2d0aebde943d45406b9bd5dda"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/contracts.proposed.json",
+      "bytes": 237,
+      "sha256": "a2a4a016dd770994795d59d719e22165bbd402595a6aa630cc3555cc88468246"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/evidence/SOURCES.json",
+      "bytes": 530,
+      "sha256": "01137ea80a37f6c149d0f691259bc3318e0a193e3613b2f2e3410460d5a28c96"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/evidence/SPEC-TESTS.json",
+      "bytes": 2107,
+      "sha256": "c1f4b86c1b9076cf36b4a8f929dbb27f2692061ced584218f6b9b3964f3de070"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/evidence/spec-model.py",
+      "bytes": 1502,
+      "sha256": "17ce8ee0570e1a45b9e369a6e75703844c704ff1279f685b3e9a43017661e690"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/fixtures/spec-cases.json",
+      "bytes": 4689,
+      "sha256": "69d15511617556bdb6caf75dea3ff87e25c2ae05ef3e1677932f6449e441ced5"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/inputs/P14.md",
+      "bytes": 5090,
+      "sha256": "260ef1541aff49db9d955b90aeaa3d60ce1f217383ba0d9424a30dfd3c462c2b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P14/reports/P14-REPORT.md",
+      "bytes": 2994,
+      "sha256": "3347fd9ace066704dbb876fdafbd6e26c9959d079d855417f5924c8db1ada430"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/DESIGN.md",
+      "bytes": 3264,
+      "sha256": "88450ab9cabf31257b7102edb8bddd7f0708235b245254fd9dc9c23c4c29d660"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/STATE.json",
+      "bytes": 572,
+      "sha256": "fa566acd8c687f887e19dd8ef91de665ca77dd2bd168b2bb7e8dbe60dacada65"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/contracts.proposed.json",
+      "bytes": 279,
+      "sha256": "c91d37debe9bd503ee8e1cc625e0fd3257ee5c26c82889e16579b286abd74dcc"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/evidence/SOURCES.json",
+      "bytes": 759,
+      "sha256": "5cfc7d45a9a2d9e40a327f13d310ad66715760150616356bb7b98395168a6c63"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/evidence/SPEC-TESTS.json",
+      "bytes": 1506,
+      "sha256": "3e5874caf9df756c5572eee16d58321511eae15ff0c3b203b5a1b7d2289e901a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/evidence/spec-model.py",
+      "bytes": 1235,
+      "sha256": "f31ce2693a49a56ebc39c0481af5713db1dc88f01e194289fbc4a907b0b4a88c"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/fixtures/spec-cases.json",
+      "bytes": 2163,
+      "sha256": "ac2bae06d75158086625b3299238f91a905e911b73ffa2073ab99dafecb14b19"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/inputs/P15.md",
+      "bytes": 5167,
+      "sha256": "b5de68845c46f22782f295af9994c94ced35013aa879aeccdcfd364bedde6755"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P15/reports/P15-REPORT.md",
+      "bytes": 3015,
+      "sha256": "d6ac75080e3bf8fc23b2282bbda5968af17f5d8866445ef9afe8251bc283f443"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/DESIGN.md",
+      "bytes": 2677,
+      "sha256": "b9796d620ad6013c652c7f7bb5993f0763d1801ba0d9f61f301777123caa8761"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/STATE.json",
+      "bytes": 534,
+      "sha256": "5bf01c6dd7e72308d215689617c3ea8ca8e4566501d2eca7a43a33054e16ecda"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/contracts.proposed.json",
+      "bytes": 243,
+      "sha256": "f1506e22e6b1223e7167fa43dd78ec67ea2420c13259460424dc740ecdab64cf"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/evidence/SOURCES.json",
+      "bytes": 1074,
+      "sha256": "b109a6deef39ba16f690dc5d44551727b1a757859eacb6208d90fc223da2858a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/evidence/SPEC-TESTS.json",
+      "bytes": 1512,
+      "sha256": "92c49c16ad3954b9f80cbdd538dba2d2d5e2fe1a928672030a2333f26b907d52"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/evidence/spec-model.py",
+      "bytes": 1123,
+      "sha256": "ce53ff9df48d6052da7234f191973f18ecbae32c04b46d27a4f8efb9e8c7a907"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/fixtures/spec-cases.json",
+      "bytes": 3896,
+      "sha256": "9a02d68463efd312aac7ba95551e7aa9d6ba9c75d66f67eed18107b9e7bc4c4b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/inputs/P16.md",
+      "bytes": 4946,
+      "sha256": "8955f2bb80390512474e170a162b4f7bfea4d5a0c4e9e97d8e99298f766e1418"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/reports/P16-REPORT.md",
+      "bytes": 2924,
+      "sha256": "dc4a4fb662c5df459b0e85ad79b77ef34cb58d1d47f5865674eaaf4814e3329e"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/DESIGN.md",
+      "bytes": 2828,
+      "sha256": "169eb8287ad3adf203030b0e452bce516fab4e104e2c63dda0091df7998344f5"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/STATE.json",
+      "bytes": 534,
+      "sha256": "4528cf9ba5143d6f67a5524ce59b5247f1fff0a6c9223159c0f5de208e366d10"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/contracts.proposed.json",
+      "bytes": 289,
+      "sha256": "e37eabe341cacafd785fd54155356f5707bf35faa97b54f2c72e0bc9f66728d7"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/evidence/SOURCES.json",
+      "bytes": 919,
+      "sha256": "b3f5c0f830ec337e263e6a724c3093af57b120b0ba2bd05cdb805372f3e3f7a8"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/evidence/SPEC-TESTS.json",
+      "bytes": 1641,
+      "sha256": "e9313c9e73e13de85077454c10bda425c52ee1862e96e6b78e1b7bcb1a017eea"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/evidence/spec-model.py",
+      "bytes": 1254,
+      "sha256": "a7f7df638dee35d90cf0b054fa6d1a4acfdd09d569110e225855466565a16f49"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/fixtures/spec-cases.json",
+      "bytes": 2653,
+      "sha256": "54f269a5dbd406b0a7871dffdebe19de5c655cad3bfbbbe65670e1860037c19e"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/inputs/P17.md",
+      "bytes": 4970,
+      "sha256": "c5aea7c9ca6b1f5901c77910dfeca1057e3b2fb2e8a93f1cea260ea7834cf658"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P17/reports/P17-REPORT.md",
+      "bytes": 2947,
+      "sha256": "5ff470fa8277ab1c7d3c958276f34dbaffbdbb49edcd632e587dce790b93a0d9"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/DESIGN.md",
+      "bytes": 2547,
+      "sha256": "1eaaae3abec74b64def6ce8fd0332f21a9fe0fd7e9cf55795669d76bdba6c03f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/STATE.json",
+      "bytes": 534,
+      "sha256": "bc4e85fd369699b6486f54c63903cf50f0c8ab6b16177c1da7312ec30e574ded"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/contracts.proposed.json",
+      "bytes": 217,
+      "sha256": "8c2d8f3569d4034f0dc93afae257d68761625d7adb2e726b6c54c55eb480fb4e"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/evidence/SOURCES.json",
+      "bytes": 539,
+      "sha256": "def33190f6ae3481418125e07b246b23f4f496dd3434bdc352101e75f4725ef1"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/evidence/SPEC-TESTS.json",
+      "bytes": 1704,
+      "sha256": "8d5dba9bca2474d80def3cce173503b06cf02a2753a5b1b3499512788b7dbd1a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/evidence/spec-model.py",
+      "bytes": 1170,
+      "sha256": "0dcceccdd4f0116ebe4fa1f7a05e4168a26d37ebf6220fae21999054d209202b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/fixtures/spec-cases.json",
+      "bytes": 2967,
+      "sha256": "91a56a2f162a3099ff384464d7ed0c363cf281dec9c731d0a38d1f0dba696a94"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/inputs/P18.md",
+      "bytes": 4910,
+      "sha256": "0925e54607cda82678cfd9fece8f5d5868a5b51ef79c2bc276ae0a033fb0b760"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P18/reports/P18-REPORT.md",
+      "bytes": 2939,
+      "sha256": "8cc7f1144e2477839e63264cb7ec390058d9fe601b9a60ed5b352badc5387616"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/DESIGN.md",
+      "bytes": 2835,
+      "sha256": "9659a1a2c2f9b4e3df7761dcd3521732dd4ed3943359a01d53ebd08c672bef4b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/STATE.json",
+      "bytes": 556,
+      "sha256": "7b24a05a0a46ab1891fdcff59e94e3bdbef5927b5305c9f2911660140cdaa712"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/contracts.proposed.json",
+      "bytes": 253,
+      "sha256": "00f46e91d9a0e8ad97b00d81d138d1638b8a69a89e0d36b193ac51b259aa6607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/evidence/SOURCES.json",
+      "bytes": 711,
+      "sha256": "dcdbb55eec31f402c4d210670adc52a55517df0f9cc8abd9fc7b7337363ea4a7"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/evidence/SPEC-TESTS.json",
+      "bytes": 2188,
+      "sha256": "2b3d480291aabc033c49852d51376c9376570ee82163a3a26fd39fcc223615b9"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/evidence/spec-model.py",
+      "bytes": 1217,
+      "sha256": "fbc6f8313a9fdc42cd5a05272ce72dbfc7e0713b724617bba49b156e010bdced"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/fixtures/spec-cases.json",
+      "bytes": 3019,
+      "sha256": "ecfd5678fb4c8d16debfebdbd7594568a530f7e57db70937f6ffeab5de7fdc96"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/inputs/P19.md",
+      "bytes": 4987,
+      "sha256": "2c2aadb908a3e41b569ff0d9ac77ce6adcc9683951451ebe7a7de758a845b0f8"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P19/reports/P19-REPORT.md",
+      "bytes": 2977,
+      "sha256": "c3682efdd0cf59aaade6d6bcc12569c35dbd0092400b95fb5752fee734cb9b51"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/DESIGN.md",
+      "bytes": 2527,
+      "sha256": "78c8eb8dcc8fe23c28ca3c56a06ded490db3c0946d6869bde3406060b8604d73"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/STATE.json",
+      "bytes": 534,
+      "sha256": "88dc21890a2f1af0eb0fa877e6b3b9f00a576d1d2fd06daabb6f1d14992e9eed"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/contracts.proposed.json",
+      "bytes": 225,
+      "sha256": "25b651c53ac47253727323b68a3ab28329fea3afa5524c9129b4a9482fed6a89"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/evidence/SOURCES.json",
+      "bytes": 1340,
+      "sha256": "26ca6354bf659268aaaa383a41c243883d74ab94c788f3fb55fc73ab2da25753"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/evidence/SPEC-TESTS.json",
+      "bytes": 1520,
+      "sha256": "e152e1d39ba1c5a318e275aa49f108f253a23f93b8746ffee21c6af978c83e6d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/evidence/spec-model.py",
+      "bytes": 1321,
+      "sha256": "ae89fa56689066e6acd15b69cf59f71fb5eb34667ceac7f3e810b009a59e5265"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/fixtures/spec-cases.json",
+      "bytes": 1914,
+      "sha256": "bd12fc734ad3a47b7f9642fa5153250ffdf48f6b4dc81691e6cacdbe6720fb6c"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/inputs/P20.md",
+      "bytes": 4944,
+      "sha256": "0d8ea62e875c365a1f19facf775717d3c92cabbdd0f1c79d72803a3d962edddb"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P20/reports/P20-REPORT.md",
+      "bytes": 2969,
+      "sha256": "a9ca390e9e3b4387bb36bf8ba8dae62522c3be015df357da48b790b107d68684"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/DESIGN.md",
+      "bytes": 2760,
+      "sha256": "bd9b2a993ed97ec1921b9937bacac6cf4cec645d842998d7599554e028439856"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/STATE.json",
+      "bytes": 556,
+      "sha256": "3cc1f876e9364922157a63f26d39e86ed53bdeab3869586552b6e18cb753b6df"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/contracts.proposed.json",
+      "bytes": 1877,
+      "sha256": "af00eaa196e2c1e35d0180b03a92f021bef16613c35946b2a95dd942265658c0"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/evidence/SOURCES.json",
+      "bytes": 711,
+      "sha256": "9ae48f4707161fe4d85637c714b8a9fd27cefcea0c0be22970714f1a2a928a24"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/evidence/SPEC-TESTS.json",
+      "bytes": 1737,
+      "sha256": "c9d3adca7e82f9bbd575da06ae76a5957eab993e1d486ef78e61a60c5bf831b2"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/evidence/spec-model.py",
+      "bytes": 1247,
+      "sha256": "6f13d072a598309adaa576e21176b60bf74d0de72ed9c6681688ef7a7c70cce1"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/fixtures/spec-cases.json",
+      "bytes": 3362,
+      "sha256": "9a0c8e6e5a4a83261c6b314c1d3ffdc071f6b8f5713208079d52afb25bac02ce"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/inputs/P21.md",
+      "bytes": 5061,
+      "sha256": "6ca12f09f6703129968d7c0d18ee78cab72be7da63e100654b14c3b2e6955061"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P21/reports/P21-REPORT.md",
+      "bytes": 2999,
+      "sha256": "483b448130744ebed48754c41881649df77b3f406039a0126e435e937ff623c6"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/DESIGN.md",
+      "bytes": 3217,
+      "sha256": "0141b49d3cf06fcd476665c5cf5d5fde73d67afbab93497c1da240b0108256de"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/STATE.json",
+      "bytes": 594,
+      "sha256": "056eedbf2efd968724ee7dd8374ecd6afcf4ce0f35f51b94369735c98d83b7b0"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/contracts.proposed.json",
+      "bytes": 260,
+      "sha256": "8731270bf201086cd4d9723c1e6441139f4ab036ea09e19e7a620e4a452c6c91"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/evidence/SOURCES.json",
+      "bytes": 2324,
+      "sha256": "f1dc8aeadcdfd870d6743b6a39c8cc10faabfb7f999e910fd6e3031118ab8978"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/evidence/SPEC-TESTS.json",
+      "bytes": 1411,
+      "sha256": "e7455babf6b5debb48f61322d97b782f6cd01eb87c07f1b12ccc6bebeff1da83"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/evidence/spec-model.py",
+      "bytes": 1196,
+      "sha256": "88abbc08c28bd7d6bb2dc31ce0e3d5a1131dc8ade34b3979fabb71712d2254b3"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/fixtures/spec-cases.json",
+      "bytes": 5327,
+      "sha256": "4a24e8abc3dcba512f5381ae7577e628c1978c3657d34361a246d8b7cece1f54"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/inputs/P22.md",
+      "bytes": 4979,
+      "sha256": "bfa041ccbdf034a7cc2592387844e6440d02d9842ab72549ac0617e3891ab381"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P22/reports/P22-REPORT.md",
+      "bytes": 3110,
+      "sha256": "947f818022b72b7a4c49956f68f87da286ac40f49a3d014b4a76083901a35c3d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/DESIGN.md",
+      "bytes": 2374,
+      "sha256": "76f3860330220c2defff3837f7b596cef4b27ba4d47ac2d36f1886d246d43460"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/STATE.json",
+      "bytes": 578,
+      "sha256": "917d0375563a3add1abc53eb21174ee3a8d894db2ca5a1ec3f01967dcb3e925f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/contracts.proposed.json",
+      "bytes": 277,
+      "sha256": "b81efe9fd9ba127e290a6465a08bfe4531193a10e3d0d48e3c3461f363fd1b7a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/evidence/SOURCES.json",
+      "bytes": 1084,
+      "sha256": "f1d92bb2dba38fa24c74fdc2c1cfc2a21410dedf1771c329592bb6c35a05b9dc"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/evidence/SPEC-TESTS.json",
+      "bytes": 1388,
+      "sha256": "bad40bed0fd6272eedd21417705a53548fbcbac3f1e6ea20ae2246975db0a738"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/evidence/spec-model.py",
+      "bytes": 1161,
+      "sha256": "ad017421ab7d118a07c1c29649468f3946446e6e18f99445b39dc01f13a0650b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/fixtures/spec-cases.json",
+      "bytes": 2826,
+      "sha256": "6eff641b240a02acb53249a08cf8e1518428b2db0dca243ec96302d9ced07a3d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/inputs/P23.md",
+      "bytes": 4992,
+      "sha256": "ad0949cc1f0fb67e9130bf61d53dd6ed142ed5088d097cbbbd150e062727bb82"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P23/reports/P23-REPORT.md",
+      "bytes": 2980,
+      "sha256": "0ceba8d2004028a4f09840b38a3e39c945e5993b4cd973ad27bc4d8ea8573d21"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/DESIGN.md",
+      "bytes": 2660,
+      "sha256": "c2826b5012cb1d5c73beed9f57e31921a4a0b49e7cd7b6410592dc5bbae6028a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/STATE.json",
+      "bytes": 605,
+      "sha256": "34807ef34e0149774fcf086838c775d3298e1c7dd37583831f73b186b0cd24ce"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/contracts.proposed.json",
+      "bytes": 206,
+      "sha256": "549ae99c97125702f24d746b1c5024cc16e281e90450a7a13d58cfadfbf3d65a"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/evidence/SOURCES.json",
+      "bytes": 1290,
+      "sha256": "2263ca17eafbd59e8fb572f493546b7f9bda5971dd4f73237e5a521f3905a882"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/evidence/SPEC-TESTS.json",
+      "bytes": 1324,
+      "sha256": "9d08c11529e7b375ff64ad98b48d94fda060a53c841762d935383f7d66f3ca8f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/evidence/spec-model.py",
+      "bytes": 1084,
+      "sha256": "c18b9f2e52919c82bf134809168d2dae57e213d75bfbc2c343714fb45d614b0f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/fixtures/spec-cases.json",
+      "bytes": 1852,
+      "sha256": "f17da2b90abacebd666903c22d49205b2dd31a4354a98df2b61f5169d4beaaf5"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/inputs/P24.md",
+      "bytes": 5043,
+      "sha256": "48939bb4f9ed67c26caab0491fae2a1f4dc10627e158e882735f18204634fced"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P24/reports/P24-REPORT.md",
+      "bytes": 3030,
+      "sha256": "61603e7e181b3bad2e452226a52fc6de341386b294c5facc1a1574cede16bdc4"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/DESIGN.md",
+      "bytes": 2619,
+      "sha256": "7f79242ad0826348ff14ddd1b8a9d64e8d61bfc6e3d21f830e0fb8a8db161c6b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/STATE.json",
+      "bytes": 538,
+      "sha256": "30dc7fc9e8f12d6f8e50e19e655223297028df178d00086265139d31779adc58"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/contracts.proposed.json",
+      "bytes": 1050,
+      "sha256": "e4c7d57f015fe68e76d677928c3dd72ebf736697983730d67e5b9702bef97737"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/evidence/SOURCES.json",
+      "bytes": 695,
+      "sha256": "08b070f72d0d43ea3d603962e77a2784a6a806080d40242d410dffb8fb5874d3"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/evidence/SPEC-TESTS.json",
+      "bytes": 1892,
+      "sha256": "f2c67c055f7b2e3792206a37313b48fbc5ec4647ebe78a23caddd45d499d6aeb"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/evidence/spec-model.py",
+      "bytes": 1607,
+      "sha256": "7db7303fd11903275c000056d5ffb7af8e9166a4b1ee0bb13ba3212244e0d6b8"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/fixtures/spec-cases.json",
+      "bytes": 2212,
+      "sha256": "9660cb8ca9969361aa12891ce2104c2f0a63f18eda49b6b95809e1bb384c5c9b"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/inputs/P25.md",
+      "bytes": 4973,
+      "sha256": "68e45b73e2f5038281d77826498105baedc6d4bfc9a5f9f5d5416e012ffd931e"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P25/reports/P25-REPORT.md",
+      "bytes": 2997,
+      "sha256": "4c3806c1bb77e761a5cd8e6c6d7a1583c725fe37726005ba556e1cbef299e341"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/DESIGN.md",
+      "bytes": 3081,
+      "sha256": "a484efbf39b9e04ec1b49732050ebba425aa328dffedc485bdbc1ea27d87c6d2"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/STATE.json",
+      "bytes": 687,
+      "sha256": "92c4a0b77f0676cb85b4bb2d38332a5762d8c02d4ab5836a6566cbb9bd30105d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/contracts.proposed.json",
+      "bytes": 280,
+      "sha256": "cdf0ea7e14b19d390b0ffb9416a892d869d98e59b2e6a29347037cc0f87ecb43"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/evidence/SOURCES.json",
+      "bytes": 1102,
+      "sha256": "195b1c311a7be2e095efea7748b3f7cd143e8261d2738709ecec74cf1ec40b92"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/evidence/SPEC-TESTS.json",
+      "bytes": 4102,
+      "sha256": "766aa096ce948369781318f344a58d15971000a572a5a8c2d33a3cd90fed0be4"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/evidence/spec-model.py",
+      "bytes": 1617,
+      "sha256": "307204550ee70b8f4cfbd04dd3a1aed3e9836aa3cbdd1c55474756c7c521c89f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/fixtures/spec-cases.json",
+      "bytes": 4065,
+      "sha256": "dad7f0443091ae3e5616bd1fa5f6b3fa0a9974fd3ada3ec37f31f643eb63c85f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/inputs/P26.md",
+      "bytes": 5109,
+      "sha256": "a849901a3a4709216f25332d1d8efbfdca883beb13f2693805b243e2219e7509"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/reports/P26-REPORT.md",
+      "bytes": 3037,
+      "sha256": "5deec5c1f801ac397977772cda66f1b36a2f8f673f41148f2720972b96702939"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/DESIGN.md",
+      "bytes": 4140,
+      "sha256": "162d41b79d452d2dbe4d2068eef947beb0323bd2693f3317688fdb654130c83d"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/STATE.json",
+      "bytes": 627,
+      "sha256": "031774b2e79e1f9fe43a66190de2e2453ebb7668eeaefa5796bfbccef3d24dab"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/TRACEABILITY.json",
+      "bytes": 55313,
+      "sha256": "aa77314f435f8ba19ab7dc8ea8fb3a5a8356a3e95e32dce3e69c8e66aefb9395"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/TRACEABILITY.md",
+      "bytes": 6682,
+      "sha256": "f468771970dec60fda169c65927d85c00416a22d8936f63763d1857ed2ecef05"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/contracts.proposed.json",
+      "bytes": 235,
+      "sha256": "bdf5f452ae44bd5dc854814df6cc92fd2ef8b5ac307bbf7987e197b2a8a8936f"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/evidence/SOURCES.json",
+      "bytes": 1293,
+      "sha256": "e6a34935eee58edc0a395ac11e68c2a220e6fbf0168126e324998a8d75001391"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/evidence/SPEC-TESTS.json",
+      "bytes": 1463,
+      "sha256": "0d456e747fd6224df5541c88a900981520f21b4a0d8814136505d30da38fa0fc"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/evidence/STATIC-CHECKS.json",
+      "bytes": 420,
+      "sha256": "96d06539f4138d2bbd93a25d15247539495d621a974f4326abd09cabeabe4607"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/evidence/spec-model.py",
+      "bytes": 1178,
+      "sha256": "a59cb63b604c6f84fef0ce711a16041107b392bff50550629aab955343130abe"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/fixtures/spec-cases.json",
+      "bytes": 2451,
+      "sha256": "4b965ed5f33fe7e5442b3b4bb0f95913124176b069ced24f3f3ef17b1d2874a9"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/inputs/P27.md",
+      "bytes": 5146,
+      "sha256": "f71a29ccab7c506c398a3c517d7f448268b29a743ab430f93f11a726e309f4df"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/P27/reports/P27-REPORT.md",
+      "bytes": 3227,
+      "sha256": "dd5535815be21525d3a80997ad66126f6bf915fd7b9373368bb350d3bce45b55"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/PROGRESS.json",
+      "bytes": 8065,
+      "sha256": "3ca02834edc7fa6244b8b5808b19f6f65fc35d8fa4fb282aca09c02d19292717"
+    },
+    {
+      "path": "docs/architecture-audit/P06-P27-SPEC-20260926/README.md",
+      "bytes": 2729,
+      "sha256": "b40d1b925dea4f78a0ba71e1363b5addefefd8f055c2bb64439688d6950af8af"
+    },
+    {
+      "path": "target-reference/01-OVERALL-ARCHITECTURE.md",
+      "bytes": 75956,
+      "sha256": "e1481ee523b2a98e3b95c4f3c84f41ec053c0bcb6c59995dcffe3cfe7a11809a"
+    },
+    {
+      "path": "target-reference/02-AI-IMPLEMENTATION-PLAYBOOK.md",
+      "bytes": 86066,
+      "sha256": "cbecc9f315caaa53836e0e379cf291129bb94e6377d7579d17f59ff21395541e"
+    },
+    {
+      "path": "target-reference/03-REFERENCES.md",
+      "bytes": 16354,
+      "sha256": "f2f4c9fcdf2b9b07ab373c5eddfe40dfeba6153745ecd360787260729d14cd03"
+    },
+    {
+      "path": "target-reference/04-TRACEABILITY-AND-DECISIONS.md",
+      "bytes": 15479,
+      "sha256": "bf02d5a529df44bb6784de148fec2ac6a77c02172c72eb0a794aba2161bafc79"
+    },
+    {
+      "path": "target-reference/05-AI-CONTEXT-HANDOFF.md",
+      "bytes": 5783,
+      "sha256": "bed37dce32ce0a21fbd357866f2e448331fb755f337db3d435d9cb7dc7eb38f6"
+    },
+    {
+      "path": "target-reference/manifests/CURRENT-STATE.json",
+      "bytes": 1439,
+      "sha256": "6cec8dfc0c5ef76dc9ca4889f4a59ab91186fcf5846b6719894929c2b27d5d7d"
+    },
+    {
+      "path": "target-reference/manifests/decisions.json",
+      "bytes": 7910,
+      "sha256": "14c150cfdc746237fd0fd71f28cdcd374c78be7633bab2116a29ebb57ac809cb"
+    },
+    {
+      "path": "target-reference/manifests/package-manifest.json",
+      "bytes": 8517,
+      "sha256": "5bd60076ef19b1b923113b284c023bd662525f76aa81a2905381b97a32d08815"
+    },
+    {
+      "path": "target-reference/manifests/references.json",
+      "bytes": 17774,
+      "sha256": "e8eab0743c72c8e4fc6c9f30575f5f16f1ad0e9d51c7d52728a473325dc2ec89"
+    },
+    {
+      "path": "target-reference/manifests/requirements.json",
+      "bytes": 12551,
+      "sha256": "267438b413afb01615fa5c5cf86fccb441d320d4871f97d1a68c2eb06683aa81"
+    },
+    {
+      "path": "target-reference/manifests/stages.json",
+      "bytes": 61040,
+      "sha256": "5457b615b3ea3deb11833dd35881c0ddd72ca45a87d445cf40cf3cdb071763c9"
+    },
+    {
+      "path": "target-reference/sources/USER-REQUIREMENTS-20260924.md",
+      "bytes": 2586,
+      "sha256": "b2f7b04d064f121363eaeca806b499495d25ebd4d38be137377172b5fed8b2e5"
+    },
+    {
+      "path": "target-reference/templates/ADR.template.md",
+      "bytes": 1331,
+      "sha256": "7613a884134bb7de7656b6b8284a33685eb7c9803cf066f15c8684fadf607472"
+    },
+    {
+      "path": "target-reference/templates/BENCHMARK-REPORT.template.md",
+      "bytes": 1690,
+      "sha256": "e80ded7821950ab61a481cee5869be368bca9eddeee17c75dc5113740e965a4e"
+    },
+    {
+      "path": "target-reference/templates/EXECUTION-PROFILE.template.json",
+      "bytes": 1529,
+      "sha256": "6b48a7472b633a0520b07fe41accc97e3ba2946e301cfd8de7df657c00ce3dc2"
+    },
+    {
+      "path": "target-reference/templates/MODULE-MANIFEST.template.json",
+      "bytes": 353,
+      "sha256": "cda6ae5744f7afdfab02ff0964662c73edc70ed52bed9e69c184415fcc837b8c"
+    },
+    {
+      "path": "target-reference/templates/STAGE-REPORT.template.md",
+      "bytes": 2129,
+      "sha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    }
+  ]
+}

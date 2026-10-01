@@ -1,0 +1,192 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "A01",
+      "input": {
+        "op": "signals",
+        "signals": [
+          "calm",
+          "calm",
+          "pressure",
+          "calm",
+          "calm"
+        ],
+        "recoverySamples": 2
+      },
+      "expected": [
+        "balanced",
+        "idle",
+        "pressure",
+        "balanced",
+        "idle"
+      ]
+    },
+    {
+      "id": "A02",
+      "input": {
+        "op": "signals",
+        "signals": [
+          "unknown",
+          "calm"
+        ],
+        "recoverySamples": 2
+      },
+      "expected": [
+        "unknown",
+        "balanced"
+      ]
+    },
+    {
+      "id": "A03",
+      "input": {
+        "op": "route",
+        "profiles": [
+          {
+            "id": "large",
+            "capability": true,
+            "quality": true,
+            "authorized": true,
+            "ready": true,
+            "fits": true,
+            "cost": 2
+          },
+          {
+            "id": "small",
+            "capability": true,
+            "quality": true,
+            "authorized": true,
+            "ready": true,
+            "fits": true,
+            "cost": 1
+          }
+        ]
+      },
+      "expected": "small"
+    },
+    {
+      "id": "A04",
+      "input": {
+        "op": "route",
+        "profiles": [
+          {
+            "id": "large",
+            "capability": true,
+            "quality": true,
+            "authorized": true,
+            "ready": true,
+            "fits": true,
+            "cost": 2
+          },
+          {
+            "id": "small",
+            "capability": true,
+            "quality": true,
+            "authorized": true,
+            "ready": true,
+            "fits": true,
+            "cost": 1
+          }
+        ],
+        "pin": "large"
+      },
+      "expected": "large"
+    },
+    {
+      "id": "A05",
+      "input": {
+        "op": "route",
+        "profiles": [
+          {
+            "id": "large",
+            "capability": true,
+            "quality": true,
+            "authorized": true,
+            "ready": true,
+            "fits": false,
+            "cost": 2
+          },
+          {
+            "id": "small",
+            "capability": true,
+            "quality": true,
+            "authorized": true,
+            "ready": true,
+            "fits": true,
+            "cost": 1
+          }
+        ],
+        "pin": "large"
+      },
+      "expected": "waiting"
+    },
+    {
+      "id": "A06",
+      "input": {
+        "op": "route",
+        "profiles": [
+          {
+            "id": "small",
+            "capability": true,
+            "quality": false,
+            "authorized": true,
+            "ready": true,
+            "fits": true,
+            "cost": 1
+          },
+          {
+            "id": "large",
+            "capability": true,
+            "quality": true,
+            "authorized": true,
+            "ready": true,
+            "fits": true,
+            "cost": 2
+          }
+        ]
+      },
+      "expected": "large"
+    },
+    {
+      "id": "A07",
+      "input": {
+        "op": "route",
+        "profiles": [
+          {
+            "id": "small",
+            "capability": true,
+            "quality": true,
+            "authorized": false,
+            "ready": true,
+            "fits": true,
+            "cost": 1
+          }
+        ]
+      },
+      "expected": "waiting"
+    },
+    {
+      "id": "A08",
+      "input": {
+        "op": "fair",
+        "ageCap": 20,
+        "jobs": [
+          {
+            "id": "ocr",
+            "priority": 1,
+            "age": 20,
+            "locality": 0
+          },
+          {
+            "id": "new",
+            "priority": 10,
+            "age": 0,
+            "locality": 1
+          }
+        ]
+      },
+      "expected": "ocr"
+    }
+  ]
+}

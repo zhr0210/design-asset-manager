@@ -1,0 +1,9 @@
+{
+  "stage": "P10",
+  "status": "proposed",
+  "capability": "tags",
+  "productionVerticalAcceptance": "NOT_RUN",
+  "singleWriter": true,
+  "autoConfirm": false,
+  "initialBatchMax": 8
+}

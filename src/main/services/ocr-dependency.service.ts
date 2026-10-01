@@ -1,45 +1,20 @@
 import path from 'path'
 import fs from 'fs'
-import { spawn, execSync } from 'child_process'
+import { spawn } from 'child_process'
 import { app, type WebContents } from 'electron'
 import { SettingsService } from './settings.service'
 import { resolveManagedPaths } from '../platform/path-resolver'
-import { resolveDebugLogPath } from '../platform/log-path-resolver'
 import type { OcrEnvPayload } from '../../shared/contracts/ocr-dependency.contract'
 import {
   CHANNEL_OCR_INSTALL_LOG_UPDATE
 } from '../../shared/contracts/ocr-dependency.contract'
+import { projectOcrSelectedProviderAvailability } from '../../shared/workflows/ocr-dependency.workflow'
 import { resolveAiServicePath } from './ai-service-paths'
-
-function redactDebugMessage(msg: string): string {
-  const homeLikeValues = [
-    process.env.USERPROFILE,
-    process.env.HOME,
-    process.env.HOMEPATH
-  ].filter((value): value is string => Boolean(value && value.trim()))
-
-  return homeLikeValues.reduce((current, value) => {
-    return current.split(value).join('<user-home>')
-  }, msg)
-}
-
-function writeDebugLog(msg: string): void {
-  try {
-    const managedPaths = resolveManagedPaths()
-    const logPath = resolveDebugLogPath('ocr-dependency', {
-      managedPaths,
-      fileName: 'ocr-dependency.log'
-    })
-    const dir = path.dirname(logPath)
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true })
-    }
-    const timestamp = new Date().toISOString()
-    fs.appendFileSync(logPath, `[${timestamp}] ${redactDebugMessage(msg)}\n`, 'utf8')
-  } catch (err) {
-    // Ignore
-  }
-}
+import {
+  resolveBasePythonExecutable,
+  resolveManagedAiPythonRuntime,
+  resolvePythonExecutable
+} from './ai-python-runtime.service'
 
 function resolveElectronManagedPaths() {
   return resolveManagedPaths({
@@ -51,200 +26,14 @@ function findEnvCheckScriptPath(): string {
   return resolveAiServicePath(['tools', 'check_ocr_env.py'])
 }
 
-function searchWindowsPythonPaths(): string | null {
-  if (process.platform !== 'win32') return null
-
-  const userProfile = process.env.USERPROFILE || process.env.HOMEPATH || ''
-  if (!userProfile) return null
-
-  writeDebugLog('[resolvePythonExecutable] Searching in common Windows programs Python directories...')
-
-  // 1. Check User Local Programs Python directory
-  const localProgramsPythonDir = path.join(userProfile, 'AppData', 'Local', 'Programs', 'Python')
-  if (fs.existsSync(localProgramsPythonDir)) {
-    try {
-      const dirs = fs.readdirSync(localProgramsPythonDir)
-      dirs.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }))
-      for (const dir of dirs) {
-        if (dir.toLowerCase().startsWith('python')) {
-          const exePath = path.join(localProgramsPythonDir, dir, 'python.exe')
-          if (fs.existsSync(exePath)) {
-            writeDebugLog(`[resolvePythonExecutable] Found Python in User Programs: ${exePath}`)
-            return exePath
-          }
-        }
-      }
-    } catch (err: any) {
-      writeDebugLog(`[resolvePythonExecutable] Error reading local programs Python dir: ${err.message}`)
-    }
-  }
-
-  // 2. Check System Program Files Python directory
-  const programFilesPythonDir = 'C:\\Program Files\\Python'
-  if (fs.existsSync(programFilesPythonDir)) {
-    try {
-      const dirs = fs.readdirSync(programFilesPythonDir)
-      dirs.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }))
-      for (const dir of dirs) {
-        if (dir.toLowerCase().startsWith('python')) {
-          const exePath = path.join(programFilesPythonDir, dir, 'python.exe')
-          if (fs.existsSync(exePath)) {
-            writeDebugLog(`[resolvePythonExecutable] Found Python in Program Files: ${exePath}`)
-            return exePath
-          }
-        }
-      }
-    } catch (err: any) {
-      writeDebugLog(`[resolvePythonExecutable] Error reading Program Files Python dir: ${err.message}`)
-    }
-  }
-
-  // 3. Check C:\Python* common root paths
-  try {
-    const rootDirs = fs.readdirSync('C:\\')
-    const pyDirs = rootDirs.filter(d => d.toLowerCase().startsWith('python'))
-    pyDirs.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }))
-    for (const dir of pyDirs) {
-      const exePath = path.join('C:\\', dir, 'python.exe')
-      if (fs.existsSync(exePath)) {
-        writeDebugLog(`[resolvePythonExecutable] Found Python in C:\\ root: ${exePath}`)
-        return exePath
-      }
-    }
-  } catch (err: any) {
-    writeDebugLog(`[resolvePythonExecutable] Error reading C:\\ root dir: ${err.message}`)
-  }
-
-  return null
-}
-
-export function resolveMacOSAiPythonRuntime(): {
-  runtimeDir: string
-  venvDir: string
-  pythonPath: string
-  exists: boolean
-} {
-  const managedPaths = resolveElectronManagedPaths()
-  const runtimeDir = path.join(managedPaths.runtimeDir, 'macos-ai-python')
-  const venvDir = path.join(runtimeDir, '.venv')
-  const pythonPath = process.platform === 'win32'
-    ? path.join(venvDir, 'Scripts', 'python.exe')
-    : path.join(venvDir, 'bin', 'python')
-
-  return {
-    runtimeDir,
-    venvDir,
-    pythonPath,
-    exists: fs.existsSync(pythonPath)
-  }
-}
-
-/** Resolve an older venv that already has torch installed as a fallback. */
-function resolveFallbackVenvPython(): string | null {
-  const managedPaths = resolveElectronManagedPaths()
-  const oldVenvPython = path.join(
-    managedPaths.runtimeDir,
-    'macos-ai-python',
-    '.venv.old',
-    process.platform === 'win32' ? path.join('Scripts', 'python.exe') : path.join('bin', 'python')
-  )
-  if (!fs.existsSync(oldVenvPython)) return null
-  try {
-    execSync(`"${oldVenvPython}" -c "import torch"`, { timeout: 5000, stdio: 'ignore' })
-    writeDebugLog('[resolvePythonExecutable] Fallback old venv has torch, preferring it.')
-    return oldVenvPython
-  } catch {
-    return null
-  }
-}
-
-export function resolveBasePythonExecutable(): string {
-  writeDebugLog('[resolvePythonExecutable] Resolving Python executable...')
-  const envs = [
-    process.env.DESIGN_ASSET_MANAGER_PYTHON,
-    process.env.TEXT_OCR_PYTHON,
-    process.env.PYTHON
-  ]
-  for (const [idx, env] of envs.entries()) {
-    if (env && env.trim()) {
-      writeDebugLog(`[resolvePythonExecutable] Found env key index ${idx}: ${env}`)
-      return env.trim()
-    }
-  }
-
-  if (process.platform === 'win32') {
-    try {
-      writeDebugLog('[resolvePythonExecutable] platform is win32, running execSync("where python")...')
-      const output = execSync('where python', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
-      writeDebugLog(`[resolvePythonExecutable] "where python" raw output:\n${output}`)
-      const lines = output.split(/\r?\n/).map(l => l.trim()).filter(Boolean)
-      for (const line of lines) {
-        if (line.toLowerCase().endsWith('python.exe') && !line.toLowerCase().includes('microsoft\\windowsapps')) {
-          writeDebugLog(`[resolvePythonExecutable] WindowsApps bypass resolved: ${line}`)
-          return line
-        }
-      }
-    } catch (e: any) {
-      writeDebugLog(`[resolvePythonExecutable] execSync("where python") failed: ${e?.message || String(e)}`)
-    }
-
-    const searchedPath = searchWindowsPythonPaths()
-    if (searchedPath) {
-      return searchedPath
-    }
-  }
-
-  writeDebugLog('[resolvePythonExecutable] Falling back to default "python"')
-
-  if (process.platform === "darwin") {
-    const homebrewPython313 = "/opt/homebrew/bin/python3.13"
-    if (fs.existsSync(homebrewPython313)) {
-      writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3.13")
-      return homebrewPython313
-    }
-    const homebrewPython3 = "/opt/homebrew/bin/python3"
-    if (fs.existsSync(homebrewPython3)) {
-      writeDebugLog("[resolvePythonExecutable] Found Homebrew Python 3")
-      return homebrewPython3
-    }
-  }
-
-  return 'python'
-}
-
-export function resolvePythonExecutable(): string {
-  const explicit = process.env.DESIGN_ASSET_MANAGER_PYTHON
-  if (explicit && explicit.trim()) return explicit.trim()
-
-  const managedRuntime = resolveMacOSAiPythonRuntime()
-  if (managedRuntime.exists) {
-    try {
-      execSync(`"${managedRuntime.pythonPath}" -c "import torch"`, {
-        timeout: 5000,
-        stdio: 'ignore'
-      })
-      writeDebugLog('[resolvePythonExecutable] Using managed macOS AI Python runtime.')
-      return managedRuntime.pythonPath
-    } catch {
-      writeDebugLog('[resolvePythonExecutable] Managed venv missing torch, trying fallback...')
-      const fallback = resolveFallbackVenvPython()
-      if (fallback) return fallback
-      writeDebugLog('[resolvePythonExecutable] Fallback also missing torch, using managed venv.')
-      return managedRuntime.pythonPath
-    }
-  }
-
-  return resolveBasePythonExecutable()
-}
-
-export async function ensureMacOSAiPythonRuntime(): Promise<{
+export async function ensureManagedAiPythonRuntime(): Promise<{
   success: boolean
   pythonPath: string
   runtimeDir: string
   created: boolean
   error?: string
 }> {
-  const managedRuntime = resolveMacOSAiPythonRuntime()
+  const managedRuntime = resolveManagedAiPythonRuntime()
   if (managedRuntime.exists) {
     return {
       success: true,
@@ -293,6 +82,8 @@ export async function ensureMacOSAiPythonRuntime(): Promise<{
     })
   })
 }
+
+export const ensureMacOSAiPythonRuntime = ensureManagedAiPythonRuntime
 
 export class OcrDependencyService {
   private static instance: OcrDependencyService
@@ -395,11 +186,25 @@ export class OcrDependencyService {
           const realPythonPath = parsed.python?.executable ?? pythonExe
 
           const selectedProvider = settings.textBoxProvider ?? 'easyocr'
-          let selectedProviderAvailable = false
-          if (selectedProvider === 'easyocr') selectedProviderAvailable = isEasyAvailable
-          else if (selectedProvider === 'rapidocr') selectedProviderAvailable = isRapidAvailable
-          else if (selectedProvider === 'paddleocr') selectedProviderAvailable = isPaddleAvailable
-          else if (selectedProvider === 'mock') selectedProviderAvailable = true
+          const providers: OcrEnvPayload['providers'] = {
+            easyocr: {
+              installed: isEasyAvailable,
+              version: parsed.easyocr?.version ?? null,
+              available: isEasyAvailable,
+              installCommand: `${pythonExe} -m pip install easyocr opencv-python numpy`
+            },
+            rapidocr: {
+              installed: isRapidAvailable,
+              version: parsed.rapidocr?.version ?? null,
+              available: isRapidAvailable
+            },
+            paddleocr: {
+              installed: isPaddleAvailable,
+              version: parsed.paddleocr?.version ?? null,
+              available: isPaddleAvailable,
+              installCommand: `${pythonExe} -m pip install paddleocr opencv-python numpy`
+            }
+          }
 
           const payload: OcrEnvPayload = {
             python: {
@@ -407,27 +212,9 @@ export class OcrDependencyService {
               version: pythonVersion,
               path: realPythonPath
             },
-            providers: {
-              easyocr: {
-                installed: isEasyAvailable,
-                version: parsed.easyocr?.version ?? null,
-                available: isEasyAvailable,
-                installCommand: `${pythonExe} -m pip install easyocr opencv-python numpy`
-              },
-              rapidocr: {
-                installed: isRapidAvailable,
-                version: parsed.rapidocr?.version ?? null,
-                available: isRapidAvailable
-              },
-              paddleocr: {
-                installed: isPaddleAvailable,
-                version: parsed.paddleocr?.version ?? null,
-                available: isPaddleAvailable,
-                installCommand: `${pythonExe} -m pip install paddleocr opencv-python numpy`
-              }
-            },
+            providers,
             selectedProvider,
-            selectedProviderAvailable,
+            selectedProviderAvailable: projectOcrSelectedProviderAvailability(selectedProvider, providers),
             checkedAt: new Date().toISOString()
           }
 

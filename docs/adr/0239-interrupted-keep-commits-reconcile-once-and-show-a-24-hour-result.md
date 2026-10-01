@@ -1,0 +1,21 @@
+# Interrupted Keep Commits Reconcile Once And Show A Twenty-Four-Hour Result
+
+When ADR 0238 Keep Commit In Flight is interrupted by main-process termination or an unclean application exit, the next host performs **Interrupted Keep Commit Reconciliation** before ADR 0223 expiry cleanup, new Keep admission or another storage-resolution workflow can act on that exact target. Reconciliation reads only the minimal device-local owner/journal generations needed to determine which side of the atomic transition committed.
+
+If the durable owner generation proves that the pending-owner-to-Keep-owner transaction committed, the Kept Verified Package Copy Pin remains authoritative and the old retention episode is ended. If durable evidence proves it did not commit, the original Awaiting Install Decision owner, retention episode, ordinary/grace deadlines and consumed Keep attempt remain authoritative. If neither outcome can be proved, ADR 0240 applies a target-only Keep Recovery Safety Gate rather than emitting a false result. Restart never reruns admission, repeats the owner mutation, restarts the five-second transaction or opens another 60-second decision opportunity.
+
+After a proven outcome, Storage Management receives one path-free **Recovered Keep Commit Result** with Recovered As Kept or Recovered As Pending status. It identifies the package copy in ordinary path-free product terms, states that an interrupted final Keep was reconciled rather than retried, and explains the resulting owner state. When available from committed metadata it may show the final reserve/byte summary, but it never fabricates missing final values from the pre-confirmation projection.
+
+Recovered As Pending creates no additional pin. Once reconciliation establishes the pending owner, the original retention policy is reevaluated normally and may remove an already-expired app-owned reference at its next owner-safe boundary. The result remains explanatory even if that later cleanup means the managed copy is no longer present; it does not recreate, reacquire or protect it merely so the message can be viewed.
+
+The result expires at the earlier of one usable Storage Management viewing opportunity or 24 elapsed hours after reconciliation. A viewing opportunity exists when a usable renderer acknowledges projection of the result; the card remains stable for that current surface session and is pruned after the user leaves/dismisses it. No focus duration, eye tracking, click history or proof of reading is recorded. If never projected, the 24-hour hard cap removes it.
+
+The 24-hour result is not Batch Result History, package audit history, a warning grace or a notification. It opens no startup modal, creates no OS notification, badge-driven urgency, background helper or support/publisher report. Clearing or expiring the card changes no owner, deadline, attempt, reserve evidence or package bytes.
+
+The recovery record contains only opaque commit/target/episode identity, reconciled owner outcome, coarse reason, reconciliation/expiry times and renderer-projection acknowledgement. It contains no managed path, package payload, credentials, user content, filesystem event trail or attention history and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
+
+After reconciliation and result projection, the consumed ADR 0235 attempt remains consumed in both outcomes. An ordinary future Keep action is available only if the same pending copy survives and another existing product rule independently permits it; this recovery result itself grants no retry, cleanup budget, decision hold or storage reservation.
+
+The current Runtime Package session keeps selections/executions in process-local maps and has no managed-copy owner journal, startup Keep reconciliation, Storage Management recovery projection or 24-hour result record. This ADR changes documentation only: it reconciles no real owner, reads no runtime database/package/cache/private state and changes no public IPC/schema/AI Worker API.
+
+ADR 0246 applies the same one-viewing-or-24-hour explanatory-result pattern to an interrupted advanced recovery delete, but it reconciles the separate atomic reference-removal boundary. It never converts a delete outcome into Recovered As Kept/Pending or reuses this Keep attempt and owner transition.

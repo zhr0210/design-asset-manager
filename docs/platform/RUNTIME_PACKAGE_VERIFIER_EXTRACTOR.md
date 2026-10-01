@@ -1,6 +1,8 @@
-# Runtime Package Verifier / Extractor Skeleton
+# Runtime Package Verifier / Extractor Planner
 
-Phase 10C adds verifier and extractor contracts plus mock implementations. It does not hash package files, extract archives, write files, or execute package scripts.
+This document describes the side-effect-free verifier and extractor planning
+module. It does not hash package files, extract archives, write files, or
+execute package scripts.
 
 ## Verifier
 
@@ -32,6 +34,10 @@ This phase does not:
 - update the runtime registry;
 - install Python, CUDA, or models.
 
-## Next Step
+## Executable Module
 
-Phase 10D should add an installer state machine and dry-run install plans that combine source, download, verification, extraction, registry metadata, and rollback planning.
+Real SHA-256 hashing and safe ZIP extraction live inside the separate Runtime
+Package Executor transaction. The planner remains available for Dry Run UI and
+preflight reporting.
+
+See `docs/platform/RUNTIME_PACKAGE_EXECUTOR.md`.

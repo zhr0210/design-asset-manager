@@ -1,0 +1,113 @@
+{
+  "status": "planned_NOT_RUN",
+  "cases": [
+    {
+      "id": "E01",
+      "given": "timeout after send",
+      "expected": "physical unknown; active jobs remote_outcome_unknown; no blind resend",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E02",
+      "given": "cancel remote job while maybe billed",
+      "expected": "job cancelled; physical outcome/cost unknown remains visible",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E03",
+      "given": "provider supports status query",
+      "expected": "revalidate query authorization and binding, query without resending material",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E04",
+      "given": "provider lacks lookup or dedupe guarantee",
+      "expected": "wait explicit bounded risk policy; no exactly-once claim",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E05",
+      "given": "provider proves not executed",
+      "expected": "same nonterminal job may bounded retry after gates",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E06",
+      "given": "provider yields full recoverable result",
+      "expected": "new recovery claim accepts verified original physical result; no new send/reservation",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E07",
+      "given": "recovered result for superseded content/generation",
+      "expected": "never update current; record only non-sensitive outcome",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E08",
+      "given": "localhost endpoint can proxy cloud",
+      "expected": "unknown location follows authorized external-risk policy",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E09",
+      "given": "credentials/config changed on reopen",
+      "expected": "fresh binding check; no reuse of old secret or grant",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E10",
+      "given": "one shared invocation has two jobs",
+      "expected": "cost/request reservation and settlement once per physical",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E11",
+      "given": "dispatch-intent durable but process dies before send",
+      "expected": "unknown until proved otherwise, not assumed free",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "E12",
+      "given": "late callback bearing old attempt token after recovery",
+      "expected": "reject callback; only new claim reconciliation path may submit",
+      "testIds": [
+        "T13"
+      ],
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

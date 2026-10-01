@@ -1,0 +1,296 @@
+{
+  "status": "proposed_NOT_RUN",
+  "states": [
+    "queued",
+    "waiting_condition",
+    "ready",
+    "running",
+    "validating",
+    "retry_wait",
+    "paused",
+    "remote_outcome_unknown",
+    "succeeded",
+    "failed_final",
+    "cancelled",
+    "superseded"
+  ],
+  "terminalStates": [
+    "succeeded",
+    "failed_final",
+    "cancelled",
+    "superseded"
+  ],
+  "transientStates": [
+    "committing"
+  ],
+  "transitions": [
+    {
+      "from": "queued",
+      "event": "evaluate-missing-condition",
+      "to": "waiting_condition",
+      "guard": "Host active; no dispatch"
+    },
+    {
+      "from": "queued",
+      "event": "preflight-ready",
+      "to": "ready",
+      "guard": "conditions observed, not permanent authority"
+    },
+    {
+      "from": "waiting_condition",
+      "event": "conditions-ready",
+      "to": "ready",
+      "guard": "all current conditions rechecked"
+    },
+    {
+      "from": "ready",
+      "event": "condition-lost",
+      "to": "waiting_condition",
+      "guard": "no dispatch"
+    },
+    {
+      "from": "ready",
+      "event": "claim",
+      "to": "running",
+      "guard": "Host lease/session + job/slot CAS + fresh token"
+    },
+    {
+      "from": "running",
+      "event": "complete-response",
+      "to": "validating",
+      "guard": "current attempt and bounded full response"
+    },
+    {
+      "from": "validating",
+      "event": "commit",
+      "to": "succeeded",
+      "guard": "synchronous Evidence+Job+Outbox transaction; committing transient only"
+    },
+    {
+      "from": "validating",
+      "event": "quality-held",
+      "to": "failed_final",
+      "guard": "history evidence+QUALITY_HELD+Outbox atomic; current retained"
+    },
+    {
+      "from": "running",
+      "event": "known-retryable-failure",
+      "to": "retry_wait",
+      "guard": "same generation, policy budget/deadline allow; prior attempt invalidated"
+    },
+    {
+      "from": "running",
+      "event": "definite-final-failure",
+      "to": "failed_final",
+      "guard": "known terminal cause; old Evidence remains"
+    },
+    {
+      "from": "running",
+      "event": "possible-remote-execution",
+      "to": "remote_outcome_unknown",
+      "guard": "dispatch may have occurred; no blind resend"
+    },
+    {
+      "from": "validating",
+      "event": "known-retryable-failure",
+      "to": "retry_wait",
+      "guard": "same generation, policy budget/deadline allow; prior attempt invalidated"
+    },
+    {
+      "from": "validating",
+      "event": "definite-final-failure",
+      "to": "failed_final",
+      "guard": "known terminal cause; old Evidence remains"
+    },
+    {
+      "from": "validating",
+      "event": "possible-remote-execution",
+      "to": "remote_outcome_unknown",
+      "guard": "dispatch may have occurred; no blind resend"
+    },
+    {
+      "from": "retry_wait",
+      "event": "backoff-elapsed",
+      "to": "ready",
+      "guard": "still permitted and retry bound/deadline valid"
+    },
+    {
+      "from": "paused",
+      "event": "resume-review",
+      "to": "waiting_condition",
+      "guard": "new current authorization; no old token restored"
+    },
+    {
+      "from": "remote_outcome_unknown",
+      "event": "provider-proves-not-executed",
+      "to": "retry_wait",
+      "guard": "current authorization and frozen retry policy permit"
+    },
+    {
+      "from": "remote_outcome_unknown",
+      "event": "verified-result-retrievable",
+      "to": "ready",
+      "guard": "new recovery claim mode; no inference send permitted"
+    },
+    {
+      "from": "remote_outcome_unknown",
+      "event": "resolve-final",
+      "to": "failed_final",
+      "guard": "explicit resolution or definitive provider evidence"
+    },
+    {
+      "from": "queued",
+      "event": "pause-or-close",
+      "to": "paused",
+      "guard": "revoke claim; retain any unknown physical outcome independently"
+    },
+    {
+      "from": "queued",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "queued",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "waiting_condition",
+      "event": "pause-or-close",
+      "to": "paused",
+      "guard": "revoke claim; retain any unknown physical outcome independently"
+    },
+    {
+      "from": "waiting_condition",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "waiting_condition",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "ready",
+      "event": "pause-or-close",
+      "to": "paused",
+      "guard": "revoke claim; retain any unknown physical outcome independently"
+    },
+    {
+      "from": "ready",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "ready",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "running",
+      "event": "pause-or-close",
+      "to": "paused",
+      "guard": "revoke claim; retain any unknown physical outcome independently"
+    },
+    {
+      "from": "running",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "running",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "validating",
+      "event": "pause-or-close",
+      "to": "paused",
+      "guard": "revoke claim; retain any unknown physical outcome independently"
+    },
+    {
+      "from": "validating",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "validating",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "retry_wait",
+      "event": "pause-or-close",
+      "to": "paused",
+      "guard": "revoke claim; retain any unknown physical outcome independently"
+    },
+    {
+      "from": "retry_wait",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "retry_wait",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "paused",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "paused",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "remote_outcome_unknown",
+      "event": "pause-or-close",
+      "to": "paused",
+      "guard": "revoke claim; retain any unknown physical outcome independently"
+    },
+    {
+      "from": "remote_outcome_unknown",
+      "event": "last-subscriber-cancel",
+      "to": "cancelled",
+      "guard": "revoke claim; committed success cannot be undone"
+    },
+    {
+      "from": "remote_outcome_unknown",
+      "event": "new-generation-or-content",
+      "to": "superseded",
+      "guard": "slot fence advanced; old callback cannot commit"
+    },
+    {
+      "from": "queued",
+      "event": "reuse-valid",
+      "to": "succeeded",
+      "guard": "Host authorized existing valid evidence; Job/effect/Outbox single transaction, no fabricated attempt"
+    },
+    {
+      "from": "ready",
+      "event": "reuse-valid",
+      "to": "succeeded",
+      "guard": "same as queued reuse; recheck content and policy"
+    }
+  ],
+  "initialState": "queued",
+  "terminalStatesHaveNoResume": true,
+  "durableStatesGrantAuthority": false,
+  "unknownPhysicalBlocksExecuteEvenAfterPause": true
+}

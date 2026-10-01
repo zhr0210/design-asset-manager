@@ -1,84 +1,31 @@
-import type { PlatformArch, PlatformName } from './platform.types'
+import type {
+  PlatformAiBranchRuntimeMetadataBase,
+  PlatformAiRuntimeLaneBase,
+  PlatformAiWorkerProbeDiagnosticsInput
+} from './platform-ai-runtime.types'
 
 export type MacOSAiRuntimeLaneId = 'python-mps' | 'onnx-runtime' | 'llama'
+export type {
+  AiCapabilityStatus,
+  AiRuntimeCapability,
+  AiWorkerCapabilityProbe,
+  AiWorkerLaneProbe,
+  PlatformAiBranchRuntimeMetadataBase,
+  PlatformAiRuntimeBranchPhase,
+  PlatformAiRuntimeLaneBase,
+  PlatformAiWorkerProbeResultBase
+} from './platform-ai-runtime.types'
 
-export type MacOSAiCapabilityStatus = 'ready' | 'optional' | 'planned' | 'fallback' | 'unavailable'
+export interface MacOSAiRuntimeLane extends PlatformAiRuntimeLaneBase<MacOSAiRuntimeLaneId> {}
 
-export interface MacOSAiRuntimeCapability {
-  id: string
-  label: string
-  status: MacOSAiCapabilityStatus
-  role: 'tagging' | 'ocr' | 'embedding' | 'prompt-reverse' | 'fallback'
-  modelFamily?: string
-  backend?: string
-}
+export interface MacOSAiBranchRuntimeMetadata extends PlatformAiBranchRuntimeMetadataBase<'macos-ai-branch', MacOSAiRuntimeLane> {}
 
-export interface MacOSAiRuntimeLane {
-  id: MacOSAiRuntimeLaneId
-  label: string
-  status: MacOSAiCapabilityStatus
-  summary: string
-  capabilities: MacOSAiRuntimeCapability[]
-  fallbackCapabilityIds: string[]
-}
-
-export interface MacOSAiBranchRuntimeMetadata {
-  marker: 'macos-ai-branch'
-  phase: 'skeleton' | 'worker-probes' | 'model-download' | 'validated'
-  platform: PlatformName
-  arch: PlatformArch
-  isCurrentPlatform: boolean
-  lanes: MacOSAiRuntimeLane[]
-  warnings: string[]
-}
-
-export interface MacOSAiWorkerCapabilityProbe {
-  id: string
-  label: string
-  status: MacOSAiCapabilityStatus
-  role: 'tagging' | 'ocr' | 'embedding' | 'prompt-reverse' | 'fallback'
-  modelFamily?: string
-  backend?: string
-  version?: string | null
-  available?: boolean
-  error?: string | null
-}
-
-export interface MacOSAiWorkerLaneProbe {
-  id: string
-  label: string
-  status: MacOSAiCapabilityStatus
-  summary: string
-  capabilities: MacOSAiWorkerCapabilityProbe[]
-}
-
-export interface MacOSAiWorkerProbeResult {
-  platform: string
-  machine: string
-  isMacOS: boolean
-  isAppleSilicon: boolean
-  phase: 'worker-probes'
-  torch: {
-    available: boolean
-    version: string | null
+export interface MacOSAiWorkerProbeResult extends PlatformAiWorkerProbeDiagnosticsInput {
+  torch: PlatformAiWorkerProbeDiagnosticsInput['torch'] & {
     mpsBuilt: boolean
     mpsAvailable: boolean
-    cpuFallback: boolean
-    error: string | null
   }
-  onnxruntime: {
-    available: boolean
-    version: string | null
-    providers: string[]
+  onnxruntime: PlatformAiWorkerProbeDiagnosticsInput['onnxruntime'] & {
     coremlAvailable: boolean
-    cpuAvailable: boolean
-    error: string | null
   }
-  mlx: {
-    available: boolean
-    version: string | null
-    error: string | null
-  }
-  clipSiglipOnnx: MacOSAiWorkerCapabilityProbe
-  lanes: MacOSAiWorkerLaneProbe[]
 }
