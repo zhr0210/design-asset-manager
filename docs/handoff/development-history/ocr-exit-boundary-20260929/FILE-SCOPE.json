@@ -1,0 +1,15 @@
+{
+  "changed": [
+    "src/main/ocr/local-ocr-process.ts",
+    "src/main/ocr/ocr-controller.ts",
+    "src/main/ocr/README.md",
+    "src/main/index.ts",
+    "scripts/ocr-process-lifecycle.test.ts",
+    "scripts/ocr-controller-lifecycle.test.ts",
+    "scripts/ocr-exit-electron.e2e.test.mjs",
+    "TASK.md"
+  ],
+  "publicContractChanges": false,
+  "schemaChanges": false,
+  "realDataAccess": false
+}

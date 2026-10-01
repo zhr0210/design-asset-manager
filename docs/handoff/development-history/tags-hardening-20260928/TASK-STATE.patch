@@ -1,0 +1,18 @@
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,4 +1,15 @@
+ # Current Task
++
++## 已完成：C07-S 增量收尾 F01–F03（2026-09-28）
++
++用户“批准处理”的三项局部收尾已完成，独立源码审查通过。F01统一最近100终态句柄保留，活动任务与持久效果不删除；F02生命周期epoch与迟到receipt释放，实际组件红绿和正式页面可达性通过；F03提供最高优先级终态入口，nextBatchAuthorized=false，不自动恢复旧ACTIVE记录。
++执行30、组件3、正式面板1、Provider9、批次12、恢复22、资源10及政策5项通过；typecheck/build和正式执行场景通过。原暂存/未暂存/未跟踪工作保留，无提交发布。真实模型/用户库/Windows/安装包未验收，历史原生等待仍未定位，其他后台进程UNKNOWN。
++
++- [最高优先级终态](.ai-run/tags-hardening-20260928/FINAL-HANDOFF.json)
++- [收尾报告](.ai-run/tags-hardening-20260928/REPORT.md)
++- [检查点](.ai-run/tags-hardening-20260928/HANDOFF.md)
++
++下方原批次完成记录保留为历史，不能由其旧授权自动启动新任务。
+ 
+ ## 连续批次已完成：C01–C07-S（2026-09-27）
+ 

@@ -1,0 +1,27 @@
+{
+  "checkedFiles": 1071,
+  "approvedExistingModified": [
+    "src/preload/index.ts",
+    "src/preload/asset-card.ts",
+    "src/shared/contracts/active-library.contract.ts",
+    "src/main/independent-tags/tag-decision-storage.ts",
+    "src/main/independent-tags/tag-execution.schema.ts",
+    "src/main/independent-tags/tag-decision.schema.ts",
+    "src/main/independent-tags/tag-execution-controller.ts",
+    "src/renderer/routes/AiConsolePage.tsx",
+    "src/renderer/components/asset/VisualAiPanel.tsx",
+    "src/main/index.ts",
+    "src/main/library-lifecycle/active-library-host.ts",
+    "src/main/library-lifecycle/library-open-control-store.internal.ts",
+    "src/main/library-lifecycle/library-schema-version.ts",
+    "src/main/library-lifecycle/library-materialization.internal.ts",
+    "src/main/ipc/main-ipc-composition.ts",
+    "src/main/ocr/ocr-controller.ts",
+    "TASK.md"
+  ],
+  "unexpectedModified": [],
+  "missing": [],
+  "indexUnchanged": true,
+  "stagedUnchanged": true,
+  "indexMethod": "sha256(git ls-files --stage -z)"
+}

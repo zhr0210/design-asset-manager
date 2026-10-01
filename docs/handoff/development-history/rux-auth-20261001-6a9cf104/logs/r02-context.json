@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/canvas-return-context.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.104,
+  "sha256": "8eeddd9b77324216e999d76b641e9e0cb160dda7bec0e65aa142d4309bbc1e43"
+}

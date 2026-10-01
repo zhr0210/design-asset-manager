@@ -1,0 +1,24 @@
+{
+  "purpose": "read-only source review snapshot, not frozen final test evidence",
+  "files": {
+    "src/main/ai-gateway/ai-connection-service.ts": "3feaa46cac5930c1a1749b4b289c0a2526a6edf6b0e4cdc8b9b0d772627ef93d",
+    "src/main/ai-gateway/pi-runtime-host.ts": "813f7e8345e4ead0bddac29560e6c9759e35f2564580867ff36b78653efaa872",
+    "src/main/ai-credentials/credential-vault.ts": "50a072fb65b1b4a39b6db89d8fdbae7d86a98289de1670514c544e09a3d84555",
+    "src/main/ipc/ai-connection.ipc.ts": "70afd44226d2b903316824a686c1d8937b945aec328d520b65e3cce613342415",
+    "src/main/ipc/ai-backend.ipc.ts": "9b33c0223a3cd07f6deac2ad6cb10f4c3e5e8070e182e1114aaa111efecb34f4",
+    "src/main/ipc/settings.ipc.ts": "a4df3c237fb61e41931039f9e03b3cd1e52804abbc4721b3402ae5ba8a6595d1",
+    "src/main/ipc/main-ipc-composition.ts": "921bd7d81d54bfb7016ded20d01b9aa47b9e54c53c18795c5eb70e25fdd988bc",
+    "src/main/index.ts": "de704b8f43d5bb773cb53e0ee63d0729ebaa8acdb30aa8d986d40b1bd3b573c9",
+    "src/shared/contracts/ai-auth-state.ts": "91fab3d0993aaf2e3a2483dfaa2077b170f736b5a22cad119dd13f9b092a1fd3",
+    "src/shared/contracts/ai-connection.contract.ts": "91262e4f87514fab1595d6b1c31685c8fd33d677398f07aae72f6d86a5a6f27c",
+    "pi-runtime/worker.mjs": "ddbcf958c314ab53deb91c0e189a32b04f8d684fdeb66ab9b79a1cff71ca113d",
+    "pi-runtime/openai-chatgpt-auth.mjs": "b9e206d542a8a28aec683451213c7e547a21359f889f392de8ec993544d54df7",
+    "pi-runtime/auth-protocol.json": "36d83e6560a527a3df50583efb496de80cac533a5f491444d55ac71fc77570fa",
+    "src/renderer/components/asset/PiConnectionsPanel.tsx": "7c8a781c5d20718d8aa1a8eef01e90a6020f58ea1b4675da6497e52b060fc72c",
+    "src/renderer/components/layout/AuthActivity.tsx": "349fbe15bd01177e5541dcafe8841e55b3358ec56de3fca6058986669aaa8097",
+    "src/renderer/components/layout/AppShell.tsx": "fe380e05200b9400ae1f93f99c4608a67d0ce01636e29e8005b3a07f79d442da",
+    "src/renderer/routes/AiWorkspace.tsx": "387a970fd233ff8ba052dc0dd739f691bf6681b43ee9cb2184a20bb2fd86ff19",
+    "scripts/auth-account-lifecycle.test.ts": "cc3ae3b562574f03f0833830f5509ac0a77958dc5a0dcc4ba060edd13cc0099f",
+    "scripts/auth-owned-stage.test.ts": "3b1abe1edaa4333f598e39eb8cc0b606d742adbcf132ceee74b7b718180144a5"
+  }
+}

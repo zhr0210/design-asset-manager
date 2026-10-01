@@ -1,0 +1,11 @@
+{
+  "indexSha256": "02a3f8d2c8b1fcdd7878086b3ad5e914ae71a1d2070ba7683ff74dbd03f2576d",
+  "stagedSha256": "4b129649df3d6d4b4e852cf2c02ea7c70278fe554d1864812c79ae07fdaf9d12",
+  "matchBaseline": true,
+  "outsideOwnedBaselineChanges": [],
+  "baselineFiles": 2270,
+  "supplementalBaseline": "module-map before capture; omitted extensions are not fully snapshotted",
+  "newUnownedFiles": "not treated as RUX additions; no broad clean",
+  "privateDataAccess": false,
+  "gitStageCommitPush": false
+}

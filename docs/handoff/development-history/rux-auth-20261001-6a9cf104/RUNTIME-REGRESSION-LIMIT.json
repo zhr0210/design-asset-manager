@@ -1,0 +1,77 @@
+{
+  "status": "RED_RETAINED",
+  "script": "scripts/ai-runtime-status-workflow.test.ts",
+  "failure": "existing strict all-src process.platform comparator policy expects empty list",
+  "currentProducerLog": "logs/r08-runtime-current.log",
+  "beforeProducerLog": "logs/r08-runtime-before.log",
+  "conditionsAtBaseline": [
+    {
+      "path": "src/main/asset-card/electron-asset-card-window.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/external-connected-library/connected-library-runtime.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/independent-tags/tag-intent-backup.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/index.ts",
+      "baselineSource": "saved before",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/library-lifecycle/exclusive-library-lock.tracer.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/library-lifecycle/library-filesystem.tracer.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/library-lifecycle/library-open-inspection.tracer.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/library-lifecycle/mac-volume-qualification.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/library-lifecycle/readonly-library-database.internal.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/ocr/ocr-runtime.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/visual-ai/visual-codec.worker.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/visual-ai/visual-preparation.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    },
+    {
+      "path": "src/main/work-mode/electron-work-window.ts",
+      "baselineSource": "R00 baseline sha",
+      "platformConditionUnchanged": true
+    }
+  ],
+  "noAssertionBypassed": true,
+  "notClaimedPassed": true,
+  "followup": "Review platform adapter policy separately; do not broaden RUX or mass refactor Main to hide failure."
+}

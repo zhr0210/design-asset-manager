@@ -1,0 +1,12 @@
+{
+  "archive": ".ai-run/background-foundation-20260928/delivery/DAM-BACKGROUND-FOUNDATION-B01-20260929.zip",
+  "sha256": "d6e93cafb0c88d79d77948684652b8d1195d13957bf9384f57350e650705b923",
+  "bytes": 917656,
+  "entries": 240,
+  "sourceDigest": "db0db486be25dd0e33380f4094cefad95bb851632058e9b7c02cbd4869f1f121",
+  "changeDigest": "ea7fc678678c16714fffdbb4c3836adc0bd7b8aeab52eadb2f946865364716c3",
+  "zipCrcVerified": true,
+  "allFileHashesVerified": true,
+  "patchReconstructed": true,
+  "terminalVerified": true
+}

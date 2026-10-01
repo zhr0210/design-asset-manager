@@ -1,0 +1,256 @@
+--- a/scripts/tag-execution.integration.test.ts
++++ b/scripts/tag-execution.integration.test.ts
+@@ -376,3 +376,39 @@
+   const assets=await f.host.listAssets();assert.equal(assets.length,1);assert.equal(assets[0].tagAnalysis,null);assert.equal((await f.host.readTagExecution(f.scope)).current,null)
+  }finally{await f.close()}
+ })
++
++await test('150 saved-result reuses retain only 100 terminal jobs without inference or durable changes',async()=>{
++ const f=await fixture();let calls=0,changes=0
++ const c=controllers(f,{invokeOnce:async()=>{calls++;throw Error('Saved result must not infer')}},()=>{changes++})
++ try{
++  const context=await f.host.readTagIntentContext(f.scope)
++  await f.host.enableTagExecution({...f.scope,sessionToken:context.sessionToken,expectedSchemaVersion:9,allowUpgrade:true})
++  const claim=await startClaim(f.host,{...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId,inputSha256:'b'.repeat(64),origin:'tags-only'})
++  const effect=await f.host.commitTagExecution({...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId,attemptToken:claim.attemptToken,tags:['已有结果']})
++  const before=await fs.readFile(f.dbFile),ids:string[]=[]
++  for(let i=0;i<150;i++){const r=await c.tags.prepare('main',{...f.scope,requestId:f.intent.requestId});assert.equal(r.alreadySucceeded,true);const job=await c.tags.run('main',r.receipt);assert.equal(job.state,'succeeded');ids.push(job.id)}
++  const visible=ids.filter(id=>{try{c.tags.inspect('main',id);return true}catch{return false}})
++  assert.equal(calls,0);assert.equal(changes,0);assert.equal(c.admission.inspect().materialBytes,0);assert.deepEqual(await fs.readFile(f.dbFile),before)
++  assert.equal((await f.host.readTagEffectReceipt({...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId})).receipt?.effectId,effect.effectId)
++  assert.deepEqual(visible,ids.slice(-100),'The saved-result fast path must obey the same 100-terminal retention bound')
++ }finally{await c.close();await f.close()}
++})
++for(const outcome of ['success','failure','queued-cancel','sent-cancel'] as const)await test(`terminal retention shares cleanup for ${outcome} without evicting active work`,async()=>{
++ const f=await fixture();let calls=0,release!:()=>void,entered!:()=>void
++ const gate=new Promise<void>(r=>{release=r}),started=new Promise<void>(r=>{entered=r})
++ const c=controllers(f,{invokeOnce:async()=>{calls++;entered();if(outcome==='sent-cancel')await gate;return{choices:[{finish_reason:'stop',message:{content:outcome==='failure'?'invalid':JSON.stringify({tags:['new result']})}}]}}})
++ try{
++  const context=await f.host.readTagIntentContext(f.scope);await f.host.enableTagExecution({...f.scope,sessionToken:context.sessionToken,expectedSchemaVersion:9,allowUpgrade:true})
++  const seed=await startClaim(f.host,{...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId,inputSha256:'b'.repeat(64),origin:'tags-only'});await f.host.commitTagExecution({...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId,attemptToken:seed.attemptToken,tags:['saved']})
++  const ids:string[]=[];for(let i=0;i<100;i++){const r=await c.tags.prepare('main',{...f.scope,requestId:f.intent.requestId});ids.push((await c.tags.run('main',r.receipt)).id)}
++  await f.host.saveTagIntent({...f.intent,expectedSchemaVersion:10,requestId:'new-terminal-case'})
++  const review=await c.tags.prepare('main',{...f.scope,requestId:'new-terminal-case'}),job=await c.tags.run('main',review.receipt)
++  assert.equal(job.state,'queued');assert.equal(c.tags.inspect('main',job.id).id,job.id)
++  if(outcome==='queued-cancel')c.tags.cancel('main',job.id)
++  if(outcome==='sent-cancel'){await started;assert.equal(c.tags.inspect('main',job.id).state,'running');c.tags.cancel('main',job.id);assert.equal(c.tags.inspect('main',job.id).id,job.id);assert.equal(c.admission.inspect().requests,1);release()}
++  const terminal=await c.tags.settle('main',job.id)
++  assert.equal(terminal.state,{'success':'succeeded','failure':'failed','queued-cancel':'cancelled','sent-cancel':'outcome-unknown'}[outcome]);assert.equal(calls,outcome==='queued-cancel'?0:1)
++  assert.throws(()=>c.tags.inspect('main',ids[0]));for(const id of ids.slice(1))assert.equal(c.tags.inspect('main',id).state,'succeeded');assert.equal(c.tags.inspect('main',job.id).state,terminal.state)
++  assert.ok((await f.host.readTagEffectReceipt({...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId})).receipt);assert.equal(c.admission.inspect().materialBytes,0)
++ }finally{release();await c.close();await f.close()}
++})
+--- /dev/null
++++ b/scripts/tag-intent-panel-electron.e2e.test.mjs
+@@ -0,0 +1,40 @@
++import assert from 'node:assert/strict'
++import {test} from 'node:test'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import http from 'node:http'
++import {pathToFileURL} from 'node:url'
++import {createHash} from 'node:crypto'
++import {_electron as electron} from 'playwright'
++import sharp from 'sharp'
++await test('formal inspector reuses the independent panel across bulk A-B-A, preserving asset intent scope',async()=>{
++ const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-intent-panel-e2e-'))),profile=path.join(root,'profile'),library=path.join(root,'library'),evidence=path.join(root,'evidence'),entry=path.join(root,'entry');let app,calls=0
++ const server=http.createServer((req,res)=>{calls++;res.writeHead(500);res.end()})
++ try{
++  for(const dir of [profile,evidence,entry])await fs.mkdir(dir)
++  const sources=[];for(const name of ['generated-a','generated-b']){const file=path.join(root,name+'.png');await sharp({create:{width:name.endsWith('a')?100:110,height:80,channels:3,background:'#7799bb'}}).png().toFile(file);sources.push(file)}
++  const hash=async()=>Promise.all(sources.map(async p=>createHash('sha256').update(await fs.readFile(p)).digest('hex'))),original=await hash()
++  await fs.writeFile(path.join(entry,'package.json'),JSON.stringify({name:'dam-owned-panel-path',type:'module',main:'main.mjs'}));await fs.writeFile(path.join(entry,'main.mjs'),`import ${JSON.stringify(pathToFileURL(path.resolve('out/main/index.js')).href)};`)
++  await new Promise(r=>server.listen(0,'127.0.0.1',r))
++  const config={rootDirectory:root,profileDirectory:profile,libraryDirectory:library,evidenceDirectory:evidence,sourceSelections:[sources]},env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k)))
++  app=await electron.launch({args:[entry,'--dam-active-library-synthetic-e2e',`--user-data-dir=${profile}`],env:{...env,NODE_ENV:'test',DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E:JSON.stringify(config)}})
++  assert.ok((await app.evaluate(({app})=>['userData','sessionData','logs','crashDumps'].map(n=>app.getPath(n)))).every(p=>p.startsWith(root+path.sep)))
++  const page=await app.firstWindow(),errors=[];page.on('pageerror',()=>errors.push('renderer-error'));page.setDefaultTimeout(15000);await page.setViewportSize({width:1379,height:1042});await page.getByTestId('formal-library-canvas').waitFor()
++  await page.getByTestId('library-create').click();await page.getByTestId('library-create-confirm').click();await page.getByRole('button',{name:'添加图片',exact:true}).click();await page.getByTestId('library-copy-confirm').click();await page.getByRole('checkbox',{name:'选择 generated-b',exact:true}).waitFor()
++  if(await page.getByRole('button',{name:'关闭资料库管理'}).count())await page.getByRole('button',{name:'关闭资料库管理'}).click()
++  await page.evaluate(baseUrl=>window.electronAPI.aiBackendSave({id:'synthetic',name:'Owned fixture',type:'openai-compatible',enabled:true,baseUrl,defaultModel:'synthetic-model',timeoutMs:5000,priority:1,capabilities:{chat:true,vision:true,embeddings:false,jsonOutput:true,modelList:false,modelManagement:false}}),`http://127.0.0.1:${server.address().port}/v1`)
++  const assets=await page.evaluate(()=>window.electronAPI.listAssets()),a=assets.find(a=>a.title==='generated-a'),b=assets.find(a=>a.title==='generated-b')
++  await page.locator(`[id="asset-card-open-${a.id}"]`).click();await page.getByText('AI 分析与提示词反推',{exact:true}).click();const panel=page.locator('[aria-label="独立标签任务"]')
++  const save=async()=>{await panel.getByRole('button',{name:'保存独立标签任务',exact:true}).click();await panel.getByRole('button',{name:'确认保存任务',exact:true}).click();await panel.getByRole('button',{name:'分析标签',exact:true}).waitFor()}
++  await save();await page.evaluate(()=>{window.__independentPanel=document.querySelector('[aria-label="独立标签任务"]')})
++  await page.getByRole('checkbox',{name:'选择 generated-b',exact:true}).check();await page.waitForFunction(()=>!document.querySelector('[aria-label="独立标签任务"]').textContent.includes('任务已保存，待运行'))
++  assert.equal(await page.evaluate(()=>window.__independentPanel===document.querySelector('[aria-label="独立标签任务"]')),true,'Bulk selection changes the real child identity without remounting its DOM')
++  await save();await page.getByRole('checkbox',{name:'选择 generated-b',exact:true}).uncheck();await panel.getByRole('button',{name:'分析标签',exact:true}).waitFor()
++  assert.equal(await page.evaluate(()=>window.__independentPanel===document.querySelector('[aria-label="独立标签任务"]')),true)
++  const counts=await page.evaluate(async ids=>{const s=await window.electronAPI.library.inspect();return Promise.all(ids.map(async assetId=>{const r=await window.electronAPI.independentTags.read({libraryIdentity:s.identity,generation:s.generation,assetId});if(!r.ok)throw Error(r.error);return r.value.requests.length}))},[a.id,b.id]);assert.deepEqual(counts,[1,1])
++  await panel.getByRole('button',{name:'分析标签',exact:true}).click();await panel.getByRole('region',{name:'确认标签执行范围'}).waitFor();await panel.getByRole('button',{name:'取消运行',exact:true}).click();await panel.getByRole('region',{name:'确认标签执行范围'}).waitFor({state:'detached'})
++  assert.equal(calls,0);assert.deepEqual(await hash(),original);assert.deepEqual(errors,[])
++  if(process.env.DAM_HARDENING_SCREENSHOT)await page.screenshot({path:process.env.DAM_HARDENING_SCREENSHOT})
++ }finally{if(app)await app.close();server.closeAllConnections();await new Promise(r=>server.close(r));await fs.rm(root,{recursive:true,force:true})}
++})
+--- /dev/null
++++ b/scripts/tag-intent-ui.integration.test.mjs
+@@ -0,0 +1,33 @@
++import assert from 'node:assert/strict'
++import {test} from 'node:test'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {_electron as electron} from 'playwright'
++import {build} from 'esbuild'
++const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-tag-intent-ui-'));let app
++try{
++ const bundle=await build({stdin:{contents:`import React,{useState} from 'react';import{createRoot}from'react-dom/client';import Panel from './src/renderer/components/asset/IndependentTagIntentPanel';
++ window.intents=[];window.executions=[];window.discarded=[];window.runs=[];
++ window.independentTagsAPI={read:async input=>({ok:true,value:{requests:[{requestId:'request:'+input.assetId,sourceMatches:true,state:'waiting-execution',model:'fixture-model'}]}}),prepare:input=>new Promise(resolve=>window.intents.push({input,resolve})),confirm:async()=>({ok:true,value:{}})};
++ window.tagExecutionAPI={onChanged:()=>()=>{},read:async()=>({ok:true,value:{schemaVersion:9,current:null,jobs:[]}}),prepare:input=>new Promise(resolve=>window.executions.push({input,resolve})),discardReview:async id=>{window.discarded.push(id);return{ok:true}},run:async id=>{window.runs.push(id);return{ok:true,value:{id:'never',state:'queued'}}}};
++ function App(){const[id,setId]=useState('a'),[shown,setShown]=useState(true);return <><button onClick={()=>setId(id==='a'?'b':'a')}>切换素材</button><button onClick={()=>setShown(!shown)}>卸载面板</button>{shown&&<Panel scope={{libraryIdentity:'generated',generation:'one'}} assetId={id} backendId="synthetic" model="fixture-model"/>}</>};createRoot(document.getElementById('root')).render(<App/>);`,resolveDir:process.cwd(),loader:'tsx'},bundle:true,format:'iife',platform:'browser',write:false,logLevel:'silent'})
++ await fs.writeFile(path.join(root,'bundle.js'),bundle.outputFiles[0].contents);await fs.writeFile(path.join(root,'index.html'),'<div id="root"></div><script src="bundle.js"></script>')
++ await fs.writeFile(path.join(root,'main.cjs'),`const{app,BrowserWindow}=require('electron');for(const name of ['userData','sessionData','logs','crashDumps'])app.setPath(name,${JSON.stringify(root)}+'/'+name);app.whenReady().then(()=>{new BrowserWindow({width:700,height:700,webPreferences:{nodeIntegration:false,contextIsolation:true}}).loadFile(${JSON.stringify(path.join(root,'index.html'))})});app.on('window-all-closed',()=>app.quit());`)
++ const env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k)))
++ app=await electron.launch({args:[path.join(root,'main.cjs')],env});const page=await app.firstWindow();page.setDefaultTimeout(5000)
++ await test('actual independent panel A-B-A rejects old review and old finally cannot unlock the new operation',async()=>{
++  await page.reload();const button=page.getByRole('button',{name:'保存独立标签任务',exact:true});await button.click();await page.waitForFunction(()=>window.intents.length===1)
++  await page.getByRole('button',{name:'切换素材',exact:true}).click();await page.waitForFunction(()=>!document.querySelectorAll('button')[2].disabled)
++  await page.getByRole('button',{name:'切换素材',exact:true}).click();await button.click();await page.waitForFunction(()=>window.intents.length===2)
++  await page.evaluate(async()=>{window.intents[0].resolve({ok:true,value:{receipt:'old-a',backendName:'OLD_A_MUST_NOT_SHOW',model:'old',storageNotice:'fixture'}});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))})
++  assert.equal(await page.getByText('OLD_A_MUST_NOT_SHOW',{exact:false}).count(),0,'Old A must not replace the current review')
++  assert.equal(await button.isDisabled(),true,'Old finally must not unlock the second A operation')
++  await page.evaluate(()=>window.intents[1].resolve({ok:true,value:{receipt:'new-a',backendName:'NEW_A_REVIEW',model:'new',storageNotice:'fixture'}}));await page.getByText('NEW_A_REVIEW',{exact:false}).waitFor();assert.equal(await button.isDisabled(),false)
++ })
++ for(const action of ['切换素材','卸载面板'])await test(`a late execution receipt after ${action} is discarded once without running`,async()=>{
++  await page.reload();await page.getByRole('button',{name:'分析标签',exact:true}).click();await page.waitForFunction(()=>window.executions.length===1);await page.getByRole('button',{name:action,exact:true}).click()
++  await page.evaluate(async()=>{window.executions[0].resolve({ok:true,value:{receipt:'late-execution',backendName:'fixture',model:'fixture',providerOrigin:'owned',inputDescription:'fixture',storageNotice:'fixture'}});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))})
++  assert.deepEqual(await page.evaluate(()=>window.discarded),['late-execution']);assert.deepEqual(await page.evaluate(()=>window.runs),[]);assert.equal(await page.getByRole('region',{name:'确认标签执行范围'}).count(),0)
++ })
++}finally{if(app)await app.close();await fs.rm(root,{recursive:true,force:true})}
+--- a/src/main/independent-tags/README.md
++++ b/src/main/independent-tags/README.md
+@@ -51,3 +51,11 @@
+ A fresh review freezes current service/authentication conditions against the stored destination/model/content binding. It reuses the original request, reads succeeded items and skips unknown/superseded items; only still-current unfinished items can obtain new attempts. Known successful receipts stay accessible when the backend is disabled. Notifications replay pending Outbox events without inference or new effects, coalesce within a session and stop after1000 events per flush with a truthful pending flag. Delivery failure leaves unacknowledged rows. Reopen notification starts after the Host business barrier is released.
+ 
+ During shutdown suspension, the private finish path records paused for not-sent and unknown for sent work, then revokes the in-memory claim. Quiescing/closed connections allow no new reads or effects. Tests include owned child-process SIGKILL at seven real persistence/response cuts, including an actual nonzero-header hot journal, normal formal Electron restart, explicit resume and disabled-backend receipt reads. Synthetic event paging is separately identified as a controller test, not proof of1001 real commits. No real user library/model, Windows or package validation.
++
++## 2026-09-28 targeted hardening (F01/F02)
++
++The single-execution controller now uses one retention function for saved-result reuse and normal completion, failure or cancellation. It keeps the latest100 terminal in-memory handles and never evicts queued/running work. It does not delete durable receipts, evidence or current pointers, and reuse still performs no inference or business write.
++
++IndependentTagIntentPanel binds asynchronous refreshes/actions to a monotonic component lifecycle epoch in addition to identity. A→B→A cannot admit the first A response or release the second A busy state. A successful execution review arriving after switch/unmount is explicitly discarded rather than left until TTL; it is never automatically run. Main Inspector's stable selected-asset key with changing single bulk selection makes this reuse reachable; native-card token remounts are a separate path. Production-component delayed-bridge tests and the formal Main/Preload/Renderer selection path provide distinct evidence.
++
++The original continuous batch remains completed history. New hardening handoffs give FINAL-HANDOFF.json precedence over archived ACTIVE contracts, with nextBatchAuthorized=false. Neither handoff deploys a coding supervisor or authorizes real models/user libraries.
+--- a/src/main/independent-tags/tag-execution-controller.ts
++++ b/src/main/independent-tags/tag-execution-controller.ts
+@@ -23,6 +23,13 @@
+  const preparing=new Set<string>(),ownerEpoch=new Map<string,number>(),drainWaiters=new Set<()=>void>()
+  let epoch=0,running=0,suspended=false,cutover:Promise<void>|undefined
+  const notifyDrain=()=>{if(!running&&!preparing.size){for(const r of drainWaiters)r();drainWaiters.clear()}}
++ // Only in-memory terminal handles are bounded; active work and durable effects stay intact.
++ const pruneTerminalJobs=()=>{
++  const terminal=(job:Job)=>!['running','queued'].includes(job.value.state)
++  let excess=[...jobs.values()].filter(terminal).length-100
++  if(excess<=0)return
++  for(const [id,job]of jobs){if(terminal(job)){jobs.delete(id);if(--excess===0)break}}
++ }
+  const requireScope=(scope:TagIntentScope)=>{const s=deps.host.inspect();if(s.state!=='ready'||s.identity!==scope.libraryIdentity||s.generation!==scope.generation)throw Error('TAG_INTENT_SCOPE_EXPIRED')}
+  const release=(m:VisualMaterialLease|null)=>{if(m){m.dispose();materials.delete(m)}}
+  const configured=(id:string)=>{
+@@ -90,7 +97,7 @@
+     const session=await deps.host.readVisualSession(plan.input);if(session.sessionToken!==plan.sessionToken)throw Error('TAG_INTENT_SESSION_EXPIRED')
+     plan.material?.consume()
+     const job:Job={owner,value:{...plan.input,id:randomUUID(),state:plan.review.alreadySucceeded?'succeeded':'queued'},abort:new AbortController()};jobs.set(job.value.id,job)
+-    if(plan.review.alreadySucceeded){running--;notifyDrain();return structuredClone(job.value)}
++    if(plan.review.alreadySucceeded){pruneTerminalJobs();running--;notifyDrain();return structuredClone(job.value)}
+     const version=epoch
+     job.settled=execute(plan,job,version).finally(()=>{running--;release(plan.material);notifyDrain()})
+     return structuredClone(job.value)
+@@ -136,7 +143,7 @@
+    if(claim)try{await deps.host.finishTagExecution({...scope,attemptToken:claim.attemptToken,state:job.value.state,errorCode:unknown?'REMOTE_OUTCOME_UNKNOWN':'TAG_ATTEMPT_FAILED'})}catch{/* Closing/replaced sessions are reconciled on reopen. */}
+   }finally{
+    timeout();job.abort.signal.removeEventListener('abort',cancel)
+-   if(jobs.size>100)for(const[id,j]of jobs){if(jobs.size<=100)break;if(j!==job&&!['running','queued'].includes(j.value.state))jobs.delete(id)}
++   pruneTerminalJobs()
+   }
+  }
+ }
+--- a/src/renderer/components/asset/IndependentTagIntentPanel.tsx
++++ b/src/renderer/components/asset/IndependentTagIntentPanel.tsx
+@@ -13,23 +13,26 @@
+  const api=bridge.independentTagsAPI??bridge.electronAPI?.independentTags,execution=bridge.tagExecutionAPI??bridge.electronAPI?.tagExecution
+  const identity=JSON.stringify([scope,assetId,backendId,model]),current=useRef(identity);current.current=identity
+  const executionReceipt=useRef<string|null>(null)
+- const requestId=useRef(''),pending=useRef(false),alive=useRef(true)
++ const requestId=useRef(''),pending=useRef(false),alive=useRef(true),lifecycle=useRef(0)
++ const isCurrent=(version:number)=>alive.current&&current.current===identity&&lifecycle.current===version
+  const [review,setReview]=useState<TagIntentReview|null>(null),[requests,setRequests]=useState<TagIntentSummary[]>([])
+  const [runReview,setRunReview]=useState<TagRunReview|null>(null),[job,setJob]=useState<TagRunJob|null>(null),[snapshot,setSnapshot]=useState<TagExecutionSnapshot|null>(null)
+  const [busy,setBusy]=useState(false),[error,setError]=useState('')
+  const running=job?.state==='queued'||job?.state==='running'
+  const applySnapshot=(value:TagExecutionSnapshot)=>{setSnapshot(value);onPendingTags?.(value.schemaVersion>=10?value.current?.pendingTags??[]:undefined);onCurrentTagSource?.(value.schemaVersion>=10?value.current?.originalVisualEvidenceId??null:undefined);if(value.activeJobs?.length)setJob(value.activeJobs[0])}
+- const refresh=async()=>{
++ const refresh=async(fence?:()=>boolean)=>{
++  const version=lifecycle.current,valid=()=>isCurrent(version)&&(!fence||fence())
+   if(!api)return
+   const saved=await api.read({...scope,assetId})
+-  if(!alive.current||current.current!==identity)return
++  if(!valid())return
+   if(saved.ok)setRequests(saved.value.requests);else setError(saved.error)
+-  if(execution){const result=await execution.read({...scope,assetId});if(alive.current&&current.current===identity){if(result.ok)applySnapshot(result.value);else setError(result.error)}}
++  if(execution){const result=await execution.read({...scope,assetId});if(valid()){if(result.ok)applySnapshot(result.value);else setError(result.error)}}
+  }
+  useEffect(()=>{
++  lifecycle.current++;const version=lifecycle.current,valid=()=>isCurrent(version)
+   alive.current=true;pending.current=false;requestId.current=crypto.randomUUID();setReview(null);setRunReview(null);setJob(null);setSnapshot(null);setRequests([]);setBusy(false);setError('');onCurrentTagSource?.(undefined);onPendingTags?.(undefined)
+-  void refresh().catch(()=>{if(alive.current&&current.current===identity)setError('标签任务读取失败，请重试。')})
+-  return()=>{alive.current=false;if(executionReceipt.current){void execution?.discardReview(executionReceipt.current).catch(()=>{});executionReceipt.current=null}}
++  void refresh(valid).catch(()=>{if(valid())setError('标签任务读取失败，请重试。')})
++  return()=>{lifecycle.current++;alive.current=false;if(executionReceipt.current){void execution?.discardReview(executionReceipt.current).catch(()=>{});executionReceipt.current=null}}
+  },[api,execution,identity])
+  useEffect(()=>execution?.onChanged(changed=>{if(changed.libraryIdentity===scope.libraryIdentity&&changed.generation===scope.generation&&changed.assetId===assetId)void refresh().catch(()=>{})}),[execution,identity])
+  useEffect(()=>{onActivityChange?.(busy||running);return()=>onActivityChange?.(false)},[busy,running,onActivityChange])
+@@ -46,34 +49,36 @@
+   }
+   timer=setTimeout(poll,100);return()=>{disposed=true;clearTimeout(timer)}
+  },[running,job?.id,execution,identity])
+- const operate=async(action:()=>Promise<void>)=>{
+-  if(pending.current)return;pending.current=true;setBusy(true);setError('')
+-  try{await action()}catch{if(alive.current&&current.current===identity)setError('标签任务操作未完成，请重新读取后核对。')}
+-  finally{if(alive.current&&current.current===identity){pending.current=false;setBusy(false)}}
++ const operate=async(action:(valid:()=>boolean)=>Promise<void>)=>{
++  if(pending.current)return
++  const version=lifecycle.current,valid=()=>isCurrent(version)
++  pending.current=true;setBusy(true);setError('')
++  try{await action(valid)}catch{if(valid())setError('标签任务操作未完成，请重新读取后核对。')}
++  finally{if(valid()){pending.current=false;setBusy(false)}}
+  }
+  if(!api)return null
+  const states=new Map(snapshot?.jobs.map(j=>[j.requestId,j.state])??[])
+  const labels:Record<string,string>={'waiting-execution':'任务已保存，待运行',queued:'等待资源',running:'标签分析中',succeeded:'标签已保存',failed:'未完成，保留原结果',cancelled:'已取消','outcome-unknown':'远端状态未知，不会自动重发',paused:'已暂停',superseded:'已被较新请求取代'}
+  return <div className="visual-ai-intents" aria-label="独立标签任务">
+-  <div className="visual-ai-actions"><button type="button" disabled={busy||running||!backendId||!model.trim()} onClick={()=>void operate(async()=>{
+-   const r=await api.prepare({...scope,assetId,backendId,model,requestId:requestId.current});if(!alive.current||current.current!==identity)return
++  <div className="visual-ai-actions"><button type="button" disabled={busy||running||!backendId||!model.trim()} onClick={()=>void operate(async valid=>{
++   const r=await api.prepare({...scope,assetId,backendId,model,requestId:requestId.current});if(!valid())return
+    if(r.ok)setReview(r.value);else setError(r.error)
+   })}>保存独立标签任务</button><button type="button" disabled={busy} onClick={()=>void operate(refresh)}>重新读取任务</button></div>
+   {review&&<div className="visual-ai-review" role="region" aria-label="确认保存标签任务"><strong>确认保存标签任务</strong><p>{review.backendName} · {review.model}</p><p>{review.storageNotice}</p>
+-   <div className="visual-ai-actions"><button type="button" disabled={busy} onClick={()=>setReview(null)}>取消保存</button><button type="button" disabled={busy} onClick={()=>void operate(async()=>{
+-    const r=await api.confirm(review.receipt);if(!alive.current||current.current!==identity)return
+-    if(r.ok){setReview(null);await refresh()}else setError(r.error)
++   <div className="visual-ai-actions"><button type="button" disabled={busy} onClick={()=>setReview(null)}>取消保存</button><button type="button" disabled={busy} onClick={()=>void operate(async valid=>{
++    const r=await api.confirm(review.receipt);if(!valid())return
++    if(r.ok){setReview(null);await refresh(valid)}else setError(r.error)
+    })}>确认保存任务</button></div></div>}
+   {runReview&&<div className="visual-ai-review" role="region" aria-label="确认标签执行范围"><strong>{runReview.alreadySucceeded?'结果已保存':runReview.location==='external'?'确认发送到外部服务':'确认独立标签分析'}</strong><p>{runReview.backendName} · {runReview.providerOrigin}</p><p>{runReview.model}</p><p>{runReview.inputDescription}</p><p>{runReview.storageNotice}</p>
+-   <div className="visual-ai-actions"><button type="button" disabled={busy} onClick={()=>{const receipt=runReview.receipt;executionReceipt.current=null;setRunReview(null);void execution?.discardReview(receipt).catch(()=>{})}}>取消运行</button><button type="button" disabled={busy} onClick={()=>void operate(async()=>{
+-    const r=await execution!.run(runReview.receipt);if(!alive.current||current.current!==identity)return
+-    if(r.ok){executionReceipt.current=null;setJob(r.value);setRunReview(null);if(r.value.state==='succeeded')await refresh()}else setError(r.error)
++   <div className="visual-ai-actions"><button type="button" disabled={busy} onClick={()=>{const receipt=runReview.receipt;executionReceipt.current=null;setRunReview(null);void execution?.discardReview(receipt).catch(()=>{})}}>取消运行</button><button type="button" disabled={busy} onClick={()=>void operate(async valid=>{
++    const r=await execution!.run(runReview.receipt);if(!valid())return
++    if(r.ok){executionReceipt.current=null;setJob(r.value);setRunReview(null);if(r.value.state==='succeeded')await refresh(valid)}else setError(r.error)
+    })}>{runReview.alreadySucceeded?'读取已保存结果':runReview.location==='external'?'同意发送并运行标签':'确认运行标签'}</button></div></div>}
+   {busy&&<p role="status">正在处理标签任务…</p>}{error&&<p role="alert">{error}</p>}
+-  {job&&<div className="visual-ai-job" role="status"><span>{labels[job.state]}</span>{running&&<button type="button" disabled={busy} onClick={()=>void operate(async()=>{const r=await execution!.cancel(job.id);if(alive.current&&current.current===identity){if(r.ok)setJob(r.value);else setError(r.error)}})}>取消标签分析</button>}{job.error&&<p>{job.error}</p>}</div>}
++  {job&&<div className="visual-ai-job" role="status"><span>{labels[job.state]}</span>{running&&<button type="button" disabled={busy} onClick={()=>void operate(async valid=>{const r=await execution!.cancel(job.id);if(valid()){if(r.ok)setJob(r.value);else setError(r.error)}})}>取消标签分析</button>}{job.error&&<p>{job.error}</p>}</div>}
+   {requests.map(r=>{const state=job?.requestId===r.requestId?job.state:states.get(r.requestId)??r.state;return <div className="visual-ai-job" role="status" key={r.requestId}><span>{r.sourceMatches?labels[state]:'素材已变化，请重新确认'} · {r.model}</span>
+-   {execution&&r.sourceMatches&&!['running','queued','outcome-unknown','superseded','succeeded'].includes(state)&&<button type="button" disabled={busy||running} onClick={()=>void operate(async()=>{
+-    const result=await execution.prepare({...scope,assetId,requestId:r.requestId});if(!alive.current||current.current!==identity)return
++   {execution&&r.sourceMatches&&!['running','queued','outcome-unknown','superseded','succeeded'].includes(state)&&<button type="button" disabled={busy||running} onClick={()=>void operate(async valid=>{
++    const result=await execution.prepare({...scope,assetId,requestId:r.requestId});if(!valid()){if(result.ok)void execution.discardReview(result.value.receipt).catch(()=>{});return}
+     if(result.ok){executionReceipt.current=result.value.receipt;setRunReview(result.value)}else setError(result.error)
+    })}>分析标签</button>}
+   </div>})}

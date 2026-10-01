@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: actual installed Pi -> controlled preview -> production Host save protects user caption and OCR
+ok 1 - actual installed Pi -> controlled preview -> production Host save protects user caption and OCR
+  ---
+  duration_ms: 2145.791709
+  ...
+# Subtest: credential change cancels owned Pi request and rejects late write, old review loses account binding
+ok 2 - credential change cancels owned Pi request and rejects late write, old review loses account binding
+  ---
+  duration_ms: 1318.112666
+  ...
+# Subtest: UNKNOWN request holds actual admission resources until the delayed close token
+ok 3 - UNKNOWN request holds actual admission resources until the delayed close token
+  ---
+  duration_ms: 0.373166
+  ...
+# Subtest: selected local evidence is disclosed and frozen for a separately reviewed external refinement
+ok 4 - selected local evidence is disclosed and frozen for a separately reviewed external refinement
+  ---
+  duration_ms: 2656.691666
+  ...
+# Subtest: generated capability validation is separately reviewed, sends once, and never creates a library effect
+ok 5 - generated capability validation is separately reviewed, sends once, and never creates a library effect
+  ---
+  duration_ms: 1239.664792
+  ...
+# Subtest: correct generated-image challenge records capability evidence for exactly the reviewed model and credential binding
+ok 6 - correct generated-image challenge records capability evidence for exactly the reviewed model and credential binding
+  ---
+  duration_ms: 1880.636792
+  ...
+# Subtest: installed Pi tags-only commits through production claim and duplicate succeeds without another inference
+ok 7 - installed Pi tags-only commits through production claim and duplicate succeeds without another inference
+  ---
+  duration_ms: 1460.008833
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10703.977041

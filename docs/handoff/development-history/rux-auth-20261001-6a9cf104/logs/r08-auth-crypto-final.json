@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/chatgpt-auth.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.261,
+  "sha256": "ebab71f81568bc6455ea92221bd98f3ec4b94a5b9403f6e965e016cae1351629"
+}

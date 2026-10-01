@@ -1,0 +1,33 @@
+test_control_source_refused (__main__.AnchorTests) ... ok
+test_evidence_change_during_publish (__main__.AnchorTests) ... ok
+test_inconsistent_or_missing_state (__main__.AnchorTests) ... ok
+test_latest_reclassifies_live_drift_without_mutating_history_or_granting_resume (__main__.AnchorTests) ... ok
+test_missing_report_or_review (__main__.AnchorTests) ... ok
+test_mutation_during_publish_refused (__main__.AnchorTests) ... ok
+test_named_gitignore_is_source_but_other_hidden_sources_are_not (__main__.AnchorTests) ... ok
+test_non_string_path_rejected (__main__.AnchorTests) ... ok
+test_ocr_adapter (__main__.AnchorTests) ... ok
+test_oversize_document (__main__.AnchorTests) ... ok
+test_pending_failed_blocked_not_completed (__main__.AnchorTests) ... ok
+test_pi_adapter (__main__.AnchorTests) ... ok
+test_pointer_changed_while_verifying (__main__.AnchorTests) ... ok
+test_publish_cas (__main__.AnchorTests) ... ok
+test_replaced_writer_lock_not_removed (__main__.AnchorTests) ... ok
+test_review_pending_rejected (__main__.AnchorTests) ... ok
+test_run_mismatch (__main__.AnchorTests) ... ok
+test_runtime_data_and_dependency_trees_remain_rejected (__main__.AnchorTests) ... ok
+test_snapshot_read_never_authorizes_live_publish (__main__.AnchorTests) ... ok
+test_source_mismatch (__main__.AnchorTests) ... ok
+test_stale_lock_never_taken (__main__.AnchorTests) ... ok
+test_state_identity_source_and_continuation_agreement (__main__.AnchorTests) ... ok
+test_symlink_and_escape (__main__.AnchorTests) ... ok
+test_typed_application_runtime_source_is_allowed (__main__.AnchorTests) ... ok
+test_unknown_algorithm (__main__.AnchorTests) ... ok
+test_unknown_format_rejected (__main__.AnchorTests) ... ok
+test_v2_notrun_preserved_and_resume_must_be_explicit (__main__.AnchorTests) ... ok
+test_v2_read_is_nonmutating_preserves_limits (__main__.AnchorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.214s
+
+OK

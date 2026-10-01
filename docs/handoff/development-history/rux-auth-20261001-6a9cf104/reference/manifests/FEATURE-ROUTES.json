@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "state": "PROPOSED",
+  "singleRegistryRequired": true,
+  "configurationRequiresLibrary": false,
+  "routes": [
+    {
+      "id": "library",
+      "label": "素材工作区",
+      "target": "/library",
+      "ownerScope": "library",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "ai-connections",
+      "label": "AI 与模型 / 连接与账号",
+      "target": "/ai/connections",
+      "ownerScope": "application",
+      "legacyAlias": "/ai-console",
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "ai-tasks",
+      "label": "任务用哪个模型",
+      "target": "/ai/task-models",
+      "ownerScope": "application",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "local-models",
+      "label": "本地模型与 OCR",
+      "target": "/ai/local-models",
+      "ownerScope": "application",
+      "legacyAlias": "/model-library",
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "background",
+      "label": "后台分析与资源",
+      "target": "/ai/background",
+      "ownerScope": "mixed-explicit-panels",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "diagnostics",
+      "label": "诊断",
+      "target": "/ai/diagnostics",
+      "ownerScope": "application-and-explicit-library",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "tasks",
+      "label": "任务中心",
+      "target": "/tasks",
+      "ownerScope": "projection-scoped",
+      "legacyAlias": "/downloads",
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "settings",
+      "label": "设置",
+      "target": "/settings",
+      "ownerScope": "application",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "tags",
+      "label": "标签管理",
+      "target": "/tag-manager",
+      "ownerScope": "library",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "eagle",
+      "label": "Eagle 连接库",
+      "target": "/connected-libraries",
+      "ownerScope": "external-library",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "legacy",
+      "label": "找回旧素材",
+      "target": "/legacy-library",
+      "ownerScope": "readonly-library",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    },
+    {
+      "id": "help",
+      "label": "帮助与关于",
+      "target": "/help",
+      "ownerScope": "application",
+      "legacyAlias": null,
+      "implementedByThisPlan": false
+    }
+  ],
+  "librarySubviewIds": [
+    "all",
+    "folders",
+    "work",
+    "trash"
+  ],
+  "oldSettingsAiAction": "navigate to same ai-connections or task-models with safe return context",
+  "noParallelConnectionEditors": true
+}

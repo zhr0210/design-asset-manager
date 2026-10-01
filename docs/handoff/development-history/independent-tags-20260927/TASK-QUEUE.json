@@ -1,0 +1,42 @@
+{
+  "tasks": [
+    {
+      "id": "C01",
+      "state": "ACCEPTED",
+      "reviewType": "SELF_REVIEW",
+      "basis": "Original source/log/hash reconciliation and minimal diagnostic coverage; no production source changes"
+    },
+    {
+      "id": "C02A",
+      "state": "ACCEPTED"
+    },
+    {
+      "id": "C02B",
+      "state": "ACCEPTED"
+    },
+    {
+      "id": "C03",
+      "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN"
+    },
+    {
+      "id": "C04",
+      "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN"
+    },
+    {
+      "id": "C05",
+      "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN"
+    },
+    {
+      "id": "C06",
+      "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN"
+    },
+    {
+      "id": "C07-S",
+      "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN"
+    }
+  ],
+  "excluded": [
+    "C07-R"
+  ],
+  "originalParentIdsPreserved": true
+}

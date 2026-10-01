@@ -1,0 +1,22 @@
+{
+  "allowed": [
+    "src shared navigation/contracts",
+    "renderer layout/AI/settings/direct configuration callers",
+    "Main auth/lifecycle/build identity/IPC",
+    "pi-runtime auth/worker/seal",
+    "focused scripts/tests",
+    "AGENTS/DESIGN/active documentation",
+    "proven deletion/migration candidates only"
+  ],
+  "excluded": [
+    "user data",
+    "credentials",
+    "model weights",
+    "dependencies",
+    "new providers",
+    "schema changes",
+    "Git staging/commit/push",
+    "unrelated WIP"
+  ],
+  "deletionRequires": "DELETION-LEDGER proof before each source removal"
+}

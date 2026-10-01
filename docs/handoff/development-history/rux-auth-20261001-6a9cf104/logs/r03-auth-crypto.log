@@ -1,0 +1,87 @@
+✔ real crypto verifies signature/issuer/audience/expiry/nonce/account and rejects unsigned variants (4.675ms)
+✔ controlled auth transport checks destinations/methods, raw bytes, redirects and retained spent attempts (2.691208ms)
+✔ callback enforces exact loopback, state, issued registration and one selected client (0.346375ms)
+✖ full public-client sign-in uses stable host and DAM registration, validates identity before result, reuses issued client (0.542292ms)
+✖ refresh preserves client/verified identity/hint when no new ID token; wrong replacement identity rejects (0.148958ms)
+✖ verified identity without plan permission is kept but cannot derive inference auth (0.129584ms)
+✖ signed refresh identity for another account cannot replace original registration (0.108917ms)
+✔ cancel during login releases owned callback and makes zero token requests (4.811125ms)
+✔ auth 429 has one physical attempt, no automatic retry and no raw error body (0.165708ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 5
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 122.099
+
+✖ failing tests:
+
+test at scripts/chatgpt-auth.test.mjs:32:7
+✖ full public-client sign-in uses stable host and DAM registration, validates identity before result, reuses issued client (0.542292ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:819:25)
+      at Object.notify (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:29:171)
+      at progress (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:37)
+      at Object.login (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:71)
+      at login (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:29:99)
+      at TestContext.<anonymous> (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:33:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    code: 'ERR_INVALID_URL',
+    input: 'undefined'
+  }
+
+test at scripts/chatgpt-auth.test.mjs:36:7
+✖ refresh preserves client/verified identity/hint when no new ID token; wrong replacement identity rejects (0.148958ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:819:25)
+      at Object.notify (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:29:171)
+      at progress (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:37)
+      at Object.login (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:71)
+      at login (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:29:99)
+      at TestContext.<anonymous> (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:37:21)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    code: 'ERR_INVALID_URL',
+    input: 'undefined'
+  }
+
+test at scripts/chatgpt-auth.test.mjs:41:7
+✖ verified identity without plan permission is kept but cannot derive inference auth (0.129584ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:819:25)
+      at Object.notify (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:43:98)
+      at progress (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:37)
+      at Object.login (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:71)
+      at TestContext.<anonymous> (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:43:30)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)
+      at run (node:internal/test_runner/harness:396:12) {
+    code: 'ERR_INVALID_URL',
+    input: 'undefined'
+  }
+
+test at scripts/chatgpt-auth.test.mjs:45:7
+✖ signed refresh identity for another account cannot replace original registration (0.108917ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:819:25)
+      at Object.notify (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:29:171)
+      at progress (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:37)
+      at Object.login (file://<DAM_WORKSPACE>/pi-runtime/openai-chatgpt-auth.mjs:57:71)
+      at login (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:29:99)
+      at TestContext.<anonymous> (file://<DAM_WORKSPACE>/scripts/chatgpt-auth.test.mjs:46:21)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    code: 'ERR_INVALID_URL',
+    input: 'undefined'
+  }

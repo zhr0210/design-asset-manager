@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED_INSTANCE_SELECTION",
+  "tool": "cua_repl native available for ordinary app; controlled identity selection not yet reliable",
+  "notPassed": true,
+  "noShortcuts": true,
+  "noRealCredentialsOrLibraryUsed": true,
+  "initialGoal": "normal home -> visible global AI entry -> connections",
+  "retry": "final candidate controlled profile; do not use selectors as CU substitute"
+}

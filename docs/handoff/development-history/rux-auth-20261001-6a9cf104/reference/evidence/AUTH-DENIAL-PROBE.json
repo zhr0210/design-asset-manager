@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-01",
+  "scope": "actual current custom OAuth module, owned loopback denial, synthetic registration and no vendor network",
+  "runtime": "Node 24.21.0 from bundled runtime",
+  "remoteProcessPid": 94421,
+  "processExitCode": 0,
+  "test": "state-valid-denial-callback",
+  "callbackStatus": 400,
+  "settledAfterCallback120ms": false,
+  "vendorNetworkCalls": 0,
+  "realAccountsUsed": false,
+  "credentialsRead": false,
+  "ownedAttemptAbortedAndClosed": true,
+  "finding": "Valid OAuth denial did not settle attempt; browser response alone did not end login",
+  "doesNotEstablish": "Root cause of the user actual browser sign-in failure",
+  "evidenceClass": "BACKEND_SYNTHETIC_REPRODUCTION_NOT_CU"
+}

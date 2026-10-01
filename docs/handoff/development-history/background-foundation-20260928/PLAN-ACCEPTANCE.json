@@ -1,0 +1,7 @@
+{
+  "state": "APPROVED_FOR_B01_FOUNDATION_ONLY",
+  "reviewer": "background_boundary_review",
+  "verified": "all three file SHA256 values; reviewer did not independently recompute bundle digest",
+  "digest": "c926120da4ca2ddba7687cd921fc52dda25e01756607d7a35cf5ef2c6e3f8b63",
+  "actualInferenceAuthorized": false
+}

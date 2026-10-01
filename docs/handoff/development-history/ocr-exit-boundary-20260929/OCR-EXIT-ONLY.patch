@@ -1,0 +1,515 @@
+--- a/src/main/ocr/local-ocr-process.ts
++++ b/src/main/ocr/local-ocr-process.ts
+@@ -2,31 +2,73 @@
+ import {isAbsolute} from 'node:path'
+ import {validateOcrObservation,type OcrObservation} from '../../shared/contracts/asset-ocr.contract'
+ 
+-/** Main-owned executable/runner paths only. No Renderer-supplied paths or shell commands. */
+-export function runLocalOcr(input:{python:string;runner:string;preview:Uint8Array;signal:AbortSignal;timeoutMs?:number;modelSha256?:OcrObservation['modelSha256']}):Promise<OcrObservation>{
+- if(input.signal.aborted)return Promise.reject(Error('OCR_CANCELLED'))
+- if(!isAbsolute(input.python)||!isAbsolute(input.runner)||!input.preview.length||input.preview.length>16*1024*1024)return Promise.reject(Error('OCR_INPUT_INVALID'))
+- return new Promise((resolve,reject)=>{
+-  let settled=false,size=0;const chunks:Buffer[]=[]
+-  const child=spawn(input.python,['-I','-B',input.runner,...(input.modelSha256?['--expected-models',JSON.stringify(input.modelSha256)]:[])],{shell:false,stdio:['pipe','pipe','pipe'],env:{PATH:process.env.PATH,LANG:'en_US.UTF-8',OMP_NUM_THREADS:'2'}})
+-  const cleanup=()=>{clearTimeout(timer);input.signal.removeEventListener('abort',abort)}
+-  const fail=(code:string)=>{if(settled)return;settled=true;cleanup();child.kill('SIGKILL');reject(Error(code))}
+-  const abort=()=>fail('OCR_CANCELLED')
+-  const timer=setTimeout(()=>fail('OCR_TIMEOUT'),Math.min(120000,Math.max(1,input.timeoutMs??60000)))
+-  input.signal.addEventListener('abort',abort,{once:true})
+-  if(input.signal.aborted){abort();return}
+-  child.on('error',()=>fail('OCR_RUNTIME_UNAVAILABLE'))
+-  child.stderr.on('data',()=>{/* Drain but never log private paths or transport text. */})
+-  child.stdout.on('data',(chunk:Buffer)=>{size+=chunk.length;if(size>1024*1024){fail('OCR_OUTPUT_TOO_LARGE');return}chunks.push(chunk)})
+-  child.stdin.on('error',()=>{/* A premature close is handled by the process exit/error. */})
+-  child.on('close',code=>{
+-   if(settled)return
+-   try{
+-    const message=JSON.parse(Buffer.concat(chunks).toString('utf8'))
+-    if(code!==0||message?.ok!==true){const errors=new Set(['OCR_DEPENDENCY_MISSING','OCR_MODEL_MISSING','OCR_RUNTIME_VERSION_UNSUPPORTED','OCR_INPUT_INVALID','OCR_MODEL_CHANGED']);fail(errors.has(message?.error)?message.error:'OCR_EXECUTION_FAILED');return}
+-    const value=validateOcrObservation(message.value);settled=true;cleanup();resolve(value)
+-   }catch{fail('OCR_RESULT_INVALID')}
++type Input={python:string;runner:string;preview:Uint8Array;signal:AbortSignal;timeoutMs?:number;modelSha256?:OcrObservation['modelSha256']}
++/** Internal resource evidence, never serialized over IPC. A rejected request is not release proof. */
++export class OcrProcessUnconfirmedError extends Error {
++ constructor(readonly released:Promise<void>){super('OCR_PROCESS_EXIT_UNCONFIRMED')}
++}
++
++/** Only the held ChildProcess handle may be signalled. Injection is for isolated lifecycle tests. */
++export function createLocalOcrRunner(deps:{spawn?:typeof spawn;graceMs?:number;closeMs?:number}={}){
++ const blocked=new Set<OcrProcessUnconfirmedError>()
++ const graceMs=deps.graceMs??250,closeMs=deps.closeMs??2000
++ return function run(input:Input):Promise<OcrObservation>{
++  if(blocked.size)return Promise.reject(new OcrProcessUnconfirmedError(Promise.all([...blocked].map(error=>error.released)).then(()=>{})))
++  if(input.signal.aborted)return Promise.reject(Error('OCR_CANCELLED'))
++  if(!isAbsolute(input.python)||!isAbsolute(input.runner)||!input.preview.length||input.preview.length>16*1024*1024)return Promise.reject(Error('OCR_INPUT_INVALID'))
++  return new Promise((resolve,reject)=>{
++   let settled=false,closed=false,exited=false,failure:string|undefined,size=0,stderrSize=0
++   let deadline:ReturnType<typeof setTimeout>|undefined,escalation:ReturnType<typeof setTimeout>|undefined,closeDeadline:ReturnType<typeof setTimeout>|undefined
++   let release!:()=>void
++   const released=new Promise<void>(r=>{release=r}),chunks:Buffer[]=[]
++   const child=(deps.spawn??spawn)(input.python,['-I','-B',input.runner,...(input.modelSha256?['--expected-models',JSON.stringify(input.modelSha256)]:[])],{shell:false,stdio:['pipe','pipe','pipe'],env:{PATH:process.env.PATH,LANG:'en_US.UTF-8',OMP_NUM_THREADS:'2'}})
++   const cleanup=()=>{clearTimeout(deadline);clearTimeout(escalation);clearTimeout(closeDeadline);input.signal.removeEventListener('abort',abort);chunks.length=0}
++   const finish=(error?:Error,value?:OcrObservation)=>{if(settled)return;settled=true;cleanup();if(error)reject(error);else resolve(value!)}
++   const signal=(name:NodeJS.Signals)=>{if(!closed&&!exited&&child.pid){try{child.kill(name)}catch{/* Delivery is not exit evidence. The close deadline still applies. */}}}
++   const awaitClose=()=>{
++    if(closeDeadline)return
++    closeDeadline=setTimeout(()=>{
++     if(closed)return
++     // Bound the transport lifetime as well. Destruction does not prove physical exit.
++     child.stdin.destroy();child.stdout.destroy();child.stderr.destroy()
++     const unknown=new OcrProcessUnconfirmedError(released);blocked.add(unknown)
++     void released.then(()=>{blocked.delete(unknown)})
++     finish(unknown)
++    },graceMs+closeMs)
++   }
++   const fail=(code:string)=>{
++    if(settled||closed||failure)return
++    failure=code;chunks.length=0;clearTimeout(deadline)
++    signal('SIGTERM');escalation=setTimeout(()=>signal('SIGKILL'),graceMs);awaitClose()
++   }
++   const abort=()=>fail('OCR_CANCELLED')
++   // All listeners exist before observing abort or writing input.
++   child.on('error',()=>{
++    if(!child.pid){closed=true;release();finish(Error('OCR_RUNTIME_UNAVAILABLE'))}
++    else fail('OCR_RUNTIME_UNAVAILABLE')
++   })
++   child.on('exit',()=>{exited=true;clearTimeout(escalation);awaitClose()})
++   child.stderr.on('error',()=>fail('OCR_STREAM_FAILED'))
++   child.stdout.on('error',()=>fail('OCR_STREAM_FAILED'))
++   child.stdin.on('error',()=>fail('OCR_STREAM_FAILED'))
++   child.stderr.on('data',(chunk:Buffer)=>{stderrSize+=chunk.length;if(stderrSize>1024*1024)fail('OCR_OUTPUT_TOO_LARGE')})
++   child.stdout.on('data',(chunk:Buffer)=>{if(failure||settled)return;size+=chunk.length;if(size>1024*1024){fail('OCR_OUTPUT_TOO_LARGE');return}chunks.push(chunk)})
++   child.on('close',code=>{
++    closed=true;exited=true;release()
++    if(settled)return
++    if(failure){finish(Error(failure));return}
++    try{
++     const message=JSON.parse(Buffer.concat(chunks).toString('utf8'))
++     if(code!==0||message?.ok!==true){const errors=new Set(['OCR_DEPENDENCY_MISSING','OCR_MODEL_MISSING','OCR_RUNTIME_VERSION_UNSUPPORTED','OCR_INPUT_INVALID','OCR_MODEL_CHANGED']);finish(Error(errors.has(message?.error)?message.error:'OCR_EXECUTION_FAILED'));return}
++     finish(undefined,validateOcrObservation(message.value))
++    }catch{finish(Error('OCR_RESULT_INVALID'))}
++   })
++   deadline=setTimeout(()=>fail('OCR_TIMEOUT'),Math.min(120000,Math.max(1,input.timeoutMs??60000)))
++   input.signal.addEventListener('abort',abort,{once:true})
++   if(input.signal.aborted){abort();return}
++   try{child.stdin.end(Buffer.from(input.preview))}catch{fail('OCR_STREAM_FAILED')}
+   })
+-  child.stdin.end(Buffer.from(input.preview))
+- })
++ }
+ }
++/** Main-selected paths only, never Renderer-selected executables. Shared quarantine across runtime handles. */
++export const runLocalOcr=createLocalOcrRunner()
+--- a/src/main/ocr/ocr-controller.ts
++++ b/src/main/ocr/ocr-controller.ts
+@@ -1,5 +1,6 @@
+ import {randomUUID,createHash} from 'node:crypto'
+ import sharp from 'sharp'
++import {OcrProcessUnconfirmedError} from './local-ocr-process'
+ import type {ActiveLibraryHost} from '../../shared/contracts/active-library.contract'
+ import type {OcrScope,OcrJob,OcrReview,OcrSnapshot,OcrCorrection} from '../../shared/contracts/asset-ocr.contract'
+ import type {OcrRuntime,OcrRuntimeHandle} from './ocr-runtime'
+@@ -8,24 +9,31 @@
+ interface Plan{scope:Scope;expires:number;epoch:number;runtime:OcrRuntimeHandle;items:Array<{assetId:string;assetRevision:string;sourceRef:string;inputSha256:string;preview:Uint8Array;snapshot:OcrSnapshot}>}
+ export const ocrMessage=(error:unknown)=>{
+  const code=error instanceof Error?error.message:''
+- const messages:Record<string,string>={OCR_SCOPE_EXPIRED:'素材库已变化，请重新选择素材。',OCR_RESULT_CONFLICT:'OCR 已在其他位置更新，草稿已保留，请重新载入后核对。',OCR_SOURCE_CHANGED:'素材预览已变化，本次结果没有保存。',OCR_RUNTIME_UNAVAILABLE:'本地 OCR 环境不可用，请先选择已安装的环境。',OCR_TIMEOUT:'文字识别超时，本次没有保存结果。',OCR_CANCELLED:'文字识别已取消。',OCR_UPGRADE_REQUIRED:'请先确认 OCR 存储升级。',OCR_MODEL_CHANGED:'OCR 模型文件已变化，请重新配置并确认。',OCR_EDITED_SOURCE_CHANGED:'已有修订属于旧预览，结果保留，请先检查素材版本。'}
++ const messages:Record<string,string>={OCR_SCOPE_EXPIRED:'素材库已变化，请重新选择素材。',OCR_RESULT_CONFLICT:'OCR 已在其他位置更新，草稿已保留，请重新载入后核对。',OCR_SOURCE_CHANGED:'素材预览已变化，本次结果没有保存。',OCR_RUNTIME_UNAVAILABLE:'本地 OCR 环境不可用，请先选择已安装的环境。',OCR_TIMEOUT:'文字识别超时，本次没有保存结果。',OCR_CANCELLED:'文字识别已取消。',OCR_PROCESS_EXIT_UNCONFIRMED:'尚未确认 OCR 进程退出，已阻止新的识别与维护操作。',OCR_DRAIN_BLOCKED:'OCR 尚未安全停止，请稍后重试关闭。',OCR_UPGRADE_REQUIRED:'请先确认 OCR 存储升级。',OCR_MODEL_CHANGED:'OCR 模型文件已变化，请重新配置并确认。',OCR_EDITED_SOURCE_CHANGED:'已有修订属于旧预览，结果保留，请先检查素材版本。'}
+  return messages[code]||'OCR 操作未完成；已有结果和输入保留，请检查本地环境后重试。'
+ }
+-export function createOcrController(deps:{host:Host;runtime:OcrRuntime;changed(scope:OcrScope):void}){
+- let epoch=0,preparing=false,maintenanceHolds=0,active:{job:OcrJob;abort:AbortController}|null=null
++export function createOcrController(deps:{host:Host;runtime:OcrRuntime;changed(scope:OcrScope):void;drainTimeoutMs?:number}){
++ let epoch=0,preparing=false,maintenanceHolds=0,drains=0,suspended=false
++ type Record={job:OcrJob;abort:AbortController;done:Promise<void>;unconfirmed:boolean}
++ let active:Record|null=null,preparation=Promise.resolve()
++ const unreleased=new Set<Promise<void>>()
++ const beginPreparation=()=>{preparing=true;let done!:()=>void;preparation=new Promise<void>(r=>{done=r});return()=>{preparing=false;done()}}
+  const plans=new Map<string,Plan>()
+  const matches=(s:Scope)=>{const a=deps.host.inspect();return a.state==='ready'&&a.identity===s.libraryIdentity&&a.generation===s.generation}
+  const requireScope=(s:Scope)=>{if(!s||!matches(s))throw Error('OCR_SCOPE_EXPIRED')}
+- const busy=()=>active?.job.state==='running'
++ const busy=()=>active?.job.state==='running'||unreleased.size>0
++ const invalidate=()=>{epoch++;plans.clear();active?.abort.abort()}
++ const suspend=()=>{suspended=true;invalidate()}
++ const assertAdmission=()=>{if(unreleased.size)throw Error('OCR_PROCESS_EXIT_UNCONFIRMED');if(suspended||maintenanceHolds||preparing||busy())throw Error('OCR_BUSY')}
+  return{
+   async status(){const runtime=await deps.runtime.current();return{configured:!!runtime,label:runtime?.label||'尚未选择本地 OCR 环境',job:active&&matches(active.job)?structuredClone(active.job):null}},
+-  holdForMaintenance(){if(busy()||preparing)throw Error('OCR_BUSY');maintenanceHolds++;epoch++;plans.clear();let held=true;return()=>{if(held){held=false;maintenanceHolds--}}},
+-  async configure(){if(maintenanceHolds||busy()||preparing)throw Error('OCR_BUSY');preparing=true;try{plans.clear();await deps.runtime.configure()}finally{preparing=false}},
++  holdForMaintenance(){if(suspended||busy()||preparing)throw Error('OCR_BUSY');maintenanceHolds++;epoch++;plans.clear();let held=true;return()=>{if(held){held=false;maintenanceHolds--}}},
++  async configure(){assertAdmission();const finish=beginPreparation();try{plans.clear();await deps.runtime.configure()}finally{finish()}},
+   read:(scope:OcrScope)=>{requireScope(scope);return deps.host.readOcr(scope)},
+   async prepare(input:Scope&{assetIds:string[]}):Promise<OcrReview>{
+-   if(maintenanceHolds||preparing||busy())throw Error('OCR_BUSY')
++   assertAdmission()
+    if(!input||Object.keys(input).some(k=>!['libraryIdentity','generation','assetIds'].includes(k))||!Array.isArray(input.assetIds)||!input.assetIds.length||input.assetIds.length>8||new Set(input.assetIds).size!==input.assetIds.length)throw Error('OCR_INPUT_INVALID')
+-   requireScope(input);preparing=true;plans.clear();const version=epoch
++   requireScope(input);const finish=beginPreparation();plans.clear();const version=epoch
+    try{
+     const runtime=await deps.runtime.current();if(!runtime)throw Error('OCR_RUNTIME_UNAVAILABLE')
+     const context=await deps.host.readAssetContext(input.assetIds),items:Plan['items']=[]
+@@ -40,22 +48,38 @@
+     requireScope(input);if(version!==epoch)throw Error('OCR_SCOPE_EXPIRED')
+     const receipt=randomUUID();plans.set(receipt,{scope:{libraryIdentity:input.libraryIdentity,generation:input.generation},epoch:version,expires:Date.now()+300000,runtime,items})
+     return{receipt,count:items.length,requiresUpgrade:items.some(i=>i.snapshot.requiresUpgrade),runtimeLabel:runtime.label}
+-   }finally{preparing=false}
++   }finally{finish()}
+   },
+-  async run(receipt:string){if(maintenanceHolds)throw Error('OCR_BUSY');const plan=plans.get(receipt);if(!plan||plan.epoch!==epoch||plan.expires<Date.now())throw Error('OCR_SCOPE_EXPIRED');requireScope(plan.scope);if(busy())throw Error('OCR_BUSY')
+-   const runtime=await deps.runtime.current();if(runtime?.fingerprint!==plan.runtime.fingerprint)throw Error('OCR_MODEL_CHANGED')
+-   requireScope(plan.scope);if(plan.epoch!==epoch||!plans.has(receipt)||busy())throw Error('OCR_SCOPE_EXPIRED');plans.delete(receipt)
+-   const record={job:{...plan.scope,id:randomUUID(),state:'running',items:plan.items.map(i=>({assetId:i.assetId,state:'queued'}))} as OcrJob,abort:new AbortController()};active=record
+-   void execute(plan,record);return structuredClone(record.job)
++  async run(receipt:string){assertAdmission();const plan=plans.get(receipt);if(!plan||plan.epoch!==epoch||plan.expires<Date.now())throw Error('OCR_SCOPE_EXPIRED');requireScope(plan.scope)
++   const finish=beginPreparation()
++   try{
++    const runtime=await deps.runtime.current();if(runtime?.fingerprint!==plan.runtime.fingerprint)throw Error('OCR_MODEL_CHANGED')
++    requireScope(plan.scope);if(suspended||maintenanceHolds||plan.epoch!==epoch||!plans.has(receipt))throw Error('OCR_SCOPE_EXPIRED');plans.delete(receipt)
++    const record:Record={job:{...plan.scope,id:randomUUID(),state:'running',items:plan.items.map(i=>({assetId:i.assetId,state:'queued'}))},abort:new AbortController(),done:Promise.resolve(),unconfirmed:false};active=record
++    record.done=execute(plan,record);return structuredClone(record.job)
++   }finally{finish()}
+   },
+   cancel(){active?.abort.abort();return active?structuredClone(active.job):null},
+   async correct(input:OcrCorrection){requireScope(input);const result=await deps.host.correctOcr(input);try{deps.changed(input)}catch{}return result},
+-  invalidate(){epoch++;plans.clear();active?.abort.abort()}
++  invalidate,
++  suspend,
++  resume(){if(!drains&&!preparing&&!busy())suspended=false},
++  async suspendAndDrain(){
++   suspend();drains++
++   let timer:ReturnType<typeof setTimeout>|undefined
++   try{
++    await Promise.race([
++     (async()=>{await preparation;await active?.done;await Promise.all([...unreleased])})(),
++     new Promise<never>((_,reject)=>{timer=setTimeout(()=>reject(Error('OCR_DRAIN_BLOCKED')),deps.drainTimeoutMs??5000)})
++    ])
++   }finally{clearTimeout(timer);drains--}
++  }
++
+  }
+- async function execute(plan:Plan,record:{job:OcrJob;abort:AbortController}){
++ async function execute(plan:Plan,record:Record){
+   try{for(const [index,input] of plan.items.entries()){
+    const item=record.job.items[index]
+-   if(record.abort.signal.aborted||plan.epoch!==epoch||!matches(plan.scope)){item.state='cancelled';continue}
++   if(record.unconfirmed||record.abort.signal.aborted||plan.epoch!==epoch||!matches(plan.scope)){item.state='cancelled';continue}
+    item.state='running'
+    try{
+     const before=await deps.host.readOcr({...plan.scope,assetId:item.assetId});if(before.sessionToken!==input.snapshot.sessionToken||before.revision!==input.snapshot.revision)throw Error('OCR_RESULT_CONFLICT')
+@@ -64,8 +88,11 @@
+     if(record.abort.signal.aborted||plan.epoch!==epoch)throw Error('OCR_CANCELLED');requireScope(plan.scope)
+     await deps.host.commitOcr({...plan.scope,assetId:item.assetId,sessionToken:input.snapshot.sessionToken,expectedRevision:input.snapshot.revision,allowUpgrade:true,evidence:{id:'ocr:'+randomUUID(),assetId:item.assetId,assetRevision:input.assetRevision,sourceRef:input.sourceRef,inputSha256:input.inputSha256,createdAt:new Date().toISOString(),observation}},record.abort.signal)
+     item.state='completed';try{deps.changed({...plan.scope,assetId:item.assetId})}catch{}
+-   }catch(error){item.state=record.abort.signal.aborted||plan.epoch!==epoch?'cancelled':'failed';item.error=item.state==='failed'?ocrMessage(error):undefined}
++   }catch(error){
++    if(error instanceof OcrProcessUnconfirmedError){record.unconfirmed=true;unreleased.add(error.released);void error.released.then(()=>unreleased.delete(error.released));item.state='failed';item.error=ocrMessage(error)}
++    else{item.state=record.abort.signal.aborted||plan.epoch!==epoch?'cancelled':'failed';item.error=item.state==='failed'?ocrMessage(error):undefined}
++   }
+    finally{input.preview=new Uint8Array()}
+-  }}finally{const n=record.job.items.filter(i=>i.state==='completed').length;record.job.state=n===record.job.items.length?'completed':n?'partial':record.abort.signal.aborted||plan.epoch!==epoch?'cancelled':'failed';plan.items=[]}
++  }}finally{const n=record.job.items.filter(i=>i.state==='completed').length;record.job.state=record.unconfirmed?'failed':n===record.job.items.length?'completed':n?'partial':record.abort.signal.aborted||plan.epoch!==epoch?'cancelled':'failed';plan.items=[]}
+  }
+ }
+--- a/src/main/ocr/README.md
++++ b/src/main/ocr/README.md
+@@ -49,3 +49,37 @@
+ The frozen model hashes are checked before constructing RapidOCR and after the worker result returns.
+ Previously committed OCR survives Trash/restore for an unchanged preview; all new commits still require
+ matching lifecycle revisions, so late tasks cannot write through a Trash round trip.
++
++
++## Owned subprocess exit and close drain (2026-09-29)
++
++`runLocalOcr` succeeds only after the owned child's `close` and validated output. A result on
++stdout, a termination request, or a terminal UI job is not physical release evidence.
++Cancel, timeout and transport failure request SIGTERM; after 250ms without observed exit,
++only that held ChildProcess handle receives SIGKILL. Observed exit suppresses further
++signals. The close/transport deadline is 2250ms. If close cannot be confirmed, local streams
++are destroyed and `OCR_PROCESS_EXIT_UNCONFIRMED` rejects the request while an internal
++resource token remains occupied until a late close. Quarantine is shared across runtime
++handles; no new spawn is allowed while any unknown token remains. This is owned-child
++accounting, not a process-tree sandbox or a device-wide resource governor.
++
++The original inference deadline remains 60s (maximum 120s); each output stream is capped
++at 1MiB cumulative transport bytes. Neither stderr nor raw protocol errors are logged.
++`exit` and `close` are intentionally distinct: a process may exit while inherited streams
++remain open. We conservatively retain the token until close and never signal an exited PID.
++
++The controller keeps resource occupancy separate from public job state, fences prepare,
++configure and run verification, and bounds `suspendAndDrain()` to 5s. Unknown resources,
++ongoing preparation and execution block maintenance. Separate maintenance releases do not
++unlock other holds. Main suspends OCR before awaiting other authority drains and waits for
++OCR before closing Host/app storage. Authority completion cannot resume OCR during shutdown.
++Failed drain requires retry after the actual resource/preparation settles; old receipts and
++late results remain revoked. No schema, IPC shape or background execution consent changes.
++
++Validation: `scripts/ocr-process-lifecycle.test.ts` uses stdlib Python children plus explicit
++fault-injected process events; `scripts/ocr-controller-lifecycle.test.ts` uses synthetic
++adapters and executes the actual Main authority-completion callback. The formal
++`scripts/ocr-exit-electron.e2e.test.mjs` uses generated images and a stdlib transport fixture
++through the production Runtime/Controller/IPC/Host, including saved correction preservation,
++close/reopen and application quit. This fixture does not validate RapidOCR or OCR quality.
++Windows signal behavior, real model execution and user libraries remain NOT_RUN this batch.
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -231,11 +231,11 @@
+ 
+ const shutdownCoordinator = new ShutdownCoordinator({
+   drain: async () => {
+-    visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate()
++    visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate();ocr?.suspend()
+     await workWindows?.drain()
+     await managedDownloads?.drain()
+     assetCard?.invalidate()
+-    activeLibraryHost?.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain()]);tagIntents?.invalidate(); ocr?.invalidate(); imageTools?.invalidate()
++    activeLibraryHost?.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain(),ocr?.suspendAndDrain()]);tagIntents?.invalidate(); imageTools?.invalidate()
+     await activeLibraryHost?.close()
+     await connectedRuntime?.drain()
+     appStorage?.close()
+@@ -291,12 +291,12 @@
+       : createProductionModelLibraryWorkspaceProvider(),
+     activeLibrary: {
+       host: activeLibraryHost,
+-      onAuthorityWillChange: async () => { if(workWindows?.hasUnsaved()&&dialog.showMessageBoxSync({type:'question',buttons:['继续编辑','放弃工作集草稿并切换'],defaultId:0,cancelId:0,message:'工作窗口有未保存内容。'})===0)throw Error('WORK_DRAFT_RETAINED');authorityBarrierRelease=visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate();await workWindows?.drain();await managedDownloads?.drain();authorityBusinessRelease=activeLibraryHost!.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain()]);tagIntents?.invalidate();ocr?.invalidate();imageTools?.invalidate();assetCard?.invalidate() },
++      onAuthorityWillChange: async () => { if(workWindows?.hasUnsaved()&&dialog.showMessageBoxSync({type:'question',buttons:['继续编辑','放弃工作集草稿并切换'],defaultId:0,cancelId:0,message:'工作窗口有未保存内容。'})===0)throw Error('WORK_DRAFT_RETAINED');authorityBarrierRelease=visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate();ocr?.suspend();await workWindows?.drain();await managedDownloads?.drain();authorityBusinessRelease=activeLibraryHost!.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain(),ocr?.suspendAndDrain()]);tagIntents?.invalidate();imageTools?.invalidate();assetCard?.invalidate() },
+       onAuthorityDidChange:async()=>{
+         const release=authorityBarrierRelease,businessRelease=authorityBusinessRelease;authorityBarrierRelease=undefined;authorityBusinessRelease=undefined
+         if(!release){businessRelease?.();return}
+         let ready:{libraryIdentity:string;generation:string}|undefined
+-        try{const scope=activeLibraryHost!.inspect();if(scope.state==='ready'&&scope.identity&&scope.generation){ready={libraryIdentity:scope.identity,generation:scope.generation};await activeLibraryHost!.readVisualSession(ready);visualAi?.resume();tagExecution?.resume();tagBatches?.resume()}}
++        try{const scope=activeLibraryHost!.inspect();if(scope.state==='ready'&&scope.identity&&scope.generation){ready={libraryIdentity:scope.identity,generation:scope.generation};await activeLibraryHost!.readVisualSession(ready);visualAi?.resume();tagExecution?.resume();tagBatches?.resume();if(shutdownCoordinator.state==='idle')ocr?.resume()}}
+         finally{businessRelease?.();release()}
+         if(ready)try{await tagRecovery?.flush(ready)}catch{/* Reopening remains usable; later refresh can redeliver. */}
+       },
+--- /dev/null
++++ b/scripts/ocr-process-lifecycle.test.ts
+@@ -0,0 +1,91 @@
++import assert from 'node:assert/strict'
++import {test} from 'node:test'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {runLocalOcr} from '../src/main/ocr/local-ocr-process'
++const sleep=(ms:number)=>new Promise(r=>setTimeout(r,ms))
++const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-ocr-exit-'))
++const waitFile=async(file:string)=>{for(let i=0;i<200;i++){try{return await fs.readFile(file,'utf8')}catch{await sleep(10)}}throw Error('fixture did not become ready')}
++test('abort retains ownership until the actual child exits',async()=>{
++ const ready=path.join(root,'ready'),runner=path.join(root,'delayed.py')
++ await fs.writeFile(runner,`import os,sys,time,signal\ndef stop(*args):\n time.sleep(0.15)\n sys.exit(0)\nsignal.signal(signal.SIGTERM,stop)\nopen(${JSON.stringify(ready)},'w').write(str(os.getpid()))\nsys.stdin.buffer.read()\ntime.sleep(30)\n`)
++ const abort=new AbortController(),pending=runLocalOcr({python:'/usr/bin/python3',runner,preview:new Uint8Array([1]),signal:abort.signal})
++ // Attach rejection immediately so a fixture assertion cannot leak an unhandled rejection.
++ const outcome=pending.then(()=>null,e=>e)
++ const pid=Number(await waitFile(ready));abort.abort()
++ const error=await outcome
++ assert.equal(error.message,'OCR_CANCELLED')
++ assert.throws(()=>process.kill(pid,0),{code:'ESRCH'},'settled cancellation must prove the owned child has exited')
++})
++
++const empty={engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:{det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},width:100,height:100,elapsedMs:1,threshold:.5,blocks:[]}
++let seq=0
++async function fixture(body:string){const id=++seq,runner=path.join(root,`runner-${id}.py`),ready=path.join(root,`ready-${id}`);await fs.writeFile(runner,`import os,sys,time,signal,json\n${body.replaceAll('READY',JSON.stringify(ready))}\n`);return{runner,ready}}
++const input=(runner:string,signal=new AbortController().signal)=>({python:'/usr/bin/python3',runner,signal,preview:new Uint8Array([1])})
++const assertExited=(pid:number)=>assert.throws(()=>process.kill(pid,0),{code:'ESRCH'})
++test('valid output does not release a live process; normal close resolves once',async()=>{
++ const f=await fixture(`sys.stdin.buffer.read()\nprint(${JSON.stringify(JSON.stringify({ok:true,value:empty}))},flush=True)\nopen(READY,'w').write(str(os.getpid()))\ntime.sleep(0.2)`)
++ let settled=0;const p=runLocalOcr(input(f.runner)).then(v=>{settled++;return v});const pid=Number(await waitFile(f.ready));await sleep(30);assert.equal(settled,0);process.kill(pid,0)
++ assert.deepEqual(await p,empty);assertExited(pid);assert.equal(settled,1)
++})
++test('ignored SIGTERM escalates only the owned child; repeated abort stays idempotent',async()=>{
++ const f=await fixture(`signal.signal(signal.SIGTERM,signal.SIG_IGN)\nsys.stdin.buffer.read()\nopen(READY,'w').write(str(os.getpid()))\ntime.sleep(30)`)
++ const other=await fixture(`sys.stdin.buffer.read()\nopen(READY,'w').write(str(os.getpid()))\ntime.sleep(30)`)
++ const a=new AbortController(),b=new AbortController(),p=runLocalOcr(input(f.runner,a.signal)).catch(e=>e),q=runLocalOcr(input(other.runner,b.signal)).catch(e=>e)
++ const pid=Number(await waitFile(f.ready)),otherPid=Number(await waitFile(other.ready));const start=Date.now();a.abort();a.abort();assert.equal((await p).message,'OCR_CANCELLED');assert.ok(Date.now()-start>=200);assertExited(pid);process.kill(otherPid,0);b.abort();await q;assertExited(otherPid)
++})
++test('timeout rejects only after physical exit',async()=>{
++ const f=await fixture(`signal.signal(signal.SIGTERM,signal.SIG_IGN)\nsys.stdin.buffer.read()\nopen(READY,'w').write(str(os.getpid()))\ntime.sleep(30)`)
++ const p=runLocalOcr({...input(f.runner),timeoutMs:300}).catch(e=>e),pid=Number(await waitFile(f.ready));assert.equal((await p).message,'OCR_TIMEOUT');assertExited(pid)
++})
++for(const [name,body,code] of [
++ ['malformed',`print('{bad-json')`,'OCR_RESULT_INVALID'],
++ ['nonzero',`print(${JSON.stringify(JSON.stringify({ok:true,value:empty}))})\nsys.exit(3)`,'OCR_EXECUTION_FAILED'],
++ ['worker error',`print('{"ok":false,"error":"OCR_MODEL_MISSING"}')`,'OCR_MODEL_MISSING'],
++ ['oversized stdout',`sys.stdout.write('x'*1100000)\nsys.stdout.flush()\ntime.sleep(30)`,'OCR_OUTPUT_TOO_LARGE'],
++ ['oversized stderr',`sys.stderr.write('x'*1100000)\nsys.stderr.flush()\ntime.sleep(30)`,'OCR_OUTPUT_TOO_LARGE']]){
++ test(name+' settles and reaps the owned process',async()=>{const f=await fixture(`sys.stdin.buffer.read()\nopen(READY,'w').write(str(os.getpid()))\n${body}`);const p=runLocalOcr(input(f.runner)).catch(e=>e),pid=Number(await waitFile(f.ready));assert.equal((await p).message,code);assertExited(pid)})
++}
++test('spawn failure and pre-abort are explicit',async()=>{
++ await assert.rejects(runLocalOcr({...input('/nonexistent/runner'),python:'/nonexistent/python'}),/OCR_RUNTIME_UNAVAILABLE/)
++ const a=new AbortController();a.abort();await assert.rejects(runLocalOcr(input('/nonexistent/runner',a.signal)),/OCR_CANCELLED/)
++})
++
++// Fault injection covers events which cannot safely be induced on a real OS child.
++import {EventEmitter} from 'node:events'
++import {PassThrough} from 'node:stream'
++import type {spawn} from 'node:child_process'
++import {createLocalOcrRunner,OcrProcessUnconfirmedError} from '../src/main/ocr/local-ocr-process'
++function fakeRunner(){
++ const child=Object.assign(new EventEmitter(),{pid:123,stdin:new PassThrough(),stdout:new PassThrough(),stderr:new PassThrough(),kill:(signal:string)=>{signals.push(signal);return false}})
++ const signals:string[]=[];let spawns=0
++ const run=createLocalOcrRunner({spawn:(()=>{spawns++;return child}) as unknown as typeof spawn,graceMs:10,closeMs:25})
++ return{child,signals,run,get spawns(){return spawns}}
++}
++test('unconfirmed close is bounded, quarantines future spawns, and late close releases exactly once',async()=>{
++ const f=fakeRunner(),a=new AbortController();const p=f.run(input('/fixture',a.signal)).catch(e=>e);a.abort();a.abort()
++ const error=await p;assert.ok(error instanceof OcrProcessUnconfirmedError);assert.deepEqual(f.signals,['SIGTERM','SIGKILL'])
++ let releases=0;void error.released.then(()=>{releases++});assert.ok(await f.run(input('/fixture')).catch(e=>e) instanceof OcrProcessUnconfirmedError);assert.equal(f.spawns,1);assert.equal(releases,0)
++ f.child.emit('exit',null,'SIGKILL');f.child.emit('close',null,'SIGKILL');await sleep(0);assert.equal(releases,1)
++ const again=f.run(input('/fixture'));f.child.stdout.emit('data',Buffer.from(JSON.stringify({ok:true,value:empty})));f.child.emit('close',0);assert.deepEqual(await again,empty);assert.equal(f.spawns,2);assert.equal(releases,1)
++})
++test('physical exit with delayed streams does not signal an exited child',async()=>{
++ const f=fakeRunner();const p=f.run(input('/fixture')).catch(e=>e)
++ f.child.emit('exit',0);const error=await p;assert.ok(error instanceof OcrProcessUnconfirmedError);assert.deepEqual(f.signals,[]);assert.equal(f.child.stdout.destroyed,true);f.child.emit('close',0);await error.released
++})
++for(const stream of ['stdin','stdout','stderr'] as const){test(stream+' error drains before rejecting',async()=>{
++ const f=fakeRunner();const p=f.run(input('/fixture')).catch(e=>e);let done=false;void p.then(()=>{done=true});f.child[stream].emit('error',Error('fixture sensitive transport'))
++ await sleep(1);assert.equal(done,false);f.child.emit('exit',1);f.child.emit('close',1);assert.equal((await p).message,'OCR_STREAM_FAILED');assert.deepEqual(f.signals,['SIGTERM'])
++})}
++test('post-spawn error does not claim a failed spawn released an existing child',async()=>{
++ const f=fakeRunner();const p=f.run(input('/fixture')).catch(e=>e);f.child.emit('error',Error('fixture'));const error=await p;assert.ok(error instanceof OcrProcessUnconfirmedError);f.child.emit('close',1);await error.released
++})
++test('two unknown owned handles retain independent quarantine until both close',async()=>{
++ const children:Array<ReturnType<typeof fakeRunner>['child']>=[]
++ const run=createLocalOcrRunner({spawn:(()=>{const f=fakeRunner();children.push(f.child);return f.child}) as unknown as typeof spawn,graceMs:5,closeMs:10})
++ const a=new AbortController(),b=new AbortController(),p=run(input('/fixture',a.signal)).catch(e=>e),q=run(input('/fixture',b.signal)).catch(e=>e);a.abort();b.abort();const [one,two]=await Promise.all([p,q]);assert.ok(one instanceof OcrProcessUnconfirmedError);assert.ok(two instanceof OcrProcessUnconfirmedError)
++ children[0].emit('close',1);await one.released;await tickRelease();assert.ok(await run(input('/fixture')).catch(e=>e) instanceof OcrProcessUnconfirmedError);assert.equal(children.length,2)
++ children[1].emit('close',1);await two.released;await tickRelease();const success=run(input('/fixture'));children[2].stdout.emit('data',Buffer.from(JSON.stringify({ok:true,value:empty})));children[2].emit('close',0);await success;assert.equal(children.length,3)
++})
++const tickRelease=()=>new Promise(r=>setImmediate(r))
+--- /dev/null
++++ b/scripts/ocr-controller-lifecycle.test.ts
+@@ -0,0 +1,75 @@
++import assert from 'node:assert/strict'
++import {test} from 'node:test'
++import sharp from 'sharp'
++import {createOcrController} from '../src/main/ocr/ocr-controller'
++import {OcrProcessUnconfirmedError} from '../src/main/ocr/local-ocr-process'
++import {ShutdownCoordinator} from '../src/main/app-shutdown/shutdown-coordinator'
++import type {OcrObservation} from '../src/shared/contracts/asset-ocr.contract'
++const observation:OcrObservation={engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:{det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},width:10,height:10,elapsedMs:1,threshold:.5,blocks:[]}
++const scope={libraryIdentity:'synthetic',generation:'generation'},request={...scope,assetIds:['asset']}
++const tick=()=>new Promise(r=>setImmediate(r))
++function deferred<T=void>(){let resolve!:(v:T)=>void;const promise=new Promise<T>(r=>{resolve=r});return{promise,resolve}}
++async function fixture(){
++ const png=await sharp({create:{width:10,height:10,channels:3,background:'#fff'}}).png().toBuffer(),started=deferred(),result=deferred<OcrObservation>()
++ let generation='generation',commits=0,runs=0,currentGate:Promise<void>|undefined,configureGate:Promise<void>|undefined,readGate:Promise<void>|undefined,commitGate:Promise<void>|undefined
++ let run=async()=>{runs++;started.resolve();return result.promise}
++ const snapshot={sessionToken:'session',revision:7,requiresUpgrade:false,evidence:null,editedText:'user correction'}
++ const host={inspect:()=>({state:'ready',identity:'synthetic',generation}),readAssetContext:async()=>({assets:[{id:'asset',revision:'rev',thumbnailRef:'preview'}]}),readPreview:async()=>png,readOcr:async()=>{await readGate;return snapshot},commitOcr:async(_:unknown,signal:AbortSignal)=>{await commitGate;if(signal.aborted)throw Error('OCR_SCOPE_EXPIRED');commits++;return snapshot},correctOcr:async()=>snapshot}
++ const runtime={configure:async()=>{await configureGate},current:async()=>{await currentGate;return{label:'synthetic',fingerprint:'same',run:()=>run()}}}
++ const c=createOcrController({host:host as any,runtime,changed:()=>{},drainTimeoutMs:40})
++ return{c,started,result,snapshot,get commits(){return commits},get runs(){return runs},set generation(v:string){generation=v},set currentGate(v:Promise<void>|undefined){currentGate=v},set configureGate(v:Promise<void>|undefined){configureGate=v},set readGate(v:Promise<void>|undefined){readGate=v},set commitGate(v:Promise<void>|undefined){commitGate=v},set run(v:typeof run){run=v}}
++}
++async function start(f:Awaited<ReturnType<typeof fixture>>){const p=await f.c.prepare(request);await f.c.run(p.receipt);await f.started.promise}
++test('cancel keeps maintenance busy and drain pending until runtime settles; late output never commits',async()=>{
++ const f=await fixture();await start(f);f.c.cancel();f.c.cancel();assert.throws(()=>f.c.holdForMaintenance(),/OCR_BUSY/)
++ let done=false;const d=f.c.suspendAndDrain().then(()=>{done=true});await tick();assert.equal(done,false);await assert.rejects(f.c.prepare(request),/OCR_BUSY/)
++ f.result.resolve(observation);await d;assert.equal(f.commits,0);assert.equal((await f.c.status()).job?.state,'cancelled');f.c.resume();const unlock=f.c.holdForMaintenance();unlock();assert.equal(f.snapshot.editedText,'user correction')
++})
++test('normal completion commits exactly once then releases maintenance',async()=>{
++ const f=await fixture();await start(f);f.result.resolve(observation);await tick();await tick();assert.equal(f.commits,1);assert.equal((await f.c.status()).job?.state,'completed');const unlock=f.c.holdForMaintenance();unlock();f.c.cancel();assert.equal(f.commits,1)
++})
++test('UNKNOWN remains blocked beyond terminal job and bounded drain; late close requires retry/resume',async()=>{
++ const f=await fixture(),released=deferred();f.run=async()=>{throw new OcrProcessUnconfirmedError(released.promise)}
++ const p=await f.c.prepare(request);await f.c.run(p.receipt);await tick();assert.equal((await f.c.status()).job?.state,'failed');assert.match((await f.c.status()).job!.items[0].error!,/尚未确认/)
++ assert.throws(()=>f.c.holdForMaintenance(),/OCR_BUSY/);await assert.rejects(f.c.configure(),/OCR_PROCESS_EXIT_UNCONFIRMED/);await assert.rejects(f.c.suspendAndDrain(),/OCR_DRAIN_BLOCKED/);f.c.resume();await assert.rejects(f.c.prepare(request),/OCR_PROCESS_EXIT_UNCONFIRMED/)
++ released.resolve();await tick();await assert.rejects(f.c.prepare(request),/OCR_BUSY/);await f.c.suspendAndDrain();f.c.resume();assert.ok(await f.c.prepare(request));assert.equal(f.commits,0)
++})
++for(const phase of ['configure','prepare','run verification'] as const){test('drain covers pending '+phase+' without resurrecting reviews',async()=>{
++ const f=await fixture(),gate=deferred();let op:Promise<unknown>
++ if(phase==='configure'){f.configureGate=gate.promise;op=f.c.configure()}
++ else if(phase==='prepare'){f.currentGate=gate.promise;op=f.c.prepare(request)}
++ else{const p=await f.c.prepare(request);f.currentGate=gate.promise;op=f.c.run(p.receipt)}
++ const outcome=op.catch(e=>e);await tick();assert.throws(()=>f.c.holdForMaintenance(),/OCR_BUSY/);await assert.rejects(f.c.suspendAndDrain(),/OCR_DRAIN_BLOCKED/);f.c.resume();await assert.rejects(f.c.configure(),/OCR_BUSY/)
++ gate.resolve();const result=await outcome;if(phase!=='configure')assert.equal(result.message,'OCR_SCOPE_EXPIRED');f.currentGate=undefined;await f.c.suspendAndDrain();f.c.resume();assert.equal(f.runs,0);assert.equal(f.commits,0)
++})}
++test('maintenance holds are independent and invalidate old reviews',async()=>{
++ const f=await fixture(),p=await f.c.prepare(request),a=f.c.holdForMaintenance(),b=f.c.holdForMaintenance();a();a();await assert.rejects(f.c.run(p.receipt),/OCR_BUSY/);await assert.rejects(f.c.configure(),/OCR_BUSY/);b();await assert.rejects(f.c.run(p.receipt),/OCR_SCOPE_EXPIRED/)
++})
++test('scope change while runtime runs rejects late writes even without explicit cancel',async()=>{
++ const f=await fixture();await start(f);f.generation='next';f.result.resolve(observation);await tick();await tick();assert.equal(f.commits,0);assert.equal((await f.c.status()).job,null)
++})
++test('commit in flight is awaited and revoked through the supplied abort signal',async()=>{
++ const f=await fixture(),gate=deferred();f.commitGate=gate.promise;await start(f);f.result.resolve(observation);await tick();let done=false;const d=f.c.suspendAndDrain().then(()=>{done=true});await tick();assert.equal(done,false);gate.resolve();await d;assert.equal(f.commits,0)
++})
++test('shutdown never closes storage or requests quit when resource exit is unknown; retry can succeed',async()=>{
++ const f=await fixture(),release=deferred();f.run=async()=>{throw new OcrProcessUnconfirmedError(release.promise)};const p=await f.c.prepare(request);await f.c.run(p.receipt);await tick()
++ let closed=0,quit=0;const shutdown=new ShutdownCoordinator({drain:async()=>{await f.c.suspendAndDrain();closed++},requestQuit:()=>{quit++}}),event={preventDefault(){}}
++ shutdown.handleBeforeQuit(event);shutdown.handleBeforeQuit(event);await new Promise(r=>setTimeout(r,60));assert.equal(shutdown.state,'failed');assert.equal(closed,0);assert.equal(quit,0)
++ release.resolve();await tick();shutdown.handleBeforeQuit(event);await tick();await tick();assert.equal(shutdown.state,'completed');assert.equal(closed,1);assert.equal(quit,1)
++})
++test('overlapping drains cannot be resumed early or release a separate maintenance hold',async()=>{
++ const f=await fixture();await start(f);const a=f.c.suspendAndDrain(),b=f.c.suspendAndDrain();f.c.resume();await assert.rejects(f.c.prepare(request),/OCR_BUSY/);f.result.resolve(observation);await Promise.all([a,b]);f.c.resume();const unlock=f.c.holdForMaintenance();await f.c.suspendAndDrain();f.c.resume();await assert.rejects(f.c.configure(),/OCR_BUSY/);unlock();await f.c.configure()
++})
++
++import fs from 'node:fs/promises'
++import {transform} from 'esbuild'
++test('actual Main authority completion cannot resume OCR after shutdown has started',async()=>{
++ const source=await fs.readFile('src/main/index.ts','utf8'),start=source.indexOf('onAuthorityDidChange:async()=>{'),end=source.indexOf('\n      onAssetsChanged:',start)
++ assert.ok(start>0&&end>start)
++ // Execute the actual production callback with explicit surrounding adapters, not a copied equivalent.
++ const expression=source.slice(start+'onAuthorityDidChange:'.length,end).trim().replace(/,$/,'')
++ const compiled=await transform(`(${expression})`,{loader:'ts',target:'node20'})
++ const f=await fixture();f.c.suspend();let released=0
++ const args={authorityBarrierRelease:()=>{released++},authorityBusinessRelease:()=>{released++},activeLibraryHost:{inspect:()=>({state:'ready',identity:'synthetic',generation:'generation'}),readVisualSession:async()=>{}},visualAi:{resume(){}},tagExecution:{resume(){}},tagBatches:{resume(){}},ocr:f.c,shutdownCoordinator:{state:'draining'},tagRecovery:{flush:async()=>{}}}
++ const callback=new Function(...Object.keys(args),`return ${compiled.code}`)(...Object.values(args));await callback();assert.equal(released,2);await assert.rejects(f.c.prepare(request),/OCR_BUSY/)
++})
+--- /dev/null
++++ b/scripts/ocr-exit-electron.e2e.test.mjs
+@@ -0,0 +1,37 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {pathToFileURL} from 'node:url'
++import {createHash} from 'node:crypto'
++import {_electron as electron} from 'playwright'
++import sharp from 'sharp'
++const sleep=ms=>new Promise(r=>setTimeout(r,ms))
++async function waitFile(file){for(let i=0;i<300;i++){try{return await fs.readFile(file,'utf8')}catch{await sleep(10)}}throw Error('synthetic child marker missing')}
++await test('formal OCR save/correction, close/reopen and quit await an owned synthetic child',async()=>{
++ const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-approved-ocr-exit-'))),profile=path.join(root,'profile'),library=path.join(root,'library'),evidence=path.join(root,'evidence'),entry=path.join(root,'entry'),runtime=path.join(root,'runtime'),ready=path.join(root,'ready'),mode=path.join(root,'mode');let app
++ const hashes={det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},value={engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:hashes,width:80,height:80,elapsedMs:1,threshold:.5,blocks:[]}
++ try{
++  for(const dir of [profile,evidence,entry,path.join(runtime,'bin')])await fs.mkdir(dir,{recursive:true})
++  const source=path.join(root,'generated.png');await sharp({create:{width:80,height:80,channels:3,background:'#7799bb'}}).png().toFile(source);const original=createHash('sha256').update(await fs.readFile(source)).digest('hex')
++  // This executable is a stdlib transport fixture, never the OCR worker or a model.
++  const python=path.join(runtime,'bin','python3');await fs.writeFile(python,`#!/usr/bin/python3\nimport os,sys,time,signal\ndef stop(*args):\n time.sleep(0.15)\n print(${JSON.stringify(JSON.stringify({ok:true,value}))},flush=True)\n sys.exit(0)\nsignal.signal(signal.SIGTERM,stop)\nsys.stdin.buffer.read()\nif open(${JSON.stringify(mode)}).read()=='wait':\n open(${JSON.stringify(ready)},'w').write(str(os.getpid()))\n time.sleep(30)\nelse:\n print(${JSON.stringify(JSON.stringify({ok:true,value}))},flush=True)\n`);await fs.chmod(python,0o700)
++  await fs.writeFile(path.join(root,'ocr-runtime.json'),JSON.stringify({schema:1,engine:'rapidocr-onnxruntime',version:'1.4.4',platform:process.platform,arch:process.arch,pythonRelative:'runtime/bin/python3',modelSha256:hashes}));await fs.writeFile(mode,'success')
++  await fs.writeFile(path.join(entry,'package.json'),JSON.stringify({name:'dam-ocr-exit-test',type:'module',main:'main.mjs'}));await fs.writeFile(path.join(entry,'main.mjs'),`import ${JSON.stringify(pathToFileURL(path.resolve('out/main/index.js')).href)};`)
++  const config={rootDirectory:root,profileDirectory:profile,libraryDirectory:library,evidenceDirectory:evidence,sourceSelections:[[source]]},env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k)))
++  app=await electron.launch({args:[entry,'--dam-active-library-synthetic-e2e',`--user-data-dir=${profile}`],env:{...env,NODE_ENV:'test',DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E:JSON.stringify(config),DAM_SYNTHETIC_OCR_RUNTIME:root}})
++  assert.ok((await app.evaluate(({app})=>['userData','sessionData','logs','crashDumps'].map(p=>app.getPath(p)))).every(p=>p.startsWith(root+path.sep)))
++  const page=await app.firstWindow();page.setDefaultTimeout(15000);await page.getByTestId('formal-library-canvas').waitFor();await page.getByTestId('library-create').click();await page.getByTestId('library-create-confirm').click();await page.getByRole('button',{name:'添加图片',exact:true}).click();await page.getByTestId('library-copy-confirm').click();await page.locator('.lc-card').first().waitFor()
++  const scope=await page.evaluate(async()=>{const s=await window.electronAPI.library.inspect(),a=(await window.electronAPI.listAssets())[0];return{libraryIdentity:s.identity,generation:s.generation,assetId:a.id}})
++  assert.equal((await page.evaluate(()=>window.electronAPI.assetOcr.configure())).ok,true)
++  const start=async()=>{const review=await page.evaluate(s=>window.electronAPI.assetOcr.prepare({libraryIdentity:s.libraryIdentity,generation:s.generation,assetIds:[s.assetId]}),scope);assert.equal(review.ok,true);const job=await page.evaluate(r=>window.electronAPI.assetOcr.run(r),review.value.receipt);assert.equal(job.ok,true)}
++  await start();let completed=false;for(let i=0;i<200;i++){const s=await page.evaluate(()=>window.electronAPI.assetOcr.status());if(s.ok&&s.value.job?.state==='completed'){completed=true;break}await sleep(10)}assert.equal(completed,true,'formal job must complete before reading saved evidence')
++  let snapshot=(await page.evaluate(s=>window.electronAPI.assetOcr.read(s),scope)).value
++  assert.ok(snapshot.evidence,JSON.stringify({stage:'after success',revision:snapshot.revision,requiresUpgrade:snapshot.requiresUpgrade,status:await page.evaluate(()=>window.electronAPI.assetOcr.status())}));
++  const corrected=await page.evaluate(s=>window.electronAPI.assetOcr.correct(s),{...scope,sessionToken:snapshot.sessionToken,expectedRevision:snapshot.revision,evidenceId:snapshot.evidence.id,text:'Synthetic user correction'});assert.equal(corrected.ok,true);const revision=corrected.value.revision
++  await fs.writeFile(mode,'wait');await start();const pid=Number(await waitFile(ready));let closed=false;const closing=page.evaluate(()=>window.electronAPI.library.close()).then(r=>{closed=true;return r});await sleep(35);assert.equal(closed,false);process.kill(pid,0);await closing;assert.throws(()=>process.kill(pid,0),{code:'ESRCH'});assert.equal((await page.evaluate(()=>window.electronAPI.library.inspect())).state,'closed')
++  await page.evaluate(()=>window.electronAPI.library.reopen());snapshot=(await page.evaluate(s=>window.electronAPI.assetOcr.read(s),scope)).value;assert.equal(snapshot.revision,revision);assert.equal(snapshot.editedText,'Synthetic user correction')
++  await fs.unlink(ready);await start();const quitPid=Number(await waitFile(ready)),quit=app.waitForEvent('close');await app.evaluate(({app})=>{app.quit()});await quit;app=null;assert.throws(()=>process.kill(quitPid,0),{code:'ESRCH'});assert.equal(await fs.readFile(path.join(evidence,'shutdown-complete'),'utf8'),'complete\n');assert.equal(createHash('sha256').update(await fs.readFile(source)).digest('hex'),original)
++ }finally{if(app)await app.close();await fs.rm(root,{recursive:true,force:true})}
++})
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,4 +1,16 @@
+ # Current Task
++
++## 已完成：OCR 子进程退出与资源/drain 边界（2026-09-29）
++
++用户“继续下一轮”批准的限定批次完成并通过独立复核。取消/超时等待owned child close；无法确认时UNKNOWN仍占用资源；Main关库/退出等待OCR，迟到结果不保存，退出期间authority回调不能重开准入。未改变schema/公共IPC或B01开关含义。
++
++17项进程、12项controller、19项B01集成、正式OCR与B01各1项及OCR存储/Host/契约/退出回归通过，typecheck/build通过。独立复核重跑17/12并核验134份源码。只使用生成素材、临时库及stdlib合成执行器，未重验真实RapidOCR/模型、真实用户库或Windows。原工作区及索引保留。
++
++- [报告](.ai-run/ocr-exit-boundary-20260929/REPORT.md)
++- [最高优先级终态](.ai-run/ocr-exit-boundary-20260929/FINAL-HANDOFF.json)
++- [独立复核](.ai-run/ocr-exit-boundary-20260929/REVIEW-FINAL.md)
++
++本批COMPLETED/STOP，nextBatchAuthorized=false；不自动进入caption、后台派发或全资源框架。下方旧批次记录仅作历史。
+ 
+ ## 已完成：B01 后台分析意图与准入基础层（2026-09-29）
+ 

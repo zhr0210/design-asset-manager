@@ -1,0 +1,37 @@
+{
+  "runId": "tags-hardening-20260928",
+  "authorization": "<REDACTED_VALUE>",
+  "scope": [
+    "F01 bounded terminal jobs",
+    "F02 actual component verification and fixes",
+    "F03 final handoff and affected regression"
+  ],
+  "status": "COMPLETED",
+  "nextBatchAuthorized": false,
+  "controls": "convention_only",
+  "commandTimeoutSeconds": 240,
+  "maxTestConcurrency": 1,
+  "maxRepairRoundsPerIssue": 3,
+  "supervisorDeployed": false,
+  "allowedExistingFiles": [
+    "src/main/independent-tags/tag-execution-controller.ts",
+    "src/renderer/components/asset/IndependentTagIntentPanel.tsx",
+    "scripts/tag-execution.integration.test.ts",
+    "src/main/independent-tags/README.md",
+    "TASK.md"
+  ],
+  "newFiles": [
+    "scripts/tag-intent-ui.integration.test.mjs",
+    "scripts/tag-intent-panel-electron.e2e.test.mjs"
+  ],
+  "prohibited": [
+    "real user library",
+    "model/runtime/dependency installation or start",
+    "external asset egress",
+    "git stage/commit/push/release",
+    "C07-R",
+    "old P00-P27 queue"
+  ],
+  "completedAt": "2026-09-28T01:59:26.789768+00:00",
+  "terminalEntry": "FINAL-HANDOFF.json"
+}

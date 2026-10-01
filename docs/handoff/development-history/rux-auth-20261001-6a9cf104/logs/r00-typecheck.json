@@ -1,0 +1,11 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "typecheck"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 5.744,
+  "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40"
+}

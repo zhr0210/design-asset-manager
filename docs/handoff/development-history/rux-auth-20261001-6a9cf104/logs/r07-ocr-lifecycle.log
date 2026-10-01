@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: cancel keeps maintenance busy and drain pending until runtime settles; late output never commits
+ok 1 - cancel keeps maintenance busy and drain pending until runtime settles; late output never commits
+  ---
+  duration_ms: 3.598375
+  ...
+# Subtest: normal completion commits exactly once then releases maintenance
+ok 2 - normal completion commits exactly once then releases maintenance
+  ---
+  duration_ms: 1.348083
+  ...
+# Subtest: UNKNOWN remains blocked beyond terminal job and bounded drain; late close requires retry/resume
+ok 3 - UNKNOWN remains blocked beyond terminal job and bounded drain; late close requires retry/resume
+  ---
+  duration_ms: 42.752417
+  ...
+# Subtest: drain covers pending configure without resurrecting reviews
+ok 4 - drain covers pending configure without resurrecting reviews
+  ---
+  duration_ms: 40.761834
+  ...
+# Subtest: drain covers pending prepare without resurrecting reviews
+ok 5 - drain covers pending prepare without resurrecting reviews
+  ---
+  duration_ms: 43.083041
+  ...
+# Subtest: drain covers pending run verification without resurrecting reviews
+ok 6 - drain covers pending run verification without resurrecting reviews
+  ---
+  duration_ms: 42.038125
+  ...
+# Subtest: maintenance holds are independent and invalidate old reviews
+ok 7 - maintenance holds are independent and invalidate old reviews
+  ---
+  duration_ms: 2.379875
+  ...
+# Subtest: scope change while runtime runs rejects late writes even without explicit cancel
+ok 8 - scope change while runtime runs rejects late writes even without explicit cancel
+  ---
+  duration_ms: 1.944875
+  ...
+# Subtest: commit in flight is awaited and revoked through the supplied abort signal
+ok 9 - commit in flight is awaited and revoked through the supplied abort signal
+  ---
+  duration_ms: 2.181125
+  ...
+# Subtest: shutdown never closes storage or requests quit when resource exit is unknown; retry can succeed
+ok 10 - shutdown never closes storage or requests quit when resource exit is unknown; retry can succeed
+  ---
+  duration_ms: 63.867166
+  ...
+# Subtest: overlapping drains cannot be resumed early or release a separate maintenance hold
+ok 11 - overlapping drains cannot be resumed early or release a separate maintenance hold
+  ---
+  duration_ms: 2.83675
+  ...
+# Subtest: actual Main authority completion cannot resume OCR after shutdown has started
+ok 12 - actual Main authority completion cannot resume OCR after shutdown has started
+  ---
+  duration_ms: 6.388875
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 255.765625

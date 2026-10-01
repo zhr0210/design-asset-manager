@@ -1,0 +1,12 @@
+{
+  "state": "ACCEPTED_LIMITED_FOUNDATION",
+  "completedAt": "2026-09-28T16:18:23.955475+00:00",
+  "changeDigest": "ea7fc678678c16714fffdbb4c3836adc0bd7b8aeab52eadb2f946865364716c3",
+  "sourceDigest": "db0db486be25dd0e33380f4094cefad95bb851632058e9b7c02cbd4869f1f121",
+  "archiveSha256": "d6e93cafb0c88d79d77948684652b8d1195d13957bf9384f57350e650705b923",
+  "reviewer": "background_boundary_review",
+  "automaticInferenceImplemented": false,
+  "nextBatchAuthorized": false,
+  "sourceAndArchiveVerified": true,
+  "indexAndStagedUnchanged": true
+}

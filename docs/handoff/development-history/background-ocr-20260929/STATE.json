@@ -1,0 +1,33 @@
+{
+  "runId": "background-ocr-20260929",
+  "state": "COMPLETED",
+  "action": "STOP",
+  "nextBatchAuthorized": false,
+  "automaticResume": false,
+  "sourceDigest": "6cfd8b67027e71111ebf1ac3f05ee8c80469e753273119cce3e11237ecf314ca",
+  "changeDigest": "9a936b4e814efd7c0e481d0c2b0c51c1932e2f06d9a42ea31b813aea22ab881f",
+  "schema": 13,
+  "scope": "Single-capability background OCR code path and isolated synthetic validation",
+  "backgroundOcrPipelineImplemented": true,
+  "productionDispatchQualified": false,
+  "productionStatus": "WAITING_QUALIFICATION",
+  "b01PlanIsExecutionConsent": false,
+  "processFacts": {
+    "ownedTestCommandsExited": true,
+    "otherBackgroundProcesses": "UNKNOWN",
+    "supervisorDeployed": false
+  },
+  "notRun": [
+    "real OCR model quality/envelope",
+    "user library",
+    "Windows",
+    "installer/signing",
+    "full resource governor"
+  ],
+  "notImplemented": [
+    "orphan sent/unknown manual reconciliation",
+    "independent caption",
+    "other automatic capabilities"
+  ],
+  "review": "REVIEW-FINAL.md"
+}

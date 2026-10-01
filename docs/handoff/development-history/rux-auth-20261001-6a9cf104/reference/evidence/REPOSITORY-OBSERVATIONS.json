@@ -1,0 +1,88 @@
+{
+  "observationKind": "remote read-only measurements",
+  "observedAt": "2026-10-01T01:22:14.043268+08:00",
+  "repository": "<DAM_WORKSPACE>",
+  "branch": "codex/product-reassessment-20260905",
+  "head": "3fa00df3bbb605478da6d0af18724d64021e723c",
+  "gitStatusCounts": {
+    "staged": 18,
+    "unstaged": 779,
+    "untrackedGroupedEntries": 253,
+    "countsCanOverlap": true
+  },
+  "metrics": [
+    {
+      "path": "src/main",
+      "files": 381,
+      "lines": 49806,
+      "bytes": 2165638
+    },
+    {
+      "path": "src/renderer",
+      "files": 126,
+      "lines": 17317,
+      "bytes": 1155999
+    },
+    {
+      "path": "src/preload",
+      "files": 5,
+      "lines": 573,
+      "bytes": 44424
+    },
+    {
+      "path": "src/shared",
+      "files": 98,
+      "lines": 9926,
+      "bytes": 359855
+    },
+    {
+      "path": "scripts",
+      "files": 363,
+      "lines": 52622,
+      "bytes": 2776877
+    },
+    {
+      "path": "ai-service",
+      "files": 105,
+      "lines": 16575,
+      "bytes": 699996
+    },
+    {
+      "path": "docs",
+      "files": 865,
+      "lines": 35724,
+      "bytes": 3610815
+    }
+  ],
+  "codeExtensions": [
+    ".ts",
+    ".tsx",
+    ".py",
+    ".js",
+    ".mjs",
+    ".cjs",
+    ".css"
+  ],
+  "documentationExtensions": [
+    ".md"
+  ],
+  "excludes": [
+    "node_modules",
+    ".git",
+    ".ai-run",
+    "dist-temp",
+    "out",
+    "dist-packages",
+    ".venv",
+    "__pycache__",
+    ".cache"
+  ],
+  "notMeasured": [
+    "whole repository disk size",
+    "memory overhead",
+    "bundle size",
+    "runtime reachability of every file"
+  ],
+  "businessSourcesModified": false,
+  "currentUiHumanValidated": false
+}

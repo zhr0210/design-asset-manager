@@ -1,0 +1,22 @@
+{
+  "state": "COMPLETED",
+  "nextBatchAuthorized": false,
+  "tasks": [
+    {
+      "id": "F01",
+      "state": "ACCEPTED"
+    },
+    {
+      "id": "F02",
+      "state": "ACCEPTED"
+    },
+    {
+      "id": "F03",
+      "state": "ACCEPTED"
+    }
+  ],
+  "excluded": [
+    "C07-R",
+    "P00-P27 auto continuation"
+  ]
+}

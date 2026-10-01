@@ -1,0 +1,12 @@
+{
+  "archive": ".ai-run/tags-hardening-20260928/delivery/DAM-INDEPENDENT-TAGS-HARDENING-20260928.zip",
+  "bytes": 5044083,
+  "sha256": "cdef211b6197686c13c7dde47f82f88a0ae430430b11082fd17168354e974559",
+  "entries": 170,
+  "sourceDigest": "99ab7341e1123322af2fe6a9221ae830bc17b8d1d52ac726a72a4bd869a289b0",
+  "changeDigest": "ceecf948ece637b5a756e54ecec599b23dd2705d12a4fe8ba0496d1326ab77d7",
+  "allPayloadHashesVerified": true,
+  "zipCrcVerified": true,
+  "actualTerminalVerified": true,
+  "sixFilePatchReconstructed": true
+}

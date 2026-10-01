@@ -1,0 +1,692 @@
+{
+  "status": "LIMITED_VALIDATION_WITH_ONE_RED",
+  "tests": [
+    {
+      "id": "r02-navigation-canonical",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/app-navigation-workflow.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 1,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r02-navigation-canonical.log",
+      "metadata": "logs/r02-navigation-canonical.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r02-context",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/canvas-return-context.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 1,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r02-context.log",
+      "metadata": "logs/r02-context.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-auth-crypto-final",
+      "layer": "contract",
+      "command": [
+        "node",
+        "--test",
+        "scripts/chatgpt-auth.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 10,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r08-auth-crypto-final.log",
+      "metadata": "logs/r08-auth-crypto-final.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r03-denial",
+      "layer": "contract",
+      "command": [
+        "node",
+        "--test",
+        "scripts/auth-denial-lifecycle.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 2,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r03-denial.log",
+      "metadata": "logs/r03-denial.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-qualification",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/auth-account-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 8,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r08-qualification.log",
+      "metadata": "logs/r08-qualification.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r03-credentials-scoped",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-credentials.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 14,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r03-credentials-scoped.log",
+      "metadata": "logs/r03-credentials-scoped.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r03-prompts-storage",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 5,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r03-prompts-storage.log",
+      "metadata": "logs/r03-prompts-storage.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r03-oauth-old",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-oauth.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 9,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r03-oauth-old.log",
+      "metadata": "logs/r03-oauth-old.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-admission",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 8,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-admission.log",
+      "metadata": "logs/r07-admission.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-owned-stages-final",
+      "layer": "contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/auth-owned-stage.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 1,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-owned-stages-final.log",
+      "metadata": "logs/r07-owned-stages-final.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-native-sdk",
+      "layer": "contract",
+      "command": [
+        "node",
+        "--test",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 17,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-native-sdk.log",
+      "metadata": "logs/r07-native-sdk.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-sdk-auth-current",
+      "layer": "integration",
+      "command": [
+        "node",
+        "--test",
+        "scripts/chatgpt-auth.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 3,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-sdk-auth-current.log",
+      "metadata": "logs/r07-sdk-auth-current.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-ui-final",
+      "layer": "integration",
+      "command": [
+        "node",
+        "--test",
+        "scripts/pi-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 5,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-ui-final.log",
+      "metadata": "logs/r07-ui-final.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r04-formal-startup",
+      "layer": "integration",
+      "command": [
+        "node",
+        "--test",
+        "scripts/library-startup-navigation.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 3,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r04-formal-startup.log",
+      "metadata": "logs/r04-formal-startup.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r04-formal-acceptance",
+      "layer": "integration",
+      "command": [
+        "node",
+        "--test",
+        "scripts/ai-acceptance.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 1,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r04-formal-acceptance.log",
+      "metadata": "logs/r04-formal-acceptance.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-formal-reselect",
+      "layer": "integration",
+      "command": [
+        "node",
+        "--test",
+        "scripts/pi-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 1,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r08-formal-reselect.log",
+      "metadata": "logs/r08-formal-reselect.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-ocr-lifecycle",
+      "layer": "integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/ocr-controller-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 12,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-ocr-lifecycle.log",
+      "metadata": "logs/r07-ocr-lifecycle.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-background",
+      "layer": "integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 35,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-background.log",
+      "metadata": "logs/r07-background.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-visual-host",
+      "layer": "integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-visual.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 7,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-visual-host.log",
+      "metadata": "logs/r07-visual-host.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r07-runtime-packaging",
+      "layer": "integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-runtime-packaging.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 2,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r07-runtime-packaging.log",
+      "metadata": "logs/r07-runtime-packaging.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-canvas-formal",
+      "layer": "integration",
+      "command": [
+        "node",
+        "scripts/library-canvas-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 13,
+      "countBasis": "script milestones",
+      "log": "logs/r08-canvas-formal.log",
+      "metadata": "logs/r08-canvas-formal.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-canvas-state",
+      "layer": "integration",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/library-canvas-state.test.tsx"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-canvas-state.log",
+      "metadata": "logs/r08-canvas-state.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r04-retired-console",
+      "layer": "sourceContracts",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ai-console-macos-branch.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r04-retired-console.log",
+      "metadata": "logs/r04-retired-console.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r04-tag-guard",
+      "layer": "sourceContracts",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ai-tagging-real-worker-guard.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r04-tag-guard.log",
+      "metadata": "logs/r04-tag-guard.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-doctor-current",
+      "layer": "sourceContracts",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/doctor-panel-contract.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-doctor-current.log",
+      "metadata": "logs/r08-doctor-current.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-readiness-current",
+      "layer": "sourceContracts",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/model-artifact-readiness-display.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-readiness-current.log",
+      "metadata": "logs/r08-readiness-current.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-test-support-ai",
+      "layer": "sourceContracts",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ai-console-status-module.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-test-support-ai.log",
+      "metadata": "logs/r08-test-support-ai.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-test-support-model",
+      "layer": "sourceContracts",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/model-library-workspace-renderer.test.ts"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-test-support-model.log",
+      "metadata": "logs/r08-test-support-model.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-runtime-current",
+      "layer": "sourceContracts",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ai-runtime-status-workflow.test.ts"
+      ],
+      "exitCode": 1,
+      "status": "FAIL_RETAINED",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-runtime-current.log",
+      "metadata": "logs/r08-runtime-current.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-anchor-runtime-source",
+      "layer": "governance",
+      "command": [
+        "python3",
+        "scripts/ai-handoff-anchor.test.py"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": 28,
+      "countBasis": "runner discovered cases",
+      "log": "logs/r08-anchor-runtime-source.log",
+      "metadata": "logs/r08-anchor-runtime-source.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r06-deferred-context",
+      "layer": "governance",
+      "command": [
+        "node",
+        "scripts/agent-context-router.test.mjs"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r06-deferred-context.log",
+      "metadata": "logs/r06-deferred-context.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-context-check",
+      "layer": "governance",
+      "command": [
+        "npm",
+        "run",
+        "context:check"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-context-check.log",
+      "metadata": "logs/r08-context-check.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-typecheck-final",
+      "layer": "build",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-typecheck-final.log",
+      "metadata": "logs/r08-typecheck-final.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    },
+    {
+      "id": "r08-build-final",
+      "layer": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "caseCount": null,
+      "countBasis": "plain assertion script; no named-case count claimed",
+      "log": "logs/r08-build-final.log",
+      "metadata": "logs/r08-build-final.json",
+      "timeout": false,
+      "producer": "root",
+      "independentRerun": false,
+      "ComputerUse": false,
+      "binding": "current compatible source; final build identity applies only build/late formal canvas, older logs keep original timestamps; after-code changes reviewed per test dependency"
+    }
+  ],
+  "notRun": [
+    "final Computer Use",
+    "real accounts/Keychain",
+    "user libraries/weights",
+    "Windows/installer/signing",
+    "real model quality/paid inference"
+  ],
+  "allRegressionPassed": false,
+  "routingEvaluationTasks": 268,
+  "routingIsProductCase": false
+}

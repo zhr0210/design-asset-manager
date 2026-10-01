@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/ai-acceptance.e2e.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 6.884,
+  "sha256": "69d1efeb4bb9908af22914a767867e97e9bfb799531d0c065595029f0a22ebfc"
+}

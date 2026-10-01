@@ -1,0 +1,874 @@
+{
+  "schema": 2,
+  "verificationStatus": "VERIFIED_ISOLATED",
+  "uniqueBehaviorTests": 196,
+  "independentRepeatedSubset": 81,
+  "independentCountsNotAdded": true,
+  "sourceDigestAlgorithm": "sha256(json-sortkeys-compact-ascii-no-newline)",
+  "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+  "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+  "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+  "entries": [
+    {
+      "testId": "independent-final-ocr-controller",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/background-ocr-runtime-observation.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.236,
+      "sha256": "3d2f0287ea310e93c7f789cbfdf002dabad226868b1bcc4687579adbaab21921",
+      "runnerMetadata": "logs/independent-final-ocr-controller.json",
+      "log": "logs/independent-final-ocr-controller.log",
+      "counts": {
+        "discovered": 21,
+        "executed": 21,
+        "pass": 21,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-ocr-host",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr-runtime-observation.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.569,
+      "sha256": "af178e1a63c3829a3d1c4f61309e29cf6aab17e5e8e861b3f60e729c42e09b36",
+      "runnerMetadata": "logs/independent-final-ocr-host.json",
+      "log": "logs/independent-final-ocr-host.log",
+      "counts": {
+        "discovered": 10,
+        "executed": 10,
+        "pass": 10,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-background-ocr.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.928,
+      "sha256": "e1b5ec14bf661ae35a2bd8ed792823fe94c852ba89aea7a4cab1bd77f7fcac19",
+      "runnerMetadata": "logs/01e-regression-background-ocr.integration.json",
+      "log": "logs/01e-regression-background-ocr.integration.log",
+      "counts": {
+        "discovered": 35,
+        "executed": 35,
+        "pass": 35,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-ocr-controller-lifecycle",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/ocr-controller-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.575,
+      "sha256": "29a3d5e39ea16090ea7f6d3568f5cb4e736fc9e985308b94d11f444a25ea8a0d",
+      "runnerMetadata": "logs/01e-regression-ocr-controller-lifecycle.json",
+      "log": "logs/01e-regression-ocr-controller-lifecycle.log",
+      "counts": {
+        "discovered": 12,
+        "executed": 12,
+        "pass": 12,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-ocr-process-lifecycle",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/ocr-process-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.011,
+      "sha256": "59e95b9fa545a8d70d35408da63d9e06ce088373809f902d1253b0e15371ba0b",
+      "runnerMetadata": "logs/01e-regression-ocr-process-lifecycle.json",
+      "log": "logs/01e-regression-ocr-process-lifecycle.log",
+      "counts": {
+        "discovered": 17,
+        "executed": 17,
+        "pass": 17,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01c-anchor-final",
+      "command": [
+        "python3",
+        "scripts/ai-handoff-anchor.test.py"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.187,
+      "sha256": "5de00e72ac34d8a2d8ffe61b59dd470e284e6b167df63473d781574fe92ccc74",
+      "runnerMetadata": "logs/01c-anchor-final.json",
+      "log": "logs/01c-anchor-final.log",
+      "counts": {
+        "discovered": 25,
+        "executed": 25,
+        "pass": 25,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-auth",
+      "command": [
+        "node",
+        "scripts/chatgpt-auth.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.125,
+      "sha256": "31fcd0b888109c55be7de4295f1a7adfe8e21f4c5d98a9a3a34b8e18273c526a",
+      "runnerMetadata": "logs/independent-final-auth.json",
+      "log": "logs/independent-final-auth.log",
+      "counts": {
+        "discovered": 9,
+        "executed": 9,
+        "pass": 9,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-chatgpt-electron",
+      "command": [
+        "node",
+        "scripts/chatgpt-auth.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 10.13,
+      "sha256": "c94ce6840eea2fd467c0d64705aeb8032c1459215b39fd7180c93101b0ac5abf",
+      "runnerMetadata": "logs/independent-final-chatgpt-electron.json",
+      "log": "logs/independent-final-chatgpt-electron.log",
+      "counts": {
+        "discovered": 3,
+        "executed": 3,
+        "pass": 3,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-permit",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ai-acceptance-permit.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.237,
+      "sha256": "5d3bacb22d46fc7b912203f509a30a2938c618c792322d8af88811bfcafb3365",
+      "runnerMetadata": "logs/independent-final-permit.json",
+      "log": "logs/independent-final-permit.log",
+      "counts": {
+        "discovered": 4,
+        "executed": 4,
+        "pass": 4,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-acceptance-unknown-final",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/ai-acceptance.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 9.431,
+      "sha256": "533e69b079183055118ca85be85249fbc5a63181913a3c8e6a603e51523107b3",
+      "runnerMetadata": "logs/01e-acceptance-unknown-final.json",
+      "log": "logs/01e-acceptance-unknown-final.log",
+      "counts": {
+        "discovered": 6,
+        "executed": 6,
+        "pass": 6,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-formal-final",
+      "command": [
+        "node",
+        "--test",
+        "scripts/ai-acceptance.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 9.056,
+      "sha256": "0aad786fcfa4b0230b4ea5902cc7006a7c32aead687cbbcb3ff9274661775a2a",
+      "runnerMetadata": "logs/01e-formal-final.json",
+      "log": "logs/01e-formal-final.log",
+      "counts": {
+        "discovered": 1,
+        "executed": 1,
+        "pass": 1,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-resources-final",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-runtime-packaging.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 9.021,
+      "sha256": "2c429094d2b5c5069da23ef09191859a1d208257e6da75aab15afa7c4d248f74",
+      "runnerMetadata": "logs/01e-resources-final.json",
+      "log": "logs/01e-resources-final.log",
+      "counts": {
+        "discovered": 2,
+        "executed": 2,
+        "pass": 2,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-pi-provider-admission",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.177,
+      "sha256": "225557c02a540094544ac60e609dc87350460cff4a94441fdab54fd71d12e3fb",
+      "runnerMetadata": "logs/01e-regression-pi-provider-admission.json",
+      "log": "logs/01e-regression-pi-provider-admission.log",
+      "counts": {
+        "discovered": 8,
+        "executed": 8,
+        "pass": 8,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-pi-runtime",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-runtime.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.603,
+      "sha256": "c4f7e6bb63ee99f62b431a5103fec4b053c362cb460a1aa0861a869a359e8758",
+      "runnerMetadata": "logs/01e-regression-pi-runtime.json",
+      "log": "logs/01e-regression-pi-runtime.log",
+      "counts": {
+        "discovered": 5,
+        "executed": 5,
+        "pass": 5,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-pi-visual.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-visual.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 11.07,
+      "sha256": "10466869dd632fc1cdd213ad66d7665948364ebc679e3423cdd0176d31ad81b4",
+      "runnerMetadata": "logs/01e-regression-pi-visual.integration.json",
+      "log": "logs/01e-regression-pi-visual.integration.log",
+      "counts": {
+        "discovered": 7,
+        "executed": 7,
+        "pass": 7,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-pi-auth-prompts",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.23,
+      "sha256": "5f8246e496af3f31c97ff5de539745e81308598bc90c74937967029d24744cb2",
+      "runnerMetadata": "logs/01e-regression-pi-auth-prompts.json",
+      "log": "logs/01e-regression-pi-auth-prompts.log",
+      "counts": {
+        "discovered": 5,
+        "executed": 5,
+        "pass": 5,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-pi-ui",
+      "command": [
+        "node",
+        "--test",
+        "scripts/pi-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.343,
+      "sha256": "5e7351962d1160925352ee13e371179a2e40b6f2ddc09bc3f1c2a107bdf587c7",
+      "runnerMetadata": "logs/01e-regression-pi-ui.json",
+      "log": "logs/01e-regression-pi-ui.log",
+      "counts": {
+        "discovered": 5,
+        "executed": 5,
+        "pass": 5,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-pi-native-sdk",
+      "command": [
+        "node",
+        "--test",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.753,
+      "sha256": "8c5c7e27044e2ca270f0be1247a64939ffd1f504f8ae9ed2540bc8ab53844840",
+      "runnerMetadata": "logs/01e-regression-pi-native-sdk.json",
+      "log": "logs/01e-regression-pi-native-sdk.log",
+      "counts": {
+        "discovered": 17,
+        "executed": 17,
+        "pass": 17,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-regression-pi-codex-contract.e2e",
+      "command": [
+        "node",
+        "--test",
+        "scripts/pi-codex-contract.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 13.015,
+      "sha256": "2add5c3f6de0fc4dcf97934ec944ed7cbcf9fe31a6e2dbf5a4dc9e79e266841d",
+      "runnerMetadata": "logs/01e-regression-pi-codex-contract.e2e.json",
+      "log": "logs/01e-regression-pi-codex-contract.e2e.log",
+      "counts": {
+        "discovered": 4,
+        "executed": 4,
+        "pass": 4,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-typecheck-final",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.576,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "runnerMetadata": "logs/01e-typecheck-final.json",
+      "log": "logs/01e-typecheck-final.log",
+      "counts": {
+        "discovered": null,
+        "executed": null,
+        "pass": null,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-metadata-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.649,
+      "sha256": "9c803d7292eefe95cd6b8fb124f36a78a3e87950d44394defab096d45be9263a",
+      "runnerMetadata": "logs/01e-metadata-build.json",
+      "log": "logs/01e-metadata-build.log",
+      "counts": {
+        "discovered": null,
+        "executed": null,
+        "pass": null,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01e-metadata-seal",
+      "command": [
+        "node",
+        "scripts/seal-pi-runtime.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.164,
+      "sha256": "ad9e9b256a34f025ea55f6cf1d520132f7a3d2d6d9e6f21ba6bd285aa77fbcf4",
+      "runnerMetadata": "logs/01e-metadata-seal.json",
+      "log": "logs/01e-metadata-seal.log",
+      "counts": {
+        "discovered": null,
+        "executed": null,
+        "pass": null,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "01d-default-plan-final",
+      "command": [
+        "node",
+        "scripts/ai-service-acceptance.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.091,
+      "sha256": "f737328a3c5296f4b1604e178055699341432450d76fe994e1698aed2e11c50c",
+      "runnerMetadata": "logs/01d-default-plan-final.json",
+      "log": "logs/01d-default-plan-final.log",
+      "counts": {
+        "discovered": null,
+        "executed": null,
+        "pass": null,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-acceptance-electron",
+      "command": [
+        "node",
+        "scripts/ai-acceptance.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.416,
+      "sha256": "1e08c9dbbf7ac1e11656d14244d1edec5303b1c61617092dfc56e103c205a669",
+      "runnerMetadata": "logs/independent-final-acceptance-electron.json",
+      "log": "logs/independent-final-acceptance-electron.log",
+      "counts": {
+        "discovered": 1,
+        "executed": 1,
+        "pass": 1,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-acceptance-host",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/ai-acceptance.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.884,
+      "sha256": "12147f5583c810e03323be4b3691c5178c9f173aa44f06c908dfc8dccd66dfaf",
+      "runnerMetadata": "logs/independent-final-acceptance-host.json",
+      "log": "logs/independent-final-acceptance-host.log",
+      "counts": {
+        "discovered": 6,
+        "executed": 6,
+        "pass": 6,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-anchor",
+      "command": [
+        "python3",
+        "scripts/ai-handoff-anchor.test.py"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.12,
+      "sha256": "c280e98fe07947c56aa639ea8896deaa04ee5f2d4652f818778fa265d2caf102",
+      "runnerMetadata": "logs/independent-final-anchor.json",
+      "log": "logs/independent-final-anchor.log",
+      "counts": {
+        "discovered": 25,
+        "executed": 25,
+        "pass": 25,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    },
+    {
+      "testId": "independent-final-resources",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-runtime-packaging.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 8.621,
+      "sha256": "3d70fd41e4d948ef5b7d3af38398271b4f3f89de49e51ec8f92921389e70c9b2",
+      "runnerMetadata": "logs/independent-final-resources.json",
+      "log": "logs/independent-final-resources.log",
+      "counts": {
+        "discovered": 2,
+        "executed": 2,
+        "pass": 2,
+        "fail": 0,
+        "skip": 0,
+        "cancelled": 0
+      },
+      "sourceSelectionDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+      "sourceBinding": "final candidate association after freeze; independent reviewer also recorded selected before/after source hashes, not a runtime attestation of every 679 source file",
+      "testPlanDigest": "a26058a2c2abbec2af490a47ce0819d14d475ad623acb0d5fd6485dabe789217",
+      "environmentDigest": "148c3f851eb4aba53a5834bd55d4f987cf17cf10e08c6302602f302df2ad1a09",
+      "dataBoundary": "generated temporary data only; fake auth network / test-owned loopback; no real account/library/model",
+      "replaceableSeams": "see individual test source; SDK/Controller/Host retained where named; signed auth/transport substituted; UNKNOWN Gateway release substituted",
+      "reviewStatus": "PASS_ISOLATED_SCOPE; see independent final receipt"
+    }
+  ],
+  "retainedFailures": [
+    {
+      "metadata": "logs/01b-host-red.json",
+      "log": "logs/01b-host-red.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01b-unit-red.json",
+      "log": "logs/01b-unit-red.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01d-acceptance-host.json",
+      "log": "logs/01d-acceptance-host.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01d-acceptance-lifecycle.json",
+      "log": "logs/01d-acceptance-lifecycle.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01d-chatgpt-production-policies.json",
+      "log": "logs/01d-chatgpt-production-policies.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01e-acceptance-confirm-fence.json",
+      "log": "logs/01e-acceptance-confirm-fence.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01e-formal-acceptance-resume.json",
+      "log": "logs/01e-formal-acceptance-resume.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01e-formal-acceptance.json",
+      "log": "logs/01e-formal-acceptance.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01e-formal-classified.json",
+      "log": "logs/01e-formal-classified.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    },
+    {
+      "metadata": "logs/01e-formal-terminal-diagnostic.json",
+      "log": "logs/01e-formal-terminal-diagnostic.log",
+      "exitCode": 1,
+      "timeout": false,
+      "status": "RETAINED_FAILURE; superseded only by named final evidence, never reported PASS"
+    }
+  ],
+  "notRun": [
+    "real accounts",
+    "real model quality",
+    "real billed API",
+    "OS Keychain",
+    "private user libraries",
+    "Windows",
+    "signed installers",
+    "sustained performance"
+  ],
+  "reviewStatus": "PASS",
+  "independentReceipt": "logs/independent-final-receipt.json",
+  "independentSourceBinding": "logs/independent-final-source-snapshot.json"
+}

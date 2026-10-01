@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/model-library-workspace-renderer.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.17,
+  "sha256": "4056b5b29f2a7549659223642cc6dc799d41368c59cf786b101044e5939809c9"
+}

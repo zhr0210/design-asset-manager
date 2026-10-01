@@ -1,0 +1,9 @@
+{
+  "A": "passed",
+  "B": "passed",
+  "C": "passed",
+  "D": "passed",
+  "state": "COMPLETED",
+  "action": "STOP",
+  "nextBatchAuthorized": false
+}

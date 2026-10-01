@@ -1,0 +1,10 @@
+{
+  "command": [
+    "node",
+    "scripts/agent-context-router.test.mjs"
+  ],
+  "exitCode": 1,
+  "timeout": false,
+  "seconds": 2.34,
+  "sha256": "1f3aad0ef05fb3dfb2fa58d11dbf517462839c0e1428ef08e1dfeedbfb5cedd3"
+}

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/library-startup-navigation.e2e.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 8.096,
+  "sha256": "d8f80d5e656eb8ff9db550db7ca817a7e44b3d76ac16961ef7313dc7428275f7"
+}

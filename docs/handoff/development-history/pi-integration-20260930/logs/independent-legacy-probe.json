@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/pi-legacy-probe.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.257,
+  "sha256": "40f3f40b635a7fa75484a1810889cef9a340a325fc2b70689b933a552ae0ddfa"
+}

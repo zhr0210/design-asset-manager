@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/background-ocr-runtime-observation.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.193,
+  "sha256": "6ba1b8fae65bccde3c2eb4180c9802a271d105fd5cbe0fba8d04ee78e0fd4905"
+}

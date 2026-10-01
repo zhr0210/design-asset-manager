@@ -1,0 +1,12 @@
+{
+  "runId": "background-ocr-20260929",
+  "authorization": "<REDACTED_VALUE>",
+  "state": "COMPLETED",
+  "testConcurrency": 1,
+  "perCommandTimeoutSeconds": 240,
+  "perIssueRepairBudget": 3,
+  "nextBatchAuthorized": false,
+  "dataScope": "generated assets/temp libraries/owned synthetic processes only",
+  "action": "STOP",
+  "automaticResume": false
+}

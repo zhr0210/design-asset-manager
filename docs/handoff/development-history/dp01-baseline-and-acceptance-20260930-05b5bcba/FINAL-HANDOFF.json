@@ -1,0 +1,61 @@
+{
+  "anchorVersion": 2,
+  "runId": "dp01-baseline-and-acceptance-20260930-05b5bcba",
+  "executionState": "COMPLETED",
+  "status": "COMPLETED_RESTRICTED_SCOPE",
+  "action": "STOP",
+  "completionScope": "DP01 isolated implementation and user-approved guarded ChatGPT sign-in entry",
+  "sourceDigest": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+  "reviewStatus": "PASS",
+  "verificationStatus": "VERIFIED_ISOLATED",
+  "nextBatchAuthorized": false,
+  "automaticResume": false,
+  "realInferenceBudget": 0,
+  "testConcurrency": 1,
+  "commandTimeoutSeconds": 240,
+  "slices": {
+    "01A": "COMPLETED_RESTRICTED_SCOPE",
+    "01B": "COMPLETED_RESTRICTED_SCOPE",
+    "01C": "COMPLETED_RESTRICTED_SCOPE",
+    "01D": "COMPLETED_RESTRICTED_SCOPE",
+    "01E": "COMPLETED_RESTRICTED_SCOPE",
+    "01F": "COMPLETED_RESTRICTED_SCOPE"
+  },
+  "notRun": [
+    "real ChatGPT account or subscription/plan eligibility",
+    "real billed API or model quality",
+    "OS Keychain/safeStorage",
+    "private user asset library or migration",
+    "real RapidOCR qualification",
+    "Windows/other architecture/signed installers",
+    "vendor bill hard cap",
+    "OS disk-cold/sustained large-library performance"
+  ],
+  "limitations": [
+    "Google, legacy Codex, Anthropic subscription and Copilot remain blocked",
+    "Background OCR production qualification remains null; B01 planning semantics preserved",
+    "Cost is a user estimate, not a guaranteed vendor billing cap",
+    "Actual free local-service USD0 declaration is not exposed; no-charge is synthetic-only",
+    "Source selection is partial and includes pre-existing WIP without full-file audit claims",
+    "Cooperative filesystem locks are not an OS sandbox or source lock",
+    "Main shutdown branch test includes source assertion; UNKNOWN gateway release is explicitly fault-injected"
+  ],
+  "fullWorkspaceSnapshot": false,
+  "source": {
+    "aggregateSha256": "db4960e5b46118a22849440671fb8090ffe74750b3c77a3c2c6ee10a27e4beb7",
+    "digestAlgorithm": "sha256(json-sortkeys-compact-ascii-no-newline)",
+    "fileCount": 679
+  },
+  "sourceManifest": "SOURCE-MANIFEST.json",
+  "report": "REPORT.md",
+  "review": "REVIEW.md",
+  "verification": "EVIDENCE-MAP.json",
+  "delta": "DELTA.json",
+  "patch": "changes.patch",
+  "handoff": "HANDOFF.md",
+  "scopeOverride": "Latest direct user approval enables only guarded ChatGPT sign-in; package restriction otherwise preserved",
+  "uniqueBehaviorTests": 196,
+  "independentRepeatedSubset": 81,
+  "realAcceptance": "NOT_RUN; user later authenticates and separately approves generated-only scope/budgets",
+  "workspacePreservation": "WORKSPACE-PRESERVATION.json"
+}

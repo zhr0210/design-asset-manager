@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "scripts/ai-handoff-anchor.py",
+    "--run",
+    ".ai-run/rux-auth-20261001-6a9cf104",
+    "--publish",
+    "--expected-current",
+    "BASELINE.oldLatestSha256"
+  ],
+  "exitCode": 1,
+  "expectedPointerMatched": true,
+  "scope": "limited code/isolated handoff, no UX or real-auth PASS"
+}

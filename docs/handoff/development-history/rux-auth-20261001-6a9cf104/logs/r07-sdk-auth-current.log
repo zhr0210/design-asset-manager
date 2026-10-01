@@ -1,0 +1,11 @@
+✔ actual SDK/Main/React guarded ChatGPT sign-in commits only verified registration; public status has no auth query or token (3548.4935ms)
+✔ new Worker reuses same issued client and protected hint; reauthentication does not register another client (1956.174708ms)
+✔ invalid callback and cancellation do not replace verified account or perform token requests (3828.683208ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10395.770291

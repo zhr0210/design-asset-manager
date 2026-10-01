@@ -1,0 +1,18 @@
+{
+  "beforeHashes": {
+    ".codeindex/module-map.json": "446a981819c548a4562e94630e4f6ee04f4712ed187f138e382655d7ef865207"
+  },
+  "reason": "module-map excluded from R00 extension set; before captured before first mutation, not retroactively called R00",
+  "libraryViewStore": "before reconstructed by removing root single insertion then verified exact R00 sha; not Git HEAD restore",
+  "untrackedOutsideR00Unchanged": "HTML/sh/media/.DS_Store absent from R00 set; not claimed new or modified by this batch",
+  "graphFinalRootCheck": {
+    "sourceHashesMatch": 613,
+    "reachable": 325,
+    "edges": 2597,
+    "computed": 25,
+    "unresolved": 0,
+    "graphSha256": "fb5e405a40746c934f20cd45b2706f988d81c0febaa42f84ef4f59a2647dd7b6",
+    "latestSupplementIndependentlyReviewed": true,
+    "reason": "Independent reviewer wrote final graph append with matching hashes before orchestration reported quota failure; root verified artifact binding, no independent test rerun or successful agent turn claimed."
+  }
+}

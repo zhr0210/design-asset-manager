@@ -1,0 +1,7 @@
+{
+  "targetReferencePackage": "DAM-REPOSITORY-UX-AUTH-PLAN-20261001.zip",
+  "sha256": "3fd01ae03c059b7f3e96ebebbfcb20cc816837852f6821ec1b93f3ee74cd4dd3",
+  "treatedAs": "user-approved R00-R08 scope/target, not pre-existing implementation evidence",
+  "prompt": "reference/prompts/MASTER-IMPLEMENTATION.md",
+  "historicalPackagesEmbedded": false
+}

@@ -1,0 +1,38 @@
+{
+  "status": "AUTH_REAL_NOT_RUN",
+  "cases": [
+    {
+      "id": "A01",
+      "title": "指定真实账号同机浏览器登录完成",
+      "evidenceType": "REAL_AUTH_AND_COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresSeparateUserAssistanceAndAuthorization": true,
+      "inferenceAllowed": false,
+      "passed": false
+    },
+    {
+      "id": "A02",
+      "title": "同一受控profile重启恢复账号状态",
+      "evidenceType": "REAL_AUTH_AND_COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresSeparateUserAssistanceAndAuthorization": true,
+      "inferenceAllowed": false,
+      "passed": false
+    },
+    {
+      "id": "A03",
+      "title": "用户登出后状态与旧执行权撤销",
+      "evidenceType": "REAL_AUTH_AND_COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresSeparateUserAssistanceAndAuthorization": true,
+      "inferenceAllowed": false,
+      "passed": false
+    }
+  ],
+  "vendorNetwork": 0,
+  "paidInference": 0,
+  "credentialsRead": false,
+  "userLibrariesRead": false,
+  "rootCause": "UNKNOWN",
+  "gate": "Synthetic contract+native UI first; user enters credentials in same-machine vendor browser, explicit single profile target; no material or inference automatically"
+}

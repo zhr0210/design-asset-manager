@@ -1,0 +1,11 @@
+{
+  "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN",
+  "reviewer": "c03_schema_review",
+  "sourceDigest": "663b68ecd05f933f566ae1943fd56fc4d670608a8dd0ba0a8e20faa6b7a29e49",
+  "acceptedAt": "2026-09-27T07:04:03.363605+00:00",
+  "report": "evidence/C03/STAGE-REPORT.md",
+  "remainingLimitations": [
+    "standalone Electron RUN_AS_NODE admission lifecycle unresolved",
+    "real libraries/models/Windows/packages not assessed"
+  ]
+}

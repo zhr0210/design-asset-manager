@@ -1,0 +1,21 @@
+{
+  "reportedRealFailure": "UNKNOWN",
+  "realVendorAttemptInThisBatch": false,
+  "syntheticConfirmedDefects": [
+    {
+      "defect": "correct-state error callback did not promptly settle owned listener",
+      "evidence": "logs/r03-denial.log",
+      "current": "denied terminal with zero token/JWKS requests; invalid state cannot terminate unrelated valid attempt"
+    },
+    {
+      "defect": "unmount cancelled App-owned auth; Main lacked safe stage/commit visibility",
+      "evidence": [
+        "logs/r07-ui-final.log",
+        "logs/r08-qualification.log"
+      ],
+      "current": "observation unsubscribes; explicit cancellation/lifecycle owns abort; Main persistence determines success"
+    }
+  ],
+  "identityOnly": "actual signed synthetic JWT case: no access/refresh is identity-only; refresh requests re-login with zero new network",
+  "noClaim": "No root cause diagnosis or successful real subscription login asserted."
+}

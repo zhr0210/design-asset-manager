@@ -1,0 +1,101 @@
+{
+  "deleted": [
+    {
+      "path": "src/renderer/components/asset/AssetDeepAnalysisPanel.tsx",
+      "beforeSha256": "515e78bc31b7edb204570301cdc47181d29bcae0bb0792e7a5ceedda727b115f",
+      "status": "DELETE_PROVEN_SOURCE",
+      "productionConsumers": [],
+      "scriptDynamicOrPackageConsumers": [],
+      "preservedData": "source only; no state/data ownership",
+      "replacement": "VisualAiPanel/current controllers or LibraryCanvas selectionbar/BulkActionModal/shared tagging projection",
+      "testCoverage": "existing active consumer regressions retained; empty/dead module not used by tests",
+      "uiImpact": "none reachable; final user path CU remains separate and pending",
+      "rollback": "copy baseline before only when after remains absent; if recreated reconcile manually",
+      "proof": "independent-cleanup audit + current executable-reference search, current build to recheck"
+    },
+    {
+      "path": "src/renderer/components/library/BulkActionDock.tsx",
+      "beforeSha256": "557f5360bf694173facc9c2b31f007affbb59df8b004f7eb1f913837cfb8f7e8",
+      "status": "DELETE_PROVEN_SOURCE",
+      "productionConsumers": [],
+      "scriptDynamicOrPackageConsumers": [],
+      "preservedData": "source only; no state/data ownership",
+      "replacement": "VisualAiPanel/current controllers or LibraryCanvas selectionbar/BulkActionModal/shared tagging projection",
+      "testCoverage": "existing active consumer regressions retained; empty/dead module not used by tests",
+      "uiImpact": "none reachable; final user path CU remains separate and pending",
+      "rollback": "copy baseline before only when after remains absent; if recreated reconcile manually",
+      "proof": "independent-cleanup audit + current executable-reference search, current build to recheck"
+    },
+    {
+      "path": "src/renderer/components/library/library-labels.ts",
+      "beforeSha256": "0d71d9c55759362c8ceb5ea439815c847db90250098f5028d1c5a6b4cc2cb5a5",
+      "status": "DELETE_PROVEN_SOURCE",
+      "productionConsumers": [],
+      "scriptDynamicOrPackageConsumers": [],
+      "preservedData": "source only; no state/data ownership",
+      "replacement": "VisualAiPanel/current controllers or LibraryCanvas selectionbar/BulkActionModal/shared tagging projection",
+      "testCoverage": "existing active consumer regressions retained; empty/dead module not used by tests",
+      "uiImpact": "none reachable; final user path CU remains separate and pending",
+      "rollback": "copy baseline before only when after remains absent; if recreated reconcile manually",
+      "proof": "independent-cleanup audit + current executable-reference search, current build to recheck"
+    },
+    {
+      "path": "src/renderer/hooks/useActivePromptModel.ts",
+      "beforeSha256": "e374c14d96b1ef98af3b2e6a903160e861c448dea72743deb70c1bbdb04bb7ba",
+      "status": "DELETE_PROVEN_SOURCE",
+      "productionConsumers": [],
+      "scriptDynamicOrPackageConsumers": [],
+      "preservedData": "source only; no state/data ownership",
+      "replacement": "VisualAiPanel/current controllers or LibraryCanvas selectionbar/BulkActionModal/shared tagging projection",
+      "testCoverage": "existing active consumer regressions retained; empty/dead module not used by tests",
+      "uiImpact": "none reachable; final user path CU remains separate and pending",
+      "rollback": "copy baseline before only when after remains absent; if recreated reconcile manually",
+      "proof": "independent-cleanup audit + current executable-reference search, current build to recheck"
+    },
+    {
+      "path": "src/renderer/hooks/usePromptReverse.ts",
+      "beforeSha256": "f8e0f3350441b21bcf2f81db921d0a9848393f353a08972be19ab9a38711587e",
+      "status": "DELETE_PROVEN_SOURCE",
+      "productionConsumers": [],
+      "scriptDynamicOrPackageConsumers": [],
+      "preservedData": "source only; no state/data ownership",
+      "replacement": "VisualAiPanel/current controllers or LibraryCanvas selectionbar/BulkActionModal/shared tagging projection",
+      "testCoverage": "existing active consumer regressions retained; empty/dead module not used by tests",
+      "uiImpact": "none reachable; final user path CU remains separate and pending",
+      "rollback": "copy baseline before only when after remains absent; if recreated reconcile manually",
+      "proof": "independent-cleanup audit + current executable-reference search, current build to recheck"
+    }
+  ],
+  "candidateCount": 27,
+  "remaining": "KEEP_PENDING_EVIDENCE / protected golden / test consumers; see independent audit",
+  "historicalReferencesPreserved": true,
+  "cuAcceptance": "PENDING_NOT_INFERRED_FROM_SOURCE_PROOF",
+  "moved": [
+    {
+      "from": "src/renderer/modules/ai-console-status/in-memory-ai-console-status.adapter.ts",
+      "to": "scripts/test-support/in-memory-ai-console-status.adapter.ts",
+      "beforeSha256": "1612972509bbb43958955741aae70104ab7a91dc7c9bb1fb4242ce2e5fc8503c",
+      "productionConsumers": [],
+      "testConsumers": [
+        "scripts/ai-console-status-module.test.ts"
+      ],
+      "reason": "sole executable consumer is retained test; type-only import now points to source module",
+      "dataMutation": false,
+      "status": "MOVE_TEST_ONLY",
+      "rollback": "restore verified before and reconcile two imports only when hashes match; never reset workspace"
+    },
+    {
+      "from": "src/renderer/modules/model-library-workspace/in-memory-model-library-workspace.adapter.ts",
+      "to": "scripts/test-support/in-memory-model-library-workspace.adapter.ts",
+      "beforeSha256": "c1e7ee36ca986c3233d3c78226917f9304e5fc56f61323abbad08de94067b092",
+      "productionConsumers": [],
+      "testConsumers": [
+        "scripts/model-library-workspace-renderer.test.ts"
+      ],
+      "reason": "sole executable consumer is retained test; type-only import now points to source module",
+      "dataMutation": false,
+      "status": "MOVE_TEST_ONLY",
+      "rollback": "restore verified before and reconcile two imports only when hashes match; never reset workspace"
+    }
+  ]
+}

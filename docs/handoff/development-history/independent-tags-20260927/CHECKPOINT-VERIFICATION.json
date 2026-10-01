@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "changedOriginalFiles": [
+    "scripts/visual-ai-provider.integration.test.ts",
+    "TASK.md"
+  ],
+  "originalIndexAndStagedDiffUnchanged": true,
+  "C02ASourceHashesCurrent": true,
+  "DDLExecuted": false,
+  "budgetAndReviewApprovalPending": true,
+  "productionSourcesChanged": false,
+  "testSupplementExitCode": 0
+}

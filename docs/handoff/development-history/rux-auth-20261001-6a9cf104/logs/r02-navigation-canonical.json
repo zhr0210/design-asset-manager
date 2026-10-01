@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/app-navigation-workflow.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.18,
+  "sha256": "6b8b9b5fb477dc110f7a297ea633222d0063bb43b40cf28ea873b54b497c9804"
+}

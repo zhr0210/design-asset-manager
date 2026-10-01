@@ -1,0 +1,73 @@
+✔ Main opaque host ID persists across fresh instances and refuses malformed/symlink records (2.000792ms)
+✔ select contract is bounded and cannot retain arbitrary SDK fields or accept unknown options (0.17025ms)
+✖ Main selection answers require active operation and current prompt; cancel and A-B-A late answers reject (129.285416ms)
+✖ expired login prompt rejects answers immediately and keeps account configuration unchanged (525.314833ms)
+✖ Main supplies one stable host ID for multiple contract Workers; registration still product-blocked (1.415667ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 2
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 663.565541
+
+✖ failing tests:
+
+test at dist-temp/tests/pi-auth-prompts.test.mjs:1052:9
+✖ Main selection answers require active operation and current prompt; cancel and A-B-A late answers reject (129.285416ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'select'
+  
+      at TestContext.<anonymous> (file://<DAM_WORKSPACE>/dist-temp/tests/pi-auth-prompts.test.mjs:1071:12)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+      at async file://<DAM_WORKSPACE>/dist-temp/tests/pi-auth-prompts.test.mjs:1052:3 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'select',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dist-temp/tests/pi-auth-prompts.test.mjs:1091:9
+✖ expired login prompt rejects answers immediately and keeps account configuration unchanged (525.314833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'failed'
+  - 'cancelled'
+  
+      at TestContext.<anonymous> (file://<DAM_WORKSPACE>/dist-temp/tests/pi-auth-prompts.test.mjs:1110:12)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+      at async file://<DAM_WORKSPACE>/dist-temp/tests/pi-auth-prompts.test.mjs:1091:3 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'failed',
+    expected: 'cancelled',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dist-temp/tests/pi-auth-prompts.test.mjs:1116:9
+✖ Main supplies one stable host ID for multiple contract Workers; registration still product-blocked (1.415667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file://<DAM_WORKSPACE>/dist-temp/tests/pi-auth-prompts.test.mjs:1130:12)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+      at async file://<DAM_WORKSPACE>/dist-temp/tests/pi-auth-prompts.test.mjs:1116:3 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

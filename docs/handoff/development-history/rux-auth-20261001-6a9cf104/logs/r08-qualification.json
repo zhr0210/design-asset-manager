@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/auth-account-lifecycle.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.403,
+  "sha256": "99dfe6d0eea053b67aa4d7761fbbe356ddc98ce6ee2114355a9648826bc5baab"
+}

@@ -1,0 +1,16 @@
+✔ google unavailable path rejects before credential, network, or probe material (1.555ms)
+✔ anthropic unavailable path rejects before credential, network, or probe material (0.336041ms)
+✔ openai-codex unavailable path rejects before credential, network, or probe material (0.190916ms)
+✔ github-copilot unavailable path rejects before credential, network, or probe material (0.199125ms)
+✔ upstream technical support and product Anthropic permission are distinct (0.070291ms)
+✔ switching a saved subscription connection to legacy transport cannot advertise executable inference (0.106667ms)
+✔ Anthropic known subscription token cannot be stored or used as an API key, old records are preserved (0.406583ms)
+✔ guarded ChatGPT admission allows user login but inference without a credential cannot request API-key billing (0.039958ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6.112792

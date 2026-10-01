@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/pi-native-sdk.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 2.52,
+  "sha256": "c6d389e31a07173ccd9ed7b3d3b4ebdddece4c28be4975ef08c6aa5e5491a7e2"
+}

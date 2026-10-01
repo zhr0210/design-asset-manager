@@ -1,0 +1,11 @@
+{
+  "files": {
+    "scripts/tag-execution.integration.test.ts": "83206798e20adfc3018d8056a3ee2543ac195680ed4614ec717374ef35afebf1",
+    "scripts/tag-intent-panel-electron.e2e.test.mjs": "b306cc168c18d0035371e9bdd4200aeeffd880bbd0d8e9678f2ff3d35a3a18dd",
+    "scripts/tag-intent-ui.integration.test.mjs": "36c7de1777b65c88d827f943709da8dbd6c1313cc790f2d8e014df1970dc0e2b",
+    "src/main/independent-tags/README.md": "13fe090170e3122512ceb8cee0125ccdef2dd725f04a1173792821990348b9e2",
+    "src/main/independent-tags/tag-execution-controller.ts": "bc27482acc3b0f52518bfb38ff5a7b703f085c7f6544ef65ef012bd51e872bd4",
+    "src/renderer/components/asset/IndependentTagIntentPanel.tsx": "38cce1229b99d46d1994fd50cff25c216309cab9a6d29e266759d3b5f69720d4"
+  },
+  "digest": "ceecf948ece637b5a756e54ecec599b23dd2705d12a4fe8ba0496d1326ab77d7"
+}

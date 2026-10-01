@@ -1,0 +1,13 @@
+{
+  "changeDigest": "54cc88bc9ba256d0945a67d7f37bc233830611326b40ef2d9de44ac6010055ef",
+  "files": {
+    "src/main/ocr/local-ocr-process.ts": "9728f4f6d06d41cc36b7c7d81bb0dabd7764f2a40e3846339d72f2cbc16eed6d",
+    "src/main/ocr/ocr-controller.ts": "26bd171902d5af43317da8cbc89e3522708fcab9f9b9a46391a68e28f91e74b2",
+    "src/main/ocr/README.md": "cca2055b45eb0619018f59fd0376e87be82d6e1d223fb0963ff577b5351e3c0d",
+    "src/main/index.ts": "6de8bcc067b8e36e47f402360dd5ccae95adad93dd92d1cf3c867f819ea40d0d",
+    "scripts/ocr-process-lifecycle.test.ts": "c6d3a607b5bf612e44a94bc1ea20f1d9db4a22da9b2c6dc3bcdc33fe27228fc9",
+    "scripts/ocr-controller-lifecycle.test.ts": "9b60723f0e7312db6f795b109b6959d4fb2020b0d559167c986f20b28f949eaf",
+    "scripts/ocr-exit-electron.e2e.test.mjs": "a65a067306ec9ddf572c40807791657e6095cfa92702472b7b2d10ddb5f1f8d1",
+    "TASK.md": "edf76efda27868f4bffd0dfe5dcdb47de6e4aa1fb36ff12c4f9a00219787251e"
+  }
+}

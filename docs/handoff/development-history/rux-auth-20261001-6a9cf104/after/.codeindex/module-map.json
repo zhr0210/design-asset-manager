@@ -1,0 +1,4191 @@
+{
+  "$schema": "./module-map.schema.json",
+  "schema_version": 2,
+  "current_context": {
+    "files_read": [
+      "AGENTS.md"
+    ]
+  },
+  "defaults": {
+    "max_files": 7,
+    "max_estimated_tokens": 16000,
+    "max_routes": 1,
+    "max_adrs": 3,
+    "max_tests": 4
+  },
+  "coverage": {
+    "roots": [
+      "src/main",
+      "src/renderer",
+      "src/preload",
+      "src/shared",
+      "ai-service"
+    ],
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".mjs",
+      ".py"
+    ],
+    "exclude": [
+      "src/main/extensions/photoshow/**",
+      "src/renderer/routes/refactor-prototype/**",
+      "src/renderer/routes/work-mode-prototype/**",
+      "**/tests/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "ai-service/eval/datasets/**",
+      "ai-service/eval/reports/**"
+    ]
+  },
+  "modules": {
+    "electron-main": {
+      "purpose": "Electron composition, trusted local capabilities, IPC and product orchestration outside the isolated intake, lifecycle and Model Library tracers.",
+      "owns": [
+        "src/main/**"
+      ],
+      "exclude": [
+        "src/main/capture-intake/**",
+        "src/main/library-lifecycle/**",
+        "src/main/model-library/**",
+        "src/main/extensions/photoshow/**"
+      ],
+      "readme": "src/main/README.md"
+    },
+    "capture-intake": {
+      "purpose": "Safe Copy planning, Candidate identity, Promotion and persistence adapters for the isolated intake tracer.",
+      "owns": [
+        "src/main/capture-intake/**"
+      ],
+      "readme": "src/main/capture-intake/README.md"
+    },
+    "library-lifecycle": {
+      "purpose": "Read-only Library opening/creation planning, Manifest/filesystem evidence, Exclusive Lock, Active Library authority and Asset Trash tracers.",
+      "owns": [
+        "src/main/library-lifecycle/**"
+      ],
+      "readme": "src/main/library-lifecycle/README.md"
+    },
+    "model-library": {
+      "purpose": "Path-free Model Library Interfaces and isolated signed admission, verified storage, root authority and device-local current-root Registry tracers; no production install authority.",
+      "owns": [
+        "src/main/model-library/**"
+      ],
+      "readme": "src/main/model-library/README.md"
+    },
+    "renderer": {
+      "purpose": "React product surfaces, interaction state and adapters to the Preload bridge.",
+      "owns": [
+        "src/renderer/**"
+      ],
+      "readme": "src/renderer/README.md"
+    },
+    "preload": {
+      "purpose": "Narrow trusted bridge between Renderer and Electron Main.",
+      "owns": [
+        "src/preload/**"
+      ]
+    },
+    "shared": {
+      "purpose": "Cross-process contracts, types, constants and pure workflow projections.",
+      "owns": [
+        "src/shared/**"
+      ],
+      "readme": "src/shared/README.md"
+    },
+    "ai-worker": {
+      "purpose": "Python inference worker, model adapters, queues, evaluation tools and worker-owned task state.",
+      "owns": [
+        "ai-service/**"
+      ],
+      "readme": "ai-service/README.md"
+    }
+  },
+  "routes": {
+    "asset-workspace": {
+      "summary": "Asset Library browsing, Inspector, tags, captions, bulk actions and the primary product surface.",
+      "aliases": [
+        "asset workspace",
+        "asset thumbnail",
+        "drag into library",
+        "素材工作区",
+        "标签管理",
+        "素材缩略图",
+        "拖入素材",
+        "user edit",
+        "user-edited caption",
+        "user-edited description",
+        "用户编辑",
+        "用户编辑素材描述",
+        "用户编辑描述",
+        "tag group",
+        "bulk selection",
+        "multi select",
+        "library toolbar",
+        "comparison tray",
+        "Eagle 连接库"
+      ],
+      "keywords": [
+        "tag",
+        "标签",
+        "caption",
+        "inspector",
+        "检查器",
+        "waterfall",
+        "thumbnail",
+        "瀑布流",
+        "bulk",
+        "批量",
+        "缩略图",
+        "user edit",
+        "Eagle",
+        "同步"
+      ],
+      "modules": [
+        "renderer",
+        "electron-main",
+        "preload",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Formal minimal Library Canvas uses Active Library data, controlled previews, lexical search, side details and focus gallery; prototype persistence is not imported.",
+          "evidence": [
+            "src/renderer/routes/Library.tsx",
+            "src/renderer/stores/asset.store.ts",
+            "src/main/index.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "The accepted workspace grows through progressive intake, analysis and explainable discovery without making classification a gate.",
+          "evidence": [
+            "docs/adr/0009-asset-workspace-is-the-primary-surface.md",
+            "docs/adr/0413-asset-organization-is-search-first-and-does-not-require-classification-completeness.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/renderer/routes/Library.tsx",
+          "anchor": "export default function Library",
+          "triggers": [
+            "workspace",
+            "library",
+            "inspector",
+            "素材工作区",
+            "素材库",
+            "检查器"
+          ],
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Primary Asset Workspace composition and interaction flow.",
+          "read_mode": "symbol",
+          "priority": 1
+        },
+        {
+          "path": "src/renderer/components/library/canvas/LibraryCanvas.tsx",
+          "anchor": "export function LibraryCanvas",
+          "triggers": [
+            "card",
+            "button",
+            "waterfall",
+            "thumbnail",
+            "卡片",
+            "按钮",
+            "瀑布流",
+            "缩略图"
+          ],
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Formal gallery, bottom search, selection, library states and retained controls.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/renderer/stores/asset.store.ts",
+          "anchor": "function mapDbAssetToAsset",
+          "triggers": [
+            "store",
+            "state",
+            "load",
+            "save",
+            "delete",
+            "tag",
+            "caption",
+            "thumbnail",
+            "状态",
+            "加载",
+            "保存",
+            "删除",
+            "标签",
+            "描述",
+            "缩略图"
+          ],
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Renderer Asset projection mapping and current Main bridge state.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "src/shared/contracts/asset.contract.ts",
+          "triggers": [
+            "ipc",
+            "contract",
+            "bridge",
+            "delete",
+            "保存",
+            "删除"
+          ],
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Shared Asset IPC Interface and compatibility seam.",
+          "read_mode": "full",
+          "priority": 3
+        },
+        {
+          "path": "src/main/ipc/active-library.ipc.ts",
+          "anchor": "export function registerActiveLibraryIpc",
+          "triggers": [
+            "ipc",
+            "main",
+            "bridge",
+            "delete",
+            "保存",
+            "删除"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Current Active Library IPC composition and held authority; legacy Asset IPC is not this write path.",
+          "read_mode": "symbol",
+          "priority": 4
+        },
+        {
+          "path": "src/renderer/components/library/README.md",
+          "role": "readme",
+          "reality": "Current Implementation",
+          "reason": "Nearest durable Library UI behavior notes.",
+          "read_mode": "full",
+          "priority": 6
+        },
+        {
+          "path": "src/main/external-connected-library/README.md",
+          "triggers": [
+            "Eagle",
+            "connected",
+            "连接库",
+            "旧库"
+          ],
+          "role": "readme",
+          "reality": "Current Implementation",
+          "reason": "Connected ownership and evidence limits.",
+          "read_mode": "full",
+          "priority": 2
+        },
+        {
+          "path": "src/renderer/components/library/canvas/LibraryFocus.tsx",
+          "anchor": "export function LibraryFocus",
+          "triggers": [
+            "focus",
+            "preview",
+            "专注",
+            "查看",
+            "预览"
+          ],
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Controlled preview, read-only focus information, ordered filmstrip and keyboard/zoom behavior.",
+          "read_mode": "symbol",
+          "priority": 2
+        }
+      ],
+      "test_profiles": [
+        "asset_workspace",
+        "external_connected_library"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0009-asset-workspace-is-the-primary-surface.md",
+          "triggers": [
+            "home",
+            "首页",
+            "navigation",
+            "导航",
+            "workspace"
+          ],
+          "reason": "Defines Asset Workspace as the primary surface.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0413-asset-organization-is-search-first-and-does-not-require-classification-completeness.md",
+          "triggers": [
+            "unsorted",
+            "分类",
+            "organization",
+            "collection"
+          ],
+          "reason": "Protects search-first organization and non-blocking Unsorted state."
+        }
+      ],
+      "avoid": [
+        "Do not read the complete renderer README or all workspace ADRs for a local UI fix.",
+        "Do not treat AI Console or Web Capture as the product home."
+      ],
+      "warnings": [
+        "Current Asset Workspace depth is uneven; verify the exact caller before describing a complete workflow."
+      ]
+    },
+    "asset-discovery": {
+      "summary": "Local Asset Discovery, lexical matching, Match Explanation and future semantic or visual retrieval.",
+      "aliases": [
+        "asset discovery",
+        "library search",
+        "match explanation",
+        "semantic search",
+        "visual search",
+        "素材检索",
+        "库内搜索",
+        "命中说明",
+        "语义搜索",
+        "以图搜图",
+        "素材库搜索",
+        "本地素材库搜索",
+        "素材库中搜索",
+        "检索",
+        "素材库里找",
+        "按颜色找图",
+        "本地素材库中查找"
+      ],
+      "keywords": [
+        "discovery",
+        "search",
+        "检索",
+        "搜索",
+        "ocr",
+        "semantic",
+        "语义",
+        "visual",
+        "视觉",
+        "embedding",
+        "vector",
+        "match",
+        "命中",
+        "local asset search",
+        "find library",
+        "find asset",
+        "dominant color",
+        "文字找回"
+      ],
+      "modules": [
+        "shared",
+        "renderer",
+        "electron-main"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "The live Asset Workspace performs bounded in-memory lexical matching over loaded assets and explains matched fields.",
+          "evidence": [
+            "src/shared/workflows/asset-discovery.workflow.ts",
+            "src/renderer/routes/Library.tsx",
+            "scripts/asset-discovery-workflow.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Durable lexical indexes, embeddings, explicit image queries and multi-channel rank fusion remain future work.",
+          "evidence": [
+            "docs/adr/0181-asset-search-is-hybrid-explainable-and-complete-without-vectors.md",
+            "docs/adr/0182-search-by-image-uses-an-explicit-ephemeral-query-source.md",
+            "docs/adr/0404-cross-library-rank-fusion-never-compares-raw-scores.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/shared/workflows/asset-discovery.workflow.ts",
+          "anchor": "projectAssetDiscovery",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure Discovery Module and Match Explanation projection.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/renderer/routes/Library.tsx",
+          "anchor": "projectAssetDiscovery",
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Live caller proving the lexical Module is wired into Asset Workspace.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/renderer/components/library/LibraryToolbar.tsx",
+          "anchor": "lexical-only",
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Current UI capability evidence and lexical-only disclosure.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "scripts/asset-discovery-workflow.test.ts",
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused executable behavior evidence.",
+          "read_mode": "full",
+          "priority": 4
+        }
+      ],
+      "test_profiles": [
+        "asset_discovery"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0181-asset-search-is-hybrid-explainable-and-complete-without-vectors.md",
+          "triggers": [
+            "semantic",
+            "语义",
+            "hybrid",
+            "embedding",
+            "vector",
+            "explanation",
+            "命中"
+          ],
+          "reason": "Defines complete-without-vectors and explainable hybrid retrieval.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0182-search-by-image-uses-an-explicit-ephemeral-query-source.md",
+          "triggers": [
+            "image query",
+            "visual search",
+            "以图搜图",
+            "图片查询"
+          ],
+          "reason": "Defines explicit ephemeral image-query semantics.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0404-cross-library-rank-fusion-never-compares-raw-scores.md",
+          "triggers": [
+            "rank fusion",
+            "cross-library",
+            "跨库",
+            "融合排序"
+          ],
+          "reason": "Prevents raw-score comparison across retrieval spaces."
+        }
+      ],
+      "avoid": [
+        "Do not read Source Discovery code for a local Asset Discovery task unless the task crosses that seam.",
+        "Do not infer semantic or visual retrieval from Runtime probes or model files."
+      ],
+      "warnings": [
+        "Current Asset Discovery is lexical-only and in-memory; durable semantic and visual paths are not live."
+      ]
+    },
+    "asset-lifecycle": {
+      "summary": "Current asset deletion, read-only Library Start and recoverable Trash tracers, and Active Library authority.",
+      "aliases": [
+        "asset trash",
+        "delete asset",
+        "active library production composition",
+        "asset authority baseline",
+        "pre-cutover authority",
+        "legacy application library migration",
+        "library start interface",
+        "library open inspection",
+        "read-only library start",
+        "exclusive library lock",
+        "素材写入权威基线",
+        "素材库启动检查",
+        "只读素材库启动接口",
+        "素材回收站",
+        "删除素材",
+        "活动素材库正式组合",
+        "旧版应用素材库迁移",
+        "素材库启动权威",
+        "library manifest"
+      ],
+      "keywords": [
+        "delete",
+        "deletion",
+        "trash",
+        "restore",
+        "lifecycle",
+        "active library",
+        "library start",
+        "library start inspection",
+        "legacy application library",
+        "material library migration",
+        "sole writer",
+        "删除",
+        "回收站",
+        "恢复",
+        "生命周期",
+        "素材库启动",
+        "素材库检查",
+        "迁移",
+        "filesystem"
+      ],
+      "modules": [
+        "library-lifecycle",
+        "electron-main",
+        "renderer",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "The live assets:delete chain still hard-deletes Asset and tag rows through the process-global database.",
+          "evidence": [
+            "src/shared/contracts/asset.contract.ts",
+            "src/main/ipc/asset.ipc.ts",
+            "src/main/services/asset.service.ts",
+            "src/renderer/stores/asset.store.ts"
+          ]
+        },
+        {
+          "reality": "Validated Tracer",
+          "summary": "Coherent read-only Library Open Inspection, Manifest/filesystem, real cross-process lock and recoverable Trash are tracers, not production activation.",
+          "evidence": [
+            "src/main/library-lifecycle/asset-trash.ts",
+            "src/main/library-lifecycle/sqlite-asset-trash.adapter.ts",
+            "scripts/asset-trash-lifecycle.test.ts",
+            "scripts/asset-trash-sqlite-persistence.test.ts",
+            "src/main/library-lifecycle/library-start.ts",
+            "src/main/library-lifecycle/library-start.tracer.ts",
+            "scripts/library-start-inspection.test.ts",
+            "src/main/library-lifecycle/library-manifest.tracer.ts",
+            "scripts/library-manifest-inspection.test.ts",
+            "src/main/library-lifecycle/library-filesystem.tracer.ts",
+            "scripts/library-filesystem-inspection.test.ts",
+            "src/main/library-lifecycle/exclusive-library-lock.tracer.ts",
+            "scripts/exclusive-library-lock.tracer.test.ts",
+            "src/main/library-lifecycle/library-open-inspection.tracer.ts",
+            "scripts/library-open-inspection.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Production Trash and Capture must use one inspected and exclusively locked Active Library; legacy formalization requires reviewed verified-copy migration and Trash-aware reads.",
+          "evidence": [
+            "docs/adr/0067-design-asset-deletion-uses-asset-trash-not-candidate-cleanup.md",
+            "docs/adr/0069-deleted-assets-are-hidden-outside-trash-unless-included.md",
+            "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md",
+            "docs/adr/0482-legacy-application-libraries-migrate-by-verified-copy-without-reimport.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/library-lifecycle/README.md",
+          "triggers": [
+            "asset authority baseline",
+            "pre-cutover authority",
+            "素材写入权威基线",
+            "library start",
+            "library open inspection",
+            "素材库启动",
+            "素材库检查",
+            "素材库打开检查"
+          ],
+          "role": "readme",
+          "reality": "Validated Tracer",
+          "reason": "Inspection/Trash tracer limits and the temporary pre-cutover authority policy.",
+          "read_mode": "full",
+          "priority": 1
+        },
+        {
+          "path": "src/main/services/asset.service.ts",
+          "anchor": "deleteAsset",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Current hard-delete behavior.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "required": true,
+          "triggers": [
+            "asset",
+            "trash",
+            "restore",
+            "delete",
+            "active library",
+            "legacy",
+            "authority",
+            "sole writer",
+            "删除",
+            "回收站",
+            "恢复",
+            "活动素材库",
+            "迁移",
+            "生命周期",
+            "权威"
+          ]
+        },
+        {
+          "path": "src/main/ipc/asset.ipc.ts",
+          "anchor": "registerAssetIpc",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Live Electron registration and handler chain for the legacy hard-delete channel.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "required": true,
+          "triggers": [
+            "asset",
+            "trash",
+            "restore",
+            "delete",
+            "active library",
+            "legacy",
+            "authority",
+            "sole writer",
+            "删除",
+            "回收站",
+            "恢复",
+            "活动素材库",
+            "迁移",
+            "生命周期",
+            "权威"
+          ]
+        },
+        {
+          "path": "src/main/library-lifecycle/asset-trash.ts",
+          "anchor": "AssetTrashWorkflow",
+          "triggers": [
+            "delete",
+            "deletion",
+            "trash",
+            "restore",
+            "删除",
+            "回收站",
+            "恢复"
+          ],
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Recoverable lifecycle Interface and invariants.",
+          "read_mode": "full",
+          "priority": 4,
+          "required": true
+        },
+        {
+          "path": "src/main/library-lifecycle/active-library-session.ts",
+          "anchor": "createActiveLibrarySession",
+          "triggers": [
+            "active library production composition",
+            "legacy application library migration",
+            "library start authority",
+            "exclusive library lock",
+            "library lock",
+            "runwhileheld",
+            "活动素材库正式组合",
+            "旧版应用素材库迁移",
+            "素材库启动权威"
+          ],
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Current deep capability for one inspected database, storage-role set and Exclusive Library Lock.",
+          "read_mode": "symbol",
+          "priority": 1
+        },
+        {
+          "path": "src/main/library-lifecycle/library-start.ts",
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "One inspection entry, opaque scope input and explicitly non-writing outcomes.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true,
+          "triggers": [
+            "library start",
+            "library open inspection",
+            "素材库启动",
+            "素材库检查",
+            "library manifest",
+            "manifest identity",
+            "managed originals binding",
+            "素材库清单",
+            "filesystem",
+            "filesystem eligibility",
+            "path headroom",
+            "selected root",
+            "write probe",
+            "文件系统",
+            "路径余量"
+          ]
+        },
+        {
+          "path": "src/main/library-lifecycle/library-start.tracer.ts",
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Main-only scope binding, data validation and read-only observation classification.",
+          "read_mode": "full",
+          "priority": 2,
+          "required": true,
+          "triggers": [
+            "library start",
+            "素材库启动",
+            "素材库检查",
+            "素材库打开检查"
+          ]
+        },
+        {
+          "path": "src/main/library-lifecycle/library-open-inspection.tracer.ts",
+          "anchor": "createLibraryOpenInspectionTracer",
+          "role": "adapter",
+          "reality": "Validated Tracer",
+          "reason": "One bound read-only inspection over shared Manifest/role policy, SQLite identity/journals and scoped qualification; never issues write authority.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true,
+          "triggers": [
+            "library open inspection",
+            "coherent inspection",
+            "开库检查",
+            "素材库打开检查"
+          ]
+        },
+        {
+          "path": "src/main/library-lifecycle/library-manifest.tracer.ts",
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Bounded canonical Manifest decoding, identity/version declarations and lexical binding policy.",
+          "read_mode": "full",
+          "priority": 2,
+          "required": true,
+          "triggers": [
+            "library manifest",
+            "portable library manifest",
+            "manifest identity",
+            "manifest compatibility",
+            "managed originals binding",
+            "素材库 manifest",
+            "素材库清单",
+            "素材库身份",
+            "素材库兼容"
+          ]
+        },
+        {
+          "path": "scripts/library-manifest-inspection.test.ts",
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Generated valid/missing/newer/hostile Manifest bytes through the existing inspection Interface.",
+          "read_mode": "full",
+          "priority": 3,
+          "triggers": [
+            "library manifest",
+            "portable library manifest",
+            "manifest identity",
+            "manifest compatibility",
+            "managed originals binding",
+            "素材库 manifest",
+            "素材库清单",
+            "素材库身份",
+            "素材库兼容"
+          ]
+        },
+        {
+          "path": "src/main/library-lifecycle/library-filesystem.tracer.ts",
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Read-only selected-role lstat/realpath observation, scoped qualification and role headroom.",
+          "read_mode": "full",
+          "priority": 2,
+          "required": true,
+          "triggers": [
+            "filesystem",
+            "filesystem eligibility",
+            "read-only filesystem",
+            "path headroom",
+            "selected root",
+            "write probe",
+            "文件系统",
+            "路径余量",
+            "只读观察"
+          ]
+        },
+        {
+          "path": "scripts/library-filesystem-inspection.test.ts",
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Task-owned roots prove no-write success/failure, links, escape, overlap, headroom and target replacement.",
+          "read_mode": "full",
+          "priority": 3,
+          "triggers": [
+            "filesystem",
+            "filesystem eligibility",
+            "read-only filesystem",
+            "path headroom",
+            "selected root",
+            "write probe",
+            "文件系统",
+            "路径余量",
+            "只读观察"
+          ]
+        },
+        {
+          "path": "src/main/library-lifecycle/exclusive-library-lock.tracer.ts",
+          "anchor": "createExclusiveLibraryLockTracer",
+          "role": "adapter",
+          "reality": "Validated Tracer",
+          "reason": "Existing-store inspection, real zero-wait lease acquisition and guarded release; drain semantics follow ADR 0278.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true,
+          "triggers": [
+            "exclusive library lock",
+            "library lock",
+            "runwhileheld",
+            "library lease",
+            "素材库锁"
+          ]
+        }
+      ],
+      "test_profiles": [
+        "asset_trash",
+        "library_start"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0067-design-asset-deletion-uses-asset-trash-not-candidate-cleanup.md",
+          "triggers": [
+            "delete",
+            "deletion",
+            "trash",
+            "restore",
+            "删除",
+            "回收站",
+            "恢复"
+          ],
+          "reason": "Defines recoverable Design Asset deletion semantics.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0069-deleted-assets-are-hidden-outside-trash-unless-included.md",
+          "triggers": [
+            "include deleted",
+            "trash-aware",
+            "hidden deleted",
+            "asset grid",
+            "search deleted",
+            "包含已删除",
+            "隐藏已删除",
+            "回收站检索"
+          ],
+          "reason": "Keeps deleted Assets out of ordinary grid, collection and search reads unless explicitly included.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md",
+          "triggers": [
+            "active library",
+            "exclusive lock",
+            "library authority",
+            "library start",
+            "library open inspection",
+            "library manifest",
+            "manifest identity",
+            "manifest compatibility",
+            "managed originals binding",
+            "filesystem",
+            "exclusive library lock",
+            "path headroom",
+            "活动素材库",
+            "素材库启动",
+            "文件系统"
+          ],
+          "reason": "Requires inspection and Exclusive Library Lock evidence before normal writes.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0482-legacy-application-libraries-migrate-by-verified-copy-without-reimport.md",
+          "triggers": [
+            "library open inspection",
+            "active library production composition",
+            "legacy application library migration",
+            "material library migration",
+            "活动素材库正式组合",
+            "旧版应用素材库迁移",
+            "legacy",
+            "migration",
+            "旧库",
+            "迁移"
+          ],
+          "reason": "Preserves Design Asset identities while verified-copying legacy originals without reimport, inference or dual writing.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0282-managed-originals-bind-to-stable-originals-without-taking-over-files.md",
+          "triggers": [
+            "library open inspection",
+            "library manifest",
+            "managed originals binding",
+            "素材库 manifest",
+            "素材库清单",
+            "原始素材绑定",
+            "filesystem",
+            "filesystem eligibility",
+            "read-only filesystem",
+            "path headroom",
+            "selected root",
+            "write probe",
+            "文件系统",
+            "路径余量",
+            "只读观察"
+          ],
+          "reason": "Manifest binding is root-relative and lexical; physical containment and ownership remain later evidence.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0291-managed-original-paths-use-conservative-portable-and-windows-budgets.md",
+          "triggers": [
+            "filesystem",
+            "path headroom",
+            "selected root",
+            "文件系统",
+            "路径余量"
+          ],
+          "reason": "Current role measurements are bounded; final/staging/rollback allocations still require their own full preflight.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not reuse assets:delete for the new Trash authority.",
+        "Do not wire the tracer to the process-global database or infer ownership for legacy Assets.",
+        "Do not treat Manifest identities or relative bindings as physical filesystem, lock or write qualification.",
+        "Do not use permission bits, OS/drive labels or successful stat as atomic, durable or locking qualification.",
+        "Do not create, recover, delete or steal lock storage while inspecting or acquiring an existing Library lock."
+      ],
+      "warnings": [
+        "The tested Trash Module is not composed into the live Electron runtime, UI, list or search path.",
+        "Compatible means generated-fixture inspection eligibility only. Production readers, volume qualification, populated-library adapters and writable activation remain unimplemented.",
+        "Manifest-compatible means declaration parsing passed; production Library Root, filesystem, lock qualification and writable activation remain unimplemented.",
+        "Filesystem-observed means selected role shape and trusted memory qualification were evaluated; no real volume or future Asset allocation is qualified.",
+        "Lock proof is macOS temporary-root evidence only; other platforms refuse before open. Review ADR 0278 for release/drain semantics; inspect is not acquisition."
+      ]
+    },
+    "library-creation": {
+      "summary": "Read-only new-library planning, future confirmed creation, registration and inactive Library Start composition.",
+      "aliases": [
+        "library creation",
+        "new library creation",
+        "new library plan",
+        "create library",
+        "新建素材库",
+        "创建素材库"
+      ],
+      "keywords": [
+        "creation planner",
+        "review new library",
+        "new root",
+        "empty target",
+        "target access",
+        "windows filename",
+        "library registration",
+        "reconnect library",
+        "library start provider",
+        "创建计划",
+        "新素材库",
+        "空目录",
+        "目标访问",
+        "注册素材库",
+        "重连素材库"
+      ],
+      "modules": [
+        "library-lifecycle",
+        "electron-main"
+      ],
+      "states": [
+        {
+          "reality": "Validated Tracer",
+          "summary": "A bound prepare/inspect Module plans missing or explicitly empty targets without mutation; receipt and capacity evidence remain non-authoritative.",
+          "evidence": [
+            "src/main/library-lifecycle/library-creation-planner.ts",
+            "src/main/library-lifecycle/library-creation-planner.tracer.ts",
+            "src/main/library-lifecycle/library-creation-target.internal.ts",
+            "src/main/library-lifecycle/library-creation-target-platform.internal.ts",
+            "scripts/library-creation-planner.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Confirmation, versioned initialization, registration and an inactive provider remain separate blocked tickets; production startup is unchanged.",
+          "evidence": [
+            "docs/adr/0275-in-place-reference-libraries-keep-originals-and-split-caches.md",
+            "docs/adr/0282-managed-originals-bind-to-stable-originals-without-taking-over-files.md",
+            "docs/adr/0291-managed-original-paths-use-conservative-portable-and-windows-budgets.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/library-lifecycle/library-creation-planner.ts",
+          "anchor": "LibraryCreationPlanner",
+          "triggers": [
+            "library creation",
+            "new library creation",
+            "new library plan",
+            "create library",
+            "新建素材库",
+            "新素材库",
+            "创建素材库"
+          ],
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Path-free prepare/inspect review contract and closed outcome vocabulary.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/library-lifecycle/library-creation-planner.tracer.ts",
+          "anchor": "createLibraryCreationPlannerTracer",
+          "triggers": [
+            "library creation",
+            "new library creation",
+            "new library plan",
+            "create library",
+            "creation planner",
+            "创建计划",
+            "新素材库",
+            "新建素材库",
+            "创建素材库"
+          ],
+          "role": "adapter",
+          "reality": "Validated Tracer",
+          "reason": "Bound target review, scoped qualification/capacity and receipt revalidation without write authority.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/library-lifecycle/library-creation-target.internal.ts",
+          "anchor": "observeLibraryCreationTarget",
+          "triggers": [
+            "library creation",
+            "new root",
+            "empty target",
+            "target collision",
+            "新素材库",
+            "创建素材库",
+            "空目录"
+          ],
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Bounded selected-parent namespace and empty-target observation without content reads.",
+          "read_mode": "full",
+          "priority": 2,
+          "required": true
+        },
+        {
+          "path": "src/main/library-lifecycle/library-creation-target-platform.internal.ts",
+          "anchor": "LibraryCreationTargetPlatformAdapter",
+          "triggers": [
+            "target access",
+            "windows filename",
+            "linked target",
+            "目标访问"
+          ],
+          "role": "adapter",
+          "reality": "Validated Tracer",
+          "reason": "Injected host filename and read/write/search-access policy keeps shared target observation platform-neutral.",
+          "read_mode": "full",
+          "priority": 2,
+          "required": false
+        },
+        {
+          "path": "scripts/library-creation-planner.test.ts",
+          "triggers": [
+            "library creation",
+            "new library creation",
+            "new library plan",
+            "creation planner",
+            "创建计划",
+            "新素材库",
+            "创建素材库"
+          ],
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Task-owned no-write, qualification, receipt, drift and concurrency evidence.",
+          "read_mode": "full",
+          "priority": 4
+        },
+        {
+          "path": "src/main/library-lifecycle/README.md",
+          "triggers": [
+            "library creation",
+            "new library creation",
+            "新建素材库",
+            "创建素材库"
+          ],
+          "role": "readme",
+          "reality": "Validated Tracer",
+          "reason": "Short Library Lifecycle truth boundary and pointer to local creation details.",
+          "read_mode": "full",
+          "priority": 5
+        },
+        {
+          "path": "src/main/library-lifecycle/LIBRARY-START.md",
+          "triggers": [
+            "library creation",
+            "new library plan",
+            "creation planner",
+            "创建计划"
+          ],
+          "role": "readme",
+          "reality": "Validated Tracer",
+          "reason": "Detailed planning invariants and confirmation boundary.",
+          "read_mode": "full",
+          "priority": 6
+        }
+      ],
+      "test_profiles": [
+        "library_creation"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0275-in-place-reference-libraries-keep-originals-and-split-caches.md",
+          "triggers": [
+            "library creation",
+            "new library creation",
+            "new root",
+            "new library plan",
+            "新素材库",
+            "创建素材库",
+            "新建素材库"
+          ],
+          "reason": "Creation/adoption preflight requires qualified storage, reserve, Control/Managed separation and no mutation before confirmation.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0282-managed-originals-bind-to-stable-originals-without-taking-over-files.md",
+          "triggers": [
+            "library creation",
+            "managed originals binding",
+            "new library plan",
+            "新素材库",
+            "创建素材库",
+            "原始素材绑定"
+          ],
+          "reason": "A new binding defaults to Originals; existing or ambiguous entries are never silently adopted.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0291-managed-original-paths-use-conservative-portable-and-windows-budgets.md",
+          "triggers": [
+            "library creation",
+            "path headroom",
+            "new library plan",
+            "新素材库",
+            "创建素材库",
+            "路径余量"
+          ],
+          "reason": "Planned Control/Managed paths and minimum allocation must retain portable and target-platform headroom.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not create, initialize, lock, register or activate a Library while planning.",
+        "Do not adopt, overwrite, scan or clean a non-empty or ambiguous target.",
+        "Do not infer capacity, atomicity, durability or lock support from stat, permissions or an OS label.",
+        "Do not expose selected paths, filesystem identities, raw errors or future write handles.",
+        "Do not wire planning into production startup or the process-global Asset database."
+      ],
+      "warnings": [
+        "Ready means reviewable fixture planning only; it is not confirmation, creation, registration, Session issuance or production behavior.",
+        "Qualification and capacity are trusted Main fixture observations; they do not qualify a real Windows/macOS volume.",
+        "Available bytes are not reserved. AL-08 must freshly recheck exact staging/publication/rollback paths and ownership before writing."
+      ]
+    },
+    "capture-intake": {
+      "summary": "Copy Into Library planning, Capture Gateway, Candidate identity, Promotion and Active Library composition.",
+      "aliases": [
+        "capture intake",
+        "capture gateway",
+        "copy into library",
+        "add assets",
+        "candidate promotion",
+        "captured candidate",
+        "capture candidate",
+        "safe copy",
+        "素材接入",
+        "素材入库",
+        "复制入库",
+        "添加素材",
+        "add local artwork",
+        "候选素材",
+        "捕获候选",
+        "安全复制"
+      ],
+      "keywords": [
+        "capture",
+        "candidate",
+        "promotion",
+        "intake",
+        "copy",
+        "候选",
+        "复制",
+        "导入",
+        "preview",
+        "import library",
+        "drop files",
+        "拖入本地图片",
+        "import local",
+        "drop copy",
+        "图片到素材库",
+        "add downloaded image"
+      ],
+      "modules": [
+        "capture-intake",
+        "library-lifecycle",
+        "electron-main"
+      ],
+      "states": [
+        {
+          "reality": "Validated Tracer",
+          "summary": "Safe Copy planning, Candidate activation, Preview gating, Promotion and SQLite persistence are proven in isolation.",
+          "evidence": [
+            "src/main/capture-intake/capture-intake.types.ts",
+            "src/main/capture-intake/capture-gateway.ts",
+            "src/main/capture-intake/sqlite-capture-persistence.adapter.ts",
+            "scripts/capture-intake-sqlite-persistence.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "One Capture Gateway should serve all producers through an inspected Active Library connection, real Preview Adapter and Renderer flow.",
+          "evidence": [
+            "docs/adr/0105-asset-candidates-persist-separately-from-downloads.md",
+            "docs/adr/0106-all-capture-producers-use-one-gateway.md",
+            "docs/adr/0123-supported-formats-require-automatic-system-preview.md",
+            "docs/adr/0292-add-assets-requires-explicit-ownership-and-fully-manages-references.md",
+            "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/capture-intake/capture-intake.types.ts",
+          "anchor": "CaptureGateway",
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Candidate, Promotion and persistence Interface.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/capture-intake/add-assets.workflow.ts",
+          "anchor": "createAddAssetsWorkflow",
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Reviewed Copy Plan and activation orchestration.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/capture-intake/capture-gateway.ts",
+          "anchor": "createCaptureGateway",
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Safe managed-original commit and Promotion implementation.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "src/main/library-lifecycle/active-library-session.ts",
+          "anchor": "createActiveLibrarySession",
+          "role": "composition",
+          "reality": "Validated Tracer",
+          "reason": "Inspected and exclusively locked per-Library authority.",
+          "read_mode": "symbol",
+          "priority": 4,
+          "required": true
+        },
+        {
+          "path": "src/main/index.ts",
+          "anchor": "setupIpcHandlers",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Formal Electron composition root; its registered IPC list currently contains no Capture Intake entry.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/capture-intake/README.md",
+          "role": "readme",
+          "reality": "Validated Tracer",
+          "reason": "Nearest Module boundary explicitly records implemented tracer behavior and deliberately missing runtime composition.",
+          "read_mode": "full",
+          "priority": 6,
+          "required": true
+        },
+        {
+          "path": "scripts/capture-intake-sqlite-persistence.test.ts",
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "SQLite restart and rollback evidence.",
+          "read_mode": "full",
+          "priority": 7
+        }
+      ],
+      "test_profiles": [
+        "capture_intake"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0105-asset-candidates-persist-separately-from-downloads.md",
+          "triggers": [
+            "candidate",
+            "候选",
+            "download",
+            "下载任务"
+          ],
+          "reason": "Separates Candidate identity from ordinary Download Task state."
+        },
+        {
+          "path": "docs/adr/0106-all-capture-producers-use-one-gateway.md",
+          "triggers": [
+            "gateway",
+            "producer",
+            "capture",
+            "接入"
+          ],
+          "reason": "Requires one Capture Gateway for all producers."
+        },
+        {
+          "path": "docs/adr/0123-supported-formats-require-automatic-system-preview.md",
+          "triggers": [
+            "preview",
+            "预览",
+            "format",
+            "格式"
+          ],
+          "reason": "Requires automatic System Preview evidence before Promotion for supported formats.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0292-add-assets-requires-explicit-ownership-and-fully-manages-references.md",
+          "triggers": [
+            "copy into library",
+            "reference in place",
+            "ownership",
+            "复制入库",
+            "引用"
+          ],
+          "reason": "Defines explicit ownership and the ordinary Copy default.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md",
+          "triggers": [
+            "active library",
+            "library inspection",
+            "exclusive lock",
+            "library connection",
+            "活动素材库",
+            "素材库检查",
+            "独占锁"
+          ],
+          "reason": "Defines the inspected and exclusively locked Library authority required before production Capture writes.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not claim Electron IPC, Renderer Add Assets UI or a real Preview Adapter exists for this tracer.",
+        "Do not use user Asset Library or Runtime database data for routing or tests."
+      ],
+      "warnings": [
+        "Capture Intake is a Validated Tracer, not Current Implementation in the formal runtime."
+      ]
+    },
+    "source-discovery": {
+      "summary": "Embedded web collection is retired; independent direct-image downloads and future external-browser connector boundaries.",
+      "aliases": [
+        "source discovery",
+        "web capture",
+        "browser capture",
+        "download queue",
+        "来源发现",
+        "网页采集",
+        "浏览器采集",
+        "下载队列",
+        "网上搜索",
+        "网站下载",
+        "网页搜索",
+        "素材站点",
+        "网上找图"
+      ],
+      "keywords": [
+        "source",
+        "website",
+        "browser",
+        "web download",
+        "download queue",
+        "capture page",
+        "来源",
+        "网页",
+        "浏览器",
+        "网页下载",
+        "下载队列",
+        "站点",
+        "web search",
+        "website download",
+        "unsplash",
+        "网站",
+        "page download"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "preload",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Embedded browser, website login and external Source Discovery removed. Independent direct-image downloads remain.",
+          "evidence": [
+            "src/renderer/App.tsx",
+            "src/main/ipc/main-ipc-composition.ts",
+            "src/main/managed-download/managed-download.ts",
+            "scripts/web-retirement.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Future external browser connectors use reviewed Candidate intake; no connector or public extension SDK is implemented.",
+          "evidence": [
+            "docs/adr/0106-all-capture-producers-use-one-gateway.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/managed-download/managed-download.ts",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Retained direct-image download execution without embedded browser.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/main-ipc-composition.ts",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Retained application capabilities and removed web IPC.",
+          "read_mode": "full",
+          "priority": 2
+        },
+        {
+          "path": "scripts/web-retirement.test.ts",
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "No web routes, embedded browser, login or extraction surface.",
+          "read_mode": "full",
+          "priority": 3
+        }
+      ],
+      "test_profiles": [
+        "source_discovery"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0106-all-capture-producers-use-one-gateway.md",
+          "triggers": [
+            "gateway",
+            "producer",
+            "intake",
+            "handoff",
+            "入库",
+            "接入",
+            "交接",
+            "移交"
+          ],
+          "reason": "Routes external producers into the single Candidate intake path.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0009-asset-workspace-is-the-primary-surface.md",
+          "triggers": [
+            "home",
+            "首页",
+            "navigation",
+            "导航"
+          ],
+          "reason": "Keeps Web Capture subordinate to Asset Workspace."
+        }
+      ],
+      "avoid": [
+        "Do not confuse retained local Asset Discovery with removed website Source Discovery.",
+        "Do not restore embedded browsing or assume a browser connector is already implemented."
+      ],
+      "warnings": [
+        "Historical web collection plans are not current implementation or authorization."
+      ]
+    },
+    "ai-analysis": {
+      "summary": "Contextual AI tagging, captions, OCR, deep analysis and Electron-owned result synchronization.",
+      "aliases": [
+        "ai analysis",
+        "ai generated",
+        "ai result",
+        "AI 结果",
+        "automatic analysis",
+        "AI 分析结果",
+        "analysis result writeback",
+        "analyzed asynchronously",
+        "ai 分析",
+        "ai 标签",
+        "AI 建议",
+        "自动分析",
+        "AI 生成",
+        "自动生成",
+        "异步运行",
+        "AI 视觉分析",
+        "automatic captioning",
+        "electron 写回"
+      ],
+      "keywords": [
+        "analysis",
+        "ai tag",
+        "asynchronous analysis",
+        "ocr",
+        "ai suggestion",
+        "AI 素材说明",
+        "ai description",
+        "分析",
+        "标签建议",
+        "model description",
+        "模型推理",
+        "embedding",
+        "result writeback",
+        "image analysis",
+        "结果写回",
+        "ai caption",
+        "automatic suggestion",
+        "machine caption"
+      ],
+      "modules": [
+        "electron-main",
+        "ai-worker",
+        "renderer",
+        "preload",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Worker-backed tagging, caption/OCR projection and Electron-owned result synchronization exist in partial live slices.",
+          "evidence": [
+            "src/main/services/ai-client.service.ts",
+            "src/main/ipc/ai-client.ipc.ts",
+            "src/main/services/ai-client/ai-result-sync.projector.ts",
+            "src/renderer/stores/asset.store.ts",
+            "ai-service/app.py"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "A unified automatic progressive analysis baseline for eligible newly activated Candidates and Design Assets, with capability evidence and non-blocking fallback, remains incomplete.",
+          "evidence": [
+            "docs/adr/0140-ai-results-preserve-view-evidence-and-derive-asset-projections.md",
+            "docs/adr/0141-automatic-analysis-is-local-progressive-and-resource-aware.md",
+            "docs/adr/0168-unavailable-analysis-capabilities-create-lightweight-intents.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/shared/contracts/ai-client.contract.ts",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Cross-process AI Client Interface and sync events.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/ai-client.ipc.ts",
+          "anchor": "registerAiClientIpc",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Live Electron composition of AI Client polling and request handlers.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "required": true
+        },
+        {
+          "path": "src/main/services/ai-client.service.ts",
+          "anchor": "class AiClientService",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Electron orchestration and Worker polling path.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "src/main/services/ai-client/ai-result-sync.projector.ts",
+          "anchor": "projectAiTaskSyncAction",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure Worker-result projection before authoritative writes.",
+          "read_mode": "symbol",
+          "priority": 4
+        },
+        {
+          "path": "src/renderer/stores/asset.store.ts",
+          "anchor": "generateAiSuggestions",
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Contextual Asset Workspace AI caller.",
+          "read_mode": "symbol",
+          "priority": 6
+        },
+        {
+          "path": "ai-service/app.py",
+          "anchor": "enqueue_tag",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Python Worker HTTP composition and inference routes.",
+          "read_mode": "symbol",
+          "priority": 7
+        },
+        {
+          "path": "scripts/ai-client-ipc-contract.test.ts",
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused cross-process contract evidence.",
+          "read_mode": "full",
+          "priority": 5
+        }
+      ],
+      "test_profiles": [
+        "ai_analysis",
+        "python_ai_worker"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0001-electron-owns-ai-result-sync.md",
+          "triggers": [
+            "result sync",
+            "sqlite write",
+            "worker write",
+            "renderer notification",
+            "结果同步",
+            "数据库写入",
+            "渲染器通知"
+          ],
+          "reason": "Keeps authoritative AI result writes and Renderer notifications in Electron rather than the Python Worker.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0140-ai-results-preserve-view-evidence-and-derive-asset-projections.md",
+          "triggers": [
+            "overwrite",
+            "sync",
+            "evidence",
+            "覆盖",
+            "同步",
+            "证据"
+          ],
+          "reason": "Protects generated evidence and user-authored projections.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0141-automatic-analysis-is-local-progressive-and-resource-aware.md",
+          "triggers": [
+            "automatic analysis",
+            "baseline analysis",
+            "candidate activation",
+            "resource aware",
+            "自动分析",
+            "基线分析",
+            "候选激活",
+            "资源感知"
+          ],
+          "reason": "Starts local progressive automatic analysis from eligible newly activated Candidates without blocking visibility.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0168-unavailable-analysis-capabilities-create-lightweight-intents.md",
+          "triggers": [
+            "unavailable",
+            "fallback",
+            "progressive",
+            "不可用",
+            "渐进",
+            "降级"
+          ],
+          "reason": "Defines non-blocking unavailable-capability behavior."
+        },
+        {
+          "path": "docs/adr/0002-external-inference-first-runtime-governance.md",
+          "triggers": [
+            "external provider",
+            "cloud",
+            "upload",
+            "外部模型",
+            "云端",
+            "上传"
+          ],
+          "reason": "Routes external inference privacy and consent decisions.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not send user asset content or persist query text to an external router.",
+        "Do not treat a Runtime Probe or installed model file as a proven Real Model Path."
+      ],
+      "warnings": [
+        "AI slices are partial; inspect the exact Electron-to-Worker-to-SQLite call path before claiming an automatic pipeline."
+      ]
+    },
+    "prompt-reverse": {
+      "summary": "Asset Workspace image-to-prompt actions, backend routing, native Python execution, external providers and Electron-owned result persistence.",
+      "aliases": [
+        "prompt reverse",
+        "user-confirmed prompt history",
+        "image to prompt",
+        "prompt generation",
+        "ai-generated prompt history",
+        "prompt provider",
+        "reverse prompt provider",
+        "提示词反推",
+        "反推提示词",
+        "图片反推",
+        "图像转提示词",
+        "reverse prompt history",
+        "反向提示词",
+        "反向提示词历史",
+        "提示词历史"
+      ],
+      "keywords": [
+        "prompt reverse",
+        "image prompt",
+        "qwen3vl",
+        "llama-openai",
+        "openai-compatible",
+        "native prompt",
+        "反推",
+        "提示词",
+        "图片提示词",
+        "图像反推",
+        "prompt history",
+        "user confirmed prompt",
+        "反推结果"
+      ],
+      "modules": [
+        "renderer",
+        "electron-main",
+        "shared",
+        "ai-worker"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Current manual controlled-preview reverse uses VisualAiPanel and runVisionRequest with Main trusted IPC and Active Library Host; follow transport imports for gateway/response implementations. Legacy Worker is restricted, not the current authority.",
+          "evidence": [
+            "src/renderer/components/asset/VisualAiPanel.tsx",
+            "src/main/visual-ai/openai-vision.transport.ts",
+            "src/main/ipc/visual-ai.ipc.ts"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/renderer/components/asset/VisualAiPanel.tsx",
+          "anchor": "VisualAiPanel",
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Current manual controlled-preview caller; no Legacy Worker authority.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/visual-ai/openai-vision.transport.ts",
+          "anchor": "runVisionRequest",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Current reverse/combined prompt and reviewed same-byte single retry transport.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/visual-ai.ipc.ts",
+          "anchor": "registerVisualAiIpc",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Trusted current IPC and scope admission.",
+          "read_mode": "symbol",
+          "priority": 4
+        },
+        {
+          "path": "src/main/visual-ai/visual-ai-controller.ts",
+          "anchor": "createVisualAiController",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Scope, original preservation and Host commit lifecycle.",
+          "read_mode": "symbol",
+          "priority": 5,
+          "triggers": [
+            "取消",
+            "权限",
+            "保存",
+            "scope",
+            "cancel",
+            "commit",
+            "library"
+          ]
+        },
+        {
+          "path": "src/main/services/ai-worker/providers/qwen3vl-prompt.provider.ts",
+          "anchor": "class Qwen3vlPromptProvider",
+          "triggers": [
+            "native",
+            "qwen3vl",
+            "qwen3-vl",
+            "python",
+            "本地",
+            "原生"
+          ],
+          "role": "adapter",
+          "reality": "Target Architecture",
+          "reason": "Historical native provider source retained for explicit native investigations; current product Worker path remains restricted.",
+          "read_mode": "symbol",
+          "priority": 6,
+          "required": false
+        },
+        {
+          "path": "src/main/services/ai-worker/providers/openai-compatible.provider.ts",
+          "anchor": "runPromptReverse",
+          "triggers": [
+            "external",
+            "openai-compatible",
+            "llama-openai",
+            "cloud",
+            "外部",
+            "云端"
+          ],
+          "role": "adapter",
+          "reality": "Target Architecture",
+          "reason": "Retained legacy provider reference for explicit investigations; active reverse dispatch is the controlled-preview transport listed above.",
+          "read_mode": "symbol",
+          "priority": 6,
+          "required": false
+        }
+      ],
+      "test_profiles": [
+        "prompt_reverse"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0001-electron-owns-ai-result-sync.md",
+          "triggers": [
+            "result persistence",
+            "result sync",
+            "sqlite write",
+            "worker write",
+            "结果持久化",
+            "结果同步",
+            "数据库写入"
+          ],
+          "reason": "Keeps Prompt Reverse result writes and notifications on the Electron side.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0002-external-inference-first-runtime-governance.md",
+          "triggers": [
+            "external",
+            "cloud",
+            "provider",
+            "upload",
+            "外部",
+            "云端",
+            "上传"
+          ],
+          "reason": "Requires local-first behavior and scoped consent before external asset inference.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not treat provider configuration as permission to upload an Asset or silently fall back to external inference.",
+        "Do not assume the Python FastAPI prompt endpoint is the native live path; the current native provider launches a focused Python subprocess."
+      ],
+      "warnings": [
+        "The current AI Worker IPC writes Prompt Reverse results directly to the process-global SQLite schema; inspect that compatibility seam before changing persistence."
+      ]
+    },
+    "ai-runtime": {
+      "summary": "Cross-platform AI Runtime selection, process control, capability probes and AI Console diagnostics.",
+      "aliases": [
+        "ai runtime",
+        "model runtime",
+        "ai console",
+        "platform ai",
+        "ai 运行时",
+        "模型运行时",
+        "ai 控制台",
+        "平台 ai"
+      ],
+      "keywords": [
+        "runtime",
+        "llama",
+        "cuda",
+        "mps",
+        "运行时",
+        "能力探测",
+        "probe",
+        "real model path",
+        "benchmark",
+        "quality evidence",
+        "calibration",
+        "真实模型路径",
+        "基准证据",
+        "质量证据",
+        "本地校准"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "shared",
+        "ai-worker"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Runtime selection, process management, probes and shared platform status have substantial live and tested plumbing.",
+          "evidence": [
+            "src/main/services/ai-runtime/ai-runtime-manager.ts",
+            "src/main/ipc/ai-runtime.ipc.ts",
+            "src/shared/contracts/ai-runtime.contract.ts",
+            "src/renderer/components/settings/AiRuntimePanel.tsx",
+            "src/renderer/modules/ai-console-status/ai-console-status.module.ts",
+            "src/renderer/routes/AiConsolePage.tsx"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Capability-specific Real Model Path probes, catalog quality evidence and local calibration remain separate evidence classes and cannot be inferred from ordinary readiness probes.",
+          "evidence": [
+            "docs/adr/0172-planning-separates-catalog-benchmarks-from-local-calibration.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/shared/contracts/ai-runtime.contract.ts",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Shared Runtime Interface and comparable platform response shape.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/services/ai-runtime/ai-runtime-manager.ts",
+          "anchor": "class AiRuntimeManager",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Runtime lifecycle orchestration Module.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/ipc/ai-runtime.ipc.ts",
+          "anchor": "registerAiRuntimeIpc",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Current Electron Runtime IPC Adapter and composition.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "src/main/services/ai-runtime/ai-runtime-host-context.ts",
+          "anchor": "createAiRuntimeHostContext",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Host/platform dependency injection seam.",
+          "read_mode": "full",
+          "priority": 4
+        },
+        {
+          "path": "src/renderer/components/settings/AiRuntimePanel.tsx",
+          "anchor": "probeOcrRealEvidence",
+          "triggers": [
+            "real model path",
+            "model load",
+            "ocr real evidence",
+            "onnx",
+            "probe evidence",
+            "真实模型路径",
+            "模型加载",
+            "ocr 真实证据",
+            "探测证据"
+          ],
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Direct UI caller for ONNX model-load and OCR Real Model Path probes; it may be deferred because the current file is oversized.",
+          "read_mode": "symbol",
+          "priority": 5
+        },
+        {
+          "path": "src/renderer/modules/ai-console-status/ai-console-status.module.ts",
+          "anchor": "createAiConsoleStatusModule",
+          "triggers": [
+            "ai console",
+            "console status",
+            "overview",
+            "diagnostic",
+            "status refresh",
+            "ai 控制台",
+            "控制台状态",
+            "概览",
+            "诊断",
+            "状态刷新"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Renderer-internal deep Module that aggregates AI Console status through one refresh Interface and normalizes partial evidence failures.",
+          "read_mode": "full",
+          "priority": 5
+        },
+        {
+          "path": "src/renderer/modules/ai-console-status/electron-ai-console-status.adapter.ts",
+          "anchor": "createElectronAiConsoleStatusAdapter",
+          "triggers": [
+            "electron bridge",
+            "status adapter",
+            "preload mapping",
+            "electron 桥接",
+            "状态适配器",
+            "preload 映射"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Production Adapter that maps the existing Electron bridge into the status Module without expanding public IPC contracts.",
+          "read_mode": "full",
+          "priority": 6
+        },
+        {
+          "path": "src/renderer/routes/AiConsolePage.tsx",
+          "anchor": "AiWorkspace",
+          "triggers": [
+            "ai console",
+            "console status",
+            "overview",
+            "diagnostic",
+            "ai 控制台",
+            "控制台状态",
+            "概览",
+            "诊断"
+          ],
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Git-tracked thin compatibility entry; follow its export to current AiWorkspace. New implementation remains unstaged WIP.",
+          "read_mode": "symbol",
+          "priority": 7
+        },
+        {
+          "path": "scripts/ai-runtime-panel-contract.test.ts",
+          "triggers": [
+            "real model path",
+            "model load",
+            "ocr real evidence",
+            "onnx",
+            "probe evidence",
+            "真实模型路径",
+            "模型加载",
+            "ocr 真实证据",
+            "探测证据"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused Runtime panel and probe-action evidence.",
+          "read_mode": "full",
+          "priority": 6
+        },
+        {
+          "path": "scripts/ai-runtime-manager.test.ts",
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused Runtime lifecycle evidence.",
+          "read_mode": "full",
+          "priority": 7
+        }
+      ],
+      "test_profiles": [
+        "shared_ai_runtime",
+        "cross_platform_runtime"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0172-planning-separates-catalog-benchmarks-from-local-calibration.md",
+          "triggers": [
+            "real model path",
+            "benchmark",
+            "quality evidence",
+            "calibration",
+            "model load",
+            "probe evidence",
+            "真实模型路径",
+            "基准",
+            "质量证据",
+            "校准"
+          ],
+          "reason": "Separates readiness and Real Model Path probes from reproducible quality benchmarks and local calibration.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0002-external-inference-first-runtime-governance.md",
+          "triggers": [
+            "external",
+            "cloud",
+            "provider",
+            "外部",
+            "云端"
+          ],
+          "reason": "Routes local/external Runtime governance and consent."
+        }
+      ],
+      "avoid": [
+        "Do not execute model downloads, installers, probes or external services during a routing query.",
+        "Do not branch product workflow or response shapes merely because Runtime adapters differ by OS."
+      ],
+      "warnings": [
+        "Runtime Probe, package readiness and Real Model Path are different evidence levels."
+      ]
+    },
+    "model-library": {
+      "summary": "Temporarily contained legacy model acquisition plus the target dedicated, verified Model Library lifecycle.",
+      "aliases": [
+        "model library",
+        "model weight",
+        "下载好的模型",
+        "huggingface model",
+        "image checkpoint",
+        "gguf checkpoint",
+        "model artifact",
+        "model download",
+        "model package",
+        "model manifest",
+        "model checkpoint",
+        "模型库",
+        "模型权重",
+        "权重下载",
+        "模型下载",
+        "模型安装",
+        "模型包",
+        "模型清单"
+      ],
+      "keywords": [
+        "model artifact",
+        "download model",
+        "install model",
+        "delete model",
+        "model readiness",
+        "downloaded weights",
+        "model checkpoint",
+        "model quantization",
+        "下载模型",
+        "安装模型",
+        "删除模型",
+        "模型检查点",
+        "模型量化",
+        "gguf quantization",
+        "delete checkpoint",
+        "weight readiness",
+        "download qwen3vl",
+        "qwen3vl quantization"
+      ],
+      "modules": [
+        "model-library",
+        "electron-main",
+        "renderer",
+        "preload",
+        "shared",
+        "ai-worker"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Legacy direct, cooperative and Llama acquisition plus direct deletion fail closed; Worker loaders are local-only; AI Console labels filesystem presence unverified. The dedicated Model Library installer remains unimplemented.",
+          "evidence": [
+            "src/main/services/ai-models/legacy-model-mutation.policy.ts",
+            "src/main/ipc/ai-model.ipc.ts",
+            "src/main/ipc/llama-runtime.ipc.ts",
+            "ai-service/models/wd_tagger.py",
+            "src/renderer/routes/AiConsolePage.tsx"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "A dedicated Model Library must own explicit, verified, recoverable data-only model artifact transactions separately from Runtime Packages.",
+          "evidence": [
+            "docs/adr/0152-ai-models-use-a-dedicated-in-app-model-library.md",
+            "docs/adr/0161-model-library-installs-data-only-pinned-artifacts.md",
+            "docs/adr/0162-model-library-groups-variants-and-deduplicates-blobs.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/services/ai-models/legacy-model-mutation.policy.ts",
+          "anchor": "blockLegacyModelMutation",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Single fail-closed result used by every active legacy model-mutation entry point.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/ai-model.ipc.ts",
+          "anchor": "registerAiModelIpc",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Live direct-model listing, blocked mutation requests and best-effort legacy cancellation.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/llama-runtime.ipc.ts",
+          "anchor": "registerLlamaRuntimeIpc",
+          "triggers": [
+            "llama",
+            "gguf",
+            "mmproj",
+            "combined installer",
+            "组合安装"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Read-only plan and detection remain available while the legacy combined Runtime/GGUF install start is blocked.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "src/main/ipc/cooperative-model.ipc.ts",
+          "anchor": "registerCooperativeModelIpc",
+          "triggers": [
+            "cooperative model",
+            "clip",
+            "siglip",
+            "ocr model",
+            "协作模型"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Separate cooperative-model listing with blocked acquisition/deletion and best-effort legacy cancellation.",
+          "read_mode": "symbol",
+          "priority": 4
+        },
+        {
+          "path": "src/shared/workflows/model-artifact-readiness.workflow.ts",
+          "anchor": "projectModelArtifactRowDisplay",
+          "triggers": [
+            "readiness",
+            "progress",
+            "artifact row",
+            "quantization",
+            "quantized",
+            "gguf",
+            "variant",
+            "就绪",
+            "进度",
+            "校验",
+            "验证",
+            "激活",
+            "可用",
+            "量化",
+            "变体"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure model artifact readiness and progress display projection.",
+          "read_mode": "symbol",
+          "priority": 5
+        },
+        {
+          "path": "ai-service/models/wd_tagger.py",
+          "anchor": "def load",
+          "triggers": [
+            "worker",
+            "implicit download",
+            "local only",
+            "huggingface",
+            "wd tagger",
+            "translation",
+            "隐式下载",
+            "仅本地"
+          ],
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Representative Worker loader that now fails locally instead of fetching missing artifacts.",
+          "read_mode": "symbol",
+          "priority": 6
+        },
+        {
+          "path": "src/renderer/routes/ModelLibraryPage.tsx",
+          "anchor": "ModelLibraryPage",
+          "triggers": [
+            "model library",
+            "model workspace",
+            "ai console",
+            "模型库",
+            "模型界面",
+            "AI 控制台"
+          ],
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Current model workspace and controlled storage UI.",
+          "read_mode": "symbol",
+          "priority": 7
+        }
+      ],
+      "test_profiles": [
+        "model_library"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0152-ai-models-use-a-dedicated-in-app-model-library.md",
+          "triggers": [
+            "model library",
+            "model download",
+            "model installation",
+            "model selection",
+            "模型库",
+            "模型下载",
+            "模型安装",
+            "模型选择"
+          ],
+          "reason": "Separates the model artifact lifecycle from AI Console diagnostics and Runtime Packages.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0161-model-library-installs-data-only-pinned-artifacts.md",
+          "triggers": [
+            "model weights",
+            "model artifact",
+            "manifest",
+            "gguf",
+            "safetensors",
+            "trust_remote_code",
+            "模型权重",
+            "模型制品",
+            "清单"
+          ],
+          "reason": "Requires pinned, verified, data-only model artifacts and forbids model-supplied executable code.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0162-model-library-groups-variants-and-deduplicates-blobs.md",
+          "triggers": [
+            "variant",
+            "checkpoint",
+            "quantization",
+            "deduplicate",
+            "变体",
+            "检查点",
+            "量化",
+            "去重"
+          ],
+          "reason": "Defines Model Family, Checkpoint and Artifact Variant identity plus shared-blob accounting."
+        }
+      ],
+      "avoid": [
+        "Do not download, delete, verify or inspect model weights during a routing query or without approval for the exact high-risk action.",
+        "Do not treat model weights as Runtime Packages or infer that filesystem presence is a verified install transaction.",
+        "Do not re-enable a legacy downloader while the pinned, verified, transactional Model Artifact Installer is absent."
+      ],
+      "warnings": [
+        "Legacy acquisition is intentionally unavailable; this containment layer is not the accepted dedicated Model Library and read-only evidence or cancellation is not an install transaction.",
+        "Local-only loading prevents network acquisition but does not by itself prove artifact trust or safe deserialization."
+      ]
+    },
+    "model-library-core": {
+      "summary": "Isolated architecture validation for signed Catalog admission, transactional verified Model Artifact storage and temporary-root writer authority behind the trusted, data-only Model Library Interface.",
+      "aliases": [
+        "model storage root identity",
+        "model library core interface",
+        "synthetic model bytes",
+        "model container validation",
+        "signed model catalog admission",
+        "signed model catalog and manifest admission",
+        "model storage authority",
+        "onnx external tensor data",
+        "transactional blob store",
+        "模型库核心接口",
+        "模型存储根身份",
+        "模型制品复核指纹",
+        "验证签名模型目录与清单准入",
+        "签名模型目录准入",
+        "模型清单信任根",
+        "合成模型字节",
+        "模型制品存储事务"
+      ],
+      "keywords": [
+        "model library interface",
+        "cross process single writer",
+        "storage busy",
+        "review fingerprint",
+        "idempotent model install",
+        "signed catalog manifest",
+        "pinned ed25519 catalog",
+        "跨进程单写锁",
+        "catalog sequence rollback",
+        "模型库接口",
+        "模型库架构",
+        "复核指纹",
+        "幂等模型安装",
+        "签名目录准入",
+        "清单反回滚",
+        "verified blob storage",
+        "crash recovery",
+        "container validation"
+      ],
+      "modules": [
+        "model-library"
+      ],
+      "states": [
+        {
+          "reality": "Validated Tracer",
+          "summary": "Isolated Modules prove pinned Ed25519 Catalog/Manifest admission, exact generated-byte transactions and a task-temporary Model Storage Root with opaque identity, cross-process SQLite/OS single-writer ownership, drained close and process-crash release.",
+          "evidence": [
+            "src/main/model-library/model-catalog-admission.tracer.ts",
+            "src/main/model-library/model-catalog-admission.internal.ts",
+            "src/main/model-library/model-library.ts",
+            "src/main/model-library/transactional-model-library.tracer.ts",
+            "src/main/model-library/transactional-model-library.internal.ts",
+            "src/main/model-library/model-artifact-format-validation.internal.ts",
+            "src/main/model-library/model-storage-authority.tracer.ts",
+            "src/main/model-library/model-storage-authority.internal.ts",
+            "scripts/model-library-catalog-admission.tracer.test.ts",
+            "scripts/model-library-core-tracer.test.ts",
+            "scripts/model-library-verified-blob-store.tracer.test.ts",
+            "scripts/model-library-storage-authority.tracer.test.ts",
+            "scripts/model-library-core-governance.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Production must add real artifact sources, configured root-reference persistence and selection, real internal/removable-volume qualification, platform and power-loss durability, migration and bounded Runtime readiness behind the same narrow intent-level Seam.",
+          "evidence": [
+            "docs/adr/0152-ai-models-use-a-dedicated-in-app-model-library.md",
+            "docs/adr/0161-model-library-installs-data-only-pinned-artifacts.md",
+            "docs/adr/0162-model-library-groups-variants-and-deduplicates-blobs.md",
+            "docs/adr/0167-model-storage-roots-migrate-transactionally.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/model-library/model-library.ts",
+          "anchor": "export interface ModelLibrary",
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Two-entry target Seam proven only by the isolated signed-admission and transactional-storage tracers; it is not a public or production compatibility contract.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/model-library/model-catalog-admission.tracer.ts",
+          "anchor": "export interface ModelCatalogAdmission",
+          "triggers": [
+            "signed model catalog",
+            "catalog admission",
+            "manifest admission",
+            "trust root",
+            "ed25519",
+            "data only manifest",
+            "catalog sequence",
+            "签名模型目录",
+            "目录准入",
+            "清单准入",
+            "信任根",
+            "反回滚"
+          ],
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Single-entry admission contract and opaque capability shape; construction re-exports the private implementation without exposing issuance authority.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": false
+        },
+        {
+          "path": "src/main/model-library/model-catalog-admission.internal.ts",
+          "anchor": "createInMemoryModelCatalogAdmissionTracer",
+          "triggers": [
+            "signed model catalog",
+            "catalog admission",
+            "manifest admission",
+            "trust root",
+            "ed25519",
+            "data only manifest",
+            "catalog sequence",
+            "签名模型目录",
+            "目录准入",
+            "清单准入",
+            "信任根",
+            "反回滚"
+          ],
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Single-entry in-process verifier that keeps capability issuance lexical-private and exposes only a non-issuing consumer seam to the lifecycle tracer.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/model-library/model-storage-authority.tracer.ts",
+          "anchor": "export interface ModelStorageAuthority",
+          "triggers": [
+            "model storage root identity",
+            "model storage authority",
+            "cross process single writer",
+            "storage busy",
+            "模型存储根身份",
+            "跨进程单写锁"
+          ],
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Two-entry provision/open authority and revocable session shape; paths, identity records, locking and recovery remain hidden.",
+          "read_mode": "symbol",
+          "priority": 1
+        },
+        {
+          "path": "src/main/model-library/model-storage-authority.internal.ts",
+          "anchor": "createModelStorageAuthorityTracer",
+          "triggers": [
+            "model storage root identity",
+            "model storage authority",
+            "cross process single writer",
+            "storage busy",
+            "crash released writer",
+            "模型存储根身份",
+            "跨进程单写锁"
+          ],
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Deep temporary-root implementation for identity initialization, SQLite/OS writer arbitration, recovery gating, drained close and capability revocation.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/model-library/transactional-model-library.internal.ts",
+          "anchor": "installReviewedArtifact",
+          "triggers": [
+            "blob transaction implementation",
+            "journal internals",
+            "commit recovery internals",
+            "事务日志内部",
+            "提交恢复内部"
+          ],
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Deep implementation for staging, hash verification, Blob promotion, commit validation, in-process serialization and reopen recovery.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "scripts/model-library-catalog-admission.tracer.test.ts",
+          "triggers": [
+            "signed model catalog",
+            "catalog admission",
+            "manifest admission",
+            "trust root",
+            "ed25519",
+            "data only manifest",
+            "catalog sequence",
+            "签名模型目录",
+            "目录准入",
+            "清单准入",
+            "信任根",
+            "反回滚"
+          ],
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Real-signature behavior proof for canonical admission, root binding, sequence, freshness, policy rejection and opaque integration.",
+          "read_mode": "full",
+          "priority": 3
+        },
+        {
+          "path": "src/main/model-library/transactional-model-library.tracer.ts",
+          "anchor": "openTransactionalModelLibraryTracer",
+          "triggers": [
+            "synthetic model bytes",
+            "transactional blob store",
+            "verified blob storage",
+            "crash recovery",
+            "model artifact transaction recovery",
+            "合成模型字节",
+            "模型制品存储事务"
+          ],
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Keeps exact byte verification, content-addressed storage, atomic commit and reopen reconciliation behind the two-entry Interface using only synthetic fixtures and a temporary root.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/model-library/model-artifact-format-validation.internal.ts",
+          "anchor": "validateModelArtifactPackage",
+          "triggers": [
+            "container validation",
+            "safetensors validation",
+            "gguf validation",
+            "onnx validation",
+            "onnx external data",
+            "容器验证"
+          ],
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Bounded, non-executing structural validators for tiny generated data-only container fixtures.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "scripts/model-library-verified-blob-store.tracer.test.ts",
+          "triggers": [
+            "synthetic model bytes",
+            "transactional blob store",
+            "verified blob storage",
+            "crash recovery",
+            "model artifact transaction recovery",
+            "container validation",
+            "onnx external data",
+            "合成模型字节",
+            "模型制品存储事务"
+          ],
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Interface-level proof for exact generated bytes, container rejection, shared Blob accounting, interruption and reopen recovery.",
+          "read_mode": "full",
+          "priority": 4
+        },
+        {
+          "path": "scripts/model-library-storage-authority.tracer.test.ts",
+          "triggers": [
+            "model storage root identity",
+            "model storage authority",
+            "cross process single writer",
+            "storage busy",
+            "crash released writer",
+            "模型存储根身份",
+            "跨进程单写锁"
+          ],
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Interface-level proof for explicit provision, identity binding, path-free failure, drained revocation, independent-process contention, crash release and verified-storage reopen.",
+          "read_mode": "full",
+          "priority": 4
+        },
+        {
+          "path": "scripts/model-library-core-governance.test.ts",
+          "triggers": [
+            "governance",
+            "production isolation",
+            "public seam",
+            "治理",
+            "生产隔离"
+          ],
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Executable proof that admission capabilities and both tracer Implementations stay outside production and public seams.",
+          "read_mode": "full",
+          "priority": 6
+        }
+      ],
+      "test_profiles": [
+        "model_library_core_tracer"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0152-ai-models-use-a-dedicated-in-app-model-library.md",
+          "triggers": [
+            "model library interface",
+            "model library architecture",
+            "model library core",
+            "模型库接口",
+            "模型库架构"
+          ],
+          "reason": "Separates the Model Library lifecycle from AI Console diagnostics and Runtime Packages.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0161-model-library-installs-data-only-pinned-artifacts.md",
+          "triggers": [
+            "model artifact",
+            "data only",
+            "manifest",
+            "review fingerprint",
+            "模型制品",
+            "仅数据",
+            "清单",
+            "复核指纹"
+          ],
+          "reason": "Requires pinned, verified, data-only Model Artifacts behind the core Interface.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0165-model-trust-revocation-separates-execution-and-result-safety.md",
+          "triggers": [
+            "trust root",
+            "catalog sequence",
+            "rollback",
+            "revocation",
+            "信任根",
+            "反回滚",
+            "撤销"
+          ],
+          "reason": "Defines signed monotonic Model Trust Statements and prohibits older evidence from rolling back accepted state."
+        },
+        {
+          "path": "docs/adr/0206-online-install-requires-fresh-trust-and-offline-packages-carry-dated-evidence.md",
+          "triggers": [
+            "fresh trust",
+            "catalog freshness",
+            "fresh trust required",
+            "online install admission",
+            "新鲜信任",
+            "目录新鲜度",
+            "在线安装准入"
+          ],
+          "reason": "Requires fresh signed trust metadata before online payload admission and keeps stale metadata in a waiting state."
+        },
+        {
+          "path": "docs/adr/0162-model-library-groups-variants-and-deduplicates-blobs.md",
+          "triggers": [
+            "variant",
+            "side by side",
+            "deduplicate",
+            "变体",
+            "并存",
+            "去重"
+          ],
+          "reason": "Defines immutable artifact identity, side-by-side variants and shared-blob accounting."
+        },
+        {
+          "path": "docs/adr/0167-model-storage-roots-migrate-transactionally.md",
+          "triggers": [
+            "model storage root identity",
+            "model storage authority",
+            "storage busy",
+            "cross process single writer",
+            "storage root migration",
+            "模型存储根身份",
+            "跨进程单写锁",
+            "模型存储迁移"
+          ],
+          "reason": "Defines app-owned Model Storage Identity, unavailable-root semantics, reconnect verification and later transactional root migration.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not connect the tracer to production, download or inspect real user model bytes, or treat verified-stored state as Installed or Model Readiness.",
+        "Do not expose catalog, transport, filesystem, journal, Blob Store or Runtime orchestration through the two-entry Interface.",
+        "Do not let a caller replace signed admission with verified, current, data-only, compatible or storage-available flags.",
+        "Do not treat a task-temporary root or SQLite process lock as production root selection, removable-volume qualification, migration or power-loss durability."
+      ],
+      "warnings": [
+        "Temporary fixtures prove bounded transactions and current-host SQLite/OS single-writer crash release only, not production root selection, cross-platform or power-loss durability, Installed state or Model Readiness.",
+        "The sequence floor and freshness clock are tracer-only in-memory evidence, not persisted anti-rollback state or Trusted Current Time."
+      ]
+    },
+    "model-storage-root-registry": {
+      "summary": "Isolated device-local Model Storage Root Registry validation for reviewed selection, same-identity reconnect and verified current-root reopen without path identity.",
+      "aliases": [
+        "model storage root registry",
+        "device local model root registry",
+        "verified current root reopen",
+        "current model storage root registration",
+        "root registry candidate review",
+        "模型存储根注册表",
+        "当前模型存储根重开",
+        "模型存储根选择复核",
+        "模型存储根重连"
+      ],
+      "keywords": [
+        "persist verified model root selection",
+        "open configured model storage root",
+        "review model root candidate",
+        "same identity reconnect",
+        "trusted model root locator",
+        "registry revision cas",
+        "持久化已验证模型存储根",
+        "重开已配置模型存储根",
+        "同身份重连",
+        "注册表并发选择"
+      ],
+      "modules": [
+        "model-library"
+      ],
+      "states": [
+        {
+          "reality": "Validated Tracer",
+          "summary": "A task-local Registry proves path-free candidate review, explicit first selection, same-identity reconnect, restart reopen, unavailable-registration retention and serialized CAS through ModelStorageAuthority.",
+          "evidence": [
+            "src/main/model-library/model-storage-root-registry.tracer.ts",
+            "src/main/model-library/model-storage-root-registry.internal.ts",
+            "scripts/model-library-root-registry.tracer.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Production still requires durable platform locators, removable-volume qualification, migration, power-loss evidence and composition-root wiring.",
+          "evidence": [
+            "docs/adr/0167-model-storage-roots-migrate-transactionally.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/model-library/model-storage-root-registry.tracer.ts",
+          "anchor": "export interface ModelStorageRootRegistry",
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Two-entry summarize/open Registry Seam; candidates, fingerprints and public results remain path-free.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/model-library/model-storage-root-registry.internal.ts",
+          "anchor": "openModelStorageRootRegistryTracer",
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Deep Registry persistence, revision/CAS, locator binding, Authority composition and wrapped-session ownership.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/model-library/model-storage-authority.tracer.ts",
+          "anchor": "export interface ModelStorageAuthority",
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Existing authority through which candidate review, selection and current-root reopen must pass.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "scripts/model-library-root-registry.tracer.test.ts",
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Public-seam proof for no-mutation review, restart reopen, reconnect, migration blocking, stale review, retention and contention.",
+          "read_mode": "full",
+          "priority": 4
+        }
+      ],
+      "test_profiles": [
+        "model_library_root_registry_tracer"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0167-model-storage-roots-migrate-transactionally.md",
+          "triggers": [
+            "model storage root registry",
+            "verified current root reopen",
+            "same identity reconnect",
+            "trusted model root locator",
+            "模型存储根注册表",
+            "当前模型存储根重开",
+            "模型存储根重连"
+          ],
+          "reason": "Defines app-owned identity, unavailable-root retention, verified reconnect and the separate later migration workflow.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not treat a filesystem path, drive letter, volume label or display name as Model Storage Identity.",
+        "Do not directly switch to a different Model Storage Identity; use the later transactional migration workflow.",
+        "Do not connect the tracer to settings, modelRootDir, IPC, Renderer, Runtime or real user model storage."
+      ],
+      "warnings": [
+        "The task-local locator and Registry SQLite prove only the isolated current-host workflow, not production locator durability, removable-volume portability or power-loss safety."
+      ]
+    },
+    "model-library-product-pilot": {
+      "summary": "Bounded production Model Library page, release-pinned bundled Catalog projection and path-free Model Storage setup behind a narrow Workspace Interface.",
+      "aliases": [
+        "model library product pilot",
+        "connect the read-only model library product pilot",
+        "read-only model library product pilot",
+        "connect read only model library product pilot",
+        "read only model library page",
+        "bundled official model catalog",
+        "model library workspace",
+        "model storage setup page",
+        "模型库产品接入",
+        "接入只读模型库页面",
+        "只读模型库页面",
+        "内置官方模型目录",
+        "模型存储设置"
+      ],
+      "keywords": [
+        "release pinned catalog",
+        "model library summarize configure storage",
+        "official catalog unavailable",
+        "model library ipc preload",
+        "recommended model storage location",
+        "模型库页面接线",
+        "发布绑定模型目录",
+        "模型存储推荐位置",
+        "模型库 ipc"
+      ],
+      "modules": [
+        "electron-main",
+        "model-library",
+        "preload",
+        "renderer",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "The live Electron composition exposes a dedicated Model Library route, exact IPC/Preload bridge and AI Console status link; this build fails closed because no publisher-signed release Catalog is embedded.",
+          "evidence": [
+            "src/main/index.ts",
+            "src/main/ipc/model-library-workspace.ipc.ts",
+            "src/preload/model-library-workspace.preload.ts",
+            "src/renderer/routes/ModelLibraryPage.tsx",
+            "src/renderer/components/ai/ModelLibraryStatusCard.tsx"
+          ]
+        },
+        {
+          "reality": "Validated Tracer",
+          "summary": "Generated signed metadata and task-temporary roots prove release-pinned catalog-only projection, explicit app-owned Root setup, restart observation and same-identity reconnect without payload or Runtime authority.",
+          "evidence": [
+            "src/main/model-library-workspace/model-library-workspace.ts",
+            "src/main/model-library-workspace/bundled-official-model-catalog.internal.ts",
+            "src/main/model-library-workspace/model-library-storage-port.internal.ts",
+            "scripts/model-library-product-pilot.test.ts",
+            "scripts/model-library-workspace.test.ts",
+            "scripts/model-library-workspace-storage.test.ts"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "A publisher-qualified signed Catalog input, full platform locator qualification and later governed refresh/import/install remain future work; the release gate itself is current.",
+          "evidence": [
+            "docs/adr/0152-ai-models-use-a-dedicated-in-app-model-library.md",
+            "docs/adr/0161-model-library-installs-data-only-pinned-artifacts.md",
+            "docs/adr/0167-model-storage-roots-migrate-transactionally.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/model-library-workspace/model-library-workspace.ts",
+          "anchor": "export interface ModelLibraryWorkspace",
+          "role": "interface",
+          "reality": "Validated Tracer",
+          "reason": "Two-entry Main Workspace Interface and path-free Catalog/storage projections.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/shared/contracts/model-library-workspace.contract.ts",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Exact two-channel IPC/Preload intent contract with no path fields.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/model-library-workspace.ipc.ts",
+          "anchor": "registerModelLibraryWorkspaceIpc",
+          "triggers": [
+            "model library product pilot",
+            "model library ipc preload",
+            "模型库产品接入",
+            "模型库 ipc"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Live Electron registration for the two narrow Model Library Workspace channels.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/model-library-workspace/bundled-official-model-catalog.internal.ts",
+          "anchor": "projectBundledOfficialCatalog",
+          "role": "implementation",
+          "reality": "Validated Tracer",
+          "reason": "Signature, release-pin and metadata-only projection separate from Fresh Trust Install Admission.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/renderer/modules/model-library-workspace/model-library-workspace.module.ts",
+          "anchor": "export interface ModelLibraryWorkspaceModule",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Renderer-internal page, storage review and AI Console summary projection.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "scripts/model-library-product-pilot.test.ts",
+          "role": "test",
+          "reality": "Validated Tracer",
+          "reason": "Focused executable entry for bundled Catalog, IPC/Preload, Renderer and governance proof; storage integration runs as its separate validated command.",
+          "read_mode": "full",
+          "priority": 5
+        }
+      ],
+      "test_profiles": [
+        "model_library_product_pilot"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0152-ai-models-use-a-dedicated-in-app-model-library.md",
+          "triggers": [
+            "model library product pilot",
+            "read only model library page",
+            "模型库产品接入",
+            "只读模型库页面"
+          ],
+          "reason": "Keeps Model Library lifecycle in a dedicated page while AI Console remains the Runtime and evidence cockpit.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0161-model-library-installs-data-only-pinned-artifacts.md",
+          "triggers": [
+            "bundled official model catalog",
+            "release pinned catalog",
+            "内置官方模型目录",
+            "发布绑定模型目录"
+          ],
+          "reason": "Defines signed exact data-only Model Artifact metadata and prevents bundled metadata from granting executable or payload authority.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0167-model-storage-roots-migrate-transactionally.md",
+          "triggers": [
+            "model storage setup page",
+            "recommended model storage location",
+            "模型存储设置",
+            "模型存储推荐位置"
+          ],
+          "reason": "Defines app-owned Storage Identity, reconnect semantics and the separate later migration workflow.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not use legacy modelRootDir, Settings folder selection or a filesystem path as Model Storage Identity.",
+        "Do not treat release-pinned bundled metadata as online-current trust or install admission.",
+        "Do not add network refresh, payload download, import, install, delete, activation, Runtime or inference authority to this Pilot."
+      ],
+      "warnings": [
+        "The current release bundle is intentionally absent, so the live page is fail-closed and storage configuration remains disabled in this build.",
+        "Generated fixtures prove the workflow only; they are not publisher-qualified models, production signing keys or current online trust."
+      ]
+    },
+    "runtime-package": {
+      "summary": "Explicit Runtime Package manifest selection, validation, execution, progress and managed installation.",
+      "aliases": [
+        "runtime package",
+        "runtime installer",
+        "runtime package installation",
+        "offline runtime package",
+        "运行时包",
+        "运行时安装器",
+        "运行时包安装",
+        "离线运行时包"
+      ],
+      "keywords": [
+        "runtime package",
+        "runtime manifest",
+        "runtime archive",
+        "runtime checksum",
+        "runtime package install",
+        "runtime install",
+        "runtime rollback",
+        "package session",
+        "运行时包",
+        "运行时包清单",
+        "运行时压缩包",
+        "运行时校验和",
+        "运行时安装",
+        "运行时包安装",
+        "运行时回滚"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Runtime Package contracts, isolated session/executor checks and legacy UI exist; the current production IPC composition keeps Runtime Package operations disabled.",
+          "evidence": [
+            "src/main/index.ts",
+            "src/shared/contracts/runtime-package.contract.ts",
+            "src/main/ipc/runtime-package.ipc.ts",
+            "src/main/runtime-package/runtime-package-session.service.ts",
+            "src/main/runtime-package/runtime-package-executor.ts",
+            "src/renderer/components/settings/RuntimePackagePanel.tsx"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Signed remote channels and mirrors plus equivalent thin and offline baseline distributions remain future work; the current remote Runtime Package source is reserved and disabled.",
+          "evidence": [
+            "docs/adr/0188-ai-runtime-bootstrap-uses-thin-and-offline-distributions.md",
+            "docs/adr/0189-runtime-updates-use-signed-catalogs-with-github-primary-and-mirrors.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/shared/contracts/runtime-package.contract.ts",
+          "anchor": "CHANNEL_RUNTIME_PACKAGE_EXECUTE_SELECTION",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Public selection, confirmation, execution-status and error compatibility seam.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/main-ipc-composition.ts",
+          "anchor": "registerMainIpcComposition",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Current IPC composition; Runtime Package operations remain explicitly disabled.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/runtime-package.ipc.ts",
+          "anchor": "registerRuntimePackageIpc",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Trusted local manifest picker and Runtime Package IPC Adapter.",
+          "read_mode": "symbol",
+          "priority": 3,
+          "required": true
+        },
+        {
+          "path": "src/main/runtime-package/runtime-package-session.service.ts",
+          "anchor": "class RuntimePackageSessionService",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Process-local selection authority, confirmation, execution retention and status Interface.",
+          "read_mode": "symbol",
+          "priority": 4,
+          "required": true
+        },
+        {
+          "path": "src/main/runtime-package/runtime-package-executor.ts",
+          "anchor": "class FileSystemRuntimePackageExecutor",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Serialized download, verification, extraction, installation and rollback orchestration.",
+          "read_mode": "symbol",
+          "priority": 5
+        },
+        {
+          "path": "src/main/runtime-package/runtime-package-source.ts",
+          "anchor": "createLocalRuntimePackageSource",
+          "triggers": [
+            "source",
+            "remote",
+            "catalog",
+            "github",
+            "mirror",
+            "offline",
+            "来源",
+            "远程",
+            "目录",
+            "镜像",
+            "离线"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Current local/bundled source boundary and explicit remote-source rejection.",
+          "read_mode": "full",
+          "priority": 5
+        },
+        {
+          "path": "src/shared/workflows/runtime-package-product.workflow.ts",
+          "anchor": "projectRuntimePackageSelectionDisplay",
+          "triggers": [
+            "status",
+            "progress",
+            "error",
+            "projection",
+            "状态",
+            "进度",
+            "错误"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure selection, execution and error display projection.",
+          "read_mode": "full",
+          "priority": 6
+        },
+        {
+          "path": "src/renderer/components/settings/RuntimePackagePanel.tsx",
+          "anchor": "RuntimePackagePanel",
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "AI Console Runtime Package selection, confirmation and progress surface.",
+          "read_mode": "symbol",
+          "priority": 7
+        }
+      ],
+      "test_profiles": [
+        "runtime_package"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0002-external-inference-first-runtime-governance.md",
+          "triggers": [
+            "install",
+            "confirmation",
+            "managed runtime",
+            "安装",
+            "确认",
+            "托管运行时"
+          ],
+          "reason": "Keeps managed-runtime changes explicit except for the separately governed baseline setup exception.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0188-ai-runtime-bootstrap-uses-thin-and-offline-distributions.md",
+          "triggers": [
+            "bootstrap",
+            "baseline runtime",
+            "thin installer",
+            "offline full",
+            "离线完整包",
+            "基础运行时"
+          ],
+          "reason": "Defines one verified Runtime Package protocol for thin and offline baseline distributions.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0189-runtime-updates-use-signed-catalogs-with-github-primary-and-mirrors.md",
+          "triggers": [
+            "remote",
+            "catalog",
+            "github",
+            "mirror",
+            "runtime update",
+            "远程",
+            "目录",
+            "镜像",
+            "运行时更新"
+          ],
+          "reason": "Defines signed immutable Runtime Package discovery, trusted mirrors and offline-source equivalence.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not select a user's local manifest, download a package or execute installation while answering a routing query.",
+        "Do not treat Runtime Packages as model weights or application update artifacts."
+      ],
+      "warnings": [
+        "Current production Runtime Package operations are disabled; isolated local-manifest tests do not prove a live installation path. Remote catalog, mirrors and offline-full distribution remain unimplemented."
+      ]
+    },
+    "settings-paths": {
+      "summary": "Application settings, migrations, managed paths, filesystem safety and platform adapters.",
+      "aliases": [
+        "settings",
+        "path governance",
+        "settings migration",
+        "managed paths",
+        "library location",
+        "model storage",
+        "storage folder",
+        "设置",
+        "路径治理",
+        "设置迁移",
+        "存储路径"
+      ],
+      "keywords": [
+        "settings",
+        "path",
+        "migration",
+        "filesystem",
+        "cache",
+        "logs",
+        "model folder",
+        "model disk",
+        "configure model",
+        "kept disk",
+        "设置",
+        "路径",
+        "迁移",
+        "缓存",
+        "日志"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Settings, dry-run migrations and managed path/platform adapters have live IPC and focused governance tests.",
+          "evidence": [
+            "src/main/services/settings.service.ts",
+            "src/main/ipc/settings.ipc.ts",
+            "src/renderer/stores/settings.store.ts",
+            "src/main/path-migration/path-migration-executor.ts",
+            "src/main/platform/path-resolver.ts",
+            "src/renderer/routes/Settings.tsx"
+          ]
+        },
+        {
+          "reality": "Target Architecture",
+          "summary": "Accepted per-Library ownership and Control Directory authority are not represented by the current global settings paths.",
+          "evidence": [
+            "docs/adr/0275-in-place-reference-libraries-keep-originals-and-split-caches.md"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/shared/contracts/settings.contract.ts",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Shared settings compatibility Interface.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/services/settings.service.ts",
+          "anchor": "class SettingsService",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Current settings persistence and defaults.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "required": true
+        },
+        {
+          "path": "src/main/ipc/settings.ipc.ts",
+          "anchor": "registerSettingsIpc",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Live Settings IPC Adapter composed by Electron Main.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "src/renderer/stores/settings.store.ts",
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Renderer load/save caller and in-memory settings state.",
+          "read_mode": "full",
+          "priority": 4
+        },
+        {
+          "path": "scripts/settings-service-defaults.test.ts",
+          "triggers": [
+            "persist",
+            "persistence",
+            "restart",
+            "default",
+            "compatibility",
+            "保存",
+            "持久化",
+            "重启",
+            "默认",
+            "兼容"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused defaults, compatibility and static persistence-shape evidence; it does not prove save-to-restart behavior.",
+          "read_mode": "full",
+          "priority": 5
+        },
+        {
+          "path": "src/renderer/routes/Settings.tsx",
+          "anchor": "handleSave",
+          "triggers": [
+            "settings page",
+            "settings ui",
+            "form",
+            "button",
+            "设置页",
+            "设置界面",
+            "表单",
+            "按钮"
+          ],
+          "role": "caller",
+          "reality": "Current Implementation",
+          "reason": "Current settings surface and user actions.",
+          "read_mode": "symbol",
+          "priority": 5
+        },
+        {
+          "path": "src/main/platform/path-resolver.ts",
+          "triggers": [
+            "path",
+            "filesystem",
+            "cache",
+            "logs",
+            "directory",
+            "路径",
+            "文件系统",
+            "缓存",
+            "日志",
+            "目录"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Cross-platform managed path Adapter.",
+          "read_mode": "full",
+          "priority": 6
+        },
+        {
+          "path": "src/main/path-migration/path-migration-executor.ts",
+          "triggers": [
+            "migration",
+            "migrate",
+            "move path",
+            "rollback",
+            "迁移",
+            "移动路径",
+            "回滚"
+          ],
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Current explicit migration executor.",
+          "read_mode": "full",
+          "priority": 7
+        },
+        {
+          "path": "scripts/settings-migration.test.ts",
+          "triggers": [
+            "migration",
+            "migrate",
+            "move path",
+            "rollback",
+            "迁移",
+            "移动路径",
+            "回滚"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused migration planning and rollback evidence.",
+          "read_mode": "full",
+          "priority": 8
+        }
+      ],
+      "test_profiles": [
+        "settings_paths"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0275-in-place-reference-libraries-keep-originals-and-split-caches.md",
+          "triggers": [
+            "library path",
+            "control directory",
+            "ownership",
+            "素材库路径",
+            "控制目录",
+            "所有权"
+          ],
+          "reason": "Routes accepted Library ownership and cache separation semantics.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not inspect or mutate actual user settings, Runtime data or Asset Library paths for ordinary code work.",
+        "Do not use platform branches for shared settings semantics."
+      ],
+      "warnings": [
+        "Current global settings paths are not proof of the accepted per-Library authority model."
+      ]
+    },
+    "desktop-shell": {
+      "summary": "Electron lifecycle, navigation, App shell, Preload composition and shared viewport behavior.",
+      "aliases": [
+        "desktop shell",
+        "app navigation",
+        "electron lifecycle",
+        "preload bridge",
+        "main window",
+        "dock",
+        "桌面外壳",
+        "应用导航",
+        "electron 生命周期",
+        "预加载桥",
+        "主窗口",
+        "恢复窗口"
+      ],
+      "keywords": [
+        "navigation",
+        "window",
+        "viewport",
+        "preload",
+        "sidebar",
+        "导航",
+        "窗口",
+        "侧边栏",
+        "启动"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "preload",
+        "shared"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Electron composition, the shared navigation workflow, App shell and narrow Preload bridge are live.",
+          "evidence": [
+            "src/main/index.ts",
+            "src/renderer/App.tsx",
+            "src/preload/index.ts",
+            "src/shared/workflows/app-navigation.workflow.ts",
+            "src/shared/desktop-viewport-policy.ts",
+            "src/shared/workflows/electron-app-lifecycle.workflow.ts"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/shared/workflows/app-navigation.workflow.ts",
+          "triggers": [
+            "navigation",
+            "route",
+            "sidebar",
+            "home",
+            "default page",
+            "导航",
+            "路由",
+            "侧边栏",
+            "首页",
+            "默认页面"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure navigation and default-surface policy.",
+          "read_mode": "full",
+          "priority": 1
+        },
+        {
+          "path": "src/renderer/App.tsx",
+          "triggers": [
+            "navigation",
+            "route",
+            "sidebar",
+            "home",
+            "layout",
+            "导航",
+            "路由",
+            "侧边栏",
+            "首页",
+            "布局"
+          ],
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Renderer composition and route projection.",
+          "read_mode": "full",
+          "priority": 2
+        },
+        {
+          "path": "src/main/index.ts",
+          "anchor": "createWindow",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Formal Electron composition root and lifecycle.",
+          "read_mode": "symbol",
+          "priority": 3,
+          "required": true
+        },
+        {
+          "path": "src/preload/index.ts",
+          "triggers": [
+            "preload",
+            "bridge",
+            "ipc",
+            "预加载",
+            "桥接",
+            "通道"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Trusted Renderer-to-Main bridge surface.",
+          "read_mode": "full",
+          "priority": 4
+        },
+        {
+          "path": "scripts/app-navigation-workflow.test.ts",
+          "triggers": [
+            "navigation",
+            "route",
+            "sidebar",
+            "home",
+            "default page",
+            "导航",
+            "路由",
+            "侧边栏",
+            "首页",
+            "默认页面"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused default navigation evidence.",
+          "read_mode": "full",
+          "priority": 5
+        },
+        {
+          "path": "src/shared/desktop-viewport-policy.ts",
+          "triggers": [
+            "window",
+            "viewport",
+            "size",
+            "position",
+            "bounds",
+            "窗口",
+            "视口",
+            "尺寸",
+            "位置",
+            "边界"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure main-window size and viewport policy.",
+          "read_mode": "full",
+          "priority": 2
+        },
+        {
+          "path": "scripts/desktop-viewport-policy.test.ts",
+          "triggers": [
+            "window",
+            "viewport",
+            "size",
+            "position",
+            "bounds",
+            "窗口",
+            "视口",
+            "尺寸",
+            "位置",
+            "边界"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused viewport and minimum-window evidence.",
+          "read_mode": "full",
+          "priority": 4
+        },
+        {
+          "path": "src/shared/workflows/electron-app-lifecycle.workflow.ts",
+          "triggers": [
+            "window",
+            "lifecycle",
+            "dock",
+            "activate",
+            "reopen",
+            "close",
+            "窗口",
+            "生命周期",
+            "激活",
+            "重开",
+            "关闭"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure Electron activate, window-all-closed and reopen policy.",
+          "read_mode": "full",
+          "priority": 2
+        },
+        {
+          "path": "scripts/electron-main-lifecycle-policy.test.ts",
+          "triggers": [
+            "window",
+            "lifecycle",
+            "dock",
+            "activate",
+            "reopen",
+            "close",
+            "窗口",
+            "生命周期",
+            "激活",
+            "重开",
+            "关闭"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused Electron lifecycle and composition evidence.",
+          "read_mode": "full",
+          "priority": 4
+        }
+      ],
+      "test_profiles": [
+        "desktop_shell"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0009-asset-workspace-is-the-primary-surface.md",
+          "triggers": [
+            "default route",
+            "home",
+            "首页",
+            "默认页面",
+            "navigation"
+          ],
+          "reason": "Defines the default primary product surface.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not modify every platform layer for a Renderer-only layout task.",
+        "Do not broaden Preload exposure beyond the exact trusted capability."
+      ],
+      "warnings": [
+        "Treat IPC and Preload as compatibility seams; inspect only the affected call chain."
+      ]
+    },
+    "official-model-catalog-release": {
+      "summary": "Public-only Official Model Catalog release-input preparation, runtime admission and signed-candidate gating.",
+      "aliases": [
+        "official model catalog release gate",
+        "official catalog release input",
+        "publisher model catalog release",
+        "model catalog release evidence",
+        "official model catalog release preparation",
+        "prepare official model catalog release input",
+        "public catalog release input preparation",
+        "官方模型目录发布门禁",
+        "官方目录发布输入",
+        "发布者模型目录",
+        "模型目录发布证据",
+        "官方模型目录发布准备",
+        "生成官方目录候选输入",
+        "生成公开的官方模型目录候选发布输入"
+      ],
+      "keywords": [
+        "official model catalog release",
+        "publisher public trust root",
+        "signed catalog release input",
+        "catalog candidate gate",
+        "catalog release preparation",
+        "candidate release input",
+        "官方模型目录发布",
+        "发布者公钥",
+        "签名目录发布输入",
+        "目录候选门禁",
+        "目录发布准备",
+        "候选发布输入"
+      ],
+      "modules": [
+        "model-library"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Runtime and signed-candidate packaging consume one checked-in public-only release input through the same release-pinned Catalog verifier; path-free evidence is a common candidate gate on Windows and macOS.",
+          "evidence": [
+            "src/main/model-library-workspace/official-model-catalog.release.ts",
+            "scripts/write-official-model-catalog-release-evidence.ts",
+            "src/main/packaging/release-flow-governance.ts",
+            ".github/workflows/release-signed-candidate.yml"
+          ]
+        },
+        {
+          "reality": "Current Implementation",
+          "summary": "The checked-in development input intentionally contains no Publisher key or Catalog, so the live Model Library and signed-candidate gate both fail closed without signing, network or payload authority.",
+          "evidence": [
+            "src/main/model-library-workspace/official-model-catalog.release-input.json",
+            "src/main/model-library-workspace/official-model-catalog.release.ts",
+            "scripts/official-model-catalog-release-gate.test.ts",
+            "scripts/official-model-catalog-release-evidence.test.ts"
+          ]
+        },
+        {
+          "reality": "Current Implementation",
+          "summary": "A local public-only preparation Module and CLI validate separate trust-root and signed-bundle JSON, then exclusively write a candidate input without modifying the checked-in release file.",
+          "evidence": [
+            "src/main/model-library-workspace/official-model-catalog-release-preparation.ts",
+            "scripts/prepare-official-model-catalog-release-input.ts",
+            "scripts/official-model-catalog-release-preparation-cli.test.ts",
+            "scripts/official-model-catalog-release-preparation-safety.test.ts"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/model-library-workspace/official-model-catalog.release.ts",
+          "anchor": "evaluateOfficialModelCatalogRelease",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Single release-input evaluation and runtime binding using the product Catalog verifier.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "src/main/model-library-workspace/official-model-catalog.release-input.json",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Checked-in public-only release input; both values remain null until a qualified release supplies them.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "scripts/write-official-model-catalog-release-evidence.ts",
+          "triggers": [
+            "official model catalog release gate",
+            "model catalog release evidence",
+            "官方模型目录发布门禁",
+            "模型目录发布证据"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Path-free per-platform evidence writer and non-zero candidate gate.",
+          "read_mode": "full",
+          "priority": 2
+        },
+        {
+          "path": "src/main/packaging/release-flow-governance.ts",
+          "anchor": "COMMON_CANDIDATE_GATES",
+          "triggers": [
+            "official model catalog release gate",
+            "catalog candidate gate",
+            "官方模型目录发布门禁",
+            "目录候选门禁"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Existing candidate-stage gate registry consuming Official Model Catalog readiness.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "scripts/signed-release-workflow.test.ts",
+          "triggers": [
+            "official model catalog release gate",
+            "model catalog release evidence",
+            "官方模型目录发布门禁",
+            "模型目录发布证据"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Windows/macOS workflow ordering, retained evidence and no-publish proof.",
+          "read_mode": "full",
+          "priority": 5
+        },
+        {
+          "path": "src/main/model-library-workspace/official-model-catalog-release-preparation.ts",
+          "anchor": "prepareOfficialModelCatalogReleaseInput",
+          "triggers": [
+            "official model catalog release preparation",
+            "prepare official model catalog release input",
+            "public catalog release input preparation",
+            "官方模型目录发布准备",
+            "生成官方目录候选输入"
+          ],
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Pure preparation Interface returning an exact candidate and path-free summary through the existing Gate.",
+          "read_mode": "symbol",
+          "priority": 1
+        },
+        {
+          "path": "scripts/prepare-official-model-catalog-release-input.ts",
+          "anchor": "prepareReleaseInputCommand",
+          "triggers": [
+            "official model catalog release preparation",
+            "prepare official model catalog release input",
+            "public catalog release input preparation",
+            "官方模型目录发布准备",
+            "生成官方目录候选输入"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Bounded public JSON reader and exclusive no-overwrite candidate writer with path-free failure output.",
+          "read_mode": "symbol",
+          "priority": 2
+        }
+      ],
+      "test_profiles": [
+        "official_model_catalog_release"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0152-ai-models-use-a-dedicated-in-app-model-library.md",
+          "triggers": [
+            "official model catalog release gate",
+            "官方模型目录发布门禁"
+          ],
+          "reason": "Separates Model Library artifact lifecycle from AI Console runtime responsibilities.",
+          "required_on_match": true
+        },
+        {
+          "path": "docs/adr/0161-model-library-installs-data-only-pinned-artifacts.md",
+          "triggers": [
+            "official catalog release input",
+            "publisher model catalog release",
+            "官方目录发布输入",
+            "发布者模型目录"
+          ],
+          "reason": "Requires separate Model Catalog trust roots, immutable signed manifests and data-only package policy.",
+          "required_on_match": true
+        }
+      ],
+      "avoid": [
+        "Do not generate, read or store Publisher private signing material.",
+        "Do not add model payload download, installation, Runtime or inference authority to release admission.",
+        "Do not sign, notarize, upload or publish artifacts during local gate validation."
+      ],
+      "warnings": [
+        "The checked-in input is intentionally absent; a passing fixture proves the gate, not a qualified production Catalog.",
+        "Catalog release admission is not Fresh Trust Install Admission and authorizes no model payload transfer."
+      ]
+    },
+    "release-packaging": {
+      "summary": "Packaging, signing, release evidence, native dependencies and external release gates.",
+      "aliases": [
+        "release",
+        "packaging",
+        "signing",
+        "notarization",
+        "release candidate",
+        "发布",
+        "打包",
+        "签名",
+        "公证",
+        "发布候选"
+      ],
+      "keywords": [
+        "release",
+        "package",
+        "build",
+        "sign",
+        "notarize",
+        "artifact",
+        "发布",
+        "打包",
+        "构建产物",
+        "签名",
+        "校验和"
+      ],
+      "modules": [
+        "electron-main"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Release planning, evidence and packaging governance are extensively tested; external credentials and signed-candidate gates remain environment-specific.",
+          "evidence": [
+            "src/main/packaging/release-flow-governance.ts",
+            "package.json",
+            "scripts/release-flow-governance.test.ts"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/packaging/release-flow-governance.ts",
+          "anchor": "createReleaseFlowGovernancePlan",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Release phase and gate projection Module.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "package.json",
+          "anchor": "\"build\"",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Packaging configuration and platform artifact contract.",
+          "read_mode": "full",
+          "priority": 2
+        },
+        {
+          "path": "scripts/release-flow-governance.test.ts",
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused release-flow governance evidence.",
+          "read_mode": "full",
+          "priority": 5
+        },
+        {
+          "path": "scripts/run-electron-builder.mjs",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Current build runner Adapter.",
+          "read_mode": "full",
+          "priority": 6
+        },
+        {
+          "path": "scripts/notarize.js",
+          "triggers": [
+            "notarization",
+            "notarize",
+            "macos signing",
+            "公证",
+            "macos 签名"
+          ],
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Current macOS notarization hook and environment gate.",
+          "read_mode": "full",
+          "priority": 1
+        },
+        {
+          "path": "scripts/signed-release-workflow.test.ts",
+          "triggers": [
+            "signing",
+            "signed",
+            "notarization",
+            "notarize",
+            "签名",
+            "公证"
+          ],
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Focused signing, notarization and signed-candidate workflow evidence.",
+          "read_mode": "full",
+          "priority": 4
+        }
+      ],
+      "test_profiles": [
+        "release_flow"
+      ],
+      "adrs": [],
+      "avoid": [
+        "Do not sign, publish, notarize or upload artifacts without explicit approval for that external action.",
+        "Do not inspect credentials or private signing material."
+      ],
+      "warnings": [
+        "A passing local preflight does not prove external signing, notarization or distribution gates completed."
+      ]
+    },
+    "agent-governance": {
+      "summary": "Agent guidance, current task ledger, context routing, ADR routing and repository governance checks.",
+      "aliases": [
+        "agent context",
+        "code index",
+        "context router",
+        "agents md",
+        "adr router",
+        "智能体上下文",
+        "代码索引",
+        "上下文路由",
+        "智能体指南"
+      ],
+      "keywords": [
+        "agent",
+        "context",
+        "index",
+        "router",
+        "adr",
+        "governance",
+        "智能体",
+        "上下文",
+        "索引",
+        "路由",
+        "治理"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "preload",
+        "shared",
+        "ai-worker"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "AGENTS provides stable project guidance; TASK is consulted for task continuity. The Router and checks provide optional bounded navigation evidence.",
+          "evidence": [
+            "AGENTS.md",
+            "TASK.md",
+            ".codeindex/module-map.json",
+            "scripts/agent-context-router.mjs",
+            "scripts/agent-context-router.test.mjs",
+            "scripts/check-agent-context.py"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "AGENTS.md",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Stable project guidance and risk boundaries.",
+          "read_mode": "full",
+          "priority": 1,
+          "required": true
+        },
+        {
+          "path": "TASK.md",
+          "role": "interface",
+          "reality": "Current Implementation",
+          "reason": "Current task boundary, validation and recovery ledger.",
+          "read_mode": "full",
+          "priority": 2,
+          "required": true
+        },
+        {
+          "path": "scripts/agent-context-router.mjs",
+          "anchor": "export function buildContextPack",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Deterministic route, budget and live repository validation Implementation.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": ".codeindex/module-map.json",
+          "anchor": "\"routes\"",
+          "role": "contract",
+          "reality": "Current Implementation",
+          "reason": "Versioned human-maintained semantic catalog; query it through the Router rather than loading it wholesale.",
+          "read_mode": "symbol",
+          "priority": 4
+        },
+        {
+          "path": "scripts/agent-context-router.test.mjs",
+          "role": "test",
+          "reality": "Current Implementation",
+          "reason": "Router Interface and drift-defense evidence.",
+          "read_mode": "full",
+          "priority": 5
+        }
+      ],
+      "test_profiles": [
+        "agent_context_router",
+        "architecture_knowledge"
+      ],
+      "adrs": [],
+      "avoid": [
+        "Do not load the complete module catalog, all ADRs or CONTEXT.md into an ordinary task context.",
+        "Do not let index claims override current code, callers and tests."
+      ],
+      "warnings": [
+        "The Router answers where to inspect first; it does not prove behavior without the returned code and executable evidence."
+      ]
+    }
+  }
+}

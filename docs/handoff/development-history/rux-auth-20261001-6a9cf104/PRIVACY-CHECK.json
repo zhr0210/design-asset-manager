@@ -1,0 +1,10 @@
+{
+  "evidencePatternFindings": [],
+  "scope": "producer/source-review logs; heuristic scan only, not a universal secret audit",
+  "realCredentialsRead": false,
+  "realUserLibrariesRead": false,
+  "privateProfilesOrRuntimeDataIncluded": false,
+  "rawIndexOrStagedPatchIncluded": false,
+  "testData": "generated/synthetic only",
+  "binaryOrBase64UserAssetsIncluded": false
+}

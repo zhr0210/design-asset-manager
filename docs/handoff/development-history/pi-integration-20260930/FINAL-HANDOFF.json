@@ -1,0 +1,45 @@
+{
+  "status": "COMPLETED_ISOLATED_SCOPE",
+  "state": "STOP",
+  "date": "2026-09-30",
+  "nextBatchAuthorized": false,
+  "authorization": "<REDACTED_VALUE>",
+  "implementation": "Formal Main/Preload/Renderer + fixed Pi runtime; independent review accepted",
+  "source": {
+    "files": 674,
+    "aggregateSha256": "260381e91f55d2ebf2621ddba1896beba0893a0c454be6896b2cfe8a94a45a84",
+    "modifiedBaselineFiles": 28,
+    "addedOwnedFiles": 29,
+    "patchReconstructedFiles": 57
+  },
+  "tests": {
+    "newDistinctCases": 43,
+    "regressionDistinctCases": 130,
+    "configurationAssertionScripts": 2,
+    "typecheck": "PASS",
+    "build": "PASS",
+    "independentFinalCases": 10
+  },
+  "runtime": {
+    "piVersion": "0.99.1",
+    "nodeVersion": "24.21.0",
+    "platform": "darwin-arm64",
+    "releaseManifestSha256": "03b7f13cfe32aea76955294b941e57e8d0d4311ab1dfaa0da2bbf6a228b28f5a"
+  },
+  "notRun": [
+    "actual local model inference",
+    "actual paid API",
+    "actual subscription login and allowance",
+    "actual OS Keychain",
+    "Windows/other CPU execution",
+    "signed installer/platform release",
+    "real user libraries"
+  ],
+  "workspaceProtection": "Baseline missing/unexpected modifications none; staged diff unchanged; raw index byte hash differs without attribution",
+  "report": "REPORT.md",
+  "review": "REVIEW-FINAL.md",
+  "evidence": "EVIDENCE-MAP.json",
+  "sourceManifest": "SOURCE-MANIFEST.json",
+  "delivery": "delivery/DAM-PI-INTEGRATION-20260930.zip",
+  "nextStepRequires": "Identify actual connection/account, generated input, endpoint and budget; no automatic next batch"
+}

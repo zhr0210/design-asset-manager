@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/library-canvas-state.test.tsx"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.291,
+  "sha256": "1bb0bc65444865f4f74fab92b6fac1c2da4b2b60795e17ca4986575a5b443c18"
+}

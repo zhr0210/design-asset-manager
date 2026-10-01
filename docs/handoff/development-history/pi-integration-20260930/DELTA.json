@@ -1,0 +1,287 @@
+{
+  ".gitignore": {
+    "kind": "modified",
+    "beforeSha256": "3a62b41ce83258af9a17bf1429782e38bff69a0a1957afb73e6c01a43bb5b4d1",
+    "afterSha256": "1fbfcc609de2ac38afef419a3f6ec2c1772c1963407ffde609ef97678b74b176"
+  },
+  "TASK.md": {
+    "kind": "modified",
+    "beforeSha256": "eee05fe7806f5378932c26811016f1422d5c67ae4ddb72b220fe2b2c58fd67cc",
+    "afterSha256": "dbc0316ad411b1dc55fb8acfba8f453435415a825a00082459c305279a72fabe"
+  },
+  "package.json": {
+    "kind": "modified",
+    "beforeSha256": "17907a26309f2ec3426faf556fe0cfd72bce5aea060fd862575b153e48dce3d4",
+    "afterSha256": "975e64170c896570126c7d6ca75a3689b874b835081700900803bd2bbe69b512"
+  },
+  "pi-runtime/README.md": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "5cbbf3b686b3604679b818e4327c90a6d06146fbde7fd8b0bb25e54214e1bb6a"
+  },
+  "pi-runtime/package-lock.json": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "a50057bd230358a0100db41cb790d6f530ad58da794e04233c0b79fb6cd164e0"
+  },
+  "pi-runtime/package.json": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "b2b20d94ae0b0f45ecdb31bce12270e3a81fff40729cd130fc92cb7eeab78fa3"
+  },
+  "pi-runtime/release.json": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "03b7f13cfe32aea76955294b941e57e8d0d4311ab1dfaa0da2bbf6a228b28f5a"
+  },
+  "pi-runtime/worker.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "922b175499d6a0a71198a9d46984e2a4ebe596a02da4fbd86955144155686883"
+  },
+  "scripts/app-settings-model-workspace.test.ts": {
+    "kind": "modified",
+    "beforeSha256": "454034eff5ac3d8c3adbe9b4795c06f41aee74b43baec80fc9f6ba97277748ba",
+    "afterSha256": "af4f305567d45d5eff54ba596b28612db6c53a1dc10974eed8d6cae3e9e93950"
+  },
+  "scripts/pi-credentials.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "e7d9f0c3504c192e4ef5e8f74eafe4ced39379e2d25633d0f4705f406b683d48"
+  },
+  "scripts/pi-electron.e2e.test.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "f541afffe054b48228e02bf2f4a89b2472e2d6359fda89c72bc706935efd7bfa"
+  },
+  "scripts/pi-legacy-probe.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "a60623da69d26c131584eb446aae7f67672cf9f3c37b70828079f075ffda8dee"
+  },
+  "scripts/pi-oauth.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "6a4ab225a04bff1b2a312fc3832bb7f62c087ec9bb53ba6f0bd0ed66d7aa19a3"
+  },
+  "scripts/pi-runtime-packaging.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "7ed10300ff645d5fea768a52ac51c3becc18e6bca23c281e9696a3ba3f24cf56"
+  },
+  "scripts/pi-runtime.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "cb5761b5024dd57f417dc38673d8fdc2cc9b2686ea598ff6d7fa037e62c1031a"
+  },
+  "scripts/pi-ui.test.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "c0f3c508c4b0cc0054f9d5a777371dec862310bb33e8b044f04e7a0b987656e3"
+  },
+  "scripts/pi-visual.integration.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "a8118082e96418ac9888ab376a651999633b91eadcd53c4edaa091c347ffc46b"
+  },
+  "scripts/prepare-pi-runtime.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "a259755ef5c0c1d9dbb1a3222d8976423ff3e90a370743d618992f173f904411"
+  },
+  "scripts/seal-pi-runtime.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "4f024ad745a34b4beb9ceeb6c092ae8e1bca71567e9a0f57f159228a31c36249"
+  },
+  "src/main/ai-credentials/credential-vault.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "d2370b09f347a7adc72ad9c47ebea8613ae5d8fb82aae398b92b4cc7b1a325c5"
+  },
+  "src/main/ai-credentials/public-settings.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "d4d920ad5f0cd0664284621d6bae41236f183d6509abd3e3e45ca7eb431b70cc"
+  },
+  "src/main/ai-credentials/synthetic-secret-protection.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "479b1ec98165775f6e928a68d83cb9042114a2606cd42952f14420760519191d"
+  },
+  "src/main/ai-gateway/README.md": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "3c296df1c8231dd3424fef3f3b5774fa1b837e7961f94c8fc82f2c547e3863c9"
+  },
+  "src/main/ai-gateway/ai-connection-service.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "60c43bb89b3971e0111dd5e8288decd2f06e82d6a1056360bebe3bc7c3f72724"
+  },
+  "src/main/ai-gateway/backend-binding.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "546d4b7dbca63b76cb1479c08e7c8338c5c79c316138812acce7e2beb69f7d46"
+  },
+  "src/main/ai-gateway/pi-runtime-host.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "f9ef85bfcace6b10eaa5d8140ec8ad14eff348dc78d37adf8ce7b8be759c00a6"
+  },
+  "src/main/ai-gateway/pi-runtime-release.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "150c828b72d1615e5aba6a049e04a0a881fce09b64d4f2932cf8889c2d5c5207"
+  },
+  "src/main/ai-gateway/usage-summary.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "b4384c0fa2d427db4cea8057b028e2b0746041276c2481cdddd4248d43b96829"
+  },
+  "src/main/independent-tags/tag-batch-controller.ts": {
+    "kind": "modified",
+    "beforeSha256": "fed9bf4f62a3c6f4b7e60c09e8fc3c28fdb697f14ab880069f3142ca0b34ac08",
+    "afterSha256": "8ddf1bf42285b04a14c9bfa70f303017541fee6953e0ec2a27dd190a61315897"
+  },
+  "src/main/independent-tags/tag-execution-controller.ts": {
+    "kind": "modified",
+    "beforeSha256": "0f27165c15a426c9d162facd76c411130db091be1d23aa296f831572a0ed8dab",
+    "afterSha256": "6b57aabbc5897e9b83c7dbd4a85a54490911de416aeaa531b6179873609c7500"
+  },
+  "src/main/independent-tags/tag-intent-controller.ts": {
+    "kind": "modified",
+    "beforeSha256": "49e6da5cfce71baa93c09a8d196973a0f1fc7c018671e66cb26ce1268e16b076",
+    "afterSha256": "75b3a5a188ab3940810b3edb48e302f31760fac25f9f3bcf55d899114e405a87"
+  },
+  "src/main/independent-tags/tag-recipe.ts": {
+    "kind": "modified",
+    "beforeSha256": "865030c49de1fedfb85c3d067492d8843be7d3b1d21d84f1e632c65f31f9225d",
+    "afterSha256": "a98409bbb97ad8eeef65e4f86186a2e6f0ad6036cc4ed97947a96ed418ec973c"
+  },
+  "src/main/independent-tags/tag-recovery-controller.ts": {
+    "kind": "modified",
+    "beforeSha256": "2e680b8f79d6593811a174e647273bde60b666ced627fa18d8fd9ea38c4be4e2",
+    "afterSha256": "8942b4aa61135ea87cbadad38a480cd9346a1983aa383f857e64259bfb7d6e20"
+  },
+  "src/main/index.ts": {
+    "kind": "modified",
+    "beforeSha256": "28b13899573750a8d9917735399ffea54fe8456a0a161aecb6c272bccb1be51f",
+    "afterSha256": "3ea44831a100e12e6c4a5663a8956e4a37c73934c682a336d1fea046cee28e99"
+  },
+  "src/main/ipc/ai-backend.ipc.ts": {
+    "kind": "modified",
+    "beforeSha256": "83f86108d2c3638c731e09bea4d7ee6bf06d55af92be632894d76632affb1ad2",
+    "afterSha256": "d43d6ed456ed8dc7226f7d03cf8c32771808f26aa2febbd13bc33dab6c73c11d"
+  },
+  "src/main/ipc/ai-connection.ipc.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "1d4d53e935754a0f3f0fe64f9d9998c43a1f485effa5ba2edf719718542e0a9c"
+  },
+  "src/main/ipc/main-ipc-composition.ts": {
+    "kind": "modified",
+    "beforeSha256": "2087f4e3f8b43d76438ac7263b7f6963a871b256ce6095822b86b4da23695397",
+    "afterSha256": "22af856779f1aa79da00f7bd3060a9bbc4f6a8585092727b89ec7807731c68fb"
+  },
+  "src/main/ipc/settings.ipc.ts": {
+    "kind": "modified",
+    "beforeSha256": "1c1c8caac99579ebbfdeeee2b4dc2cf3d27d97745841839bcdd03fbaf3dd0713",
+    "afterSha256": "074920690d9e0a24105d237bdfc357773a1199c56a16a4a7163760fd7c116328"
+  },
+  "src/main/services/ai-backends/ai-backend-settings.service.ts": {
+    "kind": "modified",
+    "beforeSha256": "b9740f92baf902cd21d76d71f5cb405086e0a5024e24169bce58f10c1463eacd",
+    "afterSha256": "5900883c65c5308148f7f786e9247de7718272386052e522f03fc6b677e828d0"
+  },
+  "src/main/services/ai-backends/model-service-probe.ts": {
+    "kind": "modified",
+    "beforeSha256": "a13674140ad377e1c511c4fcbb8672e21f3e953eed0145b23137967602beeea9",
+    "afterSha256": "fcfa4256cafa925789713c88440450903c1a6793c1a1c132f2202b9e5802d812"
+  },
+  "src/main/services/settings.service.ts": {
+    "kind": "modified",
+    "beforeSha256": "219981ad0d3b94553c4c3147718c1bff7740f32ed6040542679d14466a057837",
+    "afterSha256": "e880a10337d34595c5bda8e94fc3f75288928e0ebaca1904a64fcd31087d209c"
+  },
+  "src/main/visual-ai/README.md": {
+    "kind": "modified",
+    "beforeSha256": "fff31b046d5893c234e12b401381a9e6e6fbcaee8f5a017ef560572d0282d5af",
+    "afterSha256": "fc2c60ba9d9a21e606b1b2a1d74dc8d9573a739e5a34aaa3f2120b118f92448d"
+  },
+  "src/main/visual-ai/openai-vision.provider.ts": {
+    "kind": "modified",
+    "beforeSha256": "c16388acaf8a8b4be148016228f2d2390a4418588f0f9a6fbad45abda368a767",
+    "afterSha256": "1d10d020b7a089f438e71976538d1535949b913351c88ccca440a0e59ac9c789"
+  },
+  "src/main/visual-ai/openai-vision.transport.ts": {
+    "kind": "modified",
+    "beforeSha256": "1b7a88e5f15dde6e137d498f402169602c62c6768d80dfd93ce145fffab55bb9",
+    "afterSha256": "1e5b2de18e24aba155d8e21f920258825ede46cbc7baec6e2e05369feed23e0f"
+  },
+  "src/main/visual-ai/visual-admission.ts": {
+    "kind": "modified",
+    "beforeSha256": "5c52f635fcd5833332644cb1e769f50d79934779488096d58e40ca5826b10ffb",
+    "afterSha256": "87c48d498d7fabc7898e00eb781d714f01ecc6b7d81f03dc485ec82adc6fa10e"
+  },
+  "src/main/visual-ai/visual-ai-controller.ts": {
+    "kind": "modified",
+    "beforeSha256": "bf7288d6b6605a3b54e1e33099a522143803a21170d978c9f4cfdd7b587c6f62",
+    "afterSha256": "757593f43b2839344daef2ddcd89fd0576a57183633f5f666d9696d942964a2c"
+  },
+  "src/preload/index.ts": {
+    "kind": "modified",
+    "beforeSha256": "c2847ada441d6612e03005ce9bbd6576be8ea6f7acc40c2cb8f83fe3628dbcf1",
+    "afterSha256": "9c35aaa1aaaff0c669034945b78d998e0244d69a8c8f2c4796834a03beed0adb"
+  },
+  "src/renderer/components/asset/PiConnectionsPanel.tsx": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "965571047a71f0bbcff9d5233a3abaeb419e225846e16047e81002cceff9c669"
+  },
+  "src/renderer/components/asset/VisualAiPanel.tsx": {
+    "kind": "modified",
+    "beforeSha256": "57f3d5985cc19ce5dddd614b7fdcf02d79d95b0cbba911935c1d3c9a3fa985d3",
+    "afterSha256": "3fb2604c884b8eef7b9d39af0e5793d400732f801a0a91ee6ded9dc00e6f89c5"
+  },
+  "src/renderer/components/asset/pi-connections.css": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "a2c902767fef830b4fb3fa832ded9747031dd128f0f8431230d700f26e13f842"
+  },
+  "src/renderer/components/settings/AiBackendSettingsPanel.tsx": {
+    "kind": "modified",
+    "beforeSha256": "f5110bcb7472af9bc1f78c2bac33e510dcd152db1bb3d8367f1987ba5f25870b",
+    "afterSha256": "42c5573c1c30b7224ec99deb4cd32125c0ed39c48d8610b8ab9394c4beb372a8"
+  },
+  "src/renderer/routes/AiConsolePage.tsx": {
+    "kind": "modified",
+    "beforeSha256": "fea5664a06ad523a4bfc5aeb92fac1ccff7d8361d3d1b7d65854a1fe1d148733",
+    "afterSha256": "d5f8d085f5c5ec0f9ed51e7e471c49c28ae52f7e2ed08db609e65d273d32bd28"
+  },
+  "src/shared/constants/pi-provider-presets.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "8223ca5d97ac4c8a2efb76503749fa17c974b420efd92492000dbe6b6ab1d563"
+  },
+  "src/shared/contracts/ai-connection.contract.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "74d89211d0bb331cfbda65c29cd77a15f1bb5ed3423c56e4d600671f18d5fe3c"
+  },
+  "src/shared/contracts/visual-ai.contract.ts": {
+    "kind": "modified",
+    "beforeSha256": "2a8b70772264eb8b192dafb48bc1800112634f583a993b4ca1b1aa6b74672d28",
+    "afterSha256": "56f1791885ddc10cd2aca26cd2f8b5da4aefe5b5cc0d426f62282f72ccf3f51d"
+  },
+  "src/shared/types/ai-backend.types.ts": {
+    "kind": "modified",
+    "beforeSha256": "dfee3a4e11c0fc9e73ea667358d16faad0af8b03625b97eb3b9e0b145be2ae78",
+    "afterSha256": "b2028eddd8c815ca4c34d5e8423878c9caeedc2b2fc9e713da7aacaa2f62cee7"
+  },
+  "src/shared/types/settings.types.ts": {
+    "kind": "modified",
+    "beforeSha256": "3af4e3462dd6df67d7c243d549305bdeaa951004b8f6b50f02d1348b43c28aa2",
+    "afterSha256": "c7089c3b3f6a354eee7a691c0751dfaacfd66507c13457042e1c450f6697ab85"
+  }
+}

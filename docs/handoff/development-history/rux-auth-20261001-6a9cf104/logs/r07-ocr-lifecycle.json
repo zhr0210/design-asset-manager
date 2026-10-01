@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-electron-node-test.mjs",
+    "scripts/ocr-controller-lifecycle.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.436,
+  "sha256": "292d191a1a76bf3161dce1743080eafb1f8ca7e112884a2985ad285e7635a890"
+}

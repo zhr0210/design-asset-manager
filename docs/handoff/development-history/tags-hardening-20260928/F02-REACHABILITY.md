@@ -1,0 +1,5 @@
+# F02 实际调用方与证据边界
+
+Library.tsx 的 VisualAiPanel key 是 scope+selectedAsset.id，而传入assetIds优先使用bulkSelectedAssetIds；store.toggleBulkSelectedAssetId只改变批量选择，不改变selectedAsset。VisualAiPanel对单素材渲染IndependentTagIntentPanel且未给该子组件另设key。因此保留Inspector A、勾选B、取消B时，子组件可以A→B→A，父级key不变。AssetCardWindow另以state.token作为VisualAiPanel key，卡片换素材会重挂；不能把卡片重挂假设泛化到主页面。
+
+真实React组件测试使用生产IndependentTagIntentPanel＋明确延迟bridge，已复现并修复ABA旧结果/旧finally和切换/卸载迟到receipt。正式页面测试另外验证实际DOM沿用、A/B意图各存一份和取消执行review零HTTP。两种证据分开：正式页面不人工延迟生产IPC，不冒称在正式页面重复注入了同一竞态。没有发现或声称跨素材写入/Host权限绕过。

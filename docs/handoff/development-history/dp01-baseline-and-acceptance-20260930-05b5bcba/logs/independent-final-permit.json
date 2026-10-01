@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/ai-acceptance-permit.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.237,
+  "sha256": "5d3bacb22d46fc7b912203f509a30a2938c618c792322d8af88811bfcafb3365"
+}

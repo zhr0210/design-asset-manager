@@ -1,0 +1,323 @@
+{
+  "baselineFileCount": 2755,
+  "changed": [
+    {
+      "path": "TASK.md",
+      "kind": "modified",
+      "beforeSha256": "25ada39264e20b53e139fc40b8493ff4134b0a75eb17f4d148ca6dd7de0dbddf",
+      "afterSha256": "13d005329c63c21dfa998346208e07beb5b8c11c3b9db723fa42af8891776b80",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "package.json",
+      "kind": "modified",
+      "beforeSha256": "ba5372d08b5a5f7e677ed6922b73bcc9dab031b3f3b658bf68b38bff064d6134",
+      "afterSha256": "62419a1bc02d16eb9ee0d6554e3a9702adc58bf5a717c5fe4efb8e7dce6d6f82",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "pi-runtime/README.md",
+      "kind": "modified",
+      "beforeSha256": "54a1e9643f918e63eba32c5189181da6743e25544517f20e25737e6d413ba702",
+      "afterSha256": "b3581b88968ea4eb9353f10f8bd96586eda11a905a4cad628d587213ba5e95f4",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "pi-runtime/openai-chatgpt-auth.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "db69f40a62d8d4982616b4e59fe738b225f88224a067917337cdb7bba3ce3d5f",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "pi-runtime/provider-policy.json",
+      "kind": "modified",
+      "beforeSha256": "388afef7c98a7134e326b1b798a53bf188307c7b7706bf78c25b9b48d83b5f84",
+      "afterSha256": "460065ad6609408cb17b324d52653aa8118dccf441128c5419b48a078ca5b50e",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "pi-runtime/release.json",
+      "kind": "modified",
+      "beforeSha256": "40d8304d48fbdcde33fa31158094ec43beb4bfb06424594626941349b7b3978e",
+      "afterSha256": "edc947653913e104245e60e3d7f35095887b2788163296c4933f0ded23f4e9bd",
+      "beforeProvenance": "baseline-hash verified historical source-snapshot"
+    },
+    {
+      "path": "pi-runtime/worker.mjs",
+      "kind": "modified",
+      "beforeSha256": "8b43806ab40279470a0d40033a94a0ac6c655d55d740658eb9faf70ddeb8b5d5",
+      "afterSha256": "6c61380b7fffc6497d116b4ac07da016e34b857325028979b03e8c9bc8e02aad",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "scripts/ai-acceptance-permit.test.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "acc891a0df9eef49ad46281f50cbc1ede4013269d99214e329995d7f68d9ddcb",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/ai-acceptance.e2e.test.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "78c09c770b7343061b9e6bf59c9005f772413859d7f4f28de82b8bd7ed090939",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/ai-acceptance.integration.test.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "4a2562ce55eb603ec5dde9f0db5fac137aa8c2bfec4fa978f4ebc703d9ec18ab",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/ai-handoff-anchor.py",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "39cf1b9327bcfa4b5530867ad676096d11a3f17971fc06155a9cbdb53d3d0523",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/ai-handoff-anchor.test.py",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "c06076f655411304a37c20555afa052e0e92359ddb7937a05058bee640dc3ae2",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/ai-service-acceptance.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "41f76405ba49d14dcdebd33745c6f322640d0e28befa9518995ed8e50db6a3d1",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/background-ocr-runtime-observation.integration.test.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "8857ac8966360ef458acf1724479789b3a41da6a771507a1659e4916de78ba71",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/background-ocr-runtime-observation.test.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "40cd746b3227a1328f2b453255196f56c6daff4ebd71de833aa19a68749841d1",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/chatgpt-auth.e2e.test.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "9b6696c5b5d8640163a1ede01fcae09ed7807394171fd8f1a15f0929fc32551a",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/chatgpt-auth.test.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "f327d9fad116aa38da3e241c575f7195f04a91a0914a5ee337cbb38825a4e7fa",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/chatgpt-contract-fixture.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "7ac711b324d3ac92cfe0022d68bc2c605cf5fb1f06db06b538adf0f6ce92d4fa",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "scripts/pi-auth-prompts.test.ts",
+      "kind": "modified",
+      "beforeSha256": "0c14d8dda5ab061ae6eeab164c0fa47e50af43986bbf64d19289679f13554e50",
+      "afterSha256": "59ead5fa8a7ed7f49a2dd726cbf6eb3e795da570fbadf2ab411ebf57ee3ac06c",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "scripts/pi-codex-contract.e2e.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "4c50e46473da40fb0de883de7cc0e2d9c7290e289005ed79f96fff3169b69f93",
+      "afterSha256": "5181822820d882f1783ac0358013cebd8c79bc0a54b756c3cea87298842eb000",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "scripts/pi-native-sdk.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "407834230b4e9497c4622a7cd57e0d774855e17c95fde297c7cff24ed176ca72",
+      "afterSha256": "5cdea6319a384c182ad27a7d3b192419da536e6238ec5a2bbe546673864012b8",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "scripts/pi-provider-admission.test.ts",
+      "kind": "modified",
+      "beforeSha256": "fa2e87b79a72612c58b8af778accf4981ec37b315d337c5176144768770fea7d",
+      "afterSha256": "19c5b767e0186ed81c211275d27dbaf412627b5cb0172e0c2aa36fb064aba3a6",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "scripts/pi-runtime-packaging.test.ts",
+      "kind": "modified",
+      "beforeSha256": "7ed10300ff645d5fea768a52ac51c3becc18e6bca23c281e9696a3ba3f24cf56",
+      "afterSha256": "5d64583fb22787178f9f251a07c8fb04093f9f5c16734964586f59a7725778d2",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "scripts/pi-ui.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "06f53e9ccc76e6832816425aa36a24334184cd03999efc9c70ed7da82a70b90a",
+      "afterSha256": "f97a22ab6f14977b0495b2d42d319eec6d25accadddc720d4cf8bc7a5d66e130",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "scripts/seal-pi-runtime.mjs",
+      "kind": "modified",
+      "beforeSha256": "27068022ff868ad282b151bf6260cc8a2889b7b662d88619670de88d8d4f7aad",
+      "afterSha256": "c5aeab2b45dd06b6d9b2b0ba310ac31f27056239cb478c54d539c21043ef7358",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/ai-acceptance/README.md",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "2fc4dfe3f75e0b111cfc06952283e478a37ab14972f991dfb74a0677420f54b8",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "src/main/ai-acceptance/acceptance-permit.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "a34ffa8393e42af67fdd8e2ec2fda139864a49490ce4dc5f45b395234f71f2b2",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "src/main/ai-acceptance/acceptance-service.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "3639fcfa3455762b0963974067916ec14bfac061764df8ad2ea4db84adf55a9b",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "src/main/ai-gateway/PROVIDER-MATRIX.md",
+      "kind": "modified",
+      "beforeSha256": "a158b7ef67db1c6092dc6ea65d512a1b355500127ef2fdd683fec652c4771e8f",
+      "afterSha256": "0164c14f7b7c92dda1aa544f9cf6ece8dd3c48830b086ef18b03689497ccc251",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/ai-gateway/README.md",
+      "kind": "modified",
+      "beforeSha256": "81bc45823a82de0c190146abcf03d1105ffe4d7fb350fd937a15a1b0df8c70f8",
+      "afterSha256": "a75609801f2e13a86d482c1c666b33ff8b5acb8ec048168980ac300f81f2fdda",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/ai-gateway/ai-connection-service.ts",
+      "kind": "modified",
+      "beforeSha256": "b81187ea9f867aa20fd061fea1f2e4ddd41909de69f88e578df6afb209a7c314",
+      "afterSha256": "5bb6f5fb101a3b22c2e24c024395b0ae8d0b569f855406f8b16e3afa57d1f227",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/ai-gateway/pi-runtime-host.ts",
+      "kind": "modified",
+      "beforeSha256": "c1dda23d8fb0503d59a57401c58d15240a11d64da7c1a7cdabe2018e5179ca90",
+      "afterSha256": "4f5d80d98e2be3d0487382671f5c2a3d8064f6b7a82ed61f22e830e8baa12acb",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/ai-gateway/pi-runtime-release.ts",
+      "kind": "modified",
+      "beforeSha256": "f698572a037f8a2b86ef3b6d6465b307d152af0f9ce77297f06ea0fce7daa323",
+      "afterSha256": "cb0075b395a9a36bef5c18da9d8b3702961e80896312cb015ace1e9348250b9f",
+      "beforeProvenance": "baseline-hash verified historical source-snapshot"
+    },
+    {
+      "path": "src/main/background-ocr/README.md",
+      "kind": "modified",
+      "beforeSha256": "bdceee624366ebdcf8c8c0f213678e58cb2913a5bc9aa4412e1b42830d33c636",
+      "afterSha256": "c542f5c75ab28a9ed541b53ddf5f81fdfc0b24cb69d9750a461ae89694f80956",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/background-ocr/background-ocr-controller.ts",
+      "kind": "modified",
+      "beforeSha256": "dcf5cd52f4bb454001f84353d37d92697673845cdcea3cf5f27a5a934813a381",
+      "afterSha256": "d9dd2fb69277c295b64ede7112f9d02b9ab9445f6f11da8c8fdab758fe92b2e0",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/index.ts",
+      "kind": "modified",
+      "beforeSha256": "b7cbd06356f1bfee918f2f070a4a329ade1996888bd1af692833ee65b58d1fa5",
+      "afterSha256": "72d9121542e327631a603651fae4f2f695985d72cc62928d0f1f29618e21c733",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/ipc/ai-acceptance.ipc.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "03a519b1e14f96ea2735892729d548182409e24c031d2e649ed959adea8d87df",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "src/main/ipc/ai-connection.ipc.ts",
+      "kind": "modified",
+      "beforeSha256": "1d4d53e935754a0f3f0fe64f9d9998c43a1f485effa5ba2edf719718542e0a9c",
+      "afterSha256": "266f2d0a968a81841c309a7733e57c46bd7cc80cea2766f8736e646357b3854a",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/main/ipc/main-ipc-composition.ts",
+      "kind": "modified",
+      "beforeSha256": "22af856779f1aa79da00f7bd3060a9bbc4f6a8585092727b89ec7807731c68fb",
+      "afterSha256": "baf10c0203a482a168d4e4e7d2d4fb2dd137c099e853580c2964407cd6702b45",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/preload/index.ts",
+      "kind": "modified",
+      "beforeSha256": "9c35aaa1aaaff0c669034945b78d998e0244d69a8c8f2c4796834a03beed0adb",
+      "afterSha256": "c527f8f7f53bfb37f19b9cbfadc5b8faebd1ddb28550744b57992f62501b7519",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/renderer/components/asset/AiServiceAcceptancePanel.tsx",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "d6db487230a75f82ec254dd3f05ff8b4ccc7c0289ce03d944150d5ae77db5299",
+      "beforeProvenance": "absent in baseline"
+    },
+    {
+      "path": "src/renderer/components/asset/PiConnectionsPanel.tsx",
+      "kind": "modified",
+      "beforeSha256": "f4e6765848ea3655c14832020c7d6ef5b6d44c0c9b96a3ba1145409ff701bb1f",
+      "afterSha256": "719717b6ef46f1e37449ee77984ad2108927a4ec9001322635996d8dccf7a3bb",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/renderer/routes/AiConsolePage.tsx",
+      "kind": "modified",
+      "beforeSha256": "d5f8d085f5c5ec0f9ed51e7e471c49c28ae52f7e2ed08db609e65d273d32bd28",
+      "afterSha256": "0cb946bce86a874df64221179487bd4a687840bfa3e765b52cc6219895452355",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/shared/constants/pi-provider-admission.ts",
+      "kind": "modified",
+      "beforeSha256": "5efd969d77f47b6e6f5f01609cc78f9af2a43ddbd18d230040b99cdd7daafe9f",
+      "afterSha256": "785ceda550dcc0495a4f50d84caa1bf75c4ed74923750dfaaa309a86a9e24e1b",
+      "beforeProvenance": "captured before mutation"
+    },
+    {
+      "path": "src/shared/contracts/ai-connection.contract.ts",
+      "kind": "modified",
+      "beforeSha256": "c847ebdd7273f424c4083b961b3d8d7a9b01cb88fb843852b8e3b90fceb6263d",
+      "afterSha256": "0aae02b0f297e56c8cf0cc27242a1b35197d581b4e50452a178654f111841b62",
+      "beforeProvenance": "captured before mutation"
+    }
+  ],
+  "unrelatedBaselineChanged": [],
+  "deleted": [],
+  "scope": "DP01 plus explicit ChatGPT override only"
+}

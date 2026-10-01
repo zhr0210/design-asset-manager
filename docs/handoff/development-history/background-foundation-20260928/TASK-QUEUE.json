@@ -1,0 +1,10 @@
+{
+  "state": "COMPLETED",
+  "tasks": [
+    {
+      "id": "B01",
+      "state": "ACCEPTED_LIMITED_FOUNDATION"
+    }
+  ],
+  "nextBatchAuthorized": false
+}

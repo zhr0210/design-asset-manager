@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-27T04:14:42.493802+00:00",
+  "decision": "APPROVED_PROPOSAL_ONLY",
+  "reviewer": "c02a_readonly_review",
+  "proposalDigest": "367f9c12ad4cd681185986378f4b8f5be1f0b6e8526433bd453816dcd21dcc89",
+  "scope": "C02B code and generated temporary databases only",
+  "reviewArtifact": "evidence/C02A/REVIEW-02.md",
+  "realLibraryPermission": false
+}

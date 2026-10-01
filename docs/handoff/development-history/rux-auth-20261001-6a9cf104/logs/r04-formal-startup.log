@@ -1,0 +1,11 @@
+✔ fresh unopened home exposes real AI/menu navigation and explains unavailable library views without blocking controls (2766.372583ms)
+✔ generated real library create/import/inspect/close keeps the manager hidden and the AI entry clickable (3512.345291ms)
+✔ failed real Host open retains recovery state and original bytes but restores account and generated-plan admission (1344.397167ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7989.847125

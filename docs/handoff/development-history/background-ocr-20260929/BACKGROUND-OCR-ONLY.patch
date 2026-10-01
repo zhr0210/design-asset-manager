@@ -1,0 +1,1322 @@
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,4 +1,16 @@
+ # Current Task
++
++## 已完成：后台 OCR 单能力闭环（2026-09-29）
++
++用户“继续下一轮”批准的限定批次已完成并独立签收。新增本次开库独立许可、显式v13执行存储、原子领取/幂等OCR回执、共享手动OCR资源门槛、发送前资格复核和保守中断恢复。sent/unknown跨会话不自动重领；Runtime变化撤销旧许可。生产qualification=null保持等待，B01开关仍只收集计划。
++
++35项真实临时Host（含4个owned SIGKILL）、3项组件、2项正式后台OCR通过；旧17进程/12控制器/B01 19、标签30/13/22、资源10和存储/Host/关闭回归、正式手动OCR/B01各1通过，typecheck/build通过。独立复核重跑35并核验148份源码。真实模型/用户库/Windows未验收，未下载、安装或发布；原工作区与索引保留。
++
++- [报告](.ai-run/background-ocr-20260929/REPORT.md)
++- [最高优先级终态](.ai-run/background-ocr-20260929/FINAL-HANDOFF.json)
++- [独立复核与原始重跑输出](.ai-run/background-ocr-20260929/REVIEW-FINAL.md)
++
++本批COMPLETED/STOP，nextBatchAuthorized=false；不自动进入真实模型资格、caption或其他能力派发。下方旧批记录仅作历史。
+ 
+ ## 已完成：OCR 子进程退出与资源/drain 边界（2026-09-29）
+ 
+--- /dev/null
++++ b/scripts/background-ocr-electron.e2e.test.mjs
+@@ -0,0 +1,38 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import os from 'node:os'
++import {pathToFileURL} from 'node:url'
++import {createHash} from 'node:crypto'
++import {_electron as electron} from 'playwright'
++import sharp from 'sharp'
++const sleep=ms=>new Promise(r=>setTimeout(r,ms))
++const wait=async(check)=>{for(let i=0;i<300;i++){if(await check())return;await sleep(25)}throw Error('formal predicate timeout')}
++for(const qualified of [false,true])await test(`formal OCR session consent with ${qualified?'synthetic qualified':'production unqualified'} resource path`,async()=>{
++ const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-approved-ocr-background-'))),profile=path.join(root,'profile'),library=path.join(root,'library'),evidence=path.join(root,'evidence'),entry=path.join(root,'entry'),runs=path.join(root,'runs'),runtime=path.join(root,'runtime');let app
++ try{
++  for(const dir of [profile,evidence,entry,path.join(runtime,'bin')])await fs.mkdir(dir,{recursive:true})
++  const sources=[];for(let i=0;i<2;i++){const source=path.join(root,`generated-${i}.png`);await sharp({create:{width:80+i,height:80,channels:3,background:'#778899'}}).png().toFile(source);sources.push(source)}
++  const hashes=async()=>Promise.all(sources.map(async p=>createHash('sha256').update(await fs.readFile(p)).digest('hex'))),before=await hashes(),models={det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},value={engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:models,width:80,height:80,elapsedMs:1,threshold:.5,blocks:[]}
++  const python=path.join(runtime,'bin','python3');await fs.writeFile(python,`#!/usr/bin/python3\nimport sys\nsys.stdin.buffer.read()\nwith open(${JSON.stringify(runs)},'a') as f:f.write('run\\n')\nprint(${JSON.stringify(JSON.stringify({ok:true,value}))})\n`);await fs.chmod(python,0o700)
++  await fs.writeFile(path.join(root,'ocr-runtime.json'),JSON.stringify({schema:1,engine:'rapidocr-onnxruntime',version:'1.4.4',platform:process.platform,arch:process.arch,pythonRelative:'runtime/bin/python3',modelSha256:models}));await fs.writeFile(path.join(entry,'package.json'),JSON.stringify({name:'dam-background-ocr',type:'module',main:'main.mjs'}));await fs.writeFile(path.join(entry,'main.mjs'),`import ${JSON.stringify(pathToFileURL(path.resolve('out/main/index.js')).href)};`)
++  const config={rootDirectory:root,profileDirectory:profile,libraryDirectory:library,evidenceDirectory:evidence,sourceSelections:sources.map(p=>[p])},env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k)))
++  app=await electron.launch({args:[entry,'--dam-active-library-synthetic-e2e',`--user-data-dir=${profile}`],env:{...env,NODE_ENV:'test',DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E:JSON.stringify(config),DAM_SYNTHETIC_OCR_RUNTIME:root,...(qualified?{DAM_SYNTHETIC_BACKGROUND_OCR:'1'}:{})}})
++  assert.ok((await app.evaluate(({app})=>['userData','sessionData','logs','crashDumps'].map(p=>app.getPath(p)))).every(p=>p.startsWith(root+path.sep)))
++  const page=await app.firstWindow();page.setDefaultTimeout(12000);await page.setViewportSize({width:1450,height:1050});await page.getByTestId('formal-library-canvas').waitFor();await page.getByTestId('library-create').click();await page.getByTestId('library-create-confirm').click()
++  const add=async()=>{await page.evaluate(()=>location.hash='/library');await page.getByRole('button',{name:'添加图片',exact:true}).click();await page.getByTestId('library-copy-confirm').click();await page.locator('.lc-card').first().waitFor()}
++  await add();const scope=await page.evaluate(async()=>{const s=await window.electronAPI.library.inspect();return{libraryIdentity:s.identity,generation:s.generation}});const old=(await page.evaluate(()=>window.electronAPI.listAssets()))[0];await page.evaluate(()=>location.hash='/ai-console')
++  const plan=page.getByRole('region',{name:'后台基础分析计划',exact:true});await plan.getByRole('checkbox',{name:'收集新素材分析计划'}).check();await plan.getByRole('button',{name:'保存新素材计划设置'}).click();await plan.getByRole('button',{name:'确认保存后台计划'}).click();await plan.getByRole('region',{name:'确认后台计划设置'}).waitFor({state:'detached'})
++  await add();await wait(async()=>(await page.evaluate(()=>window.electronAPI.listAssets())).length===2);const asset=(await page.evaluate(()=>window.electronAPI.listAssets())).find(a=>a.id!==old.id);assert.ok(asset)
++  assert.equal((await page.evaluate(()=>window.electronAPI.assetOcr.configure())).ok,true);await page.evaluate(()=>location.hash='/ai-console');const panel=page.getByRole('region',{name:'后台 OCR 执行许可',exact:true});await panel.getByText('本次开库尚未授权',{exact:false}).waitFor();assert.equal(await fs.readFile(runs,'utf8').catch(()=>''),'')
++  await panel.getByRole('button',{name:'核对后台 OCR 授权'}).click();await panel.getByRole('button',{name:'确认授权后台 OCR'}).click();await panel.getByRole('region',{name:'确认后台 OCR 授权'}).waitFor({state:'detached'})
++  try{await wait(async()=>{const r=await page.evaluate(s=>window.electronAPI.backgroundOcr.read(s),scope);return r.ok&&r.value.authorized})}catch{throw Error(JSON.stringify({stage:'permission',view:await page.evaluate(s=>window.electronAPI.backgroundOcr.read(s),scope),panel:await panel.innerText()}))};assert.equal((await page.evaluate(s=>window.electronAPI.backgroundOcr.read(s),scope)).value.schemaVersion,13)
++  if(qualified){await wait(async()=>(await page.evaluate(s=>window.electronAPI.backgroundOcr.read(s),scope)).value.attempts.some(a=>a.state==='succeeded'));assert.equal(await fs.readFile(runs,'utf8'),'run\n');const o=(await page.evaluate(s=>window.electronAPI.assetOcr.read(s),{...scope,assetId:asset.id})).value;assert.ok(o.evidence);const correction=await page.evaluate(s=>window.electronAPI.assetOcr.correct(s),{...scope,assetId:asset.id,sessionToken:o.sessionToken,expectedRevision:o.revision,evidenceId:o.evidence.id,text:'Kept correction'});assert.equal(correction.ok,true)}
++  else{await panel.getByText('生产执行资源资格尚未验证',{exact:true}).waitFor();await sleep(250);assert.equal(await fs.readFile(runs,'utf8').catch(()=>''),'');assert.equal((await page.evaluate(s=>window.electronAPI.backgroundOcr.read(s),scope)).value.attempts.length,0)}
++  assert.equal((await page.evaluate(s=>window.electronAPI.assetOcr.read(s),{...scope,assetId:old.id})).value.evidence,null)
++  await panel.getByRole('button',{name:'刷新 OCR 状态'}).click();if(qualified){await panel.locator('summary').click();await panel.getByText('已保存 · 第 1 次',{exact:true}).waitFor()}
++  if(process.env.BACKGROUND_OCR_EVIDENCE_DIR){await fs.mkdir(process.env.BACKGROUND_OCR_EVIDENCE_DIR,{recursive:true});await panel.screenshot({path:path.join(process.env.BACKGROUND_OCR_EVIDENCE_DIR,qualified?'qualified.png':'waiting.png')})}
++  await page.evaluate(()=>window.electronAPI.library.close());await page.evaluate(()=>window.electronAPI.library.reopen());assert.equal((await page.evaluate(s=>window.electronAPI.backgroundOcr.read(s),scope)).value.authorized,false);await sleep(100);assert.equal(await fs.readFile(runs,'utf8').catch(()=>''),qualified?'run\n':'');if(qualified)assert.equal((await page.evaluate(s=>window.electronAPI.assetOcr.read(s),{...scope,assetId:asset.id})).value.editedText,'Kept correction');assert.deepEqual(await hashes(),before)
++ }finally{if(app)await app.close();await fs.rm(root,{recursive:true,force:true})}
++})
+--- /dev/null
++++ b/scripts/background-ocr-ui.test.mjs
+@@ -0,0 +1,26 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {build} from 'esbuild'
++import {_electron as electron} from 'playwright'
++const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-bg-ocr-ui-'));let app
++try{
++ const result=await build({stdin:{contents:`import React from 'react';import{createRoot}from'react-dom/client';import Panel from './src/renderer/components/asset/BackgroundOcrPanel';
++ window.ticks=[];window.setInterval=fn=>{window.ticks.push(fn);return window.ticks.length};window.clearInterval=()=>{};
++ window.ready=true;window.delay=false;window.reads=[];window.discarded=[];window.saved={schemaVersion:13,sessionToken:'one',permissionRevision:1,authorized:true,runtimeFingerprint:'synthetic',attempts:[],reasons:[],running:false};
++ window.electronAPI={library:{inspect:async()=>({state:window.ready?'ready':'closed',identity:'library',generation:'generation'})},backgroundOcr:{read:async()=>{const value=structuredClone(window.saved);if(window.delay)return new Promise(resolve=>window.reads.push(()=>resolve({ok:true,value})));return{ok:true,value}},prepare:async()=>new Promise(resolve=>window.resolvePrepare=()=>resolve({ok:true,value:{receipt:'late',notice:'fixture'}})),confirm:async()=>({ok:false,error:'synthetic authorization failed'}),discard:async id=>{window.discarded.push(id);return{ok:true}},revoke:async()=>{window.saved.authorized=false;window.saved.permissionRevision++;return{ok:true,value:structuredClone(window.saved)}}}};
++ createRoot(document.getElementById('root')).render(<Panel/>);`,resolveDir:process.cwd(),loader:'tsx'},bundle:true,format:'iife',platform:'browser',outfile:path.join(root,'bundle.js'),write:false,logLevel:'silent'})
++ for(const output of result.outputFiles)await fs.writeFile(output.path,output.contents);await fs.writeFile(path.join(root,'index.html'),'<link rel="stylesheet" href="bundle.css"><div id="root"></div><script src="bundle.js"></script>');await fs.writeFile(path.join(root,'main.cjs'),`const{app,BrowserWindow}=require('electron');for(const n of ['userData','sessionData','logs','crashDumps'])app.setPath(n,${JSON.stringify(root)}+'/'+n);app.whenReady().then(()=>new BrowserWindow({width:700,height:800,webPreferences:{nodeIntegration:false,contextIsolation:true}}).loadFile(${JSON.stringify(path.join(root,'index.html'))}));app.on('window-all-closed',()=>app.quit());`)
++ const env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k)));app=await electron.launch({args:[path.join(root,'main.cjs')],env});const page=await app.firstWindow();page.setDefaultTimeout(5000);const reset=async()=>{await page.goto('file://'+path.join(root,'index.html'));await page.getByRole('button',{name:'核对后台 OCR 授权'}).waitFor()}
++ await test('late authorization review after library close is discarded',async()=>{
++  await reset();await page.getByRole('button',{name:'核对后台 OCR 授权'}).click();await page.waitForFunction(()=>Boolean(window.resolvePrepare));await page.evaluate(()=>{window.ready=false;window.ticks.at(-1)()});await page.getByText('请先打开资料库。',{exact:true}).waitFor();await page.evaluate(async()=>{window.resolvePrepare();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))});assert.deepEqual(await page.evaluate(()=>window.discarded),['late']);assert.equal(await page.getByRole('button',{name:'确认授权后台 OCR'}).count(),0)
++ })
++ await test('stale authorized poll cannot undo a completed revocation',async()=>{
++  await reset();await page.evaluate(()=>{window.delay=true;window.ticks.at(-1)()});await page.waitForFunction(()=>window.reads.length===1);await page.getByRole('button',{name:'撤销后台 OCR 许可'}).click();await page.getByText('本次开库尚未授权',{exact:false}).waitFor();await page.evaluate(async()=>{window.reads[0]();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))});assert.equal(await page.getByText('本次开库已授权',{exact:false}).count(),0)
++ })
++ await test('confirmation failure remains visible after successful status refresh',async()=>{
++  await reset();await page.getByRole('button',{name:'核对后台 OCR 授权'}).click();await page.waitForFunction(()=>Boolean(window.resolvePrepare));await page.evaluate(()=>window.resolvePrepare());await page.getByRole('button',{name:'确认授权后台 OCR'}).click();await page.getByRole('alert').filter({hasText:'synthetic authorization failed'}).waitFor();await page.evaluate(()=>window.ticks.at(-1)());assert.equal(await page.getByText('synthetic authorization failed',{exact:true}).count(),1)
++ })
++}finally{if(app)await app.close();await fs.rm(root,{recursive:true,force:true})}
+--- /dev/null
++++ b/scripts/background-ocr.integration.test.ts
+@@ -0,0 +1,163 @@
++import assert from 'node:assert/strict'
++import {test} from 'node:test'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import sharp from 'sharp'
++import Database from 'better-sqlite3'
++import {createActiveLibraryHost} from '../src/main/library-lifecycle'
++import {createProductionActiveLibraryHostDependencies} from '../src/main/library-lifecycle/production-active-library-dependencies'
++import type {TagIntentTestHooks} from '../src/main/independent-tags/tag-intent-backup'
++import type {BackgroundOcrClaim} from '../src/shared/contracts/background-ocr.contract'
++import type {OcrObservation} from '../src/shared/contracts/asset-ocr.contract'
++const observation:OcrObservation={engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:{det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},width:80,height:80,elapsedMs:1,threshold:.5,blocks:[]}
++async function fixture(hooks:TagIntentTestHooks={}){
++ const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-bg-ocr-'))),library=path.join(root,'library'),sources:string[]=[];let next=0
++ for(let i=0;i<4;i++){const file=path.join(root,`generated-${i}.png`);await sharp({create:{width:80+i,height:80,channels:3,background:'#7799bb'}}).png().toFile(file);sources.push(file)}
++ const host=createActiveLibraryHost({...createProductionActiveLibraryHostDependencies({selectLibraryDirectory:async()=>({kind:'selected',directory:library}),selectLocalFiles:async()=>({kind:'selected',files:[{filePath:sources[next++]}]})}),tagIntentTestHooks:hooks})
++ const p=await host.prepareCreate();if(p.kind!=='planned')throw Error('fixture');await host.confirmCreate(p.plan.receipt);const state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!}
++ const add=async()=>{const p=await host.prepareAddAssets();if(p.kind!=='planned')throw Error('fixture');const result=await host.dispatchAddAssets(p.plan.receipt);return(await host.listAssets()).find(a=>a.id===result.items[0].promotion!.designAssetIdentity)!}
++ const plans=async()=>{const s=await host.readBackgroundAnalysis(scope);await host.configureBackgroundAnalysis({...scope,sessionToken:s.sessionToken,expectedRevision:s.policy.revision,expectedSchemaVersion:s.schemaVersion,allowUpgrade:true,enabled:true,capabilities:{tags:true,caption:true,ocr:true}})}
++ const grant=async(enabled=true)=>{const s=await host.readBackgroundOcr(scope);return host.configureBackgroundOcr({...scope,sessionToken:s.sessionToken,expectedRevision:s.permissionRevision,expectedSchemaVersion:s.schemaVersion,allowUpgrade:true,enabled,runtimeFingerprint:'synthetic-runtime'})}
++ const claim=async()=>host.claimBackgroundOcr({...scope,sessionToken:(await host.readBackgroundOcr(scope)).sessionToken,runtimeFingerprint:'synthetic-runtime'})
++ const commit=async(c:BackgroundOcrClaim)=>{const a=(await host.listAssets()).find(a=>a.id===c.assetId)!,s=await host.readOcr({...scope,assetId:a.id});return{claim:c,ocr:{...scope,assetId:a.id,sessionToken:s.sessionToken,expectedRevision:s.revision,allowUpgrade:false,evidence:{id:'ocr:'+c.attemptId,assetId:a.id,assetRevision:a.revision,sourceRef:a.thumbnailRef,inputSha256:'d'.repeat(64),createdAt:new Date().toISOString(),observation}}}}
++ return{root,library,host,scope,add,plans,grant,claim,commit,hooks,dbFile:path.join(library,'.dam','library.sqlite'),close:async()=>{await host.close();await fs.rm(root,{recursive:true,force:true})}}
++}
++await test('plan enrollment never grants OCR execution; explicit v12 upgrade and fresh session permission',async()=>{
++ const f=await fixture();try{assert.equal((await f.host.readBackgroundOcr(f.scope)).schemaVersion,1);await assert.rejects(f.grant());await f.add();await f.plans();await f.add();await assert.rejects(f.claim());const s=await f.grant();assert.equal(s.schemaVersion,13);assert.equal(s.authorized,true);assert.ok(await f.claim());assert.equal(await f.claim(),null);await f.host.close();await f.host.reopen();assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false);await assert.rejects(f.claim());await f.grant();assert.ok(await f.claim())}finally{await f.close()}
++})
++await test('atomic empty OCR + receipt, exact replay preserves later user correction, output conflict rejected',async()=>{
++ const f=await fixture();try{await f.plans();await f.add();await f.grant();const c=(await f.claim())!,input=await f.commit(c);await assert.rejects(f.host.commitBackgroundOcr(input));await f.host.markBackgroundOcrSent(c);const receipt=await f.host.commitBackgroundOcr(input);assert.equal(receipt.savedRevision,1);const s=await f.host.readOcr({...f.scope,assetId:c.assetId});await f.host.correctOcr({...f.scope,assetId:c.assetId,sessionToken:s.sessionToken,expectedRevision:s.revision,evidenceId:s.evidence!.id,text:'user correction'});assert.deepEqual(await f.host.commitBackgroundOcr(input),receipt);assert.equal((await f.host.readOcr({...f.scope,assetId:c.assetId})).editedText,'user correction');await assert.rejects(f.host.commitBackgroundOcr({...input,ocr:{...input.ocr,evidence:{...input.ocr.evidence,inputSha256:'e'.repeat(64)}}}));assert.equal(await f.claim(),null);await f.host.close();await f.host.reopen();await f.grant();assert.equal(await f.claim(),null)}finally{await f.close()}
++})
++for(const change of ['revoke','pause','source','preview','ocr-revision'] as const)await test(change+' after sent rejects stale result with zero partial effect',async()=>{
++ const f=await fixture();try{await f.plans();await f.add();await f.grant();const c=(await f.claim())!,input=await f.commit(c);await f.host.markBackgroundOcrSent(c)
++ if(change==='revoke')f.host.revokeBackgroundOcr()
++ if(change==='pause'){const b=await f.host.readBackgroundAnalysis({...f.scope,assetId:c.assetId}),i=b.intents.find(i=>i.capability==='ocr')!;await f.host.changeBackgroundIntent({...f.scope,assetId:c.assetId,id:i.id,sessionToken:b.sessionToken,expectedRevision:i.revision,action:'pause'})}
++ if(change==='source'||change==='preview'){const db=new Database(f.dbFile);try{db.exec(change==='source'?"UPDATE capture_requests SET source_generation=source_generation||'-changed'":"UPDATE asset_candidates SET preview_generation_identity=preview_generation_identity||'-changed'")}finally{db.close()}}
++ if(change==='ocr-revision')await f.host.commitOcr(input.ocr)
++ await assert.rejects(f.host.commitBackgroundOcr(input));const db=new Database(f.dbFile,{readonly:true});try{assert.equal(db.prepare("SELECT count(*) FROM background_ocr_attempts WHERE state='succeeded'").pluck().get(),0);assert.equal(db.prepare('SELECT count(*) FROM asset_ocr_evidence').pluck().get(),change==='ocr-revision'?1:0)}finally{db.close()}
++ }finally{await f.close()}
++})
++for(const state of ['claimed','sent','unknown'] as const)await test('reopen '+state+' requires fresh permission and never reclaims sent/unknown',async()=>{
++ const f=await fixture();try{await f.plans();await f.add();await f.grant();const c=(await f.claim())!;if(state!=='claimed')await f.host.markBackgroundOcrSent(c);if(state==='unknown')await f.host.finishBackgroundOcr(c,'unknown');await f.host.close();await f.host.reopen();assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false);await f.grant();assert.equal(!!await f.claim(),state==='claimed')}finally{await f.close()}
++})
++await test('terminal first intent cannot starve later work and failures do not hot-loop',async()=>{
++ const f=await fixture();try{await f.plans();await f.add();await f.grant();const a=(await f.claim())!;await f.host.finishBackgroundOcr(a,'failed');assert.equal(await f.claim(),null);await f.add();const b=(await f.claim())!;assert.notEqual(b.intentId,a.intentId);await f.host.finishBackgroundOcr(b,'cancelled');assert.equal(await f.claim(),null);await f.grant();assert.ok(await f.claim())}finally{await f.close()}
++})
++for(const point of ['afterDdl','beforeCommit','afterCommit'] as const)await test('v13 '+point+' failure has honest upgrade/grant state',async()=>{
++ const f=await fixture();try{await f.plans();f.hooks[point]=()=>{throw Error('synthetic fault')};await assert.rejects(f.grant());const view=await f.host.readBackgroundOcr(f.scope);assert.equal(view.schemaVersion,point==='afterCommit'?13:12);assert.equal(view.authorized,false);await assert.rejects(f.claim());f.hooks[point]=undefined;await f.grant();assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,true)}finally{await f.close()}
++})
++
++import {createOcrController} from '../src/main/ocr/ocr-controller'
++import {createBackgroundOcrController} from '../src/main/background-ocr/background-ocr-controller'
++import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
++import {OcrProcessUnconfirmedError} from '../src/main/ocr/local-ocr-process'
++function gate<T=void>(){let resolve!:(v:T)=>void;const promise=new Promise<T>(r=>{resolve=r});return{promise,resolve}}
++async function chain(){
++ const f=await fixture();await f.plans();await f.add();let calls=0,fingerprint='synthetic-runtime',qualified=true,lowPower=false,currentGate:Promise<void>|undefined,run:(signal:AbortSignal)=>Promise<OcrObservation>=async()=>observation
++ const admission=createVisualAdmission(),runtime={configure:async()=>{},current:async()=>{await currentGate;return{label:'synthetic',fingerprint,run:async(_:Uint8Array,signal:AbortSignal)=>{calls++;return run(signal)}}}},scheduled:Array<()=>void>=[]
++ const ocrHost={...f.host};const ocr=createOcrController({host:ocrHost,runtime,reserve:(bytes,signal)=>admission.reserveOcr(bytes,signal),changed:()=>{},drainTimeoutMs:50})
++ const k=<T>(value:T)=>({kind:'known' as const,value,sampledAt:performance.now()})
++ const background=createBackgroundOcrController({host:f.host,ocr,runtime,drainTimeoutMs:50,schedule:fn=>{scheduled.push(fn);return()=>{}},telemetry:()=>({memory:k({free:8*1024**3,total:16*1024**3}),battery:k(false),lowPower:k(lowPower),thermal:k('nominal' as const),idle:k('idle' as const),visible:k(true),gpuFree:{kind:'unknown'}}),qualify:r=>qualified?{runtimeFingerprint:r.fingerprint,evidenceId:'synthetic-only',envelope:{ownership:'host-owned',verified:true,peakRamBytes:768*1048576,accelerator:'cpu',lightOnBattery:false}}:null})
++ const authorize=async()=>background.confirm((await background.prepare(f.scope)).receipt)
++ return{...f,admission,ocrHost,ocr,background,authorize,scheduled,get calls(){return calls},set currentGate(v:Promise<void>|undefined){currentGate=v},set fingerprint(v:string){fingerprint=v},set qualified(v:boolean){qualified=v},set lowPower(v:boolean){lowPower=v},set run(v:typeof run){run=v},close:async()=>{background.invalidate();await ocr.suspendAndDrain();await f.close()}}
++}
++await test('real Host chain requires separate grant, double ticks execute once and commit once',async()=>{
++ const f=await chain();try{await f.background.tick();assert.equal(f.calls,0);await f.authorize();await Promise.all([f.background.tick(),f.background.tick()]);assert.equal(f.calls,1);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts[0].state,'succeeded');assert.equal(f.admission.inspect().materialBytes,0);await f.background.tick();assert.equal(f.calls,1)}finally{await f.close()}
++})
++await test('unqualified runtime and constrained telemetry produce no claim, decode or spawn',async()=>{
++ const f=await chain();try{await f.authorize();f.qualified=false;await f.background.tick();assert.equal(f.calls,0);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts.length,0);assert.ok((await f.background.read(f.scope)).reasons.includes('automatic-executor-not-integrated'));f.qualified=true;f.lowPower=true;await f.background.tick();assert.equal(f.calls,0);assert.equal(f.admission.inspect().materialBytes,0)}finally{await f.close()}
++})
++await test('manual review and execution share the actual background reservation boundary',async()=>{
++ const f=await chain();try{await f.authorize();const asset=(await f.host.listAssets())[0],p=await f.ocr.prepare({...f.scope,assetIds:[asset.id]});assert.ok(f.admission.inspect().materialBytes>0);await f.background.tick();assert.equal(f.calls,0);await f.ocr.run(p.receipt);for(let i=0;i<50&&(await f.ocr.status()).job?.state==='running';i++)await new Promise(r=>setTimeout(r,5));assert.equal(f.calls,1);assert.equal(f.admission.inspect().materialBytes,0)}finally{await f.close()}
++})
++await test('UNKNOWN retains reservation after failed promise; late close releases and finalizes without writing OCR',async()=>{
++ const f=await chain(),release=gate();try{f.run=async()=>{throw new OcrProcessUnconfirmedError(release.promise)};await f.authorize();await f.background.tick();assert.ok(f.admission.inspect().materialBytes>0);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts[0].state,'unknown');await f.background.tick();assert.equal(f.calls,1);await assert.rejects(f.ocr.prepare({...f.scope,assetIds:[(await f.host.listAssets())[0].id]}));release.resolve();for(let i=0;i<50&&(await f.host.readBackgroundOcr(f.scope)).attempts[0].state==='unknown';i++)await new Promise(r=>setTimeout(r,5));assert.equal(f.admission.inspect().materialBytes,0);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts[0].state,'failed');assert.equal((await f.host.readOcr({...f.scope,assetId:(await f.host.listAssets())[0].id})).evidence,null)}finally{release.resolve();await f.close()}
++})
++await test('failed concurrent confirm cannot lose active cancellation; revoke cancels owned runtime',async()=>{
++ const f=await chain(),entered=gate(),release=gate<OcrObservation>();let cancelled=false
++ try{f.run=async signal=>{signal.addEventListener('abort',()=>{cancelled=true;release.resolve(observation)},{once:true});entered.resolve();return release.promise};await f.authorize();const work=f.background.tick();await entered.promise;const review=await f.background.prepare(f.scope);await assert.rejects(f.background.confirm(review.receipt));await f.background.revoke(f.scope);await work;assert.equal(cancelled,true);assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts[0].state,'cancelled');assert.equal((await f.host.readOcr({...f.scope,assetId:(await f.host.listAssets())[0].id})).evidence,null)}finally{release.resolve(observation);await f.close()}
++})
++await test('runtime A to B to A cannot restore old permission even without qualified resources',async()=>{
++ const f=await chain();try{await f.authorize();f.qualified=false;f.fingerprint='changed';await f.background.tick();f.fingerprint='synthetic-runtime';f.qualified=true;await f.background.tick();assert.equal(f.calls,0);assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false);await f.authorize();await f.background.tick();assert.equal(f.calls,1)}finally{await f.close()}
++})
++await test('Host revoke during awaited backup cannot be overwritten by late configure',async()=>{
++ const f=await fixture(),entered=gate(),release=gate();try{await f.plans();f.hooks.afterBackup=async()=>{entered.resolve();await release.promise};const granting=f.grant();const outcome=granting.catch(e=>e);await entered.promise;f.host.revokeBackgroundOcr();release.resolve();assert.ok(await outcome instanceof Error);assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false)}finally{release.resolve();await f.close()}
++})
++
++import {build} from 'esbuild'
++import {pathToFileURL} from 'node:url'
++import {createHash} from 'node:crypto'
++import {spawn} from 'node:child_process'
++import {readLibraryManifestDeclaration} from '../src/main/library-lifecycle/library-manifest.tracer'
++import {openReadonlyLibraryDatabase} from '../src/main/library-lifecycle/readonly-library-database.internal'
++await test('frozen v12 reader rejects v13 without changing bytes; exact current reader reopens',async()=>{
++ const f=await fixture();try{await f.plans();await f.grant();await f.host.close();const base=path.resolve('scripts/fixtures/background-ocr-v12'),manifest=JSON.parse(await fs.readFile(path.join(base,'manifest.json'),'utf8'));for(const[n,h]of Object.entries(manifest))assert.equal(createHash('sha256').update(await fs.readFile(path.join(base,n+'.txt'))).digest('hex'),h)
++ const source=await fs.readFile(path.join(base,'library-open-control-store.internal.ts.txt'),'utf8'),version=await fs.readFile(path.join(base,'library-schema-version.ts.txt'),'utf8'),output=path.resolve('dist-temp/tests/background-ocr-v12-reader.mjs')
++ await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},outfile:output,bundle:true,platform:'node',format:'esm',packages:'external',logLevel:'silent',plugins:[{name:'frozen-version',setup(b){b.onResolve({filter:/library-schema-version$/},()=>({path:'frozen-v12',namespace:'frozen'}));b.onLoad({filter:/.*/,namespace:'frozen'},()=>({contents:version,loader:'ts'}))}}]})
++ const old=await import(pathToFileURL(output).href),decl=readLibraryManifestDeclaration(new Uint8Array(await fs.readFile(path.join(f.library,'.dam/library.manifest.json'))));if(decl.kind!=='compatible')throw Error('manifest');const before=await fs.readFile(f.dbFile),db=openReadonlyLibraryDatabase(f.dbFile);try{assert.equal(old.inspectLibraryControlStore(db,decl.declaration).kind,'unsupported')}finally{db.close()};assert.deepEqual(await fs.readFile(f.dbFile),before);await f.host.reopen();assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false)
++ }finally{await f.close()}
++})
++await test('failure after OCR insert rolls back both OCR and completion receipt',async()=>{
++ const f=await fixture(),prepare=Database.prototype.prepare
++ try{await f.plans();await f.add();await f.grant();const c=(await f.claim())!,input=await f.commit(c);await f.host.markBackgroundOcrSent(c);Database.prototype.prepare=function(sql:string):any{if(sql.startsWith("UPDATE background_ocr_attempts SET state='succeeded'"))throw Error('synthetic after OCR insert');return prepare.call(this,sql)};await assert.rejects(f.host.commitBackgroundOcr(input));Database.prototype.prepare=prepare;assert.equal((await f.host.readOcr({...f.scope,assetId:c.assetId})).evidence,null);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts[0].state,'sent');await f.host.commitBackgroundOcr(input);assert.equal((await f.host.readOcr({...f.scope,assetId:c.assetId})).revision,1)}finally{Database.prototype.prepare=prepare;await f.close()}
++})
++const crashWorker=path.resolve('dist-temp/tests/background-ocr-crash.worker.mjs')
++await build({entryPoints:['scripts/fixtures/background-ocr-crash.worker.ts'],outfile:crashWorker,bundle:true,platform:'node',format:'esm',packages:'external',logLevel:'silent'})
++for(const cut of ['before-claim','after-claim','after-sent','after-commit'])await test('owned Host SIGKILL '+cut+' cannot restore permission or replay a committed effect',async()=>{
++ const f=await fixture();let child:ReturnType<typeof spawn>|undefined
++ try{await f.plans();await f.add();await f.grant();await f.host.close();child=spawn(process.execPath,[crashWorker,f.root,cut],{env:{...process.env,ELECTRON_RUN_AS_NODE:'1'},stdio:['ignore','pipe','pipe']});const exited=new Promise(r=>child!.once('exit',(code,signal)=>r({code,signal})));let text='';await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('owned marker timeout')),10000);child!.stdout!.on('data',chunk=>{text+=chunk;if(text.includes('"ready":true')){clearTimeout(timer);resolve()}});child!.once('exit',()=>{clearTimeout(timer);reject(Error('owned worker ended early'))})});child.kill('SIGKILL');assert.equal((await exited as any).signal,'SIGKILL');await f.host.reopen();assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false);await assert.rejects(f.claim());await f.grant();assert.equal(!!await f.claim(),cut==='before-claim'||cut==='after-claim');if(cut==='after-commit')assert.equal((await f.host.readOcr({...f.scope,assetId:(await f.host.listAssets())[0].id})).revision,1)
++ }finally{if(child&&child.exitCode===null&&child.signalCode===null){const exited=new Promise(r=>child!.once('exit',r));child.kill('SIGKILL');await exited}await f.close()}
++})
++
++await test('a legacy combined current is seeded exactly once and v13 keeps prior user edits and each storage capability usable',async()=>{
++ const f=await fixture()
++ try{
++  const {id}=await f.add(),asset=(await f.host.listAssets())[0],scope={...f.scope,assetId:id},e={id:'old-combined',assetId:id,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef,inputSha256:'b'.repeat(64),backendId:'synthetic',providerOrigin:'http://127.0.0.1:1',model:'synthetic-model',purpose:'analyze' as const,inputScope:'controlled-preview-rgb' as const,recipe:'visual-ai-v1' as const,createdAt:new Date().toISOString(),output:{caption:'AI caption',prompt:'Historical prompt',ocrText:'',tags:['已确认','待决定']}}
++  await f.host.enableVisualAi();await f.host.saveVisualAiEvidence(e);await f.host.confirmVisualAiTag(id,e.id,'已确认');await f.host.updateAssetCaption(id,'User caption')
++  await f.plans();await f.grant();const c=await f.host.readTagExecution(scope);assert.equal(c.schemaVersion,13);assert.equal(c.current?.originalVisualEvidenceId,e.id)
++  await f.host.decideTag({...scope,sessionToken:c.sessionToken,expectedSchemaVersion:13,allowUpgrade:false,evidenceId:c.current!.evidenceId,tag:'待决定',decision:'reject'});await f.grant(false);await f.grant(true)
++  assert.deepEqual((await f.host.readTagExecution(scope)).current?.tags,['已确认']);assert.equal((await f.host.listAssets())[0].aiCaption,'User caption')
++  const ocr=await f.host.readOcr(scope),saved=await f.host.commitOcr({...scope,sessionToken:ocr.sessionToken,expectedRevision:ocr.revision,allowUpgrade:false,evidence:{id:'ocr-v13',assetId:id,assetRevision:asset.revision,sourceRef:asset.thumbnailRef,inputSha256:'e'.repeat(64),createdAt:new Date().toISOString(),observation:{engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:{det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},width:80,height:80,elapsedMs:1,threshold:.5,blocks:[]}}})
++  await f.host.correctOcr({...scope,sessionToken:saved.sessionToken,expectedRevision:saved.revision,evidenceId:'ocr-v13',text:'User OCR'})
++  const note=await f.host.readNotebook(scope);await f.host.saveNotebook({...scope,sessionToken:note.sessionToken,sourceRef:note.sourceRef,expectedRevision:note.revision,allowUpgrade:false,book:note.book})
++  const org=await f.host.readOrganization(f.scope);await f.host.writeOrganization({...f.scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'User folder',folderKind:'assets',parentId:null,assetIds:[id]}})
++  const work=await f.host.readWorkSets(f.scope,'device-v13'),set=await f.host.writeWorkSet({...f.scope,sessionToken:work.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'User set',note:'User note',assetIds:[id],colors:[],columns:1}}},'device-v13'),layout={x:12,y:20,width:400,height:500,pinned:true,open:false};await f.host.writeWorkLayout({...f.scope,sessionToken:work.sessionToken,id:set.sets[0].id,layout},'device-v13')
++  await f.host.downloadJournal({kind:'create',generation:f.scope.generation,taskId:'download-v13',url:'https://fixture.invalid/not-requested.png',fileName:'generated.png'})
++  for(const recipe of ['visual-ai-v1','independent-tags-v1']){
++   await f.host.saveTagIntent({...scope,sessionToken:c.sessionToken,expectedSchemaVersion:13,allowUpgrade:false,requestId:recipe,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef,backendId:'synthetic',model:'synthetic-model',backendBindingSha256:'a'.repeat(64),recipeId:recipe,recipeVersion:'1'})
++   const claim=await f.host.claimTagExecution({...scope,sessionToken:c.sessionToken,requestId:recipe,inputSha256:'b'.repeat(64),origin:recipe==='visual-ai-v1'?'combined':'tags-only'}),ref={...scope,sessionToken:c.sessionToken,requestId:recipe,attemptToken:claim.attemptToken};await f.host.markTagExecutionSent(ref);await f.host.commitTagExecution({...ref,tags:['新的标签'],...(recipe==='visual-ai-v1'?{combinedEvidence:{...e,id:'v13-combined',output:{...e.output,tags:['新的标签']}}}:{})})
++  }
++  await f.host.close();await f.host.reopen();assert.equal((await f.host.readOcr(scope)).editedText,'User OCR');assert.equal((await f.host.readNotebook(scope)).revision,1);assert.equal((await f.host.readOrganization(f.scope)).folders[0].name,'User folder');assert.deepEqual((await f.host.readWorkSets(f.scope,'device-v13')).sets[0].layout,layout);assert.equal((await f.host.downloadJournal({kind:'list',generation:f.scope.generation})).intents!.length,1);assert.equal((await f.host.listAssets())[0].aiCaption,'User caption');assert.deepEqual((await f.host.listAssets())[0].tags,['已确认']);assert.deepEqual((await f.host.readTagExecution(scope)).current?.tags,['新的标签'])
++ }finally{await f.close()}
++})
++for(const phase of ['preflight','confirmation'])await test('bounded background drain covers hanging '+phase+' and never revives permission',async()=>{
++ const f=await chain(),release=gate();let work:Promise<unknown>|undefined
++ try{if(phase==='preflight'){await f.authorize();f.currentGate=release.promise;work=f.background.tick()}else{const p=await f.background.prepare(f.scope);f.currentGate=release.promise;work=f.background.confirm(p.receipt).catch(e=>e)}await new Promise(r=>setImmediate(r));await assert.rejects(f.background.suspendAndDrain(),/BACKGROUND_OCR_DRAIN_BLOCKED/);release.resolve();await work;assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false);assert.equal(f.calls,0)}finally{release.resolve();await work;await f.close()}
++})
++
++import {registerBackgroundOcrIpc} from '../src/main/ipc/background-ocr.ipc'
++await test('formal IPC rejects non-Main and renderer-supplied execution options before reaching controller',async()=>{
++ const handlers=new Map<string,Function>();let calls=0
++ registerBackgroundOcrIpc({controller:{read:async()=>{calls++}} as any,isMain:e=>(e as any).main===true,handle:(name,handler)=>{handlers.set(name,handler)}})
++ assert.equal((await handlers.get('background-ocr:read')!({main:false},{libraryIdentity:'a',generation:'b'})).ok,false)
++ assert.equal((await handlers.get('background-ocr:read')!({main:true},{libraryIdentity:'a',generation:'b',verified:true})).ok,false)
++ assert.equal((await handlers.get('background-ocr:confirm')!({main:false},'receipt')).ok,false);assert.equal(calls,0)
++ assert.equal((await handlers.get('background-ocr:read')!({main:true},{libraryIdentity:'a',generation:'b'})).ok,true);assert.equal(calls,1)
++})
++await test('candidate and recent projection use dedicated indexes without full count aggregation',async()=>{
++ const f=await fixture(),prepare=Database.prototype.prepare;let sql=''
++ try{await f.plans();await f.add();await f.grant();Database.prototype.prepare=function(q:string):any{if(q.startsWith('SELECT i.id '))sql=q;return prepare.call(this,q)};await f.claim();Database.prototype.prepare=prepare;assert.ok(sql.includes('LIMIT 1'));assert.ok(!sql.includes('COUNT('));const db=new Database(f.dbFile,{readonly:true});try{const plans=db.prepare('EXPLAIN QUERY PLAN '+sql).all(1,(await f.host.readBackgroundOcr(f.scope)).sessionToken,1) as Array<{detail:string}>;assert.ok(plans.some(p=>p.detail.includes('background_ocr_candidates')));assert.ok(!plans.some(p=>p.detail.includes('TEMP B-TREE')));const recent=db.prepare('EXPLAIN QUERY PLAN SELECT * FROM background_ocr_attempts ORDER BY updated_at DESC,intent_id LIMIT 20').all() as Array<{detail:string}>;assert.ok(recent.some(p=>p.detail.includes('background_ocr_attempts_recent')))}finally{db.close()}}finally{Database.prototype.prepare=prepare;await f.close()}
++})
++await test('resource change during asynchronous preparation defers before sent and resumes safely later',async()=>{
++ const f=await chain(),entered=gate(),release=gate(),read=f.ocrHost.readPreview
++ try{await f.authorize();f.ocrHost.readPreview=async id=>{entered.resolve();await release.promise;return read(id)};const work=f.background.tick();await entered.promise;f.lowPower=true;release.resolve();await work;assert.equal(f.calls,0);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts[0].state,'deferred');assert.equal(f.admission.inspect().materialBytes,0);f.ocrHost.readPreview=read;f.lowPower=false;await f.background.tick();assert.equal(f.calls,1);assert.equal((await f.host.readBackgroundOcr(f.scope)).attempts[0].state,'succeeded')}finally{release.resolve();f.ocrHost.readPreview=read;await f.close()}
++})
++await test('Runtime identity change observed after preparation revokes instead of deferring old consent',async()=>{
++ const f=await chain(),entered=gate(),release=gate(),read=f.ocrHost.readPreview
++ try{await f.authorize();f.ocrHost.readPreview=async id=>{entered.resolve();await release.promise;return read(id)};const work=f.background.tick();await entered.promise;f.fingerprint='changed';release.resolve();await work;assert.equal(f.calls,0);assert.equal((await f.host.readBackgroundOcr(f.scope)).authorized,false);f.ocrHost.readPreview=read;f.fingerprint='synthetic-runtime';await f.background.tick();assert.equal(f.calls,0);await f.authorize();await f.background.tick();assert.equal(f.calls,1)}finally{release.resolve();f.ocrHost.readPreview=read;await f.close()}
++})
++await test('v13 settings restoration failure quarantines Host and never grants execution',async()=>{
++ const f=await fixture(),original=Database.prototype.pragma;let once=true
++ try{await f.plans();Database.prototype.pragma=function(sql:string,options?:any):any{if(once&&sql.startsWith('cache_spill = ')&&!sql.endsWith('OFF')){once=false;throw Error('synthetic restoration error')}return original.call(this,sql,options)};await assert.rejects(f.grant());assert.equal(f.host.inspect().state,'recovery-required');await assert.rejects(f.claim());const db=new Database(f.dbFile,{readonly:true});try{assert.equal(db.pragma('user_version',{simple:true}),13)}finally{db.close()}}finally{Database.prototype.pragma=original;await f.close()}
++})
+--- /dev/null
++++ b/scripts/fixtures/background-ocr-crash.worker.ts
+@@ -0,0 +1,16 @@
++import path from 'node:path'
++import {createActiveLibraryHost} from '../../src/main/library-lifecycle'
++import {createProductionActiveLibraryHostDependencies} from '../../src/main/library-lifecycle/production-active-library-dependencies'
++const [root,cut]=process.argv.slice(2)
++if(!path.basename(root).startsWith('dam-bg-ocr-')||!['before-claim','after-claim','after-sent','after-commit'].includes(cut))throw Error('Invalid fixture')
++const host=createActiveLibraryHost(createProductionActiveLibraryHostDependencies({selectLibraryDirectory:async()=>({kind:'selected',directory:path.join(root,'library')})}))
++await host.open();const s=host.inspect(),scope={libraryIdentity:s.identity!,generation:s.generation!},view=await host.readBackgroundOcr(scope)
++await host.configureBackgroundOcr({...scope,sessionToken:view.sessionToken,expectedRevision:view.permissionRevision,expectedSchemaVersion:13,allowUpgrade:false,enabled:true,runtimeFingerprint:'synthetic-runtime'})
++const marker=()=>{process.stdout.write(JSON.stringify({cut,ready:true})+'\n');setInterval(()=>{},1000)}
++if(cut==='before-claim')marker()
++else{
++ const claim=(await host.claimBackgroundOcr({...scope,sessionToken:view.sessionToken,runtimeFingerprint:'synthetic-runtime'}))!
++ if(cut==='after-claim')marker()
++ else{await host.markBackgroundOcrSent(claim);if(cut==='after-sent')marker()
++ else{const asset=(await host.listAssets()).find(a=>a.id===claim.assetId)!,ocr=await host.readOcr({...scope,assetId:asset.id});await host.commitBackgroundOcr({claim,ocr:{...scope,assetId:asset.id,sessionToken:ocr.sessionToken,expectedRevision:ocr.revision,allowUpgrade:false,evidence:{id:'ocr:'+claim.attemptId,assetId:asset.id,assetRevision:asset.revision,sourceRef:asset.thumbnailRef,inputSha256:'d'.repeat(64),createdAt:new Date().toISOString(),observation:{engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:{det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},width:80,height:80,elapsedMs:1,threshold:.5,blocks:[]}}}});marker()}}
++}
+--- /dev/null
++++ b/scripts/fixtures/background-ocr-v12/library-open-control-store.internal.ts.txt
+@@ -0,0 +1,184 @@
++import {BACKGROUND_ANALYSIS_SQL} from '../background-analysis/background-analysis.schema'
++import {TAG_DECISION_SQL} from '../independent-tags/tag-decision.schema'
++import {TAG_EXECUTION_SQL} from '../independent-tags/tag-execution.schema'
++import { TAG_INTENT_SQL } from '../independent-tags/tag-intent.schema'
++import { CURRENT_MANAGED_SCHEMA_VERSION, isKnownLibrarySchemaVersion } from './library-schema-version'
++import {OCR_SQL} from '../ocr/ocr.schema'
++import {WORK_SET_SQL} from './work-set.schema'
++import {ORGANIZATION_SQL} from './library-organization.schema'
++import {NOTEBOOK_SQL} from './asset-notebook.schema'
++import { INTAKE_RECOVERY_SQL } from './intake-recovery.schema'
++import { DOWNLOAD_JOURNAL_SQL } from '../managed-download/download-journal.schema'
++import { VISUAL_AI_TABLE_SQL, VISUAL_AI_INDEX_SQL } from '../visual-ai/visual-ai.schema'
++import type Database from 'better-sqlite3'
++
++import type { LibraryManifestDeclaration } from './library-manifest.tracer'
++
++const CONTROL_APPLICATION_ID = 0x44414d49
++const OPAQUE_IDENTITY = /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/u
++const IDENTITY_SQL = `CREATE TABLE library_control_identity (
++  singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
++  lineage_identity TEXT NOT NULL,
++  library_identity TEXT NOT NULL,
++  control_store_identity TEXT NOT NULL,
++  library_generation TEXT NOT NULL,
++  managed_originals_relative_path TEXT NOT NULL
++) WITHOUT ROWID`
++const JOURNAL_SQL = `CREATE TABLE library_operation_journal (
++  operation_identity TEXT PRIMARY KEY,
++  state TEXT NOT NULL CHECK (state IN ('settled', 'pending', 'ambiguous'))
++) WITHOUT ROWID`
++
++export type LibraryControlStoreInspection =
++  | Readonly<{ kind: 'compatible'; generation: string }>
++  | Readonly<{ kind: 'unsupported' | 'recovery-required' }>
++
++/** Main-only creation primitive; never upgrades or infers an existing store. */
++export function initializeLibraryControlStore(
++  database: Database.Database,
++  input: Readonly<{
++    lineageIdentity: string
++    libraryIdentity: string
++    controlStoreIdentity: string
++    generation: string
++    managedOriginalsRelativePath: string
++  }>
++): void {
++  database.pragma('journal_mode = DELETE')
++  database.pragma('synchronous = FULL')
++  database.pragma('application_id = 0x44414d49')
++  database.pragma('user_version = 1')
++  database.exec(`${IDENTITY_SQL};${JOURNAL_SQL}`)
++  database.prepare(`
++    INSERT INTO library_control_identity (
++      singleton, lineage_identity, library_identity, control_store_identity,
++      library_generation, managed_originals_relative_path
++    ) VALUES (1, ?, ?, ?, ?, ?)
++  `).run(
++    input.lineageIdentity,
++    input.libraryIdentity,
++    input.controlStoreIdentity,
++    input.generation,
++    input.managedOriginalsRelativePath
++  )
++}
++
++/** Empty-library fixture format only; never initializes or migrates a schema. */
++export function inspectLibraryControlStore(
++  database: Database.Database,
++  declaration: LibraryManifestDeclaration
++): LibraryControlStoreInspection {
++  try {
++    if (!database.readonly || !database.inTransaction ||
++      database.pragma('query_only', { simple: true }) !== 1 ||
++      database.pragma('application_id', { simple: true }) !== CONTROL_APPLICATION_ID) {
++      return { kind: 'recovery-required' }
++    }
++    const version = database.pragma('user_version', { simple: true })
++    if (typeof version === 'number' && Number.isSafeInteger(version) && version > CURRENT_MANAGED_SCHEMA_VERSION) {
++      return { kind: 'unsupported' }
++    }
++    if (!isKnownLibrarySchemaVersion(version) || database.pragma('journal_mode', { simple: true }) !== 'delete' ||
++      database.pragma('quick_check(1)', { simple: true }) !== 'ok') {
++      return { kind: 'recovery-required' }
++    }
++    const schema = database.prepare(`
++      SELECT type, name, sql FROM sqlite_schema
++      WHERE name NOT LIKE 'sqlite_%' ORDER BY name
++    `).all() as Array<{ type?: unknown; name?: unknown; sql?: unknown }>
++    const expected = [
++      ['library_control_identity', IDENTITY_SQL],
++      ['library_operation_journal', JOURNAL_SQL]
++    ] as const
++    const controlSchema = schema.filter((row) =>
++      row.name === 'library_control_identity' || row.name === 'library_operation_journal')
++    const allowedDataTables = new Set([
++      'assets', 'tags', 'asset_tags', 'tag_aliases', 'tag_relations',
++      'tag_groups', 'tag_group_items', 'tag_suggestions', 'capture_requests',
++      'asset_candidates', 'promotion_links', 'asset_lifecycle', 'asset_trash_plans'
++    ])
++    if (isKnownLibrarySchemaVersion(version,2)) {
++      for (const [name, type, sql] of [['visual_ai_evidence', 'table', VISUAL_AI_TABLE_SQL], ['visual_ai_evidence_asset', 'index', VISUAL_AI_INDEX_SQL]]) {
++        const row = schema.find(item => item.name === name)
++        if (!row || row.type !== type || typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(sql)) return { kind: 'recovery-required' }
++        allowedDataTables.add(name)
++      }
++    }
++    if (isKnownLibrarySchemaVersion(version,3)) {
++      // Exact statements, including immutable identity enforcement; full schema is checked on binding.
++      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (isKnownLibrarySchemaVersion(version,11) ? '\n'+TAG_DECISION_SQL : '') + (version===12?'\n'+BACKGROUND_ANALYSIS_SQL:'')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
++      for (const sql of statements) {
++        const [, kind, name] = /^CREATE (TABLE|(?:UNIQUE )?INDEX|TRIGGER) (\w+)/.exec(sql)!
++        const row = schema.find(item => item.name === name)
++        if (!row || row.type !== kind.replace('UNIQUE ','').toLowerCase() || typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(sql.replace(/;$/, ''))) return { kind: 'recovery-required' }
++        allowedDataTables.add(name)
++      }
++    }
++    if (controlSchema.length !== expected.length || schema.some((row) =>
++      typeof row.name !== 'string' ||
++      (!allowedDataTables.has(row.name) && row.name !== 'library_control_identity' &&
++        row.name !== 'library_operation_journal')) ||
++      controlSchema.some((row, index) =>
++        row.type !== 'table' || row.name !== expected[index][0] ||
++        typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(expected[index][1]))) {
++      return { kind: 'recovery-required' }
++    }
++    const identities = database.prepare(`
++      SELECT singleton, lineage_identity, library_identity, control_store_identity,
++        library_generation, managed_originals_relative_path
++      FROM library_control_identity LIMIT 2
++    `).all() as Array<Record<string, unknown>>
++    const identity = identities[0]
++    if (identities.length !== 1 || identity.singleton !== 1 ||
++      identity.lineage_identity !== declaration.lineageIdentity ||
++      identity.library_identity !== declaration.libraryIdentity ||
++      identity.control_store_identity !== declaration.controlStoreIdentity ||
++      identity.managed_originals_relative_path !== declaration.managedOriginalsRelativePath ||
++      typeof identity.library_generation !== 'string' ||
++      !OPAQUE_IDENTITY.test(identity.library_generation)) return { kind: 'recovery-required' }
++
++    const journal = database.prepare(`
++      SELECT operation_identity, state FROM library_operation_journal LIMIT 129
++    `).all() as Array<{ operation_identity?: unknown; state?: unknown }>
++    if (journal.length > 128 || journal.some((row) =>
++      typeof row.operation_identity !== 'string' || !OPAQUE_IDENTITY.test(row.operation_identity) ||
++      row.state !== 'settled')) return { kind: 'recovery-required' }
++    return { kind: 'compatible', generation: identity.library_generation }
++  } catch {
++    return { kind: 'recovery-required' }
++  }
++}
++
++function normalizeSql(value: string): string {
++  // Preserve SQL string-literal semantics; a differently cased journal state
++  // constraint is not the same schema even when its table is currently empty.
++  return value.replace(/\s+/gu, ' ').trim()
++}
++
++/** Recognize only the legacy schema surface; never read Asset/Original rows. */
++export function hasLegacyLibrarySchema(database: Database.Database): boolean {
++  if (!database.readonly || !database.inTransaction ||
++    database.pragma('query_only', { simple: true }) !== 1 ||
++    database.pragma('application_id', { simple: true }) !== 0 ||
++    database.pragma('journal_mode', { simple: true }) !== 'delete') return false
++  const tables = database.prepare(`
++    SELECT type, name, sql FROM sqlite_schema
++    WHERE name IN ('assets', 'tags', 'asset_tags', 'library_control_identity')
++    ORDER BY name LIMIT 4
++  `).all() as Array<{ type?: unknown; name?: unknown; sql?: unknown }>
++  if (tables.length !== 3 || tables.some((table) => table.type !== 'table' ||
++    typeof table.sql !== 'string' || /\bVIRTUAL\b/iu.test(table.sql)) ||
++    tables.map((table) => table.name).join(',') !== 'asset_tags,assets,tags') return false
++  for (const [table, required] of [
++    ['assets', ['id', 'title', 'file_name', 'file_path', 'thumbnail_path', 'source_site_id']],
++    ['tags', ['id', 'name']],
++    ['asset_tags', ['id', 'asset_id', 'tag_id']]
++  ] as const) {
++    const columns = database.prepare(`SELECT name FROM pragma_table_info(?) LIMIT 65`)
++      .all(table) as Array<{ name?: unknown }>
++    if (columns.length > 64 || !required.every((name) => columns.some((column) => column.name === name))) {
++      return false
++    }
++  }
++  return true
++}
+--- /dev/null
++++ b/scripts/fixtures/background-ocr-v12/library-schema-version.ts.txt
+@@ -0,0 +1,5 @@
++/** Known Managed profiles only. Feature presence never grants write authority. */
++export const CURRENT_MANAGED_SCHEMA_VERSION = 12
++export function isKnownLibrarySchemaVersion(version: unknown, minimum = 1): version is number {
++  return typeof version === 'number' && Number.isInteger(version) && version >= minimum && version <= CURRENT_MANAGED_SCHEMA_VERSION
++}
+--- /dev/null
++++ b/scripts/fixtures/background-ocr-v12/manifest.json
+@@ -0,0 +1,4 @@
++{
++  "library-open-control-store.internal.ts": "0558bf8e477a14097c69bda5aab93e0b2919d1a5ebd9b7e01d2efdfff5f8cf43",
++  "library-schema-version.ts": "f2aac9b1ddb1ec5064a9213f0c439f7ef069a7f87a7f26baae61ec1b2a06d368"
++}
+\ No newline at end of file
+--- a/src/main/background-analysis/README.md
++++ b/src/main/background-analysis/README.md
+@@ -17,3 +17,11 @@
+ Tests: background-analysis.integration.test.ts (real generated Host/SQLite and explicit controller fixtures), background-resource-policy.test.ts (pure policy), background-analysis-ui.test.mjs (production React component with delayed bridge), background-analysis-electron.e2e.test.mjs (compiled formal Main/Preload/Renderer, owned generated library). No real model, user library, runtime cache, Windows or installed-package qualification. Run evidence: .ai-run/background-foundation-20260928.
+ 
+ The v12 enabled flag authorizes collection of plans only. It is not an automatic-inference or external-upload grant; a later execution integration must introduce its own clearly reviewed authorization and qualification rather than silently reinterpret this preference.
++
++## Separate OCR execution seam
++
++B01 `enabled` still collects only future plans and `dispatchAvailable:false` remains the general
++executor projection. The separately reviewed `../background-ocr/` module adds session-specific
++OCR consent, v13 execution effects and a qualified single-capability path. Production resource
++qualification is absent, so the new control displays waiting rather than silently executing.
++It neither backfills B01 intents nor reinterprets the existing plan switch as model permission.
+--- a/src/main/background-analysis/background-analysis-controller.ts
++++ b/src/main/background-analysis/background-analysis-controller.ts
+@@ -19,7 +19,7 @@
+    for(const[id,p]of plans)if(p.owner===owner||p.expires<now())plans.delete(id)
+    if(plans.size>=4)throw Error('BACKGROUND_BUSY')
+    const receipt=randomUUID();plans.set(receipt,{owner,expires:now()+300000,input:{...structuredClone(input),sessionToken:s.sessionToken,expectedSchemaVersion:s.schemaVersion,allowUpgrade:true}})
+-   return{receipt,requiresUpgrade:s.schemaVersion<12,notice:(s.schemaVersion<12?'将备份数据库、暂停当前视觉任务并启用 v12；旧版本不能打开。OCR 忙时需先完成该任务。 ':'')+'只为启用后新入库素材保存标签、描述、OCR 计划，不回填历史库、不启动模型或发送素材；当前自动执行适配器尚未接入。'}
++   return{receipt,requiresUpgrade:s.schemaVersion<12,notice:(s.schemaVersion<12?'将备份数据库、暂停当前视觉任务并启用 v12；旧版本不能打开。OCR 忙时需先完成该任务。 ':'')+'只为启用后新入库素材保存标签、描述、OCR 计划，不回填历史库、不启动模型或发送素材；该设置本身不执行模型；后台 OCR 另需本次开库许可与资源资格。'}
+   },
+   async confirm(owner:string,receipt:string){
+    const p=plans.get(receipt);if(!p||p.owner!==owner||p.expires<now()||active.size)throw Error('BACKGROUND_SCOPE_EXPIRED')
+--- a/src/main/background-analysis/background-analysis.schema.ts
++++ b/src/main/background-analysis/background-analysis.schema.ts
+@@ -35,4 +35,4 @@
+  AND policy.singleton=1 AND policy.enabled=1 AND k.enabled=1;
+ END;
+ `
+-export function applyBackgroundAnalysisSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version===12)return;if(version!==11)throw Error('BACKGROUND_SCHEMA_UNSUPPORTED');db.exec(BACKGROUND_ANALYSIS_SQL);db.prepare('INSERT INTO background_analysis_policy VALUES(1,0,0)').run();for(const cap of ['tags','caption','ocr'])db.prepare('INSERT INTO background_analysis_capabilities VALUES(?,1)').run(cap);db.pragma('user_version=12')}
++export function applyBackgroundAnalysisSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version===12||version===13)return;if(version!==11)throw Error('BACKGROUND_SCHEMA_UNSUPPORTED');db.exec(BACKGROUND_ANALYSIS_SQL);db.prepare('INSERT INTO background_analysis_policy VALUES(1,0,0)').run();for(const cap of ['tags','caption','ocr'])db.prepare('INSERT INTO background_analysis_capabilities VALUES(?,1)').run(cap);db.pragma('user_version=12')}
+--- /dev/null
++++ b/src/main/background-ocr/README.md
+@@ -0,0 +1,63 @@
++# Background OCR: single capability, qualified execution only
++
++Main-owned chain: AI Console session review → Main-only IPC → Host permission/claim → shared
++OCR controller/material permit → owned Runtime process → atomic Host OCR + receipt. The
++Python worker never opens the library database. New schema v13 is explicitly confirmed from
++v12 with the existing qualified backup/growth/lease protocol; new libraries still start at v1.
++Enabling B01 first remains a separate action; opening/reading does not migrate or enroll history.
++
++`background_ocr_permission` holds the latest choice/revision/Runtime fingerprint, not a complete
++consent event history. Actual grant is a Host in-memory value bound to the current notebook
++session and a revocation epoch. Close/reopen and observed Runtime changes invalidate it;
++A → B → A cannot restore an old grant. There is no persistent bearer capability in the database.
++
++`background_ocr_attempts` holds one current attempt per immutable B01 intent, plus a permanent
++success receipt. This is not a full attempt event log. Claim uses the held connection and a
++transaction, checks Managed ownership, current source/preview generations, intent decision,
++policy and current session permission. Tokens remain in memory. The original baseline recipe
++continues to identify the intent; the execution independently records rapidocr-preview-v1 and
++Runtime fingerprint, while OCR evidence carries model hashes, input digest and observation.
++
++| Durable state | Meaning / eligible recovery |
++| --- | --- |
++| claimed | No Runtime dispatch; abandoned old-session claim needs fresh permission |
++| sent | Persisted before dispatch; orphaned sent stays blocked, never assumed safely stopped |
++| deferred | Resources changed before sent; same-Runtime fresh admission may retry after backoff |
++| succeeded | OCR + receipt committed atomically; never re-infer for this intent |
++| failed / cancelled | Known returned resources; new consent may retry, or explicit intent resume after cancellation |
++| unknown | Task rejected without confirmed child close; reservation remains, no reclaim |
++
++Late close may finalize a current UNKNOWN claim safely; if authority has expired, the durable
++unknown is retained. Orphan sent/unknown from another application session needs a future
++explicit reconciliation mechanism; this module does not guess whether an orphan process died.
++Exact effect replay validates its digest and returns the saved receipt without overwriting a
++later manual OCR correction. Altered effects reject. Finish is lifecycle-serialized coordination;
++it cannot turn sent/unknown into deferred and cannot downgrade a succeeded receipt.
++
++Runtime identity and qualified envelope are checked before reservation/claim and again after
++asynchronous preparation, before sent. System resource changes defer safely; Runtime changes
++revoke consent. Manual and background use one actual OCR gate and VisualAdmission ledger;
++UNKNOWN transfers the permit to the release token, not the rejected request promise.
++Host-side material accounting includes bounded source copies, decoded pixels, codec, frozen
++preview and response expansion. It is a conservative software reservation, not measured model
++memory. Full background qualification must cover this plus Runtime/model peaks. Production
++`qualify` returns null; the UI clearly waits. Main's test qualifier requires the already isolated
++synthetic-E2E mode plus its explicit test flag; it does not certify any production Runtime.
++
++Scheduler: one active tick; no scheduling without current explicit consent; 5s after successful
++work, 30s for no candidates/wait/failure. Dedicated indexed LIMIT 1 selection does not invoke
++B01 full-count aggregation. Recent records use an updated_at index and LIMIT 20. EXPLAIN
++checks are query-shape evidence, not a large-library latency benchmark; B01 OBS-01 remains.
++
++Shutdown revokes consent before draining OCR and scheduler/confirmation work. Each drain is
++bounded; failure does not assert that Host storage can close. Existing v12 reader refuses v13,
++while v13 compatibility checks cover tags/combined/OCR corrections/notebook/organization/
++worksets/download metadata and reopen. No real user library is used in these tests.
++
++Validation: background-ocr.integration.test.ts (temporary real Host, synthetic Runtime,
++fault-injected resource events and owned Host SIGKILL cutpoints); background-ocr-ui.test.mjs
++(real React with explicit bridge substitutes); background-ocr-electron.e2e.test.mjs (compiled
++Main/Preload/Renderer, generated PNGs, stdlib protocol executable, both production-null and
++synthetic-qualified paths). Real RapidOCR quality, real model qualification, Windows,
++installer/signing and real user library migration remain NOT_RUN. This is not a full Governor,
++caption implementation, tag scheduler, or automatic approval for future model execution.
+--- /dev/null
++++ b/src/main/background-ocr/background-ocr-controller.ts
+@@ -0,0 +1,72 @@
++import {randomUUID} from 'node:crypto'
++import type {ActiveLibraryHost} from '../../shared/contracts/active-library.contract'
++import type {BackgroundOcrScope,BackgroundOcrPermission,BackgroundOcrView,BackgroundOcrClaim} from '../../shared/contracts/background-ocr.contract'
++import type {OcrRuntime,OcrRuntimeHandle} from '../ocr/ocr-runtime'
++import {OCR_HOST_RESERVE_BYTES,type createOcrController} from '../ocr/ocr-controller'
++import {evaluateBackgroundReadiness,type BackgroundTelemetry,type QualifiedBackgroundEnvelope} from '../background-analysis/background-resource-policy'
++export interface BackgroundOcrQualification {runtimeFingerprint:string;evidenceId:string;envelope:QualifiedBackgroundEnvelope}
++export function createBackgroundOcrController(deps:{host:ActiveLibraryHost;ocr:ReturnType<typeof createOcrController>;runtime:OcrRuntime;telemetry():BackgroundTelemetry;qualify(runtime:OcrRuntimeHandle):BackgroundOcrQualification|null;now?:()=>number;drainTimeoutMs?:number;schedule?:(fn:()=>void,ms:number)=>()=>void}){
++ const now=deps.now??(()=>performance.now()),schedule=deps.schedule??((fn,ms)=>{const timer=setTimeout(fn,ms);timer.unref?.();return()=>clearTimeout(timer)})
++ let epoch=0,authorized:BackgroundOcrScope|null=null,active:Promise<void>|null=null,abort:AbortController|null=null,cancelTimer:(()=>void)|null=null,lastReasons:string[]=['permission-required'],confirming=false,confirmDone=Promise.resolve()
++ const reviews=new Map<string,{expires:number;epoch:number;input:BackgroundOcrPermission}>()
++ const revoke=()=>{epoch++;reviews.clear();authorized=null;deps.host.revokeBackgroundOcr();abort?.abort();cancelTimer?.();cancelTimer=null}
++ const readiness=async()=>{
++  const runtime=await deps.runtime.current(),qualification=runtime?deps.qualify(runtime):null
++  const valid=qualification&&qualification.runtimeFingerprint===runtime?.fingerprint&&qualification.evidenceId.length>0&&qualification.envelope.peakRamBytes>=OCR_HOST_RESERVE_BYTES
++  const resource=evaluateBackgroundReadiness(deps.telemetry(),valid?qualification!.envelope:null,now())
++  return{runtime,qualification:valid?qualification:null,reasons:[...(!runtime?['runtime-unavailable']:[]),...resource.reasons],policyAllows:resource.policyAllows&&!!valid}
++ }
++ const read=async(scope:BackgroundOcrScope):Promise<BackgroundOcrView>=>{const snapshot=await deps.host.readBackgroundOcr(scope),r=await readiness();const availability=deps.ocr.backgroundAvailability();return{...snapshot,running:!!active,reasons:[...(!snapshot.authorized?['permission-required']:[]),...(snapshot.authorized&&snapshot.runtimeFingerprint!==r.runtime?.fingerprint?['runtime-changed']:[]),...r.reasons,...(availability.unconfirmed?['process-exit-unconfirmed']:availability.busy?['ocr-busy']:[]),...lastReasons.filter(v=>v==='operation-failed'||v==='runtime-changed'||v==='resources-changed')]}}
++ const enqueue=(ms:number)=>{cancelTimer?.();if(authorized)cancelTimer=schedule(()=>{cancelTimer=null;void tick()},ms)}
++ const tick=():Promise<void>=>{
++  if(active)return active
++  if(!authorized)return Promise.resolve()
++  const scope={...authorized},version=epoch,controller=new AbortController();abort=controller
++  active=Promise.resolve().then(async()=>{
++   const snapshot=await deps.host.readBackgroundOcr(scope);if(version!==epoch||!snapshot.authorized){lastReasons=['permission-required'];authorized=null;return}
++   const r=await readiness();if(version!==epoch)return;if(r.runtime?.fingerprint!==snapshot.runtimeFingerprint){revoke();lastReasons=['runtime-changed'];return}if(!r.policyAllows||!r.runtime||!r.qualification){lastReasons=r.reasons;return}
++   const availability=deps.ocr.backgroundAvailability();if(availability.busy){lastReasons=[availability.unconfirmed?'process-exit-unconfirmed':'ocr-busy'];return}
++   controller.signal.throwIfAborted();if(version!==epoch)return
++   lastReasons=[]
++   const session={...scope,sessionToken:snapshot.sessionToken,runtimeFingerprint:r.runtime.fingerprint}
++   const result=await deps.ocr.runBackground({scope,runtimeFingerprint:r.runtime.fingerprint,reserveBytes:r.qualification.envelope.peakRamBytes,signal:controller.signal,
++    claim:async()=>{controller.signal.throwIfAborted();if(version!==epoch)throw Error('BACKGROUND_OCR_SCOPE_EXPIRED');const fresh=await readiness();if(fresh.runtime?.fingerprint!==session.runtimeFingerprint){revoke();throw Error('OCR_MODEL_CHANGED')}if(!fresh.policyAllows)throw Error('BACKGROUND_OCR_RESOURCES_CHANGED');return deps.host.claimBackgroundOcr(session)},
++    sent:async claim=>{controller.signal.throwIfAborted();const fresh=await readiness();if(fresh.runtime?.fingerprint!==session.runtimeFingerprint){revoke();throw Error('OCR_MODEL_CHANGED')}if(!fresh.policyAllows||!fresh.qualification||fresh.qualification.envelope.peakRamBytes>r.qualification!.envelope.peakRamBytes)throw Error('BACKGROUND_OCR_RESOURCES_CHANGED');controller.signal.throwIfAborted();await deps.host.markBackgroundOcrSent(claim)},
++    commit:(claim,ocr,signal)=>deps.host.commitBackgroundOcr({claim,ocr},signal),
++    finish:(claim,state)=>deps.host.finishBackgroundOcr(claim,state)
++   });if(!result)lastReasons=['no-eligible-intent']
++  }).catch(error=>{lastReasons=[error instanceof Error&&error.message==='BACKGROUND_OCR_RESOURCES_CHANGED'?'resources-changed':'operation-failed']}).finally(()=>{active=null;if(abort===controller)abort=null;if(version===epoch&&authorized)enqueue(lastReasons.length?30000:5000)})
++  return active
++ }
++ return{
++  read,tick,
++  async prepare(scope:BackgroundOcrScope){
++   if(confirming)throw Error('BACKGROUND_OCR_BUSY')
++   const version=epoch,s=await deps.host.readBackgroundOcr(scope),runtime=await deps.runtime.current()
++   if(version!==epoch)throw Error('BACKGROUND_OCR_SCOPE_EXPIRED')
++   if(s.schemaVersion<12)throw Error('BACKGROUND_OCR_ENABLE_PLANS_FIRST')
++   if(!runtime)throw Error('OCR_RUNTIME_UNAVAILABLE')
++   reviews.clear();const receipt=randomUUID();reviews.set(receipt,{expires:now()+300000,epoch:version,input:{...scope,sessionToken:s.sessionToken,expectedRevision:s.permissionRevision,expectedSchemaVersion:s.schemaVersion,allowUpgrade:true,enabled:true,runtimeFingerprint:runtime.fingerprint}})
++   return{receipt,notice:(s.schemaVersion<13?'将备份并升级本资料库的 OCR 执行记录；旧版应用不能打开。 ':'')+'允许本次开库期间，在资源资格满足时执行新素材 OCR 计划；与手动 OCR 共用运行资源，不上传素材。旧库不补扫，关库撤销许可。安全终止的失败任务可在本次重新授权后重试；已发送且退出未知的任务保持阻塞。当前未取得生产资源资格时仍等待。'}
++  },
++  discard(receipt:string){reviews.delete(receipt)},
++  async confirm(receipt:string){
++   const p=reviews.get(receipt);if(!p||p.epoch!==epoch||p.expires<now()||confirming||active)throw Error('BACKGROUND_OCR_REVIEW_EXPIRED')
++   reviews.delete(receipt);confirming=true;let endConfirm!:()=>void;confirmDone=new Promise<void>(r=>{endConfirm=r});let release:(()=>void)|undefined
++   const version=epoch,signal=new AbortController();abort=signal
++   try{
++    release=deps.ocr.holdForMaintenance()
++    const runtime=await deps.runtime.current();if(runtime?.fingerprint!==p.input.runtimeFingerprint||version!==epoch)throw Error('OCR_MODEL_CHANGED')
++    await deps.host.configureBackgroundOcr(p.input,signal.signal);if(version!==epoch)throw Error('BACKGROUND_OCR_SCOPE_EXPIRED')
++    authorized={libraryIdentity:p.input.libraryIdentity,generation:p.input.generation};lastReasons=[]
++    return await read(authorized)
++   }finally{release?.();confirming=false;if(abort===signal)abort=null;endConfirm();if(authorized&&version===epoch)enqueue(0)}
++  },
++  async revoke(scope:BackgroundOcrScope){revoke();const snapshot=await deps.host.readBackgroundOcr(scope);if(snapshot.schemaVersion===13)await deps.host.configureBackgroundOcr({...scope,sessionToken:snapshot.sessionToken,expectedRevision:snapshot.permissionRevision,expectedSchemaVersion:13,allowUpgrade:false,enabled:false,runtimeFingerprint:snapshot.runtimeFingerprint});lastReasons=['permission-required'];return read(scope)},
++  /** Called before policy/intent mutation; cancel only this controller's active work. */
++  changed(){abort?.abort();if(authorized)enqueue(0)},
++  invalidate:revoke,
++  async suspendAndDrain(){revoke();let timer:ReturnType<typeof setTimeout>|undefined;try{await Promise.race([(async()=>{await deps.ocr.suspendAndDrain();await active;await confirmDone})(),new Promise<never>((_,reject)=>{timer=setTimeout(()=>reject(Error('BACKGROUND_OCR_DRAIN_BLOCKED')),deps.drainTimeoutMs??5000)})])}finally{clearTimeout(timer)}},
++ }
++}
++export function backgroundOcrMessage(error:unknown){const code=error instanceof Error?error.message:'';if(code==='BACKGROUND_OCR_ENABLE_PLANS_FIRST')return '请先启用新素材计划，再单独授权后台 OCR。';if(code==='OCR_RUNTIME_UNAVAILABLE')return '请先选择已安装的本地 OCR 环境。';if(code==='OCR_BUSY'||code==='BACKGROUND_OCR_BUSY')return 'OCR 正在准备、运行或等待资源，请稍后重试。';return '后台 OCR 操作未完成；旧结果保留，请重新读取并核对授权与资源状态。'}
+--- /dev/null
++++ b/src/main/background-ocr/background-ocr-storage.ts
+@@ -0,0 +1,64 @@
++import {randomUUID,createHash} from 'node:crypto'
++import {tagIntentFail,type TagIntentBinding} from '../independent-tags/tag-intent-storage'
++import {commitOcr,requireOcrScope} from '../ocr/ocr-storage'
++import {validateOcrObservation} from '../../shared/contracts/asset-ocr.contract'
++import type {BackgroundOcrScope,BackgroundOcrSession,BackgroundOcrSnapshot,BackgroundOcrPermission,BackgroundOcrClaim,BackgroundOcrCommit,BackgroundOcrReceipt} from '../../shared/contracts/background-ocr.contract'
++interface Grant {session:string;revision:number;runtime:string}
++interface Held {session:string;intentId:string;attemptId:string;generation:number;intentRevision:number;permissionRevision:number;source:string;preview:string;runtime:string}
++export interface BackgroundOcrAuthority {grant?:Grant;claims:Map<string,Held>}
++type Binding=TagIntentBinding&{ocrAuthority:BackgroundOcrAuthority}
++const fail=(code='BACKGROUND_OCR_SCOPE_EXPIRED'):never=>tagIntentFail(code)
++const safe=(n:number)=>Number.isSafeInteger(n)&&n>=0&&n<Number.MAX_SAFE_INTEGER
++function scope(a:Binding,s:BackgroundOcrScope){if(!s||s.libraryIdentity!==a.identity||s.generation!==a.generation)fail();const v=Number(a.database.pragma('user_version',{simple:true}));if(v<1||v>13)fail();return v}
++function session(a:Binding,s:BackgroundOcrSession){scope(a,s);if(s.sessionToken!==a.notebookSession)fail()}
++function policy(a:Binding){return a.database.prepare('SELECT revision,choice,runtime_fingerprint AS runtime FROM background_ocr_permission WHERE singleton=1').get() as {revision:number;choice:number;runtime:string}}
++export function readBackgroundOcr(a:Binding,s:BackgroundOcrScope):BackgroundOcrSnapshot{
++ const version=scope(a,s),p=version===13?policy(a):{revision:0,choice:0,runtime:''},g=a.ocrAuthority.grant
++ return{schemaVersion:version,sessionToken:a.notebookSession,permissionRevision:p.revision,authorized:!!g&&g.session===a.notebookSession&&g.revision===p.revision&&g.runtime===p.runtime&&p.choice===1,runtimeFingerprint:p.runtime,attempts:version===13?a.database.prepare(`SELECT x.intent_id AS intentId,i.asset_id AS assetId,x.state,x.attempt_generation AS attemptGeneration,CASE WHEN x.owner_session!=? AND x.state IN ('claimed','sent','unknown') THEN 1 ELSE 0 END AS interrupted FROM background_ocr_attempts x JOIN background_analysis_intents i ON i.id=x.intent_id ORDER BY x.updated_at DESC,x.intent_id LIMIT 20`).all(a.notebookSession).map((r:any)=>({...r,interrupted:!!r.interrupted})) as BackgroundOcrSnapshot['attempts']:[]}
++}
++export function validateBackgroundOcrPermission(a:Binding,s:BackgroundOcrPermission,signal?:AbortSignal){
++ session(a,s);const view=readBackgroundOcr(a,s)
++ if(signal?.aborted||!safe(s.expectedRevision)||s.expectedRevision!==view.permissionRevision||s.expectedSchemaVersion!==view.schemaVersion||typeof s.enabled!=='boolean'||typeof s.allowUpgrade!=='boolean'||typeof s.runtimeFingerprint!=='string'||s.runtimeFingerprint.length>256||s.enabled&&!s.runtimeFingerprint)fail('BACKGROUND_OCR_REVIEW_EXPIRED')
++ if(view.schemaVersion!==12&&view.schemaVersion!==13)fail('BACKGROUND_OCR_ENABLE_PLANS_FIRST')
++ return view
++}
++export function writeBackgroundOcrPermission(a:Binding,s:BackgroundOcrPermission){
++ a.database.prepare('UPDATE background_ocr_permission SET revision=revision+1,choice=?,runtime_fingerprint=?,updated_at=? WHERE singleton=1 AND revision=?').run(s.enabled?1:0,s.runtimeFingerprint,new Date().toISOString(),s.expectedRevision)
++}
++const joins=`FROM background_analysis_intents i JOIN asset_lifecycle l ON l.design_asset_identity=i.asset_id JOIN promotion_links p ON p.design_asset_identity=i.asset_id JOIN asset_candidates c ON c.candidate_identity=p.candidate_identity JOIN capture_requests r ON r.capture_request_identity=c.capture_request_identity CROSS JOIN background_analysis_policy b JOIN background_analysis_capabilities k ON k.capability=i.capability`
++const eligible=`i.capability='ocr' AND i.decision='active' AND l.ownership='managed' AND l.lifecycle_state='active' AND i.source_generation=r.source_generation AND i.preview_generation=c.preview_generation_identity AND b.singleton=1 AND b.enabled=1 AND k.enabled=1`
++function intent(a:Binding,id:string){return a.database.prepare(`SELECT i.id,i.asset_id AS assetId,i.revision,i.source_generation AS source,i.preview_generation AS preview ${joins} WHERE ${eligible} AND i.id=?`).get(id) as {id:string;assetId:string;revision:number;source:string;preview:string}|undefined}
++function grant(a:Binding,s:BackgroundOcrSession,runtime:string){session(a,s);const g=a.ocrAuthority.grant;if(!g)return fail('BACKGROUND_OCR_PERMISSION_REQUIRED');if(g.session!==a.notebookSession||g.runtime!==runtime||Number(a.database.pragma('user_version',{simple:true}))!==13)fail('BACKGROUND_OCR_PERMISSION_REQUIRED');const p=policy(a);if(!p.choice||p.revision!==g.revision)fail();return g}
++export function claimBackgroundOcr(a:Binding,s:BackgroundOcrSession&{runtimeFingerprint:string}):BackgroundOcrClaim|null{
++ const g=grant(a,s,s.runtimeFingerprint)
++ if([...a.ocrAuthority.claims.values()].some(c=>c.session===a.notebookSession))return null
++ const row=a.database.prepare(`SELECT i.id ${joins} LEFT JOIN background_ocr_attempts x ON x.intent_id=i.id WHERE ${eligible} AND (x.intent_id IS NULL OR x.state='deferred' OR (x.state IN ('failed','cancelled') AND (x.permission_revision<? OR (x.state='cancelled' AND x.intent_revision<i.revision))) OR (x.state='claimed' AND x.owner_session!=? AND x.permission_revision<?)) ORDER BY i.created_at,i.id LIMIT 1`).get(g.revision,a.notebookSession,g.revision) as {id:string}|undefined
++ if(!row)return null
++ const i=intent(a,row.id)!;const old=a.database.prepare('SELECT attempt_generation AS generation FROM background_ocr_attempts WHERE intent_id=?').get(i.id) as {generation:number}|undefined
++ const generation=(old?.generation??0)+1;if(!safe(generation))fail();const attemptId=randomUUID(),token=randomUUID(),now=new Date().toISOString()
++ a.database.prepare(`INSERT INTO background_ocr_attempts VALUES(?,?,?,?,?,?,'claimed',?,'rapidocr-preview-v1',NULL,NULL,NULL,?) ON CONFLICT(intent_id) DO UPDATE SET attempt_id=excluded.attempt_id,attempt_generation=excluded.attempt_generation,intent_revision=excluded.intent_revision,permission_revision=excluded.permission_revision,owner_session=excluded.owner_session,state='claimed',runtime_fingerprint=excluded.runtime_fingerprint,effect_digest=NULL,evidence_id=NULL,saved_revision=NULL,updated_at=excluded.updated_at`).run(i.id,attemptId,generation,i.revision,g.revision,a.notebookSession,g.runtime,now)
++ a.ocrAuthority.claims.set(token,{session:a.notebookSession,intentId:i.id,attemptId,generation,intentRevision:i.revision,permissionRevision:g.revision,source:i.source,preview:i.preview,runtime:g.runtime})
++ return{...s,token,attemptId,intentId:i.id,assetId:i.assetId,runtimeFingerprint:g.runtime}
++}
++function held(a:Binding,c:BackgroundOcrClaim){session(a,c);const h=a.ocrAuthority.claims.get(c.token);if(!h||h.session!==a.notebookSession||h.attemptId!==c.attemptId||h.intentId!==c.intentId||h.runtime!==c.runtimeFingerprint)fail();return h!}
++function validateClaim(a:Binding,c:BackgroundOcrClaim){const h=held(a,c),g=grant(a,c,c.runtimeFingerprint),i=intent(a,c.intentId);if(g.revision!==h.permissionRevision||!i||i.assetId!==c.assetId||i.revision!==h.intentRevision||i.source!==h.source||i.preview!==h.preview)fail('BACKGROUND_OCR_INTENT_CHANGED');return h}
++export function markBackgroundOcrSent(a:Binding,c:BackgroundOcrClaim){validateClaim(a,c);const r=a.database.prepare("UPDATE background_ocr_attempts SET state='sent',updated_at=? WHERE intent_id=? AND attempt_id=? AND state='claimed'").run(new Date().toISOString(),c.intentId,c.attemptId);if(r.changes!==1)fail()}
++export function commitBackgroundOcr(a:Binding,input:BackgroundOcrCommit,signal?:AbortSignal):BackgroundOcrReceipt{
++ const {claim:c,ocr}=input;session(a,c);if(signal?.aborted)fail();if(ocr.assetId!==c.assetId||ocr.libraryIdentity!==c.libraryIdentity||ocr.generation!==c.generation||ocr.sessionToken!==c.sessionToken)fail()
++ const row=a.database.prepare('SELECT * FROM background_ocr_attempts WHERE intent_id=? AND attempt_id=?').get(c.intentId,c.attemptId) as any;if(!row)fail()
++ const origin=a.database.prepare('SELECT asset_id,source_generation,preview_generation FROM background_analysis_intents WHERE id=?').get(c.intentId) as any
++ if(!origin||origin.asset_id!==c.assetId||row.runtime_fingerprint!==c.runtimeFingerprint)fail()
++ requireOcrScope(a,ocr)
++ const observation=validateOcrObservation(ocr.evidence.observation)
++ const digest=createHash('sha256').update(JSON.stringify([c.intentId,c.attemptId,row.attempt_generation,origin.asset_id,origin.source_generation,origin.preview_generation,c.runtimeFingerprint,'rapidocr-preview-v1',ocr.evidence.assetRevision,ocr.evidence.sourceRef,ocr.evidence.inputSha256,observation])).digest('hex')
++ if(row.state==='succeeded'){if(row.effect_digest!==digest)fail('BACKGROUND_OCR_EFFECT_CONFLICT');return{attemptId:c.attemptId,intentId:c.intentId,evidenceId:row.evidence_id,savedRevision:row.saved_revision}}
++ validateClaim(a,c);if(row.state!=='sent')fail()
++ const result=commitOcr(a,{...ocr,evidence:{...ocr.evidence,observation}},signal)
++ a.database.prepare("UPDATE background_ocr_attempts SET state='succeeded',effect_digest=?,evidence_id=?,saved_revision=?,updated_at=? WHERE intent_id=? AND attempt_id=?").run(digest,result.evidence!.id,result.revision,new Date().toISOString(),c.intentId,c.attemptId)
++ return{attemptId:c.attemptId,intentId:c.intentId,evidenceId:result.evidence!.id,savedRevision:result.revision}
++}
++export function finishBackgroundOcr(a:Binding,c:BackgroundOcrClaim,state:'failed'|'cancelled'|'unknown'|'deferred'){
++ held(a,c);if(state==='deferred'&&(a.database.prepare('SELECT state FROM background_ocr_attempts WHERE attempt_id=?').get(c.attemptId) as {state:string}|undefined)?.state!=='claimed')fail();a.database.prepare("UPDATE background_ocr_attempts SET state=?,updated_at=? WHERE intent_id=? AND attempt_id=? AND state IN ('claimed','sent','unknown')").run(state,new Date().toISOString(),c.intentId,c.attemptId)
++ if(state!=='unknown')a.ocrAuthority.claims.delete(c.token)
++}
++export function releaseBackgroundOcrClaim(a:Binding,c:BackgroundOcrClaim){a.ocrAuthority.claims.delete(c.token)}
+--- /dev/null
++++ b/src/main/background-ocr/background-ocr.schema.ts
+@@ -0,0 +1,28 @@
++import type Database from 'better-sqlite3'
++export const BACKGROUND_OCR_SQL=`CREATE TABLE background_ocr_permission (
++ singleton INTEGER PRIMARY KEY CHECK(singleton=1),
++ revision INTEGER NOT NULL CHECK(revision>=0),
++ choice INTEGER NOT NULL CHECK(choice IN (0,1)),
++ runtime_fingerprint TEXT NOT NULL,
++ updated_at TEXT NOT NULL
++);
++CREATE TABLE background_ocr_attempts (
++ intent_id TEXT PRIMARY KEY REFERENCES background_analysis_intents(id) ON DELETE RESTRICT,
++ attempt_id TEXT NOT NULL UNIQUE,
++ attempt_generation INTEGER NOT NULL CHECK(attempt_generation>=1),
++ intent_revision INTEGER NOT NULL CHECK(intent_revision>=1),
++ permission_revision INTEGER NOT NULL CHECK(permission_revision>=1),
++ owner_session TEXT NOT NULL,
++ state TEXT NOT NULL CHECK(state IN ('claimed','sent','succeeded','failed','cancelled','unknown','deferred')),
++ runtime_fingerprint TEXT NOT NULL,
++ recipe TEXT NOT NULL CHECK(recipe='rapidocr-preview-v1'),
++ effect_digest TEXT,
++ evidence_id TEXT REFERENCES asset_ocr_evidence(id) ON DELETE RESTRICT,
++ saved_revision INTEGER CHECK(saved_revision>=1),
++ updated_at TEXT NOT NULL,
++ CHECK((state='succeeded' AND effect_digest IS NOT NULL AND evidence_id IS NOT NULL AND saved_revision IS NOT NULL) OR (state!='succeeded' AND effect_digest IS NULL AND evidence_id IS NULL AND saved_revision IS NULL))
++);
++CREATE INDEX background_ocr_attempts_recent ON background_ocr_attempts(updated_at DESC,intent_id);
++CREATE INDEX background_ocr_candidates ON background_analysis_intents(capability,decision,created_at,id);
++`
++export function applyBackgroundOcrSchema(db:Database.Database){const v=Number(db.pragma('user_version',{simple:true}));if(v===13)return;if(v!==12)throw Error('BACKGROUND_OCR_UPGRADE_REQUIRED');db.exec(BACKGROUND_OCR_SQL);db.prepare("INSERT INTO background_ocr_permission VALUES(1,0,0,'','')").run();db.pragma('user_version=13')}
+--- a/src/main/independent-tags/tag-decision-storage.ts
++++ b/src/main/independent-tags/tag-decision-storage.ts
+@@ -18,7 +18,7 @@
+ export function writeTagDecision(a:TagIntentBinding,input:TagDecisionCommit){
+  const c=readTagDecisionContext(a,input)
+  if(input.sessionToken!==c.sessionToken)tagIntentFail('TAG_INTENT_SESSION_EXPIRED')
+- if(typeof input.allowUpgrade!=='boolean'||![10,11,12].includes(input.expectedSchemaVersion)||input.expectedSchemaVersion>c.schemaVersion)tagIntentFail('TAG_DECISION_REVIEW_STALE')
++ if(typeof input.allowUpgrade!=='boolean'||![10,11,12,13].includes(input.expectedSchemaVersion)||input.expectedSchemaVersion>c.schemaVersion)tagIntentFail('TAG_DECISION_REVIEW_STALE')
+  const normalized=normalizeDecisionLabel(c.tag),now=new Date().toISOString()
+  if(input.decision==='reject'){
+   if(c.schemaVersion<11)tagIntentFail('TAG_DECISION_UPGRADE_REQUIRED')
+--- a/src/main/independent-tags/tag-decision.schema.ts
++++ b/src/main/independent-tags/tag-decision.schema.ts
+@@ -15,4 +15,4 @@
+ CREATE TRIGGER independent_tag_rejection_immutable BEFORE UPDATE ON independent_tag_rejections
+ BEGIN SELECT RAISE(ABORT,'TAG_REJECTION_IMMUTABLE'); END;
+ `
+-export function applyTagDecisionSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version===11||version===12)return;if(version!==10)throw Error('TAG_DECISION_SCHEMA_UNSUPPORTED');db.exec(TAG_DECISION_SQL);db.pragma('user_version=11')}
++export function applyTagDecisionSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version>=11&&version<=13)return;if(version!==10)throw Error('TAG_DECISION_SCHEMA_UNSUPPORTED');db.exec(TAG_DECISION_SQL);db.pragma('user_version=11')}
+--- a/src/main/independent-tags/tag-execution-controller.ts
++++ b/src/main/independent-tags/tag-execution-controller.ts
+@@ -52,7 +52,7 @@
+     try{if(deps.host.inspect().state==='ready'){
+      await deps.host.readVisualSession(plan.input)
+      const known=await deps.host.readAssetContext([])
+-     if(known.schemaVersion>=9&&known.schemaVersion<=12){deps.legacy.resume();deps.admission.resume()}
++     if(known.schemaVersion>=9&&known.schemaVersion<=13){deps.legacy.resume();deps.admission.resume()}
+     }}finally{releaseBarrier()}
+    }
+   })().finally(()=>{cutover=undefined})
+--- a/src/main/independent-tags/tag-execution.schema.ts
++++ b/src/main/independent-tags/tag-execution.schema.ts
+@@ -66,7 +66,7 @@
+ /** Caller owns the migration transaction; never starts nested source savepoints. */
+ export function applyTagExecutionSchema(db:Database.Database){
+  const version=Number(db.pragma('user_version',{simple:true}))
+- if(version>=10&&version<=12)return
++ if(version>=10&&version<=13)return
+  if(version<1||version>9||!Number.isInteger(version))throw Error('TAG_EXECUTION_SCHEMA_UNSUPPORTED')
+  applyTagIntentSchema(db)
+  db.exec(TAG_EXECUTION_SQL)
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -1,3 +1,4 @@
++import {createBackgroundOcrController} from './background-ocr/background-ocr-controller'
+ import {createBackgroundAnalysisController} from './background-analysis/background-analysis-controller'
+ import {sampleBackgroundTelemetry} from './background-analysis/background-telemetry'
+ import {createTagRecoveryController} from './independent-tags/tag-recovery-controller'
+@@ -85,6 +86,7 @@
+ let workWindows:ReturnType<typeof createWorkWindowController>|undefined
+ let assetCard: ReturnType<typeof createAssetCardController> | undefined
+ let imageTools: ReturnType<typeof createImageToolsController> | undefined
++let backgroundOcr:ReturnType<typeof createBackgroundOcrController>|undefined
+ let ocr:ReturnType<typeof createOcrController>|undefined
+ let visualAi: ReturnType<typeof createVisualAiController> | undefined
+ let visualAdmission:VisualAdmission|undefined
+@@ -231,11 +233,11 @@
+ 
+ const shutdownCoordinator = new ShutdownCoordinator({
+   drain: async () => {
+-    visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate();ocr?.suspend()
++    visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundOcr?.invalidate();backgroundAnalysis?.invalidate();ocr?.suspend()
+     await workWindows?.drain()
+     await managedDownloads?.drain()
+     assetCard?.invalidate()
+-    activeLibraryHost?.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain(),ocr?.suspendAndDrain()]);tagIntents?.invalidate(); imageTools?.invalidate()
++    activeLibraryHost?.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain(),ocr?.suspendAndDrain(),backgroundOcr?.suspendAndDrain()]);tagIntents?.invalidate(); imageTools?.invalidate()
+     await activeLibraryHost?.close()
+     await connectedRuntime?.drain()
+     appStorage?.close()
+@@ -263,11 +265,16 @@
+   tagIntents = createTagIntentController({ host: activeLibraryHost, settings: () => settingsService.getSettings(), changed: scope => {
+     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send(EVENT_VISUAL_AI_UPDATED, scope)
+   } })
+-  ocr=createOcrController({host:activeLibraryHost,runtime:createOcrRuntime({database:appStorage.database,runner:app.isPackaged?join(process.resourcesPath,'ai-service/tools/local_ocr_worker.py'):join(app.getAppPath(),'ai-service/tools/local_ocr_worker.py'),selectRoot:async()=>{
++  const ocrRuntime=createOcrRuntime({database:appStorage.database,runner:app.isPackaged?join(process.resourcesPath,'ai-service/tools/local_ocr_worker.py'):join(app.getAppPath(),'ai-service/tools/local_ocr_worker.py'),selectRoot:async()=>{
+     if(syntheticE2e){const root=process.env.DAM_SYNTHETIC_OCR_RUNTIME;return root&&root.includes('dam-approved-ocr-')?root:null}
+     const picked=await showNativeOpenDialog({title:'选择可信的本地 OCR 环境（识别时将运行其中的 Python）',buttonLabel:'选择 OCR 环境',properties:['openDirectory']})
+     return picked.canceled?null:picked.filePaths[0]||null
+-  }}),changed:scope=>{void assetCard?.refresh();void workWindows?.refresh();if(mainWindow&&!mainWindow.isDestroyed())mainWindow.webContents.send(OCR_CHANGED,scope)}})
++  }})
++  ocr=createOcrController({host:activeLibraryHost,runtime:ocrRuntime,runtimeChanged:()=>backgroundOcr?.invalidate(),reserve:(bytes,signal)=>visualAdmission!.reserveOcr(bytes,signal),changed:scope=>{void assetCard?.refresh();void workWindows?.refresh();if(mainWindow&&!mainWindow.isDestroyed())mainWindow.webContents.send(OCR_CHANGED,scope)}})
++  backgroundOcr=createBackgroundOcrController({host:activeLibraryHost,ocr,runtime:ocrRuntime,qualify:runtime=>syntheticE2e&&process.env.DAM_SYNTHETIC_BACKGROUND_OCR==='1'?{runtimeFingerprint:runtime.fingerprint,evidenceId:'synthetic-stdlib-only',envelope:{ownership:'host-owned',verified:true,peakRamBytes:768*1048576,accelerator:'cpu',lightOnBattery:false}}:null,telemetry:()=>{
++    if(syntheticE2e&&process.env.DAM_SYNTHETIC_BACKGROUND_OCR==='1'){const k=<T>(value:T)=>({kind:'known' as const,value,sampledAt:performance.now()});return{memory:k({free:8*1024**3,total:16*1024**3}),battery:k(false),lowPower:k(false),thermal:k('nominal' as const),idle:k('idle' as const),visible:k(true),gpuFree:{kind:'unknown'}}}
++    return sampleBackgroundTelemetry(Boolean(mainWindow&&!mainWindow.isDestroyed()&&mainWindow.isVisible()))
++  }})
+   managedDownloads = createManagedDownloads({ host: activeLibraryHost, history: new DownloadService(appStorage.database), onImported: job => {
+     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('download:imported', { libraryIdentity: job.libraryIdentity, generation: job.generation, assetId: job.assetId })
+   } })
+@@ -291,7 +298,7 @@
+       : createProductionModelLibraryWorkspaceProvider(),
+     activeLibrary: {
+       host: activeLibraryHost,
+-      onAuthorityWillChange: async () => { if(workWindows?.hasUnsaved()&&dialog.showMessageBoxSync({type:'question',buttons:['继续编辑','放弃工作集草稿并切换'],defaultId:0,cancelId:0,message:'工作窗口有未保存内容。'})===0)throw Error('WORK_DRAFT_RETAINED');authorityBarrierRelease=visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate();ocr?.suspend();await workWindows?.drain();await managedDownloads?.drain();authorityBusinessRelease=activeLibraryHost!.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain(),ocr?.suspendAndDrain()]);tagIntents?.invalidate();imageTools?.invalidate();assetCard?.invalidate() },
++      onAuthorityWillChange: async () => { if(workWindows?.hasUnsaved()&&dialog.showMessageBoxSync({type:'question',buttons:['继续编辑','放弃工作集草稿并切换'],defaultId:0,cancelId:0,message:'工作窗口有未保存内容。'})===0)throw Error('WORK_DRAFT_RETAINED');authorityBarrierRelease=visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundOcr?.invalidate();backgroundAnalysis?.invalidate();ocr?.suspend();await workWindows?.drain();await managedDownloads?.drain();authorityBusinessRelease=activeLibraryHost!.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain(),ocr?.suspendAndDrain(),backgroundOcr?.suspendAndDrain()]);tagIntents?.invalidate();imageTools?.invalidate();assetCard?.invalidate() },
+       onAuthorityDidChange:async()=>{
+         const release=authorityBarrierRelease,businessRelease=authorityBusinessRelease;authorityBarrierRelease=undefined;authorityBusinessRelease=undefined
+         if(!release){businessRelease?.();return}
+@@ -312,6 +319,7 @@
+     tagBatches,
+     tagRecovery,
+     backgroundAnalysis,
++    backgroundOcr,
+     ocr,
+     imageTools,
+     managedDownloads,
+--- a/src/main/ipc/background-analysis.ipc.ts
++++ b/src/main/ipc/background-analysis.ipc.ts
+@@ -2,13 +2,14 @@
+ import type {MainIpcHandleRegistrar} from './ipc-registrar'
+ import type {createAssetCardController} from '../asset-card/asset-card-controller'
+ import {backgroundMessage,type createBackgroundAnalysisController} from '../background-analysis/background-analysis-controller'
+-export function registerBackgroundAnalysisIpc(deps:{controller?:ReturnType<typeof createBackgroundAnalysisController>;card?:ReturnType<typeof createAssetCardController>;isMain(e:IpcMainInvokeEvent):boolean;handle:MainIpcHandleRegistrar}){
++export function registerBackgroundAnalysisIpc(deps:{onMutate?():void;controller?:ReturnType<typeof createBackgroundAnalysisController>;card?:ReturnType<typeof createAssetCardController>;isMain(e:IpcMainInvokeEvent):boolean;handle:MainIpcHandleRegistrar}){
+  const bind=(name:string,policy:boolean,scoped:boolean,action:(owner:string,input:any)=>unknown)=>deps.handle('background-analysis:'+name,async(event,input)=>{
+   try{
+    if(!deps.controller)throw Error('BACKGROUND_UNAVAILABLE')
+    const main=deps.isMain(event),card=!main&&deps.card?.isTrusted(event)?deps.card.inspect():null
+    if(!main&&!card||policy&&!main)throw Error('BACKGROUND_SCOPE_EXPIRED')
+    if(card&&scoped&&(!input||input.libraryIdentity!==card.context.libraryIdentity||input.generation!==card.context.generation||input.assetId!==card.context.assetId))throw Error('BACKGROUND_SCOPE_EXPIRED')
++   if(name==='change'||name==='confirm')deps.onMutate?.()
+    return{ok:true,value:await action(main?'main':`card:${card!.token}`,input)}
+   }catch(e){return{ok:false,error:backgroundMessage(e)}}
+  })
+--- /dev/null
++++ b/src/main/ipc/background-ocr.ipc.ts
+@@ -0,0 +1,13 @@
++import type {IpcMainInvokeEvent} from 'electron'
++import type {MainIpcHandleRegistrar} from './ipc-registrar'
++import {backgroundOcrMessage,type createBackgroundOcrController} from '../background-ocr/background-ocr-controller'
++export function registerBackgroundOcrIpc(d:{controller?:ReturnType<typeof createBackgroundOcrController>;isMain(event:IpcMainInvokeEvent):boolean;handle:MainIpcHandleRegistrar}){
++ for(const name of ['read','prepare','confirm','discard','revoke'] as const)d.handle('background-ocr:'+name,async(event,input)=>{
++  try{
++   if(!d.controller||!d.isMain(event))throw Error('BACKGROUND_OCR_UNTRUSTED')
++   if(['read','prepare','revoke'].includes(name)){if(!input||typeof input!=='object'||Object.keys(input).sort().join(',')!=='generation,libraryIdentity'||!['generation','libraryIdentity'].every(k=>typeof input[k]==='string'&&input[k].length>0&&input[k].length<=256))throw Error('BACKGROUND_OCR_INPUT_INVALID')}
++   else if(typeof input!=='string'||input.length>128)throw Error('BACKGROUND_OCR_INPUT_INVALID')
++   return{ok:true,value:await d.controller[name](input)}
++  }catch(error){return{ok:false,error:backgroundOcrMessage(error)}}
++ })
++}
+--- a/src/main/ipc/main-ipc-composition.ts
++++ b/src/main/ipc/main-ipc-composition.ts
+@@ -1,3 +1,5 @@
++import {registerBackgroundOcrIpc} from './background-ocr.ipc'
++import type {createBackgroundOcrController} from '../background-ocr/background-ocr-controller'
+ import {registerBackgroundAnalysisIpc} from './background-analysis.ipc'
+ import type {createBackgroundAnalysisController} from '../background-analysis/background-analysis-controller'
+ import {registerTagRecoveryIpc} from './tag-recovery.ipc'
+@@ -46,6 +48,7 @@
+   imageTools?: ReturnType<typeof createImageToolsController>
+   ocr?:ReturnType<typeof createOcrController>
+   visualAi?: ReturnType<typeof createVisualAiController>
++  backgroundOcr?:ReturnType<typeof createBackgroundOcrController>
+   backgroundAnalysis?:ReturnType<typeof createBackgroundAnalysisController>
+   tagRecovery?:ReturnType<typeof createTagRecoveryController>
+   tagBatches?:ReturnType<typeof createTagBatchController>
+@@ -74,7 +77,8 @@
+   registerImageToolsIpc({ controller: dependencies.imageTools, card: dependencies.assetCard, isMain: event => dependencies.activeLibrary.isTrustedSender?.(event) === true, handle: dependencies.handle })
+   registerAssetOcrIpc({controller:dependencies.ocr,handle:dependencies.handle,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true})
+   registerVisualAiIpc({ controller: dependencies.visualAi, card: dependencies.assetCard, isMain: event => dependencies.activeLibrary.isTrustedSender?.(event) === true, handle: dependencies.handle })
+-  registerBackgroundAnalysisIpc({controller:dependencies.backgroundAnalysis,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
++  registerBackgroundOcrIpc({controller:dependencies.backgroundOcr,handle:dependencies.handle,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true})
++  registerBackgroundAnalysisIpc({onMutate:()=>dependencies.backgroundOcr?.changed(),controller:dependencies.backgroundAnalysis,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+   registerTagRecoveryIpc({controller:dependencies.tagRecovery,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+   registerTagBatchIpc({controller:dependencies.tagBatches,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+   registerTagDecisionIpc({controller:dependencies.tagDecisions,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+--- a/src/main/library-lifecycle/active-library-host.ts
++++ b/src/main/library-lifecycle/active-library-host.ts
+@@ -1,3 +1,5 @@
++import {applyBackgroundOcrSchema} from '../background-ocr/background-ocr.schema'
++import {readBackgroundOcr as readOcrBackground,validateBackgroundOcrPermission,writeBackgroundOcrPermission,claimBackgroundOcr as claimOcrBackground,markBackgroundOcrSent,commitBackgroundOcr as commitOcrBackground,finishBackgroundOcr as finishOcrBackground,releaseBackgroundOcrClaim,type BackgroundOcrAuthority} from '../background-ocr/background-ocr-storage'
+ import {applyBackgroundAnalysisSchema} from '../background-analysis/background-analysis.schema'
+ import {readBackgroundAnalysis as readBackground,validateBackgroundConfig,writeBackgroundConfig,changeBackgroundIntent as changeBackground} from '../background-analysis/background-analysis-storage'
+ import {reconcileTagExecutions,readTagRecovery as readRecovery,readTagReceipt} from '../independent-tags/tag-recovery-storage'
+@@ -554,6 +556,48 @@
+   const readTagEffectReceipt:ActiveLibraryHost['readTagEffectReceipt']=input=>run(active=>readTagReceipt(active,input))
+   const readTagExecution:ActiveLibraryHost['readTagExecution']=scope=>run(active=>readTags(executionBinding(active),scope))
+   const enableVisualAi = () => run(active => enableVisualAiStorage(active.database))
++  let ocrGrantEpoch=0
++  const ocrAuthority:BackgroundOcrAuthority={claims:new Map()}
++  const ocrBinding=(active:Binding)=>{
++    executionBinding(active)
++    if(ocrAuthority.grant?.session!==active.notebookSession)ocrAuthority.grant=undefined
++    for(const [token,c] of ocrAuthority.claims)if(c.session!==active.notebookSession)ocrAuthority.claims.delete(token)
++    return{...active,ocrAuthority}
++  }
++  const readBackgroundOcr:ActiveLibraryHost['readBackgroundOcr']=input=>run(active=>readOcrBackground(ocrBinding(active),input))
++  const revokeBackgroundOcr=()=>{ocrGrantEpoch++;ocrAuthority.grant=undefined}
++  const configureBackgroundOcr:ActiveLibraryHost['configureBackgroundOcr']=(input,signal)=>{
++    // Revoke before any await, including failed persistence. Never resurrect from the audit row.
++    revokeBackgroundOcr();const grantEpoch=ocrGrantEpoch
++    return enqueueLifecycle(async()=>{
++      if(!binding||state.state!=='ready')throw stateError(state.state)
++      if(businessSuspensions.size)throw hostError('library-quiescing')
++      const active=binding;maintenanceAdmissionClosed=true
++      try{
++        await Promise.allSettled([...inFlight])
++        const guarded=await active.lock.lease.runWhileHeld(async()=>{
++          const check=()=>{if(grantEpoch!==ocrGrantEpoch||binding!==active||state.state!=='ready'||businessSuspensions.size)throw Error('BACKGROUND_OCR_SCOPE_EXPIRED');return validateBackgroundOcrPermission(ocrBinding(active),input,signal)}
++          const prior=check();if(prior.schemaVersion===12&&!input.allowUpgrade)throw Error('BACKGROUND_OCR_UPGRADE_REQUIRED')
++          const backup=prior.schemaVersion===12?await prepareTagIntentBackup(active,()=>{check()},signal,dependencies.tagIntentTestHooks):null
++          const write=()=>active.database.transaction(()=>{check();applyBackgroundOcrSchema(active.database);dependencies.tagIntentTestHooks?.afterDdl?.();writeBackgroundOcrPermission(ocrBinding(active),input);assertLibraryDataSchema(active.database);dependencies.tagIntentTestHooks?.beforeCommit?.()})()
++          if(backup)withTagIntentGrowthCap(active.database,backup.pageCap,write);else write()
++          try{dependencies.tagIntentTestHooks?.afterCommit?.()}catch{throw Error('BACKGROUND_OCR_ACK_UNCERTAIN')}
++          if(signal?.aborted||grantEpoch!==ocrGrantEpoch)throw Error('BACKGROUND_OCR_SCOPE_EXPIRED')
++          if(input.enabled)ocrAuthority.grant={session:active.notebookSession,revision:input.expectedRevision+1,runtime:input.runtimeFingerprint}
++          return readOcrBackground(ocrBinding(active),input)
++        })
++        if(guarded.kind!=='completed'){state={state:'recovery-required',identity:active.identity,generation:active.generation};throw hostError('library-lock-invalid')}
++        return guarded.value
++      }catch(error){revokeBackgroundOcr();if(error instanceof Error&&error.message==='TAG_INTENT_SETTINGS_RESTORE_FAILED')state={state:'recovery-required',identity:active.identity,generation:active.generation};throw error}
++      finally{maintenanceAdmissionClosed=false}
++    })
++  }
++  const claimBackgroundOcr:ActiveLibraryHost['claimBackgroundOcr']=input=>run(active=>active.database.transaction(()=>claimOcrBackground(ocrBinding(active),input))())
++  const markOcrSent:ActiveLibraryHost['markBackgroundOcrSent']=input=>run(active=>active.database.transaction(()=>markBackgroundOcrSent(ocrBinding(active),input))())
++  const commitBackgroundOcr:ActiveLibraryHost['commitBackgroundOcr']=(input,signal)=>run(active=>{
++    const a=ocrBinding(active),result=active.database.transaction(()=>commitOcrBackground(a,input,signal))();releaseBackgroundOcrClaim(a,input.claim);return result
++  })
++  const finishBackgroundOcr:ActiveLibraryHost['finishBackgroundOcr']=(input,status)=>enqueueLifecycle(()=>run(active=>active.database.transaction(()=>finishOcrBackground(ocrBinding(active),input,status))(),true))
+   const readBackgroundAnalysis:ActiveLibraryHost['readBackgroundAnalysis']=input=>run(active=>readBackground(active,input))
+   const changeBackgroundIntent:ActiveLibraryHost['changeBackgroundIntent']=(input,signal)=>run(active=>{active.database.transaction(()=>changeBackground(active,input,signal))();return readBackground(active,input)})
+   const configureBackgroundAnalysis:ActiveLibraryHost['configureBackgroundAnalysis']=(input,signal)=>enqueueLifecycle(async()=>{
+@@ -716,6 +760,7 @@
+   const saveNotebook:ActiveLibraryHost['saveNotebook']=input=>run(active=>saveAssetNotebook(active,input))
+ 
+   return Object.freeze({
++    readBackgroundOcr,configureBackgroundOcr,revokeBackgroundOcr,claimBackgroundOcr,markBackgroundOcrSent:markOcrSent,commitBackgroundOcr,finishBackgroundOcr,
+     readOcr,commitOcr,correctOcr,readNotebook,saveNotebook,readOrganization,writeOrganization,measurePreviewColors,readWorkSets,writeWorkSet,writeWorkLayout,
+     inspect, prepareCreate, confirmCreate, open, reopen, close,
+     prepareAddAssets, dispatchAddAssets, inspectCapture,
+--- a/src/main/library-lifecycle/library-materialization.internal.ts
++++ b/src/main/library-lifecycle/library-materialization.internal.ts
+@@ -1,3 +1,4 @@
++import {applyBackgroundOcrSchema} from '../background-ocr/background-ocr.schema'
+ import {applyBackgroundAnalysisSchema} from '../background-analysis/background-analysis.schema'
+ import {applyTagDecisionSchema} from '../independent-tags/tag-decision.schema'
+ import {applyTagExecutionSchema} from '../independent-tags/tag-execution.schema'
+@@ -224,7 +225,8 @@
+     })
+     initializeLibraryDataSchema(expected)
+     const version = database.pragma('user_version', { simple: true })
+-    if(version===12){applyTagExecutionSchema(expected);applyTagDecisionSchema(expected);applyBackgroundAnalysisSchema(expected)}
++    if(version===13){applyTagExecutionSchema(expected);applyTagDecisionSchema(expected);applyBackgroundAnalysisSchema(expected);applyBackgroundOcrSchema(expected)}
++    else if(version===12){applyTagExecutionSchema(expected);applyTagDecisionSchema(expected);applyBackgroundAnalysisSchema(expected)}
+     else if (version === 11) {applyTagExecutionSchema(expected);applyTagDecisionSchema(expected)}
+     else if (version === 10) applyTagExecutionSchema(expected)
+     else if (version === 9) applyTagIntentSchema(expected)
+--- a/src/main/library-lifecycle/library-open-control-store.internal.ts
++++ b/src/main/library-lifecycle/library-open-control-store.internal.ts
+@@ -1,3 +1,4 @@
++import {BACKGROUND_OCR_SQL} from '../background-ocr/background-ocr.schema'
+ import {BACKGROUND_ANALYSIS_SQL} from '../background-analysis/background-analysis.schema'
+ import {TAG_DECISION_SQL} from '../independent-tags/tag-decision.schema'
+ import {TAG_EXECUTION_SQL} from '../independent-tags/tag-execution.schema'
+@@ -106,7 +107,7 @@
+     }
+     if (isKnownLibrarySchemaVersion(version,3)) {
+       // Exact statements, including immutable identity enforcement; full schema is checked on binding.
+-      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (isKnownLibrarySchemaVersion(version,11) ? '\n'+TAG_DECISION_SQL : '') + (version===12?'\n'+BACKGROUND_ANALYSIS_SQL:'')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
++      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (isKnownLibrarySchemaVersion(version,11) ? '\n'+TAG_DECISION_SQL : '') + (version>=12?'\n'+BACKGROUND_ANALYSIS_SQL:'') + (version===13?'\n'+BACKGROUND_OCR_SQL:'')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
+       for (const sql of statements) {
+         const [, kind, name] = /^CREATE (TABLE|(?:UNIQUE )?INDEX|TRIGGER) (\w+)/.exec(sql)!
+         const row = schema.find(item => item.name === name)
+--- a/src/main/library-lifecycle/library-schema-version.ts
++++ b/src/main/library-lifecycle/library-schema-version.ts
+@@ -1,5 +1,5 @@
+ /** Known Managed profiles only. Feature presence never grants write authority. */
+-export const CURRENT_MANAGED_SCHEMA_VERSION = 12
++export const CURRENT_MANAGED_SCHEMA_VERSION = 13
+ export function isKnownLibrarySchemaVersion(version: unknown, minimum = 1): version is number {
+   return typeof version === 'number' && Number.isInteger(version) && version >= minimum && version <= CURRENT_MANAGED_SCHEMA_VERSION
+ }
+--- a/src/main/ocr/README.md
++++ b/src/main/ocr/README.md
+@@ -83,3 +83,16 @@
+ through the production Runtime/Controller/IPC/Host, including saved correction preservation,
+ close/reopen and application quit. This fixture does not validate RapidOCR or OCR quality.
+ Windows signal behavior, real model execution and user libraries remain NOT_RUN this batch.
++
++## Shared manual/background admission (2026-09-29)
++
++The internal `runBackground` entry shares the manual controller's preparation, running,
++maintenance and UNKNOWN gates. It never fabricates a manual review receipt. Both paths
++reserve host-side material through Main's VisualAdmission before reading/decoding previews.
++Manual review retains its bounded material reservation until consumed, invalidated or its
++five-minute expiry; an UNKNOWN child retains the reservation until its actual close token
++settles. This is local accounting, not a measured model peak or operating-system memory cap.
++The background caller must additionally supply a qualified full execution envelope, and
++recheck current resources/Runtime immediately before marking sent. Production qualification
++is currently absent; only the explicit isolated synthetic E2E composition supplies test evidence.
++See `../background-ocr/README.md` for independent session consent and durable effects.
+--- a/src/main/ocr/ocr-controller.ts
++++ b/src/main/ocr/ocr-controller.ts
+@@ -1,63 +1,91 @@
++import type {BackgroundOcrClaim,BackgroundOcrReceipt} from '../../shared/contracts/background-ocr.contract'
+ import {randomUUID,createHash} from 'node:crypto'
+ import sharp from 'sharp'
+ import {OcrProcessUnconfirmedError} from './local-ocr-process'
+ import type {ActiveLibraryHost} from '../../shared/contracts/active-library.contract'
+-import type {OcrScope,OcrJob,OcrReview,OcrSnapshot,OcrCorrection} from '../../shared/contracts/asset-ocr.contract'
++import type {OcrScope,OcrCommit,OcrJob,OcrReview,OcrSnapshot,OcrCorrection} from '../../shared/contracts/asset-ocr.contract'
+ import type {OcrRuntime,OcrRuntimeHandle} from './ocr-runtime'
+ type Scope=Omit<OcrScope,'assetId'>
+ type Host=Pick<ActiveLibraryHost,'inspect'|'readAssetContext'|'readPreview'|'readOcr'|'commitOcr'|'correctOcr'>
+-interface Plan{scope:Scope;expires:number;epoch:number;runtime:OcrRuntimeHandle;items:Array<{assetId:string;assetRevision:string;sourceRef:string;inputSha256:string;preview:Uint8Array;snapshot:OcrSnapshot}>}
++// Host-side decode/codec/frozen/transport/result upper accounting reserve; not a model peak estimate.
++export const OCR_HOST_RESERVE_BYTES=2*32*1048576+4*40000000+3*16*1048576+2*1048576+128*1048576+256*1048576
++interface Plan{release():void;timer?:ReturnType<typeof setTimeout>;scope:Scope;expires:number;epoch:number;runtime:OcrRuntimeHandle;items:Array<{assetId:string;assetRevision:string;sourceRef:string;inputSha256:string;preview:Uint8Array;snapshot:OcrSnapshot}>}
+ export const ocrMessage=(error:unknown)=>{
+  const code=error instanceof Error?error.message:''
+  const messages:Record<string,string>={OCR_SCOPE_EXPIRED:'素材库已变化，请重新选择素材。',OCR_RESULT_CONFLICT:'OCR 已在其他位置更新，草稿已保留，请重新载入后核对。',OCR_SOURCE_CHANGED:'素材预览已变化，本次结果没有保存。',OCR_RUNTIME_UNAVAILABLE:'本地 OCR 环境不可用，请先选择已安装的环境。',OCR_TIMEOUT:'文字识别超时，本次没有保存结果。',OCR_CANCELLED:'文字识别已取消。',OCR_PROCESS_EXIT_UNCONFIRMED:'尚未确认 OCR 进程退出，已阻止新的识别与维护操作。',OCR_DRAIN_BLOCKED:'OCR 尚未安全停止，请稍后重试关闭。',OCR_UPGRADE_REQUIRED:'请先确认 OCR 存储升级。',OCR_MODEL_CHANGED:'OCR 模型文件已变化，请重新配置并确认。',OCR_EDITED_SOURCE_CHANGED:'已有修订属于旧预览，结果保留，请先检查素材版本。'}
+  return messages[code]||'OCR 操作未完成；已有结果和输入保留，请检查本地环境后重试。'
+ }
+-export function createOcrController(deps:{host:Host;runtime:OcrRuntime;changed(scope:OcrScope):void;drainTimeoutMs?:number}){
++export function createOcrController(deps:{host:Host;runtime:OcrRuntime;changed(scope:OcrScope):void;drainTimeoutMs?:number;runtimeChanged?():void;reserve?(bytes:number,signal:AbortSignal):Promise<{release():void}>}){
+  let epoch=0,preparing=false,maintenanceHolds=0,drains=0,suspended=false
+  type Record={job:OcrJob;abort:AbortController;done:Promise<void>;unconfirmed:boolean}
+- let active:Record|null=null,preparation=Promise.resolve()
++ let active:Record|null=null,preparation=Promise.resolve(),preparationAbort:AbortController|null=null
+  const unreleased=new Set<Promise<void>>()
+- const beginPreparation=()=>{preparing=true;let done!:()=>void;preparation=new Promise<void>(r=>{done=r});return()=>{preparing=false;done()}}
++ const beginPreparation=()=>{preparing=true;preparationAbort=new AbortController();let done!:()=>void;preparation=new Promise<void>(r=>{done=r});return()=>{preparing=false;preparationAbort=null;done()}}
+  const plans=new Map<string,Plan>()
++ const clearPlans=()=>{for(const p of plans.values()){clearTimeout(p.timer);p.release()}plans.clear()}
++ const reserve=deps.reserve??(async()=>({release(){}}))
++ const retain=(error:OcrProcessUnconfirmedError,release:()=>void)=>{unreleased.add(error.released);void error.released.then(()=>{release();unreleased.delete(error.released)})}
+  const matches=(s:Scope)=>{const a=deps.host.inspect();return a.state==='ready'&&a.identity===s.libraryIdentity&&a.generation===s.generation}
+  const requireScope=(s:Scope)=>{if(!s||!matches(s))throw Error('OCR_SCOPE_EXPIRED')}
+  const busy=()=>active?.job.state==='running'||unreleased.size>0
+- const invalidate=()=>{epoch++;plans.clear();active?.abort.abort()}
++ const invalidate=()=>{epoch++;clearPlans();preparationAbort?.abort();active?.abort.abort()}
+  const suspend=()=>{suspended=true;invalidate()}
+  const assertAdmission=()=>{if(unreleased.size)throw Error('OCR_PROCESS_EXIT_UNCONFIRMED');if(suspended||maintenanceHolds||preparing||busy())throw Error('OCR_BUSY')}
+  return{
+   async status(){const runtime=await deps.runtime.current();return{configured:!!runtime,label:runtime?.label||'尚未选择本地 OCR 环境',job:active&&matches(active.job)?structuredClone(active.job):null}},
+-  holdForMaintenance(){if(suspended||busy()||preparing)throw Error('OCR_BUSY');maintenanceHolds++;epoch++;plans.clear();let held=true;return()=>{if(held){held=false;maintenanceHolds--}}},
+-  async configure(){assertAdmission();const finish=beginPreparation();try{plans.clear();await deps.runtime.configure()}finally{finish()}},
++  holdForMaintenance(){if(suspended||busy()||preparing)throw Error('OCR_BUSY');maintenanceHolds++;epoch++;clearPlans();let held=true;return()=>{if(held){held=false;maintenanceHolds--}}},
++  async configure(){assertAdmission();const finish=beginPreparation();try{clearPlans();const before=deps.runtimeChanged?await deps.runtime.current():null;await deps.runtime.configure();if(deps.runtimeChanged&&(await deps.runtime.current())?.fingerprint!==before?.fingerprint)deps.runtimeChanged()}finally{finish()}},
+   read:(scope:OcrScope)=>{requireScope(scope);return deps.host.readOcr(scope)},
+   async prepare(input:Scope&{assetIds:string[]}):Promise<OcrReview>{
+    assertAdmission()
+    if(!input||Object.keys(input).some(k=>!['libraryIdentity','generation','assetIds'].includes(k))||!Array.isArray(input.assetIds)||!input.assetIds.length||input.assetIds.length>8||new Set(input.assetIds).size!==input.assetIds.length)throw Error('OCR_INPUT_INVALID')
+-   requireScope(input);const finish=beginPreparation();plans.clear();const version=epoch
++   requireScope(input);const finish=beginPreparation();clearPlans();const version=epoch;let permit:{release():void}|undefined,transferred=false
+    try{
+     const runtime=await deps.runtime.current();if(!runtime)throw Error('OCR_RUNTIME_UNAVAILABLE')
+-    const context=await deps.host.readAssetContext(input.assetIds),items:Plan['items']=[]
+-    for(const id of input.assetIds){const a=context.assets.find(x=>x.id===id);if(!a)throw Error('OCR_SOURCE_CHANGED')
+-     const snapshot=await deps.host.readOcr({...input,assetId:id})
+-     const bytes=await deps.host.readPreview(id)
+-     if(bytes.byteLength>32*1024*1024)throw Error('OCR_INPUT_INVALID')
+-     const preview=await sharp(bytes,{limitInputPixels:40000000}).rotate().resize({width:1600,height:1600,fit:'inside',withoutEnlargement:true}).flatten({background:'#fff'}).png().toBuffer()
+-     if(preview.length>16*1024*1024)throw Error('OCR_INPUT_INVALID')
+-     items.push({assetId:id,assetRevision:a.revision,sourceRef:a.thumbnailRef,snapshot,preview,inputSha256:createHash('sha256').update(preview).digest('hex')})
+-    }
++    permit=await reserve(OCR_HOST_RESERVE_BYTES+7*16*1048576,preparationAbort!.signal)
++    const items:Plan['items']=[]
++    for(const id of input.assetIds)items.push(await freezeItem(input,id))
+     requireScope(input);if(version!==epoch)throw Error('OCR_SCOPE_EXPIRED')
+-    const receipt=randomUUID();plans.set(receipt,{scope:{libraryIdentity:input.libraryIdentity,generation:input.generation},epoch:version,expires:Date.now()+300000,runtime,items})
++    const receipt=randomUUID(),plan:Plan={release:()=>permit!.release(),scope:{libraryIdentity:input.libraryIdentity,generation:input.generation},epoch:version,expires:Date.now()+300000,runtime,items};plans.set(receipt,plan);transferred=true;plan.timer=setTimeout(()=>{if(plans.get(receipt)===plan){plans.delete(receipt);plan.release()}},300000);plan.timer.unref?.()
+     return{receipt,count:items.length,requiresUpgrade:items.some(i=>i.snapshot.requiresUpgrade),runtimeLabel:runtime.label}
+-   }finally{finish()}
++   }finally{if(!transferred)permit?.release();finish()}
+   },
+   async run(receipt:string){assertAdmission();const plan=plans.get(receipt);if(!plan||plan.epoch!==epoch||plan.expires<Date.now())throw Error('OCR_SCOPE_EXPIRED');requireScope(plan.scope)
+    const finish=beginPreparation()
+    try{
+     const runtime=await deps.runtime.current();if(runtime?.fingerprint!==plan.runtime.fingerprint)throw Error('OCR_MODEL_CHANGED')
+-    requireScope(plan.scope);if(suspended||maintenanceHolds||plan.epoch!==epoch||!plans.has(receipt))throw Error('OCR_SCOPE_EXPIRED');plans.delete(receipt)
++    requireScope(plan.scope);if(suspended||maintenanceHolds||plan.epoch!==epoch||!plans.has(receipt))throw Error('OCR_SCOPE_EXPIRED');plans.delete(receipt);clearTimeout(plan.timer)
+     const record:Record={job:{...plan.scope,id:randomUUID(),state:'running',items:plan.items.map(i=>({assetId:i.assetId,state:'queued'}))},abort:new AbortController(),done:Promise.resolve(),unconfirmed:false};active=record
+     record.done=execute(plan,record);return structuredClone(record.job)
+    }finally{finish()}
++  },
++  backgroundAvailability(){return{busy:!!busy()||preparing||maintenanceHolds>0||suspended||plans.size>0,unconfirmed:unreleased.size>0}},
++  async runBackground(input:{scope:Scope;runtimeFingerprint:string;reserveBytes:number;signal:AbortSignal;claim():Promise<BackgroundOcrClaim|null>;sent(claim:BackgroundOcrClaim):Promise<void>;commit(claim:BackgroundOcrClaim,ocr:OcrCommit,signal:AbortSignal):Promise<BackgroundOcrReceipt>;finish(claim:BackgroundOcrClaim,state:'failed'|'cancelled'|'unknown'|'deferred'):Promise<void>}):Promise<BackgroundOcrReceipt|null>{
++   assertAdmission();if(plans.size)throw Error('OCR_BUSY');requireScope(input.scope)
++   const finish=beginPreparation(),abort=preparationAbort!,version=epoch,cancel=()=>abort.abort()
++   input.signal.addEventListener('abort',cancel,{once:true});if(input.signal.aborted)cancel()
++   let permit:{release():void}|undefined,unknown=false,claim:BackgroundOcrClaim|null=null,record:Record|undefined
++   try{
++    if(input.reserveBytes<OCR_HOST_RESERVE_BYTES)throw Error('OCR_RESOURCE_BUDGET')
++    permit=await reserve(input.reserveBytes,abort.signal);abort.signal.throwIfAborted()
++    const runtime=await deps.runtime.current();if(!runtime||runtime.fingerprint!==input.runtimeFingerprint)throw Error('OCR_MODEL_CHANGED')
++    if(version!==epoch)throw Error('OCR_SCOPE_EXPIRED');requireScope(input.scope);abort.signal.throwIfAborted()
++    claim=await input.claim();if(!claim)return null
++    record={job:{...input.scope,id:claim.attemptId,state:'running',items:[{assetId:claim.assetId,state:'running'}]},abort,done:preparation,unconfirmed:false};active=record
++    const item=await freezeItem(input.scope,claim.assetId)
++    abort.signal.throwIfAborted();if(version!==epoch)throw Error('OCR_SCOPE_EXPIRED');requireScope(input.scope)
++    await input.sent(claim);abort.signal.throwIfAborted()
++    const observation=await runtime.run(item.preview,abort.signal)
++    abort.signal.throwIfAborted();if(version!==epoch)throw Error('OCR_SCOPE_EXPIRED');requireScope(input.scope)
++    const receipt=await input.commit(claim,{...input.scope,assetId:claim.assetId,sessionToken:item.snapshot.sessionToken,expectedRevision:item.snapshot.revision,allowUpgrade:false,evidence:{id:'ocr:'+claim.attemptId,assetId:claim.assetId,assetRevision:item.assetRevision,sourceRef:item.sourceRef,inputSha256:item.inputSha256,createdAt:new Date().toISOString(),observation}},abort.signal)
++    record.job.state='completed';record.job.items[0].state='completed';try{deps.changed({...input.scope,assetId:claim.assetId})}catch{}return receipt
++   }catch(error){
++    unknown=error instanceof OcrProcessUnconfirmedError
++    if(record){record.unconfirmed=unknown;record.job.state=unknown?'failed':abort.signal.aborted?'cancelled':'failed';record.job.items[0].state=record.job.state;record.job.items[0].error=ocrMessage(error)}
++    if(claim){try{await input.finish(claim,unknown?'unknown':abort.signal.aborted?'cancelled':error instanceof Error&&error.message==='BACKGROUND_OCR_RESOURCES_CHANGED'?'deferred':'failed')}catch{}}
++    if(error instanceof OcrProcessUnconfirmedError){const held=permit;retain(error,()=>{held?.release();if(claim)void input.finish(claim,'failed').catch(()=>{})})}
++    throw error
++   }finally{if(!unknown)permit?.release();input.signal.removeEventListener('abort',cancel);finish()}
+   },
+   cancel(){active?.abort.abort();return active?structuredClone(active.job):null},
+   async correct(input:OcrCorrection){requireScope(input);const result=await deps.host.correctOcr(input);try{deps.changed(input)}catch{}return result},
+@@ -76,6 +104,14 @@
+   }
+ 
+  }
++ async function freezeItem(scope:Scope,id:string):Promise<Plan['items'][number]>{
++  const a=(await deps.host.readAssetContext([id])).assets.find(x=>x.id===id);if(!a)throw Error('OCR_SOURCE_CHANGED')
++  const snapshot=await deps.host.readOcr({...scope,assetId:id}),bytes=await deps.host.readPreview(id)
++  if(bytes.byteLength>32*1024*1024)throw Error('OCR_INPUT_INVALID')
++  const preview=await sharp(bytes,{limitInputPixels:40000000}).rotate().resize({width:1600,height:1600,fit:'inside',withoutEnlargement:true}).flatten({background:'#fff'}).png().toBuffer()
++  if(preview.length>16*1024*1024)throw Error('OCR_INPUT_INVALID')
++  return{assetId:id,assetRevision:a.revision,sourceRef:a.thumbnailRef,snapshot,preview,inputSha256:createHash('sha256').update(preview).digest('hex')}
++ }
+  async function execute(plan:Plan,record:Record){
+   try{for(const [index,input] of plan.items.entries()){
+    const item=record.job.items[index]
+@@ -89,10 +125,10 @@
+     await deps.host.commitOcr({...plan.scope,assetId:item.assetId,sessionToken:input.snapshot.sessionToken,expectedRevision:input.snapshot.revision,allowUpgrade:true,evidence:{id:'ocr:'+randomUUID(),assetId:item.assetId,assetRevision:input.assetRevision,sourceRef:input.sourceRef,inputSha256:input.inputSha256,createdAt:new Date().toISOString(),observation}},record.abort.signal)
+     item.state='completed';try{deps.changed({...plan.scope,assetId:item.assetId})}catch{}
+    }catch(error){
+-    if(error instanceof OcrProcessUnconfirmedError){record.unconfirmed=true;unreleased.add(error.released);void error.released.then(()=>unreleased.delete(error.released));item.state='failed';item.error=ocrMessage(error)}
++    if(error instanceof OcrProcessUnconfirmedError){record.unconfirmed=true;retain(error,plan.release);item.state='failed';item.error=ocrMessage(error)}
+     else{item.state=record.abort.signal.aborted||plan.epoch!==epoch?'cancelled':'failed';item.error=item.state==='failed'?ocrMessage(error):undefined}
+    }
+    finally{input.preview=new Uint8Array()}
+-  }}finally{const n=record.job.items.filter(i=>i.state==='completed').length;record.job.state=record.unconfirmed?'failed':n===record.job.items.length?'completed':n?'partial':record.abort.signal.aborted||plan.epoch!==epoch?'cancelled':'failed';plan.items=[]}
++  }}finally{const n=record.job.items.filter(i=>i.state==='completed').length;record.job.state=record.unconfirmed?'failed':n===record.job.items.length?'completed':n?'partial':record.abort.signal.aborted||plan.epoch!==epoch?'cancelled':'failed';plan.items=[];if(!record.unconfirmed)plan.release()}
+  }
+ }
+--- a/src/main/visual-ai/visual-admission.ts
++++ b/src/main/visual-ai/visual-admission.ts
+@@ -4,7 +4,7 @@
+ import {prepareVisualJpeg,type VisualCodecResult} from './visual-preparation'
+ 
+ export const VISUAL_ADMISSION_PROFILE=Object.freeze({version:'visual-admission-v1',requestSlots:2,tagsSlots:1,preparationSlots:1,sourceBytes:33554432,maxPixels:50_000_000,maxJpegBytes:4194304,maxReceiptBytes:33554432,maxFrozenBytes:67108864,maxLocalBytes:805306368,maxReceipts:4,maxWaiters:4,codecBytes:268435456,serializationMultiplier:12,responseBytes:MAX_VISION_RESPONSE_BYTES*132,pipeBytes:2097152,responseParseExpansion:128})
+-type Kind='prepare'|'combined'|'tags-only'
++type Kind='prepare'|'combined'|'tags-only'|'ocr'
+ type Permit={release():void}
+ type Waiter={kind:Kind;bytes:number;signal:AbortSignal;resolve:(p:Permit)=>void;reject:(e:Error)=>void;abort:()=>void}
+ export interface VisualSession {sessionToken:string;leaseIdentity:string}
+@@ -75,6 +75,7 @@
+  }
+  const rejectWaiters=()=>{for(const w of queue.splice(0)){w.signal.removeEventListener('abort',w.abort);w.reject(Error('VISUAL_ADMISSION_SUSPENDED'))}}
+  return{
++  reserveOcr(bytes:number,signal:AbortSignal){if(!Number.isSafeInteger(bytes)||bytes<1||bytes>p.maxLocalBytes)return Promise.reject(Error('OCR_RESOURCE_BUDGET'));return acquire('ocr',bytes,signal)},
+   open(owner:string,session:VisualSession){if(!canAccept())throw Error('VISUAL_ADMISSION_SUSPENDED');if(leases.size>=p.maxReceipts)throw Error('VISUAL_ADMISSION_BUSY');const lease=makeLease(owner,session);leases.add(lease);return lease},
+   cancelOwner(owner:string){for(const lease of leases)if(lease.owner===owner)lease.dispose()},
+   hold(){const token=Symbol('visual-admission-barrier');barriers.add(token);rejectWaiters();let held=true;return()=>{if(!held)return;held=false;barriers.delete(token);pump()}},
+--- a/src/preload/index.ts
++++ b/src/preload/index.ts
+@@ -150,6 +150,7 @@
+       return () => ipcRenderer.removeListener('download:imported', receive)
+     }
+   },
++  backgroundOcr:{read:(scope:unknown)=>ipcRenderer.invoke('background-ocr:read',scope),prepare:(scope:unknown)=>ipcRenderer.invoke('background-ocr:prepare',scope),confirm:(receipt:string)=>ipcRenderer.invoke('background-ocr:confirm',receipt),discard:(receipt:string)=>ipcRenderer.invoke('background-ocr:discard',receipt),revoke:(scope:unknown)=>ipcRenderer.invoke('background-ocr:revoke',scope)},
+   assetOcr: {
+     status:()=>ipcRenderer.invoke('asset-ocr:status'),
+     configure:()=>ipcRenderer.invoke('asset-ocr:configure'),
+--- a/src/renderer/components/asset/BackgroundAnalysisPanel.tsx
++++ b/src/renderer/components/asset/BackgroundAnalysisPanel.tsx
+@@ -33,7 +33,7 @@
+  const operate=async(action:(valid:()=>boolean)=>Promise<void>)=>{if(pending.current)return;const epoch=life.current,valid=()=>epoch===life.current;readSequence.current++;pending.current=true;setBusy(true);setError('');try{await action(valid)}catch{if(valid())setError('后台计划操作未完成，请重新读取。')}finally{if(valid()){readSequence.current++;pending.current=false;setBusy(false)}}}
+  if(!api)return null
+  return <section className="visual-ai-panel background-analysis-panel" aria-label={assetId?'素材后台分析计划':'后台基础分析计划'}><header><strong>后台基础分析计划</strong><button disabled={busy} onClick={()=>void operate(async()=>{await load(true)})}>重新读取计划</button></header>
+- <p>当前只管理新素材计划，尚未自动执行模型；手动分析入口仍可使用。</p>
++ <p>这里仅收集新素材计划，不授予执行许可；后台 OCR 需在控制台单独授权并满足资源资格。</p>
+  {view&&<><p>{view.value.policy.enabled?'已启用新素材计划':'新素材计划未启用'} · 不自动补扫历史库</p>
+  {!assetId&&view.value.canConfigure&&draft&&<><label><input type="checkbox" style={{display:'inline-block',width:'auto',margin:'0 6px 0 0',accentColor:'var(--ui-text)'}} aria-label="收集新素材分析计划" checked={draft.enabled} disabled={busy} onChange={e=>setDraft({...draft,enabled:e.target.checked})}/>收集新素材分析计划</label><div className="visual-ai-actions">{BASIC_CAPABILITIES.map(cap=><label key={cap}><input type="checkbox" style={{display:'inline-block',width:'auto',margin:'0 6px 0 0',accentColor:'var(--ui-text)'}} aria-label={`计划能力 ${names[cap]}`} checked={draft.capabilities[cap]} disabled={busy} onChange={e=>setDraft({...draft,capabilities:{...draft.capabilities,[cap]:e.target.checked}})}/>{names[cap]}</label>)}</div><button disabled={busy} onClick={()=>void operate(async valid=>{const r=await api.prepare({...view.scope,enabled:draft.enabled,capabilities:draft.capabilities,expectedRevision:draft.revision});if(!valid()){if(r.ok)void api.discard(r.value.receipt).catch(()=>{});return}if(r.ok){receipt.current=r.value.receipt;setReview(r.value)}else setError(r.error)})}>保存新素材计划设置</button></>}
+  {review&&<div className="visual-ai-review" role="region" aria-label="确认后台计划设置"><p>{review.notice}</p><div className="visual-ai-actions"><button disabled={busy} onClick={()=>{const id=review.receipt;receipt.current=null;setReview(null);void api.discard(id).catch(()=>{})}}>取消设置</button><button disabled={busy} onClick={()=>void operate(async valid=>{const r=await api.confirm(review.receipt);if(!valid())return;readSequence.current++;receipt.current=null;setReview(null);if(r.ok){adopt({...view,value:r.value});setDraft(r.value.policy)}else setError(r.error)})}>确认保存后台计划</button></div></div>}
+--- /dev/null
++++ b/src/renderer/components/asset/BackgroundOcrPanel.tsx
+@@ -0,0 +1,35 @@
++import React,{useEffect,useRef,useState} from 'react'
++import type {BackgroundOcrApi,BackgroundOcrScope,BackgroundOcrView,BackgroundOcrReview} from '../../../shared/contracts/background-ocr.contract'
++import './background-analysis.css'
++const labels:Record<string,string>={'permission-required':'需要本次开库的独立许可','runtime-unavailable':'未选择本地 OCR 环境','runtime-changed':'环境已变化，请重新核对并授权','automatic-executor-not-integrated':'生产执行资源资格尚未验证','execution-envelope-unknown':'执行内存预算未知','memory-unknown':'内存证据未知','memory-insufficient':'内存余量不足','power-unknown':'供电状态未知','waiting-external-power':'等待外接电源','low-power-mode-unknown':'节能模式未知','low-power-mode':'系统处于节能模式','thermal-unknown':'温控状态未知','thermal-pressure':'温控压力','interaction-unknown':'交互状态未知','foreground-active':'前台正在交互','session-locked':'系统已锁定','visibility-unknown':'窗口状态未知','no-visible-window':'没有可见窗口','ocr-busy':'OCR 正在准备、运行或维护','process-exit-unconfirmed':'尚未确认进程退出，资源继续占用','resources-changed':'预处理期间条件变化，等待重新准入','operation-failed':'上次调度未完成，请检查任务记录后重新核对许可'}
++const states={claimed:'已领取，尚未发送',sent:'已发送',succeeded:'已保存',failed:'失败，旧结果保留',cancelled:'已取消',unknown:'退出未知，禁止重试',deferred:'等待资源重新准入'}
++export default function BackgroundOcrPanel(){
++ const bridge=(window as any).electronAPI,api=bridge?.backgroundOcr as BackgroundOcrApi|undefined
++ const [view,setView]=useState<{scope:BackgroundOcrScope;value:BackgroundOcrView}|null>(null),[review,setReview]=useState<BackgroundOcrReview|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[loadError,setLoadError]=useState('')
++ const life=useRef(0),sequence=useRef(0),key=useRef(''),receipt=useRef<string|null>(null),pending=useRef(false)
++ const discard=()=>{if(receipt.current)void api?.discard(receipt.current).catch(()=>{});receipt.current=null;setReview(null)}
++ const load=async()=>{
++  if(!api)return;const epoch=life.current,n=++sequence.current
++  try{
++   const current=await bridge.library.inspect();if(epoch!==life.current||n!==sequence.current)return
++   if(current.state!=='ready'){life.current++;key.current='';discard();setView(null);setLoadError('请先打开资料库。');pending.current=false;setBusy(false);return}
++   const scope={libraryIdentity:current.identity,generation:current.generation},r=await api.read(scope)
++   if(epoch!==life.current||n!==sequence.current)return
++   if(!r.ok){setLoadError(r.error);return}
++   const next=JSON.stringify([scope,r.value.sessionToken]);if(next!==key.current){life.current++;key.current=next;setError('');discard();pending.current=false;setBusy(false)}
++   setView(old=>old&&old.value.sessionToken===r.value.sessionToken&&old.value.permissionRevision>r.value.permissionRevision?old:{scope,value:r.value});setLoadError('')
++  }catch{if(epoch===life.current&&n===sequence.current)setLoadError('后台 OCR 状态暂不可用。')}
++ }
++ useEffect(()=>{life.current++;void load();const timer=setInterval(()=>{if(document.visibilityState==='visible')void load()},5000);return()=>{life.current++;sequence.current++;clearInterval(timer);if(receipt.current)void api?.discard(receipt.current).catch(()=>{})}},[api])
++ const act=async(action:(valid:()=>boolean)=>Promise<void>)=>{if(pending.current)return;const epoch=life.current;sequence.current++;pending.current=true;setBusy(true);setError('');try{await action(()=>epoch===life.current)}catch{if(epoch===life.current)setError('操作未完成，请重新核对。')}finally{if(epoch===life.current){pending.current=false;setBusy(false);sequence.current++;await load()}}}
++ if(!api)return null
++ return <section className="visual-ai-panel background-analysis-panel" aria-label="后台 OCR 执行许可"><header><strong>后台 OCR</strong><button disabled={busy} onClick={()=>void load()}>刷新 OCR 状态</button></header>
++ <p>新素材计划不等于执行许可。授权只对本次开库有效；关库后需重新授权，不补扫旧素材。</p>
++ {view&&<><p>{view.value.authorized?'本次开库已授权':'本次开库尚未授权'} · {view.value.running?'正在调度':'等待下一次准入'}</p>
++ <div className="visual-ai-actions"><button disabled={busy} onClick={()=>void act(async valid=>{const r=await api.prepare(view.scope);if(!valid()){if(r.ok)void api.discard(r.value.receipt);return}if(r.ok){receipt.current=r.value.receipt;setReview(r.value)}else setError(r.error)})}>核对后台 OCR 授权</button><button disabled={busy||!view.value.authorized} onClick={()=>void act(async valid=>{discard();const r=await api.revoke(view.scope);if(valid()){if(r.ok)setView({...view,value:r.value});else setError(r.error)}})}>撤销后台 OCR 许可</button></div>
++ {review&&<div className="visual-ai-review" role="region" aria-label="确认后台 OCR 授权"><p>{review.notice}</p><button disabled={busy} onClick={discard}>取消授权</button><button disabled={busy} onClick={()=>void act(async valid=>{const r=await api.confirm(review.receipt);if(!valid())return;receipt.current=null;setReview(null);if(r.ok)setView({...view,value:r.value});else setError(r.error)})}>确认授权后台 OCR</button></div>}
++ <div aria-label="后台 OCR 等待原因">{[...new Set(view.value.reasons)].map(reason=><p key={reason}>{labels[reason]??'执行条件尚未满足'}</p>)}</div>
++ <details><summary>最近 OCR 执行记录（最多 20 项）</summary>{view.value.attempts.length?view.value.attempts.map(a=><p key={a.intentId}>{a.interrupted&&a.state==='sent'?'上次发送结果未知，禁止自动重试':states[a.state]} · 第 {a.attemptGeneration} 次{a.interrupted?' · 来自上次会话，不能恢复旧权限':''}</p>):<p>尚无执行记录。</p>}</details></>}
++ {(error||loadError)&&<p role="alert">{error||loadError}</p>}
++ </section>
++}
+--- a/src/renderer/routes/AiConsolePage.tsx
++++ b/src/renderer/routes/AiConsolePage.tsx
+@@ -1,3 +1,4 @@
++import BackgroundOcrPanel from '../components/asset/BackgroundOcrPanel'
+ import BackgroundAnalysisPanel from '../components/asset/BackgroundAnalysisPanel'
+ import { SegmentedControl } from '../components/ui/WorkspaceMotion'
+ import { Notice, ReviewSheet, Button } from '../components/ui/WorkspacePrimitives'
+@@ -1260,7 +1261,7 @@
+ 
+       <div className="flex min-h-full flex-col gap-5">
+         <main className="min-w-0 flex-1 space-y-5">
+-          <BackgroundAnalysisPanel/>
++          <BackgroundAnalysisPanel/><BackgroundOcrPanel/>
+           <section className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
+             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+               <div className="min-w-0">
+--- a/src/shared/contracts/active-library.contract.ts
++++ b/src/shared/contracts/active-library.contract.ts
+@@ -1,3 +1,4 @@
++import type {BackgroundOcrScope,BackgroundOcrSession,BackgroundOcrSnapshot,BackgroundOcrPermission,BackgroundOcrClaim,BackgroundOcrCommit,BackgroundOcrReceipt} from './background-ocr.contract'
+ import type {BackgroundScope,BackgroundSnapshot,BackgroundConfigCommit,BackgroundDecision} from './background-analysis.contract'
+ import type {TagRecoveryScope,TagRecoveryStored,TagRecoveryReceipt} from './tag-recovery.contract'
+ import type {TagBatchCommit,TagBatchSaved} from './tag-batch.contract'
+@@ -227,6 +228,13 @@
+   readAssetContext(ids: readonly string[]): Promise<ActiveLibraryAssetContext>
+   readTagIntentContext(scope: TagIntentScope): Promise<TagIntentContext>
+   readTagIntents(scope: TagIntentScope): Promise<TagIntentSnapshot>
++  readBackgroundOcr(input:BackgroundOcrScope):Promise<BackgroundOcrSnapshot>
++  configureBackgroundOcr(input:BackgroundOcrPermission,signal?:AbortSignal):Promise<BackgroundOcrSnapshot>
++  revokeBackgroundOcr():void
++  claimBackgroundOcr(input:BackgroundOcrSession&{runtimeFingerprint:string}):Promise<BackgroundOcrClaim|null>
++  markBackgroundOcrSent(input:BackgroundOcrClaim):Promise<void>
++  commitBackgroundOcr(input:BackgroundOcrCommit,signal?:AbortSignal):Promise<BackgroundOcrReceipt>
++  finishBackgroundOcr(input:BackgroundOcrClaim,state:'failed'|'cancelled'|'unknown'|'deferred'):Promise<void>
+   readBackgroundAnalysis(input:BackgroundScope):Promise<BackgroundSnapshot>
+   configureBackgroundAnalysis(input:BackgroundConfigCommit,signal?:AbortSignal):Promise<BackgroundSnapshot>
+   changeBackgroundIntent(input:BackgroundDecision,signal?:AbortSignal):Promise<BackgroundSnapshot>
+--- /dev/null
++++ b/src/shared/contracts/background-ocr.contract.ts
+@@ -0,0 +1,20 @@
++import type {OcrCommit} from './asset-ocr.contract'
++export interface BackgroundOcrScope {libraryIdentity:string;generation:string}
++export interface BackgroundOcrSession extends BackgroundOcrScope {sessionToken:string}
++export interface BackgroundOcrPermission extends BackgroundOcrSession {enabled:boolean;expectedRevision:number;expectedSchemaVersion:number;allowUpgrade:boolean;runtimeFingerprint:string}
++export type BackgroundOcrAttemptState='claimed'|'sent'|'succeeded'|'failed'|'cancelled'|'unknown'|'deferred'
++export interface BackgroundOcrSnapshot {schemaVersion:number;sessionToken:string;permissionRevision:number;authorized:boolean;runtimeFingerprint:string;attempts:Array<{intentId:string;assetId:string;state:BackgroundOcrAttemptState;attemptGeneration:number;interrupted:boolean}>}
++/** Main/Host internal capability; never exposed in a renderer response. */
++export interface BackgroundOcrClaim extends BackgroundOcrSession {token:string;attemptId:string;intentId:string;assetId:string;runtimeFingerprint:string}
++export interface BackgroundOcrReceipt {attemptId:string;intentId:string;evidenceId:string;savedRevision:number}
++export interface BackgroundOcrCommit {claim:BackgroundOcrClaim;ocr:OcrCommit}
++export interface BackgroundOcrView extends BackgroundOcrSnapshot {reasons:string[];running:boolean}
++export interface BackgroundOcrReview {receipt:string;notice:string}
++export type BackgroundOcrResponse<T>={ok:true;value:T}|{ok:false;error:string}
++export interface BackgroundOcrApi {
++ read(scope:BackgroundOcrScope):Promise<BackgroundOcrResponse<BackgroundOcrView>>
++ prepare(scope:BackgroundOcrScope):Promise<BackgroundOcrResponse<BackgroundOcrReview>>
++ confirm(receipt:string):Promise<BackgroundOcrResponse<BackgroundOcrView>>
++ discard(receipt:string):Promise<BackgroundOcrResponse<void>>
++ revoke(scope:BackgroundOcrScope):Promise<BackgroundOcrResponse<BackgroundOcrView>>
++}

@@ -1,0 +1,10 @@
+Navigation passed: local workspace and downloads remain; web routes are absent and use default fallback.
+✔ global AI canonical paths, old aliases and ownership resolve without duplicate destinations (0.800042ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.016

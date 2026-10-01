@@ -1,0 +1,45 @@
+{
+  "pointer": {
+    "anchorVersion": 2,
+    "runId": "rux-auth-20261001-6a9cf104",
+    "runDirectory": ".ai-run/rux-auth-20261001-6a9cf104",
+    "executionState": "COMPLETED",
+    "completionScope": "RUX code and bounded isolated validation handoff; Computer Use blocked, real authentication not run, legacy Runtime source-policy regression retained",
+    "rawStatus": "COMPLETED",
+    "rawAdapter": "v2",
+    "report": ".ai-run/rux-auth-20261001-6a9cf104/REPORT.md",
+    "review": ".ai-run/rux-auth-20261001-6a9cf104/REVIEW.md",
+    "verification": ".ai-run/rux-auth-20261001-6a9cf104/EVIDENCE-MAP.json",
+    "sourceManifest": ".ai-run/rux-auth-20261001-6a9cf104/SOURCE-MANIFEST.json",
+    "sourceFileCount": 668,
+    "sourceDigestAlgorithm": "sha256(json-sortkeys-compact-ascii-no-newline)",
+    "sourceDigest": "0ec53bd995145a8497f63ef5d6909a69aaf2c966c102bebf1ebe07678d31a721",
+    "limitations": [
+      "Product usability/sign-in complaint remains unclosed because final native CU is blocked.",
+      "One legacy all-src Runtime source-policy regression is RED, 13 baseline Main comparator consumers; no assertion bypass.",
+      "Independent source-only signatures do not prove full regression or usability; final review task orchestration hit quota after graph append was written and hash-bound.",
+      "No Windows/installer/real model/Keychain validation.",
+      "Incremental body cannot replace entire pre-existing WIP; hash-merge against before.",
+      "Late handoff-only Runtime source-path guard correction verified with 28 local anchor tests; independent code reviewers did not review this utility supplement.",
+      "U01-U32 final native Computer Use",
+      "A01-A03 real subscription authentication",
+      "real credentials/user libraries/weights",
+      "paid inference/material external sending"
+    ],
+    "nextBatchAuthorized": false,
+    "automaticResume": false,
+    "fullWorkspaceSnapshot": false,
+    "sourceVerification": "current",
+    "terminalSha256": "dbfe7e5f7e85260b3ffee9032a3d2cd21fbf551e6a0a9376fa1abd3c8b28fe5c",
+    "stateSha256": "ef56f6646dc285e0c57734e51778ceb1660f1d48abcad1ad000ebb8dc819b0c5",
+    "evidenceHashes": {
+      "REPORT.md": "50a7fafcdeb0a43ccf0b60dd09e4094adf7054fa8f6e8e4ceed85f14cf18d837",
+      "REVIEW.md": "b944d5e6cdd1d1e88e4d37793cabd8dc38272b2d16a16ddeac03ae98e0665c2b",
+      "EVIDENCE-MAP.json": "641d2b3bea23be02ef9137388219d47e504eeae3a2c7e1d450b5f348cfbb6727",
+      "SOURCE-MANIFEST.json": "9b0f41571bf4771aedd9f624fc78197dfbfcd6af7a4044807c2b277ed53c0697"
+    }
+  },
+  "readTimeVerification": "CURRENT",
+  "automaticResume": false,
+  "nextBatchAuthorized": false
+}

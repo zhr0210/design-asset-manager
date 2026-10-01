@@ -1,0 +1,26 @@
+{
+  "runId": "ocr-exit-boundary-20260929",
+  "state": "COMPLETED",
+  "action": "STOP",
+  "nextBatchAuthorized": false,
+  "automaticResume": false,
+  "sourceDigest": "d37bc66c281a6547373111571d173d23209a7dd0f8897c10585ec022d17ee939",
+  "changeDigest": "54cc88bc9ba256d0945a67d7f37bc233830611326b40ef2d9de44ac6010055ef",
+  "scope": "OCR owned subprocess physical exit/resource/drain; synthetic execution only",
+  "publicContractChanged": false,
+  "automaticInferenceImplemented": false,
+  "processFacts": {
+    "ownedTestCommandsExited": true,
+    "otherBackgroundProcesses": "UNKNOWN",
+    "supervisorDeployed": false
+  },
+  "notRun": [
+    "real OCR/model quality",
+    "user library",
+    "Windows",
+    "installer/signing",
+    "automatic background dispatch",
+    "full resource governor"
+  ],
+  "review": "REVIEW-FINAL.md"
+}

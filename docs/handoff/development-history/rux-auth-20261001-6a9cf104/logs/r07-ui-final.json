@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/pi-ui.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 1.867,
+  "sha256": "6fcd1701fd063bb0232d96797e056f8dfea6564d095d5287d96cfa4b65a6efc4"
+}

@@ -1,0 +1,516 @@
+{
+  "records": [
+    {
+      "label": "admission-corrected",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/visual-admission.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.781,
+      "sha256": "175fc6c54e25b514155099b23bc3083dce5f0a8563c54c5da4c879afd79c8ccd",
+      "log": "logs/admission-corrected.log",
+      "discoveredTests": 10
+    },
+    {
+      "label": "admission-regression",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/visual-ai-admission.test.ts"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.084,
+      "sha256": "5e801928401529263e7d5289c079dec2e8b3b40bca0b7c187fe4857b19a69079",
+      "log": "logs/admission-regression.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "b01-formal-regression",
+      "command": [
+        "node",
+        "scripts/background-analysis-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.994,
+      "sha256": "55414349cb939dc306510e1912e4e0963475ba7b23902a41eba318e4750bec99",
+      "log": "logs/b01-formal-regression.log",
+      "discoveredTests": 1
+    },
+    {
+      "label": "b01-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.804,
+      "sha256": "ce26588d0847d475412eeb1a4327a6f80dc1634fd7a6b330a5f4ae24fa643d8d",
+      "log": "logs/b01-regression.log",
+      "discoveredTests": 19
+    },
+    {
+      "label": "build-diagnostic",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.421,
+      "sha256": "46a9aa4b2b673bd042f7c0909250b858b3f2591d76cac9668a0f27ccbdc6c686",
+      "log": "logs/build-diagnostic.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "build-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.36,
+      "sha256": "4fa1baca50713747d9993d013ef2165559c9d8fef6a7d81c3d548baa9993faa2",
+      "log": "logs/build-final.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "build-first",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.766,
+      "sha256": "5a2c69cbc1c9293b12b8bd80c0c4ade5f40b73db9c50bc659ae922252cf119bb",
+      "log": "logs/build-first.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "build-formal-fix",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.566,
+      "sha256": "22d1a9516702775e8a32ff7a78d2637ae202028aa8a6893a956568df1c00835a",
+      "log": "logs/build-formal-fix.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "chain-first",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.029,
+      "sha256": "ffa892fbbf24023d6e403b6a3fa88a6a809f7367d4909b58c1cee5bbe035514e",
+      "log": "logs/chain-first.log",
+      "discoveredTests": 21
+    },
+    {
+      "label": "controller-regression",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-controller-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.523,
+      "sha256": "47ff4d5bb4e59a9ada55efaf7798d27c8d99e15d6c0684aee290df2df0f9c789",
+      "log": "logs/controller-regression.log",
+      "discoveredTests": 12
+    },
+    {
+      "label": "final-host-resource",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.738,
+      "sha256": "f5825658bfde4d5a9aa04b0b36fd9336efdd6837657ba0e17c37e46dcd4c6917",
+      "log": "logs/final-host-resource.log",
+      "discoveredTests": 34
+    },
+    {
+      "label": "final-host",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 4.819,
+      "sha256": "b8779d1c10c1c5f7c108414db457dbbade3fd5211ebc576471f90aa472e629a4",
+      "log": "logs/final-host.log",
+      "discoveredTests": 33
+    },
+    {
+      "label": "final-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.909,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "log": "logs/final-typecheck.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "formal-diagnostic",
+      "command": [
+        "node",
+        "scripts/background-ocr-electron.e2e.test.mjs"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 26.078,
+      "sha256": "63d57a66595934746857df44cb2dd75f523fe17551ef59d3e2e82488de2ba951",
+      "log": "logs/formal-diagnostic.log",
+      "discoveredTests": 2
+    },
+    {
+      "label": "formal-final",
+      "command": [
+        "node",
+        "scripts/background-ocr-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 9.451,
+      "sha256": "5fbc5781b1b96ec73814fdabbc15207614b0ce489eccfd172f3ec3cc6c1dd809",
+      "log": "logs/formal-final.log",
+      "discoveredTests": 2
+    },
+    {
+      "label": "formal-first",
+      "command": [
+        "node",
+        "scripts/background-ocr-electron.e2e.test.mjs"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 27.129,
+      "sha256": "7a3f0111bd2d1b810fa1a57d387d4445961e34c532a9b84195664d86e82c05e8",
+      "log": "logs/formal-first.log",
+      "discoveredTests": 2
+    },
+    {
+      "label": "formal-fixed",
+      "command": [
+        "node",
+        "scripts/background-ocr-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 9.52,
+      "sha256": "b8182247bd44941c8060d71ad50ef0638b2c73395456127a834d2926bc338886",
+      "log": "logs/formal-fixed.log",
+      "discoveredTests": 2
+    },
+    {
+      "label": "host-expanded",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.521,
+      "sha256": "91fe51470bbfe7f06a4edac5423a38477fdcbe113c0d22d7efe75b7b88bd8dea",
+      "log": "logs/host-expanded.log",
+      "discoveredTests": 30
+    },
+    {
+      "label": "host-final",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.954,
+      "sha256": "9c64705f16d1fc75631e398122d54a4f3a4cf290f712bfad45991bf3956580d5",
+      "log": "logs/host-final.log",
+      "discoveredTests": 35
+    },
+    {
+      "label": "host-first",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 1.893,
+      "sha256": "d17b8e1c8bc8626c26964c5e4d9b34c922d5f75384a87ec646c9da40e0b890b2",
+      "log": "logs/host-first.log",
+      "discoveredTests": 14
+    },
+    {
+      "label": "host-fixture-fixed",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.134,
+      "sha256": "638fc7da5947acf154f9fb021f376071b3e42af37728f34e03d3c1f3378d5df5",
+      "log": "logs/host-fixture-fixed.log",
+      "discoveredTests": 14
+    },
+    {
+      "label": "host-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/active-library-host.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.355,
+      "sha256": "fd247744f5a4541850511ccf89d6523c98b284386909059efce43a60f64e710b",
+      "log": "logs/host-regression.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "manual-formal-regression",
+      "command": [
+        "node",
+        "scripts/ocr-exit-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.356,
+      "sha256": "ff2578e8ab3e3cb2f51bfa0462f0025e3b003ba8bfd516407b717520ae8f45bf",
+      "log": "logs/manual-formal-regression.log",
+      "discoveredTests": 1
+    },
+    {
+      "label": "ocr-regression",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-controller-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.5,
+      "sha256": "e908e548f2fb8580f7be0688119392c4d78036e237e5aa78b34c8789202f0f32",
+      "log": "logs/ocr-regression.log",
+      "discoveredTests": 12
+    },
+    {
+      "label": "ocr-storage-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/asset-ocr-storage.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.46,
+      "sha256": "24e0c2dff827cbaa9079acee0803c6ddb51b28ef8b3492b9f0a6beff25199ba6",
+      "log": "logs/ocr-storage-regression.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "process-regression",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-process-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.931,
+      "sha256": "5bda0c340a9dbc23ef47ff4964dba58ad715087a73473892b9bdd2beffdc8615",
+      "log": "logs/process-regression.log",
+      "discoveredTests": 17
+    },
+    {
+      "label": "recovery-matrix",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-ocr.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.347,
+      "sha256": "c0442d31693c951cc9c5a82d34e118e13537f50cc8ebccc7ee45a8d0b6944b65",
+      "log": "logs/recovery-matrix.log",
+      "discoveredTests": 27
+    },
+    {
+      "label": "shutdown-regression",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/active-library-shutdown.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.085,
+      "sha256": "813371f589dc2965b96386a3728b8c16a3e6862fb6fc4824abd68401c9811942",
+      "log": "logs/shutdown-regression.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "tag-decision-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-decision.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.173,
+      "sha256": "c5af3ca8463ed09a16dd77db71a7bad8a1dfa59dbe7318d1361ba91811fbe8ec",
+      "log": "logs/tag-decision-regression.log",
+      "discoveredTests": 13
+    },
+    {
+      "label": "tag-execution-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-execution.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.011,
+      "sha256": "880170f4a8a09b4186dd6080ddea8f515aff4f8d22398e12df1e395be2e12cc2",
+      "log": "logs/tag-execution-regression.log",
+      "discoveredTests": 30
+    },
+    {
+      "label": "tag-recovery-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-recovery.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.461,
+      "sha256": "e4278498417cfc62f0aad64f87ed655591031101ce887612f9ac9585ff16da82",
+      "log": "logs/tag-recovery-regression.log",
+      "discoveredTests": 22
+    },
+    {
+      "label": "typecheck-a",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 2,
+      "timeout": false,
+      "seconds": 5.724,
+      "sha256": "1902bef1e819463e6573b9aadc565d72d5e569580e48ee255f1b8ecbc5b03076",
+      "log": "logs/typecheck-a.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "typecheck-b",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.45,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "log": "logs/typecheck-b.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "typecheck-c",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.22,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "log": "logs/typecheck-c.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "typecheck-final",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.964,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "log": "logs/typecheck-final.log",
+      "discoveredTests": null
+    },
+    {
+      "label": "ui-final",
+      "command": [
+        "node",
+        "scripts/background-ocr-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.286,
+      "sha256": "ff3219a97190e5133d977c70647f24128f66df3bee7477d110a657ba3c2eb265",
+      "log": "logs/ui-final.log",
+      "discoveredTests": 3
+    },
+    {
+      "label": "ui-first",
+      "command": [
+        "node",
+        "scripts/background-ocr-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.477,
+      "sha256": "e8eabb7b262a2df8b26d27f500d9e5f2b093bd702bade5c5c7518c03aff5c70a",
+      "log": "logs/ui-first.log",
+      "discoveredTests": 3
+    }
+  ],
+  "sourceCandidate": "CANDIDATE-SOURCES.json",
+  "binding": "Final source candidate verified after implementation and final checks; earlier failures/intermediate passes are retained history, not all final-candidate tests."
+}

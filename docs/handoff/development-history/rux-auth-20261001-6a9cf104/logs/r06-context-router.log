@@ -1,0 +1,57 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Unexpected status for check --json
+stdout:
+{
+  "ok": false,
+  "errors": [
+    {
+      "code": "UNTRACKED_CONTEXT_PATH",
+      "message": "Route ai-runtime first-read item must reference a Git-tracked repository path.",
+      "locator": "src/renderer/routes/AiWorkspace.tsx"
+    }
+  ],
+  "warnings": [
+    {
+      "code": "UNTRACKED_FIRST_PARTY_SOURCE",
+      "message": "90 untracked first-party source file(s) were excluded from trusted ownership coverage."
+    }
+  ],
+  "coverage": {
+    "trackedRepositoryFiles": 2001,
+    "repositoryFiles": 2001,
+    "relevantSourceFiles": 1045,
+    "indexableSourceFiles": 602,
+    "ownedSourceFiles": 602,
+    "excludedSourceFiles": 443,
+    "unownedSourceFiles": 0,
+    "duplicateSourceFiles": 0,
+    "untrackedFirstPartySourceFiles": 90
+  },
+  "snapshot": {
+    "head": "3fa00df3bbb6",
+    "dirty": true
+  }
+}
+
+stderr:
+
+
+3 !== 0
+
+    at run (file://<DAM_WORKSPACE>/scripts/agent-context-router.test.mjs:22:10)
+    at file://<DAM_WORKSPACE>/scripts/agent-context-router.test.mjs:54:15
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:639:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v25.8.0

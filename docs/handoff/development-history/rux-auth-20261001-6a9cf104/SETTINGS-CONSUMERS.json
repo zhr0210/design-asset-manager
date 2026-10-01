@@ -1,0 +1,15 @@
+{
+  "current": [
+    "aiBackends via one connection editor/Gateway",
+    "aiTaskModels via task model page",
+    "Active Library paths via native create/open",
+    "OCR environment via controlled configure"
+  ],
+  "retainedLegacyOnly": [
+    "libraryPath preference",
+    "concurrency/delayInterval/saveOriginalUrl/autoThumbnail not consumed by active managed Copy/download path",
+    "modelRootDir legacy runtime preference",
+    "promptReverseTemplates legacy records read-only"
+  ],
+  "dataRemoved": false
+}

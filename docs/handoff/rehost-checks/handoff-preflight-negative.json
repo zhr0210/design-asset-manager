@@ -1,0 +1,45 @@
+{
+  "status": "SOURCE_INCOMPLETE",
+  "host": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v25.8.0"
+  },
+  "source": {
+    "requiredCount": 17,
+    "missing": [
+      "package.json",
+      "package-lock.json",
+      "electron.vite.config.ts",
+      "AGENTS.md",
+      "DESIGN.md",
+      "TASK.md",
+      "src/main/index.ts",
+      "src/preload/index.ts",
+      "src/renderer/App.tsx",
+      "src/shared/contracts/ai-connection.contract.ts",
+      "pi-runtime/package-lock.json",
+      "pi-runtime/worker.mjs",
+      "pi-runtime/auth-protocol.json",
+      "scripts/prepare-pi-runtime.mjs",
+      "scripts/seal-pi-runtime.mjs",
+      "docs/REHOST.md",
+      "src/renderer/routes/work-mode-prototype/motion-study.mp4"
+    ]
+  },
+  "dependenciesPresent": false,
+  "piPreparedFilesPresent": false,
+  "pinnedPi": {
+    "version": "0.99.1",
+    "node": "24.21.0"
+  },
+  "executionVerified": false,
+  "privateDataInspected": false,
+  "networkRequests": 0,
+  "notes": [
+    "Presence is not integrity, installation or model-path verification.",
+    "Restore dependencies using lockfiles on this host; run Electron ABI tests with repository launcher.",
+    "Pi preparation downloads only after explicit approval; models and account login are separate.",
+    "Current synthetic history does not replace native Computer Use or real authentication."
+  ]
+}

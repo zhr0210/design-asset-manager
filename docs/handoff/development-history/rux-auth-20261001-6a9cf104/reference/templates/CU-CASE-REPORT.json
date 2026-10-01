@@ -1,0 +1,17 @@
+{
+  "template": true,
+  "caseId": "Uxx",
+  "buildId": "REQUIRED",
+  "status": "NOT_RUN",
+  "tool": null,
+  "profile": "owned-isolated-profile",
+  "viewport": null,
+  "theme": null,
+  "startingState": null,
+  "fixtureSetup": [],
+  "actions": [],
+  "sensitiveCapturePolicy": "redact at capture or pause explicitly; never export token/callback query",
+  "backendReadOnlyVerification": [],
+  "usedPrivilegedShortcut": false,
+  "reason": null
+}

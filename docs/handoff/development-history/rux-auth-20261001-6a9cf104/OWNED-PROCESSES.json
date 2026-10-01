@@ -1,0 +1,6 @@
+{
+  "stoppedOwnedCuPid": 4659,
+  "status": "owned stale CU child stopped; scratch profile retained",
+  "personalPid90914": "not manipulated; CU dependency still requires user exit",
+  "scratchProfiles": "retained; no broad cleanup"
+}

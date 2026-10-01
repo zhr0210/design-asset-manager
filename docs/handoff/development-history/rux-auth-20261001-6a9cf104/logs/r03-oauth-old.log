@@ -1,0 +1,17 @@
+✔ OAuth credential messages are not committed until a successful result and actual close (6.695459ms)
+✔ OAuth nonzero cannot replace an old credential (3.252792ms)
+✔ OAuth cancel cannot replace an old credential (2.854791ms)
+✔ OAuth protocol cannot replace an old credential (2.54475ms)
+✔ no close is bounded UNKNOWN and no fresh spawn until the late close (40.588875ms)
+✔ Main login status has no token, prompt answer is scoped and cancel preserves original Vault (2.551791ms)
+✔ successful token refresh is retained even when the subsequent inference fails (2.877041ms)
+✔ at most two supervised workers reserve capacity, including before verification completes (2.811ms)
+✔ OAuth account-derived endpoint is stored with new credential revision and old selection invalidates (3.442084ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70.415833

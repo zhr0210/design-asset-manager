@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/ai-runtime-status-workflow.test.ts"
+  ],
+  "exitCode": 1,
+  "timeout": false,
+  "seconds": 0.175,
+  "sha256": "72feb8763b416554de4eae909271692e151d601af55ded346174c8fd386fe9e2"
+}

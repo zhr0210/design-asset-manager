@@ -1,0 +1,10 @@
+{
+  "reason": "Frozen prior reader fixture for the approved v11 refusal gate; actual component regressions for independently found stale read and authority teardown; local typography override to use DESIGN body/label sizes rather than inherited 10px legacy AI text",
+  "new": [
+    "scripts/fixtures/background-v11/manifest.json",
+    "scripts/fixtures/background-v11/library-schema-version.ts.txt",
+    "scripts/fixtures/background-v11/library-open-control-store.internal.ts.txt",
+    "scripts/background-analysis-ui.test.mjs",
+    "src/renderer/components/asset/background-analysis.css"
+  ]
+}

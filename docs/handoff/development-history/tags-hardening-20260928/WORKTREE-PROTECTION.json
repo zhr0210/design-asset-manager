@@ -1,0 +1,9 @@
+{
+  "checkedFiles": 1068,
+  "unexpectedModified": [],
+  "missing": [],
+  "indexUnchanged": true,
+  "stagedUnchanged": true,
+  "indexHashMethod": "SHA256(git ls-files --stage -z)",
+  "stagedHashMethod": "SHA256(git diff --cached --binary)"
+}

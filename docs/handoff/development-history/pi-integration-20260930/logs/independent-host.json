@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-electron-node-test.mjs",
+    "scripts/pi-visual.integration.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 13.648,
+  "sha256": "b3c26ba48f6b8b8b53c49a9af58d30c4900b91046f79b9a6839d07f8ad533821"
+}

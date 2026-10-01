@@ -1,0 +1,3 @@
+# Independent archive acceptance — APPROVE
+
+/root/background_boundary_review independently verified917656bytes/240entries, exact SHA256 d6e93cafb0c88d79d77948684652b8d1195d13957bf9384f57350e650705b923, allCRC, unique/safe paths and no symlinks.239manifest payload hashes,121source files and all evidence logs match. Reviewer reconstructed33delta files from before+patch entirely in memory; all final bytes match. FINAL-HANDOFF/STATE/queue consistently COMPLETED/STOP/no next batch, automatic inference explicitly not implemented. Report correctly bounds networking evidence, collection-only enabled policy and deferred work. Read-only audit; no extraction writes or product tests.

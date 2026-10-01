@@ -1,0 +1,12 @@
+{
+  "runId": "pi-integration-20260930",
+  "authorization": "<REDACTED_VALUE>",
+  "state": "STOP",
+  "scope": "Pi integration PI-01..08; isolated generated-data tests; actual accounts/data require identified scope",
+  "testConcurrency": 1,
+  "perCommandTimeoutSeconds": 240,
+  "perIssueRepairBudget": 3,
+  "nextBatchAuthorized": false,
+  "actualAccountScope": "User explicitly selected isolated acceptance only; real accounts configured later",
+  "completion": "isolated approved scope"
+}

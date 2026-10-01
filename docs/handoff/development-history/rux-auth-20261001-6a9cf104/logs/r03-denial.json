@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/auth-denial-lifecycle.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.308,
+  "sha256": "e90da9e5e196f2f3a9645144f2f719c6e56cca942cc1d9b0e588567311f81e79"
+}

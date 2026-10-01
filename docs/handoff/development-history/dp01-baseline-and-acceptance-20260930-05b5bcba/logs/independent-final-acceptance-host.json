@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-electron-node-test.mjs",
+    "scripts/ai-acceptance.integration.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 7.884,
+  "sha256": "12147f5583c810e03323be4b3691c5178c9f173aa44f06c908dfc8dccd66dfaf"
+}

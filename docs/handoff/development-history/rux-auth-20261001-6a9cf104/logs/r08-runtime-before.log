@@ -1,0 +1,48 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'src/main/asset-card/electron-asset-card-window.ts',
++   'src/main/external-connected-library/connected-library-runtime.ts',
++   'src/main/independent-tags/tag-intent-backup.ts',
++   'src/main/index.ts',
++   'src/main/library-lifecycle/exclusive-library-lock.tracer.ts',
++   'src/main/library-lifecycle/library-filesystem.tracer.ts',
++   'src/main/library-lifecycle/library-open-inspection.tracer.ts',
++   'src/main/library-lifecycle/mac-volume-qualification.ts',
++   'src/main/library-lifecycle/readonly-library-database.internal.ts',
++   'src/main/ocr/ocr-runtime.ts',
++   'src/main/visual-ai/visual-codec.worker.ts',
++   'src/main/visual-ai/visual-preparation.ts',
++   'src/main/work-mode/electron-work-window.ts'
++ ]
+- []
+
+    at file://<DAM_WORKSPACE>/dist-temp/tests/ai-runtime-status-workflow.test.mjs:1325:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'src/main/asset-card/electron-asset-card-window.ts',
+    'src/main/external-connected-library/connected-library-runtime.ts',
+    'src/main/independent-tags/tag-intent-backup.ts',
+    'src/main/index.ts',
+    'src/main/library-lifecycle/exclusive-library-lock.tracer.ts',
+    'src/main/library-lifecycle/library-filesystem.tracer.ts',
+    'src/main/library-lifecycle/library-open-inspection.tracer.ts',
+    'src/main/library-lifecycle/mac-volume-qualification.ts',
+    'src/main/library-lifecycle/readonly-library-database.internal.ts',
+    'src/main/ocr/ocr-runtime.ts',
+    'src/main/visual-ai/visual-codec.worker.ts',
+    'src/main/visual-ai/visual-preparation.ts',
+    'src/main/work-mode/electron-work-window.ts'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v25.8.0

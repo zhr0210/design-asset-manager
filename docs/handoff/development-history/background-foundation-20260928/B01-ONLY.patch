@@ -1,0 +1,1040 @@
+--- /dev/null
++++ b/scripts/background-analysis-electron.e2e.test.mjs
+@@ -0,0 +1,41 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import http from 'node:http'
++import {pathToFileURL} from 'node:url'
++import {createHash} from 'node:crypto'
++import {_electron as electron} from 'playwright'
++import sharp from 'sharp'
++await test('formal plan enrollment, controls, card isolation and reopen remain metadata-only',async()=>{
++ const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-background-e2e-'))),profile=path.join(root,'profile'),library=path.join(root,'library'),evidence=path.join(root,'evidence'),entry=path.join(root,'entry');let app,calls=0
++ const server=http.createServer((req,res)=>{calls++;res.writeHead(500);res.end()})
++ try{
++  for(const dir of [profile,evidence,entry])await fs.mkdir(dir)
++  const sources=[];for(let i=0;i<2;i++){const file=path.join(root,`generated-${i}.png`);await sharp({create:{width:80+i,height:80,channels:3,background:'#7799bb'}}).png().toFile(file);sources.push(file)}
++  const hashes=async()=>Promise.all(sources.map(async p=>createHash('sha256').update(await fs.readFile(p)).digest('hex'))),original=await hashes()
++  await fs.writeFile(path.join(entry,'package.json'),JSON.stringify({name:'dam-background-test',type:'module',main:'main.mjs'}));await fs.writeFile(path.join(entry,'main.mjs'),`import ${JSON.stringify(pathToFileURL(path.resolve('out/main/index.js')).href)};`)
++  await new Promise(r=>server.listen(0,'127.0.0.1',r));const config={rootDirectory:root,profileDirectory:profile,libraryDirectory:library,evidenceDirectory:evidence,sourceSelections:sources.map(p=>[p])},env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k))),options={args:[entry,'--dam-active-library-synthetic-e2e',`--user-data-dir=${profile}`],env:{...env,NODE_ENV:'test',DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E:JSON.stringify(config)}},errors=[]
++  const start=async()=>{app=await electron.launch(options);assert.ok((await app.evaluate(({app})=>['userData','sessionData','logs','crashDumps'].map(p=>app.getPath(p)))).every(p=>p.startsWith(root+path.sep)));const page=await app.firstWindow();page.setDefaultTimeout(15000);page.on('pageerror',()=>errors.push('renderer-error'));await page.setViewportSize({width:1450,height:1050});await page.getByTestId('formal-library-canvas').waitFor();return page}
++  let page=await start()
++  await page.getByTestId('library-create').click();await page.getByTestId('library-create-confirm').click();await page.getByRole('button',{name:'添加图片',exact:true}).click();await page.getByTestId('library-copy-confirm').click();await page.locator('.lc-card').first().waitFor()
++  await page.evaluate(baseUrl=>window.electronAPI.aiBackendSave({id:'owned-fixture',name:'Synthetic only',type:'openai-compatible',enabled:true,baseUrl,defaultModel:'fixture',timeoutMs:5000,priority:1,capabilities:{chat:true,vision:true,embeddings:false,jsonOutput:true,modelList:false,modelManagement:false}}),`http://127.0.0.1:${server.address().port}/v1`)
++  const scope=await page.evaluate(async()=>{const s=await window.electronAPI.library.inspect();return{libraryIdentity:s.identity,generation:s.generation}}),old=(await page.evaluate(()=>window.electronAPI.listAssets()))[0]
++  await page.evaluate(()=>location.hash='/ai-console');const consolePanel=page.getByRole('region',{name:'后台基础分析计划',exact:true});await consolePanel.getByRole('checkbox',{name:'收集新素材分析计划'}).check();await consolePanel.getByRole('button',{name:'保存新素材计划设置'}).click();await consolePanel.getByRole('region',{name:'确认后台计划设置'}).waitFor();assert.equal((await page.evaluate(s=>window.electronAPI.backgroundAnalysis.read(s),scope)).value.schemaVersion,1)
++  await consolePanel.getByRole('button',{name:'确认保存后台计划'}).click();await consolePanel.getByRole('region',{name:'确认后台计划设置'}).waitFor({state:'detached'});assert.equal((await page.evaluate(s=>window.electronAPI.backgroundAnalysis.read(s),scope)).value.schemaVersion,12)
++  if(process.env.BACKGROUND_EVIDENCE_DIR){await fs.mkdir(process.env.BACKGROUND_EVIDENCE_DIR,{recursive:true});await consolePanel.screenshot({path:path.join(process.env.BACKGROUND_EVIDENCE_DIR,'background-console.png')})}
++  assert.equal((await page.evaluate(s=>window.electronAPI.backgroundAnalysis.read(s),{...scope,assetId:old.id})).value.intents.length,0)
++  await page.evaluate(()=>location.hash='/library');await page.getByRole('button',{name:'添加图片',exact:true}).click();await page.getByTestId('library-copy-confirm').click();await page.waitForFunction(()=>document.querySelectorAll('.lc-card').length===2)
++  if(await page.getByRole('button',{name:'关闭资料库管理'}).count())await page.getByRole('button',{name:'关闭资料库管理'}).click()
++  const newer=(await page.evaluate(()=>window.electronAPI.listAssets())).find(a=>a.id!==old.id),selected={...scope,assetId:newer.id};let value=(await page.evaluate(s=>window.electronAPI.backgroundAnalysis.read(s),selected)).value;assert.equal(value.intents.length,3);assert.equal(value.dispatchAvailable,false)
++  await page.locator(`[id="asset-card-open-${newer.id}"]`).click();await page.getByText('AI 分析与提示词反推',{exact:true}).click();const assetPanel=page.getByRole('region',{name:'素材后台分析计划',exact:true});await assetPanel.getByRole('button',{name:'暂停标签计划'}).click();await assetPanel.getByText('标签 · 已手动暂停',{exact:true}).waitFor()
++  if(process.env.BACKGROUND_EVIDENCE_DIR)await assetPanel.screenshot({path:path.join(process.env.BACKGROUND_EVIDENCE_DIR,'background-asset.png')})
++  const opening=app.waitForEvent('window');assert.equal((await page.evaluate(s=>window.electronAPI.assetCard.open(s),selected)).ok,true);const card=await opening;await card.waitForFunction(()=>Boolean(window.backgroundAnalysisAPI));assert.equal((await card.evaluate(s=>window.backgroundAnalysisAPI.read(s),scope)).ok,false);assert.equal((await card.evaluate(s=>window.backgroundAnalysisAPI.read({...s,assetId:'foreign'}),scope)).ok,false);assert.equal((await card.evaluate(s=>window.backgroundAnalysisAPI.read(s),selected)).value.canConfigure,false)
++  assert.equal(calls,0);await card.evaluate(async()=>{const r=await window.assetCardAPI.inspect();await window.assetCardAPI.act({token:r.state.token,kind:'close'})}).catch(()=>{})
++  await page.getByRole('button',{name:'关闭专注模式',exact:true}).click()
++  if(process.env.BACKGROUND_EVIDENCE_DIR){await fs.mkdir(process.env.BACKGROUND_EVIDENCE_DIR,{recursive:true});await assetPanel.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(process.env.BACKGROUND_EVIDENCE_DIR,'background-plan.png')})}
++  await app.close();app=null;page=await start();if(await page.getByTestId('library-reopen').count())await page.getByTestId('library-reopen').click();else await page.getByTestId('library-open').click();await page.locator('.lc-card').first().waitFor()
++  value=(await page.evaluate(s=>window.electronAPI.backgroundAnalysis.read(s),selected)).value;assert.equal(value.intents.find(i=>i.capability==='tags').state,'user-paused');assert.equal(value.intents.length,3);assert.equal(value.dispatchAvailable,false);assert.ok(value.resourceReasons.includes('automatic-executor-not-integrated'));assert.equal(calls,0);assert.deepEqual(await hashes(),original);assert.deepEqual(errors,[])
++ }finally{if(app)await app.close();server.closeAllConnections();await new Promise(r=>server.close(r));await fs.rm(root,{recursive:true,force:true})}
++})
+--- /dev/null
++++ b/scripts/background-analysis-ui.test.mjs
+@@ -0,0 +1,25 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {build} from 'esbuild'
++import {_electron as electron} from 'playwright'
++const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-background-ui-'));let app
++try{
++ const result=await build({stdin:{contents:`import React from 'react';import{createRoot}from'react-dom/client';import Panel from './src/renderer/components/asset/BackgroundAnalysisPanel';
++ window.ticks=[];window.setInterval=fn=>{window.ticks.push(fn);return window.ticks.length};window.clearInterval=()=>{};
++ window.ready=true;window.delay=false;window.reads=[];window.discarded=[];window.saved={schemaVersion:12,sessionToken:'one',policy:{enabled:true,capabilities:{tags:true,caption:true,ocr:true},revision:1},intents:[{id:'intent',capability:'tags',revision:1,state:'waiting'}],counts:[],dispatchAvailable:false,canConfigure:true,resourceReasons:['automatic-executor-not-integrated'],availableMemoryMiB:null};
++ window.electronAPI={library:{inspect:async()=>({state:window.ready?'ready':'closed',identity:'library',generation:'generation'})},backgroundAnalysis:{read:async()=>{const value=structuredClone(window.saved);if(window.delay)return new Promise(resolve=>window.reads.push(()=>resolve({ok:true,value})));return{ok:true,value}},prepare:async()=>new Promise(resolve=>window.resolvePrepare=()=>resolve({ok:true,value:{receipt:'late',notice:'fixture'}})),discard:async id=>{window.discarded.push(id);return{ok:true}},change:async()=>{window.saved.intents[0]={...window.saved.intents[0],revision:2,state:'user-paused'};return{ok:true,value:structuredClone(window.saved)}}}};
++ const asset=new URLSearchParams(location.search).has('asset');createRoot(document.getElementById('root')).render(<Panel {...(asset?{scope:{libraryIdentity:'library',generation:'generation'},assetId:'a'}:{})}/>);`,resolveDir:process.cwd(),loader:'tsx'},bundle:true,format:'iife',platform:'browser',outfile:path.join(root,'bundle.js'),write:false,logLevel:'silent'})
++ for(const output of result.outputFiles)await fs.writeFile(output.path,output.contents);await fs.writeFile(path.join(root,'index.html'),'<link rel="stylesheet" href="bundle.css"><div id="root"></div><script src="bundle.js"></script>');await fs.writeFile(path.join(root,'main.cjs'),`const{app,BrowserWindow}=require('electron');for(const n of ['userData','sessionData','logs','crashDumps'])app.setPath(n,${JSON.stringify(root)}+'/'+n);app.whenReady().then(()=>new BrowserWindow({width:700,height:800,webPreferences:{nodeIntegration:false,contextIsolation:true}}).loadFile(${JSON.stringify(path.join(root,'index.html'))}));app.on('window-all-closed',()=>app.quit());`)
++ const env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k)));app=await electron.launch({args:[path.join(root,'main.cjs')],env});const page=await app.firstWindow();page.setDefaultTimeout(5000)
++ await test('stale poll cannot undo a successful user pause',async()=>{
++  await page.goto('file://'+path.join(root,'index.html')+'?asset');await page.getByRole('button',{name:'暂停标签计划'}).waitFor();await page.evaluate(()=>{window.delay=true;window.ticks.at(-1)()});await page.waitForFunction(()=>window.reads.length===1);await page.getByRole('button',{name:'暂停标签计划'}).click();await page.getByText('标签 · 已手动暂停',{exact:true}).waitFor()
++  await page.evaluate(async()=>{window.reads[0]();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))});assert.equal(await page.getByText('标签 · 已手动暂停',{exact:true}).count(),1)
++ })
++ await test('nonready library revokes a pending policy review and discards its late receipt',async()=>{
++  await page.goto('file://'+path.join(root,'index.html'));await page.getByRole('button',{name:'保存新素材计划设置'}).click();await page.waitForFunction(()=>Boolean(window.resolvePrepare));await page.evaluate(()=>{window.ready=false;window.ticks.at(-1)()});await page.getByText('请先打开资料库。',{exact:true}).waitFor()
++  await page.evaluate(async()=>{window.resolvePrepare();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))});assert.deepEqual(await page.evaluate(()=>window.discarded),['late'])
++ })
++}finally{if(app)await app.close();await fs.rm(root,{recursive:true,force:true})}
+--- /dev/null
++++ b/scripts/background-analysis.integration.test.ts
+@@ -0,0 +1,149 @@
++import {build} from 'esbuild'
++import {pathToFileURL} from 'node:url'
++import {createHash} from 'node:crypto'
++import {readLibraryManifestDeclaration} from '../src/main/library-lifecycle/library-manifest.tracer'
++import {openReadonlyLibraryDatabase} from '../src/main/library-lifecycle/readonly-library-database.internal'
++import {enableOcrStorage} from '../src/main/ocr/ocr.schema'
++import {applyTagIntentSchema} from '../src/main/independent-tags/tag-intent.schema'
++import {applyTagExecutionSchema} from '../src/main/independent-tags/tag-execution.schema'
++import {applyTagDecisionSchema} from '../src/main/independent-tags/tag-decision.schema'
++import {createBackgroundAnalysisController} from '../src/main/background-analysis/background-analysis-controller'
++import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
++import {createOcrController} from '../src/main/ocr/ocr-controller'
++import {registerBackgroundAnalysisIpc} from '../src/main/ipc/background-analysis.ipc'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {test} from 'node:test'
++import sharp from 'sharp'
++import Database from 'better-sqlite3'
++import {createActiveLibraryHost} from '../src/main/library-lifecycle'
++import {createProductionActiveLibraryHostDependencies} from '../src/main/library-lifecycle/production-active-library-dependencies'
++import type {TagIntentTestHooks} from '../src/main/independent-tags/tag-intent-backup'
++async function fixture(hooks:TagIntentTestHooks={}){
++ const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-background-plan-'))),library=path.join(root,'library'),sources:string[]=[];let next=0
++ for(let i=0;i<3;i++){const file=path.join(root,`generated-${i}.png`);await sharp({create:{width:80+i,height:80,channels:3,background:'#7799bb'}}).png().toFile(file);sources.push(file)}
++ const host=createActiveLibraryHost({...createProductionActiveLibraryHostDependencies({selectLibraryDirectory:async()=>({kind:'selected',directory:library}),selectLocalFiles:async()=>({kind:'selected',files:[{filePath:sources[next++]}]})}),tagIntentTestHooks:hooks})
++ const p=await host.prepareCreate();if(p.kind!=='planned')throw Error('fixture');await host.confirmCreate(p.plan.receipt)
++ const state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!}
++ const add=async()=>{const p=await host.prepareAddAssets();if(p.kind!=='planned')throw Error('fixture');const result=await host.dispatchAddAssets(p.plan.receipt);return{receipt:p.plan.receipt,id:result.items[0].promotion!.designAssetIdentity}}
++ return{root,host,scope,add,sources,hooks,dbFile:path.join(library,'.dam','library.sqlite'),close:async()=>{await host.close();await fs.rm(root,{recursive:true,force:true})}}
++}
++await test('explicit baseline preference persists; only later promoted assets receive three lightweight intents',async()=>{
++ const f=await fixture(),host=f.host as any
++ try{
++  const old=await f.add();assert.equal(typeof host.readBackgroundAnalysis,'function','Host must expose the reviewed metadata-only background plan boundary')
++  const initial=await host.readBackgroundAnalysis(f.scope);assert.equal(initial.schemaVersion,1);assert.equal(initial.policy.enabled,false)
++  await host.configureBackgroundAnalysis({...f.scope,sessionToken:initial.sessionToken,expectedRevision:0,expectedSchemaVersion:1,allowUpgrade:true,enabled:true,capabilities:{tags:true,caption:true,ocr:true}})
++  assert.equal((await host.readBackgroundAnalysis({...f.scope,assetId:old.id})).intents.length,0,'Enabling must not backfill old assets')
++  const added=await f.add();await f.host.dispatchAddAssets(added.receipt)
++  const current=await host.readBackgroundAnalysis({...f.scope,assetId:added.id});assert.equal(current.schemaVersion,12);assert.deepEqual(current.intents.map((i:any)=>i.capability).sort(),['caption','ocr','tags']);assert.ok(current.intents.every((i:any)=>i.state==='waiting'))
++  const db=new Database(f.dbFile,{readonly:true});try{assert.equal(db.prepare('SELECT COUNT(*) FROM background_analysis_intents').pluck().get(),3);assert.equal(db.prepare('SELECT COUNT(*) FROM independent_tag_executions').pluck().get(),0)}finally{db.close()}
++  await f.host.close();await f.host.reopen();assert.equal((await host.readBackgroundAnalysis(f.scope)).policy.enabled,true)
++ }finally{await f.close()}
++})
++async function configure(f:Awaited<ReturnType<typeof fixture>>,enabled=true,capabilities={tags:true,caption:true,ocr:true}){const c=await f.host.readBackgroundAnalysis(f.scope);return f.host.configureBackgroundAnalysis({...f.scope,sessionToken:c.sessionToken,expectedRevision:c.policy.revision,expectedSchemaVersion:c.schemaVersion,allowUpgrade:true,enabled,capabilities})}
++for(const version of [8,9,10,11])await test(`known profile ${version} upgrades to 12 without seeding historical background intents`,async()=>{
++ const f=await fixture()
++ try{
++  const old=await f.add();await f.host.close();const db=new Database(f.dbFile);try{db.pragma('foreign_keys=ON');if(version===8)enableOcrStorage(db);else if(version===9)applyTagIntentSchema(db);else{applyTagExecutionSchema(db);if(version===11)applyTagDecisionSchema(db)}}finally{db.close()}
++  await f.host.reopen();assert.equal((await f.host.readBackgroundAnalysis(f.scope)).schemaVersion,version);await configure(f);assert.equal((await f.host.readBackgroundAnalysis({...f.scope,assetId:old.id})).intents.length,0);const next=await f.add();assert.equal((await f.host.readBackgroundAnalysis({...f.scope,assetId:next.id})).intents.length,3)
++ }finally{await f.close()}
++})
++for(const fault of ['afterDdl','beforeCommit','afterCommit']as const)await test(`configuration migration ${fault} fault has an atomic and truthful result`,async()=>{
++ const hooks:TagIntentTestHooks={},f=await fixture(hooks)
++ try{hooks[fault]=()=>{throw Error('synthetic fault')};await assert.rejects(configure(f));delete hooks[fault];const s=await f.host.readBackgroundAnalysis(f.scope);assert.equal(s.schemaVersion,fault==='afterCommit'?12:1);assert.equal(s.policy.enabled,fault==='afterCommit');if(fault!=='afterCommit')await configure(f);const next=await f.add();assert.equal((await f.host.readBackgroundAnalysis({...f.scope,assetId:next.id})).intents.length,3)}finally{await f.close()}
++})
++await test('user pause/cancel survives policy toggles, Trash restoration and fresh session; source changes are not new work',async()=>{
++ const f=await fixture()
++ try{
++  await configure(f);const a=await f.add(),scope={...f.scope,assetId:a.id},s=await f.host.readBackgroundAnalysis(scope),tag=s.intents.find(i=>i.capability==='tags')!,ocr=s.intents.find(i=>i.capability==='ocr')!
++  const pause={...scope,id:tag.id,sessionToken:s.sessionToken,expectedRevision:tag.revision,action:'pause' as const};await f.host.changeBackgroundIntent(pause);await assert.rejects(f.host.changeBackgroundIntent(pause))
++  await f.host.changeBackgroundIntent({...scope,id:ocr.id,sessionToken:s.sessionToken,expectedRevision:ocr.revision,action:'cancel'});await configure(f,false);await configure(f,true)
++  const asset=(await f.host.listAssets())[0],plan=await f.host.prepareTrash({kind:'move-design-asset-to-trash',designAssetIdentity:a.id,expectedRevision:asset.revision});const trash=await f.host.dispatchTrash({kind:'confirm-plan',planReceipt:plan.plan.receipt});await f.host.dispatchTrash({kind:'restore-design-asset',designAssetIdentity:a.id,expectedRevision:trash.revision})
++  await f.host.close();await f.host.reopen();const restored=await f.host.readBackgroundAnalysis(scope);assert.equal(restored.intents.length,3);assert.equal(restored.intents.find(i=>i.capability==='tags')!.state,'user-paused');assert.equal(restored.intents.find(i=>i.capability==='ocr')!.state,'cancelled')
++  await assert.rejects(f.host.changeBackgroundIntent({...pause,expectedRevision:2,action:'resume'}));await assert.rejects(f.host.changeBackgroundIntent({...scope,id:ocr.id,sessionToken:restored.sessionToken,expectedRevision:2,action:'resume'}))
++  const resumed=await f.host.changeBackgroundIntent({...pause,sessionToken:restored.sessionToken,expectedRevision:2,action:'resume'});assert.equal(resumed.intents.find(i=>i.capability==='tags')!.state,'waiting');await f.host.changeBackgroundIntent({...pause,sessionToken:restored.sessionToken,expectedRevision:3})
++  const db=new Database(f.dbFile);try{db.prepare('UPDATE asset_candidates SET preview_generation_identity=? WHERE candidate_identity=(SELECT candidate_identity FROM promotion_links WHERE design_asset_identity=?)').run('changed-generated-preview',a.id)}finally{db.close()}
++  const changed=await f.host.readBackgroundAnalysis(scope);assert.equal(changed.intents.find(i=>i.capability==='tags')!.state,'superseded');assert.equal(changed.intents.length,3)
++ }finally{await f.close()}
++})
++await test('capability toggles affect future registration only; replay and poll never create intents',async()=>{
++ const f=await fixture()
++ try{await configure(f,true,{tags:true,caption:false,ocr:false});const a=await f.add();await f.host.dispatchAddAssets(a.receipt);for(let i=0;i<5;i++)assert.equal((await f.host.readBackgroundAnalysis({...f.scope,assetId:a.id})).intents.length,1);await configure(f);assert.equal((await f.host.readBackgroundAnalysis({...f.scope,assetId:a.id})).intents.length,1);const b=await f.add();assert.equal((await f.host.readBackgroundAnalysis({...f.scope,assetId:b.id})).intents.length,3)}finally{await f.close()}
++})
++await test('an intent storage fault rolls back Promotion rather than publishing an asset without its reviewed plan',async()=>{
++ const f=await fixture()
++ try{
++  await configure(f);const p=await f.host.prepareAddAssets();if(p.kind!=='planned')throw Error('fixture');const db=new Database(f.dbFile)
++  try{db.exec("CREATE TRIGGER synthetic_background_failure BEFORE INSERT ON background_analysis_intents BEGIN SELECT RAISE(ABORT,'synthetic'); END");await f.host.dispatchAddAssets(p.plan.receipt).catch(()=>{});assert.equal((await f.host.listAssets()).length,0);assert.equal(db.prepare('SELECT COUNT(*) FROM background_analysis_intents').pluck().get(),0);assert.equal(db.prepare("SELECT COUNT(*) FROM asset_candidates WHERE lifecycle_state='promoted'").pluck().get(),0)}finally{db.exec('DROP TRIGGER synthetic_background_failure');db.close()}
++ }finally{await f.close()}
++})
++await test('OCR maintenance rejects in-flight configure, blocks new operations and does not restore old reviews',async()=>{
++ let release!:()=>void,entered!:()=>void,calls=0;const gate=new Promise<void>(r=>{release=r}),started=new Promise<void>(r=>{entered=r}),ocr=createOcrController({host:{} as any,runtime:{current:async()=>{calls++;return null},configure:async()=>{entered();await gate}},changed:()=>{}})
++ const configuring=ocr.configure();await started;assert.throws(()=>ocr.holdForMaintenance());release();await configuring
++ const a=ocr.holdForMaintenance(),b=ocr.holdForMaintenance();await assert.rejects(ocr.configure());await assert.rejects(ocr.prepare({libraryIdentity:'fixture',generation:'fixture',assetIds:['fixture']}));await assert.rejects(ocr.run('expired'));a();await assert.rejects(ocr.configure());b();assert.equal(calls,0)
++})
++const unknownTelemetry=()=>({memory:{kind:'unknown' as const},battery:{kind:'unknown' as const},lowPower:{kind:'unknown' as const},thermal:{kind:'unknown' as const},idle:{kind:'unknown' as const},visible:{kind:'unknown' as const},gpuFree:{kind:'unknown' as const}})
++await test('controller and formal IPC keep card members scoped and reject late owner reads',async()=>{
++ const f=await fixture(),admission=createVisualAdmission();let release!:()=>void,entered!:()=>void,delay=false
++ const gate=new Promise<void>(r=>{release=r}),started=new Promise<void>(r=>{entered=r}),host={...f.host,readBackgroundAnalysis:async(...args:Parameters<typeof f.host.readBackgroundAnalysis>)=>{const v=await f.host.readBackgroundAnalysis(...args);if(delay){entered();await gate}return v}},c=createBackgroundAnalysisController({host,admission,telemetry:unknownTelemetry,holdOcr:()=>()=>{},visuals:{suspendAndDrain:async()=>{},resume:()=>{}}}),handlers=new Map<string,any>(),main={}as any,card={}as any
++ try{
++  await configure(f);const a=await f.add(),scope={...f.scope,assetId:a.id}
++  registerBackgroundAnalysisIpc({controller:c,card:{isTrusted:(e:any)=>e===card,inspect:()=>({token:'one',context:scope})}as any,isMain:e=>e===main,handle:(name,handler)=>{handlers.set(name,handler)}})
++  const call=(name:string,event:any,input:any)=>handlers.get('background-analysis:'+name)(event,input)
++  assert.equal((await call('read',card,f.scope)).ok,false);assert.equal((await call('read',card,{...scope,assetId:'foreign'})).ok,false);assert.equal((await call('prepare',card,{...f.scope,enabled:true})).ok,false)
++  const view=await call('read',card,scope);assert.equal(view.ok,true);assert.equal(view.value.dispatchAvailable,false);assert.equal(view.value.canConfigure,false);assert.ok(view.value.resourceReasons.includes('automatic-executor-not-integrated'))
++  delay=true;const pending=c.read('card:one',scope),reject=assert.rejects(pending);await started;c.cancelOwner('card:one');release();await reject
++ }finally{release?.();c.invalidate();admission.invalidate();await f.close()}
++})
++await test('a legacy combined current is seeded exactly once and v12 keeps prior user edits and each storage capability usable',async()=>{
++ const f=await fixture()
++ try{
++  const {id}=await f.add(),asset=(await f.host.listAssets())[0],scope={...f.scope,assetId:id},e={id:'old-combined',assetId:id,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef,inputSha256:'b'.repeat(64),backendId:'synthetic',providerOrigin:'http://127.0.0.1:1',model:'synthetic-model',purpose:'analyze' as const,inputScope:'controlled-preview-rgb' as const,recipe:'visual-ai-v1' as const,createdAt:new Date().toISOString(),output:{caption:'AI caption',prompt:'Historical prompt',ocrText:'',tags:['已确认','待决定']}}
++  await f.host.enableVisualAi();await f.host.saveVisualAiEvidence(e);await f.host.confirmVisualAiTag(id,e.id,'已确认');await f.host.updateAssetCaption(id,'User caption')
++  await configure(f);const c=await f.host.readTagExecution(scope);assert.equal(c.schemaVersion,12);assert.equal(c.current?.originalVisualEvidenceId,e.id)
++  await f.host.decideTag({...scope,sessionToken:c.sessionToken,expectedSchemaVersion:12,allowUpgrade:false,evidenceId:c.current!.evidenceId,tag:'待决定',decision:'reject'});await configure(f,false);await configure(f,true)
++  assert.deepEqual((await f.host.readTagExecution(scope)).current?.tags,['已确认']);assert.equal((await f.host.listAssets())[0].aiCaption,'User caption')
++  const ocr=await f.host.readOcr(scope),saved=await f.host.commitOcr({...scope,sessionToken:ocr.sessionToken,expectedRevision:ocr.revision,allowUpgrade:false,evidence:{id:'ocr-v12',assetId:id,assetRevision:asset.revision,sourceRef:asset.thumbnailRef,inputSha256:'e'.repeat(64),createdAt:new Date().toISOString(),observation:{engine:'rapidocr-onnxruntime',version:'1.4.4',recipe:'rapidocr-preview-v1',modelSha256:{det:'a'.repeat(64),cls:'b'.repeat(64),rec:'c'.repeat(64)},width:80,height:80,elapsedMs:1,threshold:.5,blocks:[]}}})
++  await f.host.correctOcr({...scope,sessionToken:saved.sessionToken,expectedRevision:saved.revision,evidenceId:'ocr-v12',text:'User OCR'})
++  const note=await f.host.readNotebook(scope);await f.host.saveNotebook({...scope,sessionToken:note.sessionToken,sourceRef:note.sourceRef,expectedRevision:note.revision,allowUpgrade:false,book:note.book})
++  const org=await f.host.readOrganization(f.scope);await f.host.writeOrganization({...f.scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'User folder',folderKind:'assets',parentId:null,assetIds:[id]}})
++  const work=await f.host.readWorkSets(f.scope,'device-v12'),set=await f.host.writeWorkSet({...f.scope,sessionToken:work.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'User set',note:'User note',assetIds:[id],colors:[],columns:1}}},'device-v12'),layout={x:12,y:20,width:400,height:500,pinned:true,open:false};await f.host.writeWorkLayout({...f.scope,sessionToken:work.sessionToken,id:set.sets[0].id,layout},'device-v12')
++  await f.host.downloadJournal({kind:'create',generation:f.scope.generation,taskId:'download-v12',url:'https://fixture.invalid/not-requested.png',fileName:'generated.png'})
++  for(const recipe of ['visual-ai-v1','independent-tags-v1']){
++   await f.host.saveTagIntent({...scope,sessionToken:c.sessionToken,expectedSchemaVersion:12,allowUpgrade:false,requestId:recipe,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef,backendId:'synthetic',model:'synthetic-model',backendBindingSha256:'a'.repeat(64),recipeId:recipe,recipeVersion:'1'})
++   const claim=await f.host.claimTagExecution({...scope,sessionToken:c.sessionToken,requestId:recipe,inputSha256:'b'.repeat(64),origin:recipe==='visual-ai-v1'?'combined':'tags-only'}),ref={...scope,sessionToken:c.sessionToken,requestId:recipe,attemptToken:claim.attemptToken};await f.host.markTagExecutionSent(ref);await f.host.commitTagExecution({...ref,tags:['新的标签'],...(recipe==='visual-ai-v1'?{combinedEvidence:{...e,id:'v12-combined',output:{...e.output,tags:['新的标签']}}}:{})})
++  }
++  await f.host.close();await f.host.reopen();assert.equal((await f.host.readOcr(scope)).editedText,'User OCR');assert.equal((await f.host.readNotebook(scope)).revision,1);assert.equal((await f.host.readOrganization(f.scope)).folders[0].name,'User folder');assert.deepEqual((await f.host.readWorkSets(f.scope,'device-v12')).sets[0].layout,layout);assert.equal((await f.host.downloadJournal({kind:'list',generation:f.scope.generation})).intents!.length,1);assert.equal((await f.host.listAssets())[0].aiCaption,'User caption');assert.deepEqual((await f.host.listAssets())[0].tags,['已确认']);assert.deepEqual((await f.host.readTagExecution(scope)).current?.tags,['新的标签'])
++ }finally{await f.close()}
++})
++await test('postcommit settings restoration failure quarantines v12 and does not allow further business writes',async()=>{
++ const f=await fixture(),original=Database.prototype.pragma;let once=true
++ try{Database.prototype.pragma=function(sql:string,options?:any):any{if(once&&sql.startsWith('cache_spill = ')&&!sql.endsWith('OFF')){once=false;throw Error('synthetic restoration error')}return original.call(this,sql,options)};await assert.rejects(configure(f));assert.equal(f.host.inspect().state,'recovery-required');await assert.rejects(f.host.readBackgroundAnalysis(f.scope));const db=new Database(f.dbFile,{readonly:true});try{assert.equal(db.pragma('user_version',{simple:true}),12)}finally{db.close()}}finally{Database.prototype.pragma=original;await f.close()}
++})
++await test('the frozen v11 reader refuses v12 without changing database bytes',async()=>{
++ const f=await fixture()
++ try{
++  await configure(f);await f.host.close();const base=path.resolve('scripts/fixtures/background-v11'),manifest=JSON.parse(await fs.readFile(path.join(base,'manifest.json'),'utf8'));for(const[n,h]of Object.entries(manifest))assert.equal(createHash('sha256').update(await fs.readFile(path.join(base,n+'.txt'))).digest('hex'),h)
++  const source=await fs.readFile(path.join(base,'library-open-control-store.internal.ts.txt'),'utf8'),version=await fs.readFile(path.join(base,'library-schema-version.ts.txt'),'utf8'),output=path.resolve('dist-temp/tests/background-v11-reader.mjs')
++  await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},outfile:output,bundle:true,platform:'node',format:'esm',packages:'external',logLevel:'silent',plugins:[{name:'frozen-version',setup(b){b.onResolve({filter:/library-schema-version$/},()=>({path:'frozen-v11',namespace:'frozen'}));b.onLoad({filter:/.*/,namespace:'frozen'},()=>({contents:version,loader:'ts'}))}}]})
++  const old=await import(pathToFileURL(output).href),decl=readLibraryManifestDeclaration(new Uint8Array(await fs.readFile(path.join(f.root,'library/.dam/library.manifest.json'))));if(decl.kind!=='compatible')throw Error('fixture manifest');const before=await fs.readFile(f.dbFile),db=openReadonlyLibraryDatabase(f.dbFile);try{assert.equal(old.inspectLibraryControlStore(db,decl.declaration).kind,'unsupported')}finally{db.close()};assert.deepEqual(await fs.readFile(f.dbFile),before)
++ }finally{await f.close()}
++})
++await test('policy receipts expire or lose authority, and overlapping barriers are not released by an upgrade',async()=>{
++ const f=await fixture(),admission=createVisualAdmission();let now=0,held=false,resumes=0
++ const c=createBackgroundAnalysisController({host:f.host,admission,telemetry:unknownTelemetry,now:()=>now,holdOcr:()=>{held=true;return()=>{held=false}},visuals:{suspendAndDrain:async()=>{assert.equal(held,true)},resume:()=>{resumes++}}})
++ const input={...f.scope,enabled:true,capabilities:{tags:true,caption:true,ocr:true},expectedRevision:0}
++ try{const old=await c.prepare('main',input);now=300001;await assert.rejects(c.confirm('main',old.receipt));const revoked=await c.prepare('main',input);c.invalidate();await assert.rejects(c.confirm('main',revoked.receipt));const good=await c.prepare('main',input),other=admission.hold();await c.confirm('main',good.receipt);assert.equal(resumes,1);assert.equal(held,false);assert.equal(admission.inspect().accepting,false);other()}finally{c.invalidate();admission.invalidate();await f.close()}
++})
++await test('OCR preparation is fenced, and a real prepared review is invalidated by the idle maintenance lock',async()=>{
++ const f=await fixture();let release!:()=>void,entered!:()=>void,calls=0
++ const gate=new Promise<void>(r=>{release=r}),started=new Promise<void>(r=>{entered=r}),ocr=createOcrController({host:f.host,runtime:{configure:async()=>{},current:async()=>{entered();await gate;return{label:'synthetic',fingerprint:'synthetic',run:async()=>{calls++;throw Error('must not run')}}}},changed:()=>{}})
++ try{const a=await f.add(),preparing=ocr.prepare({...f.scope,assetIds:[a.id]});await started;assert.throws(()=>ocr.holdForMaintenance());release();const old=await preparing,unlock=ocr.holdForMaintenance();unlock();await assert.rejects(ocr.run(old.receipt));assert.equal(calls,0)}finally{release();ocr.invalidate();await f.close()}
++})
++await test('the last safe policy revision remains readable and further writes fail without overflow',async()=>{
++ const f=await fixture()
++ try{await configure(f);const db=new Database(f.dbFile);try{db.prepare('UPDATE background_analysis_policy SET revision=?').run(Number.MAX_SAFE_INTEGER-1)}finally{db.close()};const final=await configure(f,false);assert.equal(final.policy.revision,Number.MAX_SAFE_INTEGER);assert.equal(final.policy.enabled,false);await assert.rejects(configure(f,true));assert.equal((await f.host.readBackgroundAnalysis(f.scope)).policy.enabled,false)}finally{await f.close()}
++})
+--- /dev/null
++++ b/scripts/background-resource-policy.test.ts
+@@ -0,0 +1,11 @@
++import assert from 'node:assert/strict'
++import {test} from 'node:test'
++import {evaluateBackgroundReadiness,type BackgroundTelemetry,type QualifiedBackgroundEnvelope} from '../src/main/background-analysis/background-resource-policy'
++const now=20000,known=<T>(value:T)=>({kind:'known' as const,value,sampledAt:now}),base=():BackgroundTelemetry=>({memory:known({free:4*1024**3,total:8*1024**3}),battery:known(false),lowPower:known(false),thermal:known('nominal'),idle:known('idle'),visible:known(true),gpuFree:{kind:'unknown'}}),cpu:QualifiedBackgroundEnvelope={ownership:'host-owned',verified:true,peakRamBytes:256*1024**2,accelerator:'cpu',lightOnBattery:false}
++await test('qualified CPU policy fixture can pass without invented GPU memory; production null binding never passes',()=>{assert.equal(evaluateBackgroundReadiness(base(),cpu,now).policyAllows,true);assert.deepEqual(evaluateBackgroundReadiness(base(),null,now).reasons,['automatic-executor-not-integrated'])})
++await test('stale, future and missing memory samples are unknown rather than spare capacity',()=>{for(const value of [{kind:'unknown' as const},{kind:'known' as const,value:{free:4*1024**3,total:8*1024**3},sampledAt:0},{kind:'known' as const,value:{free:4*1024**3,total:8*1024**3},sampledAt:now+1}])assert.ok(evaluateBackgroundReadiness({...base(),memory:value},cpu,now).reasons.includes('memory-unknown'))})
++await test('reserve, power, heat, interaction and visibility each deny new background admission',()=>{
++ const cases:Array<[Partial<BackgroundTelemetry>,string]>=[[{memory:known({free:500*1024**2,total:8*1024**3})},'memory-insufficient'],[{battery:known(true)},'waiting-external-power'],[{lowPower:{kind:'unknown'}},'low-power-mode-unknown'],[{lowPower:known(true)},'low-power-mode'],[{thermal:known('serious')},'thermal-pressure'],[{idle:known('active')},'foreground-active'],[{idle:known('locked')},'session-locked'],[{visible:known(false)},'no-visible-window']]
++ for(const [change,reason]of cases){const r=evaluateBackgroundReadiness({...base(),...change},cpu,now);assert.equal(r.policyAllows,false);assert.ok(r.reasons.includes(reason))}
++})
++await test('unowned runtime, absent envelope and GPU unknown cannot inherit CPU-only eligibility',()=>{assert.ok(evaluateBackgroundReadiness(base(),{...cpu,ownership:'unowned'},now).reasons.includes('runtime-not-owned'));assert.ok(evaluateBackgroundReadiness(base(),{...cpu,verified:false},now).reasons.includes('execution-envelope-unknown'));assert.ok(evaluateBackgroundReadiness(base(),{...cpu,accelerator:'gpu',peakGpuBytes:1},now).reasons.includes('gpu-memory-unknown'))})
+--- /dev/null
++++ b/scripts/fixtures/background-v11/library-open-control-store.internal.ts.txt
+@@ -0,0 +1,183 @@
++import {TAG_DECISION_SQL} from '../independent-tags/tag-decision.schema'
++import {TAG_EXECUTION_SQL} from '../independent-tags/tag-execution.schema'
++import { TAG_INTENT_SQL } from '../independent-tags/tag-intent.schema'
++import { CURRENT_MANAGED_SCHEMA_VERSION, isKnownLibrarySchemaVersion } from './library-schema-version'
++import {OCR_SQL} from '../ocr/ocr.schema'
++import {WORK_SET_SQL} from './work-set.schema'
++import {ORGANIZATION_SQL} from './library-organization.schema'
++import {NOTEBOOK_SQL} from './asset-notebook.schema'
++import { INTAKE_RECOVERY_SQL } from './intake-recovery.schema'
++import { DOWNLOAD_JOURNAL_SQL } from '../managed-download/download-journal.schema'
++import { VISUAL_AI_TABLE_SQL, VISUAL_AI_INDEX_SQL } from '../visual-ai/visual-ai.schema'
++import type Database from 'better-sqlite3'
++
++import type { LibraryManifestDeclaration } from './library-manifest.tracer'
++
++const CONTROL_APPLICATION_ID = 0x44414d49
++const OPAQUE_IDENTITY = /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/u
++const IDENTITY_SQL = `CREATE TABLE library_control_identity (
++  singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
++  lineage_identity TEXT NOT NULL,
++  library_identity TEXT NOT NULL,
++  control_store_identity TEXT NOT NULL,
++  library_generation TEXT NOT NULL,
++  managed_originals_relative_path TEXT NOT NULL
++) WITHOUT ROWID`
++const JOURNAL_SQL = `CREATE TABLE library_operation_journal (
++  operation_identity TEXT PRIMARY KEY,
++  state TEXT NOT NULL CHECK (state IN ('settled', 'pending', 'ambiguous'))
++) WITHOUT ROWID`
++
++export type LibraryControlStoreInspection =
++  | Readonly<{ kind: 'compatible'; generation: string }>
++  | Readonly<{ kind: 'unsupported' | 'recovery-required' }>
++
++/** Main-only creation primitive; never upgrades or infers an existing store. */
++export function initializeLibraryControlStore(
++  database: Database.Database,
++  input: Readonly<{
++    lineageIdentity: string
++    libraryIdentity: string
++    controlStoreIdentity: string
++    generation: string
++    managedOriginalsRelativePath: string
++  }>
++): void {
++  database.pragma('journal_mode = DELETE')
++  database.pragma('synchronous = FULL')
++  database.pragma('application_id = 0x44414d49')
++  database.pragma('user_version = 1')
++  database.exec(`${IDENTITY_SQL};${JOURNAL_SQL}`)
++  database.prepare(`
++    INSERT INTO library_control_identity (
++      singleton, lineage_identity, library_identity, control_store_identity,
++      library_generation, managed_originals_relative_path
++    ) VALUES (1, ?, ?, ?, ?, ?)
++  `).run(
++    input.lineageIdentity,
++    input.libraryIdentity,
++    input.controlStoreIdentity,
++    input.generation,
++    input.managedOriginalsRelativePath
++  )
++}
++
++/** Empty-library fixture format only; never initializes or migrates a schema. */
++export function inspectLibraryControlStore(
++  database: Database.Database,
++  declaration: LibraryManifestDeclaration
++): LibraryControlStoreInspection {
++  try {
++    if (!database.readonly || !database.inTransaction ||
++      database.pragma('query_only', { simple: true }) !== 1 ||
++      database.pragma('application_id', { simple: true }) !== CONTROL_APPLICATION_ID) {
++      return { kind: 'recovery-required' }
++    }
++    const version = database.pragma('user_version', { simple: true })
++    if (typeof version === 'number' && Number.isSafeInteger(version) && version > CURRENT_MANAGED_SCHEMA_VERSION) {
++      return { kind: 'unsupported' }
++    }
++    if (!isKnownLibrarySchemaVersion(version) || database.pragma('journal_mode', { simple: true }) !== 'delete' ||
++      database.pragma('quick_check(1)', { simple: true }) !== 'ok') {
++      return { kind: 'recovery-required' }
++    }
++    const schema = database.prepare(`
++      SELECT type, name, sql FROM sqlite_schema
++      WHERE name NOT LIKE 'sqlite_%' ORDER BY name
++    `).all() as Array<{ type?: unknown; name?: unknown; sql?: unknown }>
++    const expected = [
++      ['library_control_identity', IDENTITY_SQL],
++      ['library_operation_journal', JOURNAL_SQL]
++    ] as const
++    const controlSchema = schema.filter((row) =>
++      row.name === 'library_control_identity' || row.name === 'library_operation_journal')
++    const allowedDataTables = new Set([
++      'assets', 'tags', 'asset_tags', 'tag_aliases', 'tag_relations',
++      'tag_groups', 'tag_group_items', 'tag_suggestions', 'capture_requests',
++      'asset_candidates', 'promotion_links', 'asset_lifecycle', 'asset_trash_plans'
++    ])
++    if (isKnownLibrarySchemaVersion(version,2)) {
++      for (const [name, type, sql] of [['visual_ai_evidence', 'table', VISUAL_AI_TABLE_SQL], ['visual_ai_evidence_asset', 'index', VISUAL_AI_INDEX_SQL]]) {
++        const row = schema.find(item => item.name === name)
++        if (!row || row.type !== type || typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(sql)) return { kind: 'recovery-required' }
++        allowedDataTables.add(name)
++      }
++    }
++    if (isKnownLibrarySchemaVersion(version,3)) {
++      // Exact statements, including immutable identity enforcement; full schema is checked on binding.
++      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (version === 11 ? '\n'+TAG_DECISION_SQL : '')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
++      for (const sql of statements) {
++        const [, kind, name] = /^CREATE (TABLE|(?:UNIQUE )?INDEX|TRIGGER) (\w+)/.exec(sql)!
++        const row = schema.find(item => item.name === name)
++        if (!row || row.type !== kind.replace('UNIQUE ','').toLowerCase() || typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(sql.replace(/;$/, ''))) return { kind: 'recovery-required' }
++        allowedDataTables.add(name)
++      }
++    }
++    if (controlSchema.length !== expected.length || schema.some((row) =>
++      typeof row.name !== 'string' ||
++      (!allowedDataTables.has(row.name) && row.name !== 'library_control_identity' &&
++        row.name !== 'library_operation_journal')) ||
++      controlSchema.some((row, index) =>
++        row.type !== 'table' || row.name !== expected[index][0] ||
++        typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(expected[index][1]))) {
++      return { kind: 'recovery-required' }
++    }
++    const identities = database.prepare(`
++      SELECT singleton, lineage_identity, library_identity, control_store_identity,
++        library_generation, managed_originals_relative_path
++      FROM library_control_identity LIMIT 2
++    `).all() as Array<Record<string, unknown>>
++    const identity = identities[0]
++    if (identities.length !== 1 || identity.singleton !== 1 ||
++      identity.lineage_identity !== declaration.lineageIdentity ||
++      identity.library_identity !== declaration.libraryIdentity ||
++      identity.control_store_identity !== declaration.controlStoreIdentity ||
++      identity.managed_originals_relative_path !== declaration.managedOriginalsRelativePath ||
++      typeof identity.library_generation !== 'string' ||
++      !OPAQUE_IDENTITY.test(identity.library_generation)) return { kind: 'recovery-required' }
++
++    const journal = database.prepare(`
++      SELECT operation_identity, state FROM library_operation_journal LIMIT 129
++    `).all() as Array<{ operation_identity?: unknown; state?: unknown }>
++    if (journal.length > 128 || journal.some((row) =>
++      typeof row.operation_identity !== 'string' || !OPAQUE_IDENTITY.test(row.operation_identity) ||
++      row.state !== 'settled')) return { kind: 'recovery-required' }
++    return { kind: 'compatible', generation: identity.library_generation }
++  } catch {
++    return { kind: 'recovery-required' }
++  }
++}
++
++function normalizeSql(value: string): string {
++  // Preserve SQL string-literal semantics; a differently cased journal state
++  // constraint is not the same schema even when its table is currently empty.
++  return value.replace(/\s+/gu, ' ').trim()
++}
++
++/** Recognize only the legacy schema surface; never read Asset/Original rows. */
++export function hasLegacyLibrarySchema(database: Database.Database): boolean {
++  if (!database.readonly || !database.inTransaction ||
++    database.pragma('query_only', { simple: true }) !== 1 ||
++    database.pragma('application_id', { simple: true }) !== 0 ||
++    database.pragma('journal_mode', { simple: true }) !== 'delete') return false
++  const tables = database.prepare(`
++    SELECT type, name, sql FROM sqlite_schema
++    WHERE name IN ('assets', 'tags', 'asset_tags', 'library_control_identity')
++    ORDER BY name LIMIT 4
++  `).all() as Array<{ type?: unknown; name?: unknown; sql?: unknown }>
++  if (tables.length !== 3 || tables.some((table) => table.type !== 'table' ||
++    typeof table.sql !== 'string' || /\bVIRTUAL\b/iu.test(table.sql)) ||
++    tables.map((table) => table.name).join(',') !== 'asset_tags,assets,tags') return false
++  for (const [table, required] of [
++    ['assets', ['id', 'title', 'file_name', 'file_path', 'thumbnail_path', 'source_site_id']],
++    ['tags', ['id', 'name']],
++    ['asset_tags', ['id', 'asset_id', 'tag_id']]
++  ] as const) {
++    const columns = database.prepare(`SELECT name FROM pragma_table_info(?) LIMIT 65`)
++      .all(table) as Array<{ name?: unknown }>
++    if (columns.length > 64 || !required.every((name) => columns.some((column) => column.name === name))) {
++      return false
++    }
++  }
++  return true
++}
+--- /dev/null
++++ b/scripts/fixtures/background-v11/library-schema-version.ts.txt
+@@ -0,0 +1,5 @@
++/** Known Managed profiles only. Feature presence never grants write authority. */
++export const CURRENT_MANAGED_SCHEMA_VERSION = 11
++export function isKnownLibrarySchemaVersion(version: unknown, minimum = 1): version is number {
++  return typeof version === 'number' && Number.isInteger(version) && version >= minimum && version <= CURRENT_MANAGED_SCHEMA_VERSION
++}
+--- /dev/null
++++ b/scripts/fixtures/background-v11/manifest.json
+@@ -0,0 +1,4 @@
++{
++  "library-open-control-store.internal.ts": "c04e0963732eff719d0458af49fd89362d92a24f38a50bf6242700f5ceb13150",
++  "library-schema-version.ts": "ea5740e293a974587a9b8cec6bc6a8a1680401574e9245953b3839a9d34a0361"
++}
+--- /dev/null
++++ b/src/main/background-analysis/README.md
+@@ -0,0 +1,19 @@
++# B01 background analysis foundation
++
++Current wiring: AI Console policy review and shared Main/card per-asset panel → trusted narrow IPC → owner/session/revision-fenced Main controller → held Active Library connection. This module persists **plans**, not execution jobs or model results. Production always returns `dispatchAvailable: false` and uses a null automatic-runtime envelope; no worker, HTTP, model start, proxy materialization or automatic dispatch path exists here. Manual tags/combined/OCR remain separate. This is not the complete global resource governor or automatic baseline inference delivery.
++
++The user-confirmed baseline capability choices are tags, short description and OCR. Embedding requires its own explicit opt-in; prompt reverse remains manual. Older four-default-capability target wording is not treated as a directive to enable embedding in this implementation.
++
++New libraries stay profile1. Explicit first policy confirmation discloses backup and v12 incompatibility with older apps; migration uses the qualified local APFS/SQLite/native protocol and4MiB growth cap. Original profiles below10 receive existing combined tag-current seeding exactly once; already10/11 currents remain untouched. Historical DDL, seed, v12 schema/default policy(capabilities true, master false) and the chosen policy commit atomically. No historical asset backfill occurs.
++
++A fixed SQL trigger at the last Promotion lifecycle registration writes at most three model-agnostic intent rows inside the same transaction. Keys use Capture source_generation and candidate preview_generation_identity, never a path or the lifecycle revision that changes on Trash/restore. Replay, opening, policy changes and restoration do not create new intents. The current Managed Copy path has no content-replacement event; changed source tuples project as superseded (cancelled decisions stay terminal) rather than inventing a new operation. Future content change integration is outside B01. Durable rows scale with registered assets; live UI queries return only3 capability aggregates/state groups or at most3 rows for one asset, never materialized images or an unbounded in-memory job queue.
++
++Policy/capability off is a projection and preserves user pause/cancel. Resume applies only to a user-paused row; cancelled is terminal. Individual decisions and policy changes require current session/revision. Card IPC is restricted to its trusted current asset; aggregate and policy modification are Main-only. Async returns recheck owner epoch/session, and GUI request epochs prevent stale polling/authority changes from reviving old state.
++
++Resource readiness reads coarse host memory, power, thermal, idle and window visibility. Unsupported/unknown/stale signals remain unknown. Missing low-power and GPU evidence is not synthesized. The pure policy tests use asserted qualified envelopes; a positive fixture result is only a decision-function result, not inference or runtime qualification. Its conservative RAM reserve is max512MiB/10%total; it is not a measured model peak or a process RSS guarantee.
++
++The first upgrade holds the shared visual barrier and stops/drains existing tags/combined/batch work. OCR's synchronous idle maintenance lock also fences configure-await, prepare and run, invalidates old reviews and refuses active work. It is **not** proof that an earlier cancelled Python process physically exited. OCR actual-exit drain, independent caption commits, runtime ownership/calibration and complete cross-capability resource scheduling remain prerequisites for a later execution round.
++
++Tests: background-analysis.integration.test.ts (real generated Host/SQLite and explicit controller fixtures), background-resource-policy.test.ts (pure policy), background-analysis-ui.test.mjs (production React component with delayed bridge), background-analysis-electron.e2e.test.mjs (compiled formal Main/Preload/Renderer, owned generated library). No real model, user library, runtime cache, Windows or installed-package qualification. Run evidence: .ai-run/background-foundation-20260928.
++
++The v12 enabled flag authorizes collection of plans only. It is not an automatic-inference or external-upload grant; a later execution integration must introduce its own clearly reviewed authorization and qualification rather than silently reinterpret this preference.
+--- /dev/null
++++ b/src/main/background-analysis/background-analysis-controller.ts
+@@ -0,0 +1,45 @@
++import {randomUUID} from 'node:crypto'
++import type {ActiveLibraryHost} from '../../shared/contracts/active-library.contract'
++import {BASIC_CAPABILITIES} from '../../shared/contracts/background-analysis.contract'
++import type {BackgroundScope,BackgroundConfig,BackgroundConfigCommit,BackgroundDecision,BackgroundView,BackgroundSnapshot} from '../../shared/contracts/background-analysis.contract'
++import type {VisualAdmission} from '../visual-ai/visual-admission'
++import {evaluateBackgroundReadiness,type BackgroundTelemetry} from './background-resource-policy'
++export function createBackgroundAnalysisController(deps:{host:ActiveLibraryHost;admission:VisualAdmission;telemetry():BackgroundTelemetry;visuals:{suspendAndDrain():Promise<void>;resume():void};holdOcr():()=>void;now?:()=>number}){
++ const plans=new Map<string,{owner:string;expires:number;input:BackgroundConfigCommit}>(),owners=new Map<string,number>(),active=new Map<string,{owner:string;abort:AbortController}>();let epoch=0;const now=deps.now??(()=>performance.now())
++ const stamp=(owner:string)=>({epoch,ownerVersion:owners.get(owner)??0})
++ const fence=async(owner:string,s:ReturnType<typeof stamp>,scope:BackgroundScope,session:string)=>{const current=await deps.host.readVisualSession(scope);if(epoch!==s.epoch||s.ownerVersion!==(owners.get(owner)??0)||current.sessionToken!==session)throw Error('BACKGROUND_SCOPE_EXPIRED')}
++ const project=(owner:string,s:BackgroundSnapshot):BackgroundView=>{const resource=evaluateBackgroundReadiness(deps.telemetry(),null,performance.now());return{...s,dispatchAvailable:false,canConfigure:owner==='main',resourceReasons:resource.reasons,availableMemoryMiB:resource.availableMemoryMiB}}
++ return{
++  async read(owner:string,scope:BackgroundScope){const token=stamp(owner),s=await deps.host.readBackgroundAnalysis(scope);await fence(owner,token,scope,s.sessionToken);return project(owner,s)},
++  async prepare(owner:string,input:BackgroundConfig){
++   if(owner!=='main'||!input||Object.keys(input).some(k=>!['libraryIdentity','generation','enabled','capabilities','expectedRevision'].includes(k)))throw Error('BACKGROUND_INPUT_INVALID')
++   if(typeof input.enabled!=='boolean'||!Number.isSafeInteger(input.expectedRevision)||input.expectedRevision<0||input.expectedRevision>=Number.MAX_SAFE_INTEGER||!input.capabilities||Object.keys(input.capabilities).length!==3||BASIC_CAPABILITIES.some(c=>typeof input.capabilities[c]!=='boolean'))throw Error('BACKGROUND_INPUT_INVALID')
++   const token=stamp(owner),s=await deps.host.readBackgroundAnalysis(input);await fence(owner,token,input,s.sessionToken)
++   if(input.expectedRevision!==s.policy.revision)throw Error('BACKGROUND_CONFLICT')
++   for(const[id,p]of plans)if(p.owner===owner||p.expires<now())plans.delete(id)
++   if(plans.size>=4)throw Error('BACKGROUND_BUSY')
++   const receipt=randomUUID();plans.set(receipt,{owner,expires:now()+300000,input:{...structuredClone(input),sessionToken:s.sessionToken,expectedSchemaVersion:s.schemaVersion,allowUpgrade:true}})
++   return{receipt,requiresUpgrade:s.schemaVersion<12,notice:(s.schemaVersion<12?'将备份数据库、暂停当前视觉任务并启用 v12；旧版本不能打开。OCR 忙时需先完成该任务。 ':'')+'只为启用后新入库素材保存标签、描述、OCR 计划，不回填历史库、不启动模型或发送素材；当前自动执行适配器尚未接入。'}
++  },
++  async confirm(owner:string,receipt:string){
++   const p=plans.get(receipt);if(!p||p.owner!==owner||p.expires<now()||active.size)throw Error('BACKGROUND_SCOPE_EXPIRED')
++   const token=stamp(owner),abort=new AbortController();active.set(receipt,{owner,abort});plans.delete(receipt);let release:(()=>void)|undefined,ocrRelease:(()=>void)|undefined
++   try{
++    if(p.input.expectedSchemaVersion<12){ocrRelease=deps.holdOcr();release=deps.admission.hold();await deps.visuals.suspendAndDrain()}
++    abort.signal.throwIfAborted();const s=await deps.host.configureBackgroundAnalysis(p.input,abort.signal);await fence(owner,token,p.input,p.input.sessionToken);return project(owner,s)
++   }finally{
++    try{if(release&&deps.host.inspect().state==='ready'){const current=await deps.host.readVisualSession(p.input);if(current.sessionToken===p.input.sessionToken)deps.visuals.resume()}}
++    finally{ocrRelease?.();release?.();active.delete(receipt)}
++   }
++  },
++  discard(owner:string,receipt:string){const p=plans.get(receipt);if(!p)return;if(p.owner!==owner)throw Error('BACKGROUND_SCOPE_EXPIRED');plans.delete(receipt)},
++  async change(owner:string,input:BackgroundDecision){
++   if(active.size>=4)throw Error('BACKGROUND_BUSY')
++   const token=stamp(owner),id=randomUUID(),abort=new AbortController();active.set(id,{owner,abort})
++   try{const s=await deps.host.changeBackgroundIntent(input,abort.signal);await fence(owner,token,input,input.sessionToken);return project(owner,s)}finally{active.delete(id)}
++  },
++  cancelOwner(owner:string){owners.set(owner,(owners.get(owner)??0)+1);for(const[id,p]of plans)if(p.owner===owner)plans.delete(id);for(const a of active.values())if(a.owner===owner)a.abort.abort()},
++  invalidate(){epoch++;plans.clear();for(const a of active.values())a.abort.abort()}
++ }
++}
++export function backgroundMessage(error:unknown){const code=error instanceof Error?error.message:'';if(code==='OCR_BUSY')return 'OCR 正在准备或运行，请完成后再启用计划存储。';if(code==='BACKGROUND_CONFLICT')return '计划状态已变化，请重新读取后操作。';if(code==='TAG_INTENT_SETTINGS_RESTORE_FAILED')return '资料库需要恢复检查，已停止写入。';if(code==='TAG_INTENT_ACK_UNCERTAIN')return '配置可能已保存，请重新读取核对。';return '后台计划操作未完成，请核对当前资料库和素材后重试。'}
+--- /dev/null
++++ b/src/main/background-analysis/background-analysis-storage.ts
+@@ -0,0 +1,39 @@
++import {BASIC_CAPABILITIES,type BackgroundScope,type BackgroundSnapshot,type BackgroundConfigCommit,type BackgroundDecision,type BackgroundPolicy} from '../../shared/contracts/background-analysis.contract'
++import {tagIntentFail,type TagIntentBinding,tagIntentId} from '../independent-tags/tag-intent-storage'
++import {isKnownLibrarySchemaVersion} from '../library-lifecycle/library-schema-version'
++const defaults=():BackgroundPolicy=>({enabled:false,capabilities:{tags:true,caption:true,ocr:true},revision:0})
++const safeRevision=(n:unknown)=>typeof n==='number'&&Number.isSafeInteger(n)&&n>=0&&n<=Number.MAX_SAFE_INTEGER
++function authorize(a:TagIntentBinding,s:BackgroundScope){if(!s||s.libraryIdentity!==a.identity||s.generation!==a.generation)tagIntentFail('BACKGROUND_SCOPE_EXPIRED');if(s.assetId){tagIntentId(s.assetId);if(!a.database.prepare("SELECT 1 FROM asset_lifecycle WHERE design_asset_identity=? AND lifecycle_state='active'").get(s.assetId))tagIntentFail('BACKGROUND_ASSET_UNAVAILABLE')}const v=Number(a.database.pragma('user_version',{simple:true}));if(!isKnownLibrarySchemaVersion(v))tagIntentFail('BACKGROUND_SCHEMA_UNSUPPORTED');return v}
++const projection=`CASE WHEN i.decision='cancelled' THEN 'cancelled' WHEN r.source_generation!=i.source_generation OR c.preview_generation_identity!=i.preview_generation THEN 'superseded' WHEN i.decision='user-paused' THEN 'user-paused' WHEN l.lifecycle_state!='active' THEN 'waiting-asset' WHEN policy.enabled=0 OR k.enabled=0 THEN 'policy-paused' ELSE 'waiting' END`
++const joins=`FROM background_analysis_intents i JOIN background_analysis_capabilities k USING(capability) JOIN asset_lifecycle l ON l.design_asset_identity=i.asset_id JOIN promotion_links p ON p.design_asset_identity=i.asset_id JOIN asset_candidates c ON c.candidate_identity=p.candidate_identity JOIN capture_requests r ON r.capture_request_identity=c.capture_request_identity CROSS JOIN background_analysis_policy policy`
++export function readBackgroundAnalysis(a:TagIntentBinding,input:BackgroundScope):BackgroundSnapshot{
++ const version=authorize(a,input);if(version<12)return{schemaVersion:version,sessionToken:a.notebookSession,policy:defaults(),intents:[],counts:[]}
++ const policy=a.database.prepare('SELECT enabled,revision FROM background_analysis_policy WHERE singleton=1').get() as {enabled:number;revision:number}|undefined,rows=a.database.prepare('SELECT capability,enabled FROM background_analysis_capabilities').all() as {capability:string;enabled:number}[]
++ if(!policy||!safeRevision(policy.revision)||rows.length!==3)throw Error('BACKGROUND_POLICY_INVALID')
++ const config=defaults();config.enabled=policy.enabled===1;config.revision=policy.revision;for(const cap of BASIC_CAPABILITIES){const row=rows.find(r=>r.capability===cap);if(!row)throw Error('BACKGROUND_POLICY_INVALID');config.capabilities[cap]=row.enabled===1}
++ const filter=input.assetId?'WHERE i.asset_id=?':'',args=input.assetId?[input.assetId]:[]
++ const counts=a.database.prepare(`SELECT i.capability,${projection} AS state,COUNT(*) AS count ${joins} ${filter} GROUP BY i.capability,state ORDER BY i.capability,state`).all(...args) as BackgroundSnapshot['counts']
++ const intents=input.assetId?a.database.prepare(`SELECT i.id,i.capability,i.revision,${projection} AS state ${joins} WHERE i.asset_id=? ORDER BY i.capability LIMIT 3`).all(input.assetId) as BackgroundSnapshot['intents']:[]
++ return{schemaVersion:version,sessionToken:a.notebookSession,policy:config,intents,counts}
++}
++export function validateBackgroundConfig(a:TagIntentBinding,input:BackgroundConfigCommit,signal?:AbortSignal){
++ const snapshot=readBackgroundAnalysis(a,input)
++ if(input.assetId!==undefined||signal?.aborted||input.sessionToken!==a.notebookSession)tagIntentFail('BACKGROUND_SCOPE_EXPIRED')
++ if(!safeRevision(input.expectedRevision)||input.expectedRevision===Number.MAX_SAFE_INTEGER||input.expectedRevision!==snapshot.policy.revision)tagIntentFail('BACKGROUND_CONFLICT')
++ if(typeof input.enabled!=='boolean'||typeof input.allowUpgrade!=='boolean'||!isKnownLibrarySchemaVersion(input.expectedSchemaVersion)||!input.capabilities||Object.keys(input.capabilities).length!==3||BASIC_CAPABILITIES.some(c=>typeof input.capabilities[c]!=='boolean'))tagIntentFail('BACKGROUND_INPUT_INVALID')
++ return snapshot
++}
++export function writeBackgroundConfig(a:TagIntentBinding,input:BackgroundConfigCommit,signal?:AbortSignal){
++ validateBackgroundConfig(a,input,signal)
++ a.database.prepare('UPDATE background_analysis_policy SET enabled=?,revision=revision+1 WHERE singleton=1 AND revision=?').run(input.enabled?1:0,input.expectedRevision)
++ for(const cap of BASIC_CAPABILITIES)a.database.prepare('UPDATE background_analysis_capabilities SET enabled=? WHERE capability=?').run(input.capabilities[cap]?1:0,cap)
++}
++export function changeBackgroundIntent(a:TagIntentBinding,input:BackgroundDecision,signal?:AbortSignal){
++ const snapshot=readBackgroundAnalysis(a,input)
++ if(signal?.aborted||input.sessionToken!==a.notebookSession||!input.assetId)tagIntentFail('BACKGROUND_SCOPE_EXPIRED')
++ if(!safeRevision(input.expectedRevision)||input.expectedRevision===Number.MAX_SAFE_INTEGER||!['pause','resume','cancel'].includes(input.action))tagIntentFail('BACKGROUND_INPUT_INVALID')
++ const item=snapshot.intents.find(i=>i.id===input.id);if(!item||item.revision!==input.expectedRevision||['superseded','cancelled','waiting-asset'].includes(item.state))tagIntentFail('BACKGROUND_CONFLICT')
++ const raw=a.database.prepare('SELECT decision FROM background_analysis_intents WHERE id=? AND asset_id=?').get(input.id,input.assetId) as {decision:string}
++ if(input.action==='resume'&&raw.decision!=='user-paused')tagIntentFail('BACKGROUND_CONFLICT')
++ a.database.prepare('UPDATE background_analysis_intents SET decision=?,revision=revision+1 WHERE id=? AND revision=?').run(input.action==='pause'?'user-paused':input.action==='resume'?'active':'cancelled',input.id,input.expectedRevision)
++}
+--- /dev/null
++++ b/src/main/background-analysis/background-analysis.schema.ts
+@@ -0,0 +1,38 @@
++import type Database from 'better-sqlite3'
++export const BACKGROUND_ANALYSIS_SQL=`CREATE TABLE background_analysis_policy (
++ singleton INTEGER PRIMARY KEY CHECK(singleton=1),
++ enabled INTEGER NOT NULL CHECK(enabled IN (0,1)),
++ revision INTEGER NOT NULL CHECK(revision>=0)
++);
++CREATE TABLE background_analysis_capabilities (
++ capability TEXT PRIMARY KEY CHECK(capability IN ('tags','caption','ocr')),
++ enabled INTEGER NOT NULL CHECK(enabled IN (0,1))
++);
++CREATE TABLE background_analysis_intents (
++ id TEXT PRIMARY KEY,
++ asset_id TEXT NOT NULL REFERENCES assets(id) ON DELETE RESTRICT,
++ source_generation TEXT NOT NULL,
++ preview_generation TEXT NOT NULL,
++ capability TEXT NOT NULL REFERENCES background_analysis_capabilities(capability) ON DELETE RESTRICT,
++ recipe_version TEXT NOT NULL CHECK(recipe_version='baseline-overview-v1'),
++ decision TEXT NOT NULL CHECK(decision IN ('active','user-paused','cancelled')),
++ revision INTEGER NOT NULL CHECK(revision>=1),
++ created_at TEXT NOT NULL,
++ UNIQUE(asset_id,source_generation,preview_generation,capability,recipe_version)
++);
++CREATE INDEX background_analysis_intents_asset ON background_analysis_intents(asset_id,capability);
++CREATE TRIGGER background_analysis_identity_immutable BEFORE UPDATE OF id,asset_id,source_generation,preview_generation,capability,recipe_version,created_at ON background_analysis_intents
++BEGIN SELECT RAISE(ABORT,'BACKGROUND_IDENTITY_IMMUTABLE'); END;
++CREATE TRIGGER background_analysis_enroll AFTER INSERT ON asset_lifecycle
++WHEN NEW.lifecycle_state='active' AND NEW.last_transition='registered' AND NEW.ownership='managed'
++BEGIN
++ INSERT OR IGNORE INTO background_analysis_intents
++ SELECT 'bga:'||lower(hex(randomblob(16))),NEW.design_asset_identity,r.source_generation,c.preview_generation_identity,k.capability,'baseline-overview-v1','active',1,NEW.created_at
++ FROM promotion_links p JOIN asset_candidates c ON c.candidate_identity=p.candidate_identity
++ JOIN capture_requests r ON r.capture_request_identity=c.capture_request_identity
++ CROSS JOIN background_analysis_policy policy CROSS JOIN background_analysis_capabilities k
++ WHERE p.design_asset_identity=NEW.design_asset_identity AND c.lifecycle_state='promoted' AND c.preview_generation_identity IS NOT NULL
++ AND policy.singleton=1 AND policy.enabled=1 AND k.enabled=1;
++END;
++`
++export function applyBackgroundAnalysisSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version===12)return;if(version!==11)throw Error('BACKGROUND_SCHEMA_UNSUPPORTED');db.exec(BACKGROUND_ANALYSIS_SQL);db.prepare('INSERT INTO background_analysis_policy VALUES(1,0,0)').run();for(const cap of ['tags','caption','ocr'])db.prepare('INSERT INTO background_analysis_capabilities VALUES(?,1)').run(cap);db.pragma('user_version=12')}
+--- /dev/null
++++ b/src/main/background-analysis/background-resource-policy.ts
+@@ -0,0 +1,23 @@
++export type Signal<T>={kind:'known';value:T;sampledAt:number}|{kind:'unknown'}
++export interface BackgroundTelemetry {memory:Signal<{free:number;total:number}>;battery:Signal<boolean>;lowPower:Signal<boolean>;thermal:Signal<'nominal'|'fair'|'serious'|'critical'>;idle:Signal<'active'|'idle'|'locked'>;visible:Signal<boolean>;gpuFree:Signal<number>}
++/** A trusted adapter must supply qualification. B01 production supplies null, never a backend URL. */
++export interface QualifiedBackgroundEnvelope {ownership:'host-owned'|'unowned';verified:boolean;peakRamBytes:number;accelerator:'cpu'|'gpu';peakGpuBytes?:number;lightOnBattery:boolean}
++export const BACKGROUND_RESOURCE_PROFILE=Object.freeze({version:'background-readiness-v1',freshMs:10000,memoryReserveBytes:512*1024*1024,memoryReserveFraction:.1})
++export function evaluateBackgroundReadiness(t:BackgroundTelemetry,envelope:QualifiedBackgroundEnvelope|null,now:number){
++ const reasons:string[]=[],fresh=<T>(s:Signal<T>):T|undefined=>s.kind==='known'&&Number.isFinite(s.sampledAt)&&Number.isFinite(now)&&now>=s.sampledAt&&now-s.sampledAt<=BACKGROUND_RESOURCE_PROFILE.freshMs?s.value:undefined
++ const memory=fresh(t.memory),battery=fresh(t.battery),low=fresh(t.lowPower),thermal=fresh(t.thermal),idle=fresh(t.idle),visible=fresh(t.visible)
++ const validMemory=memory&&Number.isSafeInteger(memory.free)&&Number.isSafeInteger(memory.total)&&memory.total>0&&memory.free>=0&&memory.free<=memory.total
++ if(!envelope)reasons.push('automatic-executor-not-integrated')
++ else if(envelope.ownership!=='host-owned')reasons.push('runtime-not-owned')
++ const qualified=envelope?.verified===true&&['cpu','gpu'].includes(envelope.accelerator)&&typeof envelope.lightOnBattery==='boolean'&&Number.isSafeInteger(envelope.peakRamBytes)&&envelope.peakRamBytes>0
++ if(envelope&&!qualified)reasons.push('execution-envelope-unknown')
++ if(!validMemory)reasons.push('memory-unknown')
++ else if(qualified&&memory.free<envelope!.peakRamBytes+Math.max(BACKGROUND_RESOURCE_PROFILE.memoryReserveBytes,Math.ceil(memory.total*BACKGROUND_RESOURCE_PROFILE.memoryReserveFraction)))reasons.push('memory-insufficient')
++ if(typeof battery!=='boolean')reasons.push('power-unknown');else if(battery&&!envelope?.lightOnBattery)reasons.push('waiting-external-power')
++ if(typeof low!=='boolean')reasons.push('low-power-mode-unknown');else if(low)reasons.push('low-power-mode')
++ if(thermal===undefined)reasons.push('thermal-unknown');else if(thermal!=='nominal')reasons.push('thermal-pressure')
++ if(idle===undefined)reasons.push('interaction-unknown');else if(idle!=='idle')reasons.push(idle==='locked'?'session-locked':'foreground-active')
++ if(typeof visible!=='boolean')reasons.push('visibility-unknown');else if(!visible)reasons.push('no-visible-window')
++ if(envelope?.accelerator==='gpu'){const gpu=fresh(t.gpuFree);if(gpu===undefined||!Number.isSafeInteger(gpu)||gpu<0)reasons.push('gpu-memory-unknown');else if(!Number.isSafeInteger(envelope.peakGpuBytes)||envelope.peakGpuBytes!<=0)reasons.push('gpu-envelope-unknown');else if(gpu<envelope.peakGpuBytes!)reasons.push('gpu-memory-insufficient')}
++ return{policyAllows:reasons.length===0,reasons,availableMemoryMiB:validMemory?Math.floor(memory.free/1048576):null}
++}
+--- /dev/null
++++ b/src/main/background-analysis/background-telemetry.ts
+@@ -0,0 +1,9 @@
++import os from 'node:os'
++import {powerMonitor} from 'electron'
++import type {BackgroundTelemetry,Signal} from './background-resource-policy'
++/** Read-only coarse host evidence; unsupported signals stay unknown. No Worker/Runtime/cache access. */
++export function sampleBackgroundTelemetry(visible:boolean,now=performance.now()):BackgroundTelemetry{
++ const known=<T>(value:T):Signal<T>=>({kind:'known',value,sampledAt:now}),read=<T>(fn:()=>T):Signal<T>=>{try{return known(fn())}catch{return{kind:'unknown'}}}
++ const thermal=read(()=>powerMonitor.getCurrentThermalState()),idle=read(()=>powerMonitor.getSystemIdleState(2))
++ return{memory:read(()=>({free:os.freemem(),total:os.totalmem()})),battery:read(()=>powerMonitor.isOnBatteryPower()),lowPower:{kind:'unknown'},thermal:thermal.kind==='known'&&thermal.value!=='unknown'?known(thermal.value):{kind:'unknown'},idle:idle.kind==='known'&&idle.value!=='unknown'?known(idle.value):{kind:'unknown'},visible:known(visible),gpuFree:{kind:'unknown'}}
++}
+--- a/src/main/independent-tags/tag-decision-storage.ts
++++ b/src/main/independent-tags/tag-decision-storage.ts
+@@ -18,7 +18,7 @@
+ export function writeTagDecision(a:TagIntentBinding,input:TagDecisionCommit){
+  const c=readTagDecisionContext(a,input)
+  if(input.sessionToken!==c.sessionToken)tagIntentFail('TAG_INTENT_SESSION_EXPIRED')
+- if(typeof input.allowUpgrade!=='boolean'||![10,11].includes(input.expectedSchemaVersion)||input.expectedSchemaVersion>c.schemaVersion)tagIntentFail('TAG_DECISION_REVIEW_STALE')
++ if(typeof input.allowUpgrade!=='boolean'||![10,11,12].includes(input.expectedSchemaVersion)||input.expectedSchemaVersion>c.schemaVersion)tagIntentFail('TAG_DECISION_REVIEW_STALE')
+  const normalized=normalizeDecisionLabel(c.tag),now=new Date().toISOString()
+  if(input.decision==='reject'){
+   if(c.schemaVersion<11)tagIntentFail('TAG_DECISION_UPGRADE_REQUIRED')
+--- a/src/main/independent-tags/tag-decision.schema.ts
++++ b/src/main/independent-tags/tag-decision.schema.ts
+@@ -15,4 +15,4 @@
+ CREATE TRIGGER independent_tag_rejection_immutable BEFORE UPDATE ON independent_tag_rejections
+ BEGIN SELECT RAISE(ABORT,'TAG_REJECTION_IMMUTABLE'); END;
+ `
+-export function applyTagDecisionSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version===11)return;if(version!==10)throw Error('TAG_DECISION_SCHEMA_UNSUPPORTED');db.exec(TAG_DECISION_SQL);db.pragma('user_version=11')}
++export function applyTagDecisionSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version===11||version===12)return;if(version!==10)throw Error('TAG_DECISION_SCHEMA_UNSUPPORTED');db.exec(TAG_DECISION_SQL);db.pragma('user_version=11')}
+--- a/src/main/independent-tags/tag-execution-controller.ts
++++ b/src/main/independent-tags/tag-execution-controller.ts
+@@ -52,7 +52,7 @@
+     try{if(deps.host.inspect().state==='ready'){
+      await deps.host.readVisualSession(plan.input)
+      const known=await deps.host.readAssetContext([])
+-     if(known.schemaVersion>=9&&known.schemaVersion<=11){deps.legacy.resume();deps.admission.resume()}
++     if(known.schemaVersion>=9&&known.schemaVersion<=12){deps.legacy.resume();deps.admission.resume()}
+     }}finally{releaseBarrier()}
+    }
+   })().finally(()=>{cutover=undefined})
+--- a/src/main/independent-tags/tag-execution.schema.ts
++++ b/src/main/independent-tags/tag-execution.schema.ts
+@@ -66,7 +66,7 @@
+ /** Caller owns the migration transaction; never starts nested source savepoints. */
+ export function applyTagExecutionSchema(db:Database.Database){
+  const version=Number(db.pragma('user_version',{simple:true}))
+- if(version===10||version===11)return
++ if(version>=10&&version<=12)return
+  if(version<1||version>9||!Number.isInteger(version))throw Error('TAG_EXECUTION_SCHEMA_UNSUPPORTED')
+  applyTagIntentSchema(db)
+  db.exec(TAG_EXECUTION_SQL)
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -1,3 +1,5 @@
++import {createBackgroundAnalysisController} from './background-analysis/background-analysis-controller'
++import {sampleBackgroundTelemetry} from './background-analysis/background-telemetry'
+ import {createTagRecoveryController} from './independent-tags/tag-recovery-controller'
+ import {createTagBatchController} from './independent-tags/tag-batch-controller'
+ import {createTagDecisionController} from './independent-tags/tag-decision-controller'
+@@ -86,6 +88,7 @@
+ let ocr:ReturnType<typeof createOcrController>|undefined
+ let visualAi: ReturnType<typeof createVisualAiController> | undefined
+ let visualAdmission:VisualAdmission|undefined
++let backgroundAnalysis:ReturnType<typeof createBackgroundAnalysisController>|undefined
+ let tagRecovery:ReturnType<typeof createTagRecoveryController>|undefined
+ let tagBatches:ReturnType<typeof createTagBatchController>|undefined
+ let tagDecisions:ReturnType<typeof createTagDecisionController>|undefined
+@@ -171,7 +174,7 @@
+         mainWindow.webContents.send(EVENT_ASSET_CARD_RETURN, { ...context, configureAi, promptDraft, descriptionDraft })
+       },
+       onChanged: context => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send(EVENT_ASSET_CARD_CHANGED, context) },
+-      onCardReleased: token => { visualAi?.cancelOwner(`card:${token}`); tagIntents?.cancelOwner(`card:${token}`);tagExecution?.cancelOwner(`card:${token}`);tagDecisions?.cancelOwner(`card:${token}`);tagBatches?.cancelOwner(`card:${token}`);tagRecovery?.cancelOwner(`card:${token}`); imageTools?.discardOwner(`card:${token}`) }
++      onCardReleased: token => { visualAi?.cancelOwner(`card:${token}`); tagIntents?.cancelOwner(`card:${token}`);tagExecution?.cancelOwner(`card:${token}`);tagDecisions?.cancelOwner(`card:${token}`);tagBatches?.cancelOwner(`card:${token}`);tagRecovery?.cancelOwner(`card:${token}`);backgroundAnalysis?.cancelOwner(`card:${token}`); imageTools?.discardOwner(`card:${token}`) }
+     })
+     connectedRuntime=await createConnectedLibraryRuntime({userDataDirectory:app.getPath('userData'),synthetic:connectedSyntheticE2e,openConnectedPage:()=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus();void mainWindow.loadURL(`${trustedRendererEntryUrl}#/connected-libraries`)}},requestQuit:()=>app.quit()})
+     setupIpcHandlers()
+@@ -228,7 +231,7 @@
+ 
+ const shutdownCoordinator = new ShutdownCoordinator({
+   drain: async () => {
+-    visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate()
++    visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate()
+     await workWindows?.drain()
+     await managedDownloads?.drain()
+     assetCard?.invalidate()
+@@ -268,6 +271,7 @@
+   managedDownloads = createManagedDownloads({ host: activeLibraryHost, history: new DownloadService(appStorage.database), onImported: job => {
+     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('download:imported', { libraryIdentity: job.libraryIdentity, generation: job.generation, assetId: job.assetId })
+   } })
++  backgroundAnalysis=createBackgroundAnalysisController({host:activeLibraryHost,admission:visualAdmission,telemetry:()=>sampleBackgroundTelemetry(Boolean(mainWindow&&!mainWindow.isDestroyed()&&mainWindow.isVisible())),holdOcr:()=>ocr!.holdForMaintenance(),visuals:{suspendAndDrain:async()=>{tagRecovery?.invalidate();await Promise.all([tagBatches!.suspendAndDrain(),tagExecution!.suspendAndDrain(),visualAi!.suspendAndDrain()])},resume:()=>{tagBatches!.resume();tagExecution!.resume();visualAi!.resume()}}})
+   registerMainIpcComposition({
+     appDatabase: appStorage.database,
+     settingsService,
+@@ -287,7 +291,7 @@
+       : createProductionModelLibraryWorkspaceProvider(),
+     activeLibrary: {
+       host: activeLibraryHost,
+-      onAuthorityWillChange: async () => { if(workWindows?.hasUnsaved()&&dialog.showMessageBoxSync({type:'question',buttons:['继续编辑','放弃工作集草稿并切换'],defaultId:0,cancelId:0,message:'工作窗口有未保存内容。'})===0)throw Error('WORK_DRAFT_RETAINED');authorityBarrierRelease=visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();await workWindows?.drain();await managedDownloads?.drain();authorityBusinessRelease=activeLibraryHost!.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain()]);tagIntents?.invalidate();ocr?.invalidate();imageTools?.invalidate();assetCard?.invalidate() },
++      onAuthorityWillChange: async () => { if(workWindows?.hasUnsaved()&&dialog.showMessageBoxSync({type:'question',buttons:['继续编辑','放弃工作集草稿并切换'],defaultId:0,cancelId:0,message:'工作窗口有未保存内容。'})===0)throw Error('WORK_DRAFT_RETAINED');authorityBarrierRelease=visualAdmission?.hold();tagDecisions?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();backgroundAnalysis?.invalidate();await workWindows?.drain();await managedDownloads?.drain();authorityBusinessRelease=activeLibraryHost!.holdBusinessAdmission();await Promise.all([tagBatches?.suspendAndDrain(),visualAi?.suspendAndDrain(),tagExecution?.suspendAndDrain()]);tagIntents?.invalidate();ocr?.invalidate();imageTools?.invalidate();assetCard?.invalidate() },
+       onAuthorityDidChange:async()=>{
+         const release=authorityBarrierRelease,businessRelease=authorityBusinessRelease;authorityBarrierRelease=undefined;authorityBusinessRelease=undefined
+         if(!release){businessRelease?.();return}
+@@ -307,6 +311,7 @@
+     tagDecisions,
+     tagBatches,
+     tagRecovery,
++    backgroundAnalysis,
+     ocr,
+     imageTools,
+     managedDownloads,
+--- /dev/null
++++ b/src/main/ipc/background-analysis.ipc.ts
+@@ -0,0 +1,16 @@
++import type {IpcMainInvokeEvent} from 'electron'
++import type {MainIpcHandleRegistrar} from './ipc-registrar'
++import type {createAssetCardController} from '../asset-card/asset-card-controller'
++import {backgroundMessage,type createBackgroundAnalysisController} from '../background-analysis/background-analysis-controller'
++export function registerBackgroundAnalysisIpc(deps:{controller?:ReturnType<typeof createBackgroundAnalysisController>;card?:ReturnType<typeof createAssetCardController>;isMain(e:IpcMainInvokeEvent):boolean;handle:MainIpcHandleRegistrar}){
++ const bind=(name:string,policy:boolean,scoped:boolean,action:(owner:string,input:any)=>unknown)=>deps.handle('background-analysis:'+name,async(event,input)=>{
++  try{
++   if(!deps.controller)throw Error('BACKGROUND_UNAVAILABLE')
++   const main=deps.isMain(event),card=!main&&deps.card?.isTrusted(event)?deps.card.inspect():null
++   if(!main&&!card||policy&&!main)throw Error('BACKGROUND_SCOPE_EXPIRED')
++   if(card&&scoped&&(!input||input.libraryIdentity!==card.context.libraryIdentity||input.generation!==card.context.generation||input.assetId!==card.context.assetId))throw Error('BACKGROUND_SCOPE_EXPIRED')
++   return{ok:true,value:await action(main?'main':`card:${card!.token}`,input)}
++  }catch(e){return{ok:false,error:backgroundMessage(e)}}
++ })
++ bind('read',false,true,(o,i)=>deps.controller!.read(o,i));bind('prepare',true,true,(o,i)=>deps.controller!.prepare(o,i));bind('confirm',true,false,(o,i)=>deps.controller!.confirm(o,i));bind('discard',true,false,(o,i)=>deps.controller!.discard(o,i));bind('change',false,true,(o,i)=>deps.controller!.change(o,i))
++}
+--- a/src/main/ipc/main-ipc-composition.ts
++++ b/src/main/ipc/main-ipc-composition.ts
+@@ -1,3 +1,5 @@
++import {registerBackgroundAnalysisIpc} from './background-analysis.ipc'
++import type {createBackgroundAnalysisController} from '../background-analysis/background-analysis-controller'
+ import {registerTagRecoveryIpc} from './tag-recovery.ipc'
+ import type {createTagRecoveryController} from '../independent-tags/tag-recovery-controller'
+ import {registerTagBatchIpc} from './tag-batch.ipc'
+@@ -44,6 +46,7 @@
+   imageTools?: ReturnType<typeof createImageToolsController>
+   ocr?:ReturnType<typeof createOcrController>
+   visualAi?: ReturnType<typeof createVisualAiController>
++  backgroundAnalysis?:ReturnType<typeof createBackgroundAnalysisController>
+   tagRecovery?:ReturnType<typeof createTagRecoveryController>
+   tagBatches?:ReturnType<typeof createTagBatchController>
+   tagDecisions?:ReturnType<typeof createTagDecisionController>
+@@ -71,6 +74,7 @@
+   registerImageToolsIpc({ controller: dependencies.imageTools, card: dependencies.assetCard, isMain: event => dependencies.activeLibrary.isTrustedSender?.(event) === true, handle: dependencies.handle })
+   registerAssetOcrIpc({controller:dependencies.ocr,handle:dependencies.handle,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true})
+   registerVisualAiIpc({ controller: dependencies.visualAi, card: dependencies.assetCard, isMain: event => dependencies.activeLibrary.isTrustedSender?.(event) === true, handle: dependencies.handle })
++  registerBackgroundAnalysisIpc({controller:dependencies.backgroundAnalysis,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+   registerTagRecoveryIpc({controller:dependencies.tagRecovery,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+   registerTagBatchIpc({controller:dependencies.tagBatches,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+   registerTagDecisionIpc({controller:dependencies.tagDecisions,card:dependencies.assetCard,isMain:event=>dependencies.activeLibrary.isTrustedSender?.(event)===true,handle:dependencies.handle})
+--- a/src/main/library-lifecycle/active-library-host.ts
++++ b/src/main/library-lifecycle/active-library-host.ts
+@@ -1,3 +1,5 @@
++import {applyBackgroundAnalysisSchema} from '../background-analysis/background-analysis.schema'
++import {readBackgroundAnalysis as readBackground,validateBackgroundConfig,writeBackgroundConfig,changeBackgroundIntent as changeBackground} from '../background-analysis/background-analysis-storage'
+ import {reconcileTagExecutions,readTagRecovery as readRecovery,readTagReceipt} from '../independent-tags/tag-recovery-storage'
+ import {tagBatchInputs,existingTagBatch,insertTagBatch} from '../independent-tags/tag-batch-storage'
+ import type {TagIntentCommit} from '../../shared/contracts/independent-tag-intent.contract'
+@@ -552,6 +554,35 @@
+   const readTagEffectReceipt:ActiveLibraryHost['readTagEffectReceipt']=input=>run(active=>readTagReceipt(active,input))
+   const readTagExecution:ActiveLibraryHost['readTagExecution']=scope=>run(active=>readTags(executionBinding(active),scope))
+   const enableVisualAi = () => run(active => enableVisualAiStorage(active.database))
++  const readBackgroundAnalysis:ActiveLibraryHost['readBackgroundAnalysis']=input=>run(active=>readBackground(active,input))
++  const changeBackgroundIntent:ActiveLibraryHost['changeBackgroundIntent']=(input,signal)=>run(active=>{active.database.transaction(()=>changeBackground(active,input,signal))();return readBackground(active,input)})
++  const configureBackgroundAnalysis:ActiveLibraryHost['configureBackgroundAnalysis']=(input,signal)=>enqueueLifecycle(async()=>{
++    if(!binding||state.state!=='ready')throw stateError(state.state)
++    if(businessSuspensions.size)throw hostError('library-quiescing')
++    const active=binding;maintenanceAdmissionClosed=true
++    try{
++      await Promise.allSettled([...inFlight])
++      const result=await active.lock.lease.runWhileHeld(async()=>{
++        const check=()=>{executionBinding(active);if(binding!==active||state.state!=='ready'||businessSuspensions.size)tagIntentFail('BACKGROUND_SCOPE_EXPIRED');return validateBackgroundConfig(active,input,signal)}
++        const prior=check();if(prior.schemaVersion!==input.expectedSchemaVersion)tagIntentFail('BACKGROUND_CONFLICT')
++        if(prior.schemaVersion<12&&!input.allowUpgrade)tagIntentFail('BACKGROUND_UPGRADE_REQUIRED')
++        const backup=prior.schemaVersion<12?await prepareTagIntentBackup(active,()=>{check()},signal,dependencies.tagIntentTestHooks):null
++        const commit=()=>active.database.transaction(()=>{
++          check()
++          if(prior.schemaVersion<10){applyTagExecutionSchema(active.database);seedTagCurrent(executionBinding(active))}
++          applyTagDecisionSchema(active.database);applyBackgroundAnalysisSchema(active.database)
++          dependencies.tagIntentTestHooks?.afterDdl?.();writeBackgroundConfig(active,input,signal)
++          assertLibraryDataSchema(active.database);dependencies.tagIntentTestHooks?.beforeCommit?.()
++        })()
++        if(backup)withTagIntentGrowthCap(active.database,backup.pageCap,commit);else commit()
++        try{dependencies.tagIntentTestHooks?.afterCommit?.()}catch{tagIntentFail('TAG_INTENT_ACK_UNCERTAIN')}
++        return readBackground(active,input)
++      })
++      if(result.kind!=='completed'){state={state:'recovery-required',identity:active.identity,generation:active.generation};throw hostError('library-lock-invalid')}
++      return result.value
++    }catch(error){if(error instanceof Error&&error.message==='TAG_INTENT_SETTINGS_RESTORE_FAILED')state={state:'recovery-required',identity:active.identity,generation:active.generation};if(error instanceof ActiveLibraryHostError)throw error;return tagIntentFail('BACKGROUND_STORAGE_FAILED')}
++    finally{maintenanceAdmissionClosed=false}
++  })
+   const readTagDecisionContext:ActiveLibraryHost['readTagDecisionContext']=input=>run(active=>readDecisionContext(active,input))
+   const decideTag:ActiveLibraryHost['decideTag']=(input,signal)=>{
+     if(input.decision!=='reject'||!input.allowUpgrade)return run(active=>{
+@@ -688,7 +719,7 @@
+     readOcr,commitOcr,correctOcr,readNotebook,saveNotebook,readOrganization,writeOrganization,measurePreviewColors,readWorkSets,writeWorkSet,writeWorkLayout,
+     inspect, prepareCreate, confirmCreate, open, reopen, close,
+     prepareAddAssets, dispatchAddAssets, inspectCapture,
+-    readAssetContext,readTagRecovery,readTagEffectReceipt, readTagDecisionContext,decideTag,holdBusinessAdmission,enableTagExecution,claimTagExecution,markTagExecutionSent,commitTagExecution,finishTagExecution,readTagExecutionRequest,readTagOutbox,ackTagOutbox,readTagExecution, readTagIntentContext, readTagIntents, saveTagIntent,saveTagBatch, listAssets, searchAssets, listTags, searchTags, getTag, listTrash, readPreview, readVisualSession,readVisualPreview, readManagedOriginal, createTag, updateTag, addTagToAsset,
++    readAssetContext,readBackgroundAnalysis,configureBackgroundAnalysis,changeBackgroundIntent,readTagRecovery,readTagEffectReceipt, readTagDecisionContext,decideTag,holdBusinessAdmission,enableTagExecution,claimTagExecution,markTagExecutionSent,commitTagExecution,finishTagExecution,readTagExecutionRequest,readTagOutbox,ackTagOutbox,readTagExecution, readTagIntentContext, readTagIntents, saveTagIntent,saveTagBatch, listAssets, searchAssets, listTags, searchTags, getTag, listTrash, readPreview, readVisualSession,readVisualPreview, readManagedOriginal, createTag, updateTag, addTagToAsset,
+     createTagAlias, removeTagAlias, setTagParent, removeTagFromAsset, batchAddTagsToAssets, batchRemoveTagsFromAssets, replaceTagForAssets, listAssetTags, updateAssetCaption, resetAssetCaptionEdited,
+     listIntakeRecovery, prepareIntakeRecovery, runIntakeRecovery, downloadJournal, prepareTrash, dispatchTrash, inspectTrash, enableVisualAi, saveVisualAiEvidence, listVisualAiEvidence, confirmVisualAiTag, importDownloadedImage, recoverDownloadedImage, saveImageVariant
+   })
+--- a/src/main/library-lifecycle/library-materialization.internal.ts
++++ b/src/main/library-lifecycle/library-materialization.internal.ts
+@@ -1,3 +1,4 @@
++import {applyBackgroundAnalysisSchema} from '../background-analysis/background-analysis.schema'
+ import {applyTagDecisionSchema} from '../independent-tags/tag-decision.schema'
+ import {applyTagExecutionSchema} from '../independent-tags/tag-execution.schema'
+ import { applyTagIntentSchema } from '../independent-tags/tag-intent.schema'
+@@ -223,7 +224,8 @@
+     })
+     initializeLibraryDataSchema(expected)
+     const version = database.pragma('user_version', { simple: true })
+-    if (version === 11) {applyTagExecutionSchema(expected);applyTagDecisionSchema(expected)}
++    if(version===12){applyTagExecutionSchema(expected);applyTagDecisionSchema(expected);applyBackgroundAnalysisSchema(expected)}
++    else if (version === 11) {applyTagExecutionSchema(expected);applyTagDecisionSchema(expected)}
+     else if (version === 10) applyTagExecutionSchema(expected)
+     else if (version === 9) applyTagIntentSchema(expected)
+     else if (version === 8) enableOcrStorage(expected)
+--- a/src/main/library-lifecycle/library-open-control-store.internal.ts
++++ b/src/main/library-lifecycle/library-open-control-store.internal.ts
+@@ -1,3 +1,4 @@
++import {BACKGROUND_ANALYSIS_SQL} from '../background-analysis/background-analysis.schema'
+ import {TAG_DECISION_SQL} from '../independent-tags/tag-decision.schema'
+ import {TAG_EXECUTION_SQL} from '../independent-tags/tag-execution.schema'
+ import { TAG_INTENT_SQL } from '../independent-tags/tag-intent.schema'
+@@ -105,7 +106,7 @@
+     }
+     if (isKnownLibrarySchemaVersion(version,3)) {
+       // Exact statements, including immutable identity enforcement; full schema is checked on binding.
+-      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (version === 11 ? '\n'+TAG_DECISION_SQL : '')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
++      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (isKnownLibrarySchemaVersion(version,11) ? '\n'+TAG_DECISION_SQL : '') + (version===12?'\n'+BACKGROUND_ANALYSIS_SQL:'')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
+       for (const sql of statements) {
+         const [, kind, name] = /^CREATE (TABLE|(?:UNIQUE )?INDEX|TRIGGER) (\w+)/.exec(sql)!
+         const row = schema.find(item => item.name === name)
+--- a/src/main/library-lifecycle/library-schema-version.ts
++++ b/src/main/library-lifecycle/library-schema-version.ts
+@@ -1,5 +1,5 @@
+ /** Known Managed profiles only. Feature presence never grants write authority. */
+-export const CURRENT_MANAGED_SCHEMA_VERSION = 11
++export const CURRENT_MANAGED_SCHEMA_VERSION = 12
+ export function isKnownLibrarySchemaVersion(version: unknown, minimum = 1): version is number {
+   return typeof version === 'number' && Number.isInteger(version) && version >= minimum && version <= CURRENT_MANAGED_SCHEMA_VERSION
+ }
+--- a/src/main/ocr/ocr-controller.ts
++++ b/src/main/ocr/ocr-controller.ts
+@@ -12,17 +12,18 @@
+  return messages[code]||'OCR 操作未完成；已有结果和输入保留，请检查本地环境后重试。'
+ }
+ export function createOcrController(deps:{host:Host;runtime:OcrRuntime;changed(scope:OcrScope):void}){
+- let epoch=0,preparing=false,active:{job:OcrJob;abort:AbortController}|null=null
++ let epoch=0,preparing=false,maintenanceHolds=0,active:{job:OcrJob;abort:AbortController}|null=null
+  const plans=new Map<string,Plan>()
+  const matches=(s:Scope)=>{const a=deps.host.inspect();return a.state==='ready'&&a.identity===s.libraryIdentity&&a.generation===s.generation}
+  const requireScope=(s:Scope)=>{if(!s||!matches(s))throw Error('OCR_SCOPE_EXPIRED')}
+  const busy=()=>active?.job.state==='running'
+  return{
+   async status(){const runtime=await deps.runtime.current();return{configured:!!runtime,label:runtime?.label||'尚未选择本地 OCR 环境',job:active&&matches(active.job)?structuredClone(active.job):null}},
+-  async configure(){if(busy()||preparing)throw Error('OCR_BUSY');plans.clear();await deps.runtime.configure()},
++  holdForMaintenance(){if(busy()||preparing)throw Error('OCR_BUSY');maintenanceHolds++;epoch++;plans.clear();let held=true;return()=>{if(held){held=false;maintenanceHolds--}}},
++  async configure(){if(maintenanceHolds||busy()||preparing)throw Error('OCR_BUSY');preparing=true;try{plans.clear();await deps.runtime.configure()}finally{preparing=false}},
+   read:(scope:OcrScope)=>{requireScope(scope);return deps.host.readOcr(scope)},
+   async prepare(input:Scope&{assetIds:string[]}):Promise<OcrReview>{
+-   if(preparing||busy())throw Error('OCR_BUSY')
++   if(maintenanceHolds||preparing||busy())throw Error('OCR_BUSY')
+    if(!input||Object.keys(input).some(k=>!['libraryIdentity','generation','assetIds'].includes(k))||!Array.isArray(input.assetIds)||!input.assetIds.length||input.assetIds.length>8||new Set(input.assetIds).size!==input.assetIds.length)throw Error('OCR_INPUT_INVALID')
+    requireScope(input);preparing=true;plans.clear();const version=epoch
+    try{
+@@ -41,7 +42,7 @@
+     return{receipt,count:items.length,requiresUpgrade:items.some(i=>i.snapshot.requiresUpgrade),runtimeLabel:runtime.label}
+    }finally{preparing=false}
+   },
+-  async run(receipt:string){const plan=plans.get(receipt);if(!plan||plan.epoch!==epoch||plan.expires<Date.now())throw Error('OCR_SCOPE_EXPIRED');requireScope(plan.scope);if(busy())throw Error('OCR_BUSY')
++  async run(receipt:string){if(maintenanceHolds)throw Error('OCR_BUSY');const plan=plans.get(receipt);if(!plan||plan.epoch!==epoch||plan.expires<Date.now())throw Error('OCR_SCOPE_EXPIRED');requireScope(plan.scope);if(busy())throw Error('OCR_BUSY')
+    const runtime=await deps.runtime.current();if(runtime?.fingerprint!==plan.runtime.fingerprint)throw Error('OCR_MODEL_CHANGED')
+    requireScope(plan.scope);if(plan.epoch!==epoch||!plans.has(receipt)||busy())throw Error('OCR_SCOPE_EXPIRED');plans.delete(receipt)
+    const record={job:{...plan.scope,id:randomUUID(),state:'running',items:plan.items.map(i=>({assetId:i.assetId,state:'queued'}))} as OcrJob,abort:new AbortController()};active=record
+--- a/src/preload/asset-card.ts
++++ b/src/preload/asset-card.ts
+@@ -44,3 +44,5 @@
+ contextBridge.exposeInMainWorld('tagBatchesAPI',Object.freeze({prepare:(input:unknown)=>ipcRenderer.invoke('tag-batch:prepare',input),run:(receipt:string)=>ipcRenderer.invoke('tag-batch:run',receipt),discard:(receipt:string)=>ipcRenderer.invoke('tag-batch:discard',receipt),inspect:(id:string)=>ipcRenderer.invoke('tag-batch:inspect',id),cancel:(id:string)=>ipcRenderer.invoke('tag-batch:cancel',id)}))
+ 
+ contextBridge.exposeInMainWorld('tagRecoveryAPI',Object.freeze({list:(input:unknown)=>ipcRenderer.invoke('tag-recovery:list',input),prepare:(input:unknown)=>ipcRenderer.invoke('tag-recovery:prepare',input),receipt:(input:unknown)=>ipcRenderer.invoke('tag-recovery:receipt',input)}))
++
++contextBridge.exposeInMainWorld('backgroundAnalysisAPI',Object.freeze({read:(input:unknown)=>ipcRenderer.invoke('background-analysis:read',input),change:(input:unknown)=>ipcRenderer.invoke('background-analysis:change',input)}))
+--- a/src/preload/index.ts
++++ b/src/preload/index.ts
+@@ -161,6 +161,7 @@
+     onChanged:(listener:(scope:{libraryIdentity:string;generation:string;assetId:string})=>void)=>{const receive=(_e:IpcRendererEvent,scope:any)=>listener(scope);ipcRenderer.on('asset-ocr:changed',receive);return()=>ipcRenderer.removeListener('asset-ocr:changed',receive)}
+   },
+   tagDecisions:{prepare:(input:unknown)=>ipcRenderer.invoke('tag-decision:prepare',input),confirm:(receipt:string)=>ipcRenderer.invoke('tag-decision:confirm',receipt),discard:(receipt:string)=>ipcRenderer.invoke('tag-decision:discard',receipt)},
++  backgroundAnalysis:{read:(input:unknown)=>ipcRenderer.invoke('background-analysis:read',input),prepare:(input:unknown)=>ipcRenderer.invoke('background-analysis:prepare',input),confirm:(receipt:string)=>ipcRenderer.invoke('background-analysis:confirm',receipt),discard:(receipt:string)=>ipcRenderer.invoke('background-analysis:discard',receipt),change:(input:unknown)=>ipcRenderer.invoke('background-analysis:change',input)},
+   tagRecovery:{list:(input:unknown)=>ipcRenderer.invoke('tag-recovery:list',input),prepare:(input:unknown)=>ipcRenderer.invoke('tag-recovery:prepare',input),receipt:(input:unknown)=>ipcRenderer.invoke('tag-recovery:receipt',input)},
+   tagBatches:{prepare:(input:unknown)=>ipcRenderer.invoke('tag-batch:prepare',input),run:(receipt:string)=>ipcRenderer.invoke('tag-batch:run',receipt),discard:(receipt:string)=>ipcRenderer.invoke('tag-batch:discard',receipt),inspect:(id:string)=>ipcRenderer.invoke('tag-batch:inspect',id),cancel:(id:string)=>ipcRenderer.invoke('tag-batch:cancel',id)},
+   tagExecution:{onChanged:(listener:(scope:unknown)=>void)=>{const receive=(_event:unknown,scope:unknown)=>listener(scope);ipcRenderer.on('visual-ai:updated',receive);return()=>ipcRenderer.removeListener('visual-ai:updated',receive)},prepare:(input:unknown)=>ipcRenderer.invoke('tag-execution:prepare',input),discardReview:(receipt:string)=>ipcRenderer.invoke('tag-execution:discard-review',receipt),run:(receipt:string)=>ipcRenderer.invoke('tag-execution:run',receipt),inspect:(id:string)=>ipcRenderer.invoke('tag-execution:inspect',id),cancel:(id:string)=>ipcRenderer.invoke('tag-execution:cancel',id),read:(scope:unknown)=>ipcRenderer.invoke('tag-execution:read',scope)},
+--- /dev/null
++++ b/src/renderer/components/asset/BackgroundAnalysisPanel.tsx
+@@ -0,0 +1,45 @@
++import './background-analysis.css'
++import React,{useEffect,useRef,useState} from 'react'
++import {BASIC_CAPABILITIES,type BackgroundAnalysisApi,type BackgroundScope,type BackgroundView,type BackgroundPolicy,type BackgroundReview} from '../../../shared/contracts/background-analysis.contract'
++const names={tags:'标签',caption:'描述',ocr:'OCR'}
++const states={'waiting':'等待自动执行适配器','user-paused':'已手动暂停','policy-paused':'已由策略暂停','cancelled':'已取消','superseded':'来源已变化','waiting-asset':'等待素材恢复'}
++const reasons:Record<string,string>={'automatic-executor-not-integrated':'自动执行尚未接入','memory-unknown':'内存证据未知','memory-insufficient':'内存余量不足','power-unknown':'供电状态未知','waiting-external-power':'等待外接电源','low-power-mode-unknown':'节能模式状态未知','low-power-mode':'系统节能模式','thermal-unknown':'温控状态未知','thermal-pressure':'温控压力','interaction-unknown':'交互状态未知','foreground-active':'前台正在交互','session-locked':'系统已锁定','visibility-unknown':'窗口状态未知','no-visible-window':'没有可见主窗口','gpu-memory-unknown':'GPU 预算未知'}
++export default function BackgroundAnalysisPanel({scope,assetId}:{scope?:BackgroundScope;assetId?:string}){
++ const bridge=window as any,api=(bridge.backgroundAnalysisAPI??bridge.electronAPI?.backgroundAnalysis) as BackgroundAnalysisApi|undefined
++ const identity=JSON.stringify([scope,assetId]),life=useRef(0),readSequence=useRef(0),authority=useRef(''),reading=useRef<number|null>(null),pending=useRef(false),receipt=useRef<string|null>(null)
++ const [view,setView]=useState<{scope:BackgroundScope;value:BackgroundView}|null>(null),[draft,setDraft]=useState<BackgroundPolicy|null>(null),[review,setReview]=useState<BackgroundReview|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('')
++ const revoke=()=>{life.current++;readSequence.current++;authority.current='';pending.current=false;setBusy(false);if(receipt.current)void api?.discard?.(receipt.current).catch(()=>{});receipt.current=null;setReview(null);setView(null);setDraft(null)}
++ const adopt=(next:{scope:BackgroundScope;value:BackgroundView})=>setView(previous=>{
++  if(previous&&previous.value.sessionToken===next.value.sessionToken&&previous.scope.assetId===next.scope.assetId&&previous.scope.libraryIdentity===next.scope.libraryIdentity){
++   if(previous.value.schemaVersion>next.value.schemaVersion||previous.value.policy.revision>next.value.policy.revision||next.value.intents.some(i=>(previous.value.intents.find(p=>p.id===i.id)?.revision??0)>i.revision))return previous
++  }
++  return next
++ })
++ const load=async(reset=false)=>{
++  if(!api||reading.current===life.current)return;const epoch=life.current,sequence=++readSequence.current;reading.current=epoch
++  try{
++   let actual=scope
++   if(!actual){const current=await bridge.electronAPI?.library.inspect();if(current?.state!=='ready'){if(epoch===life.current&&sequence===readSequence.current){revoke();setError('请先打开资料库。')}return}actual={libraryIdentity:current.identity,generation:current.generation}}
++   const selected={...actual,...(assetId?{assetId}:{})},r=await api.read(selected)
++   if(epoch!==life.current||sequence!==readSequence.current)return
++   if(!r.ok){setError(r.error);return}
++   const key=JSON.stringify([actual,r.value.sessionToken])
++   if(key!==authority.current){authority.current=key;life.current++;pending.current=false;setBusy(false);if(receipt.current)void api.discard?.(receipt.current).catch(()=>{});receipt.current=null;setReview(null);setDraft(r.value.policy)}else if(reset)setDraft(r.value.policy)
++   adopt({scope:selected,value:r.value});setError('')
++  }catch{if(epoch===life.current&&sequence===readSequence.current)setError('后台计划状态暂不可用。')}
++  finally{if(reading.current===epoch)reading.current=null}
++ }
++ useEffect(()=>{life.current++;authority.current='';pending.current=false;setBusy(false);setView(null);setDraft(null);void load();const timer=setInterval(()=>{if(document.visibilityState==='visible')void load()},5000);return()=>{life.current++;clearInterval(timer);if(receipt.current)void api?.discard?.(receipt.current).catch(()=>{});receipt.current=null}},[identity,api])
++ const operate=async(action:(valid:()=>boolean)=>Promise<void>)=>{if(pending.current)return;const epoch=life.current,valid=()=>epoch===life.current;readSequence.current++;pending.current=true;setBusy(true);setError('');try{await action(valid)}catch{if(valid())setError('后台计划操作未完成，请重新读取。')}finally{if(valid()){readSequence.current++;pending.current=false;setBusy(false)}}}
++ if(!api)return null
++ return <section className="visual-ai-panel background-analysis-panel" aria-label={assetId?'素材后台分析计划':'后台基础分析计划'}><header><strong>后台基础分析计划</strong><button disabled={busy} onClick={()=>void operate(async()=>{await load(true)})}>重新读取计划</button></header>
++ <p>当前只管理新素材计划，尚未自动执行模型；手动分析入口仍可使用。</p>
++ {view&&<><p>{view.value.policy.enabled?'已启用新素材计划':'新素材计划未启用'} · 不自动补扫历史库</p>
++ {!assetId&&view.value.canConfigure&&draft&&<><label><input type="checkbox" style={{display:'inline-block',width:'auto',margin:'0 6px 0 0',accentColor:'var(--ui-text)'}} aria-label="收集新素材分析计划" checked={draft.enabled} disabled={busy} onChange={e=>setDraft({...draft,enabled:e.target.checked})}/>收集新素材分析计划</label><div className="visual-ai-actions">{BASIC_CAPABILITIES.map(cap=><label key={cap}><input type="checkbox" style={{display:'inline-block',width:'auto',margin:'0 6px 0 0',accentColor:'var(--ui-text)'}} aria-label={`计划能力 ${names[cap]}`} checked={draft.capabilities[cap]} disabled={busy} onChange={e=>setDraft({...draft,capabilities:{...draft.capabilities,[cap]:e.target.checked}})}/>{names[cap]}</label>)}</div><button disabled={busy} onClick={()=>void operate(async valid=>{const r=await api.prepare({...view.scope,enabled:draft.enabled,capabilities:draft.capabilities,expectedRevision:draft.revision});if(!valid()){if(r.ok)void api.discard(r.value.receipt).catch(()=>{});return}if(r.ok){receipt.current=r.value.receipt;setReview(r.value)}else setError(r.error)})}>保存新素材计划设置</button></>}
++ {review&&<div className="visual-ai-review" role="region" aria-label="确认后台计划设置"><p>{review.notice}</p><div className="visual-ai-actions"><button disabled={busy} onClick={()=>{const id=review.receipt;receipt.current=null;setReview(null);void api.discard(id).catch(()=>{})}}>取消设置</button><button disabled={busy} onClick={()=>void operate(async valid=>{const r=await api.confirm(review.receipt);if(!valid())return;readSequence.current++;receipt.current=null;setReview(null);if(r.ok){adopt({...view,value:r.value});setDraft(r.value.policy)}else setError(r.error)})}>确认保存后台计划</button></div></div>}
++ {!assetId&&<div className="visual-ai-result">{view.value.counts.length?view.value.counts.map(row=><p key={row.capability+row.state}>{names[row.capability]} · {states[row.state]} · {row.count}</p>):<p>尚无后台计划。</p>}</div>}
++ {assetId&&<div className="visual-ai-result">{!view.value.intents.length&&<p>此素材没有后台计划；启用设置不会补建历史任务。</p>}{view.value.intents.map(item=><div key={item.id}><p>{names[item.capability]} · {states[item.state]}</p><div className="visual-ai-actions">{(['pause','resume','cancel']as const).map(action=><button key={action} aria-label={`${action==='pause'?'暂停':action==='resume'?'恢复':'取消'}${names[item.capability]}计划`} disabled={busy||['cancelled','superseded','waiting-asset'].includes(item.state)||(action==='resume'&&item.state!=='user-paused')} onClick={()=>void operate(async valid=>{const r=await api.change({...view.scope,assetId,id:item.id,sessionToken:view.value.sessionToken,expectedRevision:item.revision,action});if(valid()){readSequence.current++;if(r.ok)adopt({...view,value:r.value});else setError(r.error)}})}>{action==='pause'?'暂停':action==='resume'?'恢复':'取消'}</button>)}</div></div>)}</div>}
++ <details><summary>准入证据与等待原因</summary><p>{view.value.availableMemoryMiB===null?'可用内存未知':`系统空闲内存约 ${view.value.availableMemoryMiB} MiB；不代表模型可用预算。`}</p>{view.value.resourceReasons.map(reason=><p key={reason}>{reasons[reason]??'执行资格尚未验证'}</p>)}</details>
++ </>}{error&&<p role="alert">{error}</p>}
++ </section>
++}
+--- a/src/renderer/components/asset/VisualAiPanel.tsx
++++ b/src/renderer/components/asset/VisualAiPanel.tsx
+@@ -1,3 +1,4 @@
++import BackgroundAnalysisPanel from './BackgroundAnalysisPanel'
+ import TagBatchPanel from './TagBatchPanel'
+ import React, { useEffect, useRef, useState } from 'react'
+ import { Sparkles, X, Check, Play } from 'lucide-react'
+@@ -68,6 +69,7 @@
+         if (response.ok) {reviewReceipt.current=response.value.receipt;setReview(response.value)} else setError(response.error)
+       }) }}><Sparkles size={13} />{purpose === 'analyze' ? `分析 ${assetIds.length} 个素材` : '反推提示词'}</button>)}</div>
+     </>}
++    {assetIds.length===1&&<BackgroundAnalysisPanel scope={requestScope} assetId={assetIds[0]}/>}
+     <TagBatchPanel scope={requestScope} assetIds={assetIds} backendId={backendId} model={model} onActivityChange={setBatchBusy} onChanged={onChanged}/>
+     {assetIds.length===1&&<IndependentTagIntentPanel scope={requestScope} assetId={assetIds[0]} backendId={backendId} model={model} onActivityChange={setTagBusy} onCurrentTagSource={setTagSource} />}
+     {exceedsBatchLimit && <p role="status">已选择 {assetIds.length} 个素材，每批最多分析 8 个，请缩小选择范围。</p>}
+--- /dev/null
++++ b/src/renderer/components/asset/background-analysis.css
+@@ -0,0 +1,6 @@
++.visual-ai-panel.background-analysis-panel { font-size:13px; }
++.visual-ai-panel.background-analysis-panel > header { font-size:13px; flex-wrap:wrap; gap:8px; }
++.visual-ai-panel.background-analysis-panel p { font-size:13px; line-height:1.6; color:var(--ui-text); }
++.visual-ai-panel.background-analysis-panel label,
++.visual-ai-panel.background-analysis-panel button,
++.visual-ai-panel.background-analysis-panel summary { font-size:12px; }
+--- a/src/renderer/routes/AiConsolePage.tsx
++++ b/src/renderer/routes/AiConsolePage.tsx
+@@ -1,3 +1,4 @@
++import BackgroundAnalysisPanel from '../components/asset/BackgroundAnalysisPanel'
+ import { SegmentedControl } from '../components/ui/WorkspaceMotion'
+ import { Notice, ReviewSheet, Button } from '../components/ui/WorkspacePrimitives'
+ import React, { useEffect, useMemo, useState } from 'react'
+@@ -1259,6 +1260,7 @@
+ 
+       <div className="flex min-h-full flex-col gap-5">
+         <main className="min-w-0 flex-1 space-y-5">
++          <BackgroundAnalysisPanel/>
+           <section className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-premium dark:border-slate-800 dark:bg-slate-900">
+             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+               <div className="min-w-0">
+--- a/src/shared/contracts/active-library.contract.ts
++++ b/src/shared/contracts/active-library.contract.ts
+@@ -1,3 +1,4 @@
++import type {BackgroundScope,BackgroundSnapshot,BackgroundConfigCommit,BackgroundDecision} from './background-analysis.contract'
+ import type {TagRecoveryScope,TagRecoveryStored,TagRecoveryReceipt} from './tag-recovery.contract'
+ import type {TagBatchCommit,TagBatchSaved} from './tag-batch.contract'
+ import type {TagDecisionPrepare,TagDecisionCommit,TagDecisionContext} from './tag-decision.contract'
+@@ -226,6 +227,9 @@
+   readAssetContext(ids: readonly string[]): Promise<ActiveLibraryAssetContext>
+   readTagIntentContext(scope: TagIntentScope): Promise<TagIntentContext>
+   readTagIntents(scope: TagIntentScope): Promise<TagIntentSnapshot>
++  readBackgroundAnalysis(input:BackgroundScope):Promise<BackgroundSnapshot>
++  configureBackgroundAnalysis(input:BackgroundConfigCommit,signal?:AbortSignal):Promise<BackgroundSnapshot>
++  changeBackgroundIntent(input:BackgroundDecision,signal?:AbortSignal):Promise<BackgroundSnapshot>
+   readTagRecovery(input:TagRecoveryScope,allowRelated:boolean,requestId?:string):Promise<TagRecoveryStored[]>
+   readTagEffectReceipt(input:import('./tag-execution.contract').TagExecutionScope&{requestId:string}):Promise<TagRecoveryReceipt>
+   saveTagBatch(input:TagBatchCommit,signal?:AbortSignal):Promise<TagBatchSaved>
+--- /dev/null
++++ b/src/shared/contracts/background-analysis.contract.ts
+@@ -0,0 +1,14 @@
++export const BASIC_CAPABILITIES=['tags','caption','ocr'] as const
++export type BasicCapability=typeof BASIC_CAPABILITIES[number]
++export interface BackgroundScope {libraryIdentity:string;generation:string;assetId?:string}
++export interface BackgroundPolicy {enabled:boolean;capabilities:Record<BasicCapability,boolean>;revision:number}
++export type BackgroundState='waiting'|'user-paused'|'policy-paused'|'cancelled'|'superseded'|'waiting-asset'
++export interface BackgroundIntent {id:string;capability:BasicCapability;state:BackgroundState;revision:number}
++export interface BackgroundSnapshot {schemaVersion:number;sessionToken:string;policy:BackgroundPolicy;intents:BackgroundIntent[];counts:Array<{capability:BasicCapability;state:BackgroundState;count:number}>}
++export interface BackgroundConfig extends BackgroundScope {enabled:boolean;capabilities:Record<BasicCapability,boolean>;expectedRevision:number}
++export interface BackgroundConfigCommit extends BackgroundConfig {sessionToken:string;expectedSchemaVersion:number;allowUpgrade:boolean}
++export interface BackgroundDecision extends BackgroundScope {assetId:string;id:string;sessionToken:string;expectedRevision:number;action:'pause'|'resume'|'cancel'}
++export interface BackgroundReview {receipt:string;notice:string;requiresUpgrade:boolean}
++export interface BackgroundView extends BackgroundSnapshot {dispatchAvailable:false;canConfigure:boolean;resourceReasons:string[];availableMemoryMiB:number|null}
++export type BackgroundResponse<T>={ok:true;value:T}|{ok:false;error:string}
++export interface BackgroundAnalysisApi {read(scope:BackgroundScope):Promise<BackgroundResponse<BackgroundView>>;prepare(input:BackgroundConfig):Promise<BackgroundResponse<BackgroundReview>>;confirm(receipt:string):Promise<BackgroundResponse<BackgroundView>>;discard(receipt:string):Promise<BackgroundResponse<void>>;change(input:BackgroundDecision):Promise<BackgroundResponse<BackgroundView>>}

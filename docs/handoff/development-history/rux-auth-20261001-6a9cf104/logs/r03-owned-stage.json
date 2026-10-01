@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/auth-owned-stage.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 5.981,
+  "sha256": "a67cb6e9bb61c3b7237aab9e631260f13de5cf7cddf24f00ac969a5d161f5c72"
+}

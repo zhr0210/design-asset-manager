@@ -1,0 +1,30 @@
+{
+  "method": "TypeScript AST import/export/relative literal require and import; type imports retained; src code only",
+  "sourceFilesParsed": 598,
+  "rendererRootReachableFilesIncludingShared": 162,
+  "productionStaticReachableFiles": 365,
+  "rootFiles": [
+    "src/main/index.ts",
+    "src/preload/index.ts",
+    "src/preload/asset-card.ts",
+    "src/preload/work-window.ts",
+    "src/renderer/main.tsx"
+  ],
+  "unresolvedDynamic": [
+    {
+      "path": "src/main/doctor/checks/native-deps.check.ts",
+      "line": 6
+    }
+  ],
+  "rendererCandidates": 27,
+  "candidateManifest": "../manifests/DELETION-CANDIDATES.json",
+  "notCovered": [
+    "all package-script entrypoints",
+    "CSS imports",
+    "string IPC registrations",
+    "packaged Python/Worker executables",
+    "visual reference/golden dependencies",
+    "all configuration-driven dynamic roots"
+  ],
+  "canAuthorizeDeletion": false
+}

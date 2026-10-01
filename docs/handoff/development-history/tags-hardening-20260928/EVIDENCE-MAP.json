@@ -1,0 +1,245 @@
+{
+  "changeDigest": "ceecf948ece637b5a756e54ecec599b23dd2705d12a4fe8ba0496d1326ab77d7",
+  "records": [
+    {
+      "label": "F01-green",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-execution.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T01:35:59.655841+00:00",
+      "finishedAt": "2026-09-28T01:36:07.173684+00:00",
+      "exitCode": 0,
+      "logSha256": "d90037cdea434df022ecff991b05051d7a1e12cf327091bd723f7e832f760c0b",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 30
+    },
+    {
+      "label": "F01-red",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-execution.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T01:34:09.020290+00:00",
+      "finishedAt": "2026-09-28T01:34:15.587532+00:00",
+      "exitCode": 1,
+      "logSha256": "23d7d3288d3491f6b6ee094c99be00b9747859026998f7d47d3294666eccf4c9",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 26
+    },
+    {
+      "label": "F02-formal",
+      "command": [
+        "node",
+        "scripts/tag-intent-panel-electron.e2e.test.mjs"
+      ],
+      "startedAt": "2026-09-28T01:41:38.232989+00:00",
+      "finishedAt": "2026-09-28T01:41:42.247123+00:00",
+      "exitCode": 0,
+      "logSha256": "0c002f1e7fc331b173fd83cfe8169e65fe85e5f2b93c1d003040fc360b74e3f1",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 1
+    },
+    {
+      "label": "F02-green",
+      "command": [
+        "node",
+        "scripts/tag-intent-ui.integration.test.mjs"
+      ],
+      "startedAt": "2026-09-28T01:38:33.569706+00:00",
+      "finishedAt": "2026-09-28T01:38:35.472531+00:00",
+      "exitCode": 0,
+      "logSha256": "ee134e82a8f66bf796296ce5853db0c6912e347495d7cd59ebe36233e0bb1a4d",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 3
+    },
+    {
+      "label": "F02-red",
+      "command": [
+        "node",
+        "scripts/tag-intent-ui.integration.test.mjs"
+      ],
+      "startedAt": "2026-09-28T01:37:18.510339+00:00",
+      "finishedAt": "2026-09-28T01:37:20.498056+00:00",
+      "exitCode": 1,
+      "logSha256": "1f17f3f516cdaef0039c0274e9edae2ef9066290b1840def487b6b5cb59119a6",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 3
+    },
+    {
+      "label": "F03-policy-green",
+      "command": [
+        "python3",
+        ".ai-run/tags-hardening-20260928/test-handoff-policy.py"
+      ],
+      "startedAt": "2026-09-28T01:46:35.738545+00:00",
+      "finishedAt": "2026-09-28T01:46:35.864136+00:00",
+      "exitCode": 0,
+      "logSha256": "9ef1fa2e12618a968ad48bf4d982f298b3005d9fcade5b9ee0b4523585edb962",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 5
+    },
+    {
+      "label": "F03-red",
+      "command": [
+        "python3",
+        ".ai-run/tags-hardening-20260928/verify-handoff.py",
+        ".ai-run/independent-tags-20260927/delivery/DAM-INDEPENDENT-TAGS-IMPLEMENTATION-20260927.zip"
+      ],
+      "startedAt": "2026-09-28T01:45:27.749580+00:00",
+      "finishedAt": "2026-09-28T01:45:27.819510+00:00",
+      "exitCode": 1,
+      "logSha256": "68b245bacd52211201059c798212683439a1b8c1350bedc4fa0b2d57526b3585",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": null
+    },
+    {
+      "label": "admission-regression",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/visual-admission.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T01:44:05.785580+00:00",
+      "finishedAt": "2026-09-28T01:44:06.407765+00:00",
+      "exitCode": 0,
+      "logSha256": "36338fb3f6872f282721d5f6006016456bf2729257daf69f99de84b8209a5b34",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 10
+    },
+    {
+      "label": "batch-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-batch.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T01:43:58.145692+00:00",
+      "finishedAt": "2026-09-28T01:44:01.884518+00:00",
+      "exitCode": 0,
+      "logSha256": "05482796f599d2f7e10025c1154ef204be56758639c5ccb0c2d967cba0160e18",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 12
+    },
+    {
+      "label": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-09-28T01:41:35.731054+00:00",
+      "finishedAt": "2026-09-28T01:41:38.203422+00:00",
+      "exitCode": 0,
+      "logSha256": "9509fe6ac19aedee0e9b876a5c8e52149f0c7535b5a1a2ac224c060fa9902e1f",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": null
+    },
+    {
+      "label": "execution-formal",
+      "command": [
+        "node",
+        "scripts/tag-execution-electron.e2e.test.mjs"
+      ],
+      "startedAt": "2026-09-28T01:44:06.440745+00:00",
+      "finishedAt": "2026-09-28T01:44:13.054710+00:00",
+      "exitCode": 0,
+      "logSha256": "97fe87f4616ff2dbe4fea9174d0ccd0dca18d66d645f6f8f31a011147201d962",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": null,
+      "verificationKind": "assertion script",
+      "scenarioCount": 1,
+      "assertionGroups": 4,
+      "successMarker": "passed:true"
+    },
+    {
+      "label": "provider-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/visual-ai-provider.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T01:43:55.520609+00:00",
+      "finishedAt": "2026-09-28T01:43:58.113146+00:00",
+      "exitCode": 0,
+      "logSha256": "2f2652dfb0b69c7bdbab311756aaea5b1bc00919d42e72cdecfad44bfa15f255",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 9
+    },
+    {
+      "label": "recovery-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-recovery.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T01:44:01.915755+00:00",
+      "finishedAt": "2026-09-28T01:44:05.754188+00:00",
+      "exitCode": 0,
+      "logSha256": "d318f0e794029e02127416114c2973501db8b8701ea3d78482257525ce4b0b1c",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": 22
+    },
+    {
+      "label": "typecheck",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-28T01:41:30.591619+00:00",
+      "finishedAt": "2026-09-28T01:41:35.697879+00:00",
+      "exitCode": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "testCount": null
+    },
+    {
+      "label": "F03-terminal-green",
+      "command": [
+        "python3",
+        ".ai-run/tags-hardening-20260928/verify-handoff.py",
+        ".ai-run/tags-hardening-20260928"
+      ],
+      "startedAt": "2026-09-28T01:59:26.833138+00:00",
+      "finishedAt": "2026-09-28T01:59:26.872710+00:00",
+      "exitCode": 0,
+      "logSha256": "849b446bf984265c0d131da81c68b7c248b589a90bff15cf2b694b11367a9db5",
+      "scope": "owned generated fixtures; no real user library/model",
+      "timeoutSeconds": 240,
+      "verificationKind": "terminal metadata checks",
+      "checks": 7,
+      "testCount": null
+    }
+  ],
+  "oldEvidencePolicy": {
+    "staleForChangedCode": [
+      "old tag-execution-controller retention acceptance",
+      "old independent panel async/ABA coverage",
+      "old package terminal handoff"
+    ],
+    "retainedHistorical": [
+      "prior C01-C07-S reports, raw PASS/FAIL and scope limits"
+    ],
+    "unchangedScope": [
+      "Host/schema/IPC contracts and provider source unchanged; affected runtime paths rerun below"
+    ],
+    "newTests": "Real temporary Host/controller, production React with delayed bridge, formal Main/Preload/Renderer and synthetic handoff policy are separately identified."
+  }
+}

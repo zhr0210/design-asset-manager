@@ -1,0 +1,25 @@
+{
+  "passed": 14,
+  "milestones": [
+    "formal-renderer-and-private-scratch-profile-no-network",
+    "copy-import-real-authority-controlled-preview-and-format-rejection",
+    "live-name-search-explanation-and-clear-empty-query",
+    "saved-tag-filter-and-clear-via-formal-store",
+    "failed-refresh-preserves-content-and-retries",
+    "side-detail-layout-and-retained-tool-callers",
+    "unsaved-notes-cancel-library-close-native-window-close-and-survive-route-change",
+    "notebook-upgrade-consent-save-failure-retains-draft-and-retry",
+    "focus-hard-cut-controlled-media-zoom-gallery-and-focus-restore",
+    "ai-analysis-suggestions-search-explanation-dynamic-folders-no-copies",
+    "closed-library-denies-preview-and-reopen-rebinds-current-authority",
+    "process-restart-retains-library-and-previews",
+    "notebook-ui-restores-after-application-restart",
+    "ai-search-and-dynamic-folders-restored-after-restart"
+  ],
+  "assetCount": 3,
+  "privateCopies": false,
+  "sourceHashesPreserved": true,
+  "privateScreenshotsTaken": false,
+  "rendererErrors": [],
+  "sourcePathsDisclosed": false
+}

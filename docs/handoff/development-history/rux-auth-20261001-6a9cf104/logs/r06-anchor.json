@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "scripts/ai-handoff-anchor.test.py"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.405,
+  "sha256": "17bca791b55d5e72221f300497b97c2698e18ce44416455d2097803332cf1312"
+}

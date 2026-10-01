@@ -1,0 +1,10 @@
+{
+  "singleBusinessWriter": "root",
+  "testConcurrency": 1,
+  "commandTimeoutSeconds": 240,
+  "repairBudgetPerIssue": 3,
+  "approvedPrompt": "02-NEXT-IMPLEMENTATION-PROMPT.md",
+  "noRealDataOrAccounts": true,
+  "noDependencyUpgradeOrDownload": true,
+  "testOnlyOverride": "private construction/generated mock bootstrap; no production configuration/environment entry"
+}

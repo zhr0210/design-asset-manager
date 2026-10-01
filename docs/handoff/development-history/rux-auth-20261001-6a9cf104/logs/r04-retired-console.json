@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/ai-console-macos-branch.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.129,
+  "sha256": "1db0f2b7fcc0afec63f640d5b17693410fa0a6299230f9629f51711e9a5b918a"
+}

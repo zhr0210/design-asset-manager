@@ -1,0 +1,628 @@
+{
+  "runId": "rux-auth-20261001-6a9cf104",
+  "head": "3fa00df3bbb605478da6d0af18724d64021e723c",
+  "branch": "codex/product-reassessment-20260905",
+  "baseline": "BASELINE.json + SUPPLEMENTAL-BASELINE.json",
+  "scope": "only root-owned RUX increment; pre-existing WIP retained",
+  "files": [
+    {
+      "path": ".codeindex/module-map.json",
+      "kind": "modified",
+      "beforeSha256": "446a981819c548a4562e94630e4f6ee04f4712ed187f138e382655d7ef865207",
+      "afterSha256": "bd9b59f74c948b342fdc065463a2fea36c8cbe9297c6f0a53f9b06f3d7a8b02d",
+      "baseline": "SUPPLEMENTAL_BEFORE_CAPTURE",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "AGENTS.md",
+      "kind": "modified",
+      "beforeSha256": "1a9f6376e6dba798d607d42a5bf01920e5e402bfdfddb9594c624d60f6268f2c",
+      "afterSha256": "ce865a679c252e3e6e7757b616bbccb54b88742018d6b3633f3f2664c4d25ca4",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "DESIGN.md",
+      "kind": "modified",
+      "beforeSha256": "ec322fd2f0c17156accf84628d1ab0a793ca79b021d64479b547e59ab638ce3f",
+      "afterSha256": "a73271d55fbf589536c5e1ce8c0e66ac79bcee5f20f7e7c54dc849ce1f3e6024",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "TASK.md",
+      "kind": "modified",
+      "beforeSha256": "7750ff4fbaa1aecd0bd761bafe1ce01b2d54ed48121a8e5f473e0af07db19407",
+      "afterSha256": "00fcdbf63fd6c136b115ce5158779a4d1ddb910865fab547e40a227d2940249c",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "package.json",
+      "kind": "modified",
+      "beforeSha256": "62419a1bc02d16eb9ee0d6554e3a9702adc58bf5a717c5fe4efb8e7dce6d6f82",
+      "afterSha256": "4cc3a8b04c127e935b1e11d601f1a7fad8d959b00116089ad6797ce3b6bb6885",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "pi-runtime/auth-protocol.json",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "36d83e6560a527a3df50583efb496de80cac533a5f491444d55ac71fc77570fa",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "pi-runtime/openai-chatgpt-auth.mjs",
+      "kind": "modified",
+      "beforeSha256": "db69f40a62d8d4982616b4e59fe738b225f88224a067917337cdb7bba3ce3d5f",
+      "afterSha256": "b9e206d542a8a28aec683451213c7e547a21359f889f392de8ec993544d54df7",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "pi-runtime/release.json",
+      "kind": "modified",
+      "beforeSha256": "edc947653913e104245e60e3d7f35095887b2788163296c4933f0ded23f4e9bd",
+      "afterSha256": "a93f68a80369ad3cd6ce1f583d8a7cf0110b14545f6c2244c42a4dba4b27287f",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "pi-runtime/worker.mjs",
+      "kind": "modified",
+      "beforeSha256": "6c61380b7fffc6497d116b4ac07da016e34b857325028979b03e8c9bc8e02aad",
+      "afterSha256": "ddbcf958c314ab53deb91c0e189a32b04f8d684fdeb66ab9b79a1cff71ca113d",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/agent-context-router.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "759665bed8c1534658eca0092e1ecadf9e4e76521065279670fe3ea05112b048",
+      "afterSha256": "a32948aa3b55bb17263f8d942d62e8f37cfde0b5ceb71a2c4b50e63a0fe7c6cc",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/ai-acceptance.e2e.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "78c09c770b7343061b9e6bf59c9005f772413859d7f4f28de82b8bd7ed090939",
+      "afterSha256": "d353a6c4ecd9791d43716a3b577f860b50c47d65f4c5ca04e08f13bf87b57d3d",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/ai-console-macos-branch.test.ts",
+      "kind": "modified",
+      "beforeSha256": "8a87eb4c4dad2b85f5369424cf5aa22db4b4cf937b208b3b92cc7126edec9769",
+      "afterSha256": "4f5774483d1e8d451658328ffd02efc3bafd469e8e64fddb4a667f26bfcd3d2d",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/ai-console-status-module.test.ts",
+      "kind": "modified",
+      "beforeSha256": "fd0ae67e662b902587e2dab6ab6b61d2f0dfcc62d42f962fac7a1d0cfffb7aa9",
+      "afterSha256": "807e65643f11197c800604d47903324c31f9af453e8af8db754ce41f56ce0165",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/ai-handoff-anchor.py",
+      "kind": "modified",
+      "beforeSha256": "39cf1b9327bcfa4b5530867ad676096d11a3f17971fc06155a9cbdb53d3d0523",
+      "afterSha256": "9e21a7cff429d94c62d84fcf814c055dea635cfe7258c9e4a81dd46f395501e4",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/ai-handoff-anchor.test.py",
+      "kind": "modified",
+      "beforeSha256": "c06076f655411304a37c20555afa052e0e92359ddb7937a05058bee640dc3ae2",
+      "afterSha256": "05af2cc6d10e4370c9a01d47dc4af3216f83a4b89a335aa07b3e5c2d43864a53",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/ai-runtime-status-workflow.test.ts",
+      "kind": "modified",
+      "beforeSha256": "dc1de9b03dee3cd1edaa3060b45ad7afb9dc751b64e8844c0ba4c615220bd490",
+      "afterSha256": "8ec18647fc1da7473b39fc298e1804239b59222ea27732ec26228a1c51e810c4",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/ai-tagging-real-worker-guard.test.ts",
+      "kind": "modified",
+      "beforeSha256": "f7576c82d4023a8b48fd62ea6160b24df09abea2387f6bcf256af5d4a68f259b",
+      "afterSha256": "b11e52ef53c37dbd8fe5ad7771d3300e2febab0e57063e58caa1200d53fb8d69",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/app-navigation-workflow.test.ts",
+      "kind": "modified",
+      "beforeSha256": "918f78ebd2fcc3520ae40289cf9c3b5b2366c7ecc0e3271b17ea3c15750a151b",
+      "afterSha256": "d9c0f50a44d4993db14168f220cf0e8da402dc131122e2e37aaaffb27a7bc01c",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/auth-account-lifecycle.test.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "a9158b9602be228a1097dfb937eaefd70841e8b38a1a64514c476901b58fdf61",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "scripts/auth-denial-lifecycle.test.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "5fb210480713768ac8e404911b0a5a7049be0600f01b39a08c90d1df6c385e78",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "scripts/auth-owned-stage.test.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "3b1abe1edaa4333f598e39eb8cc0b606d742adbcf132ceee74b7b718180144a5",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "scripts/build-identity.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "18adcd24305f7cd4f8660994971c142b163f45d67989e9943d687f518ab5f3a8",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "scripts/canvas-return-context.test.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "8730ef7c585e732ad4413b376830a62276caf48aca92f808a599c52afcd442e1",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "scripts/chatgpt-auth.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "f327d9fad116aa38da3e241c575f7195f04a91a0914a5ee337cbb38825a4e7fa",
+      "afterSha256": "a94f46f3b0f545cfb63474c02355e297ba25e0317cba7f57ab0bcc711c0116f8",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/doctor-panel-contract.test.ts",
+      "kind": "modified",
+      "beforeSha256": "09b2a65d7ac4fd74cf97f22ad3f3c136ed2c2cc3b692e9f488a085237322f847",
+      "afterSha256": "902538f8ca8355faaf4d29953eb7fbc178e19189e773d3fbe3d3162f009eb870",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/library-startup-navigation.e2e.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "b418a8dc34bfe114e7468e11e15af5224f5d35340fb58a2a468e4b94fc58eb7d",
+      "afterSha256": "3d338d97e56227af8b37ea9e85a90da9363aa992d694fd03f44fee1be6cb30ee",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/model-artifact-readiness-display.test.ts",
+      "kind": "modified",
+      "beforeSha256": "7c0cca9edf7d8d9b1fc625ecede34154f5b054c9517acb88b5c8ef49aba92daf",
+      "afterSha256": "94e52897ffe7ed4705e7373e05ddf39e363e8242309f9c571736fa88c87707cf",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/model-library-workspace-renderer.test.ts",
+      "kind": "modified",
+      "beforeSha256": "df8dc937ed857ab7598d387bec475968c31a6f10dee09a7384b9b201cee27577",
+      "afterSha256": "667cdd71e29991927dbd65f1249bfc617fd17fe3263a68b209a88705f8ff7cab",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/pi-auth-prompts.test.ts",
+      "kind": "modified",
+      "beforeSha256": "59ead5fa8a7ed7f49a2dd726cbf6eb3e795da570fbadf2ab411ebf57ee3ac06c",
+      "afterSha256": "678772cd2ca3a7efffb8d841c1f7498a0904265ce1115dc5b98d2c6cb8b19075",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/pi-credentials.test.ts",
+      "kind": "modified",
+      "beforeSha256": "e7d9f0c3504c192e4ef5e8f74eafe4ced39379e2d25633d0f4705f406b683d48",
+      "afterSha256": "354dde507c6b7ae4122ccc4fa2a464c0dd313712f636af32d613cbdfc74eb1bd",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/pi-electron.e2e.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "7996f3e353294a17b0fb1d57a1fff023c4cf978d0ad23a136f9482d5162a7f7c",
+      "afterSha256": "415904ccc918ee9654cfc66868ce8cc3b4d8784ee80b2960b6cc6ddd093573e2",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/pi-ui.test.mjs",
+      "kind": "modified",
+      "beforeSha256": "f97a22ab6f14977b0495b2d42d319eec6d25accadddc720d4cf8bc7a5d66e130",
+      "afterSha256": "345a16874a67e4861a8769faa40dbc9ea9c99fce8e138338837108ec2492915d",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/seal-pi-runtime.mjs",
+      "kind": "modified",
+      "beforeSha256": "c5aeab2b45dd06b6d9b2b0ba310ac31f27056239cb478c54d539c21043ef7358",
+      "afterSha256": "9b54a6ff8ab6cbde28a85fb8f13c356d94035f06a6adb611229a1a2d2e8b4d35",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "scripts/start-cu-profile.mjs",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "d831fe4a6ea6f483f7107baee5fd9cdc6213426c0a5e4fbef8ddb30335938bb1",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "scripts/test-support/in-memory-ai-console-status.adapter.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "1feef5b97d26980ef0d71f752b403f1b343419107031f8cba9eae8769409d65d",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "scripts/test-support/in-memory-model-library-workspace.adapter.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "298615de8048e1e1258b18b4ad7f689aabc9529ff24b9bfa0eef9cabdb5d812c",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/main/active-library-runtime.ts",
+      "kind": "modified",
+      "beforeSha256": "6fb665757dd78329c6d2056892c1f53429d66468e1317bfdaee6f21bf7678786",
+      "afterSha256": "de5bd5f12d3d2b55d7d6c6dcc97c858d6564805ea671abda5ff3426e34cb21ee",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ai-credentials/credential-vault.ts",
+      "kind": "modified",
+      "beforeSha256": "d2370b09f347a7adc72ad9c47ebea8613ae5d8fb82aae398b92b4cc7b1a325c5",
+      "afterSha256": "1073c2097b8d641205cfc67e81de8266cfcfe9a61ef126171baeb8f40d01a367",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ai-gateway/ai-connection-service.ts",
+      "kind": "modified",
+      "beforeSha256": "5bb6f5fb101a3b22c2e24c024395b0ae8d0b569f855406f8b16e3afa57d1f227",
+      "afterSha256": "5cdcf447306e9b15eabc970aea4b065347faa08d1aca0340b2d7f9eb3494488f",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ai-gateway/pi-runtime-host.ts",
+      "kind": "modified",
+      "beforeSha256": "4f5d80d98e2be3d0487382671f5c2a3d8064f6b7a82ed61f22e830e8baa12acb",
+      "afterSha256": "813f7e8345e4ead0bddac29560e6c9759e35f2564580867ff36b78653efaa872",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ai-gateway/pi-runtime-release.ts",
+      "kind": "modified",
+      "beforeSha256": "cb0075b395a9a36bef5c18da9d8b3702961e80896312cb015ace1e9348250b9f",
+      "afterSha256": "25ad909188e53edb4700b3fe60cb947460813ea5c38578a3eadfb03f4233e456",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/index.ts",
+      "kind": "modified",
+      "beforeSha256": "991a354a325df72991f19fdff86c9d0b875ea48f84b0dad3a642ee604f67b3f7",
+      "afterSha256": "de704b8f43d5bb773cb53e0ee63d0729ebaa8acdb30aa8d986d40b1bd3b573c9",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ipc/ai-backend.ipc.ts",
+      "kind": "modified",
+      "beforeSha256": "d43d6ed456ed8dc7226f7d03cf8c32771808f26aa2febbd13bc33dab6c73c11d",
+      "afterSha256": "9b33c0223a3cd07f6deac2ad6cb10f4c3e5e8070e182e1114aaa111efecb34f4",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ipc/ai-connection.ipc.ts",
+      "kind": "modified",
+      "beforeSha256": "266f2d0a968a81841c309a7733e57c46bd7cc80cea2766f8736e646357b3854a",
+      "afterSha256": "70afd44226d2b903316824a686c1d8937b945aec328d520b65e3cce613342415",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ipc/main-ipc-composition.ts",
+      "kind": "modified",
+      "beforeSha256": "baf10c0203a482a168d4e4e7d2d4fb2dd137c099e853580c2964407cd6702b45",
+      "afterSha256": "921bd7d81d54bfb7016ded20d01b9aa47b9e54c53c18795c5eb70e25fdd988bc",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/main/ipc/settings.ipc.ts",
+      "kind": "modified",
+      "beforeSha256": "074920690d9e0a24105d237bdfc357773a1199c56a16a4a7163760fd7c116328",
+      "afterSha256": "a4df3c237fb61e41931039f9e03b3cd1e52804abbc4721b3402ae5ba8a6595d1",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/preload/index.ts",
+      "kind": "modified",
+      "beforeSha256": "c527f8f7f53bfb37f19b9cbfadc5b8faebd1ddb28550744b57992f62501b7519",
+      "afterSha256": "c2160c0d738470713f09cc205bd965909ce60fa97c88e17a3860504dc6b65b89",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/App.tsx",
+      "kind": "modified",
+      "beforeSha256": "f5973053ea3e6f3d365d78bea32a50bc7a6bb93fc822c81e61cb0f6e53a3f0dc",
+      "afterSha256": "26226bbb56381b9727d4ae329a90db53cf84fb34844eb753fa21e192148c9c88",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/README.md",
+      "kind": "modified",
+      "beforeSha256": "9b384afd2cc63ab283930de3dd5fc5e77b3c62bb90edcc313f3862d2e15c89a1",
+      "afterSha256": "21ebc01987a3f3ed721c21b1696a75b39b84c3999bb84a95fd3b15bd83b0b71b",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/asset/AssetDeepAnalysisPanel.tsx",
+      "kind": "deleted",
+      "beforeSha256": "515e78bc31b7edb204570301cdc47181d29bcae0bb0792e7a5ceedda727b115f",
+      "afterSha256": null,
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/asset/OcrEnvironmentSettings.tsx",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "5b9bb407e241c6cb503f5e6841ac54d823713e6e22145e0d3d172b5ae9dfd403",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/renderer/components/asset/PiConnectionsPanel.tsx",
+      "kind": "modified",
+      "beforeSha256": "719717b6ef46f1e37449ee77984ad2108927a4ec9001322635996d8dccf7a3bb",
+      "afterSha256": "f3ac3ae2ee3e807077d4dd314fcb811fc72ff356472f1e9012227604760b52ee",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/asset/TaskModelSettings.tsx",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "d3e68620de36c0d9fab77a1e842b7e83959b34c865cb3bd16c1af9ad4f13dc5c",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/renderer/components/layout/AppShell.tsx",
+      "kind": "modified",
+      "beforeSha256": "f65d0111dce6e0b10c41d7dec67853a1d389eb0b65b2f00a450961012ac7a7bb",
+      "afterSha256": "fe380e05200b9400ae1f93f99c4608a67d0ce01636e29e8005b3a07f79d442da",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/layout/AuthActivity.tsx",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "349fbe15bd01177e5541dcafe8841e55b3358ec56de3fca6058986669aaa8097",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/renderer/components/layout/Sidebar.tsx",
+      "kind": "modified",
+      "beforeSha256": "2fb5d064369cf4a540773044253f6f65dcfe4f82188724f986d5eee8a05bc265",
+      "afterSha256": "516963d0be76c6fb3c4328c48992365b456f4e4ca578d8de9fd2a80c24378a86",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/layout/WorkspaceRail.tsx",
+      "kind": "modified",
+      "beforeSha256": "6c5d446aeab7959661b39ee6a061e3aabc74deed039eac6ed4606edd3d3f725b",
+      "afterSha256": "740121e0e3ea97488e0b6e6afccae3f9039372682bb4baf33582ab30e12e96b6",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/library/BulkActionDock.tsx",
+      "kind": "deleted",
+      "beforeSha256": "557f5360bf694173facc9c2b31f007affbb59df8b004f7eb1f913837cfb8f7e8",
+      "afterSha256": null,
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/library/README.md",
+      "kind": "modified",
+      "beforeSha256": "262f876f312797cb6f4fab9120edd287637e7e8da779d184f2bd03d9cd508e54",
+      "afterSha256": "28c3613bcb032c2979804f0d8bc544567dba37713c744994326ccc6506461f53",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/LibraryCanvas.tsx",
+      "kind": "modified",
+      "beforeSha256": "a66b6828cc0610955b35ef7fc96088648f97cceb126b81fd6b7bda78e89dab46",
+      "afterSha256": "2955fc2cd81e9b358d1df5e969b71541d1fecaf093167371875952fa94840cf6",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/canvas-session.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "12cc3ca95fba7f1c92e7769c4e874d36c06a6c56f551e8801ef6f5169d62104d",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/renderer/components/library/library-labels.ts",
+      "kind": "deleted",
+      "beforeSha256": "0d71d9c55759362c8ceb5ea439815c847db90250098f5028d1c5a6b4cc2cb5a5",
+      "afterSha256": null,
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/hooks/useActivePromptModel.ts",
+      "kind": "deleted",
+      "beforeSha256": "e374c14d96b1ef98af3b2e6a903160e861c448dea72743deb70c1bbdb04bb7ba",
+      "afterSha256": null,
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/hooks/usePromptReverse.ts",
+      "kind": "deleted",
+      "beforeSha256": "f8e0f3350441b21bcf2f81db921d0a9848393f353a08972be19ab9a38711587e",
+      "afterSha256": null,
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/modules/ai-console-status/in-memory-ai-console-status.adapter.ts",
+      "kind": "deleted",
+      "beforeSha256": "1612972509bbb43958955741aae70104ab7a91dc7c9bb1fb4242ce2e5fc8503c",
+      "afterSha256": null,
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/modules/model-library-workspace/in-memory-model-library-workspace.adapter.ts",
+      "kind": "deleted",
+      "beforeSha256": "c1e7ee36ca986c3233d3c78226917f9304e5fc56f61323abbad08de94067b092",
+      "afterSha256": null,
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/routes/AboutPage.tsx",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "f4db43b93270ce629168a9a781dcb79844cf5f3b9ed625174db60618c0b787b9",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/renderer/routes/AiConsolePage.tsx",
+      "kind": "modified",
+      "beforeSha256": "0cb946bce86a874df64221179487bd4a687840bfa3e765b52cc6219895452355",
+      "afterSha256": "8cf5d2f4c4505fd34155577f68cd3157e8526dedbfba2d897603c15f4b4a2caa",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/routes/AiWorkspace.tsx",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "387a970fd233ff8ba052dc0dd739f691bf6681b43ee9cb2184a20bb2fd86ff19",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/renderer/routes/Library.tsx",
+      "kind": "modified",
+      "beforeSha256": "9683c522edb87a11afe2d43f3c10d23806456367f6659710c33ed27a31348865",
+      "afterSha256": "7b473c95d68653e866a2d3dd052ea00f72a0858a88e20857197505d895d276f5",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/routes/Settings.tsx",
+      "kind": "modified",
+      "beforeSha256": "3f7c79e506c7ba0d600e16f93eb6fdb8134ef7ddfeaab4b3d66a5a61af513159",
+      "afterSha256": "7c22d9f0739ad1fad1a05b178842eba3cffca0fdda8813cb03f31d12069352aa",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/stores/library-view.store.ts",
+      "kind": "modified",
+      "beforeSha256": "288f273227ffbe3c86d980f234f8cfbdcabcc40440eef827ecad2347258b09d2",
+      "afterSha256": "02d401d9e80f4d47f09da7b60fe1bdfa356a16c3f1e82f96845993a3ed88022e",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/renderer/styles/asset-workspace-modes.css",
+      "kind": "modified",
+      "beforeSha256": "cddfdacf5e3fd65ded4c24387d34ef5735b77a9ab83934f80665e60197f1e6f5",
+      "afterSha256": "cfb3784f3a03aa6a298e2dc180f3fb93aaa94648fa6090cf6fc4cd79e5a27946",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/shared/build-identity.generated.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "2a3609e5336b87fa86ff466446d0bd1ce8f244e04469e7698f1d8d9a051f3ba2",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/shared/contracts/ai-auth-state.ts",
+      "kind": "added",
+      "beforeSha256": null,
+      "afterSha256": "91fab3d0993aaf2e3a2483dfaa2077b170f736b5a22cad119dd13f9b092a1fd3",
+      "baseline": "absent in R00 declared extension scope; root explicit ownership",
+      "rollback": "remove only matching owned new file after reconciling consumers; not broad clean"
+    },
+    {
+      "path": "src/shared/contracts/ai-connection.contract.ts",
+      "kind": "modified",
+      "beforeSha256": "0aae02b0f297e56c8cf0cc27242a1b35197d581b4e50452a178654f111841b62",
+      "afterSha256": "91262e4f87514fab1595d6b1c31685c8fd33d677398f07aae72f6d86a5a6f27c",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    },
+    {
+      "path": "src/shared/workflows/app-navigation.workflow.ts",
+      "kind": "modified",
+      "beforeSha256": "35c7a32d564cb46883bda31248b43c4163a321ec9a72cf5f5bd16cf90f24ca96",
+      "afterSha256": "57dfbbe694f74296bdc8a051804bdebd6fd638839a360be17785caefc81322b8",
+      "baseline": "R00",
+      "rollback": "reconcile inverse diff only after after hash matches; preserve any later edit"
+    }
+  ],
+  "indexAndStaged": "byte-exact unchanged",
+  "fullWorkspaceSnapshot": false,
+  "use": "manual inspect/hash compare before merge; never apply over newer user WIP blindly"
+}

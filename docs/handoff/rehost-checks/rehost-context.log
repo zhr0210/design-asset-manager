@@ -1,0 +1,7 @@
+
+> design-asset-manager@1.0.0 context:check
+> node scripts/agent-context-router.mjs check
+
+Agent Context Router check: PASS
+Snapshot: 3fa00df3bbb6 (dirty working tree)
+Tracked first-party source ownership: 657/657 owned; 47 excluded

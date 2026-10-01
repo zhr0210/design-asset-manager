@@ -1,0 +1,36 @@
+{
+  "template": true,
+  "containsRealData": false,
+  "operationRef": "report-local-random-reference",
+  "buildId": "REQUIRED",
+  "provider": "openai",
+  "stage": "UNKNOWN",
+  "safeErrorCode": null,
+  "httpStatusClass": null,
+  "callbackObserved": null,
+  "identityVerified": null,
+  "credentialsCommitted": null,
+  "planPermission": null,
+  "workerClose": "UNKNOWN",
+  "networkCounts": {
+    "authorization": null,
+    "token": null,
+    "jwks": null,
+    "inference": 0
+  },
+  "nextAction": "REQUIRED",
+  "forbiddenFields": [
+    "tokens",
+    "authorizationCode",
+    "state",
+    "nonce",
+    "pkce",
+    "callbackFullUrl",
+    "cookies",
+    "headers",
+    "rawResponse",
+    "realAccountEmail",
+    "rawSubject",
+    "userLibraryPath"
+  ]
+}

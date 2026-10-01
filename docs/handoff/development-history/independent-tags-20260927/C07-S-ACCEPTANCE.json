@@ -1,0 +1,16 @@
+{
+  "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN",
+  "completedAt": "2026-09-27T08:41:25.550292+00:00",
+  "sourceDigest": "977d048219c9bf1a5d6759ebc8850d42652ab0555380aba248266f600e8a09d6",
+  "archiveSha256": "1ef0ee5d22f311284de3c5ff445f2a4d9916910d4b696b1f38eb7f35232ca5d4",
+  "reviewer": "c02b_readonly_review",
+  "archiveIntegrity": "INDEPENDENTLY_VERIFIED",
+  "exclusions": [
+    "C07-R",
+    "real model on final code",
+    "real user library",
+    "Windows",
+    "installed package/signing"
+  ],
+  "unresolvedLimit": "Standalone Electron RUN_AS_NODE diagnostic native wait remains unresolved"
+}

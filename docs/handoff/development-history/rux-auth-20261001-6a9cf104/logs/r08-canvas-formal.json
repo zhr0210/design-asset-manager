@@ -1,0 +1,10 @@
+{
+  "command": [
+    "node",
+    "scripts/library-canvas-electron.e2e.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 7.386,
+  "sha256": "aaa844789a654a9126d201b4c30e86f715c63f1b04d21bbaf0c15232f072f5f3"
+}

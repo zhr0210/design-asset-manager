@@ -1,0 +1,16 @@
+✔ app account attempt survives library inference suspend/drain and unrelated settings/connection changes (17.768458ms)
+✔ cancel before real Vault commit rolls back and retains old revision (20.697042ms)
+✔ late cancel after real Vault commit cannot claim old credentials retained; shutdown waits persistence completion (34.104417ms)
+✔ unavailable secure storage fails before any Worker or browser URL is created (6.988209ms)
+✔ persisted verified identity-only account metadata survives a fresh Vault without exposing subject or token (1.607833ms)
+✔ quarantined Runtime refuses new login without replacing the existing account operation (7.646917ms)
+✔ verified identity without plan permission rejects Main inference before another Worker spawn (13.075417ms)
+✔ malformed Worker cannot claim plan authorization with no access token or replace the old account (12.907417ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118.475791

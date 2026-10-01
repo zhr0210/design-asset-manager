@@ -1,0 +1,10 @@
+✔ valid current-state denial ends real owned callback promptly, closes it and requests no vendor endpoint (20.512625ms)
+✔ unrelated wrong-state denial does not kill current attempt; its later valid denial settles once (14.624833ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 205.9205

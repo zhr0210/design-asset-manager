@@ -1,0 +1,12 @@
+{
+  "rootCauseRealUser": "UNKNOWN",
+  "confirmedSource": [
+    "valid denial hangs",
+    "page owns login cancellation",
+    "library drain aborts app login",
+    "late cancellation after committed credential can misreport",
+    "stage and persistent metadata absent"
+  ],
+  "readonlyReview": "logs/dam-rux-auth-audit-20261001.md",
+  "noRealAttempt": true
+}

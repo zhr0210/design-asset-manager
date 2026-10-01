@@ -1,0 +1,14 @@
+{
+  "baselineFiles": 2741,
+  "modifiedBaselineFiles": 20,
+  "addedOwnedFiles": 14,
+  "missing": [],
+  "unexpectedModified": [],
+  "allBeforeHashesMatch": true,
+  "stagedBefore": "4b129649df3d6d4b4e852cf2c02ea7c70278fe554d1864812c79ae07fdaf9d12",
+  "stagedAfter": "4b129649df3d6d4b4e852cf2c02ea7c70278fe554d1864812c79ae07fdaf9d12",
+  "stagedUnchanged": true,
+  "indexBefore": "02a3f8d2c8b1fcdd7878086b3ad5e914ae71a1d2070ba7683ff74dbd03f2576d",
+  "indexAfter": "02a3f8d2c8b1fcdd7878086b3ad5e914ae71a1d2070ba7683ff74dbd03f2576d",
+  "indexBytesUnchanged": true
+}

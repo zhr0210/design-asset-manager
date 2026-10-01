@@ -1,0 +1,49 @@
+{
+  "stages": [
+    "preparing-local-storage",
+    "preparing-listener",
+    "awaiting-browser",
+    "callback-received",
+    "exchanging-code",
+    "verifying-identity",
+    "persisting-credentials",
+    "connected-identity",
+    "connected-plan"
+  ],
+  "errors": [
+    "AI_AUTH_DECLINED",
+    "AI_AUTH_CALLBACK_INVALID",
+    "AI_AUTH_REGISTRATION_INVALID",
+    "AI_AUTH_IDENTITY_INVALID",
+    "AI_AUTH_IDENTITY_MISSING",
+    "AI_AUTH_TOKEN_INVALID",
+    "AI_AUTH_NETWORK_REJECTED",
+    "AI_AUTH_NETWORK_FAILED",
+    "AI_AUTH_RESPONSE_TOO_LARGE",
+    "AI_AUTH_RESPONSE_INVALID",
+    "AI_AUTH_KEYS_UNAVAILABLE",
+    "AI_AUTH_REAUTH_REQUIRED",
+    "AI_AUTH_FRESH_LOGIN_REQUIRED",
+    "AI_CHATGPT_PLAN_PERMISSION_REQUIRED",
+    "AI_HOST_ID_INVALID",
+    "AI_SECRET_STORAGE_UNAVAILABLE",
+    "AI_CREDENTIAL_PERSIST_FAILED",
+    "AI_CONNECTION_CHANGED",
+    "AI_CREDENTIAL_CHANGED",
+    "AI_PROCESS_EXIT_UNCONFIRMED",
+    "AI_TIMEOUT",
+    "AI_CANCELLED",
+    "PI_RUNTIME_CHANGED",
+    "PI_RUNTIME_UNAVAILABLE",
+    "PI_RUNTIME_PLATFORM_UNAVAILABLE",
+    "PI_RUNTIME_BUSY",
+    "AI_PROVIDER_FAILED"
+  ],
+  "workerStages": [
+    "preparing-listener",
+    "awaiting-browser",
+    "callback-received",
+    "exchanging-code",
+    "verifying-identity"
+  ]
+}

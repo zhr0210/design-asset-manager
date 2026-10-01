@@ -1,0 +1,23 @@
+{
+  "runId": "background-foundation-20260928",
+  "authorization": "<REDACTED_VALUE>",
+  "scope": "B01 background foundation: durable three-capability intents, conservative readiness/resource policy and formal controls",
+  "status": "COMPLETED",
+  "commandTimeoutSeconds": 240,
+  "maxTestConcurrency": 1,
+  "maxRepairRoundsPerIssue": 3,
+  "controls": "convention_only",
+  "newBatchOnly": true,
+  "exclusions": [
+    "automatic model dispatch/owned runtime qualification",
+    "full device resource governor/residency",
+    "real user library/model/cache",
+    "model or dependency install/start",
+    "cloud uploads",
+    "git stage/commit/push",
+    "old queue restart"
+  ],
+  "completedAt": "2026-09-28T16:12:53.645055+00:00",
+  "terminalEntry": "FINAL-HANDOFF.json",
+  "nextBatchAuthorized": false
+}

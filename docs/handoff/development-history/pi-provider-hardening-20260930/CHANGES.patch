@@ -1,0 +1,937 @@
+diff --git a/TASK.md b/TASK.md
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,4 +1,20 @@
+ # Current Task
++
++## 已完成受限范围：Pi Provider准入与认证契约收尾（2026-09-30）
++
++用户“按照包内规划提示继续”批准评审包有限实施。Main/Worker共享准入，明确关闭Google原生推理/订阅认证与Copilot未闭合路径；保留API与旧数据。稳定hostID、窄select契约、实际Codex SDK两分支的Worker/Main/React合成贯通、过期撤权、已知Anthropic订阅令牌API伪装拒绝已完成。
++
++聚焦矩阵45、相关回归125、typecheck/build与独立最终30项通过；重新封印11829文件/2链接，未升级依赖。校验约1–3秒、约190MB读取，可取消且无缓存；真实disk-cold未测。
++
++OpenAI注册/client/JWT与完整受控认证网络未实现，生产仍禁用；真实账号、模型、Keychain、Windows/签名安装均NOT_RUN。未读取真实资料库/凭据、启动模型、调用付费API、下载或发布；原WIP/index保护见报告。
++
++- [最新报告](.ai-run/pi-provider-hardening-20260930/REPORT.md)
++- [Provider矩阵](src/main/ai-gateway/PROVIDER-MATRIX.md)
++- [独立复核](.ai-run/pi-provider-hardening-20260930/REVIEW-FINAL.md)
++- [最终状态](.ai-run/pi-provider-hardening-20260930/FINAL-HANDOFF.json)
++- [交接包](.ai-run/pi-provider-hardening-20260930/delivery/DAM-PI-PROVIDER-HARDENING-20260930.zip)
++
++COMPLETED_RESTRICTED_SCOPE / STOP，nextBatchAuthorized=false；不自动进入真实账号或历史阶段。下方记录为历史，其广泛“适配接线”表述不覆盖本批实际准入限制。
+ 
+ ## 已完成限定隔离范围：Pi统一模型接入（2026-09-30）
+ 
+diff --git a/package.json b/package.json
+--- a/package.json
++++ b/package.json
+@@ -48,7 +48,9 @@
+           "package-lock.json",
+           "runtime/**/*",
+           "node_modules/**/*",
+-          "!**/.cache/**"
++          "!**/.cache/**",
++          "provider-policy.json",
++          "auth-interaction.mjs"
+         ]
+       }
+     ],
+diff --git a/pi-runtime/README.md b/pi-runtime/README.md
+--- a/pi-runtime/README.md
++++ b/pi-runtime/README.md
+@@ -1,3 +1,5 @@
++2026-09-30更新：Worker入口默认采用封印provider-policy.json；auth-interaction.mjs处理有界交互。所有生产OAuth及Google原生推理/Copilot推理按当前矩阵拒绝，SDK技术支持不自动开放产品。新增资源已纳入seal和extraResources；依赖版本、Node和原有依赖文件均未升级。完整校验可取消，未缓存。详见src/main/ai-gateway/PROVIDER-MATRIX.md及本批报告。
++
+ # DAM isolated Pi runtime
+ 
+ 本目录是执行依赖包，不是模型权重库。当前固定 `@earendil-works/pi-ai@0.99.1`，独立 Node `24.21.0`；主应用 Electron 的 Node/原生 SQLite ABI 保持原状。
+diff --git a/pi-runtime/auth-interaction.mjs b/pi-runtime/auth-interaction.mjs
+new file mode 100644
+--- /dev/null
++++ b/pi-runtime/auth-interaction.mjs
+@@ -0,0 +1,11 @@
++export function normalizeAuthPrompt(p){
++ if(!p||!['text','secret','manual_code','select'].includes(p.type)||typeof p.message!=='string'||!p.message.trim()||p.message.length>1000)throw Error('prompt')
++ const result={type:p.type,message:p.message}
++ if(p.type==='select'){
++  if(!Array.isArray(p.options)||!p.options.length||p.options.length>8)throw Error('prompt')
++  result.options=p.options.map(o=>{if(!o||typeof o.id!=='string'||!/^[a-zA-Z0-9._:-]{1,128}$/.test(o.id)||typeof o.label!=='string'||!o.label.trim()||o.label.length>256)throw Error('prompt');return{id:o.id,label:o.label}})
++  if(new Set(result.options.map(o=>o.id)).size!==result.options.length)throw Error('prompt')
++ }
++ return result
++}
++export function validAuthAnswer(prompt,answer){return typeof answer==='string'&&answer.length<=16000&&(prompt.type!=='select'||prompt.options.some(o=>o.id===answer))}
+diff --git a/pi-runtime/provider-policy.json b/pi-runtime/provider-policy.json
+new file mode 100644
+--- /dev/null
++++ b/pi-runtime/provider-policy.json
+@@ -0,0 +1,54 @@
++{
++  "version": 1,
++  "date": "2026-09-30",
++  "blocked": {
++    "google:infer": {
++      "code": "AI_GOOGLE_TRANSPORT_UNAVAILABLE",
++      "message": "Google 原生适配器不支持当前受控传输；图片推理暂不可执行。"
++    },
++    "openai:oauth": {
++      "code": "AI_OPENAI_REGISTRATION_UNVERIFIED",
++      "message": "ChatGPT 登录的注册复用与身份验证尚未闭合，暂不开放账号登录或刷新推理。"
++    },
++    "anthropic:oauth": {
++      "code": "AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE",
++      "message": "本产品不提供 Claude 订阅登录；请使用 Anthropic API Key。已有凭据保留。"
++    },
++    "openai-codex:oauth": {
++      "code": "AI_CODEX_AUTH_NETWORK_UNVERIFIED",
++      "message": "Codex 登录交互已适配，认证网络范围尚未验收；暂不开放真实账号。"
++    },
++    "github-copilot:login": {
++      "code": "AI_COPILOT_ACCOUNT_EFFECT_UNVERIFIED",
++      "message": "Copilot 登录可能启用账号模型策略；未获单独许可，暂不开放。"
++    },
++    "github-copilot:infer": {
++      "code": "AI_COPILOT_AUTH_NETWORK_UNVERIFIED",
++      "message": "Copilot 账号传输与刷新尚未验收，暂不开放推理。"
++    }
++  },
++  "sdkAuthModes": {
++    "openai-compatible": [
++      "none",
++      "api-key"
++    ],
++    "openai": [
++      "api-key",
++      "oauth"
++    ],
++    "anthropic": [
++      "api-key",
++      "oauth"
++    ],
++    "google": [
++      "api-key"
++    ],
++    "openai-codex": [
++      "oauth"
++    ],
++    "github-copilot": [
++      "api-key",
++      "oauth"
++    ]
++  }
++}
+diff --git a/pi-runtime/release.json b/pi-runtime/release.json
+--- a/pi-runtime/release.json
++++ b/pi-runtime/release.json
+@@ -6,6 +6,8 @@
+   "arch": "arm64",
+   "nodePath": "runtime/darwin-arm64/node",
+   "files": {
++    "provider-policy.json": "388afef7c98a7134e326b1b798a53bf188307c7b7706bf78c25b9b48d83b5f84",
++    "auth-interaction.mjs": "b7e88217ec26b771e385eff79abce8c8aba975ced6f57387a6996bec1907d774",
+     "node_modules/.package-lock.json": "fc075cb068f8c4466e675a1a3d4eedb30410d4c1cc227fc7fce462ea55b86e4d",
+     "node_modules/@anthropic-ai/sdk/.github/logo.svg": "b150888bc7257af83e3b85d3c2be4294f88986026f8168f6c12fc1fde6697350",
+     "node_modules/@anthropic-ai/sdk/CHANGELOG.md": "b2a1bbda5d80387db8298244dacf4979e96468110466dca6ec169ad5d1766a43",
+@@ -11829,7 +11831,7 @@
+     "node_modules/ws/lib/websocket.js": "7ccf305925f0cdb74e06b75b4c84de134b1bd771a220ef409b24520def08128f",
+     "node_modules/ws/package.json": "c1ef91ca04eb4754c011c5f0e7638b5078ff71104fada400c44ac761cf93e0b1",
+     "node_modules/ws/wrapper.mjs": "fe154662301fd558f935f9c217fccbe7a7dac02ff39e648a000589403ff27c7f",
+-    "worker.mjs": "922b175499d6a0a71198a9d46984e2a4ebe596a02da4fbd86955144155686883",
++    "worker.mjs": "8b43806ab40279470a0d40033a94a0ac6c655d55d740658eb9faf70ddeb8b5d5",
+     "package-lock.json": "a50057bd230358a0100db41cb790d6f530ad58da794e04233c0b79fb6cd164e0",
+     "runtime/darwin-arm64/LICENSE": "5888dbb9a1d2b18f2c3e6c5f6af1b39de658372b402a0577b002777f14c62ace",
+     "runtime/darwin-arm64/node": "e4b5a3af0e05c75de2eae013904145f40fe7fc2a6e6f17510128bf45cca4e79b"
+diff --git a/pi-runtime/worker.mjs b/pi-runtime/worker.mjs
+--- a/pi-runtime/worker.mjs
++++ b/pi-runtime/worker.mjs
+@@ -1,6 +1,12 @@
+ import readline from 'node:readline'
++import {fileURLToPath} from 'node:url'
++import path from 'node:path'
++import policy from './provider-policy.json' with {type:'json'}
++import {normalizeAuthPrompt,validAuthAnswer} from './auth-interaction.mjs'
+ import {createModels,createProvider,InMemoryCredentialStore,cleanupSessionResources} from '@earendil-works/pi-ai'
+ import {openAICompletionsApi} from '@earendil-works/pi-ai/api/openai-completions.lazy'
++/** Internal dependency seam for generated-network contract tests; production entry supplies no overrides. */
++export async function startPiWorker({authorizeContract}={}){
+ const abort=new AbortController();process.on('SIGTERM',()=>abort.abort());let sessionId
+ const send=value=>process.stdout.write(JSON.stringify(value)+'\n')
+ const prompts=new Map(),lines=readline.createInterface({input:process.stdin,crlfDelay:Infinity})
+@@ -9,14 +15,16 @@
+ for await(const line of lines){
+  if(line.length>9*1024*1024){send({type:'error',code:'AI_INPUT_TOO_LARGE'});break}
+  let m;try{m=JSON.parse(line)}catch{send({type:'error',code:'AI_PROTOCOL_INVALID'});break}
+- if(m.kind==='answer'){const p=prompts.get(m.id);if(p){prompts.delete(m.id);p.resolve(m.answer)}continue}
++ if(m.kind==='answer'){const p=prompts.get(m.id);if(!p||!validAuthAnswer(p.prompt,m.answer)){send({type:'error',code:'AI_AUTH_ANSWER_INVALID'});abort.abort();for(const pending of prompts.values())pending.reject(Error('invalid answer'));continue}prompts.delete(m.id);p.resolve(m.answer);continue}
+  if(m.kind==='cancel'){abort.abort();continue}
+  if(launched){send({type:'error',code:'AI_PROTOCOL_INVALID'});break}launched=true
+- void action(m).catch(()=>send({type:'error',code:abort.signal.aborted?'AI_CANCELLED':'AI_PROVIDER_FAILED'})).finally(()=>{lines.close();process.stdin.destroy();if(sessionId)cleanupSessionResources(sessionId)})
++ void action(m).catch(error=>send({type:'error',code:abort.signal.aborted?'AI_CANCELLED':(error?.message==='AI_AUTH_UNSUPPORTED'||Object.values(policy.blocked).some(b=>b.code===error?.message))?error.message:'AI_PROVIDER_FAILED'})).finally(()=>{lines.close();process.stdin.destroy();if(sessionId)cleanupSessionResources(sessionId)})
+ }
+ async function action(input){
+  const {connection:c,credential}=input
+  if(!c||typeof c.id!=='string')throw Error('input')
++ const kind=input.kind==='models'?'models':input.kind==='login'?'login':'infer'
++ if(kind!=='models'){if((c.providerKind==='anthropic'||new URL(c.baseUrl).hostname==='api.anthropic.com')&&credential?.type==='api_key'&&credential.key?.includes('sk-ant-oat'))throw Error('AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE');if(!policy.sdkAuthModes[c.providerKind??'openai-compatible']?.includes(c.authMode??'none')||kind==='login'&&c.authMode!=='oauth')throw Error('AI_AUTH_UNSUPPORTED');const block=policy.blocked[(c.providerKind??'openai-compatible')+':'+(c.authMode??'none')]??policy.blocked[(c.providerKind??'openai-compatible')+':'+kind];if(block&&!authorizeContract?.(c,kind))throw Error(block.code)}
+  const store=new InMemoryCredentialStore(),models=createModels({credentials:store,authContext:{env:async()=>undefined,fileExists:async()=>false}})
+  let provider
+  if((c.providerKind??'openai-compatible')==='openai-compatible'){
+@@ -29,7 +37,7 @@
+  if(credential)await store.modify(provider.id,async()=>credential)
+  if(input.kind==='login'){
+   if(!provider.auth.oauth)throw Error('no oauth')
+-  const value=await models.login(provider.id,'oauth',{signal:abort.signal,notify:event=>send({type:'interaction',event}),prompt:p=>new Promise((resolve,reject)=>{const id=crypto.randomUUID();prompts.set(id,{resolve,reject});send({type:'prompt',id,prompt:{type:p.type,message:p.message}});const stop=()=>{prompts.delete(id);reject(Error('cancel'))};abort.signal.addEventListener('abort',stop,{once:true});p.signal?.addEventListener('abort',stop,{once:true})})})
++  const value=await models.login(provider.id,'oauth',{signal:abort.signal,notify:event=>send({type:'interaction',event}),prompt:p=>new Promise((resolve,reject)=>{const id=crypto.randomUUID(),prompt=normalizeAuthPrompt(p);prompts.set(id,{resolve,reject,prompt});send({type:'prompt',id,prompt});const stop=()=>{prompts.delete(id);reject(Error('cancel'))};abort.signal.addEventListener('abort',stop,{once:true});p.signal?.addEventListener('abort',stop,{once:true});if(abort.signal.aborted||p.signal?.aborted)stop()})},c.providerKind==='openai'?{getDeviceId:()=>input.deviceId}:undefined)
+   const model=models.getModels(provider.id)[0],auth=await models.getAuth(provider.id,{signal:abort.signal}),endpoint=auth?.auth.baseUrl??model?.baseUrl??provider.baseUrl;send({type:'credential',credential:(await store.read(provider.id))??value,refresh:false});send({type:'result',value:{loggedIn:true,endpoint}});return
+  }
+  if(input.kind==='models'){
+@@ -55,3 +63,6 @@
+  const text=result.content.filter(b=>b.type==='text').map(b=>b.text).join('');if(Buffer.byteLength(text)>512000)throw Error('size')
+  send({type:'result',value:{choices:[{finish_reason:result.stopReason==='length'?'length':result.stopReason==='stop'?'stop':result.stopReason,message:{content:text}}],usage:result.usage}})
+ }
++
++}
++if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))await startPiWorker()
+diff --git a/scripts/pi-auth-prompts.test.ts b/scripts/pi-auth-prompts.test.ts
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-auth-prompts.test.ts
+@@ -0,0 +1,41 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import os from 'node:os'
++import {createAiHostIdentityStore} from '../src/main/ai-credentials/host-identity'
++import {parseAiLoginPrompt,validAiLoginAnswer} from '../src/shared/contracts/ai-login-prompt'
++import {createAiConnectionService} from '../src/main/ai-gateway/ai-connection-service'
++import {createNewInstallAppSettingsDefaults} from '../src/main/services/settings/settings-defaults.builder'
++const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-pi-auth-prompt-'))
++try{
++ await test('Main opaque host ID persists across fresh instances and refuses malformed/symlink records',async()=>{
++  const file=path.join(root,'identity.json'),first=createAiHostIdentityStore(file).getDeviceId();assert.match(first,/^[0-9a-f-]{36}$/);assert.equal(createAiHostIdentityStore(file).getDeviceId(),first);assert.equal((await fs.stat(file)).mode&0o777,0o600)
++  await fs.writeFile(file,'{}');assert.throws(()=>createAiHostIdentityStore(file).getDeviceId(),/AI_HOST_ID_INVALID/)
++  await fs.symlink(file,path.join(root,'link.json'));assert.throws(()=>createAiHostIdentityStore(path.join(root,'link.json')).getDeviceId(),/AI_HOST_ID_INVALID/)
++ })
++ await test('select contract is bounded and cannot retain arbitrary SDK fields or accept unknown options',()=>{
++  const p=parseAiLoginPrompt({id:'prompt-one',type:'select',message:'Select login',secret:'synthetic-private',options:[{id:'browser',label:'Browser',extra:'ignore'},{id:'device',label:'Device'}]});assert.equal('secret'in p,false);assert.equal('extra'in (p as any).options[0],false);assert.equal(validAiLoginAnswer(p,'browser'),true);assert.equal(validAiLoginAnswer(p,'unknown'),false)
++  assert.throws(()=>parseAiLoginPrompt({...p,options:[{id:'browser',label:'One'},{id:'browser',label:'Two'}]}));assert.throws(()=>parseAiLoginPrompt({...p,options:Array.from({length:9},(_,i)=>({id:String(i),label:'Test'}))}));assert.throws(()=>parseAiLoginPrompt({...p,type:'file-upload'}));
++ })
++ await test('Main selection answers require active operation and current prompt; cancel and A-B-A late answers reject',async()=>{
++  let settings=createNewInstallAppSettingsDefaults();settings.aiBackends=[{...settings.aiBackends![0],transport:'pi',providerKind:'openai-codex',authMode:'oauth'}];let calls:any[]=[],entered=0;const pending:()=>Promise<void>=async()=>{for(let i=0;i<100&&entered===0;i++)await new Promise(r=>setTimeout(r,1))}
++  const runtime={inspect:()=>({unknown:0}),execute:async(_:unknown,signal:AbortSignal,c:any)=>{entered++;c.prompt({id:'select-current',prompt:{type:'select',message:'Login method',options:[{id:'browser',label:'Browser'},{id:'device',label:'Device'}]}},(a:string)=>calls.push(a));await new Promise<void>((_,reject)=>{if(signal.aborted)reject(Error('cancel'));else signal.addEventListener('abort',()=>reject(Error('cancel')),{once:true})})}}
++  const service=createAiConnectionService({admission:()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:''}),settings:{getSettings:()=>settings,saveSettings:n=>({...settings,...n})},vault:{} as any,runtime:runtime as any,changed:()=>{}}),id=settings.aiBackends[0].id
++  const a=await service.login(id);await pending();assert.equal(service.loginStatus(a.id).prompt?.type,'select');assert.throws(()=>service.answer({id:a.id,promptId:'select-current',answer:'invalid'}));assert.throws(()=>service.answer({id:a.id,promptId:'old-prompt',answer:'browser'}));service.answer({id:a.id,promptId:'select-current',answer:'device'});assert.deepEqual(calls,['device']);assert.throws(()=>service.answer({id:a.id,promptId:'select-current',answer:'device'}))
++  service.cancelLogin(a.id);assert.throws(()=>service.answer({id:a.id,promptId:'select-current',answer:'browser'}));const b=await service.login(id);for(let i=0;i<100&&entered<2;i++)await new Promise(r=>setTimeout(r,1));service.cancelLogin(b.id);const next=await service.login(id);for(let i=0;i<100&&entered<3;i++)await new Promise(r=>setTimeout(r,1));assert.notEqual(next.id,a.id);assert.throws(()=>service.answer({id:a.id,promptId:'select-current',answer:'browser'}));assert.throws(()=>service.answer({id:b.id,promptId:'select-current',answer:'browser'}));service.answer({id:next.id,promptId:'select-current',answer:'browser'});assert.deepEqual(calls,['device','browser']);await service.drain()
++ })
++ await test('expired login prompt rejects answers immediately and keeps account configuration unchanged',async()=>{
++  const settings=createNewInstallAppSettingsDefaults();settings.aiBackends=[{...settings.aiBackends![0],transport:'pi',providerKind:'openai-codex',authMode:'oauth',credentialRevision:7}];const before=JSON.stringify(settings);let answerCalls=0
++  const runtime={inspect:()=>({unknown:0}),execute:async(_:unknown,signal:AbortSignal,c:any)=>{c.prompt({id:'expiring',prompt:{type:'select',message:'Synthetic method',options:[{id:'browser',label:'Browser'}]}},()=>{answerCalls++});await new Promise<void>((_,reject)=>{if(signal.aborted)reject(Error('expired'));else signal.addEventListener('abort',()=>reject(Error('expired')),{once:true})})}}
++  const service=createAiConnectionService({loginTimeoutMs:20,admission:()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:''}),settings:{getSettings:()=>settings,saveSettings:()=>{throw Error('must not save')}},vault:{} as any,runtime:runtime as any,changed:()=>{}}),operation=await service.login(settings.aiBackends[0].id)
++  for(let i=0;i<200&&service.loginStatus(operation.id).state!=='cancelled';i++)await new Promise(r=>setTimeout(r,2))
++  assert.equal(service.loginStatus(operation.id).state,'cancelled');assert.throws(()=>service.answer({id:operation.id,promptId:'expiring',answer:'browser'}));assert.equal(answerCalls,0);assert.equal(JSON.stringify(settings),before);await service.drain()
++ })
++ await test('Main supplies one stable host ID for multiple contract Workers; registration still product-blocked',async()=>{
++  const hostIdentity=createAiHostIdentityStore(path.join(root,'stable.json'));let settings=createNewInstallAppSettingsDefaults();settings.aiBackends=[{...settings.aiBackends![0],transport:'pi',providerKind:'openai',authMode:'oauth'}];const ids:string[]=[]
++  const service=createAiConnectionService({admission:()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:''}),hostIdentity,settings:{getSettings:()=>settings,saveSettings:n=>({...settings,...n})},vault:{} as any,runtime:{inspect:()=>({unknown:0}),execute:async(r:any)=>{ids.push(r.deviceId);throw Error('isolated reject')}} as any,changed:()=>{}})
++  for(let i=0;i<2;i++){const l=await service.login(settings.aiBackends[0].id);for(let n=0;n<100&&service.loginStatus(l.id).state==='starting';n++)await new Promise(r=>setTimeout(r,1))}
++  assert.equal(ids.length,2);assert.equal(ids[0],ids[1]);assert.equal(ids[0],hostIdentity.getDeviceId());await service.drain()
++ })
++}finally{await fs.rm(root,{recursive:true,force:true})}
+diff --git a/scripts/pi-codex-contract.e2e.test.mjs b/scripts/pi-codex-contract.e2e.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-codex-contract.e2e.test.mjs
+@@ -0,0 +1,44 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import os from 'node:os'
++import {build} from 'esbuild'
++import {_electron as electron} from 'playwright'
++import {createPiContractFixture} from './pi-contract-fixture.mjs'
++const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-pi-codex-contract-'));let app
++try{
++ const fixture=await createPiContractFixture(root,{allowCodex:true,provider:'openai-codex'});await fs.symlink(path.resolve('node_modules'),path.join(root,'node_modules'),'dir')
++ const renderer=await build({stdin:{contents:`import React from'react';import{createRoot}from'react-dom/client';import Panel from'./src/renderer/components/asset/PiConnectionsPanel';createRoot(document.getElementById('root')).render(<Panel loginEligibility={()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:'仅合成网络，不代表账号验收'})}/>);`,loader:'tsx',resolveDir:process.cwd()},bundle:true,platform:'browser',format:'iife',outfile:path.join(root,'bundle.js'),write:false,logLevel:'silent'});for(const f of renderer.outputFiles)await fs.writeFile(f.path,f.contents)
++ await fs.writeFile(path.join(root,'index.html'),'<link rel="stylesheet" href="bundle.css"><div id="root"></div><script src="bundle.js"></script>')
++ const preload=`const{contextBridge,ipcRenderer}=require('electron');const invoke=(n,v)=>ipcRenderer.invoke(n,v);contextBridge.exposeInMainWorld('electronAPI',{contractCurrentOperation:()=>invoke('contract:operation'),aiBackendList:()=>invoke('contract:list'),settingsLoad:()=>invoke('contract:settings'),aiConnections:{credentialStatus:id=>invoke('ai-connection:credential-status',id),login:id=>invoke('ai-connection:login',id),loginStatus:id=>invoke('ai-connection:login-status',id),answerLogin:v=>invoke('ai-connection:answer-login',v),cancelLogin:id=>invoke('ai-connection:cancel-login',id)}})`;await fs.writeFile(path.join(root,'preload.cjs'),preload)
++ const main=`import{app,BrowserWindow,ipcMain}from'electron';import fs from'node:fs';import{spawn}from'node:child_process';import{createAiConnectionService}from'./src/main/ai-gateway/ai-connection-service';import{createPiRuntimeHost}from'./src/main/ai-gateway/pi-runtime-host';import{createCredentialVault}from'./src/main/ai-credentials/credential-vault';import{createSyntheticSecretProtection}from'./src/main/ai-credentials/synthetic-secret-protection';import{registerAiConnectionIpc}from'./src/main/ipc/ai-connection.ipc';import{createNewInstallAppSettingsDefaults}from'./src/main/services/settings/settings-defaults.builder';import{publicBackend,publicSettings}from'./src/main/ai-credentials/public-settings';
++ const root=${JSON.stringify(root)};for(const n of ['userData','sessionData','logs','crashDumps'])app.setPath(n,root+'/'+n);
++ let settings=createNewInstallAppSettingsDefaults();const base={...settings.aiBackends[0],id:'codex-a',name:'Codex A',transport:'pi',providerKind:'openai-codex',authMode:'oauth',enabled:true,baseUrl:'https://chatgpt.com/backend-api'};settings.aiBackends=[base,{...base,id:'codex-b',name:'Codex B'}];let window,lastOperation;
++ const owned=createPiRuntimeHost({root:${JSON.stringify(path.resolve('pi-runtime'))},spawn:(node,args,options)=>spawn(node,[${JSON.stringify(fixture.bootstrap)}],options)}),stats=[];
++ const runtime={inspect:owned.inspect,execute:(request,signal,callbacks={})=>owned.execute(request,signal,{...callbacks,interaction:event=>{if(event.type==='contract-network'){stats.push({method:event.method,path:event.path});fs.writeFileSync(root+'/network.json',JSON.stringify(stats))}else callbacks.interaction?.(event)}})};
++ const service=createAiConnectionService({admission:()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:''}),settings:{getSettings:()=>settings,saveSettings:patch=>{settings={...settings,...patch};return settings}},vault:createCredentialVault({file:root+'/vault.json',protection:createSyntheticSecretProtection(root)}),runtime,changed:()=>{}});
++ registerAiConnectionIpc({service,handle:(n,h)=>ipcMain.handle(n,async(e,...args)=>{const result=await h(e,...args);if(n==='ai-connection:login')lastOperation=result.id;return result}),isMain:e=>e.sender===window?.webContents});ipcMain.handle('contract:operation',()=>lastOperation);ipcMain.handle('contract:list',()=>settings.aiBackends.map(publicBackend));ipcMain.handle('contract:settings',()=>publicSettings(settings));
++ app.whenReady().then(()=>{window=new BrowserWindow({width:1100,height:1000,webPreferences:{preload:root+'/preload.cjs',contextIsolation:true,nodeIntegration:false}});window.loadFile(root+'/index.html')});let drained=false;app.on('before-quit',e=>{if(!drained){e.preventDefault();void service.drain().finally(()=>{drained=true;app.quit()})}});app.on('window-all-closed',()=>app.quit());`
++ await build({stdin:{contents:main,loader:'ts',resolveDir:process.cwd()},bundle:true,platform:'node',format:'cjs',packages:'external',outfile:path.join(root,'main.cjs'),logLevel:'silent'})
++ const env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!['ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL','NODE_OPTIONS'].includes(k)&&!k.startsWith('DAM_')));app=await electron.launch({args:[path.join(root,'main.cjs')],env});const page=await app.firstWindow();page.setDefaultTimeout(20000)
++ const status=async()=>page.evaluate(async()=>window.electronAPI.aiConnections.loginStatus(await window.electronAPI.contractCurrentOperation()))
++ const begin=async(name='Codex A')=>{await page.getByRole('button',{name:new RegExp(name+' ·')}).click();await page.getByRole('button',{name:'开始订阅登录'}).click();await page.getByLabel('订阅登录方式').waitFor();return await page.evaluate(()=>window.electronAPI.contractCurrentOperation())}
++ const until=async(check)=>{for(let i=0;i<300;i++){if(await check())return;await new Promise(r=>setTimeout(r,25))}throw Error('contract wait timeout')}
++ const answer=async(method)=>{await page.getByLabel('订阅登录方式').selectOption(method);await page.getByRole('button',{name:'提交授权信息'}).click()}
++ await test('actual Codex select crosses fixed Worker/Main/React; invalid answer rejected and device branch completes using fake network',async()=>{
++  const operation=await begin(),state=await status();assert.equal(state.prompt.type,'select');assert.deepEqual(state.prompt.options.map(o=>o.id),['browser','device_code']);assert.equal(await page.locator('input[type=password]').count(),0)
++  await assert.rejects(page.evaluate(v=>window.electronAPI.aiConnections.answerLogin(v),{id:operation,promptId:state.prompt.id,answer:'illegal-method'}))
++  await answer('device_code');await until(async()=>(await status()).state==='completed');const calls=JSON.parse(await fs.readFile(path.join(root,'network.json'),'utf8'));assert.deepEqual(calls.map(c=>c.path),['/api/accounts/deviceauth/usercode','/api/accounts/deviceauth/token','/oauth/token']);assert.equal((await page.evaluate(()=>window.electronAPI.aiBackendList()))[0].credentialRevision,1)
++ })
++ await test('actual Codex browser branch preserves state, manual code and one fake token exchange',async()=>{
++  await begin('Codex B');await answer('browser');await until(async()=>(await status()).prompt?.type==='manual_code');const current=await status(),state=new URL(current.event.url).searchParams.get('state');assert.ok(state)
++  await page.locator('input[type=password]').fill('http://localhost:1455/auth/callback?<AUTH_QUERY_REDACTED>'+state);await page.getByRole('button',{name:'提交授权信息'}).click();await until(async()=>(await status()).state==='completed');assert.equal((await page.evaluate(()=>window.electronAPI.aiBackendList()))[1].credentialRevision,1);assert.equal(JSON.parse(await fs.readFile(path.join(root,'network.json'),'utf8')).length,4)
++ })
++ await test('actual Codex wrong callback state leaves old account revision intact and performs no token exchange',async()=>{
++  await begin('Codex B');await answer('browser');await until(async()=>(await status()).prompt?.type==='manual_code');await page.locator('input[type=password]').fill('http://localhost:1455/auth/callback?<AUTH_QUERY_REDACTED>');await page.getByRole('button',{name:'提交授权信息'}).click();await until(async()=>(await status()).state==='failed');assert.equal((await page.evaluate(()=>window.electronAPI.aiBackendList()))[1].credentialRevision,1);assert.equal(JSON.parse(await fs.readFile(path.join(root,'network.json'),'utf8')).length,4)
++ })
++ await test('actual Codex cancellation and A-B-A selection expire prior prompts without network',async()=>{
++  const a=await begin('Codex A'),prompt=(await status()).prompt.id;await begin('Codex B');await begin('Codex A');await assert.rejects(page.evaluate(v=>window.electronAPI.aiConnections.answerLogin(v),{id:a,promptId:prompt,answer:'browser'}));await page.getByRole('button',{name:'取消订阅登录'}).click();await until(async()=>(await status()).state==='cancelled');assert.equal(JSON.parse(await fs.readFile(path.join(root,'network.json'),'utf8')).length,4)
++ })
++}finally{if(app)await app.close();await fs.rm(root,{recursive:true,force:true})}
+diff --git a/scripts/pi-contract-fixture.mjs b/scripts/pi-contract-fixture.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-contract-fixture.mjs
+@@ -0,0 +1,41 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import {pathToFileURL} from 'node:url'
++import {spawn} from 'node:child_process'
++/** Only owned test bootstraps replace network. Production Worker never installs this mock. */
++export async function createPiContractFixture(directory,{mode='valid',provider='openai',allowCodex=false}={}){
++ const worker=pathToFileURL(path.resolve('pi-runtime/worker.mjs')).href,bootstrap=path.join(directory,'network-fixture.mjs')
++ const source=`import{startPiWorker}from${JSON.stringify(worker)};
++ const mode=${JSON.stringify(mode)},provider=${JSON.stringify(provider)},allowCodex=${JSON.stringify(allowCodex)};let calls=0;
++ const notify=event=>process.stdout.write(JSON.stringify({type:'interaction',event:{type:'contract-network',...event}})+'\\n');
++ const text=JSON.stringify({caption:'SDK原生隔离描述',ocrText:'',prompt:'Generated SDK reference',tags:['蓝色']});
++ const json=value=>new Response(JSON.stringify(value),{status:200,headers:{'content-type':'application/json'}});
++ globalThis.fetch=async(resource,options={})=>{
++  const url=new URL(typeof resource==='string'||resource instanceof URL?resource:resource.url),method=options.method??(resource instanceof Request?resource.method:'GET'),body=options.body??(resource instanceof Request?await resource.clone().text():undefined);calls++;notify({calls,method,path:url.pathname});
++  if(allowCodex){
++   if(url.origin!=='https://auth.openai.com'||method!=='POST')throw Error('CONTRACT_DESTINATION_REJECTED');
++   if(url.pathname==='/api/accounts/deviceauth/usercode')return json({device_auth_id:'synthetic-device',user_code:'SYNTHETIC',interval:0});
++   if(url.pathname==='/api/accounts/deviceauth/token')return json({authorization_code:'synthetic-code',code_verifier:'synthetic-verifier'});
++   if(url.pathname==='/oauth/token')return json({access_token:'e30.'+Buffer.from(JSON.stringify({'https://api.openai.com/auth':{chatgpt_account_id:'synthetic-account'}})).toString('base64url')+'.synthetic',refresh_token:'synthetic-refresh',expires_in:3600});
++   throw Error('CONTRACT_DESTINATION_REJECTED');
++  }
++  const expected=provider==='anthropic'?'https://api.anthropic.com/v1/messages':'https://api.openai.com/v1/responses';
++  if(url.origin+url.pathname!==expected||!['','?beta=true'].includes(url.search)||method!=='POST'||options.redirect!=='error')throw Error('CONTRACT_TRANSPORT_REJECTED');
++  if(mode==='hang')return await new Promise((_,reject)=>{if(options.signal.aborted)reject(Error('cancel'));else options.signal.addEventListener('abort',()=>reject(Error('cancel')),{once:true})});
++  if(mode==='429')return new Response('synthetic response never logged',{status:429});
++  if(mode==='redirect')return new Response('',{status:302,headers:{location:'https://unapproved.invalid/'}});
++  if(mode==='oversize')return new Response('x'.repeat(520000),{headers:{'content-type':'text/event-stream'}});
++  const payload=JSON.parse(body),images=provider==='anthropic'?payload.messages.flatMap(m=>m.content).filter(p=>p.type==='image'):payload.input.flatMap(m=>m.content??[]).filter(p=>p.type==='input_image');if(images.length!==1)throw Error('CONTRACT_IMAGE_MISSING');
++  const events=provider==='anthropic'?[
++   {type:'message_start',message:{id:'synthetic',role:'assistant',model:JSON.parse(body).model,content:[],usage:{input_tokens:1,output_tokens:0}}},
++   {type:'content_block_start',index:0,content_block:{type:'text',text:''}},
++   {type:'content_block_delta',index:0,delta:{type:'text_delta',text}},
++   {type:'content_block_stop',index:0},{type:'message_delta',delta:{stop_reason:'end_turn',stop_sequence:null},usage:{output_tokens:2}},{type:'message_stop'}
++   ]:[{type:'response.output_item.added',output_index:0,item:{type:'message',id:'synthetic-message',role:'assistant',content:[]}},{type:'response.output_text.delta',output_index:0,content_index:0,delta:text},{type:'response.output_item.done',output_index:0,item:{type:'message',id:'synthetic-message',role:'assistant',content:[{type:'output_text',text,annotations:[]}]}},{type:'response.completed',response:{id:'synthetic',model:JSON.parse(body).model,status:'completed',output:[{type:'message',id:'synthetic-message',role:'assistant',status:'completed',content:[{type:'output_text',text,annotations:[]}]}],usage:{input_tokens:1,output_tokens:2,total_tokens:3}}}];
++  return new Response(events.map(e=>'event: '+e.type+'\\ndata: '+JSON.stringify(e)+'\\n\\n').join(''),{headers:{'content-type':'text/event-stream'}});
++ };
++ await startPiWorker({authorizeContract:(c,kind)=>allowCodex&&c.providerKind==='openai-codex'&&kind==='login'});
++ `
++ await fs.writeFile(bootstrap,source)
++ return{bootstrap,spawnOverride:(node,_args,options)=>spawn(node,[bootstrap],options)}
++}
+diff --git a/scripts/pi-copilot-sdk.test.mjs b/scripts/pi-copilot-sdk.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-copilot-sdk.test.mjs
+@@ -0,0 +1,20 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import {githubCopilotOAuth} from '../pi-runtime/node_modules/@earendil-works/pi-ai/dist/auth/oauth/github-copilot.js'
++import {githubCopilotProvider} from '../pi-runtime/node_modules/@earendil-works/pi-ai/dist/providers/github-copilot.js'
++const modelId=githubCopilotProvider().getModels()[0].id
++let calls=[],original=globalThis.fetch
++try{
++ globalThis.fetch=async(resource,options={})=>{
++  const url=new URL(typeof resource==='string'?resource:resource.url),method=options.method??'GET';calls.push({method,path:url.pathname});const json=v=>new Response(JSON.stringify(v),{status:200,headers:{'content-type':'application/json'}})
++  if(url.href==='https://github.com/login/device/code'&&method==='POST')return json({device_code:'synthetic-device',user_code:'SYNTHETIC',verification_uri:'https://github.com/login/device',interval:0,expires_in:60})
++  if(url.href==='https://github.com/login/oauth/access_token'&&method==='POST')return json({access_token:'synthetic-github-token'})
++  if(url.href==='https://api.github.com/copilot_internal/v2/token')return json({token:'synthetic-token;proxy-ep=proxy.individual.githubcopilot.com;',expires_at:Date.now()/1000+3600})
++  if(url.href==='https://api.individual.githubcopilot.com/models'&&method==='GET')return json({data:[{id:modelId,model_picker_enabled:false,policy:{state:'unconfigured'}}]})
++  if(url.href==='https://api.individual.githubcopilot.com/models/'+modelId+'/policy'&&method==='POST'){assert.deepEqual(JSON.parse(options.body),{state:'enabled'});return json({})}
++  throw Error('ISOLATED_DESTINATION_REJECTED')
++ }
++ await test('actual fixed Copilot OAuth conditional model-policy side effect is reproduced only on synthetic network',async()=>{
++  const credential=await githubCopilotOAuth.login({signal:new AbortController().signal,prompt:async p=>{assert.equal(p.type,'text');return''},notify:()=>{}});assert.equal(credential.type,'oauth');assert.equal(calls.filter(c=>c.path.endsWith('/policy')).length,1)
++ })
++}finally{globalThis.fetch=original}
+diff --git a/scripts/pi-electron.e2e.test.mjs b/scripts/pi-electron.e2e.test.mjs
+--- a/scripts/pi-electron.e2e.test.mjs
++++ b/scripts/pi-electron.e2e.test.mjs
+@@ -18,7 +18,7 @@
+   const config={rootDirectory:root,profileDirectory:profile,libraryDirectory:library,evidenceDirectory:evidence,sourceSelections:[[source]]},env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!k.startsWith('DAM_')&&!['NODE_OPTIONS','ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL'].includes(k)))
+   app=await electron.launch({args:[entry,'--dam-active-library-synthetic-e2e',`--user-data-dir=${profile}`],env:{...env,NODE_ENV:'test',DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E:JSON.stringify(config)}});assert.ok((await app.evaluate(({app})=>['userData','sessionData','logs','crashDumps'].map(p=>app.getPath(p)))).every(p=>p.startsWith(root+path.sep)))
+   const page=await app.firstWindow();page.setDefaultTimeout(18000);await page.setViewportSize({width:1450,height:1080});await page.getByTestId('formal-library-canvas').waitFor();await page.getByTestId('library-create').click();await page.getByTestId('library-create-confirm').click();await page.getByRole('button',{name:'添加图片',exact:true}).click();await page.getByTestId('library-copy-confirm').click();await page.locator('.lc-card').first().waitFor()
+-  const selected=await page.evaluate(async()=>{const s=await window.electronAPI.library.inspect(),a=(await window.electronAPI.listAssets())[0];return{libraryIdentity:s.identity,generation:s.generation,assetId:a.id}});await page.evaluate(()=>location.hash='/ai-console');const panel=page.getByRole('region',{name:'Pi 模型连接',exact:true});await panel.getByRole('button',{name:'添加 Pi 连接'}).click();await panel.getByLabel('Pi 连接名称').fill('Pi自有测试服务');await panel.getByLabel('Pi 服务地址').fill(`http://127.0.0.1:${server.address().port}/v1`);await panel.getByLabel('Pi 模型 ID').fill('fixture');await panel.getByLabel('Pi 认证方式').selectOption('api-key');await panel.getByRole('button',{name:'保存 Pi 连接'}).click();await panel.getByRole('button',{name:'读取 Pi 模型目录'}).waitFor({state:'visible'});await panel.getByLabel('Pi API Key').fill('fixture-api-key-not-real');await panel.getByRole('button',{name:'安全保存 API Key'}).click();await until(async()=>await panel.getByRole('button',{name:/Pi自有测试服务.*已认证/}).count()===1)
++  const selected=await page.evaluate(async()=>{const s=await window.electronAPI.library.inspect(),a=(await window.electronAPI.listAssets())[0];return{libraryIdentity:s.identity,generation:s.generation,assetId:a.id}});await page.evaluate(()=>location.hash='/ai-console');const panel=page.getByRole('region',{name:'Pi 模型连接',exact:true});await panel.getByRole('button',{name:'添加 Pi 连接'}).click();await panel.getByLabel('Pi 连接名称').fill('Pi自有测试服务');await panel.getByLabel('Pi 服务地址').fill(`http://127.0.0.1:${server.address().port}/v1`);await panel.getByLabel('Pi 模型 ID').fill('fixture');await panel.getByLabel('Pi 认证方式').selectOption('api-key');await panel.getByRole('button',{name:'保存 Pi 连接'}).click();await panel.getByRole('button',{name:'读取 Pi 模型目录'}).waitFor({state:'visible'});await panel.getByLabel('Pi API Key').fill('fixture-api-key-not-real');await panel.getByRole('button',{name:'安全保存 API Key'}).click();await until(async()=>await panel.getByRole('button',{name:/Pi自有测试服务.*已保存凭据/}).count()===1)
+   assert.equal(calls,0);assert.equal(await panel.getByLabel('Pi API Key').inputValue(),'');const settings=await page.evaluate(()=>window.electronAPI.settingsLoad());assert.ok(!JSON.stringify(settings).includes('fixture-api-key-not-real'));assert.ok(!(await fs.readFile(path.join(profile,'ai-credentials.v1.json'),'utf8')).includes('fixture-api-key-not-real'))
+   await panel.getByRole('button',{name:'读取 Pi 模型目录'}).click();await until(async()=>catalog===1);await panel.getByRole('button',{name:'用于视觉分析'}).click();await until(async()=>!!(await page.evaluate(()=>window.electronAPI.settingsLoad())).aiTaskModels?.analyze)
+   await panel.getByRole('button',{name:'核对生成图片能力验证'}).click();await panel.getByRole('region',{name:'确认模型能力验证'}).waitFor();assert.equal(calls,0);await panel.getByRole('button',{name:'同意发送生成测试图'}).click();await panel.getByText('生成图片与完整 JSON 验证通过',{exact:true}).waitFor();assert.equal(calls,1);assert.equal((await page.evaluate(s=>window.electronAPI.visualAi.results(s),selected)).value.length,0)
+diff --git a/scripts/pi-native-sdk.test.mjs b/scripts/pi-native-sdk.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-native-sdk.test.mjs
+@@ -0,0 +1,29 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import os from 'node:os'
++import {spawn} from 'node:child_process'
++import sharp from 'sharp'
++import {createPiContractFixture} from './pi-contract-fixture.mjs'
++import {openaiProvider} from '../pi-runtime/node_modules/@earendil-works/pi-ai/dist/providers/openai.js'
++import {anthropicProvider} from '../pi-runtime/node_modules/@earendil-works/pi-ai/dist/providers/anthropic.js'
++const jpeg='data:image/jpeg;base64,'+(await sharp({create:{width:64,height:32,channels:3,background:'#7799bb'}}).jpeg().toBuffer()).toString('base64')
++const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-pi-native-contract-'))
++async function run(provider,mode,authMode='api-key',key='synthetic-not-real'){
++ const dir=path.join(root,provider+'-'+mode);await fs.mkdir(dir);const f=await createPiContractFixture(dir,{provider,mode}),factory=provider==='anthropic'?anthropicProvider():openaiProvider(),model=factory.getModels().find(m=>m.input.includes('image'));
++ const child=spawn(path.resolve('pi-runtime/runtime/darwin-arm64/node'),[f.bootstrap],{shell:false,env:{HOME:dir,TMPDIR:dir,LANG:'en_US.UTF-8'},stdio:['pipe','pipe','pipe']});let output='',stderr='';const messages=[];let killTimer;
++ child.stdout.on('data',chunk=>{output+=chunk;let i;while((i=output.indexOf('\n'))>=0){const m=JSON.parse(output.slice(0,i));output=output.slice(i+1);messages.push(m);if(mode==='hang'&&m.type==='interaction'&&m.event.type==='contract-network'){child.kill('SIGTERM');killTimer=setTimeout(()=>child.kill('SIGKILL'),1000)}}});child.stderr.on('data',c=>{stderr+=c});
++ const closed=new Promise(r=>child.on('close',code=>{clearTimeout(killTimer);r(code)}));child.stdin.write(JSON.stringify({kind:'infer',connection:{id:'synthetic',providerKind:provider,authMode,baseUrl:factory.baseUrl},credential:{type:'api_key',key},model:model.id,systemPrompt:'Return JSON',userPrompt:'Generated fixture only',imageDataUrl:jpeg,maxTokens:128,temperature:0})+'\n');const code=await closed;assert.equal(stderr,'');return{messages,code}
++}
++try{
++ for(const provider of ['openai','anthropic'])for(const mode of ['valid','429','redirect','oversize','hang'])await test('actual '+provider+' SDK Worker '+mode,async()=>{
++  const r=await run(provider,mode),calls=r.messages.filter(m=>m.type==='interaction'&&m.event.type==='contract-network');assert.equal(calls.length,1);
++  if(mode==='valid'){assert.equal(r.code,0);const result=r.messages.find(m=>m.type==='result').value;assert.equal(result.choices[0].finish_reason,'stop');assert.equal(JSON.parse(result.choices[0].message.content).caption,'SDK原生隔离描述')}
++  else{assert.equal(r.messages.some(m=>m.type==='result'),false);assert.ok(r.messages.some(m=>m.type==='error'));if(mode==='hang')assert.equal(r.messages.find(m=>m.type==='error').code,'AI_CANCELLED')}
++ })
++ for(const[provider,authMode,code]of [['google','api-key','AI_GOOGLE_TRANSPORT_UNAVAILABLE'],['openai','oauth','AI_OPENAI_REGISTRATION_UNVERIFIED'],['anthropic','oauth','AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE'],['openai-codex','oauth','AI_CODEX_AUTH_NETWORK_UNVERIFIED'],['github-copilot','oauth','AI_COPILOT_AUTH_NETWORK_UNVERIFIED'],['github-copilot','api-key','AI_COPILOT_AUTH_NETWORK_UNVERIFIED']])await test('production Worker admission '+provider+' '+authMode+' prevents auth/refresh/inference network',async()=>{
++  const r=await run(provider,'blocked-'+authMode,authMode);assert.equal(r.messages.filter(m=>m.type==='interaction'&&m.event.type==='contract-network').length,0);assert.equal(r.messages.some(m=>m.type==='credential'||m.type==='result'),false);assert.equal(r.messages.find(m=>m.type==='error').code,code)
++ })
++ await test('production Worker rejects SDK-detected Anthropic subscription token disguised as API key',async()=>{const r=await run('anthropic','disguised','api-key','<REDACTED_CREDENTIAL>');assert.equal(r.messages.filter(m=>m.type==='interaction'&&m.event.type==='contract-network').length,0);assert.equal(r.messages.find(m=>m.type==='error').code,'AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE')})
++}finally{await fs.rm(root,{recursive:true,force:true})}
+diff --git a/scripts/pi-oauth.test.ts b/scripts/pi-oauth.test.ts
+--- a/scripts/pi-oauth.test.ts
++++ b/scripts/pi-oauth.test.ts
+@@ -33,7 +33,7 @@
+  let settings=createNewInstallAppSettingsDefaults();settings.aiBackends![0]={...settings.aiBackends![0],transport:'pi',providerKind:'openai-codex',authMode:'oauth',credentialRef:settings.aiBackends![0].id,credentialRevision:1}
+  const id=settings.aiBackends![0].id,vault=createCredentialVault({file:path.join(root,'vault.json'),protection:{available:()=>true,encrypt:s=>Buffer.from(s),decrypt:b=>b.toString()}});await vault.set(id,{type:'oauth',access:'old-fixture',refresh:'old-fixture',expires:1});let entered!:()=>void;const started=new Promise<void>(r=>{entered=r})
+  const runtime={execute:async(_:unknown,signal:AbortSignal,callbacks:any)=>{callbacks.interaction({type:'auth_url',url:'https://auth.openai.com/authorize?fixture=true'});callbacks.prompt({id:'prompt-one',prompt:{type:'manual_code',message:'Synthetic code'}},()=>{});entered();await new Promise<void>((_,reject)=>signal.addEventListener('abort',()=>reject(Error('cancel')),{once:true}))},inspect:()=>({unknown:0})}
+- const service=createAiConnectionService({settings:{getSettings:()=>settings,saveSettings:n=>{settings={...settings,...n};return settings}},vault,runtime:runtime as any,changed:()=>{}}),login=await service.login(id);await started;const status=service.loginStatus(login.id);assert.ok(!JSON.stringify(status).includes('old-fixture'));assert.throws(()=>service.answer({id:login.id,promptId:'wrong',answer:'fixture-code'}));service.cancelLogin(login.id);await service.drain();assert.equal((await vault.resolve(id,1) as any).access,'old-fixture');assert.equal(service.loginStatus(login.id).state,'cancelled')
++ const service=createAiConnectionService({admission:()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:''}),settings:{getSettings:()=>settings,saveSettings:n=>{settings={...settings,...n};return settings}},vault,runtime:runtime as any,changed:()=>{}}),login=await service.login(id);await started;const status=service.loginStatus(login.id);assert.ok(!JSON.stringify(status).includes('old-fixture'));assert.throws(()=>service.answer({id:login.id,promptId:'wrong',answer:'fixture-code'}));service.cancelLogin(login.id);await service.drain();assert.equal((await vault.resolve(id,1) as any).access,'old-fixture');assert.equal(service.loginStatus(login.id).state,'cancelled')
+ })
+ await test('successful token refresh is retained even when the subsequent inference fails',async()=>{
+  const f=await transport();let writes=0;const p=f.host.execute({kind:'infer'},new AbortController().signal,{credential:async(v,refresh)=>{assert.equal(refresh,true);writes++;assert.equal((v as any).access,'refreshed-fixture')}}).catch(e=>e);await f.started();f.send({type:'credential',credential:{type:'oauth',access:'refreshed-fixture',refresh:'rotated-fixture',expires:10},refresh:true});f.send({type:'error',code:'AI_PROVIDER_FAILED'});f.close(1);assert.ok(await p instanceof Error);assert.equal(writes,1)
+@@ -43,5 +43,5 @@
+ })
+ await test('OAuth account-derived endpoint is stored with new credential revision and old selection invalidates',async()=>{
+  let settings=createNewInstallAppSettingsDefaults();const id=settings.aiBackends![0].id;settings.aiBackends![0]={...settings.aiBackends![0],transport:'pi',providerKind:'github-copilot',authMode:'oauth',baseUrl:'https://api.individual.githubcopilot.com'};const vault=createCredentialVault({file:path.join(root,'derived-endpoint.json'),protection:{available:()=>true,encrypt:s=>Buffer.from(s),decrypt:b=>b.toString()}})
+- const runtime={execute:async(_:unknown,_signal:AbortSignal,callbacks:any)=>{await callbacks.credential({type:'oauth',access:'fixture-only',refresh:'fixture-only',expires:1000},false,{loggedIn:true,endpoint:'https://api.business.githubcopilot.com'});return{loggedIn:true}},inspect:()=>({unknown:0})},service=createAiConnectionService({settings:{getSettings:()=>settings,saveSettings:n=>{settings={...settings,...n};return settings}},vault,runtime:runtime as any,changed:()=>{}});const login=await service.login(id);for(let i=0;i<100&&service.loginStatus(login.id).state==='starting';i++)await new Promise(r=>setTimeout(r,1));assert.equal(service.loginStatus(login.id).state,'completed');assert.equal(settings.aiBackends![0].baseUrl,'https://api.business.githubcopilot.com');assert.equal(settings.aiBackends![0].credentialRevision,1)
++ const runtime={execute:async(_:unknown,_signal:AbortSignal,callbacks:any)=>{await callbacks.credential({type:'oauth',access:'fixture-only',refresh:'fixture-only',expires:1000},false,{loggedIn:true,endpoint:'https://api.business.githubcopilot.com'});return{loggedIn:true}},inspect:()=>({unknown:0})},service=createAiConnectionService({admission:()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:''}),settings:{getSettings:()=>settings,saveSettings:n=>{settings={...settings,...n};return settings}},vault,runtime:runtime as any,changed:()=>{}});const login=await service.login(id);for(let i=0;i<100&&service.loginStatus(login.id).state==='starting';i++)await new Promise(r=>setTimeout(r,1));assert.equal(service.loginStatus(login.id).state,'completed');assert.equal(settings.aiBackends![0].baseUrl,'https://api.business.githubcopilot.com');assert.equal(settings.aiBackends![0].credentialRevision,1)
+ })
+diff --git a/scripts/pi-provider-admission.test.ts b/scripts/pi-provider-admission.test.ts
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-provider-admission.test.ts
+@@ -0,0 +1,26 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import {piProviderAdmission,backendInferenceAdmission} from '../src/shared/constants/pi-provider-admission'
++import {supportsPiAuthentication,supportsPiProductAuthentication} from '../src/shared/constants/pi-provider-presets'
++import {createAiConnectionService} from '../src/main/ai-gateway/ai-connection-service'
++import {createNewInstallAppSettingsDefaults} from '../src/main/services/settings/settings-defaults.builder'
++for(const[provider,mode]of [['google','api-key'],['openai','oauth'],['anthropic','oauth'],['openai-codex','oauth'],['github-copilot','oauth']]as const)await test(provider+' unavailable path rejects before credential, network, or probe material',async()=>{
++ let calls=0;const b={...createNewInstallAppSettingsDefaults().aiBackends![0],transport:'pi' as const,providerKind:provider,authMode:mode,defaultModel:'fixture',enabled:true};const settings={...createNewInstallAppSettingsDefaults(),aiBackends:[b]}
++ const service=createAiConnectionService({settings:{getSettings:()=>settings,saveSettings:()=>{throw Error('must not write')}},vault:{resolve:async()=>{calls++;throw Error('must not read')}} as any,runtime:{execute:async()=>{calls++;throw Error('must not spawn')},inspect:()=>({unknown:0})} as any,changed:()=>{},reserveProbe:async()=>{calls++;throw Error('must not allocate')}})
++ assert.equal(piProviderAdmission(provider,mode,'infer').allowed,false);assert.equal(piProviderAdmission(provider,mode,'models').allowed,true)
++ assert.throws(()=>service.prepareValidation(b.id),/AI_/)
++ if(mode==='oauth')await assert.rejects(service.login(b.id),/AI_/)
++ await assert.rejects(service.provider.invokeOnce({backendId:b.id,endpoint:b.baseUrl.replace(/\/+$/,'')+'/chat/completions',model:'fixture',imageDataUrl:'data:image/jpeg;base64,AA==',systemPrompt:'fixture',userPrompt:'fixture',maxTokens:128,temperature:0,signal:new AbortController().signal}),/AI_/)
++ assert.equal(calls,0)
++})
++await test('upstream technical support and product Anthropic permission are distinct',()=>{assert.equal(supportsPiAuthentication('anthropic','oauth'),true);assert.equal(supportsPiProductAuthentication('anthropic','oauth'),false);assert.equal(piProviderAdmission('anthropic','api-key','infer').allowed,true);assert.equal(piProviderAdmission('openai','api-key','infer').allowed,true);assert.equal(piProviderAdmission('openai-compatible','none','infer').allowed,true)})
++
++await test('switching a saved subscription connection to legacy transport cannot advertise executable inference',()=>{const b={...createNewInstallAppSettingsDefaults().aiBackends![0],transport:'legacy' as const,providerKind:'anthropic' as const,authMode:'oauth' as const};assert.equal(backendInferenceAdmission(b).allowed,false);assert.equal(backendInferenceAdmission({...b,authMode:'api-key'}).allowed,true)})
++
++await test('Anthropic known subscription token cannot be stored or used as an API key, old records are preserved',async()=>{
++ const b={...createNewInstallAppSettingsDefaults().aiBackends![0],transport:'pi' as const,providerKind:'anthropic' as const,authMode:'api-key' as const,baseUrl:'https://api.anthropic.com'},settings={...createNewInstallAppSettingsDefaults(),aiBackends:[b]};let writes=0,spawns=0
++ const service=createAiConnectionService({settings:{getSettings:()=>settings,saveSettings:()=>{writes++;return settings}},vault:{set:async()=>{writes++},resolve:async()=>({type:'api_key',key:'<REDACTED_CREDENTIAL>'})} as any,runtime:{execute:async()=>{spawns++},inspect:()=>({unknown:0})} as any,changed:()=>{}})
++ await assert.rejects(service.setApiKey({backendId:b.id,key:'<REDACTED_CREDENTIAL>'}),/AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE/)
++ await assert.rejects(service.provider.invokeOnce({backendId:b.id,endpoint:b.baseUrl+'/chat/completions',model:'fixture',imageDataUrl:'data:image/jpeg;base64,AA==',systemPrompt:'fixture',userPrompt:'fixture',maxTokens:128,temperature:0,signal:new AbortController().signal}),/AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE/)
++ assert.equal(writes,0);assert.equal(spawns,0)
++})
+diff --git a/scripts/pi-runtime-benchmark.test.ts b/scripts/pi-runtime-benchmark.test.ts
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-runtime-benchmark.test.ts
+@@ -0,0 +1,14 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import path from 'node:path'
++import {spawn} from 'node:child_process'
++import {createPiRuntimeHost} from '../src/main/ai-gateway/pi-runtime-host'
++const runtime=createPiRuntimeHost({root:path.resolve('pi-runtime')})
++await test('first and repeated full integrity checks measured without caching or weakening protection',async()=>{
++ const samples=[];for(let i=0;i<3;i++){const v=await runtime.verify();samples.push(v.verification);assert.ok(v.verification.filesRead>11000);assert.ok(v.verification.bytesRead>122000000)}
++ console.log('VERIFICATION_BENCHMARK '+JSON.stringify({node:process.versions.node,platform:process.platform,arch:process.arch,cacheCondition:'first invocation in fresh runner; OS cache uncontrolled; true disk-cold NOT_RUN',samples}))
++})
++await test('integrity verification observes cancellation before spawn and releases the occupied runtime slot',async()=>{
++ let spawns=0;const supervised=createPiRuntimeHost({root:path.resolve('pi-runtime'),spawn:((...args:Parameters<typeof spawn>)=>{spawns++;return spawn(...args)}) as typeof spawn})
++ const a=new AbortController(),start=performance.now(),pending=supervised.execute({kind:'models'},a.signal);setTimeout(()=>a.abort(),10);await assert.rejects(pending);const elapsedMs=performance.now()-start;assert.ok(elapsedMs<2000);assert.equal(spawns,0);assert.equal(supervised.inspect().active,0);assert.equal(supervised.inspect().unknown,0);console.log('VERIFICATION_CANCEL '+JSON.stringify({elapsedMs,abortAfterMs:10,spawned:false}))
++})
+diff --git a/scripts/pi-sdk-preconditions.test.mjs b/scripts/pi-sdk-preconditions.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/pi-sdk-preconditions.test.mjs
+@@ -0,0 +1,14 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import {createModels,InMemoryCredentialStore} from '../pi-runtime/node_modules/@earendil-works/pi-ai/dist/index.js'
++import {googleProvider} from '../pi-runtime/node_modules/@earendil-works/pi-ai/dist/providers/google.js'
++import {openaiChatGPTOAuth} from '../pi-runtime/node_modules/@earendil-works/pi-ai/dist/auth/oauth/openai-chatgpt.js'
++const originalFetch=globalThis.fetch;let networkCalls=0;globalThis.fetch=async()=>{networkCalls++;throw Error('ISOLATED_NETWORK_DISABLED')}
++try{
++ await test('fixed installed Google adapter demonstrates custom-fetch conflict before any network',async()=>{
++  const models=createModels({credentials:new InMemoryCredentialStore(),authContext:{env:async()=>undefined,fileExists:async()=>false}});models.setProvider(googleProvider());const model=models.getModels('google').find(m=>m.input.includes('image'))
++  const stream=models.stream(model,{messages:[{role:'user',timestamp:0,content:[{type:'text',text:'generated fixture'}]}]},{apiKey:'synthetic-not-real',fetch:async()=>{networkCalls++;throw Error('ISOLATED_NETWORK_DISABLED')},maxRetries:0})
++  const result=await stream.result();assert.equal(result.stopReason,'error');assert.match(result.errorMessage,/Custom fetch is not supported/);assert.equal(networkCalls,0)
++ })
++ for(const id of [undefined,'invalid-device-id'])await test('actual OpenAI entry rejects '+(id?'invalid':'missing')+' host ID without network',async()=>{await assert.rejects(openaiChatGPTOAuth.login({signal:new AbortController().signal,notify:()=>{throw Error('must not notify')},prompt:async()=>{throw Error('must not prompt')}},{getDeviceId:()=>id}),/device ID/);assert.equal(networkCalls,0)})
++}finally{globalThis.fetch=originalFetch}
+diff --git a/scripts/pi-ui.test.mjs b/scripts/pi-ui.test.mjs
+--- a/scripts/pi-ui.test.mjs
++++ b/scripts/pi-ui.test.mjs
+@@ -10,11 +10,16 @@
+  const result=await build({stdin:{contents:`import React from'react';import{createRoot}from'react-dom/client';import Panel from'./src/renderer/components/asset/PiConnectionsPanel';
+  window.calls=[];window.cancelled=[];window.backend={id:'fixture',name:'Fixture',type:'openai-compatible',transport:'pi',providerKind:'openai-codex',authMode:'oauth',baseUrl:'https://chatgpt.com/backend-api/codex',defaultModel:'fixture',enabled:true,priority:1,timeoutMs:1000,capabilities:{chat:true,vision:true,embeddings:false,jsonOutput:true,modelList:true,modelManagement:false}};
+  window.electronAPI={aiBackendList:async()=>[window.backend],aiBackendSave:async b=>{window.backend=b;window.calls.push('save');return[b]},aiBackendListModels:async()=>({success:false,models:[]}),settingsLoad:async()=>({}),settingsSave:async()=>{},aiConnections:{credentialStatus:async()=>({configured:false,kind:null,revision:0,legacyPresent:false,storageAvailable:true}),login:async()=>new Promise(r=>window.replyLogin=()=>r({id:'login-fixture',backendId:'fixture',state:'starting'})),cancelLogin:async id=>{window.cancelled.push(id)},setApiKey:async input=>{window.calls.push(input);return{configured:true,kind:'api_key',revision:1,legacyPresent:false,storageAvailable:true}},loginStatus:async()=>({id:'login-fixture',backendId:'fixture',state:'starting'})}};
+- const root=createRoot(document.getElementById('root'));window.unmount=()=>root.unmount();root.render(<Panel/>);`,loader:'tsx',resolveDir:process.cwd()},bundle:true,platform:'browser',format:'iife',outfile:path.join(root,'bundle.js'),write:false,logLevel:'silent'});for(const f of result.outputFiles)await fs.writeFile(f.path,f.contents)
++ const root=createRoot(document.getElementById('root'));window.unmount=()=>root.unmount();window.allowContractLogin=()=>root.render(<Panel loginEligibility={()=>({allowed:true,code:'ISOLATED_CONTRACT_ONLY',message:''})}/>);root.render(<Panel/>);`,loader:'tsx',resolveDir:process.cwd()},bundle:true,platform:'browser',format:'iife',outfile:path.join(root,'bundle.js'),write:false,logLevel:'silent'});for(const f of result.outputFiles)await fs.writeFile(f.path,f.contents)
+  await fs.writeFile(path.join(root,'index.html'),'<link rel="stylesheet" href="bundle.css"><div id="root"></div><script src="bundle.js"></script>');await fs.writeFile(path.join(root,'main.cjs'),`const{app,BrowserWindow}=require('electron');for(const n of ['userData','sessionData','logs','crashDumps'])app.setPath(n,${JSON.stringify(root)}+'/'+n);app.whenReady().then(()=>new BrowserWindow({width:900,height:900,webPreferences:{contextIsolation:true,nodeIntegration:false}}).loadFile(${JSON.stringify(path.join(root,'index.html'))}));app.on('window-all-closed',()=>app.quit())`)
+  const env=Object.fromEntries(Object.entries(process.env).filter(([k])=>!['ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL','NODE_OPTIONS'].includes(k)&&!k.startsWith('DAM_')));app=await electron.launch({args:[path.join(root,'main.cjs')],env});const page=await app.firstWindow();page.setDefaultTimeout(5000);const reset=async()=>{await page.goto('file://'+path.join(root,'index.html'));await page.getByRole('button',{name:/Fixture/}).click()}
+  await test('saving non-secret model configuration does not send API key or start model inference',async()=>{await reset();await page.getByLabel('Pi 认证方式').selectOption('api-key');await page.getByLabel('Pi API Key').fill('fixture-volatile-key');await page.getByRole('button',{name:'保存 Pi 连接'}).click();assert.deepEqual(await page.evaluate(()=>window.calls),['save']);assert.equal(await page.getByLabel('Pi API Key').inputValue(),'fixture-volatile-key');await page.getByRole('button',{name:'安全保存 API Key'}).click();assert.equal(await page.getByLabel('Pi API Key').inputValue(),'')})
+  await test('Codex subscription selects OAuth and disallows API key or no-auth',async()=>{await reset();await page.getByLabel('Pi Provider').selectOption('openai-codex');await page.waitForFunction(()=>document.querySelector('[aria-label="Pi 认证方式"] option[value="api-key"]')?.disabled===true);assert.equal(await page.getByLabel('Pi 认证方式').inputValue(),'oauth');assert.equal(await page.getByLabel('Pi 认证方式').locator('option[value="api-key"]').evaluate(el=>el.disabled),true);assert.equal(await page.getByLabel('Pi 认证方式').locator('option[value="none"]').evaluate(el=>el.disabled),true);assert.equal(await page.getByLabel('Pi API Key').count(),0)})
+- await test('late login after unmount is explicitly cancelled rather than orphaned',async()=>{await reset();await page.getByRole('button',{name:'开始订阅登录'}).click();await page.waitForFunction(()=>Boolean(window.replyLogin));await page.evaluate(()=>window.unmount());await page.evaluate(async()=>{window.replyLogin();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))});assert.deepEqual(await page.evaluate(()=>window.cancelled),['login-fixture'])})
++ await test('standard UI blocks unverified OpenAI login and Google inference; Anthropic subscription is not offered',async()=>{
++  await reset();assert.equal(await page.getByRole('button',{name:'开始订阅登录'}).isDisabled(),true);assert.equal(await page.getByRole('button',{name:'核对生成图片能力验证'}).isDisabled(),true)
++  await page.getByLabel('Pi Provider').selectOption('anthropic');await page.waitForFunction(()=>document.querySelector('[aria-label="Pi 认证方式"] option[value="oauth"]')?.disabled===true);assert.equal(await page.getByLabel('Pi 认证方式').locator('option[value="oauth"]').evaluate(el=>el.disabled),true)
++  await page.getByLabel('Pi Provider').selectOption('google');await page.getByText(/Google 原生适配器不支持当前受控传输/).waitFor();assert.equal(await page.getByRole('button',{name:'核对生成图片能力验证'}).isDisabled(),true);assert.equal(await page.getByRole('button',{name:'用于视觉分析'}).isDisabled(),true);assert.deepEqual(await page.evaluate(()=>window.calls),[])
++ })
++ await test('late login after unmount is explicitly cancelled rather than orphaned',async()=>{await reset();await page.evaluate(()=>window.allowContractLogin());await page.getByRole('button',{name:'开始订阅登录'}).click();await page.waitForFunction(()=>Boolean(window.replyLogin));await page.evaluate(()=>window.unmount());await page.evaluate(async()=>{window.replyLogin();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))});assert.deepEqual(await page.evaluate(()=>window.cancelled),['login-fixture'])})
+  await test('model directory failure retains manual model ID and a visible explanation',async()=>{await reset();await page.getByRole('button',{name:'读取 Pi 模型目录'}).click();await page.getByRole('alert').filter({hasText:'目录暂不可用'}).waitFor();assert.equal(await page.getByLabel('Pi 模型 ID').inputValue(),'fixture')})
+ }finally{if(app)await app.close();await fs.rm(root,{recursive:true,force:true})}
+diff --git a/scripts/seal-pi-runtime.mjs b/scripts/seal-pi-runtime.mjs
+--- a/scripts/seal-pi-runtime.mjs
++++ b/scripts/seal-pi-runtime.mjs
+@@ -3,6 +3,7 @@
+ import {createHash} from 'node:crypto'
+ const root=path.resolve('pi-runtime'),sha=b=>createHash('sha256').update(b).digest('hex'),files={},symlinks={}
+ async function walk(directory){for(const item of await fs.readdir(directory,{withFileTypes:true})){const p=path.join(directory,item.name);if(item.isSymbolicLink()){symlinks[path.relative(root,p).split(path.sep).join('/')]=await fs.readlink(p);continue;}if(item.isDirectory())await walk(p);else if(item.isFile())files[path.relative(root,p).split(path.sep).join('/')]=sha(await fs.readFile(p))}}
++for(const entry of ['provider-policy.json','auth-interaction.mjs'])files[entry]=sha(await fs.readFile(path.join(root,entry)))
+ await walk(path.join(root,'node_modules'));files['worker.mjs']=sha(await fs.readFile(path.join(root,'worker.mjs')));files['package-lock.json']=sha(await fs.readFile(path.join(root,'package-lock.json')))
+ const artifact=JSON.parse(await fs.readFile(path.join(root,'runtime-artifact.json'),'utf8'));await walk(path.join(root,'runtime',artifact.platform+'-'+artifact.arch));const nodePath=`runtime/${artifact.platform}-${artifact.arch}/${artifact.platform==='win32'?'node.exe':'node'}`;files[nodePath]=artifact.nodeSha256
+ const release=JSON.stringify({schema:1,piVersion:'0.99.1',nodeVersion:artifact.nodeVersion,platform:artifact.platform,arch:artifact.arch,nodePath,files,symlinks},null,2)+'\n';await fs.writeFile(path.join(root,'release.json'),release)
+diff --git a/src/main/ai-credentials/host-identity.ts b/src/main/ai-credentials/host-identity.ts
+new file mode 100644
+--- /dev/null
++++ b/src/main/ai-credentials/host-identity.ts
+@@ -0,0 +1,12 @@
++import fs from 'node:fs'
++import path from 'node:path'
++import {randomUUID} from 'node:crypto'
++const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
++/** Lazy, installation-scoped opaque identity. No hardware identity or Renderer projection. */
++export function createAiHostIdentityStore(file:string){return{getDeviceId():string{
++ fs.mkdirSync(path.dirname(file),{recursive:true,mode:0o700})
++ try{fs.writeFileSync(file,JSON.stringify({version:1,deviceId:randomUUID()})+'\n',{flag:'wx',mode:0o600})}catch(error){if((error as NodeJS.ErrnoException).code!=='EEXIST')throw Error('AI_HOST_ID_UNAVAILABLE')}
++ const st=fs.lstatSync(file);if(!st.isFile()||st.isSymbolicLink()||st.size>1024)throw Error('AI_HOST_ID_INVALID')
++ const value=JSON.parse(fs.readFileSync(file,'utf8'));if(value.version!==1||typeof value.deviceId!=='string'||!uuid.test(value.deviceId))throw Error('AI_HOST_ID_INVALID')
++ return value.deviceId.toLowerCase()
++}}}
+diff --git a/src/main/ai-gateway/PROVIDER-MATRIX.md b/src/main/ai-gateway/PROVIDER-MATRIX.md
+new file mode 100644
+--- /dev/null
++++ b/src/main/ai-gateway/PROVIDER-MATRIX.md
+@@ -0,0 +1,39 @@
++# Pi Provider / 认证 / 动作准入矩阵
++
++2026-09-30；固定Pi0.99.1，不是全部真实服务已验收声明。共享策略为pi-runtime/provider-policy.json，Main编译嵌入同一数据；Worker读取封印版本。SDK技术支持、产品允许、隔离契约与真实账号资格分别判断。不能改配置绕过默认策略或静默fallback。
++
++| Provider / 认证 | 目录 | 正式图片推理 | 正式登录/刷新 | 实际固定SDK隔离证据 |
++| --- | --- | --- | --- | --- |
++| OpenAI-compatible / none、API Key | 显式GET，自有服务已验 | 允许单次动作授权后执行 | 不支持OAuth | 既有5协议、7临时Host与正式Electron；本地服务/API同协议 |
++| OpenAI / API Key | 静态，未证明服务健康 | 允许单次动作授权后执行 | 不涉及OAuth刷新 | 正常/429/重定向/超大响应/取消，共5项，生成JPEG，实际Worker+Responses SDK |
++| Anthropic / API Key | 静态 | 允许单次动作授权后执行 | 不涉及OAuth刷新 | 同上5项，实际Messages SDK；已知订阅令牌伪装API Key拒绝 |
++| Google / API Key | 静态 | 不可执行：受控fetch冲突 | 不支持OAuth | 实际SDK拒绝条件已复现；生产Worker在SDK/认证前拒绝 |
++| OpenAI / OAuth | 静态 | 不可执行 | 不可执行 | 缺失/错误UUID真实前置拒绝；Main稳定hostID及跨调用测试。注册/client复用/完整ID token身份验证尚未实现 |
++| Anthropic / OAuth | 静态 | 不可执行 | 产品不提供 | SDK技术支持不能替代厂商许可；API入口保留；旧数据不删除；SDK已知订阅令牌不能通过API Key通道使用 |
++| Codex / OAuth | 静态 | 不可执行 | 尚未开放 | 实际SDK首个select、device/browser经Worker/Main/React合成网络贯通；非法ID/错state/取消/A-B-A/到期拒绝。认证网络仍未闭合 |
++| Copilot / API Key、OAuth | 静态 | 不可执行 | 不可执行 | 实际OAuth合成网络复现条件policy POST；生产准入0调用，未修改真实账号策略 |
++| Legacy HTTP / none、API Key | Main-only安全凭据探测 | 保留既有路径 | 不支持OAuth | 旧认证目录、凭据、标签执行等回归；切为Legacy不能使订阅连接可执行 |
++
++所有真实模型、API账号、订阅账号、账单、OS Keychain、Windows与签名安装包：NOT_RUN。静态目录与保存凭据不等于认证或模型资格。用户须单独批准具体素材/动作外发；API Key不自动授予素材上传。
++
++## 网络和副作用边界
++
++| 动作 | 当前网络规则与预算 | 当前状态 |
++| --- | --- | --- |
++| Native静态目录 | 固定SDK内存目录；不调用getAuth；无认证/网络 | 已验收静态性质 |
++| Compatible目录 | 保存的目标GET /models；禁止重定向；512000字节；连接超时，目录状态不验证模型能力 | 已有实际自有GET服务证据 |
++| Compatible推理 | 选定origin POST /chat/completions；原始响应512000字节；SDK retry=0；共享DAM时限/一次截断重试 | 自有SSE与真实临时Host已验 |
++| OpenAI/Anthropic API推理 | SDK固定API路由，Main冻结连接/模型/凭据revision；相同origin、redirect:error、原始字节限制和signal | 实际SDK+替代网络已验；未向真实厂商请求 |
++| 登录、OAuth刷新、账号目录 | 固定SDK缺少完整受控认证传输；授权与API域名不可机械合并 | 当前统一在Main/Worker认证前拒绝，无真实登录/刷新请求 |
++| Copilot模型policy写入 | SDK条件POST不属于通用登录许可 | 当前生产拒绝全部相应路径；没有任何账号写入许可 |
++
++测试bootstrap可以替代网络并经仅内部构造seam放行契约，用于发现真实SDK前置条件。生产index、Worker入口、Renderer配置或环境变量均不提供该放行。测试假令牌与不带真实网络的登录成功不构成生产认证资格。
++
++## 已修复与仍未闭合
++
++- F01采用明确不可用，未删除受控fetch、未改写全局生产fetch，也未声称Google已修好。
++- F02补稳定安装级UUID和真实前置测试；固定SDK仍以Pi标识、注册与令牌验证存在差距，注册/身份验证继续不可用。后续需经过单独批准的窄认证适配或SDK变更方案。
++- F03支持text/secret/manual_code/select有界契约，选项id/label由Worker和Main分别校验，答案只接受当前operation/prompt。过期以内部20ms deadline快进测试；生产默认且最长300000ms。secret/manual_code使用密码输入；select使用选择器。
++- F04正常产品禁止Anthropic订阅OAuth，且拒绝SDK已知的订阅令牌识别分支进入API Key通道；保留API与旧记录；依据[当前官方说明](https://code.claude.com/docs/en/legal-and-compliance)。OpenAI接入要求另见[OpenAI Docs](https://developers.openai.com/siwc/token-sharing-open-source/sign-in)，不泛化为全部订阅都禁止。
++- F05/F06通过显式生产阻断收敛；尚未实现认证受控网络，不把推理fetch保护扩写成所有网络保护。
++- OBS01测首次/重复全量校验与取消；OS缓存未控制，真正disk-cold NOT_RUN。不引入缓存或常驻服务，不删除额外依赖/符号链接保护。
+diff --git a/src/main/ai-gateway/README.md b/src/main/ai-gateway/README.md
+--- a/src/main/ai-gateway/README.md
++++ b/src/main/ai-gateway/README.md
+@@ -1,3 +1,5 @@
++2026-09-30 Provider收尾更新：以[当前准入矩阵](PROVIDER-MATRIX.md)为本模块最新状态。OpenAI-compatible、OpenAI API Key与Anthropic API Key有固定SDK隔离契约；Google原生推理、各订阅登录/刷新及Copilot推理暂不可执行。Codex交互已贯通合成网络，不能宣称真实账号已可用。新增稳定host ID、窄select契约与过期撤权；凭据存在显示“已保存凭据”。历史段说明不覆盖本准入限制。
++
+ # AI connection gateway — Pi integration
+ 
+ 2026-09-30：此模块已接入正式 Main 组合根、窄 Preload 与 AI Console。隔离正式 Electron 流程已验收；实际模型、付费 API、订阅登录、操作系统凭据保险库和安装包验收未运行。不要把固定目录或生成图片的隔离应答当作真实模型资格。
+diff --git a/src/main/ai-gateway/ai-connection-service.ts b/src/main/ai-gateway/ai-connection-service.ts
+--- a/src/main/ai-gateway/ai-connection-service.ts
++++ b/src/main/ai-gateway/ai-connection-service.ts
+@@ -1,3 +1,5 @@
++import {piProviderAdmission,type PiProviderAction} from '../../shared/constants/pi-provider-admission'
++import {parseAiLoginPrompt,validAiLoginAnswer} from '../../shared/contracts/ai-login-prompt'
+ import {supportsPiAuthentication} from '../../shared/constants/pi-provider-presets'
+ import sharp from 'sharp'
+ import {randomInt} from 'node:crypto'
+@@ -14,7 +16,9 @@
+ import {publicBackend} from '../ai-credentials/public-settings'
+ import {openAiVisionProvider,type VisionProvider,type VisionInvocation} from '../visual-ai/openai-vision.provider'
+ const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex')
+-export function createAiConnectionService(d:{settings:SettingsServicePort;vault:CredentialVault;runtime:PiRuntimeHost;changed():void;reserveProbe?(signal:AbortSignal):Promise<{release():void}>}){
++export function createAiConnectionService(d:{settings:SettingsServicePort;vault:CredentialVault;runtime:PiRuntimeHost;changed():void;loginTimeoutMs?:number;hostIdentity?:{getDeviceId():string};admission?:typeof piProviderAdmission;reserveProbe?(signal:AbortSignal):Promise<{release():void}>}){
++ const admission=d.admission??piProviderAdmission
++ const requireAction=(b:AiBackendConfig,action:PiProviderAction)=>{const result=admission(b.providerKind??'openai-compatible',b.authMode??'none',action);if(!result.allowed)throw Error(result.code)}
+  const notify=()=>{try{d.changed()}catch{}}
+  let suspended=false
+  const validationReviews=new Map<string,{backend:AiBackendConfig;fingerprint:string;expires:number}>()
+@@ -28,8 +32,10 @@
+   const a=new AbortController(),cancel=()=>a.abort();signal.addEventListener('abort',cancel,{once:true});if(signal.aborted)cancel();const jobs=active.get(id)??new Set();jobs.add(a);active.set(id,jobs)
+   try{return await serialized(id,async()=>{a.signal.throwIfAborted();return action(a.signal)})}finally{signal.removeEventListener('abort',cancel);jobs.delete(a);if(!jobs.size)active.delete(id)}
+  }
+- const credential=async(b:AiBackendConfig)=>{if(b.authMode==='none')return undefined;const c=await d.vault.resolve(b.id,b.credentialRevision??0);if(c){if(b.authMode==='oauth'&&c.type!=='oauth'||b.authMode==='api-key'&&c.type!=='api_key')throw Error('AI_AUTH_METHOD_MISMATCH');return c;}if(b.authMode==='oauth'||b.authMode==='api-key')throw Error('AI_CREDENTIAL_REQUIRED');if(b.apiKey&&b.apiKey!=='local')return{type:'api_key' as const,key:b.apiKey};return undefined}
++ const validateApiKeySource=(b:AiBackendConfig,key:string)=>{if((b.providerKind==='anthropic'||new URL(b.baseUrl).hostname==='api.anthropic.com')&&key.includes('sk-ant-oat'))throw Error('AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE')}
++ const credential=async(b:AiBackendConfig)=>{if(b.authMode==='none')return undefined;const c=await d.vault.resolve(b.id,b.credentialRevision??0);if(c){if(c.type==='api_key')validateApiKeySource(b,c.key);if(b.authMode==='oauth'&&c.type!=='oauth'||b.authMode==='api-key'&&c.type!=='api_key')throw Error('AI_AUTH_METHOD_MISMATCH');return c;}if(b.authMode==='oauth'||b.authMode==='api-key')throw Error('AI_CREDENTIAL_REQUIRED');if(b.apiKey&&b.apiKey!=='local'){validateApiKeySource(b,b.apiKey);return{type:'api_key' as const,key:b.apiKey}};return undefined}
+  const execute=async<T>(b:AiBackendConfig,request:Record<string,unknown>,signal:AbortSignal,callbacks:Parameters<PiRuntimeHost['execute']>[2]={})=>{
++  requireAction(b,request.kind==='models'?'models':'infer')
+   if(request.kind!=='models'&&!supportsPiAuthentication(b.providerKind??'openai-compatible',b.authMode??'none'))throw Error('AI_AUTH_UNSUPPORTED')
+   const before=hash(b),revision=b.credentialRevision??0,c=request.kind==='models'&&b.providerKind&&b.providerKind!=='openai-compatible'?undefined:await credential(b);signal.throwIfAborted()
+   const value=await d.runtime.execute<T>({...request,connection:publicBackend({...b,...(request.probeImage?{capabilities:{...b.capabilities,vision:true}}:{}),authMode:b.authMode??(c?'api-key':'none')}),credential:c},signal,{...callbacks,credential:async(value,refresh)=>{if(!refresh||c?.type!=='oauth'||(value as StoredCredential)?.type!=='oauth'||hash(backend(b.id))!==before)throw Error('AI_CREDENTIAL_CHANGED');await d.vault.set(b.id,value as StoredCredential,revision,true)}})
+@@ -42,8 +48,8 @@
+   invalidate,
+   suspend(){suspended=true;invalidate()},
+   resume(){if(!d.runtime.inspect().unknown)suspended=false},
+-  async setApiKey(input:{backendId:string;key:string}){if(suspended)throw Error('AI_CONNECTIONS_SUSPENDED');const b=backend(input.backendId);if(b.transport==='pi'&&!supportsPiAuthentication(b.providerKind??'openai-compatible','api-key'))throw Error('AI_AUTH_UNSUPPORTED');invalidate(b.id);const s=await serialized(b.id,()=>d.vault.set(b.id,{type:'api_key',key:input.key.trim()},b.credentialRevision??0,false,revision=>revise(b.id,revision)));return status(b.id)},
+-  async migrate(input:{backendId:string;expectedRevision:number}){if(suspended)throw Error('AI_CONNECTIONS_SUSPENDED');const b=backend(input.backendId);if(b.transport==='pi'&&!supportsPiAuthentication(b.providerKind??'openai-compatible','api-key'))throw Error('AI_AUTH_UNSUPPORTED');if(!b.apiKey||b.apiKey==='local')throw Error('AI_NO_LEGACY_CREDENTIAL');invalidate(b.id);const s=await serialized(b.id,()=>d.vault.set(b.id,{type:'api_key',key:b.apiKey!},input.expectedRevision,false,revision=>revise(b.id,revision)));return status(b.id)},
++  async setApiKey(input:{backendId:string;key:string}){if(suspended)throw Error('AI_CONNECTIONS_SUSPENDED');const b=backend(input.backendId);if(b.transport==='pi'&&!supportsPiAuthentication(b.providerKind??'openai-compatible','api-key'))throw Error('AI_AUTH_UNSUPPORTED');validateApiKeySource(b,input.key);invalidate(b.id);const s=await serialized(b.id,()=>d.vault.set(b.id,{type:'api_key',key:input.key.trim()},b.credentialRevision??0,false,revision=>revise(b.id,revision)));return status(b.id)},
++  async migrate(input:{backendId:string;expectedRevision:number}){if(suspended)throw Error('AI_CONNECTIONS_SUSPENDED');const b=backend(input.backendId);if(b.transport==='pi'&&!supportsPiAuthentication(b.providerKind??'openai-compatible','api-key'))throw Error('AI_AUTH_UNSUPPORTED');if(!b.apiKey||b.apiKey==='local')throw Error('AI_NO_LEGACY_CREDENTIAL');validateApiKeySource(b,b.apiKey);invalidate(b.id);const s=await serialized(b.id,()=>d.vault.set(b.id,{type:'api_key',key:b.apiKey!},input.expectedRevision,false,revision=>revise(b.id,revision)));return status(b.id)},
+   async clear(id:string){if(suspended)throw Error('AI_CONNECTIONS_SUSPENDED');const b=backend(id);invalidate(id);const s=await serialized(id,()=>d.vault.clear(id,revision=>revise(id,revision),b.credentialRevision??0));return status(id)},
+   async legacyProbe<T>(candidate:AiBackendConfig,action:(config:AiBackendConfig,signal:AbortSignal)=>Promise<T>){
+    const configured=backend(candidate.id),before=hash(configured)
+@@ -56,6 +62,7 @@
+   async models(b:AiBackendConfig,signal:AbortSignal){const configured=backend(b.id);if(hash(publicBackend(b))!==hash(publicBackend(configured)))throw Error('AI_SAVE_CONFIG_BEFORE_PROBE');return tracked(b.id,signal,s=>execute<any[]>(configured,{kind:'models'},s))},
+   provider:{invokeOnce:async(input:VisionInvocation)=>{
+    if(!input.backendId)throw Error('AI_CONNECTION_MISSING');const b=backend(input.backendId)
++   if(b.transport!=='pi'&&b.authMode==='oauth')throw Error('AI_LEGACY_OAUTH_UNSUPPORTED')
+    if((b.credentialRevision??0)!==(input.credentialRevision??0))throw Error('AI_CREDENTIAL_CHANGED')
+    const expected=new URL(b.baseUrl);expected.pathname=expected.pathname.replace(/\/+$/,'')+'/chat/completions';if(expected.href!==input.endpoint)throw Error('AI_CONNECTION_CHANGED')
+    return tracked(b.id,input.signal,async signal=>{
+@@ -63,7 +70,7 @@
+     const result=await execute<any>(b,{kind:'infer',model:input.model,systemPrompt:input.systemPrompt,userPrompt:input.userPrompt,imageDataUrl:input.imageDataUrl,maxTokens:input.maxTokens,temperature:input.temperature},signal);return{...result,piUsage:piUsageSummary(result.usage,b.authMode!=='oauth'&&b.providerKind!==undefined&&b.providerKind!=='openai-compatible')}
+    })
+   }} as VisionProvider,
+-  prepareValidation(id:string){for(const[key,r]of validationReviews)if(r.expires<Date.now())validationReviews.delete(key);if(suspended||validationReviews.size>=4)throw Error('AI_CONNECTIONS_BUSY');const b=backend(id);if(b.transport!=='pi'||!b.defaultModel?.trim()||b.defaultModel.trim().length>256)throw Error('AI_MODEL_REQUIRED');const receipt=randomUUID();validationReviews.set(receipt,{backend:b,fingerprint:hash(b),expires:Date.now()+300000});return{receipt,backendId:b.id,model:b.defaultModel,notice:`向 ${b.baseUrl} 的 ${b.defaultModel} 发送一张本应用生成的双色测试图，只验证图片请求、完整JSON及颜色识别，不读取资料库。仅调用一次，30秒上限；云端/API/订阅可能消耗额度，费用未知。`}},
++  prepareValidation(id:string){for(const[key,r]of validationReviews)if(r.expires<Date.now())validationReviews.delete(key);if(suspended||validationReviews.size>=4)throw Error('AI_CONNECTIONS_BUSY');const b=backend(id);requireAction(b,'infer');if(b.transport!=='pi'||!b.defaultModel?.trim()||b.defaultModel.trim().length>256)throw Error('AI_MODEL_REQUIRED');const receipt=randomUUID();validationReviews.set(receipt,{backend:b,fingerprint:hash(b),expires:Date.now()+300000});return{receipt,backendId:b.id,model:b.defaultModel,notice:`向 ${b.baseUrl} 的 ${b.defaultModel} 发送一张本应用生成的双色测试图，只验证图片请求、完整JSON及颜色识别，不读取资料库。仅调用一次，30秒上限；云端/API/订阅可能消耗额度，费用未知。`}},
+   discardValidation(receipt:string){validationReviews.delete(receipt)},
+   async confirmValidation(receipt:string){
+    const review=validationReviews.get(receipt);validationReviews.delete(receipt);if(!review||review.expires<Date.now()||hash(backend(review.backend.id))!==review.fingerprint)throw Error('AI_VALIDATION_EXPIRED')
+@@ -84,22 +91,22 @@
+    notify();return result
+   },
+   async login(id:string){
+-   if(suspended)throw Error('AI_CONNECTIONS_SUSPENDED');const b=backend(id);if(b.authMode!=='oauth'||!['openai','anthropic','openai-codex','github-copilot'].includes(b.providerKind??''))throw Error('AI_OAUTH_UNSUPPORTED')
++   if(suspended)throw Error('AI_CONNECTIONS_SUSPENDED');const b=backend(id);requireAction(b,'login');if(b.authMode!=='oauth'||!['openai','anthropic','openai-codex','github-copilot'].includes(b.providerKind??''))throw Error('AI_OAUTH_UNSUPPORTED')
+    invalidate(id);for(const v of logins.values())if(v.status.backendId===id&&['starting','interaction'].includes(v.status.state))v.abort.abort()
+    const operation=randomUUID(),a=new AbortController(),record={status:{id:operation,backendId:id,state:'starting'} as AiLoginStatus,abort:a,answers:new Map<string,(answer:string)=>void>()};logins.set(operation,record)
+-   const binding=hash(b),timer=setTimeout(()=>a.abort(),300000)
++   const binding=hash(b),timer=setTimeout(()=>{record.status.state='cancelled';record.status.error='登录已超时，原账号凭据保留。';record.status.prompt=undefined;record.status.event=undefined;record.answers.clear();a.abort()},Math.max(1,Math.min(300000,d.loginTimeoutMs??300000)))
+    void tracked(id,a.signal,async signal=>{
+-    await d.runtime.execute({kind:'login',connection:publicBackend(b)},signal,{
++    await d.runtime.execute({kind:'login',connection:publicBackend(b),...(b.providerKind==='openai'?{deviceId:d.hostIdentity?.getDeviceId()}: {})},signal,{
+      credential:async(value,refresh,result)=>{if(refresh||signal.aborted||hash(backend(id))!==binding)throw Error('AI_CONNECTION_CHANGED');const endpoint=loginEndpoint(b,(result as any)?.endpoint);await d.vault.set(id,value as StoredCredential,b.credentialRevision??0,false,revision=>{signal.throwIfAborted();if(hash(backend(id))!==binding)throw Error('AI_CONNECTION_CHANGED');revise(id,revision,endpoint)});notify()},
+-     interaction:event=>{const url=event.url??event.verificationUri;record.status.state='interaction';record.status.event={type:event.type,...(typeof event.message==='string'?{message:event.message.slice(0,1000)}:{}),...(typeof url==='string'?{url}:{}),...(typeof event.userCode==='string'?{userCode:event.userCode.slice(0,128)}:{})}},
+-     prompt:(message,answer)=>{record.status.state='interaction';record.answers.set(message.id,answer);record.status.prompt={id:message.id,type:message.prompt.type,message:message.prompt.message.slice(0,1000)}}
++     interaction:event=>{signal.throwIfAborted();const url=event.url??event.verificationUri;record.status.state='interaction';record.status.event={type:event.type,...(typeof event.message==='string'?{message:event.message.slice(0,1000)}:{}),...(typeof url==='string'?{url}:{}),...(typeof event.userCode==='string'?{userCode:event.userCode.slice(0,128)}:{})}},
++     prompt:(message,answer)=>{signal.throwIfAborted();const prompt=parseAiLoginPrompt({id:message.id,...message.prompt});record.answers.clear();record.status.state='interaction';record.answers.set(prompt.id,answer);record.status.prompt=prompt}
+     });record.status.state='completed';record.status.event=undefined;record.status.prompt=undefined
+-   }).catch(()=>{record.status.state=a.signal.aborted?'cancelled':'failed';record.status.error='登录未完成，原账号凭据保留。';record.status.prompt=undefined;record.status.event=undefined}).finally(()=>{clearTimeout(timer);record.answers.clear();for(const[key,value]of logins)if(logins.size>20&&['completed','failed','cancelled'].includes(value.status.state))logins.delete(key)})
++   }).catch(()=>{record.status.state=a.signal.aborted?'cancelled':'failed';record.status.error??='登录未完成，原账号凭据保留。';record.status.prompt=undefined;record.status.event=undefined}).finally(()=>{clearTimeout(timer);record.answers.clear();for(const[key,value]of logins)if(logins.size>20&&['completed','failed','cancelled'].includes(value.status.state))logins.delete(key)})
+    return structuredClone(record.status)
+   },
+   loginStatus(id:string){const r=logins.get(id);if(!r)throw Error('AI_LOGIN_EXPIRED');return structuredClone(r.status)},
+-  answer(input:{id:string;promptId:string;answer:string}){const r=logins.get(input.id),a=r?.answers.get(input.promptId);if(!r||!a||input.answer.length>16000)throw Error('AI_LOGIN_EXPIRED');r.answers.delete(input.promptId);r.status.prompt=undefined;a(input.answer)},
+-  cancelLogin(id:string){logins.get(id)?.abort.abort()},
++  answer(input:{id:string;promptId:string;answer:string}){const r=logins.get(input.id),a=r?.answers.get(input.promptId);if(!r||!a||r.status.state!=='interaction'||r.abort.signal.aborted||r.status.prompt?.id!==input.promptId||!validAiLoginAnswer(r.status.prompt,input.answer))throw Error('AI_LOGIN_EXPIRED');r.answers.delete(input.promptId);r.status.prompt=undefined;a(input.answer)},
++  cancelLogin(id:string){const r=logins.get(id);if(r&&['starting','interaction'].includes(r.status.state)){r.status.state='cancelled';r.status.prompt=undefined;r.status.event=undefined;r.answers.clear();r.abort.abort()}},
+   async drain(){suspended=true;invalidate();for(const r of logins.values())r.abort.abort();let timer:ReturnType<typeof setTimeout>|undefined;try{await Promise.race([Promise.allSettled([...tails.values()]),new Promise<never>((_,reject)=>{timer=setTimeout(()=>reject(Error('AI_DRAIN_BLOCKED')),5000)})]);if(d.runtime.inspect().unknown)throw Error('AI_PROCESS_EXIT_UNCONFIRMED')}finally{clearTimeout(timer)}}
+  }
+ }
+diff --git a/src/main/ai-gateway/pi-runtime-host.ts b/src/main/ai-gateway/pi-runtime-host.ts
+--- a/src/main/ai-gateway/pi-runtime-host.ts
++++ b/src/main/ai-gateway/pi-runtime-host.ts
+@@ -1,3 +1,4 @@
++import {knownPiAdmissionCode} from '../../shared/constants/pi-provider-admission'
+ import fs from 'node:fs/promises'
+ import path from 'node:path'
+ import {createHash} from 'node:crypto'
+@@ -9,13 +10,15 @@
+ export class PiProcessUnconfirmedError extends Error{constructor(readonly released:Promise<void>){super('AI_PROCESS_EXIT_UNCONFIRMED')}}
+ export function createPiRuntimeHost(input:{root:string;releaseSha256?:string;closeMs?:number;spawn?:typeof spawn}){
+  const unknown=new Set<Promise<void>>();let running=0
+- const verify=async()=>{
++ const verify=async(signal?:AbortSignal)=>{
++  const started=performance.now();let filesRead=0,bytesRead=0
++  signal?.throwIfAborted()
+   const releaseFile=path.join(input.root,'release.json'),bytes=await fs.readFile(releaseFile);if(sha(bytes)!==(input.releaseSha256??PI_RUNTIME_RELEASE_SHA256))throw Error('PI_RUNTIME_CHANGED')
+   const release=JSON.parse(bytes.toString());if(release.platform!==process.platform||release.arch!==process.arch||release.piVersion!=='0.99.1')throw Error('PI_RUNTIME_PLATFORM_UNAVAILABLE')
+   const root=await fs.realpath(input.root)
+   const actualFiles=new Set<string>(),actualLinks=new Set<string>()
+-  const walk=async(directory:string):Promise<void>=>{for(const item of await fs.readdir(directory,{withFileTypes:true})){
+-   const p=path.join(directory,item.name),relative=path.relative(root,p).split(path.sep).join('/')
++  const walk=async(directory:string):Promise<void>=>{signal?.throwIfAborted();for(const item of await fs.readdir(directory,{withFileTypes:true})){
++   signal?.throwIfAborted();const p=path.join(directory,item.name),relative=path.relative(root,p).split(path.sep).join('/')
+    if(item.isSymbolicLink()){
+     const target=await fs.readlink(p),resolved=path.resolve(path.dirname(p),target),targetRelative=path.relative(root,resolved).split(path.sep).join('/')
+     if(release.symlinks?.[relative]!==target||!resolved.startsWith(root+path.sep)||!(targetRelative in release.files))throw Error('PI_RUNTIME_CHANGED')
+@@ -28,16 +31,16 @@
+   const sealedTreeFiles=Object.keys(release.files).filter(p=>p.startsWith('node_modules/')||p.startsWith('runtime/'))
+   if(actualFiles.size!==sealedTreeFiles.length||actualLinks.size!==Object.keys(release.symlinks??{}).length)throw Error('PI_RUNTIME_CHANGED')
+   for(const [relative,hash]of Object.entries(release.files)){
+-   const p=path.resolve(root,relative);if(!p.startsWith(root+path.sep))throw Error('PI_RUNTIME_CHANGED');const st=await fs.lstat(p);if(!st.isFile()||st.isSymbolicLink()||sha(await fs.readFile(p))!==hash)throw Error('PI_RUNTIME_CHANGED')
++   signal?.throwIfAborted();const p=path.resolve(root,relative);if(!p.startsWith(root+path.sep))throw Error('PI_RUNTIME_CHANGED');const st=await fs.lstat(p);if(!st.isFile()||st.isSymbolicLink()||sha(await fs.readFile(p,{signal}))!==hash)throw Error('PI_RUNTIME_CHANGED');filesRead++;bytesRead+=st.size
+   }
+-  return{node:path.join(root,release.nodePath),worker:path.join(root,'worker.mjs'),version:release.nodeVersion}
++  signal?.throwIfAborted();return{verification:{filesRead,bytesRead,elapsedMs:performance.now()-started},node:path.join(root,release.nodePath),worker:path.join(root,'worker.mjs'),version:release.nodeVersion}
+  }
+  return{
+   verify,
+   inspect:()=>({unknown:unknown.size,active:running}),
+   async execute<T>(request:unknown,signal:AbortSignal,callbacks:{credential?(value:unknown,refresh:boolean,result?:unknown):Promise<void>;interaction?(value:any):void;prompt?(value:any,answer:(text:string)=>void):void}={}):Promise<T>{
+    if(unknown.size)throw Error('AI_PROCESS_EXIT_UNCONFIRMED');if(running>=2)throw Error('PI_RUNTIME_BUSY');running++;let deferred=false
+-   try{signal.throwIfAborted();const runtime=await verify();signal.throwIfAborted()
++   try{signal.throwIfAborted();const runtime=await verify(signal);signal.throwIfAborted()
+    const payload=JSON.stringify(request);if(Buffer.byteLength(payload)>9*1024*1024)throw Error('AI_INPUT_TOO_LARGE')
+    const scratch=await fs.mkdtemp(path.join(os.tmpdir(),'dam-pi-worker-'));await fs.chmod(scratch,0o700)
+    return await new Promise<T>((resolve,reject)=>{
+@@ -62,7 +65,7 @@
+       try{if(++count>256)throw Error();const message=JSON.parse(line)
+        if(message.type==='ready'){if(ready||message.nodeVersion!==runtime.version||message.piVersion!=='0.99.1')throw Error();ready=true}
+        else if(message.type==='result'){if(!ready)throw Error();if(result!==undefined)throw Error();result=message.value}
+-       else if(message.type==='error')stop(['AI_CANCELLED','AI_INPUT_TOO_LARGE','AI_PROTOCOL_INVALID'].includes(message.code)?message.code:'AI_PROVIDER_FAILED')
++       else if(message.type==='error')stop((['AI_CANCELLED','AI_INPUT_TOO_LARGE','AI_PROTOCOL_INVALID'].includes(message.code)||knownPiAdmissionCode(message.code))?message.code:'AI_PROVIDER_FAILED')
+        else if(message.type==='credential'){if(!ready||!callbacks.credential)throw Error();if(pendingCredential)throw Error();pendingCredential={value:message.credential,refresh:message.refresh===true}}
+        else if(message.type==='interaction'){if(!ready)throw Error();callbacks.interaction?.(message.event)}
+        else if(message.type==='prompt'){if(!ready||!callbacks.prompt)throw Error();callbacks.prompt(message,p=>send({kind:'answer',id:message.id,answer:p}))}
+diff --git a/src/main/ai-gateway/pi-runtime-release.ts b/src/main/ai-gateway/pi-runtime-release.ts
+--- a/src/main/ai-gateway/pi-runtime-release.ts
++++ b/src/main/ai-gateway/pi-runtime-release.ts
+@@ -1,2 +1,2 @@
+ /** Generated by seal-pi-runtime; app-bundled release identity, not user-editable runtime metadata. */
+-export const PI_RUNTIME_RELEASE_SHA256="03b7f13cfe32aea76955294b941e57e8d0d4311ab1dfaa0da2bbf6a228b28f5a"
++export const PI_RUNTIME_RELEASE_SHA256="40d8304d48fbdcde33fa31158094ec43beb4bfb06424594626941349b7b3978e"
+diff --git a/src/main/independent-tags/tag-recipe.ts b/src/main/independent-tags/tag-recipe.ts
+--- a/src/main/independent-tags/tag-recipe.ts
++++ b/src/main/independent-tags/tag-recipe.ts
+@@ -1,3 +1,4 @@
++import {requireBackendInference,backendInferenceAdmission} from '../../shared/constants/pi-provider-admission'
+ import type {AiBackendConfig} from '../../shared/types/ai-backend.types'
+ import {openAiVisionProvider,type VisionProvider} from '../visual-ai/openai-vision.provider'
+ 
+@@ -16,6 +17,7 @@
+  return tags
+ }
+ export async function runIndependentTags(input:{backend:AiBackendConfig;model:string;jpeg:Uint8Array;signal:AbortSignal},provider:VisionProvider=openAiVisionProvider):Promise<string[]>{
++ requireBackendInference(input.backend)
+  const url=new URL(input.backend.baseUrl)
+  if(!['http:','https:'].includes(url.protocol)||url.username||url.password||url.hash)throw Error('TAG_ENDPOINT_INVALID')
+  url.pathname=url.pathname.replace(/\/+$/,'')+'/chat/completions'
+diff --git a/src/main/index.ts b/src/main/index.ts
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -1,3 +1,4 @@
++import {createAiHostIdentityStore} from './ai-credentials/host-identity'
+ import {createSyntheticSecretProtection} from './ai-credentials/synthetic-secret-protection'
+ import {createAiConnectionService} from './ai-gateway/ai-connection-service'
+ import {createPiRuntimeHost} from './ai-gateway/pi-runtime-host'
+@@ -260,7 +261,7 @@
+     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('image-tools:saved', scope)
+   } })
+   visualAdmission=createVisualAdmission()
+-  aiConnections=createAiConnectionService({reserveProbe:signal=>visualAdmission!.reservePiProbe(signal),settings:settingsService,vault:createCredentialVault({file:join(app.getPath('userData'),'ai-credentials.v1.json'),protection:syntheticE2e?createSyntheticSecretProtection(app.getPath('userData')):{available:()=>safeStorage.isEncryptionAvailable()&&(process.platform!=='linux'||safeStorage.getSelectedStorageBackend()!=='basic_text'),encrypt:value=>safeStorage.encryptString(value),decrypt:value=>safeStorage.decryptString(value)}}),runtime:createPiRuntimeHost({root:app.isPackaged?join(process.resourcesPath,'pi-runtime'):join(path.dirname(fileURLToPath(import.meta.url)),'../../pi-runtime')}),changed:()=>{visualAi?.invalidate();tagExecution?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate()}})
++  aiConnections=createAiConnectionService({hostIdentity:createAiHostIdentityStore(join(app.getPath('userData'),'ai-host-identity.v1.json')),reserveProbe:signal=>visualAdmission!.reservePiProbe(signal),settings:settingsService,vault:createCredentialVault({file:join(app.getPath('userData'),'ai-credentials.v1.json'),protection:syntheticE2e?createSyntheticSecretProtection(app.getPath('userData')):{available:()=>safeStorage.isEncryptionAvailable()&&(process.platform!=='linux'||safeStorage.getSelectedStorageBackend()!=='basic_text'),encrypt:value=>safeStorage.encryptString(value),decrypt:value=>safeStorage.decryptString(value)}}),runtime:createPiRuntimeHost({root:app.isPackaged?join(process.resourcesPath,'pi-runtime'):join(path.dirname(fileURLToPath(import.meta.url)),'../../pi-runtime')}),changed:()=>{visualAi?.invalidate();tagExecution?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate()}})
+   visualAi = createVisualAiController({provider:aiConnections.provider, host: activeLibraryHost, admission:visualAdmission, settings: () => settingsService.getSettings(), onChanged: scope => {
+     void assetCard?.refresh()
+     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send(EVENT_VISUAL_AI_UPDATED, scope)
+diff --git a/src/main/visual-ai/README.md b/src/main/visual-ai/README.md
+--- a/src/main/visual-ai/README.md
++++ b/src/main/visual-ai/README.md
+@@ -1,3 +1,5 @@
++2026-09-30 Provider收尾：正常模型选择与prepare现在排除明确不可执行的Pi/Legacy订阅组合；Gateway/Worker再次校验准入。API与旧兼容路径保留、Host写入权不变。当前支持边界见../ai-gateway/PROVIDER-MATRIX.md。
++
+ 2026-09-30 更新：Main 正式装配现在注入统一连接服务；显式 Pi 连接通过固定独立 Node/Pi Worker 执行，旧连接仍使用 HTTP Provider。任务默认模型、用量证据和单独确认的本机结果外部细化已接线。独立标签通过既有 Tag Controller 与 Host，视觉四字段输出不变。详见 [连接网关](../ai-gateway/README.md)。本轮使用生成图、真实临时 Host 和正式 Electron 的自有服务验证；真实模型/API/订阅、操作系统凭据库、Windows与安装包未验收。以下日期段保留各次原始实现背景。
+ 
+ # Visual AI
+diff --git a/src/main/visual-ai/visual-ai-controller.ts b/src/main/visual-ai/visual-ai-controller.ts
+--- a/src/main/visual-ai/visual-ai-controller.ts
++++ b/src/main/visual-ai/visual-ai-controller.ts
+@@ -1,3 +1,4 @@
++import {requireBackendInference,backendInferenceAdmission} from '../../shared/constants/pi-provider-admission'
+ import {backendExecutionBinding} from '../ai-gateway/backend-binding'
+ import { createHash, randomUUID } from 'node:crypto'
+ import {VISUAL_ADMISSION_PROFILE,createVisualAdmission,type VisualAdmission,type VisualMaterialLease} from './visual-admission'
+@@ -54,7 +55,7 @@
+     for (const job of jobs.values()) if (job.owner === owner) job.abort.abort()
+   }
+   return {
+-    backends() { return (deps.settings().aiBackends ?? []).filter(backend => backend.enabled && backend.capabilities.vision).flatMap(backend => {
++    backends() { return (deps.settings().aiBackends ?? []).filter(backend => backend.enabled && backend.capabilities.vision && backendInferenceAdmission(backend).allowed).flatMap(backend => {
+       try { return [{ id: backend.id, name: backend.name, defaultModel: backend.defaultModel ?? '',taskModels:Object.fromEntries(Object.entries(deps.settings().aiTaskModels??{}).filter(([,v])=>v?.backendId===backend.id).map(([k,v])=>[k,v!.model])), location:location(backend) }] } catch { return [] }
+     }) },
+     async prepare(owner: string, input: VisualAiPrepareRequest): Promise<VisualAiReview> {
+@@ -72,6 +73,7 @@
+       const configuredBackend = configured(input.backendId)
+       const backend = configuredBackend ? structuredClone(configuredBackend) : undefined
+       if (!backend?.enabled || !backend.capabilities.vision) throw new Error('请先配置并启用支持图像的模型服务。')
++      requireBackendInference(backend)
+       const url = new URL(backend.baseUrl)
+       if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.hash) throw new Error('模型服务地址无效。')
+       const model = (input.model || backend.defaultModel || '').trim()
+diff --git a/src/renderer/components/asset/PiConnectionsPanel.tsx b/src/renderer/components/asset/PiConnectionsPanel.tsx
+--- a/src/renderer/components/asset/PiConnectionsPanel.tsx
++++ b/src/renderer/components/asset/PiConnectionsPanel.tsx
+@@ -1,41 +1,45 @@
+-import {PI_PROVIDER_ENDPOINTS,PI_PROVIDER_AUTH_MODES,supportsPiAuthentication} from '../../../shared/constants/pi-provider-presets'
++import {piProviderAdmission,backendInferenceAdmission} from '../../../shared/constants/pi-provider-admission'
++import {PI_PROVIDER_ENDPOINTS,PI_PROVIDER_AUTH_MODES,supportsPiProductAuthentication} from '../../../shared/constants/pi-provider-presets'
+ import React,{useEffect,useRef,useState} from 'react'
+ import type {AiBackendConfig} from '../../../shared/types/ai-backend.types'
+ import type {AiCredentialStatus,AiLoginStatus} from '../../../shared/contracts/ai-connection.contract'
+ import './pi-connections.css'
+ const providerDefaults:Record<string,string>=PI_PROVIDER_ENDPOINTS
+ const newConnection=():AiBackendConfig=>({id:'pi-'+crypto.randomUUID(),name:'新模型连接',type:'openai-compatible',transport:'pi',providerKind:'openai-compatible',authMode:'none',baseUrl:providerDefaults['openai-compatible'],defaultModel:'',enabled:true,timeoutMs:120000,priority:10,processingLocation:'local-service',capabilities:{chat:true,vision:true,embeddings:false,jsonOutput:true,modelList:true,modelManagement:false}})
+-export default function PiConnectionsPanel(){
++export default function PiConnectionsPanel({loginEligibility=piProviderAdmission}:{loginEligibility?:typeof piProviderAdmission}={}){
+  const api=(window as any).electronAPI,life=useRef(0),pending=useRef(false),loginRef=useRef<string|null>(null),validationRef=useRef<string|null>(null),[backends,setBackends]=useState<AiBackendConfig[]>([]),[error,setError]=useState(''),[busy,setBusy]=useState(false),[status,setStatus]=useState<Record<string,AiCredentialStatus>>({}),[selected,setSelected]=useState<AiBackendConfig|null>(null),[key,setKey]=useState(''),[models,setModels]=useState<string[]>([]),[validation,setValidation]=useState<{receipt:string;notice:string}|null>(null),[validationResult,setValidationResult]=useState(''),[login,setLogin]=useState<AiLoginStatus|null>(null),[answer,setAnswer]=useState('')
+  const load=async()=>{const version=life.current;try{const b=await api.aiBackendList();if(version!==life.current)return;setBackends(b);window.dispatchEvent(new Event('dam:ai-connections-updated'));const statuses=await Promise.allSettled(b.map(async(c:AiBackendConfig)=>[c.id,await api.aiConnections.credentialStatus(c.id)]));if(version===life.current)setStatus(Object.fromEntries(statuses.filter(r=>r.status==='fulfilled').map((r:any)=>r.value)))}catch{if(version===life.current)setError('连接配置暂不可用。')}}
+  useEffect(()=>{life.current++;void load();return()=>{life.current++;if(loginRef.current)void api.aiConnections.cancelLogin(loginRef.current).catch(()=>{});if(validationRef.current)void api.aiConnections.discardValidation(validationRef.current).catch(()=>{})}},[api])
++ useEffect(()=>{setAnswer('')},[login?.id,login?.prompt?.id])
+  useEffect(()=>{if(!login||!['starting','interaction'].includes(login.state))return;let done=false,timer:ReturnType<typeof setTimeout>;const poll=async()=>{try{const s=await api.aiConnections.loginStatus(login.id);if(!done){setLogin(s);if(s.state==='completed'){const version=life.current;void load();void api.aiBackendList().then((list:AiBackendConfig[])=>{if(version===life.current)setSelected(previous=>previous?.id===s.backendId?list.find(b=>b.id===s.backendId)??previous:previous)})}}}catch{if(!done)setError('登录状态读取失败。')}if(!done)timer=setTimeout(poll,500)};timer=setTimeout(poll,250);return()=>{done=true;clearTimeout(timer)}},[login?.id,login?.state,api])
+  const act=async(fn:(valid:()=>boolean)=>Promise<void>)=>{if(pending.current)return;pending.current=true;const version=life.current;setBusy(true);setError('');try{await fn(()=>version===life.current)}catch{if(version===life.current)setError('操作未完成，请刷新核对配置与凭据状态。')}finally{if(version===life.current){pending.current=false;setBusy(false)}}}
+  const edit=(b:AiBackendConfig)=>{if(validationRef.current)void api.aiConnections.discardValidation(validationRef.current).catch(()=>{});validationRef.current=null;setValidation(null);setValidationResult('');if(loginRef.current)void api.aiConnections.cancelLogin(loginRef.current).catch(()=>{});loginRef.current=null;life.current++;pending.current=false;setBusy(false);setSelected(structuredClone(b));setModels([]);setKey('');setError('');setLogin(null);setAnswer('')}
++ const inference=selected?backendInferenceAdmission(selected):null,loginAdmission=selected?loginEligibility(selected.providerKind??'openai-compatible',selected.authMode??'none','login'):null
+  if(!api?.aiConnections)return null
+  return <section className="visual-ai-panel pi-connections" aria-label="Pi 模型连接"><header><strong>模型连接与任务配置</strong><button disabled={busy} onClick={()=>void load()}>刷新连接</button></header><p>本地兼容服务与云端模型共用分析入口。配置、目录探测和账号登录不授权发送素材。</p>
+- <div className="visual-ai-actions"><button disabled={busy} onClick={()=>edit(newConnection())}>添加 Pi 连接</button>{backends.map(b=><button key={b.id} disabled={busy} onClick={()=>edit(b)}>{b.name} · {b.transport==='pi'?'Pi':'已有接口'} · {status[b.id]?.configured?'已认证':status[b.id]?.legacyPresent?'待迁移凭据':'未保存凭据'}</button>)}</div>
++ <div className="visual-ai-actions"><button disabled={busy} onClick={()=>edit(newConnection())}>添加 Pi 连接</button>{backends.map(b=><button key={b.id} disabled={busy} onClick={()=>edit(b)}>{b.name} · {b.transport==='pi'?'Pi':'已有接口'} · {status[b.id]?.configured?'已保存凭据':status[b.id]?.legacyPresent?'待迁移凭据':'未保存凭据'}</button>)}</div>
++ {selected&&!inference?.allowed&&<p role="status">{inference?.message}</p>}
+  {selected&&<div className="pi-connection-form" role="region" aria-label="编辑模型连接"><div className="pi-connection-grid">
+  <label>连接名称<input aria-label="Pi 连接名称" value={selected.name} disabled={busy} onChange={e=>setSelected({...selected,name:e.target.value})}/></label>
+  <label>Provider<select aria-label="Pi Provider" value={selected.providerKind??'openai-compatible'} disabled={busy} onChange={e=>setSelected({...selected,transport:'pi',providerKind:e.target.value as any,baseUrl:providerDefaults[e.target.value],authMode:PI_PROVIDER_AUTH_MODES[e.target.value as keyof typeof PI_PROVIDER_AUTH_MODES][0],processingLocation:e.target.value==='openai-compatible'?'local-service':'external-service'})}>{Object.keys(providerDefaults).map(p=><option key={p} value={p}>{p}</option>)}</select></label>
+  <label>服务地址<input aria-label="Pi 服务地址" disabled={busy} value={selected.baseUrl} onChange={e=>setSelected({...selected,baseUrl:e.target.value})}/></label>
+  <label>模型 ID<input aria-label="Pi 模型 ID" disabled={busy} value={selected.defaultModel??''} list="pi-model-list" onChange={e=>setSelected({...selected,defaultModel:e.target.value})}/><datalist id="pi-model-list">{models.map(m=><option key={m} value={m}/>)}</datalist></label>
+- <label>认证方式<select aria-label="Pi 认证方式" disabled={busy} value={selected.authMode??'none'} onChange={e=>setSelected({...selected,authMode:e.target.value as any})}><option value="none" disabled={!supportsPiAuthentication(selected.providerKind??'openai-compatible','none')}>无需认证</option><option value="api-key" disabled={!supportsPiAuthentication(selected.providerKind??'openai-compatible','api-key')}>API Key</option><option value="oauth" disabled={!supportsPiAuthentication(selected.providerKind??'openai-compatible','oauth')}>订阅账号登录</option></select></label>
++ <label>认证方式<select aria-label="Pi 认证方式" disabled={busy} value={selected.authMode??'none'} onChange={e=>setSelected({...selected,authMode:e.target.value as any})}><option value="none" disabled={!supportsPiProductAuthentication(selected.providerKind??'openai-compatible','none')}>无需认证</option><option value="api-key" disabled={!supportsPiProductAuthentication(selected.providerKind??'openai-compatible','api-key')}>API Key</option><option value="oauth" disabled={!supportsPiProductAuthentication(selected.providerKind??'openai-compatible','oauth')}>订阅账号登录</option></select></label>
+ <label>处理位置<select aria-label="Pi 处理位置" disabled={busy} value={selected.processingLocation??'external-service'} onChange={e=>setSelected({...selected,processingLocation:e.target.value as any})}><option value="local-service">本机服务</option><option value="external-service">外部服务或转发代理</option></select></label>
+  <label>执行接口<select disabled={busy} value={selected.transport??'legacy'} onChange={e=>setSelected({...selected,transport:e.target.value as any})}><option value="pi">Pi 统一接口</option><option value="legacy">已有兼容接口</option></select></label>
+  </div><label><input type="checkbox" disabled={busy} checked={selected.enabled} onChange={e=>setSelected({...selected,enabled:e.target.checked})}/> 启用此连接</label><p>图片能力目前为配置声明；目录存在和连接成功不能替代实际图片推理验证。手动模型 ID 始终可填写。</p>
+  <div className="visual-ai-actions"><button disabled={busy} onClick={()=>void act(async valid=>{const list=await api.aiBackendSave(selected);if(!valid())return;setBackends(list);setSelected(list.find((b:AiBackendConfig)=>b.id===selected.id));await load()})}>保存 Pi 连接</button><button disabled={busy||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async valid=>{const r=await api.aiBackendListModels({backendId:selected.id});if(!valid())return;if(r.success)setModels(r.models.map((m:any)=>m.id));else setError('目录暂不可用，请手动填写模型 ID；推理能力尚未验证。')})}>读取 Pi 模型目录</button><button disabled={busy} onClick={()=>void act(async valid=>{await api.aiBackendDelete({id:selected.id});if(valid()){setSelected(null);await load()}})}>删除连接</button></div>
+- <div className="visual-ai-actions"><button disabled={busy||selected.transport!=='pi'||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async valid=>{const review=await api.aiConnections.prepareValidation(selected.id);if(!valid()){void api.aiConnections.discardValidation(review.receipt);return}validationRef.current=review.receipt;setValidation(review)})}>核对生成图片能力验证</button></div>
++ <div className="visual-ai-actions"><button disabled={busy||!inference?.allowed||selected.transport!=='pi'||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async valid=>{const review=await api.aiConnections.prepareValidation(selected.id);if(!valid()){void api.aiConnections.discardValidation(review.receipt);return}validationRef.current=review.receipt;setValidation(review)})}>核对生成图片能力验证</button></div>
+  {validation&&<div className="visual-ai-review" role="region" aria-label="确认模型能力验证"><p>{validation.notice}</p><button disabled={busy} onClick={()=>{void api.aiConnections.discardValidation(validation.receipt);validationRef.current=null;setValidation(null)}}>取消能力验证</button><button disabled={busy} onClick={()=>void act(async valid=>{const proof=await api.aiConnections.confirmValidation(validation.receipt);if(valid()){validationRef.current=null;setValidation(null);setValidationResult(proof.colourChallengePassed?'生成图片与完整 JSON 验证通过':'请求与 JSON 完整，颜色识别未通过；图像理解能力仍待核验');await load()}})}>同意发送生成测试图</button></div>}
+  {validationResult&&<p role="status">{validationResult}</p>}
+  {selected.modelValidation&&<p>上次模型验证：{selected.modelValidation.model} · {selected.modelValidation.vision?'图像挑战通过':'图像挑战未通过'} · {selected.modelValidation.testedAt}</p>}
+  {selected.authMode==='api-key'&&<><label>新的 API Key<input aria-label="Pi API Key" type="password" autoComplete="new-password" value={key} disabled={busy} onChange={e=>setKey(e.target.value)}/></label><button disabled={busy||!key.trim()||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async valid=>{const value=key;setKey('');const s=await api.aiConnections.setApiKey({backendId:selected.id,key:value});if(valid()){setStatus(p=>({...p,[selected.id]:s}));await load()}})}>安全保存 API Key</button>{status[selected.id]?.storageAvailable===false&&<p role="alert">系统加密存储不可用，不能保存凭据。</p>}</>}
+  {status[selected.id]?.legacyPresent&&<p>此连接有旧格式凭据。<button disabled={busy} onClick={()=>void act(async valid=>{const s=await api.aiConnections.migrateCredential({backendId:selected.id,expectedRevision:status[selected.id].revision});if(valid()){setStatus(p=>({...p,[selected.id]:s}));await load()}})}>确认迁移此连接凭据</button></p>}
+- {selected.authMode==='oauth'&&<p>订阅登录适配器已接入；具体账号与模型需要验证。登录失败不会自动改走 API 计费。</p>}
+- {selected.authMode==='oauth'&&<div className="visual-ai-actions"><button disabled={busy||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async valid=>{const s=await api.aiConnections.login(selected.id);if(valid()){loginRef.current=s.id;setLogin(s)}else void api.aiConnections.cancelLogin(s.id).catch(()=>{})})}>开始订阅登录</button><button disabled={!login||busy} onClick={()=>void api.aiConnections.cancelLogin(login!.id)}>取消订阅登录</button></div>}
+- {login&&<div role="status"><p>{login.state==='completed'?'账号已连接；已解析服务地址，素材执行仍需重新确认':login.state==='failed'||login.state==='cancelled'?login.error??'登录已取消':'等待账号授权'}</p>{login.event?.userCode&&<p>设备码：{login.event.userCode}</p>}{login.event?.url&&<button onClick={()=>void act(async()=>{await api.aiConnections.openAuthUrl({id:login.id,url:login.event!.url})})}>在系统浏览器完成登录</button>}{login.prompt&&<><label>{login.prompt.message}<input type="password" autoComplete="off" value={answer} onChange={e=>setAnswer(e.target.value)}/></label><button onClick={()=>void act(async()=>{const value=answer;setAnswer('');await api.aiConnections.answerLogin({id:login.id,promptId:login.prompt!.id,answer:value})})}>提交授权信息</button></>}</div>}
++ {selected.authMode==='oauth'&&<p>{loginAdmission?.message} 登录失败不会自动改走 API 计费。</p>}
++ {selected.authMode==='oauth'&&<div className="visual-ai-actions"><button disabled={busy||!loginAdmission?.allowed||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async valid=>{const s=await api.aiConnections.login(selected.id);if(valid()){loginRef.current=s.id;setLogin(s)}else void api.aiConnections.cancelLogin(s.id).catch(()=>{})})}>开始订阅登录</button><button disabled={!login||busy} onClick={()=>void api.aiConnections.cancelLogin(login!.id)}>取消订阅登录</button></div>}
++ {login&&<div role="status"><p>{login.state==='completed'?'账号已连接；已解析服务地址，素材执行仍需重新确认':login.state==='failed'||login.state==='cancelled'?login.error??'登录已取消':'等待账号授权'}</p>{login.event?.userCode&&<p>设备码：{login.event.userCode}</p>}{login.event?.url&&<button onClick={()=>void act(async()=>{await api.aiConnections.openAuthUrl({id:login.id,url:login.event!.url})})}>在系统浏览器完成登录</button>}{login.prompt&&<><label>{login.prompt.message}{login.prompt.type==='select'?<select aria-label="订阅登录方式" value={answer} onChange={e=>setAnswer(e.target.value)}><option value="">请选择登录方式</option>{login.prompt.options.map(option=><option key={option.id} value={option.id}>{option.label}</option>)}</select>:<input type={login.prompt.type==='text'?'text':'password'} autoComplete="off" value={answer} onChange={e=>setAnswer(e.target.value)}/>}</label><button disabled={!answer} onClick={()=>void act(async()=>{const value=answer;setAnswer('');await api.aiConnections.answerLogin({id:login.id,promptId:login.prompt!.id,answer:value})})}>提交授权信息</button></>}</div>}
+  <button disabled={busy||!status[selected.id]?.configured} onClick={()=>void act(async valid=>{const s=await api.aiConnections.clearCredential(selected.id);if(valid()){setStatus(p=>({...p,[selected.id]:s}));await load()}})}>退出账号并移除凭据</button>
+- <div className="visual-ai-actions">{(['analyze','reverse','tags']as const).map(task=><button key={task} disabled={busy||!selected.defaultModel?.trim()||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async()=>{const saved=(await api.aiBackendList()).find((b:AiBackendConfig)=>b.id===selected.id);if(!saved?.defaultModel)throw Error('保存模型 ID 后再分配任务');const settings=await api.settingsLoad();await api.settingsSave({aiTaskModels:{...settings.aiTaskModels,[task]:{backendId:saved.id,model:saved.defaultModel}}})})}>{task==='analyze'?'用于视觉分析':task==='reverse'?'用于提示词反推':'用于独立标签'}</button>)}</div>
++ <div className="visual-ai-actions">{(['analyze','reverse','tags']as const).map(task=><button key={task} disabled={busy||!inference?.allowed||!selected.defaultModel?.trim()||!backends.some(b=>b.id===selected.id)} onClick={()=>void act(async()=>{const saved=(await api.aiBackendList()).find((b:AiBackendConfig)=>b.id===selected.id);if(!saved?.defaultModel)throw Error('保存模型 ID 后再分配任务');const settings=await api.settingsLoad();await api.settingsSave({aiTaskModels:{...settings.aiTaskModels,[task]:{backendId:saved.id,model:saved.defaultModel}}})})}>{task==='analyze'?'用于视觉分析':task==='reverse'?'用于提示词反推':'用于独立标签'}</button>)}</div>
+  </div>}{error&&<p role="alert">{error}</p>}
+  </section>
+ }
+diff --git a/src/shared/constants/pi-provider-admission.ts b/src/shared/constants/pi-provider-admission.ts
+new file mode 100644
+--- /dev/null
++++ b/src/shared/constants/pi-provider-admission.ts
+@@ -0,0 +1,16 @@
++import policy from '../../../pi-runtime/provider-policy.json'
++import type {AiBackendConfig} from '../types/ai-backend.types'
++import type {PiProviderKind,PiAuthMode} from '../contracts/ai-connection.contract'
++export type PiProviderAction='models'|'infer'|'login'
++export interface PiProviderAdmission {allowed:boolean;code:string;message:string}
++export function piProviderAdmission(provider:PiProviderKind,mode:PiAuthMode,action:PiProviderAction):PiProviderAdmission{
++ if(action==='models')return{allowed:true,code:'STATIC_OR_EXPLICIT_CATALOG',message:'目录不代表真实服务资格。'}
++ if(!(policy.sdkAuthModes as Record<string,string[]>)[provider]?.includes(mode)||action==='login'&&mode!=='oauth')return{allowed:false,code:'AI_AUTH_UNSUPPORTED',message:'此 Provider 不支持所选认证方式或登录动作。'}
++ const blocks=policy.blocked as Record<string,{code:string;message:string}>
++ const block=blocks[provider+':'+mode]??blocks[provider+':'+action]
++ return block?{allowed:false,...block}:{allowed:true,code:'ISOLATED_CONTRACT_PATH',message:'本路径有隔离契约验收；真实服务仍需单独验证。'}
++}
++export function backendInferenceAdmission(b:AiBackendConfig):PiProviderAdmission{return b.authMode==='oauth'&&b.transport!=='pi'?{allowed:false,code:'AI_LEGACY_OAUTH_UNSUPPORTED',message:'已有 HTTP 接口不能使用订阅凭据；不会自动切换接口。'}:b.transport==='pi'?piProviderAdmission(b.providerKind??'openai-compatible',b.authMode??'none','infer'):{allowed:true,code:'LEGACY',message:''}}
++export function requireBackendInference(b:AiBackendConfig):void{const admission=backendInferenceAdmission(b);if(!admission.allowed)throw Error(admission.code)}
++
++export function knownPiAdmissionCode(code:unknown):code is string{return typeof code==='string'&&(code==='AI_AUTH_UNSUPPORTED'||Object.values(policy.blocked).some(b=>b.code===code))}
+diff --git a/src/shared/constants/pi-provider-presets.ts b/src/shared/constants/pi-provider-presets.ts
+--- a/src/shared/constants/pi-provider-presets.ts
++++ b/src/shared/constants/pi-provider-presets.ts
+@@ -5,3 +5,6 @@
+ /** Supported stored credential kinds from the fixed Pi provider factories. */
+ export const PI_PROVIDER_AUTH_MODES:Readonly<Record<PiProviderKind,readonly PiAuthMode[]>>=Object.freeze({'openai-compatible':['none','api-key'],openai:['api-key','oauth'],anthropic:['api-key','oauth'],google:['api-key'],'openai-codex':['oauth'],'github-copilot':['api-key','oauth']})
+ export function supportsPiAuthentication(provider:PiProviderKind,mode:PiAuthMode):boolean{return PI_PROVIDER_AUTH_MODES[provider]?.includes(mode)??false}
++
++/** Product choices are distinct from upstream SDK support. Existing records remain readable. */
++export function supportsPiProductAuthentication(provider:PiProviderKind,mode:PiAuthMode):boolean{return supportsPiAuthentication(provider,mode)&&!(provider==='anthropic'&&mode==='oauth')}
+diff --git a/src/shared/contracts/ai-connection.contract.ts b/src/shared/contracts/ai-connection.contract.ts
+--- a/src/shared/contracts/ai-connection.contract.ts
++++ b/src/shared/contracts/ai-connection.contract.ts
+@@ -2,7 +2,8 @@
+ export type PiAuthMode='none'|'api-key'|'oauth'
+ export interface AiCredentialStatus {configured:boolean;kind:'api_key'|'oauth'|null;revision:number;storageAvailable:boolean;legacyPresent:boolean}
+ export interface PiModel {id:string;name:string;input:Array<'text'|'image'>;contextWindow:number;maxTokens:number;source:'catalog'|'service';verified:false}
+-export interface AiLoginStatus {id:string;backendId:string;state:'starting'|'interaction'|'completed'|'failed'|'cancelled';event?:{type:string;message?:string;url?:string;userCode?:string};prompt?:{id:string;type:string;message:string};error?:string}
++export type AiLoginPrompt={id:string;message:string}&({type:'text'|'secret'|'manual_code'}|{type:'select';options:Array<{id:string;label:string}>})
++export interface AiLoginStatus {id:string;backendId:string;state:'starting'|'interaction'|'completed'|'failed'|'cancelled';event?:{type:string;message?:string;url?:string;userCode?:string};prompt?:AiLoginPrompt;error?:string}
+ export interface AiCapabilityReview {receipt:string;backendId:string;model:string;notice:string}
+ export interface AiCapabilityResult {model:string;imageRequestAccepted:boolean;structuredOutputValid:boolean;colourChallengePassed:boolean;testedAt:string}
+ export interface AiConnectionApi {
+diff --git a/src/shared/contracts/ai-login-prompt.ts b/src/shared/contracts/ai-login-prompt.ts
+new file mode 100644
+--- /dev/null
++++ b/src/shared/contracts/ai-login-prompt.ts
+@@ -0,0 +1,12 @@
++import type {AiLoginPrompt} from './ai-connection.contract'
++export function parseAiLoginPrompt(input:unknown):AiLoginPrompt{
++ const p=input as any
++ if(!p||typeof p.id!=='string'||!/^[a-zA-Z0-9._:-]{1,128}$/.test(p.id)||!['text','secret','manual_code','select'].includes(p.type)||typeof p.message!=='string'||!p.message.trim()||p.message.length>1000)throw Error('AI_AUTH_PROMPT_INVALID')
++ const base={id:p.id,message:p.message}
++ if(p.type!=='select')return{...base,type:p.type}
++ if(!Array.isArray(p.options)||!p.options.length||p.options.length>8)throw Error('AI_AUTH_PROMPT_INVALID')
++ const options=p.options.map((o:any)=>{if(!o||typeof o.id!=='string'||!/^[a-zA-Z0-9._:-]{1,128}$/.test(o.id)||typeof o.label!=='string'||!o.label.trim()||o.label.length>256)throw Error('AI_AUTH_PROMPT_INVALID');return{id:o.id,label:o.label}})
++ if(new Set(options.map((o:{id:string})=>o.id)).size!==options.length)throw Error('AI_AUTH_PROMPT_INVALID')
++ return{...base,type:'select',options}
++}
++export function validAiLoginAnswer(prompt:AiLoginPrompt,answer:unknown):answer is string{return typeof answer==='string'&&answer.length<=16000&&(prompt.type!=='select'||prompt.options.some(o=>o.id===answer))}

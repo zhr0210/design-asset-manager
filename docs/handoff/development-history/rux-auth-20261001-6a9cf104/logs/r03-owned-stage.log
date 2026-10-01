@@ -1,0 +1,9 @@
+✔ actual Runtime parser rejects a Worker claiming Main credential persistence or connected state (5830.949041ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5833.235708

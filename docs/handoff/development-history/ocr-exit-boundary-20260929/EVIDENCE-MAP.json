@@ -1,0 +1,248 @@
+{
+  "records": [
+    {
+      "label": "background-formal",
+      "command": [
+        "node",
+        "scripts/background-analysis-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 6.07,
+      "sha256": "2bd900805192c2602ddc0252d96ca8e0fcdc2dcc8c2bf52d20fc0863118b859f",
+      "log": "logs/background-formal.log"
+    },
+    {
+      "label": "background-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.081,
+      "sha256": "bc77edabb836842064b7ca250a466be034b7f2f597ef2c30a61f5a6922e5aba1",
+      "log": "logs/background-regression.log"
+    },
+    {
+      "label": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.697,
+      "sha256": "80e2b06156284a84e83549c95b75b2585dc59ad8332f34f2e9b59c9a761ed497",
+      "log": "logs/build.log"
+    },
+    {
+      "label": "controller-final",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-controller-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.413,
+      "sha256": "c9dc27091eabeaddbb45a7d977e4bcc0eaa48729dd84ae5246339cfa9a397bdc",
+      "log": "logs/controller-final.log"
+    },
+    {
+      "label": "controller-matrix",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-controller-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.494,
+      "sha256": "57000d4a880197eb69c459e5201ee89a5c49e776c5aff7438c49d070ac436240",
+      "log": "logs/controller-matrix.log"
+    },
+    {
+      "label": "formal-ocr-diagnostic",
+      "command": [
+        "node",
+        "scripts/ocr-exit-electron.e2e.test.mjs"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 2.919,
+      "sha256": "bf4074f7fa0842ffbc4d71bce839b5bb465da50c58c565bfc8156c089da57ff0",
+      "log": "logs/formal-ocr-diagnostic.log"
+    },
+    {
+      "label": "formal-ocr-poll",
+      "command": [
+        "node",
+        "scripts/ocr-exit-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.97,
+      "sha256": "871396c299862befd5b443931d27bd1ecd47643f9b077b4a7171545762b8b274",
+      "log": "logs/formal-ocr-poll.log"
+    },
+    {
+      "label": "formal-ocr",
+      "command": [
+        "node",
+        "scripts/ocr-exit-electron.e2e.test.mjs"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 3.564,
+      "sha256": "9255effeaa2f0f9a5c974e14f9cd1f349a8104e74c157cbc3ca1e8b37f858ec7",
+      "log": "logs/formal-ocr.log"
+    },
+    {
+      "label": "host-regression",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/active-library-host.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.585,
+      "sha256": "02f6e18ccf8bf34d610bc996876991e1122781ab36af42cb7cd366f3f97623c8",
+      "log": "logs/host-regression.log"
+    },
+    {
+      "label": "ocr-contract",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/asset-ocr.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.237,
+      "sha256": "d62e4bc64af1e53ed16680365a87aec373db0271a3107b39aacb30981eae1f56",
+      "log": "logs/ocr-contract.log"
+    },
+    {
+      "label": "ocr-storage",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/asset-ocr-storage.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.591,
+      "sha256": "24e0c2dff827cbaa9079acee0803c6ddb51b28ef8b3492b9f0a6beff25199ba6",
+      "log": "logs/ocr-storage.log"
+    },
+    {
+      "label": "process-final",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-process-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.092,
+      "sha256": "4dd18f4ada672b8aa386f641ef749eddbb3ce8e5aad09e086e1442b00e3e3655",
+      "log": "logs/process-final.log"
+    },
+    {
+      "label": "process-green",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-process-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.34,
+      "sha256": "0983b4fc1e1a4ed1e979a306bedf1b9824fe4d796b1feb4a6da121adb391a45c",
+      "log": "logs/process-green.log"
+    },
+    {
+      "label": "process-matrix",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-process-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.975,
+      "sha256": "2ef3fd4e05d3bbb6171fdb697d2cc95fa1f11baeef7d1d93d56e2813fdc89caa",
+      "log": "logs/process-matrix.log"
+    },
+    {
+      "label": "process-real",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-process-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.895,
+      "sha256": "45ee37439dd88998c18a4747d639dcd4bd63e334184a6197ec2afc7846eba5ba",
+      "log": "logs/process-real.log"
+    },
+    {
+      "label": "process-red",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-process-lifecycle.test.ts"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.312,
+      "sha256": "105b2a902925ef2ac3d8ef78d6ca378e12d4a6c0ee886b05dfdd9c580c3657f5",
+      "log": "logs/process-red.log"
+    },
+    {
+      "label": "shutdown-regression",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/active-library-shutdown.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.088,
+      "sha256": "813371f589dc2965b96386a3728b8c16a3e6862fb6fc4824abd68401c9811942",
+      "log": "logs/shutdown-regression.log"
+    },
+    {
+      "label": "typecheck-final",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.13,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "log": "logs/typecheck-final.log"
+    },
+    {
+      "label": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.707,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "log": "logs/typecheck.log"
+    }
+  ],
+  "binding": "Final source candidate verified after implementation and tests. Earlier red/diagnostic records are retained history, not final-candidate passes."
+}

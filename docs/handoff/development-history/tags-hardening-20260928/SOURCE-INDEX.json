@@ -1,0 +1,35 @@
+{
+  "changeDigest": "ceecf948ece637b5a756e54ecec599b23dd2705d12a4fe8ba0496d1326ab77d7",
+  "entries": [
+    {
+      "path": "scripts/tag-execution.integration.test.ts",
+      "beforeSha256": "14fb053036aa34b49dfb47baf201969227b26ff81001167661a9d5c115954c85",
+      "afterSha256": "83206798e20adfc3018d8056a3ee2543ac195680ed4614ec717374ef35afebf1"
+    },
+    {
+      "path": "scripts/tag-intent-panel-electron.e2e.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "b306cc168c18d0035371e9bdd4200aeeffd880bbd0d8e9678f2ff3d35a3a18dd"
+    },
+    {
+      "path": "scripts/tag-intent-ui.integration.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "36c7de1777b65c88d827f943709da8dbd6c1313cc790f2d8e014df1970dc0e2b"
+    },
+    {
+      "path": "src/main/independent-tags/README.md",
+      "beforeSha256": "822e4b636beb2da825e9cf8793b471bbb30076a848fd971d8adb6c1939d15609",
+      "afterSha256": "13fe090170e3122512ceb8cee0125ccdef2dd725f04a1173792821990348b9e2"
+    },
+    {
+      "path": "src/main/independent-tags/tag-execution-controller.ts",
+      "beforeSha256": "958ab19232bfda21e293b1a2e8f1204b69656aad90301377a98b34b12cdf4ced",
+      "afterSha256": "bc27482acc3b0f52518bfb38ff5a7b703f085c7f6544ef65ef012bd51e872bd4"
+    },
+    {
+      "path": "src/renderer/components/asset/IndependentTagIntentPanel.tsx",
+      "beforeSha256": "d6a03d55e43175faa080cafa4034e1b09a3a81cb28ae42e09964d77aacf65852",
+      "afterSha256": "38cce1229b99d46d1994fd50cff25c216309cab9a6d29e266759d3b5f69720d4"
+    }
+  ]
+}

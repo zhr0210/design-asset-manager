@@ -1,0 +1,3 @@
+# R03 account lifecycle
+
+Main owns operation/revision/binding/completion and commit linearization. Browser wait is outside source inference tails; Library only drains source-dependent work, shutdown aborts/waits all noncommitted account work and persistence/UNKNOWN. Worker emits only listener/browser/callback/exchange/identity stages; storage/connected stages are Main-only. URL query remains private. Metadata reads never refresh tokens. Correct-state error closes listener with zero token/JWKS; wrong state does not cancel another attempt. Vault encrypted pending/previous behavior retained. Stage/error export is whitelist; actual user failure root cause UNKNOWN.

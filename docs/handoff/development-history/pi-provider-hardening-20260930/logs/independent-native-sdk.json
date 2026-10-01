@@ -1,0 +1,10 @@
+{
+  "command": [
+    "pi-runtime/runtime/darwin-arm64/node",
+    "scripts/pi-native-sdk.test.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 2.315,
+  "sha256": "49bd636feaa5075130a0363b120120c84cd0300b26bf4328d6713cdd410670ab"
+}

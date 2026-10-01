@@ -1,0 +1,11 @@
+{
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "arch": "arm64",
+  "shellNode": "v25.8.0",
+  "fixedPiNode": "v24.21.0",
+  "electron": "30.5.1",
+  "pi": "0.99.1",
+  "runtimeReleaseSha256": "edc947653913e104245e60e3d7f35095887b2788163296c4933f0ded23f4e9bd",
+  "data": "generated/temporary/synthetic only",
+  "testConcurrency": 1
+}

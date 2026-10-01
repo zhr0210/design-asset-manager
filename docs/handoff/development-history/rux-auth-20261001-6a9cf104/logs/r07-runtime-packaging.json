@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-electron-node-test.mjs",
+    "scripts/pi-runtime-packaging.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 12.199,
+  "sha256": "899719e0e7937debaaf76becb6253fea2e3e48921d2e6495903cb32ae322529a"
+}

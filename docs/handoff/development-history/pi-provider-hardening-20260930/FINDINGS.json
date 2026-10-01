@@ -1,0 +1,101 @@
+{
+  "date": "2026-09-30",
+  "mode": "READ_ONLY_REVIEW",
+  "decision": "KEEP_ARCHITECTURE_RESTRICT_UNPROVEN_PROVIDER_PATHS",
+  "remoteSourceModified": false,
+  "oldCandidateApplied": false,
+  "nextBatchAuthorized": false,
+  "findings": [
+    {
+      "id": "F01",
+      "title": "Google native custom fetch rejected",
+      "priority": "BLOCK_PROVIDER_ENABLEMENT",
+      "evidence": "REPRODUCED_INSTALLED_ADAPTER",
+      "sources": [
+        "S04",
+        "S10"
+      ],
+      "productionFixApplied": false
+    },
+    {
+      "id": "F02",
+      "title": "OpenAI OAuth missing getDeviceId and registration contract gaps",
+      "priority": "BLOCK_AUTH_ENABLEMENT",
+      "evidence": "STATIC_CONTRACT",
+      "sources": [
+        "S04",
+        "S11",
+        "S12",
+        "W02",
+        "W03"
+      ],
+      "productionFixApplied": false
+    },
+    {
+      "id": "F03",
+      "title": "Codex select options lost across Worker/Main/UI",
+      "priority": "BLOCK_NORMAL_AUTH_FLOW",
+      "evidence": "STATIC_END_TO_END_TRACE",
+      "sources": [
+        "S04",
+        "S05",
+        "S13",
+        "S14",
+        "S15"
+      ],
+      "productionFixApplied": false
+    },
+    {
+      "id": "F04",
+      "title": "Anthropic subscription policy separated from SDK support",
+      "priority": "BLOCK_PRODUCT_ENABLEMENT_WITHOUT_APPLICABLE_PERMISSION",
+      "evidence": "CURRENT_OFFICIAL_POLICY_AND_CONFIG",
+      "sources": [
+        "S05",
+        "S15",
+        "S16",
+        "W01"
+      ],
+      "productionFixApplied": false
+    },
+    {
+      "id": "F05",
+      "title": "Copilot login can enable account model policies",
+      "priority": "RESOLVE_BEFORE_ACCOUNT_LOGIN",
+      "evidence": "STATIC_UPSTREAM_CONDITIONAL_BRANCH",
+      "sources": [
+        "S17",
+        "S05",
+        "S15"
+      ],
+      "realAccountEffectsObserved": false,
+      "productionFixApplied": false
+    },
+    {
+      "id": "F06",
+      "title": "Auth and refresh do not share inference fetch controls",
+      "priority": "AUTH_NETWORK_ACCEPTANCE_REQUIRED",
+      "evidence": "STATIC_PATH",
+      "sources": [
+        "S04",
+        "S11",
+        "S17"
+      ],
+      "credentialLeakObserved": false,
+      "productionFixApplied": false
+    },
+    {
+      "id": "OBS01",
+      "title": "Full dependency inventory and hashes for every request",
+      "priority": "BENCHMARK_AND_DESIGN_REVIEW",
+      "evidence": "STATIC_PATH_AND_AUTHOR_REPORTED_FILE_COUNT",
+      "sources": [
+        "S02",
+        "S06",
+        "S18"
+      ],
+      "benchmarkRun": false,
+      "productionFixApplied": false
+    }
+  ]
+}

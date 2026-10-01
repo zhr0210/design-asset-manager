@@ -1,0 +1,28 @@
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at AnchoredGrid (file://<DAM_WORKSPACE>/dist-temp/tests/library-canvas-state.test.tsx.mjs:338:25)
+    at div
+    at main
+    at div
+    at div
+    at LibraryCanvas (file://<DAM_WORKSPACE>/dist-temp/tests/library-canvas-state.test.tsx.mjs:572:20)
+    at Router (<DAM_WORKSPACE>/node_modules/react-router/dist/umd/react-router.development.js:1207:17)
+    at StaticRouter (<DAM_WORKSPACE>/node_modules/react-router-dom/server.js:35:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at AnchoredGrid (file://<DAM_WORKSPACE>/dist-temp/tests/library-canvas-state.test.tsx.mjs:338:25)
+    at div
+    at main
+    at div
+    at div
+    at LibraryCanvas (file://<DAM_WORKSPACE>/dist-temp/tests/library-canvas-state.test.tsx.mjs:572:20)
+    at Router (<DAM_WORKSPACE>/node_modules/react-router/dist/umd/react-router.development.js:1207:17)
+    at StaticRouter (<DAM_WORKSPACE>/node_modules/react-router-dom/server.js:35:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at AnchoredGrid (file://<DAM_WORKSPACE>/dist-temp/tests/library-canvas-state.test.tsx.mjs:338:25)
+    at div
+    at main
+    at div
+    at div
+    at LibraryCanvas (file://<DAM_WORKSPACE>/dist-temp/tests/library-canvas-state.test.tsx.mjs:572:20)
+    at Router (<DAM_WORKSPACE>/node_modules/react-router/dist/umd/react-router.development.js:1207:17)
+    at StaticRouter (<DAM_WORKSPACE>/node_modules/react-router-dom/server.js:35:3)
+Library Canvas: loading/empty/no-match/error/retained/closed states and preview source restrictions passed

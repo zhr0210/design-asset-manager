@@ -1,0 +1,40 @@
+{
+  "runId": "independent-tags-20260927",
+  "status": "LIMITED_PREPARATION_PENDING_BUDGET",
+  "authorizationText": "立即实施",
+  "authorizedCurrentActions": [
+    "C01 evidence verification and necessary minimal closure",
+    "C02A read-only source investigation and plan"
+  ],
+  "requestedContinuousScope": [
+    "C01",
+    "C02A",
+    "C02B",
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C07-S"
+  ],
+  "workspace": "<DAM_WORKSPACE>",
+  "modeRequested": "CONTINUOUS_IMPLEMENT",
+  "budget": {
+    "startTime": "2026-09-27T03:54:29.210270+00:00",
+    "maxWallSeconds": null,
+    "approval": "pending-user-answer",
+    "maxTestConcurrency": 1,
+    "maxRepairRounds": 3,
+    "unattendedReady": false,
+    "wallclockPreparationSeconds": 529
+  },
+  "schemaReviewDelegation": "pending-user-answer",
+  "controls": "convention_only, no external unattended supervisor deployed",
+  "prohibited": [
+    "real user library",
+    "model/runtime install/download/start",
+    "cloud/asset egress",
+    "git commit/push/publish",
+    "dependency installation",
+    "automatic test weakening"
+  ]
+}

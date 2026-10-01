@@ -1,0 +1,172 @@
+{
+  "TASK.md": {
+    "kind": "modified",
+    "beforeSha256": "dbc0316ad411b1dc55fb8acfba8f453435415a825a00082459c305279a72fabe",
+    "afterSha256": "25ada39264e20b53e139fc40b8493ff4134b0a75eb17f4d148ca6dd7de0dbddf"
+  },
+  "package.json": {
+    "kind": "modified",
+    "beforeSha256": "975e64170c896570126c7d6ca75a3689b874b835081700900803bd2bbe69b512",
+    "afterSha256": "ba5372d08b5a5f7e677ed6922b73bcc9dab031b3f3b658bf68b38bff064d6134"
+  },
+  "pi-runtime/README.md": {
+    "kind": "modified",
+    "beforeSha256": "5cbbf3b686b3604679b818e4327c90a6d06146fbde7fd8b0bb25e54214e1bb6a",
+    "afterSha256": "54a1e9643f918e63eba32c5189181da6743e25544517f20e25737e6d413ba702"
+  },
+  "pi-runtime/auth-interaction.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "b7e88217ec26b771e385eff79abce8c8aba975ced6f57387a6996bec1907d774"
+  },
+  "pi-runtime/provider-policy.json": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "388afef7c98a7134e326b1b798a53bf188307c7b7706bf78c25b9b48d83b5f84"
+  },
+  "pi-runtime/release.json": {
+    "kind": "modified",
+    "beforeSha256": "03b7f13cfe32aea76955294b941e57e8d0d4311ab1dfaa0da2bbf6a228b28f5a",
+    "afterSha256": "40d8304d48fbdcde33fa31158094ec43beb4bfb06424594626941349b7b3978e"
+  },
+  "pi-runtime/worker.mjs": {
+    "kind": "modified",
+    "beforeSha256": "922b175499d6a0a71198a9d46984e2a4ebe596a02da4fbd86955144155686883",
+    "afterSha256": "8b43806ab40279470a0d40033a94a0ac6c655d55d740658eb9faf70ddeb8b5d5"
+  },
+  "scripts/pi-auth-prompts.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "0c14d8dda5ab061ae6eeab164c0fa47e50af43986bbf64d19289679f13554e50"
+  },
+  "scripts/pi-codex-contract.e2e.test.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "4c50e46473da40fb0de883de7cc0e2d9c7290e289005ed79f96fff3169b69f93"
+  },
+  "scripts/pi-contract-fixture.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "5f21783c8160dd48efd1f936d0385ed7586ea1cdc62eb95d52bc5ce62b7b6e0e"
+  },
+  "scripts/pi-copilot-sdk.test.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "b8dbcc72659f5c2d0a44aa6f736e1a609af0337c2444042fb44bc090c6473094"
+  },
+  "scripts/pi-electron.e2e.test.mjs": {
+    "kind": "modified",
+    "beforeSha256": "f541afffe054b48228e02bf2f4a89b2472e2d6359fda89c72bc706935efd7bfa",
+    "afterSha256": "7996f3e353294a17b0fb1d57a1fff023c4cf978d0ad23a136f9482d5162a7f7c"
+  },
+  "scripts/pi-native-sdk.test.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "407834230b4e9497c4622a7cd57e0d774855e17c95fde297c7cff24ed176ca72"
+  },
+  "scripts/pi-oauth.test.ts": {
+    "kind": "modified",
+    "beforeSha256": "6a4ab225a04bff1b2a312fc3832bb7f62c087ec9bb53ba6f0bd0ed66d7aa19a3",
+    "afterSha256": "67f06e9110b5e2cf82c37b330caa912c42f19a6995d4f801209873afb3824e23"
+  },
+  "scripts/pi-provider-admission.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "fa2e87b79a72612c58b8af778accf4981ec37b315d337c5176144768770fea7d"
+  },
+  "scripts/pi-runtime-benchmark.test.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "55e44bc47fa21286eb8fba818845dd56d53512f403eef5188bc1f84b930cf97f"
+  },
+  "scripts/pi-sdk-preconditions.test.mjs": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "307a7a79047101340800e29ffbf1f6b14b91c49a8c0d7e76526efa6a6df2a51f"
+  },
+  "scripts/pi-ui.test.mjs": {
+    "kind": "modified",
+    "beforeSha256": "c0f3c508c4b0cc0054f9d5a777371dec862310bb33e8b044f04e7a0b987656e3",
+    "afterSha256": "06f53e9ccc76e6832816425aa36a24334184cd03999efc9c70ed7da82a70b90a"
+  },
+  "scripts/seal-pi-runtime.mjs": {
+    "kind": "modified",
+    "beforeSha256": "4f024ad745a34b4beb9ceeb6c092ae8e1bca71567e9a0f57f159228a31c36249",
+    "afterSha256": "27068022ff868ad282b151bf6260cc8a2889b7b662d88619670de88d8d4f7aad"
+  },
+  "src/main/ai-credentials/host-identity.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "8b468acdb5dbc5c155e0ed0e17846a4d15c53cb8be2472493a29e7973fd66b01"
+  },
+  "src/main/ai-gateway/PROVIDER-MATRIX.md": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "a158b7ef67db1c6092dc6ea65d512a1b355500127ef2fdd683fec652c4771e8f"
+  },
+  "src/main/ai-gateway/README.md": {
+    "kind": "modified",
+    "beforeSha256": "3c296df1c8231dd3424fef3f3b5774fa1b837e7961f94c8fc82f2c547e3863c9",
+    "afterSha256": "81bc45823a82de0c190146abcf03d1105ffe4d7fb350fd937a15a1b0df8c70f8"
+  },
+  "src/main/ai-gateway/ai-connection-service.ts": {
+    "kind": "modified",
+    "beforeSha256": "60c43bb89b3971e0111dd5e8288decd2f06e82d6a1056360bebe3bc7c3f72724",
+    "afterSha256": "b81187ea9f867aa20fd061fea1f2e4ddd41909de69f88e578df6afb209a7c314"
+  },
+  "src/main/ai-gateway/pi-runtime-host.ts": {
+    "kind": "modified",
+    "beforeSha256": "f9ef85bfcace6b10eaa5d8140ec8ad14eff348dc78d37adf8ce7b8be759c00a6",
+    "afterSha256": "c1dda23d8fb0503d59a57401c58d15240a11d64da7c1a7cdabe2018e5179ca90"
+  },
+  "src/main/ai-gateway/pi-runtime-release.ts": {
+    "kind": "modified",
+    "beforeSha256": "150c828b72d1615e5aba6a049e04a0a881fce09b64d4f2932cf8889c2d5c5207",
+    "afterSha256": "f698572a037f8a2b86ef3b6d6465b307d152af0f9ce77297f06ea0fce7daa323"
+  },
+  "src/main/independent-tags/tag-recipe.ts": {
+    "kind": "modified",
+    "beforeSha256": "a98409bbb97ad8eeef65e4f86186a2e6f0ad6036cc4ed97947a96ed418ec973c",
+    "afterSha256": "eb9359bb2e40e6e34af17d0697d309ec95f1abc651e62fb35b69a55e361634fc"
+  },
+  "src/main/index.ts": {
+    "kind": "modified",
+    "beforeSha256": "3ea44831a100e12e6c4a5663a8956e4a37c73934c682a336d1fea046cee28e99",
+    "afterSha256": "b7cbd06356f1bfee918f2f070a4a329ade1996888bd1af692833ee65b58d1fa5"
+  },
+  "src/main/visual-ai/README.md": {
+    "kind": "modified",
+    "beforeSha256": "fc2c60ba9d9a21e606b1b2a1d74dc8d9573a739e5a34aaa3f2120b118f92448d",
+    "afterSha256": "c74a447a4d81454cd710a22c467aaf669979c8f06cdf643509339b00b812debd"
+  },
+  "src/main/visual-ai/visual-ai-controller.ts": {
+    "kind": "modified",
+    "beforeSha256": "757593f43b2839344daef2ddcd89fd0576a57183633f5f666d9696d942964a2c",
+    "afterSha256": "a0917dd323acb4753276527f50b04b69502accea17bb7904baa9bb0af474789f"
+  },
+  "src/renderer/components/asset/PiConnectionsPanel.tsx": {
+    "kind": "modified",
+    "beforeSha256": "965571047a71f0bbcff9d5233a3abaeb419e225846e16047e81002cceff9c669",
+    "afterSha256": "f4e6765848ea3655c14832020c7d6ef5b6d44c0c9b96a3ba1145409ff701bb1f"
+  },
+  "src/shared/constants/pi-provider-admission.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "5efd969d77f47b6e6f5f01609cc78f9af2a43ddbd18d230040b99cdd7daafe9f"
+  },
+  "src/shared/constants/pi-provider-presets.ts": {
+    "kind": "modified",
+    "beforeSha256": "8223ca5d97ac4c8a2efb76503749fa17c974b420efd92492000dbe6b6ab1d563",
+    "afterSha256": "4566a2c1373df10b72dab747fa5ddff2c5422565e0f0b01bd0f8139fda98465b"
+  },
+  "src/shared/contracts/ai-connection.contract.ts": {
+    "kind": "modified",
+    "beforeSha256": "74d89211d0bb331cfbda65c29cd77a15f1bb5ed3423c56e4d600671f18d5fe3c",
+    "afterSha256": "c847ebdd7273f424c4083b961b3d8d7a9b01cb88fb843852b8e3b90fceb6263d"
+  },
+  "src/shared/contracts/ai-login-prompt.ts": {
+    "kind": "added",
+    "beforeSha256": null,
+    "afterSha256": "6a45d12f0128d3a452934598b3eb2071d4add264029db7f99600c1dc3995de85"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/doctor-panel-contract.test.ts"
+  ],
+  "exitCode": 1,
+  "timeout": false,
+  "seconds": 0.241,
+  "sha256": "2ec27c380383579aff5a94c39731272d385b872d270cf973646cb7edeaab8a92"
+}

@@ -1,0 +1,101 @@
+{
+  "status": "CURRENT_SOURCE_WITH_UX_GATE_BLOCKED",
+  "source": "src/shared/workflows/app-navigation.workflow.ts",
+  "routes": [
+    {
+      "id": "dashboard",
+      "path": "/dashboard",
+      "routeSegment": "dashboard",
+      "sidebarLabel": "仪表盘",
+      "configurationRequiresLibrary": false,
+      "scope": "application",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "downloads",
+      "path": "/tasks",
+      "routeSegment": "tasks",
+      "sidebarLabel": "任务中心",
+      "configurationRequiresLibrary": false,
+      "scope": "application",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "library",
+      "path": "/library",
+      "routeSegment": "library",
+      "sidebarLabel": "素材工作区",
+      "configurationRequiresLibrary": true,
+      "scope": "library",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "connected-libraries",
+      "path": "/connected-libraries",
+      "routeSegment": "connected-libraries",
+      "sidebarLabel": "Eagle 连接库",
+      "configurationRequiresLibrary": false,
+      "scope": "application",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "legacy-library",
+      "path": "/legacy-library",
+      "routeSegment": "legacy-library",
+      "sidebarLabel": "找回旧素材",
+      "configurationRequiresLibrary": false,
+      "scope": "application",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "tag-manager",
+      "path": "/tag-manager",
+      "routeSegment": "tag-manager",
+      "sidebarLabel": "标签管理",
+      "configurationRequiresLibrary": true,
+      "scope": "library",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "model-library",
+      "path": "/ai/local-models",
+      "routeSegment": "ai/local-models",
+      "sidebarLabel": "模型库",
+      "configurationRequiresLibrary": false,
+      "scope": "application",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "ai-console",
+      "path": "/ai/connections",
+      "routeSegment": "ai/connections",
+      "sidebarLabel": "AI 与模型",
+      "configurationRequiresLibrary": false,
+      "scope": "application",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    },
+    {
+      "id": "settings",
+      "path": "/settings",
+      "routeSegment": "settings",
+      "sidebarLabel": "设置",
+      "configurationRequiresLibrary": false,
+      "scope": "application",
+      "CU": "BLOCKED_INSTANCE_SELECTION"
+    }
+  ],
+  "aliases": {
+    "/ai-console": "/ai/connections",
+    "/model-library": "/ai/local-models",
+    "/downloads": "/tasks",
+    "/settings?section=ai": "/ai/connections"
+  },
+  "proposalHelpDelta": "actual help owner /about; package proposed /help is not claimed implemented",
+  "libraryViews": [
+    "all",
+    "folders",
+    "work",
+    "trash"
+  ],
+  "authority": "metadata never grants Main Library/Runtime permissions"
+}

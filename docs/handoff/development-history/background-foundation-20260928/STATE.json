@@ -1,0 +1,8 @@
+{
+  "state": "COMPLETED",
+  "currentTask": null,
+  "nextAction": "STOP",
+  "nextBatchAuthorized": false,
+  "sourceDigest": "db0db486be25dd0e33380f4094cefad95bb851632058e9b7c02cbd4869f1f121",
+  "completedAt": "2026-09-28T16:12:53.645055+00:00"
+}

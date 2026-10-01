@@ -1,0 +1,25 @@
+✔ actual openai SDK Worker valid (183.215791ms)
+✔ actual openai SDK Worker 429 (164.414292ms)
+✔ actual openai SDK Worker redirect (142.023042ms)
+✔ actual openai SDK Worker oversize (153.584375ms)
+✔ actual openai SDK Worker hang (136.799833ms)
+✔ actual anthropic SDK Worker valid (148.260792ms)
+✔ actual anthropic SDK Worker 429 (129.052334ms)
+✔ actual anthropic SDK Worker redirect (133.127292ms)
+✔ actual anthropic SDK Worker oversize (131.52775ms)
+✔ actual anthropic SDK Worker hang (132.264209ms)
+✔ production Worker admission google api-key prevents auth/refresh/inference network (99.319375ms)
+✔ production Worker admission openai oauth prevents auth/refresh/inference network (98.656333ms)
+✔ production Worker admission anthropic oauth prevents auth/refresh/inference network (98.624083ms)
+✔ production Worker admission openai-codex oauth prevents auth/refresh/inference network (105.30125ms)
+✔ production Worker admission github-copilot oauth prevents auth/refresh/inference network (98.704416ms)
+✔ production Worker admission github-copilot api-key prevents auth/refresh/inference network (101.380875ms)
+✔ production Worker rejects SDK-detected Anthropic subscription token disguised as API key (108.342708ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2316.259125

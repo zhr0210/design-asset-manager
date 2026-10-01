@@ -1,0 +1,7 @@
+{
+  "state": "ACCEPTED_LIMITED_DEVELOPMENT_MAIN",
+  "digest": "000e649d2b01c982aa8b4c4097c195b88d651a2f6a434e73cecd70991d5f2f13",
+  "reviewer": "c04_decision_review",
+  "acceptedAt": "2026-09-27T07:41:02.820725+00:00",
+  "scope": "generated temporary libraries and local development Main only"
+}

@@ -1,0 +1,13 @@
+{
+  "scope": "document package internal consistency only",
+  "jsonParses": true,
+  "stageDependenciesAcyclic": true,
+  "localMarkdownLinksResolve": true,
+  "candidateCount": 27,
+  "cuCases": 32,
+  "realAuthCases": 3,
+  "allPlanStagesNotStarted": true,
+  "actualApplicationTestsRunForThisPackage": false,
+  "actualComputerUseRun": false,
+  "historicalArchivesDuplicated": false
+}

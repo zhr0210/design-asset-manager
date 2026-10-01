@@ -1,0 +1,13 @@
+✔ Main opaque host ID persists across fresh instances and refuses malformed/symlink records (2.133792ms)
+✔ select contract is bounded and cannot retain arbitrary SDK fields or accept unknown options (0.20125ms)
+✔ Main selection answers require active operation and current prompt; cancel and A-B-A late answers reject (2.32475ms)
+✔ expired login prompt rejects answers immediately and keeps account configuration unchanged (520.438917ms)
+✔ Main supplies one stable host ID for multiple contract Workers; guarded registration requires stable identity (5.597917ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 538.677875

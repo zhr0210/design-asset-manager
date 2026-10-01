@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/pi-provider-admission.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.253,
+  "sha256": "d8467e8a0b8691b31bc674967d1210e51707531ca68e424acaaa8d170aee1666"
+}

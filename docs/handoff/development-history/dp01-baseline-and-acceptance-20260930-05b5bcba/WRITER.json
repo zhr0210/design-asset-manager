@@ -1,0 +1,8 @@
+{
+  "owner": "root",
+  "mode": "single-code-writer",
+  "pid": 38380,
+  "pidIsBootstrapNotDurableWriter": true,
+  "boundary": "cooperative not OS-wide isolation",
+  "otherThreadAgents": "completed read-only reviewers; no other active code agent observed"
+}

@@ -1,0 +1,10 @@
+
+> design-asset-manager@1.0.0 context:check
+> node scripts/agent-context-router.mjs check
+
+Agent Context Router check: FAIL
+Snapshot: 3fa00df3bbb6 (dirty working tree)
+Tracked first-party source ownership: 602/602 owned; 443 excluded
+ERROR MISSING_ANCHOR: Route ai-runtime first-read item anchor "fetchConsoleStatus" is absent from src/renderer/routes/AiConsolePage.tsx.
+ERROR MISSING_ANCHOR: Route model-library first-read item anchor "ModelsWorkspace" is absent from src/renderer/routes/AiConsolePage.tsx.
+WARN UNTRACKED_FIRST_PARTY_SOURCE: 90 untracked first-party source file(s) were excluded from trusted ownership coverage.

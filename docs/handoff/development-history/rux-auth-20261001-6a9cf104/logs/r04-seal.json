@@ -1,0 +1,10 @@
+{
+  "command": [
+    "node",
+    "scripts/seal-pi-runtime.mjs"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 2.498,
+  "sha256": "4104bb133a44a53ddb42d4b578277c2d37494266abae004e25269d68cb47ce9e"
+}

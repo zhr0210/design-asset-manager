@@ -1,0 +1,127 @@
+{
+  "reports": [
+    {
+      "report": "logs/independent-auth-closure.md",
+      "sha256": "d357a909f2684962ffd801cbed0abda67390801b4917b7f464592e4cb0b884d6",
+      "sourceChecks": [
+        {
+          "source": "src/main/ai-gateway/ai-connection-service.ts",
+          "expected": "5cdcf447306e9b15eabc970aea4b065347faa08d1aca0340b2d7f9eb3494488f",
+          "match": true
+        },
+        {
+          "source": "src/main/ai-credentials/credential-vault.ts",
+          "expected": "1073c2097b8d641205cfc67e81de8266cfcfe9a61ef126171baeb8f40d01a367",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/openai-chatgpt-auth.mjs",
+          "expected": "b9e206d542a8a28aec683451213c7e547a21359f889f392de8ec993544d54df7",
+          "match": true
+        },
+        {
+          "source": "src/renderer/components/asset/PiConnectionsPanel.tsx",
+          "expected": "f3ac3ae2ee3e807077d4dd314fcb811fc72ff356472f1e9012227604760b52ee",
+          "match": true
+        }
+      ],
+      "evidenceRole": "independent read-only source; not independent test execution"
+    },
+    {
+      "report": "logs/independent-ui-cleanup-closure.md",
+      "sha256": "7d9995747a2b82826aa1fe5f7047b88a6e49266613ddccf24f8d2cd26439979a",
+      "sourceChecks": [
+        {
+          "source": "src/renderer/routes/Settings.tsx",
+          "expected": "7c22d9f0739ad1fad1a05b178842eba3cffca0fdda8813cb03f31d12069352aa",
+          "match": true
+        },
+        {
+          "source": "src/renderer/routes/AiWorkspace.tsx",
+          "expected": "387a970fd233ff8ba052dc0dd739f691bf6681b43ee9cb2184a20bb2fd86ff19",
+          "match": true
+        },
+        {
+          "source": "src/renderer/routes/AiConsolePage.tsx",
+          "expected": "8cf5d2f4c4505fd34155577f68cd3157e8526dedbfba2d897603c15f4b4a2caa",
+          "match": true
+        },
+        {
+          "source": "src/renderer/components/asset/PiConnectionsPanel.tsx",
+          "expected": "f3ac3ae2ee3e807077d4dd314fcb811fc72ff356472f1e9012227604760b52ee",
+          "match": true
+        },
+        {
+          "source": "src/renderer/components/asset/TaskModelSettings.tsx",
+          "expected": "d3e68620de36c0d9fab77a1e842b7e83959b34c865cb3bd16c1af9ad4f13dc5c",
+          "match": true
+        },
+        {
+          "source": "src/renderer/README.md",
+          "expected": "21ebc01987a3f3ed721c21b1696a75b39b84c3999bb84a95fd3b15bd83b0b71b",
+          "match": true
+        }
+      ],
+      "evidenceRole": "independent read-only source; not independent test execution"
+    },
+    {
+      "report": "logs/independent-graph-moves-closure.md",
+      "sha256": "b615df7905b1d377533386047a0b385f89b0d4e7441c3afc388c85129df92430",
+      "sourceChecks": [
+        {
+          "source": "src/shared/build-identity.generated.ts",
+          "expected": "2a3609e5336b87fa86ff466446d0bd1ce8f244e04469e7698f1d8d9a051f3ba2",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/auth-interaction.mjs",
+          "expected": "b7e88217ec26b771e385eff79abce8c8aba975ced6f57387a6996bec1907d774",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/auth-protocol.json",
+          "expected": "36d83e6560a527a3df50583efb496de80cac533a5f491444d55ac71fc77570fa",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/openai-chatgpt-auth.mjs",
+          "expected": "b9e206d542a8a28aec683451213c7e547a21359f889f392de8ec993544d54df7",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/package-lock.json",
+          "expected": "a50057bd230358a0100db41cb790d6f530ad58da794e04233c0b79fb6cd164e0",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/package.json",
+          "expected": "b2b20d94ae0b0f45ecdb31bce12270e3a81fff40729cd130fc92cb7eeab78fa3",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/provider-policy.json",
+          "expected": "460065ad6609408cb17b324d52653aa8118dccf441128c5419b48a078ca5b50e",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/release.json",
+          "expected": "a93f68a80369ad3cd6ce1f583d8a7cf0110b14545f6c2244c42a4dba4b27287f",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/runtime-artifact.json",
+          "expected": "93ce915983628dde3b3b374937d9240771f2ad70da1c028d2ba8da9e3c5da05f",
+          "match": true
+        },
+        {
+          "source": "pi-runtime/worker.mjs",
+          "expected": "ddbcf958c314ab53deb91c0e189a32b04f8d684fdeb66ab9b79a1cff71ca113d",
+          "match": true
+        }
+      ],
+      "evidenceRole": "independent read-only source; not independent test execution"
+    }
+  ],
+  "graphAndGenerator": "matching hashes in independent final append verified by root",
+  "agentFinalEvent": "quota error after appended report write; no independent test rerun claimed"
+}

@@ -1,0 +1,13 @@
+✔ saving non-secret model configuration does not send API key or start model inference (259.490625ms)
+✔ Codex subscription selects OAuth and disallows API key or no-auth (104.655291ms)
+✔ standard UI exposes guarded ChatGPT login while Google inference and Anthropic subscription stay restricted (137.504291ms)
+✔ page unmount does not cancel an App-owned login, including a late start receipt (120.222125ms)
+✔ model directory failure retains manual model ID and a visible explanation (88.250458ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1912.911

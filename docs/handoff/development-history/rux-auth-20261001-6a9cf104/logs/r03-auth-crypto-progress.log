@@ -1,0 +1,17 @@
+✔ real crypto verifies signature/issuer/audience/expiry/nonce/account and rejects unsigned variants (4.765917ms)
+✔ controlled auth transport checks destinations/methods, raw bytes, redirects and retained spent attempts (2.847584ms)
+✔ callback enforces exact loopback, state, issued registration and one selected client (0.343875ms)
+✔ full public-client sign-in uses stable host and DAM registration, validates identity before result, reuses issued client (12.725542ms)
+✔ refresh preserves client/verified identity/hint when no new ID token; wrong replacement identity rejects (1.555458ms)
+✔ verified identity without plan permission is kept but cannot derive inference auth (0.9775ms)
+✔ signed refresh identity for another account cannot replace original registration (1.350833ms)
+✔ cancel during login releases owned callback and makes zero token requests (0.352125ms)
+✔ auth 429 has one physical attempt, no automatic retry and no raw error body (0.147ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 317.579625

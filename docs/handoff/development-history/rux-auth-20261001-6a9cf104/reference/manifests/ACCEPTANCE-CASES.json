@@ -1,0 +1,360 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "U01",
+      "title": "首次未开库到AI连接",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U02",
+      "title": "已开空库到AI及返回",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U03",
+      "title": "开库失败仍可配置账号",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U04",
+      "title": "关库后全局入口可用",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U05",
+      "title": "1024宽度无拖窗或弹层遮挡",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U06",
+      "title": "1440及明暗导航一致",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U07",
+      "title": "键盘可达及焦点恢复",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U08",
+      "title": "素材配置返回完整上下文",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U09",
+      "title": "原生卡片配置返回统一",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U10",
+      "title": "任务中心来源与控制准确",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U11",
+      "title": "普通模式建立本机连接",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U12",
+      "title": "旧连接编辑及取消保留身份",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U13",
+      "title": "安全密钥输入与不回显",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U14",
+      "title": "登录启动与浏览器等待",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U15",
+      "title": "浏览器返回不提前宣告完成",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U16",
+      "title": "有效拒绝授权立即结束",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U17",
+      "title": "取消及迟到回调不覆盖",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U18",
+      "title": "离开页面再返回登录仍可控",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U19",
+      "title": "未回调提示同机与重试",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U20",
+      "title": "错误阶段明确且旧账号保护",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U21",
+      "title": "身份无计划scope单独显示",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U22",
+      "title": "重启后账号状态持久",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U23",
+      "title": "目录与图片验证分离",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U24",
+      "title": "过时事件及答案隔离",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U25",
+      "title": "原生导入与基础浏览检索",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U26",
+      "title": "人工标签描述OCR修订保护",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U27",
+      "title": "文件夹色板正确归属",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U28",
+      "title": "工作集及原生窗口恢复",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U29",
+      "title": "回收站与引用移除语义",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U30",
+      "title": "旧控制台无虚假有效操作",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U31",
+      "title": "可见构建与无秘密诊断",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "U32",
+      "title": "全局返回无配置孤岛",
+      "evidenceType": "COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresVisibleStart": true,
+      "privilegedShortcutsAllowed": false,
+      "realVendorNetworkAllowedByDefault": false,
+      "scenarioDetails": "06-COMPUTER-USE-ACCEPTANCE.md#5"
+    },
+    {
+      "id": "A01",
+      "title": "指定真实账号同机浏览器登录完成",
+      "evidenceType": "REAL_AUTH_AND_COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresSeparateUserAssistanceAndAuthorization": true,
+      "inferenceAllowed": false
+    },
+    {
+      "id": "A02",
+      "title": "同一受控profile重启恢复账号状态",
+      "evidenceType": "REAL_AUTH_AND_COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresSeparateUserAssistanceAndAuthorization": true,
+      "inferenceAllowed": false
+    },
+    {
+      "id": "A03",
+      "title": "用户登出后状态与旧执行权撤销",
+      "evidenceType": "REAL_AUTH_AND_COMPUTER_USE",
+      "status": "NOT_RUN",
+      "requiresSeparateUserAssistanceAndAuthorization": true,
+      "inferenceAllowed": false
+    }
+  ],
+  "additionalBackendRequired": [
+    "valid-state denial settles; wrong-state denial does not kill valid attempt",
+    "same-connection refresh/login/logout serialized",
+    "token response/identity/Vault failures preserve previous account",
+    "current code does not accept unsupported Provider pathways",
+    "no secrets in safe errors, protocol, logs and reports",
+    "source/build stale evidence rejected",
+    "deletion proof includes tests/scripts/packaging/worker roots",
+    "temporary Host protects user edits/results/source/close authority"
+  ],
+  "notAnActualTestRun": true
+}

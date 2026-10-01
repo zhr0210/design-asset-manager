@@ -1,0 +1,21 @@
+{
+  "sourceRemovals": "Five dead/no-test-consumer modules; no test deletion",
+  "legacyConsoleSourceTests": "Retained platform adapter assertions independently; default console assertions migrate to thin export/no disabled polling/current panels",
+  "promptRoute": "Current controlled preview transport/IPC; explicit native provider retained as target/historical investigation, not live authority",
+  "ui": [
+    "guided local/API/ChatGPT",
+    "dirty config guards",
+    "page unload preserves Main attempt"
+  ],
+  "CU": "NOT_RUN_PENDING_INSTANCE_SELECTION",
+  "testOnlyMoves": [
+    "scripts/ai-console-status-module.test.ts → scripts/test-support",
+    "scripts/model-library-workspace-renderer.test.ts → scripts/test-support"
+  ],
+  "sourceContracts": {
+    "Doctor": "disabled Settings mount retired, current help/diagnostic links positive, all safety checks retained; PASS",
+    "readiness": "all deterministic model readiness/mapper cases retained; retired console actions absent, actual workspace owner positive; PASS",
+    "runtime": "legacy projector cases retained; all-src platform assertion left strict; FAIL_RETAINED, 13 baseline Main comparator consumers"
+  },
+  "noTestsDeleted": true
+}

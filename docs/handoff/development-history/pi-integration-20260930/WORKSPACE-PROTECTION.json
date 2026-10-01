@@ -1,0 +1,15 @@
+{
+  "baselineFiles": 2715,
+  "modifiedBaselineFiles": 28,
+  "addedOwnedFiles": 29,
+  "missing": [],
+  "unexpectedModified": [],
+  "beforeSnapshotsMatchBaseline": true,
+  "stagedDiffSha256Before": "4b129649df3d6d4b4e852cf2c02ea7c70278fe554d1864812c79ae07fdaf9d12",
+  "stagedDiffSha256After": "4b129649df3d6d4b4e852cf2c02ea7c70278fe554d1864812c79ae07fdaf9d12",
+  "stagedDiffUnchanged": true,
+  "indexByteSha256Before": "af6cc87591e92b88c8fd1329aced01d0fa0e67e308504316596606532777b1b4",
+  "indexByteSha256After": "02a3f8d2c8b1fcdd7878086b3ad5e914ae71a1d2070ba7683ff74dbd03f2576d",
+  "indexByteUnchanged": false,
+  "indexByteLimitation": "Raw index bytes differ; original index not retained, attribution unknown. No restore/add/commit performed. Staged diff content remains identical."
+}

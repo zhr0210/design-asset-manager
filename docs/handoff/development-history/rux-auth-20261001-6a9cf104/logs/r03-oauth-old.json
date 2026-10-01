@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/pi-oauth.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.25,
+  "sha256": "b0cc8efca5e82c846a9daa1a0e7510341a95f4d8d9299c61f06b8c8e1beb001c"
+}

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/pi-electron.e2e.test.mjs"
+  ],
+  "exitCode": 1,
+  "timeout": false,
+  "seconds": 24.064,
+  "sha256": "6f9423bb9e0d78feed1665aa6cb0a28f43ba1ed1cba8cdb2f13a388500bd3f37"
+}

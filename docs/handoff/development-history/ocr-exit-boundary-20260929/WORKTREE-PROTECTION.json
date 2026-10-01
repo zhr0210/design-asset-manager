@@ -1,0 +1,14 @@
+{
+  "baselineFileCount": 2697,
+  "approvedModified": [
+    "src/main/ocr/README.md",
+    "src/main/ocr/local-ocr-process.ts",
+    "src/main/ocr/ocr-controller.ts",
+    "TASK.md",
+    "src/main/index.ts"
+  ],
+  "unexpectedModified": [],
+  "missing": [],
+  "indexPreserved": true,
+  "stagedPreserved": true
+}

@@ -1,0 +1,22 @@
+✖ formal Pi configuration, encrypted credential, models, task assignment and generated-asset analysis (23703.701875ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23981.228125
+
+✖ failing tests:
+
+test at scripts/pi-electron.e2e.test.mjs:12:7
+✖ formal Pi configuration, encrypted credential, models, task assignment and generated-asset analysis (23703.701875ms)
+  locator.click: Timeout 18000ms exceeded.
+  Call log:
+  [2m  - waiting for getByRole('region', { name: '连接与账号', exact: true }).getByRole('button', { name: '核对生成图片能力验证' })[22m
+  
+      at TestContext.<anonymous> (<DAM_WORKSPACE>/scripts/pi-electron.e2e.test.mjs:24:55)
+      at async file://<DAM_WORKSPACE>/scripts/pi-electron.e2e.test.mjs:12:1 {
+    name: 'TimeoutError'
+  }

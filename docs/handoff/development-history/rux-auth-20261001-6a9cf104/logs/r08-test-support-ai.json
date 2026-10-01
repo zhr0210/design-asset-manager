@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/ai-console-status-module.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.122,
+  "sha256": "7bf094e4011732dbf8bae9e5e53ef31a9734258800ccfa743c46baac8cc43133"
+}

@@ -1,0 +1,44 @@
+{
+  "anchorVersion": 2,
+  "runId": "rux-auth-20261001-6a9cf104",
+  "executionState": "COMPLETED",
+  "action": "STOP",
+  "completionScope": "RUX code and bounded isolated validation handoff; Computer Use blocked, real authentication not run, legacy Runtime source-policy regression retained",
+  "productGoalComplete": false,
+  "reviewStatus": "PASS",
+  "reviewScope": "independent source auth/UI cleanup, 5 deletion+2 moves and static graph method; no independent test rerun/CU/real-auth",
+  "verificationStatus": "VERIFIED_ISOLATED",
+  "implementation": "CODE_IMPLEMENTED_SCOPED",
+  "contractEvidence": "TARGETED_PASS; one legacy Runtime source-policy regression FAIL_RETAINED",
+  "uiIntegration": "PASS_TARGETED_CONTROLLED; no product CU acceptance claim",
+  "computerUse": "BLOCKED_UX_ACCEPTANCE_INSTANCE_SELECTION",
+  "realAuthentication": "AUTH_REAL_NOT_RUN",
+  "safeCleanup": "5 SOURCE_DELETIONS_PASS + 2 TEST_SUPPORT_MOVES_PASS",
+  "buildId": "dam-3c75658c506c8e70",
+  "build": "CURRENT_SOURCE_BUILD_MATCH/typecheck PASS",
+  "source": {
+    "aggregateSha256": "0ec53bd995145a8497f63ef5d6909a69aaf2c966c102bebf1ebe07678d31a721",
+    "fileCount": 668
+  },
+  "sourceManifest": "SOURCE-MANIFEST.json",
+  "fullWorkspaceSnapshot": false,
+  "report": "REPORT.md",
+  "review": "REVIEW.md",
+  "verification": "EVIDENCE-MAP.json",
+  "limitations": [
+    "Product usability/sign-in complaint remains unclosed because final native CU is blocked.",
+    "One legacy all-src Runtime source-policy regression is RED, 13 baseline Main comparator consumers; no assertion bypass.",
+    "Independent source-only signatures do not prove full regression or usability; final review task orchestration hit quota after graph append was written and hash-bound.",
+    "No Windows/installer/real model/Keychain validation.",
+    "Incremental body cannot replace entire pre-existing WIP; hash-merge against before.",
+    "Late handoff-only Runtime source-path guard correction verified with 28 local anchor tests; independent code reviewers did not review this utility supplement."
+  ],
+  "notRun": [
+    "U01-U32 final native Computer Use",
+    "A01-A03 real subscription authentication",
+    "real credentials/user libraries/weights",
+    "paid inference/material external sending"
+  ],
+  "nextBatchAuthorized": false,
+  "automaticResume": false
+}

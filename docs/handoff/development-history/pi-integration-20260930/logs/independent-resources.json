@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/pi-runtime-packaging.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 9.8,
+  "sha256": "405ce66342c64ff5fc6298d7c2bc1b03fce47de44d426b352c89e7835636858e"
+}

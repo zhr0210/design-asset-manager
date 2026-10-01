@@ -1,0 +1,20 @@
+{
+  "status": "CURRENT_SOURCE_BUILD_MATCH",
+  "identity": {
+    "buildId": "dam-3c75658c506c8e70",
+    "sourceDigest": "3c75658c506c8e70d6bbfea3fa43fa4f700c02736f41e53a701d60429691d261",
+    "builtAt": "2026-09-30T21:15:53.080Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 620
+  },
+  "readonlyRecomputed": true,
+  "entry": "out/main/index.js",
+  "visibleEntry": "About/帮助与当前构建",
+  "ComputerUse": "BLOCKED_INSTANCE_SELECTION",
+  "installation": "NOT_RUN",
+  "outHashes": {
+    "out/main/index.js": "65cfec64cb26a1b8bc9007929a2a7b2c21ae119a098a6e91cf76bb5fe7dd0eed",
+    "out/preload/index.cjs": "24fbec27d58937270938753c2e8b9628cdf26c4785c7c3ba980ecdda1ec40e3c",
+    "out/renderer/index.html": "5b361423935f41059433c486020def0670edd73501c544084b5a64c02d4409ae"
+  }
+}

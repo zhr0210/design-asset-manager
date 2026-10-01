@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /projectCooperativeModelRowDisplay/. Input:
+
+'/** Historical route component; canonical registry owns its destination. */\n' +
+  "export {default} from './AiWorkspace'\n"
+
+    at file://<DAM_WORKSPACE>/dist-temp/tests/model-artifact-readiness-display.test.mjs:419:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '/** Historical route component; canonical registry owns its destination. */\n' +
+    "export {default} from './AiWorkspace'\n",
+  expected: /projectCooperativeModelRowDisplay/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v25.8.0

@@ -1,3 +1,5 @@
+> 换主机继续开发：[REHOST](docs/REHOST.md) · [当前交接状态](docs/handoff/CURRENT-STATE.md) · `node scripts/handoff-preflight.mjs`（离线只读）。
+
 > 2026-10-01 完整源码快照与当前限制：[GitHub snapshot notes](docs/agents/GITHUB-SNAPSHOT-20261001.md)。Computer Use 和真实账号验收尚未完成；本分支不是安装包或全面可用承诺。
 
 # Design Asset Manager

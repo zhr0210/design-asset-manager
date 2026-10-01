@@ -1,0 +1,568 @@
+{
+  "candidateDigest": "ea7fc678678c16714fffdbb4c3836adc0bd7b8aeab52eadb2f946865364716c3",
+  "aggregateDigest": "db0db486be25dd0e33380f4094cefad95bb851632058e9b7c02cbd4869f1f121",
+  "records": [
+    {
+      "label": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-09-28T15:46:55.519471+00:00",
+      "finishedAt": "2026-09-28T15:46:58.013529+00:00",
+      "exitCode": 0,
+      "logSha256": "9e6bb4a3e3f10dcc693d6571cae5f312728e18fdcf5d07a5389b42323cbb8698",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "build-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-09-28T15:51:35.469883+00:00",
+      "finishedAt": "2026-09-28T15:51:37.794753+00:00",
+      "exitCode": 0,
+      "logSha256": "637ec318411dbf3b4cd153daeedff44b5a8a6c6d8ee4ae6541519e9d305929ee",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "build-typography-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-09-28T15:58:16.143665+00:00",
+      "finishedAt": "2026-09-28T15:58:18.544181+00:00",
+      "exitCode": 0,
+      "logSha256": "b0bed73b8e52ed3794a2f67012cabc4b34a0296fdb66632e84d676f4c9945c17",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "build-visual-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-09-28T15:53:25.394991+00:00",
+      "finishedAt": "2026-09-28T15:53:27.733448+00:00",
+      "exitCode": 0,
+      "logSha256": "06b7e5544081c9966121603ceda076f42b18fe2df6ed28beda4be46cc25fad30",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "formal-final",
+      "command": [
+        "node",
+        "scripts/background-analysis-electron.e2e.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:51:37.822837+00:00",
+      "finishedAt": "2026-09-28T15:51:43.192437+00:00",
+      "exitCode": 0,
+      "logSha256": "96b4368aa86b40f3e24047c2c43773df8713adcdb0c11033995ca4f12e0dc5b0",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 1,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "formal-first",
+      "command": [
+        "node",
+        "scripts/background-analysis-electron.e2e.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:46:58.046038+00:00",
+      "finishedAt": "2026-09-28T15:47:03.605997+00:00",
+      "exitCode": 0,
+      "logSha256": "79a9756dbfd1d1772c2b68f8af5a0b003ee3c9de114788db9ba563e7205170b2",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 1,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "formal-typography-final",
+      "command": [
+        "node",
+        "scripts/background-analysis-electron.e2e.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:58:18.575083+00:00",
+      "finishedAt": "2026-09-28T15:58:24.140835+00:00",
+      "exitCode": 0,
+      "logSha256": "b860f9b898c6c1aae1c7e7a7ccce2756d7888d0a7b0231fed30afda58974a72d",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 1,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "formal-visual-final",
+      "command": [
+        "node",
+        "scripts/background-analysis-electron.e2e.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:53:27.762167+00:00",
+      "finishedAt": "2026-09-28T15:53:33.211593+00:00",
+      "exitCode": 0,
+      "logSha256": "0c7a5ec6a6bdda01ce3c0bff53beabd1e69fe145d6e6b6afd184deb4522ee1d4",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 1,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "host-final",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:46:48.187956+00:00",
+      "finishedAt": "2026-09-28T15:46:50.216563+00:00",
+      "exitCode": 0,
+      "logSha256": "5b6b37798dc6e35668e6d01730e1928c396287fb51b0a5c5e96c815bc98d22a3",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 18,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "host-final-02",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:06.932444+00:00",
+      "finishedAt": "2026-09-28T15:51:09.000896+00:00",
+      "exitCode": 0,
+      "logSha256": "fcc6169a7ba4f5b2a526f4fb9e9cbcdab017b0a027170ddaf501da5c0008658a",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 19,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "host-matrix-01",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:33:46.740714+00:00",
+      "finishedAt": "2026-09-28T15:33:48.356102+00:00",
+      "exitCode": 1,
+      "logSha256": "8fba5812bf1be2d07718d2a2482143aff56f21dd2a6c5014b005e01bebe36457",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 13,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "host-matrix-02",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:35:27.059911+00:00",
+      "finishedAt": "2026-09-28T15:35:28.683721+00:00",
+      "exitCode": 0,
+      "logSha256": "968abea661a0f18d421286629a0adbf7de8e827fda4bc5c9b6c564ae2de1241d",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 13,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "host-matrix-03",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:37:59.328463+00:00",
+      "finishedAt": "2026-09-28T15:38:01.249180+00:00",
+      "exitCode": 1,
+      "logSha256": "012109420bc4df3ca0b18eeae31845bbae1d90125431f1ce7da0dd64b1728866",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 17,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "host-matrix-04",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:44:19.021980+00:00",
+      "finishedAt": "2026-09-28T15:44:20.846865+00:00",
+      "exitCode": 0,
+      "logSha256": "8d240b9d4ec761a3d946fa0de5aec81e81a64a2563b15731f007756b9634543a",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 17,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "intent-green",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:24:13.846649+00:00",
+      "finishedAt": "2026-09-28T15:24:14.438239+00:00",
+      "exitCode": 0,
+      "logSha256": "fe7a91756b45148aa70b7d2c90956c6cbc8e7562a8ed7b9613373774ba26f08a",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 1,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "intent-red",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:21:46.276408+00:00",
+      "finishedAt": "2026-09-28T15:21:46.991835+00:00",
+      "exitCode": 1,
+      "logSha256": "4a0730e2f9e1d90b4d729a835d40ff5c5d5d4562092be92568d022d2d0918f7d",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 1,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "policy-final",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/background-resource-policy.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:09.041650+00:00",
+      "finishedAt": "2026-09-28T15:51:09.179735+00:00",
+      "exitCode": 0,
+      "logSha256": "896dbe6803348e1101834ade19c9f408c3f809c8f67325284ac0d4b5879b7c34",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 4,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "regression-active-library-host",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/active-library-host.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:32.866398+00:00",
+      "finishedAt": "2026-09-28T15:51:33.230489+00:00",
+      "exitCode": 0,
+      "logSha256": "9e631fcf99bd925a0b506e218deeefd763fd70ccece260580fd5e666d702ee72",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "regression-asset-ocr-storage",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/asset-ocr-storage.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:32.536881+00:00",
+      "finishedAt": "2026-09-28T15:51:32.838049+00:00",
+      "exitCode": 0,
+      "logSha256": "24e0c2dff827cbaa9079acee0803c6ddb51b28ef8b3492b9f0a6beff25199ba6",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "regression-independent-tag-intent.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/independent-tag-intent.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:14.012735+00:00",
+      "finishedAt": "2026-09-28T15:51:16.374840+00:00",
+      "exitCode": 0,
+      "logSha256": "4839663f7343077d28d46bb61ec1248f101c3e4bc9fd15c5c92da844d1e22d2e",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 30,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "regression-tag-batch.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-batch.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:25.413568+00:00",
+      "finishedAt": "2026-09-28T15:51:28.939549+00:00",
+      "exitCode": 0,
+      "logSha256": "cb7dd86c24ae6b78ecf392c8fc50e8f53a215d9480397f97d4f6db79126a9df3",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 12,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "regression-tag-decision.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-decision.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:23.323677+00:00",
+      "finishedAt": "2026-09-28T15:51:25.385665+00:00",
+      "exitCode": 0,
+      "logSha256": "125758b092ad45f06c3768c1e7f14ab8d7827429f2a91d3e4bd6b92ba6e0cae4",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 13,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "regression-tag-execution.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-execution.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:16.405258+00:00",
+      "finishedAt": "2026-09-28T15:51:23.291718+00:00",
+      "exitCode": 0,
+      "logSha256": "ac828d707451c17527893dfe667716bd7fb8b11b20ccbd659a5e5f88074a5d42",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 30,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "regression-tag-recovery.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-recovery.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:28.971243+00:00",
+      "finishedAt": "2026-09-28T15:51:32.508705+00:00",
+      "exitCode": 0,
+      "logSha256": "076204b4cc38ba7a5586bb1082fdb4f0a58354e48cc940a20dd17e21cd1b7d8a",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 22,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "regression-visual-ai-provider.integration",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/visual-ai-provider.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:51:33.259079+00:00",
+      "finishedAt": "2026-09-28T15:51:35.440467+00:00",
+      "exitCode": 0,
+      "logSha256": "8e5e85aa7ecb0ba96c3510a427b1ef6b93d3de7a2b2f5d1f49978a6a115a74c4",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 9,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "resource-policy",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/background-resource-policy.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:26:59.858439+00:00",
+      "finishedAt": "2026-09-28T15:27:00.051740+00:00",
+      "exitCode": 0,
+      "logSha256": "d9174a5b4feb7777b3b645e1b12fa48d4da82d69ec126d7b202fb5a86c16d99c",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 4,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "revision-boundary-red",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T15:49:41.354403+00:00",
+      "finishedAt": "2026-09-28T15:49:43.381868+00:00",
+      "exitCode": 1,
+      "logSha256": "b3a675b5e3ad3f6e66cdffe50b7e245fcf96421302c53980ff5e68f88020b02d",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 19,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "typecheck-final",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-28T15:46:50.246805+00:00",
+      "finishedAt": "2026-09-28T15:46:55.482196+00:00",
+      "exitCode": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "typecheck-final-02",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-28T15:51:09.208752+00:00",
+      "finishedAt": "2026-09-28T15:51:13.979845+00:00",
+      "exitCode": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "typecheck-first",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-09-28T15:30:37.088202+00:00",
+      "finishedAt": "2026-09-28T15:30:42.136864+00:00",
+      "exitCode": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": null,
+      "kind": "typecheck-build-or-assertion-script"
+    },
+    {
+      "label": "ui-final",
+      "command": [
+        "node",
+        "scripts/background-analysis-ui.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:53:24.032484+00:00",
+      "finishedAt": "2026-09-28T15:53:25.364167+00:00",
+      "exitCode": 0,
+      "logSha256": "36b5194f93c8890ac49f3da182f11a6def16434afae59c77f3ed40f3de7eff51",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 2,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "ui-review-green",
+      "command": [
+        "node",
+        "scripts/background-analysis-ui.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:44:17.621067+00:00",
+      "finishedAt": "2026-09-28T15:44:18.989602+00:00",
+      "exitCode": 0,
+      "logSha256": "adb63132733c396f4b6d2b8649b4da95a7cc3c72bf2c70320fc9f23e585a1b69",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 2,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "ui-review-red",
+      "command": [
+        "node",
+        "scripts/background-analysis-ui.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:42:17.776084+00:00",
+      "finishedAt": "2026-09-28T15:42:19.250345+00:00",
+      "exitCode": 1,
+      "logSha256": "ef43170d101853d3d07dc4cb07f21c35c421f173fab0e991bcca83e2e3aacf87",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 2,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "ui-typography-final",
+      "command": [
+        "node",
+        "scripts/background-analysis-ui.test.mjs"
+      ],
+      "startedAt": "2026-09-28T15:58:14.759588+00:00",
+      "finishedAt": "2026-09-28T15:58:16.106957+00:00",
+      "exitCode": 0,
+      "logSha256": "1f10b21b021d554fe380e9a8efee4a52599c31404bed155e789833e1860c7597",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 2,
+      "kind": "counted-tests"
+    },
+    {
+      "label": "host-resume-final",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/background-analysis.integration.test.ts"
+      ],
+      "startedAt": "2026-09-28T16:07:01.153811+00:00",
+      "finishedAt": "2026-09-28T16:07:03.272090+00:00",
+      "exitCode": 0,
+      "logSha256": "c04bc5dafd3bf8a1a32e37ab5921f34087789465b6cc4743c6efd0c3483e6a4f",
+      "scope": "generated owned fixtures only; no model or user library",
+      "timeoutSeconds": 240,
+      "discoveredTestCount": 19,
+      "kind": "counted-tests"
+    }
+  ],
+  "noZeroTestClaim": true,
+  "notRun": [
+    "automatic inference",
+    "runtime qualification",
+    "real user libraries/models",
+    "Windows",
+    "installer/signing",
+    "full resource governor"
+  ],
+  "historicalEvidence": "Prior stage logs retained as history. Regressions below, not inherited PASS, qualify touched paths."
+}

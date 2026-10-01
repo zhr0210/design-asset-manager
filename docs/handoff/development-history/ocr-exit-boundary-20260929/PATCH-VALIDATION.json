@@ -1,0 +1,7 @@
+{
+  "exitCode": 0,
+  "stdout": "patching file 'src/main/ocr/local-ocr-process.ts'\npatching file 'src/main/ocr/ocr-controller.ts'\npatching file 'src/main/ocr/README.md'\npatching file 'src/main/index.ts'\npatching file 'scripts/ocr-process-lifecycle.test.ts'\npatching file 'scripts/ocr-controller-lifecycle.test.ts'\npatching file 'scripts/ocr-exit-electron.e2e.test.mjs'\npatching file TASK.md\n",
+  "stderr": "",
+  "filesRebuilt": 8,
+  "mismatches": []
+}

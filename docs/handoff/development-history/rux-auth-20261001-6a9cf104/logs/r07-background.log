@@ -1,0 +1,185 @@
+TAP version 13
+# Subtest: plan enrollment never grants OCR execution; explicit v12 upgrade and fresh session permission
+ok 1 - plan enrollment never grants OCR execution; explicit v12 upgrade and fresh session permission
+  ---
+  duration_ms: 173.265209
+  ...
+# Subtest: atomic empty OCR + receipt, exact replay preserves later user correction, output conflict rejected
+ok 2 - atomic empty OCR + receipt, exact replay preserves later user correction, output conflict rejected
+  ---
+  duration_ms: 134.220417
+  ...
+# Subtest: revoke after sent rejects stale result with zero partial effect
+ok 3 - revoke after sent rejects stale result with zero partial effect
+  ---
+  duration_ms: 115.59525
+  ...
+# Subtest: pause after sent rejects stale result with zero partial effect
+ok 4 - pause after sent rejects stale result with zero partial effect
+  ---
+  duration_ms: 117.788416
+  ...
+# Subtest: source after sent rejects stale result with zero partial effect
+ok 5 - source after sent rejects stale result with zero partial effect
+  ---
+  duration_ms: 108.639708
+  ...
+# Subtest: preview after sent rejects stale result with zero partial effect
+ok 6 - preview after sent rejects stale result with zero partial effect
+  ---
+  duration_ms: 107.218416
+  ...
+# Subtest: ocr-revision after sent rejects stale result with zero partial effect
+ok 7 - ocr-revision after sent rejects stale result with zero partial effect
+  ---
+  duration_ms: 104.519833
+  ...
+# Subtest: reopen claimed requires fresh permission and never reclaims sent/unknown
+ok 8 - reopen claimed requires fresh permission and never reclaims sent/unknown
+  ---
+  duration_ms: 124.483375
+  ...
+# Subtest: reopen sent requires fresh permission and never reclaims sent/unknown
+ok 9 - reopen sent requires fresh permission and never reclaims sent/unknown
+  ---
+  duration_ms: 123.379541
+  ...
+# Subtest: reopen unknown requires fresh permission and never reclaims sent/unknown
+ok 10 - reopen unknown requires fresh permission and never reclaims sent/unknown
+  ---
+  duration_ms: 125.090125
+  ...
+# Subtest: terminal first intent cannot starve later work and failures do not hot-loop
+ok 11 - terminal first intent cannot starve later work and failures do not hot-loop
+  ---
+  duration_ms: 118.11825
+  ...
+# Subtest: v13 afterDdl failure has honest upgrade/grant state
+ok 12 - v13 afterDdl failure has honest upgrade/grant state
+  ---
+  duration_ms: 136.367167
+  ...
+# Subtest: v13 beforeCommit failure has honest upgrade/grant state
+ok 13 - v13 beforeCommit failure has honest upgrade/grant state
+  ---
+  duration_ms: 136.561166
+  ...
+# Subtest: v13 afterCommit failure has honest upgrade/grant state
+ok 14 - v13 afterCommit failure has honest upgrade/grant state
+  ---
+  duration_ms: 105.496
+  ...
+# Subtest: real Host chain requires separate grant, double ticks execute once and commit once
+ok 15 - real Host chain requires separate grant, double ticks execute once and commit once
+  ---
+  duration_ms: 125.301542
+  ...
+# Subtest: unqualified runtime and constrained telemetry produce no claim, decode or spawn
+ok 16 - unqualified runtime and constrained telemetry produce no claim, decode or spawn
+  ---
+  duration_ms: 108.106083
+  ...
+# Subtest: manual review and execution share the actual background reservation boundary
+ok 17 - manual review and execution share the actual background reservation boundary
+  ---
+  duration_ms: 115.199708
+  ...
+# Subtest: UNKNOWN retains reservation after failed promise; late close releases and finalizes without writing OCR
+ok 18 - UNKNOWN retains reservation after failed promise; late close releases and finalizes without writing OCR
+  ---
+  duration_ms: 116.764583
+  ...
+# Subtest: failed concurrent confirm cannot lose active cancellation; revoke cancels owned runtime
+ok 19 - failed concurrent confirm cannot lose active cancellation; revoke cancels owned runtime
+  ---
+  duration_ms: 115.538333
+  ...
+# Subtest: runtime A to B to A cannot restore old permission even without qualified resources
+ok 20 - runtime A to B to A cannot restore old permission even without qualified resources
+  ---
+  duration_ms: 114.349
+  ...
+# Subtest: Host revoke during awaited backup cannot be overwritten by late configure
+ok 21 - Host revoke during awaited backup cannot be overwritten by late configure
+  ---
+  duration_ms: 91.032
+  ...
+# Subtest: frozen v12 reader rejects v13 without changing bytes; exact current reader reopens
+ok 22 - frozen v12 reader rejects v13 without changing bytes; exact current reader reopens
+  ---
+  duration_ms: 117.547833
+  ...
+# Subtest: failure after OCR insert rolls back both OCR and completion receipt
+ok 23 - failure after OCR insert rolls back both OCR and completion receipt
+  ---
+  duration_ms: 108.217667
+  ...
+# Subtest: owned Host SIGKILL before-claim cannot restore permission or replay a committed effect
+ok 24 - owned Host SIGKILL before-claim cannot restore permission or replay a committed effect
+  ---
+  duration_ms: 258.186792
+  ...
+# Subtest: owned Host SIGKILL after-claim cannot restore permission or replay a committed effect
+ok 25 - owned Host SIGKILL after-claim cannot restore permission or replay a committed effect
+  ---
+  duration_ms: 253.505042
+  ...
+# Subtest: owned Host SIGKILL after-sent cannot restore permission or replay a committed effect
+ok 26 - owned Host SIGKILL after-sent cannot restore permission or replay a committed effect
+  ---
+  duration_ms: 239.1635
+  ...
+# Subtest: owned Host SIGKILL after-commit cannot restore permission or replay a committed effect
+ok 27 - owned Host SIGKILL after-commit cannot restore permission or replay a committed effect
+  ---
+  duration_ms: 240.581708
+  ...
+# Subtest: a legacy combined current is seeded exactly once and v13 keeps prior user edits and each storage capability usable
+ok 28 - a legacy combined current is seeded exactly once and v13 keeps prior user edits and each storage capability usable
+  ---
+  duration_ms: 169.299583
+  ...
+# Subtest: bounded background drain covers hanging preflight and never revives permission
+ok 29 - bounded background drain covers hanging preflight and never revives permission
+  ---
+  duration_ms: 169.104792
+  ...
+# Subtest: bounded background drain covers hanging confirmation and never revives permission
+ok 30 - bounded background drain covers hanging confirmation and never revives permission
+  ---
+  duration_ms: 125.7615
+  ...
+# Subtest: formal IPC rejects non-Main and renderer-supplied execution options before reaching controller
+ok 31 - formal IPC rejects non-Main and renderer-supplied execution options before reaching controller
+  ---
+  duration_ms: 0.226291
+  ...
+# Subtest: candidate and recent projection use dedicated indexes without full count aggregation
+ok 32 - candidate and recent projection use dedicated indexes without full count aggregation
+  ---
+  duration_ms: 105.615958
+  ...
+# Subtest: resource change during asynchronous preparation defers before sent and resumes safely later
+ok 33 - resource change during asynchronous preparation defers before sent and resumes safely later
+  ---
+  duration_ms: 114.011416
+  ...
+# Subtest: Runtime identity change observed after preparation revokes instead of deferring old consent
+ok 34 - Runtime identity change observed after preparation revokes instead of deferring old consent
+  ---
+  duration_ms: 124.338792
+  ...
+# Subtest: v13 settings restoration failure quarantines Host and never grants execution
+ok 35 - v13 settings restoration failure quarantines Host and never grants execution
+  ---
+  duration_ms: 101.787458
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4661.013041

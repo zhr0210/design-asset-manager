@@ -1,0 +1,960 @@
+{
+  "selectedFinalChecks": {
+    "providerAdmission": "sealed-admission",
+    "sdkPreconditions": "step02-sdk-preconditions",
+    "nativeSDK": "sealed-native-sdk",
+    "codexUI": "sealed-codex-chain",
+    "copilotConditional": "step05-copilot-sdk-catalog",
+    "promptExpiry": "final-prompts-expiry",
+    "ui": "frozen-ui",
+    "benchmark": "sealed-benchmark",
+    "credentials": "sealed-credentials",
+    "oauthLifecycle": "final-oauth-expiry-regression",
+    "host": "sealed-host-regression",
+    "resources": "sealed-resources",
+    "worker": "sealed-worker-regression",
+    "formal": "sealed-formal",
+    "legacyProbe": "final-legacy-probe",
+    "tagExecution": "final-tag-execution",
+    "tagBatch": "frozen-tag-batch",
+    "tagRecovery": "frozen-tag-recovery",
+    "admissionRegression": "final-admission-regression",
+    "ocrController": "final-ocr-controller-corrected",
+    "typecheck": "sealed-typecheck",
+    "build": "sealed-build",
+    "independentNative": "independent-native-sealed",
+    "independentAdmission": "independent-admission-sealed",
+    "independentPrompts": "independent-prompts-expiry"
+  },
+  "allRunsIncludingFailures": {
+    "sealed-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.476,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "testCount": null
+    },
+    "frozen-typecheck-final": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.559,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "testCount": null
+    },
+    "final-build-credential-presence": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.027,
+      "sha256": "f90fea79c8b0ba4c24fa47cf0141747b7184db52f8c887691ddbd62c354e02c4",
+      "testCount": null
+    },
+    "final-build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.155,
+      "sha256": "2789cda259c6b6f80c28ec568a6826a0d3fee90db5874acc4653527c9dbf6cb6",
+      "testCount": null
+    },
+    "frozen-native-generated-image": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.575,
+      "sha256": "fc105bca2395aeb67b998a3c38bea695d7b193da4693d04d072e578c51f190f1",
+      "testCount": 16
+    },
+    "step03-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.546,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "testCount": null
+    },
+    "final-formal-credential-presence": {
+      "command": [
+        "node",
+        "scripts/pi-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 14.791,
+      "sha256": "41bf3df43c993d746eab8355c795d6710b8dc7bd20b8c745c29e2d5b90be9656",
+      "testCount": 1
+    },
+    "final-admission-regression": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/visual-admission.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.633,
+      "sha256": "68a843d35bac040ca3244d02d89ce3471d053cc324b8d9592ed5a6017e5eaba1",
+      "testCount": 10
+    },
+    "independent-prompts-expiry": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.241,
+      "sha256": "8cef4593e19b27f7769858f2c0fa9a6f02631d389a1b9fbc44df915455a8459a",
+      "testCount": 5
+    },
+    "final-expiry": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.135,
+      "sha256": "6f3d7140ceef4f714cd7132903f0a0098cbf51ee32a7072d13110db3f84b3f87",
+      "testCount": null
+    },
+    "step03-oauth-regression": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-oauth.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.221,
+      "sha256": "6dd8b16a99c0c3d4b99efeda41b1f9082acee156bb596a4c499708063b1ed499",
+      "testCount": 9
+    },
+    "final-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 6.266,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "testCount": null
+    },
+    "step03-worker-regression": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-runtime.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 6.581,
+      "sha256": "c20540e03f0a3691f322dc4a39bad765d6cba1698005f5ea35cf89f46ba082dd",
+      "testCount": 5
+    },
+    "step05-codex-chain": {
+      "command": [
+        "node",
+        "scripts/pi-codex-contract.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 16.279,
+      "sha256": "c8de61bbd7353688d8ae2d8620065d73f29cbf35799229e1d99ddda6acd162e9",
+      "testCount": 4
+    },
+    "independent-admission": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.185,
+      "sha256": "2cc30d380618acd7d66ca2d0593fcb5fc52bab6852b29fdcb729858a667fecd2",
+      "testCount": 6
+    },
+    "independent-native-generated-final": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.017,
+      "sha256": "f2271a279a5505a0de7b26e855b29644bf0422582d79c24b12d0fdcbb027e118",
+      "testCount": 16
+    },
+    "step07-integrity-benchmark": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-runtime-benchmark.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 6.019,
+      "sha256": "cb07a87a8d46dea805872f27623650f63315e0c9e46d3abbb6668390199dfabd",
+      "testCount": 2
+    },
+    "independent-admission-sealed": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.253,
+      "sha256": "d8467e8a0b8691b31bc674967d1210e51707531ca68e424acaaa8d170aee1666",
+      "testCount": 8
+    },
+    "final-ui-credential-presence": {
+      "command": [
+        "node",
+        "scripts/pi-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.249,
+      "sha256": "7ee8ae5b89469bc90fead01afa3ccc819f452687f814dac7e0c177b51132fe40",
+      "testCount": 5
+    },
+    "frozen-ui": {
+      "command": [
+        "node",
+        "scripts/pi-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.468,
+      "sha256": "ca900d080a6b23ac6de735ed1aa86c6c4a7ba1bbf861602dcf566127d19ebbee",
+      "testCount": 5
+    },
+    "final-ui": {
+      "command": [
+        "node",
+        "scripts/pi-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.578,
+      "sha256": "f1a98cc45a392573dea68e45e0ee7076f7a4cd1f2a43f4f732866dfe3a10435b",
+      "testCount": 5
+    },
+    "final-tag-execution": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-execution.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.43,
+      "sha256": "e7dcc28a7d47273d2d1e723e80609c48d07e81c6ed488a4f16eb2d16327b72f4",
+      "testCount": 30
+    },
+    "independent-admission-final": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.169,
+      "sha256": "382d1713df4f49574b69d47af74a9c2723f062bc55d6fb4e32e49e3269b59e2c",
+      "testCount": 7
+    },
+    "final-admission": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.171,
+      "sha256": "b59e6c2c12992f5be8351f9b656987cb71ba350077795e18b81dd7e361e4b79f",
+      "testCount": 6
+    },
+    "step04-native-sdk-corrected": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 1.757,
+      "sha256": "020850a62e486b1f4c8810fb37948946a6939ad646b1266f7d90e52274797464",
+      "testCount": 10
+    },
+    "step06-ui": {
+      "command": [
+        "node",
+        "scripts/pi-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.411,
+      "sha256": "400bd0cab0bf49ec4cd590f1aa06ad8eb87878943dc26176dadf1632e8e7c599",
+      "testCount": 5
+    },
+    "sealed-admission": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.166,
+      "sha256": "523ea18ab62ca764151b6f206eb32cfab41ef37c86f410e86384c0a0da45cc61",
+      "testCount": 8
+    },
+    "final-build-expiry": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.499,
+      "sha256": "031819b1bcdd5a72ca6ed254a9d2df858fe42295d8438889c82216e137c70261",
+      "testCount": null
+    },
+    "frozen-formal-final": {
+      "command": [
+        "node",
+        "scripts/pi-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 13.274,
+      "sha256": "9b3318689f4c5d36125cad9b0ce5371dcca1146cdbf17f04e39d40ab0fbd114b",
+      "testCount": 1
+    },
+    "sealed-codex-chain": {
+      "command": [
+        "node",
+        "scripts/pi-codex-contract.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 15.108,
+      "sha256": "a5dec52ac9ea4928e40e308a398382d2b4e1afd45e78216a9d9d2e9feac75253",
+      "testCount": 4
+    },
+    "step01-admission": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.233,
+      "sha256": "a83fcaf13c21662ba6c7ffce60da9d7fcf1fab8b8f8596fe71bd1392eb058436",
+      "testCount": 6
+    },
+    "frozen-tag-batch": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-batch.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.012,
+      "sha256": "979747a53a09201e868565812221530b5943e8b0b7bbe74ab7745436b43ec993",
+      "testCount": 12
+    },
+    "final-credentials": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-credentials.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.147,
+      "sha256": "22fbc3f7756c2a853751d8e2cc6e12e7df40ecdc134ef254ffdac240fddd02c2",
+      "testCount": 14
+    },
+    "final-prompts-expiry": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.229,
+      "sha256": "8cf97ac62c2d7dc4e7223de899fab4f130f99f29b397bc056220390d706947bd",
+      "testCount": 5
+    },
+    "final-host": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-visual.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 11.893,
+      "sha256": "9b9333e3b3d34d3e9defdb0b37d337fa09257a0ffd9485169272b7fd40dd9d55",
+      "testCount": 7
+    },
+    "step02-sdk-preconditions": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-sdk-preconditions.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.579,
+      "sha256": "7ff25a210edcb2c147bec1330a8eadffeeaf62c55a81b2bcbd83b57b35b690e4",
+      "testCount": 3
+    },
+    "sealed-worker-regression": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-runtime.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.458,
+      "sha256": "0a53edbc1ed3e94d2e89e786b7a97d395282bc841302020a2fe01f9b70826d49",
+      "testCount": 5
+    },
+    "frozen-admission": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-provider-admission.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.23,
+      "sha256": "8cc0afe4fd0619f32615a481b25d1555154e166b02248854eae1f00f27566af5",
+      "testCount": 7
+    },
+    "frozen-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.548,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "testCount": null
+    },
+    "step04-native-sdk-events": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.127,
+      "sha256": "646c2e3334b8cacc185d1858f2ff09fd020c9ecfc35e57efee355a0741f124c5",
+      "testCount": 10
+    },
+    "step04-native-sdk": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 1.763,
+      "sha256": "f5cb0d36f1c464b700c701d57241f21f9265fd56ab1d0f4b5337cfa51b2edd85",
+      "testCount": 10
+    },
+    "frozen-formal": {
+      "command": [
+        "node",
+        "scripts/pi-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 14.586,
+      "sha256": "7bce9396e3dadc04f7be2ac96e75cc433e78c2c9ef9cdbc23fa236b74730d090",
+      "testCount": 1
+    },
+    "final-typecheck-expiry": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.346,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "testCount": null
+    },
+    "final-native-sdk": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.305,
+      "sha256": "16d37238e805f94fa26d5da1398b19931a2207f6bc9eed4c527000c357332b84",
+      "testCount": 16
+    },
+    "final-oauth": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-oauth.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.195,
+      "sha256": "d081745a2702b2b87f2e53f0dca263b6f5c4a14e5bbeb9a4dc1b0511ff6ff5a9",
+      "testCount": 9
+    },
+    "step01-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.755,
+      "sha256": "3de11f70f24f4490d4340f4dc39082a1cf81fd7b1d216534da24af674e1adc40",
+      "testCount": null
+    },
+    "step06-native-admission": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.474,
+      "sha256": "31cf04ac8392b35676728fa535b1a689b9a9d9b8e5c4dcfdf2fdd889dc8a1d24",
+      "testCount": 16
+    },
+    "sealed-formal": {
+      "command": [
+        "node",
+        "scripts/pi-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 13.7,
+      "sha256": "783cf9eb6ca26374ee7e41f2f86ac64474a2fe612543c5b1494f9c105ab28101",
+      "testCount": 1
+    },
+    "sealed-native-sdk": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.217,
+      "sha256": "4f312c049a75758fc29c392281edad34c82466ae7ea2ea3ab0e9965356c7b8e6",
+      "testCount": 17
+    },
+    "final-legacy-probe": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-legacy-probe.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.173,
+      "sha256": "8aee6e7b503bd6acd505ac1872bd6589848eb8696c7198dbc067794be2d406d3",
+      "testCount": 1
+    },
+    "step03-prompts-corrected": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.195,
+      "sha256": "658bcaba832e1610b52a0f5ea2cff9c1b6e903bd0032569a169986134b10edea",
+      "testCount": 4
+    },
+    "sealed-build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.655,
+      "sha256": "958a7f1df8f6ac758f38076d61c0ab9be74cfdbb2faf7f6866112d0bfc41804d",
+      "testCount": null
+    },
+    "final-oauth-expiry-regression": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-oauth.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.214,
+      "sha256": "612b15a231b9361271bd703f52117fb982eb5d1f8f0714a2188348fb93532419",
+      "testCount": 9
+    },
+    "sealed-host-regression": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-visual.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 10.684,
+      "sha256": "f406066d915a5c2a6d0fff10e041373a85508575b23fed38e6e1f49c329564b0",
+      "testCount": 7
+    },
+    "frozen-build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.43,
+      "sha256": "9e3e15437e8adcacedf5a26068a262b05cbf333bbeb10da82f7f49bda743bdf5",
+      "testCount": null
+    },
+    "final-formal": {
+      "command": [
+        "node",
+        "scripts/pi-electron.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 14.296,
+      "sha256": "ed606f8e4309f34fcdf5916a1df0d77b78926e6e0aead9adf6afb8d7a11cea3a",
+      "testCount": 1
+    },
+    "final-reseal": {
+      "command": [
+        "node",
+        "scripts/seal-pi-runtime.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.441,
+      "sha256": "5cc08b9717f1743f3b8b9a0b38712d743747ca9feb1e3dfcc9b0d5ee88396b5f",
+      "testCount": null
+    },
+    "independent-native-sealed": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.491,
+      "sha256": "881ca2461ed5471153ca050cfc57310bdf352f6d26f32cc261b5e19a91db1bad",
+      "testCount": 17
+    },
+    "final-benchmark": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-runtime-benchmark.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 5.438,
+      "sha256": "5e58f9f6e12264fc0b5e485cd60446f69eb9fff6125930cf3ac3056bd70f8c65",
+      "testCount": 2
+    },
+    "independent-prompts": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.143,
+      "sha256": "58a78fd273b01f6bbe7478eb3e39f903056170b76f53ed5938e275274a9c6bdc",
+      "testCount": 4
+    },
+    "step05-copilot-sdk-catalog": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-copilot-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.276,
+      "sha256": "781c71059e9f774261799b2bd9f0669fa2030a732950daac790bebcdcc5f0538",
+      "testCount": 1
+    },
+    "sealed-benchmark": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-runtime-benchmark.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 3.452,
+      "sha256": "6239e9bc78ccc1866199ec4aa7bb22fb9301e1c5c61abd633fbb1179c211c8dc",
+      "testCount": 2
+    },
+    "sealed-final": {
+      "command": [
+        "node",
+        "scripts/seal-pi-runtime.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.28,
+      "sha256": "0adc8907ce4a74f2c261a3b16b0c0a399d8bb583381603b324ed3427270c81f0",
+      "testCount": null
+    },
+    "sealed-resources": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-runtime-packaging.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 7.305,
+      "sha256": "6a246a5649d6a0a4318e4023f5e133435cb70cb8defb2632ad799ce13c117dd7",
+      "testCount": 2
+    },
+    "sealed-credentials": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-credentials.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.137,
+      "sha256": "e82ae164bb59a931e78831395f59640ee3b2e25de0a7f8b7427a9474a942c067",
+      "testCount": 14
+    },
+    "final-codex-chain": {
+      "command": [
+        "node",
+        "scripts/pi-codex-contract.e2e.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 14.554,
+      "sha256": "b7d61f3d3e526b5885f7e315a6291c79b8d5da5aa88a77c5534550f88cf18739",
+      "testCount": 4
+    },
+    "final-resources": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-runtime-packaging.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 9.247,
+      "sha256": "612b673a2c0612365d4f48a7b567712aea746dc630a5904158bc8529fe2ecc47",
+      "testCount": 2
+    },
+    "final-prompts": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.131,
+      "sha256": "7b69d0db358c72635146d8e17283bc99eadd34a04db34e6f17f9fead5f173604",
+      "testCount": 4
+    },
+    "frozen-build-final": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.591,
+      "sha256": "61b043c5a527b70386f772a6deea2b003bc5e0b9259536a421b24280e5a4f021",
+      "testCount": null
+    },
+    "step07-benchmark-physical-spawn": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/pi-runtime-benchmark.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.206,
+      "sha256": "0d5053557d857716c8aacab2677276ea476d46ad7ae9093b283eae7d9f33f515",
+      "testCount": 2
+    },
+    "step03-seal": {
+      "command": [
+        "node",
+        "scripts/seal-pi-runtime.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.937,
+      "sha256": "cc215fffcd5d2ad6e1cbf336b39559c27f907a3b0c50e81ec3e3797816e28a16",
+      "testCount": null
+    },
+    "step05-copilot-sdk": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-copilot-sdk.test.mjs"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 1.31,
+      "sha256": "3c6e56936edc662fe491e85b6cddbbad6e1021fb418184454aed789d82420000",
+      "testCount": 1
+    },
+    "step06-reseal": {
+      "command": [
+        "node",
+        "scripts/seal-pi-runtime.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.494,
+      "sha256": "6a63e96f0b261ca284a6f213d050971415f13ad6b501a223bd40ade9d283cf7e",
+      "testCount": null
+    },
+    "final-ocr-controller": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-controller.test.ts"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.087,
+      "sha256": "ef1b7b027fa9d71aa70ace9653ab3be06e8281ff3ade2ecef3bce9448132617d",
+      "testCount": null
+    },
+    "step03-prompts": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-auth-prompts.test.ts"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.138,
+      "sha256": "0510fcd38ff042445fa5c5d32e1a3fa4ee98066df10e6abee314a11f6efc2fb4",
+      "testCount": null
+    },
+    "frozen-tag-recovery": {
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/tag-recovery.integration.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 4.844,
+      "sha256": "08533a361643bcd5f6a65f7785ae6d034f6618c31e6b2f6dd52a4d7765f0b65c",
+      "testCount": 22
+    },
+    "final-ocr-controller-corrected": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/ocr-controller-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.387,
+      "sha256": "2961282a5d17f2e22d08cff7f1d77a97f61099f5b1cd2f2550680eb1656df1e6",
+      "testCount": 12
+    },
+    "frozen-credentials": {
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/pi-credentials.test.ts"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.146,
+      "sha256": "92167902ff9c882554a008cdab8800a06f90d41d3d44d5447f390fc340426b03",
+      "testCount": 14
+    },
+    "independent-native-sdk": {
+      "command": [
+        "pi-runtime/runtime/darwin-arm64/node",
+        "scripts/pi-native-sdk.test.mjs"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 2.315,
+      "sha256": "49bd636feaa5075130a0363b120120c84cd0300b26bf4328d6713cdd410670ab",
+      "testCount": 16
+    }
+  },
+  "focusedProviderAndAuthCases": 45,
+  "regressionCases": 125,
+  "independentDistinctCases": 30,
+  "notRun": [
+    "real account/API/model",
+    "OS Keychain",
+    "Windows/signing",
+    "true OS disk-cold",
+    "governed OAuth networking and OpenAI registration/JWT"
+  ]
+}

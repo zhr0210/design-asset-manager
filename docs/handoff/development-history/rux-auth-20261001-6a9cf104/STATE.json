@@ -1,0 +1,30 @@
+{
+  "runId": "rux-auth-20261001-6a9cf104",
+  "stage": "R08 incremental handoff; UX gate blocked",
+  "executionState": "COMPLETED",
+  "nextBatchAuthorized": false,
+  "automaticResume": false,
+  "code": "CODE_IMPLEMENTED_SCOPED",
+  "contract": "PASS_TARGETED_WITH_ONE_LEGACY_SOURCE_POLICY_RED",
+  "computerUse": "BLOCKED_INSTANCE_SELECTION",
+  "realAuthentication": "AUTH_REAL_NOT_RUN",
+  "cleanup": "FIVE_SOURCE_DELETIONS_PASS/TWO_TEST_SUPPORT_MOVES_PASS",
+  "testConcurrency": 1,
+  "commandTimeoutSeconds": 240,
+  "repairBudgetPerIssue": 3,
+  "scope": "User approved R00–R08; no real account/library/model reads or inference; single root writer; independent readonly review",
+  "R00": "baseline/build identity/typecheck/nav passed; final source binding later",
+  "R01": "target ownership frozen; CU baseline BLOCKED_INSTANCE_SELECTION, not PASS",
+  "controlledRuntimeIssue": "distinct bundle copy exited -5; two native identity attempts failed; no private profile used as acceptance",
+  "nextAction": "STOP; recover only blocked CU/auth after user assistance, no next batch",
+  "latest": "old record untouched, read-time STALE adapter added",
+  "remaining": [
+    "U01-U32 native CU",
+    "A01-A03 real account",
+    "legacy Runtime platform source-policy regression"
+  ],
+  "action": "STOP",
+  "completionScope": "RUX code and bounded isolated validation handoff; Computer Use blocked, real authentication not run, legacy Runtime source-policy regression retained",
+  "sourceDigest": "0ec53bd995145a8497f63ef5d6909a69aaf2c966c102bebf1ebe07678d31a721",
+  "productAcceptance": "BLOCKED_UX_ACCEPTANCE"
+}

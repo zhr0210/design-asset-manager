@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-ts-test.mjs",
+    "scripts/model-artifact-readiness-display.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 0.1,
+  "sha256": "250851731aed4f73fccdffbba07f6b62d7828ca6a60a9db849febd96f7731e19"
+}

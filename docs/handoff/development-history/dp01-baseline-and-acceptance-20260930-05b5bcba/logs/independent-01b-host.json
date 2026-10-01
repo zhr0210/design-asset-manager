@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/run-electron-node-test.mjs",
+    "scripts/background-ocr-runtime-observation.integration.test.ts"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "seconds": 1.211,
+  "sha256": "8b16d4622c231685bf1f6c80f787f32fc3276ec099820610abb5b01cca9340cd"
+}

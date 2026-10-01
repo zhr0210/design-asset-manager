@@ -1,0 +1,45 @@
+{
+  "kind": "proposed_terminal_handoff_for_independent_review",
+  "runId": "tags-hardening-20260928",
+  "state": "COMPLETED",
+  "action": "STOP",
+  "nextBatchAuthorized": false,
+  "automaticResume": false,
+  "precedence": [
+    "FINAL-HANDOFF.json",
+    "HANDOFF.md",
+    "STATE.json",
+    "TASK-QUEUE.json",
+    "history/*"
+  ],
+  "sourceDigest": "99ab7341e1123322af2fe6a9221ae830bc17b8d1d52ac726a72a4bd869a289b0",
+  "changeDigest": "ceecf948ece637b5a756e54ecec599b23dd2705d12a4fe8ba0496d1326ab77d7",
+  "parentBatch": {
+    "runId": "independent-tags-20260927",
+    "state": "COMPLETED_LIMITED_DEVELOPMENT_MAIN",
+    "sourceDigest": "977d048219c9bf1a5d6759ebc8850d42652ab0555380aba248266f600e8a09d6",
+    "originalArchiveSha256": "1ef0ee5d22f311284de3c5ff445f2a4d9916910d4b696b1f38eb7f35232ca5d4"
+  },
+  "scope": [
+    "F01",
+    "F02",
+    "F03"
+  ],
+  "processFacts": {
+    "ownedTestCommandsExited": true,
+    "otherBackgroundProcesses": "UNKNOWN",
+    "globalProcessScan": "NOT_PERFORMED",
+    "supervisorDeployed": false
+  },
+  "notRun": [
+    "real model",
+    "real user library",
+    "Windows",
+    "installed/signing package",
+    "C07-R"
+  ],
+  "remainingLimitations": [
+    "historical standalone Electron RUN_AS_NODE native wait not diagnosed"
+  ],
+  "originalHistoryPolicy": "Original ACTIVE contract and prior PASS/FAIL are preserved as historical data, not resumable instructions."
+}
