@@ -1,3 +1,11 @@
+# 2026-10-08 整合已完成：从 GitHub main 接续 macOS
+
+PR#25已合入；远端只保留main，旧PR/分支清理完成。准确提交与界限见
+[最终回执](docs/handoff/GITHUB-CONSOLIDATION-RESULT-20261008.md)。本轮停止；
+WC/T23/A–F和Mac/Eagle验收仍未完成，完整治理仍有19项待解决。
+
+---
+
 # 2026-10-08 当前：统一 GitHub main，移交 macOS
 
 用户授权以当前工作区（含已采用未提交实现）为准合并仓库，旧分支/版本弃用。
