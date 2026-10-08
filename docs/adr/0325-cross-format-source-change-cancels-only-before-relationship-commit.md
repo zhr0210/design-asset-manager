@@ -1,0 +1,11 @@
+# Cross-Format Source Change Cancels Only Before Relationship Commit
+
+Status: Superseded by ADR 0348.
+
+Change Referenced Source Format may be cancelled while reviewing, validating or waiting, until the **Source Format Change Commit Boundary** begins. An accepted pre-commit cancellation durably closes the pending intent and leaves the Compatible Export, old source relationship, Source Content Generation and both user-owned files unchanged; restart never resumes that cancelled intent. Cancellation removes no export, old source, recovery evidence belonging to another operation or user file.
+
+Once the atomic relationship-and-generation commit call begins, it is not force-interrupted. The application first reconciles whether the transaction committed: a proven non-commit settles as cancelled with the old source still current, while a proven commit keeps the export current and the new Source Content Generation authoritative. It never deletes the export, restores an earlier generation, silently relinks the old source or presents the committed outcome as rollback.
+
+After a proven commit but before old-source cleanup begins, generic Cancel is no longer a valid action. A stop request accepted in that interval becomes an explicit **Keep Both After Source Format Change** outcome: the export remains the sole current source, the old source becomes an ordinary untracked user file, and no trash request or recovery receipt is created. The surface must name that consequence rather than imply that the format change itself was cancelled.
+
+After the operating-system trash request begins, neither cancellation, window closure, application exit nor Library Switch interrupts or repeats it. Reconciliation records proven trash success and its Format-Change Old Source Recovery Receipt, proven failure or retained old source as Format Changed With Old Source Remaining, and ambiguity as unresolved attention under ADR 0323. A later Keep Both or Retry Format-Change Old Source Cleanup remains explicit. The current application has no cross-format source-change cancellation boundary. This ADR records target architecture only and exports, accesses, creates, copies, relinks, moves, rewrites, restores, trashes, deletes, reads or writes no runtime/user file and changes no public IPC, database schema or AI Worker API.

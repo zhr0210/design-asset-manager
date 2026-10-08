@@ -1,0 +1,22 @@
+diff --git a/src/main/ai-gateway/ai-connection-service.ts b/src/main/ai-gateway/ai-connection-service.ts
+index ddd187b..e6da484 100644
+--- a/src/main/ai-gateway/ai-connection-service.ts
++++ b/src/main/ai-gateway/ai-connection-service.ts
+@@ -19,7 +19,7 @@ import {publicBackend} from '../ai-credentials/public-settings'
+ import {requireReasoningConfiguration,reasoningNotice} from '../../shared/workflows/ai-reasoning.workflow'
+ import {openAiVisionProvider,type VisionProvider,type VisionInvocation} from '../visual-ai/openai-vision.provider'
+ const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex')
+-export function createAiConnectionService(d:{settings:SettingsServicePort;vault:CredentialVault;runtime:PiRuntimeHost;managed?:{owns(id:string):boolean;prepare(signal:AbortSignal):Promise<void>;invokeOnce(input:VisionInvocation):Promise<unknown>};changed():void;loginTimeoutMs?:number;hostIdentity?:{getDeviceId():string};admission?:typeof piProviderAdmission;reserveProbe?(signal:AbortSignal):Promise<{release():void}>}){
++export function createAiConnectionService(d:{settings:SettingsServicePort;vault:CredentialVault;runtime:PiRuntimeHost;managed?:{owns(id:string):boolean;prepare(signal:AbortSignal):Promise<void>;invokeOnce(input:VisionInvocation):Promise<unknown>;recoverLocal?:VisionProvider['recoverLocal'];finishLocalRecovery?:VisionProvider['finishLocalRecovery']};changed():void;loginTimeoutMs?:number;hostIdentity?:{getDeviceId():string};admission?:typeof piProviderAdmission;reserveProbe?(signal:AbortSignal):Promise<{release():void}>}){
+  const admission=d.admission??piProviderAdmission
+  const requireAction=(b:AiBackendConfig,action:PiProviderAction)=>{const result=admission(b.providerKind??'openai-compatible',b.authMode??'none',action);if(!result.allowed)throw Error(result.code)}
+  const notify=()=>{try{d.changed()}catch{}}
+@@ -87,7 +87,7 @@ export function createAiConnectionService(d:{settings:SettingsServicePort;vault:
+    })
+   },
+   async models(b:AiBackendConfig,signal:AbortSignal){const configured=backend(b.id);if(hash(publicBackend(b))!==hash(publicBackend(configured)))throw Error('AI_SAVE_CONFIG_BEFORE_PROBE');return tracked(b.id,signal,s=>execute<any[]>(configured,{kind:'models'},s))},
+-  provider:{invokeOnce:(input:VisionInvocation)=>invoke(input),prepare:async(id:string,signal:AbortSignal)=>{signal.throwIfAborted();if(d.managed?.owns(id))await d.managed.prepare(signal)}} as VisionProvider,
++  provider:{invokeOnce:(input:VisionInvocation)=>invoke(input),prepare:async(id:string,signal:AbortSignal)=>{signal.throwIfAborted();if(d.managed?.owns(id))await d.managed.prepare(signal)},recoverLocal:(error,input)=>d.managed?.owns(input.backendId??'')&&d.managed.recoverLocal?d.managed.recoverLocal(error,input):Promise.resolve(false),finishLocalRecovery:(error,outcome)=>{if(d.managed?.owns(error.failure.backendId))d.managed.finishLocalRecovery?.(error,outcome)}} as VisionProvider,
+   invokeForAcceptance:(input:VisionInvocation)=>invoke(input,true),
+   prepareValidation(id:string){for(const[key,r]of validationReviews)if(r.expires<Date.now())validationReviews.delete(key);if(suspended||validationReviews.size>=4)throw Error('AI_CONNECTIONS_BUSY');const b=backend(id);requireAction(b,'infer');requireReasoningConfiguration(b);if(b.transport!=='pi'||!b.defaultModel?.trim()||b.defaultModel.trim().length>256)throw Error('AI_MODEL_REQUIRED');const receipt=randomUUID();validationReviews.set(receipt,{backend:b,fingerprint:hash(b),expires:Date.now()+300000});return{receipt,backendId:b.id,model:b.defaultModel,notice:`向 ${b.baseUrl} 的 ${b.defaultModel} 发送一张本应用生成的双色测试图，只验证图片请求、完整JSON及颜色识别，不读取资料库。${reasoningNotice(b.reasoning)}仅调用一次，30秒上限；云端/API/订阅可能消耗额度，费用未知。`}},
+   discardValidation(receipt:string){validationReviews.delete(receipt)},

@@ -10,6 +10,42 @@ Phase 12B adds a read-only governance plan for llama-runtime. It does not downlo
 | llama.app | macOS | Second | Treat as an already-running local external endpoint. |
 | llama.cpp | Windows | Third | Existing installer/start behavior stays behind explicit user action. |
 
+The platform-local adapters are selected through `LLAMA_RUNTIME_PLATFORM_ADAPTERS`.
+Adding or removing a read-only platform adapter should update that descriptor
+table instead of adding platform conditionals to the plan flow.
+
+Server executable and force-stop process metadata are selected through
+`LLAMA_SERVER_PROCESS_ADAPTERS`. Keep executable names, missing-executable copy,
+chmod-before-spawn policy, zip extraction command choice, and Windows task
+cleanup there; keep install, download, and launch actions explicitly
+user-triggered.
+
+Hardware detection dispatch is selected through the internal
+`hardwareDetectionAdapters` table. Keep macOS, Windows, and generic CPU fallback
+detectors as concrete adapters so OS probing commands stay out of shared flow
+control.
+
+The installer and planner read the current host through
+`createLlamaRuntimeHostContext`.
+Keep platform, architecture, CPU-thread, CPU-model, and memory reads in that
+helper so hardware detection and process adapter selection share the same host
+snapshot instead of reading Node globals throughout Llama runtime flow.
+
+Runtime package artifact matching is selected through
+`LLAMA_RUNTIME_PACKAGE_PATTERN_RULES`. Keep OS, architecture, and accelerator
+release filename patterns in that ordered table instead of adding platform
+conditionals to the planner flow. CUDA runtime sidecar matching is selected
+through `LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES`; keep CUDA sidecar release
+filename patterns there instead of branching in planner flow.
+
+Hardware profile planning resolves its target platform before selecting a
+default accelerator. Explicit Windows plans therefore default to Vulkan and
+macOS/Linux plans default to CPU without inheriting the host running the
+planner; CUDA selection and explicit accelerator overrides remain unchanged.
+The focused installer/planner test runs inside `ci:test-runtime-safety` on both
+Windows and macOS so target-platform defaults cannot regress into host-derived
+behavior.
+
 ## Governance Rules
 
 - `externalInferencePreferred: true`
@@ -22,6 +58,8 @@ Phase 12B adds a read-only governance plan for llama-runtime. It does not downlo
 ## Remaining Risks
 
 The existing llama-runtime install service can still download runtime packages and models, update settings, and launch a local llama server when explicitly invoked. This phase records those risks and keeps new governance code side-effect free.
+
+The existing user-triggered `llama-runtime:test-server` operation now performs both a text completion and a generated in-memory image request. It does not read user assets or persist the generated image. A successful image response is retained for five minutes as GGUF/mmproj real-inference evidence; service health alone is not real-model evidence.
 
 ## Next Step
 

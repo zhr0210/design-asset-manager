@@ -1,0 +1,13 @@
+diff --git a/src/main/local-host/local-dam-server.ts b/src/main/local-host/local-dam-server.ts
+index 1a3bbf2..6352136 100644
+--- a/src/main/local-host/local-dam-server.ts
++++ b/src/main/local-host/local-dam-server.ts
+@@ -240,7 +240,7 @@ function publicError(error: unknown): string {
+   const code = message.split(':')[0]
+   if (messages[code]) return messages[code]
+   // Fixed uppercase product codes carry no paths, URLs, tokens or system error text.
+-  if (/^(?:MODEL|LOCAL|AI|VISUAL)_[A-Z_]{1,80}$/.test(message)) return message
++  if (/^(?:MODEL|LOCAL|AI|VISUAL|NATIVE|RETRIEVAL|ASSET_SEARCH)_[A-Z_0-9]{1,80}$/.test(message)) return message
+   // Only fixed product messages cross the transport; system errors may contain paths.
+   const known = [
+     '请先完成或取消当前切库或退出审查。','内容已变化，请重新发起切库。',

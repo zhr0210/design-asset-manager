@@ -1,0 +1,38 @@
+{
+  "status": "proposed-unregistered",
+  "ownerStage": "P02",
+  "proposalStage": "P05",
+  "baseRegistry": "docs/architecture-audit/P02-20260925/manifests/MIGRATION-REGISTRY.proposed.json",
+  "baseRegistrySha256": "f9a4943281c524efcc0ce54edf2fa8f75eca2810a2f159c24e892709ea5ad79d",
+  "domain": "managed-library",
+  "feature": "persistent-analysis-journal",
+  "fromVersion": null,
+  "toVersion": null,
+  "ddlDigest": null,
+  "actualDatabaseAccess": false,
+  "proposedCollections": [
+    "analysis_requests",
+    "analysis_batches",
+    "analysis_batch_jobs",
+    "analysis_jobs",
+    "analysis_attempts",
+    "analysis_invocations",
+    "analysis_invocation_attempts",
+    "analysis_outbox",
+    "analysis_consumer_checkpoints"
+  ],
+  "reusedAuthorities": [
+    "P04 analysis_capability_state",
+    "P04 Evidence and user overlays",
+    "existing user caption and confirmed tag relations"
+  ],
+  "migrationPreconditions": [
+    "P02/P04 reviewed and implementation verified",
+    "explicit final schema profile/version/DDL approval",
+    "verified backup and active Managed lease",
+    "stop admission and drain old controllers",
+    "single writer and new session fencing wired"
+  ],
+  "rollback": "no schema downgrade or journal purge; preserve unfinished intent/evidence/receipts; compatible code or separately reviewed backup restore",
+  "implementation_status": "not_started"
+}

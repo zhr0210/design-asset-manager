@@ -1,0 +1,118 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "B01",
+      "input": {
+        "op": "plan",
+        "enabled": true,
+        "duplicate": false
+      },
+      "expected": [
+        "tags",
+        "caption",
+        "ocr"
+      ]
+    },
+    {
+      "id": "B02",
+      "input": {
+        "op": "plan",
+        "enabled": false,
+        "duplicate": false
+      },
+      "expected": []
+    },
+    {
+      "id": "B03",
+      "input": {
+        "op": "plan",
+        "enabled": true,
+        "duplicate": true
+      },
+      "expected": []
+    },
+    {
+      "id": "B04",
+      "input": {
+        "op": "plan",
+        "enabled": true,
+        "duplicate": false,
+        "done": {
+          "tags": "succeeded",
+          "ocr": "succeeded-empty"
+        }
+      },
+      "expected": [
+        "caption"
+      ]
+    },
+    {
+      "id": "B05",
+      "input": {
+        "op": "ocr",
+        "edit": null,
+        "dedicated": "",
+        "legacy": "hallucination"
+      },
+      "expected": ""
+    },
+    {
+      "id": "B06",
+      "input": {
+        "op": "ocr",
+        "edit": "修订",
+        "dedicated": "new",
+        "legacy": "old"
+      },
+      "expected": "修订"
+    },
+    {
+      "id": "B07",
+      "input": {
+        "op": "ocr",
+        "edit": "",
+        "dedicated": "new",
+        "legacy": "old"
+      },
+      "expected": ""
+    },
+    {
+      "id": "B08",
+      "input": {
+        "op": "batch",
+        "states": [
+          "succeeded",
+          "failed",
+          "succeeded-empty"
+        ]
+      },
+      "expected": "completed-with-failures"
+    },
+    {
+      "id": "B09",
+      "input": {
+        "op": "batch",
+        "states": [
+          "succeeded",
+          "waiting",
+          "queued"
+        ]
+      },
+      "expected": "partial-running"
+    },
+    {
+      "id": "B10",
+      "input": {
+        "op": "batch",
+        "states": [
+          "succeeded",
+          "succeeded",
+          "succeeded-empty"
+        ]
+      },
+      "expected": "completed"
+    }
+  ]
+}

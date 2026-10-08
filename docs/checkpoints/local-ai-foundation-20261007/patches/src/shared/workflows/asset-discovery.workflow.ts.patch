@@ -1,0 +1,44 @@
+diff --git a/src/shared/workflows/asset-discovery.workflow.ts b/src/shared/workflows/asset-discovery.workflow.ts
+index 4ca965e..6c5f2a0 100644
+--- a/src/shared/workflows/asset-discovery.workflow.ts
++++ b/src/shared/workflows/asset-discovery.workflow.ts
+@@ -9,8 +9,10 @@ export type AssetDiscoveryEvidenceKind =
+   | 'ocr'
+   | 'prompt'
+   | 'ai-tag'
++  | 'semantic'
++  | 'image-example'
+ 
+-export type AssetDiscoveryEvidenceMatch = 'exact' | 'phrase' | 'term'
++export type AssetDiscoveryEvidenceMatch = 'exact' | 'phrase' | 'term' | 'vector'
+ 
+ export interface AssetDiscoveryAssetLike {
+   id: string
+@@ -41,8 +43,10 @@ export interface AssetDiscoveryEvidence {
+ }
+ 
+ export interface AssetDiscoveryExplanation {
+-  lane: 'lexical'
++  lane: 'lexical' | 'semantic' | 'hybrid'
+   evidence: readonly AssetDiscoveryEvidence[]
++  similarity?:number
++  spaceId?:string
+ }
+ 
+ export interface AssetDiscoveryMatch<T extends AssetDiscoveryAssetLike> {
+@@ -208,6 +212,15 @@ function createLexicalFields(
+   return fields.filter((field) => normalizeText(field.value))
+ }
+ 
++/** Shared semantic field policy for Host indexing and renderer explanations. */
++export function assetDiscoverySearchText(asset: AssetDiscoveryAssetLike, scope: 'confirmed-only' | 'includes-pending'): string {
++  return createLexicalFields(asset, scope).map(field => normalizeText(field.value)).join('\n')
++}
++export function assetDiscoveryRank(asset: AssetDiscoveryAssetLike, query: string, scope: 'confirmed-only' | 'includes-pending'): number {
++  const normalized = normalizeText(query)
++  return normalized ? createRankedMatch(asset, 0, normalized, tokenizeQuery(normalized), scope)?.rank ?? 0 : 0
++}
++
+ function rankEvidence(field: LexicalField, matchedTerm: string, fullQuery: string): RankedEvidence {
+   const normalized = normalizeText(field.value)
+   const match: AssetDiscoveryEvidenceMatch = normalized === fullQuery

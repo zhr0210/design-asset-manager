@@ -1,0 +1,10 @@
+{
+  "library-open-control-store.internal.ts": {
+    "sha256": "63f98794ed54abc16978c03f2d98fa6ccbdf48286595b3dded27d860dbb53480",
+    "source": "pre-C02B frozen source; transitive historical SQL constants unchanged"
+  },
+  "image-variant-intents.ts": {
+    "sha256": "e8cfbdfe58cf4ea50808bf350b3ee2c6237915b7e357e39228b246ae8105faa5",
+    "source": "pre-C02B frozen source; transitive historical SQL constants unchanged"
+  }
+}

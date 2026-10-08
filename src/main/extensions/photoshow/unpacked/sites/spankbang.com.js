@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"spankbang.com":{ignore:'[aria-label="Video Player"],.click_layer',srcMatching:[{srcRegExp:"(//.+?\\.sb-cd\\.com/.+?/)w:\\d+/(.+@IMG@)",processor:"$1$2"}]}};

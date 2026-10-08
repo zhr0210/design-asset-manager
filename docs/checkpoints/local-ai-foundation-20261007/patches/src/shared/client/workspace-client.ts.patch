@@ -1,0 +1,53 @@
+diff --git a/src/shared/client/workspace-client.ts b/src/shared/client/workspace-client.ts
+index 704d84d..680853c 100644
+--- a/src/shared/client/workspace-client.ts
++++ b/src/shared/client/workspace-client.ts
+@@ -275,7 +275,8 @@ return Object.freeze({
+ 
+   managedVision:{status:()=>transport.invoke('managed-vision:status'),configure:()=>transport.invoke('managed-vision:configure'),activate:()=>transport.invoke('managed-vision:activate'),deactivate:()=>transport.invoke('managed-vision:deactivate')},
+   managedModels:{read:()=>transport.invoke('managed-models:read'),action:(input:import('../contracts/managed-model-library.contract').ManagedModelAction)=>transport.invoke('managed-models:action',input)},
+-  aiResources:{read:()=>transport.invoke('ai-resources:read'),configure:(policy:{mode:'quiet'|'normal'|'accelerated';reserveFraction:number})=>transport.invoke('ai-resources:configure',policy)},
++  retrievalModels:{read:()=>transport.invoke('retrieval-models:read'),action:(input:import('../contracts/retrieval-workspace.contract').RetrievalModelAction)=>transport.invoke('retrieval-models:action',input)},
++  aiResources:{read:()=>transport.invoke('ai-resources:read'),diagnostics:():Promise<{stages:import('../contracts/ai-diagnostics.contract').AiStageRecord[];recoveries:Array<Record<string,unknown>>}>=>transport.invoke('ai-resources:diagnostics'),releaseIdle:()=>transport.invoke('ai-resources:release-idle'),configure:(policy:{mode:'quiet'|'normal'|'accelerated';reserveFraction:number})=>transport.invoke('ai-resources:configure',policy)},
+ 
+   assetCard: {
+     open: (request: AssetCardOpenRequest) => transport.invoke(CHANNEL_ASSET_CARD_OPEN, request),
+@@ -333,6 +334,38 @@ return Object.freeze({
+   retryDownload: (id: string) => transport.invoke('download:retry', id),
+ 
+   // Assets IPC API
++  searchAssetsPage: async (input: import('../contracts/asset-search.contract').AssetSearchRequest) => {
++    const result = await transport.invoke('asset-search:query', input)
++    if (!result?.success) throw Error(result?.code ?? 'ASSET_SEARCH_FAILED')
++    return result.value as import('../contracts/asset-search.contract').AssetSearchPage
++  },
++  retrieval:{
++    coverage:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope)=>transport.invoke('asset-retrieval:coverage',scope) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
++    start:(input:import('../contracts/retrieval-workspace.contract').RetrievalGenerationRequest)=>transport.invoke('asset-retrieval:start',input) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
++    pause:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope,id:string)=>transport.invoke('asset-retrieval:pause',{...scope,id}) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
++    resume:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope,id:string)=>transport.invoke('asset-retrieval:resume',{...scope,id}) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
++    rebuild:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope)=>transport.invoke('asset-retrieval:rebuild-index',scope) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
++    switchSpace:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope,id:string)=>transport.invoke('asset-retrieval:switch-space',{...scope,id}) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
++    query:(input:import('../contracts/retrieval-workspace.contract').AssetSemanticSearchRequest)=>transport.invoke('asset-retrieval:query',input) as Promise<import('../contracts/retrieval-workspace.contract').AssetSemanticSearchPage>,
++    cancel:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope,id:string)=>transport.invoke('asset-retrieval:cancel-query',{...scope,id}),
++    selectFile:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope)=>transport.invoke('query-file:select',scope) as Promise<import('../contracts/retrieval-workspace.contract').QueryFileReview|null>,
++    releaseFile:(grant:string)=>transport.invoke('query-file:release',grant),
++  },
++  readSearchAssets: async (input: {libraryIdentity:string;generation:string;ids:string[]}) => {
++    const result=await transport.invoke('asset-search:read-assets',input)
++    if(!result?.success)throw Error(result?.code??'ASSET_SEARCH_FAILED')
++    return result.value as import('../contracts/active-library.contract').ActiveLibraryAssetProjection[]
++  },
++  searchIndexStatus: async () => {
++    const result = await transport.invoke('asset-search:status')
++    if (!result?.success) throw Error(result?.code ?? 'ASSET_SEARCH_FAILED')
++    return result.value as import('../contracts/asset-search.contract').AssetSearchIndexStatus
++  },
++  rebuildSearchIndex: async () => {
++    const result = await transport.invoke('asset-search:rebuild')
++    if (!result?.success) throw Error(result?.code ?? 'ASSET_SEARCH_FAILED')
++    return result.value as import('../contracts/asset-search.contract').AssetSearchIndexStatus
++  },
+   listAssets: async (filters?: any) => {
+     const result = await transport.invoke('assets:list', filters)
+     if (!result?.success) throw Error('素材列表暂时无法读取，请重新核对当前素材库。')

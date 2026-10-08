@@ -1,0 +1,174 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "P01",
+      "input": {
+        "manual": true,
+        "scope": true,
+        "contentChanged": false,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [],
+        "permit": true,
+        "truncated": false
+      },
+      "expected": {
+        "state": "ready",
+        "jobs": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    {
+      "id": "P02",
+      "input": {
+        "manual": false,
+        "scope": true,
+        "contentChanged": false,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [],
+        "permit": true,
+        "truncated": false
+      },
+      "expected": {
+        "state": "refused",
+        "jobs": []
+      }
+    },
+    {
+      "id": "P03",
+      "input": {
+        "manual": true,
+        "scope": false,
+        "contentChanged": false,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [],
+        "permit": true,
+        "truncated": false
+      },
+      "expected": {
+        "state": "review-required",
+        "jobs": []
+      }
+    },
+    {
+      "id": "P04",
+      "input": {
+        "manual": true,
+        "scope": true,
+        "contentChanged": true,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [],
+        "permit": true,
+        "truncated": false
+      },
+      "expected": {
+        "state": "review-required",
+        "jobs": []
+      }
+    },
+    {
+      "id": "P05",
+      "input": {
+        "manual": true,
+        "scope": true,
+        "contentChanged": false,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [
+          "a"
+        ],
+        "permit": true,
+        "truncated": false
+      },
+      "expected": {
+        "state": "ready",
+        "jobs": [
+          "b"
+        ]
+      }
+    },
+    {
+      "id": "P06",
+      "input": {
+        "manual": true,
+        "scope": true,
+        "contentChanged": false,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [
+          "a",
+          "b"
+        ],
+        "permit": true,
+        "truncated": false
+      },
+      "expected": {
+        "state": "completed",
+        "jobs": []
+      }
+    },
+    {
+      "id": "P07",
+      "input": {
+        "manual": true,
+        "scope": true,
+        "contentChanged": false,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [],
+        "permit": false,
+        "truncated": false
+      },
+      "expected": {
+        "state": "waiting",
+        "jobs": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    {
+      "id": "P08",
+      "input": {
+        "manual": true,
+        "scope": true,
+        "contentChanged": false,
+        "selected": [
+          "a",
+          "b"
+        ],
+        "done": [],
+        "permit": true,
+        "truncated": true
+      },
+      "expected": {
+        "state": "failed-preserve-previous",
+        "jobs": [
+          "a",
+          "b"
+        ]
+      }
+    }
+  ]
+}

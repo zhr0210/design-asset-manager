@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"auctions.yahoo.co.jp":{srcMatching:[{srcRegExp:"//.+?(/image/[^?]+).*",processor:"//auctions.c.yimg.jp$1"}]}};

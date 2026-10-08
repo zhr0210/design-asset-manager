@@ -1,0 +1,18 @@
+diff --git a/scripts/tag-execution.integration.test.ts b/scripts/tag-execution.integration.test.ts
+index eeefa46..f0a54e8 100644
+--- a/scripts/tag-execution.integration.test.ts
++++ b/scripts/tag-execution.integration.test.ts
+@@ -410,6 +410,12 @@ for(const outcome of ['success','failure','queued-cancel','sent-cancel'] as cons
+   const terminal=await c.tags.settle('main',job.id)
+   assert.equal(terminal.state,{'success':'succeeded','failure':'failed','queued-cancel':'cancelled','sent-cancel':'outcome-unknown'}[outcome]);assert.equal(calls,outcome==='queued-cancel'?0:1)
+   assert.throws(()=>c.tags.inspect('main',ids[0]));for(const id of ids.slice(1))assert.equal(c.tags.inspect('main',id).state,'succeeded');assert.equal(c.tags.inspect('main',job.id).state,terminal.state)
+-  assert.ok((await f.host.readTagEffectReceipt({...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId})).receipt);assert.equal(c.admission.inspect().materialBytes,0)
++  assert.ok((await f.host.readTagEffectReceipt({...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId})).receipt)
++  const settled=c.admission.inspect(), retained=c.admission.resourceStatus().preparedCache
++  assert.equal(settled.requests,0);assert.equal(settled.receipts,0);assert.equal(settled.frozenBytes,0)
++  assert.equal(settled.materialBytes,retained.bytes,'Only the explicitly accounted reusable cache may remain after terminal cleanup')
++  assert.ok(retained.bytes>0,'Prepared content can remain reusable without keeping the terminal operation alive')
++  c.admission.releaseIdleMaterials()
++  assert.equal(c.admission.inspect().materialBytes,0,'Explicit release must free the physical prepared buffer')
+  }finally{release();await c.close();await f.close()}
+ })

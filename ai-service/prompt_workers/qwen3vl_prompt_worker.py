@@ -4,6 +4,10 @@ import json
 import time
 import gc
 
+AI_SERVICE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if AI_SERVICE_DIR not in sys.path:
+    sys.path.insert(0, AI_SERVICE_DIR)
+
 # Reconfigure standard streams to use UTF-8 to prevent CP936 (GBK) decoding corruption on Windows
 if hasattr(sys.stdin, 'reconfigure'):
     try:
@@ -90,6 +94,9 @@ def main():
     try:
         import torch
         import transformers
+        from core.torch_inference_runtime import configure_torch_inference_runtime
+
+        configure_torch_inference_runtime(torch)
         torch_version = torch.__version__
         transformers_version = transformers.__version__
         cuda_available = torch.cuda.is_available()
@@ -108,11 +115,11 @@ def main():
         from qwen_vl_utils import process_vision_info
         from PIL import Image
 
-        # 1. Prevent mismatch & auto-heal incompatible vision ignore paths
+        # 1. Reject mismatched or migration-required local configuration without
+        # modifying the model artifact.
         config_path = os.path.join(model_path, "config.json")
         if os.path.exists(config_path):
             try:
-                config_modified = False
                 with open(config_path, "r", encoding="utf-8") as f:
                     config_data = json.load(f)
                 
@@ -121,28 +128,25 @@ def main():
                 if quantization == "none" and q_conf:
                     fail("MODEL_MISMATCH", "配置冲突！该模型文件夹包含量化配置(quantization_config)，但当前以原版(none)模式请求加载。请修改设置中的模型分类。")
                 
-                # Auto-heal vision ignore paths defensively using robust regex markers (solving group_size divisibility issues)
+                # Quantized variants require both ignore selectors. Missing rules
+                # need a future verified migration, never Worker-side self-repair.
                 if q_conf and "ignore" in q_conf:
                     ignore_list = q_conf["ignore"]
                     
-                    # Check if our regex selectors are already injected
+                    # Loading is read-only. A future verified migration may create a
+                    # compatible artifact, but the Worker never rewrites model files.
                     regex_visual = "re:.*visual\\..*"
                     regex_lm_head = "lm_head"
-                    
-                    if regex_visual not in ignore_list:
-                        ignore_list.append(regex_visual)
-                        config_modified = True
-                    if regex_lm_head not in ignore_list:
-                        ignore_list.append(regex_lm_head)
-                        config_modified = True
-                        
-                    if config_modified:
-                        q_conf["ignore"] = ignore_list
-                        config_data["quantization_config"] = q_conf
-                        
-                        # Save the self-healed config back
-                        with open(config_path, "w", encoding="utf-8") as f:
-                            json.dump(config_data, f, indent=2, ensure_ascii=False)
+                    missing_ignore_rules = [
+                        rule
+                        for rule in (regex_visual, regex_lm_head)
+                        if rule not in ignore_list
+                    ]
+                    if missing_ignore_rules:
+                        fail(
+                            "MODEL_CONFIG_REQUIRES_MIGRATION",
+                            "本地模型配置与当前量化加载规则不兼容；为保护模型文件，Worker 不会自动修改配置。请使用后续经过验证的模型迁移流程。",
+                        )
             except Exception as e:
                 # If fail was called, it exited; otherwise keep going
                 pass
@@ -160,6 +164,7 @@ def main():
                 model_path,
                 torch_dtype=torch.bfloat16 if cuda_available else torch.float32,
                 device_map="auto" if cuda_available else None,
+                local_files_only=True,
                 trust_remote_code=True
             )
         except Exception as e:
@@ -169,7 +174,10 @@ def main():
             else:
                 fail("MODEL_LOAD_FAILED", f"加载大模型失败，请检查模型文件完整性或显存资源: {err_str}", err_str)
 
-        processor = AutoProcessor.from_pretrained(model_path)
+        processor = AutoProcessor.from_pretrained(
+            model_path,
+            local_files_only=True,
+        )
 
         # Preprocess / Downscale image to save VRAM
         img = Image.open(image_path)
@@ -215,13 +223,14 @@ def main():
         inputs = inputs.to(device)
 
         # Run inference
-        generated_ids = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=top_p,
-            do_sample=True
-        )
+        with torch.inference_mode():
+            generated_ids = model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                temperature=temperature,
+                top_p=top_p,
+                do_sample=True
+            )
         generated_ids_trimmed = [
             out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
         ]

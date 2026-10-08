@@ -1,0 +1,246 @@
+diff --git a/src/main/index.ts b/src/main/index.ts
+index 150de85..72b8044 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -1,4 +1,5 @@
+ import {DAM_BUILD_IDENTITY} from '../shared/build-identity.generated'
++import {createAiDiagnostics,measureAiStage} from './local-ai-resources/ai-diagnostics'
+ import { createLocalDamServer } from './local-host/local-dam-server'
+ import { clientRequestScope, isBrowserContext, type MainInvokeContext } from './local-host/client-context'
+ import { createFileSelection } from './local-host/file-selection'
+@@ -27,6 +28,7 @@ import {createTagRecoveryController} from './independent-tags/tag-recovery-contr
+ import {createTagBatchController} from './independent-tags/tag-batch-controller'
+ import {createTagDecisionController} from './independent-tags/tag-decision-controller'
+ import {createVisualAdmission,type VisualAdmission} from './visual-ai/visual-admission'
++import {createLocalAiDeviceSampler} from './local-ai-resources/device-sampler'
+ import {createTagExecutionController} from './independent-tags/tag-execution-controller'
+ import {createOcrController} from './ocr/ocr-controller'
+ import { createTagIntentController } from './independent-tags/tag-intent-controller'
+@@ -34,7 +36,12 @@ import {createOcrRuntime} from './ocr/ocr-runtime'
+ import {createManagedVisionRuntime,MANAGED_VISION_ID} from './services/ai-runtime/managed-vision-runtime'
+ import {createPublicModelFetch} from './model-library-workspace/electron-public-model-network'
+ import {createManagedModelLibrary,type ManagedModelLibrary} from './model-library-workspace/managed-model-library'
++import {createManagedGgufPackages,assertNativeRuntimeUrl} from './services/ai-runtime/managed-gguf-packages'
+ import {parseManagedModelAction} from '../shared/contracts/managed-model-library.contract'
++import {createRetrievalModelLibrary,type RetrievalModelLibrary} from './retrieval-workspace/retrieval-model-library'
++import {createRetrievalRuntime,type RetrievalRuntime} from './retrieval-workspace/retrieval-runtime'
++import {parseRetrievalModelAction,parseRetrievalGeneration,parseAssetSemanticSearch,type RetrievalScope} from '../shared/contracts/retrieval-workspace.contract'
++import {createQueryFileGrants,type QueryFileGrants} from './retrieval-workspace/query-file-grants'
+ import {OCR_CHANGED, OCR_RUNTIME_CHANGED} from '../shared/contracts/asset-ocr.contract'
+ import {randomUUID} from 'node:crypto'
+ import {screen,nativeTheme} from 'electron'
+@@ -132,7 +139,12 @@ let imageTools: ReturnType<typeof createImageToolsController> | undefined
+ let backgroundOcr:ReturnType<typeof createBackgroundOcrController>|undefined
+ let ocr:ReturnType<typeof createOcrController>|undefined
+ let managedVision:ReturnType<typeof createManagedVisionRuntime>|undefined
++let aiDiagnostics:ReturnType<typeof createAiDiagnostics>|undefined
+ let managedModels:ManagedModelLibrary|undefined
++let retrievalModels:RetrievalModelLibrary|undefined
++let retrievalRuntime:RetrievalRuntime|undefined
++let queryFileGrants:QueryFileGrants|undefined
++let aiDeviceSampler:ReturnType<typeof createLocalAiDeviceSampler>|undefined
+ let aiAcceptance:ReturnType<typeof createAcceptanceService>|undefined
+ let aiConnections:ReturnType<typeof createAiConnectionService>|undefined
+ let visualAi: ReturnType<typeof createVisualAiController> | undefined
+@@ -258,7 +270,12 @@ function registerWorkspaceCommand(channel: string, handler: MainIpcHandler): voi
+     }
+     return receiptAuthority.execute(isBrowserContext(context) ? `client:${context.id}` : `native:${context.sender.id}`, args,
+       () => clientRequestScope.run(context, async () => {
+-        const result = await handler(context, ...args)
++        const query=args[0] as {query?:unknown;queryId?:unknown;mode?:unknown}|undefined
++        const text=typeof query?.query==='string'?query.query:''
++        const language=query?.mode==='image'?null:/[\p{Script=Han}]/u.test(text)?/[A-Za-z]/.test(text)?'mixed':'zh':/[A-Za-z]/.test(text)?'en':null
++        const result = ['asset-search:query','asset-retrieval:query'].includes(channel)
++          ?await measureAiStage(aiDiagnostics?.record,typeof query?.queryId==='string'?query.queryId:randomUUID(),'index-query',()=>Promise.resolve(handler(context,...args)),{language})
++          :await handler(context, ...args)
+         if (['settings:save', 'ai-backend:save', 'ai-backend:delete'].includes(channel)) publishWorkspaceEvent('settings:changed')
+         if ((result as { success?: boolean } | null)?.success && ['connected-library:confirm', 'connected-library:index-next', 'connected-library:queue-metadata', 'connected-library:prepare-new', 'connected-library:prepare-file', 'connected-library:queue-lifecycle', 'connected-library:sync', 'connected-library:resolve-conflict', 'connected-library:confirm-cleanup', 'connected-library:disconnect', 'legacy-readonly:confirm', 'legacy-readonly:close'].includes(channel)) publishWorkspaceEvent('connected-library:changed')
+         return result
+@@ -370,8 +387,9 @@ app.whenReady().then(async () => {
+       ...(!requestedProfile ? [join(os.homedir(), 'DesignAssetManager', 'settings.json')] : [])
+     ])
+     appStorage = createAppStorage(join(app.getPath('userData'), 'app-state'))
+-    visualAdmission = createVisualAdmission({activity:()=>{const idle=powerMonitor.getSystemIdleState(5);return idle==='idle'?'idle':idle==='active'||idle==='locked'?'active':'unknown'}})
+-    const libraryPlatform = {admission: visualAdmission, backupBundleDirectory: app.isPackaged
++    if(!syntheticE2e)aiDeviceSampler=createLocalAiDeviceSampler()
++    visualAdmission = createVisualAdmission({devices:()=>aiDeviceSampler?.read()??[],activity:()=>{const idle=powerMonitor.getSystemIdleState(5);return idle==='idle'?'idle':idle==='active'||idle==='locked'?'active':'unknown'}})
++    const libraryPlatform = {admission: visualAdmission,retrievalRuntime:()=>retrievalRuntime, backupBundleDirectory: app.isPackaged
+       ? join(process.resourcesPath, 'windows-backup-runtime', 'win32-x64')
+       : join(app.getAppPath(), 'build', 'windows-backup-runtime', 'win32-x64')}
+     activeLibraryHost = syntheticE2e
+@@ -399,7 +417,7 @@ app.whenReady().then(async () => {
+       rendererDirectory: join(__dirname, '../renderer'),
+       connected: context => { workspaceDrafts?.touch(draftOwner(context)); workspaceClients.set(draftOwner(context), { send: (channel, value) => localServer?.publishToClient(context.id, channel, value) }) },
+       disconnected: context => { const client = workspaceClients.get(draftOwner(context)); if (client) client.connected = false },
+-      revoked: context => { workspaceClients.delete(draftOwner(context)); workspaceDrafts?.release(draftOwner(context)); receiptAuthority.release(draftOwner(context)); fileSelection.revoke(context.id) },
++      revoked: context => { workspaceClients.delete(draftOwner(context)); workspaceDrafts?.release(draftOwner(context)); receiptAuthority.release(draftOwner(context)); fileSelection.revoke(context.id);queryFileGrants?.revoke(draftOwner(context));activeLibraryHost?.cancelSemanticOwner(draftOwner(context)) },
+       channels: () => [...workspaceHandlers.keys()].filter(channel => !browserDeniedChannels.has(channel)),
+       invoke: async (context, channel, args) => {
+         if (!isTrustedWorkspace(context)) throw Error('SESSION_EXPIRED')
+@@ -486,7 +504,7 @@ const libraryQuiescence = createLibraryQuiescence({
+   current: () => ({
+     visualAdmission, activeLibraryHost, workWindows, managedDownloads, assetCard,
+     tagDecisions, tagBatches, tagRecovery, visualAi, tagExecution, tagIntents,
+-    imageTools, backgroundAnalysis, basicAnalysis, backgroundOcr, ocr, aiConnections, aiAcceptance, managedVision
++    imageTools, backgroundAnalysis, basicAnalysis, backgroundOcr, ocr, aiConnections, aiAcceptance, managedVision, retrievalRuntime, queryFileGrants
+   }),
+   isShutdownIdle: () => shutdownCoordinator.state === 'idle',
+   confirmSwitchDraftDiscard: () => {
+@@ -499,8 +517,10 @@ const shutdownCoordinator = new ShutdownCoordinator({
+     fileSelection.cancelAll()
+     await workspaceDrafts?.flush()
+     await managedModels?.drain()
++    await retrievalModels?.drain()
+     await libraryQuiescence.drainForShutdown()
+     await connectedRuntime?.drain()
++    await aiDeviceSampler?.stop()
+     await localServer?.close()
+     appStorage?.close()
+     if (syntheticE2e) fs.writeFileSync(join(syntheticE2e.evidenceDirectory, 'shutdown-complete'), 'complete\n', { flag: 'w' })
+@@ -577,6 +597,7 @@ function setupIpcHandlers() {
+   }
+   if (!appStorage || !activeLibraryHost || !connectedRuntime || !visualAdmission) throw new Error('Main application state is unavailable.')
+   const settingsService = syntheticE2e ? createSyntheticSettingsService(syntheticE2e, syntheticFixtures) : SettingsService.getInstance()
++  aiDiagnostics=createAiDiagnostics(appStorage.database,DAM_BUILD_IDENTITY.buildId)
+   appStorage.database.exec('CREATE TABLE IF NOT EXISTS ai_resource_policy(singleton INTEGER PRIMARY KEY CHECK(singleton=1),policy TEXT NOT NULL)')
+   const savedResourcePolicy=appStorage.database.prepare('SELECT policy FROM ai_resource_policy WHERE singleton=1').get() as {policy:string}|undefined
+   if(savedResourcePolicy)visualAdmission.configureResources(JSON.parse(savedResourcePolicy.policy))
+@@ -592,10 +613,64 @@ function setupIpcHandlers() {
+     const modelNetwork=session.fromPartition('dam-public-model-download',{cache:false})
+     managedModels=createManagedModelLibrary({database:appStorage.database,root:join(app.getPath('userData'),'managed-models'),runner,
+       fetch:createPublicModelFetch(options=>net.request({...options,session:modelNetwork})),selectModel,selectPython,
+-      reserve:(id,signal)=>visualAdmission!.reserveResident('model-acquisition:'+id,128*1024**2,signal),changed:()=>publishWorkspaceEvent('managed-models:changed')})
++      reserve:(id,signal)=>visualAdmission!.reserveResident('model-acquisition:'+id,128*1024**2,signal),changed:()=>publishWorkspaceEvent('managed-models:changed'),admission:visualAdmission})
+     managedVision=createManagedVisionRuntime({database:appStorage.database,settings:settingsService,admission:visualAdmission,
+-      runner,selectModel,selectPython,changed,models:managedModels})
++      runner,selectModel,selectPython,changed,models:managedModels,diagnostics:aiDiagnostics.record,
++      refreshDevices:()=>aiDeviceSampler?.refresh()??Promise.resolve(),
++      ggufPackages:createManagedGgufPackages({database:appStorage.database,root:join(app.getPath('userData'),'managed-gguf-runtime'),
++        fetch:createPublicModelFetch(options=>net.request({...options,session:modelNetwork}),assertNativeRuntimeUrl),changed:()=>publishWorkspaceEvent('managed-models:changed')})})
++    const retrievalChanged=()=>publishWorkspaceEvent('retrieval-models:changed')
++    retrievalModels=createRetrievalModelLibrary({database:appStorage.database,root:join(app.getPath('userData'),'retrieval-models'),
++      fetch:createPublicModelFetch(options=>net.request({...options,session:modelNetwork})),admission:visualAdmission,changed:retrievalChanged})
++    retrievalRuntime=createRetrievalRuntime({database:appStorage.database,runner:app.isPackaged?join(process.resourcesPath,'ai-service/tools/retrieval_worker.py'):join(__dirname,'ai-service/tools/retrieval_worker.py'),
++      models:retrievalModels,admission:visualAdmission,selectPython,changed:retrievalChanged,archiveRoot:join(app.getPath('userData'),'retrieval-runtimes')})
+   }
++  registerWorkspaceCommand('retrieval-models:read',()=>{if(!retrievalModels||!retrievalRuntime)throw Error('LOCAL_RUNTIME_UNAVAILABLE');return {...retrievalModels.summary(),runtime:retrievalRuntime.status()}})
++  registerWorkspaceCommand('retrieval-models:action',async(_context,raw)=>{
++    if(!retrievalModels||!retrievalRuntime)throw Error('LOCAL_RUNTIME_UNAVAILABLE')
++    const action=parseRetrievalModelAction(raw)
++    switch(action.kind){
++      case 'review-install':return retrievalModels.reviewInstall()
++      case 'confirm-install':return retrievalModels.confirm(action.receipt)
++      case 'pause':await retrievalModels.pause(action.taskId);break
++      case 'resume':retrievalModels.resume(action.taskId);break
++      case 'abandon':await retrievalModels.abandon(action.taskId);break
++      case 'select-runtime':await retrievalRuntime.selectRuntime();break
++      case 'verify-use':await retrievalRuntime.verifyUse(action.modelId);break
++      case 'revoke':await retrievalRuntime.revoke(action.modelId);break
++      case 'restore':retrievalModels.trust(action.modelId,true);break
++      case 'release-idle':await retrievalRuntime.releaseIdle();break
++      case 'cancel-validation':retrievalRuntime.cancelValidation();break
++    }
++    return {...retrievalModels.summary(),runtime:retrievalRuntime.status()}
++  })
++  queryFileGrants=createQueryFileGrants({admission:visualAdmission,current:()=>activeLibraryHost!.inspect(),select:async()=>{
++    const result=await showNativeOpenDialog({title:'选择一张图片作为检索示例（不收录，不上传）',properties:['openFile'],filters:[{name:'单帧图片 · 最多4MiB',extensions:['png','jpg','jpeg','webp']}]})
++    return result.canceled||result.filePaths.length!==1?null:result.filePaths[0]
++  }})
++  const checkRetrievalScope=(input:unknown):RetrievalScope=>{
++    const scope=input as RetrievalScope,current=activeLibraryHost!.inspect()
++    if(!scope||typeof scope!=='object'||Array.isArray(scope)||Object.keys(scope).some(k=>!['libraryIdentity','generation'].includes(k))||
++      current.state!=='ready'||scope.libraryIdentity!==current.identity||scope.generation!==current.generation)throw Error('RETRIEVAL_SCOPE_EXPIRED')
++    return scope
++  }
++  registerWorkspaceCommand('asset-retrieval:coverage',(_context,input)=>{checkRetrievalScope(input);return activeLibraryHost!.readRetrievalCoverage()})
++  registerWorkspaceCommand('asset-retrieval:start',(_context,input)=>activeLibraryHost!.startRetrievalGeneration(parseRetrievalGeneration(input)))
++  for(const name of ['pause','resume','switch-space','cancel-query'] as const)registerWorkspaceCommand(`asset-retrieval:${name}`,(context,input)=>{
++    if(!input||typeof input!=='object'||Object.keys(input).sort().join(',')!=='generation,id,libraryIdentity'||typeof input.id!=='string')throw Error('RETRIEVAL_ACTION_INVALID')
++    const scope=checkRetrievalScope({libraryIdentity:input.libraryIdentity,generation:input.generation})
++    if(name==='pause'||name==='resume'){if(!/^retrieval-job:[a-f0-9-]{36}$/.test(input.id))throw Error('RETRIEVAL_ACTION_INVALID');return name==='pause'?activeLibraryHost!.pauseRetrievalGeneration(scope,input.id):activeLibraryHost!.resumeRetrievalGeneration(scope,input.id)}
++    if(name==='switch-space'){if(!/^[a-f0-9]{64}$/.test(input.id))throw Error('RETRIEVAL_ACTION_INVALID');return activeLibraryHost!.switchRetrievalSpace(scope,input.id)}
++    if(!/^[a-f0-9-]{36}$/.test(input.id))throw Error('RETRIEVAL_ACTION_INVALID');return activeLibraryHost!.cancelSemanticQuery(scope,input.id,draftOwner(context))
++  })
++  registerWorkspaceCommand('asset-retrieval:rebuild-index',(_context,input)=>{checkRetrievalScope(input);return activeLibraryHost!.rebuildRetrievalIndex()})
++  registerWorkspaceCommand('asset-retrieval:query',(context,input)=>{
++    const value=parseAssetSemanticSearch(input),owner=draftOwner(context)
++    if(value.externalGrant)return queryFileGrants!.use(owner,value,value.externalGrant,bytes=>activeLibraryHost!.searchSemanticPage(value,owner,bytes))
++    return activeLibraryHost!.searchSemanticPage(value,owner)
++  })
++  registerWorkspaceCommand('query-file:select',(context,input)=>queryFileGrants!.select(draftOwner(context),checkRetrievalScope(input)))
++  registerWorkspaceCommand('query-file:release',(context,id)=>{if(typeof id!=='string'||!/^query-file:[a-f0-9-]{36}$/.test(id))throw Error('RETRIEVAL_ACTION_INVALID');queryFileGrants!.release(draftOwner(context),id)})
+   registerWorkspaceCommand('managed-models:read',context=>{
+     if(!isTrustedWorkspace(context)||!managedModels)throw Error('LOCAL_RUNTIME_UNAVAILABLE')
+     return managedModels.summary(managedVision?.status().modelEntryId??undefined)
+@@ -606,18 +681,23 @@ function setupIpcHandlers() {
+     switch(action.kind){
+       case 'review-import':return managedModels.reviewImport(action.ownership)
+       case 'review-install':return managedModels.reviewInstall(action.modelId)
++      case 'review-gguf-install':return managedModels.reviewGgufInstall(action.bundleId)
++      case 'review-gguf-import':return managedModels.reviewGgufImport(action.bundleId,action.ownership)
+       case 'confirm':return managedModels.confirm(action.review)
+       case 'discard-review':managedModels.discardReview(action.review);break
+       case 'cancel-preparation':managedModels.cancelPreparation();break
+       case 'refresh-catalog':await managedModels.refreshCatalog();break
++      case 'recommend-gguf':await aiDeviceSampler?.refresh();return managedModels.recommendGguf(action.preference)
+       case 'auto-select':await managedVision.autoSelect(action.preference);break
+       case 'pause':await managedModels.pause(action.taskId);break
+       case 'resume':await managedModels.resume(action.taskId);break
+       case 'abandon':await managedModels.abandon(action.taskId);break
+       case 'activate':await managedVision.activateModel(action.modelEntryId);break
++      case 'activate-gguf':await managedVision.activateModel(action.modelEntryId,{mode:action.mode,deviceId:action.deviceId});break
+       case 'revoke':await managedVision.revokeModel(action.modelEntryId);break
+       case 'retire':await managedVision.revokeModel(action.modelEntryId,true);break
+       case 'restore':managedModels.setTrust(action.modelEntryId,true);break
++      case 'refresh-source':try{await managedModels.refreshSource(action.modelEntryId)}finally{await managedVision.sourceTrustChanged(action.modelEntryId)}break
+     }
+     return managedModels.summary(managedVision.status().modelEntryId??undefined)
+   })
+@@ -627,22 +707,35 @@ function setupIpcHandlers() {
+     return managedVision.status()
+   })
+   registerWorkspaceCommand('ai-resources:read',()=>visualAdmission!.resourceStatus())
++  registerWorkspaceCommand('ai-resources:diagnostics',context=>{
++    if(!isTrustedWorkspace(context)||!appStorage||!aiDiagnostics)throw Error('AI_RESOURCE_UNAVAILABLE')
++    const recoveries=(managedVision?appStorage.database.prepare('SELECT record FROM local_oom_recovery ORDER BY rowid DESC LIMIT 20').all():[]).map(row=>{
++      const value=JSON.parse((row as {record:string}).record),safe:Record<string,unknown>={}
++      for(const key of ['state','model','operationId','executionId','fromFingerprint','fromMode','toFingerprint','toMode','loadedExecutionId','physicalCalls','errorCode','updatedAt','terminalAt'])if(value[key]!==undefined)safe[key]=value[key]
++      return safe
++    })
++    return {stages:aiDiagnostics.read(),recoveries}
++  })
++  registerWorkspaceCommand('ai-resources:release-idle',async(context)=>{
++    if(!isTrustedWorkspace(context)||!visualAdmission)throw Error('AI_RESOURCE_UNAVAILABLE')
++    visualAdmission.releaseIdleMaterials();await Promise.all([managedVision?.releaseIdle(),retrievalRuntime?.releaseIdle()]);return visualAdmission.resourceStatus()
++  })
+   registerWorkspaceCommand('ai-resources:configure',async(_context,policy)=>{
+     visualAdmission!.configureResources(policy)
+     appStorage!.database.prepare('INSERT INTO ai_resource_policy VALUES(1,?) ON CONFLICT(singleton) DO UPDATE SET policy=excluded.policy').run(JSON.stringify(policy))
+-    await managedVision?.rebalance();return visualAdmission!.resourceStatus()
++    await Promise.all([managedVision?.rebalance(),retrievalRuntime?.rebalance()]);return visualAdmission!.resourceStatus()
+   })
+   imageTools = createImageToolsController({ host: activeLibraryHost, onSaved: scope => {
+     publishWorkspaceEvent('image-tools:saved', scope)
+   } })
+-  aiConnections=createAiConnectionService({hostIdentity:createAiHostIdentityStore(join(app.getPath('userData'),'ai-host-identity.v1.json')),managed:managedVision?{owns:id=>id===MANAGED_VISION_ID,prepare:signal=>managedVision!.prepare(signal),invokeOnce:input=>managedVision!.invokeOnce(input)}:undefined,reserveProbe:signal=>visualAdmission!.reservePiProbe(signal),settings:settingsService,vault:createCredentialVault({file:join(app.getPath('userData'),'ai-credentials.v1.json'),protection:syntheticE2e?createSyntheticSecretProtection(app.getPath('userData')):{available:()=>safeStorage.isEncryptionAvailable()&&(process.platform!=='linux'||safeStorage.getSelectedStorageBackend()!=='basic_text'),encrypt:value=>safeStorage.encryptString(value),decrypt:value=>safeStorage.decryptString(value)}}),runtime:createPiRuntimeHost({authorizeRequest:syntheticE2e?(request=>{if(!syntheticFixtures)throw Error('SYNTHETIC_EXECUTION_DENIED');syntheticFixtures.authorizePi(request)}):undefined,root:app.isPackaged?join(process.resourcesPath,'pi-runtime'):join(path.dirname(fileURLToPath(import.meta.url)),'../../pi-runtime')}),changed:()=>{visualAi?.invalidate();tagExecution?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();basicAnalysis?.invalidate()}})
++  aiConnections=createAiConnectionService({hostIdentity:createAiHostIdentityStore(join(app.getPath('userData'),'ai-host-identity.v1.json')),managed:managedVision?{owns:id=>id===MANAGED_VISION_ID,prepare:signal=>managedVision!.prepare(signal),invokeOnce:input=>managedVision!.invokeOnce(input),recoverLocal:(error,input)=>managedVision!.recoverLocal(error,input),finishLocalRecovery:(error,outcome)=>managedVision!.finishLocalRecovery(error,outcome)}:undefined,reserveProbe:signal=>visualAdmission!.reservePiProbe(signal),settings:settingsService,vault:createCredentialVault({file:join(app.getPath('userData'),'ai-credentials.v1.json'),protection:syntheticE2e?createSyntheticSecretProtection(app.getPath('userData')):{available:()=>safeStorage.isEncryptionAvailable()&&(process.platform!=='linux'||safeStorage.getSelectedStorageBackend()!=='basic_text'),encrypt:value=>safeStorage.encryptString(value),decrypt:value=>safeStorage.decryptString(value)}}),runtime:createPiRuntimeHost({authorizeRequest:syntheticE2e?(request=>{if(!syntheticFixtures)throw Error('SYNTHETIC_EXECUTION_DENIED');syntheticFixtures.authorizePi(request)}):undefined,root:app.isPackaged?join(process.resourcesPath,'pi-runtime'):join(path.dirname(fileURLToPath(import.meta.url)),'../../pi-runtime')}),changed:()=>{visualAi?.invalidate();tagExecution?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();basicAnalysis?.invalidate()}})
+   managedVision?.recheck()
+   aiAcceptance=createAcceptanceService({directory:join(app.getPath('userData'),'ai-acceptance'),settings:settingsService,connections:aiConnections,admission:visualAdmission,isSynthetic:Boolean(syntheticE2e)})
+   visualAi = createVisualAiController({provider:aiConnections.provider, host: activeLibraryHost, admission:visualAdmission, settings: () => settingsService.getSettings(), onChanged: scope => {
+     void assetCard?.refresh()
+     publishWorkspaceEvent(EVENT_VISUAL_AI_UPDATED, scope)
+   } })
+-  tagExecution=createTagExecutionController({provider:aiConnections.provider,host:activeLibraryHost,settings:()=>settingsService.getSettings(),admission:visualAdmission,legacy:visualAi,changed:scope=>{void assetCard?.refresh();publishWorkspaceEvent(EVENT_VISUAL_AI_UPDATED,scope)}})
++  tagExecution=createTagExecutionController({diagnostics:aiDiagnostics.record,provider:aiConnections.provider,host:activeLibraryHost,settings:()=>settingsService.getSettings(),admission:visualAdmission,legacy:visualAi,changed:scope=>{void assetCard?.refresh();publishWorkspaceEvent(EVENT_VISUAL_AI_UPDATED,scope)}})
+   tagBatches=createTagBatchController({host:activeLibraryHost,settings:()=>settingsService.getSettings(),execution:tagExecution,changed:scope=>{void assetCard?.refresh();publishWorkspaceEvent(EVENT_VISUAL_AI_UPDATED,scope)}})
+   tagRecovery=createTagRecoveryController({host:activeLibraryHost,settings:()=>settingsService.getSettings(),batch:tagBatches,changed:async scope=>{await assetCard?.refresh();await workWindows?.refresh();publishWorkspaceEvent(EVENT_VISUAL_AI_UPDATED,scope);if(scope.eventId.startsWith('basic:'))publishWorkspaceEvent(OCR_CHANGED,scope)}})
+   tagDecisions=createTagDecisionController({host:activeLibraryHost,admission:visualAdmission,visuals:{suspendAndDrain:async()=>{tagRecovery?.invalidate();await Promise.all([tagBatches!.suspendAndDrain(),visualAi!.suspendAndDrain(),tagExecution!.suspendAndDrain()])},resume:()=>{visualAi!.resume();tagExecution!.resume();tagBatches!.resume()}},changed:scope=>{void assetCard?.refresh();void workWindows?.refresh();publishWorkspaceEvent(EVENT_VISUAL_AI_UPDATED,scope)}})
+@@ -664,7 +757,7 @@ function setupIpcHandlers() {
+   managedDownloads = createManagedDownloads({ host: activeLibraryHost, history: new DownloadService(appStorage.database), fetch: syntheticE2e ? syntheticFixtures?.fetch ?? (async()=>{throw Error('SYNTHETIC_ENDPOINT_DENIED')}) : undefined, onImported: job => {
+     publishWorkspaceEvent('download:imported', { libraryIdentity: job.libraryIdentity, generation: job.generation, assetId: job.assetId })
+   } })
+-  basicAnalysis=createBasicAnalysisController({host:activeLibraryHost,settings:()=>settingsService.getSettings(),provider:aiConnections.provider,admission:visualAdmission,tags:tagExecution,ocr,ocrRuntime,
++  basicAnalysis=createBasicAnalysisController({diagnostics:aiDiagnostics.record,host:activeLibraryHost,settings:()=>settingsService.getSettings(),provider:aiConnections.provider,admission:visualAdmission,tags:tagExecution,ocr,ocrRuntime,
+     resourceReadiness:rule=>rule.backendId===MANAGED_VISION_ID?managedVision?.backgroundReadiness():undefined,
+     upgrade:async(input,signal)=>{if((await activeLibraryHost!.readAssetContext([])).schemaVersion>=14)return;const releaseOcr=ocr!.holdForMaintenance(),release=visualAdmission!.hold();try{await backgroundOcr?.suspendAndDrain();await Promise.all([tagBatches!.suspendAndDrain(),tagExecution!.suspendAndDrain(),visualAi!.suspendAndDrain()]);await activeLibraryHost!.enableBasicAnalysis(input,signal)}finally{tagBatches!.resume();tagExecution!.resume();visualAi!.resume();ocr!.resume();releaseOcr();release()}},
+     changed:scope=>{void assetCard?.refresh();void workWindows?.refresh();publishWorkspaceEvent(EVENT_VISUAL_AI_UPDATED,scope);publishWorkspaceEvent(OCR_CHANGED,scope);void tagRecovery?.flush(scope)}})

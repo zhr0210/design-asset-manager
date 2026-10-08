@@ -1,0 +1,17 @@
+diff --git a/scripts/managed-vision-negative.test.ts b/scripts/managed-vision-negative.test.ts
+index ac510f7..f771a76 100644
+--- a/scripts/managed-vision-negative.test.ts
++++ b/scripts/managed-vision-negative.test.ts
+@@ -18,7 +18,11 @@ async function fixture() {
+   await fs.writeFile(path.join(model, 'config.json'), JSON.stringify({ model_type: 'qwen3_vl', text_config: { hidden_size: 2560, num_hidden_layers: 36 } }))
+   for (const name of ['tokenizer.json', 'tokenizer_config.json', 'preprocessor_config.json', 'generation_config.json']) await fs.writeFile(path.join(model, name), '{}')
+   await fs.writeFile(path.join(model, 'chat_template.json'), JSON.stringify({ chat_template: '{{ messages }}' }))
+-  const db = new Database(path.join(root, 'app.sqlite')), admission = createVisualAdmission({policy:{mode:'normal',reserveFraction:.05}})
++  // These are invalid-model/actual-exit tests, not desktop-memory tests. An
++  // unrelated open application must not prevent reaching the negative check.
++  // No positive model qualification is supplied by this memory fixture.
++  const db = new Database(path.join(root, 'app.sqlite')), admission = createVisualAdmission({policy:{mode:'normal',reserveFraction:.05},
++    memory:()=>({free:48*1024**3,total:64*1024**3})})
+   let settings = createNewInstallAppSettingsDefaults()
+   const runtime = createManagedVisionRuntime({ database: db, admission, runner: path.resolve('out/main/ai-service/tools/managed_vision_worker.py'),
+     settings: { getSettings: () => settings, saveSettings: value => (settings = { ...settings, ...value }) } as any,

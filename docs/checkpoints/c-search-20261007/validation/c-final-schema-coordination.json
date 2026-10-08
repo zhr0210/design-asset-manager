@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-07T13:39:25.420Z",
+  "scope": "non-UI automated regressions; no visible user acceptance",
+  "results": [
+    {
+      "entry": "scripts/search-schema-backup.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 5242,
+      "log": "c-final-schema-coordination-search-schema-backup.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-ocr.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 128604,
+      "log": "c-final-schema-coordination-background-ocr.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-ocr-runtime-observation.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 33930,
+      "log": "c-final-schema-coordination-background-ocr-runtime-observation.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/host-schema-maintenance.test.ts",
+      "exitCode": 0,
+      "durationMs": 98935,
+      "log": "c-final-schema-coordination-host-schema-maintenance.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-analysis.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 58999,
+      "log": "c-final-schema-coordination-background-analysis.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/asset-search-host.test.ts",
+      "exitCode": 0,
+      "durationMs": 21511,
+      "log": "c-final-schema-coordination-asset-search-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/asset-retrieval-host.test.ts",
+      "exitCode": 0,
+      "durationMs": 4524,
+      "log": "c-final-schema-coordination-asset-retrieval-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/windows-backup-source.test.ts",
+      "exitCode": 0,
+      "durationMs": 1285,
+      "log": "c-final-schema-coordination-windows-backup-source.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    }
+  ]
+}

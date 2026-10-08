@@ -1,0 +1,51 @@
+diff --git a/src/main/retrieval-workspace/retrieval-runner-archive.ts b/src/main/retrieval-workspace/retrieval-runner-archive.ts
+new file mode 100644
+index e69de29..81b0215 100644
+--- /dev/null
++++ b/src/main/retrieval-workspace/retrieval-runner-archive.ts
+@@ -0,0 +1,45 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import {createHash,randomUUID} from 'node:crypto'
++import type Database from 'better-sqlite3'
++import type {RetrievalQualification} from '../../shared/contracts/retrieval-workspace.contract'
++export interface RetrievalArchivedBinding {modelId:string;python:string;artifactFingerprint:string;runnerName:string;runnerSha256:string;qualification:RetrievalQualification}
++/** Preserve the actual shipped worker associated with a real qualification.
++ * No model repository code or client-selected executable enters this store. */
++export function createRetrievalRunnerArchive(database:Database.Database,directory:string){
++ const root=path.resolve(directory)
++ database.exec('CREATE TABLE IF NOT EXISTS retrieval_runner_owner(singleton INTEGER PRIMARY KEY CHECK(singleton=1),owner TEXT NOT NULL); CREATE TABLE IF NOT EXISTS retrieval_space_bindings(space TEXT PRIMARY KEY,record TEXT NOT NULL)')
++ const prior=database.prepare('SELECT owner FROM retrieval_runner_owner WHERE singleton=1').pluck().get(),owner=typeof prior==='string'?prior:randomUUID()
++ if(!prior)database.prepare('INSERT INTO retrieval_runner_owner VALUES(1,?)').run(owner)
++ const sha=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex')
++ async function storage(){
++  await fs.mkdir(root,{recursive:true,mode:0o700});const stat=await fs.lstat(root);if(!stat.isDirectory()||stat.isSymbolicLink())throw Error('RETRIEVAL_RUNNER_STORAGE_INVALID')
++  const marker=path.join(root,'.dam-retrieval-runners')
++  try{const s=await fs.lstat(marker);if(!s.isFile()||s.isSymbolicLink()||s.size>4096||JSON.parse(await fs.readFile(marker,'utf8')).owner!==owner)throw Error('RETRIEVAL_RUNNER_STORAGE_INVALID')}
++  catch(e){if((e as NodeJS.ErrnoException).code!=='ENOENT')throw e;if(database.prepare('SELECT 1 FROM retrieval_space_bindings LIMIT 1').get())throw Error('RETRIEVAL_RUNNER_STORAGE_INVALID');await fs.writeFile(marker,JSON.stringify({owner}),{flag:'wx',mode:0o600})}
++ }
++ async function checked(binding:RetrievalArchivedBinding){
++  if(!/^runner-[a-f0-9]{64}\.py$/.test(binding.runnerName)||binding.runnerName!==`runner-${binding.runnerSha256}.py`)throw Error('RETRIEVAL_RUNNER_STORAGE_INVALID')
++  await storage();const file=path.join(root,binding.runnerName),stat=await fs.lstat(file)
++  if(!stat.isFile()||stat.isSymbolicLink()||stat.size<1||stat.size>65536||sha(await fs.readFile(file))!==binding.runnerSha256)throw Error('LOCAL_MODEL_CHANGED')
++  return file
++ }
++ return {
++  async preserve(input:Omit<RetrievalArchivedBinding,'runnerName'|'runnerSha256'>,shippedRunner:string,signal?:AbortSignal){
++   signal?.throwIfAborted()
++   await storage();const stat=await fs.lstat(shippedRunner);if(!stat.isFile()||stat.isSymbolicLink()||stat.size<1||stat.size>65536)throw Error('RETRIEVAL_RUNNER_STORAGE_INVALID')
++   const bytes=await fs.readFile(shippedRunner),runnerSha256=sha(bytes),runnerName=`runner-${runnerSha256}.py`,binding={...input,runnerName,runnerSha256}
++   const old=database.prepare('SELECT record FROM retrieval_space_bindings WHERE space=?').pluck().get(input.qualification.spaceId)
++   if(typeof old==='string'){const archived=JSON.parse(old) as RetrievalArchivedBinding
++    if(archived.modelId!==binding.modelId||archived.python!==binding.python||archived.artifactFingerprint!==binding.artifactFingerprint||archived.runnerSha256!==runnerSha256||archived.qualification.fingerprint!==binding.qualification.fingerprint)throw Error('RETRIEVAL_SPACE_CHANGED')
++    const file=await checked(archived);signal?.throwIfAborted();database.prepare('UPDATE retrieval_space_bindings SET record=? WHERE space=?').run(JSON.stringify(binding),input.qualification.spaceId);return file}
++   if(Number(database.prepare('SELECT COUNT(*) FROM retrieval_space_bindings').pluck().get())>=32)throw Error('RETRIEVAL_RUNNER_ARCHIVE_FULL')
++   const file=path.join(root,runnerName)
++   try{await fs.writeFile(file,bytes,{flag:'wx',mode:0o600})}catch(e){if((e as NodeJS.ErrnoException).code!=='EEXIST')throw e}
++   await checked(binding);signal?.throwIfAborted();database.prepare('INSERT INTO retrieval_space_bindings VALUES(?,?)').run(input.qualification.spaceId,JSON.stringify(binding));return file
++  },
++  async resolve(space:string){const row=database.prepare('SELECT record FROM retrieval_space_bindings WHERE space=?').pluck().get(space);if(typeof row!=='string')return null
++   const binding=JSON.parse(row) as RetrievalArchivedBinding;if(binding.qualification.spaceId!==space)throw Error('RETRIEVAL_SPACE_CHANGED');return {binding,runner:await checked(binding)}},
++  revoke(modelId:string){database.prepare("DELETE FROM retrieval_space_bindings WHERE json_extract(record,'$.modelId')=?").run(modelId)},
++ }
++}

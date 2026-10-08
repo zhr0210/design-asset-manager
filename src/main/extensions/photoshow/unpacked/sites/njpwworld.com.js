@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"njpwworld.com":{srcMatching:[{srcRegExp:"(\\w+)-.+?(@IMG@)",processor:"$1$2"}]}};

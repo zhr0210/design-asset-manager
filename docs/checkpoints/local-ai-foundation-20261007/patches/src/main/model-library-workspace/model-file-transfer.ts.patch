@@ -1,0 +1,34 @@
+diff --git a/src/main/model-library-workspace/model-file-transfer.ts b/src/main/model-library-workspace/model-file-transfer.ts
+index f7fae8b..38c36a8 100644
+--- a/src/main/model-library-workspace/model-file-transfer.ts
++++ b/src/main/model-library-workspace/model-file-transfer.ts
+@@ -47,9 +47,18 @@ async function writeAll(handle: fs.FileHandle, chunk: Uint8Array, position: numb
+ export async function transferModelFile(input: {
+   file: VisionModelFile; stage: string; sourceRoot?: string; release?: UpstreamModelRelease; fetch: PublicModelFetch;
+   signal: AbortSignal; progress(bytes: number): void;
++  open?: (offset: number, signal: AbortSignal) => Promise<Response>;
+ }) {
+   const { file, signal } = input
+   const destination = path.join(input.stage, file.name)
++  let parent = input.stage
++  for (const part of file.name.split('/').slice(0, -1)) {
++    if (!/^[A-Za-z0-9._-]+$/.test(part) || part === '.' || part === '..') throw Error('MODEL_STAGING_UNSAFE')
++    parent = path.join(parent, part)
++    await fs.mkdir(parent, { recursive: true, mode: 0o700 })
++    const directory = await fs.lstat(parent)
++    if (!directory.isDirectory() || directory.isSymbolicLink()) throw Error('MODEL_STAGING_UNSAFE')
++  }
+   try { await verifyTransferredFile(destination, file, signal); input.progress(file.bytes); return }
+   catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error }
+   const part = destination + '.part', opened = await partialHandle(part, file.bytes)
+@@ -70,8 +79,8 @@ export async function transferModelFile(input: {
+           if (after.size !== held.size || after.mtimeMs !== held.mtimeMs || after.ctimeMs !== held.ctimeMs) throw Error('LOCAL_MODEL_CHANGED')
+         } finally { await reader.close() }
+       } else {
+-        if (!input.release) throw Error('MODEL_SOURCE_UNAVAILABLE')
+-        const response = await openUpstreamFile(input.release, file, offset, input.fetch, signal)
++        if (!input.release && !input.open) throw Error('MODEL_SOURCE_UNAVAILABLE')
++        const response = input.open ? await input.open(offset, signal) : await openUpstreamFile(input.release!, file, offset, input.fetch, signal)
+         try {
+           if (response.status !== 200 && response.status !== 206 || !response.body) throw Error('MODEL_TRANSFER_FAILED')
+           if (response.headers.get('content-encoding') && response.headers.get('content-encoding') !== 'identity') throw Error('MODEL_TRANSFER_ENCODING_REJECTED')

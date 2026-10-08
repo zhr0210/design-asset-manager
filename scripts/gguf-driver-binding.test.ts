@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict'
+import {test} from 'node:test'
+import {createGgufLoadPlan} from '../src/main/local-ai-resources/gguf-load-plan'
+import type {HuggingFaceModelBundle} from '../src/shared/contracts/managed-model-library.contract'
+import type {AiDeviceResourceSample} from '../src/shared/contracts/local-ai-resources.contract'
+await test('a changed GPU driver changes the physical plan while the CPU plan stays independent',()=>{
+ const bundle:HuggingFaceModelBundle={id:'bundle-fixture',repository:'Qwen/fixture',revision:'a'.repeat(40),size:'2B',variant:'Instruct',languageQuantization:'Q4_K_M',projectorQuantization:'Q8_0',bytes:1024,
+  files:[{name:'model.gguf',bytes:768,sha256:'b'.repeat(64),downloadUrl:null},{name:'mmproj-model.gguf',bytes:256,sha256:'c'.repeat(64),downloadUrl:null}],support:'managed-gguf'}
+ const device:AiDeviceResourceSample={id:'0:GPU-00000000-0000-0000-0000-000000000000',name:'fixture',topology:'dedicated',state:'known',totalBytes:16*1024**3,freeBytes:12*1024**3,sampledAt:Date.now(),source:'nvidia-smi',driver:'616.92',computeCapability:'12.0'}
+ assert.notEqual(createGgufLoadPlan(bundle,'gpu',device).identity,createGgufLoadPlan(bundle,'gpu',{...device,driver:'620.00'}).identity)
+ assert.equal(createGgufLoadPlan(bundle,'cpu',device).identity,createGgufLoadPlan(bundle,'cpu',{...device,driver:'620.00'}).identity)
+})

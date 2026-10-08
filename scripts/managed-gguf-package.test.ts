@@ -1,0 +1,28 @@
+import assert from 'node:assert/strict'
+import { test } from 'node:test'
+import fs from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
+import Database from 'better-sqlite3'
+import { createManagedGgufPackages } from '../src/main/services/ai-runtime/managed-gguf-packages'
+
+await test('fixed native package acquisition refuses false bytes and never publishes an executable or readiness', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'dam-native-package-negative-'))
+  const database = new Database(path.join(root, 'app.sqlite'))
+  const packages = createManagedGgufPackages({ root: path.join(root, 'owned'), database,
+    fetch: async (url, options) => {
+      assert.equal(url, 'https://github.com/ggml-org/llama.cpp/releases/download/b11429/llama-b11429-bin-win-cpu-x64.zip')
+      assert.equal(options.credentials, 'omit')
+      return new Response('untrusted-bytes', { headers: { 'content-length': '15' } })
+    }, changed() {} })
+  try {
+    await assert.rejects(packages.prepare('cpu', new AbortController().signal), /MODEL_TRANSFER_LENGTH_REJECTED/)
+    assert.equal(packages.status().state, 'failed')
+    assert.equal(packages.status().installed.length, 0)
+    assert.equal(packages.status().release, 'b11429')
+  } finally {
+    database.close()
+    assert.ok(path.resolve(root).startsWith(path.resolve(os.tmpdir()) + path.sep) && path.basename(root).startsWith('dam-native-package-negative-'))
+    await fs.rm(root, { recursive: true, force: true })
+  }
+})

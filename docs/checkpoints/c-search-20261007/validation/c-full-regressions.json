@@ -1,0 +1,405 @@
+{
+  "at": "2026-10-07T13:25:02.620Z",
+  "scope": "non-UI automated regressions; no visible user acceptance",
+  "results": [
+    {
+      "entry": "scripts/active-library-host.test.ts",
+      "exitCode": 0,
+      "durationMs": 3228,
+      "log": "c-full-regressions-active-library-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/asset-search-host.test.ts",
+      "exitCode": 0,
+      "durationMs": 24305,
+      "log": "c-full-regressions-asset-search-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/asset-retrieval-host.test.ts",
+      "exitCode": 0,
+      "durationMs": 4628,
+      "log": "c-full-regressions-asset-retrieval-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/ai-resource-policy.test.ts",
+      "exitCode": 0,
+      "durationMs": 383,
+      "log": "c-full-regressions-ai-resource-policy.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-vision-slot.test.ts",
+      "exitCode": 0,
+      "durationMs": 368,
+      "log": "c-full-regressions-local-vision-slot.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/gguf-cpu-envelope.test.ts",
+      "exitCode": 0,
+      "durationMs": 380,
+      "log": "c-full-regressions-gguf-cpu-envelope.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/gguf-driver-binding.test.ts",
+      "exitCode": 0,
+      "durationMs": 366,
+      "log": "c-full-regressions-gguf-driver-binding.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/managed-model-library.test.ts",
+      "exitCode": 0,
+      "durationMs": 4462,
+      "log": "c-full-regressions-managed-model-library.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/huggingface-discovery.test.ts",
+      "exitCode": 0,
+      "durationMs": 539,
+      "log": "c-full-regressions-huggingface-discovery.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/china-model-mirror.test.ts",
+      "exitCode": 0,
+      "durationMs": 462,
+      "log": "c-full-regressions-china-model-mirror.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/managed-gguf-package.test.ts",
+      "exitCode": 0,
+      "durationMs": 552,
+      "log": "c-full-regressions-managed-gguf-package.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/retrieval-model-workspace.test.ts",
+      "exitCode": 0,
+      "durationMs": 658,
+      "log": "c-full-regressions-retrieval-model-workspace.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/retrieval-package-format.test.ts",
+      "exitCode": 0,
+      "durationMs": 729,
+      "log": "c-full-regressions-retrieval-package-format.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/retrieval-runner-archive.test.ts",
+      "exitCode": 0,
+      "durationMs": 473,
+      "log": "c-full-regressions-retrieval-runner-archive.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/query-file-grants.test.ts",
+      "exitCode": 0,
+      "durationMs": 479,
+      "log": "c-full-regressions-query-file-grants.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/analysis-output-contract.test.ts",
+      "exitCode": 0,
+      "durationMs": 384,
+      "log": "c-full-regressions-analysis-output-contract.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-oom-call-budget.test.ts",
+      "exitCode": 0,
+      "durationMs": 388,
+      "log": "c-full-regressions-local-oom-call-budget.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/visual-material-reuse.test.ts",
+      "exitCode": 0,
+      "durationMs": 402,
+      "log": "c-full-regressions-visual-material-reuse.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/ai-stage-diagnostics.test.ts",
+      "exitCode": 0,
+      "durationMs": 420,
+      "log": "c-full-regressions-ai-stage-diagnostics.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/basic-analysis-controller.test.ts",
+      "exitCode": 0,
+      "durationMs": 553,
+      "log": "c-full-regressions-basic-analysis-controller.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/basic-analysis.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 79009,
+      "log": "c-full-regressions-basic-analysis.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-analysis.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 61491,
+      "log": "c-full-regressions-background-analysis.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-resource-policy.test.ts",
+      "exitCode": 0,
+      "durationMs": 381,
+      "log": "c-full-regressions-background-resource-policy.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-ocr.integration.test.ts",
+      "exitCode": 1,
+      "durationMs": 104037,
+      "log": "c-full-regressions-background-ocr.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-ocr-runtime-observation.test.ts",
+      "exitCode": 0,
+      "durationMs": 454,
+      "log": "c-full-regressions-background-ocr-runtime-observation.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/background-ocr-runtime-observation.integration.test.ts",
+      "exitCode": 1,
+      "durationMs": 30854,
+      "log": "c-full-regressions-background-ocr-runtime-observation.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/visual-ai-transport.test.ts",
+      "exitCode": 0,
+      "durationMs": 553,
+      "log": "c-full-regressions-visual-ai-transport.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/visual-ai-provider.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 33268,
+      "log": "c-full-regressions-visual-ai-provider.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/visual-admission.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 3618,
+      "log": "c-full-regressions-visual-admission.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/visual-admission-isolation.test.ts",
+      "exitCode": 0,
+      "durationMs": 525,
+      "log": "c-full-regressions-visual-admission-isolation.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/visual-analysis-snapshot.test.ts",
+      "exitCode": 0,
+      "durationMs": 397,
+      "log": "c-full-regressions-visual-analysis-snapshot.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/tag-execution.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 134293,
+      "log": "c-full-regressions-tag-execution.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/tag-decision.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 57934,
+      "log": "c-full-regressions-tag-decision.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/tag-batch.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 64073,
+      "log": "c-full-regressions-tag-batch.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/tag-recovery.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 93730,
+      "log": "c-full-regressions-tag-recovery.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/independent-tag-intent.integration.test.ts",
+      "exitCode": 0,
+      "durationMs": 98604,
+      "log": "c-full-regressions-independent-tag-intent.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/ocr-controller-lifecycle.test.ts",
+      "exitCode": 0,
+      "durationMs": 802,
+      "log": "c-full-regressions-ocr-controller-lifecycle.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/ocr-process-lifecycle.test.ts",
+      "exitCode": 0,
+      "durationMs": 2317,
+      "log": "c-full-regressions-ocr-process-lifecycle.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/ocr-real-evidence.test.ts",
+      "exitCode": 0,
+      "durationMs": 386,
+      "log": "c-full-regressions-ocr-real-evidence.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/asset-ocr-storage.test.ts",
+      "exitCode": 0,
+      "durationMs": 3875,
+      "log": "c-full-regressions-asset-ocr-storage.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/library-quiescence.test.ts",
+      "exitCode": 0,
+      "durationMs": 396,
+      "log": "c-full-regressions-library-quiescence.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-client.test.ts",
+      "exitCode": 0,
+      "durationMs": 3619,
+      "log": "c-full-regressions-local-dam-client.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-http.test.ts",
+      "exitCode": 0,
+      "durationMs": 528,
+      "log": "c-full-regressions-local-dam-http.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-file-selection.test.ts",
+      "exitCode": 0,
+      "durationMs": 397,
+      "log": "c-full-regressions-local-dam-file-selection.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-settings-order.test.ts",
+      "exitCode": 0,
+      "durationMs": 423,
+      "log": "c-full-regressions-local-dam-settings-order.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-launch.test.ts",
+      "exitCode": 0,
+      "durationMs": 458,
+      "log": "c-full-regressions-local-dam-launch.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-command-replay.test.ts",
+      "exitCode": 0,
+      "durationMs": 605,
+      "log": "c-full-regressions-local-dam-command-replay.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-receipts.test.ts",
+      "exitCode": 0,
+      "durationMs": 369,
+      "log": "c-full-regressions-local-dam-receipts.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-browser-unknown-commit.test.ts",
+      "exitCode": 0,
+      "durationMs": 699,
+      "log": "c-full-regressions-local-dam-browser-unknown-commit.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-browser-reconnect.test.ts",
+      "exitCode": 0,
+      "durationMs": 427,
+      "log": "c-full-regressions-local-dam-browser-reconnect.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-browser-library.test.ts",
+      "exitCode": 0,
+      "durationMs": 3760,
+      "log": "c-full-regressions-local-dam-browser-library.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-drafts.test.ts",
+      "exitCode": 0,
+      "durationMs": 437,
+      "log": "c-full-regressions-local-dam-drafts.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-profile.test.ts",
+      "exitCode": 0,
+      "durationMs": 489,
+      "log": "c-full-regressions-local-dam-profile.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-settings-conflict.test.ts",
+      "exitCode": 0,
+      "durationMs": 413,
+      "log": "c-full-regressions-local-dam-settings-conflict.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/local-dam-transitions.test.ts",
+      "exitCode": 0,
+      "durationMs": 254,
+      "log": "c-full-regressions-local-dam-transitions.test.ts.log",
+      "runtimeHost": "package Node v25.7.0"
+    },
+    {
+      "entry": "scripts/managed-download-resume.test.ts",
+      "exitCode": 0,
+      "durationMs": 777,
+      "log": "c-full-regressions-managed-download-resume.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/managed-vision-negative.test.ts",
+      "exitCode": 0,
+      "durationMs": 13726,
+      "log": "c-full-regressions-managed-vision-negative.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    }
+  ]
+}

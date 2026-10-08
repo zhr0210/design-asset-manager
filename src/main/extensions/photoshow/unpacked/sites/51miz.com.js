@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"51miz.com":{referrerAddedHostnames:["51miz.com"],srcMatching:[{srcRegExp:"(//.+@IMG@)!.*",processor:"$1"}]}};

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"newworld.co.nz":{srcMatching:[{srcRegExp:"(//\\w+\\.fsimg\\.co\\.nz/.+?/image/)\\d+x\\d+(/.+@IMG@).*",processor:"$1master$2"},{srcRegExp:"(//\\w+\\.fsimg\\.co\\.nz/.+@IMG@).*",processor:"$1"}]}};

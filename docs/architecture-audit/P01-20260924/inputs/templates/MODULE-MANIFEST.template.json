@@ -1,0 +1,15 @@
+{
+  "templateOnly": true,
+  "moduleId": null,
+  "runtimeStatus": "unknown",
+  "responsibility": null,
+  "publicEntrypoints": [],
+  "dataOwner": null,
+  "allowedDependencies": [],
+  "forbiddenCapabilities": [],
+  "compatibilityCallers": [],
+  "sourceEvidence": [],
+  "testCommandsVerifiedInPackageJson": [],
+  "latestEvidence": null,
+  "knownGaps": []
+}

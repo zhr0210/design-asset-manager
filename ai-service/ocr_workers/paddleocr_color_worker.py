@@ -24,6 +24,11 @@ def write_debug(msg):
     sys.stderr.flush()
 
 
+def create_local_paddleocr_engine(_paddleocr_class, _environment=None):
+    """Fail closed until PaddleOCR has a pinned, verified local-only Adapter."""
+    raise RuntimeError("PADDLEOCR_LOCAL_ONLY_ADAPTER_UNAVAILABLE")
+
+
 def rgb_to_hex(rgb):
     return "#{:02X}{:02X}{:02X}".format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
@@ -334,7 +339,7 @@ def main():
         from paddleocr import PaddleOCR
 
         write_debug('Initializing PaddleOCR text detection')
-        engine = PaddleOCR(use_angle_cls=True, lang='ch')
+        engine = create_local_paddleocr_engine(PaddleOCR)
         raw_result = engine.ocr(image_path, cls=True)
         ocr_results = normalize_ocr_results(raw_result)
     except Exception as ocr_err:

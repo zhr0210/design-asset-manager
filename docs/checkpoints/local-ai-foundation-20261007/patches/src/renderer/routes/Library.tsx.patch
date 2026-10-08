@@ -1,0 +1,153 @@
+diff --git a/src/renderer/routes/Library.tsx b/src/renderer/routes/Library.tsx
+index 766e1c9..f73e777 100644
+--- a/src/renderer/routes/Library.tsx
++++ b/src/renderer/routes/Library.tsx
+@@ -23,9 +23,10 @@ import AssetCardPanel from '../components/asset/AssetCardPanel'
+ import { useLibraryViewStore, flushLibraryDrafts } from '../stores/library-view.store'
+ import { projectAssetLibraryCardDisplay } from '../../shared/workflows/asset-display.workflow'
+ import type { AssetCardChangedEvent } from '../../shared/contracts/asset-card.contract'
+-import { useAssetStore, type Asset } from '../stores/asset.store'
++import { useAssetStore, mapSearchAsset, type Asset } from '../stores/asset.store'
+ import { useSettingsStore } from '../stores/settings.store'
+-import { projectAssetDiscovery } from '../../shared/workflows/asset-discovery.workflow'
++import { useHostAssetSearch,type SearchOptions } from '../components/library/canvas/useHostAssetSearch'
++import RetrievalSearchControls from '../components/library/canvas/RetrievalSearchControls'
+ import type { ActiveLibraryHostProjection } from '../../shared/contracts/active-library.contract'
+ import { useAssetWorkspaceSession } from '../asset-workspace-session.context'
+ 
+@@ -163,16 +164,12 @@ export default function Library() {
+     return () => { active = false }
+   }, [])
+ 
+-  const discovery = useMemo(
+-    () => projectAssetDiscovery({
+-      assets,
+-      query: searchQuery,
+-      sourceSiteId: filterSite || undefined,
+-      tagScope: 'includes-pending',
+-      tagQueries: activeTagSearchQueries
+-    }),
+-    [activeTagSearchQueries, assets, filterSite, searchQuery]
+-  )
++  const [searchOptions,setSearchOptions]=useState<SearchOptions>({mode:'lexical'})
++  const [searchFolderId,setSearchFolderId]=useState<string|undefined>(),[referencedAssets,setReferencedAssets]=useState<Asset[]>([])
++  useEffect(()=>setSearchOptions({mode:'lexical'}),[libraryProjection.identity,libraryProjection.generation])
++  const hostedSearch = useHostAssetSearch(libraryProjection,searchQuery,filterSite,activeTagSearchQueries,assets,{...searchOptions,folderId:searchFolderId})
++  const discovery = {matches:hostedSearch.matches}
++  const displayAssets = useMemo(()=>[...new Map([...referencedAssets,...assets,...hostedSearch.matches.map(m=>m.asset)].map(a=>[a.id,a])).values()],[assets,hostedSearch.matches,referencedAssets])
+ 
+   const handleClearFilters = () => {
+     setSearchQuery('')
+@@ -204,37 +201,62 @@ export default function Library() {
+   }
+ 
+   const changeMode = (mode: LibraryViewMode) => {
+-    if (mode !== 'library' && !discovery.matches.some(match => match.asset.id === useAssetStore.getState().selectedAsset?.id)) setSelectedAsset(discovery.matches[0]?.asset ?? null)
++    if (mode !== 'library' && !displayAssets.some(asset => asset.id === useAssetStore.getState().selectedAsset?.id)) setSelectedAsset(discovery.matches[0]?.asset ?? null)
+     view.setMode(mode)
+     setCardError('')
+   }
+-  const focusAsset = discovery.matches.find(match => match.asset.id === selectedAsset?.id)?.asset
++  const focusAsset = displayAssets.find(asset => asset.id === selectedAsset?.id)
+   const scope = view.scope ?? 'unopened'
+   const organization=useLibraryOrganization(libraryProjection,assets)
+   const workSets=useWorkSets(libraryProjection,assets)
+   const [workSetIntent,setWorkSetIntent]=useState<WorkSetIntent|null>(null)
+   const [referenceSet,setReferenceSet]=useState<string|null>(null)
++  useEffect(()=>{setReferencedAssets([])},[scope])
++  useEffect(()=>{let live=true
++    if(libraryProjection.state!=='ready')return
++    const current={libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!},known=new Set(assets.map(a=>a.id))
++    const activeSet=referenceSet??(workSetIntent&&'id' in workSetIntent?workSetIntent.id:null)
++    const ids=[...new Set([...(workSets.catalog?.sets??[]).flatMap(s=>s.id===activeSet?s.assetIds:s.assetIds.slice(0,3)),...(organization.snapshot?.folders??[]).flatMap(f=>f.assetIds.slice(0,3))])].filter(id=>!known.has(id)).slice(0,5000)
++    void(async()=>{const fetched:Asset[]=[];for(let offset=0;offset<ids.length;offset+=100){const rows=await getWorkspaceClient()!.readSearchAssets({...current,ids:ids.slice(offset,offset+100)});if(!live)return;fetched.push(...rows.map(a=>mapSearchAsset(a,current)))}if(live)setReferencedAssets(fetched)})().catch(()=>{if(live)setLibraryError('部分工作集或文件夹素材暂不可读，请刷新重试。')})
++    return()=>{live=false}
++  },[scope,workSets.catalog,organization.snapshot,referenceSet,workSetIntent,assets])
++  useEffect(()=>{hostedSearch.reload()},[organization.snapshot?.revision])
+   // Revoke the previous scope before accepting navigation for the current one.
+   useEffect(()=>{setWorkSetIntent(null);setReferenceSet(null)},[scope])
+   useEffect(() => {
++    let live=true
+     const receive = () => {
+       if (libraryProjection.state !== 'ready' || !hasLoadedAssets) return
+       const recovered = takeRecoveredNavigation(libraryProjection.identity!)
+       if (!recovered) return
+       if (recovered.kind === 'work-set') { setWorkSetIntent(recovered.entityId === 'work-set:new' ? { kind: 'new' } : { kind: 'edit', id: recovered.entityId }); return }
+-      const asset = useAssetStore.getState().assets.find(value => value.id === recovered.entityId)
+-      if (!asset) { setLibraryError('草稿对应的素材暂不可用；草稿仍保留在本机。'); return }
+-      if (recovered.kind === 'description') view.acceptDrafts(asset.id, { descriptionDraft: { value: String(recovered.value), baseCaption: String(recovered.base) } })
+-      if (recovered.kind === 'prompt') view.acceptDrafts(asset.id, { promptDraft: String(recovered.value) })
+-      setSelectedAsset(asset)
+-      if (recovered.kind === 'notebook') openQuick(asset)
++      const current={libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}
++      void(async()=>{
++        const local=displayAssets.find(value=>value.id===recovered.entityId)
++        const asset=local??(await getWorkspaceClient()!.readSearchAssets({...current,ids:[recovered.entityId]})).map(a=>mapSearchAsset(a,current))[0]
++        if(!live||scope!==useLibraryViewStore.getState().scope)return
++        if(!asset){setLibraryError('草稿对应的素材暂不可用；草稿仍保留在本机。');return}
++        if(!local)setReferencedAssets(old=>[...old.filter(a=>a.id!==asset.id),asset])
++        if(recovered.kind==='description')view.acceptDrafts(asset.id,{descriptionDraft:{value:String(recovered.value),baseCaption:String(recovered.base)}})
++        if(recovered.kind==='prompt')view.acceptDrafts(asset.id,{promptDraft:String(recovered.value)})
++        setSelectedAsset(asset)
++        if(recovered.kind==='notebook')openQuick(asset)
++      })().catch(()=>{if(live)setLibraryError('草稿对应的素材暂不可读；草稿仍保留在本机，请重试。')})
+     }
+     window.addEventListener('workspace-recovered-draft', receive); receive()
+-    return () => window.removeEventListener('workspace-recovered-draft', receive)
+-  }, [libraryProjection.identity, libraryProjection.generation, hasLoadedAssets, assets])
++    return () => {live=false;window.removeEventListener('workspace-recovered-draft', receive)}
++  }, [libraryProjection.identity, libraryProjection.generation, hasLoadedAssets])
+   const workNavigation=useWorkSetNavigation(s=>s.request)
+   const [revealWorkAsset,setRevealWorkAsset]=useState(0)
+-  useEffect(()=>{if(!workNavigation||libraryProjection.state!=='ready'||!hasLoadedAssets)return;const event=workNavigation;useWorkSetNavigation.getState().clear();if(event.libraryIdentity!==libraryProjection.identity||event.generation!==libraryProjection.generation)return;if(event.assetId){const asset=useAssetStore.getState().assets.find(a=>a.id===event.assetId);if(asset){handleClearFilters();setSelectedAsset(asset);view.setMode('library');setRevealWorkAsset(v=>v+1)}}else setWorkSetIntent({kind:'add',targetId:event.setId})},[workNavigation,libraryProjection.state,libraryProjection.identity,libraryProjection.generation,hasLoadedAssets])
++  useEffect(()=>{if(!workNavigation||libraryProjection.state!=='ready'||!hasLoadedAssets)return;const event=workNavigation;useWorkSetNavigation.getState().clear();if(event.libraryIdentity!==libraryProjection.identity||event.generation!==libraryProjection.generation)return
++    if(event.assetId)void(async()=>{const local=displayAssets.find(a=>a.id===event.assetId),current={libraryIdentity:event.libraryIdentity,generation:event.generation}
++      const asset=local??(await getWorkspaceClient()!.readSearchAssets({...current,ids:[event.assetId!]})).map(a=>mapSearchAsset(a,current))[0]
++      if(!asset||scope!==useLibraryViewStore.getState().scope)return
++      if(!local)setReferencedAssets(old=>[...old.filter(a=>a.id!==asset.id),asset])
++      handleClearFilters();setSelectedAsset(asset);view.setMode('library');setRevealWorkAsset(v=>v+1)
++    })().catch(()=>setLibraryError('工作集素材暂不可读，请刷新后重新定位。'))
++    else setWorkSetIntent({kind:'add',targetId:event.setId})
++  },[workNavigation,libraryProjection.state,libraryProjection.identity,libraryProjection.generation,hasLoadedAssets])
+   const [organizationIntent,setOrganizationIntent]=useState<OrganizationIntent|null>(null)
+   useEffect(()=>setOrganizationIntent(null),[scope])
+   const authorityWillChange = () => setLibraryError('')
+@@ -296,7 +318,7 @@ export default function Library() {
+   useEffect(()=>{if(quickLookAsset&&!assets.some(a=>a.id===quickLookAsset.id)){setQuickLookAsset(null);if(view.mode==='focus')view.setMode('library')}},[assets])
+   const closeQuick=()=>{setQuickLookAsset(null);if(view.mode==='focus')view.setMode('library')}
+   const focused=quickLookAsset?assets.find(a=>a.id===quickLookAsset.id):null
+-  const focusItems=quickIds.map(id=>assets.find(a=>a.id===id)).filter((a):a is Asset=>Boolean(a))
++  const focusItems=quickIds.map(id=>displayAssets.find(a=>a.id===id)).filter((a):a is Asset=>Boolean(a))
+   const analysis=selectedAsset&&aiScope?<VisualAiPanel key={`${scope}:${selectedAsset.id}`} scope={aiScope} assetIds={bulkSelectedAssetIds.length?bulkSelectedAssetIds:[selectedAsset.id]} promptDraft={view.prompts[selectedAsset.id]??''} onUsePrompt={value=>view.setPrompt(selectedAsset.id,value)} onChanged={refreshAi} onConfigure={()=>navigate(appPath('ai-console'))}/>:undefined
+   const workspaceTools=selectedAsset&&aiScope?<ImageToolsPanel key={`tools:${scope}:${selectedAsset.id}`} scope={{...aiScope,assetId:selectedAsset.id}}/>:undefined
+   const legacyDetails=selectedAsset?<AssetInspectorDrawer key={`${scope}:${selectedAsset.id}`} selectedAsset={selectedAsset} setSelectedAsset={setSelectedAsset} updateAssetCaption={updateAssetCaption} resetAssetCaptionEdited={resetAssetCaptionEdited} generateAiSuggestions={generateAiSuggestions} deleteAsset={deleteAsset} activeLibraryMode embedded workspaceTools={workspaceTools} onPreview={()=>openQuick(selectedAsset)} retainTriggerFocus/>:null
+@@ -315,15 +337,25 @@ export default function Library() {
+     aiPanel={aiScope&&<VisualAiPanel scope={aiScope} assetIds={[focusAsset.id]} promptDraft={view.prompts[focusAsset.id]??''} onUsePrompt={value=>view.setPrompt(focusAsset.id,value)} onChanged={refreshAi} onConfigure={()=>navigate(appPath('ai-console'))}/>}
+     onConfigureAi={()=>navigate(appPath('ai-console'))} error={cardError}/>:<p className="lc-empty">请先导入或选择一个素材。</p>
+   return <>
+-    <LibraryCanvas revealWorkAsset={revealWorkAsset} workSets={workSets} openWorkSet={setReferenceSet} editWorkSet={setWorkSetIntent} organization={organization} organize={setOrganizationIntent} addFiles={()=>libraryControlsRef.current?.addFiles()} key={scope} scope={scope} authority={libraryProjection} assets={assets} matches={discovery.matches} tags={tags} selected={selectedAsset} pick={setSelectedAsset} openFocus={openQuick}
++    <LibraryCanvas revealWorkAsset={revealWorkAsset} workSets={workSets} openWorkSet={setReferenceSet} editWorkSet={setWorkSetIntent} organization={organization} organize={setOrganizationIntent} addFiles={()=>libraryControlsRef.current?.addFiles()} key={scope} scope={scope} authority={libraryProjection} assets={displayAssets} matches={discovery.matches} tags={tags} selected={selectedAsset} pick={setSelectedAsset} openFocus={openQuick}
++      searchFolder={setSearchFolderId} searchControl={libraryProjection.state==='ready'&&<section aria-label="检索状态" className="gallery-notice library-search-status">
++        <RetrievalSearchControls scope={{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}} options={searchOptions} setOptions={setSearchOptions} selectedIds={bulkSelectedAssetIds} selectedAsset={bulkSelectedAssetIds.length===1?displayAssets.find(a=>a.id===bulkSelectedAssetIds[0])??selectedAsset:selectedAsset} reload={hostedSearch.reload}/>
++        {hostedSearch.busy?<span role="status">正在查询或维护索引，已显示的结果保留…</span>:<span>{hostedSearch.lane==='lexical-only'?'文字检索':hostedSearch.lane==='image'?'以图找相似':hostedSearch.lane==='hybrid'?'文字＋画面含义':'中英文画面含义'} · 已显示 {hostedSearch.matches.length}/{hostedSearch.total} · 文字索引覆盖 {hostedSearch.index?.indexed??0}/{hostedSearch.index?.total??0}{hostedSearch.index?.state!=='ready'?' · 索引仍在准备':''}{hostedSearch.coverage?` · 图文覆盖 ${hostedSearch.coverage.indexed}/${hostedSearch.coverage.total}`:''}</span>}
++        {hostedSearch.notice&&<p>{hostedSearch.notice}</p>}
++        {hostedSearch.error&&<span role="alert">{hostedSearch.error}</span>}
++        <button disabled={hostedSearch.busy} onClick={hostedSearch.reload}>重新查询</button>
++        {hostedSearch.busy&&(searchOptions.mode!=='lexical'||searchOptions.example)&&<button onClick={hostedSearch.cancel}>取消图文查询</button>}
++        {hostedSearch.hasMore&&<button disabled={hostedSearch.busy} onClick={()=>void hostedSearch.loadMore()}>加载更多搜索结果</button>}
++        <details><summary>文字索引维护</summary><p>索引由当前素材与有效分析重建，不删除素材、人工内容或保存结果。</p><button disabled={hostedSearch.busy} onClick={()=>void hostedSearch.rebuild()}>重建文字索引</button></details>
++      </section>}
+       query={searchQuery} setQuery={setSearchQuery} tagQueries={activeTagSearchQueries} addTag={addActiveTagSearchQuery} removeTag={removeActiveTagSearchQuery} clearFilters={handleClearFilters}
+       bulkIds={bulkSelectedAssetIds} toggleBulk={toggleBulkSelectedAssetId} clearBulk={clearBulkSelectedAssetIds} bulkAction={setBulkActionType} status={assetLoadStatus} error={assetLoadError} loaded={hasLoadedAssets} retry={refreshReadyLibrary}
+       controls={<>{libraryError&&<div role="alert" className="lc-notice">{libraryError}<button onClick={()=>void refreshReadyLibrary()}>重新检查</button></div>}<ActiveLibraryControls ref={libraryControlsRef} projection={libraryProjection} onAuthorityWillChange={authorityWillChange} onAuthorityReady={refreshReadyLibrary} onAuthorityChangeComplete={()=>session.refresh('authority-change')} refreshProjection={refreshLibraryState}/></>}
+       details={details} work={work} workMode={view.mode==='card'} showWork={()=>changeMode('card')} showAll={()=>view.setMode('library')} register={registerCardTrigger}/>
+-    {focused&&libraryProjection.state==='ready'&&createPortal(<LibraryFocus key={scope} asset={focused} items={focusItems} change={id=>{const a=assets.find(a=>a.id===id);if(a)setQuickLookAsset(a)}} close={closeQuick} notebook={notebook} details={<LibraryDetails libraryScope={libraryProjection.state==='ready'?{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}:undefined} organize={setOrganizationIntent} addWorkColor={color=>setWorkSetIntent({kind:'add',colors:[color]})} key={focused.id} asset={focused} focus editor={<button onClick={()=>{closeQuick();setSelectedAsset(focused)}}>在侧栏编辑与分析</button>}/>}/>,document.body)}
+-    {referenceSet&&workSets.catalog&&<WorkSetReferenceView key={scope+referenceSet} id={referenceSet} model={workSets} assets={assets} close={()=>setReferenceSet(null)} preview={openQuick} locate={asset=>{setSelectedAsset(asset);view.setMode('library');setRevealWorkAsset(v=>v+1)}}/>}
++    {focused&&libraryProjection.state==='ready'&&createPortal(<LibraryFocus key={scope} asset={focused} items={focusItems} change={id=>{const a=displayAssets.find(a=>a.id===id);if(a)setQuickLookAsset(a)}} close={closeQuick} notebook={notebook} details={<LibraryDetails libraryScope={libraryProjection.state==='ready'?{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}:undefined} organize={setOrganizationIntent} addWorkColor={color=>setWorkSetIntent({kind:'add',colors:[color]})} key={focused.id} asset={focused} focus editor={<button onClick={()=>{closeQuick();setSelectedAsset(focused)}}>在侧栏编辑与分析</button>}/>}/>,document.body)}
++    {referenceSet&&workSets.catalog&&<WorkSetReferenceView key={scope+referenceSet} id={referenceSet} model={workSets} assets={displayAssets} close={()=>setReferenceSet(null)} preview={openQuick} locate={asset=>{setSelectedAsset(asset);view.setMode('library');setRevealWorkAsset(v=>v+1)}}/>}
+     {workSetIntent&&!workSets.catalog&&<div className="work-intent-pending" role="status">{workSets.error||'正在读取工作集…'}<button onClick={()=>void workSets.refresh()}>重试</button><button onClick={()=>setWorkSetIntent(null)}>取消</button></div>}
+-    {workSetIntent&&workSets.catalog&&<WorkSetModal key={scope+JSON.stringify(workSetIntent)} model={workSets} intent={workSetIntent} assets={assets} close={()=>setWorkSetIntent(null)}/>}
++    {workSetIntent&&workSets.catalog&&<WorkSetModal key={scope+JSON.stringify(workSetIntent)} model={workSets} intent={workSetIntent} assets={displayAssets} close={()=>setWorkSetIntent(null)}/>}
+     {organizationIntent&&<OrganizationModal key={scope+JSON.stringify(organizationIntent)} model={organization} intent={organizationIntent} close={()=>setOrganizationIntent(null)}/>}
+     <BulkActionModal bulkActionType={bulkActionType} bulkActionTags={bulkActionTags} setBulkActionTags={setBulkActionTags} setBulkActionType={setBulkActionType} executeBulkAction={executeBulkAction} busy={bulkBusy} error={bulkError}/>
+   </>

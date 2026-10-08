@@ -1,4 +1,4 @@
-import { getDatabase } from '../db'
+import type Database from 'better-sqlite3'
 
 export interface DbDownloadTask {
   id: string
@@ -19,17 +19,15 @@ export interface DbDownloadTask {
 }
 
 export class DownloadService {
-  private getDb() {
-    return getDatabase()
-  }
+  constructor(private readonly database: Database.Database) {}
 
   public listTasks(): DbDownloadTask[] {
-    const db = this.getDb()
+    const db = this.database
     return db.prepare('SELECT * FROM download_tasks ORDER BY created_at DESC').all() as DbDownloadTask[]
   }
 
   public saveTask(task: Omit<DbDownloadTask, 'created_at' | 'updated_at'>): DbDownloadTask {
-    const db = this.getDb()
+    const db = this.database
     const now = new Date().toISOString()
 
     const existing = db.prepare('SELECT * FROM download_tasks WHERE id = ?').get(task.id) as DbDownloadTask | undefined
@@ -91,7 +89,7 @@ export class DownloadService {
   }
 
   public clearCompleted(): void {
-    const db = this.getDb()
+    const db = this.database
     db.prepare("DELETE FROM download_tasks WHERE status = 'completed'").run()
   }
 }

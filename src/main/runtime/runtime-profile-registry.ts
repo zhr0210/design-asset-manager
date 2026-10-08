@@ -6,6 +6,7 @@ import { macosAppleSiliconProfile } from './profiles/macos-apple-silicon.profile
 import { macosIntelProfile } from './profiles/macos-intel.profile'
 import { windowsCpuProfile } from './profiles/windows-cpu.profile'
 import { windowsNvidiaCudaProfile } from './profiles/windows-nvidia-cuda.profile'
+import { runtimeProfileSupportsTarget } from './runtime-profile-selection'
 
 const profiles: RuntimeProfile[] = [
   windowsCpuProfile,
@@ -24,11 +25,7 @@ export function getRuntimeProfile(id: RuntimeProfileId): RuntimeProfile | null {
 }
 
 export function getProfilesForPlatform(platform: PlatformName, arch: PlatformArch): RuntimeProfile[] {
-  return profiles.filter((profile) => {
-    const platformMatches = profile.platform === 'all' || profile.platform === platform
-    const archMatches = profile.arch === 'all' || profile.arch === arch || profile.arch === 'unknown'
-    return platformMatches && archMatches
-  })
+  return profiles.filter((profile) => runtimeProfileSupportsTarget(profile, { platform, arch }))
 }
 
 export function getFallbackProfile(profileId: RuntimeProfileId): RuntimeProfile | null {

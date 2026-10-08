@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "date": "2026-09-30",
+  "blocked": {
+    "google:infer": {
+      "code": "AI_GOOGLE_TRANSPORT_UNAVAILABLE",
+      "message": "Google 原生适配器不支持当前受控传输；图片推理暂不可执行。"
+    },
+    "anthropic:oauth": {
+      "code": "AI_ANTHROPIC_SUBSCRIPTION_UNAVAILABLE",
+      "message": "本产品不提供 Claude 订阅登录；请使用 Anthropic API Key。已有凭据保留。"
+    },
+    "openai-codex:oauth": {
+      "code": "AI_CODEX_AUTH_NETWORK_UNVERIFIED",
+      "message": "Codex 登录交互已适配，认证网络范围尚未验收；暂不开放真实账号。"
+    },
+    "github-copilot:login": {
+      "code": "AI_COPILOT_ACCOUNT_EFFECT_UNVERIFIED",
+      "message": "Copilot 登录可能启用账号模型策略；未获单独许可，暂不开放。"
+    },
+    "github-copilot:infer": {
+      "code": "AI_COPILOT_AUTH_NETWORK_UNVERIFIED",
+      "message": "Copilot 账号传输与刷新尚未验收，暂不开放推理。"
+    }
+  },
+  "sdkAuthModes": {
+    "openai-compatible": [
+      "none",
+      "api-key"
+    ],
+    "openai": [
+      "api-key",
+      "oauth"
+    ],
+    "anthropic": [
+      "api-key",
+      "oauth"
+    ],
+    "google": [
+      "api-key"
+    ],
+    "openai-codex": [
+      "oauth"
+    ],
+    "github-copilot": [
+      "api-key",
+      "oauth"
+    ]
+  },
+  "guarded": {
+    "openai:oauth": {
+      "adapter": "dam-siwc-v1",
+      "login": "controlled public-client registration and signed identity; user browser action required",
+      "inference": "verified registration and direct plan scope required; no silent API-key fallback"
+    }
+  }
+}

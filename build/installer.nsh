@@ -2,6 +2,16 @@
 !include FileFunc.nsh
 !include nsDialogs.nsh
 
+!define DAM_BROWSER_SHORTCUT_NAME "DAM 浏览器版"
+
+!macro customInstall
+  CreateShortCut "$SMPROGRAMS\${DAM_BROWSER_SHORTCUT_NAME}.lnk" "$INSTDIR\${APP_EXECUTABLE_FILENAME}" "--dam-browser" "$INSTDIR\${APP_EXECUTABLE_FILENAME}" 0
+!macroend
+
+!macro customUnInstall
+  Delete "$SMPROGRAMS\${DAM_BROWSER_SHORTCUT_NAME}.lnk"
+!macroend
+
 !ifndef BUILD_UNINSTALLER
 !macro customPageAfterChangeDir
   Page custom NormalizeInstallDirPageCreate NormalizeInstallDirPageLeave

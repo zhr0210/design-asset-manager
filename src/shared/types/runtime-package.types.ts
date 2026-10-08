@@ -177,3 +177,63 @@ export interface RuntimePackageInstallPlan {
   warnings: string[]
   blockingIssues: string[]
 }
+
+export type RuntimePackageExecutionStage =
+  | 'validating'
+  | 'verifying'
+  | 'extracting'
+  | 'promoting'
+  | 'registering'
+  | 'completed'
+  | 'rolling_back'
+  | 'rolled_back'
+  | 'blocked'
+  | 'failed'
+
+export type RuntimePackageExecutionErrorCode =
+  | 'CONFIRMATION_REQUIRED'
+  | 'SOURCE_NOT_ALLOWED'
+  | 'PACKAGE_NOT_ALLOWED'
+  | 'ARCHIVE_OUTSIDE_SOURCE'
+  | 'ARCHIVE_INVALID'
+  | 'CHECKSUM_MISMATCH'
+  | 'ARCHIVE_ENTRY_UNSAFE'
+  | 'MANAGED_PATH_UNSAFE'
+  | 'INSTALL_TARGET_EXISTS'
+  | 'REGISTRY_WRITE_FAILED'
+  | 'ROLLBACK_FAILED'
+  | 'EXECUTION_FAILED'
+
+export interface RuntimePackageExecutionRequest {
+  entry: RuntimePackageEntry
+  source: RuntimePackageSource
+  archivePath: string
+  confirmed: boolean
+}
+
+export interface RuntimePackageExecutionProgress {
+  packageId: string
+  stage: RuntimePackageExecutionStage
+  percent: number
+  message: string
+}
+
+export interface RuntimePackageExecutionResult {
+  success: boolean
+  packageId: string
+  stage: RuntimePackageExecutionStage
+  installedVersion?: string
+  errorCode?: RuntimePackageExecutionErrorCode
+  message: string
+  rolledBack: boolean
+  progress: RuntimePackageExecutionProgress[]
+}
+
+export type RuntimePackageProgressListener = (progress: RuntimePackageExecutionProgress) => void
+
+export interface RuntimePackageExecutor {
+  execute(
+    request: RuntimePackageExecutionRequest,
+    onProgress?: RuntimePackageProgressListener
+  ): Promise<RuntimePackageExecutionResult>
+}

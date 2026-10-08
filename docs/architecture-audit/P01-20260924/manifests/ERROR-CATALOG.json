@@ -1,0 +1,107 @@
+{
+  "status": "proposed",
+  "scope": "P01 sample only; not a universal AI error enumeration",
+  "errors": [
+    {
+      "code": "INVALID_REQUEST",
+      "kind": "failed",
+      "category": "validation",
+      "retry": "never",
+      "commitState": "not-committed",
+      "safeMessage": "请求格式无效，请重新提交。"
+    },
+    {
+      "code": "UNSUPPORTED_VERSION",
+      "kind": "failed",
+      "category": "validation",
+      "retry": "never",
+      "commitState": "not-committed",
+      "safeMessage": "当前接口不支持该契约版本。"
+    },
+    {
+      "code": "UNTRUSTED_SENDER",
+      "kind": "failed",
+      "category": "permission",
+      "retry": "never",
+      "commitState": "not-committed",
+      "safeMessage": "当前窗口没有此操作权限。"
+    },
+    {
+      "code": "SCOPE_DENIED",
+      "kind": "failed",
+      "category": "permission",
+      "retry": "never",
+      "commitState": "not-committed",
+      "safeMessage": "当前窗口不能操作所选素材。"
+    },
+    {
+      "code": "LIBRARY_SCOPE_CHANGED",
+      "kind": "failed",
+      "category": "conflict",
+      "retry": "after-condition",
+      "commitState": "not-committed",
+      "safeMessage": "资料库会话已变化，请重新选择素材。"
+    },
+    {
+      "code": "LIBRARY_NOT_READY",
+      "kind": "waiting",
+      "category": "availability",
+      "retry": "after-condition",
+      "commitState": "not-committed",
+      "safeMessage": "资料库暂不可用，请打开并核对后重试。"
+    },
+    {
+      "code": "LIBRARY_BUSY",
+      "kind": "waiting",
+      "category": "availability",
+      "retry": "after-condition",
+      "commitState": "not-committed",
+      "safeMessage": "资料库正在处理其他操作，请稍后重试。"
+    },
+    {
+      "code": "SUGGESTION_UNAVAILABLE",
+      "kind": "failed",
+      "category": "conflict",
+      "retry": "after-condition",
+      "commitState": "not-committed",
+      "safeMessage": "建议已失效，请刷新当前分析结果。"
+    },
+    {
+      "code": "STORAGE_WRITE_FAILED",
+      "kind": "failed",
+      "category": "storage",
+      "retry": "bounded",
+      "commitState": "not-committed",
+      "safeMessage": "保存失败且未提交，请在条件允许时重试。"
+    },
+    {
+      "code": "CANCELLED",
+      "kind": "cancelled",
+      "category": "cancelled",
+      "retry": "never",
+      "commitState": "not-committed",
+      "safeMessage": "操作已取消，未提交本次更改。"
+    },
+    {
+      "code": "INTERNAL_FAILURE",
+      "kind": "failed",
+      "category": "internal",
+      "retry": "never",
+      "commitState": "not-committed",
+      "safeMessage": "操作未完成且未提交，请检查后重试。"
+    },
+    {
+      "code": "COMMIT_OUTCOME_UNKNOWN",
+      "kind": "indeterminate",
+      "category": "storage",
+      "retry": "reconcile",
+      "commitState": "unknown",
+      "safeMessage": "提交状态尚未确认，请先核对当前结果。"
+    }
+  ],
+  "successWarnings": [
+    "NOTIFICATION_DELIVERY_FAILED"
+  ],
+  "boundedRetryPolicy": "no automatic retry introduced; future bounded policy requires active scope, known rollback and explicit policy",
+  "safeMessagePolicy": "closed static catalog; never interpolate raw exception/provider/user content"
+}

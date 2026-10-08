@@ -1,0 +1,3 @@
+# Intake Recovery Shares Capture Concurrency
+
+New capture, automatic retry, and restart recovery must share one configurable Acquisition Concurrency Limit, reusing the existing 1–8 range with a default of 3 instead of adding a recovery-specific setting. Intake Recovery Queue orders recovery work by original gateway acceptance time and respects source request-delay or rate-limit requirements. Foreground Capture Priority reserves capacity for newly user-triggered capture when the limit permits and otherwise places it ahead of not-yet-started recovery work, without interrupting an already writing or validating artifact. Capture Activity exposes Recovery Pause for queued and resumable recovery work without blocking the current workspace or cancelling Candidate Intake.

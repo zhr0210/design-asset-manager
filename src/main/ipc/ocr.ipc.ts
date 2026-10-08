@@ -1,3 +1,4 @@
+import { isBrowserContext } from '../local-host/client-context'
 import { ipcMain } from 'electron'
 import { OcrDependencyService } from '../services/ocr-dependency.service'
 import {
@@ -20,6 +21,7 @@ export function registerOcrIpc() {
   })
 
   ipcMain.handle(CHANNEL_OCR_INSTALL_EASYOCR, async (event) => {
+    if (isBrowserContext(event)) throw new Error('NATIVE_ONLY_COMMAND')
     try {
       await service.installEasyOcr(event.sender)
     } catch (err) {
@@ -29,6 +31,7 @@ export function registerOcrIpc() {
   })
 
   ipcMain.handle('ocr:install-compressed-tensors', async (event) => {
+    if (isBrowserContext(event)) throw new Error('NATIVE_ONLY_COMMAND')
     try {
       await service.installCompressedTensors(event.sender)
     } catch (err) {

@@ -1,0 +1,1879 @@
+{
+  "requirements": [
+    {
+      "id": "R01",
+      "requirement": "保留本地优先与现有技术主线，不以目录整理代替架构优化",
+      "basis": "U01 / S00 §2、5",
+      "chapters": [
+        "SYS-01",
+        "HOST-03",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01",
+        "T02",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P00": "../../P00-20260924/reports/P00-REPORT.md",
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R02",
+      "requirement": "面向macOS与Windows；不能将macOS验证推广为Windows通过",
+      "basis": "U01 / S00 §3、10",
+      "chapters": [
+        "PLATFORM-19",
+        "VAL-22"
+      ],
+      "stages": [
+        "P07",
+        "P22",
+        "P23",
+        "P24",
+        "P27"
+      ],
+      "tests": [
+        "T11",
+        "T21",
+        "T24"
+      ],
+      "scope": "当前目标；硬件适用",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R03",
+      "requirement": "资源预留比例、低配后台分析与正常交互",
+      "basis": "U01",
+      "chapters": [
+        "RES-08"
+      ],
+      "stages": [
+        "P07",
+        "P08",
+        "P13",
+        "P26"
+      ],
+      "tests": [
+        "T09",
+        "T10",
+        "T11",
+        "T23"
+      ],
+      "scope": "当前目标；软预算",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P08": "../P08/reports/P08-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R04",
+      "requirement": "闲时加快、忙时放缓、温度/电池与缺失遥测",
+      "basis": "U01 / S20",
+      "chapters": [
+        "RES-08"
+      ],
+      "stages": [
+        "P07",
+        "P13",
+        "P26"
+      ],
+      "tests": [
+        "T11",
+        "T22",
+        "T23"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R05",
+      "requirement": "自动/手动大小模型切换，质量与资源同时约束",
+      "basis": "U01",
+      "chapters": [
+        "AI-05",
+        "AI-06",
+        "RES-08",
+        "AI-09"
+      ],
+      "stages": [
+        "P03",
+        "P09",
+        "P13",
+        "P15"
+      ],
+      "tests": [
+        "T05",
+        "T10",
+        "T12"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R06",
+      "requirement": "用户可显式使用云API，不静默外发",
+      "basis": "U01 / S00 §2.2",
+      "chapters": [
+        "SEC-10",
+        "JOB-07"
+      ],
+      "stages": [
+        "P14"
+      ],
+      "tests": [
+        "T02",
+        "T07",
+        "T13"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P14": "../P14/reports/P14-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R07",
+      "requirement": "基础分析默认标签、描述、OCR，不默认反推",
+      "basis": "U01",
+      "chapters": [
+        "PRODUCT-02",
+        "AI-06",
+        "MEDIA-16"
+      ],
+      "stages": [
+        "P10",
+        "P11"
+      ],
+      "tests": [
+        "T04",
+        "T05",
+        "T08"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R08",
+      "requirement": "一键与单项触发并存，逻辑独立、允许物理合并",
+      "basis": "U01",
+      "chapters": [
+        "AI-06",
+        "JOB-07"
+      ],
+      "stages": [
+        "P10",
+        "P11",
+        "P12"
+      ],
+      "tests": [
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R09",
+      "requirement": "单能力成功立即可用，失败独立提醒与重试",
+      "basis": "U01",
+      "chapters": [
+        "EVIDENCE-11",
+        "JOB-07",
+        "OBS-18"
+      ],
+      "stages": [
+        "P04",
+        "P10",
+        "P11",
+        "P12",
+        "P25"
+      ],
+      "tests": [
+        "T04",
+        "T05",
+        "T06",
+        "T22"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R10",
+      "requirement": "高级提示词反推手动批量，明确是创作推演",
+      "basis": "U01 / S00 §2.2",
+      "chapters": [
+        "AI-06",
+        "EVIDENCE-11"
+      ],
+      "stages": [
+        "P12"
+      ],
+      "tests": [
+        "T04",
+        "T05",
+        "T12"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P12": "../P12/reports/P12-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R11",
+      "requirement": "任务持久化、关库/崩溃后仅恢复未完成部分",
+      "basis": "U01 / S00 §8.3",
+      "chapters": [
+        "JOB-07",
+        "HOST-03"
+      ],
+      "stages": [
+        "P05",
+        "P10",
+        "P11",
+        "P12",
+        "P26"
+      ],
+      "tests": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R12",
+      "requirement": "普通模式少量验证组合，高级模式开放配置并有手册",
+      "basis": "U01",
+      "chapters": [
+        "AI-05",
+        "AI-09",
+        "PLATFORM-19"
+      ],
+      "stages": [
+        "P03",
+        "P09",
+        "P15"
+      ],
+      "tests": [
+        "T05",
+        "T14",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R13",
+      "requirement": "原件/预览/派生物、Copy和三种库边界",
+      "basis": "S00 §2.2、7",
+      "chapters": [
+        "HOST-03",
+        "DATA-12",
+        "DATA-13",
+        "MEDIA-16"
+      ],
+      "stages": [
+        "P02",
+        "P06",
+        "P19",
+        "P26",
+        "P27"
+      ],
+      "tests": [
+        "T02",
+        "T03",
+        "T18"
+      ],
+      "scope": "必须保留",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P02": "../../P02-20260925/reports/P02-REPORT.md",
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R14",
+      "requirement": "用户描述/确认标签/OCR修订不被重跑覆盖",
+      "basis": "S00 §2.2、9 / U01",
+      "chapters": [
+        "EVIDENCE-11",
+        "ORG-15"
+      ],
+      "stages": [
+        "P04",
+        "P11",
+        "P20"
+      ],
+      "tests": [
+        "T02",
+        "T04",
+        "T06",
+        "T19"
+      ],
+      "scope": "必须保留",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P20": "../P20/reports/P20-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R15",
+      "requirement": "确定性配色与带来源的OCR区域",
+      "basis": "S00 §9",
+      "chapters": [
+        "AI-06",
+        "DATA-13"
+      ],
+      "stages": [
+        "P06",
+        "P11",
+        "P19"
+      ],
+      "tests": [
+        "T05",
+        "T18"
+      ],
+      "scope": "必须保留并整理",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R16",
+      "requirement": "Host分页、中文词法检索与增量投影",
+      "basis": "建议，用户认可 / S00 §8.2",
+      "chapters": [
+        "SEARCH-14"
+      ],
+      "stages": [
+        "P16"
+      ],
+      "tests": [
+        "T08",
+        "T15",
+        "T23"
+      ],
+      "scope": "纳入目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P16": "../P16/reports/P16-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R17",
+      "requirement": "Embedding/图文与区域相似，模型空间隔离",
+      "basis": "建议，用户认可 / S15",
+      "chapters": [
+        "SEARCH-14"
+      ],
+      "stages": [
+        "P17",
+        "P18"
+      ],
+      "tests": [
+        "T16",
+        "T17",
+        "T23"
+      ],
+      "scope": "纳入目标；具体引擎待测",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R18",
+      "requirement": "混合检索与可追溯命中说明",
+      "basis": "建议，用户认可",
+      "chapters": [
+        "SEARCH-14",
+        "EVIDENCE-11"
+      ],
+      "stages": [
+        "P18"
+      ],
+      "tests": [
+        "T15",
+        "T16",
+        "T17"
+      ],
+      "scope": "纳入目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P18": "../P18/reports/P18-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R19",
+      "requirement": "派生谱系、缓存一致性与重复候选",
+      "basis": "建议，用户认可",
+      "chapters": [
+        "DATA-13"
+      ],
+      "stages": [
+        "P06",
+        "P19"
+      ],
+      "tests": [
+        "T02",
+        "T18"
+      ],
+      "scope": "纳入目标；不自动删原件",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R20",
+      "requirement": "组织/笔记/工作集/原生窗口稳定边界",
+      "basis": "S00 §2、7、8",
+      "chapters": [
+        "ORG-15"
+      ],
+      "stages": [
+        "P20",
+        "P22"
+      ],
+      "tests": [
+        "T02",
+        "T19",
+        "T21"
+      ],
+      "scope": "必须保留并整理",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P20": "../P20/reports/P20-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R21",
+      "requirement": "AI设计需求解析、比较与工作集提议",
+      "basis": "建议，用户认可",
+      "chapters": [
+        "DESIGN-17"
+      ],
+      "stages": [
+        "P21"
+      ],
+      "tests": [
+        "T13",
+        "T17",
+        "T19",
+        "T20"
+      ],
+      "scope": "纳入目标；受控而非任意Agent",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P21": "../P21/reports/P21-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R22",
+      "requirement": "收录/下载/图片工具/回收站不被AI统一队列破坏",
+      "basis": "S00 §8 / 建议",
+      "chapters": [
+        "MEDIA-16",
+        "RES-08"
+      ],
+      "stages": [
+        "P11",
+        "P19",
+        "P26"
+      ],
+      "tests": [
+        "T02",
+        "T07",
+        "T08",
+        "T18"
+      ],
+      "scope": "必须保留并纳入资源协调",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R23",
+      "requirement": "进程托管所有权、模型安装与能力验证分离",
+      "basis": "建议，用户认可 / S00 §9",
+      "chapters": [
+        "AI-09",
+        "PLATFORM-19"
+      ],
+      "stages": [
+        "P09",
+        "P15"
+      ],
+      "tests": [
+        "T10",
+        "T14",
+        "T24"
+      ],
+      "scope": "纳入目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R24",
+      "requirement": "IPC、沙箱、密钥与外部服务安全",
+      "basis": "S00 §5.3 / 建议",
+      "chapters": [
+        "HOST-03",
+        "SEC-10",
+        "PLATFORM-19"
+      ],
+      "stages": [
+        "P01",
+        "P14",
+        "P22"
+      ],
+      "tests": [
+        "T02",
+        "T13",
+        "T21"
+      ],
+      "scope": "纳入目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R25",
+      "requirement": "诊断、资源/能力质量基准与证据分级",
+      "basis": "建议，用户认可 / S00 §10",
+      "chapters": [
+        "OBS-18",
+        "VAL-22"
+      ],
+      "stages": [
+        "P07",
+        "P25",
+        "P26",
+        "P27"
+      ],
+      "tests": [
+        "T05",
+        "T22",
+        "T23",
+        "T24"
+      ],
+      "scope": "纳入目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R26",
+      "requirement": "AI编码为主、允许并行新增功能、可跨会话接手",
+      "basis": "U01",
+      "chapters": [
+        "DEV-21",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P00": "../../P00-20260924/reports/P00-REPORT.md",
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R27",
+      "requirement": "未来开源：依赖/模型许可、平台产物与贡献治理",
+      "basis": "U01",
+      "chapters": [
+        "PLATFORM-19",
+        "DEV-21"
+      ],
+      "stages": [
+        "P15",
+        "P24",
+        "P27"
+      ],
+      "tests": [
+        "T14",
+        "T24"
+      ],
+      "scope": "准备边界；不做许可证决定",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P15": "../P15/reports/P15-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R28",
+      "requirement": "未来iOS/Android收集管理、云推理与同步",
+      "basis": "U01",
+      "chapters": [
+        "EXT-20",
+        "SEC-10"
+      ],
+      "stages": [
+        "X01"
+      ],
+      "tests": [
+        "T02",
+        "T06",
+        "T07",
+        "T13",
+        "T24"
+      ],
+      "scope": "未来独立阶段",
+      "implementation_status": "not_started",
+      "handoff_status": "future-not-in-scope",
+      "design_review_status": "not_started",
+      "stageReports": {},
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R29",
+      "requirement": "未来MCP、专业工具连接器、外部AI接入",
+      "basis": "建议，用户认可 / S00 §2",
+      "chapters": [
+        "EXT-20",
+        "DESIGN-17"
+      ],
+      "stages": [
+        "X02"
+      ],
+      "tests": [
+        "T02",
+        "T20",
+        "T21",
+        "T24"
+      ],
+      "scope": "未来独立阶段",
+      "implementation_status": "not_started",
+      "handoff_status": "future-not-in-scope",
+      "design_review_status": "not_started",
+      "stageReports": {},
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R30",
+      "requirement": "视频/帧/音频/录屏/抠图/可编辑层",
+      "basis": "S00 §2目标 / 扩展建议",
+      "chapters": [
+        "EXT-20",
+        "DATA-13"
+      ],
+      "stages": [
+        "X03"
+      ],
+      "tests": [
+        "T02",
+        "T07",
+        "T18",
+        "T23"
+      ],
+      "scope": "未来；逐项另定范围",
+      "implementation_status": "not_started",
+      "handoff_status": "future-not-in-scope",
+      "design_review_status": "not_started",
+      "stageReports": {},
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R31",
+      "requirement": "自托管推理与推测解码/KV压缩等前沿实验",
+      "basis": "调研候选，不是必须启用 / S16 S17 S28 S29",
+      "chapters": [
+        "AI-05",
+        "EXT-20",
+        "VAL-22"
+      ],
+      "stages": [
+        "P23",
+        "P24",
+        "X04"
+      ],
+      "tests": [
+        "T05",
+        "T12",
+        "T23",
+        "T24"
+      ],
+      "scope": "实验/未来；需实际支持",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    },
+    {
+      "id": "R32",
+      "requirement": "本轮只细化代码框架，不针对UI/UX或交付版本排期",
+      "basis": "U01",
+      "chapters": [
+        "SYS-01",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01"
+      ],
+      "scope": "整个任务约束",
+      "implementation_status": "not_started",
+      "handoff_status": "spec-only",
+      "design_review_status": "ready_for_review",
+      "stageReports": {
+        "P00": "../../P00-20260924/reports/P00-REPORT.md",
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      },
+      "runtime_acceptance": "NOT_RUN",
+      "note": "Current pre-existing capability evidence remains in P00/S00; this status concerns target changes, not erasure of existing functionality"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "DAM-A001",
+      "decision": "保留模块化单体宿主，计算隔离但不先微服务化",
+      "chapters": [
+        "SYS-01",
+        "HOST-03"
+      ],
+      "sources": [
+        "S00",
+        "U01"
+      ],
+      "tradeoff": "增量兼容优于无证据重写；真正多客户端共享出现后再评估守护服务。",
+      "stages": "P00 P01 P27",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P00": "../../P00-20260924/reports/P00-REPORT.md",
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A002",
+      "decision": "Library Host保持权威；Managed/Eagle/Legacy独立",
+      "chapters": [
+        "HOST-03",
+        "DATA-12"
+      ],
+      "sources": [
+        "S00"
+      ],
+      "tradeoff": "共用领域读取不等于共享任意写口；跨库失败与授权各自处理。",
+      "stages": "P02 P22 P26",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P02": "../../P02-20260925/reports/P02-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A003",
+      "decision": "能力逻辑独立，完整响应可复用物理执行",
+      "chapters": [
+        "AI-06"
+      ],
+      "sources": [
+        "U01",
+        "S00"
+      ],
+      "tradeoff": "降低重复计算不允许截断JSON救字段；取消共享调用按订阅者处理。",
+      "stages": "P03 P04 P10 P11",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A004",
+      "decision": "Recipe/Profile/Backend/Runtime/Readiness分别版本化",
+      "chapters": [
+        "CONTRACT-04",
+        "AI-05",
+        "AI-09"
+      ],
+      "sources": [
+        "S00",
+        "S01",
+        "S02"
+      ],
+      "tradeoff": "模型列表不是视觉质量；未知远端版本明确标unknown。",
+      "stages": "P03 P09 P15",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A005",
+      "decision": "持久任务采用可重试执行与幂等结果效果",
+      "chapters": [
+        "JOB-07"
+      ],
+      "sources": [
+        "U01",
+        "S00"
+      ],
+      "tradeoff": "不承诺任意远端API exactly-once；请求身份与强制重跑代次分离。",
+      "stages": "P05 P10 P14",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A006",
+      "decision": "证据、成功状态和Outbox在Host事务提交",
+      "chapters": [
+        "JOB-07",
+        "DATA-12"
+      ],
+      "sources": [
+        "S00"
+      ],
+      "tradeoff": "事件重复不重复效果；文件系统发布由独立staging/journal协调。",
+      "stages": "P02 P05 P26",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P02": "../../P02-20260925/reports/P02-REPORT.md",
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A007",
+      "decision": "持久任务意图不携带永久库/外发权限",
+      "chapters": [
+        "JOB-07",
+        "SEC-10"
+      ],
+      "sources": [
+        "S00",
+        "U01"
+      ],
+      "tradeoff": "关库撤权；重开重新核对generation和范围，不因自动恢复跳过授权。",
+      "stages": "P05 P11 P14",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A008",
+      "decision": "资源预算是DAM约束，非操作系统全局硬预留",
+      "chapters": [
+        "RES-08"
+      ],
+      "sources": [
+        "S04",
+        "S05",
+        "S09",
+        "U01"
+      ],
+      "tradeoff": "根据统一池/独显/进程预算及压力保守核算，不能保证任意应用永不卡顿。",
+      "stages": "P07 P08 P13",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P08": "../P08/reports/P08-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A009",
+      "decision": "原子多资源准入与驻留/计算双许可",
+      "chapters": [
+        "RES-08",
+        "AI-09"
+      ],
+      "sources": [
+        "S09",
+        "S10",
+        "S12"
+      ],
+      "tradeoff": "任务结束不释放模型预算，失联先核对；避免重复计量已观测与已预留。",
+      "stages": "P08 P09",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P08": "../P08/reports/P08-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A010",
+      "decision": "规则与迟滞优先，模型路由受质量/授权/资源约束",
+      "chapters": [
+        "RES-08"
+      ],
+      "sources": [
+        "U01",
+        "S20"
+      ],
+      "tradeoff": "不让大模型实时调度大模型；手动固定也不绕过资源；切换在任务边界。",
+      "stages": "P13",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P13": "../P13/reports/P13-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A011",
+      "decision": "托管本地、用户本地、远端服务的控制权不同",
+      "chapters": [
+        "AI-09",
+        "SEC-10"
+      ],
+      "sources": [
+        "S10",
+        "S11",
+        "S14"
+      ],
+      "tradeoff": "不得为释放内存终止用户外部进程；localhost也可能转云。",
+      "stages": "P09 P14",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A012",
+      "decision": "不可变AI证据与用户覆盖层分离",
+      "chapters": [
+        "EVIDENCE-11"
+      ],
+      "sources": [
+        "S00",
+        "U01"
+      ],
+      "tradeoff": "AI标签立即可检索但不是已确认；旧有效结果不因重跑失败消失。",
+      "stages": "P04 P11 P20",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P20": "../P20/reports/P20-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A013",
+      "decision": "输入/缓存按内容与授权域识别，不仅按路径",
+      "chapters": [
+        "DATA-13",
+        "AI-06"
+      ],
+      "sources": [
+        "S00",
+        "S03"
+      ],
+      "tradeoff": "跨库缓存存在授权与隐私风险；坐标/预处理/模型版本均入键或来源。",
+      "stages": "P06 P19",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A014",
+      "decision": "查询在Host，索引可重建且空间/代际隔离",
+      "chapters": [
+        "SEARCH-14"
+      ],
+      "sources": [
+        "S00",
+        "S15",
+        "S21"
+      ],
+      "tradeoff": "FTS中文需实测；同维向量不可混；索引实现由基准选而非先拍板。",
+      "stages": "P16 P17 P18",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P16": "../P16/reports/P16-REPORT.md",
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A015",
+      "decision": "设计助手先提供证据与提议，再用户确认写入",
+      "chapters": [
+        "DESIGN-17"
+      ],
+      "sources": [
+        "S25",
+        "S26",
+        "U01"
+      ],
+      "tradeoff": "不直接开放SQL/任意路径；工具协议或Agent库不替代权限。",
+      "stages": "P21 X02",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P21": "../P21/reports/P21-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A016",
+      "decision": "先使用验证组合；前沿优化为可回退实验",
+      "chapters": [
+        "AI-05",
+        "PLATFORM-19",
+        "VAL-22"
+      ],
+      "sources": [
+        "S01",
+        "S03",
+        "S06",
+        "S16",
+        "S28",
+        "S29"
+      ],
+      "tradeoff": "不同硬件/模型/上下文不可外推，安装成功不等于能力可用。",
+      "stages": "P15 P23 P24 X04",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P15": "../P15/reports/P15-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A017",
+      "decision": "手机共享领域契约，不共享Electron进程和活动DB文件",
+      "chapters": [
+        "EXT-20"
+      ],
+      "sources": [
+        "U01",
+        "S23"
+      ],
+      "tradeoff": "同步存储与推理外发独立；部署和冲突形态尚未选定。",
+      "stages": "X01",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {}
+    },
+    {
+      "id": "DAM-A018",
+      "decision": "AI实施按小切片与证据推进，设计完成不等于代码通过",
+      "chapters": [
+        "DEV-21",
+        "MIG-23"
+      ],
+      "sources": [
+        "U01",
+        "S00",
+        "S27"
+      ],
+      "tradeoff": "保留用户工作区，阶段状态独立；缺环境不虚构验证。",
+      "stages": "所有P阶段",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P00": "../../P00-20260924/reports/P00-REPORT.md",
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P02": "../../P02-20260925/reports/P02-REPORT.md",
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P08": "../P08/reports/P08-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md",
+        "P16": "../P16/reports/P16-REPORT.md",
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md",
+        "P20": "../P20/reports/P20-REPORT.md",
+        "P21": "../P21/reports/P21-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A019",
+      "decision": "资源协调覆盖所有DAM负载，但不替代各域恢复状态机",
+      "chapters": [
+        "RES-08",
+        "MEDIA-16"
+      ],
+      "sources": [
+        "S00",
+        "U01"
+      ],
+      "tradeoff": "Capture/下载既有幂等身份与Promotion语义保留，分阶段申请资源。",
+      "stages": "P13 P26",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "id": "DAM-A020",
+      "decision": "安全升级和平台依赖必须按实际锁版本验证",
+      "chapters": [
+        "SEC-10",
+        "PLATFORM-19"
+      ],
+      "sources": [
+        "S00",
+        "S18",
+        "S19"
+      ],
+      "tradeoff": "不能用新文档默认行为替代旧Electron现状；ABI与打包证据独立。",
+      "stages": "P01 P22 P24 P27",
+      "status": "proposed_pending_source_review",
+      "handoff_status": "proposed",
+      "reports": {
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "testId": "T01",
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P00": "../../P00-20260924/reports/P00-REPORT.md",
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    },
+    {
+      "testId": "T02",
+      "stages": [
+        "P01",
+        "P02",
+        "P04",
+        "P06",
+        "P10",
+        "P11",
+        "P14",
+        "P16",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P26",
+        "P27"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P02": "../../P02-20260925/reports/P02-REPORT.md",
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md",
+        "P16": "../P16/reports/P16-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md",
+        "P20": "../P20/reports/P20-REPORT.md",
+        "P21": "../P21/reports/P21-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    },
+    {
+      "testId": "T03",
+      "stages": [
+        "P02",
+        "P27"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P02": "../../P02-20260925/reports/P02-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    },
+    {
+      "testId": "T04",
+      "stages": [
+        "P03",
+        "P04",
+        "P10",
+        "P11",
+        "P12"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md"
+      }
+    },
+    {
+      "testId": "T05",
+      "stages": [
+        "P03",
+        "P04",
+        "P06",
+        "P10",
+        "P11",
+        "P12",
+        "P15",
+        "P23",
+        "P24",
+        "P25"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md"
+      }
+    },
+    {
+      "testId": "T06",
+      "stages": [
+        "P04",
+        "P05",
+        "P10",
+        "P11",
+        "P20"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P04": "../../P04-20260926/reports/P04-REPORT.md",
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P20": "../P20/reports/P20-REPORT.md"
+      }
+    },
+    {
+      "testId": "T07",
+      "stages": [
+        "P02",
+        "P05",
+        "P09",
+        "P10",
+        "P11",
+        "P12",
+        "P14",
+        "P17",
+        "P19",
+        "P21",
+        "P22",
+        "P26"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P02": "../../P02-20260925/reports/P02-REPORT.md",
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md",
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md",
+        "P21": "../P21/reports/P21-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "testId": "T08",
+      "stages": [
+        "P05",
+        "P10",
+        "P11",
+        "P16",
+        "P17",
+        "P26"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P11": "../P11/reports/P11-REPORT.md",
+        "P16": "../P16/reports/P16-REPORT.md",
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "testId": "T09",
+      "stages": [
+        "P07",
+        "P08",
+        "P10",
+        "P13",
+        "P26"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P08": "../P08/reports/P08-REPORT.md",
+        "P10": "../P10/reports/P10-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "testId": "T10",
+      "stages": [
+        "P08",
+        "P09",
+        "P13",
+        "P15",
+        "P19",
+        "P23",
+        "P24",
+        "P26"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P08": "../P08/reports/P08-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "testId": "T11",
+      "stages": [
+        "P07",
+        "P08",
+        "P13",
+        "P23",
+        "P24",
+        "P26"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P08": "../P08/reports/P08-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "testId": "T12",
+      "stages": [
+        "P03",
+        "P09",
+        "P12",
+        "P13",
+        "P23",
+        "P24"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P12": "../P12/reports/P12-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md"
+      }
+    },
+    {
+      "testId": "T13",
+      "stages": [
+        "P05",
+        "P14",
+        "P21"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P05": "../../P05-20260926/reports/P05-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md",
+        "P21": "../P21/reports/P21-REPORT.md"
+      }
+    },
+    {
+      "testId": "T14",
+      "stages": [
+        "P15"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P15": "../P15/reports/P15-REPORT.md"
+      }
+    },
+    {
+      "testId": "T15",
+      "stages": [
+        "P16",
+        "P18"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P16": "../P16/reports/P16-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md"
+      }
+    },
+    {
+      "testId": "T16",
+      "stages": [
+        "P17",
+        "P18",
+        "P24"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md"
+      }
+    },
+    {
+      "testId": "T17",
+      "stages": [
+        "P16",
+        "P18",
+        "P21",
+        "P25"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P16": "../P16/reports/P16-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md",
+        "P21": "../P21/reports/P21-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md"
+      }
+    },
+    {
+      "testId": "T18",
+      "stages": [
+        "P06",
+        "P19",
+        "P23",
+        "P26"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P06": "../P06/reports/P06-REPORT.md",
+        "P19": "../P19/reports/P19-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "testId": "T19",
+      "stages": [
+        "P20",
+        "P21",
+        "P22",
+        "P26"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P20": "../P20/reports/P20-REPORT.md",
+        "P21": "../P21/reports/P21-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md"
+      }
+    },
+    {
+      "testId": "T20",
+      "stages": [
+        "P21",
+        "P22"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P21": "../P21/reports/P21-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md"
+      }
+    },
+    {
+      "testId": "T21",
+      "stages": [
+        "P01",
+        "P14",
+        "P20",
+        "P22",
+        "P27"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md",
+        "P20": "../P20/reports/P20-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    },
+    {
+      "testId": "T22",
+      "stages": [
+        "P01",
+        "P07",
+        "P13",
+        "P14",
+        "P25"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P01": "../../P01-20260924/reports/P01-REPORT.md",
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P14": "../P14/reports/P14-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md"
+      }
+    },
+    {
+      "testId": "T23",
+      "stages": [
+        "P13",
+        "P16",
+        "P17",
+        "P18",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P13": "../P13/reports/P13-REPORT.md",
+        "P16": "../P16/reports/P16-REPORT.md",
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P18": "../P18/reports/P18-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md",
+        "P26": "../P26/reports/P26-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    },
+    {
+      "testId": "T24",
+      "stages": [
+        "P00",
+        "P03",
+        "P07",
+        "P09",
+        "P15",
+        "P17",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P27"
+      ],
+      "evidence": "scope-specific document/SPEC model tests only; not full T acceptance",
+      "productionStatus": "NOT_RUN",
+      "reports": {
+        "P00": "../../P00-20260924/reports/P00-REPORT.md",
+        "P03": "../../P03-20260926/reports/P03-REPORT.md",
+        "P07": "../P07/reports/P07-REPORT.md",
+        "P09": "../P09/reports/P09-REPORT.md",
+        "P15": "../P15/reports/P15-REPORT.md",
+        "P17": "../P17/reports/P17-REPORT.md",
+        "P22": "../P22/reports/P22-REPORT.md",
+        "P23": "../P23/reports/P23-REPORT.md",
+        "P24": "../P24/reports/P24-REPORT.md",
+        "P25": "../P25/reports/P25-REPORT.md",
+        "P27": "reports/P27-REPORT.md"
+      }
+    }
+  ],
+  "allTargetChangesSpecOnly": true,
+  "realModelOrPlatformAcceptance": false
+}

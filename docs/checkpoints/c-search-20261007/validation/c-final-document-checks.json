@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-07T14:37:06.723Z",
+  "scope": "final unchanged production source typecheck and context routing; no UI or library mutations",
+  "results": [
+    {
+      "name": "typecheck",
+      "exitCode": 0,
+      "durationMs": 17124,
+      "log": "c-final-typecheck.log"
+    },
+    {
+      "name": "context",
+      "exitCode": 0,
+      "durationMs": 1086,
+      "log": "c-final-context.log"
+    }
+  ]
+}

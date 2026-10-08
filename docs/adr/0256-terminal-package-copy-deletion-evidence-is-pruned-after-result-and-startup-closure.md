@@ -1,0 +1,19 @@
+# Terminal Package-Copy Deletion Evidence Is Pruned After Result And Startup Closure
+
+Minimal **Terminal Package-Copy Deletion Evidence** created by ADR 0245 or ADR 0249 is not a permanent deletion history. After ADR 0254 Physical Reclaim Completed or ADR 0255 Physical Reclaim Completed As Shared, it becomes eligible for pruning only when the completion result has been acknowledged/left or reached its 24-hour expiry and no active transaction, recovery result, safety gate, Physical Reclaim Pending/backoff/lease, owner transition or idempotency dependency still references the deleted target.
+
+ADR 0257 summary projection may acknowledge several constituent results at once, but it does not merge this eligibility. Each target independently closes its result and later startup evidence; one blocked or newer target cannot retain or prune another target's terminal record.
+
+ADR 0258 permits one usable acknowledgement of an authoritative large-summary header snapshot to satisfy result closure for all constituents in that snapshot, including unloaded detail pages. Paging through rows is not a closure prerequisite; every target still retains its independent dependency and later clean-startup closure checks.
+
+Eligibility also requires one successful **Deletion Evidence Closure Check** during a later clean host startup after physical completion. The check must prove from current authoritative owner generations that the deleted target reference and all recovery gates remain absent, no interrupted transaction can still reconcile against the evidence and current managed-object ownership is internally consistent. Missing, corrupt, contradictory or unassessable evidence retains the terminal record rather than guessing closure.
+
+After both gates pass, the host atomically prunes the target's terminal deletion evidence and obsolete per-target reconciliation journal. It writes no long-lived tombstone, deletion Activity History or per-target pruning marker. If the pruning transaction is interrupted, atomicity leaves either the complete evidence or the complete pruned state; a later startup may safely repeat the closure check without deleting package bytes or owner references.
+
+For ADR 0255 Completed As Shared, pruning removes only the deleted target's evidence. Every current owner/reference and shared managed-byte object remains unchanged and continues under its own lifecycle. Its later last-owner transition owns any physical cleanup and never needs the pruned target's authorization.
+
+A later verified download, reacquisition or import of the same package creates a new Verified Managed Package Copy identity, owner/decision state and current install/Keep/delete review. It inherits no old scan, confirmation, authorization, failure, result or deletion state. Existing currently owned verified content may still be safely deduplicated under fresh owner accounting, but physical byte reuse never reuses the old managed-copy identity.
+
+Closure checking is local, bounded and silent. It creates no startup modal, notification, badge, user action, network request, support report or telemetry. Until eligible, the minimal evidence remains device-local and path-free; after pruning, no per-target record remains in Full Library Backup, export/merge/sync, telemetry, publisher feedback or support logs.
+
+Before pruning, the record contains only opaque target, terminal transaction, owner-generation and completion identities plus dependency/closure classes. It contains no path, payload, package-name confirmation, credentials, user content or attention history. The current project has no Verified Managed Package Copy deletion journal, physical-reclaim completion or startup closure compactor. This ADR changes documentation only: it checks/prunes/reacquires no real record or bytes, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.

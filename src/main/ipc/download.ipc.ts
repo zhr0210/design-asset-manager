@@ -1,10 +1,23 @@
-import { ipcMain } from 'electron'
 import { DownloadService } from '../services/download.service'
+import type Database from 'better-sqlite3'
+import type { MainIpcHandleRegistrar } from './ipc-registrar'
+import type { createManagedDownloads } from '../managed-download/managed-download'
+import type { MainInvokeContext as IpcMainInvokeEvent } from '../local-host/client-context'
 
-export function registerDownloadIpc() {
-  const service = new DownloadService()
+export function registerDownloadIpc(database: Database.Database, handle: MainIpcHandleRegistrar, executor?: ReturnType<typeof createManagedDownloads>, isTrusted: (event: IpcMainInvokeEvent) => boolean = () => false) {
+  const service = new DownloadService(database)
+  for (const [channel, operation] of [
+    ['download:prepare', (input: any) => executor!.prepare(input)],
+    ['download:enqueue', (receipt: string) => executor!.run(receipt)],
+    ['download:jobs', async () => { await executor!.discover(); return executor!.list() }],
+    ['download:retry', (id: string) => executor!.retry(id)],
+    ['download:cancel', (id: string) => executor!.cancel(id)]
+  ] as const) handle(channel, async (event, input) => {
+    try { if (!isTrusted(event)) throw new Error('没有下载权限。'); if (!executor) throw new Error('下载执行器不可用。'); return { ok: true, value: await operation(input) } }
+    catch (error) { return { ok: false, error: error instanceof Error && !/https?:|[/\\]/.test(error.message) ? error.message : '下载请求未能执行。' } }
+  })
 
-  ipcMain.handle('download:list', async () => {
+  handle('download:list', async () => {
     try {
       return service.listTasks()
     } catch (err) {
@@ -13,7 +26,7 @@ export function registerDownloadIpc() {
     }
   })
 
-  ipcMain.handle('download:save', async (_, task: any) => {
+  handle('download:save', async (_, task: any) => {
     try {
       const saved = service.saveTask(task)
       return { success: true, task: saved }
@@ -23,7 +36,7 @@ export function registerDownloadIpc() {
     }
   })
 
-  ipcMain.handle('download:clear', async () => {
+  handle('download:clear', async () => {
     try {
       service.clearCompleted()
       return { success: true }

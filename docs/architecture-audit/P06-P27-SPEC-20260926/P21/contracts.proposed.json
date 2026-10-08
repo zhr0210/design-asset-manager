@@ -1,0 +1,87 @@
+{
+  "stage": "P21",
+  "status": "proposed",
+  "toolSchemas": {
+    "searchAssets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query",
+        "limit"
+      ],
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        }
+      }
+    },
+    "getAssetEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assetIds"
+      ],
+      "properties": {
+        "assetIds": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "proposeWorkSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "assetIds",
+        "evidenceRefs",
+        "briefRevision"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "assetIds": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "uniqueItems": true
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "uniqueItems": true
+        },
+        "briefRevision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "confirmationToolExposedToModel": false,
+  "frameworkSelected": "bounded rule orchestration, no new dependency"
+}

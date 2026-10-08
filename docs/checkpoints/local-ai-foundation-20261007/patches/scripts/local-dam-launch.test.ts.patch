@@ -1,0 +1,23 @@
+diff --git a/scripts/local-dam-launch.test.ts b/scripts/local-dam-launch.test.ts
+index 192d08d..7c915cf 100644
+--- a/scripts/local-dam-launch.test.ts
++++ b/scripts/local-dam-launch.test.ts
+@@ -62,12 +62,18 @@ async function mainStartup(failAt: 'storage' | 'server' | 'browser') {
+     browserEntryRequested: failAt === 'browser', createWorkspaceLaunch,
+     approvedExit: false, appStorage: undefined, activeLibraryHost: undefined, workspaceDrafts: undefined,
+     workWindows: undefined, assetCard: undefined, connectedRuntime: undefined, localServer: undefined,
++    requestedProfile: 'SYNTHETIC_PROFILE', SettingsService: { configureProfile: () => {} },
++    aiDeviceSampler: undefined, visualAdmission: undefined, managedModels: undefined, retrievalModels: undefined,
++    retrievalRuntime: undefined, queryFileGrants: undefined,
++    createLocalAiDeviceSampler: () => ({ read: () => [], stop: async () => {} }),
++    createVisualAdmission: () => ({}), powerMonitor: { getSystemIdleState: () => 'idle' },
+     mainWindow: null, workspaceClients: new Map([['client:synthetic', { send: () => {} }]]),
+     join: path.join, __dirname: 'SYNTHETIC_BUILD', randomUUID: () => 'synthetic-device',
+     beforeWorkspaceWindowClose: () => {}, screen: { on: () => {} },
+     app: {
+       whenReady: () => ({ then: (callback: typeof readyCallback) => { readyCallback = callback } }),
+       getPath: () => 'SYNTHETIC_PROFILE',
++      getAppPath: () => 'SYNTHETIC_APP', isPackaged: false,
+       on: (name: string, handler: (event?: { preventDefault(): void }, argv?: string[]) => void) => { handlers.set(name, handler) },
+       quit: () => {
+         effects.push('quit'); quitApproved.push(context.approvedExit)

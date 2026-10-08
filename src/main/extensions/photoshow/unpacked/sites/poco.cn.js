@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"poco.cn":{srcMatching:[{srcRegExp:"//.+?(\\.pocoimg\\.cn/image/.+?)(?:_[A-Z]\\d+)?(@IMG@).*",processor:"//pic3$1$2"}]}};

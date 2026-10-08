@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"tver.jp":{srcMatching:[{srcRegExp:"(//.+?\\.tver\\.jp/images/.+/)(?:small|large)(/.+@IMG@)",processor:"$1xlarge$2"}]}};

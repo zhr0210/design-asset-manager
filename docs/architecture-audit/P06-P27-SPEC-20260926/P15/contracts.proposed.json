@@ -1,0 +1,14 @@
+{
+  "stage": "P15",
+  "status": "proposed",
+  "ordinaryReadyPresets": [],
+  "requiredEvidence": [
+    "trustedCatalog",
+    "verifiedBytes",
+    "platformCompatible",
+    "capabilityPassed",
+    "qualityAccepted",
+    "resourceMeasured"
+  ],
+  "installationThisRun": "NOT_RUN"
+}

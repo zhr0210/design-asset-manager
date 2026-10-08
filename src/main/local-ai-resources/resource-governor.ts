@@ -1,0 +1,497 @@
+import os from "node:os";
+import { systemVisualAiClock, type VisualAiClock } from "../visual-ai/visual-ai-clock";
+import type { AiDeviceResourceSample, ModelResourceCost } from '../../shared/contracts/local-ai-resources.contract'
+type Kind = "prepare" | "combined" | "tags-only" | "ocr" | "backup";
+type Permit = { release(): void };
+export type AiWorkPriority = "foreground" | "background";
+export interface AiResourcePolicy {
+  mode: "quiet" | "normal" | "accelerated";
+  reserveFraction: number;
+}
+export interface ResidencyPermit extends Permit {
+  observe(bytes: number, peakBytes?: number): void;
+  observeGpu(deviceId: string, bytes: number): void;
+  markUnconfirmed(): void;
+}
+type Waiter = {
+  kind: Kind;
+  bytes: number;
+  compute: number;
+  priority: AiWorkPriority;
+  signal: AbortSignal;
+  resolve: (p: Permit) => void;
+  reject: (e: Error) => void;
+  abort: () => void;
+};
+
+export interface LocalAiResourceCapacity {
+  requestSlots: number; tagsSlots: number; preparationSlots: number;
+  maxLocalBytes: number; maxWaiters: number;
+}
+/** One Host-owned allocator ledger. Runtime owners retain actual release authority. */
+export function createLocalAiResourceGovernor(deps: {
+  capacity: LocalAiResourceCapacity; clock?: VisualAiClock;
+  memory?: () => { free: number; total: number };
+  activity?: () => "active" | "idle" | "unknown"; policy?: AiResourcePolicy;
+  devices?: () => AiDeviceResourceSample[];
+}) {
+  const p = deps.capacity, clock = deps.clock ?? systemVisualAiClock;
+  let material = 0, computation = 0, preparing = 0, requests = 0, tags = 0;
+  let accepting = true, estimateFailed = false;
+  const barriers = new Set<symbol>();
+  const heldBarriers = new Map<symbol, ReturnType<typeof makeHold>>();
+  const canAccept = () => accepting && !estimateFailed && barriers.size === 0;
+  const queue: Waiter[] = [];
+  let policy: AiResourcePolicy = deps.policy ?? {
+    mode: "normal",
+    reserveFraction: 0.1,
+  };
+  const residents = new Map<
+    string,
+    {
+      bytes: number;
+      observed: number;
+      peakBytes: number;
+      sampledAt: number | null;
+      unconfirmed: boolean;
+      gpuBytes: Record<string, number>;
+      gpuObserved: Record<string, { bytes: number; sampledAt: number }>;
+    }
+  >();
+  const memory =
+    deps.memory ?? (() => ({ free: os.freemem(), total: os.totalmem() }));
+  let foregroundBurst = 0,
+    pressure = false,
+    recoverySince: number | null = null;
+  let interactionBusy = false,
+    idleSince: number | null = null,
+    activity: "active" | "idle" | "unknown" = "unknown";
+  const sampleActivity = () => {
+    try {
+      activity = deps.activity?.() ?? "unknown";
+    } catch {
+      activity = "unknown";
+    }
+    if (activity === "active") {
+      interactionBusy = true;
+      idleSince = null;
+    } else if (activity === "idle" && interactionBusy) {
+      idleSince ??= clock.now();
+      if (clock.now() - idleSince >= 10000) {
+        interactionBusy = false;
+        idleSince = null;
+      }
+    }
+    return {
+      activity,
+      interactionBusy,
+      computeThreads:
+        policy.mode === "quiet"
+          ? 2
+          : policy.mode === "normal"
+            ? interactionBusy
+              ? 2
+              : 4
+            : interactionBusy
+              ? 4
+              : 8,
+    };
+  };
+  const sample = () => {
+    sampleActivity();
+    const m = memory(),
+      valid =
+        Number.isSafeInteger(m.free) &&
+        Number.isSafeInteger(m.total) &&
+        m.free >= 0 &&
+        m.total > 0 &&
+        m.free <= m.total;
+    const reserve = valid
+      ? Math.max(512 * 1048576, Math.ceil(m.total * policy.reserveFraction))
+      : Infinity;
+    // Converge immediately, then require ten seconds of headroom before restoring concurrency.
+    if (!valid || m.free < reserve + 512 * 1048576) {
+      pressure = true;
+      recoverySince = null;
+    } else if (pressure) {
+      if (m.free < reserve + 2 * 1024 ** 3) recoverySince = null;
+      else {
+        recoverySince ??= clock.now();
+        if (clock.now() - recoverySince >= 10000) {
+          pressure = false;
+          recoverySince = null;
+        }
+      }
+    }
+    return { ...m, valid, reserve };
+  };
+  const residentBytes = () =>
+    [...residents.values()].reduce((sum, r) => sum + r.bytes, 0);
+  const sampleDevices = () => {
+    let values: AiDeviceResourceSample[]
+    try { values = deps.devices?.() ?? [] } catch { return [] }
+    if (!Array.isArray(values) || values.length > 16) return []
+    const unique = new Set<string>()
+    return values.filter(device => {
+      if (!device || typeof device.id !== 'string' || unique.has(device.id)) return false
+      unique.add(device.id); return true
+    }).map(device => {
+      const valid = Number.isSafeInteger(device.totalBytes) && device.totalBytes! > 0 &&
+        Number.isSafeInteger(device.freeBytes) && device.freeBytes! >= 0 && device.freeBytes! <= device.totalBytes!
+      const age = device.sampledAt === null ? Infinity : clock.now() - device.sampledAt
+      const state = device.state === 'unknown' || !valid || age < 0 ? 'unknown' : age >= 5000 ? 'stale' : 'known'
+      return { ...device, state: state as AiDeviceResourceSample['state'] }
+    })
+  }
+  const gpuPoolFits = (cost: Record<string, number>) => {
+    const devices = sampleDevices()
+    if (!cost || typeof cost !== 'object' || Array.isArray(cost) || Object.keys(cost).length > 16) return false
+    for (const [id, bytes] of Object.entries(cost)) {
+      if (!Number.isSafeInteger(bytes) || bytes < 0) return false
+      if (!bytes) continue
+      const device = devices.find(device => device.id === id)
+      // Shared memory is already in the RAM pool. Unknown topology/VRAM never grants a GPU plan.
+      if (!device || device.state !== 'known' || device.topology !== 'dedicated') return false
+      const reserve = Math.max(512 * 1024 ** 2, Math.ceil(device.totalBytes! * policy.reserveFraction))
+      const unobserved = [...residents.values()].reduce((sum, r) => {
+        const sample = r.gpuObserved[id], observed = sample && clock.now() - sample.sampledAt < 5000 ? sample.bytes : 0
+        return sum + Math.max(0, (r.gpuBytes[id] ?? 0) - observed)
+      }, 0)
+      if (device.freeBytes! < reserve + unobserved + bytes) return false
+    }
+    return true
+  }
+  const poolFits = (bytes: number, afterReleasingOwner?: string) => {
+    const m = sample(),
+      replacement = afterReleasingOwner ? residents.get(afterReleasingOwner) : undefined;
+    // A selection forecast only: it never frees a permit. Actual acquisitions use
+    // the ordinary pool after the owned process has confirmed its exit.
+    if (afterReleasingOwner && (!replacement || replacement.unconfirmed ||
+      replacement.sampledAt === null || clock.now() - replacement.sampledAt >= 5000)) return false;
+    const held = residentBytes() + material + computation - (replacement?.bytes ?? 0);
+    if (!m.valid) return false;
+    const reserve = m.reserve;
+    const unobserved =
+      material +
+      computation +
+      [...residents.entries()].reduce(
+        (sum, [owner, r]) =>
+          sum +
+          (owner === afterReleasingOwner ? 0 : Math.max(
+            0,
+            r.bytes -
+              (r.sampledAt !== null && clock.now() - r.sampledAt < 5000
+                ? r.observed
+                : 0),
+          )),
+        0,
+      );
+    return (
+      held + bytes <= m.total - reserve &&
+      m.free + (replacement?.observed ?? 0) >= reserve + unobserved + bytes
+    );
+  };
+  let ownedVision=0
+  const owned=(kind:Kind,compute:number)=>compute>0&&(kind==='combined'||kind==='tags-only')
+  const fits = (kind: Kind, bytes: number, compute = 0) =>
+    poolFits(bytes + compute) &&
+    material + bytes <= p.maxLocalBytes &&
+    (kind === "prepare"
+      ? preparing < p.preparationSlots
+      : requests <
+          (pressure || interactionBusy || policy.mode === "quiet"
+            ? 1
+            : p.requestSlots) &&
+        (kind !== "tags-only" || tags < p.tagsSlots)&&(!owned(kind,compute)||ownedVision<1));
+  let cancelResourcePoll: (() => void) | undefined;
+  const grant = (
+    kind: Kind,
+    bytes: number,
+    compute = 0,
+    priority: AiWorkPriority = "foreground",
+  ): Permit => {
+    material += bytes;
+    computation += compute;
+    if(owned(kind,compute))ownedVision++
+    if (kind === "prepare") preparing++;
+    else {
+      requests++;
+      if (kind === "tags-only") tags++;
+    }
+    foregroundBurst =
+      priority === "background" ? 0 : Math.min(3, foregroundBurst + 1);
+    let released = false;
+    return {
+      release() {
+        if (released) return;
+        released = true;
+        material -= bytes;
+        computation -= compute;
+        if(owned(kind,compute))ownedVision--
+        if (kind === "prepare") preparing--;
+        else {
+          requests--;
+          if (kind === "tags-only") tags--;
+        }
+        pump();
+      },
+    };
+  };
+  const pump = () => {
+    cancelResourcePoll?.();
+    cancelResourcePoll = undefined;
+    while (canAccept()) {
+      const eligible = queue.filter((w) => fits(w.kind, w.bytes, w.compute)),
+        preferred = foregroundBurst >= 3 ? "background" : "foreground";
+      const w = eligible.find((w) => w.priority === preferred) ?? eligible[0];
+      if (!w) break;
+      queue.splice(queue.indexOf(w), 1);
+      w.signal.removeEventListener("abort", w.abort);
+      w.resolve(grant(w.kind, w.bytes, w.compute, w.priority));
+    }
+    if (queue.length) cancelResourcePoll = clock.scheduleTimeout(pump, 1000);
+  };
+  const acquire = (
+    kind: Kind,
+    bytes: number,
+    signal: AbortSignal,
+    compute = 0,
+    priority: AiWorkPriority = "foreground",
+  ): Promise<Permit> => {
+    if (signal.aborted)
+      return Promise.reject(Error("VISUAL_ADMISSION_CANCELLED"));
+    if (!canAccept())
+      return Promise.reject(Error("VISUAL_ADMISSION_SUSPENDED"));
+    if (!queue.length && fits(kind, bytes, compute))
+      return Promise.resolve(grant(kind, bytes, compute, priority));
+    if (queue.length >= p.maxWaiters)
+      return Promise.reject(Error("VISUAL_ADMISSION_BUSY"));
+    return new Promise((resolve, reject) => {
+      const w: Waiter = {
+        kind,
+        bytes,
+        compute,
+        priority,
+        signal,
+        resolve,
+        reject,
+        abort: () => {
+          const i = queue.indexOf(w);
+          if (i >= 0) queue.splice(i, 1);
+          reject(Error("VISUAL_ADMISSION_CANCELLED"));
+          pump();
+        },
+      };
+      queue.push(w);
+      signal.addEventListener("abort", w.abort, { once: true });
+      pump();
+    });
+  };
+
+  const rejectWaiters = () => {
+    cancelResourcePoll?.();
+    cancelResourcePoll = undefined;
+    for (const w of queue.splice(0)) {
+      w.signal.removeEventListener("abort", w.abort);
+      w.reject(Error("VISUAL_ADMISSION_SUSPENDED"));
+    }
+  };
+  function makeHold() {
+    const token = Symbol("visual-admission-barrier");
+    barriers.add(token);
+    rejectWaiters();
+    let held = true;
+    const release = () => {
+      if (!held) return;
+      held = false;
+      barriers.delete(token);
+      heldBarriers.delete(token);
+      pump();
+    };
+    const hold = Object.assign(release, {
+      inspect: () => ({ materialBytes: material }),
+      reserveBackup(bytes: number, signal: AbortSignal): Permit {
+        if (signal.aborted) throw Error("BACKUP_MEMORY_CANCELLED");
+        if (
+          !held ||
+          !barriers.has(token) ||
+          barriers.size !== 1 ||
+          !accepting ||
+          estimateFailed
+        )
+          throw Error("BACKUP_MEMORY_SUSPENDED");
+        if (
+          !Number.isSafeInteger(bytes) ||
+          bytes < 1 ||
+          bytes > p.maxLocalBytes
+        )
+          throw Error("BACKUP_MEMORY_BUDGET");
+        if (requests !== 0 || preparing !== 0 || !fits("backup", bytes))
+          throw Error("BACKUP_MEMORY_BUSY");
+        return grant("backup", bytes);
+      },
+    });
+    heldBarriers.set(token, hold);
+    return hold;
+  }
+
+  return {
+    configureResources(next: AiResourcePolicy) {
+      if (
+        !next ||
+        Object.keys(next).some(
+          (k) => !["mode", "reserveFraction"].includes(k),
+        ) ||
+        !["quiet", "normal", "accelerated"].includes(next.mode) ||
+        !Number.isFinite(next.reserveFraction) ||
+        next.reserveFraction < 0.05 ||
+        next.reserveFraction > 0.8
+      )
+        throw Error("AI_RESOURCE_POLICY_INVALID");
+      policy = { ...next };
+      pump();
+    },
+    resourceStatus() {
+      const m = sample();
+      const devices = sampleDevices(), usedDevices = new Set([...residents.values()].flatMap(r=>Object.keys(r.gpuBytes)))
+      const gpuPressure = devices.filter(device=>usedDevices.has(device.id) && device.state==='known' &&
+        device.topology==='dedicated' && device.freeBytes! < Math.max(512*1024**2,Math.ceil(device.totalBytes!*policy.reserveFraction))+128*1024**2).map(device=>device.id)
+      return {
+        policy: { ...policy },
+        ...sampleActivity(),
+        sample: {
+          kind: m.valid ? ("known" as const) : ("unknown" as const),
+          sampledAt: Date.now(),
+          freeRamBytes: m.valid ? m.free : 0,
+          totalRamBytes: m.valid ? m.total : 0,
+        },
+        pressure,
+        concurrency:
+          pressure || interactionBusy || policy.mode === "quiet"
+            ? 1
+            : p.requestSlots,
+        fairness: {
+          foregroundBurstLimit: 3,
+          backgroundWaiting: queue.filter((w) => w.priority === "background")
+            .length,
+        },
+        materialBytes: material,
+        computeBytes: computation,
+        residentBytes: residentBytes(),
+        residents: [...residents].map(([owner, r]) => ({ owner, ...r })),
+        devices, gpuPressure,
+        waiting: queue.length,
+        requests,
+        reason: poolFits(0) ? null : "等待其他应用释放内存，或提高 DAM 预算。",
+      };
+    },
+
+    reserveResident(
+      owner: string,
+      bytes: number,
+      signal: AbortSignal,
+      gpuBytes: Record<string, number> = {},
+    ): ResidencyPermit {
+      signal.throwIfAborted();
+      if (!canAccept()) throw Error("VISUAL_ADMISSION_SUSPENDED");
+      if (
+        !owner ||
+        residents.has(owner) ||
+        !Number.isSafeInteger(bytes) ||
+        bytes < 1
+      )
+        throw Error("AI_RESIDENCY_INVALID");
+      if (!poolFits(bytes) || !gpuPoolFits(gpuBytes)) throw Error("AI_MEMORY_WAIT");
+      const r = {
+        bytes,
+        observed: 0,
+        peakBytes: 0,
+        sampledAt: null as number | null,
+        unconfirmed: false,
+        gpuBytes: { ...gpuBytes },
+        gpuObserved: {} as Record<string, { bytes: number; sampledAt: number }>,
+      };
+      residents.set(owner, r);
+      let released = false;
+      return {
+        observe(value, peak = value) {
+          if (
+            released ||
+            !Number.isSafeInteger(value) ||
+            value < 0 ||
+            !Number.isSafeInteger(peak) ||
+            peak < value
+          )
+            throw Error("AI_RESOURCE_OBSERVATION_INVALID");
+          r.observed = value;
+          r.peakBytes = Math.max(r.peakBytes, peak);
+          r.sampledAt = clock.now();
+          if (peak > bytes) {
+            r.unconfirmed = true;
+            throw Error("AI_RESOURCE_ESTIMATE_EXCEEDED");
+          }
+        },
+        release() {
+          if (released) return;
+          released = true;
+          residents.delete(owner);
+          pump();
+        },
+        observeGpu(deviceId, value) {
+          if (released || !Object.hasOwn(r.gpuBytes, deviceId) || !Number.isSafeInteger(value) || value < 0)
+            throw Error('AI_RESOURCE_OBSERVATION_INVALID')
+          r.gpuObserved[deviceId] = { bytes: value, sampledAt: clock.now() }
+          if (value > r.gpuBytes[deviceId]) { r.unconfirmed = true; throw Error('AI_RESOURCE_ESTIMATE_EXCEEDED') }
+        },
+        markUnconfirmed() { if (!released) r.unconfirmed = true },
+      };
+    },
+
+    hold: makeHold,
+    /** Main-private resource scope. The Host still validates its business lease.
+     * Borrowing the sole controller barrier cannot release it; a second barrier,
+     * suspension, unsafe estimate or UNKNOWN occupancy still refuses admission. */
+    backupHold() {
+      if (barriers.size === 0) return makeHold();
+      if (barriers.size !== 1) throw Error("BACKUP_MEMORY_SUSPENDED");
+      const existing = heldBarriers.values().next().value!;
+      return Object.assign(() => {}, {
+        inspect: existing.inspect,
+        reserveBackup: existing.reserveBackup,
+      });
+    },
+    suspend() {
+      accepting = false;
+      rejectWaiters();
+    },
+    resume() {
+      if (!estimateFailed) {
+        accepting = true;
+        pump();
+      }
+    },
+    invalidate() {
+      accepting = false;
+      rejectWaiters();
+    },
+
+    canAccept, poolFits, gpuPoolFits, fits, acquire,
+    canExecuteVision() {
+      sample();
+      return preparing < p.preparationSlots && tags < p.tagsSlots &&
+        requests < (pressure || interactionBusy || policy.mode === "quiet" ? 1 : p.requestSlots);
+    },
+    /** Material already covered by a preparation permit transfers into a held view. */
+    retainPreparedMaterial(bytes: number): Permit {
+      if (!Number.isSafeInteger(bytes) || bytes < 1 || material + bytes > p.maxLocalBytes)
+        throw Error("VISUAL_FROZEN_BUDGET");
+      material += bytes;
+      let released = false;
+      return { release() { if (released) return; released = true; material -= bytes; pump(); } };
+    },
+    invalidateEstimate() { estimateFailed = true; rejectWaiters(); },
+    inspect() { return { materialBytes: material, preparing, requests, tags,
+      waiting: queue.length, accepting: canAccept() }; },
+  };
+}
+export type LocalAiResourceGovernor = ReturnType<typeof createLocalAiResourceGovernor>;

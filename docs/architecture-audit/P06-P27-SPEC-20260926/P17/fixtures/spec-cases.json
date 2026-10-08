@@ -1,0 +1,146 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "S01",
+      "input": {
+        "op": "vector",
+        "space": "s1",
+        "expectedSpace": "s1",
+        "dimension": 2,
+        "vector": [
+          1,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "id": "S02",
+      "input": {
+        "op": "vector",
+        "space": "s2",
+        "expectedSpace": "s1",
+        "dimension": 2,
+        "vector": [
+          1,
+          0
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "S03",
+      "input": {
+        "op": "vector",
+        "space": "s1",
+        "expectedSpace": "s1",
+        "dimension": 2,
+        "vector": [
+          1
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "S04",
+      "input": {
+        "op": "vector",
+        "space": "s1",
+        "expectedSpace": "s1",
+        "dimension": 2,
+        "vector": [
+          0,
+          0
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "S05",
+      "input": {
+        "op": "vector",
+        "space": "s1",
+        "expectedSpace": "s1",
+        "dimension": 2,
+        "vector": [
+          "NaN",
+          1
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "S06",
+      "input": {
+        "op": "vector",
+        "space": "s1",
+        "expectedSpace": "s1",
+        "dimension": 2,
+        "vector": [
+          true,
+          1
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "S07",
+      "input": {
+        "op": "switch",
+        "verified": true,
+        "caughtUp": true,
+        "space": "s1",
+        "querySpace": "s1",
+        "coverage": 1,
+        "required": 1
+      },
+      "expected": true
+    },
+    {
+      "id": "S08",
+      "input": {
+        "op": "switch",
+        "verified": true,
+        "caughtUp": false,
+        "space": "s1",
+        "querySpace": "s1",
+        "coverage": 1,
+        "required": 1
+      },
+      "expected": false
+    },
+    {
+      "id": "S09",
+      "input": {
+        "op": "switch",
+        "verified": true,
+        "caughtUp": true,
+        "space": "s1",
+        "querySpace": "s1",
+        "coverage": 0.7,
+        "required": 1
+      },
+      "expected": false
+    },
+    {
+      "id": "S10",
+      "input": {
+        "op": "delete",
+        "tombstoneRevision": 3,
+        "vectorRevision": 2
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "S11",
+      "input": {
+        "op": "delete",
+        "tombstoneRevision": 1,
+        "vectorRevision": 2
+      },
+      "expected": "keep-newer"
+    }
+  ]
+}

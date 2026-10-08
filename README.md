@@ -1,79 +1,69 @@
 # Design Asset Manager
 
-Local desktop app for managing design assets.
+**面向设计师、剪辑师及其他视觉创作者的本地优先 AI 素材工作台。**
+DAM 围绕“收录 → 理解 → 找回并解释 → 检查比较 → 安全复用”组织产品，
+让素材管理与设计时的持续参考连接起来，而不只是收藏文件或管理模型。
 
-## Features
+## 产品方向
 
-- Import, normalize, thumbnail, and store local image assets.
-- Browse, search, tag, batch tag, and inspect assets.
-- Capture assets through an embedded browser and download queue.
-- Extract palettes, OCR text, and text foreground colors.
-- Run AI tag suggestions, prompt reverse, visual analysis, and local model management through a Python AI Worker.
+素材工作区负责导入、浏览、查找、组织与恢复；内置 AI 为素材生成可保存、可修正、可检索的分析。
+工作模式通过多素材工作集与原生参考窗口，把选定内容带到实际创作现场。
+模型失效时基础管理仍可用；这是一项可靠性要求，不是把 AI 降为可有可无的附加项。
 
-## Stack
+桌面版与正式本机浏览器版共享 React 产品界面和同一个本地 Host，不维护两套资料库后端。
+桌面目标平台是 Windows 与 macOS；未来手机端侧重收集管理，AI 主要采用云端推理。
+这不是局域网服务，也不是重新引入已移除的网站采集和内置浏览器。
 
-- Electron main: `src/main/`
-- React renderer: `src/renderer/`
-- Preload bridge: `src/preload/`
-- Shared contracts/types: `src/shared/`
-- SQLite runtime data: user data directory
-- Python AI Worker: `ai-service/`
-- Build: Electron Vite + TypeScript
+**以上是产品范围，不是完整交付声明。** 当前能做什么、在哪个版本/平台验证过，统一看
+[当前状态](docs/handoff/CURRENT-STATE.md)。不在本页重复易过期的模型资格、PASS 数量或进程 ID。
 
-## Commands
+## 开发与启动
 
-```bash
-npm install
-npm run dev
+开发依赖、原生模块和运行资源准备见 [CONTRIBUTING](CONTRIBUTING.md) 与
+[换主机指南](docs/REHOST.md)。命令从仓库根目录执行；首次准备前先确认目标平台和锁文件。
+
+```sh
+npm ci
 npm run typecheck
 npm run build
-python -m unittest discover ai-service/tests
-python scripts/check-agent-context.py
-python scripts/check-forbidden-paths.py
-python scripts/check-docs-sync.py
+npm run start:desktop
+# 或使用正式本机浏览器入口：
+npm run start:browser
 ```
 
-## Directories
+`npm ci` 可能执行项目依赖安装脚本。两个启动命令连接相应 profile 的真实本地业务，
+不是假界面；运行前核实当前资料和配置归属。构建成功不等于模型、账号、安装包或全产品已验收。
+研究用原型及合成夹具仍可用于开发，但它们不能替代真实功能验收。
 
-- `AGENTS.md`: AI agent rules.
-- `.codeindex/`: module map, test map, forbidden path rules.
-- `TASK.md`: current task and boundaries.
-- `src/main/`: Electron main process, SQLite, IPC, services, browser integration.
-- `src/preload/`: safe renderer bridge.
-- `src/renderer/`: React UI, routes, components, stores.
-- `src/shared/`: shared types, constants, IPC contracts.
-- `ai-service/`: FastAPI AI Worker, model wrappers, queue, tests.
-- `scripts/`: checks and maintenance scripts.
-- `tools/`: local helper tools.
+## 项目文档
 
-## Documentation Rules
+| 想了解什么 | 去哪里 |
+| --- | --- |
+| 产品定位、完整能力、优先级与非目标 | [产品基准](docs/product/PRODUCT-FOUNDATION.md) |
+| 技术栈、模块责任、正式调用链与演进方向 | [ARCHITECTURE](ARCHITECTURE.md) |
+| 环境、命令、测试、开发和贡献流程 | [CONTRIBUTING](CONTRIBUTING.md) |
+| AI 编码自主权、隐私和完成规则 | [AGENTS](AGENTS.md) |
+| 视觉、交互、设计 token 与批准参考 | [DESIGN](DESIGN.md) |
+| 当前工作与恢复点 | [TASK](TASK.md) |
+| 实际能力、证据与未完成项 | [CURRENT-STATE](docs/handoff/CURRENT-STATE.md) |
+| 术语或历史设计取舍 | [CONTEXT](CONTEXT.md)、[ADR 索引](docs/adr/README.md) |
 
-- Required startup context is only `AGENTS.md` and `TASK.md`.
-- Module details belong in the nearest module `README.md`.
-- Every module README must keep a change log with version, time, and change content.
-- Do not restore long development plans, reviews, walkthroughs, or historical reports into active docs.
+## 技术概览
 
-## Protected Boundaries
+Electron 承载可信 Host；React、TypeScript 与 Web UI 构成共享产品界面；
+SQLite 保存资料库与应用状态；Pi 适配模型协议与认证，专用 OCR/Python/本地 Runtime 按能力执行。
+完整责任与依赖方向在 ARCHITECTURE；精确版本以锁文件和平台构建证据为准。
 
-- Do not read or modify archives, eval reports/datasets, model caches, runtime SQLite DBs, model weights, or user asset libraries by default.
-- Do not casually change IPC channels, SQLite schema semantics, or Python AI Worker HTTP API.
-- Do not bypass the Electron poller for AI Worker result sync.
-- Do not run model inference inside Electron main.
-- `src/main/extensions/photoshow/` is bundled third-party extension content; do not read/refactor `unpacked` by default.
+## 数据与真实验收
 
-## Rollback
+素材原件、预览与派生结果分开；AI 建议不会自动变成用户确认内容。
+模型或账号配置不产生静默素材外发，已批准的数据与服务范围可连续用于真实测试。
+Agent 不读取 Cookie、令牌、保险库或无关私人资料；应用可在内部正常使用已登录账号。
+交付必须给出普通入口上的真实结果，不能以占位页面、模拟保存或内部测试代替。
 
-Use the nearest module README change log to locate the version, time, changed module, and affected entry files before reverting.
+历史报告保留供追溯；日期较早的未完成声明和验证结果不覆盖当前代码，也不会自动启动旧任务。
 
-## Change Log
 
-| Version | Time | Change |
-| --- | --- | --- |
-| v1.7.0 | 2026-05-31 | Fixed blurry image preview in AssetInspectorDrawer by upgrading the source from a 512px low-resolution thumbnail to the high-resolution fileUrl (with graceful fallback). |
-| v1.6.0 | 2026-05-31 | Removed max-width limits (max-w-7xl, max-w-[1320px], max-w-[1540px]) from AppShell, Settings, and AI Console wrappers, allowing components to adaptively stretch and fill the maximized desktop workspace. |
-| v1.5.0 | 2026-05-31 | Removed sidebar user information card and added a centralized global Day/Night theme toggle button with local storage persistence and full dark mode styling. |
-| v1.4.0 | 2026-05-31 | Added download source selection dropdown to Llama runtime installation wizard to allow choosing between HuggingFace official and HF-Mirror with hot-reloading support. |
-| v1.3.0 | 2026-05-31 | Removed the `docs/` startup dependency and moved current task guidance to root `TASK.md`. |
-| v1.2.0 | 2026-05-31 | Reduced required agent startup context to two files and documented the new rule. |
-| v1.1.0 | 2026-05-31 | Rewrote root README from source structure with project boundaries and docs governance. |
-| v1.0.0 | 2026-05-31 | Rebuilt compact project README. |
+原型与隔离预览入口见[开发指南](CONTRIBUTING.md#8-原有开发入口与局部规则)。
+[历史README记录](docs/history/root-readme-changelog.md)与[网页功能退休范围](docs/product/WEB-COLLECTION-RETIREMENT-20260913.md)保留追溯；
+[插件讨论](docs/product/PLUGIN-PLATFORM-DISCUSSION-20260913.md)和[2026-09-07开发审查](docs/product/DEVELOPMENT-REVIEW-20260907.md)不构成新的任务队列。

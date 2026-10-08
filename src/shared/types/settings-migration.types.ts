@@ -1,4 +1,27 @@
-import type { SettingsCompatibilityChange, SettingsCompatibilityResult } from '../../main/services/settings/settings-compatibility.types'
+import type { AppSettings } from './settings.types'
+
+export type SettingsCompatibilityChangeType = 'add' | 'normalize' | 'preserve' | 'warning'
+
+export interface SettingsCompatibilityChange {
+  field: string
+  type: SettingsCompatibilityChangeType
+  message: string
+}
+
+export interface CompatibilityReport {
+  originalVersion: number | null
+  targetVersion: number
+  changes: SettingsCompatibilityChange[]
+  warnings: string[]
+  blockingIssues: string[]
+  wouldChange: boolean
+  safeToApplyLater: boolean
+}
+
+export interface SettingsCompatibilityResult {
+  settings: Partial<AppSettings>
+  report: CompatibilityReport
+}
 
 export type SettingsMigrationMode = 'dry_run' | 'apply' | 'rollback'
 

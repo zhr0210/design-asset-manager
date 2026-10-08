@@ -1,0 +1,1597 @@
+diff --git a/src/shared/contracts/asset-search.contract.ts b/src/shared/contracts/asset-search.contract.ts
+index 77e6acf..b5aa11f 100644
+--- a/src/shared/contracts/asset-search.contract.ts
++++ b/src/shared/contracts/asset-search.contract.ts
+@@ -1,8 +1,12 @@
+ import type { ActiveLibraryAssetProjection } from './active-library.contract'
+ import type { AssetDiscoveryExplanation } from '../workflows/asset-discovery.workflow'
++export interface AssetColorFilter {hex:string;minimumPercentage:number;tolerance:number}
++export interface AssetColorCoverage {measured:number;unavailable:number;total:number;recipe:string}
++export const ASSET_SEARCH_FIELDS=['name','tags','ai-tags','description','ocr','prompt'] as const
++export type AssetSearchField=typeof ASSET_SEARCH_FIELDS[number]
+ export interface AssetSearchRequest {
+   libraryIdentity: string; generation: string; query: string; tagScope: 'confirmed-only' | 'includes-pending';
+-  sourceSiteId?: string; folderId?:string; tagQueries?: readonly string[]; limit: number; cursor?: string;
++  sourceSiteId?: string; folderId?:string; tagQueries?: readonly string[]; color?:AssetColorFilter;fields?:readonly AssetSearchField[]; limit: number; cursor?: string;
+ }
+ export interface AssetSearchIndexStatus {
+   state: 'ready' | 'building' | 'recovering' | 'unavailable'; indexGeneration: string;
+@@ -11,16 +15,24 @@ export interface AssetSearchIndexStatus {
+ export interface AssetSearchPage {
+   matches: Array<{ asset: ActiveLibraryAssetProjection; explanation: AssetDiscoveryExplanation | null }>;
+   total: number; nextCursor: string | null; index: AssetSearchIndexStatus;
++  colors?:AssetColorCoverage;
+ }
+ export function validateAssetSearchRequest(value: unknown): AssetSearchRequest {
+   const v = value as AssetSearchRequest
+   const id = (s: unknown) => typeof s === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/.test(s)
+   if (!v || typeof v !== 'object' || Array.isArray(v) || Object.keys(v).some(k =>
+-    !['libraryIdentity','generation','query','tagScope','sourceSiteId','folderId','tagQueries','limit','cursor'].includes(k)) ||
++    !['libraryIdentity','generation','query','tagScope','sourceSiteId','folderId','tagQueries','color','fields','limit','cursor'].includes(k)) ||
+     !id(v.libraryIdentity) || !id(v.generation) || typeof v.query !== 'string' || v.query.length > 1024 ||
+     !['confirmed-only','includes-pending'].includes(v.tagScope) || !Number.isInteger(v.limit) || v.limit < 1 || v.limit > 100 ||
+     v.sourceSiteId !== undefined && (!id(v.sourceSiteId)) || v.folderId!==undefined&&!id(v.folderId) || v.cursor !== undefined && (!id(v.cursor)) ||
+     v.tagQueries !== undefined && (!Array.isArray(v.tagQueries) || v.tagQueries.length > 30 ||
+       v.tagQueries.some(q => typeof q !== 'string' || q.length > 256))) throw Error('ASSET_SEARCH_INPUT_INVALID')
++  if(v.color!==undefined){const c=v.color
++    if(!c||typeof c!=='object'||Array.isArray(c)||Object.keys(c).sort().join(',')!=='hex,minimumPercentage,tolerance'||
++      typeof c.hex!=='string'||!/^#[A-Fa-f0-9]{6}$/.test(c.hex)||!Number.isFinite(c.minimumPercentage)||c.minimumPercentage<1||c.minimumPercentage>100||
++      !Number.isFinite(c.tolerance)||c.tolerance<0||c.tolerance>100)throw Error('ASSET_SEARCH_INPUT_INVALID')
++  }
++  if(v.fields!==undefined&&(!Array.isArray(v.fields)||v.fields.length<1||v.fields.length>ASSET_SEARCH_FIELDS.length||
++    new Set(v.fields).size!==v.fields.length||v.fields.some(field=>!ASSET_SEARCH_FIELDS.includes(field))))throw Error('ASSET_SEARCH_INPUT_INVALID')
+   return v
+ }
+diff --git a/src/shared/workflows/asset-discovery.workflow.ts b/src/shared/workflows/asset-discovery.workflow.ts
+index 6c5f2a0..2ece24a 100644
+--- a/src/shared/workflows/asset-discovery.workflow.ts
++++ b/src/shared/workflows/asset-discovery.workflow.ts
+@@ -1,4 +1,5 @@
+ import {currentTagSuggestions} from './ai-folders.workflow'
++import type {AssetSearchField} from '../contracts/asset-search.contract'
+ export type AssetDiscoveryMode = 'lexical-only'
+ 
+ export type AssetDiscoveryEvidenceKind =
+@@ -11,8 +12,9 @@ export type AssetDiscoveryEvidenceKind =
+   | 'ai-tag'
+   | 'semantic'
+   | 'image-example'
++  | 'color'
+ 
+-export type AssetDiscoveryEvidenceMatch = 'exact' | 'phrase' | 'term' | 'vector'
++export type AssetDiscoveryEvidenceMatch = 'exact' | 'phrase' | 'term' | 'vector' | 'measured'
+ 
+ export interface AssetDiscoveryAssetLike {
+   id: string
+@@ -24,6 +26,8 @@ export interface AssetDiscoveryAssetLike {
+   visualAi?: import('../contracts/visual-ai.contract').VisualAiSummary
+   aiPrompt?: string | null
+   aiCaption?: string | null
++  aiCaptionIsUserEdited?:boolean|number
++  aiCaptionSource?:string
+   aiOcrText?: string | null
+   sourceSiteId?: string | null
+ }
+@@ -34,6 +38,7 @@ export interface AssetDiscoveryRequest<T extends AssetDiscoveryAssetLike> {
+   sourceSiteId?: string | null
+   tagScope?: 'confirmed-only' | 'includes-pending'
+   tagQueries?: readonly string[] | null
++  fields?:readonly AssetSearchField[]
+ }
+ 
+ export interface AssetDiscoveryEvidence {
+@@ -61,6 +66,7 @@ export interface AssetDiscoveryProjection<T extends AssetDiscoveryAssetLike> {
+ }
+ 
+ interface LexicalField {
++  scope:AssetSearchField
+   kind: AssetDiscoveryEvidenceKind
+   label: string
+   value: string
+@@ -108,7 +114,7 @@ export function projectAssetDiscovery<T extends AssetDiscoveryAssetLike>(
+       sourceOrder,
+       query,
+       terms,
+-      request.tagScope ?? 'confirmed-only'
++      request.tagScope ?? 'confirmed-only',request.fields
+     ))
+     .filter((candidate): candidate is RankedMatch<T> => candidate !== null)
+     .sort((left, right) => {
+@@ -140,9 +146,9 @@ function createRankedMatch<T extends AssetDiscoveryAssetLike>(
+   sourceOrder: number,
+   query: string,
+   terms: readonly string[],
+-  tagScope: 'confirmed-only' | 'includes-pending'
++  tagScope: 'confirmed-only' | 'includes-pending',scopes?:readonly AssetSearchField[]
+ ): RankedMatch<T> | null {
+-  const fields = createLexicalFields(asset, tagScope)
++  const fields = createLexicalFields(asset, tagScope,scopes)
+   const termEvidence = terms.map((term) => (
+     fields
+       .filter((field) => normalizeText(field.value).includes(term))
+@@ -182,43 +188,59 @@ function createRankedMatch<T extends AssetDiscoveryAssetLike>(
+ 
+ function createLexicalFields(
+   asset: AssetDiscoveryAssetLike,
+-  tagScope: 'confirmed-only' | 'includes-pending'
++  tagScope: 'confirmed-only' | 'includes-pending',scopes?:readonly AssetSearchField[]
+ ): LexicalField[] {
+   const fields: LexicalField[] = [
+-    { kind: 'title', label: '标题', value: asset.title || '', priority: 500 },
+-    { kind: 'filename', label: '文件名', value: asset.fileName || '', priority: 450 },
++    { scope:'name',kind: 'title', label: '标题', value: asset.title || '', priority: 500 },
++    { scope:'name',kind: 'filename', label: '文件名', value: asset.fileName || '', priority: 450 },
+     {
+       kind: 'description',
+-      label: '描述',
++      scope:'description',label: asset.aiCaptionIsUserEdited?'人工描述':asset.aiCaptionSource?'AI 画面描述':'描述',
+       value: asset.aiCaption || '',
+       priority: 250
+     },
+-    { kind: 'ocr', label: 'OCR', value: asset.aiOcrText || '', priority: 200 },
+-    { kind: 'prompt', label: '反推提示词', value: asset.aiPrompt || asset.visualAi?.prompt || '', priority: 180 }
++    { scope:'ocr',kind: 'ocr', label: 'OCR', value: asset.aiOcrText || '', priority: 200 },
++    { scope:'prompt',kind: 'prompt', label: '反推提示词', value: asset.aiPrompt || asset.visualAi?.prompt || '', priority: 180 }
+   ]
+ 
+   for (const tag of asset.tags ?? []) {
+     fields.push({
+       kind: 'tag',
++      scope:'tags',
+       label: '标签',
+       value: tag,
+       priority: 400
+     })
+   }
+ 
+-  if (tagScope === 'includes-pending') for (const tag of currentTagSuggestions(asset)?.pendingTags ?? []) fields.push({kind:'ai-tag',label:'AI 建议标签',value:tag,priority:320})
+-  if (asset.visualAi?.caption && asset.visualAi.caption !== asset.aiCaption) fields.push({kind:'description',label:'AI 画面描述',value:asset.visualAi.caption,priority:240})
+-  for (const alias of asset.tagAliases ?? []) fields.push({ kind: 'tag', label: '标签别名', value: alias, priority: 390 })
+-  return fields.filter((field) => normalizeText(field.value))
++  if (tagScope === 'includes-pending') for (const tag of currentTagSuggestions(asset)?.pendingTags ?? []) fields.push({scope:'ai-tags',kind:'ai-tag',label:'AI 建议标签',value:tag,priority:320})
++  if (!asset.aiCaptionIsUserEdited&&(!asset.aiCaption||!asset.aiCaptionSource)&&asset.visualAi?.caption&&asset.visualAi.caption!==asset.aiCaption) fields.push({scope:'description',kind:'description',label:'AI 画面描述',value:asset.visualAi.caption,priority:240})
++  for (const alias of asset.tagAliases ?? []) fields.push({ scope:'tags',kind: 'tag', label: '标签别名', value: alias, priority: 390 })
++  return fields.filter((field) => normalizeText(field.value)&&(!scopes||scopes.includes(field.scope)))
+ }
+ 
+ /** Shared semantic field policy for Host indexing and renderer explanations. */
+ export function assetDiscoverySearchText(asset: AssetDiscoveryAssetLike, scope: 'confirmed-only' | 'includes-pending'): string {
+   return createLexicalFields(asset, scope).map(field => normalizeText(field.value)).join('\n')
+ }
+-export function assetDiscoveryRank(asset: AssetDiscoveryAssetLike, query: string, scope: 'confirmed-only' | 'includes-pending'): number {
++export function assetDiscoveryRank(asset: AssetDiscoveryAssetLike, query: string, scope: 'confirmed-only' | 'includes-pending',fields?:readonly AssetSearchField[]): number {
+   const normalized = normalizeText(query)
+-  return normalized ? createRankedMatch(asset, 0, normalized, tokenizeQuery(normalized), scope)?.rank ?? 0 : 0
++  return normalized ? createRankedMatch(asset, 0, normalized, tokenizeQuery(normalized), scope,fields)?.rank ?? 0 : 0
++}
++
++/** Refresh metadata in a frozen result without inventing a new vector rank or
++ * colour measurement. Callers must first verify the same content/view and
++ * current Library/folder authority; all textual hard conditions are current. */
++export function refreshAssetDiscoveryMatch<T extends AssetDiscoveryAssetLike>(previous:AssetDiscoveryMatch<T>,asset:T,
++ request:Omit<AssetDiscoveryRequest<T>,'assets'>):AssetDiscoveryMatch<T>|null{
++ if(!projectAssetDiscovery({...request,assets:[asset],query:''}).matches.length)return null
++ const lexical=projectAssetDiscovery({...request,assets:[asset]}).matches[0]
++ const retained=previous.explanation?.evidence.filter(e=>['color','semantic','image-example'].includes(e.kind))??[]
++ const vector=retained.some(e=>e.match==='vector')
++ if(!vector&&!lexical)return null
++ if(!retained.length)return{asset,explanation:lexical?.explanation??null}
++ return{asset,explanation:{...previous.explanation!,lane:vector?(previous.explanation?.lane==='hybrid'&&lexical?.explanation?'hybrid':'semantic'):'lexical',
++   evidence:[...retained,...(lexical?.explanation?.evidence??[])]}}
+ }
+ 
+ function rankEvidence(field: LexicalField, matchedTerm: string, fullQuery: string): RankedEvidence {
+diff --git a/src/main/library-lifecycle/measure-preview-colors.ts b/src/main/library-lifecycle/measure-preview-colors.ts
+index aa86017..75f3a8e 100644
+--- a/src/main/library-lifecycle/measure-preview-colors.ts
++++ b/src/main/library-lifecycle/measure-preview-colors.ts
+@@ -1,13 +1,26 @@
+ import sharp from 'sharp'
+ import type {MeasuredPreviewColors} from '../../shared/contracts/library-organization.contract'
+-/** Bounded sRGB preview measurement; alpha-weighted 4-bit histogram, nearest-color assignment. */
+-export async function measurePreviewColors(bytes:Uint8Array):Promise<MeasuredPreviewColors>{
++export const PREVIEW_HISTOGRAM_RECIPE='srgb-128-alpha-histogram4-v1'
++export interface PreviewColorHistogram {
++ source:'controlled-preview';recipe:string;sampleWidth:number;sampleHeight:number;visibleWeight:number;
++ bins:{rgb:[number,number,number];weight:number}[]
++}
++/** Shared bounded sRGB sampling. Transparent pixels contribute no weight;
++ * partial alpha contributes proportionally to the visible-area denominator. */
++export async function measurePreviewHistogram(bytes:Uint8Array):Promise<PreviewColorHistogram>{
+  const {data,info}=await sharp(Buffer.from(bytes),{limitInputPixels:40_000_000}).rotate().resize(128,128,{fit:'inside',withoutEnlargement:true}).toColourspace('srgb').ensureAlpha().raw().toBuffer({resolveWithObject:true})
+  const bins=new Map<number,{weight:number;r:number;g:number;b:number}>();let total=0
+  for(let i=0;i<data.length;i+=4){const w=data[i+3]/255;if(!w)continue;const key=((data[i]>>4)<<8)|((data[i+1]>>4)<<4)|(data[i+2]>>4);const bin=bins.get(key)||{weight:0,r:0,g:0,b:0};bin.weight+=w;bin.r+=data[i]*w;bin.g+=data[i+1]*w;bin.b+=data[i+2]*w;bins.set(key,bin);total+=w}
+- const seeds=[...bins.entries()].sort((a,b)=>b[1].weight-a[1].weight||a[0]-b[0]).slice(0,5).map(([,b])=>({r:Math.round(b.r/b.weight),g:Math.round(b.g/b.weight),b:Math.round(b.b/b.weight),weight:0}))
+- for(const bin of bins.values()){const r=bin.r/bin.weight,g=bin.g/bin.weight,b=bin.b/bin.weight;let best=0,d=Infinity;seeds.forEach((c,i)=>{const distance=(c.r-r)**2+(c.g-g)**2+(c.b-b)**2;if(distance<d){d=distance;best=i}});seeds[best].weight+=bin.weight}
++ return{source:'controlled-preview',recipe:PREVIEW_HISTOGRAM_RECIPE,sampleWidth:info.width,sampleHeight:info.height,visibleWeight:total,
++   bins:[...bins.entries()].sort((a,b)=>b[1].weight-a[1].weight||a[0]-b[0]).map(([,bin])=>({rgb:[bin.r/bin.weight,bin.g/bin.weight,bin.b/bin.weight],weight:bin.weight}))}
++}
++/** Existing five-swatch palette remains a presentation of the same histogram.
++ * Search uses all bins, so a minor colour is not reassigned to a large swatch. */
++export async function measurePreviewColors(bytes:Uint8Array):Promise<MeasuredPreviewColors>{
++ const histogram=await measurePreviewHistogram(bytes),total=histogram.visibleWeight
++ const seeds=histogram.bins.slice(0,5).map(bin=>({r:Math.round(bin.rgb[0]),g:Math.round(bin.rgb[1]),b:Math.round(bin.rgb[2]),weight:0}))
++ for(const bin of histogram.bins){const [r,g,b]=bin.rgb;let best=0,d=Infinity;seeds.forEach((c,i)=>{const distance=(c.r-r)**2+(c.g-g)**2+(c.b-b)**2;if(distance<d){d=distance;best=i}});seeds[best].weight+=bin.weight}
+  const sorted=seeds.sort((a,b)=>b.weight-a.weight),raw=sorted.map(c=>total?c.weight/total*10000:0),units=raw.map(Math.floor);let rest=10000-units.reduce((a,b)=>a+b,0)
+  raw.map((n,i)=>({i,f:n-units[i]})).sort((a,b)=>b.f-a.f||a.i-b.i).forEach(({i})=>{if(rest>0){units[i]++;rest--}})
+- return{source:'controlled-preview',recipe:'srgb-128-alpha-histogram4-nearest5-v1',sampleWidth:info.width,sampleHeight:info.height,colors:sorted.map((c,i)=>({hex:'#'+[c.r,c.g,c.b].map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase(),percentage:units[i]/100}))}
++ return{source:'controlled-preview',recipe:'srgb-128-alpha-histogram4-nearest5-v1',sampleWidth:histogram.sampleWidth,sampleHeight:histogram.sampleHeight,colors:sorted.map((c,i)=>({hex:'#'+[c.r,c.g,c.b].map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase(),percentage:units[i]/100}))}
+ }
+diff --git a/src/main/asset-search/asset-search-index.ts b/src/main/asset-search/asset-search-index.ts
+index 4142bad..cae9bea 100644
+--- a/src/main/asset-search/asset-search-index.ts
++++ b/src/main/asset-search/asset-search-index.ts
+@@ -2,12 +2,15 @@ import fs from 'node:fs'
+ import path from 'node:path'
+ import { createHash, randomUUID } from 'node:crypto'
+ import Database from 'better-sqlite3'
+-import type { AssetSearchRequest, AssetSearchPage, AssetSearchIndexStatus } from '../../shared/contracts/asset-search.contract'
++import type { AssetSearchRequest, AssetSearchPage, AssetSearchIndexStatus,AssetColorFilter,AssetColorCoverage } from '../../shared/contracts/asset-search.contract'
++import type {AssetDiscoveryEvidence} from '../../shared/workflows/asset-discovery.workflow'
+ import type { ActiveLibraryAssetProjection } from '../../shared/contracts/active-library.contract'
+-import { assetDiscoveryRank, assetDiscoverySearchText, projectAssetDiscovery } from '../../shared/workflows/asset-discovery.workflow'
++import { assetDiscoveryRank, assetDiscoverySearchText, projectAssetDiscovery,refreshAssetDiscoveryMatch } from '../../shared/workflows/asset-discovery.workflow'
+ import { readAssets } from '../library-lifecycle/active-library-asset-queries'
+ import type { VisualAdmission } from '../visual-ai/visual-admission'
+ import {searchFolderMembers} from './folder-scope'
++import {measurePreviewHistogram,PREVIEW_HISTOGRAM_RECIPE,type PreviewColorHistogram} from '../library-lifecycle/measure-preview-colors'
++import {matchPreviewColor} from './color-match'
+ 
+ const APP_ID = 0x44414d53, BATCH = 100
+ const normalize = (v: string) => v.normalize('NFKC').trim().replace(/\s+/gu, ' ').toLowerCase()
+@@ -15,9 +18,10 @@ const digest = (v: unknown) => createHash('sha256').update(JSON.stringify(v)).di
+ function searchProjection(a: ActiveLibraryAssetProjection) {
+   return { id: a.id, revision: a.revision, title: a.title, fileName: a.fileName, thumbnailRef: a.thumbnailRef,
+     sourceSiteId: a.sourceSiteId, createdAt: a.createdAt, tags: a.tags, tagAliases: a.tagAliases,
+-    aiCaption: a.aiCaption, aiOcrText: a.aiOcrText, tagAnalysis: a.tagAnalysis, visualAi: a.visualAi }
++    aiCaption: a.aiCaption,aiCaptionIsUserEdited:a.aiCaptionIsUserEdited,aiCaptionSource:a.aiCaptionSource, aiOcrText: a.aiOcrText, tagAnalysis: a.tagAnalysis, visualAi: a.visualAi }
+ }
+ const fingerprint = (a: ActiveLibraryAssetProjection) => digest(searchProjection(a))
++const viewKey=(a:ActiveLibraryAssetProjection)=>JSON.stringify([a.revision,a.thumbnailRef])
+ function grams(text: string) {
+   const chars = Array.from(text), result = new Set<string>()
+   for (let i = 0; i < chars.length; i++) for (let size = 1; size <= 3 && i + size <= chars.length; size++) {
+@@ -32,10 +36,10 @@ function grams(text: string) {
+  * rollback creates harmless extra work, never an unrecorded committed update.
+  * Notification outbox delivery is not consumed by this independent reader. */
+ export function createAssetSearchIndex(d: { database: Database.Database; control: string; identity: string;
+-  generation: string; assertAuthority(): void; admission?: VisualAdmission }) {
++  generation: string; assertAuthority(): void; admission?: VisualAdmission;readPreview?(asset:ActiveLibraryAssetProjection):Promise<Uint8Array> }) {
+   const registry = path.join(d.control, '.dam-asset-search.json')
+   let index: Database.Database, store: { version: number; identity: string; file: string; storeId: string }
+-  let error: string | null = null, trackerFailed = false, building = false
++  let error: string | null = null, trackerFailed = false, building = false, trackingSuspended = false
+   const snapshots = new Map<string, { query: AssetSearchRequest; key: string; generation: string; total: number; expires: number }>()
+   const cursors = new Map<string, { snapshot: string; offset: number; key: string; expires: number }>()
+   const installed = new Set<string>()
+@@ -90,8 +94,10 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+   }
+   const meta = (k: string) => String(index.prepare('SELECT value FROM meta WHERE key=?').pluck().get(k))
+   const set = (k: string,v: string) => index.prepare('INSERT INTO meta VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(k,v)
++  if(meta('field-policy')!=='sources-v2'){set('seed','');set('seeded','0');set('field-policy','sources-v2')}
+   if (meta('clean') !== '1') { set('seed',''); set('seeded','0') }
+   set('clean','0')
++  index.exec('CREATE TABLE IF NOT EXISTS colors(id TEXT PRIMARY KEY,view TEXT NOT NULL,recipe TEXT NOT NULL,sample TEXT,error TEXT)')
+   index.exec('CREATE TEMP TABLE snapshot_hits(snapshot TEXT NOT NULL,id TEXT NOT NULL,fingerprint TEXT NOT NULL,rank INTEGER NOT NULL,created_at TEXT NOT NULL,PRIMARY KEY(snapshot,id)); CREATE INDEX snapshot_order ON snapshot_hits(snapshot,rank DESC,created_at DESC,id)')
+   const mark = (id: unknown) => {
+     if (typeof id !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/.test(id)) return
+@@ -105,6 +111,7 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+     independent_tag_evidence: 'asset_id', independent_tag_decisions: 'asset_id', asset_ocr_state: 'asset_id',
+     asset_ocr_evidence: 'asset_id', basic_analysis_current: 'asset_id', basic_analysis_requests: 'asset_id' }
+   const installTracking = () => {
++    if (trackingSuspended) return
+     const sourceSchema = String(d.database.pragma('user_version',{simple:true}))
+     if (meta('source-schema') !== sourceSchema) { set('seed',''); set('seeded','0'); set('source-schema',sourceSchema) }
+     const tables = new Set((d.database.prepare("SELECT name FROM sqlite_schema WHERE type='table'").all() as { name: string }[]).map(r=>r.name))
+@@ -116,12 +123,24 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+           ? `SELECT dam_search_dirty(asset_id) FROM main.asset_tags WHERE tag_id=${row}.id;`
+           : name === 'asset_candidates' ? `SELECT dam_search_dirty(design_asset_identity) FROM main.promotion_links WHERE candidate_identity=${row}.candidate_identity;`
+             : `SELECT dam_search_dirty(${row}.${columns[name]});`).join(' ')
+-        d.database.exec(`CREATE TEMP TRIGGER dam_search_${name}_${event} AFTER ${event} ON main.${name} BEGIN ${statements} END`)
++        d.database.exec(`CREATE TEMP TRIGGER IF NOT EXISTS dam_search_${name}_${event} AFTER ${event} ON main.${name} BEGIN ${statements} END`)
+       }
+       installed.add(name)
+     }
+   }
+   installTracking()
++  const suspendTracking = () => {
++    if (building) throw Error('ASSET_SEARCH_INDEX_BUSY')
++    trackingSuspended = true
++    try {
++      // Maintenance may change schema and rows while tracking is detached.
++      // Keep existing snapshots; seed the derived projection once afterwards.
++      set('seed',''); set('seeded','0')
++      for (const name of installed) for (const event of ['INSERT','UPDATE','DELETE']) d.database.exec(`DROP TRIGGER IF EXISTS temp.dam_search_${name}_${event}`)
++      installed.clear()
++    } catch (failure) { installed.clear(); trackingSuspended = false; trackerFailed = true; throw failure }
++    return () => { trackingSuspended = false }
++  }
+   const generations = () => [meta('active'), meta('building')].filter(Boolean)
+   function status(): AssetSearchIndexStatus {
+     const gen = meta('active'), pending = Number(index.prepare('SELECT COUNT(*) FROM dirty').pluck().get())
+@@ -179,8 +198,44 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+     index.prepare(`DELETE FROM docs WHERE gen NOT IN (${keep.map(()=>'?').join(',')})`).run(...keep)
+     index.prepare(`DELETE FROM grams WHERE gen NOT IN (${keep.map(()=>'?').join(',')})`).run(...keep)
+   }
++  function colorCoverage():AssetColorCoverage {
++    const row=index.prepare(`SELECT COUNT(*) AS total,
++      SUM(CASE WHEN c.sample IS NOT NULL THEN 1 ELSE 0 END) AS measured,
++      SUM(CASE WHEN c.error IS NOT NULL THEN 1 ELSE 0 END) AS unavailable
++      FROM docs d LEFT JOIN colors c ON c.id=d.id AND c.recipe=?
++        AND c.view=json_array(json_extract(d.projection,'$.revision'),json_extract(d.projection,'$.thumbnailRef'))
++      WHERE d.gen=?`).get(PREVIEW_HISTOGRAM_RECIPE,meta('active')) as {total:number;measured:number|null;unavailable:number|null}
++    return{total:status().total,measured:row.measured??0,unavailable:row.unavailable??0,recipe:PREVIEW_HISTOGRAM_RECIPE}
++  }
++  async function filterColors(ids:readonly string[],filter:AssetColorFilter|undefined,signal:AbortSignal,measure=true):Promise<Map<string,AssetDiscoveryEvidence|null>>{
++    if(!filter)return new Map(ids.map(id=>[id,null]))
++    const matches=new Map<string,AssetDiscoveryEvidence|null>()
++    for(let start=0;start<ids.length;start+=BATCH)for(const asset of readAssets(d.database,ids.slice(start,start+BATCH))){
++      signal.throwIfAborted();d.assertAuthority()
++      const view=viewKey(asset)
++      let cached=index.prepare('SELECT sample,error FROM colors WHERE id=? AND view=? AND recipe=?').get(asset.id,view,PREVIEW_HISTOGRAM_RECIPE) as {sample:string|null;error:string|null}|undefined
++      if(!cached){
++        if(!measure)continue
++        if(!d.readPreview)throw Error('ASSET_SEARCH_COLOR_UNAVAILABLE')
++        // Authority/admission/I/O refusals are transient failures, not a saved
++        // colour measurement. Only decoding a successfully read preview can
++        // establish an unavailable sample for this exact view and recipe.
++        const bytes=await d.readPreview(asset)
++        let sample:PreviewColorHistogram|undefined
++        try{sample=await measurePreviewHistogram(bytes)}
++        catch{signal.throwIfAborted();d.assertAuthority()}
++        signal.throwIfAborted();d.assertAuthority()
++        const current=readAssets(d.database,[asset.id])[0]
++        if(!current||viewKey(current)!==view)continue
++        cached={sample:sample?JSON.stringify(sample):null,error:sample?null:'ASSET_SEARCH_COLOR_UNAVAILABLE'}
++        index.prepare('INSERT INTO colors VALUES(?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET view=excluded.view,recipe=excluded.recipe,sample=excluded.sample,error=excluded.error').run(asset.id,view,PREVIEW_HISTOGRAM_RECIPE,cached.sample,cached.error)
++      }
++      if(cached.sample){const evidence=matchPreviewColor(JSON.parse(cached.sample) as PreviewColorHistogram,filter);if(evidence)matches.set(asset.id,evidence)}
++    }
++    return matches
++  }
+   return {
+-    installTracking, status,
++    installTracking, suspendTracking, status,filterColors,colorCoverage,sync,
+     async search(input: AssetSearchRequest, cancellation?: AbortSignal): Promise<AssetSearchPage> {
+       d.assertAuthority(); expire()
+       const deadline = AbortSignal.timeout(60000)
+@@ -201,8 +256,8 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+           ${pivots.length ? `AND d.id IN (SELECT id FROM grams WHERE gen=? AND scope=? AND gram IN (${pivots.map(()=>'?').join(',')}) GROUP BY id HAVING COUNT(DISTINCT gram)=?)` : ''} AND d.id>? ORDER BY d.id LIMIT ${BATCH}`)
+         const args = [gen,...(input.sourceSiteId ? [input.sourceSiteId] : []),...(pivots.length ? [gen,input.tagScope,...pivots,pivots.length] : [])]
+         let count = 0
+-        const permit = await d.admission?.reserveLocalWork('index',32 * 1024 ** 2,signal,'foreground')
+-        try { index.transaction(() => {
++        const permit = await d.admission?.reserveLocalWork('index',(input.color?64:32) * 1024 ** 2,signal,'foreground')
++        try {
+           const insert = index.prepare('INSERT INTO snapshot_hits VALUES(?,?,?,?,?)')
+           let after = ''
+           for (;;) {
+@@ -210,16 +265,19 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+           if (!rows.length) break
+           after = rows.at(-1)!.id
+           const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
++          const colors=await filterColors(rows.filter(r=>members.has(r.id)).map(r=>r.id),input.color,signal)
++          index.transaction(()=>{
+           for (const row of rows) {
+-            if(!members.has(row.id))continue
++            if(!members.has(row.id)||!colors.has(row.id))continue
+             signal.throwIfAborted()
+             const asset = JSON.parse(row.projection) as ActiveLibraryAssetProjection
+-            if (!projectAssetDiscovery({ assets:[asset], query: input.query, sourceSiteId: input.sourceSiteId, tagScope: input.tagScope, tagQueries: input.tagQueries }).matches.length) continue
++            if (!projectAssetDiscovery({ assets:[asset], query: input.query, sourceSiteId: input.sourceSiteId, tagScope: input.tagScope, tagQueries: input.tagQueries,fields:input.fields }).matches.length) continue
+             if (++count > 200000) throw Error('ASSET_SEARCH_RESULT_LIMIT')
+-            insert.run(snapshotId,row.id,row.fingerprint,assetDiscoveryRank(asset,input.query,input.tagScope),row.created_at)
++            insert.run(snapshotId,row.id,viewKey(asset),assetDiscoveryRank(asset,input.query,input.tagScope,input.fields),row.created_at)
+           }
++          })()
+           }
+-        })() } finally { permit?.release() }
++        } catch(failure){index.prepare('DELETE FROM snapshot_hits WHERE snapshot=?').run(snapshotId);throw failure} finally { permit?.release() }
+         snapshots.set(snapshotId, { query: input, key, generation: gen, total: count, expires: Date.now()+300000 })
+       }
+       const snapshot = snapshots.get(snapshotId)
+@@ -228,6 +286,11 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+       let scanned = 0
+       while (matches.length < input.limit && offset < snapshot.total && scanned < 500) {
+         const rows = index.prepare('SELECT id,fingerprint FROM snapshot_hits WHERE snapshot=? ORDER BY rank DESC,created_at DESC,id LIMIT ? OFFSET ?').all(snapshotId,input.limit-matches.length,offset) as {id:string;fingerprint:string}[]
++        const initial = new Map(readAssets(d.database,rows.map(r=>r.id)).map(a=>[a.id,a]))
++        const permit=input.color?await d.admission?.reserveLocalWork('index',32*1024**2,signal,'foreground'):undefined
++        let colors:Map<string,AssetDiscoveryEvidence|null>
++        try{colors=await filterColors(rows.filter(row=>{const a=initial.get(row.id);return a&&viewKey(a)===row.fingerprint}).map(row=>row.id),input.color,signal,false)}finally{permit?.release()}
++        signal.throwIfAborted();d.assertAuthority()
+         const assets = new Map(readAssets(d.database,rows.map(r=>r.id)).map(a=>[a.id,a]))
+         const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+         offset += rows.length; scanned += rows.length
+@@ -235,9 +298,9 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+           const a = assets.get(row.id)
+           // Lifecycle, edits, view revision and current AI decisions are checked
+           // against authority immediately before returning any frozen hit.
+-          if (!a || !members.has(row.id) || fingerprint(a) !== row.fingerprint) continue
+-          const match = projectAssetDiscovery({ assets:[a],query:input.query,tagScope:input.tagScope,tagQueries:input.tagQueries,sourceSiteId:input.sourceSiteId }).matches[0]
+-          if (match) matches.push({ asset:a,explanation:match.explanation })
++          if (!a || !members.has(row.id) || viewKey(a) !== row.fingerprint||!colors.has(row.id)) continue
++          const match = projectAssetDiscovery({ assets:[a],query:input.query,tagScope:input.tagScope,tagQueries:input.tagQueries,sourceSiteId:input.sourceSiteId,fields:input.fields }).matches[0]
++          if (match) {const color=colors.get(row.id);matches.push({asset:a,explanation:color?{lane:'lexical',evidence:[color,...(match.explanation?.evidence??[])]}:match.explanation})}
+         }
+       }
+       let nextCursor: string | null = null
+@@ -245,10 +308,19 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
+       // A fully returned first page exposes no cursor and has no future reader.
+       // Repeated source notifications must not retain these completed snapshots.
+       if(!nextCursor&&!input.cursor){snapshots.delete(snapshotId);index.prepare('DELETE FROM snapshot_hits WHERE snapshot=?').run(snapshotId)}
+-      return { matches,total:snapshot.total,nextCursor,index:status() }
++      // A page can span several awaits while skipping invalid frozen hits.
++      // Revalidate the complete accumulated page after the final await.
++      signal.throwIfAborted();d.assertAuthority()
++      const latest=new Map(readAssets(d.database,matches.map(m=>m.asset.id)).map(a=>[a.id,a]))
++      const members=searchFolderMembers(d.database,input.folderId,matches.map(m=>m.asset.id))
++      const safe=matches.flatMap(match=>{const asset=latest.get(match.asset.id)
++        if(!asset||!members.has(asset.id)||viewKey(asset)!==viewKey(match.asset))return[]
++        const current=refreshAssetDiscoveryMatch(match,asset,input);return current?[current]:[]})
++      return { matches:safe,total:snapshot.total,nextCursor,index:status(),...(input.color?{colors:colorCoverage()}:{}) }
+     },
+     async rebuild() {
+       d.assertAuthority(); if (building) throw Error('ASSET_SEARCH_INDEX_BUSY')
++      index.prepare('DELETE FROM colors WHERE error IS NOT NULL').run()
+       set('building',randomUUID()); set('seed',''); set('seeded','0')
+       await sync(AbortSignal.timeout(60000)); return status()
+     },
+diff --git a/src/main/asset-search/color-match.ts b/src/main/asset-search/color-match.ts
+new file mode 100644
+index e69de29..ac9171e 100644
+--- /dev/null
++++ b/src/main/asset-search/color-match.ts
+@@ -0,0 +1,22 @@
++import type {AssetColorFilter} from '../../shared/contracts/asset-search.contract'
++import type {AssetDiscoveryEvidence} from '../../shared/workflows/asset-discovery.workflow'
++import type {PreviewColorHistogram} from '../library-lifecycle/measure-preview-colors'
++
++// CIE 1976 Delta E in D65 Lab, after standard sRGB linearisation.
++function lab(rgb:readonly number[]):number[]{
++ const [r,g,b]=rgb.map(n=>{const s=n/255;return s<=0.04045?s/12.92:((s+0.055)/1.055)**2.4})
++ const f=(v:number)=>v>216/24389?Math.cbrt(v):(24389/27*v+16)/116
++ const x=f((0.4124564*r+0.3575761*g+0.1804375*b)/0.95047)
++ const y=f(0.2126729*r+0.7151522*g+0.072175*b)
++ const z=f((0.0193339*r+0.119192*g+0.9503041*b)/1.08883)
++ return[116*y-16,500*(x-y),200*(y-z)]
++}
++export function matchPreviewColor(histogram:PreviewColorHistogram,filter:AssetColorFilter):AssetDiscoveryEvidence|null{
++ if(histogram.visibleWeight<=0)return null
++ const target=lab([1,3,5].map(start=>parseInt(filter.hex.slice(start,start+2),16)))
++ const weight=histogram.bins.reduce((sum,bin)=>{const value=lab(bin.rgb)
++   return sum+(Math.hypot(...value.map((n,i)=>n-target[i]))<=filter.tolerance+1e-8?bin.weight:0)},0)
++ const percentage=weight/histogram.visibleWeight*100
++ if(percentage+1e-8<filter.minimumPercentage)return null
++ return{kind:'color',match:'measured',label:`预览颜色 ${filter.hex.toUpperCase()} · ${percentage.toFixed(2)}% · 近色 ΔE≤${filter.tolerance}`}
++}
+diff --git a/src/main/library-lifecycle/active-library-host.ts b/src/main/library-lifecycle/active-library-host.ts
+index 1922a7b..b4aef10 100644
+--- a/src/main/library-lifecycle/active-library-host.ts
++++ b/src/main/library-lifecycle/active-library-host.ts
+@@ -1,5 +1,5 @@
+ import {readBackgroundOcr as readOcrBackground,claimBackgroundOcr as claimOcrBackground,markBackgroundOcrSent,commitBackgroundOcr as commitOcrBackground,finishBackgroundOcr as finishOcrBackground,releaseBackgroundOcrClaim,type BackgroundOcrAuthority} from '../background-ocr/background-ocr-storage'
+-import {readBackgroundAnalysis as readBackground,changeBackgroundIntent as changeBackground} from '../background-analysis/background-analysis-storage'
++import {readBackgroundAnalysis as readBackground,changeBackgroundIntent as changeBackground,suspendBackgroundCountCache} from '../background-analysis/background-analysis-storage'
+ import {beginBasicRequest,claimBasic,markBasicSent,commitCaption as saveCaption,commitBasicOutput,finishBasic,captions,readBasicAttempts as basicAttempts,recoverBasic,reconcileBasicAnalysis,type BasicAuthority} from '../background-analysis/basic-analysis-storage'
+ import {readExecution,claimBackground,attachBackgroundRequest,markBackgroundSent,completeBackground,finishBackground,recoverBackground,validateBackgroundClaim,type BackgroundAuthority} from '../background-analysis/background-execution-storage'
+ import {reconcileTagExecutions,readTagRecovery as readRecovery,readTagReceipt} from '../independent-tags/tag-recovery-storage'
+@@ -361,7 +361,10 @@ export function createActiveLibraryHost(
+   const listAssets = () => run((active) => readAssets(active.database))
+   const searchIndex = (active: Binding) => active.search ??= createAssetSearchIndex({ database: active.database,
+     control: active.control, identity: active.identity, generation: active.generation, admission: dependencies.resourceAdmission,
+-    assertAuthority() { if (binding !== active || inspect().state !== 'ready') throw hostError('library-generation-conflict') } })
++    readPreview:asset=>readVisualPreview({libraryIdentity:active.identity,generation:active.generation,sessionToken:active.notebookSession,
++      assetId:asset.id,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef}),
++    assertAuthority() { if (binding !== active || inspect().state !== 'ready') throw hostError('library-generation-conflict')
++      if(schemaMaintenance.isAdmissionClosed()||businessSuspensions.size)throw hostError('library-quiescing') } })
+   const searchAssetPage: ActiveLibraryHost['searchAssetPage'] = input => run(active => {
+     const value = validateAssetSearchRequest(input)
+     if (value.libraryIdentity !== active.identity || value.generation !== active.generation) throw hostError('library-generation-conflict')
+@@ -374,8 +377,10 @@ export function createActiveLibraryHost(
+     assertAuthority(){if(binding!==active||inspect().state!=='ready'||schemaMaintenance.isAdmissionClosed()||businessSuspensions.size)throw hostError('library-quiescing')},
+     readPreview:asset=>readVisualPreview({libraryIdentity:active.identity,generation:active.generation,sessionToken:active.notebookSession,
+       assetId:asset.id,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef}),
+-    lexical:(input,signal)=>{const {libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,limit,cursor}=input
+-      return searchIndex(active).search({libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,limit,cursor},signal)},
++    lexical:(input,signal)=>{const {libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,color,fields,limit,cursor}=input
++      return searchIndex(active).search({libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,color,fields,limit,cursor},signal)},
++    filterColors:(ids,color,signal,measure)=>searchIndex(active).filterColors(ids,color,signal,measure),colorCoverage:()=>searchIndex(active).colorCoverage(),
++    synchronizeColors:signal=>searchIndex(active).sync(signal),
+     lexicalStatus:()=>searchIndex(active).status()})
+   const retrievalRun=<T>(operation:(active:Binding)=>T|Promise<T>)=>run(async active=>{
+     try{return await operation(active)}catch(e){if(e instanceof ActiveLibraryHostError)throw e
+@@ -594,6 +599,13 @@ export function createActiveLibraryHost(
+     current: () => ({ binding, state: state.state, businessSuspended: businessSuspensions.size > 0 }),
+     enqueueLifecycle,
+     inFlight: () => inFlight,
++    prepareConnection: active => {
++      const resumeCounts = suspendBackgroundCountCache(active.database)
++      try {
++        const resumeSearch = active.search?.suspendTracking()
++        return () => { resumeSearch?.(); resumeCounts() }
++      } catch (error) { resumeCounts(); throw error }
++    },
+     run,
+     quarantine: active => { state = { state: 'recovery-required', identity: active.identity, generation: active.generation } },
+     stateError, hostError, executionBinding, ocrBinding, ocrAuthority,
+diff --git a/src/main/retrieval-workspace/asset-retrieval-store.ts b/src/main/retrieval-workspace/asset-retrieval-store.ts
+index f1a2f95..03f0aee 100644
+--- a/src/main/retrieval-workspace/asset-retrieval-store.ts
++++ b/src/main/retrieval-workspace/asset-retrieval-store.ts
+@@ -7,7 +7,7 @@ import {readAssets} from '../library-lifecycle/active-library-asset-queries'
+ import {validateRetrievalVectors} from './retrieval-runtime'
+ import {publicCode} from './retrieval-model-library'
+ import {searchFolderMembers} from '../asset-search/folder-scope'
+-import {projectAssetDiscovery,type AssetDiscoveryExplanation} from '../../shared/workflows/asset-discovery.workflow'
++import {projectAssetDiscovery,refreshAssetDiscoveryMatch,type AssetDiscoveryExplanation,type AssetDiscoveryEvidence} from '../../shared/workflows/asset-discovery.workflow'
+ import type {ActiveLibraryAssetProjection} from '../../shared/contracts/active-library.contract'
+ import type {AssetSearchRequest,AssetSearchPage,AssetSearchIndexStatus} from '../../shared/contracts/asset-search.contract'
+ import type {RetrievalQualification,RetrievalGenerationRequest,RetrievalCoverage,AssetSemanticSearchRequest,AssetSemanticSearchPage} from '../../shared/contracts/retrieval-workspace.contract'
+@@ -32,7 +32,10 @@ interface QueryImageSource {id:string;view:string}
+  * becomes source authority. A space ID always participates in vector lookup. */
+ export function createAssetRetrievalStore(d:{database:Database.Database;control:string;identity:string;generation:string;
+   runtime():RetrievalRuntimePort|undefined;admission?:VisualAdmission;assertAuthority():void;
+-  readPreview(asset:ActiveLibraryAssetProjection):Promise<Uint8Array>;lexical(input:AssetSearchRequest,signal?:AbortSignal):Promise<AssetSearchPage>;lexicalStatus():AssetSearchIndexStatus}) {
++  readPreview(asset:ActiveLibraryAssetProjection):Promise<Uint8Array>;lexical(input:AssetSearchRequest,signal?:AbortSignal):Promise<AssetSearchPage>;lexicalStatus():AssetSearchIndexStatus;
++  filterColors?(ids:readonly string[],filter:AssetSearchRequest['color'],signal:AbortSignal,measure?:boolean):Promise<Map<string,AssetDiscoveryEvidence|null>>;
++  synchronizeColors?(signal:AbortSignal):Promise<void>;
++  colorCoverage?():import('../../shared/contracts/asset-search.contract').AssetColorCoverage}) {
+   const registryPath=path.join(d.control,'.dam-asset-retrieval.json')
+   let registry:Registry,error:string|null=null,index:Database.Database,indexGeneration:string= randomUUID(),canonical:Database.Database,
+     running:Promise<void>|undefined,jobAbort:AbortController|undefined,rebuildAbort:AbortController|undefined,indexBuilding=false,closed=false
+@@ -199,6 +202,7 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
+         if(!current||view(current)!==source.view)throw Error('RETRIEVAL_QUERY_IMAGE_EXPIRED')
+       }
+       try{
++        if(input.color&&!input.cursor)await d.synchronizeColors?.(controller.signal)
+         if(!space||!runtime||!runtime.currentSpace()){
+           const lexical=await d.lexical(input,controller.signal);controller.signal.throwIfAborted();d.assertAuthority()
+           return {...lexical,mode:'lexical-only',coverage:coverage(),notice:'语义空间尚未准备，当前返回文字检索结果。'}
+@@ -233,12 +237,14 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
+                 canonical.transaction(()=>{for(const match of page.matches){rank++;add.run(snapshotId,match.asset.id,view(match.asset),1/(60+rank),null,match.explanation?JSON.stringify(match.explanation):null)}})()
+               }while(cursor)
+             }
+-            permit=await d.admission?.reserveLocalWork('index',32*1024**2,controller.signal)
++            permit=await d.admission?.reserveLocalWork('index',(input.color?64:32)*1024**2,controller.signal)
+             let after=''
+             for(;;){controller.signal.throwIfAborted();d.assertAuthority();const {rows,valid,source}=validRows(sourceIndex,space,after);if(!rows.length)break;after=rows.at(-1)!.id
+               const members=searchFolderMembers(d.database,input.folderId,valid.map(r=>r.id))
++              const colors=input.color?await d.filterColors?.(valid.filter(r=>members.has(r.id)).map(r=>r.id),input.color,controller.signal):null
++              if(input.color&&!colors)throw Error('ASSET_SEARCH_COLOR_UNAVAILABLE')
+               for(const row of valid){const asset=source.get(row.id)!
+-                if(!members.has(row.id))continue
++                if(!members.has(row.id)||input.color&&!colors?.has(row.id))continue
+                 if(!projectAssetDiscovery({assets:[asset],query:'',tagScope:input.tagScope,tagQueries:input.tagQueries,sourceSiteId:input.sourceSiteId}).matches.length)continue
+                 const similarity=cosine(embedded.vectors[0],decodeVector(row.vector)),candidate={id:asset.id,view:row.view,similarity}
+                 let low=0,high=candidates.length
+@@ -258,18 +264,32 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
+         while(matches.length<input.limit&&offset<snapshot.total&&scanned<500){
+           const rows=canonical.prepare('SELECT id,view,similarity,lexical FROM hits WHERE snapshot=? ORDER BY rank DESC,id LIMIT ? OFFSET ?').all(snapshotId!,input.limit-matches.length,offset) as Array<{id:string;view:string;similarity:number|null;lexical:string|null}>
+           const current=new Map(readAssets(d.database,rows.map(row=>row.id)).map(a=>[a.id,a]));offset+=rows.length;scanned+=rows.length
++          const initialMembers=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
++          const permit=input.color?await d.admission?.reserveLocalWork('index',32*1024**2,controller.signal):undefined
++          let colors:Map<string,AssetDiscoveryEvidence|null>|null|undefined
++          try{colors=input.color?await d.filterColors?.(rows.filter(row=>{const a=current.get(row.id);return a&&view(a)===row.view&&initialMembers.has(row.id)}).map(row=>row.id),input.color,controller.signal,false):null}finally{permit?.release()}
++          if(input.color&&!colors)throw Error('ASSET_SEARCH_COLOR_UNAVAILABLE')
++          controller.signal.throwIfAborted();d.assertAuthority()
++          const latest=new Map(readAssets(d.database,rows.map(row=>row.id)).map(a=>[a.id,a]))
+           const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+-          for(const row of rows){const asset=current.get(row.id);if(!asset||!members.has(row.id)||view(asset)!==row.view||!projectAssetDiscovery({assets:[asset],query:'',sourceSiteId:input.sourceSiteId,tagScope:input.tagScope,tagQueries:input.tagQueries}).matches.length)continue
+-            const lexical=row.lexical?projectAssetDiscovery({assets:[asset],query:input.query,tagScope:input.tagScope,tagQueries:input.tagQueries}).matches[0]?.explanation??null:null
+-            if(row.similarity===null){if(lexical)matches.push({asset,explanation:lexical});continue}
+-            matches.push({asset,explanation:{lane:lexical?'hybrid':'semantic',evidence:[...(lexical?.evidence??[]).slice(0,2),{kind:input.mode==='image'?'image-example':'semantic',match:'vector',label:`${input.mode==='image'?'以图相似':'画面含义'} · SigLIP2 · cosine ${row.similarity.toFixed(3)}`}],similarity:row.similarity,spaceId:snapshot.space}})
++          for(const row of rows){const asset=latest.get(row.id);if(!asset||!members.has(row.id)||view(asset)!==row.view||!projectAssetDiscovery({assets:[asset],query:'',sourceSiteId:input.sourceSiteId,tagScope:input.tagScope,tagQueries:input.tagQueries}).matches.length)continue
++            if(input.color&&!colors?.has(row.id))continue
++            const lexical=row.lexical?projectAssetDiscovery({assets:[asset],query:input.query,tagScope:input.tagScope,tagQueries:input.tagQueries,fields:input.fields}).matches[0]?.explanation??null:null
++            if(row.similarity===null){if(lexical){const color=colors?.get(row.id);matches.push({asset,explanation:color?{...lexical,evidence:[color,...lexical.evidence]}:lexical})}continue}
++            const color=colors?.get(row.id)
++            matches.push({asset,explanation:{lane:lexical?'hybrid':'semantic',evidence:[...(color?[color]:[]),...(lexical?.evidence??[]).slice(0,2),{kind:input.mode==='image'?'image-example':'semantic',match:'vector',label:`${input.mode==='image'?'以图相似':'画面含义'} · SigLIP2 · cosine ${row.similarity.toFixed(3)}`}],similarity:row.similarity,spaceId:snapshot.space}})
+           }
+         }
+         controller.signal.throwIfAborted();d.assertAuthority();assertImageSource(snapshot.imageSource);let nextCursor:string|null=null
+         if(offset<snapshot.total){nextCursor=randomUUID();cursors.set(nextCursor,{snapshot:snapshotId!,offset,owner})}
+         if(!nextCursor&&!input.cursor)dropSnapshot(snapshotId!)
++        const latest=new Map(readAssets(d.database,matches.map(m=>m.asset.id)).map(a=>[a.id,a]))
++        const members=searchFolderMembers(d.database,input.folderId,matches.map(m=>m.asset.id))
++        const safe=matches.flatMap(match=>{const asset=latest.get(match.asset.id)
++          if(!asset||!members.has(asset.id)||view(asset)!==view(match.asset))return[]
++          const current=refreshAssetDiscoveryMatch(match,asset,input);return current?[current]:[]})
+         const lexicalIndex=d.lexicalStatus()
+-        return {matches,total:snapshot.total,nextCursor,index:lexicalIndex,mode:snapshot.mode,coverage:coverage(),notice:'相似度用于排序，不表示正确率。语义候选最多 200 项，精确文字命中另行保留。'}
++        return {matches:safe,total:snapshot.total,nextCursor,index:lexicalIndex,...(input.color?{colors:d.colorCoverage?.()}:{ }),mode:snapshot.mode,coverage:coverage(),notice:'相似度用于排序，不表示正确率。语义候选最多 200 项，精确文字命中另行保留。'}
+       }catch(e){if(snapshotId&&!closed&&(!input.cursor||e instanceof Error&&e.message==='RETRIEVAL_QUERY_IMAGE_EXPIRED'))dropSnapshot(snapshotId);throw e}
+       finally{clearTimeout(deadline);controllers.delete(requestKey)}
+     },
+diff --git a/src/main/background-analysis/background-analysis-storage.ts b/src/main/background-analysis/background-analysis-storage.ts
+index a246637..aad7483 100644
+--- a/src/main/background-analysis/background-analysis-storage.ts
++++ b/src/main/background-analysis/background-analysis-storage.ts
+@@ -6,6 +6,51 @@ const safeRevision=(n:unknown)=>typeof n==='number'&&Number.isSafeInteger(n)&&n>
+ function authorize(a:TagIntentBinding,s:BackgroundScope){if(!s||s.libraryIdentity!==a.identity||s.generation!==a.generation)tagIntentFail('BACKGROUND_SCOPE_EXPIRED');if(s.assetId){tagIntentId(s.assetId);if(!a.database.prepare("SELECT 1 FROM asset_lifecycle WHERE design_asset_identity=? AND lifecycle_state='active'").get(s.assetId))tagIntentFail('BACKGROUND_ASSET_UNAVAILABLE')}const v=Number(a.database.pragma('user_version',{simple:true}));if(!isKnownLibrarySchemaVersion(v))tagIntentFail('BACKGROUND_SCHEMA_UNSUPPORTED');return v}
+ const projection=`CASE WHEN i.decision='cancelled' THEN 'cancelled' WHEN r.source_generation!=i.source_generation OR c.preview_generation_identity!=i.preview_generation THEN 'superseded' WHEN i.decision='user-paused' THEN 'user-paused' WHEN l.lifecycle_state!='active' THEN 'waiting-asset' WHEN policy.enabled=0 OR k.enabled=0 THEN 'policy-paused' ELSE 'waiting' END`
+ const joins=`FROM background_analysis_intents i JOIN background_analysis_capabilities k USING(capability) JOIN asset_lifecycle l ON l.design_asset_identity=i.asset_id JOIN promotion_links p ON p.design_asset_identity=i.asset_id JOIN asset_candidates c ON c.candidate_identity=p.candidate_identity JOIN capture_requests r ON r.capture_request_identity=c.capture_request_identity CROSS JOIN background_analysis_policy policy`
++interface CountCache {sequence:number;schema:number;installed:Set<string>;rows:Map<string,BackgroundSnapshot['counts']>;key:string}
++const countCaches=new WeakMap<TagIntentBinding['database'],CountCache>()
++const suspendedCountCaches=new WeakSet<TagIntentBinding['database']>()
++/** The Host has drained readers before maintenance. Remove only this cache's
++ * own TEMP triggers so the protected backup still sees an empty temp schema.
++ * Reads during maintenance stay pure; the next ordinary read reattaches. */
++export function suspendBackgroundCountCache(db:TagIntentBinding['database']):()=>void{
++ const cache=countCaches.get(db)
++ suspendedCountCaches.add(db)
++ const resume=()=>{suspendedCountCaches.delete(db);if(cache){cache.installed.clear();cache.rows.clear();cache.key=''}}
++ try{
++  if(cache)for(const table of cache.installed)for(const event of ['INSERT','UPDATE','DELETE'])db.exec(`DROP TRIGGER IF EXISTS temp.dam_bg_counts_${table}_${event}`)
++ }catch(error){resume();throw error}
++ if(cache){cache.installed.clear();cache.rows.clear();cache.key=''}
++ return resume
++}
++/** Derived aggregate only. TEMP triggers invalidate on every relevant write;
++ * a rolled-back write can cause extra work, never a stale committed count.
++ * Counts read inside a transaction are deliberately not retained. */
++function backgroundCounts(a:TagIntentBinding,scope:BackgroundScope,version:number,sql:string,args:string[]):BackgroundSnapshot['counts']{
++ const db=a.database
++ // Backup/migration validation can deliberately hold a query-only connection
++ // or an open DDL transaction. It must remain a pure read, including TEMP DDL.
++ if(suspendedCountCaches.has(db)||db.inTransaction||Number(db.pragma('query_only',{simple:true}))===1)return db.prepare(sql).all(...args) as BackgroundSnapshot['counts']
++ let cache=countCaches.get(db)
++ if(!cache){cache={sequence:0,schema:-1,installed:new Set(),rows:new Map(),key:''};countCaches.set(db,cache)
++   db.function('dam_background_counts_changed',()=>{cache!.sequence++;return null})}
++ const schema=Number(db.pragma('schema_version',{simple:true}))
++ if(cache.schema!==schema){cache.schema=schema;cache.installed.clear();cache.rows.clear()}
++ const tables=new Set((db.prepare("SELECT name FROM sqlite_schema WHERE type='table'").all() as {name:string}[]).map(row=>row.name))
++ for(const table of ['background_analysis_intents','background_analysis_policy','background_analysis_capabilities','background_analysis_executions',
++   'asset_lifecycle','promotion_links','asset_candidates','capture_requests']){
++   if(!tables.has(table)||cache.installed.has(table))continue
++   for(const event of ['INSERT','UPDATE','DELETE'])db.exec(`CREATE TEMP TRIGGER IF NOT EXISTS dam_bg_counts_${table}_${event} AFTER ${event} ON main.${table} BEGIN SELECT dam_background_counts_changed(); END`)
++   cache.installed.add(table)
++ }
++ const key=JSON.stringify([a.identity,a.generation,version,schema,cache.sequence,db.pragma('data_version',{simple:true})])
++ if(cache.key!==key){cache.rows.clear();cache.key=key}
++ const owner=scope.assetId??'whole-library'
++ const previous=!db.inTransaction?cache.rows.get(owner):undefined
++ if(previous)return previous.map(row=>({...row}))
++ const rows=db.prepare(sql).all(...args) as BackgroundSnapshot['counts']
++ if(!db.inTransaction){if(cache.rows.size>=32)cache.rows.delete(cache.rows.keys().next().value!);cache.rows.set(owner,rows.map(row=>({...row})))}
++ return rows
++}
+ export function readBackgroundAnalysis(a:TagIntentBinding,input:BackgroundScope):BackgroundSnapshot{
+  const version=authorize(a,input);if(version<12)return{schemaVersion:version,sessionToken:a.notebookSession,policy:defaults(),intents:[],counts:[]}
+  const policy=a.database.prepare('SELECT enabled,revision FROM background_analysis_policy WHERE singleton=1').get() as {enabled:number;revision:number}|undefined,rows=a.database.prepare('SELECT capability,enabled FROM background_analysis_capabilities').all() as {capability:string;enabled:number}[]
+@@ -14,7 +59,7 @@ export function readBackgroundAnalysis(a:TagIntentBinding,input:BackgroundScope)
+  const filter=input.assetId?'WHERE i.asset_id=?':'',args=input.assetId?[input.assetId]:[]
+  const executionJoins=version>=14?joins+' LEFT JOIN background_analysis_executions x ON x.intent_id=i.id':joins
+  const state=version>=14?`CASE WHEN i.decision='cancelled' THEN 'cancelled' WHEN r.source_generation!=i.source_generation OR c.preview_generation_identity!=i.preview_generation THEN 'superseded' WHEN i.decision='user-paused' THEN 'user-paused' WHEN x.state IN ('claimed','sent') THEN 'running' WHEN x.state IN ('succeeded','failed','cancelled','unknown','abandoned') THEN x.state ELSE ${projection} END`:projection
+- const counts=a.database.prepare(`SELECT i.capability,${state} AS state,COUNT(*) AS count ${executionJoins} ${filter} GROUP BY i.capability,state ORDER BY i.capability,state`).all(...args) as BackgroundSnapshot['counts']
++ const counts=backgroundCounts(a,input,version,`SELECT i.capability,${state} AS state,COUNT(*) AS count ${executionJoins} ${filter} GROUP BY i.capability,state ORDER BY i.capability,state`,args)
+  const intents=input.assetId?a.database.prepare(`SELECT i.id,i.capability,i.revision,${state} AS state ${executionJoins} WHERE i.asset_id=? ORDER BY i.capability LIMIT 3`).all(input.assetId) as BackgroundSnapshot['intents']:[]
+  return{schemaVersion:version,sessionToken:a.notebookSession,policy:config,intents,counts}
+ }
+diff --git a/src/renderer/components/library/canvas/useHostAssetSearch.ts b/src/renderer/components/library/canvas/useHostAssetSearch.ts
+index 3520062..0daa8fd 100644
+--- a/src/renderer/components/library/canvas/useHostAssetSearch.ts
++++ b/src/renderer/components/library/canvas/useHostAssetSearch.ts
+@@ -1,50 +1,81 @@
+ import { useEffect, useRef, useState } from 'react'
+ import { requireWorkspaceClient } from '../../../workspace-client'
+ import { mapSearchAsset, type Asset } from '../../../stores/asset.store'
+-import type { AssetSearchIndexStatus, AssetSearchRequest } from '../../../../shared/contracts/asset-search.contract'
+-import type { AssetDiscoveryMatch } from '../../../../shared/workflows/asset-discovery.workflow'
++import type { AssetSearchIndexStatus, AssetSearchRequest,AssetColorCoverage } from '../../../../shared/contracts/asset-search.contract'
++import {refreshAssetDiscoveryMatch,type AssetDiscoveryMatch} from '../../../../shared/workflows/asset-discovery.workflow'
+ import type { ActiveLibraryHostProjection } from '../../../../shared/contracts/active-library.contract'
+ import type {AssetSemanticSearchRequest,AssetSemanticSearchPage,RetrievalCoverage} from '../../../../shared/contracts/retrieval-workspace.contract'
+-export interface SearchOptions {mode:'lexical'|'semantic'|'hybrid';folderId?:string;example?:{assetId?:string;grant?:string}}
++export interface SearchOptions {mode:'lexical'|'semantic'|'hybrid';folderId?:string;example?:{assetId?:string;grant?:string};color?:AssetSearchRequest['color'];fields?:AssetSearchRequest['fields']}
+ 
+ export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query: string, site: string,
+   tags: string[], sourceChange: readonly Asset[],options:SearchOptions={mode:'lexical'}) {
+   const [matches,setMatches]=useState<AssetDiscoveryMatch<Asset>[]>([]),[index,setIndex]=useState<AssetSearchIndexStatus|null>(null)
+   const [total,setTotal]=useState(0),[cursor,setCursor]=useState<string|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('')
+   const [coverage,setCoverage]=useState<RetrievalCoverage|null>(null),[notice,setNotice]=useState<string|null>(null),[lane,setLane]=useState('lexical-only')
++  const [colors,setColors]=useState<AssetColorCoverage|null>(null),[hasUpdates,setHasUpdates]=useState(false)
++  const matchesRef=useRef(matches);matchesRef.current=matches
+   const [refresh,setRefresh]=useState(0), epoch=useRef(0), current=useRef<AssetSearchRequest|AssetSemanticSearchRequest|null>(null),canceled=useRef(-1),lastScope=useRef('')
++  const accepted=useRef<AssetSearchRequest|AssetSemanticSearchRequest|null>(null)
+   const queryTimer=useRef<ReturnType<typeof setTimeout>|null>(null)
+   const key=JSON.stringify([authority.identity,authority.generation,query,site,tags,options])
+   const accept=(page:Awaited<ReturnType<ReturnType<typeof requireWorkspaceClient>['searchAssetsPage']>>|AssetSemanticSearchPage)=>{
+-    setIndex(page.index);setTotal(page.total);setCursor(page.nextCursor)
++    setIndex(page.index);setTotal(page.total);setCursor(page.nextCursor);setColors(page.colors??null)
+     if('coverage' in page){setCoverage(page.coverage);setNotice(page.notice);setLane(page.mode)}else{setNotice(null);setLane('lexical-only')}
+   }
+   useEffect(()=>{
+     const seq=++epoch.current
+-    if(authority.state!=='ready'||!authority.identity||!authority.generation){current.current=null;setMatches([]);setCursor(null);setIndex(null);setCoverage(null);setNotice(null);setTotal(0);setError('');setBusy(false);return}
++    if(authority.state!=='ready'||!authority.identity||!authority.generation){current.current=null;accepted.current=null;setMatches([]);setCursor(null);setIndex(null);setCoverage(null);setColors(null);setNotice(null);setTotal(0);setError('');setBusy(false);return}
+     const scopeKey=JSON.stringify([authority.identity,authority.generation])
+-    if(lastScope.current!==scopeKey){lastScope.current=scopeKey;setMatches([]);setCoverage(null);setIndex(null);setTotal(0)}
++    if(lastScope.current!==scopeKey){lastScope.current=scopeKey;accepted.current=null;setMatches([]);setCursor(null);setColors(null);setCoverage(null);setIndex(null);setTotal(0)}
+     const lexical:AssetSearchRequest={libraryIdentity:authority.identity,generation:authority.generation,query,
+-      sourceSiteId:site||undefined,folderId:options.folderId,tagQueries:tags,tagScope:'includes-pending',limit:80}
++      sourceSiteId:site||undefined,folderId:options.folderId,tagQueries:tags,tagScope:'includes-pending',color:options.color,fields:options.fields,limit:80}
+     const request:AssetSearchRequest|AssetSemanticSearchRequest=options.example||options.mode!=='lexical'&&query.trim()?{...lexical,
+       mode:options.example?'image':options.mode as 'semantic'|'hybrid',queryId:crypto.randomUUID(),imageAssetId:options.example?.assetId,externalGrant:options.example?.grant}:lexical
+-    current.current=request;setBusy(true);setError('');setNotice(null);setCursor(null)
++    current.current=request;setBusy(true);setError('');setNotice(null);setHasUpdates(false)
+     const timer=setTimeout(()=>{
+       queryTimer.current=null
+       if(seq!==epoch.current||canceled.current===seq)return
+       void ('mode' in request?requireWorkspaceClient().retrieval.query(request):requireWorkspaceClient().searchAssetsPage(request)).then(page=>{
+         if(seq!==epoch.current||canceled.current===seq)return
++        accepted.current=request
+         setMatches(page.matches.map(m=>({asset:mapSearchAsset(m.asset,request),explanation:m.explanation})))
+         accept(page)
+       },e=>{if(seq===epoch.current&&canceled.current!==seq)setError(searchError(e))})
+         .finally(()=>{if(seq===epoch.current){setBusy(false);if(canceled.current===seq)setNotice('查询已取消；已有结果保留。')}})
+     },180)
+     queryTimer.current=timer
+-    return()=>{clearTimeout(timer);if(queryTimer.current===timer)queryTimer.current=null;if('mode' in request&&request.queryId)void requireWorkspaceClient().retrieval.cancel(request,request.queryId).catch(()=>{});if(epoch.current===seq)epoch.current++}
+-  },[key,authority.state,sourceChange,refresh])
++    return()=>{clearTimeout(timer);if(queryTimer.current===timer)queryTimer.current=null;const active=current.current
++      if(active&&'mode' in active&&active.queryId)void requireWorkspaceClient().retrieval.cancel(active,active.queryId).catch(()=>{});epoch.current++}
++  },[key,authority.state,refresh])
++  // Result membership/rank is a query snapshot. Source notifications refresh
++  // only the rows already displayed; they never run another embedding query or
++  // throw away a user's later pages. Library revocation still clears everything.
++  useEffect(()=>{
++    const request=accepted.current,seq=epoch.current,ids=matchesRef.current.map(m=>m.asset.id)
++    if(!request||!ids.length)return
++    let valid=true
++    void(async()=>{
++      const fresh=new Map<string,Asset>()
++      for(let start=0;start<ids.length;start+=100){
++        const rows=await requireWorkspaceClient().readSearchAssets({libraryIdentity:request.libraryIdentity,generation:request.generation,ids:ids.slice(start,start+100)})
++        if(!valid||seq!==epoch.current||accepted.current!==request)return
++        for(const row of rows)fresh.set(row.id,mapSearchAsset(row,request))
++      }
++      if(!valid||seq!==epoch.current||accepted.current!==request)return
++      setMatches(old=>old.flatMap(match=>{
++        if(!ids.includes(match.asset.id))return[match]
++        const asset=fresh.get(match.asset.id)
++        if(!asset||asset.revision!==match.asset.revision||asset.thumbnailPath!==match.asset.thumbnailPath)return[]
++        const current=refreshAssetDiscoveryMatch(match,asset,request);return current?[current]:[]
++      }))
++      setHasUpdates(true)
++    })().catch(()=>{if(valid&&seq===epoch.current)setError('当前结果刷新未完成，分页与已有内容保留。可重新查询。')})
++    return()=>{valid=false}
++  },[sourceChange])
+   const loadMore=async()=>{
+-    if(busy||!cursor||!current.current)return
+-    const seq=epoch.current,request=current.current
++    if(busy||!cursor||!accepted.current)return
++    const seq=++epoch.current,request=accepted.current
++    current.current=request
+     setBusy(true);setError('')
+     try{
+       const page=await ('mode' in request?requireWorkspaceClient().retrieval.query({...request,cursor}):requireWorkspaceClient().searchAssetsPage({...request,cursor}))
+@@ -66,7 +97,7 @@ export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query
+     if(queryTimer.current!==null){clearTimeout(queryTimer.current);queryTimer.current=null;setBusy(false);setNotice('查询已取消；已有结果保留。');return}
+     setNotice('正在取消查询；已有结果保留，执行占用会在实际结束后释放。')
+     void requireWorkspaceClient().retrieval.cancel(request,request.queryId).catch(e=>{if(seq===epoch.current)setError(searchError(e))})}
+-  return {matches,index,total,busy,error,coverage,notice,lane,hasMore:Boolean(cursor),loadMore,rebuild,cancel,reload:()=>setRefresh(v=>v+1)}
++  return {matches,index,total,busy,error,coverage,colors,hasUpdates,notice,lane,hasMore:Boolean(cursor),loadMore,rebuild,cancel,reload:()=>setRefresh(v=>v+1)}
+ }
+ function searchError(error:unknown){const message=error instanceof Error?error.message:String(error)
+   const reasons:Record<string,string>={RETRIEVAL_QUERY_TOO_LONG:'这次查询超过模型的64个词元限制。内容没有被截短，请缩短查询后再试。',
+diff --git a/src/renderer/components/library/canvas/SearchFilters.tsx b/src/renderer/components/library/canvas/SearchFilters.tsx
+new file mode 100644
+index e69de29..35420bc 100644
+--- /dev/null
++++ b/src/renderer/components/library/canvas/SearchFilters.tsx
+@@ -0,0 +1,30 @@
++import React,{useState} from 'react'
++import type {AssetSearchField,AssetColorCoverage} from '../../../../shared/contracts/asset-search.contract'
++import type {SearchOptions} from './useHostAssetSearch'
++
++const fields:{id:AssetSearchField;name:string}[]=[{id:'name',name:'标题与文件名'},{id:'tags',name:'确认标签与别名'},
++ {id:'ai-tags',name:'AI 建议标签'},{id:'description',name:'当前描述'},{id:'ocr',name:'OCR 文字'},{id:'prompt',name:'反推提示词'}]
++export default function SearchFilters(p:{options:SearchOptions;setOptions(v:SearchOptions):void;colors:AssetColorCoverage|null}){
++ const [hex,setHex]=useState(p.options.color?.hex??'#2288CC'),[percentage,setPercentage]=useState(String(p.options.color?.minimumPercentage??25))
++ const [tolerance,setTolerance]=useState(String(p.options.color?.tolerance??30)),[error,setError]=useState('')
++ const apply=()=>{const value=Number(percentage)
++   if(!/^#[a-f0-9]{6}$/i.test(hex)||!Number.isFinite(value)||value<1||value>100){setError('请输入 #RRGGBB 颜色和 1–100 的占比。');return}
++   setError('');p.setOptions({...p.options,color:{hex:hex.toUpperCase(),minimumPercentage:value,tolerance:Number(tolerance)}})
++ }
++ return <div className="search-filters">
++  <label>文字来源<select aria-label="文字搜索来源" value={p.options.fields?.[0]??'all'} onChange={e=>p.setOptions({...p.options,fields:e.target.value==='all'?undefined:[e.target.value as AssetSearchField]})}>
++   <option value="all">全部文字来源</option>{fields.map(field=><option key={field.id} value={field.id}>{field.name}</option>)}
++  </select></label>
++  <details open={p.options.color?true:undefined}><summary>颜色占比{p.options.color?` · ${p.options.color.hex} ≥${p.options.color.minimumPercentage}%`:''}</summary>
++   <div className="search-color-fields"><label>颜色<input aria-label="查找颜色代码" value={hex} maxLength={7} placeholder="#2288CC" onChange={e=>setHex(e.target.value)}/></label>
++    <label>至少占比 %<input aria-label="颜色最低占比" type="number" min="1" max="100" step="1" value={percentage} onChange={e=>setPercentage(e.target.value)}/></label>
++    <label>近色范围<select aria-label="颜色近色范围" value={tolerance} onChange={e=>setTolerance(e.target.value)}><option value="15">较严格</option><option value="30">适中</option><option value="45">较宽</option></select></label>
++    <button onClick={apply}>应用颜色筛选</button>{p.options.color&&<button onClick={()=>{setError('');p.setOptions({...p.options,color:undefined})}}>移除颜色筛选</button>}
++   </div>
++   <p>按受控预览的可见像素测量；透明部分不计，半透明按可见程度计入。颜色占比是抽样估计，近色按明度和色差匹配。</p>
++   {p.colors&&<p>颜色测量 {p.colors.measured}/{p.colors.total}{p.colors.unavailable?` · ${p.colors.unavailable} 份暂不可测`:''}；未测或不可测素材不会当作匹配。</p>}
++   {error&&<p role="alert">{error}</p>}
++  </details>
++  {p.options.fields&&p.options.mode!=='lexical'&&<small>文字来源约束文字命中；画面含义使用图片向量。颜色、标签与文件夹条件同时生效。</small>}
++ </div>
++}
+diff --git a/src/renderer/components/library/canvas/LibraryCanvas.tsx b/src/renderer/components/library/canvas/LibraryCanvas.tsx
+index 5679f46..d748521 100644
+--- a/src/renderer/components/library/canvas/LibraryCanvas.tsx
++++ b/src/renderer/components/library/canvas/LibraryCanvas.tsx
+@@ -26,7 +26,7 @@ import './library-canvas.css'
+ interface Props{revealWorkAsset?:number;workSets?:WorkSetModel;openWorkSet?:(id:string)=>void;editWorkSet?:(intent:WorkSetIntent)=>void;organization?:OrganizationModel;organize?:(intent:OrganizationIntent)=>void;addFiles?:()=>void;scope:string;authority:ActiveLibraryHostProjection;assets:Asset[];matches:readonly AssetDiscoveryMatch<Asset>[];tags:Tag[];selected:Asset|null;pick:(a:Asset|null)=>void;openFocus:(a:Asset,orderedIds?:string[])=>void;query:string;setQuery:(q:string)=>void;tagQueries:string[];addTag:(q:string)=>void;removeTag:(q:string)=>void;clearFilters:()=>void;bulkIds:string[];toggleBulk:(id:string)=>void;clearBulk:()=>void;bulkAction:(mode:'add'|'remove')=>void;status:AssetLoadStatus;error:string|null;loaded:boolean;retry:()=>Promise<void>;controls:React.ReactNode;details:React.ReactNode;work:React.ReactNode;workMode:boolean;showWork:()=>void;showAll:()=>void;register:(id:string,e:HTMLElement|null)=>void}
+ function labelTone(asset:Asset){const hex=asset.dominantColor?.replace('#','');if(!hex||!/^([0-9a-f]{6})$/i.test(hex))return undefined;const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);return (r*299+g*587+b*114)/1000<145?'dark':'light'}
+ type Location = CanvasLocation
+-export function LibraryCanvas(p:Props & {searchControl?:React.ReactNode;searchFolder?:(id:string|undefined)=>void}) {
++export function LibraryCanvas(p:Props & {filtersActive?:boolean;searchControl?:React.ReactNode;searchFolder?:(id:string|undefined)=>void}) {
+  const navigate=useNavigate(),{toggleTheme,theme}=useUIStore()
+  const [history,setHistory]=useState<Location[]>([{destination:'all'}]),[cursor,setCursor]=useState(0)
+  const location=history[cursor],destination=location.destination
+@@ -58,7 +58,7 @@ export function LibraryCanvas(p:Props & {searchControl?:React.ReactNode;searchFo
+  const shown=useMemo(()=>{const list=p.matches.filter(({asset:a})=>(!quick.includes('untagged')||!a.tags.length)&&(!(location.folder||location.ai)||memberIds.has(a.id))&&(!quick.includes('unclassified')||!classifiedIds.has(a.id))&&(category==='全部素材'||(category==='图片'&&!/^(mp4|webm|mov|txt|ttf|otf|pdf)$/i.test(a.fileType))||(category==='视频'&&/^(mp4|webm|mov)$/i.test(a.fileType))||(category==='文字'&&a.fileType==='txt')||(category==='字体'&&/^(ttf|otf)$/i.test(a.fileType))||(category==='文档'&&a.fileType==='pdf')));return order.length?[...list].sort((a,b)=>order.indexOf(a.asset.id)-order.indexOf(b.asset.id)):list},[p.matches,quick,category,location.folder,location.ai,order,memberIds,classifiedIds])
+  const shuffle=()=>{const ids=(destination==='trash'?trash:p.assets).map(a=>a.id);for(let i=ids.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]]}setOrder(ids)}
+  const displayedTrash=order.length?[...trash].sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id)):trash
+- const firstLoading=!p.loaded&&(p.status==='loading'||p.status==='idle'),firstError=!p.loaded&&p.status==='error',filtered=Boolean(p.query.trim()||p.tagQueries.length||quick.length||category!=='全部素材')
++ const firstLoading=!p.loaded&&(p.status==='loading'||p.status==='idle'),firstError=!p.loaded&&p.status==='error',filtered=Boolean(p.filtersActive||p.query.trim()||p.tagQueries.length||quick.length||category!=='全部素材')
+  const libraryActions=[{id:'new-folder',label:'新建文件夹',Icon:Folder},{id:'new-palette',label:'新建色板文件夹',Icon:Palette},{id:'library',label:'打开资料库与导入',Icon:Folder},{id:'refresh',label:'刷新素材',Icon:RefreshCw},{id:'clear',label:'清除所有筛选',Icon:RefreshCw},{id:'new-set',label:'将所选素材加入工作集',Icon:Plus},{id:'palettes',label:'打开色板文件夹',Icon:Palette}]
+  const menuItems=[...libraryActions,...getAppMenuNavigationItems().map(item=>({id:item.id,label:item.sidebarLabel,Icon:item.id==='settings'?Settings2:item.id==='tag-manager'?Tags:Sparkles})),{id:'theme',label:'切换明暗外观',Icon:Moon},{id:'recovery',label:'本机恢复草稿',Icon:RefreshCw},{id:'quit',label:'退出整个 DAM',Icon:X}]
+  const menuAction=(id:string)=>{if(missing&&['new-folder','new-palette','new-set','assign','palettes','refresh','clear'].includes(id)){setManage(true);setNotice('请先创建或打开素材库，再整理与检索素材。');return}if(id==='library')setManage(true);else if(id==='recovery')window.dispatchEvent(new Event('workspace-recovery-open'));else if(id==='quit')window.dispatchEvent(new Event('workspace-quit'));else if(id==='refresh')void p.retry();else if(id==='clear')clear();else if(id==='theme')toggleTheme();else if(id==='new-set')p.editWorkSet?.({kind:'add',assetIds:p.bulkIds.length?p.bulkIds:p.selected?[p.selected.id]:[]});else if(id==='palettes')go({destination:'folders',palettes:true});else if(id==='new-folder')p.organize?.({kind:'create',folderKind:'assets',parentId:currentFolder?.kind==='assets'?currentFolder.id:null});else if(id==='new-palette')p.organize?.({kind:'create',folderKind:'palette',parentId:currentFolder?.kind==='palette'?currentFolder.id:null});else if(id==='assign')p.organize?.({kind:'assign',assetIds:p.bulkIds.length?p.bulkIds:p.selected?[p.selected.id]:[]});else {const target=getAppMenuNavigationItems().find(item=>item.id===id);if(target)navigate(target.path)}}
+diff --git a/src/renderer/components/library/canvas/RetrievalSearchControls.tsx b/src/renderer/components/library/canvas/RetrievalSearchControls.tsx
+index 2715f03..e0ee5dc 100644
+--- a/src/renderer/components/library/canvas/RetrievalSearchControls.tsx
++++ b/src/renderer/components/library/canvas/RetrievalSearchControls.tsx
+@@ -16,7 +16,7 @@ export default function RetrievalSearchControls(p:{scope:RetrievalScope;options:
+   const selected=[...new Set(p.selectedIds.length?p.selectedIds:p.selectedAsset?[p.selectedAsset.id]:[])]
+   return <section aria-label="图文检索与覆盖" className="retrieval-search-controls">
+     <div className="retrieval-search-row">
+-      <label>查找方式 <select aria-label="素材查找方式" value={p.options.mode} onChange={e=>{clearExample();p.setOptions({mode:e.target.value as SearchOptions['mode']})}}>
++      <label>查找方式 <select aria-label="素材查找方式" value={p.options.mode} onChange={e=>{setFile(null);p.setOptions({...p.options,mode:e.target.value as SearchOptions['mode'],example:undefined})}}>
+         <option value="lexical">文字与标签</option><option value="semantic">画面含义 · 中英文</option><option value="hybrid">文字＋画面含义</option></select></label>
+       <button disabled={!p.selectedAsset||busy} onClick={()=>{setFile(null);p.setOptions({...p.options,example:{assetId:p.selectedAsset!.id}})}}>查找当前素材的相似图</button>
+       <button disabled={busy} onClick={()=>void chooseFile()}>选择一张图找相似</button>
+diff --git a/src/renderer/components/library/canvas/library-canvas.css b/src/renderer/components/library/canvas/library-canvas.css
+index b890ebf..9009b34 100644
+--- a/src/renderer/components/library/canvas/library-canvas.css
++++ b/src/renderer/components/library/canvas/library-canvas.css
+@@ -145,6 +145,13 @@
+ .retrieval-search-row select{min-height:30px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);padding:3px 7px}
+ .gallery-design .library-search-status{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;padding-right:16px;gap:8px 14px}
+ .library-search-status>.retrieval-search-controls{flex-basis:100%}
++.library-search-status>.search-filters{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 20px}
++.search-filters label{display:flex;align-items:center;gap:8px}
++.search-filters select,.search-filters input{color:var(--ink);background:var(--surface);border:1px solid var(--border);border-radius:7px;min-height:30px;padding:4px 8px;font:inherit}
++.search-filters summary{cursor:pointer;min-height:30px;line-height:30px}
++.search-color-fields{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:8px 0}
++.search-color-fields input{width:95px}.search-color-fields input[type=number]{width:65px}
++.search-filters details p{max-width:700px;margin:6px 0;line-height:1.6}.search-filters small{flex-basis:100%}
+ .library-search-status>p{flex-basis:100%;margin:0;line-height:1.5}
+ .gallery-design .library-search-status button{min-height:30px}
+ .gallery-design.minimal-prototype .library-search-status+.selectionbar{position:relative;inset:auto;margin:4px 0 14px;height:auto;min-height:40px;flex-wrap:wrap;overflow:visible}
+diff --git a/src/renderer/routes/Library.tsx b/src/renderer/routes/Library.tsx
+index f73e777..c9c993d 100644
+--- a/src/renderer/routes/Library.tsx
++++ b/src/renderer/routes/Library.tsx
+@@ -26,6 +26,7 @@ import type { AssetCardChangedEvent } from '../../shared/contracts/asset-card.co
+ import { useAssetStore, mapSearchAsset, type Asset } from '../stores/asset.store'
+ import { useSettingsStore } from '../stores/settings.store'
+ import { useHostAssetSearch,type SearchOptions } from '../components/library/canvas/useHostAssetSearch'
++import SearchFilters from '../components/library/canvas/SearchFilters'
+ import RetrievalSearchControls from '../components/library/canvas/RetrievalSearchControls'
+ import type { ActiveLibraryHostProjection } from '../../shared/contracts/active-library.contract'
+ import { useAssetWorkspaceSession } from '../asset-workspace-session.context'
+@@ -172,6 +173,7 @@ export default function Library() {
+   const displayAssets = useMemo(()=>[...new Map([...referencedAssets,...assets,...hostedSearch.matches.map(m=>m.asset)].map(a=>[a.id,a])).values()],[assets,hostedSearch.matches,referencedAssets])
+ 
+   const handleClearFilters = () => {
++    setSearchOptions({mode:'lexical'})
+     setSearchQuery('')
+     setFilterSite('')
+     setFilterTag('')
+@@ -338,10 +340,12 @@ export default function Library() {
+     onConfigureAi={()=>navigate(appPath('ai-console'))} error={cardError}/>:<p className="lc-empty">请先导入或选择一个素材。</p>
+   return <>
+     <LibraryCanvas revealWorkAsset={revealWorkAsset} workSets={workSets} openWorkSet={setReferenceSet} editWorkSet={setWorkSetIntent} organization={organization} organize={setOrganizationIntent} addFiles={()=>libraryControlsRef.current?.addFiles()} key={scope} scope={scope} authority={libraryProjection} assets={displayAssets} matches={discovery.matches} tags={tags} selected={selectedAsset} pick={setSelectedAsset} openFocus={openQuick}
+-      searchFolder={setSearchFolderId} searchControl={libraryProjection.state==='ready'&&<section aria-label="检索状态" className="gallery-notice library-search-status">
++      filtersActive={Boolean(searchOptions.color||searchOptions.example)} searchFolder={setSearchFolderId} searchControl={libraryProjection.state==='ready'&&<section aria-label="检索状态" className="gallery-notice library-search-status">
++        <SearchFilters key={scope} options={searchOptions} setOptions={setSearchOptions} colors={hostedSearch.colors}/>
+         <RetrievalSearchControls scope={{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}} options={searchOptions} setOptions={setSearchOptions} selectedIds={bulkSelectedAssetIds} selectedAsset={bulkSelectedAssetIds.length===1?displayAssets.find(a=>a.id===bulkSelectedAssetIds[0])??selectedAsset:selectedAsset} reload={hostedSearch.reload}/>
+         {hostedSearch.busy?<span role="status">正在查询或维护索引，已显示的结果保留…</span>:<span>{hostedSearch.lane==='lexical-only'?'文字检索':hostedSearch.lane==='image'?'以图找相似':hostedSearch.lane==='hybrid'?'文字＋画面含义':'中英文画面含义'} · 已显示 {hostedSearch.matches.length}/{hostedSearch.total} · 文字索引覆盖 {hostedSearch.index?.indexed??0}/{hostedSearch.index?.total??0}{hostedSearch.index?.state!=='ready'?' · 索引仍在准备':''}{hostedSearch.coverage?` · 图文覆盖 ${hostedSearch.coverage.indexed}/${hostedSearch.coverage.total}`:''}</span>}
+         {hostedSearch.notice&&<p>{hostedSearch.notice}</p>}
++        {hostedSearch.hasUpdates&&<p>素材内容已刷新，当前分页与顺序保留；重新查询可更新结果成员与排序。</p>}
+         {hostedSearch.error&&<span role="alert">{hostedSearch.error}</span>}
+         <button disabled={hostedSearch.busy} onClick={hostedSearch.reload}>重新查询</button>
+         {hostedSearch.busy&&(searchOptions.mode!=='lexical'||searchOptions.example)&&<button onClick={hostedSearch.cancel}>取消图文查询</button>}
+diff --git a/scripts/asset-search-host.test.ts b/scripts/asset-search-host.test.ts
+index 17dbbcd..ddaf5ad 100644
+--- a/scripts/asset-search-host.test.ts
++++ b/scripts/asset-search-host.test.ts
+@@ -6,8 +6,9 @@ import { test } from 'node:test'
+ import sharp from 'sharp'
+ import { createActiveLibraryHost } from '../src/main/library-lifecycle'
+ import { createProductionActiveLibraryHostDependencies } from '../src/main/library-lifecycle/production-active-library-dependencies'
++import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
+ 
+-async function fixture() {
++async function fixture(admission?:ReturnType<typeof createVisualAdmission>) {
+   const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-search-host-'))), library = path.join(root,'library')
+   const files = [1,2,3].map(n=>path.join(root,`generated-${n}.png`))
+   for (const file of files) await sharp({create:{width:32,height:24,channels:3,background:'#aabbcc'}}).png().toFile(file)
+@@ -15,7 +16,7 @@ async function fixture() {
+   const host = createActiveLibraryHost(createProductionActiveLibraryHostDependencies({
+     selectLibraryDirectory: async()=>({kind:'selected',directory:library}),
+     selectLocalFiles:async()=>({kind:'selected',files:files.map(filePath=>({filePath}))}),
+-  }))
++  },{admission}))
+   const plan = await host.prepareCreate(); if (plan.kind!=='planned') throw Error('fixture')
+   await host.confirmCreate(plan.plan.receipt)
+   const add = await host.prepareAddAssets(); if (add.kind!=='planned') throw Error('fixture')
+@@ -30,6 +31,103 @@ async function fixture() {
+   } }
+ }
+ 
++await test('Host color filtering measures controlled previews, persists coverage and enforces percentage without a model',async()=>{
++  const f=await fixture()
++  try {
++    const input={...f.scope,query:'',tagScope:'includes-pending' as const,limit:1,color:{hex:'#AABBCC',minimumPercentage:99,tolerance:15}}
++    const page=await f.host.searchAssetPage(input)
++    assert.equal(page.total,3)
++    assert.equal(page.matches.length,1)
++    assert.equal(page.colors?.measured,3)
++    assert.equal(page.colors?.unavailable,0)
++    assert.equal(page.matches[0].explanation?.evidence.find(e=>e.kind==='color')?.match,'measured')
++    assert.ok(page.matches[0].explanation?.evidence.some(e=>e.label.includes('100.00%')))
++    assert.equal((await f.host.searchAssetPage({...input,color:{hex:'#FF0000',minimumPercentage:1,tolerance:15}})).total,0)
++    await assert.rejects(f.host.searchAssetPage({...input,color:{...input.color,minimumPercentage:101}}))
++    await assert.rejects(f.host.searchAssetPage({...input,color:{...input.color,extra:'not allowed'}}))
++    await f.host.close();await f.host.reopen()
++    const scope={libraryIdentity:f.host.inspect().identity!,generation:f.host.inspect().generation!}
++    const reopened=await f.host.searchAssetPage({...input,...scope,limit:100})
++    assert.equal(reopened.total,3);assert.equal(reopened.colors?.measured,3)
++    const asset=reopened.matches[0].asset
++    const trash=await f.host.prepareTrash({designAssetIdentity:asset.id,expectedRevision:asset.revision})
++    if(trash.kind!=='planned')throw Error('fixture')
++    await f.host.dispatchTrash({kind:'move-design-asset-to-trash',planReceipt:trash.plan.receipt,designAssetIdentity:asset.id,expectedRevision:asset.revision})
++    assert.equal((await f.host.searchAssetPage({...input,...scope,limit:100})).total,2)
++  }finally{await f.close()}
++})
++
++await test('Host color pages revalidate lifecycle after an awaited resource grant',async()=>{
++ let release!:()=>void,entered!:()=>void
++ const base=createVisualAdmission(),gate=new Promise<void>(resolve=>{release=resolve})
++ const started=new Promise<void>(resolve=>{entered=resolve});let foreground=0
++ const admission={...base,reserveLocalWork:async(...args:Parameters<typeof base.reserveLocalWork>)=>{
++   const permit=await base.reserveLocalWork(...args)
++   if(args[0]==='index'&&args[3]==='foreground'&&++foreground===2){entered();await gate}
++   return permit
++ }}
++ const f=await fixture(admission)
++ try{
++   const target=(await f.host.listAssets())[0]
++   const pending=f.host.searchAssetPage({...f.scope,query:'',tagScope:'includes-pending',limit:100,color:{hex:'#AABBCC',minimumPercentage:99,tolerance:15}})
++   await started
++   const plan=await f.host.prepareTrash({designAssetIdentity:target.id,expectedRevision:target.revision})
++   if(plan.kind!=='planned')throw Error('fixture')
++   await f.host.dispatchTrash({kind:'move-design-asset-to-trash',planReceipt:plan.plan.receipt,designAssetIdentity:target.id,expectedRevision:target.revision})
++   release()
++   const page=await pending
++   assert.ok(page.matches.every(match=>match.asset.id!==target.id),'A held colour page must never return an asset trashed while it waits')
++   assert.equal(page.matches.length,2)
++ }finally{release();await f.close()}
++})
++
++await test('a filled color page rechecks earlier hits after a later page-fill iteration waits',async()=>{
++ let release!:()=>void,entered!:()=>void,removeMiddle!:()=>Promise<void>
++ const gate=new Promise<void>(resolve=>{release=resolve}),started=new Promise<void>(resolve=>{entered=resolve})
++ const base=createVisualAdmission();let enabled=false,foreground=0
++ const admission={...base,reserveLocalWork:async(...args:Parameters<typeof base.reserveLocalWork>)=>{
++   const permit=await base.reserveLocalWork(...args)
++   if(enabled&&args[0]==='index'&&args[3]==='foreground'){
++     foreground++
++     if(foreground===2)await removeMiddle()
++     if(foreground===3){entered();await gate}
++   }
++   return permit
++ }}
++ const f=await fixture(admission)
++ try{
++   const order=(await f.query('',100)).matches.map(match=>match.asset)
++   const trash=async(asset:typeof order[number])=>{const plan=await f.host.prepareTrash({designAssetIdentity:asset.id,expectedRevision:asset.revision})
++     if(plan.kind!=='planned')throw Error('fixture');await f.host.dispatchTrash({kind:'move-design-asset-to-trash',planReceipt:plan.plan.receipt,designAssetIdentity:asset.id,expectedRevision:asset.revision})}
++   removeMiddle=()=>trash(order[1]);enabled=true
++   const pending=f.host.searchAssetPage({...f.scope,query:'',tagScope:'includes-pending',limit:2,color:{hex:'#AABBCC',minimumPercentage:99,tolerance:15}})
++   await started;await trash(order[0]);release()
++   const page=await pending
++   assert.deepEqual(page.matches.map(match=>match.asset.id),[order[2].id],'The complete page must be current after its last await, including earlier accumulated hits')
++ }finally{release();await f.close()}
++})
++
++await test('Host text source scopes distinguish names, confirmed aliases and human descriptions; row-only edits retain frozen paging',async()=>{
++ const f=await fixture()
++ try{
++   const first=await f.query('generated',1),remaining=(await f.host.listAssets()).filter(a=>a.id!==first.matches[0].asset.id)
++   const id=remaining[0].id
++   await f.host.updateAssetCaption(id,'中文咖啡与唯一人工词')
++   const input={...f.scope,query:'唯一人工词',tagScope:'includes-pending' as const,limit:100}
++   assert.deepEqual((await f.host.searchAssetPage({...input,fields:['description']})).matches.map(m=>m.asset.id),[id])
++   assert.equal((await f.host.searchAssetPage({...input,fields:['name']})).matches.length,0)
++   const tag=await f.host.createTag({name:'已确认主题'});await f.host.addTagToAsset(id,tag.id);await f.host.createTagAlias(tag.id,'独立别名词')
++   assert.equal((await f.host.searchAssetPage({...input,query:'独立别名词',fields:['tags']})).matches.length,1)
++   assert.equal((await f.host.searchAssetPage({...input,query:'独立别名词',fields:['ai-tags']})).matches.length,0)
++   await assert.rejects(f.host.searchAssetPage({...input,fields:['not-a-field']}))
++   const second=await f.query('generated',1,first.nextCursor!)
++   const third=second.nextCursor?await f.query('generated',1,second.nextCursor):{matches:[]}
++   const matches=[...second.matches,...third.matches]
++   assert.equal(matches.length,2,'Updating metadata must refresh rows without silently losing members of an existing snapshot')
++   assert.ok(matches.some(m=>m.asset.id===id&&m.asset.aiCaption==='中文咖啡与唯一人工词'))
++ }finally{await f.close()}
++})
++
+ await test('Host search indexes Chinese cross-field edits and aliases, excludes stale hits, and pages a stable query snapshot',async()=>{
+   const f = await fixture()
+   try {
+diff --git a/scripts/asset-retrieval-host.test.ts b/scripts/asset-retrieval-host.test.ts
+index 09da96b..ff8be1a 100644
+--- a/scripts/asset-retrieval-host.test.ts
++++ b/scripts/asset-retrieval-host.test.ts
+@@ -45,6 +45,12 @@ await test('Host canonical image vectors support filtered multilingual fixture q
+     assert.equal(textCalls,1,'Paging the frozen plan must not run the query model again')
+     const tag=await host.createTag({name:'保留'});await host.addTagToAsset(red.id,tag.id)
+     const filtered=await query('a red object',['tag:保留']);assert.equal(filtered.total,1);assert.equal(filtered.matches[0].asset.id,red.id)
++    const colorInput={...scope(),query:'red 红色',mode:'semantic' as const,tagScope:'includes-pending' as const,limit:100,color:{hex:'#1010EE',minimumPercentage:99,tolerance:15}}
++    const blueOnly=await host.searchSemanticPage(colorInput)
++    assert.equal(blueOnly.total,1);assert.equal(blueOnly.matches[0].asset.title,'blue','Colour is a hard condition, even when the vector query ranks red first')
++    assert.equal(blueOnly.colors?.measured,3);assert.equal(blueOnly.colors?.total,3)
++    assert.ok(blueOnly.matches[0].explanation?.evidence.some(e=>e.kind==='color'))
++    assert.equal((await host.searchSemanticPage({...colorInput,color:{hex:'#FFFFFF',minimumPercentage:99,tolerance:15}})).total,0)
+     const org=await host.readOrganization(scope()),folder=await host.writeOrganization({...scope(),sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:true,command:{kind:'create',folderKind:'assets',parentId:null,name:'蓝色范围',assetIds:[assets.find(a=>a.title==='blue')!.id]}})
+     const inFolder=await host.searchSemanticPage({...scope(),folderId:folder.folders.find(f=>f.name==='蓝色范围')!.id,query:'a red object',mode:'semantic',tagScope:'includes-pending',limit:100})
+     assert.equal(inFolder.total,1);assert.equal(inFolder.matches[0].asset.title,'blue','Semantic ranking cannot widen the explicit folder condition')
+diff --git a/scripts/measure-preview-colors.test.ts b/scripts/measure-preview-colors.test.ts
+index 45544fb..75de5c7 100644
+--- a/scripts/measure-preview-colors.test.ts
++++ b/scripts/measure-preview-colors.test.ts
+@@ -1,9 +1,20 @@
+ import assert from 'node:assert/strict'
+ import sharp from 'sharp'
+-import {measurePreviewColors} from '../src/main/library-lifecycle/measure-preview-colors'
++import {measurePreviewColors,measurePreviewHistogram} from '../src/main/library-lifecycle/measure-preview-colors'
++import {matchPreviewColor} from '../src/main/asset-search/color-match'
+ const pixels=Buffer.from([255,0,0,255,255,0,0,255,0,0,255,255,0,255,0,0])
+ const png=await sharp(pixels,{raw:{width:4,height:1,channels:4}}).png().toBuffer()
+ const first=await measurePreviewColors(png);assert.deepEqual(first,await measurePreviewColors(png));assert.equal(first.colors.reduce((n,c)=>n+c.percentage,0),100);assert.equal(first.colors.length,2);assert.equal(first.colors[0].hex,'#FF0000');assert.equal(first.colors[0].percentage,66.67);assert.equal(first.colors[1].percentage,33.33)
+ const empty=await sharp({create:{width:2,height:2,channels:4,background:'#00000000'}}).png().toBuffer();assert.deepEqual((await measurePreviewColors(empty)).colors,[])
+ await assert.rejects(measurePreviewColors(Buffer.from('not an image')))
+ console.log('Preview colors: deterministic ratios, alpha exclusion, total 100%, empty alpha and decode failure passed')
++const histogram=await measurePreviewHistogram(png)
++assert.equal(histogram.visibleWeight,3)
++assert.ok(matchPreviewColor(histogram,{hex:'#FF0000',minimumPercentage:66,tolerance:15}))
++assert.equal(matchPreviewColor(histogram,{hex:'#FF0000',minimumPercentage:67,tolerance:15}),null)
++assert.equal(matchPreviewColor(histogram,{hex:'#00FF00',minimumPercentage:1,tolerance:45}),null)
++assert.equal(matchPreviewColor(await measurePreviewHistogram(empty),{hex:'#000000',minimumPercentage:1,tolerance:45}),null)
++const half=await sharp(Buffer.from([255,0,0,255,0,0,255,128]),{raw:{width:2,height:1,channels:4}}).png().toBuffer()
++const measuredHalf=await measurePreviewHistogram(half)
++assert.ok(matchPreviewColor(measuredHalf,{hex:'#FF0000',minimumPercentage:66,tolerance:15})?.label.includes('66.58%'))
++assert.equal(matchPreviewColor(measuredHalf,{hex:'#FF0000',minimumPercentage:67,tolerance:15}),null)
+diff --git a/scripts/asset-discovery-workflow.test.ts b/scripts/asset-discovery-workflow.test.ts
+index 051c456..bfe458a 100644
+--- a/scripts/asset-discovery-workflow.test.ts
++++ b/scripts/asset-discovery-workflow.test.ts
+@@ -168,6 +168,7 @@ assert.equal(projectAssetDiscovery({ assets: [aliasAsset], tagQueries: ['tag:BLU
+ assert.deepEqual(aliasMatch.matches[0].asset.tags, ['海蓝'])
+ 
+ const summary={evidenceId:'e1',model:'fixture',createdAt:'2026-09-20',caption:'AI mountain',prompt:'Rim lighting',ocrText:'',tags:['蓝色','ＢＬＵＥ'],pendingTags:['蓝色','ＢＬＵＥ']}
++assert.equal(projectAssetDiscovery({assets:[{id:'edited',aiCaption:'User landscape',aiCaptionIsUserEdited:true,visualAi:summary}],query:'mountain'}).matches.length,0,'An archived AI caption must not bypass a human override')
+ const enriched=[{id:'analyzed',tags:['确认'],aiCaption:'手工描述',visualAi:summary},{id:'manual',tags:['蓝色']}]
+ assert.deepEqual(projectAssetDiscovery({assets:enriched,query:'蓝色',tagScope:'includes-pending'}).matches.map(m=>m.asset.id),['manual','analyzed'])
+ assert.equal(projectAssetDiscovery({assets:enriched,query:'蓝色'}).matches.length,1)
+diff --git a/src/main/library-lifecycle/host-schema-maintenance.internal.ts b/src/main/library-lifecycle/host-schema-maintenance.internal.ts
+index 6e5fb6f..c4c8646 100644
+--- a/src/main/library-lifecycle/host-schema-maintenance.internal.ts
++++ b/src/main/library-lifecycle/host-schema-maintenance.internal.ts
+@@ -45,6 +45,7 @@ interface HostMaintenanceAccess<B extends MaintenanceBinding> {
+   current(): { binding?: B; state: ActiveLibraryHostState; businessSuspended: boolean }
+   enqueueLifecycle<T>(operation: () => Promise<T>): Promise<T>
+   inFlight(): Iterable<Promise<unknown>>
++  prepareConnection?(active: B): () => void
+   run<T>(operation: (active: B) => Promise<T> | T): Promise<T>
+   quarantine(active: B): void
+   stateError(state: ActiveLibraryHostState): ActiveLibraryHostError
+@@ -68,16 +69,21 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     return current.binding === active && current.state === 'ready' && !current.businessSuspended
+   }
+ 
+-  const maintain = <T>(storageFailure: string | null, operation: (active: B) => Promise<T>, onError?: () => void): Promise<T> => access.enqueueLifecycle(async () => {
++  const maintain = <T>(storageFailure: string | null, operation: (active: B, prepareBackup: (recheck: () => void, signal?: AbortSignal) => Promise<PreparedHostBackup>) => Promise<T>, onError?: () => void): Promise<T> => access.enqueueLifecycle(async () => {
+     const current = access.current()
+     if (!current.binding || current.state !== 'ready') throw access.stateError(current.state)
+     if (current.businessSuspended) throw access.hostError('library-quiescing')
+     const active = current.binding
++    let resumeBackupConnection: (() => void) | undefined
++    const prepareBackup = (recheck: () => void, signal?: AbortSignal) => {
++      resumeBackupConnection ??= access.prepareConnection?.(active)
++      return storage.prepareBackup(active, recheck, signal, access.hooks)
++    }
+     admissionClosed = true
+     try {
+       // Maintenance is outside inFlight, so it never drains its own task.
+       await Promise.allSettled(Array.from(access.inFlight()))
+-      const result = await active.lock.lease.runWhileHeld(() => operation(active))
++      const result = await active.lock.lease.runWhileHeld(() => operation(active, prepareBackup))
+       if (result.kind !== 'completed') {
+         access.quarantine(active)
+         throw access.hostError('library-lock-invalid')
+@@ -88,7 +94,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+       if (error instanceof Error && ['TAG_INTENT_SETTINGS_RESTORE_FAILED', 'TAG_INTENT_BACKUP_SETTLEMENT_FAILED'].includes(error.message)) access.quarantine(active)
+       if (storageFailure === null || error instanceof ActiveLibraryHostError) throw error
+       return tagIntentFail(storageFailure)
+-    } finally { admissionClosed = false }
++    } finally { resumeBackupConnection?.(); admissionClosed = false }
+   })
+ 
+   const commit = async <T>(active: B, backup: PreparedHostBackup | null, write: () => T, ocr = false): Promise<T> => {
+@@ -117,7 +123,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     }
+   }
+ 
+-  const enableTagExecution: ActiveLibraryHost['enableTagExecution'] = (input, signal) => maintain('TAG_EXECUTION_STORAGE_FAILED', async active => {
++  const enableTagExecution: ActiveLibraryHost['enableTagExecution'] = (input, signal) => maintain('TAG_EXECUTION_STORAGE_FAILED', async (active, prepareBackup) => {
+     const check = () => {
+       access.executionBinding(active)
+       if (!isCurrent(active) || signal?.aborted) tagIntentFail('TAG_INTENT_SCOPE_EXPIRED')
+@@ -128,7 +134,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     const context = check()
+     if (context.schemaVersion >= 10) return
+     if (context.schemaVersion !== 9 || input.expectedSchemaVersion !== 9 || !input.allowUpgrade) tagIntentFail('TAG_EXECUTION_UPGRADE_REQUIRED')
+-    const backup = await storage.prepareBackup(active, () => { check() }, signal, access.hooks)
++    const backup = await prepareBackup(() => { check() }, signal)
+     await commit(active, backup, () => {
+       check(); applyTagExecutionSchema(active.database); seedTagCurrent(access.executionBinding(active))
+       access.hooks?.afterDdl?.(); assertLibraryDataSchema(active.database)
+@@ -140,14 +146,14 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     // Revoke synchronously, before even lifecycle enqueue; audit rows are not grants.
+     revokeBackgroundOcr()
+     const grantEpoch = ocrGrantEpoch
+-    return maintain(null, async active => {
++    return maintain(null, async (active, prepareBackup) => {
+       const check = () => {
+         if (grantEpoch !== ocrGrantEpoch || !isCurrent(active)) throw Error('BACKGROUND_OCR_SCOPE_EXPIRED')
+         return validateBackgroundOcrPermission(access.ocrBinding(active), input, signal)
+       }
+       const prior = check()
+       if (prior.schemaVersion === 12 && !input.allowUpgrade) throw Error('BACKGROUND_OCR_UPGRADE_REQUIRED')
+-      const backup = prior.schemaVersion === 12 ? await storage.prepareBackup(active, () => { check() }, signal, access.hooks) : null
++      const backup = prior.schemaVersion === 12 ? await prepareBackup(() => { check() }, signal) : null
+       await commit(active, backup, () => {
+         check(); applyBackgroundOcrSchema(active.database); access.hooks?.afterDdl?.()
+         writeBackgroundOcrPermission(access.ocrBinding(active), input)
+@@ -159,7 +165,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     }, revokeBackgroundOcr)
+   }
+ 
+-  const configureBackgroundAnalysis: ActiveLibraryHost['configureBackgroundAnalysis'] = (input, signal) => maintain('BACKGROUND_STORAGE_FAILED', async active => {
++  const configureBackgroundAnalysis: ActiveLibraryHost['configureBackgroundAnalysis'] = (input, signal) => maintain('BACKGROUND_STORAGE_FAILED', async (active, prepareBackup) => {
+     const check = () => {
+       access.executionBinding(active)
+       if (!isCurrent(active)) tagIntentFail('BACKGROUND_SCOPE_EXPIRED')
+@@ -168,7 +174,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     const prior = check()
+     if (prior.schemaVersion !== input.expectedSchemaVersion) tagIntentFail('BACKGROUND_CONFLICT')
+     if (prior.schemaVersion < 12 && !input.allowUpgrade) tagIntentFail('BACKGROUND_UPGRADE_REQUIRED')
+-    const backup = prior.schemaVersion < 12 ? await storage.prepareBackup(active, () => { check() }, signal, access.hooks) : null
++    const backup = prior.schemaVersion < 12 ? await prepareBackup(() => { check() }, signal) : null
+     await commit(active, backup, () => {
+       check()
+       if (prior.schemaVersion < 10) { applyTagExecutionSchema(active.database); seedTagCurrent(access.executionBinding(active)) }
+@@ -179,17 +185,17 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     return readBackgroundAnalysis(active, input)
+   })
+ 
+-  const enableBasicAnalysis:ActiveLibraryHost['enableBasicAnalysis']=(input,signal)=>maintain(null,async active=>{
++  const enableBasicAnalysis:ActiveLibraryHost['enableBasicAnalysis']=(input,signal)=>maintain(null,async (active,prepareBackup)=>{
+     const check=()=>{access.executionBinding(active);if(!isCurrent(active)||signal?.aborted||input.sessionToken!==active.notebookSession)tagIntentFail('BACKGROUND_SCOPE_EXPIRED');return readBackgroundAnalysis(active,input)}
+     const prior=check();if(prior.schemaVersion>=14)return
+     if(!input.allowUpgrade||prior.schemaVersion!==input.expectedSchemaVersion)tagIntentFail('BASIC_UPGRADE_REQUIRED')
+-    const backup=await storage.prepareBackup(active,()=>{check()},signal,access.hooks)
++    const backup=await prepareBackup(()=>{check()},signal)
+     await commit(active,backup,()=>{check();applyBasicAnalysisSchema(active.database);if(prior.schemaVersion<10)seedTagCurrent(access.executionBinding(active));access.hooks?.afterDdl?.();assertLibraryDataSchema(active.database);access.hooks?.beforeCommit?.()})
+   })
+-  const configureBackgroundExecution:ActiveLibraryHost['configureBackgroundExecution']=(input,signal)=>maintain(null,async active=>{
++  const configureBackgroundExecution:ActiveLibraryHost['configureBackgroundExecution']=(input,signal)=>maintain(null,async (active,prepareBackup)=>{
+     const check=()=>{access.executionBinding(active);if(!isCurrent(active)||signal?.aborted)tagIntentFail('BACKGROUND_SCOPE_EXPIRED');return validateExecutionConfiguration(active,input)}
+     const prior=check();if(prior.schemaVersion<14&&!input.allowUpgrade)tagIntentFail('BASIC_UPGRADE_REQUIRED')
+-    const backup=prior.schemaVersion<14?await storage.prepareBackup(active,()=>{check()},signal,access.hooks):null
++    const backup=prior.schemaVersion<14?await prepareBackup(()=>{check()},signal):null
+     await commit(active,backup,()=>{check();applyBasicAnalysisSchema(active.database);if(prior.schemaVersion<10)seedTagCurrent(access.executionBinding(active));writeExecutionConfiguration(active,input);access.hooks?.afterDdl?.();assertLibraryDataSchema(active.database);access.hooks?.beforeCommit?.()})
+     return readExecution(active,input)
+   })
+@@ -200,7 +206,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+       active.database.transaction(() => writeTagDecision(active, input))()
+       return readTagExecution(access.executionBinding(active), input)
+     })
+-    return maintain('TAG_DECISION_STORAGE_FAILED', async active => {
++    return maintain('TAG_DECISION_STORAGE_FAILED', async (active, prepareBackup) => {
+       const check = () => {
+         access.executionBinding(active)
+         if (!isCurrent(active) || signal?.aborted) tagIntentFail('TAG_DECISION_CANCELLED')
+@@ -209,7 +215,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+         return context
+       }
+       const context = check()
+-      const backup = context.schemaVersion < 11 ? await storage.prepareBackup(active, () => { check() }, signal, access.hooks) : null
++      const backup = context.schemaVersion < 11 ? await prepareBackup(() => { check() }, signal) : null
+       await commit(active, backup, () => {
+         check(); applyTagDecisionSchema(active.database); access.hooks?.afterDdl?.()
+         writeTagDecision(active, input); assertLibraryDataSchema(active.database); access.hooks?.beforeCommit?.()
+@@ -218,7 +224,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     })
+   }
+ 
+-  const persistTagIntents = <T>(inputs: readonly TagIntentCommit[], existing: (active: B) => T | undefined, insert: (active: B) => T, signal?: AbortSignal): Promise<T> => maintain('TAG_INTENT_STORAGE_FAILED', async active => {
++  const persistTagIntents = <T>(inputs: readonly TagIntentCommit[], existing: (active: B) => T | undefined, insert: (active: B) => T, signal?: AbortSignal): Promise<T> => maintain('TAG_INTENT_STORAGE_FAILED', async (active, prepareBackup) => {
+     const input = inputs[0]
+     const check = () => {
+       const lease = active.lock.lease.inspect()
+@@ -235,7 +241,7 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
+     const context = readTagIntentContext(active, input)
+     if (context.schemaVersion !== input.expectedSchemaVersion) return tagIntentFail('TAG_INTENT_REVIEW_STALE')
+     if (context.schemaVersion < 9 && !input.allowUpgrade) return tagIntentFail('TAG_INTENT_UPGRADE_REQUIRED')
+-    const backup = context.schemaVersion < 9 ? await storage.prepareBackup(active, check, signal, access.hooks) : null
++    const backup = context.schemaVersion < 9 ? await prepareBackup(check, signal) : null
+     return commit(active, backup, () => {
+       check(); applyTagIntentSchema(active.database); access.hooks?.afterDdl?.()
+       const saved = insert(active)
+diff --git a/scripts/search-schema-backup.integration.test.ts b/scripts/search-schema-backup.integration.test.ts
+new file mode 100644
+index e69de29..cbac1ee 100644
+--- /dev/null
++++ b/scripts/search-schema-backup.integration.test.ts
+@@ -0,0 +1,59 @@
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {test} from 'node:test'
++import sharp from 'sharp'
++import {createActiveLibraryHost} from '../src/main/library-lifecycle'
++import {createProductionActiveLibraryHostDependencies} from '../src/main/library-lifecycle/production-active-library-dependencies'
++
++await test('search snapshots and background count caches survive protected schema backups',async()=>{
++  const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-search-schema-')))
++  const library=path.join(root,'library'),files=[1,2,3,4].map(n=>path.join(root,`generated-${n}.png`))
++  for(const file of files)await sharp({create:{width:32,height:24,channels:3,background:'#aabbcc'}}).png().toFile(file)
++  const originalBytes=await Promise.all(files.map(file=>fs.readFile(file)))
++  let selection=files.slice(0,3)
++  const host=createActiveLibraryHost(createProductionActiveLibraryHostDependencies({
++    selectLibraryDirectory:async()=>({kind:'selected',directory:library}),
++    selectLocalFiles:async()=>({kind:'selected',files:selection.map(filePath=>({filePath}))})
++  }))
++  try{
++    const create=await host.prepareCreate();if(create.kind!=='planned')throw Error('fixture create')
++    await host.confirmCreate(create.plan.receipt)
++    const add=async()=>{const plan=await host.prepareAddAssets();if(plan.kind!=='planned')throw Error('fixture add');await host.dispatchAddAssets(plan.plan.receipt)}
++    await add()
++    const scope={libraryIdentity:host.inspect().identity!,generation:host.inspect().generation!}
++    const query=(cursor?:string)=>host.searchAssetPage({...scope,query:'generated',tagScope:'includes-pending',limit:1,...(cursor?{cursor}:{})})
++    const first=await query();assert.equal(first.total,3);assert.ok(first.nextCursor)
++    const policy=await host.readBackgroundAnalysis(scope)
++    const enabled=await host.configureBackgroundAnalysis({...scope,sessionToken:policy.sessionToken,
++      expectedRevision:policy.policy.revision,expectedSchemaVersion:policy.schemaVersion,allowUpgrade:true,
++      enabled:true,capabilities:{tags:true,caption:true,ocr:true}})
++    assert.equal(enabled.schemaVersion,12)
++    // A normal count read installs its own derived cache before the next upgrade.
++    assert.equal((await host.readBackgroundAnalysis(scope)).schemaVersion,12)
++    const permission=await host.readBackgroundOcr(scope)
++    assert.equal((await host.configureBackgroundOcr({...scope,sessionToken:permission.sessionToken,
++      expectedRevision:permission.permissionRevision,expectedSchemaVersion:permission.schemaVersion,
++      allowUpgrade:true,enabled:true,runtimeFingerprint:'synthetic-domain-only'})).schemaVersion,13)
++    const next=await query(first.nextCursor!);assert.equal(next.total,3);assert.equal(next.matches.length,1)
++    assert.notEqual(next.matches[0].asset.id,first.matches[0].asset.id)
++    selection=[files[3]];await add()
++    const counts=(await host.readBackgroundAnalysis(scope)).counts
++    for(const capability of ['tags','caption','ocr'])assert.equal(counts.filter(row=>row.capability===capability).reduce((n,row)=>n+row.count,0),1)
++    assert.equal((await query()).total,4)
++    assert.equal((await host.readSearchIndex()).state,'ready')
++    const renewed=await host.readBackgroundOcr(scope)
++    await host.configureBackgroundOcr({...scope,sessionToken:renewed.sessionToken,
++      expectedRevision:renewed.permissionRevision,expectedSchemaVersion:renewed.schemaVersion,
++      allowUpgrade:false,enabled:true,runtimeFingerprint:'synthetic-domain-only'})
++    assert.equal((await host.readSearchIndex()).state,'ready','An ordinary permission update must keep the existing search projection ready')
++    await host.close();await host.reopen()
++    assert.equal((await query()).total,4)
++  }finally{
++    await host.close()
++    assert.deepEqual(await Promise.all(files.map(file=>fs.readFile(file))),originalBytes)
++    assert.ok(root.startsWith(path.resolve(os.tmpdir())+path.sep)&&path.basename(root).startsWith('dam-search-schema-'))
++    await fs.rm(root,{recursive:true,force:true})
++  }
++})
+diff --git a/scripts/fixtures/c-search-readback.test.ts b/scripts/fixtures/c-search-readback.test.ts
+new file mode 100644
+index e69de29..0fbdccb 100644
+--- /dev/null
++++ b/scripts/fixtures/c-search-readback.test.ts
+@@ -0,0 +1,47 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import {createHash} from 'node:crypto'
++import assert from 'node:assert/strict'
++import Database from 'better-sqlite3'
++const root=path.resolve('.scratch/c-search-20261007'),library=path.join(root,'library'),evidence=path.join(root,'evidence')
++const sha=(bytes:Uint8Array|string)=>createHash('sha256').update(bytes).digest('hex')
++const db=new Database(path.join(library,'.dam/library.sqlite'),{readonly:true,fileMustExist:true})
++try{
++ db.exec('BEGIN');assert.equal(db.pragma('integrity_check',{simple:true}),'ok');assert.deepEqual(db.pragma('foreign_key_check'),[])
++ const rows=db.prepare('SELECT id,title,ai_caption,ai_caption_is_user_edited FROM assets ORDER BY id').all() as {id:string;title:string;ai_caption:string;ai_caption_is_user_edited:number}[]
++ const protectedRows=rows.filter(row=>!row.title.startsWith('C-search-'))
++ const tags=db.prepare("SELECT * FROM asset_tags WHERE status='confirmed' ORDER BY id").all()
++ const tables=['basic_analysis_requests','basic_analysis_attempts','basic_analysis_evidence','background_analysis_executions','background_analysis_execution_history']
++ const counts:Record<string,unknown>={},executionSignatures:Record<string,string>={}
++ for(const table of tables){counts[table]=db.prepare(`SELECT COUNT(*) FROM ${table}`).pluck().get();executionSignatures[table]=sha(JSON.stringify(db.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all()))}
++ // Finish the short SQL snapshot before hashing media asynchronously. A read
++ // transaction must not remain held while the live Host performs new work.
++ db.exec('ROLLBACK');db.close()
++ // Compare the full execution records (including unknown/sent state), not only
++ // their counts, with the closed public source used to make this C copy.
++ const setup=JSON.parse(await fs.readFile(path.join(root,'setup.json'),'utf8')) as {source:string;sourceDbSha256:string}
++ const source=path.resolve(setup.source),allowedSource=path.resolve('.scratch/local-ai-implementation-20261006')
++ assert.ok(source.startsWith(allowedSource+path.sep)&&path.basename(source)==='scale-library')
++ const sourceFile=path.join(source,'.dam','library.sqlite')
++ assert.equal(sha(await fs.readFile(sourceFile)),setup.sourceDbSha256,'The closed public source remains the exact copy baseline')
++ const sourceDb=new Database(sourceFile,{readonly:true,fileMustExist:true})
++ try{for(const table of tables)assert.equal(executionSignatures[table],sha(JSON.stringify(sourceDb.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all())),table+' execution records remain intact, including unknown state')}
++ finally{sourceDb.close()}
++ const files:Record<string,string>={}
++ const walk=async(directory:string)=>{for(const entry of await fs.readdir(directory,{withFileTypes:true})){const filename=path.join(directory,entry.name)
++   if(entry.isDirectory())await walk(filename);else if(entry.isFile())files[path.relative(library,filename)]=sha(await fs.readFile(filename))}}
++ await walk(path.join(library,'Originals'));await walk(path.join(library,'.dam','required-previews'))
++ const baselineFile=path.join(evidence,'library-before.json')
++ let baseline:{protectedRows:unknown;tags:unknown;files:Record<string,string>;counts:unknown}|null=null
++ try{baseline=JSON.parse(await fs.readFile(baselineFile,'utf8'))}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error}
++ if(!baseline)await fs.writeFile(baselineFile,JSON.stringify({at:new Date().toISOString(),protectedRows,tags,files,counts},null,2))
++ else{
++   assert.deepEqual(protectedRows,baseline.protectedRows,'All original copied assets, captions and human flags remain intact')
++   assert.deepEqual(tags,baseline.tags,'Confirmed original tag relations remain intact')
++   for(const [filename,digest]of Object.entries(baseline.files))assert.equal(files[filename],digest,'Original and required preview bytes remain intact')
++   assert.deepEqual(counts,baseline.counts,'Search and reopen must not create repeated analysis effects')
++ }
++ const result={at:new Date().toISOString(),baselineCreated:!baseline,assets:rows.length,protectedAssets:protectedRows.length,protectedFiles:baseline?Object.keys(baseline.files).length:Object.keys(files).length,
++  counts,executionSignatures,colourSubjects:rows.filter(row=>/red|blue|双色|红|蓝/i.test(row.title)).map(({id,title})=>({id,title})),cTargets:rows.filter(row=>row.title.startsWith('C-search-')).map(({id,title,ai_caption})=>({id,title,caption:ai_caption})),checks:'integrity/FK, original public-copy metadata, tags, media and complete execution records; readonly'}
++ await fs.writeFile(path.join(evidence,baseline?'library-after.json':'library-baseline-result.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result))
++}finally{if(db.open){if(db.inTransaction)db.exec('ROLLBACK');db.close()}}
+diff --git a/scripts/fixtures/c-search-derived-readback.test.ts b/scripts/fixtures/c-search-derived-readback.test.ts
+new file mode 100644
+index e69de29..6fad7f5 100644
+--- /dev/null
++++ b/scripts/fixtures/c-search-derived-readback.test.ts
+@@ -0,0 +1,25 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import assert from 'node:assert/strict'
++import {createHash} from 'node:crypto'
++import Database from 'better-sqlite3'
++
++const root=path.resolve('.scratch/c-search-20261007'),control=path.join(root,'library','.dam'),evidence=path.join(root,'evidence')
++const registry=JSON.parse(await fs.readFile(path.join(control,'.dam-asset-retrieval.json'),'utf8')) as {canonical:string;index:string}
++const owned=(name:string,prefix:string)=>{assert.match(name,new RegExp(`^${prefix}-[a-f0-9-]{36}\\.sqlite$`));return path.join(control,name)}
++const db=new Database(owned(registry.canonical,'asset-vectors'),{readonly:true,fileMustExist:true})
++const index=new Database(owned(registry.index,'asset-vector-index'),{readonly:true,fileMustExist:true})
++try{
++ assert.equal(db.pragma('integrity_check',{simple:true}),'ok');assert.equal(index.pragma('integrity_check',{simple:true}),'ok')
++ const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex')
++ const space=String(db.prepare("SELECT value FROM meta WHERE key='active'").pluck().get())
++ const rows=db.prepare('SELECT * FROM vectors ORDER BY space,id,view').all(),jobs=db.prepare('SELECT * FROM jobs ORDER BY id').all()
++ const result={at:new Date().toISOString(),space,canonicalVectors:rows.length,canonicalSha256:hash(rows),jobsSha256:hash(jobs),jobs:jobs.length,
++  running:Number(db.prepare("SELECT COUNT(*) FROM jobs WHERE state='running'").pluck().get()),currentIndexed:Number(index.prepare('SELECT COUNT(*) FROM vectors WHERE space=?').pluck().get(space)),index:registry.index}
++ assert.equal(result.running,0);assert.equal(result.currentIndexed,45)
++ const baseline=path.join(evidence,'derived-before-reopen.json')
++ let before:typeof result|null=null
++ try{before=JSON.parse(await fs.readFile(baseline,'utf8'))}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error}
++ if(before){assert.equal(result.space,before.space);assert.equal(result.canonicalSha256,before.canonicalSha256,'Reopen and queries must not silently regenerate persisted vectors');assert.equal(result.jobsSha256,before.jobsSha256,'Reopen must not create or rerun generation jobs')}
++ await fs.writeFile(before?path.join(evidence,'derived-after-reopen.json'):baseline,JSON.stringify(result,null,2));console.log(JSON.stringify(result))
++}finally{index.close();db.close()}
+diff --git a/scripts/fixtures/c-search-schema-readback.test.ts b/scripts/fixtures/c-search-schema-readback.test.ts
+new file mode 100644
+index e69de29..571e684 100644
+--- /dev/null
++++ b/scripts/fixtures/c-search-schema-readback.test.ts
+@@ -0,0 +1,25 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import assert from 'node:assert/strict'
++import {createHash} from 'node:crypto'
++import Database from 'better-sqlite3'
++
++const root=path.resolve('.scratch/c-search-20261007'),library=path.join(root,'schema-ui-library')
++const db=new Database(path.join(library,'.dam','library.sqlite'),{readonly:true,fileMustExist:true})
++try{
++ assert.equal(db.pragma('integrity_check',{simple:true}),'ok')
++ assert.deepEqual(db.pragma('foreign_key_check'),[])
++ assert.equal(db.pragma('user_version',{simple:true}),14)
++ assert.equal(db.prepare('SELECT COUNT(*) FROM assets').pluck().get(),1)
++ const counts:Record<string,unknown>={}
++ for(const table of ['basic_analysis_requests','basic_analysis_attempts','basic_analysis_evidence','background_analysis_intents','background_analysis_executions']){
++  counts[table]=db.prepare(`SELECT COUNT(*) FROM ${table}`).pluck().get();assert.equal(counts[table],0,'No backfill or analysis during schema coordination acceptance')
++ }
++ const sha=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex'),hashes:string[]=[]
++ const walk=async(p:string)=>{for(const f of await fs.readdir(p,{withFileTypes:true})){const q=path.join(p,f.name);if(f.isDirectory())await walk(q);else if(f.isFile())hashes.push(sha(await fs.readFile(q)))}}
++ db.close()
++ await walk(path.join(library,'Originals'))
++ assert.deepEqual(hashes,['51564e1c293b9a32de7364dca129d63b005ceaa9ed7ea1357e55cf2f5da8d22d'])
++ const result={at:new Date().toISOString(),scope:'ordinary Browser first-search then v12 plan/v14 OCR-rule enable; read-only confirmation',schema:14,assets:1,counts,sourceBytesPreserved:true}
++ await fs.writeFile(path.join(root,'evidence/schema-after-search-readback.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result))
++}finally{if(db.open)db.close()}
+diff --git a/src/main/asset-search/README.md b/src/main/asset-search/README.md
+new file mode 100644
+index e69de29..af88200 100644
+--- /dev/null
++++ b/src/main/asset-search/README.md
+@@ -0,0 +1,13 @@
++# Host 素材检索与颜色查询
++
++普通素材搜索由 `asset-search-index.ts` 查询有界分页。标题/文件名、确认标签与别名、AI 建议、当前描述、OCR 和反推可以分别限定；人工描述覆盖旧 AI 描述。命中依据通过共享 `asset-discovery.workflow.ts` 展示，不把建议写成已确认标签。
++
++文字 n-gram、排序快照和颜色直方图都是当前库 `.dam` 内可重建派生数据，原件、人工内容及分析证据仍由素材库拥有。原主库 schema 不为颜色改变。颜色测量复用详情的 128 像素 sRGB、4-bit alpha 加权采样；搜索使用完整直方图而非五个展示色块。近色为 D65 Lab / CIE76，比例分母是可见像素权重，透明权重为零。结果明确是预览抽样估计。
++
++首次查询按候选分批测量并缓存精确内容修订/预览/算法版本；确定性解码失败显示不可测，维护重建允许重试。文件、权限、准入和撤权失败直接返回，不持久冒充颜色结果。准备和查询复用唯一资源账本；分页只读同视图缓存、核对当前权限。所有累积命中在最后一个 await 之后再次同步核对生命周期、文件夹和文字硬条件。
++
++颜色、标签与文件夹是图文查询的硬条件，在语义 Top-200 前筛选；当前返回前再次复核。后台通知只刷新已展示行，保留快照分页、选择和滚动；明确重新查询才重新确定成员与排名。请求取消或失败保留已接受快照，后续分页仍可继续。新查询和切库撤销当前实际派发，旧响应不能覆盖新代次。
++
++schema 备份由 Host 维护边界排空读者后，临时移除搜索和后台计数自己的主连接 TEMP 触发器；备份的空 TEMP/唯一 main 校验保持。维护中的核对只读，结束后重新接入追踪，并补同步停跟踪期间的变更。查询快照不因此清空；不需要备份的普通权限更新保持现有索引就绪。
++
++聚焦回归：`asset-search-host`、`asset-retrieval-host`、`asset-discovery-workflow`、`measure-preview-colors` 和 `search-schema-backup.integration`。实际用户证据见 TASK / CURRENT-STATE 和 C 交接；小型公开副本不代表十万素材基准或 Native 专项验收。
+diff --git a/src/main/retrieval-workspace/README.md b/src/main/retrieval-workspace/README.md
+index 3c80230..b96eeae 100644
+--- a/src/main/retrieval-workspace/README.md
++++ b/src/main/retrieval-workspace/README.md
+@@ -1,5 +1,7 @@
+ # 本地中英文图文检索
+ 
++颜色占比和近色条件复用 Host 确定性预览测量，并在语义候选截取前过滤。文字来源只限制文字命中，画面向量来源分别解释；切换查找方式保留颜色及文字来源条件。整页结果在最后一个异步步骤后再次核对，防止填充后页期间旧素材已回收却仍返回。
++
+ 用户从“AI 与模型 → 本地模型与 OCR”获取并验证独立 SigLIP2，从素材工作区选择文字、画面含义、混合或单图找相似。安装不自动启用，向量生成必须明确选择所选素材或全库；暂停和重开后必须明确恢复。
+ 
+ `retrieval-model-library.ts` 使用 ModelScope 境内固定提交及完整文件哈希，复用归属明确的可恢复传输。逐跳拒绝 HF、hf-mirror 和国际 CDN，不执行仓库代码。许可为 Apache-2.0。模型库存校验在加载前核对受支持的结构，`retrieval-runtime.ts` 使用用户明确选择的可信 Python 环境和 App 自有私有 stdio Worker。实际路径为 CPU float32、768 维、L2/cosine；原语言 64 token 上限，超限明确拒绝，不截断或翻译输入。真实中英文/混合与图像资格分别记录，不把下载完整或纯色弱项当语言质量证明。
+diff --git a/src/renderer/components/library/canvas/README.md b/src/renderer/components/library/canvas/README.md
+index ac0dc32..e622c8a 100644
+--- a/src/renderer/components/library/canvas/README.md
++++ b/src/renderer/components/library/canvas/README.md
+@@ -86,6 +86,8 @@ user corrections and visual-model fallback text, confirms local batch scope/v8 f
+ and copies/edits/restores text. `ocr-drafts.ts` retains unsaved edits in memory across inspector/routing changes;
+ library transitions and window close reuse the unsaved-content guard. Inference is on demand, never a list-read side effect.
+ 
++C search uses the Host's bounded snapshots and separately refreshes visible rows. Source filters distinguish titles, confirmed tags/aliases, suggestions, current descriptions, OCR and reverse prompts; colour percentage is a deterministic preview measurement and a hard condition for semantic/image results. Switching lookup modes keeps source/colour conditions. Explicit requery changes membership; background refresh, failed requests and cancellation preserve accepted pagination, selection and scroll. See `src/main/asset-search/README.md` and the dated C handoff for the actual Browser scope.
++
+ The palette renders no persistent HEX/percentage/help legend; swatch titles retain values and interactions.
+ The embedded metadata editor has no nested height cap or overflow clipping. Tag suggestions use a themed
+ portal outside the inspector scroll container, with viewport-aware positioning and pointer/focus handling.
+diff --git a/TASK.md b/TASK.md
+index 5966ce5..e13d651 100644
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,4 +1,10 @@
+-# 最新：T23 浏览器迁移与去重（2026-10-07）
++# 当前：C 浏览器范围已交付，桌面专项后续统一验收（2026-10-07）
++
++用户最新要求继续包内 C，并将桌面专项集中到后续统一验证。普通入口为 `npm run start:browser`、既定 profile-04、素材工作区原搜索入口。目标：文字/来源筛选、确定性颜色占比、中英文自然语言与参考图找回，解释命中；已有词法功能在模型缺失/索引恢复时继续可用，更新不打断分页/选择/滚动，保存重开与取消/回收站保护成立。复用已成立且未受影响的本地 AI 检索路径，不重建 A/B、不自动扩展 D–F。
++
++当前正式产物 `dam-ee312ab271299499` / 761输入，普通 Browser/profile-04，最后整应用正常退出重开于49433。C公开副本165素材，文字/颜色165/165，图文45/165；中英文/混合与库内外参考图、来源/颜色硬条件、人工描述保存重开、回收不回流和派生索引恢复均有实际结果。80%临时等待测试已恢复平衡/10%；新公开小库先搜索再正式备份升级v12/v14、无回填与分析，解决主连接TEMP触发器冲突。原164素材/328文件、人工与确认关系、完整执行记录及未知状态保持；向量/任务重开签名相同。入口、实际结果、回归中的失败与修复、范围及精确差异见[C交付](docs/handoff/SEARCH-C-20261007.md)及[检查点](docs/checkpoints/c-search-20261007/README.md)。保留旧WIP/暂存，不将其整文件提交；无推送/发布。旧T23原Chrome页压力、父#24和延期Native仍未完成；停止于C，不扩D–F。
++
++# 此前：T23 浏览器迁移与去重（2026-10-07）
+ 
+ 用户要求桌面验证转浏览器、重合跳过。当前dam-4deb9e68a5e80a0a/759输入，普通Browser61449，同profile-04；当前规模副本164/120素材成功内容及未知记录可见。取消/页外工作集/顶栏三类修复已通过；索引恢复、双语/以图、120分页、后台新公开page三能力、整个应用保存重开成立。原Chrome20标签保留，3临时压力页已关闭；指定原页控制持续超时，因此T23/父级保持未完成。Native专有行为不以Browser冒称PASS。准确入口/去重/版本/受保护数据及损坏副本暂停期间Luna/OCR差异见[浏览器交付](docs/handoff/LOCAL-AI-T23-BROWSER-20261007.md)，下文所有旧无界面/候选记录保留历史身份。原WIP/index保护，本轮只保存精确任务补丁，没有提交/推送。
+ 
+diff --git a/docs/handoff/CURRENT-STATE.md b/docs/handoff/CURRENT-STATE.md
+index 3b46e05..35b7e52 100644
+--- a/docs/handoff/CURRENT-STATE.md
++++ b/docs/handoff/CURRENT-STATE.md
+@@ -1,4 +1,8 @@
+-# 2026-10-07 当前：T23 浏览器迁移与去重
++# 2026-10-07 当前：C 浏览器范围已交付
++
++当前 `dam-ee312ab271299499` / 761输入，Windows正式Host/Chrome普通入口与既定profile-04，最后正常整应用退出重开于49433。公开C副本165素材：文字/颜色165/165、图文45/165；人工描述、中英文/混合、颜色阈值、库内外参考图、回收/恢复、索引恢复与保存重开成立，向量/任务没有重推理。原164资产/328文件、人工作品/确认关系、五张完整执行表及未知状态与复制源保持。临时80%预算已恢复平衡/10%；普通新公开小库先搜索再备份升级v12/v14成功，未回填/分析，严格备份检查不变。代码/Browser结果和旧版本未改路径的证据分别列在[C交付](SEARCH-C-20261007.md)；精确任务检查点保护旧WIP及暂存，不是clean HEAD完整源码提交。Native依用户要求后续统一验收；旧T23原Chrome页压力及父#24继续未完成。停止于C，不自动扩D–F；下文保留原时点身份，不改写历史PASS/FAIL。
++
++# 2026-10-07 此前：T23 浏览器迁移与去重
+ 
+ 用户最新要求桌面验证项目转浏览器、重合跳过。共享正式路径已在普通Browser完成本轮联合与保存重开；当前dam-4deb9e68a5e80a0a/759输入，Browser61449/profile-04，规模副本164，后台副本48。取消接线/终态、工作集页外候选、文件夹顶栏修复通过，20原标签保留、3临时页关闭、viewport已重置。原页持续压力工具无法控制，原生专有行为未验证；T23/父级不关闭。详见[实际浏览器交付](LOCAL-AI-T23-BROWSER-20261007.md)及TASK最新段。损坏副本A-bg-astronaut在界面暂停期间已有Luna/OCR审计差异，操作者未确认；主库、人工及原件保持，未回滚或冒称历史AI全相同。以下段落按各自旧日期/范围保留。
+ 
+diff --git a/docs/agents/implementation-status.md b/docs/agents/implementation-status.md
+index 06fc5f9..75a8a8d 100644
+--- a/docs/agents/implementation-status.md
++++ b/docs/agents/implementation-status.md
+@@ -1,6 +1,8 @@
+ # 实施状态与高风险接线
+ 
+ 总体当前事实以[CURRENT-STATE](../handoff/CURRENT-STATE.md)为准；下列带日期的段落保留当时证据。
++
++2026-10-07 C：正式Host已接线有界文字/来源/颜色查询、中英文及参考图硬条件、快照与行刷新分离、相关写入失效计数；仅实际备份暂停自有TEMP追踪、保持原连接保护。`dam-ee312ab271299499` 的普通Chrome公开副本真实检索、回收保护、v12/v14接线和整应用重开成立，文字/颜色165/165、图文45/165；剩余向量不隐式回填。具体结果/版本与延期Native、未完成T23压力/父级见[C交付](../handoff/SEARCH-C-20261007.md)。以下“仅词法/颜色或语义待接线”等旧段落保留历史范围，不覆盖该当前事实。
+ 2026-10-06起，指定真实范围的验证与内部工程调整遵循[AGENTS](../../AGENTS.md)及[CONTRIBUTING](../../CONTRIBUTING.md)，旧暂停记录不是当前禁令。
+ 
+ 这是按需阅读的状态快照，不是启动必读或开发任务队列。涉及 Library、模型、
+diff --git a/src/shared/build-identity.generated.ts b/src/shared/build-identity.generated.ts
+index 6a125f7..e47da6b 100644
+--- a/src/shared/build-identity.generated.ts
++++ b/src/shared/build-identity.generated.ts
+@@ -1,8 +1,8 @@
+ /** Generated at build time; excludes itself from the source digest. */
+ export const DAM_BUILD_IDENTITY = {
+-  "buildId": "dam-4deb9e68a5e80a0a",
+-  "sourceDigest": "4deb9e68a5e80a0a6c004374afc7105253a650da095c34fa820a38582db89b01",
+-  "builtAt": "2026-10-07T09:48:28.631Z",
++  "buildId": "dam-ee312ab271299499",
++  "sourceDigest": "ee312ab27129949915f4355cbc7682bcf181d6c20ffe0f749399920b55382df8",
++  "builtAt": "2026-10-07T13:34:35.972Z",
+   "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+-  "sourceCount": 759
++  "sourceCount": 761
+ } as const
+diff --git a/docs/handoff/SEARCH-C-20261007.md b/docs/handoff/SEARCH-C-20261007.md
+new file mode 100644
+index e69de29..2c36ab4 100644
+--- /dev/null
++++ b/docs/handoff/SEARCH-C-20261007.md
+@@ -0,0 +1,69 @@
++# C：文字、颜色与图文检索（2026-10-07）
++
++本轮交付范围为 Windows 正式 Host / Chrome 的共享用户路径。桌面专项按用户要求后续集中验证；T23 原 Chrome 标签页压力及父 #24 保持未完成。完成本轮 C 后停止，不扩展 D–F。
++
++## 普通入口与当前产物
++
++在项目根目录运行：
++
++```powershell
++npm run start:browser -- "--profile=G:\antigravity\Design Asset Manager 1001\.scratch\wc01-real-model-library-20261005\run-U4eFuo\profile-04"
++```
++
++从可见“打开已有素材库”选择项目内 `.scratch/c-search-20261007/library`。这是关闭后的已指定公开规模库的可恢复副本；不是唯一原库的验收。当前版本 `dam-ee312ab271299499`，761 构建输入；最终普通重开页面为 `http://127.0.0.1:49433/#/library`，端口随启动变化。软件版本 1.0.0，Electron 30.5.1 / Windows x64 / SQLite ABI123。
++
++本机 SigLIP2 Base，ModelScope 固定版本 `153facb840ce…`，Apache-2.0，CPU float32 / 768 维 / L2 cosine。当前空间 `36144a21836b…`；文字覆盖 165/165、颜色测量 165/165、图文覆盖 45/165，剩余 120 份没有隐式生成向量。C 未下载新模型、未发送云端分析、未读取账号秘密。既有模型与账号由应用内部使用。
++
++## 用户路径与实际结果
++
++入口均通过普通页面控件点击/键入；未注入 route、Store、IPC 或数据库跳过交互。主 Agent 实际操作，代码有两个只读独立审查；界面不是独立人员验收。
++
++| 操作与固定参考 | 实际结果 / 限制 | 证据（项目内 `.scratch/c-search-20261007/evidence/`） |
++| --- | --- | --- |
++| 精确标题 `public-04-coffee`；限定确认标签来源 | 标题来源 1/1，确认标签来源 0/0，未冒充标签 | `name-not-confirmed-tag-cc5f.png`；来源投影代码未再变化 |
++| AI 建议 `木质桌面`；确认标签与别名 | 建议 1/1，确认标签加棕色 2/2，明确不同来源 | `pending-tags-cc5f.png`；对应未变消费者 |
++| 当前描述 `English coffee reference` | 新公开素材人工描述 1/1；整应用重开后仍保留“用户已编辑，AI不会自动覆盖” | `final-reopen-description-ee31.png` |
++| `#A85629`、至少 25%、ΔE≤30 | 136 个文字候选，咖啡 68.41%；165/165 测量 | `colour-25-ee31.png` |
++| 同颜色至少 75% | 排除 68.41% 咖啡，只剩长条变体 76.88% | `colour-75-ee31.png` |
++| 中英混合 `一杯 coffee 放在木桌上` + 棕色 25% | 16 个结果；咖啡原图及变体在前列，颜色为硬条件 | `hybrid-colour-ee31.png`；最终重开截图 |
++| 中文 `一杯咖啡放在木桌上` | 前四为长条、大图、C 新咖啡及原咖啡 | `chinese-coffee-ee31.png` |
++| 英文 `an astronaut wearing a space suit` | 前四为宇航员素材，cosine 0.102 | `english-astronaut-ee31.png` |
++| 库内及库外公开咖啡参考图 | 两份相同原图 1.000，大图变体 0.988，长条 0.940；库外参考不隐式收录 | `image-library-ee31.png`、`image-external-ee31.png`；只读资产仍165 |
++| 当前查询后刷新素材 | 160 条分页与选择保留，滚动 856→856 | `refresh-page-green-0339.png`、`paging-selection-scroll.json`；Hook 未再改动 |
++| 超长输入与取消 | 100 个词明确拒绝64 token上限，旧80条仍可继续分页到160；冷加载取消保留旧结果并可明确重查 | `failed-query-page-160-cc5f.png`、`query-cancel-keeps-results-cc5f.png`；对应 Client/Runtime 未再变化 |
++| 有向量的 C 新素材回收与恢复 | 新混合查询44/44，不回流；恢复后人工描述仍在、旧向量失效，明确仅准备此一份后45/165 | `semantic-trash-requery-ee31.png`、`restored-vector-45-ee31.png` |
++| 资源等待中的索引维护 | 临时80%预留；首次等待60s超时，未算取消通过。第二次重建后立即正常关闭库，数秒内关闭且原索引指针保持。恢复平衡/10%，等待0后正常重建 | `rebuild-resource-wait-ee31.png`、`rebuild-cancel-after.json`、`resource-policy-restored-10-ee31.png` |
++| 新公开小库先搜索再启用后台 | 搜索1/1后，正式备份升级v12计划，再升级v14仅本地OCR规则；搜索仍1/1，没有回填/推理 | `schema-after-search-v14-ee31.png`、`search-after-v14-enable-ee31.png`、`schema-after-search-readback.json` |
++| 整个应用正常退出与同产物重开 | 菜单退出、0草稿/0登录任务，CLI退出0；普通入口重新选C库，人工内容、45向量及查询可读 | 最终重开截图、`derived-after-reopen.json`、`library-after.json` |
++
++颜色为128像素受控预览抽样估计，完整4-bit alpha加权直方图；透明不计，半透明按权重计入，D65 Lab/CIE76近色。不是视觉模型的颜色回答。语义分数用于排序，不代表正确率；仍返回低相关尾部候选，纯色中文属于已知弱项，颜色精确需求使用确定性条件。165素材包括120同图复制，独立公开资料仍约24份，不是165独立质量样本或十万素材性能基准。
++
++单次 warm 中文观察在 cc5f 构建为560ms（填入到忙控件隐藏），不是当前产物的基准。冷加载、制品复核与资源等待可能耗时，80%政策的失败是可观察的60s超时，不冒称物理OOM或原Chrome压力验收。模型管理页面曾显示加载约1.7s、进程工作集峰值约1.38GiB，属于对应运行器观测，不是ee31整应用端到端性能基准。
++
++## 保存与数据保护
++
++原164资产、328原件/必要预览字节、人工描述/人工标记及确认关系与复制基线相同。基础请求108、尝试105、效果99、后台执行60、历史78；不只比数量，五张执行表完整记录签名与关闭的复制来源一致，包含未知状态。C 主库只新增一份明确Copy的公开咖啡；回收/恢复仅操作它。独立schema小库1素材/v14，基础请求/尝试/效果/计划/后台执行均0，原件SHA保持。
++
++已保存向量与任务在最后整应用重开前后签名相同；重建投影未重推理，查询未隐式准备剩余素材。源规模库保持原文件SHA。模型/输入空间、授权、修订、最终生命周期复核和真实进程释放语义保留。
++
++## 代码变化与验证
++
++Host 搜索增加来源条件、完整颜色缓存/近色匹配、颜色硬过滤；全部累积行在最后await后复核。查询快照与行刷新分开，失败/取消不替换已接受请求。后台计数通过相关提交失效，不每5秒重新聚合。
++
++扩展回归发现临时触发器与既有Windows备份空TEMP检查冲突。修复仅在实际prepareBackup时暂停并移除搜索/计数自己的触发器，维护读取纯读，finally恢复并补同步；不清查询快照，无备份的普通权限更新保持索引ready。平台唯一main、空TEMP、事务、容量及指纹保护不变。
++
++类型检查与正式构建通过。相关完整57文件套件先为55/57，两组OCR在备份连接拒绝处失败；修复后8个受影响文件全部通过，另有新场景先红后绿、11个C/相邻检查及3个只读回读。不能把最初57套件改写为全通过，也没有机械重跑无关Python160项或所有历史平台套件。
++
++### Standards
++
++review-05精确补丁核对，无新增可行动问题；仅实际备份暂停自有触发器，保留快照，普通权限更新保持就绪；事务、UNKNOWN结算隔离、平台与容量保护未削弱。review-06的两份新增只读QA回读及Canvas README增量核对也无新问题；补丁SHA256为`b8100cc7757586262128f0b4fe9f126714ee1832fb1b3f3a979eabbc80e00e10`。静态审查，未代替界面验收。
++
++### Spec
++
++review-05精确补丁核对，无新增Spec问题；C1的快照/增量计数及C2的取消/恢复保护保持，备份失败与撤权经finally恢复，未扩展D–F。review-06增量核对无新问题，未把只读回读替代UI验收。静态审查，未代替Browser或延期Native验收。
++
++## 检查点与未验收范围
++
++[C检查点](../checkpoints/c-search-20261007/README.md)记录精确任务差异与证据；代码与旧WIP重叠，保留工作源码，不把旧WIP整文件提交。检查点不是clean HEAD的完整产品源码提交；无推送、发布或父issue关闭。
++
++Native窗口、系统文件交接、凭据/安装和其它平台按用户要求未在本轮验收；旧T23原Chrome页压力保持未完成。历史A/B/T15–T21只保留其原版本范围，未全部转记到ee31。当前浏览器单次错误`ERR_BLOCKED_BY_CLIENT`根因未确定；新普通入口正常，未修改浏览器安全设置。

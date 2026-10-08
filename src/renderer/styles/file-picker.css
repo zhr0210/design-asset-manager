@@ -1,0 +1,20 @@
+.file-picker { padding: 24px; color: var(--ui-ink); background: var(--ui-surface); }
+.file-picker h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.file-picker-path { display: flex; align-items: center; gap: 8px; margin: 16px 0; }
+.file-picker-path input { min-width: 0; flex: 1; border-radius: 10px; background: var(--ui-surface-soft); color: var(--ui-ink); padding: 10px 12px; font-size: 13px; }
+.file-picker-browser { display: grid; grid-template-columns: minmax(100px, 160px) minmax(0, 1fr); min-height: 240px; height: min(42vh, 380px); border-top: 1px solid var(--ui-border); border-bottom: 1px solid var(--ui-border); margin-bottom: 12px; }
+.file-picker-browser nav { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 8px 12px 0; overflow: auto; }
+.file-picker-list { overflow: auto; padding: 8px; border-left: 1px solid var(--ui-border); }
+.file-picker-row { display: flex; align-items: center; min-width: 0; margin-bottom: 4px; }
+.file-picker-row > button:first-child { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; text-align: left; padding: 10px; border-radius: 10px; font-size: 13px; }
+.file-picker-row > button[aria-pressed=true] { background: var(--ui-surface-soft); }
+.file-picker-row > button:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: -2px; }
+.file-picker-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-picker svg { width: 16px; height: 16px; flex-shrink: 0; }
+.file-picker footer { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 16px; }
+.file-picker footer > span { margin-right: auto; }
+@media (max-width: 600px) { .file-picker { padding: 16px; } .file-picker-browser { grid-template-columns: 100px minmax(0, 1fr); } }
+.workspace-recovery-banner { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 120; display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-radius: 16px; background: var(--glass-dense); box-shadow: var(--glass-shadow); color: var(--text-primary); }
+/* Reserve space for recovery guidance instead of covering the page's actions. */
+.workspace-stage > .workspace-recovery-banner { position: relative; top: auto; left: auto; transform: none; align-self: center; flex-shrink: 0; max-width: calc(100% - 24px); margin: 8px 12px; }
+.workspace-connection-banner { top: auto; bottom: 20px; width: min(640px, calc(100vw - 40px)); z-index: 121; }

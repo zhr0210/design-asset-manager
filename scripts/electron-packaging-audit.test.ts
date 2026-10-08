@@ -72,7 +72,7 @@ for (const scriptName of ['pack:win', 'pack:mac', 'dist:win', 'dist:mac']) {
 }
 
 assert.match(electronViteConfig, /src\/preload\/index\.ts/)
-assert.match(electronViteConfig, /src\/preload\/browser\.ts/)
+assert.doesNotMatch(electronViteConfig, /src\/preload\/browser\.ts/)
 assert.match(electronViteConfig, /externalizeDepsPlugin/)
 assert.ok(packageJson.dependencies?.['better-sqlite3'])
 assert.ok(packageJson.dependencies?.sharp)

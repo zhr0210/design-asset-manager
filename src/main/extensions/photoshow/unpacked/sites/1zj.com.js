@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"1zj.com":{srcMatching:[{srcRegExp:"(//.+?\\.1zj\\.com/.+/)thumb_\\d+_\\d+_(\\w+@IMG@)",processor:"$1$2"}]}};

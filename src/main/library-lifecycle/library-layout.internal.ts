@@ -1,0 +1,6 @@
+export const LIBRARY_DATABASE_FILE = 'library.sqlite'
+export const MANIFEST_FILE = 'library.manifest.json'
+export const CONTROL_DIRECTORY_NAME = '.dam'
+export const ORIGINALS_DIRECTORY_NAME = 'Originals'
+export const PREVIEW_DIRECTORY_NAME = 'required-previews'
+export const STAGING_DIRECTORY_NAME = 'intake-staging'

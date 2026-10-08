@@ -13,4 +13,7 @@ export type LoadSettingsResponse = AppSettings
 
 export type SaveSettingsRequest = Partial<AppSettings>
 
+/** The fields observed when editing began; null represents an absent field. */
+export type SettingsExpected = Partial<{ [K in keyof AppSettings]: AppSettings[K] | null }>
+
 export type SaveSettingsResponse = AppSettings

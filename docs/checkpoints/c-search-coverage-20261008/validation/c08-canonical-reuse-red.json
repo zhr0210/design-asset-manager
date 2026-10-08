@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-08T00:14:29.259Z",
+  "scope": "non-UI automated regressions; no visible user acceptance",
+  "results": [
+    {
+      "entry": "scripts/asset-retrieval-host.test.ts",
+      "exitCode": 1,
+      "durationMs": 9695,
+      "log": "c08-canonical-reuse-red-asset-retrieval-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    }
+  ]
+}

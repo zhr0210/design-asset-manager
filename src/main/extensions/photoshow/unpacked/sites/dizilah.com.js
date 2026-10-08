@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"dizilah.com":{srcMatching:[{srcRegExp:"(//img\\.dizi\\.la/.+?/)responsive-images(/.+?)_{3}.+(@IMG@)",processor:"$1conversions$2-medium$3"},{srcRegExp:"(//img\\.dizi\\.la/.+)-thumb(@IMG@)",processor:["$1-medium$2"]}]}};

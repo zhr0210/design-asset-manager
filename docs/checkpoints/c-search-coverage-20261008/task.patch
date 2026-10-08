@@ -1,0 +1,332 @@
+diff --git a/src/main/retrieval-workspace/asset-retrieval-store.ts b/src/main/retrieval-workspace/asset-retrieval-store.ts
+index 03f0aee..270bc26 100644
+--- a/src/main/retrieval-workspace/asset-retrieval-store.ts
++++ b/src/main/retrieval-workspace/asset-retrieval-store.ts
+@@ -116,15 +116,27 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
+     return {state:indexBuilding?'recovering':jobList.some(j=>j.state==='running')?'building':!space?'unprepared':indexed===all?'ready':'partial',spaceId:space||null,
+       selectedSpaceId:d.runtime()?.currentSpace()?.spaceId??null,indexed,total:all,indexGeneration,error,jobs:jobList}
+   }
+-  function publishVector(space:string,asset:ActiveLibraryAssetProjection,inputSha:string,vector:number[]){
++  function assertVectorSource(asset:ActiveLibraryAssetProjection){
+     d.assertAuthority();const now=readAssets(d.database,[asset.id])[0]
+     if(!now||view(now)!==view(asset))throw Error('RETRIEVAL_SOURCE_CHANGED')
++  }
++  function publishIndexVector(space:string,asset:ActiveLibraryAssetProjection,inputSha:string,bytes:Buffer){
++    index.prepare('INSERT INTO vectors VALUES(?,?,?,?,?) ON CONFLICT(space,id) DO UPDATE SET view=excluded.view,input_sha=excluded.input_sha,vector=excluded.vector')
++      .run(space,asset.id,view(asset),inputSha,bytes)
++  }
++  function reuseVector(space:string,asset:ActiveLibraryAssetProjection,prior:VectorRow){
++    assertVectorSource(asset);decodeVector(prior.vector)
++    // Reusing durable evidence only repairs its derived projection. The
++    // original bytes, input binding and generation time remain authoritative.
++    publishIndexVector(space,asset,prior.input_sha,prior.vector)
++  }
++  function publishVector(space:string,asset:ActiveLibraryAssetProjection,inputSha:string,vector:number[]){
++    assertVectorSource(asset)
+     validateRetrievalVectors([vector],1)
+     const bytes=vectorBytes(vector)
+     canonical.prepare('INSERT INTO vectors VALUES(?,?,?,?,?,?) ON CONFLICT(space,id,view) DO UPDATE SET input_sha=excluded.input_sha,vector=excluded.vector,created_at=excluded.created_at')
+       .run(space,asset.id,view(asset),inputSha,bytes,new Date().toISOString())
+-    index.prepare('INSERT INTO vectors VALUES(?,?,?,?,?) ON CONFLICT(space,id) DO UPDATE SET view=excluded.view,input_sha=excluded.input_sha,vector=excluded.vector')
+-      .run(space,asset.id,view(asset),inputSha,bytes)
++    publishIndexVector(space,asset,inputSha,bytes)
+   }
+   async function generate(job:Job,signal:AbortSignal){
+     try{
+@@ -136,7 +148,7 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
+         if(!asset){canonical.prepare("UPDATE items SET state='skipped' WHERE job=? AND id=?").run(job.id,item.id);continue}
+         try{
+           const prior=canonical.prepare('SELECT * FROM vectors WHERE space=? AND id=? AND view=?').get(job.spaceId,asset.id,view(asset)) as VectorRow|undefined
+-          if(prior){publishVector(job.spaceId,asset,prior.input_sha,decodeVector(prior.vector))}
++          if(prior){reuseVector(job.spaceId,asset,prior)}
+           else{
+             canonical.prepare("UPDATE items SET state='running' WHERE job=? AND id=?").run(job.id,item.id)
+             const bytes=await d.readPreview(asset);signal.throwIfAborted();d.assertAuthority()
+diff --git a/src/main/retrieval-workspace/README.md b/src/main/retrieval-workspace/README.md
+index b96eeae..4b2589f 100644
+--- a/src/main/retrieval-workspace/README.md
++++ b/src/main/retrieval-workspace/README.md
+@@ -10,6 +10,8 @@
+ 
+ `asset-retrieval-store.ts` 把 canonical vectors、任务及空间写入当前库 `.dam` 的独立 SQLite，并以归属 registry 绑定物理文件。派生 flat cosine 索引可以重建，不成为原件、人工内容或持久向量的权威。空间参与每次向量读写；代际、输入视图与生命周期在返回结果前复核。查询最多 200 语义候选，精确文字命中独立保留，混合使用 RRF 排名并展示具体依据；分页 cursor 有界、有所有者及期限，文件夹硬条件不得被语义排序扩大。
+ 
++明确准备兼容的已有向量时，仅修复它在派生索引中的投影；保留 canonical 原字节、输入摘要和实际生成时间，不以复用时间冒充新模型执行。缺失或内容/视图变化时才实际生成新证据。
++
+ `retrieval-runner-archive.ts` 只保存已实际资格绑定的 App 自有 stock Worker 快照，逐脚本/环境/制品指纹检查。新空间准备不破坏旧空间，已准备空间可以明确切换/回退。撤信任清执行证明，保留已保存向量。外部示例由 `query-file-grants.ts` 限定为用户正式选择的一张 PNG/JPEG/WebP，不扩大到任意路径、隐式收录或外发。
+ 
+ 聚焦检查：`retrieval-model-workspace`、`retrieval-package-format`、`retrieval-runner-archive`、`asset-retrieval-host` 和 `query-file-grants`。正式 Windows Browser 的指定公开样本、中英/混合/跨语言与以图命中、暂停恢复、重开和空间回退分列在本轮 PROGRESS；损坏实验仅使用可恢复副本。当前限制、未验收项与父级完成状态以 TASK/CURRENT-STATE 为准，不以内部检查代替用户结果。
+diff --git a/scripts/asset-retrieval-host.test.ts b/scripts/asset-retrieval-host.test.ts
+index ff8be1a..190e705 100644
+--- a/scripts/asset-retrieval-host.test.ts
++++ b/scripts/asset-retrieval-host.test.ts
+@@ -3,7 +3,9 @@ import {test} from 'node:test'
+ import fs from 'node:fs/promises'
+ import path from 'node:path'
+ import os from 'node:os'
++import {createHash} from 'node:crypto'
+ import sharp from 'sharp'
++import Database from 'better-sqlite3'
+ import {createActiveLibraryHost} from '../src/main/library-lifecycle'
+ import {createProductionActiveLibraryHostDependencies} from '../src/main/library-lifecycle/production-active-library-dependencies'
+ import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
+@@ -103,9 +105,15 @@ await test('Host canonical image vectors support filtered multilingual fixture q
+     const rebuilt=await host.rebuildRetrievalIndex();assert.notEqual(rebuilt.indexGeneration,generation);assert.equal(imageCalls,3)
+     await host.close();await host.reopen()
+     assert.equal((await query('红色画面')).matches[0].asset.id,red.id);assert.equal(imageCalls,3,'Reopening keeps canonical results')
++    const canonicalFile=path.join(library,'.dam',JSON.parse(await fs.readFile(vectorRegistry,'utf8')).canonical)
++    const savedVectors=()=>{const database=new Database(canonicalFile,{readonly:true,fileMustExist:true})
++      try{return database.prepare<[],{space:string;id:string;view:string;input_sha:string;vector:Buffer;created_at:string}>('SELECT * FROM vectors ORDER BY space,id,view').all()
++        .map(({vector,...metadata})=>({...metadata,vectorSha256:createHash('sha256').update(vector).digest('hex')}))}finally{database.close()}}
++    const canonicalBeforeReuse=savedVectors()
+     await host.startRetrievalGeneration({...scope(),selection:'selected',assetIds:[red.id]})
+     for(let i=0;i<300;i++){if((await host.readRetrievalCoverage()).jobs[0]?.state==='complete')break;await new Promise(r=>setTimeout(r,10))}
+     assert.equal(imageCalls,3,'An unchanged canonical input is reused by an explicit coverage request')
++    assert.deepEqual(savedVectors(),canonicalBeforeReuse,'Reusing vectors must preserve the original canonical bytes and generation time')
+     const imageQuery={...scope(),query:'',mode:'image' as const,imageAssetId:red.id,tagScope:'includes-pending' as const,limit:1}
+     const imagePage=await host.searchSemanticPage(imageQuery)
+     assert.ok(imagePage.nextCursor)
+diff --git a/src/shared/build-identity.generated.ts b/src/shared/build-identity.generated.ts
+index e47da6b..8c1d600 100644
+--- a/src/shared/build-identity.generated.ts
++++ b/src/shared/build-identity.generated.ts
+@@ -1,8 +1,8 @@
+ /** Generated at build time; excludes itself from the source digest. */
+ export const DAM_BUILD_IDENTITY = {
+-  "buildId": "dam-ee312ab271299499",
+-  "sourceDigest": "ee312ab27129949915f4355cbc7682bcf181d6c20ffe0f749399920b55382df8",
+-  "builtAt": "2026-10-07T13:34:35.972Z",
++  "buildId": "dam-58dc70f3d0431312",
++  "sourceDigest": "58dc70f3d04313121d1887dfa288adddce1debcc153771dff2a11e25f2081898",
++  "builtAt": "2026-10-08T00:16:15.862Z",
+   "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+   "sourceCount": 761
+ } as const
+diff --git a/.scratch/c-search-20261008/readback.mjs b/.scratch/c-search-20261008/readback.mjs
+new file mode 100644
+index e69de29..52d6993 100644
+--- /dev/null
++++ b/.scratch/c-search-20261008/readback.mjs
+@@ -0,0 +1,90 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import assert from 'node:assert/strict'
++import {createHash} from 'node:crypto'
++import {createRequire} from 'node:module'
++
++const require = createRequire(path.resolve('package.json')), Database = require('better-sqlite3')
++const stage = process.argv[2]
++assert.ok(['before', 'paused', 'repair-baseline', 'prepared', 'reuse-before', 'reuse-after', 'before-reopen', 'after-reopen'].includes(stage))
++const task = path.resolve('.scratch/c-search-20261008'), library = path.resolve('.scratch/c-search-20261007/library')
++await fs.mkdir(path.join(task, 'evidence'), {recursive: true})
++const sha = bytes => createHash('sha256').update(bytes).digest('hex')
++const signature = value => sha(JSON.stringify(value))
++const registry = JSON.parse(await fs.readFile(path.join(library, '.dam/.dam-asset-retrieval.json'), 'utf8'))
++const owned = (name, prefix) => {assert.match(name, new RegExp(`^${prefix}-[a-f0-9-]{36}\\.sqlite$`)); return path.join(library, '.dam', name)}
++const main = new Database(path.join(library, '.dam/library.sqlite'), {readonly: true, fileMustExist: true})
++let mainState
++try {
++  main.exec('BEGIN')
++  assert.equal(main.pragma('integrity_check', {simple: true}), 'ok')
++  assert.deepEqual(main.pragma('foreign_key_check'), [])
++  const tables = ['assets', 'asset_tags', 'basic_analysis_requests', 'basic_analysis_attempts',
++    'basic_analysis_evidence', 'background_analysis_executions', 'background_analysis_execution_history']
++  mainState = Object.fromEntries(tables.map(table => {const rows = main.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all();
++    return [table, {count: rows.length, sha256: signature(rows)}]}))
++  main.exec('ROLLBACK')
++} finally {if (main.inTransaction) main.exec('ROLLBACK'); main.close()}
++const canonical = new Database(owned(registry.canonical, 'asset-vectors'), {readonly: true, fileMustExist: true})
++const index = new Database(owned(registry.index, 'asset-vector-index'), {readonly: true, fileMustExist: true})
++let derived
++try {
++  canonical.exec('BEGIN'); index.exec('BEGIN')
++  assert.equal(canonical.pragma('integrity_check', {simple: true}), 'ok')
++  assert.equal(index.pragma('integrity_check', {simple: true}), 'ok')
++  const space = String(canonical.prepare("SELECT value FROM meta WHERE key='active'").pluck().get())
++  const vectors = canonical.prepare('SELECT * FROM vectors ORDER BY space,id,view').all()
++  const jobs = canonical.prepare('SELECT * FROM jobs ORDER BY id').all()
++  derived = {space, canonicalVectors: vectors.length, vectorSignatures: Object.fromEntries(vectors.map(row =>
++    [JSON.stringify([row.space, row.id, row.view]), signature(row)])), canonicalSha256: signature(vectors),
++    jobSignatures: Object.fromEntries(jobs.map(row => [row.id, signature(row)])), jobsSha256: signature(jobs),
++    jobs: jobs.map(({id, state, completed, total, failed, error}) => ({id, state, completed, total, failed, error})),
++    running: jobs.filter(row => row.state === 'running').length,
++    currentIndexed: Number(index.prepare('SELECT COUNT(*) FROM vectors WHERE space=?').pluck().get(space)), index: registry.index}
++  index.exec('ROLLBACK'); canonical.exec('ROLLBACK')
++} finally {if (index.inTransaction) index.exec('ROLLBACK'); if (canonical.inTransaction) canonical.exec('ROLLBACK'); index.close(); canonical.close()}
++const media = {}
++async function walk(directory) {for (const entry of await fs.readdir(directory, {withFileTypes: true})) {
++  const file = path.join(directory, entry.name)
++  assert.ok(!entry.isSymbolicLink(), 'No external media traversal')
++  if (entry.isDirectory()) await walk(file)
++  else if (entry.isFile()) media[path.relative(library, file).split(path.sep).join('/')] = sha(await fs.readFile(file))
++}}
++await walk(path.join(library, 'Originals')); await walk(path.join(library, '.dam/required-previews'))
++const result = {at: new Date().toISOString(), stage, main: mainState, media, derived}
++assert.equal(mainState.assets.count, 165)
++assert.equal(derived.running, 0)
++if (stage === 'before') assert.equal(derived.currentIndexed, 45)
++else {
++  const before = JSON.parse(await fs.readFile(path.join(task, 'evidence/before.json'), 'utf8'))
++  assert.deepEqual(result.main, before.main, 'No changes to original metadata, human edits, tags or full analysis audit')
++  assert.deepEqual(result.media, before.media, 'All original and preview bytes remain intact')
++  assert.equal(derived.space, before.derived.space)
++  const vectorBaseline = ['prepared', 'reuse-before', 'reuse-after', 'before-reopen', 'after-reopen'].includes(stage)
++    ? JSON.parse(await fs.readFile(path.join(task, 'evidence/repair-baseline.json'), 'utf8')) : before
++  if (stage === 'repair-baseline') {
++    result.legacyCanonicalRowsChanged = Object.entries(before.derived.vectorSignatures)
++      .filter(([key, hash]) => derived.vectorSignatures[key] !== hash).map(([key]) => key)
++    assert.ok(derived.currentIndexed > 45 && derived.currentIndexed < 165)
++  } else for (const [key, hash] of Object.entries(vectorBaseline.derived.vectorSignatures)) assert.equal(derived.vectorSignatures[key], hash,
++    'Compatible prior vector record must be reused without replacement')
++  for (const [key, hash] of Object.entries(before.derived.jobSignatures)) assert.equal(derived.jobSignatures[key], hash,
++    'Prior generation job must remain unchanged')
++  if (!['paused', 'repair-baseline'].includes(stage)) assert.equal(derived.currentIndexed, 165)
++  if (stage === 'reuse-after') {
++    const prior = JSON.parse(await fs.readFile(path.join(task, 'evidence/reuse-before.json'), 'utf8'))
++    assert.equal(derived.canonicalSha256, prior.derived.canonicalSha256, 'Explicit full compatible reuse must preserve the whole canonical store')
++    for (const [key, hash] of Object.entries(prior.derived.jobSignatures)) assert.equal(derived.jobSignatures[key], hash)
++  }
++  if (stage === 'after-reopen') {
++    const closed = JSON.parse(await fs.readFile(path.join(task, 'evidence/before-reopen.json'), 'utf8'))
++    assert.equal(derived.canonicalSha256, closed.derived.canonicalSha256, 'Reopen must not regenerate vectors')
++    assert.equal(derived.jobsSha256, closed.derived.jobsSha256, 'Reopen must not create or restart generation')
++  }
++}
++await fs.writeFile(path.join(task, `evidence/${stage}.json`), JSON.stringify(result, null, 2) + '\n')
++console.log(JSON.stringify({stage, assets: mainState.assets.count, protectedFiles: Object.keys(media).length,
++  currentIndexed: derived.currentIndexed, canonicalVectors: derived.canonicalVectors, running: derived.running,
++  jobs: derived.jobs.length, checks: stage === 'before' ? 'baseline captured, readonly' : stage === 'repair-baseline'
++    ? 'metadata/media/full prior audit intact; legacy changed canonical records captured as repair baseline, readonly'
++    : 'metadata/media/full audit/prior vectors and jobs preserved, readonly'}))
+diff --git a/.scratch/c-search-20261008/run-readback.mjs b/.scratch/c-search-20261008/run-readback.mjs
+new file mode 100644
+index e69de29..3144923 100644
+--- /dev/null
++++ b/.scratch/c-search-20261008/run-readback.mjs
+@@ -0,0 +1,17 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import {createRequire} from 'node:module'
++import {spawn} from 'node:child_process'
++const stage = process.argv[2]
++if (!['before', 'paused', 'repair-baseline', 'prepared', 'reuse-before', 'reuse-after', 'before-reopen', 'after-reopen'].includes(stage)) throw new Error('STAGE_DENIED')
++const require = createRequire(path.resolve('package.json')), electron = require('electron')
++const child = spawn(electron, [path.resolve('.scratch/c-search-20261008/readback.mjs'), stage], {
++  windowsHide: true, shell: false, env: {...process.env, ELECTRON_RUN_AS_NODE: '1'}, stdio: ['ignore', 'pipe', 'pipe']})
++const chunks = []
++child.stdout.on('data', bytes => chunks.push(bytes)); child.stderr.on('data', bytes => chunks.push(bytes))
++const code = await new Promise((resolve, reject) => {child.once('error', reject); child.once('close', resolve)})
++const output = Buffer.concat(chunks).toString('utf8')
++await fs.mkdir('.scratch/c-search-20261008/validation', {recursive: true})
++await fs.writeFile(`.scratch/c-search-20261008/validation/${stage}.log`, output)
++console.log(output.trim())
++process.exitCode = code ?? 1
+diff --git a/TASK.md b/TASK.md
+index e13d651..8c87134 100644
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,4 +1,8 @@
+-# 当前：C 浏览器范围已交付，桌面专项后续统一验收（2026-10-07）
++# 当前：C 续验全覆盖与正式兼容复用完成，桌面专项延期（2026-10-08）
++
++用户要求继续C。本轮普通Browser/profile-04沿用指定公开副本，明确准备165份、部分暂停后正常退出与新候选重开、明确恢复至165/165。发现ee31复用重写canonical生成时间，Host回归先红后绿修复，只写派生索引；不回写库补造旧时间，31条副本旧错误保持记录。当前正式dam-58dc70f3d0431312/761输入，最后整应用正常重开于53027；文字/颜色/图文各165/165，混合颜色136/136，中文/英文、库内外图、人工描述与分页选择有实际结果。全211持久记录在全库兼容复用与最终重开前后SHA相同，7任务未隐式重发；最初165素材/330文件/标签及五张完整分析审计保持。5个相关回归、typecheck/build/context及两轴静态审查通过，保留56个untracked覆盖警告。入口/结果/历史错误与版本边界见[本轮交付](docs/handoff/SEARCH-C-COVERAGE-20261008.md)与[精确检查点](docs/checkpoints/c-search-coverage-20261008/README.md)。原WIP与暂存保持，无推送/发布；Native按用户要求延期，T23原Chrome压力与父#24仍未完成。停于C，不扩D–F。
++
++# 此前：C 浏览器范围已交付，桌面专项后续统一验收（2026-10-07）
+ 
+ 用户最新要求继续包内 C，并将桌面专项集中到后续统一验证。普通入口为 `npm run start:browser`、既定 profile-04、素材工作区原搜索入口。目标：文字/来源筛选、确定性颜色占比、中英文自然语言与参考图找回，解释命中；已有词法功能在模型缺失/索引恢复时继续可用，更新不打断分页/选择/滚动，保存重开与取消/回收站保护成立。复用已成立且未受影响的本地 AI 检索路径，不重建 A/B、不自动扩展 D–F。
+ 
+diff --git a/docs/handoff/CURRENT-STATE.md b/docs/handoff/CURRENT-STATE.md
+index 35b7e52..6865688 100644
+--- a/docs/handoff/CURRENT-STATE.md
++++ b/docs/handoff/CURRENT-STATE.md
+@@ -1,4 +1,8 @@
+-# 2026-10-07 当前：C 浏览器范围已交付
++# 2026-10-08 当前：C公开副本全覆盖与复用保护
++
++最新用户继续C。普通Browser/profile-04、dam-58dc70f3d0431312/761输入，最后正常整应用退出重开53027；指定C公开副本文字/颜色/图文各165/165，混合加棕色136/136。真实准备从45到133暂停，旧ee31复用时间问题已先红后绿修复；新候选同任务明确恢复到165，再次全库兼容准备保留整份211 canonical记录，最终重开向量/7任务签名相同。165素材、330原件/必要预览、人工/标签及五张完整执行表与初始before一致，未知审计保持。旧候选在副本改过31条生成时间仍明确保留错误记录，不假称已恢复。新候选5相关回归、typecheck/build/context和两轴静态审查通过；原源码WIP/暂存保护，不整文件混入提交，56个untracked覆盖警告仍在。真实操作、质量限制、适用版本与检查点见[本轮C交付](SEARCH-C-COVERAGE-20261008.md)。Native延期集中，旧T23原Chrome压力与父#24未完成；停止C。以下保留原版本身份。
++
++# 2026-10-07 此前：C 浏览器范围已交付
+ 
+ 当前 `dam-ee312ab271299499` / 761输入，Windows正式Host/Chrome普通入口与既定profile-04，最后正常整应用退出重开于49433。公开C副本165素材：文字/颜色165/165、图文45/165；人工描述、中英文/混合、颜色阈值、库内外参考图、回收/恢复、索引恢复与保存重开成立，向量/任务没有重推理。原164资产/328文件、人工作品/确认关系、五张完整执行表及未知状态与复制源保持。临时80%预算已恢复平衡/10%；普通新公开小库先搜索再备份升级v12/v14成功，未回填/分析，严格备份检查不变。代码/Browser结果和旧版本未改路径的证据分别列在[C交付](SEARCH-C-20261007.md)；精确任务检查点保护旧WIP及暂存，不是clean HEAD完整源码提交。Native依用户要求后续统一验收；旧T23原Chrome页压力及父#24继续未完成。停止于C，不自动扩D–F；下文保留原时点身份，不改写历史PASS/FAIL。
+ 
+diff --git a/docs/agents/implementation-status.md b/docs/agents/implementation-status.md
+index 75a8a8d..70a8e42 100644
+--- a/docs/agents/implementation-status.md
++++ b/docs/agents/implementation-status.md
+@@ -2,6 +2,8 @@
+ 
+ 总体当前事实以[CURRENT-STATE](../handoff/CURRENT-STATE.md)为准；下列带日期的段落保留当时证据。
+ 
++2026-10-08 C续验：`dam-58dc70f3d0431312`从正式范围确认完成指定公开副本图文165/165，暂停/明确恢复与整应用重开成立；兼容准备仅更新派生index，保留canonical原字节/输入摘要/生成时间，解决ee31真实测试发现的复用时间重写。全库再次兼容准备和重开均保持211持久记录签名，7任务未隐式重发；165素材/330文件/人工/标签/完整审计保持。旧副本31条受影响时间不伪造恢复，说明与新候选证据见[续验交付](../handoff/SEARCH-C-COVERAGE-20261008.md)。Native延期、T23原Chrome压力及父级仍未完成。
++
+ 2026-10-07 C：正式Host已接线有界文字/来源/颜色查询、中英文及参考图硬条件、快照与行刷新分离、相关写入失效计数；仅实际备份暂停自有TEMP追踪、保持原连接保护。`dam-ee312ab271299499` 的普通Chrome公开副本真实检索、回收保护、v12/v14接线和整应用重开成立，文字/颜色165/165、图文45/165；剩余向量不隐式回填。具体结果/版本与延期Native、未完成T23压力/父级见[C交付](../handoff/SEARCH-C-20261007.md)。以下“仅词法/颜色或语义待接线”等旧段落保留历史范围，不覆盖该当前事实。
+ 2026-10-06起，指定真实范围的验证与内部工程调整遵循[AGENTS](../../AGENTS.md)及[CONTRIBUTING](../../CONTRIBUTING.md)，旧暂停记录不是当前禁令。
+ 
+diff --git a/docs/handoff/SEARCH-C-COVERAGE-20261008.md b/docs/handoff/SEARCH-C-COVERAGE-20261008.md
+new file mode 100644
+index e69de29..0fb37f0 100644
+--- /dev/null
++++ b/docs/handoff/SEARCH-C-COVERAGE-20261008.md
+@@ -0,0 +1,63 @@
++# C 续验：全库图文覆盖与兼容复用（2026-10-08）
++
++本轮按用户“继续任务C”补齐指定公开副本的全覆盖，修复正式复用路径发现的生成时间问题。交付范围为 Windows 正式 Host / Chrome 共享路径；Native 专项仍按用户要求后续集中验收，旧 T23 原 Chrome 标签页压力和父 #24 未完成。停止于 C，不扩 D–F。
++
++## 普通入口与真实结果
++
++在项目根目录运行：
++
++```powershell
++npm run start:browser -- "--profile=G:\antigravity\Design Asset Manager 1001\.scratch\wc01-real-model-library-20261005\run-U4eFuo\profile-04"
++```
++
++从“打开已有素材库”选择项目内 `.scratch/c-search-20261007/library`。这是此前已指定公开规模库的可恢复副本，不冒充唯一原库的验收。正式产物 `dam-58dc70f3d0431312`，761 输入；最后正常整应用退出重开页面 `http://127.0.0.1:53027/#/library`，Host PID2956 / CLI45755，端口随普通启动变化。软件 1.0.0、Electron 30.5.1 / Windows x64 / SQLite ABI123。
++
++本机 SigLIP2 Base、ModelScope 固定版本 `153facb840ce…`、Apache-2.0；CPU float32 / 768 维 / L2 cosine，当前空间 `36144a21836b…`。本轮没有新模型下载、云端素材分析或账号秘密读取。165 素材包含120同图规模复制，独立公开内容仍约24份；全覆盖不意味着165份独立质量样本。
++
++| 正式操作 | 实际结果 | 证据（`.scratch/c-search-20261008/evidence/`） |
++| --- | --- | --- |
++| 展开“图文覆盖与恢复”，明确“当前库全部165份”，确认范围 | 从45/165开始实际生成；冷阶段暂停0/165、明确恢复 | `scope-confirmation.png`、`paused-cold.png` |
++| 部分完成后暂停，再正常整应用退出、用修复候选重开 | 同一任务暂停119/165，有效索引133/165；没有自动恢复，明确恢复剩余范围后165/165 | `paused-partial.png`、`reopen-paused-fixed.png`、`prepared.json` |
++| 再次从正式确认入口准备全部165份兼容范围 | 全范围完成；整份211条 canonical记录 SHA 与复用前完全相同，原任务记录保持，仅新增这次明确请求的完成任务 | `compatible-reuse-complete.png`、`reuse-before.json`、`reuse-after.json` |
++| 固定中文“一杯咖啡放在木桌上” | 长条、大图和咖啡复制在前列；同构建单次warm可见响应758ms | `chinese-full.png`、`chinese-visible-timing.json` |
++| 固定英文“an astronaut wearing a space suit” | 前四为宇航员，cosine0.102；透明图等弱相关尾部仍存在 | `english-full.png`、`english-full.txt` |
++| 分页与选择 | 80→160→165，长条选择保留 | `paging-165-selection.png` |
++| 中英混合“一杯 coffee 放在木桌上” + `#A85629`≥25%、ΔE≤30 | 136个结果，咖啡及复制前列；文字、颜色、图文覆盖各165/165 | `hybrid-colour-25.png`、最终重开截图 |
++| 同条件提高至75% | 只剩76.88%长条变体；68.41%咖啡及复制排除 | `hybrid-colour-75.png` |
++| 库外单张公开咖啡参考图及库内C咖啡 | 相同咖啡复制1.000；库外图仅临时查询，没有收录。两个入口分别查询完成 | `image-external-full.png`、`image-library-full.png` |
++| 当前描述“English coffee reference” | 1/1；人工说明及“用户已编辑，AI不会自动覆盖”保持 | `description-before-reopen.png`、`final-reopen-description.png` |
++| 最后正常整应用退出与同产物重开 | 0草稿/0未保存窗口/0登录任务，CLI73902退出0；普通选择器重开同库，211向量及7任务签名不变，混合颜色136/136 | `final-exit-review.png`、`before-reopen.json`、`after-reopen.json`、`final-reopen-hybrid-full.png` |
++
++真实入口均由主 Agent 点击/键入，没有改路由、注入Store/IPC或写库跳过交互。只读数据库核对是工程证据，不替代用户路径。首次向量准备实际进行时，人工描述文字检索1/1成立；英文语义查询发起前该轮后台已完成，不能把这一例记成实际语义/后台并发验收。所指定原Chrome标签组当前没有可控会话，本轮不以其它页面或合成负载冒充压力验收。
++
++758ms为单次已加载模型的“填入到首个预先确定的咖啡/变体可见”观察，含防抖和浏览器工具开销，不是冷启动、全模型或大库基准。若干定位等待受工具3秒预算或精确标签附带覆盖文字影响而超时；随后完整DOM与截图确认实际结果，不把等待中的旧结果记为通过，也不将定位超时等同模型执行超时。
++
++语义分数只用于排序，不表示正确率；低相关尾部和纯色中文弱项保持，颜色精确需求使用确定性条件。120同图复制占据前列，不能据此宣称检索质量提升或十万素材性能。颜色算法、来源分离、查询快照及其它C1未修改路径的历史证据仍按[此前交付](SEARCH-C-20261007.md)的版本范围保留，不全部转记本候选。
++
++## 发现的问题、修复与保护
++
++旧ee31在明确准备已有向量时没有再推理，但调用共同发布函数重新写canonical的`created_at`。真实部分准备后的强回读失败；新Host公开场景回归也在“原向量记录及生成时间不变”处先红。ADR0183明确实际创建时间属于持久证据，因此不是仅放宽测试。
++
++修复仅分开“新结果持久保存”和“已有结果发布到派生索引”：复用继续核对当前授权、素材内容/视图及768维有限归一化向量，然后仅更新index；不重写原字节、输入摘要或生成时间。公开合同、schema、既有取消/恢复、最终返回复核及模型资格保持。
++
++旧候选已在这个可恢复副本改过31条复用时间，错误和红报告保留，不通过写库补造原时间。`repair-baseline.json`记录当时133覆盖/179持久结果及受影响身份；新候选恢复和全库复用后，保护这份已存在记录的全部字段。211记录包含非当前空间/旧视图留存，不冒称211份当前素材。最终当前有效覆盖为165/165。
++
++从本轮最初before到最后重开，全部165素材记录、5条标签关系、330原件/必要预览文件和五张完整执行表签名一致：请求108、尝试105、效果99、后台执行60、历史78，包含未知状态。嵌入准备只改变明确请求的向量/任务；不重复基础分析、不覆盖人工、不回滚未知审计。
++
++## 验证与两轴审查
++
++类型检查、正式构建、最终context检查及5个相关回归通过：Host检索、文字/颜色Host、检索展示工作流、模型工作区及单文件授权。修改的Host回归已经执行先红后绿，保留红报告；实际完整覆盖、全库复用及最终重开有分别的只读保护核对。未机械重跑无改动的Python或所有历史平台套件，未转记旧全仓库PASS。Context仍警告56个untracked源码不计可信ownership覆盖。
++
++### Standards
++
++review-01六文件精确补丁核对无新增可行动问题；来源和向量校验保留，复用仅写派生投影，符合ADR0183。Host断言比较真实记录与字节哈希，没有复制实现。QA明确旧错误与修复基线。静态审查未运行模型/UI或访问实际库、环境、秘密。
++
++### Spec
++
++同一六文件补丁无新增Spec问题；持久时间、空间/id/view绑定和来源保护保持，没有扩展D–F。暂停/全165/正常重开仍由实际应用结果证明，静态审查不替代它们。审查补丁SHA256：`3dc8a1c8a55468d9d6ec62a53284596ecf32819fde678b2b49b0ce02d375d95d`。
++
++## 检查点与剩余范围
++
++[本轮精确检查点](../checkpoints/c-search-coverage-20261008/README.md)保存任务差异、实际产物与证据哈希。保护原有源码WIP和全部既有暂存，不整文件混入；检查点不是clean HEAD的完整产品源码提交，无推送/发布或父issue关闭。
++
++Native窗口、安装、凭据与系统文件交接仍延期集中验收；T23原Chrome页压力及父#24保持未完成。完成本轮C浏览器补齐后停止。

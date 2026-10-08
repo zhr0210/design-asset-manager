@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"myfonts.com":{srcMatching:[{srcRegExp:"(//.+?\\.myfonts\\.net/cdn-cgi/image/).+(/images/.+)",processor:"$1$2"}]}};

@@ -1,0 +1,19 @@
+diff --git a/src/renderer/components/asset/AiExecutionDiagnostics.tsx b/src/renderer/components/asset/AiExecutionDiagnostics.tsx
+new file mode 100644
+index e69de29..47f5088 100644
+--- /dev/null
++++ b/src/renderer/components/asset/AiExecutionDiagnostics.tsx
+@@ -0,0 +1,13 @@
++import React,{useEffect,useState} from 'react'
++import {requireWorkspaceClient} from '../../workspace-client'
++import type {AiStageRecord} from '../../../shared/contracts/ai-diagnostics.contract'
++const phases:Record<AiStageRecord['stage'],string>={'prepare-and-wait':'准备（包含资源等待）','model-ready':'模型就绪核对','model-load':'实际加载','inference':'一次实际推理','validate-and-commit':'校验与提交','index-query':'索引查询（包含图文计算）','cancel-and-release':'取消与实际释放'}
++export default function AiExecutionDiagnostics(){
++ const [rows,setRows]=useState<AiStageRecord[]>([]),[recoveries,setRecoveries]=useState<Array<Record<string,unknown>>>([]),[error,setError]=useState('')
++ const refresh=async()=>{try{const value=await requireWorkspaceClient().aiResources.diagnostics();setRows(value.stages);setRecoveries(value.recoveries);setError('')}catch{setError('诊断暂不可读，请重新读取。')}}
++ useEffect(()=>{void refresh()},[])
++ return <section className="ui-card" aria-label="实际任务阶段诊断"><h2>实际任务阶段</h2><p>按请求、尝试或执行标识核对当前正式路径。准备包含资源等待；索引查询包含适用的图文计算。独立排队、首 token、费用和质量正确率未测，不由阶段返回推断。普通查询文字、图片和账号信息不进入诊断。</p><button className="ui-button ui-button-secondary" onClick={()=>void refresh()}>刷新实际执行诊断</button>{error&&<p role="alert">{error}</p>}
++ <div style={{overflowX:'auto'}}><table><thead><tr><th>阶段</th><th>结果 / 耗时</th><th>请求或尝试</th><th>组合与版本</th></tr></thead><tbody>{rows.map(row=><tr key={row.id}><td>{phases[row.stage]}{row.language?` · ${row.language}`:''}</td><td>{row.outcome==='returned'?'阶段返回':'失败'} · {row.durationMs} ms{row.errorCode?` · ${row.errorCode}`:''}</td><td><code>{row.operationId}</code><br/>{row.startedAt}</td><td>{row.buildId}<br/>{row.mode??'未测加载方式'}{row.fingerprint&&<><br/><code>{row.fingerprint.slice(0,16)}</code></>}</td></tr>)}</tbody></table></div>{!rows.length&&<p>尚无本次正式阶段记录。执行分析或查询后在此读取。</p>}
++ <h3>本地 OOM 恢复</h3><p>只在明确失败、Host 未保存且存在同模型与量化的已验证方案时尝试一次。收到响应仍须通过结果校验与事务提交。</p>{recoveries.map((v,i)=><p key={i}><code>{String(v.operationId??v.executionId??'未关联请求')}</code> · {String(v.state)} · 实际调用 {String(v.physicalCalls??'未知')} · {String(v.fromMode??'未知')} → {String(v.toMode??'未重试')}{v.errorCode?` · ${String(v.errorCode)}`:''}</p>)}{!recoveries.length&&<p>暂无本地 OOM 恢复记录。</p>}
++ </section>
++}

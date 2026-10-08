@@ -1,0 +1,1607 @@
+{
+  "createdAt": "2026-10-07T14:38:37.931Z",
+  "kind": "task-only normalized patch and evidence checkpoint; product source remains WIP",
+  "baseHead": "f50da6b9d80c096eb26992d4671f19b75a02cd93",
+  "branch": "codex/windows-workspace-1001",
+  "originalIndexSha256": "185dbb1f2355015edd37b43ccb7dd1a1035821688b07315503a2bd5af77f1b49",
+  "originalIndexEntriesSha256": "868a0f9d2a637ac26c5885730b6d70397f154318e6b4be9345b8825c04fc38fe",
+  "sourceBaseline": "existing working source before C, not clean HEAD; earlier WIP excluded from task diff",
+  "beforeRoot": ".scratch/c-search-20261007/before",
+  "files": [
+    {
+      "path": "src/shared/contracts/asset-search.contract.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "6a89ef5d1fbf59280b23cda49fe74833743f14188677471ca6c031266675d8ea",
+      "baselineNormalizedSha256": "6a89ef5d1fbf59280b23cda49fe74833743f14188677471ca6c031266675d8ea",
+      "candidateSha256": "f35d72f20b3209a02abd6770db075e874ff5246b9dc1caadc47faee8bacfaf16",
+      "candidateNormalizedSha256": "f35d72f20b3209a02abd6770db075e874ff5246b9dc1caadc47faee8bacfaf16"
+    },
+    {
+      "path": "src/shared/workflows/asset-discovery.workflow.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "405d63bdda402aae51d784f81f0a897db6655951b6eec0ac3f7f0c05f87de6b3",
+      "baselineNormalizedSha256": "cc7b99971eb90242709a5d70b3bfd4d891848b5981d6c1b0fb3fd0e16506c6ca",
+      "candidateSha256": "edd8cb01057735990d8fd5cbc2499b02f32c5612bbb4d120819b5af1674a3ec4",
+      "candidateNormalizedSha256": "53e311bf5c81c53af6ddb22347aa24db141935c437f04fa78fbcb4d8579dc5a0"
+    },
+    {
+      "path": "src/main/library-lifecycle/measure-preview-colors.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "3e7c88e3848b43f51607bf425731d8ebe50d03702f4bf04938cad14e5ae07721",
+      "baselineNormalizedSha256": "6575033190bc12f51ccad80aed3f66231e724a612ef1dd099e6f5397412e8af3",
+      "candidateSha256": "f7c3922c8316a1d666701953cd70ba66aa492863876b554c0a01ce575fc9ce74",
+      "candidateNormalizedSha256": "3213c54394f8f0e2dc1d02dee575dc6000a040d7ff8d2c598fb90538518851f4"
+    },
+    {
+      "path": "src/main/asset-search/asset-search-index.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "69599b7a1a4899f21276d7e604d9219a316351624125bcf88c20d9a42675ab9f",
+      "baselineNormalizedSha256": "69599b7a1a4899f21276d7e604d9219a316351624125bcf88c20d9a42675ab9f",
+      "candidateSha256": "188df64f04a88a9a1cdc1e2b8535d9a8aade4f7dbb0a27fad73395e647b088ce",
+      "candidateNormalizedSha256": "188df64f04a88a9a1cdc1e2b8535d9a8aade4f7dbb0a27fad73395e647b088ce"
+    },
+    {
+      "path": "src/main/asset-search/color-match.ts",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "3a90299177f9b59903b2a9a0ed5c80f710d9f3e28728ebaf1e55f575834698cd",
+      "candidateNormalizedSha256": "3a90299177f9b59903b2a9a0ed5c80f710d9f3e28728ebaf1e55f575834698cd"
+    },
+    {
+      "path": "src/main/library-lifecycle/active-library-host.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "290ec9e18da85a74225764905ad90160c45a8fb557d13fbc1f5c0908e7dc1370",
+      "baselineNormalizedSha256": "bb13f2406f1bd01e009cef148f32e9c0bb89d1c91dffecc4fab665d40dc06c91",
+      "candidateSha256": "24fed61f7f1eb6099731091e0e68e12b7dfa23779d037ec6bb55ad3c31ada744",
+      "candidateNormalizedSha256": "0b15add6161044fbe8abcb2d9ae48b7eab2db1420de0b6961a20c2b30192a888"
+    },
+    {
+      "path": "src/main/retrieval-workspace/asset-retrieval-store.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "6967d769910a560cc5153c73e267ac1770a3d535920f4196365336c1eefebc01",
+      "baselineNormalizedSha256": "6967d769910a560cc5153c73e267ac1770a3d535920f4196365336c1eefebc01",
+      "candidateSha256": "45ff4d5846485ebc42b9e1904cb0ebb882e85b3abc7330d9b96f3da787c10e95",
+      "candidateNormalizedSha256": "45ff4d5846485ebc42b9e1904cb0ebb882e85b3abc7330d9b96f3da787c10e95"
+    },
+    {
+      "path": "src/main/background-analysis/background-analysis-storage.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "6af8c7521b876631202125900af09607b81bf4479e0bac8780314fe18f0d96b2",
+      "baselineNormalizedSha256": "8d5f8722b099c4ca6f19331c14834c1ba331858879bc34d4a5995581c8773379",
+      "candidateSha256": "40945b9350677357f23bcb5b18659bf0b1806cb43622cc496015de7ea92f6309",
+      "candidateNormalizedSha256": "c637eda2ac866869dd60580f5ce4bdb999e6669653768e602cabdac59484ad71"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "4aaadb38623dae87e5baf4438ea2310b0940f04fce7c0cb9248caf89ae660a7d",
+      "baselineNormalizedSha256": "4aaadb38623dae87e5baf4438ea2310b0940f04fce7c0cb9248caf89ae660a7d",
+      "candidateSha256": "c0353c18c35117ca43695dc8e412383a513467ef191ac290625fa1f31ed3ab15",
+      "candidateNormalizedSha256": "c0353c18c35117ca43695dc8e412383a513467ef191ac290625fa1f31ed3ab15"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/SearchFilters.tsx",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "f5ba09a578911a59862f0a2442f0f5a127489b99f4534d36844516c18407c717",
+      "candidateNormalizedSha256": "f5ba09a578911a59862f0a2442f0f5a127489b99f4534d36844516c18407c717"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/LibraryCanvas.tsx",
+      "baselineKind": "reconstructed by reversing exactly two C hunks; not an original byte snapshot",
+      "baselineSha256": "d5a029774d7e1fbb7c7538907684c004142cce56c9dca631f63ddf6ab0f2c067",
+      "baselineNormalizedSha256": "f58f7658c670647afc83c658dc3bb9c0fbf63a1767594db3ada283608d039a99",
+      "candidateSha256": "825d9dddf3a5f97f193da562b15b5f340bf60ca0f09ef6eed0fe0c87cbdf72b2",
+      "candidateNormalizedSha256": "6fc16efafed22548befbe7dc5ed5be23455218ddb5f117eaf41c35348529a1ee"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/RetrievalSearchControls.tsx",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "8729688bac42adfbf6539168fa773983d27430eb9f6c59ec63b403db89661c0d",
+      "baselineNormalizedSha256": "8729688bac42adfbf6539168fa773983d27430eb9f6c59ec63b403db89661c0d",
+      "candidateSha256": "535e03e571c7dc607f36346f2b8d22ee573a32d84ed2aa394e26790389ebfc1f",
+      "candidateNormalizedSha256": "535e03e571c7dc607f36346f2b8d22ee573a32d84ed2aa394e26790389ebfc1f"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/library-canvas.css",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "2f1b74c0a8a39e866d65a18f66cffe067ff35195e945f523a6c82025f3d4f30d",
+      "baselineNormalizedSha256": "9625fbbff01169ae7240f96f44d8118394f7f833bad35efcbee4426602572fa2",
+      "candidateSha256": "21cf9d8576ca5d9303ae3eae163ddefb84a18f966cd27b66170870d5b5403189",
+      "candidateNormalizedSha256": "2a443dc37bf4c6b1f62688fae16a1acbcfbf89405860e215a7fb1ed3b0398a2d"
+    },
+    {
+      "path": "src/renderer/routes/Library.tsx",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "0c630f3823119a6bc113757d6e16109f7ef6dbf5f36fcfa91e1f0b95b388a796",
+      "baselineNormalizedSha256": "521ef7ee1b3174a145b3e9f85ad4c19e775a5489f24e9987387c64aabdfeca10",
+      "candidateSha256": "274674595969c8a38ffdad8cc6781ed7673b148b49f92ce2eb21b51682786b55",
+      "candidateNormalizedSha256": "73141a988e88b6f82813bfd88fed18ee760b3b48081ff71c31a50d039123c615"
+    },
+    {
+      "path": "scripts/asset-search-host.test.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "e704a8c8b5107087eb1e6bd18080af17fdb13712fdbbcc1a9347d81985203433",
+      "baselineNormalizedSha256": "e704a8c8b5107087eb1e6bd18080af17fdb13712fdbbcc1a9347d81985203433",
+      "candidateSha256": "b5d2bda9b9991a739b80c8f28f40c1e6887e8d52ec32b220c4c4b7b48a1aef1e",
+      "candidateNormalizedSha256": "b5d2bda9b9991a739b80c8f28f40c1e6887e8d52ec32b220c4c4b7b48a1aef1e"
+    },
+    {
+      "path": "scripts/asset-retrieval-host.test.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "a4bd9b2c998474c5c3e16fe55acd82effd115f367024d6841f86837cad73c362",
+      "baselineNormalizedSha256": "a4bd9b2c998474c5c3e16fe55acd82effd115f367024d6841f86837cad73c362",
+      "candidateSha256": "bc6006b467d8361972041446ad30de520ee928f998d81898cb202bd076d7ff2e",
+      "candidateNormalizedSha256": "bc6006b467d8361972041446ad30de520ee928f998d81898cb202bd076d7ff2e"
+    },
+    {
+      "path": "scripts/measure-preview-colors.test.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "2577bad0af13654f42a8e145a4ba2a40a3be246e93e5a8424210934d1a476ee5",
+      "baselineNormalizedSha256": "755bc937efe1e743295e4d0496668d5e5ba55783b1991c741b666de8c5af1b5a",
+      "candidateSha256": "09c16bc190987c8d64c0937540d228fba7cd81038ab4a336d3929c095aa72bb8",
+      "candidateNormalizedSha256": "ebabb04cbf4db2722c004060cd7efa58a9fcdc0b3d1c5214784f2165fc6eb046"
+    },
+    {
+      "path": "scripts/asset-discovery-workflow.test.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "cb234807308867e1b9ea6b0a42bb79230806ae96d585ef6b7127a58a67690227",
+      "baselineNormalizedSha256": "e672dc3fb3c2fd980a0ab4085822722a06fcea2e3dafe0bf1763ca5debd2e959",
+      "candidateSha256": "bce65469a2d638e55556bee2a74fb0dfce6f09d3a5cc6dc30f944e3e5103d89c",
+      "candidateNormalizedSha256": "aa3f5621cedd54ee45c288c8b22d5cbd80fec319bc41b5b657164b6bb70cc8b4"
+    },
+    {
+      "path": "src/main/library-lifecycle/host-schema-maintenance.internal.ts",
+      "baselineKind": "exact byte snapshot captured immediately before the adjacent schema fix",
+      "baselineSha256": "26a215c5cc8539f2c73a0ae6e0402fb613e96bff53bc6ca735cf420d1ba99665",
+      "baselineNormalizedSha256": "26a215c5cc8539f2c73a0ae6e0402fb613e96bff53bc6ca735cf420d1ba99665",
+      "candidateSha256": "f6f35398c253cada1b9cd673b001539fd392fd35a58ff811ffad2360969539fe",
+      "candidateNormalizedSha256": "f6f35398c253cada1b9cd673b001539fd392fd35a58ff811ffad2360969539fe"
+    },
+    {
+      "path": "scripts/search-schema-backup.integration.test.ts",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "57c64cafed7f83857aa1a5af0a49ba25fa6cd6a2c124a10f9a2b6c7337f7d1af",
+      "candidateNormalizedSha256": "57c64cafed7f83857aa1a5af0a49ba25fa6cd6a2c124a10f9a2b6c7337f7d1af"
+    },
+    {
+      "path": "scripts/fixtures/c-search-readback.test.ts",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "77da3d5bbb7499ba5ce1248bbaff07800566aa3e4094c5b060ddc4d386020108",
+      "candidateNormalizedSha256": "77da3d5bbb7499ba5ce1248bbaff07800566aa3e4094c5b060ddc4d386020108"
+    },
+    {
+      "path": "scripts/fixtures/c-search-derived-readback.test.ts",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "b8d110db4964972b1f9109409b96d223dbc39d94edb19ba75a5936510e867fe4",
+      "candidateNormalizedSha256": "b8d110db4964972b1f9109409b96d223dbc39d94edb19ba75a5936510e867fe4"
+    },
+    {
+      "path": "scripts/fixtures/c-search-schema-readback.test.ts",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "cd4cd60d054ac374c29c57d1e374c30050c6c7f3969ba17a247d8e57b1455067",
+      "candidateNormalizedSha256": "cd4cd60d054ac374c29c57d1e374c30050c6c7f3969ba17a247d8e57b1455067"
+    },
+    {
+      "path": "src/main/asset-search/README.md",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "259c11f8532f87d2a9077b63367f4385351b7b82fd5aabd94680110afa5990ea",
+      "candidateNormalizedSha256": "259c11f8532f87d2a9077b63367f4385351b7b82fd5aabd94680110afa5990ea"
+    },
+    {
+      "path": "src/main/retrieval-workspace/README.md",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "5d4700706ca67247a11b2df2d4e1860ab74f5c16550c57cb420801f9ea3d1f89",
+      "baselineNormalizedSha256": "5d4700706ca67247a11b2df2d4e1860ab74f5c16550c57cb420801f9ea3d1f89",
+      "candidateSha256": "018fb727fe80c11f3f52f143aa19935d61f5d7d532ecd3c1b5b36fa68e668791",
+      "candidateNormalizedSha256": "018fb727fe80c11f3f52f143aa19935d61f5d7d532ecd3c1b5b36fa68e668791"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/README.md",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "27fa4b2c4265358d33fb3e0171588c6c4bf6b410b20a7460baef92c133eabc46",
+      "baselineNormalizedSha256": "1b899972924ec1509815ff20f7f06c0517009bfe3153d983b93a608d00384814",
+      "candidateSha256": "b274e5a9ab15974315d1fd08f754fd98748e19d5b843ba6d0eec9eb080931251",
+      "candidateNormalizedSha256": "76c091735545a1156cd2f68f444de0b3d2da789635b5b21bdad4b2fb5347ab45"
+    },
+    {
+      "path": "TASK.md",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "6df0da69051bec5fdd3204527ca9ca8946e9451cd7a54ec5425198c7e8f6e5cb",
+      "baselineNormalizedSha256": "6df0da69051bec5fdd3204527ca9ca8946e9451cd7a54ec5425198c7e8f6e5cb",
+      "candidateSha256": "bab28421504f8567e12cedb55b4e4d2c6c9febb2b76373414847e917bbcbb2bd",
+      "candidateNormalizedSha256": "bab28421504f8567e12cedb55b4e4d2c6c9febb2b76373414847e917bbcbb2bd"
+    },
+    {
+      "path": "docs/handoff/CURRENT-STATE.md",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "c073268dcca183ff736be87de5a994084e014823ada1b7c6915520abf016a9d3",
+      "baselineNormalizedSha256": "c073268dcca183ff736be87de5a994084e014823ada1b7c6915520abf016a9d3",
+      "candidateSha256": "ce8ed4e2362d6766457d955e0b6373d51beda38684e78db1c0878237b4d99be9",
+      "candidateNormalizedSha256": "ce8ed4e2362d6766457d955e0b6373d51beda38684e78db1c0878237b4d99be9"
+    },
+    {
+      "path": "docs/agents/implementation-status.md",
+      "baselineKind": "reconstructed by removing exactly the single C status paragraph; not an original byte snapshot",
+      "baselineSha256": "17673da84b0d215f9fa85a80f16dbf38cc4f57ef76c67b151b7f2dca0e712b28",
+      "baselineNormalizedSha256": "17673da84b0d215f9fa85a80f16dbf38cc4f57ef76c67b151b7f2dca0e712b28",
+      "candidateSha256": "a4fdc822ad32b36ecd8d4a28d5528af70db525ea3cc9d8a56ba00559dbc7113a",
+      "candidateNormalizedSha256": "a4fdc822ad32b36ecd8d4a28d5528af70db525ea3cc9d8a56ba00559dbc7113a"
+    },
+    {
+      "path": "src/shared/build-identity.generated.ts",
+      "baselineKind": "exact task before byte snapshot",
+      "baselineSha256": "697b5ee21299fff145884240c4c99d9977d5e6745cc85d17e32209a23b7752f9",
+      "baselineNormalizedSha256": "697b5ee21299fff145884240c4c99d9977d5e6745cc85d17e32209a23b7752f9",
+      "candidateSha256": "77f154c8528cfc77151b278508ef255a3bd06352aae66e2e7888c45b22d088c8",
+      "candidateNormalizedSha256": "77f154c8528cfc77151b278508ef255a3bd06352aae66e2e7888c45b22d088c8"
+    },
+    {
+      "path": "docs/handoff/SEARCH-C-20261007.md",
+      "baselineKind": "new file; absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "cbc15db48f0f7fd25b0783bb1ea470213377d7ca580851d1b1f6a2d818d9cd3d",
+      "candidateNormalizedSha256": "cbc15db48f0f7fd25b0783bb1ea470213377d7ca580851d1b1f6a2d818d9cd3d"
+    }
+  ],
+  "patchSha256": "73ff928b7524aa6a8a4a1891b93ccc04e0002c4c78656f3f6f882b36acaa40ef",
+  "beforeOnlyPatchCheck": {
+    "result": "passed",
+    "directory": ".scratch/c-search-20261007/checkpoint-before-only",
+    "command": "git apply --check --whitespace=error --directory=<before-only> <task.patch>",
+    "effects": "validation only; no patch applied to source, library or index"
+  },
+  "build": {
+    "buildId": "dam-ee312ab271299499",
+    "sourceDigest": "ee312ab27129949915f4355cbc7682bcf181d6c20ffe0f749399920b55382df8",
+    "builtAt": "2026-10-07T13:34:35.972Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 761
+  },
+  "review": {
+    "snapshot": "review-06",
+    "files": 26,
+    "patchSha256": "b8100cc7757586262128f0b4fe9f126714ee1832fb1b3f3a979eabbc80e00e10",
+    "standards": {
+      "reviewer": "/root/c_standards_review",
+      "result": "no new actionable issue; review-05 plus read-only QA/README increment"
+    },
+    "spec": {
+      "reviewer": "/root/c_spec_review",
+      "result": "no new actionable issue; review-05 plus read-only QA/README increment"
+    },
+    "scope": "static task delta review, no independent UI or model verification"
+  },
+  "validation": {
+    "initialRelatedSuite": "55/57; two background OCR suites failed at BACKUP_SOURCE_CONNECTION_REFUSED",
+    "repairedAffectedFiles": "8/8 passed",
+    "previousCAndAdjacentFiles": "11/11 passed in their recorded scope",
+    "finalReadbackFiles": "3/3 passed",
+    "typecheck": "passed; final durable log included",
+    "build": "passed; final compiled identity and artifacts rechecked",
+    "wholeHistoricalRepositorySuite": "not rerun; not claimed passed",
+    "contextWarning": "56 untracked first-party source files excluded from trusted ownership coverage; warning retained"
+  },
+  "acceptance": {
+    "client": "ordinary Windows Host / Chrome browser, profile-04; public recoverable copy",
+    "currentLibrary": "165 assets; lexical/colors165/165; image/text45/165; final mixed plus color16/16",
+    "actualReopen": "same product; ordinary full app exit/restart and visible library selection; vectors/jobs preserved",
+    "pending": [
+      "Native/installation/OS handoff deferred by user",
+      "T23 original Chrome tab pressure",
+      "parent issue #24"
+    ],
+    "stopAfter": "C; no automatic D–F"
+  },
+  "artifacts": [
+    {
+      "path": ".scratch/c-search-20261007/evidence/background-cache-first-failure.txt",
+      "bytes": 437,
+      "sha256": "8224c5f3ac3b848299bb471bdab6062859f92f9859b13a445bd049f7d0322979",
+      "savedPath": null,
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/chinese-coffee-cc5f.png",
+      "bytes": 232331,
+      "sha256": "b33f925ca9069ccdd4a55112badf63157d71a035886da546c51dc94908b8e151",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/chinese-coffee-ee31.png",
+      "bytes": 246919,
+      "sha256": "62f551825601c54b567657f32d69f3a6a236eca83a8b8c1f2d59f393986e5942",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/chinese-coffee-timing-cc5f.json",
+      "bytes": 627,
+      "sha256": "3dc425b0d1f07c8dd92d581a8192feef2a520e06d78ef8a6439940b5ec2f1d20",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/chinese-coffee-timing-cc5f.json",
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/colour-25-ee31.png",
+      "bytes": 312896,
+      "sha256": "48123feade4d9335578f7d4842d9a1420ee944e9e9e5850d6dbae79f8fcd8edf",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/colour-75-ee31.png",
+      "bytes": 103845,
+      "sha256": "235244417a33da722e02682705679917f83d4add65fb25be903c57b09d69815c",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/colour-75-no-coffee-0339.png",
+      "bytes": 103628,
+      "sha256": "93875f8de62c7fb65236fd47646fe7b1b6d0cf3c4a1c4dd757935ba557791e9e",
+      "savedPath": null,
+      "scope": "dam-03393e2122ecde5c; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/colour-brown-0339.png",
+      "bytes": 296325,
+      "sha256": "9f98404c3dd34947f02bcecbaa127f2c12222f786f01e6fd1b64d892fb463adc",
+      "savedPath": null,
+      "scope": "dam-03393e2122ecde5c; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/colour-hybrid-mixed-cc5f.png",
+      "bytes": 289532,
+      "sha256": "af429d58d836f0b1e940099841a6a48022dcc20edbf95ab0abad492c65468d7b",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/derived-after-reopen.json",
+      "bytes": 446,
+      "sha256": "1a8c59e8e63ef87bd232805a7bad91e45e495f1561246d51aa86f52043adca6b",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/derived-after-reopen.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/derived-before-reopen.json",
+      "bytes": 446,
+      "sha256": "46a523d6492172d715bded8702a7b6c8b96a711775e85ef45a718de6f9c5684d",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/derived-before-reopen.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/description-incremental-cc5f.png",
+      "bytes": 99818,
+      "sha256": "47c4f73a3fa14c9827c03af61def6f450de0bdbd412a73d94a3ad5c633000663",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/english-astronaut-cc5f.png",
+      "bytes": 255694,
+      "sha256": "a9bea953cac133e2cfaef36d9375ccf262efa3e22df8a960f056eab76bb58d6f",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/english-astronaut-ee31.png",
+      "bytes": 308764,
+      "sha256": "6e4746a3827a93e65ee1d7f6e19d2b589b53a8af18fd5213aa1179599f2bd482",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/failed-query-keeps-80-cc5f.png",
+      "bytes": 315619,
+      "sha256": "f85f85a0fe487b7e045eccd0e6879b532150826538a5855da3ec2748130a41a0",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/failed-query-page-160-cc5f.png",
+      "bytes": 311083,
+      "sha256": "df2555c37dcfbab02e386d095e0f767b64754c5e278f846ccabd504c87f1cfdf",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/final-build-first-launch.json",
+      "bytes": 788,
+      "sha256": "3399a5f496a4fe585c609ec586bcd28ddad14fb82e811a201e31252703384245",
+      "savedPath": null,
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/final-reopen-description-ee31.png",
+      "bytes": 105933,
+      "sha256": "f2e03552e8ac3624b51e732862d2757aedd0651f81ac010043c60c45017c9436",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/final-reopen-description-ee31.png",
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/final-reopen-hybrid-ee31.png",
+      "bytes": 337030,
+      "sha256": "c7ff06d74ecd56b1d073312e611c516ea1db45077f3307bcaec9441867dddb88",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/final-reopen-hybrid-ee31.png",
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/final-reopen-hybrid-ee31.txt",
+      "bytes": 886,
+      "sha256": "832fd34aa8b60326ea01daea35739bea27c8abc556431b62a161a74444e14e58",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/final-reopen-hybrid-ee31.txt",
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/final-running-identity.json",
+      "bytes": 1363,
+      "sha256": "54fe943e73598091a442bff771281e05e09cf1494b534238c8c5fc32192cb431",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/final-running-identity.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/hybrid-colour-ee31.png",
+      "bytes": 336869,
+      "sha256": "5ce7a2bbbba097eaf768303306b9bff7e06789b2f6d16e72dce6d40aa8c4a945",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/image-external-ee31.png",
+      "bytes": 304148,
+      "sha256": "8483d92813a55550c49b08f0551eb86147067b775915626f6fa58bc8365e6089",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/image-external-top1-cc5f.png",
+      "bytes": 319748,
+      "sha256": "5c0bf582ba27bdcc6a3d187d44d5083a347534649b5d70ac594b85d4ec835a8c",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/image-library-ee31.png",
+      "bytes": 303180,
+      "sha256": "e38225472bbce038bd04f17b73db408fc022ded5c29999879fec8cd4f6b90bad",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/image-library-top1-cc5f.png",
+      "bytes": 318992,
+      "sha256": "5ab3ee4d292bfc39c7274527e3062c9cc6a14bf2e1e82e60e732de2b0876b426",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/lexical-after-runtime-release-cc5f.png",
+      "bytes": 109653,
+      "sha256": "2344e8b5a0372aab8be431e8fe5a022b19e0af05cb30b05e1ffb3c9be526683c",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/library-after.json",
+      "bytes": 1256,
+      "sha256": "94d5c340cf334e907ef10e5a3c943efb44efcacce1a69c25ce62a034b5b571f0",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/library-after.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/library-baseline-result.json",
+      "bytes": 476,
+      "sha256": "a64ad26083485db71b8f10df415716df33daf52ca16299d1162079c83ae63605",
+      "savedPath": null,
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/library-before.json",
+      "bytes": 82700,
+      "sha256": "d6e3da88dbd5013bdbd1634c9083f260c179e36e549a4e372e494c098a1f8c2b",
+      "savedPath": null,
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/mode-clears-colour-red-0339.png",
+      "bytes": 260688,
+      "sha256": "f643c4fd4c00cbebecf5618c7147cec89a2eb8c31f1e602e499f33584ef14e80",
+      "savedPath": null,
+      "scope": "dam-03393e2122ecde5c; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/name-not-confirmed-tag-cc5f.png",
+      "bytes": 58252,
+      "sha256": "4c8465bff33f9fd27e4f5e41463ed1e356a9157f0327a1e261b463b3d22dde23",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/new-asset-vector-45-cc5f.png",
+      "bytes": 131495,
+      "sha256": "e822e7cf49afed557f863f871c4edd5cb776de36e422515d3e166209b278d1d1",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/page-late-trash-red-review-02.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "savedPath": null,
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/paging-selection-scroll.json",
+      "bytes": 224,
+      "sha256": "ab790d5a9537ccf2d172dea5c91fd41cf074a95435e134c562b6b0aefac06ff7",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/paging-selection-scroll.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/pending-tags-cc5f.png",
+      "bytes": 78211,
+      "sha256": "d550c88dfc5333e8eefdca9b1c68c7cc3cf9e865cffb4e89a273daf86899bd24",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/query-after-cancel-english-cc5f.png",
+      "bytes": 277515,
+      "sha256": "b9d48bc02c3eb133d60ba79851a90b1e94ee47293e1a5f30c7fa5869bf4bc0e4",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/query-cancel-keeps-results-cc5f.png",
+      "bytes": 109347,
+      "sha256": "42c3f0d3936672e5154f5bf3c752e51ef87fca61cfcbb42b7ae7e931988c943f",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/rebuild-cancel-after.json",
+      "bytes": 562,
+      "sha256": "572fbee4cdccef39c74720d1660eebf2d493c76b60513ba61088f78945ee5735",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/rebuild-cancel-after.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/rebuild-cancel-before.json",
+      "bytes": 456,
+      "sha256": "48815c2d1fd5590f7b17380eb1b1a7ddeb550e2a910e0c65948bb57e0a5d3c7a",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/rebuild-cancel-before.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/rebuild-cancel-library-closed-ee31.png",
+      "bytes": 57889,
+      "sha256": "dd1fc2d983e66e9fc51ab4e893672da914b9f146b7b4b1577619fb5dec2cfb87",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/rebuild-recovered-lexical-ee31.png",
+      "bytes": 102539,
+      "sha256": "102c22d3a2e81969a20931e8aa31f85e8b503e1499e52f3615755523857e573c",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/rebuild-resource-wait-ee31.png",
+      "bytes": 129695,
+      "sha256": "03ecb1f9042fd209b88046aa1131c7da9fc24565e05cfdb66de8b84ae24b64b2",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/refresh-page-green-0339.png",
+      "bytes": 290868,
+      "sha256": "1ea67219d973c851935496ac0b818d31c93a24ea90db5ec3318964a5070b14e6",
+      "savedPath": null,
+      "scope": "dam-03393e2122ecde5c; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/refresh-page-red-4deb.png",
+      "bytes": 293625,
+      "sha256": "52356935e5edd28812000a428396b6f83fe6b39b6e8f01e97dc78dc182f7d59b",
+      "savedPath": null,
+      "scope": "dam-4deb9e68a5e80a0a; pre-fix observation"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/reopen-description-ee31.png",
+      "bytes": 105989,
+      "sha256": "e16e61232266eda4e0db415bd85848f4fc42739e902f37c911491f731ea286dd",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/resource-policy-restored-10-ee31.png",
+      "bytes": 179652,
+      "sha256": "40f3fd7cae5c27270817f2eec259d4af30733fbb0e2dbc1e08c9d2f96baa6569",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/restored-asset-needs-vector-cc5f.png",
+      "bytes": 131599,
+      "sha256": "e17f0de74be9b2562a7f6ee91cb9c4498444e748b251595993db06cc1e3dfb19",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/restored-vector-45-cc5f.png",
+      "bytes": 135038,
+      "sha256": "8e9c50dd521fad17ee5d8ab3a01de750e56da0b037dbeb793ff6caabaf3d2aff",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/restored-vector-45-ee31.png",
+      "bytes": 138760,
+      "sha256": "da10001c4a02e31babdb72aa85c63f746060a31cae888345171067829422f470",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/schema-after-search-readback.json",
+      "bytes": 402,
+      "sha256": "ccc018abbc3b245b6fd9a25d61ebe48f7c42eb78c516de9a3587556a46f66c03",
+      "savedPath": "docs/checkpoints/c-search-20261007/evidence/schema-after-search-readback.json",
+      "scope": "see receipt/log and handoff for exact version and scope"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/schema-after-search-v14-ee31.png",
+      "bytes": 149190,
+      "sha256": "44342845855adfcf3838e302361fc87d7fe676e858abb2464a2db5fb3fd54312",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/search-after-v14-enable-ee31.png",
+      "bytes": 62686,
+      "sha256": "2890432c6c1243b43f726f526400fd1b183d5a0a24e48ad863a42226c7e54268",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/semantic-trash-complete-cc5f.png",
+      "bytes": 229160,
+      "sha256": "ad0d90731c9390ad40d4f9e3f673e7bd76b2c2b7c00b6adcdadc643f83e50ba2",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/semantic-trash-complete-cc5f.txt",
+      "bytes": 542,
+      "sha256": "0157433f277ea86e4f99207b946c32147f09eecfd971bb86cb458dbbee3ed273",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/semantic-trash-excluded-cc5f.png",
+      "bytes": 185579,
+      "sha256": "7f1c6b98a81ad0d16daa1f09254601305ad9376ba64387252faacfdacda2e129",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/semantic-trash-excluded-ee31.png",
+      "bytes": 218810,
+      "sha256": "decb7b12b12879a287a3dbbfb22e65437a1ccc7ba93c51b93140bedb35c04a40",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/semantic-trash-final-cc5f.png",
+      "bytes": 288848,
+      "sha256": "fe84624e5151c18c84847a77de41640bd637b07a5763cc61b90cce2815a5ea6e",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/semantic-trash-requery-ee31.png",
+      "bytes": 226064,
+      "sha256": "186b830a6b80d22cf2c84b1736d3a02307a6ef15d7e3d02e5dcbaced2a1f43ee",
+      "savedPath": null,
+      "scope": "dam-ee312ab271299499"
+    },
+    {
+      "path": ".scratch/c-search-20261007/evidence/vector-rebuild-completed-query-cc5f.png",
+      "bytes": 199246,
+      "sha256": "3952bd7b6ecc7df0649612e63d8ce55fdedffb0fc023d4a394e11cf80027a53e",
+      "savedPath": null,
+      "scope": "dam-cc5f84142dde25f9; historical observation on the corresponding unchanged path"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-before-final-reopen-c-search-derived-readback.test.ts.log",
+      "bytes": 410,
+      "sha256": "572050a5e78cd53087223b5650fb95a21d201702ff0346caa62210551181eb48",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-before-final-reopen-c-search-readback.test.ts.log",
+      "bytes": 1113,
+      "sha256": "0be10bb0f40ee7eb6688cea4a68c7c60461e3b97c5f6e2e7ceac6e1fdb2f17e4",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-before-final-reopen.json",
+      "bytes": 642,
+      "sha256": "3d79b4066975efe72a3ff53f76c36fe48219152810522c91c94e7763de9a96ef",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-color-retrieval-asset-retrieval-host.test.ts.log",
+      "bytes": 457,
+      "sha256": "373be9d38e113d46e95d9dbfc5d0e61300832c4c7b0d86e5c27ef47d263c7664",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-color-retrieval.json",
+      "bytes": 371,
+      "sha256": "bcc6976cb67d06001af558071d0c1856b01ffa96ca47eb47b5dfd1aa9f8a1b09",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-concurrency-asset-retrieval-host.test.ts.log",
+      "bytes": 457,
+      "sha256": "3e83166693fdfb1ddbd4c5bf3a97ea50f3e6437a138c38b65c4d565043d7034c",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-concurrency-asset-search-host.test.ts.log",
+      "bytes": 2954,
+      "sha256": "9bf2d6f0c894268f78f97942c56202413f1775b28cc53208b1256dfdbd643dc6",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-concurrency-corrected-asset-retrieval-host.test.ts.log",
+      "bytes": 457,
+      "sha256": "178b088babc1f9e9fef52aa23a4ac2ddb2e78a0eb61d65e80b31d1c920e21177",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-concurrency-corrected-asset-search-host.test.ts.log",
+      "bytes": 1714,
+      "sha256": "734f93c3014b1e602caf7c139383dcba4b74331edf702bd9b5b6a5b4538fe5ac",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-concurrency-corrected.json",
+      "bytes": 621,
+      "sha256": "5beba70ee6854ccca5463682d0797dab3bd550b33fcb39df4e2dd516b4b16fb7",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-concurrency.json",
+      "bytes": 601,
+      "sha256": "e4cddab4a45d77e0d1b2a1f2a9a1f95798a34f8836a2efc1e9531ec7f24da33a",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-adjacent-scoped-asset-reads.test.ts.log",
+      "bytes": 149,
+      "sha256": "b04f4ef91a57c16d759de5daf3d6b3434a8e984229d822918ca7261cd1fb1229",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-adjacent-scoped-asset-reads.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-adjacent-work-sets.test.ts.log",
+      "bytes": 295,
+      "sha256": "a72602f04f180d04386ae2b575d29ad7f9c06906e1db036c97427fc67193819b",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-adjacent-work-sets.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-adjacent.json",
+      "bytes": 586,
+      "sha256": "d49425bab01da6051d0cfcd8ecef3dee368c51be1dc8e4480d120e2893ab743f",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-adjacent.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-context.log",
+      "bytes": 264,
+      "sha256": "41a6367e7f37c501c80e55b55cf964b7c9a4f1a8d5c35df743bbb2e76637cd7b",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-context.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-document-checks.json",
+      "bytes": 409,
+      "sha256": "b0e48b7aea4b4b3499b354ee2c5a0a004dc8f726610fde5c8386846c9250af9d",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-document-checks.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-asset-discovery-workflow.test.ts.log",
+      "bytes": 132,
+      "sha256": "ed9fe0680810d3d187b6e12b60c4836f75c5e14e8c30eced78b7d147aba9ef00",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-asset-discovery-workflow.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-asset-retrieval-host.test.ts.log",
+      "bytes": 457,
+      "sha256": "3ba1c983e2257513a94393fcb2269c2bfd4e2566c143475519f594d8894e2cbc",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-asset-retrieval-host.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-asset-search-host.test.ts.log",
+      "bytes": 1932,
+      "sha256": "d16a39af624c40c94dde60efa8c629da7eef4d63afa7752577d123f6770b1a76",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-asset-search-host.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-background-analysis.integration.test.ts.log",
+      "bytes": 4538,
+      "sha256": "71bdbd7c3a739a7a3245a755bb3fcfe0cea878be62658d4ad478bb025b470c42",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-background-analysis.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-library-canvas-state.test.tsx.log",
+      "bytes": 2933,
+      "sha256": "0b970ce174c445b0502bf6f09698305e34035ca3defef84305fe6084066ced82",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-library-canvas-state.test.tsx.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-local-dam-client.test.ts.log",
+      "bytes": 79,
+      "sha256": "f3c816bc659f4708209f70a466ced4cbfc3343027cf6bb9903b856e2887d0410",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-local-dam-client.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-local-dam-http.test.ts.log",
+      "bytes": 85,
+      "sha256": "7b0f6aaaa8f7fbe00fc0950566e18e69fe66586389a5f81d84f519700d2f670a",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-local-dam-http.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-measure-preview-colors.test.ts.log",
+      "bytes": 105,
+      "sha256": "573503324631c068895bc4cf6dae687c26222989c4c7b2907ac001d172635524",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-measure-preview-colors.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions-retrieval-cancellation-client.test.ts.log",
+      "bytes": 320,
+      "sha256": "17e7269592f01abf032aa1dd51974cdeec0d749e6f11b4eaa02929792fbbd159",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions-retrieval-cancellation-client.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-regressions.json",
+      "bytes": 2358,
+      "sha256": "d1f3e44840f4a53330192bb06721d83619de55a2e802d8330d20cf9ff682db35",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-regressions.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-reopen-protection-c-search-derived-readback.test.ts.log",
+      "bytes": 410,
+      "sha256": "513e6d25c2e6472b88170fa935f2954a0d88f77d48023b955f00995d9c98c272",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-reopen-protection-c-search-derived-readback.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-reopen-protection-c-search-readback.test.ts.log",
+      "bytes": 1113,
+      "sha256": "f45c04a0dabe390afc5d5133ea096abdad3abb20f446df8af86e1895649083f3",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-reopen-protection-c-search-readback.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-reopen-protection-c-search-schema-readback.test.ts.log",
+      "bytes": 345,
+      "sha256": "2b68f353c560c6199e222c7f7c56504c663670747969df29ce721b1defc17ea2",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-reopen-protection-c-search-schema-readback.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-reopen-protection.json",
+      "bytes": 917,
+      "sha256": "23a399cb6ba68c58e876f81ebb140e62a6de889db5fe7d619a8adaa065551f64",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-reopen-protection.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-asset-retrieval-host.test.ts.log",
+      "bytes": 456,
+      "sha256": "26efe51ef06601d2b8fc12d61cde47db8d869b2f2659fe0b49d3eb0581e5869f",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-asset-retrieval-host.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-asset-search-host.test.ts.log",
+      "bytes": 1933,
+      "sha256": "b1c4684d75617194d63416feda6cb1a809d37fd38f115a07732bd378d05f0e36",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-asset-search-host.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-background-analysis.integration.test.ts.log",
+      "bytes": 4539,
+      "sha256": "1c001d35b0767e3848187ee0f4660bffaf88adc548b9ad9ae8fd7b4ebac1f89f",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-background-analysis.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-background-ocr-runtime-observation.integration.test.ts.log",
+      "bytes": 2307,
+      "sha256": "36a0dc937f04bc98dddaaafcf6e1145e7d17d2eb79d52c725399895097678a9d",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-background-ocr-runtime-observation.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-background-ocr.integration.test.ts.log",
+      "bytes": 7613,
+      "sha256": "a9a823135d418b9e986990afd26489d7c97479f449dbbe8d812f0de367060d71",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-background-ocr.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-host-schema-maintenance.test.ts.log",
+      "bytes": 8411,
+      "sha256": "4c7f2430da1c7dc875237cefd01629b0db185cd87db8dd7e2b577fa0ba8276a1",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-host-schema-maintenance.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-search-schema-backup.integration.test.ts.log",
+      "bytes": 329,
+      "sha256": "a87d398d4fb22353022d40c437a7eaee063157db8d0546040608d314537a166c",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-search-schema-backup.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination-windows-backup-source.test.ts.log",
+      "bytes": 3198,
+      "sha256": "44d58461f1216363df688bbc8fd86373543cb601082364f4147a4a0a3496427d",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination-windows-backup-source.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-schema-coordination.json",
+      "bytes": 2270,
+      "sha256": "4db40b30fdd50f7a8c4916ede61f0a9a6dfd8c6c87849d9697eb6febaf297f73",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-schema-coordination.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-final-typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-final-typecheck.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-active-library-host.test.ts.log",
+      "bytes": 169,
+      "sha256": "b5564d752140f6e0276f400a1d70c0f15cbf6a45a069b1a3f03cce1d4640d601",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-ai-resource-policy.test.ts.log",
+      "bytes": 1844,
+      "sha256": "ce9ba066dd3488eebe41cef4ec1701a45e4d9e24ecd321205a972a09c3717303",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-ai-stage-diagnostics.test.ts.log",
+      "bytes": 359,
+      "sha256": "423ea99b0fe5bd938b3ff90fc7a08f639eb86eaa0e0d96ded787cc6b9077bb72",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-analysis-output-contract.test.ts.log",
+      "bytes": 378,
+      "sha256": "0cd034d60d01f81e41079db3844fb7464ed261b6cdc79fb6781aa479d5a3f8b6",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-asset-ocr-storage.test.ts.log",
+      "bytes": 158,
+      "sha256": "24e0c2dff827cbaa9079acee0803c6ddb51b28ef8b3492b9f0a6beff25199ba6",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-asset-retrieval-host.test.ts.log",
+      "bytes": 457,
+      "sha256": "609b1e09ead87cdf900d775ce338daa25a466ae8ee3a9e36a7e2194fc0974252",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-asset-search-host.test.ts.log",
+      "bytes": 1932,
+      "sha256": "1303fafa138ae87d263de57abf0b57db4038c83b693d6a9387226823bddef0ed",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-background-analysis.integration.test.ts.log",
+      "bytes": 4539,
+      "sha256": "d65e96352f4c3835030db2482e193b50f21919df0076066908b053e50372b359",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-background-ocr-runtime-observation.integration.test.ts.log",
+      "bytes": 16003,
+      "sha256": "c84616bab4fef5ba75eeca5fb08bd55e8cc648714918316233d62759bbe8c46d",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-full-regressions-background-ocr-runtime-observation.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-background-ocr-runtime-observation.test.ts.log",
+      "bytes": 4344,
+      "sha256": "21da463de9f686c0b04474a5b5b9388e98302fbd869566648843a669f855c9f1",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-background-ocr.integration.test.ts.log",
+      "bytes": 28460,
+      "sha256": "ea4cb4e8af3e51afd0c61c23ab93a2a36f4f31de04a7133e8cfab046c3a3ad24",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-full-regressions-background-ocr.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-background-resource-policy.test.ts.log",
+      "bytes": 1029,
+      "sha256": "93c341d7e4b7a3b9b9d4a61e63f6dc03a1b3839dd89c2f6a850cff9941056b50",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-basic-analysis-controller.test.ts.log",
+      "bytes": 807,
+      "sha256": "b4127ef5a8dd2d8ed18a3dbf83bb0c899297a2f7981328946c6d08449bec3ce5",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-basic-analysis.integration.test.ts.log",
+      "bytes": 4791,
+      "sha256": "a1dab4a09df02b597161b049e4931e56d2f9d4715e4248c6747e2d968c9d1620",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-china-model-mirror.test.ts.log",
+      "bytes": 852,
+      "sha256": "2909321ce02475516b3cf50bdc56fd03a9d176d2ddc54e8a74255391cbb102f8",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-gguf-cpu-envelope.test.ts.log",
+      "bytes": 356,
+      "sha256": "d677bf98002b7234143bf846225acf452e8ca01e0828a7845a85ed03e1814796",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-gguf-driver-binding.test.ts.log",
+      "bytes": 335,
+      "sha256": "12ec6fe89a77b9001fe5fcbb6b2c4c588922b563214719246a934708d75a907c",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-huggingface-discovery.test.ts.log",
+      "bytes": 1083,
+      "sha256": "77dacd0197801e5b74d12d89dd76abfe6d11817bda892732ce90552ebbd182b8",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-independent-tag-intent.integration.test.ts.log",
+      "bytes": 6577,
+      "sha256": "88ce5e546f862f7132b138dd8bde17516d1446782967dd54e819c329c05c022e",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-library-quiescence.test.ts.log",
+      "bytes": 2696,
+      "sha256": "7fbb98c80730f666a73599c69dbc1825a831e329e2239020cb18924535d7123d",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-browser-library.test.ts.log",
+      "bytes": 97,
+      "sha256": "0c024756147af8fd7720f6e4b7e3dde21d28b08141c2f3805bac4e2fbeaab507",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-browser-reconnect.test.ts.log",
+      "bytes": 128,
+      "sha256": "e4be0f914e5fe254ac76324fdff53c88a10bbd7f5040a77b4b57810ce0695838",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-browser-unknown-commit.test.ts.log",
+      "bytes": 1173,
+      "sha256": "ab2bb146c4e2a60517c1985525d4097b4a78f7b4b5bf76807a68ac3bfaba3542",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-client.test.ts.log",
+      "bytes": 79,
+      "sha256": "f3c816bc659f4708209f70a466ced4cbfc3343027cf6bb9903b856e2887d0410",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-command-replay.test.ts.log",
+      "bytes": 143,
+      "sha256": "d4b391d0f26dad9d44ba87ec1734384814c021ff87c4398b29477d1822170b73",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-drafts.test.ts.log",
+      "bytes": 167,
+      "sha256": "42c17d794d4b94ca74e2649bbe16264bc4db4082a657ebf88d589c2b40502a5b",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-file-selection.test.ts.log",
+      "bytes": 114,
+      "sha256": "68f16eed42a22f36b32919eb9cf13dd7e10d25f646164fb6284d8962420fe577",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-http.test.ts.log",
+      "bytes": 85,
+      "sha256": "7b0f6aaaa8f7fbe00fc0950566e18e69fe66586389a5f81d84f519700d2f670a",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-launch.test.ts.log",
+      "bytes": 3151,
+      "sha256": "292609b34ed46d73f5a65fea30daf89824d73b6211a145304a05a7d6798f39ab",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-profile.test.ts.log",
+      "bytes": 94,
+      "sha256": "1d8361a97c60b23dfc9ed0aa73879fa6c70968175e444353f1854f597e7f37d1",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-receipts.test.ts.log",
+      "bytes": 115,
+      "sha256": "f77119ffde0f390e3a677b8b6a82ece8632e3effa5a6b0b165b33ab6e9cf1fcd",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-settings-conflict.test.ts.log",
+      "bytes": 97,
+      "sha256": "9f3449707c6f96b1ea1f27215c41470ef8248040105721ef82830279769b9d57",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-settings-order.test.ts.log",
+      "bytes": 7553,
+      "sha256": "6e968630db07444f317239580eb08e2e052ead773b2f431a73c4f3e9ad6ac63f",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-dam-transitions.test.ts.log",
+      "bytes": 539,
+      "sha256": "992250ee82e4d84c695f9d44890086aac48c009953eb2e3f27cd1a40e58d6dd2",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-oom-call-budget.test.ts.log",
+      "bytes": 1040,
+      "sha256": "701049e83595f8d08aadaa067b6b92513cf4767d0182ebcb80fa6c03517c1700",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-local-vision-slot.test.ts.log",
+      "bytes": 334,
+      "sha256": "717858326a4c2fbe78c972e36cf6c0d740175b3e1073a1655ef623aeb9db046f",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-managed-download-resume.test.ts.log",
+      "bytes": 165,
+      "sha256": "6fe050f17a611c7e8a102bce1ae5375932cebb5a75a063f3626aa0fffd4d0748",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-managed-gguf-package.test.ts.log",
+      "bytes": 371,
+      "sha256": "910d46980b538a60b46ee7e82f834eb97150b3938b655f8d5cbecef1589f2b74",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-managed-model-library.test.ts.log",
+      "bytes": 3052,
+      "sha256": "75f6e8b6105559a27d094c11df82105b15fc6dd67f57553b2b5de29fd878d603",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-managed-vision-negative.test.ts.log",
+      "bytes": 839,
+      "sha256": "02e85543a4b0c1c44c632b507755ec5c5b96b4c4dd5872f24b6cfe3a98d74159",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-ocr-controller-lifecycle.test.ts.log",
+      "bytes": 3997,
+      "sha256": "2029a06b434f8b5372d36e78540328c076be2f9aa0f47b2394ee69f8c192bcbb",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-ocr-process-lifecycle.test.ts.log",
+      "bytes": 2937,
+      "sha256": "9b763eae3ee071b8b53650ca82c327cbd1be8e69efb8adb1b16cda6c12491e1f",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-ocr-real-evidence.test.ts.log",
+      "bytes": 25,
+      "sha256": "cf221ffbf6274d948f3a367ca605f531a9614ca7c73e785b954cf183ed4781bb",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-query-file-grants.test.ts.log",
+      "bytes": 420,
+      "sha256": "c8fd86d7d185c16ca9184dd8cd941fb23706d0d7129c4bf443ab29c6528a3811",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-retrieval-model-workspace.test.ts.log",
+      "bytes": 454,
+      "sha256": "ff7aaedf0fb849b76f768bf946f4695ad93492a8ec1dc9374db4394a8ad69e72",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-retrieval-package-format.test.ts.log",
+      "bytes": 419,
+      "sha256": "905fa8d51324d06471626283bdf813b40931c47d401c5593c34dd87b17d7d88f",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-retrieval-runner-archive.test.ts.log",
+      "bytes": 443,
+      "sha256": "b49906010514d619744a60692bd5f2d32ef2cfe6ca4e4fd3a6c644d793c9448c",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-tag-batch.integration.test.ts.log",
+      "bytes": 2964,
+      "sha256": "5f4566bbfa576bc56b6bfe3611247e05ccd844f911ff58502d66742910ac39fe",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-tag-decision.integration.test.ts.log",
+      "bytes": 3103,
+      "sha256": "3bb2d7e78a859d07265cc45ff5db4d2e318c3cc8b57dbbaa989878b944de1b2f",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-tag-execution.integration.test.ts.log",
+      "bytes": 6982,
+      "sha256": "07f95d16090dd82b36c7343684272a76ed4f6b7076d480baf5c39309ee5b918c",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-tag-recovery.integration.test.ts.log",
+      "bytes": 5129,
+      "sha256": "62a8cd3903c48473ab352ce41db602fb54d44c780346ada51b7f66811d5f153d",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-visual-admission-isolation.test.ts.log",
+      "bytes": 2524,
+      "sha256": "785fd7b8d191da589e5775b01448b00ad2c7a65813c875dfd025e1399d878b41",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-visual-admission.integration.test.ts.log",
+      "bytes": 2294,
+      "sha256": "b98a3105fa0ad3fb7fd882c299b1f9d9c580f7021842c4da3bd0a360c03764b6",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-visual-ai-provider.integration.test.ts.log",
+      "bytes": 2134,
+      "sha256": "c340db8810dea4be0e907864a9b793f9f0417e5f56062bb6049a4f63a98113f8",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-visual-ai-transport.test.ts.log",
+      "bytes": 1401,
+      "sha256": "f820edbd2908b4191078f1c8cf7ff6b47a2afb7260097698be5c8293a7eb36e4",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-visual-analysis-snapshot.test.ts.log",
+      "bytes": 32,
+      "sha256": "b70d55c5ac6c7ec9ac9899171d17d2497605ebcd894ff2983ef15fb80811dd26",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions-visual-material-reuse.test.ts.log",
+      "bytes": 433,
+      "sha256": "a2ca4745c0baffaf6a60817919f2bdf21af552058ed67078ed61c64404513a49",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-full-regressions.json",
+      "bytes": 14308,
+      "sha256": "0530088524d698b2534e165d8ff27eb9b965413057daf13c229203f6df72de4f",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-full-regressions.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-library-baseline-c-search-readback.test.ts.log",
+      "bytes": 413,
+      "sha256": "bc6da21adb5032005eafedc4cabbb450db42ab2423d7aaa7c6e462aac50d9946",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-library-baseline-corrected-c-search-readback.test.ts.log",
+      "bytes": 407,
+      "sha256": "ebc1239f4cf99059d5f73dd7d84747b5354f6c4f43c3548ff5cbe258d7ac9ea4",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-library-baseline-corrected.json",
+      "bytes": 385,
+      "sha256": "54ee9a4dbacb063bba91c5378b7fd84452948c2b17d7ae08a2b0e5333ece026d",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-library-baseline.json",
+      "bytes": 375,
+      "sha256": "f73ada545ebb0cb01734c96cc6aadb8f9f96b4ea1827c3400f5385860a0ac19a",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-page-late-trash-red-asset-search-host.test.ts.log",
+      "bytes": 2838,
+      "sha256": "91100335135fe327275942f17f55fd27770e2cdd4f28a015e7fc2d4409ed6842",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-page-late-trash-red-asset-search-host.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-page-late-trash-red.json",
+      "bytes": 370,
+      "sha256": "5ae636935717c66f2a0b0f80d8c463ba305b2998fde5727abaa3e08449a3d550",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-page-late-trash-red.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-pre-fix-protection-c-search-readback.test.ts.log",
+      "bytes": 1113,
+      "sha256": "965f475577d226cbb76d8098d749bc60f3315586f504e8747d04a4ce92df2821",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-pre-fix-protection.json",
+      "bytes": 376,
+      "sha256": "582112bf8da8edc21bec45eca3f8abcc9805cf8a162454c47c0800e4f7415d6c",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-real-schema-ui-readback-c-search-schema-readback.test.ts.log",
+      "bytes": 345,
+      "sha256": "4438edb6e03c388bdf80d8c4146a4f3c23f8e6562f7d65266188561abd803d9e",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-real-schema-ui-readback.json",
+      "bytes": 395,
+      "sha256": "876735d70d9047f7975513c1fc8ca3eebe30b15e00aec6fdf7063f346c56fe54",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-reference-not-imported-c-search-readback.test.ts.log",
+      "bytes": 408,
+      "sha256": "713ef96f18e70d45b9f0ca33e635e713d85fdd2794656bb86cca63bd859acb93",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-reference-not-imported-closed-reader-c-search-readback.test.ts.log",
+      "bytes": 408,
+      "sha256": "c31a97274c23ce01341e64f08db53c86e611fc66c70b0e00d5ca30ec7564615f",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-reference-not-imported-closed-reader.json",
+      "bytes": 394,
+      "sha256": "a1df82f65bb997f235baeb91ea1a2afc16517e9222600cfc14655d29627fff33",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-reference-not-imported.json",
+      "bytes": 392,
+      "sha256": "967efbd9c560cb4686816b7d5cdeb210724cf3892cde6c69f8d71b2e5566b43c",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions-asset-retrieval-host.test.ts.log",
+      "bytes": 457,
+      "sha256": "31ea5274bc0656510494e29d78fe9a392cdc6c8a66b920b76745df7f471093a5",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions-asset-search-host.test.ts.log",
+      "bytes": 1934,
+      "sha256": "b2a7e85936a275013e603d9a05405cfb60b8542c8b46b3a9500e6823c9126e7b",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions-background-analysis.integration.test.ts.log",
+      "bytes": 4538,
+      "sha256": "3a2217be4b4130774dec75100b29613cf1ecdede800a89224fc48cb9d6d9a76e",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions-background-ocr-runtime-observation.integration.test.ts.log",
+      "bytes": 2307,
+      "sha256": "608f9b02bc24e344d72f0b67c18166434e9003b9fe8628e50dba0a4ac631a9a6",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions-background-ocr.integration.test.ts.log",
+      "bytes": 7615,
+      "sha256": "ef685214b0facf7f5c203ad3e0b6394f60b3538107296b7b1067981faa7b08cc",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions-host-schema-maintenance.test.ts.log",
+      "bytes": 8407,
+      "sha256": "6b7637207edb60711c894186f460f90a93fec6dae47489b71ca0f1e064ef2eb0",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions-search-schema-backup.integration.test.ts.log",
+      "bytes": 329,
+      "sha256": "fa5d9bf49dd5a9b51951672955cf9ec527c4f6d9825914f725a72f904c4aa183",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-fix-regressions.json",
+      "bytes": 1995,
+      "sha256": "450912a7a0fc7238bc28697f680287c48f0e876698074c4b3cc1e1c5921595fd",
+      "savedPath": null,
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-scope-red-search-schema-backup.integration.test.ts.log",
+      "bytes": 994,
+      "sha256": "a034c34201a465ead1f776bd086d891ab644308ecb4e51d8155c18932ad64fdd",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-schema-scope-red-search-schema-backup.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-schema-scope-red.json",
+      "bytes": 396,
+      "sha256": "426f3a7782583402918659cbfb6d67e982cf7b273fd5ee3bcdf1943783e8890e",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-schema-scope-red.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-search-schema-red-search-schema-backup.integration.test.ts.log",
+      "bytes": 874,
+      "sha256": "6c2d5c9a84bb31880b2ec646fbc63fef144aea566d1f3bc47cb476d3fccb5151",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-search-schema-red-search-schema-backup.integration.test.ts.log",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    },
+    {
+      "path": ".scratch/c-search-20261007/validation/c-search-schema-red.json",
+      "bytes": 397,
+      "sha256": "e2452234a99be442c27fe705ea221b3df67eb8a435eed0f0f457aaf297947506",
+      "savedPath": "docs/checkpoints/c-search-20261007/validation/c-search-schema-red.json",
+      "scope": "internal regression/readback; does not itself count as UI acceptance"
+    }
+  ],
+  "pushed": false,
+  "finalDocumentCheck": {
+    "checkedAt": "2026-10-07T14:39:31.386Z",
+    "localLinks": 11,
+    "diffCheck": "passed",
+    "reviewedFilesAndSavedEvidenceHashes": "matched",
+    "originalIndexSha256": "185dbb1f2355015edd37b43ccb7dd1a1035821688b07315503a2bd5af77f1b49"
+  }
+}

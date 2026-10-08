@@ -1,0 +1,156 @@
+diff --git a/src/main/model-library/model-artifact-format-validation.internal.ts b/src/main/model-library/model-artifact-format-validation.internal.ts
+index a7991d5..4cc3029 100644
+--- a/src/main/model-library/model-artifact-format-validation.internal.ts
++++ b/src/main/model-library/model-artifact-format-validation.internal.ts
+@@ -9,6 +9,8 @@ export interface ModelArtifactPackageValidationFile {
+   readonly readableFile: string
+   /** Large tokenizer vocabularies have more nodes than small configuration files. */
+   readonly jsonNodeLimit?: number
++  readonly sentencePieceEntryLimit?: number
++  readonly ggufExpectedArchitecture?: 'qwen3vl' | 'clip'
+ }
+ 
+ export interface ModelArtifactPackageValidationInput {
+@@ -39,6 +41,8 @@ const MAX_GGUF_METADATA = 1_024
+ const MAX_GGUF_TENSORS = 4_096
+ const MAX_GGUF_DIMENSIONS = 8
+ const MAX_GGUF_ALIGNMENT = 4_096
++const MAX_GGUF_ARRAY_ENTRIES = 300_000 // Qwen tokenizer vocab is larger than 100k.
++const MAX_GGUF_HEADER_BYTES = 32 * 1024 * 1024
+ 
+ const SAFE_TENSOR_DTYPES = new Map<string, number>([
+   ['BOOL', 1], ['U8', 1], ['I8', 1], ['F8_E4M3', 1], ['F8_E5M2', 1],
+@@ -56,11 +60,26 @@ const GGML_TYPES = new Map<number, { readonly blockElements: number; readonly bl
+   [7, { blockElements: 32, blockBytes: 24 }],
+   [8, { blockElements: 32, blockBytes: 34 }],
+   [9, { blockElements: 32, blockBytes: 40 }],
++  [10, { blockElements: 256, blockBytes: 84 }],
++  [11, { blockElements: 256, blockBytes: 110 }],
++  [12, { blockElements: 256, blockBytes: 144 }],
++  [13, { blockElements: 256, blockBytes: 176 }],
++  [14, { blockElements: 256, blockBytes: 210 }],
++  [15, { blockElements: 256, blockBytes: 292 }],
++  [16, { blockElements: 256, blockBytes: 66 }],
++  [17, { blockElements: 256, blockBytes: 74 }],
++  [18, { blockElements: 256, blockBytes: 98 }],
++  [19, { blockElements: 256, blockBytes: 50 }],
++  [20, { blockElements: 32, blockBytes: 18 }],
++  [21, { blockElements: 256, blockBytes: 110 }],
++  [22, { blockElements: 256, blockBytes: 82 }],
++  [23, { blockElements: 256, blockBytes: 136 }],
+   [24, { blockElements: 1, blockBytes: 1 }],
+   [25, { blockElements: 1, blockBytes: 2 }],
+   [26, { blockElements: 1, blockBytes: 4 }],
+   [27, { blockElements: 1, blockBytes: 8 }],
+   [28, { blockElements: 1, blockBytes: 8 }],
++  [29, { blockElements: 256, blockBytes: 56 }],
+   [30, { blockElements: 1, blockBytes: 2 }]
+ ])
+ 
+@@ -121,11 +140,11 @@ export async function validateModelArtifactPackage(
+ async function validateSingleFile(file: ModelArtifactPackageValidationFile): Promise<boolean> {
+   switch (file.format) {
+     case 'safetensors': return validateSafeTensors(file.readableFile, file.sizeBytes)
+-    case 'gguf': return validateGguf(file.readableFile, file.sizeBytes)
++    case 'gguf': return validateGguf(file.readableFile, file.sizeBytes, file.ggufExpectedArchitecture)
+     case 'json': return validateJson(await readBoundedFile(file.readableFile, file.sizeBytes), file.jsonNodeLimit)
+     case 'text': return validateText(await readBoundedFile(file.readableFile, file.sizeBytes))
+     case 'sentencepiece': return validateSentencePiece(
+-      await readBoundedFile(file.readableFile, file.sizeBytes)
++      await readBoundedFile(file.readableFile, file.sizeBytes),file.sentencePieceEntryLimit
+     )
+     default: return false
+   }
+@@ -224,9 +243,9 @@ async function validateSafeTensors(stagedFile: string, sizeBytes: number): Promi
+   }
+ }
+ 
+-async function validateGguf(stagedFile: string, sizeBytes: number): Promise<boolean> {
++async function validateGguf(stagedFile: string, sizeBytes: number, expectedArchitecture?: string): Promise<boolean> {
+   if (sizeBytes < 32) return false
+-  const structuralLength = Math.min(sizeBytes, MAX_STRUCTURED_FILE_BYTES)
++  const structuralLength = Math.min(sizeBytes, MAX_GGUF_HEADER_BYTES)
+   const handle = await openExactRegularFileNoFollow(stagedFile, sizeBytes)
+   try {
+     const structuralBytes = Buffer.alloc(structuralLength)
+@@ -240,17 +259,20 @@ async function validateGguf(stagedFile: string, sizeBytes: number): Promise<bool
+ 
+     let alignment = 32
+     const metadataKeys = new Set<string>()
++    let architecture: unknown
+     for (let index = 0; index < metadataCount; index += 1) {
+       const key = reader.ggufString(MAX_NAME_BYTES)
+       if (!isSafeContainerName(key) || metadataKeys.has(key)) return false
+       metadataKeys.add(key)
+       const valueType = reader.u32()
+       const value = readGgufValue(reader, valueType, 0)
++      if (key === 'general.architecture') architecture = value
+       if (key === 'general.alignment') {
+         if (valueType !== 4 || typeof value !== 'number') return false
+         alignment = value
+       }
+     }
++    if (expectedArchitecture && architecture !== expectedArchitecture) return false
+     if (!isPowerOfTwo(alignment) || alignment > MAX_GGUF_ALIGNMENT) return false
+ 
+     const tensors: Array<{ offset: number; byteLength: number }> = []
+@@ -311,7 +333,7 @@ function readGgufValue(reader: BinaryReader, type: number, depth: number): unkno
+     case 9: {
+       const elementType = reader.u32()
+       if (elementType === 9) throw new Error('Nested GGUF arrays are not admitted.')
+-      const count = toBoundedNumber(reader.u64(), 0, MAX_CONTAINER_ENTRIES)
++      const count = toBoundedNumber(reader.u64(), 0, MAX_GGUF_ARRAY_ENTRIES)
+       if (count === null) throw new Error('GGUF array exceeds bound.')
+       const values: unknown[] = []
+       for (let index = 0; index < count; index += 1) {
+@@ -571,7 +593,8 @@ function validateText(bytes: Buffer): boolean {
+   return true
+ }
+ 
+-function validateSentencePiece(bytes: Buffer): boolean {
++function validateSentencePiece(bytes: Buffer,entryLimit=MAX_CONTAINER_ENTRIES): boolean {
++  if(!Number.isSafeInteger(entryLimit)||entryLimit<1||entryLimit>300000)return false
+   const model = new ProtobufReader(bytes)
+   let pieces = 0
+   while (!model.done) {
+@@ -579,7 +602,7 @@ function validateSentencePiece(bytes: Buffer): boolean {
+     if (tag.field === 1 && tag.wire === 2) {
+       if (!validateSentencePieceEntry(model.lengthDelimited(MAX_NAME_BYTES))) return false
+       pieces += 1
+-      if (pieces > MAX_CONTAINER_ENTRIES) return false
++      if (pieces > entryLimit) return false
+     } else if (tag.field >= 2 && tag.field <= 5 && tag.wire === 2) {
+       // Trainer/normalizer/self-test specs remain opaque declarative protobuf
+       // envelopes here, but their framing and aggregate file size are bounded.
+@@ -599,7 +622,7 @@ function validateSentencePieceEntry(bytes: Buffer): boolean {
+   while (!piece.done) {
+     const tag = piece.tag()
+     if (tag.field === 1 && tag.wire === 2 && !valueSeen) {
+-      const value = decodeUtf8(piece.lengthDelimited(MAX_NAME_BYTES))
++      const value = decodeUtf8(piece.lengthDelimited(MAX_NAME_BYTES),true)
+       if (value === null || value.length === 0 || value.includes('\0')) return false
+       valueSeen = true
+     } else if (tag.field === 2 && tag.wire === 5 && !scoreSeen) {
+@@ -613,7 +636,9 @@ function validateSentencePieceEntry(bytes: Buffer): boolean {
+       return false
+     }
+   }
+-  return valueSeen && scoreSeen && typeSeen
++  // SentencePiece ModelProto is proto2: omitted score=0 and type=NORMAL are
++  // declarative defaults, not missing structure. Duplicates/unknowns still fail.
++  return valueSeen
+ }
+ 
+ class BinaryReader {
+@@ -825,9 +850,9 @@ function parseStrictJson(bytes: Buffer, nodeLimit = MAX_CONTAINER_ENTRIES): unkn
+   return new StrictJsonParser(decoded, nodeLimit).parse()
+ }
+ 
+-function decodeUtf8(bytes: Uint8Array): string | null {
++function decodeUtf8(bytes: Uint8Array,preserveBOM=false): string | null {
+   try {
+-    return new TextDecoder('utf-8', { fatal: true }).decode(bytes)
++    return new TextDecoder('utf-8', { fatal: true,ignoreBOM:preserveBOM }).decode(bytes)
+   } catch {
+     return null
+   }

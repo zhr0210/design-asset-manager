@@ -85,6 +85,7 @@ export interface AppSettings {
   qwen3vlTemperature?: number
   qwen3vlTopP?: number
   memoryPolicy?: AiMemoryPolicy
+  aiTaskModels?:Partial<Record<'analyze'|'reverse'|'tags',{backendId:string;model:string}>>
   aiBackends?: AiBackendConfig[]
   aiRuntimeSettings?: AiRuntimeSettings
   promptReverseSettings?: AiPromptReverseSettings

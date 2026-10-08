@@ -1,0 +1,15 @@
+{
+  "stage": "P13",
+  "status": "proposed",
+  "states": [
+    "busy",
+    "balanced",
+    "idle",
+    "pressure",
+    "thermal-or-battery",
+    "unknown"
+  ],
+  "productionThresholds": null,
+  "switchAtJobBoundary": true,
+  "silentCloudFallback": false
+}

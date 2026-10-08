@@ -1,0 +1,24 @@
+diff --git a/src/shared/contracts/active-library.contract.ts b/src/shared/contracts/active-library.contract.ts
+index 3a093de..7f4855f 100644
+--- a/src/shared/contracts/active-library.contract.ts
++++ b/src/shared/contracts/active-library.contract.ts
+@@ -280,6 +280,19 @@ export interface ActiveLibraryHost {
+   inspectCapture(batchIdentity: string): Promise<ActiveLibraryCaptureBatchSnapshot>
+   listAssets(): Promise<readonly ActiveLibraryAssetProjection[]>
+   searchAssets(queries: readonly string[]): Promise<readonly ActiveLibraryAssetProjection[]>
++  searchAssetPage(input: import('./asset-search.contract').AssetSearchRequest): Promise<import('./asset-search.contract').AssetSearchPage>
++  readRetrievalCoverage():Promise<import('./retrieval-workspace.contract').RetrievalCoverage>
++  startRetrievalGeneration(input:import('./retrieval-workspace.contract').RetrievalGenerationRequest):Promise<import('./retrieval-workspace.contract').RetrievalCoverage>
++  pauseRetrievalGeneration(scope:import('./retrieval-workspace.contract').RetrievalScope,id:string):Promise<import('./retrieval-workspace.contract').RetrievalCoverage>
++  resumeRetrievalGeneration(scope:import('./retrieval-workspace.contract').RetrievalScope,id:string):Promise<import('./retrieval-workspace.contract').RetrievalCoverage>
++  searchSemanticPage(input:import('./retrieval-workspace.contract').AssetSemanticSearchRequest,owner?:string,external?:Uint8Array):Promise<import('./retrieval-workspace.contract').AssetSemanticSearchPage>
++  cancelSemanticQuery(scope:import('./retrieval-workspace.contract').RetrievalScope,queryId:string,owner?:string):Promise<void>
++  rebuildRetrievalIndex():Promise<import('./retrieval-workspace.contract').RetrievalCoverage>
++  switchRetrievalSpace(scope:import('./retrieval-workspace.contract').RetrievalScope,id:string):Promise<import('./retrieval-workspace.contract').RetrievalCoverage>
++  suspendRetrievalWork():void
++  cancelSemanticOwner(owner:string):void
++  readSearchIndex(): Promise<import('./asset-search.contract').AssetSearchIndexStatus>
++  rebuildSearchIndex(): Promise<import('./asset-search.contract').AssetSearchIndexStatus>
+   listTags(): Promise<readonly ActiveLibraryTagProjection[]>
+   searchTags(query: string): Promise<readonly ActiveLibraryTagProjection[]>
+   getTag(tagId: string): Promise<ActiveLibraryTagProjection | null>

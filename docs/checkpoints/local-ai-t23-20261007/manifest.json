@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-07T10:56:53.314Z",
+  "candidate": "dam-4deb9e68a5e80a0a",
+  "kind": "T23-only normalized delta; working product source remains in existing WIP",
+  "files": [
+    {
+      "path": "src/shared/client/workspace-client.ts",
+      "baselineKind": "T23 before snapshot",
+      "baselineSha256": "3790c512f78bb2ba832aa3609d5334638aa878d7a26c71701091a90a27457549",
+      "candidateSha256": "fb401321886891004dbf725162da668e052683da966ba9a84926e674d8e9ac85"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+      "baselineKind": "reconstructed a97d checkpoint, exact SHA verified",
+      "baselineSha256": "083fc194c5eb7b8fac5ad55df340947309b7cf82b6307bd624ed77389f33e366",
+      "candidateSha256": "4aaadb38623dae87e5baf4438ea2310b0940f04fce7c0cb9248caf89ae660a7d"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/WorkSetModal.tsx",
+      "baselineKind": "T23 before snapshot",
+      "baselineSha256": "67a477a682ba1e2c6b697c70be6551f604de3c1d9aebc51cd953bdcf096e9dc6",
+      "candidateSha256": "d356dcef564aaddc04d5e9d19f90d11f0e350c9ee8ab6bf52aa6cd22b775fe8c"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/WorkSetReferenceView.tsx",
+      "baselineKind": "T23 before snapshot",
+      "baselineSha256": "8053f982563d720de04c8757982203b9d774efe58c15eca15965c94a0de51111",
+      "candidateSha256": "f5b7d895ea3159f064dd7df3d3bf5d5a49c41fa93efa070bf6a20fb5d3e53fed"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/library-canvas.css",
+      "baselineKind": "T23 before snapshot",
+      "baselineSha256": "95a19f04e73905af278e861729b1d44020847879b9d8e7b9a8dc52e1780a2186",
+      "candidateSha256": "9625fbbff01169ae7240f96f44d8118394f7f833bad35efcbee4426602572fa2"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/useWorkSetAssets.ts",
+      "baselineKind": "new T23 file",
+      "baselineSha256": null,
+      "candidateSha256": "bd1f82f473a07b5bd679594ab1798b2c2f7e17225d94e6b2434944e707206b07"
+    },
+    {
+      "path": "src/renderer/components/library/canvas/WorkSetAssetChoices.tsx",
+      "baselineKind": "new T23 file",
+      "baselineSha256": null,
+      "candidateSha256": "9763684ca4bc45a177d5cc58bb33bbbb4b9fb6680f9b60d0306215801dcee478"
+    },
+    {
+      "path": "scripts/retrieval-cancellation-client.test.ts",
+      "baselineKind": "new T23 file",
+      "baselineSha256": null,
+      "candidateSha256": "d5cc27c07a071ca389db40ee9fae23bca6271e4f3aabc51d48d53712183c59a1"
+    },
+    {
+      "path": "scripts/fixtures/t23-retrieval-query-repro.test.ts",
+      "baselineKind": "new T23 file",
+      "baselineSha256": null,
+      "candidateSha256": "56de58ac173a6adaf4a48a1c04b9fd268de12810d4cfd2902090d9820d9ab15d"
+    },
+    {
+      "path": "scripts/fixtures/t23-library-readback.test.ts",
+      "baselineKind": "new T23 file",
+      "baselineSha256": null,
+      "candidateSha256": "2a74d82a5bb96d15e3368993a4c70a3a6c01c9ec06ceaac448766c373172fd98"
+    },
+    {
+      "path": "scripts/fixtures/t23-analysis-readback.test.ts",
+      "baselineKind": "new T23 file",
+      "baselineSha256": null,
+      "candidateSha256": "d6b74e42c4a7394433882295fcb8092b84f877bee8ce0e8ebf7b542cdf458ae7"
+    },
+    {
+      "path": "scripts/fixtures/t23-baseline-diff.test.ts",
+      "baselineKind": "new T23 file",
+      "baselineSha256": null,
+      "candidateSha256": "91cd939835f211c84f0fe783f15fc1c387a6c4f3eae9ed16f98e475a62c23b31"
+    }
+  ],
+  "patchSha256": "a18c306287627b33261060b39bdd6cc4cf13982808c67b2bd321b41aa5dde6d3",
+  "indexSha256": "185dbb1f2355015edd37b43ccb7dd1a1035821688b07315503a2bd5af77f1b49",
+  "gitIndexAndStagedEntries": "unchanged",
+  "parent": "T23 incomplete; original Chrome tab pressure remains unverified; Native effects outside current Browser verification"
+}

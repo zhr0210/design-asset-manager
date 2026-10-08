@@ -85,17 +85,13 @@ export class ImageNormalizeService {
     // Destination of original image under library/original/
     const finalOriginalAbsPath = path.join(originalDir, basename)
 
-    // 1. Relocate/Copy original to original/ subfolder if it's not already there
+    // 1. Copy the original into managed storage while preserving the user-owned source.
     try {
       if (resolvedOriginal !== finalOriginalAbsPath) {
         fs.copyFileSync(resolvedOriginal, finalOriginalAbsPath)
-        // If the original file was in the root library directory, remove it to keep layout clean
-        if (path.dirname(resolvedOriginal) === libraryDir) {
-          fs.unlinkSync(resolvedOriginal)
-        }
       }
-    } catch (moveErr) {
-      console.warn(`[ImageNormalizeService] Failed to copy/move original file to original/ folder:`, moveErr)
+    } catch (copyErr) {
+      console.warn(`[ImageNormalizeService] Failed to copy original file to original/ folder:`, copyErr)
     }
 
     const portableOriginal = this.toPortablePath(finalOriginalAbsPath)

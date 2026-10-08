@@ -18,14 +18,20 @@ def ensure_local_image(image_path: str) -> None:
     if os.path.exists(expanded_path):
         return
 
-    # Expand DB path
-    db_path = os.path.expanduser("~/DesignAssetManager/design_asset_manager.db")
-    if not os.path.exists(db_path):
-        print(f"[ensure_local_image] Database not found at: {db_path}")
+    basename = image_path.replace("\\", "/").rsplit("/", 1)[-1]
+    if os.environ.get("DESIGN_ASSET_MANAGER_DISABLE_USER_DATA_ACCESS") == "1":
+        print(f"[ensure_local_image] Test fixture is unavailable: {basename}")
         return
 
-    basename = os.path.basename(image_path)
-    print(f"[ensure_local_image] Image not found at: {expanded_path}. Searching SQLite for remote URL...")
+    default_db_path = "~/DesignAssetManager/design_asset_manager.db"
+    db_path = os.path.expanduser(
+        os.environ.get("DESIGN_ASSET_MANAGER_RUNTIME_DB", default_db_path)
+    )
+    if not os.path.exists(db_path):
+        print("[ensure_local_image] Runtime database is unavailable.")
+        return
+
+    print(f"[ensure_local_image] Searching runtime metadata for missing image: {basename}")
 
     url_to_download = None
     try:
@@ -61,7 +67,7 @@ def ensure_local_image(image_path: str) -> None:
 
     # Download from remote URL
     try:
-        print(f"[ensure_local_image] Downloading image from {url_to_download} to {expanded_path}...")
+        print(f"[ensure_local_image] Downloading missing image: {basename}")
         os.makedirs(os.path.dirname(expanded_path), exist_ok=True)
         
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -70,7 +76,7 @@ def ensure_local_image(image_path: str) -> None:
             with open(expanded_path, "wb") as out_file:
                 out_file.write(response.read())
                 
-        print(f"[ensure_local_image] Successfully downloaded! Size: {os.path.getsize(expanded_path)} bytes.")
+        print(f"[ensure_local_image] Image restored. Size: {os.path.getsize(expanded_path)} bytes.")
     except Exception as dl_err:
         print(f"[ensure_local_image] Failed to download remote image: {dl_err}")
 
@@ -155,5 +161,3 @@ def prepare_image_for_wd_tagger(image_path: str, target_size: int = 448) -> np.n
             return image_bgr
     except Exception as e:
         raise ValueError(f"Failed to preprocess image for WD Tagger: {e}")
-
-

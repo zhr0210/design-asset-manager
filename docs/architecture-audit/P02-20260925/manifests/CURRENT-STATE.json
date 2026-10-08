@@ -1,0 +1,104 @@
+{
+  "packageId": "DAM-ARCH-20260924",
+  "packageVersion": "1.0.0",
+  "updatedOn": "2026-09-25",
+  "architectureDocumentStatus": "authored_target_proposal_pending_source_review",
+  "sourceMaterialStatus": {
+    "localWorktreeAvailableForScope": true,
+    "actualSchemasReadFromSource": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "actualUserDatabaseOpened": false,
+    "temporarySqliteOpenedOrCreated": false,
+    "publicPrimaryReferencesReviewedThisRun": 3,
+    "reviewScope": "P02 relevant source and SQLite/better-sqlite3 documentation only"
+  },
+  "originalSnapshot": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df",
+    "dirtyWorktreeReported": true,
+    "headAloneReproducible": false
+  },
+  "repositoryChangesPerformed": false,
+  "damBusinessTestsRun": false,
+  "newModelBenchmarksRun": false,
+  "realLibraryAccessed": false,
+  "defaultMode": "SPEC",
+  "nextStage": null,
+  "activeStage": null,
+  "reviewedDesignStages": [],
+  "acceptedImplementationStages": [],
+  "stageRegistry": "stages.json",
+  "requirementRegistry": "REQUIREMENT-TRACE.json",
+  "decisionRegistry": "DECISION-TRACE.json",
+  "latestStageReport": "reports/P02-REPORT.md",
+  "externalActionsAuthorization": {
+    "realLibraryMutation": false,
+    "privateAssetUpload": false,
+    "paidCloudRequests": false,
+    "largeModelDownload": false,
+    "untrustedScriptExecution": false,
+    "userExternalServiceTermination": false
+  },
+  "notes": [
+    "用户明确继续P02 SPEC；P00/P01评审状态保留，不伪造接受。",
+    "版本登记与临时库配方均是文档，无SQLite文件和DDL执行。",
+    "F02/F03为源码分支发现，运行影响仍待隔离验证。",
+    "不分配v9、不统一升级所有库、不转换WAL。",
+    "完成P02后停止，不自动进入P03。"
+  ],
+  "nextStageCandidate": "P03",
+  "nextAction": "review_P02_spec",
+  "nextStageAuthorization": "not_granted",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "auditDocumentsCreated": true,
+  "businessSourceChangesPerformed": false,
+  "stoppedAfterStage": "P02",
+  "worktree": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df3bbb605478da6d0af18724d64021e723c",
+    "headAloneReproducible": false,
+    "protectedSnapshot": "../evidence/WORKTREE-BEFORE.json"
+  },
+  "predecessor": {
+    "stage": "P01",
+    "report": "../../P01-20260924/reports/P01-REPORT.md",
+    "design_review_status": "ready_for_review",
+    "implementation_status": "not_started",
+    "continuationAuthorization": {
+      "userText": "继续下一步",
+      "scope": "P02 SPEC only",
+      "doesNotImplyReviewedOrAccepted": true
+    },
+    "sourceDeltaWithinPriorProtectedSet": []
+  },
+  "externalActionsThisStage": {
+    "publicDocumentationRead": true,
+    "appStarted": false,
+    "modelStarted": false,
+    "dependencyInstalled": false,
+    "userDatabaseRead": false,
+    "userDatabaseMigrated": false,
+    "originalFilesTouched": false,
+    "backupCreated": false
+  },
+  "specStartedOn": "2026-09-25",
+  "specCompletedOn": "2026-09-25",
+  "stageRecordBases": {
+    "pathResolution": "relative to this CURRENT-STATE.json directory",
+    "P00": "../../P00-20260924",
+    "P01": "../../P01-20260924",
+    "P02": ".."
+  },
+  "migrationExecution": "NOT_RUN",
+  "backupRestoreExecution": "NOT_RUN",
+  "newVersionAllocated": false
+}

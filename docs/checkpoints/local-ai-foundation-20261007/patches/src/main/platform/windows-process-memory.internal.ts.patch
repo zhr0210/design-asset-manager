@@ -1,0 +1,26 @@
+diff --git a/src/main/platform/windows-process-memory.internal.ts b/src/main/platform/windows-process-memory.internal.ts
+index db6d624..38d890a 100644
+--- a/src/main/platform/windows-process-memory.internal.ts
++++ b/src/main/platform/windows-process-memory.internal.ts
+@@ -25,7 +25,7 @@ export function validateOwnedWindowsPeakRecord(data:any,launch:OwnedWindowsLaunc
+  return{peak:data.peak,helperPeak:data.helperPeak}
+ }
+ /** The caller keeps its own child alive until this query has settled. No unrelated process inventory. */
+-export async function readOwnedWindowsProcessPeak(launch:OwnedWindowsLaunch):Promise<{peak:number;helperPeak:number}> {
++export async function readOwnedWindowsProcessMemory(launch:OwnedWindowsLaunch):Promise<{rssBytes:number;peakRamBytes:number;helperPeak:number}> {
+  if(process.platform!=='win32'||!Number.isSafeInteger(launch.pid)||launch.pid<1||
+   !Number.isSafeInteger(launch.startedAfter)||!Number.isSafeInteger(launch.startedBefore)||launch.startedBefore<launch.startedAfter)throw Error('VISUAL_CODEC_ESTIMATE_EXCEEDED')
+  try{
+@@ -34,6 +34,11 @@ export async function readOwnedWindowsProcessPeak(launch:OwnedWindowsLaunch):Pro
+    env:{SystemRoot:systemRoot,WINDIR:systemRoot,DAM_OWNED_CODEC_PID:String(launch.pid),DAM_CODEC_LAUNCH_START:String(launch.startedAfter),DAM_CODEC_LAUNCH_END:String(launch.startedBefore)},windowsHide:true,timeout:10000,maxBuffer:2048
+   })
+   const data=JSON.parse(stdout.trim())
+-  return validateOwnedWindowsPeakRecord(data,launch)
++  const validated=validateOwnedWindowsPeakRecord(data,launch)
++  return{rssBytes:data.current,peakRamBytes:validated.peak,helperPeak:validated.helperPeak}
+  }catch{throw Error('VISUAL_CODEC_ESTIMATE_EXCEEDED')}
+ }
++export async function readOwnedWindowsProcessPeak(launch:OwnedWindowsLaunch):Promise<{peak:number;helperPeak:number}> {
++ const value=await readOwnedWindowsProcessMemory(launch)
++ return{peak:value.peakRamBytes,helperPeak:value.helperPeak}
++}

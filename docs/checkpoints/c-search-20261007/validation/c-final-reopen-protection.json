@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-07T14:21:53.541Z",
+  "scope": "non-UI automated regressions; no visible user acceptance",
+  "results": [
+    {
+      "entry": "scripts/fixtures/c-search-derived-readback.test.ts",
+      "exitCode": 0,
+      "durationMs": 432,
+      "log": "c-final-reopen-protection-c-search-derived-readback.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/fixtures/c-search-readback.test.ts",
+      "exitCode": 0,
+      "durationMs": 710,
+      "log": "c-final-reopen-protection-c-search-readback.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/fixtures/c-search-schema-readback.test.ts",
+      "exitCode": 0,
+      "durationMs": 384,
+      "log": "c-final-reopen-protection-c-search-schema-readback.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    }
+  ]
+}

@@ -1,0 +1,642 @@
+diff --git a/src/main/visual-ai/visual-admission.ts b/src/main/visual-ai/visual-admission.ts
+index 31f0a53..7bc0816 100644
+--- a/src/main/visual-ai/visual-admission.ts
++++ b/src/main/visual-ai/visual-admission.ts
+@@ -1,8 +1,10 @@
+ import { PiProcessUnconfirmedError } from "../ai-gateway/pi-runtime-host";
+ import { MAX_VISION_RESPONSE_BYTES } from "./openai-vision.provider";
+ import { randomUUID, createHash } from "node:crypto";
+-import os from "node:os";
+ import { systemVisualAiClock, type VisualAiClock } from "./visual-ai-clock";
++import { createLocalAiResourceGovernor, type AiResourcePolicy, type AiWorkPriority } from "../local-ai-resources/resource-governor";
++import type { AiDeviceResourceSample, ModelResourceCost } from '../../shared/contracts/local-ai-resources.contract'
++export type { AiResourcePolicy, AiWorkPriority, ResidencyPermit } from "../local-ai-resources/resource-governor";
+ import {
+   prepareVisualJpeg,
+   type VisualCodecResult,
+@@ -34,26 +36,7 @@ const VISUAL_PREPARATION_BYTES =
+   VISUAL_ADMISSION_PROFILE.codecBytes +
+   3 * VISUAL_ADMISSION_PROFILE.maxJpegBytes +
+   VISUAL_ADMISSION_PROFILE.pipeBytes;
+-type Kind = "prepare" | "combined" | "tags-only" | "ocr" | "backup";
+ type Permit = { release(): void };
+-export type AiWorkPriority = "foreground" | "background";
+-export interface AiResourcePolicy {
+-  mode: "quiet" | "normal" | "accelerated";
+-  reserveFraction: number;
+-}
+-export interface ResidencyPermit extends Permit {
+-  observe(bytes: number, peakBytes?: number): void;
+-}
+-type Waiter = {
+-  kind: Kind;
+-  bytes: number;
+-  compute: number;
+-  priority: AiWorkPriority;
+-  signal: AbortSignal;
+-  resolve: (p: Permit) => void;
+-  reject: (e: Error) => void;
+-  abort: () => void;
+-};
+ export interface VisualSession {
+   sessionToken: string;
+   leaseIdentity: string;
+@@ -62,6 +45,9 @@ export interface PreparedVisual {
+   assetId: string;
+   jpeg: Uint8Array;
+ }
++interface PreparationBinding { modelBinding: string }
++interface PreparationView { assetRevision: string; previewGeneration: string }
++
+ export function createVisualAdmission(
+   deps: {
+     clock?: VisualAiClock;
+@@ -69,237 +55,36 @@ export function createVisualAdmission(
+     memory?: () => { free: number; total: number };
+     activity?: () => "active" | "idle" | "unknown";
+     policy?: AiResourcePolicy;
++    devices?: () => AiDeviceResourceSample[];
+   } = {},
+ ) {
+   const p = VISUAL_ADMISSION_PROFILE,
+     clock = deps.clock ?? systemVisualAiClock,
+     codec = deps.codec ?? prepareVisualJpeg;
+-  let material = 0,
+-    computation = 0,
+-    frozen = 0,
+-    preparing = 0,
+-    requests = 0,
+-    tags = 0,
+-    accepting = true,
+-    estimateFailed = false;
+-  const barriers = new Set<symbol>();
+-  const heldBarriers = new Map<symbol, ReturnType<typeof makeHold>>();
+-  const canAccept = () => accepting && !estimateFailed && barriers.size === 0;
+-  const leases = new Set<ReturnType<typeof makeLease>>(),
+-    queue: Waiter[] = [];
+-  let policy: AiResourcePolicy = deps.policy ?? {
+-    mode: "normal",
+-    reserveFraction: 0.1,
+-  };
+-  const residents = new Map<
+-    string,
+-    {
+-      bytes: number;
+-      observed: number;
+-      peakBytes: number;
+-      sampledAt: number | null;
+-      unconfirmed: boolean;
+-    }
+-  >();
+-  const memory =
+-    deps.memory ?? (() => ({ free: os.freemem(), total: os.totalmem() }));
+-  let foregroundBurst = 0,
+-    pressure = false,
+-    recoverySince: number | null = null;
+-  let interactionBusy = false,
+-    idleSince: number | null = null,
+-    activity: "active" | "idle" | "unknown" = "unknown";
+-  const sampleActivity = () => {
+-    try {
+-      activity = deps.activity?.() ?? "unknown";
+-    } catch {
+-      activity = "unknown";
+-    }
+-    if (activity === "active") {
+-      interactionBusy = true;
+-      idleSince = null;
+-    } else if (activity === "idle" && interactionBusy) {
+-      idleSince ??= clock.now();
+-      if (clock.now() - idleSince >= 10000) {
+-        interactionBusy = false;
+-        idleSince = null;
+-      }
+-    }
+-    return {
+-      activity,
+-      interactionBusy,
+-      computeThreads:
+-        policy.mode === "quiet"
+-          ? 2
+-          : policy.mode === "normal"
+-            ? interactionBusy
+-              ? 2
+-              : 4
+-            : interactionBusy
+-              ? 4
+-              : 8,
+-    };
+-  };
+-  const sample = () => {
+-    sampleActivity();
+-    const m = memory(),
+-      valid =
+-        Number.isSafeInteger(m.free) &&
+-        Number.isSafeInteger(m.total) &&
+-        m.free >= 0 &&
+-        m.total > 0 &&
+-        m.free <= m.total;
+-    const reserve = valid
+-      ? Math.max(512 * 1048576, Math.ceil(m.total * policy.reserveFraction))
+-      : Infinity;
+-    // Converge immediately, then require ten seconds of headroom before restoring concurrency.
+-    if (!valid || m.free < reserve + 512 * 1048576) {
+-      pressure = true;
+-      recoverySince = null;
+-    } else if (pressure) {
+-      if (m.free < reserve + 2 * 1024 ** 3) recoverySince = null;
+-      else {
+-        recoverySince ??= clock.now();
+-        if (clock.now() - recoverySince >= 10000) {
+-          pressure = false;
+-          recoverySince = null;
+-        }
+-      }
+-    }
+-    return { ...m, valid, reserve };
+-  };
+-  const residentBytes = () =>
+-    [...residents.values()].reduce((sum, r) => sum + r.bytes, 0);
+-  const poolFits = (bytes: number, afterReleasingOwner?: string) => {
+-    const m = sample(),
+-      replacement = afterReleasingOwner ? residents.get(afterReleasingOwner) : undefined;
+-    // A selection forecast only: it never frees a permit. Actual acquisitions use
+-    // the ordinary pool after the owned process has confirmed its exit.
+-    if (afterReleasingOwner && (!replacement || replacement.unconfirmed ||
+-      replacement.sampledAt === null || clock.now() - replacement.sampledAt >= 5000)) return false;
+-    const held = residentBytes() + material + computation - (replacement?.bytes ?? 0);
+-    if (!m.valid) return false;
+-    const reserve = m.reserve;
+-    const unobserved =
+-      material +
+-      computation +
+-      [...residents.entries()].reduce(
+-        (sum, [owner, r]) =>
+-          sum +
+-          (owner === afterReleasingOwner ? 0 : Math.max(
+-            0,
+-            r.bytes -
+-              (r.sampledAt !== null && clock.now() - r.sampledAt < 5000
+-                ? r.observed
+-                : 0),
+-          )),
+-        0,
+-      );
+-    return (
+-      held + bytes <= m.total - reserve &&
+-      m.free + (replacement?.observed ?? 0) >= reserve + unobserved + bytes
+-    );
+-  };
+-  const fits = (kind: Kind, bytes: number, compute = 0) =>
+-    poolFits(bytes + compute) &&
+-    material + bytes <= p.maxLocalBytes &&
+-    (kind === "prepare"
+-      ? preparing < p.preparationSlots
+-      : requests <
+-          (pressure || interactionBusy || policy.mode === "quiet"
+-            ? 1
+-            : p.requestSlots) &&
+-        (kind !== "tags-only" || tags < p.tagsSlots));
+-  let cancelResourcePoll: (() => void) | undefined;
+-  const grant = (
+-    kind: Kind,
+-    bytes: number,
+-    compute = 0,
+-    priority: AiWorkPriority = "foreground",
+-  ): Permit => {
+-    material += bytes;
+-    computation += compute;
+-    if (kind === "prepare") preparing++;
+-    else {
+-      requests++;
+-      if (kind === "tags-only") tags++;
+-    }
+-    foregroundBurst =
+-      priority === "background" ? 0 : Math.min(3, foregroundBurst + 1);
+-    let released = false;
+-    return {
+-      release() {
+-        if (released) return;
+-        released = true;
+-        material -= bytes;
+-        computation -= compute;
+-        if (kind === "prepare") preparing--;
+-        else {
+-          requests--;
+-          if (kind === "tags-only") tags--;
+-        }
+-        pump();
+-      },
+-    };
+-  };
+-  const pump = () => {
+-    cancelResourcePoll?.();
+-    cancelResourcePoll = undefined;
+-    while (canAccept()) {
+-      const eligible = queue.filter((w) => fits(w.kind, w.bytes, w.compute)),
+-        preferred = foregroundBurst >= 3 ? "background" : "foreground";
+-      const w = eligible.find((w) => w.priority === preferred) ?? eligible[0];
+-      if (!w) break;
+-      queue.splice(queue.indexOf(w), 1);
+-      w.signal.removeEventListener("abort", w.abort);
+-      w.resolve(grant(w.kind, w.bytes, w.compute, w.priority));
+-    }
+-    if (queue.length) cancelResourcePoll = clock.scheduleTimeout(pump, 1000);
+-  };
+-  const acquire = (
+-    kind: Kind,
+-    bytes: number,
+-    signal: AbortSignal,
+-    compute = 0,
+-    priority: AiWorkPriority = "foreground",
+-  ): Promise<Permit> => {
+-    if (signal.aborted)
+-      return Promise.reject(Error("VISUAL_ADMISSION_CANCELLED"));
+-    if (!canAccept())
+-      return Promise.reject(Error("VISUAL_ADMISSION_SUSPENDED"));
+-    if (!queue.length && fits(kind, bytes, compute))
+-      return Promise.resolve(grant(kind, bytes, compute, priority));
+-    if (queue.length >= p.maxWaiters)
+-      return Promise.reject(Error("VISUAL_ADMISSION_BUSY"));
+-    return new Promise((resolve, reject) => {
+-      const w: Waiter = {
+-        kind,
+-        bytes,
+-        compute,
+-        priority,
+-        signal,
+-        resolve,
+-        reject,
+-        abort: () => {
+-          const i = queue.indexOf(w);
+-          if (i >= 0) queue.splice(i, 1);
+-          reject(Error("VISUAL_ADMISSION_CANCELLED"));
+-          pump();
+-        },
+-      };
+-      queue.push(w);
+-      signal.addEventListener("abort", w.abort, { once: true });
+-      pump();
+-    });
++
++  const governor = createLocalAiResourceGovernor({ capacity: p, clock, memory: deps.memory, activity: deps.activity, policy: deps.policy, devices: deps.devices });
++  const { canAccept, acquire } = governor;
++  let frozen = 0;
++  type Cached = { jpeg: Uint8Array; refs: number; retained: boolean; permit: Permit; cancel: () => void };
++  const preparedCache = new Map<string,Cached>();
++  let cacheHits=0,cacheMisses=0;
++  const evict = (key:string,entry:Cached) => {
++    if(preparedCache.get(key)===entry)preparedCache.delete(key);
++    entry.retained=false;entry.cancel();if(!entry.refs)entry.permit.release();
+   };
++  const clearPreparedCache = () => {for(const [key,entry] of [...preparedCache])evict(key,entry)};
++  const cacheBytes = () => [...preparedCache.values()].reduce((sum,entry)=>sum+entry.jpeg.byteLength,0);
++  const leases = new Set<ReturnType<typeof makeLease>>();
+   function makeLease(
+     owner: string,
+     session: VisualSession,
+     priority: AiWorkPriority,
++    binding?:PreparationBinding,
+   ) {
+     const controller = new AbortController(),
+       views = new Map<string, Uint8Array>(),
+-      id = randomUUID();
++      id = randomUUID(),
++      materialPermits: Permit[] = [];
+     let disposed = false,
+       consumed = false,
+       bytesHeld = 0,
+@@ -311,10 +96,9 @@ export function createVisualAdmission(
+       disposed = true;
+       views.clear();
+       frozen -= bytesHeld;
+-      material -= bytesHeld;
++      for (const permit of materialPermits.splice(0)) permit.release();
+       bytesHeld = 0;
+       leases.delete(api);
+-      pump();
+     };
+     const cancelTimer = clock.scheduleTimeout(() => {
+       if (!consumed) api.dispose();
+@@ -341,6 +125,7 @@ export function createVisualAdmission(
+       async prepare(
+         assetId: string,
+         read: () => Promise<Uint8Array>,
++        view?:PreparationView,
+       ): Promise<void> {
+         valid();
+         if (views.has(assetId)) throw Error("VISUAL_ASSET_DUPLICATE");
+@@ -361,7 +146,11 @@ export function createVisualAdmission(
+           source = await read();
+           if (source.length > p.sourceBytes)
+             throw Error("VISUAL_SOURCE_TOO_LARGE");
+-          result = await codec(source, controller.signal);
++          const key=binding&&view?createHash('sha256').update(JSON.stringify({recipe:'controlled-preview-jpeg-v2',
++            session,assetId,view,binding,source:createHash('sha256').update(source).digest('hex')})).digest('hex'):null;
++          let cached=key?preparedCache.get(key):undefined;
++          if(cached){cacheHits++;preparedCache.delete(key!);preparedCache.set(key!,cached);result={jpeg:cached.jpeg,pixels:0,additionalRss:0}}
++          else{if(key)cacheMisses++;result=await codec(source, controller.signal)}
+           source = undefined;
+           valid();
+           const length = result.jpeg.length;
+@@ -370,14 +159,23 @@ export function createVisualAdmission(
+             length < 1 ||
+             bytesHeld + length > p.maxReceiptBytes ||
+             frozen + length > p.maxFrozenBytes ||
+-            material + length > p.maxLocalBytes
++            governor.inspect().materialBytes + (cached ? 0 : length) > p.maxLocalBytes
+           )
+             throw Error("VISUAL_FROZEN_BUDGET");
+           // Transfer ownership out of the larger preparation reservation before freeing that permit.
+           views.set(assetId, result.jpeg);
+           bytesHeld += length;
+           frozen += length;
+-          material += length;
++          if(key&&!cached){
++            while(cacheBytes()+length>16*1024**2&&preparedCache.size){const [oldKey,entry]=preparedCache.entries().next().value!;evict(oldKey,entry)}
++            const entry:Cached={jpeg:result.jpeg,refs:0,retained:length<=16*1024**2,permit:governor.retainPreparedMaterial(length),cancel:()=>{}};
++            if(entry.retained){preparedCache.set(key,entry);entry.cancel=clock.scheduleTimeout(()=>evict(key,entry),120000)}
++            cached=entry;
++          }
++          if(cached){
++            cached.refs++;const entry=cached;let released=false;
++            materialPermits.push({release(){if(released)return;released=true;entry.refs--;if(!entry.refs&&!entry.retained)entry.permit.release()}});
++          }else materialPermits.push(governor.retainPreparedMaterial(length));
+           result = undefined;
+         } catch (error) {
+           // A platform/dependency qualification refusal is local to the codec. Its
+@@ -387,8 +185,7 @@ export function createVisualAdmission(
+             error instanceof Error &&
+             error.message === "VISUAL_CODEC_ESTIMATE_EXCEEDED"
+           ) {
+-            estimateFailed = true;
+-            rejectWaiters();
++            governor.invalidateEstimate();
+           }
+           throw error;
+         } finally {
+@@ -481,97 +278,22 @@ export function createVisualAdmission(
+     };
+     return api;
+   }
+-  const rejectWaiters = () => {
+-    cancelResourcePoll?.();
+-    cancelResourcePoll = undefined;
+-    for (const w of queue.splice(0)) {
+-      w.signal.removeEventListener("abort", w.abort);
+-      w.reject(Error("VISUAL_ADMISSION_SUSPENDED"));
+-    }
+-  };
+-  function makeHold() {
+-    const token = Symbol("visual-admission-barrier");
+-    barriers.add(token);
+-    rejectWaiters();
+-    let held = true;
+-    const release = () => {
+-      if (!held) return;
+-      held = false;
+-      barriers.delete(token);
+-      heldBarriers.delete(token);
+-      pump();
+-    };
+-    const hold = Object.assign(release, {
+-      inspect: () => ({ materialBytes: material }),
+-      reserveBackup(bytes: number, signal: AbortSignal): Permit {
+-        if (signal.aborted) throw Error("BACKUP_MEMORY_CANCELLED");
+-        if (
+-          !held ||
+-          !barriers.has(token) ||
+-          barriers.size !== 1 ||
+-          !accepting ||
+-          estimateFailed
+-        )
+-          throw Error("BACKUP_MEMORY_SUSPENDED");
+-        if (
+-          !Number.isSafeInteger(bytes) ||
+-          bytes < 1 ||
+-          bytes > p.maxLocalBytes
+-        )
+-          throw Error("BACKUP_MEMORY_BUDGET");
+-        if (requests !== 0 || preparing !== 0 || !fits("backup", bytes))
+-          throw Error("BACKUP_MEMORY_BUSY");
+-        return grant("backup", bytes);
+-      },
+-    });
+-    heldBarriers.set(token, hold);
+-    return hold;
+-  }
++
+   return {
+-    configureResources(next: AiResourcePolicy) {
+-      if (
+-        !next ||
+-        Object.keys(next).some(
+-          (k) => !["mode", "reserveFraction"].includes(k),
+-        ) ||
+-        !["quiet", "normal", "accelerated"].includes(next.mode) ||
+-        !Number.isFinite(next.reserveFraction) ||
+-        next.reserveFraction < 0.05 ||
+-        next.reserveFraction > 0.8
+-      )
+-        throw Error("AI_RESOURCE_POLICY_INVALID");
+-      policy = { ...next };
+-      pump();
++    configureResources: governor.configureResources,
++    reserveLocalWork(kind: 'index' | 'retrieval', bytes: number, signal: AbortSignal, priority: AiWorkPriority = 'foreground') {
++      if (!['index','retrieval'].includes(kind) || !Number.isSafeInteger(bytes) || bytes < 1 || bytes > p.maxLocalBytes)
++        return Promise.reject(Error('AI_LOCAL_WORK_BUDGET'))
++      return acquire('combined',bytes,signal,0,priority)
+     },
+-    resourceStatus() {
+-      const m = sample();
+-      return {
+-        policy: { ...policy },
+-        ...sampleActivity(),
+-        sample: {
+-          kind: m.valid ? ("known" as const) : ("unknown" as const),
+-          sampledAt: Date.now(),
+-          freeRamBytes: m.valid ? m.free : 0,
+-          totalRamBytes: m.valid ? m.total : 0,
+-        },
+-        pressure,
+-        concurrency:
+-          pressure || interactionBusy || policy.mode === "quiet"
+-            ? 1
+-            : p.requestSlots,
+-        fairness: {
+-          foregroundBurstLimit: 3,
+-          backgroundWaiting: queue.filter((w) => w.priority === "background")
+-            .length,
+-        },
+-        materialBytes: material,
+-        computeBytes: computation,
+-        residentBytes: residentBytes(),
+-        residents: [...residents].map(([owner, r]) => ({ owner, ...r })),
+-        waiting: queue.length,
+-        requests,
+-        reason: poolFits(0) ? null : "等待其他应用释放内存，或提高 DAM 预算。",
+-      };
++    resourceStatus() {const value=governor.resourceStatus();if(value.pressure)clearPreparedCache();return {...value,preparedCache:{bytes:cacheBytes(),entries:preparedCache.size,hits:cacheHits,misses:cacheMisses}}},
++    releaseIdleMaterials: clearPreparedCache,
++    /** Main-owned single-file query buffers. These are permission-bound input,
++     * not reusable cache entries and never leave Host through this interface. */
++    retainQueryMaterial(bytes:number) {
++      if(!canAccept()||!Number.isSafeInteger(bytes)||bytes<1||bytes>p.maxJpegBytes||governor.inspect().materialBytes+bytes>p.maxLocalBytes)
++        throw Error('RETRIEVAL_QUERY_MATERIAL_BUDGET')
++      return governor.retainPreparedMaterial(bytes)
+     },
+     /** Eligibility only. Executors still acquire atomic permits and recheck authority. */
+     canAdmitVision(
+@@ -589,14 +311,11 @@ export function createVisualAdmission(
+         VISUAL_PREPARATION_BYTES,
+         (p.serializationMultiplier + 1) * p.maxJpegBytes + p.responseBytes + workerBytes + computeBytes,
+       );
+-      return canAccept() && poolFits(residentBytes + workBytes, afterReleasingOwner) &&
+-        (!includeExecutionSlots || (
+-          preparing < p.preparationSlots && tags < p.tagsSlots &&
+-          requests < (pressure || interactionBusy || policy.mode === "quiet" ? 1 : p.requestSlots)
+-        ));
++      return canAccept() && governor.poolFits(residentBytes + workBytes, afterReleasingOwner) &&
++        (!includeExecutionSlots || governor.canExecuteVision());
+     },
+     canAdmitOcr(bytes: number) {
+-      return Number.isSafeInteger(bytes) && bytes > 0 && bytes <= p.maxLocalBytes && canAccept() && fits("ocr", bytes);
++      return Number.isSafeInteger(bytes) && bytes > 0 && bytes <= p.maxLocalBytes && canAccept() && governor.fits("ocr", bytes);
+     },
+     reserveManagedProbe(signal: AbortSignal) {
+       return acquire(
+@@ -606,55 +325,14 @@ export function createVisualAdmission(
+         1024 ** 3,
+       );
+     },
+-    reserveResident(
+-      owner: string,
+-      bytes: number,
+-      signal: AbortSignal,
+-    ): ResidencyPermit {
+-      signal.throwIfAborted();
+-      if (!canAccept()) throw Error("VISUAL_ADMISSION_SUSPENDED");
+-      if (
+-        !owner ||
+-        residents.has(owner) ||
+-        !Number.isSafeInteger(bytes) ||
+-        bytes < 1
+-      )
+-        throw Error("AI_RESIDENCY_INVALID");
+-      if (!poolFits(bytes)) throw Error("AI_MEMORY_WAIT");
+-      const r = {
+-        bytes,
+-        observed: 0,
+-        peakBytes: 0,
+-        sampledAt: null as number | null,
+-        unconfirmed: false,
+-      };
+-      residents.set(owner, r);
+-      let released = false;
+-      return {
+-        observe(value, peak = value) {
+-          if (
+-            released ||
+-            !Number.isSafeInteger(value) ||
+-            value < 0 ||
+-            !Number.isSafeInteger(peak) ||
+-            peak < value
+-          )
+-            throw Error("AI_RESOURCE_OBSERVATION_INVALID");
+-          r.observed = value;
+-          r.peakBytes = Math.max(r.peakBytes, peak);
+-          r.sampledAt = clock.now();
+-          if (peak > bytes) {
+-            r.unconfirmed = true;
+-            throw Error("AI_RESOURCE_ESTIMATE_EXCEEDED");
+-          }
+-        },
+-        release() {
+-          if (released) return;
+-          released = true;
+-          residents.delete(owner);
+-          pump();
+-        },
+-      };
++
++    reserveResident: governor.reserveResident,
++    canAdmitModel(cost: ModelResourceCost) {
++      return Number.isSafeInteger(cost.ramBytes) && cost.ramBytes > 0 && canAccept() &&
++        governor.poolFits(cost.ramBytes) && governor.gpuPoolFits(cost.gpuBytes)
++    },
++    reserveModel(owner: string, cost: ModelResourceCost, signal: AbortSignal) {
++      return governor.reserveResident(owner, cost.ramBytes, signal, cost.gpuBytes)
+     },
+     reservePiProbe(signal: AbortSignal) {
+       return acquire(
+@@ -676,56 +354,29 @@ export function createVisualAdmission(
+       owner: string,
+       session: VisualSession,
+       priority: AiWorkPriority = "foreground",
++      binding?:PreparationBinding,
+     ) {
+       if (!canAccept()) throw Error("VISUAL_ADMISSION_SUSPENDED");
+       if (leases.size >= p.maxReceipts) throw Error("VISUAL_ADMISSION_BUSY");
+-      const lease = makeLease(owner, session, priority);
++      if(binding&&!/^[a-f0-9]{64}$/.test(binding.modelBinding))throw Error('VISUAL_PREPARATION_BINDING_INVALID');
++      const lease = makeLease(owner, session, priority,binding);
+       leases.add(lease);
+       return lease;
+     },
+     cancelOwner(owner: string) {
+       for (const lease of leases) if (lease.owner === owner) lease.dispose();
+     },
+-    hold: makeHold,
+-    /** Main-private resource scope. The Host still validates its business lease.
+-     * Borrowing the sole controller barrier cannot release it; a second barrier,
+-     * suspension, unsafe estimate or UNKNOWN occupancy still refuses admission. */
+-    backupHold() {
+-      if (barriers.size === 0) return makeHold();
+-      if (barriers.size !== 1) throw Error("BACKUP_MEMORY_SUSPENDED");
+-      const existing = heldBarriers.values().next().value!;
+-      return Object.assign(() => {}, {
+-        inspect: existing.inspect,
+-        reserveBackup: existing.reserveBackup,
+-      });
+-    },
+-    suspend() {
+-      accepting = false;
+-      rejectWaiters();
+-    },
+-    resume() {
+-      if (!estimateFailed) {
+-        accepting = true;
+-        pump();
+-      }
+-    },
+-    invalidate() {
+-      accepting = false;
+-      rejectWaiters();
+-      for (const lease of leases) lease.dispose();
+-    },
+-    inspect() {
+-      return {
+-        materialBytes: material,
+-        frozenBytes: frozen,
+-        preparing,
+-        requests,
+-        tags,
+-        receipts: leases.size,
+-        waiting: queue.length,
+-        accepting: canAccept(),
+-      };
+-    },
++
++    hold(){clearPreparedCache();return governor.hold()},
++    backupHold(){clearPreparedCache();return governor.backupHold()},
++    suspend(){clearPreparedCache();governor.suspend()},
++    resume: governor.resume,
++    invalidate() { clearPreparedCache();governor.invalidate(); for (const lease of leases) lease.dispose(); },
++    inspect() { const state = governor.inspect(); return {
++      materialBytes: state.materialBytes, frozenBytes: frozen, preparing: state.preparing,
++      requests: state.requests, tags: state.tags, receipts: leases.size,
++      waiting: state.waiting, accepting: state.accepting,
++    }; },
+   };
+ }
+ export type VisualAdmission = ReturnType<typeof createVisualAdmission>;

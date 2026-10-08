@@ -1,0 +1,98 @@
+2026-10-04 当前 WC01 release / source-loader 边界：当前源码首次 rename EBUSY 已复现，owned guardian PROCESS/当前 Host PSS 诊断不取得生产 release 资格。固定完整 SQLite 镜像可与随后合法 source 事务分离，readonly/有限 hash 不隔离任意既有 writer；完整 source evidence 继续拒绝变化。两条 authority 策略均为 Target Architecture。正式 tag-intent/Host Adapter 未接线，Windows backup/status/DDL 前拒绝，productionQualified/restoreAllowed=false。实际验证、身份与缺口见 [CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)、[本批交接](../../../docs/handoff/WINDOWS-BACKUP-BOUNDARY-20261004.md)及 [威胁边界](../../../docs/platform/WINDOWS-BACKUP-THREAT-BOUNDARY.md)。
+
+历史 2026-10-04 WC01 metadata / FSCTL：私有 source/journal VFS 拒绝 sparse/compressed，实际 MAIN I/O 和 source evidence 重验；外部 writer、cached SQL、已加载 DLL 后变更及 managed executable metadata 反例不改判为保护。该批98PASS/1FAIL与三次立即rename EBUSY并列，稳定release仍UNKNOWN；见 [历史交接](../../../docs/handoff/WINDOWS-BACKUP-METADATA-20261004.md)。
+
+历史 2026-10-04 WC01 safe-load / journal pathname：隔离首加载使用 trusted OS guardian、Host duplicate handles 与本地 same-handle 核验；命名 VFS 在源 SQL 前资格检查，以 FILE_CREATE 和 retained journal handle 执行写入/同步/删除。正式 Host 不打开全局 URI、不接 Adapter；生产 Windows 仍写入前拒绝，productionQualified/restoreAllowed=false。完整 metadata/FSCTL、依赖闭包、准备进程原子资源门、分发和断电资格尚缺。旧批验证与身份见 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-PATH-20261004.md)。
+
+历史 2026-10-04 WC01 helper / VFS / commit proof：合成 helper 完整 startup/tail 资源证据与 UNKNOWN 占账、SQLite main VFS file-object provenance、同 DDL/业务事务的私有 settled journal marker 与 readonly source recorded-commit 回读已具备隔离验证。正式 tag-intent/Host composition 不提供 commit hook，生产 Windows 仍备份/status/DDL 前拒绝。pathname load/source journal 全生命周期、硬 RSS、断电和分发包资格仍未闭合；status 不能授予 restore。当前身份与验证见 [CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)及 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-PROOF-20261004.md)。
+
+以下 source/recovery 记录为上一批历史，不能作为本批完整资格：
+
+历史 2026-10-04 WC01 备份源/恢复续批：retained source 的完整64位identity/hash/NTFS同卷空间证据与connection重验；bound status的逐组件同句柄只读核对；预编译helper的Job commit限额与target完整退出后kernel峰值。仅私有Validated Tracer；生产Windows仍写入前拒绝。launcher启动/终态全RSS、SQLite VFS来源身份与事务提交恢复证明当时仍缺。历史身份与CU见 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-RECOVERY-20261004.md)。
+
+以下生命周期记录为上一批历史：
+
+历史 2026-10-04 WC01 备份生命周期续批：同句柄完整 SQLite 验证、真实 OS/共享 hold RAM permit、private finish/actual close、分段状态/flush/中断重启及内容 retrieval 已在合成范围覆盖。生产 Windows 仍在写入前拒绝。当前 build/CU/资格与限制统一见 [CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)及 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-LIFECYCLE-20261004.md)。
+
+以下原生目标和 EXLOCK 段为上一批历史，其中“当前”仅归原批：
+
+历史 2026-10-04 原生目标续批：单组件 NtCreateFile/no-reparse + SQLite 镜像候选已进入合成资格验证；真实 lease/维护模块正常、取消、DDL 回滚与测试 RAM 拒绝有独立覆盖。Buffer journal=memory 仍被生产 inspector 拒绝；生产 Windows 备份继续拒绝，未接入原生 helper。协议、限制与当前交接见 [目标协议](../../../docs/platform/WINDOWS-BACKUP-TARGET-PROTOCOL.md)及 [本批交接](../../../docs/handoff/WINDOWS-NATIVE-BACKUP-20261004.md)。
+
+以下2026-10-04 EXLOCK记录属于历史：
+
+2026-10-04 Windows NTFS续批：EXLOCK候选已被合成对抗反证。Electron30.5.1/Node20.16.0/libuv1.46.0下，FILE_WRITE_ATTRIBUTES句柄可在独占句柄持有期间把空目录改成junction；Windows NOFOLLOW为0。目录sync及rename拒绝不能证明安全publisher。生产备份与Host维护源码均未改，仍在写备份/DDL前拒绝 TAG_INTENT_BACKUP_UNSUPPORTED；普通写入和关开继续可用。新增4项反例回归，前轮撤回publisher不恢复。当前证据与Desktop结果见 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-20261004.md)，前轮记录见 [历史纵切](../../../docs/handoff/WINDOWS-QUALIFICATION-20261003.md)。
+
+
+# Independent tag analysis
+
+Current wiring: shared single-asset AI panel → independent-tags prepare/confirm/read → owner-bound controller → Active Library Host. Prepare reads context only. Confirm persists one waiting-execution request; no Provider call, preview decoding or network. C03 adds separately reviewed tags-only execution; C04 adds explicit confirmation and rejection below.
+
+Schema v9 adds immutable request headers/items, monotonic per-content request generation and exact profiles. Creation remains v1. Confirming an upgrade discloses a verified database backup and old-reader incompatibility. The Host closes ordinary admission, drains in-flight work, retains its real lease and serializes close. One source transaction applies historical DDL (including organization seed), v9 DDL and the intent. A current-scope duplicate returns the original effect; a different payload conflicts. Same-generation reopen creates a new session, invalidating old writes.
+
+Backup qualification is intentionally limited: local Darwin APFS, SQLite 3.53.1 exact source ID and the native SHA256 frozen in tag-intent-backup.ts. It is not general distribution compatibility. Other builds/volumes refuse this upgrade while ordinary supported library operations remain available. Growth is capped at 4 MiB by native max_page_count, with cache spill disabled for the transaction and both settings verified on restoration. A restoration failure or lost lease seals the Host for recovery. Space policy includes backup, conservative journal bound and 64 MiB reserve; it may refuse large libraries conservatively.
+
+Database-only backups reside in private schema-backups operation directories. Verified hashes/status are distinct from failed/unverified partials. There is no automatic restore, deletion, downgrade or real-library migration. Restoring a backup could lose subsequent writes and needs separate approval.
+
+Host intent/batch persistence, execution enablement and rejection-upgrade writes
+now share the [Host-private schema maintenance Module](../library-lifecycle/README.md#host-private-schema-maintenance).
+Fixed intent entry points retain current-session replay, transaction/hook order,
+error classification and committed-but-unacknowledged effects. Public contracts
+and production backup qualification are unchanged. `test-host-schema-maintenance`
+adds isolated protocol evidence; its synthetic backup Adapter does not qualify
+Windows upgrades or replace the platform-qualified integration tests below.
+
+Validation: node scripts/run-electron-node-test.mjs scripts/independent-tag-intent.integration.test.ts. Formal generated-data Electron test: build with the installed electron-vite, then node scripts/independent-tag-intent-electron.e2e.test.mjs. It creates an isolated profile and library, clears inherited DAM test flags, verifies Main/card permissions and process restart, and runs no model. Continuous-run evidence: .ai-run/independent-tags-20260927/evidence/C02B. Tests use Electron's existing SQLite ABI; never rebuild dependencies for shell Node.
+
+## C03 — accepted for limited local development Main
+
+The formal single-asset panel now separately reviews execution. Its additive tag-execution bridge reaches a Main controller, the shared VisualAdmission, the single-call Provider and claim-fenced Host commits. New recipe returns only a complete JSON tags object (0–8 nonempty labels, max80 UTF16 each); only explicit truncation gets one512→1024 retry within one deadline. No automatic provider fallback or model start.
+
+Explicit first run upgrades reviewed v9 intent storage to v10 after the existing verified backup protocol. Five tables store attempts, immutable tag evidence, current pointers, immutable receipts and Outbox. Main tokens are never persisted. Historical combined results remain intact, while both producers use the same tag generation/current rules; a late combined result may be historical-only and cannot take current back, even when the newer request failed. Read projections keep tagAnalysis separate from the old visual bundle; null forbids fallback to historical tags. Existing confirmed tags, edited caption/OCR and notebook/organization/workset/download data remain separate.
+
+All preparation/request paths share one Main admission instance. PNG/JPEG/WebP, uchar8bit/single-page,32MiB source,50M pixels,1024 JPEG85,4MiB encoded cap; request slots2/tags1/preprocessing1, receipts4, frozen total64MiB, total material budget768MiB. The response reservation now includes512000×(4 raw copies+128 parsed-object expansion)=67,584,000 bytes per request; an adversarial420004-byte array produced roughly9.4MiB of owned JS objects in calibration. This is conservative accounting plus measured codec allowance, not an OS RSS or external GPU limit. Codec platform and Sharp/Vips version qualification occurs before transformation; owned child processes must exit before their reservation is returned.
+
+Review cancellation/owner revocation releases material immediately, including a prepare still awaiting session lookup. TTL is reflected by the actual material deadline. Authority changes serialize the entire before/operation/after cycle; lifecycle and cutover hold independent barriers. Existing work-window/download drain happens before the Host closes ordinary business admission. During suspension, only fixed attempt-finish records and session inspection use the private coordination exception; closed connections accept neither.
+
+Validation evidence lives under .ai-run/independent-tags-20260927/evidence/C03. SQLite tests use the repository Electron Node launcher. The non-SQLite admission suite uses the normal Node launcher; standalone Electron RUN_AS_NODE sometimes hangs in a native event-loop wait after assertions, and that finding remains unresolved. Formal Electron Main separately exercised the real codec at50M pixels,64MiB frozen-budget pressure, shared Main/card requests, cancellation and full process restart/exit. Its diagnostic test entry imports the unmodified compiled composition; it does not validate an installed package or the OCR executable path. No real library/model/Windows run has been performed. C03 was independently accepted against its frozen 49-file snapshot. C04–C07-S require their own acceptance.
+
+## C04 — user choices (independently accepted)
+
+The source-bound tag-decision prepare/confirm/discard bridge uses one shared TagDecisionControls in the Inspector and native card. Reviews hold no image bytes, expire after five minutes, and bind owner, actual Host session and canonical evidence. Confirmation creates an ordinary manual/confirmed relation, preserving existing NFKC-equivalent labels and their metadata. It requires no new schema. In profile10+, the old sessionless combined confirmation entry is refused; use current tag choices. Pre-v10 callers remain supported.
+
+First explicit rejection reviews a stop/drain of both visual controllers, verified backup and v11 upgrade. One immutable rejection table keys the asset content revision, preview generation, recipe family, source normalization, decision normalization and normalized label. Same-family reruns (including model changes) retain suppression; a different family or content does not. Legacy evidence-specific rejections are not broadened. Rejection never deletes manual relations, original files or inference history. Confirmation and suppression are independent facts. observedTagCount distinguishes an actual empty result from filtered suggestions.
+
+The bulk canonical projection feeds search, AI folders and all windows. Scoped notifications refresh current suggestions and the selected asset's manual relation cache. Async UI operations use monotonically changing tokens, so A→B→A cannot consume an old receipt or unlock a newer request. Ordinary decisions use short transactions; only the first schema upgrade suspends inference. Postcommit acknowledgement failure and pragma restoration failure remain distinct outcomes; restoration failure quarantines the Host.
+
+Checks: tag-decision.integration.test.ts (real temporary Host), tag-decision-ui.integration.test.mjs (isolated shared React component), tag-decision-electron.e2e.test.mjs (compiled formal composition, generated data and owned loopback). Evidence under .ai-run/independent-tags-20260927/evidence/C04. No real user library, model, Windows or installed-package acceptance.
+
+## C05 — bounded batches and explicit reruns (independently accepted)
+
+TagBatchPanel shares the formal Main/card visual surface. It reviews1–8 frozen asset/source identities, names, backend origin/model and full settings fingerprint. Preparation reads metadata only; controlled previews are materialized sequentially after confirmation under the existing admission budget. One batch runs at a time, with at most4 metadata reviews and50 retained in-memory jobs. Progress identifies each asset, projects the actual active child state, and keeps effective current tags separate.
+
+The existing v9 header/items schema needs no new DDL. One Host transaction saves all items; canonical ordering makes scope reordering idempotent. Single-item payload hashes remain byte-compatible. Normal execution reuses the matching scope/configuration's latest request by generation; explicit force creates a new request generation, but replaying the same force requestId does not. Scope changes need a new review. Successful items read existing results; failed items can continue under a new explicit review, while remote-unknown remains protected.
+
+The batch controller uses internal execution waitIdle/settle seams. waitIdle grants no exclusive right: if another caller wins the slot, the review is discarded and the batch waits again without reporting an asset failure. settle includes actual resource release. One item failure does not roll back other success; cancellation skips unstarted items and waits for the active physical work, preserving commits that linearized first. Owner revocation, first-rejection schema maintenance and authority/quit shutdown cancel the batch before jointly draining its child controllers. No batch-to-child drain cycle.
+
+Evidence: scripts/tag-batch.integration.test.ts and scripts/tag-batch-electron.e2e.test.mjs. C04 and C05 were independently signed against their frozen source snapshots. C06 adds explicit recovery as described below; no automatic inference runs after restart.
+
+## C06 — explicit recovery (independently accepted)
+
+After exact-schema/read-only sidecar checks and a new real lease, open reconciles orphan running attempts in one transaction before ready: NOT_SENT becomes paused; a persisted send intent becomes outcome-unknown. No old token/lease/session becomes valid. A running attempt with a committed receipt is treated as inconsistent and refuses opening. Hot journal or damaged database remains recovery-required; this feature does not delete sidecars or repair database bytes.
+
+Current-session receipt reads are independent of provider availability or old compute claims. Historical effects remain readable, while isCurrent uses the complete canonical source check. Recovery list/prepare/receipt fence their return against owner, lifecycle epoch and Host session, including an owner revoked while awaiting notification. Main lists at most20 related batches; a card can list/prepare only batches wholly contained in its current single asset.
+
+A fresh review freezes current service/authentication conditions against the stored destination/model/content binding. It reuses the original request, reads succeeded items and skips unknown/superseded items; only still-current unfinished items can obtain new attempts. Known successful receipts stay accessible when the backend is disabled. Notifications replay pending Outbox events without inference or new effects, coalesce within a session and stop after1000 events per flush with a truthful pending flag. Delivery failure leaves unacknowledged rows. Reopen notification starts after the Host business barrier is released.
+
+During shutdown suspension, the private finish path records paused for not-sent and unknown for sent work, then revokes the in-memory claim. Quiescing/closed connections allow no new reads or effects. Tests include owned child-process SIGKILL at seven real persistence/response cuts, including an actual nonzero-header hot journal, normal formal Electron restart, explicit resume and disabled-backend receipt reads. Synthetic event paging is separately identified as a controller test, not proof of1001 real commits. No real user library/model, Windows or package validation.
+
+## 2026-09-28 targeted hardening (F01/F02)
+
+The single-execution controller now uses one retention function for saved-result reuse and normal completion, failure or cancellation. It keeps the latest100 terminal in-memory handles and never evicts queued/running work. It does not delete durable receipts, evidence or current pointers, and reuse still performs no inference or business write.
+
+IndependentTagIntentPanel binds asynchronous refreshes/actions to a monotonic component lifecycle epoch in addition to identity. A→B→A cannot admit the first A response or release the second A busy state. A successful execution review arriving after switch/unmount is explicitly discarded rather than left until TTL; it is never automatically run. Main Inspector's stable selected-asset key with changing single bulk selection makes this reuse reachable; native-card token remounts are a separate path. Production-component delayed-bridge tests and the formal Main/Preload/Renderer selection path provide distinct evidence.
+
+The original continuous batch remains completed history. New hardening handoffs give FINAL-HANDOFF.json precedence over archived ACTIVE contracts, with nextBatchAuthorized=false. Neither handoff deploys a coding supervisor or authorizes real models/user libraries.
+
+## WC01 backup settlement (2026-10-04)
+
+The private maintenance storage result can retain backup resources through an asynchronous finish(committed). All six intents wait before ordinary admission or queued close resumes. Transaction return records commit before restoration/ACK hooks; settlement failure quarantines authority. The production Windows TAG_INTENT_BACKUP_UNSUPPORTED gate remains unchanged. Tests use generated SQLite and private adapters only; see [current handoff](../../../docs/handoff/WINDOWS-BACKUP-LIFECYCLE-20261004.md).

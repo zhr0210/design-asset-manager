@@ -6,7 +6,8 @@ import {
 } from '../src/main/services/settings/settings-defaults.builder'
 import {
   createDefaultLlamaBackendConfig,
-  createDefaultPromptReverseSettings
+  createDefaultPromptReverseSettings,
+  normalizeProductTextBoxProvider
 } from '../src/main/services/settings.service'
 
 const legacyDefaults = createLegacyAppSettingsDefaults()
@@ -44,14 +45,34 @@ assert.equal(newInstallDefaults.doctorSettings?.showInSettings, true)
 
 assert.equal(createDefaultLlamaBackendConfig().enabled, false)
 assert.equal(createDefaultPromptReverseSettings().backendMode, 'llama-openai')
+assert.equal(normalizeProductTextBoxProvider('mock'), 'none')
+assert.equal(normalizeProductTextBoxProvider('easyocr'), 'easyocr')
+assert.equal(normalizeProductTextBoxProvider(undefined), 'none')
 
 const settingsServiceSource = await fs.readFile('src/main/services/settings.service.ts', 'utf8')
+const aiConsoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
+const aiWorkspaceSource = await fs.readFile('src/renderer/routes/AiWorkspace.tsx', 'utf8')
+const ocrEnvironmentSource = await fs.readFile('src/renderer/components/asset/OcrEnvironmentSettings.tsx', 'utf8')
+const sharedTextBoxProviderSource = await fs.readFile('src/shared/workflows/text-box-provider.workflow.ts', 'utf8')
 const builderSource = await fs.readFile('src/main/services/settings/settings-defaults.builder.ts', 'utf8')
 const combinedSource = [settingsServiceSource, builderSource].join('\n')
 
 assert.doesNotMatch(builderSource, /C:\\|\/Users\/|\/Applications\/|\/usr\/local/)
 
 assert.match(settingsServiceSource, /const newInstallDefaults = createNewInstallAppSettingsDefaults\(\)/)
+assert.match(settingsServiceSource, /shared\/workflows\/text-box-provider\.workflow/)
+// The old text-box provider editor is retired. Normalization remains Main-owned;
+// the formal local OCR environment uses the dedicated, explicitly selected API.
+assert.match(aiConsoleSource, /export \{default\} from ['"]\.\/AiWorkspace['"]/)
+assert.match(aiWorkspaceSource, /id==='model-library'/)
+assert.match(aiWorkspaceSource, /<OcrEnvironmentSettings\/>/)
+assert.match(ocrEnvironmentSource, /requireWorkspaceClient\(\)\.assetOcr\.status\(\)/)
+assert.match(ocrEnvironmentSource, /requireWorkspaceClient\(\)\.assetOcr\.configure\(\)/)
+assert.doesNotMatch(ocrEnvironmentSource, /textBoxProvider|mock|normalizeProductTextBoxProvider|installEasyocr|settingsSave/)
+assert.match(sharedTextBoxProviderSource, /PRODUCT_TEXT_BOX_PROVIDER_NORMALIZATION/)
+assert.doesNotMatch(aiConsoleSource, /function normalizeProductTextBoxProvider/)
+assert.doesNotMatch(aiConsoleSource, /provider === 'mock'/)
+assert.doesNotMatch(settingsServiceSource, /provider === 'mock' \? 'none' : provider/)
 assert.match(settingsServiceSource, /if \(!fs\.existsSync\(this\.configPath\)\)/)
 assert.doesNotMatch(settingsServiceSource, /dryRunUpgradeSettings|dryRunInjectCrossPlatformDefaults|runtime-registry/)
 
@@ -68,3 +89,4 @@ assert.doesNotMatch(combinedSource, /\bfetch\s*\(|XMLHttpRequest|https?:\s*reque
 assert.doesNotMatch(combinedSource, /child_process|execFile\s*\(|runProcess|startRuntime|restartRuntime|stopRuntime/)
 assert.doesNotMatch(combinedSource, /runtime-registry\.service|better-sqlite3|src\/main\/db|Database\(|new\s+Database/)
 assert.doesNotMatch(builderSource, /\bwriteFile\s*\(|\breadFile\s*\(|\bmkdir\s*\(|\brm\s*\(|\bunlink\s*\(|\brename\s*\(/)
+console.log('settings-service-defaults and current OCR configuration seam passed')

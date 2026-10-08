@@ -1,0 +1,340 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import {createHash,randomUUID} from 'node:crypto'
+import Database from 'better-sqlite3'
+import type {VisualAdmission} from '../visual-ai/visual-admission'
+import {readAssets} from '../library-lifecycle/active-library-asset-queries'
+import {validateRetrievalVectors} from './retrieval-runtime'
+import {publicCode} from './retrieval-model-library'
+import {searchFolderMembers} from '../asset-search/folder-scope'
+import {projectAssetDiscovery,refreshAssetDiscoveryMatch,type AssetDiscoveryExplanation,type AssetDiscoveryEvidence} from '../../shared/workflows/asset-discovery.workflow'
+import type {ActiveLibraryAssetProjection} from '../../shared/contracts/active-library.contract'
+import type {AssetSearchRequest,AssetSearchPage,AssetSearchIndexStatus} from '../../shared/contracts/asset-search.contract'
+import type {RetrievalQualification,RetrievalGenerationRequest,RetrievalCoverage,AssetSemanticSearchRequest,AssetSemanticSearchPage} from '../../shared/contracts/retrieval-workspace.contract'
+
+export interface RetrievalRuntimePort {
+  currentSpace():RetrievalQualification|null
+  embedImages(images:Uint8Array[],signal:AbortSignal,priority?:'foreground'|'background',spaceId?:string):Promise<{vectors:number[][];space:RetrievalQualification}>
+  embedTexts(texts:string[],signal:AbortSignal,priority?:'foreground'|'background',spaceId?:string):Promise<{vectors:number[][];space:RetrievalQualification}>
+}
+const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex')
+const view=(a:Pick<ActiveLibraryAssetProjection,'id'|'revision'|'thumbnailRef'>)=>hash({id:a.id,revision:a.revision,preview:a.thumbnailRef,recipe:'siglip2-rgb-224-v1'})
+const imageAsset=(a:ActiveLibraryAssetProjection)=>a.fileType?.toLowerCase()!=='mp4'
+const vectorBytes=(vector:number[])=>{const bytes=Buffer.alloc(768*4);vector.forEach((v,i)=>bytes.writeFloatLE(v,i*4));return bytes}
+const decodeVector=(bytes:Buffer)=>{if(!Buffer.isBuffer(bytes)||bytes.length!==768*4)throw Error('RETRIEVAL_VECTOR_INVALID');const vector=Array.from({length:768},(_,i)=>bytes.readFloatLE(i*4));validateRetrievalVectors([vector],1);return vector}
+const cosine=(a:number[],b:number[])=>a.reduce((sum,v,i)=>sum+v*b[i],0)
+interface Registry {version:1;identity:string;storeId:string;canonical:string;index:string}
+interface Job {id:string;spaceId:string;state:'running'|'paused'|'interrupted'|'failed'|'complete';total:number;completed:number;failed:number;error:string|null}
+interface VectorRow {space:string;id:string;view:string;input_sha:string;vector:Buffer}
+interface QueryImageSource {id:string;view:string}
+
+/** Durable canonical results are independent of the replaceable flat cosine
+ * index. Small bounded batches keep the Host responsive; no ANN/model output
+ * becomes source authority. A space ID always participates in vector lookup. */
+export function createAssetRetrievalStore(d:{database:Database.Database;control:string;identity:string;generation:string;
+  runtime():RetrievalRuntimePort|undefined;admission?:VisualAdmission;assertAuthority():void;
+  readPreview(asset:ActiveLibraryAssetProjection):Promise<Uint8Array>;lexical(input:AssetSearchRequest,signal?:AbortSignal):Promise<AssetSearchPage>;lexicalStatus():AssetSearchIndexStatus;
+  filterColors?(ids:readonly string[],filter:AssetSearchRequest['color'],signal:AbortSignal,measure?:boolean):Promise<Map<string,AssetDiscoveryEvidence|null>>;
+  synchronizeColors?(signal:AbortSignal):Promise<void>;
+  colorCoverage?():import('../../shared/contracts/asset-search.contract').AssetColorCoverage}) {
+  const registryPath=path.join(d.control,'.dam-asset-retrieval.json')
+  let registry:Registry,error:string|null=null,index:Database.Database,indexGeneration:string= randomUUID(),canonical:Database.Database,
+    running:Promise<void>|undefined,jobAbort:AbortController|undefined,rebuildAbort:AbortController|undefined,indexBuilding=false,closed=false
+  const controllers=new Map<string,AbortController>(),retired=new Set<Database.Database>(),readers=new Map<Database.Database,number>()
+  const snapshots=new Map<string,{owner:string;key:string;expires:number;total:number;space:string;mode:AssetSemanticSearchPage['mode'];indexGeneration:string;imageSource?:QueryImageSource}>()
+  const cursors=new Map<string,{snapshot:string;offset:number;owner:string}>()
+  const owned=(name:string,prefix:string)=>{
+    if(!new RegExp(`^${prefix}-[a-f0-9-]{36}\\.sqlite$`).test(name))throw Error('RETRIEVAL_STORAGE_IDENTITY_LOST')
+    const file=path.resolve(d.control,name);if(path.dirname(file)!==path.resolve(d.control))throw Error('RETRIEVAL_STORAGE_IDENTITY_LOST')
+    return file
+  }
+  const saveRegistry=(value:Registry)=>{const temp=path.join(d.control,`.dam-retrieval-registry-${randomUUID()}.tmp`)
+    fs.writeFileSync(temp,JSON.stringify(value),{flag:'wx',mode:0o600});fs.renameSync(temp,registryPath);registry=value}
+  const open=(file:string,appId:number,create:boolean)=>{
+    if(create){const fd=fs.openSync(file,'wx',0o600);fs.closeSync(fd)}
+    const stat=fs.lstatSync(file);if(!stat.isFile()||stat.isSymbolicLink())throw Error('RETRIEVAL_STORAGE_IDENTITY_LOST')
+    const db=new Database(file,{fileMustExist:true})
+    if(!create&&(db.pragma('application_id',{simple:true})!==appId||db.pragma('user_version',{simple:true})!==1||db.pragma('quick_check',{simple:true})!=='ok')){db.close();throw Error('RETRIEVAL_STORAGE_CORRUPT')}
+    db.pragma('journal_mode=WAL');db.pragma('cache_size=-4096');db.pragma(`application_id=${appId}`);db.pragma('user_version=1');return db
+  }
+  function freshIndex(){
+    const filename=`asset-vector-index-${randomUUID()}.sqlite`,db=open(owned(filename,'asset-vector-index'),0x44414d49,true)
+    db.exec('CREATE TABLE vectors(space TEXT NOT NULL,id TEXT NOT NULL,view TEXT NOT NULL,input_sha TEXT NOT NULL,vector BLOB NOT NULL,PRIMARY KEY(space,id)); CREATE TABLE meta(key TEXT PRIMARY KEY,value TEXT NOT NULL)')
+    const epoch=randomUUID();db.prepare('INSERT INTO meta VALUES(?,?)').run('generation',epoch)
+    return {filename,db,epoch}
+  }
+  try{
+    const stat=fs.lstatSync(registryPath);if(!stat.isFile()||stat.isSymbolicLink()||stat.size>4096)throw Error('RETRIEVAL_STORAGE_IDENTITY_LOST')
+    registry=JSON.parse(fs.readFileSync(registryPath,'utf8'))
+    if(registry.version!==1||registry.identity!==d.identity||!/^[a-f0-9-]{36}$/.test(registry.storeId)||Object.keys(registry).length!==5)throw Error('RETRIEVAL_STORAGE_IDENTITY_LOST')
+    canonical=open(owned(registry.canonical,'asset-vectors'),0x44414d56,false)
+    if(canonical.prepare("SELECT value FROM meta WHERE key='identity'").pluck().get()!==d.identity||canonical.prepare("SELECT value FROM meta WHERE key='storeId'").pluck().get()!==registry.storeId)throw Error('RETRIEVAL_STORAGE_IDENTITY_LOST')
+  }catch(e){
+    if((e as NodeJS.ErrnoException).code!=='ENOENT')throw e
+    if(fs.readdirSync(d.control).some(name=>/^asset-vectors-/.test(name)))throw Error('RETRIEVAL_STORAGE_IDENTITY_LOST')
+    const storeId=randomUUID(),filename=`asset-vectors-${storeId}.sqlite`
+    canonical=open(owned(filename,'asset-vectors'),0x44414d56,true)
+    canonical.exec(`CREATE TABLE meta(key TEXT PRIMARY KEY,value TEXT NOT NULL);
+      CREATE TABLE spaces(id TEXT PRIMARY KEY,qualification TEXT NOT NULL);
+      CREATE TABLE vectors(space TEXT NOT NULL,id TEXT NOT NULL,view TEXT NOT NULL,input_sha TEXT NOT NULL,vector BLOB NOT NULL,created_at TEXT NOT NULL,PRIMARY KEY(space,id,view));
+      CREATE TABLE jobs(id TEXT PRIMARY KEY,space TEXT NOT NULL,state TEXT NOT NULL,total INTEGER NOT NULL,completed INTEGER NOT NULL,failed INTEGER NOT NULL,error TEXT);
+      CREATE TABLE items(job TEXT NOT NULL,id TEXT NOT NULL,state TEXT NOT NULL,error TEXT,PRIMARY KEY(job,id));`)
+    const add=canonical.prepare('INSERT INTO meta VALUES(?,?)');for(const [k,v] of Object.entries({identity:d.identity,storeId,active:''}))add.run(k,v)
+    const fresh=freshIndex();index=fresh.db;indexGeneration=fresh.epoch
+    saveRegistry({version:1,identity:d.identity,storeId,canonical:filename,index:fresh.filename})
+  }
+  if(!index!){try{index=open(owned(registry!.index,'asset-vector-index'),0x44414d49,false);indexGeneration=String(index.prepare("SELECT value FROM meta WHERE key='generation'").pluck().get())}
+    catch(e){const fresh=freshIndex();index=fresh.db;indexGeneration=fresh.epoch;error='向量索引暂不可用，持久向量已保留，可重建索引。';saveRegistry({...registry!,index:fresh.filename})}}
+  canonical.exec("UPDATE jobs SET state='interrupted',error='RETRIEVAL_GENERATION_INTERRUPTED' WHERE state='running'; UPDATE items SET state='pending' WHERE state='running'; CREATE TEMP TABLE hits(snapshot TEXT NOT NULL,id TEXT NOT NULL,view TEXT NOT NULL,rank REAL NOT NULL,similarity REAL,lexical TEXT,PRIMARY KEY(snapshot,id)); CREATE INDEX hit_order ON hits(snapshot,rank DESC,id)")
+  const activeSpace=()=>String(canonical.prepare("SELECT value FROM meta WHERE key='active'").pluck().get()??'')
+  const jobs=():Job[]=>canonical.prepare('SELECT id,space AS spaceId,state,total,completed,failed,error FROM jobs ORDER BY rowid DESC LIMIT 20').all() as Job[]
+  const assetRows=(after:string,limit:number)=>d.database.prepare("SELECT a.id FROM assets a JOIN asset_lifecycle l ON l.design_asset_identity=a.id AND l.lifecycle_state='active' WHERE LOWER(COALESCE(a.file_type,''))<>'mp4' AND a.id>? ORDER BY a.id LIMIT ?").all(after,limit) as {id:string}[]
+  const total=()=>Number(d.database.prepare("SELECT COUNT(*) FROM assets a JOIN asset_lifecycle l ON l.design_asset_identity=a.id AND l.lifecycle_state='active' WHERE LOWER(COALESCE(a.file_type,''))<>'mp4'").pluck().get())
+  function validRows(db:Database.Database,space:string,after:string,limit=100){
+    const rows=db.prepare('SELECT * FROM vectors WHERE space=? AND id>? ORDER BY id LIMIT ?').all(space,after,limit) as VectorRow[]
+    const source=new Map(readAssets(d.database,rows.map(r=>r.id)).map(a=>[a.id,a]))
+    return {rows,valid:rows.filter(row=>{const a=source.get(row.id);return a&&imageAsset(a)&&view(a)===row.view}),source}
+  }
+  let coverageCache:{key:string;indexed:number}|undefined
+  function coverage():RetrievalCoverage {
+    d.assertAuthority();const space=activeSpace(),all=total();let indexed=0,after=''
+    // Only source/view mutations or vector publication can invalidate this
+    // count. Polling coverage never projects every analysis/tag in the library.
+    const cacheKey=JSON.stringify([space,indexGeneration,d.database.prepare('SELECT total_changes()').pluck().get(),d.database.pragma('data_version',{simple:true}),index.prepare('SELECT total_changes()').pluck().get(),index.pragma('data_version',{simple:true})])
+    if(coverageCache?.key===cacheKey)indexed=coverageCache.indexed
+    else{
+      if(space)for(;;){const rows=index.prepare('SELECT id,view FROM vectors WHERE space=? AND id>? ORDER BY id LIMIT 100').all(space,after) as {id:string;view:string}[]
+        if(!rows.length)break;after=rows.at(-1)!.id
+        const current=d.database.prepare(`SELECT a.id,l.revision,c.grid_thumbnail_ref AS thumbnailRef FROM assets a
+          JOIN asset_lifecycle l ON l.design_asset_identity=a.id AND l.lifecycle_state='active'
+          JOIN promotion_links p ON p.design_asset_identity=a.id JOIN asset_candidates c ON c.candidate_identity=p.candidate_identity
+          WHERE LOWER(COALESCE(a.file_type,''))<>'mp4' AND a.id IN (${rows.map(()=>'?').join(',')})`).all(...rows.map(r=>r.id)) as Pick<ActiveLibraryAssetProjection,'id'|'revision'|'thumbnailRef'>[]
+        const fingerprints=new Map(current.map(a=>[a.id,view(a)]));indexed+=rows.filter(r=>fingerprints.get(r.id)===r.view).length
+      }
+      coverageCache={key:cacheKey,indexed}
+    }
+    const jobList=jobs()
+    return {state:indexBuilding?'recovering':jobList.some(j=>j.state==='running')?'building':!space?'unprepared':indexed===all?'ready':'partial',spaceId:space||null,
+      selectedSpaceId:d.runtime()?.currentSpace()?.spaceId??null,indexed,total:all,indexGeneration,error,jobs:jobList}
+  }
+  function assertVectorSource(asset:ActiveLibraryAssetProjection){
+    d.assertAuthority();const now=readAssets(d.database,[asset.id])[0]
+    if(!now||!imageAsset(now)||view(now)!==view(asset))throw Error('RETRIEVAL_SOURCE_CHANGED')
+  }
+  function publishIndexVector(space:string,asset:ActiveLibraryAssetProjection,inputSha:string,bytes:Buffer){
+    index.prepare('INSERT INTO vectors VALUES(?,?,?,?,?) ON CONFLICT(space,id) DO UPDATE SET view=excluded.view,input_sha=excluded.input_sha,vector=excluded.vector')
+      .run(space,asset.id,view(asset),inputSha,bytes)
+  }
+  function reuseVector(space:string,asset:ActiveLibraryAssetProjection,prior:VectorRow){
+    assertVectorSource(asset);decodeVector(prior.vector)
+    // Reusing durable evidence only repairs its derived projection. The
+    // original bytes, input binding and generation time remain authoritative.
+    publishIndexVector(space,asset,prior.input_sha,prior.vector)
+  }
+  function publishVector(space:string,asset:ActiveLibraryAssetProjection,inputSha:string,vector:number[]){
+    assertVectorSource(asset)
+    validateRetrievalVectors([vector],1)
+    const bytes=vectorBytes(vector)
+    canonical.prepare('INSERT INTO vectors VALUES(?,?,?,?,?,?) ON CONFLICT(space,id,view) DO UPDATE SET input_sha=excluded.input_sha,vector=excluded.vector,created_at=excluded.created_at')
+      .run(space,asset.id,view(asset),inputSha,bytes,new Date().toISOString())
+    publishIndexVector(space,asset,inputSha,bytes)
+  }
+  async function generate(job:Job,signal:AbortSignal){
+    try{
+      const runtime=d.runtime();if(!runtime)throw Error('RETRIEVAL_NOT_QUALIFIED')
+      for(;;){signal.throwIfAborted();d.assertAuthority()
+        const item=canonical.prepare("SELECT id FROM items WHERE job=? AND state='pending' ORDER BY id LIMIT 1").get(job.id) as {id:string}|undefined
+        if(!item)break
+        const asset=readAssets(d.database,[item.id])[0]
+        if(!asset||!imageAsset(asset)){canonical.prepare("UPDATE items SET state='skipped' WHERE job=? AND id=?").run(job.id,item.id);continue}
+        try{
+          const prior=canonical.prepare('SELECT * FROM vectors WHERE space=? AND id=? AND view=?').get(job.spaceId,asset.id,view(asset)) as VectorRow|undefined
+          if(prior){reuseVector(job.spaceId,asset,prior)}
+          else{
+            canonical.prepare("UPDATE items SET state='running' WHERE job=? AND id=?").run(job.id,item.id)
+            const bytes=await d.readPreview(asset);signal.throwIfAborted();d.assertAuthority()
+            const embedded=await runtime.embedImages([bytes],signal,'background',job.spaceId)
+            if(embedded.space.spaceId!==job.spaceId)throw Error('RETRIEVAL_SPACE_CHANGED')
+            signal.throwIfAborted();publishVector(job.spaceId,asset,createHash('sha256').update(bytes).digest('hex'),embedded.vectors[0])
+          }
+          canonical.prepare("UPDATE items SET state='complete',error=NULL WHERE job=? AND id=?").run(job.id,item.id)
+        }catch(e){if(signal.aborted)throw e
+          const code=publicCode(e)
+          if(['AI_MEMORY_WAIT','VISUAL_ADMISSION_SUSPENDED','RETRIEVAL_NOT_QUALIFIED','RETRIEVAL_SPACE_CHANGED','LOCAL_MODEL_CHANGED'].includes(code))throw e
+          canonical.prepare("UPDATE items SET state='failed',error=? WHERE job=? AND id=?").run(code,job.id,item.id)
+        }
+        canonical.prepare("UPDATE jobs SET completed=(SELECT COUNT(*) FROM items WHERE job=? AND state IN ('complete','skipped')),failed=(SELECT COUNT(*) FROM items WHERE job=? AND state='failed') WHERE id=?").run(job.id,job.id,job.id)
+        await new Promise<void>(resolve=>setImmediate(resolve))
+      }
+      signal.throwIfAborted();d.assertAuthority()
+      const result=jobs().find(j=>j.id===job.id)!
+      canonical.prepare('UPDATE jobs SET state=?,error=? WHERE id=?').run(result.failed?'failed':'complete',result.failed?'RETRIEVAL_ITEMS_FAILED':null,job.id)
+      if(!activeSpace()&&result.completed)canonical.prepare("UPDATE meta SET value=? WHERE key='active'").run(job.spaceId)
+    }catch(e){canonical.prepare("UPDATE items SET state='pending' WHERE job=? AND state='running'").run(job.id)
+      canonical.prepare('UPDATE jobs SET state=?,error=? WHERE id=?').run(signal.aborted?'paused':'failed',signal.aborted?null:publicCode(e),job.id)}
+  }
+  function launch(job:Job){
+    if(running||closed)throw Error('RETRIEVAL_GENERATION_BUSY')
+    canonical.prepare("UPDATE jobs SET state='running',error=NULL WHERE id=?").run(job.id);jobAbort=new AbortController()
+    const signal=jobAbort.signal
+    running=new Promise<void>(resolve=>setImmediate(resolve)).then(()=>generate(job,signal)).finally(()=>{running=undefined;jobAbort=undefined})
+    return coverage()
+  }
+  function expire(){for(const [id,s] of snapshots)if(s.expires<Date.now()){snapshots.delete(id);canonical.prepare('DELETE FROM hits WHERE snapshot=?').run(id)}
+    for(const [id,c] of cursors)if(!snapshots.has(c.snapshot))cursors.delete(id)}
+  function dropSnapshot(id:string){snapshots.delete(id);canonical.prepare('DELETE FROM hits WHERE snapshot=?').run(id)}
+  return {
+    coverage,
+    start(input:RetrievalGenerationRequest){
+      d.assertAuthority();if(running)throw Error('RETRIEVAL_GENERATION_BUSY')
+      const space=d.runtime()?.currentSpace();if(!space)throw Error('RETRIEVAL_NOT_QUALIFIED')
+      if(total()>200000)throw Error('RETRIEVAL_LIBRARY_LIMIT')
+      canonical.prepare('INSERT INTO spaces VALUES(?,?) ON CONFLICT(id) DO NOTHING').run(space.spaceId,JSON.stringify(space))
+      const id='retrieval-job:'+randomUUID()
+      canonical.transaction(()=>{
+        canonical.prepare('INSERT INTO jobs VALUES(?,?,?,?,?,?,?)').run(id,space.spaceId,'running',0,0,0,null)
+        const add=canonical.prepare("INSERT OR IGNORE INTO items VALUES(?,?,'pending',NULL)")
+        if(input.selection==='selected'){for(let start=0;start<input.assetIds!.length;start+=100)for(const asset of readAssets(d.database,[...new Set(input.assetIds!.slice(start,start+100))]))if(imageAsset(asset))add.run(id,asset.id)}
+        else{let after='';for(;;){const rows=assetRows(after,100);if(!rows.length)break;after=rows.at(-1)!.id;for(const row of rows)add.run(id,row.id)}}
+        canonical.prepare('UPDATE jobs SET total=(SELECT COUNT(*) FROM items WHERE job=?) WHERE id=?').run(id,id)
+      })()
+      return launch(jobs().find(j=>j.id===id)!)
+    },
+    async pause(id:string){if(!running||jobs().find(j=>j.id===id)?.state!=='running')throw Error('RETRIEVAL_TASK_INVALID');jobAbort?.abort();await running;return coverage()},
+    resume(id:string){const job=jobs().find(j=>j.id===id);if(!job||!['paused','failed','interrupted'].includes(job.state))throw Error('RETRIEVAL_TASK_INVALID')
+      canonical.prepare("UPDATE items SET state='pending',error=NULL WHERE job=? AND state='failed'").run(id);return launch(job)},
+    async search(input:AssetSemanticSearchRequest,owner='host',external?:Uint8Array):Promise<AssetSemanticSearchPage>{
+      d.assertAuthority();expire();const space=activeSpace(),runtime=d.runtime()
+      const key=hash(input.cursor?{...input,cursor:undefined}:{...input}),controller=new AbortController(),requestKey=owner+':'+(input.queryId??randomUUID())
+      if(controllers.size>=4||controllers.has(requestKey))throw Error('RETRIEVAL_QUERY_BUSY')
+      controllers.set(requestKey,controller);const deadline=setTimeout(()=>controller.abort(),60000)
+      let snapshotId='',offset=0
+      const assertImageSource=(source:QueryImageSource|undefined)=>{
+        if(!source)return
+        const current=readAssets(d.database,[source.id])[0]
+        if(!current||!imageAsset(current)||view(current)!==source.view)throw Error('RETRIEVAL_QUERY_IMAGE_EXPIRED')
+      }
+      try{
+        if(input.mode==='image'&&input.imageAssetId){const reference=readAssets(d.database,[input.imageAssetId])[0];if(reference&&!imageAsset(reference))throw Error('RETRIEVAL_QUERY_VIDEO_UNSUPPORTED')}
+        if(input.color&&!input.cursor)await d.synchronizeColors?.(controller.signal)
+        if(!space||!runtime||!runtime.currentSpace()){
+          const lexical=await d.lexical(input,controller.signal);controller.signal.throwIfAborted();d.assertAuthority()
+          return {...lexical,mode:'lexical-only',coverage:coverage(),notice:'语义空间尚未准备，当前返回文字检索结果。'}
+        }
+        if(input.cursor){const cursor=cursors.get(input.cursor),snapshot=cursor&&snapshots.get(cursor.snapshot)
+          if(!cursor||cursor.owner!==owner||!snapshot||snapshot.key!==key)throw Error('ASSET_SEARCH_CURSOR_EXPIRED');snapshotId=cursor.snapshot;offset=cursor.offset
+          assertImageSource(snapshot.imageSource)
+        }else{
+          if(snapshots.size>=16)throw Error('RETRIEVAL_QUERY_BUSY')
+          let embedded:{vectors:number[][];space:RetrievalQualification}
+          let imageSource:QueryImageSource|undefined
+          if(input.mode==='image'){
+            const asset=input.imageAssetId?readAssets(d.database,[input.imageAssetId])[0]:undefined
+            if((!asset||!imageAsset(asset))&&!external)throw Error('RETRIEVAL_QUERY_IMAGE_EXPIRED')
+            if(asset&&!external)imageSource={id:asset.id,view:view(asset)}
+            embedded=await runtime.embedImages([external??await d.readPreview(asset!)],controller.signal,'foreground',space)
+          }else embedded=await runtime.embedTexts([input.query],controller.signal,'foreground',space)
+          if(embedded.space.spaceId!==space)throw Error('RETRIEVAL_SPACE_CHANGED')
+          validateRetrievalVectors(embedded.vectors,1);controller.signal.throwIfAborted();d.assertAuthority()
+          assertImageSource(imageSource)
+          const sourceIndex=index,epoch=indexGeneration;readers.set(sourceIndex,(readers.get(sourceIndex)??0)+1)
+          let permit:{release():void}|undefined
+          snapshotId=randomUUID()
+          const candidates:Array<{id:string;view:string;similarity:number}>=[]
+          try{
+            if(input.mode==='hybrid'){
+              let cursor:string|undefined,rank=0
+              // Each lane owns its own bounded permit. Holding the ranking
+              // permit while waiting for lexical sync deadlocks a single slot.
+              do{controller.signal.throwIfAborted();const page=await d.lexical({...input,limit:100,cursor},controller.signal);controller.signal.throwIfAborted();d.assertAuthority();cursor=page.nextCursor??undefined
+                const add=canonical.prepare('INSERT INTO hits VALUES(?,?,?,?,?,?)')
+                canonical.transaction(()=>{for(const match of page.matches){rank++;add.run(snapshotId,match.asset.id,view(match.asset),1/(60+rank),null,match.explanation?JSON.stringify(match.explanation):null)}})()
+              }while(cursor)
+            }
+            permit=await d.admission?.reserveLocalWork('index',(input.color?64:32)*1024**2,controller.signal)
+            let after=''
+            for(;;){controller.signal.throwIfAborted();d.assertAuthority();const {rows,valid,source}=validRows(sourceIndex,space,after);if(!rows.length)break;after=rows.at(-1)!.id
+              const members=searchFolderMembers(d.database,input.folderId,valid.map(r=>r.id))
+              const colors=input.color?await d.filterColors?.(valid.filter(r=>members.has(r.id)).map(r=>r.id),input.color,controller.signal):null
+              if(input.color&&!colors)throw Error('ASSET_SEARCH_COLOR_UNAVAILABLE')
+              for(const row of valid){const asset=source.get(row.id)!
+                if(!members.has(row.id)||input.color&&!colors?.has(row.id))continue
+                if(!projectAssetDiscovery({assets:[asset],query:'',tagScope:input.tagScope,tagQueries:input.tagQueries,sourceSiteId:input.sourceSiteId}).matches.length)continue
+                const similarity=cosine(embedded.vectors[0],decodeVector(row.vector)),candidate={id:asset.id,view:row.view,similarity}
+                let low=0,high=candidates.length
+                while(low<high){const mid=(low+high)>>>1,other=candidates[mid];if(other.similarity>similarity||other.similarity===similarity&&other.id<asset.id)low=mid+1;else high=mid}
+                if(low<200){candidates.splice(low,0,candidate);if(candidates.length>200)candidates.pop()}
+              }
+              await new Promise<void>(resolve=>setImmediate(resolve))
+            }
+            // RRF v1 fuses independent ranks, never adds cosine and lexical scores.
+            canonical.transaction(()=>{const add=canonical.prepare('INSERT INTO hits VALUES(?,?,?,?,?,?) ON CONFLICT(snapshot,id) DO UPDATE SET rank=rank+excluded.rank,similarity=excluded.similarity,view=excluded.view')
+              for(const [i,row] of candidates.entries())add.run(snapshotId,row.id,row.view,1/(60+i+1),row.similarity,null)})()
+            const count=Number(canonical.prepare('SELECT COUNT(*) FROM hits WHERE snapshot=?').pluck().get(snapshotId))
+            snapshots.set(snapshotId,{owner,key,expires:Date.now()+300000,total:count,space,mode:input.mode,indexGeneration:epoch,imageSource})
+          }finally{permit?.release();const n=(readers.get(sourceIndex)??1)-1;if(n)readers.set(sourceIndex,n);else readers.delete(sourceIndex);if(!n&&retired.has(sourceIndex)){sourceIndex.close();retired.delete(sourceIndex)}}
+        }
+        const snapshot=snapshots.get(snapshotId!)!;const matches:AssetSemanticSearchPage['matches']=[];let scanned=0
+        while(matches.length<input.limit&&offset<snapshot.total&&scanned<500){
+          const rows=canonical.prepare('SELECT id,view,similarity,lexical FROM hits WHERE snapshot=? ORDER BY rank DESC,id LIMIT ? OFFSET ?').all(snapshotId!,input.limit-matches.length,offset) as Array<{id:string;view:string;similarity:number|null;lexical:string|null}>
+          const current=new Map(readAssets(d.database,rows.map(row=>row.id)).map(a=>[a.id,a]));offset+=rows.length;scanned+=rows.length
+          const initialMembers=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+          const permit=input.color?await d.admission?.reserveLocalWork('index',32*1024**2,controller.signal):undefined
+          let colors:Map<string,AssetDiscoveryEvidence|null>|null|undefined
+          try{colors=input.color?await d.filterColors?.(rows.filter(row=>{const a=current.get(row.id);return a&&view(a)===row.view&&initialMembers.has(row.id)}).map(row=>row.id),input.color,controller.signal,false):null}finally{permit?.release()}
+          if(input.color&&!colors)throw Error('ASSET_SEARCH_COLOR_UNAVAILABLE')
+          controller.signal.throwIfAborted();d.assertAuthority()
+          const latest=new Map(readAssets(d.database,rows.map(row=>row.id)).map(a=>[a.id,a]))
+          const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+          for(const row of rows){const asset=latest.get(row.id);if(!asset||!members.has(row.id)||view(asset)!==row.view||!projectAssetDiscovery({assets:[asset],query:'',sourceSiteId:input.sourceSiteId,tagScope:input.tagScope,tagQueries:input.tagQueries}).matches.length)continue
+            if(input.color&&!colors?.has(row.id))continue
+            const lexical=row.lexical?projectAssetDiscovery({assets:[asset],query:input.query,tagScope:input.tagScope,tagQueries:input.tagQueries,fields:input.fields}).matches[0]?.explanation??null:null
+            if(row.similarity===null){if(lexical){const color=colors?.get(row.id);matches.push({asset,explanation:color?{...lexical,evidence:[color,...lexical.evidence]}:lexical})}continue}
+            const color=colors?.get(row.id)
+            matches.push({asset,explanation:{lane:lexical?'hybrid':'semantic',evidence:[...(color?[color]:[]),...(lexical?.evidence??[]).slice(0,2),{kind:input.mode==='image'?'image-example':'semantic',match:'vector',label:`${input.mode==='image'?'以图相似':'画面含义'} · SigLIP2 · cosine ${row.similarity.toFixed(3)}`}],similarity:row.similarity,spaceId:snapshot.space}})
+          }
+        }
+        controller.signal.throwIfAborted();d.assertAuthority();assertImageSource(snapshot.imageSource);let nextCursor:string|null=null
+        if(offset<snapshot.total){nextCursor=randomUUID();cursors.set(nextCursor,{snapshot:snapshotId!,offset,owner})}
+        if(!nextCursor&&!input.cursor)dropSnapshot(snapshotId!)
+        const latest=new Map(readAssets(d.database,matches.map(m=>m.asset.id)).map(a=>[a.id,a]))
+        const members=searchFolderMembers(d.database,input.folderId,matches.map(m=>m.asset.id))
+        const safe=matches.flatMap(match=>{const asset=latest.get(match.asset.id)
+          if(!asset||!members.has(asset.id)||view(asset)!==view(match.asset))return[]
+          const current=refreshAssetDiscoveryMatch(match,asset,input);return current?[current]:[]})
+        const lexicalIndex=d.lexicalStatus()
+        return {matches:safe,total:snapshot.total,nextCursor,index:lexicalIndex,...(input.color?{colors:d.colorCoverage?.()}:{ }),mode:snapshot.mode,coverage:coverage(),notice:'相似度用于排序，不表示正确率。语义候选最多 200 项，精确文字命中另行保留。'}
+      }catch(e){if(snapshotId&&!closed&&(!input.cursor||e instanceof Error&&e.message==='RETRIEVAL_QUERY_IMAGE_EXPIRED'))dropSnapshot(snapshotId);throw e}
+      finally{clearTimeout(deadline);controllers.delete(requestKey)}
+    },
+    cancel(queryId:string,owner='host'){controllers.get(owner+':'+queryId)?.abort()},
+    cancelOwner(owner:string){for(const [key,c] of controllers)if(key.startsWith(owner+':'))c.abort()
+      for(const [id,s] of snapshots)if(s.owner===owner)dropSnapshot(id)},
+    async rebuild(){
+      d.assertAuthority();if(indexBuilding||running)throw Error('RETRIEVAL_INDEX_BUSY');indexBuilding=true
+      const fresh=freshIndex();rebuildAbort=new AbortController();const deadline=setTimeout(()=>rebuildAbort?.abort(),60000)
+      try{const signal=rebuildAbort.signal;const spaces=canonical.prepare('SELECT id FROM spaces').all() as {id:string}[]
+        for(const space of spaces){let after='';for(;;){signal.throwIfAborted();d.assertAuthority()
+          const permit=await d.admission?.reserveLocalWork('index',32*1024**2,signal,'background')
+          let rows:VectorRow[]=[]
+          try{rows=canonical.prepare('SELECT * FROM vectors WHERE space=? AND id>? ORDER BY id LIMIT 100').all(space.id,after) as VectorRow[]
+            if(!rows.length)break;after=rows.at(-1)!.id;const source=new Map(readAssets(d.database,rows.map(r=>r.id)).map(a=>[a.id,a]))
+            fresh.db.transaction(()=>{for(const row of rows){const a=source.get(row.id);if(a&&imageAsset(a)&&view(a)===row.view){validateRetrievalVectors([decodeVector(row.vector)],1);fresh.db.prepare('INSERT OR REPLACE INTO vectors VALUES(?,?,?,?,?)').run(row.space,row.id,row.view,row.input_sha,row.vector)}}})()
+          }finally{permit?.release()}
+          await new Promise<void>(resolve=>setImmediate(resolve))
+        }}
+        d.assertAuthority();saveRegistry({...registry!,index:fresh.filename});const old=index;index=fresh.db;indexGeneration=fresh.epoch;error=null
+        if(readers.get(old))retired.add(old);else old.close()
+        return coverage()
+      }catch(e){fresh.db.close();throw e}finally{clearTimeout(deadline);rebuildAbort=undefined;indexBuilding=false}
+    },
+    switchSpace(spaceId:string){d.assertAuthority();const space=canonical.prepare('SELECT qualification FROM spaces WHERE id=?').pluck().get(spaceId)
+      if(!space||!jobs().some(job=>job.spaceId===spaceId&&job.state==='complete'))throw Error('RETRIEVAL_SPACE_INCOMPLETE')
+      canonical.prepare("UPDATE meta SET value=? WHERE key='active'").run(spaceId);return coverage()},
+    async close(){closed=true;jobAbort?.abort();for(const controller of controllers.values())controller.abort();await running
+      // Host waits for its held query operations before closing this storage.
+      index.close();for(const db of retired)db.close();canonical.close()},
+    suspend(){jobAbort?.abort();rebuildAbort?.abort();for(const controller of controllers.values())controller.abort()},
+  }
+}
+export type AssetRetrievalStore=ReturnType<typeof createAssetRetrievalStore>

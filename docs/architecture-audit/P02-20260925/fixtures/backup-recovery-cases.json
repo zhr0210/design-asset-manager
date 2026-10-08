@@ -1,0 +1,137 @@
+{
+  "status": "designed_NOT_RUN",
+  "cases": [
+    {
+      "id": "B01",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "consistent backup completes",
+      "expected": "verify SQLite profile/integrity/FK/identity/user-row preservation; record valid DB backup",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B02",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "copy only main file of active WAL DB",
+      "expected": "not an accepted backup; preserve WAL state and reject restore",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B03",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "backup DB valid but original files absent",
+      "expected": "classify database-only backup; no complete-library claim",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B04",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "backup contains stale/missing download chunks",
+      "expected": "retain explicit recovery-data coverage gap; no completed transfer claim",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B05",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "backup path symlink or occupied destination",
+      "expected": "reject; no overwrite of source or another backup",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B06",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "journal and DB outcomes disagree",
+      "expected": "reconcile actual schema/transaction evidence, not record phase alone",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B07",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "unknown unowned staged files",
+      "expected": "do not delete or attach to backup automatically",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B08",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "corrupt backup SHA/integrity/identity",
+      "expected": "reject restoration",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B09",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "restore valid backup to new isolated managed target",
+      "expected": "review and validate roots/identity/DB+files before activation; invalidate old session",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B10",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "backup succeeds but publish fsync/manifest fails",
+      "expected": "not yet verified published backup; no migration",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B11",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "no new schema steps needed",
+      "expected": "do not create backup merely for ordinary reads or no-op enable",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "B12",
+      "testIds": [
+        "T02",
+        "T03",
+        "T07"
+      ],
+      "given": "attempt to restore exclusive lock DB as live ownership",
+      "expected": "reject authority reuse; reacquire a fresh lease",
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

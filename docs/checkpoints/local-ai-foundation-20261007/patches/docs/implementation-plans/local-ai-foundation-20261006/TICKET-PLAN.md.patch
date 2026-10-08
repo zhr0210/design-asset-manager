@@ -1,0 +1,12 @@
+diff --git a/docs/implementation-plans/local-ai-foundation-20261006/TICKET-PLAN.md b/docs/implementation-plans/local-ai-foundation-20261006/TICKET-PLAN.md
+index 22b1ea8..6ee2ea3 100644
+--- a/docs/implementation-plans/local-ai-foundation-20261006/TICKET-PLAN.md
++++ b/docs/implementation-plans/local-ai-foundation-20261006/TICKET-PLAN.md
+@@ -1,5 +1,7 @@
+ # 本地AI模型、资源、分析与混合检索：任务拆分草案
+ 
++2026-10-07最新限定：用户要求连续推进五项无界面收尾，当前a97d正式构建与70个相关TS/TSX文件、160项Python回归通过；数据保护、质量/性能对照和两轴审查整改已完成，交付采用精确任务补丁检查点并保持重叠旧WIP/原暂存。当前UI/原生/压力/索引故障与规模联合验收仍未运行，T23和父级不得关闭。见[无界面交付](../../handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md)，其版本/范围优先于下面15:23记录。
++
+ 2026-10-06 拆分；2026-10-07 实施续接。来源：[规格 #24](https://github.com/zhr0210/design-asset-manager/issues/24)及[本地规格](../../product/LOCAL-AI-FOUNDATION-SPEC.md)。用户已明确调用 implement，授权在当前范围连续实施，无需逐切片确认；旧 Q18 不再阻止实施。23 张子 issue 尚未发布，发布审批与实施授权独立，父 issue 保持不变。
+ 
+ 最新实施检查点（2026-10-07 15:23）：全部切片已有实施代码，正式用户联合验收继续，父级/T23未完成。模型目录、下载/恢复只用ModelScope境内源。22bc已完成8B CPU/混合/GPU实际素材及一键3/3、正常重开；4B混合实际描述、生产GGUF后台新公开素材和真实sent未知/明确新执行恢复均成立，OOM故障一次真实低方案已复验。冷加载取消相邻修复已先红后绿并构建565d，快速开库后状态仍待读回。原生CU被用户实体Escape停止，本轮界面操作按工具要求结束。新候选受影响路径、索引损坏/120分页、当前双语以图联合、指定Chrome压力、原生和最终完整检查/审查/安全提交仍待。详细连续状态见PROGRESS，旧候选不替代当前证据。

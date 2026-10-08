@@ -1,0 +1,77 @@
+import type { PublicModelFetch, UpstreamModelRelease } from './huggingface-model-source'
+import type { VisionModelFile } from '../model-library/vision-model-artifact'
+
+export const CHINA_MODEL_MIRROR = 'https://modelscope.cn'
+export interface ChinaMirrorFile { name: string; bytes: number; sha256: string; revision: string; committedAt: number; downloadUrl: string }
+const approved = new Set(['modelscope.cn','www.modelscope.cn','cdn-lfs-cn-1.modelscope.cn'])
+export function assertChinaModelUrl(value: string) {
+  const url=new URL(value)
+  if(url.protocol!=='https:'||url.username||url.password||url.port||!approved.has(url.hostname)) throw Error('MODEL_SOURCE_REDIRECT_REJECTED')
+}
+async function mirrorJson(url:string,fetch:PublicModelFetch,signal:AbortSignal) {
+  const response=await fetch(url,{signal,method:'GET',credentials:'omit',redirect:'error',headers:{Accept:'application/json'}})
+  if(response.status!==200||!response.body){await response.body?.cancel();throw Error('MODEL_MIRROR_UNAVAILABLE')}
+  const chunks:Uint8Array[]=[];let bytes=0
+  try{for await(const chunk of response.body as unknown as AsyncIterable<Uint8Array>){
+    signal.throwIfAborted();bytes+=chunk.length;if(bytes>2*1024**2)throw Error('MODEL_SOURCE_METADATA_INVALID');chunks.push(chunk)
+  }}finally{await response.body.cancel().catch(()=>{})}
+  let value:any;try{value=JSON.parse(Buffer.concat(chunks).toString('utf8'))}catch{throw Error('MODEL_SOURCE_METADATA_INVALID')}
+  if(value.Code!==200||!value.Data)throw Error('MODEL_MIRROR_UNAVAILABLE')
+  return value.Data
+}
+export async function chinaMirrorFiles(repository: string, fetch: PublicModelFetch, signal: AbortSignal, revision='master'): Promise<ChinaMirrorFile[]> {
+  if(!/^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repository))throw Error('MODEL_SOURCE_METADATA_INVALID')
+  if(revision!=='master'&&!/^[a-f0-9]{40}$/.test(revision))throw Error('MODEL_SOURCE_METADATA_INVALID')
+  const value=await mirrorJson(`${CHINA_MODEL_MIRROR}/api/v1/models/${repository}/repo/files?Revision=${revision}&Recursive=true`,fetch,signal)
+  if(!Array.isArray(value.Files)||value.Files.length>5000)throw Error('MODEL_MIRROR_UNAVAILABLE')
+  return value.Files.filter((f:any)=>f.Type==='blob'&&typeof f.Path==='string'&&f.Path.length<=240&&
+    f.Path.split('/').every((part:string)=>/^[A-Za-z0-9._-]+$/.test(part)&&part!=='.'&&part!=='..')&&
+    /^[a-f0-9]{40}$/.test(f.Revision)&&/^[a-f0-9]{64}$/.test(f.Sha256)&&Number.isSafeInteger(f.Size)&&f.Size>0)
+    .map((f:any)=>({name:f.Path,bytes:f.Size,sha256:f.Sha256,revision:f.Revision,committedAt:Number.isSafeInteger(f.CommittedDate)?f.CommittedDate:0,
+      downloadUrl:`${CHINA_MODEL_MIRROR}/api/v1/models/${repository}/repo?Revision=${f.Revision}&FilePath=${encodeURIComponent(f.Path)}`}))
+}
+export async function chinaMirrorCatalog(repository:string,fetch:PublicModelFetch,signal:AbortSignal,revision?:string) {
+  const info=await mirrorJson(`${CHINA_MODEL_MIRROR}/api/v1/models/${repository}`,fetch,signal)
+  if(`${info.Path}/${info.Name}`!==repository||info.IsAccessible!==1||info.IsPublished!==1)throw Error('MODEL_MIRROR_UNAVAILABLE')
+  const license=typeof info.License==='string'&&/^[a-z0-9._-]{1,100}$/.test(info.License)?info.License:null
+  let files=await chinaMirrorFiles(repository,fetch,signal,revision)
+  const pinned=revision??files.slice().sort((a,b)=>b.committedAt-a.committedAt)[0]?.revision
+  if(!pinned)throw Error('MODEL_MIRROR_UNAVAILABLE')
+  // A discovered commit is re-read immutably before presenting a whole bundle.
+  if(!revision)files=await chinaMirrorFiles(repository,fetch,signal,pinned)
+  return {repository,revision:pinned,license,files}
+}
+
+/** Follow only the approved domestic storage hosts, including on resumed reads.
+ * Temporary CDN signatures stay inside this request and are never persisted. */
+export async function openChinaMirrorFile(file: ChinaMirrorFile, offset: number, fetch: PublicModelFetch, signal: AbortSignal) {
+  let url=file.downloadUrl
+  for(let redirects=0;redirects<=5;redirects++) {
+    assertChinaModelUrl(url)
+    const response=await fetch(url,{signal,method:'GET',credentials:'omit',redirect:'manual',headers:{
+      'Accept-Encoding':'identity',...(offset?{Range:`bytes=${offset}-`}:{})}})
+    if(![301,302,303,307,308].includes(response.status))return response
+    const location=response.headers.get('location');await response.body?.cancel()
+    if(!location)throw Error('MODEL_SOURCE_REDIRECT_REJECTED')
+    url=new URL(location,url).href
+  }
+  throw Error('MODEL_SOURCE_REDIRECT_REJECTED')
+}
+
+/** Mirror revisions are separate from original repository revisions. Match whole
+ * hashes, never merely names. Small declarative files with no known SHA are read
+ * solely for the existing subsequent Git-blob and complete SHA verification. */
+export async function resolveChinaMirrorFile(release: UpstreamModelRelease, file: VisionModelFile,
+  fetch: PublicModelFetch, signal: AbortSignal) {
+  const files=await chinaMirrorFiles(release.repository,fetch,signal,release.catalogProvider==='modelscope-cn'?release.revision:'master'), candidate=files.find(f=>f.name===file.name)
+  if(!candidate||candidate.bytes!==file.bytes||(/^[a-f0-9]{64}$/.test(file.sha256)&&candidate.sha256!==file.sha256))
+    throw Error('MODEL_MIRROR_FILE_UNAVAILABLE')
+  return candidate
+}
+export async function verifyChinaMirrorRelease(release: UpstreamModelRelease,fetch:PublicModelFetch,signal:AbortSignal) {
+  const catalog=await chinaMirrorCatalog(release.repository,fetch,signal,release.catalogProvider==='modelscope-cn'?release.revision:undefined)
+  if(catalog.license!==release.license)throw Error('MODEL_SOURCE_LICENSE_CHANGED')
+  const files=catalog.files
+  for(const file of release.files){const actual=files.find(f=>f.name===file.name)
+    if(!actual||actual.bytes!==file.bytes||actual.sha256!==file.sha256)throw Error('MODEL_MIRROR_FILE_UNAVAILABLE')}
+}

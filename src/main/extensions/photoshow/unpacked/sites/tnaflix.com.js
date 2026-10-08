@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"tnaflix.com":{srcMatching:[{srcRegExp:"(//.+?\\.tna(?:flix|static)\\.com/(?:thumb/)?)[\\w:]+(/.+@IMG@)",processor:"$1a$2"}]}};

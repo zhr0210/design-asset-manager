@@ -4,9 +4,12 @@ import { homedir } from 'os'
 import type { AppSettings } from '../../shared/types/settings.types'
 import type { AiBackendConfig, AiPromptReverseSettings } from '../../shared/types/ai-backend.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../shared/constants/prompt-templates.constants'
+import { normalizeProductTextBoxProvider } from '../../shared/workflows/text-box-provider.workflow'
 import { createNewInstallAppSettingsDefaults } from './settings/settings-defaults.builder'
 import { SettingsMigrationService } from './settings/settings-migration.service'
 import type { SettingsMigrationApplyResult, SettingsMigrationPlan, SettingsMigrationRollbackResult } from './settings/settings-migration.types'
+
+export { normalizeProductTextBoxProvider } from '../../shared/workflows/text-box-provider.workflow'
 
 export function createDefaultLlamaBackendConfig(): AiBackendConfig {
   return {
@@ -50,12 +53,36 @@ export class SettingsService {
   private cache: AppSettings | null = null
   private migrationService = new SettingsMigrationService()
 
-  private constructor() {
-    const baseDir = path.join(homedir(), 'DesignAssetManager')
+  private constructor(baseDir = path.join(homedir(), 'DesignAssetManager'), legacyPaths: string[] = []) {
     if (!fs.existsSync(baseDir)) {
       fs.mkdirSync(baseDir, { recursive: true })
     }
     this.configPath = path.join(baseDir, 'settings.json')
+    if (!fs.existsSync(this.configPath)) {
+      for (const legacy of legacyPaths) {
+        if (!fs.existsSync(legacy)) continue
+        // Migration stays inside Main. Credentials and references never enter a client response.
+        const content = fs.readFileSync(legacy, 'utf8')
+        const value = JSON.parse(content)
+        if (!value || typeof value !== 'object' || Array.isArray(value)) throw Error('SETTINGS_MIGRATION_INVALID')
+        const temporary = this.configPath + '.migration-pending'
+        fs.writeFileSync(temporary, content, { encoding: 'utf8', mode: 0o600, flag: 'wx' })
+        fs.renameSync(temporary, this.configPath)
+        break
+      }
+    }
+  }
+
+  /** One profile owns settings, credentials, App state and recovery. Called before service composition. */
+  public static configureProfile(directory: string, legacyPaths: string[] = []): void {
+    if (SettingsService.instance) throw Error('SETTINGS_PROFILE_ALREADY_OPEN')
+    if (!path.isAbsolute(directory)) throw Error('SETTINGS_PROFILE_INVALID')
+    SettingsService.instance = new SettingsService(directory, legacyPaths)
+  }
+
+  public static openProfile(directory: string, legacyPaths: string[] = []): SettingsService {
+    if (!path.isAbsolute(directory)) throw Error('SETTINGS_PROFILE_INVALID')
+    return new SettingsService(directory, legacyPaths)
   }
 
   public static getInstance(): SettingsService {
@@ -166,7 +193,7 @@ export class SettingsService {
 
       // R3.0 parameters parsing
       const enableAnalysisVal = parsed.enableTextColorAnalysis ?? defaults.enableTextColorAnalysis
-      const boxProviderVal = parsed.textBoxProvider ?? defaults.textBoxProvider
+      const boxProviderVal = normalizeProductTextBoxProvider(parsed.textBoxProvider ?? defaults.textBoxProvider)
       const ocrTimeoutVal = parsed.ocrTimeoutMs ?? defaults.ocrTimeoutMs
       const maxBoxesImageVal = parsed.maxTextBoxesPerImage ?? defaults.maxTextBoxesPerImage
       const autoInstallAllowedVal = parsed.autoInstallAllowed ?? defaults.autoInstallAllowed
@@ -222,6 +249,7 @@ export class SettingsService {
         qwen3vlMaxImageSize: qwen3vlMaxImageSizeVal,
         qwen3vlTemperature: qwen3vlTemperatureVal,
         qwen3vlTopP: qwen3vlTopPVal,
+        aiTaskModels:parsed.aiTaskModels??{},
         aiBackends: aiBackendsVal,
         promptReverseSettings: promptReverseSettingsVal,
         promptReverseTemplates: promptReverseTemplatesVal,
@@ -229,7 +257,7 @@ export class SettingsService {
       } as any
       return this.cache!
     } catch (e) {
-      console.error('[SettingsService] Failed to read settings.json, returning defaults:', e)
+      console.error('[SettingsService] Settings could not be read; saved file is preserved.')
       return defaults
     }
   }
@@ -249,7 +277,7 @@ export class SettingsService {
 
     // R3.0 options parsing
     const enableAnalysisVal = settings.enableTextColorAnalysis ?? current.enableTextColorAnalysis
-    const boxProviderVal = settings.textBoxProvider ?? current.textBoxProvider
+    const boxProviderVal = normalizeProductTextBoxProvider(settings.textBoxProvider ?? current.textBoxProvider)
     const ocrTimeoutVal = settings.ocrTimeoutMs ?? current.ocrTimeoutMs
     const maxBoxesImageVal = settings.maxTextBoxesPerImage ?? current.maxTextBoxesPerImage
     const autoInstallAllowedVal = settings.autoInstallAllowed ?? current.autoInstallAllowed
@@ -306,19 +334,21 @@ export class SettingsService {
       qwen3vlMaxImageSize: qwen3vlMaxImageSizeVal,
       qwen3vlTemperature: qwen3vlTemperatureVal,
       qwen3vlTopP: qwen3vlTopPVal,
+      aiTaskModels:settings.aiTaskModels??current.aiTaskModels??{},
       aiBackends: aiBackendsVal,
       promptReverseSettings: promptReverseSettingsVal,
       promptReverseTemplates: promptReverseTemplatesVal,
       memoryPolicy: memoryPolicyVal
     }
-    this.cache = updated as any
-
+    const temporary=this.configPath+'.pending'
     try {
-      fs.writeFileSync(this.configPath, JSON.stringify(updated, null, 2), 'utf8')
-      console.log('[SettingsService] Settings successfully saved to:', this.configPath)
-    } catch (e) {
-      console.error('[SettingsService] Failed to write settings.json:', e)
+      fs.writeFileSync(temporary,JSON.stringify(updated,null,2),{encoding:'utf8',mode:0o600})
+      fs.renameSync(temporary,this.configPath)
+    } catch {
+      try{fs.unlinkSync(temporary)}catch{}
+      throw new Error('SETTINGS_WRITE_FAILED')
     }
+    this.cache=updated as any
 
     return updated
   }

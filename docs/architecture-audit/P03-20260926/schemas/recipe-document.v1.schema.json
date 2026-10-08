@@ -1,0 +1,359 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.design-asset-manager.invalid/p03/recipe-document.v1.schema.json",
+  "$comment": "Proposed P03 document contract only; semantic/engine validation NOT_RUN.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "documentStatus",
+    "recipeId",
+    "recipeVersion",
+    "enabled",
+    "purposes",
+    "capabilitySemantics",
+    "input",
+    "prompts",
+    "promptDigest",
+    "promptRequirements",
+    "hardValidation",
+    "legacyEvidenceRecipeLiteral",
+    "legacyEvidenceExactRecipeBackfillAllowed",
+    "sourceProvenance",
+    "contentDigest",
+    "documentFormatVersion"
+  ],
+  "properties": {
+    "documentStatus": {
+      "const": "proposed-source-compatibility-baseline"
+    },
+    "recipeId": {
+      "const": "dam.visual-bundle.compat"
+    },
+    "recipeVersion": {
+      "type": "string"
+    },
+    "enabled": {
+      "const": false
+    },
+    "purposes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "analyze",
+          "reverse"
+        ]
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true
+    },
+    "capabilitySemantics": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "sourceMaxBytes",
+        "limitInputPixels",
+        "rotate",
+        "resize",
+        "flattenBackground",
+        "encoding",
+        "quality",
+        "explicitColourSpaceTransform",
+        "mimeType",
+        "note"
+      ],
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "sourceMaxBytes": {
+          "type": "integer"
+        },
+        "limitInputPixels": {
+          "type": "integer"
+        },
+        "rotate": {
+          "type": "string"
+        },
+        "resize": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "height",
+            "fit",
+            "withoutEnlargement"
+          ],
+          "properties": {
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            },
+            "fit": {
+              "type": "string"
+            },
+            "withoutEnlargement": {
+              "type": "boolean"
+            }
+          }
+        },
+        "flattenBackground": {
+          "type": "string"
+        },
+        "encoding": {
+          "type": "string"
+        },
+        "quality": {
+          "type": "integer"
+        },
+        "explicitColourSpaceTransform": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mimeType": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "prompts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "system",
+        "initialLengthSuffix",
+        "retryLengthSuffix",
+        "analyze",
+        "reverse",
+        "retryUserSuffix"
+      ],
+      "properties": {
+        "system": {
+          "type": "string"
+        },
+        "initialLengthSuffix": {
+          "type": "string"
+        },
+        "retryLengthSuffix": {
+          "type": "string"
+        },
+        "analyze": {
+          "type": "string"
+        },
+        "reverse": {
+          "type": "string"
+        },
+        "retryUserSuffix": {
+          "type": "string"
+        }
+      }
+    },
+    "promptDigest": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "promptRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "captionLanguage",
+        "tagLanguage",
+        "promptLanguage",
+        "ocrText",
+        "initialTagsMax",
+        "retryTagsMax",
+        "initialCaptionCharacters",
+        "retryCaptionCharactersMax",
+        "initialPromptWords",
+        "retryPromptWordsMax"
+      ],
+      "properties": {
+        "captionLanguage": {
+          "type": "string"
+        },
+        "tagLanguage": {
+          "type": "string"
+        },
+        "promptLanguage": {
+          "type": "string"
+        },
+        "ocrText": {
+          "type": "string"
+        },
+        "initialTagsMax": {
+          "type": "integer"
+        },
+        "retryTagsMax": {
+          "type": "integer"
+        },
+        "initialCaptionCharacters": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "retryCaptionCharactersMax": {
+          "type": "integer"
+        },
+        "initialPromptWords": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "retryPromptWordsMax": {
+          "type": "integer"
+        }
+      }
+    },
+    "hardValidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validatorIdentity",
+        "acceptFinishReasons",
+        "lengthReasonRejectsEvenCompleteJson",
+        "fields",
+        "textMaxUtf16Units",
+        "captionMayBeEmpty",
+        "ocrTextMayBeNonempty",
+        "promptMustBeNonblank",
+        "tagsMaxBeforeDeduplication",
+        "tagMaxUtf16UnitsBeforeTrim",
+        "tagsMayBeEmpty",
+        "tagNormalization",
+        "languageEnforced",
+        "unknownOutputFields",
+        "multipleChoices",
+        "ambiguousExtraObjects",
+        "messageObjectWithoutContentDoesNotFallbackToChoiceText"
+      ],
+      "properties": {
+        "validatorIdentity": {
+          "type": "string"
+        },
+        "acceptFinishReasons": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "stop",
+              null
+            ]
+          }
+        },
+        "lengthReasonRejectsEvenCompleteJson": {
+          "type": "boolean"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "textMaxUtf16Units": {
+          "type": "integer"
+        },
+        "captionMayBeEmpty": {
+          "type": "boolean"
+        },
+        "ocrTextMayBeNonempty": {
+          "type": "boolean"
+        },
+        "promptMustBeNonblank": {
+          "type": "boolean"
+        },
+        "tagsMaxBeforeDeduplication": {
+          "type": "integer"
+        },
+        "tagMaxUtf16UnitsBeforeTrim": {
+          "type": "integer"
+        },
+        "tagsMayBeEmpty": {
+          "type": "boolean"
+        },
+        "tagNormalization": {
+          "type": "string"
+        },
+        "languageEnforced": {
+          "type": "boolean"
+        },
+        "unknownOutputFields": {
+          "type": "string"
+        },
+        "multipleChoices": {
+          "type": "string"
+        },
+        "ambiguousExtraObjects": {
+          "type": "string"
+        },
+        "messageObjectWithoutContentDoesNotFallbackToChoiceText": {
+          "type": "boolean"
+        }
+      }
+    },
+    "legacyEvidenceRecipeLiteral": {
+      "type": "string"
+    },
+    "legacyEvidenceExactRecipeBackfillAllowed": {
+      "type": "boolean"
+    },
+    "sourceProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observedOn",
+        "files"
+      ],
+      "properties": {
+        "observedOn": {
+          "type": "string"
+        },
+        "files": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "src/main/visual-ai/visual-ai-controller.ts",
+            "src/main/visual-ai/openai-vision.transport.ts",
+            "src/main/visual-ai/vision-response.ts"
+          ],
+          "properties": {
+            "src/main/visual-ai/visual-ai-controller.ts": {
+              "type": "string"
+            },
+            "src/main/visual-ai/openai-vision.transport.ts": {
+              "type": "string"
+            },
+            "src/main/visual-ai/vision-response.ts": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "contentDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "documentFormatVersion": {
+      "type": "integer",
+      "const": 1
+    }
+  }
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"sportsdirect.com":{srcMatching:[{srcRegExp:"(//.+?\\.sportsdirect\\.com/images/)products/((\\d{2})\\d+_)[^_]+(.*@IMG@)",processor:"$1imgzoom/$3/$2xxl$4"}]}};

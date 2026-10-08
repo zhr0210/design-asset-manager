@@ -1,0 +1,15 @@
+{
+  "stage": "P22",
+  "status": "proposed",
+  "electronLock": "30.5.1",
+  "mainSandboxCurrent": false,
+  "workWindowSandboxCurrent": true,
+  "migrationExecuted": false,
+  "checks": [
+    "sender",
+    "frame",
+    "schema",
+    "scope",
+    "membership"
+  ]
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"xvideos.com":{ignore:".videopv",srcMatching:[{srcRegExp:"(//.+?\\.com/videos/thumbs\\d+)\\w*(/.+@IMG@)",processor:["$1poster$2","$1lll$2"]},{srcRegExp:"(//.+?\\.com/galleries/)\\w+(/.+@IMG@)",processor:"$1full$2"}]}};

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"dribbble.com":{srcMatching:[{srcRegExp:"(cdn\\.dribbble\\.com/users/\\d+/avatars/)(?:mini|small|normal)(/(?:.+@IMG@|data))",processor:"$1original$2"}]}};

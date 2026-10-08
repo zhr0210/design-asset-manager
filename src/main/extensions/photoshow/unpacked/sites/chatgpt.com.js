@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"chatgpt.com":{referrerAddedHostnames:["oaiusercontent.com"]}};

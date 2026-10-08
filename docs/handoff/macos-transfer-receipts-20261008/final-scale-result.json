@@ -1,0 +1,19 @@
+{
+  "build": {
+    "buildId": "dam-8ddc7686f890b3e3",
+    "sourceDigest": "8ddc7686f890b3e33030804d52703336735b84bd842d4e370386e1617d64e189",
+    "builtAt": "2026-10-08T07:37:13.123Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 786
+  },
+  "kind": "final-source production Host; not Browser or installed UI",
+  "records": 10009,
+  "coldMs": 31636.3561,
+  "warmP95Ms": 1002.5463999999993,
+  "pageP95Ms": 227.10710000000108,
+  "fullPagination": 9834,
+  "reopenMs": 1147.9372999999978,
+  "peakRss": 155635712,
+  "aiCalls": 0,
+  "originalBusinessCount": 9
+}

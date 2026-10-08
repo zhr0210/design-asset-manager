@@ -1,0 +1,21 @@
+diff --git a/src/renderer/components/library/canvas/library-canvas.css b/src/renderer/components/library/canvas/library-canvas.css
+index 7b99271..567f7e3 100644
+--- a/src/renderer/components/library/canvas/library-canvas.css
++++ b/src/renderer/components/library/canvas/library-canvas.css
+@@ -139,3 +139,16 @@
+ .gallery-design .library-onboarding-hint{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+ 
+ .gallery-design .floating-navigation button.library-ai-entry{width:auto;display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;font-size:12px}
++.retrieval-search-controls{flex:1 1 100%;min-width:0}
++.retrieval-search-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:4px 0}
++.retrieval-search-row label{display:flex;align-items:center;gap:7px}
++.retrieval-search-row select{min-height:30px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);padding:3px 7px}
++.gallery-design .library-search-status{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;padding-right:16px;gap:8px 14px}
++.library-search-status>.retrieval-search-controls{flex-basis:100%}
++.library-search-status>p{flex-basis:100%;margin:0;line-height:1.5}
++.gallery-design .library-search-status button{min-height:30px}
++.gallery-design.minimal-prototype .library-search-status+.selectionbar{position:relative;inset:auto;margin:4px 0 14px;height:auto;min-height:40px;flex-wrap:wrap;overflow:visible}
++.retrieval-search-controls details{margin-top:5px}
++.retrieval-search-controls summary{cursor:pointer}
++.retrieval-search-controls p{line-height:1.6;margin:6px 0;max-width:85ch}
++.retrieval-job{border-top:1px solid var(--border);padding:7px 0}

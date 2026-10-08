@@ -13,9 +13,15 @@ from core.model_manager import ModelManager
 from core.batch_scheduler import BatchScheduler
 from core.clip_siglip_onnx_compat import probe_clip_siglip_onnx_environment
 from core.python_mps_compat import probe_python_mps_environment
+from core.python_cuda_compat import probe_python_cuda_environment
 from core.gpu_monitor import get_gpu_status
 from core.macos_ai_capabilities import probe_macos_ai_capabilities
+from core.windows_ai_capabilities import probe_windows_ai_capabilities
+from core.mps_execution_probe import probe_python_mps_execution
+from core.cuda_execution_probe import probe_python_cuda_execution
+from core.onnx_model_load_probe import probe_registered_onnx_model_load
 from core.mock_policy import is_strict_real_ai
+from core.torch_inference_runtime import configure_torch_inference_runtime
 from schemas.tag_schema import TagEnqueueRequest
 from schemas.prompt_schema import PromptGenerateRequest
 from schemas.analysis_schema import AnalysisGenerateRequest
@@ -26,6 +32,17 @@ from models.asset_type_router import AssetTypeRouter
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle startup and shutdown hooks for FastAPI."""
+    try:
+        cuda_policy = configure_torch_inference_runtime()
+        if cuda_policy["cuda_available"]:
+            print(
+                "[CUDA] inference policy:"
+                f" matmul={cuda_policy['matmul_precision']},"
+                f" cudnn_benchmark={cuda_policy['cudnn_benchmark']}"
+            )
+    except Exception as e:
+        print(f"[CUDA] inference policy unavailable: {type(e).__name__}")
+
     # Startup: Patch tqdm with premium TUI progress display
     try:
         from utils.progress_bar import patch_tqdm_for_tui
@@ -103,13 +120,7 @@ async def tag_status():
 
 @app.post("/ai/prompt/generate", status_code=202)
 async def generate_prompt(request: PromptGenerateRequest, background_tasks: BackgroundTasks):
-    """Triggers manual JoyCaption prompt generation in the background."""
-    if is_strict_real_ai():
-        raise HTTPException(
-            status_code=501,
-            detail="Python PromptWorker mock path is disabled in production. Use the Qwen3-VL Llama/OpenAI-compatible prompt route."
-        )
-
+    """Triggers manual Qwen3-VL prompt generation in the background."""
     task_id = f"task-prompt-{uuid.uuid4().hex[:8]}"
     task_queue.enqueue(
         task_id=task_id,
@@ -125,7 +136,7 @@ async def generate_prompt(request: PromptGenerateRequest, background_tasks: Back
 
     return {
         "success": True,
-        "message": "JoyCaption prompt task started asynchronously.",
+        "message": "Qwen3-VL prompt task started asynchronously.",
         "task_id": task_id,
         "status": "queued"
     }
@@ -144,13 +155,7 @@ async def prompt_status(task_id: str):
 
 @app.post("/ai/analysis/generate", status_code=202)
 async def generate_analysis(request: AnalysisGenerateRequest, background_tasks: BackgroundTasks):
-    """Triggers manual Qwen2.5-VL layout design analysis in the background."""
-    if is_strict_real_ai():
-        raise HTTPException(
-            status_code=501,
-            detail="Python AnalysisWorker mock path is disabled in production. Use a real VLM analysis backend."
-        )
-
+    """Triggers manual Qwen3-VL layout design analysis in the background."""
     task_id = f"task-analysis-{uuid.uuid4().hex[:8]}"
     task_queue.enqueue(
         task_id=task_id,
@@ -166,7 +171,7 @@ async def generate_analysis(request: AnalysisGenerateRequest, background_tasks: 
 
     return {
         "success": True,
-        "message": "Qwen2.5-VL deep design sweep task started asynchronously.",
+        "message": "Qwen3-VL deep design sweep task started asynchronously.",
         "task_id": task_id,
         "status": "queued"
     }
@@ -254,15 +259,40 @@ async def macos_runtime_capabilities():
     """Return macOS AI branch runtime capability probes without loading models."""
     return probe_macos_ai_capabilities()
 
+@app.get("/ai/runtime/windows-capabilities")
+async def windows_runtime_capabilities():
+    """Return Windows AI branch runtime capability probes without loading models."""
+    return probe_windows_ai_capabilities()
+
 @app.get("/ai/model/clip-siglip-onnx/status")
 async def clip_siglip_onnx_status():
     """Return the CLIP/SigLIP ONNX environment compatibility signal."""
     return probe_clip_siglip_onnx_environment()
 
+@app.post("/ai/model/onnx-load-probe")
+async def onnx_model_load_probe(modelFamily: str = "wd_tagger"):
+    """Explicitly load a registered ONNX model and run its minimal probe where supported."""
+    return await asyncio.to_thread(probe_registered_onnx_model_load, modelFamily)
+
 @app.get("/ai/model/python-mps/status")
 async def python_mps_status():
     """Return the Python MPS environment compatibility signal."""
     return probe_python_mps_environment()
+
+@app.post("/ai/model/python-mps/execution-probe")
+async def python_mps_execution_probe():
+    """Explicitly execute a fixed tensor operation on the real MPS device."""
+    return await asyncio.to_thread(probe_python_mps_execution)
+
+@app.get("/ai/model/python-cuda/status")
+async def python_cuda_status():
+    """Return the Python CUDA environment compatibility signal."""
+    return probe_python_cuda_environment()
+
+@app.post("/ai/model/python-cuda/execution-probe")
+async def python_cuda_execution_probe():
+    """Explicitly execute a fixed tensor operation on the real CUDA device."""
+    return await asyncio.to_thread(probe_python_cuda_execution)
 
 @app.get("/ai/routing/preview")
 async def preview_routing(file_path: str = ""):

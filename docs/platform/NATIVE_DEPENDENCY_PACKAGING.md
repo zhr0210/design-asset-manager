@@ -1,5 +1,24 @@
 # Native Dependency Packaging Verification
 
+## Current F candidate (2026-10-08)
+
+Current production Main uses `createAppStorage` under the selected Electron
+`userData/app-state`; the legacy database path below is a historical Phase 9C
+observation. Current preloads are `index`, `asset-card`, and `work-window`.
+Browser uses the authenticated local Host HTTP transport and has no browser
+preload. The static tests check those actual consumers.
+
+Before disabling rebuild for packaging, `native-package-inputs.mjs` executes
+SQLite and Sharp in the installed target Electron and hashes loaded bindings.
+Foreign platforms/architectures are refused. This avoids mutating the live
+workspace's native DLLs; it is not native window or installation acceptance.
+Model weights, environment/secret files, databases, logs and caches are excluded
+from `ai-service`. Actual candidate bytes are checked by
+`verify-local-candidate.mjs`. Per-platform user acceptance remains separate;
+see [F state](../handoff/CURRENT-STATE.md).
+
+## Historical Phase 9C snapshot
+
 Phase 9C adds packaging preflight checks for native dependencies and Electron resource paths. It does not run `electron-builder`, package the app, download native dependencies, download models, or start the AI Worker.
 
 ## Native Dependencies

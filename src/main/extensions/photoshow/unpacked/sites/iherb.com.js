@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"iherb.com":{srcMatching:[{srcRegExp:"(//.+?\\.images-iherb\\.com/.+?/)\\w(/.+@IMG@)",processor:"$1l$2"},{srcRegExp:"(//.+?\\.images-iherb\\.com/.+?-)small(@IMG@)",processor:"$1large$2"},{srcRegExp:"(//.+?\\.(?:amazonaws|images-iherb)\\.com/.+?/)\\w(@IMG@)",processor:"$1l$2"}]}};

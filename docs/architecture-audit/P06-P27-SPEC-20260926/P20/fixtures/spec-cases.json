@@ -1,0 +1,111 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "W01",
+      "input": {
+        "op": "cycle",
+        "id": "a",
+        "parent": "b",
+        "parents": {
+          "b": null
+        }
+      },
+      "expected": true
+    },
+    {
+      "id": "W02",
+      "input": {
+        "op": "cycle",
+        "id": "a",
+        "parent": "b",
+        "parents": {
+          "b": "a"
+        }
+      },
+      "expected": false
+    },
+    {
+      "id": "W03",
+      "input": {
+        "op": "write",
+        "session": "s",
+        "currentSession": "s",
+        "expected": 2,
+        "revision": 2
+      },
+      "expected": true
+    },
+    {
+      "id": "W04",
+      "input": {
+        "op": "write",
+        "session": "old",
+        "currentSession": "s",
+        "expected": 2,
+        "revision": 2
+      },
+      "expected": false
+    },
+    {
+      "id": "W05",
+      "input": {
+        "op": "write",
+        "session": "s",
+        "currentSession": "s",
+        "expected": 1,
+        "revision": 2
+      },
+      "expected": false
+    },
+    {
+      "id": "W06",
+      "input": {
+        "op": "read",
+        "validToken": true,
+        "asset": "a",
+        "members": [
+          "a"
+        ],
+        "unavailable": []
+      },
+      "expected": true
+    },
+    {
+      "id": "W07",
+      "input": {
+        "op": "read",
+        "validToken": true,
+        "asset": "a",
+        "members": [],
+        "unavailable": []
+      },
+      "expected": false
+    },
+    {
+      "id": "W08",
+      "input": {
+        "op": "delete",
+        "sets": [
+          "w1",
+          "w2"
+        ],
+        "delete": "w1",
+        "assets": [
+          "a",
+          "b"
+        ]
+      },
+      "expected": {
+        "sets": [
+          "w2"
+        ],
+        "assets": [
+          "a",
+          "b"
+        ]
+      }
+    }
+  ]
+}

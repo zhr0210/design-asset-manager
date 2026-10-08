@@ -1,0 +1,11 @@
+import React, { useEffect, useRef } from 'react'
+import { Copy, FolderPlus, PanelsTopLeft } from 'lucide-react'
+export type ColorEvent = React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
+export function ColorStrip({colors,copy,menu}:{colors:string[];copy:(c:string)=>void;menu:(e:ColorEvent,c:string)=>void}) {
+ return <section className="detail-section immediate-palette" aria-label="配色与占比"><h3>配色与占比 <span className="sample">演示值</span></h3><div className="palette">{colors.map((c,i)=><button key={c} style={{background:c,flex:[5,3,2][i]}} title={`${c} · ${[50,30,20][i]}%`} aria-label={`复制颜色 ${c}`} aria-haspopup="menu" onClick={()=>copy(c)} onContextMenu={e=>menu(e,c)} onKeyDown={e=>{if(e.key==='ContextMenu'||e.shiftKey&&e.key==='F10')menu(e,c)}}/>)}</div></section>
+}
+export function ColorMenu({color,x,y,close,copy,collect,addWindow}:{color:string;x:number;y:number;close:()=>void;copy:()=>void;collect:()=>void;addWindow:()=>void}) {
+ const ref=useRef<HTMLDivElement>(null)
+ useEffect(()=>{const previous=document.activeElement as HTMLElement;ref.current?.querySelector('button')?.focus();const outside=(e:PointerEvent)=>{if(!ref.current?.contains(e.target as Node))close()};document.addEventListener('pointerdown',outside);return()=>{document.removeEventListener('pointerdown',outside);previous?.focus()}},[])
+ return <div ref={ref} className="color-menu glass" role="menu" aria-label={`颜色 ${color} 菜单`} style={{left:Math.max(8,Math.min(x,window.innerWidth-245)),top:Math.max(8,Math.min(y,window.innerHeight-205))}} onKeyDown={e=>{const buttons=Array.from(ref.current?.querySelectorAll('button')||[]);if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close()}if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const i=buttons.indexOf(document.activeElement as HTMLButtonElement);buttons[(i+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus()}}}><div className="color-menu-title"><span style={{background:color}}/>{color.toUpperCase()}<small>HEX</small></div><button role="menuitem" onClick={copy}><Copy size={15}/>复制颜色代码</button><button role="menuitem" onClick={collect}><FolderPlus size={15}/>添加到色板…</button><button role="menuitem" onClick={addWindow}><PanelsTopLeft size={15}/>添加到工作窗口…</button></div>
+}

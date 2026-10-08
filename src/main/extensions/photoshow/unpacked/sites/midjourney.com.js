@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"midjourney.com":{srcMatching:[{srcRegExp:"(//cdn\\.midjourney\\.com/.+)(?:_[a-z\\d]+){2}(@IMG@).*",processor:"$1$2"},{srcRegExp:"(//s\\.mj\\.run/.+)\\?.*",processor:"$1"}]}};

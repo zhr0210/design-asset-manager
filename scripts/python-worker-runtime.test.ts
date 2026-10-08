@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
+import { homedir } from 'node:os'
 import { AiRuntimeManager } from '../src/main/services/ai-runtime/ai-runtime-manager'
 import { MockAiRuntimeProcessRunner } from '../src/main/services/ai-runtime/process/mock-ai-runtime-process-runner'
 import { createPythonWorkerLaunchPlan } from '../src/main/services/ai-runtime/providers/python-worker-launch-plan'
@@ -62,6 +63,17 @@ runner.simulateExit(processId, 1)
 assert.equal(provider.getState().status, 'failed')
 assert.equal((await provider.healthCheck()).status, 'error')
 
+const stderrRunner = new MockAiRuntimeProcessRunner()
+const stderrProvider = new PythonWorkerRuntimeProvider(validConfig, stderrRunner)
+const stderrStarted = await stderrProvider.start()
+assert.ok(stderrStarted.state.pid !== null)
+stderrRunner.simulateStderr(stderrStarted.state.pid, `${process.cwd()}/ai-service/app.py failed under ${homedir()}/runtime`)
+stderrRunner.simulateExit(stderrStarted.state.pid, 1)
+const stderrState = stderrProvider.getState()
+assert.match(stderrState.lastError ?? '', /<app>\/ai-service\/app\.py failed under <home>\/runtime/)
+assert.ok(!(stderrState.lastError ?? '').includes(process.cwd()))
+assert.ok(!(stderrState.lastError ?? '').includes(homedir()))
+
 const missingHealthProvider = new PythonWorkerRuntimeProvider({ ...validConfig, baseUrl: null }, new MockAiRuntimeProcessRunner())
 await missingHealthProvider.start()
 assert.equal((await missingHealthProvider.healthCheck()).status, 'warning')
@@ -90,6 +102,10 @@ assert.equal((await manager.startRuntime('python-worker')).success, true)
 const allHealth = await manager.healthCheckAll()
 assert.equal(allHealth.length, 1)
 assert.equal(allHealth[0].runtimeId, 'python-worker')
+const stoppedRuntimes = await manager.stopAllRuntimes()
+assert.equal(stoppedRuntimes.length, 1)
+assert.equal(stoppedRuntimes[0].state.status, 'stopped')
+assert.equal(await manager.stopAllRuntimes().then((results) => results.length), 0)
 
 const providerSource = await fs.readFile('src/main/services/ai-runtime/providers/python-worker-runtime.provider.ts', 'utf8')
 const runnerSource = await fs.readFile('src/main/services/ai-runtime/process/mock-ai-runtime-process-runner.ts', 'utf8')

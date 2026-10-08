@@ -1,4 +1,5 @@
 import { runProcess } from '../../platform/process-runner'
+import { resolveDoctorNpmCommand } from '../doctor-command-resolver'
 import type { RegisteredDoctorCheck } from '../doctor.types'
 
 async function versionFor(command: string, args: string[], timeoutMs: number) {
@@ -41,7 +42,7 @@ export const nodeCheck: RegisteredDoctorCheck = {
             skipped: true,
             reason: 'Packaged Electron app uses bundled Node; npm CLI is not required at runtime.'
           }
-        : await versionFor(context.platformInfo.isWindows ? 'npm.cmd' : 'npm', ['--version'], timeoutMs)
+        : await versionFor(resolveDoctorNpmCommand(context.platformInfo.platform), ['--version'], timeoutMs)
     const status = node.available && npm.available ? 'ok' : 'warning'
 
     return {

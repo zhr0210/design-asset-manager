@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "historicalFilesModified": false,
+  "noADRMarkedAccepted": true,
+  "entries": [
+    {
+      "id": "SUP-ID-01",
+      "kind": "design-correction",
+      "oldRefs": [
+        "B-P04"
+      ],
+      "oldExactPhrases": [
+        "libraryGeneration/claimEpoch",
+        "activeLeaseGeneration",
+        "重开新generation"
+      ],
+      "replacementRefs": [
+        "B-P05-FACT",
+        "B-P05-CONTRACT"
+      ],
+      "currentClause": "AC-01",
+      "scope": "Only identity semantics; persistent generation may stay same, fresh session/lease fences claims",
+      "preserved": "P04 requestGeneration/content/old-success retention and user overlays remain",
+      "status": "proposed-ready-for-review"
+    },
+    {
+      "id": "SUP-GATE-03A",
+      "kind": "gate-relocation",
+      "oldRefs": [
+        "B-T04"
+      ],
+      "replacementRefs": [
+        "B-R01",
+        "B-T03"
+      ],
+      "currentClause": "AC-02",
+      "scope": "Move unique tags writer/current and pre-cutover drain gate to03 before first new write;04 consumes invariant",
+      "status": "proposed-ready-for-review"
+    },
+    {
+      "id": "SUP-GATE-03B",
+      "kind": "gate-relocation",
+      "oldRefs": [
+        "B-T05"
+      ],
+      "replacementRefs": [
+        "B-R02",
+        "B-T03"
+      ],
+      "currentClause": "AC-03",
+      "scope": "Shared bounded admission precedes first coexistence in03;05 extends batch tests",
+      "status": "proposed-ready-for-review"
+    },
+    {
+      "id": "SUP-SCHEMA-02",
+      "kind": "compatibility-clarification",
+      "oldRefs": [
+        "B-T02",
+        "B-SPEC"
+      ],
+      "oldExactPhrases": [
+        "回归或安全拒绝",
+        "须兼容新profile或明确安全拒绝"
+      ],
+      "replacementRefs": [
+        "B-R04"
+      ],
+      "currentClause": "AC-04",
+      "scope": "Old binary may refuse unknown profile; supported new binary must preserve existing capabilities on its own upgrade",
+      "status": "proposed-ready-for-review"
+    },
+    {
+      "id": "SUP-REF-26",
+      "kind": "reference-model-limitation",
+      "oldRefs": [
+        "B-P26",
+        "B-COUNTER"
+      ],
+      "currentClause": "AC-05",
+      "scope": "Old model is historical; late commit counterexample is not production vulnerability proof",
+      "status": "limitation-recorded-not-production-fix"
+    },
+    {
+      "id": "SUP-REF-13",
+      "kind": "reference-model-limitation",
+      "oldRefs": [
+        "B-P13",
+        "B-COUNTER"
+      ],
+      "currentClause": "AC-06",
+      "scope": "Bounded aging does not ensure starvation freedom; quota conditions before future P13 delivery",
+      "status": "limitation-recorded-not-production-fix"
+    },
+    {
+      "id": "SUP-AUTO-01",
+      "kind": "user-target-scope-clarification",
+      "oldRefs": [
+        "S-ADR",
+        "B-SPEC"
+      ],
+      "replacementRefs": [
+        "B-REVIEW"
+      ],
+      "currentClause": "AC-07",
+      "scope": "Default basic target tags/caption/OCR; replace only default automatic Embedding clause in future P11/P17; preserve capability/history",
+      "status": "user-target-recorded-formal-ADR-update-deferred"
+    }
+  ]
+}

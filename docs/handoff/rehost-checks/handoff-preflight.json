@@ -1,0 +1,27 @@
+{
+  "status": "SOURCE_PRESENT_ENVIRONMENT_INCOMPLETE",
+  "host": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v25.8.0"
+  },
+  "source": {
+    "requiredCount": 17,
+    "missing": []
+  },
+  "dependenciesPresent": true,
+  "piPreparedFilesPresent": false,
+  "pinnedPi": {
+    "version": "0.99.1",
+    "node": "24.21.0"
+  },
+  "executionVerified": false,
+  "privateDataInspected": false,
+  "networkRequests": 0,
+  "notes": [
+    "Presence is not integrity, installation or model-path verification.",
+    "Restore dependencies using lockfiles on this host; run Electron ABI tests with repository launcher.",
+    "Pi preparation downloads only after explicit approval; models and account login are separate.",
+    "Current synthetic history does not replace native Computer Use or real authentication."
+  ]
+}

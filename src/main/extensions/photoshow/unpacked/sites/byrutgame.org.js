@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"byrutgame.org":{srcMatching:[{srcRegExp:"(//byrutgame\\.org/.+/)thumbs/(.+@IMG@)",processor:"$1$2"}]}};

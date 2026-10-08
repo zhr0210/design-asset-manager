@@ -1,5 +1,23 @@
 # Electron Packaging Configuration Audit
 
+## Current F validation (2026-10-08)
+
+The old Phase 9A/9B observations below retain their original scope. Current
+ordinary startup smoke requires the actual Host build/platform health and a
+confirmed exit of its owned process. Staying alive is insufficient; smoke no
+longer disables sandbox/GPU. This does not prove UI, models, installation,
+upgrade or uninstall. The generated Sandbox script uses the same requirements
+but has not been executed for the F candidate.
+
+Current source preloads and native input checks are described in
+[native packaging](NATIVE_DEPENDENCY_PACKAGING.md). User data is explicitly
+retained on NSIS uninstall, pending actual installation lifecycle acceptance.
+F is local and unsigned; no signing or publishing has been performed. Current
+version, measured scope and outstanding acceptance are in
+[current state](../handoff/CURRENT-STATE.md).
+
+## Historical audit and earlier candidate results
+
 Phase 9A is a read-only audit. It records the current packaging state and future risks without changing real packaging behavior.
 
 ## Current Configuration
@@ -12,6 +30,23 @@ Phase 9A is a read-only audit. It records the current packaging state and future
 - renderer React build with the `@renderer` alias.
 
 `electron-builder` is installed and `postinstall` runs `electron-builder install-app-deps`.
+
+All four packaging scripts and Package Smoke call
+`scripts/run-electron-builder.mjs`. The runner reads the installed Electron
+version, uses `node_modules/electron/dist`, disables publishing, and removes
+inherited proxy variables before invoking electron-builder. The runner's
+platform flags, mode/signing choices, and platform signing environment
+requirements are kept in `scripts/electron-builder-runner-options.mjs`.
+Unsigned mode also scrubs signing/notarization variables. Signed mode is
+available only with the explicit approval flag and complete platform
+credential environment. This keeps Windows and macOS packaging behavior
+aligned and avoids a second Electron download.
+
+The shared runner has produced a real unsigned macOS arm64 candidate and a real
+Windows x64 NSIS candidate. Windows checksum/static checks passed, and Windows
+Sandbox verified unpacked startup plus silent installation into the normalized
+product subfolder. The signature warning is expected until formal signing is
+configured.
 
 An explicit electron-builder config is declared in `package.json` `build`.
 

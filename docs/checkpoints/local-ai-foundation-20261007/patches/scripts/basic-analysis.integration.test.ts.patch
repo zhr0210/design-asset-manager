@@ -1,0 +1,32 @@
+diff --git a/scripts/basic-analysis.integration.test.ts b/scripts/basic-analysis.integration.test.ts
+index 07cd984..2fdd67e 100644
+--- a/scripts/basic-analysis.integration.test.ts
++++ b/scripts/basic-analysis.integration.test.ts
+@@ -20,6 +20,7 @@ import { createOcrController } from "../src/main/ocr/ocr-controller";
+ import type { OcrRuntime } from "../src/main/ocr/ocr-runtime";
+ import { createVisualAdmission } from "../src/main/visual-ai/visual-admission";
+ import type { VisionProvider } from "../src/main/visual-ai/openai-vision.provider";
++import {ConfirmedLocalOomError} from '../src/main/visual-ai/local-oom-recovery'
+ import { createNewInstallAppSettingsDefaults } from "../src/main/services/settings/settings-defaults.builder";
+ async function fixture(upgrade = true) {
+   const hooks: TagIntentTestHooks = {};
+@@ -130,6 +131,19 @@ async function productionDispatch(f: Awaited<ReturnType<typeof fixture>>, provid
+   return { basic, background, errors, ocrCalls: () => ocrCalls, close: async () => { await background.suspendAndDrain(); background.invalidate(); await basic.suspendAndDrain(); await tags.suspendAndDrain(); await ocr.suspendAndDrain(); admission.invalidate(); } };
+ }
+ const response = (value: unknown) => ({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify(value) } }] });
++await test('production caption and tag Host checks allow one definite uncommitted local OOM recovery and persist one effect each',async()=>{
++ const f=await fixture(),counts=new Map<string,number>();let recoveries=0
++ const c=await productionDispatch(f,{invokeOnce:async input=>{const key=input.outputContract!,count=(counts.get(key)??0)+1;counts.set(key,count)
++   if(count===1)throw new ConfirmedLocalOomError({id:key,backendId:input.backendId!,model:input.model,executionId:'owned-fixture',fingerprint:'a'.repeat(64)})
++   return response(key==='caption-v1'?{caption:'恢复后有效描述'}:{tags:['恢复后有效标签']})},recoverLocal:async()=>{recoveries++;return true}})
++ try{const id=await f.add();for(let n=0;n<3;n++)await c.background.tick()
++   const execution=await f.host.readBackgroundExecution({...f.scope,assetId:id})
++   assert.ok(execution.items.every(v=>v.state==='succeeded'),JSON.stringify(execution.items.map(v=>[v.capability,v.state])))
++   assert.equal(recoveries,2);assert.equal(counts.get('caption-v1'),2);assert.equal(counts.get('tags-nfkc-lower-v1'),2)
++   assert.equal((await f.host.readCaptions({...f.scope,assetId:id})).length,1)
++   await c.close();await f.host.close();await f.host.reopen();assert.equal((await f.host.readCaptions({...f.scope,assetId:id})).length,1);assert.equal(recoveries,2)
++ }finally{await c.close();await f.close()}
++})
+ 
+ await test("unavailable model resources do not create repeated claims, requests or attempts while OCR remains runnable", async () => {
+   const f = await fixture();

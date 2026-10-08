@@ -1,0 +1,405 @@
+diff --git a/src/shared/client/workspace-client.ts b/src/shared/client/workspace-client.ts
+index 680853c..17655de 100644
+--- a/src/shared/client/workspace-client.ts
++++ b/src/shared/client/workspace-client.ts
+@@ -347,7 +347,7 @@ return Object.freeze({
+     rebuild:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope)=>transport.invoke('asset-retrieval:rebuild-index',scope) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
+     switchSpace:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope,id:string)=>transport.invoke('asset-retrieval:switch-space',{...scope,id}) as Promise<import('../contracts/retrieval-workspace.contract').RetrievalCoverage>,
+     query:(input:import('../contracts/retrieval-workspace.contract').AssetSemanticSearchRequest)=>transport.invoke('asset-retrieval:query',input) as Promise<import('../contracts/retrieval-workspace.contract').AssetSemanticSearchPage>,
+-    cancel:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope,id:string)=>transport.invoke('asset-retrieval:cancel-query',{...scope,id}),
++    cancel:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope,id:string)=>transport.invoke('asset-retrieval:cancel-query',{libraryIdentity:scope.libraryIdentity,generation:scope.generation,id}),
+     selectFile:(scope:import('../contracts/retrieval-workspace.contract').RetrievalScope)=>transport.invoke('query-file:select',scope) as Promise<import('../contracts/retrieval-workspace.contract').QueryFileReview|null>,
+     releaseFile:(grant:string)=>transport.invoke('query-file:release',grant),
+   },
+diff --git a/src/renderer/components/library/canvas/useHostAssetSearch.ts b/src/renderer/components/library/canvas/useHostAssetSearch.ts
+index 4e2974e..3520062 100644
+--- a/src/renderer/components/library/canvas/useHostAssetSearch.ts
++++ b/src/renderer/components/library/canvas/useHostAssetSearch.ts
+@@ -13,6 +13,7 @@ export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query
+   const [total,setTotal]=useState(0),[cursor,setCursor]=useState<string|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('')
+   const [coverage,setCoverage]=useState<RetrievalCoverage|null>(null),[notice,setNotice]=useState<string|null>(null),[lane,setLane]=useState('lexical-only')
+   const [refresh,setRefresh]=useState(0), epoch=useRef(0), current=useRef<AssetSearchRequest|AssetSemanticSearchRequest|null>(null),canceled=useRef(-1),lastScope=useRef('')
++  const queryTimer=useRef<ReturnType<typeof setTimeout>|null>(null)
+   const key=JSON.stringify([authority.identity,authority.generation,query,site,tags,options])
+   const accept=(page:Awaited<ReturnType<ReturnType<typeof requireWorkspaceClient>['searchAssetsPage']>>|AssetSemanticSearchPage)=>{
+     setIndex(page.index);setTotal(page.total);setCursor(page.nextCursor)
+@@ -27,16 +28,19 @@ export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query
+       sourceSiteId:site||undefined,folderId:options.folderId,tagQueries:tags,tagScope:'includes-pending',limit:80}
+     const request:AssetSearchRequest|AssetSemanticSearchRequest=options.example||options.mode!=='lexical'&&query.trim()?{...lexical,
+       mode:options.example?'image':options.mode as 'semantic'|'hybrid',queryId:crypto.randomUUID(),imageAssetId:options.example?.assetId,externalGrant:options.example?.grant}:lexical
+-    current.current=request;setBusy(true);setError('');setCursor(null)
++    current.current=request;setBusy(true);setError('');setNotice(null);setCursor(null)
+     const timer=setTimeout(()=>{
++      queryTimer.current=null
++      if(seq!==epoch.current||canceled.current===seq)return
+       void ('mode' in request?requireWorkspaceClient().retrieval.query(request):requireWorkspaceClient().searchAssetsPage(request)).then(page=>{
+         if(seq!==epoch.current||canceled.current===seq)return
+         setMatches(page.matches.map(m=>({asset:mapSearchAsset(m.asset,request),explanation:m.explanation})))
+         accept(page)
+       },e=>{if(seq===epoch.current&&canceled.current!==seq)setError(searchError(e))})
+-        .finally(()=>{if(seq===epoch.current)setBusy(false)})
++        .finally(()=>{if(seq===epoch.current){setBusy(false);if(canceled.current===seq)setNotice('查询已取消；已有结果保留。')}})
+     },180)
+-    return()=>{clearTimeout(timer);if('mode' in request&&request.queryId)void requireWorkspaceClient().retrieval.cancel(request,request.queryId).catch(()=>{});if(epoch.current===seq)epoch.current++}
++    queryTimer.current=timer
++    return()=>{clearTimeout(timer);if(queryTimer.current===timer)queryTimer.current=null;if('mode' in request&&request.queryId)void requireWorkspaceClient().retrieval.cancel(request,request.queryId).catch(()=>{});if(epoch.current===seq)epoch.current++}
+   },[key,authority.state,sourceChange,refresh])
+   const loadMore=async()=>{
+     if(busy||!cursor||!current.current)return
+@@ -48,7 +52,7 @@ export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query
+       setMatches(old=>[...new Map([...old,...page.matches.map(m=>({asset:mapSearchAsset(m.asset,request),explanation:m.explanation}))].map(m=>[m.asset.id,m])).values()])
+       accept(page)
+     }catch{if(seq===epoch.current)setError('查询快照已变化或到期，请重新读取结果。')}
+-    finally{if(seq===epoch.current)setBusy(false)}
++    finally{if(seq===epoch.current){setBusy(false);if(canceled.current===seq)setNotice('查询已取消；已有结果保留。')}}
+   }
+   const rebuild=async()=>{
+     if(busy||authority.state!=='ready')return
+@@ -58,8 +62,10 @@ export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query
+     finally{if(seq===epoch.current)setBusy(false)}
+   }
+   const cancel=()=>{const request=current.current;if(!request||!('mode' in request)||!request.queryId)return
+-    canceled.current=epoch.current;setNotice('正在取消查询；已有结果保留，执行占用会在实际结束后释放。')
+-    void requireWorkspaceClient().retrieval.cancel(request,request.queryId).catch(e=>setError(searchError(e)))}
++    const seq=epoch.current;canceled.current=seq
++    if(queryTimer.current!==null){clearTimeout(queryTimer.current);queryTimer.current=null;setBusy(false);setNotice('查询已取消；已有结果保留。');return}
++    setNotice('正在取消查询；已有结果保留，执行占用会在实际结束后释放。')
++    void requireWorkspaceClient().retrieval.cancel(request,request.queryId).catch(e=>{if(seq===epoch.current)setError(searchError(e))})}
+   return {matches,index,total,busy,error,coverage,notice,lane,hasMore:Boolean(cursor),loadMore,rebuild,cancel,reload:()=>setRefresh(v=>v+1)}
+ }
+ function searchError(error:unknown){const message=error instanceof Error?error.message:String(error)
+diff --git a/src/renderer/components/library/canvas/WorkSetModal.tsx b/src/renderer/components/library/canvas/WorkSetModal.tsx
+index 4f2e3e8..613cd2d 100644
+--- a/src/renderer/components/library/canvas/WorkSetModal.tsx
++++ b/src/renderer/components/library/canvas/WorkSetModal.tsx
+@@ -8,6 +8,8 @@ import type {WorkspaceDraftScope} from '../../../../shared/contracts/workspace-d
+ import type {WorkSetModel} from './useWorkSets'
+ import {holdWorkspaceDraft,removeWorkspaceDraft,currentWorkspaceDraft,flushWorkspaceDrafts,suspendRecoveredWorkspaceDraft} from '../../../workspace-drafts'
+ import {Button} from '../../ui/WorkspacePrimitives'
++import {useWorkSetAssets} from './useWorkSetAssets'
++import {WorkSetAssetChoices} from './WorkSetAssetChoices'
+ export type WorkSetIntent={kind:'new'}|{kind:'edit';id:string}|{kind:'add';assetIds?:string[];colors?:string[];targetId?:string}
+ type WorkSetDraftBase={revision:number;value:WorkSetValue|null}
+ const baseline=(set?:SavedWorkSet):WorkSetValue=>({name:set?.name||'',note:set?.note||'',assetIds:set?.assetIds||[],colors:set?.colors||[],columns:set?.columns||2})
+@@ -21,6 +23,7 @@ export function WorkSetModal({model,intent,assets,close}:{model:WorkSetModel;int
+  const [draftBase,setDraftBase]=useState<WorkSetDraftBase>(()=>recovery?recovery.base as WorkSetDraftBase:{revision:openingSet?.revision||0,value:openingSet?baseline(openingSet):null})
+  const [retainedRecovery,setRetainedRecovery]=useState(Boolean(recovery))
+  const [pendingTarget,setPendingTarget]=useState<string|null>(null)
++ const references=useWorkSetAssets(model.scope,query,value.assetIds,assets,!deleting)
+  useEffect(()=>{const previous=document.activeElement as HTMLElement;dialog.current?.showModal();return()=>previous?.focus({preventScroll:true})},[])
+  const draftScope={...model.scope,kind:'work-set' as const,entityId:target||'work-set:new'}
+  const missingTarget=Boolean(target&&(!base||model.catalog&&!sets.some(set=>set.id===target)))
+@@ -39,8 +42,8 @@ export function WorkSetModal({model,intent,assets,close}:{model:WorkSetModel;int
+  return createPortal(<div className={`gallery-design minimal-prototype organization-dialog-root ${theme==='dark'?'dark':''}`}><dialog ref={dialog} className="organization-modal work-set-modal glass" aria-label={intent.kind==='edit'?'编辑工作集':'加入工作集'} onCancel={e=>{e.preventDefault();if(pendingTarget!==null)setPendingTarget(null);else if(!model.busy)void leave()}}>{pendingTarget!==null?<div className="file-picker" role="alertdialog" aria-label="切换工作集"><h2>切换工作集</h2><p>切换会放弃当前工作集的未保存编辑。已保存的工作集与素材保持原样。</p><footer><Button onClick={()=>setPendingTarget(null)}>继续编辑</Button><Button variant="primary" onClick={()=>{chooseTarget(pendingTarget);setPendingTarget(null)}}>放弃草稿并切换</Button></footer></div>:<form onSubmit={submit}><header><h2>{intent.kind==='edit'?'编辑工作集':'加入工作集'}</h2><button className="icon" type="button" aria-label="关闭并保留工作集草稿" onClick={()=>void leave()} disabled={model.busy}><X/></button></header><fieldset disabled={model.busy||model.loading}>
+  {intent.kind==='add'&&<label>工作集<select aria-label="目标工作集" value={target} onChange={e=>choose(e.target.value)}><option value="">新建工作集</option>{sets.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label>}
+  {!deleting&&<><label>名称<input autoFocus required maxLength={80} aria-label="工作集名称" value={value.name} onChange={e=>setValue(v=>({...v,name:e.target.value}))}/></label><label>工作备注<textarea aria-label="工作集备注" maxLength={16000} value={value.note} onChange={e=>setValue(v=>({...v,note:e.target.value}))}/></label><label>参考排列<select aria-label="工作集列数" value={value.columns} onChange={e=>setValue(v=>({...v,columns:Number(e.target.value)}))}>{[1,2,3,4].map(n=><option key={n} value={n}>{n}列</option>)}</select></label>
+- <div className="work-set-members" aria-label="工作集成员">{value.assetIds.map((id,i)=><div key={id}><span>{assets.find(a=>a.id===id)?.title||'暂不可用的参考'}</span><button type="button" aria-label={`前移参考 ${i+1}`} disabled={i===0} onClick={()=>move(id,-1)}><ArrowLeft size={12}/></button><button type="button" aria-label={`后移参考 ${i+1}`} disabled={i===value.assetIds.length-1} onClick={()=>move(id,1)}><ArrowRight size={12}/></button><button type="button" aria-label={`移除参考 ${i+1}`} onClick={()=>toggle(id)}><X size={12}/></button></div>)}</div>
+- <label>添加已有素材<input aria-label="搜索工作集候选素材" value={query} onChange={e=>setQuery(e.target.value)} placeholder="按名称查找素材"/></label><div className="work-set-choices">{assets.filter(a=>!value.assetIds.includes(a.id)&&(!query||a.title.toLowerCase().includes(query.toLowerCase()))).slice(0,100).map(a=><button type="button" key={a.id} aria-label={`添加参考 ${a.title}`} onClick={()=>toggle(a.id)}>+ {a.title}</button>)}</div>
++ <div className="work-set-members" aria-label="工作集成员">{value.assetIds.map((id,i)=><div key={id}><span>{references.assets.find(a=>a.id===id)?.title||'暂不可用的参考'}</span><button type="button" aria-label={`前移参考 ${i+1}`} disabled={i===0} onClick={()=>move(id,-1)}><ArrowLeft size={12}/></button><button type="button" aria-label={`后移参考 ${i+1}`} disabled={i===value.assetIds.length-1} onClick={()=>move(id,1)}><ArrowRight size={12}/></button><button type="button" aria-label={`移除参考 ${i+1}`} onClick={()=>toggle(id)}><X size={12}/></button></div>)}</div>
++ <label>添加已有素材<input aria-label="搜索工作集候选素材" value={query} onChange={e=>setQuery(e.target.value)} placeholder="按名称查找素材"/></label><WorkSetAssetChoices search={references} pick={toggle}/>
+  {value.colors.length>0&&<div className="saved-swatches">{value.colors.map(c=><div key={c}><span style={{background:c}} className="swatch"/><span>{c}</span><button type="button" aria-label={`移除工作集颜色 ${c}`} onClick={()=>setValue(v=>({...v,colors:v.colors.filter(x=>x!==c)}))}><X size={12}/></button></div>)}</div>}</>}
+  {deleting&&<p>只删除工作集记录及其窗口布局，素材和原件保留；对应窗口会关闭。</p>}
+  {model.catalog?.requiresUpgrade&&<label className="organization-upgrade"><input type="checkbox" checked={upgrade} onChange={e=>setUpgrade(e.target.checked)}/>首次保存升级到 v7，旧版应用将无法打开此库；原件保留。我了解并同意。</label>}
+diff --git a/src/renderer/components/library/canvas/WorkSetReferenceView.tsx b/src/renderer/components/library/canvas/WorkSetReferenceView.tsx
+index 1bf0849..a0b1535 100644
+--- a/src/renderer/components/library/canvas/WorkSetReferenceView.tsx
++++ b/src/renderer/components/library/canvas/WorkSetReferenceView.tsx
+@@ -10,6 +10,8 @@ import { WorkReferencePanel } from '../../gallery/WorkReferencePanel'
+ import {Button} from '../../ui/WorkspacePrimitives'
+ import { controlledPreview } from './LibraryMedia'
+ import type { WorkSetModel } from './useWorkSets'
++import {useWorkSetAssets} from './useWorkSetAssets'
++import {WorkSetAssetChoices} from './WorkSetAssetChoices'
+ import './work-set-reference.css'
+ 
+ type Baseline = { revision: number; value: WorkSetValue }
+@@ -32,6 +34,7 @@ export function WorkSetReferenceView({ id, model, assets, close, preview, locate
+   const [add, setAdd] = useState(false), [query, setQuery] = useState(''), [color, setColor] = useState(''), [upgrade, setUpgrade] = useState(false)
+   const [native, setNative] = useState<WorkWindowControlState>(), [nativeBusy, setNativeBusy] = useState(false)
+   const [discard, setDiscard] = useState(false)
++  const references=useWorkSetAssets(model.scope,query,value.assetIds,assets,add)
+   const alive = useRef(true), saveLock = useRef(false), serial = useRef(0), valueRef = useRef(value), baseRef = useRef(base)
+   valueRef.current = value; baseRef.current = base
+   const dirty = !same(value, base.value), conflict = Boolean(current && current.revision !== base.revision)
+@@ -113,10 +116,10 @@ export function WorkSetReferenceView({ id, model, assets, close, preview, locate
+     finally { if (alive.current) setNativeBusy(false) }
+   }
+   const items = value.assetIds.map(assetId => {
+-    const asset = assets.find(a => a.id === assetId)
++    const asset = references.assets.find(a => a.id === assetId)
+     return { id: assetId, title: asset?.title || '暂不可用的参考', src: asset ? controlledPreview(asset) : '', unavailable: !asset || !controlledPreview(asset) }
+   })
+-  const inspect = (assetId: string) => { const asset = assets.find(a => a.id === assetId); if (asset) preview(asset, value.assetIds) }
++  const inspect = (assetId: string) => { const asset = references.assets.find(a => a.id === assetId); if (asset) preview(asset, value.assetIds) }
+   return createPortal(<div className={`gallery-design minimal-prototype ${theme === 'dark' ? 'dark' : ''}`}>
+     <dialog ref={dialog} className="work-reference-dialog glass" aria-label={`工作集 ${value.name || '暂不可用'}`} onCancel={event => { event.preventDefault(); if(discard)setDiscard(false);else void leave() }} onKeyDown={event => {
+       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') { event.preventDefault(); if(!discard)void save() }
+@@ -130,9 +133,9 @@ export function WorkSetReferenceView({ id, model, assets, close, preview, locate
+         onAdd={() => setAdd(!add)} onNote={note => update({ ...value, note })} onColors={colors => update({ ...value, colors })} onColumns={columns => update({ ...value, columns })}
+         onPin={() => void control({ kind: 'pin', pinned: !native?.pinned } as Omit<WorkWindowControlInput, 'libraryIdentity' | 'generation' | 'id'>)} onHide={() => void control({ kind: 'hide' })} onSave={() => void save()}
+         onCopyColor={hex => { void navigator.clipboard.writeText(hex).then(() => setStatus('已复制 ' + hex)).catch(() => setError('复制失败，请重试。')) }}
+-        onTransfer={assetId => { const asset = assets.find(a => a.id === assetId); if (asset) void leave().then(left => { if (left) locate(asset) }) }} transferLabel="在资料库检查"
++        onTransfer={assetId => { const asset = references.assets.find(a => a.id === assetId); if (asset) void leave().then(left => { if (left) locate(asset) }) }} transferLabel="在资料库检查"
+         extra={<div className="work-reference-fields"><label>名称<input aria-label="工作参考名称" value={value.name} maxLength={80} onChange={e => update({ ...value, name: e.target.value })}/></label>
+-          {add && <section aria-label="添加工作参考"><label>查找素材<input aria-label="查找工作参考" value={query} onChange={e => setQuery(e.target.value)}/></label><div className="work-set-choices">{assets.filter(a => !value.assetIds.includes(a.id) && a.title.toLowerCase().includes(query.toLowerCase())).slice(0, 100).map(a => <button key={a.id} onClick={() => update({ ...value, assetIds: [...value.assetIds, a.id] })}>添加参考 {a.title}</button>)}</div></section>}
++          {add && <section aria-label="添加工作参考"><label>查找素材<input aria-label="查找工作参考" value={query} onChange={e => setQuery(e.target.value)}/></label><WorkSetAssetChoices search={references} pick={id=>update({...value,assetIds:[...value.assetIds,id]})}/></section>}
+           <form onSubmit={event => { event.preventDefault(); if (!/^#[0-9a-f]{6}$/i.test(color)) { setError('请输入六位颜色代码，如 #AABBCC。'); return } update({ ...value, colors: [...new Set([...value.colors, color.toUpperCase()])] }); setColor('') }}><label>添加用色<input aria-label="工作颜色代码" value={color} maxLength={7} onChange={e => setColor(e.target.value)} placeholder="#AABBCC"/></label><button type="submit">添加工作颜色</button></form>
+           {model.catalog?.requiresUpgrade && <label><input type="checkbox" checked={upgrade} onChange={e => setUpgrade(e.target.checked)}/>首次保存升级到 v7，旧版应用将无法打开此库；原件保留。我了解并同意。</label>}
+           {(conflict || !current) && <div role="status"><p>{current ? '工作集已在另一界面修改。页面草稿仍保留。' : '原工作集已不存在或暂不可用，页面草稿仍保留。'}</p>{current && <><details><summary>核对当前已保存内容</summary><p>{current.name} · {current.assetIds.length} 份参考 · {current.colors.join('、')}</p><pre>{current.note || '尚无工作备注'}</pre></details><button disabled={saving} onClick={() => { setBase({ revision: current.revision, value: valueOf(current) }); setError(''); setStatus('已采用当前保存版本为基准，页面输入仍保留。') }}>核对后采用当前工作集为基准</button></>}</div>}
+diff --git a/src/renderer/components/library/canvas/library-canvas.css b/src/renderer/components/library/canvas/library-canvas.css
+index 567f7e3..b890ebf 100644
+--- a/src/renderer/components/library/canvas/library-canvas.css
++++ b/src/renderer/components/library/canvas/library-canvas.css
+@@ -84,7 +84,7 @@
+ .gallery-design .saved-folder .visual-folder{width:100%}
+ .gallery-design .saved-folder .folder-edit{position:absolute;right:2px;bottom:16px;width:28px;height:28px;min-height:28px;padding:6px;border:0;background:var(--capsule-glass);opacity:0}
+ .gallery-design .saved-folder:hover .folder-edit,.gallery-design .saved-folder:focus-within .folder-edit{opacity:1}
+-.gallery-design .folder-context-controls{position:absolute;left:125px;right:100px;top:12px;z-index:28;display:flex;align-items:center;gap:8px;overflow:auto;scrollbar-width:none;white-space:nowrap}
++.gallery-design .folder-context-controls{position:absolute;left:125px;right:220px;top:12px;z-index:28;display:flex;align-items:center;gap:8px;overflow:auto;scrollbar-width:none;white-space:nowrap}
+ .gallery-design .folder-context-controls>span{font-size:12px;color:var(--muted);margin-right:auto}
+ .gallery-design .folder-context-controls button{min-height:32px;padding:5px 10px;font-size:11px;border:0;background:var(--capsule-glass);backdrop-filter:blur(14px)}
+ .gallery-design .child-folder-list{margin-bottom:24px}
+diff --git a/src/renderer/components/library/canvas/useWorkSetAssets.ts b/src/renderer/components/library/canvas/useWorkSetAssets.ts
+new file mode 100644
+index e69de29..e414230 100644
+--- /dev/null
++++ b/src/renderer/components/library/canvas/useWorkSetAssets.ts
+@@ -0,0 +1,33 @@
++import {useEffect,useMemo,useState} from 'react'
++import type {Asset} from '../../../stores/asset.store'
++import {mapSearchAsset} from '../../../stores/asset.store'
++import {requireWorkspaceClient} from '../../../workspace-client'
++import type {WorkScope} from '../../../../shared/contracts/work-set.contract'
++import {useHostAssetSearch} from './useHostAssetSearch'
++
++const noChanges:readonly Asset[]=[]
++
++/** Work-set lookup has its own scoped query; the canvas page is not the library. */
++export function useWorkSetAssets(scope:WorkScope,query:string,memberIds:readonly string[],assets:Asset[],enabled=true){
++ const key=JSON.stringify([scope.libraryIdentity,scope.generation]),members=JSON.stringify(memberIds)
++ const search=useHostAssetSearch({state:enabled&&query.trim()?'ready':'closed',identity:scope.libraryIdentity,generation:scope.generation},query,'',[],noChanges)
++ const [readback,setReadback]=useState<{key:string;assets:Asset[];error:string}>({key:'',assets:[],error:''})
++ useEffect(()=>{
++  let live=true
++  const known=new Set(assets.map(a=>a.id)),missing=memberIds.filter(id=>!known.has(id))
++  if(!missing.length){setReadback({key,assets:[],error:''});return}
++  void(async()=>{
++   const fetched:Asset[]=[]
++   for(let offset=0;offset<missing.length;offset+=100){
++    const rows=await requireWorkspaceClient().readSearchAssets({...scope,ids:missing.slice(offset,offset+100)})
++    if(!live)return
++    fetched.push(...rows.map(a=>mapSearchAsset(a,scope)))
++   }
++   if(live)setReadback({key,assets:fetched,error:''})
++  })().catch(()=>{if(live)setReadback(old=>({key,assets:old.key===key?old.assets:[],error:'部分参考暂不可读；成员与草稿保留，请重开后核对。'}))})
++  return()=>{live=false}
++ },[key,members,assets])
++ const all=useMemo(()=>[...new Map([...assets,...(readback.key===key?readback.assets:[]),...search.matches.map(m=>m.asset)].map(a=>[a.id,a])).values()],[assets,readback,key,search.matches])
++ const candidates=query.trim()?search.matches.map(m=>m.asset):assets.slice(0,100)
++ return {...search,assets:all,candidates:candidates.filter(a=>!memberIds.includes(a.id)),error:search.error||(readback.key===key?readback.error:'')}
++}
+diff --git a/src/renderer/components/library/canvas/WorkSetAssetChoices.tsx b/src/renderer/components/library/canvas/WorkSetAssetChoices.tsx
+new file mode 100644
+index e69de29..8a2ca14 100644
+--- /dev/null
++++ b/src/renderer/components/library/canvas/WorkSetAssetChoices.tsx
+@@ -0,0 +1,11 @@
++import React from 'react'
++import type {useWorkSetAssets} from './useWorkSetAssets'
++
++export function WorkSetAssetChoices({search,pick}:{search:ReturnType<typeof useWorkSetAssets>;pick:(id:string)=>void}){
++ return <>
++  {search.busy&&<p role="status">正在查找库内参考…</p>}
++  {search.error&&<p role="alert">{search.error}</p>}
++  <div className="work-set-choices">{search.candidates.map(a=><button type="button" key={a.id} aria-label={`添加参考 ${a.title}`} onClick={()=>pick(a.id)}>+ {a.title}</button>)}</div>
++  {search.hasMore&&<button type="button" disabled={search.busy} onClick={()=>void search.loadMore()}>加载更多工作集候选</button>}
++ </>
++}
+diff --git a/scripts/retrieval-cancellation-client.test.ts b/scripts/retrieval-cancellation-client.test.ts
+new file mode 100644
+index e69de29..76b65a6 100644
+--- /dev/null
++++ b/scripts/retrieval-cancellation-client.test.ts
+@@ -0,0 +1,14 @@
++import assert from 'node:assert/strict'
++import {test} from 'node:test'
++import {createWorkspaceClient} from '../src/shared/client/workspace-client'
++import type {AssetSemanticSearchRequest} from '../src/shared/contracts/retrieval-workspace.contract'
++
++test('a query cancellation sends only the frozen library scope and query identity',async()=>{
++ const calls:Array<{channel:string;args:unknown[]}>=[]
++ const client=createWorkspaceClient({invoke:async(channel:string,...args:unknown[])=>{calls.push({channel,args});return undefined},on(){},removeListener(){}})
++ const query:AssetSemanticSearchRequest={libraryIdentity:'public-library',generation:'generation',queryId:'12345678-1234-1234-1234-123456789012',
++  query:'a cup of coffee on a wooden table',mode:'semantic',tagScope:'includes-pending',limit:80,folderId:'selected-folder'}
++ await client.retrieval.cancel(query,query.queryId!)
++ assert.deepEqual(calls,[{channel:'asset-retrieval:cancel-query',args:[{libraryIdentity:query.libraryIdentity,generation:query.generation,id:query.queryId}]}],
++  'The production Host rejects extra query fields in its narrow cancellation action; typed structural subtypes must not leak onto the wire')
++})
+diff --git a/scripts/fixtures/t23-retrieval-query-repro.test.ts b/scripts/fixtures/t23-retrieval-query-repro.test.ts
+new file mode 100644
+index e69de29..20fa8f5 100644
+--- /dev/null
++++ b/scripts/fixtures/t23-retrieval-query-repro.test.ts
+@@ -0,0 +1,46 @@
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import {randomUUID} from 'node:crypto'
++import Database from 'better-sqlite3'
++import {createRetrievalModelLibrary} from '../../src/main/retrieval-workspace/retrieval-model-library'
++import {createRetrievalRuntime} from '../../src/main/retrieval-workspace/retrieval-runtime'
++import {createVisualAdmission} from '../../src/main/visual-ai/visual-admission'
++import {createActiveLibraryHost} from '../../src/main/library-lifecycle'
++import {createProductionActiveLibraryHostDependencies} from '../../src/main/library-lifecycle/production-active-library-dependencies'
++
++// Diagnostic Runtime seam, actual approved stock model/Python, network denied.
++// Only public model inventory/binding is copied; no settings or account tables.
++const profile=path.resolve('.scratch/wc01-real-model-library-20261005/run-U4eFuo/profile-04')
++const root=path.resolve('.scratch/local-ai-implementation-20261006/retrieval-query-repro-'+randomUUID())
++await fs.mkdir(root)
++const source=new Database(path.join(profile,'app-state/app-state.sqlite'),{readonly:true,fileMustExist:true})
++const db=new Database(path.join(root,'app.sqlite')),admission=createVisualAdmission({policy:{mode:'normal',reserveFraction:.1}})
++for(const row of source.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name IN ('retrieval_model_store','retrieval_models','retrieval_runtime','retrieval_runner_owner','retrieval_space_bindings')").all() as {sql:string}[])db.exec(row.sql)
++db.prepare('INSERT OR REPLACE INTO retrieval_model_store VALUES(1,?)').run(source.prepare('SELECT owner FROM retrieval_model_store WHERE singleton=1').pluck().get())
++for(const r of source.prepare('SELECT id,record FROM retrieval_models').all() as any[])db.prepare('INSERT INTO retrieval_models VALUES(?,?)').run(r.id,r.record)
++db.prepare('INSERT INTO retrieval_runtime VALUES(1,?)').run(source.prepare('SELECT record FROM retrieval_runtime WHERE singleton=1').pluck().get())
++db.prepare('INSERT INTO retrieval_runner_owner VALUES(1,?)').run(source.prepare('SELECT owner FROM retrieval_runner_owner WHERE singleton=1').pluck().get())
++for(const r of source.prepare('SELECT space,record FROM retrieval_space_bindings').all() as any[])db.prepare('INSERT INTO retrieval_space_bindings VALUES(?,?)').run(r.space,r.record)
++source.close()
++const models=createRetrievalModelLibrary({database:db,root:path.join(profile,'retrieval-models'),fetch:async()=>{throw Error('NETWORK_DENIED')},admission,changed(){}})
++const runtime=createRetrievalRuntime({database:db,models,runner:path.resolve('out/main/ai-service/tools/retrieval_worker.py'),archiveRoot:path.join(profile,'retrieval-runtimes'),admission,selectPython:async()=>null,changed(){}})
++const library=path.join(root,'library')
++await fs.cp(path.resolve('.scratch/b-model-management-20261006/real-library-01'),library,{recursive:true,errorOnExist:true,force:false})
++const host=createActiveLibraryHost(createProductionActiveLibraryHostDependencies({selectLibraryDirectory:async()=>({kind:'selected',directory:library})},{retrievalRuntime:()=>runtime,admission}))
++const attempts:any[]=[],samples:any[]=[]
++const sample=setInterval(()=>{samples.push({at:Date.now(),runtime:runtime.status(),resource:admission.resourceStatus()})},2000)
++try{
++ await host.open();assert.equal(host.inspect().state,'ready')
++ const scope={libraryIdentity:host.inspect().identity!,generation:host.inspect().generation!}
++ assert.ok(runtime.currentSpace(),'Actual approved model qualification required')
++ for(const query of ['一杯咖啡放在木桌上','a cup of coffee on a wooden table','coffee 咖啡杯 wooden table','a cup of coffee on a wooden table']){
++  const abort=new AbortController(),timer=setTimeout(()=>abort.abort(),60000),started=Date.now()
++  const queryId=randomUUID(),onAbort=()=>{void host.cancelSemanticQuery(scope,queryId)}
++  abort.signal.addEventListener('abort',onAbort,{once:true})
++  try{const result=await host.searchSemanticPage({...scope,query,queryId,mode:'semantic',tagScope:'includes-pending',limit:80});assert.equal(result.matches.length,44);attempts.push({query,state:'returned',durationMs:Date.now()-started,top:result.matches.slice(0,3).map(m=>m.asset.title)})}
++  catch(error){attempts.push({query,state:'failed',durationMs:Date.now()-started,error:String(error)});throw error}
++  finally{clearTimeout(timer);abort.signal.removeEventListener('abort',onAbort);await fs.writeFile(path.join(root,'result.json'),JSON.stringify({scope:'internal real Host/Runtime query feedback loop, not GUI acceptance',attempts,samples},null,2))}
++ }
++ console.log(JSON.stringify({attempts,evidence:path.relative(process.cwd(),root)}))
++}finally{clearInterval(sample);await host.close();await runtime.suspendAndDrain();admission.invalidate();db.close()}
+diff --git a/scripts/fixtures/t23-library-readback.test.ts b/scripts/fixtures/t23-library-readback.test.ts
+new file mode 100644
+index e69de29..34406c0 100644
+--- /dev/null
++++ b/scripts/fixtures/t23-library-readback.test.ts
+@@ -0,0 +1,72 @@
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import {createHash} from 'node:crypto'
++import Database from 'better-sqlite3'
++
++// Read-only oracle for the explicitly authorized public copies. No App settings,
++// accounts, runtime requests, credentials or arbitrary user-selected paths.
++const root=path.resolve('.scratch/local-ai-implementation-20261006')
++const setup=JSON.parse(await fs.readFile(path.join(root,'recovery-cfea412f-2b5a-4bdf-9004-42e1d742178c/setup.json'),'utf8'))
++const baseline=JSON.parse(await fs.readFile('.scratch/b-model-management-20261006/evidence/library-before.json','utf8'))
++const results=[]
++const analysisTargets=new Set(['public-04-coffee','public-01-astronaut'])
++for(const [name,library] of [['public-main',path.resolve('.scratch/b-model-management-20261006/real-library-01')],['damaged',setup.damaged],['scale',setup.scale],['background',path.join(root,'background-ca8819d6-7793-4549-8e43-bc50eac77293/library')]] as const){
++ const control=path.join(library,'.dam'),db=new Database(path.join(control,'library.sqlite'),{readonly:true,fileMustExist:true})
++ try{
++  db.exec('BEGIN');assert.equal(db.pragma('integrity_check',{simple:true}),'ok');assert.deepEqual(db.pragma('foreign_key_check'),[])
++  const assets=db.prepare('SELECT id,title,ai_caption,ai_caption_is_user_edited FROM assets ORDER BY id').all() as any[]
++  const observedAiChanges=[]
++  if(name==='scale')assert.equal(assets.length,164,'Exactly 120 authorized copies were added to the original 44')
++  if(name==='background'){
++   assert.equal(assets.length,48,'Only the one authorized T23 page was added to the existing 47')
++   const executions=db.prepare(`SELECT i.capability,x.state,x.attempt_epoch FROM background_analysis_executions x
++    JOIN background_analysis_intents i ON i.id=x.intent_id JOIN assets a ON a.id=i.asset_id
++    WHERE a.title='T23-background-page' ORDER BY i.capability`).all()
++   assert.deepEqual(executions,[{capability:'caption',state:'succeeded',attempt_epoch:1},{capability:'ocr',state:'succeeded',attempt_epoch:1},{capability:'tags',state:'succeeded',attempt_epoch:1}])
++   assert.deepEqual(db.prepare('SELECT state,error_code FROM basic_analysis_attempts WHERE request_id=?').get('2d05850d-aba2-47b9-b0f0-3787eea932ce'),{state:'unknown',error_code:'ABANDONED'})
++   assert.equal(db.prepare('SELECT count(*) FROM basic_analysis_evidence WHERE request_id=?').pluck().get('2d05850d-aba2-47b9-b0f0-3787eea932ce'),0)
++  }
++  if(name==='scale'){
++   assert.equal(db.prepare('SELECT state FROM basic_analysis_attempts WHERE request_id=?').pluck().get('6bd1c4e8-3252-4e48-9ace-41d55a7482ae'),'unknown','Explicit new execution keeps the original unknown audit')
++   assert.equal(db.prepare('SELECT count(*) FROM basic_analysis_evidence WHERE request_id=?').pluck().get('6bd1c4e8-3252-4e48-9ace-41d55a7482ae'),0,'Unknown cancelled work never acquires a fabricated effect')
++  }
++  for(const previous of baseline.assets){
++   const current=assets.find(a=>a.id===previous.id);assert.ok(current,'Every original asset remains present')
++   if(previous.ai_caption_is_user_edited||!analysisTargets.has(previous.title)){
++    if(name==='damaged'&&previous.title==='A-bg-astronaut'&&!previous.ai_caption_is_user_edited){
++     assert.deepEqual(db.prepare('SELECT state,updated_at FROM basic_analysis_attempts WHERE request_id=?').get('981e1a69-2325-4b31-a4ae-109ab34ee245'),{state:'succeeded',updated_at:'2026-10-07T09:21:32.717Z'},'The pre-existing copy change must retain its actual successful audit')
++     assert.equal(current.ai_caption_is_user_edited,0)
++     observedAiChanges.push({title:previous.title,kind:'caption',requestId:'981e1a69-2325-4b31-a4ae-109ab34ee245',status:'differs from historical B baseline; execution observed during UI pause; operator not established'})
++    }else assert.deepEqual(current,previous,'Manual and all other non-target descriptions remain exact')
++   }
++  }
++  for(const table of ['tags','asset_tags','library_folders','library_folder_assets']){
++   const rows=db.prepare(`SELECT * FROM ${table} ORDER BY rowid`).all() as any[]
++   for(const previous of baseline.manualRelations[table])assert.ok(rows.some(r=>JSON.stringify(r)===JSON.stringify(previous)),table+' preserves every original confirmed relation')
++  }
++  const ocr=db.prepare('SELECT * FROM asset_ocr_state ORDER BY rowid').all() as any[]
++  for(const previous of baseline.manualRelations.asset_ocr_state.filter((r:any)=>r.edited_text!==null||!analysisTargets.has(baseline.assets.find((a:any)=>a.id===r.asset_id)?.title))){
++   if(name==='damaged'&&baseline.assets.find((a:any)=>a.id===previous.asset_id)?.title==='A-bg-astronaut'&&previous.edited_text===null){
++    assert.deepEqual(db.prepare('SELECT state,updated_at FROM basic_analysis_attempts WHERE request_id=?').get('e1ea6d53-a893-4d95-b64c-f892e50ea28c'),{state:'succeeded',updated_at:'2026-10-07T09:21:35.548Z'})
++    assert.equal(ocr.find(r=>r.asset_id===previous.asset_id)?.edited_text,null)
++    observedAiChanges.push({title:'A-bg-astronaut',kind:'ocr',requestId:'e1ea6d53-a893-4d95-b64c-f892e50ea28c',status:'new audited result during UI pause; no human revision overwritten'})
++   }else assert.deepEqual(ocr.find(r=>r.asset_id===previous.asset_id),previous,'Edited and all other non-target OCR remain exact')
++  }
++  for(const file of baseline.files){
++   const filename=path.resolve(library,file.path.replaceAll('\\','/'));assert.ok(filename.startsWith(library+path.sep))
++   assert.equal((await fs.lstat(filename)).isSymbolicLink(),false)
++   assert.equal(createHash('sha256').update(await fs.readFile(filename)).digest('hex'),file.sha256,'Originals and required previews keep their bytes')
++  }
++  const registry=JSON.parse(await fs.readFile(path.join(control,'.dam-asset-retrieval.json'),'utf8'))
++  assert.match(registry.canonical,/^asset-vectors-[a-f0-9-]{36}\.sqlite$/)
++  const vectors=new Database(path.join(control,registry.canonical),{readonly:true,fileMustExist:true})
++  let spaces
++  try{assert.equal(vectors.pragma('integrity_check',{simple:true}),'ok');spaces=vectors.prepare('SELECT space,count(*) AS vectors FROM vectors GROUP BY space ORDER BY space').all();assert.deepEqual(spaces,setup.spaces)}finally{vectors.close()}
++  results.push({name,assets:assets.length,protectedFiles:baseline.files.length,manualCaptions:baseline.assets.filter((a:any)=>a.ai_caption_is_user_edited).length,integrity:'ok',spaces,observedAiChanges,
++   counts:Object.fromEntries(['basic_analysis_requests','basic_analysis_attempts','basic_analysis_evidence','background_analysis_executions','background_analysis_execution_history','independent_tag_executions'].map(t=>[t,db.prepare(`SELECT count(*) FROM ${t}`).pluck().get()])),
++   scaleAssets:assets.filter(a=>a.title.startsWith('规模-咖啡-')),backgroundAssets:assets.filter(a=>a.title.startsWith('T14-'))})
++ }finally{db.close()}
++}
++const out=path.join(root,'t23-evidence/library-readback-latest.json')
++await fs.writeFile(out,JSON.stringify({at:new Date().toISOString(),scope:'designated public copies, read only',results},null,2));console.log(JSON.stringify(results.map(({scaleAssets,backgroundAssets,...r})=>r)))
+diff --git a/scripts/fixtures/t23-analysis-readback.test.ts b/scripts/fixtures/t23-analysis-readback.test.ts
+new file mode 100644
+index e69de29..b3c4057 100644
+--- /dev/null
++++ b/scripts/fixtures/t23-analysis-readback.test.ts
+@@ -0,0 +1,14 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import Database from 'better-sqlite3'
++
++const root=path.resolve('.scratch/local-ai-implementation-20261006')
++const setup=JSON.parse(await fs.readFile(path.join(root,'recovery-cfea412f-2b5a-4bdf-9004-42e1d742178c/setup.json'),'utf8'))
++const db=new Database(path.join(setup.scale,'.dam/library.sqlite'),{readonly:true,fileMustExist:true})
++try{
++ const attempts=db.prepare(`SELECT a.title,r.request_id,r.capability,r.model_name,x.attempt_id,x.state,x.error_code,x.updated_at
++ FROM basic_analysis_attempts x JOIN basic_analysis_requests r USING(request_id) JOIN assets a ON a.id=r.asset_id
++ WHERE a.title IN ('规模-咖啡-119','规模-咖啡-120') ORDER BY x.updated_at`).all()
++ const result={at:new Date().toISOString(),scope:'read-only, two public scale copies; no App settings or runtime secrets',attempts}
++ await fs.appendFile(path.join(root,'t23-evidence/analysis-phases.jsonl'),JSON.stringify(result)+'\n');console.log(JSON.stringify(result))
++}finally{db.close()}
+diff --git a/scripts/fixtures/t23-baseline-diff.test.ts b/scripts/fixtures/t23-baseline-diff.test.ts
+new file mode 100644
+index e69de29..0c5d420 100644
+--- /dev/null
++++ b/scripts/fixtures/t23-baseline-diff.test.ts
+@@ -0,0 +1,12 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import Database from 'better-sqlite3'
++const root=path.resolve('.scratch/local-ai-implementation-20261006'),setup=JSON.parse(await fs.readFile(path.join(root,'recovery-cfea412f-2b5a-4bdf-9004-42e1d742178c/setup.json'),'utf8'))
++const results=[]
++for(const [name,library] of [['public-main',path.resolve('.scratch/b-model-management-20261006/real-library-01')],['damaged',setup.damaged],['scale',setup.scale],['background',path.join(root,'background-ca8819d6-7793-4549-8e43-bc50eac77293/library')]]){
++ const db=new Database(path.join(library,'.dam/library.sqlite'),{readonly:true,fileMustExist:true})
++ try{results.push({name,asset:db.prepare(`SELECT id,title,ai_caption,ai_caption_updated_at,ai_caption_is_user_edited FROM assets WHERE title='A-bg-astronaut'`).get(),
++  attempts:db.prepare(`SELECT r.request_id,r.model_name,x.state,x.updated_at FROM basic_analysis_attempts x JOIN basic_analysis_requests r USING(request_id) JOIN assets a ON a.id=r.asset_id WHERE a.title='A-bg-astronaut' ORDER BY x.updated_at`).all(),
++  visual:db.prepare(`SELECT e.id,json_extract(e.evidence_json,'$.model') AS model_name,e.created_at FROM visual_ai_evidence e JOIN assets a ON a.id=e.asset_id WHERE a.title='A-bg-astronaut' ORDER BY e.created_at`).all()})}finally{db.close()}
++}
++await fs.writeFile(path.join(root,'t23-evidence/baseline-diff.json'),JSON.stringify({at:new Date().toISOString(),scope:'read only, approved public asset and copies',results},null,2));console.log(JSON.stringify(results))

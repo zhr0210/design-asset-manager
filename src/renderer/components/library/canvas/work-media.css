@@ -1,0 +1,12 @@
+.work-media-dialog{width:min(980px,94vw);max-height:92vh;overflow:auto;border:1px solid var(--gallery-border,#d9dce3);border-radius:20px;color:var(--gallery-ink,#202126);padding:20px;background:var(--gallery-surface,#fff)}
+.work-media-dialog::backdrop{background:rgba(20,22,26,.36)}
+.work-media-dialog header{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.work-media-dialog h2{font-size:18px;margin:0 0 12px}.work-media-dialog video{width:100%;max-height:46vh;background:#17191f;border-radius:12px}
+.work-media-dialog fieldset{border:0;padding:0}.work-media-dialog label,.work-file-handoff label{display:grid;gap:5px;margin:12px 0;font-size:13px}
+.work-media-dialog input,.work-media-dialog textarea,.work-file-handoff select{font:inherit;padding:8px;border:1px solid var(--gallery-border,#d9dce3);border-radius:9px;color:inherit;background:var(--gallery-surface-soft,#f5f5f7)}
+.work-frame-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.work-frame-list li{padding:12px;border:1px solid var(--gallery-border,#d9dce3);border-radius:12px}
+.work-frame-list img{width:100%;max-height:180px;object-fit:contain;display:block}.work-frame-list small{display:block;font-size:11px;margin:8px 0}.work-frame-list button[aria-pressed=true]{outline:2px solid currentColor}
+.work-file-handoff{margin:16px 0;padding:12px;border:1px solid var(--gallery-border,#d9dce3);border-radius:12px}.work-file-handoff h3{margin:0;font-size:14px}.work-file-handoff p{font-size:12px;line-height:1.6}.work-file-handoff a{display:inline-block;padding:8px;text-decoration:underline}
+.work-media-dialog button,.work-file-handoff button{font:inherit;cursor:pointer;border:1px solid var(--gallery-border,#d9dce3);border-radius:999px;padding:7px 12px;color:inherit;background:var(--gallery-surface-soft,#f5f5f7)}
+.work-media-dialog button:disabled,.work-file-handoff button:disabled{opacity:.5;cursor:default}.work-media-dialog .ui-actions,.work-file-handoff .ui-actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.dark .work-media-dialog{background:#23262e;color:#f3f4f8}.dark .work-media-dialog input,.dark .work-media-dialog textarea,.dark .work-media-dialog button,.dark .work-file-handoff button,.dark .work-file-handoff select{background:#303440;color:#f3f4f8;border-color:#494e5b}

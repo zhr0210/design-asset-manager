@@ -1,0 +1,73 @@
+diff --git a/scripts/fixtures/retrieval_tokenizer_diagnostic.py b/scripts/fixtures/retrieval_tokenizer_diagnostic.py
+new file mode 100644
+index e69de29..51e563d 100644
+--- /dev/null
++++ b/scripts/fixtures/retrieval_tokenizer_diagnostic.py
+@@ -0,0 +1,67 @@
++"""Read-only framing diagnosis of the already downloaded public tokenizer."""
++import collections
++import json
++import math
++from pathlib import Path
++import struct
++import sys
++
++
++def varint(data, offset):
++    value = 0
++    for shift in range(0, 70, 7):
++        byte = data[offset]
++        offset += 1
++        value |= (byte & 127) << shift
++        if not byte & 128:
++            return value, offset
++    raise ValueError("varint")
++
++
++def fields(data):
++    offset = 0
++    while offset < len(data):
++        tag, offset = varint(data, offset)
++        wire = tag & 7
++        if wire == 2:
++            length, offset = varint(data, offset)
++            value = data[offset:offset + length]
++            offset += length
++        elif wire == 0:
++            value, offset = varint(data, offset)
++        elif wire in (1, 5):
++            length = 8 if wire == 1 else 4
++            value = data[offset:offset + length]
++            offset += length
++        else:
++            raise ValueError("wire")
++        yield tag >> 3, wire, value
++
++
++data = Path(sys.argv[1]).read_bytes()
++assert len(data) < 16 * 1024 * 1024
++top = collections.Counter()
++piece_fields = collections.Counter()
++special = collections.Counter()
++pieces = 0
++max_piece_bytes = 0
++for field, wire, value in fields(data):
++    top[str((field, wire))] += 1
++    if (field, wire) != (1, 2):
++        continue
++    pieces += 1
++    max_piece_bytes = max(max_piece_bytes, len(value))
++    for nested, kind, item in fields(value):
++        piece_fields[str((nested, kind))] += 1
++        if nested == 1 and kind == 2:
++            special["empty"] += len(item) == 0
++            special["nul"] += b"\x00" in item
++            try:
++                item.decode("utf-8")
++            except UnicodeDecodeError:
++                special["invalid_utf8"] += 1
++        elif nested == 2 and kind == 5:
++            special["nonfinite"] += not math.isfinite(struct.unpack("<f", item)[0])
++        elif nested == 3 and kind == 0:
++            special["type:" + str(item)] += 1
++print(json.dumps({"pieces": pieces, "max_piece_bytes": max_piece_bytes, "top": top, "piece_fields": piece_fields, "special": special}))

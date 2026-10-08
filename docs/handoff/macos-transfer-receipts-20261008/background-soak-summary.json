@@ -1,0 +1,20 @@
+{
+  "kind": "sanitized numeric handoff summary from previously verified Windows result",
+  "source": ".scratch/f-release-scale-20261008/evidence/background-soak.json remains on Windows",
+  "build": "dam-fcc776741fe403b2",
+  "durationMs": 1808206,
+  "records": 10009,
+  "completedBusinessEffects": 18,
+  "businessCaptionProviderCalls": 9,
+  "businessOcrEffects": 9,
+  "qualificationCallsIncludedInBusinessCounter": false,
+  "cloudCalls": 0,
+  "sampleCount": 160,
+  "peakHostMiB": 192.265625,
+  "searchAndBackgroundReadCombinedP95Ms": 2259.6859,
+  "residentBytesAfterDrain": 0,
+  "reopensWithoutRetry": true,
+  "macOSValidated": false,
+  "browserUserPathValidated": false,
+  "sessionOrAccountValuesIncluded": false
+}

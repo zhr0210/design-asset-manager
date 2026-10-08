@@ -1,0 +1,197 @@
+{
+  "status": "planned_NOT_RUN",
+  "cases": [
+    {
+      "id": "C01",
+      "given": "legacy v1 no visual table",
+      "expected": "no AI evidence; no read-triggered schema change",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C02",
+      "given": "v2 complete combined row",
+      "expected": "4 virtual capability refs, no copies; visual OCR distinct inferred text",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C03",
+      "given": "v2 row without exact recipe/profile",
+      "expected": "retain literal visual-ai-v1; unknown digest/generation, not current P03 digest",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C04",
+      "given": "legacy analyze purpose includes prompt",
+      "expected": "historical prompt creative readable; no future auto reverse authorization",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C05",
+      "given": "legacy visual empty OCR",
+      "expected": "missing dedicated capability, not dedicated succeeded-empty",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C06",
+      "given": "v8 dedicated empty plus old visual words",
+      "expected": "empty dedicated wins via explicit presence",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C07",
+      "given": "v8 correction retained across prior rerun",
+      "expected": "text/revision retained; original correction base unknown",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C08",
+      "given": "v8 Trash/restore same preview",
+      "expected": "legacy OCR remains readable; stale lifecycle ticket still rejected",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C09",
+      "given": "legacy visual latest row corrupt",
+      "expected": "unavailable marker; no fragment rescue or unannounced older-current fallback",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C10",
+      "given": "legacy rejected exact label on evidence1",
+      "expected": "exclude only evidence1 label; do not create source-family global rejection",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C11",
+      "given": "legacy confirmed labels normalization variants",
+      "expected": "preserve tag IDs/relations; no bulk canonical merge",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C12",
+      "given": "new independent tags + old caption/prompt",
+      "expected": "new per-capability summary; never fabricate one new VisualAiEvidence bundle",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C13",
+      "given": "new generation fails after seed initialization",
+      "expected": "legacy seed still selected; no dynamic completion-time takeover",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C14",
+      "given": "pin legacy result outside old newest20 list",
+      "expected": "target explicit ref fetch with Host scope; old list API limit unchanged",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C15",
+      "given": "old binary on proposed new schema",
+      "expected": "reject unsupported writes, do not lower user_version",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "C16",
+      "given": "projection rollback cannot represent new rejection/pin/empty",
+      "expected": "block lossless rollback claim; preserve new state and require compatible reader",
+      "tests": [
+        "T02",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "packageId": "DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927",
+  "createdOn": "2026-09-27",
+  "mode": "SPEC",
+  "designReviewStatus": "ready_for_review",
+  "implementationStatus": "not_started",
+  "publicationStatus": "not_published",
+  "firstRead": "README-START-HERE.md",
+  "reviewForm": "REVIEW-FORM.md",
+  "revisionRoot": "revision-v2",
+  "originalInput": "original-input/DAM-COMPLETE-HANDOFF-20260927.zip",
+  "originalInputSha256": "6e39ca0db9942c4dae8cb86081e18f172d844b9b3ae66f9649fcca1fdeda6f70",
+  "parentTickets": 7,
+  "dependenciesChanged": false,
+  "referenceCounterexamplesReproduced": 2,
+  "minimalSpecCases": 8,
+  "revisionDocumentChecks": 20,
+  "productionTests": "NOT_RUN",
+  "sourceWorkspaceIncluded": false
+}

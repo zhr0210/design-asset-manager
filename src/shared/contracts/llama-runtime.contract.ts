@@ -15,7 +15,7 @@ export const llamaRuntimeInstallProgressChannel = (installId: string) =>
 export interface LlamaCreateInstallPlanRequest {
   mirrorManifestPath?: string;
   modelRootDir?: string;
-  downloadSource?: 'huggingface' | 'hf-mirror';
+  downloadSource?: 'huggingface' | 'hf-mirror' | 'production-cdn';
 }
 
 export interface LlamaStartInstallRequest {

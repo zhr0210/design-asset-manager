@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { X, HelpCircle, Merge } from 'lucide-react'
+import { projectAssetTagPicker } from '../../../shared/workflows/asset-tagging.workflow'
 import { useAssetStore } from '../../stores/asset.store'
 
 interface TagMergeDialogProps {
@@ -57,9 +58,8 @@ export default function TagMergeDialog({
     }
   }
 
-  // Load select option filters
-  const sourceTagOptions = tags
-  const targetTagOptions = tags.filter((t) => t.id !== sourceTagId)
+  const sourceTagOptions = projectAssetTagPicker(tags).options
+  const targetTagOptions = projectAssetTagPicker(tags, { excludeTagIds: [sourceTagId] }).options
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm select-none">
@@ -120,9 +120,9 @@ export default function TagMergeDialog({
               className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl outline-none text-slate-600 font-semibold cursor-pointer"
             >
               <option value="">点击选择源标签...</option>
-              {sourceTagOptions.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name} ({t.type}) - 使用 {t.usageCount} 次
+              {sourceTagOptions.map((option) => (
+                <option key={option.tag.id} value={option.tag.id}>
+                  {option.mergeOptionLabel}
                 </option>
               ))}
             </select>
@@ -138,9 +138,9 @@ export default function TagMergeDialog({
               className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl outline-none text-slate-600 font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <option value="">点击选择目标标签...</option>
-              {targetTagOptions.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name} ({t.type}) - 使用 {t.usageCount} 次
+              {targetTagOptions.map((option) => (
+                <option key={option.tag.id} value={option.tag.id}>
+                  {option.mergeOptionLabel}
                 </option>
               ))}
             </select>

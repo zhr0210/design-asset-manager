@@ -1,0 +1,161 @@
+diff --git a/src/main/model-library-workspace/huggingface-model-discovery.ts b/src/main/model-library-workspace/huggingface-model-discovery.ts
+index 6cc41ce..9efa733 100644
+--- a/src/main/model-library-workspace/huggingface-model-discovery.ts
++++ b/src/main/model-library-workspace/huggingface-model-discovery.ts
+@@ -1,18 +1,33 @@
+-import { createHash } from 'node:crypto'
+ import type { HuggingFaceDiscoveryEntry, ManagedVisionModelId } from '../../shared/contracts/managed-model-library.contract'
+ import { VISION_MODEL_PROFILES } from '../model-library/vision-model-artifact'
+-import { boundedSourceJson, openUpstreamFile, validateUpstreamReleasePolicy,
++import { validateUpstreamReleasePolicy,
+   type PublicModelFetch, type UpstreamModelRelease } from './huggingface-model-source'
++import { assembleGgufBundles } from './huggingface-gguf-bundles'
++import { chinaMirrorCatalog } from './china-model-mirror'
+ 
+ /** Product scope, not a third-party executable registry. Main alone chooses repositories.
+  * Upstream metadata is data; a listed file or repository never grants runtime qualification. */
+ export const HF_MODEL_SCOPE = [
+-  ...(['2B', '4B', '8B'] as const).map(size => ({ id: `qwen3-vl-${size.toLowerCase()}-instruct`,
+-    model: `Qwen3-VL ${size} Instruct`, family: '视觉理解', repository: `Qwen/Qwen3-VL-${size}-Instruct`,
+-    supported: size !== '8B' })),
+-  ...(['2B', '4B', '8B'] as const).map(size => ({ id: `qwen3-vl-${size.toLowerCase()}-gguf`,
+-    model: `Qwen3-VL ${size} GGUF（全部上游量化文件）`, family: '视觉理解 · GGUF',
+-    repository: `Qwen/Qwen3-VL-${size}-Instruct-GGUF`, supported: false })),
++  ...(['2B', '4B', '8B', '32B', '30B-A3B', '235B-A22B'] as const).flatMap(size =>
++    (['Instruct', 'Thinking'] as const).flatMap(variant => (['', '-FP8', '-GGUF'] as const).map(format => ({
++      // Keep the six original discovery identities for cached catalogues and installed records.
++      id: `qwen3-vl-${size.toLowerCase()}-${variant === 'Instruct' && format === '-GGUF' ? 'gguf' : variant.toLowerCase() + format.toLowerCase()}`,
++      model: `Qwen3-VL ${size} ${variant}${format ? ' · ' + format.slice(1) : ''}`,
++      family: '视觉理解' + (format ? ' · ' + format.slice(1) : ''),
++      repository: `Qwen/Qwen3-VL-${size}-${variant}${format}`,
++      supported: variant === 'Instruct' && !format && (size === '2B' || size === '4B'),
++    })))),
++  ...(['2B', '4B', '8B', '32B', '30B-A3B', '235B-A22B'] as const).flatMap(size =>
++    (['Instruct', 'Thinking'] as const).map(variant => ({
++      id: `unsloth-qwen3-vl-${size.toLowerCase()}-${variant.toLowerCase()}-gguf`,
++      model: `Qwen3-VL ${size} ${variant} · Unsloth GGUF`, family: '视觉理解 · 社区量化',
++      repository: `unsloth/Qwen3-VL-${size}-${variant}-GGUF`, supported: false,
++    }))),
++  ...(['Embedding', 'Reranker'] as const).flatMap(kind => (['2B', '8B'] as const).map(size => ({
++    id: `qwen3-vl-${kind.toLowerCase()}-${size.toLowerCase()}`, model: `Qwen3-VL ${kind} ${size}`,
++    family: '图文检索', repository: `Qwen/Qwen3-VL-${kind}-${size}`, supported: false,
++  }))),
++  { id: 'siglip2-base', model: 'SigLIP2 Base · 多语言图文检索', family: '图文检索', repository: 'google/siglip2-base-patch16-224', supported: false },
+   { id: 'ram-plus', model: 'RAM++', family: '图像标签', repository: 'xinyu1205/recognize-anything-plus-model', supported: false },
+   { id: 'florence-2-large', model: 'Florence-2 Large', family: '描述 / OCR', repository: 'microsoft/Florence-2-large', supported: false },
+   { id: 'clip-vit-b-32', model: 'CLIP ViT-B/32', family: '图文向量 / 分类', repository: 'laion/CLIP-ViT-B-32-laion2B-s34B-b79K', supported: false },
+@@ -21,81 +36,46 @@ export const HF_MODEL_SCOPE = [
+ 
+ const safeName = (name: unknown): name is string => typeof name === 'string' && name.length <= 240 &&
+   name.split('/').every(part => /^[A-Za-z0-9._-]+$/.test(part) && part !== '.' && part !== '..')
+-export const hfDownloadUrl = (repository: string, revision: string, name: string) =>
+-  `https://huggingface.co/${repository}/resolve/${revision}/${name.split('/').map(encodeURIComponent).join('/')}`
+-
+ export async function discoverHuggingFaceModels(fetch: PublicModelFetch, signal: AbortSignal,
+   progress: (entry: HuggingFaceDiscoveryEntry, release?: UpstreamModelRelease) => void) {
+-  // Two metadata requests at a time; one unavailable family cannot freeze unrelated families.
+   let index = 0
+-  await Promise.all([0, 1].map(async () => {
+-    while (index < HF_MODEL_SCOPE.length) {
++  await Promise.all([0,1].map(async()=>{
++    while(index<HF_MODEL_SCOPE.length){
+       signal.throwIfAborted()
+-      const scope = HF_MODEL_SCOPE[index++], checkedAt = new Date().toISOString()
+-      const entry: HuggingFaceDiscoveryEntry = { id: scope.id, model: scope.model, family: scope.family,
+-        repository: scope.repository, revision: null, license: null, bytes: null, files: [], checkedAt,
+-        support: scope.supported ? 'managed-vision' : 'catalog-only', state: 'unavailable', error: null,
+-        supportNotice: scope.supported ? '支持 DAM 托管 CPU float32；安装后须实际验证。' :
+-          '可查看上游下载文件；当前正式托管运行链未支持此组合，下载不代表可用于分析。' }
+-      let release: UpstreamModelRelease | undefined
+-      try {
+-        const requestSignal = AbortSignal.any([signal, AbortSignal.timeout(30_000)])
+-        const response = await fetch(`https://huggingface.co/api/models/${scope.repository}?blobs=true`, {
+-          signal: requestSignal, credentials: 'omit', redirect: 'error', headers: { Accept: 'application/json' } })
+-        if (response.status === 401 || response.status === 403) { await response.body?.cancel(); entry.state = 'restricted'; throw Error('MODEL_SOURCE_RESTRICTED') }
+-        const value = await boundedSourceJson(response, requestSignal)
+-        if (value.id !== scope.repository || !/^[a-f0-9]{40}$/.test(value.sha) || value.private || !Array.isArray(value.siblings) ||
+-          value.siblings.length > 5000) throw Error('MODEL_SOURCE_METADATA_INVALID')
+-        entry.revision = value.sha
+-        const license = value.cardData?.license
+-        entry.license = typeof license === 'string' && /^[a-z0-9._-]{1,100}$/.test(license) ? license : null
+-        if (value.gated) { entry.state = 'restricted'; throw Error('MODEL_SOURCE_RESTRICTED') }
+-        entry.files = value.siblings.filter((file: any) => safeName(file.rfilename) &&
+-          /\.(safetensors|gguf|onnx|bin|pth|pt|json|txt|csv|model|jinja|tiktoken)$/i.test(file.rfilename) &&
+-          Number.isSafeInteger(file.size) && file.size > 0 && file.size <= 200 * 1024 ** 3).map((file: any) => ({
+-            name: file.rfilename, bytes: file.size, sha256: /^[a-f0-9]{64}$/.test(file.lfs?.sha256) ? file.lfs.sha256 : null,
+-            downloadUrl: hfDownloadUrl(scope.repository, value.sha, file.rfilename),
+-          })).sort((a: any, b: any) => a.name.localeCompare(b.name))
+-        entry.bytes = entry.files.reduce((sum, file) => sum + file.bytes, 0)
+-        entry.state = 'available'
+-        if (scope.supported) {
+-          if (entry.license !== 'apache-2.0') throw Error('MODEL_SOURCE_LICENSE_CHANGED')
+-          const id = scope.id as ManagedVisionModelId
+-          release = { id, name: VISION_MODEL_PROFILES[id].name, repository: scope.repository,
+-            revision: value.sha, license: entry.license, loadRamBytes: VISION_MODEL_PROFILES[id].loadRamBytes, files: [] }
+-          for (const file of entry.files) {
+-            // Only data files consumed by the data-only Transformers profile. No pickle, Python or remote code.
+-            if (!/^[A-Za-z0-9._-]+$/.test(file.name) || !/\.(safetensors|json|txt|model|jinja)$/.test(file.name)) continue
+-            const raw = value.siblings.find((raw: any) => raw.rfilename === file.name)
+-            if (!/^[a-f0-9]{40}$/.test(raw.blobId)) throw Error('MODEL_SOURCE_METADATA_INVALID')
+-            let sha256 = file.sha256
+-            if (!sha256) {
+-              if (file.bytes > 16 * 1024 ** 2) throw Error('MODEL_SOURCE_METADATA_INVALID')
+-              const response = await openUpstreamFile(release, { ...file, sha256: '' }, 0, fetch, requestSignal)
+-              if (response.status !== 200 || !response.body) throw Error('MODEL_SOURCE_UNAVAILABLE')
+-              const chunks: Uint8Array[] = []; let bytes = 0
+-              try { for await (const chunk of response.body as unknown as AsyncIterable<Uint8Array>) {
+-                requestSignal.throwIfAborted(); bytes += chunk.length
+-                if (bytes > file.bytes) throw Error('MODEL_SOURCE_METADATA_CHANGED'); chunks.push(chunk)
+-              } } finally { await response.body.cancel().catch(() => {}) }
+-              const content = Buffer.concat(chunks)
+-              if (bytes !== file.bytes || createHash('sha1').update(`blob ${bytes}\0`).update(content).digest('hex') !== raw.blobId)
+-                throw Error('MODEL_SOURCE_METADATA_CHANGED')
+-              sha256 = createHash('sha256').update(content).digest('hex')
+-              file.sha256 = sha256
+-            }
+-            release.files.push({ name: file.name, bytes: file.bytes, sha256, gitBlob: raw.blobId })
+-          }
++      const scope=HF_MODEL_SCOPE[index++],checkedAt=new Date().toISOString()
++      const entry:HuggingFaceDiscoveryEntry={id:scope.id,model:scope.model,family:scope.family,repository:scope.repository,
++        sourceKind:scope.repository.startsWith('unsloth/')?'community':'official',catalogProvider:'modelscope-cn',
++        revision:null,license:null,bytes:null,files:[],bundles:[],checkedAt,support:'catalog-only',state:'unavailable',error:null,
++        supportNotice:'境内镜像目录候选；尚未支持此运行组合。'}
++      let release:UpstreamModelRelease|undefined
++      try{
++        const requestSignal=AbortSignal.any([signal,AbortSignal.timeout(30000)])
++        const catalog=await chinaMirrorCatalog(scope.repository,fetch,requestSignal)
++        entry.revision=catalog.revision;entry.license=catalog.license
++        entry.files=catalog.files.filter(file=>safeName(file.name)&&
++          /\.(safetensors|gguf|onnx|bin|pth|pt|json|txt|csv|model|jinja|tiktoken)$/i.test(file.name)&&file.bytes<=200*1024**3)
++          .map(({name,bytes,sha256,downloadUrl})=>({name,bytes,sha256,downloadUrl})).sort((a,b)=>a.name.localeCompare(b.name))
++        entry.bytes=entry.files.reduce((sum,file)=>sum+file.bytes,0)
++        entry.bundles=assembleGgufBundles(entry);entry.state='available'
++        if(scope.supported){
++          const id=scope.id as ManagedVisionModelId
++          release={id,name:VISION_MODEL_PROFILES[id].name,repository:scope.repository,catalogProvider:'modelscope-cn',
++            revision:catalog.revision,license:catalog.license??'',loadRamBytes:VISION_MODEL_PROFILES[id].loadRamBytes,
++            files:entry.files.filter(file=>/^[A-Za-z0-9._-]+$/.test(file.name)&&/\.(safetensors|json|txt|model|jinja)$/.test(file.name))
++              .map(file=>({name:file.name,bytes:file.bytes,sha256:file.sha256!}))}
+           validateUpstreamReleasePolicy(release)
++          entry.support='managed-vision';entry.supportNotice='ModelScope 境内来源；支持托管 CPU float32，仍需真实验证。'
++        }
++        if(entry.bundles.some(bundle=>bundle.support==='managed-gguf')){
++          entry.support='managed-vision';entry.supportNotice='ModelScope 境内来源；Windows x64 GGUF 路径已接通，具体组合和加载方式仍需真实图像验证。'
+         }
+-      } catch (error) {
+-        signal.throwIfAborted(); release = undefined
+-        const code = error instanceof Error ? error.message : ''
+-        entry.error = /^MODEL_[A-Z_]+$/.test(code) ? code : 'MODEL_SOURCE_UNAVAILABLE'
+-        // Preserve real file links when only compatibility/manifest verification failed.
+-        if (entry.state === 'available') entry.supportNotice = '上游文件可查看，但本次安装清单核验未通过；不能安装或激活。'
++      }catch(error){
++        signal.throwIfAborted();release=undefined
++        const code=error instanceof Error?error.message:''
++        entry.error=/^MODEL_[A-Z_]+$/.test(code)?code:'MODEL_MIRROR_UNAVAILABLE'
++        if(entry.state==='available')entry.supportNotice='境内文件链接可查看，但安装清单核验未通过；不能安装或激活。'
+       }
+-      progress(entry, release)
++      progress(entry,release)
+     }
+   }))
+ }

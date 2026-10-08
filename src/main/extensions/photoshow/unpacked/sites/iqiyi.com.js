@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"iqiyi.com":{srcMatching:[{srcRegExp:"(.+?)_\\d+_\\d+(@IMG@).*",processor:["$1_0_0$2","$1_640_640$2"]}]}};

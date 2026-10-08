@@ -1,0 +1,35 @@
+diff --git a/scripts/query-file-grants.test.ts b/scripts/query-file-grants.test.ts
+new file mode 100644
+index e69de29..cfb3cd9 100644
+--- /dev/null
++++ b/scripts/query-file-grants.test.ts
+@@ -0,0 +1,29 @@
++import {test} from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import os from 'node:os'
++import sharp from 'sharp'
++import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
++import {createQueryFileGrants} from '../src/main/retrieval-workspace/query-file-grants'
++
++await test('a trusted single query file is owner/session scoped, never imported, and retains its material through an in-flight revocation',async()=>{
++  const root=await fs.mkdtemp(path.join(os.tmpdir(),'dam-query-grant-')),file=path.join(root,'public-fixture.png')
++  await sharp({create:{width:50,height:40,channels:3,background:'#7788aa'}}).png().toFile(file)
++  const original=await fs.readFile(file),admission=createVisualAdmission();let generation='g-1'
++  const scope={libraryIdentity:'library-1',generation:'g-1'}
++  const grants=createQueryFileGrants({admission,select:async()=>file,current:()=>({state:'ready',identity:'library-1',generation})})
++  try{
++    const review=await grants.select('owner-a',scope);assert.ok(review)
++    await assert.rejects(grants.use('owner-b',scope,review!.grant,async()=>{}),/EXPIRED/)
++    let end!:()=>void,started!:()=>void;const entered=new Promise<void>(r=>{started=r}),gate=new Promise<void>(r=>{end=r})
++    const operation=grants.use('owner-a',scope,review!.grant,async bytes=>{assert.deepEqual(Buffer.from(bytes),original);started();await gate})
++    await entered;grants.revoke('owner-a')
++    assert.equal(admission.inspect().materialBytes,original.length,'Revocation cannot falsely release a still-used buffer')
++    end();await assert.rejects(operation,/EXPIRED/);assert.equal(admission.inspect().materialBytes,0)
++    const second=await grants.select('owner-a',scope);generation='g-2'
++    await assert.rejects(grants.use('owner-a',scope,second!.grant,async()=>{}),/EXPIRED/)
++    assert.equal(admission.inspect().materialBytes,0)
++    assert.deepEqual(await fs.readFile(file),original,'Choosing and searching never writes or imports the source')
++  }finally{grants.clear();admission.invalidate();await fs.rm(root,{recursive:true,force:true})}
++})

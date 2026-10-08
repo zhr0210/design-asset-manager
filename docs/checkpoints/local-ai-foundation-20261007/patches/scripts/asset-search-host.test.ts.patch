@@ -1,0 +1,103 @@
+diff --git a/scripts/asset-search-host.test.ts b/scripts/asset-search-host.test.ts
+new file mode 100644
+index e69de29..17dbbcd 100644
+--- /dev/null
++++ b/scripts/asset-search-host.test.ts
+@@ -0,0 +1,97 @@
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import { test } from 'node:test'
++import sharp from 'sharp'
++import { createActiveLibraryHost } from '../src/main/library-lifecycle'
++import { createProductionActiveLibraryHostDependencies } from '../src/main/library-lifecycle/production-active-library-dependencies'
++
++async function fixture() {
++  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-search-host-'))), library = path.join(root,'library')
++  const files = [1,2,3].map(n=>path.join(root,`generated-${n}.png`))
++  for (const file of files) await sharp({create:{width:32,height:24,channels:3,background:'#aabbcc'}}).png().toFile(file)
++  const sourceBytes = await Promise.all(files.map(file=>fs.readFile(file)))
++  const host = createActiveLibraryHost(createProductionActiveLibraryHostDependencies({
++    selectLibraryDirectory: async()=>({kind:'selected',directory:library}),
++    selectLocalFiles:async()=>({kind:'selected',files:files.map(filePath=>({filePath}))}),
++  }))
++  const plan = await host.prepareCreate(); if (plan.kind!=='planned') throw Error('fixture')
++  await host.confirmCreate(plan.plan.receipt)
++  const add = await host.prepareAddAssets(); if (add.kind!=='planned') throw Error('fixture')
++  await host.dispatchAddAssets(add.plan.receipt)
++  const scope = {libraryIdentity:host.inspect().identity!,generation:host.inspect().generation!}
++  const query = (text:string,limit=100,cursor?:string) => host.searchAssetPage({...scope,query:text,tagScope:'includes-pending',limit,...(cursor?{cursor}:{})})
++  return { root,library,host,scope,query,close:async()=>{
++    await host.close()
++    assert.deepEqual(await Promise.all(files.map(file=>fs.readFile(file))),sourceBytes)
++    assert.ok(root.startsWith(path.resolve(os.tmpdir())+path.sep) && path.basename(root).startsWith('dam-search-host-'))
++    await fs.rm(root,{recursive:true,force:true})
++  } }
++}
++
++await test('Host search indexes Chinese cross-field edits and aliases, excludes stale hits, and pages a stable query snapshot',async()=>{
++  const f = await fixture()
++  try {
++    const first = await f.query('generated',1)
++    assert.equal(first.total,3); assert.equal(first.matches.length,1); assert.ok(first.nextCursor)
++    const second = await f.query('generated',1,first.nextCursor!)
++    assert.notEqual(first.matches[0].asset.id,second.matches[0].asset.id)
++    const id = first.matches[0].asset.id
++    await f.host.updateAssetCaption(id,'青绿色咖啡杯放在木桌上')
++    const combined = await f.query('咖啡 generated')
++    assert.deepEqual(combined.matches.map(match=>match.asset.id),[id])
++    assert.ok(combined.matches[0].explanation?.evidence.some(e=>e.kind==='description'))
++    const tag = await f.host.createTag({name:'中文标签'})
++    await f.host.addTagToAsset(id,tag.id); await f.host.createTagAlias(tag.id,'coffee')
++    assert.deepEqual((await f.query('coffee')).matches.map(match=>match.asset.id),[id])
++    const frozen = await f.query('coffee',1)
++    await f.host.updateAssetCaption(id,'红色杯子'); await f.host.removeTagAlias(tag.id,'coffee')
++    assert.equal((await f.query('咖啡')).matches.length,0)
++    assert.equal((await f.query('coffee')).matches.length,0)
++    const context = (await f.host.readAssetContext([id])).assets[0]
++    const trash = await f.host.prepareTrash({designAssetIdentity:id,expectedRevision:context.revision})
++    if (trash.kind!=='planned') throw Error('fixture')
++    await f.host.dispatchTrash({kind:'move-design-asset-to-trash',planReceipt:trash.plan.receipt,designAssetIdentity:id,expectedRevision:context.revision})
++    assert.equal((await f.query('generated')).total,2)
++    assert.equal((await f.host.readSearchIndex()).state,'ready')
++    await assert.rejects(f.host.searchAssetPage({...f.scope,query:'other',tagScope:'includes-pending',limit:1,cursor:first.nextCursor!}))
++    assert.equal(frozen.matches[0].asset.id,id)
++    for(let refresh=0;refresh<25;refresh++)assert.equal((await f.query('generated')).total,2,
++      'Completed one-page queries must not exhaust the snapshot budget during analysis notifications')
++  } finally { await f.close() }
++})
++await test('Host folder search counts only canonical members and rechecks membership for a later frozen page',async()=>{
++ const f=await fixture();try{
++   const ids=(await f.host.listAssets()).map(a=>a.id),before=await f.host.readOrganization(f.scope)
++   const created=await f.host.writeOrganization({...f.scope,sessionToken:before.sessionToken,expectedRevision:before.revision,allowUpgrade:true,command:{kind:'create',folderKind:'assets',parentId:null,name:'范围',assetIds:ids.slice(0,2)}})
++   const folderId=created.folders.find(v=>v.name==='范围')!.id,input={...f.scope,query:'generated',tagScope:'includes-pending' as const,folderId,limit:1}
++   const page=await f.host.searchAssetPage(input);assert.equal(page.total,2);assert.ok(page.nextCursor)
++   const removed=ids.slice(0,2).find(id=>id!==page.matches[0].asset.id)!
++   await f.host.writeOrganization({...f.scope,sessionToken:created.sessionToken,expectedRevision:created.revision,allowUpgrade:false,command:{kind:'remove-assets',folderId,assetIds:[removed]}})
++   assert.equal((await f.host.searchAssetPage({...input,cursor:page.nextCursor!})).matches.length,0)
++   assert.equal((await f.host.searchAssetPage({...input,limit:100})).total,1)
++ }finally{await f.close()}
++})
++
++await test('owned derived index generations rebuild and recover corrupted data while source content and ordinary reopen remain usable',async()=>{
++  const f=await fixture()
++  try {
++    const before=await f.query('generated',1), oldGeneration=before.index.indexGeneration
++    const rebuilt=await f.host.rebuildSearchIndex()
++    assert.equal(rebuilt.state,'ready'); assert.notEqual(rebuilt.indexGeneration,oldGeneration)
++    assert.equal((await f.query('generated',1,before.nextCursor!)).matches.length,1)
++    await f.host.close(); await f.host.reopen()
++    assert.equal((await f.query('generated')).total,3)
++    await f.host.close()
++    const owner=JSON.parse(await fs.readFile(path.join(f.library,'.dam','.dam-asset-search.json'),'utf8'))
++    assert.match(owner.file,/^asset-search-[a-f0-9-]{36}\.sqlite$/)
++    const derived=path.resolve(f.library,'.dam',owner.file)
++    assert.equal(path.dirname(derived),path.resolve(f.library,'.dam'))
++    await fs.writeFile(derived,'controlled corruption of a disposable derived index')
++    await f.host.reopen()
++    assert.equal((await f.host.listAssets()).length,3)
++    assert.equal((await f.query('generated')).total,3)
++    assert.equal(await fs.readFile(derived,'utf8'),'controlled corruption of a disposable derived index')
++  } finally { await f.close() }
++})

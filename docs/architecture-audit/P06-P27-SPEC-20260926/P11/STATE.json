@@ -1,0 +1,36 @@
+{
+  "stage": "P11",
+  "mode": "SPEC",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "directDependencies": [
+    "P10"
+  ],
+  "precondition": "prior designs pending review; user permits continued SPEC only",
+  "requirements": [
+    "R07",
+    "R08",
+    "R09",
+    "R11",
+    "R14",
+    "R15",
+    "R22"
+  ],
+  "decisions": [
+    "DAM-A003",
+    "DAM-A007",
+    "DAM-A012"
+  ],
+  "testIds": [
+    "T02",
+    "T04",
+    "T05",
+    "T06",
+    "T07",
+    "T08"
+  ],
+  "specTests": "PASS",
+  "productionTests": "NOT_RUN",
+  "modelTests": "NOT_RUN",
+  "realLibraryAccessed": false
+}

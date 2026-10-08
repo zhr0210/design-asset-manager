@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"klingai.com":{srcMatching:[{srcRegExp:"(//.+?\\.klingai\\.com/.+):\\d+x\\d+(@IMG@)",processor:"$1$2"}]}};

@@ -1,0 +1,239 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "Q01",
+      "input": {
+        "op": "page",
+        "binding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "cursorBinding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "rows": [
+          {
+            "id": "c",
+            "key": 1
+          },
+          {
+            "id": "a",
+            "key": 1
+          },
+          {
+            "id": "b",
+            "key": 1
+          }
+        ],
+        "after": null,
+        "limit": 2
+      },
+      "expected": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "id": "Q02",
+      "input": {
+        "op": "page",
+        "binding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "cursorBinding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "rows": [
+          {
+            "id": "c",
+            "key": 1
+          },
+          {
+            "id": "a",
+            "key": 1
+          },
+          {
+            "id": "b",
+            "key": 1
+          }
+        ],
+        "after": [
+          1,
+          "b"
+        ],
+        "limit": 2
+      },
+      "expected": [
+        "c"
+      ]
+    },
+    {
+      "id": "Q03",
+      "input": {
+        "op": "page",
+        "binding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "cursorBinding": [
+          "OTHER",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "rows": [
+          {
+            "id": "c",
+            "key": 1
+          },
+          {
+            "id": "a",
+            "key": 1
+          },
+          {
+            "id": "b",
+            "key": 1
+          }
+        ],
+        "after": null,
+        "limit": 2
+      },
+      "expected": "refresh-required"
+    },
+    {
+      "id": "Q04",
+      "input": {
+        "op": "page",
+        "binding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "cursorBinding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          0
+        ],
+        "rows": [
+          {
+            "id": "c",
+            "key": 1
+          },
+          {
+            "id": "a",
+            "key": 1
+          },
+          {
+            "id": "b",
+            "key": 1
+          }
+        ],
+        "after": null,
+        "limit": 2
+      },
+      "expected": "refresh-required"
+    },
+    {
+      "id": "Q05",
+      "input": {
+        "op": "page",
+        "binding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "cursorBinding": [
+          "L",
+          "S",
+          "OTHER",
+          "I",
+          1
+        ],
+        "rows": [
+          {
+            "id": "c",
+            "key": 1
+          },
+          {
+            "id": "a",
+            "key": 1
+          },
+          {
+            "id": "b",
+            "key": 1
+          }
+        ],
+        "after": null,
+        "limit": 2
+      },
+      "expected": "refresh-required"
+    },
+    {
+      "id": "Q06",
+      "input": {
+        "op": "literal",
+        "text": "红色 海报"
+      },
+      "expected": "\"红色 海报\""
+    },
+    {
+      "id": "Q07",
+      "input": {
+        "op": "literal",
+        "text": "x\" OR y"
+      },
+      "expected": "\"x\"\" OR y\""
+    },
+    {
+      "id": "Q08",
+      "input": {
+        "op": "page",
+        "binding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "cursorBinding": [
+          "L",
+          "S",
+          "Q",
+          "I",
+          1
+        ],
+        "rows": [],
+        "after": null,
+        "limit": 2
+      },
+      "expected": []
+    }
+  ]
+}

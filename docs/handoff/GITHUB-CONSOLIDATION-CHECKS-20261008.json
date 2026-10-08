@@ -1,0 +1,702 @@
+{
+  "schema": 1,
+  "scope": "source consolidation; not product acceptance",
+  "host": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v25.7.0"
+  },
+  "build": {
+    "buildId": "dam-c46463e9f7f3a8ce",
+    "sourceDigest": "c46463e9f7f3a8ce57d0cac3cedac0a22d8683c192c62bcdda920cb2bcaf3728",
+    "builtAt": "2026-10-08T14:16:35.064Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 786
+  },
+  "dependencyInstall": "npm ci passed in isolated checkout",
+  "typecheck": "passed",
+  "buildResult": "passed; backup and video binaries compiled from source",
+  "contextOwnership": {
+    "owned": 774,
+    "total": 774,
+    "untrackedFirstParty": 0
+  },
+  "router": "268 route cases passed with unchanged 16000 token default budget",
+  "governance": {
+    "status": "NOT_PASSED",
+    "executions": [
+      {
+        "check": "ci:prepare-native-deps",
+        "status": 1
+      },
+      {
+        "check": "test-agent-context-router",
+        "status": 0
+      },
+      {
+        "check": "test-platform",
+        "status": 0
+      },
+      {
+        "check": "test-platform",
+        "status": 0
+      },
+      {
+        "check": "test-platform",
+        "status": 0
+      },
+      {
+        "check": "test-doctor",
+        "status": 0
+      },
+      {
+        "check": "test-doctor-command-resolver",
+        "status": 0
+      },
+      {
+        "check": "test-doctor-service",
+        "status": 0
+      },
+      {
+        "check": "test-settings-compatibility",
+        "status": 0
+      },
+      {
+        "check": "test-settings-service-defaults",
+        "status": 0
+      },
+      {
+        "check": "test-text-box-provider-workflow",
+        "status": 0
+      },
+      {
+        "check": "test-settings-migration",
+        "status": 0
+      },
+      {
+        "check": "test-settings-migration-ipc",
+        "status": 0
+      },
+      {
+        "check": "test-settings-migration-panel",
+        "status": 0
+      },
+      {
+        "check": "test-managed-path-audit",
+        "status": 0
+      },
+      {
+        "check": "test-log-path-governance",
+        "status": 0
+      },
+      {
+        "check": "test-python-test-isolation",
+        "status": 0
+      },
+      {
+        "check": "test-cache-temp-governance",
+        "status": 0
+      },
+      {
+        "check": "test-path-governance-panel",
+        "status": 0
+      },
+      {
+        "check": "test-path-governance-docs",
+        "status": 0
+      },
+      {
+        "check": "test-ci-governance",
+        "status": 0
+      },
+      {
+        "check": "test-desktop-viewport-policy",
+        "status": 0
+      },
+      {
+        "check": "test-app-navigation-workflow",
+        "status": 0
+      },
+      {
+        "check": "test-asset-workspace-session",
+        "status": 0
+      },
+      {
+        "check": "test-library-view-draft-lifetime",
+        "status": 0
+      },
+      {
+        "check": "test-asset-discovery-workflow",
+        "status": 0
+      },
+      {
+        "check": "test-asset-authority-baseline",
+        "status": 0
+      },
+      {
+        "check": "test-library-start-inspection",
+        "status": 0
+      },
+      {
+        "check": "test-library-manifest-inspection",
+        "status": 0
+      },
+      {
+        "check": "test-library-filesystem-inspection",
+        "status": 0
+      },
+      {
+        "check": "test-exclusive-library-lock",
+        "status": 0
+      },
+      {
+        "check": "test-library-open-inspection",
+        "status": 0
+      },
+      {
+        "check": "test-library-creation-planner",
+        "status": 0
+      },
+      {
+        "check": "test-active-library-session",
+        "status": 0
+      },
+      {
+        "check": "test-active-library-capture-composition",
+        "status": 0
+      },
+      {
+        "check": "test-asset-trash-lifecycle",
+        "status": 0
+      },
+      {
+        "check": "test-asset-trash-sqlite-persistence",
+        "status": 0
+      },
+      {
+        "check": "test-capture-intake-workflow",
+        "status": 0
+      },
+      {
+        "check": "test-capture-intake-sqlite-persistence",
+        "status": 0
+      },
+      {
+        "check": "test-download-store-integrity",
+        "status": 0
+      },
+      {
+        "check": "test-download-store-integrity",
+        "status": 0
+      },
+      {
+        "check": "test-image-normalize-source-retention",
+        "status": 0
+      },
+      {
+        "check": "test-electron-main-lifecycle-policy",
+        "status": 0
+      },
+      {
+        "check": "test-web-retirement",
+        "status": 0
+      },
+      {
+        "check": "test-bootstrap",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-registry",
+        "status": 0
+      },
+      {
+        "check": "test-bootstrap-manager",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-profile",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package",
+        "status": 0
+      },
+      {
+        "check": "test-bootstrap-package-plan",
+        "status": 0
+      },
+      {
+        "check": "test-ai-runtime",
+        "status": 0
+      },
+      {
+        "check": "test-ai-python-environment",
+        "status": 0
+      },
+      {
+        "check": "test-ai-python-runtime-host-context",
+        "status": 0
+      },
+      {
+        "check": "test-ai-runtime-host-context",
+        "status": 0
+      },
+      {
+        "check": "test-ai-runtime-bootstrap",
+        "status": 0
+      },
+      {
+        "check": "test-external-http-runtime",
+        "status": 0
+      },
+      {
+        "check": "test-python-worker-runtime",
+        "status": 0
+      },
+      {
+        "check": "test-platform-ai-branch-evidence",
+        "status": 0
+      },
+      {
+        "check": "test-platform-ai-branch-evidence-ipc",
+        "status": 0
+      },
+      {
+        "check": "test-platform-ai-branch-disabled",
+        "status": 0
+      },
+      {
+        "check": "test-real-ai-runtime-process-runner",
+        "status": 0
+      },
+      {
+        "check": "test-ai-runtime-settings",
+        "status": 0
+      },
+      {
+        "check": "test-ai-runtime-ipc",
+        "status": 0
+      },
+      {
+        "check": "test-ocr-real-evidence",
+        "status": 0
+      },
+      {
+        "check": "test-model-library-catalog-admission-tracer",
+        "status": 1
+      },
+      {
+        "check": "test-model-library-core-tracer",
+        "status": 1
+      },
+      {
+        "check": "test-model-library-verified-blob-store-tracer",
+        "status": 1
+      },
+      {
+        "check": "test-model-library-storage-authority-tracer",
+        "status": 1
+      },
+      {
+        "check": "test-model-library-root-registry-tracer",
+        "status": 1
+      },
+      {
+        "check": "test-model-library-product-pilot",
+        "status": 1
+      },
+      {
+        "check": "test-model-library-product-pilot-storage",
+        "status": 1
+      },
+      {
+        "check": "test-official-model-catalog-release-gate",
+        "status": 0
+      },
+      {
+        "check": "test-official-model-catalog-release-evidence",
+        "status": 0
+      },
+      {
+        "check": "test-official-model-catalog-release-preparation",
+        "status": 0
+      },
+      {
+        "check": "test-official-model-catalog-release-preparation-cli",
+        "status": 0
+      },
+      {
+        "check": "test-official-model-catalog-release-preparation-safety",
+        "status": 0
+      },
+      {
+        "check": "test-official-model-catalog-release-preparation-governance",
+        "status": 1
+      },
+      {
+        "check": "test-model-library-core-governance",
+        "status": 1
+      },
+      {
+        "check": "test-legacy-model-management-containment",
+        "status": 0
+      },
+      {
+        "check": "test-model-acquisition-local-only",
+        "status": 1
+      },
+      {
+        "check": "test-model-artifact-readiness",
+        "status": 0
+      },
+      {
+        "check": "test-model-artifact-readiness-display",
+        "status": 1
+      },
+      {
+        "check": "test-prompt-reverse-workflow",
+        "status": 0
+      },
+      {
+        "check": "test-ai-client-ipc-contract",
+        "status": 0
+      },
+      {
+        "check": "test-ai-runtime-status-workflow",
+        "status": 1
+      },
+      {
+        "check": "test-ai-console-status-module",
+        "status": 0
+      },
+      {
+        "check": "test-ai-runtime-panel",
+        "status": 0
+      },
+      {
+        "check": "test-platform-ai-runtime-request-selection",
+        "status": 0
+      },
+      {
+        "check": "test-macos-ai-runtime",
+        "status": 1
+      },
+      {
+        "check": "test-llama-runtime-local-models",
+        "status": 0
+      },
+      {
+        "check": "test-llama-runtime-host-context",
+        "status": 0
+      },
+      {
+        "check": "test-llama-runtime-macos-hardware-profile",
+        "status": 0
+      },
+      {
+        "check": "test-llama-runtime-installer",
+        "status": 0
+      },
+      {
+        "check": "test-llama-runtime-server-probe",
+        "status": 0
+      },
+      {
+        "check": "test-ai-console-macos-branch",
+        "status": 0
+      },
+      {
+        "check": "test-platform-ai-branch-status-display",
+        "status": 0
+      },
+      {
+        "check": "test-ai-console-overview-workflow",
+        "status": 1
+      },
+      {
+        "check": "test-ai-console-ui-smoke-contract",
+        "status": 0
+      },
+      {
+        "check": "test-macos-ai-deps-installer-contract",
+        "status": 1
+      },
+      {
+        "check": "test-windows-ai-real-evidence-validation",
+        "status": 0
+      },
+      {
+        "check": "doctor:ci",
+        "status": 0
+      },
+      {
+        "check": "test-ci-hygiene",
+        "status": 0
+      },
+      {
+        "check": "test-forbidden-paths",
+        "status": 9009
+      },
+      {
+        "check": "test-node-host-platform-defaults",
+        "status": 0
+      },
+      {
+        "check": "test-verify-platform-scripts",
+        "status": 0
+      },
+      {
+        "check": "test-electron-packaging-audit",
+        "status": 0
+      },
+      {
+        "check": "test-electron-packaging-scripts",
+        "status": 0
+      },
+      {
+        "check": "test-electron-builder-runner-options",
+        "status": 0
+      },
+      {
+        "check": "test-electron-builder-runner",
+        "status": 0
+      },
+      {
+        "check": "test-native-dependency-packaging",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-source",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-downloader",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-verifier-extractor",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-installer",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-executor",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-session",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-session-projector",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-test-hygiene",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-ipc-contract-preflight",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-ipc-governance",
+        "status": 1
+      },
+      {
+        "check": "test-runtime-package-ipc-handlers",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-product-workflow",
+        "status": 0
+      },
+      {
+        "check": "test-runtime-package-panel",
+        "status": 1
+      },
+      {
+        "check": "test-external-http-manual-health-check",
+        "status": 0
+      },
+      {
+        "check": "test-python-worker-launch-pilot",
+        "status": 0
+      },
+      {
+        "check": "test-ai-client-runtime-adapter",
+        "status": 0
+      },
+      {
+        "check": "test-ocr-dependency-governance",
+        "status": 0
+      },
+      {
+        "check": "test-llama-runtime-governance",
+        "status": 0
+      },
+      {
+        "check": "test-database-path-design",
+        "status": 0
+      },
+      {
+        "check": "test-database-path-migration-plan",
+        "status": 0
+      },
+      {
+        "check": "test-path-governance-late-phases",
+        "status": 1
+      },
+      {
+        "check": "test-release-flow-governance",
+        "status": 0
+      },
+      {
+        "check": "test-release-candidate-governance",
+        "status": 0
+      },
+      {
+        "check": "test-release-checksums",
+        "status": 0
+      },
+      {
+        "check": "test-release-update-metadata",
+        "status": 0
+      },
+      {
+        "check": "test-release-trust-evidence-checks",
+        "status": 0
+      },
+      {
+        "check": "test-release-trust-evidence",
+        "status": 0
+      },
+      {
+        "check": "test-release-readiness-summary",
+        "status": 0
+      },
+      {
+        "check": "test-release-readiness-writer",
+        "status": 0
+      },
+      {
+        "check": "test-release-publish-approval",
+        "status": 0
+      },
+      {
+        "check": "test-release-platform-targets",
+        "status": 0
+      },
+      {
+        "check": "test-release-target-selection",
+        "status": 0
+      },
+      {
+        "check": "test-release-script-targets",
+        "status": 0
+      },
+      {
+        "check": "test-release-branding-preflight",
+        "status": 0
+      },
+      {
+        "check": "test-release-branding-approval-template",
+        "status": 0
+      },
+      {
+        "check": "test-release-branding-evidence",
+        "status": 0
+      },
+      {
+        "check": "test-release-signed-candidate-preflight",
+        "status": 0
+      },
+      {
+        "check": "test-release-environment-manifest",
+        "status": 0
+      },
+      {
+        "check": "test-release-signing-environment-status",
+        "status": 0
+      },
+      {
+        "check": "test-release-signing-environment-template",
+        "status": 0
+      },
+      {
+        "check": "test-release-signed-candidate-dispatch-status",
+        "status": 0
+      },
+      {
+        "check": "test-release-install-smoke-preflight",
+        "status": 0
+      },
+      {
+        "check": "test-release-external-gate-plan",
+        "status": 0
+      },
+      {
+        "check": "test-release-external-gate-status",
+        "status": 0
+      },
+      {
+        "check": "test-release-external-gate-status-writer",
+        "status": 0
+      },
+      {
+        "check": "test-release-evidence-bundle-status",
+        "status": 0
+      },
+      {
+        "check": "test-signed-release-workflow",
+        "status": 0
+      },
+      {
+        "check": "test-macos-signing-entitlements",
+        "status": 0
+      },
+      {
+        "check": "test-package-smoke",
+        "status": 0
+      },
+      {
+        "check": "test-macos-package-artifact-workflow",
+        "status": 0
+      }
+    ],
+    "runnerCorrection": {
+      "check": "ci:prepare-native-deps",
+      "reason": "Aggregate runner lacked npm local bin resolution; rerun via actual npm script passed.",
+      "actualNpmScriptExitCode": 0
+    },
+    "remainingFailures": [
+      "test-model-library-catalog-admission-tracer",
+      "test-model-library-core-tracer",
+      "test-model-library-verified-blob-store-tracer",
+      "test-model-library-storage-authority-tracer",
+      "test-model-library-root-registry-tracer",
+      "test-model-library-product-pilot",
+      "test-model-library-product-pilot-storage",
+      "test-official-model-catalog-release-preparation-governance",
+      "test-model-library-core-governance",
+      "test-model-acquisition-local-only",
+      "test-model-artifact-readiness-display",
+      "test-ai-runtime-status-workflow",
+      "test-macos-ai-runtime",
+      "test-ai-console-overview-workflow",
+      "test-macos-ai-deps-installer-contract",
+      "test-forbidden-paths",
+      "test-runtime-package-ipc-governance",
+      "test-runtime-package-panel",
+      "test-path-governance-late-phases"
+    ]
+  },
+  "macOS": "NOT_RUN",
+  "piPrepared": false,
+  "realInferenceThisTask": false,
+  "UIThisTask": false,
+  "secretsRead": false,
+  "userDataTransferred": false
+}

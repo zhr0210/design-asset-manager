@@ -1,0 +1,21 @@
+diff --git a/src/main/visual-ai/openai-vision.provider.ts b/src/main/visual-ai/openai-vision.provider.ts
+index c786c72..18ee217 100644
+--- a/src/main/visual-ai/openai-vision.provider.ts
++++ b/src/main/visual-ai/openai-vision.provider.ts
+@@ -1,5 +1,7 @@
+ /** Main-internal, single physical call. No retry, parsing of capability values, timer or library access. */
+ export interface VisionInvocation {
++  readonly operationId?:string
++  readonly outputContract?: import('./analysis-output-contract').AnalysisOutputContract
+   readonly reasoning?:import('../../shared/workflows/ai-reasoning.workflow').AiReasoningLevel
+   readonly backendId?:string
+   readonly credentialRevision?:number
+@@ -18,6 +20,8 @@ export interface VisionProvider {
+   invokeOnce(input: VisionInvocation): Promise<unknown>
+   /** Owned model residency admission before allocating the request increment. */
+   prepare?(backendId:string,signal:AbortSignal):Promise<void>
++  recoverLocal?(error:import('./local-oom-recovery').ConfirmedLocalOomError,input:VisionInvocation):Promise<boolean>
++  finishLocalRecovery?(error:import('./local-oom-recovery').ConfirmedLocalOomError,outcome:import('./local-oom-recovery').LocalRecoveryOutcome):void
+ }
+ 
+ export const MAX_VISION_RESPONSE_BYTES = 512_000

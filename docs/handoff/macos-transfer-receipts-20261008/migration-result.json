@@ -1,0 +1,111 @@
+{
+  "build": {
+    "buildId": "dam-fcc776741fe403b2",
+    "sourceDigest": "fcc776741fe403b247a4cee197a03ff13c9aa3a4b46b9fd0e6d6632b1ec7f9ab",
+    "builtAt": "2026-10-08T06:48:23.806Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 786
+  },
+  "results": [
+    {
+      "alias": "v1-public",
+      "sourceSchema": 1,
+      "targetSchema": 15,
+      "assets": 24,
+      "filesPreserved": 330,
+      "backups": [
+        {
+          "version": 12,
+          "sha256": "7305a55520f9f17e71620a1232f76b6a838d5c3b61f6942057decbec7d8da16a",
+          "alias": "tag-intent-239ccaad86b941fb843d9340ab290625"
+        },
+        {
+          "version": 1,
+          "sha256": "8cc315b36d9de98584e8be2f0d10c416dab267f6eedf99ddc8d3d2f80448c29e",
+          "alias": "tag-intent-815f0015c4544a23bc297e6564618ec4"
+        },
+        {
+          "version": 13,
+          "sha256": "0362d7f595ccb20a0e546a440d890bee318a54e4185e6a2f27e0570c60c64cfa",
+          "alias": "tag-intent-b5df2d67611c4b7faab811b9e9bffd2f"
+        },
+        {
+          "version": 14,
+          "sha256": "bc3bec4ef9fbceeb217484e02648cb9a50192d2bc4309b0c0a2c7399203cb163",
+          "alias": "tag-intent-ba3d783c25ab496f943d390d4fcb586d"
+        },
+        {
+          "version": 1,
+          "sha256": "8cc315b36d9de98584e8be2f0d10c416dab267f6eedf99ddc8d3d2f80448c29e",
+          "alias": "tag-intent-d98295e3ef34492c9245964b825bd7e8"
+        }
+      ],
+      "restoredSchema": 1,
+      "restoreKind": "engineering restore on separate recoverable copy; not UI restoration acceptance"
+    },
+    {
+      "alias": "v13-public",
+      "sourceSchema": 13,
+      "targetSchema": 15,
+      "assets": 24,
+      "filesPreserved": 48,
+      "backups": [
+        {
+          "version": 12,
+          "sha256": "7305a55520f9f17e71620a1232f76b6a838d5c3b61f6942057decbec7d8da16a",
+          "alias": "tag-intent-239ccaad86b941fb843d9340ab290625"
+        },
+        {
+          "version": 1,
+          "sha256": "8cc315b36d9de98584e8be2f0d10c416dab267f6eedf99ddc8d3d2f80448c29e",
+          "alias": "tag-intent-815f0015c4544a23bc297e6564618ec4"
+        },
+        {
+          "version": 13,
+          "sha256": "0a14114e4d9f77843d6917fef7bb8ffea04aa52f1934eff6dada21e836fd945b",
+          "alias": "tag-intent-9671978729654da6a42ff9607a0efb36"
+        },
+        {
+          "version": 14,
+          "sha256": "dcf256a978e4707f02bf30c242e9907872d3506a287815eaddb0cdd2520bbb2b",
+          "alias": "tag-intent-d92082b3ec6e487e936adf46c0213e20"
+        }
+      ],
+      "restoredSchema": 13,
+      "restoreKind": "engineering restore on separate recoverable copy; not UI restoration acceptance"
+    },
+    {
+      "alias": "v14-public",
+      "sourceSchema": 14,
+      "targetSchema": 15,
+      "assets": 165,
+      "filesPreserved": 330,
+      "backups": [
+        {
+          "version": 12,
+          "sha256": "7305a55520f9f17e71620a1232f76b6a838d5c3b61f6942057decbec7d8da16a",
+          "alias": "tag-intent-239ccaad86b941fb843d9340ab290625"
+        },
+        {
+          "version": 14,
+          "sha256": "f0fd8afa0432cd42f9800fad80736725dd9e9d2bbaf902854085eaca947cf859",
+          "alias": "tag-intent-5fd9fe40e5044c87bb0b192e34df5e52"
+        },
+        {
+          "version": 1,
+          "sha256": "8cc315b36d9de98584e8be2f0d10c416dab267f6eedf99ddc8d3d2f80448c29e",
+          "alias": "tag-intent-815f0015c4544a23bc297e6564618ec4"
+        },
+        {
+          "version": 13,
+          "sha256": "0362d7f595ccb20a0e546a440d890bee318a54e4185e6a2f27e0570c60c64cfa",
+          "alias": "tag-intent-b5df2d67611c4b7faab811b9e9bffd2f"
+        }
+      ],
+      "restoredSchema": 14,
+      "restoreKind": "engineering restore on separate recoverable copy; not UI restoration acceptance"
+    }
+  ],
+  "mock": false,
+  "ui": false
+}

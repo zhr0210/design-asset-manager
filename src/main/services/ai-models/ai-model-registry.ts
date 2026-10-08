@@ -270,6 +270,7 @@ export function getPythonModelCacheEnv(): NodeJS.ProcessEnv {
     PADDLE_HOME: path.join(root, 'paddle'),
     PADDLEX_HOME: path.join(root, 'paddlex'),
     XDG_CACHE_HOME: path.join(root, 'cache'),
+    PYTHONDONTWRITEBYTECODE: '1',
     DESIGN_ASSET_MANAGER_STRICT_REAL_AI: '1'
   }
 }

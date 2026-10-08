@@ -1,0 +1,23 @@
+diff --git a/src/main/visual-ai/analysis-output-contract.ts b/src/main/visual-ai/analysis-output-contract.ts
+new file mode 100644
+index e69de29..a67d18a 100644
+--- /dev/null
++++ b/src/main/visual-ai/analysis-output-contract.ts
+@@ -0,0 +1,17 @@
++/** Fixed Main-owned recipe schemas. No client or model metadata can supply
++ * arbitrary grammar. llama.cpp b11429 supports this object/string/array subset;
++ * whitespace, normalization and finish reasons remain post-generation checks. */
++export type AnalysisOutputContract = 'caption-v1' | 'tags-nfkc-lower-v1' | 'visual-ai-v1'
++const caption = { type: 'string', minLength: 1, maxLength: 240 }
++const tags = { type: 'array', maxItems: 8, items: { type: 'string', minLength: 1, maxLength: 80 } }
++const schemas = {
++  'caption-v1': { type: 'object', properties: { caption }, required: ['caption'], additionalProperties: false },
++  'tags-nfkc-lower-v1': { type: 'object', properties: { tags }, required: ['tags'], additionalProperties: false },
++  'visual-ai-v1': { type: 'object', properties: { caption: { type: 'string', maxLength: 16000 },
++    ocrText: { type: 'string', maxLength: 0 }, prompt: { type: 'string', minLength: 1, maxLength: 16000 }, tags },
++    required: ['caption', 'ocrText', 'prompt', 'tags'], additionalProperties: false },
++} as const
++export function analysisOutputSchema(contract: AnalysisOutputContract) {
++  if (!Object.hasOwn(schemas, contract)) throw Error('LOCAL_OUTPUT_CONTRACT_UNSUPPORTED')
++  return schemas[contract]
++}

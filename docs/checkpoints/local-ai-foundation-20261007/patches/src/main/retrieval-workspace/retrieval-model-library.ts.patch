@@ -1,0 +1,184 @@
+diff --git a/src/main/retrieval-workspace/retrieval-model-library.ts b/src/main/retrieval-workspace/retrieval-model-library.ts
+new file mode 100644
+index e69de29..a041cc8 100644
+--- /dev/null
++++ b/src/main/retrieval-workspace/retrieval-model-library.ts
+@@ -0,0 +1,178 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import {createHash,randomUUID} from 'node:crypto'
++import type Database from 'better-sqlite3'
++import type {VisualAdmission} from '../visual-ai/visual-admission'
++import type {PublicModelFetch} from '../model-library-workspace/huggingface-model-source'
++import {chinaMirrorCatalog,openChinaMirrorFile,type ChinaMirrorFile} from '../model-library-workspace/china-model-mirror'
++import {transferModelFile,verifyTransferredFile} from '../model-library-workspace/model-file-transfer'
++import {validateModelArtifactPackage} from '../model-library/model-artifact-format-validation.internal'
++import type {RetrievalModelSummary,RetrievalTransferSummary,RetrievalInstallReview,RetrievalQualification} from '../../shared/contracts/retrieval-workspace.contract'
++
++const REPOSITORY='google/siglip2-base-patch16-224',NAME='SigLIP2 Base · 中英文图文检索'
++export const RETRIEVAL_RESIDENT_BYTES=4*1024**3,RETRIEVAL_COMPUTE_BYTES=256*1024**2
++export function assertRetrievalConfiguration(config:any,processor:any){
++  const expected=(value:any,shape:Record<string,unknown>)=>value&&typeof value==='object'&&!Array.isArray(value)&&
++    Object.entries(value).every(([key,v])=>key in shape&&JSON.stringify(v)===JSON.stringify(shape[key]))
++  if(!config||config.model_type!=='siglip'||config.auto_map||config.quantization_config||
++    !expected(config.text_config,{model_type:'siglip_text_model',vocab_size:256000,hidden_size:768,intermediate_size:3072,num_hidden_layers:12,num_attention_heads:12,max_position_embeddings:64,hidden_act:'gelu_pytorch_tanh',layer_norm_eps:1e-6,attention_dropout:0,pad_token_id:1,bos_token_id:49406,eos_token_id:49407,projection_size:768})||
++    !expected(config.vision_config,{model_type:'siglip_vision_model',hidden_size:768,intermediate_size:3072,num_hidden_layers:12,num_attention_heads:12,image_size:224,patch_size:16,num_channels:3,hidden_act:'gelu_pytorch_tanh',layer_norm_eps:1e-6,attention_dropout:0})||
++    !processor||processor.image_processor_type!=='SiglipImageProcessor'||processor.processor_class!=='SiglipProcessor'||
++    JSON.stringify(processor.size)!==JSON.stringify({height:224,width:224})||processor.do_resize!==true||processor.do_rescale!==true||processor.do_normalize!==true||
++    JSON.stringify(processor.image_mean)!=='[0.5,0.5,0.5]'||JSON.stringify(processor.image_std)!=='[0.5,0.5,0.5]'||processor.resample!==2||Math.abs(processor.rescale_factor-1/255)>1e-12)throw Error('RETRIEVAL_MODEL_UNSUPPORTED')
++}
++const digest=(v:unknown)=>createHash('sha256').update(JSON.stringify(v)).digest('hex')
++interface Release {repository:string;revision:string;license:'apache-2.0';files:ChinaMirrorFile[];bytes:number}
++interface Model {id:string;directory:string;release:Release;artifactFingerprint:string;trusted:boolean;qualification:RetrievalQualification|null;lastSourceCheck:number}
++interface Transfer extends RetrievalTransferSummary {directory:string;release:Release;entryId:string}
++export interface RetrievalArtifact {id:string;directory:string;artifactFingerprint:string;release:Release;qualification:RetrievalQualification|null}
++
++/** A separate actual consumer of the existing transfer/integrity and Governor
++ * boundaries. Installation grants no execution or embedding capability. */
++export function createRetrievalModelLibrary(d:{database:Database.Database;root:string;fetch:PublicModelFetch;admission:VisualAdmission;changed():void}) {
++  d.database.exec(`CREATE TABLE IF NOT EXISTS retrieval_model_store(singleton INTEGER PRIMARY KEY CHECK(singleton=1),owner TEXT NOT NULL);
++    CREATE TABLE IF NOT EXISTS retrieval_models(id TEXT PRIMARY KEY,record TEXT NOT NULL);
++    CREATE TABLE IF NOT EXISTS retrieval_transfers(id TEXT PRIMARY KEY,record TEXT NOT NULL);`)
++  const prior=d.database.prepare('SELECT owner FROM retrieval_model_store WHERE singleton=1').pluck().get()
++  const owner=typeof prior==='string'?prior:randomUUID()
++  if(!prior)d.database.prepare('INSERT INTO retrieval_model_store VALUES(1,?)').run(owner)
++  const root=path.resolve(d.root),reviews=new Map<string,{release:Release;expires:number}>()
++  let operation:Promise<void>|undefined,abort:AbortController|undefined,reviewing=false
++  const readModels=()=>d.database.prepare('SELECT record FROM retrieval_models ORDER BY rowid').all().map(row=>JSON.parse((row as {record:string}).record) as Model)
++  const readTasks=()=>d.database.prepare('SELECT record FROM retrieval_transfers ORDER BY rowid DESC LIMIT 30').all().map(row=>JSON.parse((row as {record:string}).record) as Transfer)
++  const saveModel=(v:Model)=>d.database.prepare('INSERT INTO retrieval_models VALUES(?,?) ON CONFLICT(id) DO UPDATE SET record=excluded.record').run(v.id,JSON.stringify(v))
++  const saveTask=(v:Transfer)=>{d.database.prepare('INSERT INTO retrieval_transfers VALUES(?,?) ON CONFLICT(id) DO UPDATE SET record=excluded.record').run(v.id,JSON.stringify(v));d.changed()}
++  for(const task of readTasks())if(task.state==='running'){task.state='interrupted';task.error='RETRIEVAL_TRANSFER_INTERRUPTED';saveTask(task)}
++  function validateRelease(release:Release) {
++    if(release.repository!==REPOSITORY||release.license!=='apache-2.0'||!/^[a-f0-9]{40}$/.test(release.revision)||
++      !Array.isArray(release.files)||release.files.length<5||release.files.length>15||new Set(release.files.map(f=>f.name)).size!==release.files.length||
++      !['model.safetensors','config.json','preprocessor_config.json','tokenizer.json','tokenizer_config.json'].every(name=>release.files.some(f=>f.name===name))||
++      release.files.some(f=>!['model.safetensors','config.json','preprocessor_config.json','tokenizer.json','tokenizer_config.json','special_tokens_map.json','tokenizer.model','added_tokens.json'].includes(f.name)||
++        !/^[a-f0-9]{40}$/.test(f.revision)||!/^[a-f0-9]{64}$/.test(f.sha256)||!Number.isSafeInteger(f.bytes)||f.bytes<=0||f.bytes>2*1024**3||
++        f.downloadUrl!==`https://modelscope.cn/api/v1/models/${REPOSITORY}/repo?Revision=${f.revision}&FilePath=${encodeURIComponent(f.name)}`)||
++      release.bytes!==release.files.reduce((sum,f)=>sum+f.bytes,0)||release.bytes>3*1024**3)throw Error('RETRIEVAL_SOURCE_INVALID')
++  }
++  const ownedDirectory=(name:string)=>{if(!/^(stage|model)-[a-f0-9-]{36}$/.test(name))throw Error('MODEL_STAGING_UNSAFE');return path.join(root,name)}
++  async function storage() {
++    await fs.mkdir(root,{recursive:true,mode:0o700})
++    const stat=await fs.lstat(root);if(!stat.isDirectory()||stat.isSymbolicLink())throw Error('MODEL_STAGING_UNSAFE')
++    const marker=path.join(root,'.dam-retrieval-store.json')
++    try {const value=await fs.lstat(marker);if(!value.isFile()||value.isSymbolicLink()||value.size>4096)throw Error('MODEL_STORAGE_IDENTITY_LOST')
++      if(JSON.parse(await fs.readFile(marker,'utf8')).owner!==owner)throw Error('MODEL_STORAGE_IDENTITY_LOST')
++    }catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error
++      if(readModels().length||readTasks().length)throw Error('MODEL_STORAGE_IDENTITY_LOST')
++      await fs.writeFile(marker,JSON.stringify({version:1,owner}),{flag:'wx',mode:0o600})}
++  }
++  async function verify(directory:string,release:Release,signal:AbortSignal) {
++    validateRelease(release);await storage()
++    const real=ownedDirectory(directory),stat=await fs.lstat(real)
++    if(!stat.isDirectory()||stat.isSymbolicLink())throw Error('MODEL_STAGING_UNSAFE')
++    for(const file of release.files)await verifyTransferredFile(path.join(real,file.name),file,signal)
++    const safe=release.files.filter(f=>f.name!=='tokenizer.json').map(f=>({relativePath:f.name,role:'retrieval',format:f.name.endsWith('.safetensors')?'safetensors':f.name.endsWith('.model')?'sentencepiece':'json',sizeBytes:f.bytes,readableFile:path.join(real,f.name),sentencePieceEntryLimit:256000}))
++    if(!await validateModelArtifactPackage({files:safe}))throw Error('LOCAL_MODEL_BYTES_REJECTED')
++    const tokenizer=release.files.find(f=>f.name==='tokenizer.json')!
++    if(tokenizer.bytes>64*1024**2)throw Error('LOCAL_MODEL_BYTES_REJECTED')
++    const parsing=d.admission.reserveResident('retrieval-tokenizer-validation:'+randomUUID(),256*1024**2,signal)
++    try{JSON.parse(await fs.readFile(path.join(real,'tokenizer.json'),'utf8'))}finally{parsing.release()}
++    const config=JSON.parse(await fs.readFile(path.join(real,'config.json'),'utf8'))
++    const processor=JSON.parse(await fs.readFile(path.join(real,'preprocessor_config.json'),'utf8'))
++    assertRetrievalConfiguration(config,processor)
++    signal.throwIfAborted();return {directory:real,artifactFingerprint:digest(release)}
++  }
++  async function checkSource(release:Release,signal:AbortSignal) {
++    validateRelease(release)
++    const source=await chinaMirrorCatalog(REPOSITORY,d.fetch,signal,release.revision)
++    if(source.license!==release.license)throw Error('MODEL_SOURCE_LICENSE_CHANGED')
++    for(const file of release.files){const match=source.files.find(f=>f.name===file.name)
++      if(!match||match.bytes!==file.bytes||match.sha256!==file.sha256||match.revision!==file.revision)throw Error('MODEL_MIRROR_FILE_UNAVAILABLE')}
++  }
++  async function perform(task:Transfer,signal:AbortSignal) {
++    const permit=d.admission.reserveResident(`retrieval-transfer:${task.id}`,128*1024**2,signal)
++    try{
++      await storage();await checkSource(task.release,signal)
++      const published=`model-${task.entryId.slice('retrieval-model:'.length)}`
++      let publishedAlready=false
++      try{await fs.lstat(ownedDirectory(published));publishedAlready=true}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error}
++      if(!publishedAlready){
++        const stage=ownedDirectory(task.directory);await fs.mkdir(stage,{recursive:true,mode:0o700})
++        const stat=await fs.lstat(stage);if(!stat.isDirectory()||stat.isSymbolicLink())throw Error('MODEL_STAGING_UNSAFE')
++        let completed=0,lastPersist=0
++        for(const file of task.release.files){const before=completed
++          await transferModelFile({file,stage,fetch:d.fetch,signal,open:(offset,s)=>openChinaMirrorFile(file,offset,d.fetch,s),progress:bytes=>{
++            task.completedBytes=before+bytes;if(Date.now()-lastPersist>300){lastPersist=Date.now();saveTask(task)}}})
++          completed+=file.bytes;task.completedBytes=completed;saveTask(task)
++        }
++        await verify(task.directory,task.release,signal);signal.throwIfAborted()
++        await fs.rename(stage,ownedDirectory(published))
++      }
++      const checked=await verify(published,task.release,signal)
++      const installed:Model={id:task.entryId,directory:published,release:task.release,artifactFingerprint:checked.artifactFingerprint,trusted:true,qualification:null,lastSourceCheck:Date.now()}
++      task.modelId=installed.id;task.state='complete';task.completedBytes=task.totalBytes;task.error=null
++      d.database.transaction(()=>{saveModel(installed);saveTask(task)})()
++    }catch(error){task.state=signal.aborted?'paused':'failed';task.error=signal.aborted?null:publicCode(error);saveTask(task)}
++    finally{permit.release()}
++  }
++  function start(task:Transfer) {
++    if(operation||reviewing)throw Error('MODEL_LIBRARY_BUSY')
++    task.state='running';task.error=null;saveTask(task);abort=new AbortController()
++    operation=perform(task,abort.signal).finally(()=>{operation=undefined;abort=undefined;d.changed()})
++    return {id:task.id,state:task.state}
++  }
++  return {
++    summary():{models:RetrievalModelSummary[];tasks:RetrievalTransferSummary[]} {
++      return {models:readModels().map(v=>({id:v.id,name:NAME,bytes:v.release.bytes,source:'modelscope-cn',repository:REPOSITORY,revision:v.release.revision,
++        license:'apache-2.0',trusted:v.trusted,qualified:Boolean(v.qualification&&v.trusted),qualification:v.qualification,lastSourceCheck:v.lastSourceCheck})),
++        tasks:readTasks().map(({directory,release,entryId,...task})=>task)}
++    },
++    async reviewInstall():Promise<RetrievalInstallReview> {
++      if(operation||reviewing)throw Error('MODEL_LIBRARY_BUSY');reviewing=true
++      const signal=AbortSignal.timeout(60000);let permit:{release():void}|undefined
++      try{
++        permit=d.admission.reserveResident('retrieval-source',32*1024**2,signal)
++        await storage();const catalog=await chinaMirrorCatalog(REPOSITORY,d.fetch,signal)
++        if(catalog.license!=='apache-2.0')throw Error('MODEL_SOURCE_LICENSE_CHANGED')
++        const files=catalog.files.filter(f=>['model.safetensors','config.json','preprocessor_config.json','tokenizer.json','tokenizer_config.json','special_tokens_map.json','tokenizer.model','added_tokens.json'].includes(f.name))
++        const release:Release={repository:REPOSITORY,revision:catalog.revision,license:'apache-2.0',files,bytes:files.reduce((sum,f)=>sum+f.bytes,0)};validateRelease(release)
++        const disk=await fs.statfs(root),freeDiskBytes=Number(disk.bavail)*Number(disk.bsize)
++        if(freeDiskBytes<release.bytes+128*1024**2)throw Error('MODEL_DISK_SPACE_INSUFFICIENT')
++        const receipt='retrieval-review:'+randomUUID();reviews.clear();reviews.set(receipt,{release,expires:Date.now()+300000})
++        return {receipt,name:NAME,source:'modelscope-cn',repository:REPOSITORY,revision:release.revision,license:'apache-2.0',bytes:release.bytes,freeDiskBytes,reserveRamBytes:RETRIEVAL_RESIDENT_BYTES+RETRIEVAL_COMPUTE_BYTES}
++      }finally{reviewing=false;permit?.release()}
++    },
++    async confirm(receipt:string) {
++      if(operation||reviewing)throw Error('MODEL_LIBRARY_BUSY')
++      const review=reviews.get(receipt);if(!review||review.expires<Date.now())throw Error('MODEL_REVIEW_EXPIRED')
++      reviews.delete(receipt)
++      const id=randomUUID(),task:Transfer={id:'retrieval-transfer:'+id,directory:'stage-'+id,release:review.release,entryId:'retrieval-model:'+randomUUID(),
++        state:'running',completedBytes:0,totalBytes:review.release.bytes,error:null,modelId:null}
++      return start(task)
++    },
++    async pause(id:string){const task=readTasks().find(v=>v.id===id);if(!task||task.state!=='running')throw Error('RETRIEVAL_TASK_INVALID');abort?.abort();await operation},
++    resume(id:string){const task=readTasks().find(v=>v.id===id);if(!task||!['paused','interrupted','failed'].includes(task.state))throw Error('RETRIEVAL_TASK_INVALID');return start(task)},
++    async abandon(id:string){if(operation)throw Error('MODEL_LIBRARY_BUSY');const task=readTasks().find(v=>v.id===id)
++      if(!task||!['paused','interrupted','failed'].includes(task.state))throw Error('RETRIEVAL_TASK_INVALID')
++      await storage();const target=ownedDirectory(task.directory)
++      try{const stat=await fs.lstat(target);if(stat.isSymbolicLink()||!stat.isDirectory())throw Error('MODEL_STAGING_UNSAFE');await fs.rm(target,{recursive:true})}
++      catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error}
++      task.state='abandoned';saveTask(task)
++    },
++    async resolve(id:string,signal:AbortSignal):Promise<RetrievalArtifact> {
++      const model=readModels().find(v=>v.id===id);if(!model||!model.trusted)throw Error('MODEL_TRUST_REVOKED')
++      const checked=await verify(model.directory,model.release,signal)
++      if(checked.artifactFingerprint!==model.artifactFingerprint)throw Error('LOCAL_MODEL_CHANGED')
++      return {id:model.id,...checked,release:model.release,qualification:model.qualification}
++    },
++    recordQualification(id:string,qualification:RetrievalQualification) {
++      const model=readModels().find(v=>v.id===id);if(!model?.trusted)throw Error('MODEL_TRUST_REVOKED')
++      if(qualification.dimension!==768||qualification.validationRecipe!=='public-subjects-and-colour-report-v1'||qualification.imageChecks?.total!==2||qualification.imageChecks.correct!==2||
++        qualification.languages.length!==3||!['zh','en','mixed'].every(language=>qualification.languages.some(v=>v.language===language&&v.total>=2&&v.correct===v.total))||
++        !/^[a-f0-9]{64}$/.test(qualification.fingerprint)||!/^[a-f0-9]{64}$/.test(qualification.spaceId)||qualification.peakRamBytes<=0)throw Error('RETRIEVAL_CAPABILITY_FAILED')
++      model.qualification=qualification;saveModel(model);d.changed()
++    },
++    trust(id:string,trusted:boolean){const model=readModels().find(v=>v.id===id);if(!model)throw Error('RETRIEVAL_MODEL_MISSING');model.trusted=trusted;if(!trusted)model.qualification=null;saveModel(model);d.changed()},
++    settle:()=>operation??Promise.resolve(),
++    async drain(){abort?.abort();await operation;reviews.clear()},
++  }
++}
++export const publicCode=(error:unknown)=>error instanceof Error&&/^[A-Z][A-Z_0-9]{1,80}$/.test(error.message)?error.message:'RETRIEVAL_OPERATION_FAILED'
++export type RetrievalModelLibrary=ReturnType<typeof createRetrievalModelLibrary>

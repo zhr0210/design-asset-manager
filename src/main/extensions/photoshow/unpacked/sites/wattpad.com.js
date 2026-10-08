@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"wattpad.com":{srcMatching:[{srcRegExp:"(//.+\\.wattpad\\.com/cover/\\d+-).+(@IMG@)",processor:"$1512$2"},{srcRegExp:"(//.+\\.wattpad\\.com/useravatar/\\w+\\.).+(@IMG@)",processor:"$1256$2"},{srcRegExp:"(//.+\\.wattpad\\.com/userbgs/\\w+\\.).+(@IMG@)",processor:"$11920$2"}]}};

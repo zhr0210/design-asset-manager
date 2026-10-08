@@ -1,0 +1,151 @@
+diff --git a/scripts/managed-model-library.test.ts b/scripts/managed-model-library.test.ts
+index 1be0bc0..9abd3bc 100644
+--- a/scripts/managed-model-library.test.ts
++++ b/scripts/managed-model-library.test.ts
+@@ -10,9 +10,18 @@ import { inspectVisionModel } from '../src/main/model-library/vision-model-artif
+ import { transferModelFile } from '../src/main/model-library-workspace/model-file-transfer'
+ import { parseManagedModelAction } from '../src/shared/contracts/managed-model-library.contract'
+ import { createVisualAdmission } from '../src/main/visual-ai/visual-admission'
++import type { PublicModelFetch } from '../src/main/model-library-workspace/huggingface-model-source'
+ 
+ const python = 'C:\\Users\\kilian\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
+-async function fixture() {
++function publicGgufFixture(architecture: string, type = 0, extent = 8, dataBytes = 32) {
++  const u32 = (value: number) => { const b = Buffer.alloc(4); b.writeUInt32LE(value); return b }
++  const u64 = (value: number) => { const b = Buffer.alloc(8); b.writeBigUInt64LE(BigInt(value)); return b }
++  const str = (value: string) => Buffer.concat([u64(Buffer.byteLength(value)), Buffer.from(value)])
++  const header = Buffer.concat([Buffer.from('GGUF'), u32(3), u64(1), u64(1),
++    str('general.architecture'), u32(8), str(architecture), str('fixture.weight'), u32(1), u64(extent), u32(type), u64(0)])
++  return Buffer.concat([header, Buffer.alloc((32 - header.length % 32) % 32), Buffer.alloc(dataBytes)])
++}
++async function fixture(publicFetch: PublicModelFetch = async () => { throw Error('UNEXPECTED_NETWORK') }) {
+   const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'dam-managed-model-tests-')))
+   const model = path.join(root, 'source'); await fs.mkdir(model)
+   await fs.writeFile(path.join(model, 'config.json'), JSON.stringify({ model_type: 'qwen3_vl', text_config: { hidden_size: 2048, num_hidden_layers: 28 } }))
+@@ -26,8 +35,8 @@ async function fixture() {
+   await fs.copyFile(path.resolve('out/main/ai-service/tools/managed_vision_worker.py'), runner)
+   const admission = createVisualAdmission({ memory: () => ({ free: 60 * 1024 ** 3, total: 64 * 1024 ** 3 }) })
+   const makeLibrary = () => createManagedModelLibrary({ database, root: path.join(root, 'owned'), runner,
+-    selectModel: async () => model, selectPython: async () => python, fetch: async () => { throw Error('UNEXPECTED_NETWORK') },
+-    reserve: (id, signal) => admission.reserveResident(id, 128 * 1024 ** 2, signal), changed() {} })
++    selectModel: async () => model, selectPython: async () => python, fetch: publicFetch,
++    reserve: (id, signal) => admission.reserveResident(id, 128 * 1024 ** 2, signal), changed() {}, admission })
+   const library = makeLibrary()
+   return { root, model, runner, database, admission, library, makeLibrary, async close() {
+     await library.drain(); database.close()
+@@ -48,6 +57,52 @@ await test('data-only imports require complete companion files and structurally
+     assert.equal(f.admission.resourceStatus().residentBytes, 0)
+   } finally { await f.close() }
+ })
++await test('a selected complete GGUF bundle installs verified data without Python or runtime qualification and reopens offline', async () => {
++  const repository = 'Qwen/Qwen3-VL-2B-Instruct-GGUF', revision = 'a'.repeat(40)
++  const files = new Map([
++    ['Qwen3VL-2B-Instruct-Q4_K_M.gguf', publicGgufFixture('qwen3vl', 12, 256, 144)],
++    ['mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf', publicGgufFixture('clip', 8, 32, 34)],
++  ])
++  let online = true
++  const fetch: PublicModelFetch = async (url) => {
++    if (!online) throw Error('OFFLINE_NETWORK_UNAVAILABLE')
++    if (url=== 'https://modelscope.cn/api/v1/models/'+repository) return new Response(JSON.stringify({Code:200,Data:{Path:'Qwen',Name:repository.split('/')[1],License:'apache-2.0',IsAccessible:1,IsPublished:1}}))
++    if (url.startsWith('https://modelscope.cn/api/v1/models/'+repository+'/repo/files?')) return new Response(JSON.stringify({Code:200,Data:{Files:[...files].map(([name,bytes])=>({
++      Path:name,Size:bytes.length,Sha256:createHash('sha256').update(bytes).digest('hex'),Revision:revision,CommittedDate:1,Type:'blob'
++    }))}}))
++    const name = new URL(url).searchParams.get('FilePath')!
++    if (files.has(name)) return new Response(new Uint8Array(files.get(name)!), { headers: { 'content-length': String(files.get(name)!.length) } })
++    return new Response('', { status: 404 })
++  }
++  const f = await fixture(fetch)
++  try {
++    await f.library.refreshCatalog()
++    const bundle = f.library.summary().discovery.find(entry => entry.repository === repository)!.bundles[0]
++    assert.ok(bundle)
++    const recommendations = f.library.recommendGguf('balanced')
++    assert.equal(recommendations[0].bundleId, bundle.id)
++    assert.equal(recommendations[0].plans[0].plan.mode, 'cpu')
++    assert.equal(recommendations[0].plans[0].fits, true)
++    assert.equal(f.library.summary().models.length, 0, 'a recommendation does not install or qualify a model')
++    const review = await f.library.reviewGgufInstall(bundle.id)
++    assert.equal(review.bytes, 434, 'exact Q4_K block and Q8_0 projector fixture size')
++    const receipt = await f.library.confirm(review.review)
++    assert.ok(receipt.taskId)
++    for (let wait = 0; wait < 200 && f.library.summary().tasks[0].state === 'running'; wait++) await new Promise(resolve => setTimeout(resolve, 20))
++    assert.equal(f.library.summary().tasks[0].state, 'complete', f.library.summary().tasks[0].error ?? '')
++    const model = f.library.summary().models[0]
++    assert.equal(model.format, 'gguf')
++    assert.equal(model.qualifiedAt, null)
++    online = false
++    const reopened = f.makeLibrary(), config = await reopened.configuration(model.id)
++    assert.equal(config.enabled, false)
++    assert.equal(config.gguf?.id, bundle.id)
++    assert.doesNotThrow(() => reopened.assertTrusted(config))
++    await fs.writeFile(path.join(config.root, bundle.files[0].name), 'damaged')
++    await assert.rejects(reopened.configuration(model.id), /MODEL_FILE_INTEGRITY_FAILED/)
++    assert.equal(reopened.summary().models[0].qualifiedAt, null)
++  } finally { await f.close() }
++})
+ await test('failed acquisition admission releases the preparation state and drains pending work', async () => {
+   const f = await fixture()
+   try {
+@@ -84,6 +139,62 @@ await test('reference import rechecks its review, stays unqualified, persists in
+     assert.equal((await inspectVisionModel(f.model)).artifactFingerprint, original.artifactFingerprint)
+   } finally { await f.close() }
+ })
++await test('an installed immutable upstream model reopens offline after source freshness expires without restoring revoked trust', async () => {
++  let online = true, denied = false, changedLicense = false, now = Date.now()
++  const date = mock.method(Date, 'now', () => now)
++  const files = new Map<string, Buffer>(), revision = '1'.repeat(40), repository = 'Qwen/Qwen3-VL-2B-Instruct'
++  const fetch: PublicModelFetch = async (url, options) => {
++    if (!online) throw Error('OFFLINE_NETWORK_UNAVAILABLE')
++    if (denied) return new Response('', { status: 403 })
++    assert.equal(options.credentials, 'omit')
++    if(url==='https://modelscope.cn/api/v1/models/'+repository)return new Response(JSON.stringify({Code:200,Data:{Path:'Qwen',Name:repository.split('/')[1],License:changedLicense?'changed-license':'apache-2.0',IsAccessible:1,IsPublished:1}}))
++    if(url.startsWith('https://modelscope.cn/api/v1/models/'+repository+'/repo/files?'))return new Response(JSON.stringify({Code:200,Data:{Files:[...files].map(([name,bytes])=>({
++      Path:name,Size:bytes.length,Sha256:createHash('sha256').update(bytes).digest('hex'),Revision:revision,CommittedDate:1,Type:'blob'
++    }))}}))
++    if (url.startsWith('https://modelscope.cn/api/v1/models/'+repository+'/repo?')) {
++      const bytes = files.get(new URL(url).searchParams.get('FilePath')!)!
++      return new Response(new Uint8Array(bytes), { headers: { 'content-length': String(bytes.length) } })
++    }
++    return new Response('', { status: 404 })
++  }
++  const f = await fixture(fetch)
++  try {
++    for (const name of await fs.readdir(f.model)) files.set(name, await fs.readFile(path.join(f.model, name)))
++    await f.library.refreshCatalog()
++    const review = await f.library.reviewInstall('qwen3-vl-2b-instruct')
++    const receipt = await f.library.confirm(review.review)
++    for (let wait = 0; wait < 200 && f.library.summary().tasks[0].state === 'running'; wait++) await new Promise(resolve => setTimeout(resolve, 20))
++    assert.equal(f.library.summary().tasks[0].state, 'complete', f.library.summary().tasks[0].error ?? '')
++    const id = f.library.summary().models[0].id, before = await f.library.configuration(id)
++    now += 48 * 60 * 60 * 1000
++    online = false
++    const reopened = f.makeLibrary(), candidate = await reopened.configuration(id)
++    assert.equal(candidate.fingerprint, before.fingerprint)
++    assert.equal(candidate.enabled, false, 'configuration never grants model capability by itself')
++    assert.doesNotThrow(() => reopened.assertTrusted(candidate))
++    assert.equal(reopened.summary().models[0].sourceFreshness.kind, 'stale')
++    await assert.rejects(reopened.refreshSource(id), /MODEL_SOURCE_UNAVAILABLE/)
++    assert.doesNotThrow(() => reopened.assertTrusted(candidate), 'source refresh failure does not revoke installed execution trust')
++    online = true
++    await reopened.refreshSource(id)
++    assert.equal(reopened.summary().models[0].sourceFreshness.kind, 'fresh')
++    assert.equal(reopened.summary().models[0].qualifiedAt, null, 'online metadata refresh never grants runtime qualification')
++    denied = true
++    await assert.rejects(reopened.refreshSource(id), /MODEL_MIRROR_UNAVAILABLE/)
++    assert.doesNotThrow(() => reopened.assertTrusted(candidate),'an unavailable mirror does not revoke verified installed bytes')
++    denied = false
++    changedLicense=true
++    await assert.rejects(reopened.refreshSource(id),/MODEL_SOURCE_LICENSE_CHANGED/)
++    assert.throws(()=>reopened.assertTrusted(candidate),/MODEL_SOURCE_LICENSE_CHANGED/,'known accepted source license change still blocks new execution')
++    changedLicense=false
++    await reopened.refreshSource(id)
++    assert.doesNotThrow(() => reopened.assertTrusted(candidate), 'explicit successful immutable source recheck may clear the source block')
++    reopened.setTrust(id, false)
++    assert.throws(() => reopened.assertTrusted(candidate), /MODEL_TRUST_REVOKED/)
++    await assert.rejects(reopened.configuration(id), /MODEL_TRUST_REVOKED/)
++    await assert.rejects(reopened.refreshSource(id), /MODEL_TRUST_REVOKED/)
++  } finally { date.mock.restore(); await f.close() }
++})
+ await test('changed reviewed bytes do not add a model or replace the previously imported version', async () => {
+   const f = await fixture()
+   try {

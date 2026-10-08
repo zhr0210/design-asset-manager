@@ -1,0 +1,145 @@
+{
+  "status": "planned_NOT_RUN",
+  "cases": [
+    {
+      "id": "S01-untrusted-frame",
+      "testId": "T21",
+      "given": "Valid Q01 with a foreign frame",
+      "expected": "UNTRUSTED_SENDER; no Host call; requestId not reflected",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S02-cross-card",
+      "testId": "T02",
+      "given": "Trusted card A asks to confirm asset B",
+      "expected": "SCOPE_DENIED; no evidence read or write",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S03-generation-changed",
+      "testId": "T02",
+      "given": "Library generation changes after validation but before transaction",
+      "expected": "LIBRARY_SCOPE_CHANGED; no commit to new library",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S04-stale-preview",
+      "testId": "T02",
+      "given": "Evidence preview/revision no longer matches active asset",
+      "expected": "SUGGESTION_UNAVAILABLE; no tag relation added",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S05-duplicate-confirm",
+      "testId": "T02",
+      "given": "Same selected suggestion clicked twice with fresh request IDs",
+      "expected": "One confirmed relation; both successful states allowed; requestId is not idempotency authority",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S06-notify-after-commit",
+      "testId": "T22",
+      "given": "Transaction commits; event notification throws",
+      "expected": "R02 ok=true; no second mutation; old caller sees success",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S07-rollback-known",
+      "testId": "T02",
+      "given": "Inject storage failure with verified transaction rollback",
+      "expected": "STORAGE_WRITE_FAILED; not-committed; no automatic retry",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S08-unknown-commit",
+      "testId": "T22",
+      "given": "Reply transport drops after commit boundary; client cannot know result",
+      "expected": "Client reconciliation state; do not synthesize a received server trace or replay blindly",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S09-cancel-before-commit",
+      "testId": "T21",
+      "given": "Owner scope revoked before commit admission",
+      "expected": "CANCELLED or scope conflict per observed cause; no commit",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S10-cancel-after-commit",
+      "testId": "T22",
+      "given": "Owner revocation arrives after transaction commit",
+      "expected": "Do not undo or label committed result cancelled; suppress stale UI application",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S11-wait",
+      "testId": "T21",
+      "given": "Host typed opening/busy state before any write",
+      "expected": "waiting kind; after-condition; recheck scope before any subsequent explicit request",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S12-legacy-void",
+      "testId": "T01",
+      "given": "Legacy confirmTag success bridge",
+      "expected": "Electron JS result retains ok=true and value===undefined; never manufacture null",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S13-unclassified-legacy",
+      "testId": "T22",
+      "given": "Only an old generic error string is available",
+      "expected": "Never infer permission/retry from localized text; use phase-known INTERNAL_FAILURE or indeterminate",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S14-unicode",
+      "testId": "T21",
+      "given": "Q20 with 41 supplementary codepoints",
+      "expected": "Shape accepted; compatibility validator rejects >80 UTF16 units for new sample; no silent slicing",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S15-same-fixtures-two-runtimes",
+      "testId": "T01",
+      "given": "Both validators consume exact contract-cases.json and same schema digests",
+      "expected": "Every expectedSchemaValid and verdict match; no bool/number/string coercion",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S16-worker-no-authority",
+      "testId": "T02",
+      "given": "A worker returns schema-valid IDs suggesting a confirmation",
+      "expected": "IPC sender still denied; conformance execution does not grant worker mutation API",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S17-response-pair",
+      "testId": "T21",
+      "given": "R13 valid shape but different assetId",
+      "expected": "Client pair guard rejects reply binding; no assertion server write rolled back",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S18-unknown-version",
+      "testId": "T21",
+      "given": "Q02 on the new channel",
+      "expected": "UNSUPPORTED_VERSION using v1 supported error shell; no lower-version execution/fallback",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S19-trace-whitelist",
+      "testId": "T22",
+      "given": "Failures containing sentinel secret, tag, path and receipt",
+      "expected": "No sentinel in trace or safeMessage; only allowlisted metadata",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S20-dependency-bypass",
+      "testId": "T01",
+      "given": "TS imports/exports and Python imports are rewired in an isolated fixture",
+      "expected": "AST rule catches forbidden edge; runtime Host spy verifies zero unauthorized calls; static scan alone not permission proof",
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

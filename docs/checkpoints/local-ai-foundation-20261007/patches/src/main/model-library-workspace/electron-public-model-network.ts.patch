@@ -1,0 +1,26 @@
+diff --git a/src/main/model-library-workspace/electron-public-model-network.ts b/src/main/model-library-workspace/electron-public-model-network.ts
+index 081339f..eff443e 100644
+--- a/src/main/model-library-workspace/electron-public-model-network.ts
++++ b/src/main/model-library-workspace/electron-public-model-network.ts
+@@ -3,9 +3,10 @@ import { assertPublicModelUrl, type PublicModelFetch } from './huggingface-model
+ 
+ /** Electron 30 fetch rejects manual redirects rather than returning their response.
+  * URLRequest lets Main inspect each target before synchronously approving it. */
+-export function createPublicModelFetch(requestFactory: (options: ClientRequestConstructorOptions) => ClientRequest): PublicModelFetch {
++export function createPublicModelFetch(requestFactory: (options: ClientRequestConstructorOptions) => ClientRequest,
++  approveUrl: (url: string) => void = assertPublicModelUrl): PublicModelFetch {
+   return async (url, options) => {
+-    assertPublicModelUrl(url)
++    approveUrl(url)
+     if (options.method && options.method !== 'GET' || options.body || options.credentials !== 'omit') throw Error('MODEL_SOURCE_REQUEST_REJECTED')
+     options.signal?.throwIfAborted()
+     return new Promise<Response>((resolve, reject) => {
+@@ -20,7 +21,7 @@ export function createPublicModelFetch(requestFactory: (options: ClientRequestCo
+       request.on('redirect', (_status, method, target) => {
+         try {
+           if (options.redirect === 'error' || method !== 'GET' || ++redirects > 5) throw Error('MODEL_SOURCE_REDIRECT_REJECTED')
+-          assertPublicModelUrl(target); request.followRedirect()
++          approveUrl(target); request.followRedirect()
+         } catch (error) { request.abort(); removeAbort(); reject(error) }
+       })
+       request.on('response', incoming => {

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"camvideos.me":{srcMatching:[{srcRegExp:"(//fastimages\\.org/images/.+)\\.th(@IMG@)",processor:"$1$2"}]}};

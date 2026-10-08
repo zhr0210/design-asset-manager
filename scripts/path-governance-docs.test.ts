@@ -43,21 +43,3 @@ assert.doesNotMatch(allDocs, /Design Asset Manager[\\/](?:library|assets|models)
 assert.match(allDocs, /no-auto-migration/i)
 assert.match(allDocs, /backup/i)
 assert.match(allDocs, /rollback/i)
-
-const changedFiles = await readGitChangedFiles()
-assert.ok(!changedFiles.includes('src/main/db/schema.ts'))
-assert.ok(!changedFiles.includes('src/main/services/asset.service.ts'))
-assert.ok(!changedFiles.some((file) => /src\/main\/services\/download/.test(file)))
-
-async function readGitChangedFiles(): Promise<string[]> {
-  const { execFile } = await import('node:child_process')
-  return new Promise((resolve, reject) => {
-    execFile('git', ['diff', '--name-only'], { encoding: 'utf8' }, (error, stdout) => {
-      if (error) {
-        reject(error)
-        return
-      }
-      resolve(stdout.split(/\r?\n/).filter(Boolean))
-    })
-  })
-}

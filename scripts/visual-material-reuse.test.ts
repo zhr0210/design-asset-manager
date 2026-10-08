@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict'
+import { test } from 'node:test'
+import { createVisualAdmission } from '../src/main/visual-ai/visual-admission'
+
+await test('compatible prepared input is reused with one physical charge; revised content, model binding and permission session cannot borrow it',async()=>{
+  let decodes=0
+  const admission=createVisualAdmission({codec:async source=>{decodes++;return{jpeg:new Uint8Array([source[0],2,3]),pixels:1,additionalRss:1}},
+    memory:()=>({free:24*1024**3,total:32*1024**3})})
+  const session={sessionToken:'library-session',leaseIdentity:'lease'},view={assetRevision:'revision-1',previewGeneration:'preview-1'}
+  const prepare=async(model:string,bytes:number,revision=view,permission=session)=>{
+    const lease=admission.open('owner',permission,'foreground',{modelBinding:model})
+    await lease.prepare('asset',async()=>new Uint8Array([bytes]),revision)
+    const result=lease.describe('asset');lease.dispose();return result
+  }
+  const first=await prepare('a'.repeat(64),1),second=await prepare('a'.repeat(64),1)
+  assert.equal(first.sha256,second.sha256);assert.equal(decodes,1)
+  assert.equal(admission.resourceStatus().materialBytes,3)
+  await prepare('a'.repeat(64),2)
+  await prepare('b'.repeat(64),2)
+  await prepare('a'.repeat(64),2,{...view,assetRevision:'revision-2'})
+  await prepare('a'.repeat(64),1,view,{...session,sessionToken:'other-library-session'})
+  assert.equal(decodes,5)
+  admission.releaseIdleMaterials()
+  assert.equal(admission.resourceStatus().materialBytes,0)
+  assert.equal(admission.inspect().receipts,0)
+  admission.invalidate()
+})

@@ -1,0 +1,54 @@
+diff --git a/src/main/model-library-workspace/huggingface-gguf-bundles.ts b/src/main/model-library-workspace/huggingface-gguf-bundles.ts
+new file mode 100644
+index e69de29..9a63ada 100644
+--- /dev/null
++++ b/src/main/model-library-workspace/huggingface-gguf-bundles.ts
+@@ -0,0 +1,48 @@
++import { createHash } from 'node:crypto'
++import type { HuggingFaceDiscoveryEntry, HuggingFaceModelBundle } from '../../shared/contracts/managed-model-library.contract'
++
++/** Only complete, hashed, repository-local language/projector pairs are selectable.
++ * Repository metadata describes candidates; it cannot grant execution qualification. */
++export function assembleGgufBundles(entry: HuggingFaceDiscoveryEntry): HuggingFaceModelBundle[] {
++  const scope = /^(Qwen|unsloth)\/Qwen3-VL-(2B|4B|8B|32B|30B-A3B|235B-A22B)-(Instruct|Thinking)-GGUF$/.exec(entry.repository)
++  if (!scope || !entry.revision || entry.license !== 'apache-2.0') return []
++  const [, , size, variant] = scope
++  const prefix = `(?:Qwen3VL|Qwen3-VL)-${size}-${variant}-`
++  const quant = '(?:UD-)?(?:IQ|Q)[0-9]+(?:_[A-Z0-9]+)*|BF16|F16|F32'
++  const language = new RegExp(`^${prefix}(${quant})(?:-(\\d{5})-of-(\\d{5}))?\\.gguf$`, 'i')
++  const projector = new RegExp(`^mmproj-(?:${prefix})?(${quant})\\.gguf$`, 'i')
++  type File = HuggingFaceModelBundle['files'][number]
++  const groups = new Map<string, { quant: string; total: number; parts: Map<number, File>; invalid: boolean }>()
++  const projectors: Array<{ quant: string; file: File }> = []
++  for (const file of entry.files) {
++    if (!file.sha256 || !/^[a-f0-9]{64}$/.test(file.sha256) || !Number.isSafeInteger(file.bytes) || file.bytes <= 0) continue
++    const name = file.name.split('/').at(-1)!, directory = file.name.slice(0, -name.length)
++    const projected = projector.exec(name)
++    if (projected) { projectors.push({ quant: projected[1].toUpperCase(), file: { ...file, sha256: file.sha256 } }); continue }
++    const parsed = language.exec(name)
++    if (!parsed) continue
++    const part = parsed[2] ? Number(parsed[2]) : 1, total = parsed[3] ? Number(parsed[3]) : 1
++    const key = directory + name.replace(/-\d{5}-of-\d{5}(?=\.gguf$)/i, '')
++    const group = groups.get(key) ?? { quant: parsed[1].toUpperCase(), total, parts: new Map<number, File>(), invalid: false }
++    if (total < 1 || total > 256 || part < 1 || part > total || group.total !== total || group.parts.has(part)) group.invalid = true
++    group.parts.set(part, { ...file, sha256: file.sha256 }); groups.set(key, group)
++  }
++  const bundles: HuggingFaceModelBundle[] = []
++  for (const group of groups.values()) {
++    if (group.invalid || group.parts.size !== group.total) continue
++    const parts = Array.from({ length: group.total }, (_, index) => group.parts.get(index + 1))
++    if (parts.some(file => !file)) continue
++    for (const projection of projectors) {
++      const files = [...parts as File[], projection.file]
++      const bytes = files.reduce((sum, file) => sum + file.bytes, 0)
++      if (!Number.isSafeInteger(bytes)) continue
++      const identity = { repository: entry.repository, revision: entry.revision,
++        language: group.quant, projector: projection.quant, files: files.map(({ name, bytes, sha256 }) => ({ name, bytes, sha256 })) }
++      bundles.push({ id: 'hf-bundle:' + createHash('sha256').update(JSON.stringify(identity)).digest('hex'),
++        repository: entry.repository, revision: entry.revision, catalogProvider: entry.catalogProvider, size, variant: variant as 'Instruct' | 'Thinking',
++        languageQuantization: group.quant, projectorQuantization: projection.quant, bytes, files,
++        support: ['2B','4B','8B'].includes(size) && variant === 'Instruct' ? 'managed-gguf' : 'catalog-only' })
++    }
++  }
++  return bundles.sort((a, b) => a.bytes - b.bytes || a.id.localeCompare(b.id))
++}

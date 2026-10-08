@@ -1,0 +1,828 @@
+{
+  "status": "expectations_from_current_source_not_executed",
+  "cases": [
+    {
+      "id": "P01-json",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "trim/deduplicate tags only",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P02-fence",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "```json\n{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}\n```"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "complete fenced object",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P03-prose",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "合成说明：{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]} 结束"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "one complete object in prose",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P04-blocks",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "{\"caption\":\"合成几何示例\","
+                },
+                {
+                  "type": "text",
+                  "text": "\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "all text parts joined",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P05-choice-text",
+      "input": {
+        "choices": [
+          {
+            "text": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "no record message; legacy choice text accepted",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P06-no-finish",
+      "input": {
+        "choices": [
+          {
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "finish reason optional",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P07-null-finish",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": null,
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "null finish accepted",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P08-length-full-json",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "length",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_TRUNCATED"
+      },
+      "reason": "length rejects even syntactically complete content",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P09-unclosed",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"unfinished"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_TRUNCATED"
+      },
+      "reason": "unclosed inner object",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P10-filtered",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "content_filter",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "non-stop terminal reason",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P11-tool-calls",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "tool_calls",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "no tool execution",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P12-invalid-inner",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "not-json"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "no object",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P13-two-objects",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]} {\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "ambiguous object wrapper",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P14-array-output",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "[{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}]"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "output must be record",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P15-no-prompt",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"x\",\"ocrText\":\"\",\"tags\":[]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "all string fields required",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P16-empty-prompt",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"   \",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "prompt nonblank",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P17-empty-caption-tags",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"\",\"ocrText\":\"\",\"prompt\":\"Synthetic prompt\",\"tags\":[]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "",
+          "ocrText": "",
+          "prompt": "Synthetic prompt",
+          "tags": []
+        }
+      },
+      "reason": "current compatibility accepts empty caption/tags",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P18-nonempty-ocr",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"SYNTHETIC TEXT\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "SYNTHETIC TEXT",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "prompt asks empty; hard validator does not enforce",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P19-english",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"Synthetic example\",\"ocrText\":\"\",\"prompt\":\"Synthetic prompt\",\"tags\":[\"shape\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "Synthetic example",
+          "ocrText": "",
+          "prompt": "Synthetic prompt",
+          "tags": [
+            "shape"
+          ]
+        }
+      },
+      "reason": "language is not hard validated",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P20-nine-tags",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\"标签0\",\"标签1\",\"标签2\",\"标签3\",\"标签4\",\"标签5\",\"标签6\",\"标签7\",\"标签8\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "标签0",
+            "标签1",
+            "标签2",
+            "标签3",
+            "标签4",
+            "标签5",
+            "标签6",
+            "标签7",
+            "标签8"
+          ]
+        }
+      },
+      "reason": "prompt max8 is not parser cap30",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P21-31-duplicates",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\",\"几何\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "cap checked before deduplication",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P22-blank-tag",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" \"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "empty after trim",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P23-tag81",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "raw tag >80 UTF16",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P24-extra-field",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"],\"syntheticExtra\":\"ignored\"}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "unknown fields are discarded",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P25-message-record-no-content",
+      "input": {
+        "choices": [
+          {
+            "message": {},
+            "text": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "record message prevents choice.text fallback",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P26-mixed-parts",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+                },
+                {
+                  "type": "image_url",
+                  "text": ""
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "all parts must be text",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P27-empty-choices",
+      "input": {
+        "choices": []
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "requires first choice",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P28-braces-in-string",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"Synthetic {curves} and \\\"quotes\\\".\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "Synthetic {curves} and \"quotes\".",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "quoted braces not structural",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P29-malformed-closed",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"prompt\":\"x\",}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "closed but malformed is not rescued",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P30-second-choice-ignored",
+      "input": {
+        "choices": [
+          {
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          },
+          {
+            "message": {
+              "content": "invalid"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "only first choice used",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P31-text16001",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "hard text limit in UTF16 units",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P32-ascii80-tag",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          ]
+        }
+      },
+      "reason": "exact tag boundary",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P33-astral41-tag",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"]}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "41 Unicode scalars have82 UTF16 units",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P34-empty-parts",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": []
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "no text content",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P35-valid-object-with-tail-brace",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "说明 {\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"]} }"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "error",
+        "code": "AI_RESPONSE_INVALID"
+      },
+      "reason": "extra brace wrapper is rejected",
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "P36-direct-extra-nested-key",
+      "input": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "message": {
+              "content": "{\"caption\":\"合成几何示例\",\"ocrText\":\"\",\"prompt\":\"A geometric composition with a circle.\",\"tags\":[\" 几何 \",\"几何\",\"蓝色\"],\"unused\":{\"nested\":\"value\"}}"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "kind": "complete-output",
+        "value": {
+          "caption": "合成几何示例",
+          "ocrText": "",
+          "prompt": "A geometric composition with a circle.",
+          "tags": [
+            "几何",
+            "蓝色"
+          ]
+        }
+      },
+      "reason": "direct complete object ignores unknown nested field",
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"5ch.net":{srcMatching:[{srcRegExp:"https?://jump\\.5ch\\.net/\\?(https?://)?(.+)",processor:({srcRegExpObj:e,triggerSrc:t})=>e.test(t)&&{commonRulesOnly:!0,triggerSrc:`${RegExp.$1||"https://"}${RegExp.$2}`},selectors:'a[href*="jump.5ch.net"]'}]}};

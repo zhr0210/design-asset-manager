@@ -40,12 +40,12 @@ def get_gpu_processes():
                         name_el = proc.find('process_name')
                         used_mem_el = proc.find('used_gpu_memory')
                         type_el = proc.find('type')
-                        
+
                         pid = int(pid_el.text) if pid_el is not None and pid_el.text else None
                         name = name_el.text if name_el is not None and name_el.text else "Unknown Process"
                         used_mem = used_mem_el.text if used_mem_el is not None and used_mem_el.text else "N/A"
                         proc_type = type_el.text if type_el is not None and type_el.text else "C+G"
-                        
+
                         if pid:
                             base_name = os.path.basename(name) if name != "None" else "System Process"
                             processes.append({
@@ -79,7 +79,7 @@ def get_gpu_status():
             free_vram_mb = int(free_bytes / (1024 * 1024))
             used_vram_mb = total_vram_mb - free_vram_mb
             utilization_percent = int((used_vram_mb / total_vram_mb) * 100) if total_vram_mb > 0 else 0
-            
+
             return {
                 "available": True,
                 "is_mock": False,
@@ -104,7 +104,7 @@ def get_gpu_status():
                 if isinstance(name, bytes):
                     name = name.decode('utf-8')
                 mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
-                
+
                 return {
                     "available": True,
                     "is_mock": False,
@@ -131,9 +131,37 @@ def get_gpu_status():
                 total_gb = int(mem_match.group(1))
                 gpu_share_gb = round(total_gb * 0.70, 1)
                 total_vram_mb = int(gpu_share_gb * 1024)
-                # Estimate: ~25% in use for system + apps
-                used_vram_mb = int(total_vram_mb * 0.25)
-                free_vram_mb = total_vram_mb - used_vram_mb
+
+                # Retrieve process RSS
+                pid = os.getpid()
+                rss_kb = 0
+                try:
+                    ps_res = subprocess.run(
+                        ["ps", "-o", "rss=", "-p", str(pid)],
+                        capture_output=True, text=True, timeout=2
+                    )
+                    if ps_res.returncode == 0 and ps_res.stdout.strip():
+                        rss_kb = int(ps_res.stdout.strip())
+                except Exception:
+                    pass
+                rss_bytes = rss_kb * 1024
+
+                # Retrieve PyTorch MPS memory usage if torch.backends.mps is available
+                mps_current = 0
+                mps_driver = 0
+                if hasattr(torch, "mps"):
+                    try:
+                        mps_current = torch.mps.current_allocated_memory()
+                        mps_driver = torch.mps.driver_allocated_memory()
+                    except Exception:
+                        pass
+
+                # Calculate used memory as maximum of driver allocated memory and process RSS
+                used_bytes = max(mps_driver, rss_bytes)
+                used_vram_mb = int(used_bytes / (1024 * 1024))
+                free_vram_mb = max(0, total_vram_mb - used_vram_mb)
+                utilization_percent = min(100, int((used_vram_mb / total_vram_mb) * 100)) if total_vram_mb > 0 else 0
+
                 return {
                     "available": True,
                     "is_mock": False,
@@ -141,7 +169,7 @@ def get_gpu_status():
                     "total_vram_mb": total_vram_mb,
                     "used_vram_mb": used_vram_mb,
                     "free_vram_mb": free_vram_mb,
-                    "utilization_percent": int((used_vram_mb / total_vram_mb) * 100),
+                    "utilization_percent": utilization_percent,
                     "processes": processes,
                 }
         except Exception:

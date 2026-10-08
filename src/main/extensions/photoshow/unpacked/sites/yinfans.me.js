@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"yinfans.me":{ignore:".glass"}};

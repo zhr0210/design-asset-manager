@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.design-asset-manager.invalid/p05/outbox-event.v1.schema.json",
+  "$comment": "Proposal only; no engine validation. Host validates job/evidence/capability/scope cross references. No content or credential fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "eventSeq",
+    "libraryId",
+    "assetId",
+    "contentKey",
+    "jobId",
+    "requestGeneration",
+    "effectRevision",
+    "eventKind",
+    "capability",
+    "evidenceRef",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "eventSeq": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "libraryId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "assetId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "contentKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "jobId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "requestGeneration": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "effectRevision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "eventKind": {
+      "enum": [
+        "analysis-result-committed",
+        "analysis-state-changed",
+        "analysis-quality-held",
+        "analysis-projection-invalidated"
+      ]
+    },
+    "capability": {
+      "enum": [
+        "tags",
+        "caption",
+        "ocr",
+        "prompt"
+      ]
+    },
+    "evidenceRef": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "capability"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "new",
+                "legacy-visual",
+                "legacy-ocr"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "capability": {
+              "enum": [
+                "tags",
+                "caption",
+                "ocr",
+                "prompt"
+              ]
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "eventKind": {
+            "enum": [
+              "analysis-result-committed",
+              "analysis-quality-held"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "requestGeneration": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "evidenceRef": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "id",
+              "capability"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "new",
+                  "legacy-visual",
+                  "legacy-ocr"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "capability": {
+                "enum": [
+                  "tags",
+                  "caption",
+                  "ocr",
+                  "prompt"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

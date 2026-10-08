@@ -1,29 +1,45 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
+import { registerDisabledAppIpc } from '../src/main/ipc/disabled-app.ipc'
 
 const panelSource = await fs.readFile('src/renderer/components/settings/SettingsMigrationPanel.tsx', 'utf8')
 const settingsRouteSource = await fs.readFile('src/renderer/routes/Settings.tsx', 'utf8')
 const settingsStoreSource = await fs.readFile('src/renderer/stores/settings.store.ts', 'utf8')
+const aiWorkspaceSource = await fs.readFile('src/renderer/routes/AiWorkspace.tsx', 'utf8')
+const compositionSource = await fs.readFile('src/main/ipc/main-ipc-composition.ts', 'utf8')
 
-assert.match(settingsRouteSource, /SettingsMigrationPanel/)
-assert.match(settingsRouteSource, /<SettingsMigrationPanel \/>/)
+// A retained panel is not a delivered migration path. Neither formal client
+// mounts it, and every compatible legacy migration command is explicitly denied.
+assert.doesNotMatch(settingsRouteSource, /SettingsMigrationPanel/)
+assert.doesNotMatch(aiWorkspaceSource, /SettingsMigrationPanel/)
+assert.match(compositionSource, /registerDisabledAppIpc\(dependencies\.handle\)/)
+assert.doesNotMatch(compositionSource, /registerSettingsMigrationIpc\(/)
+const disabled = new Map<string, (...args: any[]) => unknown>()
+registerDisabledAppIpc((channel, handler) => { disabled.set(channel, handler) })
+for (const channel of ['settingsMigration:createPlan', 'settingsMigration:dryRun', 'settingsMigration:analyze', 'settingsMigration:listBackups']) {
+  assert.ok(disabled.has(channel), channel)
+  assert.deepEqual(await disabled.get(channel)!({}), { success: false, error: 'This operation is unavailable while Active Library authority is active.', code: 'LIBRARY_FEATURE_DISABLED' }, channel)
+}
 assert.doesNotMatch(settingsRouteSource, /AiRuntimePanel/)
 
-assert.match(panelSource, /electronAPI\?\.\s*settingsMigration/)
+assert.match(panelSource, /getWorkspaceClient\(\)\?\.settingsMigration/)
 assert.match(panelSource, /createPlan:/)
 assert.match(panelSource, /dryRun:/)
 assert.match(panelSource, /analyze:/)
 assert.match(panelSource, /listBackups:/)
 assert.match(panelSource, /SettingsMigrationPlan/)
-assert.match(panelSource, /not_analyzed/)
-assert.match(panelSource, /loading/)
-assert.match(panelSource, /safe_to_apply/)
-assert.match(panelSource, /blocked/)
-assert.match(panelSource, /failed/)
-assert.match(panelSource, /no_changes/)
-assert.match(panelSource, /backupRequired/)
-assert.match(panelSource, /canApply/)
-assert.match(panelSource, /canRollback/)
+assert.match(panelSource, /projectSettingsMigrationStatus/)
+assert.match(panelSource, /resolvePlanPanelStatus/)
+assert.match(panelSource, /resolveReportPanelStatus/)
+assert.match(panelSource, /projectSettingsMigrationSummary/)
+assert.match(panelSource, /projectSettingsMigrationBackups/)
+assert.match(panelSource, /SETTINGS_MIGRATION_EMPTY_LABELS/)
+
+assert.doesNotMatch(panelSource, /const statusStyles/)
+assert.doesNotMatch(panelSource, /const statusLabels/)
+assert.doesNotMatch(panelSource, /function getPlanPanelStatus/)
+assert.doesNotMatch(panelSource, /function getReportPanelStatus/)
+assert.doesNotMatch(panelSource, /function formatSize/)
 
 assert.doesNotMatch(panelSource, /ipcRenderer/)
 assert.doesNotMatch(panelSource, /process\.platform/)
@@ -43,3 +59,4 @@ const saveHandlerBlock = settingsRouteSource.slice(saveHandlerStart, saveHandler
 assert.match(saveHandlerBlock, /updateSettings/)
 assert.doesNotMatch(saveHandlerBlock, /settingsMigration|createPlan|dryRun|analyze|listBackups/)
 assert.doesNotMatch(settingsStoreSource, /settingsMigration|settings-migration/)
+console.log('settings-migration retained panel boundaries and formal absence passed')

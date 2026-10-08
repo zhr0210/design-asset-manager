@@ -1,0 +1,156 @@
+"""DAM owned, offline SigLIP2 embeddings on private stdio. No repository code."""
+import base64
+import contextlib
+import io
+import json
+import os
+from pathlib import Path
+import socket
+import sys
+import threading
+import time
+
+os.environ.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", PYTHONDONTWRITEBYTECODE="1", OMP_NUM_THREADS="2")
+sys.dont_write_bytecode = True
+protocol = sys.stdout.buffer
+lock = threading.Lock()
+
+
+def deny_network(*args, **kwargs):
+    raise RuntimeError("RETRIEVAL_NETWORK_DENIED")
+
+
+socket.socket.connect = deny_network
+socket.socket.connect_ex = deny_network
+socket.create_connection = deny_network
+
+
+def emit(value):
+    with lock:
+        protocol.write((json.dumps(value, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8"))
+        protocol.flush()
+
+
+def main():
+    with contextlib.redirect_stdout(sys.stderr):
+        import torch
+        import psutil
+        from PIL import Image, ImageOps
+        from transformers import AutoTokenizer, SiglipConfig, SiglipImageProcessor, SiglipModel
+        root = Path(sys.argv[1]).resolve(strict=True)
+        config = json.loads((root / "config.json").read_text(encoding="utf-8"))
+        if config.get("model_type") != "siglip" or config.get("auto_map") or config.get("quantization_config"):
+            raise ValueError("RETRIEVAL_MODEL_UNSUPPORTED")
+        # Validate the complete allocation shape before constructing weights.
+        # This is a separately pinned worker revision; old qualified spaces
+        # continue through their owned, byte-verified worker snapshot.
+        shape = SiglipConfig.from_pretrained(str(root), local_files_only=True)
+        text, vision = shape.text_config, shape.vision_config
+        if (text.vocab_size != 256000 or text.hidden_size != 768 or text.intermediate_size != 3072
+                or text.num_hidden_layers != 12 or text.num_attention_heads != 12
+                or text.max_position_embeddings != 64 or vision.hidden_size != 768
+                or vision.intermediate_size != 3072 or vision.num_hidden_layers != 12
+                or vision.num_attention_heads != 12 or vision.image_size != 224
+                or vision.patch_size != 16 or vision.num_channels != 3):
+            raise ValueError("RETRIEVAL_SPACE_UNSUPPORTED")
+        torch.set_num_threads(2)
+        Image.MAX_IMAGE_PIXELS = 50_000_000
+        started = time.monotonic()
+        tokenizer = AutoTokenizer.from_pretrained(str(root), local_files_only=True, trust_remote_code=False)
+        processor = SiglipImageProcessor.from_pretrained(str(root), local_files_only=True)
+        model = SiglipModel.from_pretrained(str(root), local_files_only=True, use_safetensors=True,
+                                           torch_dtype=torch.float32, attn_implementation="sdpa").eval()
+        if model.config.text_config.max_position_embeddings != 64 or model.config.vision_config.image_size != 224:
+            raise ValueError("RETRIEVAL_SPACE_UNSUPPORTED")
+        process = psutil.Process()
+
+    def metrics():
+        m = process.memory_info()
+        return {"rssBytes": m.rss, "peakRamBytes": getattr(m, "peak_wset", m.rss)}
+
+    def normalized(features):
+        if features.ndim != 2 or features.shape[1] != 768 or not torch.isfinite(features).all():
+            raise ValueError("RETRIEVAL_VECTOR_INVALID")
+        lengths = features.norm(p=2, dim=-1, keepdim=True)
+        if (lengths < 0.000001).any():
+            raise ValueError("RETRIEVAL_VECTOR_INVALID")
+        return (features / lengths).to(torch.float32).cpu().tolist()
+
+    def text_vectors(texts):
+        if not isinstance(texts, list) or not 1 <= len(texts) <= 8 or any(not isinstance(t, str) or not 1 <= len(t) <= 4096 for t in texts):
+            raise ValueError("RETRIEVAL_INPUT_INVALID")
+        # Preserve the original language and every token. Reject, never silently truncate.
+        if any(len(tokenizer(t, add_special_tokens=True)["input_ids"]) > 64 for t in texts):
+            raise ValueError("RETRIEVAL_QUERY_TOO_LONG")
+        encoded = tokenizer(texts, padding="max_length", max_length=64, truncation=False, return_tensors="pt")
+        with torch.inference_mode():
+            return normalized(model.get_text_features(**encoded))
+
+    def image_vectors(images):
+        if not isinstance(images, list) or not 1 <= len(images) <= 8:
+            raise ValueError("RETRIEVAL_INPUT_INVALID")
+        decoded = []
+        try:
+            for data in images:
+                if not isinstance(data, str) or len(data) > 6 * 1024 * 1024:
+                    raise ValueError("RETRIEVAL_INPUT_INVALID")
+                image = Image.open(io.BytesIO(base64.b64decode(data, validate=True)))
+                if image.width * image.height > 50_000_000 or getattr(image, "n_frames", 1) != 1:
+                    raise ValueError("RETRIEVAL_IMAGE_UNSUPPORTED")
+                image = ImageOps.exif_transpose(image)
+                if "A" in image.getbands():
+                    rgba = image.convert("RGBA")
+                    rgb = Image.new("RGB", rgba.size, "white")
+                    rgb.paste(rgba, mask=rgba.getchannel("A"))
+                    image = rgb
+                else:
+                    image = image.convert("RGB")
+                decoded.append(image)
+            pixels = processor(images=decoded, return_tensors="pt")["pixel_values"]
+            with torch.inference_mode():
+                return normalized(model.get_image_features(pixel_values=pixels))
+        finally:
+            for image in decoded:
+                image.close()
+
+    emit({"kind": "loaded", "dimension": 768, "loadMs": round((time.monotonic() - started) * 1000), "metrics": metrics()})
+
+    def heartbeat():
+        while True:
+            time.sleep(1)
+            emit({"kind": "metrics", "metrics": metrics()})
+
+    threading.Thread(target=heartbeat, daemon=True).start()
+    for line in sys.stdin.buffer:
+        if len(line) > 12 * 1024 * 1024:
+            raise ValueError("RETRIEVAL_INPUT_TOO_LARGE")
+        request = json.loads(line)
+        if request.get("kind") == "stop":
+            return
+        request_id = request.get("id")
+        try:
+            if not isinstance(request_id, str):
+                raise ValueError("RETRIEVAL_INPUT_INVALID")
+            kind = request.get("kind")
+            if kind == "texts":
+                vectors = text_vectors(request.get("texts"))
+            elif kind == "images":
+                vectors = image_vectors(request.get("images"))
+            else:
+                raise ValueError("RETRIEVAL_INPUT_INVALID")
+            emit({"kind": "result", "id": request_id, "vectors": vectors, "metrics": metrics()})
+        except Exception as error:
+            code = str(error)
+            if isinstance(error, torch.OutOfMemoryError) or "out of memory" in code.lower():
+                code = "LOCAL_OOM"
+            elif code not in {"RETRIEVAL_QUERY_TOO_LONG", "RETRIEVAL_INPUT_INVALID", "RETRIEVAL_IMAGE_UNSUPPORTED", "RETRIEVAL_VECTOR_INVALID"}:
+                code = "RETRIEVAL_EXECUTION_FAILED"
+            emit({"kind": "error", "id": request_id, "code": code, "metrics": metrics()})
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception:
+        emit({"kind": "failed", "code": "RETRIEVAL_RUNTIME_FAILED"})
+        sys.exit(1)

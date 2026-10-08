@@ -1,0 +1,16 @@
+diff --git a/scripts/launch-local-dam.mjs b/scripts/launch-local-dam.mjs
+index 8db9464..3928e10 100644
+--- a/scripts/launch-local-dam.mjs
++++ b/scripts/launch-local-dam.mjs
+@@ -40,7 +40,10 @@ if (synthetic) {
+   await fs.mkdir('.scratch/local-dual-client', { recursive: true })
+   await fs.writeFile('.scratch/local-dual-client/controlled-launch.json', JSON.stringify({ testId: 'local-client-synthetic', evidenceDirectory, rootDirectory: root, profileDirectory }, null, 2))
+ }
+-const child = spawn(require('electron'), args, { cwd: process.cwd(), env, windowsHide: client !== 'desktop', stdio: 'ignore' })
++// Electron is a GUI executable. A Browser-first Host may later be asked to
++// present its first native window; Windows must not inherit SW_HIDE for that
++// presentation. Browser mode itself creates no native workspace window.
++const child = spawn(require('electron'), args, { cwd: process.cwd(), env, windowsHide: false, stdio: 'ignore' })
+ child.once('error', error => { console.error('DAM launcher failed:', error.code); process.exitCode = 1 })
+ child.once('exit', async code => { await fixtures?.close(); process.exitCode = code ?? 1 })
+ if (evidenceDirectory && client === 'browser') {

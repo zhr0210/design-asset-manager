@@ -1,0 +1,47 @@
+diff --git a/scripts/active-library-host.test.ts b/scripts/active-library-host.test.ts
+index 9bbd0c2..b31cfa3 100644
+--- a/scripts/active-library-host.test.ts
++++ b/scripts/active-library-host.test.ts
+@@ -157,7 +157,14 @@ const bootstrapLossHost = createActiveLibraryHost({
+   selectLibraryDirectory: async () => ({ kind: 'selected', directory: bootstrapLossTarget }),
+   onBootstrapLocked: async (controlDirectory) => {
+     bootstrapLossLockPath = path.join(controlDirectory, 'exclusive-library-lock.sqlite')
+-    await fs.rename(bootstrapLossLockPath, `${bootstrapLossLockPath}.lost`)
++    if(process.platform==='win32'){
++      // Windows denies renaming SQLite's open handle. Exercise an actual
++      // physical claim change instead of mistaking EBUSY for lost authority.
++      await assert.rejects(fs.rename(bootstrapLossLockPath, `${bootstrapLossLockPath}.lost`),(e)=>['EBUSY','EPERM','EACCES'].includes((e as NodeJS.ErrnoException).code??''))
++      const prior=(await fs.stat(bootstrapLossLockPath)).mode
++      await fs.chmod(bootstrapLossLockPath,0o444)
++      assert.notEqual((await fs.stat(bootstrapLossLockPath)).mode,prior)
++    }else await fs.rename(bootstrapLossLockPath, `${bootstrapLossLockPath}.lost`)
+   }
+ })
+ const bootstrapLossPlan = await bootstrapLossHost.prepareCreate()
+@@ -167,7 +174,8 @@ await assert.rejects(bootstrapLossHost.confirmCreate(bootstrapLossPlan.plan.rece
+ const bootstrapLossDb = new Database(path.join(bootstrapLossTarget, '.dam', 'library.sqlite'))
+ assert.equal(bootstrapLossDb.prepare("SELECT COUNT(*) AS count FROM sqlite_schema WHERE type = 'table' AND name = 'assets'").get<{ count: number }>()?.count, 0)
+ bootstrapLossDb.close()
+-assert.equal(await exists(`${bootstrapLossLockPath}.lost`), true)
++assert.equal(await exists(process.platform==='win32'?bootstrapLossLockPath:`${bootstrapLossLockPath}.lost`), true)
++if(process.platform==='win32')await fs.chmod(bootstrapLossLockPath,0o666)
+ 
+ const appearsDuringConfirmTarget = path.join(testRoot, 'appears-during-confirm')
+ selectedLibrary = appearsDuringConfirmTarget
+@@ -350,12 +358,14 @@ triggerCleanupDb.close()
+ await host.reopen()
+ assert.equal(host.inspect().state, 'ready')
+ 
+-await fs.rename(lockDbPath, `${lockDbPath}.lost`)
++if(process.platform==='win32')await fs.chmod(lockDbPath,0o444)
++else await fs.rename(lockDbPath, `${lockDbPath}.lost`)
+ await assert.rejects(host.listAssets(), (error) => hostErrorCode(error) === 'library-lock-invalid')
+ assert.equal(host.inspect().state, 'recovery-required')
+ await assert.rejects(host.listAssets(), (error) => hostErrorCode(error) === 'library-recovery-required')
+ await host.close()
+-await fs.rename(`${lockDbPath}.lost`, lockDbPath)
++if(process.platform==='win32')await fs.chmod(lockDbPath,0o666)
++else await fs.rename(`${lockDbPath}.lost`, lockDbPath)
+ 
+ const manifestPath = path.join(targetDirectory, '.dam', 'library.manifest.json')
+ const manifestBefore = await fs.readFile(manifestPath)

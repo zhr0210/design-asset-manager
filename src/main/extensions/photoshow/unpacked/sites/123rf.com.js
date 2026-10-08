@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"123rf.com":{srcMatching:[{srcRegExp:"//.+\\.123rf\\.com/\\d+\\w+/(.+@IMG@.*)",processor:"//previews.123rf.com/images/$1"}]}};

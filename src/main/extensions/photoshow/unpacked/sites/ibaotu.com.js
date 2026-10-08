@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"ibaotu.com":{srcMatching:[{srcRegExp:"(//pic\\.ibaotu\\.com/.+@IMG@!).*",processor:"$1ww7004"}]}};

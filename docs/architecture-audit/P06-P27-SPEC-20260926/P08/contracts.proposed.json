@@ -1,0 +1,12 @@
+{
+  "stage": "P08",
+  "status": "proposed",
+  "atomicAllPools": true,
+  "permitKinds": [
+    "residency",
+    "compute"
+  ],
+  "timeoutReleasesMemory": false,
+  "unloadAckAloneReleases": false,
+  "budgetPolicy": "min(DAM cap, platform cap, pressure constraint)"
+}

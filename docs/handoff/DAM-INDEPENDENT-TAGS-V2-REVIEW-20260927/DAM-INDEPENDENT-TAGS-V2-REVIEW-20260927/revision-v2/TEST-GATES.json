@@ -1,0 +1,157 @@
+{
+  "version": 2,
+  "allProductionResults": "NOT_RUN",
+  "gates": [
+    {
+      "id": "G01-single-writer",
+      "rule": "AC-02 / A",
+      "minimalCounterexample": "旧combined g1、新tags g2；g2先成功或先失败，g1迟到",
+      "referenceScope": "无新增模型；验收需求",
+      "productionAcceptance": "临时库断言唯一current/效果，历史bundle可读、无双发；正式Inspector确认显示来源",
+      "owner": "03（04消费）",
+      "existingCommandIds": [
+        "test-visual-ai-download-integration",
+        "test-active-library-electron-e2e"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G02-shared-admission",
+      "rule": "AC-03 / B",
+      "minimalCounterexample": "旧新同时prepare/run；2槽满、新tags1槽满；取消/异常/TTL释放",
+      "referenceScope": "无native峰值模拟；额度参数仍需03冻结",
+      "productionAcceptance": "同一Main准入实例；bounded reader分配前拦截、冻结字节上限、无部分reservation泄漏；UI waiting/cancel",
+      "owner": "03（05批次扩展）",
+      "existingCommandIds": [
+        "test-visual-ai-download-integration",
+        "visual-ai-transport.test"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G03-session-fence",
+      "rule": "AC-01 / C",
+      "minimalCounterexample": "同libraryGeneration G1：S1关、S2开，S1 claim迟到",
+      "referenceScope": "MC06：常量G1、仅session变化；非实际lease测试",
+      "productionAcceptance": "真实临时Host reopen不改控制generation，S1提交拒绝，S2可读旧成功；正式重开不外发",
+      "owner": "02/03/06",
+      "existingCommandIds": [
+        "test-active-library-host",
+        "test-exclusive-library-lock",
+        "test-active-library-electron-e2e"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G04-schema-checkpoints",
+      "rule": "AC-04 / D",
+      "minimalCounterexample": "02A未定profile/备份便开始02B；迁移/首写中失败",
+      "referenceScope": "结构gate文档，不运行迁移",
+      "productionAcceptance": "先记录version/profile/DDL/备份；临时库故障回滚、空间/备份校验失败零新schema；未知新profile旧程序拒写",
+      "owner": "02A→02B",
+      "existingCommandIds": [
+        "test-active-library-host",
+        "test-visual-ai-download-integration"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G05-new-app-compat",
+      "rule": "AC-04 / D",
+      "minimalCounterexample": "新版把自己升级库的OCR/笔记/工作集/下载拒绝",
+      "referenceScope": "无模型；明确定义FAIL",
+      "productionAcceptance": "每现有功能读/写/关开保留用户内容；不以old-binary拒写断言替代；正式UI保存重读",
+      "owner": "02B（07集合）",
+      "existingCommandIds": [
+        "asset-ocr-storage.test",
+        "test-asset-notebook",
+        "test-work-sets",
+        "test-library-organization",
+        "test-persistent-download",
+        "test-library-canvas-electron"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G06-rollback",
+      "rule": "AC-04 / D",
+      "minimalCounterexample": "升级后新增用户内容，再恢复旧备份宣称无损",
+      "referenceScope": "无DB模型",
+      "productionAcceptance": "兼容代码回退保留目标schema；恢复前计算差异/用户影响，不降版本；实际恢复另按批准范围",
+      "owner": "02A/02B",
+      "existingCommandIds": [
+        "test-active-library-host"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G07-close-write-kinds",
+      "rule": "AC-05 / E1",
+      "minimalCounterexample": "closing→closed→commit(new)；关闭前pause；closed读回执；新会话重读",
+      "referenceScope": "原CE-P26复现；MC01–MC06限纯状态",
+      "productionAcceptance": "生产Host关闭屏障前后普通业务/协调记录/回执权限分开；SQLite已提交成功保留；异步旧claim拒绝；正式关库UI",
+      "owner": "03基础/06恢复",
+      "existingCommandIds": [
+        "test-active-library-host",
+        "test-visual-ai-download-integration",
+        "test-active-library-electron-e2e"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G08-conditional-fairness",
+      "rule": "AC-06 / E2",
+      "minimalCounterexample": "priority10/0 ageCap5，持续前台100轮后台0；资源不满足对照",
+      "referenceScope": "原CE-P13；MF01/MF02展示1/4配额条件，不是生产默认",
+      "productionAcceptance": "未来实际scheduler假时钟/受控任务测quota/轮转与取消重入；压力不满足不声称必须完成",
+      "owner": "后续P13（不阻塞01）",
+      "existingCommandIds": [],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G09-pagination-liveness",
+      "rule": "DEFER-16 / F",
+      "minimalCounterexample": "无关AI展示更新持续触发全局cursor过期",
+      "referenceScope": "风险登记，未运行参考或生产查询",
+      "productionAcceptance": "未来QueryPort临时库持续写+翻页保持进展，命中集合变化按声明策略处理，权限/Trash即时过滤",
+      "owner": "后续P16（不阻塞01）",
+      "existingCommandIds": [
+        "test-asset-discovery-workflow"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G10-variant-v8",
+      "rule": "DEFER-V8 / F",
+      "minimalCounterexample": "合成v8 pending副本intent由reader读取/重复恢复",
+      "referenceScope": "源码白名单事实，未执行",
+      "productionAcceptance": "最小临时v8及新profile复现并单独记录；若升级兼容涉及时关联02，不扩大01",
+      "owner": "独立复现/02兼容涉及时",
+      "existingCommandIds": [
+        "test-owned-download-recovery",
+        "test-active-library-host"
+      ],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G11-eagle-guard-order",
+      "rule": "DEFER-EAGLE / F",
+      "minimalCounterexample": "合成未知高version且部分表缺失，再调用initializer",
+      "referenceScope": "源码顺序事实，未执行",
+      "productionAcceptance": "未来临时Eagle索引断言版本拒绝前零DDL；生产Eagle/真实库不访问",
+      "owner": "独立Eagle复现（不阻塞01）",
+      "existingCommandIds": [],
+      "newProductionCases": "proposed-not-implemented"
+    },
+    {
+      "id": "G12-three-defaults",
+      "rule": "AC-07 / F",
+      "minimalCounterexample": "默认基础plan误带Embedding或因替代删除旧向量",
+      "referenceScope": "只记录产品目标，不执行策略",
+      "productionAcceptance": "未来Planner默认精确tags/caption/OCR；Embedding在语义检索显式启用后合法准入，历史数据保留",
+      "owner": "后续P11/P17（不阻塞01）",
+      "existingCommandIds": [],
+      "newProductionCases": "proposed-not-implemented"
+    }
+  ]
+}

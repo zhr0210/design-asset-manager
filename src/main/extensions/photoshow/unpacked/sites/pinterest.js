@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={pinterest:{srcMatching:[{srcRegExp:"(//i\\.pinimg\\.com/)(?:originals|\\d+x(?:\\d+(?:_\\w+)?)?)(/.+@IMG@)",processor:["$1originals$2","$1736x$2"]}]}};

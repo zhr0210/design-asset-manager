@@ -1,0 +1,11 @@
+{
+  "candidateBuild": "dam-fcc776741fe403b2",
+  "client": "Chrome 3",
+  "normalEntry": "http://127.0.0.1:51244/",
+  "result": "BLOCKED_UX_ACCEPTANCE",
+  "observed": "Chrome 已封鎖這個網頁 / ERR_BLOCKED_BY_CLIENT",
+  "snapshot": "browser-blocked.png",
+  "appEntered": false,
+  "bypassed": false,
+  "current8ddcUi": "NOT_RUN; no transfer of old UI evidence"
+}

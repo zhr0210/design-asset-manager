@@ -1,0 +1,10 @@
+{
+  "stage": "P12",
+  "status": "proposed",
+  "recipeId": "advanced-reverse-v1",
+  "enabled": false,
+  "candidateOutputLimit": null,
+  "capability": "prompt",
+  "attribution": "creative",
+  "trigger": "manual-only"
+}

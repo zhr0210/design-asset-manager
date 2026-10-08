@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"mbok.jp":{srcMatching:[{srcRegExp:"(//.+?\\.mbokimg\\.mbok\\.jp/\\d+/)\\d+(/.+@IMG@)",processor:"$17$2"}]}};

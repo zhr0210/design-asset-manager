@@ -1,0 +1,48 @@
+diff --git a/scripts/china-model-mirror.test.ts b/scripts/china-model-mirror.test.ts
+new file mode 100644
+index e69de29..a0bd0ac 100644
+--- /dev/null
++++ b/scripts/china-model-mirror.test.ts
+@@ -0,0 +1,42 @@
++import assert from 'node:assert/strict'
++import { test } from 'node:test'
++import { assertPublicModelUrl,openUpstreamFile,sourceRelease } from '../src/main/model-library-workspace/huggingface-model-source'
++
++await test('model acquisition refuses direct Hugging Face and its international storage redirects',()=>{
++  for(const url of ['https://huggingface.co/Qwen/model','https://cas-bridge.xethub.hf.co/object',
++    'https://cdn-lfs.huggingface.co/object','https://hf-mirror.com.evil.example/model','https://hf-mirror.com/api/models/Qwen/model'])
++    assert.throws(()=>assertPublicModelUrl(url),/MODEL_SOURCE_REDIRECT_REJECTED/)
++  for(const url of ['https://modelscope.cn/api/v1/models/Qwen/model',
++    'https://cdn-lfs-cn-1.modelscope.cn/object']) assert.doesNotThrow(()=>assertPublicModelUrl(url))
++})
++
++await test('a mirror hash mismatch or redirect back to Hugging Face cannot issue a model byte request there',async()=>{
++  const release=sourceRelease('qwen3-vl-2b-instruct'),file=release.files[0]
++  let byteRequests=0
++  const metadata=(hash:string)=>new Response(JSON.stringify({Code:200,Data:{Files:[{Path:file.name,Size:file.bytes,Sha256:hash,Revision:'d'.repeat(40),Type:'blob'}]}}))
++  await assert.rejects(openUpstreamFile(release,file,0,async()=>metadata('0'.repeat(64)),new AbortController().signal),/MODEL_MIRROR_FILE_UNAVAILABLE/)
++  await assert.rejects(openUpstreamFile(release,file,0,async(url)=>{
++    if(url.includes('/repo/files?'))return metadata(file.sha256)
++    byteRequests++;assert.equal(new URL(url).hostname,'modelscope.cn')
++    return new Response('',{status:302,headers:{Location:'https://huggingface.co/not-approved/model'}})
++  },new AbortController().signal),/MODEL_SOURCE_REDIRECT_REJECTED/)
++  assert.equal(byteRequests,1)
++})
++
++await test('an exact Chinese mirror maps full hashes to its own pinned file revisions and never falls back to direct HF',async()=>{
++  const release=sourceRelease('qwen3-vl-2b-instruct'), file=release.files[0], calls:string[]=[]
++  const mirrorRevision='d'.repeat(40)
++  const response=await openUpstreamFile(release,file,7,async(url,options)=>{
++    calls.push(url);assert.equal(options.credentials,'omit')
++    if(url.includes('/repo/files?'))return new Response(JSON.stringify({Code:200,Data:{Files:release.files.map(f=>({
++      Path:f.name,Size:f.bytes,Sha256:f.sha256,Revision:mirrorRevision,Type:'blob',Mode:'33188'
++    }))}}))
++    assert.equal(new URL(url).hostname,'modelscope.cn')
++    assert.equal(new URL(url).searchParams.get('Revision'),mirrorRevision)
++    assert.equal(new URL(url).searchParams.get('FilePath'),file.name)
++    assert.equal(new Headers(options.headers).get('Range'),'bytes=7-')
++    return new Response(new Uint8Array([1]),{status:206,headers:{'Content-Range':`bytes 7-7/${file.bytes}`}})
++  },new AbortController().signal)
++  assert.equal(response.status,206);await response.body?.cancel()
++  assert.ok(calls.length>=2);assert.ok(calls.every(url=>!new URL(url).hostname.endsWith('hf.co')&&new URL(url).hostname!=='huggingface.co'))
++})

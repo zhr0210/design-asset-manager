@@ -1,3 +1,5 @@
+import type {PiProviderKind,PiAuthMode} from '../contracts/ai-connection.contract'
+import type {AiReasoningLevel} from '../workflows/ai-reasoning.workflow'
 export type AiBackendType =
   | 'native-python'
   | 'openai-compatible'
@@ -21,11 +23,23 @@ export type AiBackendConfig = {
   type: AiBackendType;
   enabled: boolean;
   baseUrl: string;
+  /** Legacy Main-only value. Never returned in Renderer settings. */
   apiKey?: string;
+  modelValidation?:{model:string;reasoning?:AiReasoningLevel;bindingSha256:string;vision:boolean;jsonOutput:boolean;testedAt:string;generatedInput:true}
+  processingLocation?:'local-service'|'external-service';
+  transport?: 'pi' | 'legacy';
+  providerKind?:PiProviderKind;
+  authMode?:PiAuthMode;
+  credentialRef?:string;
+  credentialRevision?:number;
   defaultModel?: string;
+  /** Omitted preserves the SDK/model default; explicit levels are qualified per requested model. */
+  reasoning?: AiReasoningLevel;
   timeoutMs: number;
   capabilities: AiBackendCapability;
   priority: number;
+  /** Main-owned artifact/runtime binding for an imported managed model. */
+  runtimeFingerprint?: string;
   notes?: string;
 };
 
@@ -49,7 +63,7 @@ export type AiBackendHealthResult = {
 export type AiModelListResult = {
   success: boolean;
   backendId: string;
-  models: Array<{ id: string; name?: string }>;
+  models: Array<{ id: string; name?: string; reasoningLevels?: AiReasoningLevel[] }>;
   rawResponse?: unknown;
   error?: AiBackendError;
 };

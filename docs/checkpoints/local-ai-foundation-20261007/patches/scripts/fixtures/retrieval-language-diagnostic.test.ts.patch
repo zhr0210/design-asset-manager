@@ -1,0 +1,44 @@
+diff --git a/scripts/fixtures/retrieval-language-diagnostic.test.ts b/scripts/fixtures/retrieval-language-diagnostic.test.ts
+new file mode 100644
+index e69de29..06c8f45 100644
+--- /dev/null
++++ b/scripts/fixtures/retrieval-language-diagnostic.test.ts
+@@ -0,0 +1,38 @@
++import {spawn} from 'node:child_process'
++import path from 'node:path'
++import sharp from 'sharp'
++import {createVisualAdmission} from '../../src/main/visual-ai/visual-admission'
++import {validateRetrievalVectors} from '../../src/main/retrieval-workspace/retrieval-runtime'
++// Read-only diagnosis of the public downloaded model; never writes product
++// configuration/qualification. UI validation is still independently required.
++const root=path.resolve('.scratch/wc01-real-model-library-20261005/run-U4eFuo/profile-04/retrieval-models/model-f544a28a-fe0d-41da-ad06-7a6c21fbb85b')
++const admission=createVisualAdmission(),signal=AbortSignal.timeout(120000)
++const resident=admission.reserveResident('isolated-public-language-probe',4*1024**3,signal)
++const child=spawn('C:/Users/kilian/AppData/Local/Programs/Python/Python311/python.exe',['-I','-B',path.resolve('ai-service/tools/retrieval_worker.py'),root],{windowsHide:true,shell:false,stdio:['pipe','pipe','pipe']})
++let buffer='',resolveLoaded!:()=>void,rejectLoaded!:(e:Error)=>void,requestId=0
++const loaded=new Promise<void>((resolve,reject)=>{resolveLoaded=resolve;rejectLoaded=reject})
++const pending=new Map<number,{resolve(v:number[][]):void;reject(e:Error):void}>()
++const closed=new Promise<void>(resolve=>child.on('close',()=>{resident.release();resolve()}))
++child.stdout.on('data',(chunk:Buffer)=>{buffer+=chunk.toString('utf8');for(;;){const end=buffer.indexOf('\n');if(end<0)break;const line=buffer.slice(0,end);buffer=buffer.slice(end+1);const m=JSON.parse(line)
++  if(m.metrics)resident.observe(m.metrics.rssBytes,m.metrics.peakRamBytes)
++  if(m.kind==='loaded')resolveLoaded()
++  if(m.kind==='result'){const p=pending.get(Number(m.id));p?.resolve(validateRetrievalVectors(m.vectors,m.vectors.length));pending.delete(Number(m.id))}
++  if(m.kind==='error')pending.get(Number(m.id))?.reject(Error(m.code))
++  if(m.kind==='failed')rejectLoaded(Error(m.code))
++}})
++child.stderr.resume();child.on('error',()=>rejectLoaded(Error('DIAGNOSTIC_WORKER_FAILED')))
++const abort=()=>{child.kill();rejectLoaded(Error('DIAGNOSTIC_TIMEOUT'));for(const p of pending.values())p.reject(Error('DIAGNOSTIC_TIMEOUT'))}
++signal.addEventListener('abort',abort,{once:true})
++const request=(kind:string,values:string[])=>new Promise<number[][]>((resolve,reject)=>{const id=++requestId;pending.set(id,{resolve,reject});child.stdin.write(JSON.stringify({id:String(id),kind,[kind]:values})+'\n')})
++const dot=(a:number[],b:number[])=>a.reduce((sum,v,i)=>sum+v*b[i],0)
++try{
++  await loaded
++  const pairs=[{name:'abstract-colours',images:await Promise.all(['#ed1010','#1010ed'].map(color=>sharp({create:{width:224,height:224,channels:3,background:color}}).jpeg().toBuffer())),
++    texts:[['zh',['一张纯红色的图片','一张纯蓝色的图片']],['en',['a solid red image','a solid blue image']],['mixed',['红色 red image','蓝色 blue image']]]},
++    {name:'public-subjects',images:await Promise.all(['public-01-astronaut-ccxtfpota5r2.png','public-19-Flag_of_the_Netherlands-16bit-55qgpb3fnfpu.png'].map(name=>sharp(path.resolve('.scratch/b-model-management-20261006/real-library-01/Originals/bucket-0001',name)).resize({width:224,height:224,fit:'inside'}).jpeg().toBuffer())),
++    texts:[['zh',['一名身穿橙色太空服的宇航员','红白蓝三色的荷兰国旗']],['en',['an astronaut wearing an orange space suit','the red white blue flag of the Netherlands']],['mixed',['宇航员 astronaut portrait','荷兰 red white blue flag']]]}]
++  for(const pair of pairs){const images=await request('images',pair.images.map(v=>v.toString('base64')))
++    for(const [language,texts] of pair.texts){const values=await request('texts',texts as string[]);const scores=values.map(v=>images.map(image=>Number(dot(v,image).toFixed(5))))
++      console.log(JSON.stringify({sample:pair.name,language,scores,correct:scores.filter((row,i)=>row[i]>row[1-i]).length,total:2}))}
++  }
++}finally{signal.removeEventListener('abort',abort);child.stdin.end();await closed;admission.invalidate()}

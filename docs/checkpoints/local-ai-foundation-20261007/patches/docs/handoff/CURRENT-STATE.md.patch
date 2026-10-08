@@ -1,0 +1,37 @@
+diff --git a/docs/handoff/CURRENT-STATE.md b/docs/handoff/CURRENT-STATE.md
+index 81a680c..b462c0c 100644
+--- a/docs/handoff/CURRENT-STATE.md
++++ b/docs/handoff/CURRENT-STATE.md
+@@ -1,4 +1,20 @@
+-# 当前状态：to-tickets拆分草案待确认，未发布子issue或实施产品（2026-10-06）
++# 当前状态：implement 已授权，连续实施中（2026-10-07）
++
++最新为用户指定的五项无界面收尾：当前源码a97d/757输入，typecheck/build/context与70个相关TS/TSX文件最终回归、160项Python单测通过；真实2B离线取消重核验、一次注入OOM实际低方案/1效果/退出归零、两公开库原88文件及人工/关系保护通过。两轴审查原问题已整改并只读复核，质量/性能按输入/能力/构建保存，不转记旧UI证据。交付采用精确任务补丁检查点，50个旧WIP重叠文件及原暂存保持，源码仍在工作区。没有本轮界面操作或GUI E2E，父级/T23未完成，详见[无界面交付](LOCAL-AI-NON-UI-CLOSURE-20261007.md)和[检查点](../checkpoints/local-ai-foundation-20261007/README.md)。下面保留原时点历史。
++
++15:23 最新检查点：当前候选565d已构建，普通Browser CLI93119、Chrome1000400733、http://127.0.0.1:58187/#/library，同profile-04/T14公开副本。22bc已完成8B CPU/混合/GPU实际素材、一键3/3和正常重开、4B混合实际描述；生产8B后台新wood/coffee/page逐项保存，真实sent未提交中断重开保持unknown，核对/保留不重发，明确新执行后描述第2次保存，旧未知可放弃等待、tags/OCR各1次。冷加载取消相邻问题已先红后绿修复，实际2B离线重新核验/退出及负向检查通过；565d快速开库后状态仍待读回。普通Desktop入口已调用，但Windows CU被用户实体Escape停止，未观察窗口，按工具要求结束本轮界面操作。派生索引损坏/120分页、当前双语以图联合、Chrome压力、新候选受影响路径、原生专项、最终全套审查/安全提交仍待。完整恢复状态在PROGRESS最新段，父级未完成，不将22bc结果转记565d。
++
++07:40 较早检查点：候选 `dam-0f867c43bc6ceb98`，Windows x64，普通 Browser/profile-04。模型目录、下载和恢复限定 ModelScope 中国境内源，无 HF/hf-mirror/国际 CDN fallback。0996 实际完成新旧 SigLIP2 空间各44/44、暂停/明确恢复、中英文/混合查询和旧空间回退；0f86普通重开保留新空间。这些保留原时点，不替代当前候选联合验收。最新连续记录见 `.scratch/local-ai-implementation-20261006/PROGRESS.md`。
++
++当前授权：[本地 AI 底座规格](../product/LOCAL-AI-FOUNDATION-SPEC.md)与[23 切片](../implementation-plans/local-ai-foundation-20261006/TICKET-PLAN.md)，包含中英文/混合/跨语言语义检索与以图找。旧 Q18 不再阻止实施；子票尚未对外发布，父 #24 未修改。
++
++已完成内部验证：T01 唯一 Governor、T02 离线资格/来源新鲜度与已知来源阻止、T03 完整 57 仓库目录/GGUF 组合、T04 GGUF 复用库存/传输/哈希/结构核验、T05 单 GPU 新鲜余量/预算/推荐。类型检查、目录 5 项、库存 12 项、资源策略 7 项、原生包拒绝错误字节及既有运行器负面测试通过。
++
++真实 Browser 已获取目录、下载/暂停/恢复 2B Q4_K_M+Q8_0 并完整核验入库，正常退出后库存重开保留。首次 Native 端口日志级别问题保持资格失败；修订 `dam-93e769b0f2b81137` 实际 CPU 图像验证通过（约 1.3s 加载、2.62 GiB 工作集峰值），公开 44 资产库已从正式入口打开。coffee 独立描述因冷加载线程改变绑定而取消，旧描述保持；正在修复后重建复验。当前 Browser `http://127.0.0.1:56080/#/library` / Chrome Tab1000400580，CLI profile 沿用指定 profile-04。T06 分析与重开及 T07–T23 未完成，父级未完成。证据 `.scratch/local-ai-implementation-20261006/evidence/`。源码之后变化必须复验对应证据；原 index 保持，最终全套测试/审查/提交未进行。
++
++---
++
++# 此前：to-tickets拆分草案待确认，未发布子issue或实施产品（2026-10-06）
+ 
+ 用户更正语义检索范围为中英文。已修订本地规格/设计与T17/T18/T19/T21/T22/T23，涵盖中文、英文、混合与跨语言真实命中，按语言记录质量/延迟，新空间切换复验双语。票数/依赖/批准状态保持；无代码或资料变化。父#24依技能不改正文，原发布快照保留，相关子票发布时包含语言补充；本地规格已更新，与父issue原始发布版本分别记录。
+ 
+@@ -77,3 +93,10 @@
+ - 历史整体第三项排除、N01–N03启动偏差和首次rapid-cancel失败不回写；本轮仅补上述路径，不覆盖其他缺口。
+ 
+ 基础合并和当前Pi限定续接已完成；剩余愿景不是新队列，无commit/push/发布。
++# 2026-10-07：implement 已授权，连续实施中
++
++当前目标为 [本地 AI 底座规格](../product/LOCAL-AI-FOUNDATION-SPEC.md)及[23 切片](../implementation-plans/local-ai-foundation-20261006/TICKET-PLAN.md)，包含中英文/混合/跨语言语义检索与以图找。用户明确调用 implement，旧 Q18 待确认不再阻止实施；子票尚未对外发布，父 #24 未修改。
++
++T01 Resource Governor 与 T02 离线资格已完成代码和聚焦内部验证；当前候选的真实 UI/推理/保存重开仍未验收。T03 官方完整目录/量化组合测试已 red，下一动作补实现并继续 GGUF 获取、设备推荐与实际运行。未做本轮正式构建/全套测试/最终审查提交，父级未完成。原暂存 index 核对未变，起始备份 `.scratch/local-ai-implementation-20261006/before`。旧 A/B 证据只适用于各自原候选，不转记到本轮。
++
++---

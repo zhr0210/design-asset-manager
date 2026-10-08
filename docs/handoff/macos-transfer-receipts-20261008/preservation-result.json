@@ -1,0 +1,35 @@
+{
+  "build": {
+    "buildId": "dam-8ddc7686f890b3e3",
+    "sourceDigest": "8ddc7686f890b3e33030804d52703336735b84bd842d4e370386e1617d64e189",
+    "builtAt": "2026-10-08T07:37:13.123Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 786
+  },
+  "kind": "independent read-only source/copy oracle",
+  "inheritedRows": {
+    "assets": 166,
+    "asset_lifecycle": 166,
+    "tags": 4,
+    "asset_tags": 5,
+    "library_folders": 1,
+    "library_folder_assets": 2,
+    "visual_ai_evidence": 0,
+    "independent_tag_requests": 60,
+    "independent_tag_executions": 43,
+    "independent_tag_evidence": 41,
+    "asset_ocr_evidence": 42,
+    "asset_ocr_state": 25,
+    "basic_analysis_requests": 108,
+    "basic_analysis_attempts": 105,
+    "basic_analysis_evidence": 99,
+    "work_sets": 2,
+    "background_analysis_executions": 60,
+    "background_analysis_execution_history": 78
+  },
+  "inheritedFileHashesMatched": 335,
+  "canonicalVectorsMatched": 211,
+  "unknownExecutions": "original persisted rows retained verbatim",
+  "copyIntegrity": "ok",
+  "foreignKeys": 0
+}

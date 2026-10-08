@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://design-asset-manager.local/schemas/agent-context-module-map-v2.json",
+  "title": "Design Asset Manager Agent Context Router Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "current_context",
+    "defaults",
+    "coverage",
+    "modules",
+    "routes"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "schema_version": { "const": 2 },
+    "current_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["files_read"],
+      "properties": {
+        "files_read": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": [
+            { "const": "AGENTS.md" },
+            { "const": "TASK.md" }
+          ],
+          "additionalItems": false
+        }
+      }
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_files", "max_estimated_tokens", "max_routes", "max_adrs", "max_tests"],
+      "properties": {
+        "max_files": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "max_estimated_tokens": { "type": "integer", "minimum": 1000, "maximum": 48000 },
+        "max_routes": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "max_adrs": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "max_tests": { "type": "integer", "minimum": 1, "maximum": 6 }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roots", "extensions", "exclude"],
+      "properties": {
+        "roots": { "$ref": "#/definitions/nonEmptyStringList" },
+        "extensions": { "$ref": "#/definitions/nonEmptyStringList" },
+        "exclude": { "$ref": "#/definitions/stringList" }
+      }
+    },
+    "modules": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 15,
+      "propertyNames": { "type": "string", "minLength": 1, "maxLength": 80 },
+      "additionalProperties": { "$ref": "#/definitions/module" }
+    },
+    "routes": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 19,
+      "propertyNames": { "type": "string", "minLength": 1, "maxLength": 80 },
+      "additionalProperties": { "$ref": "#/definitions/route" }
+    }
+  },
+  "definitions": {
+    "stringList": {
+      "type": "array",
+      "maxItems": 15,
+      "items": { "type": "string", "minLength": 1, "maxLength": 240 },
+      "uniqueItems": true
+    },
+    "nonEmptyStringList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 15,
+      "items": { "type": "string", "minLength": 1, "maxLength": 240 },
+      "uniqueItems": true
+    },
+    "routingTerms": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 19,
+      "items": { "type": "string", "minLength": 1, "maxLength": 240 },
+      "uniqueItems": true
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "owns"],
+      "properties": {
+        "purpose": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "owns": { "$ref": "#/definitions/nonEmptyStringList" },
+        "exclude": { "$ref": "#/definitions/stringList" },
+        "readme": { "type": "string", "minLength": 1, "maxLength": 240 }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reality", "summary", "evidence"],
+      "properties": {
+        "reality": {
+          "enum": ["Current Implementation", "Validated Tracer", "Target Architecture"]
+        },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 260 },
+        "evidence": { "$ref": "#/definitions/nonEmptyStringList" }
+      }
+    },
+    "contextItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "role", "reality", "reason", "read_mode", "priority"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "anchor": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "triggers": { "$ref": "#/definitions/nonEmptyStringList" },
+        "role": {
+          "enum": ["composition", "interface", "contract", "caller", "implementation", "adapter", "test", "readme"]
+        },
+        "reality": {
+          "enum": ["Current Implementation", "Validated Tracer", "Target Architecture"]
+        },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "read_mode": { "enum": ["full", "symbol"] },
+        "priority": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "required": { "type": "boolean" }
+      }
+    },
+    "adr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "triggers", "reason"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 240, "pattern": "^docs/adr/" },
+        "triggers": { "$ref": "#/definitions/nonEmptyStringList" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "required_on_match": { "type": "boolean" }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "aliases",
+        "keywords",
+        "modules",
+        "states",
+        "read_first",
+        "test_profiles",
+        "adrs",
+        "avoid",
+        "warnings"
+      ],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "aliases": { "$ref": "#/definitions/routingTerms" },
+        "keywords": { "$ref": "#/definitions/routingTerms" },
+        "modules": { "$ref": "#/definitions/nonEmptyStringList" },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "$ref": "#/definitions/state" }
+        },
+        "read_first": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 13,
+          "items": { "$ref": "#/definitions/contextItem" }
+        },
+        "test_profiles": { "$ref": "#/definitions/nonEmptyStringList" },
+        "adrs": {
+          "type": "array",
+          "maxItems": 6,
+          "items": { "$ref": "#/definitions/adr" }
+        },
+        "avoid": { "$ref": "#/definitions/stringList" },
+        "warnings": { "$ref": "#/definitions/stringList" }
+      }
+    }
+  }
+}

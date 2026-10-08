@@ -1,0 +1,7 @@
+{
+  "from": "dam-fcc776741fe403b2",
+  "to": "dam-8ddc7686f890b3e3",
+  "unchangedExecutableResources": 21,
+  "mainDifference": "only buildId/sourceDigest/builtAt metadata",
+  "scope": "Exact executable equivalence supports applicability of fcc internal domain/runtime evidence; UI, installer and release governance require their own new-candidate checks."
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"akiba-web.com":{srcMatching:[{srcRegExp:"(//www\\.giga-web\\.jp/.+/(?:sample/\\d+|pac))(?:_\\w+)?(@IMG@)",processor:"$1_l$2"}]}};

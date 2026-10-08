@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"nytimes.com":{srcMatching:[{srcRegExp:"(//.+?\\.nyt\\.com/.+?-)\\w+(?:-v\\d+)?(@IMG@).*",processor:["$1superJumbo$2"]}]}};

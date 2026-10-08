@@ -29,6 +29,7 @@ const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8')) as {
 const electronViteConfig = await fs.readFile('electron.vite.config.ts', 'utf8')
 const pathResolver = await fs.readFile('src/main/platform/path-resolver.ts', 'utf8')
 const dbIndex = await fs.readFile('src/main/db/index.ts', 'utf8')
+const main = await fs.readFile('src/main/index.ts', 'utf8')
 const doc = await fs.readFile('docs/platform/NATIVE_DEPENDENCY_PACKAGING.md', 'utf8')
 
 assert.equal(manifest.runsPackaging, false)
@@ -45,9 +46,13 @@ for (const dependency of manifest.nativeDependencies ?? []) {
   assert.match(doc, new RegExp(dependency.name))
 }
 
-for (const preloadEntry of manifest.pathChecks?.preloadEntryPoints ?? []) {
+// Phase 9C manifest is a historical preflight snapshot, not today's entries.
+for (const preloadEntry of ['src/preload/index.ts', 'src/preload/asset-card.ts', 'src/preload/work-window.ts']) {
   assert.match(electronViteConfig, new RegExp(preloadEntry.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
 }
+assert.doesNotMatch(electronViteConfig, /src\/preload\/browser\.ts/)
+assert.match(main, /createAppStorage\(join\(app\.getPath\('userData'\), 'app-state'\)\)/)
+assert.match(main, /createLocalDamServer/)
 
 assert.match(pathResolver, /userData/)
 assert.match(pathResolver, /databaseDir:\s*path\.join\(userDataDir,\s*'database'\)/)
@@ -61,9 +66,12 @@ assert.match(doc, /Phase 13/)
 const aiServiceResource = packageJson.build?.extraResources?.find((resource) => resource.from === 'ai-service')
 assert.ok(aiServiceResource)
 assert.equal(aiServiceResource?.to, 'ai-service')
-assert.ok(aiServiceResource?.filter?.includes('!**/models/**'))
+assert.ok(aiServiceResource?.filter?.some((f) => f.includes('!**/models/**/*.onnx') || f.includes('!**/models/**/*.safetensors')))
 assert.ok(aiServiceResource?.filter?.includes('!**/.venv/**'))
 assert.ok(aiServiceResource?.filter?.includes('!**/__pycache__/**'))
+for (const exclusion of ['!**/.env*', '!**/*.db', '!**/*.sqlite*', '!**/*.log', '!**/.cache/**', '!**/.git/**', '!**/models/**']) {
+  assert.ok(aiServiceResource?.filter?.includes(exclusion), 'Resource exclusion required: ' + exclusion)
+}
 
 const combined = [JSON.stringify(packageJson.build), JSON.stringify(manifest), doc].join('\n')
 assert.doesNotMatch(combined, /C:\\Users\\[A-Za-z0-9_.-]+/i)
