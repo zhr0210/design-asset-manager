@@ -1,12 +1,30 @@
 import { execFile } from 'node:child_process'
 import path from 'node:path'
+import os from 'node:os'
 import type { AiDeviceResourceSample } from '../../shared/contracts/local-ai-resources.contract'
 
 /** Fixed bounded device query only: no process, account, environment or file inventory. */
 export function createLocalAiDeviceSampler() {
+  let memory = { free: os.freemem(), total: os.totalmem() }, memoryAt = 0
+  let metalName: string | undefined
   let devices: AiDeviceResourceSample[] = [], inFlight: Promise<void> | undefined, stopped = false
   const query = () => {
     if (inFlight || stopped) return inFlight ?? Promise.resolve()
+    if (process.platform === 'darwin') {
+      inFlight = new Promise<void>(resolve => {
+        execFile('/usr/bin/memory_pressure', ['-Q'], { timeout: 2000, maxBuffer: 8192, shell: false }, (error, stdout) => {
+          const percent = /System-wide memory free percentage:\s*(\d+)%/.exec(stdout)?.[1]
+          if (!error && percent !== undefined && Number(percent) <= 100) {
+            memory = { total: os.totalmem(), free: Math.floor(os.totalmem() * Number(percent) / 100) }; memoryAt = Date.now()
+          }
+          if (metalName) devices = [{ id: '0:METAL', name: metalName, topology: 'shared', source: 'macos-system',
+            sampledAt: memoryAt || null, state: memoryAt && Date.now() - memoryAt < 5000 ? 'known' : 'unknown',
+            totalBytes: memory.total, freeBytes: memoryAt ? memory.free : null, driver: os.release() }]
+          resolve()
+        })
+      }).finally(() => { inFlight = undefined })
+      return inFlight
+    }
     if (process.platform !== 'win32') { devices = []; return Promise.resolve() }
     const executable = path.join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'nvidia-smi.exe')
     inFlight = new Promise<void>(resolve => {
@@ -29,8 +47,17 @@ export function createLocalAiDeviceSampler() {
     }).finally(() => { inFlight = undefined })
     return inFlight
   }
+  if (process.platform === 'darwin' && process.arch === 'arm64') {
+    // Displays only: never request serial numbers, process inventory or accounts.
+    execFile('/usr/sbin/system_profiler', ['SPDisplaysDataType', '-json'], { timeout: 5000, maxBuffer: 65536, shell: false }, (error, stdout) => {
+      if (error || stopped) return
+      try { const display = JSON.parse(stdout).SPDisplaysDataType?.find((value: any) => value.sppci_model && (value.spdisplays_metal || value.spdisplays_mtlgpufamilysupport))
+        if (display && /^Apple /.test(display.sppci_model)) { metalName = String(display.sppci_model).slice(0, 120); void query() }
+      } catch { /* Unknown stays unknown; CPU remains available. */ }
+    })
+  }
   void query()
   const timer = setInterval(() => { void query() }, 2000); timer.unref?.()
-  return { read: () => devices.map(device => ({ ...device })), refresh: query,
+  return { memory: () => process.platform === 'darwin' && memoryAt && Date.now() - memoryAt < 5000 ? { ...memory } : { free: os.freemem(), total: os.totalmem() }, read: () => devices.map(device => ({ ...device })), refresh: query,
     async stop() { stopped = true; clearInterval(timer); await inFlight } }
 }

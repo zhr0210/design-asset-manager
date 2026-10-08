@@ -56,7 +56,10 @@ assert.match(clientSource, /CHANNEL_RUNTIME_PACKAGE_GET_EXECUTION_STATUS/)
 
 assert.match(rendererSurface, /damClient\?\.runtimePackage/)
 assert.match(rendererSurface, /RuntimePackagePanel/)
-assert.doesNotMatch(rendererSurface, /\.manifestPath|\.archivePath|\.installPath|\.stagingPath|\.sha256/)
+// Other model UIs legitimately show public artifact hashes. Keep the retained
+// runtime installer surface itself path/hash free.
+const runtimePanelSource=await fs.readFile('src/renderer/components/settings/RuntimePackagePanel.tsx','utf8')
+assert.doesNotMatch(runtimePanelSource, /\.manifestPath|\.archivePath|\.installPath|\.stagingPath|\.sha256/)
 assert.doesNotMatch(rendererSurface, /RuntimePackageSessionService|rawExecutorResult|rollbackPlan/)
 
 assert.match(runtimePackageDoc, /polling/i)

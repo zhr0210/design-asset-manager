@@ -97,6 +97,10 @@ def main():
         import psutil
         memory = psutil.Process().memory_info()
         peak = getattr(memory, "peak_wset", memory.rss)
+        if sys.platform != "win32":
+            import resource
+            os_peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            peak = max(peak, int(os_peak * (1 if sys.platform == "darwin" else 1024)))
         sys.stdout.buffer.write(json.dumps({"ok": True, "value": value, "peakRamBytes": peak}, ensure_ascii=False, allow_nan=False).encode("utf-8"))
         return 0
     except Exception as error:

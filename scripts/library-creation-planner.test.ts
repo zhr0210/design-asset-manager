@@ -111,7 +111,10 @@ async function aMissingTargetProducesOnlyAReviewedPlan(): Promise<void> {
     assert.equal(Object.isFrozen(result.review.receipt), true)
     assert.deepEqual(Object.keys(planner).sort(), ['inspect', 'prepare'])
     assert.equal(JSON.stringify(result).includes(root), false)
-    assert.equal(JSON.stringify(qualificationInputs).includes(root), false)
+    // Qualification is Main-only and needs the selected target for real volume checks.
+    assert.equal((qualificationInputs[0] as LibraryCreationQualificationInput).targetDirectory, target)
+    const publicQualification = qualificationInputs.map(({ targetDirectory, ...evidence }: any) => evidence)
+    assert.equal(JSON.stringify(publicQualification).includes(root), false)
 
     const repeated = await planner.inspect({ receipt: result.review.receipt })
     assert.equal(repeated.state, 'ready')

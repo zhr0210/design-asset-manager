@@ -6,10 +6,11 @@ const panelSource = await fs.readFile(
   'utf8'
 )
 const consoleSource = await fs.readFile('src/renderer/routes/AiConsolePage.tsx', 'utf8')
-const preloadSource = await fs.readFile('src/preload/index.ts', 'utf8')
+const preloadSource = await fs.readFile('src/shared/client/workspace-client.ts', 'utf8')
 
-assert.match(consoleSource, /import RuntimePackagePanel from/)
-assert.match(consoleSource, /activeTab === 'runtime'[\s\S]*<AiRuntimePanel[\s\S]*<RuntimePackagePanel \/>/)
+assert.match(consoleSource, /export \{default\} from '.\/AiWorkspace'/)
+const formalWorkspace=await fs.readFile('src/renderer/routes/AiWorkspace.tsx','utf8')
+assert.doesNotMatch(formalWorkspace,/RuntimePackagePanel/)
 assert.match(panelSource, /data-testid="runtime-package-panel"/)
 assert.match(panelSource, /max-w-\[calc\(100vw-32px\)\]/)
 assert.match(panelSource, /data-testid="runtime-package-select"/)
@@ -26,7 +27,7 @@ assert.match(panelSource, /确认安装/)
 assert.doesNotMatch(panelSource, /\.manifestPath|\.archivePath|\.installPath|\.stagingPath|\.sha256/)
 
 assert.match(preloadSource, /runtimePackage:\s*\{/)
-assert.match(preloadSource, /selectLocalManifest: \(\) => ipcRenderer\.invoke\(CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST\)/)
+assert.match(preloadSource, /selectLocalManifest: \(\) => transport\.invoke\(CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST\)/)
 assert.match(preloadSource, /executeSelection: \(request: RuntimePackageExecuteSelectionRequest\)/)
 assert.match(preloadSource, /getExecutionStatus: \(request: RuntimePackageGetExecutionStatusRequest\)/)
 

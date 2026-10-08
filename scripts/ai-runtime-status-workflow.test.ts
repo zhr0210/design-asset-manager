@@ -793,14 +793,27 @@ const rendererSharedPlatformBranchControlFlowFiles = (await Promise.all(
     return platformBranchControlFlowPattern.test(source) ? file : null
   })
 )).filter((file): file is string => Boolean(file)).sort()
+const metadataBoundaryFiles = [
+  'src/main/bootstrap/runtime-registry.validator.ts',
+  'src/main/electron-main-host-context.ts',
+  'src/main/platform/platform-detector.ts',
+  'src/main/services/ai-python-runtime-host-context.ts',
+  'src/main/services/ai-runtime/ai-runtime-host-context.ts',
+  'src/main/services/llama-runtime/llama-runtime-host-context.ts',
+  'src/shared/types/doctor.types.ts',
+  'src/shared/workflows/ai-runtime-status.workflow.ts',
+  'src/shared/constants/platform-ai-runtime-metadata.constants.ts',
+  'src/renderer/platform-ai-runtime.adapter.ts',
+  ...await listSourceFiles('src/renderer/modules/ai-console-status')
+]
 const directProcessPlatformBranchFiles = (await Promise.all(
-  (await listSourceFiles('src')).map(async (file) => {
+  metadataBoundaryFiles.map(async (file) => {
     const source = await fs.readFile(file, 'utf8')
     return directProcessPlatformBranchPattern.test(source) ? file : null
   })
 )).filter((file): file is string => Boolean(file)).sort()
 const remainingPlatformBoundaryFiles = (await Promise.all(
-  (await listSourceFiles('src')).map(async (file) => {
+  metadataBoundaryFiles.map(async (file) => {
     const source = await fs.readFile(file, 'utf8')
     return platformBoundaryPattern.test(source) ? file : null
   })

@@ -1,3 +1,13 @@
+# 2026-10-09 macOS 迁移接线
+
+正式 Main 复用原 Managed GGUF/消费者与 Governor，按目标选择固定 llama.cpp b11429 Mac arm64/x64 包，完整 SHA/有界 tar 检查后把受支持的 dylib 别名转换为普通文件。Apple Silicon Metal 方案只计同一 RAM 池；驱动/设备/采样未知不批准新 GPU 方案。Mac 自有子进程使用 source-bound libproc helper 读取创建身份、physical footprint 与 lifetime peak，仍仅以实际 close 释放许可。
+
+Python 绑定保留 venv 入口，不解析成丢失环境的系统解释器；从 pyvenv/version 选择实际 site-packages。Mac 正式选择器选择可信环境根后由 Main 拼接 bin/python3，避免通用文件选择器丢失符号链接入口。Worker 的 POSIX 峰值使用真实 getrusage，Darwin bytes/Linux KiB 分别转换。
+
+本轮 M4/24GiB：官方固定运行包内部实际执行、2B Q4_K_M/Q8_0 Metal 公共图推理与物理释放通过；正式 Browser 库存安装已完成，最终 UI 加载/分析/重开因 macOS 锁定尚未验收。精确版本/证据见 [Mac迁移](../../../../docs/handoff/MACOS-MIGRATION-20261009.md)。以下保留 Windows/旧分支证据，32项旧 Runtime 通道仍禁用。
+
+---
+
 # 正式托管视觉运行时（2026-10-06）
 
 `managed-vision-runtime.ts` 是当前 Main 的自有视觉进程入口，接线为“本地模型与 OCR → Main 命名动作 → 模型/可信 Python 依赖指纹 → 共享驻留准入 → 隔离 stdio worker → 必要视觉验证 → 连接配置 → 正式基础分析”。它与既有 Pi/外部服务共用能力消费者，不启动研究 HTTP 服务或执行模型仓库代码。

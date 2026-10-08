@@ -99,7 +99,7 @@ export default function ManagedModelSettings() {
     <p>从 ModelScope 境内来源安装支持组合，或导入已有完整制品。DAM 通过共享预算加载、复用与卸载；素材在本机推理。</p>
     <p role="status">{states[status?.state] ?? '正在读取状态'}{status?.configured ? ` · ${status.model}` : ''} · {status?.device ?? 'cpu'} / {status?.dtype ?? '尚未选择'}</p>
     {status?.nativePackage?.state === 'preparing' && <p role="status">正在准备固定 llama.cpp {status.nativePackage.release} 运行包 · {gib(status.nativePackage.completedBytes)} / {gib(status.nativePackage.totalBytes)}。不执行安装脚本。</p>}
-    {status?.measurement && <p>进程测量：{status.measurementModel} · 工作集峰值 {gib(status.measurement.peakRamBytes)} · {status.measurement.threads} 个计算线程。{status.loadMs != null ? `加载 ${(status.loadMs / 1000).toFixed(1)} 秒。` : ''}{status.unloadMs != null ? `实际退出 ${(status.unloadMs / 1000).toFixed(1)} 秒。` : ''}</p>}
+    {status?.measurement && <p>进程测量：{status.measurementModel} · 内存峰值 {gib(status.measurement.peakRamBytes)} · {status.measurement.threads} 个计算线程。{status.loadMs != null ? `加载 ${(status.loadMs / 1000).toFixed(1)} 秒。` : ''}{status.unloadMs != null ? `实际退出 ${(status.unloadMs / 1000).toFixed(1)} 秒。` : ''}</p>}
     <div className="ui-button-row">
       <button className="ui-button ui-button-secondary" disabled={!status?.configured || ['inactive', 'unconfigured'].includes(status?.state)} onClick={() => void stop()}>停用并释放</button>
       <button className="ui-button ui-button-secondary" onClick={() => void read().catch(error => setError(errorMessage(error)))}>重新读取模型状态</button>

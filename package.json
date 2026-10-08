@@ -68,7 +68,8 @@
     "asarUnpack": [
       "node_modules/better-sqlite3/**/*",
       "node_modules/sharp/**/*",
-      "node_modules/@img/**/*"
+      "node_modules/@img/**/*",
+      "out/main/macos-runtime/**/*"
     ],
     "win": {
       "executableName": "Design Asset Manager",
@@ -139,7 +140,7 @@
     "context:check": "node scripts/agent-context-router.mjs check",
     "test-agent-context-router": "node scripts/agent-context-router.test.mjs",
     "dev": "electron-vite dev",
-    "build": "node scripts/build-eagle-companion.mjs && node scripts/build-identity.mjs && electron-vite build",
+    "build": "node scripts/build-macos-runtime.mjs && node scripts/build-eagle-companion.mjs && node scripts/build-identity.mjs && electron-vite build",
     "pack:win": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dir",
     "pack:mac": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dir",
     "dist:win": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dist",
@@ -386,7 +387,8 @@
     "test-windows-codec-faults": "node scripts/run-electron-node-test.mjs scripts/windows-codec-faults.test.ts",
     "test-windows-schema-backup-qualification": "node scripts/run-electron-node-test.mjs scripts/windows-schema-backup-qualification.test.ts",
     "test-visual-admission-isolation": "node scripts/run-ts-test.mjs scripts/visual-admission-isolation.test.ts",
-    "test-pi-prepare-offline": "node scripts/run-ts-test.mjs scripts/pi-prepare-offline.test.mjs"
+    "test-pi-prepare-offline": "node scripts/run-ts-test.mjs scripts/pi-prepare-offline.test.mjs",
+    "build:macos-runtime": "node scripts/build-macos-runtime.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^12.10.0",
@@ -400,6 +402,7 @@
     "react-router-dom": "^6.23.1",
     "sharp": "^0.34.5",
     "tailwind-merge": "^2.3.0",
+    "tar": "7.5.22",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

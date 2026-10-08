@@ -26,7 +26,10 @@
       ".tsx",
       ".js",
       ".mjs",
-      ".py"
+      ".py",
+      ".c",
+      ".cpp",
+      ".swift"
     ],
     "exclude": [
       "src/main/extensions/photoshow/**",

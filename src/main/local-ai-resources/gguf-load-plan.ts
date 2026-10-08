@@ -4,6 +4,8 @@ import type { AiDeviceResourceSample, GgufLoadPlan, GgufLoadMode, GgufModelRecom
   ModelRecommendationPreference } from '../../shared/contracts/local-ai-resources.contract'
 import type { VisualAdmission } from '../visual-ai/visual-admission'
 const MiB = 1024 ** 2
+export const isGgufDevice = (device: AiDeviceResourceSample) => device.topology === 'dedicated' && /^\d{1,2}:GPU-/.test(device.id) || device.topology === 'shared' && device.source === 'macos-system' && device.id === '0:METAL'
+export const ggufDeviceReady = (device?: AiDeviceResourceSample) => Boolean(device && isGgufDevice(device) && device.state === 'known' && (device.topology === 'shared' || device.driver && Number(device.driver.split('.')[0]) >= 615 && device.computeCapability))
 const LAYERS: Record<string, number> = { '2B': 28, '4B': 36, '8B': 32 }
 
 /** Conservative initial envelopes, separately labelled from runtime observations.
@@ -12,7 +14,7 @@ export function createGgufLoadPlan(bundle: HuggingFaceModelBundle, mode: GgufLoa
   device?: AiDeviceResourceSample): GgufLoadPlan {
   const layers = LAYERS[bundle.size]
   if (!layers || bundle.variant !== 'Instruct') throw Error('LOCAL_MODEL_UNSUPPORTED')
-  if (mode !== 'cpu' && (!device || device.topology !== 'dedicated' || !/^\d{1,2}:GPU-/.test(device.id))) throw Error('AI_DEVICE_UNKNOWN')
+  if (mode !== 'cpu' && (!device || !isGgufDevice(device))) throw Error('AI_DEVICE_UNKNOWN')
   const languageBytes = bundle.files.filter(file => !file.name.split('/').at(-1)!.startsWith('mmproj-')).reduce((sum, file) => sum + file.bytes, 0)
   const projectorBytes = bundle.bytes - languageBytes
   const gpuLayers = mode === 'cpu' ? 0 : mode === 'gpu' ? layers + 1 : Math.floor(layers / 2)
@@ -33,12 +35,14 @@ export function createGgufLoadPlan(bundle: HuggingFaceModelBundle, mode: GgufLoa
     loading: 512 * MiB + Math.ceil(languageBytes * fraction) + (projectorOnGpu ? projectorBytes : 0), cache: 0 }
   const ramBytes = components.cpuWeights + components.mapping + components.transfer + components.loading +
     (kvOnGpu ? 0 : kv) + (mode === 'cpu' ? components.workspace : 256 * MiB)
-  const gpuBytes = mode === 'cpu' ? {} : { [device!.id]: components.gpuWeights + (kvOnGpu ? kv : 0) + components.workspace + 256 * MiB }
-  const semantics = { bundleId: bundle.id, mode, deviceId: mode === 'cpu' ? null : device!.id,
+  const unified = mode !== 'cpu' && device!.topology === 'shared'
+  const unifiedRamBytes = languageBytes + projectorBytes + kv + workspace + components.mapping + components.transfer + 512 * MiB
+  const gpuBytes = unified ? {} : mode === 'cpu' ? {} : { [device!.id]: components.gpuWeights + (kvOnGpu ? kv : 0) + components.workspace + 256 * MiB }
+  const semantics = { ...(mode === 'cpu' ? {} : { deviceBackend: unified ? 'metal' as const : 'cuda' as const }), bundleId: bundle.id, mode, deviceId: mode === 'cpu' ? null : device!.id,
     driverVersion:mode==='cpu'?null:device!.driver??null,computeCapability:mode==='cpu'?null:device!.computeCapability??null,
     deviceIndex: mode === 'cpu' ? null : Number(device!.id.split(':')[0]), gpuLayers, projectorOnGpu, kvOnGpu,
     context: 4096, batch: 512, microBatch: 128, kvType: 'f16' as const }
-  return { ...semantics, cost: { ramBytes, gpuBytes }, components,
+  return { ...semantics, cost: { ramBytes: unified ? unifiedRamBytes : ramBytes, gpuBytes }, components,
     estimateSource: 'dam-qwen3vl-envelope-v2; estimates, no runtime qualification',
     identity: createHash('sha256').update(JSON.stringify(semantics)).digest('hex') }
 }
@@ -48,13 +52,13 @@ export function recommendGgufBundles(bundles: HuggingFaceModelBundle[], admissio
   const devices = admission.resourceStatus().devices
   const candidates = bundles.filter(bundle => ['2B', '4B', '8B'].includes(bundle.size) && bundle.variant === 'Instruct')
     .map(bundle => {
-      const plans = [createGgufLoadPlan(bundle, 'cpu'), ...devices.filter(device => /^\d{1,2}:GPU-/.test(device.id) && device.topology === 'dedicated')
+      const plans = [createGgufLoadPlan(bundle, 'cpu'), ...devices.filter(isGgufDevice)
         .flatMap(device => [createGgufLoadPlan(bundle, 'gpu', device), createGgufLoadPlan(bundle, 'hybrid', device)])]
       const sourceKind = bundle.repository.startsWith('Qwen/') ? 'official' as const : 'community' as const
       return { bundleId: bundle.id, model: `Qwen3-VL ${bundle.size} · ${bundle.languageQuantization} / ${bundle.projectorQuantization}`,
         sourceKind, recommended: false, plans: plans.map(plan => {
           const device = devices.find(device => device.id === plan.deviceId)
-          const driverReady=plan.mode==='cpu'||Boolean(device?.driver&&Number(device.driver.split('.')[0])>=615&&device.computeCapability)
+          const driverReady=plan.mode==='cpu'||ggufDeviceReady(device)
           const fits = driverReady&&admission.canAdmitModel(plan.cost) && admission.canAdmitVision({ residentBytes: plan.cost.ramBytes }, false)
           const reason = plan.mode !== 'cpu' && (device?.state !== 'known'||!driverReady) ? '显存计量或驱动兼容性未知，不能批准 GPU 方案。' : !fits
             ? '当前余量不足以满足完整加载、计算和其他应用预留；执行前会重新核对。'

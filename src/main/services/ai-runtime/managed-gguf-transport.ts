@@ -38,7 +38,7 @@ export async function launchManagedGguf(configuration: ManagedVisionConfiguratio
     '--threads-batch', String(native.threads), '--image-max-tokens', '256', '--cache-ram', '0',
     // INFO=3 carries the bound ephemeral port. TRACE=4 is deliberately excluded.
     '--no-cache-prompt', '--no-context-shift', '--sleep-idle-seconds', '-1', '--log-verbosity', '3']
-  if (plan.deviceIndex !== null) args.push('--device', `CUDA${plan.deviceIndex}`)
+  if (plan.deviceIndex !== null && plan.deviceBackend !== 'metal') args.push('--device', `CUDA${plan.deviceIndex}`)
   if (!plan.projectorOnGpu) args.push('--no-mmproj-offload')
   if (!plan.kvOnGpu) args.push('--no-kv-offload')
   let child: ChildProcessWithoutNullStreams

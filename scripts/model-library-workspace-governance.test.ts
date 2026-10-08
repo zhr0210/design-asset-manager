@@ -7,9 +7,26 @@ const workspaceInterfaceSource = await fs.readFile(
   `${workspaceRoot}/model-library-workspace.ts`,
   'utf8'
 )
-const workspaceSources = await Promise.all(
-  (await sourceFilesUnder(workspaceRoot)).map((file) => fs.readFile(file, 'utf8'))
-)
+// The retained signed-catalog Pilot must remain passive. The neighbouring
+// managed-download module now owns explicit ModelScope transport; directory
+// co-location does not grant that authority to the Pilot's import closure.
+const workspaceSources: string[] = []
+const visited = new Set<string>()
+async function visitPilot(file: string) {
+  if (visited.has(file)) return
+  visited.add(file)
+  const source = await fs.readFile(file, 'utf8')
+  workspaceSources.push(source)
+  for (const match of source.matchAll(/(?:from|import)\s*['"](\.[^'"]+)['"]/g)) {
+    const resolved = path.normalize(path.join(path.dirname(file), match[1]))
+    if (!resolved.startsWith(workspaceRoot + path.sep)) continue
+    for (const candidate of [resolved + '.ts', path.join(resolved, 'index.ts')]) {
+      try { await fs.access(candidate) } catch { continue }
+      await visitPilot(candidate); break
+    }
+  }
+}
+await visitPilot(`${workspaceRoot}/model-library-workspace.ts`)
 const releaseSource = await fs.readFile(
   `${workspaceRoot}/official-model-catalog.release.ts`,
   'utf8'

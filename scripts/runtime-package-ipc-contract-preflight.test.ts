@@ -90,4 +90,4 @@ const ipcGovernanceSource = await fs.readFile('scripts/runtime-package-ipc-gover
 assert.match(ipcGovernanceSource, /CHANNEL_RUNTIME_PACKAGE_SELECT_LOCAL_MANIFEST/)
 assert.match(ipcGovernanceSource, /CHANNEL_RUNTIME_PACKAGE_EXECUTE_SELECTION/)
 assert.match(ipcGovernanceSource, /CHANNEL_RUNTIME_PACKAGE_GET_EXECUTION_STATUS/)
-assert.match(ipcGovernanceSource, /assert\.doesNotMatch\(rendererSurface, \/\\\.manifestPath/)
+assert.match(ipcGovernanceSource, /assert\.doesNotMatch\(runtimePanelSource, \/\\\.manifestPath/)

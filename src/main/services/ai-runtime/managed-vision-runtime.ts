@@ -15,10 +15,11 @@ import { inspectAndBindVisionModel, nativeVisionFingerprint, nativeVisionBackend
 import { VISION_MODEL_PROFILES } from "../../model-library/vision-model-artifact";
 import type { ManagedModelLibrary } from "../../model-library-workspace/managed-model-library";
 import { inspectGgufModel } from '../../model-library/gguf-model-artifact';
-import { createGgufLoadPlan } from '../../local-ai-resources/gguf-load-plan';
+import { createGgufLoadPlan, ggufDeviceReady } from '../../local-ai-resources/gguf-load-plan';
 import type { GgufLoadMode } from '../../../shared/contracts/local-ai-resources.contract';
 import type { ManagedGgufPackages } from './managed-gguf-packages';
 import { launchManagedGguf } from './managed-gguf-transport';
+import {readOwnedMacProcessMemory} from '../../platform/macos-owned-memory';
 import { readOwnedWindowsProcessMemory } from '../../platform/windows-process-memory.internal';
 import {ConfirmedLocalOomError,type LocalRecoveryOutcome} from '../../visual-ai/local-oom-recovery'
 import {measureAiStage,type AiStageSink} from '../../local-ai-resources/ai-diagnostics'
@@ -336,13 +337,13 @@ export function createManagedVisionRuntime(d: {
         const mode = requested?.mode ?? c.native?.plan.mode ?? 'cpu';
         const devices = d.admission.resourceStatus().devices;
         const deviceId = requested?.deviceId ?? c.native?.plan.deviceId;
-        const device = devices.find(value => value.id === deviceId) ?? devices.find(value => value.state === 'known' && value.topology === 'dedicated');
-        if (mode !== 'cpu' && (!device || device.state !== 'known' || Number(device.driver?.split('.')[0] ?? 0) < 615)) throw Error('AI_DEVICE_UNKNOWN');
+        const device = devices.find(value => value.id === deviceId) ?? devices.find(value => ggufDeviceReady(value));
+        if (mode !== 'cpu' && (!ggufDeviceReady(device))) throw Error('AI_DEVICE_UNKNOWN');
         const plan = createGgufLoadPlan(c.gguf, mode, device);
         if (!d.admission.canAdmitModel(plan.cost) || !d.admission.canAdmitVision({ residentBytes: plan.cost.ramBytes, computeBytes: MANAGED_COMPUTE_BYTES }, false)) throw Error('AI_MEMORY_WAIT');
         const preparing = d.admission.reserveResident('native-runtime-preparation:' + randomUUID(), 128 * 1024 ** 2, abort.signal);
         let binding;
-        try { binding = await d.ggufPackages.prepare(mode === 'cpu' ? 'cpu' : 'cuda-13.4', abort.signal) }
+        try { binding = await d.ggufPackages.prepare(process.platform === 'darwin' ? `macos-${process.arch}` as 'macos-arm64' | 'macos-x64' : mode === 'cpu' ? 'cpu' : 'cuda-13.4', abort.signal) }
         finally { preparing.release() }
         // A cold reload belongs to the already frozen backend binding. Activity
         // cannot change that binding while its consumer is preparing execution.
@@ -405,7 +406,7 @@ export function createManagedVisionRuntime(d: {
         if (!launched || !c.native || !owned.pid || child !== owned || observingNative) return;
         observingNative = true;
         try {
-        const value = await readOwnedWindowsProcessMemory({ pid: owned.pid, ...launched.launch });
+        const value = await (process.platform === 'darwin' ? readOwnedMacProcessMemory : readOwnedWindowsProcessMemory)({ pid: owned.pid, ...launched.launch });
         if (child !== owned || !resident) return;
         measurement = { rssBytes: value.rssBytes, peakRamBytes: value.peakRamBytes, device: c.native.plan.mode,
           dtype: 'GGUF ' + c.gguf!.languageQuantization, threads };

@@ -10,7 +10,7 @@ import {
   OCR_HOST_RESERVE_BYTES,
   OCR_WORKER_RESERVE_BYTES,
 } from "./ocr-controller";
-import { bindPythonDependencies } from "../services/ai-runtime/python-environment-binding";
+import { bindPythonDependencies, pythonPackageRoots } from "../services/ai-runtime/python-environment-binding";
 export interface OcrRuntimeQualification {
   runtimeFingerprint: string;
   evidenceId: string;
@@ -86,10 +86,8 @@ export function createOcrRuntime(deps: {
         .update(real + "\n" + manifest)
         .update(await fs.readFile(python))
         .update(await fs.readFile(deps.runner));
-    const packages =
-      process.platform === "win32"
-        ? path.join(real, "runtime/Lib/site-packages")
-        : path.join(real, "runtime/lib/python3.11/site-packages");
+    const { packages: packageRoots } = await pythonPackageRoots(python);
+    const packages = packageRoots[0];
     const names = {
       det: "ch_PP-OCRv4_det_infer.onnx",
       cls: "ch_ppocr_mobile_v2.0_cls_infer.onnx",

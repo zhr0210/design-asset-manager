@@ -1,3 +1,13 @@
+# 2026-10-09 Mac 视频 Adapter
+
+Main 在 macOS 接 `createMacVideoRuntime`，复用原 WorkVideoRuntime/Host/持久化契约。离线构建 Swift AVFoundation helper 与 C libproc 内存helper，按source/二进制SHA与目标架构验证；开发输出与ASAR unpack资源均绑定构建。只支持既定未旋转 H.264 MP4/96MiB/一小时/3840×2160范围。
+
+解码通过同一Governor串行准入，512MiB许可、384MiB自有进程峰值监测；它是有界监测/终止保护，不能冒称Windows Job Object硬内存上限。取消/超时只操作持有的ChildProcess，实际close归还许可；退出未确认保持隔离与占用。参考帧保留请求/实际100ns时间与PNG，不覆盖原件。内部生成H.264的实际解码、时间/PNG、预取消、close记账和真实物理内存查询通过；Blender官方视频下载本轮HTTP403，真实视频/原生交接未验收。
+
+见 [迁移记录](../../../docs/handoff/MACOS-MIGRATION-20261009.md)。以下保留Windows及历史证据。
+
+---
+
 # Native Work Sets
 
 `work-window-controller.ts` owns one window per saved set and at most eight live windows. It verifies owned

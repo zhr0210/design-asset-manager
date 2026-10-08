@@ -99,10 +99,13 @@ for (const sourcePath of await sourceFilesUnder(moduleRoot)) {
   }
 }
 assert.deepEqual(filesystemImporters.sort(), [
+  `${moduleRoot}/gguf-model-artifact.ts`,
   `${moduleRoot}/model-artifact-format-validation.internal.ts`,
   `${moduleRoot}/model-storage-authority.internal.ts`,
   `${moduleRoot}/model-storage-root-registry.internal.ts`,
-  `${moduleRoot}/transactional-model-library.internal.ts`
+  `${moduleRoot}/transactional-model-library.internal.ts`,
+  `${moduleRoot}/vision-model-artifact.ts`,
+  `${moduleRoot}/vision-model-binding.ts`
 ])
 assert.deepEqual(
   sqliteImporters.sort(),
@@ -219,6 +222,18 @@ assert.match(
 const admittedCatalogInternalImporters: string[] = []
 const admittedCatalogInternalImportPattern =
   /from\s*['"][^'"]*model-catalog-admission\.internal(?:\.[cm]?[jt]s)?['"]/i
+const dataOnlyImporters = new Set([
+  'src/main/model-library-workspace/huggingface-model-source.ts',
+  'src/main/model-library-workspace/model-file-transfer.ts',
+  'src/main/model-library-workspace/china-model-mirror.ts',
+  'src/main/model-library-workspace/huggingface-model-discovery.ts',
+  'src/main/model-library-workspace/managed-model-library.ts',
+  'src/main/services/ai-runtime/managed-gguf-transport.ts',
+  'src/main/services/ai-runtime/managed-gguf-packages.ts',
+  'src/main/services/ai-runtime/managed-vision-runtime.ts',
+  'src/main/retrieval-workspace/retrieval-model-library.ts'
+])
+
 for (const forbiddenSample of [
   'from "./model-catalog-admission.internal"',
   "from './model-catalog-admission.internal.js'",
@@ -259,7 +274,7 @@ const productionSourceFiles = [
   ].some((excludedRoot) => repoPath.startsWith(excludedRoot))
 })
 const productionConnectionPattern =
-  /(?:(?:from|import\s*\(|require\s*\()\s*['"][^'"]*model-library(?:\/[^'"]*)?['"]|import\s*['"][^'"]*model-library(?:\/[^'"]*)?['"]|model-library:)/i
+  /(?:(?:from|import\s*\(|require\s*\()\s*['"][^'"]*\/model-library(?:\/[^'"]*)?['"]|import\s*['"][^'"]*\/model-library(?:\/[^'"]*)?['"]|model-library:)/i
 const allowedProductionConnectionImporters = new Set([
   'src/main/model-library-workspace/bundled-official-model-catalog.internal.ts',
   'src/main/model-library-workspace/model-library-storage-port.internal.ts',
@@ -289,6 +304,12 @@ for (const forbiddenSample of [
 for (const sourcePath of productionSourceFiles) {
   const source = await fs.readFile(sourcePath, 'utf8')
   const repoPath = sourcePath.split(path.sep).join('/')
+  if (dataOnlyImporters.has(repoPath)) {
+    assert.match(source, productionConnectionPattern)
+    assert.doesNotMatch(source, /model-library\/(?:transactional-model-library|model-storage-|model-catalog-admission|model-library)(?:\.|['"])/,
+      'Data consumers must not acquire the retained transactional/catalog/storage tracer authority.')
+    continue
+  }
   if (allowedProductionConnectionImporters.has(repoPath)) {
     assert.match(
       source,

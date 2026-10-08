@@ -1,3 +1,13 @@
+# 2026-10-09 macOS 环境与内存边界
+
+Mac 使用独立 Python 3.12.11/RapidOCR 1.4.4，det/cls/rec 从 ModelScope RapidAI/RapidOCR 固定提交获取并完整核验。环境发现支持实际 Python 版本与 venv 符号链接，不采用系统解释器丢失依赖。
+
+最大1600输入实测约875MB，原1GiB工作集预留在25%余量要求下不足。Mac改为1280MiB Worker预留，并把全部增量计入共享Governor；Windows原预留不变。输入、识字/空图挑战、25%余量、运行时指纹与实际close要求均保留。POSIX峰值采用真实getrusage，实际测量而非固定资格。当前内部Runtime已真实产生资格并识别指定公开page/coffee；活动profile资格与素材UI保存仍待Mac手动解锁后验收，不能转记内部结果为用户完成。
+
+见 [迁移记录](../../../docs/handoff/MACOS-MIGRATION-20261009.md)。下面是历史。
+
+---
+
 # 当前 A 接线（2026-10-06）
 
 “AI 与模型 → 本地模型与 OCR”正式选择可信本地 OCR 环境，Main 核对文件/依赖并进行真实识别挑战。重启自动复核；资格等待共享资源时状态读取保持可用，明确显示未就绪原因，不凭 manifest 或固定 verified 对象放行。控制器与 runtime 的 suspend/drain 等待自动复核及真实进程释放，未确认退出不恢复执行或归还许可。

@@ -56,7 +56,11 @@ def main():
 
     def metrics():
         m = process.memory_info()
-        return {"rssBytes": m.rss, "peakRamBytes": getattr(m, "peak_wset", m.rss),
+        peak = getattr(m, "peak_wset", m.rss)
+        if sys.platform != "win32":
+            import resource
+            peak = max(peak, int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * (1 if sys.platform == "darwin" else 1024)))
+        return {"rssBytes": m.rss, "peakRamBytes": peak,
                 "device": "cpu", "dtype": "float32", "threads": threads}
 
     emit({"kind": "loaded", "metrics": metrics(), "torch": torch.__version__,

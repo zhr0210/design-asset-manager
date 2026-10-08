@@ -88,3 +88,7 @@ src/message.txt
 .env
 .env.*
 !.env.example
+
+# Generated native helpers and companion bundle; rebuilt from tracked source.
+/build/macos-runtime/
+/build/eagle-companion/

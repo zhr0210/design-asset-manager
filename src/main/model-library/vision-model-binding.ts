@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises'
+import path from 'node:path'
 import { createHash } from 'node:crypto'
 import { hashBoundFile, inspectVisionModel, type VisionModelArtifact } from './vision-model-artifact'
 import { bindPythonDependencies } from '../services/ai-runtime/python-environment-binding'
@@ -38,12 +39,13 @@ export function nativeVisionBackendFingerprint(configuration: ManagedVisionConfi
 }
 
 export async function bindVisionEnvironment(artifact: VisionModelArtifact, selectedPython: string, runner: string, signal?: AbortSignal) {
-  const python = await fs.realpath(selectedPython)
+  const python = path.resolve(selectedPython)
+  await fs.realpath(python)
   const digest = createHash('sha256')
   digest.update(JSON.stringify({ platform: process.platform, arch: process.arch, modelId: artifact.modelId,
     artifactFingerprint: artifact.artifactFingerprint, device: 'cpu', dtype: 'float32', maxPixels: 28 * 28 * 256,
     maxContext: 4096, maxTokens: 3072 }))
-  await hashBoundFile(python, digest, signal)
+  await hashBoundFile(await fs.realpath(python), digest, signal)
   await hashBoundFile(runner, digest, signal)
   await bindPythonDependencies(python, digest, ['torch-', 'transformers-', 'pillow-', 'psutil-'], signal)
   return { root: artifact.root, python, fingerprint: digest.digest('hex'), artifactFingerprint: artifact.artifactFingerprint,

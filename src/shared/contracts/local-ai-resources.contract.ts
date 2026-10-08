@@ -6,7 +6,7 @@ export interface AiDeviceResourceSample {
   totalBytes: number | null
   freeBytes: number | null
   sampledAt: number | null
-  source: 'nvidia-smi' | 'unsupported'
+  source: 'nvidia-smi' | 'macos-system' | 'unsupported'
   driver?: string
   computeCapability?: string
 }
@@ -14,6 +14,7 @@ export interface ModelResourceCost { ramBytes: number; gpuBytes: Record<string, 
 export type GgufLoadMode = 'cpu' | 'gpu' | 'hybrid'
 export type ModelRecommendationPreference = 'balanced' | 'efficient' | 'quality'
 export interface GgufLoadPlan {
+  deviceBackend?: 'cuda' | 'metal'
   driverVersion?:string|null
   computeCapability?:string|null
   mode: GgufLoadMode

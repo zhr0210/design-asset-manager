@@ -47,6 +47,7 @@ import {OCR_CHANGED, OCR_RUNTIME_CHANGED} from '../shared/contracts/asset-ocr.co
 import {randomUUID} from 'node:crypto'
 import {screen,nativeTheme} from 'electron'
 import {createWorkWindowController} from './work-mode/work-window-controller'
+import {createMacVideoRuntime} from './work-mode/macos-video-runtime'
 import {createWindowsVideoRuntime} from './work-mode/windows-video-runtime'
 import {createWorkFileHandoffs} from './work-mode/work-file-handoff'
 import {createWorkMediaController} from './work-mode/work-media-controller'
@@ -394,8 +395,8 @@ app.whenReady().then(async () => {
     ])
     appStorage = createAppStorage(join(app.getPath('userData'), 'app-state'))
     if(!syntheticE2e)aiDeviceSampler=createLocalAiDeviceSampler()
-    visualAdmission = createVisualAdmission({devices:()=>aiDeviceSampler?.read()??[],activity:()=>{const idle=powerMonitor.getSystemIdleState(5);return idle==='idle'?'idle':idle==='active'||idle==='locked'?'active':'unknown'}})
-    const videoRuntime=createWindowsVideoRuntime({directory:join(__dirname,'windows-video'),admission:visualAdmission})
+    visualAdmission = createVisualAdmission({memory:()=>aiDeviceSampler?.memory()??{free:os.freemem(),total:os.totalmem()},devices:()=>aiDeviceSampler?.read()??[],activity:()=>{const idle=powerMonitor.getSystemIdleState(5);return idle==='idle'?'idle':idle==='active'||idle==='locked'?'active':'unknown'}})
+    const videoRuntime=process.platform==='darwin'?createMacVideoRuntime({admission:visualAdmission}):createWindowsVideoRuntime({directory:join(__dirname,'windows-video'),admission:visualAdmission})
     const libraryPlatform = {videoRuntime,admission: visualAdmission,retrievalRuntime:()=>retrievalRuntime, backupBundleDirectory: app.isPackaged
       ? join(process.resourcesPath, 'windows-backup-runtime', 'win32-x64')
       : join(app.getAppPath(), 'build', 'windows-backup-runtime', 'win32-x64')}
@@ -646,7 +647,16 @@ function setupIpcHandlers() {
   if(!syntheticE2e){
     const runner=app.isPackaged?join(process.resourcesPath,'ai-service/tools/managed_vision_worker.py'):join(__dirname,'ai-service/tools/managed_vision_worker.py')
     const selectModel=()=>selectRuntimePath('导入 Qwen3-VL 2B/4B 数据制品文件夹（不执行目录代码）',true)
-    const selectPython=()=>selectRuntimePath('选择已安装、可信的 Python（需 Torch 与 Transformers）',false)
+    const selectPython=async()=>{
+      if(process.platform!=='darwin')return selectRuntimePath('选择已安装、可信的 Python（需 Torch 与 Transformers）',false)
+      // File selectors canonicalize symlinks; a venv's Python would then become
+      // the base interpreter. Select its environment root and retain the entry.
+      const root=await selectRuntimePath('选择可信 Python 环境文件夹（需 Torch 与 Transformers）',true)
+      if(!root)return null
+      const cfg=await fs.promises.lstat(join(root,'pyvenv.cfg'))
+      if(!cfg.isFile()||cfg.isSymbolicLink())throw Error('LOCAL_DEPENDENCY_MISSING')
+      return join(root,'bin/python3')
+    }
     const changed=()=>{aiConnections?.configurationChanged();visualAi?.invalidate();tagExecution?.invalidate();tagBatches?.invalidate();tagRecovery?.invalidate();basicAnalysis?.invalidate();publishWorkspaceEvent('settings:changed')}
     const modelNetwork=session.fromPartition('dam-public-model-download',{cache:false})
     managedModels=createManagedModelLibrary({database:appStorage.database,root:join(app.getPath('userData'),'managed-models'),runner,

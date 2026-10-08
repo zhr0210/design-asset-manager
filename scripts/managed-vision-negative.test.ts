@@ -10,7 +10,7 @@ import { createNewInstallAppSettingsDefaults } from '../src/main/services/settin
 
 // Negative qualification only: disposable invalid model files, actual trusted
 // installed Python and the candidate's bundled runner. No positive readiness fixture.
-const python = 'C:\\Users\\kilian\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
+const python = process.env.DAM_TEST_PYTHON ?? path.resolve('.scratch/macos-migration-20261009/python/bin/python')
 async function fixture() {
   const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'dam-vision-negative-')))
   const model = path.join(root, 'model')
@@ -29,7 +29,8 @@ async function fixture() {
     selectModel: async () => model, selectPython: async () => python, changed() {} })
   return { root, model, db, admission, runtime, close: async () => {
     await runtime.drain(); db.close()
-    assert.ok(root.startsWith(path.resolve(os.tmpdir()) + path.sep) && path.basename(root).startsWith('dam-vision-negative-'))
+    assert.equal(path.dirname(root), await fs.realpath(os.tmpdir()))
+    assert.ok(path.basename(root).startsWith('dam-vision-negative-'))
     await fs.rm(root, { recursive: true, force: true })
   } }
 }

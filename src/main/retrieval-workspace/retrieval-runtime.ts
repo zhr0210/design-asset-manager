@@ -45,7 +45,7 @@ export function createRetrievalRuntime(d:{database:Database.Database;runner:stri
   function observed(metrics:any){if(!Number.isSafeInteger(metrics?.rssBytes)||!Number.isSafeInteger(metrics?.peakRamBytes)||metrics.rssBytes<1||metrics.peakRamBytes<metrics.rssBytes)throw Error('RETRIEVAL_RESOURCE_INVALID')
     peakRamBytes=Math.max(peakRamBytes??0,metrics.peakRamBytes);resident?.observe(metrics.rssBytes)
     if(peakRamBytes>RETRIEVAL_RESIDENT_BYTES)throw Error('RETRIEVAL_RESOURCE_ESTIMATE_EXCEEDED')}
-  async function stamp(file:string){const s=await fs.lstat(file);if(!s.isFile()||s.isSymbolicLink())throw Error('LOCAL_MODEL_CHANGED');return `${s.dev}:${s.ino}:${s.size}:${s.mtimeMs}:${s.ctimeMs}`}
+  async function stamp(file:string){const interpreter=file===binding()?.python;const s=interpreter?await fs.stat(file):await fs.lstat(file);if(!s.isFile()||(!interpreter&&s.isSymbolicLink()))throw Error('LOCAL_MODEL_CHANGED');return `${s.dev}:${s.ino}:${s.size}:${s.mtimeMs}:${s.ctimeMs}:${interpreter?await fs.realpath(file):file}`}
   async function runtimeFingerprint(python:string,artifact:RetrievalArtifact,signal:AbortSignal,runner=d.runner) {
     const digest=createHash('sha256').update('siglip2-cpu-f32-224-original-text64-l2-v1').update(artifact.artifactFingerprint)
     digest.update(await fs.readFile(python)).update(await fs.readFile(runner))
@@ -159,7 +159,7 @@ export function createRetrievalRuntime(d:{database:Database.Database;runner:stri
   const api={
     status,currentSpace,
     async selectRuntime(){if(activation||pending||validating)throw Error('RETRIEVAL_RUNTIME_BUSY');const python=await d.selectPython();if(!python)return
-      const real=await fs.realpath(python);if(!path.isAbsolute(real))throw Error('RETRIEVAL_RUNTIME_UNAVAILABLE')
+      const real=path.resolve(python);await fs.realpath(real);if(!path.isAbsolute(python))throw Error('RETRIEVAL_RUNTIME_UNAVAILABLE')
       await stop();const prior=binding();save({python:real,modelId:prior?.modelId??null,fingerprint:null});state='inactive';changed()},
     async verifyUse(id:string){
       const c=binding();if(!c?.python)throw Error('RETRIEVAL_PYTHON_REQUIRED')

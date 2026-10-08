@@ -11,7 +11,10 @@ import type {OcrRuntime,OcrRuntimeHandle} from './ocr-runtime'
 type Scope=Omit<OcrScope,'assetId'>
 type Host=Pick<ActiveLibraryHost,'inspect'|'readAssetContext'|'readPreview'|'readOcr'|'commitOcr'|'correctOcr'>
 // Host-side decode/codec/frozen/transport/result upper accounting reserve; not a model peak estimate.
-export const OCR_WORKER_RESERVE_BYTES=1024**3
+// macOS CPU wheels measured 874 MB at the declared maximum input. Reserve
+// the full observed envelope plus the existing 25% margin; the Governor charges
+// this larger allocation instead of relaxing qualification or input limits.
+export const OCR_WORKER_RESERVE_BYTES=(process.platform==='darwin'?1280:1024)*1024**2
 export const OCR_HOST_RESERVE_BYTES=2*32*1048576+4*40000000+3*16*1048576+2*1048576+128*1048576+OCR_WORKER_RESERVE_BYTES
 interface Plan{release():void;timer?:ReturnType<typeof setTimeout>;scope:Scope;expires:number;epoch:number;runtime:OcrRuntimeHandle;items:Array<{assetId:string;assetRevision:string;sourceRef:string;inputSha256:string;preview:Uint8Array;snapshot:OcrSnapshot;request?:BasicRequest}>}
 export const ocrMessage=(error:unknown)=>{

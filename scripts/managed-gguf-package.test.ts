@@ -9,14 +9,16 @@ import { createManagedGgufPackages } from '../src/main/services/ai-runtime/manag
 await test('fixed native package acquisition refuses false bytes and never publishes an executable or readiness', async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'dam-native-package-negative-'))
   const database = new Database(path.join(root, 'app.sqlite'))
+  const variant = process.platform === 'darwin' ? `macos-${process.arch}` as 'macos-arm64' | 'macos-x64' : 'cpu'
+  const name = process.platform === 'darwin' ? `llama-b11429-bin-macos-${process.arch}.tar.gz` : 'llama-b11429-bin-win-cpu-x64.zip'
   const packages = createManagedGgufPackages({ root: path.join(root, 'owned'), database,
     fetch: async (url, options) => {
-      assert.equal(url, 'https://github.com/ggml-org/llama.cpp/releases/download/b11429/llama-b11429-bin-win-cpu-x64.zip')
+      assert.equal(url, 'https://github.com/ggml-org/llama.cpp/releases/download/b11429/' + name)
       assert.equal(options.credentials, 'omit')
       return new Response('untrusted-bytes', { headers: { 'content-length': '15' } })
     }, changed() {} })
   try {
-    await assert.rejects(packages.prepare('cpu', new AbortController().signal), /MODEL_TRANSFER_LENGTH_REJECTED/)
+    await assert.rejects(packages.prepare(variant, new AbortController().signal), /MODEL_TRANSFER_LENGTH_REJECTED/)
     assert.equal(packages.status().state, 'failed')
     assert.equal(packages.status().installed.length, 0)
     assert.equal(packages.status().release, 'b11429')

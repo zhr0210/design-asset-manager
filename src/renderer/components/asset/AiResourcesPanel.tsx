@@ -105,8 +105,8 @@ export default function AiResourcesPanel() {
           {status.reason && `。${status.reason}`}
         </p>
       )}
-      {status?.devices?.map((device: any) => <p key={device.id}>{device.name} · {device.topology === 'dedicated' ? '独立显存' : '共享/未知拓扑'} ·
-        {device.state === 'known' ? `空闲 ${gib(device.freeBytes)} / 总量 ${gib(device.totalBytes)}` : device.state === 'stale' ? '显存数据已过期，暂停新 GPU 准入' : '显存空闲量未知'} ·
+      {status?.devices?.map((device: any) => <p key={device.id}>{device.name} · {device.topology === 'dedicated' ? '独立显存' : device.topology === 'shared' ? 'Metal · 统一内存（计入 RAM）' : '未知拓扑'} ·
+        {device.state === 'known' ? `空闲 ${gib(device.freeBytes)} / 总量 ${gib(device.totalBytes)}` : device.state === 'stale' ? '内存采样已过期，暂停新 GPU 准入' : '空闲内存量未知'} ·
         {device.source}{device.sampledAt != null ? ` · ${new Date(device.sampledAt).toLocaleTimeString()}` : ''}</p>)}
       {status?.preparedCache&&<p>受控预览准备缓存 {gib(status.preparedCache.bytes)} · {status.preparedCache.entries} 项 · 复用 {status.preparedCache.hits} 次。仅复用兼容输入，明确重跑仍产生新的模型执行。</p>}
       {!status?.devices?.length && <p>未取得可用的 GPU 计量；CPU 能力继续按 RAM 预算工作。</p>}
