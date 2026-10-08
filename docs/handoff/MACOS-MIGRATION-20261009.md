@@ -5,7 +5,7 @@
 ## 当前可做与准确入口
 
 新目录 `/Users/meigong/Documents/design-asset-manager-macos`，分支 `codex/macos-migration`。
-GitHub main 末次回读仍为 `6b86ef05e558229e2bd87998101ca5678bc228cc`，完整3118源文件树/历史已克隆，git fsck通过；旧Mac目录WIP保留。
+本轮产品代码本地检查点 `62d0e0bfabf964340c6a8bcbdb8bae320d6ca650`；未推送。GitHub main 末次回读仍为 `6b86ef05e558229e2bd87998101ca5678bc228cc`，完整3118源文件树/历史已克隆，git fsck通过；旧Mac目录WIP保留。
 
 ```sh
 cd /Users/meigong/Documents/design-asset-manager-macos
@@ -34,7 +34,7 @@ Python3.12.11独立环境 `.scratch/macos-migration-20261009/python`：Torch2.14
 | --- | --- | --- |
 | 普通Browser | 首页/创建专用库/确认打开、57仓库目录、两模型计划与安装/明确恢复、两次整应用正常退出、重开保留已收到字节 | 来源是较早实际候选；最终新产物的完整UI消费未验 |
 | 普通Desktop | 同profile唯一Host显示实际原生窗口，系统Cmd-Q引出正式退出确认并物理退出 | 未覆盖拖拽/置顶/多屏/文件接收/安全存储/安装 |
-| 内部真实Qwen/Metal | 公开coffee正确描述“红色杯碟上的浓缩咖啡、勺、木桌”；physical-footprint峰值1,185,139,112 bytes；退出驻留归零 | 实际Adapter/公开材料，不是UI保存效果 |
+| 内部真实Qwen/Metal | 公开coffee正确描述“红色杯碟上的浓缩咖啡、勺、木桌”；physical-footprint峰值1,177,012,672 bytes；退出驻留归零 | 实际Adapter/公开材料，不是UI保存效果 |
 | 内部真实OCR | Actual Runtime从实际识字/空图/1600挑战产生资格；page5区域，coffee0区域；峰值865,992,704 bytes | 公共英文页有空格粘连，非整体中文质量验收；没有写活动profile资格或素材 |
 | 内部真实检索 | 768维/L2 CPU，英文与中文coffee查询在coffee/astronaut/page三图中均第一；同图cosine、实际close归零；峰值1,490,452,480 bytes | 没有正式用户索引生成、暂停恢复与保存重开；不是广泛质量保证 |
 | 内部原生运行包/视频 | 官方Mac tar真执行/架构拒绝/复用/损坏拒绝/恢复，生成H.264实际解码/参考时间/PNG/预取消/close记账/自有物理内存查询 | 生成clip不是Blender真实视频验收；Blender指定源本轮HTTP403 |
