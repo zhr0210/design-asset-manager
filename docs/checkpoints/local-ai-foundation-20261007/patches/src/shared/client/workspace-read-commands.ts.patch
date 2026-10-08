@@ -1,0 +1,19 @@
+diff --git a/src/shared/client/workspace-read-commands.ts b/src/shared/client/workspace-read-commands.ts
+index 0605583..682bd05 100644
+--- a/src/shared/client/workspace-read-commands.ts
++++ b/src/shared/client/workspace-read-commands.ts
+@@ -14,10 +14,13 @@ const reads = new Set([
+   'ai-connection:active-logins', 'ai-connection:credential-status',
+   'ai-connection:login-status', 'ai-connection:current-login', 'ai-connection:auth-diagnostic',
+   'ai-acceptance:status', 'background-ocr:read', 'asset-ocr:status', 'asset-ocr:read',
+-  'background-analysis:read', 'basic-analysis:inspect', 'basic-analysis:captions', 'basic-analysis:attempts', 'independent-tags:read', 'tag-recovery:list', 'managed-vision:status', 'managed-models:read', 'ai-resources:read',
++  'background-analysis:read', 'basic-analysis:inspect', 'basic-analysis:captions', 'basic-analysis:attempts', 'independent-tags:read', 'tag-recovery:list', 'managed-vision:status', 'managed-models:read', 'ai-resources:read', 'ai-resources:diagnostics',
+   'tag-batch:inspect', 'tag-execution:inspect', 'tag-execution:read',
+   'visual-ai:backends', 'visual-ai:inspect', 'visual-ai:results',
+   'assets:list', 'assets:get-custom-category',
++  'asset-search:query', 'asset-search:status', 'asset-search:read-assets',
++  'retrieval-models:read',
++  'asset-retrieval:coverage','asset-retrieval:query',
+   'tag:get', 'tag:list', 'tag:search', 'asset-tag:list-by-asset',
+   'tag-search:assets', 'tag-search:untagged', 'tag-search:ai-pending',
+   'model-library-workspace:summarize',

@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.design-asset-manager.invalid/p01/confirm-ai-tag.result.v1.schema.json",
+  "$comment": "Successful commit including notification failure is always ok=true. No receipt, path, text payload, raw exception or credentials in diagnostic fields.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1
+        },
+        "operation": {
+          "const": "visual-ai.confirm-tag"
+        },
+        "requestId": {
+          "$ref": "common.v1.schema.json#/definitions/requestId"
+        },
+        "traceId": {
+          "$ref": "common.v1.schema.json#/definitions/traceId"
+        },
+        "ok": {
+          "const": true
+        },
+        "effect": {
+          "const": "committed"
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "assetId": {
+              "$ref": "common.v1.schema.json#/definitions/opaqueId"
+            },
+            "evidenceId": {
+              "$ref": "common.v1.schema.json#/definitions/opaqueId"
+            },
+            "confirmation": {
+              "const": "confirmed"
+            }
+          },
+          "required": [
+            "assetId",
+            "evidenceId",
+            "confirmation"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.v1.schema.json#/definitions/notificationWarning"
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "requestId",
+        "traceId",
+        "ok",
+        "effect",
+        "value",
+        "warnings"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1
+        },
+        "operation": {
+          "const": "visual-ai.confirm-tag"
+        },
+        "requestId": {
+          "anyOf": [
+            {
+              "$ref": "common.v1.schema.json#/definitions/requestId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "traceId": {
+          "$ref": "common.v1.schema.json#/definitions/traceId"
+        },
+        "ok": {
+          "const": false
+        },
+        "error": {
+          "$ref": "common.v1.schema.json#/definitions/commandError"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "requestId",
+        "traceId",
+        "ok",
+        "error"
+      ]
+    }
+  ]
+}

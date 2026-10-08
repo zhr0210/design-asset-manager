@@ -1,0 +1,15 @@
+diff --git a/scripts/asset-discovery-workflow.test.ts b/scripts/asset-discovery-workflow.test.ts
+index 42614f6..051c456 100644
+--- a/scripts/asset-discovery-workflow.test.ts
++++ b/scripts/asset-discovery-workflow.test.ts
+@@ -144,7 +144,9 @@ const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8')) as {
+ }
+ 
+ assert.match(sharedIndexSource, /asset-discovery\.workflow/)
+-assert.match(librarySource, /projectAssetDiscovery/)
++// Shared field semantics are exercised above; actual Library search now runs
++// through the Host and is covered by asset-search-host/asset-retrieval-host.
++// The Renderer no longer imports the projection to scan the full library.
+ assert.doesNotMatch(librarySource, /assets\.filter\(\(asset\)/)
+ assert.match(gridSource, /AssetDiscoveryMatch/)
+ assert.match(gridSource, /match\.explanation/)

@@ -1,0 +1,514 @@
+{
+  "status": "source-inventory-with-proposed-central-projection",
+  "readSemantics": "table availability is not permission/runtime readiness; inspect exact known profile first",
+  "versions": [
+    {
+      "schemaDomain": "managed-library",
+      "version": 1,
+      "profileId": "managed:v1",
+      "featureIntroduced": "core",
+      "label": "新库基础控制/素材/标签/Capture/Trash",
+      "tablesAdded": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans"
+      ],
+      "namedIndexesAdded": [],
+      "triggersAdded": [],
+      "cumulativeTableCount": 15,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans"
+      ],
+      "source": {
+        "path": "src/main/library-lifecycle/library-materialization.internal.ts",
+        "symbol": "initializeLibraryDataSchema",
+        "fileSha256": "9a671d379fddb7951c5bd586e622dd1fbd5a78ce3461940c095ca0ec1ee079c2"
+      },
+      "ddlSource": null,
+      "existingEnableTrigger": "用户确认创建新库；不是旧库升级",
+      "existingTransactionBoundary": "control initialization + materialization; version=1",
+      "preservesKnownHigherVersions": [],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "initializerPolicy": "new empty library or in-memory expected-schema fixture only; must never run on an existing library"
+    },
+    {
+      "schemaDomain": "managed-library",
+      "version": 2,
+      "profileId": "managed:v2",
+      "featureIntroduced": "visual-evidence",
+      "label": "视觉AI证据",
+      "tablesAdded": [
+        "visual_ai_evidence"
+      ],
+      "namedIndexesAdded": [
+        "visual_ai_evidence_asset"
+      ],
+      "triggersAdded": [],
+      "cumulativeTableCount": 16,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans",
+        "visual_ai_evidence"
+      ],
+      "source": {
+        "path": "src/main/visual-ai/visual-ai-storage.ts",
+        "symbol": "enableVisualAiStorage",
+        "fileSha256": "664eb98d6ab35f9d26ae6061021d70245eec2f19eaac84964a6d08dde8a57c76"
+      },
+      "ddlSource": "src/main/visual-ai/visual-ai.schema.ts",
+      "existingEnableTrigger": "用户确认visual-ai.run后、推理之前",
+      "existingTransactionBoundary": "schema transaction separate from later inference result",
+      "preservesKnownHigherVersions": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "ddlSourceFileSha256": "5805332f7f3cab391dd66106ceba9818e9feb082b88abc388bc9c7c0d8e02d17"
+    },
+    {
+      "schemaDomain": "managed-library",
+      "version": 3,
+      "profileId": "managed:v3",
+      "featureIntroduced": "persistent-download",
+      "label": "下载意图与分块恢复",
+      "tablesAdded": [
+        "managed_download_intents",
+        "managed_download_chunks"
+      ],
+      "namedIndexesAdded": [
+        "managed_download_intents_library"
+      ],
+      "triggersAdded": [
+        "managed_download_intent_identity_immutable"
+      ],
+      "cumulativeTableCount": 18,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans",
+        "visual_ai_evidence",
+        "managed_download_intents",
+        "managed_download_chunks"
+      ],
+      "source": {
+        "path": "src/main/managed-download/download-journal.schema.ts",
+        "symbol": "enableDownloadJournal",
+        "fileSha256": "1d86fc76d34430b252cbc94b7bbbe6f0626c9ebe600bb7724548837a311e35c1"
+      },
+      "ddlSource": "src/main/managed-download/download-journal.schema.ts",
+      "existingEnableTrigger": "显式persistence=library确认run/create intent",
+      "existingTransactionBoundary": "DDL + first download intent in one transaction",
+      "preservesKnownHigherVersions": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "ddlSourceFileSha256": "1d86fc76d34430b252cbc94b7bbbe6f0626c9ebe600bb7724548837a311e35c1"
+    },
+    {
+      "schemaDomain": "managed-library",
+      "version": 4,
+      "profileId": "managed:v4",
+      "featureIntroduced": "variant-intents",
+      "label": "图片副本恢复意图",
+      "tablesAdded": [
+        "image_variant_intents"
+      ],
+      "namedIndexesAdded": [],
+      "triggersAdded": [
+        "image_variant_intent_immutable"
+      ],
+      "cumulativeTableCount": 19,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans",
+        "visual_ai_evidence",
+        "managed_download_intents",
+        "managed_download_chunks",
+        "image_variant_intents"
+      ],
+      "source": {
+        "path": "src/main/library-lifecycle/intake-recovery.schema.ts",
+        "symbol": "enableIntakeRecoveryStorage",
+        "fileSha256": "2c1b01feb88d25621e5ae1617f7964a8b735290f113ea9e0b8b33f40635f861e"
+      },
+      "ddlSource": "src/main/library-lifecycle/intake-recovery.schema.ts",
+      "existingEnableTrigger": "用户确认保存副本；stage已写/校验后登记意图；普通Copy不升级",
+      "existingTransactionBoundary": "DDL + variant intent in one DB transaction; file staging separate",
+      "preservesKnownHigherVersions": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "ddlSourceFileSha256": "2c1b01feb88d25621e5ae1617f7964a8b735290f113ea9e0b8b33f40635f861e"
+    },
+    {
+      "schemaDomain": "managed-library",
+      "version": 5,
+      "profileId": "managed:v5",
+      "featureIntroduced": "notebooks",
+      "label": "图片笔记",
+      "tablesAdded": [
+        "asset_notebooks"
+      ],
+      "namedIndexesAdded": [],
+      "triggersAdded": [],
+      "cumulativeTableCount": 20,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans",
+        "visual_ai_evidence",
+        "managed_download_intents",
+        "managed_download_chunks",
+        "image_variant_intents",
+        "asset_notebooks"
+      ],
+      "source": {
+        "path": "src/main/library-lifecycle/asset-notebook.schema.ts",
+        "symbol": "enableNotebookStorage",
+        "fileSha256": "0bcac39ec7d7faa06c38a6ff81b4a6c541c9e39b6cc203ee0410caaeb372f71a"
+      },
+      "ddlSource": "src/main/library-lifecycle/asset-notebook.schema.ts",
+      "existingEnableTrigger": "第一次saveNotebook且allowUpgrade=true；读不升级",
+      "existingTransactionBoundary": "outer notebook save transaction includes DDL and first value",
+      "preservesKnownHigherVersions": [
+        6,
+        7,
+        8
+      ],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "ddlSourceFileSha256": "0bcac39ec7d7faa06c38a6ff81b4a6c541c9e39b6cc203ee0410caaeb372f71a"
+    },
+    {
+      "schemaDomain": "managed-library",
+      "version": 6,
+      "profileId": "managed:v6",
+      "featureIntroduced": "organization",
+      "label": "普通文件夹/色板",
+      "tablesAdded": [
+        "library_organization_state",
+        "library_folders",
+        "library_folder_assets",
+        "library_palette_colors"
+      ],
+      "namedIndexesAdded": [
+        "library_folder_names",
+        "library_folder_asset_lookup"
+      ],
+      "triggersAdded": [],
+      "cumulativeTableCount": 24,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans",
+        "visual_ai_evidence",
+        "managed_download_intents",
+        "managed_download_chunks",
+        "image_variant_intents",
+        "asset_notebooks",
+        "library_organization_state",
+        "library_folders",
+        "library_folder_assets",
+        "library_palette_colors"
+      ],
+      "source": {
+        "path": "src/main/library-lifecycle/library-organization.schema.ts",
+        "symbol": "enableOrganizationStorage",
+        "fileSha256": "7e7af7b7d4909de5711f02206617887df21e21c5ee3870e8f185715110ac2aa4"
+      },
+      "ddlSource": "src/main/library-lifecycle/library-organization.schema.ts",
+      "existingEnableTrigger": "第一次writeOrganization且allowUpgrade=true；只读不升级",
+      "existingTransactionBoundary": "outer organization write includes DDL + singleton seed + command",
+      "preservesKnownHigherVersions": [
+        7,
+        8
+      ],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "ddlSourceFileSha256": "7e7af7b7d4909de5711f02206617887df21e21c5ee3870e8f185715110ac2aa4"
+    },
+    {
+      "schemaDomain": "managed-library",
+      "version": 7,
+      "profileId": "managed:v7",
+      "featureIntroduced": "work-sets",
+      "label": "工作集/设备布局",
+      "tablesAdded": [
+        "work_sets",
+        "work_set_members",
+        "work_window_layouts"
+      ],
+      "namedIndexesAdded": [],
+      "triggersAdded": [],
+      "cumulativeTableCount": 27,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans",
+        "visual_ai_evidence",
+        "managed_download_intents",
+        "managed_download_chunks",
+        "image_variant_intents",
+        "asset_notebooks",
+        "library_organization_state",
+        "library_folders",
+        "library_folder_assets",
+        "library_palette_colors",
+        "work_sets",
+        "work_set_members",
+        "work_window_layouts"
+      ],
+      "source": {
+        "path": "src/main/library-lifecycle/work-set.schema.ts",
+        "symbol": "enableWorkSetStorage",
+        "fileSha256": "0fcf4c20bca7d3392d5576e89c83efe101afd1f91b3e2ebf3aed2bbea406dc41"
+      },
+      "ddlSource": "src/main/library-lifecycle/work-set.schema.ts",
+      "existingEnableTrigger": "第一次writeWorkSet且allowUpgrade=true；被动布局写不独自升级",
+      "existingTransactionBoundary": "outer work-set content write includes DDL + set/member/layout changes",
+      "preservesKnownHigherVersions": [
+        8
+      ],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "ddlSourceFileSha256": "0fcf4c20bca7d3392d5576e89c83efe101afd1f91b3e2ebf3aed2bbea406dc41"
+    },
+    {
+      "schemaDomain": "managed-library",
+      "version": 8,
+      "profileId": "managed:v8",
+      "featureIntroduced": "dedicated-ocr",
+      "label": "专用OCR证据与修订",
+      "tablesAdded": [
+        "asset_ocr_evidence",
+        "asset_ocr_state"
+      ],
+      "namedIndexesAdded": [
+        "asset_ocr_evidence_asset"
+      ],
+      "triggersAdded": [],
+      "cumulativeTableCount": 29,
+      "cumulativeTables": [
+        "library_control_identity",
+        "library_operation_journal",
+        "assets",
+        "tags",
+        "asset_tags",
+        "tag_aliases",
+        "tag_relations",
+        "tag_groups",
+        "tag_group_items",
+        "tag_suggestions",
+        "capture_requests",
+        "asset_candidates",
+        "promotion_links",
+        "asset_lifecycle",
+        "asset_trash_plans",
+        "visual_ai_evidence",
+        "managed_download_intents",
+        "managed_download_chunks",
+        "image_variant_intents",
+        "asset_notebooks",
+        "library_organization_state",
+        "library_folders",
+        "library_folder_assets",
+        "library_palette_colors",
+        "work_sets",
+        "work_set_members",
+        "work_window_layouts",
+        "asset_ocr_evidence",
+        "asset_ocr_state"
+      ],
+      "source": {
+        "path": "src/main/ocr/ocr.schema.ts",
+        "symbol": "enableOcrStorage",
+        "fileSha256": "e3c8780202b09ac7bce4c6fe5a35a1a2a787e9ed2ac42c854daec13d98a5f18c"
+      },
+      "ddlSource": "src/main/ocr/ocr.schema.ts",
+      "existingEnableTrigger": "已确认OCR且有效结果成功commit；失败/读取不升级",
+      "existingTransactionBoundary": "outer OCR commit includes DDL + observation + current revision",
+      "preservesKnownHigherVersions": [],
+      "minimumAppReaderVersion": null,
+      "minimumAppWriterVersion": null,
+      "appVersionEvidence": "NOT_VERIFIED; require support for exact schema profile, not guessed historical app semver",
+      "operationalCaveats": [
+        "F02-VARIANT-READ-V8"
+      ],
+      "currentEvidence": "source inspection only; no SQLite opened",
+      "ddlSourceFileSha256": "e3c8780202b09ac7bce4c6fe5a35a1a2a787e9ed2ac42c854daec13d98a5f18c"
+    }
+  ],
+  "domains": {
+    "managed-library": {
+      "knownVersions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "currentJournalMode": "DELETE",
+      "unknownVersionPolicy": "unsupported or recovery-required; no writes"
+    },
+    "eagle-index": {
+      "knownVersion": 1,
+      "separateRegistryRequired": true,
+      "finding": "F03-EAGLE-GUARD-ORDER"
+    },
+    "app-state": {
+      "sharedUserVersionScheme": false,
+      "tablesObserved": [
+        "download_tasks",
+        "app_device_identity",
+        "local_ocr_runtime"
+      ],
+      "notManagedLibrary": true
+    },
+    "legacy-readonly": {
+      "migrationAllowed": false,
+      "currentOpenerPlatform": "darwin"
+    },
+    "model-storage": {
+      "outsideThisMigrationRegistry": true
+    }
+  }
+}

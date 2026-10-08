@@ -1,0 +1,44 @@
+{
+  "packageId": "DAM-ARCH-20260924",
+  "packageVersion": "1.0.0",
+  "updatedOn": "2026-09-24",
+  "architectureDocumentStatus": "authored_target_proposal_pending_source_review",
+  "sourceMaterialStatus": {
+    "handoffRead": true,
+    "completeWorktreeObtained": false,
+    "linkedPrivateReportsRead": false,
+    "publicPrimaryReferencesReviewed": 30
+  },
+  "originalSnapshot": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df",
+    "dirtyWorktreeReported": true,
+    "headAloneReproducible": false
+  },
+  "repositoryChangesPerformed": false,
+  "damBusinessTestsRun": false,
+  "newModelBenchmarksRun": false,
+  "realLibraryAccessed": false,
+  "defaultMode": "SPEC",
+  "nextStage": "P00",
+  "activeStage": null,
+  "reviewedDesignStages": [],
+  "acceptedImplementationStages": [],
+  "stageRegistry": "stages.json",
+  "requirementRegistry": "requirements.json",
+  "decisionRegistry": "decisions.json",
+  "latestStageReport": null,
+  "externalActionsAuthorization": {
+    "realLibraryMutation": false,
+    "privateAssetUpload": false,
+    "paidCloudRequests": false,
+    "largeModelDownload": false,
+    "untrustedScriptExecution": false,
+    "userExternalServiceTermination": false
+  },
+  "notes": [
+    "文档包形成不代表仓库阶段完成。",
+    "任何实际阶段进度必须附报告与对应模式状态。",
+    "本包的链接/JSON/依赖图完整性检查不是DAM业务或模型测试。"
+  ]
+}

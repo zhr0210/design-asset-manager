@@ -40,7 +40,6 @@ const guardedSources = [
   'src/main/services/ai-worker/providers/qwen3vl-prompt.provider.ts',
   'src/main/services/ai-worker/ai-gpu-monitor.service.ts',
   'src/main/services/ai-worker/ai-memory-guard.service.ts',
-  'src/main/services/ai-models/ai-model-download.service.ts',
   'src/main/ipc/ai-model.ipc.ts',
   'src/main/services/text-detection/easyocr-text-box-provider.ts',
   'src/main/services/ocr-dependency.service.ts'

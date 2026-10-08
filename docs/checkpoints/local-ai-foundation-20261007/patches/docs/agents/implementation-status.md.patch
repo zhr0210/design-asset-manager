@@ -1,0 +1,262 @@
+diff --git a/docs/agents/implementation-status.md b/docs/agents/implementation-status.md
+new file mode 100644
+index e69de29..06fc5f9 100644
+--- /dev/null
++++ b/docs/agents/implementation-status.md
+@@ -0,0 +1,256 @@
++# 实施状态与高风险接线
++
++总体当前事实以[CURRENT-STATE](../handoff/CURRENT-STATE.md)为准；下列带日期的段落保留当时证据。
++2026-10-06起，指定真实范围的验证与内部工程调整遵循[AGENTS](../../AGENTS.md)及[CONTRIBUTING](../../CONTRIBUTING.md)，旧暂停记录不是当前禁令。
++
++这是按需阅读的状态快照，不是启动必读或开发任务队列。涉及 Library、模型、
++下载或发布时，先看相关段落，再用当前代码和聚焦测试确认。
++入口仍在 [AGENTS.md](../../AGENTS.md)。本页由 2026-09-07 基础文档审查从
++根指南搬移；记录已有证据的适用范围，不把 Tracer 提升为生产功能。
++
++## 新Library界面正式接线（2026-09-14）
++
++`/library`现使用正式LibraryCanvas：Active Library数据、底部词法/标签检索、受控预览、
++占位侧栏及专注画廊。Main/Preload/schema未新增；原生卡片、标签、AI/图片工具及恢复入口保留。
++生成素材与授权Eagle副本均通过9项真实Electron闭环，完整原生/AI/下载回归通过；
++本轮限定样本验证不代表整库迁移或字体/PDF支持。笔记、色板、多工作集持久化仍未交付。
++[交付与范围](../design/FORMAL-LIBRARY-CANVAS-20260914.md)。
++
++## 产品目标与已交付能力分开（2026-09-14）
++
++[产品基准](../product/PRODUCT-FOUNDATION.md)和ADR 0483/0484已统一AI+核心、
++可选高阶插件与暂缓的开发接口/社区方向。本轮仅改文档与ADR校验配置，未新增
++运行时功能。已接线的显式确认HTTP视觉分析不等于真实小模型推理质量已验证。
++当前本地检索为词法基线；完整提示词、颜色占比检索及语义索引仍需逐项实施和验证。
++公共插件SDK、第三方执行隔离平台、新云端开发API/MCP服务和社区市场尚未交付。
++真实素材库验证继续暂停；以下既有合成证据不能替代该验证。
++
++## 工作模式与录屏目标（2026-09-14补充）
++
++本轮核对Main controller、原生window adapter、Preload契约与Renderer：已有一个原生
++Asset Card窗口、当前素材与有界导航顺序、置顶及会话草稿；Renderer使用图片预览。
++可复用现有权限与AI/工具调用，但不代表多工作集/多窗口持久恢复、视频参考帧或
++跨应用文件拖出已经交付。新[工作模式规格](../product/WORK-MODE-AND-MOTION-REFERENCE.md)
++与ADR 0485是产品目标；本轮未修改应用、录屏或访问真实数据。
++
++## Library 与 Model Library
++
++2026-10-06 B：正式 `managed-models:read/action` → Host SQLite库存/传输/来源 → A受管视觉运行器与共享资源 → 同一视觉连接/任务默认 → 素材正式消费者已接线。用户指定 Hugging Face，采用无凭据公开HTTPS、固定提交、逐文件哈希与显式可撤销来源信任；保留原DAM签名目录流程，不将HF冒充发布签名。Host实际查询10登记仓库/78文件，2B/4B可安装运行，其余catalog-only。真实下载/复制的暂停、重开、明确恢复、校验入库、实际验证、分析、切换、卸载、失败保留旧配置和撤信任已在指定公开副本验收。
++
++最终候选 `dam-f7bec71152122626` 复验撤信任不自动改选云、OCR独立执行、4B一键三项、2B独立描述、正常/10%自动切换及整应用保存重开；重开请求/尝试/效果/后台数不增。最新范围见 [B 完成记录](../handoff/MODEL-MANAGEMENT-20261006.md) 与 [当前状态](../handoff/CURRENT-STATE.md)。以下历史Tracer和暂停段保持原日期，不能当本轮正式来源或真实推理证据；软件签名安装发行/macOS/GPU/其它模型运行未覆盖。
++
++2026-09-13恢复当前库标签别名和层级，标签页支持创建、名称/类别/颜色编辑、
++别名增删、父标签选择与素材筛选。别名参与词法检索，显示“标签别名”命中依据，
++不增加确认标签；循环层级拒绝、更新事务回滚、切库后的旧结果拒绝已用合成库
++验证。复用原schema及既有三个IPC通道，集中禁用表余87项；标签合并/删除仍受
++身份保留与恢复要求约束。[模块说明](../../src/main/library-lifecycle/README.md)。
++
++2026-09-11 正式工作区已接入资料库、专注查看和卡片三模式，使用当前 Active
++Library 的素材和受控预览。卡片可打开真实 Electron 原生浮窗（独立 sandbox
++Preload、置顶/取消置顶、描述编辑、会话提示词草稿）。Main 校验窗口 token 与
++Library generation；切库、关库和退出撤销浮窗。草稿在两类窗口间由 Main 同步，
++关闭卡片保留、关闭 Library 清除；描述比较提交旧值，保护并发与后续输入。
++macOS 合成 Electron E2E 已覆盖窗口、实际图片、描述持久化、双向多素材草稿、
++重复打开、标签刷新与撤销；不是 Windows、打包应用或真实用户库证据。
++
++五个 `ai-backend:*` 配置/连接/模型列表接口已恢复并使用注入的 App Settings。
++配置 CRUD 不发网络请求；显式检查与模型列表经 OpenAI-compatible `/models`
++GET 验证，聚焦测试使用 loopback 合成服务。视觉 HTTP 分析/反推与直连图片下载现已正式接线，验证仅用生成素材及 loopback
++合成响应；不证明真实模型质量。旧 Runtime/模型安装仍未恢复。原集中禁用表
++97 项在 2026-09-12 恢复后余 90 项，旧反推 alias、迁移与旧删除拒绝保持各自边界。
++
++2026-09-12新增 `visual-ai:*` prepare/run/inspect/cancel/results/confirm-tag 窄接口。
++Library及原生卡片确认选定服务、模型和1–8张受控预览后才执行；手工描述保护、
++标签待确认、提示词追加与跨窗口刷新均接线。首次明确确认会为该库新增v2证据
++表；新库仍为v1，旧版本不能打开v2。未读取或升级真实用户库。详见
++[Visual AI](../../src/main/visual-ai/README.md)。
++
++图片工具支持默认受控预览（最长边1600）及显式受管原件输入（输出最长边8192，
++不放大），包含旋转/镜像、居中与自由区域裁剪、缩放。原件按持锁当前库身份读取，
++核对文件身份和入库SHA，不回退到预览、不访问外部来源。拖拽/数值/键盘选择区域，
++真实预览后确认保存新PNG素材，保留来源/recipe；确认保存时以v4记录恢复意图，素材元数据复用原字段。像素与身份
++保护已有合成集成证据；本轮Electron执行结果见TASK，未操作真实用户素材。
++资料库创建/回滚/schema实现内聚到内部Module，下载与副本共享受管Capture入库。
++[工具说明](../../src/main/image-tools/README.md)。
++
++External Connected Library has a separately composed app-owned SQLite Module,
++official-shape Eagle Web API v2 Adapter, bounded companion Plugin artifact,
++Main/IPC/Preload/Renderer surface and window-independent coordinator. Protocol
++tests and full Electron tests use only loopback synthetic Eagle and generated
++files; the production provider remains unconfigured and does not probe a real
++Eagle port. Real pairing, plugin installation and user-library writes are not
++implemented evidence. Eagle remains the sole Original authority; connected
++items do not enter Managed Capture/Promotion.
++Synthetic evidence also covers an offline queued new Asset whose lost add
++response is recovered by exact custom Eagle item identity and content read-back
++before DAM-owned staging is released. Provider lookup now distinguishes
++authoritative absence from timeout/transport/invalid responses; failure
++injection proves uncertain Add and cleanup outcomes retain staging/state and
++are not replayed as confirmed deletion. Host calls and companion writes are
++serialized locally, file edit operations retain their immutable start
++fingerprint, and conflict decisions commit only after a current-library
++read-back. Without a trusted provider/Library/volume identity resolver, the
++Web API Adapter negotiates read/index capabilities only.
++
++Legacy Read-Only Workspace has a user-selected SQLite database and asset-root
++Adapter plus summary/list/search/preview UI. It uses the recovery-sidecar-
++refusing read-only opener and a held query-only transaction. Synthetic evidence
++proves no DB byte/stat or journal change across existing sidecars and database
++replacement, while preview tests cover bounded image reads, historical `~/`
++resolution, symlink and scope escape rejection. The real legacy inventory is
++documented separately; it is not attached to Active Library or migrated.
++
++当前 Electron 组合从 `src/main/index.ts` 进入，并把 App 级 Site/Download
++SQLite 与 Active Library SQLite 分开。Asset、Tag、Capture/Promotion、受控
++Preview 和 Trash/Restore 通过一个经 Open Inspection、schema 检查与独占锁
++绑定的 Active Library Host；Renderer 具有创建/打开/关闭/重开、Copy Review、
++词法/标签检索、手动单个/批量标签及回收站恢复入口。旧 AI、路径迁移、复杂
++Tag 维护和永久删除通道在活动库模式返回固定不可用状态，不回退到 App 数据库。
++
++`test-active-library-electron-e2e` 已在 macOS 用生成 PNG/JPEG/WebP、临时 profile
++和临时新库启动真实 Main、正式 Preload 与完整 Renderer，验证来源 SHA 不变、
++真实图片加载、重复确认幂等、标签搜索/批量关系、Trash/Restore、旧 generation
++媒体拒绝、关闭/打开/重开后的 SQLite 持久化及退出 drain。测试只注入合成目录
++选择、App Settings 和受限 Model Workspace，阻断 Renderer 的 HTTP(S)。新增 Main 传输只使用
++测试专属 loopback 服务，覆盖原生卡片 AI 确认、结果与标签刷新、提示词追加、
++下载校验入库。不是实际用户库、真实模型、legacy 迁移、Windows或打包证据。
++
++`src/main/model-library/` 是未接入 composition root 的 Model Library
++Validated Tracer。它以真实测试签名证明 pinned Ed25519 Catalog/Manifest
++metadata admission，并以生成的 Safetensors/GGUF/ONNX 夹具和任务临时目录
++证明 exact file/size/SHA-256、受限结构验证、内容寻址 Blob 去重、事务提交与
++重开恢复；另以任务临时根和真实 SQLite/OS 锁证明 opaque Model Storage
++Identity、跨进程单写与进程崩溃释放。其 device-local
++`ModelStorageRootRegistry` 隔离 Tracer 通过 `summarize / open` 两入口证明
++opaque candidate 复核、显式首次选择、同 Identity 重连、重启重开、有限状态
++观察和跨进程 CAS；不同 Identity 只返回 migration required。Model Library
++调用方仍只使用 path-free `summarize / install`，不能自报 verified 结论。
++这些 Tracer 不读取真实模型/缓存，也不具备正式来源、生产 `modelRootDir` 接线、
++文件夹选择器/系统 bookmark、可移动卷与跨平台文件系统资格、迁移、多根、
++Runtime Probe 或生产接线，因此 `verified-stored` 不是 Installed 或 Model
++Readiness。
++
++`src/main/model-library-workspace/` 已接入正式 composition root，并通过两个
++窄 IPC channel、Preload Adapter、独立 Model Library 页面和 AI Console 摘要
++入口提供受限产品 Pilot。运行时与 Signed Candidate 现从同一份 checked-in
++public-only release input 读取独立 Publisher 公钥和对应签名 Catalog，并使用同一
++release-pinned 验证语义；双平台构建前 Gate 和 Release Readiness 只输出路径无关
++聚合证据。当前输入两项均为 `null`，因此正式页面诚实显示 Official Catalog
++unavailable，Signed Candidate 也在打包前 fail closed；不会用
++测试密钥、网络或 legacy 路径替代。生成签名夹具与任务临时目录已证明
++release-pinned catalog-only 投影和 app-owned Root 复核/确认，但这些仍是
++Validated Tracer 证据，不代表当前发布已有可安装模型、生产签名材料、在线新鲜
++信任、模型下载/导入/安装/删除/激活或 Runtime Readiness。
++本地 public-only release preparation 只把显式选择的公开 trust-root JSON 与
++已签名 Catalog bundle 验证后写入新的 candidate 文件；它拒绝覆盖并保留正式
++release-input 文件名，且不读取签名 secret、模型字节或网络。
++
++现有 `assets:delete` 在 Active Library 组合中固定拒绝；Renderer 的删除意图走
++独立 `library-trash:*` prepare/dispatch/inspect/list 通道。Trash 保留 Asset、Tag
++关系、Promotion 历史和受管文件；永久删除仍未授权。
++
++## 下载
++
++下载页、来源搜索与网页采集触发器已接入显式确认。Main 对直连PNG/JPEG/WebP
++执行无Cookie、不跟随重定向的GET，限制32MB，真实字节进度，支持传输取消及
++同会话失败重试。具备强ETag和一致identity编码时可续接内存中的连续前缀，
++否则重新下载。显式library模式在确认后升级v3并保存可信检查点，支持重启后重新确认续传。
++格式校验后使用held Active Library Capture/Promotion，成功
++才通知刷新；App store只保存历史。入库中断保留受管staging和恢复记录，显示
++需要恢复；确认后检查并恢复已知任务，不重新联网。持久任务可跨重启发现并恢复，
++来源/名称取自持锁库日志。任意历史Capture及损坏库恢复不在实现范围。
++重启后的App历史仍是未核验记录。
++
++聚焦集成测试覆盖单次receipt、真实HTTP、取消/重试、来源不变与v2重开；macOS
++Electron E2E使用生成图片验证下载确认到实际预览的完整链路。没有下载真实网页
++资源、读取旧下载文件或迁移用户库。[实现与限制](../../src/main/managed-download/README.md)。
++
++## 维护
++
++本地 public-only release preparation 的权限仍仅是读取有界普通公开 JSON、
++验证并独占创建新的 candidate。不得将其改成签名器、下载器或正式 release
++input 自动覆盖工具；不得读取签名 secret、模型字节或网络。
++
++接线或能力证据变化时，只更新受影响段落和最近的模块说明。
++目录、ADR Accepted、类型、构建成功或 Runtime Probe 均不能单独证明交付。
++正式行为检查从 `src/main/index.ts`、对应 IPC/Preload/Renderer 调用方
++和聚焦行为测试开始。不要为了回答局部问题读取本页列出的全部模块。
++
++## 同会话受检入库恢复（2026-09-13）
++
++下载任务在Capture受理后失败，可通过现有retry链路明确确认恢复。核对库、请求、
++Candidate、原件身份、字节与SHA后补齐缺失步骤，原件不覆盖、冲突不清理、Trash
++不复活；恢复完成幂等且保护用户编辑。复用已有schema与正式通道。故障注入集成
++证据已覆盖发布/激活/预览/Promotion/元数据阶段；Electron执行证据见TASK。
++不是跨重启自动恢复、真实用户库或数据损坏修复。[说明](../../src/main/managed-download/README.md)。
++
++## 统一入库恢复与空间管理（2026-09-13）
++
++普通Copy与已记录图片副本已接入资料库“入库恢复”：核验受管文件或显式重选
++匹配原文件后再确认，保护冲突、Trash和用户编辑。首次确认副本保存升级v4以
++保留名称/SHA/处理参数；普通Copy恢复不升级。精确schema和AI/下载支持v1–v4。
++下载队列支持确认放弃任务并只释放受检登记块；未完成Capture拒绝放弃，未知与
++不匹配文件保留。新增3条library-recovery通道，invoke共199；旧禁用入口保持。
++
++聚焦故障与真实Electron两次重启/UI恢复/释放已有合成证据，结果见TASK及
++[实施说明](../product/INTAKE-RECOVERY-SPACE-MANAGEMENT-20260913.md)。较早段落中的
++版本与“未完成”描述为对应阶段状态，本段更新其当前实现；不代表真实库或Windows验收。
++
++## 面向大库的按需读取（2026-09-13）
++
++AI、图片工具和原生卡片的单项/小批操作改用Main内部按ID素材上下文，不再为每次
++动作读取整库；有效OCR、确认标签/别名与当前库版本由同一读模型投影。保持原有
++最多500项卡片导航范围，不新增IPC或schema。v2/v3/v4的AI确认不再固定提示升级v2。
++
++10001条合成元数据的一致性与选定范围检查、相关集成和完整Electron回归通过。
++用户已允许真实库操作，具体目标路径仍待提供；这些测试不代表真实库验证。
++
++## 内置网页功能已移除（2026-09-13）
++
++按用户最新范围，内置浏览器、网页采集、外部来源搜索与网站登录管理已从运行代码、
++页面和IPC/Preload移除，PhotoShow资源不再随源码保留。本地检索/导入、独立下载、
++AI、图片工具、Eagle和恢复能力保持。旧网页段落为此前状态，当前以本段和
++[移除报告](../product/WEB-COLLECTION-RETIREMENT-20260913.md)为准。真实库验证暂停。
++
++插件平台为[讨论稿](../product/PLUGIN-PLATFORM-DISCUSSION-20260913.md)，未实现SDK、
++安装器、市场或Chrome/Edge连接器。当前183个invoke、0个主进程入站event通道；
++素材/下载/AI出站通知仍存在。完整合成Electron回归通过。
++
++## 图片笔记（2026-09-17）
++
++正式专注画布接入库内v5笔记表；按素材保存，多页/便签独立于原件。首次保存确认升级，
++读取不升级；版本冲突与失效会话拒绝写入，回收/恢复保留笔记。验证和当前限制见
++[笔记规格](../product/ASSET-NOTEBOOKS-20260917.md)及TASK；不是Eagle迁移或真实库验证。
++
++## 普通文件夹与色板（2026-09-19）
++
++正式界面支持普通/子文件夹、素材引用加入/移除、改名/移动/删除、色板收藏与恢复。
++首次确认组织写入启用v6；测色为本地受控预览确定性采样。AI动态分类、工作窗口色板共享
++仍未交付。实现与合成验证范围见[组织规格](../product/LIBRARY-ORGANIZATION-20260919.md)。
++
++## 工作集与原生多窗口（2026-09-20）
++
++v7支持工作集引用/顺序/备注/颜色、每设备窗口几何和置顶恢复。原生窗口独立session和sandbox桥接，
++只能读取所属成员的预览/笔记；库切换撤销全部窗口，隐藏/关闭不删工作集。旧单卡片工具保留。
++双窗口、持久恢复、权限隔离和旧功能回归使用合成库验证；详见[工作集记录](../product/WORK-SETS-20260920.md)。
++视频、原生跨应用拖出、Windows打包与物理多显示器切换未由本轮证明。
++
++
++## 2026-09-20 第四步：AI结果、搜索与AI文件夹
++
++正式素材读投影增加可选AI摘要，保持既有IPC/写接口/schema；新侧栏展示模型来源、
++画面描述、独立建议、提示词和OCR。底部词法搜索覆盖这些字段并解释命中，
++AI汇总/当前标签分类动态引用素材，无需确认建议或复制文件；重分析更新分类但保留确认标签。
++使用本机合成HTTP响应与临时库完成正式Electron闭环，不代表真实模型推理质量。
++自定义AI规则、语义/向量搜索、自动分析和真实Eagle操作未在此轮实施。
++详情与检查入口见 [第四步规格](../product/AI-DISCOVERY-20260920.md)。
++
++
++## 2026-09-20 专用 OCR 正式接线
++
++RapidOCR1.4.4/ONNX Runtime1.19.2隔离CPU运行已实测；11张生成图的归一化文字均符合预期、
++3张无字图无误报，但空格存在丢失，不能称逐字排版完全准确或推广为实库准确率。
++新增独立OCR v8证据/用户修订，Main/Preload/主工作台识别与搜索、有效空结果优先、
++草稿保护和进程重启恢复已有正式Electron证据。旧全局AI/OCR通道继续禁用。
++本轮配置入口选择已有可信环境，未交付一键应用内安装、真实素材库迁移或Windows打包验证。
++见[OCR记录](../product/RAPIDOCR-EVALUATION-20260920.md)与ADR0490。

@@ -1,0 +1,60 @@
+diff --git a/src/main/visual-ai/visual-ai-controller.ts b/src/main/visual-ai/visual-ai-controller.ts
+index e5c27fc..a6f6a24 100644
+--- a/src/main/visual-ai/visual-ai-controller.ts
++++ b/src/main/visual-ai/visual-ai-controller.ts
+@@ -10,6 +10,7 @@ import type { AppSettings } from '../../shared/types/settings.types'
+ import type { AiBackendConfig } from '../../shared/types/ai-backend.types'
+ import type { AiExecutionUsage,VisualAiEvidence, VisualAiJob, VisualAiPrepareRequest, VisualAiReview, VisualAiScope } from '../../shared/contracts/visual-ai.contract'
+ import { runVisionRequest } from './openai-vision.transport'
++import {ConfirmedLocalOomError} from './local-oom-recovery'
+ import type { VisionProvider } from './openai-vision.provider'
+ import { systemVisualAiClock, type VisualAiClock } from './visual-ai-clock'
+ 
+@@ -19,7 +20,7 @@ type Job = { owner: string; value: VisualAiJob; abort: AbortController }
+ export const localEndpoint = (url: string) => ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(url).hostname)
+ 
+ export function createVisualAiController(deps: {
+-  host: Pick<ActiveLibraryHost, 'readVisualSession'|'readVisualPreview'|'saveTagIntent'|'claimTagExecution'|'markTagExecutionSent'|'finishTagExecution'|'commitTagExecution'|'inspect' | 'readAssetContext' | 'readPreview' | 'enableVisualAi' | 'saveVisualAiEvidence' | 'listVisualAiEvidence' | 'confirmVisualAiTag'>&Partial<Pick<ActiveLibraryHost,'beginBasicRequest'|'claimBasicAnalysis'|'markBasicAnalysisSent'|'finishBasicAnalysis'>>
++  host: Pick<ActiveLibraryHost, 'readVisualSession'|'readVisualPreview'|'saveTagIntent'|'claimTagExecution'|'markTagExecutionSent'|'finishTagExecution'|'commitTagExecution'|'inspect' | 'readAssetContext' | 'readPreview' | 'enableVisualAi' | 'saveVisualAiEvidence' | 'listVisualAiEvidence' | 'confirmVisualAiTag'>&Partial<Pick<ActiveLibraryHost,'beginBasicRequest'|'claimBasicAnalysis'|'markBasicAnalysisSent'|'finishBasicAnalysis'|'readTagExecutionRequest'|'readTagEffectReceipt'|'readBasicAttempts'>>
+   settings(): AppSettings
+   onChanged(scope: VisualAiScope & { assetId: string }): void
+   transport?: typeof runVisionRequest
+@@ -87,11 +88,11 @@ export function createVisualAiController(deps: {
+       if(input.refineEvidenceId){if(input.assetIds.length!==1||location(backend)!=='external')throw Error('AI_REFINEMENT_INVALID');const asset=(await deps.host.readAssetContext(input.assetIds)).assets[0],evidence=(await deps.host.listVisualAiEvidence(input.assetIds[0])).find(e=>e.id===input.refineEvidenceId);if(!asset||!evidence||evidence.assetRevision!==asset.revision||evidence.previewGeneration!==asset.thumbnailRef||(!localEndpoint(evidence.providerOrigin)||evidence.processingLocation==='external-service'))throw Error('AI_REFINEMENT_SOURCE_CHANGED');priorAnalysis=JSON.stringify({caption:evidence.output.caption,prompt:evidence.output.prompt,tags:evidence.output.tags});if(priorAnalysis.length>16000)throw Error('AI_REFINEMENT_TOO_LARGE')}
+       const before = epoch; const context = await deps.host.readAssetContext(input.assetIds); const assets = context.assets; const views: Input[] = []
+       const session=await deps.host.readVisualSession(input)
+-      preparationAbort.signal.throwIfAborted();material=admission.open(`combined:${owner}`,session);materials.add(material);preparationAbort.signal.addEventListener('abort',revokeMaterial,{once:true})
++      preparationAbort.signal.throwIfAborted();material=admission.open(`combined:${owner}`,session,'foreground',{modelBinding:backendExecutionBinding(backend,model)});materials.add(material);preparationAbort.signal.addEventListener('abort',revokeMaterial,{once:true})
+       for (const id of input.assetIds) {
+         const asset = assets.find(item => item.id === id)
+         if (!asset) throw new Error('所选素材已不可用。')
+-        await material.prepare(id,()=>deps.host.readVisualPreview({libraryIdentity:input.libraryIdentity,generation:input.generation,assetId:id,sessionToken:material!.session.sessionToken,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef}))
++        await material.prepare(id,()=>deps.host.readVisualPreview({libraryIdentity:input.libraryIdentity,generation:input.generation,assetId:id,sessionToken:material!.session.sessionToken,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef}),{assetRevision:asset.revision,previewGeneration:asset.thumbnailRef})
+         views.push({asset,sha:material.describe(id).sha256})
+       }
+       requireScope(input); if (before !== epoch || ownerVersion !== (ownerEpoch.get(owner) ?? 0)) throw new Error('操作已失效。')
+@@ -169,7 +170,14 @@ export function createVisualAiController(deps: {
+             if(view.claim)await deps.host.markTagExecutionSent({...claimScope(plan,view),attemptToken:view.claim.attemptToken})
+             signal.throwIfAborted()
+             sent=true
+-            return transport({backend:plan.backend,model:plan.review.model,purpose:plan.input.purpose,priorAnalysis:plan.priorAnalysis,onUsage:value=>{usage=value},jpeg,signal})
++            return transport({backend:plan.backend,model:plan.review.model,purpose:plan.input.purpose,priorAnalysis:plan.priorAnalysis,onUsage:value=>{usage=value},jpeg,signal,
++              operationId:view.claim?.attemptId??view.captionClaim?.attemptId,
++              mayRecover:async()=>{signal.throwIfAborted();if(suspended||!matches(plan.input)||!view.claim||!deps.host.readTagExecutionRequest||!deps.host.readTagEffectReceipt)return false
++                const scope=claimScope(plan,view),session=await deps.host.readVisualSession(plan.input),request=await deps.host.readTagExecutionRequest(scope,view.requestId!),effect=await deps.host.readTagEffectReceipt(scope)
++                if(session.sessionToken!==plan.material.session.sessionToken||!request.sourceMatches||request.state!=='running'||request.requestGeneration!==view.claim.requestGeneration||effect.receipt)return false
++                if(view.captionClaim){if(!deps.host.readBasicAttempts)return false;const attempts=await deps.host.readBasicAttempts({...plan.input,assetId:view.asset.id}),attempt=attempts.items.find(v=>v.attemptId===view.captionClaim!.attemptId)
++                  if(attempts.sessionToken!==view.captionClaim.sessionToken||!attempt?.sourceMatches||attempt.hasReceipt||attempt.state!=='sent')return false}
++                return true}})
+           },plan.backend.transport==='pi'?VISUAL_ADMISSION_PROFILE.piWorkerBytes:0,plan.backend.runtimeFingerprint?1024**3:0)
+           completedResponse=true
+           if (job.abort.signal.aborted || !matches(plan.input)) { item.state = 'cancelled';await finishClaim(plan,view,'cancelled');continue }
+@@ -182,7 +190,7 @@ export function createVisualAiController(deps: {
+         } catch (error) {
+           item.state = job.abort.signal.aborted || !matches(plan.input) ? 'cancelled' : 'failed'
+           const code=error instanceof Error?error.message:''
+-          const unknown=sent&&!completedResponse&&(requestAbort.signal.aborted||!(code.startsWith('AI_RESPONSE_')||code.startsWith('AI_HTTP_')))
++          const unknown=sent&&!completedResponse&&!(error instanceof ConfirmedLocalOomError)&&(requestAbort.signal.aborted||!(code.startsWith('AI_RESPONSE_')||code.startsWith('AI_HTTP_')))
+           await finishClaim(plan,view,unknown?'outcome-unknown':item.state==='cancelled'?'cancelled':'failed')
+           item.error = item.state === 'failed' ? visionFailureMessage(requestAbort.signal.aborted ? new Error('AI_TIMEOUT') : error) : undefined
+           if(view.claim&&unknown)item.error=(item.error?item.error+' ':'')+'请求可能已在服务端执行，远端结果尚不确定；不会自动重发。'

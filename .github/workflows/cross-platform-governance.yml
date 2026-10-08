@@ -28,17 +28,17 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - windows-latest
+          - windows-2022
           - macos-latest
         node-version:
           - '20'
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
@@ -48,6 +48,26 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Prepare Windows native build inputs
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $installation = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $installation) { throw 'Windows C++ compiler is required' }
+          $tool = Get-ChildItem -LiteralPath "$installation/VC/Tools/MSVC" -Directory | Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
+          $sdkRoot = "${env:ProgramFiles(x86)}/Windows Kits/10"
+          $sdk = Get-ChildItem -LiteralPath "$sdkRoot/Include" -Directory | Where-Object { Test-Path -LiteralPath "$sdkRoot/Lib/$($_.Name)/um/x64/kernel32.lib" } | Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
+          if (-not $tool -or -not $sdk) { throw 'Windows native build inputs are incomplete' }
+          $nodeVersion = node -p 'process.versions.node'
+          $headerRoot = "$env:RUNNER_TEMP/dam-node-headers"
+          npm exec --yes --package=node-gyp@11.5.0 -- node-gyp install "--target=$nodeVersion" "--devdir=$headerRoot"
+          if ($LASTEXITCODE -ne 0) { throw 'Node build header preparation failed' }
+          node scripts/build-windows-backup-runtime.mjs "--tool-root=$($tool.FullName)" "--sdk-root=$sdkRoot" "--sdk-version=$($sdk.Name)" "--node-headers-root=$headerRoot/$nodeVersion"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows native bundle compilation failed' }
+          node scripts/build-windows-video-runtime.mjs "--tool-root=$($tool.FullName)" "--sdk-root=$sdkRoot" "--sdk-version=$($sdk.Name)"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows video bundle compilation failed' }
 
       - name: Build
         run: npm run build

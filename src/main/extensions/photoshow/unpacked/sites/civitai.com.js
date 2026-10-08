@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"civitai.com":{ignore:'img[src*="user avatar decoration"]',srcMatching:[{srcRegExp:"(//image\\.civitai\\.com/.+)/[\\w=,]+(/.+@IMG@)",processor:"$1$2"}]}};

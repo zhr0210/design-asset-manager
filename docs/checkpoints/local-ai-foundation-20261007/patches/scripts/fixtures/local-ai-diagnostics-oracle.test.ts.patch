@@ -1,0 +1,21 @@
+diff --git a/scripts/fixtures/local-ai-diagnostics-oracle.test.ts b/scripts/fixtures/local-ai-diagnostics-oracle.test.ts
+new file mode 100644
+index e69de29..719b5f4 100644
+--- /dev/null
++++ b/scripts/fixtures/local-ai-diagnostics-oracle.test.ts
+@@ -0,0 +1,15 @@
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import Database from 'better-sqlite3'
++const profile=path.resolve('.scratch/wc01-real-model-library-20261005/run-U4eFuo/profile-04')
++const db=new Database(path.join(profile,'app-state/app-state.sqlite'),{readonly:true,fileMustExist:true})
++try{
++ // Only explicit public diagnostic fields; no settings/accounts/private transport.
++ const stages=db.prepare(`SELECT json_extract(record,'$.buildId') AS buildId,json_extract(record,'$.operationId') AS operationId,
++  json_extract(record,'$.stage') AS stage,json_extract(record,'$.startedAt') AS startedAt,json_extract(record,'$.durationMs') AS durationMs,
++  json_extract(record,'$.mode') AS mode,json_extract(record,'$.language') AS language,json_extract(record,'$.fingerprint') AS fingerprint,
++  json_extract(record,'$.outcome') AS outcome,json_extract(record,'$.errorCode') AS errorCode FROM ai_stage_diagnostics ORDER BY rowid DESC LIMIT 60`).all()
++ const out=path.resolve('.scratch/local-ai-implementation-20261006/evidence/diagnostics-latest.json')
++ await fs.writeFile(out,JSON.stringify({at:new Date().toISOString(),stages},null,2))
++ console.log(JSON.stringify(stages.filter((s:any)=>s.stage==='inference'||s.stage==='model-load'||s.outcome==='failed').slice(0,14)))
++}finally{db.close()}

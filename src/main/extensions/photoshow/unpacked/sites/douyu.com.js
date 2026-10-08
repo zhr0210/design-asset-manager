@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"douyu.com":{ignore:'[class*="playIcon"]',srcMatching:[{srcRegExp:"(//.+?\\.douyucdn\\.cn/.+_)(?:small|middle)(@IMG@).*",processor:"$1big$2"},{srcRegExp:"(//.+?\\.douyucdn\\.cn/.+?_src_\\d+@IMG@).*",processor:"$1"}]}};

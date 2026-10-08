@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"kemono.su":{srcMatching:[{srcRegExp:"//img\\.kemono\\.su/thumbnail/(.+@IMG@)",processor:"//n1.kemono.su/$1"}]}};

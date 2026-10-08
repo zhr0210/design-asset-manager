@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"gamebanana.com":{srcMatching:[{srcRegExp:"(//images\\.gamebanana\\.com/.+/)[-\\d]+_(\\w+@IMG@)",processor:"$1$2"}]}};

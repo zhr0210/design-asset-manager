@@ -1,0 +1,169 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "D01",
+      "input": {
+        "op": "tool",
+        "tool": "searchAssets",
+        "calls": 0,
+        "limit": 3,
+        "ids": [],
+        "returned": [],
+        "scope": true
+      },
+      "expected": true
+    },
+    {
+      "id": "D02",
+      "input": {
+        "op": "tool",
+        "tool": "deleteAssets",
+        "calls": 0,
+        "limit": 3,
+        "ids": [],
+        "returned": [],
+        "scope": true
+      },
+      "expected": false
+    },
+    {
+      "id": "D03",
+      "input": {
+        "op": "tool",
+        "tool": "approve",
+        "calls": 0,
+        "limit": 3,
+        "ids": [],
+        "returned": [],
+        "scope": true
+      },
+      "expected": false
+    },
+    {
+      "id": "D04",
+      "input": {
+        "op": "tool",
+        "tool": "searchAssets",
+        "calls": 3,
+        "limit": 3,
+        "ids": [],
+        "returned": [],
+        "scope": true
+      },
+      "expected": false
+    },
+    {
+      "id": "D05",
+      "input": {
+        "op": "tool",
+        "tool": "searchAssets",
+        "calls": 0,
+        "limit": 3,
+        "ids": [
+          "invented"
+        ],
+        "returned": [],
+        "scope": true
+      },
+      "expected": false
+    },
+    {
+      "id": "D06",
+      "input": {
+        "op": "confirm",
+        "scope": true,
+        "duplicate": false,
+        "userReceipt": true,
+        "digest": "d",
+        "reviewedDigest": "d",
+        "revision": 1,
+        "expected": 1,
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": "commit"
+    },
+    {
+      "id": "D07",
+      "input": {
+        "op": "confirm",
+        "scope": true,
+        "duplicate": false,
+        "userReceipt": false,
+        "digest": "d",
+        "reviewedDigest": "d",
+        "revision": 1,
+        "expected": 1,
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": "review-required"
+    },
+    {
+      "id": "D08",
+      "input": {
+        "op": "confirm",
+        "scope": true,
+        "duplicate": false,
+        "userReceipt": true,
+        "digest": "changed",
+        "reviewedDigest": "d",
+        "revision": 1,
+        "expected": 1,
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": "review-required"
+    },
+    {
+      "id": "D09",
+      "input": {
+        "op": "confirm",
+        "scope": true,
+        "duplicate": false,
+        "userReceipt": true,
+        "digest": "d",
+        "reviewedDigest": "d",
+        "revision": 1,
+        "expected": 1,
+        "now": 2,
+        "expiry": 2
+      },
+      "expected": "review-required"
+    },
+    {
+      "id": "D10",
+      "input": {
+        "op": "confirm",
+        "scope": true,
+        "duplicate": true,
+        "userReceipt": true,
+        "digest": "d",
+        "reviewedDigest": "d",
+        "revision": 1,
+        "expected": 1,
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": "already-committed"
+    },
+    {
+      "id": "D11",
+      "input": {
+        "op": "confirm",
+        "scope": false,
+        "duplicate": true,
+        "userReceipt": true,
+        "digest": "d",
+        "reviewedDigest": "d",
+        "revision": 1,
+        "expected": 1,
+        "now": 1,
+        "expiry": 2
+      },
+      "expected": "refused"
+    }
+  ]
+}

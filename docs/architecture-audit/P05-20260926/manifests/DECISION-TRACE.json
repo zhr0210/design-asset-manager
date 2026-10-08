@@ -1,0 +1,60 @@
+{
+  "scope": "P05 only; original package and previous stage statuses preserved",
+  "items": [
+    {
+      "id": "DAM-A005",
+      "decision": "持久任务采用可重试执行与幂等结果效果",
+      "chapters": [
+        "JOB-07"
+      ],
+      "sources": [
+        "U01",
+        "S00"
+      ],
+      "tradeoff": "不承诺任意远端API exactly-once；请求身份与强制重跑代次分离。",
+      "stages": "P05 P10 P14",
+      "status": "proposed_pending_source_review",
+      "p05_design_review_status": "ready_for_review",
+      "p05_implementation_status": "not_started",
+      "p05_report": "../reports/P05-REPORT.md",
+      "p05_runtime_tests": "NOT_RUN"
+    },
+    {
+      "id": "DAM-A006",
+      "decision": "证据、成功状态和Outbox在Host事务提交",
+      "chapters": [
+        "JOB-07",
+        "DATA-12"
+      ],
+      "sources": [
+        "S00"
+      ],
+      "tradeoff": "事件重复不重复效果；文件系统发布由独立staging/journal协调。",
+      "stages": "P02 P05 P26",
+      "status": "proposed_pending_source_review",
+      "p05_design_review_status": "ready_for_review",
+      "p05_implementation_status": "not_started",
+      "p05_report": "../reports/P05-REPORT.md",
+      "p05_runtime_tests": "NOT_RUN"
+    },
+    {
+      "id": "DAM-A007",
+      "decision": "持久任务意图不携带永久库/外发权限",
+      "chapters": [
+        "JOB-07",
+        "SEC-10"
+      ],
+      "sources": [
+        "S00",
+        "U01"
+      ],
+      "tradeoff": "关库撤权；重开重新核对generation和范围，不因自动恢复跳过授权。",
+      "stages": "P05 P11 P14",
+      "status": "proposed_pending_source_review",
+      "p05_design_review_status": "ready_for_review",
+      "p05_implementation_status": "not_started",
+      "p05_report": "../reports/P05-REPORT.md",
+      "p05_runtime_tests": "NOT_RUN"
+    }
+  ]
+}

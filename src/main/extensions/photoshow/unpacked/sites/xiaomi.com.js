@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"xiaomi.com":{srcMatching:[{srcRegExp:"(//(?:.+\\.(?:app)?mifile\\.(?:com|cn)|static\\.home\\.mi\\.com)/.+?)(?:!\\d+x\\d+)?(@IMG@).*",processor:"$1$2"},{srcRegExp:"(//.+\\.(?:(?:app)?mifile|mi-img)\\.(?:com|cn)/.+?@IMG@).*",processor:"$1"},{srcRegExp:"(//.+\\.market\\.xiaomi\\.com/thumbnail/\\w+/\\w)\\w*(?=/)",processor:"$1"}]}};

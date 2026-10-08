@@ -1,0 +1,13 @@
+diff --git a/.codeindex/module-map.json b/.codeindex/module-map.json
+index e40223c..e30990d 100644
+--- a/.codeindex/module-map.json
++++ b/.codeindex/module-map.json
+@@ -417,7 +417,7 @@
+         },
+         {
+           "path": "src/renderer/routes/Library.tsx",
+-          "anchor": "projectAssetDiscovery",
++          "anchor": "useHostAssetSearch",
+           "role": "caller",
+           "reality": "Current Implementation",
+           "reason": "Live caller proving the lexical Module is wired into Asset Workspace.",

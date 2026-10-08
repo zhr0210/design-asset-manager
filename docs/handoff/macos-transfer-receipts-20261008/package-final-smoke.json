@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-10-08T07:42:15.220Z",
+  "checks": [
+    {
+      "id": "installer",
+      "status": "passed",
+      "detail": "installer exists"
+    },
+    {
+      "id": "winUnpackedExe",
+      "status": "passed",
+      "detail": "winUnpackedExe exists"
+    },
+    {
+      "id": "launch-unpacked",
+      "status": "passed",
+      "detail": "Ordinary packaged Host returned its actual build/platform health and its owned process exited; UI/model use is not verified."
+    }
+  ],
+  "artifacts": {
+    "installer": {
+      "fileName": "Design Asset Manager Setup 1.0.0.exe",
+      "sizeBytes": 128658496,
+      "sha256": "C7994A2F0B61264C5037CD05CEDA10E9BBAF65977B13708BB8F9B0C1CB616F04",
+      "signed": "unknown"
+    },
+    "blockmap": {
+      "fileName": "Design Asset Manager Setup 1.0.0.exe.blockmap",
+      "sizeBytes": 134407
+    },
+    "ordinaryStartup": {
+      "passed": true,
+      "observation": {
+        "schema": 1,
+        "state": "ready",
+        "buildId": "dam-8ddc7686f890b3e3",
+        "platform": "win32",
+        "arch": "x64",
+        "version": "1.0.0",
+        "pid": 15348,
+        "startupMs": 1105,
+        "origin": "http://127.0.0.1:57850",
+        "startupKind": "ordinary packaged Browser Host; not UI/model acceptance"
+      },
+      "processExited": true,
+      "logsRead": false,
+      "unsafeStartupFlags": false,
+      "signatureVerified": false,
+      "uiVerified": false
+    }
+  }
+}

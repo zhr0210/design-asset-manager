@@ -1,0 +1,8 @@
+# Public retrieval verification images
+
+These two small, bundled images are capability probes, never user-library input.
+
+- `astronaut.jpg`: Eileen Collins NASA portrait distributed as `skimage.data.astronaut`. NASA public-domain United States government photograph; no endorsement is implied. Source description: https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.astronaut . NASA media guidance: https://www.nasa.gov/nasa-brand-center/images-and-media/ . Resized from the already authorized public evaluation image to a 224-pixel bounding box, JPEG quality 85.
+- `flag.jpg`: the simple red/white/blue geometric flag of the Netherlands, from the already authorized public flag evaluation image. Public-domain geometric design. Resized to the same bounding box, JPEG quality 85.
+
+Original user-library files are retained. The product loads only these fixed probe images for installation validation. Real-library query quality is evaluated separately. The Chinese abstract pure-red probe has a known weak result for this model; it is retained in the additional validation report, not described as a passed colour-accuracy test.

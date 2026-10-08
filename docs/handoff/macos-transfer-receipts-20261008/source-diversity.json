@@ -1,0 +1,19 @@
+{
+  "results": [
+    {
+      "alias": "inherited-D",
+      "fileCount": 166,
+      "uniqueByteContents": 24,
+      "bytes": 127143006,
+      "duplicateCopies": 142
+    },
+    {
+      "alias": "F-load-copy",
+      "fileCount": 10009,
+      "uniqueByteContents": 24,
+      "bytes": 4220236440,
+      "duplicateCopies": 9985
+    }
+  ],
+  "limitation": "Distinct byte contents include derived versions; not an independent semantic quality set. Scale copies add no new content diversity."
+}

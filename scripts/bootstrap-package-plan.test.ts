@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict'
+Object.defineProperty(process, 'platform', { value: 'win32', configurable: true })
+Object.defineProperty(process, 'arch', { value: 'x64', configurable: true })
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { DoctorReport } from '../src/shared/types/doctor.types'

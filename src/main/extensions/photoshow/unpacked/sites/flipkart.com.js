@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"flipkart.com":{srcMatching:[{srcRegExp:"(//.+?\\.flixcart\\.com/image/)\\d+/\\d+/(.+@IMG@)",processor:["$1$2"]},{srcRegExp:"(//.+?\\.flixcart\\.com/blobio/)\\d+/\\d+(/.+@IMG@)",processor:["$12000/2000$2"]}]}};

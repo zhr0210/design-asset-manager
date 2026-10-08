@@ -1,0 +1,184 @@
+import {BACKGROUND_ANALYSIS_SQL} from '../background-analysis/background-analysis.schema'
+import {TAG_DECISION_SQL} from '../independent-tags/tag-decision.schema'
+import {TAG_EXECUTION_SQL} from '../independent-tags/tag-execution.schema'
+import { TAG_INTENT_SQL } from '../independent-tags/tag-intent.schema'
+import { CURRENT_MANAGED_SCHEMA_VERSION, isKnownLibrarySchemaVersion } from './library-schema-version'
+import {OCR_SQL} from '../ocr/ocr.schema'
+import {WORK_SET_SQL} from './work-set.schema'
+import {ORGANIZATION_SQL} from './library-organization.schema'
+import {NOTEBOOK_SQL} from './asset-notebook.schema'
+import { INTAKE_RECOVERY_SQL } from './intake-recovery.schema'
+import { DOWNLOAD_JOURNAL_SQL } from '../managed-download/download-journal.schema'
+import { VISUAL_AI_TABLE_SQL, VISUAL_AI_INDEX_SQL } from '../visual-ai/visual-ai.schema'
+import type Database from 'better-sqlite3'
+
+import type { LibraryManifestDeclaration } from './library-manifest.tracer'
+
+const CONTROL_APPLICATION_ID = 0x44414d49
+const OPAQUE_IDENTITY = /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/u
+const IDENTITY_SQL = `CREATE TABLE library_control_identity (
+  singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
+  lineage_identity TEXT NOT NULL,
+  library_identity TEXT NOT NULL,
+  control_store_identity TEXT NOT NULL,
+  library_generation TEXT NOT NULL,
+  managed_originals_relative_path TEXT NOT NULL
+) WITHOUT ROWID`
+const JOURNAL_SQL = `CREATE TABLE library_operation_journal (
+  operation_identity TEXT PRIMARY KEY,
+  state TEXT NOT NULL CHECK (state IN ('settled', 'pending', 'ambiguous'))
+) WITHOUT ROWID`
+
+export type LibraryControlStoreInspection =
+  | Readonly<{ kind: 'compatible'; generation: string }>
+  | Readonly<{ kind: 'unsupported' | 'recovery-required' }>
+
+/** Main-only creation primitive; never upgrades or infers an existing store. */
+export function initializeLibraryControlStore(
+  database: Database.Database,
+  input: Readonly<{
+    lineageIdentity: string
+    libraryIdentity: string
+    controlStoreIdentity: string
+    generation: string
+    managedOriginalsRelativePath: string
+  }>
+): void {
+  database.pragma('journal_mode = DELETE')
+  database.pragma('synchronous = FULL')
+  database.pragma('application_id = 0x44414d49')
+  database.pragma('user_version = 1')
+  database.exec(`${IDENTITY_SQL};${JOURNAL_SQL}`)
+  database.prepare(`
+    INSERT INTO library_control_identity (
+      singleton, lineage_identity, library_identity, control_store_identity,
+      library_generation, managed_originals_relative_path
+    ) VALUES (1, ?, ?, ?, ?, ?)
+  `).run(
+    input.lineageIdentity,
+    input.libraryIdentity,
+    input.controlStoreIdentity,
+    input.generation,
+    input.managedOriginalsRelativePath
+  )
+}
+
+/** Empty-library fixture format only; never initializes or migrates a schema. */
+export function inspectLibraryControlStore(
+  database: Database.Database,
+  declaration: LibraryManifestDeclaration
+): LibraryControlStoreInspection {
+  try {
+    if (!database.readonly || !database.inTransaction ||
+      database.pragma('query_only', { simple: true }) !== 1 ||
+      database.pragma('application_id', { simple: true }) !== CONTROL_APPLICATION_ID) {
+      return { kind: 'recovery-required' }
+    }
+    const version = database.pragma('user_version', { simple: true })
+    if (typeof version === 'number' && Number.isSafeInteger(version) && version > CURRENT_MANAGED_SCHEMA_VERSION) {
+      return { kind: 'unsupported' }
+    }
+    if (!isKnownLibrarySchemaVersion(version) || database.pragma('journal_mode', { simple: true }) !== 'delete' ||
+      database.pragma('quick_check(1)', { simple: true }) !== 'ok') {
+      return { kind: 'recovery-required' }
+    }
+    const schema = database.prepare(`
+      SELECT type, name, sql FROM sqlite_schema
+      WHERE name NOT LIKE 'sqlite_%' ORDER BY name
+    `).all() as Array<{ type?: unknown; name?: unknown; sql?: unknown }>
+    const expected = [
+      ['library_control_identity', IDENTITY_SQL],
+      ['library_operation_journal', JOURNAL_SQL]
+    ] as const
+    const controlSchema = schema.filter((row) =>
+      row.name === 'library_control_identity' || row.name === 'library_operation_journal')
+    const allowedDataTables = new Set([
+      'assets', 'tags', 'asset_tags', 'tag_aliases', 'tag_relations',
+      'tag_groups', 'tag_group_items', 'tag_suggestions', 'capture_requests',
+      'asset_candidates', 'promotion_links', 'asset_lifecycle', 'asset_trash_plans'
+    ])
+    if (isKnownLibrarySchemaVersion(version,2)) {
+      for (const [name, type, sql] of [['visual_ai_evidence', 'table', VISUAL_AI_TABLE_SQL], ['visual_ai_evidence_asset', 'index', VISUAL_AI_INDEX_SQL]]) {
+        const row = schema.find(item => item.name === name)
+        if (!row || row.type !== type || typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(sql)) return { kind: 'recovery-required' }
+        allowedDataTables.add(name)
+      }
+    }
+    if (isKnownLibrarySchemaVersion(version,3)) {
+      // Exact statements, including immutable identity enforcement; full schema is checked on binding.
+      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (isKnownLibrarySchemaVersion(version,11) ? '\n'+TAG_DECISION_SQL : '') + (version===12?'\n'+BACKGROUND_ANALYSIS_SQL:'')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
+      for (const sql of statements) {
+        const [, kind, name] = /^CREATE (TABLE|(?:UNIQUE )?INDEX|TRIGGER) (\w+)/.exec(sql)!
+        const row = schema.find(item => item.name === name)
+        if (!row || row.type !== kind.replace('UNIQUE ','').toLowerCase() || typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(sql.replace(/;$/, ''))) return { kind: 'recovery-required' }
+        allowedDataTables.add(name)
+      }
+    }
+    if (controlSchema.length !== expected.length || schema.some((row) =>
+      typeof row.name !== 'string' ||
+      (!allowedDataTables.has(row.name) && row.name !== 'library_control_identity' &&
+        row.name !== 'library_operation_journal')) ||
+      controlSchema.some((row, index) =>
+        row.type !== 'table' || row.name !== expected[index][0] ||
+        typeof row.sql !== 'string' || normalizeSql(row.sql) !== normalizeSql(expected[index][1]))) {
+      return { kind: 'recovery-required' }
+    }
+    const identities = database.prepare(`
+      SELECT singleton, lineage_identity, library_identity, control_store_identity,
+        library_generation, managed_originals_relative_path
+      FROM library_control_identity LIMIT 2
+    `).all() as Array<Record<string, unknown>>
+    const identity = identities[0]
+    if (identities.length !== 1 || identity.singleton !== 1 ||
+      identity.lineage_identity !== declaration.lineageIdentity ||
+      identity.library_identity !== declaration.libraryIdentity ||
+      identity.control_store_identity !== declaration.controlStoreIdentity ||
+      identity.managed_originals_relative_path !== declaration.managedOriginalsRelativePath ||
+      typeof identity.library_generation !== 'string' ||
+      !OPAQUE_IDENTITY.test(identity.library_generation)) return { kind: 'recovery-required' }
+
+    const journal = database.prepare(`
+      SELECT operation_identity, state FROM library_operation_journal LIMIT 129
+    `).all() as Array<{ operation_identity?: unknown; state?: unknown }>
+    if (journal.length > 128 || journal.some((row) =>
+      typeof row.operation_identity !== 'string' || !OPAQUE_IDENTITY.test(row.operation_identity) ||
+      row.state !== 'settled')) return { kind: 'recovery-required' }
+    return { kind: 'compatible', generation: identity.library_generation }
+  } catch {
+    return { kind: 'recovery-required' }
+  }
+}
+
+function normalizeSql(value: string): string {
+  // Preserve SQL string-literal semantics; a differently cased journal state
+  // constraint is not the same schema even when its table is currently empty.
+  return value.replace(/\s+/gu, ' ').trim()
+}
+
+/** Recognize only the legacy schema surface; never read Asset/Original rows. */
+export function hasLegacyLibrarySchema(database: Database.Database): boolean {
+  if (!database.readonly || !database.inTransaction ||
+    database.pragma('query_only', { simple: true }) !== 1 ||
+    database.pragma('application_id', { simple: true }) !== 0 ||
+    database.pragma('journal_mode', { simple: true }) !== 'delete') return false
+  const tables = database.prepare(`
+    SELECT type, name, sql FROM sqlite_schema
+    WHERE name IN ('assets', 'tags', 'asset_tags', 'library_control_identity')
+    ORDER BY name LIMIT 4
+  `).all() as Array<{ type?: unknown; name?: unknown; sql?: unknown }>
+  if (tables.length !== 3 || tables.some((table) => table.type !== 'table' ||
+    typeof table.sql !== 'string' || /\bVIRTUAL\b/iu.test(table.sql)) ||
+    tables.map((table) => table.name).join(',') !== 'asset_tags,assets,tags') return false
+  for (const [table, required] of [
+    ['assets', ['id', 'title', 'file_name', 'file_path', 'thumbnail_path', 'source_site_id']],
+    ['tags', ['id', 'name']],
+    ['asset_tags', ['id', 'asset_id', 'tag_id']]
+  ] as const) {
+    const columns = database.prepare(`SELECT name FROM pragma_table_info(?) LIMIT 65`)
+      .all(table) as Array<{ name?: unknown }>
+    if (columns.length > 64 || !required.every((name) => columns.some((column) => column.name === name))) {
+      return false
+    }
+  }
+  return true
+}

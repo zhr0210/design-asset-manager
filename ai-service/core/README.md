@@ -8,6 +8,7 @@ Shared runtime infrastructure for AI tasks.
 - `batch_scheduler.py`: batching and scheduling.
 - `gpu_monitor.py`: GPU state checks.
 - `model_manager.py`: model loading and memory coordination.
+- `mps_execution_probe.py`: fixed-input real `torch.mps` execution evidence.
 
 ## Rules
 
@@ -24,5 +25,6 @@ python -m unittest discover ai-service/tests
 
 | Version | Time | Change |
 | --- | --- | --- |
+| v1.2.0 | 2026-06-06 | Added a path-free, fixed-tensor MPS execution probe with structured unsupported/dependency/backend/failure states. |
 | v1.1.0 | 2026-05-31 | GPU monitor now returns an explicit unavailable state instead of fabricated mock GPU metrics when CUDA/NVML/nvidia-smi are unavailable. |
 | v1.0.0 | 2026-05-31 | Rewrote README with compact core ownership and protection rule. |

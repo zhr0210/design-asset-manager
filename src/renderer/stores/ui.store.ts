@@ -16,12 +16,10 @@ const TRANSLATIONS: Record<AppLanguage, Record<string, string>> = {
   zh: {
     // Sidebar
     'menu.dashboard': '仪表盘',
-    'menu.sites': '网站账号',
-    'menu.browser': '素材浏览器',
-    'menu.search': '传统搜索',
     'menu.downloads': '下载队列',
-    'menu.library': '本地素材库',
+    'menu.library': '素材工作区',
     'menu.tags': '标签管理',
+    'menu.modelLibrary': '模型库',
     'menu.aiConsole': 'AI 控制台',
     'menu.settings': '设置',
     // Tooltips
@@ -33,12 +31,10 @@ const TRANSLATIONS: Record<AppLanguage, Record<string, string>> = {
   en: {
     // Sidebar
     'menu.dashboard': 'Dashboard',
-    'menu.sites': 'Accounts',
-    'menu.browser': 'Browser',
-    'menu.search': 'Search',
     'menu.downloads': 'Downloads',
-    'menu.library': 'Library',
+    'menu.library': 'Asset Workspace',
     'menu.tags': 'Tags',
+    'menu.modelLibrary': 'Model Library',
     'menu.aiConsole': 'AI Console',
     'menu.settings': 'Settings',
     // Tooltips

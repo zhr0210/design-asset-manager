@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-08T00:39:05.833Z",
+  "build": {
+    "buildId": "dam-58dc70f3d0431312",
+    "sourceDigest": "58dc70f3d04313121d1887dfa288adddce1debcc153771dff2a11e25f2081898",
+    "builtAt": "2026-10-08T00:16:15.862Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 761
+  },
+  "buildValidation": "npm run build exit0, CLI99577; compiled identity/artifact hashes rechecked",
+  "results": [
+    {
+      "name": "typecheck",
+      "exitCode": 0,
+      "durationMs": 31896,
+      "log": "typecheck.log"
+    },
+    {
+      "name": "context",
+      "exitCode": 0,
+      "durationMs": 1674,
+      "log": "context.log"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "out/main/index.js",
+      "sha256": "37f75b610952551694aa958f24c749c3074a72f58b48071ee98c81e737db7de7"
+    },
+    {
+      "path": "out/renderer/index.html",
+      "sha256": "2bb735d88cb8e3813dcc0468ba92008a1447b4997a5d7b852466a8496a3279c0"
+    },
+    {
+      "path": "src/shared/build-identity.generated.ts",
+      "sha256": "9483807281b7fc9518997416afd13686c75bb81e18c669b85ab59526ddfe4128"
+    }
+  ],
+  "scope": "current exact candidate; internal checks are not UI acceptance",
+  "contextWarning": "56 untracked first-party source files excluded from trusted ownership coverage, retained"
+}

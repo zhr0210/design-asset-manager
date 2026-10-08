@@ -1,0 +1,91 @@
+{
+  "packageId": "DAM-ARCH-20260924",
+  "packageVersion": "1.0.0",
+  "updatedOn": "2026-09-25",
+  "architectureDocumentStatus": "authored_target_proposal_pending_source_review",
+  "sourceMaterialStatus": {
+    "localWorktreeAvailableForScope": true,
+    "predecessorBaseline": "../../P00-20260924/evidence/STATIC-CHECKS.json",
+    "priorStageHistoricalReportsRead": 10,
+    "historicalReportsRereadThisStage": 0,
+    "privateOriginalsRead": false,
+    "publicPrimaryReferencesReviewedThisRun": 7,
+    "publicReviewScope": "P01 relevant sections; URLs and version caveats in REFERENCES.md; no external execution"
+  },
+  "originalSnapshot": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df",
+    "dirtyWorktreeReported": true,
+    "headAloneReproducible": false
+  },
+  "repositoryChangesPerformed": false,
+  "damBusinessTestsRun": false,
+  "newModelBenchmarksRun": false,
+  "realLibraryAccessed": false,
+  "defaultMode": "SPEC",
+  "nextStage": null,
+  "activeStage": null,
+  "reviewedDesignStages": [],
+  "acceptedImplementationStages": [],
+  "stageRegistry": "stages.json",
+  "requirementRegistry": "REQUIREMENT-TRACE.json",
+  "decisionRegistry": "DECISION-TRACE.json",
+  "latestStageReport": "reports/P01-REPORT.md",
+  "externalActionsAuthorization": {
+    "realLibraryMutation": false,
+    "privateAssetUpload": false,
+    "paidCloudRequests": false,
+    "largeModelDownload": false,
+    "untrustedScriptExecution": false,
+    "userExternalServiceTermination": false
+  },
+  "notes": [
+    "用户明确继续下一步，进入P01 SPEC；不伪造P00 reviewed。",
+    "本轮只新增文档、Proposed schema及合成夹具；无业务契约修改。",
+    "公开官方资料查阅不等于外发私有素材或启动远程服务。",
+    "P01 ready_for_review，完成停止，不自动进入P02。"
+  ],
+  "nextStageCandidate": "P02",
+  "nextAction": "review_P01_spec",
+  "nextStageAuthorization": "not_granted",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "auditDocumentsCreated": true,
+  "businessSourceChangesPerformed": false,
+  "stoppedAfterStage": "P01",
+  "worktree": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df3bbb605478da6d0af18724d64021e723c",
+    "headAloneReproducible": false,
+    "protectedSnapshot": "../evidence/WORKTREE-BEFORE.json"
+  },
+  "predecessor": {
+    "stage": "P00",
+    "report": "../../P00-20260924/reports/P00-REPORT.md",
+    "recordedDesignStatus": "ready_for_review",
+    "implementationStatus": "not_started",
+    "continuationAuthorization": {
+      "userText": "继续下一步",
+      "interpretation": "P01 SPEC continuation explicitly authorized; no inferred item-by-item P00 acceptance or IMPLEMENT permission",
+      "proceedAllowed": true
+    },
+    "sourceDeltaWithinP00ProtectedSet": []
+  },
+  "externalActionsThisStage": {
+    "publicDocumentationRead": true,
+    "modelStarted": false,
+    "appStarted": false,
+    "dependencyInstalled": false,
+    "libraryAccessed": false,
+    "privateAssetUploaded": false
+  },
+  "schemaSemanticValidation": "NOT_RUN",
+  "crossLanguageValidation": "NOT_RUN",
+  "specStartedOn": "2026-09-24",
+  "specCompletedOn": "2026-09-25",
+  "stageRecordBases": {
+    "pathResolution": "relative to this CURRENT-STATE.json directory; report paths inside unchanged stage records resolve against their stage base",
+    "P00": "../../P00-20260924",
+    "P01": ".."
+  }
+}

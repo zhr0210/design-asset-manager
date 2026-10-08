@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"shopping.yahoo.co.jp":{srcMatching:[{srcRegExp:"(//.+?\\.c\\.yimg\\.jp/i/)\\w(/.+)",processor:"$1f$2"},{srcRegExp:"(//.+?\\.wear2\\.jp/.+)_\\d+(@IMG@)",processor:"$1$2"}]}};

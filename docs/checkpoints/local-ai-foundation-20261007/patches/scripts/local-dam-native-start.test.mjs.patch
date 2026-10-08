@@ -1,0 +1,67 @@
+diff --git a/scripts/local-dam-native-start.test.mjs b/scripts/local-dam-native-start.test.mjs
+new file mode 100644
+index e69de29..9093591 100644
+--- /dev/null
++++ b/scripts/local-dam-native-start.test.mjs
+@@ -0,0 +1,61 @@
++// Ordinary native entry, isolated empty profile. No synthetic launch switches,
++// library/model/account configuration or access to the real application profile.
++import assert from 'node:assert/strict'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import {test} from 'node:test'
++import {createRequire} from 'node:module'
++import {_electron} from 'playwright'
++import {spawn} from 'node:child_process'
++const require=createRequire(import.meta.url)
++const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-native-start-')))
++const profile=path.join(root,'profile'),errors=[],consoleErrors=[]
++const childEnv={...process.env}
++for(const key of ['ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL','DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E','DAM_CONNECTED_LIBRARY_SYNTHETIC_E2E'])delete childEnv[key]
++let app
++try{
++ await test('ordinary Desktop renders its discoverable workspace through the actual preload',async()=>{
++  app=await _electron.launch({executablePath:require('electron'),args:['.',`--dam-profile=${profile}`],cwd:process.cwd(),env:childEnv,timeout:15000})
++  assert.ok((await app.evaluate(({app})=>['userData','sessionData','logs','crashDumps'].map(p=>app.getPath(p)))).every(p=>p.startsWith(profile)))
++  const page=await app.firstWindow()
++  page.on('pageerror',error=>errors.push(String(error.message).slice(0,500)))
++  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text().slice(0,500))})
++  try{
++   await page.getByRole('button',{name:'打开已有素材库',exact:true}).waitFor({state:'visible',timeout:10000})
++   assert.equal(await page.evaluate(()=>typeof window.damClient),'object')
++   assert.equal(await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().filter(w=>w.isVisible()&&!w.isDestroyed()).length),1)
++   assert.deepEqual(errors,[])
++  }catch(error){
++   const startup=await page.evaluate(()=>({ready:document.readyState,rootText:document.getElementById('root')?.textContent,bridge:typeof window.damClient}))
++   console.log(JSON.stringify({symptom:'native workspace missing',startup,errors,consoleErrors,evidence:root}))
++   await page.screenshot({path:path.join(root,'native-start-failure.png')})
++   throw error
++  }
++ })
++ await app.evaluate(({app})=>app.exit(0)).catch(()=>{});await app.close().catch(()=>{});app=undefined
++ await test('Browser-first Host presents a functioning Desktop on a second ordinary launch',async()=>{
++  const browserProfile=path.join(root,'browser-profile')
++  app=await _electron.launch({executablePath:require('electron'),args:['.','--dam-browser',`--dam-profile=${browserProfile}`],cwd:process.cwd(),env:childEnv,timeout:15000})
++  await app.evaluate(({app})=>app.whenReady())
++  await new Promise((resolve,reject)=>{
++   const secondary=spawn(require('electron'),['.',`--dam-profile=${browserProfile}`],{cwd:process.cwd(),env:childEnv,windowsHide:false,stdio:'ignore'})
++   secondary.once('error',reject);secondary.once('exit',code=>code===0?resolve():reject(Error('SECOND_LAUNCH_FAILED')))
++  })
++  const page=await app.firstWindow()
++  page.on('pageerror',error=>errors.push(String(error.message).slice(0,500)))
++  try{
++   await page.getByRole('button',{name:'打开已有素材库',exact:true}).waitFor({state:'visible',timeout:10000})
++   assert.equal(await page.evaluate(()=>typeof window.damClient),'object')
++   assert.equal(await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().filter(w=>w.isVisible()&&!w.isDestroyed()).length),1)
++   assert.deepEqual(errors,[])
++  }catch(error){
++   console.log(JSON.stringify({symptom:'Browser-first native workspace missing',startup:await page.evaluate(()=>({ready:document.readyState,rootText:document.getElementById('root')?.textContent,bridge:typeof window.damClient})),errors,evidence:root}))
++   await page.screenshot({path:path.join(root,'browser-first-native-failure.png')});throw error
++  }
++ })
++}finally{
++ // Only the isolated, empty test-owned instance. No user edits or active work.
++ await app?.evaluate(({app})=>app.exit(0)).catch(()=>{})
++ await app?.close().catch(()=>{})
++}

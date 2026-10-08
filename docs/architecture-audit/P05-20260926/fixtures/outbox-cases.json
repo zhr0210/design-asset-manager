@@ -1,0 +1,131 @@
+{
+  "status": "planned_NOT_RUN",
+  "cases": [
+    {
+      "id": "O01",
+      "given": "same event delivered twice",
+      "expected": "same projection/checkpoint; no second inference",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O02",
+      "given": "seq12 arrives while seq11 not consumed",
+      "expected": "serial consumer fetches ordered events; checkpoint never jumps over failure",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O03",
+      "given": "seqs have numeric gaps",
+      "expected": "process committed ordered rows, not wait for nonexistent integer",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O04",
+      "given": "event for older content arrives after new content",
+      "expected": "re-read current; do not downgrade projection",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O05",
+      "given": "user correction changed after evidence event",
+      "expected": "current overlay applies; old model text not restored",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O06",
+      "given": "projection transaction fails",
+      "expected": "projection and checkpoint both rolled back",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O07",
+      "given": "one consumer poisoned",
+      "expected": "that checkpoint stalls; other consumer proceeds; reason redacted",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O08",
+      "given": "unknown event schema version",
+      "expected": "pause consumer; do not skip/delete silently",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O09",
+      "given": "window absent during notification",
+      "expected": "Job stays success; reopen reads latest snapshot",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O10",
+      "given": "close/reopen with pending event",
+      "expected": "only new current scope may consume",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O11",
+      "given": "new consumer/index generation",
+      "expected": "new checkpoint; snapshot+watermark rebuild",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O12",
+      "given": "cleaning old request receipt as ordinary log",
+      "expected": "forbid unsafe purge; keep dedupe record/tombstone",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O13",
+      "given": "late index publication would replace newer projection",
+      "expected": "reject downgrade or rebuild/re-read",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "O14",
+      "given": "overlay invalidation event has no jobId",
+      "expected": "valid distinct event; authorized projection refresh without job creation",
+      "testIds": [
+        "T08"
+      ],
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# Library Conflict Counts Confirm After Persistence
+
+Library Conflict Smart Filter count updates should balance responsive local feedback with trustworthy global navigation state. After Carryover Resolution, the current surface may use an Optimistic Count Update with pending state, but global navigation and Smart Filter badge counts should use Confirmed Count Update only after the resolution write is persisted. If persistence fails or the temporary count disagrees with stored conflict state, Count Reconciliation should restore the unresolved count and show the unresolved reason instead of silently hiding the conflict.

@@ -1,0 +1,378 @@
+commit	date	subject
+3fa00df3bbb605478da6d0af18724d64021e723c	2026-09-07T10:33:50+08:00	wip: preserve product reassessment before foundation docs audit
+d2221f2c260948154ef5aae44adbb9fd70bb71f8	2026-09-04T17:22:34+08:00	docs(library): define confirmed creation protocol (#13)
+2262db8e9ebb7adae84b0821e83f11ce438ed635	2026-09-04T17:14:01+08:00	docs(library): record AL-07 validation and handoff (#12)
+979de7e061aaedde085160e03090f8643e7899ee	2026-09-04T17:11:43+08:00	refactor(library): inject creation target platform policy (#12)
+5792e80db9f21ba0b8b073f603bc2447307529b0	2026-09-04T17:01:02+08:00	fix(library): close creation planning review gaps (#12)
+0049aac8fa4d58ba6616b345dcb48213b736ac60	2026-09-04T16:47:47+08:00	test(library): prove creation review revocation (#12)
+311ac4c52fb6ebc4b83570f63bf6385664112d6b	2026-09-04T16:41:06+08:00	feat(library): add read-only new-library planning core (#12)
+f0a2d145328ea84dd0c7372d26f8fe873c52b3ee	2026-09-03T14:44:31+08:00	docs(product): establish persistent commercial delivery acceptance
+c49e8f2ca7198c9d550fdbf53723f7efaec029cd	2026-09-03T14:26:31+08:00	docs(library): record AL-06 validation and foundation handoff (#11)
+826031cf2f3c3038a5677205db7f3ae3cfcb01d0	2026-09-03T14:24:16+08:00	fix(library): keep legacy inspection schema-only and reject mixed roots (#11)
+a824c96b3da9573ddd06099dae84a098a647795a	2026-09-03T14:16:50+08:00	refactor(library): clarify recovery observation naming (#11)
+9f1506b21ac03b87d4fc742fc9f8de6c3d7ad52f	2026-09-03T14:12:13+08:00	feat(library): compose fail-closed read-only open inspection (#11)
+d1afc709bbb4f0e3db3be7d49537d15393e6b2f5	2026-09-03T09:22:32+08:00	docs(library): record AL-05 validation and handoff (#10)
+7ffc6efbd5900d8283f2fd032e6067137e1b62b2	2026-09-03T09:19:10+08:00	fix(library): guard reentrant release and recovery races (#10)
+749880f9341953c454d389abf3d4bde3905be488	2026-09-03T09:00:34+08:00	feat(library): prove cross-process exclusive lock tracer (#10)
+49238455f3d678c921fe134f30e13a2b9c86eea6	2026-09-02T17:27:17+08:00	docs(library): record AL-04 validation and handoff (#9)
+3e6e701fed349de12d04e58c590d532e0af8757e	2026-09-02T17:23:18+08:00	fix(library): require scoped mount-boundary qualification (#9)
+7e32c0c82cb7fcb2add165fecfde6204e8431ddb	2026-09-02T17:15:53+08:00	feat(library): observe filesystem eligibility without writes (#9)
+a0e5ef7896a3b017e0746f654fd2fa9506ebf01e	2026-09-01T23:38:58+08:00	docs(library): record AL-03 validation and handoff (#8)
+fc26b647cf8014abcc0408ff661b008837f0c8d8	2026-09-01T23:36:34+08:00	fix(library): preserve routing and share Manifest data safety (#8)
+8747585218cc4d481af4cd374a0497b22821bf4f	2026-09-01T23:27:18+08:00	feat(library): validate portable Library Manifest declarations (#8)
+e83f305d0b2d940ab7da5072303f03d53dfdd97a	2026-08-31T11:54:50+08:00	docs(library): record AL-02 validation and handoff (#7)
+dbcc2ebb0faddc8c0fac83e8080361dcc0b1cdd9	2026-08-31T11:45:43+08:00	refactor(library): centralize inspection-only result projection (#7)
+7c8e9b922f1648a1c62a9812ac1170f9e7dc6df7	2026-08-31T11:35:13+08:00	feat(library): add read-only Library Start inspection tracer (#7)
+1e7a47b16f00a5fffba67904d7fe42b00f618a7d	2026-08-31T10:32:10+08:00	docs(library): record AL-01 validation and handoff (#6)
+99a4041cd61b69ae93e4970f0686567d1486b145	2026-08-31T10:21:25+08:00	test(library): fail closed on unreviewed IPC channel forms (#6)
+02478e26a108b04312d38c8118bc81c10846fe95	2026-08-31T10:12:43+08:00	test(library): close baseline registration and alias gaps (#6)
+c6cddbec7e5a68f6f83dcf5f3a73059ccefa99e5	2026-08-31T09:57:27+08:00	test(library): guard pre-cutover asset authority (#6)
+034656f4013c7a343890106b6741028ff338c726	2026-08-31T09:17:54+08:00	docs(library): queue foundation issues 6-11
+23fc977b660c421279a4e8ca5397b095993cb2b5	2026-08-31T08:45:32+08:00	docs(library): record authoritative Active Library plan (#5)
+f8c0b9c975626e40055675ee1e1c4a3a10cddec8	2026-08-30T18:00:17+08:00	feat(release): add public catalog input preparation
+f16e554a1408920448daf9ce9efbfc2385042f29	2026-08-28T19:34:03+08:00	feat(release): gate candidates on official model catalog
+16a55c8da0e04b49620a3e44f4a3f3745471c079	2026-08-28T10:07:54+08:00	feat(model-library): connect read-only product pilot
+de725870f1569007e34388231e83a738ebddfc01	2026-08-13T12:12:10+08:00	feat(model-library): validate root registry tracer
+ca5da173b67a5f384224ff92422061bfbe00db2d	2026-08-12T19:53:47+08:00	feat(model-library): validate storage authority tracer
+81157719fec5481c6de12a80ff8cd76602093daf	2026-08-12T16:59:38+08:00	feat(model-library): validate transactional blob storage tracer
+5b7144366db01ca917b7d005c394313ad2465b8c	2026-08-12T13:14:55+08:00	feat(model-library): validate signed catalog admission tracer
+28f80d80a5f55f83cdf5219fa94a7c796fae4bf8	2026-08-12T11:15:43+08:00	feat(ai): validate model library core interface
+f93fca2b58787c652917aa08d9120fde39bed52c	2026-08-10T04:12:19+08:00	fix(ai): contain unsafe legacy model acquisition
+a94132cbf2977d07c87d07661b9e84814f55a7a5	2026-08-09T19:06:09+08:00	refactor: extract AI Console status module
+4c53d3945b69f6a6b6dc768fc15941f73befc02a	2026-08-09T18:00:25+08:00	tools: harden agent routing from real-task pilot
+409c713bed03c0e56d74844f7753e93b13f6be66	2026-08-01T23:57:31+08:00	tools: add bounded agent context router
+c4644cda9a33a53a82aa28135e9b50f4e1c98015	2026-08-01T21:32:15+08:00	docs: redefine agent project guidance
+2df114817cadb34e538b0b37c03232c6e71072d7	2026-08-01T04:13:48+08:00	docs: close asset trash sqlite tracer
+93ce38e1e1db2dc0e3423a6a5cd12523c79c024c	2026-08-01T04:12:55+08:00	fix: reject asset trash clock rollback
+ff2151b2cbb3cf8b8045402052b5c833c0040371	2026-08-01T04:08:03+08:00	docs: compact current task ledger
+8e68c2a847f7e5eeb13b7e4b713de6eb0c287105	2026-08-01T04:08:03+08:00	fix: harden asset trash persistence
+d362ce46d51c06a711057359c6a5cfd8d921d934	2026-08-01T03:45:18+08:00	docs: record asset trash sqlite tracer
+1122908e16f2915a759538fb1f2604cbde29e962	2026-08-01T03:45:18+08:00	feat: persist recoverable asset trash
+dc3ac172822e2ace558cc051d7fbdddab63dd82d	2026-08-01T03:37:29+08:00	refactor: extract asset trash interface
+302f214f4749be3a184d67aa7fd5d35f032a1adc	2026-08-01T03:37:29+08:00	docs: bound asset trash sqlite tracer
+6ba80699fb778c7e16dd9ee59e4a1ce84c01015b	2026-08-01T03:12:33+08:00	refactor: seal active library capability
+47a4954c0eae47bf3fbef0f9b33a840fa2cbf4c8	2026-08-01T02:00:07+08:00	fix: freeze active library lease identity
+34db22cc108680db5d63c164db5bccecb8cc20e4	2026-08-01T01:56:55+08:00	fix: enforce lifecycle authority invariants
+7ca880d0b63cd0b81869a6800072f273d98a2f31	2026-08-01T01:46:35+08:00	feat: model recoverable asset trash
+87dbfaed41f1e2aab60413b3c28c852dd3ddb2d3	2026-08-01T01:42:57+08:00	refactor: compose capture from active library
+a8f9eedb4b48cfd09dc3d9d804675b4e425f9709	2026-08-01T01:40:35+08:00	feat: bind active library authority
+b59edbfb3af7d40ab55811db0db1ab394cd38925	2026-07-31T22:28:44+08:00	feat: add durable capture intake persistence
+7d35c2e650f14d026da0c0602c1892ead14a9f7c	2026-07-31T20:22:10+08:00	feat: establish safe capture intake tracer
+8806eea14b48b8385b87994b5d4e3070091e0463	2026-07-30T12:58:20+08:00	docs: close asset discovery vertical slice
+9b17d87dc6592c3dc9d0eb076e8283f55e9ae117	2026-07-30T12:56:52+08:00	fix: make source discovery fail honestly
+95139867ba13921ef5ca7fa233b50bde57a089fa	2026-07-30T12:51:01+08:00	feat: make asset workspace the product home
+d50b9d52be1b2a5d5182fd0695efac1aa6d2c16d	2026-07-30T12:48:24+08:00	feat: add explainable local asset discovery
+df32ddfe5107beb3b20155ac9416429afb8c5bae	2026-07-30T12:09:48+08:00	docs: route and reconcile architecture corpus
+6ea6c3d35efcb7c2e8b483b5c84655dffad9fcd6	2026-07-30T11:22:37+08:00	docs: define embedded AI interaction principle
+00a59d35b9153b57dcd1bd40280f174239e02677	2026-07-30T11:16:21+08:00	docs: define private alpha success standard
+e644973348e7c7dc749e41f952d110e2bb551c93	2026-07-29T18:21:48+08:00	fix: preserve source files during normalization
+2167cc3c326963c8b7d30ce0360bfd7e085a699f	2026-07-29T18:12:08+08:00	docs: align asset ownership default
+617447a502467de38de35e477be769400b96f960	2026-07-29T16:53:46+08:00	docs: snapshot architecture corpus before convergence
+b6d839bc38817ddecd6d9354ff8bc2e6464f90c9	2026-07-29T16:53:35+08:00	snapshot: preserve implementation before architecture convergence
+88bca24d8aa545835a833331fae7fa1f76fe3f0d	2026-07-01T00:05:04+08:00	Record gated closure blockers
+608a409deeed3a94875f3b6b7465904c36537f0b	2026-06-30T23:55:45+08:00	Share Platform AI metadata matcher
+d4e1732a53349275e3d5430b5c4fbb773cc2a3b2	2026-06-30T23:47:29+08:00	Share platform adapter matcher workflow
+d0263feab48cc24006e02c0081e06d01a1ae292c	2026-06-30T23:37:44+08:00	Share Doctor command platform matcher
+0891d839a5b364cc9e1c60bc9ed4be156aa601b8	2026-06-30T23:29:42+08:00	Share Llama planner platform matcher
+24e9aae40e779349ac39ae16f14076090257bb1d	2026-06-30T23:19:09+08:00	Share Llama governance platform adapter matching
+e7dad1606c5972a292518831d075372069887abd	2026-06-30T23:09:21+08:00	Share Llama installer platform adapter matching
+a4c786fcacfad636b26400837c5b315c93ed17b1	2026-06-30T17:26:27+08:00	Share main platform adapter matching
+241c0a577a3c0b696de9dd847cfc0ecc4a6d119e	2026-06-30T17:10:10+08:00	Share AI runtime bootstrap profile matching
+2b605955eda0f3d5b895338104d6f02a50ff7934	2026-06-30T17:01:54+08:00	Share runtime profile target matching
+a4ce7ff7d2c03fadaca6edebb00f68cae8274db4	2026-06-30T16:49:36+08:00	Share signing environment platform lookup
+ca9d27c6eac3002fd4edbb22864f27c4fd01c328	2026-06-30T16:40:57+08:00	Share external gate platform lookup
+24cbfcd86c61766e0ba765efca2dd19b71016a56	2026-06-30T16:29:39+08:00	Index release platform target metadata
+7f2e0701d44f45e3d246f94ab2edb040a6e9c63b	2026-06-30T12:13:41+08:00	Share release target matching helpers
+604a9148b7f3b12cdae0cca8ce08432a671db9f0	2026-06-30T11:56:13+08:00	Share release readiness target assertion
+af507402bac1b7c57e8a3579e3c06a004184a24f	2026-06-30T11:44:12+08:00	Share signing environment platform status lookup
+86158b6ad93727054c031ede1061e0bc9d949941	2026-06-30T11:29:39+08:00	Share release external gate plan lookup
+174d5317fe5e8dc6288eba646c7dabde75a83014	2026-06-30T02:56:29+08:00	Share AI Console smoke host defaults
+78878301b034f2d88fa1f36dc46ab6485d5ca619	2026-06-30T02:41:07+08:00	Share worker probe connection markers
+2093eef09c3b2900a34b37648328b15ade698206	2026-06-30T02:26:52+08:00	Add isolated AI Console UI smoke harness
+5ca74f977de4c4c261457c46cc184de66b9d147e	2026-06-30T02:13:45+08:00	Share AI Console GPU health display metadata
+daa880a6e2c900c7add0189d3e6bf47cbf6d53cd	2026-06-30T02:04:21+08:00	Share platform AI action button display metadata
+cce8f23db3afcd0cba1f353b91f7d182d9e865dc	2026-06-29T15:30:42+08:00	Share python runtime compatibility status metadata
+0ef67a219765d3ac6d762b9104daccb4304bfa7d	2026-06-29T15:22:59+08:00	Share text box provider execution descriptors
+db86ee8f359dc796707d4fc86f267dde7490aad8	2026-06-29T15:12:59+08:00	Share visual analysis skip reason copy
+d75b5d6ba118bf1b3fda063acd3a2ff55f2b7c20	2026-06-29T15:05:08+08:00	Share text box provider execution planning
+3bdb7a83bcdc3bd8cd66b62f7276f54908a59c20	2026-06-29T14:47:48+08:00	Share OCR selected provider availability
+ebadedc518d6b57f9a3a97274b0aa0ca8d0460ad	2026-06-29T14:36:06+08:00	Share text box provider normalization
+910e11d52c8437ef97b6ed8946b989f32289bee2	2026-06-29T09:49:02+08:00	Project OCR governance from metadata
+c6df85467a06c842f20aede9c6a01396fe8e8bbb	2026-06-29T09:41:42+08:00	Derive release signed candidate evidence checks
+090c26b8e455b4a0bb294fe6da7f89a46f70ea1c	2026-06-29T09:21:34+08:00	Share release branding icon target metadata
+7abb510755035e45edef00f678b8afe1994bc0b6	2026-06-29T09:14:00+08:00	Share worker probe connection predicates
+bd41366b9ccab818c4115588005a4d200fe4689c	2026-06-29T09:06:24+08:00	Share Llama macOS hardware profile projection
+007edbadb9fe4bcf638274925d10e827c31a75be	2026-06-26T22:42:03+08:00	Share Package Smoke artifact plan builders
+eab7c74d726ca990e1af9a334488e6614fc22ed3	2026-06-26T22:32:38+08:00	Share worker probe boolean labels
+fb2a50987be321157403d5dc234f73fceb2e8fe1	2026-06-26T22:23:15+08:00	Share platform detector flags
+6a0c91b23f846fca7ff576db166d982bc22798e7	2026-06-26T22:14:13+08:00	Share Electron main host context
+ee857b36a0c988f1acb1ba954528c7e50ac6d497	2026-06-26T22:06:41+08:00	Share Llama governance platform registry
+98996c25e19297062b3fd69a452baa21872c3a39	2026-06-26T21:58:44+08:00	Share AI Python runtime host context
+6d7f8817bb3a82a1b3ddd1fac62b758b4191774e	2026-06-26T15:04:41+08:00	Share AI runtime IPC host context
+5e9c47635941010838e3dfc68b6069c35bd371d1	2026-06-26T14:53:39+08:00	Share Llama planner host defaults
+16c51c04a114e48f6a58ea2c53c7bae07681d61e	2026-06-26T14:43:47+08:00	Share Llama runtime host context
+70f46a509dce9f59a5f205f13b7924455d18a44b	2026-06-26T14:33:29+08:00	Share platform AI branch platform mapping
+2574027f11e4c0efd2c0e09581fa22301097b019	2026-06-26T14:23:56+08:00	Share Llama planner rule matching
+0bf167b8828b1b98c52e43cd8cf13a1f91cf407e	2026-06-26T14:13:55+08:00	Describe runtime profile hardware rules
+409d992af7dd8e85acd45f1899f2e192a730210c	2026-06-26T09:33:11+08:00	Use platform names for Doctor command resolution
+cc735a858765f384c81451c68c06ebec9dbd5593	2026-06-26T09:23:20+08:00	Share AI Python base discovery adapter
+7301b91d5bed31345f17e3416040f1f1ca694376	2026-06-26T09:11:47+08:00	Share AI Runtime bootstrap platform policy
+d7450a5e9446bd6fb1adb5e662afad81313ce936	2026-06-26T09:01:40+08:00	Share AI Python environment platform adapter
+415059027c182809939708df704dbb62d25363d5	2026-06-26T08:51:45+08:00	Share Package Smoke artifact plan
+0447e6d40f533f2ce03c54e2416c14be772070b9	2026-06-26T00:01:02+08:00	Share text color QA host defaults
+e1e791107327bca6b8e652fdaca5f1e54a3bdf80	2026-06-25T23:49:53+08:00	Register Doctor command resolver boundary
+176b84ba11473eefc8a35275c6fa628c17a6e518	2026-06-25T23:45:06+08:00	Share Doctor command resolver
+c3e8d31455128e2fac9219aa9da5991a8d570311	2026-06-25T23:32:32+08:00	Share AI console dependency install display
+0bd381bc74254f3db1de05da2d90021f48c7e77b	2026-06-25T19:07:14+08:00	Fix lifecycle policy governance ledger
+a36e4c8005e448a5e7fa1319ff430eb2e2ff7db5	2026-06-25T18:59:06+08:00	Share Electron lifecycle policy
+c657d54b104fdf98af980f305d5eb3afd03ef2a2	2026-06-25T18:50:21+08:00	Share app navigation workflow
+d974eb4cb12b50e95f85b12fdc9275a104169f36	2026-06-25T18:38:48+08:00	Share desktop viewport policy
+8c931b620ca3b6ad68e15698c7debd2fe4f9638c	2026-06-24T10:21:52+08:00	Unify cross-platform AI Python environment
+4512b108b0fd624c3d20669334eca6f7806845b5	2026-06-24T10:03:12+08:00	Deepen shared AI runtime bootstrap
+2907f38e68c628b0131e21f81f848bb94f89c08d	2026-06-24T09:46:35+08:00	Route AI runtime requests through current platform adapter
+1ee085d75c8800541af1e5eaa7bd94768abaea36	2026-06-20T13:00:10+08:00	Expose Runtime Package product flow
+dd1c06735182eb79f10ec6484f6901f266e1475d	2026-06-20T01:51:12+08:00	Bound Python Doctor launcher probing
+432ea1cd342cfc0c7fe039d2e59f2bd034bcbcd2	2026-06-19T20:16:38+08:00	Share Python runtime probe IPC orchestration
+df9ba97cc78e8fbad208d449c79b72fa319c5143	2026-06-19T20:04:32+08:00	Share platform capability IPC registration
+c10c7998011c69ac142e2f30e4a75613c8e0d9cb	2026-06-19T19:55:40+08:00	Share platform branch status IPC orchestration
+6c3b9ffde46d1938e43bb0168028c2bb91fd4032	2026-06-19T13:07:34+08:00	Make Llama platform planning deterministic
+ecbc6d290129cc927891bfe3b78d3fd1d8f2e476	2026-06-19T12:57:46+08:00	Share Node CLI host defaults
+5361274621b0776789c3fb47b737c8f16436f783	2026-06-19T12:47:27+08:00	Share release script artifact definitions
+5dd236424f549389a31e01e143facd0e60d8e3c1	2026-06-19T12:39:30+08:00	Share package smoke host defaults
+c225fea59f2079b9d277eb369d3aee1c7934120a	2026-06-18T13:45:27+08:00	Share release external gate evidence checks
+c05a72274c7b14362c22e92f52c35fbaa8b0b28b	2026-06-18T13:36:19+08:00	Share release candidate distribution gates
+ee43b5af4143270b51da1a96308ad151affc812c	2026-06-18T13:25:11+08:00	Share release install smoke preflight data
+5a511c7b6b45153d2791b34d46fca4fde7a5d7d9	2026-06-18T13:13:18+08:00	Share electron builder runner options
+8c0284ac224b76f3f8f1324bb5d3e5996e23389a	2026-06-18T13:02:25+08:00	Share release trust evidence checks
+fef7d5d4c78ab48d8a3921984256e1adf4d1a12e	2026-06-18T11:09:04+08:00	Share release script target parsing
+b8d5059bf2f89c494db0603e12b9d8a3897cf358	2026-06-18T10:32:32+08:00	Share release target selection
+c4ee5bf0472366f723dd496c17a68f014ed1d68b	2026-06-18T10:19:12+08:00	Centralize release platform targets
+9c12d4431625d616694b0e813f320041c89493a4	2026-06-18T09:50:20+08:00	Add signed candidate dispatch status
+ccabad7e08474e76f4d697dff21d90b22daf851c	2026-06-17T19:02:03+08:00	Add signing environment evidence template
+adfbc06be366cdb058cc81dd37a894c407a1ad7e	2026-06-17T18:53:16+08:00	Add release signing environment status
+6a729f7ba4d94cce615250f9a233cc61dd27955b	2026-06-17T18:42:20+08:00	Add release evidence bundle status
+8bfe6aab64a046e99575ae19ca12f26db8cbce4c	2026-06-17T11:53:52+08:00	Add aggregate release gate status
+a5b368bf8ee8efeb8c19a4ab6115879f1cc591f6	2026-06-17T11:42:01+08:00	Add structured release publish approval
+c59c406d283aa9eaefd59aeb79deb2145def5909	2026-06-17T11:31:12+08:00	Add release external gate status artifact
+551d15ae75476fc0728c020c640dd84bd8ffbace	2026-06-17T11:17:21+08:00	Add release external gate status
+68547f7af93a555ac2e871288692c2a3fbf94304	2026-06-17T10:09:55+08:00	Add release external gate plan
+74ab748cb0735fb7ab933a35301358758559b0b2	2026-06-17T09:56:16+08:00	Classify docs path changes as advisory
+528f8ba0237c1dc566625d5a23f3158c6ff94b33	2026-06-17T09:46:23+08:00	Keep runtime package fixtures in hygiene scope
+288a590e548b0ec5ec8066980eccf7db535f9da0	2026-06-16T16:47:16+08:00	Bind release readiness writer to shared gates
+491d91feb17356be8ac8963b82109e2e9323e9ff	2026-06-16T16:24:15+08:00	Add release install smoke preflight
+ff8e8e62ee083f9b0109ba6b709272bd69312efd	2026-06-16T16:13:01+08:00	Add release environment manifest
+c2e363300031b0e6c6edc10d7055d78a12555658	2026-06-16T16:01:02+08:00	Add release branding approval template
+c3c5306aa853e4adfd79236b73fbab5967516f72	2026-06-16T12:29:07+08:00	Guard signed readiness workflow order
+8993766a310a1d159ceb99ebabdcbe6934693fd1	2026-06-16T12:20:14+08:00	Strengthen release readiness writer coverage
+184e390f9c01843a6dcf15930354aaacaaf6fede	2026-06-16T12:09:45+08:00	Add release readiness evidence writer
+41a440f8fa59d8960e31dca0f1c80d81f8f085b4	2026-06-16T11:54:12+08:00	Add release readiness summary
+b4558e81755d6e053882c132e597ac50adbe87e2	2026-06-16T10:09:09+08:00	Add runtime package IPC contract preflight
+b9e91b3e25d2143c8ba1f836c49308537416cfca	2026-06-16T09:55:26+08:00	Add release branding preflight gate
+854e38edb662f7ac623bb1e6b531ceb9fe3a6b35	2026-06-16T09:44:30+08:00	Record green governance after release preflight
+65b95b710be879c4dbf9416154df318a9be0a0b8	2026-06-16T09:41:02+08:00	Add runtime package projection and release preflight gates
+c0f25efd99c4a099684109a8491ba1b5466a412f	2026-06-15T16:05:35+08:00	Record green cross-platform PR governance
+47b41e51e1f3efc18a6a0afb43c97452e4de86ff	2026-06-15T16:00:55+08:00	Stabilize Windows GitHub Actions toolchain
+e6376ed3ef64bceffe9f7242bf3669e0e6bc1aed	2026-06-15T15:45:43+08:00	Record branding approval governance validation
+7715dbf6563820da9674670ef18099dc635a82ea	2026-06-15T15:43:21+08:00	Bind release branding to approved digests
+007bbc3e01682a9b1cee635334a7b11850595bc4	2026-06-15T15:36:25+08:00	Record cross-platform branding gate validation
+6c03cb1273dcdb4ab9bee1d03a9e1c36ab838b91	2026-06-15T15:28:58+08:00	Gate signed candidates on release branding
+03514c765bdf335182fd74ee269c4a62a24c9218	2026-06-15T14:59:52+08:00	Record runtime package IPC governance validation
+37afdcdfd11f53e266f361470d0648227a7380f0	2026-06-15T14:51:13+08:00	Guard runtime package IPC approval boundary
+18195d8c2491f2f32f4a9a02f4b7df717245f0dd	2026-06-15T14:46:30+08:00	Record bounded session validation
+730981050b98376d3050bbae06427602ddb482f8	2026-06-15T14:44:07+08:00	Bound runtime package session snapshots
+a504c9c5441ec1216a14aaee3dbd7a76e388635a	2026-06-15T14:37:38+08:00	Cover runtime package manifest disambiguation
+3ed575bc5d2f8e59b12914b1f22446a320d6d111	2026-06-15T14:34:15+08:00	Record runtime package governance pass
+e637c2e023ae60d3bff1ebaed64b93ddc03e3a4e	2026-06-15T14:31:14+08:00	Record runtime package session validation
+a3b3d13625e87ef1ab68d435e004f100a8ad5cfa	2026-06-15T14:26:47+08:00	Add runtime package session boundary
+a7d420e6942b9b552d9b1b0d8c3db1108eb9dace	2026-06-15T09:46:21+08:00	Add disposable macOS DMG install smoke
+389e0b27344e863d349230a146486dd29e3dd192	2026-06-15T09:37:21+08:00	Add governed signed release candidates
+5fb2d609e7375423613010d0ad38c33acb1c6a57	2026-06-15T09:17:07+08:00	Record cross-platform package validation
+ab5c7cd7f04b0f4568df9e3bce75ce78496d62c2	2026-06-15T09:11:19+08:00	Make Windows Sandbox smoke observable
+4cca68f1a8c81c9e8d8998c74295e6e6669542c0	2026-06-15T08:57:36+08:00	Unify cross-platform Electron packaging runner
+17d12a655c516f9440bdf90237eecfa8c32e8dd3	2026-06-15T08:52:39+08:00	Prepare native modules for governance tests
+c8d741cddaca584265d025126853ef5aa4ec2f09	2026-06-15T08:46:08+08:00	Make migration contract test CRLF-safe
+c0c971c5efc0599bdf09dded0dbb8a8e7d146745	2026-06-15T00:35:58+08:00	Add shared release candidate governance
+efa57ca7786508944f55e837a11e75372512b1c0	2026-06-15T00:24:05+08:00	Add transactional runtime package executor
+e0382e2211d60a5667587954e792be68e70ee338	2026-06-15T00:02:21+08:00	Align cross-platform architecture baseline
+8d53d036f575d6fb7cc8505ef1a473f25fb7ca4d	2026-06-14T20:09:17+08:00	Prioritize primary AI evidence gaps
+c55baf5250d82258629072e1bf624987400d79b4	2026-06-14T20:04:57+08:00	Preserve model gaps with runtime evidence
+7f9bb053a22fb42560676fde32e156e816dfac72	2026-06-14T19:58:47+08:00	Make Windows evidence screenshot deterministic
+5d911a3670e1d442dda68fa689ffdf8566f1b5f0	2026-06-14T19:52:41+08:00	Expose explicit OCR real evidence probe
+7f80d0bead95fd1ece9bf10dcd06c56e8ce7fb5b	2026-06-14T14:34:41+08:00	Record complete Windows evidence validation
+a3c625020f83c001f0f550ae12538bdc9d9cad35	2026-06-14T14:32:56+08:00	Wait for Windows evidence panel repaint
+9f3ec047554a2887eb102de910e4a2df252e490a	2026-06-14T14:30:47+08:00	Target platform evidence panel in validation
+2cfeaddcedd1b7532d0550b91e032bd96f49e853	2026-06-14T14:28:27+08:00	Capture complete Windows evidence panel
+f2a089a0b2e4369446510fc3e670c2e947b5601c	2026-06-14T14:24:46+08:00	Capture Windows branch status evidence
+bcb3b9f828dc4a5dd449d0d832b813e2b82fbc73	2026-06-14T14:20:37+08:00	Validate proven Windows prompt evidence
+a86880ed5214b59faf8e30189c772ffd1027896b	2026-06-14T14:17:39+08:00	Assert Windows cached runtime evidence
+ddc3a046b19596fa08e3f8041d07d338348c426e	2026-06-14T14:12:29+08:00	Record Windows Phase 2 verification
+59e397d45fd4b37b2be6e4a30c47aab2e302630c	2026-06-14T14:08:54+08:00	Record macOS Phase 2 evidence
+00a10ed2c63dae1c31a378e5b390e4080d27d015	2026-06-14T14:03:53+08:00	Cache accelerator runtime execution evidence
+80bd5d4da871558c8a128f6513749d90dd01a249	2026-06-14T14:00:51+08:00	Build shared OCR evidence core
+1338ddd558e908a1a31319fe5127ff71f355af89	2026-06-14T01:29:47+08:00	Remove product mock OCR selection
+c72ea9bee1503ad9bd383badc9fac34671aca058	2026-06-14T01:22:50+08:00	Record Windows OCR evidence gap
+f2664239bf0fcc0911b5812d1a5de8fd3f228271	2026-06-14T01:21:29+08:00	Make OCR evidence probe self contained
+9aeca71c3f729171a1ccff6143b5af69a7f12e75	2026-06-14T01:20:10+08:00	Add bounded Windows OCR evidence probe
+af57b64bc64f98a2cb44b46e9ac4bc8b3a641aa8	2026-06-14T01:16:53+08:00	Route platform AI actions to management tabs
+4e9a5dedec8c7c3ed9156fa7a6d63080f982dcb4	2026-06-14T01:07:06+08:00	Make mock inference explicit opt in
+87da22e48c87d627a7892c9eb29d9a0ac14657b3	2026-06-14T01:04:29+08:00	Remove stale AI worker product routes
+53656bd2c8476e9f9ea24b0f88de09a418da0959	2026-06-14T01:00:07+08:00	Remove product mock tag IPC
+58b02caeccaa1d99dd56798e306025b58dab2647	2026-06-14T00:58:30+08:00	Harden AI evidence probes
+ccf7561b8c355762b496c355fc47bc6536551bd3	2026-06-13T20:44:59+08:00	Record explicit ONNX CUDA model evidence
+35e5844943f8f92b6ae98b6cc0eac89446120151	2026-06-13T20:44:48+08:00	Add CLIP TF32 quality evidence probe
+8ae3e151ff75725f8f154a07445b58a8f4767214	2026-06-13T20:33:47+08:00	Record Windows AI stabilization evidence
+13610a463d3823fd87c02bee3af2c97496ce212e	2026-06-13T19:32:01+08:00	Stabilize cross-platform AI runtime policy
+e4ae1be1a827622632bfdf401215b5b4a4b2e031	2026-06-13T19:05:14+08:00	Optimize Windows CUDA inference runtime
+7b093e06fe811fb06e5f85237efd4a9a93e2453d	2026-06-13T18:45:20+08:00	Record shared architecture completion audit
+c7296b8299d78bbaa40373762dbc95c2ade00520	2026-06-13T18:39:26+08:00	Share Worker probe connection rules
+f3308cac9d0f701f3e9fc056b0c853186352a845	2026-06-13T18:32:13+08:00	Share Doctor command selection policy
+95c07e9ec2fa4b22c3db174bf78228421be69950	2026-06-13T18:28:24+08:00	Share Llama CUDA sidecar pattern policy
+312eb27a9e064773e2a7f0006f4c22661da61a6b	2026-06-13T18:24:46+08:00	Share Llama runtime package pattern policy
+57ae5681c5626000270d6f3f0a0a4841f2160fce	2026-06-13T18:20:03+08:00	Share AI runtime app data path policy
+9466fbc1804fae0defb98dc83ffd865e8e90866f	2026-06-13T18:17:20+08:00	Share platform AI lane status policy
+3f7fb9cfcd66ed157d85721ae9434214a6952d5f	2026-06-13T18:12:13+08:00	Share platform AI runtime metadata helpers
+ee27d4dc18b8de7d1373371d8362168a5c48dc5d	2026-06-13T18:06:03+08:00	Audit direct platform process branches
+0ecb50372d7014de25155501c0e9739d6b7f6cb6	2026-06-13T13:34:44+08:00	Share OCR base Python resolver metadata
+bb8fcf13cfb30fa7b08a14202d0ab044f0ef562d	2026-06-13T13:30:40+08:00	Share Llama process policy metadata
+757e0a1a3fdbc8cf032f8284b42435748fc230c0	2026-06-13T13:25:53+08:00	Share Electron lifecycle policy metadata
+94de9f9c710ccb28e7bed448377e444c411d050a	2026-06-13T13:21:32+08:00	Share Llama hardware detection dispatch
+74ed5d431585361f6897d79e36618c3f9171855f	2026-06-13T13:14:13+08:00	Share Llama server process metadata
+ea7b7550148ddb5688a8a428210ac07571d13c5e	2026-06-13T13:11:37+08:00	Share OCR managed venv path metadata
+74b3421eae35068d193458f8ff0026b239e502b8	2026-06-13T13:06:54+08:00	Share Llama governance adapter metadata
+2118da74763534f26f2119164be10596fa3a855b	2026-06-13T13:04:41+08:00	Share Llama accelerator default metadata
+32813f97e373d503c13be7b8e66ca6b3d98546f0	2026-06-13T13:01:24+08:00	Share runtime profile reason metadata
+ad2b6198f4bf1c302130973b871975f9b5fdc8a7	2026-06-13T12:55:29+08:00	Share Platform AI lane resolution
+7ba1deda9926109314b542fa4a181beebd364fe5	2026-06-13T12:03:58+08:00	Share Platform AI provider profile rules
+13f0b9c04a9ceaf1810d9295a0f22360904fe830	2026-06-13T12:01:26+08:00	Share Platform AI default branch policy
+f8bfffa58e81dc3cad8e4bd12b54bd65dafffe14	2026-06-13T00:44:25+08:00	Share Doctor platform label metadata
+de46b97b018304b0efd53432cd50936113e72b1e	2026-06-13T00:40:40+08:00	Share platform profile detection metadata
+cca8876007acac520ba3a24d68f3611955a6aef1	2026-06-13T00:37:51+08:00	Share runtime profile selection metadata
+d2203637fd47a73fedf7a67a55405b1f1101c365	2026-06-13T00:34:56+08:00	Share Python worker autostart platform metadata
+df85714a6527dde7ffee475f7657fc1ca5cb32c8	2026-06-13T00:32:19+08:00	Share platform AI branch provider registration
+479db73b3de54745a9948032fb2673abc96d60fb	2026-06-13T00:29:30+08:00	Share platform AI branch runtime lookup
+38845cf9776b2d97158ff831637e7ed4c44dd5fb	2026-06-13T00:25:28+08:00	Audit platform AI boundary checks
+894e48aae9759592fbdc03b54c5b00e60c3f634f	2026-06-13T00:19:21+08:00	Share platform AI branch boundary metadata
+2f07e8dba9714f8dad41c30fd0d52d69c72d3921	2026-06-12T23:36:09+08:00	Share platform AI worker probe selection
+a7c5216e93128e409fdefda950019d8ed73fb978	2026-06-12T23:31:51+08:00	Share platform AI worker probe accessors
+2b9b51238ede72a162f0e42db42831208d60be61	2026-06-12T23:27:26+08:00	Share platform AI action command overrides
+d8046a8ea05754e8f76624ff011ad2b8e8f2e1cb	2026-06-12T23:23:19+08:00	Share platform AI readiness lane families
+c2b3fa1b02d2b6ac3048e44d2c1af12e5cc34741	2026-06-12T23:17:34+08:00	Share platform AI runtime lane metadata
+1dde5ef14f95152f72e21a4bf21f76d79ad2a971	2026-06-12T23:08:56+08:00	Share platform AI workflow metadata
+ed3eb6025eb034d6be47652ce47665bb736662da	2026-06-12T23:04:54+08:00	Share renderer platform AI runtime adapter
+c6264162d9580604d616be3815380c401c90c879	2026-06-12T22:58:27+08:00	Share platform branch display copy
+9a72b13b1e27be46b505ba68e41ac913b32ef640	2026-06-12T22:54:06+08:00	Share AI runtime panel copy
+d550759db96e1d7a64bfbbc1b890415aacaed449	2026-06-12T22:49:38+08:00	Share platform AI surface copy
+29adfb224b247cd233e9e9bb2fc07abc0e2d0cbb	2026-06-12T22:44:11+08:00	Remove concrete AI worker display aliases
+c774f91ce2d645afc9bb57d1ea0e6234a13f7dd3	2026-06-12T17:58:51+08:00	Share platform AI worker probe copy
+6391084c6c18db36a816b20739f9cff8b2f31a6c	2026-06-12T17:58:21+08:00	Redact absolute Windows validation paths
+d516399c30c94f5153c391a9de15bb6a91c238e4	2026-06-12T17:51:41+08:00	Share platform AI worker diagnostics projector
+b7a6082b56a3338da8ba61002a4acf3596ba7ccb	2026-06-12T17:46:43+08:00	Redact native Windows validation output
+bb4997720a4484545c8d26c2aaa7e81064a5e629	2026-06-12T17:42:03+08:00	Share platform Python runtime display projectors
+9a6e20098c80dde9394dc63de59463710d4e72c6	2026-06-12T17:36:12+08:00	Share platform Python runtime projector input
+7864980f6c1fff2745a4777634e73811ca5cdda3	2026-06-12T17:28:38+08:00	Share platform AI panel branch input
+b26d0167de6524e773d4f9c3e90bbc1d5a5652d1	2026-06-12T17:21:13+08:00	Share platform AI branch discovery
+3ecdbdb86bda1af5c7c32530aec6e6088d0740d5	2026-06-12T17:16:48+08:00	Share platform AI worker diagnostics input
+42c6ee0eaec9c048348f4d037e1edbcec52a398a	2026-06-12T17:11:50+08:00	Share current platform AI branch selection
+dfa5ca7c4b1a99afcb75f6922815a5cdcecdb4aa	2026-06-12T17:06:15+08:00	Share AI Runtime platform display state
+6f789f60259547eec80e2fc9ede869e3400f1468	2026-06-12T17:01:23+08:00	Share AI Console platform Python compatibility display
+e25a2326a5763bac10df06f41305ee0554230144	2026-06-12T16:56:39+08:00	Share AI Console platform worker probe selection
+b1199d6ea2f34e129c720ed07ef2e76a612a0d63	2026-06-12T16:29:26+08:00	Share AI Console native model list type
+be05c7e099d954c596b144a63c1d16592a5e3deb	2026-06-12T16:25:44+08:00	Share AI Runtime status icon type
+daa5239b3c8dc195393f2dc6dedef86ceed5a8c9	2026-06-12T16:22:18+08:00	Share AI Console GPU display prop type
+f48a552d3ca676e8ff5d0bae66ed348990d2c1f4	2026-06-12T16:16:33+08:00	Share AI Console GPU overview display
+7fbbd28ff8019b0321853d9747349706490c7f94	2026-06-12T16:11:30+08:00	Share AI Console queue stats input
+d6d1823507fb3fa4a4f28da85072aec9f8111615	2026-06-12T16:07:21+08:00	Share AI Console model readiness input
+f49251dca6fc32f8b1f558041cc78af439cf11c4	2026-06-12T16:00:26+08:00	Share AI worker diagnostics display type
+f21cc2a142dbd964425e511d94f9e5acac47bc92	2026-06-12T15:53:19+08:00	Guard platform AI shared helper boundaries
+44c8d179b0bf0f8c0906ae41c4b682fb6c23cd72	2026-06-12T15:49:41+08:00	Guard Platform AI concrete type boundaries
+906a1d19db5d434dc1cf48d0cf5285288cbd32bf	2026-06-12T15:47:17+08:00	Share AI lane card input type
+5e21cd0124be159da4e6174369a5d0c224485732	2026-06-12T15:01:34+08:00	Share AI branch panel metadata type
+cb466ae4f9cfbdce6de6f688943397e37c4df9b9	2026-06-12T14:57:08+08:00	Share AI Console worker probe overview type
+5d3ec3979fc64b950561729b18d42d721c347d64	2026-06-12T14:51:37+08:00	Share AI worker probe panel input type
+93158452037e0abf88546df9790f0906eb230a35	2026-06-12T14:35:59+08:00	Record Windows AI evidence validation
+21ee6d919a3d817b132be3a1cabb816dc1ab37bc	2026-06-12T12:37:06+08:00	Add remote Windows Codex execution plan
+530b0e146a932e9fc261b7e84fe19e7ad33f77d2	2026-06-12T12:34:55+08:00	Share platform AI runtime probe display input types
+736ba74ed23c7b73dcf275a61f735a0ffa8f7b96	2026-06-12T10:34:13+08:00	Share platform AI worker probe base type
+dce45897dc5f132f6ad5b84b531e4f977258ee99	2026-06-11T23:38:05+08:00	Share platform AI runtime branch base types
+a779a13654ebedf01ca18968e8d4e00dbdf0cfe0	2026-06-11T23:30:22+08:00	Extract platform-neutral AI runtime probe types
+4a598ba40d3baf276d17a2764955648cfa5cc2ee	2026-06-11T18:34:13+08:00	Share AI worker probe panel header shape
+ecd7b53f0f257e69e4d71e91aa629932684e34f0	2026-06-11T18:31:05+08:00	Share AI worker probe header projection
+5f15eafd3f73b59cbc178680f2a54a5283f3014b	2026-06-11T18:25:28+08:00	Use shared AI worker lane type in capability matrix
+39301d954be6c368eed88f8bcddcd94d13841ad2	2026-06-11T18:22:34+08:00	Use platform-neutral AI runtime dependency action props
+eb616b4491b9ff480e761dc48357e6912a3ee5dd	2026-06-11T18:18:26+08:00	Use platform-neutral AI probe tile type
+5e421c7c30adb92bc50f2690f12cae7b1cff5b09	2026-06-11T18:15:42+08:00	Use platform-neutral route diagnostics flag
+1207296e69a96fc79b99f24cc4c3a512a63a2e28	2026-06-11T18:13:00+08:00	Use platform-neutral AI runtime lane type
+e4368650eea0b810a073dbd5496cfa1debee77c6	2026-06-11T18:04:53+08:00	Rename platform AI capability matrix component
+414e30929a71c3661579ae3a00896b0839e8b6b3	2026-06-11T17:59:06+08:00	Use platform-neutral AI runtime probe naming
+e4d20d0af3ba2c0d43217109e2da2fe1833f47a0	2026-06-11T17:53:22+08:00	Use platform-neutral worker probe naming
+161a81ebfbcdd9405c1935a2a7f372a773b53293	2026-06-11T17:48:46+08:00	Share platform route overview display copy
+5fd67d5b0896ee8363fa731a5e37fac8d9c2aff1	2026-06-11T12:07:39+08:00	Share AI capability matrix display copy
+e0bdabeccd1e8e6d136ad8af90e19ea73fb38d7c	2026-06-11T12:01:12+08:00	Record AI runtime projection Windows validation
+dc50fcee9cadecbfe9cc842b9032fb0d73694dcd	2026-06-11T12:00:10+08:00	Share AI runtime platform panel projection
+b0c21c26a367f79880e0243f264fda7e4a9a4990	2026-06-11T11:48:39+08:00	Share platform AI action command routing
+b1185bbbeecf08770634a6f0f57be77ad9870aff	2026-06-11T11:27:01+08:00	Record Windows Llama full validation
+e947443937471babd52e098e05524fde2d3b8894	2026-06-11T11:23:18+08:00	Fix Windows Llama validation model path
+e0b9eefa2bc0cfd21c07b2a4e0df3779ead6a851	2026-06-11T11:18:20+08:00	Fix Windows Llama validation startup plan
+6f6afee0a9b243fc0e32122ba05c491fa1579150	2026-06-11T11:15:22+08:00	Close Windows Llama real evidence
+e350a976fae21626e6344c1a61f9a379d247c424	2026-06-09T09:18:33+08:00	refactor: remove JoyCaption, route visual tasks to Qwen3-VL 2B, and render model candidates with links
+4d117c66d949d2717ab4ad7893314b8ad6ae04b0	2026-06-09T08:53:20+08:00	feat(ai): integrate production cdn and close platform ai real execution
+af9fe7d0f0fff9a8f51375db5dc35c4d07616d33	2026-06-08T16:04:55+08:00	feat: complete Phase 16 path migration and Settings UI on macOS
+c2805f1701bc8cfac51daaa22ed08880386a4a23	2026-06-07T02:57:26+08:00	Close Windows CLIP ONNX evidence
+a8e4ee59df39823dc96e6192e286c1bb6a737ccb	2026-06-07T02:38:16+08:00	Record Windows WD Tagger real load
+382a2e5372bfb307ef0f64c02329101a7d039296	2026-06-07T02:31:09+08:00	Align cooperative model paths on Windows
+74fd53b8429eac6bb724ac2c29a888bb445be214	2026-06-07T02:24:04+08:00	Record Windows validation rerun
+297d08c467b0637ef4e0fd88a659dc105ef1c8e9	2026-06-07T02:16:28+08:00	Checkpoint Windows validation fixes
+308a575ba8e8bb4e2c49a0ed683ea4bf3ec28331	2026-06-06T21:04:36+08:00	Record Windows AI validation results
+47a6d518cce857e76c66a8e15ed29bbeeffa2f59	2026-06-06T19:57:11+08:00	Add GitHub mailbox for Windows AI validation
+554b5a5f935d616109398b6ec0cca9bc0bcb5359	2026-06-06T19:34:54+08:00	Add Windows AI validation handoff
+dcb99e8696930d94c9c7427a599f69c752932731	2026-06-06T19:17:11+08:00	Add real AI runtime evidence probes
+4144b2b883503c355e8feb0956433503c4c48a75	2026-06-06T13:29:59+08:00	feat: verify real MPS execution
+b126e0c85b2d6b48798cba80695724c21e899919	2026-06-06T13:23:26+08:00	fix: manage real AI worker lifecycle
+410f3c09a2c345e7b377f8c21e825a31e1b2a371	2026-06-06T13:11:37+08:00	feat: verify real ONNX model loading
+64045198f7b3bb43e9615689b34308e99a5f6def	2026-06-06T13:00:49+08:00	feat: add platform AI action plans
+83bea74b5ace596be7e86bc1ca323a9e6f121951	2026-06-06T11:31:23+08:00	fix: distinguish AI capability evidence states
+199f1a269b4caab39ba8e2d3f715b970469e7f50	2026-06-06T11:21:54+08:00	checkpoint: shared cross-platform architecture roadmap
+1609dd091061dfa53b3b045a51ab03cb8a300c1b	2026-06-03T19:33:25+08:00	fix: prevent MLX probe crash by importing mlx instead of mlx.core
+4355e943b311ae9b83313e7be65d097eafa30c20	2026-06-03T19:26:16+08:00	feat: add Qwen3-VL GGUF quantized models (Q4_K_M/Q8_0/F16 for 2B/4B/8B) to model registry
+21530884745436d11bd1d60e34881b16a6697e41	2026-06-03T19:17:44+08:00	fix: WD Tagger ONNX prefer CoreML on macOS, fix Florence-2 torch_dtype deprecation
+e9f898f0ccf7a557733efc2e5b6a4a8c4a82aaa2	2026-06-03T18:53:01+08:00	fix: add PADDLE_HOME and PADDLEX_HOME env for PaddleOCR cache isolation
+2df0e879fcfa03c6421f8fe8d8f792a65b9d61f1	2026-06-03T18:39:20+08:00	fix: HF_HOME env, Python runtime fallback, model weight validation
+7d4cdb57278ed0b260e0ddce6b5a9e5f85913b3f	2026-06-03T18:15:03+08:00	feat: TLS 1.2 download fix, Python 3.13 OpenSSL detection, urllib model downloader
+34bef2034fad006a41138a6090bd9a4d32cdf227	2026-06-03T09:25:10+08:00	Develop macOS AI branch runtime surfaces
+fd53ca50a7500a8e02f5a835a134818c41ba583c	2026-06-02T17:55:33+08:00	fix: add doctor repair and mac llama detection
+3a19f038921b82029d368560655b676f84cdcd95	2026-06-02T17:37:13+08:00	fix: unpack sharp optional native packages
+1214ff16c0c70a0737330bb7cd1e001a6d6bf335	2026-06-02T17:30:57+08:00	fix: implement llama runtime and doctor repairs
+edf74a5b916a86710ce7e0e3643893a3ec0736b8	2026-06-02T15:00:33+08:00	chore: record main merge handoff
+e8c6328494201454eb65b9bf8c8e1edb6d74b523	2026-06-02T14:59:39+08:00	merge: cross-platform packaging governance
+ac21c56446cef3dd0ab9fc0f117c1bef547ec1aa	2026-06-02T14:59:19+08:00	feat: add cross-platform packaging governance
+d4f0af8ec912e4a8593939467fc0063a54ca99fc	2026-06-02T09:41:14+08:00	feat: add readonly path governance summary
+3516fb4a2afe9132d770e85a16c0d21d9666ab6f	2026-06-02T09:16:23+08:00	chore: add managed cache and temp path governance
+97ea7ec46629fbeebd8574969278c2b17466f3d1	2026-06-02T02:25:11+08:00	chore: add managed log path governance
+766ee420e115b1752b0a58e930b244987d1d95ca	2026-06-02T02:08:35+08:00	merge platform governance into adaptation
+d0383e28090ddbc95c1a3e3594abb8c5c2e3c128	2026-06-02T02:06:00+08:00	chore: add managed path audit
+8efc536ac1af18c5babd9ca18c861585036cbcfb	2026-06-02T01:48:52+08:00	feat: add readonly settings migration panel
+487c23bae42ab8b0ed35b44fb368f818baa8a105	2026-06-02T01:32:51+08:00	chore: expose settings migration dry-run ipc
+1c43c3e1ecbe27fc9bc9cd566f09548d10b21cad	2026-06-02T01:20:40+08:00	chore: add explicit settings migration service
+07ec64e29bf2233b642adc5ac69be47c2eeba39b	2026-06-02T00:57:10+08:00	chore: add cross-platform settings defaults for new installs
+c0782f85962c7e476efb8a375901b998422f4089	2026-06-01T22:45:36+08:00	chore: add settings compatibility dry run
+79eb371806986bdcd284bb405e14fcd8b0294422	2026-06-01T21:18:52+08:00	feat: add ai runtime panel to settings
+a661bd9c1e5cca13a98c55440a54469b2562def7	2026-06-01T21:07:36+08:00	chore: expose ai runtime through safe ipc
+42ecf5195aab51d23fb6a3c823ad43c2be293040	2026-06-01T20:57:51+08:00	chore: add ai runtime settings mapping
+23611954b85d52824d10ae18eef77ec98a18d4ea	2026-06-01T20:15:40+08:00	chore: add python worker runtime provider skeleton
+c8adbf5a9c72bec0788b649c9501386aafb305a0	2026-06-01T18:57:55+08:00	chore: add ai runtime manager and external http provider
+0c0215243b68a3310e6a6d1774fed17e9d0124dc	2026-06-01T17:47:04+08:00	chore: add bootstrap runtime package plan
+d9cfb4769715885c7cc8068f3af9e29a2b1f0bc1	2026-06-01T17:17:53+08:00	chore: add runtime package manifest validation
+47305b37b45534f2f622f004893ea427fb9f7ea4	2026-06-01T17:03:05+08:00	chore: add runtime profile model
+3f1f2b3be2744cb9e38f3d7e61acc806d2f274cc	2026-06-01T16:08:15+08:00	chore: connect bootstrap manager to doctor and registry
+7c32dd2f8ca8df2ab3da1d5d9cb52b406bbca4b0	2026-06-01T15:55:45+08:00	chore: add runtime registry boundary
+f7081c2a9d38c177eee492557fafb904b5feb8df	2026-06-01T15:45:57+08:00	docs: update task ledger for bootstrap state machine
+7058c8ef33488ae21d438de458e6b4067cbacf01	2026-06-01T15:41:51+08:00	chore: add bootstrap state machine
+fea9a8ac3664e2a3812a6f160339ce77a99460eb	2026-06-01T15:32:02+08:00	docs: update task ledger for doctor panel
+01e8ba54041b57f5632e7818149c368fd2a3c91a	2026-06-01T15:30:20+08:00	feat: add doctor panel to settings
+855470c88215f3b02a56018735524bd5c1131230	2026-06-01T15:15:24+08:00	chore: add platform foundation and doctor diagnostics
+ff1ac0ebe875adb6608ea4e51b8075f4622425dd	2026-06-01T12:47:28+08:00	fix: track library renderer components
+6e79df0aa30e5fbe3457495516080d962c702ab7	2026-06-01T12:46:19+08:00	feat: add AI asset analysis console
+020ae1a272e90faf153795479e3b17892b2baea4	2026-05-27T19:34:50+08:00	feat: implement high-performance direct-injected hover zoom, S-key trigger, preload script bundling, and clean debug logs
+53b4b43f3751e9244193c187c693ccf28b1ad3d3	2026-05-26T22:02:05+08:00	fix: implement isMounted guards and dynamic sliding flex-drawers for browser viewport
+f8ed3701a45b33dbd32d7b29f4a7d3ee6a80445a	2026-05-26T21:53:18+08:00	feat: implement embedded WebContentsView browser and dynamic DOM scanner plugin
+7ec913f283030fdfbc7cfd66d51e83743c5e5930	2026-05-26T21:43:05+08:00	initial commit: completed phases 1-4

@@ -1,0 +1,261 @@
+{
+  "status": "synthetic_expected_valid_NOT_RUN",
+  "hashesArePlaceholders": true,
+  "examples": [
+    {
+      "schemaVersion": 1,
+      "evidenceId": "synthetic:e1",
+      "libraryId": "synthetic:library",
+      "assetId": "synthetic:asset",
+      "capability": "tags",
+      "sourceBinding": {
+        "assetLifecycleRevision": "life:1",
+        "contentKey": "content:synthetic:1",
+        "previewGeneration": "preview:synthetic:1",
+        "inputArtifactDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "inputTransformVersion": "synthetic-transform-v1"
+      },
+      "recipe": {
+        "id": "synthetic-tags",
+        "version": "1",
+        "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "profile": {
+        "id": "synthetic-profile",
+        "version": "1",
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "modelAlias": "synthetic-model",
+        "weightsDigest": null,
+        "runtimeVersion": null,
+        "providerVersion": null,
+        "identityStatus": "opaque",
+        "parameters": {
+          "temperature": 0.2,
+          "maxOutputTokens": 1536,
+          "contextTokens": null,
+          "threads": null,
+          "quantization": null,
+          "hardwareBackend": null
+        },
+        "unknownFields": [
+          "runtimeVersion",
+          "weightsDigest"
+        ]
+      },
+      "execution": {
+        "requestGeneration": 2,
+        "attemptId": "synthetic:attempt:2",
+        "claimEpoch": 1,
+        "jobId": null,
+        "physicalInvocationId": "synthetic:physical:2"
+      },
+      "quality": {
+        "structure": "valid",
+        "language": "not-assessed",
+        "semantic": "not-assessed",
+        "eligibility": "eligible",
+        "reasons": []
+      },
+      "attribution": "inferred",
+      "createdAt": "2026-09-26T00:00:00Z",
+      "value": {
+        "labels": [
+          "几何",
+          "蓝色"
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "evidenceId": "synthetic:caption",
+      "libraryId": "synthetic:library",
+      "assetId": "synthetic:asset",
+      "capability": "caption",
+      "sourceBinding": {
+        "assetLifecycleRevision": "life:1",
+        "contentKey": "content:synthetic:1",
+        "previewGeneration": "preview:synthetic:1",
+        "inputArtifactDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "inputTransformVersion": "synthetic-transform-v1"
+      },
+      "recipe": {
+        "id": "synthetic-tags",
+        "version": "1",
+        "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "profile": {
+        "id": "synthetic-profile",
+        "version": "1",
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "modelAlias": "synthetic-model",
+        "weightsDigest": null,
+        "runtimeVersion": null,
+        "providerVersion": null,
+        "identityStatus": "opaque",
+        "parameters": {
+          "temperature": 0.2,
+          "maxOutputTokens": 1536,
+          "contextTokens": null,
+          "threads": null,
+          "quantization": null,
+          "hardwareBackend": null
+        },
+        "unknownFields": [
+          "runtimeVersion",
+          "weightsDigest"
+        ]
+      },
+      "execution": {
+        "requestGeneration": 2,
+        "attemptId": "synthetic:attempt:2",
+        "claimEpoch": 1,
+        "jobId": null,
+        "physicalInvocationId": "synthetic:physical:2"
+      },
+      "quality": {
+        "structure": "valid",
+        "language": "not-assessed",
+        "semantic": "not-assessed",
+        "eligibility": "eligible",
+        "reasons": []
+      },
+      "attribution": "inferred",
+      "createdAt": "2026-09-26T00:00:00Z",
+      "value": {
+        "text": "合成几何示例"
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "evidenceId": "synthetic:prompt",
+      "libraryId": "synthetic:library",
+      "assetId": "synthetic:asset",
+      "capability": "prompt",
+      "sourceBinding": {
+        "assetLifecycleRevision": "life:1",
+        "contentKey": "content:synthetic:1",
+        "previewGeneration": "preview:synthetic:1",
+        "inputArtifactDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "inputTransformVersion": "synthetic-transform-v1"
+      },
+      "recipe": {
+        "id": "synthetic-tags",
+        "version": "1",
+        "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "profile": {
+        "id": "synthetic-profile",
+        "version": "1",
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "modelAlias": "synthetic-model",
+        "weightsDigest": null,
+        "runtimeVersion": null,
+        "providerVersion": null,
+        "identityStatus": "opaque",
+        "parameters": {
+          "temperature": 0.2,
+          "maxOutputTokens": 1536,
+          "contextTokens": null,
+          "threads": null,
+          "quantization": null,
+          "hardwareBackend": null
+        },
+        "unknownFields": [
+          "runtimeVersion",
+          "weightsDigest"
+        ]
+      },
+      "execution": {
+        "requestGeneration": 2,
+        "attemptId": "synthetic:attempt:2",
+        "claimEpoch": 1,
+        "jobId": null,
+        "physicalInvocationId": "synthetic:physical:2"
+      },
+      "quality": {
+        "structure": "valid",
+        "language": "not-assessed",
+        "semantic": "not-assessed",
+        "eligibility": "eligible",
+        "reasons": []
+      },
+      "attribution": "creative",
+      "createdAt": "2026-09-26T00:00:00Z",
+      "value": {
+        "text": "A geometric composition for a new design."
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "evidenceId": "synthetic:ocr",
+      "libraryId": "synthetic:library",
+      "assetId": "synthetic:asset",
+      "capability": "ocr",
+      "sourceBinding": {
+        "assetLifecycleRevision": "life:1",
+        "contentKey": "content:synthetic:1",
+        "previewGeneration": "preview:synthetic:1",
+        "inputArtifactDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "inputTransformVersion": "synthetic-transform-v1"
+      },
+      "recipe": {
+        "id": "synthetic-tags",
+        "version": "1",
+        "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "profile": {
+        "id": "synthetic-profile",
+        "version": "1",
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "modelAlias": "synthetic-model",
+        "weightsDigest": null,
+        "runtimeVersion": null,
+        "providerVersion": null,
+        "identityStatus": "opaque",
+        "parameters": {
+          "temperature": 0.2,
+          "maxOutputTokens": 1536,
+          "contextTokens": null,
+          "threads": null,
+          "quantization": null,
+          "hardwareBackend": null
+        },
+        "unknownFields": [
+          "runtimeVersion",
+          "weightsDigest"
+        ]
+      },
+      "execution": {
+        "requestGeneration": 2,
+        "attemptId": "synthetic:attempt:2",
+        "claimEpoch": 1,
+        "jobId": null,
+        "physicalInvocationId": "synthetic:physical:2"
+      },
+      "quality": {
+        "structure": "valid",
+        "language": "not-assessed",
+        "semantic": "not-assessed",
+        "eligibility": "eligible",
+        "reasons": []
+      },
+      "attribution": "observed",
+      "createdAt": "2026-09-26T00:00:00Z",
+      "value": {
+        "engine": "rapidocr-onnxruntime",
+        "version": "1.4.4",
+        "recipe": "rapidocr-preview-v1",
+        "modelSha256": {
+          "det": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "cls": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "rec": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "width": 100,
+        "height": 100,
+        "elapsedMs": 1,
+        "threshold": 0.5,
+        "blocks": []
+      }
+    }
+  ]
+}

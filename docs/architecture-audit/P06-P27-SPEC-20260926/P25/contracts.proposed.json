@@ -1,0 +1,39 @@
+{
+  "stage": "P25",
+  "status": "proposed",
+  "diagnosticsDefault": "local",
+  "routes": [
+    {
+      "name": "test-log-path-governance",
+      "command": "node scripts/run-ts-test.mjs scripts/log-path-governance.test.ts",
+      "productionStatus": "NOT_RUN"
+    },
+    {
+      "name": "test-active-library-host",
+      "command": "node scripts/run-electron-node-test.mjs scripts/active-library-host.test.ts",
+      "productionStatus": "NOT_RUN"
+    },
+    {
+      "name": "test-visual-ai-download-integration",
+      "command": "node scripts/run-electron-node-test.mjs scripts/visual-ai-download.integration.test.ts",
+      "productionStatus": "NOT_RUN"
+    },
+    {
+      "name": "test-work-sets",
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-sets.test.ts",
+      "productionStatus": "NOT_RUN"
+    }
+  ],
+  "benchmarkFields": [
+    "revision",
+    "dirtyDigest",
+    "command",
+    "exitCode",
+    "hardware",
+    "model",
+    "inputScope",
+    "evidenceLevel",
+    "unknowns"
+  ],
+  "productionQualityAccepted": false
+}

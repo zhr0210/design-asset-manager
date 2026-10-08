@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"t2tea.com":{srcMatching:[{srcRegExp:"(//cdn\\.intelligencebank\\.com/.+?/preset=)\\w+(/[^_]+).*",processor:"$1orginal$2"},{srcRegExp:"(//cdn\\.intelligencebank\\.com/.+?/)size=[^/]+(/.+)",processor:"$1original$2"}]}};

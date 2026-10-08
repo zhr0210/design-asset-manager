@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={carousell:{srcMatching:[{srcRegExp:"(//.+?\\.karousell\\.com/.+?)(?:_(?:progressive|thumbnail))+(@IMG@)?",processor:"$1$2"}]}};

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"designspiration.com":{srcMatching:[{processor:({trigger:r})=>r.querySelector("img"),selectors:".gridItemInnerWrap"}]}};

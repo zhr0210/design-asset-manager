@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"pornpics.com":{srcMatching:[{srcRegExp:"(//cdni\\.pornpics\\.com/)\\d+(/.+@IMG@)",processor:"$11280$2"}]}};

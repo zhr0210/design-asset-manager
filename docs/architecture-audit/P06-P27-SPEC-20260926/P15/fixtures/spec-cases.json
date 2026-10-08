@@ -1,0 +1,107 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "M01",
+      "input": {
+        "op": "ready",
+        "trustedCatalog": true,
+        "verifiedBytes": true,
+        "platformCompatible": true,
+        "capabilityPassed": true,
+        "qualityAccepted": true,
+        "resourceMeasured": true
+      },
+      "expected": true
+    },
+    {
+      "id": "M02",
+      "input": {
+        "op": "ready",
+        "trustedCatalog": false,
+        "verifiedBytes": true,
+        "platformCompatible": true,
+        "capabilityPassed": true,
+        "qualityAccepted": true,
+        "resourceMeasured": true
+      },
+      "expected": false
+    },
+    {
+      "id": "M03",
+      "input": {
+        "op": "ready",
+        "trustedCatalog": true,
+        "verifiedBytes": true,
+        "platformCompatible": true,
+        "capabilityPassed": false,
+        "qualityAccepted": true,
+        "resourceMeasured": true
+      },
+      "expected": false
+    },
+    {
+      "id": "M04",
+      "input": {
+        "op": "ready",
+        "trustedCatalog": true,
+        "verifiedBytes": true,
+        "platformCompatible": true,
+        "capabilityPassed": true,
+        "qualityAccepted": false,
+        "resourceMeasured": true
+      },
+      "expected": false
+    },
+    {
+      "id": "M05",
+      "input": {
+        "op": "path",
+        "name": "models/model.gguf"
+      },
+      "expected": true
+    },
+    {
+      "id": "M06",
+      "input": {
+        "op": "path",
+        "name": "../outside"
+      },
+      "expected": false
+    },
+    {
+      "id": "M07",
+      "input": {
+        "op": "path",
+        "name": "C:/outside"
+      },
+      "expected": false
+    },
+    {
+      "id": "M08",
+      "input": {
+        "op": "path",
+        "name": "/absolute"
+      },
+      "expected": false
+    },
+    {
+      "id": "M09",
+      "input": {
+        "op": "path",
+        "name": "models/link",
+        "link": true
+      },
+      "expected": false
+    },
+    {
+      "id": "M10",
+      "input": {
+        "op": "path",
+        "name": "a/../../b"
+      },
+      "expected": false
+    }
+  ]
+}

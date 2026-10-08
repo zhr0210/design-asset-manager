@@ -1,0 +1,262 @@
+{
+  "createdAt": "2026-10-08T04:48:10.121Z",
+  "head": "156a9841e0262465d422283851095bca47979532",
+  "branch": "codex/windows-workspace-1001",
+  "indexSha256": "7c42daf64191e49fa59efbd12f2219a0628417c0317c9a5aa25755c78c877f85",
+  "patchSha256": "95e7418375de073b8c3de336b34bc17564ea690f54d5c9bc6f16ef522d9082b3",
+  "patchCheck": "PASS on independent before-only copy",
+  "build": {
+    "buildId": "dam-11b22b18c2708872",
+    "sourceDigest": "11b22b18c27088720a3847526339df457d7b6cfaf651937f04c383da14b9c2dc",
+    "builtAt": "2026-10-08T04:42:49.132Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 782
+  },
+  "files": [
+    {
+      "path": "TASK.md",
+      "beforeSha256": "12b845a75a11e2379769364247fd9a6b5011ddbe65ecdd9e0615e61e61be8c05",
+      "candidateSha256": "895ca1948349ec39b7a761e115c1afa7389706635ef5e9a5ef3ad8ba04e990cb"
+    },
+    {
+      "path": "docs/agents/implementation-status.md",
+      "beforeSha256": "16e2d87fd6ef33f57133fdc0cbfb5fe99ca2f535a941bc663170ec62232e1d89",
+      "candidateSha256": "0b2d8a0dee01c9ff456959d07542b0244befee505efa951dfe36be690a1b4dde"
+    },
+    {
+      "path": "docs/handoff/CURRENT-STATE.md",
+      "beforeSha256": "8ca764cbba03dfa9ab1c43216fab1583dc13ce3fcf15ca24ff91e79ddbe9e8a5",
+      "candidateSha256": "155edddd6715a46f18e0b22e93c4b56b9fe21843d46bea50b0b8cad045415e10"
+    },
+    {
+      "path": "docs/handoff/EAGLE-E-20261008.md",
+      "beforeSha256": null,
+      "candidateSha256": "09027448ab6b840c6d96a09dc2f6ae973689ae8918a786aedc7dac99a26dd1c9"
+    },
+    {
+      "path": "eagle-companion/README.md",
+      "beforeSha256": "ed7faf9aecd6cffa656d391479694bfeaf84b67c0f981108a8a9f169bd04b3dd",
+      "candidateSha256": "1a0aceccceb7d8c00b4d9182937420a32219198a112bb95d235738e0360200f1"
+    },
+    {
+      "path": "eagle-companion/index.html",
+      "beforeSha256": "4e70958337adbe9e913c0aa19c1870b216d20aae2587b313334fcc2f9350ddb9",
+      "candidateSha256": "d07acec355d829135a17c72fc8d3279f40bc7131417413d9519de0c55bd8b846"
+    },
+    {
+      "path": "eagle-companion/js/pairing.cjs",
+      "beforeSha256": null,
+      "candidateSha256": "2e0c0bca7c22d7d4b0abe4d3ac253a14a93c0eb48972953fc7af3212ddfe2b61"
+    },
+    {
+      "path": "eagle-companion/js/plugin.cjs",
+      "beforeSha256": "00e87fca72a4ddfc47a663f112a04fd44b8063a5003c4fcd25da02b973905ac7",
+      "candidateSha256": "2d89a5947e6f20fee294aac769e8c8a936ba20a683a1b07de8077846f5c17b7e"
+    },
+    {
+      "path": "eagle-companion/manifest.json",
+      "beforeSha256": "6b97496facc65e33bdb28bad52c6c33a0aa41c1c9c2e4eabcb05cd92dcf41155",
+      "candidateSha256": "959b7d22efb0f768a7485ad2fcdfd3923ec534ec7cd19fe25d0aaaae04ae7f95"
+    },
+    {
+      "path": "electron.vite.config.ts",
+      "beforeSha256": "b85e95b2927f85010141a37d9ea6047416fa52d42e087bf0bece276fa04c9e6d",
+      "candidateSha256": "330e8739869686375ea590fd59e4fd185d0ef8dbb05ebc91eab125f622cb6eb4"
+    },
+    {
+      "path": "package-lock.json",
+      "beforeSha256": "0dab5ffdbfb1b3d11cae2f4489eea2b03f741ceedc6d46b85cee490ddc713ba5",
+      "candidateSha256": "ffc4463781f3723522cd3cfc776e760fd81e72b9e4d0c54e7afdc8131359f667"
+    },
+    {
+      "path": "package.json",
+      "beforeSha256": "088157a558443733789e02222ab7d675d59833afef8746d22a57ab1731a252ec",
+      "candidateSha256": "a09782c03a30fc3577aae1f28036f4ad43f4f247880b0852bc4ec52f003d368e"
+    },
+    {
+      "path": "scripts/build-eagle-companion.mjs",
+      "beforeSha256": null,
+      "candidateSha256": "b9d152e02d03048e69c34bee507bf89144f770d0ae717ed3ce89b52478c75b7f"
+    },
+    {
+      "path": "scripts/build-identity.mjs",
+      "beforeSha256": "81cc0daea6021caa989ee5e560ac79fcdd53d0dc5df8e46bf5e5f78c762bf5d3",
+      "candidateSha256": "28eea2314b37c1a2f3b94a1ed500b60d244c51ba8c5d334dfb0a9ab22dedc88e"
+    },
+    {
+      "path": "scripts/eagle-adapter-companion.test.ts",
+      "beforeSha256": "aea5946633cc9e359d8c00e3b49925f20f6a00df8f07c259f1dbe47ed7f64e70",
+      "candidateSha256": "35c45fad07a39c27a10083501d3fb2265cf74184987c7aa263787feeb64c54ae"
+    },
+    {
+      "path": "scripts/eagle-companion-artifact.test.ts",
+      "beforeSha256": "19564c4b7b02bb987bb8ff57745bfab39821a3432c5c10e2d16f65f63778e77e",
+      "candidateSha256": "25b900e0a09bca0673cbea1ec3fbe271046bcc1a1dd5b2f94dfb970d689142a4"
+    },
+    {
+      "path": "scripts/eagle-production-pairing.test.ts",
+      "beforeSha256": null,
+      "candidateSha256": "d68a5a94f722243cd2a5e4cb91ed2f65355e440d6c569586ecd17cb4c0bbaae5"
+    },
+    {
+      "path": "scripts/external-connected-library-core.test.ts",
+      "beforeSha256": "11b034d15983939167c17f1dbfe481ba94160d81fafd8dfeb07b9b95fb9c7b14",
+      "candidateSha256": "226ce708e809f5ed232db7580138c2224f9a5f89b3385b5f911d94e1e4473a78"
+    },
+    {
+      "path": "scripts/external-connected-library-ipc.test.ts",
+      "beforeSha256": "45501e6c666acb48da15ce3c0978a54b05a373d827314b0d6fab4723b0699c78",
+      "candidateSha256": "ea24af98b407c2842f09c9e6e845f31c5b2b1f0b04c9f9cb96a32c8f86e8ca34"
+    },
+    {
+      "path": "src/main/external-connected-library/README.md",
+      "beforeSha256": "e7b69e1db763f8d6b91858077bf22dbd93fe838f8ff6cf3e00157c8d42599f37",
+      "candidateSha256": "a59d3350a31de8b140c6591b515bba60e2db02700cb07f8c985459de54baaa1d"
+    },
+    {
+      "path": "src/main/external-connected-library/connected-library-runtime.ts",
+      "beforeSha256": "7078009fa08e09fa68c50db35b21c0254d13d28e6a4e87c93176d5dcd901ccc6",
+      "candidateSha256": "d2d2a438d27013e1cd5e66b657fd1723259b2ee90c37d821983f19f4b9cd2f30"
+    },
+    {
+      "path": "src/main/external-connected-library/eagle-companion-http.adapter.ts",
+      "beforeSha256": "86dd664fffd8d4bb9bb931f29d788c35834f8843fb1c46252b072ebb54038cf3",
+      "candidateSha256": "bf10a7f225e37917302829e34e391bafa3d63d5e4a4cb370f5e39b04026ec339"
+    },
+    {
+      "path": "src/main/external-connected-library/eagle-companion.port.ts",
+      "beforeSha256": "1008eda2dc443d5ff0f886e1b06c5fcb562d6426e4ce75b63a529234e6d20958",
+      "candidateSha256": "74ac3df292958c44712597f94784276bcda42d276a618bc7474c270c2e69ea63"
+    },
+    {
+      "path": "src/main/external-connected-library/eagle-pairing.ts",
+      "beforeSha256": null,
+      "candidateSha256": "408c25b6033a3f3149af10da3b2a4137d6fcd2bdda10d8b2d2e525679f04d3e0"
+    },
+    {
+      "path": "src/main/external-connected-library/eagle-web-api.adapter.ts",
+      "beforeSha256": "bb044bbe52d031152c6378440e5fb8400f99293cfaec0dc4c2db1b3809d75d3b",
+      "candidateSha256": "cc3d8a3e55f68e3cc2d86a6f4c9b522339bca6e6d2a0370d825b057d9fcb5323"
+    },
+    {
+      "path": "src/main/external-connected-library/external-connected-library.ts",
+      "beforeSha256": "f7a0be00ea7f65a9930bd1dd79eb7e23313e364be2cde7e6c924ac98fa81c5b6",
+      "candidateSha256": "9e1625cdf6fb87c5c243a10c3dbc0bd9962a23a1ed52fb42fb1acb1ff3e828ff"
+    },
+    {
+      "path": "src/main/index.ts",
+      "beforeSha256": "67259e62b03ea32e765a9c12ac1dc781a8a97c067ff7d99f174e3d8db38dc0ea",
+      "candidateSha256": "ec52c12195fc14b103f3c2137180e07c05b578c29c514175df7f844ba160eab5"
+    },
+    {
+      "path": "src/main/ipc/external-connected-library.ipc.ts",
+      "beforeSha256": "be41a139eca95580f19d06602db2e04d1a839a73b8b9b13cfad3ea6cd25fe9db",
+      "candidateSha256": "bb6584322ec4ae54b2ffda181a83a530e8dfc98898ff43ec8a658c46b349b800"
+    },
+    {
+      "path": "src/main/ipc/main-ipc-composition.ts",
+      "beforeSha256": "2f8e1a6fa10437e3c10267c5456a7609749d6fe841f6afd672940654cb3ea0b5",
+      "candidateSha256": "0805a8e6d4991ea00f49fa30e7fe9f8defdd5e16cb1e22dbee985405b62a0218"
+    },
+    {
+      "path": "src/renderer/routes/ConnectedLibrariesPage.tsx",
+      "beforeSha256": "5f95899e01c0164372b9ee20c35437854c9dc648a92c4b52715602bc3a6bdbe1",
+      "candidateSha256": "bdd3e25caaeb8466fd2bbbff9c113884dbcb684858c39e36fe59feb07b4ba332"
+    },
+    {
+      "path": "src/shared/build-identity.generated.ts",
+      "beforeSha256": "a5c3bf5327ce7ea3bd4468c7ad2eee4ba2a1efe492829e00967424cce201a29c",
+      "candidateSha256": "c705c3ae50a7980dda6c9744a143f62492d7500bef4ef1a88d01470e25c676cd"
+    },
+    {
+      "path": "src/shared/client/external-connected-library.client.ts",
+      "beforeSha256": "bca1fc86132ba6cfa7b280c0e411c9ea1c2118e63d88bbf0c3dc657ab87655b1",
+      "candidateSha256": "47b3e97509764df83f6285b29cb7d27b348fc08bd3283c78c8edc24570e3a46a"
+    },
+    {
+      "path": "src/shared/client/workspace-read-commands.ts",
+      "beforeSha256": "f8ba30a5e0e3c7bf98c48e8234953dab106d9d8be41225bcefbcd822a48c8811",
+      "candidateSha256": "5d516b391c018c17849d3902e760f83d7133cc99c387670f90288c7f3d44ec96"
+    },
+    {
+      "path": "src/shared/contracts/external-connected-library.contract.ts",
+      "beforeSha256": "12ce74da680f132bde1ad420b617b2c40ecf434c8fac1610349b29e84f743573",
+      "candidateSha256": "5974ee81d40331fa8835ed7e9a2748d1f36c67cf4c3b26d753e448a4d23a9d81"
+    }
+  ],
+  "plugin": {
+    "bytes": 10637,
+    "sha256": "6735caf4f138119c13f360c2233419f9bbccfa1290cbcc9c8c8675560ee39656",
+    "installed": false,
+    "published": false
+  },
+  "validation": {
+    "tests": [
+      {
+        "file": "scripts/eagle-production-pairing.test.ts",
+        "status": "PASS",
+        "evidenceKind": "tool-observed controlled/integration test execution",
+        "sourceSha256": "d68a5a94f722243cd2a5e4cb91ed2f65355e440d6c569586ecd17cb4c0bbaae5"
+      },
+      {
+        "file": "scripts/eagle-adapter-companion.test.ts",
+        "status": "PASS",
+        "evidenceKind": "tool-observed controlled/integration test execution",
+        "sourceSha256": "35c45fad07a39c27a10083501d3fb2265cf74184987c7aa263787feeb64c54ae"
+      },
+      {
+        "file": "scripts/eagle-companion-artifact.test.ts",
+        "status": "PASS",
+        "evidenceKind": "tool-observed controlled/integration test execution",
+        "sourceSha256": "25b900e0a09bca0673cbea1ec3fbe271046bcc1a1dd5b2f94dfb970d689142a4"
+      },
+      {
+        "file": "scripts/external-connected-library-ipc.test.ts",
+        "status": "PASS",
+        "evidenceKind": "tool-observed controlled/integration test execution",
+        "sourceSha256": "ea24af98b407c2842f09c9e6e845f31c5b2b1f0b04c9f9cb96a32c8f86e8ca34"
+      },
+      {
+        "file": "scripts/connected-library-background.test.ts",
+        "status": "PASS",
+        "evidenceKind": "tool-observed controlled/integration test execution",
+        "sourceSha256": "468e45170f8adca1ded865a7e874141834ef04bf57b38ac0e5072ab96a7e3d90"
+      },
+      {
+        "file": "scripts/external-connected-library-core.test.ts",
+        "status": "PASS",
+        "evidenceKind": "tool-observed controlled/integration test execution",
+        "sourceSha256": "226ce708e809f5ed232db7580138c2224f9a5f89b3385b5f911d94e1e4473a78"
+      }
+    ],
+    "typecheck": "PASS",
+    "build": "PASS",
+    "context": "PASS; 69 untracked first-party excluded",
+    "review": "primary-agent static self-review; no independent reviewer",
+    "browser": "NOT_PASSED; ERR_BLOCKED_BY_CLIENT on earlier fb7b candidate",
+    "realEagle": "NOT_RUN",
+    "parentComplete": false
+  },
+  "startup": {
+    "profileAlias": "E ordinary profile",
+    "hostPid": 5332,
+    "cliSession": 90398,
+    "port": 50422,
+    "sourceBuild": "dam-11b22b18c2708872",
+    "caveat": "normal startup only; no visible UI acceptance or installed Eagle session"
+  },
+  "pending": [
+    "user-created public Eagle library and plugin installation/consent",
+    "Chrome regular-entry access restored",
+    "real read/index/preview/search and writes/readback/conflict/reconnect/unknown-result/reopen"
+  ],
+  "protected": {
+    "priorWipAndIndexPreserved": true,
+    "credentialsReadByAgent": false,
+    "privateEagleLibraryRead": false,
+    "originalFilesChanged": false,
+    "eagleDatabaseWritten": false,
+    "commit": false,
+    "push": false
+  }
+}

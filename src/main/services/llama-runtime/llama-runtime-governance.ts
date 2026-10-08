@@ -1,4 +1,8 @@
-export type LlamaRuntimeGovernancePlatform = 'win32' | 'darwin' | 'linux' | 'unknown'
+import { platformAdapterMatchesCurrentPlatform } from '../../platform/platform-adapter-selection'
+
+export const LLAMA_RUNTIME_GOVERNANCE_PLATFORMS = ['win32', 'darwin', 'linux'] as const
+
+export type LlamaRuntimeGovernancePlatform = typeof LLAMA_RUNTIME_GOVERNANCE_PLATFORMS[number] | 'unknown'
 export type LlamaRuntimeGovernanceMode = 'external-inference' | 'llama-app' | 'llama-cpp' | 'disabled'
 
 export interface LlamaRuntimeAdapterDesign {
@@ -37,9 +41,13 @@ export interface LlamaRuntimeGovernancePlan {
   }>
 }
 
+interface LlamaRuntimePlatformAdapterDescriptor {
+  platform: LlamaRuntimeGovernancePlatform
+  createAdapter: () => LlamaRuntimeAdapterDesign
+}
+
 function normalizePlatform(platform: NodeJS.Platform | string): LlamaRuntimeGovernancePlatform {
-  if (platform === 'win32' || platform === 'darwin' || platform === 'linux') return platform
-  return 'unknown'
+  return LLAMA_RUNTIME_GOVERNANCE_PLATFORMS.find((candidate) => candidate === platform) ?? 'unknown'
 }
 
 function createExternalAdapter(): LlamaRuntimeAdapterDesign {
@@ -108,11 +116,19 @@ function createWindowsLlamaCppAdapter(): LlamaRuntimeAdapterDesign {
   }
 }
 
+const LLAMA_RUNTIME_PLATFORM_ADAPTERS: LlamaRuntimePlatformAdapterDescriptor[] = [
+  { platform: 'darwin', createAdapter: createMacLlamaAppAdapter },
+  { platform: 'win32', createAdapter: createWindowsLlamaCppAdapter }
+]
+
 export function createLlamaRuntimeGovernancePlan(platform: NodeJS.Platform | string): LlamaRuntimeGovernancePlan {
   const normalized = normalizePlatform(platform)
-  const adapters = [createExternalAdapter()]
-  if (normalized === 'darwin') adapters.push(createMacLlamaAppAdapter())
-  if (normalized === 'win32') adapters.push(createWindowsLlamaCppAdapter())
+  const adapters = [
+    createExternalAdapter(),
+    ...LLAMA_RUNTIME_PLATFORM_ADAPTERS
+      .filter((adapter) => platformAdapterMatchesCurrentPlatform(adapter, { currentPlatform: normalized }))
+      .map((adapter) => adapter.createAdapter())
+  ]
 
   return {
     phase: '12B',

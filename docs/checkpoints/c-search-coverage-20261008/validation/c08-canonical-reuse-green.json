@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-08T00:16:04.993Z",
+  "scope": "non-UI automated regressions; no visible user acceptance",
+  "results": [
+    {
+      "entry": "scripts/asset-retrieval-host.test.ts",
+      "exitCode": 0,
+      "durationMs": 5376,
+      "log": "c08-canonical-reuse-green-asset-retrieval-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/asset-search-host.test.ts",
+      "exitCode": 0,
+      "durationMs": 25275,
+      "log": "c08-canonical-reuse-green-asset-search-host.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/asset-discovery-workflow.test.ts",
+      "exitCode": 0,
+      "durationMs": 536,
+      "log": "c08-canonical-reuse-green-asset-discovery-workflow.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/retrieval-model-workspace.test.ts",
+      "exitCode": 0,
+      "durationMs": 715,
+      "log": "c08-canonical-reuse-green-retrieval-model-workspace.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/query-file-grants.test.ts",
+      "exitCode": 0,
+      "durationMs": 569,
+      "log": "c08-canonical-reuse-green-query-file-grants.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    }
+  ]
+}

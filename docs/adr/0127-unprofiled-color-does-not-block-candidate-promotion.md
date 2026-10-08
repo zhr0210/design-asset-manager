@@ -1,0 +1,7 @@
+# Unprofiled Color Does Not Block Candidate Promotion
+
+Unprofiled Color is an honest statement about missing Authoritative Color Evidence, not a file-safety failure or a Preview Generation Failure. A candidate with Unprofiled Color may satisfy the preview portion of Promotion Readiness when its supported-format worker has produced and validated an Unmanaged Structural Preview and all other file safety, artifact integrity, composition rendering, identity, ownership, and promotion requirements pass. It remains eligible for Candidate Promotion, Quick Promote, and Batch Promotion; the product must not trap it permanently in Capture Inbox or require the user to invent a source profile.
+
+Promotion preserves Unprofiled Color as asset metadata and carries a persistent Color Accuracy Warning into the Design Asset. Candidate Grid and Asset Grid expose a compact color-status indicator without replacing the card's primary lifecycle badge, while Asset Inspector shows the missing-evidence state, preview provenance, and the fact that displayed color is not verified. This state is informational and does not create permanent unresolved Review Signal work. Explicit user profile assignment or newly discovered Authoritative Color Evidence regenerates color-managed derivatives and removes the warning only after successful validation; it never rewrites the original.
+
+This decision applies only to absent authoritative evidence. Color Profile Conflict and Invalid Color Profile remain distinct evidence states governed by ADR 0128 and ADR 0129 respectively.

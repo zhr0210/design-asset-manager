@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"gamewith.jp":{srcMatching:[{srcRegExp:"(img\\.gamewith\\.jp/img/(?!original_))(.+@IMG@)",processor:["$1original_$2"]}]}};

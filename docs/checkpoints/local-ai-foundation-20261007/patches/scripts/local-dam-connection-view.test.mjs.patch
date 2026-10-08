@@ -1,0 +1,37 @@
+diff --git a/scripts/local-dam-connection-view.test.mjs b/scripts/local-dam-connection-view.test.mjs
+index f2397ab..05510e9 100644
+--- a/scripts/local-dam-connection-view.test.mjs
++++ b/scripts/local-dam-connection-view.test.mjs
+@@ -18,14 +18,15 @@ await build({absWorkingDir:process.cwd(),bundle:true,platform:'browser',format:'
+  import{freezeWorkspaceInput,lockWorkspaceInput}from'./src/renderer/workspace-input-lock';
+  import'./src/renderer/components/gallery/tokens.css';import'./src/renderer/styles/file-picker.css';
+  const listeners=new Set(),reviewListeners=new Set(),transitionListeners=new Set(),reviewReads=[],cancelled=[];
+- let state={connected:true,reconciling:false},releaseModal;
+- installWorkspaceClient({connectionState:()=>state,onConnectionChanged:listener=>{listeners.add(listener);return()=>listeners.delete(listener)},transitions:{
++ let state={connected:true,reconciling:false},releaseModal,connectOnSubscribe=false;
++ installWorkspaceClient({connectionState:()=>state,onConnectionChanged:listener=>{listeners.add(listener);if(connectOnSubscribe){connectOnSubscribe=false;state={connected:true,reconciling:false}}return()=>listeners.delete(listener)},transitions:{
+   pending:()=>new Promise(resolve=>reviewReads.push(resolve)),cancel:async id=>{cancelled.push(id)},confirm:async()=>{},quit:async()=>{},
+   onReview:listener=>{reviewListeners.add(listener);return()=>reviewListeners.delete(listener)},onState:listener=>{transitionListeners.add(listener);return()=>transitionListeners.delete(listener)}
+  }});
+  const app=createRoot(document.getElementById('root'));
+  const mount=()=>app.render(<><input aria-label="Synthetic editable draft" defaultValue="Synthetic draft"/><div className="workspace-recovery-banner" data-testid="recovery-banner">Synthetic recovery notice</div><WorkspaceConnection/></>);
+  window.fixture={mount,unmount:()=>app.render(null),freeze:freezeWorkspaceInput,
++  mountReconciliationRace:()=>{state={connected:false,reconciling:true};connectOnSubscribe=true;mount()},
+   state:next=>{state=next;for(const listener of listeners)listener(next)},
+   listeners:()=>listeners.size,
+   mountTransitions:()=>app.render(<WorkspaceTransitions/>),
+@@ -108,6 +109,14 @@ try{
+  })
+ 
+  const review={id:'transition:synthetic',action:'quit',drafts:1,nativeDrafts:0,accounts:0,changed:false}
++ await test('reconciliation completed between render and subscription cannot leave a stale connection banner',async()=>{
++  await page.evaluate(()=>window.fixture.mountReconciliationRace())
++  await page.waitForFunction(()=>window.fixture.listeners()===1)
++  await banner().waitFor({state:'detached'})
++  assert.equal(await business.evaluate(element=>element.inert),false)
++  await page.evaluate(()=>window.fixture.unmount())
++  await page.waitForFunction(()=>window.fixture.listeners()===0)
++ })
+  const settle=()=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))))
+  await test('late pending review cannot revive the dialog after cancellation and the authoritative empty reply',async()=>{
+   await page.evaluate(()=>window.fixture.mountTransitions());await page.waitForFunction(()=>window.fixture.reviewState().listeners===2)

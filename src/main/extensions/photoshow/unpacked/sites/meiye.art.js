@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"meiye.art":{srcMatching:[{srcRegExp:"(//image\\.meiye\\.art/[^?]+).*",processor:"$1"}]}};

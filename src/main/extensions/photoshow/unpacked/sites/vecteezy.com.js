@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"vecteezy.com":{srcMatching:[{srcRegExp:"(//.+?\\.vecteezy\\.com/.+/avatar/.+/).+?_(.*@IMG@)",processor:"$1$2"},{srcRegExp:"(//.+?\\.vecteezy\\.com/system/resources/.+/).+(/[^/]+@IMG@)",processor:"$1original$2"}]}};

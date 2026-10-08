@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Design Asset Manager Companion</title>
+    <style>
+      body { margin: 0; padding: 24px; color: #202126; background: #f5f5f7; font: 14px/1.6 "Segoe UI", sans-serif; }
+      h1 { margin: 0 0 14px; font-size: 20px; }
+      p { margin: 0 0 18px; }
+      button { border: 1px solid #d9dce3; border-radius: 9px; padding: 9px 14px; background: white; color: inherit; cursor: pointer; }
+      #approve { background: #151619; color: white; margin-right: 8px; }
+      button:focus-visible { outline: 2px solid #55585f; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Design Asset Manager Companion</h1>
+      <p id="status">Pairing required · 正在准备本机配对。授权前不读取素材。</p>
+      <button id="approve" hidden>允许连接此库</button>
+      <button id="reject" hidden>拒绝 / 撤销连接</button>
+    </main>
+    <script src="js/plugin.cjs"></script>
+    <script src="js/pairing.cjs"></script>
+  </body>
+</html>

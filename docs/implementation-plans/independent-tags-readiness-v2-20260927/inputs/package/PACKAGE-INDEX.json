@@ -1,0 +1,37 @@
+{
+  "package": "DAM-COMPLETE-HANDOFF-20260927",
+  "assembled_on": "2026-09-27",
+  "purpose": "Complete architecture, engineering specification, review, evidence, prompts, and provenance handoff.",
+  "sections": {
+    "01-original-baseline": {
+      "file_count": 1,
+      "bytes": 44463
+    },
+    "02-target-architecture": {
+      "file_count": 53,
+      "bytes": 532199
+    },
+    "03-engineering-report": {
+      "file_count": 421,
+      "bytes": 3308836
+    },
+    "04-engineering-review": {
+      "file_count": 60,
+      "bytes": 209852
+    },
+    "99-source-archives": {
+      "file_count": 3,
+      "bytes": 1260560
+    },
+    "NEXT-AI-START-HERE.md": {
+      "file_count": 1,
+      "bytes": 1230
+    },
+    "README-START-HERE.md": {
+      "file_count": 1,
+      "bytes": 4084
+    }
+  },
+  "next_entry": "04-engineering-review/02-NEXT-AI-PROMPT.md",
+  "source_precedence_note": "Latest review governs implementation cautions; engineering report governs current planned implementation; target architecture governs desired design; original baseline preserves 2026-09-24 observed state."
+}

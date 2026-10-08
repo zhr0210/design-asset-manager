@@ -1,0 +1,12 @@
+{
+  "stage": "P20",
+  "status": "proposed",
+  "limits": {
+    "windows": 8,
+    "membersPerSet": 200,
+    "sets": 200,
+    "folderDepth": 20
+  },
+  "removeMemberDeletesAsset": false,
+  "windowCloseDeletesMembership": false
+}

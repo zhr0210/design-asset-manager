@@ -1,0 +1,432 @@
+{
+  "status": "planned_NOT_RUN",
+  "cases": [
+    {
+      "id": "S01",
+      "sequence": [
+        "complete JSON: valid tags, invalid caption; independently versioned recipe",
+        "commit tags",
+        "caption fails"
+      ],
+      "expected": "tags current immediately; old caption unchanged; batch partial",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S02",
+      "sequence": [
+        "JSON truncated after tags field"
+      ],
+      "expected": "zero capability commits; previous results preserved",
+      "tests": [
+        "T05"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S03",
+      "sequence": [
+        "issue g2 with current g1",
+        "g2 fails"
+      ],
+      "expected": "current g1 remains; recent failure distinct from availability",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S04",
+      "sequence": [
+        "issue g1 then g2",
+        "g2 completes",
+        "g1 completes"
+      ],
+      "expected": "g2 current; g1 rejected stale regardless of timestamps",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S05",
+      "sequence": [
+        "current g0",
+        "issue g1 then g2",
+        "g2 fails",
+        "g1 completes"
+      ],
+      "expected": "g0 remains; g1 not resurrected",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S06",
+      "sequence": [
+        "g2 attempt a1",
+        "retry replaces with a2 claim2",
+        "a1 returns first",
+        "a2 returns"
+      ],
+      "expected": "a1 rejected; a2 one effect",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S07",
+      "sequence": [
+        "same ticket submitted twice same semantic value"
+      ],
+      "expected": "same receipt/evidence; pointer and notification effect not duplicated",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S08",
+      "sequence": [
+        "same ticket submitted twice different values"
+      ],
+      "expected": "conflict; first result unchanged",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S09",
+      "sequence": [
+        "content changed while model runs"
+      ],
+      "expected": "reject commit; old history retained but not effective for new content",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S10",
+      "sequence": [
+        "user edits caption while AI runs",
+        "AI succeeds"
+      ],
+      "expected": "manual text remains effective; AI candidate traceable",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S11",
+      "sequence": [
+        "manual caption text empty",
+        "AI succeeds"
+      ],
+      "expected": "empty manual caption preserved",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S12",
+      "sequence": [
+        "caption-release-for-next-ai",
+        "no new success yet"
+      ],
+      "expected": "retained text unchanged; no implicit inference",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S13",
+      "sequence": [
+        "pin e1",
+        "new smaller model e2 succeeds"
+      ],
+      "expected": "effective e1; e2 retained, auto can update",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S14",
+      "sequence": [
+        "pin e1",
+        "content changes"
+      ],
+      "expected": "needs-review for pin; no silent substitute",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S15",
+      "sequence": [
+        "confirmed tag T",
+        "rerun returns different tags"
+      ],
+      "expected": "confirmed relation T retained",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S16",
+      "sequence": [
+        "reject T sourceFamily F content C",
+        "rerun same F C with new evidence id"
+      ],
+      "expected": "T suppressed from suggestions/AI folder; rejection unchanged",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S17",
+      "sequence": [
+        "reject T sourceFamily F",
+        "provider model changes within same F"
+      ],
+      "expected": "T still suppressed; model alias not rejection key",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S18",
+      "sequence": [
+        "reject T sourceFamily F",
+        "different family G suggests T"
+      ],
+      "expected": "F rejection not silently widened; source G disclosed",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S19",
+      "sequence": [
+        "confirmed T and rejected AI T"
+      ],
+      "expected": "confirmed relation searchable; AI suggestion suppressed",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S20",
+      "sequence": [
+        "dedicated OCR succeeds blocks empty",
+        "old visual OCR text exists"
+      ],
+      "expected": "effective OCR empty, succeeded-empty; zero fallback",
+      "tests": [
+        "T05"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S21",
+      "sequence": [
+        "dedicated OCR fails",
+        "prior dedicated text exists"
+      ],
+      "expected": "prior text retained, error separate",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S22",
+      "sequence": [
+        "OCR editedText empty",
+        "rerun recognizes words same content"
+      ],
+      "expected": "edited empty remains effective; original base ref preserved",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S23",
+      "sequence": [
+        "OCR correction bound e1",
+        "rerun new blocks e2 same content"
+      ],
+      "expected": "whole-text correction kept against e1; no array-index migration",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S24",
+      "sequence": [
+        "OCR old preview correction",
+        "new preview output"
+      ],
+      "expected": "existing compatibility path rejects; explicit resolution required",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S25",
+      "sequence": [
+        "OCR correction saved while old inference pending"
+      ],
+      "expected": "old expected state conflict or current overlay read; correction never lost",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S26",
+      "sequence": [
+        "close and reopen",
+        "old ticket returns"
+      ],
+      "expected": "reject expired generation; committed results remain",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S27",
+      "sequence": [
+        "cancel before commit",
+        "late response"
+      ],
+      "expected": "zero late effect",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S28",
+      "sequence": [
+        "commit succeeds",
+        "notification fails"
+      ],
+      "expected": "success remains; reload recovers projection",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S29",
+      "sequence": [
+        "two windows edit same overlay revision"
+      ],
+      "expected": "one succeeds; second conflict preserves draft",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S30",
+      "sequence": [
+        "new tags held quality",
+        "old tags eligible"
+      ],
+      "expected": "old auto remains; held not advertised as current",
+      "tests": [
+        "T05"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S31",
+      "sequence": [
+        "unpin e1 with latest eligible e2"
+      ],
+      "expected": "e2 effective without new inference",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S32",
+      "sequence": [
+        "manual request only tags",
+        "response includes prompt"
+      ],
+      "expected": "only tags eligible for commit; no unsolicited advanced capability",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S33",
+      "sequence": [
+        "duplicate receipt after commit response lost"
+      ],
+      "expected": "lookup effect receipt before any replay; no fresh model call",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S34",
+      "sequence": [
+        "unknown higher schema or Eagle or Legacy target"
+      ],
+      "expected": "reject new Managed writes; no migration side effects",
+      "tests": [
+        "T02"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S35",
+      "sequence": [
+        "new independent tag commit",
+        "query Inspector/search/AI folder"
+      ],
+      "expected": "same projection version and evidence ref; no confirmed tag created",
+      "tests": [
+        "T04"
+      ],
+      "actualResult": "NOT_RUN"
+    },
+    {
+      "id": "S36",
+      "sequence": [
+        "manual overlay changes after validation before commit"
+      ],
+      "expected": "transaction rechecks latest overlay/pin; AI does not overwrite",
+      "tests": [
+        "T06"
+      ],
+      "actualResult": "NOT_RUN"
+    }
+  ]
+}

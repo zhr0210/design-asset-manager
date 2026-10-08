@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.design-asset-manager.invalid/p01/safe-trace-event.v1.schema.json",
+  "$comment": "Proposed allowlisted diagnostic event; not a logger implementation.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "operation": {
+      "const": "visual-ai.confirm-tag"
+    },
+    "traceId": {
+      "$ref": "common.v1.schema.json#/definitions/traceId"
+    },
+    "requestId": {
+      "anyOf": [
+        {
+          "$ref": "common.v1.schema.json#/definitions/requestId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "phase": {
+      "enum": [
+        "authorize",
+        "validate",
+        "commit",
+        "notify",
+        "reply"
+      ]
+    },
+    "outcome": {
+      "enum": [
+        "succeeded",
+        "waiting",
+        "failed",
+        "cancelled",
+        "indeterminate"
+      ]
+    },
+    "durationMs": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "code": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "INVALID_REQUEST",
+            "UNSUPPORTED_VERSION",
+            "UNTRUSTED_SENDER",
+            "SCOPE_DENIED",
+            "LIBRARY_SCOPE_CHANGED",
+            "LIBRARY_NOT_READY",
+            "LIBRARY_BUSY",
+            "SUGGESTION_UNAVAILABLE",
+            "STORAGE_WRITE_FAILED",
+            "CANCELLED",
+            "INTERNAL_FAILURE",
+            "COMMIT_OUTCOME_UNKNOWN",
+            "NOTIFICATION_DELIVERY_FAILED"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "operation",
+    "traceId",
+    "requestId",
+    "phase",
+    "outcome",
+    "durationMs",
+    "code"
+  ]
+}

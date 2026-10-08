@@ -1,7 +1,9 @@
+import { getWorkspaceClient } from '../workspace-client'
 import { create } from 'zustand'
 import type { AppSettings } from '../../shared/types/settings.types'
 import type { AiBackendConfig, AiPromptReverseSettings } from '../../shared/types/ai-backend.types'
 import { DEFAULT_PROMPT_REVERSE_MAX_TOKENS } from '../../shared/constants/prompt-templates.constants'
+import type { SettingsExpected } from '../../shared/contracts/settings.contract'
 
 const defaultLlamaBackend: AiBackendConfig = {
   id: 'llama-local-openai',
@@ -37,12 +39,15 @@ const defaultPromptReverseSettings: AiPromptReverseSettings = {
 
 interface SettingsState {
   settings: AppSettings
-  updateSettings: (settings: Partial<AppSettings>) => Promise<void>
-  loadSettings: () => Promise<void>
+  updateSettings: (settings: Partial<AppSettings>, expected?: SettingsExpected) => Promise<void>
+  loadSettings: (requireSuccess?: boolean) => Promise<void>
   clearCache: () => Promise<void>
 }
 
-const api = (window as any).electronAPI
+const api = getWorkspaceClient()
+let loadVersion = 0
+let saveVersion = 0
+let requiredLoad: Promise<void> | undefined
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   settings: {
@@ -91,33 +96,63 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     }
   },
 
-  loadSettings: async () => {
-    if (api && api.settingsLoad) {
-      try {
-        const loaded = await api.settingsLoad()
-        set({ settings: loaded })
-        console.log('[SettingsStore] Settings loaded from backend:', loaded)
-      } catch (err) {
-        console.error('[SettingsStore] Failed to load settings:', err)
+  loadSettings: async (requireSuccess = false) => {
+    // Mount/event refreshes must not invalidate the read that admits browser writes.
+    // Follow it with a fresh read so peer changes during calibration are still seen.
+    if (!requireSuccess) {
+      while (requiredLoad) {
+        try { await requiredLoad } catch { /* The required caller still receives its failure. */ }
       }
     }
+    const version = ++loadVersion
+    const read = async () => {
+      if (api && api.settingsLoad) {
+        try {
+          const loaded = await api.settingsLoad()
+          if (version !== loadVersion) {
+            if (requireSuccess) throw Error('SETTINGS_LOAD_SUPERSEDED')
+            return
+          }
+          set({ settings: loaded })
+          console.log('[SettingsStore] Settings loaded from backend.')
+        } catch (err) {
+          console.error('[SettingsStore] Failed to load settings:', err)
+          if (requireSuccess) throw err
+        }
+      } else if (requireSuccess) throw Error('SETTINGS_API_UNAVAILABLE')
+    }
+    if (!requireSuccess) return read()
+    const pending = read().finally(() => {
+      if (requiredLoad === pending) requiredLoad = undefined
+    })
+    requiredLoad = pending
+    return pending
   },
 
-  updateSettings: async (newSettings) => {
+  updateSettings: async (newSettings, expected) => {
+    const version = ++saveVersion
+    ++loadVersion
     const previous = get().settings
     const updated = { ...previous, ...newSettings }
     set({ settings: updated })
 
     if (api && api.settingsSave) {
+      let saved: AppSettings
       try {
-        const saved = await api.settingsSave(newSettings)
-        set({ settings: saved })
-        console.log('[SettingsStore] Settings saved to backend:', saved)
+        const base = expected ?? Object.fromEntries(Object.keys(newSettings).map(key => [key, previous[key as keyof AppSettings] ?? null]))
+        saved = await api.settingsSave(newSettings, base)
       } catch (err) {
-        set({ settings: previous })
+        if (get().settings === updated) set({ settings: previous })
         console.error('[SettingsStore] Failed to save settings to backend, rolled back:', err)
         throw err
       }
+      // Commit is known. A failed refresh must not roll it back or report a failed write.
+      ++loadVersion
+      if (version === saveVersion) {
+        if (get().settings === updated) set({ settings: saved })
+        else await get().loadSettings()
+      }
+      console.log('[SettingsStore] Settings saved to backend.')
     }
   },
 

@@ -1,0 +1,24 @@
+{
+  "stage": "P01",
+  "decisions": [
+    {
+      "id": "P01-CONTRACT-BOUNDARY",
+      "repositoryAdrId": null,
+      "status": "Proposed",
+      "reviewer": null,
+      "date": "2026-09-24",
+      "targetReferences": [
+        "DAM-A001",
+        "DAM-A020"
+      ],
+      "path": "../adr/ADR-P01-CONTRACT-BOUNDARY.proposed.md",
+      "implementationStatus": "not_started",
+      "approvalRequiredBeforeImplementation": [
+        "channel and payload version",
+        "field limits and error catalog",
+        "production validator dependency scope",
+        "Python conformance environment"
+      ]
+    }
+  ]
+}

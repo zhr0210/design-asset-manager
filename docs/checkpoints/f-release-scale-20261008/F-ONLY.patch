@@ -1,0 +1,964 @@
+diff --git a/docs/agents/implementation-status.md b/docs/agents/implementation-status.md
+index 2328d40..6bb7366 100644
+--- a/docs/agents/implementation-status.md
++++ b/docs/agents/implementation-status.md
+@@ -1,3 +1,7 @@
++# 当前：F 1 万条与候选验证，父级未完成（2026-10-08）
++
++用户已将 Eagle/E 开发测试留给 macOS，继续 F，首轮选1万条。当前源码/未签名 Windows x64候选 `dam-8ddc7686f890b3e3` / 786输入、1.0.0；包已生成并普通启动健康/确认退出通过，安装/升级/卸载与签名发布未验。实际生产Host入库10000条，持续测试分三批新增9副本；原件逐个流式SHA核对合计10009记录/24种不同内容。fcc版本v1/v13/v14真实小库迁移/工程恢复和30.14分钟2B CPU+OCR后台通过：9描述+9OCR、重开无重发、驻留归零，非Browser用户路径；8ddc最终10009条重建31.636s、词法P95 1003ms、分页227ms、重开1148ms，335文件/211向量与旧行仍保持。持续期间检索+后台读组合P95 2259.69ms，并发两秒目标未证明。Chrome普通新入口实报ERR_BLOCKED_BY_CLIENT，未绕过；8ddc UI未执行。桌面专项仍后续集中、macOS未验，4MiB旧schema备份限制未扩大，**F父级未完成**。准确入口、版本分界及证据见 [F记录](../handoff/RELEASE-SCALE-F-20261008.md)；旧E等待及“不扩F”保留历史身份。
++
+ # 2026-10-08：E正式接线已实施，真实Eagle/Browser验收未成立
+ 
+ 普通composition接Main加密配对与安装包、伴随双端同意及稳定目录身份；官方v2经授权本机网关，保留独立索引、Journal、Outbox、三方冲突与未知结果核对。当前dam-11b22b18c2708872 / 782输入，受控相关回归/typecheck/build/context通过；插件0.2.0尚未安装、用户所选专用公开库待创建，没有实际Eagle读取/写入/冲突/恢复证据。Chrome新端口直开出现ERR_BLOCKED_BY_CLIENT，未绕过；当前候选Browser未验收。69份untracked覆盖警告保留。见[准确状态](../handoff/EAGLE-E-20261008.md)。E父级未完成，不扩F；旧D及更早记录按原版本保持。
+
+diff --git a/docs/handoff/CURRENT-STATE.md b/docs/handoff/CURRENT-STATE.md
+index a6e92e6..66267dc 100644
+--- a/docs/handoff/CURRENT-STATE.md
++++ b/docs/handoff/CURRENT-STATE.md
+@@ -1,3 +1,7 @@
++# 当前：F 1 万条与候选验证，父级未完成（2026-10-08）
++
++用户已将 Eagle/E 开发测试留给 macOS，继续 F，首轮选1万条。当前源码/未签名 Windows x64候选 `dam-8ddc7686f890b3e3` / 786输入、1.0.0；包已生成并普通启动健康/确认退出通过，安装/升级/卸载与签名发布未验。实际生产Host入库10000条，持续测试分三批新增9副本；原件逐个流式SHA核对合计10009记录/24种不同内容。fcc版本v1/v13/v14真实小库迁移/工程恢复和30.14分钟2B CPU+OCR后台通过：9描述+9OCR、重开无重发、驻留归零，非Browser用户路径；8ddc最终10009条重建31.636s、词法P95 1003ms、分页227ms、重开1148ms，335文件/211向量与旧行仍保持。持续期间检索+后台读组合P95 2259.69ms，并发两秒目标未证明。Chrome普通新入口实报ERR_BLOCKED_BY_CLIENT，未绕过；8ddc UI未执行。桌面专项仍后续集中、macOS未验，4MiB旧schema备份限制未扩大，**F父级未完成**。准确入口、版本分界及证据见 [F记录](RELEASE-SCALE-F-20261008.md)；旧E等待及“不扩F”保留历史身份。
++
+ # 当前：E Eagle 正式接线实施，真实验收待准备（2026-10-08）
+ 
+ 用户已授权包内E，并选择新建专用公开 Eagle 测试库。普通E profile的配对、safeStorage、可信目录身份、伴随网关、只读预览、撤权与重连、插件下载及随构建打包已有代码；既有Journal/Outbox/三方基线保留。当前dam-11b22b18c2708872 / 782输入，普通Host5332/CLI90398/50422；插件0.2.0包已核对，尚未安装。三份既定公开素材副本已准备，未创建/接触实际Eagle库。相关受控/SQLite/IPC/包回归、typecheck/build/context通过，不是实际Eagle通过；69份untracked覆盖警告保留。旧fb7b候选Chrome直开63476遭ERR_BLOCKED_BY_CLIENT，当前候选未绕过拦截；Browser及读取/写入回读/冲突/恢复/保存重开均未验收。等待用户创建空专用库、安装及内部授权，并恢复Chrome正规入口；必要确认来自Windows computer-use保护规则。准确入口与证据见 [本轮记录](EAGLE-E-20261008.md)。HEAD与原index保持、未commit/push/发布。**E父级未完成；不扩F，桌面专项仍后续集中验收。**
+
+diff --git a/docs/handoff/EAGLE-E-20261008.md b/docs/handoff/EAGLE-E-20261008.md
+index 2c57813..9060b1f 100644
+--- a/docs/handoff/EAGLE-E-20261008.md
++++ b/docs/handoff/EAGLE-E-20261008.md
+@@ -1,5 +1,8 @@
+ # E：正式 Eagle 接线已实施，真实验收待准备
+ 
++用户最新安排（2026-10-08）：Eagle 相关开发与真实测试留给 macOS，当前转为 F。
++下文Windows准备和未验收结果保持历史身份；不再等待Windows安装/配对，E未完成。
++
+ 普通入口：在仓库根目录运行以下命令，经「设置 → 资料库 → Eagle 连接库」进入。
+ 
+ ```powershell
+@@ -76,3 +79,7 @@ Chrome 客户端拦截也需要用户恢复正规入口，Agent 不绕过。
+ 替换、回收/恢复回读 → Eagle侧编辑冲突 → 断连/切库/撤权/插件重启与未知结果核对 →
+ 整应用保存重开与原件/人工内容保护。原生专项仍按用户安排后续集中验收。
+ **E父级未完成；不自动扩F，不用只读或模拟通过关闭E。**
++# 最新安排（2026-10-08）
++
++用户将 Eagle 相关开发与真实测试留给 macOS，当前转为 F。下文Windows
++准备和未验收结果保留原时点；不再等待Windows安装/配对，不冒称E完成。
+
+diff --git a/docs/platform/ELECTRON_PACKAGING_AUDIT.md b/docs/platform/ELECTRON_PACKAGING_AUDIT.md
+index 8c98ad8..82e54a6 100644
+--- a/docs/platform/ELECTRON_PACKAGING_AUDIT.md
++++ b/docs/platform/ELECTRON_PACKAGING_AUDIT.md
+@@ -1,5 +1,23 @@
+ # Electron Packaging Configuration Audit
+ 
++## Current F validation (2026-10-08)
++
++The old Phase 9A/9B observations below retain their original scope. Current
++ordinary startup smoke requires the actual Host build/platform health and a
++confirmed exit of its owned process. Staying alive is insufficient; smoke no
++longer disables sandbox/GPU. This does not prove UI, models, installation,
++upgrade or uninstall. The generated Sandbox script uses the same requirements
++but has not been executed for the F candidate.
++
++Current source preloads and native input checks are described in
++[native packaging](NATIVE_DEPENDENCY_PACKAGING.md). User data is explicitly
++retained on NSIS uninstall, pending actual installation lifecycle acceptance.
++F is local and unsigned; no signing or publishing has been performed. Current
++version, measured scope and outstanding acceptance are in
++[current state](../handoff/CURRENT-STATE.md).
++
++## Historical audit and earlier candidate results
++
+ Phase 9A is a read-only audit. It records the current packaging state and future risks without changing real packaging behavior.
+ 
+ ## Current Configuration
+
+diff --git a/docs/platform/NATIVE_DEPENDENCY_PACKAGING.md b/docs/platform/NATIVE_DEPENDENCY_PACKAGING.md
+index 3bbc94f..75cfb48 100644
+--- a/docs/platform/NATIVE_DEPENDENCY_PACKAGING.md
++++ b/docs/platform/NATIVE_DEPENDENCY_PACKAGING.md
+@@ -1,5 +1,24 @@
+ # Native Dependency Packaging Verification
+ 
++## Current F candidate (2026-10-08)
++
++Current production Main uses `createAppStorage` under the selected Electron
++`userData/app-state`; the legacy database path below is a historical Phase 9C
++observation. Current preloads are `index`, `asset-card`, and `work-window`.
++Browser uses the authenticated local Host HTTP transport and has no browser
++preload. The static tests check those actual consumers.
++
++Before disabling rebuild for packaging, `native-package-inputs.mjs` executes
++SQLite and Sharp in the installed target Electron and hashes loaded bindings.
++Foreign platforms/architectures are refused. This avoids mutating the live
++workspace's native DLLs; it is not native window or installation acceptance.
++Model weights, environment/secret files, databases, logs and caches are excluded
++from `ai-service`. Actual candidate bytes are checked by
++`verify-local-candidate.mjs`. Per-platform user acceptance remains separate;
++see [F state](../handoff/CURRENT-STATE.md).
++
++## Historical Phase 9C snapshot
++
+ Phase 9C adds packaging preflight checks for native dependencies and Electron resource paths. It does not run `electron-builder`, package the app, download native dependencies, download models, or start the AI Worker.
+ 
+ ## Native Dependencies
+
+diff --git a/package.json b/package.json
+index b427ef4..0ba9bae 100644
+--- a/package.json
++++ b/package.json
+@@ -25,6 +25,13 @@
+           "**/*",
+           "!**/__pycache__/**",
+           "!**/.venv/**",
++          "!**/.env*",
++          "!**/*.db",
++          "!**/*.sqlite*",
++          "!**/*.log",
++          "!**/.cache/**",
++          "!**/.git/**",
++          "!**/models/**",
+           "!**/models/**/*.pth",
+           "!**/models/**/*.onnx",
+           "!**/models/**/*.safetensors",
+@@ -84,6 +91,7 @@
+     },
+     "nsis": {
+       "oneClick": false,
++      "deleteAppDataOnUninstall": false,
+       "include": "build/installer.nsh",
+       "allowToChangeInstallationDirectory": true
+     },
+
+diff --git a/scripts/build-identity.mjs b/scripts/build-identity.mjs
+index 238e050..02849d7 100644
+--- a/scripts/build-identity.mjs
++++ b/scripts/build-identity.mjs
+@@ -7,6 +7,7 @@ async function walk(dir){for(const entry of await fs.readdir(dir,{withFileTypes:
+ await walk('src')
+ for(const name of ['manifest.json','index.html','js/plugin.cjs','js/pairing.cjs','README.md'])files['eagle-companion/'+name]=createHash('sha256').update(await fs.readFile('eagle-companion/'+name)).digest('hex')
+ files['scripts/build-eagle-companion.mjs']=createHash('sha256').update(await fs.readFile('scripts/build-eagle-companion.mjs')).digest('hex')
++for(const name of ['build/installer.nsh','scripts/run-electron-builder.mjs','scripts/electron-builder-runner-options.mjs','scripts/native-package-inputs.mjs'])files[name]=createHash('sha256').update(await fs.readFile(name)).digest('hex')
+ await walk('ai-service/tools')
+ for(const name of ['package.json','package-lock.json','electron.vite.config.ts','scripts/build-identity.mjs','pi-runtime/worker.mjs','pi-runtime/provider-policy.json','pi-runtime/auth-interaction.mjs','pi-runtime/openai-chatgpt-auth.mjs','pi-runtime/model-reasoning.mjs','pi-runtime/release.json'])files[name]=createHash('sha256').update(await fs.readFile(name)).digest('hex')
+ files['scripts/windows-backup-build-closure.mjs']=createHash('sha256').update(await fs.readFile('scripts/windows-backup-build-closure.mjs')).digest('hex')
+
+diff --git a/scripts/electron-builder-runner.test.ts b/scripts/electron-builder-runner.test.ts
+index 6b047e7..7eb792c 100644
+--- a/scripts/electron-builder-runner.test.ts
++++ b/scripts/electron-builder-runner.test.ts
+@@ -12,6 +12,7 @@ assert.equal(winPlan.publishing, 'disabled')
+ assert.ok(winPlan.args.includes('--win'))
+ assert.ok(winPlan.args.includes('nsis'))
+ assert.ok(winPlan.args.includes('--x64'))
++assert.ok(winPlan.args.includes('--config.npmRebuild=false'))
+ assert.ok(winPlan.args.some((arg: string) => arg.includes('electronDist=<REPO_ROOT>')))
+ assert.equal(JSON.stringify(winPlan).includes(process.cwd()), false)
+ 
+@@ -49,6 +50,12 @@ await assert.rejects(
+   dryRun(['--platform=win', '--mode=dist', '--publish=always']),
+   /Protected electron-builder option/
+ )
++await assert.rejects(dryRun(['--platform=win', '--mode=dist', '--config.npmRebuild=true']), /Protected electron-builder option/)
++for (const architecture of ['--ia32', '--universal', '--all', '--x64=true']) {
++  await assert.rejects(dryRun(['--platform=win', '--mode=dist', architecture]), /one supported native architecture/)
++}
++await assert.rejects(dryRun(['--platform=win', '--mode=dist', '--x64', '--arm64']), /one supported native architecture/)
++await assert.rejects(dryRun(['--platform=win', '--mode=dist', '--arch=arm64']), /Protected electron-builder option/)
+ await assert.rejects(
+   dryRun(['--platform=mac', '--mode=dist', '--config.mac.identity=Ad Hoc']),
+   /Protected electron-builder option/
+
+diff --git a/scripts/library-open-inspection.test.ts b/scripts/library-open-inspection.test.ts
+index 19dbb85..e78dc6e 100644
+--- a/scripts/library-open-inspection.test.ts
++++ b/scripts/library-open-inspection.test.ts
+@@ -1,6 +1,7 @@
+ import assert from 'node:assert/strict'
+ import { spawnSync } from 'node:child_process'
+ import { createHash } from 'node:crypto'
++import { createReadStream } from 'node:fs'
+ import fs from 'node:fs/promises'
+ import os from 'node:os'
+ import path from 'node:path'
+@@ -20,6 +21,7 @@ import {
+   '../src/main/library-lifecycle/library-open-inspection.tracer'
+ 
+ const CONTROL_APPLICATION_ID = 0x44414d49
++const supportedHost = ['darwin','win32'].includes(process.platform)
+ const manifest = {
+   format: 'design-asset-library',
+   manifestSchemaVersion: 1,
+@@ -161,15 +163,15 @@ async function coherentFixtureIsInspectedWithoutWrites(): Promise<void> {
+     })
+     assert.deepEqual(result, {
+       candidate: tracer.candidate,
+-      state: process.platform === 'darwin' ? 'compatible' : 'not-assessed',
+-      reason: process.platform === 'darwin' ? 'candidate-compatible' : 'evidence-not-assessed',
++      state: supportedHost ? 'compatible' : 'not-assessed',
++      reason: supportedHost ? 'candidate-compatible' : 'evidence-not-assessed',
+       writeAuthority: 'not-issued'
+     })
+     assert.equal(Object.isFrozen(result), true)
+     assert.deepEqual(Object.keys(tracer.libraryStart), ['inspect'])
+     assert.equal(JSON.stringify(result).includes(fixture.root), false)
+     // The trusted Main volume adapter receives the exact root; the public result stays path-free.
+-    if (process.platform === 'darwin') assert.equal((evidenceRequests[0] as { libraryRootDirectory: string }).libraryRootDirectory, await fs.realpath(fixture.root))
++    if (supportedHost) assert.equal((evidenceRequests[0] as { libraryRootDirectory: string }).libraryRootDirectory, await fs.realpath(fixture.root))
+     assert.deepEqual(await snapshotFixture(fixture.root), before)
+   } finally {
+     await removeFixture(fixture)
+@@ -403,14 +405,22 @@ async function changedEvidenceCannotBeCombinedIntoSuccess(): Promise<void> {
+       try {
+         const before = await snapshotFixture(fixture.root)
+         let actorRan = false
++        let deniedByOpenFileGuard = false
+         const result = await inspectFixture(fixture, async (input) => {
+           actorRan = true
+-          await change(fixture)
++          try { await change(fixture) }
++          catch (error) {
++            if (process.platform === 'win32' && ['EPERM','EBUSY','EACCES'].includes((error as NodeJS.ErrnoException).code ?? '')) {
++              deniedByOpenFileGuard = true
++            }
++            throw error
++          }
+           return qualifiedEvidence(input)
+         })
+         assert.equal(actorRan, true)
+-        assert.equal(result.state, 'recovery-required', name)
++        assert.equal(result.state, deniedByOpenFileGuard ? 'not-assessed' : 'recovery-required', name)
+         const after = await snapshotFixture(fixture.root)
++        if (deniedByOpenFileGuard) assert.deepEqual(after, before, 'Windows denied replacement without changing the fixture')
+         const unchanged = (entries: readonly FixtureEntry[]) => entries.filter((entry) =>
+           !changedPaths.includes(entry[0]))
+         assert.deepEqual(unchanged(after), unchanged(before),
+@@ -468,7 +478,7 @@ async function linkedOrOversizedControlFilesStayBlocked(): Promise<void> {
+       }],
+       ['large-manifest', (fixture: LibraryFixture) => fs.writeFile(fixture.manifestFile,
+         Buffer.alloc(16 * 1024 + 1, 0x20))],
+-      ['large-control', (fixture: LibraryFixture) => fs.truncate(fixture.databaseFile, 16 * 1024 * 1024 + 1)]
++      ['large-control-lock', (fixture: LibraryFixture) => fs.truncate(path.join(fixture.control,'exclusive-library-lock.sqlite'), 16 * 1024 * 1024 + 1)]
+     ] as const) {
+       const fixture = await createFixture(name)
+       try {
+@@ -527,6 +537,27 @@ async function inspectionNeitherAcquiresNorStealsTheWriterLease(): Promise<void>
+   }
+ }
+ 
++async function oversizedDatabaseIsRefusedWithoutLoadingIt(): Promise<void> {
++  const fixture = await createFixture('large-database')
++  const digest = async () => {
++    const hash = createHash('sha256')
++    for await (const chunk of createReadStream(fixture.databaseFile)) hash.update(chunk)
++    return hash.digest('hex')
++  }
++  try {
++    await fs.truncate(fixture.databaseFile, 512 * 1024 * 1024 + 1)
++    const before = await digest()
++    const metadata = await fs.stat(fixture.databaseFile)
++    assert.equal((await inspectFixture(fixture, () => {
++      throw Error('Oversized database must be refused before volume qualification')
++    })).state, 'recovery-required')
++    assert.equal(await digest(), before)
++    const after = await fs.stat(fixture.databaseFile)
++    assert.equal(after.size, metadata.size)
++    assert.equal(after.mtimeMs, metadata.mtimeMs)
++  } finally { await removeFixture(fixture) }
++}
++
+ if (process.argv[2] === '--child-attempt-inspected-lock') {
+   const control = process.argv[3]
+   if (!control || !path.basename(path.dirname(control)).startsWith('dam-library-open-')) {
+@@ -539,7 +570,7 @@ if (process.argv[2] === '--child-attempt-inspected-lock') {
+   process.stdout.write(`${acquired.kind}\n`)
+ } else {
+   await coherentFixtureIsInspectedWithoutWrites()
+-  if (process.platform === 'darwin') {
++  if (supportedHost) {
+     await qualificationAndLockStatesRemainConservative()
+     await blockedControlStatesDoNotMutateFixtures()
+     await legacyAndMissingRootsNeverCreatePortableState()
+@@ -548,8 +579,9 @@ if (process.argv[2] === '--child-attempt-inspected-lock') {
+     await changedEvidenceCannotBeCombinedIntoSuccess()
+     await cancelledOrForgedRequestsNeverStartObservation()
+     await linkedOrOversizedControlFilesStayBlocked()
++    await oversizedDatabaseIsRefusedWithoutLoadingIt()
+     await inspectionNeitherAcquiresNorStealsTheWriterLease()
+   }
+-  console.log(process.platform === 'darwin' ? 'library-open-inspection passed'
++  console.log(supportedHost ? 'library-open-inspection passed'
+     : 'library-open-inspection unqualified host refusal passed; inspection proof not run')
+ }
+
+diff --git a/scripts/local-dam-http.test.ts b/scripts/local-dam-http.test.ts
+index dfffd1d..f953241 100644
+--- a/scripts/local-dam-http.test.ts
++++ b/scripts/local-dam-http.test.ts
+@@ -7,11 +7,17 @@ import { createLocalDamServer } from '../src/main/local-host/local-dam-server'
+ const root = await fs.mkdtemp(path.join(os.tmpdir(), 'dam-local-http-'))
+ await fs.writeFile(path.join(root, 'index.html'), '<!doctype html><title>DAM shared renderer</title>')
+ const server = await createLocalDamServer({ rendererDirectory: root,
++  health: () => ({ buildId:'dam-controlled-http',platform:process.platform,arch:process.arch,version:'1.0.0' }),
+   invoke: async (client, command) => ({ owner: client.id, command }),
+   channels: () => ['library:inspect'],
+   media: async () => { throw Error('NOT_GRANTED') }
+ })
+ try {
++  const health = await fetch(server.origin + '/api/health')
++  assert.deepEqual(await health.json(), { schema:1,state:'ready',buildId:'dam-controlled-http',
++    platform:process.platform,arch:process.arch,version:'1.0.0' })
++  assert.equal((await fetch(server.origin + '/api/health', { headers:{ Origin:'https://attacker.invalid' } })).status,403)
++  assert.equal((await fetch(server.origin + '/api/health?path=private')).status,403)
+   assert.equal((await fetch(server.origin + '/api/command', { method: 'POST', body: '{}' })).status, 403)
+   server.authorizeLaunch()
+   const page = await fetch(server.origin + '/launch')
+
+diff --git a/scripts/native-dependency-packaging.test.ts b/scripts/native-dependency-packaging.test.ts
+index e2917cb..8616ff0 100644
+--- a/scripts/native-dependency-packaging.test.ts
++++ b/scripts/native-dependency-packaging.test.ts
+@@ -29,6 +29,7 @@ const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8')) as {
+ const electronViteConfig = await fs.readFile('electron.vite.config.ts', 'utf8')
+ const pathResolver = await fs.readFile('src/main/platform/path-resolver.ts', 'utf8')
+ const dbIndex = await fs.readFile('src/main/db/index.ts', 'utf8')
++const main = await fs.readFile('src/main/index.ts', 'utf8')
+ const doc = await fs.readFile('docs/platform/NATIVE_DEPENDENCY_PACKAGING.md', 'utf8')
+ 
+ assert.equal(manifest.runsPackaging, false)
+@@ -45,9 +46,13 @@ for (const dependency of manifest.nativeDependencies ?? []) {
+   assert.match(doc, new RegExp(dependency.name))
+ }
+ 
+-for (const preloadEntry of manifest.pathChecks?.preloadEntryPoints ?? []) {
++// Phase 9C manifest is a historical preflight snapshot, not today's entries.
++for (const preloadEntry of ['src/preload/index.ts', 'src/preload/asset-card.ts', 'src/preload/work-window.ts']) {
+   assert.match(electronViteConfig, new RegExp(preloadEntry.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+ }
++assert.doesNotMatch(electronViteConfig, /src\/preload\/browser\.ts/)
++assert.match(main, /createAppStorage\(join\(app\.getPath\('userData'\), 'app-state'\)\)/)
++assert.match(main, /createLocalDamServer/)
+ 
+ assert.match(pathResolver, /userData/)
+ assert.match(pathResolver, /databaseDir:\s*path\.join\(userDataDir,\s*'database'\)/)
+@@ -64,6 +69,9 @@ assert.equal(aiServiceResource?.to, 'ai-service')
+ assert.ok(aiServiceResource?.filter?.some((f) => f.includes('!**/models/**/*.onnx') || f.includes('!**/models/**/*.safetensors')))
+ assert.ok(aiServiceResource?.filter?.includes('!**/.venv/**'))
+ assert.ok(aiServiceResource?.filter?.includes('!**/__pycache__/**'))
++for (const exclusion of ['!**/.env*', '!**/*.db', '!**/*.sqlite*', '!**/*.log', '!**/.cache/**', '!**/.git/**', '!**/models/**']) {
++  assert.ok(aiServiceResource?.filter?.includes(exclusion), 'Resource exclusion required: ' + exclusion)
++}
+ 
+ const combined = [JSON.stringify(packageJson.build), JSON.stringify(manifest), doc].join('\n')
+ assert.doesNotMatch(combined, /C:\\Users\\[A-Za-z0-9_.-]+/i)
+
+diff --git a/scripts/package-smoke.mjs b/scripts/package-smoke.mjs
+index 78377fa..c63eb1b 100644
+--- a/scripts/package-smoke.mjs
++++ b/scripts/package-smoke.mjs
+@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
+ import path from 'node:path'
+ import crypto from 'node:crypto'
+ import os from 'node:os'
++import { smokeOrdinaryPackageStartup } from './package-startup-smoke.mjs'
+ import {
+   resolvePackageSmokeArtifactPlan,
+   resolvePackageSmokeHostDefaults
+@@ -20,7 +21,7 @@ const sandboxInstall = args.has('--sandbox-install')
+ const generateSandbox = args.has('--sandbox') || args.has('--generate-sandbox') || sandboxInstall
+ const openSandbox = args.has('--open-sandbox')
+ const timeoutArg = process.argv.find((arg) => arg.startsWith('--timeout-ms='))
+-const launchTimeoutMs = timeoutArg ? Number(timeoutArg.replace('--timeout-ms=', '')) : 8000
++const launchTimeoutMs = timeoutArg ? Number(timeoutArg.replace('--timeout-ms=', '')) : 30000
+ const sandboxInstallTimeoutArg = process.argv.find((arg) => arg.startsWith('--sandbox-install-timeout-ms='))
+ const sandboxInstallTimeoutMs = sandboxInstallTimeoutArg
+   ? Number(sandboxInstallTimeoutArg.replace('--sandbox-install-timeout-ms=', ''))
+@@ -39,7 +40,8 @@ if (!['x64', 'arm64'].includes(requestedArch)) {
+ const outputArg = process.argv.find((arg) => arg.startsWith('--output='))
+ const outputPath = outputArg ? path.resolve(outputArg.replace('--output=', '')) : null
+ 
+-const distDir = path.join(root, 'dist-packages')
++const distDirArg = process.argv.find(arg => arg.startsWith('--dist-dir='))
++const distDir = distDirArg ? path.resolve(distDirArg.slice('--dist-dir='.length)) : path.join(root, 'dist-packages')
+ const workRootArg = process.argv.find((arg) => arg.startsWith('--work-root='))
+ const workRoot = path.resolve(
+   workRootArg?.replace('--work-root=', '') || path.join(os.tmpdir(), 'DesignAssetManagerPackageSmoke')
+@@ -192,12 +194,10 @@ async function smokeLaunchUnpacked() {
+     id: 'launch-unpacked',
+     status: passed ? 'passed' : 'failed',
+     detail: passed
+-      ? `Process stayed alive, loaded SQLite database, and resolved python executable.`
++      ? `Ordinary packaged Host returned its actual build/platform health and its owned process exited; UI/model use is not verified.`
+       : `App failed smoke checks or required startup evidence was incomplete.`
+   })
+ 
+-  await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
+-
+   if (!passed) process.exitCode = 1
+ }
+ 
+@@ -291,71 +291,9 @@ async function smokeInstallDmg() {
+ }
+ 
+ async function launchPackagedBinary(binaryPath, sandboxHome) {
+-  await fs.rm(sandboxHome, { recursive: true, force: true }).catch(() => {})
+-  await fs.mkdir(sandboxHome, { recursive: true })
+-
+-  const customEnv = {
+-    ...process.env,
+-    HOME: sandboxHome,
+-    USERPROFILE: sandboxHome,
+-    APPDATA: path.join(sandboxHome, 'AppData', 'Roaming'),
+-    LOCALAPPDATA: path.join(sandboxHome, 'AppData', 'Local')
+-  }
+-
+-  return new Promise((resolve) => {
+-    const child = spawn(binaryPath, ['--no-sandbox', '--disable-gpu'], {
+-      cwd: path.dirname(binaryPath),
+-      shell: false,
+-      windowsHide: true,
+-      env: customEnv
+-    })
+-
+-    let stdoutBuffer = ''
+-    let stderrBuffer = ''
+-    child.stdout.on('data', (data) => { stdoutBuffer += data.toString() })
+-    child.stderr.on('data', (data) => { stderrBuffer += data.toString() })
+-
+-    const hasRequiredStartupEvidence = () => {
+-      const fullLog = `${stdoutBuffer}\n${stderrBuffer}`
+-      const hasDbLog = fullLog.includes('[SQLite] Database successfully loaded.')
+-        || fullLog.includes('Database successfully loaded.')
+-      const hasPyLog = fullLog.includes('[resolvePythonExecutable]')
+-        || fullLog.includes('resolvePythonExecutable')
+-      return hasDbLog && hasPyLog
+-    }
+-
+-    let resolved = false
+-    let timedOut = false
+-    let runningAtTimeout = false
+-    let evidenceAtTimeout = false
+-    let killFallback = null
+-    let timer = null
+-    const finish = (passed) => {
+-      if (resolved) return
+-      resolved = true
+-      if (timer) clearTimeout(timer)
+-      if (killFallback) clearTimeout(killFallback)
+-      resolve(passed)
+-    }
+-    timer = setTimeout(() => {
+-      timedOut = true
+-      runningAtTimeout = child.exitCode === null
+-      evidenceAtTimeout = hasRequiredStartupEvidence()
+-      if (!runningAtTimeout) {
+-        finish(false)
+-        return
+-      }
+-      child.kill('SIGKILL')
+-      killFallback = setTimeout(() => finish(evidenceAtTimeout), 2_000)
+-    }, launchTimeoutMs)
+-
+-    child.on('error', () => finish(false))
+-    child.on('close', (code) => {
+-      finish(timedOut
+-        ? runningAtTimeout && evidenceAtTimeout
+-        : code === 0 && hasRequiredStartupEvidence())
+-    })
+-  })
++  const result = await smokeOrdinaryPackageStartup({ binaryPath, workRoot, timeoutMs: launchTimeoutMs })
++  report.artifacts.ordinaryStartup = result
++  return result.passed
+ }
+ 
+ async function generateSandboxFiles() {
+@@ -417,11 +355,14 @@ if (Test-Path $installer) {
+   $expectedInstallDir = Join-Path $installParent '${productName}'
+   Remove-Item -LiteralPath $installParent -Recurse -Force -ErrorAction SilentlyContinue
+   New-Item -ItemType Directory -Force -Path $installParent | Out-Null
+-  $installerProcess = Start-Process -FilePath $installer -ArgumentList @('/S', ('/D=' + $installParent)) -PassThru
++  $installerProcess = Start-Process -FilePath $installer -ArgumentList @('/S', ('/D=' + $installParent)) -PassThru -WindowStyle Hidden
+   if ($installerProcess.WaitForExit(${sandboxInstallTimeoutMs})) {
+     Add-Check 'installer-run' ($(if ($installerProcess.ExitCode -eq 0) { 'passed' } else { 'failed' })) ('Installer exited with code ' + $installerProcess.ExitCode)
+     Add-Check 'installer-subfolder' ($(if (Test-Path $expectedInstallDir) { 'passed' } else { 'failed' })) 'Installer used the normalized product subfolder.'
+     Add-Check 'installed-exe' ($(if (Test-Path (Join-Path $expectedInstallDir '${productName}.exe')) { 'passed' } else { 'failed' })) 'Installed executable exists under the normalized product subfolder.'
++    if ($installerProcess.ExitCode -eq 0 -and (Test-Path (Join-Path $expectedInstallDir '${productName}.exe'))) {
++      Test-OrdinaryHost (Join-Path $expectedInstallDir '${productName}.exe') 'installed-launch'
++    }
+   } else {
+     Stop-Process -Id $installerProcess.Id -Force -ErrorAction SilentlyContinue
+     Add-Check 'installer-run' 'failed' 'Installer exceeded the ${sandboxInstallTimeoutMs} ms timeout.'
+@@ -430,7 +371,6 @@ if (Test-Path $installer) {
+ `
+     : ''
+   return `$ErrorActionPreference = 'Stop'
+-Start-Sleep -Seconds 15
+ $root = 'C:\\Users\\WDAGUtilityAccount\\Desktop\\package-smoke'
+ $report = Join-Path $root 'sandbox-report.json'
+ $reportTemp = Join-Path $root 'sandbox-report.json.tmp'
+@@ -452,18 +392,45 @@ function Add-Check($id, $status, $detail) {
+   Write-Report $false
+ }
+ 
++function Test-OrdinaryHost($binary, $checkId) {
++  $profile = Join-Path $root ('ordinary-profile-' + [guid]::NewGuid().ToString('N'))
++  New-Item -ItemType Directory -Path $profile | Out-Null
++  $p = $null
++  $ready = $false
++  $exited = $false
++  try {
++    $p = Start-Process -FilePath $binary -ArgumentList @('--dam-browser', ('"--dam-profile=' + $profile + '"')) -PassThru -WindowStyle Hidden
++    $deadline = (Get-Date).AddMilliseconds(${launchTimeoutMs})
++    while (-not $p.HasExited -and (Get-Date) -lt $deadline) {
++      try {
++        $receipt = Get-Content -LiteralPath (Join-Path $profile 'host-startup.json') -Raw | ConvertFrom-Json
++        $origin = [uri]$receipt.origin
++        if ($receipt.schema -ne 1 -or $receipt.pid -ne $p.Id -or $origin.Scheme -ne 'http' -or $origin.Host -ne '127.0.0.1' -or $origin.Port -le 0 -or $origin.AbsolutePath -ne '/' -or $origin.Query -or $origin.Fragment -or $origin.UserInfo) { throw 'STARTUP_RECEIPT_INVALID' }
++        $health = Invoke-RestMethod -Uri ($receipt.origin + '/api/health') -TimeoutSec 2 -MaximumRedirection 0
++        if ($health.schema -eq 1 -and $health.state -eq 'ready' -and $health.buildId -eq $receipt.buildId -and $health.platform -eq $receipt.platform -and $health.arch -eq $receipt.arch -and $health.version -eq $receipt.version) { $ready = $true; break }
++      } catch {}
++      Start-Sleep -Milliseconds 250
++    }
++  } finally {
++    if ($p) {
++      if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
++      $exited = $p.WaitForExit(5000)
++    }
++    # Only remove the fresh owned empty profile after confirmed process exit.
++    $resolvedProfile = [System.IO.Path]::GetFullPath($profile)
++    if ($exited -and [System.IO.Path]::GetDirectoryName($resolvedProfile) -eq [System.IO.Path]::GetFullPath($root)) {
++      Remove-Item -LiteralPath $resolvedProfile -Recurse -Force
++    }
++  }
++  Add-Check $checkId ($(if ($ready -and $exited) { 'passed' } else { 'failed' })) 'Ordinary Host health and confirmed process exit; no UI/model/upgrade acceptance.'
++}
++
+ try {
+   Add-Check 'installer-present' ($(if (Test-Path $installer) { 'passed' } else { 'failed' })) 'Installer presence check.'
+   Add-Check 'unpacked-present' ($(if (Test-Path $unpacked) { 'passed' } else { 'failed' })) 'Unpacked executable presence check.'
+ 
+   if (Test-Path $unpacked) {
+-    $p = Start-Process -FilePath $unpacked -ArgumentList @('--no-sandbox','--disable-gpu') -PassThru -WindowStyle Hidden
+-    if (-not $p.WaitForExit(${launchTimeoutMs})) {
+-      Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+-      Add-Check 'unpacked-launch' 'passed' 'Unpacked app stayed alive for ${launchTimeoutMs} ms.'
+-    } else {
+-      Add-Check 'unpacked-launch' 'failed' ('Unpacked app exited early with code ' + $p.ExitCode)
+-    }
++    Test-OrdinaryHost $unpacked 'unpacked-launch'
+   }
+ 
+   if (Test-Path $installer) {
+
+diff --git a/scripts/package-smoke.test.ts b/scripts/package-smoke.test.ts
+index 577b46d..21a16e6 100644
+--- a/scripts/package-smoke.test.ts
++++ b/scripts/package-smoke.test.ts
+@@ -28,10 +28,18 @@ assert.match(source, /WindowsSandbox\.exe/)
+ assert.match(source, /hdiutil/)
+ assert.match(source, /DMG mounted read-only/)
+ assert.match(source, /fs\.cp\(mountedApp, installedApp/)
+-assert.match(source, /child\.kill\('SIGKILL'\)/)
+-assert.match(source, /child\.on\('close'/)
++assert.match(source, /smokeOrdinaryPackageStartup/)
++const ordinarySource = await fs.readFile('scripts/package-startup-smoke.mjs','utf8')
++assert.match(ordinarySource, /--dam-profile=/)
++assert.match(ordinarySource, /\/api\/health/)
++assert.match(ordinarySource, /receipt\.pid !== child\.pid/)
++assert.match(ordinarySource, /child\.kill\('SIGKILL'\)/)
++assert.match(ordinarySource, /child\.once\('close'/)
++assert.doesNotMatch(ordinarySource, /--no-sandbox|--disable-gpu|HOME:|USERPROFILE:|stdoutBuffer|stderrBuffer/)
+ assert.match(source, /<VGpu>Disable<\/VGpu>/)
+-assert.match(source, /Start-Sleep -Seconds 15/)
++assert.match(source, /function Test-OrdinaryHost/)
++assert.match(source, /Test-OrdinaryHost \$unpacked 'unpacked-launch'/)
++assert.doesNotMatch(source, /--no-sandbox|--disable-gpu|stayed alive|Start-Sleep -Seconds 15/)
+ assert.match(source, /NO_PROXY: '\*'/)
+ assert.match(source, /run-electron-builder\.mjs/)
+ assert.doesNotMatch(source, /process\.platform === 'win32' \? 'npm\.cmd' : 'npm'/)
+
+diff --git a/scripts/release-environment-manifest.test.ts b/scripts/release-environment-manifest.test.ts
+index fd31042..018da85 100644
+--- a/scripts/release-environment-manifest.test.ts
++++ b/scripts/release-environment-manifest.test.ts
+@@ -31,7 +31,7 @@ assert.deepEqual(windows.requiredSecretNames, ['WINDOWS_CSC_LINK', 'WINDOWS_CSC_
+ assert.equal(windows.secretValuesPolicy, 'names_only_never_read')
+ assert.equal(windows.requiredDistributionSmoke, 'windows_sandbox_installer_smoke')
+ assert.equal(windows.distributionSmokeEvidenceSource, 'package-smoke')
+-assert.deepEqual(windows.distributionSmokeCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe'])
++assert.deepEqual(windows.distributionSmokeCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe', 'installed-launch'])
+ assert.equal(windows.brandingApprovalFile, 'release-branding.json')
+ assert.equal(windows.brandingIconFileName, 'icon.ico')
+ assert.equal(windows.artifactNamePattern, 'design-asset-manager-windows-${arch}-signed-candidate')
+
+diff --git a/scripts/release-install-smoke-preflight.test.ts b/scripts/release-install-smoke-preflight.test.ts
+index 7f49144..08ec860 100644
+--- a/scripts/release-install-smoke-preflight.test.ts
++++ b/scripts/release-install-smoke-preflight.test.ts
+@@ -15,7 +15,7 @@ assert.equal(
+   windows.packageSmokeCommand,
+   'node scripts/package-smoke.mjs --sandbox-install --output=dist-packages/package-smoke-windows-${arch}.json'
+ )
+-assert.deepEqual(windows.requiredCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe'])
++assert.deepEqual(windows.requiredCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe', 'installed-launch'])
+ assert.equal(windows.executionHost, 'windows-sandbox')
+ assert.equal(windows.disposableInstallRoot, true)
+ assert.equal(windows.launchUsesIsolatedAppData, true)
+@@ -40,7 +40,7 @@ assert.equal(macos.readsSigningSecrets, false)
+ const preflights = listReleaseInstallSmokePreflights()
+ assert.deepEqual(preflights.map((item) => item.platform), ['windows', 'macos'])
+ preflights[0].requiredCheckIds.push('dmg-mount')
+-assert.deepEqual(createReleaseInstallSmokePreflight('windows').requiredCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe'])
++assert.deepEqual(createReleaseInstallSmokePreflight('windows').requiredCheckIds, ['installer-run', 'installer-subfolder', 'installed-exe', 'installed-launch'])
+ 
+ const manifest = createReleaseEnvironmentManifest()
+ const manifestWindows = manifest.environments.find((item) => item.platform === 'windows')
+
+diff --git a/scripts/release-readiness-writer.test.ts b/scripts/release-readiness-writer.test.ts
+index ffae205..6b84662 100644
+--- a/scripts/release-readiness-writer.test.ts
++++ b/scripts/release-readiness-writer.test.ts
+@@ -33,7 +33,8 @@ const windowsInstall = await createFixture('windows-install', 'windows', 'x64',
+     { id: 'installer', status: 'passed', detail: 'fixture' },
+     { id: 'installer-run', status: 'passed', detail: 'fixture' },
+     { id: 'installer-subfolder', status: 'passed', detail: 'fixture' },
+-    { id: 'installed-exe', status: 'passed', detail: 'fixture' }
++    { id: 'installed-exe', status: 'passed', detail: 'fixture' },
++    { id: 'installed-launch', status: 'passed', detail: 'fixture' }
+   ]
+ })
+ const windowsInstallSummary = await runAndRead(windowsInstall)
+@@ -44,6 +45,19 @@ assert.equal(windowsInstallPlatform.publishAllowed, false)
+ assert.deepEqual(windowsInstallPlatform.blockers.map((item: { code: string }) => item.code), ['publish_approval'])
+ assert.equal(JSON.stringify(windowsInstallSummary).includes(root), false)
+ 
++const windowsFilesOnly = await createFixture('windows-installed-files-without-launch', 'windows', 'x64', {
++  packageSmokeChecks: [
++    { id: 'installer', status: 'passed', detail: 'fixture' },
++    { id: 'installer-run', status: 'passed', detail: 'fixture' },
++    { id: 'installer-subfolder', status: 'passed', detail: 'fixture' },
++    { id: 'installed-exe', status: 'passed', detail: 'fixture' }
++  ]
++})
++const filesOnly = (await runAndRead(windowsFilesOnly)).platforms[0]
++assert.equal(filesOnly.stage, 'candidate_ready')
++assert.equal(filesOnly.distributionAllowed, false, 'Installed files cannot substitute for an ordinary installed Host launch')
++assert.equal(filesOnly.checks.installerSmoke, 'failed')
++
+ const publishApprovalPath = path.join(windowsInstall.distDir, 'release-publish-approval.json')
+ await writeJson(windowsInstall.distDir, 'release-publish-approval.json', {
+   schemaVersion: 1,
+@@ -123,7 +137,8 @@ const failedBranding = await createFixture('failed-branding', 'windows', 'x64',
+     { id: 'installer', status: 'passed', detail: 'fixture' },
+     { id: 'installer-run', status: 'passed', detail: 'fixture' },
+     { id: 'installer-subfolder', status: 'passed', detail: 'fixture' },
+-    { id: 'installed-exe', status: 'passed', detail: 'fixture' }
++    { id: 'installed-exe', status: 'passed', detail: 'fixture' },
++    { id: 'installed-launch', status: 'passed', detail: 'fixture' }
+   ]
+ })
+ const failedBrandingPlatform = (await runAndRead(failedBranding)).platforms[0]
+@@ -137,7 +152,8 @@ const missingChecksum = await createFixture('missing-checksum', 'windows', 'x64'
+     { id: 'installer', status: 'passed', detail: 'fixture' },
+     { id: 'installer-run', status: 'passed', detail: 'fixture' },
+     { id: 'installer-subfolder', status: 'passed', detail: 'fixture' },
+-    { id: 'installed-exe', status: 'passed', detail: 'fixture' }
++    { id: 'installed-exe', status: 'passed', detail: 'fixture' },
++    { id: 'installed-launch', status: 'passed', detail: 'fixture' }
+   ]
+ })
+ const missingChecksumOutput = path.join(missingChecksum.distDir, 'readiness.json')
+@@ -157,7 +173,8 @@ const missingOfficialCatalog = await createFixture(
+       { id: 'installer', status: 'passed', detail: 'fixture' },
+       { id: 'installer-run', status: 'passed', detail: 'fixture' },
+       { id: 'installer-subfolder', status: 'passed', detail: 'fixture' },
+-      { id: 'installed-exe', status: 'passed', detail: 'fixture' }
++      { id: 'installed-exe', status: 'passed', detail: 'fixture' },
++    { id: 'installed-launch', status: 'passed', detail: 'fixture' }
+     ]
+   }
+ )
+
+diff --git a/scripts/run-electron-builder.mjs b/scripts/run-electron-builder.mjs
+index ab48dab..96e0f76 100644
+--- a/scripts/run-electron-builder.mjs
++++ b/scripts/run-electron-builder.mjs
+@@ -1,6 +1,7 @@
+ import { spawn } from 'node:child_process'
+ import fs from 'node:fs/promises'
+ import path from 'node:path'
++import { verifyNativePackageInputs } from './native-package-inputs.mjs'
+ import {
+   getElectronBuilderPlatformOptions,
+   listElectronBuilderSigningEnvKeys,
+@@ -12,6 +13,11 @@ const options = parseArgs(process.argv.slice(2))
+ const { platform, mode, signing } = parseElectronBuilderRunnerOptions(options)
+ const platformOptions = getElectronBuilderPlatformOptions(platform)
+ assertSafePassthrough(options.passthrough)
++const architectureArgs = options.passthrough.filter(arg => /^--(?:x64|arm64|ia32|armv7l|universal|all)(?:=|$)/.test(arg))
++if (architectureArgs.length > 1 || architectureArgs.some(arg => !['--x64', '--arm64'].includes(arg))) {
++  throw Error('Choose one supported native architecture: --x64 or --arm64.')
++}
++const selectedArch = architectureArgs[0]?.slice(2) ?? process.arch
+ const electronPackagePath = path.join(root, 'node_modules', 'electron', 'package.json')
+ const electronDist = path.join(root, 'node_modules', 'electron', 'dist')
+ const builderCli = path.join(root, 'node_modules', 'electron-builder', 'out', 'cli', 'cli.js')
+@@ -30,7 +36,8 @@ builderArgs.push(
+   `--config.electronDist=${electronDist}`,
+   `--config.electronVersion=${electronPackage.version}`,
+   '--publish',
+-  'never'
++  'never',
++  '--config.npmRebuild=false'
+ )
+ if (signing === 'required') {
+   assertSigningApproval(platform)
+@@ -56,6 +63,9 @@ if (options.dryRun) {
+   process.exit(0)
+ }
+ 
++const nativeInputs = verifyNativePackageInputs({ platform, arch: selectedArch })
++console.log(JSON.stringify({ stage: 'native-package-input', ...nativeInputs, rebuild: false }))
++
+ const exitCode = await new Promise((resolve) => {
+   const child = spawn(process.execPath, builderArgs, {
+     cwd: root,
+@@ -138,6 +148,10 @@ function assertSafePassthrough(args) {
+     '--config.publish',
+     '--config.electronDist',
+     '--config.electronVersion',
++    '--config.npmRebuild',
++    '--arch',
++    '--config.mac.target',
++    '--config.win.target',
+     '--config.afterSign',
+     '--config.forceCodeSigning',
+     '--config.mac.identity',
+
+diff --git a/src/main/capture-intake/add-assets.workflow.ts b/src/main/capture-intake/add-assets.workflow.ts
+index ead234f..2da6d22 100644
+--- a/src/main/capture-intake/add-assets.workflow.ts
++++ b/src/main/capture-intake/add-assets.workflow.ts
+@@ -43,11 +43,16 @@ export function createAddAssetsWorkflow(
+ 
+       const activeLibrary = await dependencies.resolveActiveLibrary()
+       const scopeLabels = createUniqueSourceScopeLabels(selection.files)
+-      const plannedItems = await Promise.all(
+-        selection.files.map((file, index) =>
+-          planSelection(file, scopeLabels[index], dependencies)
+-        )
+-      )
++      // Keep source order without opening one descriptor/hash stream per selected file.
++      // Each lane owns at most one source check; public plans still review every item.
++      const plannedItems: Awaited<ReturnType<typeof planSelection>>[] = new Array(selection.files.length)
++      let next = 0
++      await Promise.all(Array.from({ length: Math.min(8, selection.files.length) }, async () => {
++        while (next < selection.files.length) {
++          const index = next++
++          plannedItems[index] = await planSelection(selection.files[index], scopeLabels[index], dependencies)
++        }
++      }))
+       const receipt = dependencies.createIdentity('copy-plan')
+       const publicItems = plannedItems.map((item) => item.publicItem)
+       const eligibleItems = plannedItems
+
+diff --git a/src/main/capture-intake/README.md b/src/main/capture-intake/README.md
+index 532f5e8..d3123c4 100644
+--- a/src/main/capture-intake/README.md
++++ b/src/main/capture-intake/README.md
+@@ -1,5 +1,20 @@
+ # Capture Intake
+ 
++## F large selections (2026-10-08)
++
++Copy-plan preparation uses at most eight source checks concurrently, preserving
++selection order and review of every item. It no longer opens/hash-checks all
++selected files at once. The public PNG prepare regression measured eight
++checks for 256 selections; source change checks and confirmed dispatch remain
++at the existing boundary.
++
++The production Host imported 9834 filename copies of three approved public
++contents into a recoverable copy with 166 inherited records, reaching 10000.
++This is actual copy/preview/SQLite load evidence with a dialog test seam, not
++10000 independent quality samples or Browser intake acceptance. Current scope
++is in [F state](../../../docs/handoff/CURRENT-STATE.md); the generated-only
++statement below retains the earlier evidence boundary.
++
+ Windows disables Sharp's file-handle cache for required previews so owned
+ files can be replaced and removed after processing. The production Library
+ regression uses generated PNG/JPEG/WebP and checks import, reopen and unchanged
+
+diff --git a/src/main/index.ts b/src/main/index.ts
+index 7265589..cac0206 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -423,6 +423,7 @@ app.whenReady().then(async () => {
+     connectedRuntime=await createConnectedLibraryRuntime({userDataDirectory:app.getPath('userData'),synthetic:connectedSyntheticE2e,openConnectedPage:()=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus()}publishWorkspaceEvent('workspace:navigate',{path:'/connected-libraries'})},requestQuit:()=>app.quit()})
+     setupIpcHandlers()
+     localServer = await createLocalDamServer({
++      health: () => ({ buildId: DAM_BUILD_IDENTITY.buildId, platform: process.platform, arch: process.arch, version: app.getVersion() }),
+       rendererDirectory: join(__dirname, '../renderer'),
+       connected: context => { workspaceDrafts?.touch(draftOwner(context)); workspaceClients.set(draftOwner(context), { send: (channel, value) => localServer?.publishToClient(context.id, channel, value) }) },
+       disconnected: context => { const client = workspaceClients.get(draftOwner(context)); if (client) client.connected = false },
+@@ -469,6 +470,19 @@ app.whenReady().then(async () => {
+     return
+   }
+ 
++  if (!syntheticE2e && localServer) {
++    const receipt = { schema: 1, pid: process.pid, origin: localServer.origin, buildId: DAM_BUILD_IDENTITY.buildId,
++      platform: process.platform, arch: process.arch, version: app.getVersion() }
++    const temporary = join(app.getPath('userData'), 'host-startup.' + randomUUID() + '.tmp')
++    try {
++      await fs.promises.writeFile(temporary, JSON.stringify(receipt), { flag: 'wx', mode: 0o600 })
++      await fs.promises.rename(temporary, join(app.getPath('userData'), 'host-startup.json'))
++    } catch {
++      await fs.promises.rm(temporary, { force: true }).catch(() => {})
++      console.error('[App] Non-sensitive startup receipt unavailable.')
++    }
++  }
++
+   const appLifecyclePolicy = resolveElectronAppLifecyclePolicy(electronMainHostContext.platform)
+ 
+   if (appLifecyclePolicy.appUserModelId) {
+
+diff --git a/src/main/library-lifecycle/library-open-inspection.tracer.ts b/src/main/library-lifecycle/library-open-inspection.tracer.ts
+index dec92b0..ed68274 100644
+--- a/src/main/library-lifecycle/library-open-inspection.tracer.ts
++++ b/src/main/library-lifecycle/library-open-inspection.tracer.ts
+@@ -53,6 +53,9 @@ interface Configuration {
+ 
+ const MAX_MANIFEST_BYTES = 16 * 1024
+ const MAX_CONTROL_BYTES = 16 * 1024 * 1024
++// Database size is observed with lstat; it is not loaded into a Buffer.
++// Keep lock/metadata bounds narrow while admitting measured large Managed stores.
++const MAX_LIBRARY_DATABASE_BYTES = 512 * 1024 * 1024
+ const LEGACY_DATABASE_FILE = 'design_asset_manager.db'
+ const recoveryRequiredObservation = Object.freeze({
+   kind: 'portable', compatibility: 'compatible', integrity: 'recovery-required',
+@@ -109,7 +112,7 @@ async function inspectSelectedLibrary(configuration: Configuration): Promise<unk
+     if (!sameLibraryFilesystemObservation({ ...boundary, managed: roles.managed }, roles)) return recoveryRequiredObservation
+     const databaseFile = path.join(roles.control.real, 'library.sqlite')
+     const lockFile = path.join(roles.control.real, 'exclusive-library-lock.sqlite')
+-    const databaseStamp = await readFileStamp(databaseFile, MAX_CONTROL_BYTES)
++    const databaseStamp = await readFileStamp(databaseFile, MAX_LIBRARY_DATABASE_BYTES)
+     const lockStamp = await readFileStamp(lockFile, MAX_CONTROL_BYTES)
+     database = openReadonlyLibraryDatabase(databaseFile)
+     const store = inspectLibraryControlStore(database, declaration)
+@@ -146,7 +149,7 @@ async function inspectSelectedLibrary(configuration: Configuration): Promise<unk
+     const finalStore = inspectLibraryControlStore(database, declaration)
+     if (!sameLibraryFilesystemObservation(roles, finalRoles) ||
+       manifest.stamp !== finalManifest.stamp || manifest.digest !== finalManifest.digest ||
+-      databaseStamp !== await readFileStamp(databaseFile, MAX_CONTROL_BYTES) ||
++      databaseStamp !== await readFileStamp(databaseFile, MAX_LIBRARY_DATABASE_BYTES) ||
+       lockStamp !== await readFileStamp(lockFile, MAX_CONTROL_BYTES) ||
+       !await isAbsent(legacyFile) ||
+       !sqliteRecoverySidecarsAbsent(databaseFile) ||
+
+diff --git a/src/main/library-lifecycle/README.md b/src/main/library-lifecycle/README.md
+index 98ccc26..dd9e578 100644
+--- a/src/main/library-lifecycle/README.md
++++ b/src/main/library-lifecycle/README.md
+@@ -1,5 +1,23 @@
+ # Library Lifecycle
+ 
++## F measured scope (2026-10-08)
++
++Selected-store inspection now permits a main database up to 512 MiB using file
++metadata and the existing read-only SQLite checks. It never loads that entire
++file into a Buffer. Manifest (16 KiB), lock/control (16 MiB), identity,
++sidecar, lease and pre/post stamp protections remain. A real 10000-record
++Managed copy with a 28.9 MB main database reopened; the old 16 MiB shared guard
++had incorrectly quarantined it. Above 512 MiB is still refused.
++
++This reader bound does not expand schema-backup qualification. The current
++Windows native maintenance image cap is 4 MiB with the sealed runtime and
++resource budget. Real public v1/v13/v14 small-library copies upgraded to v15,
++and their readable pre-upgrade backups were restored on separate engineering
++copies. Large old-schema upgrades and UI restoration remain unverified.
++The 1 MiB statement in the historical evidence section below describes its
++earlier candidate, not today's budget. Browser/Native acceptance is separate
++from these internal checks; see [current F state](../../../docs/handoff/CURRENT-STATE.md).
++
+ Active Library description updates optionally accept an expected previous caption
+ and compare it in the same SQLite UPDATE. This protects concurrent native-card edits
+ without changing schema or legacy two-argument caller behavior. Empty descriptions
+
+diff --git a/src/main/local-host/local-dam-server.ts b/src/main/local-host/local-dam-server.ts
+index bc5f811..37713b4 100644
+--- a/src/main/local-host/local-dam-server.ts
++++ b/src/main/local-host/local-dam-server.ts
+@@ -15,6 +15,7 @@ interface BrowserSession {
+ }
+ 
+ export interface LocalDamServerInput {
++  health?(): { buildId: string; platform: string; arch: string; version: string }
+   rendererDirectory: string
+   channels(): readonly string[]
+   invoke(client: BrowserClientContext, command: string, args: unknown[]): Promise<unknown>
+@@ -77,6 +78,11 @@ export async function createLocalDamServer(input: LocalDamServerInput) {
+       const url = new URL(request.url ?? '/', origin)
+       const eventQuery = url.pathname === '/api/events' && [...url.searchParams.keys()].every(key => key === 'client') && url.searchParams.getAll('client').length === 1
+       if (url.origin !== origin || (url.search && !eventQuery) || url.username || url.password) { send(403, { code: 'REQUEST_DENIED' }); return }
++      if (request.method === 'GET' && url.pathname === '/api/health' && input.health) {
++        const health = input.health()
++        send(200, { schema: 1, state: 'ready', buildId: health.buildId, platform: health.platform, arch: health.arch, version: health.version })
++        return
++      }
+       if (request.method === 'GET' && url.pathname === '/launch') {
+         if (!pendingLaunches) { send(403, { code: 'START_DAM_LAUNCHER' }); return }
+         pendingLaunches--
+
+diff --git a/src/main/packaging/release-install-smoke-preflight.ts b/src/main/packaging/release-install-smoke-preflight.ts
+index 6922fd6..3686609 100644
+--- a/src/main/packaging/release-install-smoke-preflight.ts
++++ b/src/main/packaging/release-install-smoke-preflight.ts
+@@ -8,6 +8,7 @@ export type ReleaseInstallSmokeCheckId =
+   | 'installer-run'
+   | 'installer-subfolder'
+   | 'installed-exe'
++  | 'installed-launch'
+   | 'dmg-mount'
+   | 'dmg-copy'
+   | 'dmg-installed-launch'
+@@ -34,7 +35,7 @@ const RELEASE_INSTALL_SMOKE_PREFLIGHTS: Record<ReleasePlatform, ReleaseInstallSm
+     distributionSmoke: 'windows_sandbox_installer_smoke',
+     evidenceSource: 'package-smoke',
+     packageSmokeCommand: 'node scripts/package-smoke.mjs --sandbox-install --output=dist-packages/package-smoke-windows-${arch}.json',
+-    requiredCheckIds: ['installer-run', 'installer-subfolder', 'installed-exe'],
++    requiredCheckIds: ['installer-run', 'installer-subfolder', 'installed-exe', 'installed-launch'],
+     executionHost: 'windows-sandbox',
+     disposableInstallRoot: true,
+     launchUsesIsolatedAppData: true,
+
+diff --git a/src/shared/build-identity.generated.ts b/src/shared/build-identity.generated.ts
+index 3fa5d9b..64362ce 100644
+--- a/src/shared/build-identity.generated.ts
++++ b/src/shared/build-identity.generated.ts
+@@ -1,8 +1,8 @@
+ /** Generated at build time; excludes itself from the source digest. */
+ export const DAM_BUILD_IDENTITY = {
+-  "buildId": "dam-11b22b18c2708872",
+-  "sourceDigest": "11b22b18c27088720a3847526339df457d7b6cfaf651937f04c383da14b9c2dc",
+-  "builtAt": "2026-10-08T04:42:49.132Z",
++  "buildId": "dam-8ddc7686f890b3e3",
++  "sourceDigest": "8ddc7686f890b3e33030804d52703336735b84bd842d4e370386e1617d64e189",
++  "builtAt": "2026-10-08T07:37:13.123Z",
+   "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+-  "sourceCount": 782
++  "sourceCount": 786
+ } as const
+
+diff --git a/TASK.md b/TASK.md
+index 9f531eb..715080d 100644
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,3 +1,7 @@
++# 当前：F 1 万条与候选验证，父级未完成（2026-10-08）
++
++用户已将 Eagle/E 开发测试留给 macOS，继续 F，首轮选1万条。当前源码/未签名 Windows x64候选 `dam-8ddc7686f890b3e3` / 786输入、1.0.0；包已生成并普通启动健康/确认退出通过，安装/升级/卸载与签名发布未验。实际生产Host入库10000条，持续测试分三批新增9副本；原件逐个流式SHA核对合计10009记录/24种不同内容。fcc版本v1/v13/v14真实小库迁移/工程恢复和30.14分钟2B CPU+OCR后台通过：9描述+9OCR、重开无重发、驻留归零，非Browser用户路径；8ddc最终10009条重建31.636s、词法P95 1003ms、分页227ms、重开1148ms，335文件/211向量与旧行仍保持。持续期间检索+后台读组合P95 2259.69ms，并发两秒目标未证明。Chrome普通新入口实报ERR_BLOCKED_BY_CLIENT，未绕过；8ddc UI未执行。桌面专项仍后续集中、macOS未验，4MiB旧schema备份限制未扩大，**F父级未完成**。准确入口、版本分界及证据见 [F记录](docs/handoff/RELEASE-SCALE-F-20261008.md)；旧E等待及“不扩F”保留历史身份。
++
+ # 当前：E Eagle 正式接线实施，真实验收待准备（2026-10-08）
+ 
+ 用户已授权包内E，并选择新建专用公开 Eagle 测试库。普通E profile的配对、safeStorage、可信目录身份、伴随网关、只读预览、撤权与重连、插件下载及随构建打包已有代码；既有Journal/Outbox/三方基线保留。当前dam-11b22b18c2708872 / 782输入，普通Host5332/CLI90398/50422；插件0.2.0包已核对，尚未安装。三份既定公开素材副本已准备，未创建/接触实际Eagle库。相关受控/SQLite/IPC/包回归、typecheck/build/context通过，不是实际Eagle通过；69份untracked覆盖警告保留。旧fb7b候选Chrome直开63476遭ERR_BLOCKED_BY_CLIENT，当前候选未绕过拦截；Browser及读取/写入回读/冲突/恢复/保存重开均未验收。等待用户创建空专用库、安装及内部授权，并恢复Chrome正规入口；必要确认来自Windows computer-use保护规则。准确入口与证据见 [本轮记录](docs/handoff/EAGLE-E-20261008.md)。HEAD与原index保持、未commit/push/发布。**E父级未完成；不扩F，桌面专项仍后续集中验收。**

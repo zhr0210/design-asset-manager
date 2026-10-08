@@ -1,0 +1,94 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "EP01",
+      "input": {
+        "op": "optimized-ep",
+        "build": 26100,
+        "hardware": true,
+        "driver": true,
+        "ep": true
+      },
+      "expected": true
+    },
+    {
+      "id": "EP02",
+      "input": {
+        "op": "optimized-ep",
+        "build": 22631,
+        "hardware": true,
+        "driver": true,
+        "ep": true
+      },
+      "expected": false
+    },
+    {
+      "id": "EP03",
+      "input": {
+        "op": "optimized-ep",
+        "build": 26100,
+        "hardware": false,
+        "driver": true,
+        "ep": true
+      },
+      "expected": false
+    },
+    {
+      "id": "EP04",
+      "input": {
+        "op": "optimized-ep",
+        "build": 26100,
+        "hardware": true,
+        "driver": false,
+        "ep": true
+      },
+      "expected": false
+    },
+    {
+      "id": "EP05",
+      "input": {
+        "op": "execute",
+        "available": false,
+        "requested": "NPU",
+        "actual": "unknown",
+        "fallbackAllowed": true
+      },
+      "expected": "waiting"
+    },
+    {
+      "id": "EP06",
+      "input": {
+        "op": "execute",
+        "available": true,
+        "requested": "NPU",
+        "actual": "CPU",
+        "fallbackAllowed": true
+      },
+      "expected": "CPU"
+    },
+    {
+      "id": "EP07",
+      "input": {
+        "op": "execute",
+        "available": true,
+        "requested": "NPU",
+        "actual": "CPU",
+        "fallbackAllowed": false
+      },
+      "expected": "fallback-refused"
+    },
+    {
+      "id": "EP08",
+      "input": {
+        "op": "execute",
+        "available": true,
+        "requested": "GPU",
+        "actual": "mixed",
+        "fallbackAllowed": true
+      },
+      "expected": "mixed"
+    }
+  ]
+}

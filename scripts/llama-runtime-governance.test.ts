@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import { createLlamaRuntimeGovernancePlan } from '../src/main/services/llama-runtime/llama-runtime-governance'
+import {
+  createLlamaRuntimeGovernancePlan,
+  LLAMA_RUNTIME_GOVERNANCE_PLATFORMS
+} from '../src/main/services/llama-runtime/llama-runtime-governance'
+
+assert.deepEqual(LLAMA_RUNTIME_GOVERNANCE_PLATFORMS, ['win32', 'darwin', 'linux'])
 
 const winPlan = createLlamaRuntimeGovernancePlan('win32')
 assert.equal(winPlan.phase, '12B')
@@ -23,6 +28,10 @@ assert.ok(!macPlan.adapters.some((adapter) => adapter.id === 'windows-llama-cpp'
 const linuxPlan = createLlamaRuntimeGovernancePlan('linux')
 assert.deepEqual(linuxPlan.adapters.map((adapter) => adapter.id), ['external-openai-compatible'])
 
+const unknownPlan = createLlamaRuntimeGovernancePlan('freebsd')
+assert.equal(unknownPlan.platform, 'unknown')
+assert.deepEqual(unknownPlan.adapters.map((adapter) => adapter.id), ['external-openai-compatible'])
+
 const manifest = JSON.parse(await fs.readFile('.codeindex/llama-runtime-governance.json', 'utf8')) as {
   readOnlyAudit?: boolean
   externalInferencePreferred?: boolean
@@ -39,11 +48,45 @@ assert.equal(manifest.autoStart, false)
 assert.equal(manifest.privacy?.containsRealUserPaths, false)
 
 const governanceSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-governance.ts', 'utf8')
+assert.match(governanceSource, /LLAMA_RUNTIME_GOVERNANCE_PLATFORMS = \['win32', 'darwin', 'linux'\] as const/)
+assert.match(governanceSource, /LLAMA_RUNTIME_GOVERNANCE_PLATFORMS\.find\(\(candidate\) => candidate === platform\) \?\? 'unknown'/)
+assert.match(governanceSource, /const LLAMA_RUNTIME_PLATFORM_ADAPTERS: LlamaRuntimePlatformAdapterDescriptor\[\]/)
+assert.match(governanceSource, /platform: 'darwin'[\s\S]*createAdapter: createMacLlamaAppAdapter/)
+assert.match(governanceSource, /platform: 'win32'[\s\S]*createAdapter: createWindowsLlamaCppAdapter/)
+assert.match(governanceSource, /platformAdapterMatchesCurrentPlatform\(adapter, \{ currentPlatform: normalized \}\)/)
+assert.doesNotMatch(governanceSource, /adapter\.platform === normalized/)
+assert.doesNotMatch(governanceSource, /if \(normalized === 'darwin'\)|if \(normalized === 'win32'\)/)
+assert.doesNotMatch(governanceSource, /platform === 'win32' \|\| platform === 'darwin' \|\| platform === 'linux'/)
 assert.doesNotMatch(governanceSource, /fetch\s*\(|spawn\s*\(|execSync\s*\(|downloadOnce|startInstall|startServer|saveSettings/)
 assert.doesNotMatch(governanceSource, /C:\\Users\\[A-Za-z0-9_.-]+/i)
 
 const installerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-install.service.ts', 'utf8')
+const hostContextSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-host-context.ts', 'utf8')
+assert.match(installerSource, /private static readonly hardwareDetectionAdapters: LlamaHardwareDetectionAdapter\[\]/)
+assert.match(hostContextSource, /export function createLlamaRuntimeHostContext/)
+assert.match(installerSource, /platform: 'darwin'[\s\S]*detect: \(service, hostContext\) => service\.detectMacHardware\(hostContext\)/)
+assert.match(installerSource, /platform: 'win32'[\s\S]*detect: \(service, hostContext\) => service\.detectWindowsHardware\(hostContext\)/)
+assert.match(installerSource, /detect: \(service, hostContext\) => service\.detectGenericHardware\(hostContext\)/)
+assert.match(installerSource, /const hostContext = createLlamaRuntimeHostContext\(\)/)
+assert.match(installerSource, /platformAdapterMatchesCurrentPlatform\(item, \{ currentPlatform: hostContext\.platform \}\)/)
+assert.match(installerSource, /platformAdapterMatchesCurrentPlatform\(adapter, \{ currentPlatform: hostContext\.platform \}\)/)
+assert.doesNotMatch(installerSource, /!item\.platform \|\| item\.platform === hostContext\.platform/)
+assert.doesNotMatch(installerSource, /!adapter\.platform \|\| adapter\.platform === hostContext\.platform/)
+assert.doesNotMatch(installerSource, /if \(process\.platform === 'darwin'\)[\s\S]*return this\.detectMacHardware\(\)/)
+assert.doesNotMatch(installerSource, /if \(process\.platform !== 'win32'\)[\s\S]*return createHardwareProfile/)
+assert.doesNotMatch(installerSource, /process\.platform|process\.arch|os\.cpus|os\.totalmem/)
+assert.match(installerSource, /const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter\[\]/)
+assert.match(installerSource, /platform: 'win32'[\s\S]*executableName: 'llama-server\.exe'[\s\S]*chmodExecutableBeforeSpawn: false[\s\S]*zipExtractor: 'powershell-expand-archive'[\s\S]*command: 'taskkill'/)
+assert.match(installerSource, /executableName: 'llama-server'[\s\S]*chmodExecutableBeforeSpawn: true[\s\S]*zipExtractor: 'unzip'/)
+assert.match(installerSource, /const processAdapter = resolveLlamaServerProcessAdapter\(\)/)
+assert.match(installerSource, /processAdapter\.missingExecutableMessage/)
+assert.match(installerSource, /resolveLlamaServerProcessAdapter\(\)\.executableName/)
+assert.match(installerSource, /processAdapter\.chmodExecutableBeforeSpawn/)
+assert.match(installerSource, /resolveLlamaServerProcessAdapter\(\)\.zipExtractor === 'unzip'/)
+assert.doesNotMatch(installerSource, /process\.platform === 'win32' \? 'llama-server\.exe' : 'llama-server'/)
+assert.doesNotMatch(installerSource, /process\.platform === 'win32' \? '未找到 llama-server\.exe/)
 assert.match(installerSource, /llama-server\.exe/)
+assert.doesNotMatch(installerSource, /if \(process\.platform !== 'win32'\)/)
 assert.match(installerSource, /downloadPackage|downloadUrl/)
 
 const doc = await fs.readFile('docs/platform/LLAMA_RUNTIME_GOVERNANCE.md', 'utf8')

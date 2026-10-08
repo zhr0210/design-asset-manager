@@ -16,6 +16,7 @@
     "downloaded-assets"
   ],
   "allowedDistTempEntries": [
+    "ai-console-ui-smoke",
     "doctor",
     "platform-tests",
     "settings-migration-tests",

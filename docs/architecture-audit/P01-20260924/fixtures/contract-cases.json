@@ -1,0 +1,1212 @@
+{
+  "fixtureVersion": 1,
+  "status": "designed_not_executed",
+  "syntheticOnly": true,
+  "schemaBaseDirectory": "../schemas",
+  "tests": [
+    "T01",
+    "T02",
+    "T21",
+    "T22"
+  ],
+  "cases": [
+    {
+      "id": "Q01-valid-request",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Current selected suggestion; authorization still checked separately",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q02-unknown-version",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 2,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Version/type/unknown field must be rejected without coercion",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q03-string-version",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": "1",
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Version/type/unknown field must be rejected without coercion",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q04-bool-version",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": true,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Version/type/unknown field must be rejected without coercion",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q05-wrong-operation",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "asset.delete",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Version/type/unknown field must be rejected without coercion",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q06-client-trace",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        },
+        "traceId": "1234567890abcdef1234567890abcdef"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Version/type/unknown field must be rejected without coercion",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q07-missing-id",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": null,
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Version/type/unknown field must be rejected without coercion",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q08-required-id",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Missing required correlation id",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q09-path-field",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何",
+          "filePath": "fixture-forbidden-path"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q10-database-field",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何",
+          "database": "fixture-forbidden-database"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q11-sender-field",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何",
+          "senderId": 99
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q12-asset-array",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": [
+            "design-asset:fixture-1"
+          ],
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q13-empty-tag",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": ""
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q14-blank-tag",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "   "
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q15-long-tag",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q16-control-tag",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何\n图形"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q17-path-id",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "../fixture",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q18-credential-field",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "几何",
+          "apiKey": "SYNTHETIC-NOT-A-SECRET"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown authority fields or invalid value must be rejected",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q19-boundary-80",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Schema length boundary; tag must still exist exactly in evidence",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q20-unicode-scalar-length",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "payload": {
+          "libraryIdentity": "library:fixture-a",
+          "generation": "generation:fixture-1",
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "tag": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Draft-07 codepoint count; domain requires current-provider UTF16-bound compatibility separately",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "Q21-top-array",
+      "schema": "confirm-ai-tag.request.v1.schema.json",
+      "input": [
+        {
+          "schemaVersion": 1,
+          "operation": "visual-ai.confirm-tag",
+          "requestId": "11111111-1111-4111-8111-111111111111",
+          "payload": {
+            "libraryIdentity": "library:fixture-a",
+            "generation": "generation:fixture-1",
+            "assetId": "design-asset:fixture-1",
+            "evidenceId": "evidence:fixture-1",
+            "tag": "几何"
+          }
+        }
+      ],
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Top-level object only",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R01-committed",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": []
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Confirmed relation after successful transaction",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R02-committed-notify-warning",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": [
+          "NOTIFICATION_DELIVERY_FAILED"
+        ]
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Do not turn committed mutation into failure or replay",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-INVALID_REQUEST",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "请求格式无效，请重新提交。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-UNSUPPORTED_VERSION",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "UNSUPPORTED_VERSION",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "当前接口不支持该契约版本。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-UNTRUSTED_SENDER",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": null,
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "UNTRUSTED_SENDER",
+          "kind": "failed",
+          "category": "permission",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "当前窗口没有此操作权限。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-SCOPE_DENIED",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "SCOPE_DENIED",
+          "kind": "failed",
+          "category": "permission",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "当前窗口不能操作所选素材。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-LIBRARY_SCOPE_CHANGED",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "LIBRARY_SCOPE_CHANGED",
+          "kind": "failed",
+          "category": "conflict",
+          "retry": "after-condition",
+          "commitState": "not-committed",
+          "safeMessage": "资料库会话已变化，请重新选择素材。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-LIBRARY_NOT_READY",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "LIBRARY_NOT_READY",
+          "kind": "waiting",
+          "category": "availability",
+          "retry": "after-condition",
+          "commitState": "not-committed",
+          "safeMessage": "资料库暂不可用，请打开并核对后重试。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-LIBRARY_BUSY",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "LIBRARY_BUSY",
+          "kind": "waiting",
+          "category": "availability",
+          "retry": "after-condition",
+          "commitState": "not-committed",
+          "safeMessage": "资料库正在处理其他操作，请稍后重试。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-SUGGESTION_UNAVAILABLE",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "SUGGESTION_UNAVAILABLE",
+          "kind": "failed",
+          "category": "conflict",
+          "retry": "after-condition",
+          "commitState": "not-committed",
+          "safeMessage": "建议已失效，请刷新当前分析结果。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-STORAGE_WRITE_FAILED",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "STORAGE_WRITE_FAILED",
+          "kind": "failed",
+          "category": "storage",
+          "retry": "bounded",
+          "commitState": "not-committed",
+          "safeMessage": "保存失败且未提交，请在条件允许时重试。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-CANCELLED",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "CANCELLED",
+          "kind": "cancelled",
+          "category": "cancelled",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "操作已取消，未提交本次更改。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-INTERNAL_FAILURE",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "INTERNAL_FAILURE",
+          "kind": "failed",
+          "category": "internal",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "操作未完成且未提交，请检查后重试。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R-code-COMMIT_OUTCOME_UNKNOWN",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "COMMIT_OUTCOME_UNKNOWN",
+          "kind": "indeterminate",
+          "category": "storage",
+          "retry": "reconcile",
+          "commitState": "unknown",
+          "safeMessage": "提交状态尚未确认，请先核对当前结果。"
+        }
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Closed error tuple; no raw details",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R03-unknown-code",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "ARBITRARY_ERROR",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "请求格式无效，请重新提交。"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Closed union/tuple must reject inconsistent or leaking result",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R04-unsafe-message",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "SYNTHETIC-RAW-PROVIDER-TEXT"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Closed union/tuple must reject inconsistent or leaking result",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R05-failure-with-commit",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "请求格式无效，请重新提交。"
+        },
+        "effect": "committed"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Closed union/tuple must reject inconsistent or leaking result",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R06-error-extra-detail",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "请求格式无效，请重新提交。",
+          "detail": "SYNTHETIC-PRIVATE-TEXT"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Closed union/tuple must reject inconsistent or leaking result",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R07-wrong-retry-tuple",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": false,
+        "error": {
+          "code": "INVALID_REQUEST",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "bounded",
+          "commitState": "not-committed",
+          "safeMessage": "请求格式无效，请重新提交。"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Closed union/tuple must reject inconsistent or leaking result",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R08-success-and-error",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": [],
+        "error": {
+          "code": "INVALID_REQUEST",
+          "kind": "failed",
+          "category": "validation",
+          "retry": "never",
+          "commitState": "not-committed",
+          "safeMessage": "请求格式无效，请重新提交。"
+        }
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Success cannot contain failure",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R09-zero-trace",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "00000000000000000000000000000000",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": []
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Host trace must be nonzero",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R10-success-needs-id",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": null,
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": []
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Successful response must echo valid request id",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R11-unknown-warning",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": [
+          "AUTO_RETRY_COMMIT"
+        ]
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Warning list must not instruct duplicate write",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R12-result-version",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 2,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:fixture-1",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": []
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "Unknown wire version",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "R13-correlation-semantic-check",
+      "schema": "confirm-ai-tag.result.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "ok": true,
+        "effect": "committed",
+        "value": {
+          "assetId": "design-asset:other-fixture",
+          "evidenceId": "evidence:fixture-1",
+          "confirmation": "confirmed"
+        },
+        "warnings": []
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Shape is valid; pair validation must reject different assetId",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L01-safe-trace",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED"
+      },
+      "expectedSchemaValid": true,
+      "expectedInBothLanguages": true,
+      "reason": "Only enum/id/timing metadata",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-assetId",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "assetId": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-libraryIdentity",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "libraryIdentity": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-tag",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "tag": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-receipt",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "receipt": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-prompt",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "prompt": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-apiKey",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "apiKey": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-headers",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "headers": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-stack",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "stack": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "L-extra-providerUrl",
+      "schema": "safe-trace-event.v1.schema.json",
+      "input": {
+        "schemaVersion": 1,
+        "operation": "visual-ai.confirm-tag",
+        "traceId": "1234567890abcdef1234567890abcdef",
+        "requestId": "11111111-1111-4111-8111-111111111111",
+        "phase": "notify",
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "code": "NOTIFICATION_DELIVERY_FAILED",
+        "providerUrl": "SYNTHETIC-FORBIDDEN-CONTENT"
+      },
+      "expectedSchemaValid": false,
+      "expectedInBothLanguages": false,
+      "reason": "No private content or authorization material in trace",
+      "executionStatus": "NOT_RUN"
+    }
+  ]
+}

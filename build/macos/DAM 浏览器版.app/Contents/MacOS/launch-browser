@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+# Platform execution and companion signing remain separate release gates.
+launcher_directory=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
+launcher_parent=$(CDPATH= cd "$launcher_directory/../../.." && pwd -P)
+
+for bundle in \
+  "$launcher_parent/Design Asset Manager.app" \
+  "/Applications/Design Asset Manager.app" \
+  "${HOME}/Applications/Design Asset Manager.app"
+do
+  if [ -d "$bundle" ] && [ -f "$bundle/Contents/Info.plist" ] && [ -x "$bundle/Contents/MacOS/Design Asset Manager" ]; then
+    exec /usr/bin/open -n "$bundle" --args --dam-browser
+  fi
+done
+
+printf '%s\n' '请先将主应用 Design Asset Manager.app 拖入“应用程序”，再打开 DAM 浏览器版。' >&2
+/usr/bin/osascript -e 'display alert "无法启动 DAM 浏览器版" message "请先将主应用 Design Asset Manager.app 拖入“应用程序”，再打开 DAM 浏览器版。" as warning' || true
+exit 1

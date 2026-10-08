@@ -1,12 +1,10 @@
 import { ipcMain } from 'electron'
 import { AssetTagService, AssetTagOptions } from '../services/asset-tag.service'
 import { TagSearchService } from '../services/tag-search.service'
-import { MockAiTagService } from '../services/mock-ai-tag.service'
 
 export function registerAssetTagIpc() {
   const service = new AssetTagService()
   const searchService = new TagSearchService()
-  const mockAiService = new MockAiTagService()
 
   ipcMain.handle('asset-tag:add', async (_, { assetId, tagId, options }: { assetId: string; tagId: string; options?: AssetTagOptions }) => {
     try {
@@ -119,20 +117,4 @@ export function registerAssetTagIpc() {
     }
   })
 
-  // Mock AI predictions trigger
-  ipcMain.handle('mock-ai:generate-suggestions', async (_, assetId: string) => {
-    try {
-      if (process.env.DESIGN_ASSET_MANAGER_ALLOW_MOCK_AI_TAGS !== '1') {
-        return {
-          success: false,
-          error: 'Mock AI tag generation is disabled. Start and configure the real AI Worker before running smart tagging.'
-        }
-      }
-      const suggestions = mockAiService.generateSuggestionsForAsset(assetId)
-      return { success: true, suggestions }
-    } catch (err) {
-      console.error('[IPC] mock-ai:generate-suggestions error:', err)
-      return { success: false, error: String(err) }
-    }
-  })
 }

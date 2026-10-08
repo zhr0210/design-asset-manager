@@ -1,4 +1,5 @@
 import assert from 'assert/strict'
+import fs from 'fs/promises'
 import http from 'http'
 import {
   assertSafeZipEntries,
@@ -35,6 +36,10 @@ const release: LlamaReleaseInfo = {
     {
       name: 'llama-b9999-bin-macos-arm64.zip',
       browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9999/llama-b9999-bin-macos-arm64.zip'
+    },
+    {
+      name: 'llama-b9999-bin-linux-x64.zip',
+      browser_download_url: 'https://github.com/ggml-org/llama.cpp/releases/download/b9999/llama-b9999-bin-linux-x64.zip'
     }
   ]
 }
@@ -69,7 +74,48 @@ async function withMockServer(handler: http.RequestListener, run: (baseUrl: stri
 async function main() {
   assert.equal(recommendAccelerator('13.2', true), 'cuda13')
   assert.equal(recommendAccelerator('12.4', true), 'cuda12')
-  assert.equal(recommendAccelerator(undefined, false), process.platform === 'win32' ? 'vulkan' : 'cpu')
+  assert.equal(recommendAccelerator(undefined, false, 'win32'), 'vulkan')
+  assert.equal(recommendAccelerator(undefined, false, 'darwin'), 'cpu')
+  assert.equal(recommendAccelerator(undefined, false, 'linux'), 'cpu')
+
+  assert.equal(createHardwareProfile({
+    platform: 'win32',
+    arch: 'x64',
+    hasNvidiaGpu: false
+  }).recommendedAccelerator, 'vulkan')
+  assert.equal(createHardwareProfile({
+    platform: 'darwin',
+    arch: 'arm64',
+    hasNvidiaGpu: false
+  }).recommendedAccelerator, 'cpu')
+
+  const plannerSource = await fs.readFile('src/main/services/llama-runtime/llama-runtime-planner.ts', 'utf8')
+  assert.match(plannerSource, /createLlamaRuntimeHostContext/)
+  assert.match(plannerSource, /platformAdapterMatchesCurrentPlatform/)
+  assert.doesNotMatch(plannerSource, /process\.platform|process\.arch|os\.cpus|os\.totalmem/)
+  assert.match(plannerSource, /const DEFAULT_LLAMA_ACCELERATOR_RULES: LlamaDefaultAcceleratorRule\[\]/)
+  assert.match(plannerSource, /platform: 'win32'[\s\S]*accelerator: 'vulkan'/)
+  assert.match(plannerSource, /DEFAULT_LLAMA_ACCELERATOR_RULES\.find\(\(rule\) => llamaRuntimeRuleMatches\(\{ platform: rule\.platform \}, \{ platform \}\)\)/)
+  assert.match(plannerSource, /recommendAccelerator\(input\.cudaVersion, input\.hasNvidiaGpu, platform\)/)
+  assert.doesNotMatch(plannerSource, /rule\.platform === process\.platform/)
+  assert.doesNotMatch(plannerSource, /process\.platform === 'win32' \? 'vulkan' : 'cpu'/)
+  assert.match(plannerSource, /function llamaRuntimeRuleMatches/)
+  assert.match(plannerSource, /platformAdapterMatchesCurrentPlatform\(rule, \{ currentPlatform: input\.platform \?\? '' \}\)/)
+  assert.doesNotMatch(plannerSource, /rule\.platform\s*!==\s*input\.platform|rule\.platform\s*===\s*input\.platform/)
+  assert.match(plannerSource, /const LLAMA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaRuntimePackagePatternRule\[\]/)
+  assert.match(plannerSource, /platform: 'darwin'[\s\S]*arch: 'arm64'[\s\S]*bin-macos-arm64/)
+  assert.match(plannerSource, /platform: 'linux'[\s\S]*arch: 'arm64'[\s\S]*bin-linux-arm64/)
+  assert.match(plannerSource, /accelerator: 'cuda13'[\s\S]*bin-win-cuda-13/)
+  assert.match(plannerSource, /LLAMA_RUNTIME_PACKAGE_PATTERN_RULES\.find\(\(candidate\) => llamaRuntimeRuleMatches\(candidate/)
+  assert.match(plannerSource, /platform: resolvedPlatform[\s\S]*arch: resolvedArch[\s\S]*accelerator/)
+  assert.doesNotMatch(plannerSource, /if \(platform === 'darwin'\)|if \(platform === 'linux'\)/)
+  assert.doesNotMatch(plannerSource, /\(!candidate\.platform \|\| candidate\.platform === platform\)/)
+  assert.match(plannerSource, /const LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES: LlamaCudaRuntimePackagePatternRule\[\]/)
+  assert.match(plannerSource, /accelerator: 'cuda13'[\s\S]*cudart-llama-bin-win-cuda-13/)
+  assert.match(plannerSource, /accelerator: 'cuda12'[\s\S]*cudart-llama-bin-win-cuda-12/)
+  assert.match(plannerSource, /LLAMA_CUDA_RUNTIME_PACKAGE_PATTERN_RULES\.find\(\(rule\) => llamaRuntimeRuleMatches\(rule, \{ accelerator \}\)\)/)
+  assert.doesNotMatch(plannerSource, /function cudaRuntimePatterns[\s\S]*if \(accelerator === 'cuda13'\)/)
+  assert.doesNotMatch(plannerSource, /function cudaRuntimePatterns[\s\S]*if \(accelerator === 'cuda12'\)/)
 
   const profile = createHardwareProfile({
     platform: 'win32',
@@ -102,6 +148,17 @@ async function main() {
   assert.equal(plan.runtimePackages[0].verified, true)
   assert.equal(plan.runtimePackages[1].officialUrl.includes('cudart-llama'), true)
 
+  const cdnPlan = createInstallPlan({
+    hardware: profile,
+    release,
+    mirrorManifest,
+    installRoot: 'C:\\Users\\Example\\AppData\\Roaming\\Design Asset Manager\\llama-runtime',
+    downloadSource: 'production-cdn'
+  })
+  assert.equal(cdnPlan.downloadSource, 'production-cdn')
+  assert.ok(cdnPlan.recommendedModel.url.startsWith('https://cdn.design-asset-manager.com'))
+  assert.ok(cdnPlan.recommendedModel.mmprojUrl?.startsWith('https://cdn.design-asset-manager.com'))
+
   const macPlan = createInstallPlan({
     hardware: createHardwareProfile({
       platform: 'darwin',
@@ -118,6 +175,19 @@ async function main() {
   assert.equal(macPlan.accelerator, 'metal')
   assert.equal(macPlan.runtimePackages[0].filename, 'llama-b9999-bin-macos-arm64.zip')
   assert.equal(macPlan.recommendedModel.id, 'qwen3-vl-4b-instruct-q4-k-m')
+
+  const linuxPlan = createInstallPlan({
+    hardware: createHardwareProfile({
+      platform: 'linux',
+      arch: 'x64',
+      totalMemoryGB: 16,
+      hasNvidiaGpu: false,
+      recommendedAccelerator: 'cpu'
+    }),
+    release,
+    installRoot: '/tmp/design-asset-manager/llama-runtime'
+  })
+  assert.equal(linuxPlan.runtimePackages[0].filename, 'llama-b9999-bin-linux-x64.zip')
 
   assert.throws(
     () => createInstallPlan({

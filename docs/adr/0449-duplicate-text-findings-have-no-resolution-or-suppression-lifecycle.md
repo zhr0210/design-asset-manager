@@ -1,0 +1,7 @@
+# Duplicate Text Findings Have No Resolution or Suppression Lifecycle
+
+An ADR 0445 Duplicate Text Value Finding is query evidence, not a Review Signal or attention queue. A matching group, comparison key or owner therefore has no persistent resolved, dismissed, snoozed, acknowledged, expected-duplicate or ignored state; the application creates no attention badge, Review History entry or portable suppression table for it. ADR 0051 continues to govern actual Review Signals, including content-oriented duplicate review, but does not apply merely because Text values share a comparison key.
+
+The user may collapse a group only as presentation state inside the current ADR 0448 Duplicate Text Finding Session. Collapse does not change membership, totals or filter truth, is not saved or backed up, and ends with that session. This avoids letting an accepted repetition silently hide future owners that later enter the same dynamic group.
+
+A User Smart Filter may instead be explicitly edited under ADR 0047 to add ADR 0450 ordinary visible Text conditions or owner, collection and lifecycle criteria. ADR 0447 applies those declared criteria before duplicate grouping; no result-row action secretly creates an exclusion, and the criteria remain inspectable and removable like every other saved filter condition. A group leaves the result only after explicit refresh evaluates fewer than two matching in-scope owners.

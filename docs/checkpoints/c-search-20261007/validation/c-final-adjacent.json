@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-07T12:29:33.745Z",
+  "scope": "non-UI automated regressions; no visible user acceptance",
+  "results": [
+    {
+      "entry": "scripts/scoped-asset-reads.test.ts",
+      "exitCode": 0,
+      "durationMs": 4527,
+      "log": "c-final-adjacent-scoped-asset-reads.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    },
+    {
+      "entry": "scripts/work-sets.test.ts",
+      "exitCode": 0,
+      "durationMs": 3260,
+      "log": "c-final-adjacent-work-sets.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    }
+  ]
+}

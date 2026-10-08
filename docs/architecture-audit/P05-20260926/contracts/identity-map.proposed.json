@@ -1,0 +1,55 @@
+{
+  "status": "proposed_NOT_RUN",
+  "singleAuthority": {
+    "requestGeneration": "P04 analysis_capability_state slot",
+    "claimEpoch": "same slot; Journal is exclusive owner of mutation",
+    "jobRevision": "analysis_jobs CAS",
+    "session": "fresh current Host session or lease identity; libraryGeneration alone insufficient"
+  },
+  "ephemeralOnly": [
+    "attemptToken",
+    "InputGrant bearer",
+    "EgressGrant bearer",
+    "ResourcePermit handle"
+  ],
+  "persistedNotAuthorizing": [
+    "batchId",
+    "jobId",
+    "attemptId",
+    "physicalInvocationId",
+    "requestGeneration",
+    "claimEpoch",
+    "hostSessionId audit",
+    "frozenRecipeProfileInputReferences",
+    "providerRequestId",
+    "reservationRef"
+  ],
+  "uniqueKeys": {
+    "request": [
+      "libraryId",
+      "clientRequestId"
+    ],
+    "job": [
+      "assetId",
+      "contentKey",
+      "capability",
+      "requestGeneration"
+    ],
+    "successEffect": [
+      "jobId",
+      "requestGeneration"
+    ],
+    "event": [
+      "effectKey",
+      "eventKind"
+    ],
+    "consumer": [
+      "consumerId",
+      "consumerVersion",
+      "indexGeneration"
+    ]
+  },
+  "newRequestIdRequiredForForceRerun": true,
+  "terminalJobRevivalAllowed": false,
+  "providerExactlyOnceClaimed": false
+}

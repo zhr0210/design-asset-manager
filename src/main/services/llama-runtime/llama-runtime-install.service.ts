@@ -2,7 +2,6 @@ import { app, shell, type WebContents } from 'electron'
 import fs from 'fs'
 import fsp from 'fs/promises'
 import crypto from 'crypto'
-import os from 'os'
 import path from 'path'
 import { spawn, type ChildProcessWithoutNullStreams } from 'child_process'
 import {
@@ -27,11 +26,66 @@ import type {
 } from '../../../shared/types/llama-runtime.types'
 import { llamaRuntimeInstallProgressChannel } from '../../../shared/contracts/llama-runtime.contract'
 import type { AiBackendConfig } from '../../../shared/types/ai-backend.types'
+import { platformAdapterMatchesCurrentPlatform } from '../../platform/platform-adapter-selection'
+import { probeLlamaServer } from './llama-runtime-server-probe'
+import { createLlamaRuntimeHostContext, type LlamaRuntimeHostContext } from './llama-runtime-host-context'
+import { projectLlamaMacHardwareProfile } from './llama-runtime-macos-hardware-profile'
 
 const LLAMA_RELEASES_API = 'https://api.github.com/repos/ggml-org/llama.cpp/releases/latest'
 
+interface LlamaServerProcessAdapter {
+  platform?: NodeJS.Platform | string
+  executableName: string
+  missingExecutableMessage: string
+  chmodExecutableBeforeSpawn: boolean
+  zipExtractor: 'powershell-expand-archive' | 'unzip'
+  forceStopCommand?: {
+    command: string
+    args: string[]
+    shell: boolean
+  }
+}
+
+interface LlamaHardwareDetectionAdapter {
+  platform?: NodeJS.Platform | string
+  detect: (service: LlamaRuntimeInstallService, hostContext: LlamaRuntimeHostContext) => Promise<LlamaHardwareProfile>
+}
+
+const LLAMA_SERVER_PROCESS_ADAPTERS: LlamaServerProcessAdapter[] = [
+  {
+    platform: 'win32',
+    executableName: 'llama-server.exe',
+    chmodExecutableBeforeSpawn: false,
+    zipExtractor: 'powershell-expand-archive',
+    missingExecutableMessage: '未找到 llama-server.exe，请先完成安装。',
+    forceStopCommand: {
+      command: 'taskkill',
+      args: ['/F', '/IM', 'llama-server.exe'],
+      shell: true
+    }
+  },
+  {
+    executableName: 'llama-server',
+    chmodExecutableBeforeSpawn: true,
+    zipExtractor: 'unzip',
+    missingExecutableMessage: '未找到 llama-server，请先完成安装。'
+  }
+]
+
+function resolveLlamaServerProcessAdapter(hostContext = createLlamaRuntimeHostContext()): LlamaServerProcessAdapter {
+  return LLAMA_SERVER_PROCESS_ADAPTERS.find((adapter) =>
+    platformAdapterMatchesCurrentPlatform(adapter, { currentPlatform: hostContext.platform })
+  ) ?? LLAMA_SERVER_PROCESS_ADAPTERS[1]
+}
+
 export class LlamaRuntimeInstallService {
   private static instance: LlamaRuntimeInstallService
+  private static readonly hardwareDetectionAdapters: LlamaHardwareDetectionAdapter[] = [
+    { platform: 'darwin', detect: (service, hostContext) => service.detectMacHardware(hostContext) },
+    { platform: 'win32', detect: (service, hostContext) => service.detectWindowsHardware(hostContext) },
+    { detect: (service, hostContext) => service.detectGenericHardware(hostContext) }
+  ]
+
   private abortController: AbortController | null = null
   private serverProcess: ChildProcessWithoutNullStreams | null = null
   private status: LlamaInstallStatus = {
@@ -49,20 +103,14 @@ export class LlamaRuntimeInstallService {
   }
 
   public async detectHardware(): Promise<LlamaHardwareProfile> {
-    if (process.platform === 'darwin') {
-      return this.detectMacHardware()
-    }
+    const hostContext = createLlamaRuntimeHostContext()
+    const adapter = LlamaRuntimeInstallService.hardwareDetectionAdapters.find((item) =>
+      platformAdapterMatchesCurrentPlatform(item, { currentPlatform: hostContext.platform })
+    )
+    return (adapter ?? LlamaRuntimeInstallService.hardwareDetectionAdapters[2]).detect(this, hostContext)
+  }
 
-    if (process.platform !== 'win32') {
-      return createHardwareProfile({
-        platform: process.platform,
-        arch: process.arch,
-        cpuThreads: os.cpus().length,
-        totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
-        warnings: ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
-      })
-    }
-
+  private async detectWindowsHardware(hostContext: LlamaRuntimeHostContext): Promise<LlamaHardwareProfile> {
     const warnings: string[] = []
     let gpuName: string | undefined
     let totalVramGB: number | undefined
@@ -85,10 +133,10 @@ export class LlamaRuntimeInstallService {
     }
 
     return createHardwareProfile({
-      platform: process.platform,
-      arch: process.arch,
-      cpuThreads: os.cpus().length,
-      totalMemoryGB: Math.round(os.totalmem() / 1024 / 1024 / 1024),
+      platform: hostContext.platform,
+      arch: hostContext.arch,
+      cpuThreads: hostContext.cpuThreads,
+      totalMemoryGB: hostContext.totalMemoryGB,
       hasNvidiaGpu: Boolean(gpuName),
       gpuName,
       totalVramGB,
@@ -98,11 +146,21 @@ export class LlamaRuntimeInstallService {
     })
   }
 
-  private async detectMacHardware(): Promise<LlamaHardwareProfile> {
+  private async detectGenericHardware(hostContext: LlamaRuntimeHostContext): Promise<LlamaHardwareProfile> {
+    return createHardwareProfile({
+      platform: hostContext.platform,
+      arch: hostContext.arch,
+      cpuThreads: hostContext.cpuThreads,
+      totalMemoryGB: hostContext.totalMemoryGB,
+      warnings: ['当前平台将使用 llama.cpp CPU 运行包；如下载源未提供当前架构包，请手动选择已安装的 llama-server。']
+    })
+  }
+
+  private async detectMacHardware(hostContext: LlamaRuntimeHostContext): Promise<LlamaHardwareProfile> {
     const warnings: string[] = []
-    const totalMemoryGB = Math.round(os.totalmem() / 1024 / 1024 / 1024)
-    const cpuThreads = os.cpus().length
-    let chipName = os.cpus()[0]?.model || 'Apple Silicon / Intel Mac'
+    const totalMemoryGB = hostContext.totalMemoryGB
+    const cpuThreads = hostContext.cpuThreads
+    let chipName = hostContext.cpuModel || 'Apple Silicon / Intel Mac'
     let coreSummary = `${cpuThreads} 线程`
     let displaySummary = ''
 
@@ -135,30 +193,31 @@ export class LlamaRuntimeInstallService {
       // Display profiler data is optional for llama runtime planning.
     }
 
-    const isAppleSilicon = process.arch === 'arm64' || /Apple\s+M\d|Apple\s+Silicon/i.test(chipName)
-    const estimatedUnifiedVramGB = isAppleSilicon
-      ? Math.max(4, Math.round(totalMemoryGB * 0.65 * 10) / 10)
-      : undefined
-    const recommendedAccelerator = isAppleSilicon ? 'metal' : 'cpu'
+    const macHardwareProfile = projectLlamaMacHardwareProfile({
+      arch: hostContext.arch,
+      chipName,
+      displaySummary,
+      totalMemoryGB
+    })
 
     return createHardwareProfile({
-      platform: process.platform,
-      arch: process.arch,
+      platform: hostContext.platform,
+      arch: hostContext.arch,
       cpuThreads,
       totalMemoryGB,
       hasNvidiaGpu: false,
-      gpuName: displaySummary || `${chipName}${isAppleSilicon ? ' 统一内存 GPU' : ''}`,
-      totalVramGB: estimatedUnifiedVramGB,
-      recommendedAccelerator,
+      gpuName: macHardwareProfile.gpuName,
+      totalVramGB: macHardwareProfile.totalVramGB,
+      recommendedAccelerator: macHardwareProfile.recommendedAccelerator,
       warnings: [
         `macOS 硬件检测完成：${chipName}，${coreSummary}，系统内存约 ${totalMemoryGB} GB。`,
-        ...(estimatedUnifiedVramGB ? [`按 Apple 统一内存估算可用于本地推理的显存预算约 ${estimatedUnifiedVramGB} GB。`] : []),
+        ...(macHardwareProfile.unifiedMemoryWarning ? [macHardwareProfile.unifiedMemoryWarning] : []),
         ...warnings
       ]
     })
   }
 
-  public async createInstallPlan(mirrorManifestPath?: string, requestedModelRootDir?: string, downloadSource?: 'huggingface' | 'hf-mirror'): Promise<LlamaInstallPlan> {
+  public async createInstallPlan(mirrorManifestPath?: string, requestedModelRootDir?: string, downloadSource?: 'huggingface' | 'hf-mirror' | 'production-cdn'): Promise<LlamaInstallPlan> {
     const hardware = await this.detectHardware()
     const release = await this.fetchLatestRelease()
     const mirrorManifest = await this.loadMirrorManifest(mirrorManifestPath)
@@ -352,8 +411,9 @@ export class LlamaRuntimeInstallService {
       }
     }
 
+    const processAdapter = resolveLlamaServerProcessAdapter()
     if (!exePath || !fs.existsSync(exePath)) {
-      throw new Error(process.platform === 'win32' ? '未找到 llama-server.exe，请先完成安装。' : '未找到 llama-server，请先完成安装。')
+      throw new Error(processAdapter.missingExecutableMessage)
     }
     if (!fs.existsSync(ggufPath)) {
       throw new Error('未找到 GGUF 模型文件，请先完成模型下载。')
@@ -364,7 +424,7 @@ export class LlamaRuntimeInstallService {
       args.push('--mmproj', mmprojPath)
     }
     args.push('--host', '127.0.0.1', '--port', '8080', '-c', '4096', '-ngl', '999')
-    if (process.platform !== 'win32') {
+    if (processAdapter.chmodExecutableBeforeSpawn) {
       try {
         fs.chmodSync(exePath, 0o755)
       } catch {
@@ -418,10 +478,10 @@ export class LlamaRuntimeInstallService {
       this.serverProcess = null
     }
     
-    // Synchronously launch taskkill in background to force close any dangling llama-server.exe processes
-    if (process.platform === 'win32') {
+    const forceStopCommand = resolveLlamaServerProcessAdapter().forceStopCommand
+    if (forceStopCommand) {
       try {
-        spawn('taskkill', ['/F', '/IM', 'llama-server.exe'], { shell: true })
+        spawn(forceStopCommand.command, forceStopCommand.args, { shell: forceStopCommand.shell })
       } catch (e) {
         // ignore
       }
@@ -437,45 +497,7 @@ export class LlamaRuntimeInstallService {
   }
 
   public async testServer(baseUrl = 'http://127.0.0.1:8080/v1'): Promise<LlamaServerTestResult> {
-    try {
-      const modelsResponse = await fetch(`${baseUrl.replace(/\/$/, '')}/models`, {
-        signal: AbortSignal.timeout(8000)
-      })
-      if (!modelsResponse.ok) {
-        return { success: false, baseUrl, models: [], chatOk: false, error: { code: 'LLAMA_MODELS_FAILED', message: `HTTP ${modelsResponse.status}` } }
-      }
-      const modelsJson: any = await modelsResponse.json()
-      const models = Array.isArray(modelsJson?.data) ? modelsJson.data.map((item: any) => String(item.id)).filter(Boolean) : []
-      const chatResponse = await fetch(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: models[0] ?? 'local-model',
-          messages: [{ role: 'user', content: 'Reply with OK.' }],
-          max_tokens: 8,
-          temperature: 0
-        }),
-        signal: AbortSignal.timeout(15000)
-      })
-      return {
-        success: chatResponse.ok,
-        baseUrl,
-        models,
-        chatOk: chatResponse.ok,
-        error: chatResponse.ok ? undefined : { code: 'LLAMA_CHAT_FAILED', message: `HTTP ${chatResponse.status}` }
-      }
-    } catch (err: any) {
-      return {
-        success: false,
-        baseUrl,
-        models: [],
-        chatOk: false,
-        error: {
-          code: err?.name === 'TimeoutError' ? 'LLAMA_SERVER_TIMEOUT' : 'LLAMA_SERVER_CONNECTION_FAILED',
-          message: sanitizeLlamaLog(err?.message ?? String(err))
-        }
-      }
-    }
+    return probeLlamaServer(baseUrl)
   }
 
   public async checkServerHealth(baseUrl = 'http://127.0.0.1:8080/v1'): Promise<{ running: boolean; models: string[]; error?: string }> {
@@ -584,6 +606,17 @@ export class LlamaRuntimeInstallService {
   private async downloadOnce(url: string, targetPath: string, checksum: string | undefined, sender: WebContents, installId: string, progressBase: number, message: string): Promise<void> {
     const controller = this.abortController
     if (!controller) throw new Error('安装任务不存在。')
+
+    if (url.startsWith('https://cdn.design-asset-manager.com')) {
+      this.emit(sender, installId, 'downloading', progressBase, `[CDN Dry-Run] 正在测试连接生产端 CDN...`)
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      this.emit(sender, installId, 'downloading', progressBase + 5, `[CDN Dry-Run] 生产端 CDN 连接测试成功 (模拟模式)。`)
+      this.emit(sender, installId, 'downloading', progressBase + 10, `[CDN Dry-Run] 模拟下载 Qwen3-VL 资源中...`)
+      await fsp.mkdir(path.dirname(targetPath), { recursive: true })
+      await fsp.writeFile(targetPath, Buffer.from('gguf'))
+      this.emit(sender, installId, 'downloading', progressBase + 20, `${message}模拟下载已完成。`)
+      return
+    }
 
     const formatBytes = (bytes: number): string => {
       if (bytes === 0) return '0 B'
@@ -701,7 +734,7 @@ export class LlamaRuntimeInstallService {
     const buffer = await fsp.readFile(zipPath)
     assertSafeZipEntries(listZipEntries(buffer), destinationDir)
     await fsp.mkdir(destinationDir, { recursive: true })
-    if (process.platform !== 'win32') {
+    if (resolveLlamaServerProcessAdapter().zipExtractor === 'unzip') {
       await new Promise<void>((resolve, reject) => {
         const child = spawn('unzip', ['-o', zipPath, '-d', destinationDir], { shell: false })
         let stderr = ''
@@ -728,7 +761,7 @@ export class LlamaRuntimeInstallService {
   }
 
   private findServerExecutable(runtimeDir: string): string | null {
-    const executableName = process.platform === 'win32' ? 'llama-server.exe' : 'llama-server'
+    const executableName = resolveLlamaServerProcessAdapter().executableName
     const directCandidates = [
       path.join(runtimeDir, executableName),
       path.join(runtimeDir, 'bin', executableName),

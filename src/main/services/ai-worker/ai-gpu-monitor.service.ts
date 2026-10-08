@@ -1,5 +1,5 @@
 import { spawn } from 'child_process'
-import { resolvePythonExecutable } from '../ocr-dependency.service'
+import { resolvePythonExecutable } from '../ai-python-runtime.service'
 import fs from 'fs'
 import type { GpuStatus } from '../../../shared/types/ai-worker.types'
 import { resolveAiServicePath } from '../ai-service-paths'

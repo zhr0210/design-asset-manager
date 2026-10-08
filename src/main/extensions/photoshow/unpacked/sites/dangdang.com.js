@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"dangdang.com":{ignore:".pic_kong",srcMatching:[{srcRegExp:"(//.*\\.(?:ddimg\\.cn|dangdang\\.com)/[^_]+?)_[^oy]((?:_?\\w+)?@IMG@)",processor:"$1_o$2"}]}};

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"dgtle.com":{srcMatching:[{srcRegExp:"(//.+\\.dgtle\\.com/.+?)(?:_\\d+){0,2}(@IMG@).*",processor:"$1$2"}]}};

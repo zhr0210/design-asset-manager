@@ -1,0 +1,331 @@
+{
+  "checkedAt": "2026-09-26T14:39:19.860142+00:00",
+  "scope": "P06-P27 SPEC plus prior report/requirement trace; not production acceptance",
+  "reruns": [
+    {
+      "stage": "P06",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P06/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 13,
+      "stdoutSha256": "f387b914f484367ca557d324d0eff9e0f3f55f2310a13434902915864127dfc6"
+    },
+    {
+      "stage": "P07",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P07/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 11,
+      "stdoutSha256": "6cf2bcb992038dc5d85f0f4d6b1cec568eebe17cd5d5a963110aab2c41edf2b0"
+    },
+    {
+      "stage": "P08",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P08/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 10,
+      "stdoutSha256": "c115301440bfb0286fb9d9573e1f026ae6a5c135196ab03bcbeedc25f40810e2"
+    },
+    {
+      "stage": "P09",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P09/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 11,
+      "stdoutSha256": "35e5c8986e371334d1cb44f0a0535e1ede976c0b2bf1b3cbd2b06d7b863b8302"
+    },
+    {
+      "stage": "P10",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P10/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 9,
+      "stdoutSha256": "26ba7b4c1cf7a3c4ff508c1d5aaa203338b867d57002d4319973e8e8b3956b29"
+    },
+    {
+      "stage": "P11",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P11/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 10,
+      "stdoutSha256": "94512e2f53958dfe7c45652dc41c3f7f539133484d6a1e9712422e294f3cd663"
+    },
+    {
+      "stage": "P12",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P12/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "26c13661ab3b0f8d2761957dc97b67fa06ed684c0af1a6c4dcd22bc0e277ef61"
+    },
+    {
+      "stage": "P13",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P13/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "e0a1b054da0169170a38d79fc64f3478ed7fa582fc0775c993384d6e3f716ee4"
+    },
+    {
+      "stage": "P14",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P14/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 9,
+      "stdoutSha256": "df224137b0c6738c1b7a861cc3bda4503385de21e1e0a1d6d99448de468ecbbc"
+    },
+    {
+      "stage": "P15",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P15/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 10,
+      "stdoutSha256": "6679818315e9b840cde84f2f47132763044f6e9acd393867c09b668a0eff9cf1"
+    },
+    {
+      "stage": "P16",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P16/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "e8d3c29430e594df322d1513f205855e0bcdd4034b9a409be4f63686a9a8a01c"
+    },
+    {
+      "stage": "P17",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P17/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 11,
+      "stdoutSha256": "48e758a317527938d7f93dd87d318e67be110cea8cd2f9e02543f8565e47787f"
+    },
+    {
+      "stage": "P18",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P18/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "72e8cc85f38f101cc62323729553142bdc9317685c6a51aee4b57dbd9d6c759a"
+    },
+    {
+      "stage": "P19",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P19/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 10,
+      "stdoutSha256": "6488a255e63faf72d95215ade6289f832b81860a109facffbcd005b8b75157c7"
+    },
+    {
+      "stage": "P20",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P20/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "84efaa82b1d35fe57ce7dd8ff141a9b7bc2d537fe22b14199b73c82811f32ce6"
+    },
+    {
+      "stage": "P21",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P21/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 11,
+      "stdoutSha256": "336030cb239c8067ab7539f593695460d8fc318bb3dff1acdc7139fc35d1e0e1"
+    },
+    {
+      "stage": "P22",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P22/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 9,
+      "stdoutSha256": "f9ed4d316107e2a0f3c2189981e2beb80563dedeb4a84c5a444105deb560cf07"
+    },
+    {
+      "stage": "P23",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P23/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "2b479edf4a1a29101e11eff7d603268ee35d4f0966a0b47d43c1d53115de7b5e"
+    },
+    {
+      "stage": "P24",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P24/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "64334563e42d820614a8df3d63b26a92ef397a1755d1218430a7fd434b017c53"
+    },
+    {
+      "stage": "P25",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P25/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "9fbcf6c95dc017c70eb1f13512947b206f019c7288b33dc2a9cdc50dbefb4db2"
+    },
+    {
+      "stage": "P26",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P26/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 8,
+      "stdoutSha256": "341fce2d2dcaca48a93668b3b32cfdfbea327177cc92ea6478c1742c437d9f4a"
+    },
+    {
+      "stage": "P27",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/meigong/Documents/design-asset-manager/docs/architecture-audit/P06-P27-SPEC-20260926/P27/evidence/spec-model.py"
+      ],
+      "exitCode": 0,
+      "result": "PASS",
+      "caseCount": 9,
+      "stdoutSha256": "1f591c9e606c1721a50e7c2a9127bdb2ab9b119c39e279b149a323466fc5d8b1"
+    }
+  ],
+  "checks": [
+    {
+      "id": "28-stage-reports",
+      "result": "PASS",
+      "detail": "P00-P27 report paths verified; prior tests not rerun or relabelled"
+    },
+    {
+      "id": "sequential-P06-P27",
+      "result": "PASS",
+      "detail": "Every stage logged completion before next; terminal P27"
+    },
+    {
+      "id": "spec-reference-model-reruns",
+      "result": "PASS",
+      "detail": {
+        "stages": 22,
+        "cases": 205,
+        "evidenceLevel": "SPEC-EXEC only",
+        "productionTests": "NOT_RUN"
+      }
+    },
+    {
+      "id": "source-and-status-consistency",
+      "result": "PASS",
+      "detail": "All cited source hashes unchanged; stages remain ready_for_review/not_started"
+    },
+    {
+      "id": "traceability-coverage",
+      "result": "PASS",
+      "detail": "32 requirements / 20 decisions / 24 T IDs; future X scope explicit"
+    },
+    {
+      "id": "traceability-links",
+      "result": "PASS",
+      "detail": "All referenced P reports exist"
+    },
+    {
+      "id": "original-workspace-protection",
+      "result": "PASS",
+      "detail": {
+        "originalTextFiles": 1865,
+        "gitIndexAndDiffs": "compared",
+        "businessCodeChanged": false
+      }
+    },
+    {
+      "id": "current-stage-markdown-links",
+      "result": "PASS",
+      "detail": []
+    },
+    {
+      "id": "no-false-implementation-status",
+      "result": "PASS",
+      "detail": "No stage auto-reviewed/implemented/accepted"
+    }
+  ],
+  "specTestCount": 205,
+  "stages": 22,
+  "productionTests": "NOT_RUN",
+  "result": "PASS",
+  "exitCode": 0
+}

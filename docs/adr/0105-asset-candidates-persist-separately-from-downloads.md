@@ -1,0 +1,3 @@
+# Asset Candidates Persist Separately From Downloads
+
+Asset Candidates are first-class Candidate Records persisted in authoritative library state, with activated original files held as Candidate Artifacts in the library's Original Asset Storage under ADR 0280, so Capture Inbox review, retention, analysis, crash recovery, and application reinstall do not depend on transient download or application-data state. A Download Task owns transfer progress, retry, and failure only; it must not substitute for Candidate Identity or lifecycle state. Candidate Promotion creates a Design Asset and Promotion Link transactionally and transfers Asset File Ownership of the captured original instead of downloading or duplicating it again.

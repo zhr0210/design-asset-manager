@@ -1,0 +1,24 @@
+{
+  "stage": "P03",
+  "decisions": [
+    {
+      "id": "P03-VISION-PROVIDER-SEAM",
+      "repositoryAdrId": null,
+      "status": "Proposed",
+      "path": "../adr/ADR-P03-VISION-PROVIDER-SEAM.proposed.md",
+      "targetReferences": [
+        "DAM-A003",
+        "DAM-A004"
+      ],
+      "implementationStatus": "not_started",
+      "notApproved": [
+        "Provider registration",
+        "production profile loader",
+        "new evidence provenance fields",
+        "default model changes",
+        "strict language enforcement",
+        "new runtime or model installation"
+      ]
+    }
+  ]
+}

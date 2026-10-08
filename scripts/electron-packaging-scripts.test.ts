@@ -24,7 +24,7 @@ for (const scriptName of ['pack:win', 'pack:mac', 'dist:win', 'dist:mac']) {
   const manifestScript = manifest.scripts?.[scriptName]
   assert.ok(packageScript, `Missing package script: ${scriptName}`)
   assert.equal(packageScript, manifestScript?.command)
-  assert.match(packageScript, /npm run build && electron-builder/)
+  assert.match(packageScript, /npm run build && node scripts\/run-electron-builder\.mjs/)
   assert.doesNotMatch(packageScript, /\b(publish|release|notarize|afterSign|curl|wget|pip install|python -m pip)\b/i)
   assert.equal(manifestScript?.publishes, false)
   assert.equal(manifestScript?.signs, false)
@@ -32,11 +32,10 @@ for (const scriptName of ['pack:win', 'pack:mac', 'dist:win', 'dist:mac']) {
   assert.equal(manifestScript?.releaseWorkflow, false)
 }
 
-assert.match(packageJson.scripts?.['pack:win'] ?? '', /--win --dir/)
-assert.match(packageJson.scripts?.['pack:mac'] ?? '', /--mac --dir/)
-assert.match(packageJson.scripts?.['pack:mac'] ?? '', /identity=null/)
-assert.match(packageJson.scripts?.['dist:win'] ?? '', /--win$/)
-assert.match(packageJson.scripts?.['dist:mac'] ?? '', /--mac --config\.mac\.identity=null$/)
+assert.match(packageJson.scripts?.['pack:win'] ?? '', /--platform=win --mode=dir/)
+assert.match(packageJson.scripts?.['pack:mac'] ?? '', /--platform=mac --mode=dir/)
+assert.match(packageJson.scripts?.['dist:win'] ?? '', /--platform=win --mode=dist$/)
+assert.match(packageJson.scripts?.['dist:mac'] ?? '', /--platform=mac --mode=dist$/)
 
 assert.doesNotMatch(workflow, /npm run (?:pack|dist):/i)
 assert.doesNotMatch(workflow, /electron-builder/i)

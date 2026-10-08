@@ -1,0 +1,17 @@
+# Physical Reclaim Details Use Bounded Direct-Jump Pagination Controls
+
+An expanded ADR 0257 Physical Reclaim Completion Summary shows a **Physical Reclaim Page Navigation** bar only when the current ADR 0268 All/outcome-filter result contains more than 50 targets. A result with at most 50 targets fits ADR 0258's single page and hides the entire bar; pagination chrome never appears merely because the unfiltered snapshot is larger.
+
+The bar has one fixed logical order: First, Previous, a labeled current-page integer input, a localized total such as “of 23 pages”, Next and Last. Every control has a keyboard-accessible name and focus state. First and Previous are disabled on page one; Next and Last are disabled on the final page. Disabled state is never communicated by color alone.
+
+The host derives total pages as the ceiling of the exact filtered target count divided by 50. A user submits a direct page value with Enter or an explicit submit action. An integer from 1 through the current total requests that page directly; submitting the already-current page is a no-op. Focus loss alone does not navigate.
+
+Empty, non-integer, fractional, negative, zero and greater-than-total values are invalid. Invalid submission sends no page request, does not clamp, wrap or change the current page, and shows a localized inline validation message programmatically associated with the input. Correcting the value clears the validation. Invalid input is transient editing text, not selected-page state.
+
+First, Previous, valid direct jump, Next and Last all use the same bound read-only page request. Only a successful response matching the exact opaque summary generation, stable-volume identity, member-set digest, selected outcome filter and requested page may replace the detail rows. A stale, partial, failed or mismatched response leaves the current page intact. ADR 0271 keeps those current rows visible during a cache-miss demand load and exposes failure through path-free inline retry. After a successful page change, the detail region scrolls to its top without moving the summary card; ADR 0274 restores a keyboard focus origin separately and announces the committed outcome.
+
+Page navigation affects details only. It never changes the complete header metrics, immutable snapshot membership, acknowledgement, constituent expiry, ADR 0256 closure or card ordering. The selected page remains ADR 0259 session-only disclosure state: it may survive collapse and re-expansion of the same summary, but leaving Storage Management, renderer-session loss or host restart resets a later projection to page one. Invalid editing text and validation are never retained through collapse.
+
+There is no infinite scroll, Load More action, exhaustive run of numbered page buttons, URL/deep link, browse history or persistent last-page preference. Page input and navigation create no database row, filesystem cache, Full Library Backup, export/merge/sync record, Activity History, telemetry or support payload.
+
+The current project has no Physical Reclaim Completion Summary or page-navigation request. This ADR changes documentation only: it requests/renders/acknowledges no real result, reads no user asset, runtime database, package/cache/model/private state and changes no public IPC/schema/AI Worker API. ADR 0270 permits low-priority adjacent-page prefetch within a maximum-three-page session-memory window without changing these controls, and ADR 0274 defines keyboard focus restoration plus accessible status announcements.

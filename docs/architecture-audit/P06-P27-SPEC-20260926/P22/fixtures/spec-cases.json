@@ -1,0 +1,265 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "IPC01",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app#/one",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "id": "IPC02",
+      "input": {
+        "sender": 2,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app#/one",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "IPC03",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": false,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app#/one",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "IPC04",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "fake",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app#/one",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "IPC05",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app?evil=1",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "IPC06",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app#/one",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "old"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "IPC07",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app#/one",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "delete",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "id": "IPC08",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://fixture.invalid/app#/one",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": []
+      },
+      "expected": false
+    },
+    {
+      "id": "IPC09",
+      "input": {
+        "sender": 1,
+        "trustedSender": 1,
+        "mainFrame": true,
+        "frameIdentity": "f",
+        "trustedFrame": "f",
+        "url": "https://evil.invalid/app",
+        "entry": "https://fixture.invalid/app",
+        "scope": [
+          "L",
+          "S"
+        ],
+        "current": [
+          "L",
+          "S"
+        ],
+        "channel": "read",
+        "allowed": [
+          "read"
+        ],
+        "asset": "a",
+        "members": [
+          "a"
+        ]
+      },
+      "expected": false
+    }
+  ]
+}

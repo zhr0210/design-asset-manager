@@ -1,0 +1,22 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import Database from 'better-sqlite3'
+
+// Read only the fixed, explicitly authorized public background experiment.
+const root=path.resolve('.scratch/local-ai-implementation-20261006/background-ca8819d6-7793-4549-8e43-bc50eac77293')
+const db=new Database(path.join(root,'library/.dam/library.sqlite'),{readonly:true,fileMustExist:true})
+try{
+  const titles=db.prepare("SELECT id,title,ai_caption,ai_caption_is_user_edited FROM assets WHERE title LIKE 'T14-%' ORDER BY title").all()
+  const executions=db.prepare(`SELECT a.title,i.capability,x.state,x.attempt_id,x.attempt_epoch,x.request_id,x.effect_id,x.updated_at
+    FROM background_analysis_executions x JOIN background_analysis_intents i ON i.id=x.intent_id JOIN assets a ON a.id=i.asset_id
+    WHERE a.title LIKE 'T14-%' ORDER BY x.updated_at`).all()
+  const attempts=db.prepare(`SELECT a.title,r.capability,r.model_name,x.state,x.error_code,x.updated_at
+    FROM basic_analysis_attempts x JOIN basic_analysis_requests r USING(request_id) JOIN assets a ON a.id=r.asset_id
+    WHERE a.title LIKE 'T14-%' ORDER BY x.updated_at`).all()
+  const result={at:new Date().toISOString(),titles,executions,attempts,
+    counts:Object.fromEntries(['basic_analysis_requests','basic_analysis_attempts','basic_analysis_evidence','background_analysis_executions','background_analysis_execution_history','independent_tag_executions']
+      .map(table=>[table,db.prepare(`SELECT count(*) FROM ${table}`).pluck().get()])),
+    outbox:db.prepare("SELECT 'basic' AS kind,delivered,count(*) AS count FROM basic_analysis_outbox GROUP BY delivered UNION ALL SELECT 'tags',delivered,count(*) FROM independent_tag_outbox GROUP BY delivered").all(),
+    integrity:db.pragma('integrity_check',{simple:true}),foreignKeys:db.pragma('foreign_key_check')}
+  await fs.writeFile(path.join(root,'latest.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result))
+}finally{db.close()}

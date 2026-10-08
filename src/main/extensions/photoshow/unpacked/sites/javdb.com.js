@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"javdb.com":{srcMatching:[{srcRegExp:"(//.+\\.jdbstatic\\.com/samples/.+?_)s(.*@IMG@)",processor:"$1l$2"}]}};

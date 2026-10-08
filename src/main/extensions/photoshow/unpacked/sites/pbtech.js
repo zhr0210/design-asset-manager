@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={pbtech:{srcMatching:[{srcRegExp:"/thumbs/(?:\\d+/)?(.+?@IMG@).*",processor:"/imgprod/default/$1"}]}};

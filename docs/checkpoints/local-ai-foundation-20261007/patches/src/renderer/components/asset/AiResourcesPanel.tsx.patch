@@ -1,0 +1,45 @@
+diff --git a/src/renderer/components/asset/AiResourcesPanel.tsx b/src/renderer/components/asset/AiResourcesPanel.tsx
+index 9381dbe..3d35b79 100644
+--- a/src/renderer/components/asset/AiResourcesPanel.tsx
++++ b/src/renderer/components/asset/AiResourcesPanel.tsx
+@@ -62,9 +62,9 @@ export default function AiResourcesPanel() {
+           value={mode}
+           onChange={(e) => setMode(e.target.value as typeof mode)}
+         >
+-          <option value="quiet">安静</option>
+-          <option value="normal">正常</option>
+-          <option value="accelerated">加速</option>
++          <option value="quiet">最省资源</option>
++          <option value="normal">平衡</option>
++          <option value="accelerated">最快响应</option>
+         </select>
+       </label>
+       <label>
+@@ -86,6 +86,10 @@ export default function AiResourcesPanel() {
+       >
+         保存资源策略
+       </button>
++      <button className="ui-button ui-button-secondary" disabled={busy} onClick={()=>{
++        setBusy(true);setSaveError('');void requireWorkspaceClient().aiResources.releaseIdle().then(setStatus,
++          ()=>setSaveError('空闲资源释放尚未确认。活跃执行与未退出的实例保持占用。')).finally(()=>setBusy(false))
++      }}>释放空闲模型与准备缓存</button>
+       {status && (
+         <p role="status">
+           可用内存 {gib(status.sample.freeRamBytes)} · 模型驻留许可{" "}
+@@ -101,10 +105,12 @@ export default function AiResourcesPanel() {
+           {status.reason && `。${status.reason}`}
+         </p>
+       )}
+-      <p>
+-        这是 DAM 的准入与卸载策略；当前本地组合使用
+-        CPU。系统不会因此为其他程序锁定固定比例。
+-      </p>
++      {status?.devices?.map((device: any) => <p key={device.id}>{device.name} · {device.topology === 'dedicated' ? '独立显存' : '共享/未知拓扑'} ·
++        {device.state === 'known' ? `空闲 ${gib(device.freeBytes)} / 总量 ${gib(device.totalBytes)}` : device.state === 'stale' ? '显存数据已过期，暂停新 GPU 准入' : '显存空闲量未知'} ·
++        {device.source}{device.sampledAt != null ? ` · ${new Date(device.sampledAt).toLocaleTimeString()}` : ''}</p>)}
++      {status?.preparedCache&&<p>受控预览准备缓存 {gib(status.preparedCache.bytes)} · {status.preparedCache.entries} 项 · 复用 {status.preparedCache.hits} 次。仅复用兼容输入，明确重跑仍产生新的模型执行。</p>}
++      {!status?.devices?.length && <p>未取得可用的 GPU 计量；CPU 能力继续按 RAM 预算工作。</p>}
++      <p>每张 GPU 单独核对，显存不跨卡相加，共享内存不重复记账。预留属于 DAM 准入策略，不会锁定其他程序的系统资源。</p>
+       {(saveError || readError) && <p role="alert">{saveError || readError}</p>}
+     </section>
+   );

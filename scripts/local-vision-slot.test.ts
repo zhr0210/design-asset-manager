@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict'
+import {test} from 'node:test'
+import {createLocalAiResourceGovernor} from '../src/main/local-ai-resources/resource-governor'
+await test('owned single-slot vision queues a second vision call while independent OCR can run',async()=>{
+ const g=createLocalAiResourceGovernor({capacity:{requestSlots:2,tagsSlots:1,preparationSlots:1,maxLocalBytes:1024,maxWaiters:4},memory:()=>({free:64*1024**3,total:64*1024**3})})
+ const signal=new AbortController().signal,first=await g.acquire('combined',8,signal,8)
+ let admitted=false;const second=g.acquire('combined',8,signal,8).then(p=>{admitted=true;return p})
+ await new Promise<void>(r=>setImmediate(r));assert.equal(admitted,false)
+ const ocr=await g.acquire('ocr',8,signal,0);assert.equal(admitted,false)
+ first.release();const next=await second;assert.equal(admitted,true);next.release();ocr.release();g.invalidate()
+})

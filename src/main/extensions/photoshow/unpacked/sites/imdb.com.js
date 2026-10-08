@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"imdb.com":{srcMatching:[{srcRegExp:"(//.*\\.media-amazon\\.com/images/.*?)\\._.+(@IMG@)",processor:"$1$2"}]}};

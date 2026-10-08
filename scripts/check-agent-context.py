@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Verify the minimal agent context files."""
+"""Verify minimal startup context and the live Agent Context Router."""
 
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,8 +15,11 @@ def main() -> int:
         "AGENTS.md",
         "TASK.md",
         ".codeindex/module-map.json",
+        ".codeindex/module-map.schema.json",
         ".codeindex/forbidden-paths.json",
         ".codeindex/tests-map.json",
+        "scripts/agent-context-router.mjs",
+        "scripts/agent-context-router.test.mjs",
     ]
 
     errors: list[str] = []
@@ -26,28 +30,36 @@ def main() -> int:
         else:
             print(f"[OK] {relative}")
 
-    module_map_path = ROOT / ".codeindex/module-map.json"
-    if module_map_path.exists():
-        try:
-            module_map = json.loads(module_map_path.read_text(encoding="utf-8"))
-            if "current_context" not in module_map:
-                errors.append("module-map.json must contain current_context")
-            else:
-                files_read = module_map["current_context"].get("files_read", [])
-                if files_read != ["AGENTS.md", "TASK.md"]:
-                    errors.append("current_context.files_read must stay limited to AGENTS.md and TASK.md")
-        except Exception as exc:
-            errors.append(f"Failed to parse module-map.json: {exc}")
-
-    forbidden_path = ROOT / ".codeindex/forbidden-paths.json"
-    if forbidden_path.exists():
-        try:
-            forbidden = json.loads(forbidden_path.read_text(encoding="utf-8"))
-            dirs = forbidden.get("forbidden_directories", [])
-            if "docs/" not in dirs:
-                errors.append("forbidden-paths.json must keep docs/ forbidden")
-        except Exception as exc:
-            errors.append(f"Failed to parse forbidden-paths.json: {exc}")
+    router = ROOT / "scripts/agent-context-router.mjs"
+    if router.exists():
+        result = subprocess.run(
+            ["node", str(router), "check", "--json"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            errors.append("Agent Context Router check failed")
+            if result.stdout.strip():
+                try:
+                    report = json.loads(result.stdout)
+                    for finding in report.get("errors", []):
+                        errors.append(f"{finding.get('code', 'ROUTER')}: {finding.get('message', finding)}")
+                except Exception:
+                    errors.append(result.stdout.strip())
+            if result.stderr.strip():
+                errors.append(result.stderr.strip())
+        else:
+            try:
+                report = json.loads(result.stdout)
+                coverage = report["coverage"]
+                print(
+                    "[OK] Tracked first-party source ownership "
+                    f"{coverage['ownedSourceFiles']}/{coverage['indexableSourceFiles']} files"
+                )
+            except Exception as exc:
+                errors.append(f"Failed to parse Agent Context Router report: {exc}")
 
     if errors:
         print("[FAIL] Agent context check failed")

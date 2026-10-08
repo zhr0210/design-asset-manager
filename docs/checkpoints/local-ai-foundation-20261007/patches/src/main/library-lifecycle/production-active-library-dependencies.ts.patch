@@ -1,0 +1,21 @@
+diff --git a/src/main/library-lifecycle/production-active-library-dependencies.ts b/src/main/library-lifecycle/production-active-library-dependencies.ts
+index 8a1e2a3..7d2baf2 100644
+--- a/src/main/library-lifecycle/production-active-library-dependencies.ts
++++ b/src/main/library-lifecycle/production-active-library-dependencies.ts
+@@ -13,6 +13,7 @@ export interface ProductionLibraryDialogAdapter {
+ 
+ export interface ProductionLibraryPlatformOptions {
+   admission?: VisualAdmission
++  retrievalRuntime?:import('./active-library-host').ActiveLibraryHostDependencies['retrievalRuntime']
+   backupBundleDirectory?: string
+ }
+ 
+@@ -23,6 +24,8 @@ export function createProductionActiveLibraryHostDependencies(dialog: Production
+     selectLibraryDirectory: dialog.selectLibraryDirectory,
+     selectLocalFiles: dialog.selectLocalFiles,
+     targetPlatform,
++    resourceAdmission: platform.admission,
++    retrievalRuntime:platform.retrievalRuntime,
+     schemaMaintenanceStorage: process.platform === 'win32' ? createWindowsSchemaMaintenanceStorage({
+       admission: platform.admission ?? createVisualAdmission(), bundleDirectory: platform.backupBundleDirectory
+     }) : undefined,

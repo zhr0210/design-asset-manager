@@ -1,0 +1,139 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "X01",
+      "input": {
+        "op": "experiment",
+        "authorized": true,
+        "platform": true,
+        "pinned": true,
+        "baselineRun": true,
+        "candidateRun": true,
+        "changedOptimizations": [
+          "vision-cache"
+        ],
+        "quality": true
+      },
+      "expected": "eligible-for-review"
+    },
+    {
+      "id": "X02",
+      "input": {
+        "op": "experiment",
+        "authorized": true,
+        "platform": true,
+        "pinned": true,
+        "baselineRun": true,
+        "candidateRun": false,
+        "changedOptimizations": [
+          "vision-cache"
+        ],
+        "quality": true
+      },
+      "expected": "NOT_RUN"
+    },
+    {
+      "id": "X03",
+      "input": {
+        "op": "experiment",
+        "authorized": false,
+        "platform": true,
+        "pinned": true,
+        "baselineRun": true,
+        "candidateRun": true,
+        "changedOptimizations": [
+          "vision-cache"
+        ],
+        "quality": true
+      },
+      "expected": "NOT_RUN"
+    },
+    {
+      "id": "X04",
+      "input": {
+        "op": "experiment",
+        "authorized": true,
+        "platform": true,
+        "pinned": false,
+        "baselineRun": true,
+        "candidateRun": true,
+        "changedOptimizations": [
+          "vision-cache"
+        ],
+        "quality": true
+      },
+      "expected": "NOT_RUN"
+    },
+    {
+      "id": "X05",
+      "input": {
+        "op": "experiment",
+        "authorized": true,
+        "platform": true,
+        "pinned": true,
+        "baselineRun": true,
+        "candidateRun": true,
+        "changedOptimizations": [
+          "cache",
+          "kv"
+        ],
+        "quality": true
+      },
+      "expected": "invalid-comparison"
+    },
+    {
+      "id": "X06",
+      "input": {
+        "op": "experiment",
+        "authorized": true,
+        "platform": true,
+        "pinned": true,
+        "baselineRun": true,
+        "candidateRun": true,
+        "changedOptimizations": [
+          "vision-cache"
+        ],
+        "quality": false
+      },
+      "expected": "reject-quality"
+    },
+    {
+      "id": "X07",
+      "input": {
+        "op": "cache",
+        "key": [
+          "L1",
+          "h",
+          "model1"
+        ],
+        "storedKey": [
+          "L2",
+          "h",
+          "model1"
+        ],
+        "sessionValid": true
+      },
+      "expected": false
+    },
+    {
+      "id": "X08",
+      "input": {
+        "op": "cache",
+        "key": [
+          "L1",
+          "h",
+          "model1"
+        ],
+        "storedKey": [
+          "L1",
+          "h",
+          "model1"
+        ],
+        "sessionValid": false
+      },
+      "expected": false
+    }
+  ]
+}

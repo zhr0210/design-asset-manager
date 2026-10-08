@@ -1,0 +1,63 @@
+diff --git a/src/main/independent-tags/tag-execution-controller.ts b/src/main/independent-tags/tag-execution-controller.ts
+index 13f8331..d5a22b7 100644
+--- a/src/main/independent-tags/tag-execution-controller.ts
++++ b/src/main/independent-tags/tag-execution-controller.ts
+@@ -12,6 +12,8 @@ import type {BackgroundExecutionClaim} from '../../shared/contracts/background-a
+ import {systemVisualAiClock,type VisualAiClock} from '../visual-ai/visual-ai-clock'
+ import type {VisionProvider} from '../visual-ai/openai-vision.provider'
+ import {runIndependentTags} from './tag-recipe'
++import {ConfirmedLocalOomError} from '../visual-ai/local-oom-recovery'
++import {measureAiStage,type AiStageSink} from '../local-ai-resources/ai-diagnostics'
+ import {tagIntentId} from './tag-intent-storage'
+ 
+ const fingerprint=(v:unknown)=>createHash('sha256').update(JSON.stringify(v)).digest('hex')
+@@ -21,6 +23,7 @@ export function createTagExecutionController(deps:{
+  host:ActiveLibraryHost;settings():AppSettings;admission:VisualAdmission
+  legacy:{suspendAndDrain():Promise<void>;resume():void}
+  changed(scope:TagIntentScope):void;provider?:VisionProvider;clock?:VisualAiClock
++ diagnostics?:AiStageSink
+ }){
+  const clock=deps.clock??systemVisualAiClock,plans=new Map<string,Plan>(),jobs=new Map<string,Job>(),materials=new Set<VisualMaterialLease>()
+  const preparationSignals=new Map<string,AbortController>()
+@@ -85,8 +88,8 @@ export function createTagExecutionController(deps:{
+     if(binding!==request.backendBindingSha256)throw Error('TAG_BACKEND_CHANGED')
+     const session=await deps.host.readVisualSession(input),context=await deps.host.readTagIntentContext(input)
+     if(request.state!=='succeeded'){
+-     preparationAbort.signal.throwIfAborted();material=deps.admission.open(`tags:${owner}`,session,priority);materials.add(material);preparationAbort.signal.addEventListener('abort',revokeMaterial,{once:true})
+-     await material.prepare(input.assetId,()=>deps.host.readVisualPreview({...input,sessionToken:session.sessionToken,assetRevision:request.assetRevision,previewGeneration:request.previewGeneration}))
++     preparationAbort.signal.throwIfAborted();material=deps.admission.open(`tags:${owner}`,session,priority,{modelBinding:binding});materials.add(material);preparationAbort.signal.addEventListener('abort',revokeMaterial,{once:true})
++     await material.prepare(input.assetId,()=>deps.host.readVisualPreview({...input,sessionToken:session.sessionToken,assetRevision:request.assetRevision,previewGeneration:request.previewGeneration}),{assetRevision:request.assetRevision,previewGeneration:request.previewGeneration})
+     }
+     requireScope(input);if(version!==epoch||ownerVersion!==(ownerEpoch.get(owner)??0))throw Error('TAG_INTENT_SESSION_EXPIRED')
+     const origin=new URL(backend.baseUrl),review:TagRunReview={receipt:randomUUID(),requestId:request.requestId,assetId:input.assetId,backendName:backend.name,providerOrigin:origin.origin,model:request.model,location:backendLocation(backend),inputDescription:reasoningNotice(backend.reasoning)+'仅发送本次素材的受控预览：白底 JPEG，最长边1024；不发送原件、路径或其他素材。只生成标签，截断时同输入最多重试一次。',storageNotice:context.schemaVersion<10?'确认后停止在途旧视觉任务，备份并升级至 v10；旧版应用将无法打开，新旧入口统一管理当前标签。':'标签建议保存到当前资料库，不覆盖人工描述、OCR修订或已确认标签。',expiresAt:new Date(material?.expiresAt??clock.now()+300000).toISOString(),alreadySucceeded:request.state==='succeeded'}
+@@ -133,22 +136,25 @@ export function createTagExecutionController(deps:{
+   const timeout=clock.scheduleTimeout(cancel,Math.min(120000,Math.max(1000,Number.isFinite(plan.backend.timeoutMs)?plan.backend.timeoutMs:120000)))
+   if(job.abort.signal.aborted)abort.abort()
+   try{
+-   abort.signal.throwIfAborted();await activate(plan,abort.signal);requireScope(plan.input);abort.signal.throwIfAborted()
++   abort.signal.throwIfAborted();await measureAiStage(deps.diagnostics,plan.input.requestId,'prepare-and-wait',()=>activate(plan,abort.signal));requireScope(plan.input);abort.signal.throwIfAborted()
+    if(suspended||version!==epoch)throw Error('TAG_EXECUTION_CANCELLED')
+-   await deps.provider?.prepare?.(plan.backend.id,abort.signal)
++   await measureAiStage(deps.diagnostics,plan.input.requestId,'model-ready',async()=>{await deps.provider?.prepare?.(plan.backend.id,abort.signal)})
+    claim=await deps.host.claimTagExecution({...scope,inputSha256:plan.material!.describe(plan.input.assetId).sha256,origin:'tags-only',background:plan.background})
+    const tags=await plan.material!.withRequest(plan.input.assetId,'tags-only',abort.signal,async(jpeg,signal)=>{
+     job.value.state='running'
+     await deps.host.markTagExecutionSent({...scope,attemptToken:claim!.attemptToken,background:plan.background});signal.throwIfAborted();sent=true
+-    return runIndependentTags({backend:plan.backend,model:plan.request.model,jpeg,signal},deps.provider)
++    return runIndependentTags({backend:plan.backend,model:plan.request.model,jpeg,signal,operationId:claim!.attemptId,
++      mayRecover:async()=>{signal.throwIfAborted();if(suspended||version!==epoch)return false
++        const session=await deps.host.readVisualSession(plan.input),request=await deps.host.readTagExecutionRequest(plan.input,plan.input.requestId),effect=await deps.host.readTagEffectReceipt({...scope,requestId:plan.input.requestId})
++        return session.sessionToken===plan.sessionToken&&request.sourceMatches&&request.requestGeneration===claim!.requestGeneration&&request.state==='running'&&!effect.receipt}},deps.provider)
+    },plan.backend.transport==='pi'?VISUAL_ADMISSION_PROFILE.piWorkerBytes:0,plan.backend.runtimeFingerprint?1024**3:0)
+    completedResponse=true
+    if(suspended||version!==epoch||abort.signal.aborted)throw Error('TAG_EXECUTION_CANCELLED')
+-   await deps.host.commitTagExecution({...scope,attemptToken:claim.attemptToken,tags,background:plan.background},abort.signal)
++   await measureAiStage(deps.diagnostics,claim.attemptId,'validate-and-commit',()=>deps.host.commitTagExecution({...scope,attemptToken:claim!.attemptToken,tags,background:plan.background},abort.signal))
+    job.value.state='succeeded';await publish(plan.input,plan.sessionToken)
+   }catch(error){
+    const code=error instanceof Error?error.message:''
+-   const unknown=sent&&!completedResponse&&(abort.signal.aborted||!(code.startsWith('TAG_OUTPUT_')||code.startsWith('AI_HTTP_')))
++   const unknown=sent&&!completedResponse&&!(error instanceof ConfirmedLocalOomError)&&(abort.signal.aborted||!(code.startsWith('TAG_OUTPUT_')||code.startsWith('AI_HTTP_')))
+    job.value.state=unknown?'outcome-unknown':job.abort.signal.aborted||version!==epoch?'cancelled':'failed'
+    job.value.error=tagExecutionMessage(unknown?Error('TAG_OUTCOME_UNKNOWN'):error)
+    job.value.errorCode=unknown?'TAG_OUTCOME_UNKNOWN':/^[A-Z_]{1,80}$/.test(code)?code:'TAG_ATTEMPT_FAILED'

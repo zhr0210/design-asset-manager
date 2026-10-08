@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"suning.com":{srcMatching:[{srcRegExp:"(//(?:image|imgservice)\\d*\\.suning\\.cn/.+?)(?:_\\d+x\\d+)?(@IMG@).*",processor:"$1$2"}]}};

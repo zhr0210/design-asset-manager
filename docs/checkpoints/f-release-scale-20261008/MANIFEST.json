@@ -1,0 +1,245 @@
+{
+  "generatedAt": "2026-10-08T07:52:34.272Z",
+  "build": {
+    "buildId": "dam-8ddc7686f890b3e3",
+    "sourceDigest": "8ddc7686f890b3e33030804d52703336735b84bd842d4e370386e1617d64e189",
+    "builtAt": "2026-10-08T07:37:13.123Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 786
+  },
+  "baselineHead": "156a9841e0262465d422283851095bca47979532",
+  "baselineIndexSha": "7c42daf64191e49fa59efbd12f2219a0628417c0317c9a5aa25755c78c877f85",
+  "currentIndexSha": "7c42daf64191e49fa59efbd12f2219a0628417c0317c9a5aa25755c78c877f85",
+  "files": [
+    {
+      "path": "docs/agents/implementation-status.md",
+      "before": "0b2d8a0dee01c9ff456959d07542b0244befee505efa951dfe36be690a1b4dde",
+      "after": "97eb79c930d77f7ec8d37e1fbd0da02ee1cefefe502c91f45e365bb3d1c43445",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "docs/handoff/CURRENT-STATE.md",
+      "before": "155edddd6715a46f18e0b22e93c4b56b9fe21843d46bea50b0b8cad045415e10",
+      "after": "927644efd7ce829dd68a2d02a163cd2f35a7f2a0fccbee4b051ecaa0795c205e",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "docs/handoff/EAGLE-E-20261008.md",
+      "before": "09027448ab6b840c6d96a09dc2f6ae973689ae8918a786aedc7dac99a26dd1c9",
+      "after": "b0abeda4313e7f60fe23803e2cd797e8c3bd5786956a45e91197a0386116f7df",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "docs/platform/ELECTRON_PACKAGING_AUDIT.md",
+      "before": "5cc7d9c1af1beade1c320324b219310e6affc2489b549ddcdb79be0f6740f056",
+      "after": "8ce8bf33031182612b71a63b628844f6dc17dae6f39288ce896039d23db95899",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "docs/platform/NATIVE_DEPENDENCY_PACKAGING.md",
+      "before": "06378791448b3f169e0634c9dce6d287a411d652220bae07b750a28ae23091c5",
+      "after": "ad75bd5811caea7e247b43135a9592112abc8c86fb77a2f383167cf0af429f9b",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "package.json",
+      "before": "a09782c03a30fc3577aae1f28036f4ad43f4f247880b0852bc4ec52f003d368e",
+      "after": "59c7f08dadfec2e23a4c2b27dc7f3652eeaaadd5d6156fe64d29bb4026074ec4",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/build-identity.mjs",
+      "before": "28eea2314b37c1a2f3b94a1ed500b60d244c51ba8c5d334dfb0a9ab22dedc88e",
+      "after": "67fa0c26e03d0df2d59fd956d50c9e18e69e6eacdab37baa0596dabeec146652",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/electron-builder-runner.test.ts",
+      "before": "d6dd8f57500a47f400d10d1fde118c76b5348b632f5e5b8b5fe5a4c304e0d93b",
+      "after": "d02ab651d4a57ea357361adfc2fc6cddfe3272c54f13a691c4943f0451ac754f",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/library-open-inspection.test.ts",
+      "before": "a68c9bbf115fd2779b3c0559a4bd367e2ab6e0a0c4c1d885aeb5769d12e17af4",
+      "after": "bea6dcee184edf29ea6435d06a1e4750dc0274a26ad383cef681b232b2f017e2",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/local-dam-http.test.ts",
+      "before": "d4e4e97568daca208ed54615453e21bf4726cd742fd07315ae29dc814ee2f458",
+      "after": "ef7c65ca6216d158b139b3ff08d6e179d691af1fd6552ea98def5c4d95f885e4",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/native-dependency-packaging.test.ts",
+      "before": "b349842083fb9c571e9c79e3fa846211b014b6d1433ab2145ef7de551de6814e",
+      "after": "6ef776893f3908a9c0e151b4ede5cd31766edff2ea2bceef3a3f78c2024376bf",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/package-smoke.mjs",
+      "before": "31880ede4d4f1536b21bcfe8c9d3a094fe01128eff10a93728ff76916c57f674",
+      "after": "4f6a7cc9cfcccd8de7bfa847471fcb2ed039e7711a4bbc617e0818a3755ffe5d",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/package-smoke.test.ts",
+      "before": "c73cb0986d5e7ae555d6838f6b1612ab1e36b9c473e87c6888bcddc1591db853",
+      "after": "4b60e20f441ac99be8eb3e1214897a29f122ae0558a5bab46f8b4999bb0734f0",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/release-environment-manifest.test.ts",
+      "before": "bc056926a0a12535c1c42fc0061844ab679ac7f5abef52dff5af8f38b198c7c0",
+      "after": "48c3af9b3c97a9f20a759ab41460fd025961e0de02dd30c9194fda1efdb1cf2d",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/release-install-smoke-preflight.test.ts",
+      "before": "db24bb42b8dd656e2e311b00d8f06d2fdb35b07cab4579800f5c208d7874539b",
+      "after": "91c10963ccdb225cca5ea2a9329288a2f42515b017e02270d7209743d5e7c18b",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/release-readiness-writer.test.ts",
+      "before": "1e44058bd68ebaaf9e817fdff0b413d77af6993e95f91141174720f614c28f8e",
+      "after": "839359dd0a8f199b89ef9c289c92c1d1372931c51bccf60c08d6eb849ac23451",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/run-electron-builder.mjs",
+      "before": "c6187b596fc5e8c12fe006411a69fe998bb3ff518562c896344e9b033ce7b7de",
+      "after": "eb66e1f5c16698e7f2ebdce0f6cacd5140e2f3091c96ca89b72299f312c308e8",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/main/capture-intake/add-assets.workflow.ts",
+      "before": "7b00757aa8386f0484f31ea72172fc8ab6c1fd578cc6bea062401de83e9926d3",
+      "after": "63be0f976fbb54a7d3bacbf3a77ac63717a6d79eefb7fd136de65e5e2728b682",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/main/capture-intake/README.md",
+      "before": "793be2c1437b2642252fa1d6c3dfca52f969191347971c0460743b7cbd420479",
+      "after": "7646f6da1681e8fa1db48b31b746fcc7adc2543b90e18e3a67b6d2b6c988ddbe",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/main/index.ts",
+      "before": "ec52c12195fc14b103f3c2137180e07c05b578c29c514175df7f844ba160eab5",
+      "after": "3e5b46bc140a46eb4fb70102547146403fd6dfa191cab9f78a03451dee896ace",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/main/library-lifecycle/library-open-inspection.tracer.ts",
+      "before": "9b718b965c04ffedee2f7d63b4ffdbcb79566f925a2a8aaf9d91b04e44bbf7e6",
+      "after": "445d87a487c884098fcc59adda3d220d8e927950212e7b63f211a696b4f970c1",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/main/library-lifecycle/README.md",
+      "before": "e3b8df4ce0d5ad4086ff05c4bb40145d434cc02bdfd4112518936a2e52e79dc6",
+      "after": "4f0f1f1383df278bdf102c142e927464ea1dbde3c8760c8370502e8d4315ae88",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/main/local-host/local-dam-server.ts",
+      "before": "ca46ae6d2da17123e3b06cc603abaea783f118084bd192d98227aec8fffb6a2f",
+      "after": "a7e78f71d0fdc7862b32b2ce3cb4bc7e65cef8a63c0c065ea37ee7f29e478ad8",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/main/packaging/release-install-smoke-preflight.ts",
+      "before": "4f7e0f52388bd1781251b699d284cf5e5af9992b96ad43480892270a1f778d56",
+      "after": "d2d0031661a08de5493315f65059c1323650f384c81c75c8c2a3a202dffaa08a",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "src/shared/build-identity.generated.ts",
+      "before": "c705c3ae50a7980dda6c9744a143f62492d7500bef4ef1a88d01470e25c676cd",
+      "after": "f960ba1527beb2fb65ac4300fc62f281747e330acfc16cfd261774a734e1a07b",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "TASK.md",
+      "before": "895ca1948349ec39b7a761e115c1afa7389706635ef5e9a5ef3ad8ba04e990cb",
+      "after": "7475dc8d1b8c7f6fb71ae268135dadd5bbe4d1aa507f5ab45324b6612bf5b7bf",
+      "kind": "relative to F baseline, prior WIP retained"
+    },
+    {
+      "path": "scripts/native-package-inputs.mjs",
+      "after": "ae14c30dd74b405caef455c128b1f895b7e7b25e3193e893d9fe643956f50e78",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/package-startup-smoke.mjs",
+      "after": "70d793fe9ef4f9c7ed5c279f5ab34d584379d1e32d8385adedbf888ce1901f4e",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/verify-local-candidate.mjs",
+      "after": "4b39f16937ee1224e6539b3a97cd2ef4273b361d8519b9a309e12f5f3960d4f0",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/native-package-inputs.test.ts",
+      "after": "e319e650bf088a3bd1fac9b430242bb97436cf6042ca24aa27d7ae6cbe17fb5e",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/capture-large-selection.test.ts",
+      "after": "90bf9656324f2c3a980d73ed47184608997726987639987e45672a2443fb1a79",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-public-scale.test.ts",
+      "after": "b33d73ed1bd8cf6f23585fd2653d102fe50d5af2a6fbffb4d82c5768c86fa46e",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-real-migration.test.ts",
+      "after": "b0f409fb90ea5f2f5b6d682154d94ff718d1cf3f8cab1d4231948437034e4a1c",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-real-background-soak.test.ts",
+      "after": "71a80b6eee24ba687abd1c6518a3c72446052709fcb87b57bc1ee4caf7c00507",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-preservation-oracle.test.ts",
+      "after": "0596a5b3a74792832897ead5ebcc20b3da6d2c986a1904ab4325100d68ffd751",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-soak-progress-oracle.test.ts",
+      "after": "65248e42d81dcf67bce0a38fa1d72e58300f8b1f265ec6d75babf4ac7dbc1f87",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-source-diversity.test.ts",
+      "after": "0b712bd014439041ddb2d543fe279ca0e232c75c02e3b7de6ee5f30b888bf003",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-runtime-equivalence.test.ts",
+      "after": "5354159882a3825460759b1daba115c77d43ce0a07f691d03427fd9cbc344cdc",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "scripts/fixtures/f-final-scale.test.ts",
+      "after": "206d325f6c9da449591fa2202766aa5c9954d353e2b80a928fc7aad015116327",
+      "kind": "F owned new file"
+    },
+    {
+      "path": "docs/handoff/RELEASE-SCALE-F-20261008.md",
+      "after": "3ee34e0138b7ebff71713056439bbd1c36ed88695699a637a9e7e25dac1aade0",
+      "kind": "F owned new file"
+    }
+  ],
+  "review": "main Agent static self-review; not independent external review",
+  "committed": false,
+  "pushed": false,
+  "published": false
+}

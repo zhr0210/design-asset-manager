@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAM 项目与架构交接 · 2026-09-24</title>
+<style>
+:root{color-scheme:light;--ink:#202b3a;--muted:#59697b;--line:#dde4eb;--blue:#245fa1;--paper:#fff;--bg:#f4f6f9}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:30px}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.8 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible{outline:3px solid #6a9cca;outline-offset:3px}button{font:inherit;border:1px solid #c6d1df;border-radius:7px;background:white;color:var(--ink);padding:7px 13px;cursor:pointer}button:hover{background:#edf3fa}.masthead{border-bottom:1px solid var(--line);background:#16314f;color:#fff;padding:25px max(24px,calc((100% - 1420px)/2))}.masthead .eyebrow{font-size:12px;letter-spacing:2px;color:#bad1e8}.masthead .title{font-size:22px;font-weight:650;margin:7px 0}.masthead .meta{color:#d3e0ed;font-size:13px}.shell{display:grid;grid-template-columns:230px minmax(0,1fr);gap:38px;max-width:1420px;margin:0 auto;padding:30px 24px 70px}.sidebar{position:sticky;top:22px;align-self:start}.sidebar h2{font-size:12px;letter-spacing:1px;color:var(--muted);margin:0 0 12px}.sidebar nav{display:flex;flex-direction:column;gap:4px}.sidebar a{display:block;padding:7px 9px;color:var(--muted);border-radius:6px;font-size:13px;line-height:1.55}.sidebar a:hover{background:#e6edf6;color:var(--blue);text-decoration:none}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.note{font-size:12px;color:var(--muted);margin-top:15px}main{min-width:0;background:var(--paper);padding:36px 46px 52px;border:1px solid var(--line);border-radius:10px}h1{font-size:29px;line-height:1.45;letter-spacing:-.5px;margin:0 0 20px}h2{font-size:23px;line-height:1.5;margin:46px 0 20px;padding-top:18px;border-top:1px solid var(--line)}h3{font-size:17px;margin:28px 0 12px}p{margin:13px 0}strong{font-weight:650}li{margin:8px 0}ul,ol{padding-left:23px}code{font:12.5px/1.65 ui-monospace,SFMono-Regular,Consolas,"PingFang SC",monospace;overflow-wrap:anywhere}p code,li code,td code{background:#edf2f7;padding:2px 4px;border-radius:4px}.tree{margin:23px 0;background:#f6f8fb;border:1px solid var(--line);border-radius:8px;overflow:hidden}.tree figcaption{font-size:11px;letter-spacing:1.6px;color:var(--muted);padding:9px 17px;border-bottom:1px solid var(--line)}pre{margin:0;padding:18px;overflow-x:auto;tab-size:4}pre code{font-size:12px;line-height:1.95;white-space:pre;overflow-wrap:normal}.table-wrap{overflow-x:auto;margin:20px 0}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.7}th{text-align:left;background:#eaf0f7;font-weight:650}th,td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#fafbfd}blockquote{margin:20px 0;border-left:3px solid var(--blue);padding:16px 20px;background:#f1f5fa;font-size:14px}.footer{margin-top:35px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:15px}@media(max-width:1050px){.shell{grid-template-columns:190px minmax(0,1fr);gap:20px}main{padding:28px 24px}.sidebar a{font-size:12px}}@media(max-width:760px){.shell{display:block;padding:18px 12px}.sidebar{position:static;padding:8px 8px 22px}.sidebar nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.actions{margin-top:12px}main{padding:23px 18px}h1{font-size:25px}h2{font-size:21px}.masthead{padding:21px 22px}.table-wrap{font-size:12px}th,td{padding:9px 8px}}@media(max-width:380px){.sidebar nav{grid-template-columns:1fr}}
+@media print{@page{size:A4;margin:15mm 12mm}body{background:white;font-size:10pt;line-height:1.65}.masthead{padding:0 0 10mm;background:white;color:#16314f}.masthead .eyebrow,.masthead .meta{color:#53697e}.sidebar{display:none}.shell{display:block;padding:0;max-width:none}main{border:0;padding:0}h1{font-size:20pt}h2{font-size:15pt;margin:9mm 0 4mm;break-after:avoid}h3{font-size:12pt;break-after:avoid}table{font-size:8.5pt}.table-wrap{overflow:visible}thead{display:table-header-group}tr{break-inside:avoid}.tree{overflow:visible;break-inside:auto}pre{overflow:visible;padding:10px;white-space:pre-wrap}pre code{font-size:7.5pt;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}a{color:inherit}blockquote{break-inside:avoid}button{display:none}}
+</style></head><body>
+<header class="masthead"><div class="eyebrow">ARCHITECTURE HANDOFF · SOURCE SNAPSHOT</div><div class="title">Design Asset Manager</div><div class="meta">项目介绍 · 当前架构 · 数据权威 · AI 推理 · 评审要求　／　2026-09-24</div></header>
+<div class="shell"><aside class="sidebar"><h2>阅读导航</h2><nav aria-label="章节目录"><a href="#section-1">1. 项目摘要与本次交接目的</a><a href="#section-2">2. 产品定位、功能分层与不可变边界</a><a href="#section-3">3. 当前交付状态总表</a><a href="#section-4">4. 技术栈与代码规模</a><a href="#section-5">5. 总体架构与进程边界</a><a href="#section-6">6. 代码目录树与模块责任</a><a href="#section-7">7. 数据架构、所有权与版本</a><a href="#section-8">8. 主要执行链路</a><a href="#section-9">9. 当前 AI 推理框架及这次实测结论</a><a href="#section-10">10. 验证、开发与发布方式</a><a href="#section-11">11. 架构评审重点：观察、影响与问题</a><a href="#section-12">12. 希望框架设计师交付什么</a><a href="#section-13">13. 源码与证据阅读导航</a></nav><div class="actions"><button type="button" id="print">打印 / PDF</button><button type="button" id="download">保存 Markdown</button></div><p class="note">全文与树状图可离线阅读。源码链接需与仓库一同使用。规划状态不等于已交付。</p></aside><main><h1>Design Asset Manager：项目与代码架构交接</h1><p>面向：项目框架设计师、架构评审人员、后续实施负责人。</p><p>快照日期：2026-09-24。本文描述当前工作区源码及已有验证记录，不是目标架构批准书。建议先读第 1、3、5、11、12 节，再按模块查阅源码。</p><h2 id="section-1">1. 项目摘要与本次交接目的</h2><p>Design Asset Manager（DAM）是面向设计师、美工、剪辑师、编导等视觉创作者的本地优先素材管理与创作参考工作台。它以可靠的素材管理为基础，以内置 AI 理解、可检索的分析结果、多素材工作集与原生悬浮窗口为差异化能力。</p><p>核心用户闭环：<strong>收进素材 → 渐进理解 → 找回并解释命中 → 检查与比较 → 安全复用</strong>。</p><p>产品在素材管理和创作参考体验上参考 Eagle，但当前交付范围不等于已实现 Eagle 的全部格式、性能和功能。无模型时基础管理应保持可用；AI 是产品核心体验，但不要求每张素材默认运行所有模型。</p><p>本次交接希望评审者回答：现有模块如何减轻理解和修改成本、如何把 AI 从分散实现整理为稳定框架、如何保留数据安全和已经验证的功能，以及应按什么顺序迁移。本文提出评审问题与候选方向，不预先决定重写、换技术栈或合并所有服务。</p><h3 id="heading-16">1.1 阅读状态标签</h3><div class="table-wrap"><table><thead><tr><th>标签</th><th>本文含义</th></tr></thead><tbody><tr><td>接线</td><td>已有正式入口、调用方和执行实现；不自动等于全部平台/真实用户环境均验收</td></tr><tr><td>实测</td><td>有指定模型、输入、平台、运行方式的执行证据；效力只覆盖该范围</td></tr><tr><td>受限</td><td>界面或模块存在，但配置、权限、依赖或正式接入有限，不能视为完整功能</td></tr><tr><td>验证实现</td><td>Tracer、合成服务或临时环境证明了局部设计，不等于完整正式安装/使用链路</td></tr><tr><td>原型</td><td>用于交互或视觉探索，不能获得正式资料库权限</td></tr><tr><td>目标</td><td>产品或 ADR 规定的未来行为，尚未完整落地</td></tr><tr><td>待核验</td><td>目前没有足够执行证据，不能写成通过，也不能直接认定不存在</td></tr></tbody></table></div><h3 id="heading-28">1.2 本轮文档的证据边界</h3><p>本轮只读源码、模块说明及已有测试报告，制作交接文件；未改业务代码，未新增模型推理、下载、真实资料库访问或迁移，未更新 TASK.md。引用的真实 AI 测试来自此前获准执行并归档的 9 月 24 日记录。其他模块的“已验证”主要是历史隔离测试证据，本轮未重新运行整套产品测试。</p><p>当前分支为 <code>codex/product-reassessment-20260905</code>，读取时 HEAD 为 <code>3fa00df</code>。当前工作区包含大量暂存、未暂存及未跟踪改动，本文依据工作区而非仅该提交。接手方必须取得对应工作区补丁或完整源码快照，单独 checkout 此 SHA 无法重现本文状态。</p><h2 id="section-2">2. 产品定位、功能分层与不可变边界</h2><h3 id="heading-36">2.1 产品功能树</h3><figure class="tree"><figcaption>结构图 01</figcaption><pre><code>Design Asset Manager
+├── 素材工作区【核心；正式主表面】
+│   ├── 全部素材：预览、选择、排序/布局、详情与专注查看
+│   ├── 文件夹：普通文件夹、AI 动态分类、色板
+│   ├── 工作模式：多素材工作集、原生参考窗口、保存恢复
+│   └── 回收站：受控删除意图、恢复与生命周期管理
+├── 内置理解能力【核心；各能力交付状态不同】
+│   ├── 颜色与占比：确定性图像测量
+│   ├── 视觉分析：描述、标签建议
+│   ├── 提示词反推：用于再创作的推演结果
+│   ├── 专用 OCR：文字、区域、人工修订
+│   └── 检索：当前词法/标签；语义与向量检索为目标
+├── 收录与安全复用【核心】
+│   ├── 本地文件 Copy Into Library
+│   ├── 图片直链下载与受控入库
+│   ├── 图片裁剪/旋转/缩放产生新副本
+│   └── 入库中断恢复、版本与原件保护
+├── 外部与历史数据【独立权限边界】
+│   ├── Eagle Connected Library：Eagle 持有唯一原件
+│   └── Legacy Read-Only Workspace：旧 DAM 数据只读找回
+├── 基础设施【支撑，不是主工作流】
+│   ├── 设置、标签管理、下载记录
+│   ├── AI 服务配置、模型库、AI 控制台
+│   └── Runtime、诊断、平台适配与发布治理
+└── 扩展方向【目标/暂缓】
+    ├── 录屏、抠图、可编辑图层及专业工具插件
+    ├── 视频与参考帧的宿主管理
+    └── 通用插件 SDK、浏览器连接器、外部 AI 开发接入、社区分发</code></pre></figure><p>内置网页浏览、网页采集、网站登录和外部来源搜索已经退休。历史数据库字段或文件名中仍可能出现 site/browser，它们不证明对应功能仍可执行。</p><h3 id="heading-71">2.2 优化时必须保留的产品语义</h3><ul><li><strong>Copy 不等于 Move</strong>：默认导入复制到资料库，不静默移动、覆盖或删除外部来源。</li><li><strong>素材、预览和派生物不同</strong>：Original、Preview、图片工具生成的副本不能混为同一种文件所有权。</li><li><strong>三种资料库不能混写</strong>：受管活动库、Eagle 连接库、旧库只读工作区有不同权威来源。</li><li><strong>用户修改优先</strong>：手工描述、确认标签、OCR 修订、组织关系不被模型重跑覆盖。</li><li><strong>AI 建议不是确认事实</strong>：可参与带来源说明的检索/分类；无需强制逐条确认才能继续使用产品。</li><li><strong>结果可归因</strong>：测量、观察、推断、创作提示词与用户编辑应有清晰区别；反推不等于找回原始提示词。</li><li><strong>配置不等于外发授权</strong>：保存服务地址/密钥不能触发素材上传；不静默切换到外部模型。</li><li><strong>渐进非阻塞</strong>：AI 不可用不能阻塞基础入库、浏览、词法检索与复用。</li><li><strong>工作集是引用</strong>：移除成员、关闭窗口或删除工作集不删除素材原件。</li><li><strong>历史文档不是新任务</strong>：ADR Accepted、旧阶段计划、原型演示、构建成功都不是功能交付证明。</li></ul><p>产品入口：<a href="../product/PRODUCT-FOUNDATION.md">PRODUCT-FOUNDATION</a>；界面规范以 <a href="../../DESIGN.md">DESIGN.md</a> 为准。</p><h2 id="section-3">3. 当前交付状态总表</h2><div class="table-wrap"><table><thead><tr><th>模块/能力</th><th>当前实现</th><th>证据与限制</th></tr></thead><tbody><tr><td>活动库创建/打开/关闭</td><td>正式 Host、受检数据库、独占 lease、关闭 drain</td><td>macOS 临时库与合成 E2E；真实旧库迁移不包含在内</td></tr><tr><td>本地收录</td><td>文件选择、Copy 审阅、SHA 校验、Capture/Promotion</td><td>正式路径主要验证 PNG/JPEG/WebP；不能推广为所有设计格式</td></tr><tr><td>素材浏览</td><td>网格、侧边详情、专注查看、缩放/平移</td><td>正式当前库和受控预览；不是原型数据</td></tr><tr><td>搜索</td><td>名称、文件名、标签/别名、描述、OCR、提示词词法命中及说明</td><td>当前以内存投影匹配为主；不等于持久全文索引或语义检索</td></tr><tr><td>标签</td><td>创建/编辑、别名、父子关系、素材确认标签</td><td>合并/删除等身份保留复杂操作仍受限</td></tr><tr><td>文件夹与色板</td><td>v6 持久化普通组织、成员引用和色值</td><td>AI 文件夹由当前分析标签动态派生，不复制文件</td></tr><tr><td>图片笔记</td><td>v5 持久化、版本/会话控制、草稿保护</td><td>适用当前图片链路；未保存内存草稿不等于崩溃恢复</td></tr><tr><td>工作集/原生窗口</td><td>v7 内容与设备布局，多个窗口、置顶/隐藏/关闭/恢复</td><td>macOS 生成素材验证；视频、真实跨显示器和原生跨应用拖出仍有缺口</td></tr><tr><td>回收站</td><td>独立生命周期与恢复路径</td><td>不能用旧 <code>assets:delete</code> 代替；不泛化为任意物理清理</td></tr><tr><td>图片工具</td><td>受控预览或显式受管原件输入，变换后另存新素材</td><td>有范围/尺寸限制；不覆盖来源、不复制原素材 AI 结果</td></tr><tr><td>直链图片下载</td><td>Main 传输、校验、受管入库；可选库内持久检查点</td><td>无登录/Cookie/重定向；当前 PNG/JPEG/WebP、单文件上限32MB</td></tr><tr><td>下载/入库恢复</td><td>日志、Range/ETag、显式恢复确认、部分 Capture 恢复</td><td>合成 HTTP 与重启证据；不保证任意站点、损坏库或断电恢复</td></tr><tr><td>综合视觉 AI</td><td><code>visual-ai:*</code>、HTTP transport、完整结果写入</td><td>Qwen 2B/8B 本地实测；不自动启动模型或下载权重</td></tr><tr><td>专用 OCR</td><td><code>asset-ocr:*</code>、受控 Python 子进程、v8 结果和修订</td><td>RapidOCR 本地实测；依赖已验证环境，应用内全自动安装未交付</td></tr><tr><td>配色比例</td><td>受控预览确定性采样</td><td>不由语言模型猜测，不等于原件全部像素的绝对测量</td></tr><tr><td>AI 服务配置</td><td>配置 CRUD、显式模型列表/连接检查</td><td><code>/models</code> 成功不证明图像能力或输出质量</td></tr><tr><td>Model Library</td><td>受限正式 Workspace、存储位置管理、核心验证实现</td><td>完整可信目录→安装→激活闭环不可按页面存在推定</td></tr><tr><td>AI Console</td><td>诊断与状态页面、历史平台投影</td><td>部分旧 Runtime IPC 已禁用，页面存在不等于各操作可用</td></tr><tr><td>Eagle 连接库</td><td>独立索引/Journal、Adapter、companion 与隔离测试</td><td>正式 composition 默认拒绝未建立的配对；未宣称真实 Eagle 已接通</td></tr><tr><td>旧库找回</td><td>用户选择旧数据库与素材根，只读列表/检索/预览</td><td>不迁移、不写入、不自动改成受管库</td></tr><tr><td>Python 多模型 Worker</td><td>模型封装、队列/轮询、分类/翻译等代码仍在</td><td>旧调用链受限；Florence 隔离实测不等于正式接线；RAM/WD/CLIP未完成本轮实测</td></tr><tr><td>通用插件平台</td><td>权限/版本/贡献面有设计</td><td>Eagle companion 是专用集成，不代表通用插件 SDK 已交付</td></tr><tr><td>视频/参考帧/录屏</td><td>产品规格已有方向</td><td>当前图片工作模式不能代表这些能力完成</td></tr><tr><td>Windows/发布</td><td>平台适配、打包与签名治理脚本存在</td><td>本轮主要是 macOS 未打包测试，不能替代 Windows/签名安装验收</td></tr></tbody></table></div><h2 id="section-4">4. 技术栈与代码规模</h2><h3 id="heading-117">4.1 技术栈</h3><p>下列是 <code>package.json</code> 声明范围，不是对本机或安装包中精确版本的独立审计。</p><div class="table-wrap"><table><thead><tr><th>领域</th><th>当前选型</th></tr></thead><tbody><tr><td>桌面宿主</td><td>Electron <code>^30.0.6</code>；Main/Preload/Renderer 分层</td></tr><tr><td>前端</td><td>React <code>^18.3.1</code>、React Router <code>^6.23.1</code>（HashRouter）、Zustand <code>^4.5.2</code></td></tr><tr><td>语言/构建</td><td>TypeScript <code>^5.4.5</code>、Vite <code>^5.2.11</code>、electron-vite <code>^2.2.0</code></td></tr><tr><td>UI</td><td>自有 CSS/tokens/共享组件，Tailwind 工具，Motion，Lucide</td></tr><tr><td>数据库</td><td>better-sqlite3 <code>^12.10.0</code>，Main 持有连接</td></tr><tr><td>图片处理</td><td>Sharp <code>^0.34.5</code>，部分旧色彩工具保留</td></tr><tr><td>AI</td><td>HTTP OpenAI-compatible；本地 RapidOCR 子进程；旧 Python FastAPI Worker</td></tr><tr><td>本轮本地视觉运行时</td><td>隔离 llama.cpp b11057 + Metal + Qwen3-VL GGUF，非自动安装后的正式默认服务</td></tr><tr><td>打包</td><td>electron-builder <code>^24.13.3</code>，原生依赖需 Electron ABI 和平台产物核验</td></tr><tr><td>验证</td><td>聚焦 TS/Node 脚本、Electron Node 启动器、Python unittest、Playwright Electron E2E</td></tr></tbody></table></div><h3 id="heading-134">4.2 源码体量快照</h3><p>仅统计 <code>.ts/.tsx/.py/.js/.mjs/.cjs/.css</code> 文本行，排除依赖与 Python 缓存；包含测试、原型和旧模块，不代表全部处于正式运行路径。数字用于定位评审范围，不是质量评分。</p><div class="table-wrap"><table><thead><tr><th>目录</th><th>文件数</th><th>文本行数</th></tr></thead><tbody><tr><td><code>src/main</code></td><td>331</td><td>47,017</td></tr><tr><td><code>src/preload</code></td><td>5</td><td>544</td></tr><tr><td><code>src/renderer</code></td><td>117</td><td>16,969</td></tr><tr><td><code>src/shared</code></td><td>87</td><td>9,666</td></tr><tr><td><code>ai-service</code></td><td>105</td><td>16,575</td></tr><tr><td><code>scripts</code></td><td>302</td><td>48,413</td></tr></tbody></table></div><p>集中度提示：<code>AiConsolePage.tsx</code> 2,576行、<code>asset.store.ts</code> 818行、<code>active-library-host.ts</code> 674行、<code>preload/index.ts</code> 467行。大文件值得复核职责，但不能仅凭行数决定拆分；还需看调用方、修改频率、状态归属与测试替换成本。</p><h2 id="section-5">5. 总体架构与进程边界</h2><h3 id="heading-151">5.1 当前系统树</h3><figure class="tree"><figcaption>结构图 02</figcaption><pre><code>桌面应用进程体系
+├── Electron Main：可信宿主
+│   ├── index.ts：应用启动、窗口、协议、模块组合、退出协调
+│   ├── IPC composition：正式通道注册和受限旧通道拒绝
+│   ├── Active Library Host：当前库身份、锁租约、连接、生命周期
+│   ├── 业务模块：Capture、组织、笔记、工作集、下载、图片工具、AI/OCR
+│   ├── 外部边界：Eagle Adapter、只读旧库、HTTP模型、Python子进程
+│   └── 平台基础设施：文件身份、路径、原生窗口、进程、Runtime/发布
+├── Main Window Renderer：React 用户界面
+│   ├── AppShell / Routes：素材工作区与辅助页面
+│   ├── Canvas / Gallery：共享素材展示与交互
+│   ├── Zustand：列表、选择、草稿、下载和设置等界面状态
+│   └── Shared Workflows：纯状态/展示/词法检索投影
+├── Preload：受控桥接
+│   ├── index.cjs：主窗口较宽的历史与当前接口表面
+│   ├── asset-card.cjs：原生单素材卡片的窄接口
+│   └── work-window.cjs：工作集窗口的窄接口
+├── 独立原生窗口的 Renderer
+│   ├── AssetCardWindow：兼容的单素材原生卡片
+│   └── WorkSetWindow：成员范围内的多素材参考、笔记与工作备注
+└── 外部执行进程/服务
+    ├── 已启动的兼容视觉模型服务：HTTP，不由当前控制器自动启动
+    ├── 专用 OCR：Main 选择的 Python + 本地 RapidOCR
+    ├── 旧 FastAPI Worker：代码保留，当前活动库通道受限
+    └── Eagle 应用/companion：外部原件权威，真实配对另行建立</code></pre></figure><h3 id="heading-181">5.2 一次正式操作的共同路径</h3><figure class="tree"><figcaption>结构图 03</figcaption><pre><code>用户动作
+  → Renderer 调用 Preload 窄方法
+  → Main IPC 校验 sender/frame、输入契约与当前权限
+  → 业务控制器准备范围、版本和单次确认凭据
+  → 用户确认后执行文件/网络/进程操作
+  → Active Library Host 在有效 lease 中复核并提交
+  → SQLite 事务形成权威结果
+  → Main 发送更新事件
+  → Renderer 重新读取当前投影并展示</code></pre></figure><p>不是所有读取都需要确认；确认用于明确执行、范围披露、结构升级等具体动作。<code>prepare/review/confirm</code> 不应被扩展成每次普通读取都弹窗。通知失败不能把已提交结果伪装成失败，界面显示也不能提前宣告后台提交成功。</p><h3 id="heading-197">5.3 安全实施现状</h3><ul><li>Renderer 不应直接拿到原件路径、数据库连接、任意文件/进程能力；可信读写位于 Main。</li><li>主窗口当前为 <code>contextIsolation: true</code>、<code>nodeIntegration: false</code>，但 <strong><code>sandbox: false</code></strong>。因此不能笼统写成“所有窗口均已沙箱化”；是否收窄主 Preload 并启用 sandbox 是实际评审点。</li><li>原生卡片/工作窗口使用独立受限 Preload；工作窗口采用独立内存 session、token 与成员范围验证，阻止外部网络。</li><li><code>dam-preview</code> 等受控协议按当前 Library identity/generation/asset 身份校验，关库或撤销会话后旧地址失效。</li><li>不能把 Renderer 的 TypeScript 类型或提示词当作宿主运行时权限校验。</li></ul><h2 id="section-6">6. 代码目录树与模块责任</h2><p>下列为架构导航树，省略同类文件；不是每个目录中全部代码都已上线。路径以仓库根为起点。</p><figure class="tree"><figcaption>结构图 04</figcaption><pre><code>设计素材管理项目/
+├── src/
+│   ├── main/
+│   │   ├── index.ts                         应用组合根、窗口、协议、退出
+│   │   ├── active-library-runtime.ts        生产资料库组合
+│   │   ├── trusted-sender.ts                窗口/帧来源验证
+│   │   ├── ipc/                            正式注册、handler、旧通道禁用
+│   │   ├── app-storage/                    应用级 SQLite；不持有库素材表
+│   │   ├── app-shutdown/                   drain 与退出协调
+│   │   ├── library-lifecycle/              活动库权限、生命周期、域持久化
+│   │   │   ├── active-library-host.ts      生命周期与服务门面
+│   │   │   ├── active-library-session.ts   会话与 held binding
+│   │   │   ├── library-*-inspection*       manifest/文件系统/schema 检查
+│   │   │   ├── library-materialization*   创建、目录与失败回滚
+│   │   │   ├── active-library-asset-queries.ts  素材/AI/OCR读取投影
+│   │   │   ├── active-library-tag-metadata.ts  标签/别名/父子关系
+│   │   │   ├── asset-notebook*             图片笔记 v5
+│   │   │   ├── library-organization*       普通文件夹/色板 v6
+│   │   │   ├── work-sets*                  工作集/设备布局 v7
+│   │   │   └── owned-*-intake/recovery*    受管图片与中断恢复
+│   │   ├── capture-intake/                 Copy/Candidate/Promotion Gateway
+│   │   ├── managed-download/               下载控制器、传输、持久 Journal
+│   │   ├── image-tools/                    变换与副本保存
+│   │   ├── visual-ai/                      视觉控制器、HTTP、解析、结果存储
+│   │   ├── ocr/                            专用OCR控制器、进程、环境、存储
+│   │   ├── asset-card/                     单素材原生卡片
+│   │   ├── work-mode/                      多工作集原生窗口与边界
+│   │   ├── external-connected-library/     Eagle Provider/companion/Journal
+│   │   ├── legacy-readonly-workspace/      旧资料只读恢复
+│   │   ├── model-library/                  模型制品核心与验证实现
+│   │   ├── model-library-workspace/        受限正式模型工作区/存储位置
+│   │   ├── services/
+│   │   │   ├── settings/、ai-backends/     设置与模型服务配置/探测
+│   │   │   ├── ai-worker/、ai-client/      旧推理Provider与同步链路
+│   │   │   ├── ai-runtime/、llama-runtime/ Runtime规划、适配、旧管理接口
+│   │   │   └── color-palette/ 等            专项服务及历史实现
+│   │   ├── db/                             历史schema/连接代码；不是新库通用写口
+│   │   ├── platform/                       OS/路径/文件身份/原生对话框
+│   │   └── runtime/、runtime-package/、bootstrap/、doctor/、packaging/
+│   │                                        基础设施、诊断、安装/发布治理
+│   ├── preload/
+│   │   ├── index.ts                        主窗口接口
+│   │   ├── asset-card.ts                   卡片接口
+│   │   ├── work-window.ts                  工作窗口接口
+│   │   ├── model-library-workspace.preload.ts
+│   │   └── external-connected-library.preload.ts
+│   ├── renderer/
+│   │   ├── main.tsx / App.tsx              React启动与HashRouter
+│   │   ├── routes/                         正式页面、窗口页及隔离原型
+│   │   ├── components/library/canvas/      当前素材工作区组合
+│   │   ├── components/gallery/             共享Gallery/Focus/工作参考展示
+│   │   ├── components/asset/               详情、描述、标签、AI、图片工具
+│   │   ├── components/layout/、ui/         导航、基础组件、动效
+│   │   ├── modules/                        AI Console/Model Workspace内部模块
+│   │   ├── stores/                         Zustand状态与桥接调用
+│   │   └── styles/、hooks/                 样式与行为复用
+│   └── shared/
+│       ├── contracts/                      IPC和跨进程产品契约
+│       ├── types/                          共享领域/服务类型及历史类型
+│       ├── workflows/                      纯投影、状态规划、搜索与分类
+│       └── constants/                      提示模板、枚举与公共常量
+├── ai-service/
+│   ├── app.py                              旧FastAPI Worker入口
+│   ├── core/                               模型管理、队列、资源与平台探测
+│   ├── workers/                            tagging / prompt / analysis
+│   ├── models/                             Qwen/Florence/RAM/WD/CLIP等封装
+│   ├── tools/local_ocr_worker.py            当前专用OCR子进程入口
+│   ├── tools/、eval/、tests/                探测、实测、回归工具
+│   └── requirements*.txt                  CPU/平台相关依赖声明
+├── eagle-companion/                        专用Eagle插件；非通用插件市场
+├── scripts/                                TS/SQLite/Electron/Python/发布检查
+├── .codeindex/                             模块路由与候选验证索引
+├── .github/workflows/                      跨平台治理和打包/签名流水线
+├── docs/
+│   ├── product/                            产品规格与能力/实测记录
+│   ├── adr/                                架构决定、目标与历史约束
+│   ├── agents/                             实施状态、领域导航、问题跟踪
+│   ├── platform/                           平台与Runtime/发布说明
+│   ├── design/                             视觉规范、原型与截图证据
+│   └── history/                            保留的旧说明与任务记录
+├── AGENTS.md / CONTEXT.md / DESIGN.md / TASK.md
+├── package.json / package-lock.json
+├── electron.vite.config.ts / tsconfig.json
+└── build/                                  打包资源；out等构建输出不作为源码真相</code></pre></figure><h3 id="heading-296">6.1 页面与窗口映射</h3><div class="table-wrap"><table><thead><tr><th>路由</th><th>责任</th><th>需注意</th></tr></thead><tbody><tr><td><code>/library</code></td><td>默认素材工作区，全部/文件夹/工作模式/回收站</td><td>主业务表面</td></tr><tr><td><code>/downloads</code></td><td>直链下载、历史与恢复</td><td>历史记录不是文件存在证明</td></tr><tr><td><code>/tag-manager</code></td><td>标签元数据管理</td><td>部分复杂操作受限</td></tr><tr><td><code>/settings</code></td><td>外观、库、AI/模型、下载、快捷键、维护</td><td>配置与执行分开</td></tr><tr><td><code>/ai-console</code></td><td>模型/Runtime诊断与状态</td><td>较大旧页面，入口不等于功能可用</td></tr><tr><td><code>/model-library</code></td><td>模型工作区</td><td>安装/激活能力按真实依赖判定</td></tr><tr><td><code>/connected-libraries</code></td><td>Eagle连接边界</td><td>未配对时拒绝执行</td></tr><tr><td><code>/legacy-library</code></td><td>旧DAM只读找回</td><td>不提供隐式迁移</td></tr><tr><td><code>/dashboard</code></td><td>汇总辅助页</td><td>不是当前默认首页</td></tr><tr><td><code>/asset-card</code></td><td>独立原生卡片页面</td><td>使用专属Preload</td></tr><tr><td><code>/work-window</code></td><td>独立多素材工作窗口</td><td>成员范围权限，不允许全库任意操作</td></tr></tbody></table></div><h2 id="section-7">7. 数据架构、所有权与版本</h2><h3 id="heading-314">7.1 三种库与应用状态</h3><figure class="tree"><figcaption>结构图 05</figcaption><pre><code>数据权威
+├── Managed Active Library：DAM拥有受管副本
+│   ├── Library Root/
+│   │   ├── Originals/                      受管原件
+│   │   └── .dam/
+│   │       ├── library.manifest.json       库身份/布局声明
+│   │       ├── library.sqlite              当前库权威元数据
+│   │       ├── exclusive-library-lock.sqlite  独占锁支撑
+│   │       ├── required-previews/          必要预览
+│   │       └── intake-staging/             收录暂存；不是正式素材
+│   └── Host会话持有连接与lease，其他模块不能自行认领连接
+├── App状态：与素材库独立
+│   ├── app-state.sqlite                   下载历史、设备身份、OCR环境等
+│   ├── 应用设置                           外观/服务配置等
+│   └── Model Workspace控制与存储位置      模型权重不冒充素材
+├── Eagle Connected Library：Eagle拥有原件
+│   ├── DAM独立索引 / 三方基线 / Journal / Outbox
+│   └── 受控预览与暂存，不进入Managed Capture复制原件
+└── Legacy Read-Only Workspace：旧DAM数据只读
+    └── 选定旧数据库+素材根；不初始化schema、不写回、不自动迁移</code></pre></figure><h3 id="heading-339">7.2 关键领域对象</h3><div class="table-wrap"><table><thead><tr><th>对象</th><th>语义</th></tr></thead><tbody><tr><td>Candidate</td><td>尚未完成Promotion的收录候选；不是下载任务</td></tr><tr><td>Design Asset</td><td>已进入可用资料库的素材身份</td></tr><tr><td>Capture Request / Promotion Link</td><td>收录幂等、来源记录与Candidate→Asset联系</td></tr><tr><td>Original / Preview / Variant</td><td>原件、受控预览、变换副本，分别记录所有权与来源</td></tr><tr><td>Library identity / generation</td><td>哪个库、哪次运行绑定；不能用路径字符串代替权限</td></tr><tr><td>revision / sessionToken / receipt</td><td>分别承担内容并发、会话约束、单次审阅确认；不要混成一个版本号</td></tr><tr><td>Confirmed Tag / AI Suggestion</td><td>用户确认关系与模型候选关系分离</td></tr><tr><td>Notebook / Folder / Palette / Work Set</td><td>笔记、库内组织、色值收藏、创作参考上下文，各自有生命周期</td></tr><tr><td>Visual Evidence / OCR Evidence</td><td>不同分析来源与结果；OCR修订不被视觉重分析清空</td></tr><tr><td>Model Artifact / Runtime Package</td><td>数据权重与可执行依赖分离；下载完成不等于可运行</td></tr></tbody></table></div><h3 id="heading-354">7.3 当前库schema演进</h3><div class="table-wrap"><table><thead><tr><th>版本</th><th>主要增量</th><th>触发原则</th></tr></thead><tbody><tr><td>v1</td><td>库控制、基础素材/标签、Capture/生命周期</td><td>新库基础版本</td></tr><tr><td>v2</td><td>视觉AI证据</td><td>首次明确确认相关操作</td></tr><tr><td>v3</td><td>持久下载Journal，包含v2结构</td><td>显式选择库内持久下载</td></tr><tr><td>v4</td><td>图片副本持久恢复意图</td><td>明确保存派生副本</td></tr><tr><td>v5</td><td>图片笔记</td><td>首次确认保存</td></tr><tr><td>v6</td><td>普通文件夹与色板</td><td>首次确认组织写入</td></tr><tr><td>v7</td><td>工作集、成员与设备窗口布局</td><td>首次确认工作集保存</td></tr><tr><td>v8</td><td>独立OCR证据/当前结果/修订</td><td>首次确认后成功OCR提交</td></tr></tbody></table></div><p>这里是已经实现的版本含义，不是对任意旧库的迁移授权。模块有各自schema启用与兼容检查；更高版本不应被较旧功能降级。当前存在多处版本分支，如何集中迁移与能力判定是评审点。</p><h2 id="section-8">8. 主要执行链路</h2><h3 id="heading-371">8.1 本地收录与副本产生</h3><figure class="tree"><figcaption>结构图 06</figcaption><pre><code>本地文件选择             图片工具确认保存             直链下载确认
+      │                        │                          │
+      └────审阅范围/冻结来源────┴────受控输出/完整字节─────┘
+                               ↓
+                       Active Library Host
+                               ↓
+                         Capture Gateway
+                               ↓
+                 接收记录 → 暂存 → SHA校验 → 不覆盖发布
+                               ↓
+                    Candidate Activation → 必要预览
+                               ↓
+                  Promotion事务 → Asset + Promotion Link
+                               ↓
+                       刷新列表 / 详情 / 工作窗口</code></pre></figure><p>关键区别：下载网络成功只是中间状态；只有完成有效入库后才能报告素材可用。已受理Capture失败进入恢复状态，不能重新下载来掩盖部分提交，也不能重新生成素材身份造成重复。</p><h3 id="heading-393">8.2 查询与组织</h3><figure class="tree"><figcaption>结构图 07</figcaption><pre><code>Main库查询 → 素材基本字段 + 确认标签/别名 + 当前AI摘要 + 专用OCR
+    → Renderer Store
+    ├── asset-discovery.workflow：词法匹配、范围、排序、命中说明
+    ├── ai-folders.workflow：当前分析标签派生的成员ID集合
+    ├── Library Organization：普通文件夹/色板持久数据
+    └── Canvas/Gallery/Inspector：同一素材的不同展示</code></pre></figure><p>当前按ID读取优化避免一次小批AI/卡片操作读取全库；但主列表及词法搜索仍需评审大库分页、查询索引、增量更新与内存成本。10,001条合成元数据检查不是百万素材性能保证。</p><h3 id="heading-406">8.3 多窗口与关闭</h3><figure class="tree"><figcaption>结构图 08</figcaption><pre><code>保存的Work Set内容（库内）
+  + 设备Window Layout（库内，按device隔离）
+  → Main创建窗口 → 专属session/token → 只开放当前成员
+  → 编辑/保存 → revision校验 → 内容与显式布局事务
+
+关闭资料库/退出
+  → 未保存草稿处理
+  → 撤销待确认与窗口权限
+  → 取消/收敛AI、OCR、下载、已开始写入
+  → drain连接库与活动库
+  → 释放lease、关闭数据库</code></pre></figure><p>当前窗口上限8个，工作集内容最多200份参考、64种颜色；这些是现有约束，不等于理论最终容量。Hide、Close、移除成员、删除工作集、删除素材必须保持不同语义。</p><h2 id="section-9">9. 当前 AI 推理框架及这次实测结论</h2><h3 id="heading-426">9.1 AI框架树</h3><figure class="tree"><figcaption>结构图 09</figcaption><pre><code>AI能力体系
+├── 正式视觉链路【接线 + Qwen本地实测】
+│   ├── VisualAiPanel → visual-ai:* → VisualAiController
+│   ├── prepare：1–8素材、受控预览、服务配置与库版本冻结
+│   ├── run：用户确认、最多两个批次、每素材含重试共享最多120秒
+│   ├── 输入：白底RGB、最长边1024、JPEG85
+│   ├── transport：OpenAI-compatible /chat/completions
+│   │   ├── 中文描述/标签、英文提示词、OCR字段要求为空
+│   │   ├── 首次1536 token，截断时3072 token最多重试一次
+│   │   └── 同一服务/模型/图片；不静默fallback
+│   ├── parser：完整JSON/代码块/文本块兼容，残缺/无效结果拒绝
+│   └── save：当前库证据、标签建议；保护用户描述
+├── 专用OCR链路【接线 + RapidOCR实测】
+│   ├── DedicatedOcrPanel → asset-ocr:* → OcrController
+│   ├── 已验证本地环境 → Python子进程 → RapidOCR 1.4.4
+│   └── v8独立结果/区域/修订；有效空结果不冒充失败
+├── 确定性配色【接线；非语言模型】
+│   └── 受控预览采样 → 色值/占比 → 色板与工作集复用
+├── 旧推理与Runtime代码【受限】
+│   ├── OpenAICompatibleProvider / LlamaOpenAIProvider
+│   ├── Python FastAPI Worker + AiClient轮询/旧数据库同步
+│   ├── Florence/RAM/WD/CLIP等模型封装
+│   └── Runtime桥接有plan-only部分，不是完整统一执行网关
+└── 待完整落地的统一层【目标】
+    ├── 按能力的独立结果/合并契约
+    ├── 模型与任务执行配置、处理策略版本、上下文预算
+    ├── 跨Runtime资源准入、优先级、驻留与恢复
+    ├── 模型制品→安装→激活→能力验证闭环
+    └── 语义检索/Embedding空间、自动分析与历史回填</code></pre></figure><h3 id="heading-460">9.2 新旧接口问题的架构含义</h3><p>旧Provider有可用的中文提示、预处理、参数与截断重试，但也曾将截断后的部分字段报为成功。新路径加强了活动库权限、完整提交和取消保护，却最初没有完整承接旧推理策略，使用固定英文任务提示、1280输入和1800 token一次输出，同时要求OCR、描述、标签和提示词，导致真实设计稿频繁截断。</p><p>修复已采用中文紧凑提示、1024输入、OCR职责分离、1536→3072一次重试及完整JSON兼容。保留拒绝残缺结果和用户状态优先。说明新结构的问题不能直接归因于“模型不可用”，也不能因此恢复旧全局数据库写入。</p><p>仍有结构缺口：当前综合输出把caption/prompt/tags放在一个契约中；按模型/任务的执行配置未独立成统一层；<code>recipe</code>仍为<code>visual-ai-v1</code>，不能仅凭它区分此次提示修改；最多8标签主要是提示要求，解析兼容上限仍为30，语言也未形成独立质量状态。</p><h3 id="heading-468">9.3 已有真实测试</h3><p>硬件Apple M4、24GiB；llama.cpp b11057/Metal；Qwen3-VL Instruct Q4_K_M + F16视觉投影。8份获准设计稿只读受限预览，未写入真实资料库。</p><div class="table-wrap"><table><thead><tr><th>项目</th><th>2B分析</th><th>8B分析</th><th>8B反推</th></tr></thead><tbody><tr><td>完整结果</td><td>8/8</td><td>8/8</td><td>8/8</td></tr><tr><td>首次完成</td><td>5/8</td><td>8/8</td><td>8/8</td></tr><tr><td>重试样本数</td><td>3</td><td>0</td><td>0</td></tr><tr><td>最多8标签</td><td>6/8</td><td>8/8</td><td>8/8</td></tr><tr><td>单份中位耗时</td><td>4.96秒</td><td>20.82秒</td><td>19.01秒</td></tr></tbody></table></div><p>2B在4096上下文的补测也8/8成功，固定seed的最终输出与8192对照一致。两种模型的生成素材正式Electron联动各17环节通过，包含真实分析保存、检索、AI文件夹、OCR/手工保护、取消与重启恢复。</p><p>结论只覆盖结构、部分语言约束与数据链路。8B标签更稳定但较慢；生成抽象图仍有场景/用途推断，尚未建立真实设计稿人工事实准确率基准。它不是原Ollama 8B服务配置的复现，也不是全平台质量放行。下载文件已完整校验，本轮隔离服务已停，正式默认模型配置未修改。</p><p>详细记录：<a href="../product/QWEN3-VL-REAL-COMPARISON-20260924.md">真实模型对比</a>。</p><h2 id="section-10">10. 验证、开发与发布方式</h2><h3 id="heading-488">10.1 证据分层</h3><figure class="tree"><figcaption>结构图 10</figcaption><pre><code>契约/纯逻辑检查
+  → 临时文件/SQLite集成
+  → 合成HTTP与故障注入
+  → 正式Electron Main + Preload + Renderer
+  → 明确模型/硬件/输入的真实推理
+  → 真实OS、打包产物、原生依赖、签名安装与用户规模验收</code></pre></figure><p>上层验证不能被下层替代。页面渲染正常不证明权限和持久化正确，模型返回200不证明结果完整，合成测试通过不证明真实模型质量，未打包macOS测试不证明Windows安装包可用。</p><h3 id="heading-501">10.2 常用入口</h3><div class="table-wrap"><table><thead><tr><th>目的</th><th>已存在命令/入口</th></tr></thead><tbody><tr><td>查模块与候选检查</td><td><code>npm run context:route -- --task &quot;任务描述&quot;</code></td></tr><tr><td>类型与构建</td><td><code>npm run typecheck</code>；<code>npm run build</code></td></tr><tr><td>Python隔离测试</td><td><code>npm run test-python-unittest</code></td></tr><tr><td>SQLite/Host集成</td><td>仓库<code>run-electron-node-test.mjs</code>，使用匹配Electron ABI</td></tr><tr><td>素材正式界面</td><td><code>npm run test-library-canvas-electron</code></td></tr><tr><td>下载/AI临时库</td><td><code>npm run test-visual-ai-download-integration</code></td></tr><tr><td>组织/笔记/工作集</td><td><code>test-library-organization</code>、<code>test-asset-notebook</code>、<code>test-work-sets</code>等</td></tr><tr><td>真实AI测试</td><td><code>test-local-visual-ai.ts</code>、<code>test-authorized-visual-ai.ts</code>及真实UI流程；需要明确运行授权和输入</td></tr><tr><td>发布</td><td><code>.github/workflows/</code>与<code>packaging/</code>、<code>scripts/</code>中的候选/签名/产物核验</td></tr></tbody></table></div><p>不要为文档或低影响改动运行整套长测试。也不要因shell Node ABI不匹配而临时重编better-sqlite3，破坏Electron环境。<code>npm run dev</code>不是隔离验收工具。</p><h3 id="heading-517">10.3 仍需单独验证</h3><p>真实用户库升级/迁移、损坏库/断电恢复、Windows与签名包、原生对话框和多显示器、超大资料库性能、视频/复杂格式、模型长期资源表现、外部服务兼容矩阵，以及真实Eagle配对/写入均不能从当前报告自动推定。</p><h2 id="section-11">11. 架构评审重点：观察、影响与问题</h2><p>以下是有源码依据的评审入口，不是已批准的重构方案，也不要求一次性实施全部远景。</p><div class="table-wrap"><table><thead><tr><th>编号</th><th>当前观察</th><th>对优化的影响</th><th>请设计师回答</th></tr></thead><tbody><tr><td>A01</td><td>新Host链路、旧Service/Worker和验证实现并存</td><td>阅读目录无法判断运行状态</td><td>如何生成正式可达模块图，并划清current/legacy/tracer的归属？</td></tr><tr><td>A02</td><td>部分README保留“下载不可用”“工作集待实现”等旧段落</td><td>设计者可能依据错误快照规划</td><td>哪些入口应合并或缩短，如何让状态和调用链保持一致？</td></tr><tr><td>A03</td><td>AI计划层与正式transport分离，参数/提示固定在执行文件</td><td>更换模型或任务时重复修补</td><td>如何抽出最小可用执行配置与Provider适配，继承已验证行为？</td></tr><tr><td>A04</td><td>综合视觉结果耦合描述/标签/反推；OCR已独立</td><td>单能力升级或失败难独立表达</td><td>如何演进能力结果契约及兼容投影，而不清空旧结果？</td></tr><tr><td>A05</td><td>视觉、OCR、旧Worker各有任务控制</td><td>缺少跨Runtime资源准入与统一恢复</td><td>哪些应统一，哪些应继续由能力内部持有？如何避免“万能队列”？</td></tr><tr><td>A06</td><td>schema兼容分支散落在不同功能模块</td><td>新增版本容易出现漏保留或意外降级</td><td>是否需要集中迁移/能力查询入口？旧版本打开策略如何测试？</td></tr><tr><td>A07</td><td>主Preload较宽，主窗口sandbox=false，原生窗口已有窄接口</td><td>安全与兼容债务并存</td><td>如何渐进收窄主桥接，验证所有调用方后改善隔离？</td></tr><tr><td>A08</td><td>Library主列表在Renderer做词法投影，部分小批已按ID优化</td><td>大库查询、跨进程传输与渲染成本未知</td><td>何时引入分页、FTS、增量投影或虚拟化？用哪些基准决定？</td></tr><tr><td>A09</td><td>AiConsolePage与asset.store较大，含旧字段/流程</td><td>功能修改可能牵连未启用能力</td><td>按稳定职责拆分还是先清理调用路径？请给出证据而非行数阈值</td></tr><tr><td>A10</td><td>Main组合根集中窗口/协议/服务装配</td><td>容易继续堆积生命周期交叉逻辑</td><td>如何保留一个清晰组合根，同时减少各模块互相刷新/撤销耦合？</td></tr><tr><td>A11</td><td>合同存在<code>ok/value</code>与<code>success/error</code>等多种形态</td><td>错误分类与UI适配重复</td><td>是否需要渐进统一错误/结果信封？如何保留公共兼容？</td></tr><tr><td>A12</td><td>模型库、Runtime包、安装治理设计很多，正式安装仍受限</td><td>容易把大量基础设施当作产品交付</td><td>最小“下载校验→启动→能力测试→可用”闭环应如何组合？</td></tr><tr><td>A13</td><td>Eagle原件权威与Managed Copy不同</td><td>复用通用仓储易抹平第三方写入约束</td><td>哪些领域接口可共用，哪些必须保持Provider专属？</td></tr><tr><td>A14</td><td>脚本测试量大且包含源码扫描/合成/真实测试</td><td>执行成本与证据等级难理解</td><td>如何建立按风险选择的测试矩阵，淘汰重复而保留重要负向验证？</td></tr><tr><td>A15</td><td>原型/正式共享部分Gallery组件，但历史界面实现仍在</td><td>清理容易破坏已批准交互或又产生简化版</td><td>如何以共享展示契约迁移，分别验收视觉与真实数据链路？</td></tr><tr><td>A16</td><td>插件、视频和语义检索尚未全部落地</td><td>过早冻结统一平台会扩大当前复杂度</td><td>哪个真实能力最适合验证最小扩展接口，哪些接口应暂不建立？</td></tr></tbody></table></div><h3 id="heading-544">11.1 文档漂移的具体例子</h3><p><code>src/renderer/README.md</code>仍含下载不可执行、笔记/色板/工作集待持久化的旧描述；当前Main已组合下载控制器，v5–v8分别落地相关持久化。<code>capture-intake/README.md</code>同时保留早期Tracer未接线清单与后续正式接线说明。<code>PRODUCT-FOUNDATION.md</code>中部分“当前原型”段落属于9月14日时点，而9月19–24日已有后续交付。</p><p>这些冲突不意味着所有文档都应删除。建议以“产品不变量”“当前实现”“历史证据”“目标规格”分层整理，保留出处；本文按最新源码和日期明确的证据纠正状态，不改写历史事实。</p><h2 id="section-12">12. 希望框架设计师交付什么</h2><p>请以现有功能和权限边界为输入，对比可选结构，给出可实施意见，而不是只提供理想目录图。</p><h3 id="heading-554">12.1 必要输出</h3><ol><li><strong>现状评估</strong>：哪些模块边界有效、哪些重复或职责混杂，每项附源码入口与影响。</li><li><strong>目标架构树与运行图</strong>：模块责任、依赖方向、进程边界、数据权威、生命周期归属。</li><li><strong>方案对比</strong>：至少比较“保留现有边界增量整理”与另一合理方案，列收益、迁移风险、验证成本；不强制微服务或全面重写。</li><li><strong>接口设计</strong>：Library Host、分析能力、模型执行配置、任务、结果投影、窗口与插件之间的最小契约。</li><li><strong>AI专项设计</strong>：明确模型服务配置、权重、Runtime、能力就绪、请求策略、结果质量五者分别由谁管理。</li><li><strong>数据演进计划</strong>：schema版本、旧结果兼容、并发与回滚、三种库边界、用户编辑保护。</li><li><strong>迁移顺序</strong>：每一步的输入、修改范围、保留调用方、替换点、验收门槛、回退点。</li><li><strong>删除/合并候选清单</strong>：逐项证明不可达、已被替代或有重复，不按名称批量删除旧代码/测试/文档。</li><li><strong>可量化验收</strong>：实际用户流程、错误恢复、真实模型、资源预算、大库与平台矩阵，而不仅是typecheck/build。</li><li><strong>不做清单</strong>：明确本轮暂缓哪些未来能力，防止再次把插件市场、云服务或全部格式作为核心前置。</li></ol><h3 id="heading-567">12.2 评审时必须回答的AI问题</h3><figure class="tree"><figcaption>结构图 11</figcaption><pre><code>一个素材请求分析时
+├── 谁决定任务是OCR、标签、描述还是反推？
+├── 谁选择已验证的模型与执行Runtime？
+├── 谁提供输入预处理、提示、输出预算和响应适配？
+├── 谁判断资源允许执行、何时等待、是否重试？
+├── 谁区分完整结构、正确语言、有效空结果与质量不足？
+├── 谁保存模型/处理策略版本及用户修改优先级？
+└── 更换模型/Runtime后，哪组真实基线必须重跑？</code></pre></figure><h3 id="heading-580">12.3 可直接转交的评审说明</h3><blockquote>请基于这份交接稿和当前工作区源码，评估 Design Asset Manager 的模块、接口、数据与 AI 推理架构。保留本地优先、AI+内置核心、素材工作区、多素材工作模式，以及原件/用户状态/库权限保护。先核实当前可达调用链，区分正式、旧代码、验证实现、原型和目标。请给出可对比的架构方案、迁移步骤、兼容与验收矩阵，并指出可以删除或合并的部分及证据。尤其审查新AI链路如何继承旧Provider的有效能力，如何将模型执行策略、能力契约、资源调度和结果质量接到实际产品入口。不要以重写技术栈、目录美化或增加抽象层代替问题诊断，不把未来规划当作必须立即实现的清单。</blockquote><h2 id="section-13">13. 源码与证据阅读导航</h2><div class="table-wrap"><table><thead><tr><th>要核对的问题</th><th>优先入口</th></tr></thead><tbody><tr><td>当前产品定位</td><td><a href="../product/PRODUCT-FOUNDATION.md">PRODUCT-FOUNDATION</a>；<a href="../../AGENTS.md">AGENTS</a>；<a href="../../DESIGN.md">DESIGN</a></td></tr><tr><td>当前组合/IPC/窗口</td><td><a href="../../src/main/index.ts">Main入口</a>；<a href="../../src/main/ipc/main-ipc-composition.ts">IPC组合</a>；<a href="../../src/main/ipc/disabled-app.ipc.ts">旧通道拒绝</a></td></tr><tr><td>页面与导航</td><td><a href="../../src/renderer/App.tsx">App</a>；<a href="../../src/shared/workflows/app-navigation.workflow.ts">导航契约</a>；<a href="../../src/renderer/routes/Library.tsx">Library</a></td></tr><tr><td>活动库与schema</td><td><a href="../../src/main/library-lifecycle/active-library-host.ts">Host</a>；<a href="../../src/main/library-lifecycle/README.md">库说明</a>；<a href="../../src/main/library-lifecycle/library-layout.internal.ts">布局</a></td></tr><tr><td>收录/恢复</td><td><a href="../../src/main/capture-intake/README.md">Capture</a>；<a href="../../src/main/managed-download/README.md">下载</a>；<a href="../../src/main/image-tools/README.md">图片工具</a></td></tr><tr><td>笔记/组织/工作集</td><td><a href="../product/ASSET-NOTEBOOKS-20260917.md">笔记规格</a>；<a href="../product/LIBRARY-ORGANIZATION-20260919.md">组织规格</a>；<a href="../product/WORK-SETS-20260920.md">工作集规格</a></td></tr><tr><td>原生窗口</td><td><a href="../../src/main/work-mode/README.md">工作窗口</a>；<a href="../../src/main/asset-card/README.md">卡片</a></td></tr><tr><td>AI正式与旧路径</td><td><a href="../../src/main/visual-ai/README.md">Visual AI</a>；<a href="../../src/main/ocr/README.md">OCR</a>；<a href="../platform/AI_CLIENT_RUNTIME_ADAPTER.md">旧Runtime桥接范围</a></td></tr><tr><td>最新模型证据</td><td><a href="../product/QWEN3-VL-REAL-COMPARISON-20260924.md">真实AI对比</a>；<a href="../product/BASELINE-AI-INVENTORY-20260920.md">基础模型盘点</a></td></tr><tr><td>模型库边界</td><td><a href="../../src/main/model-library/README.md">Model Library核心</a>；<a href="../../src/main/model-library-workspace/model-library-workspace.composition.ts">正式Workspace组合</a></td></tr><tr><td>Eagle/旧库</td><td><a href="../../src/main/external-connected-library/README.md">Eagle连接库</a>；<a href="../../src/main/legacy-readonly-workspace/README.md">旧库只读</a></td></tr><tr><td>检索/AI文件夹</td><td><a href="../../src/shared/workflows/asset-discovery.workflow.ts">检索workflow</a>；<a href="../../src/shared/workflows/ai-folders.workflow.ts">AI分类workflow</a></td></tr><tr><td>架构目标与替代关系</td><td><a href="../adr/README.md">ADR索引</a>，按领域选读，不把全部历史规格作为前置</td></tr><tr><td>测试/构建/发布</td><td><a href="../../package.json">package.json</a>；<a href="../../electron.vite.config.ts">electron-vite</a>；<code>.github/workflows/</code></td></tr></tbody></table></div><p>旧 <a href="../design/UI-UX-HANDOFF-20260911.md">UI/UX功能交接稿</a>可用于追溯交互意图，但当时包含后来退休的网页功能等，不能作为当前能力清单直接交付。当前框架评审以本报告、现行DESIGN和源码为准。</p><div class="footer">交接范围：当前工作区与已有验证证据。本文不授权真实数据迁移、修改公共契约或开启外部推理。</div></main></div>
+<template id="source-md"># Design Asset Manager：项目与代码架构交接
+
+面向：项目框架设计师、架构评审人员、后续实施负责人。
+
+快照日期：2026-09-24。本文描述当前工作区源码及已有验证记录，不是目标架构批准书。建议先读第 1、3、5、11、12 节，再按模块查阅源码。
+
+## 1. 项目摘要与本次交接目的
+
+Design Asset Manager（DAM）是面向设计师、美工、剪辑师、编导等视觉创作者的本地优先素材管理与创作参考工作台。它以可靠的素材管理为基础，以内置 AI 理解、可检索的分析结果、多素材工作集与原生悬浮窗口为差异化能力。
+
+核心用户闭环：**收进素材 → 渐进理解 → 找回并解释命中 → 检查与比较 → 安全复用**。
+
+产品在素材管理和创作参考体验上参考 Eagle，但当前交付范围不等于已实现 Eagle 的全部格式、性能和功能。无模型时基础管理应保持可用；AI 是产品核心体验，但不要求每张素材默认运行所有模型。
+
+本次交接希望评审者回答：现有模块如何减轻理解和修改成本、如何把 AI 从分散实现整理为稳定框架、如何保留数据安全和已经验证的功能，以及应按什么顺序迁移。本文提出评审问题与候选方向，不预先决定重写、换技术栈或合并所有服务。
+
+### 1.1 阅读状态标签
+
+| 标签 | 本文含义 |
+| --- | --- |
+| 接线 | 已有正式入口、调用方和执行实现；不自动等于全部平台/真实用户环境均验收 |
+| 实测 | 有指定模型、输入、平台、运行方式的执行证据；效力只覆盖该范围 |
+| 受限 | 界面或模块存在，但配置、权限、依赖或正式接入有限，不能视为完整功能 |
+| 验证实现 | Tracer、合成服务或临时环境证明了局部设计，不等于完整正式安装/使用链路 |
+| 原型 | 用于交互或视觉探索，不能获得正式资料库权限 |
+| 目标 | 产品或 ADR 规定的未来行为，尚未完整落地 |
+| 待核验 | 目前没有足够执行证据，不能写成通过，也不能直接认定不存在 |
+
+### 1.2 本轮文档的证据边界
+
+本轮只读源码、模块说明及已有测试报告，制作交接文件；未改业务代码，未新增模型推理、下载、真实资料库访问或迁移，未更新 TASK.md。引用的真实 AI 测试来自此前获准执行并归档的 9 月 24 日记录。其他模块的“已验证”主要是历史隔离测试证据，本轮未重新运行整套产品测试。
+
+当前分支为 `codex/product-reassessment-20260905`，读取时 HEAD 为 `3fa00df`。当前工作区包含大量暂存、未暂存及未跟踪改动，本文依据工作区而非仅该提交。接手方必须取得对应工作区补丁或完整源码快照，单独 checkout 此 SHA 无法重现本文状态。
+
+## 2. 产品定位、功能分层与不可变边界
+
+### 2.1 产品功能树
+
+```text
+Design Asset Manager
+├── 素材工作区【核心；正式主表面】
+│   ├── 全部素材：预览、选择、排序/布局、详情与专注查看
+│   ├── 文件夹：普通文件夹、AI 动态分类、色板
+│   ├── 工作模式：多素材工作集、原生参考窗口、保存恢复
+│   └── 回收站：受控删除意图、恢复与生命周期管理
+├── 内置理解能力【核心；各能力交付状态不同】
+│   ├── 颜色与占比：确定性图像测量
+│   ├── 视觉分析：描述、标签建议
+│   ├── 提示词反推：用于再创作的推演结果
+│   ├── 专用 OCR：文字、区域、人工修订
+│   └── 检索：当前词法/标签；语义与向量检索为目标
+├── 收录与安全复用【核心】
+│   ├── 本地文件 Copy Into Library
+│   ├── 图片直链下载与受控入库
+│   ├── 图片裁剪/旋转/缩放产生新副本
+│   └── 入库中断恢复、版本与原件保护
+├── 外部与历史数据【独立权限边界】
+│   ├── Eagle Connected Library：Eagle 持有唯一原件
+│   └── Legacy Read-Only Workspace：旧 DAM 数据只读找回
+├── 基础设施【支撑，不是主工作流】
+│   ├── 设置、标签管理、下载记录
+│   ├── AI 服务配置、模型库、AI 控制台
+│   └── Runtime、诊断、平台适配与发布治理
+└── 扩展方向【目标/暂缓】
+    ├── 录屏、抠图、可编辑图层及专业工具插件
+    ├── 视频与参考帧的宿主管理
+    └── 通用插件 SDK、浏览器连接器、外部 AI 开发接入、社区分发
+```
+
+内置网页浏览、网页采集、网站登录和外部来源搜索已经退休。历史数据库字段或文件名中仍可能出现 site/browser，它们不证明对应功能仍可执行。
+
+### 2.2 优化时必须保留的产品语义
+
+- **Copy 不等于 Move**：默认导入复制到资料库，不静默移动、覆盖或删除外部来源。
+- **素材、预览和派生物不同**：Original、Preview、图片工具生成的副本不能混为同一种文件所有权。
+- **三种资料库不能混写**：受管活动库、Eagle 连接库、旧库只读工作区有不同权威来源。
+- **用户修改优先**：手工描述、确认标签、OCR 修订、组织关系不被模型重跑覆盖。
+- **AI 建议不是确认事实**：可参与带来源说明的检索/分类；无需强制逐条确认才能继续使用产品。
+- **结果可归因**：测量、观察、推断、创作提示词与用户编辑应有清晰区别；反推不等于找回原始提示词。
+- **配置不等于外发授权**：保存服务地址/密钥不能触发素材上传；不静默切换到外部模型。
+- **渐进非阻塞**：AI 不可用不能阻塞基础入库、浏览、词法检索与复用。
+- **工作集是引用**：移除成员、关闭窗口或删除工作集不删除素材原件。
+- **历史文档不是新任务**：ADR Accepted、旧阶段计划、原型演示、构建成功都不是功能交付证明。
+
+产品入口：[PRODUCT-FOUNDATION](../product/PRODUCT-FOUNDATION.md)；界面规范以 [DESIGN.md](../../DESIGN.md) 为准。
+
+## 3. 当前交付状态总表
+
+| 模块/能力 | 当前实现 | 证据与限制 |
+| --- | --- | --- |
+| 活动库创建/打开/关闭 | 正式 Host、受检数据库、独占 lease、关闭 drain | macOS 临时库与合成 E2E；真实旧库迁移不包含在内 |
+| 本地收录 | 文件选择、Copy 审阅、SHA 校验、Capture/Promotion | 正式路径主要验证 PNG/JPEG/WebP；不能推广为所有设计格式 |
+| 素材浏览 | 网格、侧边详情、专注查看、缩放/平移 | 正式当前库和受控预览；不是原型数据 |
+| 搜索 | 名称、文件名、标签/别名、描述、OCR、提示词词法命中及说明 | 当前以内存投影匹配为主；不等于持久全文索引或语义检索 |
+| 标签 | 创建/编辑、别名、父子关系、素材确认标签 | 合并/删除等身份保留复杂操作仍受限 |
+| 文件夹与色板 | v6 持久化普通组织、成员引用和色值 | AI 文件夹由当前分析标签动态派生，不复制文件 |
+| 图片笔记 | v5 持久化、版本/会话控制、草稿保护 | 适用当前图片链路；未保存内存草稿不等于崩溃恢复 |
+| 工作集/原生窗口 | v7 内容与设备布局，多个窗口、置顶/隐藏/关闭/恢复 | macOS 生成素材验证；视频、真实跨显示器和原生跨应用拖出仍有缺口 |
+| 回收站 | 独立生命周期与恢复路径 | 不能用旧 `assets:delete` 代替；不泛化为任意物理清理 |
+| 图片工具 | 受控预览或显式受管原件输入，变换后另存新素材 | 有范围/尺寸限制；不覆盖来源、不复制原素材 AI 结果 |
+| 直链图片下载 | Main 传输、校验、受管入库；可选库内持久检查点 | 无登录/Cookie/重定向；当前 PNG/JPEG/WebP、单文件上限32MB |
+| 下载/入库恢复 | 日志、Range/ETag、显式恢复确认、部分 Capture 恢复 | 合成 HTTP 与重启证据；不保证任意站点、损坏库或断电恢复 |
+| 综合视觉 AI | `visual-ai:*`、HTTP transport、完整结果写入 | Qwen 2B/8B 本地实测；不自动启动模型或下载权重 |
+| 专用 OCR | `asset-ocr:*`、受控 Python 子进程、v8 结果和修订 | RapidOCR 本地实测；依赖已验证环境，应用内全自动安装未交付 |
+| 配色比例 | 受控预览确定性采样 | 不由语言模型猜测，不等于原件全部像素的绝对测量 |
+| AI 服务配置 | 配置 CRUD、显式模型列表/连接检查 | `/models` 成功不证明图像能力或输出质量 |
+| Model Library | 受限正式 Workspace、存储位置管理、核心验证实现 | 完整可信目录→安装→激活闭环不可按页面存在推定 |
+| AI Console | 诊断与状态页面、历史平台投影 | 部分旧 Runtime IPC 已禁用，页面存在不等于各操作可用 |
+| Eagle 连接库 | 独立索引/Journal、Adapter、companion 与隔离测试 | 正式 composition 默认拒绝未建立的配对；未宣称真实 Eagle 已接通 |
+| 旧库找回 | 用户选择旧数据库与素材根，只读列表/检索/预览 | 不迁移、不写入、不自动改成受管库 |
+| Python 多模型 Worker | 模型封装、队列/轮询、分类/翻译等代码仍在 | 旧调用链受限；Florence 隔离实测不等于正式接线；RAM/WD/CLIP未完成本轮实测 |
+| 通用插件平台 | 权限/版本/贡献面有设计 | Eagle companion 是专用集成，不代表通用插件 SDK 已交付 |
+| 视频/参考帧/录屏 | 产品规格已有方向 | 当前图片工作模式不能代表这些能力完成 |
+| Windows/发布 | 平台适配、打包与签名治理脚本存在 | 本轮主要是 macOS 未打包测试，不能替代 Windows/签名安装验收 |
+
+## 4. 技术栈与代码规模
+
+### 4.1 技术栈
+
+下列是 `package.json` 声明范围，不是对本机或安装包中精确版本的独立审计。
+
+| 领域 | 当前选型 |
+| --- | --- |
+| 桌面宿主 | Electron `^30.0.6`；Main/Preload/Renderer 分层 |
+| 前端 | React `^18.3.1`、React Router `^6.23.1`（HashRouter）、Zustand `^4.5.2` |
+| 语言/构建 | TypeScript `^5.4.5`、Vite `^5.2.11`、electron-vite `^2.2.0` |
+| UI | 自有 CSS/tokens/共享组件，Tailwind 工具，Motion，Lucide |
+| 数据库 | better-sqlite3 `^12.10.0`，Main 持有连接 |
+| 图片处理 | Sharp `^0.34.5`，部分旧色彩工具保留 |
+| AI | HTTP OpenAI-compatible；本地 RapidOCR 子进程；旧 Python FastAPI Worker |
+| 本轮本地视觉运行时 | 隔离 llama.cpp b11057 + Metal + Qwen3-VL GGUF，非自动安装后的正式默认服务 |
+| 打包 | electron-builder `^24.13.3`，原生依赖需 Electron ABI 和平台产物核验 |
+| 验证 | 聚焦 TS/Node 脚本、Electron Node 启动器、Python unittest、Playwright Electron E2E |
+
+### 4.2 源码体量快照
+
+仅统计 `.ts/.tsx/.py/.js/.mjs/.cjs/.css` 文本行，排除依赖与 Python 缓存；包含测试、原型和旧模块，不代表全部处于正式运行路径。数字用于定位评审范围，不是质量评分。
+
+| 目录 | 文件数 | 文本行数 |
+| --- | ---: | ---: |
+| `src/main` | 331 | 47,017 |
+| `src/preload` | 5 | 544 |
+| `src/renderer` | 117 | 16,969 |
+| `src/shared` | 87 | 9,666 |
+| `ai-service` | 105 | 16,575 |
+| `scripts` | 302 | 48,413 |
+
+集中度提示：`AiConsolePage.tsx` 2,576行、`asset.store.ts` 818行、`active-library-host.ts` 674行、`preload/index.ts` 467行。大文件值得复核职责，但不能仅凭行数决定拆分；还需看调用方、修改频率、状态归属与测试替换成本。
+
+## 5. 总体架构与进程边界
+
+### 5.1 当前系统树
+
+```text
+桌面应用进程体系
+├── Electron Main：可信宿主
+│   ├── index.ts：应用启动、窗口、协议、模块组合、退出协调
+│   ├── IPC composition：正式通道注册和受限旧通道拒绝
+│   ├── Active Library Host：当前库身份、锁租约、连接、生命周期
+│   ├── 业务模块：Capture、组织、笔记、工作集、下载、图片工具、AI/OCR
+│   ├── 外部边界：Eagle Adapter、只读旧库、HTTP模型、Python子进程
+│   └── 平台基础设施：文件身份、路径、原生窗口、进程、Runtime/发布
+├── Main Window Renderer：React 用户界面
+│   ├── AppShell / Routes：素材工作区与辅助页面
+│   ├── Canvas / Gallery：共享素材展示与交互
+│   ├── Zustand：列表、选择、草稿、下载和设置等界面状态
+│   └── Shared Workflows：纯状态/展示/词法检索投影
+├── Preload：受控桥接
+│   ├── index.cjs：主窗口较宽的历史与当前接口表面
+│   ├── asset-card.cjs：原生单素材卡片的窄接口
+│   └── work-window.cjs：工作集窗口的窄接口
+├── 独立原生窗口的 Renderer
+│   ├── AssetCardWindow：兼容的单素材原生卡片
+│   └── WorkSetWindow：成员范围内的多素材参考、笔记与工作备注
+└── 外部执行进程/服务
+    ├── 已启动的兼容视觉模型服务：HTTP，不由当前控制器自动启动
+    ├── 专用 OCR：Main 选择的 Python + 本地 RapidOCR
+    ├── 旧 FastAPI Worker：代码保留，当前活动库通道受限
+    └── Eagle 应用/companion：外部原件权威，真实配对另行建立
+```
+
+### 5.2 一次正式操作的共同路径
+
+```text
+用户动作
+  → Renderer 调用 Preload 窄方法
+  → Main IPC 校验 sender/frame、输入契约与当前权限
+  → 业务控制器准备范围、版本和单次确认凭据
+  → 用户确认后执行文件/网络/进程操作
+  → Active Library Host 在有效 lease 中复核并提交
+  → SQLite 事务形成权威结果
+  → Main 发送更新事件
+  → Renderer 重新读取当前投影并展示
+```
+
+不是所有读取都需要确认；确认用于明确执行、范围披露、结构升级等具体动作。`prepare/review/confirm` 不应被扩展成每次普通读取都弹窗。通知失败不能把已提交结果伪装成失败，界面显示也不能提前宣告后台提交成功。
+
+### 5.3 安全实施现状
+
+- Renderer 不应直接拿到原件路径、数据库连接、任意文件/进程能力；可信读写位于 Main。
+- 主窗口当前为 `contextIsolation: true`、`nodeIntegration: false`，但 **`sandbox: false`**。因此不能笼统写成“所有窗口均已沙箱化”；是否收窄主 Preload 并启用 sandbox 是实际评审点。
+- 原生卡片/工作窗口使用独立受限 Preload；工作窗口采用独立内存 session、token 与成员范围验证，阻止外部网络。
+- `dam-preview` 等受控协议按当前 Library identity/generation/asset 身份校验，关库或撤销会话后旧地址失效。
+- 不能把 Renderer 的 TypeScript 类型或提示词当作宿主运行时权限校验。
+
+## 6. 代码目录树与模块责任
+
+下列为架构导航树，省略同类文件；不是每个目录中全部代码都已上线。路径以仓库根为起点。
+
+```text
+设计素材管理项目/
+├── src/
+│   ├── main/
+│   │   ├── index.ts                         应用组合根、窗口、协议、退出
+│   │   ├── active-library-runtime.ts        生产资料库组合
+│   │   ├── trusted-sender.ts                窗口/帧来源验证
+│   │   ├── ipc/                            正式注册、handler、旧通道禁用
+│   │   ├── app-storage/                    应用级 SQLite；不持有库素材表
+│   │   ├── app-shutdown/                   drain 与退出协调
+│   │   ├── library-lifecycle/              活动库权限、生命周期、域持久化
+│   │   │   ├── active-library-host.ts      生命周期与服务门面
+│   │   │   ├── active-library-session.ts   会话与 held binding
+│   │   │   ├── library-*-inspection*       manifest/文件系统/schema 检查
+│   │   │   ├── library-materialization*   创建、目录与失败回滚
+│   │   │   ├── active-library-asset-queries.ts  素材/AI/OCR读取投影
+│   │   │   ├── active-library-tag-metadata.ts  标签/别名/父子关系
+│   │   │   ├── asset-notebook*             图片笔记 v5
+│   │   │   ├── library-organization*       普通文件夹/色板 v6
+│   │   │   ├── work-sets*                  工作集/设备布局 v7
+│   │   │   └── owned-*-intake/recovery*    受管图片与中断恢复
+│   │   ├── capture-intake/                 Copy/Candidate/Promotion Gateway
+│   │   ├── managed-download/               下载控制器、传输、持久 Journal
+│   │   ├── image-tools/                    变换与副本保存
+│   │   ├── visual-ai/                      视觉控制器、HTTP、解析、结果存储
+│   │   ├── ocr/                            专用OCR控制器、进程、环境、存储
+│   │   ├── asset-card/                     单素材原生卡片
+│   │   ├── work-mode/                      多工作集原生窗口与边界
+│   │   ├── external-connected-library/     Eagle Provider/companion/Journal
+│   │   ├── legacy-readonly-workspace/      旧资料只读恢复
+│   │   ├── model-library/                  模型制品核心与验证实现
+│   │   ├── model-library-workspace/        受限正式模型工作区/存储位置
+│   │   ├── services/
+│   │   │   ├── settings/、ai-backends/     设置与模型服务配置/探测
+│   │   │   ├── ai-worker/、ai-client/      旧推理Provider与同步链路
+│   │   │   ├── ai-runtime/、llama-runtime/ Runtime规划、适配、旧管理接口
+│   │   │   └── color-palette/ 等            专项服务及历史实现
+│   │   ├── db/                             历史schema/连接代码；不是新库通用写口
+│   │   ├── platform/                       OS/路径/文件身份/原生对话框
+│   │   └── runtime/、runtime-package/、bootstrap/、doctor/、packaging/
+│   │                                        基础设施、诊断、安装/发布治理
+│   ├── preload/
+│   │   ├── index.ts                        主窗口接口
+│   │   ├── asset-card.ts                   卡片接口
+│   │   ├── work-window.ts                  工作窗口接口
+│   │   ├── model-library-workspace.preload.ts
+│   │   └── external-connected-library.preload.ts
+│   ├── renderer/
+│   │   ├── main.tsx / App.tsx              React启动与HashRouter
+│   │   ├── routes/                         正式页面、窗口页及隔离原型
+│   │   ├── components/library/canvas/      当前素材工作区组合
+│   │   ├── components/gallery/             共享Gallery/Focus/工作参考展示
+│   │   ├── components/asset/               详情、描述、标签、AI、图片工具
+│   │   ├── components/layout/、ui/         导航、基础组件、动效
+│   │   ├── modules/                        AI Console/Model Workspace内部模块
+│   │   ├── stores/                         Zustand状态与桥接调用
+│   │   └── styles/、hooks/                 样式与行为复用
+│   └── shared/
+│       ├── contracts/                      IPC和跨进程产品契约
+│       ├── types/                          共享领域/服务类型及历史类型
+│       ├── workflows/                      纯投影、状态规划、搜索与分类
+│       └── constants/                      提示模板、枚举与公共常量
+├── ai-service/
+│   ├── app.py                              旧FastAPI Worker入口
+│   ├── core/                               模型管理、队列、资源与平台探测
+│   ├── workers/                            tagging / prompt / analysis
+│   ├── models/                             Qwen/Florence/RAM/WD/CLIP等封装
+│   ├── tools/local_ocr_worker.py            当前专用OCR子进程入口
+│   ├── tools/、eval/、tests/                探测、实测、回归工具
+│   └── requirements*.txt                  CPU/平台相关依赖声明
+├── eagle-companion/                        专用Eagle插件；非通用插件市场
+├── scripts/                                TS/SQLite/Electron/Python/发布检查
+├── .codeindex/                             模块路由与候选验证索引
+├── .github/workflows/                      跨平台治理和打包/签名流水线
+├── docs/
+│   ├── product/                            产品规格与能力/实测记录
+│   ├── adr/                                架构决定、目标与历史约束
+│   ├── agents/                             实施状态、领域导航、问题跟踪
+│   ├── platform/                           平台与Runtime/发布说明
+│   ├── design/                             视觉规范、原型与截图证据
+│   └── history/                            保留的旧说明与任务记录
+├── AGENTS.md / CONTEXT.md / DESIGN.md / TASK.md
+├── package.json / package-lock.json
+├── electron.vite.config.ts / tsconfig.json
+└── build/                                  打包资源；out等构建输出不作为源码真相
+```
+
+### 6.1 页面与窗口映射
+
+| 路由 | 责任 | 需注意 |
+| --- | --- | --- |
+| `/library` | 默认素材工作区，全部/文件夹/工作模式/回收站 | 主业务表面 |
+| `/downloads` | 直链下载、历史与恢复 | 历史记录不是文件存在证明 |
+| `/tag-manager` | 标签元数据管理 | 部分复杂操作受限 |
+| `/settings` | 外观、库、AI/模型、下载、快捷键、维护 | 配置与执行分开 |
+| `/ai-console` | 模型/Runtime诊断与状态 | 较大旧页面，入口不等于功能可用 |
+| `/model-library` | 模型工作区 | 安装/激活能力按真实依赖判定 |
+| `/connected-libraries` | Eagle连接边界 | 未配对时拒绝执行 |
+| `/legacy-library` | 旧DAM只读找回 | 不提供隐式迁移 |
+| `/dashboard` | 汇总辅助页 | 不是当前默认首页 |
+| `/asset-card` | 独立原生卡片页面 | 使用专属Preload |
+| `/work-window` | 独立多素材工作窗口 | 成员范围权限，不允许全库任意操作 |
+
+## 7. 数据架构、所有权与版本
+
+### 7.1 三种库与应用状态
+
+```text
+数据权威
+├── Managed Active Library：DAM拥有受管副本
+│   ├── Library Root/
+│   │   ├── Originals/                      受管原件
+│   │   └── .dam/
+│   │       ├── library.manifest.json       库身份/布局声明
+│   │       ├── library.sqlite              当前库权威元数据
+│   │       ├── exclusive-library-lock.sqlite  独占锁支撑
+│   │       ├── required-previews/          必要预览
+│   │       └── intake-staging/             收录暂存；不是正式素材
+│   └── Host会话持有连接与lease，其他模块不能自行认领连接
+├── App状态：与素材库独立
+│   ├── app-state.sqlite                   下载历史、设备身份、OCR环境等
+│   ├── 应用设置                           外观/服务配置等
+│   └── Model Workspace控制与存储位置      模型权重不冒充素材
+├── Eagle Connected Library：Eagle拥有原件
+│   ├── DAM独立索引 / 三方基线 / Journal / Outbox
+│   └── 受控预览与暂存，不进入Managed Capture复制原件
+└── Legacy Read-Only Workspace：旧DAM数据只读
+    └── 选定旧数据库+素材根；不初始化schema、不写回、不自动迁移
+```
+
+### 7.2 关键领域对象
+
+| 对象 | 语义 |
+| --- | --- |
+| Candidate | 尚未完成Promotion的收录候选；不是下载任务 |
+| Design Asset | 已进入可用资料库的素材身份 |
+| Capture Request / Promotion Link | 收录幂等、来源记录与Candidate→Asset联系 |
+| Original / Preview / Variant | 原件、受控预览、变换副本，分别记录所有权与来源 |
+| Library identity / generation | 哪个库、哪次运行绑定；不能用路径字符串代替权限 |
+| revision / sessionToken / receipt | 分别承担内容并发、会话约束、单次审阅确认；不要混成一个版本号 |
+| Confirmed Tag / AI Suggestion | 用户确认关系与模型候选关系分离 |
+| Notebook / Folder / Palette / Work Set | 笔记、库内组织、色值收藏、创作参考上下文，各自有生命周期 |
+| Visual Evidence / OCR Evidence | 不同分析来源与结果；OCR修订不被视觉重分析清空 |
+| Model Artifact / Runtime Package | 数据权重与可执行依赖分离；下载完成不等于可运行 |
+
+### 7.3 当前库schema演进
+
+| 版本 | 主要增量 | 触发原则 |
+| --- | --- | --- |
+| v1 | 库控制、基础素材/标签、Capture/生命周期 | 新库基础版本 |
+| v2 | 视觉AI证据 | 首次明确确认相关操作 |
+| v3 | 持久下载Journal，包含v2结构 | 显式选择库内持久下载 |
+| v4 | 图片副本持久恢复意图 | 明确保存派生副本 |
+| v5 | 图片笔记 | 首次确认保存 |
+| v6 | 普通文件夹与色板 | 首次确认组织写入 |
+| v7 | 工作集、成员与设备窗口布局 | 首次确认工作集保存 |
+| v8 | 独立OCR证据/当前结果/修订 | 首次确认后成功OCR提交 |
+
+这里是已经实现的版本含义，不是对任意旧库的迁移授权。模块有各自schema启用与兼容检查；更高版本不应被较旧功能降级。当前存在多处版本分支，如何集中迁移与能力判定是评审点。
+
+## 8. 主要执行链路
+
+### 8.1 本地收录与副本产生
+
+```text
+本地文件选择             图片工具确认保存             直链下载确认
+      │                        │                          │
+      └────审阅范围/冻结来源────┴────受控输出/完整字节─────┘
+                               ↓
+                       Active Library Host
+                               ↓
+                         Capture Gateway
+                               ↓
+                 接收记录 → 暂存 → SHA校验 → 不覆盖发布
+                               ↓
+                    Candidate Activation → 必要预览
+                               ↓
+                  Promotion事务 → Asset + Promotion Link
+                               ↓
+                       刷新列表 / 详情 / 工作窗口
+```
+
+关键区别：下载网络成功只是中间状态；只有完成有效入库后才能报告素材可用。已受理Capture失败进入恢复状态，不能重新下载来掩盖部分提交，也不能重新生成素材身份造成重复。
+
+### 8.2 查询与组织
+
+```text
+Main库查询 → 素材基本字段 + 确认标签/别名 + 当前AI摘要 + 专用OCR
+    → Renderer Store
+    ├── asset-discovery.workflow：词法匹配、范围、排序、命中说明
+    ├── ai-folders.workflow：当前分析标签派生的成员ID集合
+    ├── Library Organization：普通文件夹/色板持久数据
+    └── Canvas/Gallery/Inspector：同一素材的不同展示
+```
+
+当前按ID读取优化避免一次小批AI/卡片操作读取全库；但主列表及词法搜索仍需评审大库分页、查询索引、增量更新与内存成本。10,001条合成元数据检查不是百万素材性能保证。
+
+### 8.3 多窗口与关闭
+
+```text
+保存的Work Set内容（库内）
+  + 设备Window Layout（库内，按device隔离）
+  → Main创建窗口 → 专属session/token → 只开放当前成员
+  → 编辑/保存 → revision校验 → 内容与显式布局事务
+
+关闭资料库/退出
+  → 未保存草稿处理
+  → 撤销待确认与窗口权限
+  → 取消/收敛AI、OCR、下载、已开始写入
+  → drain连接库与活动库
+  → 释放lease、关闭数据库
+```
+
+当前窗口上限8个，工作集内容最多200份参考、64种颜色；这些是现有约束，不等于理论最终容量。Hide、Close、移除成员、删除工作集、删除素材必须保持不同语义。
+
+## 9. 当前 AI 推理框架及这次实测结论
+
+### 9.1 AI框架树
+
+```text
+AI能力体系
+├── 正式视觉链路【接线 + Qwen本地实测】
+│   ├── VisualAiPanel → visual-ai:* → VisualAiController
+│   ├── prepare：1–8素材、受控预览、服务配置与库版本冻结
+│   ├── run：用户确认、最多两个批次、每素材含重试共享最多120秒
+│   ├── 输入：白底RGB、最长边1024、JPEG85
+│   ├── transport：OpenAI-compatible /chat/completions
+│   │   ├── 中文描述/标签、英文提示词、OCR字段要求为空
+│   │   ├── 首次1536 token，截断时3072 token最多重试一次
+│   │   └── 同一服务/模型/图片；不静默fallback
+│   ├── parser：完整JSON/代码块/文本块兼容，残缺/无效结果拒绝
+│   └── save：当前库证据、标签建议；保护用户描述
+├── 专用OCR链路【接线 + RapidOCR实测】
+│   ├── DedicatedOcrPanel → asset-ocr:* → OcrController
+│   ├── 已验证本地环境 → Python子进程 → RapidOCR 1.4.4
+│   └── v8独立结果/区域/修订；有效空结果不冒充失败
+├── 确定性配色【接线；非语言模型】
+│   └── 受控预览采样 → 色值/占比 → 色板与工作集复用
+├── 旧推理与Runtime代码【受限】
+│   ├── OpenAICompatibleProvider / LlamaOpenAIProvider
+│   ├── Python FastAPI Worker + AiClient轮询/旧数据库同步
+│   ├── Florence/RAM/WD/CLIP等模型封装
+│   └── Runtime桥接有plan-only部分，不是完整统一执行网关
+└── 待完整落地的统一层【目标】
+    ├── 按能力的独立结果/合并契约
+    ├── 模型与任务执行配置、处理策略版本、上下文预算
+    ├── 跨Runtime资源准入、优先级、驻留与恢复
+    ├── 模型制品→安装→激活→能力验证闭环
+    └── 语义检索/Embedding空间、自动分析与历史回填
+```
+
+### 9.2 新旧接口问题的架构含义
+
+旧Provider有可用的中文提示、预处理、参数与截断重试，但也曾将截断后的部分字段报为成功。新路径加强了活动库权限、完整提交和取消保护，却最初没有完整承接旧推理策略，使用固定英文任务提示、1280输入和1800 token一次输出，同时要求OCR、描述、标签和提示词，导致真实设计稿频繁截断。
+
+修复已采用中文紧凑提示、1024输入、OCR职责分离、1536→3072一次重试及完整JSON兼容。保留拒绝残缺结果和用户状态优先。说明新结构的问题不能直接归因于“模型不可用”，也不能因此恢复旧全局数据库写入。
+
+仍有结构缺口：当前综合输出把caption/prompt/tags放在一个契约中；按模型/任务的执行配置未独立成统一层；`recipe`仍为`visual-ai-v1`，不能仅凭它区分此次提示修改；最多8标签主要是提示要求，解析兼容上限仍为30，语言也未形成独立质量状态。
+
+### 9.3 已有真实测试
+
+硬件Apple M4、24GiB；llama.cpp b11057/Metal；Qwen3-VL Instruct Q4_K_M + F16视觉投影。8份获准设计稿只读受限预览，未写入真实资料库。
+
+| 项目 | 2B分析 | 8B分析 | 8B反推 |
+| --- | ---: | ---: | ---: |
+| 完整结果 | 8/8 | 8/8 | 8/8 |
+| 首次完成 | 5/8 | 8/8 | 8/8 |
+| 重试样本数 | 3 | 0 | 0 |
+| 最多8标签 | 6/8 | 8/8 | 8/8 |
+| 单份中位耗时 | 4.96秒 | 20.82秒 | 19.01秒 |
+
+2B在4096上下文的补测也8/8成功，固定seed的最终输出与8192对照一致。两种模型的生成素材正式Electron联动各17环节通过，包含真实分析保存、检索、AI文件夹、OCR/手工保护、取消与重启恢复。
+
+结论只覆盖结构、部分语言约束与数据链路。8B标签更稳定但较慢；生成抽象图仍有场景/用途推断，尚未建立真实设计稿人工事实准确率基准。它不是原Ollama 8B服务配置的复现，也不是全平台质量放行。下载文件已完整校验，本轮隔离服务已停，正式默认模型配置未修改。
+
+详细记录：[真实模型对比](../product/QWEN3-VL-REAL-COMPARISON-20260924.md)。
+
+## 10. 验证、开发与发布方式
+
+### 10.1 证据分层
+
+```text
+契约/纯逻辑检查
+  → 临时文件/SQLite集成
+  → 合成HTTP与故障注入
+  → 正式Electron Main + Preload + Renderer
+  → 明确模型/硬件/输入的真实推理
+  → 真实OS、打包产物、原生依赖、签名安装与用户规模验收
+```
+
+上层验证不能被下层替代。页面渲染正常不证明权限和持久化正确，模型返回200不证明结果完整，合成测试通过不证明真实模型质量，未打包macOS测试不证明Windows安装包可用。
+
+### 10.2 常用入口
+
+| 目的 | 已存在命令/入口 |
+| --- | --- |
+| 查模块与候选检查 | `npm run context:route -- --task &quot;任务描述&quot;` |
+| 类型与构建 | `npm run typecheck`；`npm run build` |
+| Python隔离测试 | `npm run test-python-unittest` |
+| SQLite/Host集成 | 仓库`run-electron-node-test.mjs`，使用匹配Electron ABI |
+| 素材正式界面 | `npm run test-library-canvas-electron` |
+| 下载/AI临时库 | `npm run test-visual-ai-download-integration` |
+| 组织/笔记/工作集 | `test-library-organization`、`test-asset-notebook`、`test-work-sets`等 |
+| 真实AI测试 | `test-local-visual-ai.ts`、`test-authorized-visual-ai.ts`及真实UI流程；需要明确运行授权和输入 |
+| 发布 | `.github/workflows/`与`packaging/`、`scripts/`中的候选/签名/产物核验 |
+
+不要为文档或低影响改动运行整套长测试。也不要因shell Node ABI不匹配而临时重编better-sqlite3，破坏Electron环境。`npm run dev`不是隔离验收工具。
+
+### 10.3 仍需单独验证
+
+真实用户库升级/迁移、损坏库/断电恢复、Windows与签名包、原生对话框和多显示器、超大资料库性能、视频/复杂格式、模型长期资源表现、外部服务兼容矩阵，以及真实Eagle配对/写入均不能从当前报告自动推定。
+
+## 11. 架构评审重点：观察、影响与问题
+
+以下是有源码依据的评审入口，不是已批准的重构方案，也不要求一次性实施全部远景。
+
+| 编号 | 当前观察 | 对优化的影响 | 请设计师回答 |
+| --- | --- | --- | --- |
+| A01 | 新Host链路、旧Service/Worker和验证实现并存 | 阅读目录无法判断运行状态 | 如何生成正式可达模块图，并划清current/legacy/tracer的归属？ |
+| A02 | 部分README保留“下载不可用”“工作集待实现”等旧段落 | 设计者可能依据错误快照规划 | 哪些入口应合并或缩短，如何让状态和调用链保持一致？ |
+| A03 | AI计划层与正式transport分离，参数/提示固定在执行文件 | 更换模型或任务时重复修补 | 如何抽出最小可用执行配置与Provider适配，继承已验证行为？ |
+| A04 | 综合视觉结果耦合描述/标签/反推；OCR已独立 | 单能力升级或失败难独立表达 | 如何演进能力结果契约及兼容投影，而不清空旧结果？ |
+| A05 | 视觉、OCR、旧Worker各有任务控制 | 缺少跨Runtime资源准入与统一恢复 | 哪些应统一，哪些应继续由能力内部持有？如何避免“万能队列”？ |
+| A06 | schema兼容分支散落在不同功能模块 | 新增版本容易出现漏保留或意外降级 | 是否需要集中迁移/能力查询入口？旧版本打开策略如何测试？ |
+| A07 | 主Preload较宽，主窗口sandbox=false，原生窗口已有窄接口 | 安全与兼容债务并存 | 如何渐进收窄主桥接，验证所有调用方后改善隔离？ |
+| A08 | Library主列表在Renderer做词法投影，部分小批已按ID优化 | 大库查询、跨进程传输与渲染成本未知 | 何时引入分页、FTS、增量投影或虚拟化？用哪些基准决定？ |
+| A09 | AiConsolePage与asset.store较大，含旧字段/流程 | 功能修改可能牵连未启用能力 | 按稳定职责拆分还是先清理调用路径？请给出证据而非行数阈值 |
+| A10 | Main组合根集中窗口/协议/服务装配 | 容易继续堆积生命周期交叉逻辑 | 如何保留一个清晰组合根，同时减少各模块互相刷新/撤销耦合？ |
+| A11 | 合同存在`ok/value`与`success/error`等多种形态 | 错误分类与UI适配重复 | 是否需要渐进统一错误/结果信封？如何保留公共兼容？ |
+| A12 | 模型库、Runtime包、安装治理设计很多，正式安装仍受限 | 容易把大量基础设施当作产品交付 | 最小“下载校验→启动→能力测试→可用”闭环应如何组合？ |
+| A13 | Eagle原件权威与Managed Copy不同 | 复用通用仓储易抹平第三方写入约束 | 哪些领域接口可共用，哪些必须保持Provider专属？ |
+| A14 | 脚本测试量大且包含源码扫描/合成/真实测试 | 执行成本与证据等级难理解 | 如何建立按风险选择的测试矩阵，淘汰重复而保留重要负向验证？ |
+| A15 | 原型/正式共享部分Gallery组件，但历史界面实现仍在 | 清理容易破坏已批准交互或又产生简化版 | 如何以共享展示契约迁移，分别验收视觉与真实数据链路？ |
+| A16 | 插件、视频和语义检索尚未全部落地 | 过早冻结统一平台会扩大当前复杂度 | 哪个真实能力最适合验证最小扩展接口，哪些接口应暂不建立？ |
+
+### 11.1 文档漂移的具体例子
+
+`src/renderer/README.md`仍含下载不可执行、笔记/色板/工作集待持久化的旧描述；当前Main已组合下载控制器，v5–v8分别落地相关持久化。`capture-intake/README.md`同时保留早期Tracer未接线清单与后续正式接线说明。`PRODUCT-FOUNDATION.md`中部分“当前原型”段落属于9月14日时点，而9月19–24日已有后续交付。
+
+这些冲突不意味着所有文档都应删除。建议以“产品不变量”“当前实现”“历史证据”“目标规格”分层整理，保留出处；本文按最新源码和日期明确的证据纠正状态，不改写历史事实。
+
+## 12. 希望框架设计师交付什么
+
+请以现有功能和权限边界为输入，对比可选结构，给出可实施意见，而不是只提供理想目录图。
+
+### 12.1 必要输出
+
+1. **现状评估**：哪些模块边界有效、哪些重复或职责混杂，每项附源码入口与影响。
+2. **目标架构树与运行图**：模块责任、依赖方向、进程边界、数据权威、生命周期归属。
+3. **方案对比**：至少比较“保留现有边界增量整理”与另一合理方案，列收益、迁移风险、验证成本；不强制微服务或全面重写。
+4. **接口设计**：Library Host、分析能力、模型执行配置、任务、结果投影、窗口与插件之间的最小契约。
+5. **AI专项设计**：明确模型服务配置、权重、Runtime、能力就绪、请求策略、结果质量五者分别由谁管理。
+6. **数据演进计划**：schema版本、旧结果兼容、并发与回滚、三种库边界、用户编辑保护。
+7. **迁移顺序**：每一步的输入、修改范围、保留调用方、替换点、验收门槛、回退点。
+8. **删除/合并候选清单**：逐项证明不可达、已被替代或有重复，不按名称批量删除旧代码/测试/文档。
+9. **可量化验收**：实际用户流程、错误恢复、真实模型、资源预算、大库与平台矩阵，而不仅是typecheck/build。
+10. **不做清单**：明确本轮暂缓哪些未来能力，防止再次把插件市场、云服务或全部格式作为核心前置。
+
+### 12.2 评审时必须回答的AI问题
+
+```text
+一个素材请求分析时
+├── 谁决定任务是OCR、标签、描述还是反推？
+├── 谁选择已验证的模型与执行Runtime？
+├── 谁提供输入预处理、提示、输出预算和响应适配？
+├── 谁判断资源允许执行、何时等待、是否重试？
+├── 谁区分完整结构、正确语言、有效空结果与质量不足？
+├── 谁保存模型/处理策略版本及用户修改优先级？
+└── 更换模型/Runtime后，哪组真实基线必须重跑？
+```
+
+### 12.3 可直接转交的评审说明
+
+&gt; 请基于这份交接稿和当前工作区源码，评估 Design Asset Manager 的模块、接口、数据与 AI 推理架构。保留本地优先、AI+内置核心、素材工作区、多素材工作模式，以及原件/用户状态/库权限保护。先核实当前可达调用链，区分正式、旧代码、验证实现、原型和目标。请给出可对比的架构方案、迁移步骤、兼容与验收矩阵，并指出可以删除或合并的部分及证据。尤其审查新AI链路如何继承旧Provider的有效能力，如何将模型执行策略、能力契约、资源调度和结果质量接到实际产品入口。不要以重写技术栈、目录美化或增加抽象层代替问题诊断，不把未来规划当作必须立即实现的清单。
+
+## 13. 源码与证据阅读导航
+
+| 要核对的问题 | 优先入口 |
+| --- | --- |
+| 当前产品定位 | [PRODUCT-FOUNDATION](../product/PRODUCT-FOUNDATION.md)；[AGENTS](../../AGENTS.md)；[DESIGN](../../DESIGN.md) |
+| 当前组合/IPC/窗口 | [Main入口](../../src/main/index.ts)；[IPC组合](../../src/main/ipc/main-ipc-composition.ts)；[旧通道拒绝](../../src/main/ipc/disabled-app.ipc.ts) |
+| 页面与导航 | [App](../../src/renderer/App.tsx)；[导航契约](../../src/shared/workflows/app-navigation.workflow.ts)；[Library](../../src/renderer/routes/Library.tsx) |
+| 活动库与schema | [Host](../../src/main/library-lifecycle/active-library-host.ts)；[库说明](../../src/main/library-lifecycle/README.md)；[布局](../../src/main/library-lifecycle/library-layout.internal.ts) |
+| 收录/恢复 | [Capture](../../src/main/capture-intake/README.md)；[下载](../../src/main/managed-download/README.md)；[图片工具](../../src/main/image-tools/README.md) |
+| 笔记/组织/工作集 | [笔记规格](../product/ASSET-NOTEBOOKS-20260917.md)；[组织规格](../product/LIBRARY-ORGANIZATION-20260919.md)；[工作集规格](../product/WORK-SETS-20260920.md) |
+| 原生窗口 | [工作窗口](../../src/main/work-mode/README.md)；[卡片](../../src/main/asset-card/README.md) |
+| AI正式与旧路径 | [Visual AI](../../src/main/visual-ai/README.md)；[OCR](../../src/main/ocr/README.md)；[旧Runtime桥接范围](../platform/AI_CLIENT_RUNTIME_ADAPTER.md) |
+| 最新模型证据 | [真实AI对比](../product/QWEN3-VL-REAL-COMPARISON-20260924.md)；[基础模型盘点](../product/BASELINE-AI-INVENTORY-20260920.md) |
+| 模型库边界 | [Model Library核心](../../src/main/model-library/README.md)；[正式Workspace组合](../../src/main/model-library-workspace/model-library-workspace.composition.ts) |
+| Eagle/旧库 | [Eagle连接库](../../src/main/external-connected-library/README.md)；[旧库只读](../../src/main/legacy-readonly-workspace/README.md) |
+| 检索/AI文件夹 | [检索workflow](../../src/shared/workflows/asset-discovery.workflow.ts)；[AI分类workflow](../../src/shared/workflows/ai-folders.workflow.ts) |
+| 架构目标与替代关系 | [ADR索引](../adr/README.md)，按领域选读，不把全部历史规格作为前置 |
+| 测试/构建/发布 | [package.json](../../package.json)；[electron-vite](../../electron.vite.config.ts)；`.github/workflows/` |
+
+旧 [UI/UX功能交接稿](../design/UI-UX-HANDOFF-20260911.md)可用于追溯交互意图，但当时包含后来退休的网页功能等，不能作为当前能力清单直接交付。当前框架评审以本报告、现行DESIGN和源码为准。
+</template><script>
+document.getElementById('print').addEventListener('click',()=>window.print());
+document.getElementById('download').addEventListener('click',()=>{const blob=new Blob([document.getElementById('source-md').content.textContent],{type:'text/markdown;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='PROJECT-ARCHITECTURE-HANDOFF-20260924.md';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
+</script></body></html>

@@ -1,0 +1,10 @@
+{
+  "stage": "P14",
+  "status": "proposed",
+  "providerSelected": null,
+  "rateVersion": null,
+  "grantNotConfig": true,
+  "unknownRefunds": false,
+  "costScopeInitial": "single-library reviewed budget",
+  "httpFaultServer": "NOT_RUN"
+}

@@ -1,0 +1,47 @@
+diff --git a/src/renderer/stores/asset.store.ts b/src/renderer/stores/asset.store.ts
+index 3cb2485..c7f2564 100644
+--- a/src/renderer/stores/asset.store.ts
++++ b/src/renderer/stores/asset.store.ts
+@@ -206,6 +206,16 @@ function mapDbAssetToAsset(dbAsset: any): Asset {
+   }
+ }
+ 
++export function mapSearchAsset(a: import('../../shared/contracts/active-library.contract').ActiveLibraryAssetProjection,
++  scope: { libraryIdentity: string; generation: string }): Asset {
++  return mapDbAssetToAsset({ id:a.id,revision:a.revision,title:a.title,file_name:a.fileName,
++    thumbnail_path:getWorkspaceClient()?.mediaUrl?.(`dam-preview://preview/${encodeURIComponent(scope.libraryIdentity)}/${encodeURIComponent(scope.generation)}/${encodeURIComponent(a.id)}`),
++    source_site_id:a.sourceSiteId,source_site_name:a.sourceSiteName,width:a.width,height:a.height,file_size:a.fileSize,file_type:a.fileType,
++    ai_caption:a.aiCaption,ai_caption_source:a.aiCaptionSource,ai_caption_updated_at:a.aiCaptionUpdatedAt,ai_caption_is_user_edited:a.aiCaptionIsUserEdited?1:0,
++    ai_ocr_text:a.aiOcrText,ai_prompt:a.visualAi?.prompt,visualAi:a.visualAi,tagAnalysis:a.tagAnalysis,ocr:a.ocr,
++    created_at:a.createdAt,tags:a.tags,tagAliases:a.tagAliases })
++}
++
+ function mapDbTagToTag(dbTag: any): Tag {
+   let parsedAliases: string[] = []
+   try {
+@@ -350,10 +360,12 @@ export const useAssetStore = create<AssetState>((set, get) => ({
+     }
+ 
+     try {
+-      const dbAssets = await currentApi.listAssets({
+-        keyword: queries.length > 0 ? queries.join(' ') : undefined,
+-        includePending
+-      })
++      const authority = typeof currentApi.searchAssetsPage === 'function' ? await currentApi.library.inspect() : null
++      const scope = authority?.state==='ready' ? {libraryIdentity:authority.identity!,generation:authority.generation!} : null
++      const firstPage = scope ? await currentApi.searchAssetsPage({...scope,query:'',tagScope:'includes-pending',limit:100}) : null
++      const refs = scope ? [...new Set([...get().bulkSelectedAssetIds,...(get().selectedAsset?[get().selectedAsset!.id]:[])])].slice(0,500) : []
++      const selectedRows = scope && refs.length ? await currentApi.readSearchAssets({...scope,ids:refs}) : []
++      const dbAssets = firstPage ? [] : await currentApi.listAssets({ keyword:queries.length?queries.join(' '):undefined,includePending })
+ 
+       if (requestId !== latestAssetLoadRequestId) {
+         return
+@@ -367,7 +379,7 @@ export const useAssetStore = create<AssetState>((set, get) => ({
+         return
+       }
+ 
+-      const mappedAssets = dbAssets.map(mapDbAssetToAsset)
++      const mappedAssets = firstPage && scope ? [...new Map([...firstPage.matches.map(m=>m.asset),...selectedRows].map(a=>[a.id,mapSearchAsset(a,scope)])).values()] : dbAssets.map(mapDbAssetToAsset)
+ 
+       const currentSel = get().selectedAsset
+       let updatedSelected: Asset | null = null

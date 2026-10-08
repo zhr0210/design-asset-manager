@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"aplaybox.com":{referrerAddedHostnames:["oss.aplaybox.com"]}};

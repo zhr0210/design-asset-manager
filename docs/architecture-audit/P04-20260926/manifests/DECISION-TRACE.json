@@ -1,0 +1,41 @@
+{
+  "scope": "P04-only annotation; original package/status untouched",
+  "items": [
+    {
+      "id": "DAM-A003",
+      "decision": "能力逻辑独立，完整响应可复用物理执行",
+      "chapters": [
+        "AI-06"
+      ],
+      "sources": [
+        "U01",
+        "S00"
+      ],
+      "tradeoff": "降低重复计算不允许截断JSON救字段；取消共享调用按订阅者处理。",
+      "stages": "P03 P04 P10 P11",
+      "status": "proposed_pending_source_review",
+      "p04_design_review_status": "ready_for_review",
+      "p04_implementation_status": "not_started",
+      "p04_evidence": "../reports/P04-REPORT.md",
+      "p04_runtime_tests": "NOT_RUN"
+    },
+    {
+      "id": "DAM-A012",
+      "decision": "不可变AI证据与用户覆盖层分离",
+      "chapters": [
+        "EVIDENCE-11"
+      ],
+      "sources": [
+        "S00",
+        "U01"
+      ],
+      "tradeoff": "AI标签立即可检索但不是已确认；旧有效结果不因重跑失败消失。",
+      "stages": "P04 P11 P20",
+      "status": "proposed_pending_source_review",
+      "p04_design_review_status": "ready_for_review",
+      "p04_implementation_status": "not_started",
+      "p04_evidence": "../reports/P04-REPORT.md",
+      "p04_runtime_tests": "NOT_RUN"
+    }
+  ]
+}

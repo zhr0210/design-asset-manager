@@ -1,0 +1,5 @@
+build/macos/**/Contents/MacOS/* text eol=lf
+# Pi release entries and Main's manifest pin are exact byte contracts.
+pi-runtime/*.mjs text eol=lf
+pi-runtime/*.json text eol=lf
+src/main/ai-gateway/pi-runtime-release.ts text eol=lf

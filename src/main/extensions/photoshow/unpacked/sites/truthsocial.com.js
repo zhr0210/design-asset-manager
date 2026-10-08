@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"truthsocial.com":{srcMatching:[{srcRegExp:"(//.+?\\.truthsocial\\.com/.+/)small(/.+@IMG@)",processor:"$1original$2"}]}};

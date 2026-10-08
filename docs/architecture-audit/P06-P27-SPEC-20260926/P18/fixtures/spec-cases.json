@@ -1,0 +1,200 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "H01",
+      "input": {
+        "branches": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ],
+        "allowed": [
+          "a",
+          "b",
+          "c"
+        ],
+        "deleted": [],
+        "k": 10,
+        "limit": 5
+      },
+      "expected": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "id": "H02",
+      "input": {
+        "branches": [
+          [
+            "b",
+            "a"
+          ]
+        ],
+        "allowed": [
+          "a",
+          "b",
+          "c"
+        ],
+        "deleted": [],
+        "k": 10,
+        "limit": 5
+      },
+      "expected": [
+        "b",
+        "a"
+      ]
+    },
+    {
+      "id": "H03",
+      "input": {
+        "branches": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ],
+        "allowed": [
+          "a"
+        ],
+        "deleted": [],
+        "k": 10,
+        "limit": 5
+      },
+      "expected": [
+        "a"
+      ]
+    },
+    {
+      "id": "H04",
+      "input": {
+        "branches": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ],
+        "allowed": [
+          "a",
+          "b",
+          "c"
+        ],
+        "deleted": [
+          "a"
+        ],
+        "k": 10,
+        "limit": 5
+      },
+      "expected": [
+        "b"
+      ]
+    },
+    {
+      "id": "H05",
+      "input": {
+        "branches": [],
+        "allowed": [
+          "a",
+          "b",
+          "c"
+        ],
+        "deleted": [],
+        "k": 10,
+        "limit": 5
+      },
+      "expected": []
+    },
+    {
+      "id": "H06",
+      "input": {
+        "branches": [
+          [
+            "c"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ],
+        "allowed": [
+          "a",
+          "b",
+          "c"
+        ],
+        "deleted": [],
+        "k": 10,
+        "limit": 5
+      },
+      "expected": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "id": "H07",
+      "input": {
+        "branches": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ],
+        "allowed": [
+          "a",
+          "b",
+          "c"
+        ],
+        "deleted": [],
+        "k": 10,
+        "limit": 1
+      },
+      "expected": [
+        "a"
+      ]
+    },
+    {
+      "id": "H08",
+      "input": {
+        "branches": [
+          [
+            "a",
+            "a",
+            "b"
+          ]
+        ],
+        "allowed": [
+          "a",
+          "b",
+          "c"
+        ],
+        "deleted": [],
+        "k": 10,
+        "limit": 5
+      },
+      "expected": [
+        "a",
+        "b"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "source": "github-environment-status",
+  "environments": [
+    {
+      "environment": "release-signing-windows",
+      "reviewersConfigured": false,
+      "requiredSecretNamesPresent": [
+        "WINDOWS_CSC_LINK",
+        "WINDOWS_CSC_KEY_PASSWORD"
+      ]
+    },
+    {
+      "environment": "release-signing-macos",
+      "reviewersConfigured": false,
+      "requiredSecretNamesPresent": [
+        "MACOS_CSC_LINK",
+        "MACOS_CSC_KEY_PASSWORD",
+        "APPLE_ID",
+        "APPLE_APP_SPECIFIC_PASSWORD",
+        "APPLE_TEAM_ID"
+      ]
+    }
+  ]
+}

@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"nzsale.co.nz":{srcMatching:[{srcRegExp:"(//cdn\\.mysalemarketplace\\.com/.+)_\\d+x\\d+(@IMG@).*",processor:"$1$2"},{srcRegExp:"(//cdn\\.mysalemarketplace\\.com/.+?@IMG@).*",processor:"$1"}]}};

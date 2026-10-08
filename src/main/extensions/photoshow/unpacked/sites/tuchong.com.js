@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"tuchong.com":{srcMatching:[{srcRegExp:"(//photo\\.tuchong\\.com/\\d+/)\\w+(/.+@IMG@)",processor:"$1wp$2"}]}};

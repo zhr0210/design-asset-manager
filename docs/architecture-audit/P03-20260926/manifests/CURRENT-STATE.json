@@ -1,0 +1,98 @@
+{
+  "packageId": "DAM-ARCH-20260924",
+  "packageVersion": "1.0.0",
+  "updatedOn": "2026-09-26",
+  "architectureDocumentStatus": "authored_target_proposal_pending_source_review",
+  "sourceMaterialStatus": {
+    "localWorktreeAvailableForScope": true,
+    "currentVisionControllerTransportParserRead": true,
+    "historicalArtifactManifestsRead": true,
+    "historicalModelBytesRead": false,
+    "actualServiceConfigRead": false,
+    "publicPrimaryReferencesReviewedThisRun": 4,
+    "reviewScope": "S01/S02 master and b11057 reference sections; not actual binary parameter verification"
+  },
+  "originalSnapshot": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df",
+    "dirtyWorktreeReported": true,
+    "headAloneReproducible": false
+  },
+  "repositoryChangesPerformed": false,
+  "damBusinessTestsRun": false,
+  "newModelBenchmarksRun": false,
+  "realLibraryAccessed": false,
+  "defaultMode": "SPEC",
+  "nextStage": null,
+  "activeStage": null,
+  "reviewedDesignStages": [],
+  "acceptedImplementationStages": [],
+  "stageRegistry": "stages.json",
+  "requirementRegistry": "REQUIREMENT-TRACE.json",
+  "decisionRegistry": "DECISION-TRACE.json",
+  "latestStageReport": "reports/P03-REPORT.md",
+  "externalActionsAuthorization": {
+    "realLibraryMutation": false,
+    "privateAssetUpload": false,
+    "paidCloudRequests": false,
+    "largeModelDownload": false,
+    "untrustedScriptExecution": false,
+    "userExternalServiceTermination": false
+  },
+  "notes": [
+    "P03直接前置P01；用户授权继续SPEC，不回写前序为reviewed。",
+    "当前参数/提示来自源码，历史实测参数不被当作所有服务默认。",
+    "所有Profile disabled；合成Provider只是设计，没有生产mock fallback。",
+    "P02两处源码发现继续保留，未在P03修复。",
+    "完成后停止，不自动进入P04。"
+  ],
+  "nextStageCandidate": "P04",
+  "nextAction": "review_P03_spec",
+  "nextStageAuthorization": "not_granted",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "auditDocumentsCreated": true,
+  "businessSourceChangesPerformed": false,
+  "stoppedAfterStage": "P03",
+  "worktree": {
+    "branch": "codex/product-reassessment-20260905",
+    "head": "3fa00df3bbb605478da6d0af18724d64021e723c",
+    "headAloneReproducible": false,
+    "protectedSnapshot": "../evidence/WORKTREE-BEFORE.json"
+  },
+  "predecessor": {
+    "directDependencyStage": "P01",
+    "mostRecentStage": "P02",
+    "directDependencyReport": "../../P01-20260924/reports/P01-REPORT.md",
+    "dependencyDesignStatus": "ready_for_review",
+    "dependencyImplementationStatus": "not_started",
+    "continuationAuthorization": {
+      "userText": "继续",
+      "scope": "P03 SPEC only",
+      "doesNotImplyReviewedOrAccepted": true
+    },
+    "sourceDeltaWithinPreviousProtectedSet": []
+  },
+  "externalActionsThisStage": {
+    "publicDocumentationRead": true,
+    "syntheticProviderStarted": false,
+    "modelStarted": false,
+    "appStarted": false,
+    "dependencyInstalled": false,
+    "libraryAccessed": false,
+    "privateAssetUploaded": false,
+    "defaultModelChanged": false
+  },
+  "specStartedOn": "2026-09-26",
+  "specCompletedOn": "2026-09-26",
+  "stageRecordBases": {
+    "pathResolution": "relative to this CURRENT-STATE.json directory",
+    "P00": "../../P00-20260924",
+    "P01": "../../P01-20260924",
+    "P02": "../../P02-20260925",
+    "P03": ".."
+  },
+  "schemaSemanticValidation": "NOT_RUN",
+  "parserTests": "NOT_RUN",
+  "providerTests": "NOT_RUN"
+}

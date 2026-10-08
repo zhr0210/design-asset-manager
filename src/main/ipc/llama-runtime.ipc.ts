@@ -16,9 +16,10 @@ import {
 } from '../../shared/contracts/llama-runtime.contract'
 import type {
   LlamaCreateInstallPlanRequest,
-  LlamaServerControlRequest,
-  LlamaStartInstallRequest
+  LlamaServerControlRequest
 } from '../../shared/contracts/llama-runtime.contract'
+import { platformAiBranchEvidence } from '../services/ai-runtime/platform-ai-branch-evidence.internal'
+import { blockLegacyModelMutation } from '../services/ai-models/legacy-model-mutation.policy'
 
 export function registerLlamaRuntimeIpc() {
   const service = LlamaRuntimeInstallService.getInstance()
@@ -31,9 +32,7 @@ export function registerLlamaRuntimeIpc() {
     return service.createInstallPlan(request?.mirrorManifestPath, request?.modelRootDir, request?.downloadSource)
   })
 
-  ipcMain.handle(CHANNEL_LLAMA_RUNTIME_START_INSTALL, async (event, request: LlamaStartInstallRequest) => {
-    return service.startInstall(request.plan, event.sender)
-  })
+  ipcMain.handle(CHANNEL_LLAMA_RUNTIME_START_INSTALL, blockLegacyModelMutation)
 
   ipcMain.handle(CHANNEL_LLAMA_RUNTIME_CANCEL_INSTALL, async () => {
     return service.cancelInstall()
@@ -53,7 +52,9 @@ export function registerLlamaRuntimeIpc() {
   })
 
   ipcMain.handle(CHANNEL_LLAMA_RUNTIME_TEST_SERVER, async (_, request?: LlamaServerControlRequest) => {
-    return service.testServer(request?.baseUrl)
+    const result = await service.testServer(request?.baseUrl)
+    platformAiBranchEvidence.record({ kind: 'llama', probe: result })
+    return result
   })
 
   ipcMain.handle('llama-runtime:open-install-root', async () => {

@@ -1,0 +1,47 @@
+import React,{useCallback,useEffect,useState} from 'react'
+import {Link} from 'react-router-dom'
+import {requireWorkspaceClient} from '../../../workspace-client'
+import type {RetrievalScope,RetrievalCoverage,QueryFileReview} from '../../../../shared/contracts/retrieval-workspace.contract'
+import type {SearchOptions} from './useHostAssetSearch'
+export default function RetrievalSearchControls(p:{scope:RetrievalScope;options:SearchOptions;setOptions:(v:SearchOptions)=>void;selectedIds:string[];selectedAsset?:{id:string;title:string;fileType?:string}|null;reload():void}) {
+  const [coverage,setCoverage]=useState<RetrievalCoverage|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[range,setRange]=useState<'selected'|'whole-library'>('selected'),[confirm,setConfirm]=useState(false),[file,setFile]=useState<QueryFileReview|null>(null)
+  const key=JSON.stringify(p.scope)
+  const read=useCallback(async()=>{setCoverage(await requireWorkspaceClient().retrieval.coverage(p.scope))},[key])
+  useEffect(()=>{let live=true;setCoverage(null);setFile(null);setError('');const refresh=()=>void requireWorkspaceClient().retrieval.coverage(p.scope).then(v=>{if(live)setCoverage(v)}).catch(()=>{})
+    refresh();const timer=setInterval(refresh,3000);return()=>{live=false;clearInterval(timer)}},[key])
+  useEffect(()=>()=>{if(file)void requireWorkspaceClient().retrieval.releaseFile(file.grant).catch(()=>{})},[file?.grant])
+  const act=async(action:()=>Promise<RetrievalCoverage>)=>{setBusy(true);setError('');try{setCoverage(await action());setConfirm(false);p.reload()}catch(e){setError(controlError(e))}finally{setBusy(false)}}
+  const chooseFile=async()=>{setBusy(true);setError('');try{const value=await requireWorkspaceClient().retrieval.selectFile(p.scope);if(value){setFile(value);p.setOptions({...p.options,example:{grant:value.grant}})}}catch(e){setError(controlError(e))}finally{setBusy(false)}}
+  const clearExample=()=>{p.setOptions({...p.options,example:undefined});setFile(null)}
+  const selected=[...new Set(p.selectedIds.length?p.selectedIds:p.selectedAsset?[p.selectedAsset.id]:[])]
+  return <section aria-label="图文检索与覆盖" className="retrieval-search-controls">
+    <div className="retrieval-search-row">
+      <label>查找方式 <select aria-label="素材查找方式" value={p.options.mode} onChange={e=>{setFile(null);p.setOptions({...p.options,mode:e.target.value as SearchOptions['mode'],example:undefined})}}>
+        <option value="lexical">文字与标签</option><option value="semantic">画面含义 · 中英文</option><option value="hybrid">文字＋画面含义</option></select></label>
+      <button disabled={!p.selectedAsset||busy} onClick={()=>{if(p.selectedAsset?.fileType?.toLowerCase()==='mp4'){setError('当前以图检索支持图片。MP4可用文字搜索找回，视频与参考帧在工作模式使用。');return}setError('');setFile(null);p.setOptions({...p.options,example:{assetId:p.selectedAsset!.id}})}}>查找当前素材的相似图</button>
+      <button disabled={busy} onClick={()=>void chooseFile()}>选择一张图找相似</button>
+      {p.options.example&&<><span>{file?`示例图：${file.name}`:'使用当前库内素材作为示例'} · 本机临时查询</span><button onClick={clearExample}>清除示例图</button></>}
+    </div>
+    <details><summary>图文覆盖与恢复{coverage?` · ${coverage.indexed}/${coverage.total}`:''}</summary>
+      <p>按明确范围生成当前受控预览的持久图像向量；名称、标签、描述及 OCR 继续由文字检索覆盖。已保存向量不随模型卸载清除，重建索引会复用它们。</p>
+      <p>MP4不参与整图语义索引与以图示例，准备范围会排除视频；视频名称与人工文字仍可搜索。</p>
+      <p>中文、英文或混合文字可在底部搜索框描述画面。外部示例限单帧 PNG/JPEG/WebP、4 MiB 内；只使用所选这一文件，不收录、不外发、不写查询历史。</p>
+      {!coverage?.selectedSpaceId&&<p><Link to="/ai/local-models">先准备并验证本地图文检索模型</Link></p>}
+      {coverage?.spaceId&&<p>当前空间 {coverage.spaceId.slice(0,12)} · {coverage.state==='ready'?'覆盖完整':'覆盖仍在准备或范围有限'}{coverage.error?` · ${coverage.error}`:''}</p>}
+      <div className="retrieval-search-row"><label>准备范围 <select aria-label="图文向量准备范围" value={range} onChange={e=>{setRange(e.target.value as typeof range);setConfirm(false)}}>
+        <option value="selected">所选 {selected.length} 份素材</option><option value="whole-library">当前库全部 {coverage?.total??'已入库'} 份素材</option></select></label>
+        <button disabled={busy||!coverage?.selectedSpaceId||range==='selected'&&!selected.length||coverage?.jobs.some(j=>j.state==='running')} onClick={()=>setConfirm(true)}>准备图文检索覆盖</button>
+        <button disabled={busy||coverage?.jobs.some(j=>j.state==='running')} onClick={()=>void act(()=>requireWorkspaceClient().retrieval.rebuild(p.scope))}>仅重建向量索引</button><button disabled={busy} onClick={()=>void read().catch(e=>setError(controlError(e)))}>刷新图文覆盖</button>
+      </div>
+      {confirm&&<div role="group" aria-label="图文范围确认"><p>确认准备{range==='selected'?`所选 ${selected.length} 份`:'当前库全部'}素材的受控预览。兼容的已有向量会复用；文字和人工内容保持，CPU 推理可暂停并明确恢复。</p><button disabled={busy} onClick={()=>void act(()=>requireWorkspaceClient().retrieval.start({...p.scope,selection:range,...(range==='selected'?{assetIds:selected}:{})}))}>确认范围并准备向量</button><button disabled={busy} onClick={()=>setConfirm(false)}>取消范围确认</button></div>}
+      {coverage?.jobs.map(job=><article key={job.id} className="retrieval-job"><p>图文覆盖 · {({running:'执行中',paused:'已暂停',interrupted:'中断，等待明确恢复',failed:'未完成',complete:'已完成所选范围'})[job.state]} · {job.completed}/{job.total}{job.failed?` · 失败 ${job.failed}`:''} · {job.spaceId.slice(0,12)}</p>
+        {job.error&&<p>{controlError(job.error)} · {job.error}</p>}
+        {job.state==='running'?<button onClick={()=>void act(()=>requireWorkspaceClient().retrieval.pause(p.scope,job.id))}>暂停向量准备</button>:['paused','failed','interrupted'].includes(job.state)&&<button disabled={busy} onClick={()=>void act(()=>requireWorkspaceClient().retrieval.resume(p.scope,job.id))}>明确恢复向量准备</button>}
+        {job.state==='complete'&&job.spaceId!==coverage.spaceId&&<button disabled={busy} onClick={()=>void act(()=>requireWorkspaceClient().retrieval.switchSpace(p.scope,job.spaceId))}>切换到此已准备空间</button>}
+      </article>)}
+    </details>
+    {busy&&<span role="status">正在核对检索操作…</span>}{error&&<p role="alert">{error}</p>}
+  </section>
+}
+const controlError=(e:unknown)=>{const value=e instanceof Error?e.message:String(e);const reasons:Record<string,string>={RETRIEVAL_NOT_QUALIFIED:'先在 AI 与模型中完成真实图文验证。',RETRIEVAL_QUERY_FILE_TOO_LARGE:'所选查询图片超过4 MiB，没有读取部分内容替代。请另选符合范围的图片。',RETRIEVAL_ITEMS_FAILED:'范围内有素材未生成向量，已完成结果保留。',RETRIEVAL_GENERATION_INTERRUPTED:'应用中断后保留已完成向量，请明确恢复余下范围。',AI_MEMORY_WAIT:'当前资源不足，已完成内容保留，稍后可明确恢复。',RETRIEVAL_SPACE_CHANGED:'当前运行空间不匹配，原空间与向量保留。',LOCAL_MODEL_CHANGED:'检索模型或环境变化，需要重新验证。'}
+  return Object.entries(reasons).find(([code])=>value.includes(code))?.[1]??'操作未完成，素材、文字检索与已保存向量保留，请核对状态后重试。'}

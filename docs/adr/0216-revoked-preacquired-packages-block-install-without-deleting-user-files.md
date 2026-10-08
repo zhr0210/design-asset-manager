@@ -1,0 +1,25 @@
+# Revoked Preacquired Packages Block Install Without Deleting User Files
+
+A pre-acquired Official Offline Package remains an **External User-Owned Package** until a valid, in-window, explicitly confirmed transaction copies verified bytes into managed staging. If its exact digest/manifest/publisher/runtime-set scope matches an accepted model/runtime revocation or suspension, read-only inspection returns **External Package Installation Blocked** and no staging, promotion, activation, readiness probe or execution occurs.
+
+The block grants no file-management authority. Design Asset Manager never deletes, moves, renames, rewrites, truncates, quarantines, changes permissions/extended attributes, sends to Trash or otherwise modifies the selected external file or its containing directory. It does not clean Downloads, removable media, shared deployment folders or another application's cache. Existing operating-system quarantine flags are respected but not added/removed by this workflow.
+
+The application owns and removes only its bounded ephemeral inspection state: path-free verification records, parser scratch and any app-created temporary extraction fragments inside its governed temporary root. Cleanup cannot follow a symlink, traverse to the selected source or remove a byte whose ownership is not proven as application-created. The external package size is never reported as reclaimed storage because no user-owned payload was deleted.
+
+While the native-picker grant/session is still live, the blocking surface may offer **Show In File Manager** through an opaque host-owned handle plus plain-language user deletion guidance. The renderer receives no raw path, and the action only asks the OS to reveal the already selected item; it neither selects a destructive command nor confirms deletion. After the grant expires, the application retains no path/bookmark/watch/recent-file entry and cannot reveal or revisit the file without a new explicit selection.
+
+Last Verified Model/Runtime Trust State retains the content/package revocation identity, not the external filename or location. Renaming, copying or moving identical bytes therefore cannot bypass the block when the file is selected again, while a broad warning is never applied to unrelated bytes by filename resemblance. A later newer signed recovery statement may clear/narrow the trust block under ADRs 0165/0192; the user must still reselect and fully reverify the external package, and recovery never auto-installs or restores prior picker access.
+
+No selected package bytes, filename/path, directory listing or local deletion decision is uploaded to the catalog/publisher or placed in logs/notifications. Merely discovering a block during foreground inspection produces an in-app typed explanation, not a package-specific OS notification or durable external-file history. Independently material trust attention affecting installed/active scope remains governed by ADR 0199 without acquiring authority over this external file.
+
+ADR 0217 separates the short-lived selection from durable security state. Session end clears the picker grant and computed selection evidence; accepted signed revocation identity remains in the global trust ledger without a selected/seen marker, and only unlinkable coarse path-free diagnostic counters may persist. Neither trust state nor a counter lets the application reveal or revisit the former external file.
+
+During the live blocked session, ADR 0218 keeps the verified identity card visible beside the typed block explanation so the user can distinguish the selected file from the signed package that was matched. The basename and digest short code are not deletion authority, and the card disappears with the picker session.
+
+ADR 0219 may also expose and explicitly copy the complete digest after it has fully matched the signed manifest, even when that identity is separately revoked. Viewing/copying exact byte identity does not weaken the block, authorize deletion or persist access to the external file.
+
+ADR 0221 never offers reacquisition of that same revoked candidate for installation. It may show a separately signed stable replacement/recovery candidate, but cannot use a mirror, redownload or changed filename to bypass the accepted block.
+
+If an official copy was reacquired and became app-owned before a later revocation, ADR 0222 keeps Install blocked while leaving Keep/Delete decisions inside managed package storage. That authority still never reaches back to delete or alter the former external source file.
+
+The current project has no External User-Owned Package ownership state, revocation-aware read-only offline inspector, opaque reveal grant, provenance-safe temporary cleanup or path-free external block result. This ADR records target behavior only: it selects/reads/reveals/deletes/modifies no file, cleans no cache, refreshes no trust state, sends no notification, accesses no model/runtime/asset/result/private data and changes no public IPC/schema/AI Worker API.

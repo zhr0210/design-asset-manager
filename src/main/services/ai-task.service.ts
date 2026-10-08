@@ -48,7 +48,7 @@ export class AiTaskService {
     return id
   }
 
-  public createPromptTask(assetId: string, filePath: string, modelName: string = 'JoyCaption-v2'): string {
+  public createPromptTask(assetId: string, filePath: string, modelName: string = 'Qwen3-VL'): string {
     const db = this.getDb()
     const id = `task-prompt-${Math.random().toString(36).substr(2, 9)}`
     const now = new Date().toISOString()
@@ -63,7 +63,7 @@ export class AiTaskService {
     return id
   }
 
-  public createAnalysisTask(assetId: string, filePath: string, modelName: string = 'Qwen2.5-VL'): string {
+  public createAnalysisTask(assetId: string, filePath: string, modelName: string = 'Qwen3-VL'): string {
     const db = this.getDb()
     const id = `task-analysis-${Math.random().toString(36).substr(2, 9)}`
     const now = new Date().toISOString()

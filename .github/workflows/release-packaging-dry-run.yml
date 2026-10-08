@@ -1,4 +1,4 @@
-name: Release Packaging Dry Run
+name: Release Packaging Dry-Run
 
 on:
   workflow_dispatch:
@@ -6,41 +6,85 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+  DAM_CI_SAFE: true
+  DAM_DISABLE_MODEL_DOWNLOADS: true
+  DAM_DISABLE_RUNTIME_DOWNLOADS: true
+  DAM_DISABLE_REAL_AI_WORKER: true
+  DAM_DISABLE_EXTERNAL_INFERENCE: true
+  CSC_IDENTITY_AUTO_DISCOVERY: false
+
 jobs:
-  package-plan:
-    name: ${{ matrix.target }} ${{ matrix.arch }}
+  dry-run:
+    name: Dry run packaging on ${{ matrix.os }} for ${{ matrix.target }} (${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - target: windows-nsis
-            os: windows-latest
+          - os: windows-2022
+            target: windows-nsis
             arch: x64
-            command: npm run pack:win
-          - target: windows-nsis
-            os: windows-latest
+          - os: windows-2022
+            target: windows-nsis
             arch: arm64
-            command: npm run pack:win
-          - target: macos-dmg
-            os: macos-latest
+          - os: macos-latest
+            target: macos-dmg
             arch: x64
-            command: npm run pack:mac
-          - target: macos-dmg
-            os: macos-latest
+          - os: macos-latest
+            target: macos-dmg
             arch: arm64
-            command: npm run pack:mac
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: 20
-          cache: npm
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run build
-      - name: Packaging command reserved
-        run: echo "${{ matrix.command }}"
-      - name: Publish disabled
-        run: echo "publish=false signing=reserved notarization=reserved auto-update=future"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run build
+        run: npm run build
+
+      - name: Run release governance checks
+        run: npm run test-release-flow-governance && npm run test-release-candidate-governance && npm run test-release-checksums && npm run test-package-smoke
+
+      - name: Build unsigned Windows NSIS package
+        if: matrix.target == 'windows-nsis'
+        run: npm run dist:win -- --${{ matrix.arch }}
+
+      - name: Build unsigned macOS DMG package
+        if: matrix.target == 'macos-dmg'
+        run: npm run dist:mac -- --${{ matrix.arch }}
+
+      - name: Write Windows checksum manifest
+        if: matrix.target == 'windows-nsis'
+        run: node scripts/write-release-checksums.mjs --platform=windows --arch=${{ matrix.arch }}
+
+      - name: Write macOS checksum manifest
+        if: matrix.target == 'macos-dmg'
+        run: node scripts/write-release-checksums.mjs --platform=macos --arch=${{ matrix.arch }}
+
+      - name: Run static Package Smoke
+        run: npm run package:smoke -- --arch=${{ matrix.arch }}
+
+      - name: Upload unsigned release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-asset-manager-${{ matrix.target }}-${{ matrix.arch }}-unsigned-candidate
+          path: |
+            dist-packages/*.exe
+            dist-packages/*.dmg
+            dist-packages/*.blockmap
+            dist-packages/release-checksums-*.json
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,21 @@
+diff --git a/scripts/background-ocr-runtime-observation.test.ts b/scripts/background-ocr-runtime-observation.test.ts
+index 13f62d7..b19dfb0 100644
+--- a/scripts/background-ocr-runtime-observation.test.ts
++++ b/scripts/background-ocr-runtime-observation.test.ts
+@@ -1,6 +1,7 @@
+ import assert from 'node:assert/strict'
+ import {test} from 'node:test'
+ import {createBackgroundOcrController} from '../src/main/background-ocr/background-ocr-controller'
++import {OCR_HOST_RESERVE_BYTES} from '../src/main/ocr/ocr-controller'
+ 
+ // Controller-level regression; Host persistence/OCR/telemetry are explicit substitutes.
+ // Keep the real Host integration and Electron suites as separate acceptance gates.
+@@ -26,7 +27,7 @@ function fixture(){
+  const controller=createBackgroundOcrController({host:host as any,ocr:ocr as any,runtime:runtime as any,now:()=>1000,
+   schedule:callback=>{const timer={callback,cancelled:false};timers.push(timer);return()=>{timer.cancelled=true}},
+   telemetry:()=>({memory:known({free:8*1024**3,total:16*1024**3}),battery:known(false),lowPower:known(false),thermal:known('nominal' as const),idle:known('idle' as const),visible:known(true),gpuFree:{kind:'unknown'}}),
+-  qualify:value=>qualified?{runtimeFingerprint:value.fingerprint,evidenceId:'synthetic-unit-only',envelope:{ownership:'host-owned',verified:true,peakRamBytes:768*1048576,accelerator:'cpu',lightOnBattery:false}}:null})
++  qualify:value=>qualified?{runtimeFingerprint:value.fingerprint,evidenceId:'synthetic-unit-only',envelope:{ownership:'host-owned',verified:true,peakRamBytes:OCR_HOST_RESERVE_BYTES+128*1048576,accelerator:'cpu',lightOnBattery:false}}:null})
+  const authorize=async()=>controller.confirm((await controller.prepare(scope)).receipt)
+  return{scope,controller,snapshot,timers,authorize,set fingerprint(value:string|null){fingerprint=value},set qualified(value:boolean){qualified=value},get revokeCalls(){return revokeCalls},get dispatches(){return dispatches},get claims(){return claims},get sent(){return sent},get busy(){return busy},get activeSignal(){return activeSignal},
+   delayRuntime(value:string|null,afterCalls=1){delayCount=afterCalls;const entered=deferred(),released=deferred();nextRuntime=async()=>{entered.resolve();await released.promise;return handle(value)};return{entered:entered.promise,release:()=>released.resolve()}},

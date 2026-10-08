@@ -1,0 +1,10 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "typecheck"
+  ],
+  "exitCode": 0,
+  "seconds": 5.0,
+  "scope": "expanded source handoff; existing deps test support only"
+}

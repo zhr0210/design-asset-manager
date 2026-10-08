@@ -1,0 +1,93 @@
+{
+  "scope": "P00 only; original package registry preserved under inputs",
+  "requirements": [
+    {
+      "id": "R01",
+      "requirement": "保留本地优先与现有技术主线，不以目录整理代替架构优化",
+      "basis": "U01 / S00 §2、5",
+      "chapters": [
+        "SYS-01",
+        "HOST-03",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01",
+        "T02",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P00_audit": "scoped_source_baseline_recorded",
+      "evidence": [
+        "CURRENT-STATE-AUDIT.md",
+        "MODULE-REACHABILITY.md",
+        "BASELINE-MATRIX.md",
+        "reports/P00-REPORT.md"
+      ],
+      "limitation": "P00核查不表示跨阶段需求已实现/已接受"
+    },
+    {
+      "id": "R26",
+      "requirement": "AI编码为主、允许并行新增功能、可跨会话接手",
+      "basis": "U01",
+      "chapters": [
+        "DEV-21",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01",
+        "T24"
+      ],
+      "scope": "当前目标",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P00_audit": "scoped_source_baseline_recorded",
+      "evidence": [
+        "CURRENT-STATE-AUDIT.md",
+        "MODULE-REACHABILITY.md",
+        "BASELINE-MATRIX.md",
+        "reports/P00-REPORT.md"
+      ],
+      "limitation": "P00核查不表示跨阶段需求已实现/已接受"
+    },
+    {
+      "id": "R32",
+      "requirement": "本轮只细化代码框架，不针对UI/UX或交付版本排期",
+      "basis": "U01",
+      "chapters": [
+        "SYS-01",
+        "MIG-23"
+      ],
+      "stages": [
+        "P00",
+        "P01",
+        "P27"
+      ],
+      "tests": [
+        "T01"
+      ],
+      "scope": "整个任务约束",
+      "implementation_status": "unverified",
+      "design_review_status": "ready_for_review",
+      "P00_audit": "scoped_source_baseline_recorded",
+      "evidence": [
+        "CURRENT-STATE-AUDIT.md",
+        "MODULE-REACHABILITY.md",
+        "BASELINE-MATRIX.md",
+        "reports/P00-REPORT.md"
+      ],
+      "limitation": "P00核查不表示跨阶段需求已实现/已接受"
+    }
+  ]
+}

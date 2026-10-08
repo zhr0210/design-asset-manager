@@ -1,0 +1,21 @@
+diff --git a/scripts/fixtures/local-ai-checkpoint-oracle.test.ts b/scripts/fixtures/local-ai-checkpoint-oracle.test.ts
+new file mode 100644
+index e69de29..f1c09cc 100644
+--- /dev/null
++++ b/scripts/fixtures/local-ai-checkpoint-oracle.test.ts
+@@ -0,0 +1,15 @@
++import Database from 'better-sqlite3'
++import fs from 'node:fs'
++import path from 'node:path'
++const profile=path.resolve('.scratch/wc01-real-model-library-20261005/run-U4eFuo/profile-04')
++const control=path.resolve('.scratch/b-model-management-20261006/real-library-01/.dam')
++const app=new Database(path.join(profile,'app-state/app-state.sqlite'),{readonly:true,fileMustExist:true})
++const library=new Database(path.join(control,'library.sqlite'),{readonly:true,fileMustExist:true})
++try{
++ const modelPlans=app.prepare("SELECT json_extract(record,'$.artifact.model') AS model,json_extract(record,'$.qualifiedAt') AS qualifiedAt,json_extract(record,'$.validatedPlans') AS plans FROM managed_model_entries WHERE json_extract(record,'$.artifact.gguf') IS NOT NULL").all().map((v:any)=>({model:v.model,qualifiedAt:v.qualifiedAt,plans:JSON.parse(v.plans??'[]').map((p:any)=>({mode:p.configuration.native?.plan.mode,threads:p.configuration.native?.threads,fingerprint:p.configuration.fingerprint}))}))
++ const archives=app.prepare("SELECT space,json_extract(record,'$.runnerSha256') AS runnerSha256,json_extract(record,'$.qualification.fingerprint') AS fingerprint FROM retrieval_space_bindings").all()
++ const bundleBytes=app.prepare("SELECT json_extract(record,'$.artifact.model') AS model,json_extract(record,'$.artifact.gguf.files') AS files FROM managed_model_entries WHERE json_extract(record,'$.artifact.gguf.size')='8B'").all().map((v:any)=>({model:v.model,files:JSON.parse(v.files??'[]').map((f:any)=>({name:f.name,bytes:f.bytes}))}))
++ const captions=library.prepare("SELECT a.title,r.model_name,x.state,json_extract(e.output_json,'$.caption') AS caption FROM basic_analysis_attempts x JOIN basic_analysis_requests r USING(request_id) JOIN assets a ON a.id=r.asset_id LEFT JOIN basic_analysis_evidence e ON e.request_id=r.request_id WHERE a.title='public-04-coffee' ORDER BY x.updated_at DESC LIMIT 3").all()
++ const registry=JSON.parse(fs.readFileSync(path.join(control,'.dam-asset-retrieval.json'),'utf8')),vectors=new Database(path.join(control,registry.canonical),{readonly:true,fileMustExist:true})
++ try{console.log(JSON.stringify({modelPlans,bundleBytes,archives,captions,spaces:vectors.prepare('SELECT id FROM spaces').all(),jobs:vectors.prepare('SELECT space,state,total,completed,failed FROM jobs ORDER BY rowid DESC LIMIT 3').all()}))}finally{vectors.close()}
++}finally{app.close();library.close()}

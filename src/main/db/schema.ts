@@ -1,5 +1,7 @@
 // SQLite schemas for the Design Asset Manager
 
+import type Database from 'better-sqlite3'
+
 export const CREATE_SITES_TABLE = `
   CREATE TABLE IF NOT EXISTS sites (
     id TEXT PRIMARY KEY,
@@ -228,6 +230,96 @@ export const CREATE_DOWNLOAD_TASKS_TABLE = `
     updated_at TEXT NOT NULL
   );
 `
+
+export const CREATE_CAPTURE_REQUESTS_TABLE = `
+  CREATE TABLE IF NOT EXISTS capture_requests (
+    capture_request_identity TEXT PRIMARY KEY,
+    batch_identity TEXT NOT NULL,
+    batch_item_position INTEGER NOT NULL CHECK (batch_item_position >= 0),
+    active_library_identity TEXT NOT NULL,
+    canonical_envelope_digest TEXT NOT NULL,
+    capture_method TEXT NOT NULL CHECK (capture_method = 'copy-into-library'),
+    plan_item_identity TEXT NOT NULL,
+    received_file_name TEXT NOT NULL,
+    source_bytes INTEGER NOT NULL CHECK (source_bytes >= 0),
+    source_generation TEXT NOT NULL,
+    source_locator_digest TEXT NOT NULL,
+    source_format TEXT NOT NULL CHECK (source_format IN ('jpeg', 'png', 'webp')),
+    created_at TEXT NOT NULL,
+    UNIQUE(batch_identity, batch_item_position),
+    UNIQUE(batch_identity, plan_item_identity)
+  );
+`
+
+export const CREATE_ASSET_CANDIDATES_TABLE = `
+  CREATE TABLE IF NOT EXISTS asset_candidates (
+    candidate_identity TEXT PRIMARY KEY,
+    capture_request_identity TEXT NOT NULL UNIQUE,
+    original_storage_object_identity TEXT NOT NULL UNIQUE,
+    lifecycle_state TEXT NOT NULL CHECK (lifecycle_state IN ('intake', 'active', 'promoted')),
+    managed_original_ref TEXT,
+    preview_generation_identity TEXT,
+    grid_thumbnail_ref TEXT,
+    created_at TEXT NOT NULL,
+    activated_at TEXT,
+    promoted_at TEXT,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (capture_request_identity)
+      REFERENCES capture_requests(capture_request_identity) ON DELETE CASCADE,
+    CHECK (
+      (lifecycle_state = 'intake'
+        AND managed_original_ref IS NULL
+        AND preview_generation_identity IS NULL
+        AND grid_thumbnail_ref IS NULL
+        AND activated_at IS NULL
+        AND promoted_at IS NULL)
+      OR
+      (lifecycle_state = 'active'
+        AND managed_original_ref IS NOT NULL
+        AND preview_generation_identity IS NULL
+        AND grid_thumbnail_ref IS NULL
+        AND activated_at IS NOT NULL
+        AND promoted_at IS NULL)
+      OR
+      (lifecycle_state = 'promoted'
+        AND managed_original_ref IS NOT NULL
+        AND preview_generation_identity IS NOT NULL
+        AND grid_thumbnail_ref IS NOT NULL
+        AND activated_at IS NOT NULL
+        AND promoted_at IS NOT NULL)
+    )
+  );
+`
+
+export const CREATE_PROMOTION_LINKS_TABLE = `
+  CREATE TABLE IF NOT EXISTS promotion_links (
+    promotion_link_identity TEXT PRIMARY KEY,
+    candidate_identity TEXT NOT NULL UNIQUE,
+    design_asset_identity TEXT NOT NULL UNIQUE,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (candidate_identity)
+      REFERENCES asset_candidates(candidate_identity) ON DELETE RESTRICT,
+    FOREIGN KEY (design_asset_identity)
+      REFERENCES assets(id) ON DELETE RESTRICT
+  );
+`
+
+const CAPTURE_INTAKE_SCHEMA = [
+  CREATE_ASSETS_TABLE,
+  CREATE_CAPTURE_REQUESTS_TABLE,
+  CREATE_ASSET_CANDIDATES_TABLE,
+  CREATE_PROMOTION_LINKS_TABLE
+] as const
+
+export function initializeCaptureIntakeSchema(
+  database: Database.Database
+): void {
+  database.transaction(() => {
+    for (const statement of CAPTURE_INTAKE_SCHEMA) {
+      database.prepare(statement).run()
+    }
+  })()
+}
 
 // Performance enhancing indexes
 export const CREATE_INDEXES = [

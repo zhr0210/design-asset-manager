@@ -1,0 +1,14 @@
+diff --git a/electron.vite.config.ts b/electron.vite.config.ts
+index 43ae257..36430c0 100644
+--- a/electron.vite.config.ts
++++ b/electron.vite.config.ts
+@@ -8,7 +8,8 @@ export default defineConfig({
+     plugins: [externalizeDepsPlugin(),{
+       name:'dam-ai-worker-resources',
+       buildStart(){
+-        for(const name of ['local_ocr_worker.py','managed_vision_worker.py'])this.emitFile({type:'asset',fileName:`ai-service/tools/${name}`,source:readFileSync(resolve(__dirname,'ai-service/tools',name))})
++        for(const name of ['local_ocr_worker.py','managed_vision_worker.py','retrieval_worker.py'])this.emitFile({type:'asset',fileName:`ai-service/tools/${name}`,source:readFileSync(resolve(__dirname,'ai-service/tools',name))})
++        for(const name of ['astronaut.jpg','flag.jpg','NOTICE.md'])this.emitFile({type:'asset',fileName:`ai-service/tools/retrieval_probe/${name}`,source:readFileSync(resolve(__dirname,'ai-service/tools/retrieval_probe',name))})
+       }
+     }]
+   },

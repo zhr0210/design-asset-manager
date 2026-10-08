@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"fanart.tv":{srcMatching:[{srcRegExp:"(//images\\.fanart\\.tv/).+(/.+@IMG@)",processor:"$1fanart$2"}]}};

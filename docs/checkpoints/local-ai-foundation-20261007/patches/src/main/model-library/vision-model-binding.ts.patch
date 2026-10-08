@@ -1,0 +1,45 @@
+diff --git a/src/main/model-library/vision-model-binding.ts b/src/main/model-library/vision-model-binding.ts
+index b681446..c968568 100644
+--- a/src/main/model-library/vision-model-binding.ts
++++ b/src/main/model-library/vision-model-binding.ts
+@@ -2,11 +2,15 @@ import fs from 'node:fs/promises'
+ import { createHash } from 'node:crypto'
+ import { hashBoundFile, inspectVisionModel, type VisionModelArtifact } from './vision-model-artifact'
+ import { bindPythonDependencies } from '../services/ai-runtime/python-environment-binding'
+-import type { ModelOwnership } from '../../shared/contracts/managed-model-library.contract'
++import type { ModelOwnership, HuggingFaceModelBundle } from '../../shared/contracts/managed-model-library.contract'
++import type { GgufLoadPlan } from '../../shared/contracts/local-ai-resources.contract'
++import type { NativeGgufRuntimeBinding } from '../services/ai-runtime/managed-gguf-packages'
+ 
+ export interface ManagedVisionConfiguration {
+   root: string
+-  python: string
++  python?: string
++  gguf?: HuggingFaceModelBundle
++  native?: { binding: NativeGgufRuntimeBinding; plan: GgufLoadPlan; threads: number }
+   fingerprint: string
+   artifactFingerprint?: string
+   modelId?: VisionModelArtifact['modelId']
+@@ -16,6 +20,22 @@ export interface ManagedVisionConfiguration {
+   ownership?: ModelOwnership
+   enabled: boolean
+ }
++export function nativeVisionFingerprint(configuration: ManagedVisionConfiguration) {
++  if (!configuration.gguf || !configuration.native || !configuration.artifactFingerprint) throw Error('LOCAL_MODEL_UNSUPPORTED')
++  return createHash('sha256').update(JSON.stringify({ adapter: 'dam-native-qwen3vl-v3; driver-bound-plan; bounded-recipe-schema-v1',
++    artifact: configuration.artifactFingerprint, runtime: configuration.native.binding.fingerprint,
++    plan: configuration.native.plan.identity, threads: configuration.native.threads,
++    platform: process.platform, arch: process.arch, maxImageTokens: 256, maxContext: 4096, maxTokens: 3072 })).digest('hex')
++}
++
++/** Semantic backend binding stays frozen across verified placement changes.
++ * Every physical execution separately records the full plan/thread fingerprint. */
++export function nativeVisionBackendFingerprint(configuration: ManagedVisionConfiguration) {
++  if (!configuration.gguf || !configuration.native || !configuration.artifactFingerprint) throw Error('LOCAL_MODEL_UNSUPPORTED')
++  return createHash('sha256').update(JSON.stringify({ adapter: 'dam-native-qwen3vl-v2; bounded-recipe-schema-v1',
++    artifact: configuration.artifactFingerprint, runtimeRelease: configuration.native.binding.release,
++    platform: process.platform, arch: process.arch, maxImageTokens: 256, maxContext: 4096, maxTokens: 3072 })).digest('hex')
++}
+ 
+ export async function bindVisionEnvironment(artifact: VisionModelArtifact, selectedPython: string, runner: string, signal?: AbortSignal) {
+   const python = await fs.realpath(selectedPython)

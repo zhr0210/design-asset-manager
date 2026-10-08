@@ -1,0 +1,120 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "AUD01",
+      "input": {
+        "op": "status",
+        "implemented": false,
+        "productionEvidence": false,
+        "accepted": false,
+        "spec": true
+      },
+      "expected": "spec-only"
+    },
+    {
+      "id": "AUD02",
+      "input": {
+        "op": "status",
+        "implemented": true,
+        "productionEvidence": false,
+        "accepted": false,
+        "spec": true
+      },
+      "expected": "spec-only"
+    },
+    {
+      "id": "AUD03",
+      "input": {
+        "op": "status",
+        "implemented": true,
+        "productionEvidence": true,
+        "accepted": true,
+        "spec": true
+      },
+      "expected": "implemented"
+    },
+    {
+      "id": "AUD04",
+      "input": {
+        "op": "status",
+        "implemented": false,
+        "productionEvidence": false,
+        "accepted": false,
+        "spec": false
+      },
+      "expected": "unverified"
+    },
+    {
+      "id": "AUD05",
+      "input": {
+        "op": "delete",
+        "authorized": true,
+        "noCallers": true,
+        "replacementTested": true,
+        "compatibilityProved": true,
+        "recoverablePatch": true
+      },
+      "expected": true
+    },
+    {
+      "id": "AUD06",
+      "input": {
+        "op": "delete",
+        "authorized": true,
+        "noCallers": true,
+        "replacementTested": false,
+        "compatibilityProved": true,
+        "recoverablePatch": true
+      },
+      "expected": false
+    },
+    {
+      "id": "AUD07",
+      "input": {
+        "op": "delete",
+        "authorized": false,
+        "noCallers": true,
+        "replacementTested": true,
+        "compatibilityProved": true,
+        "recoverablePatch": true
+      },
+      "expected": false
+    },
+    {
+      "id": "AUD08",
+      "input": {
+        "op": "locality",
+        "changed": [
+          "Provider",
+          "Runtime",
+          "Preset"
+        ],
+        "allowed": [
+          "Provider",
+          "Runtime",
+          "Preset",
+          "EvidenceValidator"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "id": "AUD09",
+      "input": {
+        "op": "locality",
+        "changed": [
+          "Provider",
+          "GlobalAssetDB"
+        ],
+        "allowed": [
+          "Provider",
+          "Runtime",
+          "Preset"
+        ]
+      },
+      "expected": false
+    }
+  ]
+}

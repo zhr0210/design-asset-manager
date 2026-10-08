@@ -1,0 +1,147 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "L01",
+      "input": {
+        "op": "manage",
+        "owner": "dam-managed",
+        "identity": [
+          "p1",
+          "start1"
+        ],
+        "observed": [
+          "p1",
+          "start1"
+        ],
+        "proof": true
+      },
+      "expected": true
+    },
+    {
+      "id": "L02",
+      "input": {
+        "op": "manage",
+        "owner": "user-managed",
+        "identity": [
+          "p1",
+          "start1"
+        ],
+        "observed": [
+          "p1",
+          "start1"
+        ],
+        "proof": true
+      },
+      "expected": false
+    },
+    {
+      "id": "L03",
+      "input": {
+        "op": "manage",
+        "owner": "remote",
+        "identity": [
+          "p1",
+          "start1"
+        ],
+        "observed": [
+          "p1",
+          "start1"
+        ],
+        "proof": true
+      },
+      "expected": false
+    },
+    {
+      "id": "L04",
+      "input": {
+        "op": "manage",
+        "owner": "dam-managed",
+        "identity": [
+          "p1",
+          "start1"
+        ],
+        "observed": [
+          "p1",
+          "start2"
+        ],
+        "proof": true
+      },
+      "expected": false
+    },
+    {
+      "id": "L05",
+      "input": {
+        "op": "ready",
+        "installed": true,
+        "loaded": true,
+        "capabilityTested": true,
+        "identityVerified": true,
+        "healthy": true,
+        "permit": true
+      },
+      "expected": true
+    },
+    {
+      "id": "L06",
+      "input": {
+        "op": "ready",
+        "installed": true,
+        "loaded": true,
+        "capabilityTested": false,
+        "identityVerified": true,
+        "healthy": true,
+        "permit": true
+      },
+      "expected": false
+    },
+    {
+      "id": "L07",
+      "input": {
+        "op": "ready",
+        "installed": true,
+        "loaded": true,
+        "capabilityTested": true,
+        "identityVerified": true,
+        "healthy": true,
+        "permit": false
+      },
+      "expected": false
+    },
+    {
+      "id": "L08",
+      "input": {
+        "op": "release",
+        "identityVerified": true,
+        "physicalConfirmed": false
+      },
+      "expected": false
+    },
+    {
+      "id": "L09",
+      "input": {
+        "op": "release",
+        "identityVerified": true,
+        "physicalConfirmed": true
+      },
+      "expected": true
+    },
+    {
+      "id": "L10",
+      "input": {
+        "op": "cancel",
+        "subscribers": 1
+      },
+      "expected": "keep-running"
+    },
+    {
+      "id": "L11",
+      "input": {
+        "op": "cancel",
+        "subscribers": 0
+      },
+      "expected": "request-abort-not-confirmed"
+    }
+  ]
+}

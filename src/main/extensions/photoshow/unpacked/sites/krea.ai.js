@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"krea.ai":{srcMatching:[{srcRegExp:"(//.+?\\.krea\\.ai/.+\\?.+?)&s=\\d+(.*)",processor:"$1$2"}]}};

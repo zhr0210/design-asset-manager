@@ -1,0 +1,22 @@
+diff --git a/scripts/background-ocr-runtime-observation.integration.test.ts b/scripts/background-ocr-runtime-observation.integration.test.ts
+index 90de4ab..98263f8 100644
+--- a/scripts/background-ocr-runtime-observation.integration.test.ts
++++ b/scripts/background-ocr-runtime-observation.integration.test.ts
+@@ -6,7 +6,7 @@ import path from 'node:path'
+ import sharp from 'sharp'
+ import {createActiveLibraryHost} from '../src/main/library-lifecycle'
+ import {createProductionActiveLibraryHostDependencies} from '../src/main/library-lifecycle/production-active-library-dependencies'
+-import {createOcrController} from '../src/main/ocr/ocr-controller'
++import {createOcrController,OCR_HOST_RESERVE_BYTES} from '../src/main/ocr/ocr-controller'
+ import {createBackgroundOcrController} from '../src/main/background-ocr/background-ocr-controller'
+ import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
+ import type {OcrObservation} from '../src/shared/contracts/asset-ocr.contract'
+@@ -37,7 +37,7 @@ async function fixture(){
+  const known=<T>(value:T)=>({kind:'known' as const,value,sampledAt:performance.now()})
+  const background=createBackgroundOcrController({host,ocr,runtime,schedule:()=>()=>{},
+   telemetry:()=>({memory:known({free:8*1024**3,total:16*1024**3}),battery:known(false),lowPower:known(false),thermal:known('nominal' as const),idle:known('idle' as const),visible:known(true),gpuFree:{kind:'unknown'}}),
+-  qualify:r=>({runtimeFingerprint:r.fingerprint,evidenceId:'synthetic-test-only',envelope:{ownership:'host-owned',verified:true,peakRamBytes:768*1048576,accelerator:'cpu',lightOnBattery:false}})
++  qualify:r=>({runtimeFingerprint:r.fingerprint,evidenceId:'synthetic-test-only',envelope:{ownership:'host-owned',verified:true,peakRamBytes:OCR_HOST_RESERVE_BYTES+128*1048576,accelerator:'cpu',lightOnBattery:false}})
+  })
+  const authorize=async()=>background.confirm((await background.prepare(scope)).receipt)
+  return{host,scope,background,authorize,admission,get calls(){return calls},set fingerprint(value:string|null){fingerprint=value},delayRuntime(afterCalls=1){delayCount=afterCalls;let entered!:()=>void,released!:()=>void;const started=new Promise<void>(r=>{entered=r}),wait=new Promise<void>(r=>{released=r});nextRuntime=async()=>{entered();await wait;return{label:'synthetic-only',fingerprint:'synthetic-B',run:async()=>observation}};return{entered:started,release:released}},close:async()=>{background.invalidate();await ocr.suspendAndDrain();await host.close();await fs.rm(root,{recursive:true,force:true})}}

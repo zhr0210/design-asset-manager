@@ -1,0 +1,12 @@
+{
+  "stage": "P11",
+  "status": "proposed",
+  "basicCapabilities": [
+    "tags",
+    "caption",
+    "ocr"
+  ],
+  "advancedImplicit": false,
+  "promotionSubscription": "transactional-outbox",
+  "restoreOnlyUnfinished": true
+}

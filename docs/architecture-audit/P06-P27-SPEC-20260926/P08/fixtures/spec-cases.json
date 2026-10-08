@@ -1,0 +1,301 @@
+{
+  "synthetic": true,
+  "scope": "executable design reference model; not production implementation",
+  "cases": [
+    {
+      "id": "R01",
+      "input": {
+        "op": "ledger",
+        "capacity": {
+          "ram": 10,
+          "gpu": 4
+        },
+        "events": [
+          {
+            "op": "acquire",
+            "id": "a",
+            "d": {
+              "ram": 7,
+              "gpu": 0
+            },
+            "kind": "compute"
+          },
+          {
+            "op": "acquire",
+            "id": "b",
+            "d": {
+              "ram": 7,
+              "gpu": 0
+            },
+            "kind": "compute"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "granted",
+          "waiting"
+        ],
+        "used": {
+          "ram": 7,
+          "gpu": 0
+        }
+      }
+    },
+    {
+      "id": "R02",
+      "input": {
+        "op": "ledger",
+        "capacity": {
+          "ram": 10,
+          "gpu": 4
+        },
+        "events": [
+          {
+            "op": "acquire",
+            "id": "a",
+            "d": {
+              "ram": 2,
+              "gpu": 5
+            },
+            "kind": "compute"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "waiting"
+        ],
+        "used": {
+          "ram": 0,
+          "gpu": 0
+        }
+      }
+    },
+    {
+      "id": "R03",
+      "input": {
+        "op": "ledger",
+        "capacity": {
+          "ram": 10,
+          "gpu": 4
+        },
+        "events": [
+          {
+            "op": "acquire",
+            "id": "a",
+            "d": {
+              "ram": 2,
+              "gpu": 3
+            },
+            "kind": "compute"
+          },
+          {
+            "op": "acquire",
+            "id": "b",
+            "d": {
+              "ram": 2,
+              "gpu": 2
+            },
+            "kind": "compute"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "granted",
+          "waiting"
+        ],
+        "used": {
+          "ram": 2,
+          "gpu": 3
+        }
+      }
+    },
+    {
+      "id": "R04",
+      "input": {
+        "op": "ledger",
+        "capacity": {
+          "ram": 10,
+          "gpu": 4
+        },
+        "events": [
+          {
+            "op": "acquire",
+            "id": "a",
+            "d": {
+              "ram": 5,
+              "gpu": 0
+            },
+            "kind": "compute"
+          },
+          {
+            "op": "complete",
+            "id": "a"
+          },
+          {
+            "op": "complete",
+            "id": "a"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "granted",
+          "released",
+          "unchanged"
+        ],
+        "used": {
+          "ram": 0,
+          "gpu": 0
+        }
+      }
+    },
+    {
+      "id": "R05",
+      "input": {
+        "op": "ledger",
+        "capacity": {
+          "ram": 10,
+          "gpu": 4
+        },
+        "events": [
+          {
+            "op": "acquire",
+            "id": "a",
+            "d": {
+              "ram": 5,
+              "gpu": 0
+            },
+            "kind": "residency"
+          },
+          {
+            "op": "complete",
+            "id": "a"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "granted",
+          "unchanged"
+        ],
+        "used": {
+          "ram": 5,
+          "gpu": 0
+        }
+      }
+    },
+    {
+      "id": "R06",
+      "input": {
+        "op": "ledger",
+        "capacity": {
+          "ram": 10,
+          "gpu": 4
+        },
+        "events": [
+          {
+            "op": "acquire",
+            "id": "a",
+            "d": {
+              "ram": 5,
+              "gpu": 0
+            },
+            "kind": "residency"
+          },
+          {
+            "op": "suspect",
+            "id": "a"
+          },
+          {
+            "op": "acquire",
+            "id": "b",
+            "d": {
+              "ram": 6,
+              "gpu": 0
+            },
+            "kind": "compute"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "granted",
+          "retained",
+          "waiting"
+        ],
+        "used": {
+          "ram": 5,
+          "gpu": 0
+        }
+      }
+    },
+    {
+      "id": "R07",
+      "input": {
+        "op": "ledger",
+        "capacity": {
+          "ram": 10,
+          "gpu": 4
+        },
+        "events": [
+          {
+            "op": "acquire",
+            "id": "a",
+            "d": {
+              "ram": 5,
+              "gpu": 0
+            },
+            "kind": "residency"
+          },
+          {
+            "op": "confirmed-unloaded",
+            "id": "a"
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          "granted",
+          "released"
+        ],
+        "used": {
+          "ram": 0,
+          "gpu": 0
+        }
+      }
+    },
+    {
+      "id": "R08",
+      "input": {
+        "op": "budget",
+        "total": 100,
+        "reserve": 0,
+        "safety": 10
+      },
+      "expected": 90
+    },
+    {
+      "id": "R09",
+      "input": {
+        "op": "budget",
+        "total": 100,
+        "reserve": 1,
+        "safety": 10
+      },
+      "expected": 0
+    },
+    {
+      "id": "R10",
+      "input": {
+        "op": "budget",
+        "total": 100,
+        "reserve": 0.25,
+        "safety": 10
+      },
+      "expected": 65
+    }
+  ]
+}

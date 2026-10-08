@@ -19,9 +19,9 @@ assert.equal(transitionRuntimePackageInstallState('blocked', 'rollback'), 'rolle
 
 const installer = new MockRuntimePackageInstaller()
 const source = createLocalRuntimePackageSource('local-source', 'fixtures/runtime-packages')
-const extractRoot = path.resolve('dist-temp/runtime-install')
+const extractRoot = path.resolve('dist-temp/tests/runtime-install')
 const installPath = path.join(extractRoot, entry.id)
-const plan = installer.createDryRunPlan(entry, source, 'dist-temp/runtime-packages/ai-worker-core.zip', extractRoot, installPath)
+const plan = installer.createDryRunPlan(entry, source, 'dist-temp/tests/runtime-packages/ai-worker-core.zip', extractRoot, installPath)
 
 assert.equal(plan.packageId, entry.id)
 assert.equal(plan.state, 'planned')
@@ -33,11 +33,11 @@ assert.equal(plan.rollbackPlan.registryRestoreRequired, true)
 assert.ok(plan.warnings.some((warning) => warning.includes('does not install Python')))
 
 const remoteSource = createReservedRemoteRuntimePackageSource('remote-source', 'https://example.invalid/runtime.zip')
-const remotePlan = installer.createDryRunPlan(entry, remoteSource, 'dist-temp/runtime-packages/remote.zip', extractRoot, installPath)
+const remotePlan = installer.createDryRunPlan(entry, remoteSource, 'dist-temp/tests/runtime-packages/remote.zip', extractRoot, installPath)
 assert.equal(remotePlan.state, 'blocked')
 assert.ok(remotePlan.blockingIssues.some((issue) => issue.includes('reserved remote')))
 
-const escapePlan = installer.createDryRunPlan(entry, source, 'dist-temp/runtime-packages/ai-worker-core.zip', extractRoot, path.resolve('dist-temp/outside-install'))
+const escapePlan = installer.createDryRunPlan(entry, source, 'dist-temp/tests/runtime-packages/ai-worker-core.zip', extractRoot, path.resolve('dist-temp/tests/outside-install'))
 assert.equal(escapePlan.state, 'blocked')
 assert.ok(escapePlan.blockingIssues.some((issue) => issue.includes('inside extractRoot')))
 
@@ -64,4 +64,5 @@ assert.doesNotMatch(sourceFile, /RuntimeRegistry|runtime-registry|saveSettings|S
 const doc = await fs.readFile('docs/platform/RUNTIME_PACKAGE_INSTALLER.md', 'utf8')
 assert.match(doc, /writeRegistry: false/)
 assert.match(doc, /install Python/)
-assert.match(doc, /Phase 11A/)
+assert.match(doc, /Runtime\s+Package\s+Executor/)
+assert.match(doc, /planning and execution separate/)

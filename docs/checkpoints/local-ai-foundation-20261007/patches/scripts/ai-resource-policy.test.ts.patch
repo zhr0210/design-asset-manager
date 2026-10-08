@@ -1,0 +1,32 @@
+diff --git a/scripts/ai-resource-policy.test.ts b/scripts/ai-resource-policy.test.ts
+index dc13665..5cf6224 100644
+--- a/scripts/ai-resource-policy.test.ts
++++ b/scripts/ai-resource-policy.test.ts
+@@ -3,6 +3,27 @@ import { test } from "node:test";
+ import { createVisualAdmission } from "../src/main/visual-ai/visual-admission";
+ 
+ const GiB = 1024 ** 3;
++await test('native model admission uses a fresh individual GPU pool, preserves release accounting and refuses stale/unknown VRAM', () => {
++  const timer = clock()
++  let free = 6 * GiB
++  const admission = createVisualAdmission({ clock: timer, memory: () => ({ free: 30 * GiB, total: 32 * GiB }),
++    devices: () => [{ id: 'gpu-0', name: 'discrete device', topology: 'dedicated', totalBytes: 8 * GiB,
++      freeBytes: free, sampledAt: 0, source: 'nvidia-smi', state: 'known' }] })
++  const cost = { ramBytes: 2 * GiB, gpuBytes: { 'gpu-0': 4 * GiB } }
++  assert.equal(admission.canAdmitModel(cost), true)
++  const resident = admission.reserveModel('native', cost, new AbortController().signal)
++  assert.equal(admission.canAdmitModel(cost), false, 'unallocated commitments cannot overbook a fresh pool')
++  assert.equal(admission.resourceStatus().residents[0].gpuBytes['gpu-0'], 4 * GiB)
++  free = 2 * GiB
++  assert.equal(admission.canAdmitVision(), true, 'a local GPU reservation cannot freeze unrelated CPU paths')
++  timer.advance(5000)
++  assert.equal(admission.canAdmitModel(cost), false)
++  assert.equal(admission.resourceStatus().devices[0].state, 'stale')
++  resident.release()
++  assert.equal(admission.resourceStatus().residentBytes, 0)
++  assert.equal(admission.canAdmitModel({ ramBytes: GiB, gpuBytes: { 'absent-device': GiB } }), false)
++  assert.equal(admission.canAdmitModel({ ramBytes: GiB, gpuBytes: {} }), true)
++})
+ await test('whole model loading and work envelope is checked before claiming without allocating residency', async () => {
+   let free=31.5*GiB;
+   const admission=createVisualAdmission({memory:()=>({free,total:64*GiB})});

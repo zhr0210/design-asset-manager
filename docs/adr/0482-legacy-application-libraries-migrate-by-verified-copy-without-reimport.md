@@ -1,0 +1,5 @@
+# Legacy Application Libraries Migrate By Verified Copy Without Reimport
+
+A Legacy Application Library has no trustworthy Managed/Referenced ownership evidence, so formalization uses one explicitly confirmed Material Library Migration rather than path inference, reimport, Candidate Promotion, or dual writing. The migration preserves every Design Asset Identity and user-authored relationship, copy-verifies each available Original into the new Managed Originals Directory, leaves every migration source file untouched, and creates neither a new Design Asset nor Promotion Link.
+
+Before mutation, the user reviews affected items, bytes, destination reserve, exceptions, a verified recovery snapshot and rollback plan. Unresolved, missing, unsafe or unverifiable items block authority cutover; the Legacy Application Library remains the sole writer until every item has a proven disposition and one atomic switch activates the new Library Control Directory. Cleanup of retained legacy sources is outside migration and always requires a later separately reviewed operation.

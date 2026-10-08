@@ -1,0 +1,31 @@
+diff --git a/src/main/local-host/active-library-commands.ts b/src/main/local-host/active-library-commands.ts
+index a6f279e..ca9e5d3 100644
+--- a/src/main/local-host/active-library-commands.ts
++++ b/src/main/local-host/active-library-commands.ts
+@@ -1,5 +1,6 @@
+ import {ORGANIZATION_COLORS,validateColorRequest,ORGANIZATION_READ,ORGANIZATION_WRITE,validateOrganizationScope,validateOrganizationWrite} from '../../shared/contracts/library-organization.contract'
+ import {NOTEBOOK_READ,NOTEBOOK_SAVE,validateNotebook,type NotebookScope,type NotebookSaveRequest} from '../../shared/contracts/asset-notebook.contract'
++import { validateAssetSearchRequest } from '../../shared/contracts/asset-search.contract'
+ 
+ import {
+   CHANNEL_LIBRARY_ADD_DISPATCH,
+@@ -117,6 +118,19 @@ export function createActiveLibraryCommands(
+     const assets = await dependencies.host.listAssets()
+     return { assets, identity: authority.identity, generation: authority.generation }
+   }))
++  handle('asset-search:query', input => invoke(() => dependencies.host.searchAssetPage(validateAssetSearchRequest(input))))
++  handle('asset-search:status', () => invoke(() => dependencies.host.readSearchIndex()))
++  handle('asset-search:read-assets', (input) => invoke(async () => {
++    if (!input || Object.keys(input).some(key=>!['libraryIdentity','generation','ids'].includes(key)) ||
++      !Array.isArray(input.ids) || input.ids.length>500 || input.ids.some((id:unknown)=>typeof id!=='string'||!OPAQUE_ID.test(id))) throw Error('ASSET_SEARCH_INPUT_INVALID')
++    const authority=dependencies.host.inspect()
++    if (authority.state!=='ready'||authority.identity!==input.libraryIdentity||authority.generation!==input.generation) throw new ActiveLibraryHostError('library-generation-conflict','素材库已变化。')
++    const result=await dependencies.host.readAssetContext(input.ids)
++    const after=dependencies.host.inspect()
++    if (after.identity!==authority.identity||after.generation!==authority.generation||after.state!=='ready') throw new ActiveLibraryHostError('library-generation-conflict','素材库已变化。')
++    return result.assets
++  }))
++  handle('asset-search:rebuild', () => invoke(() => dependencies.host.rebuildSearchIndex()))
+   handle('tag:search', (request: unknown) => invoke(() => dependencies.host.searchTags(requireStringValue(request))))
+   handle('tag:get', (request: unknown) => invoke(() => dependencies.host.getTag(requireIdValue(request))))
+   handle('tag:list', () => invoke(() => dependencies.host.listTags()))

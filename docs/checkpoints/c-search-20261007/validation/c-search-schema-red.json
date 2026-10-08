@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-07T13:22:01.212Z",
+  "scope": "non-UI automated regressions; no visible user acceptance",
+  "results": [
+    {
+      "entry": "scripts/search-schema-backup.integration.test.ts",
+      "exitCode": 1,
+      "durationMs": 3288,
+      "log": "c-search-schema-red-search-schema-backup.integration.test.ts.log",
+      "runtimeHost": "Electron Node 20.16.0 / SQLite ABI123"
+    }
+  ]
+}

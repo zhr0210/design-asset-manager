@@ -10,9 +10,6 @@ export const CHANNEL_DOWNLOAD_CLEAR = 'download:clear'
 export const CHANNEL_DOWNLOAD_ENQUEUE = 'download:enqueue'
 export const CHANNEL_DOWNLOAD_RETRY = 'download:retry'
 
-// Injected Web Page Download Triggers (安全反向注入触发信道)
-export const EVENT_DOWNLOAD_INJECTED_TRIGGER = 'download:injected-trigger'
-
 // DTOs
 export interface ListDownloadsResponse {
   success: boolean

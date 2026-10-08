@@ -1,0 +1,548 @@
+{
+  "at": "2026-10-08T00:49:03.696Z",
+  "kind": "C-only exact patch and public-copy acceptance checkpoint; product source remains WIP",
+  "baseHead": "a5150c3517d5ee9ed1a2671dccef6c28d43eaf99",
+  "branch": "codex/windows-workspace-1001",
+  "originalIndexSha256": "7f83f818b0959099f9e2527bb2e68ad419348a4e8bd1771577b24552901d4523",
+  "originalIndexEntriesSha256": "1439b0799fb6a77af02de6c8b57dea1f03ba6051de6e80f47da9b5a74ffb2809",
+  "beforeRoot": ".scratch/c-search-20261008/before",
+  "sourceBaseline": "exact current working source before this continuation, not clean HEAD",
+  "files": [
+    {
+      "path": "src/main/retrieval-workspace/asset-retrieval-store.ts",
+      "baselineKind": "exact pre-edit byte snapshot",
+      "baselineSha256": "45ff4d5846485ebc42b9e1904cb0ebb882e85b3abc7330d9b96f3da787c10e95",
+      "baselineNormalizedSha256": "45ff4d5846485ebc42b9e1904cb0ebb882e85b3abc7330d9b96f3da787c10e95",
+      "candidateSha256": "6ae4a9b2da88fb429be3705350a08e45fa93891f82cc28d883d30b169d29a227",
+      "candidateNormalizedSha256": "6ae4a9b2da88fb429be3705350a08e45fa93891f82cc28d883d30b169d29a227"
+    },
+    {
+      "path": "src/main/retrieval-workspace/README.md",
+      "baselineKind": "exact pre-edit byte snapshot",
+      "baselineSha256": "018fb727fe80c11f3f52f143aa19935d61f5d7d532ecd3c1b5b36fa68e668791",
+      "baselineNormalizedSha256": "018fb727fe80c11f3f52f143aa19935d61f5d7d532ecd3c1b5b36fa68e668791",
+      "candidateSha256": "83e98cee25294cd7aa7b971a7f4e7f430bb13b22d117d60915345b67ac6ad6b5",
+      "candidateNormalizedSha256": "83e98cee25294cd7aa7b971a7f4e7f430bb13b22d117d60915345b67ac6ad6b5"
+    },
+    {
+      "path": "scripts/asset-retrieval-host.test.ts",
+      "baselineKind": "exact pre-edit byte snapshot",
+      "baselineSha256": "bc6006b467d8361972041446ad30de520ee928f998d81898cb202bd076d7ff2e",
+      "baselineNormalizedSha256": "bc6006b467d8361972041446ad30de520ee928f998d81898cb202bd076d7ff2e",
+      "candidateSha256": "8a412d1f244bee6571864df6c276fadd72811091d3addd84c1900a1c9bc386d2",
+      "candidateNormalizedSha256": "8a412d1f244bee6571864df6c276fadd72811091d3addd84c1900a1c9bc386d2"
+    },
+    {
+      "path": "src/shared/build-identity.generated.ts",
+      "baselineKind": "exact pre-edit byte snapshot",
+      "baselineSha256": "77f154c8528cfc77151b278508ef255a3bd06352aae66e2e7888c45b22d088c8",
+      "baselineNormalizedSha256": "77f154c8528cfc77151b278508ef255a3bd06352aae66e2e7888c45b22d088c8",
+      "candidateSha256": "9483807281b7fc9518997416afd13686c75bb81e18c669b85ab59526ddfe4128",
+      "candidateNormalizedSha256": "9483807281b7fc9518997416afd13686c75bb81e18c669b85ab59526ddfe4128"
+    },
+    {
+      "path": ".scratch/c-search-20261008/readback.mjs",
+      "baselineKind": "new file, absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "ed7c317577ce8485b966c36da27a216fb1f1334dd8ff9a57b2b76eb89f1ae1b8",
+      "candidateNormalizedSha256": "ed7c317577ce8485b966c36da27a216fb1f1334dd8ff9a57b2b76eb89f1ae1b8"
+    },
+    {
+      "path": ".scratch/c-search-20261008/run-readback.mjs",
+      "baselineKind": "new file, absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "9ea0fe9e5ebb00c2b2cf81a8bdb4247ecc306c29e3196fafdf58479da01582b3",
+      "candidateNormalizedSha256": "9ea0fe9e5ebb00c2b2cf81a8bdb4247ecc306c29e3196fafdf58479da01582b3"
+    },
+    {
+      "path": "TASK.md",
+      "baselineKind": "exact pre-edit byte snapshot",
+      "baselineSha256": "bab28421504f8567e12cedb55b4e4d2c6c9febb2b76373414847e917bbcbb2bd",
+      "baselineNormalizedSha256": "bab28421504f8567e12cedb55b4e4d2c6c9febb2b76373414847e917bbcbb2bd",
+      "candidateSha256": "481fc729538abc910b54baa506c0fd32fd9dac71dbe95e8947513d59f822ec15",
+      "candidateNormalizedSha256": "481fc729538abc910b54baa506c0fd32fd9dac71dbe95e8947513d59f822ec15"
+    },
+    {
+      "path": "docs/handoff/CURRENT-STATE.md",
+      "baselineKind": "exact pre-edit byte snapshot",
+      "baselineSha256": "ce8ed4e2362d6766457d955e0b6373d51beda38684e78db1c0878237b4d99be9",
+      "baselineNormalizedSha256": "ce8ed4e2362d6766457d955e0b6373d51beda38684e78db1c0878237b4d99be9",
+      "candidateSha256": "e1da19c317a81e6f19b1217a8c678c1b3683397470fcf2c683edbdf76ce3c70b",
+      "candidateNormalizedSha256": "e1da19c317a81e6f19b1217a8c678c1b3683397470fcf2c683edbdf76ce3c70b"
+    },
+    {
+      "path": "docs/agents/implementation-status.md",
+      "baselineKind": "exact pre-edit byte snapshot",
+      "baselineSha256": "a4fdc822ad32b36ecd8d4a28d5528af70db525ea3cc9d8a56ba00559dbc7113a",
+      "baselineNormalizedSha256": "a4fdc822ad32b36ecd8d4a28d5528af70db525ea3cc9d8a56ba00559dbc7113a",
+      "candidateSha256": "5371961fb3acc8e3d80e613331e1d2dc747b17d0b530a4682355d1d896a3db80",
+      "candidateNormalizedSha256": "5371961fb3acc8e3d80e613331e1d2dc747b17d0b530a4682355d1d896a3db80"
+    },
+    {
+      "path": "docs/handoff/SEARCH-C-COVERAGE-20261008.md",
+      "baselineKind": "new file, absent before task",
+      "baselineSha256": null,
+      "baselineNormalizedSha256": null,
+      "candidateSha256": "2b46d899075026b6c043fd1defb077f366d4454347b601edcf4050b94b040099",
+      "candidateNormalizedSha256": "2b46d899075026b6c043fd1defb077f366d4454347b601edcf4050b94b040099"
+    }
+  ],
+  "patchSha256": "b672a815a02b98de02f3f0ed93a119d36e7076afdb5072411c49ca1a5066285a",
+  "beforeOnlyPatchCheck": {
+    "result": "passed",
+    "directory": ".scratch/c-search-20261008/checkpoint-before-only",
+    "effects": "check only; no patch applied to product, library or index"
+  },
+  "build": {
+    "buildId": "dam-58dc70f3d0431312",
+    "sourceDigest": "58dc70f3d04313121d1887dfa288adddce1debcc153771dff2a11e25f2081898",
+    "builtAt": "2026-10-08T00:16:15.862Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 761
+  },
+  "buildArtifacts": [
+    {
+      "path": "out/main/index.js",
+      "sha256": "37f75b610952551694aa958f24c749c3074a72f58b48071ee98c81e737db7de7"
+    },
+    {
+      "path": "out/renderer/index.html",
+      "sha256": "2bb735d88cb8e3813dcc0468ba92008a1447b4997a5d7b852466a8496a3279c0"
+    },
+    {
+      "path": "src/shared/build-identity.generated.ts",
+      "sha256": "9483807281b7fc9518997416afd13686c75bb81e18c669b85ab59526ddfe4128"
+    }
+  ],
+  "validation": {
+    "relatedFiles": "5/5 passed; added Host regression red then green",
+    "typecheck": "passed",
+    "build": "passed",
+    "context": "passed; 56 untracked-source ownership warning retained",
+    "fullHistoricalRepositorySuite": "not rerun or claimed passed"
+  },
+  "review": {
+    "snapshot": "review-01",
+    "files": 6,
+    "patchSha256": "3dc8a1c8a55468d9d6ec62a53284596ecf32819fde678b2b49b0ce02d375d95d",
+    "standards": "no new actionable issue",
+    "spec": "no new issue",
+    "effects": "independent static reviews only; neither ran actual UI/model/library"
+  },
+  "actualScope": {
+    "client": "ordinary Windows Host/Chrome, profile-04, designated recoverable public copy",
+    "library": "165 assets, lexical/colors/image-text165/165; 120 duplicate scale copies, about24 independent public materials",
+    "persistence": "full211 canonical records unchanged across compatible reuse and final full app reopen;7 jobs unchanged across reopen",
+    "originalProtection": "all165 metadata,5 tags,330 media files and5 full analysis execution tables unchanged from initial before",
+    "legacyFailure": "31 previous canonical created_at values changed by ee31 in this copy; preserved as legacy error, not claimed restored",
+    "repairBaseline": "133 indexed/179 persistent records; all remaining work and full compatible reuse preserve these exact prior rows",
+    "pending": [
+      "Native/installation/credentials/OS handoff deferred",
+      "T23 original Chrome tab pressure",
+      "parent issue#24"
+    ],
+    "stopAfter": "C"
+  },
+  "ordinaryLastReopen": {
+    "url": "http://127.0.0.1:53027/#/library",
+    "hostPid": 2956,
+    "cliSession": 45755,
+    "priorCliExit": "73902 exit0 after ordinary menu/0 drafts/0 unsaved windows/0 login tasks"
+  },
+  "artifacts": [
+    {
+      "path": ".scratch/c-search-20261008/evidence/after-reopen.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/after-reopen.json",
+      "bytes": 108357,
+      "sha256": "b224cde869b774c29b056b67cef1ebfa14ec1a5168346afe2a2579ae00b1c959",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/before-reopen.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/before-reopen.json",
+      "bytes": 108358,
+      "sha256": "ecdd2d59e1a32b8c4769e205cdd009e9ac7cdda24d9d967a4351b658ac7b6f7f",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/before.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/before.json",
+      "bytes": 75163,
+      "sha256": "6f56226b65dccedada8083529a6490639d3030bf7e5a8da45efff22a1e39de76",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/chinese-full.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/chinese-full.png",
+      "bytes": 115000,
+      "sha256": "49009db0235a61dfb66e0fabb69b8df4b638226bed125d724e7fed6085bfdcd0",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/chinese-visible-timing.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/chinese-visible-timing.json",
+      "bytes": 395,
+      "sha256": "b1e940bce8a32e3dc8a0dc3c50e51d454a070a46db4f4e3b607017fe229f8506",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/compatible-reuse-complete.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/compatible-reuse-complete.png",
+      "bytes": 85581,
+      "sha256": "14962dc0bd74fa0cf271c708a0c4a03d4ee72f17967b197917f677eecff4b841",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/description-before-reopen.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/description-before-reopen.png",
+      "bytes": 82215,
+      "sha256": "b573f661985e20cc350443025c0c0f6ed0782e313c3aab0f2b129798ec886832",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/english-full.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/english-full.png",
+      "bytes": 92288,
+      "sha256": "93180a6bff0ae683b28c1bb11326551f42b48be68d691c7d454a8462aa51aa5c",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/english-full.txt",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/english-full.txt",
+      "bytes": 9388,
+      "sha256": "ebb08a3e8f685ebfade0d35beaef31d5ce549f5980d9e3a6b37e8596ad54853b",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/exit-paused-old-build.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/exit-paused-old-build.png",
+      "bytes": 39027,
+      "sha256": "06a79d0909a369266915bb2fa461943a621f933c458032604cc1de343dbe90a6",
+      "scope": "ee31 initial/legacy candidate; see handoff, not transferred to fixed product"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/final-exit-review.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/final-exit-review.png",
+      "bytes": 44006,
+      "sha256": "69e10e63d145aad3901add4ee7848bdb5b3df7766eb96ee2a769b0b283e15f51",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/final-reopen-description.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/final-reopen-description.png",
+      "bytes": 82579,
+      "sha256": "c245b35c73ab6c7eff9f17eb66248814ad23b4af1a5b763904865e1d6fb90251",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/final-reopen-hybrid-full.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/final-reopen-hybrid-full.png",
+      "bytes": 115095,
+      "sha256": "942fa117bcdad0eee202b47808be1e214bfae66692d6f4b71c527a1c84b65333",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/final-reopen-hybrid-full.txt",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/final-reopen-hybrid-full.txt",
+      "bytes": 6932,
+      "sha256": "552b02485bc7173f306b3846d2f50875a8589ef5dae131ef7210de55ebfcf677",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/hybrid-colour-25.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/hybrid-colour-25.png",
+      "bytes": 141034,
+      "sha256": "f00d1ec4cb0f9a2b163cbf2a7c862e17f3b27c2ad9e6ff0e51e712e6742a7080",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/hybrid-colour-25.txt",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/hybrid-colour-25.txt",
+      "bytes": 7584,
+      "sha256": "2f1b201dc33bd1d97988479db3bea44d09e444f994d61d29da446dbc9315d1c4",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/hybrid-colour-75.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/hybrid-colour-75.png",
+      "bytes": 52306,
+      "sha256": "4b267a05f0e1fdc5a58ece6e70e658738ce69a61d7fc0333206ffce131c04d2e",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/image-external-full.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/image-external-full.png",
+      "bytes": 133797,
+      "sha256": "264216ffaf22ed782eb0012d06a1e3b26ae2e1d56805fc0a7a39e83eb3d89f88",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/image-external-full.txt",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/image-external-full.txt",
+      "bytes": 5567,
+      "sha256": "d183b9e2da8f3e2670608bf5c0bbecec847e655d15259e1af17d22ec89410555",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/image-library-full.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/image-library-full.png",
+      "bytes": 156919,
+      "sha256": "59cab385cdb796ccefe28ec2c63cbfdd76ae9e4b377f6dd39343fab402181f97",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/image-library-full.txt",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/image-library-full.txt",
+      "bytes": 5138,
+      "sha256": "885cf437cb6859ab1ab6d269ab8714a0ee3c23500699124f6f2282acc05e0807",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/lexical-during-generation.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/lexical-during-generation.png",
+      "bytes": 78593,
+      "sha256": "cccfc5de30bb3796732daa190c6fe93df3ec5b4c0ba54d5e60fe598f6c0b13bd",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/paging-165-selection.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/paging-165-selection.png",
+      "bytes": 118680,
+      "sha256": "653458682a822434b5f73c73eecf67d21c20b99558bab635624b632d45b31736",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/paused-cold.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/paused-cold.json",
+      "bytes": 75492,
+      "sha256": "a492fcf1c8f92da87089447df00dbb6f65d33cda70ebafbd4533ea56fd7c3123",
+      "scope": "ee31 initial/legacy candidate; see handoff, not transferred to fixed product"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/paused-cold.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/paused-cold.png",
+      "bytes": 82080,
+      "sha256": "d954754652b40ad62a4308ed002846791f492d70e816d44f38f490ab28750bf9",
+      "scope": "ee31 initial/legacy candidate; see handoff, not transferred to fixed product"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/paused-partial.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/paused-partial.png",
+      "bytes": 76513,
+      "sha256": "03ad94e28707dcdc9466057e6852ad75218c6fc79cd22799c7b01b357b73ba1b",
+      "scope": "ee31 initial/legacy candidate; see handoff, not transferred to fixed product"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/paused.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/paused.json",
+      "bytes": 75492,
+      "sha256": "a492fcf1c8f92da87089447df00dbb6f65d33cda70ebafbd4533ea56fd7c3123",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/paused.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/paused.png",
+      "bytes": 82080,
+      "sha256": "d954754652b40ad62a4308ed002846791f492d70e816d44f38f490ab28750bf9",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/prepared.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/prepared.json",
+      "bytes": 108020,
+      "sha256": "6937ddd2fb382e4c73580a5d61fd12117b0e2fc6ea70a8847364f9c0bd674b84",
+      "scope": "pre-fix failing regression/oracle, retained"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/reopen-paused-fixed.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/reopen-paused-fixed.png",
+      "bytes": 81757,
+      "sha256": "b43a75100f61eac1407dfa26c74e728d5b64c427c4e6e3deab6884ea7d443b7b",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/repair-baseline.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/repair-baseline.json",
+      "bytes": 105622,
+      "sha256": "a5df21fc27225895d1537fe067e2197bd3b468e20826eb6bd34e1e5d5769c581",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/resources-during-load.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/resources-during-load.png",
+      "bytes": 110510,
+      "sha256": "cb575cf7d3a16762a4bfbcaa16ce488e2fb2ee9801be3f58252cb16c9d633ad7",
+      "scope": "ee31 initial/legacy candidate; see handoff, not transferred to fixed product"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/reuse-after.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/reuse-after.json",
+      "bytes": 108356,
+      "sha256": "5770a62487122d24c71caff6bb8e27237d0901f4ebb56113913e4e1ea4030c3d",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/reuse-before.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/reuse-before.json",
+      "bytes": 108024,
+      "sha256": "42e06d79b30607a0503d81176ee3a204be912de5c674eb00771295e11a43dd44",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/scope-confirmation.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/scope-confirmation.png",
+      "bytes": 85524,
+      "sha256": "c948c2002449d42f1c5e1f26212950786ceb0f73515a68e79933d81779bc57fe",
+      "scope": "ee31 initial/legacy candidate; see handoff, not transferred to fixed product"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/after-reopen.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/after-reopen.log",
+      "bytes": 204,
+      "sha256": "c99d9432726b9097a25e94d1de52df69394ff0646196495a3e62b0a53fd3bce3",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/before-reopen.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/before-reopen.log",
+      "bytes": 205,
+      "sha256": "d0e4f902c2434c77ae4b29b3c7ed093215ed636f05f4846bc1c587979138a443",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/before.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/before.log",
+      "bytes": 155,
+      "sha256": "1f2a106dc09c85777f6e2eccbc162a02023c472583f3c66354b7bda2d4d561d1",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-green-asset-discovery-workflow.test.ts.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-green-asset-discovery-workflow.test.ts.log",
+      "bytes": 132,
+      "sha256": "ed9fe0680810d3d187b6e12b60c4836f75c5e14e8c30eced78b7d147aba9ef00",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-green-asset-retrieval-host.test.ts.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-green-asset-retrieval-host.test.ts.log",
+      "bytes": 457,
+      "sha256": "2cf85a320b271b1ef66fbaaadc12657e17cacddca98159853a1b5a691247e872",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-green-asset-search-host.test.ts.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-green-asset-search-host.test.ts.log",
+      "bytes": 1933,
+      "sha256": "38ca0fc9ed050495ab58476cee9787d0f558965f85c756ed42fcfedf528c6192",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-green-query-file-grants.test.ts.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-green-query-file-grants.test.ts.log",
+      "bytes": 421,
+      "sha256": "f20bdbfa0d76137549f16e80b0b4a6568b9620b8b90b5ea86735546a04d90fa4",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-green-retrieval-model-workspace.test.ts.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-green-retrieval-model-workspace.test.ts.log",
+      "bytes": 455,
+      "sha256": "3bcea41d477cbcd676293f791abf12d5f2353a948875981d5d83aa2d268db9c9",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-green.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-green.json",
+      "bytes": 1387,
+      "sha256": "c3e159f97b2623af83c19eaefa0a699a71e24b6fa6cd91e969785efc4e9eda11",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-red-asset-retrieval-host.test.ts.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-red-asset-retrieval-host.test.ts.log",
+      "bytes": 291582,
+      "sha256": "5c5050d8b5ddda29965c690c36ecb4d9a310692ec19f10db7399b4f21872462c",
+      "scope": "pre-fix failing regression/oracle, retained"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/c08-canonical-reuse-red.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/c08-canonical-reuse-red.json",
+      "bytes": 377,
+      "sha256": "47e31d653168f0f2d13649888659b00d1568c4213d77ab8442d30b6f27ff95dd",
+      "scope": "pre-fix failing regression/oracle, retained"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/context.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/context.log",
+      "bytes": 264,
+      "sha256": "4dc8addc68904465f3cc548c2507de6ffad2f5f309aae3d7bbadfca8bc54ddb4",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/final-checks.json",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/final-checks.json",
+      "bytes": 1292,
+      "sha256": "c3a3c51355dbbe0644c3d21d77e4e826a82fb1c9485b036e3f548d003a096d17",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/paused.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/paused.log",
+      "bytes": 550,
+      "sha256": "b0e2798e1b217d6f34dc37f08434348f467f202620690e6a7eef830139b3b615",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/prepared.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/prepared.log",
+      "bytes": 200,
+      "sha256": "7797a519b73c42b95b22585cafd626cef551d3f84496811a0a85d4830bb5d57b",
+      "scope": "pre-fix failing regression/oracle, retained"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/repair-baseline.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/repair-baseline.log",
+      "bytes": 249,
+      "sha256": "d8881b14f326592dd33ba1d4dde3688a91208b669750b964b03cc97fcf7c52f1",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/reuse-after.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/reuse-after.log",
+      "bytes": 203,
+      "sha256": "94eb37662a9c43e1993715f82721544e24dc1a0b7ae8079860fcbaf3fb5d1b17",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/reuse-before.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/reuse-before.log",
+      "bytes": 204,
+      "sha256": "b5711b593cafb51aadf6a8c0923abc5a81250018dd692baad539d87a245481e6",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/validation/typecheck.log",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/validation/typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": "see receipt and handoff for exact current/legacy and UI/internal scope"
+    },
+    {
+      "path": ".scratch/c-search-20261008/evidence/final-reopen-hybrid-loaded.png",
+      "savedPath": "docs/checkpoints/c-search-coverage-20261008/evidence/final-reopen-hybrid-loaded.png",
+      "bytes": 139285,
+      "sha256": "64256de09845b5c1203e78b0df0897bdddcb75aafade56e47235f4fe499da4ed",
+      "scope": "same final53027/58dc candidate after visible thumbnails fully decoded; browser extension overlays remain visible; no source, data, extension or security changes"
+    }
+  ],
+  "pushed": false,
+  "finalLoadedScreenshot": {
+    "at": "2026-10-08T01:01:27.571Z",
+    "assetCoverage": 165,
+    "matched": 136,
+    "kind": "fresh UI screenshot after normal scroll; original loading-frame screenshot retained"
+  }
+}

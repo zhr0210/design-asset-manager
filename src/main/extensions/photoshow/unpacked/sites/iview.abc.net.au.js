@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"iview.abc.net.au":{srcMatching:[{srcRegExp:"(//.+?\\.iview\\.abc\\.net\\.au/thumbs/)\\d+(/.+@IMG@)",processor:"$10$2"}]}};

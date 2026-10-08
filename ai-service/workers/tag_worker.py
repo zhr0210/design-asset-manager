@@ -328,11 +328,8 @@ class TagWorker:
                         run_qwen_fallback = True
                         qwen_reason = f"Fewer than 3 tags extracted ({len(primary_fused_tags)})"
                         
-                    # Condition 3: No competitive heavy model currently loaded (to prevent memory crash)
-                    is_joycaption_loaded = "joycaption" in self.model_manager.loaded_models
-                    
-                    # Run Qwen-VL if conditions met and no competitor loaded
-                    if run_qwen_fallback and not is_joycaption_loaded:
+                    # Run Qwen-VL if conditions met
+                    if run_qwen_fallback:
                         try:
                             print(f"[TagWorker] Qwen-VL Fallback Triggered! Reason: {qwen_reason}")
                             await self.model_manager.load_model("qwen_vl")

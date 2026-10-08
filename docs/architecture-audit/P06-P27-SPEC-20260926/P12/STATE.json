@@ -1,0 +1,27 @@
+{
+  "stage": "P12",
+  "mode": "SPEC",
+  "design_review_status": "ready_for_review",
+  "implementation_status": "not_started",
+  "directDependencies": [
+    "P11"
+  ],
+  "precondition": "prior designs pending review; user permits continued SPEC only",
+  "requirements": [
+    "R08",
+    "R09",
+    "R10",
+    "R11"
+  ],
+  "decisions": [],
+  "testIds": [
+    "T04",
+    "T05",
+    "T07",
+    "T12"
+  ],
+  "specTests": "PASS",
+  "productionTests": "NOT_RUN",
+  "modelTests": "NOT_RUN",
+  "realLibraryAccessed": false
+}

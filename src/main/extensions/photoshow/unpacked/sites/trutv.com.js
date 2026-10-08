@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"trutv.com":{srcMatching:[{srcRegExp:"(//.+?/w_)\\d+(/.*)",processor:"$1auto$2"}]}};

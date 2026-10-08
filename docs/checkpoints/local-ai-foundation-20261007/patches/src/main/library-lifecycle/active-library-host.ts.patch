@@ -1,0 +1,107 @@
+diff --git a/src/main/library-lifecycle/active-library-host.ts b/src/main/library-lifecycle/active-library-host.ts
+index ce520ed..1922a7b 100644
+--- a/src/main/library-lifecycle/active-library-host.ts
++++ b/src/main/library-lifecycle/active-library-host.ts
+@@ -15,6 +15,11 @@ import {measurePreviewColors as measureColors} from './measure-preview-colors'
+ import {readOrganization as readLibraryOrganization,writeOrganization as writeLibraryOrganization} from './library-organization'
+ import {readNotebook as readAssetNotebook,saveNotebook as saveAssetNotebook} from './asset-notebook'
+ import { readAssets, readAssetContext as readSelectedAssetContext } from './active-library-asset-queries'
++import { createAssetSearchIndex, type AssetSearchIndex } from '../asset-search/asset-search-index'
++import {createAssetRetrievalStore,type AssetRetrievalStore,type RetrievalRuntimePort} from '../retrieval-workspace/asset-retrieval-store'
++import {parseRetrievalGeneration,parseAssetSemanticSearch} from '../../shared/contracts/retrieval-workspace.contract'
++import type { VisualAdmission } from '../visual-ai/visual-admission'
++import { validateAssetSearchRequest } from '../../shared/contracts/asset-search.contract'
+ import { listIntakeRecovery as listRecovery, prepareIntakeRecovery as prepareRecovery, runIntakeRecovery as recoverIntake, type PreparedIntake } from './intake-recovery'
+ import { executeDownloadJournal } from '../managed-download/download-journal'
+ import { recoverOwnedDownload } from './owned-download-recovery'
+@@ -116,6 +121,8 @@ export interface ActiveLibraryHostDependencies extends LibraryDirectorySelection
+   tagIntentTestHooks?: TagIntentTestHooks
+   /** Trusted Main platform composition; never accepted by IPC or a client. */
+   schemaMaintenanceStorage?: HostMaintenanceStorage
++  resourceAdmission?: VisualAdmission
++  retrievalRuntime?:()=>RetrievalRuntimePort|undefined
+ }
+ 
+ interface CreationPlanRecord {
+@@ -126,6 +133,8 @@ interface CreationPlanRecord {
+ }
+ 
+ interface Binding {
++  search?: AssetSearchIndex
++  retrieval?:AssetRetrievalStore
+   notebookSession:string
+   manifestDeclaration: LibraryManifestDeclaration
+   root: string
+@@ -183,6 +192,7 @@ export function createActiveLibraryHost(
+       try {
+         const result = await active.lock.lease.runWhileHeld(async () => {
+           if (state.state !== 'ready' || binding !== active || (!allowSuspendedCoordination&&businessSuspensions.size)) throw hostError('library-quiescing')
++          active.search?.installTracking()
+           return operation(active)
+         })
+         if (result.kind !== 'completed') {
+@@ -283,8 +293,11 @@ export function createActiveLibraryHost(
+     }
+     const active = binding
+     state = { state: 'quiescing', identity: active.identity, generation: active.generation }
++    active.retrieval?.suspend()
+     recoveryPlans.clear(); recoveryPreparation++
+     await Promise.allSettled(Array.from(inFlight))
++    await active.retrieval?.close()
++    active.search?.close()
+     try { await active.lock.release() } catch { state = { state: 'recovery-required', identity: active.identity, generation: active.generation }; throw hostError('library-lock-invalid') }
+     try { if (active.database.open) active.database.close() } catch { state = { state: 'recovery-required', identity: active.identity, generation: active.generation }; throw hostError('library-operation-failed') }
+     binding = undefined
+@@ -346,6 +359,42 @@ export function createActiveLibraryHost(
+   })
+   const readAssetContext = (ids: readonly string[]) => run(active => readSelectedAssetContext(active.database, ids))
+   const listAssets = () => run((active) => readAssets(active.database))
++  const searchIndex = (active: Binding) => active.search ??= createAssetSearchIndex({ database: active.database,
++    control: active.control, identity: active.identity, generation: active.generation, admission: dependencies.resourceAdmission,
++    assertAuthority() { if (binding !== active || inspect().state !== 'ready') throw hostError('library-generation-conflict') } })
++  const searchAssetPage: ActiveLibraryHost['searchAssetPage'] = input => run(active => {
++    const value = validateAssetSearchRequest(input)
++    if (value.libraryIdentity !== active.identity || value.generation !== active.generation) throw hostError('library-generation-conflict')
++    return searchIndex(active).search(value)
++  })
++  const readSearchIndex: ActiveLibraryHost['readSearchIndex'] = () => run(active => searchIndex(active).status())
++  const rebuildSearchIndex: ActiveLibraryHost['rebuildSearchIndex'] = () => run(active => searchIndex(active).rebuild())
++  const retrievalStore=(active:Binding)=>active.retrieval??=createAssetRetrievalStore({database:active.database,control:active.control,
++    identity:active.identity,generation:active.generation,runtime:()=>dependencies.retrievalRuntime?.(),admission:dependencies.resourceAdmission,
++    assertAuthority(){if(binding!==active||inspect().state!=='ready'||schemaMaintenance.isAdmissionClosed()||businessSuspensions.size)throw hostError('library-quiescing')},
++    readPreview:asset=>readVisualPreview({libraryIdentity:active.identity,generation:active.generation,sessionToken:active.notebookSession,
++      assetId:asset.id,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef}),
++    lexical:(input,signal)=>{const {libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,limit,cursor}=input
++      return searchIndex(active).search({libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,limit,cursor},signal)},
++    lexicalStatus:()=>searchIndex(active).status()})
++  const retrievalRun=<T>(operation:(active:Binding)=>T|Promise<T>)=>run(async active=>{
++    try{return await operation(active)}catch(e){if(e instanceof ActiveLibraryHostError)throw e
++      const code=e instanceof Error&&/^(RETRIEVAL|ASSET_SEARCH|LOCAL_MODEL|AI_MEMORY|VISUAL)_[A-Z_0-9]+$/.test(e.message)?e.message:'RETRIEVAL_OPERATION_FAILED'
++      throw new ActiveLibraryHostError('library-operation-failed',code)}})
++  const retrievalScope=(active:Binding,scope:{libraryIdentity:string;generation:string})=>{
++    if(scope.libraryIdentity!==active.identity||scope.generation!==active.generation)throw hostError('library-generation-conflict')}
++  const readRetrievalCoverage:ActiveLibraryHost['readRetrievalCoverage']=()=>retrievalRun(active=>retrievalStore(active).coverage())
++  const startRetrievalGeneration:ActiveLibraryHost['startRetrievalGeneration']=input=>retrievalRun(active=>{
++    const value=parseRetrievalGeneration(input);retrievalScope(active,value);return retrievalStore(active).start(value)})
++  const pauseRetrievalGeneration:ActiveLibraryHost['pauseRetrievalGeneration']=(scope,id)=>retrievalRun(active=>{retrievalScope(active,scope);return retrievalStore(active).pause(id)})
++  const resumeRetrievalGeneration:ActiveLibraryHost['resumeRetrievalGeneration']=(scope,id)=>retrievalRun(active=>{retrievalScope(active,scope);return retrievalStore(active).resume(id)})
++  const searchSemanticPage:ActiveLibraryHost['searchSemanticPage']=(input,owner,external)=>retrievalRun(active=>{
++    const value=parseAssetSemanticSearch(input);retrievalScope(active,value);return retrievalStore(active).search(value,owner,external)})
++  const cancelSemanticQuery:ActiveLibraryHost['cancelSemanticQuery']=(scope,queryId,owner)=>retrievalRun(active=>{retrievalScope(active,scope);retrievalStore(active).cancel(queryId,owner)})
++  const rebuildRetrievalIndex:ActiveLibraryHost['rebuildRetrievalIndex']=()=>retrievalRun(active=>retrievalStore(active).rebuild())
++  const switchRetrievalSpace:ActiveLibraryHost['switchRetrievalSpace']=(scope,id)=>retrievalRun(active=>{retrievalScope(active,scope);return retrievalStore(active).switchSpace(id)})
++  const suspendRetrievalWork=()=>binding?.retrieval?.suspend()
++  const cancelSemanticOwner=(owner:string)=>binding?.retrieval?.cancelOwner(owner)
+   const searchAssets = (queries: readonly string[]) => run((active) => {
+     const normalizedQueries = queries.map((query) => query.trim()).filter(Boolean)
+     if (normalizedQueries.length === 0) return readAssets(active.database)
+@@ -642,7 +691,8 @@ export function createActiveLibraryHost(
+     enableBasicAnalysis,beginBasicRequest:beginBasic,claimBasicAnalysis,markBasicAnalysisSent,commitCaption,finishBasicAnalysis,readCaptions,readBasicAttempts,recoverBasicAnalysis,
+     readBackgroundExecution,configureBackgroundExecution,claimBackgroundExecution,attachBackgroundRequest:attachBackground,markBackgroundExecutionSent,finishBackgroundExecution,recoverBackgroundExecution,
+     readOcr,commitOcr,correctOcr,readNotebook,saveNotebook,readOrganization,writeOrganization,measurePreviewColors,readWorkSets,writeWorkSet,writeWorkLayout,
+-    inspect, prepareCreate, confirmCreate, open, reopen, close,
++    inspect, prepareCreate, confirmCreate, open, reopen, close, searchAssetPage, readSearchIndex, rebuildSearchIndex,
++    readRetrievalCoverage,startRetrievalGeneration,pauseRetrievalGeneration,resumeRetrievalGeneration,searchSemanticPage,cancelSemanticQuery,rebuildRetrievalIndex,switchRetrievalSpace,suspendRetrievalWork,cancelSemanticOwner,
+     prepareAddAssets, dispatchAddAssets, inspectCapture,
+     readAssetContext,readBackgroundAnalysis,configureBackgroundAnalysis,changeBackgroundIntent,readTagRecovery,readTagEffectReceipt, readTagDecisionContext,decideTag,holdBusinessAdmission,enableTagExecution,claimTagExecution,markTagExecutionSent,commitTagExecution,finishTagExecution,readTagExecutionRequest,readTagOutbox,ackTagOutbox,readTagExecution, readTagIntentContext, readTagIntents, saveTagIntent,saveTagBatch, listAssets, searchAssets, listTags, searchTags, getTag, listTrash, readPreview, readVisualSession,readVisualPreview, readManagedOriginal, createTag, updateTag, addTagToAsset,
+     createTagAlias, removeTagAlias, setTagParent, removeTagFromAsset, batchAddTagsToAssets, batchRemoveTagsFromAssets, replaceTagForAssets, listAssetTags, updateAssetCaption, resetAssetCaptionEdited,

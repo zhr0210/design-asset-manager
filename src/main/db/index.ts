@@ -89,10 +89,10 @@ export function initDatabase(): Database.Database {
 
   // Resolve DB file path
   const dbPath = join(baseDir, 'design_asset_manager.db')
-  console.log(`[SQLite] Connecting to SQLite DB at: ${dbPath}`)
+  console.log('[SQLite] Connecting to the application database.')
 
   // Open SQLite database
-  db = new Database(dbPath, { verbose: console.log })
+  db = new Database(dbPath)
   db.pragma('foreign_keys = ON')
 
   // Check if tags table needs migration (does it lack 'normalized_name'?)
@@ -400,6 +400,10 @@ export function initDatabase(): Database.Database {
   }
 
   return db
+}
+
+export function setDatabase(newDb: Database.Database): void {
+  db = newDb
 }
 
 export function getDatabase(): Database.Database {

@@ -1,0 +1,23 @@
+# Unpinning A Kept Package Copy Starts A New Pending Decision Cycle
+
+The explicit **Unpin Kept Package Copy** action, presented to users as Stop Keeping For Later, does not delete a Kept Verified Package Copy. Before confirmation, its review shows the exact managed package identity, current install eligibility, logical/shared/reclaimable bytes and that a new seven-day Pending Package Decision Retention episode will begin. A user seeking immediate space reclamation must instead choose the separate ADR 0222 Delete Managed Download Copy action.
+
+On confirmed unpin, the host atomically replaces the Kept Verified Package Copy Pin with a new Awaiting Install Decision owner. The content-addressed bytes must never become temporarily unowned between those changes, and no automatic cleanup or physical deletion runs in the same ownership transaction. If the ownership commit cannot complete durably, the Keep pin remains authoritative and the UI reports that unpin did not finish.
+
+The new retention episode starts when that atomic transition commits, not at the original download, verification, Keep or prior pending deadline. It receives a full seven elapsed days under ADR 0223, including its own final 24-hour Pending Package Decision Warning. Earlier episode deadlines, warning opportunities and missed-warning grace timestamps do not shorten or extend the new episode.
+
+ADR 0224 applies independently to the new episode. If it has no usable Pending Package Warning Opportunity during its final day, the first later usable projection grants that episode one 24-hour Missed Pending Package Warning Grace. The old episode's consumed marker is not reused, while restart, route changes or repeated projection within the current episode still cannot create another grace.
+
+The new episode also receives its own ADR 0228 cumulative 30-minute Pending Package Storage Resolution Budget. Any budget consumed by the episode that ended at Keep is not restored or transferred; deduplicated physical bytes do not merge decision-episode budget state.
+
+After unpin, the copy again exposes Install Now, Keep Verified Copy For Later and Delete Managed Download Copy. Choosing Keep atomically ends the pending episode and restores a Keep pin only after ADR 0226 Keep Pin Admission succeeds; a blocked attempt leaves the current episode unchanged. A later explicit unpin may start another new episode. This repeatability follows deliberate user decisions rather than a hidden timer refresh, automatic snooze, application restart or low-disk policy.
+
+Revocation, suspension, Install Window Ended, incompatibility or changed license/dependency state may disable Install but does not prevent the user from keeping or deleting the managed copy. Unpin never refreshes trust, extends a signed install window, changes package identity, reacquires bytes or makes an ineligible package executable.
+
+An active review, integrity check, transfer, install, copy or other declared transaction prevents an unsafe owner transition. The host either commits the unpin in the same durable owner journal at a safe boundary or leaves the Keep pin unchanged until that boundary; it never cancels active work merely to start retention. Installed, rollback, other-copy and transaction owners remain independent, so shared physical bytes stay present while any owner still needs them.
+
+At the new episode's deadline or one-time grace deadline, ADR 0223 owner-safe cleanup may release only its pending reference. Explicit Delete remains the only immediate-delete intent and still reports actual physical reclamation, which may be zero or partial for shared bytes. Generic Analysis Proxy, Preview, derived-model or low-disk cleanup cannot reinterpret either unpin or expiry as authority over another storage class.
+
+ADR 0223 elapsed-time and Retention Time Not Assessable rules govern the new episode. Unpin creates no background helper, scheduled wake or OS notification. Current episode identity, timestamps, warning opportunity and grace state remain minimal device-local package-manager metadata excluded from backup, export/merge/sync, telemetry, publisher feedback and support logs; completed episode state may be pruned once no owner-safety decision needs it and never becomes user-attention history.
+
+The current project has no Verified Managed Package Copy registry, Keep/unpin action, durable owner journal, repeated retention-episode state or atomic pin-to-pending transition. This ADR changes documentation only: it unpins/deletes/retains no real package, reads no package/cache/private state, starts no timer/helper, sends no notification and changes no public IPC/schema/AI Worker API.

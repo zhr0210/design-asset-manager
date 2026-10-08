@@ -1,1 +1,0 @@
-window.SITE_SETTINGS={"crunchyroll.com":{ignore:'[class*="playable-card__hover-info"]',srcMatching:[{srcRegExp:"(//.+?\\.crunchyroll\\.com/)cdn-cgi/image/[^/]*/(.+@IMG@)",processor:"$1$2"}]}};

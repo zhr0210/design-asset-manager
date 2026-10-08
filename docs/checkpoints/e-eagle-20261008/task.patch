@@ -1,0 +1,2653 @@
+diff --git a/TASK.md b/TASK.md
+index eb48e12..9f531eb 100644
+--- a/TASK.md
++++ b/TASK.md
+@@ -1,3 +1,7 @@
++# 当前：E Eagle 正式接线实施，真实验收待准备（2026-10-08）
++
++用户已授权包内E，并选择新建专用公开 Eagle 测试库。普通E profile的配对、safeStorage、可信目录身份、伴随网关、只读预览、撤权与重连、插件下载及随构建打包已有代码；既有Journal/Outbox/三方基线保留。当前dam-11b22b18c2708872 / 782输入，普通Host5332/CLI90398/50422；插件0.2.0包已核对，尚未安装。三份既定公开素材副本已准备，未创建/接触实际Eagle库。相关受控/SQLite/IPC/包回归、typecheck/build/context通过，不是实际Eagle通过；69份untracked覆盖警告保留。旧fb7b候选Chrome直开63476遭ERR_BLOCKED_BY_CLIENT，当前候选未绕过拦截；Browser及读取/写入回读/冲突/恢复/保存重开均未验收。等待用户创建空专用库、安装及内部授权，并恢复Chrome正规入口；必要确认来自Windows computer-use保护规则。准确入口与证据见 [本轮记录](docs/handoff/EAGLE-E-20261008.md)。HEAD与原index保持、未commit/push/发布。**E父级未完成；不扩F，桌面专项仍后续集中验收。**
++
+ # 当前：D 浏览器视频与交付闭环完成，桌面专项延期（2026-10-08）
+ 
+ 用户授权包内D并批准Blender官方开放许可视频，桌面专项后续集中验收。普通Browser/profile-04 → 指定C公开库独立D副本 → 正式MP4 Copy/v15备份升级 → 工作集视频/两帧/顺序/双语备注/公开来源 → 四类独立副本下载/核对 → 整应用正常保存重开已成立。当前dam-452db36be3f6a1ad / 775输入，最后同一产物普通重开50183/Host3472/CLI29376，Windows x64普通运行；两帧实际30.125与120.4583333秒，重开暂停120.458333秒。旧1MiB备份限制、Chrome缺Range与视频首帧误入整图索引已修复；原C库v14/165素材/330文件保持，D的旧31张相关表行、330文件、211持久向量和7任务保持，最终335文件/保存状态完整签名重开相同。真实取消、来源拒绝、成员移除再加入、下载后取消/明确清理有实际结果。相关回归、typecheck/build/context及主Agent静态自审通过，68个untracked覆盖警告保留。入口、各候选证据和限制见[本轮交付](docs/handoff/WORK-MODE-D-20261008.md)与[精确检查点](docs/checkpoints/d-work-mode-20261008/README.md)。原WIP/暂存保持，未commit/push。**D父级未完成**：指定创作应用真正接收、Native拖拽/置顶/隐藏/多屏与断屏等按用户安排后续集中验收；不以Browser下载或假OS port替代。止于D，不扩E–F；旧T23压力与父#24不自动关闭。
+diff --git a/docs/agents/implementation-status.md b/docs/agents/implementation-status.md
+index ecaa0cd..2328d40 100644
+--- a/docs/agents/implementation-status.md
++++ b/docs/agents/implementation-status.md
+@@ -1,3 +1,7 @@
++# 2026-10-08：E正式接线已实施，真实Eagle/Browser验收未成立
++
++普通composition接Main加密配对与安装包、伴随双端同意及稳定目录身份；官方v2经授权本机网关，保留独立索引、Journal、Outbox、三方冲突与未知结果核对。当前dam-11b22b18c2708872 / 782输入，受控相关回归/typecheck/build/context通过；插件0.2.0尚未安装、用户所选专用公开库待创建，没有实际Eagle读取/写入/冲突/恢复证据。Chrome新端口直开出现ERR_BLOCKED_BY_CLIENT，未绕过；当前候选Browser未验收。69份untracked覆盖警告保留。见[准确状态](../handoff/EAGLE-E-20261008.md)。E父级未完成，不扩F；旧D及更早记录按原版本保持。
++
+ # 实施状态与高风险接线
+ 
+ 总体当前事实以[CURRENT-STATE](../handoff/CURRENT-STATE.md)为准；下列带日期的段落保留当时证据。
+diff --git a/docs/handoff/CURRENT-STATE.md b/docs/handoff/CURRENT-STATE.md
+index 85d5e28..a6e92e6 100644
+--- a/docs/handoff/CURRENT-STATE.md
++++ b/docs/handoff/CURRENT-STATE.md
+@@ -1,3 +1,7 @@
++# 当前：E Eagle 正式接线实施，真实验收待准备（2026-10-08）
++
++用户已授权包内E，并选择新建专用公开 Eagle 测试库。普通E profile的配对、safeStorage、可信目录身份、伴随网关、只读预览、撤权与重连、插件下载及随构建打包已有代码；既有Journal/Outbox/三方基线保留。当前dam-11b22b18c2708872 / 782输入，普通Host5332/CLI90398/50422；插件0.2.0包已核对，尚未安装。三份既定公开素材副本已准备，未创建/接触实际Eagle库。相关受控/SQLite/IPC/包回归、typecheck/build/context通过，不是实际Eagle通过；69份untracked覆盖警告保留。旧fb7b候选Chrome直开63476遭ERR_BLOCKED_BY_CLIENT，当前候选未绕过拦截；Browser及读取/写入回读/冲突/恢复/保存重开均未验收。等待用户创建空专用库、安装及内部授权，并恢复Chrome正规入口；必要确认来自Windows computer-use保护规则。准确入口与证据见 [本轮记录](EAGLE-E-20261008.md)。HEAD与原index保持、未commit/push/发布。**E父级未完成；不扩F，桌面专项仍后续集中验收。**
++
+ # 当前：D 浏览器范围交付，父级仍未完成（2026-10-08）
+ 
+ 用户授权包内D并批准Blender官方开放许可视频，桌面专项后续集中验收。普通Browser/profile-04 → 指定C公开库独立D副本 → 正式MP4 Copy/v15备份升级 → 工作集视频/两帧/顺序/双语备注/公开来源 → 四类独立副本下载/核对 → 整应用正常保存重开已成立。当前dam-452db36be3f6a1ad / 775输入，最后同一产物普通重开50183/Host3472/CLI29376，Windows x64普通运行；两帧实际30.125与120.4583333秒，重开暂停120.458333秒。旧1MiB备份限制、Chrome缺Range与视频首帧误入整图索引已修复；原C库v14/165素材/330文件保持，D的旧31张相关表行、330文件、211持久向量和7任务保持，最终335文件/保存状态完整签名重开相同。真实取消、来源拒绝、成员移除再加入、下载后取消/明确清理有实际结果。相关回归、typecheck/build/context及主Agent静态自审通过，68个untracked覆盖警告保留。入口、各候选证据和限制见[本轮交付](WORK-MODE-D-20261008.md)与[精确检查点](../checkpoints/d-work-mode-20261008/README.md)。原WIP/暂存保持，未commit/push。**D父级未完成**：指定创作应用真正接收、Native拖拽/置顶/隐藏/多屏与断屏等按用户安排后续集中验收；不以Browser下载或假OS port替代。止于D，不扩E–F；旧T23压力与父#24不自动关闭。
+diff --git a/docs/handoff/EAGLE-E-20261008.md b/docs/handoff/EAGLE-E-20261008.md
+new file mode 100644
+index e69de29..2c57813 100644
+--- /dev/null
++++ b/docs/handoff/EAGLE-E-20261008.md
+@@ -0,0 +1,78 @@
++# E：正式 Eagle 接线已实施，真实验收待准备
++
++普通入口：在仓库根目录运行以下命令，经「设置 → 资料库 → Eagle 连接库」进入。
++
++```powershell
++npm run start:browser -- "--profile=G:\antigravity\Design Asset Manager 1001\.scratch\e-eagle-20261008\profile"
++```
++
++当前构建 **dam-11b22b18c2708872 / 782 输入**，Windows x64。
++最新普通 E Host PID5332，CLI90398，监听127.0.0.1:50422；端口与PID不是固定入口。
++这是独立的普通 E profile，无 synthetic 注入，不使用/复制旧 profile 的账号秘密。
++此前 D 实例/profile 与用户草稿保留，不把 D 的证据转记到 E。
++
++## 用户当前可准备的产物
++
++`build/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin` 已生成并纳入正式
++`out/main/eagle-companion`；10637字节，SHA256
++`6735caf4f138119c13f360c2233419f9bbccfa1290cbcc9c8c8675560ee39656`。
++它是本地构建的可审阅插件包，尚未安装、未向 Eagle 市场发布或获得市场审核。
++正式界面已有下载入口，但当前 Browser 下载点击尚未验收。
++
++用户已明确选择新建 Eagle 专用公开测试库。建议路径为
++`.scratch/e-eagle-20261008/Eagle-E-public.library`，**当前尚未创建**。
++已在 `public-imports` 准备此前获准真实公开资料的三份字节副本：宇航员、coffee、荷兰旗。
++原文件与副本 SHA 在本轮 `public-sources.json`；没有把 capability probe 当成用户素材。
++尚未向 Eagle 导入、写元数据或修改第三方库/原件。
++
++## 本轮代码与保护
++
++- 普通 composition 从永久 unavailable 占位改接 `eagle-pairing.ts`。未配对时不探测 Eagle。
++  用户从 DAM 发起只读/可编辑请求，在 Eagle 伴随窗口核对并批准；两分钟有效。
++  秘密自动生成并在应用内传输，Renderer 不接收 token，Main 使用 safeStorage 加密保存。
++- 插件仅内存保留会话，localStorage 仅保存非秘密安装身份。双方分别观察目录 dev/ino/
++  birthtime，不把路径字符串当稳定身份；切库、重装/插件重启、撤权要求重新确认。
++  Host 重启可恢复仍活跃的同一插件会话。
++- 官方 v2 请求走已授权伴随网关；固定127.0.0.1:41595、严格方法/字段/端点白名单，
++  Origin/Fetch-Metadata 拒绝。添加/替换只接受配对的 DAM 暂存根，切库前后核对身份。
++  既有 Journal、Outbox、三方基线、原件权威、未知提交核对与冲突实现保留。
++- 只读会话可索引/搜索/预览，不能写入；旧写权限遇当前能力降级进入重新核对状态，
++  未提交编辑仍保留。断开会撤销 Main 配对，不让后台重新使用旧凭据自动接回。
++- 预览与替换能力分开。缺失/错 ID/无效成功数据不会变删除证据；空进展或重复分页拒绝。
++  指纹改为1MiB分块读取并核对打开前后文件状态，避免整份大原件读入内存。
++- 包构建只收 manifest/HTML/两份JS/README。ZIP格式核对官方文档与已安装 Eagle 的
++  Pack Plugin 实现，无复制厂商代码。archiver7.0.1为直接开发依赖；相关压缩依赖调整，
++  没有运行 npm audit fix 或扩大为全仓依赖升级。
++
++## 当前证据及限界
++
++主 Agent 同会话静态自审；不是独立人员复核。未新建子 Agent。
++
++| 检查 | 实际结果 |
++| --- | --- |
++| 类型检查与正式构建 | 当前候选通过，Main/preload/renderer及插件包实际输出 |
++| Eagle生产配对测试 | 受控网关 + 真实临时目录身份，授权前零探测、只读拒写、重启、切库/撤权、跨站拒绝通过；不是实际 Eagle |
++| 原适配器与伴随协议 | 元数据/文件回读、超时/错误/错ID保护及读取中切库回归通过 |
++| Host SQLite核心 | 三方同步、冲突、未知结果、保留队列、关闭排空及新增权限降级回归通过 |
++| IPC与后台 | 信任发送方、未知请求字段/秘密字段拒绝、22条连接频道及后台序列化回归通过 |
++| 插件包 | 解包目录/逐文件内容与源码一致，out字节与构建包一致，无会话或素材文件 |
++| context | PASS；69份未跟踪first-party源未纳入可信ownership覆盖，不能称全仓覆盖 |
++| 真实浏览器 | **未通过**：fb7b旧候选63476直开报告ERR_BLOCKED_BY_CLIENT；原因未确认。当前11b22候选50422未绕过拦截继续验收 |
++| 真实 Eagle | **NOT_RUN**：专用库/插件安装/批准尚待用户准备，无读取、写入、冲突或重连成功证据 |
++
++本轮没有读取账号秘密、浏览器历史/凭据、个人 Eagle 库，也没有删除库或直接写 Eagle DB。
++HEAD156a9841与本轮起始index SHA保持，已有 WIP/暂存保留，未commit/push/发布。
++精确任务差异与候选归属见 [本轮检查点](../checkpoints/e-eagle-20261008/README.md)。
++
++## 下一步与父级状态
++
++等待用户建空的公开测试库并安装本包。Windows computer-use 技能
++`C:/Users/kilian/.codex/plugins/cache/openai-bundled/computer-use/26.1002.52244/skills/computer-use/SKILL.md`
++要求读取其确认/保护规则：安装操作在行动时确认；guidance 明确
++“Do not act on security or privacy permission requests.” 安装与 Eagle 配对授权交用户处理。
++Chrome 客户端拦截也需要用户恢复正规入口，Agent 不绕过。
++
++准备后继续同一 E：可见入口/配对审阅 → 分页索引/预览/搜索 → 实际添加、元数据、
++替换、回收/恢复回读 → Eagle侧编辑冲突 → 断连/切库/撤权/插件重启与未知结果核对 →
++整应用保存重开与原件/人工内容保护。原生专项仍按用户安排后续集中验收。
++**E父级未完成；不自动扩F，不用只读或模拟通过关闭E。**
+diff --git a/eagle-companion/README.md b/eagle-companion/README.md
+index 32abf2f..296423f 100644
+--- a/eagle-companion/README.md
++++ b/eagle-companion/README.md
+@@ -1,16 +1,48 @@
+ # Design Asset Manager Eagle Companion
+ 
+-This is an uninstalled, reviewable Eagle background-service plugin artifact.
+-It remains idle until a reviewed local session supplies a token, exact Eagle
+-Library identity, and one DAM-owned edit-staging root.
++Version 0.2.0 is an installable, reviewable Eagle background-service plugin.
++Normal DAM builds include `DAM-Eagle-Companion-0.2.0.eagleplugin`; download it
++from the Eagle connected-library page and open it in Eagle to install. This
++local package has not been published to or reviewed by the Eagle marketplace.
++
++Choose the intended library in Eagle. In DAM choose read-only or editable,
++request pairing, then explicitly allow that library in the plugin window.
++The request expires after two minutes. Tokens are generated/transferred by
++the applications, never copied by a user or displayed in either interface.
++Main stores accepted credentials with Electron safeStorage. The plugin keeps
++the session only in memory and stores only its non-secret installation ID.
++Host restart can resume the still-running plugin; plugin exit, library change,
++reinstallation or explicit revocation requires a fresh reviewed session.
++
++The plugin observes the actual library directory's device, file identity and
++creation timestamp. Main independently checks the same observation before
++granting a stable local identity; a path or display name alone is insufficient.
++Remote/virtual filesystems with zero or unstable identities fail closed.
+ 
+ The handler accepts only capability negotiation, item fingerprint, bounded
+-preview read, and `Item.replaceFile()` commands. It resolves items through the
++preview read, and `Item.replaceFile()` commands. Its authenticated gateway also
++forwards only the exact Web API v2 info/get/update/add allowlist to Eagle's
++fixed local port. Browser Origin/Fetch-Metadata requests are rejected; HTTP
++binds only 127.0.0.1:41596. Add and Replace accept only the paired DAM staging
++root; arbitrary URLs, paths and library-switch APIs are excluded.
++It resolves items through the
+ official Eagle Plugin Item interface, never edits `metadata.json`, and rejects
+ unknown request fields, wrong sessions, library changes, symlink/path escapes,
+ and staged bytes whose digest differs from the reviewed request.
+ 
+-Metadata and Trash/Restore use Eagle Web API v2. The Plugin Item documentation
++Metadata and Trash/Restore use Eagle Web API v2 (Eagle 4.0 build21+).
++The Plugin Item documentation
+ does not expose Restore or permanent deletion, so this plugin does not invent
+ those operations. Installation, real pairing, and real Eagle writes remain
+-outside synthetic protocol validation.
++outside synthetic protocol validation. Cross-application compare-and-swap is
++unavailable: DAM checks before/after, preserves unknown results and records conflicts.
++
++Sources: [Web Item API](https://developer.eagle.cool/web-api/api/item),
++[Plugin Library API](https://developer.eagle.cool/plugin-api/api/library),
++[Plugin Item API](https://developer.eagle.cool/plugin-api/api/item),
++[official packaging flow](https://developer.eagle.cool/plugin-api/publishing/package).
++The ZIP packaging format was independently checked against installed Eagle's
++`app/js/plugin/index.js` Pack Plugin implementation; no vendor code was copied.
++
++License: MIT, matching the DAM project. Never include credentials, real library
++files or local session state in a plugin package or report.
+diff --git a/eagle-companion/index.html b/eagle-companion/index.html
+index 3375547..c5594ed 100644
+--- a/eagle-companion/index.html
++++ b/eagle-companion/index.html
+@@ -1,15 +1,26 @@
+ <!doctype html>
+-<html lang="en">
++<html lang="zh-CN">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <title>Design Asset Manager Companion</title>
++    <style>
++      body { margin: 0; padding: 24px; color: #202126; background: #f5f5f7; font: 14px/1.6 "Segoe UI", sans-serif; }
++      h1 { margin: 0 0 14px; font-size: 20px; }
++      p { margin: 0 0 18px; }
++      button { border: 1px solid #d9dce3; border-radius: 9px; padding: 9px 14px; background: white; color: inherit; cursor: pointer; }
++      #approve { background: #151619; color: white; margin-right: 8px; }
++      button:focus-visible { outline: 2px solid #55585f; outline-offset: 2px; }
++    </style>
+   </head>
+   <body>
+     <main>
+       <h1>Design Asset Manager Companion</h1>
+-      <p id="status">Pairing required. No Eagle data is exposed until a reviewed local session is active.</p>
++      <p id="status">Pairing required · 正在准备本机配对。授权前不读取素材。</p>
++      <button id="approve" hidden>允许连接此库</button>
++      <button id="reject" hidden>拒绝 / 撤销连接</button>
+     </main>
+     <script src="js/plugin.cjs"></script>
++    <script src="js/pairing.cjs"></script>
+   </body>
+ </html>
+diff --git a/eagle-companion/js/pairing.cjs b/eagle-companion/js/pairing.cjs
+new file mode 100644
+index e69de29..0310a5e 100644
+--- /dev/null
++++ b/eagle-companion/js/pairing.cjs
+@@ -0,0 +1,209 @@
++/* Local pairing gateway. Secrets stay in process; only explicit Eagle consent activates access. */
++(function (root, factory) {
++    const exported = factory();
++    if (typeof module === 'object' && module.exports) module.exports = exported;
++    if (root) root.DamEaglePairing = exported;
++})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
++    const crypto = require('node:crypto');
++    const fs = require('node:fs/promises');
++    const path = require('node:path');
++    const PROTOCOL = 1;
++    const TOKEN = /^[a-f0-9]{64}$/;
++    const digest = value => crypto.createHash('sha256').update(value).digest('hex');
++    const exact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) &&
++        Object.keys(value).sort().join('\0') === keys.slice().sort().join('\0');
++
++    function createPairingGateway(options) {
++        const eagle = options.eagle;
++        const providerIdentity = options.providerIdentity;
++        const core = options.core;
++        let pending = null;
++        let active = null;
++        let serial = Promise.resolve();
++        async function observeLibrary() {
++            const libraryPath = await fs.realpath(eagle.library.path);
++            const stat = await fs.stat(libraryPath, { bigint: true });
++            if (!stat.isDirectory() || stat.ino === 0n || stat.dev === 0n) throw Error('IDENTITY_UNAVAILABLE');
++            return {
++                identity: { providerIdentity,
++                    libraryIdentity: 'eagle-library:' + digest(`${stat.dev}:${stat.ino}:${stat.birthtimeNs}`),
++                    volumeIdentity: 'eagle-volume:' + digest(String(stat.dev)) },
++                libraryPath, displayName: String(eagle.library.name)
++            };
++        }
++        function revoke() {
++            if (active) active.handler.invalidate();
++            active = null; pending = null;
++            options.changed({ state: 'unpaired' });
++        }
++        async function requireActive(token, identity) {
++            if (!active || active.token !== token || identity && active.library.identity.libraryIdentity !== identity) throw Error('UNAUTHORIZED');
++            const library = await observeLibrary();
++            if (!active || active.token !== token || JSON.stringify(library.identity) !== JSON.stringify(active.library.identity)) {
++                revoke(); throw Error('LIBRARY_CHANGED');
++            }
++            return active;
++        }
++        async function pairing(request) {
++            if (!request || !TOKEN.test(request.sessionToken)) return { state: 'unpaired' };
++            if (request.kind === 'begin') {
++                if (!exact(request, ['kind', 'sessionToken', 'requestedGrant', 'stagingRoot']) ||
++                    !['read-only', 'read-write'].includes(request.requestedGrant) ||
++                    typeof request.stagingRoot !== 'string' || !path.isAbsolute(request.stagingRoot)) return { state: 'unpaired' };
++                if (active) return { state: active.token === request.sessionToken ? 'paired' : 'busy' };
++                if (pending && pending.expires > Date.now()) return { state: pending.token === request.sessionToken ? 'pending' : 'busy' };
++                const root = await fs.realpath(request.stagingRoot);
++                if (!(await fs.stat(root)).isDirectory()) return { state: 'unpaired' };
++                pending = { token: request.sessionToken, requestedGrant: request.requestedGrant,
++                    stagingRoot: root, library: await observeLibrary(), expires: Date.now() + 120000 };
++                options.changed({ state: 'pending', displayName: pending.library.displayName, requestedGrant: pending.requestedGrant });
++                return { state: 'pending', protocolVersion: PROTOCOL };
++            }
++            if (!exact(request, ['kind', 'sessionToken'])) return { state: 'unpaired' };
++            if (request.kind === 'revoke') {
++                if (active && active.token === request.sessionToken || pending && pending.token === request.sessionToken) revoke();
++                return { state: 'unpaired' };
++            }
++            if (request.kind !== 'observe') return { state: 'unpaired' };
++            if (pending && pending.token === request.sessionToken && pending.expires > Date.now()) return { state: 'pending', protocolVersion: PROTOCOL };
++            try {
++                const session = await requireActive(request.sessionToken);
++                return { state: 'paired', protocolVersion: PROTOCOL, requestedGrant: session.requestedGrant, ...session.library };
++            } catch { return { state: 'unpaired' }; }
++        }
++        async function approve() {
++            const reviewed = pending;
++            if (!reviewed || reviewed.expires <= Date.now()) { revoke(); return false; }
++            const current = await observeLibrary();
++            if (pending !== reviewed || JSON.stringify(current.identity) !== JSON.stringify(reviewed.library.identity)) { revoke(); return false; }
++            active = { ...reviewed, handler: core.createHandler({ eagle, sessionToken: reviewed.token,
++                libraryIdentity: current.identity.libraryIdentity, stagingRoot: reviewed.stagingRoot }) };
++            pending = null;
++            options.changed({ state: 'paired', displayName: current.displayName, requestedGrant: active.requestedGrant });
++            return true;
++        }
++        async function invoke(request) {
++            const session = await requireActive(request.sessionToken, request.libraryIdentity);
++            if (request.kind === 'replace-file' && session.requestedGrant !== 'read-write') return { ok: false, code: 'UNAUTHORIZED' };
++            const result = await session.handler.handle(request);
++            await requireActive(request.sessionToken, request.libraryIdentity);
++            if (result.ok === true && result.kind === 'capabilities') result.fileReplace = session.requestedGrant === 'read-write';
++            return result;
++        }
++        async function webApi(request) {
++            if (!exact(request, ['sessionToken', 'libraryIdentity', 'method', 'endpoint', 'payload'])) throw Error('INVALID_REQUEST');
++            const session = await requireActive(request.sessionToken, request.libraryIdentity);
++            const reads = { '/api/v2/app/info': 'GET', '/api/v2/library/info': 'GET', '/api/v2/item/get': 'POST' };
++            const writes = ['/api/v2/item/update', '/api/v2/item/add'];
++            if (reads[request.endpoint] !== request.method && !(session.requestedGrant === 'read-write' && request.method === 'POST' && writes.includes(request.endpoint))) throw Error('UNAUTHORIZED');
++            if (request.method === 'GET' && request.payload !== null) throw Error('INVALID_REQUEST');
++            if (request.method === 'POST') {
++                const allowed = request.endpoint === '/api/v2/item/get' ? ['ids', 'fields', 'offset', 'limit'] :
++                    request.endpoint === '/api/v2/item/update' ? ['id', 'name', 'tags', 'folders', 'annotation', 'star', 'isDeleted'] :
++                    ['id', 'path', 'name', 'tags', 'folders', 'annotation'];
++                if (!request.payload || typeof request.payload !== 'object' || Array.isArray(request.payload) || Object.keys(request.payload).some(key => !allowed.includes(key))) throw Error('INVALID_REQUEST');
++                if (request.endpoint === '/api/v2/item/add') {
++                    const resolved = await fs.realpath(request.payload.path);
++                    const relative = path.relative(session.stagingRoot, resolved);
++                    const stat = await fs.lstat(request.payload.path);
++                    if (!relative || relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative) || !stat.isFile() || stat.isSymbolicLink()) throw Error('STAGING_PATH_REJECTED');
++                }
++            }
++            await requireActive(request.sessionToken, request.libraryIdentity);
++            const response = await (options.fetch || fetchOfficial)('http://127.0.0.1:41595' + request.endpoint, {
++                method: request.method, headers: { 'Content-Type': 'application/json' },
++                body: request.payload === null ? undefined : JSON.stringify(request.payload),
++                signal: AbortSignal.timeout(5000), redirect: 'error'
++            });
++            const text = await response.text();
++            if (!response.ok || Buffer.byteLength(text) > 8 * 1024 * 1024) throw Error('PROVIDER_UNAVAILABLE');
++            await requireActive(request.sessionToken, request.libraryIdentity);
++            return JSON.parse(text);
++        }
++        function dispatch(route, request) {
++            const result = serial.then(() => route === '/v1/dam-eagle-pairing' ? pairing(request) :
++                route === '/v1/dam-eagle-companion' ? invoke(request) :
++                route === '/v1/dam-eagle-web-api' ? webApi(request) : Promise.reject(Error('INVALID_REQUEST')));
++            serial = result.catch(() => undefined);
++            return result;
++        }
++        return { dispatch, approve, revoke };
++    }
++    // Node HTTP avoids renderer Origin/referrer behavior. Origin/port/endpoint are fixed above.
++    function fetchOfficial(url, input) {
++        return new Promise((resolve, reject) => {
++            const request = require('node:http').request(url, { method: input.method, headers: input.headers }, response => {
++                let size = 0;
++                const chunks = [];
++                response.on('data', chunk => {
++                    size += chunk.length;
++                    if (size > 8 * 1024 * 1024) request.destroy(Error('RESPONSE_TOO_LARGE'));
++                    else chunks.push(chunk);
++                });
++                response.on('error', reject);
++                response.on('end', () => resolve({ ok: response.statusCode >= 200 && response.statusCode < 300,
++                    text: async () => Buffer.concat(chunks).toString('utf8') }));
++            });
++            request.setTimeout(5000, () => request.destroy(Error('PROVIDER_TIMEOUT')));
++            request.on('error', reject);
++            if (input.body) request.write(input.body);
++            request.end();
++        });
++    }
++    async function startServer(gateway, port = 41596) {
++        const server = require('node:http').createServer((request, response) => {
++            if (request.method !== 'POST' || request.headers.origin || request.headers['sec-fetch-site'] ||
++                !['127.0.0.1', '::ffff:127.0.0.1'].includes(request.socket.remoteAddress) ||
++                request.headers.host !== '127.0.0.1:' + server.address().port ||
++                request.headers['content-type'] !== 'application/json') {
++                response.writeHead(403); response.end(); return;
++            }
++            let size = 0;
++            const chunks = [];
++            request.on('data', chunk => { size += chunk.length; if (size > 65536) request.destroy(); else chunks.push(chunk); });
++            request.on('end', async () => {
++                try {
++                    const result = await gateway.dispatch(request.url, JSON.parse(Buffer.concat(chunks).toString('utf8')));
++                    response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
++                    response.end(JSON.stringify(result));
++                } catch { response.writeHead(503); response.end('{"ok":false,"code":"OPERATION_FAILED"}'); }
++            });
++        });
++        server.requestTimeout = 10000;
++        await new Promise((resolve, reject) => { server.once('error', reject); server.listen(port, '127.0.0.1', resolve); });
++        return { port: server.address().port, close: () => new Promise(resolve => { gateway.revoke(); server.close(resolve); }) };
++    }
++    return { createPairingGateway, startServer };
++});
++
++if (typeof eagle !== 'undefined' && eagle && typeof eagle.onPluginCreate === 'function') {
++    eagle.onPluginCreate(async () => {
++        const status = document.querySelector('#status');
++        const approve = document.querySelector('#approve');
++        const reject = document.querySelector('#reject');
++        let installId = localStorage.getItem('dam-companion-install-id');
++        if (!/^[a-f0-9]{32}$/.test(installId || '')) {
++            installId = require('node:crypto').randomBytes(16).toString('hex');
++            localStorage.setItem('dam-companion-install-id', installId);
++        }
++        const gateway = DamEaglePairing.createPairingGateway({ eagle, core: DamEagleCompanion,
++            providerIdentity: 'eagle-companion:' + installId,
++            changed: state => {
++                if (state.state === 'pending' && eagle.window && typeof eagle.window.show === 'function') void eagle.window.show();
++                approve.hidden = state.state !== 'pending';
++                reject.hidden = state.state === 'unpaired';
++                status.textContent = state.state === 'pending' ? `DAM 请求连接「${state.displayName}」。权限：${state.requestedGrant === 'read-write' ? '读取、元数据编辑、添加、回收/恢复和文件替换' : '只读索引与预览'}。仅在你刚从 DAM 发起配对且已选对库时允许。请求两分钟后失效。` :
++                    state.state === 'paired' ? `已连接「${state.displayName}」。切库、退出插件或撤销会立即停止会话；不会保存配对秘密。` :
++                    '等待 DAM 发起配对。请选择要连接的库，再在 DAM 的 Eagle 连接库页面发起请求。';
++            }
++        });
++        approve.addEventListener('click', () => gateway.approve().catch(() => gateway.revoke()));
++        reject.addEventListener('click', () => gateway.revoke());
++        eagle.onLibraryChanged(() => gateway.revoke());
++        try {
++            const server = await DamEaglePairing.startServer(gateway);
++            eagle.onPluginBeforeExit(() => { void server.close(); });
++            gateway.revoke();
++        } catch { status.textContent = '无法启动本机配对服务（41596）。请检查是否已运行另一个伴随插件实例。'; }
++    });
++}
+diff --git a/eagle-companion/js/plugin.cjs b/eagle-companion/js/plugin.cjs
+index 5bbe16b..60fedb8 100644
+--- a/eagle-companion/js/plugin.cjs
++++ b/eagle-companion/js/plugin.cjs
+@@ -146,9 +146,27 @@
+         throw tagged('ITEM_UNAVAILABLE'); return item; }
+     async function fingerprintItem(item, fs, crypto) { if (typeof item.filePath !== 'string' || !item.filePath)
+         throw tagged('ITEM_UNAVAILABLE'); return fingerprintPath(item.filePath, fs, crypto); }
+-    async function fingerprintPath(filePath, fs, crypto) { const stat = await fs.lstat(filePath); if (!stat.isFile() || stat.isSymbolicLink())
+-        throw tagged('ITEM_UNAVAILABLE'); const bytes = await fs.readFile(filePath); if (bytes.length !== stat.size)
+-        throw tagged('ITEM_UNAVAILABLE'); return { digest: crypto.createHash('sha256').update(bytes).digest('hex'), size: bytes.length }; }
++    async function fingerprintPath(filePath, fs, crypto) {
++        const before = await fs.lstat(filePath);
++        if (!before.isFile() || before.isSymbolicLink() || !Number.isSafeInteger(before.size)) throw tagged('ITEM_UNAVAILABLE');
++        const file = await fs.open(filePath, 'r');
++        try {
++            const opened = await file.stat();
++            if (opened.dev !== before.dev || opened.ino !== before.ino || opened.size !== before.size) throw tagged('ITEM_UNAVAILABLE');
++            const digest = crypto.createHash('sha256');
++            const buffer = Buffer.alloc(1024 * 1024);
++            let total = 0;
++            while (total < before.size) {
++                const result = await file.read(buffer, 0, Math.min(buffer.length, before.size - total), total);
++                if (!result.bytesRead) throw tagged('ITEM_UNAVAILABLE');
++                digest.update(buffer.subarray(0, result.bytesRead));
++                total += result.bytesRead;
++            }
++            const after = await file.stat();
++            if (after.size !== opened.size || after.mtimeMs !== opened.mtimeMs || after.ctimeMs !== opened.ctimeMs) throw tagged('ITEM_UNAVAILABLE');
++            return { digest: digest.digest('hex'), size: total };
++        } finally { await file.close(); }
++    }
+     async function requireStagedPath(candidate, root, fs, path) { const resolved = await fs.realpath(path.resolve(candidate)); const realRoot = await fs.realpath(root); const relative = path.relative(realRoot, resolved); if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative))
+         throw tagged('STAGING_PATH_REJECTED'); const stat = await fs.lstat(resolved); if (!stat.isFile() || stat.isSymbolicLink())
+         throw tagged('STAGING_PATH_REJECTED'); return resolved; }
+diff --git a/eagle-companion/manifest.json b/eagle-companion/manifest.json
+index 40ab00e..f809e81 100644
+--- a/eagle-companion/manifest.json
++++ b/eagle-companion/manifest.json
+@@ -1,6 +1,6 @@
+ {
+   "id": "DAMCONNECTEDLIBRARY",
+-  "version": "0.1.0",
++  "version": "0.2.0",
+   "platform": "all",
+   "arch": "all",
+   "name": "Design Asset Manager Companion",
+diff --git a/electron.vite.config.ts b/electron.vite.config.ts
+index d10a0d9..c150cfd 100644
+--- a/electron.vite.config.ts
++++ b/electron.vite.config.ts
+@@ -10,6 +10,7 @@ export default defineConfig({
+     plugins: [externalizeDepsPlugin(),{
+       name:'dam-ai-worker-resources',
+       buildStart(){
++        this.emitFile({type:'asset',fileName:'eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin',source:readFileSync(resolve(__dirname,'build/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin'))})
+         if(process.platform==='win32'){
+           const sourceDigest=createHash('sha256').update(Buffer.concat([readFileSync(resolve(__dirname,'src/main/work-mode/windows-video.cpp')),readFileSync(resolve(__dirname,'scripts/build-windows-video-runtime.mjs'))])).digest('hex')
+           if(sourceDigest!==VIDEO_RUNTIME_SOURCE_DIGEST)throw Error('WINDOWS_VIDEO_SOURCE_REQUIRES_OFFLINE_REBUILD')
+diff --git a/package-lock.json b/package-lock.json
+index 3121a8e..bff638e 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -31,6 +31,7 @@
+         "@types/react-dom": "^18.3.0",
+         "@vitejs/plugin-react": "^4.2.1",
+         "ajv": "6.15.0",
++        "archiver": "^7.0.1",
+         "autoprefixer": "^10.4.19",
+         "electron": "^30.0.6",
+         "electron-builder": "^24.13.3",
+@@ -2437,6 +2438,19 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/abort-controller": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/abort-controller/-/abort-controller-3.0.0.tgz",
++      "integrity": "sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "event-target-shim": "^5.0.0"
++      },
++      "engines": {
++        "node": ">=6.5"
++      }
++    },
+     "node_modules/agent-base": {
+       "version": "6.0.2",
+       "resolved": "https://registry.npmjs.org/agent-base/-/agent-base-6.0.2.tgz",
+@@ -2626,82 +2640,211 @@
+       }
+     },
+     "node_modules/archiver": {
+-      "version": "5.3.2",
+-      "resolved": "https://registry.npmjs.org/archiver/-/archiver-5.3.2.tgz",
+-      "integrity": "sha512-+25nxyyznAXF7Nef3y0EbBeqmGZgeN/BxHX29Rs39djAfaFalmQ89SE6CWyDCHzGL0yt/ycBtNOmGTW0FyGWNw==",
++      "version": "7.0.1",
++      "resolved": "https://registry.npmjs.org/archiver/-/archiver-7.0.1.tgz",
++      "integrity": "sha512-ZcbTaIqJOfCc03QwD468Unz/5Ir8ATtvAHsK+FdXbDIbGfihqh9mrvdcYunQzqn4HrvWWaFyaxJhGZagaJJpPQ==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+-        "archiver-utils": "^2.1.0",
++        "archiver-utils": "^5.0.2",
+         "async": "^3.2.4",
+-        "buffer-crc32": "^0.2.1",
+-        "readable-stream": "^3.6.0",
++        "buffer-crc32": "^1.0.0",
++        "readable-stream": "^4.0.0",
+         "readdir-glob": "^1.1.2",
+-        "tar-stream": "^2.2.0",
+-        "zip-stream": "^4.1.0"
++        "tar-stream": "^3.0.0",
++        "zip-stream": "^6.0.1"
+       },
+       "engines": {
+-        "node": ">= 10"
++        "node": ">= 14"
+       }
+     },
+     "node_modules/archiver-utils": {
+-      "version": "2.1.0",
+-      "resolved": "https://registry.npmjs.org/archiver-utils/-/archiver-utils-2.1.0.tgz",
+-      "integrity": "sha512-bEL/yUb/fNNiNTuUz979Z0Yg5L+LzLxGJz8x79lYmR54fmTIb6ob/hNQgkQnIUDWIFjZVQwl9Xs356I6BAMHfw==",
++      "version": "5.0.2",
++      "resolved": "https://registry.npmjs.org/archiver-utils/-/archiver-utils-5.0.2.tgz",
++      "integrity": "sha512-wuLJMmIBQYCsGZgYLTy5FIB2pF6Lfb6cXMSF8Qywwk3t20zWnAi7zLcQFdKQmIB8wyZpY5ER38x08GbwtR2cLA==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+-        "glob": "^7.1.4",
++        "glob": "^10.0.0",
+         "graceful-fs": "^4.2.0",
++        "is-stream": "^2.0.1",
+         "lazystream": "^1.0.0",
+-        "lodash.defaults": "^4.2.0",
+-        "lodash.difference": "^4.5.0",
+-        "lodash.flatten": "^4.4.0",
+-        "lodash.isplainobject": "^4.0.6",
+-        "lodash.union": "^4.6.0",
++        "lodash": "^4.17.15",
+         "normalize-path": "^3.0.0",
+-        "readable-stream": "^2.0.0"
++        "readable-stream": "^4.0.0"
+       },
+       "engines": {
+-        "node": ">= 6"
++        "node": ">= 14"
++      }
++    },
++    "node_modules/archiver-utils/node_modules/buffer": {
++      "version": "6.0.3",
++      "resolved": "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz",
++      "integrity": "sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==",
++      "dev": true,
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/feross"
++        },
++        {
++          "type": "patreon",
++          "url": "https://www.patreon.com/feross"
++        },
++        {
++          "type": "consulting",
++          "url": "https://feross.org/support"
++        }
++      ],
++      "license": "MIT",
++      "dependencies": {
++        "base64-js": "^1.3.1",
++        "ieee754": "^1.2.1"
++      }
++    },
++    "node_modules/archiver-utils/node_modules/glob": {
++      "version": "10.5.0",
++      "resolved": "https://registry.npmjs.org/glob/-/glob-10.5.0.tgz",
++      "integrity": "sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==",
++      "deprecated": "Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me",
++      "dev": true,
++      "license": "ISC",
++      "dependencies": {
++        "foreground-child": "^3.1.0",
++        "jackspeak": "^3.1.2",
++        "minimatch": "^9.0.4",
++        "minipass": "^7.1.2",
++        "package-json-from-dist": "^1.0.0",
++        "path-scurry": "^1.11.1"
++      },
++      "bin": {
++        "glob": "dist/esm/bin.mjs"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      }
++    },
++    "node_modules/archiver-utils/node_modules/minimatch": {
++      "version": "9.0.9",
++      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.9.tgz",
++      "integrity": "sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==",
++      "dev": true,
++      "license": "ISC",
++      "dependencies": {
++        "brace-expansion": "^2.0.2"
++      },
++      "engines": {
++        "node": ">=16 || 14 >=14.17"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      }
++    },
++    "node_modules/archiver-utils/node_modules/minipass": {
++      "version": "7.1.3",
++      "resolved": "https://registry.npmjs.org/minipass/-/minipass-7.1.3.tgz",
++      "integrity": "sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A==",
++      "dev": true,
++      "license": "BlueOak-1.0.0",
++      "engines": {
++        "node": ">=16 || 14 >=14.17"
+       }
+     },
+     "node_modules/archiver-utils/node_modules/readable-stream": {
+-      "version": "2.3.8",
+-      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.8.tgz",
+-      "integrity": "sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==",
++      "version": "4.7.0",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-4.7.0.tgz",
++      "integrity": "sha512-oIGGmcpTLwPga8Bn6/Z75SVaH1z5dUut2ibSyAMVhmUggWpmDn2dapB0n7f8nwaSiRtepAsfJyfXIO5DCVAODg==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+-        "core-util-is": "~1.0.0",
+-        "inherits": "~2.0.3",
+-        "isarray": "~1.0.0",
+-        "process-nextick-args": "~2.0.0",
+-        "safe-buffer": "~5.1.1",
+-        "string_decoder": "~1.1.1",
+-        "util-deprecate": "~1.0.1"
++        "abort-controller": "^3.0.0",
++        "buffer": "^6.0.3",
++        "events": "^3.3.0",
++        "process": "^0.11.10",
++        "string_decoder": "^1.3.0"
++      },
++      "engines": {
++        "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+       }
+     },
+-    "node_modules/archiver-utils/node_modules/safe-buffer": {
+-      "version": "5.1.2",
+-      "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz",
+-      "integrity": "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==",
++    "node_modules/archiver/node_modules/b4a": {
++      "version": "1.9.0",
++      "resolved": "https://registry.npmjs.org/b4a/-/b4a-1.9.0.tgz",
++      "integrity": "sha512-dpfcF9fDNR6++cthXR67iyhgqWy9CBouAvIWhIntzBG6cvK/cnIPiZQjBwi/ZqjjBEDGfoNDtmB0kTjroOJ3pQ==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "peerDependencies": {
++        "react-native-b4a": "*"
++      },
++      "peerDependenciesMeta": {
++        "react-native-b4a": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/archiver/node_modules/buffer": {
++      "version": "6.0.3",
++      "resolved": "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz",
++      "integrity": "sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==",
+       "dev": true,
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/feross"
++        },
++        {
++          "type": "patreon",
++          "url": "https://www.patreon.com/feross"
++        },
++        {
++          "type": "consulting",
++          "url": "https://feross.org/support"
++        }
++      ],
+       "license": "MIT",
+-      "peer": true
++      "dependencies": {
++        "base64-js": "^1.3.1",
++        "ieee754": "^1.2.1"
++      }
+     },
+-    "node_modules/archiver-utils/node_modules/string_decoder": {
+-      "version": "1.1.1",
+-      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz",
+-      "integrity": "sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==",
++    "node_modules/archiver/node_modules/buffer-crc32": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/buffer-crc32/-/buffer-crc32-1.0.0.tgz",
++      "integrity": "sha512-Db1SbgBS/fg/392AblrMJk97KggmvYhr4pB5ZIMTWtaivCPMWLkmb7m21cJvpvgK+J3nsU2CmmixNBZx4vFj/w==",
++      "dev": true,
++      "license": "MIT",
++      "engines": {
++        "node": ">=8.0.0"
++      }
++    },
++    "node_modules/archiver/node_modules/readable-stream": {
++      "version": "4.7.0",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-4.7.0.tgz",
++      "integrity": "sha512-oIGGmcpTLwPga8Bn6/Z75SVaH1z5dUut2ibSyAMVhmUggWpmDn2dapB0n7f8nwaSiRtepAsfJyfXIO5DCVAODg==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+-        "safe-buffer": "~5.1.0"
++        "abort-controller": "^3.0.0",
++        "buffer": "^6.0.3",
++        "events": "^3.3.0",
++        "process": "^0.11.10",
++        "string_decoder": "^1.3.0"
++      },
++      "engines": {
++        "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
++      }
++    },
++    "node_modules/archiver/node_modules/tar-stream": {
++      "version": "3.2.2",
++      "resolved": "https://registry.npmjs.org/tar-stream/-/tar-stream-3.2.2.tgz",
++      "integrity": "sha512-+8NeqHRjQWH9nYlwo2gamAMImZCVzI4UoEgDpWorBt9OEfppiZn+uSkskzQKPWIZyji/C8fpWO7u69G0DX0tbg==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "b4a": "^1.9.0",
++        "bare-fs": "^4.8.2",
++        "fast-fifo": "^1.3.2",
++        "streamx": "^2.28.1"
+       }
+     },
+     "node_modules/arg": {
+@@ -2818,6 +2961,106 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/bare-events": {
++      "version": "2.9.2",
++      "resolved": "https://registry.npmjs.org/bare-events/-/bare-events-2.9.2.tgz",
++      "integrity": "sha512-AIPKioV7/Y/8KfZ3AAhjPJxLLbY49S64Ym5DakZlUg75qQiTgUq9hEJoEwa4eUezPUlXRy/i5NpsKvo9jgKmoA==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "peerDependencies": {
++        "bare-abort-controller": "*"
++      },
++      "peerDependenciesMeta": {
++        "bare-abort-controller": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/bare-fs": {
++      "version": "4.8.2",
++      "resolved": "https://registry.npmjs.org/bare-fs/-/bare-fs-4.8.2.tgz",
++      "integrity": "sha512-+ZI68KHMUvosXfKbg/UOHK0tbCdRnegbvPEdEcZ3Nd6TetieQsJPRXBRXPdLyy8+3VSEbPXtsumTpEtt78xv9w==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "dependencies": {
++        "bare-events": "^2.5.4",
++        "bare-path": "^3.0.0",
++        "bare-stream": "^2.6.4",
++        "bare-url": "^2.2.2",
++        "fast-fifo": "^1.3.2"
++      },
++      "engines": {
++        "bare": ">=1.28.0"
++      },
++      "peerDependencies": {
++        "bare-buffer": "*"
++      },
++      "peerDependenciesMeta": {
++        "bare-buffer": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/bare-path": {
++      "version": "3.1.2",
++      "resolved": "https://registry.npmjs.org/bare-path/-/bare-path-3.1.2.tgz",
++      "integrity": "sha512-ZyKbsuuqK6Ag0K8pX6V5Txq6XeJRvY+wXucnFGRjiyVYP9YWDpIQugk/b+enRYrEYBJaqLzghRQpXPMR7341Nw==",
++      "dev": true,
++      "license": "Apache-2.0"
++    },
++    "node_modules/bare-stream": {
++      "version": "2.13.4",
++      "resolved": "https://registry.npmjs.org/bare-stream/-/bare-stream-2.13.4.tgz",
++      "integrity": "sha512-PcrQ8lVLbiJscNm1Kez+Yp4Gy4AHGcN1lzwjvf5NybWen7VvEgUfyfnXYJ2zNqWnzOfCb1Abq6lH8ti0syQszA==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "dependencies": {
++        "b4a": "^1.8.1",
++        "streamx": "^2.25.0",
++        "teex": "^1.0.1"
++      },
++      "peerDependencies": {
++        "bare-abort-controller": "*",
++        "bare-buffer": "*",
++        "bare-events": "*"
++      },
++      "peerDependenciesMeta": {
++        "bare-abort-controller": {
++          "optional": true
++        },
++        "bare-buffer": {
++          "optional": true
++        },
++        "bare-events": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/bare-stream/node_modules/b4a": {
++      "version": "1.9.0",
++      "resolved": "https://registry.npmjs.org/b4a/-/b4a-1.9.0.tgz",
++      "integrity": "sha512-dpfcF9fDNR6++cthXR67iyhgqWy9CBouAvIWhIntzBG6cvK/cnIPiZQjBwi/ZqjjBEDGfoNDtmB0kTjroOJ3pQ==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "peerDependencies": {
++        "react-native-b4a": "*"
++      },
++      "peerDependenciesMeta": {
++        "react-native-b4a": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/bare-url": {
++      "version": "2.5.4",
++      "resolved": "https://registry.npmjs.org/bare-url/-/bare-url-2.5.4.tgz",
++      "integrity": "sha512-Gxa7UVWBr0/edU1b+TJhn/AZvMQUj9OGspvYsaTYQrAbZA4BOTZGL3LiZxvD+CeMlDH4juwD84+eTAp/bLYW5g==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "dependencies": {
++        "bare-path": "^3.0.0"
++      }
++    },
+     "node_modules/base64-js": {
+       "version": "1.5.1",
+       "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz",
+@@ -3409,20 +3652,62 @@
+       }
+     },
+     "node_modules/compress-commons": {
+-      "version": "4.1.2",
+-      "resolved": "https://registry.npmjs.org/compress-commons/-/compress-commons-4.1.2.tgz",
+-      "integrity": "sha512-D3uMHtGc/fcO1Gt1/L7i1e33VOvD4A9hfQLP+6ewd+BvG/gQ84Yh4oftEhAdjSMgBgwGL+jsppT7JYNpo6MHHg==",
++      "version": "6.0.2",
++      "resolved": "https://registry.npmjs.org/compress-commons/-/compress-commons-6.0.2.tgz",
++      "integrity": "sha512-6FqVXeETqWPoGcfzrXb37E50NP0LXT8kAMu5ooZayhWWdgEY4lBEEcbQNXtkuKQsGduxiIcI4gOTsxTmuq/bSg==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+-        "buffer-crc32": "^0.2.13",
+-        "crc32-stream": "^4.0.2",
++        "crc-32": "^1.2.0",
++        "crc32-stream": "^6.0.0",
++        "is-stream": "^2.0.1",
+         "normalize-path": "^3.0.0",
+-        "readable-stream": "^3.6.0"
++        "readable-stream": "^4.0.0"
+       },
+       "engines": {
+-        "node": ">= 10"
++        "node": ">= 14"
++      }
++    },
++    "node_modules/compress-commons/node_modules/buffer": {
++      "version": "6.0.3",
++      "resolved": "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz",
++      "integrity": "sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==",
++      "dev": true,
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/feross"
++        },
++        {
++          "type": "patreon",
++          "url": "https://www.patreon.com/feross"
++        },
++        {
++          "type": "consulting",
++          "url": "https://feross.org/support"
++        }
++      ],
++      "license": "MIT",
++      "dependencies": {
++        "base64-js": "^1.3.1",
++        "ieee754": "^1.2.1"
++      }
++    },
++    "node_modules/compress-commons/node_modules/readable-stream": {
++      "version": "4.7.0",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-4.7.0.tgz",
++      "integrity": "sha512-oIGGmcpTLwPga8Bn6/Z75SVaH1z5dUut2ibSyAMVhmUggWpmDn2dapB0n7f8nwaSiRtepAsfJyfXIO5DCVAODg==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "abort-controller": "^3.0.0",
++        "buffer": "^6.0.3",
++        "events": "^3.3.0",
++        "process": "^0.11.10",
++        "string_decoder": "^1.3.0"
++      },
++      "engines": {
++        "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+       }
+     },
+     "node_modules/concat-map": {
+@@ -3522,7 +3807,6 @@
+       "integrity": "sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==",
+       "dev": true,
+       "license": "Apache-2.0",
+-      "peer": true,
+       "bin": {
+         "crc32": "bin/crc32.njs"
+       },
+@@ -3531,18 +3815,59 @@
+       }
+     },
+     "node_modules/crc32-stream": {
+-      "version": "4.0.3",
+-      "resolved": "https://registry.npmjs.org/crc32-stream/-/crc32-stream-4.0.3.tgz",
+-      "integrity": "sha512-NT7w2JVU7DFroFdYkeq8cywxrgjPHWkdX1wjpRQXPX5Asews3tA+Ght6lddQO5Mkumffp3X7GEqku3epj2toIw==",
++      "version": "6.0.0",
++      "resolved": "https://registry.npmjs.org/crc32-stream/-/crc32-stream-6.0.0.tgz",
++      "integrity": "sha512-piICUB6ei4IlTv1+653yq5+KoqfBYmj9bw6LqXoOneTMDXk5nM1qt12mFW1caG3LlJXEKW1Bp0WggEmIfQB34g==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "crc-32": "^1.2.0",
+-        "readable-stream": "^3.4.0"
++        "readable-stream": "^4.0.0"
+       },
+       "engines": {
+-        "node": ">= 10"
++        "node": ">= 14"
++      }
++    },
++    "node_modules/crc32-stream/node_modules/buffer": {
++      "version": "6.0.3",
++      "resolved": "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz",
++      "integrity": "sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==",
++      "dev": true,
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/feross"
++        },
++        {
++          "type": "patreon",
++          "url": "https://www.patreon.com/feross"
++        },
++        {
++          "type": "consulting",
++          "url": "https://feross.org/support"
++        }
++      ],
++      "license": "MIT",
++      "dependencies": {
++        "base64-js": "^1.3.1",
++        "ieee754": "^1.2.1"
++      }
++    },
++    "node_modules/crc32-stream/node_modules/readable-stream": {
++      "version": "4.7.0",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-4.7.0.tgz",
++      "integrity": "sha512-oIGGmcpTLwPga8Bn6/Z75SVaH1z5dUut2ibSyAMVhmUggWpmDn2dapB0n7f8nwaSiRtepAsfJyfXIO5DCVAODg==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "abort-controller": "^3.0.0",
++        "buffer": "^6.0.3",
++        "events": "^3.3.0",
++        "process": "^0.11.10",
++        "string_decoder": "^1.3.0"
++      },
++      "engines": {
++        "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+       }
+     },
+     "node_modules/cross-spawn": {
+@@ -3892,67 +4217,159 @@
+         "ejs": "bin/cli.js"
+       },
+       "engines": {
+-        "node": ">=0.10.0"
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/electron": {
++      "version": "30.5.1",
++      "resolved": "https://registry.npmjs.org/electron/-/electron-30.5.1.tgz",
++      "integrity": "sha512-AhL7+mZ8Lg14iaNfoYTkXQ2qee8mmsQyllKdqxlpv/zrKgfxz6jNVtcRRbQtLxtF8yzcImWdfTQROpYiPumdbw==",
++      "dev": true,
++      "hasInstallScript": true,
++      "license": "MIT",
++      "dependencies": {
++        "@electron/get": "^2.0.0",
++        "@types/node": "^20.9.0",
++        "extract-zip": "^2.0.1"
++      },
++      "bin": {
++        "electron": "cli.js"
++      },
++      "engines": {
++        "node": ">= 12.20.55"
++      }
++    },
++    "node_modules/electron-builder": {
++      "version": "24.13.3",
++      "resolved": "https://registry.npmjs.org/electron-builder/-/electron-builder-24.13.3.tgz",
++      "integrity": "sha512-yZSgVHft5dNVlo31qmJAe4BVKQfFdwpRw7sFp1iQglDRCDD6r22zfRJuZlhtB5gp9FHUxCMEoWGq10SkCnMAIg==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "app-builder-lib": "24.13.3",
++        "builder-util": "24.13.1",
++        "builder-util-runtime": "9.2.4",
++        "chalk": "^4.1.2",
++        "dmg-builder": "24.13.3",
++        "fs-extra": "^10.1.0",
++        "is-ci": "^3.0.0",
++        "lazy-val": "^1.0.5",
++        "read-config-file": "6.3.2",
++        "simple-update-notifier": "2.0.0",
++        "yargs": "^17.6.2"
++      },
++      "bin": {
++        "electron-builder": "cli.js",
++        "install-app-deps": "install-app-deps.js"
++      },
++      "engines": {
++        "node": ">=14.0.0"
++      }
++    },
++    "node_modules/electron-builder-squirrel-windows": {
++      "version": "24.13.3",
++      "resolved": "https://registry.npmjs.org/electron-builder-squirrel-windows/-/electron-builder-squirrel-windows-24.13.3.tgz",
++      "integrity": "sha512-oHkV0iogWfyK+ah9ZIvMDpei1m9ZRpdXcvde1wTpra2U8AFDNNpqJdnin5z+PM1GbQ5BoaKCWas2HSjtR0HwMg==",
++      "dev": true,
++      "license": "MIT",
++      "peer": true,
++      "dependencies": {
++        "app-builder-lib": "24.13.3",
++        "archiver": "^5.3.1",
++        "builder-util": "24.13.1",
++        "fs-extra": "^10.1.0"
++      }
++    },
++    "node_modules/electron-builder-squirrel-windows/node_modules/archiver": {
++      "version": "5.3.2",
++      "resolved": "https://registry.npmjs.org/archiver/-/archiver-5.3.2.tgz",
++      "integrity": "sha512-+25nxyyznAXF7Nef3y0EbBeqmGZgeN/BxHX29Rs39djAfaFalmQ89SE6CWyDCHzGL0yt/ycBtNOmGTW0FyGWNw==",
++      "dev": true,
++      "license": "MIT",
++      "peer": true,
++      "dependencies": {
++        "archiver-utils": "^2.1.0",
++        "async": "^3.2.4",
++        "buffer-crc32": "^0.2.1",
++        "readable-stream": "^3.6.0",
++        "readdir-glob": "^1.1.2",
++        "tar-stream": "^2.2.0",
++        "zip-stream": "^4.1.0"
++      },
++      "engines": {
++        "node": ">= 10"
++      }
++    },
++    "node_modules/electron-builder-squirrel-windows/node_modules/archiver-utils": {
++      "version": "2.1.0",
++      "resolved": "https://registry.npmjs.org/archiver-utils/-/archiver-utils-2.1.0.tgz",
++      "integrity": "sha512-bEL/yUb/fNNiNTuUz979Z0Yg5L+LzLxGJz8x79lYmR54fmTIb6ob/hNQgkQnIUDWIFjZVQwl9Xs356I6BAMHfw==",
++      "dev": true,
++      "license": "MIT",
++      "peer": true,
++      "dependencies": {
++        "glob": "^7.1.4",
++        "graceful-fs": "^4.2.0",
++        "lazystream": "^1.0.0",
++        "lodash.defaults": "^4.2.0",
++        "lodash.difference": "^4.5.0",
++        "lodash.flatten": "^4.4.0",
++        "lodash.isplainobject": "^4.0.6",
++        "lodash.union": "^4.6.0",
++        "normalize-path": "^3.0.0",
++        "readable-stream": "^2.0.0"
++      },
++      "engines": {
++        "node": ">= 6"
+       }
+     },
+-    "node_modules/electron": {
+-      "version": "30.5.1",
+-      "resolved": "https://registry.npmjs.org/electron/-/electron-30.5.1.tgz",
+-      "integrity": "sha512-AhL7+mZ8Lg14iaNfoYTkXQ2qee8mmsQyllKdqxlpv/zrKgfxz6jNVtcRRbQtLxtF8yzcImWdfTQROpYiPumdbw==",
++    "node_modules/electron-builder-squirrel-windows/node_modules/archiver-utils/node_modules/readable-stream": {
++      "version": "2.3.8",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.8.tgz",
++      "integrity": "sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==",
+       "dev": true,
+-      "hasInstallScript": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+-        "@electron/get": "^2.0.0",
+-        "@types/node": "^20.9.0",
+-        "extract-zip": "^2.0.1"
+-      },
+-      "bin": {
+-        "electron": "cli.js"
+-      },
+-      "engines": {
+-        "node": ">= 12.20.55"
++        "core-util-is": "~1.0.0",
++        "inherits": "~2.0.3",
++        "isarray": "~1.0.0",
++        "process-nextick-args": "~2.0.0",
++        "safe-buffer": "~5.1.1",
++        "string_decoder": "~1.1.1",
++        "util-deprecate": "~1.0.1"
+       }
+     },
+-    "node_modules/electron-builder": {
+-      "version": "24.13.3",
+-      "resolved": "https://registry.npmjs.org/electron-builder/-/electron-builder-24.13.3.tgz",
+-      "integrity": "sha512-yZSgVHft5dNVlo31qmJAe4BVKQfFdwpRw7sFp1iQglDRCDD6r22zfRJuZlhtB5gp9FHUxCMEoWGq10SkCnMAIg==",
++    "node_modules/electron-builder-squirrel-windows/node_modules/compress-commons": {
++      "version": "4.1.2",
++      "resolved": "https://registry.npmjs.org/compress-commons/-/compress-commons-4.1.2.tgz",
++      "integrity": "sha512-D3uMHtGc/fcO1Gt1/L7i1e33VOvD4A9hfQLP+6ewd+BvG/gQ84Yh4oftEhAdjSMgBgwGL+jsppT7JYNpo6MHHg==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+-        "app-builder-lib": "24.13.3",
+-        "builder-util": "24.13.1",
+-        "builder-util-runtime": "9.2.4",
+-        "chalk": "^4.1.2",
+-        "dmg-builder": "24.13.3",
+-        "fs-extra": "^10.1.0",
+-        "is-ci": "^3.0.0",
+-        "lazy-val": "^1.0.5",
+-        "read-config-file": "6.3.2",
+-        "simple-update-notifier": "2.0.0",
+-        "yargs": "^17.6.2"
+-      },
+-      "bin": {
+-        "electron-builder": "cli.js",
+-        "install-app-deps": "install-app-deps.js"
++        "buffer-crc32": "^0.2.13",
++        "crc32-stream": "^4.0.2",
++        "normalize-path": "^3.0.0",
++        "readable-stream": "^3.6.0"
+       },
+       "engines": {
+-        "node": ">=14.0.0"
++        "node": ">= 10"
+       }
+     },
+-    "node_modules/electron-builder-squirrel-windows": {
+-      "version": "24.13.3",
+-      "resolved": "https://registry.npmjs.org/electron-builder-squirrel-windows/-/electron-builder-squirrel-windows-24.13.3.tgz",
+-      "integrity": "sha512-oHkV0iogWfyK+ah9ZIvMDpei1m9ZRpdXcvde1wTpra2U8AFDNNpqJdnin5z+PM1GbQ5BoaKCWas2HSjtR0HwMg==",
++    "node_modules/electron-builder-squirrel-windows/node_modules/crc32-stream": {
++      "version": "4.0.3",
++      "resolved": "https://registry.npmjs.org/crc32-stream/-/crc32-stream-4.0.3.tgz",
++      "integrity": "sha512-NT7w2JVU7DFroFdYkeq8cywxrgjPHWkdX1wjpRQXPX5Asews3tA+Ght6lddQO5Mkumffp3X7GEqku3epj2toIw==",
+       "dev": true,
+       "license": "MIT",
+       "peer": true,
+       "dependencies": {
+-        "app-builder-lib": "24.13.3",
+-        "archiver": "^5.3.1",
+-        "builder-util": "24.13.1",
+-        "fs-extra": "^10.1.0"
++        "crc-32": "^1.2.0",
++        "readable-stream": "^3.4.0"
++      },
++      "engines": {
++        "node": ">= 10"
+       }
+     },
+     "node_modules/electron-builder-squirrel-windows/node_modules/fs-extra": {
+@@ -3985,6 +4402,25 @@
+         "graceful-fs": "^4.1.6"
+       }
+     },
++    "node_modules/electron-builder-squirrel-windows/node_modules/safe-buffer": {
++      "version": "5.1.2",
++      "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz",
++      "integrity": "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==",
++      "dev": true,
++      "license": "MIT",
++      "peer": true
++    },
++    "node_modules/electron-builder-squirrel-windows/node_modules/string_decoder": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz",
++      "integrity": "sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==",
++      "dev": true,
++      "license": "MIT",
++      "peer": true,
++      "dependencies": {
++        "safe-buffer": "~5.1.0"
++      }
++    },
+     "node_modules/electron-builder-squirrel-windows/node_modules/universalify": {
+       "version": "2.0.1",
+       "resolved": "https://registry.npmjs.org/universalify/-/universalify-2.0.1.tgz",
+@@ -3996,6 +4432,45 @@
+         "node": ">= 10.0.0"
+       }
+     },
++    "node_modules/electron-builder-squirrel-windows/node_modules/zip-stream": {
++      "version": "4.1.1",
++      "resolved": "https://registry.npmjs.org/zip-stream/-/zip-stream-4.1.1.tgz",
++      "integrity": "sha512-9qv4rlDiopXg4E69k+vMHjNN63YFMe9sZMrdlvKnCjlCRWeCBswPPMPUfx+ipsAWq1LXHe70RcbaHdJJpS6hyQ==",
++      "dev": true,
++      "license": "MIT",
++      "peer": true,
++      "dependencies": {
++        "archiver-utils": "^3.0.4",
++        "compress-commons": "^4.1.2",
++        "readable-stream": "^3.6.0"
++      },
++      "engines": {
++        "node": ">= 10"
++      }
++    },
++    "node_modules/electron-builder-squirrel-windows/node_modules/zip-stream/node_modules/archiver-utils": {
++      "version": "3.0.4",
++      "resolved": "https://registry.npmjs.org/archiver-utils/-/archiver-utils-3.0.4.tgz",
++      "integrity": "sha512-KVgf4XQVrTjhyWmx6cte4RxonPLR9onExufI1jhvw/MQ4BB6IsZD5gT8Lq+u/+pRkWna/6JoHpiQioaqFP5Rzw==",
++      "dev": true,
++      "license": "MIT",
++      "peer": true,
++      "dependencies": {
++        "glob": "^7.2.3",
++        "graceful-fs": "^4.2.0",
++        "lazystream": "^1.0.0",
++        "lodash.defaults": "^4.2.0",
++        "lodash.difference": "^4.5.0",
++        "lodash.flatten": "^4.4.0",
++        "lodash.isplainobject": "^4.0.6",
++        "lodash.union": "^4.6.0",
++        "normalize-path": "^3.0.0",
++        "readable-stream": "^3.6.0"
++      },
++      "engines": {
++        "node": ">= 10"
++      }
++    },
+     "node_modules/electron-builder/node_modules/fs-extra": {
+       "version": "10.1.0",
+       "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-10.1.0.tgz",
+@@ -4278,6 +4753,36 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/event-target-shim": {
++      "version": "5.0.1",
++      "resolved": "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz",
++      "integrity": "sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==",
++      "dev": true,
++      "license": "MIT",
++      "engines": {
++        "node": ">=6"
++      }
++    },
++    "node_modules/events": {
++      "version": "3.3.0",
++      "resolved": "https://registry.npmjs.org/events/-/events-3.3.0.tgz",
++      "integrity": "sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==",
++      "dev": true,
++      "license": "MIT",
++      "engines": {
++        "node": ">=0.8.x"
++      }
++    },
++    "node_modules/events-universal": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/events-universal/-/events-universal-1.0.1.tgz",
++      "integrity": "sha512-LUd5euvbMLpwOF8m6ivPCbhQeSiYVNb8Vs0fQ8QjXo0JTkEHpz8pxdQf0gStltaPpw0Cca8b39KxvK9cfKRiAw==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "dependencies": {
++        "bare-events": "^2.7.0"
++      }
++    },
+     "node_modules/expand-template": {
+       "version": "2.0.3",
+       "resolved": "https://registry.npmjs.org/expand-template/-/expand-template-2.0.3.tgz",
+@@ -4325,6 +4830,13 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/fast-fifo": {
++      "version": "1.3.2",
++      "resolved": "https://registry.npmjs.org/fast-fifo/-/fast-fifo-1.3.2.tgz",
++      "integrity": "sha512-/d9sfos4yxzpwkDkuN7k2SqFKtYNmCTzgfEpz82x34IM9/zc8KGxQoXg1liNC/izpRM/MBdt44Nmx41ZWqk+FQ==",
++      "dev": true,
++      "license": "MIT"
++    },
+     "node_modules/fast-glob": {
+       "version": "3.3.3",
+       "resolved": "https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.3.tgz",
+@@ -5116,13 +5628,25 @@
+         "node": ">=0.12.0"
+       }
+     },
++    "node_modules/is-stream": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/is-stream/-/is-stream-2.0.1.tgz",
++      "integrity": "sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==",
++      "dev": true,
++      "license": "MIT",
++      "engines": {
++        "node": ">=8"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/sindresorhus"
++      }
++    },
+     "node_modules/isarray": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz",
+       "integrity": "sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==",
+       "dev": true,
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/isbinaryfile": {
+       "version": "5.0.7",
+@@ -5288,7 +5812,6 @@
+       "integrity": "sha512-b94GiNHQNy6JNTrt5w6zNyffMrNkXZb3KTkCZJb2V1xaEGCk093vkZ2jk3tpaeP33/OiXC+WvK9AxUebnf5nbw==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "readable-stream": "^2.0.5"
+       },
+@@ -5302,7 +5825,6 @@
+       "integrity": "sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "core-util-is": "~1.0.0",
+         "inherits": "~2.0.3",
+@@ -5318,8 +5840,7 @@
+       "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz",
+       "integrity": "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==",
+       "dev": true,
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/lazystream/node_modules/string_decoder": {
+       "version": "1.1.1",
+@@ -5327,7 +5848,6 @@
+       "integrity": "sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "safe-buffer": "~5.1.0"
+       }
+@@ -6184,13 +6704,22 @@
+         "node": ">=10"
+       }
+     },
++    "node_modules/process": {
++      "version": "0.11.10",
++      "resolved": "https://registry.npmjs.org/process/-/process-0.11.10.tgz",
++      "integrity": "sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==",
++      "dev": true,
++      "license": "MIT",
++      "engines": {
++        "node": ">= 0.6.0"
++      }
++    },
+     "node_modules/process-nextick-args": {
+       "version": "2.0.1",
+       "resolved": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz",
+       "integrity": "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==",
+       "dev": true,
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/progress": {
+       "version": "2.0.3",
+@@ -6400,7 +6929,6 @@
+       "integrity": "sha512-v05I2k7xN8zXvPD9N+z/uhXPaj0sUFCe2rcWZIpBsqxfP7xXFQ0tipAd/wjj1YxWyWtUS5IDJpOG82JKt2EAVA==",
+       "dev": true,
+       "license": "Apache-2.0",
+-      "peer": true,
+       "dependencies": {
+         "minimatch": "^5.1.0"
+       }
+@@ -6910,6 +7438,18 @@
+         "node": ">= 6"
+       }
+     },
++    "node_modules/streamx": {
++      "version": "2.28.1",
++      "resolved": "https://registry.npmjs.org/streamx/-/streamx-2.28.1.tgz",
++      "integrity": "sha512-zEzXb0s5Cds7tqMH6rhZ05lcJydCWiQPEwiNngVqzsxCc962vLY4Uw+mW7od8kDH258k2Uz/JrOkdIAAhSh9VA==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "events-universal": "^1.0.0",
++        "fast-fifo": "^1.3.2",
++        "text-decoder": "^1.1.0"
++      }
++    },
+     "node_modules/string_decoder": {
+       "version": "1.3.0",
+       "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz",
+@@ -7166,6 +7706,16 @@
+       "dev": true,
+       "license": "ISC"
+     },
++    "node_modules/teex": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/teex/-/teex-1.0.1.tgz",
++      "integrity": "sha512-eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "streamx": "^2.12.5"
++      }
++    },
+     "node_modules/temp-file": {
+       "version": "3.4.0",
+       "resolved": "https://registry.npmjs.org/temp-file/-/temp-file-3.4.0.tgz",
+@@ -7215,6 +7765,31 @@
+         "node": ">= 10.0.0"
+       }
+     },
++    "node_modules/text-decoder": {
++      "version": "1.2.7",
++      "resolved": "https://registry.npmjs.org/text-decoder/-/text-decoder-1.2.7.tgz",
++      "integrity": "sha512-vlLytXkeP4xvEq2otHeJfSQIRyWxo/oZGEbXrtEEF9Hnmrdly59sUbzZ/QgyWuLYHctCHxFF4tRQZNQ9k60ExQ==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "dependencies": {
++        "b4a": "^1.6.4"
++      }
++    },
++    "node_modules/text-decoder/node_modules/b4a": {
++      "version": "1.9.0",
++      "resolved": "https://registry.npmjs.org/b4a/-/b4a-1.9.0.tgz",
++      "integrity": "sha512-dpfcF9fDNR6++cthXR67iyhgqWy9CBouAvIWhIntzBG6cvK/cnIPiZQjBwi/ZqjjBEDGfoNDtmB0kTjroOJ3pQ==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "peerDependencies": {
++        "react-native-b4a": "*"
++      },
++      "peerDependenciesMeta": {
++        "react-native-b4a": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/thenify": {
+       "version": "3.3.1",
+       "resolved": "https://registry.npmjs.org/thenify/-/thenify-3.3.1.tgz",
+@@ -7664,42 +8239,60 @@
+       }
+     },
+     "node_modules/zip-stream": {
+-      "version": "4.1.1",
+-      "resolved": "https://registry.npmjs.org/zip-stream/-/zip-stream-4.1.1.tgz",
+-      "integrity": "sha512-9qv4rlDiopXg4E69k+vMHjNN63YFMe9sZMrdlvKnCjlCRWeCBswPPMPUfx+ipsAWq1LXHe70RcbaHdJJpS6hyQ==",
++      "version": "6.0.1",
++      "resolved": "https://registry.npmjs.org/zip-stream/-/zip-stream-6.0.1.tgz",
++      "integrity": "sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+-        "archiver-utils": "^3.0.4",
+-        "compress-commons": "^4.1.2",
+-        "readable-stream": "^3.6.0"
++        "archiver-utils": "^5.0.0",
++        "compress-commons": "^6.0.2",
++        "readable-stream": "^4.0.0"
+       },
+       "engines": {
+-        "node": ">= 10"
++        "node": ">= 14"
+       }
+     },
+-    "node_modules/zip-stream/node_modules/archiver-utils": {
+-      "version": "3.0.4",
+-      "resolved": "https://registry.npmjs.org/archiver-utils/-/archiver-utils-3.0.4.tgz",
+-      "integrity": "sha512-KVgf4XQVrTjhyWmx6cte4RxonPLR9onExufI1jhvw/MQ4BB6IsZD5gT8Lq+u/+pRkWna/6JoHpiQioaqFP5Rzw==",
++    "node_modules/zip-stream/node_modules/buffer": {
++      "version": "6.0.3",
++      "resolved": "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz",
++      "integrity": "sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==",
++      "dev": true,
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/feross"
++        },
++        {
++          "type": "patreon",
++          "url": "https://www.patreon.com/feross"
++        },
++        {
++          "type": "consulting",
++          "url": "https://feross.org/support"
++        }
++      ],
++      "license": "MIT",
++      "dependencies": {
++        "base64-js": "^1.3.1",
++        "ieee754": "^1.2.1"
++      }
++    },
++    "node_modules/zip-stream/node_modules/readable-stream": {
++      "version": "4.7.0",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-4.7.0.tgz",
++      "integrity": "sha512-oIGGmcpTLwPga8Bn6/Z75SVaH1z5dUut2ibSyAMVhmUggWpmDn2dapB0n7f8nwaSiRtepAsfJyfXIO5DCVAODg==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+-        "glob": "^7.2.3",
+-        "graceful-fs": "^4.2.0",
+-        "lazystream": "^1.0.0",
+-        "lodash.defaults": "^4.2.0",
+-        "lodash.difference": "^4.5.0",
+-        "lodash.flatten": "^4.4.0",
+-        "lodash.isplainobject": "^4.0.6",
+-        "lodash.union": "^4.6.0",
+-        "normalize-path": "^3.0.0",
+-        "readable-stream": "^3.6.0"
++        "abort-controller": "^3.0.0",
++        "buffer": "^6.0.3",
++        "events": "^3.3.0",
++        "process": "^0.11.10",
++        "string_decoder": "^1.3.0"
+       },
+       "engines": {
+-        "node": ">= 10"
++        "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+       }
+     },
+     "node_modules/zustand": {
+diff --git a/package.json b/package.json
+index 7ae6060..b427ef4 100644
+--- a/package.json
++++ b/package.json
+@@ -131,7 +131,7 @@
+     "context:check": "node scripts/agent-context-router.mjs check",
+     "test-agent-context-router": "node scripts/agent-context-router.test.mjs",
+     "dev": "electron-vite dev",
+-    "build": "node scripts/build-identity.mjs && electron-vite build",
++    "build": "node scripts/build-eagle-companion.mjs && node scripts/build-identity.mjs && electron-vite build",
+     "pack:win": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dir",
+     "pack:mac": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dir",
+     "dist:win": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dist",
+@@ -402,14 +402,15 @@
+     "@types/react-dom": "^18.3.0",
+     "@vitejs/plugin-react": "^4.2.1",
+     "ajv": "6.15.0",
++    "archiver": "^7.0.1",
+     "autoprefixer": "^10.4.19",
+     "electron": "^30.0.6",
+     "electron-builder": "^24.13.3",
+     "electron-vite": "^2.2.0",
++    "playwright": "^1.60.0",
+     "postcss": "^8.4.38",
+     "tailwindcss": "^3.4.3",
+     "typescript": "^5.4.5",
+-    "vite": "^5.2.11",
+-    "playwright": "^1.60.0"
++    "vite": "^5.2.11"
+   }
+ }
+diff --git a/scripts/build-eagle-companion.mjs b/scripts/build-eagle-companion.mjs
+new file mode 100644
+index e69de29..5fa18e4 100644
+--- /dev/null
++++ b/scripts/build-eagle-companion.mjs
+@@ -0,0 +1,27 @@
++import fs from 'node:fs/promises'
++import { createWriteStream } from 'node:fs'
++import path from 'node:path'
++import { createHash } from 'node:crypto'
++import archiver from 'archiver'
++
++// Eagle's documented Pack Plugin produces a ZIP with manifest at its root.
++// An explicit allowlist keeps credentials, local sessions and development files out.
++export const EAGLE_COMPANION_FILES = ['manifest.json', 'index.html', 'js/plugin.cjs', 'js/pairing.cjs', 'README.md']
++export const EAGLE_COMPANION_NAME = 'DAM-Eagle-Companion-0.2.0.eagleplugin'
++await fs.mkdir('build/eagle-companion', { recursive: true })
++const target = path.resolve('build/eagle-companion', EAGLE_COMPANION_NAME)
++const archive = archiver('zip', { zlib: { level: 9 } })
++const output = createWriteStream(target)
++archive.pipe(output)
++const completed = new Promise((resolve, reject) => { output.on('close', resolve); output.on('error', reject); archive.on('error', reject) })
++for (const name of EAGLE_COMPANION_FILES) {
++  const file = path.join('eagle-companion', name)
++  const stat = await fs.lstat(file)
++  if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 1024 * 1024) throw Error('EAGLE_COMPANION_SOURCE_INVALID')
++  archive.append(await fs.readFile(file), { name, date: new Date('1980-01-01T00:00:00Z'), mode: 0o644 })
++}
++await archive.finalize()
++await completed
++const bytes = await fs.readFile(target)
++console.log(JSON.stringify({ file: EAGLE_COMPANION_NAME, bytes: bytes.length,
++  sha256: createHash('sha256').update(bytes).digest('hex'), installed: false }))
+diff --git a/scripts/build-identity.mjs b/scripts/build-identity.mjs
+index 9145c46..238e050 100644
+--- a/scripts/build-identity.mjs
++++ b/scripts/build-identity.mjs
+@@ -5,6 +5,8 @@ import {windowsBackupBuildClosure} from './windows-backup-build-closure.mjs'
+ const files={};const generated='src/shared/build-identity.generated.ts'
+ async function walk(dir){for(const entry of await fs.readdir(dir,{withFileTypes:true})){const name=path.join(dir,entry.name).split(path.sep).join('/');if(entry.isSymbolicLink())throw Error('BUILD_SOURCE_SYMLINK');if(entry.isDirectory())await walk(name);else if(entry.isFile()&&name!==generated&&/\.(ts|tsx|css|js|mjs|cjs|json|cpp|c|cs|py)$/.test(name))files[name]=createHash('sha256').update(await fs.readFile(name)).digest('hex')}}
+ await walk('src')
++for(const name of ['manifest.json','index.html','js/plugin.cjs','js/pairing.cjs','README.md'])files['eagle-companion/'+name]=createHash('sha256').update(await fs.readFile('eagle-companion/'+name)).digest('hex')
++files['scripts/build-eagle-companion.mjs']=createHash('sha256').update(await fs.readFile('scripts/build-eagle-companion.mjs')).digest('hex')
+ await walk('ai-service/tools')
+ for(const name of ['package.json','package-lock.json','electron.vite.config.ts','scripts/build-identity.mjs','pi-runtime/worker.mjs','pi-runtime/provider-policy.json','pi-runtime/auth-interaction.mjs','pi-runtime/openai-chatgpt-auth.mjs','pi-runtime/model-reasoning.mjs','pi-runtime/release.json'])files[name]=createHash('sha256').update(await fs.readFile(name)).digest('hex')
+ files['scripts/windows-backup-build-closure.mjs']=createHash('sha256').update(await fs.readFile('scripts/windows-backup-build-closure.mjs')).digest('hex')
+diff --git a/scripts/eagle-adapter-companion.test.ts b/scripts/eagle-adapter-companion.test.ts
+index ae3bef4..1c25a6c 100644
+--- a/scripts/eagle-adapter-companion.test.ts
++++ b/scripts/eagle-adapter-companion.test.ts
+@@ -53,7 +53,7 @@ const companion = createEagleCompanionHttpAdapter({ origin: `http://127.0.0.1:${
+ const webState = {
+   version: '4.0.0', buildVersion: 'build21', libraryPath: eagleRoot, libraryName: 'Synthetic Eagle',
+   modificationTime: 1, item: eagleItem, failAfterNextUpdate: false,
+-  nextGetFailure: null as null | 'http-500' | 'timeout' | 'bad-json',
++  nextGetFailure: null as null | 'http-500' | 'timeout' | 'bad-json' | 'bad-envelope' | 'wrong-id',
+   receivedPaths: [] as string[]
+ }
+ const webServer = http.createServer(async (request, response) => {
+@@ -68,6 +68,8 @@ const webServer = http.createServer(async (request, response) => {
+     webState.nextGetFailure=null
+     if(failure==='http-500')return send(response,500,{status:'error'})
+     if(failure==='bad-json'){response.writeHead(200,{'Content-Type':'application/json'});response.end('{');return}
++    if(failure==='bad-envelope')return send(response,200,{status:'success',data:{}})
++    if(failure==='wrong-id')return send(response,200,{status:'success',data:{data:[{...webItem(eagleItem),id:'wrong-id'}],total:1}})
+     if(failure==='timeout'){setTimeout(()=>{if(!response.writableEnded)send(response,200,{status:'success',data:{data:[webItem(eagleItem)],total:1}})},500);return}
+     const ids = Array.isArray(body.ids) ? body.ids : null
+     const all = ids && !ids.includes(eagleItem.id) ? [] : [webItem(eagleItem)]
+@@ -116,7 +118,7 @@ assert.equal(loaded.kind,'found')
+ assert.equal(loaded.kind==='found'?loaded.item.contentFingerprint:null,digest(Buffer.from('original-v1')))
+ assert.deepEqual(Buffer.from((await adapter.readPreview('item-one'))!),Buffer.from('preview-v1'))
+ 
+-for(const failure of ['http-500','timeout','bad-json'] as const){
++for(const failure of ['http-500','timeout','bad-json','bad-envelope','wrong-id'] as const){
+   webState.nextGetFailure=failure
+   const unavailable=await adapter.getItem('item-one')
+   assert.equal(unavailable.kind,'unavailable',`${failure} must not be reported as an observed missing item.`)
+@@ -163,7 +165,12 @@ assert.deepEqual(await shortReadHandler.handle({kind:'snapshot-item',sessionToke
+ let raceReplaceCalls=0
+ const raceEagle={item:{getById:async()=>({...eagleItem,replaceFile:async()=>{raceReplaceCalls+=1;return true}})}}
+ let raceHandler:any
+-const raceFs={...fs,readFile:async(filePath:string)=>{const bytes=await fs.readFile(filePath);raceHandler.invalidate();return bytes}}
++const raceFs={...fs,open:async(filePath:string,flags:string)=>{
++  const file=await fs.open(filePath,flags)
++  return {stat:()=>file.stat(),close:()=>file.close(),read:async(...args:any[])=>{
++    const result=await (file.read as any)(...args);raceHandler.invalidate();return result
++  }}
++}}
+ raceHandler=companionArtifact.createHandler({eagle:raceEagle,sessionToken:'race-synthetic-session',libraryIdentity,stagingRoot,fs:raceFs})
+ const raceResult=await raceHandler.handle({kind:'replace-file',sessionToken:'race-synthetic-session',libraryIdentity,itemId:'item-one',stagedFilePath:stagedPath,expectedFingerprint:digest(await fs.readFile(originalPath)),desiredFingerprint:digest(await fs.readFile(stagedPath))})
+ assert.deepEqual(raceResult,{ok:false,code:'LIBRARY_CHANGED'})
+diff --git a/scripts/eagle-companion-artifact.test.ts b/scripts/eagle-companion-artifact.test.ts
+index 57e1fe4..55fff38 100644
+--- a/scripts/eagle-companion-artifact.test.ts
++++ b/scripts/eagle-companion-artifact.test.ts
+@@ -1,5 +1,8 @@
+ import assert from 'node:assert/strict'
+ import fs from 'node:fs/promises'
++import path from 'node:path'
++import os from 'node:os'
++import extract from 'extract-zip'
+ 
+ const manifest=JSON.parse(await fs.readFile('eagle-companion/manifest.json','utf8'))
+ const html=await fs.readFile('eagle-companion/index.html','utf8')
+@@ -17,4 +20,19 @@ assert.doesNotMatch(source,/metadata\.json/)
+ assert.doesNotMatch(source,/0\.0\.0\.0|listen\([^,]+\)|eval\(|new Function|child_process|exec\(|spawn\(/)
+ assert.doesNotMatch(source,/https?:\/\/(?!127\.0\.0\.1)/)
+ assert.doesNotMatch(JSON.stringify(manifest)+html+source,/synthetic-e2e-session-token|api[_-]?key|authorizationHeader/i)
++const gateway=await fs.readFile('eagle-companion/js/pairing.cjs','utf8')
++assert.match(gateway,/request\.headers\.origin/)
++assert.match(gateway,/request\.headers\['sec-fetch-site'\]/)
++assert.doesNotMatch(gateway,/metadata\.json|0\.0\.0\.0|eval\(|child_process|exec\(|spawn\(/)
++const archive='build/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin'
++const packaged='out/main/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin'
++assert.deepEqual(await fs.readFile(packaged),await fs.readFile(archive),'running artifact must be the exact built package')
++const unpack=await fs.mkdtemp(path.join(os.tmpdir(),'dam-eagle-package-'))
++try {
++  await extract(path.resolve(archive),{dir:unpack})
++  assert.deepEqual((await fs.readdir(unpack)).sort(),['README.md','index.html','js','manifest.json'])
++  assert.deepEqual((await fs.readdir(path.join(unpack,'js'))).sort(),['pairing.cjs','plugin.cjs'])
++  for(const file of ['manifest.json','index.html','js/plugin.cjs','js/pairing.cjs','README.md'])
++    assert.deepEqual(await fs.readFile(path.join(unpack,file)),await fs.readFile(path.join('eagle-companion',file)),file+' must match current source')
++} finally { await fs.rm(unpack,{recursive:true,force:true}) }
+ console.log('Eagle companion artifact governance passed')
+diff --git a/scripts/eagle-production-pairing.test.ts b/scripts/eagle-production-pairing.test.ts
+new file mode 100644
+index e69de29..ea057b0 100644
+--- /dev/null
++++ b/scripts/eagle-production-pairing.test.ts
+@@ -0,0 +1,93 @@
++import assert from 'node:assert/strict'
++import { createRequire } from 'node:module'
++import fs from 'node:fs/promises'
++import os from 'node:os'
++import path from 'node:path'
++import { createEaglePairing } from '../src/main/external-connected-library/eagle-pairing'
++
++const require = createRequire(import.meta.url)
++const core = require(path.resolve('eagle-companion/js/plugin.cjs'))
++const { createPairingGateway, startServer } = require(path.resolve('eagle-companion/js/pairing.cjs'))
++const root = await fs.mkdtemp(path.join(os.tmpdir(), 'dam-eagle-pairing-'))
++const libraryPath = path.join(root, 'public.library')
++const otherPath = path.join(root, 'other.library')
++const stagingRoot = path.join(root, 'staging')
++await Promise.all([libraryPath, otherPath, stagingRoot].map(file => fs.mkdir(file)))
++const eagle = { library: { path: libraryPath, name: 'Public test library' }, item: { getById: async () => null } }
++let providerCalls = 0
++let projected: any
++const gateway = createPairingGateway({ eagle, core, providerIdentity: 'eagle-companion:test-install',
++  changed: (value: any) => { projected = value },
++  fetch: async (url: string, init: RequestInit) => {
++    providerCalls++
++    const endpoint = new URL(url).pathname
++    const data = endpoint === '/api/v2/app/info' ? { version: '4.0.0', buildVersion: 'build21' } :
++      endpoint === '/api/v2/library/info' ? { name: eagle.library.name, path: eagle.library.path } :
++      endpoint === '/api/v2/item/get' ? { data: [], total: 0 } : null
++    assert.ok(init.method === 'GET' || init.method === 'POST')
++    return new Response(JSON.stringify({ status: 'success', data }))
++  }
++})
++let hostRequests = 0
++const fetchGateway: typeof fetch = async (url, init) => {
++  hostRequests++
++  try { return new Response(JSON.stringify(await gateway.dispatch(new URL(String(url)).pathname, JSON.parse(String(init?.body))))) }
++  catch { return new Response('{"ok":false}', { status: 503 }) }
++}
++const protection = { available: () => true, encrypt: (value: string) => Buffer.from('test-sealed:' + value),
++  decrypt: (value: Buffer) => value.toString().replace(/^test-sealed:/, '') }
++const file = path.join(root, 'host', 'pairing.encrypted')
++const pairing = createEaglePairing({ file, stagingRoot, protection, fetch: fetchGateway })
++try {
++  assert.equal((await pairing.inspect()).state, 'unpaired')
++  assert.equal(await pairing.provider.negotiate(), null)
++  assert.equal(hostRequests, 0, 'unpaired startup must not probe Eagle')
++  assert.equal((await pairing.begin('read-only')).state, 'awaiting-eagle')
++  assert.equal(projected.requestedGrant, 'read-only')
++  assert.equal(await pairing.provider.negotiate(), null, 'pending consent never grants capability')
++  assert.equal(providerCalls, 0)
++  assert.equal(await gateway.approve(), true)
++  assert.equal((await pairing.inspect()).state, 'paired')
++  const connection = await pairing.provider.negotiate()
++  assert.ok(connection)
++  assert.equal(connection.evidenceLevel, 'provider-protocol')
++  assert.equal(connection.capabilities.metadataWrite, false)
++  assert.equal(connection.capabilities.previewRead, true)
++  assert.equal(connection.capabilities.fileReplace, false)
++  assert.deepEqual(await pairing.provider.listPage({ cursor: null, limit: 100, scope: { kind: 'all' } }),
++    { items: [], nextCursor: null, complete: true })
++  const callsBeforeWrite = providerCalls
++  assert.equal((await pairing.provider.updateMetadata('one', { name: 'denied' })).kind, 'unsupported')
++  assert.equal(providerCalls, callsBeforeWrite)
++  const restarted = createEaglePairing({ file, stagingRoot, protection, fetch: fetchGateway })
++  assert.equal((await restarted.inspect()).state, 'paired', 'same active plugin is reconnectable after Host restart')
++  assert.equal((await restarted.provider.negotiate())?.libraryIdentity, connection.libraryIdentity)
++  assert.equal(JSON.stringify(await restarted.inspect()).includes('test-sealed'), false)
++  eagle.library.path = otherPath
++  assert.equal(await restarted.provider.negotiate(), null, 'switching library invalidates trusted identity')
++  assert.equal(projected.state, 'unpaired')
++  assert.equal((await restarted.revoke()).state, 'unpaired')
++  assert.equal(await fs.stat(file).then(() => true, () => false), false)
++  assert.equal((await restarted.begin('read-write')).state, 'awaiting-eagle')
++  assert.equal(await gateway.approve(), true)
++  const writable = await restarted.provider.negotiate()
++  assert.equal(writable?.capabilities.metadataWrite, true)
++  assert.equal(writable?.capabilities.permanentDelete, false)
++  await restarted.revoke()
++  const beforeNoGrant = providerCalls
++  assert.equal(await restarted.provider.negotiate(), null)
++  assert.equal(providerCalls, beforeNoGrant)
++
++  const unavailable = createEaglePairing({ file, stagingRoot,
++    protection: { ...protection, available: () => false }, fetch: fetchGateway })
++  assert.equal((await unavailable.begin('read-write')).state, 'storage-unavailable')
++
++  const server = await startServer(gateway, 0)
++  try {
++    const forbidden = await fetch(`http://127.0.0.1:${server.port}/v1/dam-eagle-pairing`, {
++      method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://attacker.invalid' }, body: '{}'
++    })
++    assert.equal(forbidden.status, 403, 'browser origin cannot submit pairing or privileged commands')
++  } finally { await server.close() }
++  console.log('Eagle production composition pairing tests passed (controlled gateway; real Eagle NOT tested)')
++} finally { gateway.revoke(); await fs.rm(root, { recursive: true, force: true }) }
+diff --git a/scripts/external-connected-library-core.test.ts b/scripts/external-connected-library-core.test.ts
+index 7e9ebb1..baf5d57 100644
+--- a/scripts/external-connected-library-core.test.ts
++++ b/scripts/external-connected-library-core.test.ts
+@@ -386,6 +386,23 @@ await assert.rejects(switchingHost.indexNextPage(), (error) =>
+ assert.equal(switchingHost.inspect().counts.indexed, 0, 'A page from a replaced library must not enter the index.')
+ await switchingHost.close()
+ 
++const downgradedProvider = new FakeEagleProvider([item('downgraded', 'Keep queued edit', [], { content: 'public' })])
++const downgradedHost = await createIsolatedHost('downgraded', downgradedProvider)
++await connectAndIndex(downgradedHost)
++const downgradedItem = (await downgradedHost.listItems())[0]
++await downgradedHost.queueMetadata({ itemKey: downgradedItem.key, clientReceipt: 'receipt:downgraded', patch: { name: 'Retained edit' } })
++const negotiateWritable = downgradedProvider.negotiate.bind(downgradedProvider)
++downgradedProvider.negotiate = async () => {
++  const current = await negotiateWritable()
++  return current ? { ...current, capabilities: { ...current.capabilities, metadataWrite: false } } : null
++}
++await assert.rejects(downgradedHost.synchronize(), (error: unknown) =>
++  error instanceof ExternalConnectedLibraryError && error.code === 'connected-library-read-only')
++assert.equal(downgradedHost.inspect().state, 'review-required')
++assert.equal((await downgradedHost.listOperations())[0].state, 'pending')
++assert.equal(downgradedProvider.metadataMutationCount.size, 0)
++await downgradedHost.close()
++
+ console.log('External Connected Library core integration passed')
+ 
+ async function createHost(name: string) {
+diff --git a/scripts/external-connected-library-ipc.test.ts b/scripts/external-connected-library-ipc.test.ts
+index 7bad456..29e5742 100644
+--- a/scripts/external-connected-library-ipc.test.ts
++++ b/scripts/external-connected-library-ipc.test.ts
+@@ -27,6 +27,9 @@ for(const [channel,request] of [
+   ['legacy-readonly:confirm',{receipt:'legacy:review',databasePath:'/private'}]
+ ] as const){const result=await invoke(channel,request);assert.equal(result.success,false);assert.equal(String(result.error).includes('/private'),false)}
+ assert.equal((await invoke('connected-library:list',undefined,{trusted:false})).code,'UNTRUSTED_SENDER')
+-assert.equal([...handlers.keys()].filter((channel)=>channel.startsWith('connected-library:')).length,18)
++assert.equal((await invoke('connected-library:pairing-begin',{requestedGrant:'read-write'}, {trusted:false})).code,'UNTRUSTED_SENDER')
++assert.equal((await invoke('connected-library:pairing-inspect')).value.state,'unpaired')
++assert.equal((await invoke('connected-library:pairing-begin',{requestedGrant:'read-write',sessionToken:'forbidden'})).success,false)
++assert.equal([...handlers.keys()].filter((channel)=>channel.startsWith('connected-library:')).length,22)
+ assert.equal([...handlers.keys()].filter((channel)=>channel.startsWith('legacy-readonly:')).length,7)
+ console.log('External Connected Library IPC boundary passed')
+diff --git a/src/main/external-connected-library/README.md b/src/main/external-connected-library/README.md
+index c5513ef..500da5d 100644
+--- a/src/main/external-connected-library/README.md
++++ b/src/main/external-connected-library/README.md
+@@ -48,9 +48,16 @@ local SQLite lock is never described as an Eagle-wide lock.
+   filename or same-looking bytes elsewhere never count as a receipt.
+ - Permanent cleanup remains unsupported for the production Eagle Adapter.
+   Synthetic protocol tests alone exercise a fake cleanup capability.
+-- The production composition is fail-closed until a later explicitly reviewed
+-  real pairing supplies a token and companion session. It never probes the
+-  user's Eagle port at startup.
++- Production uses `eagle-pairing.ts`, a Main-owned encrypted pairing session.
++  Unpaired startup does not probe Eagle. Explicit begin requests approval in
++  the companion; the plugin binds that consent to a real directory identity,
++  grant and staging root. Main independently verifies device/file identity.
++  The actual v2 requests are gated and forwarded by the companion; changing
++  libraries or revoking the plugin cannot leave a direct Web API write bypass.
++  Plugin sessions remain in memory; Main restart resumes the same running
++  session, while plugin restart requires approval again. Disconnect revokes
++  credentials without deleting index, journal, outbox or staging.
++  A downgraded capability requires review before old writable grants dispatch.
+ - A Web API path is not a stable Library or volume identity. Without a trusted
+   pairing resolver for provider, Library and volume identities, the Adapter
+   negotiates metadata read/index only and reports every write capability as
+@@ -64,4 +71,5 @@ npm run test-eagle-adapter-companion
+ npm run test-external-connected-library-ipc
+ npm run test-connected-library-background
+ npm run test-external-connected-library-electron-e2e
++node scripts/run-ts-test.mjs scripts/eagle-production-pairing.test.ts
+ ```
+diff --git a/src/main/external-connected-library/connected-library-runtime.ts b/src/main/external-connected-library/connected-library-runtime.ts
+index 928687c..5513bba 100644
+--- a/src/main/external-connected-library/connected-library-runtime.ts
++++ b/src/main/external-connected-library/connected-library-runtime.ts
+@@ -1,7 +1,9 @@
+ import fs from 'node:fs'
+ import path from 'node:path'
++import { fileURLToPath } from 'node:url'
++import { createHash } from 'node:crypto'
+ 
+-import { Menu, nativeImage, Tray, type Protocol } from 'electron'
++import { Menu, nativeImage, Tray, safeStorage, type Protocol } from 'electron'
+ import { showNativeOpenDialog } from '../platform/native-open-dialog'
+ 
+ import type {
+@@ -13,7 +15,7 @@ import { ConnectedLibraryBackgroundCoordinator } from './connected-library-backg
+ import { createEagleCompanionHttpAdapter } from './eagle-companion-http.adapter'
+ import { createEagleWebApiAdapter } from './eagle-web-api.adapter'
+ import { createExternalConnectedLibrary } from './external-connected-library'
+-import { createUnavailableEagleProvider } from './unavailable-eagle-provider'
++import { createEaglePairing, type EaglePairing } from './eagle-pairing'
+ 
+ export interface ConnectedSyntheticE2eConfiguration {
+   eagleBaseUrl: string
+@@ -29,6 +31,8 @@ export interface ConnectedLibraryRuntime {
+   connected: ExternalConnectedLibrary
+   legacy: LegacyReadOnlyWorkspace
+   background: ConnectedLibraryBackgroundCoordinator
++  pairing?: EaglePairing
++  companionArtifact(): Promise<{ fileName: string; bytesBase64: string; sha256: string }>
+   registerProtocols(protocol: Protocol): void
+   drain(): Promise<void>
+ }
+@@ -40,6 +44,15 @@ export async function createConnectedLibraryRuntime(input: {
+   requestQuit(): void
+ }): Promise<ConnectedLibraryRuntime> {
+   const connectedRoot = path.join(input.userDataDirectory, 'connected-libraries', 'eagle')
++  const pairing = input.synthetic ? undefined : createEaglePairing({
++    file: path.join(connectedRoot, 'pairing.encrypted'),
++    stagingRoot: path.join(connectedRoot, 'edit-staging'),
++    protection: {
++      available: () => safeStorage.isEncryptionAvailable() && (process.platform !== 'linux' || safeStorage.getSelectedStorageBackend() !== 'basic_text'),
++      encrypt: value => safeStorage.encryptString(value),
++      decrypt: value => safeStorage.decryptString(value)
++    }
++  })
+   const provider = input.synthetic
+     ? createEagleWebApiAdapter({
+         token: input.synthetic.token,
+@@ -56,7 +69,7 @@ export async function createConnectedLibraryRuntime(input: {
+           volumeIdentity: input.synthetic!.volumeIdentity
+         })
+       })
+-    : createUnavailableEagleProvider()
++    : pairing!.provider
+ 
+   const connected = await createExternalConnectedLibrary({
+     appOwnedRoot: connectedRoot,
+@@ -163,6 +176,13 @@ export async function createConnectedLibraryRuntime(input: {
+     connected,
+     legacy,
+     background,
++    pairing,
++    async companionArtifact() {
++      const fileName = 'DAM-Eagle-Companion-0.2.0.eagleplugin'
++      const bytes = await fs.promises.readFile(path.join(path.dirname(fileURLToPath(import.meta.url)), 'eagle-companion', fileName))
++      if (bytes.length > 1024 * 1024) throw Error('EAGLE_COMPANION_ARTIFACT_INVALID')
++      return { fileName, bytesBase64: bytes.toString('base64'), sha256: createHash('sha256').update(bytes).digest('hex') }
++    },
+     registerProtocols(protocol: Protocol) {
+       protocol.handle('dam-connected-preview', (request) => handleConnectedPreview(request.url))
+       protocol.handle('dam-legacy-preview', (request) => handleLegacyPreview(request.url))
+diff --git a/src/main/external-connected-library/eagle-companion-http.adapter.ts b/src/main/external-connected-library/eagle-companion-http.adapter.ts
+index 10b3510..b95522f 100644
+--- a/src/main/external-connected-library/eagle-companion-http.adapter.ts
++++ b/src/main/external-connected-library/eagle-companion-http.adapter.ts
+@@ -54,7 +54,7 @@ function validateCompanionResponse(value: unknown): EagleCompanionResponse {
+         return response as unknown as EagleCompanionResponse;
+     if (response.ok !== true || typeof response.kind !== 'string')
+         return { ok: false, code: 'OPERATION_FAILED' };
+-    if (response.kind === 'capabilities' && response.fileReplace === true && typeof response.libraryIdentity === 'string')
++    if (response.kind === 'capabilities' && typeof response.fileReplace === 'boolean' && typeof response.libraryIdentity === 'string')
+         return response as unknown as EagleCompanionResponse;
+     if (response.kind === 'item-snapshot' && typeof response.itemId === 'string' && typeof response.contentFingerprint === 'string' && Number.isSafeInteger(response.size))
+         return response as unknown as EagleCompanionResponse;
+diff --git a/src/main/external-connected-library/eagle-companion.port.ts b/src/main/external-connected-library/eagle-companion.port.ts
+index 8aaf980..9dd48a1 100644
+--- a/src/main/external-connected-library/eagle-companion.port.ts
++++ b/src/main/external-connected-library/eagle-companion.port.ts
+@@ -25,7 +25,7 @@ export type EagleCompanionRequest = {
+ export type EagleCompanionResponse = {
+     ok: true;
+     kind: 'capabilities';
+-    fileReplace: true;
++    fileReplace: boolean;
+     libraryIdentity: string;
+ } | {
+     ok: true;
+diff --git a/src/main/external-connected-library/eagle-pairing.ts b/src/main/external-connected-library/eagle-pairing.ts
+new file mode 100644
+index e69de29..d6424d8 100644
+--- /dev/null
++++ b/src/main/external-connected-library/eagle-pairing.ts
+@@ -0,0 +1,176 @@
++import { createHash, randomBytes } from 'node:crypto'
++import fs from 'node:fs/promises'
++import path from 'node:path'
++import type { SecretProtection } from '../ai-credentials/credential-vault'
++import type { EagleProviderPort } from './eagle-provider.port'
++import { createEagleWebApiAdapter } from './eagle-web-api.adapter'
++import { createEagleCompanionHttpAdapter } from './eagle-companion-http.adapter'
++import type { EaglePairingProjection } from '../../shared/contracts/external-connected-library.contract'
++
++const ORIGIN = 'http://127.0.0.1:41596'
++const ID = /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/u
++interface Session {
++  token: string
++  requestedGrant: 'read-only' | 'read-write'
++  identity?: { providerIdentity: string; libraryIdentity: string; volumeIdentity: string }
++}
++
++/** Pairing secrets never leave Main. No Eagle requests until explicit begin or a saved grant. */
++export function createEaglePairing(input: {
++  file: string
++  stagingRoot: string
++  protection: SecretProtection
++  fetch?: typeof fetch
++}) {
++  const fetchImpl = input.fetch ?? globalThis.fetch
++  let session: Session | null = null
++  let loaded = false
++  let adapter: EagleProviderPort | null = null
++  let projection: EaglePairingProjection = {
++    state: 'unpaired', displayName: null, requestedGrant: null, protocolVersion: 1
++  }
++  let tail: Promise<unknown> = Promise.resolve()
++  const locked = <T>(fn: () => Promise<T>) => {
++    const result = tail.then(fn, fn)
++    tail = result.catch(() => undefined)
++    return result
++  }
++  const exchange = async (body: unknown): Promise<any> => {
++    const response = await fetchImpl(`${ORIGIN}/v1/dam-eagle-pairing`, {
++      method: 'POST', headers: { 'Content-Type': 'application/json' },
++      body: JSON.stringify(body), signal: AbortSignal.timeout(5000), redirect: 'error'
++    })
++    if (!response.ok) throw Error('EAGLE_COMPANION_UNAVAILABLE')
++    const bytes = await response.text()
++    if (Buffer.byteLength(bytes) > 16384) throw Error('EAGLE_PAIRING_INVALID')
++    return JSON.parse(bytes)
++  }
++  const load = async () => {
++    if (loaded) return
++    loaded = true
++    if (!input.protection.available()) return
++    try {
++      const stat = await fs.lstat(input.file)
++      if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 16384) return
++      const value = JSON.parse(input.protection.decrypt(await fs.readFile(input.file)))
++      if (/^[a-f0-9]{64}$/u.test(value.token) && ['read-only', 'read-write'].includes(value.requestedGrant) &&
++          value.identity && Object.values(value.identity).length === 3 && Object.values(value.identity).every(id => typeof id === 'string' && ID.test(id))) {
++        session = value
++        projection = { ...projection, state: 'unavailable', requestedGrant: value.requestedGrant }
++      }
++    } catch { /* Corrupt/unavailable credentials never grant access. Explicit pairing repairs. */ }
++  }
++  const save = async () => {
++    if (!input.protection.available()) throw Error('EAGLE_SECRET_STORAGE_UNAVAILABLE')
++    await fs.mkdir(path.dirname(input.file), { recursive: true, mode: 0o700 })
++    const temporary = `${input.file}.${randomBytes(8).toString('hex')}.tmp`
++    try {
++      await fs.writeFile(temporary, input.protection.encrypt(JSON.stringify(session)), { flag: 'wx', mode: 0o600 })
++      await fs.rename(temporary, input.file)
++    } finally { await fs.rm(temporary, { force: true }) }
++  }
++  const observe = async () => {
++    await load()
++    if (!session) return null
++    const response = await exchange({ kind: 'observe', sessionToken: session.token })
++    if (response?.state !== 'paired' || response.protocolVersion !== 1 ||
++        response.requestedGrant !== session.requestedGrant || typeof response.displayName !== 'string' ||
++        typeof response.libraryPath !== 'string' || !response.identity ||
++        !['providerIdentity', 'libraryIdentity', 'volumeIdentity'].every(key => ID.test(response.identity[key]))) {
++      projection = { ...projection, state: response?.state === 'pending' ? 'awaiting-eagle' : 'unavailable' }
++      adapter = null
++      return null
++    }
++    const realPath = await fs.realpath(response.libraryPath)
++    const stat = await fs.stat(realPath, { bigint: true })
++    if (!stat.isDirectory() || stat.ino === 0n || stat.dev === 0n) throw Error('EAGLE_IDENTITY_UNAVAILABLE')
++    const identity = {
++      providerIdentity: response.identity.providerIdentity as string,
++      libraryIdentity: `eagle-library:${digest(`${stat.dev}:${stat.ino}:${stat.birthtimeNs}`)}`,
++      volumeIdentity: `eagle-volume:${digest(String(stat.dev))}`
++    }
++    if (identity.libraryIdentity !== response.identity.libraryIdentity || identity.volumeIdentity !== response.identity.volumeIdentity ||
++        session.identity && JSON.stringify(session.identity) !== JSON.stringify(identity)) {
++      adapter = null
++      projection = { ...projection, state: 'unavailable' }
++      return null
++    }
++    if (!session.identity) { session.identity = identity; await save() }
++    projection = { ...projection, state: 'paired', displayName: response.displayName, requestedGrant: session.requestedGrant }
++    return { identity, libraryPath: realPath }
++  }
++  const resolveAdapter = async () => {
++    const observed = await observe().catch(() => null)
++    if (!observed || !session) return null
++    if (!adapter) {
++      const active = session
++      adapter = createEagleWebApiAdapter({
++        token: active.token,
++        companion: createEagleCompanionHttpAdapter({ origin: ORIGIN, fetch: fetchImpl }),
++        // The companion validates token, grant, current library and endpoint before forwarding.
++        fetch: async (url, init) => {
++          const parsed = new URL(String(url))
++          if (parsed.origin !== 'http://127.0.0.1:41595') throw Error('EAGLE_ORIGIN_INVALID')
++          return fetchImpl(`${ORIGIN}/v1/dam-eagle-web-api`, {
++            method: 'POST', headers: { 'Content-Type': 'application/json' },
++            body: JSON.stringify({ sessionToken: active.token, libraryIdentity: active.identity!.libraryIdentity,
++              endpoint: parsed.pathname, method: init?.method, payload: init?.body ? JSON.parse(String(init.body)) : null }),
++            signal: init?.signal, redirect: 'error'
++          })
++        },
++        resolveTrustedIdentity: async info => {
++          const current = await observe()
++          if (!current || await fs.realpath(info.libraryPath) !== current.libraryPath) throw Error('EAGLE_LIBRARY_CHANGED')
++          return current.identity
++        },
++        readOnly: active.requestedGrant === 'read-only'
++      })
++    }
++    return adapter
++  }
++  const provider: EagleProviderPort = {
++    negotiate: async () => (await resolveAdapter())?.negotiate() ?? null,
++    listPage: async request => { const current = await resolveAdapter(); if (!current) throw Error('EAGLE_PROVIDER_UNAVAILABLE'); return current.listPage(request) },
++    getItem: async id => (await resolveAdapter())?.getItem(id) ?? { kind: 'unavailable', reason: 'transport' },
++    readPreview: async id => (await resolveAdapter())?.readPreview(id) ?? null,
++    updateMetadata: async (id, patch) => (await resolveAdapter())?.updateMetadata(id, patch) ?? { kind: 'unavailable' },
++    addFile: async (id, file, metadata) => (await resolveAdapter())?.addFile(id, file, metadata) ?? { kind: 'unavailable' },
++    replaceFile: async (id, file, before, after) => (await resolveAdapter())?.replaceFile(id, file, before, after) ?? { kind: 'unavailable' },
++    setDeleted: async (id, deleted) => (await resolveAdapter())?.setDeleted(id, deleted) ?? { kind: 'unavailable' },
++    permanentlyDelete: async () => ({ kind: 'unsupported' }),
++    disconnect: async () => { await adapter?.disconnect(); adapter = null }
++  }
++  return {
++    provider,
++    inspect: () => locked(async () => {
++      if (!input.protection.available()) return { ...projection, state: 'storage-unavailable' as const }
++      await observe().catch(() => { adapter = null; projection = { ...projection, state: 'unavailable' } })
++      return { ...projection }
++    }),
++    begin: (requestedGrant: 'read-only' | 'read-write') => locked(async () => {
++      if (!input.protection.available()) return { ...projection, state: 'storage-unavailable' as const }
++      await load()
++      if (projection.state === 'awaiting-eagle') return { ...projection }
++      if (session && await observe().catch(() => null)) return { ...projection }
++      if (session) await exchange({ kind: 'revoke', sessionToken: session.token }).catch(() => undefined)
++      adapter = null
++      session = { token: randomBytes(32).toString('hex'), requestedGrant }
++      try {
++        const result = await exchange({ kind: 'begin', sessionToken: session.token, requestedGrant, stagingRoot: input.stagingRoot })
++        projection = { ...projection, displayName: null, requestedGrant,
++          state: result?.state === 'pending' ? 'awaiting-eagle' : 'unavailable' }
++      } catch { projection = { ...projection, state: 'unavailable' } }
++      return { ...projection }
++    }),
++    revoke: () => locked(async () => {
++      await load()
++      if (session) await exchange({ kind: 'revoke', sessionToken: session.token }).catch(() => undefined)
++      session = null; adapter = null
++      await fs.rm(input.file, { force: true })
++      projection = { state: 'unpaired', displayName: null, requestedGrant: null, protocolVersion: 1 }
++      return { ...projection }
++    })
++  }
++}
++export type EaglePairing = ReturnType<typeof createEaglePairing>
++function digest(text: string) { return createHash('sha256').update(text).digest('hex') }
+diff --git a/src/main/external-connected-library/eagle-web-api.adapter.ts b/src/main/external-connected-library/eagle-web-api.adapter.ts
+index 03db8dd..d5fc84f 100644
+--- a/src/main/external-connected-library/eagle-web-api.adapter.ts
++++ b/src/main/external-connected-library/eagle-web-api.adapter.ts
+@@ -24,6 +24,7 @@ export interface CreateEagleWebApiAdapterInput {
+     allowSyntheticLoopback?: boolean;
+     timeoutMs?: number;
+     syntheticPermanentDelete?: boolean;
++    readOnly?: boolean;
+ }
+ class EagleRequestError extends Error {
+     constructor(readonly reason: 'timeout' | 'transport' | 'invalid-response') {
+@@ -123,7 +124,7 @@ export function createEagleWebApiAdapter(input: CreateEagleWebApiAdapterInput):
+                     libraryIdentity: identity.libraryIdentity
+                 }).catch(() => null)
+                 : null;
+-            const trustedWrite = trustedIdentity !== null;
++            const trustedWrite = trustedIdentity !== null && input.readOnly !== true;
+             const capabilities: EagleCapabilityProjection = {
+                 webApiV2: true,
+                 progressiveIndex: true,
+@@ -131,6 +132,7 @@ export function createEagleWebApiAdapter(input: CreateEagleWebApiAdapterInput):
+                 metadataWrite: trustedWrite,
+                 trash: trustedWrite,
+                 restore: trustedWrite,
++                previewRead: companionResponse?.ok === true && companionResponse.kind === 'capabilities',
+                 fileReplace: trustedWrite && companionResponse?.ok === true &&
+                     companionResponse.kind === 'capabilities' && companionResponse.fileReplace === true &&
+                     companionResponse.libraryIdentity === identity.libraryIdentity,
+@@ -165,10 +167,9 @@ export function createEagleWebApiAdapter(input: CreateEagleWebApiAdapterInput):
+             const record = unwrapItemResponse(response);
+             if (!record)
+                 return { kind: 'missing' };
+-            return {
+-                kind: 'found',
+-                item: await normalizeItem(record, input.companion, input.token, connection!.libraryIdentity)
+-            };
++            const item = await normalizeItem(record, input.companion, input.token, connection!.libraryIdentity);
++            if (item.id !== itemId) throw new EagleRequestError('invalid-response');
++            return { kind: 'found', item };
+         }
+         catch (error) {
+             return { kind: 'unavailable', reason: requestFailureReason(error) };
+@@ -189,9 +190,12 @@ export function createEagleWebApiAdapter(input: CreateEagleWebApiAdapterInput):
+             offset,
+             limit
+         }));
+-        const data = Array.isArray(response.data) ? response.data : [];
++        if (!Array.isArray(response.data)) throw new EagleRequestError('invalid-response');
++        const data = response.data;
+         const total = requireInteger(response.total);
++        if (data.length > limit || data.length === 0 && offset < total) throw new EagleRequestError('invalid-response');
+         const items = await Promise.all(data.map((item) => normalizeItem(requireRecord(item), undefined, input.token, connection!.libraryIdentity)));
++        if (new Set(items.map(item => item.id)).size !== items.length || offset + items.length > total) throw new EagleRequestError('invalid-response');
+         const next = offset + items.length;
+         return { items, nextCursor: next < total ? String(next) : null, complete: next >= total };
+     };
+@@ -214,7 +218,7 @@ export function createEagleWebApiAdapter(input: CreateEagleWebApiAdapterInput):
+         getItem,
+         async readPreview(itemId) {
+             const negotiated = requireNegotiated();
+-            if (!input.companion || !negotiated.capabilities.fileReplace)
++            if (!input.companion || !(negotiated.capabilities.previewRead ?? negotiated.capabilities.fileReplace))
+                 return null;
+             const response = await input.companion.invoke({
+                 kind: 'read-preview',
+@@ -352,7 +356,8 @@ function unwrapItemResponse(value: unknown): Record<string, unknown> | null {
+     const record = requireRecord(value);
+     if (Array.isArray(record.data))
+         return record.data[0] ? requireRecord(record.data[0]) : null;
+-    return 'id' in record ? record : null;
++    if ('id' in record) return record;
++    throw new EagleRequestError('invalid-response');
+ }
+ function requestFailureReason(error: unknown): 'timeout' | 'transport' | 'invalid-response' {
+     return error instanceof EagleRequestError ? error.reason : 'invalid-response';
+diff --git a/src/main/external-connected-library/external-connected-library.ts b/src/main/external-connected-library/external-connected-library.ts
+index 6796cf8..559d81e 100644
+--- a/src/main/external-connected-library/external-connected-library.ts
++++ b/src/main/external-connected-library/external-connected-library.ts
+@@ -575,6 +575,10 @@ export async function createExternalConnectedLibrary(input: CreateExternalConnec
+             writeConnection(database, { ...connection, state: 'conflict', generation: createIdentity('connected-generation'), updatedAt: iso(now()) });
+             throw connectedError('connected-library-identity-changed');
+         }
++        if (connection.grantLevel === 'read-write' && !current.capabilities.metadataWrite) {
++            writeConnection(database, { ...connection, state: 'review-required', generation: createIdentity('connected-generation'), updatedAt: iso(now()) });
++            throw connectedError('connected-library-read-only');
++        }
+         return current;
+     }
+     async function assertRemoteConnectionStillMatches(saved: ConnectionRow, expected: EagleProviderConnection): Promise<void> {
+diff --git a/src/main/index.ts b/src/main/index.ts
+index 241ab55..7265589 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -828,6 +828,8 @@ function setupIpcHandlers() {
+     managedDownloads,
+     externalConnectedLibrary:{
+       host:connectedRuntime.connected,
++      pairing:connectedRuntime.pairing,
++      companionArtifact:connectedRuntime.companionArtifact,
+       legacy:connectedRuntime.legacy,
+       isTrustedSender:isTrustedWorkspace
+     },
+diff --git a/src/main/ipc/external-connected-library.ipc.ts b/src/main/ipc/external-connected-library.ipc.ts
+index c1daaef..75cf004 100644
+--- a/src/main/ipc/external-connected-library.ipc.ts
++++ b/src/main/ipc/external-connected-library.ipc.ts
+@@ -1,11 +1,15 @@
++import { CHANNEL_EAGLE_PAIRING_INSPECT, CHANNEL_EAGLE_PAIRING_BEGIN, CHANNEL_EAGLE_PAIRING_REVOKE, CHANNEL_EAGLE_COMPANION_ARTIFACT } from '../../shared/contracts/external-connected-library.contract';
+ import type { MainInvokeContext as IpcMainInvokeEvent } from '../local-host/client-context';
+ import { CHANNEL_CONNECTED_CLEANUP_CANDIDATES, CHANNEL_CONNECTED_CONFIRM, CHANNEL_CONNECTED_CONFIRM_CLEANUP, CHANNEL_CONNECTED_CONFLICTS, CHANNEL_CONNECTED_DISCONNECT, CHANNEL_CONNECTED_INDEX_NEXT, CHANNEL_CONNECTED_INSPECT, CHANNEL_CONNECTED_LIST, CHANNEL_CONNECTED_MEDIA_PREVIEW, CHANNEL_CONNECTED_OPERATIONS, CHANNEL_CONNECTED_PREPARE, CHANNEL_CONNECTED_PREPARE_NEW, CHANNEL_CONNECTED_PREPARE_FILE, CHANNEL_CONNECTED_QUEUE_LIFECYCLE, CHANNEL_CONNECTED_QUEUE_METADATA, CHANNEL_CONNECTED_RESOLVE_CONFLICT, CHANNEL_CONNECTED_SEARCH, CHANNEL_CONNECTED_SYNC, CHANNEL_LEGACY_CLOSE, CHANNEL_LEGACY_CONFIRM, CHANNEL_LEGACY_INSPECT, CHANNEL_LEGACY_LIST, CHANNEL_LEGACY_MEDIA_PREVIEW, CHANNEL_LEGACY_PREPARE, CHANNEL_LEGACY_SEARCH, type ConnectedLibraryScope, type ConnectedMetadataPatch, type ExternalConnectedLibrary, type LegacyReadOnlyWorkspace } from '../../shared/contracts/external-connected-library.contract';
+ import { ExternalConnectedLibraryError } from '../external-connected-library';
+ import type { MainIpcHandleRegistrar } from './ipc-registrar';
++import type { EaglePairing } from '../external-connected-library/eagle-pairing';
+ const ID = /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/u;
+ export function registerExternalConnectedLibraryIpc(input: {
+     host: ExternalConnectedLibrary;
+     legacy: LegacyReadOnlyWorkspace;
++    pairing?: EaglePairing;
++    companionArtifact?(): Promise<{ fileName: string; bytesBase64: string; sha256: string }>;
+     isTrustedSender(event: IpcMainInvokeEvent): boolean;
+ }, handle: MainIpcHandleRegistrar): void {
+     const invoke = async <T>(event: IpcMainInvokeEvent, operation: () => Promise<T> | T) => {
+@@ -19,6 +23,21 @@ export function registerExternalConnectedLibraryIpc(input: {
+         }
+     };
+     handle(CHANNEL_CONNECTED_INSPECT, (event) => invoke(event, () => input.host.inspect()));
++    handle(CHANNEL_EAGLE_PAIRING_INSPECT, (event) => invoke(event, async () => input.pairing ? input.pairing.inspect() : { state: 'unpaired' as const, displayName: null, requestedGrant: null, protocolVersion: 1 as const }));
++    handle(CHANNEL_EAGLE_COMPANION_ARTIFACT, (event) => invoke(event, async () => {
++        if (!input.companionArtifact) throw invalid();
++        return input.companionArtifact();
++    }));
++    handle(CHANNEL_EAGLE_PAIRING_BEGIN, (event, request: unknown) => invoke(event, () => {
++        const grant = exact(request, ['requestedGrant']).requestedGrant;
++        if (!['read-only', 'read-write'].includes(String(grant)) || !input.pairing) throw invalid();
++        return input.pairing.begin(grant as 'read-only' | 'read-write');
++    }));
++    handle(CHANNEL_EAGLE_PAIRING_REVOKE, (event) => invoke(event, async () => {
++        await input.host.disconnect();
++        if (!input.pairing) throw invalid();
++        return input.pairing.revoke();
++    }));
+     handle(CHANNEL_CONNECTED_PREPARE, (event, request: unknown) => invoke(event, () => { const record = exact(request, ['scope', 'requestedGrant']); const scope = parseScope(record.scope); const grant = record.requestedGrant; if (grant !== 'read-only' && grant !== 'read-write')
+         throw invalid(); return input.host.prepareConnection({ scope, requestedGrant: grant }); }));
+     handle(CHANNEL_CONNECTED_CONFIRM, (event, request: unknown) => invoke(event, () => input.host.confirmConnection(fieldId(request, 'receipt'))));
+@@ -40,7 +59,10 @@ export function registerExternalConnectedLibraryIpc(input: {
+     handle(CHANNEL_CONNECTED_CONFIRM_CLEANUP, (event, request: unknown) => invoke(event, () => { const record = exact(request, ['itemKey', 'clientReceipt']); return input.host.confirmPermanentCleanup({ itemKey: requireId(record.itemKey), clientReceipt: requireId(record.clientReceipt) }); }));
+     handle(CHANNEL_CONNECTED_MEDIA_PREVIEW, (event, request: unknown) => invoke(event, async () => { const record = exact(request, ['itemKey', 'libraryIdentity', 'generation']); const authority = input.host.inspect(); if (authority.state === 'unconfigured' || authority.libraryIdentity !== requireId(record.libraryIdentity) || authority.generation !== requireId(record.generation))
+         throw new ExternalConnectedLibraryError('connected-library-generation-stale'); return Buffer.from(await input.host.readPreview(requireId(record.itemKey))).toString('base64'); }));
+-    handle(CHANNEL_CONNECTED_DISCONNECT, (event) => invoke(event, () => input.host.disconnect()));
++    handle(CHANNEL_CONNECTED_DISCONNECT, (event) => invoke(event, async () => {
++        await input.host.disconnect();
++        await input.pairing?.revoke();
++    }));
+     handle(CHANNEL_LEGACY_INSPECT, (event) => invoke(event, () => input.legacy.inspect()));
+     handle(CHANNEL_LEGACY_PREPARE, (event) => invoke(event, () => input.legacy.prepare()));
+     handle(CHANNEL_LEGACY_CONFIRM, (event, request: unknown) => invoke(event, () => input.legacy.confirm(fieldId(request, 'receipt'))));
+diff --git a/src/main/ipc/main-ipc-composition.ts b/src/main/ipc/main-ipc-composition.ts
+index 8c837f0..474da5e 100644
+--- a/src/main/ipc/main-ipc-composition.ts
++++ b/src/main/ipc/main-ipc-composition.ts
+@@ -69,6 +69,8 @@ export interface MainIpcCompositionDependencies {
+   tagIntents?: ReturnType<typeof createTagIntentController>
+   managedDownloads?: ReturnType<typeof createManagedDownloads>
+   externalConnectedLibrary?: {
++    pairing?: import('../external-connected-library/eagle-pairing').EaglePairing
++    companionArtifact?(): Promise<{ fileName: string; bytesBase64: string; sha256: string }>
+     host: ExternalConnectedLibrary
+     legacy: LegacyReadOnlyWorkspace
+     isTrustedSender(event: import('../local-host/client-context').MainInvokeContext): boolean
+diff --git a/src/renderer/routes/ConnectedLibrariesPage.tsx b/src/renderer/routes/ConnectedLibrariesPage.tsx
+index 0f12450..d5d9658 100644
+--- a/src/renderer/routes/ConnectedLibrariesPage.tsx
++++ b/src/renderer/routes/ConnectedLibrariesPage.tsx
+@@ -19,7 +19,8 @@ import type {
+   ConnectedLibraryItemProjection,
+   ConnectedLibraryProjection,
+   ConnectedLibraryReview,
+-  ConnectedOperationProjection
++  ConnectedOperationProjection,
++  EaglePairingProjection
+ } from '../../shared/contracts/external-connected-library.contract'
+ import {
+   Button,
+@@ -65,6 +66,8 @@ export default function ConnectedLibrariesPage() {
+   const [busy, setBusy] = useState<string | null>(null)
+   const [error, setError] = useState<string | null>(null)
+   const [initialLoading, setInitialLoading] = useState(true)
++  const [pairing, setPairing] = useState<EaglePairingProjection | null>(null)
++  const [requestedGrant, setRequestedGrant] = useState<'read-only' | 'read-write'>('read-only')
+   const [names, setNames] = useState<Record<string, string>>({})
+   const [brokenPreviews, setBrokenPreviews] = useState<ReadonlySet<string>>(new Set())
+   const mediaAuthorityRef = useRef({ libraryIdentity: null as string | null, generation: null as string | null })
+@@ -75,14 +78,16 @@ export default function ConnectedLibrariesPage() {
+     const epoch = ++refreshEpoch.current
+     if (!api) throw new Error('CONNECTED_LIBRARY_UNAVAILABLE')
+     const next = unwrap<ConnectedLibraryProjection>(await api.inspect())
+-    const [listed, queued, foundConflicts, candidates] = await Promise.all([
++    const [listed, queued, foundConflicts, candidates, pairStatus] = await Promise.all([
+       api.list(),
+       api.operations(),
+       api.conflicts(),
+-      api.cleanupCandidates()
++      api.cleanupCandidates(),
++      next.evidenceLevel === 'synthetic-protocol' ? null : api.pairingInspect()
+     ])
+     if(epoch !== refreshEpoch.current)return
+     setProjection(next)
++    if (pairStatus) setPairing(unwrap(pairStatus))
+     setItems(unwrap(listed))
+     setOperations(unwrap(queued))
+     setConflicts(unwrap(foundConflicts))
+@@ -116,6 +121,16 @@ export default function ConnectedLibrariesPage() {
+     return()=>{++refreshEpoch.current;stop();stopReconcile()}
+   }, [])
+ 
++  useEffect(() => {
++    if (pairing?.state !== 'awaiting-eagle') return
++    let cancelled = false
++    const timer = window.setInterval(() => {
++      void api.pairingInspect().then(result => { if (!cancelled) setPairing(unwrap(result)) })
++        .catch(() => { if (!cancelled) setError('伴随插件暂不可达。配对请求失效后可以重新发起。') })
++    }, 2000)
++    return () => { cancelled = true; window.clearInterval(timer) }
++  }, [pairing?.state])
++
+   const visible = useMemo(() => {
+     const value = query.trim().toLocaleLowerCase()
+     return items.filter((item) => !value ||
+@@ -158,6 +173,54 @@ export default function ConnectedLibrariesPage() {
+       当前为模拟连接，用于验证交互与同步流程；尚未连接真实 Eagle。
+     </Notice>}
+ 
++    {pairing && <section className="ui-card" aria-label="Eagle 本机配对">
++      <div className="ui-section-heading"><div>
++        <h2>本机配对</h2>
++        <p className="ui-muted">先在 Eagle 安装并打开 DAM 伴随插件，选择要连接的库；再从这里发起请求，在 Eagle 确认该库与权限。配对秘密由应用内部处理。</p>
++      </div><StatusBadge tone={pairing.state === 'paired' ? 'positive' : 'warning'}>{({
++        unpaired: '尚未配对', 'awaiting-eagle': '等待 Eagle 确认', paired: '已配对',
++        unavailable: '插件不可达或需重新配对', 'storage-unavailable': '安全凭据存储不可用'
++      })[pairing.state]}</StatusBadge></div>
++      {pairing.displayName && <p>已授权库：{pairing.displayName} · {pairing.requestedGrant === 'read-write' ? '可编辑' : '只读'}</p>}
++      <label className="ui-field"><span className="ui-label">请求权限</span>
++        <select className="ui-input" value={requestedGrant} disabled={busy !== null || pairing.state === 'awaiting-eagle' || pairing.state === 'paired'}
++          onChange={event => setRequestedGrant(event.target.value as 'read-only' | 'read-write')}>
++          <option value="read-only">只读：索引、搜索与预览</option>
++          <option value="read-write">可编辑：修改、添加、回收/恢复与文件替换</option>
++        </select>
++      </label>
++      <div className="flex gap-2">
++        <Button variant="secondary" disabled={busy !== null} onClick={() => run('plugin-download', async () => {
++          const artifact = unwrap<{ fileName: string; bytesBase64: string; sha256: string }>(await api.companionArtifact())
++          const bytes = Uint8Array.from(atob(artifact.bytesBase64), character => character.charCodeAt(0))
++          const digest = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))).map(value => value.toString(16).padStart(2, '0')).join('')
++          if (digest !== artifact.sha256) throw Error('插件文件校验未通过，请重新下载。')
++          const url = URL.createObjectURL(new Blob([bytes], { type: 'application/zip' }))
++          const link = document.createElement('a'); link.href = url; link.download = artifact.fileName; link.click()
++          window.setTimeout(() => URL.revokeObjectURL(url), 10000)
++        })}>下载伴随插件</Button>
++        <Button variant="primary" disabled={busy !== null || pairing.state === 'awaiting-eagle' || pairing.state === 'paired' || pairing.state === 'storage-unavailable'}
++          onClick={() => run('pairing', async () => setPairing(unwrap(await api.pairingBegin(requestedGrant))))}>发起本机配对</Button>
++        {pairing.state !== 'unpaired' && <Button variant="secondary" disabled={busy !== null}
++          onClick={() => run('revoke', async () => {
++            setPairing(unwrap(await api.pairingRevoke())); setReview(null); await refresh()
++          })}>取消 / 撤销配对</Button>}
++        {pairing.state === 'paired' && <Button variant="secondary" disabled={busy !== null}
++          onClick={() => run('prepare', async () => {
++            const result = unwrap<any>(await api.prepare({ kind: 'all' }, pairing.requestedGrant ?? 'read-only'))
++            if (result.kind === 'unavailable') throw new Error('EAGLE_PROVIDER_UNAVAILABLE')
++            setReview(result.review)
++          })}>核对库与连接权限</Button>}
++      </div>
++      <p className="ui-muted">插件退出、切库或重启后需重新确认；DAM 的索引与未完成同步记录保留。永久删除不可用。</p>
++      {error && <Notice tone="warning">{error}</Notice>}
++      {busy && <InlineBusy label={busyLabel(busy)} />}
++      {isConnected && review && <ConnectionReview review={review} busy={busy !== null}
++        onCancel={() => setReview(null)} onConfirm={() => run('confirm', async () => {
++          unwrap(await api.confirm(review.receipt)); setReview(null); await refresh()
++        })} />}
++    </section>}
++
+     {initialLoading && <section data-testid="connected-state" className="ui-card">
+       <EmptyState
+         icon={<RefreshCw />}
+@@ -170,13 +233,13 @@ export default function ConnectedLibrariesPage() {
+       <EmptyState
+         icon={<Cable />}
+         title="尚未开启真实 Eagle 连接"
+-        description="连接前需要 Eagle 4.0 Build 21 或更高版本、已审阅的本机配对，以及可核验的库与存储卷身份。当前不会自动探测或写入 Eagle。"
++        description="需要 Eagle 4.0 Build 21 或更高版本。配对成功后核对库名与权限，确认后开始分页索引；原件留在 Eagle。"
+         actions={<Button
+           variant="primary"
+           data-testid="connected-prepare"
+-          disabled={busy !== null}
++          disabled={busy !== null || pairing !== null && pairing.state !== 'paired'}
+           onClick={() => run('prepare', async () => {
+-            const result = unwrap<any>(await api.prepare({ kind: 'all' }, 'read-write'))
++            const result = unwrap<any>(await api.prepare({ kind: 'all' }, pairing?.requestedGrant ?? 'read-write'))
+             if (result.kind === 'unavailable') throw new Error('EAGLE_PROVIDER_UNAVAILABLE')
+             setReview(result.review)
+           })}
+@@ -214,7 +277,7 @@ export default function ConnectedLibrariesPage() {
+           await refresh()
+         })}
+         onSync={() => run('sync', async () => {
+-          unwrap(await api.sync(100))
++          unwrap(await (projection.grant === 'read-only' ? api.indexNext(100) : api.sync(100)))
+           await refresh({ resetPreviews: projection.state === 'disconnected' })
+         })}
+         onRetry={() => run('refresh', () => refresh({ resetPreviews: true }))}
+@@ -404,7 +467,7 @@ function ConnectionStatus({ projection, busy, error, onIndex, onAdd, onSync, onR
+       <Button
+         variant={projection.indexingComplete ? 'secondary' : 'primary'}
+         data-testid="connected-index"
+-        disabled={busy !== null || projection.state === 'disconnected'}
++        disabled={busy !== null}
+         onClick={onIndex}
+       >
+         {projection.indexingComplete ? '检查 Eagle 更新' : '继续读取索引'}
+@@ -415,7 +478,7 @@ function ConnectionStatus({ projection, busy, error, onIndex, onAdd, onSync, onR
+         disabled={busy !== null}
+         onClick={onSync}
+       >
+-        {projection.state === 'disconnected' ? '重连并同步' : '同步待处理更改'}
++        {projection.grant === 'read-only' ? '核对并刷新索引' : projection.state === 'disconnected' ? '重连并同步' : '同步待处理更改'}
+       </Button>
+       <Button
+         variant="secondary"
+@@ -687,6 +750,9 @@ function busyLabel(value: string) {
+     prepare: '正在检查连接条件…',
+     confirm: '正在确认连接…',
+     disconnect: '正在断开连接…',
++    pairing: '正在请求 Eagle 配对…',
++    revoke: '正在撤销配对…',
++    'plugin-download': '正在核对伴随插件文件…',
+     index: '正在读取 Eagle 索引…',
+     sync: '正在同步并核对结果…',
+     'add-new': '正在准备新增素材…',
+diff --git a/src/shared/build-identity.generated.ts b/src/shared/build-identity.generated.ts
+index 8cf87ae..3fa5d9b 100644
+--- a/src/shared/build-identity.generated.ts
++++ b/src/shared/build-identity.generated.ts
+@@ -1,8 +1,8 @@
+ /** Generated at build time; excludes itself from the source digest. */
+ export const DAM_BUILD_IDENTITY = {
+-  "buildId": "dam-452db36be3f6a1ad",
+-  "sourceDigest": "452db36be3f6a1ad183342ce757c2edf6f32c811a3a7a4bec1781a8b165b3945",
+-  "builtAt": "2026-10-08T03:10:10.652Z",
++  "buildId": "dam-11b22b18c2708872",
++  "sourceDigest": "11b22b18c27088720a3847526339df457d7b6cfaf651937f04c383da14b9c2dc",
++  "builtAt": "2026-10-08T04:42:49.132Z",
+   "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+-  "sourceCount": 775
++  "sourceCount": 782
+ } as const
+diff --git a/src/shared/client/external-connected-library.client.ts b/src/shared/client/external-connected-library.client.ts
+index d6f2367..c3ead49 100644
+--- a/src/shared/client/external-connected-library.client.ts
++++ b/src/shared/client/external-connected-library.client.ts
+@@ -1,3 +1,4 @@
++import { CHANNEL_EAGLE_PAIRING_INSPECT, CHANNEL_EAGLE_PAIRING_BEGIN, CHANNEL_EAGLE_PAIRING_REVOKE, CHANNEL_EAGLE_COMPANION_ARTIFACT } from '../contracts/external-connected-library.contract';
+ import { CHANNEL_CONNECTED_CLEANUP_CANDIDATES, CHANNEL_CONNECTED_CONFIRM, CHANNEL_CONNECTED_CONFIRM_CLEANUP, CHANNEL_CONNECTED_CONFLICTS, CHANNEL_CONNECTED_DISCONNECT, CHANNEL_CONNECTED_INDEX_NEXT, CHANNEL_CONNECTED_INSPECT, CHANNEL_CONNECTED_LIST, CHANNEL_CONNECTED_MEDIA_PREVIEW, CHANNEL_CONNECTED_OPERATIONS, CHANNEL_CONNECTED_PREPARE, CHANNEL_CONNECTED_PREPARE_FILE, CHANNEL_CONNECTED_PREPARE_NEW, CHANNEL_CONNECTED_QUEUE_LIFECYCLE, CHANNEL_CONNECTED_QUEUE_METADATA, CHANNEL_CONNECTED_RESOLVE_CONFLICT, CHANNEL_CONNECTED_SEARCH, CHANNEL_CONNECTED_SYNC, CHANNEL_LEGACY_CLOSE, CHANNEL_LEGACY_CONFIRM, CHANNEL_LEGACY_INSPECT, CHANNEL_LEGACY_LIST, CHANNEL_LEGACY_MEDIA_PREVIEW, CHANNEL_LEGACY_PREPARE, CHANNEL_LEGACY_SEARCH, type ConnectedLibraryScope, type ConnectedMetadataPatch } from '../contracts/external-connected-library.contract';
+ export interface ConnectedLibraryPreloadInvoker {
+     invoke(channel: string, request?: unknown): Promise<any>;
+@@ -5,7 +6,38 @@ export interface ConnectedLibraryPreloadInvoker {
+ export function createExternalConnectedLibraryPreloadApi(invoker: ConnectedLibraryPreloadInvoker) {
+     const invoke = async (channel: string, request?: unknown) => { const result = request === undefined ? await invoker.invoke(channel) : await invoker.invoke(channel, request); return result?.success ? result.value : result; };
+     return Object.freeze({
+-        connectedLibrary: { inspect: () => invoke(CHANNEL_CONNECTED_INSPECT), prepare: (scope: ConnectedLibraryScope, requestedGrant: 'read-only' | 'read-write') => invoke(CHANNEL_CONNECTED_PREPARE, { scope, requestedGrant }), confirm: (receipt: string) => invoke(CHANNEL_CONNECTED_CONFIRM, { receipt }), indexNext: (limit?: number) => invoke(CHANNEL_CONNECTED_INDEX_NEXT, limit === undefined ? undefined : { limit }), list: () => invoke(CHANNEL_CONNECTED_LIST), search: (query: string) => invoke(CHANNEL_CONNECTED_SEARCH, { query }), queueMetadata: (itemKey: string, clientReceipt: string, patch: ConnectedMetadataPatch) => invoke(CHANNEL_CONNECTED_QUEUE_METADATA, { itemKey, clientReceipt, patch }), prepareNew: (metadata?: ConnectedMetadataPatch) => invoke(CHANNEL_CONNECTED_PREPARE_NEW, metadata ? { metadata } : undefined), prepareFile: (itemKey: string) => invoke(CHANNEL_CONNECTED_PREPARE_FILE, { itemKey }), queueLifecycle: (itemKey: string, clientReceipt: string, action: 'trash' | 'restore') => invoke(CHANNEL_CONNECTED_QUEUE_LIFECYCLE, { itemKey, clientReceipt, action }), sync: (limit?: number) => invoke(CHANNEL_CONNECTED_SYNC, limit === undefined ? undefined : { limit }), operations: () => invoke(CHANNEL_CONNECTED_OPERATIONS), conflicts: () => invoke(CHANNEL_CONNECTED_CONFLICTS), resolveConflict: (conflictId: string, decision: 'use-local' | 'use-eagle' | 'hold') => invoke(CHANNEL_CONNECTED_RESOLVE_CONFLICT, { conflictId, decision }), cleanupCandidates: () => invoke(CHANNEL_CONNECTED_CLEANUP_CANDIDATES), confirmCleanup: (itemKey: string, clientReceipt: string) => invoke(CHANNEL_CONNECTED_CONFIRM_CLEANUP, { itemKey, clientReceipt }), readPreview: (itemKey: string, libraryIdentity: string, generation: string) => invoke(CHANNEL_CONNECTED_MEDIA_PREVIEW, { itemKey, libraryIdentity, generation }), disconnect: () => invoke(CHANNEL_CONNECTED_DISCONNECT) },
+-        legacyReadonly: { inspect: () => invoke(CHANNEL_LEGACY_INSPECT), prepare: () => invoke(CHANNEL_LEGACY_PREPARE), confirm: (receipt: string) => invoke(CHANNEL_LEGACY_CONFIRM, { receipt }), list: () => invoke(CHANNEL_LEGACY_LIST), search: (query: string) => invoke(CHANNEL_LEGACY_SEARCH, { query }), readPreview: (assetId: string, identity: string, generation: string) => invoke(CHANNEL_LEGACY_MEDIA_PREVIEW, { assetId, identity, generation }), close: () => invoke(CHANNEL_LEGACY_CLOSE) }
++        connectedLibrary: {
++            companionArtifact: () => invoke(CHANNEL_EAGLE_COMPANION_ARTIFACT),
++            pairingInspect: () => invoke(CHANNEL_EAGLE_PAIRING_INSPECT),
++            pairingBegin: (requestedGrant: 'read-only' | 'read-write') => invoke(CHANNEL_EAGLE_PAIRING_BEGIN, { requestedGrant  }),
++            pairingRevoke: () => invoke(CHANNEL_EAGLE_PAIRING_REVOKE),
++            inspect: () => invoke(CHANNEL_CONNECTED_INSPECT),
++            prepare: (scope: ConnectedLibraryScope, requestedGrant: 'read-only' | 'read-write') => invoke(CHANNEL_CONNECTED_PREPARE, { scope, requestedGrant  }),
++            confirm: (receipt: string) => invoke(CHANNEL_CONNECTED_CONFIRM, { receipt  }),
++            indexNext: (limit?: number) => invoke(CHANNEL_CONNECTED_INDEX_NEXT, limit === undefined ? undefined : { limit  }),
++            list: () => invoke(CHANNEL_CONNECTED_LIST),
++            search: (query: string) => invoke(CHANNEL_CONNECTED_SEARCH, { query  }),
++            queueMetadata: (itemKey: string, clientReceipt: string, patch: ConnectedMetadataPatch) => invoke(CHANNEL_CONNECTED_QUEUE_METADATA, { itemKey, clientReceipt, patch  }),
++            prepareNew: (metadata?: ConnectedMetadataPatch) => invoke(CHANNEL_CONNECTED_PREPARE_NEW, metadata ? { metadata  } : undefined),
++            prepareFile: (itemKey: string) => invoke(CHANNEL_CONNECTED_PREPARE_FILE, { itemKey  }),
++            queueLifecycle: (itemKey: string, clientReceipt: string, action: 'trash' | 'restore') => invoke(CHANNEL_CONNECTED_QUEUE_LIFECYCLE, { itemKey, clientReceipt, action  }),
++            sync: (limit?: number) => invoke(CHANNEL_CONNECTED_SYNC, limit === undefined ? undefined : { limit  }),
++            operations: () => invoke(CHANNEL_CONNECTED_OPERATIONS),
++            conflicts: () => invoke(CHANNEL_CONNECTED_CONFLICTS),
++            resolveConflict: (conflictId: string, decision: 'use-local' | 'use-eagle' | 'hold') => invoke(CHANNEL_CONNECTED_RESOLVE_CONFLICT, { conflictId, decision  }),
++            cleanupCandidates: () => invoke(CHANNEL_CONNECTED_CLEANUP_CANDIDATES),
++            confirmCleanup: (itemKey: string, clientReceipt: string) => invoke(CHANNEL_CONNECTED_CONFIRM_CLEANUP, { itemKey, clientReceipt  }),
++            readPreview: (itemKey: string, libraryIdentity: string, generation: string) => invoke(CHANNEL_CONNECTED_MEDIA_PREVIEW, { itemKey, libraryIdentity, generation  }),
++            disconnect: () => invoke(CHANNEL_CONNECTED_DISCONNECT)
++        },
++        legacyReadonly: {
++            inspect: () => invoke(CHANNEL_LEGACY_INSPECT),
++            prepare: () => invoke(CHANNEL_LEGACY_PREPARE),
++            confirm: (receipt: string) => invoke(CHANNEL_LEGACY_CONFIRM, { receipt  }),
++            list: () => invoke(CHANNEL_LEGACY_LIST),
++            search: (query: string) => invoke(CHANNEL_LEGACY_SEARCH, { query  }),
++            readPreview: (assetId: string, identity: string, generation: string) => invoke(CHANNEL_LEGACY_MEDIA_PREVIEW, { assetId, identity, generation  }),
++            close: () => invoke(CHANNEL_LEGACY_CLOSE)
++        },
+     });
+ }
+diff --git a/src/shared/client/workspace-read-commands.ts b/src/shared/client/workspace-read-commands.ts
+index de17a37..83a2d5e 100644
+--- a/src/shared/client/workspace-read-commands.ts
++++ b/src/shared/client/workspace-read-commands.ts
+@@ -7,6 +7,8 @@ const reads = new Set([
+   'library-organization:read', 'library-organization:preview-colors', 'library-notebook:read',
+   'work-sets:read', 'work-windows:list', 'work-media:status','work-media:read','work-files:list', 'library-recovery:list',
+   'connected-library:inspect', 'connected-library:list', 'connected-library:search',
++  'connected-library:pairing-inspect',
++  'connected-library:companion-artifact',
+   'connected-library:operations', 'connected-library:conflicts',
+   'connected-library:cleanup-candidates', 'connected-library:media-preview',
+   'legacy-readonly:inspect', 'legacy-readonly:list', 'legacy-readonly:search', 'legacy-readonly:media-preview',
+diff --git a/src/shared/contracts/external-connected-library.contract.ts b/src/shared/contracts/external-connected-library.contract.ts
+index 86d1ebf..5ddb37f 100644
+--- a/src/shared/contracts/external-connected-library.contract.ts
++++ b/src/shared/contracts/external-connected-library.contract.ts
+@@ -1,4 +1,14 @@
+ /** Path-free public contract for a library whose Original authority stays in Eagle. */
++export interface EaglePairingProjection {
++    state: 'unpaired' | 'awaiting-eagle' | 'paired' | 'unavailable' | 'storage-unavailable';
++    displayName: string | null;
++    requestedGrant: 'read-only' | 'read-write' | null;
++    protocolVersion: 1;
++}
++export const CHANNEL_EAGLE_PAIRING_INSPECT = 'connected-library:pairing-inspect';
++export const CHANNEL_EAGLE_PAIRING_BEGIN = 'connected-library:pairing-begin';
++export const CHANNEL_EAGLE_PAIRING_REVOKE = 'connected-library:pairing-revoke';
++export const CHANNEL_EAGLE_COMPANION_ARTIFACT = 'connected-library:companion-artifact';
+ export type ConnectedLibraryState = 'unconfigured' | 'review-required' | 'connecting' | 'indexing' | 'ready' | 'disconnected' | 'conflict' | 'recovery-required' | 'closed';
+ export type ConnectedLibraryEvidenceLevel = 'not-connected' | 'synthetic-protocol' | 'provider-protocol';
+ export type ConnectedLibraryScope = {
+@@ -16,6 +26,7 @@ export interface EagleCapabilityProjection {
+     restore: boolean;
+     fileReplace: boolean;
+     permanentDelete: boolean;
++    previewRead?: boolean;
+ }
+ export interface ConnectedLibraryProjection {
+     state: ConnectedLibraryState;

@@ -1,0 +1,17 @@
+diff --git a/src/shared/build-identity.generated.ts b/src/shared/build-identity.generated.ts
+index ca43db2..6ac7acd 100644
+--- a/src/shared/build-identity.generated.ts
++++ b/src/shared/build-identity.generated.ts
+@@ -1,8 +1,8 @@
+ /** Generated at build time; excludes itself from the source digest. */
+ export const DAM_BUILD_IDENTITY = {
+-  "buildId": "dam-f7bec71152122626",
+-  "sourceDigest": "f7bec71152122626dfb1efe2008f42cd37dce357c10b63ea9d7ef9a5c828fea8",
+-  "builtAt": "2026-10-06T13:08:45.499Z",
++  "buildId": "dam-a97d912710065a56",
++  "sourceDigest": "a97d912710065a56ceac9700883fba4233bd1381046899874cc7d5932b4a5e67",
++  "builtAt": "2026-10-07T08:02:57.270Z",
+   "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+-  "sourceCount": 729
++  "sourceCount": 757
+ } as const

@@ -1,0 +1,44 @@
+diff --git a/scripts/tag-batch.integration.test.ts b/scripts/tag-batch.integration.test.ts
+index 57eccea..b872712 100644
+--- a/scripts/tag-batch.integration.test.ts
++++ b/scripts/tag-batch.integration.test.ts
+@@ -60,12 +60,20 @@ function controllers(f:Awaited<ReturnType<typeof fixture>>,provider:VisionProvid
+  return{settings,admission,legacy,execution,batch,prepare,close:async()=>{await Promise.all([batch.suspendAndDrain(),execution.suspendAndDrain(),legacy.suspendAndDrain()]);admission.invalidate()}}
+ }
+ const output=(tags=['蓝色'])=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify({tags})}}]})
++function assertIdleMaterials(admission:ReturnType<typeof createVisualAdmission>){
++ const state=admission.inspect(),cache=admission.resourceStatus().preparedCache
++ assert.equal(state.requests,0);assert.equal(state.preparing,0);assert.equal(state.frozenBytes,0)
++ assert.equal(state.materialBytes,cache.bytes,'Terminal work releases active buffers; only the accounted reusable cache may remain')
++ admission.releaseIdleMaterials()
++ assert.equal(admission.inspect().materialBytes,0,'Explicit cache release frees the remaining physical buffers')
++ assert.equal(admission.resourceStatus().preparedCache.bytes,0)
++}
+ await test('eight-item execution keeps partial success, reuses successful items and only force advances generations',async()=>{
+  const f=await fixture();let calls=0,peak=0;let c:ReturnType<typeof controllers>
+  c=controllers(f,{invokeOnce:async()=>{calls++;peak=Math.max(peak,c.admission.inspect().requests);return calls===2?{choices:[{finish_reason:'stop',message:{content:'invalid'}}]}:output()}})
+  try{
+   const r=await c.prepare();assert.equal(calls,0);const j=await c.batch.run('main',r.receipt);await assert.rejects(c.batch.run('main',r.receipt));const first=await c.batch.settle('main',j.id)
+-  assert.equal(first.state,'partial');assert.equal(first.items.filter(i=>i.state==='succeeded').length,7);assert.equal(calls,8);assert.equal(peak,1);assert.equal(c.admission.inspect().materialBytes,0)
++  assert.equal(first.state,'partial');assert.equal(first.items.filter(i=>i.state==='succeeded').length,7);assert.equal(calls,8);assert.equal(peak,1);assertIdleMaterials(c.admission)
+   const review=await c.prepare(false,'different-window-request'),retry=await c.batch.run('main',review.receipt);assert.equal((await c.batch.settle('main',retry.id)).state,'completed');assert.equal(calls,9)
+   const forced=await c.prepare(true,'force-replay'),force=await c.batch.run('main',forced.receipt);assert.equal((await c.batch.settle('main',force.id)).state,'completed');assert.equal(calls,17)
+   const duplicate=await c.prepare(true,'force-replay'),same=await c.batch.run('main',duplicate.receipt);await c.batch.settle('main',same.id);assert.equal(calls,17)
+@@ -102,7 +110,7 @@ await test('legacy requests and a new batch share two physical slots; late combi
+   await until(()=>releases.length,n=>n===2);const r=await c.prepare(true,'newest-batch'),j=await c.batch.run('main',r.receipt)
+   await until(()=>c.admission.inspect().waiting,n=>n>0);assert.equal(tags,0);assert.equal(c.admission.inspect().requests,2);releases[0]()
+   assert.equal((await c.batch.settle('main',j.id)).state,'completed');assert.equal(tags,1);releases[1]();for(const old of jobs)await until(()=>c.legacy.inspect(old.owner,old.job.id),j=>!['queued','running'].includes(j.state))
+-  assert.equal(peak,2);assert.deepEqual((await f.host.readTagExecution({...f.scope,assetId:f.assets[0].id})).current?.tags,['最新标签']);assert.equal(c.admission.inspect().materialBytes,0)
++  assert.equal(peak,2);assert.deepEqual((await f.host.readTagExecution({...f.scope,assetId:f.assets[0].id})).current?.tags,['最新标签']);assertIdleMaterials(c.admission)
+  }finally{releases.forEach(r=>r());await c.close();await f.close()}
+ })
+ await test('an item that committed before batch cancel stays successful while later items are cancelled',async()=>{
+@@ -123,7 +131,7 @@ await test('waitIdle is not an exclusive permit: a stolen run slot is retried wi
+  try{
+   await f.host.saveTagBatch({...f.input,requestId:'raced-batch'});await f.host.enableTagExecution({...f.scope,assetId:f.assets[0].id,sessionToken:f.input.sessionToken,expectedSchemaVersion:9,allowUpgrade:true})
+   const r=await batch.prepare('main',{...f.scope,assetIds:f.assets.map(a=>a.id),requestId:'raced-batch',backendId:'synthetic',model:'synthetic-model',forceRerun:false}),j=await batch.run('main',r.receipt);await started
+-  await until(()=>busyRetries,n=>n===1);release();const done=await batch.settle('main',j.id);assert.equal(done.state,'completed');assert.equal(calls,2);assert.equal(c.admission.inspect().materialBytes,0)
++  await until(()=>busyRetries,n=>n===1);release();const done=await batch.settle('main',j.id);assert.equal(done.state,'completed');assert.equal(calls,2);assertIdleMaterials(c.admission)
+  }finally{release();await Promise.all([batch.suspendAndDrain(),c.close()]);await f.close()}
+ })
+ await test('owner revocation and same-generation reopen invalidate frozen batch reviews before any send',async()=>{
