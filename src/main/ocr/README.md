@@ -57,7 +57,11 @@ results survive application restart. The raw observation's whitespace is preserv
 No cloud OCR, real-user-library migration or Windows packaged-runtime execution was validated in this task.
 
 After a successful configuration changes the Runtime fingerprint, Main publishes the payload-free
-`asset-ocr:runtime-changed` notification through the shared Desktop/Browser Client. Equivalent selection,
+`asset-ocr:runtime-changed` notification through the shared Desktop/Browser Client. A new Main's
+nonblocking automatic real recheck also publishes availability after successful verification and
+actual process release, so an already open inspector becomes usable without navigation. Failed
+checks do not produce a recheck event loop; lost notification does not revoke real qualification.
+Equivalent selection,
 cancel and failed selection do not publish. Both environment displays reread only status; lifecycle and
 request checks reject obsolete replies without altering correction snapshots or drafts. This global
 configuration notification is distinct from scoped `asset-ocr:changed` evidence updates. Job
@@ -68,6 +72,11 @@ environment rereads clear only their own read errors. Synthetic
 checks: `local-dam-ocr-runtime-status-view.test.mjs`, `local-dam-ocr-runtime-event.test.ts`,
 `local-dam-ocr-environment-view.test.mjs` and `ocr-controller-lifecycle.test.ts`; these are not formal CU
 or model-execution evidence.
+
+Real opt-in regression: `DAM_TEST_OCR_ROOT=/absolute/trusted/ocr-root node scripts/run-electron-node-test.mjs scripts/ocr-auto-revalidation.test.ts`.
+It runs the bundled stock worker's real recognition/empty/maximum-input challenges twice against
+an isolated SQLite profile, verifies cold status remains nonblocking and notification follows release,
+and never seeds qualification or writes an active application profile.
 
 Checks: `node scripts/run-ts-test.mjs scripts/asset-ocr.test.ts` and
 `ai-service/tests/test_local_ocr_result.py`; these use no real model or private inputs.

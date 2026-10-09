@@ -44,6 +44,8 @@ export function createOcrRuntime(deps: {
   database: Database.Database;
   runner: string;
   selectRoot(): Promise<string | null>;
+  /** Payload-free availability notification after a successful automatic real recheck. */
+  changed?(): void;
   reserve?: (
     bytes: number,
     signal: AbortSignal,
@@ -282,7 +284,15 @@ export function createOcrRuntime(deps: {
           lastFailure = "";
           void verify(value, abort.signal).catch(error => {
             lastFailure = error instanceof Error ? error.message : "OCR_RUNTIME_UNAVAILABLE";
-          }).finally(() => { clearTimeout(timer); automaticChecks.delete(fingerprint); });
+          }).finally(() => {
+            clearTimeout(timer); automaticChecks.delete(fingerprint);
+            // An open consumer must reread after a nonblocking check succeeds.
+            // Observer loss never changes actual qualification or exit accounting.
+            // A failed check must not provoke a status-read/recheck event loop.
+            if (!automaticSuspended && checked.has(fingerprint)) {
+              try { deps.changed?.(); } catch { /* Delivery can be retried by a read. */ }
+            }
+          });
         }
         return null;
       } catch (error) {

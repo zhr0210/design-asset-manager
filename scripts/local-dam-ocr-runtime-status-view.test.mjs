@@ -61,27 +61,27 @@ try{
   await run({page,env,detail,input,inspect,rendered,flush,edit})
  }finally{await page.close()}}
  await test('peer runtime configuration updates both actual surfaces through the dedicated shared Client event',async()=>withPanels(async({page,env,detail,inspect,rendered})=>{
-  assert.match(await env().innerText(),/尚未配置/);assert.equal(await detail().getByRole('button',{name:'重新识别文字',exact:true}).isDisabled(),true)
+  assert.match(await env().innerText(),/尚未就绪/);assert.equal(await detail().getByRole('button',{name:'重新识别文字',exact:true}).isDisabled(),true)
   await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 对端配置 · 无真实模型'));await rendered()
-  assert.match(await env().innerText(),/已配置.*合成 OCR 对端配置 · 无真实模型/);assert.equal(await detail().getByRole('button',{name:'重新识别文字',exact:true}).isEnabled(),true)
+  assert.match(await env().innerText(),/已验证.*合成 OCR 对端配置 · 无真实模型/);assert.equal(await detail().getByRole('button',{name:'重新识别文字',exact:true}).isEnabled(),true)
   const state=await inspect();assert.equal(state.statusReads,4);assert.equal(state.dataReads,1);assert.equal(state.selections,0);assert.deepEqual(state.writes,[]);assert.equal(state.runtimeListeners,2)
  }))
  await test('late initial status cannot overwrite peer configuration or change an existing correction draft',async()=>withPanels(async({page,env,detail,input,inspect,rendered,edit,flush})=>{
   await edit('Draft retained across initial status and runtime event');const before=await inspect();await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 当前配置 · 无真实模型'));await rendered()
   await page.evaluate(()=>window.fixture.releaseStatuses());await rendered();await flush();const state=await inspect()
-  assert.match(await env().innerText(),/已配置.*合成 OCR 当前配置 · 无真实模型/);assert.equal((await detail().innerText()).includes('选择已安装且可信的 OCR 环境'),false);assert.equal(await input().inputValue(),before.ocrDraft.text)
+  assert.match(await env().innerText(),/已验证.*合成 OCR 当前配置 · 无真实模型/);assert.equal((await detail().innerText()).includes('选择已安装且可信的 OCR 环境'),false);assert.equal(await input().inputValue(),before.ocrDraft.text)
   assert.deepEqual(state.ocrDraft.base,before.ocrDraft.base);assert.equal(state.ocrDraft.mismatch,false);assert.deepEqual(state.workspaceDraft.base,before.workspaceDraft.base);assert.equal(state.workspaceDraft.value,before.workspaceDraft.value);assert.equal(state.dataReads,1);assert.deepEqual(state.writes,[])
  },{held:true}))
  await test('reverse runtime status replies preserve the latest environment and the correction baseline',async()=>withPanels(async({page,env,detail,input,inspect,rendered,edit,flush})=>{
   await edit('Correction survives reversed runtime status replies');const before=await inspect();await page.evaluate(()=>{window.fixture.holdNextStatuses();window.fixture.peer(false,'合成 OCR 旧环境')});await page.waitForFunction(()=>window.fixture.inspect().pendingStatuses===2)
   await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 最新环境 · 无真实模型'));await rendered();await page.evaluate(()=>window.fixture.releaseStatuses());await rendered();await flush();const state=await inspect()
-  assert.match(await env().innerText(),/已配置.*合成 OCR 最新环境 · 无真实模型/);assert.equal((await detail().innerText()).includes('选择已安装且可信的 OCR 环境'),false);assert.equal(await input().inputValue(),before.ocrDraft.text)
+  assert.match(await env().innerText(),/已验证.*合成 OCR 最新环境 · 无真实模型/);assert.equal((await detail().innerText()).includes('选择已安装且可信的 OCR 环境'),false);assert.equal(await input().inputValue(),before.ocrDraft.text)
   assert.deepEqual(state.ocrDraft.base,before.ocrDraft.base);assert.equal(state.ocrDraft.mismatch,false);assert.equal(state.workspaceDraft.value,before.workspaceDraft.value);assert.equal(state.dataReads,1);assert.equal(state.selections,0);assert.deepEqual(state.writes,[])
  }))
  await test('configuration publication before its reply restores the initiating action and rejects older status on both surfaces',async()=>{
   for(const target of ['environment','detail'])await withPanels(async({page,env,detail,inspect,rendered})=>{
-   const action=target==='environment'?env().getByRole('button',{name:'选择可信本地 OCR 环境',exact:true}):detail().getByRole('button',{name:'选择本地 OCR 环境',exact:true});await action.click();await rendered();await page.evaluate(()=>window.fixture.releaseStatuses());await rendered()
-   assert.match(await env().innerText(),/已配置.*合成 OCR 新配置 · 无真实模型/);assert.equal(await action.isEnabled(),true);assert.equal(await detail().getByRole('button',{name:'重新识别文字',exact:true}).isEnabled(),true)
+   const action=target==='environment'?env().getByRole('button',{name:'选择并验证本地 OCR 环境',exact:true}):detail().getByRole('button',{name:'选择本地 OCR 环境',exact:true});await action.click();await rendered();await page.evaluate(()=>window.fixture.releaseStatuses());await rendered()
+   assert.match(await env().innerText(),/已验证.*合成 OCR 新配置 · 无真实模型/);assert.equal(await action.isEnabled(),true);assert.equal(await detail().getByRole('button',{name:'重新识别文字',exact:true}).isEnabled(),true)
    const state=await inspect();assert.equal(state.selections,1);assert.equal(state.dataReads,1);assert.deepEqual(state.writes,[]);assert.equal(await env().getByRole('alert').count(),0);assert.equal(await detail().getByRole('alert').count(),0)
   },{held:true})
  })
@@ -91,9 +91,9 @@ try{
  }))
  await test('a runtime event before a lost configuration reply does not erase unknown-outcome guidance or replay the selection',async()=>{
   for(const target of ['environment','detail'])await withPanels(async({page,env,detail,inspect,rendered})=>{
-   await page.evaluate(()=>window.fixture.loseNextSelectionReply());const region=target==='environment'?env():detail(),action=target==='environment'?region.getByRole('button',{name:'选择可信本地 OCR 环境',exact:true}):region.getByRole('button',{name:'选择本地 OCR 环境',exact:true});await action.click();await rendered()
+   await page.evaluate(()=>window.fixture.loseNextSelectionReply());const region=target==='environment'?env():detail(),action=target==='environment'?region.getByRole('button',{name:'选择并验证本地 OCR 环境',exact:true}):region.getByRole('button',{name:'选择本地 OCR 环境',exact:true});await action.click();await rendered()
    const alerts=await region.getByRole('alert').allTextContents();assert.equal(alerts.length,1);assert.match(alerts[0],/操作结果尚未确认/);assert.match(alerts[0],/检查保存结果，勿重复提交/);assert.equal(alerts[0].includes('未能选择环境'),false);assert.equal(await action.isEnabled(),true)
-   assert.match(await env().innerText(),/已配置.*合成 OCR 新配置 · 无真实模型/);await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 后续读取 · 无真实模型'));await rendered();assert.match(await region.getByRole('alert').innerText(),/操作结果尚未确认/)
+   assert.match(await env().innerText(),/已验证.*合成 OCR 新配置 · 无真实模型/);await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 后续读取 · 无真实模型'));await rendered();assert.match(await region.getByRole('alert').innerText(),/操作结果尚未确认/)
    await page.evaluate(()=>{window.fixture.failNextStatuses();window.fixture.peer(true,'合成 OCR 读取失败 · 无真实模型')});await rendered();assert.match(await region.getByRole('alert').innerText(),/操作结果尚未确认/);assert.match(await region.getByRole('alert').innerText(),/检查保存结果，勿重复提交/);const state=await inspect();assert.equal(state.selections,1);assert.equal(state.dataReads,1);assert.deepEqual(state.writes,[])
   })
  })
@@ -102,7 +102,7 @@ try{
   assert.equal(await detail().getByRole('button',{name:'选择本地 OCR 环境',exact:true}).isEnabled(),true);const state=await inspect();assert.equal(state.maxStatusInFlight,1);assert.equal(state.statusInFlight,0);assert.equal(state.dataReads,1);assert.equal(state.selections,0);assert.deepEqual(state.writes,[])
  },{slow:true}))
  await test('a successful environment reread clears its old read error without changing the saved runtime',async()=>withPanels(async({page,env,rendered,inspect})=>{
-  assert.equal(await env().getByRole('alert').innerText(),'OCR 环境状态暂不可读。');await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 恢复读取 · 无真实模型'));await rendered();assert.equal(await env().getByRole('alert').count(),0);assert.match(await env().innerText(),/已配置.*合成 OCR 恢复读取 · 无真实模型/);assert.equal((await inspect()).selections,0)
+  assert.equal(await env().getByRole('alert').innerText(),'OCR 环境状态暂不可读。');await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 恢复读取 · 无真实模型'));await rendered();assert.equal(await env().getByRole('alert').count(),0);assert.match(await env().innerText(),/已验证.*合成 OCR 恢复读取 · 无真实模型/);assert.equal((await inspect()).selections,0)
  },{statusFailure:true}))
  await test('a status reply captured before confirmed run cannot hide the running job or its cancel action',async()=>withPanels(async({page,detail,rendered,inspect})=>{
   await page.evaluate(()=>window.fixture.peer(true,'合成 OCR 运行入口 · 无真实模型'));await rendered();await page.evaluate(()=>{window.fixture.holdNextStatuses();window.fixture.peer(true,'合成 OCR 运行入口 · 无真实模型')});await page.waitForFunction(()=>window.fixture.inspect().pendingStatuses===2)
