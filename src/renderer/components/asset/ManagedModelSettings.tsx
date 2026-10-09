@@ -101,7 +101,7 @@ export default function ManagedModelSettings() {
     {status?.nativePackage?.state === 'preparing' && <p role="status">正在准备固定 llama.cpp {status.nativePackage.release} 运行包 · {gib(status.nativePackage.completedBytes)} / {gib(status.nativePackage.totalBytes)}。不执行安装脚本。</p>}
     {status?.measurement && <p>进程测量：{status.measurementModel} · 内存峰值 {gib(status.measurement.peakRamBytes)} · {status.measurement.threads} 个计算线程。{status.loadMs != null ? `加载 ${(status.loadMs / 1000).toFixed(1)} 秒。` : ''}{status.unloadMs != null ? `实际退出 ${(status.unloadMs / 1000).toFixed(1)} 秒。` : ''}</p>}
     <div className="ui-button-row">
-      <button className="ui-button ui-button-secondary" disabled={!status?.configured || ['inactive', 'unconfigured'].includes(status?.state)} onClick={() => void stop()}>停用并释放</button>
+      <button className="ui-button ui-button-secondary" disabled={!status?.switching && (!status?.configured || ['inactive', 'unconfigured'].includes(status?.state))} onClick={() => void stop()}>{status?.switching ? '取消加载或验证' : '停用并释放'}</button>
       <button className="ui-button ui-button-secondary" onClick={() => void read().catch(error => setError(errorMessage(error)))}>重新读取模型状态</button>
     </div>
     {(error || status?.error) && <p role="alert">{error || errorMessage(status.error)}
@@ -210,7 +210,7 @@ export default function ManagedModelSettings() {
             <button className="ui-button ui-button-primary" disabled={switching} onClick={() => void act({ kind: 'activate-gguf', modelEntryId: model.id, mode: 'gpu' })}>验证并使用 · 完整 GPU</button>
             <button className="ui-button ui-button-secondary" disabled={switching} onClick={() => void act({ kind: 'activate-gguf', modelEntryId: model.id, mode: 'hybrid' })}>验证并使用 · 混合慢速</button>
             <button className="ui-button ui-button-secondary" disabled={switching} onClick={() => void act({ kind: 'activate-gguf', modelEntryId: model.id, mode: 'cpu' })}>验证并使用 · CPU 慢速</button>
-            <p>首次验证会准备固定受管运行包：CPU 约 19 MB；GPU/混合约 577 MB，含单独 NVIDIA CUDA 许可的 DLL。新方案完成真实图像验证后才启用。</p>
+            <p>首次验证会准备固定受管运行包：macOS 约 12 MB，Apple Silicon 可使用 Metal；Windows CPU 约 19 MB，GPU/混合约 577 MB，含单独 NVIDIA CUDA 许可的 DLL。新方案完成真实图像验证后才启用。</p>
           </> : <button className="ui-button ui-button-primary" disabled={switching || model.active && status?.state === 'ready'} onClick={() => void act({ kind: 'activate', modelEntryId: model.id })}>验证并使用 {model.model}</button>}
           <button className="ui-button ui-button-secondary" disabled={busy} onClick={() => void act({ kind: 'revoke', modelEntryId: model.id })}>撤销此版本信任</button>
           {model.source === 'huggingface-upstream' && <button className="ui-button ui-button-secondary" disabled={busy || library?.preparing} onClick={() => void act({ kind: 'refresh-source', modelEntryId: model.id })}>核对上游来源</button>}

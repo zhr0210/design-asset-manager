@@ -92,7 +92,8 @@ async function fixture(upgrade = true) {
     hooks,
     close: async () => {
       await host.close();
-      assert.ok(root.startsWith(path.resolve(os.tmpdir()) + path.sep));
+      assert.equal(path.dirname(root), await fs.realpath(os.tmpdir()));
+      assert.ok(path.basename(root).startsWith('dam-basic-'));
       await fs.rm(root, { recursive: true, force: true });
     },
   };
