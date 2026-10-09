@@ -1,0 +1,25 @@
+TAP version 13
+# Subtest: missing weights and remote-code declarations never create a trusted execution configuration
+ok 1 - missing weights and remote-code declarations never create a trusted execution configuration
+  ---
+  duration_ms: 15.67075
+  ...
+# Subtest: changed imported bytes revoke the binding before model residency or worker startup
+ok 2 - changed imported bytes revoke the binding before model residency or worker startup
+  ---
+  duration_ms: 68.166125
+  ...
+# Subtest: actual bundled worker failure cannot qualify corrupt weights and drains its real process before release
+ok 3 - actual bundled worker failure cannot qualify corrupt weights and drains its real process before release
+  ---
+  duration_ms: 13369.265375
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13458.739459

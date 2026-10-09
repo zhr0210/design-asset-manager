@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: Host color filtering measures controlled previews, persists coverage and enforces percentage without a model
+ok 1 - Host color filtering measures controlled previews, persists coverage and enforces percentage without a model
+  ---
+  duration_ms: 138.391708
+  ...
+# Subtest: Host color pages revalidate lifecycle after an awaited resource grant
+ok 2 - Host color pages revalidate lifecycle after an awaited resource grant
+  ---
+  duration_ms: 81.134625
+  ...
+# Subtest: a filled color page rechecks earlier hits after a later page-fill iteration waits
+ok 3 - a filled color page rechecks earlier hits after a later page-fill iteration waits
+  ---
+  duration_ms: 82.12725
+  ...
+# Subtest: Host text source scopes distinguish names, confirmed aliases and human descriptions; row-only edits retain frozen paging
+ok 4 - Host text source scopes distinguish names, confirmed aliases and human descriptions; row-only edits retain frozen paging
+  ---
+  duration_ms: 80.39225
+  ...
+# Subtest: Host search indexes Chinese cross-field edits and aliases, excludes stale hits, and pages a stable query snapshot
+ok 5 - Host search indexes Chinese cross-field edits and aliases, excludes stale hits, and pages a stable query snapshot
+  ---
+  duration_ms: 122.401417
+  ...
+# Subtest: Host folder search counts only canonical members and rechecks membership for a later frozen page
+ok 6 - Host folder search counts only canonical members and rechecks membership for a later frozen page
+  ---
+  duration_ms: 79.771167
+  ...
+# Subtest: owned derived index generations rebuild and recover corrupted data while source content and ordinary reopen remain usable
+ok 7 - owned derived index generations rebuild and recover corrupted data while source content and ordinary reopen remain usable
+  ---
+  duration_ms: 106.379667
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 694.028125
