@@ -1,0 +1,9 @@
+{
+  "kind": "ordinary-new-iab-entry-failure",
+  "entry": "http://127.0.0.1:64545/launch",
+  "actualBuild": "dam-342516c36717d81c",
+  "browserReported": "net::ERR_BLOCKED_BY_CLIENT",
+  "credentialsCopied": false,
+  "authenticationRelaxed": false,
+  "next": "native approved browser entry after Mac unlock, or ordinary system Browser if tooling available"
+}

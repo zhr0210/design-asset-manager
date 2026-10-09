@@ -1,0 +1,50 @@
+{
+  "kind": "ordinary-browser-four-kind-download-readback",
+  "candidate": "dam-6d6fa6a0230cf98d",
+  "items": [
+    {
+      "kind": "frame",
+      "fileName": "BigBuckBunny_320x180 \u53c2\u8003\u5e27 120.5000000s.png",
+      "bytes": 130529,
+      "sha256": "6278f8b84e9d5dcb05d650c3fbd0f8dbb7453d3aeab9ec2c99465daac020280d",
+      "appPreparedCopyByteEqual": true,
+      "dimensions": [
+        320,
+        180
+      ]
+    },
+    {
+      "kind": "original",
+      "fileName": "BigBuckBunny_320x180 \u539f\u4ef6\u526f\u672c.mp4",
+      "bytes": 64657027,
+      "sha256": "f78f39603e6774907f2faafabf26a667f4a6fc31769ec304a8a8f7c62d280508",
+      "appPreparedCopyByteEqual": true
+    },
+    {
+      "kind": "preview",
+      "fileName": "BigBuckBunny_320x180 \u9884\u89c8\u526f\u672c.png",
+      "bytes": 268,
+      "sha256": "6e5c5fdb7a23c5446ca0ca59ad2ed0b7705d88152a356b5606020256972e063d",
+      "appPreparedCopyByteEqual": true,
+      "dimensions": [
+        320,
+        180
+      ],
+      "firstFrameBlack": true
+    },
+    {
+      "kind": "compat",
+      "fileName": "public-coffee \u517c\u5bb9\u5bfc\u51fa.png",
+      "bytes": 624658,
+      "sha256": "8d6fa9c90a7ecb812b69e4df3df77397938342ac34fd623380a65a25290bc04d",
+      "appPreparedCopyByteEqual": true,
+      "dimensions": [
+        600,
+        400
+      ],
+      "sourceRgbaPixelsEqual": true
+    }
+  ],
+  "credentialsOrReceiptJsonRead": false,
+  "newProvenanceRepairQualification": false
+}

@@ -1,0 +1,14 @@
+{
+  "productBuild": "dam-6d6fa6a0230cf98d",
+  "productImplementationCommit": "327e523",
+  "startCommit": "3a0e5ba",
+  "existingPublicLibraryAssets": 186,
+  "existingVectors": 185,
+  "existingAttempts": 53,
+  "existingEvidence": 51,
+  "backgroundPaused": true,
+  "protectedWip": {
+    "AGENTS.md": "0b9046f790d476ce9b69efff3f7bda67f6ac6707a11c1fe48864a5178062d710",
+    "docs/agents/ui-ux-acceptance.md": "9e682fe862cf2deae8536c5a13906e3dc53a3686d1214e56aee36da3bb101ec4"
+  }
+}

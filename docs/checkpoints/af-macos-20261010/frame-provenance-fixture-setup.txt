@@ -1,0 +1,16 @@
+file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:1421
+  return new CaptureIntakeError(
+         ^
+
+CaptureIntakeError: The Capture Request Identity conflicts with an accepted capture envelope.
+    at captureIdentityConflict (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:1421:10)
+    at Object.acceptOrReplay (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:1176:51)
+    at Object.start (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:222:57)
+    at Object.dispatch (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:587:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:1502:25
+    at async file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:4007:27 {
+  code: 'capture-identity-conflict'
+}
+
+Node.js v20.16.0

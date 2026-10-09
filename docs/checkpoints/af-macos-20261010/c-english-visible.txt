@@ -1,0 +1,18 @@
+			1267 text 中英文画面含义  · 已显示  80 / 186  · 文字索引覆盖  186 / 186  · 图文覆盖 186/186
+				1270 button Description: 查看 T23-bulk-astronaut-018, ID: asset-card-open-design-asset:0048c3ab-2ead-4f08-bd60-79f12d159806
+				1276 text PNG T23-bulk-astronaut-018 画面含义 · SigLIP2 · cosine 0.082
+				1278 button Description: 查看 T23-bulk-astronaut-014, ID: asset-card-open-design-asset:09de0dd4-76ed-4e37-af14-45d54e5cfdb2
+				1284 text PNG T23-bulk-astronaut-014 画面含义 · SigLIP2 · cosine 0.082
+				1286 button Description: 查看 T23-bulk-astronaut-015, ID: asset-card-open-design-asset:1dcdbf8b-79a9-402d-8d19-b823db95aae9
+				1292 text PNG T23-bulk-astronaut-015 画面含义 · SigLIP2 · cosine 0.082
+				1294 button Description: 查看 T23-bulk-astronaut-017, ID: asset-card-open-design-asset:1e630346-fdd1-4f7e-af93-e48e42a5a6b8
+				1300 text PNG T23-bulk-astronaut-017 画面含义 · SigLIP2 · cosine 0.082
+				1302 button Description: 查看 T23-bulk-astronaut-020, ID: asset-card-open-design-asset:223af1eb-ed41-4ea9-9175-2410ea908031
+				1308 text PNG T23-bulk-astronaut-020 画面含义 · SigLIP2 · cosine 0.082
+				1310 button Description: 查看 T23-bulk-astronaut-011, ID: asset-card-open-design-asset:24b908de-a541-4a52-b2a4-a15db635c0ca
+				1316 text PNG T23-bulk-astronaut-011 画面含义 · SigLIP2 · cosine 0.082
+				1318 button Description: 查看 T23-bulk-astronaut-003, ID: asset-card-open-design-asset:29cd295f-e6ef-47f5-b2eb-f6c443530b4d
+				1324 text PNG T23-bulk-astronaut-003 画面含义 · SigLIP2 · cosine 0.082
+				1326 button Description: 查看 T23-bulk-astronaut-023, ID: asset-card-open-design-asset:3b301054-ebbc-4f73-9239-b465746717bb
+				1332 text PNG T23-bulk-astronaut-023 画面含义 · SigLIP2 · cosine 0.082
+				1334 button Description: 查看 T23-bulk-astronaut-019, ID: asset-card-open-design-asset:44f97848-c0a2-43b2-aa16-ca0f511a0576

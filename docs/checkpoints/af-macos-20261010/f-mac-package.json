@@ -1,0 +1,18 @@
+{
+  "kind": "ordinary-unsigned-macos-arm64-directory-package",
+  "command": [
+    "node",
+    "scripts/run-electron-builder.mjs",
+    "--platform=mac",
+    "--mode=dir",
+    "--arm64",
+    "--config.directories.output=/Users/meigong/Documents/design-asset-manager-macos/.scratch/af-macos-20261010/package"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 5.752,
+  "sourceBuild": "dam-6d6fa6a0230cf98d",
+  "signingRequested": false,
+  "publishingRequested": false,
+  "installationPerformed": false,
+  "userPathAcceptance": false
+}

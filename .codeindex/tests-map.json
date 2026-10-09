@@ -127,7 +127,9 @@
   "desktop_shell": [
     "npm run test-desktop-viewport-policy",
     "npm run test-app-navigation-workflow",
-    "npm run test-electron-main-lifecycle-policy"
+    "npm run test-electron-main-lifecycle-policy",
+    "npm run test-work-frame-provenance",
+    "npm run test-file-selection-bulk-ui"
   ],
   "main_ipc_registration": [
     "npm run test-app-ipc-registration",

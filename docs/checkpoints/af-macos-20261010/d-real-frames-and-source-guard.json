@@ -1,0 +1,23 @@
+{
+  "kind": "ordinary-video-frames-and-source-rejection-read-only-check",
+  "savedPublicSource": "https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4.zip",
+  "savedPositionTicks": 1204560000,
+  "frames": [
+    {
+      "requestedTicks": 301230000,
+      "actualTicks": 305000000,
+      "note": "30.123 秒请求；实际 30.500 秒 · 官方公开短片 · CC BY 3.0",
+      "position": 0
+    },
+    {
+      "requestedTicks": 1204560000,
+      "actualTicks": 1205000000,
+      "note": "120.456 秒请求；实际 120.500 秒 · English motion reference · CC BY 3.0",
+      "position": 1
+    }
+  ],
+  "queryParameterSourceRejectedAndOriginalSavedSourceRetained": true,
+  "nativeDecodeToleranceAfterSeconds": 1,
+  "timeBase": 10000000,
+  "writePerformedByAgent": false
+}

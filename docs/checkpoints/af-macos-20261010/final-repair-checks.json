@@ -1,0 +1,32 @@
+[
+  {
+    "check": "bulk-ui-final",
+    "exitCode": 0,
+    "durationSeconds": 1.621
+  },
+  {
+    "check": "file-selection-host",
+    "exitCode": 0,
+    "durationSeconds": 0.176
+  },
+  {
+    "check": "frame-provenance-final",
+    "exitCode": 0,
+    "durationSeconds": 0.648
+  },
+  {
+    "check": "typecheck-final",
+    "exitCode": 0,
+    "durationSeconds": 5.693
+  },
+  {
+    "check": "context-final",
+    "exitCode": 3,
+    "durationSeconds": 0.32
+  },
+  {
+    "check": "build-final",
+    "exitCode": 0,
+    "durationSeconds": 5.366
+  }
+]

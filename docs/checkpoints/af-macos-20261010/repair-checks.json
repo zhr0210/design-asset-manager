@@ -1,0 +1,72 @@
+[
+  {
+    "check": "frame-provenance",
+    "command": [
+      "npm",
+      "run",
+      "test-work-frame-provenance"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.783
+  },
+  {
+    "check": "work-media-http",
+    "command": [
+      "node",
+      "scripts/run-ts-test.mjs",
+      "scripts/work-media-http.test.ts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.134
+  },
+  {
+    "check": "native-file-active",
+    "command": [
+      "node",
+      "scripts/run-electron-node-test.mjs",
+      "scripts/native-work-file-active.test.ts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.321
+  },
+  {
+    "check": "work-zip",
+    "command": [
+      "node",
+      "scripts/run-electron-node-test.mjs",
+      "scripts/work-zip-handoff.test.ts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.946
+  },
+  {
+    "check": "context",
+    "command": [
+      "npm",
+      "run",
+      "context:check"
+    ],
+    "exitCode": 3,
+    "durationSeconds": 0.347
+  },
+  {
+    "check": "context-router",
+    "command": [
+      "npm",
+      "run",
+      "test-agent-context-router"
+    ],
+    "exitCode": 1,
+    "durationSeconds": 0.35
+  },
+  {
+    "check": "build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 5.385
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "kind": "unsigned-local-candidate-inventory",
+  "appPath": "/Users/meigong/Documents/design-asset-manager-macos/.scratch/af-macos-20261010/package/mac-arm64/Design Asset Manager.app",
+  "bundleIdentifier": "com.antigravity.design-asset-manager",
+  "bundleExecutable": "Design Asset Manager",
+  "version": "1.0.0",
+  "architecture": "arm64",
+  "asarBytes": 62236090,
+  "asarSha256": "0e3c754bc179de4138175227a413713eda9c92a3a5a657d082ee3ed11c2218b5",
+  "sourceBuild": "dam-6d6fa6a0230cf98d",
+  "ordinaryLaunchPerformed": false,
+  "signedDistributionClaim": false
+}

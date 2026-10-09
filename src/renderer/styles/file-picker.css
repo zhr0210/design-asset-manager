@@ -18,3 +18,4 @@
 /* Reserve space for recovery guidance instead of covering the page's actions. */
 .workspace-stage > .workspace-recovery-banner { position: relative; top: auto; left: auto; transform: none; align-self: center; flex-shrink: 0; max-width: calc(100% - 24px); margin: 8px 12px; }
 .workspace-connection-banner { top: auto; bottom: 20px; width: min(640px, calc(100vw - 40px)); z-index: 121; }
+.file-picker-bulk{display:flex;align-items:center;flex-wrap:wrap;gap:8px}

@@ -1,5 +1,7 @@
 # 当前状态（2026-10-10）
 
+A–F 新一轮持续验收已启动，goal active；当前342516普通Host已启动，原生锁屏及新IAB入口拦截待恢复，E专用公开库待切换。范围/进展见 [本轮记录](AF-MACOS-20261010.md)。下列是已交付环境与基线，后续新增执行及父级状态按本轮证据更新。
+
 Mac 开发环境、迁移必需路径及本轮 bug 收敛已完成。最后确认与文件整理见 [收口台账](MACOS-DELIVERY-CLOSURE-20261010.md)；未验证项统一在 [待测清单](DEFERRED-ACCEPTANCE.md)。窗口交互扩展延期，云上传/分享取消。
 
 ## 启动与身份
@@ -35,7 +37,7 @@ npm run start:browser -- --profile=/Users/meigong/Documents/DAM-public-macos-pro
 - 正常退出唯一 Host、同产物重开，工作集四参考/顺序/名称/备注及所选持久签名一致，无重复粘贴或自动重发。
 - 先前批次两张批量拖出图实际接收在桌面，已核对字节；指定 Finder 文件夹仍空。停靠/ZIP/处理图证据按原构建保留。
 
-当前公开库 186 资产、53 尝试/51 证据、21 OCR、1 工作集/4 引用、63 后台成功/64 历史；185 向量/1 索引任务。新 Clipboard 资产未索引，覆盖准确为 185/186；后台暂停，平衡/10%。原迁移公开库冻结。非敏感签名见 [最终重开证据](../checkpoints/macos-bugfix-delivery-20261010/clipboard-real-reopen-result.json)。
+A–F阶段公开库现187资产（新增官方视频）、53尝试/51证据、21OCR、2工作集/6引用、63后台成功/64历史；186向量/2索引任务，图片覆盖186/186，视频不参与整图索引。2旧Mac帧/错误transform按6d6历史保留，新修复复验待。后台暂停，平衡/10%。原迁移公开库冻结。非敏感签名见 [最终重开证据](../checkpoints/macos-bugfix-delivery-20261010/clipboard-real-reopen-result.json)。
 
 ## 收口与接续
 

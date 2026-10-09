@@ -1,0 +1,10 @@
+{
+  "kind": "read-only-old-selected-record-protection",
+  "oldSelectedMainRowsExactlyEqual": true,
+  "newEffectsExcludedFromComparison": [
+    "one ordinary MP4 asset",
+    "one explicitly created D work set and two members"
+  ],
+  "backgroundAnalysisStillPaused": true,
+  "activeLibraryWritesByAgent": false
+}

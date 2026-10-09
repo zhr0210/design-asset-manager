@@ -1,0 +1,1 @@
+Actual React picker: bulk selects only current bounded file entries in order, clears selection, resets on session changes, handles 2000/truncation, blocks busy refresh, and excludes single-file/directory modes. Controlled IO; ordinary app path separately required.

@@ -87,6 +87,14 @@ export default function FileSelectionOverlay() {
           </div>)}
         </div>
       </div>
+      {picker.mode === 'files' && picker.multiple && <div className="file-picker-bulk">
+        <Button disabled={busy || !picker.entries.some(entry => entry.kind === 'file')}
+          onClick={() => setSelected(picker.entries.filter(entry => entry.kind === 'file').map(entry => entry.id))}>
+          选择当前列表全部文件
+        </Button>
+        <Button disabled={busy || selected.length === 0} onClick={() => setSelected([])}>清除文件选择</Button>
+        <span className="ui-meta">仅选择当前列表中的文件，不包含子文件夹。</span>
+      </div>}
       {picker.truncated && <Notice>目录项目较多，当前显示前 2000 项。可输入更精确的目录路径继续选择。</Notice>}
       {newFolder !== null ? <form className="file-picker-path" onSubmit={event => { event.preventDefault(); void run(async isCurrent => {
         const next = await api.createDirectory({ session: picker.id, name: newFolder })

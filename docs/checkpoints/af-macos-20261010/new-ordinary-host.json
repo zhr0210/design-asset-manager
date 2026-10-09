@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "pid": 90302,
+  "origin": "http://127.0.0.1:64545",
+  "buildId": "dam-342516c36717d81c",
+  "platform": "darwin",
+  "arch": "arm64",
+  "version": "1.0.0"
+}

@@ -1,0 +1,56 @@
+
+> design-asset-manager@1.0.0 test-agent-context-router
+> node scripts/agent-context-router.test.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Unexpected status for check --json
+stdout:
+{
+  "ok": false,
+  "errors": [
+    {
+      "code": "MISSING_COMMAND_PATH",
+      "message": "npm script test-work-frame-provenance references an untracked or missing path scripts/work-frame-provenance.test.ts.",
+      "locator": "scripts/work-frame-provenance.test.ts"
+    }
+  ],
+  "warnings": [],
+  "coverage": {
+    "trackedRepositoryFiles": 3344,
+    "repositoryFiles": 3344,
+    "relevantSourceFiles": 836,
+    "indexableSourceFiles": 789,
+    "ownedSourceFiles": 789,
+    "excludedSourceFiles": 47,
+    "unownedSourceFiles": 0,
+    "duplicateSourceFiles": 0,
+    "untrackedFirstPartySourceFiles": 0
+  },
+  "snapshot": {
+    "head": "3a0e5ba0b730",
+    "dirty": true
+  }
+}
+
+stderr:
+
+
+3 !== 0
+
+    at run (file:///Users/meigong/Documents/design-asset-manager-macos/scripts/agent-context-router.test.mjs:23:10)
+    at file:///Users/meigong/Documents/design-asset-manager-macos/scripts/agent-context-router.test.mjs:61:15
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:639:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v25.8.0

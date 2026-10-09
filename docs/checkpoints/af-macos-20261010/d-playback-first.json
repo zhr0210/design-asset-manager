@@ -1,0 +1,13 @@
+{
+  "observation": "read-only DOM video state after visible play click",
+  "videos": [
+    {
+      "currentTime": 81.769973,
+      "duration": 596.458333,
+      "height": 180,
+      "paused": false,
+      "readyState": 4,
+      "width": 320
+    }
+  ]
+}

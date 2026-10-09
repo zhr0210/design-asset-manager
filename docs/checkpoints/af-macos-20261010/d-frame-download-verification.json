@@ -1,0 +1,17 @@
+{
+  "kind": "ordinary-browser-frame-download-byte-verification",
+  "downloadFileName": "BigBuckBunny_320x180 \u53c2\u8003\u5e27 120.5000000s.png",
+  "bytes": 130529,
+  "sha256": "6278f8b84e9d5dcb05d650c3fbd0f8dbb7453d3aeab9ec2c99465daac020280d",
+  "dimensions": [
+    320,
+    180
+  ],
+  "canonicalFrameShaMatches": true,
+  "actualTicks": 1205000000,
+  "method": "macos-avfoundation:f1005ab7eb79977b1fcfef30891caf45c3881d4c63b1d3d133e0e3d1c6293fcf",
+  "historicalWrongTransform": "media-foundation-visible-aperture/8bit-rgb/png/full-resolution/v1",
+  "candidate": "dam-6d6fa6a0230cf98d",
+  "newRepairQualification": false,
+  "receiptJsonRead": false
+}

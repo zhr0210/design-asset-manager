@@ -1,0 +1,15 @@
+{
+  "kind": "ordinary-video-copy-and-schema-upgrade-read-only-check",
+  "schemaVersion": 15,
+  "assets": 187,
+  "newOriginalBytes": 64657027,
+  "newOriginalSha256": "f78f39603e6774907f2faafabf26a667f4a6fc31769ec304a8a8f7c62d280508",
+  "oldOriginalsPreserved": 186,
+  "oldOriginalsAllHashesUnchanged": true,
+  "canonicalVectorsAndJobsUnchanged": true,
+  "workSetAndMembersUnchanged": true,
+  "backgroundPaused": true,
+  "integrityCheck": "ok",
+  "foreignKeyViolations": 0,
+  "actualVideoUserPlaybackOrFrames": false
+}

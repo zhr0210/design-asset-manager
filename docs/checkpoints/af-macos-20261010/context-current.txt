@@ -1,0 +1,8 @@
+
+> design-asset-manager@1.0.0 context:check
+> node scripts/agent-context-router.mjs check
+
+Agent Context Router check: FAIL
+Snapshot: 3a0e5ba0b730 (dirty working tree)
+Tracked first-party source ownership: 789/789 owned; 47 excluded
+ERROR MISSING_COMMAND_PATH: npm script test-work-frame-provenance references an untracked or missing path scripts/work-frame-provenance.test.ts.

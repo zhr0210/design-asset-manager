@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-file-selection-bulk-ui
+> node scripts/run-ts-test.mjs scripts/file-selection-bulk-ui.test.mjs
+
+Actual React picker: bulk selects only current bounded file entries in order, clears selection, resets on session changes, handles 2000/truncation, blocks busy refresh, and excludes single-file/directory modes. Controlled IO; ordinary app path separately required.

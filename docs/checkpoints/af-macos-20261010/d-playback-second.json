@@ -1,0 +1,13 @@
+{
+  "observation": "read-only DOM after visible pause click",
+  "videos": [
+    {
+      "currentTime": 161.520702,
+      "duration": 596.458333,
+      "height": 180,
+      "paused": true,
+      "readyState": 4,
+      "width": 320
+    }
+  ]
+}

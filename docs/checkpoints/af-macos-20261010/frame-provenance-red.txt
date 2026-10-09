@@ -1,0 +1,14 @@
+node:internal/modules/run_main:144
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: shared storage must describe its own PNG normalization, not claim a Windows decoder for every platform
+    at file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/work-frame-provenance.test.mjs:12986:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'media-foundation-visible-aperture/8bit-rgb/png/full-resolution/v1',
+  expected: 'decoded-video-frame/sharp/png/full-resolution/v1',
+  operator: 'strictEqual'
+}
+
+Node.js v20.16.0

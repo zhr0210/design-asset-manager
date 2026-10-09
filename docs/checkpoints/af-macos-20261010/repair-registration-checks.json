@@ -1,0 +1,13 @@
+{
+  "initialFailureCause": "new npm command referenced untracked new regression; explicit own-path staging registered it",
+  "checks": [
+    {
+      "check": "context-final-registered",
+      "exitCode": 0
+    },
+    {
+      "check": "router-final-registered",
+      "exitCode": 0
+    }
+  ]
+}

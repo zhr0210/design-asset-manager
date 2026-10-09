@@ -1,0 +1,20 @@
+{
+  "kind": "authorized-public-scale-input-preparation",
+  "files": 10000,
+  "batches": 10,
+  "perBatch": 1000,
+  "countsByPublicContent": {
+    "astronaut": 3334,
+    "coffee": 3333,
+    "page": 3333
+  },
+  "distinctSourceContents": 3,
+  "sourceHashes": {
+    "astronaut": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+    "coffee": "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7",
+    "page": "341a6f0a61557662b02734a9b6e56ec33a915b2c41886b97509dedf2a43b47a3"
+  },
+  "logicalBytes": 4353489575,
+  "intakePerformed": false,
+  "userPathAcceptance": false
+}

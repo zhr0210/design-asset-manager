@@ -1,0 +1,18 @@
+			1267 text 中英文画面含义  · 已显示  80 / 186  · 文字索引覆盖  186 / 186  · 图文覆盖 186/186
+				93 button Description: 查看 Clipboard-f49b98d319b9a37b, ID: asset-card-open-clipboard-asset:f49b98d319b9a37b23db8123fdd5d0bf9095ef6934f883768e60e6cd72407239
+				99 text PNG Clipboard-f49b98d319b9a37b 画面含义 · SigLIP2 · cosine 0.129
+				968 button Description: 查看 T23-bulk-coffee-116, ID: asset-card-open-design-asset:0421b5de-eb74-4ac2-a81b-a2d79019020a
+				974 text PNG T23-bulk-coffee-116 画面含义 · SigLIP2 · cosine 0.129
+				976 button Description: 查看 T23-bulk-coffee-130, ID: asset-card-open-design-asset:047d3477-e930-481c-8a6c-781deec5d843
+				982 text PNG T23-bulk-coffee-130 画面含义 · SigLIP2 · cosine 0.129
+				984 button Description: 查看 T23-bulk-coffee-110, ID: asset-card-open-design-asset:0ec667eb-e3eb-4b78-a491-3e18bc9e9f66
+				990 text PNG T23-bulk-coffee-110 画面含义 · SigLIP2 · cosine 0.129
+				992 button Description: 查看 T23-bulk-coffee-017, ID: asset-card-open-design-asset:11e115a3-76dd-49f7-8f18-b41488f81575
+				998 text PNG T23-bulk-coffee-017 画面含义 · SigLIP2 · cosine 0.129
+				1000 button Description: 查看 T23-bulk-coffee-111, ID: asset-card-open-design-asset:13529b50-650d-4a12-a307-21151824806e
+				1006 text PNG T23-bulk-coffee-111 画面含义 · SigLIP2 · cosine 0.129
+				1008 button Description: 查看 T23-bulk-coffee-093, ID: asset-card-open-design-asset:14bdb86b-7f42-424b-8f33-79acf19d12fc
+				1014 text PNG T23-bulk-coffee-093 画面含义 · SigLIP2 · cosine 0.129
+				1016 button Description: 查看 T23-bulk-coffee-094, ID: asset-card-open-design-asset:150ff2d8-8df1-403a-a4df-ad789ef23fc6
+				1022 text PNG T23-bulk-coffee-094 画面含义 · SigLIP2 · cosine 0.129
+				487 button Description: 查看 T23-bulk-coffee-136, ID: asset-card-open-design-asset:1587ed3d-06b8-4ecf-b927-1d12eb3e8f51

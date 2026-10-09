@@ -139,7 +139,7 @@ export async function writeWorkMedia(active: Binding, input: WorkMediaWrite, run
             if (signal?.aborted)
                 return fail('视频操作已取消。');
             ensureState(db, scope, baseline.sourceGeneration);
-            db.prepare('INSERT INTO work_reference_frames VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)').run(id, scope.setId, scope.assetId, c.requestId, baseline.sourceGeneration, c.requestedTicks, decoded.metadata.actualTicks, 10000000, baseline.frames.length, '', pngRef, png.length, sha(png), new Date().toISOString(), runtime.identity, 'media-foundation-visible-aperture/8bit-rgb/png/full-resolution/v1');
+            db.prepare('INSERT INTO work_reference_frames VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)').run(id, scope.setId, scope.assetId, c.requestId, baseline.sourceGeneration, c.requestedTicks, decoded.metadata.actualTicks, 10000000, baseline.frames.length, '', pngRef, png.length, sha(png), new Date().toISOString(), runtime.identity, 'decoded-video-frame/sharp/png/full-resolution/v1');
             db.prepare('UPDATE work_media_state SET revision=?,duration_ticks=?,position_ticks=?,selected_frame_id=? WHERE set_id=? AND asset_id=?').run(baseline.revision + 1, decoded.metadata.durationTicks, decoded.metadata.actualTicks, id, scope.setId, scope.assetId);
             return readWorkMedia(active, scope);
         })();

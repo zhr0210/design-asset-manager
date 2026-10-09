@@ -1,0 +1,25 @@
+{
+  "initialGovernanceFailure": "UI test npm expansion used direct node; selected existing approved TS runner without weakening whitelist",
+  "checks": [
+    {
+      "check": "bulk-approved-runner",
+      "exitCode": 0,
+      "durationSeconds": 1.588
+    },
+    {
+      "check": "context-approved-runner",
+      "exitCode": 0,
+      "durationSeconds": 0.337
+    },
+    {
+      "check": "router-approved-runner",
+      "exitCode": 0,
+      "durationSeconds": 25.488
+    },
+    {
+      "check": "build-approved-runner",
+      "exitCode": 0,
+      "durationSeconds": 4.492
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+
+> design-asset-manager@1.0.0 context:check
+> node scripts/agent-context-router.mjs check
+
+Agent Context Router check: FAIL
+Snapshot: 3a0e5ba0b730 (dirty working tree)
+Tracked first-party source ownership: 789/789 owned; 47 excluded
+ERROR UNSAFE_NPM_SCRIPT: Test profile desktop_shell npm script test-file-selection-bulk-ui expands to an unapproved command shape.

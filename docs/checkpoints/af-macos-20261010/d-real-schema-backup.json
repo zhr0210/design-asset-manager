@@ -1,0 +1,20 @@
+{
+  "kind": "read-only-ordinary-migration-backup-check",
+  "verifiedBackups": [
+    {
+      "file": "tag-intent-FsyMx6NYrU6N/library.sqlite",
+      "bytes": 1400832,
+      "schema": 14,
+      "assets": 186,
+      "integrity": "ok"
+    },
+    {
+      "file": "tag-intent-M35Yr3AIoNxr/library.sqlite",
+      "bytes": 163840,
+      "schema": 1,
+      "assets": 3,
+      "integrity": "ok"
+    }
+  ],
+  "restorePerformed": false
+}
