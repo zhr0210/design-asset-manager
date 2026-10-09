@@ -3,7 +3,8 @@ import type {OrganizationScope} from './library-organization.contract'
 import type {NotebookSaveRequest,NotebookSnapshot} from './asset-notebook.contract'
 export type WorkScope=OrganizationScope
 export interface WorkSetValue {name:string;assetIds:string[];note:string;colors:string[];columns:number}
-export interface WorkWindowLayout {x:number;y:number;width:number;height:number;pinned:boolean;open:boolean}
+export interface WorkWindowBounds{x:number;y:number;width:number;height:number}
+export interface WorkWindowLayout extends WorkWindowBounds{pinned:boolean;open:boolean;dock?:{edge:'left'|'right';normalBounds:WorkWindowBounds}}
 export interface SavedWorkSet extends WorkSetValue {id:string;revision:number;unavailableIds:string[];layout:WorkWindowLayout|null}
 export interface WorkSetCatalog {sets:SavedWorkSet[];sessionToken:string;requiresUpgrade:boolean}
 export interface WorkSetWrite extends WorkScope {sessionToken:string;allowUpgrade:boolean;command:{kind:'create';value:WorkSetValue}|{kind:'save';id:string;expectedRevision:number;value:WorkSetValue}|{kind:'delete';id:string;expectedRevision:number}}
@@ -14,7 +15,7 @@ export interface WorkWindowControlState {id:string;open:boolean;pinned:boolean;v
 export type WorkWindowControlInput=WorkScope & {id:string} & ({kind:'pin';pinned:boolean}|{kind:'hide'|'recover'|'close'})
 export interface WorkWindowControlResult {status:'applied'|'review-required';window:WorkWindowControlState;message?:string}
 export type WorkResult<T>={success:true;value:T}|{success:false;error:string;code?:string}
-export type WorkWindowAction={token:string}&({kind:'close';discard:boolean}|{kind:'notes-dirty';dirty:boolean}|{kind:'save'|'draft';expectedRevision:number;value:WorkSetValue}|{kind:'pin';pinned:boolean}|{kind:'hide'|'recover'|'add-from-library'|'discard-draft'}|{kind:'locate';assetId:string})
+export type WorkWindowAction={token:string}&({kind:'close';discard:boolean}|{kind:'notes-dirty';dirty:boolean}|{kind:'save'|'draft';expectedRevision:number;value:WorkSetValue}|{kind:'pin';pinned:boolean}|{kind:'dock';edge:'left'|'right'}|{kind:'undock'}|{kind:'hide'|'recover'|'add-from-library'|'discard-draft'}|{kind:'locate';assetId:string})
 export interface WorkWindowApi {
  mediaRead(input:{token:string;request:import('./work-media.contract').WorkMediaScope}):Promise<WorkResult<import('./work-media.contract').WorkMediaSnapshot>>
  mediaWrite(input:{token:string;request:import('./work-media.contract').WorkMediaWrite}):Promise<WorkResult<import('./work-media.contract').WorkMediaSnapshot>>
@@ -34,4 +35,18 @@ export function validateWorkScope(v:unknown):WorkScope {const r=workRecord(v,['l
 export function validateWorkWindowControl(v:unknown):WorkWindowControlInput {const r=workRecord(v,['libraryIdentity','generation','id','kind','pinned']),scope=validateWorkScope({libraryIdentity:r.libraryIdentity,generation:r.generation}),id=workId(r.id);if(r.kind==='pin'){if(typeof r.pinned!=='boolean')return invalid();return{...scope,id,kind:'pin',pinned:r.pinned}}if(r.kind==='hide'||r.kind==='recover'||r.kind==='close'){workRecord(r,['libraryIdentity','generation','id','kind']);return{...scope,id,kind:r.kind}}return invalid()}
 export function validateWorkValue(v:unknown):WorkSetValue {const r=workRecord(v,['name','assetIds','note','colors','columns']);if(typeof r.name!=='string'||!r.name.trim()||r.name.trim().length>80||/[\x00-\x1f]/.test(r.name)||typeof r.note!=='string'||r.note.length>16000||!Array.isArray(r.assetIds)||r.assetIds.length>200||!Array.isArray(r.colors)||r.colors.length>64||!Number.isInteger(r.columns)||Number(r.columns)<1||Number(r.columns)>4)return invalid();const ids=r.assetIds.map(workId);if(new Set(ids).size!==ids.length)return invalid();const colors=r.colors.map(c=>{if(typeof c!=='string'||!/^#[0-9a-f]{6}$/i.test(c))return invalid();return c.toUpperCase()});return{name:r.name.trim(),assetIds:ids,note:r.note,colors:[...new Set(colors)],columns:Number(r.columns)}}
 export function validateWorkWrite(v:unknown):WorkSetWrite {const r=workRecord(v,['libraryIdentity','generation','sessionToken','allowUpgrade','command']),c=workRecord(r.command,['kind','id','expectedRevision','value']);if(typeof r.allowUpgrade!=='boolean')return invalid();let command:WorkSetWrite['command'];if(c.kind==='create'){workRecord(c,['kind','value']);command={kind:'create',value:validateWorkValue(c.value)}}else if(c.kind==='save'){workRecord(c,['kind','id','expectedRevision','value']);command={kind:'save',id:workId(c.id),expectedRevision:workRevision(c.expectedRevision),value:validateWorkValue(c.value)}}else if(c.kind==='delete'){workRecord(c,['kind','id','expectedRevision']);command={kind:'delete',id:workId(c.id),expectedRevision:workRevision(c.expectedRevision)}}else return invalid();return{...validateWorkScope({libraryIdentity:r.libraryIdentity,generation:r.generation}),sessionToken:workId(r.sessionToken),allowUpgrade:r.allowUpgrade,command}}
-export function validateWorkLayout(v:unknown):WorkWindowLayout {const r=workRecord(v,['x','y','width','height','pinned','open']);for(const k of ['x','y','width','height'])if(typeof r[k]!=='number'||!Number.isFinite(r[k])||Math.abs(Number(r[k]))>100000)return invalid();if(Number(r.width)<290||Number(r.height)<310||Number(r.width)>5000||Number(r.height)>5000||typeof r.pinned!=='boolean'||typeof r.open!=='boolean')return invalid();return{x:Math.round(Number(r.x)),y:Math.round(Number(r.y)),width:Math.round(Number(r.width)),height:Math.round(Number(r.height)),pinned:r.pinned,open:r.open}}
+export function validateWorkLayout(v:unknown):WorkWindowLayout {
+ const r=workRecord(v,['x','y','width','height','pinned','open','dock'])
+ const bounds=(value:unknown,minWidth:number,minHeight:number):WorkWindowBounds=>{
+  const b=workRecord(value,['x','y','width','height'])
+  for(const k of ['x','y','width','height'])if(typeof b[k]!=='number'||!Number.isFinite(b[k])||Math.abs(Number(b[k]))>100000)return invalid()
+  if(Number(b.width)<minWidth||Number(b.height)<minHeight||Number(b.width)>5000||Number(b.height)>5000)return invalid()
+  return{x:Math.round(Number(b.x)),y:Math.round(Number(b.y)),width:Math.round(Number(b.width)),height:Math.round(Number(b.height))}
+ }
+ let dock:WorkWindowLayout['dock']
+ if(r.dock!==undefined){const d=workRecord(r.dock,['edge','normalBounds']);if(d.edge!=='left'&&d.edge!=='right')return invalid();dock={edge:d.edge,normalBounds:bounds(d.normalBounds,290,310)}}
+ if(typeof r.pinned!=='boolean'||typeof r.open!=='boolean')return invalid()
+ const actual=bounds({x:r.x,y:r.y,width:r.width,height:r.height},dock?72:290,dock?160:310)
+ if(dock&&(actual.width!==72||actual.height!==160))return invalid()
+ return{...actual,pinned:r.pinned,open:r.open,...(dock?{dock}:{})}
+}

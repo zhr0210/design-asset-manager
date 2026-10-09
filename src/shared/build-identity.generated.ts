@@ -1,8 +1,8 @@
 /** Generated at build time; excludes itself from the source digest. */
 export const DAM_BUILD_IDENTITY = {
-  "buildId": "dam-aa5a83d2c3b086c5",
-  "sourceDigest": "aa5a83d2c3b086c5241934ea0f373a3bd645d2d0b76e16b0aabf0d39acf3b6aa",
-  "builtAt": "2026-10-09T14:43:25.648Z",
+  "buildId": "dam-bd59d711e6a61838",
+  "sourceDigest": "bd59d711e6a61838d57a0731a25c6f2ab896edff75215b620d0b1ac6b0300f9a",
+  "builtAt": "2026-10-09T15:53:49.347Z",
   "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
-  "sourceCount": 786
+  "sourceCount": 789
 } as const

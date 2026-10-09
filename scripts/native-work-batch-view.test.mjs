@@ -33,6 +33,7 @@ try{
  assert.equal(await page.getByRole('checkbox',{name:'选择参考 alpha'}).isChecked(),true);assert.equal(await page.getByRole('checkbox',{name:'选择参考 beta'}).isChecked(),true)
  await page.getByRole('button',{name:'准备所选拖出',exact:true}).click();await page.waitForFunction(()=>document.querySelectorAll('.work-handoff-item-state.ready').length===2)
  assert.deepEqual((await inspect()).handoffs.map(q=>q.request.assetId),['asset:alpha','asset:beta'])
+ assert.equal(await page.getByText('原件副本已准备 · 可拖出',{exact:true}).count(),2,'readiness identifies the prepared Original copy for both members')
  await picture('beta').dispatchEvent('dragstart');await page.waitForFunction(()=>window.fixture.inspect().batches.length===1)
  assert.equal((await inspect()).batches[0].ids.length,2)
  await page.getByRole('button',{name:'准备全部拖出',exact:true}).click();assert.equal((await inspect()).handoffs.length,2,'repeated preparation reuses confirmed copies')

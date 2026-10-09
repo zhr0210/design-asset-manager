@@ -30,7 +30,7 @@ export function useWorkHandoffs(api:WorkWindowApi|undefined,snapshot:WorkWindowS
   const s=current.current.snapshot,id=request.assetId
   if(!api||!s||request.libraryIdentity!==s.scope.libraryIdentity||request.generation!==s.scope.generation||request.setId!==s.set.id||!current.current.ids.includes(id))return Promise.resolve(failed('此参考已失效，请重新读取工作集。'))
   const member=memberKey(s,id);if(member===null)return Promise.resolve(failed('此参考暂不可用。'))
-  const cacheKey=[scopeKey(s),id,member,request.kind,request.frameId||'',JSON.stringify(request.imageTransform||null)].join('|'),version=invalidations.current.get(id)||0
+  const cacheKey=[scopeKey(s),id,member,request.kind,request.frameId||'',JSON.stringify(request.imageTransform||null),JSON.stringify(request.assetIds||null)].join('|'),version=invalidations.current.get(id)||0
   const existing=pending.current.get(cacheKey);if(existing)return existing
   if(unknown.current.has(cacheKey))return Promise.resolve(failed('上一份交付结果尚未确认；请核对保留记录，不能自动重复创建。'))
   if(request.action==='prepare'){
@@ -51,7 +51,7 @@ export function useWorkHandoffs(api:WorkWindowApi|undefined,snapshot:WorkWindowS
     unknown.current.add(cacheKey)
     if(valid(s,id,member)&&(invalidations.current.get(id)||0)===version)publish(id,{phase:'error',kind:request.kind,error,token:scopeKey(s),member})
     return failed(error)
-   }finally{pending.current.delete(cacheKey)}
+   }finally{pending.current.delete(cacheKey);if(live.current)redraw(n=>n+1)}
   })();pending.current.set(cacheKey,task);return task
  },[api])
  const prepare=useCallback(async(targets:readonly string[])=>{
@@ -70,5 +70,6 @@ export function useWorkHandoffs(api:WorkWindowApi|undefined,snapshot:WorkWindowS
   }
  },[handoff])
  const stop=useCallback(()=>{if(run.current){run.current.stop=true;setMessage('正在等待当前副本结果；随后停止，已完成副本保留。')}},[])
- return{get,invalidate,handoff,prepare,stop,busy,message}
+ const isPreparing=[...pending.current.keys()].some(value=>key&&value.startsWith(key+'|'))
+ return{get,invalidate,handoff,prepare,stop,busy,isPreparing,message}
 }

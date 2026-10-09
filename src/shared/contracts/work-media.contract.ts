@@ -78,11 +78,12 @@ export interface WorkHandoffImageResult {
     /** Actual output blocks only; this does not promise all source metadata survived. */
     retainedMetadata: Array<'exif' | 'icc' | 'iptc' | 'xmp'>;
 }
-export type WorkHandoffKind = 'original' | 'preview' | 'compatible-png' | 'reference-frame' | 'processed-image';
+export type WorkHandoffKind = 'original' | 'preview' | 'compatible-png' | 'reference-frame' | 'processed-image' | 'zip';
 export type WorkHandoffRequest = WorkMediaScope & {
     kind: WorkHandoffKind;
     frameId?: string;
     imageTransform?: WorkImageTransform;
+    assetIds?: string[];
     action: 'prepare' | 'open';
 };
 export interface WorkHandoffReceipt {
@@ -94,6 +95,7 @@ export interface WorkHandoffReceipt {
     status: 'prepared' | 'open-requested' | 'open-rejected';
     message: string;
     image?: WorkHandoffImageResult;
+    archive?: { count: number; items: Array<{ fileName: string; bytes: number; sha256: string }> };
 }
 export const WORK_MEDIA_READ = 'work-media:read', WORK_MEDIA_WRITE = 'work-media:write', WORK_MEDIA_CANCEL = 'work-media:cancel', WORK_FILE_HANDOFF = 'work-files:handoff';
 export function validateWorkMediaScope(value: unknown): WorkMediaScope {
@@ -145,11 +147,17 @@ export function validateWorkMediaWrite(value: unknown): WorkMediaWrite {
     throw Error('视频操作无效。');
 }
 export function validateWorkHandoff(value: unknown): WorkHandoffRequest {
-    const r = workRecord(value, ['libraryIdentity', 'generation', 'setId', 'assetId', 'kind', 'frameId', 'imageTransform', 'action']);
+    const r = workRecord(value, ['libraryIdentity', 'generation', 'setId', 'assetId', 'kind', 'frameId', 'imageTransform', 'assetIds', 'action']);
     const scope = validateWorkMediaScope({ libraryIdentity: r.libraryIdentity, generation: r.generation, setId: r.setId, assetId: r.assetId });
-    if (typeof r.kind !== 'string' || typeof r.action !== 'string' || !['original', 'preview', 'compatible-png', 'reference-frame', 'processed-image'].includes(r.kind) || !['prepare', 'open'].includes(r.action) || (r.kind === 'reference-frame') !== (r.frameId !== undefined) || (r.kind === 'processed-image') !== (r.imageTransform !== undefined))
+    if (typeof r.kind !== 'string' || typeof r.action !== 'string' || !['original', 'preview', 'compatible-png', 'reference-frame', 'processed-image', 'zip'].includes(r.kind) || !['prepare', 'open'].includes(r.action) || (r.kind === 'reference-frame') !== (r.frameId !== undefined) || (r.kind === 'processed-image') !== (r.imageTransform !== undefined) || (r.kind === 'zip') !== (r.assetIds !== undefined))
         throw Error('文件交付选项无效。');
-    return { ...scope, kind: r.kind as WorkHandoffKind, action: r.action as WorkHandoffRequest['action'], ...(r.frameId !== undefined ? { frameId: workId(r.frameId) } : {}), ...(r.imageTransform !== undefined ? { imageTransform: validateWorkImageTransform(r.imageTransform) } : {}) };
+    let assetIds: string[] | undefined;
+    if (r.assetIds !== undefined) {
+        if (!Array.isArray(r.assetIds) || r.assetIds.length < 1 || r.assetIds.length > 64) throw Error('ZIP归档需要1–64份参考。');
+        assetIds = r.assetIds.map(workId);
+        if (assetIds[0] !== scope.assetId || new Set(assetIds).size !== assetIds.length) throw Error('ZIP参考顺序或成员无效，请重新选择。');
+    }
+    return { ...scope, kind: r.kind as WorkHandoffKind, action: r.action as WorkHandoffRequest['action'], ...(r.frameId !== undefined ? { frameId: workId(r.frameId) } : {}), ...(r.imageTransform !== undefined ? { imageTransform: validateWorkImageTransform(r.imageTransform) } : {}), ...(assetIds ? { assetIds } : {}) };
 }
 export function validateWorkImageTransform(value: unknown): WorkImageTransform {
     const r = workRecord(value, ['format', 'quality', 'resize', 'stripMetadata']);
