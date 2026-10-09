@@ -1,4 +1,4 @@
-import {mergePublicBackends} from '../../ai-credentials/public-settings'
+import {mergePublicBackends,publicBackend} from '../../ai-credentials/public-settings'
 import { SettingsService, createDefaultLlamaBackendConfig } from '../settings.service'
 import type { AiBackendConfig } from '../../../shared/types/ai-backend.types'
 import type { SettingsServicePort } from '../../ipc/settings.ipc'
@@ -23,8 +23,8 @@ export class AiBackendSettingsService {
     const backends = this.listBackends()
     const index = backends.findIndex((backend) => backend.id === config.id)
     const next = index >= 0
-      ? backends.map((backend) => (backend.id === config.id ? config : backend))
-      : [...backends, config]
+      ? backends.map((backend) => (backend.id === config.id ? config : publicBackend(backend)))
+      : [...backends.map(publicBackend), config]
 
     const merged=mergePublicBackends(backends,next)
     this.settingsService.saveSettings({ aiBackends: merged })
@@ -32,7 +32,7 @@ export class AiBackendSettingsService {
   }
 
   public deleteBackend(id: string): AiBackendConfig[] {
-    const next = this.listBackends().filter((backend) => backend.id !== id)
+    const next = this.listBackends().filter((backend) => backend.id !== id).map(publicBackend)
     const normalized = next.length > 0 ? next : [createDefaultLlamaBackendConfig()]
     this.settingsService.saveSettings({ aiBackends: normalized })
     return normalized.sort((a, b) => a.priority - b.priority)

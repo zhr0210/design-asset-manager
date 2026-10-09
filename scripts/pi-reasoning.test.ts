@@ -142,7 +142,9 @@ try{
  await test('formal Host reviews reject changed effort and evidence keeps strength across library reopen',async()=>{
   const directory=path.join(root,'formal'),library=path.join(directory,'library'),file=path.join(directory,'generated.png');await fs.mkdir(directory);await fs.writeFile(file,await sharp(jpeg).png().toBuffer())
   const host=createActiveLibraryHost(createProductionActiveLibraryHostDependencies({selectLibraryDirectory:async()=>({kind:'selected',directory:library}),selectLocalFiles:async()=>({kind:'selected',files:[{filePath:file}]})}))
-  const admission=createVisualAdmission();let settings={...createNewInstallAppSettingsDefaults(),aiBackends:[{...native,reasoning:'low' as AiReasoningLevel}]},calls=0
+  // This simulated inference regression needs to reach binding/evidence checks;
+  // unrelated desktop pressure must not turn it into an unbounded memory wait.
+  const admission=createVisualAdmission({memory:()=>({free:16*1024**3,total:32*1024**3})});let settings={...createNewInstallAppSettingsDefaults(),aiBackends:[{...native,reasoning:'low' as AiReasoningLevel}]},calls=0
   const provider={invokeOnce:async(input:VisionInvocation)=>{assert.equal(input.reasoning,settings.aiBackends![0].reasoning);calls++;return response(output)}}
   const controller=createVisualAiController({host,settings:()=>settings,provider,admission,onChanged:()=>{}})
   const tags=createTagExecutionController({host,settings:()=>settings,provider,admission,legacy:controller,changed:()=>{}})
@@ -164,7 +166,10 @@ try{
    settings={...settings,aiBackends:[{...native,reasoning:'low'}]}
    await assert.rejects(tags.run('main',tagReview.receipt),/TAG_BACKEND_CHANGED/);assert.equal(calls,1)
    await tags.suspendAndDrain();await controller.suspendAndDrain();await host.close();await host.reopen()
-   assert.equal((await host.listVisualAiEvidence(asset.id))[0].reasoning,'high');assert.equal(admission.inspect().materialBytes,0)
-  }finally{await tags.suspendAndDrain();await controller.suspendAndDrain();await host.close()}
+   assert.equal((await host.listVisualAiEvidence(asset.id))[0].reasoning,'high')
+   // The composition releases compatible prepared-preview caches at authority
+   // changes. This controller-only fixture must drive that public seam too.
+   admission.releaseIdleMaterials();assert.equal(admission.inspect().materialBytes,0)
+  }finally{admission.invalidate();await tags.suspendAndDrain();await controller.suspendAndDrain();await host.close()}
  })
 }finally{await fs.rm(root,{recursive:true,force:true})}

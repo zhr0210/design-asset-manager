@@ -3,6 +3,7 @@ import http from 'node:http'
 import { registerAiBackendIpc } from '../src/main/ipc/ai-backend.ipc'
 import { createNewInstallAppSettingsDefaults } from '../src/main/services/settings/settings-defaults.builder'
 import type { AiBackendConfig } from '../src/shared/types/ai-backend.types'
+import { publicBackend } from '../src/main/ai-credentials/public-settings'
 
 const requests: string[] = []
 let responseMode: 'normal' | 'redirect' | 'invalid' = 'normal'
@@ -32,7 +33,18 @@ try {
   const backend: AiBackendConfig = { id: 'test-backend', name: 'Test model service', type: 'openai-compatible', enabled: true,
     baseUrl: `http://127.0.0.1:${address.port}/v1`, timeoutMs: 5000, priority: 1,
     capabilities: { chat: true, vision: true, embeddings: false, jsonOutput: true, modelList: true, modelManagement: false } }
+  // This binding only exercises the existing read-only settings guard. It does
+  // not supply a runtime, installed model or positive execution qualification.
+  const managed: AiBackendConfig = { ...backend, id: 'dam-local-qwen-cpu', name: 'Owned settings fixture',
+    type: 'native-python', runtimeFingerprint: 'settings-guard-only', priority: 20,
+    credentialRevision: undefined, credentialRef: undefined }
+  settings.aiBackends = [...settings.aiBackends!, managed]
+  const heldManaged = publicBackend(managed)
   await invoke('ai-backend:save', backend)
+  await invoke('ai-backend:save', { ...backend, name: 'Edited model service' })
+  assert.deepEqual(publicBackend(settings.aiBackends!.find(b => b.id === managed.id)!), heldManaged,
+    'Saving another connection preserves the managed binding despite private optional fields.')
+  await assert.rejects(invoke('ai-backend:save', { ...managed, name: 'Attempted managed edit' }), /托管模型/)
   assert.equal((await invoke('ai-backend:list'))[0].id, 'test-backend')
   assert.deepEqual(requests, [], 'Configuration changes must not probe or upload.')
   const models = await invoke('ai-backend:list-models', { backendId: backend.id })
@@ -49,6 +61,8 @@ try {
   responseMode = 'invalid'
   assert.equal((await invoke('ai-backend:list-models', { backendId: backend.id })).error.code, 'BACKEND_MODEL_LIST_INVALID')
   await invoke('ai-backend:delete', { id: backend.id })
+  assert.deepEqual(publicBackend(settings.aiBackends!.find(b => b.id === managed.id)!), heldManaged,
+    'Deleting another connection also preserves the managed binding.')
   assert.equal((await invoke('ai-backend:list')).some((entry: AiBackendConfig) => entry.id === backend.id), false)
   assert.equal(settings.concurrency, createNewInstallAppSettingsDefaults().concurrency)
   console.log('AI backend restoration: isolated configuration, trusted calls and loopback GET-only probes passed')
