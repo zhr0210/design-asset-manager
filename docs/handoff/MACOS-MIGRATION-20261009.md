@@ -1,3 +1,84 @@
+# 2026-10-09：Mac 开发环境与迁移必需用户路径已可用
+
+用户已手动解锁。本轮在新克隆 `codex/macos-migration` 完成目标平台依赖、必要接线、正式构建和普通用户路径。
+实际运行构建 **dam-0f2388d7a86f7fc4** / 781产品输入，源码摘要 `0f2388d7a86f7fc41dfc7ae510104b934ab94045d9d3810ea833d67f934948af`；关于页显示 darwin/arm64/普通运行。
+代码检查点 `a9f4b681eb4d82e46270bd69b2d32f804306d7dd`（含此前 `62d0e0b` 的迁移核心）。GitHub main 最新回读仍为 `6b86ef05e558229e2bd87998101ca5678bc228cc`；没有推送或发布，旧工作区WIP保持。
+
+## 当前能做与启动入口
+
+```sh
+cd /Users/meigong/Documents/design-asset-manager-macos
+npm run start:browser -- --profile=/Users/meigong/Documents/DAM-public-macos-profile
+# 同一唯一Host可打开原生窗口；不要并行运行另一个Host写同库
+npm run start:desktop -- --profile=/Users/meigong/Documents/DAM-public-macos-profile
+```
+
+浏览器首页由普通启动脚本自动打开，动态端口不可作为永久书签；Desktop普通窗口已实际启动。
+从“打开已有素材库”选择 `/Users/meigong/Documents/DAM-public-macos-library`。
+三个授权公开样本已Copy入库；源文件仍在新仓库 `.scratch/macos-migration-20261009/public-sources`。
+素材卡片 → 详情 → 展开“AI分析与提示词反推”可独立生成标签/描述/OCR或一键基础分析。
+“AI与模型 → 本地模型与OCR”保留真实资格与Python/OCR入口；“任务用哪个模型”已保存视觉/独立标签的Qwen2B默认。
+重开会真实复核OCR，短暂未就绪要等待复核结束，不代表已保存文字丢失。
+末次唯一Host的原生窗口保留可继续使用，两个空闲运行器已实际释放，驻留/计算许可0.0GiB；已验证配置和持久向量保留，下次执行按预算冷加载。
+
+本机其他程序占用时，2B视觉和独立检索的完整保守准入预算可能不能同时满足。
+本轮实际遇到 `AI_MEMORY_WAIT`；“停用并释放”确认物理退出后，明确恢复向量任务成功。
+“释放空闲模型与准备缓存”保护已准备/活跃请求，不能强行假释放；停止视觉会暂时禁用该连接，继续分析前从已安装版本“验证并使用·完整GPU”恢复。
+
+## 真实操作、保存重开与失败保护
+
+| 正式路径 | 当前证据 |
+| --- | --- |
+| Browser普通入口 | 新构建启动、显式开库、OCR/检索环境选择与真实验证、Mac受管包下载及Metal验证。Chrome转到用户活动后在同Host普通Desktop继续，未操作用户其他页面 |
+| Desktop正式收录 | 可见添加素材/选择3图/确认Copy，3素材/文字索引3/3，源文件保留 |
+| 本地模型 | ModelScope两模型实际安装/明确下载恢复；Qwen2B Q4_K_M/Q8_0真实Metal图像验证，峰值约1.05GiB，首次12秒、暖加载约1秒；Mac固定包实际入库/运行 |
+| 取消/退出 | 可见“取消加载或验证”在混合切换中实际点击，旧GPU版本保留，新模式未启用，驻留/计算归零。取消目前显示 `LOCAL_RUNTIME_SWITCH_FAILED`，属于提示不足，不能误记为混合验证通过。普通Cmd-Q/确认退出后Host监听消失 |
+| 独立标签/描述 | 咖啡/杯/杯碟建议；确认咖啡、拒绝错误咖啡豆。独立描述准确包含杯/碟/勺/木桌，显示实际1次调用/349输入59输出tokens；分析历史保存 |
+| 专用OCR | 正式扫描页受控预览4区域、咖啡0区域有效空结果。人工空格修订保存，原识别文字保留；正文遗漏和空格粘连仍是质量限制 |
+| 一键基础分析 | 最终产物咖啡3/3标签/描述/OCR分别保存；人工中文备注未覆盖，确认/拒绝决定保持，新AI结果另存 |
+| 索引失败/暂停/恢复 | 同一任务先因资源不足0/3停止，明确恢复/实际暂停0/3，确认释放视觉后明确恢复到3/3；没有降低预算或写向量造覆盖 |
+| 中文/英文语义 | “一杯咖啡”与“a cup of coffee”均咖啡图第一；cosine约0.101/0.128。仅3图样本，不是广泛质量或准确率 |
+| 外部以图 | 从可见选择器选公开coffee原图，不新增资产；同图第一/cosine1.000，其他两图0.520/0.463 |
+| 保存重开 | 同产物整应用退出/普通重开/显式同库，人工备注、修订OCR、3向量/同一任务保留；重开中文查询仍咖啡第一。只读审计与原件SHA完全一致，无自动重发 |
+
+重开前后非秘密审计SHA：库用户内容/分析 `50be89e92b2f5721f5953a4421c80f944c4b6655dcc396784394d1e1458fee72`；
+canonical向量与任务 `9329aa72f8572f92a712d463c7e3ecd5b64927d2cde8ecc468dbb35c855ffd7c`。
+回读使用只读连接和明确非认证列，没有Agent SQL写库或读取session authority。
+
+## 版本、来源和工程验证
+
+M4原生arm64/macOS27.0(26A428)/24GiB统一内存，GPU计入同一RAM池；Node25.8.0/npm11.11.0，Electron30.5.1、better-sqlite3 12.10.0、Sharp0.34.5，SQLite通过Electron测试入口。
+Pi0.99.1/固定独立Node24.21.0与真实seal/Main pin `ff5c59ec9be9cc130f8da974c838c8af998f552adb48514c7da85c63c5848156`。
+Python3.12.11独立原生环境 `.scratch/macos-migration-20261009/python`；Torch2.14.1、Transformers4.57.6、NumPy2.2.6、ONNX Runtime1.23.2、OpenCV4.11.0.86、RapidOCR1.4.4。完整锁在本轮evidence/python-lock.txt。
+正式OCR根 `.scratch/macos-migration-20261009/ocr`，运行入口绑定上述venv，没有把Python符号链接解析成失去venv依赖的系统入口。
+
+Qwen ModelScope固定版本 `4cf9622939ac8f040023147fc2a17b20f1eb8be1`，语言Q4_K_M/投影Q8_0，Apache-2.0。
+SigLIP2 Base固定 `153facb840ceec16916cc7ec0e3bf8757d95f7e3`，Apache-2.0，实际768维资格，中/英/混合挑战各2/2；纯色中文弱项保留。
+RapidOCR三权重来自ModelScope `RapidAI/RapidOCR@7d0781614ca1a83d5ad9603f713acb2e74855d72`，逐文件完整核验。
+llama.cpp b11429/d81235049 Mac arm64运行包来自官方GitHub软件发行（约12MB、MIT），固定SHA/安全tar展开/真实架构执行；它是软件运行包，不是额外模型CDN回退。未运行模型仓库代码。
+
+迁移核心完整本机 `ci:governance` 已exit0，160 Python测试无skip、Pi5运行器+17实际SDK受控回归。
+续验最终typecheck/build/context通过（782/782 owned，47显式排除）；3基础controller、19真实Electron SQLite集成和AI界面工作流回归通过。
+19项初次失败全部被Mac临时目录 `/var`/`/private/var` 清理断言遮蔽，修为真实父目录+受控basename双重保护后全部执行通过，没有删用例/永久skip/固定verified。
+
+必要代码：固定Mac GGUF包/安全tar、Metal统一预算、真实device/memory采样、自有进程物理峰值helper、AVFoundation视频helper、venv消费者接线与OCR真实预算；保留Host/共享调度/活跃保护/取消/物理退出/原件优先。
+续验补首次验证阶段取消按钮及Mac运行包说明。临时诊断日志代码已撤下，最终产物没有调试启动模式。
+
+## 尚未验收与下一动作
+
+- Blender指定官方MP4源本轮重试仍HTTP403，未取得视频；生成H264的内部解码/取消/close测试不替代真实视频。下一步来源恢复后按既定URL/SHA取可恢复副本，普通导入/抽帧/保存重开。
+- Pi真实账号登录未做（账号本人正规入口操作），受控SDK结果不授真实账号资格；需要本人登录后补正规实际调用。
+- 原生专项仅普通窗口/Cmd-Q成立：目标创作软件真实接收、拖拽/置顶/多屏断屏、安全存储、安装升级卸载仍未验。截图工具只给极小倾斜窗口缩略图，不能据此宣称完整视觉QA；需可用原生完整画面/专项条件。
+- Eagle真实库/插件配对与读写冲突、恢复未验；本轮未新建Eagle库或安装配对。按原专项在明确公开Eagle测试库上接续。
+- 两平台远端CI仍为main Actions37793257740失败；本机Mac治理通过不等于Windows tracer或远端重跑通过。未推送，下一步单独review/推送本分支并两平台重跑。
+- 广泛OCR、检索质量/压力与商业签名发行未验；现有三图路径可用，不自动关闭WC01、T23/父#24、A–F、Eagle或商业发行父级。
+
+本轮到源码/依赖/迁移必需可用路径为止停止，不扩大所有后续专项。
+稳定证据见 [验收JSON](../checkpoints/macos-migration-20261009/acceptance.json)、[重开前](../checkpoints/macos-migration-20261009/persistence-before-reopen.json)、[重开后](../checkpoints/macos-migration-20261009/persistence-after-reopen.json)。
+全部本轮非秘密原始日志在 `.scratch/macos-migration-20261009/evidence/`；原内部报告仍标 `userPathAcceptance:false / activeProfileDbWrites:0`，与本次正式UI证据分开，不追认旧PASS。
+
+---
+
 # 2026-10-09 最终接续检查点：源码/依赖和真实底层执行已准备，用户验收等待解锁
 
 **迁移用户验收尚未完成。** macOS 在本轮 Browser/OCR 操作后锁定，计算机控制工具明确拒绝自动解锁；已请求用户手动解锁，尚未收到回复。此为真实系统操作条件，不能改写成完整PASS。

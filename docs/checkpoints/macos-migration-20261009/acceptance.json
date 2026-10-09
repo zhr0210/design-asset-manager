@@ -1,0 +1,237 @@
+{
+  "schema": 1,
+  "baseCommit": "6b86ef05e558229e2bd87998101ca5678bc228cc",
+  "codeCheckpoint": "a9f4b681eb4d82e46270bd69b2d32f804306d7dd",
+  "branch": "codex/macos-migration",
+  "build": {
+    "buildId": "dam-0f2388d7a86f7fc4",
+    "sourceDigest": "0f2388d7a86f7fc41dfc7ae510104b934ab94045d9d3810ea833d67f934948af",
+    "builtAt": "2026-10-09T00:58:08.778Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 781
+  },
+  "entry": "ordinary start:browser followed by ordinary start:desktop on the same unique Host; no synthetic mode",
+  "clients": {
+    "browser": "normal startup/library open/model settings; Chrome user activity led to native continuation",
+    "desktop": "public Copy import, real independent tags/caption/OCR, basic analysis, search, normal quit and reopen"
+  },
+  "method": "CUA visible AX controls and ordinary keyboard/paste; no IPC direct calls, Store injection, SQL writes or fake response for user-path acceptance",
+  "observed": {
+    "ocrQualification": "Actual RapidOCR character, empty and maximum-input challenges; active profile verified, auto rechecked on normal reopen",
+    "retrievalQualification": "Actual 768 dim L2/cosine; Chinese 2/2, English 2/2, mixed 2/2; measured peak 1.36 GiB; 0.5s load",
+    "ggufQualification": "Actual managed Mac b11429 package acquired from fixed official source; Qwen2B full GPU/Metal image challenge passed, visible peak 1.05 GiB/initial 12s load, later warm load ~1s/peak 1.17 GiB",
+    "copyImport": "3 public PNGs imported with source retained; source/license/integrity in public-materials.json",
+    "independentTags": "Coffee/cup/saucer suggested; coffee accepted, incorrect coffee-beans rejected; decisions persisted through rerun/reopen",
+    "independentCaption": "Correct coffee/cup/saucer/spoon/wood table; visible one actual call, 349 input and 59 output tokens",
+    "ocrPage": "4 regions from formal controlled preview; Region-basedsegmentation and other English lines; original preserved and manual whitespace edit saved",
+    "basicAnalysis": "Coffee 3/3 tags/caption/OCR saved; empty OCR was valid 0 regions; manual Chinese caption retained while new AI evidence saved",
+    "modelCancel": "Visible cancel-load-or-verify control clicked during hybrid switch; prior version retained; new mode not enabled; residency/compute 0.0 GiB. UI currently reports LOCAL_RUNTIME_SWITCH_FAILED for cancellation",
+    "resourceFailure": "Actual AI_MEMORY_WAIT refused overlapping visual/retrieval envelope; model/files/effects retained; stop-and-release confirmed 0.0 GiB then explicit vector resume succeeded",
+    "indexPauseResume": "One task, 0/3 resource failure, explicit resume/pause at 0/3, explicit resume; after confirmed visual release completed 3/3",
+    "semanticEnglish": {
+      "query": "a cup of coffee",
+      "ranking": [
+        [
+          "public-coffee",
+          0.128
+        ],
+        [
+          "public-page",
+          0.045
+        ],
+        [
+          "public-astronaut",
+          0.02
+        ]
+      ]
+    },
+    "semanticChinese": {
+      "query": "一杯咖啡",
+      "ranking": [
+        [
+          "public-coffee",
+          0.101
+        ],
+        [
+          "public-page",
+          0.016
+        ],
+        [
+          "public-astronaut",
+          -0.034
+        ]
+      ]
+    },
+    "externalImage": {
+      "input": "public-coffee.png",
+      "ranking": [
+        [
+          "public-coffee",
+          1.0
+        ],
+        [
+          "public-astronaut",
+          0.52
+        ],
+        [
+          "public-page",
+          0.463
+        ]
+      ],
+      "assetsAdded": 0
+    },
+    "reopen": "Normal Cmd-Q confirmation with zero drafts/login operations, Host physically exited; same build ordinary restart, same library explicitly opened; corrected OCR/manual caption/3 vectors/one job retained; Chinese query again coffee rank 1 without rebuilding image vectors"
+  },
+  "persistence": {
+    "equal": true,
+    "readOnly": true,
+    "authColumnsRead": false,
+    "beforeAndAfter": {
+      "library": {
+        "sha256": "50be89e92b2f5721f5953a4421c80f944c4b6655dcc396784394d1e1458fee72",
+        "counts": {
+          "assets": 3,
+          "attempts": 4,
+          "captions": 4,
+          "ocr": 2,
+          "ocrEdits": 2,
+          "tagSuggestions": 0
+        }
+      },
+      "vectors": {
+        "sha256": "9329aa72f8572f92a712d463c7e3ecd5b64927d2cde8ecc468dbb35c855ffd7c",
+        "counts": {
+          "vectors": 3,
+          "jobs": 1
+        }
+      },
+      "readOnly": true,
+      "authColumnsRead": false,
+      "originalFiles": {
+        "Originals/bucket-0001/public-astronaut-igo5l6osadxd.png": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+        "Originals/bucket-0001/public-coffee-cpdmopu6ekdh.png": "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7",
+        "Originals/bucket-0001/public-page-uz6uqy62fh4g.png": "341a6f0a61557662b02734a9b6e56ec33a915b2c41886b97509dedf2a43b47a3"
+      },
+      "userAssets": [
+        [
+          "design-asset:346b99b3-e23a-4843-bc39-6451f14061e7",
+          "public-astronaut",
+          null,
+          0,
+          null
+        ],
+        [
+          "design-asset:7723ac16-cf0e-42f6-b7b6-b9e680b6e8c4",
+          "public-page",
+          null,
+          0,
+          null
+        ],
+        [
+          "design-asset:b96091fe-9cd6-4ef4-a862-a8a62a68f578",
+          "public-coffee",
+          "人工验收备注：木桌上的红色咖啡杯、杯碟和金属勺。",
+          1,
+          "2026-10-09T01:04:20.127Z"
+        ]
+      ],
+      "ocrEdits": [
+        [
+          "design-asset:7723ac16-cf0e-42f6-b7b6-b9e680b6e8c4",
+          "ocr:26ad81f8-41cd-46de-9b7c-6166dac59aae",
+          2,
+          "Region-based segmentation\nLet us first determine markers of the coins and the\nunambiguously as either object or background. Here,\nhistogram of grey values:"
+        ],
+        [
+          "design-asset:b96091fe-9cd6-4ef4-a862-a8a62a68f578",
+          "ocr:2c860796-12eb-4482-83f2-cdf12cfbffee",
+          1,
+          null
+        ]
+      ],
+      "vectorJobs": [
+        [
+          "retrieval-job:374f3290-b2cb-4752-9de6-b241468e4787",
+          "f4aadb7c826777334497c59f863ed1b470308b0bb9a58a1c2fa3f3a349cbf45c",
+          "complete",
+          3,
+          3,
+          0,
+          null
+        ]
+      ]
+    }
+  },
+  "checks": {
+    "typecheck": "exit0 final continuation",
+    "build": "exit0 final continuation",
+    "context": "782/782 owned; 47 explicit exclusions",
+    "basicController": "3/3",
+    "basicSQLiteIntegration": "19/19 Electron; macOS temp-root safety assertion canonicalized, no cases removed or skipped",
+    "aiOverviewWorkflow": "exit0",
+    "fullGovernance": "earlier migration core complete exit0; final small renderer/test changes verified above"
+  },
+  "remaining": {
+    "blenderVideo": "official designated MP4 source still HTTP403 on retry; generated internal H264 is not user qualification",
+    "piAccount": "5 runner and17 actual SDK loopback tests pass; real user account login not performed",
+    "nativeSpecialties": "ordinary native window and Cmd-Q accepted; drag-to-creation-app/pin/multiple-displays/credential/install behaviors not accepted; screenshot tool only yielded a tiny tilted window thumbnail, not full pixel QA",
+    "eagle": "no actual authorized Eagle library/plugin pairing acceptance this round",
+    "remoteCI": "main Actions37793257740 still failed; no push or remote rerun; Windows tracer not validated on Windows",
+    "quality": "3 public images only; OCR missed part of scanned page and joined spaces; SigLIP2 similarity is ranking, not accuracy; pure-color Chinese weakness retained"
+  },
+  "parentTasksClosed": false,
+  "remotePush": false,
+  "secretsRead": false,
+  "migrationRequiredUsablePathsComplete": true,
+  "versions": {
+    "node": "25.8.0",
+    "npm": "11.11.0",
+    "electron": "30.5.1",
+    "betterSqlite3": "12.10.0",
+    "sharp": "0.34.5",
+    "pi": "0.99.1",
+    "piNode": "24.21.0",
+    "python": "3.12.11",
+    "torch": "2.14.1",
+    "transformers": "4.57.6",
+    "numpy": "2.2.6",
+    "onnxruntime": "1.23.2",
+    "opencvPython": "4.11.0.86",
+    "rapidocr": "1.4.4"
+  },
+  "models": {
+    "gguf": {
+      "repository": "Qwen/Qwen3-VL-2B-Instruct-GGUF",
+      "revision": "4cf9622939ac8f040023147fc2a17b20f1eb8be1",
+      "runtime": "b11429",
+      "files": [
+        {
+          "name": "Qwen3VL-2B-Instruct-Q4_K_M.gguf",
+          "bytes": 1107409952,
+          "sha256": "089d75c52f4b7ffc56ba998ffc50aae89fcafc755f9e7208aacca281dca6c2ae"
+        },
+        {
+          "name": "mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf",
+          "bytes": 445053216,
+          "sha256": "f9a68fabba69c3b81e153367b2c7521030b0fa8bb0de400c9599c8e6725f9c82"
+        }
+      ]
+    },
+    "retrieval": {
+      "repository": "google/siglip2-base-patch16-224",
+      "revision": "153facb840ceec16916cc7ec0e3bf8757d95f7e3"
+    },
+    "ocr": {
+      "repository": "RapidAI/RapidOCR",
+      "revision": "7d0781614ca1a83d5ad9603f713acb2e74855d72"
+    }
+  },
+  "piSeal": "ff5c59ec9be9cc130f8da974c838c8af998f552adb48514c7da85c63c5848156",
+  "finalRuntimeState": "Qwen GPU/Metal actual revalidation passed after reopen; released both idle runners with resident/compute0.0GiB, verified configurations retained",
+  "llamaMacArm64Archive": {
+    "release": "b11429",
+    "commit": "d81235049384534c167caea52b85a694f6103d14",
+    "bytes": 11971406,
+    "sha256": "740288ec6887be94280a5dfa25b5e23a78285cab104519e6c7e218904ee82459"
+  }
+}

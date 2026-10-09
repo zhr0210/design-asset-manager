@@ -1,0 +1,32 @@
+{
+  "scope": "designated public evaluation materials only; no private search",
+  "files": [
+    {
+      "alias": "public-coffee.png",
+      "source": "https://raw.githubusercontent.com/scikit-image/scikit-image/v0.19.3/skimage/data/coffee.png",
+      "bytes": 466706,
+      "sha256": "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7",
+      "license": "scikit-image public evaluation data; attribution noted in upstream data docs"
+    },
+    {
+      "alias": "public-page.png",
+      "source": "https://raw.githubusercontent.com/scikit-image/scikit-image/v0.19.3/skimage/data/page.png",
+      "bytes": 47679,
+      "sha256": "341a6f0a61557662b02734a9b6e56ec33a915b2c41886b97509dedf2a43b47a3",
+      "license": "scikit-image public evaluation data"
+    },
+    {
+      "alias": "public-astronaut.png",
+      "source": "https://raw.githubusercontent.com/scikit-image/scikit-image/v0.19.3/skimage/data/astronaut.png",
+      "bytes": 791555,
+      "sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+      "license": "NASA Eileen Collins portrait, public domain; no endorsement"
+    }
+  ],
+  "video": {
+    "source": "https://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_320x180.mp4",
+    "license": "CC BY 3.0 Blender Foundation",
+    "expectedSha256": "f78f39603e6774907f2faafabf26a667f4a6fc31769ec304a8a8f7c62d280508",
+    "state": "HTTP_403_NOT_ACQUIRED"
+  }
+}

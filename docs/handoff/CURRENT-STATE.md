@@ -1,3 +1,16 @@
+# 2026-10-09 当前：Mac 开发环境与迁移必需路径已可用，本轮停止
+
+新克隆 `design-asset-manager-macos` / `codex/macos-migration`，最新GitHub main仍 `6b86ef05e558229e2bd87998101ca5678bc228cc`，旧Mac WIP保持。
+实际普通运行 **dam-0f2388d7a86f7fc4** / 781产品输入，代码检查点 `a9f4b681eb4d82e46270bd69b2d32f804306d7dd`；未推送/发布。
+目标原生依赖/Pi seal/Python、固定Mac GGUF/Metal统一预算与自有物理内存/视频必要接线已准备；OCR/SigLIP2/2B已从正式UI真实授资格。
+普通Browser启动/模型准备，同Host普通Desktop的3公开图Copy、独立标签/描述/OCR、一键3/3、双语与以图检索、真实取消/资源失败/明确索引暂停恢复到3/3及整应用保存重开成立。
+人工/原件/非秘密分析审计/3canonical向量与同一任务重开前后SHA一致，没有自动重发。
+最后两空闲运行器实际释放，已验证配置保留。完整本机治理及最终相关回归/typecheck/build/context通过；远端失败CI未重跑，Windows仍未验。
+准确命令、版本、证据与下一动作见 [本轮记录](MACOS-MIGRATION-20261009.md)。Blender指定源403、Pi本人真实登录、Native专项/Eagle/安装签名发行保留未验；WC01、T23/父#24、A–F和商业父级均不自动关闭。
+本轮止于迁移必需可用路径；下面是按原时点保留的历史检查点，锁屏等待已由本段替代。
+
+---
+
 # 2026-10-09 当前：Mac依赖/底层真实执行已准备，正式用户验收等待解锁
 
 最新用户授权完整源码、目标依赖、必要Mac接线与普通真实路径验收；以GitHub最新main为唯一基准。新克隆/迁移分支保持旧Mac目录WIP；当前事实、实际入口和下一动作见 [本轮记录](MACOS-MIGRATION-20261009.md)。完整本机治理、构建与实际Metal/OCR/双语检索内部执行已通过；普通Browser创建/退出及正式境内库存安装已成立。Mac锁定阻塞最终UI加载、素材保存/索引重开；新build与旧Host分列。Native/Eagle/账号/发行及全部父级不自动关闭。以下为历史。
