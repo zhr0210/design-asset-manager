@@ -1,3 +1,5 @@
+> 历史批次记录；当前状态以 [CURRENT-STATE](../../../handoff/CURRENT-STATE.md) 为准。旧候选、等待与资格保持原时间身份。
+
 # 2026-10-09 补充：Pi／ChatGPT 本人授权已连接并安全保存
 
 补充（2026-10-09）：本人已从正规系统浏览器授权；DAM 正式 UI 显示“账号已连接”“身份与计划权限已验证”“已保存凭据”。应用内部加密持久化 OAuth 授权凭据；Agent未读取/导出 Cookie、令牌、保险库或完整回调。尚未做该账号的实际模型推理与重开持久化验收。
@@ -82,7 +84,7 @@ llama.cpp b11429/d81235049 Mac arm64运行包来自官方GitHub软件发行（�
 - 广泛OCR、检索质量/压力与商业签名发行未验；现有三图路径可用，不自动关闭WC01、T23/父#24、A–F、Eagle或商业发行父级。
 
 本轮到源码/依赖/迁移必需可用路径为止停止，不扩大所有后续专项。
-稳定证据见 [验收JSON](../checkpoints/macos-migration-20261009/acceptance.json)、[重开前](../checkpoints/macos-migration-20261009/persistence-before-reopen.json)、[重开后](../checkpoints/macos-migration-20261009/persistence-after-reopen.json)。
+稳定证据见 [验收JSON](../../../checkpoints/macos-migration-20261009/acceptance.json)、[重开前](../../../checkpoints/macos-migration-20261009/persistence-before-reopen.json)、[重开后](../../../checkpoints/macos-migration-20261009/persistence-after-reopen.json)。
 全部本轮非秘密原始日志在 `.scratch/macos-migration-20261009/evidence/`；原内部报告仍标 `userPathAcceptance:false / activeProfileDbWrites:0`，与本次正式UI证据分开，不追认旧PASS。
 
 ---

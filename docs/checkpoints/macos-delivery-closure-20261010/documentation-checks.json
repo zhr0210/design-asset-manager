@@ -1,0 +1,183 @@
+{
+  "kind": "documentation-final-check",
+  "checks": [
+    {
+      "check": "context-check",
+      "command": [
+        "npm",
+        "run",
+        "context:check"
+      ],
+      "exitCode": 0,
+      "log": "context-check.txt"
+    },
+    {
+      "check": "agent-context",
+      "command": [
+        "python3",
+        "scripts/check-agent-context.py"
+      ],
+      "exitCode": 0,
+      "log": "agent-context.txt"
+    },
+    {
+      "check": "docs-sync",
+      "command": [
+        "python3",
+        "scripts/check-docs-sync.py",
+        "--mode",
+        "phase-summary"
+      ],
+      "exitCode": 0,
+      "log": "docs-sync.txt"
+    },
+    {
+      "check": "forbidden-paths",
+      "command": [
+        "python3",
+        "scripts/check-forbidden-paths.py"
+      ],
+      "exitCode": 0,
+      "log": "forbidden-paths.txt"
+    },
+    {
+      "check": "ci-hygiene",
+      "command": [
+        "npm",
+        "run",
+        "test-ci-hygiene"
+      ],
+      "exitCode": 0,
+      "log": "ci-hygiene.txt"
+    }
+  ],
+  "currentDocumentFiles": 14,
+  "currentLocalLinks": 41,
+  "brokenCurrentLinks": [],
+  "historicalUnresolvedLinks": [
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/01-resource-foundation.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/02-installed-model-offline.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/03-hf-bundle-catalog.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/04-gguf-acquisition.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/05-device-recommendation.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/06-gguf-2b-cpu.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/07-gguf-2b-gpu-hybrid.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/08-gguf-4b-runtime.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/09-gguf-8b-runtime.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/10-structured-analysis-output.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/11-bounded-analysis-reuse.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/12-adaptive-residency.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/13-audited-local-oom.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/14-gguf-background-recovery.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/15-lexical-indexed-search.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/16-lexical-index-recovery.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/17-retrieval-model-install.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/18-canonical-vector-generation.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/19-semantic-text-search.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/20-image-example-search.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/21-embedding-space-recovery.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/22-execution-diagnostics.md",
+      "kind": "historical unresolved reference, not current entry"
+    },
+    {
+      "from": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "target": "../../../../.scratch/local-ai-foundation-tickets-20261006/issues/23-real-app-closure.md",
+      "kind": "historical unresolved reference, not current entry"
+    }
+  ],
+  "currentEntryLines": {
+    "TASK.md": 25,
+    "docs/handoff/CURRENT-STATE.md": 44
+  },
+  "logWhitespaceNormalized": [
+    "ci-hygiene.txt",
+    "typecheck.txt"
+  ],
+  "finalStagedWhitespaceCheck": "pass after log whitespace normalization"
+}

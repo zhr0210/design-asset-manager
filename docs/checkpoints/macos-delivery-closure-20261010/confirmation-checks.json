@@ -1,0 +1,126 @@
+{
+  "recordedAt": "2026-10-09T17:07:28.790199+00:00",
+  "kind": "engineering-confirmation",
+  "userPathAcceptance": false,
+  "checks": [
+    {
+      "check": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 7.177,
+      "log": "typecheck.txt"
+    },
+    {
+      "check": "clipboard-image-intake",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/clipboard-image-intake.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.934,
+      "log": "clipboard-image-intake.txt"
+    },
+    {
+      "check": "native-work-clipboard",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/native-work-clipboard.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 2.798,
+      "log": "native-work-clipboard.txt"
+    },
+    {
+      "check": "native-work-file-active",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/native-work-file-active.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.386,
+      "log": "native-work-file-active.txt"
+    },
+    {
+      "check": "work-zip-handoff",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/work-zip-handoff.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.003,
+      "log": "work-zip-handoff.txt"
+    },
+    {
+      "check": "work-handoff-cancellation",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/work-handoff-cancellation.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.796,
+      "log": "work-handoff-cancellation.txt"
+    },
+    {
+      "check": "native-batch-handoff",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/native-batch-handoff.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.342,
+      "log": "native-batch-handoff.txt"
+    },
+    {
+      "check": "native-zip-handoff",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/native-zip-handoff.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.423,
+      "log": "native-zip-handoff.txt"
+    },
+    {
+      "check": "native-work-dock",
+      "command": [
+        "node",
+        "scripts/run-electron-node-test.mjs",
+        "scripts/native-work-dock.test.ts"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.594,
+      "log": "native-work-dock.txt"
+    },
+    {
+      "check": "native-work-paste-view",
+      "command": [
+        "node",
+        "scripts/native-work-paste-view.test.mjs"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.616,
+      "log": "native-work-paste-view.txt"
+    },
+    {
+      "check": "native-work-window-activation",
+      "command": [
+        "node",
+        "scripts/native-work-window-activation.test.mjs"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.097,
+      "log": "native-work-window-activation.txt"
+    }
+  ]
+}

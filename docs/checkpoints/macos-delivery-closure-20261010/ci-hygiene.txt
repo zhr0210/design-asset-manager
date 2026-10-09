@@ -1,0 +1,3 @@
+
+> design-asset-manager@1.0.0 test-ci-hygiene
+> node scripts/run-ts-test.mjs scripts/ci-hygiene.test.ts

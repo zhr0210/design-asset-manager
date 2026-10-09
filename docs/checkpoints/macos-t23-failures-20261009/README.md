@@ -1,6 +1,6 @@
 # Mac T23 失败项检查点
 
-权威状态见 [续收敛记录](../../handoff/MACOS-T23-FAILURES-20261009.md)。当前代码7ee0a0d／构建58700；解锁后的最终普通4B分析→即时释放→整Host保存重开已成立，仍不把内部回归或旧476278当新构建证据。
+权威状态见 [续收敛记录](../../history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-FAILURES-20261009.md)。当前代码7ee0a0d／构建58700；解锁后的最终普通4B分析→即时释放→整Host保存重开已成立，仍不把内部回归或旧476278当新构建证据。
 
 - `pi-rgb-v1-real*.json`：b8bff普通界面固定3次真实观察，非fixture。
 - `native-work-window.jpg`：b8bff真实原生窗口三图像素；原生隐藏／恢复另有操作记录。

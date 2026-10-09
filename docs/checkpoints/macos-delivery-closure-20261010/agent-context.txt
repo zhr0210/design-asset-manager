@@ -1,0 +1,10 @@
+[OK] AGENTS.md
+[OK] TASK.md
+[OK] .codeindex/module-map.json
+[OK] .codeindex/module-map.schema.json
+[OK] .codeindex/forbidden-paths.json
+[OK] .codeindex/tests-map.json
+[OK] scripts/agent-context-router.mjs
+[OK] scripts/agent-context-router.test.mjs
+[OK] Tracked first-party source ownership 789/789 files
+[PASS] Agent context check passed

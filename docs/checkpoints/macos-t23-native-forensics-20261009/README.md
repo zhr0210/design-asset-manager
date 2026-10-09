@@ -1,6 +1,6 @@
 # Mac 原生与历史取证检查点
 
-状态与版本见 [当前记录](../../handoff/MACOS-T23-NATIVE-FORENSICS-20261009.md)。8bd已普通启动、开库并在现存Finder元数据条件下实际生成新副本；物理拖入及最终保存重开等待手动动作回执。
+状态与版本见 [当前记录](../../history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-NATIVE-FORENSICS-20261009.md)。8bd已普通启动、开库并在现存Finder元数据条件下实际生成新副本；物理拖入及最终保存重开等待手动动作回执。
 
 - preview-original-received.jpg／preview-file-integrity.json：58700原生正式交付与默认接收。
 - photoshop-isolated-public-received.jpg：用户授权的公开咖啡图实际Photoshop接收，独立窗口不含私人文档标签；交付副本来自58700。

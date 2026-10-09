@@ -8,7 +8,7 @@ Managed prepare 返回属于该消费者的释放句柄；视觉、独立标签�
 
 Python 绑定保留 venv 入口，不解析成丢失环境的系统解释器；从 pyvenv/version 选择实际 site-packages。Mac 正式选择器选择可信环境根后由 Main 拼接 bin/python3，避免通用文件选择器丢失符号链接入口。Worker 的 POSIX 峰值使用真实 getrusage，Darwin bytes/Linux KiB 分别转换。
 
-本轮 M4/24GiB：官方固定运行包内部实际执行、2B Q4_K_M/Q8_0 Metal 公共图推理与物理释放通过；正式 Browser 库存安装已完成，最终 UI 加载/分析/重开因 macOS 锁定尚未验收。精确版本/证据见 [Mac迁移](../../../../docs/handoff/MACOS-MIGRATION-20261009.md)。以下保留 Windows/旧分支证据，32项旧 Runtime 通道仍禁用。
+本轮 M4/24GiB：官方固定运行包内部实际执行、2B Q4_K_M/Q8_0 Metal 公共图推理与物理释放通过；正式 Browser 库存安装已完成，最终 UI 加载/分析/重开因 macOS 锁定尚未验收。精确版本/证据见 [Mac迁移](../../../../docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-MIGRATION-20261009.md)。以下保留 Windows/旧分支证据，32项旧 Runtime 通道仍禁用。
 
 ---
 

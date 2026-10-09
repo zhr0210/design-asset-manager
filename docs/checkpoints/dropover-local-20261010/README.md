@@ -1,6 +1,6 @@
 # Dropover 本地检查点
 
-准确状态见 [2026-10-10 接续](../../handoff/DROPOVER-LOCAL-CHECKPOINT-20261010.md)。当前证据分属 aa5 图像处理与 bd59 停靠/ZIP，两者不可互换。
+准确状态见 [2026-10-10 接续](../../history/handoff-snapshots/macos-20261009-20261010/DROPOVER-LOCAL-CHECKPOINT-20261010.md)。当前证据分属 aa5 图像处理与 bd59 停靠/ZIP，两者不可互换。
 
 图片是普通原生窗口及公开 Preview 接收。JSON 是已授权公开文件、独立 ZIP/元数据读取和非秘密持久列签名；未包含完整 receipt、原生 actor、账号或秘密配置。
 

@@ -4,7 +4,7 @@ Main 在 macOS 接 `createMacVideoRuntime`，复用原 WorkVideoRuntime/Host/持
 
 解码通过同一Governor串行准入，512MiB许可、384MiB自有进程峰值监测；它是有界监测/终止保护，不能冒称Windows Job Object硬内存上限。取消/超时只操作持有的ChildProcess，实际close归还许可；退出未确认保持隔离与占用。参考帧保留请求/实际100ns时间与PNG，不覆盖原件。内部生成H.264的实际解码、时间/PNG、预取消、close记账和真实物理内存查询通过；Blender官方视频下载本轮HTTP403，真实视频/原生交接未验收。
 
-见 [迁移记录](../../../docs/handoff/MACOS-MIGRATION-20261009.md)。以下保留Windows及历史证据。
+见 [迁移记录](../../../docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-MIGRATION-20261009.md)。以下保留Windows及历史证据。
 
 ---
 
@@ -86,4 +86,4 @@ them even when unfocused. CSS backdrop filtering alone cannot blur other applica
 foreground colors track system appearance. Images stay unfiltered. Non-macOS uses a legible solid fallback,
 not an unverified imitation of native desktop blur. See DESIGN.md for the window interaction contract.
 
-2026-10-09 Mac原生续验：交付记录的assetId决定拖动图标，不能使用工作集第一成员。Finder .DS_Store仅作为有界普通文件元数据识别，不读内容、不接受链接；其他未知根内容、角色／成员／来源、64目录与1 GiB预算保持。正式接收与物理拖动按[本轮记录](../../../docs/handoff/MACOS-T23-NATIVE-FORENSICS-20261009.md)分别记证据。
+2026-10-09 Mac原生续验：交付记录的assetId决定拖动图标，不能使用工作集第一成员。Finder .DS_Store仅作为有界普通文件元数据识别，不读内容、不接受链接；其他未知根内容、角色／成员／来源、64目录与1 GiB预算保持。正式接收与物理拖动按[本轮记录](../../../docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-NATIVE-FORENSICS-20261009.md)分别记证据。

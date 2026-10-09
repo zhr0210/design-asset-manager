@@ -1,3 +1,5 @@
+> 历史批次记录；当前状态以 [CURRENT-STATE](../../../handoff/CURRENT-STATE.md) 为准。旧候选、等待与资格保持原时间身份。
+
 # Mac T23 失败项续收敛（2026-10-09）
 
 当前源码检查点 `7ee0a0d`，分支 `codex/macos-migration`；GitHub main 再核对仍为 `6b86ef05e558229e2bd87998101ca5678bc228cc`。未推送。当前普通 Host 已启动最终构建 **dam-58700bb81142e924**，782 产品输入，source SHA `58700bb81142e9240eea006b540800a2e2e3e74181e4157a19cebe275efab2da`，UTC 2026-10-09T10:23:28.565Z。
@@ -57,4 +59,4 @@ Pi最新蓝／红、gpt-6-luna／low通过记录也在最终重开后回读；�
 
 最终4B释放首次 Playwright 点击在布局过渡中定位失败、未触发；重新读取当前AX后有效点击成立。这是工具定位中断，不伪记为模型释放失败；“有效点击→物理退出”与“描述保存→导航到释放页”是不同时间。未靠等待120秒超时才归零。
 
-精选 [证据检查点](../checkpoints/macos-t23-failures-20261009/README.md)，完整本地 `.scratch/t23-failures-20261009/evidence/`。其他作者的 AGENTS.md／ui-ux-acceptance.md WIP 保持，不纳入提交。
+精选 [证据检查点](../../../checkpoints/macos-t23-failures-20261009/README.md)，完整本地 `.scratch/t23-failures-20261009/evidence/`。其他作者的 AGENTS.md／ui-ux-acceptance.md WIP 保持，不纳入提交。

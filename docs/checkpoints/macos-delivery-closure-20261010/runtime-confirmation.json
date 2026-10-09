@@ -1,0 +1,53 @@
+{
+  "kind": "read-only-runtime-confirmation",
+  "native": {
+    "exitCode": 0,
+    "result": {
+      "arch": "arm64",
+      "platform": "darwin",
+      "electron": "30.5.1",
+      "node": "20.16.0",
+      "modules": "123",
+      "sqlite": "12.10.0",
+      "sharp": "0.34.5",
+      "actualSqliteInMemory": true,
+      "actualSharpDecode": true
+    }
+  },
+  "python": {
+    "exitCode": 0,
+    "result": {
+      "python": "3.12.11",
+      "machine": "arm64",
+      "packages": {
+        "torch": "2.14.1",
+        "transformers": "4.57.6",
+        "numpy": "2.2.6",
+        "onnxruntime": "1.23.2",
+        "rapidocr-onnxruntime": "1.4.4",
+        "opencv-python": "4.11.0.86"
+      },
+      "importsPassed": true
+    }
+  },
+  "pipCheck": {
+    "exitCode": 1,
+    "result": "No module named pip",
+    "cause": "uv-created environment has no pip module; package/import checks were not failed dependencies"
+  },
+  "activeProfileRead": false,
+  "credentialsRead": false,
+  "activeLibraryWrites": false,
+  "uvPipCheck": {
+    "command": [
+      "uv",
+      "pip",
+      "check",
+      "--python",
+      ".scratch/macos-migration-20261009/python/bin/python"
+    ],
+    "exitCode": 0,
+    "result": "Using Python 3.12.11 environment at: .scratch/macos-migration-20261009/python\nChecked 70 packages in 9ms\nAll installed packages are compatible"
+  },
+  "allApplicableRuntimeChecksPassed": true
+}

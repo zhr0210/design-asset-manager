@@ -1,0 +1,28 @@
+{
+  "kind": "read-only-current-source-vs-existing-build",
+  "verification": "execute actual build-identity hashing; replace only final generated-file write with equality check",
+  "sourceDigestMatches": true,
+  "storedIdentity": {
+    "buildId": "dam-6d6fa6a0230cf98d",
+    "sourceDigest": "6d6fa6a0230cf98d874606417e3c85bf993e07f7bf043ebc0567c63fb120cc39",
+    "builtAt": "2026-10-09T16:33:21.505Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 790
+  },
+  "artifacts": {
+    "out/main/index.js": {
+      "bytes": 1743323,
+      "sha256": "49a67bb6c82c04418b02733c35305640ccd25cc65aa38d935fe8d5ecf94b3778"
+    },
+    "out/preload/index.cjs": {
+      "bytes": 47768,
+      "sha256": "7b8a64cdcc6e4b38ebba6f38f9a4a6433710b01dfeac061b943cd2bd63a43aea"
+    },
+    "out/preload/work-window.cjs": {
+      "bytes": 2212,
+      "sha256": "405b515be8f3cdd81b826561f2e063366c732c740a6a7ec4a2924e71a00dfc07"
+    }
+  },
+  "buildIdentityFileWritten": false,
+  "productFilesWritten": false
+}

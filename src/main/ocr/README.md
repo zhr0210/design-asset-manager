@@ -4,7 +4,7 @@ Mac 使用独立 Python 3.12.11/RapidOCR 1.4.4，det/cls/rec 从 ModelScope Rapi
 
 最大1600输入实测约875MB，原1GiB工作集预留在25%余量要求下不足。Mac改为1280MiB Worker预留，并把全部增量计入共享Governor；Windows原预留不变。输入、识字/空图挑战、25%余量、运行时指纹与实际close要求均保留。POSIX峰值采用真实getrusage，实际测量而非固定资格。当前内部Runtime已真实产生资格并识别指定公开page/coffee；活动profile资格与素材UI保存仍待Mac手动解锁后验收，不能转记内部结果为用户完成。
 
-见 [迁移记录](../../../docs/handoff/MACOS-MIGRATION-20261009.md)。下面是历史。
+见 [迁移记录](../../../docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-MIGRATION-20261009.md)。下面是历史。
 
 ---
 

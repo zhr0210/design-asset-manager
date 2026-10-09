@@ -1,0 +1,39 @@
+{
+  "archived": [
+    "docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-MIGRATION-20261009.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-20261009.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-FAILURES-20261009.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-NATIVE-FORENSICS-20261009.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-NATIVE-CLICK-20261009.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/DROPOVER-INTEGRATION-20261009.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/DROPOVER-LOCAL-CHECKPOINT-20261010.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/DROPOVER-FEATURE-CATALOG-20261009.json",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/TASK-before-closure.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/CURRENT-STATE-before-closure.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md"
+  ],
+  "rewrittenReferences": [
+    "docs/checkpoints/dropover-local-20261010/README.md",
+    "docs/checkpoints/macos-t23-20261009/README.md",
+    "docs/checkpoints/macos-t23-failures-20261009/README.md",
+    "docs/checkpoints/macos-t23-native-click-20261009/README.md",
+    "docs/checkpoints/macos-t23-native-forensics-20261009/README.md",
+    "src/main/ocr/README.md",
+    "src/main/services/ai-runtime/README.md",
+    "src/main/work-mode/README.md"
+  ],
+  "protectedWipSha256": {
+    "AGENTS.md": "0b9046f790d476ce9b69efff3f7bda67f6ac6707a11c1fe48864a5178062d710",
+    "docs/agents/ui-ux-acceptance.md": "9e682fe862cf2deae8536c5a13906e3dc53a3686d1214e56aee36da3bb101ec4"
+  },
+  "currentEntries": {
+    "beforeLines": {
+      "TASK.md": 238,
+      "CURRENT-STATE.md": 247
+    },
+    "afterLines": {
+      "TASK.md": 25,
+      "CURRENT-STATE.md": 44
+    }
+  }
+}

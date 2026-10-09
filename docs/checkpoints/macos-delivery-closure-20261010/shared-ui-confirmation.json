@@ -1,0 +1,20 @@
+{
+  "kind": "ordinary-existing-iab-readback",
+  "url": "http://127.0.0.1:62497/#/library",
+  "ordinaryIndependentSession": true,
+  "workSet": "T23 Mac 联合参考",
+  "references": 4,
+  "saved": true,
+  "desktopWindowVisible": true,
+  "names": [
+    "public-astronaut",
+    "public-coffee",
+    "public-page",
+    "Clipboard-f49b98d319b9a37b"
+  ],
+  "note": "T23 未保存草稿：请重开后保留这段中英文 draft note 20261009。",
+  "newModelExecution": false,
+  "newPaste": false,
+  "newHostReopen": false,
+  "evidenceSource": "CUA existing IAB accessibility state, 2026-10-10"
+}

@@ -1,0 +1,2 @@
+Docs sync check
+OK: source and governance/index changes are both present.

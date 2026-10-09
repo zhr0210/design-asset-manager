@@ -1,0 +1,1 @@
+Production temp-SQLite batch handoff: correct ordered files/cursor, one OS call; duplicate, bounds, sender/token, foreign actor, modified copy, unavailable asset and member revoked during preview reject without partial drag.

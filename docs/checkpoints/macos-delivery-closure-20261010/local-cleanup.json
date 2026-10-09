@@ -1,0 +1,443 @@
+{
+  "recordedAt": "2026-10-09T17:13:09.575876+00:00",
+  "method": "explicit owned paths only; no git clean/reset/stash or profile/library changes",
+  "removed": [
+    {
+      "path": ".scratch/macos-migration-20261009/python313-unused",
+      "reason": "unused Python environment",
+      "bytes": 10436593,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/llama-api-asset.tar.gz",
+      "reason": "byte-identical duplicate official runtime archive",
+      "bytes": 11971406,
+      "kind": "file",
+      "sha256": "740288ec6887be94280a5dfa25b5e23a78285cab104519e6c7e218904ee82459"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/Dropover-arm64",
+      "reason": "reproducible third-party analysis copy",
+      "bytes": 12882656,
+      "kind": "file",
+      "sha256": "b5dfa561d25dadff69ddc22376b626e32175f8fb1dac00a32fe08795707c2239"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/DropoverCore-arm64",
+      "reason": "reproducible third-party analysis copy",
+      "bytes": 1181520,
+      "kind": "file",
+      "sha256": "4bd964b5a0b3a3cad58e474ce8ec480058ae41c7cca7c998df8db0dce6ce0770"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/packaged-audit/WorkWindowCommandBar.draft.tsx",
+      "reason": "unadopted deferred command-bar draft",
+      "bytes": 8505,
+      "kind": "file",
+      "sha256": "38f7f9cbae7f67daf134c00f77065988d7b8c54d9e3795821aff41b2c3be2d85"
+    },
+    {
+      "path": "dist-temp",
+      "reason": "generated test output",
+      "bytes": 23228008,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/isolated-app.sqlite",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 12288,
+      "kind": "file",
+      "sha256": "f57892084b55c0e117a46762137292d3889967dd2b12e324a025e638db7ac5e2"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/packages",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 24925833,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/real-model-7YCMBZNbXNKD",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 113919669,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/real-model-h0eZSOwVUn1j",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 113919669,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/real-ocr-v0aHLQ2CE3AK",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 20480,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/run-8bmyVfoAyg96",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 24938121,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/run-bRpEGGEeaDXg",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 113919669,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/runtime-package-test/run-bmUKX61GYez4",
+      "reason": "finished isolated integration-test run; production uses userData/managed-gguf-runtime",
+      "bytes": 113919669,
+      "kind": "directory"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/finder-real-batch-received.json",
+      "reason": "exact duplicate of docs/checkpoints/dropover-local-20261010/finder-real-batch-received.json",
+      "bytes": 53,
+      "kind": "file",
+      "sha256": "8cc18963538ed787699f44805092a9c8cb60a2acc22eadf73d910698229d6f72"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/open-reuse-real-result.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-bugfix-delivery-20261010/open-reuse-real-result.json",
+      "bytes": 326,
+      "kind": "file",
+      "sha256": "dc2fe8bea1ffc67983168e6fdb1450e0bfd5e620b9d0044dc50f765748892732"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/build-clipboard-open-final.txt",
+      "reason": "exact duplicate of docs/checkpoints/macos-bugfix-delivery-20261010/build-clipboard-open-final.txt",
+      "bytes": 2584,
+      "kind": "file",
+      "sha256": "0e33e63d7295b5f9286781beb9f007f56bf44bab95aa9b20a7d7c90094924019"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/coffee-processed-preview-real-metadata.json",
+      "reason": "exact duplicate of docs/checkpoints/dropover-local-20261010/coffee-processed-preview-real-metadata.json",
+      "bytes": 104,
+      "kind": "file",
+      "sha256": "f7b92e4242a68cd2a7d1316af00749c4002238728ce229e0ecb3804dc3fde79f"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/clipboard-real-protection.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-bugfix-delivery-20261010/clipboard-real-protection.json",
+      "bytes": 2036,
+      "kind": "file",
+      "sha256": "bad9d6fc9ca0dc2bb8756f57b4bf8b4775016ae1ff5587ce836a82a0effff50b"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/clipboard-real-pixels.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-bugfix-delivery-20261010/clipboard-real-pixels.json",
+      "bytes": 352,
+      "kind": "file",
+      "sha256": "36d9bb2321ef6f5f640b4ee42ef1d9e525c4cefaeb946f139449516a266cbaa1"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/clipboard-real-reopen-result.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-bugfix-delivery-20261010/clipboard-real-reopen-result.json",
+      "bytes": 1332,
+      "kind": "file",
+      "sha256": "dfd1966a73bec6133a79e53894e9b2c88ffb5f9b7df8f1c119a198159e69847c"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/three-prepared-public-files.json",
+      "reason": "exact duplicate of docs/checkpoints/dropover-local-20261010/three-prepared-public-files.json",
+      "bytes": 792,
+      "kind": "file",
+      "sha256": "a625f45b97363f8912e417587a27ab3aab84019cf5c9e32193d2dcfb71be1d88"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/context-delivery-final.txt",
+      "reason": "exact duplicate of docs/checkpoints/macos-bugfix-delivery-20261010/context-delivery-final.txt",
+      "bytes": 233,
+      "kind": "file",
+      "sha256": "b17847889df19d6c8be74512f5501c91cec458b1e994e95a20be7d5eff2a65f7"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/real-zip-independent-check.json",
+      "reason": "exact duplicate of docs/checkpoints/dropover-local-20261010/real-zip-independent-check.json",
+      "bytes": 834,
+      "kind": "file",
+      "sha256": "6f971b37ddb7081b98c1f376527192db42e1f1fc3377d354b8f66949e3b19e9b"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/desktop-real-batch-received.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-bugfix-delivery-20261010/desktop-real-batch-received.json",
+      "bytes": 586,
+      "kind": "file",
+      "sha256": "9f7d842639c7d0020909718df8e3bbd1722639e95219c669b4800bcfbb218054"
+    },
+    {
+      "path": ".scratch/dropover-integration-20261009/coffee-processed-real-metadata.json",
+      "reason": "exact duplicate of docs/checkpoints/dropover-local-20261010/coffee-processed-real-metadata.json",
+      "bytes": 121,
+      "kind": "file",
+      "sha256": "d25a55cc1c676a64e6589fcc25b567d3eda3dee435661669a412621074518644"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/evidence/public-materials.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-migration-20261009/public-materials.json",
+      "bytes": 1419,
+      "kind": "file",
+      "sha256": "95734a104ed820950ef51d18436790ffaecddc30aaa673e43618a5bb49bb2e0f"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/evidence/persistence-before-reopen.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-migration-20261009/persistence-before-reopen.json",
+      "bytes": 2050,
+      "kind": "file",
+      "sha256": "8ee8c55528f8f1a09147722f197bed4bc84aa0b167e28524f08d99527820c10b"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/evidence/python-lock.txt",
+      "reason": "exact duplicate of docs/checkpoints/macos-migration-20261009/python-lock.txt",
+      "bytes": 1228,
+      "kind": "file",
+      "sha256": "4aee4c71da25f2264c83e4ba91b8b8cea7008052810cb934eb907b3f7be6d13f"
+    },
+    {
+      "path": ".scratch/macos-migration-20261009/evidence/persistence-after-reopen.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-migration-20261009/persistence-after-reopen.json",
+      "bytes": 2050,
+      "kind": "file",
+      "sha256": "8ee8c55528f8f1a09147722f197bed4bc84aa0b167e28524f08d99527820c10b"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/actual-execution-modes-final.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/actual-execution-modes-final.json",
+      "bytes": 1854,
+      "kind": "file",
+      "sha256": "00cd0d067e058c3f72ce0c1b477e9b60c2749d5fb7617dd397f3b3a957edb7a9"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/account-delivery-public.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/account-delivery-public.json",
+      "bytes": 288,
+      "kind": "file",
+      "sha256": "d847d1f1769910986a622b1a6401d291b9ad295528f4d3e7ed8ff5b392f7706d"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/pagination-164.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/pagination-164.json",
+      "bytes": 22740,
+      "kind": "file",
+      "sha256": "68a25a3cb8961e72fd785a9b04e2ee28eb8e7e8eb494784b142dc3e2e22ef09f"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/derived-index-fault.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/derived-index-fault.json",
+      "bytes": 504,
+      "kind": "file",
+      "sha256": "9005cbd043733d09602c411224601e36d53bdad4fd0155ca9d7b35fa83e0d31d"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/account-refresh-real-outcome.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/account-refresh-real-outcome.json",
+      "bytes": 517,
+      "kind": "file",
+      "sha256": "53a969b73045e665ecc5450767b2288ef730a024aa321425115d24c69f8f7613"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/background-delivery-public.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/background-delivery-public.json",
+      "bytes": 483,
+      "kind": "file",
+      "sha256": "a5ee10ddc8ea8753e39e7ec474cf15554ca85215680d238932e2623d8662e485"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/retrieval-cancel-final.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/retrieval-cancel-final.json",
+      "bytes": 14053,
+      "kind": "file",
+      "sha256": "63c48709418491054d7747a1a5d0ec40d682920459bd4dd791fa6c98cc2a0085"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/search-color-hard-filter.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/search-color-hard-filter.json",
+      "bytes": 3467,
+      "kind": "file",
+      "sha256": "5075c803b59ded1d857e956dc99236153402d58c948e27f36873d07c2eff1855"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/2b-hybrid-final-analysis.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/2b-hybrid-final-analysis.json",
+      "bytes": 1456,
+      "kind": "file",
+      "sha256": "eae494ed5d6f1dcb731eed7618f6d7e39587f64e52fd2d4e4250f584cb58d082"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/search-description-source.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/search-description-source.json",
+      "bytes": 2647,
+      "kind": "file",
+      "sha256": "491dc1f618e1f10f87eb3b3928b10de9f8e4a3006432c0f0d673e5f27c86979d"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/retrieval-cancel-final.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/retrieval-cancel-final.jpg",
+      "bytes": 197128,
+      "kind": "file",
+      "sha256": "1dad9ddaeace4ca7df883edf0f270f04e4b04ddb0cd50628608a95235c169690"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/search-title-source.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/search-title-source.json",
+      "bytes": 2561,
+      "kind": "file",
+      "sha256": "a2408643b74db5c47134881da5b6527b8784693b6bd1c8cf38411a632a3f9532"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/ai-folder-delivery.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/ai-folder-delivery.json",
+      "bytes": 6300,
+      "kind": "file",
+      "sha256": "dfd592c055daaeb6e8b5b7243af7c110dd1b6f968f94bca96fc45db2cbaaaba1"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/delivery-reopen-comparison.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/delivery-reopen-comparison.json",
+      "bytes": 432,
+      "kind": "file",
+      "sha256": "898b0941108a0c0238b2e8e165d458e6046e5c075a313dc5236e892451442347"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/retrieval-index-restored.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/retrieval-index-restored.jpg",
+      "bytes": 171678,
+      "kind": "file",
+      "sha256": "82d47368442f2bd22811b8453ee5ae6da01c7ab786b6ddb8bf43e1649b75f7cd"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/ai-folder-delivery.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/ai-folder-delivery.jpg",
+      "bytes": 164427,
+      "kind": "file",
+      "sha256": "4572e829befb2bf9d21ee7dbcf68b38ea49add6d34fe99f1926140e66424ab78"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/search-color-cleared.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/search-color-cleared.json",
+      "bytes": 7983,
+      "kind": "file",
+      "sha256": "37bde4b392ec59e2e268b4e55c5ad11390c10eab7e0e32569d4bc3527018df90"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/persistence-comparison.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/persistence-comparison.json",
+      "bytes": 558,
+      "kind": "file",
+      "sha256": "3de6196c4d1ea521ff548ff4db87bd9b5194b5bd7253a24a2d5c68baa51a9746"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/4b-cpu-active-test-failure.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/4b-cpu-active-test-failure.json",
+      "bytes": 1073,
+      "kind": "file",
+      "sha256": "ed708c3b0bb350a00221b7e73d5e7d229396c62ba30de1c9e532fd3674ad7411"
+    },
+    {
+      "path": ".scratch/t23-macos-20261009/evidence/workset-delivery.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-20261009/workset-delivery.jpg",
+      "bytes": 103402,
+      "kind": "file",
+      "sha256": "c23508b094911430fcdec69bff5a1a79388f5a74a88e7d9e736504c486be762a"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/58700-reopened-caption.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/58700-reopened-caption.json",
+      "bytes": 1116,
+      "kind": "file",
+      "sha256": "ad9db2cc9b18edeaf8e87c043b9d74ec1850cc01da07a15c51fcfdfda9928888"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/final-4b-cpu-description.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/final-4b-cpu-description.jpg",
+      "bytes": 66535,
+      "kind": "file",
+      "sha256": "450622554667f85f61d847abd058f53cfc6be237206fe2efcddb11a86a435c93"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/58700-workset-reopened.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/58700-workset-reopened.json",
+      "bytes": 1665,
+      "kind": "file",
+      "sha256": "61f3aef52e704093cc90439b283d71c29a17bfb62f484d42a3a5cf0e1f77ac16"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/58700-release-proof.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/58700-release-proof.json",
+      "bytes": 1093,
+      "kind": "file",
+      "sha256": "e0e92105524c1deb0e7824f8961358f4ca5ac56d16f5f1f3dce091ae372fedab"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/native-work-window.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/native-work-window.jpg",
+      "bytes": 155493,
+      "kind": "file",
+      "sha256": "1b3c3e68a4757b3f981c60ac5a3d9f86f002e68cf78c6d576fa4b8a6d69ea704"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/pi-rgb-v1-real-2.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/pi-rgb-v1-real-2.json",
+      "bytes": 394,
+      "kind": "file",
+      "sha256": "6f314e7af180997167e591ae48c36e3f7dbe7d7925de1b79e8e091340a00618d"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/58700-pi-reopened.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/58700-pi-reopened.json",
+      "bytes": 430,
+      "kind": "file",
+      "sha256": "be33790dbf1d8e9d2fb06569f2a676a24b0939e4c13418e8d2b6cb28f61ef0f3"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/58700-reopened-caption-visible.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/58700-reopened-caption-visible.jpg",
+      "bytes": 62607,
+      "kind": "file",
+      "sha256": "311de7d35850b7cc7442f7b712308d746455a49a6a4118acf6f16284473d8c09"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/58700-description-saved.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/58700-description-saved.jpg",
+      "bytes": 67345,
+      "kind": "file",
+      "sha256": "efbdccc15c16031bbacdfb56bfa887e38b13c0b4a1602c1fd11872259cddd245"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/pi-rgb-v1-real-3.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/pi-rgb-v1-real-3.json",
+      "bytes": 394,
+      "kind": "file",
+      "sha256": "97927e07e9653353ce776e37e2d19a40f698e94e5b60d503fce21c5c7ce641a3"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/58700-released.jpg",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/58700-released.jpg",
+      "bytes": 85990,
+      "kind": "file",
+      "sha256": "e2378feb7be6d97f164476337af18d2395f8b7478e2900a1b9aa6fcb8105829f"
+    },
+    {
+      "path": ".scratch/t23-failures-20261009/evidence/pi-rgb-v1-real.json",
+      "reason": "exact duplicate of docs/checkpoints/macos-t23-failures-20261009/pi-rgb-v1-real.json",
+      "bytes": 394,
+      "kind": "file",
+      "sha256": "32218c88e7ad083713b77f062ab5e12a34452e411be56ade78f7992f7623e8a6"
+    }
+  ],
+  "removedBytes": 566447193,
+  "kept": [
+    ".scratch/macos-migration-20261009/python",
+    ".scratch/macos-migration-20261009/ocr",
+    ".scratch/macos-migration-20261009/public-sources",
+    ".scratch/macos-migration-20261009/llama-b11429-bin-macos-arm64.tar.gz",
+    ".scratch/macos-migration-20261009/runtime-package-test (empty root required by mkdtemp)",
+    ".scratch/t23-macos-20261009/library-before-index-damage",
+    ".scratch/t23-macos-20261009/bulk",
+    ".scratch/t23-macos-20261009/stress",
+    "all unique evidence / runtime / model / profile / library / handoff copies / .git / other WIP"
+  ]
+}
