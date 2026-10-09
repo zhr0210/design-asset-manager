@@ -23,7 +23,8 @@ try{
  const state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!},device='device:handoff-test'
  const catalog=await host.readWorkSets(scope,device)
  const created=await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Fixture two distinct images',assetIds:[first.id,second.id],colors:[],columns:2,note:''}}},device)
- const set=created.sets[0],files=createWorkFileHandoffs({host,root:path.join(root,'handoffs'),open:async()=>'',trash:async()=>{throw Error('NOT_USED')}})
+ const set=created.sets[0],handoffRoot=path.join(root,'handoffs'),files=createWorkFileHandoffs({host,root:handoffRoot,open:async()=>'',trash:async()=>{throw Error('NOT_USED')}})
+ await fs.mkdir(handoffRoot);await fs.writeFile(path.join(handoffRoot,'.DS_Store'),Buffer.alloc(6148))
  const media=createWorkMediaController({host,files,changed(){}}),owner={}
  let layout!:WorkWindowLayout,captured:{file:string;icon:Uint8Array}|undefined
  controller=createWorkWindowController({host,media,deviceId:device,theme:()=> 'light',areas:()=>[{x:0,y:0,width:1200,height:900}],changed(){},hideMain(){},locate(){},createWindow:input=>{
@@ -37,6 +38,13 @@ try{
  assert.deepEqual(Buffer.from(captured.icon),Buffer.from(await host.readPreview(second.id)),'native cursor must show the delivered second image, not first workset member')
  assert.notDeepEqual(Buffer.from(captured.icon),Buffer.from(await host.readPreview(first.id)))
  assert.deepEqual(await fs.readFile(captured.file),await fs.readFile(sources[1]))
+ assert.equal((await files.list({...scope,setId:set.id,assetId:second.id})).length,1)
+ await fs.writeFile(path.join(handoffRoot,'unexpected.txt'),'fixture')
+ await assert.rejects(files.list({...scope,setId:set.id,assetId:second.id}),/未知内容/)
+ await fs.unlink(path.join(handoffRoot,'unexpected.txt'));await fs.unlink(path.join(handoffRoot,'.DS_Store'))
+ await fs.symlink(sources[0],path.join(handoffRoot,'.DS_Store'))
+ await assert.rejects(files.list({...scope,setId:set.id,assetId:second.id}),/系统元数据/)
+ await fs.unlink(path.join(handoffRoot,'.DS_Store'))
  console.log('Production image Copy/Host/handoff/controller: second-member file and cursor agree; wrong native sender rejected. Controlled OS port; physical drop is separately verified.')
 }finally{
  await controller?.drain();await host.close()

@@ -35,6 +35,26 @@ export function createWorkFileHandoffs(input: {
     const records = new Map<string, HeldHandoff>(), sha = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
     let queue: Promise<unknown> = Promise.resolve();
     const serialize = <T>(fn: () => Promise<T>) => { const next = queue.then(fn); queue = next.catch(() => { }); return next; };
+    const retainedDirectories = async () => {
+        const rootInfo = await fs.lstat(input.root);
+        if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw Error('交付目录无效。');
+        const entries = await fs.readdir(input.root, { withFileTypes: true });
+        const directories: import('node:fs').Dirent[] = [];
+        let metadataBytes = 0;
+        for (const entry of entries) {
+            if (entry.name === '.DS_Store') {
+                // Finder metadata is neither a receipt nor an import source.
+                // Never read it, follow a link, or ignore arbitrary root files.
+                const info = await fs.lstat(path.join(input.root, entry.name));
+                if (!info.isFile() || info.isSymbolicLink() || info.size > 1024 * 1024) throw Error('交付目录的系统元数据无效，请检查。');
+                metadataBytes += info.size;
+            } else {
+                if (!entry.isDirectory() || entry.isSymbolicLink() || !/^[a-f0-9-]{36}$/.test(entry.name)) throw Error('交付目录包含未知内容，请检查。');
+                directories.push(entry);
+            }
+        }
+        return { directories, metadataBytes };
+    };
     const load = async (id: string) => {
         if (!/^handoff:[a-f0-9-]{36}$/.test(id))
             throw Error('交付记录无效。');
@@ -107,8 +127,8 @@ export function createWorkFileHandoffs(input: {
             const rootInfo = await fs.lstat(input.root);
             if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink())
                 throw Error('交付目录无效。');
-            const directories = await fs.readdir(input.root, { withFileTypes: true });
-            let retainedBytes = 0;
+            const { directories, metadataBytes } = await retainedDirectories();
+            let retainedBytes = metadataBytes;
             for (const dir of directories) {
                 if (!dir.isDirectory() || dir.isSymbolicLink() || !/^handoff-[a-f0-9-]{36}$/.test('handoff-' + dir.name))
                     throw Error('交付目录包含未知内容，请检查。');
@@ -154,7 +174,7 @@ export function createWorkFileHandoffs(input: {
             await input.host.readWorkMedia(scope);
             let dirs: import('node:fs').Dirent[];
             try {
-                dirs = await fs.readdir(input.root, { withFileTypes: true });
+                dirs = (await retainedDirectories()).directories;
             }
             catch (error) {
                 if ((error as NodeJS.ErrnoException).code === 'ENOENT')
