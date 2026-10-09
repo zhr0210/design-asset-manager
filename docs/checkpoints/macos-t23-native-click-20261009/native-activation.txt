@@ -1,0 +1,1 @@
+Actual native adapter accepts first Mac mouse, activates its own app before window focus on explicit show/readiness, preserves sandbox and Windows behavior. Controlled API test; physical mouse separately verified.

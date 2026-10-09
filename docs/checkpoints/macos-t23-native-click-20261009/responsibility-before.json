@@ -1,0 +1,8 @@
+{
+  "build": "dam-8bd31224e19a0b33",
+  "ownedHostPid": 81359,
+  "responsiblePid": 45326,
+  "responsibleExecutable": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+  "selfResponsible": false,
+  "scope": "one owned Host responsibility only; no argv/environment/memory/UI inventory read; diagnostic SPI not a product dependency"
+}

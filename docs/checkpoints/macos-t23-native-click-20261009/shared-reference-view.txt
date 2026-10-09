@@ -1,0 +1,22 @@
+✔ shared reference panel shows multiple real fixture previews; reorder/remove only affect references (806.45075ms)
+✔ save carries the original expected revision and accepts the catalog returned by the real model hook (68.0015ms)
+✔ dirty edits keep their baseline on remote updates; only explicit adoption permits the later revision (205.570541ms)
+✔ recovered input preserves its older baseline until reviewed explicit adoption (130.98825ms)
+✔ a recovered value equal to its old baseline still requires an explicit recovery choice (160.58975ms)
+✔ a deleted target cannot save normally and explicit Save As creates the preserved value (102.803542ms)
+✔ return flushes and suspends the draft; reopening retains input and original baseline (89.390417ms)
+✔ native controls use only the scoped windows/control seam and retain page edits (244.303666ms)
+✔ editing during save keeps a new draft based on the returned committed revision (126.957708ms)
+✔ editing during Save As never discards the later unsaved input (81.311708ms)
+✔ locating a reference flushes and closes before delivering the selected asset (54.87375ms)
+✔ discard review cannot save or remove input until explicit confirmation; cancel and Escape preserve it (179.101834ms)
+✔ confirmed discard restores the saved version and removes only the page draft without a library write (77.019167ms)
+✔ confirmed discard of a missing target closes the preserved editor without creating or deleting saved content (96.242333ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2474.294459

@@ -1,0 +1,1 @@
+Actual native Renderer: local click preview, no preview-URI drag, unprepared gesture only reveals preparation, prepared second-member dispatch and stale variant rejection. Controlled bridge; physical OS drag separately verified.

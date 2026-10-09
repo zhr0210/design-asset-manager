@@ -1,0 +1,1 @@
+Mac ordinary entry uses exact bundle LaunchServices, absolute root, wait/new and unchanged profile/browser args; Windows and isolated fixtures retain direct launch.
