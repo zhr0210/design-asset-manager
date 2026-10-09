@@ -1,5 +1,7 @@
 # 2026-10-09 macOS 迁移接线
 
+退出确认绑定每次 launch 的物理 close，独立于异步文件清理；旧 launch 的清理不能确认替代进程退出。未确认退出继续保持驻留许可和 unknown，整个 Host drain 仍等待已登记的清理完成。安装环境真实测试 `scripts/macos-real-vision-close-race.test.ts` 使用指定公开 profile 的只读模型/官方二进制、独立临时数据库；延迟清理和 TERM 交付是明确故障注入，不代替普通 UI 验收。
+
 正式 Main 复用原 Managed GGUF/消费者与 Governor，按目标选择固定 llama.cpp b11429 Mac arm64/x64 包，完整 SHA/有界 tar 检查后把受支持的 dylib 别名转换为普通文件。Apple Silicon Metal 方案只计同一 RAM 池；驱动/设备/采样未知不批准新 GPU 方案。Mac 自有子进程使用 source-bound libproc helper 读取创建身份、physical footprint 与 lifetime peak，仍仅以实际 close 释放许可。
 
 Python 绑定保留 venv 入口，不解析成丢失环境的系统解释器；从 pyvenv/version 选择实际 site-packages。Mac 正式选择器选择可信环境根后由 Main 拼接 bin/python3，避免通用文件选择器丢失符号链接入口。Worker 的 POSIX 峰值使用真实 getrusage，Darwin bytes/Linux KiB 分别转换。

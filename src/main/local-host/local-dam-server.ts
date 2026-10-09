@@ -34,7 +34,7 @@ export async function createLocalDamServer(input: LocalDamServerInput) {
   // Admission is per document, before effects; no result/credential is cached.
   const invocations = new WeakMap<BrowserClientContext, { highest: number; seen: Set<number> }>()
   const launches = new Map<string, number>()
-  let pendingLaunches = 0
+  let pendingLaunches: number[] = []
   let origin = ''
   let closed = false
   const secret = () => randomBytes(32).toString('hex')
@@ -46,6 +46,7 @@ export async function createLocalDamServer(input: LocalDamServerInput) {
     for (const [stream, owner] of session.streams) if (owner === context) { session.streams.delete(stream); stream.end() }
   }
   const cleanExpired = () => {
+    pendingLaunches = pendingLaunches.filter(expiry => expiry > Date.now())
     for (const [grant, expiry] of launches) if (expiry < Date.now()) launches.delete(grant)
     for (const [cookie, session] of sessions) if (session.expires < Date.now()) {
       for (const context of session.clients.values()) { authenticated.delete(context); input.disconnected?.(context); input.revoked?.(context) }
@@ -84,8 +85,8 @@ export async function createLocalDamServer(input: LocalDamServerInput) {
         return
       }
       if (request.method === 'GET' && url.pathname === '/launch') {
-        if (!pendingLaunches) { send(403, { code: 'START_DAM_LAUNCHER' }); return }
-        pendingLaunches--
+        if (!pendingLaunches.length) { send(403, { code: 'START_DAM_LAUNCHER' }); return }
+        pendingLaunches.shift()
         const grant = secret()
         launches.set(grant, Date.now() + 60_000)
         response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
@@ -205,7 +206,7 @@ export async function createLocalDamServer(input: LocalDamServerInput) {
   origin = `http://127.0.0.1:${(server.address() as { port: number }).port}`
   return Object.freeze({
     origin,
-    authorizeLaunch() { pendingLaunches = Math.min(pendingLaunches + 1, 8); return `${origin}/launch` },
+    authorizeLaunch() { pendingLaunches = [...pendingLaunches.filter(expiry => expiry > Date.now()).slice(-7), Date.now() + 60_000]; return `${origin}/launch` },
     isAuthenticated(context: unknown): context is BrowserClientContext { return authenticated.has(context as BrowserClientContext) },
     publish(name: string, payload: unknown) {
       const data = JSON.stringify({ name, payload })

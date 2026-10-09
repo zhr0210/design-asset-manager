@@ -148,10 +148,10 @@ await test('production caption and tag Host checks allow one definite uncommitte
 
 await test("unavailable model resources do not create repeated claims, requests or attempts while OCR remains runnable", async () => {
   const f = await fixture();
-  let prepares = 0, sends = 0, available = false;
+  let prepares = 0, sends = 0, available = false, heldPreparations = 0;
   const c = await productionDispatch(f, {
-    prepare: async () => { prepares++; if (!available) throw Error('AI_MEMORY_WAIT'); },
-    invokeOnce: async input => { sends++; return response(input.systemPrompt.includes('{"tags"') ? {tags:['色块']} : {caption:'资源恢复后的描述'}); },
+    prepare: async () => { prepares++; if (!available) throw Error('AI_MEMORY_WAIT'); heldPreparations++; return () => { heldPreparations--; }; },
+    invokeOnce: async input => { assert.equal(heldPreparations,1); sends++; return response(input.systemPrompt.includes('{"tags"') ? {tags:['色块']} : {caption:'资源恢复后的描述'}); },
   }, { resourceReadiness: rule => rule.capability === 'ocr' || available ? undefined : {ready:false,reason:'模型加载及计算正在等待内存'} });
   try {
     const id = await f.add();
@@ -166,7 +166,7 @@ await test("unavailable model resources do not create repeated claims, requests 
     for (let n = 0; n < 3; n++) await c.background.tick();
     const resumed = await f.host.readBackgroundExecution({...f.scope,assetId:id});
     assert.ok(resumed.items.every(i=>i.state==='succeeded'&&i.attemptEpoch===1));
-    assert.equal(c.ocrCalls(),1); assert.equal(sends,2);
+    assert.equal(c.ocrCalls(),1); assert.equal(sends,2); assert.equal(heldPreparations,0,'caption and independent tags release owned preparation after completion');
   } finally { await c.close(); await f.close(); }
 });
 

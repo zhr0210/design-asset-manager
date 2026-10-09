@@ -59,14 +59,20 @@ async function mainStartup(failAt: 'storage' | 'server' | 'browser') {
   const window = { isDestroyed: () => false, show: () => { effects.push('show-desktop') }, focus: () => { effects.push('focus-desktop') } }
   const context = vm.createContext({
     ownsSingleHost: true, syntheticE2e: undefined, connectedSyntheticE2e: undefined,
+    process: { platform: 'win32', arch: 'x64', pid: 1 },
+    DAM_BUILD_IDENTITY: {buildId:'dam-controlled-launch'},
+    fs: {promises:{writeFile:async()=>{},rename:async()=>{},rm:async()=>{}}},
     browserEntryRequested: failAt === 'browser', createWorkspaceLaunch,
     approvedExit: false, appStorage: undefined, activeLibraryHost: undefined, workspaceDrafts: undefined,
     workWindows: undefined, assetCard: undefined, connectedRuntime: undefined, localServer: undefined,
+    workMedia: undefined,
     requestedProfile: 'SYNTHETIC_PROFILE', SettingsService: { configureProfile: () => {} },
     aiDeviceSampler: undefined, visualAdmission: undefined, managedModels: undefined, retrievalModels: undefined,
     retrievalRuntime: undefined, queryFileGrants: undefined,
     createLocalAiDeviceSampler: () => ({ read: () => [], stop: async () => {} }),
     createVisualAdmission: () => ({}), powerMonitor: { getSystemIdleState: () => 'idle' },
+    createWindowsVideoRuntime: () => ({}),
+    createWorkFileHandoffs: () => ({}), createWorkMediaController: () => ({}),
     mainWindow: null, workspaceClients: new Map([['client:synthetic', { send: () => {} }]]),
     join: path.join, __dirname: 'SYNTHETIC_BUILD', randomUUID: () => 'synthetic-device',
     beforeWorkspaceWindowClose: () => {}, screen: { on: () => {} },
@@ -74,6 +80,7 @@ async function mainStartup(failAt: 'storage' | 'server' | 'browser') {
       whenReady: () => ({ then: (callback: typeof readyCallback) => { readyCallback = callback } }),
       getPath: () => 'SYNTHETIC_PROFILE',
       getAppPath: () => 'SYNTHETIC_APP', isPackaged: false,
+      getVersion: () => '1.0.0',
       on: (name: string, handler: (event?: { preventDefault(): void }, argv?: string[]) => void) => { handlers.set(name, handler) },
       quit: () => {
         effects.push('quit'); quitApproved.push(context.approvedExit)

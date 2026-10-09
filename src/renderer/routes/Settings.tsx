@@ -10,6 +10,7 @@ import { useTransientWorkspaceEdit } from '../workspace-edit-guards'
 import type { AppSettings } from '../../shared/types/settings.types'
 import type { SettingsExpected } from '../../shared/contracts/settings.contract'
 import { workspaceMutationErrorMessage } from '../../shared/client/workspace-connection-error'
+import BrowserEntryPanel from '../components/settings/BrowserEntryPanel'
 
 const sections = [
   { id: 'appearance', label: '外观与操作', Icon: Sun },
@@ -103,7 +104,7 @@ export default function Settings() {
       </form>
       <section hidden={section!=='ai'} className="ui-card"><h2>AI 与模型</h2><p>连接与账号在统一页面管理，配置不会发送素材。</p><Link className="ui-button ui-button-secondary" to={appPath('ai-console')}>管理 AI 连接与账号</Link></section>
       <section hidden={section !== 'shortcuts'} className="ui-card"><h2>快捷键</h2>{[['搜索素材', '⌘ F / Ctrl F'], ['快速查看', '空格'], ['关闭当前浮层', 'Esc'], ['切换查看模式', '在底部模式条使用左右方向键']].map(([label, shortcut]) => <div className="preference-row" key={label}><span>{label}</span><kbd>{shortcut}</kbd></div>)}</section>
-      {section === 'advanced' && <section><Notice>维护操作会先检查目标与范围。配置外部模型服务不会授权上传素材。</Notice><Link className="ui-button ui-button-secondary" to="/about">帮助与当前构建</Link><Link className="ui-button ui-button-secondary" to={appPath('ai-diagnostics')}>查看现行诊断</Link></section>}
+      {section === 'advanced' && <section><Notice>维护操作会先检查目标与范围。配置外部模型服务不会授权上传素材。</Notice><Link className="ui-button ui-button-secondary" to="/about">帮助与当前构建</Link><Link className="ui-button ui-button-secondary" to={appPath('ai-diagnostics')}>查看现行诊断</Link><BrowserEntryPanel /></section>}
     </main></div>
     <footer className="preferences-savebar"><span role="status">{saving ? '正在保存…' : dirty ? '有尚未保存的偏好更改' : '路径偏好已同步'}</span><Button type="submit" form="workspace-preferences" variant="primary" disabled={!dirty || saving || conflicting.length > 0}><Save />{saving ? '保存中…' : '保存偏好'}</Button></footer>
   </div>

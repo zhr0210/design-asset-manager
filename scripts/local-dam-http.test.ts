@@ -13,6 +13,15 @@ const server = await createLocalDamServer({ rendererDirectory: root,
   media: async () => { throw Error('NOT_GRANTED') }
 })
 try {
+  assert.equal((await fetch(server.origin + '/launch')).status, 403, 'no launch is granted by browsing the address')
+  const now = Date.now
+  const preparedAt = now()
+  try {
+    Date.now = () => preparedAt
+    assert.equal(server.authorizeLaunch(), server.origin + '/launch', 'ordinary entry contains no session secret')
+    Date.now = () => preparedAt + 60_001
+    assert.equal((await fetch(server.origin + '/launch')).status, 403, 'unused entry expires without granting a session')
+  } finally { Date.now = now }
   const health = await fetch(server.origin + '/api/health')
   assert.deepEqual(await health.json(), { schema:1,state:'ready',buildId:'dam-controlled-http',
     platform:process.platform,arch:process.arch,version:'1.0.0' })

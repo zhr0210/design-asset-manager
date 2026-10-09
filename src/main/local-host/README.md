@@ -13,6 +13,15 @@ one-use browser entry. Browser-only startup does not require the main window.
 Closing a surface detaches that client. The visible **退出整个 DAM** command
 checks all participants and drafts before ending the Host.
 
+Desktop **设置 → 高级维护 → 连接其他浏览器 → 准备浏览器入口**
+prepares the same ordinary `/launch` address for a chosen browser, including Codex
+IAB. It contains no session secret. Pending opening expires after 60 seconds,
+is consumed once, and the page exchanges its own grant with the existing
+same-origin/CSRF/session mechanism. Only the trusted main Desktop may prepare
+this entry; Browser and native secondary surfaces cannot invoke that command.
+Host exit/transition rejects preparation. No Chrome session or credential is
+transferred. `start:browser` still opens the system default browser normally.
+
 Ordinary launch accepts an explicit absolute `--profile` directory. Settings,
 credentials, App state and recovery belong to that Host profile. Browser session
 cookie names include the loopback port because cookie scope itself ignores ports;

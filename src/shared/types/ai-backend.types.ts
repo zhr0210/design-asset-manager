@@ -1,4 +1,4 @@
-import type {PiProviderKind,PiAuthMode} from '../contracts/ai-connection.contract'
+import type {PiProviderKind,PiAuthMode,AiColourObservation} from '../contracts/ai-connection.contract'
 import type {AiReasoningLevel} from '../workflows/ai-reasoning.workflow'
 export type AiBackendType =
   | 'native-python'
@@ -25,7 +25,7 @@ export type AiBackendConfig = {
   baseUrl: string;
   /** Legacy Main-only value. Never returned in Renderer settings. */
   apiKey?: string;
-  modelValidation?:{model:string;reasoning?:AiReasoningLevel;bindingSha256:string;vision:boolean;jsonOutput:boolean;testedAt:string;generatedInput:true}
+  modelValidation?:{model:string;reasoning?:AiReasoningLevel;bindingSha256:string;vision:boolean;jsonOutput:boolean;testedAt:string;generatedInput:true;colourObservation?:AiColourObservation}
   processingLocation?:'local-service'|'external-service';
   transport?: 'pi' | 'legacy';
   providerKind?:PiProviderKind;

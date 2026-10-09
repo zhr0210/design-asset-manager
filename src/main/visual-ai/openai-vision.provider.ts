@@ -19,7 +19,7 @@ export interface VisionInvocation {
 export interface VisionProvider {
   invokeOnce(input: VisionInvocation): Promise<unknown>
   /** Owned model residency admission before allocating the request increment. */
-  prepare?(backendId:string,signal:AbortSignal):Promise<void>
+  prepare?(backendId:string,signal:AbortSignal):Promise<void | (() => void)>
   recoverLocal?(error:import('./local-oom-recovery').ConfirmedLocalOomError,input:VisionInvocation):Promise<boolean>
   finishLocalRecovery?(error:import('./local-oom-recovery').ConfirmedLocalOomError,outcome:import('./local-oom-recovery').LocalRecoveryOutcome):void
 }

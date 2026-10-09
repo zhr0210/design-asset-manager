@@ -19,7 +19,7 @@ import {publicBackend} from '../ai-credentials/public-settings'
 import {requireReasoningConfiguration,reasoningNotice} from '../../shared/workflows/ai-reasoning.workflow'
 import {openAiVisionProvider,type VisionProvider,type VisionInvocation} from '../visual-ai/openai-vision.provider'
 const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex')
-export function createAiConnectionService(d:{settings:SettingsServicePort;vault:CredentialVault;runtime:PiRuntimeHost;managed?:{owns(id:string):boolean;prepare(signal:AbortSignal):Promise<void>;invokeOnce(input:VisionInvocation):Promise<unknown>;recoverLocal?:VisionProvider['recoverLocal'];finishLocalRecovery?:VisionProvider['finishLocalRecovery']};changed():void;loginTimeoutMs?:number;hostIdentity?:{getDeviceId():string};admission?:typeof piProviderAdmission;reserveProbe?(signal:AbortSignal):Promise<{release():void}>}){
+export function createAiConnectionService(d:{settings:SettingsServicePort;vault:CredentialVault;runtime:PiRuntimeHost;managed?:{owns(id:string):boolean;prepare(signal:AbortSignal):Promise<void | (() => void)>;invokeOnce(input:VisionInvocation):Promise<unknown>;recoverLocal?:VisionProvider['recoverLocal'];finishLocalRecovery?:VisionProvider['finishLocalRecovery']};changed():void;loginTimeoutMs?:number;hostIdentity?:{getDeviceId():string};admission?:typeof piProviderAdmission;reserveProbe?(signal:AbortSignal):Promise<{release():void}>}){
  const admission=d.admission??piProviderAdmission
  const requireAction=(b:AiBackendConfig,action:PiProviderAction)=>{const result=admission(b.providerKind??'openai-compatible',b.authMode??'none',action);if(!result.allowed)throw Error(result.code)}
  const notify=()=>{try{d.changed()}catch{}}
@@ -87,7 +87,7 @@ export function createAiConnectionService(d:{settings:SettingsServicePort;vault:
    })
   },
   async models(b:AiBackendConfig,signal:AbortSignal){const configured=backend(b.id);if(hash(publicBackend(b))!==hash(publicBackend(configured)))throw Error('AI_SAVE_CONFIG_BEFORE_PROBE');return tracked(b.id,signal,s=>execute<any[]>(configured,{kind:'models'},s))},
-  provider:{invokeOnce:(input:VisionInvocation)=>invoke(input),prepare:async(id:string,signal:AbortSignal)=>{signal.throwIfAborted();if(d.managed?.owns(id))await d.managed.prepare(signal)},recoverLocal:(error,input)=>d.managed?.owns(input.backendId??'')&&d.managed.recoverLocal?d.managed.recoverLocal(error,input):Promise.resolve(false),finishLocalRecovery:(error,outcome)=>{if(d.managed?.owns(error.failure.backendId))d.managed.finishLocalRecovery?.(error,outcome)}} as VisionProvider,
+  provider:{invokeOnce:(input:VisionInvocation)=>invoke(input),prepare:async(id:string,signal:AbortSignal)=>{signal.throwIfAborted();if(d.managed?.owns(id))return d.managed.prepare(signal)},recoverLocal:(error,input)=>d.managed?.owns(input.backendId??'')&&d.managed.recoverLocal?d.managed.recoverLocal(error,input):Promise.resolve(false),finishLocalRecovery:(error,outcome)=>{if(d.managed?.owns(error.failure.backendId))d.managed.finishLocalRecovery?.(error,outcome)}} as VisionProvider,
   invokeForAcceptance:(input:VisionInvocation)=>invoke(input,true),
   prepareValidation(id:string){for(const[key,r]of validationReviews)if(r.expires<Date.now())validationReviews.delete(key);if(suspended||validationReviews.size>=4)throw Error('AI_CONNECTIONS_BUSY');const b=backend(id);requireAction(b,'infer');requireReasoningConfiguration(b);if(b.transport!=='pi'||!b.defaultModel?.trim()||b.defaultModel.trim().length>256)throw Error('AI_MODEL_REQUIRED');const receipt=randomUUID();validationReviews.set(receipt,{backend:b,fingerprint:hash(b),expires:Date.now()+300000});return{receipt,backendId:b.id,model:b.defaultModel,notice:`向 ${b.baseUrl} 的 ${b.defaultModel} 发送一张本应用生成的双色测试图，只验证图片请求、完整JSON及颜色识别，不读取资料库。${reasoningNotice(b.reasoning)}仅调用一次，30秒上限；云端/API/订阅可能消耗额度，费用未知。`}},
   discardValidation(receipt:string){validationReviews.delete(receipt)},
@@ -102,11 +102,12 @@ export function createAiConnectionService(d:{settings:SettingsServicePort;vault:
      const image=await sharp(pixels,{raw:{width:64,height:32,channels:3}}).jpeg().toBuffer()
      const response=await execute<any>(b,{kind:'infer',probeImage:true,model:b.defaultModel,systemPrompt:'只返回完整JSON对象，字段caption为简短中文描述、ocrText固定空字符串、prompt为简短英文描述、tags为图片两块主要颜色的简体中文颜色名称数组。不返回其他内容。',userPrompt:'请完成双色验证：根据图片列出两块主要颜色，不猜测来源。',imageDataUrl:'data:image/jpeg;base64,'+image.toString('base64'),maxTokens:256,temperature:0},signal)
      const output=parseVisionOutput(response),passed=[labels[left],labels[right]].every(label=>output.tags.includes(label))
-     return{model:b.defaultModel!,...(b.reasoning!==undefined?{reasoning:b.reasoning}:{}),imageRequestAccepted:true,structuredOutputValid:true,colourChallengePassed:passed,testedAt:new Date().toISOString()}
+     return{model:b.defaultModel!,...(b.reasoning!==undefined?{reasoning:b.reasoning}:{}),imageRequestAccepted:true,structuredOutputValid:true,colourChallengePassed:passed,testedAt:new Date().toISOString(),
+      colourObservation:{recipe:'rgb-blocks-v1' as const,width:64 as const,height:32 as const,inputSha256:createHash('sha256').update(image).digest('hex'),expected:[labels[left],labels[right]],observed:output.tags}}
     }catch(error){if(error instanceof PiProcessUnconfirmedError){unknown=true;void error.released.then(()=>permit?.release())}throw error}finally{if(!unknown)permit?.release()}
    })
    if(hash(backend(b.id))!==review.fingerprint)throw Error('AI_CONNECTION_CHANGED')
-   const list=d.settings.getSettings().aiBackends??[];d.settings.saveSettings({aiBackends:list.map(current=>current.id===b.id?{...current,modelValidation:{model:result.model,...(result.reasoning!==undefined?{reasoning:result.reasoning}:{}),bindingSha256:backendExecutionBinding(b,result.model),vision:result.colourChallengePassed,jsonOutput:true,testedAt:result.testedAt,generatedInput:true as const}}:current)})
+   const list=d.settings.getSettings().aiBackends??[];d.settings.saveSettings({aiBackends:list.map(current=>current.id===b.id?{...current,modelValidation:{model:result.model,...(result.reasoning!==undefined?{reasoning:result.reasoning}:{}),bindingSha256:backendExecutionBinding(b,result.model),vision:result.colourChallengePassed,jsonOutput:true,testedAt:result.testedAt,generatedInput:true as const,colourObservation:result.colourObservation}}:current)})
    notify();return result
   },
   async login(id:string){

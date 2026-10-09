@@ -180,6 +180,7 @@ return Object.freeze({
   onReconcile: (listener: () => Promise<void>) => transport.onReconcile?.(listener) ?? (() => {}),
   connectionState: () => transport.connectionState?.() ?? {connected:true,reconciling:false},
   openBrowser: () => transport.invoke('app:open-browser'),
+  prepareBrowserEntry: (): Promise<{ entry: string; expiresAt: string }> => transport.invoke('app:prepare-browser-entry'),
   capabilities: () => transport.invoke('app:capabilities'),
   onSettingsChanged: (listener: () => void) => {
     transport.on('settings:changed', listener)

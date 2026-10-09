@@ -101,7 +101,7 @@ async function startClaim(host:any,input:any){const claim=await host.claimTagExe
 async function eventually<T>(read:()=>T|Promise<T>,done:(v:T)=>boolean):Promise<T>{for(let i=0;i<500;i++){const v=await read();if(done(v))return v;await new Promise(r=>setTimeout(r,10))}throw Error('Synthetic task did not settle')}
 function controllers(f:Awaited<ReturnType<typeof fixture>>,provider:VisionProvider,changed=()=>{}){
  const settings=createNewInstallAppSettingsDefaults();settings.aiBackends=[{id:'synthetic',name:'Synthetic service',type:'openai-compatible',enabled:true,baseUrl:'http://127.0.0.1:1/v1',defaultModel:'synthetic-model',timeoutMs:5000,priority:1,capabilities:{chat:true,vision:true,embeddings:false,jsonOutput:true,modelList:false,modelManagement:false}}]
- const admission=createVisualAdmission(),legacy=createVisualAiController({host:f.host,settings:()=>settings,admission,provider,onChanged:changed})
+ const admission=createVisualAdmission({memory:()=>({free:16*1024**3,total:24*1024**3})}),legacy=createVisualAiController({host:f.host,settings:()=>settings,admission,provider,onChanged:changed})
  const tags=createTagExecutionController({host:f.host,settings:()=>settings,admission,legacy,provider,changed})
  return{admission,legacy,tags,settings,close:async()=>{await Promise.all([tags.suspendAndDrain(),legacy.suspendAndDrain()]);admission.invalidate()}}
 }
@@ -122,7 +122,7 @@ await test('production tag controller freezes a reviewed preview, revokes legacy
   assert.equal((await f.host.readTagOutbox({...f.scope,sessionToken:snapshot.sessionToken})).length,1)
   const reread=await c.tags.prepare('main',{...f.scope,requestId:f.intent.requestId});assert.equal(reread.alreadySucceeded,true)
   assert.equal((await c.tags.run('main',reread.receipt)).state,'succeeded');assert.equal(calls,1)
-  await eventually(()=>c.admission.inspect(),s=>s.materialBytes===0);assert.equal(c.admission.inspect().requests,0)
+  c.admission.releaseIdleMaterials();await eventually(()=>c.admission.inspect(),s=>s.materialBytes===0);assert.equal(c.admission.inspect().requests,0)
  }finally{await c.close();await f.close()}
 })
 await test('v10 seeds the real prior combined source and preserves confirmed/rejected choices',async()=>{

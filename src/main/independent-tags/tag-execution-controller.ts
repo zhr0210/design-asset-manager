@@ -130,6 +130,7 @@ export function createTagExecutionController(deps:{
  }
  return api
  async function execute(plan:Plan,job:Job,version:number){
+  let releasePreparation:void|(()=>void)=undefined
   let claim:TagAttemptClaim|undefined,sent=false,completedResponse=false
   const scope={...plan.input,sessionToken:plan.sessionToken}
   const abort=new AbortController(),cancel=()=>abort.abort();job.abort.signal.addEventListener('abort',cancel,{once:true})
@@ -138,7 +139,7 @@ export function createTagExecutionController(deps:{
   try{
    abort.signal.throwIfAborted();await measureAiStage(deps.diagnostics,plan.input.requestId,'prepare-and-wait',()=>activate(plan,abort.signal));requireScope(plan.input);abort.signal.throwIfAborted()
    if(suspended||version!==epoch)throw Error('TAG_EXECUTION_CANCELLED')
-   await measureAiStage(deps.diagnostics,plan.input.requestId,'model-ready',async()=>{await deps.provider?.prepare?.(plan.backend.id,abort.signal)})
+   releasePreparation=await measureAiStage(deps.diagnostics,plan.input.requestId,'model-ready',async()=>deps.provider?.prepare?.(plan.backend.id,abort.signal))
    claim=await deps.host.claimTagExecution({...scope,inputSha256:plan.material!.describe(plan.input.assetId).sha256,origin:'tags-only',background:plan.background})
    const tags=await plan.material!.withRequest(plan.input.assetId,'tags-only',abort.signal,async(jpeg,signal)=>{
     job.value.state='running'
@@ -160,6 +161,7 @@ export function createTagExecutionController(deps:{
    job.value.errorCode=unknown?'TAG_OUTCOME_UNKNOWN':/^[A-Z_]{1,80}$/.test(code)?code:'TAG_ATTEMPT_FAILED'
    if(claim)try{await deps.host.finishTagExecution({...scope,attemptToken:claim.attemptToken,state:job.value.state,errorCode:unknown?'REMOTE_OUTCOME_UNKNOWN':'TAG_ATTEMPT_FAILED'})}catch{/* Closing/replaced sessions are reconciled on reopen. */}
   }finally{
+   releasePreparation?.()
    timeout();job.abort.signal.removeEventListener('abort',cancel)
    pruneTerminalJobs()
   }

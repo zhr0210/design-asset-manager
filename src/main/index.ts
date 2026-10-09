@@ -210,7 +210,7 @@ const workspaceTransitions = createWorkspaceTransitions({
   }
 })
 const workspaceHandlers = new Map<string, MainIpcHandler>()
-const browserDeniedChannels = new Set(['asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:drag-file'])
+const browserDeniedChannels = new Set(['app:prepare-browser-entry','asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:drag-file'])
 const nativeDraftChannels = new Set(['drafts:put', 'drafts:remove', 'workspace:ready', 'workspace:flush-ack'])
 const nativeCardChannels = new Set([
   'asset-card:inspect', 'asset-card:action', 'tag-decision:prepare', 'tag-decision:confirm', 'tag-decision:discard',
@@ -619,6 +619,11 @@ function setupIpcHandlers() {
     })
   }
   registerWorkspaceCommand('app:build-identity',event=>{if(!isTrustedWorkspace(event))throw Error('UNTRUSTED_SENDER');return {...DAM_BUILD_IDENTITY,platform:process.platform,arch:process.arch,profileKind:syntheticE2e?'synthetic-isolated':'normal',host:'electron-local'}})
+  registerWorkspaceCommand('app:prepare-browser-entry', async event => {
+    if (isBrowserContext(event) || !isTrustedWorkspace(event)) throw Error('UNTRUSTED_SENDER')
+    if (!localServer || shutdownCoordinator.state !== 'idle' || approvedExit || workspaceTransitions.applying()) throw Error('LOCAL_HOST_UNAVAILABLE')
+    return { entry: localServer.authorizeLaunch(), expiresAt: new Date(Date.now() + 60_000).toISOString() }
+  })
   registerWorkspaceCommand('app:open-browser', async event => { if (!isTrustedWorkspace(event)) throw Error('UNTRUSTED_SENDER'); await workspaceLaunch.request('browser'); return { success: true } })
   registerWorkspaceCommand('app:capabilities', context => {
     if (!isTrustedWorkspace(context)) throw Error('UNTRUSTED_SENDER')

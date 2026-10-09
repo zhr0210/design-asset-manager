@@ -5,7 +5,8 @@ export interface PiModel {id:string;name:string;input:Array<'text'|'image'>;cont
 export type AiLoginPrompt={id:string;message:string}&({type:'text'|'secret'|'manual_code'}|{type:'select';options:Array<{id:string;label:string}>})
 export interface AiLoginStatus {id:string;backendId:string;state:'starting'|'interaction'|'completed'|'failed'|'cancelled'|'cancelling'|'denied'|'expired'|'unknown';stage?:import('./ai-auth-state').AuthStage;sequence?:number;errorCode?:string;startedAt?:number;deadlineAt?:number;workerCloseStatus?:'pending'|'confirmed'|'unknown';timeline?:Array<{stage:import('./ai-auth-state').AuthStage;at:number}>;credentialRevisionAtEnd?:number;event?:{type:string;message?:string;url?:string;userCode?:string};prompt?:AiLoginPrompt;planUsageAuthorized?:boolean;error?:string}
 export interface AiCapabilityReview {receipt:string;backendId:string;model:string;notice:string}
-export interface AiCapabilityResult {model:string;reasoning?:import('../workflows/ai-reasoning.workflow').AiReasoningLevel;imageRequestAccepted:boolean;structuredOutputValid:boolean;colourChallengePassed:boolean;testedAt:string}
+export interface AiColourObservation {recipe:'rgb-blocks-v1';width:64;height:32;inputSha256:string;expected:string[];observed:string[]}
+export interface AiCapabilityResult {model:string;reasoning?:import('../workflows/ai-reasoning.workflow').AiReasoningLevel;imageRequestAccepted:boolean;structuredOutputValid:boolean;colourChallengePassed:boolean;testedAt:string;colourObservation?:AiColourObservation}
 export interface AiConnectionApi {
  prepareValidation(backendId:string):Promise<AiCapabilityReview>
  confirmValidation(receipt:string):Promise<AiCapabilityResult>

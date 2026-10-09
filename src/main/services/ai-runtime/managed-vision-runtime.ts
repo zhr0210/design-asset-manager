@@ -100,6 +100,7 @@ export function createManagedVisionRuntime(d: {
     transitionAbort: AbortController | undefined;
   let nativeTransport: Awaited<ReturnType<typeof launchManagedGguf>> | undefined,
     nativeMeasurementTimer: ReturnType<typeof setInterval> | undefined;
+  const disposals = new Set<Promise<void>>();
   const config = (): Configuration | null => {
     const row = d.database
       .prepare(
@@ -173,7 +174,7 @@ export function createManagedVisionRuntime(d: {
   const prepared = new Map<AbortSignal, () => void>();
   const protectPrepared = (signal: AbortSignal) => {
     if (prepared.has(signal)) return;
-    const release = () => { clearTimeout(timer); signal.removeEventListener('abort', release); prepared.delete(signal); touch() };
+    const release = () => { if(prepared.get(signal)!==release)return; clearTimeout(timer); signal.removeEventListener('abort', release); prepared.delete(signal); touch() };
     const timer = setTimeout(release, 120000); timer.unref?.();
     prepared.set(signal, release); signal.addEventListener('abort', release, { once: true });
     clearTimeout(idleTimer);
@@ -245,6 +246,7 @@ export function createManagedVisionRuntime(d: {
     state = "stopping";
     unloadStartedAt ??= Date.now();
     const owned = child;
+    const ownedClosed = closed;
     const stoppedExecution=executionId??'local-release',stoppedFingerprint=measurementFingerprint,stopStarted=Date.now();
     try {
       owned.kill("SIGTERM");
@@ -254,11 +256,12 @@ export function createManagedVisionRuntime(d: {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       await Promise.race([
-        closed,
+        ownedClosed,
         new Promise<never>((_, reject) => {
           timer = setTimeout(() => {
             state = "unknown";
-            const unknown = new PiProcessUnconfirmedError(closed);
+            resident?.markUnconfirmed();
+            const unknown = new PiProcessUnconfirmedError(ownedClosed);
             failRequest(unknown);
             reject(unknown);
           }, 5000);
@@ -384,11 +387,13 @@ export function createManagedVisionRuntime(d: {
       closed = new Promise<void>((resolve) => {
         closeResolve = resolve;
       });
+      const resolveOwnedClose = closeResolve!;
+      const ownedExecution = executionId;
       const threads = d.admission.resourceStatus().computeThreads;
       const loadStartedAt = Date.now();
       let launched: Awaited<ReturnType<typeof launchManagedGguf>> | undefined;
       try { launched = c.native ? await (d.launchGguf??launchManagedGguf)(c, abort.signal) : undefined }
-      catch (error) { resident?.release(); resident = undefined; throw error }
+      catch (error) { resident?.release(); resident = undefined; resolveOwnedClose(); throw error }
       nativeTransport = launched;
       const owned = launched?.child ?? spawn(
         c.python!,
@@ -430,6 +435,7 @@ export function createManagedVisionRuntime(d: {
         stderrBytes = 0;
       const decoder = new StringDecoder("utf8");
       const protocolFailure = () => {
+        if (child !== owned) return;
         loadedReject(Error("LOCAL_RUNTIME_PROTOCOL_FAILED"));
         void stop(false).catch(() => {});
       };
@@ -480,17 +486,17 @@ export function createManagedVisionRuntime(d: {
       owned.stderr.on("error", protocolFailure);
       owned.once("error", () => {
         loadedReject(Error("LOCAL_RUNTIME_START_FAILED"));
-        if (!owned.pid) {
+        if (!owned.pid && child === owned) {
           child = undefined;
           executionId = null;
           resident?.release();
           resident = undefined;
-          closeResolve?.();
+          resolveOwnedClose();
         }
       });
       owned.once("close", () => {
-        clearInterval(nativeMeasurementTimer);
         if (child === owned) {
+          clearInterval(nativeMeasurementTimer);
           if (unloadStartedAt !== null) unloadMs = Date.now() - unloadStartedAt;
           child = undefined;
           nativeTransport = undefined;
@@ -499,11 +505,19 @@ export function createManagedVisionRuntime(d: {
           executionId = null;
           lastStop = Date.now();
           state = "inactive";
+          failRequest("LOCAL_RUNTIME_EXITED");
         }
         loadedReject(Error("LOCAL_RUNTIME_EXITED"));
-        failRequest("LOCAL_RUNTIME_EXITED");
-        if (launched) void launched.dispose().catch(() => {}).finally(() => closeResolve?.());
-        else closeResolve?.();
+        // Process/stdio close is the physical exit proof. Cleanup may outlive
+        // this launch; it must never resolve a replacement's mutable waiter.
+        resolveOwnedClose();
+        if (launched) {
+          const disposal = launched.dispose().catch(() => {
+            try{d.diagnostics?.({operationId:ownedExecution??'local-cleanup',stage:'cancel-and-release',startedAt:new Date().toISOString(),durationMs:0,outcome:'failed',errorCode:'LOCAL_RUNTIME_CLEANUP_FAILED',fingerprint:c.fingerprint,mode:c.native?.plan.mode??'cpu',language:null})}catch{}
+          });
+          disposals.add(disposal);
+          void disposal.finally(() => disposals.delete(disposal));
+        }
       });
       let deadline: ReturnType<typeof setTimeout> | undefined;
       try {
@@ -761,6 +775,7 @@ export function createManagedVisionRuntime(d: {
         protectPrepared(signal);
         if (state !== "ready") await activate();
         signal.throwIfAborted();
+        return prepared.get(signal)!;
       } catch (error) {
         prepared.get(signal)?.(); throw error;
       } finally {
@@ -830,6 +845,7 @@ export function createManagedVisionRuntime(d: {
       for (const release of [...prepared.values()]) release();
       await stop(false);
       await activation?.catch(() => {});
+      await Promise.all(disposals);
       await d.ggufPackages?.drain();
     },
     async recheck() {

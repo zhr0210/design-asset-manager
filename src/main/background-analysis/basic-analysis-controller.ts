@@ -570,6 +570,7 @@ export function createBasicAnalysisController(d: {
     let material: ReturnType<VisualAdmission["open"]> | undefined;
     const cancelMaterial = () => material?.dispose();
     abort.signal.addEventListener("abort", cancelMaterial, { once: true });
+    let releasePreparation: void | (() => void) = undefined;
     let claim: BasicClaim | undefined,
       sent = false,
       responded = false;
@@ -587,7 +588,7 @@ export function createBasicAnalysisController(d: {
       ));
       abort.signal.throwIfAborted();
       material.consume();
-      await measureAiStage(d.diagnostics,request.requestId,'model-ready',async()=>{await d.provider.prepare?.(b.id, abort.signal)});
+      releasePreparation = await measureAiStage(d.diagnostics,request.requestId,'model-ready',async()=>d.provider.prepare?.(b.id, abort.signal));
       claim = await d.host.claimBasicAnalysis({
         ...request,
         inputSha256: material.describe(t.assetId).sha256,
@@ -636,6 +637,7 @@ export function createBasicAnalysisController(d: {
       clearTimeout(timer);
       signal.removeEventListener("abort", cancel);
       abort.signal.removeEventListener("abort", cancelMaterial);
+      releasePreparation?.();
       material?.dispose();
     }
   }

@@ -156,6 +156,7 @@ export function createVisualAiController(deps: {
         const item = job.value.items[index]
         if (job.abort.signal.aborted || !matches(plan.input)) { item.state = 'cancelled';await finishClaim(plan,view,'cancelled');continue }
         item.state = 'running'
+        let releasePreparation:void|(()=>void)=undefined
         let sent=false,completedResponse=false,usage:AiExecutionUsage|undefined
         const requestAbort = new AbortController()
         const abort = () => requestAbort.abort()
@@ -165,7 +166,7 @@ export function createVisualAiController(deps: {
         try {
           const current = (await deps.host.readAssetContext([view.asset.id])).assets.find(asset => asset.id === view.asset.id)
           if (!current || current.revision !== view.asset.revision || current.thumbnailRef !== view.asset.thumbnailRef || job.abort.signal.aborted) throw new Error('AI_SOURCE_CHANGED')
-          await deps.provider?.prepare?.(plan.backend.id,requestAbort.signal)
+          releasePreparation=await deps.provider?.prepare?.(plan.backend.id,requestAbort.signal)
           const output = await plan.material.withRequest(view.asset.id,'combined',requestAbort.signal,async(jpeg,signal)=>{
             if(view.captionClaim)await deps.host.markBasicAnalysisSent!(view.captionClaim)
             if(view.claim)await deps.host.markTagExecutionSent({...claimScope(plan,view),attemptToken:view.claim.attemptToken})
@@ -195,7 +196,7 @@ export function createVisualAiController(deps: {
           await finishClaim(plan,view,unknown?'outcome-unknown':item.state==='cancelled'?'cancelled':'failed')
           item.error = item.state === 'failed' ? visionFailureMessage(requestAbort.signal.aborted ? new Error('AI_TIMEOUT') : error) : undefined
           if(view.claim&&unknown)item.error=(item.error?item.error+' ':'')+'请求可能已在服务端执行，远端结果尚不确定；不会自动重发。'
-        } finally { cancelTimeout(); job.abort.signal.removeEventListener('abort', abort) }
+        } finally { releasePreparation?.(); cancelTimeout(); job.abort.signal.removeEventListener('abort', abort) }
       }
     } catch {
       for (const item of job.value.items) if (['queued', 'running'].includes(item.state)) {
