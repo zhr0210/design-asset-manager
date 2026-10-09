@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-09T01:47:54Z",
+  "buildId": "dam-0f2388d7a86f7fc4",
+  "provider": "ChatGPT via Pi",
+  "ordinaryUiPath": "AI与模型 → 使用ChatGPT账号 → 保存连接 → Continue with ChatGPT → 在系统浏览器完成登录 → 用户本人授权",
+  "visibleResults": [
+    "账号已连接；素材执行仍需重新确认",
+    "身份与计划权限已验证",
+    "ChatGPT账号 · 已保存凭据"
+  ],
+  "credentialContentsRead": false,
+  "cookiesReadOrExported": false,
+  "callbackRead": false,
+  "storage": "Application internally persists encrypted OAuth credentials; browser owns its cookies",
+  "actualAccountInference": "NOT_RUN",
+  "credentialPersistenceAfterAppRestart": "NOT_RUN",
+  "parentTasksClosed": false
+}
