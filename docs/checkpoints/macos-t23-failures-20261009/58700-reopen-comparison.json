@@ -1,0 +1,34 @@
+{
+  "build": "dam-58700bb81142e924",
+  "readOnly": true,
+  "authColumnsRead": false,
+  "selectedPersistentDataEqual": true,
+  "library": {
+    "sha256": "e3dc6c7a8d28e746f4050725c122aeae5c6096615c22175a6dcfb0873eb51f50",
+    "counts": {
+      "assets": 185,
+      "attempts": 53,
+      "evidence": 51,
+      "ocr": 21,
+      "ocrEdits": 21,
+      "workSets": 1,
+      "workMembers": 3,
+      "background": 63,
+      "backgroundPolicy": 1,
+      "backgroundHistory": 64
+    }
+  },
+  "vectors": {
+    "sha256": "2fa5f129fc1333a635311e9d0b1dac14af5cc98635e836057d597548da2df38b",
+    "counts": {
+      "vectors": 185,
+      "jobs": 1
+    }
+  },
+  "originalsSha256": "f633315b50ff203111b25f88297e79c6257996d2e08c92a1dbd64475055a402d",
+  "backgroundStateCounts": {
+    "succeeded": 63
+  },
+  "normalQuitPriorHostPid": 62145,
+  "normalRestartHostPid": 66210
+}

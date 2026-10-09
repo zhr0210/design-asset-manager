@@ -1,0 +1,75 @@
+{
+  "library": {
+    "sha256": "50be89e92b2f5721f5953a4421c80f944c4b6655dcc396784394d1e1458fee72",
+    "counts": {
+      "assets": 3,
+      "attempts": 4,
+      "captions": 4,
+      "ocr": 2,
+      "ocrEdits": 2,
+      "tagSuggestions": 0
+    }
+  },
+  "vectors": {
+    "sha256": "9329aa72f8572f92a712d463c7e3ecd5b64927d2cde8ecc468dbb35c855ffd7c",
+    "counts": {
+      "vectors": 3,
+      "jobs": 1
+    }
+  },
+  "readOnly": true,
+  "authColumnsRead": false,
+  "originalFiles": {
+    "Originals/bucket-0001/public-astronaut-igo5l6osadxd.png": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+    "Originals/bucket-0001/public-coffee-cpdmopu6ekdh.png": "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7",
+    "Originals/bucket-0001/public-page-uz6uqy62fh4g.png": "341a6f0a61557662b02734a9b6e56ec33a915b2c41886b97509dedf2a43b47a3"
+  },
+  "userAssets": [
+    [
+      "design-asset:346b99b3-e23a-4843-bc39-6451f14061e7",
+      "public-astronaut",
+      null,
+      0,
+      null
+    ],
+    [
+      "design-asset:7723ac16-cf0e-42f6-b7b6-b9e680b6e8c4",
+      "public-page",
+      null,
+      0,
+      null
+    ],
+    [
+      "design-asset:b96091fe-9cd6-4ef4-a862-a8a62a68f578",
+      "public-coffee",
+      "人工验收备注：木桌上的红色咖啡杯、杯碟和金属勺。",
+      1,
+      "2026-10-09T01:04:20.127Z"
+    ]
+  ],
+  "ocrEdits": [
+    [
+      "design-asset:7723ac16-cf0e-42f6-b7b6-b9e680b6e8c4",
+      "ocr:26ad81f8-41cd-46de-9b7c-6166dac59aae",
+      2,
+      "Region-based segmentation\nLet us first determine markers of the coins and the\nunambiguously as either object or background. Here,\nhistogram of grey values:"
+    ],
+    [
+      "design-asset:b96091fe-9cd6-4ef4-a862-a8a62a68f578",
+      "ocr:2c860796-12eb-4482-83f2-cdf12cfbffee",
+      1,
+      null
+    ]
+  ],
+  "vectorJobs": [
+    [
+      "retrieval-job:374f3290-b2cb-4752-9de6-b241468e4787",
+      "f4aadb7c826777334497c59f863ed1b470308b0bb9a58a1c2fa3f3a349cbf45c",
+      "complete",
+      3,
+      3,
+      0,
+      null
+    ]
+  ]
+}
