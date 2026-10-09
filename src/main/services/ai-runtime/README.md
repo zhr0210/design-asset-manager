@@ -71,3 +71,5 @@ tests remain independent; three duplicate store tests were replaced.
 These checks do not prove a production model path or restore the old entry points.
 Native navigation/visible-state evidence and remaining older test limitations
 are recorded separately in `TASK.md`.
+
+2026-10-09 停止取证：首次触发者在abort监听器重入前冻结；有界诊断只保留停止类别、安全码、自有PID、关联尝试及信号请求／物理close观察。超时与迟到close分列，不能把信号请求当退出。旧记录缺这些字段时保留未知，不推断或回填历史原因。

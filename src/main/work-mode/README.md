@@ -85,3 +85,5 @@ macOS native windows use `vibrancy: under-window` and `visualEffectState: active
 them even when unfocused. CSS backdrop filtering alone cannot blur other application windows. The macOS Renderer removes its full-panel tint, CSS backdrop blur, 6px inset and second rounded surface;
 foreground colors track system appearance. Images stay unfiltered. Non-macOS uses a legible solid fallback,
 not an unverified imitation of native desktop blur. See DESIGN.md for the window interaction contract.
+
+2026-10-09 Mac原生续验：交付记录的assetId决定拖动图标，不能使用工作集第一成员。Finder .DS_Store仅作为有界普通文件元数据识别，不读内容、不接受链接；其他未知根内容、角色／成员／来源、64目录与1 GiB预算保持。正式接收与物理拖动按[本轮记录](../../../docs/handoff/MACOS-T23-NATIVE-FORENSICS-20261009.md)分别记证据。
