@@ -15,6 +15,25 @@ const protection={available:()=>true,encrypt:(text:string)=>{const iv=randomByte
 await test('secrets encrypted, metadata public, refresh keeps account revision and clear revokes',async()=>{
  const file=path.join(root,'vault.json'),v=createCredentialVault({file,protection});await v.set('one',{type:'api_key',key:'fixture-key-never-public'});assert.ok(!(await fs.readFile(file,'utf8')).includes('fixture-key-never-public'));assert.equal((await v.status('one')).revision,1);assert.equal((await v.resolve('one',1))?.type,'api_key');await v.set('one',{type:'api_key',key:'rotated'},1,true);assert.equal((await v.status('one')).revision,1);await assert.rejects(v.resolve('one',0));await v.clear('one');assert.equal((await v.status('one')).revision,2);assert.equal(await v.resolve('one',2),undefined)
 })
+await test('expired refreshable ChatGPT access is pending refresh, not a demand to repeat login',async()=>{
+ const v=createCredentialVault({file:path.join(root,'expiry-status.json'),protection})
+ const credential={type:'oauth' as const,access:'synthetic-expired-access',refresh:'synthetic-refresh',expires:Date.now()-1000,
+  registration:'dam-siwc-v1',clientId:'synthetic-client',identity:{issuer:'https://auth.openai.com',clientId:'synthetic-client',subject:'synthetic-subject'},
+  idToken:'synthetic-id-token',scopes:['resource.invoke','chatgpt.tokens.use.direct'],planUsageAuthorized:true}
+ await v.set('refreshable',credential)
+ const before=await v.status('refreshable')
+ assert.equal((before as any).refreshPending,true);assert.equal(before.requiresRelogin,false)
+ assert.equal(before.planUsageAuthorized,true)
+ assert.ok(!JSON.stringify(before).includes('synthetic-'),'Public expiry metadata must contain no credential/identity values')
+ await v.set('refreshable',{...credential,access:'synthetic-fresh-access',expires:Date.now()+60000},before.revision,true)
+ const after=await v.status('refreshable')
+ assert.equal(Boolean((after as any).refreshPending),false);assert.equal(after.requiresRelogin,false);assert.equal(after.revision,before.revision)
+ await v.set('missing-refresh',{...credential,refresh:''})
+ assert.equal((await v.status('missing-refresh')).requiresRelogin,true)
+ await v.set('identity-only',{...credential,access:'',refresh:'',planUsageAuthorized:false,scopes:['openid']})
+ assert.equal((await v.status('identity-only')).planUsageAuthorized,false)
+ assert.equal((await v.status('identity-only')).requiresRelogin,true)
+})
 await test('Codex rejects unsupported key save and public settings auth before touching storage',async()=>{
  const saved=createNewInstallAppSettingsDefaults(),backend={...saved.aiBackends![0],transport:'pi' as const,providerKind:'openai-codex' as const,authMode:'oauth' as const};saved.aiBackends=[backend]
  const vault=createCredentialVault({file:path.join(root,'codex-reject.json'),protection}),service=createAiConnectionService({settings:{getSettings:()=>saved,saveSettings:()=>{throw Error('must not save')}},vault,runtime:{} as any,changed:()=>{}})

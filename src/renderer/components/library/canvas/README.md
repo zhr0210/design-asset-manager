@@ -1,5 +1,11 @@
 # Formal Library Canvas
 
+Manual and AI dynamic folder navigation freeze their distinct Host search scope.
+Dynamic membership is computed from current tag evidence before Host ranking and
+paging. The Canvas also checks each returned row's current tag summary while a
+new scope loads, instead of filtering a global page against a separate loaded-ID
+list. Source-only updates remove hits that no longer belong without re-embedding.
+
 Presentation lifetime now crosses the private Asset Workspace Session Interface
 (`refresh`, `revoke`, fixed `receive` events). AppShell owns the stable instance;
 Library observes its Host projection/error and clears local panels for the exact

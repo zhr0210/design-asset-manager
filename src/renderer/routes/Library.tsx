@@ -166,9 +166,9 @@ export default function Library() {
   }, [])
 
   const [searchOptions,setSearchOptions]=useState<SearchOptions>({mode:'lexical'})
-  const [searchFolderId,setSearchFolderId]=useState<string|undefined>(),[referencedAssets,setReferencedAssets]=useState<Asset[]>([])
+  const [searchFolderScope,setSearchFolderScope]=useState<{folderId?:string;aiFolderId?:string}>({}),[referencedAssets,setReferencedAssets]=useState<Asset[]>([])
   useEffect(()=>setSearchOptions({mode:'lexical'}),[libraryProjection.identity,libraryProjection.generation])
-  const hostedSearch = useHostAssetSearch(libraryProjection,searchQuery,filterSite,activeTagSearchQueries,assets,{...searchOptions,folderId:searchFolderId})
+  const hostedSearch = useHostAssetSearch(libraryProjection,searchQuery,filterSite,activeTagSearchQueries,assets,{...searchOptions,...searchFolderScope})
   const discovery = {matches:hostedSearch.matches}
   const displayAssets = useMemo(()=>[...new Map([...referencedAssets,...assets,...hostedSearch.matches.map(m=>m.asset)].map(a=>[a.id,a])).values()],[assets,hostedSearch.matches,referencedAssets])
 
@@ -342,7 +342,7 @@ export default function Library() {
     onConfigureAi={()=>navigate(appPath('ai-console'))} error={cardError}/>:<p className="lc-empty">请先导入或选择一个素材。</p>
   return <>
     <LibraryCanvas revealWorkAsset={revealWorkAsset} workSets={workSets} openWorkSet={setReferenceSet} editWorkSet={setWorkSetIntent} organization={organization} organize={setOrganizationIntent} addFiles={()=>libraryControlsRef.current?.addFiles()} key={scope} scope={scope} authority={libraryProjection} assets={displayAssets} matches={discovery.matches} tags={tags} selected={selectedAsset} pick={setSelectedAsset} openFocus={openQuick}
-      filtersActive={Boolean(searchOptions.color||searchOptions.example)} searchFolder={setSearchFolderId} searchControl={libraryProjection.state==='ready'&&<section aria-label="检索状态" className="gallery-notice library-search-status">
+      filtersActive={Boolean(searchOptions.color||searchOptions.example)} searchBusy={hostedSearch.busy} searchFolder={setSearchFolderScope} searchControl={libraryProjection.state==='ready'&&<section aria-label="检索状态" className="gallery-notice library-search-status">
         <SearchFilters key={scope} options={searchOptions} setOptions={setSearchOptions} colors={hostedSearch.colors}/>
         <RetrievalSearchControls scope={{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}} options={searchOptions} setOptions={setSearchOptions} selectedIds={bulkSelectedAssetIds} selectedAsset={bulkSelectedAssetIds.length===1?displayAssets.find(a=>a.id===bulkSelectedAssetIds[0])??selectedAsset:selectedAsset} reload={hostedSearch.reload}/>
         {hostedSearch.busy?<span role="status">正在查询或维护索引，已显示的结果保留…</span>:<span>{hostedSearch.lane==='lexical-only'?'文字检索':hostedSearch.lane==='image'?'以图找相似':hostedSearch.lane==='hybrid'?'文字＋画面含义':'中英文画面含义'} · 已显示 {hostedSearch.matches.length}/{hostedSearch.total} · 文字索引覆盖 {hostedSearch.index?.indexed??0}/{hostedSearch.index?.total??0}{hostedSearch.index?.state!=='ready'?' · 索引仍在准备':''}{hostedSearch.coverage?` · 图文覆盖 ${hostedSearch.coverage.indexed}/${hostedSearch.coverage.total}`:''}</span>}

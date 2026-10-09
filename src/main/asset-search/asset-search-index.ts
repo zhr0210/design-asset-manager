@@ -264,7 +264,7 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
           const rows = candidates.all(...args,after) as Array<{ id: string; fingerprint: string; projection: string; created_at: string }>
           if (!rows.length) break
           after = rows.at(-1)!.id
-          const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+          const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id),input.aiFolderId)
           const colors=await filterColors(rows.filter(r=>members.has(r.id)).map(r=>r.id),input.color,signal)
           index.transaction(()=>{
           for (const row of rows) {
@@ -292,7 +292,7 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
         try{colors=await filterColors(rows.filter(row=>{const a=initial.get(row.id);return a&&viewKey(a)===row.fingerprint}).map(row=>row.id),input.color,signal,false)}finally{permit?.release()}
         signal.throwIfAborted();d.assertAuthority()
         const assets = new Map(readAssets(d.database,rows.map(r=>r.id)).map(a=>[a.id,a]))
-        const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+        const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id),input.aiFolderId)
         offset += rows.length; scanned += rows.length
         for (const row of rows) {
           const a = assets.get(row.id)
@@ -312,7 +312,7 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
       // Revalidate the complete accumulated page after the final await.
       signal.throwIfAborted();d.assertAuthority()
       const latest=new Map(readAssets(d.database,matches.map(m=>m.asset.id)).map(a=>[a.id,a]))
-      const members=searchFolderMembers(d.database,input.folderId,matches.map(m=>m.asset.id))
+      const members=searchFolderMembers(d.database,input.folderId,matches.map(m=>m.asset.id),input.aiFolderId)
       const safe=matches.flatMap(match=>{const asset=latest.get(match.asset.id)
         if(!asset||!members.has(asset.id)||viewKey(asset)!==viewKey(match.asset))return[]
         const current=refreshAssetDiscoveryMatch(match,asset,input);return current?[current]:[]})

@@ -1,12 +1,13 @@
 import type { ActiveLibraryAssetProjection } from './active-library.contract'
 import type { AssetDiscoveryExplanation } from '../workflows/asset-discovery.workflow'
+import {isAiFolderId} from '../workflows/ai-folders.workflow'
 export interface AssetColorFilter {hex:string;minimumPercentage:number;tolerance:number}
 export interface AssetColorCoverage {measured:number;unavailable:number;total:number;recipe:string}
 export const ASSET_SEARCH_FIELDS=['name','tags','ai-tags','description','ocr','prompt'] as const
 export type AssetSearchField=typeof ASSET_SEARCH_FIELDS[number]
 export interface AssetSearchRequest {
   libraryIdentity: string; generation: string; query: string; tagScope: 'confirmed-only' | 'includes-pending';
-  sourceSiteId?: string; folderId?:string; tagQueries?: readonly string[]; color?:AssetColorFilter;fields?:readonly AssetSearchField[]; limit: number; cursor?: string;
+  sourceSiteId?: string; folderId?:string; aiFolderId?:string; tagQueries?: readonly string[]; color?:AssetColorFilter;fields?:readonly AssetSearchField[]; limit: number; cursor?: string;
 }
 export interface AssetSearchIndexStatus {
   state: 'ready' | 'building' | 'recovering' | 'unavailable'; indexGeneration: string;
@@ -21,10 +22,10 @@ export function validateAssetSearchRequest(value: unknown): AssetSearchRequest {
   const v = value as AssetSearchRequest
   const id = (s: unknown) => typeof s === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/.test(s)
   if (!v || typeof v !== 'object' || Array.isArray(v) || Object.keys(v).some(k =>
-    !['libraryIdentity','generation','query','tagScope','sourceSiteId','folderId','tagQueries','color','fields','limit','cursor'].includes(k)) ||
+    !['libraryIdentity','generation','query','tagScope','sourceSiteId','folderId','aiFolderId','tagQueries','color','fields','limit','cursor'].includes(k)) ||
     !id(v.libraryIdentity) || !id(v.generation) || typeof v.query !== 'string' || v.query.length > 1024 ||
     !['confirmed-only','includes-pending'].includes(v.tagScope) || !Number.isInteger(v.limit) || v.limit < 1 || v.limit > 100 ||
-    v.sourceSiteId !== undefined && (!id(v.sourceSiteId)) || v.folderId!==undefined&&!id(v.folderId) || v.cursor !== undefined && (!id(v.cursor)) ||
+    v.sourceSiteId !== undefined && (!id(v.sourceSiteId)) || v.folderId!==undefined&&!id(v.folderId) || v.aiFolderId!==undefined&&!isAiFolderId(v.aiFolderId) || v.cursor !== undefined && (!id(v.cursor)) ||
     v.tagQueries !== undefined && (!Array.isArray(v.tagQueries) || v.tagQueries.length > 30 ||
       v.tagQueries.some(q => typeof q !== 'string' || q.length > 256))) throw Error('ASSET_SEARCH_INPUT_INVALID')
   if(v.color!==undefined){const c=v.color

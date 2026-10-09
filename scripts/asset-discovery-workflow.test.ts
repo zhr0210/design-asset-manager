@@ -182,4 +182,11 @@ assert.deepEqual(folders.find(f=>f.id==='ai:analyzed')?.assetIds,['analyzed'])
 assert.deepEqual(folders.find(f=>f.id==='ai:tag:蓝色')?.assetIds,['analyzed'])
 assert.deepEqual(projectAiFolders([{...enriched[0],visualAi:{...summary,pendingTags:[]}}]).find(f=>f.id==='ai:pending')?.assetIds,[])
 assert.equal(projectAiFolders([]).length,2)
+assert.deepEqual(projectAssetDiscovery({assets:enriched,aiFolderId:'ai:tag:蓝色'}).matches.map(m=>m.asset.id),['analyzed'],
+ 'A confirmed manual tag does not itself join an AI dynamic folder')
+assert.equal(projectAssetDiscovery({assets:[{...enriched[0],tagAnalysis:null}],aiFolderId:'ai:analyzed'}).matches.length,0,
+ 'A v10 empty current must not revive archived visual suggestions')
+const {refreshAssetDiscoveryMatch}=await import('../src/shared/workflows/asset-discovery.workflow')
+assert.equal(refreshAssetDiscoveryMatch({asset:enriched[0],explanation:{lane:'semantic',evidence:[{kind:'semantic',match:'vector',label:'fixture'}]}},
+ {...enriched[0],tagAnalysis:null},{aiFolderId:'ai:pending'}),null,'A retained vector hit loses membership when its current tag evidence is cleared')
 console.log('AI discovery: independent suggestions, evidence labels, prompt search and dynamic references passed')

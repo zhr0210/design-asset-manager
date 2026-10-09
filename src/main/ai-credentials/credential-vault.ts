@@ -19,7 +19,20 @@ export function createCredentialVault(input:{file:string;protection:SecretProtec
  const status=(r:Row|undefined)=>({configured:!!r?.value,kind:r?.kind??null,revision:r?.revision??0,storageAvailable:input.protection.available()})
  const requireId=(id:string)=>{if(!/^[a-zA-Z0-9][a-zA-Z0-9._:~-]{0,255}$/.test(id))throw Error('AI_CREDENTIAL_INVALID')}
  return{
-  status:(id:string,revision?:number)=>locked(async()=>{requireId(id);const row=select((await read())[id],revision),result=status(row);if(row?.kind!=='oauth'||!row.value||!result.storageAvailable)return result;try{const c=JSON.parse(input.protection.decrypt(Buffer.from(row.value,'base64')));const identityVerified=c.registration==='dam-siwc-v1'&&c.identity?.issuer==='https://auth.openai.com'&&c.identity?.clientId===c.clientId&&typeof c.identity?.subject==='string';const expiresAt=Number.isFinite(c.expires)?c.expires:undefined;return{...result,identityVerified,planUsageAuthorized:identityVerified&&c.planUsageAuthorized===true&&typeof c.access==='string'&&c.access.length>0&&Array.isArray(c.scopes)&&c.scopes.includes('resource.invoke')&&c.scopes.includes('chatgpt.tokens.use.direct'),expiresAt,requiresRelogin:!identityVerified||expiresAt===undefined||expiresAt<=Date.now()}}catch{return{...result,identityVerified:false,planUsageAuthorized:false,requiresRelogin:true}}}),
+  status:(id:string,revision?:number)=>locked(async()=>{
+   requireId(id);const row=select((await read())[id],revision),result=status(row)
+   if(row?.kind!=='oauth'||!row.value||!result.storageAvailable)return result
+   try{
+    const c=JSON.parse(input.protection.decrypt(Buffer.from(row.value,'base64')))
+    const identityVerified=c.registration==='dam-siwc-v1'&&c.identity?.issuer==='https://auth.openai.com'&&c.identity?.clientId===c.clientId&&typeof c.identity?.subject==='string'
+    const expiresAt=Number.isFinite(c.expires)?c.expires:undefined
+    const planUsageAuthorized=identityVerified&&c.planUsageAuthorized===true&&typeof c.access==='string'&&c.access.length>0&&Array.isArray(c.scopes)&&c.scopes.includes('resource.invoke')&&c.scopes.includes('chatgpt.tokens.use.direct')
+    // Metadata only: refresh is attempted by the existing approved execution,
+    // and may still fail. Reading status performs no network request or write.
+    const refreshPending=planUsageAuthorized&&expiresAt!==undefined&&expiresAt<=Date.now()&&typeof c.refresh==='string'&&c.refresh.length>0
+    return{...result,identityVerified,planUsageAuthorized,expiresAt,requiresRelogin:!identityVerified||expiresAt===undefined||expiresAt<=Date.now()&&!refreshPending,...(refreshPending?{refreshPending:true}:{})}
+   }catch{return{...result,identityVerified:false,planUsageAuthorized:false,requiresRelogin:true}}
+  }),
   resolve:(id:string,revision?:number)=>locked(async()=>{
    requireId(id);const r=select((await read())[id],revision);if(revision!==undefined&&(r?.revision??0)!==revision)throw Error('AI_CREDENTIAL_CHANGED');if(!r?.value)return undefined;if(!input.protection.available())throw Error('AI_SECRET_STORAGE_UNAVAILABLE');try{return JSON.parse(input.protection.decrypt(Buffer.from(r.value,'base64'))) as StoredCredential}catch{throw Error('AI_VAULT_UNAVAILABLE')}
   }),

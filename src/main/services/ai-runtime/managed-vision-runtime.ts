@@ -419,6 +419,7 @@ export function createManagedVisionRuntime(d: {
         loadMs = Date.now() - loadStartedAt;
         try { await observeNative(); loadedResolve() } catch (error) { loadedReject(error as Error) }
         nativeMeasurementTimer = setInterval(() => { void observeNative().catch(failure => {
+          if (child !== owned) return; // A late sample from a retired process cannot stop its replacement.
           const code = failure instanceof Error ? failure.message : '';
           error = /^(LOCAL|AI)_[A-Z_0-9]+$/.test(code) ? code : 'LOCAL_RESOURCE_OBSERVATION_FAILED';
           void stop(false).catch(() => {});

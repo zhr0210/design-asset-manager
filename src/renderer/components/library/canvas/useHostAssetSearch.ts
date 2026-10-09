@@ -5,7 +5,7 @@ import type { AssetSearchIndexStatus, AssetSearchRequest,AssetColorCoverage } fr
 import {refreshAssetDiscoveryMatch,type AssetDiscoveryMatch} from '../../../../shared/workflows/asset-discovery.workflow'
 import type { ActiveLibraryHostProjection } from '../../../../shared/contracts/active-library.contract'
 import type {AssetSemanticSearchRequest,AssetSemanticSearchPage,RetrievalCoverage} from '../../../../shared/contracts/retrieval-workspace.contract'
-export interface SearchOptions {mode:'lexical'|'semantic'|'hybrid';folderId?:string;example?:{assetId?:string;grant?:string};color?:AssetSearchRequest['color'];fields?:AssetSearchRequest['fields']}
+export interface SearchOptions {mode:'lexical'|'semantic'|'hybrid';folderId?:string;aiFolderId?:string;example?:{assetId?:string;grant?:string};color?:AssetSearchRequest['color'];fields?:AssetSearchRequest['fields']}
 
 export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query: string, site: string,
   tags: string[], sourceChange: readonly Asset[],options:SearchOptions={mode:'lexical'}) {
@@ -28,7 +28,7 @@ export function useHostAssetSearch(authority: ActiveLibraryHostProjection, query
     const scopeKey=JSON.stringify([authority.identity,authority.generation])
     if(lastScope.current!==scopeKey){lastScope.current=scopeKey;accepted.current=null;setMatches([]);setCursor(null);setColors(null);setCoverage(null);setIndex(null);setTotal(0)}
     const lexical:AssetSearchRequest={libraryIdentity:authority.identity,generation:authority.generation,query,
-      sourceSiteId:site||undefined,folderId:options.folderId,tagQueries:tags,tagScope:'includes-pending',color:options.color,fields:options.fields,limit:80}
+      sourceSiteId:site||undefined,folderId:options.folderId,aiFolderId:options.aiFolderId,tagQueries:tags,tagScope:'includes-pending',color:options.color,fields:options.fields,limit:80}
     const request:AssetSearchRequest|AssetSemanticSearchRequest=options.example||options.mode!=='lexical'&&query.trim()?{...lexical,
       mode:options.example?'image':options.mode as 'semantic'|'hybrid',queryId:crypto.randomUUID(),imageAssetId:options.example?.assetId,externalGrant:options.example?.grant}:lexical
     current.current=request;setBusy(true);setError('');setNotice(null);setHasUpdates(false)

@@ -254,7 +254,7 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
             permit=await d.admission?.reserveLocalWork('index',(input.color?64:32)*1024**2,controller.signal)
             let after=''
             for(;;){controller.signal.throwIfAborted();d.assertAuthority();const {rows,valid,source}=validRows(sourceIndex,space,after);if(!rows.length)break;after=rows.at(-1)!.id
-              const members=searchFolderMembers(d.database,input.folderId,valid.map(r=>r.id))
+              const members=searchFolderMembers(d.database,input.folderId,valid.map(r=>r.id),input.aiFolderId)
               const colors=input.color?await d.filterColors?.(valid.filter(r=>members.has(r.id)).map(r=>r.id),input.color,controller.signal):null
               if(input.color&&!colors)throw Error('ASSET_SEARCH_COLOR_UNAVAILABLE')
               for(const row of valid){const asset=source.get(row.id)!
@@ -278,14 +278,14 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
         while(matches.length<input.limit&&offset<snapshot.total&&scanned<500){
           const rows=canonical.prepare('SELECT id,view,similarity,lexical FROM hits WHERE snapshot=? ORDER BY rank DESC,id LIMIT ? OFFSET ?').all(snapshotId!,input.limit-matches.length,offset) as Array<{id:string;view:string;similarity:number|null;lexical:string|null}>
           const current=new Map(readAssets(d.database,rows.map(row=>row.id)).map(a=>[a.id,a]));offset+=rows.length;scanned+=rows.length
-          const initialMembers=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+          const initialMembers=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id),input.aiFolderId)
           const permit=input.color?await d.admission?.reserveLocalWork('index',32*1024**2,controller.signal):undefined
           let colors:Map<string,AssetDiscoveryEvidence|null>|null|undefined
           try{colors=input.color?await d.filterColors?.(rows.filter(row=>{const a=current.get(row.id);return a&&view(a)===row.view&&initialMembers.has(row.id)}).map(row=>row.id),input.color,controller.signal,false):null}finally{permit?.release()}
           if(input.color&&!colors)throw Error('ASSET_SEARCH_COLOR_UNAVAILABLE')
           controller.signal.throwIfAborted();d.assertAuthority()
           const latest=new Map(readAssets(d.database,rows.map(row=>row.id)).map(a=>[a.id,a]))
-          const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id))
+          const members=searchFolderMembers(d.database,input.folderId,rows.map(r=>r.id),input.aiFolderId)
           for(const row of rows){const asset=latest.get(row.id);if(!asset||!members.has(row.id)||view(asset)!==row.view||!projectAssetDiscovery({assets:[asset],query:'',sourceSiteId:input.sourceSiteId,tagScope:input.tagScope,tagQueries:input.tagQueries}).matches.length)continue
             if(input.color&&!colors?.has(row.id))continue
             const lexical=row.lexical?projectAssetDiscovery({assets:[asset],query:input.query,tagScope:input.tagScope,tagQueries:input.tagQueries,fields:input.fields}).matches[0]?.explanation??null:null
@@ -298,7 +298,7 @@ export function createAssetRetrievalStore(d:{database:Database.Database;control:
         if(offset<snapshot.total){nextCursor=randomUUID();cursors.set(nextCursor,{snapshot:snapshotId!,offset,owner})}
         if(!nextCursor&&!input.cursor)dropSnapshot(snapshotId!)
         const latest=new Map(readAssets(d.database,matches.map(m=>m.asset.id)).map(a=>[a.id,a]))
-        const members=searchFolderMembers(d.database,input.folderId,matches.map(m=>m.asset.id))
+        const members=searchFolderMembers(d.database,input.folderId,matches.map(m=>m.asset.id),input.aiFolderId)
         const safe=matches.flatMap(match=>{const asset=latest.get(match.asset.id)
           if(!asset||!members.has(asset.id)||view(asset)!==view(match.asset))return[]
           const current=refreshAssetDiscoveryMatch(match,asset,input);return current?[current]:[]})

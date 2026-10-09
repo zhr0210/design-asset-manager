@@ -8,7 +8,11 @@ import { createActiveLibraryHost } from '../src/main/library-lifecycle'
 import { createProductionActiveLibraryHostDependencies } from '../src/main/library-lifecycle/production-active-library-dependencies'
 import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
 
+// These are Host effects/lifecycle tests, independent of desktop load.
+const fixtureAdmission=()=>createVisualAdmission({memory:()=>({free:16*1024**3,total:24*1024**3})})
+
 async function fixture(admission?:ReturnType<typeof createVisualAdmission>) {
+  const resources=admission??fixtureAdmission()
   const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-search-host-'))), library = path.join(root,'library')
   const files = [1,2,3].map(n=>path.join(root,`generated-${n}.png`))
   for (const file of files) await sharp({create:{width:32,height:24,channels:3,background:'#aabbcc'}}).png().toFile(file)
@@ -16,7 +20,7 @@ async function fixture(admission?:ReturnType<typeof createVisualAdmission>) {
   const host = createActiveLibraryHost(createProductionActiveLibraryHostDependencies({
     selectLibraryDirectory: async()=>({kind:'selected',directory:library}),
     selectLocalFiles:async()=>({kind:'selected',files:files.map(filePath=>({filePath}))}),
-  },{admission}))
+  },{admission:resources}))
   const plan = await host.prepareCreate(); if (plan.kind!=='planned') throw Error('fixture')
   await host.confirmCreate(plan.plan.receipt)
   const add = await host.prepareAddAssets(); if (add.kind!=='planned') throw Error('fixture')
@@ -25,8 +29,10 @@ async function fixture(admission?:ReturnType<typeof createVisualAdmission>) {
   const query = (text:string,limit=100,cursor?:string) => host.searchAssetPage({...scope,query:text,tagScope:'includes-pending',limit,...(cursor?{cursor}:{})})
   return { root,library,host,scope,query,close:async()=>{
     await host.close()
+    resources.invalidate()
     assert.deepEqual(await Promise.all(files.map(file=>fs.readFile(file))),sourceBytes)
-    assert.ok(root.startsWith(path.resolve(os.tmpdir())+path.sep) && path.basename(root).startsWith('dam-search-host-'))
+    assert.equal(path.dirname(root),await fs.realpath(os.tmpdir()))
+    assert.ok(path.basename(root).startsWith('dam-search-host-'))
     await fs.rm(root,{recursive:true,force:true})
   } }
 }
@@ -59,7 +65,7 @@ await test('Host color filtering measures controlled previews, persists coverage
 
 await test('Host color pages revalidate lifecycle after an awaited resource grant',async()=>{
  let release!:()=>void,entered!:()=>void
- const base=createVisualAdmission(),gate=new Promise<void>(resolve=>{release=resolve})
+ const base=fixtureAdmission(),gate=new Promise<void>(resolve=>{release=resolve})
  const started=new Promise<void>(resolve=>{entered=resolve});let foreground=0
  const admission={...base,reserveLocalWork:async(...args:Parameters<typeof base.reserveLocalWork>)=>{
    const permit=await base.reserveLocalWork(...args)
@@ -84,7 +90,7 @@ await test('Host color pages revalidate lifecycle after an awaited resource gran
 await test('a filled color page rechecks earlier hits after a later page-fill iteration waits',async()=>{
  let release!:()=>void,entered!:()=>void,removeMiddle!:()=>Promise<void>
  const gate=new Promise<void>(resolve=>{release=resolve}),started=new Promise<void>(resolve=>{entered=resolve})
- const base=createVisualAdmission();let enabled=false,foreground=0
+ const base=fixtureAdmission();let enabled=false,foreground=0
  const admission={...base,reserveLocalWork:async(...args:Parameters<typeof base.reserveLocalWork>)=>{
    const permit=await base.reserveLocalWork(...args)
    if(enabled&&args[0]==='index'&&args[3]==='foreground'){

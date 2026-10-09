@@ -1,4 +1,4 @@
-import {currentTagSuggestions} from './ai-folders.workflow'
+import {currentTagSuggestions,assetInAiFolder} from './ai-folders.workflow'
 import type {AssetSearchField} from '../contracts/asset-search.contract'
 export type AssetDiscoveryMode = 'lexical-only'
 
@@ -39,6 +39,7 @@ export interface AssetDiscoveryRequest<T extends AssetDiscoveryAssetLike> {
   tagScope?: 'confirmed-only' | 'includes-pending'
   tagQueries?: readonly string[] | null
   fields?:readonly AssetSearchField[]
+  aiFolderId?:string
 }
 
 export interface AssetDiscoveryEvidence {
@@ -91,6 +92,7 @@ export function projectAssetDiscovery<T extends AssetDiscoveryAssetLike>(
 ): AssetDiscoveryProjection<T> {
   const query = normalizeText(request.query)
   const constrainedAssets = request.assets.filter((asset) =>
+    assetInAiFolder(asset,request.aiFolderId) &&
     (!request.sourceSiteId || asset.sourceSiteId === request.sourceSiteId) &&
     matchesTagQueries(asset, request.tagQueries, request.tagScope ?? 'confirmed-only')
   )

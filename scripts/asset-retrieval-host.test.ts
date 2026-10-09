@@ -40,6 +40,19 @@ await test('Host canonical image vectors support filtered multilingual fixture q
     const plan=await host.prepareCreate();if(plan.kind!=='planned')throw Error('fixture');await host.confirmCreate(plan.plan.receipt)
     const add=await host.prepareAddAssets();if(add.kind!=='planned')throw Error('fixture');await host.dispatchAddAssets(add.plan.receipt)
     const assets=await host.listAssets(),red=assets.find(a=>a.title==='red')!
+    // Current tag receipts on two non-red assets: a red-first vector query
+    // must filter this dynamic folder before ranking/pagination, not afterwards.
+    for(const asset of assets.filter(a=>a.id!==red.id)){
+      const tagScope={...scope(),assetId:asset.id},context=await host.readTagIntentContext(tagScope)
+      const requestId='folder-tags-'+asset.title
+      await host.saveTagIntent({...tagScope,sessionToken:context.sessionToken,expectedSchemaVersion:context.schemaVersion,
+        allowUpgrade:true,requestId,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef,
+        backendId:'synthetic',model:'synthetic',backendBindingSha256:'a'.repeat(64),recipeId:'independent-tags-v1',recipeVersion:'1'})
+      if(context.schemaVersion<10)await host.enableTagExecution({...tagScope,sessionToken:context.sessionToken,expectedSchemaVersion:9,allowUpgrade:true})
+      const claim=await host.claimTagExecution({...tagScope,sessionToken:context.sessionToken,requestId,inputSha256:'b'.repeat(64),origin:'tags-only'})
+      await host.markTagExecutionSent({...tagScope,sessionToken:context.sessionToken,requestId,attemptToken:claim.attemptToken})
+      await host.commitTagExecution({...tagScope,sessionToken:context.sessionToken,requestId,attemptToken:claim.attemptToken,tags:['咖啡']})
+    }
     await host.startRetrievalGeneration({...scope(),selection:'whole-library'})
     for(let i=0;i<300;i++){const value=await host.readRetrievalCoverage();if(value.jobs[0]?.state==='complete')break;await new Promise(r=>setTimeout(r,10))}
     const initialCoverage=await host.readRetrievalCoverage()
@@ -49,6 +62,24 @@ await test('Host canonical image vectors support filtered multilingual fixture q
     assert.ok(first.matches[0].explanation?.evidence.some(e=>e.kind==='semantic'));assert.ok(first.nextCursor)
     const second=await query('red 红色',undefined,first.nextCursor!);assert.notEqual(second.matches[0].asset.id,red.id)
     assert.equal(textCalls,1,'Paging the frozen plan must not run the query model again')
+    const dynamic={...scope(),query:'red',mode:'semantic' as const,tagScope:'includes-pending' as const,limit:1,aiFolderId:'ai:tag:咖啡'}
+    const folderFirst=await host.searchSemanticPage(dynamic)
+    assert.equal(folderFirst.total,2)
+    assert.notEqual(folderFirst.matches[0].asset.id,red.id)
+    assert.ok(folderFirst.nextCursor)
+    const folderSecond=await host.searchSemanticPage({...dynamic,cursor:folderFirst.nextCursor!})
+    assert.equal(folderSecond.total,2);assert.equal(folderSecond.matches.length,1)
+    assert.notEqual(folderSecond.matches[0].asset.id,red.id)
+    assert.notEqual(folderSecond.matches[0].asset.id,folderFirst.matches[0].asset.id)
+    await assert.rejects(host.searchSemanticPage({...dynamic,aiFolderId:'ai:analyzed',cursor:folderFirst.nextCursor!}))
+    const {mode:dynamicMode,...dynamicLexical}=dynamic
+    assert.equal((await host.searchAssetPage({...dynamicLexical,query:''})).total,2)
+    for(const aiFolderId of ['ai:analyzed','ai:pending'])assert.equal((await host.searchAssetPage({...dynamicLexical,query:'',aiFolderId})).total,2)
+    for(const aiFolderId of ['ai:tag:','ai:other','ai:tag: Coffee','ai:tag:coffee\n'])await assert.rejects(host.searchSemanticPage({...dynamic,aiFolderId}))
+    const dynamicHybrid=await host.searchSemanticPage({...dynamic,query:'咖啡',mode:'hybrid',limit:100})
+    assert.equal(dynamicHybrid.total,2);assert.ok(dynamicHybrid.matches.every(m=>m.asset.id!==red.id))
+    const blueFolder=await host.searchSemanticPage({...dynamic,limit:100,color:{hex:'#1010EE',minimumPercentage:99,tolerance:15}})
+    assert.equal(blueFolder.total,1);assert.equal(blueFolder.matches[0].asset.title,'blue')
     const tag=await host.createTag({name:'保留'});await host.addTagToAsset(red.id,tag.id)
     const filtered=await query('a red object',['tag:保留']);assert.equal(filtered.total,1);assert.equal(filtered.matches[0].asset.id,red.id)
     const colorInput={...scope(),query:'red 红色',mode:'semantic' as const,tagScope:'includes-pending' as const,limit:100,color:{hex:'#1010EE',minimumPercentage:99,tolerance:15}}

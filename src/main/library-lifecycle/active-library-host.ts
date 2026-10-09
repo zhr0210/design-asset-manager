@@ -381,8 +381,8 @@ export function createActiveLibraryHost(
     assertAuthority(){if(binding!==active||inspect().state!=='ready'||schemaMaintenance.isAdmissionClosed()||businessSuspensions.size)throw hostError('library-quiescing')},
     readPreview:asset=>readVisualPreview({libraryIdentity:active.identity,generation:active.generation,sessionToken:active.notebookSession,
       assetId:asset.id,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef}),
-    lexical:(input,signal)=>{const {libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,color,fields,limit,cursor}=input
-      return searchIndex(active).search({libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,color,fields,limit,cursor},signal)},
+    lexical:(input,signal)=>{const {libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,aiFolderId,color,fields,limit,cursor}=input
+      return searchIndex(active).search({libraryIdentity,generation,query,tagScope,sourceSiteId,tagQueries,folderId,aiFolderId,color,fields,limit,cursor},signal)},
     filterColors:(ids,color,signal,measure)=>searchIndex(active).filterColors(ids,color,signal,measure),colorCoverage:()=>searchIndex(active).colorCoverage(),
     synchronizeColors:signal=>searchIndex(active).sync(signal),
     lexicalStatus:()=>searchIndex(active).status()})
