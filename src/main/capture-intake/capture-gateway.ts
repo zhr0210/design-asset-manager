@@ -23,6 +23,7 @@ import {
 } from './capture-intake.types'
 
 interface CaptureGatewayDependencies {
+  sourceKind?: 'local-file' | 'clipboard'
   persistence: CapturePersistenceAdapter
   generateSystemPreview(input: GenerateSystemPreviewInput): Promise<SystemPreviewOutcome>
   createIdentity(kind: CaptureIdentityKind): string
@@ -63,7 +64,7 @@ export function createCaptureGateway(
           candidateIdentity: identities.items[index].candidateIdentity,
           originalStorageObjectIdentity:
             identities.items[index].originalStorageObjectIdentity,
-          canonicalEnvelopeDigest: createCanonicalCaptureEnvelopeDigest(item),
+          canonicalEnvelopeDigest: createCanonicalCaptureEnvelopeDigest(item,dependencies.sourceKind),
           captureMethod: 'copy-into-library',
           receivedFileName: item.receivedFileName,
           sourceBytes: item.sourceBytes,
@@ -122,7 +123,7 @@ async function captureAndPromoteItem(
     verifiedRecoveryBytes = (await readVerifiedOwnedFile({
       root: plan.activeLibrary.libraryRootDirectory, role: plan.activeLibrary.intakeStagingDirectory,
       relative: path.relative(plan.activeLibrary.intakeStagingDirectory, item.sourcePath).split(path.sep).join('/'),
-      expectedSize: item.sourceBytes, expectedDigest: item.sourceDigest, maximumBytes: 32 * 1024 * 1024
+      expectedSize: item.sourceBytes, expectedDigest: item.sourceDigest, maximumBytes: (dependencies.sourceKind==='clipboard'?96:32) * 1024 * 1024
     })).bytes
   } else {
     const currentSource = await readSourceEvidence(item.sourcePath)
@@ -156,7 +157,7 @@ async function captureAndPromoteItem(
     if (originalExists) await readVerifiedOwnedFile({
       root: plan.activeLibrary.libraryRootDirectory, role: plan.activeLibrary.managedOriginalsDirectory,
       relative: path.relative(plan.activeLibrary.managedOriginalsDirectory, finalPath).split(path.sep).join('/'),
-      expectedSize: item.sourceBytes, expectedDigest: item.sourceDigest, maximumBytes: 32 * 1024 * 1024
+      expectedSize: item.sourceBytes, expectedDigest: item.sourceDigest, maximumBytes: (dependencies.sourceKind==='clipboard'?96:32) * 1024 * 1024
     })
   }
   if (!originalExists) await commitVerifiedManagedOriginal(plan, item, managedBucket, finalPath, stagingPath, verifiedRecoveryBytes)
@@ -211,7 +212,7 @@ async function captureAndPromoteItem(
 
   if (previousState) await readVerifiedOwnedFile({
     root: plan.activeLibrary.libraryRootDirectory, role: plan.activeLibrary.managedOriginalsDirectory,
-    relative: managedRelativePath, expectedSize: item.sourceBytes, expectedDigest: item.sourceDigest, maximumBytes: 32 * 1024 * 1024
+    relative: managedRelativePath, expectedSize: item.sourceBytes, expectedDigest: item.sourceDigest, maximumBytes: (dependencies.sourceKind==='clipboard'?96:32) * 1024 * 1024
   })
 
   // Copy Plan confirmation is the reviewed action authorizing Quick Promote
@@ -390,12 +391,13 @@ async function readSourceEvidence(filePath: string): Promise<{
   }
 }
 
-function createCanonicalCaptureEnvelopeDigest(
-  item: ConfirmedCopyPlan['items'][number]
+export function createCanonicalCaptureEnvelopeDigest(
+  item: Pick<ConfirmedCopyPlan['items'][number],'sourceLocatorDigest'|'sourceGeneration'|'sourceBytes'|'format'|'receivedFileName'>,
+  sourceKind:'local-file'|'clipboard'='local-file'
 ): string {
   const canonicalEnvelope = JSON.stringify({
     source: {
-      kind: 'local-file',
+      kind: sourceKind,
       locatorDigest: item.sourceLocatorDigest,
       generation: item.sourceGeneration,
       byteSize: item.sourceBytes,

@@ -137,7 +137,8 @@ async function planSelection(
   publicItem: CopyIntoLibraryPlanItem
   confirmedItem: ConfirmedCopyPlanItem | null
 }> {
-  const receivedFileName = path.basename(selection.filePath)
+  const receivedFileName = dependencies.sourceKind==='clipboard' ? selection.receivedFileName??'' : path.basename(selection.filePath)
+  if(dependencies.sourceKind==='clipboard'&&(!receivedFileName||receivedFileName.length>180||/[\\/\x00-\x1f]/u.test(receivedFileName)))throw new CaptureIntakeError('plan-not-confirmable','The owned intake display name is invalid.')
   const planItemIdentity = dependencies.createIdentity('plan-item')
 
   try {

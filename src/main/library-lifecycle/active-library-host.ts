@@ -32,7 +32,7 @@ import fs from 'node:fs/promises'
 import { constants as fsConstants } from 'node:fs'
 import path from 'node:path'
 import { randomUUID } from 'node:crypto'
-import { importOwnedImage } from './owned-image-intake'
+import { importOwnedImage,readCompletedClipboardBytes } from './owned-image-intake'
 import type { ImageVariantInput } from '../../shared/contracts/image-tools.contract'
 import { enableVisualAiStorage, readVisualAiEvidence, commitVisualAiEvidence, confirmVisualAiTag as confirmEvidenceTag } from '../visual-ai/visual-ai-storage'
 import type { VisualAiEvidence } from '../../shared/contracts/visual-ai.contract'
@@ -645,6 +645,31 @@ export function createActiveLibraryHost(
   const readTagDecisionContext:ActiveLibraryHost['readTagDecisionContext']=input=>run(active=>readDecisionContext(active,input))
   const readTagIntentContext: ActiveLibraryHost['readTagIntentContext'] = scope => run(active => readTagContext(active,scope))
   const readTagIntents: ActiveLibraryHost['readTagIntents'] = scope => run(active => readSavedTagIntents(active,scope))
+  const clipboardHeader=(raw:unknown,withBytes:boolean)=>{
+    if(!raw||typeof raw!=='object'||Array.isArray(raw)||Object.keys(raw).some(key=>!['requestId','libraryIdentity','generation','fileName',...(withBytes?['bytes']:[])].includes(key)))throw hostError('library-operation-failed')
+    const value=raw as Record<string,unknown>
+    if(typeof value.requestId!=='string'||!/^[a-zA-Z0-9-]{1,100}$/.test(value.requestId)||typeof value.libraryIdentity!=='string'||typeof value.generation!=='string'||typeof value.fileName!=='string')throw hostError('library-operation-failed')
+    const fileName=value.fileName.normalize('NFC')
+    if(fileName.length>180||fileName!==fileName.trim()||/[\\/:*?"<>|\x00-\x1f]/u.test(fileName)||!fileName.toLowerCase().endsWith('.png')||fileName==='.png')throw hostError('library-operation-failed')
+    return{requestId:value.requestId,libraryIdentity:value.libraryIdentity,generation:value.generation,fileName}
+  }
+  const clipboardWork=(input:ReturnType<typeof clipboardHeader>,getBytes:()=>Promise<Uint8Array>,restore:boolean)=>serialRun(async active=>{
+    const checkSource=()=>{if(input.libraryIdentity!==active.identity||input.generation!==active.generation)throw hostError('library-generation-conflict')}
+    checkSource()
+    if(!dependencies.resourceAdmission)throw new ActiveLibraryHostError('library-operation-failed','Clipboard image resource admission is unavailable.')
+    const permit=await dependencies.resourceAdmission.reserveLocalWork('media',512*1024*1024,new AbortController().signal)
+    try{
+      checkSource();const prior=restore?await readCompletedClipboardBytes(active,input):null,bytes=prior??await getBytes();checkSource()
+      if(!(bytes instanceof Uint8Array)||!bytes.byteLength||bytes.byteLength>96*1024*1024)throw hostError('library-operation-failed')
+      return await importOwnedImage(active,{requestId:input.requestId,fileName:input.fileName,bytes:Buffer.from(bytes),source:{kind:'clipboard'}},preview,checkSource)
+    }finally{permit.release()}
+  })
+  const importClipboardImage:ActiveLibraryHost['importClipboardImage']=raw=>{
+    try{const input=clipboardHeader(raw,true);if(!(raw.bytes instanceof Uint8Array)||!raw.bytes.byteLength||raw.bytes.byteLength>96*1024*1024)throw hostError('library-operation-failed');return clipboardWork(input,async()=>raw.bytes,false)}catch(error){return Promise.reject(error)}
+  }
+  const importClipboardImageFromReader:ActiveLibraryHost['importClipboardImageFromReader']=(raw,read)=>{
+    try{const input=clipboardHeader(raw,false);if(typeof read!=='function')throw hostError('library-operation-failed');return clipboardWork(input,read,true)}catch(error){return Promise.reject(error)}
+  }
   const importDownloadedImage: ActiveLibraryHost['importDownloadedImage'] = input => serialRun(active => {
     if (input.generation !== active.generation) throw hostError('library-generation-conflict')
     return importOwnedImage(active, { ...input, source: { kind: 'download', url: input.sourceUrl } }, preview)
@@ -718,7 +743,7 @@ export function createActiveLibraryHost(
     prepareAddAssets, dispatchAddAssets, inspectCapture,
     readAssetContext,readBackgroundAnalysis,configureBackgroundAnalysis,changeBackgroundIntent,readTagRecovery,readTagEffectReceipt, readTagDecisionContext,decideTag,holdBusinessAdmission,enableTagExecution,claimTagExecution,markTagExecutionSent,commitTagExecution,finishTagExecution,readTagExecutionRequest,readTagOutbox,ackTagOutbox,readTagExecution, readTagIntentContext, readTagIntents, saveTagIntent,saveTagBatch, listAssets, searchAssets, listTags, searchTags, getTag, listTrash, readPreview, readVisualSession,readVisualPreview, readManagedOriginal, createTag, updateTag, addTagToAsset,
     createTagAlias, removeTagAlias, setTagParent, removeTagFromAsset, batchAddTagsToAssets, batchRemoveTagsFromAssets, replaceTagForAssets, listAssetTags, updateAssetCaption, resetAssetCaptionEdited,
-    listIntakeRecovery, prepareIntakeRecovery, runIntakeRecovery, downloadJournal, prepareTrash, dispatchTrash, inspectTrash, enableVisualAi, saveVisualAiEvidence, listVisualAiEvidence, confirmVisualAiTag, importDownloadedImage, recoverDownloadedImage, saveImageVariant
+    listIntakeRecovery, prepareIntakeRecovery, runIntakeRecovery, downloadJournal, prepareTrash, dispatchTrash, inspectTrash, enableVisualAi, saveVisualAiEvidence, listVisualAiEvidence, confirmVisualAiTag, importClipboardImage, importClipboardImageFromReader, importDownloadedImage, recoverDownloadedImage, saveImageVariant
   })
 
   async function openDirectory(directory: string): Promise<CreateLibraryResult> {

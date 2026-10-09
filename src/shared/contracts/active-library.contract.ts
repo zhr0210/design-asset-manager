@@ -307,6 +307,9 @@ export interface ActiveLibraryHost {
   readVisualPreview(input:import('./tag-execution.contract').TagExecutionScope&{assetRevision:string;previewGeneration:string}):Promise<Uint8Array>
   /** Main-only image tool reader; not exposed as a Preload channel. */
   readManagedOriginal(assetId: string, revision: string, previewGeneration: string): Promise<{ bytes: Uint8Array; identity: string }>
+  /** Main-only bounded PNG bytes from the explicit clipboard-image action. */
+  importClipboardImageFromReader(input: { requestId: string; libraryIdentity: string; generation: string; fileName: string }, read: () => Promise<Uint8Array>): Promise<{ assetId: string }>
+  importClipboardImage(input: { requestId: string; libraryIdentity: string; generation: string; fileName: string; bytes: Uint8Array }): Promise<{ assetId: string }>
   importDownloadedImage(input: { requestId: string; generation: string; fileName: string; sourceUrl: string; bytes: Uint8Array }): Promise<{ assetId: string }>
   /** Main-only: resume a previously admitted download without another HTTP request. */
   recoverDownloadedImage(input: { requestId: string; generation: string; fileName: string; sourceUrl: string }): Promise<{ assetId: string }>

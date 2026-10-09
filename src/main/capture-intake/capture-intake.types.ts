@@ -141,6 +141,8 @@ export class CaptureIntakeError extends Error {
 
 export interface LocalFileSelection {
   filePath: string
+  /** Internal owned-byte intake display name; never a filesystem locator. */
+  receivedFileName?: string
 }
 
 export type LocalFileSelectionOutcome =
@@ -254,6 +256,7 @@ export interface CaptureGateway {
 }
 
 export interface CaptureIntakeDependencies {
+  sourceKind?: 'local-file' | 'clipboard'
   inspectVideo?(file:string):Promise<boolean>
   /** Internal explicit recovery only; ordinary plan replay remains read-only. */
   resumeAccepted?: boolean

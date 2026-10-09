@@ -8,6 +8,7 @@ export interface WorkMediaActions {
         message: string;
     }>>;
     handoff(input: WorkHandoffRequest): Promise<WorkResult<WorkHandoffReceipt>>;
+    open?: (id: string) => Promise<WorkResult<WorkHandoffReceipt>>;
     list?: (scope: WorkMediaScope) => Promise<WorkResult<WorkHandoffReceipt[]>>;
     clear?: (id: string) => Promise<WorkResult<{
         message: string;

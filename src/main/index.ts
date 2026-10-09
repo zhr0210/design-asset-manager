@@ -45,7 +45,8 @@ import {parseRetrievalModelAction,parseRetrievalGeneration,parseAssetSemanticSea
 import {createQueryFileGrants,type QueryFileGrants} from './retrieval-workspace/query-file-grants'
 import {OCR_CHANGED, OCR_RUNTIME_CHANGED} from '../shared/contracts/asset-ocr.contract'
 import {randomUUID} from 'node:crypto'
-import {screen,nativeTheme} from 'electron'
+import {screen,nativeTheme,clipboard} from 'electron'
+import {createNativeClipboardImageReader} from './work-mode/native-clipboard-image'
 import {createWorkWindowController} from './work-mode/work-window-controller'
 import {createMacVideoRuntime} from './work-mode/macos-video-runtime'
 import {createWindowsVideoRuntime} from './work-mode/windows-video-runtime'
@@ -210,7 +211,7 @@ const workspaceTransitions = createWorkspaceTransitions({
   }
 })
 const workspaceHandlers = new Map<string, MainIpcHandler>()
-const browserDeniedChannels = new Set(['app:prepare-browser-entry','asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:drag-file','work-window:drag-files'])
+const browserDeniedChannels = new Set(['app:prepare-browser-entry','asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:open-file','work-window:drag-file','work-window:drag-files'])
 const nativeDraftChannels = new Set(['drafts:put', 'drafts:remove', 'workspace:ready', 'workspace:flush-ack'])
 const nativeCardChannels = new Set([
   'asset-card:inspect', 'asset-card:action', 'tag-decision:prepare', 'tag-decision:confirm', 'tag-decision:discard',
@@ -409,7 +410,7 @@ app.whenReady().then(async () => {
     const deviceId=(appStorage.database.prepare('SELECT identity FROM app_device_identity WHERE singleton=1').get() as {identity:string}).identity
     const handoffFiles=createWorkFileHandoffs({host:activeLibraryHost,root:join(app.getPath("userData"),"work-file-handoffs"),admission:visualAdmission,open:file=>shell.openPath(file),trash:file=>shell.trashItem(file)})
     workMedia=createWorkMediaController({host:activeLibraryHost,files:handoffFiles,changed:()=>publishWorkspaceEvent("work-sets:changed")})
-    workWindows=createWorkWindowController({media:workMedia,host:activeLibraryHost,deviceId,beforeWorkspaceClose:beforeWorkspaceWindowClose,areas:()=>screen.getAllDisplays().map(d=>d.workArea),theme:()=>nativeTheme.shouldUseDarkColors?'dark':'light',createWindow:input=>createElectronWorkWindow({...input,entryUrl:trustedRendererEntryUrl,preloadPath:join(__dirname,'../preload/work-window.cjs')}),changed:()=>{publishWorkspaceEvent('work-sets:changed')},hideMain:()=>{mainWindow?.hide()},locate:(scope,setId,assetId)=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus()}publishWorkspaceEvent('work-sets:locate',{...scope,setId,assetId})}})
+    workWindows=createWorkWindowController({readClipboardImage:createNativeClipboardImageReader(clipboard),media:workMedia,host:activeLibraryHost,deviceId,beforeWorkspaceClose:beforeWorkspaceWindowClose,areas:()=>screen.getAllDisplays().map(d=>d.workArea),theme:()=>nativeTheme.shouldUseDarkColors?'dark':'light',createWindow:input=>createElectronWorkWindow({...input,entryUrl:trustedRendererEntryUrl,preloadPath:join(__dirname,'../preload/work-window.cjs')}),changed:()=>{publishWorkspaceEvent('work-sets:changed')},hideMain:()=>{mainWindow?.hide()},locate:(scope,setId,assetId)=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus()}publishWorkspaceEvent('work-sets:locate',{...scope,setId,assetId})}})
     screen.on('display-removed',()=>{void workWindows?.recover()});screen.on('display-metrics-changed',()=>{void workWindows?.recover()})
     assetCard = createAssetCardController({
       host: activeLibraryHost,

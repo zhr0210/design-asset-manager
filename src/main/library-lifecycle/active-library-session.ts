@@ -85,6 +85,7 @@ export interface ActiveLibrarySession {
 }
 
 export interface ActiveLibraryCaptureDependencies {
+  sourceKind?: 'local-file' | 'clipboard'
   inspectVideo?(file:string):Promise<boolean>
   resumeAccepted?: boolean
   session: ActiveLibrarySession
@@ -189,6 +190,7 @@ export function createActiveLibrarySession(
       const workflow = await runGuarded(() =>
         createAddAssetsWorkflow({
           selectLocalFiles: dependencies.selectLocalFiles,
+          sourceKind: dependencies.sourceKind,
           inspectVideo:dependencies.inspectVideo,
           resolveActiveLibrary: async () => createCaptureContext(binding),
         persistence: createSqliteCapturePersistenceAdapter(binding.database, {

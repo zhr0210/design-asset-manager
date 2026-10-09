@@ -1,9 +1,10 @@
 import fs from 'node:fs/promises';
+import { constants } from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import sharp from 'sharp';
 import type { ActiveLibraryHost } from '../../shared/contracts/active-library.contract';
-import type { WorkHandoffReceipt, WorkHandoffRequest, WorkHandoffImageResult, WorkImageTransform } from '../../shared/contracts/work-media.contract';
+import type { WorkHandoffReceipt, WorkHandoffRequest, WorkHandoffImageResult, WorkImageTransform, WorkMediaScope } from '../../shared/contracts/work-media.contract';
 import { validateWorkHandoff } from '../../shared/contracts/work-media.contract';
 import type { VisualAdmission } from '../visual-ai/visual-admission';
 import { readVerifiedOwnedFile } from '../platform/verified-owned-file';
@@ -96,22 +97,40 @@ export function createWorkFileHandoffs(input: {
         }
         return { directories, metadataBytes };
     };
-    const load = async (id: string) => {
+    const readReceipt = async (id: string) => {
+        if (!/^handoff:[a-f0-9-]{36}$/.test(id)) throw Error('交付记录无效。');
+        const relative = id.slice(8) + '/receipt.json', file = path.join(input.root, relative), before = await fs.lstat(file, { bigint: true });
+        if (!before.isFile() || before.isSymbolicLink() || before.nlink !== 1n || before.size < 1n || before.size > BigInt(128 * 1024)) throw Error('交付记录无效。');
+        const handle = await fs.open(file, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+        let bytes: Uint8Array;
+        try {
+            const opened = await handle.stat({ bigint: true });
+            if (opened.dev !== before.dev || opened.ino !== before.ino || opened.size !== before.size || !opened.isFile()) throw Error('交付记录已变化。');
+            const buffer = Buffer.alloc(Number(before.size) + 1), received = await handle.read(buffer, 0, buffer.length, 0);
+            if (received.bytesRead !== Number(before.size)) throw Error('交付记录已变化。');
+            bytes = buffer.subarray(0, received.bytesRead);
+        } finally { await handle.close(); }
+        return readVerifiedOwnedFile({ root: input.root, role: input.root, relative, expectedSize: bytes.length, expectedDigest: sha(bytes), maximumBytes: 128 * 1024 });
+    };
+    const immutableRecord = (record: HeldHandoff) => JSON.stringify({ scope: record.scope, actor: record.actor, sourceGeneration: record.sourceGeneration, sourceMembers: record.sourceMembers, provenance: record.provenance, receipt: { id: record.receipt.id, kind: record.receipt.kind, fileName: record.receipt.fileName, bytes: record.receipt.bytes, sha256: record.receipt.sha256, image: record.receipt.image, archive: record.receipt.archive } });
+    const load = async (id: string, fresh = false) => {
         if (!/^handoff:[a-f0-9-]{36}$/.test(id))
             throw Error('交付记录无效。');
-        let record = records.get(id);
+        const cached = records.get(id);
+        let record = fresh ? undefined : cached;
         if (!record) {
             const dir = path.join(input.root, id.slice(8)), info = await fs.lstat(dir);
             if (!info.isDirectory() || info.isSymbolicLink())
                 throw Error('交付目录已变化。');
-            const bytes = await fs.readFile(path.join(dir, 'receipt.json'));
+            const { bytes } = await readReceipt(id);
             if (bytes.length > 128 * 1024)
                 throw Error('交付记录无效。');
-            record = JSON.parse(bytes.toString()) as HeldHandoff;
+            record = JSON.parse(Buffer.from(bytes).toString()) as HeldHandoff;
             const storedScope = validateWorkHandoff(record.scope);
             if (bytes.length > receiptLimit(storedScope.kind) || record.receipt.id !== id || record.receipt.kind !== storedScope.kind)
                 throw Error('交付记录无效。');
             if (storedScope.kind !== 'zip' && (record.sourceMembers !== undefined || record.receipt.archive !== undefined)) throw Error('交付记录无效。');
+            if (fresh && cached && immutableRecord(record) !== immutableRecord(cached)) throw Error('交付记录身份已变化，请核对副本，未请求接收应用。');
             records.set(id, record);
         }
         const current = input.host.inspect();
@@ -308,7 +327,74 @@ export function createWorkFileHandoffs(input: {
     };
     const whenIdle = async (actor: string) => { while (jobs.get(actor)?.size) await Promise.all([...jobs.get(actor)!].map(job => job.done)); };
     const cancel = async (actor: string) => { for (const job of jobs.get(actor) ?? []) job.abort.abort(workHandoffCancelled()); await whenIdle(actor); return { message: '本窗交付的取消请求已处理，任务已结束；已完成副本保持。' }; };
-    return { prepare, cancel, whenIdle, hasActive: (actor: string) => Boolean(jobs.get(actor)?.size),
+    const openExisting = (actor: string, id: string, guard?: (scope?: WorkMediaScope) => void): Promise<WorkHandoffReceipt> => {
+        const abort = new AbortController(); let finish!: () => void;
+        const job: Job = { abort, done: new Promise<void>(resolve => { finish = resolve; }), finish: () => finish() }, owned = jobs.get(actor) ?? new Set<Job>();
+        owned.add(job); jobs.set(actor, owned);
+        return serialize(async () => {
+            let checkedScope: WorkMediaScope | undefined;
+            const check = () => { assertNotCancelled(abort.signal); guard?.(checkedScope); }; let permit: Awaited<ReturnType<VisualAdmission['reserveLocalWork']>> | undefined, dispatched = false;
+            try {
+                check(); permit = await input.admission?.reserveLocalWork('media', 512 * 1024 * 1024, abort.signal); check();
+                const record = await load(id, true);
+                checkedScope = { libraryIdentity: record.scope.libraryIdentity, generation: input.host.inspect().generation!, setId: record.scope.setId, assetId: record.scope.assetId }; check();
+                if (record.actor !== actor) throw Object.assign(Error('交付副本不属于当前窗口。'), { code: 'WORK_HANDOFF_ACTOR_MISMATCH' });
+                const verified = await read(id); check();
+                if (immutableRecord(verified.record) !== immutableRecord(record)) throw Error('交付记录已变化，未请求接收应用。');
+                const metadata = await readReceipt(id); check();
+                const currentMetadata = JSON.parse(Buffer.from(metadata.bytes).toString()) as HeldHandoff;
+                if (immutableRecord(currentMetadata) !== immutableRecord(record)) throw Error('交付记录已变化，未请求接收应用。');
+                const { directories, metadataBytes } = await retainedDirectories(); check();
+                let total = metadataBytes;
+                for (const dir of directories) for (const file of await fs.readdir(path.join(input.root, dir.name), { withFileTypes: true })) {
+                    check(); if (!file.isFile() || file.isSymbolicLink()) throw Error('交付目录包含未知内容，请检查。');
+                    total += (await fs.lstat(path.join(input.root, dir.name, file.name))).size;
+                }
+                check(); if (directories.length > 64 || total + receiptLimit(record.scope.kind) > 1024 ** 3) throw Error('交付记录更新超过保留预算，未请求接收应用。');
+                const finalVerified = await read(id); check();
+                const finalRecord = await load(id, true); check();
+                if (immutableRecord(finalRecord) !== immutableRecord(record) || finalVerified.path !== verified.path) throw Error('交付副本已变化，未请求接收应用。');
+                // No new copy or preparation. A cancellation before this point
+                // never reaches the OS; after dispatch it cannot withdraw it.
+                dispatched = true;
+                let error: string;
+                try { error = await input.open(finalVerified.path); } catch { throw Object.assign(Error('系统打开请求已发出，但结果未确认；副本保留，请先核对接收应用，勿盲目重开。'), { code: 'WORK_HANDOFF_OPEN_UNKNOWN' }); }
+                guard?.(checkedScope);
+                const afterRequest = await read(id); guard?.(checkedScope);
+                const afterRecord = await load(id, true); guard?.(checkedScope);
+                if (afterRequest.path !== finalVerified.path || immutableRecord(afterRecord) !== immutableRecord(record)) throw Error('系统请求期间副本已变化。');
+                record.receipt.status = error ? 'open-rejected' : 'open-requested';
+                record.receipt.message = (error ? '接收应用拒绝打开；原交付副本仍保留。' : '已请求默认应用打开已准备的副本；请在接收应用核对，此状态不代表接收完成。') + (abort.signal.aborted ? '取消发生在系统请求发出后，不能撤回该请求。' : '');
+                const json = JSON.stringify(record, null, 2) + '\n';
+                if (Buffer.byteLength(json) > receiptLimit(record.scope.kind)) throw Error('交付记录更新超过大小上限。');
+                const dir = path.join(input.root, id.slice(8)), target = path.join(dir, 'receipt.json'), temporary = path.join(dir, 'receipt-update-' + randomUUID() + '.json');
+                let ownedTemporary: { dev: number; ino: number } | undefined;
+                try {
+                    const current = await readReceipt(id);
+                    guard?.(checkedScope);
+                    if (current.fileIdentity !== metadata.fileIdentity) throw Error('交付记录在系统请求期间已变化。');
+                    const handle = await fs.open(temporary, 'wx');
+                    try { const stamp = await handle.stat(); ownedTemporary = { dev: stamp.dev, ino: stamp.ino }; await handle.writeFile(json); await handle.sync(); } finally { await handle.close(); }
+                    const stillCurrent = await readReceipt(id);
+                    guard?.(checkedScope);
+                    if (stillCurrent.fileIdentity !== metadata.fileIdentity) throw Error('交付记录在系统请求期间已变化。');
+                    await fs.rename(temporary, target);
+                    const saved = await readReceipt(id);
+                    guard?.(checkedScope);
+                    if (sha(saved.bytes) !== sha(Buffer.from(json))) throw Error('交付记录更新结果未确认。');
+                } catch {
+                    if (ownedTemporary) { try { const now = await fs.lstat(temporary); if (now.isFile() && !now.isSymbolicLink() && now.dev === ownedTemporary.dev && now.ino === ownedTemporary.ino) await fs.unlink(temporary); } catch { /* Unknown replacements remain for review. */ } }
+                    throw Object.assign(Error('系统打开已请求，但交付记录更新未确认；副本保留，请先核对接收应用，勿盲目重开。'), { code: 'WORK_HANDOFF_OPEN_RECORD_UNKNOWN' });
+                }
+                records.set(id, record); return { ...record.receipt };
+            } catch (error) {
+                if (abort.signal.aborted && !dispatched) throw workHandoffCancelled('打开交付副本已取消，未请求接收应用；原副本保持。');
+                if (dispatched && !(error && typeof error === 'object' && 'code' in error && ['WORK_HANDOFF_OPEN_UNKNOWN', 'WORK_HANDOFF_OPEN_RECORD_UNKNOWN'].includes(String(error.code)))) throw Object.assign(Error('系统打开已请求，但交付结果或记录未确认；副本保留，请先核对接收应用，勿盲目重开。'), { code: 'WORK_HANDOFF_OPEN_RECORD_UNKNOWN' });
+                throw error;
+            } finally { permit?.release(); }
+        }).finally(() => { owned.delete(job); if (!owned.size && jobs.get(actor) === owned) jobs.delete(actor); job.finish(); });
+    };
+    return { prepare, openExisting, cancel, whenIdle, hasActive: (actor: string) => Boolean(jobs.get(actor)?.size),
         list: async (scope: import('../../shared/contracts/work-media.contract').WorkMediaScope) => {
             await input.host.readWorkMedia(scope);
             let dirs: import('node:fs').Dirent[];

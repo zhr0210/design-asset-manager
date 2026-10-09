@@ -14,13 +14,15 @@ export interface WorkWindowSnapshot {token:string;scope:WorkScope;set:SavedWorkS
 export interface WorkWindowControlState {id:string;open:boolean;pinned:boolean;visible:boolean;hasUnsaved:boolean;layoutError?:string}
 export type WorkWindowControlInput=WorkScope & {id:string} & ({kind:'pin';pinned:boolean}|{kind:'hide'|'recover'|'close'})
 export interface WorkWindowControlResult {status:'applied'|'review-required';window:WorkWindowControlState;message?:string}
-export type WorkResult<T>={success:true;value:T}|{success:false;error:string;code?:string}
-export type WorkWindowAction={token:string}&({kind:'close';discard:boolean}|{kind:'notes-dirty';dirty:boolean}|{kind:'save'|'draft';expectedRevision:number;value:WorkSetValue}|{kind:'pin';pinned:boolean}|{kind:'dock';edge:'left'|'right'}|{kind:'undock'}|{kind:'hide'|'recover'|'add-from-library'|'discard-draft'}|{kind:'locate';assetId:string})
+export interface WorkClipboardEffect{kind:'clipboard-image';assetId:string;libraryIdentity:string;attachment:'unconfirmed'}
+export type WorkResult<T>={success:true;value:T}|{success:false;error:string;code?:string;effect?:WorkClipboardEffect}
+export type WorkWindowAction={token:string}&({kind:'paste-image';requestId:string;expectedRevision:number}|{kind:'close';discard:boolean}|{kind:'notes-dirty';dirty:boolean}|{kind:'save'|'draft';expectedRevision:number;value:WorkSetValue}|{kind:'pin';pinned:boolean}|{kind:'dock';edge:'left'|'right'}|{kind:'undock'}|{kind:'hide'|'recover'|'add-from-library'|'discard-draft'}|{kind:'locate';assetId:string})
 export interface WorkWindowApi {
  mediaRead(input:{token:string;request:import('./work-media.contract').WorkMediaScope}):Promise<WorkResult<import('./work-media.contract').WorkMediaSnapshot>>
  mediaWrite(input:{token:string;request:import('./work-media.contract').WorkMediaWrite}):Promise<WorkResult<import('./work-media.contract').WorkMediaSnapshot>>
  mediaCancel(input:{token:string}):Promise<WorkResult<{message:string}>>
  fileHandoff(input:{token:string;request:import('./work-media.contract').WorkHandoffRequest}):Promise<WorkResult<import('./work-media.contract').WorkHandoffReceipt>>
+ openFile(input:{token:string;id:string}):Promise<WorkResult<import('./work-media.contract').WorkHandoffReceipt>>
  dragFiles(input:{token:string;ids:string[]}):Promise<WorkResult<{message:string}>>
  dragFile(input:{token:string;id:string}):Promise<WorkResult<{message:string}>>
  inspect():Promise<WorkResult<WorkWindowSnapshot>>;act(action:WorkWindowAction):Promise<WorkResult<WorkWindowSnapshot>>;onState(listener:(state:WorkWindowSnapshot|null)=>void):()=>void;notebookRead(input:{token:string;assetId:string}):Promise<WorkResult<NotebookSnapshot>>;notebookSave(input:{token:string;request:NotebookSaveRequest}):Promise<WorkResult<NotebookSnapshot>>
@@ -50,3 +52,5 @@ export function validateWorkLayout(v:unknown):WorkWindowLayout {
  if(dock&&(actual.width!==72||actual.height!==160))return invalid()
  return{...actual,pinned:r.pinned,open:r.open,...(dock?{dock}:{})}
 }
+
+export function workClipboardRequestId(value:unknown):string{if(typeof value!=='string'||!/^[a-zA-Z0-9-]{1,100}$/.test(value))return invalid();return value}

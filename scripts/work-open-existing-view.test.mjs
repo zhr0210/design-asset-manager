@@ -1,0 +1,56 @@
+// Actual Renderer components; controlled transport, no physical OS-receiver claim.
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
+import {build} from 'esbuild'
+import {_electron as electron} from 'playwright'
+import sharp from 'sharp'
+const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-open-existing-view-')))
+await build({absWorkingDir:process.cwd(),bundle:true,platform:'browser',format:'iife',outfile:path.join(root,'fixture.js'),logLevel:'silent',stdin:{resolveDir:process.cwd(),loader:'jsx',contents:`
+import React,{useState}from'react';import{createRoot}from'react-dom/client';import WorkSetWindow from'./src/renderer/routes/WorkSetWindow';import{WorkFileHandoffPanel}from'./src/renderer/components/library/canvas/WorkFileHandoffPanel';
+const calls={handoffs:[],opens:[],actions:[]},receipts=new Map(),waiting=[];let serial=0,scopeSerial=0,mode='ok',code='WORK_HANDOFF_OPEN_RECORD_UNKNOWN',listener,setFileGeneration;
+let snapshot={token:'native:open-view',scope:{libraryIdentity:'library:fixture',generation:'generation:one'},set:{id:'work-set:fixture',name:'Open fixture',revision:1,assetIds:['asset:alpha','asset:beta'],unavailableIds:[],colors:[],columns:2,note:''},assets:['alpha','beta'].map(id=>({id:'asset:'+id,title:id,revision:'one',thumbnailRef:'fixture',aiCaption:'Public fixture',tags:[],fileType:'png'})),pinned:true,geometry:{x:0,y:0,width:420,height:640,pinned:true,open:true},theme:'light'};
+const prepare=async input=>{calls.handoffs.push(structuredClone(input));const q=input.request||input,zip=q.kind==='zip',value={id:'handoff:'+ ++serial,fileName:zip?'fixture-'+serial+'.zip':'copy-'+serial+'.png',bytes:128,sha256:'a'.repeat(64),kind:q.kind,status:'prepared',message:'Controlled prepared '+serial,...(zip?{archive:{count:q.assetIds.length,items:q.assetIds.map(id=>({fileName:id.slice(6)+'.png',bytes:64,sha256:'a'.repeat(64)}))}}:{})};receipts.set(value.id,value);return{success:true,value}};
+const reply=id=>({success:true,value:{...receipts.get(id),status:'open-requested',message:'Controlled OS requested '+id}});
+const open=async input=>{calls.opens.push(structuredClone(input));const id=typeof input==='string'?input:input.id;if(mode==='delay')return new Promise((resolve,reject)=>waiting.push({id,resolve,reject}));if(mode==='code')return{success:false,error:'Controlled open journal unknown',code};if(mode==='throw')throw Error('Controlled transport unknown');return reply(id)};
+window.workWindowAPI={inspect:async()=>({success:true,value:snapshot}),onState:fn=>{listener=fn;return()=>{}},act:async input=>{calls.actions.push(input);return{success:true,value:snapshot}},notebookRead:async()=>({success:false,error:'NOT_USED'}),notebookSave:async()=>({success:false,error:'NOT_USED'}),mediaRead:async()=>({success:false,error:'NOT_USED'}),mediaWrite:async()=>({success:false,error:'NOT_USED'}),mediaCancel:async()=>({success:true,value:{message:'Fixture cancel'}}),fileHandoff:prepare,openFile:open,dragFile:async()=>({success:true,value:{message:'NOT_USED'}}),dragFiles:async()=>({success:true,value:{message:'NOT_USED'}})};
+window.nativeDraftsAPI={put:async()=>{},remove:async()=>{},ready:async()=>{},acknowledge:async()=>{},onFlush:()=>()=>{},onState:()=>()=>{}};
+const fileActions={handoff:prepare,open,read:async()=>({success:false,error:'NOT_USED'}),write:async()=>({success:false,error:'NOT_USED'}),cancel:async()=>({success:false,error:'NOT_USED'})};
+function FileFixture(){const[generation,setGeneration]=useState('generation:one');setFileGeneration=setGeneration;return<WorkFileHandoffPanel scope={{libraryIdentity:'library:fixture',generation,setId:'work-set:fixture',assetId:'asset:alpha'}} actions={fileActions}/>}
+const rendererRoot=createRoot(document.getElementById('root'));const mount=kind=>{mode='ok';rendererRoot.render(kind==='file'?<FileFixture/>:<WorkSetWindow/>)};mount('file');
+window.fixture={inspect:()=>structuredClone(calls),mode:(next,errorCode='WORK_HANDOFF_OPEN_RECORD_UNKNOWN')=>{mode=next;code=errorCode},waiting:()=>waiting.length,resolve:()=>{const next=waiting.shift();if(!next)throw Error('NO_PENDING');next.resolve(reply(next.id))},reject:()=>{const next=waiting.shift();next.reject(Error('Controlled transport unknown'))},scopeFile:()=>setFileGeneration('generation:'+ ++scopeSerial),mount,scopeNative:()=>{snapshot={...snapshot,token:'native:open-view-'+ ++scopeSerial,scope:{...snapshot.scope,generation:'generation:'+scopeSerial}};listener(snapshot)},unmount:()=>rendererRoot.unmount()};
+`}})
+await fs.writeFile(path.join(root,'reference.png'),await sharp({create:{width:8,height:8,channels:3,background:'#486890'}}).png().toBuffer())
+await fs.writeFile(path.join(root,'index.html'),'<meta charset="utf-8"><div id="root"></div><script src="fixture.js"></script>')
+await fs.writeFile(path.join(root,'main.cjs'),`const{app,BrowserWindow,protocol,session}=require('electron'),fs=require('node:fs');protocol.registerSchemesAsPrivileged([{scheme:'dam-preview',privileges:{standard:true,secure:true,supportFetchAPI:true}}]);app.setPath('userData',${JSON.stringify(path.join(root,'profile'))});app.whenReady().then(()=>{session.defaultSession.webRequest.onBeforeRequest((r,done)=>done({cancel:!r.url.startsWith('file:')&&!r.url.startsWith('dam-preview:')}));protocol.handle('dam-preview',()=>new Response(fs.readFileSync(${JSON.stringify(path.join(root,'reference.png'))}),{headers:{'Content-Type':'image/png'}}));new BrowserWindow({show:false,width:1000,height:1200,webPreferences:{contextIsolation:true,nodeIntegration:false}}).loadFile(${JSON.stringify(path.join(root,'index.html'))})});app.on('window-all-closed',()=>app.quit())`)
+const app=await electron.launch({args:[path.join(root,'main.cjs')],env:{PATH:'/usr/bin:/bin:/usr/sbin:/sbin',ELECTRON_RUN_AS_NODE:'',NODE_OPTIONS:'',ELECTRON_RENDERER_URL:''}})
+try{
+ const page=await app.firstWindow();page.setDefaultTimeout(6000)
+ const calls=()=>page.evaluate(()=>window.fixture.inspect())
+ const filePrepare=()=>page.getByRole('button',{name:'准备交付副本',exact:true}),fileOpen=()=>page.getByRole('button',{name:'用默认应用打开副本',exact:true})
+ await filePrepare().click();await page.getByText('Controlled prepared 1',{exact:true}).waitFor();assert.equal((await calls()).handoffs.length,1)
+ await fileOpen().click();await page.getByText('Controlled OS requested handoff:1',{exact:true}).waitFor();assert.deepEqual((await calls()).opens,['handoff:1']);assert.equal((await calls()).handoffs.length,1,'prepared default open must not create a second copy')
+ await page.evaluate(()=>window.fixture.mode('delay'));await fileOpen().click();await page.waitForFunction(()=>window.fixture.waiting()===1)
+ assert.equal(await fileOpen().isDisabled(),true);assert.equal(await filePrepare().isDisabled(),true);await fileOpen().dispatchEvent('click');assert.equal((await calls()).opens.length,2,'busy open cannot be repeated in parallel')
+ await page.evaluate(()=>window.fixture.resolve());await page.waitForFunction(()=>!Array.from(document.querySelectorAll('button')).find(b=>b.textContent==='用默认应用打开副本')?.disabled)
+ await page.evaluate(()=>window.fixture.mode('code','WORK_HANDOFF_OPEN_RECORD_UNKNOWN'));await fileOpen().click();await page.getByRole('alert').filter({hasText:'Controlled open journal unknown'}).waitFor()
+ assert.equal(await fileOpen().isDisabled(),true,'a dispatched request with unknown journal must block replay');await fileOpen().dispatchEvent('click');assert.equal((await calls()).opens.length,3)
+ await page.evaluate(()=>window.fixture.scopeFile());await filePrepare().click();await page.getByText('Controlled prepared 2',{exact:true}).waitFor()
+ await page.evaluate(()=>window.fixture.mode('delay'));await fileOpen().click();await page.waitForFunction(()=>window.fixture.waiting()===1);await page.evaluate(()=>window.fixture.scopeFile());await page.evaluate(()=>window.fixture.resolve());await filePrepare().waitFor()
+ assert.equal(await page.getByText('Controlled OS requested handoff:2',{exact:true}).count(),0,'old-scope open result cannot replace the new scope receipt')
+ // Actual WorkSetWindow carries ArchivePanel onBusy into its close/dock controls.
+ await page.evaluate(()=>window.fixture.mount('native'));await page.getByRole('button',{name:'查看参考 alpha',exact:true}).waitFor()
+ const archivePrepare=()=>page.getByRole('button',{name:'准备 ZIP 归档',exact:true}),archiveOpen=()=>page.getByRole('button',{name:'用默认应用打开 ZIP',exact:true})
+ await archivePrepare().click();await archiveOpen().waitFor();const beforeArchive=(await calls()).handoffs.length,archiveId=(await calls()).handoffs.at(-1)
+ assert.equal(archiveId.request.kind,'zip');await archiveOpen().click();await page.getByRole('status').filter({hasText:'Controlled OS requested handoff:3'}).waitFor();assert.equal((await calls()).handoffs.length,beforeArchive)
+ assert.deepEqual((await calls()).opens.at(-1),{token:'native:open-view',id:'handoff:3'})
+ await page.evaluate(()=>window.fixture.mode('delay'));await archiveOpen().click();await page.waitForFunction(()=>window.fixture.waiting()===1)
+ const close=()=>page.getByRole('button',{name:'关闭工作窗口 Open fixture',exact:true}),dock=()=>page.getByRole('button',{name:'左侧停靠',exact:true})
+ assert.equal(await close().isDisabled(),true);assert.equal(await dock().isDisabled(),true);assert.equal(await archivePrepare().isDisabled(),true);const requestCount=(await calls()).opens.length;await page.getByRole('button',{name:'正在请求打开…',exact:true}).dispatchEvent('click');assert.equal((await calls()).opens.length,requestCount)
+ await page.evaluate(()=>window.fixture.resolve());await archiveOpen().waitFor();assert.equal(await close().isDisabled(),false)
+ await page.evaluate(()=>window.fixture.mode('code','WORK_HANDOFF_OPEN_RECORD_UNKNOWN'));await archiveOpen().click();await page.getByRole('alert').filter({hasText:'Controlled open journal unknown'}).waitFor();assert.equal(await archiveOpen().isDisabled(),true,'archive unknown journal must not resend OS request')
+ await page.evaluate(()=>window.fixture.scopeNative());await archivePrepare().click();await archiveOpen().waitFor();const newerId=(await calls()).handoffs.length
+ await page.evaluate(()=>window.fixture.mode('delay'));await archiveOpen().click();await page.waitForFunction(()=>window.fixture.waiting()===1);await page.evaluate(()=>window.fixture.scopeNative());await page.evaluate(()=>window.fixture.resolve());await archivePrepare().waitFor();assert.equal(await archiveOpen().count(),0,'old-token archive receipt cannot appear in the fresh scope');assert.equal((await calls()).handoffs.length,newerId)
+ console.log('PASS: actual Panel/WorkSetWindow/Archive React opens confirmed receipt without another preparation; request counts/anchor token; unknown journal blocks replay; busy no parallel and real parent close/dock disabled; old scope/token late results retired. Controlled bridge; OS receiver effects remain separate.')
+}finally{await(await app.firstWindow()).evaluate(()=>window.fixture.unmount()).catch(()=>{});await app.close();assert.equal(path.dirname(root),await fs.realpath(os.tmpdir()));assert.ok(path.basename(root).startsWith('dam-open-existing-view-'));await fs.rm(root,{recursive:true,force:true})}
