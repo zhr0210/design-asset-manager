@@ -1,0 +1,15 @@
+node:internal/modules/run_main:144
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: preparation must return an owned release, independent of later transport signals
+    at file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/macos-real-vision-close-race.test.mjs:5660:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'undefined',
+  expected: 'function',
+  operator: 'strictEqual'
+}
+
+Node.js v20.16.0

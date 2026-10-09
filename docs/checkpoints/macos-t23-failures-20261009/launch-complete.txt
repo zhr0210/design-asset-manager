@@ -1,0 +1,21 @@
+✔ Main retains a Browser launch received before a cold Desktop Host is ready (1.618417ms)
+✔ a cold Browser Host retains an early Desktop launch and coalesces pending duplicates (0.326375ms)
+✔ ready launches share the existing desktop window in both entry orders (1.507417ms)
+✔ launch admission is checked on request and again before each queued presentation (0.35925ms)
+✔ an unsuccessful Browser opening does not prevent an already queued Desktop opening (0.19575ms)
+✔ presentation failure feedback also covers an actual Desktop failure and retains the rejection (0.109125ms)
+✔ Main reports a failed Browser opening, preserves the Host, and supports retry plus the existing Desktop (0.849167ms)
+✔ Main explicitly rejects Browser presentation when the local server is unavailable (0.366708ms)
+✔ the visible Browser command uses launch feedback and retains its trusted success or rejection result (0.728416ms)
+✔ Main startup failure reports fixed safe guidance, approves cleanup exit, and returns before presenting any workspace (1.538458ms)
+✔ Main cold Browser presentation failure keeps activation and repeated launch recovery available (0.600708ms)
+✔ Main uses one cold/repeated launch owner and rejects presentation during exit or drain (0.0825ms)
+✔ Windows Browser Start menu shortcut targets the same installed executable and is removed on uninstall (0.680875ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11.730834

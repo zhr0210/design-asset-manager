@@ -1,0 +1,105 @@
+TAP version 13
+# Subtest: production caption and tag Host checks allow one definite uncommitted local OOM recovery and persist one effect each
+ok 1 - production caption and tag Host checks allow one definite uncommitted local OOM recovery and persist one effect each
+  ---
+  duration_ms: 281.073959
+  ...
+# Subtest: unavailable model resources do not create repeated claims, requests or attempts while OCR remains runnable
+ok 2 - unavailable model resources do not create repeated claims, requests or attempts while OCR remains runnable
+  ---
+  duration_ms: 269.168125
+  ...
+# Subtest: production background loop commits all three capabilities through strict executors and replays notifications without inference
+ok 3 - production background loop commits all three capabilities through strict executors and replays notifications without inference
+  ---
+  duration_ms: 270.795
+  ...
+# Subtest: caption retry usage includes both physical calls and survives transactional background receipt and reopening
+ok 4 - caption retry usage includes both physical calls and survives transactional background receipt and reopening
+  ---
+  duration_ms: 241.353917
+  ...
+# Subtest: invalid caption usage cannot commit a forged successful receipt
+ok 5 - invalid caption usage cannot commit a forged successful receipt
+  ---
+  duration_ms: 89.203333
+  ...
+# Subtest: production dispatch honors pause, preserves other capabilities on failure, and retries with a new audited attempt
+ok 6 - production dispatch honors pause, preserves other capabilities on failure, and retries with a new audited attempt
+  ---
+  duration_ms: 242.24025
+  ...
+# Subtest: production suspension of a sent request preserves uncertainty across reopening and never automatically resends it
+ok 7 - production suspension of a sent request preserves uncertainty across reopening and never automatically resends it
+  ---
+  duration_ms: 231.516
+  ...
+# Subtest: v14 afterDdl interruption never reports a partial upgrade
+ok 8 - v14 afterDdl interruption never reports a partial upgrade
+  ---
+  duration_ms: 88.146542
+  ...
+# Subtest: v14 beforeCommit interruption never reports a partial upgrade
+ok 9 - v14 beforeCommit interruption never reports a partial upgrade
+  ---
+  duration_ms: 117.351334
+  ...
+# Subtest: v14 afterCommit interruption never reports a partial upgrade
+ok 10 - v14 afterCommit interruption never reports a partial upgrade
+  ---
+  duration_ms: 123.484417
+  ...
+# Subtest: v14 backup migration, late caption fencing, failed newer request and manual priority survive reopening
+ok 11 - v14 backup migration, late caption fencing, failed newer request and manual priority survive reopening
+  ---
+  duration_ms: 150.021166
+  ...
+# Subtest: background request, sent, effect receipt, daily reservations and explicit unknown recovery share the Host transaction
+ok 12 - background request, sent, effect receipt, daily reservations and explicit unknown recovery share the Host transaction
+  ---
+  duration_ms: 146.124208
+  ...
+# Subtest: sent caption across a fresh Host session remains unknown and no old claim authority revives
+ok 13 - sent caption across a fresh Host session remains unknown and no old claim authority revives
+  ---
+  duration_ms: 103.342666
+  ...
+# Subtest: manual interrupted attempts remain actionable without inference and abandoning preserves uncertainty
+ok 14 - manual interrupted attempts remain actionable without inference and abandoning preserves uncertainty
+  ---
+  duration_ms: 108.392125
+  ...
+# Subtest: registered requests interrupted before input preparation are visible without fabricated attempts or hashes
+ok 15 - registered requests interrupted before input preparation are visible without fabricated attempts or hashes
+  ---
+  duration_ms: 97.960833
+  ...
+# Subtest: explicit background rerun retains the original unknown audit after the new attempt is claimed
+ok 16 - explicit background rerun retains the original unknown audit after the new attempt is claimed
+  ---
+  duration_ms: 97.815708
+  ...
+# Subtest: v14 OCR receipts reconcile without inference, preserve corrections, and fence late or invalid output
+ok 17 - v14 OCR receipts reconcile without inference, preserve corrections, and fence late or invalid output
+  ---
+  duration_ms: 113.037791
+  ...
+# Subtest: v14 late combined caption cannot supersede a failed newer independent caption
+ok 18 - v14 late combined caption cannot supersede a failed newer independent caption
+  ---
+  duration_ms: 106.984209
+  ...
+# Subtest: v14 user tag confirmation and rejection remain valid across rerun and reopening
+ok 19 - v14 user tag confirmation and rejection remain valid across rerun and reopening
+  ---
+  duration_ms: 113.905292
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2996.358375

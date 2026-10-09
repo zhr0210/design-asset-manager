@@ -1,0 +1,1 @@
+Actual Main entry handler: trusted native only, shutdown guard, ordinary non-secret one-use address. HTTP grant/Origin/CSRF protections tested separately.

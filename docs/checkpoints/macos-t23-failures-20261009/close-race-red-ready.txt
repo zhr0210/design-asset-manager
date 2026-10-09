@@ -1,0 +1,14 @@
+node:internal/modules/run_main:144
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: physical close must resolve its own stop before delayed filesystem cleanup
+    at file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/macos-real-vision-close-race.test.mjs:5646:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual'
+}
+
+Node.js v20.16.0

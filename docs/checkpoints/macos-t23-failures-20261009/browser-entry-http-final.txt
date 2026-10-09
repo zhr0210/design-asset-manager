@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-local-dam-http
+> node scripts/run-ts-test.mjs scripts/local-dam-http.test.ts
+
+Local Browser session: one-use launch, same-origin/CSRF and command allowlist passed

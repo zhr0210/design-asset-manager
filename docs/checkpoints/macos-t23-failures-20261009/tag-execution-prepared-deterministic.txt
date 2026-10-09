@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: explicit execution upgrade creates one claim-fenced durable tag effect and same-scope duplicate receipt
+ok 1 - explicit execution upgrade creates one claim-fenced durable tag effect and same-scope duplicate receipt
+  ---
+  duration_ms: 152.807291
+  ...
+# Subtest: late combined result stays historical-only after newer tags succeeded
+ok 2 - late combined result stays historical-only after newer tags succeeded
+  ---
+  duration_ms: 138.1855
+  ...
+# Subtest: late combined result stays historical-only after newer tags failed
+ok 3 - late combined result stays historical-only after newer tags failed
+  ---
+  duration_ms: 122.934875
+  ...
+# Subtest: missing session, cancelled signal and expired claim never create tag effects
+ok 4 - missing session, cancelled signal and expired claim never create tag effects
+  ---
+  duration_ms: 107.950917
+  ...
+# Subtest: production tag controller freezes a reviewed preview, revokes legacy receipts at cutover and survives lost notification
+ok 5 - production tag controller freezes a reviewed preview, revokes legacy receipts at cutover and survives lost notification
+  ---
+  duration_ms: 194.883958
+  ...
+# Subtest: v10 seeds the real prior combined source and preserves confirmed/rejected choices
+ok 6 - v10 seeds the real prior combined source and preserves confirmed/rejected choices
+  ---
+  duration_ms: 123.473083
+  ...
+# Subtest: outbox insertion fault rolls back the whole tag effect and allows the same response to be committed once
+ok 7 - outbox insertion fault rolls back the whole tag effect and allows the same response to be committed once
+  ---
+  duration_ms: 108.124625
+  ...
+# Subtest: business suspension denies new effects and user edits but allows only bounded finish records and session inspection
+ok 8 - business suspension denies new effects and user edits but allows only bounded finish records and session inspection
+  ---
+  duration_ms: 102.623375
+  ...
+# Subtest: legacy v10 network failure after send is unknown, not safe-to-resend failure
+ok 9 - legacy v10 network failure after send is unknown, not safe-to-resend failure
+  ---
+  duration_ms: 200.734917
+  ...
+# Subtest: legacy v10 deadline while waiting for a slot is not recorded as remote unknown
+ok 10 - legacy v10 deadline while waiting for a slot is not recorded as remote unknown
+  ---
+  duration_ms: 1361.675042
+  ...
+# Subtest: v10 activation afterDdl fault preserves the correct committed schema and writer mode
+ok 11 - v10 activation afterDdl fault preserves the correct committed schema and writer mode
+  ---
+  duration_ms: 235.203459
+  ...
+# Subtest: v10 activation beforeCommit fault preserves the correct committed schema and writer mode
+ok 12 - v10 activation beforeCommit fault preserves the correct committed schema and writer mode
+  ---
+  duration_ms: 187.7305
+  ...
+# Subtest: v10 activation afterCommit fault preserves the correct committed schema and writer mode
+ok 13 - v10 activation afterCommit fault preserves the correct committed schema and writer mode
+  ---
+  duration_ms: 183.694417
+  ...
+# Subtest: postcommit restoration failure quarantines v10 and never sends an inference request
+ok 14 - postcommit restoration failure quarantines v10 and never sends an inference request
+  ---
+  duration_ms: 180.911625
+  ...
+# Subtest: authority IPC serializes the complete will-change/operation/did-change cycle
+ok 15 - authority IPC serializes the complete will-change/operation/did-change cycle
+  ---
+  duration_ms: 86.540041
+  ...
+# Subtest: failed authority operation while ready restores admission but never revives old receipts
+ok 16 - failed authority operation while ready restores admission but never revives old receipts
+  ---
+  duration_ms: 227.562959
+  ...
+# Subtest: discarding a reviewed operation immediately releases its material and forbids consuming that receipt
+ok 17 - discarding a reviewed operation immediately releases its material and forbids consuming that receipt
+  ---
+  duration_ms: 152.377125
+  ...
+# Subtest: tag recipe empty, strict invalid and bounded truncation cases preserve the last committed result
+ok 18 - tag recipe empty, strict invalid and bounded truncation cases preserve the last committed result
+  ---
+  duration_ms: 397.5445
+  ...
+# Subtest: a tags provider ignoring cancellation retains its permit until settlement and creates no late effect
+ok 19 - a tags provider ignoring cancellation retains its permit until settlement and creates no late effect
+  ---
+  duration_ms: 202.848667
+  ...
+# Subtest: owner revocation before session lookup completes never starts preview materialization
+ok 20 - owner revocation before session lookup completes never starts preview materialization
+  ---
+  duration_ms: 75.134625
+  ...
+# Subtest: unscoped legacy rejection never suppresses an independent tag family
+ok 21 - unscoped legacy rejection never suppresses an independent tag family
+  ---
+  duration_ms: 110.521125
+  ...
+# Subtest: cutover completion cannot reopen admission held by a simultaneous close cycle
+ok 22 - cutover completion cannot reopen admission held by a simultaneous close cycle
+  ---
+  duration_ms: 184.582667
+  ...
+# Subtest: v10 preserves OCR edits, notebook, work layout, organization and download journal across reopen
+ok 23 - v10 preserves OCR edits, notebook, work layout, organization and download journal across reopen
+  ---
+  duration_ms: 130.144292
+  ...
+# Subtest: frozen v9 inspector and its version helper refuse v10 with database bytes unchanged
+ok 24 - frozen v9 inspector and its version helper refuse v10 with database bytes unchanged
+  ---
+  duration_ms: 114.274792
+  ...
+# Subtest: inconsistent current generation is hidden without hiding the basic asset
+ok 25 - inconsistent current generation is hidden without hiding the basic asset
+  ---
+  duration_ms: 111.568458
+  ...
+# Subtest: 150 saved-result reuses retain only 100 terminal jobs without inference or durable changes
+ok 26 - 150 saved-result reuses retain only 100 terminal jobs without inference or durable changes
+  ---
+  duration_ms: 281.800333
+  ...
+# Subtest: terminal retention shares cleanup for success without evicting active work
+ok 27 - terminal retention shares cleanup for success without evicting active work
+  ---
+  duration_ms: 313.378833
+  ...
+# Subtest: terminal retention shares cleanup for failure without evicting active work
+ok 28 - terminal retention shares cleanup for failure without evicting active work
+  ---
+  duration_ms: 310.830625
+  ...
+# Subtest: terminal retention shares cleanup for queued-cancel without evicting active work
+ok 29 - terminal retention shares cleanup for queued-cancel without evicting active work
+  ---
+  duration_ms: 328.462458
+  ...
+# Subtest: terminal retention shares cleanup for sent-cancel without evicting active work
+ok 30 - terminal retention shares cleanup for sent-cancel without evicting active work
+  ---
+  duration_ms: 306.838042
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6740.342125
