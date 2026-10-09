@@ -1,0 +1,12 @@
+{
+  "originalStopStartedUtc": "2026-10-09T04:23:18.518Z",
+  "originalInferenceStartedUtc": "2026-10-09T04:23:13.751Z",
+  "originalStopDurationMs": 5009,
+  "laterSampleProcessCreatedUtc": "2026-10-09T04:43:30.500000+00:00",
+  "laterFirstSampleUtc": "2026-10-09T04:43:43.115292+00:00",
+  "laterLastSampleUtc": "2026-10-09T04:44:10.402141+00:00",
+  "laterPid": 91757,
+  "sampleCount": 100,
+  "sameHistoricalProcessEvidence": false,
+  "reason": "Sampled process was created after the original incident; it cannot establish the original process state or trigger."
+}

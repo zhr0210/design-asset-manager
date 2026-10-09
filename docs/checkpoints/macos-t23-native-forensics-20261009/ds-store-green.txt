@@ -1,0 +1,1 @@
+Production image Copy/Host/handoff/controller: second-member file and cursor agree; wrong native sender rejected. Controlled OS port; physical drop is separately verified.

@@ -1,0 +1,1 @@
+Real qualification twice; owned close separated from delayed disposal; replacement alive/unknown retained until actual close. No active profile DB writes.
