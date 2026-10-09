@@ -5,6 +5,7 @@ import { spawn } from 'node:child_process'
 import { createRequire } from 'node:module'
 import sharp from 'sharp'
 import {startLocalDamFixtures} from './local-dam-fixtures.mjs'
+import {localDamLaunchCommand} from './local-dam-launch-command.mjs'
 
 const client = process.argv.includes('--client=desktop') ? 'desktop' : 'browser'
 const synthetic = process.argv.includes('--synthetic')
@@ -43,7 +44,8 @@ if (synthetic) {
 // Electron is a GUI executable. A Browser-first Host may later be asked to
 // present its first native window; Windows must not inherit SW_HIDE for that
 // presentation. Browser mode itself creates no native workspace window.
-const child = spawn(require('electron'), args, { cwd: process.cwd(), env, windowsHide: false, stdio: 'ignore' })
+const command = localDamLaunchCommand({platform:process.platform,synthetic,electronBinary:require('electron'),root:process.cwd(),args})
+const child = spawn(command.executable, command.args, { cwd: process.cwd(), env, windowsHide: false, stdio: 'ignore' })
 child.once('error', error => { console.error('DAM launcher failed:', error.code); process.exitCode = 1 })
 child.once('exit', async code => { await fixtures?.close(); process.exitCode = code ?? 1 })
 if (evidenceDirectory && client === 'browser') {

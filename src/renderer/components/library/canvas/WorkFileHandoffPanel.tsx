@@ -2,14 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { WorkMediaScope, WorkHandoffKind, WorkHandoffReceipt } from '../../../../shared/contracts/work-media.contract';
 import { workspaceWorkMediaActions, type WorkMediaActions } from './work-media-api';
 import './work-media.css';
-export function WorkFileHandoffPanel({ scope, frameId, video = false, actions = workspaceWorkMediaActions }: {
+export function WorkFileHandoffPanel({ scope, frameId, video = false, actions = workspaceWorkMediaActions, onReceipt }:  {
     scope: WorkMediaScope;
     frameId?: string;
     video?: boolean;
     actions?: WorkMediaActions;
+    onReceipt?: (receipt: WorkHandoffReceipt | undefined) => void;
 }) {
     const [kind, setKind] = useState<WorkHandoffKind>(frameId ? 'reference-frame' : 'original'), [receipt, setReceipt] = useState<WorkHandoffReceipt>(), [busy, setBusy] = useState(false), [error, setError] = useState(''), [review, setReview] = useState(false), live = useRef(true);
     useEffect(() => { live.current = true; return () => { live.current = false; }; }, []);
+    useEffect(() => { onReceipt?.(receipt); }, [receipt, onReceipt]);
     const [retained, setRetained] = useState<WorkHandoffReceipt[]>([]);
     const refresh = async () => { if (!actions.list)
         return; const result = await actions.list(scope); if (live.current) {
