@@ -50,3 +50,13 @@ html.native-work-window,html.native-work-window body,html.native-work-window #ro
 .gallery-design.native-work-surface.dark{color-scheme:dark}
 .gallery-design.native-work-surface .reference-grid:has(>.reference-item:only-child){grid-template-columns:minmax(0,1fr)!important}
 @media(prefers-color-scheme:dark){.native-work-empty{color:#f3f4f8}}
+.gallery-design.native-work-surface .reference-item.reference-selected .reference-picture{outline:2px solid var(--accent);outline-offset:2px}
+.gallery-design.native-work-surface .reference-caption input[type=checkbox]{width:14px;height:14px;margin:0 5px 0 0;accent-color:var(--accent);flex-shrink:0}
+.gallery-design.native-work-surface .work-handoff-item-state{font-size:10px;line-height:1.4;color:var(--muted);padding:3px 0;overflow-wrap:anywhere;min-height:20px}
+.gallery-design.native-work-surface .work-handoff-item-state.ready{color:var(--ink)}
+.gallery-design.native-work-surface .work-handoff-item-state.error{color:var(--danger)}
+.gallery-design.native-work-surface .work-handoff-toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:12px 0;margin:6px 0;border-top:1px solid var(--work-control-hover);border-bottom:1px solid var(--work-control-hover)}
+.gallery-design.native-work-surface .work-handoff-toolbar>span{width:100%;font-size:11px;color:var(--muted)}
+.gallery-design.native-work-surface .work-handoff-toolbar>button{min-height:30px;background:var(--work-control);padding:5px 8px;border-radius:8px;font-size:11px}
+.gallery-design.native-work-surface .work-handoff-toolbar>button[draggable=true]{cursor:grab;background:var(--work-control-hover)}
+.gallery-design.native-work-surface .work-handoff-toolbar>p{width:100%;font-size:10px;line-height:1.5;color:var(--muted);margin:3px 0 0}

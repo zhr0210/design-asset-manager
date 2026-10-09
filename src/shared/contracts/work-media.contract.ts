@@ -59,10 +59,30 @@ export type WorkMediaWrite = WorkMediaScope & {
 export type WorkMediaFile = WorkMediaScope & {
     frameId?: string;
 };
-export type WorkHandoffKind = 'original' | 'preview' | 'compatible-png' | 'reference-frame';
+export interface WorkImageTransform {
+    format: 'png' | 'jpeg' | 'webp';
+    /** PNG is lossless: this setting is accepted but is not applied to PNG. */
+    quality: number;
+    resize?: { fit: 'inside'; width: number; height: number };
+    stripMetadata: boolean;
+}
+export interface WorkHandoffImageResult {
+    width: number;
+    height: number;
+    format: WorkImageTransform['format'];
+    hasAlpha: boolean;
+    autoOriented: true;
+    qualityApplied: boolean;
+    jpegAlphaFlattened: boolean;
+    metadataPolicy: 'stripped' | 'partial';
+    /** Actual output blocks only; this does not promise all source metadata survived. */
+    retainedMetadata: Array<'exif' | 'icc' | 'iptc' | 'xmp'>;
+}
+export type WorkHandoffKind = 'original' | 'preview' | 'compatible-png' | 'reference-frame' | 'processed-image';
 export type WorkHandoffRequest = WorkMediaScope & {
     kind: WorkHandoffKind;
     frameId?: string;
+    imageTransform?: WorkImageTransform;
     action: 'prepare' | 'open';
 };
 export interface WorkHandoffReceipt {
@@ -73,6 +93,7 @@ export interface WorkHandoffReceipt {
     kind: WorkHandoffKind;
     status: 'prepared' | 'open-requested' | 'open-rejected';
     message: string;
+    image?: WorkHandoffImageResult;
 }
 export const WORK_MEDIA_READ = 'work-media:read', WORK_MEDIA_WRITE = 'work-media:write', WORK_MEDIA_CANCEL = 'work-media:cancel', WORK_FILE_HANDOFF = 'work-files:handoff';
 export function validateWorkMediaScope(value: unknown): WorkMediaScope {
@@ -124,9 +145,22 @@ export function validateWorkMediaWrite(value: unknown): WorkMediaWrite {
     throw Error('视频操作无效。');
 }
 export function validateWorkHandoff(value: unknown): WorkHandoffRequest {
-    const r = workRecord(value, ['libraryIdentity', 'generation', 'setId', 'assetId', 'kind', 'frameId', 'action']);
+    const r = workRecord(value, ['libraryIdentity', 'generation', 'setId', 'assetId', 'kind', 'frameId', 'imageTransform', 'action']);
     const scope = validateWorkMediaScope({ libraryIdentity: r.libraryIdentity, generation: r.generation, setId: r.setId, assetId: r.assetId });
-    if (!['original', 'preview', 'compatible-png', 'reference-frame'].includes(String(r.kind)) || !['prepare', 'open'].includes(String(r.action)) || (r.kind === 'reference-frame') !== (r.frameId !== undefined))
+    if (typeof r.kind !== 'string' || typeof r.action !== 'string' || !['original', 'preview', 'compatible-png', 'reference-frame', 'processed-image'].includes(r.kind) || !['prepare', 'open'].includes(r.action) || (r.kind === 'reference-frame') !== (r.frameId !== undefined) || (r.kind === 'processed-image') !== (r.imageTransform !== undefined))
         throw Error('文件交付选项无效。');
-    return { ...scope, kind: r.kind as WorkHandoffKind, action: r.action as WorkHandoffRequest['action'], ...(r.frameId !== undefined ? { frameId: workId(r.frameId) } : {}) };
+    return { ...scope, kind: r.kind as WorkHandoffKind, action: r.action as WorkHandoffRequest['action'], ...(r.frameId !== undefined ? { frameId: workId(r.frameId) } : {}), ...(r.imageTransform !== undefined ? { imageTransform: validateWorkImageTransform(r.imageTransform) } : {}) };
+}
+export function validateWorkImageTransform(value: unknown): WorkImageTransform {
+    const r = workRecord(value, ['format', 'quality', 'resize', 'stripMetadata']);
+    if (typeof r.format !== 'string' || !['png', 'jpeg', 'webp'].includes(r.format) || !Number.isInteger(r.quality) || Number(r.quality) < 1 || Number(r.quality) > 100 || typeof r.stripMetadata !== 'boolean')
+        throw Error('图像处理选项无效。');
+    let resize: WorkImageTransform['resize'];
+    if (r.resize !== undefined) {
+        const s = workRecord(r.resize, ['fit', 'width', 'height']);
+        if (s.fit !== 'inside' || !Number.isInteger(s.width) || !Number.isInteger(s.height) || Number(s.width) < 1 || Number(s.height) < 1 || Number(s.width) > 4096 || Number(s.height) > 4096)
+            throw Error('图像缩放尺寸无效，请使用1–4096像素的边界。');
+        resize = { fit: 'inside', width: Number(s.width), height: Number(s.height) };
+    }
+    return { format: r.format as WorkImageTransform['format'], quality: Number(r.quality), stripMetadata: r.stripMetadata, ...(resize ? { resize } : {}) };
 }

@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import sharp from 'sharp';
 import type { ActiveLibraryHost } from '../../shared/contracts/active-library.contract';
-import type { WorkHandoffReceipt, WorkHandoffRequest } from '../../shared/contracts/work-media.contract';
+import type { WorkHandoffReceipt, WorkHandoffRequest, WorkHandoffImageResult, WorkImageTransform } from '../../shared/contracts/work-media.contract';
 import { validateWorkHandoff } from '../../shared/contracts/work-media.contract';
 import type { VisualAdmission } from '../visual-ai/visual-admission';
 import { readVerifiedOwnedFile } from '../platform/verified-owned-file';
@@ -15,6 +15,8 @@ interface HeldHandoff {
     provenance?: {
         sourceUrl: string;
         transform: string;
+        sourceSha256?: string;
+        image?: { request: WorkImageTransform; result: WorkHandoffImageResult; operations: string[] };
         frame?: {
             actualTicks: number;
             requestedTicks: number;
@@ -95,7 +97,7 @@ export function createWorkFileHandoffs(input: {
             const selectedFrame = request.frameId ? before.frames.find(frame => frame.id === request.frameId) : undefined;
             if (request.frameId && !selectedFrame)
                 throw Error('所选参考帧已变化，请重新选择。');
-            let bytes: Uint8Array, extension: string;
+            let bytes: Uint8Array, extension: string, image: WorkHandoffImageResult | undefined, sourceSha256: string | undefined, imageOperations: string[] | undefined;
             if (request.kind === 'reference-frame') {
                 const frame = await input.host.readWorkMediaFile({ ...scope, frameId: request.frameId });
                 bytes = frame.bytes;
@@ -107,7 +109,40 @@ export function createWorkFileHandoffs(input: {
             }
             else {
                 const original = await input.host.readWorkMediaFile(scope);
-                if (request.kind === 'compatible-png') {
+                if (original.sourceGeneration !== before.sourceGeneration) throw Error('素材已变化，未交付旧版本。');
+                if (request.kind === 'processed-image') {
+                    if (original.type === 'video/mp4') throw Error('视频不支持整段图像处理，请选取参考帧后使用独立图像。');
+                    const transform = request.imageTransform!;
+                    sourceSha256 = sha(original.bytes);
+                    const metadata = await sharp(original.bytes, { limitInputPixels: 16_000_000 }).metadata();
+                    if (!metadata.width || !metadata.height || metadata.width * metadata.height > 16_000_000 || (metadata.pages ?? 1) > 1)
+                        throw Error('图像处理仅支持单帧、最多16百万像素的来源。');
+                    let pipeline = sharp(original.bytes, { limitInputPixels: 16_000_000 }).rotate();
+                    imageOperations = ['auto-orient'];
+                    if (transform.resize) {
+                        pipeline = pipeline.resize(transform.resize.width, transform.resize.height, { fit: 'inside', withoutEnlargement: true });
+                        imageOperations.push('resize-inside/without-enlargement');
+                    }
+                    if (transform.format === 'jpeg') {
+                        pipeline = pipeline.flatten({ background: '#ffffff' }).jpeg({ quality: transform.quality });
+                        imageOperations.push('flatten-alpha/white', 'jpeg/quality-' + transform.quality);
+                    } else if (transform.format === 'webp') {
+                        pipeline = pipeline.webp({ quality: transform.quality });
+                        imageOperations.push('webp/quality-' + transform.quality);
+                    } else {
+                        pipeline = pipeline.png();
+                        imageOperations.push('png/lossless-quality-not-applied');
+                    }
+                    if (!transform.stripMetadata) pipeline = pipeline.withMetadata();
+                    imageOperations.push(transform.stripMetadata ? 'strip-metadata' : 'withMetadata/partial');
+                    bytes = await pipeline.toBuffer();
+                    const actual = await sharp(bytes, { limitInputPixels: 16_000_000 }).metadata();
+                    const retainedMetadata: WorkHandoffImageResult['retainedMetadata'] = [];
+                    for (const key of ['exif', 'icc', 'iptc', 'xmp'] as const) if (actual[key]?.length) retainedMetadata.push(key);
+                    image = { width: actual.width!, height: actual.height!, format: transform.format, hasAlpha: Boolean(actual.hasAlpha), autoOriented: true, qualityApplied: transform.format !== 'png', jpegAlphaFlattened: transform.format === 'jpeg' && Boolean(metadata.hasAlpha), metadataPolicy: transform.stripMetadata ? 'stripped' : 'partial', retainedMetadata };
+                    extension = transform.format === 'jpeg' ? 'jpg' : transform.format;
+                }
+                else if (request.kind === 'compatible-png') {
                     if (original.type === 'video/mp4')
                         throw Error('视频请交付原视频或选定参考帧；PNG 不能替代整段视频。');
                     bytes = await sharp(original.bytes, { limitInputPixels: 16 * 1024 * 1024 }).rotate().png().toBuffer();
@@ -138,13 +173,22 @@ export function createWorkFileHandoffs(input: {
                     retainedBytes += (await fs.stat(path.join(input.root, dir.name, file.name))).size;
                 }
             }
-            if (directories.length >= 64 || retainedBytes + bytes.length > 1024 * 1024 * 1024)
+            // Existing receipts may be up to 16 KiB and an open request updates
+            // that receipt after delivery. Reserve the same bounded metadata
+            // allowance before writing any copy, so receipt bytes cannot put the
+            // retained directory over its 1 GiB cap.
+            if (directories.length >= 64 || retainedBytes + bytes.length + 16384 > 1024 * 1024 * 1024)
                 throw Error('交付副本达到保留上限（64份或1 GiB），请在接收应用读完后清理。');
             const id = 'handoff:' + randomUUID(), directory = path.join(input.root, id.slice(8));
-            await fs.mkdir(directory);
             const stem = path.basename(asset.fileName, path.extname(asset.fileName)).replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-').replace(/[. ]+$/g, '').slice(0, 100) || '素材';
-            const fileName = stem + ' ' + (request.kind === 'original' ? '原件副本' : request.kind === 'preview' ? '预览副本' : request.kind === 'reference-frame' ? '参考帧 ' + (selectedFrame!.actualTicks / 1e7).toFixed(7) + 's' : '兼容导出') + '.' + extension;
+            const fileName = stem + ' ' + (request.kind === 'original' ? '原件副本' : request.kind === 'preview' ? '预览副本' : request.kind === 'reference-frame' ? '参考帧 ' + (selectedFrame!.actualTicks / 1e7).toFixed(7) + 's' : request.kind === 'processed-image' ? '图像处理副本' : '兼容导出') + '.' + extension;
             const file = path.join(directory, fileName);
+            const details = image ? `图像处理生成${image.width}×${image.height} ${image.format.toUpperCase()}独立副本。${image.format === 'png' ? 'PNG无损，质量设置不适用。' : ''}${image.jpegAlphaFlattened ? 'JPEG不支持透明，已铺白底。' : ''}${image.metadataPolicy === 'stripped' ? '已移除元数据。' : '仅部分保留元数据；输出含' + (image.retainedMetadata.join('、') || '无支持的元数据块') + '，不保证完整保留。'}` : '';
+            const receipt: WorkHandoffReceipt = { id, fileName, bytes: bytes.length, sha256: sha(bytes), kind: request.kind, status: 'prepared', message: details + '交付副本已准备；不会自动清理，请在接收应用读完后明确清理。', ...(image ? { image } : {}) };
+            const held: HeldHandoff = { receipt, scope: request, actor, sourceGeneration: before.sourceGeneration, provenance: { sourceUrl: before.sourceUrl, transform: request.kind === 'processed-image' ? 'sharp-processed-image/v1' : request.kind === 'compatible-png' ? 'sharp-auto-orient/full-resolution/png' : request.kind === 'preview' ? 'required-preview' : selectedFrame?.transform ?? 'byte-identical-original-copy', ...(image ? { sourceSha256, image: { request: request.imageTransform!, result: image, operations: imageOperations! } } : {}), ...(selectedFrame ? { frame: { actualTicks: selectedFrame.actualTicks, requestedTicks: selectedFrame.requestedTicks, timeBase: selectedFrame.timeBase, method: selectedFrame.method } } : {}) } };
+            const serializeReceipt = () => { const json = JSON.stringify(held, null, 2) + '\n'; if (Buffer.byteLength(json) > 16384) throw Error('交付记录超过16 KiB，不能保存；已有资料和副本保留。'); return json; };
+            const preparedJson = serializeReceipt();
+            await fs.mkdir(directory);
             await fs.writeFile(file, bytes, { flag: 'wx' });
             const descriptor = await fs.open(file, 'r+');
             try {
@@ -153,15 +197,13 @@ export function createWorkFileHandoffs(input: {
             finally {
                 await descriptor.close();
             }
-            const receipt: WorkHandoffReceipt = { id, fileName, bytes: bytes.length, sha256: sha(bytes), kind: request.kind, status: 'prepared', message: '交付副本已准备；不会自动清理，请在接收应用读完后明确清理。' };
-            const held: HeldHandoff = { receipt, scope: request, actor, sourceGeneration: before.sourceGeneration, provenance: { sourceUrl: before.sourceUrl, transform: request.kind === 'compatible-png' ? 'sharp-auto-orient/full-resolution/png' : request.kind === 'preview' ? 'required-preview' : selectedFrame?.transform ?? 'byte-identical-original-copy', ...(selectedFrame ? { frame: { actualTicks: selectedFrame.actualTicks, requestedTicks: selectedFrame.requestedTicks, timeBase: selectedFrame.timeBase, method: selectedFrame.method } } : {}) } };
             records.set(id, held);
-            await fs.writeFile(path.join(directory, 'receipt.json'), JSON.stringify(held, null, 2) + '\n', { flag: 'wx' });
+            await fs.writeFile(path.join(directory, 'receipt.json'), preparedJson, { flag: 'wx' });
             if (request.action === 'open') {
                 const verified = await read(id), error = await input.open(verified.path);
                 receipt.status = error ? 'open-rejected' : 'open-requested';
-                receipt.message = error ? '接收应用未能打开文件；副本仍保留，请选择支持该格式的应用。' : '已请求默认应用打开副本；请在接收应用中核对内容。此状态不代表接收已完成。';
-                await fs.writeFile(path.join(directory, 'receipt.json'), JSON.stringify(held, null, 2) + '\n');
+                receipt.message = details + (error ? '接收应用未能打开文件；副本仍保留，请选择支持该格式的应用。' : '已请求默认应用打开副本；请在接收应用中核对内容。此状态不代表接收已完成。');
+                await fs.writeFile(path.join(directory, 'receipt.json'), serializeReceipt());
             }
             return receipt;
         }
@@ -196,7 +238,7 @@ export function createWorkFileHandoffs(input: {
             }
             return receipts;
         },
-        readFile: async (id: string) => { const value = await read(id); const kind = value.record.receipt.kind; return { bytes: value.bytes, type: kind === 'original' && value.record.receipt.fileName.endsWith('.mp4') ? 'video/mp4' : kind === 'original' ? 'application/octet-stream' : kind === 'preview' && value.bytes[0] !== 137 ? 'application/octet-stream' : 'image/png', fileName: value.record.receipt.fileName }; },
+        readFile: async (id: string) => { const value = await read(id); const kind = value.record.receipt.kind; return { bytes: value.bytes, type: kind === 'processed-image' && value.record.receipt.image ? 'image/' + value.record.receipt.image.format : kind === 'original' && value.record.receipt.fileName.endsWith('.mp4') ? 'video/mp4' : kind === 'original' ? 'application/octet-stream' : kind === 'preview' && value.bytes[0] !== 137 ? 'application/octet-stream' : 'image/png', fileName: value.record.receipt.fileName }; },
         nativeFile: async (actor: string, id: string) => { const checked = await read(id); if (checked.record.actor !== actor)
             throw Error('交付副本不属于当前窗口。'); return {file:checked.path,assetId:checked.record.scope.assetId}; },
         clear: (id: string) => serialize(async () => { const checked = await read(id); await input.trash(checked.path); await fs.unlink(path.join(path.dirname(checked.path), 'receipt.json')); await fs.rmdir(path.dirname(checked.path)); records.delete(id); return { message: '交付副本已移至系统回收站；库中原件和参考帧保持。' }; })

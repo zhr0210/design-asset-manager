@@ -9,5 +9,5 @@ export function registerWorkSetIpc(input:{controller:ReturnType<typeof createWor
  input.handle(C.WORK_WINDOW_ACTION,(event,request)=>input.controller.act(event,request))
  input.handle(C.WORK_WINDOW_NOTE_READ,(event,request)=>input.controller.notebookRead(event,request))
  input.handle(C.WORK_WINDOW_NOTE_SAVE,(event,request)=>input.controller.notebookSave(event,request))
- for(const [channel,method]of [['work-window:media-read',input.controller.nativeMediaRead],['work-window:media-write',input.controller.nativeMediaWrite],['work-window:media-cancel',input.controller.nativeMediaCancel],['work-window:file-handoff',input.controller.nativeHandoff],['work-window:drag-file',input.controller.nativeDrag]] as const)input.handle(channel,(event,request)=>method(event,request))
+ for(const [channel,method]of [['work-window:media-read',input.controller.nativeMediaRead],['work-window:media-write',input.controller.nativeMediaWrite],['work-window:media-cancel',input.controller.nativeMediaCancel],['work-window:file-handoff',input.controller.nativeHandoff],['work-window:drag-file',input.controller.nativeDrag],['work-window:drag-files',input.controller.nativeDragFiles]] as const)input.handle(channel,(event,request)=>method(event,request))
 }

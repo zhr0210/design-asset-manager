@@ -10,3 +10,9 @@
 .work-media-dialog button,.work-file-handoff button{font:inherit;cursor:pointer;border:1px solid var(--gallery-border,#d9dce3);border-radius:999px;padding:7px 12px;color:inherit;background:var(--gallery-surface-soft,#f5f5f7)}
 .work-media-dialog button:disabled,.work-file-handoff button:disabled{opacity:.5;cursor:default}.work-media-dialog .ui-actions,.work-file-handoff .ui-actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .dark .work-media-dialog{background:#23262e;color:#f3f4f8}.dark .work-media-dialog input,.dark .work-media-dialog textarea,.dark .work-media-dialog button,.dark .work-file-handoff button,.dark .work-file-handoff select{background:#303440;color:#f3f4f8;border-color:#494e5b}
+/* Image outputs are independent copies; the form describes their concrete options. */
+.work-image-transform{border:0;padding:8px 0;margin:8px 0;display:flex;flex-direction:column;gap:8px}
+.work-image-transform legend{font-size:12px;font-weight:600}
+.work-image-transform label{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px}
+.work-image-transform input[type=number]{width:80px;min-height:28px}
+.work-image-transform small{font-size:10px;line-height:1.5;color:var(--muted)}

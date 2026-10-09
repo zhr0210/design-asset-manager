@@ -20,6 +20,7 @@ export interface WorkWindowApi {
  mediaWrite(input:{token:string;request:import('./work-media.contract').WorkMediaWrite}):Promise<WorkResult<import('./work-media.contract').WorkMediaSnapshot>>
  mediaCancel(input:{token:string}):Promise<WorkResult<{message:string}>>
  fileHandoff(input:{token:string;request:import('./work-media.contract').WorkHandoffRequest}):Promise<WorkResult<import('./work-media.contract').WorkHandoffReceipt>>
+ dragFiles(input:{token:string;ids:string[]}):Promise<WorkResult<{message:string}>>
  dragFile(input:{token:string;id:string}):Promise<WorkResult<{message:string}>>
  inspect():Promise<WorkResult<WorkWindowSnapshot>>;act(action:WorkWindowAction):Promise<WorkResult<WorkWindowSnapshot>>;onState(listener:(state:WorkWindowSnapshot|null)=>void):()=>void;notebookRead(input:{token:string;assetId:string}):Promise<WorkResult<NotebookSnapshot>>;notebookSave(input:{token:string;request:NotebookSaveRequest}):Promise<WorkResult<NotebookSnapshot>>
 }

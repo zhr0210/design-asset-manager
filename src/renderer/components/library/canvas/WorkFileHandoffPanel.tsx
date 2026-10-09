@@ -2,14 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { WorkMediaScope, WorkHandoffKind, WorkHandoffReceipt } from '../../../../shared/contracts/work-media.contract';
 import { workspaceWorkMediaActions, type WorkMediaActions } from './work-media-api';
 import './work-media.css';
-export function WorkFileHandoffPanel({ scope, frameId, video = false, actions = workspaceWorkMediaActions, onReceipt }:  {
+import {DEFAULT_WORK_IMAGE_TRANSFORM,WorkImageTransformControls} from './WorkImageTransformControls';
+export function WorkFileHandoffPanel({ scope, frameId, video = false, actions = workspaceWorkMediaActions, onReceipt, onKindChange }:  {
     scope: WorkMediaScope;
     frameId?: string;
     video?: boolean;
     actions?: WorkMediaActions;
     onReceipt?: (receipt: WorkHandoffReceipt | undefined) => void;
+    onKindChange?: () => void;
 }) {
     const [kind, setKind] = useState<WorkHandoffKind>(frameId ? 'reference-frame' : 'original'), [receipt, setReceipt] = useState<WorkHandoffReceipt>(), [busy, setBusy] = useState(false), [error, setError] = useState(''), [review, setReview] = useState(false), live = useRef(true);
+    const [imageTransform,setImageTransform]=useState(DEFAULT_WORK_IMAGE_TRANSFORM);
+    const operationKey=JSON.stringify([scope.libraryIdentity,scope.generation,scope.setId,scope.assetId,frameId,kind,imageTransform]),currentOperation=useRef(operationKey);currentOperation.current=operationKey;
     useEffect(() => { live.current = true; return () => { live.current = false; }; }, []);
     useEffect(() => { onReceipt?.(receipt); }, [receipt, onReceipt]);
     const [retained, setRetained] = useState<WorkHandoffReceipt[]>([]);
@@ -21,28 +25,30 @@ export function WorkFileHandoffPanel({ scope, frameId, video = false, actions = 
             setError(result.error);
     } };
     useEffect(() => { void refresh().catch(() => setError('交付历史读取失败，已有副本保留。')); }, [scope.libraryIdentity, scope.generation, scope.setId, scope.assetId, receipt?.id]);
-    useEffect(() => { setReceipt(undefined); setKind(frameId ? 'reference-frame' : 'original'); setError(''); }, [scope.assetId, frameId]);
+    useEffect(() => { setReceipt(undefined); setRetained([]);setKind(frameId ? 'reference-frame' : 'original'); setError('');setBusy(false);setReview(false); }, [scope.libraryIdentity,scope.generation,scope.setId,scope.assetId, frameId]);
     const prepare = async (action: 'prepare' | 'open') => { if (busy)
-        return; setBusy(true); setError(''); try {
-        const result = await actions.handoff({ ...scope, kind, action, ...(kind === 'reference-frame' ? { frameId } : {}) });
-        if (!live.current)
+        return; const owned=operationKey;setBusy(true); setError(''); try {
+        const result = await actions.handoff({ ...scope, kind, action, ...(kind === 'reference-frame' ? { frameId } : {}),...(kind==='processed-image'?{imageTransform}:{} ) });
+        if (!live.current||currentOperation.current!==owned)
             return;
         if (!result.success)
             throw Error(result.error);
         setReceipt(result.value);
     }
     catch (e) {
-        if (live.current)
+        if (live.current&&currentOperation.current===owned)
             setError(e instanceof Error ? e.message : '交付失败。');
     }
     finally {
-        if (live.current)
+        if (live.current&&currentOperation.current===owned)
             setBusy(false);
     } };
     return <section className="work-file-handoff" aria-label="交付文件"><h3>交付文件</h3><p>交付独立副本；库中原件保持。接收应用读完后再清理。</p>
-    <label>交付内容<select aria-label="交付内容" value={kind} disabled={busy} onChange={e => { setKind(e.target.value as WorkHandoffKind); setReceipt(undefined); }}>{frameId && <option value="reference-frame">所选参考帧 · PNG</option>}<option value="original">原件副本{video ? ' · MP4' : ''}</option><option value="preview">预览副本 · 图片</option>{!video && <option value="compatible-png">兼容导出 · PNG（保留图像尺寸）</option>}</select></label>
+    <label>交付内容<select aria-label="交付内容" value={kind} disabled={busy} onChange={e => { onKindChange?.(); setKind(e.target.value as WorkHandoffKind); setReceipt(undefined); }}>{frameId && <option value="reference-frame">所选参考帧 · PNG</option>}<option value="original">原件副本{video ? ' · MP4' : ''}</option><option value="preview">预览副本 · 图片</option>{!video && <><option value="compatible-png">兼容导出 · PNG（保留图像尺寸）</option><option value="processed-image">图像处理 · 缩放与格式转换</option></>}</select></label>
+    {kind==='processed-image'&&<WorkImageTransformControls value={imageTransform} disabled={busy} onChange={value=>{onKindChange?.();setImageTransform(value);setReceipt(undefined);setError('');}}/>}
     <div className="ui-actions"><button disabled={busy} onClick={() => void prepare('prepare')}>准备交付副本</button><button disabled={busy} onClick={() => void prepare('open')}>用默认应用打开副本</button></div>
     {receipt && <div role="status"><p>{receipt.fileName} · {(receipt.bytes / 1024).toFixed(1)} KiB</p><p>{receipt.message}</p>
+      {receipt.image&&<p>{receipt.image.width} × {receipt.image.height} · {receipt.image.format.toUpperCase()} · {receipt.image.metadataPolicy==='stripped'?'元数据已删除':`实际保留元数据：${receipt.image.retainedMetadata.join('、')||'无'}`}{receipt.image.jpegAlphaFlattened?' · 透明区域已转白底':''}</p>}
       {!actions.drag && <a href={'/media/handoff/' + encodeURIComponent(receipt.id)} download={receipt.fileName}>下载交付副本</a>}
       {actions.drag && <button draggable onDragStart={e => { e.preventDefault(); void actions.drag!(receipt.id).then(result => { if (!result.success)
             setError(result.error); }); }}>拖动此副本到创作应用</button>}

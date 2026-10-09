@@ -210,7 +210,7 @@ const workspaceTransitions = createWorkspaceTransitions({
   }
 })
 const workspaceHandlers = new Map<string, MainIpcHandler>()
-const browserDeniedChannels = new Set(['app:prepare-browser-entry','asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:drag-file'])
+const browserDeniedChannels = new Set(['app:prepare-browser-entry','asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:drag-file','work-window:drag-files'])
 const nativeDraftChannels = new Set(['drafts:put', 'drafts:remove', 'workspace:ready', 'workspace:flush-ack'])
 const nativeCardChannels = new Set([
   'asset-card:inspect', 'asset-card:action', 'tag-decision:prepare', 'tag-decision:confirm', 'tag-decision:discard',

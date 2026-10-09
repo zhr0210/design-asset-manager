@@ -5,7 +5,7 @@ import type {ActiveLibraryHost} from '../../shared/contracts/active-library.cont
 import {validateWorkScope,validateWorkWrite,validateWorkValue,validateWorkWindowControl,workRecord,workId,workRevision,type WorkScope,type WorkSetWrite,type WorkSetCatalog,type WorkWindowSnapshot,type WorkWindowAction,type WorkResult,type WorkWindowLayout,type WorkWindowControlState,type WorkWindowControlResult} from '../../shared/contracts/work-set.contract'
 import {validateNotebook,type NotebookSaveRequest} from '../../shared/contracts/asset-notebook.contract'
 import {visibleWorkBounds,type WorkArea} from './work-window-bounds'
-export interface WorkWindowPort{startDrag?(file:string,icon:Uint8Array):void;publish(value:WorkWindowSnapshot|null):void;show():void;hide():void;destroy():void;setPinned(value:boolean):void;bounds():WorkWindowLayout;setBounds(value:WorkWindowLayout):void;visible():boolean;isTrusted(event:unknown):boolean}
+export interface WorkWindowPort{startDragFiles?(files:string[],icon:Uint8Array):void;startDrag?(file:string,icon:Uint8Array):void;publish(value:WorkWindowSnapshot|null):void;show():void;hide():void;destroy():void;setPinned(value:boolean):void;bounds():WorkWindowLayout;setBounds(value:WorkWindowLayout):void;visible():boolean;isTrusted(event:unknown):boolean}
 interface Entry{notesDirty?:boolean;port:WorkWindowPort;state:WorkWindowSnapshot;sessionToken:string;queue:Promise<unknown>;timer?:ReturnType<typeof setTimeout>}
 /** Windows are owned separately; private paths and broad application APIs never enter their preload. */
 export function createWorkWindowController(deps:{media?:ReturnType<typeof import('./work-media-controller').createWorkMediaController>;host:ActiveLibraryHost;deviceId:string;areas:()=>WorkArea[];theme:()=> 'light'|'dark';createWindow:(input:{layout:WorkWindowLayout;changed:()=>void;closed:()=>void;readPreview:(url:string)=>Promise<Uint8Array>;readMedia?:(url:string)=>Promise<{bytes:Uint8Array;type:string}>})=>WorkWindowPort;beforeWorkspaceClose:()=>Promise<()=>void>;changed:()=>void;locate:(scope:WorkScope,setId:string,assetId?:string)=>void;hideMain:()=>void}){
@@ -55,6 +55,27 @@ export function createWorkWindowController(deps:{media?:ReturnType<typeof import
  const nativeMediaCancel=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token']),e=locateEntry(event,workId(r.token));if(!deps.media)throw Error('MEDIA_UNAVAILABLE');return mediaReply(deps.media.cancel('work-native:'+e.state.token,{}))})
  const nativeHandoff=(event:unknown,input:unknown)=>result(async()=>{const {e,request}=scopedMediaEntry(event,input);if(!deps.media)throw Error('MEDIA_UNAVAILABLE');const value=await mediaReply(deps.media.handoff('work-native:'+e.state.token,request));assertCurrent(e);return value})
  const nativeDrag=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','id']),e=locateEntry(event,workId(r.token));if(!deps.media||!e.port.startDrag)throw Error('NATIVE_DRAG_UNAVAILABLE');const selected=await deps.media.files.nativeFile('work-native:'+e.state.token,workId(r.id));assertCurrent(e);if(!e.state.set.assetIds.includes(selected.assetId))throw Error('MEMBERSHIP_NOT_GRANTED');const icon=await deps.host.readPreview(selected.assetId);assertCurrent(e);e.port.startDrag(selected.file,icon);return{message:'已开始原生文件交接；请在接收应用中核对结果。'}})
+ const nativeDragFiles=(event:unknown,input:unknown)=>result(async()=>{
+  const r=workRecord(input,['token','ids']),e=locateEntry(event,workId(r.token))
+  if(!Array.isArray(r.ids)||r.ids.length<1||r.ids.length>64)throw Object.assign(Error('请选择1至64个已准备的交付副本。'),{code:'NATIVE_DRAG_INPUT_INVALID'})
+  const ids=r.ids.map(workId)
+  if(new Set(ids).size!==ids.length)throw Object.assign(Error('同一个交付副本不能重复拖出。'),{code:'NATIVE_DRAG_INPUT_INVALID'})
+  if(!deps.media||!e.port.startDragFiles)throw Object.assign(Error('当前窗口不支持批量原生拖出。'),{code:'NATIVE_DRAG_UNAVAILABLE'})
+  const files=deps.media.files,actor='work-native:'+e.state.token
+  const assertMember=(assetId:string)=>{assertCurrent(e);if(!e.state.set.assetIds.includes(assetId)||e.state.set.unavailableIds.includes(assetId))throw Error('MEMBERSHIP_NOT_GRANTED')}
+  const selected:Awaited<ReturnType<typeof files.nativeFile>>[]=[]
+  for(const id of ids){const file=await files.nativeFile(actor,id);assertMember(file.assetId);selected.push(file)}
+  const icon=await deps.host.readPreview(selected[0].assetId)
+  // Preview reads yield. Recheck every receipt and member after that read;
+  // no OS handoff occurs until the entire batch has passed again.
+  for(const [index,id]of ids.entries()){
+   const checked=await files.nativeFile(actor,id);assertMember(checked.assetId)
+   if(checked.assetId!==selected[index].assetId||checked.file!==selected[index].file)throw Error('STALE_HANDOFF')
+  }
+  for(const file of selected)assertMember(file.assetId)
+  e.port.startDragFiles(selected.map(file=>file.file),icon)
+  return{message:'已开始批量原生文件交接；请在接收应用中核对结果。'}
+ })
  const inspect=(event:unknown)=>result(()=>locateEntry(event).state)
  const act=(event:unknown,input:unknown)=>result(async()=>{const a=workRecord(input,['token','kind','expectedRevision','value','pinned','assetId','dirty','discard']),e=locateEntry(event,workId(a.token));const run=async()=>{assertCurrent(e)
   if(a.kind==='close'){workRecord(a,['token','kind','discard']);if(typeof a.discard!=='boolean')throw Error('INVALID_ACTION');if(!a.discard&&(e.notesDirty||e.state.draft))throw Error('UNSAVED_WORK_SET');clearTimeout(e.timer);await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout:{...e.port.bounds(),open:false}},deps.deviceId);assertCurrent(e);entries.delete(e.state.set.id);e.port.destroy();deps.changed()}
@@ -76,5 +97,5 @@ export function createWorkWindowController(deps:{media?:ReturnType<typeof import
  const hasUnsaved=()=>[...entries.values()].some(entryUnsaved)
  const isTrusted=(event:unknown)=>{try{locateEntry(event);return true}catch{return false}}
  const permitsDraft=(event:unknown,scope:WorkspaceDraftScope)=>{try{const e=locateEntry(event);return scope.libraryIdentity===e.state.scope.libraryIdentity&&scope.generation===e.state.scope.generation&&(scope.kind==='work-set'?scope.entityId===e.state.set.id:(scope.kind==='work-media'&&e.state.set.assetIds.some(id=>scope.entityId===e.state.set.id+'~'+id&&!e.state.set.unavailableIds.includes(id))||scope.kind==='notebook'&&e.state.set.assetIds.includes(scope.entityId))&&!e.state.set.unavailableIds.includes(scope.entityId))}catch{return false}}
- return{nativeMediaRead,nativeMediaWrite,nativeMediaCancel,nativeHandoff,nativeDrag,isTrusted,permitsDraft,hasUnsaved,read,write,windows,control,open,restore,recover,inspect,act,notebookRead,notebookSave,invalidate,refresh,drain,hideMain:()=>result(()=>{if(!entries.size)throw Error('NO_WORK_WINDOWS');entries.values().next().value?.port.show();deps.hideMain();return{count:entries.size}}),count:()=>entries.size}
+ return{nativeMediaRead,nativeMediaWrite,nativeMediaCancel,nativeHandoff,nativeDrag,nativeDragFiles,isTrusted,permitsDraft,hasUnsaved,read,write,windows,control,open,restore,recover,inspect,act,notebookRead,notebookSave,invalidate,refresh,drain,hideMain:()=>result(()=>{if(!entries.size)throw Error('NO_WORK_WINDOWS');entries.values().next().value?.port.show();deps.hideMain();return{count:entries.size}}),count:()=>entries.size}
 }
