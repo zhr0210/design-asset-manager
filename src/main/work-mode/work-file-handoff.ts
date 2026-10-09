@@ -178,7 +178,7 @@ export function createWorkFileHandoffs(input: {
         },
         readFile: async (id: string) => { const value = await read(id); const kind = value.record.receipt.kind; return { bytes: value.bytes, type: kind === 'original' && value.record.receipt.fileName.endsWith('.mp4') ? 'video/mp4' : kind === 'original' ? 'application/octet-stream' : kind === 'preview' && value.bytes[0] !== 137 ? 'application/octet-stream' : 'image/png', fileName: value.record.receipt.fileName }; },
         nativeFile: async (actor: string, id: string) => { const checked = await read(id); if (checked.record.actor !== actor)
-            throw Error('交付副本不属于当前窗口。'); return checked.path; },
+            throw Error('交付副本不属于当前窗口。'); return {file:checked.path,assetId:checked.record.scope.assetId}; },
         clear: (id: string) => serialize(async () => { const checked = await read(id); await input.trash(checked.path); await fs.unlink(path.join(path.dirname(checked.path), 'receipt.json')); await fs.rmdir(path.dirname(checked.path)); records.delete(id); return { message: '交付副本已移至系统回收站；库中原件和参考帧保持。' }; })
     };
 }

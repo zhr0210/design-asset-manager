@@ -22,6 +22,7 @@ import { launchManagedGguf } from './managed-gguf-transport';
 import {readOwnedMacProcessMemory} from '../../platform/macos-owned-memory';
 import { readOwnedWindowsProcessMemory } from '../../platform/windows-process-memory.internal';
 import {ConfirmedLocalOomError,type LocalRecoveryOutcome} from '../../visual-ai/local-oom-recovery'
+import type {AiReleaseCause,AiReleaseObservation} from '../../../shared/contracts/ai-diagnostics.contract'
 import {measureAiStage,type AiStageSink} from '../../local-ai-resources/ai-diagnostics'
 
 export const MANAGED_VISION_ID = "dam-local-qwen-cpu";
@@ -39,6 +40,7 @@ interface Measurement {
 }
 interface Request {
   id: string;
+  operationId?: string;
   resolve(value: unknown): void;
   reject(error: Error): void;
 }
@@ -101,6 +103,10 @@ export function createManagedVisionRuntime(d: {
   let nativeTransport: Awaited<ReturnType<typeof launchManagedGguf>> | undefined,
     nativeMeasurementTimer: ReturnType<typeof setInterval> | undefined;
   const disposals = new Set<Promise<void>>();
+  const physicalCloses=new WeakSet<ChildProcessWithoutNullStreams>();
+  type StopTrace={started:number;operationId:string;fingerprint:string|null;mode:string;release:AiReleaseObservation;reported?:boolean};
+  const stops=new WeakMap<ChildProcessWithoutNullStreams,StopTrace>();
+  const recordStop=(owned:ChildProcessWithoutNullStreams,trace:StopTrace)=>{const seen=physicalCloses.has(owned);if(trace.reported===seen)return;trace.reported=seen;try{d.diagnostics?.({operationId:trace.operationId,stage:'cancel-and-release',startedAt:new Date(trace.started).toISOString(),durationMs:Date.now()-trace.started,outcome:seen?'returned':'failed',errorCode:seen?null:'LOCAL_RUNTIME_EXIT_UNCONFIRMED',fingerprint:trace.fingerprint,mode:trace.mode,language:null,release:{...trace.release,physicalCloseSeen:seen}})}catch{}};
   const config = (): Configuration | null => {
     const row = d.database
       .prepare(
@@ -159,12 +165,12 @@ export function createManagedVisionRuntime(d: {
       const mode = d.admission.resourceStatus().policy.mode;
       if (rebalancePending) {
         rebalancePending = false;
-        void stop(false).catch(() => {});
+        void stop(false,false,'pressure').catch(() => {});
         return;
       }
       idleTimer = setTimeout(
         () => {
-          void stop(false).catch(() => {});
+          void stop(false,false,'idle-timeout').catch(() => {});
         },
         mode === "quiet" ? 30000 : mode === "accelerated" ? 300000 : 120000,
       );
@@ -229,7 +235,10 @@ export function createManagedVisionRuntime(d: {
     pending = undefined;
     request?.reject(typeof code === "string" ? Error(code) : code);
   };
-  async function stop(disable: boolean, preserveTransition = false) {
+  async function stop(disable: boolean, preserveTransition = false, cause:AiReleaseCause='request-cancel', triggerCode:string|null=null) {
+    // Capture the first trigger before abort listeners can re-enter stop().
+    const owner=child;
+    if(owner&&!stops.has(owner))stops.set(owner,{started:Date.now(),operationId:executionId??'local-release',fingerprint:measurementFingerprint,mode:config()?.native?.plan.mode??'cpu',release:{cause,triggerCode:triggerCode&&/^[A-Z][A-Z_0-9]{0,79}$/.test(triggerCode)?triggerCode:null,pid:owner.pid??null,signalRequested:false,physicalCloseSeen:false,inferenceOperationId:pending?.operationId??null}});
     clearTimeout(idleTimer);
     clearInterval(nativeMeasurementTimer);
     abort?.abort();
@@ -247,9 +256,9 @@ export function createManagedVisionRuntime(d: {
     unloadStartedAt ??= Date.now();
     const owned = child;
     const ownedClosed = closed;
-    const stoppedExecution=executionId??'local-release',stoppedFingerprint=measurementFingerprint,stopStarted=Date.now();
     try {
-      owned.kill("SIGTERM");
+      const accepted=owned.kill("SIGTERM");
+      const trace=stops.get(owned);if(trace)trace.release.signalRequested ||= accepted;
     } catch {
       /* Actual close is the release condition. */
     }
@@ -269,13 +278,13 @@ export function createManagedVisionRuntime(d: {
       ]);
     } finally {
       clearTimeout(timer);
-      try{d.diagnostics?.({operationId:stoppedExecution,stage:'cancel-and-release',startedAt:new Date(stopStarted).toISOString(),durationMs:Date.now()-stopStarted,outcome:child===owned?'failed':'returned',errorCode:child===owned?'LOCAL_RUNTIME_EXIT_UNCONFIRMED':null,fingerprint:stoppedFingerprint,mode:c?.native?.plan.mode??'cpu',language:null})}catch{}
+      const trace=stops.get(owned);if(trace)recordStop(owned,trace);
     }
   }
   async function send(
     input: Pick<
       VisionInvocation,
-      "systemPrompt" | "userPrompt" | "imageDataUrl" | "maxTokens" | "signal" | "outputContract"
+      "systemPrompt" | "userPrompt" | "imageDataUrl" | "maxTokens" | "signal" | "outputContract" | "operationId"
     >,
   ): Promise<unknown> {
     input.signal.throwIfAborted();
@@ -290,13 +299,13 @@ export function createManagedVisionRuntime(d: {
     try {
       if (nativeTransport) {
         return await new Promise((resolve, reject) => {
-          pending = { id, resolve, reject };
+          pending = { id, resolve, reject, operationId:input.operationId };
           nativeTransport!.invoke(input).then(value => { if (pending?.id === id) pending = undefined; resolve(value) },
             error => { if (pending?.id === id) pending = undefined; reject(error) });
         });
       }
       return await new Promise((resolve, reject) => {
-        pending = { id, resolve, reject };
+        pending = { id, resolve, reject, operationId:input.operationId };
         owned.stdin.write(
           JSON.stringify({
             kind: "infer",
@@ -427,7 +436,7 @@ export function createManagedVisionRuntime(d: {
           if (child !== owned) return; // A late sample from a retired process cannot stop its replacement.
           const code = failure instanceof Error ? failure.message : '';
           error = /^(LOCAL|AI)_[A-Z_0-9]+$/.test(code) ? code : 'LOCAL_RESOURCE_OBSERVATION_FAILED';
-          void stop(false).catch(() => {});
+          void stop(false,false,'observation-failed',error).catch(() => {});
         }) }, 2000);
         nativeMeasurementTimer.unref?.();
       }, loadedReject);
@@ -437,7 +446,7 @@ export function createManagedVisionRuntime(d: {
       const protocolFailure = () => {
         if (child !== owned) return;
         loadedReject(Error("LOCAL_RUNTIME_PROTOCOL_FAILED"));
-        void stop(false).catch(() => {});
+        void stop(false,false,'protocol-failed','LOCAL_RUNTIME_PROTOCOL_FAILED').catch(() => {});
       };
       if (!launched) owned.stdout.on("data", (data: Buffer) => {
         buffer += decoder.write(data);
@@ -461,7 +470,7 @@ export function createManagedVisionRuntime(d: {
             } else if (message.kind === "metrics") observe(message.metrics);
             else if (message.kind === "fatal") {
               loadedReject(Error(message.code));
-              void stop(false).catch(() => {});
+              void stop(false,false,'protocol-failed',message.code).catch(() => {});
             } else if (pending && message.id === pending.id) {
               observe(message.metrics);
               const request = pending;
@@ -495,6 +504,8 @@ export function createManagedVisionRuntime(d: {
         }
       });
       owned.once("close", () => {
+        physicalCloses.add(owned);
+        const stopTrace=stops.get(owned);if(stopTrace?.reported===false)recordStop(owned,stopTrace);
         if (child === owned) {
           clearInterval(nativeMeasurementTimer);
           if (unloadStartedAt !== null) unloadMs = Date.now() - unloadStartedAt;
@@ -601,7 +612,7 @@ export function createManagedVisionRuntime(d: {
       const cancelled = !!abort?.signal.aborted && e instanceof Error &&
         (e.name === 'AbortError' || e.message === 'LOCAL_RUNTIME_CANCELLED');
       error = cancelled ? 'LOCAL_RUNTIME_CANCELLED' : e instanceof Error ? e.message : "LOCAL_RUNTIME_FAILED";
-      if (child) await stop(false).catch(() => {});
+      if (child) await stop(false,false,'activation-failed').catch(() => {});
       const temporary = cancelled || ["AI_MEMORY_WAIT", "LOCAL_RUNTIME_COOLDOWN"].includes(
         error,
       );
@@ -699,7 +710,7 @@ export function createManagedVisionRuntime(d: {
         // Disable new admissions before releasing the old owned process. Its configuration stays durable until success.
         const previous = config();
         if (previous) settingsBackend(previous, false);
-        await stop(false, true);
+        await stop(false,true,'model-switch');
         transitionAbort.signal.throwIfAborted();
         lastStop = 0; // A confirmed deliberate switch does not inherit the idle reload cooldown.
         await activate(candidate, requested);
@@ -713,12 +724,12 @@ export function createManagedVisionRuntime(d: {
       if (!d.models) throw Error('LOCAL_RUNTIME_UNAVAILABLE');
       d.models.setTrust(id, false);
       if (retire) d.models.retire(id);
-      if (config()?.entryId === id) await stop(true);
+      if (config()?.entryId === id) await stop(true,false,'trust-revoked');
     },
     async sourceTrustChanged(id: string) {
       const c = config();
       if (c?.entryId !== id) return;
-      try { d.models?.assertTrusted(c) } catch { await stop(true) }
+      try { d.models?.assertTrusted(c) } catch { await stop(true,false,'trust-revoked') }
     },
     async autoSelect(preference: 'efficient' | 'quality'): Promise<void> {
       if (!d.models || switching || activation || configuring || pending) throw Error('LOCAL_RUNTIME_BUSY');
@@ -746,10 +757,10 @@ export function createManagedVisionRuntime(d: {
       await this.activateModel(chosen.id, verified[0]?.native ? { mode: verified[0].native.plan.mode,
         ...(verified[0].native.plan.deviceId ? { deviceId: verified[0].native.plan.deviceId } : {}) } : undefined);
     },
-    deactivate: () => stop(true),
+    deactivate: () => stop(true,false,'deactivate'),
     async releaseIdle() {
       if(pending||activation||switching||prepared.size)return false;
-      await stop(false);return true;
+      await stop(false,false,'idle-release');return true;
     },
     async rebalance() {
       const resource = d.admission.resourceStatus();
@@ -757,13 +768,13 @@ export function createManagedVisionRuntime(d: {
         rebalancePending = true;
         if (!pending && !prepared.size) {
           rebalancePending = false;
-          await stop(false);
+          await stop(false,false,'pressure');
         }
       }
     },
     async prepare(signal: AbortSignal) {
       const cancel = () => {
-        void stop(false).catch(() => {});
+        void stop(false,false,'preparation-cancel').catch(() => {});
       };
       signal.addEventListener("abort", cancel, { once: true });
       try {
@@ -824,7 +835,7 @@ export function createManagedVisionRuntime(d: {
       const cancel=()=>{transitionAbort?.abort();abort?.abort()};input.signal.addEventListener('abort',cancel,{once:true})
       try{
         recoveryAudit(cause.failure.id,{state:'confirming-release'})
-        await stop(false,true);input.signal.throwIfAborted();if(child)throw Error('LOCAL_RUNTIME_EXIT_PENDING')
+        await stop(false,true,'local-recovery');input.signal.throwIfAborted();if(child)throw Error('LOCAL_RUNTIME_EXIT_PENDING')
         await d.refreshDevices?.();input.signal.throwIfAborted();d.models.assertTrusted(before)
         if(config()?.fingerprint!==before.fingerprint)throw Error('LOCAL_RUNTIME_BINDING_CHANGED')
         const target=candidates.find(planFits);if(!target)throw Error('AI_MEMORY_WAIT')
@@ -843,7 +854,7 @@ export function createManagedVisionRuntime(d: {
     async drain() {
       clearInterval(pressureTimer);
       for (const release of [...prepared.values()]) release();
-      await stop(false);
+      await stop(false,false,'shutdown');
       await activation?.catch(() => {});
       await Promise.all(disposals);
       await d.ggufPackages?.drain();

@@ -13,6 +13,7 @@ import {launchManagedGguf} from '../src/main/services/ai-runtime/managed-gguf-tr
 import {createLocalAiDeviceSampler} from '../src/main/local-ai-resources/device-sampler'
 import {createVisualAdmission} from '../src/main/visual-ai/visual-admission'
 import {createNewInstallAppSettingsDefaults} from '../src/main/services/settings/settings-defaults.builder'
+import {createAiDiagnostics} from '../src/main/local-ai-resources/ai-diagnostics'
 import {PiProcessUnconfirmedError} from '../src/main/ai-gateway/pi-runtime-host'
 
 const profile=process.env.DAM_TEST_VISION_PROFILE
@@ -29,6 +30,7 @@ source.close();assert.ok(entry);assert.equal(typeof packageRecord,'string')
 const configuration=JSON.parse(entry.record).configuration
 const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-owned-close-race-')))
 const db=new Database(path.join(root,'isolated.sqlite'))
+const diagnostics=createAiDiagnostics(db,'real-owned-trace-test');
 const sampler=createLocalAiDeviceSampler();await sampler.refresh()
 const admission=createVisualAdmission({memory:()=>sampler.memory(),devices:()=>sampler.read()})
 let settings=createNewInstallAppSettingsDefaults()
@@ -51,7 +53,7 @@ db.prepare('INSERT INTO managed_gguf_packages VALUES(?,?)').run('macos-arm64',pa
 let enterCleanup!:()=>void,releaseCleanup!:()=>void,cleanupDone!:()=>void
 const entered=new Promise<void>(r=>enterCleanup=r),gate=new Promise<void>(r=>releaseCleanup=r),disposed=new Promise<void>(r=>cleanupDone=r)
 const launches:Array<Awaited<ReturnType<typeof launchManagedGguf>>>=[]
-const runtime=createManagedVisionRuntime({database:db,admission,models,ggufPackages:packages,
+const runtime=createManagedVisionRuntime({database:db,admission,models,ggufPackages:packages,diagnostics:diagnostics.record,
   runner:path.resolve('ai-service/tools/managed_vision_worker.py'),settings:{getSettings:()=>settings,saveSettings:n=>(settings={...settings,...n})},
   selectModel:async()=>null,selectPython:async()=>null,changed(){},launchGguf:async(c,s)=>{
     const actual=await launchManagedGguf(c,s);launches.push(actual)
@@ -71,6 +73,7 @@ try{
   assert.equal(launches[0].child.exitCode!==null||launches[0].child.signalCode!==null,true)
   const stopped=await Promise.race([firstStop.then(()=>true),new Promise<boolean>(r=>setTimeout(()=>r(false),1500))])
   assert.equal(stopped,true,'physical close must resolve its own stop before delayed filesystem cleanup')
+  const firstTrace=diagnostics.read().find(r=>r.release)?.release!;assert.equal(firstTrace.cause,'idle-release');assert.equal(firstTrace.pid,launches[0].child.pid);assert.equal(firstTrace.physicalCloseSeen,true)
   await runtime.activateModel(entry.id,{mode:'cpu'})
   assert.equal(runtime.status().state,'ready')
   const second=launches[1].child,originalKill=second.kill.bind(second)
@@ -81,11 +84,13 @@ try{
   releaseCleanup();await disposed
   const result=await nextStop
   assert.ok(result instanceof PiProcessUnconfirmedError)
+  const pendingTrace=diagnostics.read().find(r=>r.release?.pid===second.pid)?.release!;assert.equal(pendingTrace.cause,'idle-release');assert.equal(pendingTrace.signalRequested,true);assert.equal(pendingTrace.physicalCloseSeen,false)
   assert.equal(runtime.status().state,'unknown')
   assert.ok(admission.resourceStatus().residentBytes>0,'an alive replacement keeps its real memory reservation')
   process.kill(second.pid!,0)
   restoreKill();restoreKill=undefined;originalKill('SIGTERM');await result.released
   assert.equal(admission.resourceStatus().residentBytes,0)
+  assert.equal(diagnostics.read().find(r=>r.release?.pid===second.pid)?.release?.physicalCloseSeen,true,'late physical close is recorded separately from the timeout')
   console.log('Real qualification twice; owned close separated from delayed disposal; replacement alive/unknown retained until actual close. No active profile DB writes.')
 }finally{
   restoreKill?.();releaseCleanup();await firstStop?.catch(()=>{})

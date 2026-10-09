@@ -13,3 +13,12 @@ await test('bounded stage diagnostics keep failure evidence without queries or c
   assert.equal(diagnostics.read().length,100)
  }finally{db.close()}
 })
+await test('release provenance is bounded and excludes arbitrary nested data',async()=>{
+ const db=new Database(':memory:');try{
+  const d=createAiDiagnostics(db,'release-fixture'),base={operationId:'owned:1',stage:'cancel-and-release' as const,startedAt:new Date().toISOString(),durationMs:5000,outcome:'failed' as const,errorCode:'LOCAL_RUNTIME_EXIT_UNCONFIRMED',fingerprint:null,mode:'cpu',language:null}
+  d.record({...base,release:{cause:'observation-failed',triggerCode:'LOCAL_RESOURCE_OBSERVATION_FAILED',pid:123,signalRequested:true,physicalCloseSeen:false,inferenceOperationId:'attempt:2',privateText:'MUST_NOT_PERSIST'} as any})
+  assert.equal(d.read()[0].release?.physicalCloseSeen,false);assert.equal(d.read()[0].release?.cause,'observation-failed');assert.ok(!JSON.stringify(d.read()).includes('MUST_NOT_PERSIST'))
+  d.record({...base,release:{cause:'observation-failed',triggerCode:'unsafe provider detail',pid:123,signalRequested:true,physicalCloseSeen:false,inferenceOperationId:'attempt:2'}})
+  assert.equal(d.read()[0].release,undefined);assert.ok(!JSON.stringify(d.read()).includes('unsafe provider detail'))
+ }finally{db.close()}
+})
