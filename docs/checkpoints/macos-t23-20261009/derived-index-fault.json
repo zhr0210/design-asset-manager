@@ -1,0 +1,11 @@
+{
+  "scope": "recoverable T23 public library only",
+  "hostPid96464Exited": true,
+  "backupReadable": true,
+  "backupMode": "offline immutable SQLite quick_check, no WAL, canonical185",
+  "derivedIndex": "asset-vector-index-92ab8426-d351-4944-afd7-18b665cae1d0.sqlite",
+  "priorSha256": "e6b1b8dac08c6e9951df09d79062ba12d663024c631858572205c6070aabcacd",
+  "corruptSha256": "82157e5dedd2b90621698615e3a6710806d7d901c93594d73cdff00138954b34",
+  "canonicalUntouched": true,
+  "userPathAcceptance": false
+}

@@ -1,0 +1,9 @@
+{
+  "build": "dam-9c0969d516958e65",
+  "publicOutcome": [
+    "      - status: 请求与 JSON 完整，颜色识别未通过；图像理解能力仍待核验",
+    "      - paragraph: 身份与计划权限已验证",
+    "      - paragraph: 无需 API Key；请在运行 DAM 的同一台机器完成浏览器授权。 受保护的 ChatGPT 登录入口已接线；由你在系统浏览器授权，实际账号与额度尚未验收。 登录失败不会自动改走 API 计费。"
+  ],
+  "credentialValuesRead": false
+}

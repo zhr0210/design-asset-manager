@@ -1,0 +1,14 @@
+{
+  "scope": "Formal UI 4B CPU caption plus release-idle click; not PASS",
+  "build": "dam-6fbe7385d98ed452",
+  "diagnostics": [
+    "阶段结果 / 耗时请求或尝试组合与版本",
+    "取消与实际释放失败 · 5009 ms · LOCAL_RUNTIME_EXIT_UNCONFIRMED5e55a600-b80c-47f3-bec5-daa39d525d2e2026-10-09T04:23:18.518Zdam-6fbe7385d98ed452cpu45778b7a0f3140c1",
+    "一次实际推理失败 · 9773 ms · AI_PROCESS_EXIT_UNCONFIRMED291fbd4b-f37d-4bd2-8f5d-af5ce1c421d82026-10-09T04:23:13.751Zdam-6fbe7385d98ed452cpu45778b7a0f3140c1",
+    "模型就绪核对阶段返回 · 1 ms34ed0d25-16d0-462f-b7f0-6ce87bac45152026-10-09T04:23:13.748Zdam-6fbe7385d98ed452未测加载方式",
+    "准备（包含资源等待）阶段返回 · 328 ms34ed0d25-16d0-462f-b7f0-6ce87bac45152026-10-09T04:23:13.420Zdam-6fbe7385d98ed452未测加载方式",
+    "索引查询（包含图文计算） · en阶段返回 · 8 msc97378f5-6fc9-4b7c-9f9a-7fda44a9e15b2026-10-09T04:22:51.885Zdam-6fbe7385d98ed452未测加载方式"
+  ],
+  "oldCaptionPreserved": true,
+  "unknownNotResent": true
+}

@@ -1,0 +1,19 @@
+{
+  "build": "dam-9703e974f8ba9555",
+  "normalWholeAppReopen": true,
+  "readOnlyExplicitColumns": true,
+  "checks": {
+    "library": true,
+    "vectors": true,
+    "originalFiles": true,
+    "workSets": true,
+    "workMembers": true,
+    "backgroundPolicy": true,
+    "backgroundStateCounts": true
+  },
+  "attempts": 51,
+  "evidence": 49,
+  "canonicalVectors": 185,
+  "backgroundSucceeded": 63,
+  "automaticResendDetected": false
+}

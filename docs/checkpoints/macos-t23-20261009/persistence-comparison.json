@@ -1,0 +1,18 @@
+{
+  "build": "dam-53deb272bf4ff655",
+  "beforeAfterDerivedIndexRecovery": {
+    "library": true,
+    "vectors": true,
+    "originalFiles": true,
+    "workSets": true,
+    "workMembers": true,
+    "backgroundPolicy": true,
+    "backgroundStateCounts": true
+  },
+  "originalMigrationLibraryBaselineUnchanged": true,
+  "canonicalVectorCount": 185,
+  "backgroundSucceeded": 63,
+  "sameVectorBytesAndGenerationTimes": true,
+  "newInferenceDuringRebuild": false,
+  "acceptanceMethod": "ordinary GUI rebuild plus explicit-column read-only persistence comparison"
+}
