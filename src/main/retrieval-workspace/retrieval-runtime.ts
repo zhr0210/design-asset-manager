@@ -34,6 +34,7 @@ export function createRetrievalRuntime(d:{database:Database.Database;runner:stri
     stopTimer:ReturnType<typeof setTimeout>|undefined,idleTimer:ReturnType<typeof setTimeout>|undefined,
     suspended=false,validating=false,validationAbort:AbortController|undefined
   const stamps=new Map<string,string>()
+  const stopping=new WeakSet<ChildProcessWithoutNullStreams>()
   const status=():RetrievalWorkspaceStatus['runtime']=>({state,modelId:binding()?.modelId??null,spaceId:active?.qualification?.spaceId??null,error,peakRamBytes,loadMs,pythonSelected:Boolean(binding()?.python)})
   const currentSpace=():RetrievalQualification|null=>{const c=binding();if(!c?.fingerprint||!c.modelId||suspended)return null
     const model=d.models.summary().models.find(v=>v.id===c.modelId&&v.trusted)
@@ -55,7 +56,7 @@ export function createRetrievalRuntime(d:{database:Database.Database;runner:stri
   async function stop(){
     clearTimeout(idleTimer)
     if(!child)return
-    const owned=child;state='stopping';changed()
+    const owned=child;stopping.add(owned);state='stopping';changed()
     try{owned.stdin.end(JSON.stringify({kind:'stop'})+'\n')}catch{/* Only close proves release. */}
     stopTimer=setTimeout(()=>{try{owned.kill()}catch{}},250);stopTimer.unref?.()
     let cancel:ReturnType<typeof setTimeout>|undefined
@@ -75,11 +76,18 @@ export function createRetrievalRuntime(d:{database:Database.Database;runner:stri
     const owned=spawn(python,['-I','-B',runner,artifact.directory],{shell:false,windowsHide:true,stdio:['pipe','pipe','pipe'],env:{PATH:process.env.PATH,SYSTEMROOT:process.env.SYSTEMROOT,LANG:'en_US.UTF-8',OMP_NUM_THREADS:'2'}})
     child=owned
     const decoder=new StringDecoder('utf8');let output='',stderr=0
-    const fail=(code:string)=>{error=code;state='failed';loadedReject(Error(code));pending?.reject(Error(code));pending=undefined;try{owned.kill()}catch{};changed()}
+    const fail=(code:string)=>{
+      // Ending stdin/killing a cancelled worker can emit EPIPE and late output.
+      // Its requested shutdown is already tracked; only close proves release.
+      // An unrelated/failed running worker still retains its actual failure.
+      if(child!==owned||stopping.has(owned))return
+      error=code;state='failed';loadedReject(Error(code));pending?.reject(Error(code));pending=undefined;try{owned.kill()}catch{};changed()
+    }
     owned.on('error',()=>fail('RETRIEVAL_RUNTIME_UNAVAILABLE'))
     owned.stdin.on('error',()=>fail('RETRIEVAL_STREAM_FAILED'));owned.stdout.on('error',()=>fail('RETRIEVAL_STREAM_FAILED'));owned.stderr.on('error',()=>fail('RETRIEVAL_STREAM_FAILED'))
     owned.stderr.on('data',(chunk:Buffer)=>{stderr+=chunk.length;if(stderr>1024**2)fail('RETRIEVAL_OUTPUT_TOO_LARGE')})
     owned.stdout.on('data',(chunk:Buffer)=>{
+      if(child!==owned||stopping.has(owned))return
       output+=decoder.write(chunk);if(Buffer.byteLength(output)>1024**2){fail('RETRIEVAL_OUTPUT_TOO_LARGE');return}
       for(;;){const end=output.indexOf('\n');if(end<0)break;const line=output.slice(0,end);output=output.slice(end+1)
         try{const message=JSON.parse(line);if(message.metrics)observed(message.metrics)

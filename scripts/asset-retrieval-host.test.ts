@@ -23,7 +23,9 @@ await test('Host canonical image vectors support filtered multilingual fixture q
   const originals=await Promise.all(sources.map(f=>fs.readFile(f)))
   let imageCalls=0,textCalls=0,retrievalAvailable=true
   let imageGate:{entered():void;release:Promise<void>}|undefined
-  const admission=createVisualAdmission({policy:{mode:'quiet',reserveFraction:.1}})
+  // Host filtering/cursor/rebuild fixture, not a desktop pressure measurement.
+  const admission=createVisualAdmission({policy:{mode:'quiet',reserveFraction:.1},
+    memory:()=>({free:16*1024**3,total:24*1024**3})})
   // A deterministic dependency fixture tests Host effects/filtering/recovery;
   // it is never provided by Main and proves no real multilingual model quality.
   const runtime={currentSpace:()=>space,

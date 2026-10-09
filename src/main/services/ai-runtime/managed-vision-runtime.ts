@@ -418,7 +418,11 @@ export function createManagedVisionRuntime(d: {
       if (launched) launched.ready.then(async () => {
         loadMs = Date.now() - loadStartedAt;
         try { await observeNative(); loadedResolve() } catch (error) { loadedReject(error as Error) }
-        nativeMeasurementTimer = setInterval(() => { void observeNative().catch(() => { void stop(false).catch(() => {}) }) }, 2000);
+        nativeMeasurementTimer = setInterval(() => { void observeNative().catch(failure => {
+          const code = failure instanceof Error ? failure.message : '';
+          error = /^(LOCAL|AI)_[A-Z_0-9]+$/.test(code) ? code : 'LOCAL_RESOURCE_OBSERVATION_FAILED';
+          void stop(false).catch(() => {});
+        }) }, 2000);
         nativeMeasurementTimer.unref?.();
       }, loadedReject);
       let buffer = "",
