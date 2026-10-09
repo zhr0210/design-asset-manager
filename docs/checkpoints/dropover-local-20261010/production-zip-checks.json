@@ -1,0 +1,66 @@
+{
+  "scope": "Production ZIP through existing fileHandoff; own temporary Copy/Host/SQLite fixtures only. No active user library, GUI, user profiles, credential or shared REA session access.",
+  "request": {
+    "kind": "zip",
+    "assetIds": "unique ordered1..64; first equals scope.assetId; all current set managed members",
+    "action": [
+      "prepare",
+      "open"
+    ]
+  },
+  "dependencies": {
+    "archiver": "7.0.1 MIT, production dependency promoted/pinned by main agent",
+    "test_reader": "existing yauzl2.10.0 MIT and buffer-crc32, test only"
+  },
+  "limits": {
+    "input_bytes_total": 100663296,
+    "output_bytes": 100663296,
+    "shared_admission_bytes": 536870912,
+    "retained_copies": 64,
+    "retained_bytes_including_receipts": 1073741824,
+    "zip_receipt_bytes": 131072,
+    "legacy_receipt_bytes": 16384
+  },
+  "checks": [
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-zip-handoff.test.ts",
+      "exit_code": 0,
+      "covers": [
+        "three distinct public generated images",
+        "actual64-import production maximum with receipt larger than16KiB and smaller than128KiB",
+        "independent ZIP reader entry order/UTF8/CRC/actual original bytes",
+        "deterministic Unicode/case-fold collision names",
+        "strict params/all member source-generation/digest/member/actor guards",
+        "96MiB input preflight before source buffering and bounded output failure",
+        "64-copy/1GiB incl128KiB receipt reserve",
+        "real partial-file write then disk-fault rollback by owned physical identities",
+        "unknown extra file retained; no OSopen; explicit no blind retry",
+        "legacy original receipt compatibility",
+        "actual Host close/reopen and restore revoked member authority",
+        "source and managed-original hashes preserved; shared permit returned"
+      ]
+    },
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-processed-image-handoff.test.ts",
+      "exit_code": 0
+    },
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/native-image-handoff.test.ts",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check (owned changed files)",
+      "exit_code": 0
+    }
+  ],
+  "limitations": [
+    "Input metadata budget/source DB changes/ENOSPC are explicitly injected internal regression faults, not user-path evidence.",
+    "Final-build GUI toolbar, archive delivery/receiver import and save-reopen verification belong to main agent.",
+    "ZIP is unencrypted and preserves raw originals/embedded metadata in independent archive, as stated by receipt."
+  ],
+  "commit_status": "No staging, commit or push by this worker."
+}

@@ -1,0 +1,74 @@
+{
+  "readOnly": true,
+  "authColumnsRead": false,
+  "library": {
+    "sha256": "e3dc6c7a8d28e746f4050725c122aeae5c6096615c22175a6dcfb0873eb51f50",
+    "counts": {
+      "assets": 185,
+      "attempts": 53,
+      "evidence": 51,
+      "ocr": 21,
+      "ocrEdits": 21,
+      "workSets": 1,
+      "workMembers": 3,
+      "background": 63,
+      "backgroundPolicy": 1,
+      "backgroundHistory": 64
+    }
+  },
+  "vectors": {
+    "sha256": "2fa5f129fc1333a635311e9d0b1dac14af5cc98635e836057d597548da2df38b",
+    "counts": {
+      "vectors": 185,
+      "jobs": 1
+    }
+  },
+  "originalsSha256": "f633315b50ff203111b25f88297e79c6257996d2e08c92a1dbd64475055a402d",
+  "workSets": [
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "T23 Mac 联合参考",
+      "T23 未保存草稿：请重开后保留这段中英文 draft note 20261009。",
+      2
+    ]
+  ],
+  "workMembers": [
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "design-asset:d697ef30-4d60-439e-b7c4-fb753570b0f1",
+      0
+    ],
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "design-asset:38af3144-3473-4e72-a2c9-0626cbf6baca",
+      1
+    ],
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "design-asset:91b064ba-a964-4f3e-98fa-ee94c5745176",
+      2
+    ]
+  ],
+  "backgroundPolicy": [
+    [
+      0,
+      2,
+      24,
+      "2026-10-09T05:00:11.880Z"
+    ]
+  ],
+  "backgroundStateCounts": {
+    "succeeded": 63
+  },
+  "vectorJobs": [
+    [
+      "retrieval-job:69602c92-ed99-4cea-9686-7df2620ab9e1",
+      "f4aadb7c826777334497c59f863ed1b470308b0bb9a58a1c2fa3f3a349cbf45c",
+      "complete",
+      185,
+      185,
+      0,
+      null
+    ]
+  ]
+}

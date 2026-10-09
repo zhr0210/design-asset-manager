@@ -1,0 +1,63 @@
+{
+  "scope": "Only work-media.contract.ts, work-file-handoff.ts and new work-processed-image-handoff.test.ts production/test changes; no GUI/profile/active-library/REA-session access.",
+  "production_request": {
+    "kind": "processed-image",
+    "imageTransform": {
+      "format": [
+        "png",
+        "jpeg",
+        "webp"
+      ],
+      "quality": "integer 1..100; PNG accepts but does not apply quality",
+      "resize": "optional {fit:inside,width:1..4096,height:1..4096}; never enlarges",
+      "stripMetadata": "boolean; false partially retains supported blocks through Sharp.withMetadata"
+    }
+  },
+  "checks": [
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-processed-image-handoff.test.ts",
+      "exit_code": 0,
+      "covers": [
+        "production Copy intake/temporary SQLite/Host/Sharp",
+        "PNG alpha and quality10/100 byte equality",
+        "JPEG alpha white flatten",
+        "EXIF orientation6 and no enlargement",
+        "partial metadata/output block names",
+        "MIME/provenance source digest",
+        "actual Host close/reopen",
+        "old original/preview/compatible-png kinds",
+        "strict malformed/unknown input rejection",
+        "16MP source and 64-copy/1GiB retained quotas",
+        "source/type/member/actor fault refusal",
+        "shared admission compute bytes and requests return to zero",
+        "source and managed-original hashes unchanged",
+        "prospective receipt metadata byte budget boundary",
+        "oversized receipt rejected before creating a new copy directory"
+      ],
+      "limitations": [
+        "Video refusal uses explicit temporary SQLite source_format fault after production v15 upgrade; not video user-path qualification.",
+        "Physical GUI delivery, UI entry and final-build reopen require main agent verification."
+      ]
+    },
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/native-image-handoff.test.ts",
+      "exit_code": 0,
+      "covers": [
+        "existing production second-member bytes/cursor identity and wrong-sender refusal"
+      ],
+      "limitations": [
+        "Controlled OS port, not physical drop."
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check -- src/shared/contracts/work-media.contract.ts src/main/work-mode/work-file-handoff.ts",
+      "exit_code": 0
+    }
+  ],
+  "commit_status": "Not staged, committed or pushed by this worker.",
+  "budget_note": "New handoff reserves the existing 16KiB maximum receipt allowance in the 1GiB retained byte cap; existing directory bytes including receipts are counted from actual sizes. Prepared/open receipt serialization enforces that 16KiB cap. This leaves at most 16KiB headroom rather than ignoring receipt bytes."
+}

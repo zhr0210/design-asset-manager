@@ -1,0 +1,47 @@
+{
+  "scope": "Owner-scoped file/ZIP/image cancellation and active protection production chain; own generated images and temporary Copy/Host/SQLite only. No GUI, active user library, credential, profile or shared REA access.",
+  "api": {
+    "files.prepare": "Registers an AbortController synchronously at request arrival, including queued operations; same signal reaches shared admission and ZIP; checks after Host/Sharp/filesystem awaits.",
+    "files.hasActive": "true until actual current/queued operation finally, including owned stream close and permit release",
+    "files.cancel": "async actor-only cancel followed by actual idle barrier; completed retained copies remain",
+    "files.whenIdle": "async actual actor current/queued completion barrier",
+    "media.cancel/revoke": "cancel and await both owned write completion and files completion",
+    "media.hasActive/whenIdle": "joint owned video-write/file lifecycle"
+  },
+  "checks": [
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-handoff-cancellation.test.ts",
+      "exit_code": 0,
+      "covers": [
+        "Current held Host read and queued same-actor prepare both cancelled with WORK_HANDOFF_CANCELLED",
+        "Cancelled queued preview never executes; foreign actor completes",
+        "Actual Governor waiter removed via same signal while independently owned blocker remains reserved",
+        "Real archiver instance finish and close observed while actor active and512MiB material still held; only subsequent prepare finally releases",
+        "Sharp actual toBuffer completion Promise with explicit reply-delay barrier must settle before cancellation acknowledgement and permit release",
+        "Real owned partial write cancellation rolls back by inode identity",
+        "Cancel after final receipt fsync/close retains successful prepared copy and skips not-yet-dispatched OSopen",
+        "Existing completed copy survives cancellation and every original hash is unchanged",
+        "Formal media cancellation joins file job, revoke joins actual Host write return; Host correctly rejects PNG video capture"
+      ]
+    },
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-zip-handoff.test.ts",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check (owned changed files)",
+      "exit_code": 0
+    }
+  ],
+  "limits": [
+    "Observer wrappers/delayed return barriers and resource samplers are explicit internal lifecycle regressions, not GUI qualification.",
+    "ZIP is a Node stream; no ChildProcess or physical process exit is claimed.",
+    "Video lifecycle regression uses a real Host PNG rejection and cannot qualify actual video decode/cancel.",
+    "Final-build ordinary GUI entry, real cancellation interactions and save-reopen verification belong to main agent."
+  ],
+  "commit_status": "No stage, commit or push by worker; production frozen after passing these checks."
+}

@@ -1,0 +1,26 @@
+{
+  "path": "/Users/meigong/Documents/DAM-public-macos-profile/work-file-handoffs/246b23c8-6baa-4f13-b4b3-641bf238aaa0/public-astronaut ZIP归档.zip",
+  "bytes": 954891,
+  "sha256": "039b13d4434803bb21fd091d512c42fcbb39abbf6f07f8f5efa987e3ebaf9204",
+  "crcError": null,
+  "entries": [
+    {
+      "name": "public-astronaut.png",
+      "bytes": 791555,
+      "crc32": "3a0dc29e",
+      "sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5"
+    },
+    {
+      "name": "public-coffee.png",
+      "bytes": 466706,
+      "crc32": "c5ecbc0b",
+      "sha256": "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7"
+    },
+    {
+      "name": "public-page.png",
+      "bytes": 47679,
+      "crc32": "cfe71bc5",
+      "sha256": "341a6f0a61557662b02734a9b6e56ec33a915b2c41886b97509dedf2a43b47a3"
+    }
+  ]
+}
