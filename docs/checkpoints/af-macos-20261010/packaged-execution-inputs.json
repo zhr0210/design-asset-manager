@@ -1,0 +1,37 @@
+{
+  "kind": "packaged-execution-input-equivalence",
+  "build": "dam-342516c36717d81c",
+  "artifacts": [
+    {
+      "file": "out/main/index.js",
+      "sha256": "b638258a6a72e7bfb36dc56b0936c6ef90daf0be44f43223a2cec02065cbfd47",
+      "bytes": 1743306,
+      "byteEqual": true
+    },
+    {
+      "file": "out/preload/index.cjs",
+      "sha256": "7b8a64cdcc6e4b38ebba6f38f9a4a6433710b01dfeac061b943cd2bd63a43aea",
+      "bytes": 47768,
+      "byteEqual": true
+    },
+    {
+      "file": "out/preload/work-window.cjs",
+      "sha256": "405b515be8f3cdd81b826561f2e063366c732c740a6a7ec4a2924e71a00dfc07",
+      "bytes": 2212,
+      "byteEqual": true
+    },
+    {
+      "file": "macos-runtime/owned-memory",
+      "sha256": "9bb55b15c5afbd70b583e6d91478ec0d6ae69dcb90cce7d4e891ee3b8f2eb4de",
+      "bytes": 33728,
+      "byteEqual": true
+    },
+    {
+      "file": "macos-runtime/video",
+      "sha256": "c468e9296208a1b9e344896213bf03c8f24364d3c35cad39766c18d9a24f9b7e",
+      "bytes": 95304,
+      "byteEqual": true
+    }
+  ],
+  "hostStartupOrUserPathAcceptance": false
+}

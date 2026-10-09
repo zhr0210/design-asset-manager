@@ -10,3 +10,5 @@
 - 正规退出旧64987 Host，0草稿/0原生未保存/0登录任务，实际退出；普通Browser新Host90302/64545/342516已启动。新IAB正规/launch报客户端拦截，Chrome连接超时重置工具，Mac锁屏阻塞原生。没有复制凭据或绕过认证。
 
 当前尚未执行：新构建UI批量导入/新帧正确provenance/最终重开保护，A/B本批新增消费者复验，E实际库/插件/配对与读写冲突，F万条入库/性能/持续运行/普通包启动。图像、视频和下载只有指定公开内容；未包含完整receipt、native actor、账号秘密或全配置。保留原件、备用库、模型/Python/Pi与其他WIP。
+
+包内消费补充：`packaged-native-consumption.json`、`packaged-execution-inputs.json`、`packaged-pi-consumption.json`分别记录实际包内原生模块执行、当前运行输入字节等价、真实Pi封印/固定Node。均未启动第二Host或读取profile，不代替普通包UI启动/模型/安装验收。

@@ -1,0 +1,18 @@
+{
+  "kind": "packaged-native-dependency-execution",
+  "build": "dam-342516c36717d81c",
+  "app": "/Users/meigong/Documents/design-asset-manager-macos/.scratch/af-macos-20261010/package-current/mac-arm64/Design Asset Manager.app",
+  "exitCode": 0,
+  "uiAcceptance": false,
+  "hostStarted": false,
+  "profileRead": false,
+  "result": {
+    "electron": "30.5.1",
+    "abi": "123",
+    "arch": "arm64",
+    "sqlite": "12.10.0",
+    "sharp": "0.34.5",
+    "actualPackagedSqlite": true,
+    "actualPackagedSharp": true
+  }
+}

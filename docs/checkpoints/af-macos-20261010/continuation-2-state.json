@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-09T18:34:37.943550+00:00",
+  "previousGoalTurn": "progress",
+  "newEvidence": [
+    "packaged Electron SQLite/Sharp executed",
+    "Main/preload/native helpers equal current build",
+    "real Pi consumer verifies all 11832 sealed files",
+    "packaged fixed Node executed v24.21.0"
+  ],
+  "hostPid": 90302,
+  "build": "dam-342516c36717d81c",
+  "healthReady": true,
+  "ordinaryDesktopCommandExitCode": 0,
+  "nativeUiVerified": false,
+  "nativeToolState": "Mac locked, revalidated this turn",
+  "iabState": "old tab connection interrupted after old Host normal exit",
+  "pendingUserFacts": [
+    "Mac unlock",
+    "dedicated public Eagle library active"
+  ],
+  "goalStatus": "active",
+  "userPathAcceptance": false
+}

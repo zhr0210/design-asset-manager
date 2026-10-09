@@ -1,0 +1,20 @@
+{
+  "kind": "packaged-Pi-real-consumer-seal-verification",
+  "build": "dam-342516c36717d81c",
+  "seal": "ff5c59ec9be9cc130f8da974c838c8af998f552adb48514c7da85c63c5848156",
+  "piVersion": "0.99.1",
+  "nodeVersion": "24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "sealedFiles": 11832,
+  "verification": {
+    "filesRead": 11832,
+    "bytesRead": 190560520,
+    "elapsedMs": 818.411375
+  },
+  "workerSpawns": 0,
+  "profileRead": false,
+  "userPathAcceptance": false,
+  "fixedNodeExecuted": true,
+  "actualNodeVersion": "24.21.0"
+}
