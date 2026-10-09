@@ -1,0 +1,15 @@
+{
+  "pixelIdentity": true,
+  "source": {
+    "width": 600,
+    "height": 400,
+    "channels": 4,
+    "pixelSha256": "2c9022e5a85bd6baa1679a11f91fa94fd1d69ba879414f5da7c55066ea3b28fc"
+  },
+  "clipboard": {
+    "width": 600,
+    "height": 400,
+    "channels": 4,
+    "pixelSha256": "2c9022e5a85bd6baa1679a11f91fa94fd1d69ba879414f5da7c55066ea3b28fc"
+  }
+}

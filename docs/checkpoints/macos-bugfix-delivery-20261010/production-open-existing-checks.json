@@ -1,0 +1,60 @@
+{
+  "scope": "Native-only opening of previously prepared verified copies, not another preparation; own temporary production Copy/Host/SQLite and controlled OS opener. No active user library, GUI, credentials or profiles read.",
+  "api": {
+    "files.openExisting": "actor,id -> WorkHandoffReceipt; actor lifecycle registered at arrival; optional Main-only current-window guard throughout IO and before/after OS dispatch",
+    "native": "WorkWindowApi.openFile({token,id}) through work-window:open-file, explicitly browserDenied",
+    "side_effects": "One existing file path, no new handoff directory; status open-requested/open-rejected only, never received"
+  },
+  "checks": [
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-open-existing.test.ts",
+      "exit_code": 0,
+      "covers": [
+        "same receipt id and actual byte copy reused; directory count unchanged",
+        "ZIP every member/source/digest still scoped and valid",
+        "wrong actor/sender/token/unknown keys no OS request",
+        "changed copy bytes/linked payload/linked receipt/record kind refuses OS request",
+        "opener rejection preserves prepared copy",
+        "pre-dispatch cancellation waits actual held Host return and leaves complete copy intact",
+        "actual pending opener promise keeps actor active and512MiB material held; native close/dock refuses",
+        "Controller drain cancels and waits actual opener return before destruction",
+        "atomic receipt result unknown causes explicit failure, no automatic OS reopen or copy deletion",
+        "source hashes and shared permits remain protected"
+      ]
+    },
+    {
+      "command": "node scripts/work-open-existing-view.test.mjs",
+      "exit_code": 0,
+      "covers": [
+        "actual React WorkFileHandoffPanel opens receipt without second handoff request",
+        "actual React WorkSetWindow/ArchivePanel opens ZIP id with correct token",
+        "busy prevents concurrent OS request and disables actual parent Close/Dock",
+        "WORK_HANDOFF_OPEN_UNKNOWN/RECORD_UNKNOWN/SCOPE_CHANGED treated as uncertain outcomes by patched UI; tested journal unknown prevents replay",
+        "old generation/token late results are not adopted"
+      ],
+      "oracle_note": "Receipt serial and scope-generation sequence separated after initial fixture error; no standards lowered."
+    },
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-zip-handoff.test.ts",
+      "exit_code": 0
+    },
+    {
+      "command": "node scripts/run-electron-node-test.mjs scripts/work-handoff-cancellation.test.ts",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check (owned production/test differences)",
+      "exit_code": 0
+    }
+  ],
+  "limitations": [
+    "Controlled OS opener and actual React controlled transport are internal regression evidence, not physical application reception.",
+    "Whole-Host final build GUI execution and persistence verification belong to main agent."
+  ],
+  "command_bar": "Unfinished source component moved out of src to WorkWindowCommandBar.draft.tsx in this directory after main agent freeze instruction; not part of current production candidate.",
+  "commit_status": "No staging, commit or push by worker."
+}

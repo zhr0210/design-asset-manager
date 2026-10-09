@@ -1,0 +1,55 @@
+{
+  "allSelectedPersistentValuesEqual": true,
+  "libraryHashEqual": true,
+  "vectorHashEqual": true,
+  "originalHashEqual": true,
+  "counts": {
+    "assets": 186,
+    "attempts": 53,
+    "evidence": 51,
+    "ocr": 21,
+    "ocrEdits": 21,
+    "workSets": 1,
+    "workMembers": 4,
+    "background": 63,
+    "backgroundPolicy": 1,
+    "backgroundHistory": 64
+  },
+  "vectors": {
+    "sha256": "2fa5f129fc1333a635311e9d0b1dac14af5cc98635e836057d597548da2df38b",
+    "counts": {
+      "vectors": 185,
+      "jobs": 1
+    }
+  },
+  "workSets": [
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "T23 Mac 联合参考",
+      "T23 未保存草稿：请重开后保留这段中英文 draft note 20261009。",
+      3
+    ]
+  ],
+  "workMembers": [
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "design-asset:d697ef30-4d60-439e-b7c4-fb753570b0f1",
+      0
+    ],
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "design-asset:38af3144-3473-4e72-a2c9-0626cbf6baca",
+      1
+    ],
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "design-asset:91b064ba-a964-4f3e-98fa-ee94c5745176",
+      2
+    ],
+    [
+      "work-set:074788ed-2d23-4ebf-b731-e637a45b1154",
+      "clipboard-asset:f49b98d319b9a37b23db8123fdd5d0bf9095ef6934f883768e60e6cd72407239",
+      3
+    ]
+  ]
+}
