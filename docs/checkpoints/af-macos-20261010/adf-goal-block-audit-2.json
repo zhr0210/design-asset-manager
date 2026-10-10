@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-10",
+  "goalTurn": 2,
+  "previousTurnClassification": "progress: real 5be package/consumer evidence and 48d search repair/checkpoint",
+  "thisTurnProgress": "reviewed actual public result contents and identified OCR/manual-correction targets; tried ordinary browser entry to existing Host",
+  "sameBlockingCondition": "Mac locked, new regular IAB entry client-blocked; Chrome control timed out",
+  "nativeAppObservation": "locked",
+  "ordinaryBrowserIntentForwardingExitCode": 0,
+  "mainPidStillLive": 91119,
+  "health": {
+    "state": "ready",
+    "buildId": "dam-48d2ccd23660d439",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "normalEntryIabOldTab": "ERR_BLOCKED_BY_CLIENT",
+  "normalEntryIabFreshTab": "ERR_BLOCKED_BY_CLIENT",
+  "chromeObservation": "timeout, not proof Host stopped",
+  "cookieOrGrantReadByAgent": false,
+  "newWritableHostStarted": false,
+  "goalStatus": "active",
+  "nativeUiOrModelAcceptanceAddedOn48d": false,
+  "unlockQuestionAlreadyPending": true,
+  "blockedThresholdSatisfied": false
+}

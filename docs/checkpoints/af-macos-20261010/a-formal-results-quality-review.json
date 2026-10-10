@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-10",
+  "executionBuild": "dam-5be87024c1293899",
+  "kind": "read-only-review-of-actual-formal-background-results",
+  "sourceImagesViewedAndHashBound": true,
+  "actualResults": [
+    {
+      "asset": "AF-A-astronaut",
+      "capability": "caption",
+      "caption": "一位身穿橙色宇航服的女性宇航员，面带微笑，背景是美国国旗和航天飞机模型。她穿着的宇航服上有一个圆形徽章，上面有'Collins'和'Collins'字样。",
+      "reportedPhysicalCalls": 1,
+      "usage": {
+        "inputTokens": 358,
+        "outputTokens": 64,
+        "costEstimateUsd": null,
+        "source": "unpriced"
+      }
+    },
+    {
+      "asset": "AF-A-astronaut",
+      "capability": "ocr",
+      "engine": "rapidocr-onnxruntime",
+      "version": "1.4.4",
+      "dimensions": [
+        512,
+        512
+      ],
+      "elapsedMs": 220,
+      "blockCount": 0,
+      "recognizedTexts": []
+    },
+    {
+      "asset": "AF-A-coffee",
+      "capability": "caption",
+      "caption": "一杯浓郁的意式浓缩咖啡，盛在红白相间的陶瓷杯中，置于同色系的杯碟上，旁边放着一把闪亮的金属勺子，整体摆放在深色木纹桌面上。",
+      "reportedPhysicalCalls": 1,
+      "usage": {
+        "inputTokens": 349,
+        "outputTokens": 61,
+        "costEstimateUsd": null,
+        "source": "unpriced"
+      }
+    },
+    {
+      "asset": "AF-A-coffee",
+      "capability": "ocr",
+      "engine": "rapidocr-onnxruntime",
+      "version": "1.4.4",
+      "dimensions": [
+        600,
+        400
+      ],
+      "elapsedMs": 240,
+      "blockCount": 0,
+      "recognizedTexts": []
+    },
+    {
+      "asset": "AF-A-page",
+      "capability": "caption",
+      "caption": "一份关于基于区域分割的设计参考文档，内容涉及如何通过灰度直方图的两端来识别硬币和背景的标记像素。",
+      "reportedPhysicalCalls": 1,
+      "usage": {
+        "inputTokens": 174,
+        "outputTokens": 43,
+        "costEstimateUsd": null,
+        "source": "unpriced"
+      }
+    },
+    {
+      "asset": "AF-A-page",
+      "capability": "ocr",
+      "engine": "rapidocr-onnxruntime",
+      "version": "1.4.4",
+      "dimensions": [
+        384,
+        191
+      ],
+      "elapsedMs": 507,
+      "blockCount": 4,
+      "recognizedTexts": [
+        "Region-basedsegmentation",
+        "Let us first determine markers of the coins and the",
+        "unambiguously as either object or background.Here,",
+        "histogram ofgreyvalues:"
+      ]
+    }
+  ],
+  "actualPendingTags": [
+    {
+      "asset": "AF-A-astronaut",
+      "tags": [
+        "宇航员",
+        "太空服",
+        "美国国旗",
+        "航天飞机",
+        "太空探索",
+        "橙色",
+        "肖像照",
+        "NASA"
+      ]
+    },
+    {
+      "asset": "AF-A-coffee",
+      "tags": [
+        "咖啡",
+        "咖啡杯",
+        "咖啡杯碟"
+      ]
+    },
+    {
+      "asset": "AF-A-page",
+      "tags": [
+        "区域分割",
+        "标记",
+        "灰度图",
+        "零值",
+        "背景",
+        "设计素材",
+        "视觉元素",
+        "图像分析"
+      ]
+    }
+  ],
+  "assessment": {
+    "broadSubjects": "astronaut portrait, coffee cup/saucer, region-based segmentation document align with public inputs",
+    "fineCaptionLimitation": "astronaut badge repeats Collins and does not establish exact text; beverage subtype is inference",
+    "ocrLimitation": "document has four detected blocks; two body rows and the small code row are not returned, spaces are joined; astronaut small badge text was not detected",
+    "tagsRemainSuggestions": true,
+    "completeAccuracyClaim": false,
+    "requiredNextUserPaths": [
+      "read results back in 48d ordinary UI",
+      "correct document OCR and preserve correction across one-click analysis/reopen",
+      "save manual caption and confirm tags, then verify AI does not overwrite them"
+    ]
+  },
+  "productionDbWritesByAgent": false,
+  "secretRead": false,
+  "completeUserPathAcceptance": false
+}
