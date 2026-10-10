@@ -1,6 +1,6 @@
 # 当前任务：A–D/F Mac 真实验收收敛（2026-10-10）
 
-Goal active。用户明确Eagle联动交由 `codex/eagle-integration` 后续调整，当前继续 `codex/macos-migration` 的A–D/F。唯一源码目录 `/Users/meigong/Documents/design-asset-manager-macos`，不切分支做并行产品写入，不推送/合main/签名发布。
+Goal blocked：同一锁屏/新浏览器入口不可用条件已连续三轮验证，完整目标保留。用户明确Eagle联动交由 `codex/eagle-integration` 后续调整，当前继续 `codex/macos-migration` 的A–D/F。唯一源码目录 `/Users/meigong/Documents/design-asset-manager-macos`，不切分支做并行产品写入，不推送/合main/签名发布。
 
 ## 当前进度与下一动作
 
@@ -20,3 +20,5 @@ Goal active。用户明确Eagle联动交由 `codex/eagle-integration` 后续调�
 两份AGENTS/验收流程其他WIP原字节保持，不提交。账号秘密/receipt完整内容不读取。测试素材只用已授权公开图片/官方Blender短片，冻结原迁移库不写；单Host，不断真实外网、不安排外屏/Windows原页压力/商业发行，完整Dropover扩展延期。
 
 第二轮Goal审计：Mac仍锁屏，普通Browser启动可转交到现有Host但Chrome控制超时/IAB新旧页客户端阻止。Host91119仍健康，不重启或改认证；解锁请求已在界面待答，Goal active，完整要求保留。
+
+第三轮阻塞审计：[adf-goal-block-audit-3.json](docs/checkpoints/af-macos-20261010/adf-goal-block-audit-3.json)。Host91119/48d仍真实运行且health ready；Mac仍锁屏，现有IAB仍是旧63862断连页。已尝试正规Browser单实例转交、新旧IAB入口及Chrome控制，不能继续普通UI，不能用更多工程脚本冒称完成。手动解锁并恢复Goal后按上方下一动作继续，不新建目标、不重启当前健康Host，不合main或扩大E/发行范围。

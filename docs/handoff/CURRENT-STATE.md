@@ -1,6 +1,6 @@
 # DAM 当前状态（A–D/F进行中）
 
-`codex/macos-migration`继续A–D/F，Eagle独立分支8cf60c7延期。万条Copy/真实恢复/普通5be包重开已成立；5be新增三张公开图九项后台效果已保存，原187资料选定字段、原件及旧186向量/2任务保持。随后发现前台查询快照泄漏，修复后的48d候选工程检查与Mac包通过，但普通UI复验等待解锁；Goal active，A–D/F及父级未关闭。准确接续见 [TASK](../../TASK.md)、[本轮记录](AF-MACOS-20261010.md)。
+`codex/macos-migration`继续A–D/F，Eagle独立分支8cf60c7延期。万条Copy/真实恢复/普通5be包重开已成立；5be新增三张公开图九项后台效果已保存，原187资料选定字段、原件及旧186向量/2任务保持。随后发现前台查询快照泄漏，修复后的48d候选工程检查与Mac包通过，但普通UI复验等待解锁；同一外部条件连续三轮后Goal blocked，A–D/F及父级未关闭。准确接续见 [TASK](../../TASK.md)、[本轮记录](AF-MACOS-20261010.md)。
 
 当前唯一普通Host：PID91119 / `http://127.0.0.1:57228` / `dam-48d2ccd23660d439`，同公开profile。旧5be Host87396已正规退出并确认物理退出。新IAB需经实体候选高级维护的正规入口授权，不能复用旧端口或会话。
 
@@ -59,3 +59,5 @@ A–F阶段公开库现187资产（新增官方视频）、53尝试/51证据、2
 只按新用户要求从待测清单接续。需要原始版本/来源/失败链时查 [Mac 历史索引](../history/handoff-snapshots/macos-20261009-20261010/README.md)，不默认加载整批历史。源码、模型、凭据、实际资料库、运行环境和其他 WIP 保留。
 
 目录已统一，Eagle额外worktree已移除；从同一源码目录切换各分支，详情见 [分支与目录](BRANCHES.md)。
+
+最新第三轮复核：Mac仍锁屏，IAB旧页仍断连，Host91119/48d健康ready且物理进程存在。已保存完整A–D/F逐项完成审计，仍有普通用户路径未验证，故不标complete；Goal依三轮规则blocked，手动解锁并恢复Goal后接续。见 [阻塞审计](../checkpoints/af-macos-20261010/adf-goal-block-audit-3.json)。
