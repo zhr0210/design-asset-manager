@@ -1,0 +1,115 @@
+{
+  "status": "REVIEW_ONLY",
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "P1",
+      "title": "Unsupported Windows visual codec persistently suspends shared admission",
+      "basis": "PRODUCTION_FUNCTION_REPRODUCED",
+      "evidence": [
+        "E04",
+        "S20",
+        "S22",
+        "S23"
+      ],
+      "next": "WC01/W02"
+    },
+    {
+      "id": "F02",
+      "severity": "P1_FOR_WINDOWS_AI",
+      "title": "Windows visual and schema-maintenance qualification incomplete",
+      "basis": "SOURCE_CONFIRMED",
+      "evidence": [
+        "S22",
+        "S24",
+        "S30"
+      ],
+      "next": "Windows qualification vertical slice after WC01"
+    },
+    {
+      "id": "F03",
+      "severity": "P1_FOR_REPRODUCIBLE_HANDOFF",
+      "title": "HEAD Mac Pi seal, Windows WIP, frozen candidate and generated build identity differ",
+      "basis": "GIT_AND_SOURCE_CONFIRMED",
+      "evidence": [
+        "E01",
+        "S08",
+        "S31"
+      ],
+      "next": "WC01/W01,W03"
+    },
+    {
+      "id": "F04",
+      "severity": "P2",
+      "title": "Current context check fails on untracked command dependency closure",
+      "basis": "COMMAND_REPLAYED",
+      "evidence": [
+        "E02"
+      ],
+      "next": "WC01/W01,W05"
+    },
+    {
+      "id": "F05",
+      "severity": "P2",
+      "title": "Multiple stale current-state documents conflict with live architecture",
+      "basis": "DOCUMENT_AND_SOURCE_CONFIRMED",
+      "evidence": [
+        "S01",
+        "S09",
+        "S10",
+        "S11",
+        "S13",
+        "S20"
+      ],
+      "next": "WC01/W04"
+    },
+    {
+      "id": "F06",
+      "severity": "P2_STRATEGY",
+      "title": "Production AI capabilities and resource governor lag infrastructure delivery",
+      "basis": "SOURCE_AND_SCOPE_ASSESSMENT",
+      "evidence": [
+        "S20",
+        "S25",
+        "S26",
+        "S29",
+        "B01"
+      ],
+      "next": "Resume DP02-DP05, preserve approved dual client"
+    },
+    {
+      "id": "F07",
+      "severity": "P2",
+      "title": "Historical failure evidence needs current gate-specific closure queue",
+      "basis": "REPORT_REVIEW_NOT_FULL_RERUN",
+      "evidence": [
+        "S08",
+        "S37"
+      ],
+      "next": "WC01/W05"
+    },
+    {
+      "id": "F08",
+      "severity": "P2_P3",
+      "title": "Dormant code and history need responsibility-based cleanup",
+      "basis": "STATIC_CANDIDATES_NOT_DELETION_PROOF",
+      "evidence": [
+        "E05",
+        "E07"
+      ],
+      "next": "Scoped cleanup only after caller proof"
+    },
+    {
+      "id": "F09",
+      "severity": "P2_P3",
+      "title": "Build identity coverage must be separated from full runtime provenance",
+      "basis": "BUILD_SCRIPT_SOURCE",
+      "evidence": [
+        "S31",
+        "S32",
+        "S33"
+      ],
+      "next": "WC01/W03"
+    }
+  ]
+}

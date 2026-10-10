@@ -24,7 +24,7 @@
 ## 内容保全位置
 
 - 根指南的详细事实：
-  [implementation-status.md](implementation-status.md)。
+  [implementation-status.md](../history/task-consolidation-20261011/agents/implementation-status.md)。
 - Main 的 26 条未来规则：
   [Main ADR reference](../../src/main/ADR-REFERENCE.md)。
 - Renderer 的 58 条未来规则（含补查的状态中心、恢复与 Text 规则）：

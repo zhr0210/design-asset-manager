@@ -1,0 +1,16 @@
+[
+  {
+    "originalMountedPath": "/mnt/data/DAM-NEXT-DEVELOPMENT-PLAN-20260930/02-MASTER-ROADMAP.md",
+    "copy": "baselines/MASTER-ROADMAP-20260930.md",
+    "sha256": "7d6e352e71a9666765467554789df965e26b22b9c0c049897bc76074289a374c",
+    "copiedByteIdentical": true,
+    "role": "historical target plan; subsequent user-approved evolution takes precedence"
+  },
+  {
+    "originalMountedPath": "/mnt/data/DAM-REPOSITORY-UX-AUTH-PLAN-20261001/02-EXECUTION-PLAN.md",
+    "copy": "baselines/RUX-EXECUTION-PLAN-20261001.md",
+    "sha256": "0033b3e5e2a40a6e660d440dc61c322b9c70673b23161efbfbacba887bd12055",
+    "copiedByteIdentical": true,
+    "role": "historical target plan; subsequent user-approved evolution takes precedence"
+  }
+]

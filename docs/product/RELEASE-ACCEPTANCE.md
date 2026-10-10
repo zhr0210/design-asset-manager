@@ -1,6 +1,6 @@
 # 商业首版交付验收
 
-状态：持续目标已启动，尚未达到商业交付。基线：2026-09-03 / `c49e8f2`。
+本页是商业交付标准，不表示正在执行发行任务。原标准基线：2026-09-03 / `c49e8f2`；当前发行条件与延期状态见[任务主台账](../tasks/TASK-REGISTRY.md#release)。
 本清单定义“何时可以交付”，不替代当前代码证据，也不把全部 ADR 变成首版功能。
 完整愿景以[产品基准](PRODUCT-FOUNDATION.md)为主，[NORTH-STAR.html](NORTH-STAR.html)保留历史目标来源；当前请求决定实施范围。
 跟踪入口：[素材权威 #5](https://github.com/zhr0210/design-asset-manager/issues/5)、
@@ -45,7 +45,7 @@ mock、类型检查或一次构建成功，均不能独立代表成品完成。
 
 ## 当前事实入口
 
-本页定义交付门；当前正式 Main 已接 Active Library 与唯一 Local Host，Desktop/Browser 共享产品界面。实际候选、适用验证、Windows 未支持项及失败队列统一见[CURRENT-STATE](../handoff/CURRENT-STATE.md)。正式接线不等于真实库迁移、真实 AI 或商业交付通过。
+本页定义交付门；当前正式 Main 已接 Active Library 与唯一 Local Host，Desktop/Browser 共享产品界面。实际候选与适用验证见[CURRENT-STATE](../handoff/CURRENT-STATE.md)。正式接线不等于真实库迁移、真实 AI 或商业交付通过。
 
 ## 历史执行节奏（historicalAsOf=2026-09-03）
 
@@ -61,5 +61,5 @@ mock、类型检查或一次构建成功，均不能独立代表成品完成。
 - 旧的忽略截图目录导致 hygiene 例外，保留并单独处理，不为“全绿”擅自删除用户文件。
 - 每个技术任务必须映射到上面的用户结果；优先完成现有 Module 的正式消费者和产品
   纵切，不追加没有当前用途的抽象。每阶段有测试、审查、Git 提交和恢复点。
-- `TASK.md` 只记录当前小任务与下一步。持续目标在所有交付门真正完成前保持进行中；
+- `TASK.md` 只记录当前小任务与下一步。历史持续目标的边界以当时记录为准；当前执行范围由TASK与任务主台账确定，
   遇到必要授权或外部材料缺口，明确报告，不伪造完成，也不扩大授权。

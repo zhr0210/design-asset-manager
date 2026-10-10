@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "a1faf93cda96736bad47874f29d12ed4d521c5a9",
+  "scope": "documentation only; no product build or runtime acceptance",
+  "commands": [
+    {
+      "command": "npm run context:check",
+      "exitCode": 0,
+      "stdout": "\n> design-asset-manager@1.0.0 context:check\n> node scripts/agent-context-router.mjs check\n\nAgent Context Router check: PASS\nSnapshot: a1faf93cda96 (dirty working tree)\nTracked first-party source ownership: 789/789 owned; 47 excluded\n"
+    },
+    {
+      "command": "npm run test-agent-context-router",
+      "exitCode": 0,
+      "stdout": "\n> design-asset-manager@1.0.0 test-agent-context-router\n> node scripts/agent-context-router.test.mjs\n\nAgent Context Router tests passed (268 route-eval tasks; 1-7 files; 1790-15976 estimated tokens).\n"
+    },
+    {
+      "command": "npm run test-path-governance-docs",
+      "exitCode": 0,
+      "stdout": "\n> design-asset-manager@1.0.0 test-path-governance-docs\n> node scripts/run-ts-test.mjs scripts/path-governance-docs.test.ts\n\n"
+    }
+  ],
+  "numberCoverage": {
+    "responsibilities": 19,
+    "uniqueResponsibilityAnchors": true,
+    "legacyFamilies": {
+      "WC W": 6,
+      "WC H": 22,
+      "WC C": 3,
+      "WC UX": 3,
+      "DP": 10,
+      "RUX R": 9,
+      "EXT": 2,
+      "DualClient": 23,
+      "LocalAI": 23,
+      "Deferred": 12
+    },
+    "allExpectedAliasesPresent": true,
+    "missing": {
+      "WC W": [],
+      "WC H": [],
+      "WC C": [],
+      "WC UX": [],
+      "DP": [],
+      "RUX R": [],
+      "EXT": [],
+      "DualClient": [],
+      "LocalAI": [],
+      "Deferred": []
+    },
+    "ruxUAndAuthSourceNamespacePreserved": true,
+    "caseAndPlatformScopeStillRequired": true
+  },
+  "currentNavigationAnchors": {
+    "currentNavigationAnchorsChecked": 14,
+    "broken": []
+  },
+  "linkAudit": {
+    "baselineMissingReferences": 489,
+    "remainingHistoricalUnavailableReferences": 454,
+    "newlyIntroducedBrokenLinks": 0,
+    "importedOriginalPackageMissingReferences": [
+      {
+        "file": "docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/MASTER-ROADMAP-20260930.md",
+        "href": "03-DP01-IMPLEMENTATION-PLAN.md",
+        "target": "docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/03-DP01-IMPLEMENTATION-PLAN.md"
+      },
+      {
+        "file": "docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/MASTER-ROADMAP-20260930.md",
+        "href": "06-SOURCES-AND-TRACEABILITY.md",
+        "target": "docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/06-SOURCES-AND-TRACEABILITY.md"
+      },
+      {
+        "file": "docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/MASTER-ROADMAP-20260930.md",
+        "href": "PLAN-STATE.json",
+        "target": "docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/PLAN-STATE.json"
+      }
+    ],
+    "historicalExamples": [
+      {
+        "file": "docs/design/GLASS-POLISH-20260914.md",
+        "href": "artifacts/glass-polish-20260914/clean-glass.png",
+        "target": "docs/design/artifacts/glass-polish-20260914/clean-glass.png"
+      },
+      {
+        "file": "docs/design/GLASS-POLISH-20260914.md",
+        "href": "artifacts/glass-polish-20260914/dark-glass.png",
+        "target": "docs/design/artifacts/glass-polish-20260914/dark-glass.png"
+      },
+      {
+        "file": "docs/design/WORKSPACE-UI-SYSTEM.md",
+        "href": "../../mobbin.md",
+        "target": "mobbin.md"
+      },
+      {
+        "file": "docs/design/AI-DISCOVERY-20260920.md",
+        "href": "artifacts/ai-discovery-20260920/report.json",
+        "target": "docs/design/artifacts/ai-discovery-20260920/report.json"
+      },
+      {
+        "file": "docs/design/AI-DISCOVERY-20260920.md",
+        "href": "artifacts/ai-discovery-20260920/ai-folders-light.png",
+        "target": "docs/design/artifacts/ai-discovery-20260920/ai-folders-light.png"
+      },
+      {
+        "file": "docs/design/AI-DISCOVERY-20260920.md",
+        "href": "artifacts/ai-discovery-20260920/ai-folders-dark.png",
+        "target": "docs/design/artifacts/ai-discovery-20260920/ai-folders-dark.png"
+      },
+      {
+        "file": "docs/design/AI-DISCOVERY-20260920.md",
+        "href": "artifacts/ai-discovery-20260920/ai-folders-compact.png",
+        "target": "docs/design/artifacts/ai-discovery-20260920/ai-folders-compact.png"
+      },
+      {
+        "file": "docs/design/AI-DISCOVERY-20260920.md",
+        "href": "artifacts/ai-discovery-20260920/ai-details-light.png",
+        "target": "docs/design/artifacts/ai-discovery-20260920/ai-details-light.png"
+      },
+      {
+        "file": "docs/design/FORMAL-LIBRARY-CANVAS-20260914.md",
+        "href": "artifacts/formal-library-canvas-20260914/formal-library-side.png",
+        "target": "docs/design/artifacts/formal-library-canvas-20260914/formal-library-side.png"
+      },
+      {
+        "file": "docs/design/FORMAL-LIBRARY-CANVAS-20260914.md",
+        "href": "artifacts/formal-library-canvas-20260914/formal-library-focus.png",
+        "target": "docs/design/artifacts/formal-library-canvas-20260914/formal-library-focus.png"
+      },
+      {
+        "file": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+        "href": "../../mobbin.md",
+        "target": "mobbin.md"
+      },
+      {
+        "file": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+        "href": "artifacts/gallery-glass-20260914/library.png",
+        "target": "docs/design/artifacts/gallery-glass-20260914/library.png"
+      }
+    ],
+    "fullReadOnlyAuditLocal": ".scratch/task-consolidation-20261011/link-check.json",
+    "interpretation": "Missing legacy exports/Windows-only local evidence were already absent or absent in the original user package; no placeholder evidence manufactured. Current/new navigation and moved formerly-valid links are checked."
+  },
+  "preservation": {
+    "productExecutableAndLockFiles": 1405,
+    "allProductBytesUnchanged": true,
+    "immutableEvidenceArchitectureAndWipPaths": 2739,
+    "allProtectedBytesUnchanged": true,
+    "otherWip": [
+      "AGENTS.md",
+      "docs/agents/ui-ux-acceptance.md"
+    ],
+    "oldScratchRuntimeArtifacts": "no removal, rename or overwrite; only new task-consolidation work artifacts added",
+    "externalLibrariesModelsProfiles": "no reads/writes or runtime actions",
+    "importedVisionPackageOriginalHashesVerified": 28
+  },
+  "productApiSchemaAndRuntimeChanged": false,
+  "newProductQualificationClaimed": false,
+  "parentIssuesClosed": false,
+  "pushOrMainMerge": false,
+  "review": "SELF_REVIEW, documentation mapping/scope/link/protection; no independent product reviewer claimed",
+  "stagedScopeCheck": {
+    "ownPaths": 240,
+    "otherWipNotStaged": true,
+    "all28OriginalPackageDeclaredFilesTracked": true,
+    "contextCheckAfterStaging": "\n> design-asset-manager@1.0.0 context:check\n> node scripts/agent-context-router.mjs check\n\nAgent Context Router check: PASS\nSnapshot: a1faf93cda96 (dirty working tree)\nTracked first-party source ownership: 789/789 owned; 47 excluded\n",
+    "publicPackageEvidenceIgnoreHandling": "7 exact verified historical JSON documents were explicitly added; global ignore rules unchanged"
+  }
+}

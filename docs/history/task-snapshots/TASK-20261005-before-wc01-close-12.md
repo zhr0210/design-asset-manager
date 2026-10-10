@@ -231,7 +231,7 @@ max1合成attempt不是真实OCR/tag域验收；effectcommit/finish/outbox、Hre
   复现并修复，尚待新构建复测。安装入口/启动早到意图及标签冲突复核也在补齐。详见E33。
 - 当时未完成（后续故障/相关尺寸长内容补验见顶部E43–E45）：完整尺寸缩放、安装包双入口
   及必要原生专项；综合suite失败仍保留。76故事/23票/264共享命令/277总登记已有矩阵；
-  查 docs/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md，不将代码接线视作全体验收。
+  查 docs/history/task-consolidation-20261011/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md，不将代码接线视作全体验收。
   本轮增量和必要前置作为实施检查点选择性提交，无push；保留原先
   无关WIP。实施前快照在 .scratch/local-dual-client/implementation-baseline。
 
@@ -723,7 +723,7 @@ runVisionRequest负责；1536→3072最多一次截断重试，仍共用控制�
 未运行真实模型、正式GUI/打包/Windows或真实用户库测试。没有新tags-only能力、
 任务持久化或新schema；未进入02A，未发布Issue、暂存、提交或推送。
 用户既有修改保留；旧规格/评审文件不改写。实施与审查证据：
-[任务01实施报告](docs/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT.md)。
+[任务01实施报告](../task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT.md)。
 
 ## 已完成：真实推理复测与获准下载 Qwen3-VL 8B（2026-09-24）
 

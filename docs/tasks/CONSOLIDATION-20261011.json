@@ -1,0 +1,2541 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "a1faf93cda96736bad47874f29d12ed4d521c5a9",
+  "scope": "tasks/documents only; no runtime or product execution changes",
+  "duplicateGroups": [
+    {
+      "group": 1,
+      "originalSha256": "01663f3872f749611204a5aab59d1d598f03d914e2467f801ecd2d5af9aa6bad",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/PLAN-CHANGES.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/PLAN-CHANGES.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/PLAN-CHANGES.md",
+      "canonicalFinalSha256": "01663f3872f749611204a5aab59d1d598f03d914e2467f801ecd2d5af9aa6bad"
+    },
+    {
+      "group": 2,
+      "originalSha256": "f46a46b34a8cfbb8a041b392a9978af381c26aef122257b0205cc7df672a7744",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/ADMISSION-PROFILE.proposed.json",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/ADMISSION-PROFILE.proposed.json"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/ADMISSION-PROFILE.proposed.json",
+      "canonicalFinalSha256": "f46a46b34a8cfbb8a041b392a9978af381c26aef122257b0205cc7df672a7744"
+    },
+    {
+      "group": 3,
+      "originalSha256": "d766cead3a02ba766e96f40c1c90bf0c3e664761da96e102b5cd526dab222066",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/SUPERSEDES.json",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/SUPERSEDES.json"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/SUPERSEDES.json",
+      "canonicalFinalSha256": "d766cead3a02ba766e96f40c1c90bf0c3e664761da96e102b5cd526dab222066"
+    },
+    {
+      "group": 4,
+      "originalSha256": "c8f73dffa56983f0582ca345b1773a0bbf3dfdeab8b29ad8d194b07d02ff632a",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/README.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/README.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/README.md",
+      "canonicalFinalSha256": "c8f73dffa56983f0582ca345b1773a0bbf3dfdeab8b29ad8d194b07d02ff632a"
+    },
+    {
+      "group": 5,
+      "originalSha256": "60f369717c79b035e77bc559809a8493de6e7231963d2eba322cd99308c8163f",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/FIRST-ROUND-PLAN.v2.json",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/FIRST-ROUND-PLAN.v2.json"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/FIRST-ROUND-PLAN.v2.json",
+      "canonicalFinalSha256": "60f369717c79b035e77bc559809a8493de6e7231963d2eba322cd99308c8163f"
+    },
+    {
+      "group": 6,
+      "originalSha256": "e36044d600865e78b3abb52749ffb74ac2d069a02b450404a079cd5957085162",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/REFERENCES.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/REFERENCES.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/REFERENCES.md",
+      "canonicalFinalSha256": "e36044d600865e78b3abb52749ffb74ac2d069a02b450404a079cd5957085162"
+    },
+    {
+      "group": 7,
+      "originalSha256": "e40e4a69ec8031cec30797dd5f088e7f3cc5a1d5f7c1f8d5ae137a055ad62078",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/READINESS-REVIEW.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/READINESS-REVIEW.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/READINESS-REVIEW.md",
+      "canonicalFinalSha256": "e40e4a69ec8031cec30797dd5f088e7f3cc5a1d5f7c1f8d5ae137a055ad62078"
+    },
+    {
+      "group": 8,
+      "originalSha256": "07d3df81bd435f29e441205f81fa21928befb182e2739063a9640bbec0044af0",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATES.json",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/TEST-GATES.json"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATES.json",
+      "canonicalFinalSha256": "07d3df81bd435f29e441205f81fa21928befb182e2739063a9640bbec0044af0"
+    },
+    {
+      "group": 9,
+      "originalSha256": "9f86a0d9dc3da1bb49e67bcc2c8917594f8a339416eeacc8208d3f37c5dfe2bc",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/DEFERRED-REGISTER.json",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/DEFERRED-REGISTER.json"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/DEFERRED-REGISTER.json",
+      "canonicalFinalSha256": "9f86a0d9dc3da1bb49e67bcc2c8917594f8a339416eeacc8208d3f37c5dfe2bc"
+    },
+    {
+      "group": 10,
+      "originalSha256": "f52ca20f25c289c0c056335e5879a171f153d77eb122e6ee5be8063cfb557b09",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATE-MATRIX.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/TEST-GATE-MATRIX.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATE-MATRIX.md",
+      "canonicalFinalSha256": "f52ca20f25c289c0c056335e5879a171f153d77eb122e6ee5be8063cfb557b09"
+    },
+    {
+      "group": 11,
+      "originalSha256": "7a937065b9eef26c23b36ef4ecda77f0013f2fa3060a271f25eadb79688ab70b",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/ACTIVE-CONTRACT-ADDENDUM.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/ACTIVE-CONTRACT-ADDENDUM.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/ACTIVE-CONTRACT-ADDENDUM.md",
+      "canonicalFinalSha256": "7a937065b9eef26c23b36ef4ecda77f0013f2fa3060a271f25eadb79688ab70b"
+    },
+    {
+      "group": 12,
+      "originalSha256": "68532197f962fea19a2c64d7901dac2542d9faa470b66fd0e735f81ba1f5d0c2",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/HANDOFF.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/HANDOFF.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/HANDOFF.md",
+      "canonicalFinalSha256": "68532197f962fea19a2c64d7901dac2542d9faa470b66fd0e735f81ba1f5d0c2"
+    },
+    {
+      "group": 13,
+      "originalSha256": "088e0ff294fa8da091e0d2aa8bfd3dcdbe0be0f20601e96ccdcfc1716fa7b91d",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/02-persist-reviewed-tag-intent.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "canonicalFinalSha256": "088e0ff294fa8da091e0d2aa8bfd3dcdbe0be0f20601e96ccdcfc1716fa7b91d"
+    },
+    {
+      "group": 14,
+      "originalSha256": "38ac7235acffd3f69fee532795ba55b177b13006825c077ca7e8809f6e99e506",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/05-bounded-batch-and-rerun.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/05-bounded-batch-and-rerun.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/05-bounded-batch-and-rerun.md",
+      "canonicalFinalSha256": "38ac7235acffd3f69fee532795ba55b177b13006825c077ca7e8809f6e99e506"
+    },
+    {
+      "group": 15,
+      "originalSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/07-accept-independent-tags.md",
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/07-accept-independent-tags.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/07-accept-independent-tags.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/07-accept-independent-tags.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/07-accept-independent-tags.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "canonicalFinalSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78"
+    },
+    {
+      "group": 16,
+      "originalSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/01-preserve-combined-provider.md",
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/01-preserve-combined-provider.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/01-preserve-combined-provider.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/01-preserve-combined-provider.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/01-preserve-combined-provider.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "canonicalFinalSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3"
+    },
+    {
+      "group": 17,
+      "originalSha256": "89e2e31009d366735ec8df96f90776c74369ab1ba510d77dc1299fdb9a4a307b",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/04-find-review-tag-suggestions.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/04-find-review-tag-suggestions.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/04-find-review-tag-suggestions.md",
+      "canonicalFinalSha256": "89e2e31009d366735ec8df96f90776c74369ab1ba510d77dc1299fdb9a4a307b"
+    },
+    {
+      "group": 18,
+      "originalSha256": "fc25f231005e6dd2708047fddf48c91ca3e0a9316b96d3f396c8cab4d4e9fe3f",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/03-single-tag-result.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/03-single-tag-result.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/03-single-tag-result.md",
+      "canonicalFinalSha256": "fc25f231005e6dd2708047fddf48c91ca3e0a9316b96d3f396c8cab4d4e9fe3f"
+    },
+    {
+      "group": 19,
+      "originalSha256": "0b8811e2bfbf9a1fc09be1ffabefc3026f28b4e1d1de5824516cff92bf40351c",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/06-resume-unfinished-safely.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/06-resume-unfinished-safely.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/06-resume-unfinished-safely.md",
+      "canonicalFinalSha256": "0b8811e2bfbf9a1fc09be1ffabefc3026f28b4e1d1de5824516cff92bf40351c"
+    },
+    {
+      "group": 20,
+      "originalSha256": "eaa0b5d7dbfab3ee1a3a4f06ca75e239e4e25c3d58c7806d73646ccc031d6570",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/PACKAGE-INDEX.json",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/PACKAGE-INDEX.json"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/PACKAGE-INDEX.json",
+      "canonicalFinalSha256": "eaa0b5d7dbfab3ee1a3a4f06ca75e239e4e25c3d58c7806d73646ccc031d6570"
+    },
+    {
+      "group": 21,
+      "originalSha256": "bc475ce2898c20b8d61156699d0e1dc7a734a533a4b375e970ea9e4ce7475595",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/NEXT-AI-START-HERE.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/NEXT-AI-START-HERE.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/NEXT-AI-START-HERE.md",
+      "canonicalFinalSha256": "bc475ce2898c20b8d61156699d0e1dc7a734a533a4b375e970ea9e4ce7475595"
+    },
+    {
+      "group": 22,
+      "originalSha256": "3a43bd2c453a60c5cbba99b1acc1f7d067fddd3675dc1d58f2bb9a724a1e70b2",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/README-START-HERE.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/README-START-HERE.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/README-START-HERE.md",
+      "canonicalFinalSha256": "3a43bd2c453a60c5cbba99b1acc1f7d067fddd3675dc1d58f2bb9a724a1e70b2"
+    },
+    {
+      "group": 23,
+      "originalSha256": "13cc580672f41cc90cf10e95d4368c190cd8fa4b1599517ef70dca2eb1cbf5c5",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/01-REVIEW.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/01-REVIEW.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/01-REVIEW.md",
+      "canonicalFinalSha256": "9250afce715860e01eae384bd1fdc6b356b2148bd0cda7f60f4c7ba1608ccb50"
+    },
+    {
+      "group": 24,
+      "originalSha256": "d3ff70a9061a139e35541c57c573924082db27c1c887c7b88061646baf936cbc",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md",
+      "removed": [
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md",
+      "canonicalFinalSha256": "d3ff70a9061a139e35541c57c573924082db27c1c887c7b88061646baf936cbc"
+    },
+    {
+      "group": 25,
+      "originalSha256": "dc8c1ea146943c1e48e05dfce8cc849d04f13cf7fcdf36858efe9c808a207bab",
+      "canonical": "docs/architecture-audit/P04-20260926/COMPATIBILITY-MIGRATION.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P04-20260926/COMPATIBILITY-MIGRATION.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P04-20260926/COMPATIBILITY-MIGRATION.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P04-20260926/COMPATIBILITY-MIGRATION.md",
+      "canonicalFinalSha256": "dc8c1ea146943c1e48e05dfce8cc849d04f13cf7fcdf36858efe9c808a207bab"
+    },
+    {
+      "group": 26,
+      "originalSha256": "1a3d5d1cc7fa87fa1d9cc21527becf5511003655cca8b2675c8f11feacde3855",
+      "canonical": "docs/architecture-audit/P04-20260926/CURRENT-SELECTION.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P04-20260926/CURRENT-SELECTION.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P04-20260926/CURRENT-SELECTION.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P04-20260926/CURRENT-SELECTION.md",
+      "canonicalFinalSha256": "1a3d5d1cc7fa87fa1d9cc21527becf5511003655cca8b2675c8f11feacde3855"
+    },
+    {
+      "group": 27,
+      "originalSha256": "2bb860fbb3d187f237caacb9af04aa4637cd0ec0ba4629e2ea13cdf1bb34e82b",
+      "canonical": "docs/architecture-audit/P05-20260926/JOURNAL-CONTRACT.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P05-20260926/JOURNAL-CONTRACT.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P05-20260926/JOURNAL-CONTRACT.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P05-20260926/JOURNAL-CONTRACT.md",
+      "canonicalFinalSha256": "2bb860fbb3d187f237caacb9af04aa4637cd0ec0ba4629e2ea13cdf1bb34e82b"
+    },
+    {
+      "group": 28,
+      "originalSha256": "5d56ac30d226fdad6068135c0cad5b617a8123ccf8c92032db6991ac5cb7c23c",
+      "canonical": "docs/architecture-audit/P05-20260926/CURRENT-BASELINE.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P05-20260926/CURRENT-BASELINE.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P05-20260926/CURRENT-BASELINE.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P05-20260926/CURRENT-BASELINE.md",
+      "canonicalFinalSha256": "5d56ac30d226fdad6068135c0cad5b617a8123ccf8c92032db6991ac5cb7c23c"
+    },
+    {
+      "group": 29,
+      "originalSha256": "a484efbf39b9e04ec1b49732050ebba425aa328dffedc485bdbc1ea27d87c6d2",
+      "canonical": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/DESIGN.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P26/DESIGN.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P26/DESIGN.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/DESIGN.md",
+      "canonicalFinalSha256": "a484efbf39b9e04ec1b49732050ebba425aa328dffedc485bdbc1ea27d87c6d2"
+    },
+    {
+      "group": 30,
+      "originalSha256": "b9796d620ad6013c652c7f7bb5993f0763d1801ba0d9f61f301777123caa8761",
+      "canonical": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/DESIGN.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P16/DESIGN.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P16/DESIGN.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/DESIGN.md",
+      "canonicalFinalSha256": "b9796d620ad6013c652c7f7bb5993f0763d1801ba0d9f61f301777123caa8761"
+    },
+    {
+      "group": 31,
+      "originalSha256": "bb8a6b67065fa0a2f268c83b01662134537bc1523043d8c71bfacee42d6e4a83",
+      "canonical": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/DESIGN.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P13/DESIGN.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P13/DESIGN.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/DESIGN.md",
+      "canonicalFinalSha256": "bb8a6b67065fa0a2f268c83b01662134537bc1523043d8c71bfacee42d6e4a83"
+    },
+    {
+      "group": 32,
+      "originalSha256": "78e746cda137f6a7275c1212a1580ce357c3013962c2d7b8cab111bff72ce507",
+      "canonical": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/DESIGN.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P08/DESIGN.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P08/DESIGN.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/DESIGN.md",
+      "canonicalFinalSha256": "78e746cda137f6a7275c1212a1580ce357c3013962c2d7b8cab111bff72ce507"
+    },
+    {
+      "group": 33,
+      "originalSha256": "4246e76fadb47c73d1f34a131baaa97fca1939758fadfc0d36833b958858a9b2",
+      "canonical": "docs/architecture-audit/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+      "canonicalFinalSha256": "4246e76fadb47c73d1f34a131baaa97fca1939758fadfc0d36833b958858a9b2"
+    },
+    {
+      "group": 34,
+      "originalSha256": "f5a751f1d652a2d84fba34bc106051aae4ccf361d9876378bb4489eddc643b1f",
+      "canonical": "docs/architecture-audit/P02-20260925/SOURCE-FINDINGS.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SOURCE-FINDINGS.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SOURCE-FINDINGS.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P02-20260925/SOURCE-FINDINGS.md",
+      "canonicalFinalSha256": "f5a751f1d652a2d84fba34bc106051aae4ccf361d9876378bb4489eddc643b1f"
+    },
+    {
+      "group": 35,
+      "originalSha256": "2abb8e2bddaf84c56cad5880c377767db29264abdc90dd6ddd7d9444719dd25d",
+      "canonical": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md",
+      "removed": [
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/REPORT.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/REPORT.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md",
+      "canonicalFinalSha256": "7e12d3bbb719670327f3de12ce410c765b9a8f2fe8c20e47d32d38307555dbba"
+    },
+    {
+      "group": 36,
+      "originalSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/PLAN.json",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/PLAN.json",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/PLAN.json",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/PLAN.json"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/PLAN.json",
+      "canonicalFinalSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385"
+    },
+    {
+      "group": 37,
+      "originalSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/SOURCE-MAP.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/SOURCE-MAP.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/SOURCE-MAP.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/SOURCE-MAP.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SOURCE-MAP.md",
+      "canonicalFinalSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b"
+    },
+    {
+      "group": 38,
+      "originalSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/README.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/README.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/README.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/README.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/README.md",
+      "canonicalFinalSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c"
+    },
+    {
+      "group": 39,
+      "originalSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/TEST-SEAMS-AND-DECISIONS.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/TEST-SEAMS-AND-DECISIONS.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/TEST-SEAMS-AND-DECISIONS.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/TEST-SEAMS-AND-DECISIONS.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TEST-SEAMS-AND-DECISIONS.md",
+      "canonicalFinalSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205"
+    },
+    {
+      "group": 40,
+      "originalSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/TICKETS.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/TICKETS.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/TICKETS.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/TICKETS.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TICKETS.md",
+      "canonicalFinalSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d"
+    },
+    {
+      "group": 41,
+      "originalSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/SPEC.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/SPEC.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/SPEC.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/SPEC.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SPEC.md",
+      "canonicalFinalSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666"
+    },
+    {
+      "group": 42,
+      "originalSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/02-persist-reviewed-tag-intent.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/02-persist-reviewed-tag-intent.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/02-persist-reviewed-tag-intent.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "canonicalFinalSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4"
+    },
+    {
+      "group": 43,
+      "originalSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/draft-tickets/05-bounded-batch-and-rerun.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/05-bounded-batch-and-rerun.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/05-bounded-batch-and-rerun.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/05-bounded-batch-and-rerun.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/05-bounded-batch-and-rerun.md",
+      "canonicalFinalSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242"
+    },
+    {
+      "group": 44,
+      "originalSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/draft-tickets/04-find-review-tag-suggestions.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/04-find-review-tag-suggestions.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/04-find-review-tag-suggestions.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/04-find-review-tag-suggestions.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/04-find-review-tag-suggestions.md",
+      "canonicalFinalSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398"
+    },
+    {
+      "group": 45,
+      "originalSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/draft-tickets/03-single-tag-result.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/03-single-tag-result.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/03-single-tag-result.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/03-single-tag-result.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/03-single-tag-result.md",
+      "canonicalFinalSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c"
+    },
+    {
+      "group": 46,
+      "originalSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "canonical": "docs/implementation-plans/independent-tags-20260926/draft-tickets/06-resume-unfinished-safely.md",
+      "removed": [
+        "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/06-resume-unfinished-safely.md",
+        "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/06-resume-unfinished-safely.md",
+        "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/06-resume-unfinished-safely.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/06-resume-unfinished-safely.md",
+      "canonicalFinalSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296"
+    },
+    {
+      "group": 47,
+      "originalSha256": "ed6ac1b91c10ee6c9ef7771862ee6d50adf2cb5b7dd8281986c05f76551b2c34",
+      "canonical": "docs/architecture-audit/P00-20260924/inputs/sources/PROJECT-ARCHITECTURE-HANDOFF-20260924.md",
+      "removed": [
+        "docs/handoff/PROJECT-ARCHITECTURE-HANDOFF-20260924.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P00-20260924/inputs/sources/PROJECT-ARCHITECTURE-HANDOFF-20260924.md",
+      "canonicalFinalSha256": "ed6ac1b91c10ee6c9ef7771862ee6d50adf2cb5b7dd8281986c05f76551b2c34"
+    },
+    {
+      "group": 48,
+      "originalSha256": "3ee34e0138b7ebff71713056439bbd1c36ed88695699a637a9e7e25dac1aade0",
+      "canonical": "docs/handoff/RELEASE-SCALE-F-20261008.md",
+      "removed": [],
+      "independentEvidenceRetained": [
+        "docs/checkpoints/f-release-scale-20261008/new-files/docs/handoff/RELEASE-SCALE-F-20261008.md"
+      ],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/handoff/RELEASE-SCALE-F-20261008.md",
+      "canonicalFinalSha256": "3ee34e0138b7ebff71713056439bbd1c36ed88695699a637a9e7e25dac1aade0"
+    },
+    {
+      "group": 49,
+      "originalSha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10",
+      "canonical": "docs/architecture-audit/P04-20260926/inputs/STAGE-REPORT.template.md",
+      "removed": [],
+      "independentEvidenceRetained": [
+        "docs/architecture-audit/P00-20260924/inputs/templates/STAGE-REPORT.template.md",
+        "docs/architecture-audit/P01-20260924/inputs/templates/STAGE-REPORT.template.md",
+        "docs/architecture-audit/P03-20260926/inputs/templates/STAGE-REPORT.template.md",
+        "docs/architecture-audit/P05-20260926/inputs/STAGE-REPORT.template.md",
+        "docs/architecture-audit/P02-20260925/inputs/templates/STAGE-REPORT.template.md"
+      ],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P04-20260926/inputs/STAGE-REPORT.template.md",
+      "canonicalFinalSha256": "ee95fa79b1d722fa73af70b7ec803c0e6307b8a3df72d0c312a0f20b3874ee10"
+    },
+    {
+      "group": 50,
+      "originalSha256": "7613a884134bb7de7656b6b8284a33685eb7c9803cf066f15c8684fadf607472",
+      "canonical": "docs/architecture-audit/P01-20260924/inputs/templates/ADR.template.md",
+      "removed": [],
+      "independentEvidenceRetained": [
+        "docs/architecture-audit/P03-20260926/inputs/templates/ADR.template.md",
+        "docs/architecture-audit/P02-20260925/inputs/templates/ADR.template.md"
+      ],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/architecture-audit/P01-20260924/inputs/templates/ADR.template.md",
+      "canonicalFinalSha256": "7613a884134bb7de7656b6b8284a33685eb7c9803cf066f15c8684fadf607472"
+    },
+    {
+      "group": 51,
+      "originalSha256": "9b31feb0572f447e0a43ddd0087c10fb9afe6058540c438b60d1e0778e153161",
+      "canonical": "docs/checkpoints/dropover-local-20261010/bd59-reopened-signatures.json",
+      "removed": [],
+      "independentEvidenceRetained": [
+        "docs/checkpoints/macos-t23-native-click-20261009/final-8ff-reopened-signatures.json"
+      ],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/checkpoints/dropover-local-20261010/bd59-reopened-signatures.json",
+      "canonicalFinalSha256": "9b31feb0572f447e0a43ddd0087c10fb9afe6058540c438b60d1e0778e153161"
+    },
+    {
+      "group": 52,
+      "originalSha256": "8ee8c55528f8f1a09147722f197bed4bc84aa0b167e28524f08d99527820c10b",
+      "canonical": "docs/checkpoints/macos-migration-20261009/persistence-after-reopen.json",
+      "removed": [],
+      "independentEvidenceRetained": [
+        "docs/checkpoints/macos-t23-failures-20261009/original-migration-library-unchanged.json",
+        "docs/checkpoints/macos-migration-20261009/persistence-before-reopen.json"
+      ],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/checkpoints/macos-migration-20261009/persistence-after-reopen.json",
+      "canonicalFinalSha256": "8ee8c55528f8f1a09147722f197bed4bc84aa0b167e28524f08d99527820c10b"
+    },
+    {
+      "group": 53,
+      "originalSha256": "ea782d0b699db01dd081d0b4aee41b56f66040cf8df34d07e7a6785cc948802a",
+      "canonical": "docs/checkpoints/macos-t23-failures-20261009/58700-persistence-after-reopen.json",
+      "removed": [],
+      "independentEvidenceRetained": [
+        "docs/checkpoints/macos-t23-failures-20261009/58700-persistence-before-reopen.json"
+      ],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/checkpoints/macos-t23-failures-20261009/58700-persistence-after-reopen.json",
+      "canonicalFinalSha256": "ea782d0b699db01dd081d0b4aee41b56f66040cf8df34d07e7a6785cc948802a"
+    },
+    {
+      "group": 54,
+      "originalSha256": "ed319b5be2c2334ef4f8e9367b1b63564fb05849a82a4de040c818645b869f42",
+      "canonical": "docs/history/agent-collaboration/orchestrator/context.md",
+      "removed": [
+        "docs/history/agent-collaboration/orchestrator_gen2/context.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/agent-collaboration/orchestrator/context.md",
+      "canonicalFinalSha256": "ed319b5be2c2334ef4f8e9367b1b63564fb05849a82a4de040c818645b869f42"
+    },
+    {
+      "group": 55,
+      "originalSha256": "ac0ec565ce3eb4cce14c3078356a3af59f085f742df498ef6cf0f6bf0ecf6071",
+      "canonical": "docs/history/agent-collaboration/orchestrator/plan.md",
+      "removed": [
+        "docs/history/agent-collaboration/orchestrator_gen2/plan.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/agent-collaboration/orchestrator/plan.md",
+      "canonicalFinalSha256": "ac0ec565ce3eb4cce14c3078356a3af59f085f742df498ef6cf0f6bf0ecf6071"
+    },
+    {
+      "group": 56,
+      "originalSha256": "291e5ada1a1536287bc1ebecbdc239fa78314ffd1998fbfa7d67f9a100ed7868",
+      "canonical": "docs/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT.md",
+      "removed": [
+        "docs/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT_副本.md"
+      ],
+      "independentEvidenceRetained": [],
+      "decision": "retain independently frozen evidence; remove only byte-equal unbound documents",
+      "canonicalFinalPath": "docs/history/task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT.md",
+      "canonicalFinalSha256": "291e5ada1a1536287bc1ebecbdc239fa78314ffd1998fbfa7d67f9a100ed7868"
+    }
+  ],
+  "fileActions": [
+    {
+      "action": "archive",
+      "from": "docs/agents/implementation-status.md",
+      "to": "docs/history/task-consolidation-20261011/agents/implementation-status.md",
+      "beforeSha256": "b263d819362da905a631fe11ba52cb4e2e36ef9c59901bf1f6e7995bf38c41fd",
+      "bytes": 23942,
+      "afterSha256": "1faa06a31a9c727c837f5fd21c2f3f7a17e184bcb70810f9337a2e3e0be9c4a9",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/AF-MACOS-20261010.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/AF-MACOS-20261010.md",
+      "beforeSha256": "35df83577ff8a559df71ce0c1e82d6a904222f33281d69c79052e20afe7290be",
+      "bytes": 6802,
+      "afterSha256": "460f305f89d951e9e9b87384a33fc453aafdd6eeea805fcf67911253b6196d9a",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/CAPTURE-INTAKE-NOTES-20261008.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/CAPTURE-INTAKE-NOTES-20261008.md",
+      "beforeSha256": "9b5ed20ea5f64e7bdf50ab4c64baaffbe8a7b8ee6539cd282059ec55d6f1040b",
+      "bytes": 7047,
+      "afterSha256": "9039f8daf70ea07a56af3ebddea4b1e950521293a0d470f05b7ec91b0eeba720",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/DAM-ENGINEERING-REPORT-20260927.zip.sha256",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-ENGINEERING-REPORT-20260927/DAM-ENGINEERING-REPORT-20260927.zip.sha256",
+      "beforeSha256": "d0fe23cce5461f0a710b9d99e9379066d5777d81b52836cb2151a250076e06ae",
+      "bytes": 102,
+      "afterSha256": "d0fe23cce5461f0a710b9d99e9379066d5777d81b52836cb2151a250076e06ae",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/REPORT-VERIFICATION.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-ENGINEERING-REPORT-20260927/REPORT-VERIFICATION.json",
+      "beforeSha256": "12b6321108511e5100e9c3d4a4b794da1b82971868c97063f6b60497b3eb76f7",
+      "bytes": 631,
+      "afterSha256": "12b6321108511e5100e9c3d4a4b794da1b82971868c97063f6b60497b3eb76f7",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/REPORT.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md",
+      "beforeSha256": "2abb8e2bddaf84c56cad5880c377767db29264abdc90dd6ddd7d9444719dd25d",
+      "bytes": 10293,
+      "afterSha256": "7e12d3bbb719670327f3de12ce410c765b9a8f2fe8c20e47d32d38307555dbba",
+      "navigationRebased": true
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/PLAN.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/PLAN.json",
+      "beforeSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "bytes": 8812,
+      "afterSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/README.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/README.md",
+      "beforeSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "bytes": 868,
+      "afterSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/SOURCE-MAP.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SOURCE-MAP.md",
+      "beforeSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "bytes": 1758,
+      "afterSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/SPEC.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SPEC.md",
+      "beforeSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "bytes": 11670,
+      "afterSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/TEST-SEAMS-AND-DECISIONS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TEST-SEAMS-AND-DECISIONS.md",
+      "beforeSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "bytes": 2182,
+      "afterSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/TICKETS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TICKETS.md",
+      "beforeSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "bytes": 2657,
+      "afterSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/01-preserve-combined-provider.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "beforeSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "bytes": 1058,
+      "afterSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "beforeSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "bytes": 1201,
+      "afterSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/03-single-tag-result.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/03-single-tag-result.md",
+      "beforeSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "bytes": 1246,
+      "afterSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/04-find-review-tag-suggestions.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/04-find-review-tag-suggestions.md",
+      "beforeSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "bytes": 1121,
+      "afterSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/05-bounded-batch-and-rerun.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/05-bounded-batch-and-rerun.md",
+      "beforeSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "bytes": 1124,
+      "afterSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/06-resume-unfinished-safely.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/06-resume-unfinished-safely.md",
+      "beforeSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "bytes": 1132,
+      "afterSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-ENGINEERING-REPORT-20260927/implementation-plan/draft-tickets/07-accept-independent-tags.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "beforeSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "bytes": 1360,
+      "afterSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927.zip.sha256",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927.zip.sha256",
+      "beforeSha256": "90a37e1f2a46197e1910be1e645739da4c666cb3ec0780192ca745d31ada7ba2",
+      "bytes": 110,
+      "afterSha256": "90a37e1f2a46197e1910be1e645739da4c666cb3ec0780192ca745d31ada7ba2",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/MANIFEST-SHA256.txt",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/MANIFEST-SHA256.txt",
+      "beforeSha256": "ee96967aab9db13d9e4994dd93e3ef151b6435c67157f21518627ca500751675",
+      "bytes": 9008,
+      "afterSha256": "ee96967aab9db13d9e4994dd93e3ef151b6435c67157f21518627ca500751675",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/PACKAGE-INDEX.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/PACKAGE-INDEX.json",
+      "beforeSha256": "5ef0775d52efcb2a1af6722613a1de0a748326805fbfa65716ed7d61d3a8afc1",
+      "bytes": 725,
+      "afterSha256": "5ef0775d52efcb2a1af6722613a1de0a748326805fbfa65716ed7d61d3a8afc1",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/PACKAGING-VALIDATION.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/PACKAGING-VALIDATION.json",
+      "beforeSha256": "aa623341b1adc78bda0157ce4b8abda2542e8f751b72f6b6a0243814ecd1d3c4",
+      "bytes": 748,
+      "afterSha256": "aa623341b1adc78bda0157ce4b8abda2542e8f751b72f6b6a0243814ecd1d3c4",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/README-START-HERE.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/README-START-HERE.md",
+      "beforeSha256": "b454fe000bb640280b7062bc1ab6af83fa5ff5bbc0024d86bdc62274a6813968",
+      "bytes": 2962,
+      "afterSha256": "d81cd2877c7295a5f7ecb88a979a6527de3a21b33f8aa9fc1a84c64bb10637a1",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/REVIEW-FORM.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/REVIEW-FORM.md",
+      "beforeSha256": "755171bcae141eefa69fac3f9b6d98f03dac7e58766e80980e8078f7dc5ac3d7",
+      "bytes": 1771,
+      "afterSha256": "755171bcae141eefa69fac3f9b6d98f03dac7e58766e80980e8078f7dc5ac3d7",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/ACTIVE-CONTRACT-ADDENDUM.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/ACTIVE-CONTRACT-ADDENDUM.md",
+      "beforeSha256": "7a937065b9eef26c23b36ef4ecda77f0013f2fa3060a271f25eadb79688ab70b",
+      "bytes": 10831,
+      "afterSha256": "7a937065b9eef26c23b36ef4ecda77f0013f2fa3060a271f25eadb79688ab70b",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/ADMISSION-PROFILE.proposed.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/ADMISSION-PROFILE.proposed.json",
+      "beforeSha256": "f46a46b34a8cfbb8a041b392a9978af381c26aef122257b0205cc7df672a7744",
+      "bytes": 924,
+      "afterSha256": "f46a46b34a8cfbb8a041b392a9978af381c26aef122257b0205cc7df672a7744",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/DEFERRED-REGISTER.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/DEFERRED-REGISTER.json",
+      "beforeSha256": "9f86a0d9dc3da1bb49e67bcc2c8917594f8a339416eeacc8208d3f37c5dfe2bc",
+      "bytes": 2963,
+      "afterSha256": "9f86a0d9dc3da1bb49e67bcc2c8917594f8a339416eeacc8208d3f37c5dfe2bc",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/FIRST-ROUND-PLAN.v2.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/FIRST-ROUND-PLAN.v2.json",
+      "beforeSha256": "60f369717c79b035e77bc559809a8493de6e7231963d2eba322cd99308c8163f",
+      "bytes": 13301,
+      "afterSha256": "60f369717c79b035e77bc559809a8493de6e7231963d2eba322cd99308c8163f",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/HANDOFF.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/HANDOFF.md",
+      "beforeSha256": "68532197f962fea19a2c64d7901dac2542d9faa470b66fd0e735f81ba1f5d0c2",
+      "bytes": 1813,
+      "afterSha256": "68532197f962fea19a2c64d7901dac2542d9faa470b66fd0e735f81ba1f5d0c2",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/PLAN-CHANGES.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/PLAN-CHANGES.md",
+      "beforeSha256": "01663f3872f749611204a5aab59d1d598f03d914e2467f801ecd2d5af9aa6bad",
+      "bytes": 930,
+      "afterSha256": "01663f3872f749611204a5aab59d1d598f03d914e2467f801ecd2d5af9aa6bad",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/READINESS-REVIEW.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/READINESS-REVIEW.md",
+      "beforeSha256": "e40e4a69ec8031cec30797dd5f088e7f3cc5a1d5f7c1f8d5ae137a055ad62078",
+      "bytes": 6392,
+      "afterSha256": "e40e4a69ec8031cec30797dd5f088e7f3cc5a1d5f7c1f8d5ae137a055ad62078",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/README.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/README.md",
+      "beforeSha256": "c8f73dffa56983f0582ca345b1773a0bbf3dfdeab8b29ad8d194b07d02ff632a",
+      "bytes": 657,
+      "afterSha256": "c8f73dffa56983f0582ca345b1773a0bbf3dfdeab8b29ad8d194b07d02ff632a",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/REFERENCES.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/REFERENCES.md",
+      "beforeSha256": "e36044d600865e78b3abb52749ffb74ac2d069a02b450404a079cd5957085162",
+      "bytes": 4114,
+      "afterSha256": "e36044d600865e78b3abb52749ffb74ac2d069a02b450404a079cd5957085162",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/SUPERSEDES.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/SUPERSEDES.json",
+      "beforeSha256": "d766cead3a02ba766e96f40c1c90bf0c3e664761da96e102b5cd526dab222066",
+      "bytes": 3164,
+      "afterSha256": "d766cead3a02ba766e96f40c1c90bf0c3e664761da96e102b5cd526dab222066",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/TEST-GATE-MATRIX.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATE-MATRIX.md",
+      "beforeSha256": "f52ca20f25c289c0c056335e5879a171f153d77eb122e6ee5be8063cfb557b09",
+      "bytes": 6237,
+      "afterSha256": "f52ca20f25c289c0c056335e5879a171f153d77eb122e6ee5be8063cfb557b09",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/TEST-GATES.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATES.json",
+      "beforeSha256": "07d3df81bd435f29e441205f81fa21928befb182e2739063a9640bbec0044af0",
+      "bytes": 7163,
+      "afterSha256": "07d3df81bd435f29e441205f81fa21928befb182e2739063a9640bbec0044af0",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/checks/minimal-spec-checks.py",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/checks/minimal-spec-checks.py",
+      "beforeSha256": "0ddaeac29306ec5941d8817f151d7b6db260887feace846c1e49737eb51640c8",
+      "bytes": 7403,
+      "afterSha256": "0ddaeac29306ec5941d8817f151d7b6db260887feace846c1e49737eb51640c8",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/checks/verify-revision.py",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/checks/verify-revision.py",
+      "beforeSha256": "5f7210c6e5b2d526d9d9b5088a71014b16e7ea49fdd04d99ff940eea4c828761",
+      "bytes": 8356,
+      "afterSha256": "5f7210c6e5b2d526d9d9b5088a71014b16e7ea49fdd04d99ff940eea4c828761",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/01-preserve-combined-provider.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "beforeSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "bytes": 1058,
+      "afterSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "beforeSha256": "088e0ff294fa8da091e0d2aa8bfd3dcdbe0be0f20601e96ccdcfc1716fa7b91d",
+      "bytes": 2080,
+      "afterSha256": "088e0ff294fa8da091e0d2aa8bfd3dcdbe0be0f20601e96ccdcfc1716fa7b91d",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/03-single-tag-result.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/03-single-tag-result.md",
+      "beforeSha256": "fc25f231005e6dd2708047fddf48c91ca3e0a9316b96d3f396c8cab4d4e9fe3f",
+      "bytes": 2422,
+      "afterSha256": "fc25f231005e6dd2708047fddf48c91ca3e0a9316b96d3f396c8cab4d4e9fe3f",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/04-find-review-tag-suggestions.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/04-find-review-tag-suggestions.md",
+      "beforeSha256": "89e2e31009d366735ec8df96f90776c74369ab1ba510d77dc1299fdb9a4a307b",
+      "bytes": 1336,
+      "afterSha256": "89e2e31009d366735ec8df96f90776c74369ab1ba510d77dc1299fdb9a4a307b",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/05-bounded-batch-and-rerun.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/05-bounded-batch-and-rerun.md",
+      "beforeSha256": "38ac7235acffd3f69fee532795ba55b177b13006825c077ca7e8809f6e99e506",
+      "bytes": 1376,
+      "afterSha256": "38ac7235acffd3f69fee532795ba55b177b13006825c077ca7e8809f6e99e506",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/06-resume-unfinished-safely.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/06-resume-unfinished-safely.md",
+      "beforeSha256": "0b8811e2bfbf9a1fc09be1ffabefc3026f28b4e1d1de5824516cff92bf40351c",
+      "bytes": 1488,
+      "afterSha256": "0b8811e2bfbf9a1fc09be1ffabefc3026f28b4e1d1de5824516cff92bf40351c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/draft-tickets/07-accept-independent-tags.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "beforeSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "bytes": 1360,
+      "afterSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/REPORT.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md",
+      "beforeSha256": "2abb8e2bddaf84c56cad5880c377767db29264abdc90dd6ddd7d9444719dd25d",
+      "bytes": 10293,
+      "afterSha256": "7e12d3bbb719670327f3de12ce410c765b9a8f2fe8c20e47d32d38307555dbba",
+      "navigationRebased": true
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/PLAN.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/PLAN.json",
+      "beforeSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "bytes": 8812,
+      "afterSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/README.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/README.md",
+      "beforeSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "bytes": 868,
+      "afterSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/SOURCE-MAP.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SOURCE-MAP.md",
+      "beforeSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "bytes": 1758,
+      "afterSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/SPEC.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SPEC.md",
+      "beforeSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "bytes": 11670,
+      "afterSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/TEST-SEAMS-AND-DECISIONS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TEST-SEAMS-AND-DECISIONS.md",
+      "beforeSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "bytes": 2182,
+      "afterSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/TICKETS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TICKETS.md",
+      "beforeSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "bytes": 2657,
+      "afterSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/01-preserve-combined-provider.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "beforeSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "bytes": 1058,
+      "afterSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "beforeSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "bytes": 1201,
+      "afterSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/03-single-tag-result.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/03-single-tag-result.md",
+      "beforeSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "bytes": 1246,
+      "afterSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/04-find-review-tag-suggestions.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/04-find-review-tag-suggestions.md",
+      "beforeSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "bytes": 1121,
+      "afterSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/05-bounded-batch-and-rerun.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/05-bounded-batch-and-rerun.md",
+      "beforeSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "bytes": 1124,
+      "afterSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/06-resume-unfinished-safely.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/06-resume-unfinished-safely.md",
+      "beforeSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "bytes": 1132,
+      "afterSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/03-engineering-report/implementation-plan/draft-tickets/07-accept-independent-tags.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "beforeSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "bytes": 1360,
+      "afterSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/01-REVIEW.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/01-REVIEW.md",
+      "beforeSha256": "13cc580672f41cc90cf10e95d4368c190cd8fa4b1599517ef70dca2eb1cbf5c5",
+      "bytes": 18415,
+      "afterSha256": "9250afce715860e01eae384bd1fdc6b356b2148bd0cda7f60f4c7ba1608ccb50",
+      "navigationRebased": true
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md",
+      "beforeSha256": "d3ff70a9061a139e35541c57c573924082db27c1c887c7b88061646baf936cbc",
+      "bytes": 5928,
+      "afterSha256": "d3ff70a9061a139e35541c57c573924082db27c1c887c7b88061646baf936cbc",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+      "to": "docs/architecture-audit/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+      "beforeSha256": "4246e76fadb47c73d1f34a131baaa97fca1939758fadfc0d36833b958858a9b2",
+      "bytes": 8739,
+      "afterSha256": "4246e76fadb47c73d1f34a131baaa97fca1939758fadfc0d36833b958858a9b2",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SOURCE-FINDINGS.md",
+      "to": "docs/architecture-audit/P02-20260925/SOURCE-FINDINGS.md",
+      "beforeSha256": "f5a751f1d652a2d84fba34bc106051aae4ccf361d9876378bb4489eddc643b1f",
+      "bytes": 4299,
+      "afterSha256": "f5a751f1d652a2d84fba34bc106051aae4ccf361d9876378bb4489eddc643b1f",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P04-20260926/COMPATIBILITY-MIGRATION.md",
+      "to": "docs/architecture-audit/P04-20260926/COMPATIBILITY-MIGRATION.md",
+      "beforeSha256": "dc8c1ea146943c1e48e05dfce8cc849d04f13cf7fcdf36858efe9c808a207bab",
+      "bytes": 5534,
+      "afterSha256": "dc8c1ea146943c1e48e05dfce8cc849d04f13cf7fcdf36858efe9c808a207bab",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P04-20260926/CURRENT-SELECTION.md",
+      "to": "docs/architecture-audit/P04-20260926/CURRENT-SELECTION.md",
+      "beforeSha256": "1a3d5d1cc7fa87fa1d9cc21527becf5511003655cca8b2675c8f11feacde3855",
+      "bytes": 5393,
+      "afterSha256": "1a3d5d1cc7fa87fa1d9cc21527becf5511003655cca8b2675c8f11feacde3855",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P05-20260926/CURRENT-BASELINE.md",
+      "to": "docs/architecture-audit/P05-20260926/CURRENT-BASELINE.md",
+      "beforeSha256": "5d56ac30d226fdad6068135c0cad5b617a8123ccf8c92032db6991ac5cb7c23c",
+      "bytes": 3463,
+      "afterSha256": "5d56ac30d226fdad6068135c0cad5b617a8123ccf8c92032db6991ac5cb7c23c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P05-20260926/JOURNAL-CONTRACT.md",
+      "to": "docs/architecture-audit/P05-20260926/JOURNAL-CONTRACT.md",
+      "beforeSha256": "2bb860fbb3d187f237caacb9af04aa4637cd0ec0ba4629e2ea13cdf1bb34e82b",
+      "bytes": 6714,
+      "afterSha256": "2bb860fbb3d187f237caacb9af04aa4637cd0ec0ba4629e2ea13cdf1bb34e82b",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P08/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/DESIGN.md",
+      "beforeSha256": "78e746cda137f6a7275c1212a1580ce357c3013962c2d7b8cab111bff72ce507",
+      "bytes": 2860,
+      "afterSha256": "78e746cda137f6a7275c1212a1580ce357c3013962c2d7b8cab111bff72ce507",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P13/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/DESIGN.md",
+      "beforeSha256": "bb8a6b67065fa0a2f268c83b01662134537bc1523043d8c71bfacee42d6e4a83",
+      "bytes": 2498,
+      "afterSha256": "bb8a6b67065fa0a2f268c83b01662134537bc1523043d8c71bfacee42d6e4a83",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P16/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/DESIGN.md",
+      "beforeSha256": "b9796d620ad6013c652c7f7bb5993f0763d1801ba0d9f61f301777123caa8761",
+      "bytes": 2677,
+      "afterSha256": "b9796d620ad6013c652c7f7bb5993f0763d1801ba0d9f61f301777123caa8761",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P26/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/DESIGN.md",
+      "beforeSha256": "a484efbf39b9e04ec1b49732050ebba425aa328dffedc485bdbc1ea27d87c6d2",
+      "bytes": 3081,
+      "afterSha256": "a484efbf39b9e04ec1b49732050ebba425aa328dffedc485bdbc1ea27d87c6d2",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/NEXT-AI-START-HERE.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/NEXT-AI-START-HERE.md",
+      "beforeSha256": "bc475ce2898c20b8d61156699d0e1dc7a734a533a4b375e970ea9e4ce7475595",
+      "bytes": 1230,
+      "afterSha256": "bc475ce2898c20b8d61156699d0e1dc7a734a533a4b375e970ea9e4ce7475595",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/PACKAGE-INDEX.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/PACKAGE-INDEX.json",
+      "beforeSha256": "eaa0b5d7dbfab3ee1a3a4f06ca75e239e4e25c3d58c7806d73646ccc031d6570",
+      "bytes": 1094,
+      "afterSha256": "eaa0b5d7dbfab3ee1a3a4f06ca75e239e4e25c3d58c7806d73646ccc031d6570",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/inputs/package/README-START-HERE.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/README-START-HERE.md",
+      "beforeSha256": "3a43bd2c453a60c5cbba99b1acc1f7d067fddd3675dc1d58f2bb9a724a1e70b2",
+      "bytes": 4084,
+      "afterSha256": "3a43bd2c453a60c5cbba99b1acc1f7d067fddd3675dc1d58f2bb9a724a1e70b2",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/verify-package.py",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/verify-package.py",
+      "beforeSha256": "656e12138a5bf2fb108bce6f161f4be0f9c488d56b77915585077efeefe2f4a2",
+      "bytes": 548,
+      "afterSha256": "656e12138a5bf2fb108bce6f161f4be0f9c488d56b77915585077efeefe2f4a2",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/PACKAGE-RESULT.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/PACKAGE-RESULT.json",
+      "beforeSha256": "4ef378bc73f501c4b386c27ef7de1297a15799f469e5dd3dae884904115b43e8",
+      "bytes": 499,
+      "afterSha256": "4ef378bc73f501c4b386c27ef7de1297a15799f469e5dd3dae884904115b43e8",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/GITHUB-CONSOLIDATION-20261008.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-20261008.md",
+      "beforeSha256": "e219901a1a6e5c4a466c855a60357659529eaa030acd8b515335e41c7d3144c3",
+      "bytes": 5076,
+      "afterSha256": "6835e75a9c03e1a453801084cc8223c005de9e4e186eda3ff5b14c1deb50810c",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/GITHUB-CONSOLIDATION-RESULT-20261008.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-RESULT-20261008.md",
+      "beforeSha256": "048464008c376e686bfe80c0fa391381a994282a8325bd46660926fcdc7f6c6e",
+      "bytes": 1975,
+      "afterSha256": "5799725c981ececbd7dcd7b95f5ef2b8465ec68abf1eec7286f7df3d109dbf84",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/LOCAL-AI-T23-BROWSER-20261007.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/LOCAL-AI-T23-BROWSER-20261007.md",
+      "beforeSha256": "39e994e7a805bdce3ff5ee9d27a7ae7bea863181d1d9d18db4cd33a96067d000",
+      "bytes": 10502,
+      "afterSha256": "ea3e1aa2e5fcfa5532980f912c9334d78fe7b9b7e0b872211c1f01f83bd0b774",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/MACOS-BUGFIX-DELIVERY-20261010.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/MACOS-BUGFIX-DELIVERY-20261010.md",
+      "beforeSha256": "ab91853bcc6f9e0cb3f4f318c1248f05a7c8a7cff503b35b272cc3645fec13cf",
+      "bytes": 7761,
+      "afterSha256": "ff28a09088e8dca1c9e091245c4016fe6832eba7287a001dbe321a00bb19db7b",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/MACOS-CONTINUATION-20261008.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/MACOS-CONTINUATION-20261008.md",
+      "beforeSha256": "d56faa584b7f10dc5211e9f366869ad24df1e7f17bc2ae3163d1b01573cb97db",
+      "bytes": 7336,
+      "afterSha256": "d0b76deab928b73c424142d2c900522fbd7cf186780889b3a9dc9141fc8746f0",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md",
+      "beforeSha256": "48ed29066e4fd5ebac6b860d0d599b4a028cb8a844251c73ec21be804eae9050",
+      "bytes": 9109,
+      "afterSha256": "b4cec817f1304a55df5af63449dc487f9b4d2570bf60252a94c3bda2e7a12113",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/PROJECT-ARCHITECTURE-HANDOFF-20260924.html",
+      "to": "docs/history/task-consolidation-20261011/handoff/PROJECT-ARCHITECTURE-HANDOFF-20260924.html",
+      "beforeSha256": "9849379d4599ba575afd54c3fa1a94ab6276dd8c8611d6f50d981d1395c4ea02",
+      "bytes": 102755,
+      "afterSha256": "9f276b7004fbd15d0fe3e19ec70867fc89a76d2d65de747f679747cbd35dffdd",
+      "navigationRebased": true
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/handoff/PROJECT-ARCHITECTURE-HANDOFF-20260924.md",
+      "to": "docs/architecture-audit/P00-20260924/inputs/sources/PROJECT-ARCHITECTURE-HANDOFF-20260924.md",
+      "beforeSha256": "ed6ac1b91c10ee6c9ef7771862ee6d50adf2cb5b7dd8281986c05f76551b2c34",
+      "bytes": 44463,
+      "afterSha256": "ed6ac1b91c10ee6c9ef7771862ee6d50adf2cb5b7dd8281986c05f76551b2c34",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/REHOST-VERIFICATION.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/REHOST-VERIFICATION.md",
+      "beforeSha256": "a866fe57a7dfc6e6a80bab8a67f592bbcefd9fe7d3a600f72dfdfd6be68a032b",
+      "bytes": 1613,
+      "afterSha256": "a866fe57a7dfc6e6a80bab8a67f592bbcefd9fe7d3a600f72dfdfd6be68a032b",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/README.md",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/README.md",
+      "beforeSha256": "53c2f767be8f532f349d5c9dadac7e7ee780454158432dcb70cde07807f0c50f",
+      "bytes": 488,
+      "afterSha256": "53c2f767be8f532f349d5c9dadac7e7ee780454158432dcb70cde07807f0c50f",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/background-soak-summary.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/background-soak-summary.json",
+      "beforeSha256": "526d9a3173fed10e71652c6488d681c74a9b09be85e39367fabf6866b3f85d6a",
+      "bytes": 715,
+      "afterSha256": "526d9a3173fed10e71652c6488d681c74a9b09be85e39367fabf6866b3f85d6a",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/browser-blocked.png",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/browser-blocked.png",
+      "beforeSha256": "e2a386921a74ccb1feeb4d2ed83abc201557fce24db4b1b135232b4b12441c4f",
+      "bytes": 16049,
+      "afterSha256": "e2a386921a74ccb1feeb4d2ed83abc201557fce24db4b1b135232b4b12441c4f",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/browser-result.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/browser-result.json",
+      "beforeSha256": "e33c3f2357187df56169e7cee87aa955cceb8d271b3f5a95a024357781ceaf2a",
+      "bytes": 365,
+      "afterSha256": "e33c3f2357187df56169e7cee87aa955cceb8d271b3f5a95a024357781ceaf2a",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/candidate-final-manifest.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/candidate-final-manifest.json",
+      "beforeSha256": "0560bee728e853d1dbef66de531f2528eb6b218357ada2855d98114861551ad8",
+      "bytes": 2656092,
+      "afterSha256": "0560bee728e853d1dbef66de531f2528eb6b218357ada2855d98114861551ad8",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/final-scale-result.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/final-scale-result.json",
+      "beforeSha256": "dc0675001884e55928cb4a0273f0fbb927f100a189418049bbfbc7d2a559aed7",
+      "bytes": 594,
+      "afterSha256": "dc0675001884e55928cb4a0273f0fbb927f100a189418049bbfbc7d2a559aed7",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/migration-result.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/migration-result.json",
+      "beforeSha256": "8830198c242f6e1e95d975d399213f4205b55dbf96fbf92611d7da3de03e352d",
+      "bytes": 3813,
+      "afterSha256": "8830198c242f6e1e95d975d399213f4205b55dbf96fbf92611d7da3de03e352d",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/package-final-smoke.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/package-final-smoke.json",
+      "beforeSha256": "406e92631358b62c6747747120417e9131896a02ab784d1bf07fa118da12b7a2",
+      "bytes": 1429,
+      "afterSha256": "406e92631358b62c6747747120417e9131896a02ab784d1bf07fa118da12b7a2",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/preservation-result.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/preservation-result.json",
+      "beforeSha256": "59e46bb2bfa321182794f8ccb147c0599b78dcf998297fa1bb6904b8a865790f",
+      "bytes": 1097,
+      "afterSha256": "59e46bb2bfa321182794f8ccb147c0599b78dcf998297fa1bb6904b8a865790f",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/runtime-equivalence.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/runtime-equivalence.json",
+      "beforeSha256": "51394f6a49ac36cb28867937e22438af3961c70f37b7addd9933fbd7bb6d3c87",
+      "bytes": 357,
+      "afterSha256": "51394f6a49ac36cb28867937e22438af3961c70f37b7addd9933fbd7bb6d3c87",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/signing-status.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/signing-status.json",
+      "beforeSha256": "42d2d989c5d2e43b6ab00bba8cad54046f38ef680bfadf49a90b5f7892671646",
+      "bytes": 113,
+      "afterSha256": "42d2d989c5d2e43b6ab00bba8cad54046f38ef680bfadf49a90b5f7892671646",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/macos-transfer-receipts-20261008/source-diversity.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/source-diversity.json",
+      "beforeSha256": "30212fe541196b00bc0f4c4751694550d958de90a4b6b8def60d5ff14986d801",
+      "bytes": 486,
+      "afterSha256": "30212fe541196b00bc0f4c4751694550d958de90a4b6b8def60d5ff14986d801",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/rehost-checks/handoff-preflight-negative.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/rehost-checks/handoff-preflight-negative.json",
+      "beforeSha256": "4b993eb0b39cd2f3c617239b55857825a6c73188686e570547b1cc1abaa49843",
+      "bytes": 1359,
+      "afterSha256": "4b993eb0b39cd2f3c617239b55857825a6c73188686e570547b1cc1abaa49843",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/rehost-checks/handoff-preflight.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/rehost-checks/handoff-preflight.json",
+      "beforeSha256": "a561af9b646522ee2f0b5f1ec59a04fd18ff0274adb16622a2d20a9c94743267",
+      "bytes": 819,
+      "afterSha256": "a561af9b646522ee2f0b5f1ec59a04fd18ff0274adb16622a2d20a9c94743267",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/rehost-checks/rehost-build.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/rehost-checks/rehost-build.json",
+      "beforeSha256": "dca81f64fc24ee059c451f8054d531b94f226153b13f55ee4cbd04d0532fe864",
+      "bytes": 163,
+      "afterSha256": "dca81f64fc24ee059c451f8054d531b94f226153b13f55ee4cbd04d0532fe864",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/rehost-checks/rehost-context.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/rehost-checks/rehost-context.json",
+      "beforeSha256": "6269b1078e7c5d9d906615ffa628b6b67f1256388cacfd6af40008c60407c3e1",
+      "bytes": 171,
+      "afterSha256": "6269b1078e7c5d9d906615ffa628b6b67f1256388cacfd6af40008c60407c3e1",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/handoff/rehost-checks/rehost-typecheck.json",
+      "to": "docs/history/task-consolidation-20261011/handoff/rehost-checks/rehost-typecheck.json",
+      "beforeSha256": "4380b778a473469fabdde212693220767f58b4e0cd562abe673657202f4be4d4",
+      "bytes": 166,
+      "afterSha256": "4380b778a473469fabdde212693220767f58b4e0cd562abe673657202f4be4d4",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/history/agent-collaboration/orchestrator_gen2/context.md",
+      "to": "docs/history/agent-collaboration/orchestrator/context.md",
+      "beforeSha256": "ed319b5be2c2334ef4f8e9367b1b63564fb05849a82a4de040c818645b869f42",
+      "bytes": 718,
+      "afterSha256": "ed319b5be2c2334ef4f8e9367b1b63564fb05849a82a4de040c818645b869f42",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/history/agent-collaboration/orchestrator_gen2/plan.md",
+      "to": "docs/history/agent-collaboration/orchestrator/plan.md",
+      "beforeSha256": "ac0ec565ce3eb4cce14c3078356a3af59f085f742df498ef6cf0f6bf0ecf6071",
+      "bytes": 1839,
+      "afterSha256": "ac0ec565ce3eb4cce14c3078356a3af59f085f742df498ef6cf0f6bf0ecf6071",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/PLAN.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/PLAN.json",
+      "beforeSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "bytes": 8812,
+      "afterSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/README.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/README.md",
+      "beforeSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "bytes": 868,
+      "afterSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/SOURCE-MAP.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SOURCE-MAP.md",
+      "beforeSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "bytes": 1758,
+      "afterSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/SPEC.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SPEC.md",
+      "beforeSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "bytes": 11670,
+      "afterSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/TEST-SEAMS-AND-DECISIONS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TEST-SEAMS-AND-DECISIONS.md",
+      "beforeSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "bytes": 2182,
+      "afterSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/TICKETS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TICKETS.md",
+      "beforeSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "bytes": 2657,
+      "afterSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "beforeSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "bytes": 1058,
+      "afterSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "beforeSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "bytes": 1201,
+      "afterSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/draft-tickets/03-single-tag-result.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/03-single-tag-result.md",
+      "beforeSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "bytes": 1246,
+      "afterSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/draft-tickets/04-find-review-tag-suggestions.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/04-find-review-tag-suggestions.md",
+      "beforeSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "bytes": 1121,
+      "afterSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/draft-tickets/05-bounded-batch-and-rerun.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/05-bounded-batch-and-rerun.md",
+      "beforeSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "bytes": 1124,
+      "afterSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/draft-tickets/06-resume-unfinished-safely.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/06-resume-unfinished-safely.md",
+      "beforeSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "bytes": 1132,
+      "afterSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "beforeSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "bytes": 1360,
+      "afterSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/ACTIVE-CONTRACT-ADDENDUM.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/ACTIVE-CONTRACT-ADDENDUM.md",
+      "beforeSha256": "7a937065b9eef26c23b36ef4ecda77f0013f2fa3060a271f25eadb79688ab70b",
+      "bytes": 10831,
+      "afterSha256": "7a937065b9eef26c23b36ef4ecda77f0013f2fa3060a271f25eadb79688ab70b",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/ADMISSION-PROFILE.proposed.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/ADMISSION-PROFILE.proposed.json",
+      "beforeSha256": "f46a46b34a8cfbb8a041b392a9978af381c26aef122257b0205cc7df672a7744",
+      "bytes": 924,
+      "afterSha256": "f46a46b34a8cfbb8a041b392a9978af381c26aef122257b0205cc7df672a7744",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/DEFERRED-REGISTER.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/DEFERRED-REGISTER.json",
+      "beforeSha256": "9f86a0d9dc3da1bb49e67bcc2c8917594f8a339416eeacc8208d3f37c5dfe2bc",
+      "bytes": 2963,
+      "afterSha256": "9f86a0d9dc3da1bb49e67bcc2c8917594f8a339416eeacc8208d3f37c5dfe2bc",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/FIRST-ROUND-PLAN.v2.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/FIRST-ROUND-PLAN.v2.json",
+      "beforeSha256": "60f369717c79b035e77bc559809a8493de6e7231963d2eba322cd99308c8163f",
+      "bytes": 13301,
+      "afterSha256": "60f369717c79b035e77bc559809a8493de6e7231963d2eba322cd99308c8163f",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/HANDOFF.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/HANDOFF.md",
+      "beforeSha256": "68532197f962fea19a2c64d7901dac2542d9faa470b66fd0e735f81ba1f5d0c2",
+      "bytes": 1813,
+      "afterSha256": "68532197f962fea19a2c64d7901dac2542d9faa470b66fd0e735f81ba1f5d0c2",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/PLAN-CHANGES.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/PLAN-CHANGES.md",
+      "beforeSha256": "01663f3872f749611204a5aab59d1d598f03d914e2467f801ecd2d5af9aa6bad",
+      "bytes": 930,
+      "afterSha256": "01663f3872f749611204a5aab59d1d598f03d914e2467f801ecd2d5af9aa6bad",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/READINESS-REVIEW.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/READINESS-REVIEW.md",
+      "beforeSha256": "e40e4a69ec8031cec30797dd5f088e7f3cc5a1d5f7c1f8d5ae137a055ad62078",
+      "bytes": 6392,
+      "afterSha256": "e40e4a69ec8031cec30797dd5f088e7f3cc5a1d5f7c1f8d5ae137a055ad62078",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/README.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/README.md",
+      "beforeSha256": "c8f73dffa56983f0582ca345b1773a0bbf3dfdeab8b29ad8d194b07d02ff632a",
+      "bytes": 657,
+      "afterSha256": "c8f73dffa56983f0582ca345b1773a0bbf3dfdeab8b29ad8d194b07d02ff632a",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/REFERENCES.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/REFERENCES.md",
+      "beforeSha256": "e36044d600865e78b3abb52749ffb74ac2d069a02b450404a079cd5957085162",
+      "bytes": 4114,
+      "afterSha256": "e36044d600865e78b3abb52749ffb74ac2d069a02b450404a079cd5957085162",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/SUPERSEDES.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/SUPERSEDES.json",
+      "beforeSha256": "d766cead3a02ba766e96f40c1c90bf0c3e664761da96e102b5cd526dab222066",
+      "bytes": 3164,
+      "afterSha256": "d766cead3a02ba766e96f40c1c90bf0c3e664761da96e102b5cd526dab222066",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATE-MATRIX.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATE-MATRIX.md",
+      "beforeSha256": "f52ca20f25c289c0c056335e5879a171f153d77eb122e6ee5be8063cfb557b09",
+      "bytes": 6237,
+      "afterSha256": "f52ca20f25c289c0c056335e5879a171f153d77eb122e6ee5be8063cfb557b09",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATES.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATES.json",
+      "beforeSha256": "07d3df81bd435f29e441205f81fa21928befb182e2739063a9640bbec0044af0",
+      "bytes": 7163,
+      "afterSha256": "07d3df81bd435f29e441205f81fa21928befb182e2739063a9640bbec0044af0",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/checks/minimal-spec-checks.py",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/checks/minimal-spec-checks.py",
+      "beforeSha256": "0ddaeac29306ec5941d8817f151d7b6db260887feace846c1e49737eb51640c8",
+      "bytes": 7403,
+      "afterSha256": "0ddaeac29306ec5941d8817f151d7b6db260887feace846c1e49737eb51640c8",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/checks/verify-revision.py",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/checks/verify-revision.py",
+      "beforeSha256": "5f7210c6e5b2d526d9d9b5088a71014b16e7ea49fdd04d99ff940eea4c828761",
+      "bytes": 8356,
+      "afterSha256": "5f7210c6e5b2d526d9d9b5088a71014b16e7ea49fdd04d99ff940eea4c828761",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/01-preserve-combined-provider.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "beforeSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "bytes": 1058,
+      "afterSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "beforeSha256": "088e0ff294fa8da091e0d2aa8bfd3dcdbe0be0f20601e96ccdcfc1716fa7b91d",
+      "bytes": 2080,
+      "afterSha256": "088e0ff294fa8da091e0d2aa8bfd3dcdbe0be0f20601e96ccdcfc1716fa7b91d",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/03-single-tag-result.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/03-single-tag-result.md",
+      "beforeSha256": "fc25f231005e6dd2708047fddf48c91ca3e0a9316b96d3f396c8cab4d4e9fe3f",
+      "bytes": 2422,
+      "afterSha256": "fc25f231005e6dd2708047fddf48c91ca3e0a9316b96d3f396c8cab4d4e9fe3f",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/04-find-review-tag-suggestions.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/04-find-review-tag-suggestions.md",
+      "beforeSha256": "89e2e31009d366735ec8df96f90776c74369ab1ba510d77dc1299fdb9a4a307b",
+      "bytes": 1336,
+      "afterSha256": "89e2e31009d366735ec8df96f90776c74369ab1ba510d77dc1299fdb9a4a307b",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/05-bounded-batch-and-rerun.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/05-bounded-batch-and-rerun.md",
+      "beforeSha256": "38ac7235acffd3f69fee532795ba55b177b13006825c077ca7e8809f6e99e506",
+      "bytes": 1376,
+      "afterSha256": "38ac7235acffd3f69fee532795ba55b177b13006825c077ca7e8809f6e99e506",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/06-resume-unfinished-safely.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/06-resume-unfinished-safely.md",
+      "beforeSha256": "0b8811e2bfbf9a1fc09be1ffabefc3026f28b4e1d1de5824516cff92bf40351c",
+      "bytes": 1488,
+      "afterSha256": "0b8811e2bfbf9a1fc09be1ffabefc3026f28b4e1d1de5824516cff92bf40351c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/draft-tickets/07-accept-independent-tags.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "beforeSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "bytes": 1360,
+      "afterSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md",
+      "beforeSha256": "2abb8e2bddaf84c56cad5880c377767db29264abdc90dd6ddd7d9444719dd25d",
+      "bytes": 10293,
+      "afterSha256": "7e12d3bbb719670327f3de12ce410c765b9a8f2fe8c20e47d32d38307555dbba",
+      "navigationRebased": true
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/PLAN.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/PLAN.json",
+      "beforeSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "bytes": 8812,
+      "afterSha256": "9e226904173c23bc2b48a7d496edba7dbe3aff40aa922c35d73f5222e20fd385",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/README.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/README.md",
+      "beforeSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "bytes": 868,
+      "afterSha256": "8821b3740d14126e579ec992d6b7a19a75ff6f638b3dbbd34f905867579df43c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/SOURCE-MAP.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SOURCE-MAP.md",
+      "beforeSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "bytes": 1758,
+      "afterSha256": "4566dfe7d8376ac9bccc4cf24bee53ead2687027f690d7fff65f954ff1c8ab8b",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/SPEC.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SPEC.md",
+      "beforeSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "bytes": 11670,
+      "afterSha256": "02acdaab4cd8a0809a69e7f749756363f8d21c175b80a068c3e7a749fd6b6666",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/TEST-SEAMS-AND-DECISIONS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TEST-SEAMS-AND-DECISIONS.md",
+      "beforeSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "bytes": 2182,
+      "afterSha256": "46742ae6926e6ed681721da5ba6ed457bfd44d3b62178bde976466710b3d0205",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/TICKETS.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/TICKETS.md",
+      "beforeSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "bytes": 2657,
+      "afterSha256": "1301be3561900e0c610d157abc95b420ac09ff26b49624f693e6ec9350e7921d",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/01-preserve-combined-provider.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/01-preserve-combined-provider.md",
+      "beforeSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "bytes": 1058,
+      "afterSha256": "f1b57bab6f4bb2abf2054e37bdc87063df48f269df7020ce7eeaeb30243c8ae3",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/02-persist-reviewed-tag-intent.md",
+      "beforeSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "bytes": 1201,
+      "afterSha256": "50a09f435ad6e315bdf9d6d43cf42cc5a963fd24cd563e5f39a75d86ee45ffa4",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/03-single-tag-result.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/03-single-tag-result.md",
+      "beforeSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "bytes": 1246,
+      "afterSha256": "4ec71c615fc5eb8ab2adf8aca77ee359429996990d7f34f10e44b02cb2ea561c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/04-find-review-tag-suggestions.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/04-find-review-tag-suggestions.md",
+      "beforeSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "bytes": 1121,
+      "afterSha256": "40039f6bc86e0c4153b5ee60eb015cb23579dcb59702259cf22944d6ab1b6398",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/05-bounded-batch-and-rerun.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/05-bounded-batch-and-rerun.md",
+      "beforeSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "bytes": 1124,
+      "afterSha256": "27f8d9ff1bb7eaf6d8b9059dc785b929285cbe594a7cca2017d28f68b166b242",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/06-resume-unfinished-safely.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/06-resume-unfinished-safely.md",
+      "beforeSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "bytes": 1132,
+      "afterSha256": "5f9656c27df43a82afb85a63925fc476fd8a69395bb67e2e2ee57806510ab296",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/implementation-plan/draft-tickets/07-accept-independent-tags.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/draft-tickets/07-accept-independent-tags.md",
+      "beforeSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "bytes": 1360,
+      "afterSha256": "2a38afe6039bb3b8b2ce1a8faf51fbaa63528cba4b1ac81bb45f3fa6ac111e78",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/01-REVIEW.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/01-REVIEW.md",
+      "beforeSha256": "13cc580672f41cc90cf10e95d4368c190cd8fa4b1599517ef70dca2eb1cbf5c5",
+      "bytes": 18415,
+      "afterSha256": "9250afce715860e01eae384bd1fdc6b356b2148bd0cda7f60f4c7ba1608ccb50",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md",
+      "beforeSha256": "d3ff70a9061a139e35541c57c573924082db27c1c887c7b88061646baf936cbc",
+      "bytes": 5928,
+      "afterSha256": "d3ff70a9061a139e35541c57c573924082db27c1c887c7b88061646baf936cbc",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+      "to": "docs/architecture-audit/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md",
+      "beforeSha256": "4246e76fadb47c73d1f34a131baaa97fca1939758fadfc0d36833b958858a9b2",
+      "bytes": 8739,
+      "afterSha256": "4246e76fadb47c73d1f34a131baaa97fca1939758fadfc0d36833b958858a9b2",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P02-20260925/SOURCE-FINDINGS.md",
+      "to": "docs/architecture-audit/P02-20260925/SOURCE-FINDINGS.md",
+      "beforeSha256": "f5a751f1d652a2d84fba34bc106051aae4ccf361d9876378bb4489eddc643b1f",
+      "bytes": 4299,
+      "afterSha256": "f5a751f1d652a2d84fba34bc106051aae4ccf361d9876378bb4489eddc643b1f",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P04-20260926/COMPATIBILITY-MIGRATION.md",
+      "to": "docs/architecture-audit/P04-20260926/COMPATIBILITY-MIGRATION.md",
+      "beforeSha256": "dc8c1ea146943c1e48e05dfce8cc849d04f13cf7fcdf36858efe9c808a207bab",
+      "bytes": 5534,
+      "afterSha256": "dc8c1ea146943c1e48e05dfce8cc849d04f13cf7fcdf36858efe9c808a207bab",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P04-20260926/CURRENT-SELECTION.md",
+      "to": "docs/architecture-audit/P04-20260926/CURRENT-SELECTION.md",
+      "beforeSha256": "1a3d5d1cc7fa87fa1d9cc21527becf5511003655cca8b2675c8f11feacde3855",
+      "bytes": 5393,
+      "afterSha256": "1a3d5d1cc7fa87fa1d9cc21527becf5511003655cca8b2675c8f11feacde3855",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P05-20260926/CURRENT-BASELINE.md",
+      "to": "docs/architecture-audit/P05-20260926/CURRENT-BASELINE.md",
+      "beforeSha256": "5d56ac30d226fdad6068135c0cad5b617a8123ccf8c92032db6991ac5cb7c23c",
+      "bytes": 3463,
+      "afterSha256": "5d56ac30d226fdad6068135c0cad5b617a8123ccf8c92032db6991ac5cb7c23c",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P05-20260926/JOURNAL-CONTRACT.md",
+      "to": "docs/architecture-audit/P05-20260926/JOURNAL-CONTRACT.md",
+      "beforeSha256": "2bb860fbb3d187f237caacb9af04aa4637cd0ec0ba4629e2ea13cdf1bb34e82b",
+      "bytes": 6714,
+      "afterSha256": "2bb860fbb3d187f237caacb9af04aa4637cd0ec0ba4629e2ea13cdf1bb34e82b",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P08/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P08/DESIGN.md",
+      "beforeSha256": "78e746cda137f6a7275c1212a1580ce357c3013962c2d7b8cab111bff72ce507",
+      "bytes": 2860,
+      "afterSha256": "78e746cda137f6a7275c1212a1580ce357c3013962c2d7b8cab111bff72ce507",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P13/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P13/DESIGN.md",
+      "beforeSha256": "bb8a6b67065fa0a2f268c83b01662134537bc1523043d8c71bfacee42d6e4a83",
+      "bytes": 2498,
+      "afterSha256": "bb8a6b67065fa0a2f268c83b01662134537bc1523043d8c71bfacee42d6e4a83",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P16/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P16/DESIGN.md",
+      "beforeSha256": "b9796d620ad6013c652c7f7bb5993f0763d1801ba0d9f61f301777123caa8761",
+      "bytes": 2677,
+      "afterSha256": "b9796d620ad6013c652c7f7bb5993f0763d1801ba0d9f61f301777123caa8761",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/sources/architecture/P06-P27-SPEC-20260926/P26/DESIGN.md",
+      "to": "docs/architecture-audit/P06-P27-SPEC-20260926/P26/DESIGN.md",
+      "beforeSha256": "a484efbf39b9e04ec1b49732050ebba425aa328dffedc485bdbc1ea27d87c6d2",
+      "bytes": 3081,
+      "afterSha256": "a484efbf39b9e04ec1b49732050ebba425aa328dffedc485bdbc1ea27d87c6d2",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/NEXT-AI-START-HERE.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/NEXT-AI-START-HERE.md",
+      "beforeSha256": "bc475ce2898c20b8d61156699d0e1dc7a734a533a4b375e970ea9e4ce7475595",
+      "bytes": 1230,
+      "afterSha256": "bc475ce2898c20b8d61156699d0e1dc7a734a533a4b375e970ea9e4ce7475595",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/PACKAGE-INDEX.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/PACKAGE-INDEX.json",
+      "beforeSha256": "eaa0b5d7dbfab3ee1a3a4f06ca75e239e4e25c3d58c7806d73646ccc031d6570",
+      "bytes": 1094,
+      "afterSha256": "eaa0b5d7dbfab3ee1a3a4f06ca75e239e4e25c3d58c7806d73646ccc031d6570",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/README-START-HERE.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/README-START-HERE.md",
+      "beforeSha256": "3a43bd2c453a60c5cbba99b1acc1f7d067fddd3675dc1d58f2bb9a724a1e70b2",
+      "bytes": 4084,
+      "afterSha256": "3a43bd2c453a60c5cbba99b1acc1f7d067fddd3675dc1d58f2bb9a724a1e70b2",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-reports/task01-provider-extraction-20260927/CURRENT-STATE.json",
+      "to": "docs/history/task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/CURRENT-STATE.json",
+      "beforeSha256": "14f408a4884656e64c7b330257833d2c56e0cdf2fbf9dd0f6ecca36d121bbca6",
+      "bytes": 881,
+      "afterSha256": "14f408a4884656e64c7b330257833d2c56e0cdf2fbf9dd0f6ecca36d121bbca6",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-reports/task01-provider-extraction-20260927/README.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/README.md",
+      "beforeSha256": "e0734821c6b4316363ab346b30c1dcb0961bd276a1b054073c48fd14106252a4",
+      "bytes": 469,
+      "afterSha256": "e0734821c6b4316363ab346b30c1dcb0961bd276a1b054073c48fd14106252a4",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-reports/task01-provider-extraction-20260927/REVIEW.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/REVIEW.md",
+      "beforeSha256": "548fe7c3c62483fa0f857093a94180bdd43fb37ada81be7054a6f876c0525789",
+      "bytes": 2283,
+      "afterSha256": "548fe7c3c62483fa0f857093a94180bdd43fb37ada81be7054a6f876c0525789",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT.md",
+      "beforeSha256": "291e5ada1a1536287bc1ebecbdc239fa78314ffd1998fbfa7d67f9a100ed7868",
+      "bytes": 7534,
+      "afterSha256": "291e5ada1a1536287bc1ebecbdc239fa78314ffd1998fbfa7d67f9a100ed7868",
+      "navigationRebased": false
+    },
+    {
+      "action": "deduplicate",
+      "from": "docs/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT_副本.md",
+      "to": "docs/history/task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/TASK01-IMPLEMENTATION-REPORT.md",
+      "beforeSha256": "291e5ada1a1536287bc1ebecbdc239fa78314ffd1998fbfa7d67f9a100ed7868",
+      "bytes": 7534,
+      "afterSha256": "291e5ada1a1536287bc1ebecbdc239fa78314ffd1998fbfa7d67f9a100ed7868",
+      "navigationRebased": false
+    },
+    {
+      "action": "archive",
+      "from": "docs/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md",
+      "to": "docs/history/task-consolidation-20261011/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md",
+      "beforeSha256": "649a931b1f25a75beb1734e170c442627aad2fb0744e2a95c67a7a33fdf922d6",
+      "bytes": 90628,
+      "afterSha256": "a851adf667e4e603e9c82757a2b9bbb856c6485667574287af2a665a49540937",
+      "navigationRebased": true
+    },
+    {
+      "action": "archive-before-replace",
+      "from": "docs/REHOST.md",
+      "to": "docs/history/task-consolidation-20261011/REHOST-before-consolidation.md",
+      "beforeSha256": "e897d12a8e69dad3207f55810b1d27e05e940c733725fdb55a5cfdf06cdd8d6b",
+      "bytes": 8950,
+      "afterSha256": "07beb99190bb85aa849959dad14454c152bf4f238f1569b1febe77573db05c0b",
+      "navigationRebased": true
+    }
+  ],
+  "referenceOnlyEdits": [
+    "TASK.md",
+    "docs/REHOST.md",
+    "docs/design/UI-UX-HANDOFF-20260911.html",
+    "docs/design/UI-UX-HANDOFF-20260911.md",
+    "docs/agents/PRODUCT-INSTRUCTION-ALIGNMENT-20260914.md",
+    "docs/agents/FOUNDATION-AUDIT-20260907.md",
+    "docs/product/REFACTOR-FUNCTION-MAP-20260911.md",
+    "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+    "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/TASK-before-closure.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+    "docs/history/handoff-snapshots/macos-20261009-20261010/CURRENT-STATE-before-closure.md",
+    "docs/history/task-snapshots/TASK-20261005-before-wc01-close-12.md",
+    "docs/history/module-snapshots/library-lifecycle-20261005-before-wc01-close-12.md",
+    "docs/history/module-snapshots/independent-tags-20261005-before-wc01-close-12.md",
+    "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/01-REVIEW.md",
+    "docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md",
+    "docs/history/task-consolidation-20261011/handoff/PROJECT-ARCHITECTURE-HANDOFF-20260924.html",
+    "docs/history/task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-RESULT-20261008.md",
+    "docs/history/task-consolidation-20261011/handoff/MACOS-BUGFIX-DELIVERY-20261010.md",
+    "docs/history/task-consolidation-20261011/handoff/LOCAL-AI-T23-BROWSER-20261007.md",
+    "docs/history/task-consolidation-20261011/handoff/AF-MACOS-20261010.md",
+    "docs/history/task-consolidation-20261011/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md",
+    "docs/history/task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-20261008.md",
+    "docs/history/task-consolidation-20261011/handoff/MACOS-CONTINUATION-20261008.md",
+    "docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/README-START-HERE.md",
+    "docs/history/task-consolidation-20261011/agents/implementation-status.md",
+    "docs/history/task-consolidation-20261011/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md",
+    "src/main/capture-intake/README.md",
+    "src/main/work-mode/README.md"
+  ],
+  "frozenPathBoundDocuments": [
+    "docs/handoff/AI-CORE-20261006.md",
+    "docs/handoff/EAGLE-E-20261008.md",
+    "docs/handoff/FOUNDATION-ADOPTION-20261006.md",
+    "docs/handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md",
+    "docs/handoff/MACOS-DELIVERY-CLOSURE-20261010.md",
+    "docs/handoff/MODEL-MANAGEMENT-20261006.md",
+    "docs/handoff/QWEN-QUANT-DEVICE-20261006.md",
+    "docs/handoff/RELEASE-SCALE-F-20261008.md",
+    "docs/handoff/SEARCH-C-20261007.md",
+    "docs/handoff/SEARCH-C-COVERAGE-20261008.md",
+    "docs/handoff/WC01-20261003.md",
+    "docs/handoff/WC01-CLOSE-12-20261005.md",
+    "docs/handoff/WC01-DIVERSE-IMAGE-LIBRARY-20261005.md",
+    "docs/handoff/WC01-FAILURE-QUEUE-20261003.md",
+    "docs/handoff/WC01-PI-REASONING-20261005.md",
+    "docs/handoff/WC01-REAL-MODEL-LIBRARY-20261005.md",
+    "docs/handoff/WINDOWS-BACKUP-20261004.md",
+    "docs/handoff/WINDOWS-BACKUP-AUTHORITY-20261005.md",
+    "docs/handoff/WINDOWS-BACKUP-BOUNDARY-20261004.md",
+    "docs/handoff/WINDOWS-BACKUP-LIFECYCLE-20261004.md",
+    "docs/handoff/WINDOWS-BACKUP-METADATA-20261004.md",
+    "docs/handoff/WINDOWS-BACKUP-PATH-20261004.md",
+    "docs/handoff/WINDOWS-BACKUP-PROOF-20261004.md",
+    "docs/handoff/WINDOWS-BACKUP-RECOVERY-20261004.md",
+    "docs/handoff/WINDOWS-CONTROL-CLAIM-TRACER-20261005.md",
+    "docs/handoff/WINDOWS-CONTROL-COMPATIBILITY-20261005.md",
+    "docs/handoff/WINDOWS-CONTROL-EFFECT-TRACER-20261005.md",
+    "docs/handoff/WINDOWS-CONTROL-FACADE-TRACER-20261005.md",
+    "docs/handoff/WINDOWS-CONTROL-PROTOCOL-TRACER-20261005.md",
+    "docs/handoff/WINDOWS-CONTROL-RESTART-TRACER-20261005.md",
+    "docs/handoff/WINDOWS-CONTROL-STORE-MIGRATION-20261005.md",
+    "docs/handoff/WINDOWS-NATIVE-BACKUP-20261004.md",
+    "docs/handoff/WINDOWS-QUALIFICATION-20261003.md",
+    "docs/handoff/WORK-MODE-D-20261008.md",
+    "docs/implementation-plans/local-ai-foundation-20261006/TICKET-PLAN.md",
+    "docs/product/AI-ENGINEERING-REFERENCE-20261006.md",
+    "docs/product/COMMERCIAL-DEVELOPMENT-GOALS.md",
+    "docs/product/LOCAL-AI-RESOURCE-COORDINATION.md",
+    "docs/product/PRODUCT-FOUNDATION.md"
+  ],
+  "originalManifestHashes": "historical hashes refer to baseline bytes; link rebasing is separately recorded, never rewritten as a historic PASS",
+  "compatibilityPages": [
+    {
+      "path": "docs/handoff/LOCAL-AI-T23-BROWSER-20261007.md",
+      "target": "docs/history/task-consolidation-20261011/handoff/LOCAL-AI-T23-BROWSER-20261007.md",
+      "reason": "incoming link in immutable checkpoint or path-bound historical document"
+    },
+    {
+      "path": "docs/handoff/MACOS-BUGFIX-DELIVERY-20261010.md",
+      "target": "docs/history/task-consolidation-20261011/handoff/MACOS-BUGFIX-DELIVERY-20261010.md",
+      "reason": "incoming link in immutable checkpoint or path-bound historical document"
+    },
+    {
+      "path": "docs/handoff/AF-MACOS-20261010.md",
+      "target": "docs/history/task-consolidation-20261011/handoff/AF-MACOS-20261010.md",
+      "reason": "incoming link in immutable checkpoint or path-bound historical document"
+    },
+    {
+      "path": "docs/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md",
+      "target": "docs/history/task-consolidation-20261011/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md",
+      "reason": "incoming link in immutable checkpoint or path-bound historical document"
+    },
+    {
+      "path": "docs/handoff/MACOS-CONTINUATION-20261008.md",
+      "target": "docs/history/task-consolidation-20261011/handoff/MACOS-CONTINUATION-20261008.md",
+      "reason": "unchanged production/tool literal path: scripts/export-candidate-source.mjs"
+    }
+  ],
+  "mutableDocumentReferences": [
+    "docs/handoff/CURRENT-STATE.md",
+    "docs/handoff/DEFERRED-ACCEPTANCE.md",
+    "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+    "docs/product/RELEASE-ACCEPTANCE.md"
+  ],
+  "preservation": {
+    "productExecutableAndLockFiles": 1405,
+    "allProductBytesUnchanged": true,
+    "immutableEvidenceArchitectureAndWipPaths": 2739,
+    "allProtectedBytesUnchanged": true,
+    "otherWip": [
+      "AGENTS.md",
+      "docs/agents/ui-ux-acceptance.md"
+    ],
+    "oldScratchRuntimeArtifacts": "no removal, rename or overwrite; only new task-consolidation work artifacts added",
+    "externalLibrariesModelsProfiles": "no reads/writes or runtime actions",
+    "importedVisionPackageOriginalHashesVerified": 28
+  },
+  "navigationHashPolicy": "original SHA binds the baseline blob; after SHA binds relocated/rebased navigation. No source/evidence hash or PASS status was edited to manufacture qualification.",
+  "modifiedExistingDocuments": [
+    {
+      "path": "CONTRIBUTING.md",
+      "beforeSha256": "f1f174b8ca9760a3113e46c6b2bae5a0e1753380b21b8a4ab5c88f42da6ee07c",
+      "afterSha256": "aca522ea8e5d969ea935d69a8fe841ac2a5e2d58b9a36906d023b5ea29fdd767"
+    },
+    {
+      "path": "README.md",
+      "beforeSha256": "0eeb9001fa65980617c66458274e66a07342894d9953134694c2fccfe7fb0952",
+      "afterSha256": "11edc8e30ab60a036b8a5f7605ebc7745f095d5add7548be8cc1153548235789"
+    },
+    {
+      "path": "TASK.md",
+      "beforeSha256": "5b7f3d9dd2ea2a4e06a5aff67d9d7b4aa16ac059bf074e07c7077e154b642571",
+      "afterSha256": "513d8e1e253ed260261be7478a4d725c890cd8057f98edddb8f991dbafde22de"
+    },
+    {
+      "path": "docs/REHOST.md",
+      "beforeSha256": "e897d12a8e69dad3207f55810b1d27e05e940c733725fdb55a5cfdf06cdd8d6b",
+      "afterSha256": "888656ae55f9afca3c5ebdf3f850438364fc5edbbab4faae4511bf77e9fb652d"
+    },
+    {
+      "path": "docs/agents/FOUNDATION-AUDIT-20260907.md",
+      "beforeSha256": "86eb3715b6ecff9a42c02b1d7f4c3f0db678ac667e4ec1f389b7a2efb92d538f",
+      "afterSha256": "78fd5307e7c0f911bebb5d8ca10e5228722aece995c2a5eab5eeda050b09e319"
+    },
+    {
+      "path": "docs/agents/PRODUCT-INSTRUCTION-ALIGNMENT-20260914.md",
+      "beforeSha256": "791dbb5c88894287e4b5154b1eeecf3db8fbac5ebdb01906b7e2aa1d331f6c3b",
+      "afterSha256": "83dd1597493900dd9acfde8732915856b85255c2f6360b927fbbb693b850dec0"
+    },
+    {
+      "path": "docs/design/UI-UX-HANDOFF-20260911.html",
+      "beforeSha256": "75923f3acb6d73863d8019a882e86ff0021b86bca5f09f85d7801448db58db36",
+      "afterSha256": "38c84a2005833b9d18a6defc100291e5d79cc0893a71bed82b3e2f40e1ca11f0"
+    },
+    {
+      "path": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "beforeSha256": "4add21974156fe2b10724332da43be030de0890c4048e933e31b1f83e00e5262",
+      "afterSha256": "80ddaf5aa2cdaabde4181fa8a0e11a809da71e649bf0cb4f9ea6ba872c6784b7"
+    },
+    {
+      "path": "docs/handoff/CURRENT-STATE.md",
+      "beforeSha256": "dc3fbb1e21ccd86976bde28303bab31320031a258a5ee802abd4e5898bef22ed",
+      "afterSha256": "bbd1049587d3f2e7a63a32d2f143f71045957a9a158e423b1a151f0576ac70e9"
+    },
+    {
+      "path": "docs/handoff/DEFERRED-ACCEPTANCE.md",
+      "beforeSha256": "437a96685ddf001601f6ce56f44c80a363b8e69f5769bff0ac7431aad584ebfc",
+      "afterSha256": "c5b9588c50cdae237fdf98ec42d59870631cdc99711837637a6ca14459fb3a54"
+    },
+    {
+      "path": "docs/history/handoff-snapshots/macos-20261009-20261010/CURRENT-STATE-before-closure.md",
+      "beforeSha256": "e529f7998545857debd5c625b0bc623109be8ad1560e58417d1ea8968b0f3c4b",
+      "afterSha256": "f1f630cec24223aa7d06c587fdd71a5289adf918d747f8ff4e25fb5436f61880"
+    },
+    {
+      "path": "docs/history/handoff-snapshots/macos-20261009-20261010/TASK-before-closure.md",
+      "beforeSha256": "32befa3add039ac4accf070fc70e33a3627afa9c9f227438fc9a50c2a7f950e8",
+      "afterSha256": "f4b2ff173e2c5c50d918dbc5cf00c3c993ec8daced303760ebed1e75fe61ab11"
+    },
+    {
+      "path": "docs/history/handoff-snapshots/macos-20261009-20261010/TICKET-PLAN-before-closure.md",
+      "beforeSha256": "68af4ba94e593bf8063046bdc7ea09da8ad3c99e20664e114621194ab42bb5e6",
+      "afterSha256": "ae0ec6b79439c675949513493526ca9a03fb320f06b0834bb633212f4516b3f0"
+    },
+    {
+      "path": "docs/history/module-snapshots/independent-tags-20261005-before-wc01-close-12.md",
+      "beforeSha256": "c19b0c645e9f9a6e6be643146dfafc18b9abda84f6193040d2d48380f931e3fc",
+      "afterSha256": "a9fa9c4a224db6a16eee37b2ee23d451cae5b6c7528c7771e31dda011abb49a3"
+    },
+    {
+      "path": "docs/history/module-snapshots/library-lifecycle-20261005-before-wc01-close-12.md",
+      "beforeSha256": "220565350ec8da41a731f226863ff45479766d07a2c1d150e744ed1d567e4097",
+      "afterSha256": "2898298a7e9ba5060abba06b535f502efe19b48b75abc47ce33ebf6ea0dafdec"
+    },
+    {
+      "path": "docs/history/task-snapshots/TASK-20261005-before-wc01-close-12.md",
+      "beforeSha256": "856ae92a1ca1e714dddc54f78dbd602b940a278ed06cbfe36852c2b6e591c180",
+      "afterSha256": "b2aa461a1670e878b8c40fca14f0c917efb1ae015c98561e90653dc54d7e9799"
+    },
+    {
+      "path": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "beforeSha256": "421e4d906af079ade5114c0c882d45c52fbebf8bcea735d13f435056b02b877e",
+      "afterSha256": "87146b7b976a3f2f230f7041a54f18f8aaef73b02f6927198c4acc549bcb635b"
+    },
+    {
+      "path": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "beforeSha256": "681182da63c22b8e0f89aef3b12e16687b433cd96ee0f6de78f7de1cb8a9a9c8",
+      "afterSha256": "dba2bdf50483d9034c98442faafee037c5d367978c78752f391d40cbf217ab54"
+    },
+    {
+      "path": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "beforeSha256": "8e12b53541cc06fa91cc82698d1867e0322465d60a0deadd8c4355809a534bd6",
+      "afterSha256": "b0c1faf34f01abed6d4088f92e248ead02bfa53b3362e4331f0968aab6ef49c0"
+    },
+    {
+      "path": "docs/product/REFACTOR-FUNCTION-MAP-20260911.md",
+      "beforeSha256": "b97d4b9c8c6debf6243cd726a9adce8d3c806adcdb0d5d9203563af1bc59e449",
+      "afterSha256": "4e5578193190311e2be1150eb20a0ad7d52256977fc291df8ebac75319ca2537"
+    },
+    {
+      "path": "docs/product/RELEASE-ACCEPTANCE.md",
+      "beforeSha256": "df306e72bfc3e53b01e43d2c4ae57e4b2e6e1a427d5abefb1b97142acc49d383",
+      "afterSha256": "cb82cced50b9205b327bc145107cde2fa628361d6bcf267858a429da7868797a"
+    },
+    {
+      "path": "src/main/capture-intake/README.md",
+      "beforeSha256": "c13b1cf25d7ddb2b0b596b1f525e23bd148c22224e81f29b358a80bd86f587a6",
+      "afterSha256": "b8b2304fb7ddff19e1692bf080f5353f27ea291e92763c135f7acda7810c7c83"
+    },
+    {
+      "path": "src/main/work-mode/README.md",
+      "beforeSha256": "ba9a71ea59db51362a7a9953da2ec3cf6e08caa7a1c3643d5f630c695bbb05c2",
+      "afterSha256": "04247b40927329588638cbab4a306468861655c4bc3c5589c2aab0f54c777cf0"
+    }
+  ]
+}

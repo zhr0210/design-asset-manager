@@ -1,0 +1,117 @@
+{
+  "scope": "documentation package, not application validation",
+  "files": {
+    "01-AUDIT-REPORT.md": {
+      "bytes": 21911,
+      "sha256": "20df59d6b9e3238e4dcd8fb62fd4ac7e41ec28d2aaca6f328a8a7add9ed6e64b"
+    },
+    "02-VISION-TRACEABILITY.md": {
+      "bytes": 5634,
+      "sha256": "1d29a4a71a1ecb6f2b18e3e1f236b62b4f7ad89a3dc3246c7532a29c817e015a"
+    },
+    "03-ADJUSTMENT-PLAN.md": {
+      "bytes": 15206,
+      "sha256": "7d2167c74de549aebb80427736d76eb5675f25b1a60eee57d5e90175b135af1d"
+    },
+    "04-GOVERNANCE-ADJUSTMENTS.md": {
+      "bytes": 6444,
+      "sha256": "f2ff3fc0e85a3b224cbf00123a6763a32a8314f840aa477026f7fb7e375ec29a"
+    },
+    "05-VERIFICATION-AND-ACCEPTANCE.md": {
+      "bytes": 7010,
+      "sha256": "536c83c8de056821d9cf0ef50449e0a0293c2db0617bd4ab5359ba3b36584c10"
+    },
+    "06-SOURCES-AND-LIMITS.md": {
+      "bytes": 6744,
+      "sha256": "bf9d500765b17174d9d70924585aef6e7520591ee6e792e2bcba4d678832a9bd"
+    },
+    "README-START-HERE.md": {
+      "bytes": 2763,
+      "sha256": "7de13fb689692404adc72985ffce514185fc47211f1aa9ee10c09e27b0ed0b64"
+    },
+    "baselines/MASTER-ROADMAP-20260930.md": {
+      "bytes": 16703,
+      "sha256": "7d6e352e71a9666765467554789df965e26b22b9c0c049897bc76074289a374c"
+    },
+    "baselines/RUX-EXECUTION-PLAN-20261001.md": {
+      "bytes": 19281,
+      "sha256": "0033b3e5e2a40a6e660d440dc61c322b9c70673b23161efbfbacba887bd12055"
+    },
+    "evidence/AUDIT-LIMITATIONS.json": {
+      "bytes": 1563,
+      "sha256": "d1806b8ecfecc8038a26c8a11a39f72bd450af104c29b98507746912f2963922"
+    },
+    "evidence/INVENTORY.json": {
+      "bytes": 1526,
+      "sha256": "7fc8114fca252b8800ce59a199829120896b611899f455f18938e43f2f77bd4e"
+    },
+    "evidence/PACKAGE-CHECKS.json": {
+      "bytes": 152,
+      "sha256": "149f7aa8fc007265098694b61d09ade86ce8d28d04a959caa524eaac41679c1d"
+    },
+    "evidence/REMOTE-CHECKS.json": {
+      "bytes": 2883,
+      "sha256": "776f1ec51af61a65d9d8ad8c752dc251e94ff8ffacc1f60412a33cb7d8b8c802"
+    },
+    "evidence/REPOSITORY-SNAPSHOT.json": {
+      "bytes": 2327,
+      "sha256": "6028c0348b0b18ae8b23c0fc1729556e73300a3414f493b0216ea92c0a540c84"
+    },
+    "evidence/STATIC-DEPENDENCIES.json": {
+      "bytes": 4943,
+      "sha256": "c8c5cc4294079a55a2095d528892bd7d335b1eac05e37fd190f5bd3fb06d4c5d"
+    },
+    "evidence/WINDOWS-ADMISSION-PROBE.json": {
+      "bytes": 1374,
+      "sha256": "011538f3bd38523f600926e5124349add34a3d70d0aae8cc8c3bd35bf96d47fb"
+    },
+    "manifests/BASELINE-SOURCES.json": {
+      "bytes": 733,
+      "sha256": "53964575c3315645e499dcebfa2db6e1ab66c39164f301f56e7d515534d6f321"
+    },
+    "manifests/FINDINGS.json": {
+      "bytes": 2830,
+      "sha256": "e6449d57bdf162d2c5e763c10b7cbec0e529f9940d88381631d04bc49cbdc7d0"
+    },
+    "manifests/SOURCE-FINGERPRINTS.json": {
+      "bytes": 5035,
+      "sha256": "98b1bd62f5c7857457e6ae5e7c0acb0d34293c4462aee86d219d63b496cd20ae"
+    },
+    "prompts/W01.md": {
+      "bytes": 399,
+      "sha256": "b7807ecd817ad13b2709db69b93ec02c6c839ab12e280508e881fbfa10ef4379"
+    },
+    "prompts/W02.md": {
+      "bytes": 371,
+      "sha256": "1c3168692b699df980c7b051d27e30f0dd45342cd7d67f5d12b59bd8b174b942"
+    },
+    "prompts/W03.md": {
+      "bytes": 385,
+      "sha256": "e49f7e67599088c4ea6603da3f71cb828d25e3fe4158befc8358b4ba20364ac3"
+    },
+    "prompts/W04.md": {
+      "bytes": 334,
+      "sha256": "d113ad414c281987c4f3ae0dccbab5710bcf87c12ab35c0cf808a043d73a966b"
+    },
+    "prompts/W05.md": {
+      "bytes": 347,
+      "sha256": "a66e3d6f5a321b0bb1f220f920e930425efb3d8962411135935b7f8a426d23be"
+    },
+    "prompts/W06.md": {
+      "bytes": 366,
+      "sha256": "dacb435e77a328055d1504175df514135595109df2cdb529b2ef0137ffa12edd"
+    },
+    "prompts/WC01-MASTER.md": {
+      "bytes": 3425,
+      "sha256": "bb8898bbf83a2fe500a74542c5ffdbdbc2135f289987cae71cf1bde5be08acdb"
+    },
+    "tools/replay-admission-probe.cjs": {
+      "bytes": 3074,
+      "sha256": "0bb7ded63174a0093b9a6a9dd32c250284193af38762c98d855152733f0ba35e"
+    },
+    "tools/verify-package.py": {
+      "bytes": 1058,
+      "sha256": "5dd322582c59164a3d6b8c1bf2917842267c3e9b3fc2369b05cb09a1053525ff"
+    }
+  }
+}

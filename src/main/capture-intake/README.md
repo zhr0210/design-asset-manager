@@ -61,6 +61,6 @@ load run imported 9834 filename copies of three approved public contents into
 a recoverable 166-record copy, reaching 10000 records. Its dialog test seam is
 internal load evidence, not Browser intake acceptance or 10000 quality samples.
 Product and native completion remain in [current state](../../../docs/handoff/CURRENT-STATE.md)
-and the [remaining acceptance checklist](../../../docs/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md).
+and the [task registry](../../../docs/tasks/TASK-REGISTRY.md#library).
 Earlier detailed notes and their superseded tracer limitations are preserved in
-[historical notes](../../../docs/handoff/CAPTURE-INTAKE-NOTES-20261008.md).
+[historical notes](../../../docs/history/task-consolidation-20261011/handoff/CAPTURE-INTAKE-NOTES-20261008.md).

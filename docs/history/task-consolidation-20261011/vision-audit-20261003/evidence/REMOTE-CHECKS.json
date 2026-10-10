@@ -1,0 +1,90 @@
+{
+  "captureMethod": "Structured transcription of completed remote command output",
+  "platform": "win32-x64",
+  "shellNode": "v25.7.0",
+  "workspace": "current dirty worktree; not an exported HEAD build",
+  "checks": [
+    {
+      "id": "handoff-presence",
+      "command": [
+        "node",
+        "scripts/handoff-preflight.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.043,
+      "result": "SOURCE_PRESENT_ENVIRONMENT_NEEDS_EXECUTION_VALIDATION",
+      "requiredPaths": 17,
+      "missing": [],
+      "dependenciesPresent": true,
+      "piPreparedFilesPresent": true,
+      "executionVerified": false
+    },
+    {
+      "id": "typecheck-current-worktree",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "seconds": 11.905,
+      "stdout": "",
+      "stderr": "",
+      "limitations": [
+        "tsconfig includes src; not full scripts/Python/Worker verification",
+        "does not prove clean-checkout build"
+      ]
+    },
+    {
+      "id": "real-http-replay-boundary",
+      "command": [
+        "node",
+        "scripts/run-ts-test.mjs",
+        "scripts/local-dam-command-replay.test.ts"
+      ],
+      "exitCode": 0,
+      "seconds": 0.784,
+      "stdout": "Replay admission: concurrent duplicate, mismatched body, auth, bounded old rejection, out-of-order, failure and distinct/revoked owners passed\n",
+      "testCaseCount": null,
+      "scope": "Actual production HTTP server and transport admission; synthetic business callback, own temporary directory/server; not actual Settings persistence or UI"
+    },
+    {
+      "id": "context-current-worktree",
+      "command": [
+        "node",
+        "scripts/agent-context-router.mjs",
+        "check"
+      ],
+      "exitCode": 3,
+      "seconds": 1.094,
+      "result": "FAIL",
+      "trackedOwnership": "693/693",
+      "excluded": 47,
+      "uniqueMissingCommandPaths": [
+        "scripts/platform-ai-branch-evidence.test.ts",
+        "scripts/platform-ai-branch-evidence-ipc.test.mjs",
+        "scripts/platform-ai-branch-disabled.test.ts"
+      ],
+      "reason": "Files exist as untracked paths; command/committable ownership closure not accepted",
+      "printedErrorLines": 6,
+      "warning": "2 untracked first-party source files excluded from trusted ownership coverage"
+    }
+  ],
+  "parentWrapperExitCode": 0,
+  "parentExitDoesNotOverrideChildFailures": true,
+  "notRun": [
+    "full build",
+    "full 135-file selected suite",
+    "full Host/SQLite regression",
+    "Browser CU",
+    "native CU",
+    "real account",
+    "real model",
+    "installer/signing"
+  ],
+  "effects": [
+    "standard TS runner may write ignored dist-temp/tests compiled module",
+    "owned loopback test temporary directory and server created then removed/closed",
+    "no production source, index, settings or user library edits"
+  ]
+}

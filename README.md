@@ -45,7 +45,8 @@ npm run start:browser
 | AI 编码自主权、隐私和完成规则 | [AGENTS](AGENTS.md) |
 | 视觉、交互、设计 token 与批准参考 | [DESIGN](DESIGN.md) |
 | 当前工作与恢复点 | [TASK](TASK.md) |
-| 实际能力、证据与未完成项 | [CURRENT-STATE](docs/handoff/CURRENT-STATE.md) |
+| 实际能力与运行身份 | [CURRENT-STATE](docs/handoff/CURRENT-STATE.md) |
+| 跨系列任务、剩余条件与历史编号映射 | [任务主台账](docs/tasks/TASK-REGISTRY.md) |
 | 术语或历史设计取舍 | [CONTEXT](CONTEXT.md)、[ADR 索引](docs/adr/README.md) |
 
 ## 技术概览

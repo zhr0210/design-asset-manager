@@ -10,7 +10,7 @@
 - [ADR 0483](../adr/0483-ai-plus-core-product-and-extension-boundaries.md)：AI+核心与旧产品条款的明确替代。
 - [ADR 0484](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)：渐进扩展契约和暂缓的AI开发接入。
 - [CONTEXT.md](../../CONTEXT.md)：术语；[DESIGN.md](../../DESIGN.md)：核心UX状态与设计方式。
-- [实施状态](implementation-status.md)：已有接线、合成证据与未交付目标分开。
+- [实施状态](../history/task-consolidation-20261011/agents/implementation-status.md)：已有接线、合成证据与未交付目标分开。
 
 ## 删除、调整与保留的规则
 

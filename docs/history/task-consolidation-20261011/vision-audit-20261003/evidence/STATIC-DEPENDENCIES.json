@@ -1,0 +1,129 @@
+{
+  "captureMethod": "Summary transcribed from TS AST static analysis on live source",
+  "sourceCodeFiles": 634,
+  "staticallyReachableIncludingTypes": 383,
+  "unreached": 251,
+  "roots": [
+    "src/main/index.ts",
+    "src/renderer/main.tsx",
+    "src/preload/index.ts",
+    "src/preload/asset-card.ts",
+    "src/preload/work-window.ts"
+  ],
+  "method": "TypeScript compiler API import/export/require/import literal resolution; type-only imports included; src code extensions ts/tsx/js/mjs/cjs",
+  "unresolvedNonliteralCalls": [
+    {
+      "file": "src/main/doctor/checks/native-deps.check.ts",
+      "line": 6
+    }
+  ],
+  "selectedGroups": {
+    "src/main/bootstrap": {
+      "files": 12,
+      "reachable": 0
+    },
+    "src/main/doctor": {
+      "files": 12,
+      "reachable": 0
+    },
+    "src/main/runtime": {
+      "files": 10,
+      "reachable": 0
+    },
+    "src/main/runtime-package": {
+      "files": 14,
+      "reachable": 0
+    },
+    "src/main/packaging": {
+      "files": 14,
+      "reachable": 0
+    },
+    "src/main/services": {
+      "files": 101,
+      "reachable": 16
+    },
+    "src/main/model-library": {
+      "files": 11,
+      "reachable": 10
+    },
+    "src/main/local-host": {
+      "files": 10,
+      "reachable": 10
+    },
+    "src/renderer/components": {
+      "files": 80,
+      "reachable": 63
+    }
+  },
+  "candidatesWithoutSrcStaticImporter": [
+    "src/main/bootstrap/index.ts",
+    "src/main/doctor/index.ts",
+    "src/main/ipc/ai-client.ipc.ts",
+    "src/main/ipc/ai-model.ipc.ts",
+    "src/main/ipc/ai-runtime.ipc.ts",
+    "src/main/ipc/ai-worker.ipc.ts",
+    "src/main/ipc/asset-tag.ipc.ts",
+    "src/main/ipc/asset.ipc.ts",
+    "src/main/ipc/color-palette.ipc.ts",
+    "src/main/ipc/cooperative-model.ipc.ts",
+    "src/main/ipc/doctor.ipc.ts",
+    "src/main/ipc/llama-runtime.ipc.ts",
+    "src/main/ipc/ocr-healthcheck.ipc.ts",
+    "src/main/ipc/ocr.ipc.ts",
+    "src/main/ipc/path-governance.ipc.ts",
+    "src/main/ipc/runtime-package.ipc.ts",
+    "src/main/ipc/settings-migration.ipc.ts",
+    "src/main/ipc/tag.ipc.ts",
+    "src/main/model-library/index.ts",
+    "src/main/model-library-workspace/official-model-catalog-release-preparation.ts",
+    "src/main/packaging/official-model-catalog-release-evidence.ts",
+    "src/main/packaging/release-evidence-bundle-status.ts",
+    "src/main/packaging/release-publish-approval.ts",
+    "src/main/packaging/release-signed-candidate-dispatch-status.ts",
+    "src/main/path-migration/database-path-migration-plan.ts",
+    "src/main/path-migration/media-path-governance.ts",
+    "src/main/platform/index.ts",
+    "src/main/runtime/index.ts",
+    "src/main/runtime-package/index.ts",
+    "src/main/runtime-package/runtime-package-ipc-contract-preflight.ts",
+    "src/main/services/ai-backends/ai-backend-health.service.ts",
+    "src/main/services/ai-client/ai-runtime-adapter.ts",
+    "src/main/services/ai-runtime/index.ts",
+    "src/main/services/ai-task.service.ts",
+    "src/main/services/llama-runtime/llama-runtime-governance.ts",
+    "src/main/services/ocr-governance.service.ts",
+    "src/main/services/tests/mocks/mock-ai-tag.service.ts",
+    "src/main/services/tests/test_color_family_classifier.ts",
+    "src/main/services/tests/test_color_palette_service.ts",
+    "src/main/services/tests/test_text_color_extractor.ts",
+    "src/preload/external-connected-library.preload.ts",
+    "src/preload/model-library-workspace.preload.ts",
+    "src/renderer/components/ai/ModelLibraryStatusCard.tsx",
+    "src/renderer/components/layout/Sidebar.tsx",
+    "src/renderer/components/layout/Topbar.tsx",
+    "src/renderer/components/library/AssetWaterfallGrid.tsx",
+    "src/renderer/components/library/LibrarySidebar.tsx",
+    "src/renderer/components/library/LibraryToolbar.tsx",
+    "src/renderer/components/settings/AiBackendSettingsPanel.tsx",
+    "src/renderer/components/settings/AiRuntimePanel.tsx",
+    "src/renderer/components/settings/DoctorPanel.tsx",
+    "src/renderer/components/settings/PathMigrationPanel.tsx",
+    "src/renderer/components/settings/RuntimePackagePanel.tsx",
+    "src/renderer/components/settings/SettingsMigrationPanel.tsx",
+    "src/renderer/components/tag/TagEditDialog.tsx",
+    "src/renderer/components/tag/TagFilterBar.tsx",
+    "src/renderer/components/tag/TagMergeDialog.tsx",
+    "src/renderer/modules/ai-console-status/electron-ai-console-status.adapter.ts",
+    "src/renderer/routes/refactor-prototype/RefactorPrototype.tsx",
+    "src/renderer/routes/work-mode-prototype/FocusCanvas.tsx",
+    "src/renderer/routes/work-mode-prototype/WorkModePrototype.tsx",
+    "src/shared/index.ts"
+  ],
+  "deletionApproved": false,
+  "limits": [
+    "not a bundler runtime graph",
+    "does not cover every script/packager/test/golden root",
+    "does not prove dynamic calls, subprocess entrypoints or type-only module side effects",
+    "unreached code may be legitimate CLI, test, retained compatibility or future work"
+  ]
+}

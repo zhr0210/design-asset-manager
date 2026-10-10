@@ -1,0 +1,45 @@
+{
+  "captureMethod": "Transcribed actual remote production-function probe output",
+  "id": "windows-unqualified-codec-shared-admission",
+  "platform": "win32",
+  "arch": "x64",
+  "node": "v25.7.0",
+  "processExitCode": 0,
+  "before": {
+    "materialBytes": 0,
+    "frozenBytes": 0,
+    "preparing": 0,
+    "requests": 0,
+    "tags": 0,
+    "receipts": 0,
+    "waiting": 0,
+    "accepting": true
+  },
+  "preparationError": "VISUAL_CODEC_UNQUALIFIED",
+  "afterPrepare": {
+    "materialBytes": 0,
+    "frozenBytes": 0,
+    "preparing": 0,
+    "requests": 0,
+    "tags": 0,
+    "receipts": 0,
+    "waiting": 0,
+    "accepting": false
+  },
+  "afterResume": {
+    "materialBytes": 0,
+    "frozenBytes": 0,
+    "preparing": 0,
+    "requests": 0,
+    "tags": 0,
+    "receipts": 0,
+    "waiting": 0,
+    "accepting": false
+  },
+  "ocrReservationError": "VISUAL_ADMISSION_SUSPENDED",
+  "piProbeReservationError": "VISUAL_ADMISSION_SUSPENDED",
+  "input": "one synthetic byte; platform check rejects before image decoding or spawn",
+  "scope": "Actual production admission and codec bundled in memory by installed esbuild; no Host/SQLite/UI/model/provider/credential",
+  "isProductGuiReproduction": false,
+  "meaning": "Reproduces local unsupported capability propagating to shared admission; does not demonstrate memory growth, data loss, actual OCR execution, or provider failure."
+}

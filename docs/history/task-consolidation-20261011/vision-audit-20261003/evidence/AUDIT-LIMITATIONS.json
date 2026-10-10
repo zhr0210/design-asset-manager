@@ -1,0 +1,28 @@
+{
+  "productionCodeEdited": false,
+  "credentialsRead": false,
+  "userLibraryRead": false,
+  "modelsReadOrStarted": false,
+  "externalInference": false,
+  "browserOrNativeComputerUse": false,
+  "gitStageCommitPush": false,
+  "testedCurrentDirtyWorktree": true,
+  "cleanHeadBuildPerformed": false,
+  "independentFullHistoricSuiteReplayed": false,
+  "historicScreenshotsIndividuallyVerified": false,
+  "sourceSnapshots": [
+    "selected source files and fingerprints, no complete runtime or user data snapshot"
+  ],
+  "probeNotATestPass": "F01 diagnostic exited 0 to report reproduction, not to certify correct application behavior",
+  "instrumentationIssuesCorrected": [
+    "Initial git helper trimmed leading porcelain status spaces; corrected result is staged0/unstaged32/untracked10. Initial counts superseded.",
+    "Initial git-show buffer was too small for large release metadata, producing an audit helper TypeError. Re-read with bounded20MiB buffer. This was not a product failure.",
+    "One PowerShell stdin probe used non-ASCII regex text corrupted by shell encoding and failed before executing. Replaced with ASCII-only expressions; no product change."
+  ],
+  "effects": [
+    "ignored dist-temp/tests compile output from standard test runner",
+    "owned temporary HTTP test directory/server cleaned by script",
+    "read-only source diagnostics and Node in-memory compilation"
+  ],
+  "reviewFocus": "Vision/architecture, source/contract drift, platform qualification, evidence and next steps. Not full security, performance, release or UI audit."
+}

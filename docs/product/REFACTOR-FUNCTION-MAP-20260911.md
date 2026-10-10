@@ -47,7 +47,7 @@ Electron / React / SQLite / Python AI 的现有分工暂作基础。保留本地
 - **待核验**：本次没有追完对应调用链，不能推断完整可用或不存在。
 - **目标**：本次要求保留的产品方向，不作为现有交付事实。
 
-现有合成 Electron 验证范围见[实施状态](../agents/implementation-status.md)。
+现有合成 Electron 验证范围见[实施状态](../history/task-consolidation-20261011/agents/implementation-status.md)。
 初版盘点以源码确认区分能力。新增正式接线的执行证据见上方当前进展：macOS
 合成 Electron E2E、聚焦 IPC 与浏览器检查；不等于真实用户库、真实推理或下载验证。
 

@@ -1,24 +1,11 @@
-# 统一待测清单
+# 待测与延期入口
 
-2026-10-10 接续：用户已启动 A–F 集中测试；U05/U07/U08及U11中的A–F适用部分恢复推进，进度见 [本轮记录](AF-MACOS-20261010.md)。其余既有专项边界仍保留。上一轮用户决定保留未验证项，之后统一测试。本表保留完整待测范围，各项是否执行以本轮记录和最新用户指令为准。已完成范围见 [收口台账](MACOS-DELIVERY-CLOSURE-20261010.md)，运行身份见 [CURRENT-STATE](CURRENT-STATE.md)。新批次固定候选、平台、公开材料和通过条件；旧构建证据保留原身份。
+当前剩余条件只维护在 [任务主台账](../tasks/TASK-REGISTRY.md)，本页保留既有链接，不再复制状态表。
 
-| ID | 未完成范围 / 当前状态 | 下一次所需条件与动作 |
-| --- | --- | --- |
-| U01 | 真实断网：用户延期，NOT_RUN | 用户安排断网窗口；从普通入口验证本地模型/OCR/检索、失败反馈、联网恢复及保存重开 |
-| U02 | Windows 原 Chrome 指定原页压力：NOT_RUN | 回到对应 Windows 和原标签组；Mac 替代样本不关闭该历史项 |
-| U03 | 外屏/跨屏/拔插恢复：设备缺口，NOT_RUN | 接外屏，验证浮窗迁移、坐标恢复、拔插后可找回及重开 |
-| U04 | 最终候选物理点击、跨应用置顶、单/多图与 ZIP 拖出到指定 Finder/创作应用：覆盖未全 | 从当前实体浮窗操作到明确公开接收目标，核对文件/内容及原件。旧批次咖啡拖入和两图桌面接收不继承为最终所有拖放资格 |
-| U05 | Mac Blender：48d实片取帧/备注/Preview接收/取消保护及整Host重开已验；175保存回读/新副本Preview实际文档打开及字节已验；完整原生专项仍保留 | 已从Blender官方取得开放许可实片，见AF记录；当前候选回读已完成；剩余Native矩阵另固定范围接续 |
-| U06 | 本机 8B 与其他声明模型/运行模式：未准备或未验 | 核对统一内存预算，从 ModelScope 准备适用组合；真实挑战、素材使用、取消/物理退出、重开 |
-| U07 | 图片检索：48d普通189/189及中/英/混合/以图/整Host重开已验；175规模库限定3图实际检索已验，保存重开/T23回读与中英查询已验 | 旧186向量/2任务全字段保持；175仅三图准备未回填原万条，当前观察1801.5秒后已正规暂停/退出/物理退出/重开，无自动重发 |
-| U08 | Eagle：用户延期调整方向，隔离到codex/eagle-integration，未完成 | `/Users/meigong/Pictures/测试库.library`、应用内配对、真实读写回读/冲突/撤权/恢复/重开；独立验收 E |
-| U09 | 签名安装/升级/卸载/商业发行：本轮排除，NOT_RUN | 固定发行平台、签名与费用/权限范围，执行原发行门；开发启动不关闭发行 |
-| U10 | 完整窗口交互扩展：用户延期，未实现/未验 | 从 [功能目录](../history/handoff-snapshots/macos-20261009-20261010/DROPOVER-FEATURE-CATALOG-20261009.json)选择新范围，保留 DAM 架构；文字/链接/通用暂存/文件承诺/监视/系统入口/PDF等须先实现再验。云上传/分享取消 |
-| U11 | WC01、A–F 与父 #24 的其他完整矩阵/规模/质量条件：保留未覆盖范围 | 将 [原剩余审计](MACOS-REMAINING-ACCEPTANCE-20261008.md)与后续证据和当前代码去重，已修/已验项不重当缺陷。Provider 全能力、中文 OCR 多样质量、大库/旧 schema/后台并发等另固定样本与标准 |
-| U12 | 远端两平台 CI：最新main运行37793257740仍失败，未重跑 | 已重读最新main首失败点并复跑当前Mac相应测试通过；Windows根因/复验及远端重跑仍保留，不自动推送 |
+- 系统/设备差额：[NATIVE](../tasks/TASK-REGISTRY.md#native)。
+- 模型与质量：[MODEL](../tasks/TASK-REGISTRY.md#model)、[AI](../tasks/TASK-REGISTRY.md#ai)、[SEARCH](../tasks/TASK-REGISTRY.md#search)。
+- 数据恢复/规模/下载：[LIBRARY](../tasks/TASK-REGISTRY.md#library)、[SCALE](../tasks/TASK-REGISTRY.md#scale)、[DOWNLOAD](../tasks/TASK-REGISTRY.md#download)。
+- 独立后续目标：[EAGLE](../tasks/TASK-REGISTRY.md#eagle)、[WINDOW-EXT](../tasks/TASK-REGISTRY.md#window-ext)、[RELEASE](../tasks/TASK-REGISTRY.md#release)、[ASSISTANT](../tasks/TASK-REGISTRY.md#assistant)、[MOBILE](../tasks/TASK-REGISTRY.md#mobile)。
+- 治理与CI：[GOVERNANCE](../tasks/TASK-REGISTRY.md#governance)。
 
-历史 4B 单次未确认退出和 Pi 旧颜色失败是因果资料缺口，不登记为“仍未修复的当前复现 bug”。停止诊断/非敏感挑战观察已补；若再复现，采集受限真实事件链，保留旧 FAIL，不抽签或编造唯一根因。详见 [历史取证](../history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-NATIVE-FORENSICS-20261009.md)。
-
-新验收须从普通可见入口出发，分列真实执行/正确结果/保存重开/失败取消/保护证据。不得以直调 IPC、写库、固定 verified、替身或永久 skip 替代通过；账号由用户在正规入口登录，Agent 不读秘密。
-
-T23 当前 Mac 范围完成；T23 全量与父 #24 的剩余资格在此保留。WC01、A–F、Eagle与发行父级分别保持，不因整理而关闭远端任务。
+旧U01–U12逐项来源见主台账的“历史统一待测编号”；它们与RUX的U01–U32不同。后续只补缺失条件，不重做已经满足的限定范围；本页不授权执行、发布或关闭父级。

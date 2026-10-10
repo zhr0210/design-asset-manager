@@ -1,8 +1,10 @@
 # DAM 正式本机双客户端规格
 
+2026-10-11状态入口归一：本页为双客户端原规格，目标/保护/验收条件保留；日期较早的实施/授权说明有历史边界。当前进度与缺失条件统一见[任务主台账](../tasks/TASK-REGISTRY.md)，不整轮重开或通过整理自动关闭父级。
+
 日期：2026-10-02。依据用户已确认的 Q1–Q9 双客户端方案。
 这是已确认的实施与验收基准；架构获批不代表功能已交付。
-当前接线、实测结果与未覆盖范围见[实施证据矩阵](LOCAL-DUAL-CLIENT-IMPLEMENTATION.md)。
+当前接线、实测结果与未覆盖范围见[实施证据矩阵](../history/task-consolidation-20261011/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md)。
 
 ## Problem Statement
 

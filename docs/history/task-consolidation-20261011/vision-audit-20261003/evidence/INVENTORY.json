@@ -1,0 +1,73 @@
+{
+  "captureMethod": "Selected-directory inventory from live read-only scan",
+  "observedAt": "2026-10-03T07:58:50.328Z",
+  "extensions": [
+    ".ts",
+    ".tsx",
+    ".js",
+    ".mjs",
+    ".cjs",
+    ".py",
+    ".css",
+    ".md",
+    ".json",
+    ".html"
+  ],
+  "excludedDirectories": [
+    "node_modules",
+    ".git",
+    ".scratch",
+    "dist-temp",
+    "out",
+    "models",
+    "AIModels",
+    "runtime",
+    "__pycache__",
+    ".venv"
+  ],
+  "countsAreNotPureLOC": true,
+  "trailingNewlineMayAddOneToLineCount": true,
+  "directories": {
+    "src/main": {
+      "files": 409,
+      "lines": 53875,
+      "bytes": 2504330
+    },
+    "src/preload": {
+      "files": 5,
+      "lines": 91,
+      "bytes": 7554
+    },
+    "src/renderer": {
+      "files": 152,
+      "lines": 16907,
+      "bytes": 1238311
+    },
+    "src/shared": {
+      "files": 110,
+      "lines": 10907,
+      "bytes": 442015
+    },
+    "scripts": {
+      "files": 425,
+      "lines": 58957,
+      "bytes": 3347807
+    },
+    "docs": {
+      "files": 1771,
+      "lines": 221466,
+      "bytes": 17344655
+    },
+    "pi-runtime": {
+      "files": 10,
+      "lines": 13298,
+      "bytes": 1724435
+    },
+    "ai-service": {
+      "files": 106,
+      "lines": 20121,
+      "bytes": 846567
+    }
+  },
+  "interpretation": "Includes comments, tests, schema/manifest JSON and history. Excludes named models/runtime directories including any sources stored there. Not comparable to older inventories with different filters. No arbitrary deletion ratio derived."
+}

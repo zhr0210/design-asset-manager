@@ -1,9 +1,11 @@
 # DAM 双客户端任务拆分
 
+2026-10-11状态入口归一：本页为双客户端切片目标/依赖来源，编号DualClient:Txx；日期较早的实施/授权说明有历史边界。当前进度与缺失条件统一见[任务主台账](../tasks/TASK-REGISTRY.md)，不整轮重开或通过整理自动关闭父级。
+
 状态：待用户批准拆分，2026-10-02。父规格：[Issue #23](https://github.com/zhr0210/design-asset-manager/issues/23)。
 这23项是拟发布的实施/验收任务；未创建子Issue、未改变父Issue，也未开始产品代码。
-上句记录任务拆分阶段。随后用户已批准实施；当前交付状态见
-[实施证据矩阵](LOCAL-DUAL-CLIENT-IMPLEMENTATION.md)，子Issue仍未发布。
+上句记录任务拆分阶段。随后用户已批准实施；当前状态只在任务主台账维护；原候选证据见
+[历史实施证据矩阵](../history/task-consolidation-20261011/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md)，子Issue仍未发布。
 
 ## 拆分规则
 

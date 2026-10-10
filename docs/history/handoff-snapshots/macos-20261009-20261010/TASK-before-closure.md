@@ -8,7 +8,7 @@
 
 产品327e523，普通构建dam-6d6fa6a0230cf98d/790输入；本轮当前可用路径已经真实验收并重开，未推送。Native现有副本打开两次无重复制备；公开Preview复制→正规粘贴入库+附着，RGBA像素同源，原185资产/原件/手工/分析保持；合法新增1公开PNG及1引用到186/4，检索向量仍185。整Host正常退出重开后所有所选签名精确相同；当前IAB已正规launch更新至同Host并显示四参考/原备注。
 用户最新交互复刻延期、先修bug交付，本轮停止新增能力。云上传/分享剔除；其余窗口完整复刻/命令草稿与系统专项保持接续，父级不自动关闭。桌面找到实际astronaut/coffee接收副本与原hash一致，指定Finder目录仍空，按真实目标分别记证据。
-准确入口/版本/差异/测试/交付与未完项见 [最终记录](../../../handoff/MACOS-BUGFIX-DELIVERY-20261010.md)。其他AGENTS/验收流程WIP保持。以下为原时点。
+准确入口/版本/差异/测试/交付与未完项见 [最终记录](../../task-consolidation-20261011/handoff/MACOS-BUGFIX-DELIVERY-20261010.md)。其他AGENTS/验收流程WIP保持。以下为原时点。
 
 ---
 
@@ -92,7 +92,7 @@ Pi预定三次原严格双色复验3/3并重开回读；IAB正规独立入口已
 # 2026-10-08 整合已完成：从 GitHub main 接续 macOS
 
 PR#25已合入；远端只保留main，旧PR/分支清理完成。准确提交与界限见
-[最终回执](../../../handoff/GITHUB-CONSOLIDATION-RESULT-20261008.md)。本轮停止；
+[最终回执](../../task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-RESULT-20261008.md)。本轮停止；
 WC/T23/A–F和Mac/Eagle验收仍未完成，完整治理仍有19项待解决。
 
 ---
@@ -101,13 +101,13 @@ WC/T23/A–F和Mac/Eagle验收仍未完成，完整治理仍有19项待解决。
 
 用户授权以当前工作区（含已采用未提交实现）为准合并仓库，旧分支/版本弃用。
 统一源码入口为 GitHub main；普通克隆、目标机准备和启动见
-[仓库整合记录](../../../handoff/GITHUB-CONSOLIDATION-20261008.md)。隔离候选保留当前
+[仓库整合记录](../../task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-20261008.md)。隔离候选保留当前
 源码闭包，原 Windows 工作区及暂存不被覆盖；旧远端分支先记录 SHA/恢复副本，
 新候选合入后清理。Git 正常历史保留，不 force push。
 
 本轮终点是源码整合与移机交接，不启动 Mac 产品实施。WC01、T23/父#24、
 D/E/F及商业首版继续未完成；Mac GGUF/设备/视频接线、原生行为和 Eagle
-仍须按[剩余验收清单](../../../handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md)完成。
+仍须按[剩余验收清单](../../task-consolidation-20261011/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md)完成。
 Windows旧证据保留原身份，新整合构建/CI不能转记成真实产品验收。
 
 ---
@@ -120,7 +120,7 @@ Windows旧证据保留原身份，新整合构建/CI不能转记成真实产品�
 历史未随包。WC/T23/A–F剩余验收已逐项登记。HEAD与原暂存SHA保持，
 没有Mac产品验收或Git发布。ZIP冻结于本轮导出时，之后仅更新此终态入口。
 
-最新用户要求先整理当前候选源码、交接记录和剩余验收，明确WC系列也未完成。本轮仅准备可校验开发源码快照，不执行Mac安装/资料迁移/推理或关闭父级。Windows来源候选dam-8ddc7686f890b3e3 / 786输入，HEAD156a9841e026、保留未提交已采用实现与原暂存；原字节源码ZIP附SHA清单，环境、模型、账号profile和资料库另行准备。WC01的H01–H22/C01–C03/UX、T23/父#24、D/E/F及首版总门持续未完成。当前Mac GGUF运行包/设备采样/视频仍有明确代码缺口，原生与Eagle由Mac接续，不能继承Windows历史PASS。恢复入口见 [Mac交接](../../../handoff/MACOS-CONTINUATION-20261008.md)，逐项对账见 [剩余验收](../../../handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md)。本轮不提交、推送、签名或发布；以下按原日期保留历史。
+最新用户要求先整理当前候选源码、交接记录和剩余验收，明确WC系列也未完成。本轮仅准备可校验开发源码快照，不执行Mac安装/资料迁移/推理或关闭父级。Windows来源候选dam-8ddc7686f890b3e3 / 786输入，HEAD156a9841e026、保留未提交已采用实现与原暂存；原字节源码ZIP附SHA清单，环境、模型、账号profile和资料库另行准备。WC01的H01–H22/C01–C03/UX、T23/父#24、D/E/F及首版总门持续未完成。当前Mac GGUF运行包/设备采样/视频仍有明确代码缺口，原生与Eagle由Mac接续，不能继承Windows历史PASS。恢复入口见 [Mac交接](../../task-consolidation-20261011/handoff/MACOS-CONTINUATION-20261008.md)，逐项对账见 [剩余验收](../../task-consolidation-20261011/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md)。本轮不提交、推送、签名或发布；以下按原日期保留历史。
 
 # 当前：F 1 万条与候选验证，父级未完成（2026-10-08）
 
@@ -146,7 +146,7 @@ Windows旧证据保留原身份，新整合构建/CI不能转记成真实产品�
 
 # 此前：T23 浏览器迁移与去重（2026-10-07）
 
-用户要求桌面验证转浏览器、重合跳过。当前dam-4deb9e68a5e80a0a/759输入，普通Browser61449，同profile-04；当前规模副本164/120素材成功内容及未知记录可见。取消/页外工作集/顶栏三类修复已通过；索引恢复、双语/以图、120分页、后台新公开page三能力、整个应用保存重开成立。原Chrome20标签保留，3临时压力页已关闭；指定原页控制持续超时，因此T23/父级保持未完成。Native专有行为不以Browser冒称PASS。准确入口/去重/版本/受保护数据及损坏副本暂停期间Luna/OCR差异见[浏览器交付](../../../handoff/LOCAL-AI-T23-BROWSER-20261007.md)，下文所有旧无界面/候选记录保留历史身份。原WIP/index保护，本轮只保存精确任务补丁，没有提交/推送。
+用户要求桌面验证转浏览器、重合跳过。当前dam-4deb9e68a5e80a0a/759输入，普通Browser61449，同profile-04；当前规模副本164/120素材成功内容及未知记录可见。取消/页外工作集/顶栏三类修复已通过；索引恢复、双语/以图、120分页、后台新公开page三能力、整个应用保存重开成立。原Chrome20标签保留，3临时压力页已关闭；指定原页控制持续超时，因此T23/父级保持未完成。Native专有行为不以Browser冒称PASS。准确入口/去重/版本/受保护数据及损坏副本暂停期间Luna/OCR差异见[浏览器交付](../../task-consolidation-20261011/handoff/LOCAL-AI-T23-BROWSER-20261007.md)，下文所有旧无界面/候选记录保留历史身份。原WIP/index保护，本轮只保存精确任务补丁，没有提交/推送。
 
 # 当前：本地 AI 底座连续实施（2026-10-07）
 

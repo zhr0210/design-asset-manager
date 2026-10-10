@@ -585,7 +585,7 @@ Eagle 版本要求是当前页面的前置文案，不是本次对第三方最�
 | E13 | [旧库页](../../src/renderer/routes/LegacyLibraryPage.tsx)、[只读模块](../../src/main/legacy-readonly-workspace/README.md) | 旧库找回与只读边界 |
 | E14 | [AI 控制台](../../src/renderer/routes/AiConsolePage.tsx)、[禁用表](../../src/main/ipc/disabled-app.ipc.ts) | 功能表面与当前禁用状态 |
 | E15 | [服务设置面板](../../src/renderer/components/settings/AiBackendSettingsPanel.tsx)、[AI 服务 IPC](../../src/main/ipc/ai-backend.ipc.ts) | 新服务配置/检查/模型列表接线 |
-| E16 | [模型库页](../../src/renderer/routes/ModelLibraryPage.tsx)、[实施状态](../agents/implementation-status.md) | 受限 Model Workspace、Catalog 与证据 |
+| E16 | [模型库页](../../src/renderer/routes/ModelLibraryPage.tsx)、[实施状态](../history/task-consolidation-20261011/agents/implementation-status.md) | 受限 Model Workspace、Catalog 与证据 |
 | E17 | [Runtime](../../src/renderer/components/settings/AiRuntimePanel.tsx)、[Runtime 包](../../src/renderer/components/settings/RuntimePackagePanel.tsx) | 运行环境及受限管理面板 |
 | E18 | [设置页](../../src/renderer/routes/Settings.tsx)、[Doctor](../../src/renderer/components/settings/DoctorPanel.tsx)、[路径迁移](../../src/renderer/components/settings/PathMigrationPanel.tsx)、[设置迁移](../../src/renderer/components/settings/SettingsMigrationPanel.tsx) | 六分类与维护入口 |
 | E19 | [总览](../../src/renderer/routes/Dashboard.tsx)、[窗口策略](../../src/shared/desktop-viewport-policy.ts) | 已加载统计与窗口基准 |

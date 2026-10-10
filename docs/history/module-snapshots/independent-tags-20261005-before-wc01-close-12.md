@@ -1,26 +1,26 @@
-2026-10-04 当前 WC01 release / source-loader 边界：当前源码首次 rename EBUSY 已复现，owned guardian PROCESS/当前 Host PSS 诊断不取得生产 release 资格。固定完整 SQLite 镜像可与随后合法 source 事务分离，readonly/有限 hash 不隔离任意既有 writer；完整 source evidence 继续拒绝变化。两条 authority 策略均为 Target Architecture。正式 tag-intent/Host Adapter 未接线，Windows backup/status/DDL 前拒绝，productionQualified/restoreAllowed=false。实际验证、身份与缺口见 [CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)、[本批交接](../../../docs/handoff/WINDOWS-BACKUP-BOUNDARY-20261004.md)及 [威胁边界](../../../docs/platform/WINDOWS-BACKUP-THREAT-BOUNDARY.md)。
+2026-10-04 当前 WC01 release / source-loader 边界：当前源码首次 rename EBUSY 已复现，owned guardian PROCESS/当前 Host PSS 诊断不取得生产 release 资格。固定完整 SQLite 镜像可与随后合法 source 事务分离，readonly/有限 hash 不隔离任意既有 writer；完整 source evidence 继续拒绝变化。两条 authority 策略均为 Target Architecture。正式 tag-intent/Host Adapter 未接线，Windows backup/status/DDL 前拒绝，productionQualified/restoreAllowed=false。实际验证、身份与缺口见 [CURRENT-STATE](../../handoff/CURRENT-STATE.md)、[本批交接](../../handoff/WINDOWS-BACKUP-BOUNDARY-20261004.md)及 [威胁边界](../../platform/WINDOWS-BACKUP-THREAT-BOUNDARY.md)。
 
-历史 2026-10-04 WC01 metadata / FSCTL：私有 source/journal VFS 拒绝 sparse/compressed，实际 MAIN I/O 和 source evidence 重验；外部 writer、cached SQL、已加载 DLL 后变更及 managed executable metadata 反例不改判为保护。该批98PASS/1FAIL与三次立即rename EBUSY并列，稳定release仍UNKNOWN；见 [历史交接](../../../docs/handoff/WINDOWS-BACKUP-METADATA-20261004.md)。
+历史 2026-10-04 WC01 metadata / FSCTL：私有 source/journal VFS 拒绝 sparse/compressed，实际 MAIN I/O 和 source evidence 重验；外部 writer、cached SQL、已加载 DLL 后变更及 managed executable metadata 反例不改判为保护。该批98PASS/1FAIL与三次立即rename EBUSY并列，稳定release仍UNKNOWN；见 [历史交接](../../handoff/WINDOWS-BACKUP-METADATA-20261004.md)。
 
-历史 2026-10-04 WC01 safe-load / journal pathname：隔离首加载使用 trusted OS guardian、Host duplicate handles 与本地 same-handle 核验；命名 VFS 在源 SQL 前资格检查，以 FILE_CREATE 和 retained journal handle 执行写入/同步/删除。正式 Host 不打开全局 URI、不接 Adapter；生产 Windows 仍写入前拒绝，productionQualified/restoreAllowed=false。完整 metadata/FSCTL、依赖闭包、准备进程原子资源门、分发和断电资格尚缺。旧批验证与身份见 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-PATH-20261004.md)。
+历史 2026-10-04 WC01 safe-load / journal pathname：隔离首加载使用 trusted OS guardian、Host duplicate handles 与本地 same-handle 核验；命名 VFS 在源 SQL 前资格检查，以 FILE_CREATE 和 retained journal handle 执行写入/同步/删除。正式 Host 不打开全局 URI、不接 Adapter；生产 Windows 仍写入前拒绝，productionQualified/restoreAllowed=false。完整 metadata/FSCTL、依赖闭包、准备进程原子资源门、分发和断电资格尚缺。旧批验证与身份见 [本批交接](../../handoff/WINDOWS-BACKUP-PATH-20261004.md)。
 
-历史 2026-10-04 WC01 helper / VFS / commit proof：合成 helper 完整 startup/tail 资源证据与 UNKNOWN 占账、SQLite main VFS file-object provenance、同 DDL/业务事务的私有 settled journal marker 与 readonly source recorded-commit 回读已具备隔离验证。正式 tag-intent/Host composition 不提供 commit hook，生产 Windows 仍备份/status/DDL 前拒绝。pathname load/source journal 全生命周期、硬 RSS、断电和分发包资格仍未闭合；status 不能授予 restore。当前身份与验证见 [CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)及 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-PROOF-20261004.md)。
+历史 2026-10-04 WC01 helper / VFS / commit proof：合成 helper 完整 startup/tail 资源证据与 UNKNOWN 占账、SQLite main VFS file-object provenance、同 DDL/业务事务的私有 settled journal marker 与 readonly source recorded-commit 回读已具备隔离验证。正式 tag-intent/Host composition 不提供 commit hook，生产 Windows 仍备份/status/DDL 前拒绝。pathname load/source journal 全生命周期、硬 RSS、断电和分发包资格仍未闭合；status 不能授予 restore。当前身份与验证见 [CURRENT-STATE](../../handoff/CURRENT-STATE.md)及 [本批交接](../../handoff/WINDOWS-BACKUP-PROOF-20261004.md)。
 
 以下 source/recovery 记录为上一批历史，不能作为本批完整资格：
 
-历史 2026-10-04 WC01 备份源/恢复续批：retained source 的完整64位identity/hash/NTFS同卷空间证据与connection重验；bound status的逐组件同句柄只读核对；预编译helper的Job commit限额与target完整退出后kernel峰值。仅私有Validated Tracer；生产Windows仍写入前拒绝。launcher启动/终态全RSS、SQLite VFS来源身份与事务提交恢复证明当时仍缺。历史身份与CU见 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-RECOVERY-20261004.md)。
+历史 2026-10-04 WC01 备份源/恢复续批：retained source 的完整64位identity/hash/NTFS同卷空间证据与connection重验；bound status的逐组件同句柄只读核对；预编译helper的Job commit限额与target完整退出后kernel峰值。仅私有Validated Tracer；生产Windows仍写入前拒绝。launcher启动/终态全RSS、SQLite VFS来源身份与事务提交恢复证明当时仍缺。历史身份与CU见 [本批交接](../../handoff/WINDOWS-BACKUP-RECOVERY-20261004.md)。
 
 以下生命周期记录为上一批历史：
 
-历史 2026-10-04 WC01 备份生命周期续批：同句柄完整 SQLite 验证、真实 OS/共享 hold RAM permit、private finish/actual close、分段状态/flush/中断重启及内容 retrieval 已在合成范围覆盖。生产 Windows 仍在写入前拒绝。当前 build/CU/资格与限制统一见 [CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)及 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-LIFECYCLE-20261004.md)。
+历史 2026-10-04 WC01 备份生命周期续批：同句柄完整 SQLite 验证、真实 OS/共享 hold RAM permit、private finish/actual close、分段状态/flush/中断重启及内容 retrieval 已在合成范围覆盖。生产 Windows 仍在写入前拒绝。当前 build/CU/资格与限制统一见 [CURRENT-STATE](../../handoff/CURRENT-STATE.md)及 [本批交接](../../handoff/WINDOWS-BACKUP-LIFECYCLE-20261004.md)。
 
 以下原生目标和 EXLOCK 段为上一批历史，其中“当前”仅归原批：
 
-历史 2026-10-04 原生目标续批：单组件 NtCreateFile/no-reparse + SQLite 镜像候选已进入合成资格验证；真实 lease/维护模块正常、取消、DDL 回滚与测试 RAM 拒绝有独立覆盖。Buffer journal=memory 仍被生产 inspector 拒绝；生产 Windows 备份继续拒绝，未接入原生 helper。协议、限制与当前交接见 [目标协议](../../../docs/platform/WINDOWS-BACKUP-TARGET-PROTOCOL.md)及 [本批交接](../../../docs/handoff/WINDOWS-NATIVE-BACKUP-20261004.md)。
+历史 2026-10-04 原生目标续批：单组件 NtCreateFile/no-reparse + SQLite 镜像候选已进入合成资格验证；真实 lease/维护模块正常、取消、DDL 回滚与测试 RAM 拒绝有独立覆盖。Buffer journal=memory 仍被生产 inspector 拒绝；生产 Windows 备份继续拒绝，未接入原生 helper。协议、限制与当前交接见 [目标协议](../../platform/WINDOWS-BACKUP-TARGET-PROTOCOL.md)及 [本批交接](../../handoff/WINDOWS-NATIVE-BACKUP-20261004.md)。
 
 以下2026-10-04 EXLOCK记录属于历史：
 
-2026-10-04 Windows NTFS续批：EXLOCK候选已被合成对抗反证。Electron30.5.1/Node20.16.0/libuv1.46.0下，FILE_WRITE_ATTRIBUTES句柄可在独占句柄持有期间把空目录改成junction；Windows NOFOLLOW为0。目录sync及rename拒绝不能证明安全publisher。生产备份与Host维护源码均未改，仍在写备份/DDL前拒绝 TAG_INTENT_BACKUP_UNSUPPORTED；普通写入和关开继续可用。新增4项反例回归，前轮撤回publisher不恢复。当前证据与Desktop结果见 [本批交接](../../../docs/handoff/WINDOWS-BACKUP-20261004.md)，前轮记录见 [历史纵切](../../../docs/handoff/WINDOWS-QUALIFICATION-20261003.md)。
+2026-10-04 Windows NTFS续批：EXLOCK候选已被合成对抗反证。Electron30.5.1/Node20.16.0/libuv1.46.0下，FILE_WRITE_ATTRIBUTES句柄可在独占句柄持有期间把空目录改成junction；Windows NOFOLLOW为0。目录sync及rename拒绝不能证明安全publisher。生产备份与Host维护源码均未改，仍在写备份/DDL前拒绝 TAG_INTENT_BACKUP_UNSUPPORTED；普通写入和关开继续可用。新增4项反例回归，前轮撤回publisher不恢复。当前证据与Desktop结果见 [本批交接](../../handoff/WINDOWS-BACKUP-20261004.md)，前轮记录见 [历史纵切](../../handoff/WINDOWS-QUALIFICATION-20261003.md)。
 
 
 # Independent tag analysis
@@ -95,4 +95,4 @@ The original continuous batch remains completed history. New hardening handoffs 
 
 ## WC01 backup settlement (2026-10-04)
 
-The private maintenance storage result can retain backup resources through an asynchronous finish(committed). All six intents wait before ordinary admission or queued close resumes. Transaction return records commit before restoration/ACK hooks; settlement failure quarantines authority. The production Windows TAG_INTENT_BACKUP_UNSUPPORTED gate remains unchanged. Tests use generated SQLite and private adapters only; see [current handoff](../../../docs/handoff/WINDOWS-BACKUP-LIFECYCLE-20261004.md).
+The private maintenance storage result can retain backup resources through an asynchronous finish(committed). All six intents wait before ordinary admission or queued close resumes. Transaction return records commit before restoration/ACK hooks; settlement failure quarantines authority. The production Windows TAG_INTENT_BACKUP_UNSUPPORTED gate remains unchanged. Tests use generated SQLite and private adapters only; see [current handoff](../../handoff/WINDOWS-BACKUP-LIFECYCLE-20261004.md).

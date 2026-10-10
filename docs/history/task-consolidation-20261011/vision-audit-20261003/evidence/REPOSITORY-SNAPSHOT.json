@@ -1,0 +1,62 @@
+{
+  "captureMethod": "Structured transcription of Remote Desktop Commander tool output, not an original log download",
+  "observedAt": "2026-10-03T08:03:41.456Z",
+  "root": "G:\\antigravity\\Design Asset Manager 1001",
+  "head": "b5cc954f90d248694aedc2d6ca1aa5188fa0aa11",
+  "branch": "codex/windows-workspace-1001",
+  "status": {
+    "stagedEntries": 0,
+    "unstagedEntries": 32,
+    "untrackedEntries": 10,
+    "untrackedMayBeDirectories": true
+  },
+  "indexBeforeAndAfterSha256": "a92bbd501d224af3c76a7529914d618fa8f3e8b4a38b59c5790468424841a45c",
+  "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "releases": {
+    "head": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "nodeVersion": "24.21.0",
+      "piVersion": "0.99.1",
+      "nodePath": "runtime/darwin-arm64/node",
+      "files": 11831,
+      "links": 2,
+      "sha256": "a93f68a80369ad3cd6ce1f583d8a7cf0110b14545f6c2244c42a4dba4b27287f"
+    },
+    "worktree": {
+      "platform": "win32",
+      "arch": "x64",
+      "nodeVersion": "24.21.0",
+      "piVersion": "0.99.1",
+      "nodePath": "runtime/win32-x64/node.exe",
+      "files": 11837,
+      "links": 0,
+      "sha256": "3a7bc0b9fc02a7eda8be7a41c5bd324f28aff6c44cc337948b381a43ff3946df"
+    }
+  },
+  "generatedIdentity": {
+    "headFile": "dam-3c75658c506c8e70",
+    "headSourceCount": 620,
+    "worktreeFile": "dam-793ad575ac817ce3",
+    "worktreeSourceCount": 655,
+    "actualRunningApplication": "NOT_INSPECTED"
+  },
+  "latestReportedFrozenCandidate": {
+    "buildId": "dam-f8e1eb79e1650a98",
+    "sourceCount": 658,
+    "tree": "eadec07017a1a2cf1f1b123f6f070d843ba3f59b",
+    "selectedFiles": 277,
+    "source": "docs/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md",
+    "independentlyRebuilt": false
+  },
+  "importantUntracked": [
+    "scripts/host-schema-maintenance.test.ts",
+    "scripts/platform-ai-branch-disabled.test.ts",
+    "scripts/platform-ai-branch-evidence-ipc.test.mjs",
+    "scripts/platform-ai-branch-evidence.test.ts",
+    "src/main/library-lifecycle/host-schema-maintenance.internal.ts",
+    "src/main/services/ai-runtime/README.md",
+    "src/main/services/ai-runtime/platform-ai-branch-evidence.internal.ts"
+  ],
+  "scope": "Read-only source/git metadata; no material from AIModels, real libraries, credentials or browser profile."
+}
