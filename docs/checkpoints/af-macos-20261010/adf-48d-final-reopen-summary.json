@@ -1,0 +1,42 @@
+{
+  "build": "dam-48d2ccd23660d439",
+  "sameOrdinaryPackageReopened": true,
+  "hostBefore": 2204,
+  "hostAfter": 3282,
+  "originAfter": "http://127.0.0.1:56363",
+  "manualCaptionTagOcrAndNewVideoFrameReadBackInUi": true,
+  "library": {
+    "sha256": "f53e7473443401866e243cc72f03b29b5dc57f44aa433a649f7945e36c5e2b32",
+    "counts": {
+      "assets": 190,
+      "attempts": 62,
+      "evidence": 59,
+      "ocr": 25,
+      "ocrEdits": 24,
+      "workSets": 2,
+      "workMembers": 6,
+      "background": 72,
+      "backgroundPolicy": 1,
+      "backgroundHistory": 73
+    }
+  },
+  "vectors": {
+    "sha256": "5a82f75ac4a81905465ef5229ba6d0e81eefff3b263759d8af6765748892ed4d",
+    "counts": {
+      "vectors": 189,
+      "jobs": 3
+    }
+  },
+  "backgroundPolicy": [
+    [
+      0,
+      4,
+      24,
+      "2026-10-10T05:01:54.635Z"
+    ]
+  ],
+  "currentOriginals": 190,
+  "unknownAttemptKeptNotResent": true,
+  "twoWipFilesUnchanged": true,
+  "parentTasksComplete": false
+}

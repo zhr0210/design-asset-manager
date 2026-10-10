@@ -1,6 +1,6 @@
 # 当前任务：A–D/F Mac 真实验收收敛（2026-10-10）
 
-Goal blocked：同一锁屏/新浏览器入口不可用条件已连续三轮验证，完整目标保留。用户明确Eagle联动交由 `codex/eagle-integration` 后续调整，当前继续 `codex/macos-migration` 的A–D/F。唯一源码目录 `/Users/meigong/Documents/design-asset-manager-macos`，不切分支做并行产品写入，不推送/合main/签名发布。
+Goal active：用户已解锁并恢复运行，旧阻塞审计保留历史。用户明确Eagle联动交由 `codex/eagle-integration` 后续调整，当前继续 `codex/macos-migration` 的A–D/F。唯一源码目录 `/Users/meigong/Documents/design-asset-manager-macos`，不切分支做并行产品写入，不推送/合main/签名发布。
 
 ## 当前进度与下一动作
 
@@ -22,3 +22,9 @@ Goal blocked：同一锁屏/新浏览器入口不可用条件已连续三轮验�
 第二轮Goal审计：Mac仍锁屏，普通Browser启动可转交到现有Host但Chrome控制超时/IAB新旧页客户端阻止。Host91119仍健康，不重启或改认证；解锁请求已在界面待答，Goal active，完整要求保留。
 
 第三轮阻塞审计：[adf-goal-block-audit-3.json](docs/checkpoints/af-macos-20261010/adf-goal-block-audit-3.json)。Host91119/48d仍真实运行且health ready；Mac仍锁屏，现有IAB仍是旧63862断连页。已尝试正规Browser单实例转交、新旧IAB入口及Chrome控制，不能继续普通UI，不能用更多工程脚本冒称完成。手动解锁并恢复Goal后按上方下一动作继续，不新建目标、不重启当前健康Host，不合main或扩大E/发行范围。
+
+## 最新48d接续
+
+当前普通包Host3282 / http://127.0.0.1:56363 / dam-48d2ccd23660d439，IAB正规授权，公开T23库190资产。实际19次保存人工描述后原分页80→160和选择保持，后续查询1/1；文档图人工描述、确认标签、OCR七行修订经一键3/3及整Host重开保持。执行中取消独立描述→unknown，实际退出0.9秒/驻留计算0，重开回执核对后明确放弃等待，不删除或重发。C189/189显式增量覆盖，仅新增三图，旧186向量/2任务全字段保持；中文/英文/混合/外部咖啡以图真实找回。D新帧210.123请求→210.500实际，正确Sharp transform及AVFoundation method；实体Preview接收与PNG摘要一致，整Host重开备注/来源/帧保持。
+
+下一步新48d万条库重开/持续后台并发响应、B适用模式/保护及最终A–D/F全矩阵审计；不标父级全量完成，不执行E/断网/外屏/Windows指定压力/签名发行。准确证据见docs/checkpoints/af-macos-20261010/adf-48d-resume-real.json。旧PID91119本轮开始已不存在，原因未知；PID2204本批经正规退出审查及物理退出后重开3282。两份其他WIP保持。

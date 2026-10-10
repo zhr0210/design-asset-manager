@@ -1,0 +1,67 @@
+{
+  "build": "dam-48d2ccd23660d439",
+  "ordinaryUi19DescriptionSaves": true,
+  "originalPaging80to160AndSelectionPreserved": true,
+  "manualCaption": "人工确认：区域分割说明页，包含硬币与背景标记、灰度直方图及 zeros_like 代码。",
+  "manualCaptionProtected": true,
+  "confirmedTags": [
+    "区域分割"
+  ],
+  "ocrRevision": 3,
+  "ocrCorrectedText": "Region-based segmentation\nLet us first determine markers of the coins and the\nbackground. These markers are pixels that we can label\nunambiguously as either object or background. Here,\nthe markers are found at the two extreme parts of the\nhistogram of grey values:\n>>> markers = np.zeros_like(coins)",
+  "oneClickThreeOfThreeSaved": true,
+  "manualFieldsSurvivedOneClickAndActualReopen": true,
+  "descriptionCancelObservedExecuting": true,
+  "cancelState": "unknown -> observed physical process exit -> reopened -> receipt check -> explicitly abandoned waiting",
+  "observedExitSeconds": 0.9,
+  "residentAndComputeAfterCancel": 0,
+  "latestAttempts": [
+    [
+      "caption",
+      "unknown",
+      "2026-10-10T06:10:55.419Z"
+    ],
+    [
+      "ocr",
+      "succeeded",
+      "2026-10-10T06:09:02.102Z"
+    ],
+    [
+      "caption",
+      "succeeded",
+      "2026-10-10T06:09:00.728Z"
+    ],
+    [
+      "caption",
+      "succeeded",
+      "2026-10-10T04:54:06.824Z"
+    ]
+  ],
+  "newVectorCount": 189,
+  "original186VectorsAnd2JobsAllFieldsUnchanged": true,
+  "newGenerationTotal": 189,
+  "bilingualMixedAndImageQueriesOrdinaryUi": true,
+  "imageCosineFirst": 1.0,
+  "externalExampleDidNotIntake": true,
+  "video": "new210.123requested210.500actual frame, byte-equal native Preview receiver",
+  "old2FramesPreserved": true,
+  "remaining": [
+    "final controlled whole Host shutdown/reopen for all new C/D states",
+    "new48d scale reopen/background response soak",
+    "full B applicable resource modes and relevant migration checks"
+  ],
+  "goalComplete": false,
+  "directDbWrites": false,
+  "finalHost": {
+    "pid": 3282,
+    "origin": "http://127.0.0.1:56363",
+    "buildId": "dam-48d2ccd23660d439"
+  },
+  "controlledHost2204ExitConfirmed": true,
+  "ordinaryWholeHostReopenAcd": true,
+  "newFrameNoteAndSourceUiReadBack": true,
+  "finalIndexCoverage": {
+    "lexical": 190,
+    "image": 189
+  }
+}

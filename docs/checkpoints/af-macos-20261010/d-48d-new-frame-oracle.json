@@ -1,0 +1,16 @@
+{
+  "requested_ticks": 2101230000,
+  "actual_ticks": 2105000000,
+  "time_base": 10000000,
+  "png_ref": "reference-frame-16d115e3-dad7-44b9-bf95-e532859e96a2.png",
+  "png_bytes": 110537,
+  "png_sha256": "41cc01d5d3602fb18091af89ef126cdfae3448cb27fe88f3c9542db3d2307bf9",
+  "method": "macos-avfoundation:f1005ab7eb79977b1fcfef30891caf45c3881d4c63b1d3d133e0e3d1c6293fcf",
+  "transform": "decoded-video-frame/sharp/png/full-resolution/v1",
+  "note": "Mac 48d真实取帧：请求210.123s，实际210.500s。Big Buck Bunny © 2008 Blender Foundation / www.bigbuckbunny.org，CC BY 3.0。",
+  "build": "dam-48d2ccd23660d439",
+  "handoffSha256": "41cc01d5d3602fb18091af89ef126cdfae3448cb27fe88f3c9542db3d2307bf9",
+  "previewNativeReceiverObserved": true,
+  "receiptRead": false,
+  "old2FrameRecordsPreserved": true
+}
