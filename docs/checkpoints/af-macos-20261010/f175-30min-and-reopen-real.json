@@ -1,0 +1,56 @@
+{
+  "assets": 10018,
+  "backgroundStates": [
+    [
+      "succeeded",
+      36
+    ]
+  ],
+  "newPlanPolicy": [
+    [
+      0
+    ]
+  ],
+  "executionPolicy": [
+    [
+      0
+    ]
+  ],
+  "tagExecutionStates": [
+    [
+      "outcome-unknown",
+      1
+    ],
+    [
+      "succeeded",
+      3
+    ]
+  ],
+  "original10000RowsUnchanged": true,
+  "vectorRows": 3,
+  "vectorJobs": 1,
+  "canonicalVectorsSha256": "afd20a8100c8b39cf684ca3eca2d43429701b55ef9de4d55d45d756839dc5cf9",
+  "canonicalVectorsAndJobsUnchanged": true,
+  "newBackgroundDispatchAfterReopen": false,
+  "durationObservation": {
+    "state": "complete",
+    "startUnix": 1791623729.017838,
+    "hostPid": 27667,
+    "buildId": "dam-175fb4d6af635d1d",
+    "samples": 91,
+    "observedSeconds": 1801.5,
+    "soakPassed": true
+  },
+  "currentStartup": {
+    "schema": 1,
+    "pid": 41994,
+    "origin": "http://127.0.0.1:65500",
+    "buildId": "dam-175fb4d6af635d1d",
+    "platform": "darwin",
+    "arch": "arm64",
+    "version": "1.0.0"
+  },
+  "ordinaryNormalQuitAndPhysicalExitOld27667": true,
+  "samePackageOrdinaryReopenAndRegularIabLaunch": true,
+  "humanCaptionAndOldUnknownTagUiReopened": true
+}

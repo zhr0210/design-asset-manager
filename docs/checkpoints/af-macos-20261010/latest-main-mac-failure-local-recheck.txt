@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-library-creation-planner
+> node scripts/run-ts-test.mjs scripts/library-creation-planner.test.ts
+
+library-creation-planner passed

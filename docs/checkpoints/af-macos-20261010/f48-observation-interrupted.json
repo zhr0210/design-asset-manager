@@ -1,0 +1,13 @@
+{
+  "state": "interrupted-unqualified",
+  "startedUtc": "2026-10-10T06:25:39.034Z",
+  "startUnix": 1791613539.034,
+  "hostPid": 3282,
+  "candidate": "dam-48d2ccd23660d439",
+  "durationGoalSeconds": 1800,
+  "sampleCount": 80,
+  "lastObservedUtc": "2026-10-10T06:52:16Z",
+  "observedSeconds": 1597.0,
+  "reason": "observer handle unavailable and Host absent on resumption; cause of exit unknown",
+  "soakPassed": false
+}

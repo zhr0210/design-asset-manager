@@ -2,7 +2,7 @@
   "buildId": "dam-175fb4d6af635d1d",
   "hostPid": 27667,
   "origin": "http://127.0.0.1:62148",
-  "publicLibraryAssets": 10015,
+  "publicLibraryAssets": 10018,
   "newPublicCopyCount": 3,
   "newPublicContents": 3,
   "importStarted": "2026-10-10T09:16:09.664Z",
@@ -94,5 +94,27 @@
     "loadSeconds": 1.6
   },
   "stopDisablesCaptionTagsKeepsOcr": true,
-  "cpuRevalidationRestoresConnection": true
+  "cpuRevalidationRestoresConnection": true,
+  "thirdBatchStarted": "2026-10-10T09:36:44.673Z",
+  "thirdBatchCaptionOcrSaved": true,
+  "ordinary30minAndWholeHostReopen": true,
+  "actualReopenEvidence": "f175-30min-and-reopen-real.json",
+  "thirdBatchQueries": [
+    {
+      "query": "AF-F-00001-astronaut",
+      "automationMs": 1532
+    },
+    {
+      "query": "AF-F-05000-coffee",
+      "automationMs": 639
+    },
+    {
+      "query": "AF-F-10000-astronaut",
+      "automationMs": 644
+    },
+    {
+      "query": "AF-F-soak-06-page",
+      "automationMs": 636
+    }
+  ]
 }

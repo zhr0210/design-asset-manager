@@ -1,0 +1,23 @@
+{
+  "observedHostOnly": true,
+  "workerAndRendererMemoryNotMeasuredByThisObserver": true,
+  "duration": {
+    "state": "complete",
+    "startUnix": 1791623729.017838,
+    "hostPid": 27667,
+    "buildId": "dam-175fb4d6af635d1d",
+    "samples": 91,
+    "observedSeconds": 1801.5,
+    "soakPassed": true
+  },
+  "sampleCount": 91,
+  "firstUtc": "2026-10-10T09:15:29.021241+00:00",
+  "lastUtc": "2026-10-10T09:45:30.491785+00:00",
+  "hostRssKiB": {
+    "min": 78288,
+    "max": 183328
+  },
+  "scope": "3 ordinary Copy batches / 9 new copies / 3 contents, 9 caption+9 OCR effects; foreground querying and model/3-image retrieval work plus idle periods",
+  "continuousInferenceStress": false,
+  "normalPauseQuitPhysicalExitReopenEvidence": "f175-30min-and-reopen-real.json"
+}

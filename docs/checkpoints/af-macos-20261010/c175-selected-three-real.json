@@ -1,0 +1,40 @@
+{
+  "buildId": "dam-175fb4d6af635d1d",
+  "library": "public-scale-copy",
+  "explicitSelectedRange": 3,
+  "actualCoverage": 3,
+  "totalLibrary": 10015,
+  "semantic": [
+    {
+      "query": "红色杯子里的咖啡",
+      "visibleOrder": [
+        "查看 AF-F-soak-05-coffee",
+        "查看 AF-F-soak-05-page",
+        "查看 AF-F-soak-05-astronaut"
+      ]
+    },
+    {
+      "query": "woman astronaut in space suit",
+      "visibleOrder": [
+        "查看 AF-F-soak-05-astronaut",
+        "查看 AF-F-soak-05-page",
+        "查看 AF-F-soak-05-coffee"
+      ]
+    },
+    {
+      "query": "red 咖啡 cup",
+      "visibleOrder": [
+        "查看 AF-F-soak-05-coffee",
+        "查看 AF-F-soak-05-page",
+        "查看 AF-F-soak-05-astronaut"
+      ]
+    }
+  ],
+  "imageQuery": {
+    "example": "authorized public coffee source",
+    "top": "AF-F-soak-05-coffee",
+    "cosine": 1
+  },
+  "old10000NotPrepared": true,
+  "ordinaryWholeHostReopen": false
+}

@@ -1,0 +1,41 @@
+{
+  "buildId": "dam-175fb4d6af635d1d",
+  "ordinaryT23ReopenUi": true,
+  "manualCaptionConfirmedTagSevenLineOcrReadback": true,
+  "coverage": {
+    "images": 189,
+    "eligibleImages": 189,
+    "lexical": 190
+  },
+  "actualSemanticQueries": [
+    "woman astronaut in space suit",
+    "\u7ea2\u8272\u676f\u5b50\u91cc\u7684\u5496\u5561"
+  ],
+  "workSetAnd210FrameNoteSourceReadback": true,
+  "librarySelectedSignatureUnchanged": true,
+  "canonicalVectorsAndJobsSignatureUnchanged": true,
+  "originalBytesSignatureUnchanged": true,
+  "libraryCounts": {
+    "assets": 190,
+    "attempts": 62,
+    "evidence": 59,
+    "ocr": 25,
+    "ocrEdits": 24,
+    "workSets": 2,
+    "workMembers": 6,
+    "background": 72,
+    "backgroundPolicy": 1,
+    "backgroundHistory": 73
+  },
+  "vectorCounts": {
+    "vectors": 189,
+    "jobs": 3
+  },
+  "actualDefaultReceiverDocumentSeen": "Preview / BigBuckBunny_320x180 \u53c2\u8003\u5e27 210.5000000s.png",
+  "newHandoffPngBytes": 110537,
+  "newHandoffPngSha256": "41cc01d5d3602fb18091af89ef126cdfae3448cb27fe88f3c9542db3d2307bf9",
+  "newCopyEquals48dSavedFrame": true,
+  "receiptJsonRead": false,
+  "nativeScreenshotAfterUserAppChange": "not captured; stopped further Preview control",
+  "newDecodeClaimed": false
+}

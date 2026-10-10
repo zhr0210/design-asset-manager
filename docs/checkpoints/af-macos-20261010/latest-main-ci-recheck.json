@@ -1,0 +1,22 @@
+{
+  "mainSha": "6b86ef05e558229e2bd87998101ca5678bc228cc",
+  "runId": 37793257740,
+  "url": "https://github.com/zhr0210/design-asset-manager/actions/runs/37793257740",
+  "jobs": [
+    {
+      "name": "macos-latest / Node 20",
+      "conclusion": "failure"
+    },
+    {
+      "name": "windows-2022 / Node 20",
+      "conclusion": "failure"
+    }
+  ],
+  "actualFirstFailures": {
+    "macos": "library-creation-planner: Main-only qualification now contains chosen target path; old assertion rejected it",
+    "windows": "model-library-catalog-admission-tracer: RECOVERY_BLOCKED; this turn does not prove Windows root cause or fix"
+  },
+  "currentMacLocalRecheckBothPassed": true,
+  "remoteRerun": false,
+  "WindowsQualifiedByLocalMac": false
+}

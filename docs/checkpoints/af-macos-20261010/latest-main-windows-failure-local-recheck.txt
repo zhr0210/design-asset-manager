@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-model-library-catalog-admission-tracer
+> node scripts/run-ts-test.mjs scripts/model-library-catalog-admission.tracer.test.ts
+
+model-library-catalog-admission-tracer passed
