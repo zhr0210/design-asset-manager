@@ -1,0 +1,25 @@
+{
+  "platform": "darwin-arm64",
+  "build": "dam-48d2ccd23660d439",
+  "trigger": "ordinary UI background plan and execution confirmation on existing10000 library",
+  "actualBackups": [
+    {
+      "name": "tag-intent-FMmurEJaac39",
+      "version": 12,
+      "assets": 10000,
+      "bytes": 27525120,
+      "integrity": "ok"
+    },
+    {
+      "name": "tag-intent-2llXAQNECpk0",
+      "version": 1,
+      "assets": 10000,
+      "bytes": 27234304,
+      "integrity": "ok"
+    }
+  ],
+  "currentVersion": 14,
+  "engineeringRestoreDone": false,
+  "productRestoreDone": false,
+  "Windows4MiBNativeCapQualifiedByThis": false
+}

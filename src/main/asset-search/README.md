@@ -15,3 +15,5 @@ AI 动态文件夹通过有界 `aiFolderId` 选择当前已分析、待确认或
 schema 备份由 Host 维护边界排空读者后，临时移除搜索和后台计数自己的主连接 TEMP 触发器；备份的空 TEMP/唯一 main 校验保持。维护中的核对只读，结束后重新接入追踪，并补同步停跟踪期间的变更。查询快照不因此清空；不需要备份的普通权限更新保持现有索引就绪。
 
 聚焦回归：`asset-search-host`、`asset-retrieval-host`、`asset-discovery-workflow`、`measure-preview-colors` 和 `search-schema-backup.integration`。实际用户证据见 TASK / CURRENT-STATE 和 C 交接；小型公开副本不代表十万素材基准或 Native 专项验收。
+
+未过滤且不保留游标的Store行刷新按派生索引时间顺序读取有界第一页，避免把万条结果重新投影/排序写入临时快照；领取资源许可后重新读当前生命周期，最多核对500项补齐失效行。用户分页和任何文字/文件夹/颜色/标签过滤仍走原精确快照路径，不能用此优化省略硬条件。

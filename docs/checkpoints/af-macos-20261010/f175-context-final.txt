@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-agent-context-router
+> node scripts/agent-context-router.test.mjs
+
+Agent Context Router tests passed (268 route-eval tasks; 1-7 files; 1790-15975 estimated tokens).

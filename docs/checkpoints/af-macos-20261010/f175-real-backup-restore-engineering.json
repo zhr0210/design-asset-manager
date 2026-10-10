@@ -1,0 +1,17 @@
+{
+  "kind": "engineering-restoration-of-real-public-v1-backup",
+  "ordinaryUiRestore": false,
+  "platform": "darwin",
+  "arch": "arm64",
+  "electron": "30.5.1",
+  "assets": 10000,
+  "backupBytes": 27234304,
+  "restoredVersion": 1,
+  "integrity": "ok",
+  "selectedRowsSha256": "5610266fbba808d767b17d2d1856a06db69a156e0cdf78cc134ba1d32ce7456c",
+  "selectedRowsPreserved": true,
+  "sourceLibraryWrites": false,
+  "previewBytes": 611524,
+  "previewSha256": "6559ac5ebd5583085d29d639cb1e09a15a7377e9c5fe77db92c355cf1e23fe25",
+  "openAndReopen": true
+}

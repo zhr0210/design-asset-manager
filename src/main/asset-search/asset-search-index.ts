@@ -248,6 +248,36 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
         snapshotId = cursor.snapshot; offset = cursor.offset
       } else {
         if (!building) await sync(signal)
+        // Store refreshes consume only the current unfiltered first page. Read
+        // it in index order instead of materializing every match in the library.
+        // Filtered/user queries retain their existing snapshot semantics below.
+        if (!retainSnapshot && !input.query.trim() && !input.sourceSiteId && !input.folderId &&
+            !input.aiFolderId && !input.color && !input.tagQueries?.length) {
+          const permit = await d.admission?.reserveLocalWork('index',32 * 1024 ** 2,signal,'foreground')
+          try {
+            signal.throwIfAborted(); d.assertAuthority()
+            const generation = meta('active')
+            const total = Number(index.prepare('SELECT COUNT(*) FROM docs WHERE gen=?').pluck().get(generation))
+            const matches:AssetSearchPage['matches']=[]
+            let offset=0
+            while(matches.length<input.limit&&offset<500){
+              const rows=index.prepare('SELECT id FROM docs WHERE gen=? ORDER BY created_at DESC,id LIMIT ? OFFSET ?')
+                .all(generation,Math.min(input.limit-matches.length,500-offset),offset) as {id:string}[]
+              if(!rows.length)break
+              offset+=rows.length
+              const current=new Map(readAssets(d.database,rows.map(row=>row.id)).map(asset=>[asset.id,asset]))
+              for(const row of rows){
+                const asset=current.get(row.id)
+                if(!asset)continue
+                const match=projectAssetDiscovery({assets:[asset],query:input.query,sourceSiteId:input.sourceSiteId,
+                  tagScope:input.tagScope,tagQueries:input.tagQueries,fields:input.fields}).matches[0]
+                if(match)matches.push({asset,explanation:match.explanation})
+              }
+            }
+            signal.throwIfAborted();d.assertAuthority()
+            return {matches,total,nextCursor:null,index:status()}
+          } finally {permit?.release()}
+        }
         if (retainSnapshot && [...snapshots.values()].filter(snapshot => snapshot.query.retainSnapshot !== false).length >= 16) throw Error('ASSET_SEARCH_BUSY')
         snapshotId = randomUUID()
         const gen = meta('active'), terms = [...new Set(normalize(input.query).split(/[\s,，。！？!?；;：:、]+/u).filter(Boolean))]

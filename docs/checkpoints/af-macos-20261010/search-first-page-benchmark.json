@@ -1,0 +1,38 @@
+{
+  "kind": "real-public-consistent-copy-engineering-query-benchmark",
+  "samples": [
+    {
+      "ordinaryMs": 189.84358300000008,
+      "refreshMs": 65.36675000000014,
+      "total": 10006,
+      "page": 100
+    },
+    {
+      "ordinaryMs": 197.22958400000016,
+      "refreshMs": 62.1693750000004,
+      "total": 10006,
+      "page": 100
+    },
+    {
+      "ordinaryMs": 210.17116600000008,
+      "refreshMs": 59.34958400000005,
+      "total": 10006,
+      "page": 100
+    },
+    {
+      "ordinaryMs": 197.89862500000027,
+      "refreshMs": 59.10099999999966,
+      "total": 10006,
+      "page": 100
+    },
+    {
+      "ordinaryMs": 183.22241699999995,
+      "refreshMs": 58.554083999999875,
+      "total": 10006,
+      "page": 100
+    }
+  ],
+  "productionWrites": false,
+  "ordinaryUiQualified": false,
+  "uniqueCauseForEarlier7sProved": false
+}

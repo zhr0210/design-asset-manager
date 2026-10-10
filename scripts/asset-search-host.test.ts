@@ -227,3 +227,25 @@ await test('transient refreshes remain available at the retained-snapshot limit 
    await assert.rejects(f.query('generated',1),'Refreshing rows does not evict or exceed retained query leases')
  }finally{await f.close()}
 })
+
+await test('unfiltered transient row pages match ordinary ordering and recheck lifecycle after resource admission',async()=>{
+ const base=fixtureAdmission();let enabled=false,remove!:()=>Promise<void>
+ const admission={...base,reserveLocalWork:async(...args:Parameters<typeof base.reserveLocalWork>)=>{
+  const permit=await base.reserveLocalWork(...args)
+  if(enabled&&args[0]==='index'&&args[3]==='foreground'){enabled=false;await remove()}
+  return permit
+ }}
+ const f=await fixture(admission)
+ try{
+  const input={...f.scope,query:'',tagScope:'includes-pending' as const,limit:1}
+  const ordinary=await f.host.searchAssetPage(input)
+  const transient=await f.host.searchAssetPage({...input,retainSnapshot:false})
+  assert.equal(transient.total,ordinary.total);assert.deepEqual(transient.matches,ordinary.matches);assert.equal(transient.nextCursor,null)
+  const asset=ordinary.matches[0].asset
+  remove=async()=>{const plan=await f.host.prepareTrash({designAssetIdentity:asset.id,expectedRevision:asset.revision});if(plan.kind!=='planned')throw Error('fixture');await f.host.dispatchTrash({kind:'move-design-asset-to-trash',planReceipt:plan.plan.receipt,designAssetIdentity:asset.id,expectedRevision:asset.revision})}
+  enabled=true
+  const fresh=await f.host.searchAssetPage({...input,retainSnapshot:false})
+  assert.equal(fresh.matches.length,1);assert.notEqual(fresh.matches[0].asset.id,asset.id,'Transient page may not return an asset removed during admission')
+  assert.equal((await f.host.searchAssetPage({...input,query:'generated-1',retainSnapshot:false})).total, (await f.host.searchAssetPage({...input,query:'generated-1'})).total,'Filtered transient queries retain their own exact membership')
+ }finally{await f.close()}
+})

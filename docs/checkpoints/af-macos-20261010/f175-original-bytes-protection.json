@@ -1,0 +1,14 @@
+{
+  "buildId": "dam-175fb4d6af635d1d",
+  "baseline": "actual10000 pre-upgrade v1 backup",
+  "readOnly": true,
+  "files": 10000,
+  "logicalBytes": 4353489575,
+  "countsByContent": {
+    "astronaut": 3334,
+    "page": 3333,
+    "coffee": 3333
+  },
+  "hashMismatchCount": 0,
+  "allOriginalBytesPreserved": true
+}

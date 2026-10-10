@@ -1,0 +1,50 @@
+{
+  "buildId": "dam-175fb4d6af635d1d",
+  "baseline": "actual ordinary pre-upgrade v1 backup",
+  "originalAssets": 10000,
+  "comparedAssetColumns": [
+    "id",
+    "title",
+    "file_name",
+    "file_path",
+    "thumbnail_path",
+    "source_site_id",
+    "source_site_name",
+    "source_page_url",
+    "original_url",
+    "width",
+    "height",
+    "file_size",
+    "file_type",
+    "dominant_color",
+    "browser_page_title",
+    "capture_method",
+    "original_path",
+    "normalized_path",
+    "original_format",
+    "normalized_format",
+    "has_alpha",
+    "color_space",
+    "normalize_status",
+    "normalized_at",
+    "image_metadata_json",
+    "created_at",
+    "updated_at",
+    "last_tag_updated_at",
+    "ai_caption",
+    "ai_caption_is_user_edited",
+    "ai_caption_updated_at"
+  ],
+  "allOriginalAssetRowsEqual": true,
+  "changedRowCount": 0,
+  "currentAssets": 10012,
+  "backgroundStates": [
+    [
+      "succeeded",
+      24
+    ]
+  ],
+  "original10000BackgroundIntents": 0,
+  "integrity": "ok",
+  "ordinaryUiRestore": false
+}

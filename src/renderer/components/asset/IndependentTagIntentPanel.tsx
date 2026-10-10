@@ -59,7 +59,7 @@ export default function IndependentTagIntentPanel({scope,assetId,backendId,model
  }
  if(!api)return null
  const states=new Map(snapshot?.jobs.map(j=>[j.requestId,j.state])??[])
- const labels:Record<string,string>={'waiting-execution':'任务已保存，待运行',queued:'等待资源',running:'标签分析中',succeeded:'标签已保存',failed:'未完成，保留原结果',cancelled:'已取消','outcome-unknown':'远端状态未知，不会自动重发',paused:'已暂停',superseded:'已被较新请求取代'}
+ const labels:Record<string,string>={'waiting-execution':'任务已保存，待运行',queued:'等待资源',running:'标签分析中',succeeded:'标签已保存',failed:'未完成，保留原结果',cancelled:'已取消','outcome-unknown':'执行结果不确定，不会自动重发',paused:'已暂停',superseded:'已被较新请求取代'}
  return <div className="visual-ai-intents" aria-label="独立标签任务">
   <div className="visual-ai-actions"><button type="button" disabled={busy||running||!backendId||!model.trim()} onClick={()=>void operate(async valid=>{
    const r=await api.prepare({...scope,assetId,backendId,model,requestId:requestId.current});if(!valid())return

@@ -1,0 +1,31 @@
+
+> design-asset-manager@1.0.0 test-asset-store-loading
+> node scripts/run-ts-test.mjs scripts/asset-store-loading.test.ts
+
+--- Starting asset-store-loading behavior tests ---
+Test 1: Initial load success
+Test 2: Successful empty array enters ready and hasLoadedAssets=true
+Test 3: Initial load failure with safe console.error and no stack/path leakage
+Test 4: Refresh failure preserves existing assets, selectedAsset, and bulkSelectedAssetIds
+[Store] Failed to load assets from DB
+Test 5a: Out-of-order completion: slow Req1 completing after fast Req2 cannot overwrite
+Test 5b: Out-of-order: slow Req1 success cannot overwrite faster Req2 failure
+[Store] Failed to load assets from DB
+Test 5c: Out-of-order: slow Req1 failure cannot overwrite faster Req2 success
+Test 5d: Library authority reset invalidates pending lists and write follow-up refreshes
+Test 6a: Selected asset cleared when no longer present in new results
+Test 6b: Selected asset updated to fresh instance when still present
+Test 7: User selection change during pending load is respected at commit time
+Test 8a: Missing window.damClient treated as retryable error
+Test 8b: listAssets is not a function treated as retryable error
+Test 8c: Non-array response treated as retryable error
+Test 8d: Retry after invalid response succeeds
+Test 9: Passes current activeTagSearchQueries and includePending at request time
+Test 10: Executable react-dom/server rendering assertions for Grid states
+Test 10a: ready + unfiltered empty
+Test 10b: ready + filtered no-match
+Test 10c: hasLoadedAssets=true + loading + empty must not falsely report empty
+Test 10d: hasLoadedAssets=true + error + empty must show refresh failure without false empty
+Test 10e: Existing matches in loading/error still include cards and recovery hints
+Test 10f: hasLoadedAssets=true + idle + empty must show indeterminate state without false empty
+--- All asset-store-loading behavior tests PASSED successfully ---
