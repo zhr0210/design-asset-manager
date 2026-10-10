@@ -1,0 +1,203 @@
+{
+  "build": "dam-48d2ccd23660d439",
+  "assetCount": 10003,
+  "newPublicInputs": 3,
+  "actualEffects": [
+    {
+      "title": "AF-F-soak-01-astronaut",
+      "capability": "caption",
+      "output": {
+        "caption": "一位身穿橙色宇航服的女性宇航员，面带微笑，背景是美国国旗和航天飞机模型。她胸前有任务徽章，手中拿着头盔。",
+        "usage": {
+          "inputTokens": 358,
+          "outputTokens": 51,
+          "costEstimateUsd": null,
+          "source": "unpriced"
+        },
+        "physicalCalls": 1
+      }
+    },
+    {
+      "title": "AF-F-soak-01-astronaut",
+      "capability": "ocr",
+      "output": {
+        "ocr": {
+          "engine": "rapidocr-onnxruntime",
+          "version": "1.4.4",
+          "recipe": "rapidocr-preview-v1",
+          "modelSha256": {
+            "det": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "cls": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c",
+            "rec": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b"
+          },
+          "width": 512,
+          "height": 512,
+          "elapsedMs": 165,
+          "threshold": 0.5,
+          "blocks": []
+        }
+      }
+    },
+    {
+      "title": "AF-F-soak-01-coffee",
+      "capability": "caption",
+      "output": {
+        "caption": "一杯浓郁的意式浓缩咖啡，盛在红白相间的陶瓷杯中，置于同色系的杯碟上，旁边放着一把闪亮的金属勺子，整个画面置于温暖的木质桌面上。",
+        "usage": {
+          "inputTokens": 349,
+          "outputTokens": 60,
+          "costEstimateUsd": null,
+          "source": "unpriced"
+        },
+        "physicalCalls": 1
+      }
+    },
+    {
+      "title": "AF-F-soak-01-coffee",
+      "capability": "ocr",
+      "output": {
+        "ocr": {
+          "engine": "rapidocr-onnxruntime",
+          "version": "1.4.4",
+          "recipe": "rapidocr-preview-v1",
+          "modelSha256": {
+            "det": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "cls": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c",
+            "rec": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b"
+          },
+          "width": 600,
+          "height": 400,
+          "elapsedMs": 249,
+          "threshold": 0.5,
+          "blocks": []
+        }
+      }
+    },
+    {
+      "title": "AF-F-soak-01-page",
+      "capability": "caption",
+      "output": {
+        "caption": "一份关于基于区域分割的设计参考文档，内容涉及如何通过灰度直方图的两端来识别硬币和背景的标记像素。",
+        "usage": {
+          "inputTokens": 174,
+          "outputTokens": 43,
+          "costEstimateUsd": null,
+          "source": "unpriced"
+        },
+        "physicalCalls": 1
+      }
+    },
+    {
+      "title": "AF-F-soak-01-page",
+      "capability": "ocr",
+      "output": {
+        "ocr": {
+          "engine": "rapidocr-onnxruntime",
+          "version": "1.4.4",
+          "recipe": "rapidocr-preview-v1",
+          "modelSha256": {
+            "det": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "cls": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c",
+            "rec": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b"
+          },
+          "width": 384,
+          "height": 191,
+          "elapsedMs": 461,
+          "threshold": 0.5,
+          "blocks": [
+            {
+              "text": "Region-basedsegmentation",
+              "confidence": 0.9958889732758204,
+              "polygon": [
+                [
+                  0.018229166666666668,
+                  0.06282722513089005
+                ],
+                [
+                  0.7604166666666666,
+                  0.07329842931937172
+                ],
+                [
+                  0.7604166666666666,
+                  0.17277486910994763
+                ],
+                [
+                  0.018229166666666668,
+                  0.16753926701570682
+                ]
+              ]
+            },
+            {
+              "text": "Let us first determine markers of the coins and the",
+              "confidence": 0.9511983172566283,
+              "polygon": [
+                [
+                  0.010416666666666666,
+                  0.24607329842931938
+                ],
+                [
+                  0.984375,
+                  0.25654450261780104
+                ],
+                [
+                  0.984375,
+                  0.34554973821989526
+                ],
+                [
+                  0.010416666666666666,
+                  0.33507853403141363
+                ]
+              ]
+            },
+            {
+              "text": "unambiguously as either object or background.Here,",
+              "confidence": 0.948842386007309,
+              "polygon": [
+                [
+                  0.0078125,
+                  0.42408376963350786
+                ],
+                [
+                  0.984375,
+                  0.43455497382198954
+                ],
+                [
+                  0.984375,
+                  0.5445026178010471
+                ],
+                [
+                  0.0078125,
+                  0.5340314136125655
+                ]
+              ]
+            },
+            {
+              "text": "histogram ofgreyvalues:",
+              "confidence": 0.9682237246762151,
+              "polygon": [
+                [
+                  0.013020833333333334,
+                  0.5968586387434555
+                ],
+                [
+                  0.4479166666666667,
+                  0.643979057591623
+                ],
+                [
+                  0.4453125,
+                  0.7329842931937173
+                ],
+                [
+                  0.010416666666666666,
+                  0.6910994764397905
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "scope": "only new public caption/OCR; original10000 not backfilled",
+  "soakComplete": false
+}

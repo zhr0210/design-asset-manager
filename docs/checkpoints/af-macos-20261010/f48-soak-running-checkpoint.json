@@ -1,0 +1,43 @@
+{
+  "candidate": "dam-48d2ccd23660d439",
+  "hostPid": 3282,
+  "origin": "http://127.0.0.1:56363",
+  "startedUtc": "2026-10-10T06:25:39.034Z",
+  "elapsedAtCheckpointSeconds": 279.4,
+  "scope": "6 new public copies / 3 contents, caption+OCR only, original10000 no backfill",
+  "ordinaryUiReopen10000AndPagination160Selection": true,
+  "firstTwoBatchesSavedEffects": 12,
+  "readOnlyObserverSessionId": 66396,
+  "observerState": "running",
+  "observerSamplePath": ".scratch/af-macos-20261010/f48-host-resource-samples.jsonl",
+  "pendingBatch3Source": ".scratch/af-macos-20261010/f-soak-inputs/batch-03",
+  "thirdBatchIntakeDone": false,
+  "soakPassed": false,
+  "queriesWithAutomationMs": [
+    1253,
+    1150,
+    781,
+    1290,
+    768
+  ],
+  "timeoutObservation": {
+    "query": "AF-F-10000-astronaut during batch02",
+    "toolWaitTimedOut": true,
+    "subsequentSamePageFound": true,
+    "detailOpened": true,
+    "twoSecondTargetProved": false
+  },
+  "bRealQualification": {
+    "2bHybridImageChallenge": true,
+    "2bMetalImageChallenge": true,
+    "4bMetal": "AI_MEMORY_WAIT, prior2b selection retained, OCR independent"
+  },
+  "next": [
+    "poll same observer handle, do not restart on timeout",
+    "while current Host live continue foreground B/A protections",
+    "later ordinary import batch03 and measure concurrent query",
+    "after actual30min verify observer terminal and counts/original hashes",
+    "normal pause rules and physical exit/reopen then all persisted states",
+    "finish actual Mac oldschema/migration checks and global A-D/F audit"
+  ]
+}

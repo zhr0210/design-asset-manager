@@ -1,0 +1,19 @@
+{
+  "build": "dam-48d2ccd23660d439",
+  "currentAssets": 10006,
+  "original10000WithoutBackgroundIntents": true,
+  "original10000NoCaptionsWritten": true,
+  "originalSelectedFieldsSha256": "d7b280f962be027dc3e53df019d42a2e9e196928c0ccb2bf8ad026ef230f12ef",
+  "backgroundEffectsNow": [
+    [
+      "succeeded",
+      12
+    ]
+  ],
+  "publicInputsAdded": 6,
+  "sourceDiversity": 3,
+  "soakComplete": false,
+  "observationSessionId": 66396,
+  "nextPublicBatch": 3,
+  "targetMinutes": 30
+}
