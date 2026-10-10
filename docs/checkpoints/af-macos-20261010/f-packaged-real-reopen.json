@@ -1,0 +1,40 @@
+{
+  "build": "dam-5be87024c1293899",
+  "hostPid": 87396,
+  "origin": "http://127.0.0.1:63862",
+  "ordinaryPackagedApp": true,
+  "profile": "same-authorized-public",
+  "oldHost65513PhysicallyExited": true,
+  "normalExitReview": {
+    "drafts": 0,
+    "nativeUnsaved": 0,
+    "loginJobs": 0
+  },
+  "reopenedBy": "ordinary Desktop advanced Browser entry -> IAB open-existing-library chooser",
+  "assets": 10000,
+  "requests": 10000,
+  "distinctSourceNames": 10000,
+  "candidateStates": [
+    [
+      "promoted",
+      10000
+    ]
+  ],
+  "originalFiles": 10000,
+  "allOriginalHashesPreserved": true,
+  "integrity": "ok",
+  "foreignKeyErrors": 0,
+  "ordinaryUiIndexed": 10000,
+  "firstMiddleLastVisible": true,
+  "sourceUiPaginationBeforeExit": 240,
+  "selectionSurvivedPagination": true,
+  "oldSnapshotExpiryProtected": true,
+  "queryIncludingAutomationMs": [
+    784,
+    795,
+    913
+  ],
+  "backgroundConcurrencyTargetVerified": false,
+  "signedInstallQualification": false,
+  "launchCorrection": "npm --profile maps to application --dam-profile; first default empty candidate was normally closed before selected-profile launch"
+}

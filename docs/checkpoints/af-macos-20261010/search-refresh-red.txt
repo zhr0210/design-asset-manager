@@ -1,0 +1,71 @@
+TAP version 13
+# Subtest: Host color filtering measures controlled previews, persists coverage and enforces percentage without a model
+ok 1 - Host color filtering measures controlled previews, persists coverage and enforces percentage without a model
+  ---
+  duration_ms: 142.769375
+  ...
+# Subtest: Host color pages revalidate lifecycle after an awaited resource grant
+ok 2 - Host color pages revalidate lifecycle after an awaited resource grant
+  ---
+  duration_ms: 67.669
+  ...
+# Subtest: a filled color page rechecks earlier hits after a later page-fill iteration waits
+ok 3 - a filled color page rechecks earlier hits after a later page-fill iteration waits
+  ---
+  duration_ms: 73.72
+  ...
+# Subtest: Host text source scopes distinguish names, confirmed aliases and human descriptions; row-only edits retain frozen paging
+ok 4 - Host text source scopes distinguish names, confirmed aliases and human descriptions; row-only edits retain frozen paging
+  ---
+  duration_ms: 70.513125
+  ...
+# Subtest: Host search indexes Chinese cross-field edits and aliases, excludes stale hits, and pages a stable query snapshot
+ok 5 - Host search indexes Chinese cross-field edits and aliases, excludes stale hits, and pages a stable query snapshot
+  ---
+  duration_ms: 105.494791
+  ...
+# Subtest: Host folder search counts only canonical members and rechecks membership for a later frozen page
+ok 6 - Host folder search counts only canonical members and rechecks membership for a later frozen page
+  ---
+  duration_ms: 62.400708
+  ...
+# Subtest: owned derived index generations rebuild and recover corrupted data while source content and ordinary reopen remain usable
+ok 7 - owned derived index generations rebuild and recover corrupted data while source content and ordinary reopen remain usable
+  ---
+  duration_ms: 102.112958
+  ...
+# Subtest: row refreshes do not retain unused paging snapshots or consume existing user cursors
+not ok 8 - row refreshes do not retain unused paging snapshots or consume existing user cursors
+  ---
+  duration_ms: 59.858292
+  location: '/Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/asset-search-host.test.mjs:12557:7'
+  failureType: 'testCodeFailure'
+  error: 'The Active Library operation failed.'
+  code: 'library-operation-failed'
+  name: 'ActiveLibraryHostError'
+  stack: |-
+    hostError (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/asset-search-host.test.mjs:10493:10)
+    file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/asset-search-host.test.mjs:9519:15
+  ...
+# Subtest: transient refreshes remain available at the retained-snapshot limit without weakening that limit
+not ok 9 - transient refreshes remain available at the retained-snapshot limit without weakening that limit
+  ---
+  duration_ms: 88.57875
+  location: '/Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/asset-search-host.test.mjs:12576:7'
+  failureType: 'testCodeFailure'
+  error: 'The Active Library operation failed.'
+  code: 'library-operation-failed'
+  name: 'ActiveLibraryHostError'
+  stack: |-
+    hostError (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/asset-search-host.test.mjs:10493:10)
+    file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/asset-search-host.test.mjs:9519:15
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 7
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 776.425583

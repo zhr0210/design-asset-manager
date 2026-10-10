@@ -1,0 +1,17 @@
+{
+  "build": "dam-5be87024c1293899",
+  "package": ".scratch/af-macos-20261010/package-5be-final/mac-arm64/Design Asset Manager.app",
+  "sameAsSourceOut": {
+    "main/index.js": true,
+    "preload/index.cjs": true,
+    "preload/work-window.cjs": true,
+    "preload/asset-card.cjs": true,
+    "main/macos-runtime/video": true,
+    "main/macos-runtime/owned-memory": true,
+    "main/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin": true
+  },
+  "electron": "30.5.1",
+  "arch": "arm64",
+  "signed": false,
+  "ordinaryStartupVerified": false
+}

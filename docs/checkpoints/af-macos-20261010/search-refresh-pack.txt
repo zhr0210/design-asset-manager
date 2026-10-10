@@ -1,0 +1,9 @@
+{"stage":"native-package-input","platform":"darwin","arch":"arm64","electron":"30.5.1","abi":"123","sqlite":"loaded-and-executed","sharp":{"aom":"3.13.1","archive":"3.8.2","cairo":"1.18.4","cgif":"0.5.0","exif":"0.6.25","expat":"2.7.3","ffi":"3.5.2","fontconfig":"2.17.1","freetype":"2.14.1","fribidi":"1.0.16","glib":"2.86.1","harfbuzz":"12.1.0","heif":"1.20.2","highway":"1.3.0","imagequant":"2.4.1","lcms":"2.17","mozjpeg":"0826579","pango":"1.57.0","pixman":"0.46.4","png":"1.6.50","proxy-libintl":"0.5","rsvg":"2.61.2","spng":"0.7.4","tiff":"4.7.1","vips":"8.17.3","webp":"1.6.0","xml2":"2.15.1","zlib-ng":"2.2.5","sharp":"0.34.5"},"bindings":[{"file":"node_modules/@img/sharp-darwin-arm64/lib/sharp-darwin-arm64.node","sha256":"05dba5ee40609b0ac94e14e591c515b3d9bd813ff5939625ff9a4bb78eb7c628"},{"file":"node_modules/better-sqlite3/build/Release/better_sqlite3.node","sha256":"a2cf78fc1ba336c9573768235098c82c9d35a1bd645415ea32926df23b202fb4"}],"rebuild":false}
+  • electron-builder  version=24.13.3 os=27.0.0
+  • loaded configuration  file=package.json ("build" field)
+  • skipped dependencies rebuild  reason=npmRebuild is set to false
+  • packaging       platform=darwin arch=arm64 electron=30.5.1 appOutDir=.scratch/af-macos-20261010/package-search-fix/mac-arm64
+  • copying Electron  source=/Users/meigong/Documents/design-asset-manager-macos/node_modules/electron/dist/Electron.app destination=/Users/meigong/Documents/design-asset-manager-macos/.scratch/af-macos-20261010/package-search-fix/mac-arm64/Electron.app
+  • default Electron icon is used  reason=application icon is not set
+  • skipped macOS code signing  reason=identity explicitly is set to null
+Skipping Apple notarization: Apple credentials (APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID) are not set.

@@ -1,6 +1,17 @@
-# DAM 当前状态
+# DAM 当前状态（A–D/F进行中）
 
-A–D/F Mac持续验收，Goal active。用户将Eagle联动移到独立分支 `codex/eagle-integration` / `ed098f6`，目录 `/Users/meigong/Documents/design-asset-manager-macos`，后续调整方向，E暂停未完成。本工作区撤回本轮E差异。F普通UI已达10000条（3内容），33条正式恢复后全Original SHA/完整性/外键通过；大库查询、保存重开和剩余A–D/F继续。详见 [本轮记录](AF-MACOS-20261010.md)。
+`codex/macos-migration`继续A–D/F，Eagle独立分支8cf60c7延期。万条Copy/真实恢复/普通5be包重开已成立；5be新增三张公开图九项后台效果已保存，原187资料选定字段、原件及旧186向量/2任务保持。随后发现前台查询快照泄漏，修复后的48d候选工程检查与Mac包通过，但普通UI复验等待解锁；Goal active，A–D/F及父级未关闭。准确接续见 [TASK](../../TASK.md)、[本轮记录](AF-MACOS-20261010.md)。
+
+当前唯一普通Host：PID91119 / `http://127.0.0.1:57228` / `dam-48d2ccd23660d439`，同公开profile。旧5be Host87396已正规退出并确认物理退出。新IAB需经实体候选高级维护的正规入口授权，不能复用旧端口或会话。
+
+普通未签名候选启动命令：
+
+```sh
+cd /Users/meigong/Documents/design-asset-manager-macos
+".scratch/af-macos-20261010/package-search-fix/mac-arm64/Design Asset Manager.app/Contents/MacOS/Design Asset Manager" --dam-profile=/Users/meigong/Documents/DAM-public-macos-profile
+```
+
+先检查同profile已有Host并复用/正常退出，不启动第二个Host。开发启动器仍用下方npm的`--profile`；直接应用参数是`--dam-profile`。包在本机scratch，未签名/安装/发行资格不由普通启动代替。
 
 下列是已交付环境与基线，后续新增执行及父级状态按本轮证据更新。
 

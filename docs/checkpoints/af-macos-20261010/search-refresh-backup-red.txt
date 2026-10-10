@@ -1,0 +1,27 @@
+TAP version 13
+# Subtest: search snapshots and background count caches survive protected schema backups
+not ok 1 - search snapshots and background count caches survive protected schema backups
+  ---
+  duration_ms: 223.76275
+  location: '/Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/search-schema-backup.integration.test.mjs:12319:7'
+  failureType: 'testCodeFailure'
+  error: 'false == true'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/search-schema-backup.integration.test.mjs:12393:12)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 226.405958

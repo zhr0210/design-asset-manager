@@ -362,7 +362,7 @@ export const useAssetStore = create<AssetState>((set, get) => ({
     try {
       const authority = typeof currentApi.searchAssetsPage === 'function' ? await currentApi.library.inspect() : null
       const scope = authority?.state==='ready' ? {libraryIdentity:authority.identity!,generation:authority.generation!} : null
-      const firstPage = scope ? await currentApi.searchAssetsPage({...scope,query:'',tagScope:'includes-pending',limit:100}) : null
+      const firstPage = scope ? await currentApi.searchAssetsPage({...scope,query:'',tagScope:'includes-pending',limit:100,retainSnapshot:false}) : null
       const refs = scope ? [...new Set([...get().bulkSelectedAssetIds,...(get().selectedAsset?[get().selectedAsset!.id]:[])])].slice(0,500) : []
       const selectedRows = scope && refs.length ? await currentApi.readSearchAssets({...scope,ids:refs}) : []
       const dbAssets = firstPage ? [] : await currentApi.listAssets({ keyword:queries.length?queries.join(' '):undefined,includePending })

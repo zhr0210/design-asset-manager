@@ -53,7 +53,8 @@ await test('search snapshots and background count caches survive protected schem
   }finally{
     await host.close()
     assert.deepEqual(await Promise.all(files.map(file=>fs.readFile(file))),originalBytes)
-    assert.ok(root.startsWith(path.resolve(os.tmpdir())+path.sep)&&path.basename(root).startsWith('dam-search-schema-'))
+    assert.equal(path.dirname(root),await fs.realpath(os.tmpdir()))
+    assert.ok(path.basename(root).startsWith('dam-search-schema-'))
     await fs.rm(root,{recursive:true,force:true})
   }
 })

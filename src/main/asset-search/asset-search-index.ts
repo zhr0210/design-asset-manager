@@ -240,6 +240,7 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
       d.assertAuthority(); expire()
       const deadline = AbortSignal.timeout(60000)
       const key = digest({ ...input, cursor: undefined }), signal = cancellation ? AbortSignal.any([deadline,cancellation]) : deadline
+      const retainSnapshot = input.retainSnapshot !== false
       let snapshotId: string, offset = 0
       if (input.cursor) {
         const cursor = cursors.get(input.cursor)
@@ -247,7 +248,7 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
         snapshotId = cursor.snapshot; offset = cursor.offset
       } else {
         if (!building) await sync(signal)
-        if (snapshots.size >= 16) throw Error('ASSET_SEARCH_BUSY')
+        if (retainSnapshot && [...snapshots.values()].filter(snapshot => snapshot.query.retainSnapshot !== false).length >= 16) throw Error('ASSET_SEARCH_BUSY')
         snapshotId = randomUUID()
         const gen = meta('active'), terms = [...new Set(normalize(input.query).split(/[\s,，。！？!?；;：:、]+/u).filter(Boolean))]
         if (terms.length > 64) throw Error('ASSET_SEARCH_QUERY_TOO_COMPLEX')
@@ -304,7 +305,7 @@ export function createAssetSearchIndex(d: { database: Database.Database; control
         }
       }
       let nextCursor: string | null = null
-      if (offset < snapshot.total) { nextCursor = randomUUID(); cursors.set(nextCursor,{ snapshot:snapshotId,offset,key,expires:snapshot.expires }) }
+      if (retainSnapshot && offset < snapshot.total) { nextCursor = randomUUID(); cursors.set(nextCursor,{ snapshot:snapshotId,offset,key,expires:snapshot.expires }) }
       // A fully returned first page exposes no cursor and has no future reader.
       // Repeated source notifications must not retain these completed snapshots.
       if(!nextCursor&&!input.cursor){snapshots.delete(snapshotId);index.prepare('DELETE FROM snapshot_hits WHERE snapshot=?').run(snapshotId)}

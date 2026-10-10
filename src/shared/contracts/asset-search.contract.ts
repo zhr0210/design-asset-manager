@@ -8,6 +8,8 @@ export type AssetSearchField=typeof ASSET_SEARCH_FIELDS[number]
 export interface AssetSearchRequest {
   libraryIdentity: string; generation: string; query: string; tagScope: 'confirmed-only' | 'includes-pending';
   sourceSiteId?: string; folderId?:string; aiFolderId?:string; tagQueries?: readonly string[]; color?:AssetColorFilter;fields?:readonly AssetSearchField[]; limit: number; cursor?: string;
+  /** First-page row refreshes have no future reader and must not lease paging state. */
+  retainSnapshot?: boolean;
 }
 export interface AssetSearchIndexStatus {
   state: 'ready' | 'building' | 'recovering' | 'unavailable'; indexGeneration: string;
@@ -22,10 +24,11 @@ export function validateAssetSearchRequest(value: unknown): AssetSearchRequest {
   const v = value as AssetSearchRequest
   const id = (s: unknown) => typeof s === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/.test(s)
   if (!v || typeof v !== 'object' || Array.isArray(v) || Object.keys(v).some(k =>
-    !['libraryIdentity','generation','query','tagScope','sourceSiteId','folderId','aiFolderId','tagQueries','color','fields','limit','cursor'].includes(k)) ||
+    !['libraryIdentity','generation','query','tagScope','sourceSiteId','folderId','aiFolderId','tagQueries','color','fields','limit','cursor','retainSnapshot'].includes(k)) ||
     !id(v.libraryIdentity) || !id(v.generation) || typeof v.query !== 'string' || v.query.length > 1024 ||
     !['confirmed-only','includes-pending'].includes(v.tagScope) || !Number.isInteger(v.limit) || v.limit < 1 || v.limit > 100 ||
     v.sourceSiteId !== undefined && (!id(v.sourceSiteId)) || v.folderId!==undefined&&!id(v.folderId) || v.aiFolderId!==undefined&&!isAiFolderId(v.aiFolderId) || v.cursor !== undefined && (!id(v.cursor)) ||
+    v.retainSnapshot !== undefined && (typeof v.retainSnapshot !== 'boolean' || v.retainSnapshot === false && v.cursor !== undefined) ||
     v.tagQueries !== undefined && (!Array.isArray(v.tagQueries) || v.tagQueries.length > 30 ||
       v.tagQueries.some(q => typeof q !== 'string' || q.length > 256))) throw Error('ASSET_SEARCH_INPUT_INVALID')
   if(v.color!==undefined){const c=v.color

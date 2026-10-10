@@ -1,15 +1,12 @@
-# A–F Mac 当前检查点（2026-10-10）
+# A–D/F Mac 当前检查点
 
-当前进度见 [本轮记录](../../handoff/AF-MACOS-20261010.md)。Goal已恢复active，A–F未全量关闭。旧blocked审计保留历史。
+当前状态和下一动作以 [TASK](../../../TASK.md) 与 [本轮记录](../../handoff/AF-MACOS-20261010.md) 为准。Goal active，未全部完成，Eagle延期独立分支。
 
-- 当前唯一普通Host65513/55963/5be；正规Desktop/IAB恢复，不读取Cookie/授权秘密。新19c8正式候选已构建并生成未签名arm64包，尚未切换普通Host。
-- F：前6000条含33条真实恢复，7/8批成功，9批运行中；10000副本仅3种公开内容，不当独立质量样本。第一次1000确认因Host500上限失败，修复共享2000上限并保留红→绿回归及实际1000 Copy。
-- 第六批5967条时部分失败，33条请求/原件保留；普通入库恢复逐条核验/来源重选后6000条，恢复清单为空。错来源被拒。f-sqlite-reader-lock-mechanism.json仅证明隔离SQLite读锁可令timeout0写抛SQLITE_BUSY；本次原始错误未捕获，不能断言生产根因，不在复制期间验库。
-- E：用户指定测试库228资产已授权，原有492文件摘要留本机scratch。0.2.0正规安装/菜单运行发现端口与已有MCP冲突；0.2.1改41597已正规更新、正常退出重启、实际窗口等待配对，与41596 MCP共存。真实配对/分页/读写/撤权/重开仍待。
-- C旧6d6：普通186/186范围，中文/英文/混合/以图及Clipboard词法找回；旧185向量全字段及人工/原件/旧分析保持。最终Host重开待。
-- D旧6d6：官方Blender ZIP/许可/CRC/SHA、真实播放器/两帧30.500与120.500、备注/来源拒绝保护、四类实际Browser下载。旧transform误标Windows保留，新generic转换说明回归通过，普通新帧待。
-- 包内SQLite/Sharp/Pi先前342516工程消费分别保持原身份，不能替代19c8普通包启动/真实模型/安装验收。
+- `f-10000-copy-real.json` / `f-packaged-real-reopen.json`：真实万条UI Copy、33条恢复、240分页保选择、5be普通Mac包重开万条和三位置查询、Original全字节核对；仅3内容，不当万条质量样本。
+- `a-nine-background-effects-real.jpg` / `a-nine-effects-protection.json`：5be包新三张真实标签/描述/OCR9效果；旧187选定字段/原件及旧186向量/2任务全字段保持。GPU仅2B真实挑战，九后台效果为2B CPU/OCR；结果内容与人工重跑仍待。
+- `search-after-background-failure-real.jpg`：旧5be前台查询失败，保留原结果。
+- `search-refresh-fix-checkpoint.json`：Store第一页面刷新遗留游标，耗尽16个快照；修复瞬时行刷新而不放宽用户分页。Host/Store红→绿，类型/检索/备份/治理/构建/包通过；备份清理路径Mac真实父目录修正另留红→绿。
+- `search-fix-host-startup.json`：当前48d普通候选PID91119/57228，待手动解锁后正规IAB授权与普通路径复验；不继承旧5be资格。
+- C/D旧6d6/5be范围记录仍属对应版本，视频两旧帧误记transform保留，新generic帧尚待。完整receipt/native actor/账号秘密未读取。
 
-受测资料均为指定公开内容。未读取receipt完整内容、native actor、账号秘密或完整配置；其他AGENTS与验收流程WIP保持。外屏、真实断网、Windows指定压力、签名商业发行仍分列，完整Dropover扩展延期。
-
-最新调整：Eagle后续工作移到 `codex/eagle-integration` / `ac8a2fa`；相关E证据移入该工作目录 `docs/checkpoints/eagle-integration-20261010/`，主迁移继续A–D/F。F十批10000实际Copy与33条恢复已完成，见f-10000-copy-real.json，文字索引/大库重开待。19c8停止用作当前候选，重新构建不含本轮E改动的版本。
+基线和旧阻塞记录保留历史。两份其他AGENTS/验收流程WIP原字节保持，不提交；外屏/断网/Windows原页/签名商业发行未扩大。单Host，不推送或关闭父级。

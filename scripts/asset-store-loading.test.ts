@@ -740,6 +740,22 @@ async function runTests() {
   assert.equal(useAssetStore.getState().tagLoadError, null)
   assert.deepEqual(useAssetStore.getState().tags, [])
 
+  // The store refreshes only its first bounded page; Library search owns user paging.
+  {
+    resetStore()
+    const requests:Array<{retainSnapshot?:boolean}>=[]
+    Object.assign(mockApi,{
+      library:{inspect:async()=>({state:'ready',identity:'public-library',generation:'public-generation'})},
+      searchAssetsPage:async(request:{retainSnapshot?:boolean})=>{requests.push(request);return {matches:[],total:190,nextCursor:null,index:{state:'ready',indexed:190,pending:0,total:190,watermark:0,error:null,indexGeneration:'index-generation'}}},
+      readSearchAssets:async()=>[]
+    })
+    try{
+      for(let refresh=0;refresh<25;refresh++)await useAssetStore.getState().loadAssets()
+      assert.equal(requests.length,25)
+      assert.ok(requests.every(request=>request.retainSnapshot===false),'Background row refreshes must not leak unused paging snapshots')
+      assert.equal(useAssetStore.getState().assetLoadStatus,'ready')
+    }finally{for(const key of ['library','searchAssetsPage','readSearchAssets'])Reflect.deleteProperty(mockApi,key)}
+  }
   console.log('--- All asset-store-loading behavior tests PASSED successfully ---')
 }
 

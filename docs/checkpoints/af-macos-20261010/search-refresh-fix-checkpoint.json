@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-10",
+  "sourceBranch": "codex/macos-migration",
+  "beforeBuild": "dam-5be87024c1293899",
+  "fixedBuild": "dam-48d2ccd23660d439",
+  "fixedSourceDigest": "48d2ccd23660d4395cbf0541140e3884e7274d52edc178e7744ecd0334434449",
+  "sourceInputs": 790,
+  "symptom": "Repeated row refreshes after public background analysis exhausted retained query snapshots; foreground query failed and kept old results",
+  "cause": "Asset Store requested paged first 100 on every refresh but discarded the next cursor; incomplete query snapshots remained leased up to five minutes",
+  "repair": "First-page-only row refresh explicitly requests retainSnapshot:false; no cursor and temporary hits released before return",
+  "preservedGuards": [
+    "16 retained snapshots",
+    "five minute user paging expiry",
+    "existing user cursors",
+    "bounded first page and 200000 total result cap",
+    "shared resource admission",
+    "library identity/generation",
+    "source and human contents"
+  ],
+  "checks": {
+    "hostSearch": "9/9",
+    "assetStoreLoading": "passed including 25 refreshes",
+    "typecheck": "passed",
+    "retrievalHost": "passed",
+    "schemaBackup": "passed after canonical Mac temp-parent cleanup guard fix",
+    "context": "passed",
+    "build": "passed",
+    "unsignedMacDirectoryPackage": "passed"
+  },
+  "realUiFailureOn5beRecorded": true,
+  "realUiFixed48dPendingUnlock": true,
+  "currentHost": {
+    "pid": 91119,
+    "origin": "http://127.0.0.1:57228",
+    "profile": "same public profile"
+  },
+  "macLockedObserved": true,
+  "blockAuditConsecutiveTurns": 1,
+  "goalComplete": false,
+  "unrelatedWipPreserved": true,
+  "secretRead": false,
+  "eagleScope": "deferred independent branch"
+}

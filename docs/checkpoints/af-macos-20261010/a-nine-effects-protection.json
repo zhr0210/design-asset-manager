@@ -1,0 +1,30 @@
+{
+  "build": "dam-5be87024c1293899",
+  "newPublicAssets": 3,
+  "newBackgroundEffects": 9,
+  "original187SelectedPersistedFieldsUnchanged": true,
+  "original186VectorsAnd2JobsAllFieldsUnchanged": true,
+  "original187FilesBytePreserved": true,
+  "currentCounts": {
+    "assets": 190,
+    "attempts": 59,
+    "evidence": 57,
+    "ocr": 24,
+    "ocrEdits": 24,
+    "workSets": 2,
+    "workMembers": 6,
+    "background": 72,
+    "backgroundPolicy": 1,
+    "backgroundHistory": 73
+  },
+  "onlyExpectedPolicyEditsExcludedFromOldSignature": true,
+  "backgroundPausedBeforeRestart": true,
+  "ordinaryPackagedRealConsumers": {
+    "GGUF2BGpuChallenge": true,
+    "GGUF2BCpuBackground": true,
+    "RapidOcr3Inputs": true
+  },
+  "retrievalNewChallengeResourceWaitObserved": true,
+  "searchFailureStillOpenOnOld5be": true,
+  "productionDbWritesByAgent": false
+}

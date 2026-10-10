@@ -199,3 +199,31 @@ await test('owned derived index generations rebuild and recover corrupted data w
     assert.equal(await fs.readFile(derived,'utf8'),'controlled corruption of a disposable derived index')
   } finally { await f.close() }
 })
+
+await test('row refreshes do not retain unused paging snapshots or consume existing user cursors',async()=>{
+ const f=await fixture()
+ try{
+   const user=await f.query('generated',1);assert.ok(user.nextCursor)
+   const input={...f.scope,query:'generated',tagScope:'includes-pending' as const,limit:1,retainSnapshot:false}
+   for(let refresh=0;refresh<25;refresh++){
+     const page=await f.host.searchAssetPage(input)
+     assert.equal(page.total,3);assert.equal(page.matches.length,1)
+     assert.equal(page.nextCursor,null,'Row refresh never promises a cursor its consumer discards')
+   }
+   assert.equal((await f.query('generated',1,user.nextCursor!)).matches.length,1,'Existing user paging survives row refreshes')
+   await assert.rejects(f.host.searchAssetPage({...input,retainSnapshot:'no'}))
+   await assert.rejects(f.host.searchAssetPage({...input,cursor:user.nextCursor!}))
+ }finally{await f.close()}
+})
+await test('transient refreshes remain available at the retained-snapshot limit without weakening that limit',async()=>{
+ const f=await fixture()
+ try{
+   const pages=[]
+   for(let n=0;n<16;n++)pages.push(await f.query('generated',1))
+   await assert.rejects(f.query('generated',1),'The retained query bound stays at 16')
+   const refresh=await f.host.searchAssetPage({...f.scope,query:'generated',tagScope:'includes-pending',limit:1,retainSnapshot:false})
+   assert.equal(refresh.total,3);assert.equal(refresh.nextCursor,null)
+   for(const page of pages)assert.equal((await f.query('generated',1,page.nextCursor!)).matches.length,1)
+   await assert.rejects(f.query('generated',1),'Refreshing rows does not evict or exceed retained query leases')
+ }finally{await f.close()}
+})
