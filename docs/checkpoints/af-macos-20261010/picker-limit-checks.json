@@ -1,0 +1,22 @@
+[
+  {
+    "check": "picker-limit-green",
+    "exitCode": 0,
+    "seconds": 0.695
+  },
+  {
+    "check": "picker-ui-limit",
+    "exitCode": 0,
+    "seconds": 1.933
+  },
+  {
+    "check": "picker-typecheck",
+    "exitCode": 0,
+    "seconds": 6.882
+  },
+  {
+    "check": "picker-build",
+    "exitCode": 0,
+    "seconds": 5.238
+  }
+]

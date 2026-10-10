@@ -1,0 +1,13 @@
+
+> design-asset-manager@1.0.0 test-local-dam-file-selection
+> node scripts/run-ts-test.mjs scripts/local-dam-file-selection.test.ts
+
+file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/local-dam-file-selection.test.mjs:135
+      if (!request || Object.keys(request).sort().join() !== "entries,session" || !Array.isArray(request.entries) || !request.entries.length || request.entries.length > 500 || new Set(request.entries).size !== request.entries.length) throw Error("\u8BF7\u9009\u62E9\u6587\u4EF6\u6216\u6587\u4EF6\u5939\u3002");
+                                                                                                                                                                                                                                                ^
+
+Error: 请选择文件或文件夹。
+    at Object.confirm (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/local-dam-file-selection.test.mjs:135:241)
+    at file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/local-dam-file-selection.test.mjs:215:16
+
+Node.js v25.8.0

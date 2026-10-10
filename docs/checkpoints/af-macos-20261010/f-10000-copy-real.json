@@ -1,0 +1,32 @@
+{
+  "kind": "ordinary-ui-10000-copy-and-33-recovery-read-only-oracle",
+  "build": "dam-5be87024c1293899",
+  "assets": 10000,
+  "distinctAssetIds": 10000,
+  "requests": 10000,
+  "distinctSourceNames": 10000,
+  "candidateStates": [
+    [
+      "promoted",
+      10000
+    ]
+  ],
+  "originalFiles": 10000,
+  "countsBySha256": {
+    "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7": 3333,
+    "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5": 3334,
+    "341a6f0a61557662b02734a9b6e56ec33a915b2c41886b97509dedf2a43b47a3": 3333
+  },
+  "allOriginalsMatchPublicInputs": true,
+  "firstTitle": "AF-F-00001-astronaut",
+  "lastTitle": "AF-F-10000-astronaut",
+  "integrity": "ok",
+  "foreignKeyErrors": 0,
+  "directDbWrites": false,
+  "copyPlanBatches": 10,
+  "batchSize": 1000,
+  "sixthBatchInitiallyPartial": 5967,
+  "ordinaryRecoveryCount": 33,
+  "copyCompleteBeforeOracle": true,
+  "contentsAreOnly3PublicSamples": true
+}

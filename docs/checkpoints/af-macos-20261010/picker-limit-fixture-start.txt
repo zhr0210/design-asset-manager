@@ -1,0 +1,12 @@
+
+> design-asset-manager@1.0.0 test-local-dam-file-selection
+> node scripts/run-ts-test.mjs scripts/local-dam-file-selection.test.ts
+
+file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/local-dam-file-selection.test.mjs:206
+  assert.equal(bulkSnapshot.entries.length, 2e3);
+                            ^
+
+TypeError: Cannot read properties of null (reading 'entries')
+    at file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/local-dam-file-selection.test.mjs:206:29
+
+Node.js v25.8.0

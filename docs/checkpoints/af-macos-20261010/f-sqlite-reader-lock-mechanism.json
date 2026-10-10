@@ -1,0 +1,9 @@
+{
+  "kind": "isolated-sqlite-contention-mechanism",
+  "journalMode": "DELETE",
+  "writerTimeout": 0,
+  "heldReadTransactionWriteError": "SQLITE_BUSY",
+  "afterReadReleased": 2,
+  "productionFailureRootCauseConfirmed": false,
+  "productionDatabaseTouched": false
+}

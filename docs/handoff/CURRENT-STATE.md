@@ -1,6 +1,8 @@
-# 当前状态（2026-10-10）
+# DAM 当前状态
 
-A–F 新一轮持续验收已启动，当前实际受阻，完整目标保留；当前342516普通Host已启动，原生锁屏及新IAB入口拦截待恢复，E专用公开库待切换。范围/进展见 [本轮记录](AF-MACOS-20261010.md)。下列是已交付环境与基线，后续新增执行及父级状态按本轮证据更新。
+A–D/F Mac持续验收，Goal active。用户将Eagle联动移到独立分支 `codex/eagle-integration` / `ac8a2fa`，目录 `/Users/meigong/Documents/design-asset-manager-eagle`，后续调整方向，E暂停未完成。本工作区撤回本轮E差异。F普通UI已达10000条（3内容），33条正式恢复后全Original SHA/完整性/外键通过；大库查询、保存重开和剩余A–D/F继续。详见 [本轮记录](AF-MACOS-20261010.md)。
+
+下列是已交付环境与基线，后续新增执行及父级状态按本轮证据更新。
 
 Mac 开发环境、迁移必需路径及本轮 bug 收敛已完成。最后确认与文件整理见 [收口台账](MACOS-DELIVERY-CLOSURE-20261010.md)；未验证项统一在 [待测清单](DEFERRED-ACCEPTANCE.md)。窗口交互扩展延期，云上传/分享取消。
 

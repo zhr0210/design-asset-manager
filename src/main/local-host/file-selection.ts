@@ -4,6 +4,7 @@ import os from 'node:os'
 import { randomUUID } from 'node:crypto'
 import type { OpenDialogOptions, OpenDialogReturnValue } from 'electron'
 import type { FilePickerEntry, FilePickerSnapshot } from '../../shared/contracts/file-selection.contract'
+import { FILE_PICKER_MAX_ENTRIES } from '../../shared/contracts/file-selection.contract'
 
 interface Selection {
   id: string; owner: string; options: OpenDialogOptions; generation: string
@@ -60,7 +61,7 @@ export function createFileSelection(input: {
     const extensions = new Set(session.options.filters?.flatMap(filter => filter.extensions.map(extension => extension.toLowerCase())) ?? [])
     const matching = files.filter(file => !file.isSymbolicLink() && (file.isDirectory() || (file.isFile() && (extensions.size === 0 || extensions.has('*') || extensions.has(path.extname(file.name).slice(1).toLowerCase())))))
       .sort((a, b) => Number(b.isDirectory()) - Number(a.isDirectory()) || a.name.localeCompare(b.name, 'zh-CN', { numeric: true }))
-    const entries = matching.slice(0, 2000).map(file => ({ id: addPath(session, path.join(directory, file.name)), name: file.name, kind: file.isDirectory() ? 'directory' as const : 'file' as const }))
+    const entries = matching.slice(0, FILE_PICKER_MAX_ENTRIES).map(file => ({ id: addPath(session, path.join(directory, file.name)), name: file.name, kind: file.isDirectory() ? 'directory' as const : 'file' as const }))
     const parent = path.dirname(directory)
     const canParent = parent !== directory && (!input.syntheticRoot || directory !== await fs.realpath(input.syntheticRoot))
     return { id: session.id, title: session.options.title ?? '选择本机文件', mode: session.options.properties?.includes('openDirectory') ? 'directory' : 'files', multiple: session.options.properties?.includes('multiSelections') ?? false,
@@ -102,7 +103,7 @@ export function createFileSelection(input: {
       return snapshot(session)
     },
     async confirm(owner: string, request: { session: string; entries: string[] }) {
-      if (!request || Object.keys(request).sort().join() !== 'entries,session' || !Array.isArray(request.entries) || !request.entries.length || request.entries.length > 500 || new Set(request.entries).size !== request.entries.length) throw Error('请选择文件或文件夹。')
+      if (!request || Object.keys(request).sort().join() !== 'entries,session' || !Array.isArray(request.entries) || !request.entries.length || request.entries.length > FILE_PICKER_MAX_ENTRIES || new Set(request.entries).size !== request.entries.length) throw Error('请选择文件或文件夹。')
       const session = get(owner, request.session)
       if (!session.options.properties?.includes('multiSelections') && request.entries.length !== 1) throw Error('本次只能选择一个位置。')
       const paths: string[] = []

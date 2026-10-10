@@ -5,6 +5,11 @@ React Renderer. Electron remains the sole file, SQLite, process and inference
 authority. `index.ts` registers each command once; Electron IPC and the loopback
 HTTP adapter enter the same handler and existing Library authority queue.
 
+The ordinary file selector uses the same 2000-entry capacity for listing and
+confirmation. Bulk selection submits only current listed files; owner/session,
+generation, duplicates, file/directory type and single-selection checks remain.
+It does not recursively collect files or authorize arbitrary paths.
+
 ## Launch and lifecycle
 
 Build with `npm run build`. `npm run start:desktop` opens the desktop workspace;

@@ -1,14 +1,15 @@
-# A–F Mac 2026-10-10 当前检查点
+# A–F Mac 当前检查点（2026-10-10）
 
-状态见 [本轮记录](../../handoff/AF-MACOS-20261010.md)。Goal active，A–F未全量关闭。
+当前进度见 [本轮记录](../../handoff/AF-MACOS-20261010.md)。Goal已恢复active，A–F未全量关闭。旧blocked审计保留历史。
 
-- C：普通6d6范围确认→186/186，中文/英文/混合/以图及Clipboard词法找回；旧185 canonical全字段、原件/人工/旧分析保持。
-- D：官方ZIP/许可/CRC/原片SHA；确认前取消不升级，普通Copy备份14→15、真实播放器81→161秒推进/暂停；两帧30.500/120.500、双语备注/来源拒绝保护，四类Browser实际下载与字节/像素核对。旧6d6的transform误标Windows保持历史，新修复不能继承其资格。
-- 两修复：共享帧转换说明改为真实Sharp PNG流程；FileSelection仅当前受限列表文件的全选/清除，single/directory/busy/session保护保持。便携临时SQLite来源回归红→绿，实际React2000项/截断/模式等通过；不当正式UX。
-- 工程初次失败分别是新测试未tracked、UI npm指令未走已有批准runner；原日志保持。明确注册与批准runner后context/router/build通过，未放宽安全白名单。当前342516构建790输入。
-- F：普通Browser创建独立空库，选200项后取消未入库；10000真实公开副本、仅3种内容已准备。6d6旧包与342516新包分别记录，均未签名/安装/发布；包生成不当用户路径。
-- 正规退出旧64987 Host，0草稿/0原生未保存/0登录任务，实际退出；普通Browser新Host90302/64545/342516已启动。新IAB正规/launch报客户端拦截，Chrome连接超时重置工具，Mac锁屏阻塞原生。没有复制凭据或绕过认证。
+- 当前唯一普通Host65513/55963/5be；正规Desktop/IAB恢复，不读取Cookie/授权秘密。新19c8正式候选已构建并生成未签名arm64包，尚未切换普通Host。
+- F：前6000条含33条真实恢复，7/8批成功，9批运行中；10000副本仅3种公开内容，不当独立质量样本。第一次1000确认因Host500上限失败，修复共享2000上限并保留红→绿回归及实际1000 Copy。
+- 第六批5967条时部分失败，33条请求/原件保留；普通入库恢复逐条核验/来源重选后6000条，恢复清单为空。错来源被拒。f-sqlite-reader-lock-mechanism.json仅证明隔离SQLite读锁可令timeout0写抛SQLITE_BUSY；本次原始错误未捕获，不能断言生产根因，不在复制期间验库。
+- E：用户指定测试库228资产已授权，原有492文件摘要留本机scratch。0.2.0正规安装/菜单运行发现端口与已有MCP冲突；0.2.1改41597已正规更新、正常退出重启、实际窗口等待配对，与41596 MCP共存。真实配对/分页/读写/撤权/重开仍待。
+- C旧6d6：普通186/186范围，中文/英文/混合/以图及Clipboard词法找回；旧185向量全字段及人工/原件/旧分析保持。最终Host重开待。
+- D旧6d6：官方Blender ZIP/许可/CRC/SHA、真实播放器/两帧30.500与120.500、备注/来源拒绝保护、四类实际Browser下载。旧transform误标Windows保留，新generic转换说明回归通过，普通新帧待。
+- 包内SQLite/Sharp/Pi先前342516工程消费分别保持原身份，不能替代19c8普通包启动/真实模型/安装验收。
 
-当前尚未执行：新构建UI批量导入/新帧正确provenance/最终重开保护，A/B本批新增消费者复验，E实际库/插件/配对与读写冲突，F万条入库/性能/持续运行/普通包启动。图像、视频和下载只有指定公开内容；未包含完整receipt、native actor、账号秘密或全配置。保留原件、备用库、模型/Python/Pi与其他WIP。
+受测资料均为指定公开内容。未读取receipt完整内容、native actor、账号秘密或完整配置；其他AGENTS与验收流程WIP保持。外屏、真实断网、Windows指定压力、签名商业发行仍分列，完整Dropover扩展延期。
 
-包内消费补充：`packaged-native-consumption.json`、`packaged-execution-inputs.json`、`packaged-pi-consumption.json`分别记录实际包内原生模块执行、当前运行输入字节等价、真实Pi封印/固定Node。均未启动第二Host或读取profile，不代替普通包UI启动/模型/安装验收。
+最新调整：Eagle后续工作移到 `codex/eagle-integration` / `ac8a2fa`；相关E证据移入该工作目录 `docs/checkpoints/eagle-integration-20261010/`，主迁移继续A–D/F。F十批10000实际Copy与33条恢复已完成，见f-10000-copy-real.json，文字索引/大库重开待。19c8停止用作当前候选，重新构建不含本轮E改动的版本。

@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-local-dam-file-selection
+> node scripts/run-ts-test.mjs scripts/local-dam-file-selection.test.ts
+
+PASS scoped picker rejects targets before filesystem resolution, retains session and permits in-scope directories
