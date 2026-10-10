@@ -8,7 +8,7 @@
 - [ ] B：本机目标模型来源/安装/导入/运行/资源切换与保护，按实际支持矩阵验收。
 - [ ] C：普通检索/索引恢复与当前新增 Clipboard 覆盖，持久向量保护。
 - [ ] D：Blender 官方真实视频/参考帧/交付及本机原生专项。
-- [ ] E：用户要求后续调整方向，已隔离到 `codex/eagle-integration` / `ac8a2fa`，目录 `/Users/meigong/Documents/design-asset-manager-eagle`；本轮暂停，保持未完成。
+- [ ] E：用户要求后续调整方向，已隔离到 `codex/eagle-integration` / `ed098f6`，目录 `/Users/meigong/Documents/design-asset-manager-macos`；本轮暂停，保持未完成。
 - [ ] F：Mac 普通候选、公开规模库、持续运行/性能/迁移与保存重开；签名/商业发行另列。
 
 逐项证据和下一动作见 [A–F 本轮记录](docs/handoff/AF-MACOS-20261010.md)，当前既有环境见 [CURRENT-STATE](docs/handoff/CURRENT-STATE.md)。上一轮 [迁移收口](docs/handoff/MACOS-DELIVERY-CLOSURE-20261010.md)保持完成，不再加载其历史时间线。
@@ -20,3 +20,5 @@
 账号由正规应用内部使用，Agent 不读取秘密。背景任务只按本轮明确选择执行；未知提交不自动重发，原件/人工/旧分析保留。其他 AGENTS/验收流程 WIP 保持。必要代码/依赖/测试/构建自主推进，保存本地检查点，不自动推送/发布或关闭父级。
 
 当前Goal active，最新范围为A–D/F，E由用户明确移到独立分支。F从普通UI十批导入达到10000，33条正式恢复，全部原件/请求/ID及完整性核对通过，仅3种公开内容。唯一旧Host65513/55963/5be；E新候选19c8停止使用，已撤回本轮E差异并重新构建A–D/F候选。下一步重开大库、查询分页与后台响应，D新帧、C/A/B消费者和Mac普通包。
+
+目录已统一，Eagle额外worktree已移除；从同一源码目录切换各分支，详情见 [分支与目录](docs/handoff/BRANCHES.md)。

@@ -1,6 +1,6 @@
 # DAM 当前状态
 
-A–D/F Mac持续验收，Goal active。用户将Eagle联动移到独立分支 `codex/eagle-integration` / `ac8a2fa`，目录 `/Users/meigong/Documents/design-asset-manager-eagle`，后续调整方向，E暂停未完成。本工作区撤回本轮E差异。F普通UI已达10000条（3内容），33条正式恢复后全Original SHA/完整性/外键通过；大库查询、保存重开和剩余A–D/F继续。详见 [本轮记录](AF-MACOS-20261010.md)。
+A–D/F Mac持续验收，Goal active。用户将Eagle联动移到独立分支 `codex/eagle-integration` / `ed098f6`，目录 `/Users/meigong/Documents/design-asset-manager-macos`，后续调整方向，E暂停未完成。本工作区撤回本轮E差异。F普通UI已达10000条（3内容），33条正式恢复后全Original SHA/完整性/外键通过；大库查询、保存重开和剩余A–D/F继续。详见 [本轮记录](AF-MACOS-20261010.md)。
 
 下列是已交付环境与基线，后续新增执行及父级状态按本轮证据更新。
 
@@ -46,3 +46,5 @@ A–F阶段公开库现187资产（新增官方视频）、53尝试/51证据、2
 本轮适用任务标记完成；T23 全量/父 #24、WC01、A–F、Eagle与商业发行保留未覆盖条件，未修改远端 issue、未推送/发布。真实断网、Windows 原页压力、Eagle、签名安装/商业发行、无外屏及其他未验项集中留待以后。
 
 只按新用户要求从待测清单接续。需要原始版本/来源/失败链时查 [Mac 历史索引](../history/handoff-snapshots/macos-20261009-20261010/README.md)，不默认加载整批历史。源码、模型、凭据、实际资料库、运行环境和其他 WIP 保留。
+
+目录已统一，Eagle额外worktree已移除；从同一源码目录切换各分支，详情见 [分支与目录](BRANCHES.md)。

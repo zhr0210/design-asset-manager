@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-10",
+  "sourceDirectory": "/Users/meigong/Documents/design-asset-manager-macos",
+  "worktreeCount": 1,
+  "currentBranch": "codex/macos-migration",
+  "refsBefore": {
+    "main": "6b86ef05e558229e2bd87998101ca5678bc228cc",
+    "codex/macos-migration": "3f7f719457aae678325eff834011da250af53b50",
+    "codex/eagle-integration": "ac8a2fada00c3f95f89d18dd2bb7e9688c949467"
+  },
+  "refsAfter": {
+    "main": "6b86ef05e558229e2bd87998101ca5678bc228cc",
+    "codex/macos-migration": "3f7f719457aae678325eff834011da250af53b50",
+    "codex/eagle-integration": "ed098f621fc1020d4be863f139624c2672d5d715"
+  },
+  "eagleHistoryPreserved": true,
+  "ignoredArtifactFilesPreservedAndShaVerified": 12182,
+  "unrelatedWorkingFilesPreserved": [
+    "AGENTS.md",
+    "docs/agents/ui-ux-acceptance.md"
+  ],
+  "actualSwitchRoundTrip": [
+    "codex/macos-migration",
+    "codex/eagle-integration",
+    "codex/macos-migration"
+  ],
+  "removedSecondaryCheckout": true,
+  "artifactDirectory": ".scratch/eagle-isolated-20261010",
+  "resetCleanStashOrForceUsed": false,
+  "pushed": false
+}
