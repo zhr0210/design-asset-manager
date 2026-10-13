@@ -1,6 +1,14 @@
 # DAM 分支与工作树
 
-## 2026-10-13：B内容整合与后续工作
+## 当前：仅保留main
+
+2026-10-13用户要求清理其他分支，已删除本地`codex/floating-window-b`、`codex/floating-window-design`、`codex/macos-migration`和`codex/legacy-window-wip-20261013`，Eagle分支此前已删除。当前唯一本地分支为main，普通目录`/Users/meigong/Documents/design-asset-manager-macos`检出main。
+
+B及迁移成果保留在main历史；未合入main的旧WIP保存在标签`archive/legacy-window-wip-20261013`（9d63405），Eagle独有历史保存在`archive/eagle-integration-20261013`（8cf60c7）。标签不是开发分支，仅用于恢复。保留B的detached工作树及本地运行资料/证据，不删除资料库。没有修改远端、push或发布。
+
+以下分支和目录描述保留为整合过程历史，不再作为当前切换或接续指令；后续默认在main继续，除非用户另行要求建立分支。
+
+## 2026-10-13：B内容整合过程（历史）
 
 当前日常目录`/Users/meigong/Documents/design-asset-manager-macos`已检出本地main，工作区干净。`codex/floating-window-design`已解除其他worktree占用，可在日常目录切换；实际main→设计分支→main往返已验证。此前main已合并但普通目录仍在旧分支、且两个分支被worktree占用，导致用户看不到新文件并无法切换；该收尾问题已修正。
 
