@@ -22,17 +22,30 @@ func shelfEdgeDecision(_ frame:NSRect,screen:NSRect,others:[NSRect],deltaX:Doubl
     let p=min(1,max(0,(left ? screen.minX-frame.minX:frame.maxX-screen.maxX)/(frame.width*0.84)))
     return ShelfEdgeDecision(edge:edge,progress:p,target:target,docks:p>0 && ((left ? deltaX<0:deltaX>0) || p>0.4))
 }
-final class WorkShelfDockOverlay:NSView {
+final class WorkShelfDockOverlay:NSVisualEffectView {
     weak var shelf:NativeWorkShelf?
-    var edge="left"
+    private let tint=NSView()
+    private let arrow=NSImageView()
+    var edge="left" {didSet{needsLayout=true}}
+    override init(frame:NSRect) {
+        super.init(frame:frame)
+        material = .popover;blendingMode = .withinWindow;state = .active
+        tint.wantsLayer=true;tint.autoresizingMask=[.width,.height]
+        arrow.contentTintColor = .labelColor;arrow.imageScaling = .scaleProportionallyDown
+        addSubview(tint);addSubview(arrow);updateTint()
+    }
+    required init?(coder:NSCoder){nil}
+    override func viewDidChangeEffectiveAppearance(){super.viewDidChangeEffectiveAppearance();updateTint()}
+    private func updateTint(){effectiveAppearance.performAsCurrentDrawingAppearance{tint.layer?.backgroundColor=NSColor.windowBackgroundColor.withAlphaComponent(0.25).cgColor}}
+    override func layout() {
+        super.layout();tint.frame=bounds
+        let x=edge=="left" ? bounds.width-bounds.width*0.08:bounds.width*0.08
+        arrow.frame=NSRect(x:x-8,y:bounds.midY-12,width:16,height:24)
+        arrow.image=NSImage(systemSymbolName:edge=="left" ? "chevron.right":"chevron.left",accessibilityDescription:nil)
+    }
     override func hitTest(_ point:NSPoint)->NSView? {
         guard !isHidden,alphaValue>0.01,let shelf,!shelf.moving,!shelf.animating,shelf.docked else{return nil}
-        return super.hitTest(point)
-    }
-    override func draw(_ dirtyRect:NSRect) {
-        NSColor.windowBackgroundColor.withAlphaComponent(0.65).setFill();bounds.fill()
-        let x=edge=="left" ? bounds.width-bounds.width*0.08:bounds.width*0.08
-        NSImage(systemSymbolName:edge=="left" ? "chevron.right":"chevron.left",accessibilityDescription:nil)?.draw(in:NSRect(x:x-8,y:bounds.midY-12,width:16,height:24))
+        return bounds.contains(convert(point,from:superview)) ? self:nil
     }
     override func mouseDown(with event:NSEvent){shelf?.interaction.eventAt=event.timestamp;shelf?.beginUserTracking();shelf?.dragStartPoint=shelf?.eventScreenPoint(event) ?? .zero}
     override func mouseDragged(with event:NSEvent){shelf?.moveFromEvent(event)}
@@ -73,10 +86,20 @@ final class WorkShelfInteractionController {
     }
     func feedback(_ visible:Bool,edge:String?=nil,animated:Bool=true){
         overlayGeneration+=1;let token=overlayGeneration
+        shelf.dockFeedbackVisible=visible
+        if !visible{shelf.dockButtonsHidden=false}
+        shelf.layout()
         shelf.root.addSubview(overlay,positioned:.above,relativeTo:nil);overlay.frame=shelf.root.bounds;if let edge{overlay.edge=edge}
-        overlay.needsDisplay=true
+        overlay.needsLayout=true;overlay.layoutSubtreeIfNeeded()
         if visible{if overlay.isHidden{overlay.alphaValue=0};overlay.isHidden=false}
-        NSAnimationContext.runAnimationGroup({c in c.duration=animated && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? 0.3:0;overlay.animator().alphaValue=visible ? 1:0},completionHandler:{[weak self] in guard let self,self.overlayGeneration==token else{return};self.overlay.isHidden = !visible})
+        NSAnimationContext.runAnimationGroup({c in
+            c.duration=animated && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? 0.3:0
+            overlay.animator().alphaValue=visible ? 1:0
+            for button in shelf.contentButtons{button.animator().alphaValue=visible ? 0:1}
+        },completionHandler:{[weak self] in
+            guard let self,self.overlayGeneration==token else{return}
+            self.overlay.isHidden = !visible;self.shelf.dockButtonsHidden=visible;self.shelf.layout()
+        })
     }
     func interrupt(){
         guard shelf.animating else{return}
@@ -98,7 +121,13 @@ final class WorkShelfInteractionController {
         let point=shelf.eventScreenPoint(event),dx=point.x-shelf.dragStartPoint.x,dy=point.y-shelf.dragStartPoint.y
         if !shelf.dragMoved && hypot(dx,dy)<=3{return}
         shelf.dragMoved=true;deltaX=event.deltaX
-        shelf.window.setFrameOrigin(NSPoint(x:initial.minX+dx,y:initial.minY+dy))
+        var target=initial.offsetBy(dx:dx,dy:dy)
+        if shelf.expanded {
+            let area=shelf.bestScreen(target).visibleFrame
+            target.size=NSSize(width:min(target.width,area.width),height:min(target.height,area.height))
+            target.origin=NSPoint(x:max(area.minX,min(target.minX,area.maxX-target.width)),y:max(area.minY,min(target.minY,area.maxY-target.height)))
+        }
+        shelf.window.setFrame(target,display:true)
         if !shelf.expanded,let d=decision(){
             if d.progress>0.4 && overlay.isHidden{feedback(true,edge:d.edge)}
             else if d.progress<=0.4 && !overlay.isHidden{feedback(false)}
@@ -109,7 +138,7 @@ final class WorkShelfInteractionController {
         let f=actualFrame(),screen=shelf.bestScreen(f)
         return shelfEdgeDecision(f,screen:screen.frame,others:NSScreen.screens.filter{$0 != screen}.map{$0.frame},deltaX:deltaX)
     }
-    func clickedRestore(){emit(["event":"undockIntent","gestureId":gestureId]);feedback(false)}
+    func clickedRestore(){guard !shelf.frozen,!shelf.retired,shelf.docked,!shelf.moving,!shelf.animating else{return};emit(["event":"undockIntent","gestureId":gestureId]);feedback(false)}
     func finish(){
         guard shelf.moving else{return}
         shelf.moving=false;shelf.dragStartFrame=nil;shelf.motion(shelf.dragMoved ? "finished-moved":"finished-click")

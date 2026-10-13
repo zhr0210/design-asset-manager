@@ -1,0 +1,17 @@
+[
+  {
+    "name": "native-shelf-drop",
+    "code": 0,
+    "log": "native-shelf-drop-final.log"
+  },
+  {
+    "name": "work-shelf-interaction",
+    "code": 0,
+    "log": "work-shelf-interaction-final.log"
+  },
+  {
+    "name": "work-shelf-color-picker",
+    "code": 0,
+    "log": "work-shelf-color-picker-final.log"
+  }
+]

@@ -21,9 +21,23 @@ func emit(_ value:[String:Any]){pickerEvents.append(value)}
   let duplicate=WorkShelfColorPicker(initial:"#FF0000",existing:["#ff0000"]);_ = duplicate.view;duplicate.added={commits.append($0)};precondition(!duplicate.confirm.isEnabled);duplicate.confirmSelection();precondition(commits.count==1)
   let root=URL(fileURLWithPath:NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString);try FileManager.default.createDirectory(at:root,withIntermediateDirectories:true);defer{try? FileManager.default.removeItem(at:root)}
   let shelf=NativeWorkShelf(root:root);shelf.expanded=true;shelf.layout();precondition(!shelf.addColorButton.isHidden)
+  // Exercise the production popover's own window, rather than only a standalone NSPanel.
+  try shelf.command(["op":"bounds","motionId":1,"presentation":"expanded","x":100.0,"y":100.0,"width":640.0,"height":520.0])
+  shelf.window.orderFrontRegardless();shelf.openColorPicker()
+  guard let nativePicker=shelf.colorPicker?.contentViewController as? WorkShelfColorPicker,let pickerWindow=nativePicker.view.window else{fatalError("Production color popover not shown")}
+  let nativeDown=NSEvent.mouseEvent(with:.leftMouseDown,location:nativePicker.area.convert(NSPoint(x:124,y:124),to:nil),modifierFlags:[],timestamp:ProcessInfo.processInfo.systemUptime,windowNumber:pickerWindow.windowNumber,context:nil,eventNumber:3,clickCount:1,pressure:1)!
+  pickerWindow.sendEvent(nativeDown)
+  precondition(abs(nativePicker.selection.saturation-0.5)<0.01 && abs(nativePicker.selection.brightness-0.5)<0.01,"Production popover routes its window's pointer to the color area")
+  let nativeDrag=NSEvent.mouseEvent(with:.leftMouseDragged,location:nativePicker.area.convert(NSPoint(x:248,y:0),to:nil),modifierFlags:[],timestamp:ProcessInfo.processInfo.systemUptime,windowNumber:pickerWindow.windowNumber,context:nil,eventNumber:4,clickCount:1,pressure:1)!
+  pickerWindow.sendEvent(nativeDrag);precondition(nativePicker.selection.saturation==1 && nativePicker.selection.brightness==1)
+  nativePicker.cancelSelection();shelf.colorPicker?.close()
   shelf.expanded=false;shelf.layout();precondition(shelf.addColorButton.isHidden)
   let pop=NSPopover(),late=WorkShelfColorPicker(initial:"#00FF00",existing:[]);_ = late.view;late.added={commits.append($0)};pop.contentViewController=late;shelf.colorPicker=pop
   shelf.popoverWillClose(Notification(name:NSPopover.willCloseNotification,object:pop));late.confirmSelection();precondition(commits.count==1,"Closing float rejects queued confirmation immediately")
+  let pendingPop=NSPopover(),pendingPicker=WorkShelfColorPicker(initial:"#00FF00",existing:[]);_ = pendingPicker.view;pendingPicker.added={commits.append($0)};pendingPop.contentViewController=pendingPicker;shelf.colorPicker=pendingPop
+  try shelf.command(["op":"freeze","requestId":"freeze-color","value":true])
+  try shelf.command(["op":"freeze","requestId":"unfreeze-color","value":false])
+  pendingPicker.confirmSelection();precondition(commits.count==1,"Freeze must retire the color draft even when the popover's close notification is unavailable")
   shelf.retire()
   print("PASS production native color picker: opaque RGB round-trip, HSV area/hue controls, preview without commit, exact HEX display, single confirmation, canceled/duplicate refusal, expanded-only add button. AppKit controls; physical UI path separately required.")
  }

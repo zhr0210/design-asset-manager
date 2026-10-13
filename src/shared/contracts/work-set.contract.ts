@@ -47,11 +47,12 @@ export function validateWorkLayout(v:unknown):WorkWindowLayout {
   return{x:Math.round(Number(b.x)),y:Math.round(Number(b.y)),width:Math.round(Number(b.width)),height:Math.round(Number(b.height))}
  }
  let dock:WorkWindowLayout['dock']
- if(r.dock!==undefined){const d=workRecord(r.dock,['edge','normalBounds','style']);if(d.edge!=='left'&&d.edge!=='right'||d.style!==undefined&&d.style!=='edge-slide')return invalid();dock={edge:d.edge,normalBounds:bounds(d.normalBounds,290,310),...(d.style==='edge-slide'?{style:'edge-slide' as const}:{})}}
+ if(r.dock!==undefined){const d=workRecord(r.dock,['edge','normalBounds','style']);if(d.edge!=='left'&&d.edge!=='right'||d.style!==undefined&&d.style!=='edge-slide')return invalid();dock={edge:d.edge,normalBounds:bounds(d.normalBounds,d.style==='edge-slide'?220:290,d.style==='edge-slide'?240:310),...(d.style==='edge-slide'?{style:'edge-slide' as const}:{})}}
  if(typeof r.pinned!=='boolean'||typeof r.open!=='boolean')return invalid()
  if(r.presentation!==undefined&&r.presentation!=='compact'&&r.presentation!=='expanded')return invalid()
  const compactDock=dock&&dock.style!=='edge-slide'
- const actual=bounds({x:r.x,y:r.y,width:r.width,height:r.height},compactDock?72:290,compactDock?160:310)
+ const nativeCompact=r.presentation==='compact'
+ const actual=bounds({x:r.x,y:r.y,width:r.width,height:r.height},compactDock?72:nativeCompact?220:290,compactDock?160:nativeCompact?240:310)
  if(compactDock&&(actual.width!==72||actual.height!==160))return invalid()
  if(dock?.style==='edge-slide'&&(r.presentation!=='compact'||actual.width!==dock.normalBounds.width||actual.height!==dock.normalBounds.height))return invalid()
  return{...actual,pinned:r.pinned,open:r.open,...(r.presentation?{presentation:r.presentation as 'compact'|'expanded'}:{}),...(dock?{dock}:{})}

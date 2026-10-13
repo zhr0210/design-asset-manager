@@ -37,8 +37,9 @@ export function createNativeShelfWorkWindow(
   let previewBytes=0
   // Native compact presentation has its own actual geometry. The React detail
   // surface retains the original editor size; neither lies about OS bounds.
-  if(!(input.legacyLayout??input.layout).presentation)writeFileSync(join(root,'legacy-layout.json'),JSON.stringify(input.legacyLayout??input.layout),{flag:'wx',mode:0o600})
   let geometry = nativeShelfLayout(input.layout,screen.getAllDisplays().map(d=>d.workArea))
+  const savedLayout=input.legacyLayout??input.layout
+  if(!savedLayout.presentation||JSON.stringify(savedLayout)!==JSON.stringify(geometry))writeFileSync(join(root,'legacy-layout.json'),JSON.stringify(savedLayout),{flag:'wx',mode:0o600})
   let gestureVersion=0
   const motions=new Map<number,{resolve:()=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>;target:WorkWindowLayout}>()
   let dockTarget: WorkWindowLayout | undefined

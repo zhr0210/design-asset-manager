@@ -30,14 +30,14 @@ try{
  holding=true;const opening=controller.open({...scope,id});for(let i=0;i<50&&!gate;i++)await new Promise(resolve=>setTimeout(resolve,5));assert.ok(gate);assert.deepEqual((await host.readWorkSets(scope,device)).sets[0].layout,legacy,'opening also waits for actual motion before committing');gate!();holding=false;gate=undefined;const opened=await opening;if(!opened.success)throw Error(opened.error);const token=opened.value.token
  assert.equal(opened.value.geometry.presentation,'compact');assert.equal(opened.value.geometry.dock?.style,'edge-slide')
  assert.equal((await controller.act(owner,{token,kind:'undock'})).success,true)
- assert.equal(geometry!.x,12);assert.equal(geometry!.width,290)
+ assert.equal(geometry!.x,12);assert.equal(geometry!.width,220)
  assert.ok(nativeIntent);nativeIntent!({kind:'dock',edge:'left',gestureId:1,deltaX:-2});await new Promise(resolve=>setTimeout(resolve,20));await controller.windows(scope);assert.equal(geometry!.dock?.style,'edge-slide','owned native gesture fields accepted')
  nativeIntent!({kind:'undock',gestureId:1});await new Promise(resolve=>setTimeout(resolve,20));await controller.windows(scope);assert.equal(geometry!.x,12)
  const before=(await host.readWorkSets(scope,device)).sets[0].layout
  holding=true;const docking=controller.act(owner,{token,kind:'dock',edge:'right'});for(let i=0;i<12&&!gate;i++)await new Promise(resolve=>setImmediate(resolve));assert.ok(gate)
  assert.deepEqual((await host.readWorkSets(scope,device)).sets[0].layout,before,'native target is not committed before actual completion')
  gate!();const completed=await docking;assert.equal(completed.success,true);holding=false;gate=undefined
- assert.equal(geometry!.x,1154);assert.equal(geometry!.width,290);assert.equal((await host.readWorkSets(scope,device)).sets[0].layout?.x,1154)
+ assert.equal(geometry!.x,1165);assert.equal(geometry!.width,220);assert.equal((await host.readWorkSets(scope,device)).sets[0].layout?.x,1165)
  const settled=structuredClone(geometry!);fail=true;assert.equal((await controller.act(owner,{token,kind:'undock'})).success,false);assert.deepEqual((await host.readWorkSets(scope,device)).sets[0].layout,settled);fail=false
  saveFails=true
  const failedSave=await controller.act(owner,{token,kind:'undock'});assert.equal(failedSave.success,false);assert.deepEqual((await host.readWorkSets(scope,device)).sets[0].layout,settled,'failed disk commit retains last valid layout');assert.equal(geometry!.dock,undefined,'display stays at successful physical completion');saveFails=false

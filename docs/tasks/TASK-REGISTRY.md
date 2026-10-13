@@ -191,7 +191,7 @@
 <a id="design-apply"></a>
 ### DESIGN-APPLY · 将已批准设计系统应用到实际产品
 
-- 状态：**用户延期，待实施**；与文档职责整理分开验收。
+- 状态：**部分实施、正式验收PARTIAL**；2026-10-14本工作树已实施B悬浮窗原生设计，见[实施检查点](../checkpoints/b-native-design-implementation-20261014/README.md)。主工作台/大预览及全产品生成CSS仍待实施；与文档职责整理分开验收。
 - 范围：主工作台/大预览的Apple中性色与强调色、生成CSS同步、普通工具/选择中性灰；悬浮窗全底板Liquid Glass、220×240紧凑布局、常显原生按钮、完整预览与区域分工。
 - 剩余条件：消除`design:check`的规范/生成CSS差异；按正式入口验明暗、系统设置、键鼠输入、动画/中断、保存重开与相关失败保护。现有色板指针及停靠覆盖/设备缺口继续独立保留。
 - 来源：[DESIGN](../../DESIGN.md)、[工作台交互](../design/WORKSPACE-INTERACTIONS.md)、[悬浮窗交互](../design/WORK-WINDOW-INTERACTIONS.md)、[CURRENT-STATE](../handoff/CURRENT-STATE.md)。

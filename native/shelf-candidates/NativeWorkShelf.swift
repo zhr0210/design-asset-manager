@@ -79,6 +79,11 @@ final class WorkShelfRoot: NSView {
     override var acceptsFirstResponder: Bool { true }
     override var mouseDownCanMoveWindow:Bool {false}
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+    override func hitTest(_ point:NSPoint)->NSView? {
+        guard let hit=super.hitTest(point) else{return nil}
+        if let shelf,(shelf.dockFeedbackVisible || shelf.docked),hit !== shelf.interaction.overlay{return self}
+        return hit
+    }
     override func layout() { super.layout(); shelf?.layout();if let shelf{shelf.interaction.overlay.frame=bounds} }
     override func mouseDown(with event: NSEvent) {
         guard let shelf else { return }
@@ -170,10 +175,21 @@ final class WorkShelfCard: NSView {
         dimensions.frame = NSRect(x:8,y:bounds.height-24,width:bounds.width-16,height:18)
         workShelfUseRootDropDestination(self)
     }
+    private var visuallySelected=false
+    override func viewDidChangeEffectiveAppearance() {
+        super.viewDidChangeEffectiveAppearance()
+        updateSelectionAppearance()
+        needsDisplay=true
+    }
+    private func updateSelectionAppearance() {
+        effectiveAppearance.performAsCurrentDrawingAppearance {
+            layer?.backgroundColor = visuallySelected ? NSColor.unemphasizedSelectedContentBackgroundColor.cgColor : NSColor.clear.cgColor
+        }
+    }
     func update(_ item:WorkShelfItem, selected:Bool) {
         assetId = item.id; picture.image = item.image ?? NSImage(systemSymbolName: item.available ? "photo" : "exclamationmark.triangle",accessibilityDescription:nil)
-        caption.stringValue = item.name; dimensions.stringValue = item.available ? item.dimensions : "素材暂不可用"
-        layer?.backgroundColor = selected ? NSColor.controlAccentColor.withAlphaComponent(0.32).cgColor : NSColor.clear.cgColor
+        caption.stringValue = item.name; dimensions.stringValue = item.available ? item.dimensions : "引用故障，请检查资料库"
+        visuallySelected=selected;updateSelectionAppearance()
         setAccessibilityLabel("\(item.name)，\(dimensions.stringValue)"); setAccessibilityValue(selected ? "已选择" : "未选择")
     }
     override func accessibilityPerformPress() -> Bool { shelf?.select(assetId, toggle:NSEvent.modifierFlags.contains(.shift));window?.makeFirstResponder(shelf?.collection); return true }
@@ -227,8 +243,8 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     let collection=WorkShelfCollection()
     let scroll=WorkShelfDropScroll()
     let stack=WorkShelfStack()
-    let back=NSButton(title:"❌",target:nil,action:nil)
-    let dropdown=NSButton(title:"⌄",target:nil,action:nil)
+    let back=NSButton(title:"",target:nil,action:nil)
+    let dropdown=NSButton(title:"",target:nil,action:nil)
     let capsule=NSButton(title:"工作集 ›",target:nil,action:nil)
     let heading=WorkShelfHeading(labelWithString:"")
     let note=WorkShelfTextView()
@@ -258,6 +274,9 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     var animating=false
     var retired=false
     var frozen=false
+    var dockFeedbackVisible=false
+    var dockButtonsHidden=false
+    var contentButtons:[NSButton]{[back,dropdown,capsule,addColorButton,retry]+swatches}
     var animationTarget:NSRect?
     var motionId=0
     var applying=false
@@ -273,17 +292,23 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     var pendingInput=0
     init(root inputDirectory:URL) {
         inputRoot=inputDirectory
-        window=WorkShelfWindow(contentRect:NSRect(x:100,y:100,width:290,height:310),styleMask:[.borderless,.nonactivatingPanel],backing:.buffered,defer:false)
+        window=WorkShelfWindow(contentRect:NSRect(x:100,y:100,width:220,height:240),styleMask:[.borderless,.nonactivatingPanel],backing:.buffered,defer:false)
         super.init()
         window.shelf=self;window.hidesOnDeactivate=false;window.becomesKeyOnlyIfNeeded=false
         window.isMovableByWindowBackground=false
         window.registerForDraggedTypes(workShelfDropTypes)
         window.isOpaque=false;window.backgroundColor = .clear;window.hasShadow=true;window.isReleasedWhenClosed=false
         window.level = .floating;window.collectionBehavior=[.canJoinAllSpaces,.managed,.participatesInCycle];window.delegate=self
-        let background=NSVisualEffectView(frame:NSRect(x:0,y:0,width:290,height:310))
-        background.material = .underWindowBackground;background.blendingMode = .behindWindow;background.state = .active
-        background.wantsLayer=true;background.layer?.cornerRadius=24;background.layer?.masksToBounds=true
-        background.autoresizingMask=[.width,.height];root.frame=background.bounds;root.autoresizingMask=[.width,.height];root.shelf=self;background.addSubview(root);window.contentView=background
+        root.frame=NSRect(x:0,y:0,width:220,height:240);root.autoresizingMask=[.width,.height];root.shelf=self
+        if #available(macOS 26.0, *) {
+            let glass=NSGlassEffectView(frame:root.bounds)
+            glass.cornerRadius=24;glass.autoresizingMask=[.width,.height];glass.contentView=root;window.contentView=glass
+        } else {
+            let background=NSVisualEffectView(frame:root.bounds)
+            background.material = .underWindowBackground;background.blendingMode = .behindWindow;background.state = .active
+            background.wantsLayer=true;background.layer?.cornerRadius=24;background.layer?.masksToBounds=true
+            background.autoresizingMask=[.width,.height];background.addSubview(root);window.contentView=background
+        }
         root.setAccessibilityLabel("原生工作集架子");root.registerForDraggedTypes(workShelfDropTypes)
         collection.shelf=self;collection.backgroundColors=[.clear];collection.isSelectable=false
         let flow=NSCollectionViewFlowLayout();flow.minimumInteritemSpacing=12;flow.minimumLineSpacing=12;collection.collectionViewLayout=flow
@@ -296,8 +321,9 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
         addColorButton.bezelStyle = .rounded;addColorButton.setAccessibilityLabel("添加工作颜色");addColorButton.target=self;addColorButton.action=#selector(openColorPicker)
         heading.alignment = .center;heading.font = .systemFont(ofSize:13,weight:.semibold)
         errorField.textColor = .systemRed;errorField.font = .systemFont(ofSize:11);errorField.lineBreakMode = .byTruncatingTail
-        back.target=self;back.action=#selector(backOrClose);back.isBordered=false
-        dropdown.target=self;dropdown.action=#selector(menu);dropdown.isBordered=false;dropdown.setAccessibilityLabel("工作集操作菜单")
+        back.target=self;back.action=#selector(backOrClose);back.bezelStyle = .circular;back.imagePosition = .imageOnly
+        dropdown.target=self;dropdown.action=#selector(menu);dropdown.bezelStyle = .circular;dropdown.imagePosition = .imageOnly
+        dropdown.image=NSImage(systemSymbolName:"ellipsis",accessibilityDescription:"工作集操作菜单");dropdown.setAccessibilityLabel("工作集操作菜单")
         capsule.target=self;capsule.action=#selector(toggleExpanded);capsule.bezelStyle = .rounded;capsule.setAccessibilityLabel("展开工作集")
         retry.target=self;retry.action=#selector(retrySave);retry.isHidden=true
         stack.shelf=self
@@ -319,7 +345,7 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
         errorField.isHidden=small || errorField.stringValue.isEmpty;retry.isHidden=small || errorField.stringValue.isEmpty
         for v in swatches { v.isHidden=small || !expanded }
         swatchScroll.isHidden=small || !expanded
-        let minimum=expanded ? NSSize(width:420,height:380) : NSSize(width:290,height:310)
+        let minimum=expanded ? NSSize(width:420,height:380) : NSSize(width:220,height:240)
         if window.minSize != minimum { window.minSize=minimum }
         let resizable=expanded && !docked
         if window.styleMask.contains(.resizable) != resizable {
@@ -328,11 +354,14 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             if visible {window.orderFrontRegardless()}
         }
 
-        back.title=expanded ? "‹" : "❌";back.setAccessibilityLabel(expanded ? "收起工作集" : "关闭工作集架子")
+        back.image=NSImage(systemSymbolName:expanded ? "chevron.left":"xmark",accessibilityDescription:expanded ? "收起工作集":"关闭工作集架子")
+        back.setAccessibilityLabel(expanded ? "收起工作集" : "关闭工作集架子")
         back.frame=NSRect(x:12,y:10,width:32,height:32);dropdown.frame=NSRect(x:b.width-44,y:10,width:32,height:32)
         heading.frame=NSRect(x:48,y:15,width:b.width-96,height:22);heading.stringValue=expanded ? "\(name) · \(selected.isEmpty ? "\(items.count)份参考" : "已选\(selected.count)份")" : name
+        heading.isHidden = !expanded
         capsule.title="\(name) ›";capsule.frame=NSRect(x:28,y:b.height-45,width:b.width-56,height:30)
-        stack.frame=NSRect(x:24,y:65,width:b.width-48,height:max(40,b.height-130));stack.isHidden=expanded
+        capsule.cell?.lineBreakMode = .byTruncatingTail;capsule.toolTip=name
+        stack.frame=NSRect(x:12,y:50,width:b.width-24,height:max(40,b.height-105));stack.isHidden=expanded
         scroll.isHidden = !expanded;capsule.isHidden=expanded;noteScroll.isHidden = !expanded;addColorButton.isHidden = !expanded
         if expanded {
             scroll.frame=NSRect(x:14,y:54,width:b.width-28,height:max(100,b.height-190))
@@ -346,6 +375,10 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
         }
         errorField.frame=NSRect(x:18,y:b.height-21,width:b.width-125,height:18);errorField.isHidden=errorField.stringValue.isEmpty
         retry.frame=NSRect(x:b.width-108,y:b.height-24,width:94,height:22)
+        for button in contentButtons {
+            button.isEnabled = !frozen && !dockFeedbackVisible && !docked
+            if dockButtonsHidden{button.isHidden=true}
+        }
     }
     func collectionView(_ collectionView:NSCollectionView,numberOfItemsInSection section:Int)->Int { items.count }
     func collectionView(_ collectionView:NSCollectionView,validateDrop draggingInfo:NSDraggingInfo,proposedIndexPath proposedDropIndexPath:AutoreleasingUnsafeMutablePointer<NSIndexPath>,dropOperation proposedDropOperation:UnsafeMutablePointer<NSCollectionView.DropOperation>)->NSDragOperation { .copy }
@@ -368,12 +401,21 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     }
     func clearSelection() { selected=[];primary=nil;refreshSelection() }
     func selectAll() { selected=Set(items.map(\.id));primary=items.first(where:{selected.contains($0.id)})?.id;refreshSelection() }
-    func targets()->[String] { items.filter{$0.available && (selected.isEmpty || selected.contains($0.id))}.map(\.id) }
+    func targets()->[String] { items.filter{!expanded || selected.isEmpty || selected.contains($0.id)}.map(\.id) }
+    var targetSummary:String{"\(expanded && !selected.isEmpty ? "所选":"全部") \(targets().count) 项"}
     func key(_ event:NSEvent)->Bool {
         if frozen{return true}
+        if dockFeedbackVisible || docked {
+            if event.keyCode==36 || event.keyCode==49{interaction.clickedRestore()}
+            return true
+        }
         if event.keyCode==49 { if !event.isARepeat,let primary { action("focus",["assetId":primary]) };return true }
         if event.keyCode==51 || event.keyCode==117 { if !selected.isEmpty { edit("remove",items.filter{selected.contains($0.id)}.map(\.id)) };return true }
-        if event.keyCode==53 { if expanded { toggleExpanded() };return true }
+        if event.keyCode==53 {
+            if colorPicker?.isShown==true{dismissColorPicker();return true}
+            if let pop=tools,pop.isShown{pop.close();return true}
+            if expanded { toggleExpanded() };return true
+        }
         if [123,124,125,126].contains(event.keyCode),!items.isEmpty {
             let at=items.firstIndex(where:{$0.id==primary}) ?? 0,delta=[123,126].contains(event.keyCode) ? -1 : 1
             let to=max(0,min(items.count-1,at+delta));select(items[to].id,toggle:event.modifierFlags.contains(.shift));collection.scrollToItems(at:[IndexPath(item:to,section:0)],scrollPosition:.nearestHorizontalEdge);return true
@@ -384,9 +426,9 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     @objc func closeRequested() { emit(["event":"closeRequested"]) }
     @objc func toggleExpanded() {
         configuringFrame=true;defer{configuringFrame=false}
-        colorPicker?.performClose(nil);interaction.interrupt();interaction.feedback(false)
+        dismissColorPicker();tools?.close();interaction.interrupt();interaction.feedback(false)
         expanded.toggle();let old=window.frame,screen=bestScreen(old).visibleFrame
-        let size=expanded ? NSSize(width:min(640,screen.width),height:min(520,screen.height)) : NSSize(width:290,height:310)
+        let size=expanded ? NSSize(width:min(640,screen.width),height:min(520,screen.height)) : NSSize(width:220,height:240)
         let rect=NSRect(x:max(screen.minX,min(old.minX,screen.maxX-size.width)),y:max(screen.minY,min(old.maxY-size.height,screen.maxY-size.height)),width:size.width,height:size.height)
         layout();animate(rect);window.makeFirstResponder(expanded ? collection : root)
     }
@@ -427,7 +469,7 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     func textDidChange(_ notification:Notification) { guard !applying else{return};action("transient",["pending":note.hasMarkedText() || pendingInput>0]);if !note.hasMarkedText(){edit("note",note.string)} }
     @objc func openColorPicker() {
         guard !frozen,!retired,expanded,!docked else{return}
-        if let pop=colorPicker,pop.isShown{pop.performClose(nil);return}
+        if colorPicker?.isShown==true{dismissColorPicker();return}
         window.makeKeyAndOrderFront(nil);NSApp.activate(ignoringOtherApps:true)
         let controller=WorkShelfColorPicker(initial:colors.last ?? "#6040FF",existing:colors)
         let pop=NSPopover();pop.behavior = .transient;pop.contentViewController=controller;pop.contentSize=NSSize(width:280,height:356);pop.delegate=self;colorPicker=pop
@@ -435,8 +477,13 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             guard let self,let pop,self.colorPicker===pop,!self.frozen,!self.retired,!self.colors.contains(hex) else{return}
             self.colors.append(hex);self.edit("colors",self.colors);self.swatchViews()
         }
-        controller.dismissed={[weak pop] in pop?.performClose(nil)}
+        controller.dismissed={[weak pop] in pop?.close()}
         pop.show(relativeTo:addColorButton.bounds,of:addColorButton,preferredEdge:.maxY)
+    }
+    func dismissColorPicker() {
+        guard let pop=colorPicker else{return}
+        (pop.contentViewController as? WorkShelfColorPicker)?.retireDraft()
+        pop.close()
     }
     func popoverWillClose(_ notification:Notification) {
         guard let pop=notification.object as? NSPopover else{return}
@@ -461,18 +508,26 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             if alert.runModal() == .alertSecondButtonReturn {self.action("resolve-save",["revision":revision])}
         }
     }
-    @objc func menu() {
-        let menu=NSMenu();let count=targets().count
+    func operationMenu()->NSMenu {
+        let menu=NSMenu();menu.autoenablesItems=false
+        let ids=targets(),count=ids.count,summary=targetSummary
         for (title,kind) in [("交付原件副本","original"),("交付预览副本","preview"),("交付兼容PNG","compatible-png"),("图像处理…","processed-image"),("ZIP归档","zip")] {
-            let item=NSMenuItem(title:"\(title) · \(count)份",action:#selector(delivery(_:)),keyEquivalent:"");item.target=self;item.representedObject=kind;item.isEnabled=count>0 && count<=64;menu.addItem(item)
+            let item=NSMenuItem(title:"\(title) · \(summary)",action:#selector(delivery(_:)),keyEquivalent:"")
+            item.target=self;item.representedObject=["kind":kind,"ids":ids,"summary":summary];item.isEnabled=count>0 && count<=64 && !frozen && !retired;menu.addItem(item)
         }
         menu.addItem(.separator());let rename=NSMenuItem(title:"修改工作集名称…",action:#selector(rename),keyEquivalent:"");rename.target=self;menu.addItem(rename)
+        if count>64{let limit=NSMenuItem(title:"单次交付最多64项，请在展开态选择",action:nil,keyEquivalent:"");limit.isEnabled=false;menu.insertItem(limit,at:5)}
+        return menu
+    }
+    @objc func menu() {
+        guard !frozen,!retired,!dockFeedbackVisible,!docked else{return}
+        let menu=operationMenu()
         menu.popUp(positioning:nil,at:NSPoint(x:0,y:dropdown.bounds.height),in:dropdown)
     }
     @objc func rename() { let alert=NSAlert();alert.messageText="工作集名称";let field=NSTextField(string:name);field.frame=NSRect(x:0,y:0,width:260,height:24);alert.accessoryView=field;alert.addButton(withTitle:"确定");alert.addButton(withTitle:"取消");if alert.runModal() == .alertFirstButtonReturn { edit("name",field.stringValue) } }
     @objc func delivery(_ sender:NSMenuItem) {
-        guard let kind=sender.representedObject as? String else{return}
-        let controller=WorkShelfTools(shelf:self,kind:kind,ids:targets());let pop=NSPopover();pop.behavior = .semitransient;pop.contentViewController=controller;pop.contentSize=NSSize(width:300,height:kind=="processed-image" ? 300 : 150);tools=pop;pop.show(relativeTo:dropdown.bounds,of:dropdown,preferredEdge:.maxY)
+        guard !frozen,!retired,let value=sender.representedObject as? [String:Any],let kind=value["kind"] as? String,let ids=value["ids"] as? [String],let summary=value["summary"] as? String else{return}
+        let controller=WorkShelfTools(shelf:self,kind:kind,ids:ids,summary:summary);let pop=NSPopover();pop.behavior = .semitransient;pop.contentViewController=controller;pop.contentSize=NSSize(width:300,height:kind=="processed-image" ? 300 : 150);tools=pop;pop.show(relativeTo:dropdown.bounds,of:dropdown,preferredEdge:.maxY)
     }
     func feedback(_ text:String) { errorField.stringValue=String(text.prefix(300));retry.isHidden=text.isEmpty;layout() }
     func receive(_ board:NSPasteboard)->Bool {
@@ -547,9 +602,10 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             guard let value=command["value"] as? Bool,let id=command["requestId"] as? String else{throw CocoaError(.coderInvalidValue)}
             if value && (pendingInput>0 || note.hasMarkedText() || (window.firstResponder as? NSTextView)?.hasMarkedText()==true){emit(["event":"frozen","requestId":id,"ok":false]);return}
             frozen=value;note.isEditable = !value;addColorButton.isEnabled = !value;back.isEnabled = !value;dropdown.isEnabled = !value;capsule.isEnabled = !value
-            if value{colorPicker?.performClose(nil);interaction.interrupt();moving=false;dragStartFrame=nil;window.makeFirstResponder(root)}
+            if value{dismissColorPicker();tools?.close();interaction.interrupt();moving=false;dragStartFrame=nil;window.makeFirstResponder(root)}
+            layout()
             emit(["event":"frozen","requestId":id,"ok":true])
-        case "hide":colorPicker?.performClose(nil);window.orderOut(nil);visibility()
+        case "hide":dismissColorPicker();tools?.close();window.orderOut(nil);visibility()
         case "pin":window.level = command["pinned"] as? Bool == false ? .normal : .floating
         case "destroy":retire();NSApp.terminate(nil)
         case "bounds":
@@ -558,7 +614,8 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             if moving || (command["gestureId"] as? Int ?? interaction.gestureId)<interaction.gestureId{interaction.acknowledgement(version,"canceled","new-gesture");return}
             motionId=version
             configuringFrame=true;defer{configuringFrame=false}
-            guard let x=command["x"] as? Double,let y=command["y"] as? Double,let w=command["width"] as? Double,let h=command["height"] as? Double,[x,y,w,h].allSatisfy({$0.isFinite && abs($0)<=100000}),w>=290,h>=310,w<=5000,h<=5000 else{interaction.acknowledgement(version,"failed","invalid-frame");return}
+            guard let mode=command["presentation"] as? String,["compact","expanded"].contains(mode),
+                  let x=command["x"] as? Double,let y=command["y"] as? Double,let w=command["width"] as? Double,let h=command["height"] as? Double,[x,y,w,h].allSatisfy({$0.isFinite && abs($0)<=100000}),w>=(mode=="compact" ? 220:420),h>=(mode=="compact" ? 240:380),w<=5000,h<=5000 else{interaction.acknowledgement(version,"failed","invalid-frame");return}
             let top=NSScreen.screens.first?.frame.maxY ?? 0,target=NSRect(x:x,y:top-y-h,width:w,height:h)
             let nextDock=command["docked"] as? Bool ?? false,wasDocked=docked
             if nextDock && (expanded || command["presentation"] as? String=="expanded"){interaction.acknowledgement(version,"failed","expanded-not-dockable");return}
@@ -577,13 +634,14 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
         default:throw CocoaError(.coderInvalidValue)
         }
     }
-    func retire() { colorPicker?.performClose(nil);interaction.retire();retired=true;moving=false;for callback in requests.values { callback(["ok":false]) };requests.removeAll();locallyPresentedReplies.removeAll();window.delegate=nil;window.close() }
+    func retire() { dismissColorPicker();tools?.close();interaction.retire();retired=true;moving=false;for callback in requests.values { callback(["ok":false]) };requests.removeAll();locallyPresentedReplies.removeAll();window.delegate=nil;window.close() }
 }
 
 final class WorkShelfTools:NSViewController {
     weak var shelf:NativeWorkShelf?
     let kind:String
     let ids:[String]
+    let summary:String
     let status=NSTextField(labelWithString:"")
     let width=NSTextField(string:"1024"),height=NSTextField(string:"1024")
     let format=NSPopUpButton()
@@ -592,11 +650,11 @@ final class WorkShelfTools:NSViewController {
     let result=WorkShelfReceiptDrag()
     let cancel=NSButton(title:"取消",target:nil,action:nil)
     var operation=UUID()
-    init(shelf:NativeWorkShelf,kind:String,ids:[String]) { self.shelf=shelf;self.kind=kind;self.ids=ids;super.init(nibName:nil,bundle:nil) }
+    init(shelf:NativeWorkShelf,kind:String,ids:[String],summary:String?=nil) { self.shelf=shelf;self.kind=kind;self.ids=ids;self.summary=summary ?? "\(ids.count) 项参考";super.init(nibName:nil,bundle:nil) }
     required init?(coder:NSCoder) { fatalError("programmatic") }
     override func loadView() {
         view=NSView(frame:NSRect(x:0,y:0,width:300,height:kind=="processed-image" ? 300 : 150))
-        status.frame=NSRect(x:18,y:view.bounds.height-60,width:264,height:44);status.maximumNumberOfLines=3;status.stringValue="\(ids.count)份参考";view.addSubview(status)
+        status.frame=NSRect(x:18,y:view.bounds.height-60,width:264,height:44);status.maximumNumberOfLines=3;status.stringValue=summary;view.addSubview(status)
         export.frame=NSRect(x:18,y:16,width:130,height:30);export.target=self;export.action=#selector(run);view.addSubview(export)
         cancel.frame=NSRect(x:165,y:16,width:115,height:30);cancel.target=self;cancel.action=#selector(stop);view.addSubview(cancel)
         result.frame=NSRect(x:18,y:52,width:264,height:26);result.shelf=shelf;result.isHidden=true;view.addSubview(result)
@@ -607,8 +665,8 @@ final class WorkShelfTools:NSViewController {
         operation=UUID();let token=operation
         var input:[String:Any]=["assetIds":ids,"handoffKind":kind]
         if kind=="processed-image" { input["imageTransform"]=["format":format.titleOfSelectedItem ?? "png","quality":quality.integerValue,"resize":["fit":"inside","width":width.integerValue,"height":height.integerValue],"stripMetadata":strip.state == .on] }
-        export.isEnabled=false;result.receipts=[];result.isHidden=true;status.stringValue="正在生成…"
-        shelf?.action("handoff",input,presentsReply:true) { [weak self] reply in guard let self,self.operation==token else{return};self.export.isEnabled=true;self.status.stringValue=reply["message"] as? String ?? (reply["ok"] as? Bool == true ? "副本已完成" : "未完成");if reply["ok"] as? Bool == true,let receipts=reply["receipts"] as? [[String:String]],!receipts.isEmpty {self.result.receipts=receipts;self.result.isHidden=false} }
+        export.isEnabled=false;result.receipts=[];result.isHidden=true;status.stringValue="正在生成 · \(summary)…"
+        shelf?.action("handoff",input,presentsReply:true) { [weak self] reply in guard let self,self.operation==token else{return};self.export.isEnabled=true;self.status.stringValue=reply["message"] as? String ?? (reply["ok"] as? Bool == true ? "副本已完成" : "未完成");if let receipts=reply["receipts"] as? [[String:String]],!receipts.isEmpty {self.result.receipts=receipts;self.result.isHidden=false} }
     }
     @objc func stop() {
         guard cancel.isEnabled else{return}

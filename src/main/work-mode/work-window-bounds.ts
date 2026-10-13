@@ -10,7 +10,8 @@ export function visibleWorkBounds(saved:WorkWindowLayout|null,areas:readonly Wor
  const area=areaFor(value.dock?.style==='edge-slide'?{...value,x:value.dock.edge==='left'?value.x+value.width*.84:value.x,width:value.width*.16}:value,areas)
  if(value.dock?.style==='edge-slide')return{...value,x:Math.round(value.dock.edge==='left'?area.x-value.width*.84:area.x+area.width-value.width*.16),y:Math.round(Math.max(area.y,Math.min(value.y,area.y+area.height-value.height))),dock:{...value.dock,normalBounds:{...value.dock.normalBounds}}}
  if(value.dock)return{...value,width:72,height:160,x:value.dock.edge==='left'?area.x:area.x+area.width-72,y:Math.round(Math.max(area.y,Math.min(value.y,area.y+area.height-160))),dock:{...value.dock,normalBounds:{...value.dock.normalBounds}}}
- const width=Math.min(Math.max(290,value.width),Math.max(290,area.width)),height=Math.min(Math.max(310,value.height),Math.max(310,area.height))
+ const minimum=value.presentation==='compact'?{width:220,height:240}:{width:290,height:310}
+ const width=Math.min(Math.max(minimum.width,value.width),Math.max(minimum.width,area.width)),height=Math.min(Math.max(minimum.height,value.height),Math.max(minimum.height,area.height))
  return{...value,width,height,x:Math.round(Math.max(area.x,Math.min(value.x,area.x+area.width-width))),y:Math.round(Math.max(area.y,Math.min(value.y,area.y+area.height-height)))}
 }
 export function dockWorkBounds(value:WorkWindowLayout,edge:'left'|'right',areas:readonly WorkArea[],style?:'edge-slide'):WorkWindowLayout{
@@ -33,12 +34,17 @@ export function insetShelfBounds(value:WorkWindowLayout,areas:readonly WorkArea[
 
 /** Normalize only the B presentation; other platform adapters retain legacy layouts. */
 export function nativeShelfLayout(saved:WorkWindowLayout,areas:readonly WorkArea[]):WorkWindowLayout {
- if(saved.presentation)return visibleWorkBounds(saved,areas)
+ const compact=(value:WorkWindowLayout):WorkWindowLayout=>{
+  const {dock,...base}=value
+  const normal={...base,...(dock?.normalBounds??{}),width:220,height:240,presentation:'compact' as const}
+  return dock?dockWorkBounds(normal,dock.edge,areas,'edge-slide'):visibleWorkBounds(normal,areas)
+ }
+ if(saved.presentation)return saved.presentation==='compact'?compact(saved):visibleWorkBounds(saved,areas)
  if(saved.dock){
   const {dock,...base}=saved,normal={...base,...dock.normalBounds}
   if(normal.width>=420)return visibleWorkBounds({...normal,presentation:'expanded'},areas)
-  return dockWorkBounds({...normal,presentation:'compact'},dock.edge,areas,'edge-slide')
+  return compact({...saved,presentation:'compact'})
  }
  const legacyDefault=saved.width===420&&saved.height===640
- return visibleWorkBounds({...saved,...(legacyDefault?{width:290,height:310}:{}),presentation:legacyDefault||saved.width<420?'compact':'expanded'},areas)
+ return legacyDefault||saved.width<420?compact(saved):visibleWorkBounds({...saved,presentation:'expanded'},areas)
 }

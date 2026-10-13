@@ -158,7 +158,11 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
    if(action.kind==='retry')return await e.shelf!.retry()
    if(action.kind==='cancel'){e.nativeCancelEpoch=(e.nativeCancelEpoch??0)+1;e.dropAbort?.abort();const outcomes=await Promise.allSettled([deps.media?.revoke(fileActor(e)),...e.nativeTasks??[]]);if(outcomes[0].status==='rejected')throw outcomes[0].reason;return{ok:true,message:'已等待当前项返回并停止后续项，已完成副本与入库素材保留。'}}
    const flushed=await e.shelf?.flush();if(flushed&&!flushed.ok)return flushed
-   const member=(id:string)=>{assertCurrent(e);if(!e.state.set.assetIds.includes(id)||e.state.set.unavailableIds.includes(id))throw Error('素材已失效，未执行操作。')}
+   const member=(id:string)=>{
+    assertCurrent(e)
+    if(!e.state.set.assetIds.includes(id))throw Error('该成员已移出当前工作集，未执行操作。')
+    if(e.state.set.unavailableIds.includes(id)||!e.state.assets.some(asset=>asset.id===id))throw Error('工作集引用故障：成员无法访问，未跳过或删除引用，请检查资料库。')
+   }
    if(action.kind==='focus'){member(action.assetId);e.state={...e.state,focusAssetId:action.assetId,focusRequest:(e.state.focusRequest??0)+1};e.port.publish(e.state);e.port.openFocus?.(action.assetId);return{ok:true}}
    if(action.kind==='paste'){const reply=await actEntry(e,{token:e.state.token,kind:'paste-image',requestId:randomUUID(),expectedRevision:e.state.set.revision});return reply.success?{ok:true}:{ok:false,message:reply.error}}
    const prepare=async(id:string,kind:import('../../shared/contracts/work-media.contract').WorkHandoffKind,extra:Record<string,unknown>={})=>{
@@ -190,8 +194,14 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
     if(action.kind==='handoff'){
      action.assetIds.forEach(member);const receipts:NonNullable<ShelfReply['receipts']>=[]
      const targets=action.handoffKind==='zip'?[action.assetIds[0]]:action.assetIds
-     for(const id of targets){const receipt=await prepare(id,action.handoffKind,{...(action.handoffKind==='zip'?{assetIds:action.assetIds}:{}),...(action.imageTransform?{imageTransform:action.imageTransform}:{})});const file=await deps.media!.files.nativeFile(fileActor(e),receipt);member(id);const data=await deps.media!.files.readFile(receipt);receipts.push({id:receipt,fileName:data.fileName,assetId:id})}
-     return{ok:true,message:`${receipts.length}份副本已完成`,receipts}
+     try{
+      for(const id of targets){const receipt=await prepare(id,action.handoffKind,{...(action.handoffKind==='zip'?{assetIds:action.assetIds}:{}),...(action.imageTransform?{imageTransform:action.imageTransform}:{})});await deps.media!.files.nativeFile(fileActor(e),receipt);member(id);const data=await deps.media!.files.readFile(receipt);receipts.push({id:receipt,fileName:data.fileName,assetId:id})}
+     }catch(error){
+      assertCurrent(e)
+      const message=error instanceof Error?error.message:'执行结果未确认，请核对保留记录。'
+      return{ok:false,message:`本次交付未完成（已完成 ${receipts.length}/${action.assetIds.length} 项）。${message} 原目标与已完成副本保留。`,receipts}
+     }
+     return{ok:true,message:action.handoffKind==='zip'?`${action.assetIds.length} 项参考的 ZIP 已完成`:`${receipts.length}/${action.assetIds.length} 项副本已完成`,receipts}
     }
     if(action.kind==='members'||action.kind==='drop'){
      const revision=e.state.set.revision;let ids:string[]=[],partial=0

@@ -34,6 +34,11 @@ final class DropTestInfo:NSObject,NSDraggingInfo {
         try FileManager.default.createDirectory(at:directory,withIntermediateDirectories:false)
         defer {try? FileManager.default.removeItem(at:directory)}
         let shelf=NativeWorkShelf(root:directory),info=DropTestInfo()
+        guard shelf.window.frame.size == NSSize(width:220,height:240),
+              shelf.heading.isHidden, !shelf.back.isHidden, !shelf.dropdown.isHidden,
+              shelf.back.image != nil, shelf.dropdown.image != nil else {
+            throw NSError(domain:"CompactPresentation",code:1,userInfo:[NSLocalizedDescriptionKey:"B compact window must be 220×240 with native visible controls and no duplicate heading"])
+        }
         info.draggingDestinationWindow=shelf.window
         let file=directory.appendingPathComponent("generated.png")
         // Only URL negotiation is exercised; Host owns the actual file intake.
@@ -101,6 +106,30 @@ final class DropTestInfo:NSObject,NSDraggingInfo {
         try shelf.command(["op":"reply","requestId":succeeded,"ok":true,"message":"副本完成","receipts":[["id":"new","assetId":"first","fileName":"first.png"]]])
         guard processing.status.stringValue=="副本完成",!processing.result.isHidden,shelf.errorField.stringValue=="保存冲突，草稿保留" else {throw NSError(domain:"ReplyPresentation",code:2)}
         print("PASS delivery error remains local, input retained, successful correction updates status without clearing an independent autosave conflict.")
+        try shelf.command(["op":"publish","name":"Menu scope","note":"unchanged","colors":[],"items":[["id":"first","fileName":"first.png"],["id":"second","fileName":"second.png","available":false]]])
+        shelf.selected=["second"];shelf.expanded=false
+        guard shelf.targets()==["first","second"] else{throw NSError(domain:"MenuScope",code:1,userInfo:[NSLocalizedDescriptionKey:"Compact delivery must include the full declared scope, without hiding reference faults"])}
+        shelf.expanded=true
+        guard shelf.targets()==["second"] else{throw NSError(domain:"MenuScope",code:2)}
+        let shown=shelf.operationMenu()
+        guard shown.items.prefix(5).allSatisfy({$0.title.contains("所选 1 项")}) else{throw NSError(domain:"MenuScope",code:3)}
+        shelf.clearSelection()
+        guard shelf.targets()==["first","second"],shown.items[0].title.contains("所选 1 项"),
+              (shown.items[0].representedObject as? [String:Any])?["ids"] as? [String] == ["second"] else{throw NSError(domain:"MenuScope",code:4)}
+        let partial=WorkShelfTools(shelf:shelf,kind:"original",ids:["first","second"]);partial.loadView();partial.run()
+        let partialId=dropTestEvents.last!["requestId"] as! String
+        try shelf.command(["op":"reply","requestId":partialId,"ok":false,"message":"本次交付未完成（已完成 1/2 项）","receipts":[["id":"retained","assetId":"first","fileName":"first.png"]]])
+        guard !partial.result.isHidden,partial.result.receipts.count==1,partial.status.stringValue.contains("未完成") else{throw NSError(domain:"PartialDelivery",code:1)}
+        let openedTools=NSPopover();openedTools.behavior = .semitransient;openedTools.animates=false;openedTools.contentViewController=WorkShelfTools(shelf:shelf,kind:"original",ids:["first"]);openedTools.contentSize=NSSize(width:300,height:150);shelf.tools=openedTools
+        shelf.window.orderFrontRegardless();openedTools.show(relativeTo:shelf.dropdown.bounds,of:shelf.dropdown,preferredEdge:.maxY)
+        guard openedTools.isShown else{throw NSError(domain:"PopoverSetup",code:1)}
+        let escape=NSEvent.keyEvent(with:.keyDown,location:.zero,modifierFlags:[],timestamp:ProcessInfo.processInfo.systemUptime,windowNumber:shelf.window.windowNumber,context:nil,characters:"\u{1b}",charactersIgnoringModifiers:"\u{1b}",isARepeat:false,keyCode:53)!
+        guard shelf.key(escape),shelf.expanded else{throw NSError(domain:"PopoverEscape",code:1,userInfo:[NSLocalizedDescriptionKey:"Escape closes the active tools float before collapsing its owning window"])}
+        let closeDeadline=Date().addingTimeInterval(0.8)
+        while openedTools.isShown,Date()<closeDeadline {
+            if let event=app.nextEvent(matching:.any,until:Date().addingTimeInterval(0.02),inMode:.default,dequeue:true){app.sendEvent(event)}
+        }
+        guard !openedTools.isShown else{throw NSError(domain:"PopoverEscape",code:2,userInfo:[NSLocalizedDescriptionKey:"The tools float completes its native close transition"])}
         // Motion is verified by work-shelf-interaction.test.swift against the
         // new proportional state machine. These legacy capsule assertions no
         // longer describe the requested product behavior.

@@ -5128,6 +5128,10 @@ _Avoid_: Library organization mode, embedded browser, recording plugin
 A saved library-bound set of asset references with its own order, presentation and work notes, independent of Collection membership and original-file ownership.
 _Avoid_: Duplicate asset library, Collection, permanent copy of every referenced original
 
+**Work Set Reference Fault**:
+An unexpected inability to access a Work Set member that should be usable in the current library. This is a fault rather than a supported offline membership state.
+_Avoid_: Normal offline member, optional reference, implied removal from the Work Set
+
 **Work Window Layout**:
 The device-specific placement, size, pinning and restore state of a Work Window, separate from its Work Set's reference content.
 _Avoid_: Asset ownership, permission grant, global collection order
