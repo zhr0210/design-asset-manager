@@ -1,0 +1,1 @@
+PASS production shelf Space closes without switching/button activation; editable Space retained; Shift-only zoom in shelf/main; stripped header/left filmstrip below notes, square main image/rounded shadow thumbnails; deferred notebook read preserves mounted canvas. Chromium component test only.

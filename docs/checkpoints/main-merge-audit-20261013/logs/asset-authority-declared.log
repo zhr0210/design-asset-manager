@@ -1,0 +1,34 @@
+
+> design-asset-manager@1.0.0 test-asset-authority-baseline
+> node scripts/run-ts-test.mjs scripts/asset-authority-baseline.test.ts
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The active authority baseline must pass.
++ actual - expected
+
++ [
++   {
++     code: 'active-authority-composition-changed',
++     file: 'src/main/work-mode/work-member-tools.ts'
++   }
++ ]
+- []
+
+    at file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/asset-authority-baseline.test.mjs:511:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      code: 'active-authority-composition-changed',
+      file: 'src/main/work-mode/work-member-tools.ts'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v25.8.0

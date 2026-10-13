@@ -1,0 +1,57 @@
+[
+  {
+    "check": "work-sets",
+    "code": 0,
+    "seconds": 2.54
+  },
+  {
+    "check": "shelf-controller",
+    "code": 0,
+    "seconds": 1.56
+  },
+  {
+    "check": "motion-host",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "check": "drop-cancel",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "check": "clipboard",
+    "code": 0,
+    "seconds": 4.48
+  },
+  {
+    "check": "work-copy",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "check": "zip",
+    "code": 0,
+    "seconds": 1.28
+  },
+  {
+    "check": "handoff-cancel",
+    "code": 0,
+    "seconds": 0.82
+  },
+  {
+    "check": "processed-copy",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "check": "active-session",
+    "code": 0,
+    "seconds": 0.19
+  },
+  {
+    "check": "capture-sqlite",
+    "code": 0,
+    "seconds": 0.18
+  }
+]

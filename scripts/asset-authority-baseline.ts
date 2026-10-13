@@ -24,6 +24,9 @@ const LIBRARY_CONSUMER_IMPORTS: Record<string, Record<string, string>> = {
   },
   'src/main/retrieval-workspace/query-file-grants.ts': {
     'src/main/library-lifecycle/bounded-preview-reader.ts': 'readBoundedPreviewBytes'
+  },
+  'src/main/work-mode/work-member-tools.ts': {
+    'src/main/library-lifecycle/measure-preview-colors.ts': 'measurePreviewColors'
   }
 }
 

@@ -1,0 +1,11 @@
+file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/native-work-dock.test.mjs:10589
+  return new ActiveLibraryHostError(code, messages[code] ?? "The Active Library operation failed.");
+         ^
+
+ActiveLibraryHostError: The Active Library operation failed.
+    at hostError (file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/native-work-dock.test.mjs:10589:10)
+    at file:///Users/meigong/Documents/design-asset-manager-macos/dist-temp/tests/native-work-dock.test.mjs:9646:63 {
+  code: 'library-operation-failed'
+}
+
+Node.js v25.8.0

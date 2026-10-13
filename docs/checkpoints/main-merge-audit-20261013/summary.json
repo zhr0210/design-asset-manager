@@ -1,0 +1,224 @@
+{
+  "auditedCommit": "56ee968",
+  "gitIntegrity": {
+    "branch": "main",
+    "main": "56ee96869fdb7567b590c88449166060c1d16e07",
+    "bCommit": "63dc760",
+    "trackedSourceFilesChecked": 1462,
+    "missing": [],
+    "different": [],
+    "sourceChangesAfterBCommit": [],
+    "bAncestor": true,
+    "legacyWipAncestor": false
+  },
+  "checks": [
+    {
+      "check": "work-sets",
+      "code": 0,
+      "seconds": 2.54,
+      "finalCode": 0
+    },
+    {
+      "check": "shelf-controller",
+      "code": 0,
+      "seconds": 1.56,
+      "finalCode": 0
+    },
+    {
+      "check": "motion-host",
+      "code": 0,
+      "seconds": 0.56,
+      "finalCode": 0
+    },
+    {
+      "check": "drop-cancel",
+      "code": 0,
+      "seconds": 0.6,
+      "finalCode": 0
+    },
+    {
+      "check": "clipboard",
+      "code": 0,
+      "seconds": 4.48,
+      "finalCode": 0
+    },
+    {
+      "check": "work-copy",
+      "code": 0,
+      "seconds": 0.4,
+      "finalCode": 0
+    },
+    {
+      "check": "zip",
+      "code": 0,
+      "seconds": 1.28,
+      "finalCode": 0
+    },
+    {
+      "check": "handoff-cancel",
+      "code": 0,
+      "seconds": 0.82,
+      "finalCode": 0
+    },
+    {
+      "check": "processed-copy",
+      "code": 0,
+      "seconds": 0.61,
+      "finalCode": 0
+    },
+    {
+      "check": "active-session",
+      "code": 0,
+      "seconds": 0.19,
+      "finalCode": 0
+    },
+    {
+      "check": "capture-sqlite",
+      "code": 0,
+      "seconds": 0.18,
+      "finalCode": 0
+    },
+    {
+      "check": "layout",
+      "code": 0,
+      "seconds": 0.13,
+      "finalCode": 0
+    },
+    {
+      "check": "autosave",
+      "code": 0,
+      "seconds": 0.13,
+      "finalCode": 0
+    },
+    {
+      "check": "trace",
+      "code": 0,
+      "seconds": 0.13,
+      "finalCode": 0
+    },
+    {
+      "check": "legacy-dock",
+      "code": 1,
+      "seconds": 0.18,
+      "initialFailure": "wrong system Node runner against Electron SQLite ABI",
+      "rerunLog": "legacy-dock-electron.log",
+      "finalCode": 0
+    },
+    {
+      "check": "dock-bounds",
+      "code": 0,
+      "seconds": 0.13,
+      "finalCode": 0
+    },
+    {
+      "check": "capture-plan",
+      "code": 0,
+      "seconds": 0.13,
+      "finalCode": 0
+    },
+    {
+      "check": "capture-composition",
+      "code": 1,
+      "seconds": 0.13,
+      "initialFailure": "wrong system Node runner against Electron SQLite ABI",
+      "rerunLog": "capture-composition-electron.log",
+      "finalCode": 0
+    },
+    {
+      "check": "asset-authority",
+      "code": 1,
+      "seconds": 0.61,
+      "initialFailure": "new exact preview-measurement consumer not registered in authority guard",
+      "rerunLog": "asset-authority-fixed.log",
+      "finalCode": 0
+    },
+    {
+      "check": "focus-input",
+      "code": 0,
+      "seconds": 1.41,
+      "finalCode": 0
+    },
+    {
+      "check": "exit-top-layer",
+      "code": 0,
+      "seconds": 0.8,
+      "finalCode": 0
+    },
+    {
+      "check": "dock-adapter",
+      "code": 0,
+      "seconds": 0.12,
+      "finalCode": 0
+    },
+    {
+      "check": "window-activation",
+      "code": 0,
+      "seconds": 0.13,
+      "finalCode": 0
+    },
+    {
+      "check": "dock-view",
+      "code": 0,
+      "seconds": 2.23,
+      "finalCode": 0
+    },
+    {
+      "check": "image-transform-view",
+      "code": 0,
+      "seconds": 1.22,
+      "finalCode": 0
+    },
+    {
+      "check": "drop-test",
+      "finalCode": 0,
+      "scope": "controlled AppKit inputs"
+    },
+    {
+      "check": "interaction-test",
+      "finalCode": 0,
+      "scope": "controlled AppKit inputs"
+    },
+    {
+      "check": "picker-test",
+      "finalCode": 0,
+      "scope": "controlled AppKit inputs"
+    },
+    {
+      "check": "typecheck-final",
+      "finalCode": 0
+    }
+  ],
+  "productSourceChanged": false,
+  "authorityGuardCorrection": [
+    "scripts/asset-authority-baseline.ts",
+    "scripts/asset-authority-baseline.test.ts"
+  ],
+  "actualUi": [
+    "native compact/expanded",
+    "native note input -> SQLite save",
+    "window close preserves work set",
+    "normal whole Host quit and process exit",
+    "regular library reopen and native reopen",
+    "color popover cancel and duplicate disabled",
+    "Space independent preview",
+    "preview image switch and close return"
+  ],
+  "preserved": {
+    "noteRestored": true,
+    "members": 9,
+    "colors": 4,
+    "originalHashes": 11,
+    "sqliteIntegrity": "ok"
+  },
+  "notQualified": [
+    "all software AI/OCR/provider paths",
+    "ordinary desktop Electron window real UI matrix",
+    "physical mouse/trackpad picker drag",
+    "native docking blur/button visual parity",
+    "multidisplay/Spaces/high-frame-rate motion",
+    "design-to-CSS/native visual alignment"
+  ],
+  "bEntry": "npm run start:work-b",
+  "ordinaryEntry": "npm run start:desktop",
+  "networkPush": false
+}

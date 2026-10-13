@@ -35,12 +35,20 @@ assert.ok(checkAssetAuthorityBaseline(
   replace('src/main/ipc/active-library.ipc.ts', 'dependencies.isTrustedSender?.(event)', 'dependencies.bypassTrustedSender?.(event)')
 ).some((violation) => violation.code === 'active-authority-ipc-changed'), 'The desktop facade must keep its trusted sender gate.')
 
-for (const file of ['src/main/ai-acceptance/acceptance-service.ts', 'src/main/retrieval-workspace/query-file-grants.ts']) {
+for (const file of ['src/main/ai-acceptance/acceptance-service.ts', 'src/main/retrieval-workspace/query-file-grants.ts', 'src/main/work-mode/work-member-tools.ts']) {
   assert.ok(checkAssetAuthorityBaseline(
     append(file, "import { createActiveLibrarySession } from '../library-lifecycle/active-library-session'")
   ).some((violation) => violation.code === 'active-authority-composition-changed' && violation.file === file),
   'Reviewed consumers must not acquire additional Library authority.')
 }
+
+assert.ok(checkAssetAuthorityBaseline(
+  replace('src/main/work-mode/work-member-tools.ts',
+    "import {measurePreviewColors} from '../library-lifecycle/measure-preview-colors'",
+    "import {measurePreviewColors, createActiveLibraryHost} from '../library-lifecycle/measure-preview-colors'")
+).some(violation => violation.code === 'active-authority-composition-changed' &&
+  violation.file === 'src/main/work-mode/work-member-tools.ts'),
+'Member tools may only import the reviewed preview measurement binding, not extra Library authority.')
 
 assert.ok(checkAssetAuthorityBaseline(
   append('src/main/library-lifecycle/active-library-host.ts', "import { getDatabase } from '../db'")

@@ -1,5 +1,7 @@
 # 当前任务：悬浮工作窗UI/UX访谈与设计系统整理
 
+2026-10-13main完整性验证完成：1462个源码/测试/构建文件与B提交63dc760一致，旧WIP未混入；类型及29项相关保护/组件检查最终通过。修复新素材测色消费者遗漏权限基线登记，并增加禁止新增Host/Session及额外导入的反例。正式B窗备注保存、正常整Host退出重开、颜色取消与大预览切图已验，测试前备注已恢复，9成员/4色/11原件哈希及库完整性保持。未关闭普通默认窗口全矩阵、物理输入/多屏/动画视觉及AI/OCR资格。详细结果见[main验证](docs/checkpoints/main-merge-audit-20261013/README.md)；接续仍提醒DESIGN-APPLY，Eagle移除与悬浮窗菜单范围保持待办。
+
 2026-10-13Git整合与普通目录切换已完成：B源码与文档已保存到`codex/floating-window-b`的`63dc760`并合入本地main。普通目录`/Users/meigong/Documents/design-asset-manager-macos`现检出main；后续可在此切到`codex/floating-window-design`继续悬浮窗模块。原普通目录旧WIP保存在`codex/legacy-window-wip-20261013`的`9d63405`（16文件原字节核对），未合入main。临时main整合工作树已归档，B目录保留为detached HEAD，不再占用设计分支，其运行资料和本地研究证据保留。没有推送或发布。Eagle本地分支已删除，`archive/eagle-integration-20261013`保留8cf60c7，main中的Eagle功能未删除。检查与保全见[整合回执](docs/checkpoints/b-main-integration-20261013/README.md)。
 
 下次继续本任务时先提醒用户：完成设计规范应用对齐。用户明确本轮延期产品界面、生成CSS、Apple中性色/强调色、原生Liquid Glass、220×240紧凑布局及系统控件样式；实施后须同步tokens并复验正式入口、主题、输入、动画与保存重开。当前`design:check`因目标规范与旧生成CSS不同而未通过，不能遗忘或记作已对齐。完整责任见[DESIGN-APPLY](docs/tasks/TASK-REGISTRY.md#design-apply)；只在接续时提醒，不创建定时自动化。

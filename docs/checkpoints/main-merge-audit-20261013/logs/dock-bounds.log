@@ -1,0 +1,1 @@
+Dock layout parser/bounds: unchanged old JSON, strict compact/normal bounds and edge, reversible expansion, bounded work-area recovery retaining expansion record. Pure geometry fixture; no physical display qualification.

@@ -1,0 +1,1 @@
+PASS production native color picker: opaque RGB round-trip, HSV area/hue controls, preview without commit, exact HEX display, single confirmation, canceled/duplicate refusal, expanded-only add button. AppKit controls; physical UI path separately required.

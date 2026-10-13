@@ -1,0 +1,1 @@
+Production shelf autosave: newer input survives old completion; monotonic acknowledgement; unknown submission blocks automatic retries; removal preserves other references; owned pipe rejects extra authority.

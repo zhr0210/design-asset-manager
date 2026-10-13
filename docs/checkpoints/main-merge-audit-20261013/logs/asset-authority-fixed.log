@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-asset-authority-baseline
+> node scripts/run-ts-test.mjs scripts/asset-authority-baseline.test.ts
+
+asset-authority-baseline passed

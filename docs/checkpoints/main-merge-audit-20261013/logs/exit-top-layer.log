@@ -1,0 +1,1 @@
+Production transition ReviewSheet overtakes an existing modal editor; click/confirm and Escape cancellation preserve retained editor/input. Chromium regression only.

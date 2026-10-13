@@ -1,0 +1,42 @@
+[
+  {
+    "check": "layout",
+    "code": 0,
+    "seconds": 0.13
+  },
+  {
+    "check": "autosave",
+    "code": 0,
+    "seconds": 0.13
+  },
+  {
+    "check": "trace",
+    "code": 0,
+    "seconds": 0.13
+  },
+  {
+    "check": "legacy-dock",
+    "code": 1,
+    "seconds": 0.18
+  },
+  {
+    "check": "dock-bounds",
+    "code": 0,
+    "seconds": 0.13
+  },
+  {
+    "check": "capture-plan",
+    "code": 0,
+    "seconds": 0.13
+  },
+  {
+    "check": "capture-composition",
+    "code": 1,
+    "seconds": 0.13
+  },
+  {
+    "check": "asset-authority",
+    "code": 1,
+    "seconds": 0.61
+  }
+]

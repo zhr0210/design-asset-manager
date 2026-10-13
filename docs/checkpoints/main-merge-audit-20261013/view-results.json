@@ -1,0 +1,32 @@
+[
+  {
+    "check": "focus-input",
+    "code": 0,
+    "seconds": 1.41
+  },
+  {
+    "check": "exit-top-layer",
+    "code": 0,
+    "seconds": 0.8
+  },
+  {
+    "check": "dock-adapter",
+    "code": 0,
+    "seconds": 0.12
+  },
+  {
+    "check": "window-activation",
+    "code": 0,
+    "seconds": 0.13
+  },
+  {
+    "check": "dock-view",
+    "code": 0,
+    "seconds": 2.23
+  },
+  {
+    "check": "image-transform-view",
+    "code": 0,
+    "seconds": 1.22
+  }
+]

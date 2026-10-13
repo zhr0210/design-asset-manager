@@ -1,0 +1,1 @@
+Actual Electron dock adapter: constructor restores compact min/resize mode, configure changes physical window min/resize/bounds, expands to normal min, owned bounds metadata stays immutable, destroyed window refuses. Controlled native API; physical screen/drop separate.
