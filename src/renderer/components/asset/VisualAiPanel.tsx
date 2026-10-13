@@ -9,10 +9,10 @@ import IndependentTagIntentPanel from './IndependentTagIntentPanel'
 import { workspaceMutationErrorMessage } from '../../../shared/client/workspace-connection-error'
 import { reasoningNotice } from '../../../shared/workflows/ai-reasoning.workflow'
 
-export default function VisualAiPanel({ scope, assetIds, promptDraft = '', onUsePrompt, onChanged, onConfigure }: {
-  scope: VisualAiScope; assetIds: string[]; promptDraft?: string; onUsePrompt?(prompt: string): void; onChanged?(): void; onConfigure(): void
+export default function VisualAiPanel({ scope, assetIds, promptDraft = '', onUsePrompt, onChanged, onConfigure,memberApi,libraryTools=true }: {
+  memberApi?:VisualAiApi;libraryTools?:boolean;scope: VisualAiScope; assetIds: string[]; promptDraft?: string; onUsePrompt?(prompt: string): void; onChanged?(): void; onConfigure(): void
 }) {
-  const api = (window as Window & { visualAiAPI?: VisualAiApi; damClient?: { visualAi?: VisualAiApi } }).visualAiAPI ?? getWorkspaceClient()?.visualAi as VisualAiApi | undefined
+  const api = memberApi??((window as Window & { visualAiAPI?: VisualAiApi; damClient?: { visualAi?: VisualAiApi } }).visualAiAPI ?? getWorkspaceClient()?.visualAi as VisualAiApi | undefined)
   const [backends, setBackends] = useState<VisualAiBackendChoice[]>([])
   const [batchBusy,setBatchBusy]=useState(false)
   const [tagBusy,setTagBusy]=useState(false),[tagSource,setTagSource]=useState<string|null|undefined>(undefined)
@@ -80,10 +80,10 @@ export default function VisualAiPanel({ scope, assetIds, promptDraft = '', onUse
         if (response.ok) {reviewReceipt.current=response.value.receipt;setReview(response.value)} else setError(response.error)
       }) }}><Sparkles size={13} />高级反推提示词</button>)}</div>
     </>}
-    <BasicAnalysisPanel scope={requestScope} assetIds={assetIds} backendId={backendId} model={model} onChanged={onChanged}/>
-    {assetIds.length===1&&<BackgroundAnalysisPanel scope={requestScope} assetId={assetIds[0]}/>}
-    <TagBatchPanel scope={requestScope} assetIds={assetIds} backendId={tagChoice?.backendId??backendId} model={tagChoice?.model??model} onActivityChange={setBatchBusy} onChanged={onChanged}/>
-    {assetIds.length===1&&<IndependentTagIntentPanel scope={requestScope} assetId={assetIds[0]} backendId={tagChoice?.backendId??backendId} model={tagChoice?.model??model} onActivityChange={setTagBusy} onCurrentTagSource={setTagSource} />}
+    {libraryTools&&<BasicAnalysisPanel scope={requestScope} assetIds={assetIds} backendId={backendId} model={model} onChanged={onChanged}/>}
+    {libraryTools&&assetIds.length===1&&<BackgroundAnalysisPanel scope={requestScope} assetId={assetIds[0]}/>}
+    {libraryTools&&<TagBatchPanel scope={requestScope} assetIds={assetIds} backendId={tagChoice?.backendId??backendId} model={tagChoice?.model??model} onActivityChange={setBatchBusy} onChanged={onChanged}/>}
+    {libraryTools&&assetIds.length===1&&<IndependentTagIntentPanel scope={requestScope} assetId={assetIds[0]} backendId={tagChoice?.backendId??backendId} model={tagChoice?.model??model} onActivityChange={setTagBusy} onCurrentTagSource={setTagSource} />}
     {exceedsBatchLimit && <p role="status">已选择 {assetIds.length} 个素材，每批最多分析 8 个，请缩小选择范围。</p>}
     {review && <div className="visual-ai-review" role="region" aria-label="确认 AI 执行范围"><strong>{review.location === 'external' ? '确认发送到外部服务' : '确认本地分析'}</strong><p>{review.backendName} · {review.providerOrigin}</p><p>{review.model} · {review.assets.length} 个素材</p><p>{review.inputDescription}</p><p>{review.storageNotice}</p><div className="visual-ai-actions"><button type="button" disabled={busy} onClick={() => {const receipt=review.receipt;reviewReceipt.current=null;setReview(null);void api?.discardReview(receipt).catch(()=>{})}}><X size={13} />取消</button><button type="button" disabled={busy} onClick={() => { void operate(async () => {
       const response = await api!.run(review.receipt)

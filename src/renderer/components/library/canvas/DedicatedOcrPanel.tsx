@@ -5,8 +5,8 @@ import React,{useEffect,useRef,useState} from 'react'
 import {Copy,ScanText} from 'lucide-react'
 import type {Asset} from '../../../stores/asset.store'
 import {ocrText,type OcrApi,type OcrScope,type OcrSnapshot,type OcrStatus,type OcrReview} from '../../../../shared/contracts/asset-ocr.contract'
-export function DedicatedOcrPanel({asset,scope,assetIds}:{asset:Asset;scope:OcrScope;assetIds?:string[]}){
- const api=getWorkspaceClient()?.assetOcr as OcrApi | undefined
+export function DedicatedOcrPanel({asset,scope,assetIds,memberApi}:{asset:Asset;scope:OcrScope;assetIds?:string[];memberApi?:OcrApi}){
+ const api=memberApi??getWorkspaceClient()?.assetOcr as OcrApi | undefined
  const draftKey=ocrDraftKey(scope),retained=getOcrDraft(draftKey)
  const [snapshot,setSnapshot]=useState<OcrSnapshot|null>(retained?.snapshot??null),[status,setStatus]=useState<OcrStatus|null>(null),[review,setReview]=useState<OcrReview|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[statusError,setStatusError]=useState(''),[message,setMessage]=useState(''),[editing,setEditing]=useState(!!retained),[draft,setDraft]=useState(retained?.text??''),[recoveryMismatch,setRecoveryMismatch]=useState(retained?.mismatch??false)
  const life=useRef(0),readSequence=useRef(0),statusSequence=useRef(0),pending=useRef(false),snapshotRef=useRef(snapshot),dirtyRef=useRef(false),draftRef=useRef(draft);snapshotRef.current=snapshot;draftRef.current=draft

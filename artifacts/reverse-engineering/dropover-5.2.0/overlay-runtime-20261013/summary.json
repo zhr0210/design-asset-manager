@@ -1,0 +1,236 @@
+{
+  "target": {
+    "version": "5.2.0",
+    "pid": 18449,
+    "windowId": 30269,
+    "sha256": "b0120976ab702cbd3eaca13e4e596bb5d4d6db8eeae776fb78e234b9d78b5294"
+  },
+  "capture": {
+    "kind": "selected-window images + passive statistical thread stacks",
+    "samples": 651,
+    "elapsed": 59.993717583303805,
+    "meanGapMs": 92.29802660258989,
+    "maxGapMs": 424.51212502783164
+  },
+  "events": [
+    {
+      "frame": 0,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2208,
+        "Y": 165
+      },
+      "elapsed": 2.916203811764717e-7,
+      "image": "frame-0000.png",
+      "nativeAt": 443251.774084625,
+      "windowId": 30269
+    },
+    {
+      "frame": 90,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2208,
+        "Y": 165
+      },
+      "elapsed": 8.450096291664522,
+      "image": "frame-0090.png",
+      "nativeAt": 443260.22418062505,
+      "windowId": 30269
+    },
+    {
+      "frame": 91,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2208,
+        "Y": 165
+      },
+      "elapsed": 8.566396958311088,
+      "image": "frame-0091.png",
+      "nativeAt": 443260.3404812917,
+      "windowId": 30269
+    },
+    {
+      "frame": 92,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2149,
+        "Y": 165
+      },
+      "elapsed": 8.661422333330847,
+      "image": "frame-0092.png",
+      "nativeAt": 443260.4355066667,
+      "windowId": 30269
+    },
+    {
+      "frame": 93,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2042,
+        "Y": 165
+      },
+      "elapsed": 8.766320166643709,
+      "image": "frame-0093.png",
+      "nativeAt": 443260.54040450003,
+      "windowId": 30269
+    },
+    {
+      "frame": 94,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2030,
+        "Y": 165
+      },
+      "elapsed": 8.858832874975633,
+      "image": "frame-0094.png",
+      "nativeAt": 443260.63291720836,
+      "windowId": 30269
+    },
+    {
+      "frame": 96,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2030,
+        "Y": 165
+      },
+      "elapsed": 9.023982249957044,
+      "image": "frame-0096.png",
+      "nativeAt": 443260.79806658335,
+      "windowId": 30269
+    },
+    {
+      "frame": 150,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2030,
+        "Y": 165
+      },
+      "elapsed": 13.701788541628048,
+      "image": "frame-0150.png",
+      "nativeAt": 443265.475872875,
+      "windowId": 30269
+    },
+    {
+      "frame": 506,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2030,
+        "Y": 165
+      },
+      "elapsed": 46.74412258330267,
+      "image": "frame-0506.png",
+      "nativeAt": 443298.5182069167,
+      "windowId": 30269
+    },
+    {
+      "frame": 507,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2030,
+        "Y": 165
+      },
+      "elapsed": 46.845669249945786,
+      "image": "frame-0507.png",
+      "nativeAt": 443298.61975358333,
+      "windowId": 30269
+    },
+    {
+      "frame": 508,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2149,
+        "Y": 165
+      },
+      "elapsed": 46.92437045829138,
+      "image": "frame-0508.png",
+      "nativeAt": 443298.6984547917,
+      "windowId": 30269
+    },
+    {
+      "frame": 509,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2190,
+        "Y": 165
+      },
+      "elapsed": 47.01217249996262,
+      "image": "frame-0509.png",
+      "nativeAt": 443298.78625683335,
+      "windowId": 30269
+    },
+    {
+      "frame": 510,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2208,
+        "Y": 165
+      },
+      "elapsed": 47.09390008333139,
+      "image": "frame-0510.png",
+      "nativeAt": 443298.8679844167,
+      "windowId": 30269
+    },
+    {
+      "frame": 512,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2208,
+        "Y": 165
+      },
+      "elapsed": 47.2913566249772,
+      "image": "frame-0512.png",
+      "nativeAt": 443299.06544095837,
+      "windowId": 30269
+    },
+    {
+      "frame": 514,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2208,
+        "Y": 165
+      },
+      "elapsed": 47.4903409582912,
+      "image": "frame-0514.png",
+      "nativeAt": 443299.2644252917,
+      "windowId": 30269
+    },
+    {
+      "frame": 650,
+      "bounds": {
+        "Height": 207,
+        "Width": 198,
+        "X": 2208,
+        "Y": 165
+      },
+      "elapsed": 59.993717583303805,
+      "image": "frame-0650.png",
+      "nativeAt": 443311.7678019167,
+      "windowId": 30269
+    }
+  ],
+  "observedRuntimeOffsets": {
+    "moduleLoadAddress": "0x10432c000",
+    "showAddSubview": "0x217390",
+    "showAnimationGroup": "0x2176fc",
+    "fadeInAlphaSetter": "0x217a60"
+  },
+  "limits": [
+    "Menu docking used; atomic CUA drag did not move the window.",
+    "sample has aggregate call stacks, no argument values or per-call timestamps.",
+    "No credentials/environment/heap dumps; screenshots only the named public test window."
+  ]
+}

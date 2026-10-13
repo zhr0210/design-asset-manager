@@ -100,3 +100,11 @@ UI修复后的证据绑定新候选，旧失败保留，不回写成通过。审
 分别列出Browser CU、Desktop/原生CU、后台/接线测试的PASS、FAIL、NOT_RUN和BLOCKED_UX_ACCEPTANCE。
 PASS只用于实际执行且结果相符；FAIL是已观察到不符；NOT_RUN是未执行；工具/所需端不可用或范围身份不明则BLOCKED_UX_ACCEPTANCE。
 关键路径未通过不宣称UI/UX完成，用户反馈不替代Agent验收。
+
+## 设计基准与视觉对照
+
+视觉规则只由[DESIGN](../../DESIGN.md)维护，用户行为按[工作台](../design/WORKSPACE-INTERACTIONS.md)与[悬浮工作窗](../design/WORK-WINDOW-INTERACTIONS.md)规格确认。批准的设计目标、源码状态和受测产物分别记录，不把设计文件的更新视为界面已更新。
+
+视觉与正式数据是两条分别成立的证据：同窗口、同合成素材、同主题对照导航、卡片、材质、侧栏、专注、笔记、菜单、明暗与缩窄状态；正式执行另验入库、检索、编辑、错误恢复、保存与重开。合成适配器不证明Host接线，数据成功也不证明原生材质或动画。
+
+原DESIGN的≤1 CSS px目标属于批准原型布局对照，来源见[迁移前原文](../history/design-system-restructure-20261013/DESIGN.before.md)。设计发生变化后建立新候选基准，不以旧零像素对照阻止已批准的Apple强调色或原生布局变化，也不将旧截图转记给新产物。1024/1440网页宽度、原生平台与适用设备分别报告；缺连续帧或真实设备覆盖时明确未验。

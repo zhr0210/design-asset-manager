@@ -92,3 +92,7 @@
 .gallery-design .notebook-upgrade p{margin:16px 0;color:var(--muted);font-size:12px}
 .gallery-design .notebook-upgrade>div{display:flex;justify-content:flex-end;gap:12px}
 .gallery-design .notebook-upgrade-backdrop{position:absolute;inset:0;z-index:70;background:#20212615;backdrop-filter:blur(3px)}
+
+/* Preview media has its own rounded container; original focus images stay square. */
+.gallery-design .focus-filmstrip button .focus-preview-thumbnail{display:flex;align-items:center;justify-content:center;flex:none;width:100%;height:50px;max-width:none;overflow:hidden;border-radius:8px;background:var(--surface);box-shadow:0 5px 10px -3px rgba(0,0,0,.18);white-space:normal}
+.gallery-design .focus-filmstrip button .focus-preview-thumbnail img{display:block;width:100%;height:100%;object-fit:contain;border-radius:0}

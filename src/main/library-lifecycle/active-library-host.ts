@@ -356,6 +356,25 @@ export function createActiveLibraryHost(
     const snapshot = await active.capture.dispatch({ kind: 'confirm-plan', planReceipt: receipt })
     return snapshot
   })
+  const prepareDroppedAssets:NonNullable<ActiveLibraryHost['prepareDroppedAssets']> = (files,signal) => run(async active => {
+    if(!Array.isArray(files)||!files.length||files.length>200||files.some(file=>typeof file!=='string'||!path.isAbsolute(file)||file.includes('\0')))throw hostError('library-target-invalid')
+    const result=await active.capture.prepare(files.map(filePath=>({filePath})),signal)
+    if(result.kind==='planned')capturePlanGenerations.set(result.plan.receipt,result.plan.activeLibrary.generation)
+    return result
+  })
+  const dispatchDroppedAssets:NonNullable<ActiveLibraryHost['dispatchDroppedAssets']>=(receipt,signal)=>serialRun(async active=>{
+    const expectedGeneration=capturePlanGenerations.get(receipt)
+    if(expectedGeneration&&expectedGeneration!==active.generation)throw hostError('library-generation-conflict')
+    return active.capture.dispatch({kind:'confirm-plan',planReceipt:receipt},signal)
+  })
+  const resolveDroppedAssetReferences:NonNullable<ActiveLibraryHost['resolveDroppedAssetReferences']>=files=>run(async active=>{
+    if(!Array.isArray(files)||!files.length||files.length>200||files.some(file=>typeof file!=='string'||!path.isAbsolute(file)||file.includes('\0')))throw hostError('library-target-invalid')
+    const rows=active.database.prepare(`SELECT l.design_asset_identity AS id,l.revision,c.grid_thumbnail_ref AS preview,c.managed_original_ref AS reference FROM asset_lifecycle l JOIN promotion_links p ON p.design_asset_identity=l.design_asset_identity JOIN asset_candidates c ON c.candidate_identity=p.candidate_identity WHERE l.lifecycle_state='active' AND l.ownership='managed'`).all() as {id:string;revision:string;preview:string;reference:string}[]
+    const known=new Map(rows.filter(r=>r.reference?.startsWith('managed-original:')).map(r=>[path.resolve(active.managed,r.reference.slice('managed-original:'.length)),r]))
+    const assetIds:string[]=[],externalPaths:string[]=[]
+    for(const file of files){const row=known.get(path.resolve(file));if(row){await readOwnedOriginal(active,row.id,row.revision,row.preview,96*1024*1024);assetIds.push(row.id)}else externalPaths.push(file)}
+    return{assetIds:[...new Set(assetIds)],externalPaths}
+  })
   const inspectCapture = (batchIdentity: string) => run(async (active) => {
     const snapshot = await active.capture.inspect({ batchIdentity })
     if (snapshot.activeLibraryIdentity !== active.identity) throw hostError('library-generation-conflict')
@@ -740,7 +759,7 @@ export function createActiveLibraryHost(
     workMediaStatus,enableWorkMedia,readWorkMedia,writeWorkMedia,readWorkMediaFile,
     inspect, prepareCreate, confirmCreate, open, reopen, close, searchAssetPage, readSearchIndex, rebuildSearchIndex,
     readRetrievalCoverage,startRetrievalGeneration,pauseRetrievalGeneration,resumeRetrievalGeneration,searchSemanticPage,cancelSemanticQuery,rebuildRetrievalIndex,switchRetrievalSpace,suspendRetrievalWork,cancelSemanticOwner,
-    prepareAddAssets, dispatchAddAssets, inspectCapture,
+    prepareAddAssets, prepareDroppedAssets, dispatchDroppedAssets, resolveDroppedAssetReferences, dispatchAddAssets, inspectCapture,
     readAssetContext,readBackgroundAnalysis,configureBackgroundAnalysis,changeBackgroundIntent,readTagRecovery,readTagEffectReceipt, readTagDecisionContext,decideTag,holdBusinessAdmission,enableTagExecution,claimTagExecution,markTagExecutionSent,commitTagExecution,finishTagExecution,readTagExecutionRequest,readTagOutbox,ackTagOutbox,readTagExecution, readTagIntentContext, readTagIntents, saveTagIntent,saveTagBatch, listAssets, searchAssets, listTags, searchTags, getTag, listTrash, readPreview, readVisualSession,readVisualPreview, readManagedOriginal, createTag, updateTag, addTagToAsset,
     createTagAlias, removeTagAlias, setTagParent, removeTagFromAsset, batchAddTagsToAssets, batchRemoveTagsFromAssets, replaceTagForAssets, listAssetTags, updateAssetCaption, resetAssetCaptionEdited,
     listIntakeRecovery, prepareIntakeRecovery, runIntakeRecovery, downloadJournal, prepareTrash, dispatchTrash, inspectTrash, enableVisualAi, saveVisualAiEvidence, listVisualAiEvidence, confirmVisualAiTag, importClipboardImage, importClipboardImageFromReader, importDownloadedImage, recoverDownloadedImage, saveImageVariant

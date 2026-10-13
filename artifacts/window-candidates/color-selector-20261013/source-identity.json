@@ -1,0 +1,13 @@
+{
+  "buildId": "dam-8816c1fa125661e6",
+  "files": {
+    "native/shelf-candidates/NativeWorkShelf.swift": "9c8daa900d15dad5464575db6e656b7762c23699d56cadf9fbf8c5a8992c5873",
+    "native/shelf-candidates/WorkShelfColorPicker.swift": "30d71ead183238b51972fc3f4dc67720103ac5ede65d17c37ea28ceb57833ff3",
+    "scripts/build-shelf-candidates.mjs": "c18628ff83f8db8f9bd3cd2f254cb863874824adcddd1ea2bce4c00d637ad627",
+    "scripts/native-shelf-drop.test.swift": "9dbc676a80fde53930ae81d6139b6381b6e5484e0f017245afacbe5bd5cd347d",
+    "scripts/work-shelf-color-picker.test.swift": "26ae38fb365d28a000246541e904c2c93ef5fa8880692cd5bbd692a949ff42ee",
+    "src/main/work-mode/native-shelf-work-window.ts": "9626c6a75bd51c403201b512c6fd4351cf4d7983af7a511a5825e5f207d2221f",
+    "src/shared/build-identity.generated.ts": "9fd545c00cee712c43997f6c61d54e98704631a629c1c38e589d2e2222bafc76",
+    "src/main/work-mode/shelf-candidate-identity.generated.ts": "41f0dfcaf00f8ea467192e87bb673b21a5f87aa632a205dd4829122f0d8ac1b5"
+  }
+}

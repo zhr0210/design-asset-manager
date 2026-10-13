@@ -69,7 +69,8 @@
       "node_modules/better-sqlite3/**/*",
       "node_modules/sharp/**/*",
       "node_modules/@img/**/*",
-      "out/main/macos-runtime/**/*"
+      "out/main/macos-runtime/**/*",
+      "out/main/shelf-candidates/**/*"
     ],
     "win": {
       "executableName": "Design Asset Manager",
@@ -140,13 +141,16 @@
     "context:check": "node scripts/agent-context-router.mjs check",
     "test-agent-context-router": "node scripts/agent-context-router.test.mjs",
     "dev": "electron-vite dev",
-    "build": "node scripts/build-macos-runtime.mjs && node scripts/build-eagle-companion.mjs && node scripts/build-identity.mjs && electron-vite build",
+    "build": "node scripts/build-shelf-candidates.mjs && node scripts/build-macos-runtime.mjs && node scripts/build-eagle-companion.mjs && node scripts/build-identity.mjs && electron-vite build",
     "pack:win": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dir",
     "pack:mac": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dir",
     "dist:win": "npm run build && node scripts/run-electron-builder.mjs --platform=win --mode=dist",
     "dist:mac": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dist",
     "postinstall": "electron-builder install-app-deps",
     "typecheck": "tsc --noEmit",
+    "build:shelf-candidates": "node scripts/build-shelf-candidates.mjs",
+    "start:shelf-a": "node scripts/launch-window-candidate.mjs --candidate=a",
+    "start:work-b": "node scripts/launch-window-candidate.mjs --candidate=b",
     "build:windows-video": "node scripts/build-windows-video-runtime.mjs",
     "test-python-unittest": "node scripts/run-python-unittest.mjs",
     "test-openai-compatible-provider": "node scripts/run-ts-test.mjs scripts/test-openai-compatible-provider.ts",

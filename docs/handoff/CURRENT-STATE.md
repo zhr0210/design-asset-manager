@@ -1,5 +1,21 @@
 # DAM 当前可用状态
 
+## 设计目标与受测产物的区别
+
+设计系统已按Apple参考整理，功能流程与技术机制分别归位；这是文档更新，不是新的应用构建。主要操作采用系统强调色（网页默认蓝色）、紧凑220×240 pt、全底板明显Liquid Glass和顶部常显原生按钮是已批准的设计目标；本次未同步生成CSS、改动原生源代码或重建候选。现有网页tokens与新设计存在强调色差异，后续实施须同步并重新验收，旧证据不能关闭这些目标。
+
+悬浮窗的区域分工、完整预览及菜单范围的确认状态见[交互规格](../design/WORK-WINDOW-INTERACTIONS.md)。最新色板产物及既有指针/覆盖层/设备缺口如下保留，资格不因文档迁移改变。
+
+## B窗口核心重建（2026-10-13，492930）
+
+最新色板候选为dam-8816c1fa125661e6：展开窗右侧HEX输入改为“添加”按钮及原生颜色浮层，用户选择不透明六位HEX。确认/取消/重复保护与整Host保存重开已从正式可访问控件验收；原备注/9成员/两色保留。浮层坐标指针输入未取得有效证据，物理鼠标/触控板取色仍BLOCKED_UX_ACCEPTANCE，详情见[色板记录](../../artifacts/window-candidates/color-selector-20261013/RESULT.md)。这不关闭前一轮原生模糊、按钮视觉退出及流畅性资格。
+
+后续原版实测确认吸附使用真正窗内NSVisualEffectView，全部原按钮视觉退出/弹出恢复；当前B纯颜色overlay遗漏该效果，尚未实施或取得对应视觉资格。651张指定公开窗口图像及后台实际AppKit/Core Animation栈见[实时补证](../../artifacts/reverse-engineering/dropover-5.2.0/overlay-runtime-20261013/RESULT.md)。本轮仅调研，B二进制身份未变。
+
+最新要求取代旧f55展开停靠/72×160胶囊体验资格。本轮仅在B工作副本实现：明确compact/expanded、同尺寸84%屏外停靠、12点内侧恢复、原始deltaX时长、可中断原生运动、私有关联回执及终态后Host保存，旧布局原文备份、异步有界诊断保留。最终dam-492930414aa9bcb7及原生5648ab9…已独立构建并核对实际身份。正式单屏CUA左右停靠、弹出、再拖、拖离、展开左右拒绝、关闭重开及整个Host停靠恢复已验，9成员/备注/两色/修订20保留；临时生产SQLite另验取消、保存失败和撤权。入口为B副本npm run start:work-b / profile-b / library-b-v2。
+
+[完整证据与缺口](../../artifacts/window-candidates/core-rebuild-20261013/RESULT.md)：指定窗口连续采样约10fps，原版背景/标题原子drag未产生运动，无法获得慢/快/反向/中断对照；物理多屏、触控板和高帧率体验未验，父级1:1仍PARTIAL。旧进程已退出，仅新B候选在跑；普通默认软件、发布和AI/OCR未触及。以下为先前受测产品及候选的历史状态。
+
 更新：2026-10-11文档整理；产品证据截至2026-10-10。本页只维护能力、启动、版本和限制。当前工作见 [TASK](../../TASK.md)，跨系列状态/剩余条件唯一入口为 [任务主台账](../tasks/TASK-REGISTRY.md)。
 
 ## 用户现在可用的范围
@@ -53,3 +69,19 @@ cd /Users/meigong/Documents/design-asset-manager-macos
 ## 按需接续
 
 [模块接线入口](../agents/implementation-status.md) → 对应模块README；[任务主台账](../tasks/TASK-REGISTRY.md) → 相关原始证据；[历史索引](../history/task-consolidation-20261011/README.md)仅在需要因果/旧方案时读取。保留运行环境、资料、模型与其他WIP，不默认加载全部旧报告。
+
+## 当前工作副本的窗口候选（2026-10-12）
+
+用户授权的A/B两路线正在实施，状态PARTIAL，非上述旧候选的新资格。启动入口为当前工作副本的`npm run start:shelf-a` / `npm run start:work-b`，默认独立profile；源码与范围见[原生候选说明](../../native/shelf-candidates/README.md)，阶段证据见[比较记录](../../artifacts/window-candidates/COMPARISON.md)。原生接线、部分正式UI及保护回归已有证据；A完整1:1、B整体原生级体验、AI新增接线及Windows未完成。Mac已手动解锁，最新构建正式复验正常退出/重开、草稿取消保护和复杂面板尺寸；修复退出审查被页面modal遮挡。A最新构建正常退出/重开、Quick Look及停靠恢复通过。旧失败记录保留，不将旧截图转记到新代码。精确build/原生SHA与运行范围见[检查点](../../artifacts/window-candidates/checkpoint.json)。不替换此前受测普通包、不继承其PASS、不对外发布。
+
+### B深度改造的当前检查点
+
+2026-10-12用户已选B为主线、A保留参考。B已实现同窗原生网格、边缘吸附、直接文件承诺、Host自动保存与恢复、独立专注/真实笔记及受限成员工具。用户指出的展开局部拖入/多选缩为单项已分别修复；用户确认多选拖动保持，但接收文件尚未证明。最新整页拖入和输入/退出保护代码已构建，Mac自动锁定阻塞装载与正式复验，当前仍运行中间构建。桌面专用接收目录为`/Users/meigong/Desktop/DAM-B-接收测试-20261012-77a7`。精确下一动作与限制见[TASK](../../TASK.md)；不得把内部真实库、旧截图或拖动影像代替新构建的接收结果。
+
+### B 原生候选验收续记（2026-10-12，5f8522）
+
+当前测试候选dam-5f8522c6e415e0b9，入口npm run start:work-b与独立profile-b/library-b-v2。整窗拖入用户已确认；取消/错误反馈/真实图片点击焦点修复，正式生成原件、预览、兼容PNG、图像处理、9项ZIP与文件回读符合；备注与真实矩形笔记正常退出重开、引用移出不删原件再恢复已有9项已验。详细范围及未完成条件见[当前验收矩阵](../../artifacts/window-candidates/B-ACCEPTANCE-20261012.md)。菜单物理接收、视频参考帧、AI/OCR配置、跨屏及性能未关闭；B仍PARTIAL，普通默认版本不变。
+
+### B吸附自行验收结果（2026-10-13，f55e18）
+
+当前候选dam-f55e18f0df3e70b9，仍走npm run start:work-b与指定隔离profile/library。用户明确后续由Agent测试，本轮正式CUA紧凑左右吸附、弹出后再吸附、展开左右、点击恢复、拖离保留当前位置已通过；实时backend12个完整意图/命令/终态链及保存layout读回一致。详见[自行验收与原因分析](../../artifacts/window-candidates/B-DOCK-SELF-ACCEPTANCE-V7-20261013.md)。仅当前单屏吸附子目标PASS，父B及多屏/Spaces/连续帧、其他OS交接/视频/AI/OCR资格仍PARTIAL，不替换普通默认版本、不发布。

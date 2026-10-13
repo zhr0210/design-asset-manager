@@ -1,4 +1,16 @@
-# DAM 分支与统一目录
+# DAM 分支与工作树
+
+## 2026-10-13：B内容整合与后续工作
+
+本轮用户要求将B worktree的源码及设计文档提交后合入本地main，再从main继续悬浮窗模块。B来源分支为`codex/floating-window-b`，接续分支为`codex/floating-window-design`；整合使用独立干净工作树，普通目录的`codex/macos-migration`旧版WIP保留，不自动搬入B，不推送或发布。
+
+B工作目录为`/Users/meigong/.codex/worktrees/6699/design-asset-manager-macos`。main整合工作目录为`/Users/meigong/.codex/worktrees/main-integration/design-asset-manager-macos`；普通目录仍为`/Users/meigong/Documents/design-asset-manager-macos`。同一Git仓库中的工作树不是独立产品权威，运行时必须按所选分支重建/核对，不复用另一工作树的旧验收资格。
+
+`codex/eagle-integration`已按用户要求删除，本地恢复标签`archive/eagle-integration-20261013`指向`8cf60c7b3fd2e165b574db134e1d7149e9116a3e`，保留其独有历史；没有合入Eagle分支独有变更。main原位置由`archive/main-before-b-20261013`保留。删除分支没有删除产品中的Eagle功能，后续移除见[EAGLE任务](../tasks/TASK-REGISTRY.md#eagle)。
+
+主要操作色、生成CSS、原生材质与布局应用仍由[DESIGN-APPLY](../tasks/TASK-REGISTRY.md#design-apply)登记；下次继续当前任务时提醒用户安排，不创建定时自动化。本轮构建和内部检查不扩大物理指针、模糊及设备资格。
+
+## 2026-10-10统一目录记录（历史）
 
 2026-10-10 用户要求统一为一个源码目录，已执行并实测迁移→Eagle→迁移切换。
 

@@ -1,7 +1,7 @@
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
-import {readFileSync} from 'node:fs'
+import {readFileSync,chmodSync} from 'node:fs'
 import {VIDEO_RUNTIME_FILE,VIDEO_RUNTIME_SHA256,VIDEO_RUNTIME_SOURCE_DIGEST} from './src/main/work-mode/video-identity.generated'
 import {MACOS_RUNTIME_IDENTITY} from './src/main/platform/macos-runtime-identity.generated'
 import {createHash} from 'node:crypto'
@@ -10,9 +10,13 @@ export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin(),{
       name:'dam-ai-worker-resources',
+      writeBundle(options){
+        if(process.platform==='darwin')chmodSync(resolve(options.dir||'out/main','shelf-candidates/DAM Shelf B.app/Contents/MacOS/Shelf'),0o755)
+      },
       buildStart(){
         this.emitFile({type:'asset',fileName:'eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin',source:readFileSync(resolve(__dirname,'build/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin'))})
         if(process.platform==='darwin') {
+          for(const name of ['MacOS/Shelf','Info.plist','_CodeSignature/CodeResources'])this.emitFile({type:'asset',fileName:`shelf-candidates/DAM Shelf B.app/Contents/${name}`,source:readFileSync(resolve(__dirname,'build/shelf-candidates/DAM Shelf B.app/Contents',name))})
           for(const name of ['owned-memory','video'] as const) {
             const bytes=readFileSync(resolve(__dirname,'build/macos-runtime',name))
             if(createHash('sha256').update(bytes).digest('hex')!==MACOS_RUNTIME_IDENTITY.files[name])throw Error('MACOS_RUNTIME_CHANGED')

@@ -53,6 +53,9 @@ import {createWindowsVideoRuntime} from './work-mode/windows-video-runtime'
 import {createWorkFileHandoffs} from './work-mode/work-file-handoff'
 import {createWorkMediaController} from './work-mode/work-media-controller'
 import {createElectronWorkWindow} from './work-mode/electron-work-window'
+import {createNativeShelfWorkWindow} from './work-mode/native-shelf-work-window'
+import {createShelfDraftStore} from './work-mode/shelf-draft-store'
+import {createWorkMemberTools} from './work-mode/work-member-tools'
 import { createImageToolsController } from './image-tools/image-tools-controller'
 import { app, shell, BrowserWindow, ipcMain, protocol, dialog, session, powerMonitor, net } from 'electron'
 import { join } from 'path'
@@ -106,6 +109,8 @@ const connectedSyntheticE2e = readConnectedSyntheticE2eConfiguration({encoded:pr
 const profileArguments = process.argv.filter(argument => argument.startsWith('--dam-profile='))
 if (profileArguments.length > 1 || (syntheticE2e && profileArguments.length)) throw Error('PROFILE_ARGUMENT_INVALID')
 const requestedProfile = profileArguments[0]?.slice('--dam-profile='.length)
+const nativeShelfCandidate = process.argv.includes('--dam-work-window-candidate=b')
+if(nativeShelfCandidate && process.platform!=='darwin')throw Error('NATIVE_SHELF_PLATFORM_UNAVAILABLE')
 if (requestedProfile) {
   if (!path.isAbsolute(requestedProfile)) throw Error('PROFILE_ARGUMENT_INVALID')
   for (const [name, directory] of [
@@ -211,7 +216,7 @@ const workspaceTransitions = createWorkspaceTransitions({
   }
 })
 const workspaceHandlers = new Map<string, MainIpcHandler>()
-const browserDeniedChannels = new Set(['app:prepare-browser-entry','asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:open-file','work-window:drag-file','work-window:drag-files'])
+const browserDeniedChannels = new Set(['app:prepare-browser-entry','asset-card:inspect', 'asset-card:action', 'work-window:inspect', 'work-window:member', 'work-window:action', 'work-window:note-read', 'work-window:note-save','work-window:media-read','work-window:media-write','work-window:media-cancel','work-window:file-handoff','work-window:open-file','work-window:drag-file','work-window:drag-files'])
 const nativeDraftChannels = new Set(['drafts:put', 'drafts:remove', 'workspace:ready', 'workspace:flush-ack'])
 const nativeCardChannels = new Set([
   'asset-card:inspect', 'asset-card:action', 'tag-decision:prepare', 'tag-decision:confirm', 'tag-decision:discard',
@@ -410,7 +415,7 @@ app.whenReady().then(async () => {
     const deviceId=(appStorage.database.prepare('SELECT identity FROM app_device_identity WHERE singleton=1').get() as {identity:string}).identity
     const handoffFiles=createWorkFileHandoffs({host:activeLibraryHost,root:join(app.getPath("userData"),"work-file-handoffs"),admission:visualAdmission,open:file=>shell.openPath(file),trash:file=>shell.trashItem(file)})
     workMedia=createWorkMediaController({host:activeLibraryHost,files:handoffFiles,changed:()=>publishWorkspaceEvent("work-sets:changed")})
-    workWindows=createWorkWindowController({readClipboardImage:createNativeClipboardImageReader(clipboard),media:workMedia,host:activeLibraryHost,deviceId,beforeWorkspaceClose:beforeWorkspaceWindowClose,areas:()=>screen.getAllDisplays().map(d=>d.workArea),theme:()=>nativeTheme.shouldUseDarkColors?'dark':'light',createWindow:input=>createElectronWorkWindow({...input,entryUrl:trustedRendererEntryUrl,preloadPath:join(__dirname,'../preload/work-window.cjs')}),changed:()=>{publishWorkspaceEvent('work-sets:changed')},hideMain:()=>{mainWindow?.hide()},locate:(scope,setId,assetId)=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus()}publishWorkspaceEvent('work-sets:locate',{...scope,setId,assetId})}})
+    workWindows=createWorkWindowController({configureAi:()=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus()}publishWorkspaceEvent('workspace:navigate',{path:'/ai-console'})},shelfDrafts:nativeShelfCandidate?createShelfDraftStore(join(app.getPath('userData'),'native-shelf-drafts')):undefined,memberTools:createWorkMemberTools({host:activeLibraryHost,visual:()=>visualAi,ocr:()=>ocr}),readClipboardImage:createNativeClipboardImageReader(clipboard),media:workMedia,host:activeLibraryHost,deviceId,beforeWorkspaceClose:beforeWorkspaceWindowClose,areas:()=>screen.getAllDisplays().map(d=>d.workArea),theme:()=>nativeTheme.shouldUseDarkColors?'dark':'light',createWindow:input=>(nativeShelfCandidate?createNativeShelfWorkWindow:createElectronWorkWindow)({...input,entryUrl:trustedRendererEntryUrl,preloadPath:join(__dirname,'../preload/work-window.cjs')}),changed:()=>{publishWorkspaceEvent('work-sets:changed')},hideMain:()=>{mainWindow?.hide()},locate:(scope,setId,assetId)=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus()}publishWorkspaceEvent('work-sets:locate',{...scope,setId,assetId})}})
     screen.on('display-removed',()=>{void workWindows?.recover()});screen.on('display-metrics-changed',()=>{void workWindows?.recover()})
     assetCard = createAssetCardController({
       host: activeLibraryHost,

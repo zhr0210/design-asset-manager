@@ -1,0 +1,91 @@
+{
+  "source_sha256": "4d9bf4faa6cca13d792cd202ec9d68617a8031701c226a5f42e3e630e79a03d0",
+  "apple_source_sha256": "a0de8225fb315bc27b15cf9b8df17667a21e6007c83e45dd123be66b6bd9f5dd",
+  "source_lines": 393,
+  "sections": [
+    {
+      "title": "设计依据与边界",
+      "start": 129,
+      "end": 149,
+      "destination": "DESIGN Overview；批准原型的资格方法归docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "title": "原生窗口",
+      "start": 150,
+      "end": 155,
+      "destination": "视觉几何归DESIGN Layout/Components，拖动职责归WORKSPACE-INTERACTIONS.md"
+    },
+    {
+      "title": "产品表面",
+      "start": 156,
+      "end": 173,
+      "destination": "docs/design/WORKSPACE-INTERACTIONS.md：页面职责与入口"
+    },
+    {
+      "title": "精确布局",
+      "start": 174,
+      "end": 210,
+      "destination": "DESIGN Layout：保留桌面几何，宽度资格归验收流程"
+    },
+    {
+      "title": "材料、颜色与字体",
+      "start": 211,
+      "end": 225,
+      "destination": "DESIGN Colors/Typography/Elevation：蓝色主要操作替代旧灰色主操作，灰色选择保留"
+    },
+    {
+      "title": "交互与动效",
+      "start": 226,
+      "end": 243,
+      "destination": "用户流程归WORKSPACE-INTERACTIONS.md，通用视觉反馈归DESIGN Components/Motion"
+    },
+    {
+      "title": "专注画布与笔记",
+      "start": 244,
+      "end": 260,
+      "destination": "WORKSPACE-INTERACTIONS.md及图片笔记规格；Shift滚轮与B专注差异归最新悬浮窗规格"
+    },
+    {
+      "title": "状态与验收",
+      "start": 261,
+      "end": 281,
+      "destination": "用户状态归WORKSPACE-INTERACTIONS.md，资格方法归docs/agents/ui-ux-acceptance.md，结果仍在CURRENT-STATE/原报告"
+    },
+    {
+      "title": "普通文件夹与色板的正式交互",
+      "start": 282,
+      "end": 290,
+      "destination": "WORKSPACE-INTERACTIONS.md及组织规格"
+    },
+    {
+      "title": "多素材原生工作窗口",
+      "start": 291,
+      "end": 316,
+      "destination": "当前B用户行为归WORK-WINDOW-INTERACTIONS.md，技术权威归src/main/work-mode/README.md/ADR0493；旧窗口结构保留原文"
+    },
+    {
+      "title": "AI 结果与找回",
+      "start": 317,
+      "end": 328,
+      "destination": "WORKSPACE-INTERACTIONS.md及AI找回产品规格；呈现样式归DESIGN Components"
+    },
+    {
+      "title": "专用 OCR",
+      "start": 329,
+      "end": 347,
+      "destination": "WORKSPACE-INTERACTIONS.md：OCR执行、取消、修订及配色/基础信息；通用样式归DESIGN"
+    },
+    {
+      "title": "RUX 功能归属补充（2026-10-01）",
+      "start": 348,
+      "end": 356,
+      "destination": "WORKSPACE-INTERACTIONS.md：AI与模型入口；旧验收条件保留证据入口"
+    },
+    {
+      "title": "B原生工作集的已确认改造方向（2026-10-12）",
+      "start": 357,
+      "end": 393,
+      "destination": "当前契约归WORK-WINDOW-INTERACTIONS.md、视觉归DESIGN、架构归ADR0493/模块README；v4/v5等时间线只保留在原文历史，不作为当前规则"
+    }
+  ]
+}

@@ -19,6 +19,10 @@ pre-optimization corpus is preserved by the annotated Git tag
 
 2026-10-06 adds Supporting ADR 0492 for the proposed Host/runtime resource coordination design. Its lifecycle is **Proposed**, pending the user-requested final shared-understanding confirmation; classification does not mark it accepted or implemented.
 
+2026-10-11 adds Supporting [ADR 0493](0493-dropover-style-interaction-allows-platform-native-implementation.md). The user accepted necessary platform-native implementation and separate macOS/Windows acceptance for Dropover-style interactions. Lifecycle is **Accepted**, delivery is **Target-only**; the exact native/React presentation split remains under interview. The historical 492-entry audit counts below have not been rerun and do not include this addition.
+
+2026-10-13 updates ADR 0493 with the accepted priority: native-grade floating-window responsiveness and animation, macOS system visuals over Dropover custom visuals, and AppKit presentation for the full floating Work Window while React retains the main workspace and independent preview. The opaque color-picker change is an explicitly requested scoped implementation; whole-window quality, measurable performance criteria and native process strategy remain under interview/acceptance.
+
 ## Current engineering policy
 
 As of 2026-10-06, [AGENTS](../../AGENTS.md), [CONTRIBUTING](../../CONTRIBUTING.md) and [acceptance](../agents/ui-ux-acceptance.md) govern implementation autonomy and already specified real validation. Historical per-interface approvals or synthetic-only batch limits do not override the current user request. Product, ownership, privacy, public compatibility and runtime qualification decisions retain their specific scope; this does not mark any ADR delivered.

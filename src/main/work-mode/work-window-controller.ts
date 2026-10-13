@@ -1,15 +1,22 @@
 import {randomUUID,createHash} from 'node:crypto'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import {constants} from 'node:fs'
+import {memberImageMetadata} from './member-image-metadata'
+import {createShelfAutosave} from './shelf-autosave'
+import type {ShelfAction,ShelfReply} from './native-shelf-actions'
 import {validateWorkMediaScope} from '../../shared/contracts/work-media.contract'
 import type { WorkspaceDraftScope } from '../../shared/contracts/workspace-draft.contract'
 import type {ActiveLibraryHost} from '../../shared/contracts/active-library.contract'
 import {validateWorkScope,validateWorkLayout,validateWorkWrite,validateWorkValue,validateWorkWindowControl,workRecord,workId,workRevision,workClipboardRequestId,type WorkScope,type WorkSetWrite,type WorkSetCatalog,type WorkWindowSnapshot,type WorkWindowAction,type WorkResult,type WorkWindowLayout,type WorkWindowControlState,type WorkWindowControlResult,type WorkClipboardEffect} from '../../shared/contracts/work-set.contract'
 import {validateNotebook,type NotebookSaveRequest} from '../../shared/contracts/asset-notebook.contract'
 import {visibleWorkBounds,dockWorkBounds,expandedWorkBounds,type WorkArea} from './work-window-bounds'
-export interface WorkWindowPort{readFileIcon?(verifiedFile:string):Promise<Uint8Array>;configureDock?(layout:WorkWindowLayout):void;startDragFiles?(files:string[],icon:Uint8Array):void;startDrag?(file:string,icon:Uint8Array):void;publish(value:WorkWindowSnapshot|null):void;show():void;hide():void;destroy():void;setPinned(value:boolean):void;bounds():WorkWindowLayout;setBounds(value:WorkWindowLayout):void;visible():boolean;isTrusted(event:unknown):boolean}
+export interface WorkWindowPort{traceLayoutSave?(layout:WorkWindowLayout):(status:'committed'|'failed')=>void;freeze?(value:boolean):Promise<void>;bindShelfActions?(listener:(action:ShelfAction)=>Promise<ShelfReply>):void;openFocus?(assetId:string):void;closeFocus?():void;feedback?(message:string):void;bindNativeIntents?(listener:(intent:import('./native-shelf-work-window').NativeShelfIntent)=>void):void;showDetail?():void;readFileIcon?(verifiedFile:string):Promise<Uint8Array>;edgeDock?:boolean;configureDock?(layout:WorkWindowLayout,options?:{gestureId?:number;deltaX?:number}):void|Promise<void>;startDragFiles?(files:string[],icon:Uint8Array):void;startDrag?(file:string,icon:Uint8Array):void;publish(value:WorkWindowSnapshot|null):void;show():void;hide():void;destroy():void|Promise<void>;setPinned(value:boolean):void;bounds():WorkWindowLayout;setBounds(value:WorkWindowLayout):void;visible():boolean;isTrusted(event:unknown):boolean}
 class ClipboardAttachmentError extends Error{readonly code='CLIPBOARD_ATTACHMENT_INCOMPLETE';constructor(readonly effect:WorkClipboardEffect){super('图片已保存到素材库，但未确认加入工作集；未覆盖现有内容。请在资料库查看该图片并重新加入。')}}
-interface Entry{pasteActive?:boolean;clipboardAssets?:Set<string>;fileRetiring?:symbol;notesDirty?:boolean;port:WorkWindowPort;state:WorkWindowSnapshot;sessionToken:string;queue:Promise<unknown>;timer?:ReturnType<typeof setTimeout>}
+const savedValue=(s:{name:string;note:string;colors:string[];columns:number;assetIds:string[]})=>validateWorkValue({name:s.name,note:s.note,colors:s.colors,columns:s.columns,assetIds:s.assetIds})
+interface Entry{nativeFrozen?:boolean;nativeCancelEpoch?:number;dropAbort?:AbortController;nativeTransient?:boolean;shelf?:ReturnType<typeof createShelfAutosave>;nativeTasks?:Set<Promise<unknown>>;nativeReceipts?:Map<string,string>;nativeUnknown?:Set<string>;pasteActive?:boolean;clipboardAssets?:Set<string>;fileRetiring?:symbol;notesDirty?:boolean;port:WorkWindowPort;state:WorkWindowSnapshot;sessionToken:string;queue:Promise<unknown>;timer?:ReturnType<typeof setTimeout>}
 /** Windows are owned separately; private paths and broad application APIs never enter their preload. */
-export function createWorkWindowController(deps:{readClipboardImage?:()=>Promise<Uint8Array>;media?:ReturnType<typeof import('./work-media-controller').createWorkMediaController>;host:ActiveLibraryHost;deviceId:string;areas:()=>WorkArea[];theme:()=> 'light'|'dark';createWindow:(input:{layout:WorkWindowLayout;changed:()=>void;closed:()=>void;readPreview:(url:string)=>Promise<Uint8Array>;readMedia?:(url:string)=>Promise<{bytes:Uint8Array;type:string}>})=>WorkWindowPort;beforeWorkspaceClose:()=>Promise<()=>void>;changed:()=>void;locate:(scope:WorkScope,setId:string,assetId?:string)=>void;hideMain:()=>void}){
+export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDrafts?:ReturnType<typeof import('./shelf-draft-store').createShelfDraftStore>;memberTools?:ReturnType<typeof import('./work-member-tools').createWorkMemberTools>;readClipboardImage?:()=>Promise<Uint8Array>;media?:ReturnType<typeof import('./work-media-controller').createWorkMediaController>;host:ActiveLibraryHost;deviceId:string;areas:()=>WorkArea[];theme:()=> 'light'|'dark';createWindow:(input:{layout:WorkWindowLayout;changed:()=>void;closed:()=>void;readMetadata?:(id:string)=>Promise<{width:number|null;height:number|null}>;readPreview:(url:string)=>Promise<Uint8Array>;readMedia?:(url:string)=>Promise<{bytes:Uint8Array;type:string}>})=>WorkWindowPort;beforeWorkspaceClose:()=>Promise<()=>void>;changed:()=>void;locate:(scope:WorkScope,setId:string,assetId?:string)=>void;hideMain:()=>void}){
  const entries=new Map<string,Entry>();let epoch=0;let retiredSession:string|null=null;let draining=false,drainPromise:Promise<void>|null=null
  const result=async<T>(fn:()=>Promise<T>|T):Promise<WorkResult<T>>=>{try{return{success:true,value:await fn()}}catch(e){return{success:false,error:e instanceof Error&&'code'in e?e.message:e instanceof Error&&e.message==='TOO_MANY_WINDOWS'?'最多同时打开8个工作窗口，请先关闭其他工作窗口。':'操作未完成，请重试。',...(e&&typeof e==='object'&&'code'in e?{code:String(e.code)}:{}),...(e instanceof ClipboardAttachmentError?{effect:e.effect}:{})}}}
  const matches=(s:WorkScope)=>{const a=deps.host.inspect();return a.state==='ready'&&a.identity===s.libraryIdentity&&a.generation===s.generation}
@@ -21,38 +28,64 @@ export function createWorkWindowController(deps:{readClipboardImage?:()=>Promise
   if(!media.hasActive||!media.revoke||!media.whenIdle)throw Object.assign(Error('交付操作状态尚未提供，窗口保留，请稍后重试。'),{code:'WORK_OPERATION_STATUS_UNAVAILABLE'})
   return{hasActive:media.hasActive.bind(media),cancel:media.revoke.bind(media),whenIdle:media.whenIdle.bind(media)}
  }
- const assertFileIdle=(e:Entry)=>{if(e.pasteActive||fileLifecycle()?.hasActive(fileActor(e)))throw Object.assign(Error('正在准备交付，请完成或取消后再关闭。'),{code:'WORK_OPERATION_ACTIVE'})}
+ const assertFileIdle=(e:Entry)=>{if(e.pasteActive||e.nativeTasks?.size||fileLifecycle()?.hasActive(fileActor(e)))throw Object.assign(Error('正在准备交付，请完成或取消后再关闭。'),{code:'WORK_OPERATION_ACTIVE'})}
  const assertFileAdmission=(e:Entry)=>{if(draining||e.fileRetiring)throw Object.assign(Error('窗口正在退出，未开始新的交付操作。'),{code:'WORK_OPERATION_RETIRING'})}
- const entryUnsaved=(e:Entry)=>Boolean(e.notesDirty||e.state.draft&&JSON.stringify(e.state.draft)!==JSON.stringify(validateWorkValue({name:e.state.set.name,assetIds:e.state.set.assetIds,note:e.state.set.note,colors:e.state.set.colors,columns:e.state.set.columns})))
+ const entryUnsaved=(e:Entry)=>Boolean(e.nativeTransient||e.notesDirty||e.state.draft&&JSON.stringify(e.state.draft)!==JSON.stringify(validateWorkValue({name:e.state.set.name,assetIds:e.state.set.assetIds,note:e.state.set.note,colors:e.state.set.colors,columns:e.state.set.columns})))
  const controlState=(e:Entry,open=true):WorkWindowControlState=>({id:e.state.set.id,open,pinned:e.port.bounds().pinned,visible:open&&e.port.visible(),hasUnsaved:entryUnsaved(e),...(e.state.layoutError?{layoutError:e.state.layoutError}:{})})
- const invalidate=()=>{epoch++;for(const e of entries.values()){deps.media?.revoke("work-native:"+e.state.token);clearTimeout(e.timer);e.port.publish(null);e.port.destroy()}entries.clear()}
+ const invalidate=async()=>{epoch++;const held=[...entries.values()];for(const e of held){e.shelf?.dispose();deps.memberTools?.retire(fileActor(e));clearTimeout(e.timer);e.port.publish(null)};await Promise.all(held.map(async e=>{await deps.media?.revoke(fileActor(e));await e.port.destroy();entries.delete(e.state.set.id)}));deps.changed()}
  const locateEntry=(event:unknown,token?:string)=>{for(const e of entries.values())if(e.port.isTrusted(event)&&(!token||token===e.state.token)){assertCurrent(e);return e}throw Error('UNTRUSTED_WORK_WINDOW')}
- const persist=(e:Entry)=>{const save=async()=>{assertCurrent(e);const layout=validateWorkLayout({...e.port.bounds(),open:true});e.state={...e.state,geometry:layout,pinned:layout.pinned};try{await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout},deps.deviceId);assertCurrent(e);e.state={...e.state,geometry:layout,pinned:layout.pinned,layoutError:undefined};e.port.publish(e.state)}catch(error){if(entries.get(e.state.set.id)===e){e.state={...e.state,layoutError:'窗口位置未保存，请重试。'};e.port.publish(e.state)}throw error}finally{deps.changed()}};const task=e.queue.then(save);e.queue=task.catch(()=>{});return task}
- const geometryChanged=(e:Entry)=>{clearTimeout(e.timer);e.timer=setTimeout(()=>{void(async()=>{assertCurrent(e);const actual=e.port.bounds();if(actual.dock){const target=visibleWorkBounds(actual,deps.areas());if(actual.x!==target.x||actual.y!==target.y||actual.width!==target.width||actual.height!==target.height)e.port.setBounds(target)}await persist(e)})().catch(()=>{})},250)}
- const refreshEntry=async(e:Entry)=>{const before=epoch;const catalog=await deps.host.readWorkSets(e.state.scope,deps.deviceId);if(before!==epoch)return;assertCurrent(e);const set=catalog.sets.find(s=>s.id===e.state.set.id);if(!set){clearTimeout(e.timer);entries.delete(e.state.set.id);e.port.destroy();return}const assets=(await deps.host.readAssetContext(set.assetIds)).assets;if(before!==epoch)return;assertCurrent(e);e.state={...e.state,set,assets:[...assets]};e.sessionToken=catalog.sessionToken;e.port.publish(e.state)}
- const refresh=async()=>{for(const e of [...entries.values()]){try{await refreshEntry(e)}catch{if(entries.get(e.state.set.id)===e){entries.delete(e.state.set.id);clearTimeout(e.timer);e.port.destroy()}}}}
+ const persist=(e:Entry)=>{const save=async()=>{assertCurrent(e);const layout=validateWorkLayout({...e.port.bounds(),open:true});e.state={...e.state,geometry:layout,pinned:layout.pinned};const receipt=e.port.traceLayoutSave?.(layout);try{await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout},deps.deviceId);assertCurrent(e);receipt?.('committed');e.state={...e.state,geometry:layout,pinned:layout.pinned,layoutError:undefined};e.port.publish(e.state)}catch(error){receipt?.('failed');if(entries.get(e.state.set.id)===e){e.state={...e.state,layoutError:'窗口位置未保存，请重试。'};e.port.publish(e.state)}throw error}finally{deps.changed()}};const task=e.queue.then(save);e.queue=task.catch(()=>{});return task}
+ const applyBounds=async(e:Entry,layout:WorkWindowLayout)=>{if(e.port.edgeDock&&e.port.configureDock)await e.port.configureDock(layout);else e.port.setBounds(layout);assertCurrent(e)}
+ const geometryChanged=(e:Entry)=>{clearTimeout(e.timer);e.timer=setTimeout(()=>{void(async()=>{assertCurrent(e);const actual=e.port.bounds();if(actual.dock){const target=visibleWorkBounds(actual,deps.areas());if(actual.x!==target.x||actual.y!==target.y||actual.width!==target.width||actual.height!==target.height)await applyBounds(e,target)}await persist(e)})().catch(()=>{})},250)}
+ const refreshEntry=async(e:Entry)=>{const before=epoch;const catalog=await deps.host.readWorkSets(e.state.scope,deps.deviceId);if(before!==epoch)return;assertCurrent(e);const set=catalog.sets.find(s=>s.id===e.state.set.id);if(!set){clearTimeout(e.timer);e.shelf?.dispose();deps.memberTools?.retire(fileActor(e));await e.port.destroy();entries.delete(e.state.set.id);return}const assets=(await deps.host.readAssetContext(set.assetIds)).assets;if(before!==epoch)return;assertCurrent(e);e.state={...e.state,set,assets:[...assets]};e.sessionToken=catalog.sessionToken;e.port.publish(e.state)}
+ const refresh=async()=>{for(const e of [...entries.values()]){try{await refreshEntry(e)}catch{if(entries.get(e.state.set.id)===e){clearTimeout(e.timer);await e.port.destroy();entries.delete(e.state.set.id)}}}}
  const read=(input:unknown)=>result(async()=>{const catalog=await deps.host.readWorkSets(validateWorkScope(input),deps.deviceId);if(catalog.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');return catalog})
  const write=(input:unknown)=>result(async()=>{const r=validateWorkWrite(input);if(r.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');const value=await deps.host.writeWorkSet(r,deps.deviceId);deps.changed();await refresh();return value})
  const windows=(input:unknown)=>result(async()=>{const scope=validateWorkScope(input);if(!matches(scope))throw Error('STALE_LIBRARY');await Promise.all([...entries.values()].map(e=>e.queue));if(!matches(scope))throw Error('STALE_LIBRARY');return[...entries.values()].map(e=>{assertCurrent(e);return controlState(e)})})
- const control=(input:unknown)=>result(async():Promise<WorkWindowControlResult>=>{const a=validateWorkWindowControl(input);if(!matches(a))throw Error('STALE_LIBRARY');const e=entries.get(a.id);if(!e)throw Object.assign(Error('此工作窗口已关闭，请重新打开。'),{code:'WORK_WINDOW_MISSING'});const retirement=Symbol('workspace-close');if(a.kind==='close'){assertFileIdle(e);assertFileAdmission(e);e.fileRetiring=retirement}let release:(()=>void)|undefined;try{release=a.kind==='close'?await deps.beforeWorkspaceClose():undefined;const run=async():Promise<WorkWindowControlResult>=>{assertCurrent(e)
+ const control=(input:unknown)=>result(async():Promise<WorkWindowControlResult>=>{const a=validateWorkWindowControl(input);if(!matches(a))throw Error('STALE_LIBRARY');const e=entries.get(a.id);if(!e)throw Object.assign(Error('此工作窗口已关闭，请重新打开。'),{code:'WORK_WINDOW_MISSING'});const retirement=Symbol('workspace-close');if(a.kind==='close'){assertFileIdle(e);assertFileAdmission(e);e.fileRetiring=retirement}let release:(()=>void)|undefined;try{if(a.kind==='close'){await e.port.freeze?.(true);e.nativeFrozen=true;const flushed=await e.shelf?.flush();if(flushed&&!flushed.ok)throw Error(flushed.message)};release=a.kind==='close'?await deps.beforeWorkspaceClose():undefined;const run=async():Promise<WorkWindowControlResult>=>{assertCurrent(e)
   if(a.kind==='close'){
    assertFileIdle(e);if(entryUnsaved(e)){e.port.show();deps.changed();return{status:'review-required',window:controlState(e),message:'此原生窗口有未保存的工作集或笔记，已保留并显示。请在该窗口核对并保存或明确放弃，再关闭。'}}
-   clearTimeout(e.timer);const state=controlState(e,false);await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout:{...e.port.bounds(),open:false}},deps.deviceId);assertCurrent(e);entries.delete(e.state.set.id);e.port.destroy();deps.changed();return{status:'applied',window:state}
+   clearTimeout(e.timer);const state=controlState(e,false);await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout:{...e.port.bounds(),open:false}},deps.deviceId);assertCurrent(e);e.shelf?.dispose();deps.memberTools?.retire(fileActor(e));await e.port.destroy();entries.delete(e.state.set.id);deps.changed();return{status:'applied',window:state}
   }
   if(a.kind==='pin'){e.port.setPinned(a.pinned);e.state={...e.state,pinned:a.pinned};e.port.publish(e.state)}
   else if(a.kind==='hide')e.port.hide()
-  else{e.port.setBounds(visibleWorkBounds(e.port.bounds(),deps.areas()));e.port.show()}
+  else{await applyBounds(e,visibleWorkBounds(e.port.bounds(),deps.areas()));e.port.show()}
   return{status:'applied',window:controlState(e)}
- };const task=e.queue.then(run);e.queue=task.catch(()=>{});const applied=await task;if(a.kind!=='close'){await persist(e);return{...applied,window:controlState(e)}}return applied}finally{release?.();if(entries.get(e.state.set.id)===e&&e.fileRetiring===retirement)e.fileRetiring=undefined}})
+ };const task=e.queue.then(run);e.queue=task.catch(()=>{});const applied=await task;if(a.kind!=='close'){await persist(e);return{...applied,window:controlState(e)}}return applied}finally{release?.();if(entries.get(e.state.set.id)===e){e.nativeFrozen=false;await e.port.freeze?.(false).catch(()=>{});if(e.fileRetiring===retirement)e.fileRetiring=undefined}}})
  const open=async(input:unknown):Promise<WorkResult<WorkWindowSnapshot>>=>result(async()=>{if(draining)throw Error('LIBRARY_TRANSITION');const r=workRecord(input,['libraryIdentity','generation','id','theme']),scope=validateWorkScope({libraryIdentity:r.libraryIdentity,generation:r.generation}),id=workId(r.id);if(r.theme!==undefined&&!['light','dark'].includes(String(r.theme)))throw Error('INVALID_THEME');if(!matches(scope))throw Error('STALE_LIBRARY');const existing=entries.get(id);if(existing){assertCurrent(existing);if(r.theme==='light'||r.theme==='dark'){existing.state={...existing.state,theme:r.theme};existing.port.publish(existing.state)}existing.port.show();return existing.state}if(entries.size>=8)throw Error('TOO_MANY_WINDOWS');const before=epoch,catalog=await deps.host.readWorkSets(scope,deps.deviceId),set=catalog.sets.find(s=>s.id===id);if(catalog.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');if(!set)throw Error('SET_MISSING');const assets=(await deps.host.readAssetContext(set.assetIds)).assets;if(before!==epoch||!matches(scope)||draining)throw Error('STALE_LIBRARY');if(entries.has(id)){const existing=entries.get(id)!;existing.port.show();return existing.state}
-  const layout={...visibleWorkBounds(set.layout,deps.areas(),entries.size),open:true};await deps.host.writeWorkLayout({...scope,id,sessionToken:catalog.sessionToken,layout},deps.deviceId);if(before!==epoch||!matches(scope)||draining)throw Error('STALE_LIBRARY')
+  const layout={...visibleWorkBounds(set.layout,deps.areas(),entries.size),open:true}
   if(entries.has(id)){const existing=entries.get(id)!;existing.port.show();return existing.state}if(entries.size>=8)throw Error('TOO_MANY_WINDOWS');
   const state:WorkWindowSnapshot={token:randomUUID(),scope,set,assets:[...assets],pinned:layout.pinned,geometry:layout,theme:r.theme==='dark'?'dark':r.theme==='light'?'light':deps.theme()};let entry:Entry
-  const port=deps.createWindow({layout,readMedia:async(url)=>{assertCurrent(entry);const u=new URL(url);if(u.protocol!=="dam-workmedia:"||u.host!=="media"||u.search||u.hash||u.username||u.password||u.port)throw Error("INVALID_MEDIA");const p=u.pathname.split("/").filter(Boolean).map(decodeURIComponent);if((p.length!==4&&p.length!==5)||p[0]!==scope.libraryIdentity||p[1]!==scope.generation||p[2]!==id||!entry.state.set.assetIds.includes(p[3])||entry.state.set.unavailableIds.includes(p[3]))throw Error("MEMBERSHIP_NOT_GRANTED");const file=await deps.host.readWorkMediaFile({...scope,setId:id,assetId:p[3],...(p[4]?{frameId:p[4]}:{})});assertCurrent(entry);if(!entry.state.set.assetIds.includes(p[3])||entry.state.set.unavailableIds.includes(p[3]))throw Error("MEMBERSHIP_NOT_GRANTED");return file},readPreview:async(url)=>{assertCurrent(entry);const u=new URL(url);if(u.host!=='preview'||u.search||u.username||u.password||u.port)throw Error('INVALID_PREVIEW');const parts=u.pathname.split('/').filter(Boolean).map(decodeURIComponent);if(parts.length!==3||parts[0]!==scope.libraryIdentity||parts[1]!==scope.generation||!entry.state.set.assetIds.includes(parts[2])||entry.state.set.unavailableIds.includes(parts[2]))throw Error('MEMBERSHIP_NOT_GRANTED');const bytes=await deps.host.readPreview(parts[2]);assertCurrent(entry);if(!entry.state.set.assetIds.includes(parts[2])||entry.state.set.unavailableIds.includes(parts[2]))throw Error('MEMBERSHIP_NOT_GRANTED');return bytes},changed:()=>{if(entry&&entries.get(id)===entry)geometryChanged(entry)},closed:()=>{if(entry&&entries.get(id)===entry){clearTimeout(entry.timer);entries.delete(id)}}});if(layout.dock){if(!port.configureDock){port.destroy();throw Object.assign(Error('当前窗口不支持恢复停靠布局。'),{code:'NATIVE_DOCK_UNAVAILABLE'})}try{port.configureDock(layout)}catch(error){port.destroy();throw error}}
-  const actual=validateWorkLayout(port.bounds());entry={port,state:{...state,geometry:actual,pinned:actual.pinned},sessionToken:catalog.sessionToken,queue:Promise.resolve()};entries.set(id,entry);port.publish(entry.state);port.show();deps.changed();await persist(entry);return entry.state
+  const port=deps.createWindow({layout,...(set.layout&&!set.layout.presentation?{legacyLayout:set.layout}:{}),readMetadata:async(assetId)=>{assertCurrent(entry);const asset=entry.state.assets.find(a=>a.id===assetId);if(!asset||!entry.state.set.assetIds.includes(assetId)||entry.state.set.unavailableIds.includes(assetId))throw Error('MEMBERSHIP_NOT_GRANTED');const result=await memberImageMetadata(deps.host,asset);assertCurrent(entry);return result},readMedia:async(url)=>{assertCurrent(entry);const u=new URL(url);if(u.protocol!=="dam-workmedia:"||u.host!=="media"||u.search||u.hash||u.username||u.password||u.port)throw Error("INVALID_MEDIA");const p=u.pathname.split("/").filter(Boolean).map(decodeURIComponent);if((p.length!==4&&p.length!==5)||p[0]!==scope.libraryIdentity||p[1]!==scope.generation||p[2]!==id||!entry.state.set.assetIds.includes(p[3])||entry.state.set.unavailableIds.includes(p[3]))throw Error("MEMBERSHIP_NOT_GRANTED");const file=await deps.host.readWorkMediaFile({...scope,setId:id,assetId:p[3],...(p[4]?{frameId:p[4]}:{})});assertCurrent(entry);if(!entry.state.set.assetIds.includes(p[3])||entry.state.set.unavailableIds.includes(p[3]))throw Error("MEMBERSHIP_NOT_GRANTED");return file},readPreview:async(url)=>{assertCurrent(entry);const u=new URL(url);if(u.host!=='preview'||u.search||u.username||u.password||u.port)throw Error('INVALID_PREVIEW');const parts=u.pathname.split('/').filter(Boolean).map(decodeURIComponent);if(parts.length!==3||parts[0]!==scope.libraryIdentity||parts[1]!==scope.generation||!entry.state.set.assetIds.includes(parts[2])||entry.state.set.unavailableIds.includes(parts[2]))throw Error('MEMBERSHIP_NOT_GRANTED');const bytes=await deps.host.readPreview(parts[2]);assertCurrent(entry);if(!entry.state.set.assetIds.includes(parts[2])||entry.state.set.unavailableIds.includes(parts[2]))throw Error('MEMBERSHIP_NOT_GRANTED');return bytes},changed:()=>{if(entry&&entries.get(id)===entry)geometryChanged(entry)},closed:()=>{if(entry&&entries.get(id)===entry){clearTimeout(entry.timer);entry.shelf?.dispose();deps.memberTools?.retire(fileActor(entry));entries.delete(id);deps.changed()}}});if(layout.dock||port.edgeDock){if(!port.configureDock){await port.destroy();throw Object.assign(Error('当前窗口不支持恢复停靠布局。'),{code:'NATIVE_DOCK_UNAVAILABLE'})}try{await port.configureDock(layout)}catch(error){await port.destroy();throw error}}
+  if(before!==epoch||!matches(scope)||draining){await port.destroy();throw Error('STALE_LIBRARY')}
+  const actual=validateWorkLayout(port.bounds());entry={port,state:{...state,geometry:actual,pinned:actual.pinned},sessionToken:catalog.sessionToken,queue:Promise.resolve()};entries.set(id,entry)
+  if(port.bindShelfActions){
+   entry.shelf=createShelfAutosave({current:()=>entry.state,hold:(value,revision)=>{assertCurrent(entry);entry.state={...entry.state,draft:value,draftRevision:revision};deps.shelfDrafts?.put({libraryIdentity:entry.state.scope.libraryIdentity,id,revision,value});deps.changed()},feedback:message=>port.feedback?.(message),save:async(value,revision,serial)=>{
+    const latest=await deps.host.readWorkSets(entry.state.scope,deps.deviceId);assertCurrent(entry);const current=latest.sets.find(s=>s.id===id);if(!current)throw Error('工作集已不存在，草稿保留。');if(current.revision!==revision){if(JSON.stringify(savedValue(current))===JSON.stringify(value)){entry.state={...entry.state,set:current,draft:undefined,draftRevision:undefined,nativeSaveSerial:serial};deps.shelfDrafts?.clear(scope.libraryIdentity,id,value);port.publish(entry.state);return entry.state}throw Error('工作集已在其他位置更新，当前草稿保留，请核对版本。')}
+    const reply=await actEntry(entry,{token:entry.state.token,kind:'save',expectedRevision:revision,value})
+    if(!reply.success){const current=await deps.host.readWorkSets(entry.state.scope,deps.deviceId);assertCurrent(entry);const saved=current.sets.find(s=>s.id===id)
+     if(!saved||saved.revision<=revision||JSON.stringify(validateWorkValue(savedValue(saved)))!==JSON.stringify(value))throw Error(reply.error+' 草稿保留，请核对后重试。')
+     entry.state={...entry.state,set:saved,draft:undefined,draftRevision:undefined}
+    }
+    deps.shelfDrafts?.clear(entry.state.scope.libraryIdentity,id,value);entry.state={...entry.state,nativeSaveSerial:serial};port.publish(entry.state);return entry.state
+   }})
+   const recovered=deps.shelfDrafts?.read(scope.libraryIdentity,id);if(recovered){if(JSON.stringify(recovered.value)===JSON.stringify(savedValue(entry.state.set)))deps.shelfDrafts?.clear(scope.libraryIdentity,id,recovered.value);else entry.shelf.recover(recovered.value,recovered.revision)}
+   port.bindShelfActions(action=>nativeShelfAction(entry,action))
+  }
+  port.bindNativeIntents?.(intent=>{
+   if(entries.get(id)!==entry||!matches(entry.state.scope))return
+   if(intent.kind==='close'){
+    void (async()=>{const flushed=await entry.shelf?.flush();if(flushed&&!flushed.ok)return {success:false as const,error:flushed.message??'保存未确认'};return control({...entry.state.scope,id,kind:'close'})})().then(reply=>{
+     if(!reply.success){port.feedback?.(reply.error);port.showDetail?.()}else if(reply.value.status==='review-required'){port.feedback?.(reply.value.message??'草稿尚未保存');port.showDetail?.()}
+    })
+   }else{
+    void actEntry(entry,{token:entry.state.token,...intent},true).then(reply=>{if(!reply.success&&reply.code!=='WORK_MOTION_CANCELED'){port.feedback?.(reply.error);port.showDetail?.()}})
+   }
+  })
+  port.publish(entry.state);port.show();deps.changed();await persist(entry);return entry.state
  })
  const restore=(input:unknown)=>result(async()=>{const r=workRecord(input,['libraryIdentity','generation','theme']);if(r.theme!==undefined&&!['light','dark'].includes(String(r.theme)))throw Error('INVALID_THEME');const scope=validateWorkScope({libraryIdentity:r.libraryIdentity,generation:r.generation}),catalog=await deps.host.readWorkSets(scope,deps.deviceId);let count=0;for(const set of catalog.sets.filter(s=>s.layout?.open)){const opened=await open({...scope,id:set.id,theme:r.theme});if(!opened.success)throw Error('WINDOW_RESTORE_FAILED');count++}return{count}})
- const recover=()=>result(async()=>{for(const e of entries.values()){e.port.setBounds(visibleWorkBounds(e.port.bounds(),deps.areas()));e.port.show();await persist(e)}return{count:entries.size}})
+ const recover=()=>result(async()=>{for(const e of entries.values()){await applyBounds(e,visibleWorkBounds(e.port.bounds(),deps.areas()));e.port.show();await persist(e)}return{count:entries.size}})
  const scopedMediaEntry=(event:unknown,value:unknown)=>{
   const r=workRecord(value,['token','request']),e=locateEntry(event,workId(r.token)),q=r.request as Record<string,unknown>
   if(!q||typeof q!=='object')throw Error('INVALID_MEDIA_REQUEST')
@@ -109,8 +142,90 @@ export function createWorkWindowController(deps:{readClipboardImage?:()=>Promise
   e.port.startDragFiles(selected.map(file=>file.file),icon)
   return{message:'已开始批量原生文件交接；请在接收应用中核对结果。'}
  })
- const inspect=(event:unknown)=>result(()=>locateEntry(event).state)
- const act=(event:unknown,input:unknown)=>result(async()=>{const a=workRecord(input,['token','kind','expectedRevision','value','pinned','assetId','dirty','discard','edge','requestId']),e=locateEntry(event,workId(a.token));const retirement=Symbol('native-close');const run=async()=>{assertCurrent(e)
+ const nativeShelfAction=async(e:Entry,action:ShelfAction):Promise<ShelfReply>=>{
+  try{
+   assertCurrent(e);if(!((action.kind==='edit'||action.kind==='transient')&&!e.nativeFrozen))assertFileAdmission(e)
+   if(action.kind==='transient'){e.nativeTransient=action.pending;deps.changed();return{ok:true}}
+   if(e.nativeTransient&&action.kind!=='cancel')return{ok:false,message:'请先完成输入法文字输入，窗口与内容保持。'}
+   if(action.kind==='edit')return await e.shelf!.edit(action)
+   if(action.kind==='review-save'||action.kind==='resolve-save'){
+    const catalog=await deps.host.readWorkSets(e.state.scope,deps.deviceId);assertCurrent(e);const saved=catalog.sets.find(s=>s.id===e.state.set.id);if(!saved)throw Error('工作集已不存在，草稿保留。')
+    if(action.kind==='review-save')return{ok:true,review:{revision:saved.revision,name:saved.name,note:saved.note,count:saved.assetIds.length}}
+    if(saved.revision!==action.revision)throw Error('核对期间工作集又有更新，草稿保留，请重新核对。')
+    if(e.state.draft?.assetIds.some(id=>!saved.assetIds.includes(id)))throw Error('部分草稿成员已被移出工作集，未覆盖当前引用；请在主界面核对成员。')
+    e.state={...e.state,set:saved};return await e.shelf!.rebase(saved.revision)
+   }
+   if(action.kind==='retry')return await e.shelf!.retry()
+   if(action.kind==='cancel'){e.nativeCancelEpoch=(e.nativeCancelEpoch??0)+1;e.dropAbort?.abort();const outcomes=await Promise.allSettled([deps.media?.revoke(fileActor(e)),...e.nativeTasks??[]]);if(outcomes[0].status==='rejected')throw outcomes[0].reason;return{ok:true,message:'已等待当前项返回并停止后续项，已完成副本与入库素材保留。'}}
+   const flushed=await e.shelf?.flush();if(flushed&&!flushed.ok)return flushed
+   const member=(id:string)=>{assertCurrent(e);if(!e.state.set.assetIds.includes(id)||e.state.set.unavailableIds.includes(id))throw Error('素材已失效，未执行操作。')}
+   if(action.kind==='focus'){member(action.assetId);e.state={...e.state,focusAssetId:action.assetId,focusRequest:(e.state.focusRequest??0)+1};e.port.publish(e.state);e.port.openFocus?.(action.assetId);return{ok:true}}
+   if(action.kind==='paste'){const reply=await actEntry(e,{token:e.state.token,kind:'paste-image',requestId:randomUUID(),expectedRevision:e.state.set.revision});return reply.success?{ok:true}:{ok:false,message:reply.error}}
+   const prepare=async(id:string,kind:import('../../shared/contracts/work-media.contract').WorkHandoffKind,extra:Record<string,unknown>={})=>{
+    member(id);if(!deps.media)throw Error('交付模块尚未就绪。')
+    const asset=e.state.assets.find(a=>a.id===id)!,key=JSON.stringify([id,asset.revision,asset.thumbnailRef,kind,extra])
+    e.nativeReceipts??=new Map();e.nativeUnknown??=new Set()
+    const cached=e.nativeReceipts.get(key);if(cached){try{await deps.media.files.nativeFile(fileActor(e),cached);member(id);return cached}catch{e.nativeReceipts.delete(key)}}
+    if(e.nativeUnknown.has(key))throw Error('上一份副本结果未确认，请核对交付记录，未重复创建。')
+    const request={...e.state.scope,setId:e.state.set.id,assetId:id,kind,action:'prepare',...extra}
+    let reply;try{reply=await deps.media.handoff(fileActor(e),request)}catch{e.nativeUnknown.add(key);throw Error('副本结果未确认，请核对保留记录。')}
+    if(!reply.success)throw Error(reply.error);member(id);e.nativeReceipts.set(key,reply.value.id);return reply.value.id
+   }
+   const admittedEpoch=e.nativeCancelEpoch??0
+   const run=async():Promise<ShelfReply>=>{
+    assertCurrent(e);if((e.nativeCancelEpoch??0)!==admittedEpoch)throw Error('操作在开始前已取消。')
+    if(action.kind==='promise'){
+     member(action.assetId);const receipt=action.receiptId??await prepare(action.assetId,'original')
+     const checked=await deps.media!.files.nativeFile(fileActor(e),receipt);member(action.assetId)
+     const read=await deps.media!.files.readFile(receipt);member(action.assetId)
+     if(checked.assetId!==action.assetId)throw Error('MEMBERSHIP_NOT_GRANTED')
+     const target=path.resolve(action.destination),directory=path.dirname(target)
+     if(await fs.realpath(directory)!==directory)throw Error('接收位置包含链接，未写入。')
+     const handle=await fs.open(target,constants.O_WRONLY|constants.O_CREAT|constants.O_EXCL|(constants.O_NOFOLLOW??0),0o600)
+     const identity=await handle.stat({bigint:true});let completed=false
+     try{member(action.assetId);await handle.writeFile(read.bytes);await handle.sync();member(action.assetId);completed=true}
+     finally{await handle.close();if(!completed){const now=await fs.lstat(target,{bigint:true}).catch(()=>null);if(now?.dev===identity.dev&&now.ino===identity.ino)await fs.unlink(target)}}
+     return{ok:true,message:'副本写入完成；请在接收应用核对。'}
+    }
+    if(action.kind==='handoff'){
+     action.assetIds.forEach(member);const receipts:NonNullable<ShelfReply['receipts']>=[]
+     const targets=action.handoffKind==='zip'?[action.assetIds[0]]:action.assetIds
+     for(const id of targets){const receipt=await prepare(id,action.handoffKind,{...(action.handoffKind==='zip'?{assetIds:action.assetIds}:{}),...(action.imageTransform?{imageTransform:action.imageTransform}:{})});const file=await deps.media!.files.nativeFile(fileActor(e),receipt);member(id);const data=await deps.media!.files.readFile(receipt);receipts.push({id:receipt,fileName:data.fileName,assetId:id})}
+     return{ok:true,message:`${receipts.length}份副本已完成`,receipts}
+    }
+    if(action.kind==='members'||action.kind==='drop'){
+     const revision=e.state.set.revision;let ids:string[]=[],partial=0
+     if(action.kind==='members'){
+      if(action.transfer.libraryIdentity!==e.state.scope.libraryIdentity||action.transfer.generation!==e.state.scope.generation)throw Error('不能接入其他库或失效会话的引用。')
+      const assets=(await deps.host.readAssetContext(action.transfer.assetIds)).assets;assertCurrent(e)
+      ids=assets.map(a=>a.id);partial=action.transfer.assetIds.length-ids.length
+     }else{
+      const resolved=await deps.host.resolveDroppedAssetReferences?.(action.paths)??{assetIds:[],externalPaths:action.paths};assertCurrent(e);ids=resolved.assetIds
+      if(resolved.externalPaths.length+new Set([...e.state.set.assetIds,...ids]).size>200)throw Error('工作集最多200份参考，未开始入库。')
+      if(resolved.externalPaths.length){
+      if(!deps.host.prepareDroppedAssets||!deps.host.dispatchDroppedAssets)throw Error('当前Host未提供拖入接入。')
+      const abort=new AbortController();e.dropAbort=abort
+      const plan=await deps.host.prepareDroppedAssets(resolved.externalPaths,abort.signal);assertCurrent(e)
+      if(plan.kind!=='planned'||!plan.plan.confirmable)throw Error('没有可接入的文件；支持PNG、JPEG、WebP及适用MP4。')
+      const batch=await deps.host.dispatchDroppedAssets(plan.plan.receipt,abort.signal);assertCurrent(e)
+      ids=[...ids,...batch.items.flatMap(i=>i.promotion?[i.promotion.designAssetIdentity]:[])];partial=resolved.externalPaths.length-batch.items.filter(i=>i.promotion).length
+      }
+     }
+     if(!ids.length)throw Error('入库未完成，已执行的接入记录保留。')
+     const catalog=await deps.host.readWorkSets(e.state.scope,deps.deviceId);assertCurrent(e);const current=catalog.sets.find(s=>s.id===e.state.set.id)
+     if(!current||current.revision!==revision)throw Error('素材已接入，但工作集在接入期间变化；未覆盖，请从资料库重新加入。')
+     const assetIds=[...new Set([...current.assetIds,...ids])];if(assetIds.length>200)throw Error('素材已接入，但工作集达到200份上限。')
+     await deps.host.writeWorkSet({...e.state.scope,sessionToken:catalog.sessionToken,allowUpgrade:false,command:{kind:'save',id:current.id,expectedRevision:revision,value:{...savedValue(current),assetIds}}},deps.deviceId)
+     await refreshEntry(e);deps.changed();return{ok:true,message:partial?`已加入${ids.length}份；${partial}份未完成，接入记录保留。`:undefined}
+    }
+    throw Error('窗口操作未支持。')
+   }
+   const task=e.queue.then(run);e.queue=task.catch(()=>{});e.nativeTasks??=new Set();e.nativeTasks.add(task)
+   try{return await task}finally{e.nativeTasks.delete(task);if(action.kind==='drop')e.dropAbort=undefined}
+  }catch(error){return{ok:false,message:error instanceof Error?error.message:'操作未完成，内容保留。'}}
+ }
+ const inspect=(event:unknown)=>result(()=>{const e=locateEntry(event);return e.shelf?{...e.state,focusOnly:true}:e.state})
+ const actEntry=(e:Entry,input:unknown,ownedNativeIntent=false)=>result(async()=>{const a=workRecord(input,['token','kind','expectedRevision','value','pinned','assetId','dirty','discard','edge','requestId',...(ownedNativeIntent?['restore','gestureId','deltaX']:[])]);if(workId(a.token)!==e.state.token)throw Error('UNTRUSTED_WORK_WINDOW');const retirement=Symbol('native-close');const run=async()=>{assertCurrent(e)
   if(a.kind==='paste-image'){
    workRecord(a,['token','kind','requestId','expectedRevision']);const nonce=workClipboardRequestId(a.requestId),revision=workRevision(a.expectedRevision)
    assertFileAdmission(e);assertFileIdle(e)
@@ -136,45 +251,54 @@ export function createWorkWindowController(deps:{readClipboardImage?:()=>Promise
    }catch(error){if(imported)throw new ClipboardAttachmentError({kind:'clipboard-image',assetId:imported,libraryIdentity:scope.libraryIdentity,attachment:'unconfirmed'});throw error}
    finally{e.pasteActive=false}
   }
-  else if(a.kind==='close'){workRecord(a,['token','kind','discard']);if(typeof a.discard!=='boolean')throw Error('INVALID_ACTION');assertFileIdle(e);assertFileAdmission(e);if(!a.discard&&entryUnsaved(e))throw Error('UNSAVED_WORK_SET');e.fileRetiring=retirement;clearTimeout(e.timer);await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout:{...e.port.bounds(),open:false}},deps.deviceId);assertCurrent(e);entries.delete(e.state.set.id);e.port.destroy();deps.changed()}
+  else if(a.kind==='close'){workRecord(a,['token','kind','discard']);if(typeof a.discard!=='boolean')throw Error('INVALID_ACTION');assertFileIdle(e);assertFileAdmission(e);if(!a.discard&&entryUnsaved(e))throw Error('UNSAVED_WORK_SET');e.fileRetiring=retirement;clearTimeout(e.timer);await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout:{...e.port.bounds(),open:false}},deps.deviceId);assertCurrent(e);e.shelf?.dispose();deps.memberTools?.retire(fileActor(e));await e.port.destroy();entries.delete(e.state.set.id);deps.changed()}
   else if(a.kind==='notes-dirty'){workRecord(a,['token','kind','dirty']);if(typeof a.dirty!=='boolean')throw Error('INVALID_ACTION');e.notesDirty=a.dirty;deps.changed()}
   else if(a.kind==='draft'){workRecord(a,['token','kind','expectedRevision','value']);const value=validateWorkValue(a.value);if(value.assetIds.some(id=>!e.state.set.assetIds.includes(id)))throw Error('MEMBERSHIP_NOT_GRANTED');e.state={...e.state,draft:value,draftRevision:workRevision(a.expectedRevision)};deps.changed()}
   else if(a.kind==='discard-draft'){workRecord(a,['token','kind']);e.state={...e.state,draft:undefined,draftRevision:undefined};e.port.publish(e.state);deps.changed()}
   else if(a.kind==='save'){workRecord(a,['token','kind','expectedRevision','value']);const value=validateWorkValue(a.value);if(value.assetIds.some(id=>!e.state.set.assetIds.includes(id)))throw Error('MEMBERSHIP_NOT_GRANTED');const saved=await deps.host.writeWorkSet({...e.state.scope,sessionToken:e.sessionToken,allowUpgrade:false,command:{kind:'save',id:e.state.set.id,expectedRevision:workRevision(a.expectedRevision),value}},deps.deviceId,{...e.port.bounds(),open:true});assertCurrent(e);const set=saved.sets.find(s=>s.id===e.state.set.id)!;e.state={...e.state,set,...(JSON.stringify(e.state.draft)===JSON.stringify(value)?{draft:undefined,draftRevision:undefined}:{})};e.port.publish(e.state);deps.changed()}
   else if(a.kind==='pin'){workRecord(a,['token','kind','pinned']);if(typeof a.pinned!=='boolean')throw Error('INVALID_ACTION');e.port.setPinned(a.pinned);e.state={...e.state,pinned:a.pinned};e.port.publish(e.state)}
   else if(a.kind==='dock'||a.kind==='undock'){
-   workRecord(a,a.kind==='dock'?['token','kind','edge']:['token','kind'])
+   workRecord(a,a.kind==='dock'?['token','kind','edge',...(ownedNativeIntent?['gestureId','deltaX']:[])]:['token','kind',...(ownedNativeIntent?['restore','gestureId']:[])])
    if(a.kind==='dock'&&a.edge!=='left'&&a.edge!=='right')throw Error('INVALID_DOCK_EDGE')
    assertFileIdle(e);assertFileAdmission(e)
    if(!e.port.configureDock)throw Object.assign(Error('当前窗口不支持原生停靠。'),{code:'NATIVE_DOCK_UNAVAILABLE'})
-   const actual=validateWorkLayout(e.port.bounds()),next=a.kind==='dock'?dockWorkBounds(actual,a.edge as 'left'|'right',deps.areas()):expandedWorkBounds(actual,deps.areas())
-   e.port.configureDock(next)
+   const actual=validateWorkLayout(e.port.bounds());if(e.port.edgeDock&&a.kind==='dock'&&actual.presentation==='expanded')throw Object.assign(Error('展开窗口不参与边缘停靠，请先收回小窗。'),{code:'WORK_WINDOW_NOT_DOCKABLE'});let next=a.kind==='dock'?dockWorkBounds(actual,a.edge as 'left'|'right',deps.areas(),e.port.edgeDock?'edge-slide':undefined):expandedWorkBounds(actual,deps.areas())
+   if(a.kind==='undock'&&ownedNativeIntent&&a.restore!==undefined){const restore=workRecord(a.restore,['x','y','width','height']);const {dock,...base}=actual;next=visibleWorkBounds(validateWorkLayout({...base,...restore}),deps.areas())}
+   clearTimeout(e.timer)
+   await e.port.configureDock(next,ownedNativeIntent?{gestureId:a.gestureId as number|undefined,deltaX:a.deltaX as number|undefined}:undefined);assertCurrent(e)
    e.state={...e.state,geometry:validateWorkLayout(e.port.bounds()),pinned:e.port.bounds().pinned};e.port.publish(e.state)
   }
+  else if(a.kind==='configure-ai'){workRecord(a,['token','kind']);if(!deps.configureAi)throw Error('AI配置入口未就绪');e.port.closeFocus?.();deps.configureAi()}
+  else if(a.kind==='close-focus'){workRecord(a,['token','kind']);e.port.closeFocus?.()}
   else if(a.kind==='hide'){workRecord(a,['token','kind']);e.port.hide()}
-  else if(a.kind==='recover'){workRecord(a,['token','kind']);e.port.setBounds(visibleWorkBounds(e.port.bounds(),deps.areas()))}
+  else if(a.kind==='recover'){workRecord(a,['token','kind']);await applyBounds(e,visibleWorkBounds(e.port.bounds(),deps.areas()))}
   else if(a.kind==='add-from-library'){workRecord(a,['token','kind']);deps.locate(e.state.scope,e.state.set.id)}
   else if(a.kind==='locate'){workRecord(a,['token','kind','assetId']);const id=workId(a.assetId);if(!e.state.set.assetIds.includes(id)&&!e.clipboardAssets?.has(id))throw Error('MEMBERSHIP_NOT_GRANTED');deps.locate(e.state.scope,e.state.set.id,id)}
   else throw Error('INVALID_ACTION')
   return e.state
  };const task=e.queue.then(run);e.queue=task.catch(()=>{});try{await task;if(['pin','hide','recover','dock','undock'].includes(String(a.kind)))await persist(e);return e.state}finally{if(a.kind==='close'&&entries.get(e.state.set.id)===e&&e.fileRetiring===retirement)e.fileRetiring=undefined}})
+ const act=(event:unknown,input:unknown)=>{
+  try{const a=workRecord(input,['token','kind','expectedRevision','value','pinned','assetId','dirty','discard','edge','requestId']);return actEntry(locateEntry(event,workId(a.token)),input)}
+  catch(error){return result<WorkWindowSnapshot>(()=>{throw error})}
+ }
+ const memberTools=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','assetId','operation','input']),e=locateEntry(event,workId(r.token)),assetId=workId(r.assetId);const check=()=>{assertCurrent(e);if(!e.state.set.assetIds.includes(assetId)||e.state.set.unavailableIds.includes(assetId))throw Error('MEMBERSHIP_NOT_GRANTED')};check();assertFileAdmission(e);if(!deps.memberTools||typeof r.operation!=='string')throw Error('MEMBER_TOOLS_UNAVAILABLE');if(r.operation==='add-color'){const q=workRecord(r.input,['color']);if(typeof q.color!=='string'||!/^#[0-9a-f]{6}$/i.test(q.color)||!e.shelf)throw Error('颜色无效');if(e.nativeTransient)throw Error('请先结束文字输入');const reply=await e.shelf.addColor(q.color.toUpperCase());if(!reply.ok)throw Error(reply.message);return e.state.set.colors};return deps.memberTools.call({owner:fileActor(e),scope:e.state.scope,assetId,check},r.operation,r.input)})
  const notebookRead=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','assetId']),e=locateEntry(event,workId(r.token)),assetId=workId(r.assetId);if(!e.state.set.assetIds.includes(assetId))throw Error('MEMBERSHIP_NOT_GRANTED');const value=await deps.host.readNotebook({...e.state.scope,assetId});assertCurrent(e);return value})
- const notebookSave=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','request']),e=locateEntry(event,workId(r.token)),q=workRecord(r.request,['assetId','libraryIdentity','generation','sessionToken','sourceRef','expectedRevision','allowUpgrade','book']);const assetId=workId(q.assetId);if(!e.state.set.assetIds.includes(assetId)||q.libraryIdentity!==e.state.scope.libraryIdentity||q.generation!==e.state.scope.generation||q.allowUpgrade!==false||!Number.isSafeInteger(q.expectedRevision)||Number(q.expectedRevision)<0)throw Error('MEMBERSHIP_NOT_GRANTED');const request:NotebookSaveRequest={...e.state.scope,assetId,sessionToken:workId(q.sessionToken),sourceRef:workId(q.sourceRef),expectedRevision:Number(q.expectedRevision),allowUpgrade:false,book:validateNotebook(q.book)};const saved=await deps.host.saveNotebook(request);assertCurrent(e);return saved})
+ const notebookSave=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','request']),e=locateEntry(event,workId(r.token)),q=workRecord(r.request,['assetId','libraryIdentity','generation','sessionToken','sourceRef','expectedRevision','allowUpgrade','book']);const assetId=workId(q.assetId);if(!e.state.set.assetIds.includes(assetId)||q.libraryIdentity!==e.state.scope.libraryIdentity||q.generation!==e.state.scope.generation||(q.allowUpgrade!==false&&(!e.shelf||q.allowUpgrade!==true))||!Number.isSafeInteger(q.expectedRevision)||Number(q.expectedRevision)<0)throw Error('MEMBERSHIP_NOT_GRANTED');const request:NotebookSaveRequest={...e.state.scope,assetId,sessionToken:workId(q.sessionToken),sourceRef:workId(q.sourceRef),expectedRevision:Number(q.expectedRevision),allowUpgrade:q.allowUpgrade===true,book:validateNotebook(q.book)};const saved=await deps.host.saveNotebook(request);assertCurrent(e);return saved})
  const drain=()=>{
   if(drainPromise)return drainPromise
   draining=true
   const task=(async()=>{
-   const held=[...entries.values()];await Promise.all(held.map(e=>e.queue));const files=fileLifecycle()
+   const held=[...entries.values()];try{await Promise.all(held.map(async e=>{await e.port.freeze?.(true);e.nativeFrozen=true}));}catch(error){await Promise.all(held.map(async e=>{e.nativeFrozen=false;await e.port.freeze?.(false).catch(()=>{})}));throw error};if(held.some(e=>e.nativeTransient))throw Error('原生窗口仍在输入文字，尚未退出。');const saves=await Promise.all(held.map(e=>e.shelf?.flush()));if(saves.some(r=>r&&!r.ok))throw Error('原生工作集保存未确认，窗口与草稿保留。');await Promise.all(held.map(e=>e.queue));const files=fileLifecycle()
    if(files){await Promise.all(held.map(e=>files.cancel(fileActor(e))));await Promise.all(held.map(e=>files.whenIdle(fileActor(e))));for(const e of held)assertFileIdle(e)}
    const a=deps.host.inspect();if(a.state==='ready'&&a.identity&&a.generation){try{retiredSession=(await deps.host.readWorkSets({libraryIdentity:a.identity,generation:a.generation},deps.deviceId)).sessionToken}catch{}}
-   await Promise.allSettled(held.filter(e=>entries.get(e.state.set.id)===e).map(e=>persist(e)));invalidate()
+   await Promise.allSettled(held.filter(e=>entries.get(e.state.set.id)===e).map(e=>persist(e)));await invalidate()
   })()
-  drainPromise=task.finally(()=>{draining=false;drainPromise=null})
+  drainPromise=task.finally(async()=>{draining=false;drainPromise=null;await Promise.all([...entries.values()].map(async e=>{e.nativeFrozen=false;await e.port.freeze?.(false).catch(()=>{})}))})
   return drainPromise
  }
 
  const hasUnsaved=()=>[...entries.values()].some(entryUnsaved)
  const isTrusted=(event:unknown)=>{try{locateEntry(event);return true}catch{return false}}
  const permitsDraft=(event:unknown,scope:WorkspaceDraftScope)=>{try{const e=locateEntry(event);return scope.libraryIdentity===e.state.scope.libraryIdentity&&scope.generation===e.state.scope.generation&&(scope.kind==='work-set'?scope.entityId===e.state.set.id:(scope.kind==='work-media'&&e.state.set.assetIds.some(id=>scope.entityId===e.state.set.id+'~'+id&&!e.state.set.unavailableIds.includes(id))||scope.kind==='notebook'&&e.state.set.assetIds.includes(scope.entityId))&&!e.state.set.unavailableIds.includes(scope.entityId))}catch{return false}}
- return{nativeMediaRead,nativeMediaWrite,nativeMediaCancel,nativeHandoff,nativeOpenFile,nativeDrag,nativeDragFiles,isTrusted,permitsDraft,hasUnsaved,read,write,windows,control,open,restore,recover,inspect,act,notebookRead,notebookSave,invalidate,refresh,drain,hideMain:()=>result(()=>{if(!entries.size)throw Error('NO_WORK_WINDOWS');entries.values().next().value?.port.show();deps.hideMain();return{count:entries.size}}),count:()=>entries.size}
+ return{memberTools,nativeMediaRead,nativeMediaWrite,nativeMediaCancel,nativeHandoff,nativeOpenFile,nativeDrag,nativeDragFiles,isTrusted,permitsDraft,hasUnsaved,read,write,windows,control,open,restore,recover,inspect,act,notebookRead,notebookSave,invalidate,refresh,drain,hideMain:()=>result(()=>{if(!entries.size)throw Error('NO_WORK_WINDOWS');entries.values().next().value?.port.show();deps.hideMain();return{count:entries.size}}),count:()=>entries.size}
 }

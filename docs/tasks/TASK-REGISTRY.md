@@ -125,13 +125,14 @@
 - 下一动作：30分钟含空闲且只有3种图片内容；下一批先冻结规模/多样性/阈值。
 
 <a id="eagle"></a>
-### EAGLE · Eagle配对、索引、写回与冲突
+### EAGLE · 停止集成方向，移除Eagle相关产品功能
 
-- 分支：`codex/eagle-integration`。状态：**用户延期；PARTIAL**。
-- 已验范围：8cf60c7隔离方向调整与端口修复；原件权威/Journal边界保留。
-- 剩余条件：正规配对、实际读取/写回/冲突/撤权/断连恢复/重开；测试库内容已获准。
+- 状态：**2026-10-13用户停止原集成方向；本地分支已归档并删除，产品功能移除待实施**。
+- 历史来源：`codex/eagle-integration`的8cf60c7保留在本地恢复标签`archive/eagle-integration-20261013`；原配对/端口与限定证据只作历史，不继续扩展。
+- 剩余条件：后续在main集成移除导入、同步、写回及相关菜单/设置/适配/测试接线的变更；先追踪消费者，不仅删除分支或隐藏按钮。
+- 数据保护：不读取、操作或删除Eagle库和外部原件；保全DAM中已经收录的素材、笔记、颜色及来源记录，必要兼容处理不得冒充已验收。
 - 证据：[BRANCHES.md](../handoff/BRANCHES.md)；[EAGLE-E-20261008.md](../handoff/EAGLE-E-20261008.md)。
-- 下一动作：在Eagle分支按新方向调整；不把旧插件包或代码接线当真实配对通过。
+- 下一动作：本轮只删除经归档的本地Git分支；产品功能清理另行实施，不把本轮合并称为已移除Eagle功能。
 
 <a id="assistant"></a>
 ### ASSISTANT · 受控设计助手提议工作集
@@ -181,11 +182,20 @@
 <a id="window-ext"></a>
 ### WINDOW-EXT · 工作浮窗完整交互扩展
 
-- 分支：`后续批次，保留现有架构`。状态：**用户延期；云上传分享CANCELLED**。
+- 分支：`当前工作副本，B主线/A参考`。状态：**2026-10-12用户选择B深度开发、A保留参考；实施中/PARTIAL；云上传分享CANCELLED**。
 - 已验范围：现有局部副本/拖出成果按各构建保留。
 - 剩余条件：通用暂存、文字/链接、文件承诺、监视/系统入口/PDF等新增用户结果。
 - 证据：[DROPOVER-FEATURE-CATALOG-20261009.json](../history/handoff-snapshots/macos-20261009-20261010/DROPOVER-FEATURE-CATALOG-20261009.json)；DEFERRED原U10。
-- 下一动作：另选范围实施后验；不因整理复刻第三方所有功能。
+- 下一动作：按用户确认的B计划完成同窗展开、自动吸附、直接交接、独立专注与自动保存。先完成macOS，A保留参考；逐功能覆盖、运行与平台差额保留。当前执行入口见[TASK](../../TASK.md)，原始研究见[Dropover报告](../../artifacts/reverse-engineering/dropover-5.2.0/REPORT.md)。
+
+<a id="design-apply"></a>
+### DESIGN-APPLY · 将已批准设计系统应用到实际产品
+
+- 状态：**用户延期，待实施**；与文档职责整理分开验收。
+- 范围：主工作台/大预览的Apple中性色与强调色、生成CSS同步、普通工具/选择中性灰；悬浮窗全底板Liquid Glass、220×240紧凑布局、常显原生按钮、完整预览与区域分工。
+- 剩余条件：消除`design:check`的规范/生成CSS差异；按正式入口验明暗、系统设置、键鼠输入、动画/中断、保存重开与相关失败保护。现有色板指针及停靠覆盖/设备缺口继续独立保留。
+- 来源：[DESIGN](../../DESIGN.md)、[工作台交互](../design/WORKSPACE-INTERACTIONS.md)、[悬浮窗交互](../design/WORK-WINDOW-INTERACTIONS.md)、[CURRENT-STATE](../handoff/CURRENT-STATE.md)。
+- 接续提醒：下次继续当前任务时先提醒用户安排本项；用户选择接续提醒，不创建定时自动化，不自动提前执行UI改造。
 
 ## 原任务编号映射
 

@@ -86,8 +86,17 @@ export function ReviewSheet({ label, busy = false, onCancel, children, surfaceCl
   children: React.ReactNode
 }) {
   const root = useRef<HTMLDivElement>(null)
+  const topLayer = useRef<HTMLDialogElement>(null)
   useModalFocus(root)
-  return createPortal(<div className={`ui-sheet-backdrop ${surfaceClassName}`} data-workspace-transition-surface={transitionSurface || undefined}>
+  useEffect(() => {
+    if (!transitionSurface) return
+    const dialog = topLayer.current
+    if (!dialog) return
+    dialog.showModal()
+    root.current?.focus()
+    return () => { if (dialog.open) dialog.close() }
+  }, [transitionSurface])
+  const contents = <>
     <div ref={root} role="dialog" aria-modal="true" aria-label={label} aria-busy={busy} tabIndex={-1} className="ui-sheet" onKeyDown={event => {
       if (event.key === 'Escape') {
         event.preventDefault()
@@ -99,5 +108,13 @@ export function ReviewSheet({ label, busy = false, onCancel, children, surfaceCl
       {children}
       {busy && <div className="ui-meta px-6 pb-5" role="status">正在完成操作…</div>}
     </div>
-  </div>, document.body)
+  </>
+  // A page Work Set can itself be a modal <dialog>. A regular portal cannot
+  // overtake the browser's top layer, regardless of z-index; Exit/Library
+  // review must join that layer without closing or discarding the editor.
+  return createPortal(transitionSurface ?
+    <dialog ref={topLayer} className={`ui-sheet-backdrop ${surfaceClassName}`} data-workspace-transition-surface
+      aria-label={label} style={{ margin: 0, border: 0, padding: 0, width: '100%', height: '100%', maxWidth: 'none', maxHeight: 'none' }}
+      onCancel={event => { event.preventDefault(); if (!busy) onCancel() }}>{contents}</dialog> :
+    <div className={`ui-sheet-backdrop ${surfaceClassName}`}>{contents}</div>, document.body)
 }

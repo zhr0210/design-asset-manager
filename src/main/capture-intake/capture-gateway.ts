@@ -50,7 +50,8 @@ export function createCaptureGateway(
   const identitiesByPlanReceipt = new Map<string, BatchIdentities>()
 
   return {
-    async start(plan): Promise<CaptureBatchSnapshot> {
+    async start(plan,signal): Promise<CaptureBatchSnapshot> {
+      if(signal?.aborted)throw new CaptureIntakeError('capture-cancelled','入库已取消，尚未建立接入记录。')
       const identities = identitiesByPlanReceipt.get(plan.receipt)
         ?? createBatchIdentities(plan, dependencies)
       identitiesByPlanReceipt.set(plan.receipt, identities)
@@ -76,6 +77,7 @@ export function createCaptureGateway(
       if (acceptance.kind === 'replayed' && (!dependencies.resumeAccepted || acceptance.snapshot.state === 'complete')) return acceptance.snapshot
 
       for (const [index, item] of plan.items.entries()) {
+        if(signal?.aborted){const held=await dependencies.persistence.inspect(identities.batchIdentity);if(!held)throw new CaptureIntakeError('capture-persistence-unavailable','取消后的入库记录尚未确认。');return held}
         const previous = acceptance.kind === 'replayed' ? acceptance.snapshot.items[index] : undefined
         if (previous?.state === 'promoted') continue
         await captureAndPromoteItem(

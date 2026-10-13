@@ -1,0 +1,8 @@
+{
+  "buildId": "dam-8816c1fa125661e6",
+  "mainSha256": "8479ac4d83409ae52b4c57d8e0c24081ff8bc6a93470a2f5cec3b6fffe673ea9",
+  "nativeSha256": "4d272f9435b6d0683ec3f26476167d8d788e69fb8d9b1e9bce9da0e5574406d5",
+  "profile": "profile-b",
+  "library": "library-b-v2",
+  "picker": "opaque HSV + read-only HEX + explicit confirm"
+}

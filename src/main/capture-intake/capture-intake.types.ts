@@ -114,12 +114,13 @@ export interface CaptureBatchSnapshot {
 }
 
 export interface AddAssetsWorkflow {
-  prepare(): Promise<PrepareAddAssetsOutcome>
-  dispatch(command: ConfirmCopyPlanCommand): Promise<CaptureBatchSnapshot>
+  prepare(files?: readonly LocalFileSelection[], signal?:AbortSignal): Promise<PrepareAddAssetsOutcome>
+  dispatch(command: ConfirmCopyPlanCommand, signal?:AbortSignal): Promise<CaptureBatchSnapshot>
   inspect(request: InspectCaptureBatchRequest): Promise<CaptureBatchSnapshot>
 }
 
 export type CaptureIntakeErrorCode =
+  | 'capture-cancelled'
   | 'plan-not-found'
   | 'plan-not-confirmable'
   | 'plan-stale'
@@ -251,7 +252,7 @@ export interface ConfirmedCopyPlan {
 }
 
 export interface CaptureGateway {
-  start(plan: ConfirmedCopyPlan): Promise<CaptureBatchSnapshot>
+  start(plan: ConfirmedCopyPlan, signal?:AbortSignal): Promise<CaptureBatchSnapshot>
   inspect(batchIdentity: string): Promise<CaptureBatchSnapshot | null>
 }
 

@@ -281,6 +281,10 @@ export interface ActiveLibraryHost {
   reopen(): Promise<CreateLibraryResult>
   close(): Promise<void>
   prepareAddAssets(): Promise<ActiveLibraryCapturePrepareResponse>
+  /** Main-only explicit native drop; not exposed to Browser/Workspace transport. */
+  prepareDroppedAssets?(files:readonly string[],signal?:AbortSignal): Promise<ActiveLibraryCapturePrepareResponse>
+  dispatchDroppedAssets?(receipt:string,signal?:AbortSignal):Promise<ActiveLibraryCaptureBatchSnapshot>
+  resolveDroppedAssetReferences?(files:readonly string[]):Promise<{assetIds:string[];externalPaths:string[]}>
   dispatchAddAssets(planReceipt: string): Promise<ActiveLibraryCaptureBatchSnapshot>
   inspectCapture(batchIdentity: string): Promise<ActiveLibraryCaptureBatchSnapshot>
   listAssets(): Promise<readonly ActiveLibraryAssetProjection[]>

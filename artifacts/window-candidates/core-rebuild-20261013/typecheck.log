@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 typecheck
+> tsc --noEmit
+
+src/main/work-mode/shelf-motion-trace.ts(20,65): error TS18048: 'last' is possibly 'undefined'.

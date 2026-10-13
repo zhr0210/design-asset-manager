@@ -1,5 +1,6 @@
 # Dependency directories
 node_modules/
+/node_modules
 
 # Compilation outputs
 dist/
@@ -92,3 +93,4 @@ src/message.txt
 # Generated native helpers and companion bundle; rebuilt from tracked source.
 /build/macos-runtime/
 /build/eagle-companion/
+/build/shelf-candidates/

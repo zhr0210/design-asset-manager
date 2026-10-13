@@ -1,0 +1,395 @@
+{
+  "final-cycle-left": {
+    "samples": 197,
+    "durationSeconds": 19.89921487501124,
+    "meanGapMs": 101.52660565461478,
+    "maxGapMs": 217.49208332039416,
+    "geometries": [
+      [
+        -244,
+        373,
+        290,
+        310
+      ],
+      [
+        186,
+        373,
+        640,
+        520
+      ],
+      [
+        -172,
+        373,
+        290,
+        310
+      ],
+      [
+        -207,
+        373,
+        290,
+        310
+      ],
+      [
+        186,
+        373,
+        290,
+        310
+      ],
+      [
+        -237,
+        373,
+        290,
+        310
+      ],
+      [
+        186,
+        373,
+        363,
+        354
+      ],
+      [
+        1538,
+        373,
+        290,
+        310
+      ]
+    ],
+    "correlation": [
+      {
+        "phase": "native-animation-start",
+        "motionId": 4,
+        "nativeAt": 441132.62611662503,
+        "eventFrame": {
+          "x": -149,
+          "y": 373,
+          "width": 290,
+          "height": 310,
+          "docked": false
+        },
+        "sampleFile": "frame-0071.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 1538,
+          "Y": 373
+        },
+        "sampleGapMs": -45.66649999469519
+      },
+      {
+        "phase": "native-animation-complete",
+        "motionId": 4,
+        "nativeAt": 441132.92406366667,
+        "eventFrame": {
+          "x": -244,
+          "y": 373,
+          "width": 290,
+          "height": 310,
+          "docked": true
+        },
+        "sampleFile": "frame-0075.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": -244,
+          "Y": 373
+        },
+        "sampleGapMs": 49.53633336117491
+      },
+      {
+        "phase": "ack",
+        "motionId": 4,
+        "nativeAt": 441132.9244947917,
+        "eventFrame": {
+          "x": -244,
+          "y": 373,
+          "width": 290,
+          "height": 310,
+          "docked": true
+        },
+        "sampleFile": "frame-0075.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": -244,
+          "Y": 373
+        },
+        "sampleGapMs": 49.10520830890164
+      },
+      {
+        "phase": "native-animation-start",
+        "motionId": 4,
+        "nativeAt": 441139.64774308336,
+        "eventFrame": {
+          "x": 186,
+          "y": 373,
+          "width": 290,
+          "height": 310,
+          "docked": false
+        },
+        "sampleFile": "frame-0141.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 186,
+          "Y": 373
+        },
+        "sampleGapMs": -24.95179168181494
+      },
+      {
+        "phase": "native-animation-complete",
+        "motionId": 4,
+        "nativeAt": 441139.8825070417,
+        "eventFrame": {
+          "x": 186,
+          "y": 373,
+          "width": 640,
+          "height": 520,
+          "docked": false
+        },
+        "sampleFile": "frame-0143.png",
+        "sampleFrame": {
+          "Height": 520,
+          "Width": 640,
+          "X": 186,
+          "Y": 373
+        },
+        "sampleGapMs": 51.34920834098011
+      }
+    ]
+  },
+  "final-cycle-right": {
+    "samples": 195,
+    "durationSeconds": 19.939496208331548,
+    "meanGapMs": 102.78090764618402,
+    "maxGapMs": 334.9664167035371,
+    "geometries": [
+      [
+        1480,
+        353,
+        290,
+        310
+      ],
+      [
+        2200,
+        353,
+        290,
+        310
+      ],
+      [
+        2197,
+        353,
+        290,
+        310
+      ],
+      [
+        1538,
+        373,
+        290,
+        310
+      ],
+      [
+        1943,
+        353,
+        290,
+        310
+      ],
+      [
+        2073,
+        353,
+        290,
+        310
+      ],
+      [
+        2194,
+        353,
+        290,
+        310
+      ],
+      [
+        1938,
+        353,
+        290,
+        310
+      ],
+      [
+        2195,
+        353,
+        290,
+        310
+      ]
+    ],
+    "correlation": [
+      {
+        "phase": "native-animation-start",
+        "motionId": 2,
+        "nativeAt": 441106.82860675,
+        "eventFrame": {
+          "x": 2200,
+          "y": 353,
+          "width": 290,
+          "height": 310,
+          "docked": false
+        },
+        "sampleFile": "frame-0058.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 2200,
+          "Y": 353
+        },
+        "sampleGapMs": -8.264666656032205
+      },
+      {
+        "phase": "native-animation-complete",
+        "motionId": 2,
+        "nativeAt": 441107.14144283335,
+        "eventFrame": {
+          "x": 2194,
+          "y": 353,
+          "width": 290,
+          "height": 310,
+          "docked": true
+        },
+        "sampleFile": "frame-0061.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 2194,
+          "Y": 353
+        },
+        "sampleGapMs": -44.25387497758493
+      },
+      {
+        "phase": "ack",
+        "motionId": 2,
+        "nativeAt": 441107.1463355417,
+        "eventFrame": {
+          "x": 2194,
+          "y": 353,
+          "width": 290,
+          "height": 310,
+          "docked": true
+        },
+        "sampleFile": "frame-0061.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 2194,
+          "Y": 353
+        },
+        "sampleGapMs": -49.146583303809166
+      },
+      {
+        "phase": "native-animation-start",
+        "motionId": 3,
+        "nativeAt": 441113.04301691666,
+        "eventFrame": {
+          "x": 2194,
+          "y": 353,
+          "width": 290,
+          "height": 310,
+          "docked": true
+        },
+        "sampleFile": "frame-0120.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 2194,
+          "Y": 353
+        },
+        "sampleGapMs": -46.288041630759835
+      },
+      {
+        "phase": "native-animation-complete",
+        "motionId": 3,
+        "nativeAt": 441113.2230624167,
+        "eventFrame": {
+          "x": 1938,
+          "y": 353,
+          "width": 290,
+          "height": 310,
+          "docked": false
+        },
+        "sampleFile": "frame-0122.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 1943,
+          "Y": 353
+        },
+        "sampleGapMs": 2.1212916471995413
+      },
+      {
+        "phase": "ack",
+        "motionId": 3,
+        "nativeAt": 441113.24684575,
+        "eventFrame": {
+          "x": 1938,
+          "y": 353,
+          "width": 290,
+          "height": 310,
+          "docked": false
+        },
+        "sampleFile": "frame-0122.png",
+        "sampleFrame": {
+          "Height": 310,
+          "Width": 290,
+          "X": 1943,
+          "Y": 353
+        },
+        "sampleGapMs": -21.662041661329567
+      }
+    ]
+  },
+  "dropover-right-v2": {
+    "samples": 152,
+    "durationSeconds": 11.97951049997937,
+    "meanGapMs": 79.33450331109644,
+    "maxGapMs": 180.16499996883795,
+    "geometries": [
+      [
+        2028,
+        121,
+        198,
+        207
+      ]
+    ]
+  },
+  "libraryReadback": {
+    "layout": {
+      "x": 1926,
+      "y": 347,
+      "width": 290,
+      "height": 310,
+      "pinned": true,
+      "open": true,
+      "presentation": "compact"
+    },
+    "set": [
+      "B 二版原生验收",
+      "本轮 B 同窗自动保存备注",
+      20,
+      "[\"#4A9DAB\",\"#342342\"]"
+    ],
+    "memberCount": 9,
+    "assetCount": 11
+  },
+  "finalReadback": {
+    "layout": {
+      "x": 1926,
+      "y": 347,
+      "width": 290,
+      "height": 310,
+      "pinned": true,
+      "open": true,
+      "presentation": "compact"
+    },
+    "memberCount": 9,
+    "set": [
+      "B 二版原生验收",
+      "本轮 B 同窗自动保存备注",
+      20,
+      "[\"#4A9DAB\",\"#342342\"]"
+    ]
+  }
+}

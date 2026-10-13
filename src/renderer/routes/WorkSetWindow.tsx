@@ -9,6 +9,7 @@ import {WorkArchivePanel} from '../components/library/canvas/WorkArchivePanel'
 import {useWorkHandoffs} from './use-work-handoffs'
 import type {WorkMediaActions} from '../components/library/canvas/work-media-api'
 import {FocusView} from '../components/gallery/FocusView'
+import {WorkShelfFocus} from './WorkShelfFocus'
 import {createNotebookSession} from '../components/library/canvas/notebook-session'
 import '../components/gallery/tokens.css'
 import '../components/gallery/gallery.css'
@@ -45,7 +46,7 @@ export default function WorkSetWindow(){
  const save=async()=>{if(!draftRef.current||!stateRef.current||savingRef.current)return;const submitted=structuredClone(draftRef.current),version=serial.current;savingRef.current=true;setSaving(true);const result=await act({kind:'save',expectedRevision:baseRef.current,value:submitted} as Omit<WorkWindowAction,'token'>);if(result&&alive.current){baseRef.current=result.set.revision;stateRef.current=result;setSnapshot(result);if(serial.current===version){draftRef.current=valueOf(result);setDraft(valueOf(result));setError('');feedback('已保存')}else {void act({kind:'draft',expectedRevision:result.set.revision,value:draftRef.current!} as Omit<WorkWindowAction,'token'>);setError('已保存此次内容，新编辑尚未保存。')}}savingRef.current=false;if(alive.current)setSaving(false)}
  const notebook=useMemo(()=>{const token=snapshot?.token,scope=snapshot?.scope;if(!token||!scope||!api)return null;const session=createNotebookSession(scope,()=>({notebookRead:r=>api.notebookRead({token,assetId:r.assetId}),notebookSave:r=>api.notebookSave({token,request:r})}));const dirty=()=>{void api.act({token,kind:'notes-dirty',dirty:session.hasUnsaved()})};return{...session,hold:(books:Parameters<typeof session.hold>[0])=>{session.hold(books);dirty()},setTransient:(pending:boolean)=>{session.setTransient?.(pending);dirty()},save:async(...args:Parameters<typeof session.save>)=>{try{await session.save(...args)}finally{dirty()}}}},[snapshot?.token,api])
  useEffect(()=>()=>notebook?.dispose(),[notebook])
- useEffect(()=>connectTransitionParticipant(()=>notebook?.hasTransient()===true||archiveBusy||pasteBusy||handoffs.busy||handoffs.isPreparing),[notebook,archiveBusy,pasteBusy,handoffs.busy,handoffs.isPreparing])
+ useEffect(()=>snapshot?.focusOnly?undefined:connectTransitionParticipant(()=>notebook?.hasTransient()===true||archiveBusy||pasteBusy||handoffs.busy||handoffs.isPreparing),[snapshot?.focusOnly,notebook,archiveBusy,pasteBusy,handoffs.busy,handoffs.isPreparing])
  useEffect(()=>{const protect=(e:BeforeUnloadEvent)=>{const s=stateRef.current;if(s&&draftRef.current&&JSON.stringify(draftRef.current)!==JSON.stringify(valueOf(s))||notebook?.hasUnsaved()||pasteBusy||archiveBusy||handoffs.busy||handoffs.isPreparing){e.preventDefault();e.returnValue=''}};window.addEventListener('beforeunload',protect);return()=>window.removeEventListener('beforeunload',protect)},[notebook,pasteBusy,archiveBusy,handoffs.busy,handoffs.isPreparing])
  useEffect(()=>{setSelection(new Set());selectionAnchor.current=null;pasteRequest.current=null;setPasteEffect(null)},[snapshot?.token])
  const pasteImage=async()=>{
@@ -64,6 +65,7 @@ export default function WorkSetWindow(){
   }catch{if(alive.current&&stateRef.current?.token===token)setError('粘贴结果未确认，原请求已保留。请先核对资料库，再用同一请求恢复；不会自动重发。')}
   finally{pasteRunning.current=false;if(alive.current)setPasteBusy(false)}
  }
+ if(snapshot?.focusOnly&&api)return <WorkShelfFocus key={snapshot.token} snapshot={snapshot} api={api}/>
  if(!snapshot||!draft)return <main className="native-work-empty">{error||'正在读取工作集…'}</main>
  const available=new Map(snapshot.assets.map(a=>[a.id,a])),src=(id:string)=>`dam-preview://preview/${[snapshot.scope.libraryIdentity,snapshot.scope.generation,id].map(encodeURIComponent).join('/')}`
  const items=draft.assetIds.map(id=>({id,title:available.get(id)?.title||'暂不可用的参考',src:src(id),unavailable:!available.has(id)||snapshot.set.unavailableIds?.includes(id)||!snapshot.set.assetIds.includes(id)})),focused=focus?available.get(focus):undefined,focusItems=items.filter(i=>!i.unavailable).map(i=>({...i,src:i.src,kind:'image' as const,pixelLabel:'预览像素 1:1'}))

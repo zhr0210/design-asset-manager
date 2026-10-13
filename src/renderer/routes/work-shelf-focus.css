@@ -1,0 +1,20 @@
+.gallery-design.native-work-surface.work-shelf-focus{--canvas:transparent;--surface:rgba(255,255,255,.08);--surface-soft:rgba(127,127,127,.1)}
+.gallery-design.native-work-surface.work-shelf-focus dialog.focus-mode{width:100vw;height:100vh;max-width:none;max-height:none;inset:0;margin:0;padding:0;border:0;border-radius:24px;background:transparent;box-shadow:none;color:inherit}
+.gallery-design.work-shelf-focus dialog.focus-mode::backdrop{background:transparent}
+.gallery-design.work-shelf-focus .focus-mode .focus-main,.gallery-design.work-shelf-focus .focus-mode .focus-stage,.gallery-design.work-shelf-focus .focus-mode .focus-header,.gallery-design.work-shelf-focus .focus-mode .focus-filmstrip{background:transparent}
+.gallery-design.work-shelf-focus .focus-mode .focus-details{background:rgba(255,255,255,.08)}
+.gallery-design.work-shelf-focus.dark .focus-mode .focus-details{background:rgba(0,0,0,.08)}
+.work-shelf-focus .focus-header{ -webkit-app-region:drag }
+.work-shelf-focus button,.work-shelf-focus input,.work-shelf-focus textarea,.work-shelf-focus select{ -webkit-app-region:no-drag }
+.work-focus-error{position:fixed;top:64px;left:18px;z-index:100000;color:var(--danger,#b42318);padding:8px;background:rgba(255,255,255,.9);border-radius:8px}
+.gallery-design.work-shelf-focus .focus-header{height:42px;min-height:42px;padding:5px 12px}
+.work-shelf-focus .work-focus-close{width:30px;height:30px;margin-right:auto}
+.gallery-design.work-shelf-focus .focus-details{position:relative;display:flex;flex-direction:column;overflow:hidden}
+.gallery-design.work-shelf-focus .focus-details>.gallery-details{flex:1;min-height:0;height:100%}
+.gallery-design.work-shelf-focus .note-save-status{top:44px;left:50px}
+.gallery-design.work-shelf-focus .work-focus-close{min-width:30px;min-height:30px}
+.gallery-design.work-shelf-focus .focus-stage>.focus-filmstrip{position:relative;flex:0 0 78px;height:78px;min-height:78px;width:100%;gap:6px;padding:6px 12px;overflow-x:auto;background:transparent}
+.gallery-design.work-shelf-focus .focus-stage>.focus-filmstrip button{flex:0 0 62px;width:62px;height:62px;min-height:62px;padding:4px;border-radius:9px}
+.gallery-design.work-shelf-focus .focus-stage>.focus-filmstrip button .focus-preview-thumbnail{height:38px;width:100%;flex:0 0 38px}
+.gallery-design.work-shelf-focus .canvas-image-frame{border-radius:0;overflow:visible}
+.gallery-design.work-shelf-focus .canvas-image-frame>img{border-radius:0}

@@ -1,0 +1,1 @@
+PASS production AppKit interaction: proportional symmetric progress, strict .4/raw-delta duration boundaries, adjacent-screen rejection, explicit expanded/asset-drag refusal, completed/canceled transition receipts, interruption uses actual frame and stale completion cannot overwrite a new frame, owned mouse event path. Controlled AppKit inputs; physical CU separate.

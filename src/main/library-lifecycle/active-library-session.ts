@@ -203,9 +203,9 @@ export function createActiveLibrarySession(
       )
 
       const captureInterface: AddAssetsWorkflow = {
-        prepare: () => runGuarded(() => workflow.prepare()),
-        dispatch: (command) =>
-          runGuarded(() => workflow.dispatch(command)),
+        prepare: (files,signal) => runGuarded(() => workflow.prepare(files,signal)),
+        dispatch: (command,signal) =>
+          runGuarded(() => workflow.dispatch(command,signal)),
         inspect: (request) =>
           runGuarded(() => workflow.inspect(request))
       }

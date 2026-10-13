@@ -1,0 +1,68 @@
+{
+  "designSections": [
+    "Overview",
+    "Colors",
+    "Typography",
+    "Layout",
+    "Elevation & Depth",
+    "Shapes",
+    "Components",
+    "Do's and Don'ts"
+  ],
+  "yamlValid": true,
+  "tokenReferencesValid": true,
+  "localLinksChecked": 111,
+  "missingLocalLinks": [],
+  "sourceSectionsMapped": 14,
+  "sourceArchiveExact": true,
+  "appleReferenceExact": true,
+  "currentCssMatchesPreMigrationTokens": true,
+  "approvedColorTokenChanges": [
+    {
+      "token": "primary",
+      "before": "#151619",
+      "after": "#1d1d1f"
+    },
+    {
+      "token": "surface-soft",
+      "before": "#eceef2",
+      "after": "#fafafc"
+    },
+    {
+      "token": "ink",
+      "before": "#202126",
+      "after": "#1d1d1f"
+    },
+    {
+      "token": "muted",
+      "before": "#60636f",
+      "after": "#707070"
+    },
+    {
+      "token": "border",
+      "before": "#d9dce3",
+      "after": "#d6d6d6"
+    },
+    {
+      "token": "accent",
+      "before": "#55585f",
+      "after": "#0071e3"
+    },
+    {
+      "token": "dark-accent",
+      "before": "#c9cbd1",
+      "after": "#0071e3"
+    },
+    {
+      "token": "dark-on-accent",
+      "before": "#24262d",
+      "after": "#ffffff"
+    }
+  ],
+  "designCheck": "expected-drift-unsynced-generated-css",
+  "productBuildOrUiRun": false,
+  "designSha256": "236d608ca9f22aaf64c8070552a302f1d4055d515a66d6a84f004e797a2ffdf9",
+  "generatedCssSha256": "9248fdb7b1c88095960865d449a903f79f726330e69d2c47c56dda00145acbef",
+  "designContainsVersionTimeline": false,
+  "historicalMissingImages": 3
+}

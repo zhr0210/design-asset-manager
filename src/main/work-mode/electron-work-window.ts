@@ -5,7 +5,7 @@ import {WORK_WINDOW_STATE} from '../../shared/contracts/work-set.contract'
 import {isTrustedLibrarySender} from '../trusted-sender'
 import type {WorkWindowPort} from './work-window-controller'
 import {workMediaResponse} from './media-response'
-export function createElectronWorkWindow(input:{entryUrl:string;preloadPath:string;layout:WorkWindowLayout;changed:()=>void;closed:()=>void;readPreview:(url:string)=>Promise<Uint8Array>;readMedia?:(url:string)=>Promise<{bytes:Uint8Array;type:string}>}):WorkWindowPort {
+export function createElectronWorkWindow(input:{entryUrl:string;preloadPath:string;layout:WorkWindowLayout;legacyLayout?:WorkWindowLayout;initiallyHidden?:boolean;focusOnly?:boolean;changed:()=>void;closed:()=>void;readMetadata?:(id:string)=>Promise<{width:number|null;height:number|null}>;readPreview:(url:string)=>Promise<Uint8Array>;readMedia?:(url:string)=>Promise<{bytes:Uint8Array;type:string}>}):WorkWindowPort {
  const isolated=session.fromPartition('work-window:'+randomUUID()),entry=new URL(input.entryUrl)
  isolated.webRequest.onBeforeRequest({urls:['http://*/*','https://*/*']},(details,callback)=>{let allowed=false;try{allowed=entry.protocol.startsWith('http')&&new URL(details.url).origin===entry.origin}catch{}callback({cancel:!allowed})})
  isolated.protocol.handle('dam-preview',async request=>{try{const bytes=await input.readPreview(request.url);return new Response(Buffer.from(bytes),{headers:{'Content-Type':bytes[0]===137?'image/png':bytes[0]===255?'image/jpeg':'image/webp','Cache-Control':'no-store'}})}catch{return new Response('Unavailable',{status:403})}})
@@ -19,7 +19,7 @@ export function createElectronWorkWindow(input:{entryUrl:string;preloadPath:stri
  const frame=w.webContents.mainFrame,publish=()=>{if(!w.isDestroyed()&&!w.webContents.isLoadingMainFrame()){if(latest)w.setTitle(latest.set.name);w.webContents.send(WORK_WINDOW_STATE,latest)}}
  w.webContents.setWindowOpenHandler(()=>({action:'deny'}));w.webContents.on('will-navigate',e=>e.preventDefault());w.webContents.on('did-finish-load',publish)
  const show=()=>{if(!w.isDestroyed()){w.show();if(process.platform==='darwin')app.focus({steal:true});w.focus()}}
- w.once('ready-to-show',show);w.on('move',input.changed);w.on('resize',input.changed);w.on('show',input.changed);w.on('hide',input.changed)
+ if(!input.initiallyHidden)w.once('ready-to-show',show);w.on('move',input.changed);w.on('resize',input.changed);w.on('show',input.changed);w.on('hide',input.changed)
  // Closing the reference surface hides it, keeping its unsaved draft available for restore.
  w.on('close',event=>{if(!revoked){event.preventDefault();w.hide()}})
  w.once('closed',()=>{isolated.protocol.unhandle('dam-preview');isolated.protocol.unhandle('dam-workmedia');input.closed()})

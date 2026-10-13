@@ -6,6 +6,7 @@ export function registerWorkSetIpc(input:{controller:ReturnType<typeof createWor
  const denied={success:false,error:'当前窗口没有此操作权限。',code:'UNTRUSTED_SENDER'}
  for(const [channel,operation]of [[C.WORK_SET_READ,input.controller.read],[C.WORK_SET_WRITE,input.controller.write],[C.WORK_WINDOWS_LIST,input.controller.windows],[C.WORK_WINDOWS_CONTROL,input.controller.control],[C.WORK_WINDOW_OPEN,input.controller.open],[C.WORK_WINDOW_RESTORE,input.controller.restore],[C.WORK_WINDOW_RECOVER,input.controller.recover],[C.WORK_WINDOW_HIDE_MAIN,input.controller.hideMain]] as const)input.handle(channel,(event,request)=>input.isMain(event)?operation(request):denied)
  input.handle(C.WORK_WINDOW_INSPECT,event=>input.controller.inspect(event))
+ input.handle('work-window:member',(event,request)=>input.controller.memberTools(event,request))
  input.handle(C.WORK_WINDOW_ACTION,(event,request)=>input.controller.act(event,request))
  input.handle(C.WORK_WINDOW_NOTE_READ,(event,request)=>input.controller.notebookRead(event,request))
  input.handle(C.WORK_WINDOW_NOTE_SAVE,(event,request)=>input.controller.notebookSave(event,request))

@@ -1,0 +1,49 @@
+
+> design-asset-manager@1.0.0 build
+> node scripts/build-shelf-candidates.mjs && node scripts/build-macos-runtime.mjs && node scripts/build-eagle-companion.mjs && node scripts/build-identity.mjs && electron-vite build
+
+{"platform":"darwin","arch":"arm64","sourceDigest":"72dd350d20ec48354e25244f181e99f0345214cd59473eadf7700e4c51f53a4b","binaryDigest":"5648ab9ac5154aca4f5ef7ec273d8540deb8613f7fcdb7624e7bac0f0cf2d57e","aBinaryDigest":"fe9d8aff38b0d4460726d9de03cc6eca9234db7cff32aa14511da76307eae90a","app":"/Users/meigong/.codex/worktrees/6699/design-asset-manager-macos/build/shelf-candidates/DAM Shelf A.app","helperApp":"/Users/meigong/.codex/worktrees/6699/design-asset-manager-macos/build/shelf-candidates/DAM Shelf B.app"}
+{"sourceDigest":"f1005ab7eb79977b1fcfef30891caf45c3881d4c63b1d3d133e0e3d1c6293fcf","files":{"owned-memory":"9bb55b15c5afbd70b583e6d91478ec0d6ae69dcb90cce7d4e891ee3b8f2eb4de","video":"c468e9296208a1b9e344896213bf03c8f24364d3c35cad39766c18d9a24f9b7e"}}
+{"file":"DAM-Eagle-Companion-0.2.0.eagleplugin","bytes":10571,"sha256":"2a59de81f2eed49d1965f963913893d4fc06ca664f50e238665f93eaeee7d507","installed":false}
+{"buildId":"dam-492930414aa9bcb7","sourceCount":800}
+vite v5.4.21 building SSR bundle for production...
+transforming...
+✓ 306 modules transformed.
+rendering chunks...
+out/main/shelf-candidates/DAM Shelf B.app/Contents/Info.plist                        0.59 kB
+out/main/ai-service/tools/retrieval_probe/NOTICE.md                                  1.15 kB
+out/main/ai-service/tools/retrieval_probe/flag.jpg                                   1.33 kB
+out/main/shelf-candidates/DAM Shelf B.app/Contents/_CodeSignature/CodeResources      2.20 kB
+out/main/ai-service/tools/local_ocr_worker.py                                        5.54 kB
+out/main/ai-service/tools/managed_vision_worker.py                                   7.46 kB
+out/main/ai-service/tools/retrieval_worker.py                                        7.51 kB
+out/main/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin                      10.57 kB
+out/main/ai-service/tools/retrieval_probe/astronaut.jpg                             14.96 kB
+out/main/macos-runtime/owned-memory                                                 33.73 kB
+out/main/macos-runtime/video                                                        95.30 kB
+out/main/shelf-candidates/DAM Shelf B.app/Contents/MacOS/Shelf                     652.34 kB
+out/main/index.js                                                                1,780.18 kB
+✓ built in 940ms
+vite v5.4.21 building SSR bundle for production...
+transforming...
+✓ 22 modules transformed.
+rendering chunks...
+out/preload/work-window.cjs   2.29 kB
+out/preload/asset-card.cjs    5.12 kB
+out/preload/index.cjs        47.72 kB
+✓ built in 32ms
+vite v5.4.21 building for production...
+transforming...
+✓ 2077 modules transformed.
+rendering chunks...
+../../out/renderer/index.html                              0.55 kB
+../../out/renderer/assets/VisualAiPanel-Bg5nD62M.css       0.44 kB
+../../out/renderer/assets/App-CjpDfH1B.css                 5.55 kB
+../../out/renderer/assets/WorkSetWindow-nLFvfmNT.css     110.31 kB
+../../out/renderer/assets/index-COqQUqBh.css             129.65 kB
+../../out/renderer/assets/AssetCardWindow-3vfcsQAx.js     30.64 kB
+../../out/renderer/assets/VisualAiPanel-DpOwFLvz.js       92.35 kB
+../../out/renderer/assets/WorkSetWindow-DN_bEFA6.js      188.46 kB
+../../out/renderer/assets/index-fLi6PfQ7.js              278.58 kB
+../../out/renderer/assets/App-CO9M2Fo0.js              1,043.08 kB
+✓ built in 1.66s

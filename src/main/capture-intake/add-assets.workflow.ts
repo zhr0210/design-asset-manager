@@ -35,8 +35,10 @@ export function createAddAssetsWorkflow(
   const gateway = createCaptureGateway(dependencies)
 
   return {
-    async prepare() {
-      const selection = await dependencies.selectLocalFiles()
+    async prepare(files,signal) {
+      const check=()=>{if(signal?.aborted)throw new CaptureIntakeError('capture-cancelled','已停止本次拖入准备，尚未开始入库。')}
+      check()
+      const selection = files ? {kind:'selected' as const,files} : await dependencies.selectLocalFiles()
       if (selection.kind === 'cancelled' || selection.files.length === 0) {
         return { kind: 'cancelled' as const }
       }
@@ -47,12 +49,16 @@ export function createAddAssetsWorkflow(
       // Each lane owns at most one source check; public plans still review every item.
       const plannedItems: Awaited<ReturnType<typeof planSelection>>[] = new Array(selection.files.length)
       let next = 0
-      await Promise.all(Array.from({ length: Math.min(8, selection.files.length) }, async () => {
+      const lanes=await Promise.allSettled(Array.from({ length: Math.min(8, selection.files.length) }, async () => {
         while (next < selection.files.length) {
+          check()
           const index = next++
           plannedItems[index] = await planSelection(selection.files[index], scopeLabels[index], dependencies)
         }
       }))
+      // Cancellation acknowledges after all admitted source readers have returned.
+      for(const lane of lanes)if(lane.status==='rejected')throw lane.reason
+      check()
       const receipt = dependencies.createIdentity('copy-plan')
       const publicItems = plannedItems.map((item) => item.publicItem)
       const eligibleItems = plannedItems
@@ -88,7 +94,8 @@ export function createAddAssetsWorkflow(
       return { kind: 'planned' as const, plan: publicPlan }
     },
 
-    async dispatch(command) {
+    async dispatch(command,signal) {
+      if(signal?.aborted)throw new CaptureIntakeError('capture-cancelled','已停止拖入，未开始入库。')
       const stored = plans.get(command.planReceipt)
       if (!stored) {
         throw new CaptureIntakeError(
@@ -113,7 +120,7 @@ export function createAddAssetsWorkflow(
           'The active library changed after the Copy Into Library Plan was created.'
         )
       }
-      return gateway.start(stored.confirmedPlan)
+      return gateway.start(stored.confirmedPlan,signal)
     },
 
     async inspect(request) {

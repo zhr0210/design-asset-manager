@@ -1,0 +1,8 @@
+Empty grid destination: entered=1, updated=1
+Card target WorkShelfCard: []
+Card target WorkShelfRoundedImage: []
+Card target NSTextField: []
+Card target NSTextField: []
+PASS cancellation waits for Host confirmation; late handoff completion cannot restore revoked result or enable generation prematurely.
+PASS delivery error remains local, input retained, successful correction updates status without clearing an independent autosave conflict.
+PASS window-wide destination: native thumbnail legacy/promise registrations removed, all display descendants transparent to asset drops, plain-text editor registration retained, file-as-text routed to Host without editing; update, completion and freeze protections. Controlled sender, not UI acceptance.
