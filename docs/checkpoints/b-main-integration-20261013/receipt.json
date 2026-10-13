@@ -1,0 +1,25 @@
+{
+  "sourceCommit": "63dc760b22cc81c673d6fd324af8ab95b2527ba2",
+  "mergedLocalMain": "63dc760b22cc81c673d6fd324af8ab95b2527ba2",
+  "integratedFilesChecked": 126,
+  "ordinaryTrackedWipPreserved": 15,
+  "ordinaryStatusPreserved": true,
+  "eagleLocalBranchRemoved": true,
+  "eagleRecoveryTag": "archive/eagle-integration-20261013",
+  "eagleRecoveryCommit": "8cf60c7b3fd2e165b574db134e1d7149e9116a3e",
+  "remotePush": false,
+  "continuationBranch": "codex/floating-window-design",
+  "typecheck": "passed",
+  "build": "passed dam-8816c1fa125661e6",
+  "focusedChecks": [
+    "proportional layout/legacy conversion",
+    "autosave concurrency/cancel protection",
+    "bounded asynchronous motion trace",
+    "production temporary SQLite motion barrier/reopen",
+    "production AppKit interaction/duration/interruption"
+  ],
+  "designCssAlignment": "deferred; design:check remains unresolved",
+  "physicalUiRetest": "not rerun for Git integration",
+  "localRuntimeProfilesAndLibraries": "not committed; retained in B worktree",
+  "remainingLocalResearchArtifacts": "retained in B worktree; curated public evidence committed"
+}

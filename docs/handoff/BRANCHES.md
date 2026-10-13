@@ -4,6 +4,8 @@
 
 本轮用户要求将B worktree的源码及设计文档提交后合入本地main，再从main继续悬浮窗模块。B来源分支为`codex/floating-window-b`，接续分支为`codex/floating-window-design`；整合使用独立干净工作树，普通目录的`codex/macos-migration`旧版WIP保留，不自动搬入B，不推送或发布。
 
+B提交`63dc760`已快速前进合入本地main；main包含既有macOS迁移历史及本轮B内容。126个提交文件与B来源逐一哈希相同，普通目录15个已跟踪WIP及Git状态保持；类型、构建与相关内部保护检查通过，设备资格未扩大。见[整合回执](../checkpoints/b-main-integration-20261013/README.md)。
+
 B工作目录为`/Users/meigong/.codex/worktrees/6699/design-asset-manager-macos`。main整合工作目录为`/Users/meigong/.codex/worktrees/main-integration/design-asset-manager-macos`；普通目录仍为`/Users/meigong/Documents/design-asset-manager-macos`。同一Git仓库中的工作树不是独立产品权威，运行时必须按所选分支重建/核对，不复用另一工作树的旧验收资格。
 
 `codex/eagle-integration`已按用户要求删除，本地恢复标签`archive/eagle-integration-20261013`指向`8cf60c7b3fd2e165b574db134e1d7149e9116a3e`，保留其独有历史；没有合入Eagle分支独有变更。main原位置由`archive/main-before-b-20261013`保留。删除分支没有删除产品中的Eagle功能，后续移除见[EAGLE任务](../tasks/TASK-REGISTRY.md#eagle)。

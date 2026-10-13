@@ -1,6 +1,6 @@
 # 当前任务：悬浮工作窗UI/UX访谈与设计系统整理
 
-2026-10-13当前执行：将B worktree源码与文档保存到`codex/floating-window-b`，通过独立干净工作树合入本地main，再从main创建后续悬浮窗设计分支。普通目录旧版WIP保留，不搬入B；不推送或发布。Eagle本地分支先保存恢复标签再删除，main中的Eagle功能本轮不删除。
+2026-10-13Git整合已完成：B worktree源码与文档已保存到`codex/floating-window-b`的`63dc760`并快速前进合入本地main；后续在`codex/floating-window-design`继续悬浮窗模块，沿用B目录。普通目录旧版WIP原样保留，未搬入B；没有推送或发布。Eagle本地分支已删除，`archive/eagle-integration-20261013`保留8cf60c7，main中的Eagle功能未删除。检查与保全见[整合回执](docs/checkpoints/b-main-integration-20261013/README.md)。
 
 下次继续本任务时先提醒用户：完成设计规范应用对齐。用户明确本轮延期产品界面、生成CSS、Apple中性色/强调色、原生Liquid Glass、220×240紧凑布局及系统控件样式；实施后须同步tokens并复验正式入口、主题、输入、动画与保存重开。当前`design:check`因目标规范与旧生成CSS不同而未通过，不能遗忘或记作已对齐。完整责任见[DESIGN-APPLY](docs/tasks/TASK-REGISTRY.md#design-apply)；只在接续时提醒，不创建定时自动化。
 
@@ -10,7 +10,7 @@
 
 用户已采纳主要操作用系统强调色（默认蓝色），普通工具与素材选择保持中性灰；已确认的220×240、全底板Liquid Glass、常显原生按钮、完整预览及操作区域分工保留。菜单作用范围仍待确认。文档规范与已开发源码分别核对，尚未实施的样式不记为交付。
 
-本轮只改文档，未同步生成CSS或修改产品代码、构建、资料库与普通默认副本；当前设计与受测产物的差异见CURRENT-STATE。下一用户决策仍是菜单范围；不要自动恢复历史窗口修补、运行验收或AI/OCR队列。
+设计整理只改文档；本次Git整合已执行类型、构建及相关内部检查，没有新改产品代码、生成CSS、资料库或普通目录WIP。当前设计与受测产物的差异见CURRENT-STATE。下一用户决策仍是菜单范围；不要自动恢复历史窗口修补、运行验收或AI/OCR队列。
 
 ## 此前任务与确认记录（历史）
 
