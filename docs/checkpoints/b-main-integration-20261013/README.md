@@ -1,5 +1,7 @@
 # B工作树合入本地main
 
+后续收尾：用户发现普通目录未显示合并内容且无法切换。原因是普通目录仍检出旧分支，main和设计分支被工作树占用。现已把原15个tracked WIP及1个新测试保存到`codex/legacy-window-wip-20261013`的`9d63405`，逐文件SHA一致；该提交不属于main祖先。临时main工作树已归档，B工作树detach保留本地资料。日常目录现检出main，实际切到`codex/floating-window-design`再切回main成功，状态干净。没有push，GitHub的origin/main仍是之前版本。
+
 用户授权先保存B worktree，再合入main并继续新分支。`codex/floating-window-b`的`63dc760`已快速前进合入本地main，包含B窗口实现、测试和Apple设计系统文档。独立main工作树隔离了普通目录的旧版WIP；126个提交文件与来源逐一哈希一致，普通目录15个已跟踪WIP及状态保持。详见[核对回执](receipt.json)。
 
 本轮通过类型检查、构建、比例布局与旧记录转换、自动保存、运动诊断、临时生产SQLite及受控AppKit交互检查。编译测试首次错误地同时包含两个emit定义，已按测试入口去除Shelf.swift并重编译执行通过；没有修改生产源码或降低断言。构建身份仍为dam-8816c1fa125661e6，不将Git整合视为新的物理鼠标/多屏/覆盖层资格。

@@ -2,6 +2,10 @@
 
 ## 2026-10-13：B内容整合与后续工作
 
+当前日常目录`/Users/meigong/Documents/design-asset-manager-macos`已检出本地main，工作区干净。`codex/floating-window-design`已解除其他worktree占用，可在日常目录切换；实际main→设计分支→main往返已验证。此前main已合并但普通目录仍在旧分支、且两个分支被worktree占用，导致用户看不到新文件并无法切换；该收尾问题已修正。
+
+旧普通目录WIP保存为`codex/legacy-window-wip-20261013`的`9d63405`，16个文件与保存前SHA一致，不进入main。临时main整合工作树已通过Codex归档；B目录`/Users/meigong/.codex/worktrees/6699/design-asset-manager-macos`改为detached HEAD，保留本地运行资料/证据。以下原整合目录描述是过程记录，当前继续工作以日常目录为准。
+
 本轮用户要求将B worktree的源码及设计文档提交后合入本地main，再从main继续悬浮窗模块。B来源分支为`codex/floating-window-b`，接续分支为`codex/floating-window-design`；整合使用独立干净工作树，普通目录的`codex/macos-migration`旧版WIP保留，不自动搬入B，不推送或发布。
 
 B提交`63dc760`已快速前进合入本地main；main包含既有macOS迁移历史及本轮B内容。126个提交文件与B来源逐一哈希相同，普通目录15个已跟踪WIP及Git状态保持；类型、构建与相关内部保护检查通过，设备资格未扩大。见[整合回执](../checkpoints/b-main-integration-20261013/README.md)。
