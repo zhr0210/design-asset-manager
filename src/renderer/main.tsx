@@ -4,10 +4,13 @@ import { getWorkspaceClient, installWorkspaceClient } from './workspace-client'
 import { createWorkspaceClient } from '../shared/client/workspace-client'
 import { createBrowserTransport } from './browser-transport'
 import './styles/globals.css'
+import './components/gallery/tokens.css'
+import './styles/app-design.css'
 
 async function startWorkspace() {
   const native = window as Window & { assetCardAPI?: unknown; workWindowAPI?: unknown }
   if (native.assetCardAPI || native.workWindowAPI) {
+    if (native.assetCardAPI && !native.workWindowAPI) document.documentElement.classList.add('app-design')
     const { default: NativeSurface } = native.workWindowAPI
       ? await import('./routes/WorkSetWindow')
       : await import('./routes/AssetCardWindow')
@@ -15,6 +18,7 @@ async function startWorkspace() {
     return
   }
   const client = getWorkspaceClient() ?? createWorkspaceClient(await createBrowserTransport())
+  document.documentElement.classList.add('app-design')
   if (client) installWorkspaceClient(client)
   const { default: App } = await import('./App')
   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

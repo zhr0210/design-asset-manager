@@ -27,9 +27,8 @@ assert.doesNotMatch(mainSource, /minWidth:\s*1024|minHeight:\s*700/)
 
 const appShellSource = await fs.readFile('src/renderer/components/layout/AppShell.tsx', 'utf8')
 assert.match(appShellSource, /DESKTOP_VIEWPORT_POLICY/)
-// The adopted responsive Library workspace can shrink in the browser. Other
-// routes and the native window still retain the shared viewport policy.
-assert.match(appShellSource, /minWidth:\s*library\s*\?\s*0\s*:\s*DESKTOP_VIEWPORT_POLICY\.shell\.minContentWidth/)
+// Every shared page can shrink in Browser. Native window limits stay in Main.
+assert.match(appShellSource, /minWidth:\s*0/)
 assert.match(appShellSource, /data-library-workspace=\{library\s*\|\|\s*undefined\}/)
 assert.match(appShellSource, /minHeight:\s*DESKTOP_VIEWPORT_POLICY\.shell\.minContentHeight/)
 assert.doesNotMatch(appShellSource, /mainContentMinWidth/)

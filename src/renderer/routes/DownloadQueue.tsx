@@ -49,7 +49,7 @@ export default function DownloadQueue() {
                     {rowDisplay.thumbnailSrc ? <img
                       src={rowDisplay.thumbnailSrc}
                       alt={rowDisplay.titleLabel}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     /> : <span className="flex h-full items-center justify-center text-[10px] text-slate-400">无预览</span>}
                   </div>
 

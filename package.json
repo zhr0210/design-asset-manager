@@ -394,7 +394,9 @@
     "test-windows-schema-backup-qualification": "node scripts/run-electron-node-test.mjs scripts/windows-schema-backup-qualification.test.ts",
     "test-visual-admission-isolation": "node scripts/run-ts-test.mjs scripts/visual-admission-isolation.test.ts",
     "test-pi-prepare-offline": "node scripts/run-ts-test.mjs scripts/pi-prepare-offline.test.mjs",
-    "build:macos-runtime": "node scripts/build-macos-runtime.mjs"
+    "build:macos-runtime": "node scripts/build-macos-runtime.mjs",
+    "test-app-design-style": "node scripts/app-design-style.test.mjs",
+    "test-ui-theme-sync": "node scripts/run-ts-test.mjs scripts/ui-theme-sync.test.ts"
   },
   "dependencies": {
     "archiver": "7.0.1",
@@ -424,6 +426,7 @@
     "electron": "^30.0.6",
     "electron-builder": "^24.13.3",
     "electron-vite": "^2.2.0",
+    "js-yaml": "4.1.1",
     "playwright": "^1.60.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",

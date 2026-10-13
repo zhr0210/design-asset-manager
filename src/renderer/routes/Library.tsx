@@ -41,6 +41,7 @@ export default function Library() {
   const view = useLibraryViewStore()
   const [cardError, setCardError] = useState('')
   const [libraryError,setLibraryError]=useState('')
+  const [retrievalFeedback,setRetrievalFeedback]=useState({busy:false,error:''})
   const [openingCard, setOpeningCard] = useState(false)
   const session = useAssetWorkspaceSession()
   const {
@@ -342,21 +343,27 @@ export default function Library() {
     onConfigureAi={()=>navigate(appPath('ai-console'))} error={cardError}/>:<p className="lc-empty">请先导入或选择一个素材。</p>
   return <>
     <LibraryCanvas revealWorkAsset={revealWorkAsset} workSets={workSets} openWorkSet={setReferenceSet} editWorkSet={setWorkSetIntent} organization={organization} organize={setOrganizationIntent} addFiles={()=>libraryControlsRef.current?.addFiles()} key={scope} scope={scope} authority={libraryProjection} assets={displayAssets} matches={discovery.matches} tags={tags} selected={selectedAsset} pick={setSelectedAsset} openFocus={openQuick}
-      filtersActive={Boolean(searchOptions.color||searchOptions.example)} searchBusy={hostedSearch.busy} searchFolder={setSearchFolderScope} searchControl={libraryProjection.state==='ready'&&<section aria-label="检索状态" className="gallery-notice library-search-status">
+      filtersActive={Boolean(searchOptions.color||searchOptions.example)} searchBusy={hostedSearch.busy} searchFolder={setSearchFolderScope} searchMethodLabel={searchOptions.example?'以图查找':searchOptions.mode==='semantic'?'画面含义':searchOptions.mode==='hybrid'?'文字＋画面':'文字与标签'}
+      searchControl={libraryProjection.state==='ready'&&<section aria-label="检索控件" className="retrieval-options">
         <SearchFilters key={scope} options={searchOptions} setOptions={setSearchOptions} colors={hostedSearch.colors}/>
-        <RetrievalSearchControls scope={{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}} options={searchOptions} setOptions={setSearchOptions} selectedIds={bulkSelectedAssetIds} selectedAsset={bulkSelectedAssetIds.length===1?displayAssets.find(a=>a.id===bulkSelectedAssetIds[0])??selectedAsset:selectedAsset} reload={hostedSearch.reload}/>
-        {hostedSearch.busy?<span role="status">正在查询或维护索引，已显示的结果保留…</span>:<span>{hostedSearch.lane==='lexical-only'?'文字检索':hostedSearch.lane==='image'?'以图找相似':hostedSearch.lane==='hybrid'?'文字＋画面含义':'中英文画面含义'} · 已显示 {hostedSearch.matches.length}/{hostedSearch.total} · 文字索引覆盖 {hostedSearch.index?.indexed??0}/{hostedSearch.index?.total??0}{hostedSearch.index?.state!=='ready'?' · 索引仍在准备':''}{hostedSearch.coverage?` · 图文覆盖 ${hostedSearch.coverage.indexed}/${hostedSearch.coverage.total}`:''}</span>}
+        <RetrievalSearchControls onStatus={setRetrievalFeedback} scope={{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}} options={searchOptions} setOptions={setSearchOptions} selectedIds={bulkSelectedAssetIds} selectedAsset={bulkSelectedAssetIds.length===1?displayAssets.find(a=>a.id===bulkSelectedAssetIds[0])??selectedAsset:selectedAsset} reload={hostedSearch.reload}/>
+        <details><summary>文字索引维护</summary><p>索引由当前素材与有效分析重建，不删除素材、人工内容或保存结果。</p><button disabled={hostedSearch.busy} onClick={()=>void hostedSearch.rebuild()}>重建文字索引</button></details>
+      </section>}
+      searchStatus={libraryProjection.state==='ready'&&<section aria-label="检索状态" className="gallery-notice library-search-status">
+        <span role="status">{hostedSearch.busy?'正在查询，已显示的结果保留…':`已显示 ${hostedSearch.matches.length}/${hostedSearch.total}`}</span>
+        {hostedSearch.index?.state!=='ready'&&<span>文字索引仍在准备</span>}
         {hostedSearch.notice&&<p>{hostedSearch.notice}</p>}
-        {hostedSearch.hasUpdates&&<p>素材内容已刷新，当前分页与顺序保留；重新查询可更新结果成员与排序。</p>}
+        {hostedSearch.hasUpdates&&<p>内容已更新，当前结果顺序保留；重新查询可更新排序。</p>}
         {hostedSearch.error&&<span role="alert">{hostedSearch.error}</span>}
+        {retrievalFeedback.busy&&<span role="status">正在核对检索操作…</span>}
+        {retrievalFeedback.error&&<span role="alert">{retrievalFeedback.error}</span>}
         <button disabled={hostedSearch.busy} onClick={hostedSearch.reload}>重新查询</button>
         {hostedSearch.busy&&(searchOptions.mode!=='lexical'||searchOptions.example)&&<button onClick={hostedSearch.cancel}>取消图文查询</button>}
         {hostedSearch.hasMore&&<button disabled={hostedSearch.busy} onClick={()=>void hostedSearch.loadMore()}>加载更多搜索结果</button>}
-        <details><summary>文字索引维护</summary><p>索引由当前素材与有效分析重建，不删除素材、人工内容或保存结果。</p><button disabled={hostedSearch.busy} onClick={()=>void hostedSearch.rebuild()}>重建文字索引</button></details>
       </section>}
       query={searchQuery} setQuery={setSearchQuery} tagQueries={activeTagSearchQueries} addTag={addActiveTagSearchQuery} removeTag={removeActiveTagSearchQuery} clearFilters={handleClearFilters}
       bulkIds={bulkSelectedAssetIds} toggleBulk={toggleBulkSelectedAssetId} clearBulk={clearBulkSelectedAssetIds} bulkAction={setBulkActionType} status={assetLoadStatus} error={assetLoadError} loaded={hasLoadedAssets} retry={refreshReadyLibrary}
-      controls={<>{libraryError&&<div role="alert" className="lc-notice">{libraryError}<button onClick={()=>void refreshReadyLibrary()}>重新检查</button></div>}<ActiveLibraryControls ref={libraryControlsRef} projection={libraryProjection} onAuthorityWillChange={authorityWillChange} onAuthorityReady={refreshReadyLibrary} onAuthorityChangeComplete={()=>session.refresh('authority-change')} refreshProjection={refreshLibraryState}/></>}
+      controls={<>{libraryError&&<div role="alert" className="lc-notice">{libraryError}<button onClick={()=>void refreshReadyLibrary()}>重新检查</button></div>}<ActiveLibraryControls ref={libraryControlsRef} projection={libraryProjection} onAuthorityWillChange={authorityWillChange} onAuthorityReady={async()=>{await refreshReadyLibrary();hostedSearch.reload()}} onAuthorityChangeComplete={()=>session.refresh('authority-change')} refreshProjection={refreshLibraryState}/></>}
       details={details} work={work} workMode={view.mode==='card'} showWork={()=>changeMode('card')} showAll={()=>view.setMode('library')} register={registerCardTrigger}/>
     {focused&&libraryProjection.state==='ready'&&createPortal(<LibraryFocus key={scope} asset={focused} items={focusItems} change={id=>{const a=displayAssets.find(a=>a.id===id);if(a)setQuickLookAsset(a)}} close={closeQuick} notebook={notebook} details={<LibraryDetails libraryScope={libraryProjection.state==='ready'?{libraryIdentity:libraryProjection.identity!,generation:libraryProjection.generation!}:undefined} organize={setOrganizationIntent} addWorkColor={color=>setWorkSetIntent({kind:'add',colors:[color]})} key={focused.id} asset={focused} focus editor={<button onClick={()=>{closeQuick();setSelectedAsset(focused)}}>在侧栏编辑与分析</button>}/>}/>,document.body)}
     {referenceSet&&workSets.catalog&&<WorkSetReferenceView key={scope+referenceSet} id={referenceSet} initialMediaAssetId={recoveredMediaAsset} model={workSets} assets={displayAssets} close={()=>{setReferenceSet(null);setRecoveredMediaAsset(null)}} preview={openQuick} locate={asset=>{setSelectedAsset(asset);view.setMode('library');setRevealWorkAsset(v=>v+1)}}/>}

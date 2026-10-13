@@ -5120,6 +5120,10 @@ _Avoid_: Asset folder, measured image palette, copied original
 The saved color references used in one Work Set, displayed alongside its visual references without changing source image colors or other palette folders.
 _Avoid_: Image color measurement, global palette deletion, automatic recoloring
 
+**Single-Asset Card**:
+A floating reference view dedicated to one Design Asset, with its asset information, description editing and prompt drafts. It is distinct from a Work Window presenting a saved Work Set.
+_Avoid_: Work Window, Work Set, asset-grid thumbnail
+
 **Work Mode**:
 The core creation-facing mode that keeps selected visual references available beside ongoing design work through floating Work Windows; the product-facing name is provisional.
 _Avoid_: Library organization mode, embedded browser, recording plugin

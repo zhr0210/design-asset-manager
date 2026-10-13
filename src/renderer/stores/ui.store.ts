@@ -95,3 +95,11 @@ export const useUIStore = create<UIState>((set, get) => ({
     return TRANSLATIONS[lang][key] || key
   }
 }))
+
+// Same-origin desktop surfaces share the saved appearance. This event carries
+// only that preference; native card authority and business state remain Host-owned.
+window.addEventListener?.('storage', event => {
+  if (event.key !== 'app-theme' || (event.newValue !== 'light' && event.newValue !== 'dark')) return
+  applyTheme(event.newValue)
+  useUIStore.setState({ theme: event.newValue })
+})

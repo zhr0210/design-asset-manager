@@ -3,8 +3,9 @@ import {Link} from 'react-router-dom'
 import {requireWorkspaceClient} from '../../../workspace-client'
 import type {RetrievalScope,RetrievalCoverage,QueryFileReview} from '../../../../shared/contracts/retrieval-workspace.contract'
 import type {SearchOptions} from './useHostAssetSearch'
-export default function RetrievalSearchControls(p:{scope:RetrievalScope;options:SearchOptions;setOptions:(v:SearchOptions)=>void;selectedIds:string[];selectedAsset?:{id:string;title:string;fileType?:string}|null;reload():void}) {
+export default function RetrievalSearchControls(p:{onStatus?:(status:{busy:boolean;error:string})=>void;scope:RetrievalScope;options:SearchOptions;setOptions:(v:SearchOptions)=>void;selectedIds:string[];selectedAsset?:{id:string;title:string;fileType?:string}|null;reload():void}) {
   const [coverage,setCoverage]=useState<RetrievalCoverage|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[range,setRange]=useState<'selected'|'whole-library'>('selected'),[confirm,setConfirm]=useState(false),[file,setFile]=useState<QueryFileReview|null>(null)
+  useEffect(()=>{p.onStatus?.({busy,error})},[busy,error,p.onStatus])
   const key=JSON.stringify(p.scope)
   const read=useCallback(async()=>{setCoverage(await requireWorkspaceClient().retrieval.coverage(p.scope))},[key])
   useEffect(()=>{let live=true;setCoverage(null);setFile(null);setError('');const refresh=()=>void requireWorkspaceClient().retrieval.coverage(p.scope).then(v=>{if(live)setCoverage(v)}).catch(()=>{})

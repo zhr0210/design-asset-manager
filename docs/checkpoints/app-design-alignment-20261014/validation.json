@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-14",
+  "candidate": {
+    "buildId": "dam-bab1cdcdc23d65f9",
+    "sourceDigest": "bab1cdcdc23d65f9798e93dfd3d100ab332d8c2ba32457eb408fec4eb8319b93",
+    "builtAt": "2026-10-13T17:08:54.314Z",
+    "digestAlgorithm": "sha256(sorted-source-file-sha256-json)",
+    "sourceCount": 802
+  },
+  "sourceBaseline": "e7189b550a78e78d4d952b7179fff3a8a24139c4",
+  "ordinaryDesktopAndBrowser": true,
+  "finalBrowserWidths": [
+    1024,
+    1440
+  ],
+  "nativeRendererWidths": [
+    1136,
+    1280
+  ],
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "accessibility": [
+    "contrast-more",
+    "reduced-motion",
+    "menu-focus-restoration"
+  ],
+  "stages": {
+    "ordinary-paths": {
+      "ordinaryProfile": true,
+      "realPublicCopies": true,
+      "milestones": [
+        "ordinary-independent-browser-and-desktop-same-host",
+        "browser-real-file-selector-create-copy-and-desktop-refresh",
+        "real-lexical-query-no-match-reset-and-collapsible-retrieval",
+        "browser-all-global-pages-visible-input-and-context-return",
+        "desktop-all-global-pages-visible-input-and-context-return"
+      ]
+    },
+    "ordinary-persistence": {
+      "ordinaryProfile": true,
+      "realPublicCopies": true,
+      "milestones": [
+        "ordinary-independent-browser-and-desktop-same-host",
+        "browser-real-file-selector-create-copy-and-desktop-refresh",
+        "real-lexical-query-no-match-reset-and-collapsible-retrieval",
+        "browser-real-folder-palette-and-color-commits",
+        "browser-real-tag-create-and-list",
+        "browser-real-description-and-notebook-save",
+        "browser-real-preferences-save",
+        "desktop-native-single-asset-card-save-and-return"
+      ]
+    },
+    "ordinary-restored": {
+      "ordinaryProfile": true,
+      "realPublicCopies": true,
+      "milestones": [
+        "ordinary-independent-browser-and-desktop-same-host",
+        "browser-real-file-selector-create-copy-and-desktop-refresh",
+        "same-host-reopen-restores-folder-color-tag-description-notebook-and-preference",
+        "both-clients-two-widths-and-themes"
+      ]
+    },
+    "ordinary-final": {
+      "ordinaryProfile": true,
+      "realPublicCopies": true,
+      "milestones": [
+        "ordinary-independent-browser-and-desktop-same-host",
+        "browser-real-file-selector-create-copy-and-desktop-refresh",
+        "same-host-reopen-restores-folder-color-tag-description-notebook-and-preference",
+        "final-candidate-two-clients-widths-themes-accessibility-and-focus",
+        "native-card-initial-dark-and-live-desktop-theme-sync"
+      ]
+    },
+    "normal-exit-final": {
+      "normalHostExit": true,
+      "code": 0
+    },
+    "real-retrieval-validation": {
+      "ready": true,
+      "failed": false,
+      "actualExistingModel": true
+    },
+    "real-semantic-result": {
+      "actualSigLIP2": true,
+      "scope": 3,
+      "generatedVectors": 3,
+      "chineseQuery": true,
+      "imageQuery": true,
+      "formalDesktop": true,
+      "cloudUpload": false
+    },
+    "real-browser-semantic": {
+      "realSigLIP2": true,
+      "englishQuery": true,
+      "imageQuery": true,
+      "formalBrowser": true,
+      "sameHost": true,
+      "rankedCoffeeFirst": true,
+      "imageSelfMatchFirst": true
+    },
+    "real-desktop-ranking": {
+      "actualSigLIP2": true,
+      "scope": 3,
+      "chineseAstronautFirst": true,
+      "imageSelfMatchFirst": true
+    },
+    "real-ocr-result": {
+      "actualRapidOCR": true,
+      "scope": 1,
+      "publicPageRecognized": true,
+      "characters": 151,
+      "formalDesktop": true,
+      "originalPreserved": true
+    }
+  },
+  "publicOriginalHashesPreserved": true,
+  "publicOriginalDigests": [
+    "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+    "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7",
+    "341a6f0a61557662b02734a9b6e56ec33a915b2c41886b97509dedf2a43b47a3"
+  ],
+  "review": "same-session self review; issues found and repaired, not independent review",
+  "remaining": [
+    "physical native pointer/drag qualification unavailable: CUA initialization timed out twice",
+    "full destructive/recovery and concurrent failure UI matrix not completed",
+    "actual download transfer and Eagle pairing/legacy source selection not revalidated",
+    "all models/provider quality and Windows/Linux platforms out of scope"
+  ],
+  "configuredFullSuite": {
+    "command": "npm run ci:governance",
+    "completed": true,
+    "uniqueCommands": 163,
+    "failureMarkers": 0
+  },
+  "screenshotBindings": {
+    "browser-retrieval-popup.png": "earlier layout snapshot; not final-candidate acceptance",
+    "browser-final-width-1024-light.png": "final candidate",
+    "browser-final-width-1024-dark.png": "final candidate",
+    "browser-restored-notebook.png": "final candidate",
+    "desktop-final-native-card-dark.png": "final candidate",
+    "desktop-final-width-1136-light.png": "final candidate"
+  },
+  "publicProfileLibrarySelectionRestored": true,
+  "publicProfileExitReviewConfirmed": true,
+  "publicProfileProcessExitConfirmed": true
+}

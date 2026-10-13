@@ -26,4 +26,8 @@ assert.match(render({assets:[asset],matches:[{asset,explanation:null}],searchBus
 assert.equal(controlledPreview(asset),asset.fileUrl)
 for(const src of ['file:///private/source.png','https://example.invalid/image.png','data:image/png;base64,AAAA','local-file:///source.png'])assert.equal(controlledPreview({...asset,fileUrl:src}),'')
 assert.doesNotMatch(render({authority:{state:'closed',identity:null,generation:null},assets:[asset],matches:[{asset,explanation:null}]}),/data-asset-id="asset"/)
+const retrieval=render({searchControl:<div>fixture-retrieval-controls</div>,searchStatus:<p role="status">fixture-live-query</p>,searchMethodLabel:'画面含义'})
+assert.ok(retrieval.indexOf('fixture-retrieval-controls')>retrieval.indexOf('class="bottom-dock"'),'Retrieval controls belong to the bottom search region')
+assert.match(retrieval,/hidden=""[^>]*>.*fixture-retrieval-controls/,'Maintenance is mounted but collapsed initially')
+assert.ok(retrieval.indexOf('fixture-live-query')>retrieval.indexOf('class="bottom-dock"'),'Query feedback stays with the live search')
 console.log('Library Canvas: loading/empty/no-match/error/retained/closed states and preview source restrictions passed')

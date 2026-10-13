@@ -37,7 +37,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: '仪表盘',
     topbarTitle: '仪表盘',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   },
   {
     id: 'downloads',
@@ -46,7 +46,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: '任务中心',
     topbarTitle: '任务中心',
     shell: 'desktop',
-    showTopbar: true,
+    showTopbar: false,
     showDownloadBadge: true
   },
   {
@@ -56,7 +56,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: '素材工作区',
     topbarTitle: '素材工作区',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   },
   {
     id: 'connected-libraries',
@@ -65,7 +65,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: 'Eagle 连接库',
     topbarTitle: 'Eagle 连接库',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   },
   {
     id: 'legacy-library',
@@ -74,7 +74,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: '找回旧素材',
     topbarTitle: '旧 DAM 库（只读）',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   },
   {
     id: 'tag-manager',
@@ -83,7 +83,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: '标签管理',
     topbarTitle: '标签管理中心',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   },
   {
     id: 'model-library',
@@ -92,7 +92,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: '模型库',
     topbarTitle: '模型库',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   },
   {
     id: 'ai-console',
@@ -101,12 +101,12 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: 'AI 与模型',
     topbarTitle: 'AI 与模型',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   },
-  {id:'ai-task-models',path:'/ai/task-models',routeSegment:'ai/task-models',sidebarLabel:'任务用哪个模型',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:true},
-  {id:'ai-background',path:'/ai/background',routeSegment:'ai/background',sidebarLabel:'后台分析与资源',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:true},
-  {id:'ai-diagnostics',path:'/ai/diagnostics',routeSegment:'ai/diagnostics',sidebarLabel:'高级诊断',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:true},
-  {id:'about',path:'/about',routeSegment:'about',sidebarLabel:'帮助与关于',topbarTitle:'帮助与关于',shell:'desktop',showTopbar:true},
+  {id:'ai-task-models',path:'/ai/task-models',routeSegment:'ai/task-models',sidebarLabel:'任务用哪个模型',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
+  {id:'ai-background',path:'/ai/background',routeSegment:'ai/background',sidebarLabel:'后台分析与资源',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
+  {id:'ai-diagnostics',path:'/ai/diagnostics',routeSegment:'ai/diagnostics',sidebarLabel:'高级诊断',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
+  {id:'about',path:'/about',routeSegment:'about',sidebarLabel:'帮助与关于',topbarTitle:'帮助与关于',shell:'desktop',showTopbar:false},
   {
     id: 'settings',
     path: '/settings',
@@ -114,7 +114,7 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     sidebarLabel: '设置',
     topbarTitle: '系统偏好设置',
     shell: 'desktop',
-    showTopbar: true
+    showTopbar: false
   }
 ] as const
 
@@ -136,17 +136,7 @@ export const APP_OVERLAY_ROUTE_IDS: readonly AppRouteId[] = [
   'settings',
   'about'
 ] as const
-export const APP_MENU_ROUTE_IDS: readonly AppRouteId[] = [
-  'dashboard',
-  'downloads',
-  'connected-libraries',
-  'legacy-library',
-  'tag-manager',
-  'model-library',
-  'ai-console',
-  'settings',
-  'about'
-] as const
+export const APP_MENU_ROUTE_IDS: readonly AppRouteId[] = ['tag-manager','dashboard','connected-libraries','legacy-library','about'] as const
 
 export function getAppMenuNavigationItems(): AppNavigationItem[] {
   return APP_MENU_ROUTE_IDS

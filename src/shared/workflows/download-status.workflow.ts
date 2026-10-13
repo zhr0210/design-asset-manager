@@ -63,10 +63,10 @@ export function projectDownloadTaskStatusDisplay(status?: DownloadTaskStatus | n
     return {
       normalizedStatus,
       label: '已完成',
-      badgeClass: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
+      badgeClass: 'bg-slate-100 text-slate-600 border border-slate-200',
       iconKey: 'check',
-      iconClass: 'text-emerald-500',
-      progressClass: 'bg-emerald-500',
+      iconClass: 'text-slate-500',
+      progressClass: 'bg-slate-500',
       isActive: false,
       isCompleted: true,
       isFailed: false

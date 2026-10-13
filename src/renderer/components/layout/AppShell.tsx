@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { MotionConfig } from 'motion/react'
 import { WorkspaceEntrance } from '../ui/WorkspaceMotion'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import GlobalNavigationMenu from './GlobalNavigationMenu'
 import AuthActivity from './AuthActivity'
 import FileSelectionOverlay from './FileSelectionOverlay'
 import WorkspaceRecovery from './WorkspaceRecovery'
@@ -21,7 +20,7 @@ import { useDownloadStore } from '../../stores/download.store'
 import { useAssetStore } from '../../stores/asset.store'
 import WorkspaceRail from './WorkspaceRail'
 import { DESKTOP_VIEWPORT_POLICY } from '../../../shared/desktop-viewport-policy'
-import { APP_HOME_ROUTE, appPath, getAppTopbarTitle, shouldShowAppTopbar } from '../../../shared/workflows/app-navigation.workflow'
+import { APP_HOME_ROUTE, appPath } from '../../../shared/workflows/app-navigation.workflow'
 import { createElectronAssetWorkspaceSession } from '../../asset-workspace-session.adapter'
 import { AssetWorkspaceSessionContext } from '../../asset-workspace-session.context'
 import type { AssetCardReturnEvent, AssetCardChangedEvent } from '../../../shared/contracts/asset-card.contract'
@@ -30,15 +29,10 @@ function AppShellContent() {
   const location = useLocation()
   const library = location.pathname === '/library'
   const nativeMac = /Electron/.test(navigator.userAgent) && /Mac/.test(navigator.platform)
-  return <div className="workspace-shell" data-native-mac={nativeMac||undefined} data-library-workspace={library || undefined} data-settings-workspace={location.pathname === '/settings' || undefined} style={{ minWidth: library ? 0 : DESKTOP_VIEWPORT_POLICY.shell.minContentWidth, minHeight: DESKTOP_VIEWPORT_POLICY.shell.minContentHeight }}>
+  return <div className="workspace-shell" data-native-mac={nativeMac||undefined} data-library-workspace={library || undefined} data-settings-workspace={location.pathname === '/settings' || undefined} style={{ minWidth: 0, minHeight: DESKTOP_VIEWPORT_POLICY.shell.minContentHeight }}>
     {nativeMac&&<div className="native-window-drag" aria-hidden="true"/>}
-    <WorkspaceRail />
+    {!library&&<WorkspaceRail />}
     <div className="workspace-stage">
-      {!library && shouldShowAppTopbar(location.pathname) && <header className="workspace-titlebar">
-        <div><span className="workspace-titlebar-title">{getAppTopbarTitle(location.pathname)}</span><span className="workspace-titlebar-caption">Design Asset Manager</span></div>
-        <span className="ui-meta mr-12">本地优先 · 创作素材工作台</span>
-      </header>}
-      {!library&&<GlobalNavigationMenu />}
       <AuthActivity />
       <FileSelectionOverlay />
       <WorkspaceRecovery />

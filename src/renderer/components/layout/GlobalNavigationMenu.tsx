@@ -1,43 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { AnimatePresence } from 'motion/react'
-import { PresencePanel } from '../ui/WorkspaceMotion'
+import { createPortal } from 'react-dom'
 import { NavLink } from 'react-router-dom'
-import { Grid2X2, Moon, Sun, X } from 'lucide-react'
-import { useUIStore } from '../../stores/ui.store'
+import { MoreHorizontal } from 'lucide-react'
 import { getAppMenuNavigationItems } from '../../../shared/workflows/app-navigation.workflow'
-
 export default function GlobalNavigationMenu() {
-  const triggerRef = useRef<HTMLButtonElement>(null)
-  const rootRef = useRef<HTMLDivElement>(null)
-  const [open, setMenuOpen] = useState(false)
-  const { theme, toggleTheme } = useUIStore()
+  const trigger = useRef<HTMLButtonElement>(null), root = useRef<HTMLDivElement>(null), popup = useRef<HTMLElement>(null)
+  const [open, setOpen] = useState(false)
+  const [position,setPosition] = useState({left:78,bottom:60})
+  const close = (restore = false) => { setOpen(false); if (restore) trigger.current?.focus() }
   useEffect(() => {
     if (!open) return
-    const outside = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setMenuOpen(false)
-    }
-    const escape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); setMenuOpen(false); triggerRef.current?.focus() }
-    }
-    window.addEventListener('pointerdown', outside)
-    window.addEventListener('keydown', escape)
-    return () => { window.removeEventListener('pointerdown', outside); window.removeEventListener('keydown', escape) }
-  }, [open, setMenuOpen])
-  return <div ref={rootRef} className="absolute right-5 top-3 z-[100]">
-    <button ref={triggerRef} type="button" className="ui-button ui-button-ghost h-9 w-9 p-0" title="更多功能" aria-label="打开导航菜单" aria-expanded={open} aria-controls="workspace-tools" onClick={() => setMenuOpen(!open)}>
-      {open ? <X aria-hidden="true" /> : <Grid2X2 aria-hidden="true" />}
-    </button>
-    <AnimatePresence>{open && <PresencePanel key="tools" id="workspace-tools" data-testid="global-navigation-menu-popover" className="ui-card absolute right-0 top-12 w-[280px] p-2" style={{ boxShadow: 'var(--glass-shadow)', background: 'var(--glass-dense)', backdropFilter: 'var(--glass-blur)', borderRadius: 22 }}>
-      <div className="ui-eyebrow px-3 pb-2 pt-2">更多功能</div>
-      <nav className="grid grid-cols-2 gap-1" aria-label="应用功能">
-        {getAppMenuNavigationItems().map(item => <NavLink key={item.id} to={item.path} state={{ overlayOrigin: 'menu' }} onClick={() => setMenuOpen(false)} className={({isActive}) => 'ui-button justify-start border-transparent text-left ' + (isActive ? 'ui-button-primary' : 'ui-button-ghost')}>
-          {item.sidebarLabel}
-        </NavLink>)}
-      </nav>
-      <hr className="ui-divider my-2" />
-      <button type="button" onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event('workspace-recovery-open')) }} className="ui-button ui-button-ghost w-full justify-start">本机恢复草稿</button>
-      <button type="button" onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event('workspace-quit')) }} className="ui-button ui-button-ghost w-full justify-start">退出整个 DAM</button>
-      <button type="button" onClick={toggleTheme} className="ui-button ui-button-ghost w-full justify-start">{theme === 'light' ? <Moon /> : <Sun />}{theme === 'light' ? '切换深色模式' : '切换浅色模式'}</button>
-    </PresencePanel>}</AnimatePresence>
+    const rect=trigger.current?.getBoundingClientRect()
+    if(rect)setPosition({left:Math.max(8,Math.min(rect.right+8,window.innerWidth-308)),bottom:Math.max(8,window.innerHeight-rect.bottom)})
+    popup.current?.querySelector<HTMLElement>('[role=menuitem]')?.focus()
+    const outside = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)&&!popup.current?.contains(event.target as Node)) close() }
+    const reposition=()=>close(true)
+    const escape=(event:KeyboardEvent)=>{if(event.key==='Escape'&&!event.defaultPrevented){event.preventDefault();close(true)}}
+    document.addEventListener('pointerdown', outside)
+    document.addEventListener('keydown',escape)
+    window.addEventListener('resize',reposition)
+    return () => { document.removeEventListener('pointerdown', outside);document.removeEventListener('keydown',escape);window.removeEventListener('resize',reposition) }
+  }, [open])
+  return <div ref={root} className="rail-global-menu" onKeyDown={event=>{
+    if (!open) return
+    if (event.key==='Escape') { event.preventDefault(); event.stopPropagation(); close(true); return }
+    if (!['ArrowUp','ArrowDown','Home','End'].includes(event.key)) return
+    event.preventDefault()
+    const items = Array.from(popup.current?.querySelectorAll<HTMLElement>('[role=menuitem]')??[])
+    const index = items.indexOf(document.activeElement as HTMLElement)
+    const next = event.key==='Home'?0:event.key==='End'?items.length-1:(index+(event.key==='ArrowUp'?-1:1)+items.length)%items.length
+    items[next]?.focus()
+  }}>
+    <button ref={trigger} type="button" title="更多功能" aria-label="打开导航菜单" aria-haspopup="menu" aria-expanded={open} aria-controls="workspace-tools" onClick={()=>setOpen(!open)}><MoreHorizontal /><span className="rail-tooltip">更多功能</span></button>
+    {open&&createPortal(<nav ref={popup} id="workspace-tools" style={position} className="rail-global-popover" role="menu" aria-label="应用功能" data-testid="global-navigation-menu-popover">
+      {getAppMenuNavigationItems().map(item=><NavLink key={item.id} role="menuitem" to={item.path} onClick={()=>close()}>{item.sidebarLabel}</NavLink>)}
+      <hr className="ui-divider" />
+      <button type="button" role="menuitem" onClick={()=>{close(true);window.dispatchEvent(new Event('workspace-recovery-open'))}}>本机恢复草稿</button>
+      <button type="button" role="menuitem" onClick={()=>{close(true);window.dispatchEvent(new Event('workspace-quit'))}}>退出整个 DAM</button>
+    </nav>,document.body)}
   </div>
 }

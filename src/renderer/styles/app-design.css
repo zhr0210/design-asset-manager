@@ -1,0 +1,172 @@
+/* Included workspaces only. Native Work Window renderers do not opt into this scope. */
+html.app-design {
+  --ui-canvas: var(--canvas);
+  --ui-surface: var(--surface);
+  --ui-surface-muted: var(--surface-soft);
+  --ui-rail: var(--canvas);
+  --ui-text: var(--ink);
+  --ui-muted: var(--muted);
+  --ui-border: var(--border);
+  --ui-accent: var(--accent);
+  --ui-accent-text: var(--on-accent);
+  --ui-accent-soft: var(--accent-soft);
+  --ui-primary-top: var(--accent);
+  --ui-primary-bottom: var(--accent);
+  --ui-positive: var(--positive);
+  --ui-warning: var(--warning);
+  --ui-danger: var(--danger);
+  --ui-radius: 20px;
+  --selection-fill: #55585f;
+  --selection-ink: #ffffff;
+  --control-glass: var(--glass-control);
+  --popover-glass: var(--glass-popup);
+  --capsule-glass: var(--glass-capsule);
+  --glass-fill: var(--control-glass);
+  --glass-dense: var(--popover-glass);
+  --glass-highlight: transparent;
+  --glass-shadow: 0 7px 26px rgba(22,28,38,.055);
+  --glass-blur: blur(24px) saturate(1.02);
+  --glass-border: var(--border);
+  --glass-soft: var(--surface-soft);
+  --text-secondary: var(--muted);
+  --surface-base: var(--surface);
+  --ui-ink:var(--ink); --ui-surface-soft:var(--surface-soft); --text-primary:var(--ink);
+  color: var(--ink);
+  background: var(--canvas);
+}
+html.app-design.dark {
+  --canvas: var(--dark-canvas);
+  --surface: var(--dark-surface);
+  --surface-soft: var(--dark-surface-soft);
+  --ink: var(--dark-ink);
+  --muted: var(--dark-muted);
+  --border: var(--dark-border);
+  --accent: var(--dark-accent);
+  --on-accent: var(--dark-on-accent);
+  --accent-soft: var(--dark-accent-soft);
+  --positive: var(--dark-positive);
+  --warning: var(--dark-warning);
+  --danger: var(--dark-danger);
+  --glass-control: var(--dark-glass-control);
+  --glass-popup: var(--dark-glass-popup);
+  --glass-capsule: var(--dark-glass-capsule);
+  --selection-fill: #c9cbd1;
+  --selection-ink: #24262d;
+}
+html.app-design .workspace-shell { background: var(--canvas); font:13px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif; }
+html.app-design .workspace-stage { margin:0; border:0; border-radius:0; background:var(--canvas); box-shadow:none; }
+html.app-design .workspace-shell:not([data-library-workspace=true]) { grid-template-columns:70px minmax(0,1fr); }
+html.app-design .workspace-page { padding:52px 28px 28px; }
+html.app-design .ui-page-header h1 { font-size:28px; font-weight:650; letter-spacing:-.02em; }
+html.app-design .ui-page-header { margin-bottom:24px; }
+html.app-design .ui-page-description { font-size:13px; line-height:1.6; }
+html.app-design .ui-eyebrow { display:none; }
+html.app-design .ui-card { background:var(--surface); border-color:var(--border); box-shadow:none; }
+html.app-design .ui-card h2 { font-size:18px; font-weight:600; }
+html.app-design .ui-button { min-height:36px; padding:6px 16px; font-size:12px; font-weight:600; line-height:1.5; }
+html.app-design .ui-button-secondary { background:var(--surface); border-color:var(--border); box-shadow:none; backdrop-filter:none; }
+html.app-design .ui-button-primary,
+html.app-design .gallery-design .library-manager .ui-button-primary,
+html.app-design .gallery-design.gallery-review-surface .ui-button-primary,
+html.app-design .gallery-design .organization-modal button[type=submit] {
+  color:var(--on-accent); background:var(--accent); background-image:none; border-color:transparent; box-shadow:none; backdrop-filter:none;
+}
+html.app-design .ui-button:hover:not(:disabled) { transform:none; box-shadow:none; }
+html.app-design .ui-button-primary:hover:not(:disabled) { filter:brightness(.96); }
+html.app-design .ui-input { min-height:40px; border-radius:10px; background:var(--surface-soft); }
+html.app-design .preferences-layout nav button[aria-pressed=true] { background:var(--accent-soft); color:var(--ink); }
+html.app-design .appearance-choice[aria-pressed=true] { border-color:var(--border); box-shadow:0 0 0 2px var(--accent-soft); }
+html.app-design .ui-tool-page :is(input:not([type=range]):not([type=checkbox]),select,textarea) { font-size:13px; }
+html.app-design .ui-status[data-tone=positive] { color:var(--muted); background:var(--surface-soft); }
+html.app-design .ai-section-tabs { display:flex; flex-wrap:wrap; gap:4px; border:0; border-radius:16px; margin-bottom:16px; }
+html.app-design .ai-section-tabs a[aria-current=page] { color:var(--ink); background:var(--accent-soft); background-image:none; border-color:transparent; box-shadow:none; }
+html.app-design .visual-ai-panel { font-size:13px; padding:16px 0; }
+html.app-design .visual-ai-panel :is(p,label,small,pre) { font-size:12px; line-height:1.6; }
+html.app-design .visual-ai-panel :is(button,input,select) { font-size:12px; border-radius:10px; min-height:36px; }
+html.app-design .visual-ai-panel button { background:var(--surface); color:var(--ink); border-color:var(--border); }
+html.app-design .visual-ai-panel .ui-button-primary { background:var(--accent); color:var(--on-accent); }
+html.app-design .ui-button-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+html.app-design .gallery-design .select-asset input:checked+span { background:var(--selection-fill); color:var(--selection-ink); }
+html.app-design .gallery-design.minimal-prototype:not(.native-work-surface) {
+  --accent:var(--ui-accent); --on-accent:var(--ui-accent-text); --accent-soft:var(--ui-accent-soft);
+  --ink:var(--ui-text); --muted:var(--ui-muted); --surface:var(--ui-surface); --surface-soft:var(--ui-surface-muted);
+}
+html.app-design .gallery-design .side-inspector { animation:app-inspector-in .2s cubic-bezier(.2,.75,.25,1); }
+@keyframes app-inspector-in { from { transform:translateX(24px); } to { transform:none; } }
+html.app-design .gallery-design .organization-modal footer { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; }
+html.app-design .gallery-design .organization-modal button.danger[type=submit] { background:var(--ui-danger-soft); color:var(--danger); }
+html.app-design [hidden] { display:none!important; }
+html.app-design .gallery-design .bottom-dock { pointer-events:none; }
+html.app-design .gallery-design .dock-feedback { pointer-events:auto; margin-bottom:8px; max-height:120px; overflow:auto; }
+html.app-design .gallery-design .dock-feedback .library-search-status { padding:6px 10px; font-size:11px; gap:4px 10px; }
+html.app-design .gallery-design .dock-feedback .library-search-status button { min-height:26px; padding:3px 8px; font-size:11px; }
+html.app-design .gallery-design .lc-gallery-scroll { padding-bottom:var(--search-reserve,175px); }
+html.app-design .gallery-design .retrieval-popover { width:min(600px,calc(100vw - 180px)); max-width:none; bottom:80px; }
+html.app-design .gallery-design .retrieval-popover header { display:flex; align-items:center; justify-content:space-between; }
+html.app-design .gallery-design .retrieval-popover .retrieval-options { display:flex; flex-direction:column; gap:12px; }
+html.app-design .gallery-design .dock-actions .search-method { width:auto; padding:6px 10px; font-size:12px; }
+html.app-design .gallery-design .retrieval-options :is(input,select) { min-height:36px; border-radius:10px; }
+html.app-design .gallery-design .retrieval-options label { font-size:12px; }
+html.app-design .asset-floating-panel { color:var(--ink); background:var(--popover-glass); border-color:var(--border); box-shadow:var(--glass-shadow); backdrop-filter:blur(24px) saturate(1.02); }
+html.app-design .asset-card-chrome { background:transparent; border-color:var(--border); }
+html.app-design .asset-card-information p { color:var(--muted); font-size:12px; }
+html.app-design .asset-card-image { background:var(--surface-soft); }
+html.app-design .asset-floating-panel button { background:var(--surface); color:var(--ink); font-size:12px; border-radius:10px; min-height:32px; }
+html.app-design .asset-card-tools button { background:var(--surface); border-color:var(--border); }
+html.app-design .asset-card-description button[type=submit] { background:var(--accent); color:var(--on-accent); }
+html.app-design .asset-floating-panel textarea { background:var(--surface); color:var(--ink); border-color:var(--border); }
+html.app-design .asset-card-prompt { background:var(--surface-soft); border-color:var(--border); }
+html.app-design :is(.asset-card-prompt p,.asset-card-prompt footer,.asset-card-status,.asset-card-description > div > span) { color:var(--muted); font-size:12px; }
+html.app-design .asset-card-description { font-size:13px; }
+html.app-design .asset-floating-panel textarea { font-size:13px; border-radius:10px; }
+html.app-design .asset-card-tags span { color:var(--ink); background:var(--accent-soft); border:0; border-radius:999px; font-size:12px; padding:4px 9px; }
+html.app-design .asset-card-preview-label { color:var(--ink); background:var(--surface); font-size:10px; }
+html.app-design .asset-card-error { color:var(--danger); background:var(--ui-danger-soft); font-size:12px; }
+html.app-design .asset-floating-panel button:focus-visible,
+html.app-design .asset-floating-panel textarea:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+html.app-design .native-card-empty { background:var(--surface); color:var(--muted); }
+html.app-design .app-navigation { flex-shrink:0; width:70px; display:flex; flex-direction:column; align-items:center; padding:20px 10px 14px; background:var(--canvas); z-index:40; }
+html.app-design .app-navigation .rail-brand { width:35px; height:35px; display:grid; place-items:center; margin-bottom:45px; border-radius:12px; background:var(--surface-soft); color:var(--ink); }
+html.app-design .app-navigation .rail-brand .brand-symbol { border:0; background:transparent; box-shadow:none; }
+html.app-design .app-navigation nav { display:flex; flex-direction:column; gap:18px; }
+html.app-design .app-navigation .rail-bottom { margin-top:auto; display:flex; flex-direction:column; gap:8px; position:relative; }
+html.app-design .app-navigation :is(button,.rail-link) { position:relative; width:46px; height:46px; min-height:46px; padding:10px; display:grid; place-items:center; border:0; border-radius:15px; color:var(--muted); background:transparent; box-shadow:none; }
+html.app-design .app-navigation :is(button,.rail-link).active { background:var(--accent-soft); color:var(--ink); }
+html.app-design .app-navigation svg { width:22px; height:22px; }
+html.app-design .rail-tooltip { position:absolute; left:52px; top:8px; padding:6px 10px; background:var(--surface); color:var(--ink); border-radius:8px; font-size:12px; white-space:nowrap; pointer-events:none; visibility:hidden; opacity:0; }
+html.app-design .app-navigation :is(button,.rail-link):hover .rail-tooltip,
+html.app-design .app-navigation :is(button,.rail-link):focus-visible .rail-tooltip { visibility:visible; opacity:1; }
+html.app-design .app-navigation :is(button,a):focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+html.app-design .rail-global-menu { position:relative; }
+html.app-design .rail-global-popover { position:fixed; width:300px; max-height:min(520px,75vh); overflow:auto; z-index:200; padding:8px; background:var(--popover-glass); color:var(--ink); backdrop-filter:blur(24px) saturate(1.02); border:0; border-radius:22px; box-shadow:var(--glass-shadow); }
+html.app-design .rail-global-popover :is(button,a) { width:100%; height:auto; min-height:36px; display:flex; justify-content:flex-start; align-items:center; padding:8px 14px; border:0; background:transparent; color:var(--ink); border-radius:10px; font:13px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif; }
+html.app-design .rail-global-popover :is(button,a):hover { background:var(--surface-soft); }
+html.app-design .rail-global-popover :is(button,a):focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+html.app-design .rail-global-popover svg { width:16px; height:16px; }
+html.app-design .rail-global-popover a[aria-current=page] { background:var(--accent-soft); color:var(--ink); }
+html.app-design .workspace-shell[data-native-mac=true] .app-navigation { padding-top:52px; -webkit-app-region:drag; }
+html.app-design .workspace-shell[data-native-mac=true] .app-navigation :is(button,a) { -webkit-app-region:no-drag; }
+@media(max-height:760px) {
+  html.app-design .app-navigation nav { gap:10px; }
+  html.app-design .app-navigation .rail-brand { margin-bottom:24px; }
+  html.app-design .app-navigation .rail-bottom { gap:4px; }
+}
+@media(max-width:1100px) {
+  html.app-design .preferences-layout { grid-template-columns:180px minmax(0,1fr); gap:20px; }
+  html.app-design .ui-tool-page .ui-stat-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:720px) {
+  html.app-design .preferences-layout { grid-template-columns:1fr; }
+  html.app-design .ui-tool-page .ui-stat-grid { grid-template-columns:1fr; }
+}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  html.app-design { --control-glass:var(--surface); --popover-glass:var(--surface); --capsule-glass:var(--surface); --glass-blur:none; }
+  html.app-design :is(.rail-global-popover,.ui-sheet,.ui-sheet-backdrop,.preferences-savebar,.ai-section-tabs,.asset-floating-panel) { background:var(--surface); backdrop-filter:none!important; -webkit-backdrop-filter:none!important; }
+  html.app-design .gallery-design :is(.glass,.floating-navigation button,.library-manager,.tag-suggestions,.organization-modal,.ui-sheet,.ui-card,.library-manager .ui-button) { backdrop-filter:none!important; -webkit-backdrop-filter:none!important; }
+  html.app-design .gallery-design :is(.floating-navigation button,.library-manager,.tag-suggestions,.organization-modal,.gallery-notice,.ui-sheet,.ui-card) { background:var(--surface); }
+  html.app-design .gallery-design .library-manager .ui-button:not(.ui-button-primary) { background:var(--surface); }
+  html.app-design .gallery-design .focus-mode::backdrop { backdrop-filter:none!important; -webkit-backdrop-filter:none!important; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html.app-design *,html.app-design *::before,html.app-design *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+}

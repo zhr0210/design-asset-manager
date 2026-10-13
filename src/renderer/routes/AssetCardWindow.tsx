@@ -6,6 +6,7 @@ import { completeDescriptionDraft } from '../../shared/workflows/asset-descripti
 import VisualAiPanel from '../components/asset/VisualAiPanel'
 import AssetCardPanel from '../components/asset/AssetCardPanel'
 import type { AssetCardAction, AssetCardApi, AssetCardSnapshot, AssetDescriptionDraft } from '../../shared/contracts/asset-card.contract'
+import '../stores/ui.store'
 
 const messages = {
   DESCRIPTION_CONFLICT: '描述已在其他窗口变化。请取消编辑以载入最新内容，再重试。',
