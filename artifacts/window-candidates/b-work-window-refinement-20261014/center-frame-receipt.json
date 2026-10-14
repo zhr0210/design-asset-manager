@@ -1,0 +1,57 @@
+{
+  "scope": "Continuous frames include only the designated public native window and owned opaque blue backdrop; actual-display snapshots preflight foreign foreground and exclude tool cursor.",
+  "requestedFPS": 60,
+  "medianActualFrameIntervalSeconds": 0.033333375002257526,
+  "selectedFrames": [
+    {
+      "relativeSampleMs": 0.0,
+      "epochMs": 1791961327334.437,
+      "file": "frame-0215.png",
+      "presentationSeconds": 541623.53849075
+    },
+    {
+      "relativeSampleMs": 116.7,
+      "epochMs": 1791961327443.9658,
+      "file": "frame-0218.png",
+      "presentationSeconds": 541623.655157416
+    },
+    {
+      "relativeSampleMs": 183.3,
+      "epochMs": 1791961327506.949,
+      "file": "frame-0220.png",
+      "presentationSeconds": 541623.721824083
+    },
+    {
+      "relativeSampleMs": 266.7,
+      "epochMs": 1791961327574.372,
+      "file": "frame-0222.png",
+      "presentationSeconds": 541623.805157375
+    },
+    {
+      "relativeSampleMs": 350.0,
+      "epochMs": 1791961327641.38,
+      "file": "frame-0224.png",
+      "presentationSeconds": 541623.888490708
+    },
+    {
+      "relativeSampleMs": 416.7,
+      "epochMs": 1791961327718.3372,
+      "file": "frame-0226.png",
+      "presentationSeconds": 541623.955157375
+    },
+    {
+      "relativeSampleMs": 516.7,
+      "epochMs": 1791961327828.974,
+      "file": "frame-0229.png",
+      "presentationSeconds": 541624.055157375
+    },
+    {
+      "relativeSampleMs": 616.7,
+      "epochMs": 1791961327937.427,
+      "file": "frame-0232.png",
+      "presentationSeconds": 541624.155157416
+    }
+  ],
+  "limitation": "Approximately30fps display stream with pipeline lag. Receipt callback epoch is not frame-exposure time and cannot establish exact input latency or60fps quality. Exact approved phases are supported separately by native presentation opacity.",
+  "timebase": "Relative stream presentation timestamp from first visible foreground change; separate from native/input epoch time"
+}

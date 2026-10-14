@@ -66,6 +66,7 @@ final class WorkShelfWindow: NSPanel,NSDraggingDestination {
     func performDragOperation(_ sender:NSDraggingInfo)->Bool { shelf?.receive(sender.draggingPasteboard) ?? false }
     override func performKeyEquivalent(with event:NSEvent)->Bool {
         if event.modifierFlags.contains(.command),!(firstResponder is NSTextView) {
+            if shelf?.expanded==true && (shelf?.expandedForeground.visibleOpacity ?? 0)<=0.01{return true}
             if event.charactersIgnoringModifiers?.lowercased()=="v" {shelf?.action("paste");return true}
             if event.charactersIgnoringModifiers?.lowercased()=="a" {shelf?.selectAll();return true}
         }
@@ -152,6 +153,7 @@ final class WorkShelfCard: NSView {
     let picture = WorkShelfRoundedImage()
     let caption = NSTextField(labelWithString: "")
     let dimensions = NSTextField(labelWithString: "")
+    private let selectionBackground=CALayer()
     override var isFlipped: Bool { true }
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
     // Thumbnail/labels are presentation; the card owns click, selection and
@@ -159,7 +161,9 @@ final class WorkShelfCard: NSView {
     // previously edited text view as the keyboard responder.
     override func hitTest(_ point:NSPoint)->NSView? { super.hitTest(point)==nil ? nil : self }
     override init(frame: NSRect) {
-        super.init(frame:frame); wantsLayer = true; layer?.cornerRadius = 12
+        super.init(frame:frame); wantsLayer = true
+        selectionBackground.name="selection-background";selectionBackground.cornerRadius=12;selectionBackground.opacity=0
+        layer?.insertSublayer(selectionBackground,at:0);updateSelectionAppearance()
         picture.imageScaling = .scaleProportionallyUpOrDown
         caption.alignment = .center; caption.lineBreakMode = .byTruncatingMiddle
         dimensions.alignment = .center; dimensions.font = .systemFont(ofSize:11); dimensions.textColor = .secondaryLabelColor
@@ -170,6 +174,7 @@ final class WorkShelfCard: NSView {
     required init?(coder:NSCoder) { fatalError("programmatic") }
     override func layout() {
         super.layout()
+        CATransaction.begin();CATransaction.setDisableActions(true);selectionBackground.frame=bounds;CATransaction.commit()
         picture.frame = NSRect(x:12,y:10,width:bounds.width-24,height:max(20,bounds.height-65))
         caption.frame = NSRect(x:8,y:bounds.height-45,width:bounds.width-16,height:20)
         dimensions.frame = NSRect(x:8,y:bounds.height-24,width:bounds.width-16,height:18)
@@ -183,13 +188,30 @@ final class WorkShelfCard: NSView {
     }
     private func updateSelectionAppearance() {
         effectiveAppearance.performAsCurrentDrawingAppearance {
-            layer?.backgroundColor = visuallySelected ? NSColor.unemphasizedSelectedContentBackgroundColor.cgColor : NSColor.clear.cgColor
+            CATransaction.begin();CATransaction.setDisableActions(true)
+            selectionBackground.backgroundColor=NSColor.unemphasizedSelectedContentBackgroundColor.cgColor
+            CATransaction.commit()
         }
     }
     func update(_ item:WorkShelfItem, selected:Bool) {
+        let reused=assetId != item.id,changed=visuallySelected != selected
         assetId = item.id; picture.image = item.image ?? NSImage(systemSymbolName: item.available ? "photo" : "exclamationmark.triangle",accessibilityDescription:nil)
         caption.stringValue = item.name; dimensions.stringValue = item.available ? item.dimensions : "引用故障，请检查资料库"
         visuallySelected=selected;updateSelectionAppearance()
+        if reused || changed {
+            // Before the first render there is no presentation layer yet. A
+            // replaced, uncommitted fade still starts at its original visual
+            // value, rather than a model target which was never displayed.
+            let uncommitted=(selectionBackground.animation(forKey:"selection-opacity") as? CABasicAnimation)?.fromValue as? Float
+            let from=selectionBackground.presentation()?.opacity ?? uncommitted ?? selectionBackground.opacity,target:Float=selected ? 1:0
+            selectionBackground.removeAnimation(forKey:"selection-opacity")
+            CATransaction.begin();CATransaction.setDisableActions(true);selectionBackground.opacity=target;CATransaction.commit()
+            if !reused && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
+                let animation=CABasicAnimation(keyPath:"opacity");animation.fromValue=from;animation.toValue=target
+                animation.duration=0.16;animation.timingFunction=CAMediaTimingFunction(name:.easeInEaseOut)
+                selectionBackground.add(animation,forKey:"selection-opacity")
+            }
+        }
         setAccessibilityLabel("\(item.name)，\(dimensions.stringValue)"); setAccessibilityValue(selected ? "已选择" : "未选择")
     }
     override func accessibilityPerformPress() -> Bool { shelf?.select(assetId, toggle:NSEvent.modifierFlags.contains(.shift));window?.makeFirstResponder(shelf?.collection); return true }
@@ -240,6 +262,8 @@ final class WorkShelfStack: NSView {
 final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource,NSCollectionViewDelegate,NSTextViewDelegate,NSTextFieldDelegate,NSDraggingSource,NSFilePromiseProviderDelegate,NSPopoverDelegate {
     let window:WorkShelfWindow
     let root=WorkShelfRoot()
+    let topForeground=WorkShelfForeground(),compactForeground=WorkShelfForeground(),expandedForeground=WorkShelfForeground(),statusForeground=WorkShelfForeground()
+    lazy var presentation=WorkShelfPresentationController(self)
     let collection=WorkShelfCollection()
     let scroll=WorkShelfDropScroll()
     let stack=WorkShelfStack()
@@ -264,6 +288,7 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     var expanded=false
     var docked=false
     var normal:NSRect?
+    var expansionAnchor:WorkShelfExpansionAnchor?
     var assetDragging=false
     lazy var interaction=WorkShelfInteractionController(self)
     var moving=false
@@ -292,21 +317,26 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     var pendingInput=0
     init(root inputDirectory:URL) {
         inputRoot=inputDirectory
-        window=WorkShelfWindow(contentRect:NSRect(x:100,y:100,width:220,height:240),styleMask:[.borderless,.nonactivatingPanel],backing:.buffered,defer:false)
+        window=WorkShelfWindow(contentRect:NSRect(x:100,y:100,width:220,height:240),styleMask:[.titled,.fullSizeContentView,.nonactivatingPanel],backing:.buffered,defer:false)
         super.init()
         window.shelf=self;window.hidesOnDeactivate=false;window.becomesKeyOnlyIfNeeded=false
         window.isMovableByWindowBackground=false
+        window.titleVisibility = .hidden;window.titlebarAppearsTransparent=true
+        for kind in [NSWindow.ButtonType.closeButton,.miniaturizeButton,.zoomButton]{window.standardWindowButton(kind)?.isHidden=true}
+        // Full-size content uses the system's rounded window frame, including
+        // key appearance. No private corner setter or painted masking border.
+        window.setFrame(NSRect(x:100,y:100,width:220,height:240),display:false)
         window.registerForDraggedTypes(workShelfDropTypes)
         window.isOpaque=false;window.backgroundColor = .clear;window.hasShadow=true;window.isReleasedWhenClosed=false
         window.level = .floating;window.collectionBehavior=[.canJoinAllSpaces,.managed,.participatesInCycle];window.delegate=self
         root.frame=NSRect(x:0,y:0,width:220,height:240);root.autoresizingMask=[.width,.height];root.shelf=self
         if #available(macOS 26.0, *) {
             let glass=NSGlassEffectView(frame:root.bounds)
-            glass.cornerRadius=24;glass.autoresizingMask=[.width,.height];glass.contentView=root;window.contentView=glass
+            glass.cornerRadius=16;glass.autoresizingMask=[.width,.height];glass.contentView=root;window.contentView=glass
         } else {
             let background=NSVisualEffectView(frame:root.bounds)
             background.material = .underWindowBackground;background.blendingMode = .behindWindow;background.state = .active
-            background.wantsLayer=true;background.layer?.cornerRadius=24;background.layer?.masksToBounds=true
+            background.wantsLayer=true;background.layer?.cornerRadius=10;background.layer?.masksToBounds=true
             background.autoresizingMask=[.width,.height];background.addSubview(root);window.contentView=background
         }
         root.setAccessibilityLabel("原生工作集架子");root.registerForDraggedTypes(workShelfDropTypes)
@@ -316,8 +346,8 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
         // item classes afterwards; pre-layout registration belongs to legacy mode.
         collection.register(WorkShelfCollectionItem.self,forItemWithIdentifier:NSUserInterfaceItemIdentifier("reference"));collection.dataSource=self;collection.delegate=self
         scroll.shelf=self;let clip=WorkShelfDropClip();clip.shelf=self;scroll.contentView=clip;scroll.documentView=collection;scroll.hasVerticalScroller=true;scroll.drawsBackground=false
-        note.shelf=self;note.isRichText=false;note.font = .systemFont(ofSize:13);note.backgroundColor = .clear;note.delegate=self;note.setAccessibilityLabel("工作备注")
-        noteScroll.documentView=note;noteScroll.hasVerticalScroller=true;noteScroll.drawsBackground=false
+        note.shelf=self;note.isRichText=false;note.font = .systemFont(ofSize:13);note.textContainerInset=NSSize(width:4,height:4);note.backgroundColor = .clear;note.delegate=self;note.setAccessibilityLabel("工作备注")
+        noteScroll.documentView=note;noteScroll.hasVerticalScroller=true;noteScroll.autohidesScrollers=true;noteScroll.drawsBackground=false
         addColorButton.bezelStyle = .rounded;addColorButton.setAccessibilityLabel("添加工作颜色");addColorButton.target=self;addColorButton.action=#selector(openColorPicker)
         heading.alignment = .center;heading.font = .systemFont(ofSize:13,weight:.semibold)
         errorField.textColor = .systemRed;errorField.font = .systemFont(ofSize:11);errorField.lineBreakMode = .byTruncatingTail
@@ -327,8 +357,12 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
         capsule.target=self;capsule.action=#selector(toggleExpanded);capsule.bezelStyle = .rounded;capsule.setAccessibilityLabel("展开工作集")
         retry.target=self;retry.action=#selector(retrySave);retry.isHidden=true
         stack.shelf=self
-        swatchScroll.shelf=self;swatchScroll.documentView=swatchDocument;swatchScroll.hasHorizontalScroller=true;swatchScroll.scrollerStyle = .overlay;swatchScroll.drawsBackground=false
-        for view in [scroll,stack,back,dropdown,capsule,heading,noteScroll,addColorButton,errorField,retry,swatchScroll] { root.addSubview(view) }
+        swatchScroll.shelf=self;swatchScroll.documentView=swatchDocument;swatchScroll.hasHorizontalScroller=true;swatchScroll.autohidesScrollers=true;swatchScroll.scrollerStyle = .overlay;swatchScroll.drawsBackground=false
+        for plane in [topForeground,compactForeground,expandedForeground,statusForeground]{plane.wantsLayer=true;root.addSubview(plane)}
+        for view in [back,dropdown,heading]{topForeground.addSubview(view)}
+        for view in [stack,capsule]{compactForeground.addSubview(view)}
+        for view in [scroll,noteScroll,addColorButton,swatchScroll]{expandedForeground.addSubview(view)}
+        for view in [errorField,retry]{statusForeground.addSubview(view)}
         layout()
     }
     func installMenu() {
@@ -340,7 +374,10 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     }
     func layout() {
         for view in root.subviews {workShelfUseRootDropDestination(view)}
-        let b=root.bounds,small=false
+        let b=expanded ? NSRect(origin:.zero,size:presentation.layoutSize ?? animationTarget?.size ?? interaction.interruptedPresentationSize ?? root.bounds.size):root.bounds,small=false
+        topForeground.frame=root.bounds;statusForeground.frame=root.bounds
+        compactForeground.frame=presentation.planeFrame(size:NSSize(width:220,height:240));compactForeground.isHidden=expanded
+        expandedForeground.frame=presentation.planeFrame(size:b.size);expandedForeground.isHidden = !expanded
         for v in [scroll,stack,back,dropdown,capsule,heading,noteScroll,addColorButton] { v.isHidden=small }
         errorField.isHidden=small || errorField.stringValue.isEmpty;retry.isHidden=small || errorField.stringValue.isEmpty
         for v in swatches { v.isHidden=small || !expanded }
@@ -353,15 +390,17 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             if resizable {window.styleMask.insert(.resizable)}else{window.styleMask.remove(.resizable)}
             if visible {window.orderFrontRegardless()}
         }
+        for kind in [NSWindow.ButtonType.closeButton,.miniaturizeButton,.zoomButton]{window.standardWindowButton(kind)?.isHidden=true}
 
         back.image=NSImage(systemSymbolName:expanded ? "chevron.left":"xmark",accessibilityDescription:expanded ? "收起工作集":"关闭工作集架子")
         back.setAccessibilityLabel(expanded ? "收起工作集" : "关闭工作集架子")
-        back.frame=NSRect(x:12,y:10,width:32,height:32);dropdown.frame=NSRect(x:b.width-44,y:10,width:32,height:32)
-        heading.frame=NSRect(x:48,y:15,width:b.width-96,height:22);heading.stringValue=expanded ? "\(name) · \(selected.isEmpty ? "\(items.count)份参考" : "已选\(selected.count)份")" : name
+        let header=topForeground.bounds
+        back.frame=NSRect(x:12,y:10,width:32,height:32);dropdown.frame=NSRect(x:header.width-44,y:10,width:32,height:32)
+        heading.frame=NSRect(x:48,y:15,width:header.width-96,height:22);heading.stringValue=expanded ? "\(name) · \(selected.isEmpty ? "\(items.count)份参考" : "已选\(selected.count)份")" : name
         heading.isHidden = !expanded
-        capsule.title="\(name) ›";capsule.frame=NSRect(x:28,y:b.height-45,width:b.width-56,height:30)
+        capsule.title="\(name) ›";capsule.frame=NSRect(x:28,y:195,width:164,height:30)
         capsule.cell?.lineBreakMode = .byTruncatingTail;capsule.toolTip=name
-        stack.frame=NSRect(x:12,y:50,width:b.width-24,height:max(40,b.height-105));stack.isHidden=expanded
+        stack.frame=NSRect(x:12,y:50,width:196,height:135);stack.isHidden=expanded
         scroll.isHidden = !expanded;capsule.isHidden=expanded;noteScroll.isHidden = !expanded;addColorButton.isHidden = !expanded
         if expanded {
             scroll.frame=NSRect(x:14,y:54,width:b.width-28,height:max(100,b.height-190))
@@ -373,12 +412,14 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             swatchDocument.frame=NSRect(x:0,y:0,width:max(swatchScroll.contentSize.width,CGFloat(swatches.count)*30),height:26)
             for (i,button) in swatches.enumerated() { button.frame=NSRect(x:CGFloat(i)*30,y:0,width:26,height:24);button.isHidden=false }
         }
-        errorField.frame=NSRect(x:18,y:b.height-21,width:b.width-125,height:18);errorField.isHidden=errorField.stringValue.isEmpty
-        retry.frame=NSRect(x:b.width-108,y:b.height-24,width:94,height:22)
+        let status=statusForeground.bounds
+        errorField.frame=NSRect(x:18,y:status.height-21,width:status.width-125,height:18);errorField.isHidden=errorField.stringValue.isEmpty
+        retry.frame=NSRect(x:status.width-108,y:status.height-24,width:94,height:22)
         for button in contentButtons {
             button.isEnabled = !frozen && !dockFeedbackVisible && !docked
             if dockButtonsHidden{button.isHidden=true}
         }
+        presentation.positionSnapshot()
     }
     func collectionView(_ collectionView:NSCollectionView,numberOfItemsInSection section:Int)->Int { items.count }
     func collectionView(_ collectionView:NSCollectionView,validateDrop draggingInfo:NSDraggingInfo,proposedIndexPath proposedDropIndexPath:AutoreleasingUnsafeMutablePointer<NSIndexPath>,dropOperation proposedDropOperation:UnsafeMutablePointer<NSCollectionView.DropOperation>)->NSDragOperation { .copy }
@@ -405,6 +446,7 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     var targetSummary:String{"\(expanded && !selected.isEmpty ? "所选":"全部") \(targets().count) 项"}
     func key(_ event:NSEvent)->Bool {
         if frozen{return true}
+        if expanded && expandedForeground.visibleOpacity<=0.01 && event.keyCode != 53{return true}
         if dockFeedbackVisible || docked {
             if event.keyCode==36 || event.keyCode==49{interaction.clickedRestore()}
             return true
@@ -426,11 +468,25 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
     @objc func closeRequested() { emit(["event":"closeRequested"]) }
     @objc func toggleExpanded() {
         configuringFrame=true;defer{configuringFrame=false}
+        guard !frozen,!retired,!moving,!docked else{return}
         dismissColorPicker();tools?.close();interaction.interrupt();interaction.feedback(false)
-        expanded.toggle();let old=window.frame,screen=bestScreen(old).visibleFrame
-        let size=expanded ? NSSize(width:min(640,screen.width),height:min(520,screen.height)) : NSSize(width:220,height:240)
-        let rect=NSRect(x:max(screen.minX,min(old.minX,screen.maxX-size.width)),y:max(screen.minY,min(old.maxY-size.height,screen.maxY-size.height)),width:size.width,height:size.height)
-        layout();animate(rect);window.makeFirstResponder(expanded ? collection : root)
+        let old=window.frame,screen=bestScreen(old).visibleFrame
+        let rect:NSRect
+        let horizontal:WorkShelfExpansionAnchor.Horizontal
+        if !expanded {
+            expansionAnchor=WorkShelfExpansionAnchor(compact:expansionAnchor?.compact ?? old,screen:screen)
+            horizontal=expansionAnchor!.horizontal
+            rect=expansionAnchor!.expanded
+        } else {
+            horizontal=expansionAnchor?.horizontal ?? .center
+            let compact=expansionAnchor?.compact ?? NSRect(x:old.midX-110,y:old.midY-120,width:220,height:240)
+            rect=WorkShelfExpansionAnchor.clamp(compact,to:screen)
+        }
+        presentation.prepare(horizontal:horizontal)
+        expanded.toggle()
+        presentation.start(target:rect);animate(rect,duration:expanded ? 0.18:0.23)
+        window.makeFirstResponder(root)
+        if !presentation.active && expanded{window.makeFirstResponder(collection)}
     }
     func bestScreen(_ f:NSRect)->NSScreen { NSScreen.screens.max { let a=$0.visibleFrame.intersection(f),b=$1.visibleFrame.intersection(f);return max(0,a.width)*max(0,a.height)<max(0,b.width)*max(0,b.height) } ?? NSScreen.main! }
     func motion(_ phase:String,edge:String?=nil) {
@@ -458,6 +514,12 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
         emit(out)
     }
     func interruptTransition(){interaction.interrupt()}
+    func suspendPresentation() {
+        let target=presentation.active ? (animationTarget ?? (expanded ? expansionAnchor?.expanded:expansionAnchor?.compact)):nil
+        interaction.interrupt()
+        if let target{configuringFrame=true;window.setFrame(target,display:window.isVisible);configuringFrame=false}
+        presentation.finishImmediately();geometry()
+    }
     func animate(_ rect:NSRect,duration:Double=0.2,docking:Bool=false){interaction.animate(rect,duration:duration,docking:docking)}
     func visibility() { emit(["event":"visibility","visible":window.isVisible]) }
     func action(_ kind:String,_ payload:[String:Any]=[:],presentsReply:Bool=false,completion:(([String:Any])->Void)?=nil) {
@@ -602,10 +664,10 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             guard let value=command["value"] as? Bool,let id=command["requestId"] as? String else{throw CocoaError(.coderInvalidValue)}
             if value && (pendingInput>0 || note.hasMarkedText() || (window.firstResponder as? NSTextView)?.hasMarkedText()==true){emit(["event":"frozen","requestId":id,"ok":false]);return}
             frozen=value;note.isEditable = !value;addColorButton.isEnabled = !value;back.isEnabled = !value;dropdown.isEnabled = !value;capsule.isEnabled = !value
-            if value{dismissColorPicker();tools?.close();interaction.interrupt();moving=false;dragStartFrame=nil;window.makeFirstResponder(root)}
+            if value{dismissColorPicker();tools?.close();suspendPresentation();moving=false;dragStartFrame=nil;window.makeFirstResponder(root)}
             layout()
             emit(["event":"frozen","requestId":id,"ok":true])
-        case "hide":dismissColorPicker();tools?.close();window.orderOut(nil);visibility()
+        case "hide":dismissColorPicker();tools?.close();suspendPresentation();window.orderOut(nil);visibility()
         case "pin":window.level = command["pinned"] as? Bool == false ? .normal : .floating
         case "destroy":retire();NSApp.terminate(nil)
         case "bounds":
@@ -620,8 +682,13 @@ final class NativeWorkShelf:NSObject,NSWindowDelegate,NSCollectionViewDataSource
             let nextDock=command["docked"] as? Bool ?? false,wasDocked=docked
             if nextDock && (expanded || command["presentation"] as? String=="expanded"){interaction.acknowledgement(version,"failed","expanded-not-dockable");return}
             if let mode=command["presentation"] as? String{expanded=mode=="expanded"}
+            expansionAnchor=nil
+            if expanded,let a=command["expansion"] as? [String:Any],let edge=a["edge"] as? String,let horizontal=WorkShelfExpansionAnchor.Horizontal(rawValue:edge),let c=a["compactBounds"] as? [String:Double],let cx=c["x"],let cy=c["y"],c["width"]==220,c["height"]==240,[cx,cy].allSatisfy({$0.isFinite && abs($0)<=100000}){
+                expansionAnchor=WorkShelfExpansionAnchor(compact:NSRect(x:cx,y:top-cy-240,width:220,height:240),expanded:target,horizontal:horizontal)
+            }
             if let n=command["normal"] as? [String:Double],let nx=n["x"],let ny=n["y"],let nw=n["width"],let nh=n["height"]{normal=NSRect(x:nx,y:top-ny-nh,width:nw,height:nh)}
             let duration=nextDock ? shelfDockDuration(command["deltaX"] as? Double ?? 0):wasDocked ? 0.2:0.2
+            presentation.finishImmediately()
             interaction.animate(target,duration:duration,docking:nextDock,id:version)
         case "reply":
             guard let id=command["requestId"] as? String else{return}

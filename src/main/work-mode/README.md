@@ -2,11 +2,11 @@
 
 视觉规范见[DESIGN](../../../DESIGN.md)，用户状态与手势契约见[悬浮工作窗交互规格](../../../docs/design/WORK-WINDOW-INTERACTIONS.md)。呈现边界按[ADR0493](../../../docs/adr/0493-dropover-style-interaction-allows-platform-native-implementation.md)：AppKit负责整个悬浮窗，React保留主工作台与独立大预览；这是设计与实现边界，不是完成资格。
 
-B由Electron Main工作窗口控制器、原生适配器与Swift AppKit子进程组成。NativeWorkShelf持有NSPanel和内容控件，WorkShelfInteraction集中处理手势、边缘候选、过渡与实际frame接管。标题/背景使用统一的AppKit输入路径，素材拖出、控件和文本输入独立；不用全局按键轮询或无来源重复移动作为兜底。
+B由Electron Main工作窗口控制器、原生适配器与Swift AppKit子进程组成。NativeWorkShelf持有NSPanel和内容控件，WorkShelfInteraction集中处理手势、边缘候选、过渡与实际frame接管；WorkShelfPresentation独立拥有前景淡化、不可交互的临时快照和可取消延迟，业务选择与草稿不归动画回调管理。标题/背景使用统一的AppKit输入路径，素材拖出、控件和文本输入独立；不用全局按键轮询或无来源重复移动作为兜底。
 
 唯一Host持有Library、工作集、成员、修订、文件与提交权威。私有桥传受限展示快照/意图及gestureId、motionId等关联信息，返回完成/取消/失败；configureDock等待实际有效终态，迟到回执不得覆盖新操作。会话、成员、撤权与实际进程退出检查保留，未确认退出不释放窗口/文件资源。
 
-布局契约区分presentation与edge-slide停靠。旧布局转换前保留原文；旧紧凑胶囊转换为比例停靠，旧展开停靠恢复可见展开态，不改变工作集内容。运动记录含版本、关联标识、原生事件时间、请求/实际位置、判定及终态；有界缓冲、异步写入，拖动采样可合并，开始/松手/拒绝/中断/完成必须保留。诊断失败不得阻塞交互。
+布局契约区分presentation与edge-slide停靠。展开态可附带expansion（center/left/right与220×240 compactBounds）：仅保存位置关系，不授予文件或执行能力；严格校验数值、模式和尺寸，与实际展开geometry一并持久化，并在原生bounds恢复。紧凑/停靠不得携带旧展开关系。旧布局转换前保留原文；旧紧凑胶囊转换为比例停靠，旧展开停靠恢复可见展开态，不改变工作集内容。运动记录含版本、关联标识、原生事件时间、请求/实际位置、判定及终态；有界缓冲、异步写入，拖动采样可合并，开始/松手/拒绝/中断/完成必须保留。诊断失败不得阻塞交互。
 
 背景材质与停靠覆盖层是独立实现；Liquid Glass、按钮样式及220×240布局的设计目标不能由现有NSVisualEffectView或旧构建资格推定已实现。实际身份、指针输入、模糊及设备缺口见[CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)和[原生候选说明](../../../native/shelf-candidates/README.md)。
 

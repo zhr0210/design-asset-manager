@@ -12,6 +12,7 @@ const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-motion-
 await sharp({create:{width:80,height:90,channels:3,background:'#195af0'}}).png().toFile(png)
 const host=createActiveLibraryHost(createProductionActiveLibraryHostDependencies({selectLibraryDirectory:async()=>({kind:'selected',directory:library}),selectLocalFiles:async()=>({kind:'selected',files:[{filePath:png}]})}))
 let nativeIntent:((intent:import('../src/main/work-mode/native-shelf-work-window').NativeShelfIntent)=>void)|undefined
+let changedGeometry:(()=>void)|undefined
 let geometry:WorkWindowLayout,gate:(()=>void)|undefined,holding=false,fail=false,destroyed=false
 const owner={},device='device:motion-host',port:WorkWindowPort={edgeDock:true,bindNativeIntents(listener){nativeIntent=listener},publish(){},show(){},hide(){},destroy(){destroyed=true},setPinned(p){geometry.pinned=p},bounds:()=>structuredClone(geometry),setBounds:b=>{geometry=b},visible:()=>!destroyed,isTrusted:e=>e===owner,configureDock:async target=>{
  if(holding)await new Promise<void>(resolve=>{gate=resolve})
@@ -20,7 +21,7 @@ const owner={},device='device:motion-host',port:WorkWindowPort={edgeDock:true,bi
 }}
 let saveFails=false
 const controllerHost={...host,writeWorkLayout:async(...args:Parameters<typeof host.writeWorkLayout>)=>{if(saveFails)throw Object.assign(Error('injected layout disk failure'),{code:'LAYOUT_SAVE_FAILED'});return host.writeWorkLayout(...args)}}
-const controller=createWorkWindowController({host:controllerHost,deviceId:device,areas:()=>areas,theme:()=> 'light',changed(){},hideMain(){},locate(){},beforeWorkspaceClose:async()=>()=>{},createWindow:input=>{destroyed=false;geometry=nativeShelfLayout(input.layout,areas);return port}})
+const controller=createWorkWindowController({host:controllerHost,deviceId:device,areas:()=>areas,theme:()=> 'light',changed(){},hideMain(){},locate(){},beforeWorkspaceClose:async()=>()=>{},createWindow:input=>{changedGeometry=input.changed;destroyed=false;geometry=nativeShelfLayout(input.layout,areas);return port}})
 try{
  const create=await host.prepareCreate();if(create.kind!=='planned')throw Error('CREATE');await host.confirmCreate(create.plan.receipt)
  const add=await host.prepareAddAssets();if(add.kind!=='planned')throw Error('ADD');await host.dispatchAddAssets(add.plan.receipt)
@@ -43,12 +44,20 @@ try{
  const failedSave=await controller.act(owner,{token,kind:'undock'});assert.equal(failedSave.success,false);assert.deepEqual((await host.readWorkSets(scope,device)).sets[0].layout,settled,'failed disk commit retains last valid layout');assert.equal(geometry!.dock,undefined,'display stays at successful physical completion');saveFails=false
  assert.equal((await controller.act(owner,{token,kind:'dock',edge:'left',gestureId:1})).success,false,'Renderer cannot forge native gesture fields')
  await controller.act(owner,{token,kind:'undock'});geometry={...geometry!,width:640,height:520,presentation:'expanded'}
+ geometry.expansion={edge:'left',compactBounds:{x:12,y:210,width:220,height:240}}
+ changedGeometry!();await new Promise(resolve=>setTimeout(resolve,350));await controller.windows(scope)
+ assert.deepEqual((await host.readWorkSets(scope,device)).sets[0].layout?.expansion,geometry.expansion,'Native actual expanded geometry and compact relation reach Host storage')
+ const anchored=structuredClone(geometry)
  const large=await controller.act(owner,{token,kind:'dock',edge:'left'});assert.equal(large.success,false);if(!large.success)assert.equal(large.code,'WORK_WINDOW_NOT_DOCKABLE')
- geometry={...geometry!,width:290,height:310,presentation:'compact'};await controller.act(owner,{token,kind:'dock',edge:'left'});await controller.drain();await host.close();await host.open()
+ geometry={...geometry!,expansion:undefined,width:290,height:310,presentation:'compact'};await controller.act(owner,{token,kind:'dock',edge:'left'});await controller.drain();await host.close();await host.open()
  const reopened=host.inspect(),s={libraryIdentity:reopened.identity!,generation:reopened.generation!},set=(await host.readWorkSets(s,device)).sets[0]
  assert.equal(set.layout?.dock?.style,'edge-slide');assert.equal(set.note,value.note);assert.deepEqual(set.colors,value.colors)
  assert.deepEqual((await host.readWorkMediaFile({...s,setId:id,assetId:asset.id})).bytes,await fs.readFile(png))
  const reopenWindow=await controller.open({...s,id});assert.equal(reopenWindow.success,true);if(!reopenWindow.success)throw Error(reopenWindow.error)
  holding=true;const revoked=controller.act(owner,{token:reopenWindow.value.token,kind:'undock'});for(let i=0;i<50&&!gate;i++)await new Promise(resolve=>setTimeout(resolve,5));assert.ok(gate);await host.close();gate!();holding=false;gate=undefined;assert.equal((await revoked).success,false,'revoked Host cannot commit late native completion');await controller.invalidate();await host.open();const renewed=host.inspect();assert.equal((await host.readWorkSets({libraryIdentity:renewed.identity!,generation:renewed.generation!},device)).sets[0].layout?.dock?.style,'edge-slide')
- console.log('PASS production temp SQLite: legacy normalization, actual native completion barrier, cancellation preserves last commit, forged native fields/expanded docking refuse, full held Host reopen retains compact dock and content. Controlled OS port; physical CU separately required.')
+ const finalScope={libraryIdentity:renewed.identity!,generation:renewed.generation!},finalCatalog=await host.readWorkSets(finalScope,device)
+ await host.writeWorkLayout({...finalScope,id,sessionToken:finalCatalog.sessionToken,layout:anchored},device);await host.close();await host.open()
+ const anchorReopen=host.inspect(),anchorScope={libraryIdentity:anchorReopen.identity!,generation:anchorReopen.generation!};assert.deepEqual((await host.readWorkSets(anchorScope,device)).sets[0].layout,anchored,'Expanded compact relation survives a real SQLite Host close/reopen')
+ const restoredAnchorWindow=await controller.open({...anchorScope,id});assert.equal(restoredAnchorWindow.success,true);if(!restoredAnchorWindow.success)throw Error(restoredAnchorWindow.error);assert.deepEqual(restoredAnchorWindow.value.geometry.expansion,anchored.expansion);assert.deepEqual(geometry.expansion,anchored.expansion,'Formal controller reopening restores the compact relation to the native port')
+ console.log('PASS production temp SQLite: legacy normalization, actual native completion barrier, cancellation preserves last commit, forged native fields/expanded docking refuse, full held Host reopen retains compact dock/content and expanded compact relation. Controlled OS port; physical CU separately required.')
 }finally{await controller.drain();await host.close();await fs.rm(root,{recursive:true,force:true})}

@@ -1,0 +1,115 @@
+{
+  "scope": "Public second-card blank selection background pixel, formal Shift select/deselect",
+  "stage": "Continuous frames include only the designated public native window and owned opaque blue backdrop; actual-display snapshots preflight foreign foreground and exclude tool cursor.",
+  "point": [
+    728,
+    328
+  ],
+  "changes": [
+    {
+      "epochMs": 1791962393512.5852,
+      "from": [
+        39,
+        83,
+        189
+      ],
+      "to": [
+        49,
+        84,
+        172
+      ]
+    },
+    {
+      "epochMs": 1791962393546.2441,
+      "from": [
+        49,
+        84,
+        172
+      ],
+      "to": [
+        59,
+        79,
+        134
+      ]
+    },
+    {
+      "epochMs": 1791962393581.655,
+      "from": [
+        59,
+        79,
+        134
+      ],
+      "to": [
+        67,
+        73,
+        94
+      ]
+    },
+    {
+      "epochMs": 1791962393615.352,
+      "from": [
+        67,
+        73,
+        94
+      ],
+      "to": [
+        70,
+        70,
+        72
+      ]
+    },
+    {
+      "epochMs": 1791962414842.21,
+      "from": [
+        70,
+        70,
+        70
+      ],
+      "to": [
+        67,
+        74,
+        90
+      ]
+    },
+    {
+      "epochMs": 1791962414879.572,
+      "from": [
+        67,
+        74,
+        90
+      ],
+      "to": [
+        56,
+        82,
+        150
+      ]
+    },
+    {
+      "epochMs": 1791962414918.658,
+      "from": [
+        56,
+        82,
+        150
+      ],
+      "to": [
+        48,
+        87,
+        181
+      ]
+    },
+    {
+      "epochMs": 1791962414964.663,
+      "from": [
+        48,
+        87,
+        181
+      ],
+      "to": [
+        47,
+        88,
+        191
+      ]
+    }
+  ],
+  "limitation": "Sampled gradual background changes; exact160ms contract additionally checked on production CALayer"
+}

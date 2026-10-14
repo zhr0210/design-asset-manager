@@ -35,7 +35,7 @@ export function insetShelfBounds(value:WorkWindowLayout,areas:readonly WorkArea[
 /** Normalize only the B presentation; other platform adapters retain legacy layouts. */
 export function nativeShelfLayout(saved:WorkWindowLayout,areas:readonly WorkArea[]):WorkWindowLayout {
  const compact=(value:WorkWindowLayout):WorkWindowLayout=>{
-  const {dock,...base}=value
+  const {dock,expansion:_expansion,...base}=value
   const normal={...base,...(dock?.normalBounds??{}),width:220,height:240,presentation:'compact' as const}
   return dock?dockWorkBounds(normal,dock.edge,areas,'edge-slide'):visibleWorkBounds(normal,areas)
  }

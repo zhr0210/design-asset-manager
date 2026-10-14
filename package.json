@@ -148,6 +148,7 @@
     "dist:mac": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dist",
     "postinstall": "electron-builder install-app-deps",
     "typecheck": "tsc --noEmit",
+    "test-native-work-shelf": "node scripts/run-native-work-shelf-tests.mjs",
     "build:shelf-candidates": "node scripts/build-shelf-candidates.mjs",
     "start:shelf-a": "node scripts/launch-window-candidate.mjs --candidate=a",
     "start:work-b": "node scripts/launch-window-candidate.mjs --candidate=b",

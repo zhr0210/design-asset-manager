@@ -1,0 +1,177 @@
+{
+  "commands": 251,
+  "exitZero": 230,
+  "failedOrTimedOut": 21,
+  "newFailingCommandNames": [],
+  "failures": [
+    {
+      "name": "test-doctor-ipc",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.21,
+      "log": "test-doctor-ipc.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-asset-library-keyboard",
+      "code": 1,
+      "timeout": false,
+      "seconds": 16.23,
+      "log": "test-asset-library-keyboard.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-app-ipc-registration",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.32,
+      "log": "test-app-ipc-registration.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-host-schema-maintenance",
+      "code": 1,
+      "timeout": false,
+      "seconds": 2.5,
+      "log": "test-host-schema-maintenance.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-visual-ai-download-integration",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.03,
+      "log": "test-visual-ai-download-integration.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-active-library-electron-e2e",
+      "code": 1,
+      "timeout": false,
+      "seconds": 35.32,
+      "log": "test-active-library-electron-e2e.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-external-connected-library-electron-e2e",
+      "code": 1,
+      "timeout": true,
+      "seconds": 300.11,
+      "log": "test-external-connected-library-electron-e2e.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-persistent-download-electron-e2e",
+      "code": 1,
+      "timeout": true,
+      "seconds": 300.09,
+      "log": "test-persistent-download-electron-e2e.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-intake-recovery-electron-e2e",
+      "code": 1,
+      "timeout": true,
+      "seconds": 300.1,
+      "log": "test-intake-recovery-electron-e2e.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-library-canvas-electron",
+      "code": 1,
+      "timeout": false,
+      "seconds": 34.91,
+      "log": "test-library-canvas-electron.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-gallery-parity",
+      "code": 1,
+      "timeout": false,
+      "seconds": 2.27,
+      "log": "test-gallery-parity.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-work-sets-electron",
+      "code": 1,
+      "timeout": false,
+      "seconds": 34.39,
+      "log": "test-work-sets-electron.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-local-dam-connection-view",
+      "code": 1,
+      "timeout": false,
+      "seconds": 60.95,
+      "log": "test-local-dam-connection-view.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-windows-codec-qualification",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.03,
+      "log": "test-windows-codec-qualification.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-windows-codec-faults",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.05,
+      "log": "test-windows-codec-faults.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-windows-schema-backup-qualification",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.65,
+      "log": "test-windows-schema-backup-qualification.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "test-visual-admission-isolation",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.03,
+      "log": "test-visual-admission-isolation.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "work-media-existing-library.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.23,
+      "log": "work-media-existing-library.test.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "work-media-preservation.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.18,
+      "log": "work-media-preservation.test.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "work-media-real-evidence.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.18,
+      "log": "work-media-real-evidence.test.log",
+      "failedInPriorRound": true
+    },
+    {
+      "name": "work-media.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.29,
+      "log": "work-media.test.log",
+      "failedInPriorRound": true
+    }
+  ],
+  "note": "Complete regression round; native fixes during review revalidated in final focused logs on the final source. Same failure-name set as prior round; failure reasons retained in local logs."
+}

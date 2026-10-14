@@ -2,6 +2,6 @@
 export const SHELF_CANDIDATE_IDENTITY = {
   "platform": "darwin",
   "arch": "arm64",
-  "sourceDigest": "d68aa94eef36a08e6b17f147cebc163db5ae32d7334997f25ef816538e1a1ff3",
-  "binaryDigest": "07267e86e50446f04a1bef02940918a2d48b53b457ee481d0795f5ae335d6488"
+  "sourceDigest": "91a392206d0e0b97c8d55825ad6e27dabea8156d6e48695fec51ee39c1d340f4",
+  "binaryDigest": "275c6cca276a48dc40537d00c7d46469ec87173211f416a09f6d28867c6c6eff"
 } as const

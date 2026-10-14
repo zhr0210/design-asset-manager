@@ -1,0 +1,318 @@
+[
+  {
+    "file": "compact-true-key.png",
+    "capture": {
+      "beganEpochMs": 1791964099197.0151,
+      "endedEpochMs": 1791964099263.4312,
+      "file": "compact-true-key-display.png",
+      "mark": "compact-true-key",
+      "noForeignForeground": true
+    },
+    "nativeState": {
+      "epochMs": 1791964057587,
+      "mark": "compact-refocused",
+      "pid": 44228,
+      "windowNumber": 41397,
+      "key": 1,
+      "appActive": 1,
+      "frame": [
+        1976,
+        543,
+        220,
+        240
+      ],
+      "windowCorner": 16,
+      "glassCorner": 16,
+      "hasShadow": 1,
+      "planes": [
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 1,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        }
+      ]
+    },
+    "nextStateEpochMs": 1791964171171,
+    "sha256": "e24dd5428e2bff2502b14f40d64f9ac8a231aa644336664fc9719cfc09f794f1"
+  },
+  {
+    "file": "compact-refocused.png",
+    "capture": {
+      "beganEpochMs": 1791964153280.0432,
+      "endedEpochMs": 1791964153379.5771,
+      "file": "compact-refocused-display.png",
+      "mark": "compact-refocused",
+      "noForeignForeground": true
+    },
+    "nativeState": {
+      "epochMs": 1791964057587,
+      "mark": "compact-refocused",
+      "pid": 44228,
+      "windowNumber": 41397,
+      "key": 1,
+      "appActive": 1,
+      "frame": [
+        1976,
+        543,
+        220,
+        240
+      ],
+      "windowCorner": 16,
+      "glassCorner": 16,
+      "hasShadow": 1,
+      "planes": [
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 1,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            220,
+            240
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        }
+      ]
+    },
+    "nextStateEpochMs": 1791964171171,
+    "sha256": "e24dd5428e2bff2502b14f40d64f9ac8a231aa644336664fc9719cfc09f794f1"
+  },
+  {
+    "file": "release-expanded-key.png",
+    "capture": {
+      "beganEpochMs": 1791963451261.496,
+      "endedEpochMs": 1791963451328.126,
+      "file": "release-expanded-key-display.png",
+      "mark": "release-expanded-key",
+      "noForeignForeground": true
+    },
+    "nativeState": {
+      "epochMs": 1791963443855,
+      "mark": "reduce-motion-on",
+      "pid": 44228,
+      "windowNumber": 41397,
+      "key": 1,
+      "appActive": 1,
+      "frame": [
+        1401,
+        486,
+        640,
+        520
+      ],
+      "windowCorner": 16,
+      "glassCorner": 16,
+      "hasShadow": 1,
+      "planes": [
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            640,
+            520
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            420,
+            140,
+            220,
+            240
+          ],
+          "hidden": 1,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            640,
+            520
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            640,
+            520
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        }
+      ]
+    },
+    "nextStateEpochMs": 1791963458627,
+    "sha256": "605d62481034dd39d4c6ca03424765e43880ae2e102ae458a839f447142183db"
+  },
+  {
+    "file": "light-expanded-key.png",
+    "capture": {
+      "beganEpochMs": 1791963131059.5742,
+      "endedEpochMs": 1791963131132.288,
+      "file": "light-expanded-key-display.png",
+      "mark": "light-expanded-key",
+      "noForeignForeground": true
+    },
+    "nativeState": {
+      "epochMs": 1791963123536,
+      "mark": "reduce-motion-on",
+      "pid": 44228,
+      "windowNumber": 41397,
+      "key": 1,
+      "appActive": 1,
+      "frame": [
+        1531,
+        312,
+        640,
+        520
+      ],
+      "windowCorner": 16,
+      "glassCorner": 16,
+      "hasShadow": 1,
+      "planes": [
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            640,
+            520
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            420,
+            140,
+            220,
+            240
+          ],
+          "hidden": 1,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            640,
+            520
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        },
+        {
+          "class": "Shelf.WorkShelfForeground",
+          "frame": [
+            0,
+            0,
+            640,
+            520
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "presentationOpacity": 1
+        }
+      ]
+    },
+    "nextStateEpochMs": 1791963134096,
+    "sha256": "b65a8fabe5e70ff905c3db41609f74ef48ec9ede7406a9399246c12dc19e220f"
+  }
+]

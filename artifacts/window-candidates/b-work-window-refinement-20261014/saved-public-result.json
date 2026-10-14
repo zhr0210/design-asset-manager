@@ -1,0 +1,31 @@
+{
+  "name": "B-native-design-public",
+  "note": "Public native saved note 2",
+  "revision": 6,
+  "colors": [
+    "#6445FF",
+    "#7C7797"
+  ],
+  "memberCount": 9,
+  "layout": {
+    "x": 1559,
+    "y": 68,
+    "width": 640,
+    "height": 520,
+    "expansion": {
+      "edge": "right",
+      "compactBounds": {
+        "x": 1979,
+        "y": 208,
+        "width": 220,
+        "height": 240
+      }
+    },
+    "pinned": true,
+    "open": true,
+    "presentation": "expanded"
+  },
+  "originalsCount": 9,
+  "originalsUnchanged": true,
+  "readOnlyAudit": true
+}

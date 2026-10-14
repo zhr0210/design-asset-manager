@@ -8,7 +8,7 @@ if (process.platform !== 'darwin') process.exit(0)
 const root = process.cwd()
 const output = path.join(root, 'build/shelf-candidates')
 await fs.mkdir(output, { recursive: true })
-const sources = ['native/shelf-candidates/Shelf.swift', 'native/shelf-candidates/NativeWorkShelf.swift', 'native/shelf-candidates/WorkShelfInteraction.swift', 'native/shelf-candidates/WorkShelfColorPicker.swift', 'native/shelf-candidates/main.swift', 'scripts/build-shelf-candidates.mjs']
+const sources = ['native/shelf-candidates/Shelf.swift', 'native/shelf-candidates/NativeWorkShelf.swift', 'native/shelf-candidates/WorkShelfInteraction.swift', 'native/shelf-candidates/WorkShelfPresentation.swift', 'native/shelf-candidates/WorkShelfColorPicker.swift', 'native/shelf-candidates/main.swift', 'scripts/build-shelf-candidates.mjs']
 const hash = value => createHash('sha256').update(value).digest('hex')
 const sourceDigest = hash(Buffer.concat(await Promise.all(sources.map(file => fs.readFile(file)))))
 const app = path.join(output, 'DAM Shelf A.app')

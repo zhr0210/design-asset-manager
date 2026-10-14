@@ -5140,6 +5140,10 @@ _Avoid_: Asset ownership, permission grant, global collection order
 A native floating presentation of a Work Set that coexists with other reference windows and external creative applications under current library access authority.
 _Avoid_: Saved permission token, single asset identity, library management window
 
+**Work Window Expansion Anchor**:
+The spatial reference relating a Work Window's compact and expanded presentations, so changing presentation does not unintentionally shift its placement. User-initiated repositioning moves this reference with the window.
+_Avoid_: Permanently fixed top-left corner, forced return to a position the user has moved away from
+
 **Video Reference Frame**:
 A user-selected visual reference tied to actual video presentation time and source generation, with durable selection and annotation meaning.
 _Avoid_: Codec I-frame, disposable thumbnail, independent Design Asset by implication

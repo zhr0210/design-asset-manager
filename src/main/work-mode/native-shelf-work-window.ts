@@ -66,7 +66,7 @@ export function createNativeShelfWorkWindow(
   }
   const geometryCommand = (layout: WorkWindowLayout) => ({
     op: 'bounds', x: layout.x, y: layout.y, width: layout.width, height: layout.height,
-    presentation:layout.presentation??'compact',docked: Boolean(layout.dock), ...(layout.dock ? { normal: layout.dock.normalBounds } : {})
+    ...(layout.expansion?{expansion:layout.expansion}:{}),presentation:layout.presentation??'compact',docked: Boolean(layout.dock), ...(layout.dock ? { normal: layout.dock.normalBounds } : {})
   })
   // The existing sandboxed renderer remains the complex editing surface; its
   // authenticated frame/member APIs are not exposed to the native child.
@@ -105,7 +105,7 @@ export function createNativeShelfWorkWindow(
         try{
          if(e.status==='failed')throw Object.assign(Error('原生窗口拒绝了运动请求，布局未保存。'),{code:'WORK_MOTION_FAILED'})
          if(e.status!=='completed'||e.gestureId!==gestureVersion)throw Object.assign(Error('窗口移动已由新输入接管。'),{code:'WORK_MOTION_CANCELED'})
-         geometry=validateWorkLayout({x:e.x,y:e.y,width:e.width,height:e.height,presentation:e.presentation,pinned:geometry.pinned,open:true,...(e.docked&&dockTarget?.dock?{dock:dockTarget.dock}:{})})
+         geometry=validateWorkLayout({x:e.x,y:e.y,width:e.width,height:e.height,...(e.expansion?{expansion:e.expansion}:{}),presentation:e.presentation,pinned:geometry.pinned,open:true,...(e.docked&&dockTarget?.dock?{dock:dockTarget.dock}:{})})
          if(['x','y','width','height'].some(key=>Math.abs(Number(geometry[key as keyof WorkWindowLayout])-Number(pending.target[key as keyof WorkWindowLayout]))>1))throw Object.assign(Error('实际窗口位置与目标不符，未保存布局。'),{code:'WORK_MOTION_FRAME_MISMATCH'})
          pending.resolve()
         }catch(error){pending.reject(error instanceof Error?error:Error('INVALID_MOTION_ACK'))}
@@ -113,7 +113,7 @@ export function createNativeShelfWorkWindow(
         recordMotion({phase:'geometry',motionId:e.motionId,currentMotionId:motionVersion,x:e.x,y:e.y,width:e.width,height:e.height,docked:e.docked})
         if(e.motionId!==motionVersion||Number(e.gestureId)<gestureVersion)return
         const next = validateWorkLayout({ x: e.x, y: e.y, width: e.width, height: e.height,
-          open: true, pinned: geometry.pinned,presentation:e.presentation,
+          open: true, pinned: geometry.pinned,presentation:e.presentation,...(e.expansion?{expansion:e.expansion}:{}),
           ...(e.docked === true && dockTarget?.dock ? { dock: dockTarget.dock } : {}) })
         geometry = next
         input.changed()

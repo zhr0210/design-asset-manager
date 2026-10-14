@@ -2,6 +2,16 @@
 
 视觉只由[DESIGN](../../DESIGN.md)维护，当前B用户行为见[悬浮工作窗交互规格](../../docs/design/WORK-WINDOW-INTERACTIONS.md)，技术机制见[工作模式模块](../../src/main/work-mode/README.md)。旧候选结果不构成新视觉设计的资格，实际版本与缺口由[CURRENT-STATE](../../docs/handoff/CURRENT-STATE.md)维护。
 
+## B轮廓、锚点与呈现机制（2026-10-14）
+
+B改用带系统圆角框架的非激活NSPanel（titled + fullSizeContentView）；隐藏原生标题栏内容、使用既有AppKit按钮，玻璃铺满底板。macOS26+玻璃采用与当前系统框架一致的16pt圆角，旧系统保留VisualEffect回退。没有生产私有圆角setter、额外描边遮盖或关闭阴影/聚焦。
+
+WorkShelfExpansionAnchor保存紧凑frame及中心/左/右位置关系；只有实际用户拖动平移关系，屏幕夹取不当作用户移动。geometry附带可选expansion，由Host严格校验并保存，重开通过同一bounds命令恢复。紧凑态及停靠态不携带该字段。
+
+WorkShelfPresentation只拥有前景视图、短期透明快照及可取消的延迟任务；窗口运动仍由WorkShelfInteraction控制。图片/文字在固定尺寸前景平面中呈现，快照不接受输入；实际透明度为零的平面不接受鼠标命中。再次切换从当前frame/opacity接续，拖动立即接管，冻结/隐藏结算目标并撤销旧回调。选择背景是独立CALayer，业务选择先更新，仅背景opacity做160ms过渡，复用卡片直接同步状态。全部时序取自DESIGN；真实运行资格只见CURRENT-STATE及本轮报告。
+
+相关原生回归统一执行`npm run test-native-work-shelf`，涵盖呈现、交互、接收和颜色浮层；这些受控AppKit输入仍不替代正式原生验收。
+
 ## B原生设计接线（2026-10-14）
 
 2026-10-14本工作树已实施B原生设计：220×240紧凑布局、系统图标按钮、紧凑/展开的NSGlassEffectView底板（支持系统）、窗内NSVisualEffectView停靠覆盖与独立图标抓手。Host布局归一化/校验与原生尺寸同步，旧紧凑布局原文在转换前保留；展开拖窗限制在目标屏可见区域。原生仅呈现，Host权威不变。

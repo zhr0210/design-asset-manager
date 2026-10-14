@@ -4,7 +4,7 @@ import type {NotebookSaveRequest,NotebookSnapshot} from './asset-notebook.contra
 export type WorkScope=OrganizationScope
 export interface WorkSetValue {name:string;assetIds:string[];note:string;colors:string[];columns:number}
 export interface WorkWindowBounds{x:number;y:number;width:number;height:number}
-export interface WorkWindowLayout extends WorkWindowBounds{pinned:boolean;open:boolean;presentation?:'compact'|'expanded';dock?:{edge:'left'|'right';normalBounds:WorkWindowBounds;style?:'edge-slide'}}
+export interface WorkWindowLayout extends WorkWindowBounds{pinned:boolean;open:boolean;presentation?:'compact'|'expanded';expansion?:{edge:'center'|'left'|'right';compactBounds:WorkWindowBounds};dock?:{edge:'left'|'right';normalBounds:WorkWindowBounds;style?:'edge-slide'}}
 export interface SavedWorkSet extends WorkSetValue {id:string;revision:number;unavailableIds:string[];layout:WorkWindowLayout|null}
 export interface WorkSetCatalog {sets:SavedWorkSet[];sessionToken:string;requiresUpgrade:boolean}
 export interface WorkSetWrite extends WorkScope {sessionToken:string;allowUpgrade:boolean;command:{kind:'create';value:WorkSetValue}|{kind:'save';id:string;expectedRevision:number;value:WorkSetValue}|{kind:'delete';id:string;expectedRevision:number}}
@@ -39,7 +39,7 @@ export function validateWorkWindowControl(v:unknown):WorkWindowControlInput {con
 export function validateWorkValue(v:unknown):WorkSetValue {const r=workRecord(v,['name','assetIds','note','colors','columns']);if(typeof r.name!=='string'||!r.name.trim()||r.name.trim().length>80||/[\x00-\x1f]/.test(r.name)||typeof r.note!=='string'||r.note.length>16000||!Array.isArray(r.assetIds)||r.assetIds.length>200||!Array.isArray(r.colors)||r.colors.length>64||!Number.isInteger(r.columns)||Number(r.columns)<1||Number(r.columns)>4)return invalid();const ids=r.assetIds.map(workId);if(new Set(ids).size!==ids.length)return invalid();const colors=r.colors.map(c=>{if(typeof c!=='string'||!/^#[0-9a-f]{6}$/i.test(c))return invalid();return c.toUpperCase()});return{name:r.name.trim(),assetIds:ids,note:r.note,colors:[...new Set(colors)],columns:Number(r.columns)}}
 export function validateWorkWrite(v:unknown):WorkSetWrite {const r=workRecord(v,['libraryIdentity','generation','sessionToken','allowUpgrade','command']),c=workRecord(r.command,['kind','id','expectedRevision','value']);if(typeof r.allowUpgrade!=='boolean')return invalid();let command:WorkSetWrite['command'];if(c.kind==='create'){workRecord(c,['kind','value']);command={kind:'create',value:validateWorkValue(c.value)}}else if(c.kind==='save'){workRecord(c,['kind','id','expectedRevision','value']);command={kind:'save',id:workId(c.id),expectedRevision:workRevision(c.expectedRevision),value:validateWorkValue(c.value)}}else if(c.kind==='delete'){workRecord(c,['kind','id','expectedRevision']);command={kind:'delete',id:workId(c.id),expectedRevision:workRevision(c.expectedRevision)}}else return invalid();return{...validateWorkScope({libraryIdentity:r.libraryIdentity,generation:r.generation}),sessionToken:workId(r.sessionToken),allowUpgrade:r.allowUpgrade,command}}
 export function validateWorkLayout(v:unknown):WorkWindowLayout {
- const r=workRecord(v,['x','y','width','height','pinned','open','dock','presentation'])
+ const r=workRecord(v,['x','y','width','height','pinned','open','dock','presentation','expansion'])
  const bounds=(value:unknown,minWidth:number,minHeight:number):WorkWindowBounds=>{
   const b=workRecord(value,['x','y','width','height'])
   for(const k of ['x','y','width','height'])if(typeof b[k]!=='number'||!Number.isFinite(b[k])||Math.abs(Number(b[k]))>100000)return invalid()
@@ -55,7 +55,9 @@ export function validateWorkLayout(v:unknown):WorkWindowLayout {
  const actual=bounds({x:r.x,y:r.y,width:r.width,height:r.height},compactDock?72:nativeCompact?220:290,compactDock?160:nativeCompact?240:310)
  if(compactDock&&(actual.width!==72||actual.height!==160))return invalid()
  if(dock?.style==='edge-slide'&&(r.presentation!=='compact'||actual.width!==dock.normalBounds.width||actual.height!==dock.normalBounds.height))return invalid()
- return{...actual,pinned:r.pinned,open:r.open,...(r.presentation?{presentation:r.presentation as 'compact'|'expanded'}:{}),...(dock?{dock}:{})}
+ let expansion:WorkWindowLayout['expansion']
+ if(r.expansion!==undefined){const a=workRecord(r.expansion,['edge','compactBounds']);if(r.presentation!=='expanded'||dock||!['center','left','right'].includes(String(a.edge)))return invalid();const compactBounds=bounds(a.compactBounds,220,240);if(compactBounds.width!==220||compactBounds.height!==240)return invalid();expansion={edge:a.edge as 'center'|'left'|'right',compactBounds}}
+ return{...actual,...(expansion?{expansion}:{}),pinned:r.pinned,open:r.open,...(r.presentation?{presentation:r.presentation as 'compact'|'expanded'}:{}),...(dock?{dock}:{})}
 }
 
 export function workClipboardRequestId(value:unknown):string{if(typeof value!=='string'||!/^[a-zA-Z0-9-]{1,100}$/.test(value))return invalid();return value}
