@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: unrelated pending journal state refuses writer and recovery proof
+ok 1 - unrelated pending journal state refuses writer and recovery proof
+  ---
+  duration_ms: 60.515458
+  ...
+# Subtest: unrelated ambiguous journal state refuses writer and recovery proof
+ok 2 - unrelated ambiguous journal state refuses writer and recovery proof
+  ---
+  duration_ms: 44.4535
+  ...
+# Subtest: illegal unrelated operation identity and overflowing journal refuse recovery without repair
+ok 3 - illegal unrelated operation identity and overflowing journal refuse recovery without repair
+  ---
+  duration_ms: 69.282834
+  ...
+# Subtest: missing source marker is unproven at the captured or target schema, despite finished status claiming commit
+ok 4 - missing source marker is unproven at the captured or target schema, despite finished status claiming commit
+  ---
+  duration_ms: 36.49725
+  ...
+# Subtest: same real COMMIT persists DDL, user write and exact settled marker across readonly reopen
+ok 5 - same real COMMIT persists DDL, user write and exact settled marker across readonly reopen
+  ---
+  duration_ms: 48.769417
+  ...
+# Subtest: rollback after writing marker atomically removes DDL, business result and marker
+ok 6 - rollback after writing marker atomically removes DDL, business result and marker
+  ---
+  duration_ms: 36.076542
+  ...
+# Subtest: an acknowledgement failure after actual COMMIT cannot turn the durable marker into rollback
+ok 7 - an acknowledgement failure after actual COMMIT cannot turn the durable marker into rollback
+  ---
+  duration_ms: 40.311333
+  ...
+# Subtest: writer refuses autocommit, readonly connection and duplicate operation marker without inserting a second row
+ok 8 - writer refuses autocommit, readonly connection and duplicate operation marker without inserting a second row
+  ---
+  duration_ms: 36.763625
+  ...
+# Subtest: writer refuses a prior marker sharing captured operation digest even if its image or target differs
+ok 9 - writer refuses a prior marker sharing captured operation digest even if its image or target differs
+  ---
+  duration_ms: 41.431625
+  ...
+# Subtest: wrong operation, full binding, image or target cannot inherit another commit marker
+ok 10 - wrong operation, full binding, image or target cannot inherit another commit marker
+  ---
+  duration_ms: 44.391208
+  ...
+# Subtest: source or library identity mismatches refuse commit evidence instead of trusting valid marker text
+ok 11 - source or library identity mismatches refuse commit evidence instead of trusting valid marker text
+  ---
+  duration_ms: 45.181875
+  ...
+# Subtest: present exact marker requires current target schema and settled state
+ok 12 - present exact marker requires current target schema and settled state
+  ---
+  duration_ms: 44.195084
+  ...
+# Subtest: tampered or deleted marker is unproven and does not grant restore even at the target schema
+ok 13 - tampered or deleted marker is unproven and does not grant restore even at the target schema
+  ---
+  duration_ms: 37.931542
+  ...
+# Subtest: reader requires a readonly query-only transaction and a file-backed main connection
+ok 14 - reader requires a readonly query-only transaction and a file-backed main connection
+  ---
+  duration_ms: 38.338458
+  ...
+# Subtest: writer refuses WAL, unsafe synchronous, wrong application ID and attached databases
+ok 15 - writer refuses WAL, unsafe synchronous, wrong application ID and attached databases
+  ---
+  duration_ms: 35.823333
+  ...
+# Subtest: reader rejects unsafe connection settings and attached databases without repairing them
+ok 16 - reader rejects unsafe connection settings and attached databases without repairing them
+  ---
+  duration_ms: 33.755542
+  ...
+# Subtest: invalid target expectations and malformed captured binding refuse before a marker can be written
+ok 17 - invalid target expectations and malformed captured binding refuse before a marker can be written
+  ---
+  duration_ms: 32.580417
+  ...
+# Subtest: current source evidence keeps exact uint64 strings and rejects invalid size, numeric coercion and unsafe filesystem
+ok 18 - current source evidence keeps exact uint64 strings and rejects invalid size, numeric coercion and unsafe filesystem
+  ---
+  duration_ms: 56.83
+  ...
+# Subtest: a populated temp schema is refused while SQLite internal empty temp remains compatible
+ok 19 - a populated temp schema is refused while SQLite internal empty temp remains compatible
+  ---
+  duration_ms: 38.904334
+  ...
+# Subtest: existing journal capacity 127 preserves the 128-row limit and atomic write
+ok 20 - existing journal capacity 127 preserves the 128-row limit and atomic write
+  ---
+  duration_ms: 36.876
+  ...
+# Subtest: existing journal capacity 128 preserves the 128-row limit and atomic write
+ok 21 - existing journal capacity 128 preserves the 128-row limit and atomic write
+  ---
+  duration_ms: 33.961167
+  ...
+# Subtest: full schema validation rejects unknown source objects before writing or accepting commit proof
+ok 22 - full schema validation rejects unknown source objects before writing or accepting commit proof
+  ---
+  duration_ms: 38.812625
+  ...
+# Subtest: OWNED child killed at actual SQLite before-commit cut proves the durable source result
+ok 23 - OWNED child killed at actual SQLite before-commit cut proves the durable source result
+  ---
+  duration_ms: 115.964375
+  ...
+# Subtest: OWNED child killed at actual SQLite after-commit cut proves the durable source result
+ok 24 - OWNED child killed at actual SQLite after-commit cut proves the durable source result
+  ---
+  duration_ms: 107.450791
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1159.065792

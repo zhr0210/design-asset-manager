@@ -1,0 +1,105 @@
+TAP version 13
+# Subtest: explicit baseline preference persists; only later promoted assets receive three lightweight intents
+ok 1 - explicit baseline preference persists; only later promoted assets receive three lightweight intents
+  ---
+  duration_ms: 111.027125
+  ...
+# Subtest: known profile 8 upgrades to 12 without seeding historical background intents
+ok 2 - known profile 8 upgrades to 12 without seeding historical background intents
+  ---
+  duration_ms: 88.572416
+  ...
+# Subtest: known profile 9 upgrades to 12 without seeding historical background intents
+ok 3 - known profile 9 upgrades to 12 without seeding historical background intents
+  ---
+  duration_ms: 95.88975
+  ...
+# Subtest: known profile 10 upgrades to 12 without seeding historical background intents
+ok 4 - known profile 10 upgrades to 12 without seeding historical background intents
+  ---
+  duration_ms: 102.329709
+  ...
+# Subtest: known profile 11 upgrades to 12 without seeding historical background intents
+ok 5 - known profile 11 upgrades to 12 without seeding historical background intents
+  ---
+  duration_ms: 96.20875
+  ...
+# Subtest: configuration migration afterDdl fault has an atomic and truthful result
+ok 6 - configuration migration afterDdl fault has an atomic and truthful result
+  ---
+  duration_ms: 89.385083
+  ...
+# Subtest: configuration migration beforeCommit fault has an atomic and truthful result
+ok 7 - configuration migration beforeCommit fault has an atomic and truthful result
+  ---
+  duration_ms: 103.010958
+  ...
+# Subtest: configuration migration afterCommit fault has an atomic and truthful result
+ok 8 - configuration migration afterCommit fault has an atomic and truthful result
+  ---
+  duration_ms: 64.199792
+  ...
+# Subtest: user pause/cancel survives policy toggles, Trash restoration and fresh session; source changes are not new work
+ok 9 - user pause/cancel survives policy toggles, Trash restoration and fresh session; source changes are not new work
+  ---
+  duration_ms: 96.672625
+  ...
+# Subtest: capability toggles affect future registration only; replay and poll never create intents
+ok 10 - capability toggles affect future registration only; replay and poll never create intents
+  ---
+  duration_ms: 75.749959
+  ...
+# Subtest: an intent storage fault rolls back Promotion rather than publishing an asset without its reviewed plan
+ok 11 - an intent storage fault rolls back Promotion rather than publishing an asset without its reviewed plan
+  ---
+  duration_ms: 65.742791
+  ...
+# Subtest: OCR maintenance rejects in-flight configure, blocks new operations and does not restore old reviews
+ok 12 - OCR maintenance rejects in-flight configure, blocks new operations and does not restore old reviews
+  ---
+  duration_ms: 0.379334
+  ...
+# Subtest: controller and formal IPC keep card members scoped and reject late owner reads
+ok 13 - controller and formal IPC keep card members scoped and reject late owner reads
+  ---
+  duration_ms: 69.418292
+  ...
+# Subtest: a legacy combined current is seeded exactly once and v12 keeps prior user edits and each storage capability usable
+ok 14 - a legacy combined current is seeded exactly once and v12 keeps prior user edits and each storage capability usable
+  ---
+  duration_ms: 163.707208
+  ...
+# Subtest: postcommit settings restoration failure quarantines v12 and does not allow further business writes
+ok 15 - postcommit settings restoration failure quarantines v12 and does not allow further business writes
+  ---
+  duration_ms: 61.653542
+  ...
+# Subtest: the frozen v11 reader refuses v12 without changing database bytes
+ok 16 - the frozen v11 reader refuses v12 without changing database bytes
+  ---
+  duration_ms: 66.454292
+  ...
+# Subtest: policy receipts expire or lose authority, and overlapping barriers are not released by an upgrade
+ok 17 - policy receipts expire or lose authority, and overlapping barriers are not released by an upgrade
+  ---
+  duration_ms: 66.185125
+  ...
+# Subtest: OCR preparation is fenced, and a real prepared review is invalidated by the idle maintenance lock
+ok 18 - OCR preparation is fenced, and a real prepared review is invalidated by the idle maintenance lock
+  ---
+  duration_ms: 37.586084
+  ...
+# Subtest: the last safe policy revision remains readable and further writes fail without overflow
+ok 19 - the last safe policy revision remains readable and further writes fail without overflow
+  ---
+  duration_ms: 69.617042
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1526.923625

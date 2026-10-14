@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-work-sets
+> node scripts/run-electron-node-test.mjs scripts/work-sets.test.ts
+
+Work sets: consent/schema/reopen, per-device layouts, duplicate-open guard, scoped Desktop/Browser window controls, dirty close preservation, two independent owners, membership-scoped preview/notes, drafts, pin/hide/restore, Trash state, deletion reference safety and off-screen recovery passed

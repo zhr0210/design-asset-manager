@@ -4,7 +4,7 @@
 
 ## 运行身份与入口
 
-macOS 27.0 (26A428)、arm64。最终编译构建 `dam-d06367346016b4be`，原生 SHA256 `cacaea361c15ae234935737842908883529e0b176bde61891522f12cfca36124`；完整 [构建日志](final-build.log)与代码生成身份一致。普通入口：当前工作树 `npm run start:work-b -- --profile=/绝对路径/隔离profile` → 打开指定公开库副本 → 工作模式 → 打开/恢复工作集。专项 profile/public-library 在 `.scratch/b-work-window-second-implementation-20261015/`；9份公开生成 Original 的可恢复库副本已准备，原公开库与其他 profile 没有迁移。运行实例启动身份须与该最终编译版本分列。旧专项PID42714收到SIGTERM后仍在，未确认退出；一次提前启动的新实例已退出，没有将旧进程算作最终候选。停止重启尝试并保留状态，解锁后通过正常应用退出/启动复验。最后一次CUA重新绑定超时；没有把超时当作已经解锁。
+macOS 27.0 (26A428)、arm64。最终编译构建 `dam-d06367346016b4be`，原生 SHA256 `cacaea361c15ae234935737842908883529e0b176bde61891522f12cfca36124`；完整 [构建日志](final-build.txt)与代码生成身份一致。普通入口：当前工作树 `npm run start:work-b -- --profile=/绝对路径/隔离profile` → 打开指定公开库副本 → 工作模式 → 打开/恢复工作集。专项 profile/public-library 在 `.scratch/b-work-window-second-implementation-20261015/`；9份公开生成 Original 的可恢复库副本已准备，原公开库与其他 profile 没有迁移。运行实例启动身份须与该最终编译版本分列。旧专项PID42714收到SIGTERM后仍在，未确认退出；一次提前启动的新实例已退出，没有将旧进程算作最终候选。停止重启尝试并保留状态，解锁后通过正常应用退出/启动复验。最后一次CUA重新绑定超时；没有把超时当作已经解锁。
 
 ## 实现与内部证据
 
@@ -18,7 +18,7 @@ macOS 27.0 (26A428)、arm64。最终编译构建 `dam-d06367346016b4be`，原生
 | S14 | 手动遮挡、移动/调整/删除/撤销，智能OCR文字区域点击/拖选；原图尺寸导出遮挡像素与未遮挡像素已实际核对，原件保持；编辑源变化拒绝 | 正式编辑→导出→系统查看与真实OCR智能区域未验 |
 | S15 | 同Host事务复制/移至新集合、源/目标修订/顺序与失败保护；清空只改引用，窗口上限/未知确认保护 | 正式双窗→退出重开路径未验 |
 
-新存储/图像/恢复测试为 `npm run test-work-set-retirement`、`test-work-set-draft-retirement`、`test-work-image-document`；实际 [AppKit检查](final-native.log)、[工作集](work-sets-final.log)、[页面恢复](draft-recovery-final.log)、[参考页14项](reference-view-final.log)、[本机OCR35项](background-ocr-final.log)分别限定受控边界。系统Trash在临时文件检查使用可恢复适配器，不能冒称系统废纸篓已实际操作。
+新存储/图像/恢复测试为 `npm run test-work-set-retirement`、`test-work-set-draft-retirement`、`test-work-image-document`；实际 [AppKit检查](final-native.txt)、[工作集](work-sets-final.txt)、[页面恢复](draft-recovery-final.txt)、[参考页14项](reference-view-final.txt)、[本机OCR35项](background-ocr-final.txt)分别限定受控边界。系统Trash在临时文件检查使用可恢复适配器，不能冒称系统废纸篓已实际操作。
 
 ## 完整回归与修复后检查
 

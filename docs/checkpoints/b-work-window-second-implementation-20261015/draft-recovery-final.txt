@@ -1,0 +1,1 @@
+PASS work-set recovery preserves the baseline, blocks absent targets, supports explicit Save As/discard, retains ordinary new-set creation, merges later Add intents, protects clean target recovery, adopts reviewed baselines, reopens drafts after closing X, and requires page confirmation before a dirty target switch while cancel/Escape preserve input and saved content

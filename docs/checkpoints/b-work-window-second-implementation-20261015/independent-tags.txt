@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: the production Host persists an explicitly reviewed intent and reads it after same-generation reopen
+ok 1 - the production Host persists an explicitly reviewed intent and reads it after same-generation reopen
+  ---
+  duration_ms: 106.728125
+  ...
+# Subtest: v1 upgrades after verified backup and preserves the original snapshot
+ok 2 - v1 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 79.743709
+  ...
+# Subtest: v2 upgrades after verified backup and preserves the original snapshot
+ok 3 - v2 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 79.959083
+  ...
+# Subtest: v3 upgrades after verified backup and preserves the original snapshot
+ok 4 - v3 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 80.341291
+  ...
+# Subtest: v4 upgrades after verified backup and preserves the original snapshot
+ok 5 - v4 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 82.400583
+  ...
+# Subtest: v5 upgrades after verified backup and preserves the original snapshot
+ok 6 - v5 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 79.128041
+  ...
+# Subtest: v6 upgrades after verified backup and preserves the original snapshot
+ok 7 - v6 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 82.216833
+  ...
+# Subtest: v7 upgrades after verified backup and preserves the original snapshot
+ok 8 - v7 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 78.044667
+  ...
+# Subtest: v8 upgrades after verified backup and preserves the original snapshot
+ok 9 - v8 upgrades after verified backup and preserves the original snapshot
+  ---
+  duration_ms: 78.915125
+  ...
+# Subtest: v9 keeps OCR correction, notebook, work set, organization and download journal read/write usable
+ok 10 - v9 keeps OCR correction, notebook, work set, organization and download journal read/write usable
+  ---
+  duration_ms: 123.884375
+  ...
+# Subtest: space-before-backup rejects without a partially upgraded library
+ok 11 - space-before-backup rejects without a partially upgraded library
+  ---
+  duration_ms: 54.755208
+  ...
+# Subtest: space-before-ddl rejects without a partially upgraded library
+ok 12 - space-before-ddl rejects without a partially upgraded library
+  ---
+  duration_ms: 70.246167
+  ...
+# Subtest: after-ddl rejects without a partially upgraded library
+ok 13 - after-ddl rejects without a partially upgraded library
+  ---
+  duration_ms: 87.59375
+  ...
+# Subtest: before-commit rejects without a partially upgraded library
+ok 14 - before-commit rejects without a partially upgraded library
+  ---
+  duration_ms: 78.313125
+  ...
+# Subtest: growth-cap rejects without a partially upgraded library
+ok 15 - growth-cap rejects without a partially upgraded library
+  ---
+  duration_ms: 73.174458
+  ...
+# Subtest: backup maintenance refuses ordinary writes and a later close waits without deadlock
+ok 16 - backup maintenance refuses ordinary writes and a later close waits without deadlock
+  ---
+  duration_ms: 80.390542
+  ...
+# Subtest: cancel during verified backup prevents DDL and preserves a verifiable backup record
+ok 17 - cancel during verified backup prevents DDL and preserves a verifiable backup record
+  ---
+  duration_ms: 54.372875
+  ...
+# Subtest: postcommit acknowledgement loss is resolved by current-scope idempotent lookup, not another migration
+ok 18 - postcommit acknowledgement loss is resolved by current-scope idempotent lookup, not another migration
+  ---
+  duration_ms: 64.559417
+  ...
+# Subtest: variant recovery reads v8 and v9 rather than hiding a pending intent
+ok 19 - variant recovery reads v8 and v9 rather than hiding a pending intent
+  ---
+  duration_ms: 65.456041
+  ...
+# Subtest: space arithmetic rejects unknown bounds and native page/spill settings restore after failure
+ok 20 - space arithmetic rejects unknown bounds and native page/spill settings restore after failure
+  ---
+  duration_ms: 0.157583
+  ...
+# Subtest: controller review is owner-bound, read-only and does not call a provider or network
+ok 21 - controller review is owner-bound, read-only and does not call a provider or network
+  ---
+  duration_ms: 69.231917
+  ...
+# Subtest: a native settings restoration exception quarantines the Host and still attempts both settings
+ok 22 - a native settings restoration exception quarantines the Host and still attempts both settings
+  ---
+  duration_ms: 64.933292
+  ...
+# Subtest: Trash refuses tag operations; restoration retains intent history and invalidates the old source receipt
+ok 23 - Trash refuses tag operations; restoration retains intent history and invalidates the old source receipt
+  ---
+  duration_ms: 68.274875
+  ...
+# Subtest: lease identity replacement during backup refuses DDL and seals Host admission
+ok 24 - lease identity replacement during backup refuses DDL and seals Host admission
+  ---
+  duration_ms: 54.04725
+  ...
+# Subtest: frozen v8 inspector rejects v9 without writes and the new inspector refuses unknown higher versions
+ok 25 - frozen v8 inspector rejects v9 without writes and the new inspector refuses unknown higher versions
+  ---
+  duration_ms: 71.736708
+  ...
+# Subtest: frozen pre-C02B v8 variant reader demonstrates the missing pending-intent regression
+ok 26 - frozen pre-C02B v8 variant reader demonstrates the missing pending-intent regression
+  ---
+  duration_ms: 38.010333
+  ...
+# Subtest: backup transfer failure records the observed partial state and never upgrades
+ok 27 - backup transfer failure records the observed partial state and never upgrades
+  ---
+  duration_ms: 41.230875
+  ...
+# Subtest: v9 visual evidence, confirmed tags, palette, layout and owned download/variant recovery remain usable
+ok 28 - v9 visual evidence, confirmed tags, palette, layout and owned download/variant recovery remain usable
+  ---
+  duration_ms: 181.676958
+  ...
+# Subtest: failure after historical DDL but before new tables rolls all schema changes back
+ok 29 - failure after historical DDL but before new tables rolls all schema changes back
+  ---
+  duration_ms: 60.998583
+  ...
+# Subtest: unqualified SQLite source refuses upgrade before backup without disabling ordinary library operations
+ok 30 - unqualified SQLite source refuses upgrade before backup without disabling ordinary library operations
+  ---
+  duration_ms: 34.544834
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2189.010375
