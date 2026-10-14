@@ -1,0 +1,27 @@
+Window: "", App: Dropover.
+0 窗口 Secondary Actions: Raise
+	1 container
+		2 图像
+		3 text 调整图像大小 通过选择预定义选项或指定自己的尺寸来修改图像的大小。
+		4 滚动区
+			5 container
+				6 弹出式按钮 尺寸, Value: 自定义（像素）
+				7 文本 最大宽度（像素）
+				8 文本栏 (settable) 600
+				9 文本 最大高度（像素）
+				10 文本栏 (settable) 300
+			11 container
+				12 弹出式按钮 显示, Value: 在新窗口中显示
+				13 转换 创建一个副本, Value: on
+				14 文本 保存在
+				15 菜单按钮 moved-output
+		16 按钮 取消
+		17 按钮 继续
+18 menu bar
+	19 Dropover
+	20 Edit
+	21 查看
+	22 窗口
+	23 Help
+
+The focused UI element is 0 窗口 Secondary Actions: Raise

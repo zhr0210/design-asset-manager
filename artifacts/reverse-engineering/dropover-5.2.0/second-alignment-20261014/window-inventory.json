@@ -1,0 +1,130 @@
+{
+  "type": "send",
+  "payload": {
+    "event": "window-inventory",
+    "pid": 18449,
+    "atMs": 1791968495313,
+    "windows": [
+      {
+        "number": 4294967296,
+        "class": "NSStatusBarWindow",
+        "visible": 1,
+        "key": 0,
+        "frame": [
+          1648,
+          1230,
+          38,
+          30
+        ]
+      },
+      {
+        "number": 29937,
+        "class": "NSKVONotifying_QLPreviewPanel",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          857,
+          35,
+          527,
+          1160
+        ]
+      },
+      {
+        "number": 33480,
+        "class": "NSKVONotifying_TUINSWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          0,
+          0,
+          500,
+          500
+        ]
+      },
+      {
+        "number": 39701,
+        "class": "..NSKVONotifying_Dropover.DragSessionWindow",
+        "visible": 1,
+        "key": 1,
+        "frame": [
+          1870,
+          500,
+          198,
+          207
+        ]
+      },
+      {
+        "number": 39702,
+        "class": "Dropover.DragSessionOverlayTooltipWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          2116,
+          614,
+          80,
+          33
+        ]
+      },
+      {
+        "number": 39703,
+        "class": "..NSKVONotifying_Dropover.ActionDockWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          682,
+          958,
+          198,
+          46
+        ]
+      },
+      {
+        "number": 43070,
+        "class": "NSKVONotifying_NSLocalWindowSharingWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          914,
+          517,
+          66,
+          20
+        ]
+      },
+      {
+        "number": 43143,
+        "class": "..NSKVONotifying_Dropover.DragSessionWindow",
+        "visible": 1,
+        "key": 0,
+        "frame": [
+          2008,
+          994,
+          198,
+          207
+        ]
+      },
+      {
+        "number": 43144,
+        "class": "Dropover.DragSessionOverlayTooltipWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          0,
+          -32,
+          26,
+          32
+        ]
+      },
+      {
+        "number": 43145,
+        "class": "..NSKVONotifying_Dropover.ActionDockWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          2008,
+          940,
+          198,
+          46
+        ]
+      }
+    ]
+  }
+}

@@ -48,7 +48,7 @@ try {
       const clip = (await host.listAssets())[0]
       const catalog = await host.readWorkSets(scope, 'device:provenance-test')
       const created = await host.writeWorkSet({ ...scope, sessionToken: catalog.sessionToken, allowUpgrade: true,
-        command: { kind: 'create', value: { name: family, assetIds: [clip.id], columns: 1, colors: [], note: 'Controlled codec port' } }
+        command: { kind: 'create', value: { name: family, assetIds: [clip.id], columns: 1,   } }
       }, 'device:provenance-test')
       const mediaScope = { ...scope, setId: created.sets[0].id, assetId: clip.id }
       const before = await host.readWorkMedia(mediaScope)

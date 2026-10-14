@@ -25,7 +25,7 @@ const controller=createWorkWindowController({host:controllerHost,deviceId:device
 try{
  const create=await host.prepareCreate();if(create.kind!=='planned')throw Error('CREATE');await host.confirmCreate(create.plan.receipt)
  const add=await host.prepareAddAssets();if(add.kind!=='planned')throw Error('ADD');await host.dispatchAddAssets(add.plan.receipt)
- const asset=(await host.listAssets())[0],active=host.inspect(),scope={libraryIdentity:active.identity!,generation:active.generation!},catalog=await host.readWorkSets(scope,device),value={name:'Motion fixture',assetIds:[asset.id],note:'saved original',colors:['#195AF0'],columns:1}
+ const asset=(await host.listAssets())[0],active=host.inspect(),scope={libraryIdentity:active.identity!,generation:active.generation!},catalog=await host.readWorkSets(scope,device),value={name:'Motion fixture',assetIds:[asset.id],columns:1}
  const created=await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value}},device),id=created.sets[0].id
  const legacy={x:0,y:70,width:72,height:160,pinned:true,open:true,dock:{edge:'left' as const,normalBounds:{x:200,y:70,width:290,height:310}}};await host.writeWorkLayout({...scope,id,sessionToken:created.sessionToken,layout:legacy},device)
  holding=true;const opening=controller.open({...scope,id});for(let i=0;i<50&&!gate;i++)await new Promise(resolve=>setTimeout(resolve,5));assert.ok(gate);assert.deepEqual((await host.readWorkSets(scope,device)).sets[0].layout,legacy,'opening also waits for actual motion before committing');gate!();holding=false;gate=undefined;const opened=await opening;if(!opened.success)throw Error(opened.error);const token=opened.value.token
@@ -51,7 +51,7 @@ try{
  const large=await controller.act(owner,{token,kind:'dock',edge:'left'});assert.equal(large.success,false);if(!large.success)assert.equal(large.code,'WORK_WINDOW_NOT_DOCKABLE')
  geometry={...geometry!,expansion:undefined,width:290,height:310,presentation:'compact'};await controller.act(owner,{token,kind:'dock',edge:'left'});await controller.drain();await host.close();await host.open()
  const reopened=host.inspect(),s={libraryIdentity:reopened.identity!,generation:reopened.generation!},set=(await host.readWorkSets(s,device)).sets[0]
- assert.equal(set.layout?.dock?.style,'edge-slide');assert.equal(set.note,value.note);assert.deepEqual(set.colors,value.colors)
+ assert.equal(set.layout?.dock?.style,'edge-slide');assert.equal(set.name,value.name);assert.deepEqual(set.colors,value.colors)
  assert.deepEqual((await host.readWorkMediaFile({...s,setId:id,assetId:asset.id})).bytes,await fs.readFile(png))
  const reopenWindow=await controller.open({...s,id});assert.equal(reopenWindow.success,true);if(!reopenWindow.success)throw Error(reopenWindow.error)
  holding=true;const revoked=controller.act(owner,{token:reopenWindow.value.token,kind:'undock'});for(let i=0;i<50&&!gate;i++)await new Promise(resolve=>setTimeout(resolve,5));assert.ok(gate);await host.close();gate!();holding=false;gate=undefined;assert.equal((await revoked).success,false,'revoked Host cannot commit late native completion');await controller.invalidate();await host.open();const renewed=host.inspect();assert.equal((await host.readWorkSets({libraryIdentity:renewed.identity!,generation:renewed.generation!},device)).sets[0].layout?.dock?.style,'edge-slide')

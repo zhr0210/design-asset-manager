@@ -1,0 +1,25 @@
+{
+  "images": [
+    {
+      "name": "menu-renamed-01.jpg",
+      "format": "JPEG",
+      "size": [
+        1200,
+        600
+      ],
+      "mode": "RGB",
+      "bytes": 115133
+    },
+    {
+      "name": "menu-renamed-01.png",
+      "format": "PNG",
+      "size": [
+        1200,
+        600
+      ],
+      "mode": "RGBA",
+      "bytes": 23238
+    }
+  ],
+  "PNGSourcePreserved": true
+}

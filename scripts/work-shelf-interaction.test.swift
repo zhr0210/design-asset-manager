@@ -19,6 +19,10 @@ func emit(_ v:[String:Any]){events.append(v)}
   let _=NSApplication.shared
   let root=URL(fileURLWithPath:NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString);try FileManager.default.createDirectory(at:root,withIntermediateDirectories:true);defer{try? FileManager.default.removeItem(at:root)}
   let shelf=NativeWorkShelf(root:root);shelf.window.setFrame(f,display:false)
+  events=[];precondition(shelf.interaction.doubleClickDock(NSPoint(x:110,y:12)))
+  precondition(events.contains{$0["event"] as? String=="dockIntent" && $0["deltaX"] as? Double==0})
+  events=[];precondition(!shelf.interaction.doubleClickDock(NSPoint(x:110,y:27)) && events.isEmpty)
+  shelf.expanded=true;precondition(!shelf.interaction.doubleClickDock(NSPoint(x:110,y:12)));shelf.expanded=false
   shelf.interaction.feedback(true,edge:"left",animated:false)
   RunLoop.current.run(until:Date().addingTimeInterval(0.05))
   precondition(shelf.back.isHidden && shelf.dropdown.isHidden && !shelf.back.isEnabled,"Covered buttons leave the visible/accessibility surface")
@@ -36,7 +40,7 @@ func emit(_ v:[String:Any]){events.append(v)}
   // Production transition completion/geometry and old-token cancellation, no copied animation implementation.
   shelf.interaction.animate(f.offsetBy(dx:30,dy:0),duration:0,docking:false,id:4);RunLoop.current.run(until:Date().addingTimeInterval(0.05))
   precondition(events.contains{$0["event"] as? String=="motionAck" && $0["status"] as? String=="completed" && $0["motionId"] as? Int==4})
-  events=[];shelf.expanded=true;try shelf.command(["op":"bounds","motionId":6,"gestureId":0,"presentation":"expanded","docked":true,"x":0.0,"y":50.0,"width":640.0,"height":520.0]);precondition(events.contains{$0["motionId"] as? Int==6 && $0["status"] as? String=="failed"});shelf.expanded=false
+  events=[];shelf.expanded=true;try shelf.command(["op":"bounds","motionId":6,"gestureId":shelf.interaction.gestureId,"presentation":"expanded","docked":true,"x":0.0,"y":50.0,"width":640.0,"height":520.0]);precondition(events.contains{$0["motionId"] as? Int==6 && $0["status"] as? String=="failed"});shelf.expanded=false
   shelf.window.orderFrontRegardless();events=[]
   shelf.interaction.animate(f.offsetBy(dx:200,dy:0),duration:1,docking:false,id:5)
   RunLoop.current.run(until:Date().addingTimeInterval(0.1));let displayed=shelf.interaction.actualFrame();shelf.interruptTransition()

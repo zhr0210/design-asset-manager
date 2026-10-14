@@ -1,0 +1,4 @@
+The following is a diff from the previous accessibility tree for Window: "" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 24-28
+~				15 菜单按钮 moved-output
+The focused UI element is 10 文本栏 (settable) 300

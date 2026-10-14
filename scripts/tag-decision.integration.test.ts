@@ -167,7 +167,7 @@ await test('v11 preserves OCR edits, notebook, work layout, organization and dow
   await f.host.correctOcr({...f.scope,sessionToken:saved.sessionToken,expectedRevision:saved.revision,evidenceId:'ocr-v11',text:'User OCR retained'})
   const note=await f.host.readNotebook(f.scope);await f.host.saveNotebook({...f.scope,sessionToken:note.sessionToken,sourceRef:note.sourceRef,expectedRevision:note.revision,allowUpgrade:false,book:note.book})
   const org=await f.host.readOrganization(scope);await f.host.writeOrganization({...scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'User folder',folderKind:'assets',parentId:null,assetIds:[f.asset.id]}})
-  const work=await f.host.readWorkSets(scope,'device-v11'),set=await f.host.writeWorkSet({...scope,sessionToken:work.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'User set',note:'User note',assetIds:[f.asset.id],colors:[],columns:1}}},'device-v11')
+  const work=await f.host.readWorkSets(scope,'device-v11'),set=await f.host.writeWorkSet({...scope,sessionToken:work.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'User set',assetIds:[f.asset.id],columns:1}}},'device-v11')
   const layout={x:12,y:20,width:400,height:500,pinned:true,open:false};await f.host.writeWorkLayout({...scope,sessionToken:work.sessionToken,id:set.sets[0].id,layout},'device-v11')
   await f.host.downloadJournal({kind:'create',generation:scope.generation,taskId:'download-v11',url:'https://fixture.invalid/not-requested.png',fileName:'generated.png'})
   await f.publish('after-choices',['新建议'])

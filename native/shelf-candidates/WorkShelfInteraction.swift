@@ -8,9 +8,9 @@ struct WorkShelfExpansionAnchor {
     let horizontal:Horizontal
     var compact:NSRect
     var expanded:NSRect
-    init(compact:NSRect,screen:NSRect) {
+    init(compact:NSRect,screen:NSRect,count:Int=0) {
         self.compact=compact
-        let size=NSSize(width:min(640,screen.width),height:min(520,screen.height))
+        let size=NSSize(width:min(400,screen.width),height:min(count<=2 ? 207:count<=5 ? 310:435,screen.height))
         let centered=compact.midX-size.width/2
         horizontal=centered<screen.minX ? .left : centered+size.width>screen.maxX ? .right : .center
         let x:CGFloat
@@ -183,10 +183,26 @@ final class WorkShelfInteractionController {
         return shelfEdgeDecision(f,screen:screen.frame,others:NSScreen.screens.filter{$0 != screen}.map{$0.frame},deltaX:deltaX)
     }
     func clickedRestore(){guard !shelf.frozen,!shelf.retired,shelf.docked,!shelf.moving,!shelf.animating else{return};emit(["event":"undockIntent","gestureId":gestureId]);feedback(false)}
+    @discardableResult func doubleClickDock(_ point:NSPoint)->Bool {
+        guard !shelf.expanded,!shelf.docked,!shelf.frozen,!shelf.retired,!shelf.assetDragging else{return false}
+        let b=shelf.root.bounds
+        guard b.contains(point),min(point.x,b.width-point.x,point.y,b.height-point.y)<=26 else{return false}
+        let frame=actualFrame(),screen=shelf.bestScreen(frame),area=screen.visibleFrame
+        let preferLeft=abs(frame.minX-area.minX)<=abs(frame.maxX-area.maxX)
+        let candidates=preferLeft ? [true,false]:[false,true]
+        guard let left=candidates.first(where:{left in
+            let target=NSRect(x:left ? area.minX-frame.width*0.84:area.maxX-frame.width*0.16,y:frame.minY,width:frame.width,height:frame.height)
+            return !NSScreen.screens.filter({$0 != screen}).contains(where:{$0.frame.intersects(target)})
+        }) else{return false}
+        begin();shelf.moving=false;shelf.dragStartFrame=nil;deltaX=0
+        shelf.motion("double-click-dock",edge:left ? "left":"right")
+        emit(["event":"dockIntent","edge":left ? "left":"right","gestureId":gestureId,"deltaX":0.0])
+        return true
+    }
     func finish(){
         guard shelf.moving else{return}
         shelf.moving=false;shelf.dragStartFrame=nil;shelf.motion(shelf.dragMoved ? "finished-moved":"finished-click")
-        if !shelf.dragMoved{if settleInterruptedPresentation(){return};if wasDocked{clickedRestore()}else{shelf.geometry()};return}
+        if !shelf.dragMoved{if settleInterruptedPresentation(){return};if wasDocked{clickedRestore()}else{shelf.resizeExpandedIfNeeded();shelf.geometry()};return}
         shelf.docked=false
         if settleInterruptedPresentation(){return}
         shelf.geometry()
@@ -204,6 +220,7 @@ final class WorkShelfInteractionController {
         return true
     }
     private func completeRelease(){
+        shelf.resizeExpandedIfNeeded()
         guard !shelf.expanded,!shelf.assetDragging,let d=decision() else{feedback(false);shelf.geometry();return}
         shelf.motion("eligible",edge:d.edge)
         if d.docks{emit(["event":"dockIntent","edge":d.edge,"gestureId":gestureId,"deltaX":deltaX]);return}

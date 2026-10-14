@@ -1,0 +1,19 @@
+Window: "PUBLIC alignment 1 3 5 7 · Long scrolling title for native capsule inspection", App: Dropover.
+0 窗口 PUBLIC alignment 1 3 5 7 · Long scrolling title for native capsule inspection, Secondary Actions: Raise
+	1 滚动区 Secondary Actions: Scroll Up, Scroll Down
+		2 集合
+			3 节 (disabled)
+				4 container
+					5 图像 转发
+					6 文本 在 Finder 中显示
+		7 滚动条 (disabled, settable, float) 0
+	8 text 没有文件 0 档
+0 KB
+9 menu bar
+	10 Dropover
+	11 Edit
+	12 查看
+	13 窗口
+	14 Help
+
+The focused UI element is 2 集合

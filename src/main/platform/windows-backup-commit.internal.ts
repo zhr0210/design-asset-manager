@@ -11,7 +11,7 @@ export interface WindowsBackupCommitExpectation {
 function marker(expected: WindowsBackupCommitExpectation): string {
   const {binding, targetSchemaVersion} = expected
   const canonical = serializeWindowsBackupBinding(binding)
-  if (!Number.isSafeInteger(targetSchemaVersion) || targetSchemaVersion <= binding.connection.schemaVersion || targetSchemaVersion > 15) throw Error('BACKUP_COMMIT_EXPECTATION_REFUSED')
+  if (!Number.isSafeInteger(targetSchemaVersion) || targetSchemaVersion <= binding.connection.schemaVersion || targetSchemaVersion > 16) throw Error('BACKUP_COMMIT_EXPECTATION_REFUSED')
   return `backup-proof:v1:${backupBindingSha256(canonical)}:${binding.imageSha256}:${targetSchemaVersion}`
 }
 

@@ -3,6 +3,8 @@ import { constants } from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import sharp from 'sharp';
+import {ocrText} from '../../shared/contracts/asset-ocr.contract';
+import {composeWorkImages} from './work-image-document';
 import type { ActiveLibraryHost } from '../../shared/contracts/active-library.contract';
 import type { WorkHandoffReceipt, WorkHandoffRequest, WorkHandoffImageResult, WorkImageTransform, WorkMediaScope } from '../../shared/contracts/work-media.contract';
 import { validateWorkHandoff } from '../../shared/contracts/work-media.contract';
@@ -11,7 +13,7 @@ import { readVerifiedOwnedFile } from '../platform/verified-owned-file';
 import { createBoundedWorkZip, workZipEntryNames, WORK_ZIP_MAX_BYTES, workHandoffCancelled } from './bounded-work-zip';
 import { workRecord, workId } from '../../shared/contracts/work-set.contract';
 interface SourceMember { assetId: string; sourceGeneration: string; digest: string }
-const receiptLimit = (kind: WorkHandoffRequest['kind']) => kind === 'zip' ? 128 * 1024 : 16384;
+const receiptLimit = (kind: WorkHandoffRequest['kind']) => ['zip','pdf','stitch'].includes(kind) ? 128 * 1024 : 16384;
 const assertNotCancelled = (signal: AbortSignal) => { if (signal.aborted) throw workHandoffCancelled(); };
 async function persistPreparedCopy(directory: string, fileName: string, bytes: Uint8Array, json: string, signal: AbortSignal) {
     assertNotCancelled(signal);
@@ -44,6 +46,8 @@ async function persistPreparedCopy(directory: string, fileName: string, bytes: U
     }
 }
 interface HeldHandoff {
+    trashed?:boolean;
+    location?:{path:string;dev:string;ino:string};
     receipt: WorkHandoffReceipt;
     scope: WorkHandoffRequest;
     actor: string;
@@ -112,7 +116,7 @@ export function createWorkFileHandoffs(input: {
         } finally { await handle.close(); }
         return readVerifiedOwnedFile({ root: input.root, role: input.root, relative, expectedSize: bytes.length, expectedDigest: sha(bytes), maximumBytes: 128 * 1024 });
     };
-    const immutableRecord = (record: HeldHandoff) => JSON.stringify({ scope: record.scope, actor: record.actor, sourceGeneration: record.sourceGeneration, sourceMembers: record.sourceMembers, provenance: record.provenance, receipt: { id: record.receipt.id, kind: record.receipt.kind, fileName: record.receipt.fileName, bytes: record.receipt.bytes, sha256: record.receipt.sha256, image: record.receipt.image, archive: record.receipt.archive } });
+    const immutableRecord = (record: HeldHandoff) => JSON.stringify({ scope: record.scope, actor: record.actor, sourceGeneration: record.sourceGeneration, sourceMembers: record.sourceMembers, location:record.location,trashed:record.trashed, provenance: record.provenance, receipt: { id: record.receipt.id, kind: record.receipt.kind, fileName: record.receipt.fileName, bytes: record.receipt.bytes, sha256: record.receipt.sha256, image: record.receipt.image, archive: record.receipt.archive } });
     const load = async (id: string, fresh = false) => {
         if (!/^handoff:[a-f0-9-]{36}$/.test(id))
             throw Error('交付记录无效。');
@@ -129,7 +133,7 @@ export function createWorkFileHandoffs(input: {
             const storedScope = validateWorkHandoff(record.scope);
             if (bytes.length > receiptLimit(storedScope.kind) || record.receipt.id !== id || record.receipt.kind !== storedScope.kind)
                 throw Error('交付记录无效。');
-            if (storedScope.kind !== 'zip' && (record.sourceMembers !== undefined || record.receipt.archive !== undefined)) throw Error('交付记录无效。');
+            if (!['zip','pdf','stitch'].includes(storedScope.kind) && (record.sourceMembers !== undefined || record.receipt.archive !== undefined)) throw Error('交付记录无效。');
             if (fresh && cached && immutableRecord(record) !== immutableRecord(cached)) throw Error('交付记录身份已变化，请核对副本，未请求接收应用。');
             records.set(id, record);
         }
@@ -137,11 +141,11 @@ export function createWorkFileHandoffs(input: {
         if (current.state !== 'ready' || current.identity !== record.scope.libraryIdentity || !current.generation)
             throw Error('请先授权打开交付副本所属的素材库。');
         const restoredScope = { libraryIdentity: record.scope.libraryIdentity, generation: current.generation, setId: record.scope.setId, assetId: record.scope.assetId };
-        if (record.scope.kind === 'zip') {
+        if (['zip','pdf','stitch'].includes(record.scope.kind)) {
             const request = validateWorkHandoff(record.scope), ids = request.assetIds!, members = record.sourceMembers, archive = record.receipt.archive;
             if (!Array.isArray(members) || members.length !== ids.length || !archive || archive.count !== ids.length || !Array.isArray(archive.items) || archive.items.length !== ids.length) throw Error('ZIP交付成员记录无效。');
             workRecord(archive, ['count', 'items']);
-            if (record.receipt.image !== undefined || !record.receipt.fileName.endsWith('.zip')) throw Error('ZIP交付记录类型无效。');
+            if (record.receipt.image !== undefined || !record.receipt.fileName.endsWith(record.scope.kind==='zip'?'.zip':record.scope.kind==='pdf'?'.pdf':'.png')) throw Error('ZIP交付记录类型无效。');
             const names = workZipEntryNames(archive.items.map(item => item.fileName));
             let total = 0;
             for (const [index, member] of members.entries()) {
@@ -158,12 +162,59 @@ export function createWorkFileHandoffs(input: {
         return record;
     };
     const read = async (id: string) => {
-        const record = await load(id), relative = id.slice(8) + '/' + record.receipt.fileName;
-        const file = await readVerifiedOwnedFile({ root: input.root, role: input.root, relative, expectedSize: record.receipt.bytes, expectedDigest: record.receipt.sha256, maximumBytes: 96 * 1024 * 1024 });
+        const record = await load(id);if(record.trashed)throw Error('此交付副本已移至系统废纸篓，可恢复；不能再次交付。');const relative = id.slice(8) + '/' + record.receipt.fileName;
+        const location=record.location
+        const filePath=location?.path ?? path.join(input.root,relative),directory=path.dirname(filePath)
+        if(location){if(!path.isAbsolute(filePath)||await fs.realpath(directory)!==directory)throw Error('副本目的位置已变化。');const stamp=await fs.lstat(filePath,{bigint:true});if(stamp.dev.toString()!==location.dev||stamp.ino.toString()!==location.ino)throw Error('移动后的副本身份已变化。')}
+        const file = await readVerifiedOwnedFile({ root: location?directory:input.root, role: location?directory:input.root, relative: location?path.basename(filePath):relative, expectedSize: record.receipt.bytes, expectedDigest: record.receipt.sha256, maximumBytes: 96 * 1024 * 1024 });
         if (record.scope.kind === 'zip' && (file.bytes[0] !== 0x50 || file.bytes[1] !== 0x4b || file.bytes[2] !== 0x03 || file.bytes[3] !== 0x04)) throw Error('ZIP副本格式无效，未交付。');
         await load(id);
-        return { record, bytes: file.bytes, path: path.join(input.root, relative) };
+        return { record, bytes: file.bytes, path: filePath };
     };
+    const saveRecord=async(record:HeldHandoff)=>{
+        const directory=path.join(input.root,record.receipt.id.slice(8)),target=path.join(directory,'receipt.json'),temporary=path.join(directory,'receipt-update-'+randomUUID()+'.json')
+        const previous=JSON.parse(Buffer.from((await readReceipt(record.receipt.id)).bytes).toString()) as HeldHandoff,cached=records.get(record.receipt.id)
+        if(!cached||immutableRecord(previous)!==immutableRecord(cached))throw Error('交付记录已变化，请核对实际副本，未覆盖新记录。')
+        const text=JSON.stringify(record,null,2)+'\n';if(Buffer.byteLength(text)>receiptLimit(record.scope.kind))throw Error('副本记录过大。')
+        const handle=await fs.open(temporary,'wx',0o600)
+        try{await handle.writeFile(text);await handle.sync()}finally{await handle.close()}
+        try{await fs.rename(temporary,target)}finally{await fs.unlink(temporary).catch(()=>{})}
+        records.set(record.receipt.id,record)
+    }
+    const fileAction=(actor:string,id:string,operation:'copy'|'move'|'rename'|'trash',destination:string|undefined,guard:()=>void)=>serialize(async()=>{
+        guard();await load(id,true);const checked=await read(id),record=structuredClone(checked.record)
+        if(record.actor!==actor)throw Error('副本不属于当前窗口。');guard()
+        const initial=await fs.lstat(checked.path,{bigint:true})
+        if(operation==='trash'){
+            await load(id,true);guard();await input.trash(checked.path)
+            record.trashed=true;record.receipt.message='交付副本已移至系统废纸篓，可在 Finder 恢复；库内原件与引用保持。'
+            record.receipt.status='open-rejected';try{await saveRecord(record)}catch(error){throw Object.assign(Error('系统废纸篓操作已经返回，但记录更新未确认；请在 Finder 核对，不要重复执行。'),{code:'WORK_FILE_ACTION_UNCERTAIN',cause:error})}
+            guard();return{message:record.receipt.message,receipt:record.receipt}
+        }
+        if(!destination||!path.isAbsolute(destination)||destination.includes('\0')||destination.length>4096)throw Error('目的位置无效。')
+        const target=path.resolve(destination),directory=path.dirname(target)
+        if(await fs.realpath(directory)!==directory||target===checked.path)throw Error('目的位置包含链接或与当前副本相同。')
+        for(let parent=directory;;parent=path.dirname(parent)){
+            if(await fs.lstat(path.join(parent,'.dam','library.sqlite')).then(()=>true,()=>false))throw Error('交付副本不能写入素材库内部，请选择普通文件夹。')
+            if(path.dirname(parent)===parent)break
+        }
+        if(path.extname(target).toLowerCase()!==path.extname(checked.path).toLowerCase())throw Error('请保留副本扩展名，格式转换使用图像处理。')
+        if(operation==='rename'&&directory!==path.dirname(checked.path))throw Error('改名不能改变父目录。')
+        await load(id,true);guard();const handle=await fs.open(target,constants.O_WRONLY|constants.O_CREAT|constants.O_EXCL|(constants.O_NOFOLLOW??0),0o600)
+        const identity=await handle.stat({bigint:true});let complete=false
+        try{guard();await handle.writeFile(checked.bytes);await handle.sync();complete=true}finally{await handle.close();if(!complete){const stamp=await fs.lstat(target,{bigint:true}).catch(()=>null);if(stamp?.dev===identity.dev&&stamp.ino===identity.ino)await fs.unlink(target)}}
+        // A completed external copy is never automatically removed. Write its
+        // recovery location before removing the old owned copy.
+        try{
+            await load(id,true);guard();if(operation!=='copy'){record.location={path:target,dev:identity.dev.toString(),ino:identity.ino.toString()};record.receipt.fileName=path.basename(target)}
+            record.receipt.message=`副本${operation==='copy'?'已复制':'已转移'}至 ${target}；库内原件保持。`;await saveRecord(record)
+            if(operation!=='copy'){
+                await load(id,true);guard();const now=await fs.lstat(checked.path,{bigint:true});if(now.dev!==initial.dev||now.ino!==initial.ino)throw Error('旧副本身份变化，已保留。')
+                await fs.unlink(checked.path)
+            }
+            guard();return{message:record.receipt.message,receipt:record.receipt}
+        }catch(error){throw Object.assign(Error(`副本已写入 ${target}，后续转移或确认未完成。请核对目的与保留记录，不要盲目重试。`),{code:'WORK_FILE_ACTION_UNCERTAIN',cause:error})}
+    })
     const prepare = (actor: string, value: WorkHandoffRequest): Promise<WorkHandoffReceipt> => {
         const abort = new AbortController(); let finish!: () => void;
         const job: Job = { abort, done: new Promise<void>(resolve => { finish = resolve; }), finish: () => finish() };
@@ -182,7 +233,7 @@ export function createWorkFileHandoffs(input: {
             if (request.frameId && !selectedFrame)
                 throw Error('所选参考帧已变化，请重新选择。');
             let bytes: Uint8Array, extension: string, image: WorkHandoffImageResult | undefined, sourceSha256: string | undefined, imageOperations: string[] | undefined, archive: WorkHandoffReceipt['archive'], sourceMembers: SourceMember[] | undefined;
-            if (request.kind === 'zip') {
+            if (['zip','pdf','stitch'].includes(request.kind)) {
                 const plans: Array<{ scope: typeof scope; sourceGeneration: string; fileName: string; size: number }> = [];
                 let plannedBytes = 0;
                 for (const assetId of request.assetIds!) {
@@ -204,11 +255,16 @@ export function createWorkFileHandoffs(input: {
                     sourceMembers.push({ assetId: plan.scope.assetId, sourceGeneration: original.sourceGeneration, digest });
                     items.push({ fileName: names[index], bytes: original.bytes.length, sha256: digest });
                 }
-                bytes = await createBoundedWorkZip(originals, WORK_ZIP_MAX_BYTES, signal); check(); extension = 'zip'; archive = { count: items.length, items };
+                bytes = request.kind==='zip'?await createBoundedWorkZip(originals, WORK_ZIP_MAX_BYTES, signal):await composeWorkImages(originals.map(i=>i.bytes),{kind:request.kind as 'pdf'|'stitch',direction:request.composition?.direction??'vertical',gap:request.composition?.gap??0,scale:request.composition?.scale??'original'},check); check(); extension = request.kind==='zip'?'zip':request.kind==='pdf'?'pdf':'png'; archive = { count: items.length, items };
                 for (const [index, plan] of plans.entries()) {
                     const now = await wait(() => input.host.readWorkMedia(plan.scope)), original = await wait(() => input.host.readWorkMediaFile(plan.scope));
                     if (now.sourceGeneration !== sourceMembers[index].sourceGeneration || original.sourceGeneration !== sourceMembers[index].sourceGeneration || sha(original.bytes) !== sourceMembers[index].digest) throw Error('ZIP成员来源在归档期间已变化，未交付旧版本。');
                 }
+            }
+            else if(request.kind==='ocr-text'){
+                const snapshot=await wait(()=>input.host.readOcr({...scope}));if(!snapshot.evidence)throw Error('素材还没有已完成的 OCR 结果。')
+                const text=snapshot.editedText??ocrText(snapshot.evidence.observation)
+                bytes=Buffer.from(`${asset.fileName}\n${snapshot.evidence.observation.engine} ${snapshot.evidence.observation.version} · ${snapshot.evidence.createdAt}\n${snapshot.editedText!==null?'人工修正':'识别原文'}\n\n${text || '（有效空结果：未识别到文字）'}\n`,'utf8');extension='txt'
             }
             else if (request.kind === 'reference-frame') {
                 const frame = await wait(() => input.host.readWorkMediaFile({ ...scope, frameId: request.frameId }));
@@ -231,6 +287,13 @@ export function createWorkFileHandoffs(input: {
                         throw Error('图像处理仅支持单帧、最多16百万像素的来源。');
                     let pipeline = sharp(original.bytes, { limitInputPixels: 16_000_000 }).rotate();
                     imageOperations = ['auto-orient'];
+                    if(transform.annotations?.length){
+                        const oriented=await wait(()=>pipeline.png().toBuffer({resolveWithObject:true})),w=oriented.info.width,h=oriented.info.height
+                        const elements=transform.annotations.map(a=>`<rect x="${a.x*w}" y="${a.y*h}" width="${a.width*w}" height="${a.height*h}" fill="${a.color}"/>`).join('')
+                        const svg=Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">${elements}</svg>`)
+                        const annotated=await wait(()=>sharp(oriented.data,{limitInputPixels:16_000_000}).composite([{input:svg}]).png().toBuffer())
+                        pipeline=sharp(annotated,{limitInputPixels:16_000_000});imageOperations.push('annotations/'+transform.annotations.length)
+                    }
                     if (transform.resize) {
                         pipeline = pipeline.resize(transform.resize.width, transform.resize.height, { fit: 'inside', withoutEnlargement: true });
                         imageOperations.push('resize-inside/without-enlargement');
@@ -248,6 +311,7 @@ export function createWorkFileHandoffs(input: {
                     if (!transform.stripMetadata) pipeline = pipeline.withMetadata();
                     imageOperations.push(transform.stripMetadata ? 'strip-metadata' : 'withMetadata/partial');
                     bytes = await wait(() => pipeline.toBuffer());
+                    imageOperations.push(bytes.length<original.bytes.length?'size-reduced':'size-not-reduced');
                     const actual = await wait(() => sharp(bytes, { limitInputPixels: 16_000_000 }).metadata());
                     const retainedMetadata: WorkHandoffImageResult['retainedMetadata'] = [];
                     for (const key of ['exif', 'icc', 'iptc', 'xmp'] as const) if (actual[key]?.length) retainedMetadata.push(key);
@@ -275,6 +339,7 @@ export function createWorkFileHandoffs(input: {
             if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink())
                 throw Error('交付目录无效。');
             const { directories, metadataBytes } = await wait(() => retainedDirectories());
+            if(directories.length>=64)throw Error('交付副本达到保留上限（64份或1 GiB），请在接收应用读完后清理。');
             let retainedBytes = metadataBytes;
             for (const dir of directories) {
                 if (!dir.isDirectory() || dir.isSymbolicLink() || !/^handoff-[a-f0-9-]{36}$/.test('handoff-' + dir.name))
@@ -285,6 +350,8 @@ export function createWorkFileHandoffs(input: {
                     retainedBytes += (await wait(() => fs.stat(path.join(input.root, dir.name, file.name)))).size;
                 }
             }
+            if(retainedBytes+bytes.length+receiptLimit(request.kind)>1024**3)throw Error('交付副本达到保留上限（64份或1 GiB），请在接收应用读完后清理。');
+            for(const dir of directories){const stored=JSON.parse(Buffer.from((await wait(()=>readReceipt('handoff:'+dir.name))).bytes).toString()) as HeldHandoff;if(stored.location&&!stored.trashed){if(!Number.isSafeInteger(stored.receipt.bytes)||stored.receipt.bytes<1||stored.receipt.bytes>96*1024**2)throw Error('外部副本保留预算无效。');retainedBytes+=stored.receipt.bytes}}
             // Existing receipts may be up to 16 KiB (ZIP: 128 KiB) and an open request updates
             // that receipt after delivery. Reserve the same bounded metadata
             // allowance before writing any copy, so receipt bytes cannot put the
@@ -293,11 +360,11 @@ export function createWorkFileHandoffs(input: {
                 throw Error('交付副本达到保留上限（64份或1 GiB），请在接收应用读完后清理。');
             const id = 'handoff:' + randomUUID(), directory = path.join(input.root, id.slice(8));
             const stem = path.basename(asset.fileName, path.extname(asset.fileName)).replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-').replace(/[. ]+$/g, '').slice(0, 100) || '素材';
-            const fileName = stem + ' ' + (request.kind === 'original' ? '原件副本' : request.kind === 'preview' ? '预览副本' : request.kind === 'reference-frame' ? '参考帧 ' + (selectedFrame!.actualTicks / 1e7).toFixed(7) + 's' : request.kind === 'processed-image' ? '图像处理副本' : request.kind === 'zip' ? 'ZIP归档' : '兼容导出') + '.' + extension;
+            const fileName = stem + ' ' + (request.kind === 'original' ? '原件副本' : request.kind === 'preview' ? '预览副本' : request.kind === 'reference-frame' ? '参考帧 ' + (selectedFrame!.actualTicks / 1e7).toFixed(7) + 's' : request.kind === 'processed-image' ? '图像处理副本' : request.kind === 'zip' ? 'ZIP归档' : request.kind==='pdf'?'PDF':request.kind==='ocr-text'?'识别文字':request.kind==='stitch'?'拼接副本':'兼容导出') + '.' + extension;
             const file = path.join(directory, fileName);
-            const details = image ? `图像处理生成${image.width}×${image.height} ${image.format.toUpperCase()}独立副本。${image.format === 'png' ? 'PNG无损，质量设置不适用。' : ''}${image.jpegAlphaFlattened ? 'JPEG不支持透明，已铺白底。' : ''}${image.metadataPolicy === 'stripped' ? '已移除元数据。' : '仅部分保留元数据；输出含' + (image.retainedMetadata.join('、') || '无支持的元数据块') + '，不保证完整保留。'}` : archive ? `ZIP已按所选顺序归档${archive.count}份原件的独立副本，未加密；库中原件保持。` : '';
+            const details = image ? `${imageOperations?.includes('size-not-reduced')?'大小未减少；':''}图像处理生成${image.width}×${image.height} ${image.format.toUpperCase()}独立副本。${image.format === 'png' ? 'PNG无损，质量设置不适用。' : ''}${image.jpegAlphaFlattened ? 'JPEG不支持透明，已铺白底。' : ''}${image.metadataPolicy === 'stripped' ? '已移除元数据。' : '仅部分保留元数据；输出含' + (image.retainedMetadata.join('、') || '无支持的元数据块') + '，不保证完整保留。'}` : archive ? `${request.kind==='zip'?'ZIP归档':request.kind==='pdf'?'PDF逐图一页':'等比白底拼接'}已按所选顺序生成${archive.count}份来源的独立副本；库中原件保持。` : '';
             const receipt: WorkHandoffReceipt = { id, fileName, bytes: bytes.length, sha256: sha(bytes), kind: request.kind, status: 'prepared', message: details + '交付副本已准备；不会自动清理，请在接收应用读完后明确清理。', ...(image ? { image } : {}), ...(archive ? { archive } : {}) };
-            const held: HeldHandoff = { receipt, scope: request, actor, sourceGeneration: before.sourceGeneration, ...(sourceMembers ? { sourceMembers } : {}), provenance: { sourceUrl: before.sourceUrl, transform: request.kind === 'zip' ? 'archiver/7.0.1/zip/deflate-6/utf8/v1' : request.kind === 'processed-image' ? 'sharp-processed-image/v1' : request.kind === 'compatible-png' ? 'sharp-auto-orient/full-resolution/png' : request.kind === 'preview' ? 'required-preview' : selectedFrame?.transform ?? 'byte-identical-original-copy', ...(archive ? { archive: { method: 'archiver/7.0.1/zip/deflate-6/utf8/v1', inputs: sourceMembers! } } : {}), ...(image ? { sourceSha256, image: { request: request.imageTransform!, result: image, operations: imageOperations! } } : {}), ...(selectedFrame ? { frame: { actualTicks: selectedFrame.actualTicks, requestedTicks: selectedFrame.requestedTicks, timeBase: selectedFrame.timeBase, method: selectedFrame.method } } : {}) } };
+            const held: HeldHandoff = { receipt, scope: request, actor, sourceGeneration: before.sourceGeneration, ...(sourceMembers ? { sourceMembers } : {}), provenance: { sourceUrl: before.sourceUrl, transform: request.kind === 'zip' ? 'archiver/7.0.1/zip/deflate-6/utf8/v1' : request.kind==='pdf'?'image-pages/pdf-1.4/v1':request.kind==='stitch'?'sharp-stitch/v1' : request.kind === 'processed-image' ? 'sharp-processed-image/v1' : request.kind === 'compatible-png' ? 'sharp-auto-orient/full-resolution/png' : request.kind === 'preview' ? 'required-preview' : selectedFrame?.transform ?? 'byte-identical-original-copy', ...(archive ? { archive: { method: 'archiver/7.0.1/zip/deflate-6/utf8/v1', inputs: sourceMembers! } } : {}), ...(image ? { sourceSha256, image: { request: request.imageTransform!, result: image, operations: imageOperations! } } : {}), ...(selectedFrame ? { frame: { actualTicks: selectedFrame.actualTicks, requestedTicks: selectedFrame.requestedTicks, timeBase: selectedFrame.timeBase, method: selectedFrame.method } } : {}) } };
             const serializeReceipt = () => { const json = JSON.stringify(held, null, 2) + '\n'; if (Buffer.byteLength(json) > receiptLimit(request.kind)) throw Error('交付记录超过' + (receiptLimit(request.kind) / 1024) + ' KiB，不能保存；已有资料和副本保留。'); return json; };
             const preparedJson = serializeReceipt();
             check(); await persistPreparedCopy(directory, fileName, bytes, preparedJson, signal);
@@ -423,9 +490,18 @@ export function createWorkFileHandoffs(input: {
             }
             return receipts;
         },
-        readFile: async (id: string) => { const value = await read(id); const kind = value.record.receipt.kind; return { bytes: value.bytes, type: kind === 'zip' ? 'application/zip' : kind === 'processed-image' && value.record.receipt.image ? 'image/' + value.record.receipt.image.format : kind === 'original' && value.record.receipt.fileName.endsWith('.mp4') ? 'video/mp4' : kind === 'original' ? 'application/octet-stream' : kind === 'preview' && value.bytes[0] !== 137 ? 'application/octet-stream' : 'image/png', fileName: value.record.receipt.fileName }; },
+        readFile: async (id: string) => { const value = await read(id); const kind = value.record.receipt.kind; return { bytes: value.bytes, type: kind==='ocr-text'?'text/plain':kind === 'pdf'?'application/pdf':kind==='stitch'?'image/png':kind === 'zip' ? 'application/zip' : kind === 'processed-image' && value.record.receipt.image ? 'image/' + value.record.receipt.image.format : kind === 'original' && value.record.receipt.fileName.endsWith('.mp4') ? 'video/mp4' : kind === 'original' ? 'application/octet-stream' : kind === 'preview' && value.bytes[0] !== 137 ? 'application/octet-stream' : 'image/png', fileName: value.record.receipt.fileName,message:value.record.receipt.message }; },
+        fileAction,
+        resumeNative: (actor:string,scope:WorkMediaScope,id:string,guard:(previousActor:string)=>void)=>serialize(async()=>{
+            if(!actor.startsWith('work-native:'))throw Error('仅当前原生工作窗可恢复此类副本。')
+            const previous=await load(id,true);guard(previous.actor)
+            if(!previous.actor.startsWith('work-native:')||previous.scope.libraryIdentity!==scope.libraryIdentity||previous.scope.setId!==scope.setId||previous.scope.assetId!==scope.assetId||previous.trashed||jobs.get(previous.actor)?.size)throw Error('此历史副本不能由当前工作窗恢复。')
+            await read(id);guard(previous.actor)
+            if(previous.actor!==actor){const record=structuredClone(previous);record.actor=actor;await saveRecord(record)}
+            return{...previous.receipt}
+        }),
         nativeFile: async (actor: string, id: string) => { const checked = await read(id); if (checked.record.actor !== actor)
             throw Error('交付副本不属于当前窗口。'); return {file:checked.path,assetId:checked.record.scope.assetId,kind:checked.record.receipt.kind}; },
-        clear: (id: string) => serialize(async () => { const checked = await read(id); await input.trash(checked.path); await fs.unlink(path.join(path.dirname(checked.path), 'receipt.json')); await fs.rmdir(path.dirname(checked.path)); records.delete(id); return { message: '交付副本已移至系统回收站；库中原件和参考帧保持。' }; })
+        clear: (id: string) => serialize(async () => { const record=await load(id);if(!record.trashed){const checked=await read(id);await input.trash(checked.path)} await fs.unlink(path.join(input.root,id.slice(8),'receipt.json')); await fs.rmdir(path.join(input.root,id.slice(8))); records.delete(id); return { message: '交付副本已移至系统回收站；库中原件和参考帧保持。' }; })
     };
 }

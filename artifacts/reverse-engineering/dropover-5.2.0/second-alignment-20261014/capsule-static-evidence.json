@@ -1,0 +1,3781 @@
+[
+  {
+    "address": "0x28b90",
+    "evidence_id": "ev_fa29364bd22a9beeea5a05e39f7dc6cdb9506ad345a0007dedbf1f78939ac296",
+    "pseudocode": "\n/* Function Stack Size: 0x10 bytes */\n\nID _TtC12DropoverCore26DisclosureIndicatorControl::init(ID param_1,SEL param_2)\n\n{\n  DisclosureIndicatorControl *pDVar1;\n  \n  pDVar1 = DropoverCore::DisclosureIndicatorControl::init((DisclosureIndicatorControl *)param_1);\n  return (ID)pDVar1;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x28da0",
+    "evidence_id": "ev_1126de29e2022324a31c478af2b2610b30695093a5787de2ab8752d5d8a746d8",
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* Function Stack Size: 0x10 bytes */\n\nvoid _TtC12DropoverCore26DisclosureIndicatorControl::layout(ID param_1,SEL param_2)\n\n{\n  DropoverCore::DisclosureIndicatorControl::layout((DisclosureIndicatorControl *)param_1);\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4ef08",
+    "evidence_id": "ev_ad22ce05a0871a89ab19786a7f5e1a8bcabcea61861195b1a280bd3bf6b2e3e0",
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* Function Stack Size: 0x10 bytes */\n\nvoid _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::layout\n               (ID param_1,SEL param_2)\n\n{\n  FUN_0004eb20(param_1);\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4f214",
+    "evidence_id": "ev_1eae8cfe961482dd988ba2aa5a515bff71516c2262f7adc7e6dafb02d99bacc6",
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* Function Stack Size: 0x10 bytes */\n\nvoid _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n     viewDidChangeEffectiveAppearance(ID param_1,SEL param_2)\n\n{\n  class_t *pcVar1;\n  objc_super local_30;\n  \n  pcVar1 = (class_t *)param_1;\n  _swift_getObjectType();\n  local_30.receiver = param_1;\n  local_30.super_class = pcVar1;\n  _objc_msgSendSuper2(&local_30,\"viewDidChangeEffectiveAppearance\");\n  FUN_0004ef88();\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x289d4",
+    "evidence_id": "ev_d616c031fc9552f389c83999cdbaf77f02b3a519a96d94d947618b46b827d0d4",
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* DropoverCore.DisclosureIndicatorControl.init() -> DropoverCore.DisclosureIndicatorControl */\n\nDisclosureIndicatorControl * __thiscall\nDropoverCore::DisclosureIndicatorControl::init(DisclosureIndicatorControl *this)\n\n{\n  class_t *pcVar1;\n  ID IVar2;\n  NSView *this_00;\n  DisclosureIndicatorControl *pDVar3;\n  objc_super local_40;\n  \n  pcVar1 = (class_t *)this;\n  _swift_getObjectType();\n  IVar2 = 0;\n  FUN_0004dde0();\n  _objc_allocWithZone();\n  this_00 = (NSView *)_objc_msgSend(IVar2,\"init\");\n  (extension_DropoverCore)::__C::NSView::set_dropover_acceptsFirstMouse(this_00,true);\n  *(NSView **)(this + _TtC12DropoverCore26DisclosureIndicatorControl::textContainerView) = this_00;\n  IVar2 = 0;\n  FUN_00029190();\n  _objc_allocWithZone();\n  IVar2 = _objc_msgSend(IVar2,\"init\");\n  *(ID *)(this + _TtC12DropoverCore26DisclosureIndicatorControl::imageView) = IVar2;\n  this[_TtC12DropoverCore26DisclosureIndicatorControl::selected] = (DisclosureIndicatorControl)0x0;\n  local_40.receiver = (ID)this;\n  local_40.super_class = pcVar1;\n  pDVar3 = (DisclosureIndicatorControl *)_objc_msgSendSuper2(&local_40,\"init\");\n  FUN_00028aa4();\n  return pDVar3;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x282cc",
+    "evidence_id": "ev_3e37e2714e1e3bc6c3314bf57e00d306c35b97265f67bcb23cd9b39b860b7c58",
+    "pseudocode": "\n/* DropoverCore.DisclosureIndicatorControl.layout() -> () */\n\nvoid __thiscall DropoverCore::DisclosureIndicatorControl::layout(DisclosureIndicatorControl *this)\n\n{\n  class_t *pcVar1;\n  ID self;\n  ID self_00;\n  double in_d0;\n  double dVar2;\n  double dVar3;\n  double in_d1;\n  double dVar4;\n  double dVar5;\n  objc_super local_70;\n  \n  pcVar1 = (class_t *)this;\n  _swift_getObjectType();\n  local_70.receiver = (ID)this;\n  local_70.super_class = pcVar1;\n  _objc_msgSendSuper2(&local_70,\"layout\");\n  self = *(ID *)(this + _TtC12DropoverCore26DisclosureIndicatorControl::textContainerView);\n  _objc_msgSend(self,\"fittingSize\");\n  dVar3 = 86.0;\n  if (in_d0 <= 86.0) {\n    dVar3 = in_d0;\n  }\n  _objc_msgSend((ID)this,\"bounds\");\n  _CGRectGetHeight();\n  dVar4 = (in_d0 - in_d1) * 0.5 + -1.0;\n  dVar2 = 0.0;\n  _CGRectIntegral(0,dVar4,dVar3,in_d1);\n  _objc_msgSend(self,\"setFrame:\");\n  self_00 = *(ID *)(this + _TtC12DropoverCore26DisclosureIndicatorControl::imageView);\n  _objc_msgSend(self_00,\"fittingSize\");\n  dVar3 = dVar2;\n  _objc_msgSend(self,\"frame\");\n  _CGRectGetMaxX();\n  dVar5 = dVar3 + 4.0;\n  _objc_msgSend((ID)this,\"bounds\");\n  _CGRectGetHeight();\n  _CGRectIntegral(dVar5,(dVar3 - dVar4) * 0.5,dVar2,dVar4);\n  _objc_msgSend(self_00,\"setFrame:\");\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4eb20",
+    "evidence_id": "ev_921a6fb36fa09a69b6cbc6a57e78c46894f21b182944c6d9707adf089656e6ce",
+    "pseudocode": "\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_0004eb20(undefined8 param_1)\n\n{\n  undefined *puVar1;\n  undefined8 uVar2;\n  NSArray *pNVar3;\n  NSNumber *this;\n  NSNumber *pNVar4;\n  ID unaff_x20;\n  ID IVar5;\n  ID self;\n  \n  _swift_getObjectType();\n  _objc_msgSendSuper2((objc_super *)&stack0xffffffffffffff80,\"layout\");\n  CATransaction::begin((ID)&_OBJC_CLASS___CATransaction,\"begin\");\n  CATransaction::setDisableActions_((ID)&_OBJC_CLASS___CATransaction,\"setDisableActions:\",1);\n  IVar5 = *(ID *)(unaff_x20 +\n                 _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                 viewportLayer);\n  _objc_msgSend(unaff_x20,\"bounds\");\n  _objc_msgSend(IVar5,\"setFrame:\");\n  self = *(ID *)(unaff_x20 +\n                _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::maskLayer\n                );\n  _objc_msgSend(IVar5,\"bounds\");\n  _objc_msgSend(self,\"setFrame:\");\n  IVar5 = NSScreen::mainScreen((ID)&_OBJC_CLASS___NSScreen,\"mainScreen\");\n  if (IVar5 == 0) {\n    param_1 = 0x4000000000000000;\n  }\n  else {\n    NSScreen::backingScaleFactor(IVar5,\"backingScaleFactor\");\n  }\n  _objc_msgSend(self,\"setContentsScale:\",param_1);\n  puVar1 = &DAT_000cca88;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cca88,&DAT_0009b500);\n  _swift_allocObject();\n  *(undefined8 *)(puVar1 + 0x18) = 8;\n  *(undefined8 *)(puVar1 + 0x10) = 4;\n  IVar5 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,\"blackColor\");\n  IVar5 = NSColor::colorWithAlphaComponent_(IVar5,\"colorWithAlphaComponent:\",0);\n  IVar5 = NSColor::CGColor(IVar5,\"CGColor\");\n  uVar2 = 0;\n  FUN_00005594();\n  *(undefined8 *)(puVar1 + 0x38) = uVar2;\n  *(ID *)(puVar1 + 0x20) = IVar5;\n  IVar5 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,\"blackColor\");\n  IVar5 = NSColor::CGColor(IVar5,\"CGColor\");\n  *(undefined8 *)(puVar1 + 0x58) = uVar2;\n  *(ID *)(puVar1 + 0x40) = IVar5;\n  IVar5 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,\"blackColor\");\n  IVar5 = NSColor::CGColor(IVar5,\"CGColor\");\n  *(undefined8 *)(puVar1 + 0x78) = uVar2;\n  *(ID *)(puVar1 + 0x60) = IVar5;\n  IVar5 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,\"blackColor\");\n  IVar5 = NSColor::colorWithAlphaComponent_(IVar5,\"colorWithAlphaComponent:\",0);\n  IVar5 = NSColor::CGColor(IVar5,\"CGColor\");\n  *(undefined8 *)(puVar1 + 0x98) = uVar2;\n  *(ID *)(puVar1 + 0x80) = IVar5;\n  pNVar3 = (extension_Foundation)::Swift::Array<undefined>::_bridgeToObjectiveC();\n  _swift_bridgeObjectRelease(puVar1);\n  _objc_msgSend(self,\"setColors:\",pNVar3);\n  puVar1 = &DAT_000cbd30;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cbd30,&DAT_00099440);\n  _swift_allocObject();\n  *(undefined8 *)(puVar1 + 0x18) = 9;\n  *(undefined8 *)(puVar1 + 0x10) = 4;\n  this = (NSNumber *)0x0;\n  FUN_0000d230(0,&DAT_000cca90,&PTR__OBJC_CLASS___NSNumber_000c8c68);\n  pNVar4 = (extension_Foundation)::__C::NSNumber::__allocating_init(this,0);\n  *(NSNumber **)(puVar1 + 0x20) = pNVar4;\n  pNVar4 = (extension_Foundation)::__C::NSNumber::__allocating_init(this,0.15);\n  *(NSNumber **)(puVar1 + 0x28) = pNVar4;\n  pNVar4 = (extension_Foundation)::__C::NSNumber::__allocating_init(this,0.85);\n  *(NSNumber **)(puVar1 + 0x30) = pNVar4;\n  pNVar4 = (extension_Foundation)::__C::NSNumber::__allocating_init(this,1);\n  *(NSNumber **)(puVar1 + 0x38) = pNVar4;\n  pNVar3 = (extension_Foundation)::Swift::Array<undefined>::_bridgeToObjectiveC();\n  _swift_bridgeObjectRelease(puVar1);\n  _objc_msgSend(self,\"setLocations:\",pNVar3);\n  FUN_0004e188(0);\n  CATransaction::commit((ID)&_OBJC_CLASS___CATransaction,\"commit\");\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4ef88",
+    "evidence_id": "ev_8d2c0c9d20382bc10ad5f84f38d65662d8c25e67dbe758714ef76bd378ac8be7",
+    "pseudocode": "\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n\nundefined8 FUN_0004ef88(void)\n\n{\n  undefined8 uVar1;\n  long lVar2;\n  code *pcVar3;\n  undefined8 uVar4;\n  undefined *puVar5;\n  ID IVar6;\n  ID IVar7;\n  long unaff_x20;\n  \n  uVar4 = *(undefined8 *)\n           (unaff_x20 +\n           _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::text);\n  uVar1 = ((undefined8 *)\n          (unaff_x20 +\n          _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::text))[1];\n  _swift_bridgeObjectRetain(uVar1);\n  FUN_0004de60(uVar4,uVar1);\n  _swift_bridgeObjectRelease(uVar1);\n  lVar2 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::attributedText;\n  *(undefined8 *)\n   (unaff_x20 +\n   _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::attributedText) =\n       uVar4;\n  puVar5 = &DAT_000cbd30;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cbd30,&DAT_00099440);\n  _swift_initStackObject();\n  *(undefined8 *)(puVar5 + 0x18) = 5;\n  *(undefined8 *)(puVar5 + 0x10) = 2;\n  IVar6 = *(ID *)(unaff_x20 +\n                 _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                 textLayerA);\n  *(ID *)(puVar5 + 0x20) = IVar6;\n  *(undefined8 *)(puVar5 + 0x28) =\n       *(undefined8 *)\n        (unaff_x20 +\n        _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::textLayerB);\n  if (((ulong)puVar5 & 0xc000000000000001) != 0) {\n    IVar6 = 0;\n    FUN_0001469c(0,puVar5);\n  }\n  _objc_msgSend(IVar6,\"setForegroundColor:\",0);\n  _objc_msgSend(IVar6,\"setString:\",0);\n  _objc_msgSend(IVar6,\"setString:\",*(undefined8 *)(unaff_x20 + lVar2));\n  IVar7 = NSColor::secondaryLabelColor((ID)&_OBJC_CLASS___NSColor,\"secondaryLabelColor\");\n  IVar7 = NSColor::CGColor(IVar7,\"CGColor\");\n  _objc_msgSend(IVar6,\"setForegroundColor:\",IVar7);\n  _objc_msgSend(IVar6,\"setNeedsDisplay\");\n  if (((ulong)puVar5 & 0xc000000000000001) == 0) {\n    if (*(ulong *)(((ulong)puVar5 & 0xffffffffffffff8) + 0x10) < 2) {\n                    /* WARNING: Does not return */\n      pcVar3 = (code *)SoftwareBreakpoint(1,0x4f214);\n      (*pcVar3)();\n    }\n    IVar6 = *(ID *)(puVar5 + 0x28);\n  }\n  else {\n    IVar6 = 1;\n    FUN_0001469c(1,puVar5);\n  }\n  _swift_bridgeObjectRelease(puVar5);\n  _objc_msgSend(IVar6,\"setForegroundColor:\",0);\n  _objc_msgSend(IVar6,\"setString:\",0);\n  _objc_msgSend(IVar6,\"setString:\",*(undefined8 *)(unaff_x20 + lVar2));\n  IVar7 = NSColor::secondaryLabelColor((ID)&_OBJC_CLASS___NSColor,\"secondaryLabelColor\");\n  IVar7 = NSColor::CGColor(IVar7,\"CGColor\");\n  _objc_msgSend(IVar6,\"setForegroundColor:\",IVar7);\n  _objc_msgSend(IVar6,\"setNeedsDisplay\");\n  return 0;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4e188",
+    "evidence_id": "ev_5de654277d8b5796c6a5daa8ec058aeb5529c09a5443237a69165bc53f757a01",
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n\nvoid FUN_0004e188(undefined8 param_1,undefined8 param_2,double param_3,double param_4)\n\n{\n  long lVar1;\n  code *pcVar2;\n  undefined *puVar3;\n  UUID UVar4;\n  ID IVar5;\n  NSString *pNVar6;\n  long extraout_x8;\n  long extraout_x8_00;\n  long lVar7;\n  ID unaff_x20;\n  long lVar8;\n  long lVar9;\n  ID IVar10;\n  double dVar11;\n  double dVar12;\n  double dVar13;\n  double dVar14;\n  long local_150;\n  undefined *local_148;\n  undefined8 local_140;\n  undefined8 uStack_138;\n  undefined8 local_130;\n  undefined8 uStack_128;\n  undefined8 local_120;\n  undefined8 uStack_118;\n  undefined8 local_110;\n  undefined8 uStack_108;\n  undefined8 local_100;\n  undefined8 uStack_f8;\n  undefined8 uStack_f0;\n  undefined8 uStack_e8;\n  undefined8 local_e0;\n  undefined8 uStack_d8;\n  undefined8 uStack_d0;\n  undefined8 uStack_c8;\n  \n  puVar3 = &DAT_000cd2a8;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cd2a8,&DAT_0009b508);\n  (*(code *)PTR____chkstk_darwin_000b8820)\n            (*(long *)(*(long *)(puVar3 + -8) + 0x40) + 0xfU & 0xfffffffffffffff0);\n  lVar7 = (long)&local_150 - extraout_x8;\n  UVar4 = Foundation::UUID::typeMetadataAccessor();\n  lVar9 = *(long *)(UVar4.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_000b8820)(*(undefined8 *)(lVar9 + 0x40));\n  lVar8 = lVar7 - (extraout_x8_00 + 0xfU & 0xfffffffffffffff0);\n  IVar5 = _objc_msgSend(unaff_x20,\"layer\");\n  lVar1 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::attributedText;\n  if (IVar5 != 0) {\n    local_150 = lVar9;\n    local_148 = UVar4.unknown;\n    _objc_msgSend(*(ID *)(unaff_x20 +\n                         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                         attributedText),\"boundingRectWithSize:options:context:\",0x7fefffffffffffff,\n                  0x7fefffffffffffff,3,0);\n    dVar11 = (double)(long)param_3;\n    dVar13 = dVar11 + 1.0;\n    _objc_msgSend(unaff_x20,\"bounds\");\n    _CGRectGetHeight();\n    if ((double)(long)param_4 <= dVar11) {\n      dVar11 = (double)(long)param_4;\n    }\n    dVar14 = (double)(long)dVar11;\n    dVar13 = (double)(long)dVar13;\n    puVar3 = &DAT_000cbd30;\n    ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cbd30,&DAT_00099440);\n    _swift_initStackObject();\n    dVar11 = 9.88131291682493e-324;\n    *(undefined8 *)(puVar3 + 0x18) = 5;\n    *(undefined8 *)(puVar3 + 0x10) = 2;\n    IVar5 = *(ID *)(unaff_x20 +\n                   _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                   textLayerA);\n    *(ID *)(puVar3 + 0x20) = IVar5;\n    IVar10 = *(ID *)(unaff_x20 +\n                    _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                    textLayerB);\n    *(ID *)(puVar3 + 0x28) = IVar10;\n    if (((ulong)puVar3 & 0xc000000000000001) != 0) {\n      IVar5 = 0;\n      FUN_0001469c(0,puVar3);\n    }\n    _objc_msgSend(IVar5,\"setString:\",*(undefined8 *)(unaff_x20 + lVar1));\n    _objc_msgSend(unaff_x20,\"bounds\");\n    _CGRectGetHeight();\n    dVar12 = 0.0;\n    _CGRectIntegral(0,(dVar11 - dVar14) * 0.5,dVar13,dVar14);\n    _objc_msgSend(IVar5,\"setFrame:\");\n    if (((ulong)puVar3 & 0xc000000000000001) == 0) {\n      if (*(ulong *)(((ulong)puVar3 & 0xffffffffffffff8) + 0x10) < 2) {\n                    /* WARNING: Does not return */\n        pcVar2 = (code *)SoftwareBreakpoint(1,0x4e768);\n        (*pcVar2)();\n      }\n      IVar5 = *(ID *)(puVar3 + 0x28);\n    }\n    else {\n      IVar5 = 1;\n      FUN_0001469c(1,puVar3);\n    }\n    _swift_bridgeObjectRelease(puVar3);\n    _objc_msgSend(IVar5,\"setString:\",*(undefined8 *)(unaff_x20 + lVar1));\n    _objc_msgSend(unaff_x20,\"bounds\");\n    _CGRectGetHeight();\n    _CGRectIntegral(0,(dVar12 - dVar14) * 0.5,dVar13,dVar14);\n    _objc_msgSend(IVar5,\"setFrame:\");\n    lVar1 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::spacing;\n    dVar11 = *(double *)\n              (unaff_x20 +\n              _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::spacing);\n    _objc_msgSend(IVar10,\"frame\",dVar11);\n    _objc_msgSend(IVar10,\"setFrame:\",dVar13 + dVar11);\n    dVar11 = dVar13 + *(double *)(unaff_x20 + lVar1);\n    IVar5 = *(ID *)(unaff_x20 +\n                   _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                   contentLayer);\n    dVar12 = dVar11 + dVar11;\n    _objc_msgSend(unaff_x20,\"bounds\");\n    _CGRectGetHeight();\n    dVar14 = 10.0;\n    _CGRectIntegral(0x4024000000000000,0x3ff0000000000000,dVar12,dVar11);\n    _objc_msgSend(IVar5,\"setFrame:\");\n    _objc_msgSend(unaff_x20,\"invalidateIntrinsicContentSize\");\n    _objc_msgSend(IVar5,\"removeAllAnimations\");\n    _objc_msgSend(unaff_x20,\"bounds\");\n    _CGRectGetWidth();\n    if (dVar13 + 10.0 <= dVar14) {\n      *(undefined1 *)\n       (unaff_x20 +\n       _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::isAnimating) = 0;\n      (**(code **)(local_150 + 0x38))(lVar7,1,1,local_148);\n      lVar1 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n              animationIdentifier;\n      _swift_beginAccess(unaff_x20 +\n                         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                         animationIdentifier,&local_140,0x21,0);\n      FUN_00050328(lVar7,unaff_x20 + lVar1);\n      _swift_endAccess(&local_140);\n      _objc_msgSend(*(ID *)(unaff_x20 +\n                           _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView\n                           ::viewportLayer),\"setMask:\",0);\n      pNVar6 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n      IVar10 = _objc_msgSend(IVar5,\"animationForKey:\",pNVar6);\n      if (IVar10 != 0) {\n        pNVar6 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n        _objc_msgSend(IVar5,\"removeAnimationForKey:\",pNVar6);\n      }\n      uStack_f8 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x48);\n      local_100 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x40);\n      uStack_e8 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x58);\n      uStack_f0 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x50);\n      uStack_d8 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x68);\n      local_e0 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x60);\n      uStack_c8 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x78);\n      uStack_d0 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x70);\n      uStack_138 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 8);\n      local_140 = *(undefined8 *)PTR__CATransform3DIdentity_000b8c48;\n      uStack_128 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x18);\n      local_130 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x10);\n      uStack_118 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x28);\n      local_120 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x20);\n      uStack_108 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x38);\n      local_110 = *(undefined8 *)(PTR__CATransform3DIdentity_000b8c48 + 0x30);\n      _objc_msgSend(IVar5,\"setTransform:\",&local_140);\n    }\n    else {\n      *(undefined1 *)\n       (unaff_x20 +\n       _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::isAnimating) = 1;\n      IVar5 = *(ID *)(unaff_x20 +\n                     _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                     viewportLayer);\n      _objc_msgSend(unaff_x20,\"bounds\");\n      _objc_msgSend(IVar5,\"setFrame:\");\n      IVar10 = *(ID *)(unaff_x20 +\n                      _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                      maskLayer);\n      _objc_msgSend(IVar5,\"bounds\");\n      _objc_msgSend(IVar10,\"setFrame:\");\n      _objc_msgSend(IVar5,\"setMask:\",IVar10);\n      Foundation::UUID::init();\n      puVar3 = local_148;\n      lVar9 = local_150;\n      (**(code **)(local_150 + 0x10))(lVar7,lVar8,local_148);\n      (**(code **)(lVar9 + 0x38))(lVar7,0,1,puVar3);\n      lVar1 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n              animationIdentifier;\n      _swift_beginAccess(unaff_x20 +\n                         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                         animationIdentifier,&local_140,0x21,0);\n      FUN_00050328(lVar7,unaff_x20 + lVar1);\n      _swift_endAccess(&local_140);\n      FUN_0004f3a4(lVar8);\n      (**(code **)(lVar9 + 8))(lVar8,puVar3);\n    }\n  }\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x28aa4",
+    "evidence_id": "ev_74cac648f79b628ddd6dfa1436aa0a914d1bfc9e27fd1c79bce6df6dbff5d09b",
+    "pseudocode": "\nvoid FUN_00028aa4(void)\n\n{\n  undefined8 *puVar1;\n  undefined8 uVar2;\n  undefined8 uVar3;\n  undefined *puVar4;\n  ID unaff_x20;\n  undefined1 auStack_58 [24];\n  \n  _objc_msgSend(unaff_x20,\"setWantsLayer:\",1);\n  puVar4 = &DAT_000bba80;\n  _swift_allocObject(&DAT_000bba80,0x18,7);\n  _swift_unknownObjectWeakInit(puVar4 + 0x10);\n  puVar1 = (undefined8 *)(unaff_x20 + _TtC12DropoverCore7Control::onHighlightStateChange);\n  _swift_beginAccess(puVar1,auStack_58,1,0);\n  uVar2 = *puVar1;\n  uVar3 = puVar1[1];\n  *puVar1 = FUN_000291f4;\n  puVar1[1] = puVar4;\n  _swift_retain(puVar4);\n  FUN_00006718(uVar2,uVar3);\n  _swift_release(puVar4);\n  _objc_msgSend(unaff_x20,\"addSubview:\",\n                *(undefined8 *)\n                 (unaff_x20 + _TtC12DropoverCore26DisclosureIndicatorControl::textContainerView));\n  _objc_msgSend(unaff_x20,\"addSubview:\",\n                *(undefined8 *)\n                 (unaff_x20 + _TtC12DropoverCore26DisclosureIndicatorControl::imageView));\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4ead8",
+    "evidence_id": "ev_48049710498e221a252fcc4e4df3be04d56540fc643a616f70b32c602cde712e",
+    "pseudocode": "\n/* Function Stack Size: 0x30 bytes */\n\nID _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::initWithFrame_\n             (ID param_1,SEL param_2,CGRect param_3)\n\n{\n  FUN_0004e768(param_1,param_2,param_3.field0_0x0.field0_0x0,param_3.field0_0x0.field1_0x8,\n               param_3.field1_0x10.field0_0x0,param_3.field1_0x10.field1_0x8);\n  return param_1;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4f3a4",
+    "evidence_id": "ev_366ac149fbb1b25eb789c791f30d5220defa6c62239610c123fb11bf92c485d0",
+    "pseudocode": "\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_0004f3a4(undefined8 param_1)\n\n{\n  DispatchTime DVar1;\n  bool bVar2;\n  DispatchTimeInterval DVar3;\n  DispatchWorkItemFlags DVar4;\n  DispatchQoS DVar5;\n  DispatchTime DVar6;\n  UUID UVar7;\n  undefined *puVar8;\n  undefined *puVar9;\n  long lVar10;\n  OS_dispatch_queue *pOVar11;\n  void *aBlock;\n  DispatchQoS DVar12;\n  undefined8 *puVar13;\n  long lVar14;\n  long extraout_x8;\n  DispatchWorkItemFlags flags;\n  long lVar15;\n  long extraout_x8_00;\n  DispatchQoS qos;\n  long extraout_x8_01;\n  DispatchTime deadline;\n  long extraout_x8_02;\n  long extraout_x8_03;\n  ulong uVar16;\n  long extraout_x12;\n  long extraout_x12_00;\n  long lVar17;\n  long unaff_x20;\n  long lVar18;\n  long lVar19;\n  long lVar20;\n  long lVar21;\n  long lVar22;\n  long lVar23;\n  ulong uVar24;\n  code *pcVar25;\n  undefined *local_120;\n  code *local_118;\n  DispatchTime local_110;\n  long local_108;\n  undefined *local_b0;\n  undefined8 local_a8;\n  code *local_a0;\n  undefined *puStack_98;\n  code *local_90;\n  undefined *local_88;\n  undefined1 auStack_80 [32];\n  \n  DVar4 = Dispatch::DispatchWorkItemFlags::typeMetadataAccessor();\n  lVar14 = *(long *)(DVar4.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_000b8820)(*(undefined8 *)(lVar14 + 0x40));\n  flags.unknown = (undefined *)((long)&local_120 - (extraout_x8 + 0xfU & 0xfffffffffffffff0));\n  DVar5 = Dispatch::DispatchQoS::typeMetadataAccessor();\n  lVar15 = *(long *)(DVar5.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_000b8820)(*(undefined8 *)(lVar15 + 0x40));\n  qos.unknown = flags.unknown + -(extraout_x8_00 + 0xfU & 0xfffffffffffffff0);\n  DVar6 = Dispatch::DispatchTime::typeMetadataAccessor();\n  local_108 = *(long *)(DVar6.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_000b8820)(*(undefined8 *)(local_108 + 0x40));\n  local_110.unknown = qos.unknown + -(extraout_x8_01 + 0xfU & 0xfffffffffffffff0);\n  (*(code *)PTR____chkstk_darwin_000b8820)();\n  deadline.unknown = qos.unknown + -(extraout_x8_01 + 0xfU & 0xfffffffffffffff0) + -extraout_x12;\n  UVar7 = Foundation::UUID::typeMetadataAccessor();\n  lVar23 = *(long *)(UVar7.unknown + -8);\n  lVar22 = *(long *)(lVar23 + 0x40);\n  (*(code *)PTR____chkstk_darwin_000b8820)();\n  lVar20 = (long)deadline.unknown - (lVar22 + 0xfU & 0xfffffffffffffff0);\n  puVar8 = &DAT_000cd2b0;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cd2b0,&DAT_0009b510);\n  (*(code *)PTR____chkstk_darwin_000b8820)\n            (*(long *)(*(long *)(puVar8 + -8) + 0x40) + 0xfU & 0xfffffffffffffff0);\n  lVar17 = lVar20 - extraout_x8_02;\n  puVar9 = &DAT_000cd2a8;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cd2a8,&DAT_0009b508);\n  (*(code *)PTR____chkstk_darwin_000b8820)(*(undefined8 *)(*(long *)(puVar9 + -8) + 0x40));\n  lVar19 = lVar17 - (extraout_x8_03 + 0xfU & 0xfffffffffffffff0);\n  (*(code *)PTR____chkstk_darwin_000b8820)();\n  lVar21 = lVar19 - extraout_x12_00;\n  local_118 = *(code **)(lVar23 + 0x10);\n  (*local_118)(lVar21,param_1,UVar7.unknown);\n  (**(code **)(lVar23 + 0x38))(lVar21,0,1,UVar7.unknown);\n  lVar10 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n           animationIdentifier;\n  _swift_beginAccess(unaff_x20 +\n                     _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                     animationIdentifier,auStack_80,0,0);\n  lVar18 = (long)*(int *)(puVar8 + 0x30);\n  FUN_00050378(lVar21,lVar17);\n  FUN_00050378(unaff_x20 + lVar10,lVar17 + lVar18);\n  pcVar25 = *(code **)(lVar23 + 0x30);\n  lVar10 = lVar17;\n  (*pcVar25)(lVar17,1,UVar7.unknown);\n  if ((int)lVar10 == 1) {\n    FUN_00005518(lVar21,&DAT_000cd2a8,&DAT_0009b508);\n    lVar18 = lVar17 + lVar18;\n    (*pcVar25)(lVar18,1,UVar7.unknown);\n    if ((int)lVar18 != 1) {\nLAB_0004f6a0:\n      FUN_00005518(lVar17,&DAT_000cd2b0,&DAT_0009b510);\n      return;\n    }\n    FUN_00005518(lVar17,&DAT_000cd2a8,&DAT_0009b508);\n  }\n  else {\n    FUN_00050378(lVar17,lVar19);\n    lVar10 = lVar17 + lVar18;\n    (*pcVar25)(lVar10,1,UVar7.unknown);\n    if ((int)lVar10 == 1) {\n      FUN_00005518(lVar21,&DAT_000cd2a8,&DAT_0009b508);\n      (**(code **)(lVar23 + 8))(lVar19,UVar7.unknown);\n      goto LAB_0004f6a0;\n    }\n    (**(code **)(lVar23 + 0x20))(lVar20,lVar17 + lVar18,UVar7.unknown);\n    puVar8 = &DAT_000cd2b8;\n    FUN_00002e98(&DAT_000cd2b8,PTR_typeMetadataAccessor_000b8570,\n                 PTR_Foundation__Foundation__UUID_>Swift__Equatable_000b8580);\n    bVar2 = Swift::Equatable::___infix(lVar19,lVar20,UVar7.unknown,puVar8);\n    pcVar25 = *(code **)(lVar23 + 8);\n    (*pcVar25)(lVar20,UVar7.unknown);\n    FUN_00005518(lVar21,&DAT_000cd2a8,&DAT_0009b508);\n    (*pcVar25)(lVar19,UVar7.unknown);\n    FUN_00005518(lVar17,&DAT_000cd2a8,&DAT_0009b508);\n    if (!bVar2) {\n      return;\n    }\n  }\n  pOVar11 = (OS_dispatch_queue *)0x0;\n  FUN_0000d230(0,&DAT_000cb3b8,&PTR__OBJC_CLASS___OS_dispatch_queue_000c8b08);\n  local_120 = (extension_Dispatch)::__C::OS_dispatch_queue::get_main(pOVar11);\n  DVar1.unknown = local_110.unknown;\n  Dispatch::DispatchTime::now((DispatchTime)local_120);\n  if (DAT_000caee0 != -1) {\n    _swift_once(&DAT_000caee0,FUN_0004de00);\n  }\n  DVar3 = Dispatch::DispatchTimeInterval::typeMetadataAccessor();\n  ___swift_project_value_buffer(DVar3.value,&DAT_000cd1c8);\n  Dispatch::__infix(DVar1,DVar3);\n  pcVar25 = *(code **)(local_108 + 8);\n  (*pcVar25)(DVar1.unknown,DVar6.unknown);\n  puVar8 = &DAT_000bd2f0;\n  _swift_allocObject(&DAT_000bd2f0,0x18,7);\n  _swift_unknownObjectWeakInit(puVar8 + 0x10,unaff_x20);\n  (*local_118)(lVar20,param_1,UVar7.unknown);\n  uVar16 = (ulong)*(byte *)(lVar23 + 0x50);\n  uVar24 = uVar16 + 0x18 & (uVar16 ^ 0xffffffffffffffff);\n  puVar9 = &DAT_000bd318;\n  _swift_allocObject(&DAT_000bd318,uVar24 + lVar22,uVar16 | 7);\n  *(undefined **)(puVar9 + 0x10) = puVar8;\n  (**(code **)(lVar23 + 0x20))(puVar9 + uVar24,lVar20,UVar7.unknown);\n  local_90 = FUN_00050470;\n  local_b0 = PTR___NSConcreteStackBlock_000b8810;\n  local_a8 = 0x42000000;\n  local_a0 = FUN_00015d5c;\n  puStack_98 = &_block_descriptor;\n  local_88 = puVar9;\n  aBlock = __Block_copy(&local_b0);\n  DVar12.unknown = local_88;\n  _swift_release();\n  Dispatch::DispatchQoS::get_unspecified(DVar12);\n  local_b0 = PTR___swiftEmptyArrayStorage_000b9e20;\n  puVar13 = &DAT_000cb3a0;\n  FUN_00002e98(&DAT_000cb3a0,PTR_typeMetadataAccessor_000ba108,\n               PTR_Dispatch__Dispatch__DispatchWorkItemFlags_>Swift__SetAlgebra_000ba118);\n  puVar8 = &DAT_000cb3a8;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cb3a8,&DAT_00098f10);\n  puVar9 = puVar8;\n  FUN_00016f08();\n  Swift::SetAlgebra::_init(flags.unknown,&local_b0,puVar8,puVar9,DVar4.unknown,puVar13);\n  (extension_Dispatch)::__C::OS_dispatch_queue::_asyncAfter(deadline,qos,flags);\n  __Block_release(aBlock);\n  (**(code **)(lVar14 + 8))(flags.unknown,DVar4.unknown);\n  (**(code **)(lVar15 + 8))(qos.unknown,DVar5.unknown);\n  (*pcVar25)(deadline.unknown,DVar6.unknown);\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4e768",
+    "evidence_id": "ev_1c02319a0c08b5eb5878c56f8edfc0e48e4829f40d96ba79e00e157f79fd92ae",
+    "pseudocode": "\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n\nID FUN_0004e768(undefined8 param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4)\n\n{\n  undefined8 *puVar1;\n  long lVar2;\n  undefined *puVar3;\n  NSString *pNVar4;\n  ID IVar5;\n  UUID UVar6;\n  long unaff_x20;\n  \n  _swift_getObjectType();\n  puVar1 = (undefined8 *)\n           (unaff_x20 +\n           _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::text);\n  *puVar1 = 0;\n  puVar1[1] = 0xe000000000000000;\n  *(undefined8 *)\n   (unaff_x20 + _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::spacing)\n       = 0x4028000000000000;\n  lVar2 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::attributedText;\n  puVar3 = &_OBJC_CLASS___NSAttributedString;\n  _objc_allocWithZone();\n  pNVar4 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n  IVar5 = _objc_msgSend((ID)puVar3,\"initWithString:\",pNVar4);\n  *(ID *)(unaff_x20 + lVar2) = IVar5;\n  lVar2 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n          animationIdentifier;\n  UVar6 = Foundation::UUID::typeMetadataAccessor();\n  (**(code **)(*(long *)(UVar6.unknown + -8) + 0x38))(unaff_x20 + lVar2,1,1,UVar6.unknown);\n  *(undefined1 *)\n   (unaff_x20 +\n   _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::isAnimating) = 0;\n  puVar3 = &_OBJC_CLASS___CALayer;\n  _objc_allocWithZone();\n  IVar5 = _objc_msgSend((ID)puVar3,\"init\");\n  *(ID *)(unaff_x20 +\n         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::contentLayer) =\n       IVar5;\n  puVar3 = &_OBJC_CLASS___CALayer;\n  _objc_allocWithZone();\n  IVar5 = _objc_msgSend((ID)puVar3,\"init\");\n  *(ID *)(unaff_x20 +\n         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::viewportLayer) =\n       IVar5;\n  puVar3 = &_OBJC_CLASS___CAGradientLayer;\n  _objc_allocWithZone();\n  IVar5 = _objc_msgSend((ID)puVar3,\"init\");\n  *(ID *)(unaff_x20 +\n         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::maskLayer) =\n       IVar5;\n  FUN_00050500();\n  *(ID *)(unaff_x20 +\n         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::textLayerA) =\n       IVar5;\n  FUN_00050500();\n  *(ID *)(unaff_x20 +\n         _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::textLayerB) =\n       IVar5;\n  IVar5 = _objc_msgSendSuper2((objc_super *)&stack0xffffffffffffff90,\"initWithFrame:\",param_1,\n                              param_2,param_3,param_4);\n  FUN_0004e92c();\n  return IVar5;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x291f4",
+    "evidence_id": "ev_47be07752540ab75854305491ad4bee5f22ad43ea7fef6b23ff615344ef30326",
+    "pseudocode": "\nvoid FUN_000291f4(uint param_1)\n\n{\n  FUN_00028bf8(param_1 & 1);\n  return;\n}\n\n",
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4f9b0",
+    "evidence_id": "ev_c9acd4a67b2f4c4723714fab80cc6fa16dd89474aee3e0a5c2b5d93dbf99dbfc",
+    "pseudocode": "\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_0004f9b0(long param_1,undefined8 param_2)\n\n{\n  bool bVar1;\n  UUID UVar2;\n  undefined *puVar3;\n  undefined *puVar4;\n  long lVar5;\n  long extraout_x8;\n  long extraout_x8_00;\n  long extraout_x8_01;\n  long extraout_x12;\n  long lVar6;\n  undefined1 *puVar7;\n  long lVar8;\n  long lVar9;\n  long lVar10;\n  code *pcVar11;\n  long lVar12;\n  undefined1 auStack_90 [24];\n  undefined1 auStack_78 [24];\n  \n  UVar2 = Foundation::UUID::typeMetadataAccessor();\n  lVar12 = *(long *)(UVar2.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_000b8820)(*(undefined8 *)(lVar12 + 0x40));\n  puVar7 = auStack_90 + -(extraout_x8 + 0xfU & 0xfffffffffffffff0);\n  puVar3 = &DAT_000cd2b0;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cd2b0,&DAT_0009b510);\n  (*(code *)PTR____chkstk_darwin_000b8820)\n            (*(long *)(*(long *)(puVar3 + -8) + 0x40) + 0xfU & 0xfffffffffffffff0);\n  lVar6 = (long)puVar7 - extraout_x8_00;\n  puVar4 = &DAT_000cd2a8;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cd2a8,&DAT_0009b508);\n  (*(code *)PTR____chkstk_darwin_000b8820)(*(undefined8 *)(*(long *)(puVar4 + -8) + 0x40));\n  lVar8 = lVar6 - (extraout_x8_01 + 0xfU & 0xfffffffffffffff0);\n  (*(code *)PTR____chkstk_darwin_000b8820)();\n  lVar9 = lVar8 - extraout_x12;\n  _swift_beginAccess(param_1 + 0x10,auStack_78,0,0);\n  param_1 = param_1 + 0x10;\n  _swift_unknownObjectWeakLoadStrong();\n  lVar5 = _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n          animationIdentifier;\n  if (param_1 == 0) {\n    return;\n  }\n  _swift_beginAccess(param_1 + _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView\n                               ::animationIdentifier,auStack_90,0,0);\n  (**(code **)(lVar12 + 0x10))(lVar9,param_2,UVar2.unknown);\n  (**(code **)(lVar12 + 0x38))(lVar9,0,1,UVar2.unknown);\n  lVar10 = (long)*(int *)(puVar3 + 0x30);\n  FUN_00050378(param_1 + lVar5,lVar6);\n  FUN_00050378(lVar9,lVar6 + lVar10);\n  pcVar11 = *(code **)(lVar12 + 0x30);\n  lVar5 = lVar6;\n  (*pcVar11)(lVar6,1,UVar2.unknown);\n  if ((int)lVar5 == 1) {\n    FUN_00005518(lVar9,&DAT_000cd2a8,&DAT_0009b508);\n    lVar10 = lVar6 + lVar10;\n    (*pcVar11)(lVar10,1,UVar2.unknown);\n    if ((int)lVar10 != 1) {\nLAB_0004fbfc:\n      FUN_00005518(lVar6,&DAT_000cd2b0,&DAT_0009b510);\n      return;\n    }\n    FUN_00005518(lVar6,&DAT_000cd2a8,&DAT_0009b508);\n  }\n  else {\n    FUN_00050378(lVar6,lVar8);\n    lVar5 = lVar6 + lVar10;\n    (*pcVar11)(lVar5,1,UVar2.unknown);\n    if ((int)lVar5 == 1) {\n      FUN_00005518(lVar9,&DAT_000cd2a8,&DAT_0009b508);\n      (**(code **)(lVar12 + 8))(lVar8,UVar2.unknown);\n      goto LAB_0004fbfc;\n    }\n    (**(code **)(lVar12 + 0x20))(puVar7,lVar6 + lVar10,UVar2.unknown);\n    puVar3 = &DAT_000cd2b8;\n    FUN_00002e98(&DAT_000cd2b8,PTR_typeMetadataAccessor_000b8570,\n                 PTR_Foundation__Foundation__UUID_>Swift__Equatable_000b8580);\n    bVar1 = Swift::Equatable::___infix(lVar8,puVar7,UVar2.unknown,puVar3);\n    pcVar11 = *(code **)(lVar12 + 8);\n    (*pcVar11)(puVar7,UVar2.unknown);\n    FUN_00005518(lVar9,&DAT_000cd2a8,&DAT_0009b508);\n    (*pcVar11)(lVar8,UVar2.unknown);\n    FUN_00005518(lVar6,&DAT_000cd2a8,&DAT_0009b508);\n    if (!bVar1) {\n      return;\n    }\n  }\n  FUN_0004fce0();\n  return;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x132c00",
+        "value": "/usr/lib/libSystem.B.dylib::___chkstk_darwin",
+        "source_address": "0x4f9f8"
+      },
+      {
+        "address": "0x132c00",
+        "value": "/usr/lib/libSystem.B.dylib::___chkstk_darwin",
+        "source_address": "0x4fa40"
+      },
+      {
+        "address": "0x132c00",
+        "value": "/usr/lib/libSystem.B.dylib::___chkstk_darwin",
+        "source_address": "0x4fa78"
+      },
+      {
+        "address": "0x132c00",
+        "value": "/usr/lib/libSystem.B.dylib::___chkstk_darwin",
+        "source_address": "0x4fa9c"
+      },
+      {
+        "address": "0x1355e8",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::Foundation::UUID::typeMetadataAccessor",
+        "source_address": "0x4fc38"
+      },
+      {
+        "address": "0x1355f8",
+        "value": "Foundation::Foundation::UUID->Swift::Equatable",
+        "source_address": "0x4fc40"
+      },
+      {
+        "address": "0x1b7c",
+        "value": "___swift_instantiateConcreteTypeFromMangledNameV2",
+        "source_address": "0x4fa20"
+      },
+      {
+        "address": "0x1b7c",
+        "value": "___swift_instantiateConcreteTypeFromMangledNameV2",
+        "source_address": "0x4fa60"
+      },
+      {
+        "address": "0x2e98",
+        "value": "FUN_00002e98",
+        "source_address": "0x4fc44"
+      },
+      {
+        "address": "0x4fb9c",
+        "value": "LAB_0004fb9c",
+        "source_address": "0x4fb4c"
+      },
+      {
+        "address": "0x4fbf4",
+        "value": "LAB_0004fbf4",
+        "source_address": "0x4fb7c"
+      },
+      {
+        "address": "0x4fbfc",
+        "value": "LAB_0004fbfc",
+        "source_address": "0x4fbf0"
+      },
+      {
+        "address": "0x4fc18",
+        "value": "LAB_0004fc18",
+        "source_address": "0x4fbbc"
+      },
+      {
+        "address": "0x4fcb0",
+        "value": "LAB_0004fcb0",
+        "source_address": "0x4fb98"
+      },
+      {
+        "address": "0x4fcb8",
+        "value": "LAB_0004fcb8",
+        "source_address": "0x4fcac"
+      },
+      {
+        "address": "0x4fcc0",
+        "value": "LAB_0004fcc0",
+        "source_address": "0x4fac8"
+      },
+      {
+        "address": "0x4fcc0",
+        "value": "LAB_0004fcc0",
+        "source_address": "0x4fc14"
+      },
+      {
+        "address": "0x4fce0",
+        "value": "FUN_0004fce0",
+        "source_address": "0x4fcb4"
+      },
+      {
+        "address": "0x50378",
+        "value": "FUN_00050378",
+        "source_address": "0x4fb24"
+      },
+      {
+        "address": "0x50378",
+        "value": "FUN_00050378",
+        "source_address": "0x4fb30"
+      },
+      {
+        "address": "0x50378",
+        "value": "FUN_00050378",
+        "source_address": "0x4fba4"
+      },
+      {
+        "address": "0x5518",
+        "value": "FUN_00005518",
+        "source_address": "0x4fb64"
+      },
+      {
+        "address": "0x5518",
+        "value": "FUN_00005518",
+        "source_address": "0x4fb94"
+      },
+      {
+        "address": "0x5518",
+        "value": "FUN_00005518",
+        "source_address": "0x4fbdc"
+      },
+      {
+        "address": "0x5518",
+        "value": "FUN_00005518",
+        "source_address": "0x4fc10"
+      },
+      {
+        "address": "0x5518",
+        "value": "FUN_00005518",
+        "source_address": "0x4fc8c"
+      },
+      {
+        "address": "0x5518",
+        "value": "FUN_00005518",
+        "source_address": "0x4fca8"
+      },
+      {
+        "address": "0x94834",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::Foundation::UUID::typeMetadataAccessor",
+        "source_address": "0x4f9dc"
+      },
+      {
+        "address": "0x9526c",
+        "value": "/usr/lib/swift/libswiftCore.dylib::Swift::Equatable::==_infix",
+        "source_address": "0x4fc58"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4fbc4"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4fbf8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4fcbc"
+      },
+      {
+        "address": "0x961a8",
+        "value": "_swift_beginAccess",
+        "source_address": "0x4fabc"
+      },
+      {
+        "address": "0x961a8",
+        "value": "_swift_beginAccess",
+        "source_address": "0x4fae8"
+      },
+      {
+        "address": "0x964fc",
+        "value": "_swift_unknownObjectWeakLoadStrong",
+        "source_address": "0x4fac4"
+      },
+      {
+        "address": "0x9b508",
+        "value": "DAT_0009b508",
+        "source_address": "0x4fa5c"
+      },
+      {
+        "address": "0x9b508",
+        "value": "DAT_0009b508",
+        "source_address": "0x4fb5c"
+      },
+      {
+        "address": "0x9b508",
+        "value": "DAT_0009b508",
+        "source_address": "0x4fb8c"
+      },
+      {
+        "address": "0x9b508",
+        "value": "DAT_0009b508",
+        "source_address": "0x4fbd4"
+      },
+      {
+        "address": "0x9b508",
+        "value": "DAT_0009b508",
+        "source_address": "0x4fc88"
+      },
+      {
+        "address": "0x9b508",
+        "value": "DAT_0009b508",
+        "source_address": "0x4fca4"
+      },
+      {
+        "address": "0x9b510",
+        "value": "DAT_0009b510",
+        "source_address": "0x4fa1c"
+      },
+      {
+        "address": "0x9b510",
+        "value": "DAT_0009b510",
+        "source_address": "0x4fc08"
+      },
+      {
+        "address": "0xb8570",
+        "value": "PTR_typeMetadataAccessor_000b8570",
+        "source_address": "0x4fc38"
+      },
+      {
+        "address": "0xb8580",
+        "value": "PTR_Foundation::Foundation::UUID->Swift::Equatable_000b8580",
+        "source_address": "0x4fc40"
+      },
+      {
+        "address": "0xb8820",
+        "value": "PTR____chkstk_darwin_000b8820",
+        "source_address": "0x4f9f4"
+      },
+      {
+        "address": "0xb8820",
+        "value": "PTR____chkstk_darwin_000b8820",
+        "source_address": "0x4fa3c"
+      },
+      {
+        "address": "0xb8820",
+        "value": "PTR____chkstk_darwin_000b8820",
+        "source_address": "0x4fa74"
+      },
+      {
+        "address": "0xb8820",
+        "value": "PTR____chkstk_darwin_000b8820",
+        "source_address": "0x4fa98"
+      },
+      {
+        "address": "0xcd258",
+        "value": "_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::animationIdentifier",
+        "source_address": "0x4fad4"
+      },
+      {
+        "address": "0xcd2a8",
+        "value": "DAT_000cd2a8",
+        "source_address": "0x4fa54"
+      },
+      {
+        "address": "0xcd2a8",
+        "value": "DAT_000cd2a8",
+        "source_address": "0x4fb54"
+      },
+      {
+        "address": "0xcd2a8",
+        "value": "DAT_000cd2a8",
+        "source_address": "0x4fb84"
+      },
+      {
+        "address": "0xcd2a8",
+        "value": "DAT_000cd2a8",
+        "source_address": "0x4fbcc"
+      },
+      {
+        "address": "0xcd2a8",
+        "value": "DAT_000cd2a8",
+        "source_address": "0x4fc84"
+      },
+      {
+        "address": "0xcd2a8",
+        "value": "DAT_000cd2a8",
+        "source_address": "0x4fca0"
+      },
+      {
+        "address": "0xcd2b0",
+        "value": "DAT_000cd2b0",
+        "source_address": "0x4fa14"
+      },
+      {
+        "address": "0xcd2b0",
+        "value": "DAT_000cd2b0",
+        "source_address": "0x4fc00"
+      },
+      {
+        "address": "0xcd2b8",
+        "value": "DAT_000cd2b8",
+        "source_address": "0x4fc30"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x504b8",
+    "evidence_id": "ev_f2b40c8739d1ccef145edd14bfebea74d34e4065ad78285b96d4179c35c6a12d",
+    "pseudocode": "\nvoid FUN_000504b8(void)\n\n{\n  FUN_0004ff8c();\n  return;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x4ff8c",
+        "value": "FUN_0004ff8c",
+        "source_address": "0x504bc"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x3ce94",
+    "evidence_id": "ev_3f861ce571b9c4b144486c88c48fbcd50a82a391a25c61ceb74420552b7fd395",
+    "pseudocode": "\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nID FUN_0003ce94(ulong param_1,ulong param_2)\n\n{\n  ID IVar1;\n  \n  if ((param_2 & 1) != 0) {\n    IVar1 = NSColor::clearColor((ID)&_OBJC_CLASS___NSColor,\"clearColor\");\n    return IVar1;\n  }\n  if ((param_1 & 1) == 0) {\n    IVar1 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,\"blackColor\");\n    IVar1 = NSColor::colorWithAlphaComponent_(IVar1,\"colorWithAlphaComponent:\",0x3fb1eb851eb851ec);\n  }\n  else {\n    IVar1 = NSColor::whiteColor((ID)&_OBJC_CLASS___NSColor,\"whiteColor\");\n    IVar1 = NSColor::colorWithAlphaComponent_(IVar1,\"colorWithAlphaComponent:\",0x3fb999999999999a);\n  }\n  return IVar1;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x12ec00",
+        "value": "_OBJC_CLASS_$_NSColor",
+        "source_address": "0x3ceac"
+      },
+      {
+        "address": "0x12ec02",
+        "value": "NSColor::blackColor",
+        "source_address": "0x3cf14"
+      },
+      {
+        "address": "0x12ec03",
+        "value": "NSColor::colorWithAlphaComponent:",
+        "source_address": "0x3cf00"
+      },
+      {
+        "address": "0x12ec03",
+        "value": "NSColor::colorWithAlphaComponent:",
+        "source_address": "0x3cf34"
+      },
+      {
+        "address": "0x12ec05",
+        "value": "NSColor::clearColor",
+        "source_address": "0x3cec0"
+      },
+      {
+        "address": "0x12ec06",
+        "value": "NSColor::whiteColor",
+        "source_address": "0x3cee0"
+      },
+      {
+        "address": "0x3ced4",
+        "value": "LAB_0003ced4",
+        "source_address": "0x3ceb4"
+      },
+      {
+        "address": "0x3cf0c",
+        "value": "LAB_0003cf0c",
+        "source_address": "0x3ced4"
+      },
+      {
+        "address": "0x3cf3c",
+        "value": "LAB_0003cf3c",
+        "source_address": "0x3cf08"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3cec0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3cee0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3cf00"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3cf14"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3cf34"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3ceb0"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3cf48"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3ced0"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3cee8"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3cf1c"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3cf3c"
+      },
+      {
+        "address": "0x97490",
+        "value": "DAT_00097490",
+        "source_address": "0x3cefc"
+      },
+      {
+        "address": "0x98d18",
+        "value": "DAT_00098d18",
+        "source_address": "0x3cf30"
+      },
+      {
+        "address": "0xaf003",
+        "value": "s_blackColor_000af003",
+        "source_address": "0x3cf10"
+      },
+      {
+        "address": "0xaf374",
+        "value": "s_clearColor_000af374",
+        "source_address": "0x3cebc"
+      },
+      {
+        "address": "0xaf389",
+        "value": "s_colorWithAlphaComponent:_000af389",
+        "source_address": "0x3cef4"
+      },
+      {
+        "address": "0xaf389",
+        "value": "s_colorWithAlphaComponent:_000af389",
+        "source_address": "0x3cf28"
+      },
+      {
+        "address": "0xb0f4f",
+        "value": "s_whiteColor_000b0f4f",
+        "source_address": "0x3cedc"
+      },
+      {
+        "address": "0xc7c48",
+        "value": "PTR_s_whiteColor_000c7c48",
+        "source_address": "0x3cedc"
+      },
+      {
+        "address": "0xc7c50",
+        "value": "PTR_s_blackColor_000c7c50",
+        "source_address": "0x3cf10"
+      },
+      {
+        "address": "0xc7c58",
+        "value": "PTR_s_colorWithAlphaComponent:_000c7c58",
+        "source_address": "0x3cef4"
+      },
+      {
+        "address": "0xc7c58",
+        "value": "PTR_s_colorWithAlphaComponent:_000c7c58",
+        "source_address": "0x3cf28"
+      },
+      {
+        "address": "0xc7c60",
+        "value": "PTR_s_clearColor_000c7c60",
+        "source_address": "0x3cebc"
+      },
+      {
+        "address": "0xc8b48",
+        "value": "PTR__OBJC_CLASS_$_NSColor_000c8b48",
+        "source_address": "0x3ceac"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x3c170",
+    "evidence_id": "ev_f915d312fa17b590cb94f3b327e0f51dca0d852a99121c2d7f285e5138c534ae",
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* DropoverCore.Control.updateLayer() -> () */\n\nvoid __thiscall DropoverCore::Control::updateLayer(Control *this)\n\n{\n  bool bVar1;\n  NSAppearance *pNVar2;\n  ID self;\n  undefined8 uVar3;\n  undefined8 uVar4;\n  uint uVar5;\n  objc_super local_50;\n  \n  local_50.super_class = (class_t *)typeMetadataAccessor();\n  local_50.receiver = (ID)this;\n  _objc_msgSendSuper2(&local_50,\"updateLayer\");\n  pNVar2 = (NSAppearance *)_objc_msgSend((ID)this,\"effectiveAppearance\");\n  bVar1 = (extension_DropoverCore)::__C::NSAppearance::get_isDarkMode(pNVar2);\n  uVar4 = 0xc000000000000000;\n  if (!bVar1) {\n    uVar4 = 0;\n  }\n  uVar3 = 0x4010000000000000;\n  if (!bVar1) {\n    uVar3 = 0;\n  }\n  uVar5 = 0x3dcccccd;\n  if (!bVar1) {\n    uVar5 = 0;\n  }\n  self = *(ID *)(this + _TtC12DropoverCore7Control::shadowLayer);\n  _objc_msgSend(self,\"setShadowRadius:\",uVar3);\n  _objc_msgSend(self,\"setShadowOffset:\",0,uVar4);\n  _objc_msgSend(self,\"setShadowOpacity:\",(ulong)uVar5);\n  FUN_0003ad48();\n  FUN_0003ae74();\n  return;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x3ad48",
+        "value": "FUN_0003ad48",
+        "source_address": "0x3c248"
+      },
+      {
+        "address": "0x3ae74",
+        "value": "FUN_0003ae74",
+        "source_address": "0x3c24c"
+      },
+      {
+        "address": "0x3d328",
+        "value": "DropoverCore::Control::typeMetadataAccessor",
+        "source_address": "0x3c18c"
+      },
+      {
+        "address": "0x5ffc0",
+        "value": "(extension_DropoverCore)::__C::NSAppearance::get_isDarkMode",
+        "source_address": "0x3c1c0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c1b0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c214"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c22c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c240"
+      },
+      {
+        "address": "0x95f44",
+        "value": "_objc_msgSendSuper2",
+        "source_address": "0x3c1a0"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c1cc"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3c1b8"
+      },
+      {
+        "address": "0xafa2a",
+        "value": "s_effectiveAppearance_000afa2a",
+        "source_address": "0x3c1a8"
+      },
+      {
+        "address": "0xb0b4d",
+        "value": "s_setShadowOffset:_000b0b4d",
+        "source_address": "0x3c21c"
+      },
+      {
+        "address": "0xb0b5e",
+        "value": "s_setShadowOpacity:_000b0b5e",
+        "source_address": "0x3c234"
+      },
+      {
+        "address": "0xb0b7f",
+        "value": "s_setShadowRadius:_000b0b7f",
+        "source_address": "0x3c20c"
+      },
+      {
+        "address": "0xb0edb",
+        "value": "s_updateLayer_000b0edb",
+        "source_address": "0x3c198"
+      },
+      {
+        "address": "0xc7c08",
+        "value": "PTR_s_updateLayer_000c7c08",
+        "source_address": "0x3c198"
+      },
+      {
+        "address": "0xc82f0",
+        "value": "PTR_s_effectiveAppearance_000c82f0",
+        "source_address": "0x3c1a8"
+      },
+      {
+        "address": "0xc82f8",
+        "value": "PTR_s_setShadowRadius:_000c82f8",
+        "source_address": "0x3c20c"
+      },
+      {
+        "address": "0xc8300",
+        "value": "PTR_s_setShadowOffset:_000c8300",
+        "source_address": "0x3c21c"
+      },
+      {
+        "address": "0xc8308",
+        "value": "PTR_s_setShadowOpacity:_000c8308",
+        "source_address": "0x3c234"
+      },
+      {
+        "address": "0xcca10",
+        "value": "_TtC12DropoverCore7Control::shadowLayer",
+        "source_address": "0x3c200"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x284cc",
+    "evidence_id": "ev_1390becb954050679c387eadfce264686f867b0139ee3e5d42236821ae456647",
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n\nundefined8 FUN_000284cc(void)\n\n{\n  void *pvVar1;\n  long lVar2;\n  bool bVar3;\n  ID self;\n  NSString *pNVar4;\n  ID self_00;\n  NSNumber *pNVar5;\n  char *pcVar6;\n  char *pcVar7;\n  void *pvVar8;\n  long unaff_x20;\n  ID self_01;\n  undefined8 uVar9;\n  undefined8 uVar10;\n  String SVar11;\n  String SVar12;\n  undefined1 auStack_78 [24];\n  \n  self_01 = *(ID *)(unaff_x20 + _TtC12DropoverCore26DisclosureIndicatorControl::imageView);\n  self = _objc_msgSend(self_01,\"layer\");\n  if (self != 0) {\n    uVar9 = 0x3fe0000000000000;\n    _objc_msgSend(self,\"setAnchorPoint:\",0x3fe0000000000000,0x3fe0000000000000);\n    _objc_msgSend(self_01,\"frame\");\n    _CGRectGetMidX();\n    uVar10 = uVar9;\n    _objc_msgSend(self_01,\"frame\");\n    _CGRectGetMidY();\n    _objc_msgSend(self,\"setPosition:\",uVar9,uVar10);\n    pNVar4 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n    self_00 = CASpringAnimation::animationWithKeyPath_\n                        ((ID)&_OBJC_CLASS___CASpringAnimation,\"animationWithKeyPath:\",pNVar4);\n    lVar2 = _TtC12DropoverCore26DisclosureIndicatorControl::selected;\n    pvVar8 = (void *)0x0;\n    _swift_beginAccess(unaff_x20 + _TtC12DropoverCore26DisclosureIndicatorControl::selected,\n                       auStack_78,0);\n    _objc_msgSend(self_01,\"frame\");\n    _CGRectGetMidX();\n    pNVar5 = (extension_Foundation)::CoreGraphics::CGFloat::_bridgeToObjectiveC();\n    CASpringAnimation::setFromValue_(self_00,\"setFromValue:\",pNVar5);\n    uVar10 = 0;\n    Swift::__bridgeAnythingNonVerbatimToObjectiveC(0,PTR___type_metadata_for____000b9e10 + 8);\n    CASpringAnimation::setToValue_(self_00,\"setToValue:\",uVar10);\n    _swift_unknownObjectRelease(uVar10);\n    _objc_msgSend(self_01,\"frame\");\n    _CGRectGetMidX();\n    pNVar5 = (extension_Foundation)::CoreGraphics::CGFloat::_bridgeToObjectiveC();\n    CASpringAnimation::setToValue_(self_00,\"setToValue:\",pNVar5);\n    CASpringAnimation::setRemovedOnCompletion_(self_00,\"setRemovedOnCompletion:\",0);\n    pcVar7 = *(char **)PTR__kCAFillModeForwards_000b8c58;\n    CASpringAnimation::setFillMode_(self_00,\"setFillMode:\");\n    CASpringAnimation::setMass_(self_00,\"setMass:\",0x3ff0000000000000);\n    uVar10 = 0x4028000000000000;\n    if (*(char *)(unaff_x20 + lVar2) == '\\0') {\n      uVar10 = 0x402a000000000000;\n    }\n    CASpringAnimation::setDamping_(self_00,\"setDamping:\",uVar10);\n    uVar10 = 0x4059000000000000;\n    if (*(char *)(unaff_x20 + lVar2) == '\\0') {\n      uVar10 = 0x4056800000000000;\n    }\n    CASpringAnimation::setStiffness_(self_00,\"setStiffness:\",uVar10);\n    uVar10 = 0x4024000000000000;\n    if (*(char *)(unaff_x20 + lVar2) == '\\0') {\n      uVar10 = 0x4020000000000000;\n    }\n    CASpringAnimation::setInitialVelocity_(self_00,\"setInitialVelocity:\",uVar10);\n    CASpringAnimation::settlingDuration(self_00,\"settlingDuration\");\n    pcVar6 = \"setDuration:\";\n    CASpringAnimation::setDuration_(self_00,\"setDuration:\");\n    Swift::_StringGuts::grow(0x14,(_StringGuts)pcVar6);\n    _swift_bridgeObjectRelease(0xe000000000000000);\n    bVar3 = *(char *)(unaff_x20 + lVar2) == '\\0';\n    pcVar6 = (char *)0x65757274;\n    if (bVar3) {\n      pcVar6 = (char *)0x65736c6166;\n    }\n    pvVar1 = (void *)0xe400000000000000;\n    if (bVar3) {\n      pvVar1 = (void *)0xe500000000000000;\n    }\n    SVar11.bridgeObject = pvVar1;\n    SVar11.str = pcVar6;\n    SVar12.bridgeObject = pvVar8;\n    SVar12.str = pcVar7;\n    Swift::String::append(SVar11,SVar12);\n    _swift_bridgeObjectRelease(pvVar1);\n    pNVar4 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n    _swift_bridgeObjectRelease(0x800000000009ecc0);\n    _objc_msgSend(self,\"addAnimation:forKey:\",self_00,pNVar4);\n  }\n  return 0;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x12e000",
+        "value": "_OBJC_CLASS_$_CASpringAnimation",
+        "source_address": "0x28590"
+      },
+      {
+        "address": "0x12e001",
+        "value": "CASpringAnimation::animationWithKeyPath:",
+        "source_address": "0x285a4"
+      },
+      {
+        "address": "0x12e002",
+        "value": "CASpringAnimation::setDuration:",
+        "source_address": "0x28784"
+      },
+      {
+        "address": "0x12e003",
+        "value": "CASpringAnimation::setFromValue:",
+        "source_address": "0x28620"
+      },
+      {
+        "address": "0x12e004",
+        "value": "CASpringAnimation::setToValue:",
+        "source_address": "0x28650"
+      },
+      {
+        "address": "0x12e004",
+        "value": "CASpringAnimation::setToValue:",
+        "source_address": "0x28690"
+      },
+      {
+        "address": "0x12e005",
+        "value": "CASpringAnimation::setMass:",
+        "source_address": "0x286ec"
+      },
+      {
+        "address": "0x12e006",
+        "value": "CASpringAnimation::setStiffness:",
+        "source_address": "0x28740"
+      },
+      {
+        "address": "0x12e007",
+        "value": "CASpringAnimation::setDamping:",
+        "source_address": "0x28710"
+      },
+      {
+        "address": "0x12e008",
+        "value": "CASpringAnimation::setInitialVelocity:",
+        "source_address": "0x28764"
+      },
+      {
+        "address": "0x12e009",
+        "value": "CASpringAnimation::settlingDuration",
+        "source_address": "0x28774"
+      },
+      {
+        "address": "0x12e00a",
+        "value": "CASpringAnimation::setFillMode:",
+        "source_address": "0x286d8"
+      },
+      {
+        "address": "0x12e00b",
+        "value": "CASpringAnimation::setRemovedOnCompletion:",
+        "source_address": "0x286bc"
+      },
+      {
+        "address": "0x134400",
+        "value": "_kCAFillModeForwards",
+        "source_address": "0x286c8"
+      },
+      {
+        "address": "0x1369e0",
+        "value": "$$value_witness_table_for_()_->_()",
+        "source_address": "0x28634"
+      },
+      {
+        "address": "0x28854",
+        "value": "LAB_00028854",
+        "source_address": "0x28510"
+      },
+      {
+        "address": "0x948c4",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::CoreGraphics::CGFloat::_bridgeToObjectiveC",
+        "source_address": "0x28608"
+      },
+      {
+        "address": "0x948c4",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::CoreGraphics::CGFloat::_bridgeToObjectiveC",
+        "source_address": "0x2867c"
+      },
+      {
+        "address": "0x95284",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::Swift::String::_bridgeToObjectiveC",
+        "source_address": "0x28584"
+      },
+      {
+        "address": "0x95284",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::Swift::String::_bridgeToObjectiveC",
+        "source_address": "0x28814"
+      },
+      {
+        "address": "0x953a4",
+        "value": "/usr/lib/swift/libswiftCore.dylib::Swift::String::append",
+        "source_address": "0x28800"
+      },
+      {
+        "address": "0x95914",
+        "value": "/usr/lib/swift/libswiftCore.dylib::Swift::_StringGuts::grow",
+        "source_address": "0x287a4"
+      },
+      {
+        "address": "0x95adc",
+        "value": "/usr/lib/swift/libswiftCore.dylib::Swift::$_bridgeAnythingNonVerbatimToObjectiveC",
+        "source_address": "0x28638"
+      },
+      {
+        "address": "0x95c5c",
+        "value": "_CGRectGetMidX",
+        "source_address": "0x2853c"
+      },
+      {
+        "address": "0x95c5c",
+        "value": "_CGRectGetMidX",
+        "source_address": "0x285f4"
+      },
+      {
+        "address": "0x95c5c",
+        "value": "_CGRectGetMidX",
+        "source_address": "0x2866c"
+      },
+      {
+        "address": "0x95c68",
+        "value": "_CGRectGetMidY",
+        "source_address": "0x28550"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28504"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28528"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28538"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x2854c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28568"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x285a4"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x285f0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28620"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28650"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28668"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28690"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x286bc"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x286d8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x286ec"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28710"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28740"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28764"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28774"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28784"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x28838"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x28594"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x285b8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x28628"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x28698"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x286a0"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x2878c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x28840"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x28848"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x28850"
+      },
+      {
+        "address": "0x95f68",
+        "value": "_objc_retain",
+        "source_address": "0x285e0"
+      },
+      {
+        "address": "0x95f68",
+        "value": "_objc_retain",
+        "source_address": "0x286a8"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x2850c"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x285ac"
+      },
+      {
+        "address": "0x961a8",
+        "value": "_swift_beginAccess",
+        "source_address": "0x285d4"
+      },
+      {
+        "address": "0x961b4",
+        "value": "_swift_bridgeObjectRelease",
+        "source_address": "0x287ac"
+      },
+      {
+        "address": "0x961b4",
+        "value": "_swift_bridgeObjectRelease",
+        "source_address": "0x28808"
+      },
+      {
+        "address": "0x961b4",
+        "value": "_swift_bridgeObjectRelease",
+        "source_address": "0x28820"
+      },
+      {
+        "address": "0x964b4",
+        "value": "_swift_unknownObjectRelease",
+        "source_address": "0x28658"
+      },
+      {
+        "address": "0xaedd4",
+        "value": "s_addAnimation:forKey:_000aedd4",
+        "source_address": "0x28828"
+      },
+      {
+        "address": "0xaee39",
+        "value": "s_setAnchorPoint:_000aee39",
+        "source_address": "0x28518"
+      },
+      {
+        "address": "0xaee93",
+        "value": "s_animationWithKeyPath:_000aee93",
+        "source_address": "0x2859c"
+      },
+      {
+        "address": "0xafb5e",
+        "value": "s_frame_000afb5e",
+        "source_address": "0x28530"
+      },
+      {
+        "address": "0xafb5e",
+        "value": "s_frame_000afb5e",
+        "source_address": "0x28544"
+      },
+      {
+        "address": "0xafb5e",
+        "value": "s_frame_000afb5e",
+        "source_address": "0x285e8"
+      },
+      {
+        "address": "0xafb5e",
+        "value": "s_frame_000afb5e",
+        "source_address": "0x28660"
+      },
+      {
+        "address": "0xb0018",
+        "value": "s_layer_000b0018",
+        "source_address": "0x284fc"
+      },
+      {
+        "address": "0xb082f",
+        "value": "s_setDamping:_000b082f",
+        "source_address": "0x28708"
+      },
+      {
+        "address": "0xb08a0",
+        "value": "s_setDuration:_000b08a0",
+        "source_address": "0x2877c"
+      },
+      {
+        "address": "0xb08e1",
+        "value": "s_setFillMode:_000b08e1",
+        "source_address": "0x286d0"
+      },
+      {
+        "address": "0xb096e",
+        "value": "s_setFromValue:_000b096e",
+        "source_address": "0x28614"
+      },
+      {
+        "address": "0xb09d4",
+        "value": "s_setInitialVelocity:_000b09d4",
+        "source_address": "0x2875c"
+      },
+      {
+        "address": "0xb0a3a",
+        "value": "s_setMass:_000b0a3a",
+        "source_address": "0x286e0"
+      },
+      {
+        "address": "0xb0ad0",
+        "value": "s_setPosition:_000b0ad0",
+        "source_address": "0x2855c"
+      },
+      {
+        "address": "0xb0aff",
+        "value": "s_setRemovedOnCompletion:_000b0aff",
+        "source_address": "0x286b4"
+      },
+      {
+        "address": "0xb0bd2",
+        "value": "s_setStiffness:_000b0bd2",
+        "source_address": "0x28738"
+      },
+      {
+        "address": "0xb0c38",
+        "value": "s_setToValue:_000b0c38",
+        "source_address": "0x28644"
+      },
+      {
+        "address": "0xb0c38",
+        "value": "s_setToValue:_000b0c38",
+        "source_address": "0x28684"
+      },
+      {
+        "address": "0xb0cee",
+        "value": "s_settlingDuration_000b0cee",
+        "source_address": "0x2876c"
+      },
+      {
+        "address": "0xb8c58",
+        "value": "PTR__kCAFillModeForwards_000b8c58",
+        "source_address": "0x286c4"
+      },
+      {
+        "address": "0xb9e10",
+        "value": "PTR_$$type_metadata_for_()_000b9e10",
+        "source_address": "0x28630"
+      },
+      {
+        "address": "0xc7bd0",
+        "value": "PTR_s_frame_000c7bd0",
+        "source_address": "0x28530"
+      },
+      {
+        "address": "0xc7bd0",
+        "value": "PTR_s_frame_000c7bd0",
+        "source_address": "0x28544"
+      },
+      {
+        "address": "0xc7bd0",
+        "value": "PTR_s_frame_000c7bd0",
+        "source_address": "0x285e8"
+      },
+      {
+        "address": "0xc7bd0",
+        "value": "PTR_s_frame_000c7bd0",
+        "source_address": "0x28660"
+      },
+      {
+        "address": "0xc7c70",
+        "value": "PTR_s_layer_000c7c70",
+        "source_address": "0x284fc"
+      },
+      {
+        "address": "0xc7d60",
+        "value": "PTR_s_animationWithKeyPath:_000c7d60",
+        "source_address": "0x2859c"
+      },
+      {
+        "address": "0xc7d68",
+        "value": "PTR_s_setFromValue:_000c7d68",
+        "source_address": "0x28614"
+      },
+      {
+        "address": "0xc7d70",
+        "value": "PTR_s_setToValue:_000c7d70",
+        "source_address": "0x28644"
+      },
+      {
+        "address": "0xc7d70",
+        "value": "PTR_s_setToValue:_000c7d70",
+        "source_address": "0x28684"
+      },
+      {
+        "address": "0xc7d78",
+        "value": "PTR_s_setDuration:_000c7d78",
+        "source_address": "0x2877c"
+      },
+      {
+        "address": "0xc7d80",
+        "value": "PTR_s_setFillMode:_000c7d80",
+        "source_address": "0x286d0"
+      },
+      {
+        "address": "0xc7d88",
+        "value": "PTR_s_setRemovedOnCompletion:_000c7d88",
+        "source_address": "0x286b4"
+      },
+      {
+        "address": "0xc7d90",
+        "value": "PTR_s_addAnimation:forKey:_000c7d90",
+        "source_address": "0x28828"
+      },
+      {
+        "address": "0xc7da0",
+        "value": "PTR_s_setMass:_000c7da0",
+        "source_address": "0x286e0"
+      },
+      {
+        "address": "0xc7da8",
+        "value": "PTR_s_setStiffness:_000c7da8",
+        "source_address": "0x28738"
+      },
+      {
+        "address": "0xc7db0",
+        "value": "PTR_s_setDamping:_000c7db0",
+        "source_address": "0x28708"
+      },
+      {
+        "address": "0xc7db8",
+        "value": "PTR_s_setInitialVelocity:_000c7db8",
+        "source_address": "0x2875c"
+      },
+      {
+        "address": "0xc7dc0",
+        "value": "PTR_s_settlingDuration_000c7dc0",
+        "source_address": "0x2876c"
+      },
+      {
+        "address": "0xc7dd8",
+        "value": "PTR_s_setAnchorPoint:_000c7dd8",
+        "source_address": "0x28518"
+      },
+      {
+        "address": "0xc7de8",
+        "value": "PTR_s_setPosition:_000c7de8",
+        "source_address": "0x2855c"
+      },
+      {
+        "address": "0xc8ba0",
+        "value": "PTR__OBJC_CLASS_$_CASpringAnimation_000c8ba0",
+        "source_address": "0x28590"
+      },
+      {
+        "address": "0xcc490",
+        "value": "_TtC12DropoverCore26DisclosureIndicatorControl::imageView",
+        "source_address": "0x284f0"
+      },
+      {
+        "address": "0xcc498",
+        "value": "_TtC12DropoverCore26DisclosureIndicatorControl::selected",
+        "source_address": "0x285c0"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x3ca54",
+    "evidence_id": "ev_43e8f399244e6f4a3954e9822e2e54dc1130414049744edf35ebea00e59d8503",
+    "pseudocode": "\n/* Function Stack Size: 0x10 bytes */\n\nbool _TtC12DropoverCore7Control::allowsVibrancy(ID param_1,SEL param_2)\n\n{\n  return 0;\n}\n\n",
+    "referenced_names": [],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4fce0",
+    "evidence_id": "ev_023a695d4cd5fb4817e07c90afca9549833751fd15fad245422791cad9e87baf",
+    "pseudocode": "\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n\nID FUN_0004fce0(undefined8 param_1,undefined8 param_2,double param_3)\n\n{\n  ID IVar1;\n  NSString *pNVar2;\n  NSNumber *pNVar3;\n  ID IVar4;\n  undefined *puVar5;\n  void *aBlock;\n  long unaff_x20;\n  double dVar6;\n  double dVar7;\n  undefined *local_70;\n  undefined8 local_68;\n  code *local_60;\n  undefined *puStack_58;\n  code *local_50;\n  undefined *local_48;\n  \n  IVar1 = _objc_msgSend(*(ID *)(unaff_x20 +\n                               _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView\n                               ::attributedText),\"boundingRectWithSize:options:context:\",\n                        0x7fefffffffffffff,0x7fefffffffffffff,3,0);\n  dVar7 = *(double *)\n           (unaff_x20 +\n           _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::spacing) +\n          (double)(long)((double)(long)param_3 + 1.0);\n  if (0.0 < dVar7) {\n    dVar7 = dVar7 * 0.05;\n    dVar6 = 10.0;\n    if (10.0 < dVar7) {\n      dVar6 = dVar7;\n    }\n    CATransaction::begin((ID)&_OBJC_CLASS___CATransaction,\"begin\");\n    pNVar2 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n    IVar1 = CABasicAnimation::animationWithKeyPath_\n                      ((ID)&_OBJC_CLASS___CABasicAnimation,\"animationWithKeyPath:\",pNVar2);\n    pNVar3 = (extension_Foundation)::CoreGraphics::CGFloat::_bridgeToObjectiveC();\n    CABasicAnimation::setByValue_(IVar1,\"setByValue:\",pNVar3);\n    CABasicAnimation::setDuration_(IVar1,\"setDuration:\",dVar6);\n    IVar4 = CAMediaTimingFunction::functionWithName_\n                      ((ID)&_OBJC_CLASS___CAMediaTimingFunction,\"functionWithName:\",\n                       *(undefined8 *)PTR__kCAMediaTimingFunctionEaseInEaseOut_000b8c78);\n    CABasicAnimation::setTimingFunction_(IVar1,\"setTimingFunction:\",IVar4);\n    CABasicAnimation::setAdditive_(IVar1,\"setAdditive:\",1);\n    puVar5 = &DAT_000bd2f0;\n    _swift_allocObject(&DAT_000bd2f0,0x18,7);\n    _swift_unknownObjectWeakInit(puVar5 + 0x10);\n    local_50 = FUN_000504b8;\n    local_70 = PTR___NSConcreteStackBlock_000b8810;\n    local_68 = 0x42000000;\n    local_60 = FUN_00015d5c;\n    puStack_58 = &_block_descriptor_7;\n    local_48 = puVar5;\n    aBlock = __Block_copy(&local_70);\n    _swift_release(local_48);\n    CATransaction::setCompletionBlock_\n              ((ID)&_OBJC_CLASS___CATransaction,\"setCompletionBlock:\",aBlock);\n    __Block_release(aBlock);\n    IVar4 = *(ID *)(unaff_x20 +\n                   _TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::\n                   contentLayer);\n    pNVar2 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n    _objc_msgSend(IVar4,\"addAnimation:forKey:\",IVar1,pNVar2);\n    CATransaction::commit((ID)&_OBJC_CLASS___CATransaction,\"commit\");\n    IVar1 = 0;\n  }\n  return IVar1;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x12db00",
+        "value": "_OBJC_CLASS_$_CABasicAnimation",
+        "source_address": "0x4fda8"
+      },
+      {
+        "address": "0x12db01",
+        "value": "CABasicAnimation::animationWithKeyPath:",
+        "source_address": "0x4fdbc"
+      },
+      {
+        "address": "0x12db04",
+        "value": "CABasicAnimation::setDuration:",
+        "source_address": "0x4fe14"
+      },
+      {
+        "address": "0x12db08",
+        "value": "CABasicAnimation::setByValue:",
+        "source_address": "0x4fdf0"
+      },
+      {
+        "address": "0x12db09",
+        "value": "CABasicAnimation::setTimingFunction:",
+        "source_address": "0x4fe5c"
+      },
+      {
+        "address": "0x12db0a",
+        "value": "CABasicAnimation::setAdditive:",
+        "source_address": "0x4fe80"
+      },
+      {
+        "address": "0x12de00",
+        "value": "_OBJC_CLASS_$_CAMediaTimingFunction",
+        "source_address": "0x4fe28"
+      },
+      {
+        "address": "0x12de01",
+        "value": "CAMediaTimingFunction::functionWithName:",
+        "source_address": "0x4fe3c"
+      },
+      {
+        "address": "0x12e200",
+        "value": "_OBJC_CLASS_$_CATransaction",
+        "source_address": "0x4fd68"
+      },
+      {
+        "address": "0x12e200",
+        "value": "_OBJC_CLASS_$_CATransaction",
+        "source_address": "0x4fefc"
+      },
+      {
+        "address": "0x12e200",
+        "value": "_OBJC_CLASS_$_CATransaction",
+        "source_address": "0x4ff64"
+      },
+      {
+        "address": "0x12e201",
+        "value": "CATransaction::begin",
+        "source_address": "0x4fd7c"
+      },
+      {
+        "address": "0x12e202",
+        "value": "CATransaction::setCompletionBlock:",
+        "source_address": "0x4ff04"
+      },
+      {
+        "address": "0x12e203",
+        "value": "CATransaction::commit",
+        "source_address": "0x4ff68"
+      },
+      {
+        "address": "0x132b00",
+        "value": "__NSConcreteStackBlock",
+        "source_address": "0x4febc"
+      },
+      {
+        "address": "0x134800",
+        "value": "_kCAMediaTimingFunctionEaseInEaseOut",
+        "source_address": "0x4fe20"
+      },
+      {
+        "address": "0x15d5c",
+        "value": "FUN_00015d5c",
+        "source_address": "0x4fedc"
+      },
+      {
+        "address": "0x4ff74",
+        "value": "LAB_0004ff74",
+        "source_address": "0x4fd48"
+      },
+      {
+        "address": "0x504b8",
+        "value": "FUN_000504b8",
+        "source_address": "0x4feb0"
+      },
+      {
+        "address": "0x948c4",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::CoreGraphics::CGFloat::_bridgeToObjectiveC",
+        "source_address": "0x4fdd8"
+      },
+      {
+        "address": "0x95284",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::Swift::String::_bridgeToObjectiveC",
+        "source_address": "0x4fd9c"
+      },
+      {
+        "address": "0x95284",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::Swift::String::_bridgeToObjectiveC",
+        "source_address": "0x4ff34"
+      },
+      {
+        "address": "0x95cec",
+        "value": "__Block_copy",
+        "source_address": "0x4fee4"
+      },
+      {
+        "address": "0x95cf8",
+        "value": "__Block_release",
+        "source_address": "0x4ff0c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fd20"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fd7c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fdbc"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fdf0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fe14"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fe3c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fe5c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4fe80"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4ff04"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4ff50"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x4ff68"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x4fd6c"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x4fdac"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x4fe2c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4fdd0"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4fdf8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4fe64"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4fe6c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4ff58"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x4ff70"
+      },
+      {
+        "address": "0x95f68",
+        "value": "_objc_retain",
+        "source_address": "0x4fe00"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x4fdc4"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x4fe44"
+      },
+      {
+        "address": "0x96154",
+        "value": "_swift_allocObject",
+        "source_address": "0x4fe94"
+      },
+      {
+        "address": "0x96418",
+        "value": "_swift_release",
+        "source_address": "0x4fef0"
+      },
+      {
+        "address": "0x964f0",
+        "value": "_swift_unknownObjectWeakInit",
+        "source_address": "0x4fea4"
+      },
+      {
+        "address": "0x97498",
+        "value": "DAT_00097498",
+        "source_address": "0x4fec4"
+      },
+      {
+        "address": "0x9a2b0",
+        "value": "DAT_0009a2b0",
+        "source_address": "0x4fd50"
+      },
+      {
+        "address": "0xaedd4",
+        "value": "s_addAnimation:forKey:_000aedd4",
+        "source_address": "0x4ff40"
+      },
+      {
+        "address": "0xaee93",
+        "value": "s_animationWithKeyPath:_000aee93",
+        "source_address": "0x4fdb4"
+      },
+      {
+        "address": "0xaf252",
+        "value": "s_begin_000af252",
+        "source_address": "0x4fd78"
+      },
+      {
+        "address": "0xaf2c8",
+        "value": "s_boundingRectWithSize:options:con_000af2c8",
+        "source_address": "0x4fd08"
+      },
+      {
+        "address": "0xaf419",
+        "value": "s_commit_000af419",
+        "source_address": "0x4ff60"
+      },
+      {
+        "address": "0xafb64",
+        "value": "s_functionWithName:_000afb64",
+        "source_address": "0x4fe34"
+      },
+      {
+        "address": "0xb0588",
+        "value": "s_setAdditive:_000b0588",
+        "source_address": "0x4fe74"
+      },
+      {
+        "address": "0xb068d",
+        "value": "s_setByValue:_000b068d",
+        "source_address": "0x4fde4"
+      },
+      {
+        "address": "0xb0737",
+        "value": "s_setCompletionBlock:_000b0737",
+        "source_address": "0x4fef8"
+      },
+      {
+        "address": "0xb08a0",
+        "value": "s_setDuration:_000b08a0",
+        "source_address": "0x4fe0c"
+      },
+      {
+        "address": "0xb0c1b",
+        "value": "s_setTimingFunction:_000b0c1b",
+        "source_address": "0x4fe50"
+      },
+      {
+        "address": "0xb8810",
+        "value": "PTR___NSConcreteStackBlock_000b8810",
+        "source_address": "0x4feb8"
+      },
+      {
+        "address": "0xb8c78",
+        "value": "PTR__kCAMediaTimingFunctionEaseInEaseOut_000b8c78",
+        "source_address": "0x4fe1c"
+      },
+      {
+        "address": "0xbd2f0",
+        "value": "DAT_000bd2f0",
+        "source_address": "0x4fe88"
+      },
+      {
+        "address": "0xbd358",
+        "value": "_block_descriptor.7",
+        "source_address": "0x4fedc"
+      },
+      {
+        "address": "0xc7d60",
+        "value": "PTR_s_animationWithKeyPath:_000c7d60",
+        "source_address": "0x4fdb4"
+      },
+      {
+        "address": "0xc7d78",
+        "value": "PTR_s_setDuration:_000c7d78",
+        "source_address": "0x4fe0c"
+      },
+      {
+        "address": "0xc7d90",
+        "value": "PTR_s_addAnimation:forKey:_000c7d90",
+        "source_address": "0x4ff40"
+      },
+      {
+        "address": "0xc7d98",
+        "value": "PTR_s_begin_000c7d98",
+        "source_address": "0x4fd78"
+      },
+      {
+        "address": "0xc7dc8",
+        "value": "PTR_s_setCompletionBlock:_000c7dc8",
+        "source_address": "0x4fef8"
+      },
+      {
+        "address": "0xc7dd0",
+        "value": "PTR_s_commit_000c7dd0",
+        "source_address": "0x4ff60"
+      },
+      {
+        "address": "0xc83d0",
+        "value": "PTR_s_setTimingFunction:_000c83d0",
+        "source_address": "0x4fe50"
+      },
+      {
+        "address": "0xc8450",
+        "value": "PTR_s_boundingRectWithSize:options:con_000c8450",
+        "source_address": "0x4fd08"
+      },
+      {
+        "address": "0xc8470",
+        "value": "PTR_s_setByValue:_000c8470",
+        "source_address": "0x4fde4"
+      },
+      {
+        "address": "0xc8478",
+        "value": "PTR_s_functionWithName:_000c8478",
+        "source_address": "0x4fe34"
+      },
+      {
+        "address": "0xc8480",
+        "value": "PTR_s_setAdditive:_000c8480",
+        "source_address": "0x4fe74"
+      },
+      {
+        "address": "0xc8b90",
+        "value": "PTR__OBJC_CLASS_$_CABasicAnimation_000c8b90",
+        "source_address": "0x4fda8"
+      },
+      {
+        "address": "0xc8b98",
+        "value": "PTR__OBJC_CLASS_$_CATransaction_000c8b98",
+        "source_address": "0x4fd68"
+      },
+      {
+        "address": "0xc8ca0",
+        "value": "PTR__OBJC_CLASS_$_CAMediaTimingFunction_000c8ca0",
+        "source_address": "0x4fe28"
+      },
+      {
+        "address": "0xcd220",
+        "value": "_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::spacing",
+        "source_address": "0x4fd38"
+      },
+      {
+        "address": "0xcd228",
+        "value": "_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::attributedText",
+        "source_address": "0x4fcfc"
+      },
+      {
+        "address": "0xcd238",
+        "value": "_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView::contentLayer",
+        "source_address": "0x4ff14"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x3ad48",
+    "evidence_id": "ev_463cde0e28920f1458d7cb557dd9f357c8cdf9d767cf449c8e92154ae60a29c7",
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n\nundefined8 FUN_0003ad48(NSView *param_1)\n\n{\n  undefined **ppuVar1;\n  long lVar2;\n  bool bVar3;\n  ID IVar4;\n  ID IVar5;\n  long unaff_x20;\n  undefined1 auStack_58 [24];\n  \n  IVar5 = *(ID *)(unaff_x20 + _TtC12DropoverCore7Control::backgroundLayer);\n  bVar3 = (extension_DropoverCore)::__C::NSView::get_isDarkModeEffective(param_1);\n  lVar2 = _TtC12DropoverCore7Control::backgroundVisibility;\n  IVar4 = (ID)bVar3;\n  _swift_beginAccess(unaff_x20 + _TtC12DropoverCore7Control::backgroundVisibility,auStack_58,0,0);\n  FUN_0003ce94(IVar4,*(undefined1 *)(unaff_x20 + lVar2));\n  IVar4 = _objc_msgSend(IVar4,\"CGColor\");\n  _objc_msgSend(IVar5,\"setFillColor:\",IVar4);\n  bVar3 = (extension_DropoverCore)::__C::NSView::get_isDarkModeEffective((NSView *)0x0);\n  IVar4 = *(ID *)(unaff_x20 + _TtC12DropoverCore7Control::selectionLayer);\n  ppuVar1 = &PTR_s_whiteColor_000c7c48;\n  if (!bVar3) {\n    ppuVar1 = &PTR_s_darkGrayColor_000c7c38;\n  }\n  IVar5 = NSColor::darkGrayColor((ID)&_OBJC_CLASS___NSColor,*ppuVar1);\n  IVar5 = NSColor::CGColor(IVar5,\"CGColor\");\n  _objc_msgSend(IVar4,\"setFillColor:\",IVar5);\n  return 0;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x12ec00",
+        "value": "_OBJC_CLASS_$_NSColor",
+        "source_address": "0x3adf4"
+      },
+      {
+        "address": "0x12ec01",
+        "value": "NSColor::darkGrayColor",
+        "source_address": "0x3ae18"
+      },
+      {
+        "address": "0x12ec04",
+        "value": "NSColor::CGColor",
+        "source_address": "0x3ae2c"
+      },
+      {
+        "address": "0x3ce94",
+        "value": "FUN_0003ce94",
+        "source_address": "0x3ad98"
+      },
+      {
+        "address": "0x5fe20",
+        "value": "(extension_DropoverCore)::__C::NSView::get_isDarkModeEffective",
+        "source_address": "0x3ad6c"
+      },
+      {
+        "address": "0x5fe20",
+        "value": "(extension_DropoverCore)::__C::NSView::get_isDarkModeEffective",
+        "source_address": "0x3addc"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3ada8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3add0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3ae18"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3ae2c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3ae50"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3adf8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3adbc"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3add8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3ae40"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3ae58"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3adb0"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3ae20"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3ae34"
+      },
+      {
+        "address": "0x961a8",
+        "value": "_swift_beginAccess",
+        "source_address": "0x3ad8c"
+      },
+      {
+        "address": "0xaed48",
+        "value": "s_CGColor_000aed48",
+        "source_address": "0x3ada4"
+      },
+      {
+        "address": "0xaed48",
+        "value": "s_CGColor_000aed48",
+        "source_address": "0x3ae28"
+      },
+      {
+        "address": "0xaf8b4",
+        "value": "s_darkGrayColor_000af8b4",
+        "source_address": "0x3ae14"
+      },
+      {
+        "address": "0xb08d3",
+        "value": "s_setFillColor:_000b08d3",
+        "source_address": "0x3adc4"
+      },
+      {
+        "address": "0xb08d3",
+        "value": "s_setFillColor:_000b08d3",
+        "source_address": "0x3ae44"
+      },
+      {
+        "address": "0xb0f4f",
+        "value": "s_whiteColor_000b0f4f",
+        "source_address": "0x3ae14"
+      },
+      {
+        "address": "0xc7c10",
+        "value": "PTR_s_CGColor_000c7c10",
+        "source_address": "0x3ada4"
+      },
+      {
+        "address": "0xc7c10",
+        "value": "PTR_s_CGColor_000c7c10",
+        "source_address": "0x3ae28"
+      },
+      {
+        "address": "0xc7c18",
+        "value": "PTR_s_setFillColor:_000c7c18",
+        "source_address": "0x3adc4"
+      },
+      {
+        "address": "0xc7c18",
+        "value": "PTR_s_setFillColor:_000c7c18",
+        "source_address": "0x3ae44"
+      },
+      {
+        "address": "0xc7c38",
+        "value": "PTR_s_darkGrayColor_000c7c38",
+        "source_address": "0x3ae14"
+      },
+      {
+        "address": "0xc7c48",
+        "value": "PTR_s_whiteColor_000c7c48",
+        "source_address": "0x3ae14"
+      },
+      {
+        "address": "0xc8b48",
+        "value": "PTR__OBJC_CLASS_$_NSColor_000c8b48",
+        "source_address": "0x3adf4"
+      },
+      {
+        "address": "0xcca00",
+        "value": "_TtC12DropoverCore7Control::backgroundVisibility",
+        "source_address": "0x3ad78"
+      },
+      {
+        "address": "0xcca20",
+        "value": "_TtC12DropoverCore7Control::backgroundLayer",
+        "source_address": "0x3ad64"
+      },
+      {
+        "address": "0xcca28",
+        "value": "_TtC12DropoverCore7Control::selectionLayer",
+        "source_address": "0x3ade8"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x3bc24",
+    "evidence_id": "ev_a21f95044b4481a6ab2ecd5f5172097a319df40a36670e724e1e874979e04fe6",
+    "pseudocode": "\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* DropoverCore.Control.layout() -> () */\n\nundefined8 __thiscall DropoverCore::Control::layout(Control *this)\n\n{\n  NSBezierPath *pNVar1;\n  undefined *puVar2;\n  NSBezierPath *pNVar3;\n  ID IVar4;\n  ID IVar5;\n  ID IVar6;\n  ID IVar7;\n  double in_d0;\n  double dVar8;\n  undefined8 uVar9;\n  undefined8 in_d2;\n  undefined8 in_d3;\n  double dVar10;\n  objc_super local_a0;\n  \n  local_a0.super_class = (class_t *)typeMetadataAccessor();\n  local_a0.receiver = (ID)this;\n  _objc_msgSendSuper2(&local_a0,\"layout\");\n  _objc_msgSend((ID)this,\"bounds\");\n  _CGRectGetHeight();\n  uVar9 = 0x3fe0000000000000;\n  dVar10 = in_d0 * 0.5;\n  IVar5 = *(ID *)(this + _TtC12DropoverCore7Control::backgroundLayer);\n  _objc_msgSend((ID)this,\"bounds\");\n  _objc_msgSend(IVar5,\"setFrame:\");\n  IVar7 = *(ID *)(this + _TtC12DropoverCore7Control::selectionLayer);\n  _objc_msgSend((ID)this,\"bounds\");\n  _objc_msgSend(IVar7,\"setFrame:\");\n  IVar6 = *(ID *)(this + _TtC12DropoverCore7Control::shadowLayer);\n  _objc_msgSend((ID)this,\"bounds\");\n  _objc_msgSend(IVar6,\"setFrame:\");\n  IVar4 = *(ID *)(this + _TtC12DropoverCore7Control::borderLayer);\n  _objc_msgSend((ID)this,\"bounds\");\n  _objc_msgSend(IVar4,\"setFrame:\");\n  _objc_msgSend((ID)this,\"bounds\");\n  pNVar1 = (NSBezierPath *)\n           NSBezierPath::bezierPathWithRoundedRect_xRadius_yRadius_\n                     ((ID)&_OBJC_CLASS___NSBezierPath,\"bezierPathWithRoundedRect:xRadius:yRadius:\",\n                      in_d0,uVar9,in_d2,in_d3,dVar10,dVar10);\n  pNVar3 = pNVar1;\n  (extension_DropoverCore)::__C::NSBezierPath::get_CGPath(pNVar1);\n  _objc_msgSend(IVar5,\"setPath:\",pNVar3);\n  uVar9 = 0;\n  (extension_DropoverCore)::__C::NSBezierPath::get_CGPath((NSBezierPath *)0x0);\n  _objc_msgSend(IVar7,\"setPath:\",uVar9);\n  uVar9 = 0;\n  (extension_DropoverCore)::__C::NSBezierPath::get_CGPath((NSBezierPath *)0x0);\n  _objc_msgSend(IVar6,\"setShadowPath:\",uVar9);\n  _objc_msgSend((ID)this,\"bounds\");\n  _CGRectInset();\n  IVar5 = NSBezierPath::bezierPathWithRect_((ID)&_OBJC_CLASS___NSBezierPath,\"bezierPathWithRect:\");\n  NSBezierPath::appendBezierPath_(IVar5,\"appendBezierPath:\",pNVar1);\n  NSBezierPath::setWindingRule_(IVar5,\"setWindingRule:\",1);\n  IVar5 = _objc_msgSend(IVar6,\"mask\");\n  if ((IVar5 == 0) || (_swift_dynamicCastObjCClass(IVar5,&_OBJC_CLASS___CAShapeLayer), IVar5 == 0))\n  {\n    puVar2 = &_OBJC_CLASS___CAShapeLayer;\n    _objc_allocWithZone();\n    IVar5 = _objc_msgSend((ID)puVar2,\"init\");\n  }\n  _objc_msgSend(IVar6,\"bounds\");\n  _CGRectGetWidth();\n  dVar8 = in_d0;\n  _objc_msgSend(IVar6,\"bounds\");\n  _CGRectGetHeight();\n  pNVar3 = (NSBezierPath *)_objc_msgSend(IVar5,\"setFrame:\",0,0,in_d0,dVar8);\n  (extension_DropoverCore)::__C::NSBezierPath::get_CGPath(pNVar3);\n  _objc_msgSend(IVar5,\"setPath:\",pNVar3);\n  IVar7 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,\"blackColor\");\n  IVar7 = NSColor::CGColor(IVar7,\"CGColor\");\n  _objc_msgSend(IVar5,\"setFillColor:\",IVar7);\n  _objc_msgSend(IVar5,\"setFillRule:\",*(undefined8 *)PTR__kCAFillRuleEvenOdd_000b8c60);\n  _objc_msgSend(IVar6,\"setMask:\",IVar5);\n  _objc_msgSend(IVar4,\"setCornerRadius:\",dVar10);\n  IVar4 = *(ID *)(this + _TtC12DropoverCore7Control::borderTopInnerShadowLayer);\n  _objc_msgSend((ID)this,\"bounds\");\n  _objc_msgSend(IVar4,\"setFrame:\");\n  IVar5 = _objc_msgSend(IVar4,\"mask\");\n  if ((IVar5 == 0) || (_swift_dynamicCastObjCClass(IVar5,&_OBJC_CLASS___CAShapeLayer), IVar5 == 0))\n  {\n    puVar2 = &_OBJC_CLASS___CAShapeLayer;\n    _objc_allocWithZone();\n    IVar5 = _objc_msgSend((ID)puVar2,\"init\");\n  }\n  _objc_msgSend((ID)this,\"bounds\");\n  pNVar3 = (NSBezierPath *)_objc_msgSend(IVar5,\"setFrame:\");\n  (extension_DropoverCore)::__C::NSBezierPath::get_CGPath(pNVar3);\n  _objc_msgSend(IVar5,\"setPath:\",pNVar3);\n  IVar6 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,\"blackColor\");\n  IVar6 = NSColor::CGColor(IVar6,\"CGColor\");\n  _objc_msgSend(IVar5,\"setFillColor:\",IVar6);\n  _objc_msgSend(IVar4,\"setMask:\",IVar5);\n  return 0;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x12df00",
+        "value": "_OBJC_CLASS_$_CAShapeLayer",
+        "source_address": "0x3be78"
+      },
+      {
+        "address": "0x12df00",
+        "value": "_OBJC_CLASS_$_CAShapeLayer",
+        "source_address": "0x3be90"
+      },
+      {
+        "address": "0x12df00",
+        "value": "_OBJC_CLASS_$_CAShapeLayer",
+        "source_address": "0x3c010"
+      },
+      {
+        "address": "0x12df00",
+        "value": "_OBJC_CLASS_$_CAShapeLayer",
+        "source_address": "0x3c02c"
+      },
+      {
+        "address": "0x12e700",
+        "value": "_OBJC_CLASS_$_NSBezierPath",
+        "source_address": "0x3bd40"
+      },
+      {
+        "address": "0x12e700",
+        "value": "_OBJC_CLASS_$_NSBezierPath",
+        "source_address": "0x3be10"
+      },
+      {
+        "address": "0x12e701",
+        "value": "NSBezierPath::bezierPathWithRoundedRect:xRadius:yRadius:",
+        "source_address": "0x3bd6c"
+      },
+      {
+        "address": "0x12e704",
+        "value": "NSBezierPath::bezierPathWithRect:",
+        "source_address": "0x3be14"
+      },
+      {
+        "address": "0x12e705",
+        "value": "NSBezierPath::appendBezierPath:",
+        "source_address": "0x3be30"
+      },
+      {
+        "address": "0x12e706",
+        "value": "NSBezierPath::setWindingRule:",
+        "source_address": "0x3be44"
+      },
+      {
+        "address": "0x12ec00",
+        "value": "_OBJC_CLASS_$_NSColor",
+        "source_address": "0x3bf14"
+      },
+      {
+        "address": "0x12ec00",
+        "value": "_OBJC_CLASS_$_NSColor",
+        "source_address": "0x3c094"
+      },
+      {
+        "address": "0x12ec02",
+        "value": "NSColor::blackColor",
+        "source_address": "0x3bf28"
+      },
+      {
+        "address": "0x12ec02",
+        "value": "NSColor::blackColor",
+        "source_address": "0x3c098"
+      },
+      {
+        "address": "0x12ec04",
+        "value": "NSColor::CGColor",
+        "source_address": "0x3bf40"
+      },
+      {
+        "address": "0x12ec04",
+        "value": "NSColor::CGColor",
+        "source_address": "0x3c0b0"
+      },
+      {
+        "address": "0x134500",
+        "value": "_kCAFillRuleEvenOdd",
+        "source_address": "0x3bf7c"
+      },
+      {
+        "address": "0x3be90",
+        "value": "LAB_0003be90",
+        "source_address": "0x3be68"
+      },
+      {
+        "address": "0x3bea0",
+        "value": "LAB_0003bea0",
+        "source_address": "0x3be84"
+      },
+      {
+        "address": "0x3c028",
+        "value": "LAB_0003c028",
+        "source_address": "0x3bffc"
+      },
+      {
+        "address": "0x3c040",
+        "value": "LAB_0003c040",
+        "source_address": "0x3c01c"
+      },
+      {
+        "address": "0x3d328",
+        "value": "DropoverCore::Control::typeMetadataAccessor",
+        "source_address": "0x3bc54"
+      },
+      {
+        "address": "0x60bc4",
+        "value": "(extension_DropoverCore)::__C::NSBezierPath::get_CGPath",
+        "source_address": "0x3bd80"
+      },
+      {
+        "address": "0x60bc4",
+        "value": "(extension_DropoverCore)::__C::NSBezierPath::get_CGPath",
+        "source_address": "0x3bda8"
+      },
+      {
+        "address": "0x60bc4",
+        "value": "(extension_DropoverCore)::__C::NSBezierPath::get_CGPath",
+        "source_address": "0x3bdcc"
+      },
+      {
+        "address": "0x60bc4",
+        "value": "(extension_DropoverCore)::__C::NSBezierPath::get_CGPath",
+        "source_address": "0x3bef0"
+      },
+      {
+        "address": "0x60bc4",
+        "value": "(extension_DropoverCore)::__C::NSBezierPath::get_CGPath",
+        "source_address": "0x3c068"
+      },
+      {
+        "address": "0x95c38",
+        "value": "_CGRectGetHeight",
+        "source_address": "0x3bc7c"
+      },
+      {
+        "address": "0x95c38",
+        "value": "_CGRectGetHeight",
+        "source_address": "0x3bec8"
+      },
+      {
+        "address": "0x95c8c",
+        "value": "_CGRectGetWidth",
+        "source_address": "0x3beb4"
+      },
+      {
+        "address": "0x95c98",
+        "value": "_CGRectInset",
+        "source_address": "0x3be04"
+      },
+      {
+        "address": "0x95f14",
+        "value": "_objc_allocWithZone",
+        "source_address": "0x3be94"
+      },
+      {
+        "address": "0x95f14",
+        "value": "_objc_allocWithZone",
+        "source_address": "0x3c030"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bc78"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bc9c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bcac"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bcc4"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bcd0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bce8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bcf4"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bd0c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bd1c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bd28"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bd6c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bd98"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bdbc"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bde4"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bdf8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3be14"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3be30"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3be44"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3be54"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3be9c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3beb0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bec4"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bee8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bf04"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bf28"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bf40"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bf68"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bf8c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bfa0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bfbc"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bfd4"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bfe0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3bff0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c03c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c050"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c060"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c080"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c098"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c0b0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c0d8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3c0f0"
+      },
+      {
+        "address": "0x95f44",
+        "value": "_objc_msgSendSuper2",
+        "source_address": "0x3bc68"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3bd44"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3be74"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3bf18"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3c00c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3bda0"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3bdc4"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3bdec"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3be8c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3bf0c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3bf54"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3bf70"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3bfa8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c024"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c088"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c0c4"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c0e0"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c0f8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c100"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c108"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c110"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3c118"
+      },
+      {
+        "address": "0x95f68",
+        "value": "_objc_retain",
+        "source_address": "0x3bea0"
+      },
+      {
+        "address": "0x95f68",
+        "value": "_objc_retain",
+        "source_address": "0x3c040"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3bd74"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3be1c"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3be5c"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3bf30"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3bf48"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3bff8"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3c0a0"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3c0b8"
+      },
+      {
+        "address": "0x96274",
+        "value": "_swift_dynamicCastObjCClass",
+        "source_address": "0x3be80"
+      },
+      {
+        "address": "0x96274",
+        "value": "_swift_dynamicCastObjCClass",
+        "source_address": "0x3c018"
+      },
+      {
+        "address": "0xaed48",
+        "value": "s_CGColor_000aed48",
+        "source_address": "0x3bf3c"
+      },
+      {
+        "address": "0xaed48",
+        "value": "s_CGColor_000aed48",
+        "source_address": "0x3c0ac"
+      },
+      {
+        "address": "0xaefb8",
+        "value": "s_bezierPathWithRoundedRect:xRadiu_000aefb8",
+        "source_address": "0x3bd50"
+      },
+      {
+        "address": "0xaf003",
+        "value": "s_blackColor_000af003",
+        "source_address": "0x3bf24"
+      },
+      {
+        "address": "0xaf003",
+        "value": "s_blackColor_000af003",
+        "source_address": "0x3c090"
+      },
+      {
+        "address": "0xaf1f3",
+        "value": "s_appendBezierPath:_000af1f3",
+        "source_address": "0x3be28"
+      },
+      {
+        "address": "0xaf226",
+        "value": "s_setWindingRule:_000af226",
+        "source_address": "0x3be38"
+      },
+      {
+        "address": "0xaf268",
+        "value": "s_bezierPathWithRect:_000af268",
+        "source_address": "0x3be0c"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bc70"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bc94"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bcbc"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bce0"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bd04"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bd20"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bdf0"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bea8"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bebc"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3bfcc"
+      },
+      {
+        "address": "0xaf2ee",
+        "value": "s_bounds_000af2ee",
+        "source_address": "0x3c048"
+      },
+      {
+        "address": "0xafce1",
+        "value": "s_init_000afce1",
+        "source_address": "0x3be98"
+      },
+      {
+        "address": "0xafce1",
+        "value": "s_init_000afce1",
+        "source_address": "0x3c038"
+      },
+      {
+        "address": "0xb001e",
+        "value": "s_layout_000b001e",
+        "source_address": "0x3bc60"
+      },
+      {
+        "address": "0xb00be",
+        "value": "s_mask_000b00be",
+        "source_address": "0x3be4c"
+      },
+      {
+        "address": "0xb00be",
+        "value": "s_mask_000b00be",
+        "source_address": "0x3bfe8"
+      },
+      {
+        "address": "0xb080f",
+        "value": "s_setCornerRadius:_000b080f",
+        "source_address": "0x3bfb0"
+      },
+      {
+        "address": "0xb08d3",
+        "value": "s_setFillColor:_000b08d3",
+        "source_address": "0x3bf5c"
+      },
+      {
+        "address": "0xb08d3",
+        "value": "s_setFillColor:_000b08d3",
+        "source_address": "0x3c0cc"
+      },
+      {
+        "address": "0xb08ee",
+        "value": "s_setFillRule:_000b08ee",
+        "source_address": "0x3bf84"
+      },
+      {
+        "address": "0xb092a",
+        "value": "s_setFrame:_000b092a",
+        "source_address": "0x3bca4"
+      },
+      {
+        "address": "0xb092a",
+        "value": "s_setFrame:_000b092a",
+        "source_address": "0x3bcc8"
+      },
+      {
+        "address": "0xb092a",
+        "value": "s_setFrame:_000b092a",
+        "source_address": "0x3bcec"
+      },
+      {
+        "address": "0xb092a",
+        "value": "s_setFrame:_000b092a",
+        "source_address": "0x3bd10"
+      },
+      {
+        "address": "0xb092a",
+        "value": "s_setFrame:_000b092a",
+        "source_address": "0x3bed4"
+      },
+      {
+        "address": "0xb092a",
+        "value": "s_setFrame:_000b092a",
+        "source_address": "0x3bfd8"
+      },
+      {
+        "address": "0xb092a",
+        "value": "s_setFrame:_000b092a",
+        "source_address": "0x3c058"
+      },
+      {
+        "address": "0xb0a11",
+        "value": "s_setMask:_000b0a11",
+        "source_address": "0x3bf94"
+      },
+      {
+        "address": "0xb0a11",
+        "value": "s_setMask:_000b0a11",
+        "source_address": "0x3c0e4"
+      },
+      {
+        "address": "0xb0aa4",
+        "value": "s_setPath:_000b0aa4",
+        "source_address": "0x3bd8c"
+      },
+      {
+        "address": "0xb0aa4",
+        "value": "s_setPath:_000b0aa4",
+        "source_address": "0x3bdb0"
+      },
+      {
+        "address": "0xb0aa4",
+        "value": "s_setPath:_000b0aa4",
+        "source_address": "0x3bef8"
+      },
+      {
+        "address": "0xb0aa4",
+        "value": "s_setPath:_000b0aa4",
+        "source_address": "0x3c074"
+      },
+      {
+        "address": "0xb0b70",
+        "value": "s_setShadowPath:_000b0b70",
+        "source_address": "0x3bdd8"
+      },
+      {
+        "address": "0xb8c60",
+        "value": "PTR__kCAFillRuleEvenOdd_000b8c60",
+        "source_address": "0x3bf78"
+      },
+      {
+        "address": "0xc7b98",
+        "value": "PTR_s_init_000c7b98",
+        "source_address": "0x3be98"
+      },
+      {
+        "address": "0xc7b98",
+        "value": "PTR_s_init_000c7b98",
+        "source_address": "0x3c038"
+      },
+      {
+        "address": "0xc7be0",
+        "value": "PTR_s_layout_000c7be0",
+        "source_address": "0x3bc60"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bc70"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bc94"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bcbc"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bce0"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bd04"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bd20"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bdf0"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bea8"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bebc"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3bfcc"
+      },
+      {
+        "address": "0xc7be8",
+        "value": "PTR_s_bounds_000c7be8",
+        "source_address": "0x3c048"
+      },
+      {
+        "address": "0xc7bf0",
+        "value": "PTR_s_setFrame:_000c7bf0",
+        "source_address": "0x3bca4"
+      },
+      {
+        "address": "0xc7bf0",
+        "value": "PTR_s_setFrame:_000c7bf0",
+        "source_address": "0x3bcc8"
+      },
+      {
+        "address": "0xc7bf0",
+        "value": "PTR_s_setFrame:_000c7bf0",
+        "source_address": "0x3bcec"
+      },
+      {
+        "address": "0xc7bf0",
+        "value": "PTR_s_setFrame:_000c7bf0",
+        "source_address": "0x3bd10"
+      },
+      {
+        "address": "0xc7bf0",
+        "value": "PTR_s_setFrame:_000c7bf0",
+        "source_address": "0x3bed4"
+      },
+      {
+        "address": "0xc7bf0",
+        "value": "PTR_s_setFrame:_000c7bf0",
+        "source_address": "0x3bfd8"
+      },
+      {
+        "address": "0xc7bf0",
+        "value": "PTR_s_setFrame:_000c7bf0",
+        "source_address": "0x3c058"
+      },
+      {
+        "address": "0xc7bf8",
+        "value": "PTR_s_bezierPathWithRoundedRect:xRadiu_000c7bf8",
+        "source_address": "0x3bd50"
+      },
+      {
+        "address": "0xc7c00",
+        "value": "PTR_s_setPath:_000c7c00",
+        "source_address": "0x3bd8c"
+      },
+      {
+        "address": "0xc7c00",
+        "value": "PTR_s_setPath:_000c7c00",
+        "source_address": "0x3bdb0"
+      },
+      {
+        "address": "0xc7c00",
+        "value": "PTR_s_setPath:_000c7c00",
+        "source_address": "0x3bef8"
+      },
+      {
+        "address": "0xc7c00",
+        "value": "PTR_s_setPath:_000c7c00",
+        "source_address": "0x3c074"
+      },
+      {
+        "address": "0xc7c10",
+        "value": "PTR_s_CGColor_000c7c10",
+        "source_address": "0x3bf3c"
+      },
+      {
+        "address": "0xc7c10",
+        "value": "PTR_s_CGColor_000c7c10",
+        "source_address": "0x3c0ac"
+      },
+      {
+        "address": "0xc7c18",
+        "value": "PTR_s_setFillColor:_000c7c18",
+        "source_address": "0x3bf5c"
+      },
+      {
+        "address": "0xc7c18",
+        "value": "PTR_s_setFillColor:_000c7c18",
+        "source_address": "0x3c0cc"
+      },
+      {
+        "address": "0xc7c50",
+        "value": "PTR_s_blackColor_000c7c50",
+        "source_address": "0x3bf24"
+      },
+      {
+        "address": "0xc7c50",
+        "value": "PTR_s_blackColor_000c7c50",
+        "source_address": "0x3c090"
+      },
+      {
+        "address": "0xc81f0",
+        "value": "PTR_s_setCornerRadius:_000c81f0",
+        "source_address": "0x3bfb0"
+      },
+      {
+        "address": "0xc82b8",
+        "value": "PTR_s_setShadowPath:_000c82b8",
+        "source_address": "0x3bdd8"
+      },
+      {
+        "address": "0xc82c0",
+        "value": "PTR_s_bezierPathWithRect:_000c82c0",
+        "source_address": "0x3be0c"
+      },
+      {
+        "address": "0xc82c8",
+        "value": "PTR_s_appendBezierPath:_000c82c8",
+        "source_address": "0x3be28"
+      },
+      {
+        "address": "0xc82d0",
+        "value": "PTR_s_setWindingRule:_000c82d0",
+        "source_address": "0x3be38"
+      },
+      {
+        "address": "0xc82d8",
+        "value": "PTR_s_mask_000c82d8",
+        "source_address": "0x3be4c"
+      },
+      {
+        "address": "0xc82d8",
+        "value": "PTR_s_mask_000c82d8",
+        "source_address": "0x3bfe8"
+      },
+      {
+        "address": "0xc82e0",
+        "value": "PTR_s_setFillRule:_000c82e0",
+        "source_address": "0x3bf84"
+      },
+      {
+        "address": "0xc82e8",
+        "value": "PTR_s_setMask:_000c82e8",
+        "source_address": "0x3bf94"
+      },
+      {
+        "address": "0xc82e8",
+        "value": "PTR_s_setMask:_000c82e8",
+        "source_address": "0x3c0e4"
+      },
+      {
+        "address": "0xc8b28",
+        "value": "PTR__OBJC_CLASS_$_CAShapeLayer_000c8b28",
+        "source_address": "0x3be70"
+      },
+      {
+        "address": "0xc8b28",
+        "value": "PTR__OBJC_CLASS_$_CAShapeLayer_000c8b28",
+        "source_address": "0x3be90"
+      },
+      {
+        "address": "0xc8b28",
+        "value": "PTR__OBJC_CLASS_$_CAShapeLayer_000c8b28",
+        "source_address": "0x3c008"
+      },
+      {
+        "address": "0xc8b28",
+        "value": "PTR__OBJC_CLASS_$_CAShapeLayer_000c8b28",
+        "source_address": "0x3c02c"
+      },
+      {
+        "address": "0xc8b30",
+        "value": "PTR__OBJC_CLASS_$_NSBezierPath_000c8b30",
+        "source_address": "0x3bd40"
+      },
+      {
+        "address": "0xc8b48",
+        "value": "PTR__OBJC_CLASS_$_NSColor_000c8b48",
+        "source_address": "0x3bf14"
+      },
+      {
+        "address": "0xcca10",
+        "value": "_TtC12DropoverCore7Control::shadowLayer",
+        "source_address": "0x3bcd8"
+      },
+      {
+        "address": "0xcca20",
+        "value": "_TtC12DropoverCore7Control::backgroundLayer",
+        "source_address": "0x3bc8c"
+      },
+      {
+        "address": "0xcca28",
+        "value": "_TtC12DropoverCore7Control::selectionLayer",
+        "source_address": "0x3bcb4"
+      },
+      {
+        "address": "0xcca30",
+        "value": "_TtC12DropoverCore7Control::borderTopInnerShadowLayer",
+        "source_address": "0x3bfc4"
+      },
+      {
+        "address": "0xcca38",
+        "value": "_TtC12DropoverCore7Control::borderLayer",
+        "source_address": "0x3bcfc"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x28bf8",
+    "evidence_id": "ev_369e3ae20c10ffa1ee170ad1a4d3809d88bc1cf72e84d304077debcfd5679f75",
+    "pseudocode": "\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_00028bf8(byte param_1,long param_2)\n\n{\n  byte bVar1;\n  long lVar2;\n  undefined1 auStack_60 [24];\n  undefined1 auStack_48 [24];\n  \n  _swift_beginAccess(param_2 + 0x10,auStack_48,0,0);\n  param_2 = param_2 + 0x10;\n  _swift_unknownObjectWeakLoadStrong();\n  lVar2 = _TtC12DropoverCore26DisclosureIndicatorControl::selected;\n  if (param_2 != 0) {\n    _swift_beginAccess(param_2 + _TtC12DropoverCore26DisclosureIndicatorControl::selected,auStack_60\n                       ,1,0);\n    bVar1 = *(byte *)(param_2 + lVar2);\n    *(byte *)(param_2 + lVar2) = param_1 & 1;\n    if (bVar1 != (param_1 & 1)) {\n      FUN_000284cc();\n    }\n  }\n  return;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x284cc",
+        "value": "FUN_000284cc",
+        "source_address": "0x28c68"
+      },
+      {
+        "address": "0x28c6c",
+        "value": "LAB_00028c6c",
+        "source_address": "0x28c64"
+      },
+      {
+        "address": "0x28c74",
+        "value": "LAB_00028c74",
+        "source_address": "0x28c30"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x28c70"
+      },
+      {
+        "address": "0x961a8",
+        "value": "_swift_beginAccess",
+        "source_address": "0x28c24"
+      },
+      {
+        "address": "0x961a8",
+        "value": "_swift_beginAccess",
+        "source_address": "0x28c50"
+      },
+      {
+        "address": "0x964fc",
+        "value": "_swift_unknownObjectWeakLoadStrong",
+        "source_address": "0x28c2c"
+      },
+      {
+        "address": "0xcc498",
+        "value": "_TtC12DropoverCore26DisclosureIndicatorControl::selected",
+        "source_address": "0x28c3c"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x50470",
+    "evidence_id": "ev_953f325eb7b57551bf197f8cf4fc1c5771541788cd7879233ce38cd6875629cd",
+    "pseudocode": "\nvoid FUN_00050470(void)\n\n{\n  UUID UVar1;\n  long unaff_x20;\n  \n  UVar1 = Foundation::UUID::typeMetadataAccessor();\n  FUN_0004f9b0(*(undefined8 *)(unaff_x20 + 0x10),\n               unaff_x20 +\n               ((ulong)*(byte *)(*(long *)(UVar1.unknown + -8) + 0x50) + 0x18 &\n               ((ulong)*(byte *)(*(long *)(UVar1.unknown + -8) + 0x50) ^ 0xffffffffffffffff)));\n  return;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x4f9b0",
+        "value": "FUN_0004f9b0",
+        "source_address": "0x5049c"
+      },
+      {
+        "address": "0x94834",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::Foundation::UUID::typeMetadataAccessor",
+        "source_address": "0x5047c"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x3ba0c",
+    "evidence_id": "ev_1f4cf678b9c0ee4f7197ffaa0ac1bb7c1fc245439d0cde7b1d2302e07b047902",
+    "pseudocode": "\n/* DropoverCore.Control.init(coder: __C.NSCoder) -> DropoverCore.Control? */\n\nvoid __thiscall DropoverCore::Control::_init(Control *this,NSCoder *coder)\n\n{\n  Control *pCVar1;\n  code *pcVar2;\n  String SVar3;\n  \n  pCVar1 = this + _TtC12DropoverCore7Control::onSelect;\n  *(undefined8 *)pCVar1 = 0;\n  *(undefined8 *)(pCVar1 + 8) = 0;\n  pCVar1 = this + _TtC12DropoverCore7Control::onHighlightStateChange;\n  *(undefined8 *)pCVar1 = 0;\n  *(undefined8 *)(pCVar1 + 8) = 0;\n  *(undefined **)(this + _TtC12DropoverCore7Control::windowObservers) =\n       PTR___swiftEmptyArrayStorage_000b9e20;\n  SVar3.bridgeObject = (void *)((long)&MACH_HEADER.magic + 2);\n  SVar3.str = (char *)((long)&MACH_HEADER.cpusubtype + 3);\n  Swift::_assertionFailure((StaticString)0x9e778,SVar3,(StaticString)0x0,0xe000000000000000,0x9f3f0)\n  ;\n                    /* WARNING: Does not return */\n  pcVar2 = (code *)SoftwareBreakpoint(1,0x3ba88);\n  (*pcVar2)();\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x132f00",
+        "value": "__swiftEmptyArrayStorage",
+        "source_address": "0x3ba48"
+      },
+      {
+        "address": "0x95980",
+        "value": "/usr/lib/swift/libswiftCore.dylib::Swift::_assertionFailure",
+        "source_address": "0x3ba80"
+      },
+      {
+        "address": "0x9e778",
+        "value": "s_Fatal_error_0009e778",
+        "source_address": "0x3ba5c"
+      },
+      {
+        "address": "0x9f3f0",
+        "value": "s_DropoverCore/Control.swift_0009f3f0",
+        "source_address": "0x3ba64"
+      },
+      {
+        "address": "0xb9e20",
+        "value": "PTR___swiftEmptyArrayStorage_000b9e20",
+        "source_address": "0x3ba44"
+      },
+      {
+        "address": "0xcc9f0",
+        "value": "_TtC12DropoverCore7Control::onSelect",
+        "source_address": "0x3ba1c"
+      },
+      {
+        "address": "0xcc9f8",
+        "value": "_TtC12DropoverCore7Control::onHighlightStateChange",
+        "source_address": "0x3ba2c"
+      },
+      {
+        "address": "0xcca18",
+        "value": "_TtC12DropoverCore7Control::windowObservers",
+        "source_address": "0x3ba3c"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x3ae74",
+    "evidence_id": "ev_e62360ff393bf98bff482205f5eca0d9712a1f032606fafac86a52e1918ef911",
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n\nundefined8 FUN_0003ae74(void)\n\n{\n  undefined **ppuVar1;\n  bool bVar2;\n  NSAppearance *pNVar3;\n  ID IVar4;\n  undefined *puVar5;\n  undefined8 uVar6;\n  NSArray *pNVar7;\n  NSNumber *this;\n  NSNumber *pNVar8;\n  ID IVar9;\n  ID unaff_x20;\n  \n  IVar9 = *(ID *)(unaff_x20 + _TtC12DropoverCore7Control::borderLayer);\n  pNVar3 = (NSAppearance *)_objc_msgSend(unaff_x20,\"effectiveAppearance\");\n  bVar2 = (extension_DropoverCore)::__C::NSAppearance::get_isDarkMode(pNVar3);\n  ppuVar1 = &PTR_s_whiteColor_000c7c48;\n  if (!bVar2) {\n    ppuVar1 = &PTR_s_blackColor_000c7c50;\n  }\n  IVar4 = NSColor::blackColor((ID)&_OBJC_CLASS___NSColor,*ppuVar1);\n  IVar4 = NSColor::colorWithAlphaComponent_(IVar4,\"colorWithAlphaComponent:\",0x3f9eb851eb851eb8);\n  IVar4 = NSColor::CGColor(IVar4,\"CGColor\");\n  _objc_msgSend(IVar9,\"setBorderColor:\",IVar4);\n  pNVar3 = (NSAppearance *)_objc_msgSend(unaff_x20,\"effectiveAppearance\");\n  bVar2 = (extension_DropoverCore)::__C::NSAppearance::get_isDarkMode(pNVar3);\n  uVar6 = 0x3fb1eb851eb851ec;\n  if (!bVar2) {\n    uVar6 = 0x3fb999999999999a;\n  }\n  IVar9 = NSColor::whiteColor((ID)&_OBJC_CLASS___NSColor,\"whiteColor\");\n  IVar9 = NSColor::colorWithAlphaComponent_(IVar9,\"colorWithAlphaComponent:\",uVar6);\n  IVar4 = *(ID *)(unaff_x20 + _TtC12DropoverCore7Control::borderTopInnerShadowLayer);\n  puVar5 = &DAT_000cca88;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cca88,&DAT_0009b500);\n  _swift_allocObject();\n  *(undefined8 *)(puVar5 + 0x18) = 4;\n  *(undefined8 *)(puVar5 + 0x10) = 2;\n  IVar9 = NSColor::CGColor(IVar9,\"CGColor\");\n  uVar6 = 0;\n  FUN_00005594();\n  *(undefined8 *)(puVar5 + 0x38) = uVar6;\n  *(ID *)(puVar5 + 0x20) = IVar9;\n  IVar9 = NSColor::clearColor((ID)&_OBJC_CLASS___NSColor,\"clearColor\");\n  IVar9 = NSColor::CGColor(IVar9,\"CGColor\");\n  *(undefined8 *)(puVar5 + 0x58) = uVar6;\n  *(ID *)(puVar5 + 0x40) = IVar9;\n  pNVar7 = (extension_Foundation)::Swift::Array<undefined>::_bridgeToObjectiveC();\n  _swift_bridgeObjectRelease(puVar5);\n  _objc_msgSend(IVar4,\"setColors:\",pNVar7);\n  puVar5 = &DAT_000cbd30;\n  ___swift_instantiateConcreteTypeFromMangledNameV2(&DAT_000cbd30,&DAT_00099440);\n  _swift_allocObject();\n  *(undefined8 *)(puVar5 + 0x18) = 5;\n  *(undefined8 *)(puVar5 + 0x10) = 2;\n  this = (NSNumber *)0x0;\n  FUN_0000d230(0,&DAT_000cca90,&PTR__OBJC_CLASS___NSNumber_000c8c68);\n  pNVar8 = (extension_Foundation)::__C::NSNumber::__allocating_init(this,0.0);\n  *(NSNumber **)(puVar5 + 0x20) = pNVar8;\n  pNVar8 = (extension_Foundation)::__C::NSNumber::__allocating_init(this,0.25);\n  *(NSNumber **)(puVar5 + 0x28) = pNVar8;\n  pNVar7 = (extension_Foundation)::Swift::Array<undefined>::_bridgeToObjectiveC();\n  _swift_bridgeObjectRelease(puVar5);\n  _objc_msgSend(IVar4,\"setLocations:\",pNVar7);\n  return 0;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x12ec00",
+        "value": "_OBJC_CLASS_$_NSColor",
+        "source_address": "0x3aed4"
+      },
+      {
+        "address": "0x12ec00",
+        "value": "_OBJC_CLASS_$_NSColor",
+        "source_address": "0x3afb0"
+      },
+      {
+        "address": "0x12ec00",
+        "value": "_OBJC_CLASS_$_NSColor",
+        "source_address": "0x3b054"
+      },
+      {
+        "address": "0x12ec02",
+        "value": "NSColor::blackColor",
+        "source_address": "0x3aef8"
+      },
+      {
+        "address": "0x12ec03",
+        "value": "NSColor::colorWithAlphaComponent:",
+        "source_address": "0x3af18"
+      },
+      {
+        "address": "0x12ec03",
+        "value": "NSColor::colorWithAlphaComponent:",
+        "source_address": "0x3afd4"
+      },
+      {
+        "address": "0x12ec04",
+        "value": "NSColor::CGColor",
+        "source_address": "0x3af3c"
+      },
+      {
+        "address": "0x12ec04",
+        "value": "NSColor::CGColor",
+        "source_address": "0x3b030"
+      },
+      {
+        "address": "0x12ec04",
+        "value": "NSColor::CGColor",
+        "source_address": "0x3b078"
+      },
+      {
+        "address": "0x12ec05",
+        "value": "NSColor::clearColor",
+        "source_address": "0x3b064"
+      },
+      {
+        "address": "0x12ec06",
+        "value": "NSColor::whiteColor",
+        "source_address": "0x3afbc"
+      },
+      {
+        "address": "0x1369d8",
+        "value": "$$type_metadata_for_()",
+        "source_address": "0x3b0a0"
+      },
+      {
+        "address": "0x1b7c",
+        "value": "___swift_instantiateConcreteTypeFromMangledNameV2",
+        "source_address": "0x3b008"
+      },
+      {
+        "address": "0x1b7c",
+        "value": "___swift_instantiateConcreteTypeFromMangledNameV2",
+        "source_address": "0x3b0e4"
+      },
+      {
+        "address": "0x5594",
+        "value": "FUN_00005594",
+        "source_address": "0x3b044"
+      },
+      {
+        "address": "0x5ffc0",
+        "value": "(extension_DropoverCore)::__C::NSAppearance::get_isDarkMode",
+        "source_address": "0x3aec0"
+      },
+      {
+        "address": "0x5ffc0",
+        "value": "(extension_DropoverCore)::__C::NSAppearance::get_isDarkMode",
+        "source_address": "0x3af88"
+      },
+      {
+        "address": "0x95488",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::Swift::Array<undefined>::_bridgeToObjectiveC",
+        "source_address": "0x3b0a8"
+      },
+      {
+        "address": "0x95488",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::Swift::Array<undefined>::_bridgeToObjectiveC",
+        "source_address": "0x3b140"
+      },
+      {
+        "address": "0x95728",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::__C::NSNumber::__allocating_init",
+        "source_address": "0x3b124"
+      },
+      {
+        "address": "0x95728",
+        "value": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation::(extension_Foundation)::__C::NSNumber::__allocating_init",
+        "source_address": "0x3b130"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3aeb0"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3aef8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3af18"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3af3c"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3af64"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3af78"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3afbc"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3afd4"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3b030"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3b064"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3b078"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3b0c8"
+      },
+      {
+        "address": "0x95f38",
+        "value": "_objc_msgSend",
+        "source_address": "0x3b160"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3aed8"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3afb4"
+      },
+      {
+        "address": "0x95f50",
+        "value": "_objc_opt_self",
+        "source_address": "0x3b058"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3aecc"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3af2c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3af50"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3af6c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3af94"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3afe8"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3b08c"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3b0d0"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3b168"
+      },
+      {
+        "address": "0x95f5c",
+        "value": "_objc_release",
+        "source_address": "0x3b18c"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3aeb8"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3af00"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3af20"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3af44"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3af80"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3afc4"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3afdc"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3b038"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3b06c"
+      },
+      {
+        "address": "0x95f80",
+        "value": "_objc_retainAutoreleasedReturnValue",
+        "source_address": "0x3b080"
+      },
+      {
+        "address": "0x96154",
+        "value": "_swift_allocObject",
+        "source_address": "0x3b014"
+      },
+      {
+        "address": "0x96154",
+        "value": "_swift_allocObject",
+        "source_address": "0x3b0f0"
+      },
+      {
+        "address": "0x961b4",
+        "value": "_swift_bridgeObjectRelease",
+        "source_address": "0x3b0b4"
+      },
+      {
+        "address": "0x961b4",
+        "value": "_swift_bridgeObjectRelease",
+        "source_address": "0x3b14c"
+      },
+      {
+        "address": "0x97490",
+        "value": "DAT_00097490",
+        "source_address": "0x3afa0"
+      },
+      {
+        "address": "0x98d18",
+        "value": "DAT_00098d18",
+        "source_address": "0x3afa8"
+      },
+      {
+        "address": "0x992c0",
+        "value": "DAT_000992c0",
+        "source_address": "0x3b0fc"
+      },
+      {
+        "address": "0x99340",
+        "value": "DAT_00099340",
+        "source_address": "0x3b020"
+      },
+      {
+        "address": "0x99440",
+        "value": "DAT_00099440",
+        "source_address": "0x3b0e0"
+      },
+      {
+        "address": "0x9a2a8",
+        "value": "DAT_0009a2a8",
+        "source_address": "0x3af14"
+      },
+      {
+        "address": "0x9b500",
+        "value": "DAT_0009b500",
+        "source_address": "0x3b004"
+      },
+      {
+        "address": "0xaed48",
+        "value": "s_CGColor_000aed48",
+        "source_address": "0x3af34"
+      },
+      {
+        "address": "0xaed48",
+        "value": "s_CGColor_000aed48",
+        "source_address": "0x3b028"
+      },
+      {
+        "address": "0xaed48",
+        "value": "s_CGColor_000aed48",
+        "source_address": "0x3b074"
+      },
+      {
+        "address": "0xaf003",
+        "value": "s_blackColor_000af003",
+        "source_address": "0x3aef4"
+      },
+      {
+        "address": "0xaf18e",
+        "value": "s_setBorderColor:_000af18e",
+        "source_address": "0x3af58"
+      },
+      {
+        "address": "0xaf374",
+        "value": "s_clearColor_000af374",
+        "source_address": "0x3b060"
+      },
+      {
+        "address": "0xaf389",
+        "value": "s_colorWithAlphaComponent:_000af389",
+        "source_address": "0x3af0c"
+      },
+      {
+        "address": "0xaf389",
+        "value": "s_colorWithAlphaComponent:_000af389",
+        "source_address": "0x3afcc"
+      },
+      {
+        "address": "0xafa2a",
+        "value": "s_effectiveAppearance_000afa2a",
+        "source_address": "0x3aea8"
+      },
+      {
+        "address": "0xafa2a",
+        "value": "s_effectiveAppearance_000afa2a",
+        "source_address": "0x3af70"
+      },
+      {
+        "address": "0xb0715",
+        "value": "s_setColors:_000b0715",
+        "source_address": "0x3b0bc"
+      },
+      {
+        "address": "0xb0a03",
+        "value": "s_setLocations:_000b0a03",
+        "source_address": "0x3b154"
+      },
+      {
+        "address": "0xb0f4f",
+        "value": "s_whiteColor_000b0f4f",
+        "source_address": "0x3aef4"
+      },
+      {
+        "address": "0xb0f4f",
+        "value": "s_whiteColor_000b0f4f",
+        "source_address": "0x3afb8"
+      },
+      {
+        "address": "0xb9e08",
+        "value": "PTR_$$type_metadata_for_Any_000b9e08",
+        "source_address": "0x3b09c"
+      },
+      {
+        "address": "0xc7c10",
+        "value": "PTR_s_CGColor_000c7c10",
+        "source_address": "0x3af34"
+      },
+      {
+        "address": "0xc7c10",
+        "value": "PTR_s_CGColor_000c7c10",
+        "source_address": "0x3b028"
+      },
+      {
+        "address": "0xc7c10",
+        "value": "PTR_s_CGColor_000c7c10",
+        "source_address": "0x3b074"
+      },
+      {
+        "address": "0xc7c48",
+        "value": "PTR_s_whiteColor_000c7c48",
+        "source_address": "0x3aef4"
+      },
+      {
+        "address": "0xc7c48",
+        "value": "PTR_s_whiteColor_000c7c48",
+        "source_address": "0x3afb8"
+      },
+      {
+        "address": "0xc7c50",
+        "value": "PTR_s_blackColor_000c7c50",
+        "source_address": "0x3aef4"
+      },
+      {
+        "address": "0xc7c58",
+        "value": "PTR_s_colorWithAlphaComponent:_000c7c58",
+        "source_address": "0x3af0c"
+      },
+      {
+        "address": "0xc7c58",
+        "value": "PTR_s_colorWithAlphaComponent:_000c7c58",
+        "source_address": "0x3afcc"
+      },
+      {
+        "address": "0xc7c60",
+        "value": "PTR_s_clearColor_000c7c60",
+        "source_address": "0x3b060"
+      },
+      {
+        "address": "0xc82a8",
+        "value": "PTR_s_setBorderColor:_000c82a8",
+        "source_address": "0x3af58"
+      },
+      {
+        "address": "0xc82f0",
+        "value": "PTR_s_effectiveAppearance_000c82f0",
+        "source_address": "0x3aea8"
+      },
+      {
+        "address": "0xc82f0",
+        "value": "PTR_s_effectiveAppearance_000c82f0",
+        "source_address": "0x3af70"
+      },
+      {
+        "address": "0xc8338",
+        "value": "PTR_s_setColors:_000c8338",
+        "source_address": "0x3b0bc"
+      },
+      {
+        "address": "0xc8340",
+        "value": "PTR_s_setLocations:_000c8340",
+        "source_address": "0x3b154"
+      },
+      {
+        "address": "0xc8b48",
+        "value": "PTR__OBJC_CLASS_$_NSColor_000c8b48",
+        "source_address": "0x3aed4"
+      },
+      {
+        "address": "0xc8b48",
+        "value": "PTR__OBJC_CLASS_$_NSColor_000c8b48",
+        "source_address": "0x3afb0"
+      },
+      {
+        "address": "0xc8b48",
+        "value": "PTR__OBJC_CLASS_$_NSColor_000c8b48",
+        "source_address": "0x3b054"
+      },
+      {
+        "address": "0xc8c68",
+        "value": "PTR__OBJC_CLASS_$_NSNumber_000c8c68",
+        "source_address": "0x3b110"
+      },
+      {
+        "address": "0xcbd30",
+        "value": "DAT_000cbd30",
+        "source_address": "0x3b0d8"
+      },
+      {
+        "address": "0xcca30",
+        "value": "_TtC12DropoverCore7Control::borderTopInnerShadowLayer",
+        "source_address": "0x3aff0"
+      },
+      {
+        "address": "0xcca38",
+        "value": "_TtC12DropoverCore7Control::borderLayer",
+        "source_address": "0x3ae9c"
+      },
+      {
+        "address": "0xcca88",
+        "value": "DAT_000cca88",
+        "source_address": "0x3affc"
+      },
+      {
+        "address": "0xcca90",
+        "value": "DAT_000cca90",
+        "source_address": "0x3b108"
+      },
+      {
+        "address": "0xd230",
+        "value": "FUN_0000d230",
+        "source_address": "0x3b118"
+      }
+    ],
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "address": "0x4de00",
+    "evidence_id": "ev_aaf63bc0e3c70868618041f6ba7a1a55455139e9c7eab819359d40618cb204ca",
+    "pseudocode": "\nvoid FUN_0004de00(void)\n\n{\n  DispatchTimeInterval DVar1;\n  undefined7 extraout_var;\n  undefined8 *puVar3;\n  undefined8 *puVar2;\n  \n  DVar1 = Dispatch::DispatchTimeInterval::typeMetadataAccessor();\n  puVar2 = (undefined8 *)CONCAT71(extraout_var,DVar1.value);\n  ___swift_allocate_value_buffer(puVar2,&DAT_000cd1c8);\n  puVar3 = puVar2;\n  ___swift_project_value_buffer(puVar2,&DAT_000cd1c8);\n  *puVar3 = 2;\n                    /* WARNING: Could not recover jumptable at 0x0004de5c. Too many branches */\n                    /* WARNING: Treating indirect jump as call */\n  (**(code **)(puVar2[-1] + 0x68))();\n  return;\n}\n\n",
+    "referenced_names": [
+      {
+        "address": "0x136a10",
+        "value": "$$enum_case_for_Dispatch.DispatchTimeInterval.seconds(Dispatch.DispatchTimeInterval.Type)_->_(Swift.Int)_->_Dispatch.DispatchTimeInterval",
+        "source_address": "0x4de44"
+      },
+      {
+        "address": "0x503c8",
+        "value": "___swift_project_value_buffer",
+        "source_address": "0x4de30"
+      },
+      {
+        "address": "0x504c0",
+        "value": "___swift_allocate_value_buffer",
+        "source_address": "0x4de24"
+      },
+      {
+        "address": "0x9511c",
+        "value": "/usr/lib/swift/libswiftDispatch.dylib::Dispatch::DispatchTimeInterval::typeMetadataAccessor",
+        "source_address": "0x4de10"
+      },
+      {
+        "address": "0xba0f0",
+        "value": "PTR_$$enum_case_for_Dispatch.DispatchTimeInterval.seconds(Dispatch.DispatchTimeInterval.Type)_->_(Swift.Int)_->_Dispatch.DispatchTimeInterval_000ba0f0",
+        "source_address": "0x4de40"
+      },
+      {
+        "address": "0xcd1c8",
+        "value": "DAT_000cd1c8",
+        "source_address": "0x4de20"
+      },
+      {
+        "address": "0xcd1c8",
+        "value": "DAT_000cd1c8",
+        "source_address": "0x4de2c"
+      }
+    ],
+    "assembly": [
+      "0x4de00: stp x20, x19, [sp, #-0x20]!",
+      "0x4de04: stp x29, x30, [sp, #0x10]",
+      "0x4de08: add x29, sp, #0x10",
+      "0x4de0c: mov x0, #0x0",
+      "0x4de10: bl 0x0009511c",
+      "0x4de14: mov x19, x0",
+      "0x4de18: adrp x20, 0xcd000",
+      "0x4de1c: add x20, x20, #0x1c8",
+      "0x4de20: mov x1, x20",
+      "0x4de24: bl 0x000504c0",
+      "0x4de28: mov x0, x19",
+      "0x4de2c: mov x1, x20",
+      "0x4de30: bl 0x000503c8",
+      "0x4de34: mov w8, #0x2",
+      "0x4de38: str x8, [x0]",
+      "0x4de3c: adrp x8, 0xba000",
+      "0x4de40: ldr x8, [x8, #0xf0]",
+      "0x4de44: ldr w1, [x8]",
+      "0x4de48: ldur x8, [x19, #-0x8]",
+      "0x4de4c: ldr x3, [x8, #0x68]",
+      "0x4de50: mov x2, x19",
+      "0x4de54: ldp x29, x30, [sp, #0x10]",
+      "0x4de58: ldp x20, x19, [sp], #0x20",
+      "0x4de5c: br x3"
+    ],
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  }
+]

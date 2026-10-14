@@ -13,7 +13,7 @@ import {createVisualAnalysisSnapshot} from '../../../../shared/workflows/visual-
 import {ColorMenu, type ColorEvent} from '../../gallery/ColorTools'
 import {workspaceMutationErrorMessage} from '../../../../shared/client/workspace-connection-error'
 /** The approved inspector presentation. Editing/AI execution remain supplied by the host route. */
-export function LibraryDetails({ocrAssetIds,analysis,tools,asset,close,preview,editor,focus=false,addWork,organize,libraryScope,addWorkColor,memberPalette,ocrPanel}:{memberPalette?:MeasuredPreviewColors;ocrPanel?:React.ReactNode;ocrAssetIds?:string[];analysis?:React.ReactNode;tools?:React.ReactNode;asset:Asset;close?:()=>void;preview?:()=>void;editor?:React.ReactNode;focus?:boolean;addWork?:()=>void;organize?:(intent:OrganizationIntent)=>void;libraryScope?:OrganizationScope;addWorkColor?:(hex:string)=>void}) {
+export function LibraryDetails({ocrAssetIds,analysis,tools,asset,close,preview,editor,focus=false,addWork,organize,libraryScope,memberPalette,ocrPanel}:{memberPalette?:MeasuredPreviewColors;ocrPanel?:React.ReactNode;ocrAssetIds?:string[];analysis?:React.ReactNode;tools?:React.ReactNode;asset:Asset;close?:()=>void;preview?:()=>void;editor?:React.ReactNode;focus?:boolean;addWork?:()=>void;organize?:(intent:OrganizationIntent)=>void;libraryScope?:OrganizationScope}) {
  const display=projectAssetDetailDisplay(asset)
  const tagSummary=currentTagSuggestions(asset),tagEvidenceId=asset.tagAnalysis===undefined?asset.visualAi?.evidenceId:asset.tagAnalysis?.originalVisualEvidenceId
  const [prompt,setPrompt]=useState(false),[status,setStatus]=useState(''),[color,setColor]=useState<{value:string;x:number;y:number}|null>(null)
@@ -49,6 +49,6 @@ export function LibraryDetails({ocrAssetIds,analysis,tools,asset,close,preview,e
    {tools&&<div className="detail-section">{tools}</div>}
    {status&&<p role="status" className="color-hint">{status}</p>}
   </div>
-  {color&&<ColorMenu color={color.value} x={color.x} y={color.y} close={()=>setColor(null)} copy={()=>{void copy(color.value);setColor(null)}} collect={organize?()=>{organize({kind:'color',hex:color.value,sourceAssetId:asset.id});setColor(null)}:undefined} addWindow={addWorkColor?()=>{addWorkColor(color.value);setColor(null)}:undefined}/>}
+  {color&&<ColorMenu color={color.value} x={color.x} y={color.y} close={()=>setColor(null)} copy={()=>{void copy(color.value);setColor(null)}} collect={organize?()=>{organize({kind:'color',hex:color.value,sourceAssetId:asset.id});setColor(null)}:undefined}/>}
  </div>
 }

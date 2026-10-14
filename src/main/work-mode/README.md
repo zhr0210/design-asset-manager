@@ -10,6 +10,17 @@ B由Electron Main工作窗口控制器、原生适配器与Swift AppKit子进程
 
 背景材质与停靠覆盖层是独立实现；Liquid Glass、按钮样式及220×240布局的设计目标不能由现有NSVisualEffectView或旧构建资格推定已实现。实际身份、指针输入、模糊及设备缺口见[CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)和[原生候选说明](../../../native/shelf-candidates/README.md)。
 
+
+## 数量窗口与本机复用的技术边界
+
+Work Set 的有效内容为 name/assetIds/columns，Native 栅格固定两列。`work-set-retirement.schema.ts` 只在既有 Host 备份维护事务中执行 v16 退役；同事务保存修订/引用，`fork` 可原子复制或移动引用到新集合。设备布局独立保存 indicatorColor/alwaysShowIndicator/currentSpaceOnly/pinned。历史恢复文件先只读投影；已明确升级的库才备份并清理对应字段，Notebook 与其他库记录不动。
+
+`WorkShelfCapsule` 使用公共 AppKit vibrancy 和 Core Animation，不宣称胶囊本身是 NSGlassEffectView。`WorkShelfSystemActions` 消费当前范围/修订与 Host 准备的副本；动态 NSWorkspace 打开方式、Quick Look、NSSharingServicePicker、系统文件选择器属于原生表面。文件信息目前为 AppKit 信息面板，不宣称 Finder Get Info 自动化。没有任意 Renderer 路径、SQL 或系统脚本入口。
+
+`work-file-handoff` 的副本移动/改名保留实际位置及物理身份，更新记录在移除旧副本之前；重名不覆盖，未知确认保留完成副本。Trash 与记录清理分开，已回收副本不可再次交付。新 PDF/拼接/OCR文本仍沿用保留预算、来源/成员重验和任务取消；`work-image-document` 生成真实 RGB PDF 页和有界拼接，默认原尺寸纵向居中，等比/横向为显式配置。
+
+`WorkShelfOCR` 复用既有本机 RapidOCR 与资源准入，原版 Vision 仅作为对标证据；不新增云服务。`WorkShelfRedaction` 提供手动遮挡与消费真实 OCR 多边形的智能选区，独立 PNG 通过 Host 原图尺寸生成，不写回素材原件或 Notebook。代码/受控测试资格与正式设备通过仍分别记录。
+
 以下是视频适配及其他工作窗口的既有实现与历史说明，不自动成为B的新验收结果。
 
 # 2026-10-09 Mac 视频 Adapter
@@ -31,7 +42,7 @@ sender/frame/token, scopes previews/notebooks to current members and serializes 
 `electron-work-window.ts` gives each window a separate memory session, sandbox preload, protocol handler,
 blocked external networking and native drag/resize/pin behavior. `work-window-bounds.ts` keeps bounds visible.
 
-Saved set content lives in the held Active Library v7 schema, not this controller or browser storage.
+Saved set content lives in the held Active Library v16 schema (legacy v7–v15 stays read-only until explicit backed-up retirement), not this controller or browser storage.
 Device placement is keyed by an app-scoped opaque identity. Explicit native Save commits content plus layout
 atomically; passive geometry writes are separately reported. Hide retains drafts, Close releases a slot and
 sets open=false, and library/shutdown drain retires capabilities while retaining saved restore records.

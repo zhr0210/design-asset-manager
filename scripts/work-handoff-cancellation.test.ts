@@ -23,7 +23,7 @@ try{
  const creation=await host.prepareCreate();if(creation.kind!=='planned')throw Error('CREATE');await host.confirmCreate(creation.plan.receipt)
  const intake=await host.prepareAddAssets();if(intake.kind!=='planned')throw Error('INTAKE');await host.dispatchAddAssets(intake.plan.receipt)
  const assets=await host.listAssets(),ids=sources.map(file=>assets.find(a=>a.fileName===path.basename(file))!.id),current=host.inspect(),scope={libraryIdentity:current.identity!,generation:current.generation!},device='device:cancel-test'
- const catalog=await host.readWorkSets(scope,device),set=(await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Cancellation public fixtures',assetIds:ids,colors:[],columns:2,note:'Keep originals'}}},device)).sets[0]
+ const catalog=await host.readWorkSets(scope,device),set=(await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Cancellation public fixtures',assetIds:ids,columns:2,}}},device)).sets[0]
  const original=(assetId=ids[0]):WorkHandoffRequest=>({...scope,setId:set.id,assetId,kind:'original',action:'prepare'}),zip:WorkHandoffRequest={...scope,setId:set.id,assetId:ids[0],assetIds:ids,kind:'zip',action:'prepare'}
  const admission=createVisualAdmission({memory:()=>({free:8*1024**3,total:16*1024**3})}),handoffRoot=path.join(root,'copies');let opens=0
  const options={host,admission,root:handoffRoot,open:async()=>{opens++;return ''},trash:async()=>{throw Error('NOT_USED')}}

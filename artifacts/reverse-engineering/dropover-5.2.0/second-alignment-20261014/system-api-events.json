@@ -1,0 +1,27 @@
+[
+  {
+    "epochMs": 1791972566322,
+    "window": 43143,
+    "class": "NSSharingService",
+    "selector": "performWithItems:",
+    "itemCount": 1,
+    "stack": [
+      "0x10454fd8c Dropover!0x223d8c (0x100223d8c)",
+      "0x104552f48 Dropover!0x226f48 (0x100226f48)",
+      "0x1045501e4 Dropover!0x2241e4 (0x1002241e4)",
+      "0x104556b60 Dropover!0x22ab60 (0x10022ab60)",
+      "0x104556d90 Dropover!-[Dropover.ActionsController didSelectItem:]",
+      "0x19d8dd610 AppKit!-[NSApplication(NSResponder) sendAction:to:from:]",
+      "0x19dd50200 AppKit!-[NSMenuItem _corePerformAction:]",
+      "0x19dfe52b8 AppKit!_NSMenuPerformActionWithHighlighting",
+      "0x19d9dd5cc AppKit!-[NSMenu performActionForItemAtIndex:]",
+      "0x19dd3ac80 AppKit!-[NSMenu _internalPerformActionForItemAtIndex:invocationType:]",
+      "0x19dfda148 AppKit!+[NSCocoaMenuImpl _performActionForMenuItem:invocationType:]",
+      "0x19dcef00c AppKit!-[NSMenuTrackingSession _performPostTrackingDismissalActions]",
+      "0x19dceeb88 AppKit!-[NSMenuTrackingSession startRunningMenuEventLoop:]",
+      "0x19dcee210 AppKit!-[NSMenuTrackingSession startMonitoringEvents:]",
+      "0x19e4a3f98 AppKit!-[NSContextMenuTrackingSession startMonitoringEvents:]",
+      "0x19dca209c AppKit!+[NSContextMenuImpl presentPopup:fromView:withContext:animated:async:completionBlock:]"
+    ]
+  }
+]

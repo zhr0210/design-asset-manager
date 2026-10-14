@@ -62,7 +62,7 @@ else {
    return{fixture:asset.fileName,hasEvidence:!!asset.visualAi,searchFindsOwnPrompt:text?projectAssetDiscovery({assets:projected,query:text,tagScope:'includes-pending'}).matches.some(m=>m.asset.id===asset.id):false,aiFolder:folders[0].assetIds.includes(asset.id),output:asset.visualAi||null}
   })
   const ready=projected.filter(a=>a.visualAi)
-  if(ready.length){const catalog=await host.readWorkSets(scope,'evaluation-device');await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'AI Evaluation References',assetIds:ready.map(a=>a.id),colors:[],note:'Generated evaluation materials only',columns:2}}},'evaluation-device')}
+  if(ready.length){const catalog=await host.readWorkSets(scope,'evaluation-device');await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'AI Evaluation References',assetIds:ready.map(a=>a.id),columns:2}}},'evaluation-device')}
   await host.close();await host.reopen()
   const restored=await host.listAssets()
   assert.deepEqual(restored.map(a=>a.visualAi),projected.map(a=>a.visualAi))

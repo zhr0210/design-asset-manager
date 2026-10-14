@@ -1,0 +1,16 @@
+{
+  "publicFixtureHashes": {
+    "native-design-02.png": "7d93528bc4bdec098a5d5c4cb705e7cbc146a15ea6f1b4757563f0362bb65ef3",
+    "native-design-03.png": "3dfe877bf19f2a09400a318e9750846da1481bb4763e9128012a0224b7e545b1",
+    "native-design-01.png": "a653546b9d92c9d2b5d8dd7c0797f69edbea4584329de5aaeda22fcd7b606882",
+    "native-design-04.png": "d71fda3b0689b3b4de84dae412271d678e9a119e00252cae69ea884b59d06cc2",
+    "native-design-05.png": "493e56e2fe5ee7403f2fc95597b04c414d733b47311bbddcff44c56738fc103a",
+    "native-design-07.png": "39adffccc8bb0712fa91e08144db612c807c7845aa55e4a0b0f9d787cf47c5ea",
+    "native-design-06.png": "75d74523989ad85b7728cd489857693842e7623b1e029ae5ac79bcd0fc7533e3",
+    "native-design-08.png": "4c97959e4ac1459448fa2b82b698ab2486cf3dafdd41c18c6a61596324f5045a",
+    "native-design-09.png": "bec97fd9b0935d4c12bbf741297e632caa475b9cb50a4bb40755cffced0f9bb8"
+  },
+  "count": 9,
+  "allMatchLibraryOriginalContent": true,
+  "note": "Only designated public generated PNG fixture and Original content hashes read; no Library writes or private file inspection."
+}

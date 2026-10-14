@@ -1,0 +1,32 @@
+{
+  "images": [
+    {
+      "name": "menu-renamed-01 (1).png",
+      "format": "PNG",
+      "size": [
+        600,
+        300
+      ],
+      "bytes": 14826
+    },
+    {
+      "name": "menu-renamed-01.jpg",
+      "format": "JPEG",
+      "size": [
+        1200,
+        600
+      ],
+      "bytes": 115133
+    },
+    {
+      "name": "menu-renamed-01.png",
+      "format": "PNG",
+      "size": [
+        1200,
+        600
+      ],
+      "bytes": 23238
+    }
+  ],
+  "originalBytesPreserved": true
+}

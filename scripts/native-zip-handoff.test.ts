@@ -18,7 +18,7 @@ try{
  const creation=await host.prepareCreate();if(creation.kind!=='planned')throw Error('FIXTURE_CREATE');await host.confirmCreate(creation.plan.receipt)
  const intake=await host.prepareAddAssets();if(intake.kind!=='planned')throw Error('FIXTURE_INTAKE');await host.dispatchAddAssets(intake.plan.receipt)
  const assets=await host.listAssets(),first=assets.find(a=>a.fileName==='first.png')!,second=assets.find(a=>a.fileName==='second.png')!,state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!},device='device:native-zip-test'
- const initial=await host.readWorkSets(scope,device),value={name:'Native ZIP fixture',assetIds:[first.id,second.id],colors:[],columns:2,note:''}
+ const initial=await host.readWorkSets(scope,device),value={name:'Native ZIP fixture',assetIds:[first.id,second.id],columns:2,}
  const created=await host.writeWorkSet({...scope,sessionToken:initial.sessionToken,allowUpgrade:true,command:{kind:'create',value}},device),set=created.sets[0]
  const files=createWorkFileHandoffs({host,root:path.join(root,'handoffs'),open:async()=>'',trash:async()=>{throw Error('NOT_USED')}}),media=createWorkMediaController({host,files,changed(){}}),owner={}
  const iconRequests:string[]=[],dragCalls:{files:string[];icon:Uint8Array}[]=[];let port!:WorkWindowPort,layout!:WorkWindowLayout,afterIcon:(()=>Promise<void>)|undefined,emptyIcon=false

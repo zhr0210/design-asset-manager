@@ -1,0 +1,1822 @@
+[
+  {
+    "name": "test-agent-context-router",
+    "code": 1,
+    "timeout": false,
+    "seconds": 2.11,
+    "log": "test-agent-context-router.log"
+  },
+  {
+    "name": "test-native-work-shelf",
+    "code": 0,
+    "timeout": false,
+    "seconds": 28.48,
+    "log": "test-native-work-shelf.log"
+  },
+  {
+    "name": "test-python-unittest",
+    "code": 0,
+    "timeout": false,
+    "seconds": 2.46,
+    "log": "test-python-unittest.log"
+  },
+  {
+    "name": "test-openai-compatible-provider",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.42,
+    "log": "test-openai-compatible-provider.log"
+  },
+  {
+    "name": "test-llama-openai-backend",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.33,
+    "log": "test-llama-openai-backend.log"
+  },
+  {
+    "name": "test-llama-runtime-installer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.33,
+    "log": "test-llama-runtime-installer.log"
+  },
+  {
+    "name": "test-llama-runtime-host-context",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-llama-runtime-host-context.log"
+  },
+  {
+    "name": "test-llama-runtime-macos-hardware-profile",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-llama-runtime-macos-hardware-profile.log"
+  },
+  {
+    "name": "test-platform",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.44,
+    "log": "test-platform.log"
+  },
+  {
+    "name": "test-doctor",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-doctor.log"
+  },
+  {
+    "name": "test-doctor-command-resolver",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-doctor-command-resolver.log"
+  },
+  {
+    "name": "test-doctor-service",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-doctor-service.log"
+  },
+  {
+    "name": "test-doctor-ipc",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-doctor-ipc.log"
+  },
+  {
+    "name": "test-doctor-panel",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-doctor-panel.log"
+  },
+  {
+    "name": "test-bootstrap",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-bootstrap.log"
+  },
+  {
+    "name": "test-runtime-registry",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-registry.log"
+  },
+  {
+    "name": "test-bootstrap-manager",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-bootstrap-manager.log"
+  },
+  {
+    "name": "test-runtime-profile",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-profile.log"
+  },
+  {
+    "name": "test-runtime-package",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package.log"
+  },
+  {
+    "name": "test-bootstrap-package-plan",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-bootstrap-package-plan.log"
+  },
+  {
+    "name": "test-ai-runtime",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ai-runtime.log"
+  },
+  {
+    "name": "test-ai-python-environment",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ai-python-environment.log"
+  },
+  {
+    "name": "test-ai-python-runtime-host-context",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ai-python-runtime-host-context.log"
+  },
+  {
+    "name": "test-ai-runtime-host-context",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ai-runtime-host-context.log"
+  },
+  {
+    "name": "test-ai-runtime-bootstrap",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ai-runtime-bootstrap.log"
+  },
+  {
+    "name": "test-external-http-runtime",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-external-http-runtime.log"
+  },
+  {
+    "name": "test-python-worker-runtime",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-python-worker-runtime.log"
+  },
+  {
+    "name": "test-platform-ai-branch-evidence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-platform-ai-branch-evidence.log"
+  },
+  {
+    "name": "test-platform-ai-branch-evidence-ipc",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-platform-ai-branch-evidence-ipc.log"
+  },
+  {
+    "name": "test-platform-ai-branch-disabled",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-platform-ai-branch-disabled.log"
+  },
+  {
+    "name": "test-real-ai-runtime-process-runner",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-real-ai-runtime-process-runner.log"
+  },
+  {
+    "name": "test-ai-runtime-settings",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ai-runtime-settings.log"
+  },
+  {
+    "name": "test-ai-runtime-ipc",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ai-runtime-ipc.log"
+  },
+  {
+    "name": "test-ocr-real-evidence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ocr-real-evidence.log"
+  },
+  {
+    "name": "test-model-library-catalog-admission-tracer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-model-library-catalog-admission-tracer.log"
+  },
+  {
+    "name": "test-model-library-core-tracer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.44,
+    "log": "test-model-library-core-tracer.log"
+  },
+  {
+    "name": "test-model-library-verified-blob-store-tracer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.37,
+    "log": "test-model-library-verified-blob-store-tracer.log"
+  },
+  {
+    "name": "test-model-library-storage-authority-tracer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.01,
+    "log": "test-model-library-storage-authority-tracer.log"
+  },
+  {
+    "name": "test-model-library-root-registry-tracer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.07,
+    "log": "test-model-library-root-registry-tracer.log"
+  },
+  {
+    "name": "test-model-library-product-pilot",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-model-library-product-pilot.log"
+  },
+  {
+    "name": "test-model-library-product-pilot-storage",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.36,
+    "log": "test-model-library-product-pilot-storage.log"
+  },
+  {
+    "name": "test-official-model-catalog-release-gate",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-official-model-catalog-release-gate.log"
+  },
+  {
+    "name": "test-official-model-catalog-release-evidence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-official-model-catalog-release-evidence.log"
+  },
+  {
+    "name": "test-official-model-catalog-release-preparation",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-official-model-catalog-release-preparation.log"
+  },
+  {
+    "name": "test-official-model-catalog-release-preparation-cli",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-official-model-catalog-release-preparation-cli.log"
+  },
+  {
+    "name": "test-official-model-catalog-release-preparation-safety",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.02,
+    "log": "test-official-model-catalog-release-preparation-safety.log"
+  },
+  {
+    "name": "test-official-model-catalog-release-preparation-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-official-model-catalog-release-preparation-governance.log"
+  },
+  {
+    "name": "test-model-library-core-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-model-library-core-governance.log"
+  },
+  {
+    "name": "test-legacy-model-management-containment",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-legacy-model-management-containment.log"
+  },
+  {
+    "name": "test-model-acquisition-local-only",
+    "code": 0,
+    "timeout": false,
+    "seconds": 2.29,
+    "log": "test-model-acquisition-local-only.log"
+  },
+  {
+    "name": "test-model-artifact-readiness",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-model-artifact-readiness.log"
+  },
+  {
+    "name": "test-model-artifact-readiness-display",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-model-artifact-readiness-display.log"
+  },
+  {
+    "name": "test-prompt-reverse-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-prompt-reverse-workflow.log"
+  },
+  {
+    "name": "test-ai-client-ipc-contract",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ai-client-ipc-contract.log"
+  },
+  {
+    "name": "test-ai-runtime-status-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ai-runtime-status-workflow.log"
+  },
+  {
+    "name": "test-ai-console-status-module",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ai-console-status-module.log"
+  },
+  {
+    "name": "test-ai-runtime-panel",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ai-runtime-panel.log"
+  },
+  {
+    "name": "test-platform-ai-runtime-request-selection",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-platform-ai-runtime-request-selection.log"
+  },
+  {
+    "name": "test-macos-ai-runtime",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-macos-ai-runtime.log"
+  },
+  {
+    "name": "test-llama-runtime-local-models",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-llama-runtime-local-models.log"
+  },
+  {
+    "name": "test-llama-runtime-server-probe",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-llama-runtime-server-probe.log"
+  },
+  {
+    "name": "test-ai-console-macos-branch",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-ai-console-macos-branch.log"
+  },
+  {
+    "name": "test-platform-ai-branch-status-display",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-platform-ai-branch-status-display.log"
+  },
+  {
+    "name": "test-ai-console-overview-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ai-console-overview-workflow.log"
+  },
+  {
+    "name": "test-ai-console-ui-smoke-contract",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ai-console-ui-smoke-contract.log"
+  },
+  {
+    "name": "test-macos-ai-deps-installer-contract",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-macos-ai-deps-installer-contract.log"
+  },
+  {
+    "name": "test-windows-ai-real-evidence-validation",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-windows-ai-real-evidence-validation.log"
+  },
+  {
+    "name": "test-settings-compatibility",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-settings-compatibility.log"
+  },
+  {
+    "name": "test-settings-service-defaults",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-settings-service-defaults.log"
+  },
+  {
+    "name": "test-text-box-provider-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-text-box-provider-workflow.log"
+  },
+  {
+    "name": "test-settings-migration",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-settings-migration.log"
+  },
+  {
+    "name": "test-settings-migration-ipc",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-settings-migration-ipc.log"
+  },
+  {
+    "name": "test-settings-migration-panel",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-settings-migration-panel.log"
+  },
+  {
+    "name": "test-managed-path-audit",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-managed-path-audit.log"
+  },
+  {
+    "name": "test-log-path-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-log-path-governance.log"
+  },
+  {
+    "name": "test-python-test-isolation",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-python-test-isolation.log"
+  },
+  {
+    "name": "test-cache-temp-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-cache-temp-governance.log"
+  },
+  {
+    "name": "test-path-governance-panel",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-path-governance-panel.log"
+  },
+  {
+    "name": "test-path-governance-docs",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-path-governance-docs.log"
+  },
+  {
+    "name": "test-ci-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ci-governance.log"
+  },
+  {
+    "name": "test-ci-hygiene",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ci-hygiene.log"
+  },
+  {
+    "name": "test-desktop-viewport-policy",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-desktop-viewport-policy.log"
+  },
+  {
+    "name": "test-app-navigation-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-app-navigation-workflow.log"
+  },
+  {
+    "name": "test-asset-discovery-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-asset-discovery-workflow.log"
+  },
+  {
+    "name": "test-asset-store-loading",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.31,
+    "log": "test-asset-store-loading.log"
+  },
+  {
+    "name": "test-asset-workspace-session",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-asset-workspace-session.log"
+  },
+  {
+    "name": "test-library-view-draft-lifetime",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.66,
+    "log": "test-library-view-draft-lifetime.log"
+  },
+  {
+    "name": "test-asset-library-keyboard",
+    "code": 1,
+    "timeout": false,
+    "seconds": 16.18,
+    "log": "test-asset-library-keyboard.log"
+  },
+  {
+    "name": "test-asset-authority-baseline",
+    "code": 0,
+    "timeout": false,
+    "seconds": 2.71,
+    "log": "test-asset-authority-baseline.log"
+  },
+  {
+    "name": "test-library-start-inspection",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-library-start-inspection.log"
+  },
+  {
+    "name": "test-library-manifest-inspection",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-library-manifest-inspection.log"
+  },
+  {
+    "name": "test-library-filesystem-inspection",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-library-filesystem-inspection.log"
+  },
+  {
+    "name": "test-exclusive-library-lock",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.6,
+    "log": "test-exclusive-library-lock.log"
+  },
+  {
+    "name": "test-library-open-inspection",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.1,
+    "log": "test-library-open-inspection.log"
+  },
+  {
+    "name": "test-library-creation-planner",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.43,
+    "log": "test-library-creation-planner.log"
+  },
+  {
+    "name": "test-library-start-foundation",
+    "code": 0,
+    "timeout": false,
+    "seconds": 5.83,
+    "log": "test-library-start-foundation.log"
+  },
+  {
+    "name": "test-active-library-session",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.37,
+    "log": "test-active-library-session.log"
+  },
+  {
+    "name": "test-active-library-host",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.55,
+    "log": "test-active-library-host.log"
+  },
+  {
+    "name": "test-windows-library-production",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.39,
+    "log": "test-windows-library-production.log"
+  },
+  {
+    "name": "test-app-storage",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.31,
+    "log": "test-app-storage.log"
+  },
+  {
+    "name": "test-active-library-runtime",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.31,
+    "log": "test-active-library-runtime.log"
+  },
+  {
+    "name": "test-active-library-ipc",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.43,
+    "log": "test-active-library-ipc.log"
+  },
+  {
+    "name": "test-asset-card",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.33,
+    "log": "test-asset-card.log"
+  },
+  {
+    "name": "test-asset-description-draft",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-asset-description-draft.log"
+  },
+  {
+    "name": "test-ai-backend-restoration",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-ai-backend-restoration.log"
+  },
+  {
+    "name": "test-active-library-tags",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.42,
+    "log": "test-active-library-tags.log"
+  },
+  {
+    "name": "test-app-ipc-registration",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-app-ipc-registration.log"
+  },
+  {
+    "name": "test-app-settings-model-workspace",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-app-settings-model-workspace.log"
+  },
+  {
+    "name": "test-active-library-shutdown",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-active-library-shutdown.log"
+  },
+  {
+    "name": "test-library-quiescence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-library-quiescence.log"
+  },
+  {
+    "name": "test-host-schema-maintenance",
+    "code": 1,
+    "timeout": false,
+    "seconds": 2.33,
+    "log": "test-host-schema-maintenance.log"
+  },
+  {
+    "name": "test-active-library-capture-composition",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-active-library-capture-composition.log"
+  },
+  {
+    "name": "test-image-tools-integration",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.71,
+    "log": "test-image-tools-integration.log"
+  },
+  {
+    "name": "test-owned-download-recovery",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.64,
+    "log": "test-owned-download-recovery.log"
+  },
+  {
+    "name": "test-managed-download-resume",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.45,
+    "log": "test-managed-download-resume.log"
+  },
+  {
+    "name": "test-visual-ai-download-integration",
+    "code": -15,
+    "timeout": true,
+    "seconds": 120.02,
+    "log": "test-visual-ai-download-integration.log"
+  },
+  {
+    "name": "test-active-library-electron-e2e",
+    "code": 1,
+    "timeout": false,
+    "seconds": 35.35,
+    "log": "test-active-library-electron-e2e.log"
+  },
+  {
+    "name": "test-external-connected-library-core",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.58,
+    "log": "test-external-connected-library-core.log"
+  },
+  {
+    "name": "test-eagle-adapter-companion",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.84,
+    "log": "test-eagle-adapter-companion.log"
+  },
+  {
+    "name": "test-legacy-readonly-workspace",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-legacy-readonly-workspace.log"
+  },
+  {
+    "name": "test-external-connected-library-ipc",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.3,
+    "log": "test-external-connected-library-ipc.log"
+  },
+  {
+    "name": "test-external-connected-library-electron-e2e",
+    "code": 1,
+    "timeout": true,
+    "seconds": 300.05,
+    "log": "test-external-connected-library-electron-e2e.log"
+  },
+  {
+    "name": "test-connected-library-background",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-connected-library-background.log"
+  },
+  {
+    "name": "test-eagle-companion-artifact",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-eagle-companion-artifact.log"
+  },
+  {
+    "name": "test-asset-trash-lifecycle",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-asset-trash-lifecycle.log"
+  },
+  {
+    "name": "test-asset-trash-sqlite-persistence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-asset-trash-sqlite-persistence.log"
+  },
+  {
+    "name": "test-capture-intake-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-capture-intake-workflow.log"
+  },
+  {
+    "name": "test-capture-intake-sqlite-persistence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-capture-intake-sqlite-persistence.log"
+  },
+  {
+    "name": "test-download-store-integrity",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.33,
+    "log": "test-download-store-integrity.log"
+  },
+  {
+    "name": "test-image-normalize-source-retention",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-image-normalize-source-retention.log"
+  },
+  {
+    "name": "test-electron-main-lifecycle-policy",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-electron-main-lifecycle-policy.log"
+  },
+  {
+    "name": "test-forbidden-paths",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.21,
+    "log": "test-forbidden-paths.log"
+  },
+  {
+    "name": "test-node-host-platform-defaults",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.31,
+    "log": "test-node-host-platform-defaults.log"
+  },
+  {
+    "name": "test-verify-platform-scripts",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-verify-platform-scripts.log"
+  },
+  {
+    "name": "test-electron-packaging-audit",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-electron-packaging-audit.log"
+  },
+  {
+    "name": "test-electron-packaging-scripts",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-electron-packaging-scripts.log"
+  },
+  {
+    "name": "test-electron-builder-runner-options",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-electron-builder-runner-options.log"
+  },
+  {
+    "name": "test-electron-builder-runner",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.31,
+    "log": "test-electron-builder-runner.log"
+  },
+  {
+    "name": "test-native-dependency-packaging",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-native-dependency-packaging.log"
+  },
+  {
+    "name": "test-runtime-package-source",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-source.log"
+  },
+  {
+    "name": "test-runtime-package-downloader",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-downloader.log"
+  },
+  {
+    "name": "test-runtime-package-verifier-extractor",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-verifier-extractor.log"
+  },
+  {
+    "name": "test-runtime-package-installer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-runtime-package-installer.log"
+  },
+  {
+    "name": "test-runtime-package-executor",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-runtime-package-executor.log"
+  },
+  {
+    "name": "test-runtime-package-session",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-session.log"
+  },
+  {
+    "name": "test-runtime-package-session-projector",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-session-projector.log"
+  },
+  {
+    "name": "test-runtime-package-test-hygiene",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-test-hygiene.log"
+  },
+  {
+    "name": "test-runtime-package-ipc-contract-preflight",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-ipc-contract-preflight.log"
+  },
+  {
+    "name": "test-runtime-package-ipc-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-runtime-package-ipc-governance.log"
+  },
+  {
+    "name": "test-runtime-package-ipc-handlers",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-runtime-package-ipc-handlers.log"
+  },
+  {
+    "name": "test-runtime-package-product-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-product-workflow.log"
+  },
+  {
+    "name": "test-runtime-package-panel",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-runtime-package-panel.log"
+  },
+  {
+    "name": "test-external-http-manual-health-check",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-external-http-manual-health-check.log"
+  },
+  {
+    "name": "test-python-worker-launch-pilot",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-python-worker-launch-pilot.log"
+  },
+  {
+    "name": "test-ai-client-runtime-adapter",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-ai-client-runtime-adapter.log"
+  },
+  {
+    "name": "test-ocr-dependency-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-ocr-dependency-governance.log"
+  },
+  {
+    "name": "test-llama-runtime-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-llama-runtime-governance.log"
+  },
+  {
+    "name": "test-database-path-design",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-database-path-design.log"
+  },
+  {
+    "name": "test-database-path-migration-plan",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-database-path-migration-plan.log"
+  },
+  {
+    "name": "test-path-governance-late-phases",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-path-governance-late-phases.log"
+  },
+  {
+    "name": "test-release-flow-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-release-flow-governance.log"
+  },
+  {
+    "name": "test-release-candidate-governance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-candidate-governance.log"
+  },
+  {
+    "name": "test-release-checksums",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.5,
+    "log": "test-release-checksums.log"
+  },
+  {
+    "name": "test-release-update-metadata",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.45,
+    "log": "test-release-update-metadata.log"
+  },
+  {
+    "name": "test-release-trust-evidence-checks",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-trust-evidence-checks.log"
+  },
+  {
+    "name": "test-release-trust-evidence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.54,
+    "log": "test-release-trust-evidence.log"
+  },
+  {
+    "name": "test-release-readiness-summary",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-readiness-summary.log"
+  },
+  {
+    "name": "test-release-readiness-writer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.41,
+    "log": "test-release-readiness-writer.log"
+  },
+  {
+    "name": "test-release-publish-approval",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-release-publish-approval.log"
+  },
+  {
+    "name": "test-release-platform-targets",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-platform-targets.log"
+  },
+  {
+    "name": "test-release-target-selection",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "test-release-target-selection.log"
+  },
+  {
+    "name": "test-release-script-targets",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-script-targets.log"
+  },
+  {
+    "name": "test-release-branding-preflight",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-branding-preflight.log"
+  },
+  {
+    "name": "test-release-branding-approval-template",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.33,
+    "log": "test-release-branding-approval-template.log"
+  },
+  {
+    "name": "test-release-branding-evidence",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.73,
+    "log": "test-release-branding-evidence.log"
+  },
+  {
+    "name": "test-release-signed-candidate-preflight",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-signed-candidate-preflight.log"
+  },
+  {
+    "name": "test-release-environment-manifest",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-environment-manifest.log"
+  },
+  {
+    "name": "test-release-signing-environment-status",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.44,
+    "log": "test-release-signing-environment-status.log"
+  },
+  {
+    "name": "test-release-signing-environment-template",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-signing-environment-template.log"
+  },
+  {
+    "name": "test-release-signed-candidate-dispatch-status",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.45,
+    "log": "test-release-signed-candidate-dispatch-status.log"
+  },
+  {
+    "name": "test-release-install-smoke-preflight",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-install-smoke-preflight.log"
+  },
+  {
+    "name": "test-release-external-gate-plan",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-release-external-gate-plan.log"
+  },
+  {
+    "name": "test-release-external-gate-status",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-release-external-gate-status.log"
+  },
+  {
+    "name": "test-release-external-gate-status-writer",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.55,
+    "log": "test-release-external-gate-status-writer.log"
+  },
+  {
+    "name": "test-release-evidence-bundle-status",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.44,
+    "log": "test-release-evidence-bundle-status.log"
+  },
+  {
+    "name": "test-signed-release-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-signed-release-workflow.log"
+  },
+  {
+    "name": "test-macos-signing-entitlements",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-macos-signing-entitlements.log"
+  },
+  {
+    "name": "test-package-smoke",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-package-smoke.log"
+  },
+  {
+    "name": "test-macos-package-artifact-workflow",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-macos-package-artifact-workflow.log"
+  },
+  {
+    "name": "test-native-open-dialog",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-native-open-dialog.log"
+  },
+  {
+    "name": "test-workspace-design-system",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.27,
+    "log": "test-workspace-design-system.log"
+  },
+  {
+    "name": "test-persistent-download",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.04,
+    "log": "test-persistent-download.log"
+  },
+  {
+    "name": "test-persistent-download-electron-e2e",
+    "code": 1,
+    "timeout": true,
+    "seconds": 300.06,
+    "log": "test-persistent-download-electron-e2e.log"
+  },
+  {
+    "name": "test-intake-recovery",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.59,
+    "log": "test-intake-recovery.log"
+  },
+  {
+    "name": "test-download-space-management",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.47,
+    "log": "test-download-space-management.log"
+  },
+  {
+    "name": "test-intake-recovery-electron-e2e",
+    "code": 1,
+    "timeout": true,
+    "seconds": 300.06,
+    "log": "test-intake-recovery-electron-e2e.log"
+  },
+  {
+    "name": "test-scoped-asset-reads",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.76,
+    "log": "test-scoped-asset-reads.log"
+  },
+  {
+    "name": "test-web-retirement",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-web-retirement.log"
+  },
+  {
+    "name": "test-library-canvas-electron",
+    "code": 1,
+    "timeout": false,
+    "seconds": 34.49,
+    "log": "test-library-canvas-electron.log"
+  },
+  {
+    "name": "test-library-canvas-state",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.38,
+    "log": "test-library-canvas-state.log"
+  },
+  {
+    "name": "test-gallery-parity",
+    "code": 1,
+    "timeout": false,
+    "seconds": 2.24,
+    "log": "test-gallery-parity.log"
+  },
+  {
+    "name": "test-asset-notebook",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.42,
+    "log": "test-asset-notebook.log"
+  },
+  {
+    "name": "test-notebook-session",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.66,
+    "log": "test-notebook-session.log"
+  },
+  {
+    "name": "test-library-organization",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.44,
+    "log": "test-library-organization.log"
+  },
+  {
+    "name": "test-organization-state",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.84,
+    "log": "test-organization-state.log"
+  },
+  {
+    "name": "test-preview-colors",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.3,
+    "log": "test-preview-colors.log"
+  },
+  {
+    "name": "test-work-sets",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.43,
+    "log": "test-work-sets.log"
+  },
+  {
+    "name": "test-work-frame-provenance",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.76,
+    "log": "test-work-frame-provenance.log"
+  },
+  {
+    "name": "test-work-sets-electron",
+    "code": 1,
+    "timeout": false,
+    "seconds": 34.25,
+    "log": "test-work-sets-electron.log"
+  },
+  {
+    "name": "test-local-dam-client",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.43,
+    "log": "test-local-dam-client.log"
+  },
+  {
+    "name": "test-local-dam-http",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.31,
+    "log": "test-local-dam-http.log"
+  },
+  {
+    "name": "test-local-dam-file-selection",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.61,
+    "log": "test-local-dam-file-selection.log"
+  },
+  {
+    "name": "test-file-selection-bulk-ui",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.42,
+    "log": "test-file-selection-bulk-ui.log"
+  },
+  {
+    "name": "test-local-dam-transitions",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-local-dam-transitions.log"
+  },
+  {
+    "name": "test-local-dam-settings-order",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "test-local-dam-settings-order.log"
+  },
+  {
+    "name": "test-local-dam-connection-view",
+    "code": 1,
+    "timeout": false,
+    "seconds": 60.73,
+    "log": "test-local-dam-connection-view.log"
+  },
+  {
+    "name": "test-windows-codec-qualification",
+    "code": -15,
+    "timeout": true,
+    "seconds": 120.02,
+    "log": "test-windows-codec-qualification.log"
+  },
+  {
+    "name": "test-windows-codec-faults",
+    "code": -15,
+    "timeout": true,
+    "seconds": 120.03,
+    "log": "test-windows-codec-faults.log"
+  },
+  {
+    "name": "test-windows-schema-backup-qualification",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.65,
+    "log": "test-windows-schema-backup-qualification.log"
+  },
+  {
+    "name": "test-visual-admission-isolation",
+    "code": -15,
+    "timeout": true,
+    "seconds": 120.02,
+    "log": "test-visual-admission-isolation.log"
+  },
+  {
+    "name": "test-pi-prepare-offline",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.49,
+    "log": "test-pi-prepare-offline.log"
+  },
+  {
+    "name": "test-work-set-retirement",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.76,
+    "log": "test-work-set-retirement.log"
+  },
+  {
+    "name": "test-work-set-draft-retirement",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.33,
+    "log": "test-work-set-draft-retirement.log"
+  },
+  {
+    "name": "test-work-image-document",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.32,
+    "log": "test-work-image-document.log"
+  },
+  {
+    "name": "background-analysis.integration.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.73,
+    "log": "background-analysis.integration.test.log"
+  },
+  {
+    "name": "background-ocr.integration.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 4.8,
+    "log": "background-ocr.integration.test.log"
+  },
+  {
+    "name": "basic-analysis.integration.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 3.13,
+    "log": "basic-analysis.integration.test.log"
+  },
+  {
+    "name": "independent-tag-intent.integration.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 2.68,
+    "log": "independent-tag-intent.integration.test.log"
+  },
+  {
+    "name": "native-shelf-controller.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.44,
+    "log": "native-shelf-controller.test.log"
+  },
+  {
+    "name": "native-work-archive-view.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.43,
+    "log": "native-work-archive-view.test.log"
+  },
+  {
+    "name": "native-work-batch-view.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 7.09,
+    "log": "native-work-batch-view.test.log"
+  },
+  {
+    "name": "native-work-clipboard.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 2.65,
+    "log": "native-work-clipboard.test.log"
+  },
+  {
+    "name": "native-work-dock-adapter.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.15,
+    "log": "native-work-dock-adapter.test.log"
+  },
+  {
+    "name": "native-work-dock-view.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 6.83,
+    "log": "native-work-dock-view.test.log"
+  },
+  {
+    "name": "native-work-dock.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.73,
+    "log": "native-work-dock.test.log"
+  },
+  {
+    "name": "native-work-file-active.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.43,
+    "log": "native-work-file-active.test.log"
+  },
+  {
+    "name": "native-work-paste-view.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 6.79,
+    "log": "native-work-paste-view.test.log"
+  },
+  {
+    "name": "native-work-picture-view.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.93,
+    "log": "native-work-picture-view.test.log"
+  },
+  {
+    "name": "native-work-window-activation.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.14,
+    "log": "native-work-window-activation.test.log"
+  },
+  {
+    "name": "shelf-autosave.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.19,
+    "log": "shelf-autosave.test.log"
+  },
+  {
+    "name": "shelf-motion-trace.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.19,
+    "log": "shelf-motion-trace.test.log"
+  },
+  {
+    "name": "tag-decision.integration.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 2.52,
+    "log": "tag-decision.integration.test.log"
+  },
+  {
+    "name": "tag-execution.integration.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 6.79,
+    "log": "tag-execution.integration.test.log"
+  },
+  {
+    "name": "work-handoff-cancellation.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.84,
+    "log": "work-handoff-cancellation.test.log"
+  },
+  {
+    "name": "work-image-transform-view.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.06,
+    "log": "work-image-transform-view.test.log"
+  },
+  {
+    "name": "work-media-existing-library.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.2,
+    "log": "work-media-existing-library.test.log"
+  },
+  {
+    "name": "work-media-http.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.26,
+    "log": "work-media-http.test.log"
+  },
+  {
+    "name": "work-media-preservation.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.21,
+    "log": "work-media-preservation.test.log"
+  },
+  {
+    "name": "work-media-real-evidence.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.21,
+    "log": "work-media-real-evidence.test.log"
+  },
+  {
+    "name": "work-media.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 0.25,
+    "log": "work-media.test.log"
+  },
+  {
+    "name": "work-open-existing-view.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.15,
+    "log": "work-open-existing-view.test.log"
+  },
+  {
+    "name": "work-open-existing.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.59,
+    "log": "work-open-existing.test.log"
+  },
+  {
+    "name": "work-processed-image-handoff.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.65,
+    "log": "work-processed-image-handoff.test.log"
+  },
+  {
+    "name": "work-set-draft-recovery.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 6.71,
+    "log": "work-set-draft-recovery.test.log"
+  },
+  {
+    "name": "work-set-reference-view.test",
+    "code": 1,
+    "timeout": false,
+    "seconds": 85.51,
+    "log": "work-set-reference-view.test.log"
+  },
+  {
+    "name": "work-shelf-focus-interaction.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.07,
+    "log": "work-shelf-focus-interaction.test.log"
+  },
+  {
+    "name": "work-shelf-layout-v2.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.21,
+    "log": "work-shelf-layout-v2.test.log"
+  },
+  {
+    "name": "work-shelf-motion-host.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.84,
+    "log": "work-shelf-motion-host.test.log"
+  },
+  {
+    "name": "work-window-dock-bounds.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 0.15,
+    "log": "work-window-dock-bounds.test.log"
+  },
+  {
+    "name": "work-zip-handoff.test",
+    "code": 0,
+    "timeout": false,
+    "seconds": 1.12,
+    "log": "work-zip-handoff.test.log"
+  }
+]

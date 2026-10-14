@@ -21,8 +21,8 @@ await build({
     import {rememberRecoveredDraft,clearWorkspaceDraftView,flushWorkspaceDrafts,holdWorkspaceDraft,suspendRecoveredWorkspaceDraft,currentWorkspaceDraft,isWorkspaceDraftLoaded} from './src/renderer/workspace-drafts'
     const drafts = new Map(), writes = []
     const scope = {libraryIdentity:'library:fixture',generation:'generation:fixture'}
-    const original = {name:'Original set',note:'Original saved note',assetIds:['asset:one'],colors:['#112233'],columns:2}
-    const recovered = {...original,name:'Recovered set',note:'Recovered unsaved note'}
+    const original = {name:'Original set',assetIds:['asset:one'],columns:2}
+    const recovered = {...original,name:'Recovered set',}
     const baseline = {revision:7,value:original}
     const key = s => JSON.stringify([s.libraryIdentity,s.generation,s.kind,s.entityId])
     let revision = 0, closed = 0, acceptWrite = false, version = 0, intent = {kind:'edit',id:'work-set:missing'}
@@ -44,7 +44,7 @@ await build({
         app.render(null);await new Promise(resolve=>setTimeout(resolve,0));clearWorkspaceDraftView();drafts.clear();writes.length=0;closed=0;acceptWrite=false;version++;
         const additive=mode==='add-target'||mode==='add-choose'||mode==='add-clean-choose';
         intent=additive?{kind:'add',assetIds:mode==='add-clean-choose'?['asset:one']:['asset:two','asset:one'],colors:mode==='add-clean-choose'?['#112233']:['#445566','#112233'],...(mode==='add-target'?{targetId:'work-set:missing'}:{})}:mode==='new'?{kind:'new'}:{kind:'edit',id:'work-set:missing'};
-        catalog={...catalog,sets:mode===true||additive?[{...original,id:'work-set:missing',revision:9,note:'A newer saved note',unavailableIds:[],layout:null}]:[]};
+        catalog={...catalog,sets:mode===true||additive?[{...original,id:'work-set:missing',revision:9,name:'A newer saved note',unavailableIds:[],layout:null}]:[]};
         const record={...scope,kind:'work-set',entityId:'work-set:missing',value:mode==='add-clean-choose'?clone(original):recovered,base:baseline,id:'draft:fixture',revision:1,updatedAt:1,clientKind:'browser',owned:true,activeElsewhere:false};
         if(additive){holdWorkspaceDraft(record,record.value,record.base);await flushWorkspaceDrafts();suspendRecoveredWorkspaceDraft(record)}
         else if(mode!=='new'){drafts.set(key(record),clone(record));rememberRecoveredDraft(record)}render()
@@ -67,12 +67,12 @@ try {
   await page.waitForFunction(()=>Boolean(window.fixture))
   const reset = async mode => {await page.evaluate(mode=>window.fixture.reset(mode),mode);await page.getByRole('dialog',{name:mode==='new'||String(mode).startsWith('add-')?'加入工作集':'编辑工作集',exact:true}).waitFor()}
   const inspect = async () => {await page.evaluate(()=>window.fixture.flush());return page.evaluate(()=>window.fixture.inspect())}
-  const originalBaseline = {revision:7,value:{name:'Original set',note:'Original saved note',assetIds:['asset:one'],colors:['#112233'],columns:2}}
+  const originalBaseline = {revision:7,value:{name:'Original set',assetIds:['asset:one'],columns:2}}
   await reset(false)
-  await page.getByRole('textbox',{name:'工作集备注',exact:true}).fill('Edited recovered note')
+  await page.getByRole('textbox',{name:'工作集名称',exact:true}).fill('Edited recovered note')
   const missing = await inspect()
   assert.deepEqual(missing.drafts[0].base,originalBaseline,'missing recovered target keeps its original save baseline')
-  assert.equal(missing.drafts[0].value.note,'Edited recovered note')
+  assert.equal(missing.drafts[0].value.name,'Edited recovered note')
   assert.equal(await page.getByRole('button',{name:'保存工作集',exact:true}).isDisabled(),true,'an absent existing target cannot silently become a create command')
   await page.getByText('原工作集已不存在或暂不可用，当前输入仍保留。可以另存工作集，或取消放弃这份草稿。',{exact:true}).waitFor()
   assert.equal(await page.getByRole('button',{name:'另存工作集',exact:true}).isVisible(),true)
@@ -81,8 +81,8 @@ try {
   assert.deepEqual(blocked.writes,[],'submit handler also rejects a missing target')
   assert.equal(blocked.closed,0)
   await page.getByRole('button',{name:'另存工作集',exact:true}).click()
-  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Recovered set 副本')
-  assert.equal(await page.getByRole('textbox',{name:'工作集备注',exact:true}).inputValue(),'Edited recovered note')
+  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Edited recovered note 副本')
+  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Edited recovered note 副本')
   const alternate = await inspect()
   assert.deepEqual(alternate.drafts.find(draft=>draft.entityId==='work-set:missing')?.base,originalBaseline,'choosing another save destination does not discard the original recovery before a commit')
   assert.deepEqual(alternate.drafts.find(draft=>draft.entityId==='work-set:new')?.base,{revision:0,value:null})
@@ -98,11 +98,11 @@ try {
   assert.deepEqual((await inspect()).drafts,[],'a successful alternate commit clears the recovery records')
 
   await reset(true)
-  await page.getByRole('textbox',{name:'工作集备注',exact:true}).fill('Further recovered edit')
+  await page.getByRole('textbox',{name:'工作集名称',exact:true}).fill('Further recovered edit')
   assert.deepEqual((await inspect()).drafts[0].base,originalBaseline,'a newer catalog does not silently rebase recovery')
   await page.getByRole('button',{name:'保存工作集',exact:true}).click()
   await page.getByRole('alert').getByText('Synthetic conflict',{exact:true}).waitFor()
-  assert.deepEqual((await inspect()).writes[0],{kind:'save',id:'work-set:missing',expectedRevision:7,value:{name:'Recovered set',note:'Further recovered edit',assetIds:['asset:one'],colors:['#112233'],columns:2}})
+  assert.deepEqual((await inspect()).writes[0],{kind:'save',id:'work-set:missing',expectedRevision:7,value:{name:'Recovered set',name:'Further recovered edit',assetIds:['asset:one'],columns:2}})
   await page.evaluate(()=>window.fixture.removeTarget())
   await page.getByText('原工作集已不存在或暂不可用，当前输入仍保留。可以另存工作集，或取消放弃这份草稿。',{exact:true}).waitFor()
   assert.equal(await page.getByRole('button',{name:'保存工作集',exact:true}).isDisabled(),true,'a target deleted while editing also blocks saving')
@@ -122,7 +122,7 @@ try {
   await page.getByRole('button',{name:'保存工作集',exact:true}).click()
   await page.getByRole('dialog',{name:'加入工作集',exact:true}).waitFor({state:'detached'})
   const fresh = await inspect()
-  assert.deepEqual(fresh.writes,[{kind:'create',value:{name:'Ordinary new set',note:'',assetIds:[],colors:[],columns:2}}])
+  assert.deepEqual(fresh.writes,[{kind:'create',value:{name:'Ordinary new set',assetIds:[],columns:2}}])
   assert.deepEqual(fresh.drafts,[])
 
   // A local draft left by the reference view must not swallow a later Add intent.
@@ -131,19 +131,19 @@ try {
   for(const mode of ['add-target','add-choose']){
     await reset(mode)
     if(mode==='add-choose'){
-      await page.getByRole('textbox',{name:'工作集备注',exact:true}).fill('Keep input until a reviewed switch')
+      await page.getByRole('textbox',{name:'工作集名称',exact:true}).fill('Keep input until a reviewed switch')
       const beforeSwitch=await inspect()
       await page.getByRole('combobox',{name:'目标工作集',exact:true}).selectOption('work-set:missing')
       await page.getByRole('alertdialog',{name:'切换工作集',exact:true}).waitFor()
       assert.deepEqual((await inspect()).drafts,beforeSwitch.drafts,'asking to switch cannot discard either draft')
       assert.deepEqual((await inspect()).writes,[])
       await page.getByRole('button',{name:'继续编辑',exact:true}).click()
-      assert.equal(await page.getByRole('textbox',{name:'工作集备注',exact:true}).inputValue(),'Keep input until a reviewed switch')
+      assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Keep input until a reviewed switch')
       assert.equal(await page.getByRole('combobox',{name:'目标工作集',exact:true}).inputValue(),'','cancel preserves the current target')
       await page.getByRole('combobox',{name:'目标工作集',exact:true}).selectOption('work-set:missing')
       await page.getByRole('alertdialog',{name:'切换工作集',exact:true}).waitFor()
       await page.keyboard.press('Escape')
-      assert.equal(await page.getByRole('textbox',{name:'工作集备注',exact:true}).inputValue(),'Keep input until a reviewed switch','Escape cancels review rather than closing or discarding the editor')
+      assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Keep input until a reviewed switch','Escape cancels review rather than closing or discarding the editor')
       assert.deepEqual((await inspect()).drafts,beforeSwitch.drafts)
       await page.getByRole('combobox',{name:'目标工作集',exact:true}).selectOption('work-set:missing')
       await page.getByRole('button',{name:'放弃草稿并切换',exact:true}).click()
@@ -152,16 +152,16 @@ try {
       assert.deepEqual(switched.catalog,beforeSwitch.catalog,'switching never writes the saved work set')
       assert.deepEqual(switched.writes,[])
     }
-    assert.equal(await page.getByRole('textbox',{name:'工作集备注',exact:true}).inputValue(),'Recovered unsaved note','the reopened local draft keeps the earlier note')
+    assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Recovered set','the reopened local draft keeps the earlier note')
     await page.getByRole('button',{name:'保存工作集',exact:true}).click()
     await page.getByRole('alert').getByText('Synthetic conflict',{exact:true}).waitFor()
     const additive=await inspect()
     assert.deepEqual(additive.drafts.find(draft=>draft.entityId==='work-set:missing')?.base,originalBaseline,'adding into a local draft preserves the original CAS baseline')
     assert.equal(additive.writes[0].expectedRevision,7)
-    assert.equal(additive.writes[0].value.note,'Recovered unsaved note')
+    assert.equal(additive.writes[0].value.name,'Recovered set')
     try{
       assert.deepEqual(additive.writes[0].value.assetIds,['asset:one','asset:two'],mode+' merges requested references without duplicates')
-      assert.deepEqual(additive.writes[0].value.colors,['#112233','#445566'],mode+' merges requested colors without duplicates')
+      assert.equal('colors' in additive.writes[0].value,false,mode+' must not reintroduce retired colors')
     }catch(error){additiveFailures.push(error.message)}
   }
   assert.deepEqual(additiveFailures,[],'both additive entry paths preserve existing input and add the requested members/colors')
@@ -173,41 +173,41 @@ try {
   assert.equal(cleanChoice.drafts.length,1,'choosing a clean local recovery does not silently remove its record')
   assert.deepEqual(cleanChoice.drafts[0].base,originalBaseline,'the selected target keeps its older recovery baseline')
   assert.deepEqual(cleanChoice.drafts[0].value,originalBaseline.value)
-  assert.equal(await page.getByRole('textbox',{name:'工作集备注',exact:true}).inputValue(),'Original saved note')
+  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Original set')
   await page.getByText('工作集已在另一界面变化。当前输入及原保存基准保留。',{exact:true}).waitFor()
   await page.getByRole('button',{name:'取消',exact:true}).click()
   assert.deepEqual((await inspect()).drafts,[],'explicit cancellation can discard the selected clean recovery')
 
   await reset(true)
-  await page.getByRole('textbox',{name:'工作集备注',exact:true}).fill('Reviewed recovered note')
+  await page.getByRole('textbox',{name:'工作集名称',exact:true}).fill('Reviewed recovered note')
   await page.getByText('核对当前已保存的工作集',{exact:true}).click()
-  await page.getByText('A newer saved note',{exact:true}).waitFor()
+  await page.getByText(/A newer saved note/).waitFor()
   await page.getByRole('button',{name:'核对后采用当前工作集为基准',exact:true}).click()
   const adopted=await inspect()
-  assert.deepEqual(adopted.drafts[0].base,{revision:9,value:{...originalBaseline.value,note:'A newer saved note'}})
-  assert.equal(await page.getByRole('textbox',{name:'工作集备注',exact:true}).inputValue(),'Reviewed recovered note','explicit adoption changes the expected baseline while preserving typed input')
-  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Recovered set')
+  assert.deepEqual(adopted.drafts[0].base,{revision:9,value:{...originalBaseline.value,name:'A newer saved note'}})
+  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Reviewed recovered note','explicit adoption changes the expected baseline while preserving typed input')
+  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Reviewed recovered note')
   await page.evaluate(()=>window.fixture.accept())
   await page.getByRole('button',{name:'保存工作集',exact:true}).click()
   await page.getByRole('dialog',{name:'编辑工作集',exact:true}).waitFor({state:'detached'})
   const adoptedSave=await inspect()
   assert.equal(adoptedSave.writes[0].expectedRevision,9)
-  assert.equal(adoptedSave.writes[0].value.note,'Reviewed recovered note')
+  assert.equal(adoptedSave.writes[0].value.name,'Reviewed recovered note')
   assert.deepEqual(adoptedSave.drafts,[])
 
   await reset(true)
-  await page.getByRole('textbox',{name:'工作集备注',exact:true}).fill('Modal kept by X')
+  await page.getByRole('textbox',{name:'工作集名称',exact:true}).fill('Modal kept by X')
   await page.getByRole('button',{name:'关闭并保留工作集草稿',exact:true}).click()
   await page.getByRole('dialog',{name:'编辑工作集',exact:true}).waitFor({state:'detached'})
   const left=await inspect()
-  assert.equal(left.drafts[0].value.note,'Modal kept by X')
+  assert.equal(left.drafts[0].value.name,'Modal kept by X')
   assert.deepEqual(left.drafts[0].base,originalBaseline)
-  assert.equal(left.local.value.note,'Modal kept by X')
+  assert.equal(left.local.value.name,'Modal kept by X')
   assert.equal(left.loaded,false,'leaving suspends the loaded marker while preserving the record')
   assert.deepEqual(left.writes,[],'closing X is not a formal save')
   await page.evaluate(()=>window.fixture.reopen())
   await page.getByRole('dialog',{name:'编辑工作集',exact:true}).waitFor()
-  assert.equal(await page.getByRole('textbox',{name:'工作集备注',exact:true}).inputValue(),'Modal kept by X','reopening the modal restores the local input')
+  assert.equal(await page.getByRole('textbox',{name:'工作集名称',exact:true}).inputValue(),'Modal kept by X','reopening the modal restores the local input')
   assert.deepEqual((await inspect()).drafts[0].base,originalBaseline)
   await page.getByRole('button',{name:'取消',exact:true}).click()
   const discarded=await inspect()

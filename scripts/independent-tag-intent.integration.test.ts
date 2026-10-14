@@ -114,16 +114,16 @@ await test('v9 keeps OCR correction, notebook, work set, organization and downlo
     const org=await f.host.readOrganization(scope)
     await f.host.writeOrganization({...scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'Preserved folder',folderKind:'assets',parentId:null,assetIds:[f.asset.id]}})
     const work=await f.host.readWorkSets(scope,'device:synthetic')
-    await f.host.writeWorkSet({...scope,sessionToken:work.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'Preserved set',assetIds:[f.asset.id],note:'User note',colors:[],columns:1}}},'device:synthetic')
+    await f.host.writeWorkSet({...scope,sessionToken:work.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Preserved set',assetIds:[f.asset.id],columns:1}}},'device:synthetic')
     const intent=await f.host.downloadJournal({kind:'create',generation:scope.generation,taskId:'download-synthetic',url:'https://fixture.invalid/not-requested.png',fileName:'generated.png'})
-    assert.equal(intent.version,9)
+    assert.equal(intent.version,16)
     await f.host.close();await f.host.reopen()
     assert.equal((await f.host.readOcr(f.scope)).editedText,'User OCR retained')
     assert.equal((await f.host.readNotebook(f.scope)).revision,1)
     assert.equal((await f.host.readOrganization(scope)).folders[0].name,'Preserved folder')
-    assert.equal((await f.host.readWorkSets(scope,'device:synthetic')).sets[0].note,'User note')
+    assert.equal((await f.host.readWorkSets(scope,'device:synthetic')).sets[0].name,'Preserved set')
     assert.equal((await f.host.downloadJournal({kind:'list',generation:scope.generation})).intents!.length,1)
-    assert.equal((await f.host.readTagIntentContext(f.scope)).schemaVersion,9)
+    assert.equal((await f.host.readTagIntentContext(f.scope)).schemaVersion,16)
   } finally { await f.close() }
 })
 
@@ -399,7 +399,7 @@ await test('v9 visual evidence, confirmed tags, palette, layout and owned downlo
     await f.host.confirmVisualAiTag(f.asset.id,'evidence:reverse','蓝色')
     const org=await f.host.readOrganization(scope)
     await f.host.writeOrganization({...scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'Colors',folderKind:'palette',parentId:null,color:{hex:'#AABBCC',sourceAssetId:f.asset.id}}})
-    const w=await f.host.readWorkSets(scope,'device:test'),saved=await f.host.writeWorkSet({...scope,sessionToken:w.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'Layout',note:'',assetIds:[f.asset.id],colors:[],columns:1}}},'device:test')
+    const w=await f.host.readWorkSets(scope,'device:test'),saved=await f.host.writeWorkSet({...scope,sessionToken:w.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Layout',assetIds:[f.asset.id],columns:1}}},'device:test')
     const layout={x:20,y:20,width:400,height:500,pinned:true,open:true}
     await f.host.writeWorkLayout({...scope,sessionToken:w.sessionToken,id:saved.sets[0].id,layout},'device:test')
     const bytes=await fs.readFile(path.join(f.root,'generated.png')),download={requestId:'v9-recovery',generation:scope.generation,fileName:'recovered.png',sourceUrl:'https://fixture.invalid/not-requested',bytes}

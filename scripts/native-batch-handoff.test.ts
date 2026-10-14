@@ -25,7 +25,7 @@ try{
  assert.ok(first&&second)
  const state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!},device='device:batch-test'
  const catalog=await host.readWorkSets(scope,device)
- const value={name:'Fixture batch',assetIds:[first.id,second.id],colors:[],columns:2,note:''}
+ const value={name:'Fixture batch',assetIds:[first.id,second.id],columns:2,}
  const created=await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value}},device)
  const set=created.sets[0],files=createWorkFileHandoffs({host,root:path.join(root,'handoffs'),open:async()=>'',trash:async()=>{throw Error('NOT_USED')}})
  const media=createWorkMediaController({host,files,changed(){}}),owner={},calls:{files:string[];icon:Uint8Array}[]=[]

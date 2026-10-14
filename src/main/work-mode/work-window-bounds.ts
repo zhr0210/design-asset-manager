@@ -10,7 +10,7 @@ export function visibleWorkBounds(saved:WorkWindowLayout|null,areas:readonly Wor
  const area=areaFor(value.dock?.style==='edge-slide'?{...value,x:value.dock.edge==='left'?value.x+value.width*.84:value.x,width:value.width*.16}:value,areas)
  if(value.dock?.style==='edge-slide')return{...value,x:Math.round(value.dock.edge==='left'?area.x-value.width*.84:area.x+area.width-value.width*.16),y:Math.round(Math.max(area.y,Math.min(value.y,area.y+area.height-value.height))),dock:{...value.dock,normalBounds:{...value.dock.normalBounds}}}
  if(value.dock)return{...value,width:72,height:160,x:value.dock.edge==='left'?area.x:area.x+area.width-72,y:Math.round(Math.max(area.y,Math.min(value.y,area.y+area.height-160))),dock:{...value.dock,normalBounds:{...value.dock.normalBounds}}}
- const minimum=value.presentation==='compact'?{width:220,height:240}:{width:290,height:310}
+ const minimum=value.presentation==='compact'?{width:220,height:240}:{width:value.presentation==='expanded'?220:290,height:value.presentation==='expanded'?160:310}
  const width=Math.min(Math.max(minimum.width,value.width),Math.max(minimum.width,area.width)),height=Math.min(Math.max(minimum.height,value.height),Math.max(minimum.height,area.height))
  return{...value,width,height,x:Math.round(Math.max(area.x,Math.min(value.x,area.x+area.width-width))),y:Math.round(Math.max(area.y,Math.min(value.y,area.y+area.height-height)))}
 }

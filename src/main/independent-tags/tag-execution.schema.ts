@@ -66,7 +66,7 @@ CREATE INDEX independent_tag_outbox_pending ON independent_tag_outbox(delivered,
 /** Caller owns the migration transaction; never starts nested source savepoints. */
 export function applyTagExecutionSchema(db:Database.Database){
  const version=Number(db.pragma('user_version',{simple:true}))
- if(version>=10&&version<=15)return
+ if(version>=10&&version<=16)return
  if(version<1||version>9||!Number.isInteger(version))throw Error('TAG_EXECUTION_SCHEMA_UNSUPPORTED')
  applyTagIntentSchema(db)
  db.exec(TAG_EXECUTION_SQL)

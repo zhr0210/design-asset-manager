@@ -1,0 +1,49 @@
+{
+  "draftSlices": 15,
+  "blockingEdges": {
+    "01": [],
+    "02": [
+      "01"
+    ],
+    "03": [],
+    "04": [],
+    "05": [],
+    "06": [],
+    "07": [
+      "06"
+    ],
+    "08": [
+      "06"
+    ],
+    "09": [
+      "06"
+    ],
+    "10": [
+      "06"
+    ],
+    "11": [
+      "06"
+    ],
+    "12": [
+      "06"
+    ],
+    "13": [
+      "06"
+    ],
+    "14": [
+      "06"
+    ],
+    "15": [
+      "01"
+    ]
+  },
+  "acyclic": true,
+  "localLinksVerified": true,
+  "minAcceptanceCriteria": 5,
+  "productCodeChanged": false,
+  "externalTicketsPublished": false,
+  "implementationAuthorized": false,
+  "sourceBaseline": "98cace0",
+  "breakdownApproved": true,
+  "approvalScope": "Keep 15 local draft slices and their dependencies; no publication or implementation"
+}

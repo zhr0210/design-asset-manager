@@ -1,0 +1,76 @@
+{
+  "newInitialPID": 18449,
+  "newInitialWindow": 44398,
+  "readMethodsObserved": [
+    "URLsForApplicationsToOpenURL:",
+    "activateFileViewerSelectingURLs:",
+    "runModal",
+    "sharingServicesForItems:"
+  ],
+  "copyActualResultVerified": true,
+  "copyCanceledOnceBeforeExecuting": true,
+  "resizeConfigurationObserved": true,
+  "resizeExecuted": false,
+  "resizeCancelNoHookRecheck": {
+    "pid": 64347,
+    "window": 44504,
+    "visible": true,
+    "key": true,
+    "contentRetained": true
+  },
+  "runtimeInterruption": {
+    "process18449Exited": true,
+    "diagnostic": "EXC_BAD_ACCESS; stack size exceeded due to excessive recursion",
+    "duringInstrumentation": true,
+    "attribution": "unresolved; do not classify as inherent Dropover bug"
+  },
+  "currentNamedPublicWindow": "PUBLIC-继续测试",
+  "productImplementation": false,
+  "doubleClickMatrix": {
+    "window": 44504,
+    "pid": 64347,
+    "title": "PUBLIC-继续测试",
+    "centerNearLeftBefore": [
+      1009,
+      943,
+      198,
+      207
+    ],
+    "afterDoubleClickAtRightBackground": [
+      -167,
+      943,
+      198,
+      207
+    ],
+    "leftRestored": [
+      12,
+      943,
+      198,
+      207
+    ],
+    "leftDoubleClickAgain": [
+      -167,
+      943,
+      198,
+      207
+    ],
+    "noWindowFunctionHooks": true,
+    "actualInitialMove": "user physical input; subsequent double clicks/restore via formal CUA",
+    "previousRightSample": "43143 [2208,1002,198,207]"
+  },
+  "sourcePNGUnchanged": true,
+  "doubleClickOutside26pt": {
+    "screenshotPoint": [
+      198,
+      290
+    ],
+    "observedFrame": [
+      12,
+      943,
+      198,
+      207
+    ],
+    "docked": false,
+    "input": "formal CUA double click"
+  }
+}

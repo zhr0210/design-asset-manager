@@ -9,7 +9,7 @@ export interface BackgroundOcrAuthority {grant?:Grant;claims:Map<string,Held>}
 type Binding=TagIntentBinding&{ocrAuthority:BackgroundOcrAuthority}
 const fail=(code='BACKGROUND_OCR_SCOPE_EXPIRED'):never=>tagIntentFail(code)
 const safe=(n:number)=>Number.isSafeInteger(n)&&n>=0&&n<Number.MAX_SAFE_INTEGER
-function scope(a:Binding,s:BackgroundOcrScope){if(!s||s.libraryIdentity!==a.identity||s.generation!==a.generation)fail();const v=Number(a.database.pragma('user_version',{simple:true}));if(v<1||v>15)fail();return v}
+function scope(a:Binding,s:BackgroundOcrScope){if(!s||s.libraryIdentity!==a.identity||s.generation!==a.generation)fail();const v=Number(a.database.pragma('user_version',{simple:true}));if(v<1||v>16)fail();return v}
 function session(a:Binding,s:BackgroundOcrSession){scope(a,s);if(s.sessionToken!==a.notebookSession)fail()}
 function policy(a:Binding){return a.database.prepare('SELECT revision,choice,runtime_fingerprint AS runtime FROM background_ocr_permission WHERE singleton=1').get() as {revision:number;choice:number;runtime:string}}
 export function readBackgroundOcr(a:Binding,s:BackgroundOcrScope):BackgroundOcrSnapshot{

@@ -24,7 +24,7 @@ try{
  const creation=await host.prepareCreate();if(creation.kind!=='planned')throw Error('CREATE');await host.confirmCreate(creation.plan.receipt)
  const intake=await host.prepareAddAssets();if(intake.kind!=='planned')throw Error('INTAKE');await host.dispatchAddAssets(intake.plan.receipt)
  const assets=await host.listAssets(),ids=sources.map(file=>assets.find(a=>a.fileName===path.basename(file))!.id),current=host.inspect(),scope={libraryIdentity:current.identity!,generation:current.generation!},device='device:open-existing'
- const initial=await host.readWorkSets(scope,device),set=(await host.writeWorkSet({...scope,sessionToken:initial.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Public opener fixtures',assetIds:ids,note:'Keep bytes',colors:[],columns:3}}},device)).sets[0]
+ const initial=await host.readWorkSets(scope,device),set=(await host.writeWorkSet({...scope,sessionToken:initial.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Public opener fixtures',assetIds:ids,columns:3}}},device)).sets[0]
  const admission=createVisualAdmission({memory:()=>({free:8*1024**3,total:16*1024**3})});let opens=0,mode:'ok'|'reject'|'gate'|'throw'='ok',entered=deferred(),release=deferred(),lastPath=''
  const options={host,admission,root:handoffRoot,open:async(file:string)=>{opens++;lastPath=file;if(mode==='gate'){entered.resolve();await release.promise}if(mode==='throw')throw Error('fixture opener unknown');return mode==='reject'?'fixture receiver rejection':''},trash:async()=>{throw Error('NOT_USED')}}
  const files=createWorkFileHandoffs(options),media=createWorkMediaController({host,files,changed(){}}),owner={},foreign={};let layout!:WorkWindowLayout
@@ -51,10 +51,10 @@ try{
  db.prepare('UPDATE capture_requests SET source_generation=? WHERE capture_request_identity=?').run('sha256:'+'a'.repeat(64),link.requestId)
  try{await assert.rejects(files.openExisting(actor,zip.id))}finally{db.prepare('UPDATE capture_requests SET source_generation=? WHERE capture_request_identity=?').run(link.generation,link.requestId)}assert.equal(opens,2)
  const beforeRemoval=await host.readWorkSets(scope,device),saved=beforeRemoval.sets.find(s=>s.id===set.id)!
- await host.writeWorkSet({...scope,sessionToken:beforeRemoval.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:saved.revision,value:{name:saved.name,assetIds:[ids[0],ids[2]],note:saved.note,colors:saved.colors,columns:saved.columns}}},device)
+ await host.writeWorkSet({...scope,sessionToken:beforeRemoval.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:saved.revision,value:{name:saved.name,assetIds:[ids[0],ids[2]],columns:saved.columns}}},device)
  await assert.rejects(files.openExisting(actor,zip.id),/参考已移除/);assert.equal(opens,2)
  const restore=await host.readWorkSets(scope,device),removed=restore.sets.find(s=>s.id===set.id)!
- await host.writeWorkSet({...scope,sessionToken:restore.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:removed.revision,value:{name:removed.name,assetIds:ids,note:removed.note,colors:removed.colors,columns:removed.columns}}},device)
+ await host.writeWorkSet({...scope,sessionToken:restore.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:removed.revision,value:{name:removed.name,assetIds:ids,columns:removed.columns}}},device)
  // Pending real opener Promise is an active actor job; native close/dock deny it.
  mode='gate';entered=deferred();release=deferred();const pending=controller.nativeOpenFile(owner,{token,id:zip.id});assert.equal(files.hasActive(actor),true);await entered.promise
  const close=await controller.act(owner,{token,kind:'close',discard:true});assert.equal(close.success,false);if(!close.success)assert.equal(close.code,'WORK_OPERATION_ACTIVE')

@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-15",
+  "referenceApp": "Dropover 5.2.0",
+  "pid": 64347,
+  "runtimeMethod": "Formal CUA menus and real independent file outputs; no NSWindow method hooks",
+  "specifiedMaterials": "Public generated PNG disposable copies only",
+  "results": {
+    "rename": {
+      "action": "rename",
+      "oldPathExists": false,
+      "newPathExists": true,
+      "unchangedBytes": true
+    },
+    "rename-collision": {
+      "renameStillPresent": true,
+      "collisionTargetUnchanged": true,
+      "renamedContentUnchanged": true,
+      "replacementPerformed": false
+    },
+    "move": {
+      "action": "move",
+      "sourceNoLongerExists": true,
+      "destinationExists": true,
+      "unchangedBytes": true
+    },
+    "zip": {
+      "zipExists": true,
+      "entries": [
+        "menu-renamed-01.png"
+      ],
+      "crcError": null,
+      "entriesMatchingSource": [
+        "menu-renamed-01.png"
+      ]
+    },
+    "convert": {
+      "images": [
+        {
+          "name": "menu-renamed-01.jpg",
+          "format": "JPEG",
+          "size": [
+            1200,
+            600
+          ],
+          "mode": "RGB",
+          "bytes": 115133
+        },
+        {
+          "name": "menu-renamed-01.png",
+          "format": "PNG",
+          "size": [
+            1200,
+            600
+          ],
+          "mode": "RGBA",
+          "bytes": 23238
+        }
+      ],
+      "PNGSourcePreserved": true
+    },
+    "resize": {
+      "images": [
+        {
+          "name": "menu-renamed-01 (1).png",
+          "format": "PNG",
+          "size": [
+            600,
+            300
+          ],
+          "bytes": 14826
+        },
+        {
+          "name": "menu-renamed-01.jpg",
+          "format": "JPEG",
+          "size": [
+            1200,
+            600
+          ],
+          "bytes": 115133
+        },
+        {
+          "name": "menu-renamed-01.png",
+          "format": "PNG",
+          "size": [
+            1200,
+            600
+          ],
+          "bytes": 23238
+        }
+      ],
+      "originalBytesPreserved": true
+    },
+    "pdf": [
+      {
+        "name": "2026-10-15_01.49.08.pdf",
+        "bytes": 55821,
+        "pages": 1,
+        "pageSizes": [
+          [
+            1200.0,
+            600.0
+          ]
+        ],
+        "imageCounts": [
+          1
+        ]
+      }
+    ],
+    "trash": {
+      "sourceAbsent": true,
+      "exactTrashEntryExists": true,
+      "trashContentMatch": true,
+      "permanentDelete": false,
+      "restoredToTaskPath": true,
+      "restoredHashMatches": true
+    }
+  },
+  "publicOriginalsUnchanged": true,
+  "resizeDefaultsRestoredAndReadBack": true,
+  "zipDefaultNameUnchangedAndReadBack": true,
+  "originalLibraryEdited": false,
+  "damProductCodeEdited": false,
+  "screenCaptureErrors": "SCStream -3812/noWindowsAvailable when modal/window closes; successful actions independently verified by actual files or rebinding",
+  "unexecuted": [
+    "image compression output (PNG unsupported message; canceled)",
+    "OCR",
+    "stitch",
+    "image redaction",
+    "metadata cleanup",
+    "multi-item partial failure",
+    "multiple input/output format matrix"
+  ]
+}

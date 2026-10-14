@@ -1,0 +1,2829 @@
+{
+  "epochMs": 1791970228976,
+  "elapsedMs": 1028567,
+  "event": "state",
+  "reason": "poll",
+  "state": {
+    "window": 43143,
+    "class": "..NSKVONotifying_Dropover.DragSessionWindow",
+    "key": 1,
+    "frame": [
+      1820,
+      899,
+      400,
+      310
+    ],
+    "visible": 1,
+    "content": {
+      "class": "Dropover.ShelfContentContainerView",
+      "frame": [
+        0,
+        0,
+        400,
+        310
+      ],
+      "hidden": 0,
+      "alpha": 1,
+      "layer": {
+        "class": "NSViewBackingLayer",
+        "corner": 24,
+        "opacity": 1
+      },
+      "children": [
+        {
+          "class": "Dropover.ShelfBackdropView",
+          "frame": [
+            0,
+            0,
+            400,
+            310
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "layer": {
+            "class": "NSViewBackingLayer",
+            "corner": 0,
+            "opacity": 1
+          },
+          "children": [
+            {
+              "class": "NSKVONotifying_NSGlassEffectView",
+              "frame": [
+                0,
+                0,
+                400,
+                310
+              ],
+              "hidden": 0,
+              "alpha": 1,
+              "layer": {
+                "class": "_TtCE6AppKitCSo17NSGlassEffectViewP33_92F0BB6107B916AA04C9A991F505A16412BackingLayer",
+                "corner": 0,
+                "opacity": 1
+              },
+              "children": [
+                {
+                  "class": "_TtCE6AppKitCSo17NSGlassEffectViewP33_92F0BB6107B916AA04C9A991F505A16417ContentHolderView",
+                  "frame": [
+                    0,
+                    0,
+                    400,
+                    310
+                  ],
+                  "hidden": 0,
+                  "alpha": 1,
+                  "layer": {
+                    "class": "CALayer",
+                    "corner": 0,
+                    "opacity": 1
+                  },
+                  "children": [
+                    {
+                      "class": "NSView",
+                      "frame": [
+                        0,
+                        0,
+                        400,
+                        310
+                      ],
+                      "hidden": 0,
+                      "alpha": 1,
+                      "layer": {
+                        "class": "NSViewBackingLayer",
+                        "corner": 0,
+                        "opacity": 1
+                      },
+                      "children": [
+                        {
+                          "class": "Dropover.DragSessionView",
+                          "frame": [
+                            0,
+                            0,
+                            400,
+                            310
+                          ],
+                          "hidden": 1,
+                          "alpha": 0,
+                          "layer": {
+                            "class": "NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 0
+                          },
+                          "children": [
+                            {
+                              "class": "Dropover.DragSessionBackgroundView",
+                              "frame": [
+                                0,
+                                0,
+                                400,
+                                310
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [
+                                {
+                                  "class": "Dropover.DragSessionInboundDropIndicatorView",
+                                  "frame": [
+                                    0,
+                                    0,
+                                    400,
+                                    310
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 0,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 0
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        143,
+                                        145,
+                                        114,
+                                        20
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            114,
+                                            20
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "DropoverCore.LinkButton",
+                                  "frame": [
+                                    156.5,
+                                    10,
+                                    87.5,
+                                    28
+                                  ],
+                                  "hidden": 1,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSStackView",
+                                      "frame": [
+                                        11,
+                                        7,
+                                        65.5,
+                                        14
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSTextField",
+                                          "frame": [
+                                            -2,
+                                            0,
+                                            69.5,
+                                            14
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null
+                                          ],
+                                          "corner": 0
+                                        },
+                                        {
+                                          "class": "NSImageView",
+                                          "frame": [
+                                            0,
+                                            14,
+                                            0,
+                                            0
+                                          ],
+                                          "hidden": 1,
+                                          "alpha": 0.94,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 0.9399999976158142
+                                          },
+                                          "children": [
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "DropoverCore.DisclosureIndicatorControl",
+                                  "frame": [
+                                    149.5,
+                                    10,
+                                    101,
+                                    28
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "DropoverCore.DisclosureIndicatorTextContainerView",
+                                      "frame": [
+                                        0,
+                                        6,
+                                        86,
+                                        14
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            86,
+                                            14
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC12DropoverCoreP33_011107BE856F2998EE5B1E577B0BD51F16ChevronImageView",
+                                      "frame": [
+                                        90,
+                                        8,
+                                        6,
+                                        12
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0.94,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0.9399999976158142
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            6,
+                                            12
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "Dropover.HighlightableButton",
+                                  "frame": [
+                                    14,
+                                    16.5,
+                                    15,
+                                    15
+                                  ],
+                                  "hidden": 1,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSKVONotifying_NSButtonImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        15,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0,
+                                  "material": 18
+                                }
+                              ],
+                              "corner": 0
+                            },
+                            {
+                              "class": "Dropover.DragSessionActionStateView",
+                              "frame": [
+                                0,
+                                0,
+                                400,
+                                310
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [
+                                {
+                                  "class": "_TtC8DropoverP33_B4DC6F8814683424429976654E624D3522ActionStateLoadingView",
+                                  "frame": [
+                                    0,
+                                    0,
+                                    400,
+                                    310
+                                  ],
+                                  "hidden": 1,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSProgressIndicator",
+                                      "frame": [
+                                        40,
+                                        137,
+                                        320,
+                                        20
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        38,
+                                        165,
+                                        324,
+                                        16
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            324,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "DropoverCore.TextControl",
+                                      "frame": [
+                                        173,
+                                        12,
+                                        54,
+                                        28
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSTextField",
+                                          "frame": [
+                                            9,
+                                            7,
+                                            36,
+                                            14
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "_TtC8DropoverP33_B4DC6F8814683424429976654E624D3520ActionStateErrorView",
+                                  "frame": [
+                                    0,
+                                    0,
+                                    400,
+                                    310
+                                  ],
+                                  "hidden": 1,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        177,
+                                        237.5,
+                                        46.5,
+                                        52
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            5,
+                                            46.5,
+                                            41.02941176470589
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        198,
+                                        210,
+                                        4,
+                                        16
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            4,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSButton",
+                                      "frame": [
+                                        168.5,
+                                        189,
+                                        63,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSButtonTextField",
+                                          "frame": [
+                                            -4,
+                                            0,
+                                            71,
+                                            15
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0,
+                                      "material": 18
+                                    },
+                                    {
+                                      "class": "DropoverCore.TextControl",
+                                      "frame": [
+                                        178,
+                                        12,
+                                        44,
+                                        28
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSTextField",
+                                          "frame": [
+                                            9,
+                                            7,
+                                            26,
+                                            14
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "_TtC8DropoverP33_B4DC6F8814683424429976654E624D3527ActionStateConfirmationView",
+                                  "frame": [
+                                    0,
+                                    0,
+                                    400,
+                                    310
+                                  ],
+                                  "hidden": 1,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        179,
+                                        231,
+                                        42,
+                                        48
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            3,
+                                            42,
+                                            42
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        125.5,
+                                        204,
+                                        149,
+                                        16
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            149,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "DropoverCore.TextControl",
+                                      "frame": [
+                                        167,
+                                        12,
+                                        66,
+                                        32
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSTextField",
+                                          "frame": [
+                                            9,
+                                            9,
+                                            48,
+                                            14
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "DropoverCore.NavigationControl",
+                                      "frame": [
+                                        356,
+                                        12,
+                                        32,
+                                        32
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC12DropoverCoreP33_1F58D4D52D8052FAC90D646BE45B833616VibrantImageView",
+                                          "frame": [
+                                            9.5,
+                                            9,
+                                            14,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 0.94,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 0.9399999976158142
+                                          },
+                                          "children": [
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                }
+                              ],
+                              "corner": 0
+                            },
+                            {
+                              "class": "Dropover.DragSessionItemContainerView",
+                              "frame": [
+                                101,
+                                55.5,
+                                198,
+                                207
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [
+                                {
+                                  "class": "Dropover.DraggableItemView",
+                                  "frame": [
+                                    51,
+                                    58,
+                                    96,
+                                    101
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 0,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 0
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        96,
+                                        101
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            3,
+                                            96,
+                                            96
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_43D199F4C0A73207326660926297189B34DraggableItemProgressIndicatorView",
+                                      "frame": [
+                                        34,
+                                        36.5,
+                                        28,
+                                        28
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSProgressIndicator",
+                                          "frame": [
+                                            6,
+                                            6,
+                                            16,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "Dropover.DraggableItemView",
+                                  "frame": [
+                                    51,
+                                    58,
+                                    96,
+                                    101
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        96,
+                                        101
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            3,
+                                            96,
+                                            96
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_43D199F4C0A73207326660926297189B34DraggableItemProgressIndicatorView",
+                                      "frame": [
+                                        34,
+                                        36.5,
+                                        28,
+                                        28
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSProgressIndicator",
+                                          "frame": [
+                                            6,
+                                            6,
+                                            16,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "Dropover.DraggableItemView",
+                                  "frame": [
+                                    51,
+                                    58,
+                                    96,
+                                    101
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        96,
+                                        101
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            3,
+                                            96,
+                                            96
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_43D199F4C0A73207326660926297189B34DraggableItemProgressIndicatorView",
+                                      "frame": [
+                                        34,
+                                        36.5,
+                                        28,
+                                        28
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSProgressIndicator",
+                                          "frame": [
+                                            6,
+                                            6,
+                                            16,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "Dropover.DraggableItemView",
+                                  "frame": [
+                                    51,
+                                    58,
+                                    96,
+                                    101
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        96,
+                                        101
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            3,
+                                            96,
+                                            96
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_43D199F4C0A73207326660926297189B34DraggableItemProgressIndicatorView",
+                                      "frame": [
+                                        34,
+                                        36.5,
+                                        28,
+                                        28
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSProgressIndicator",
+                                          "frame": [
+                                            6,
+                                            6,
+                                            16,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "Dropover.DraggableItemView",
+                                  "frame": [
+                                    51,
+                                    58,
+                                    96,
+                                    101
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        96,
+                                        101
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            3,
+                                            96,
+                                            96
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_43D199F4C0A73207326660926297189B34DraggableItemProgressIndicatorView",
+                                      "frame": [
+                                        34,
+                                        36.5,
+                                        28,
+                                        28
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSProgressIndicator",
+                                          "frame": [
+                                            6,
+                                            6,
+                                            16,
+                                            16
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                }
+                              ],
+                              "corner": 0
+                            },
+                            {
+                              "class": "Dropover.DragSessionNavigationBar",
+                              "frame": [
+                                0,
+                                268,
+                                400,
+                                42
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [
+                                {
+                                  "class": "DropoverCore.NavigationControl",
+                                  "frame": [
+                                    7,
+                                    3,
+                                    32,
+                                    32
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "_TtC12DropoverCoreP33_1F58D4D52D8052FAC90D646BE45B833616VibrantImageView",
+                                      "frame": [
+                                        10,
+                                        10.5,
+                                        13,
+                                        12
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0.94,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0.9399999976158142
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            13,
+                                            12
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "DropoverCore.NavigationControl",
+                                  "frame": [
+                                    361,
+                                    3,
+                                    32,
+                                    32
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "_TtC12DropoverCoreP33_1F58D4D52D8052FAC90D646BE45B833616VibrantImageView",
+                                      "frame": [
+                                        9.5,
+                                        12,
+                                        13,
+                                        8
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 0.94,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 0.9399999976158142
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            13,
+                                            8
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                }
+                              ],
+                              "corner": 0
+                            }
+                          ],
+                          "corner": 0
+                        }
+                      ],
+                      "corner": 0
+                    }
+                  ],
+                  "corner": 0
+                },
+                {
+                  "class": "_TtGC6AppKit18_NSCoreHostingViewVES_CSo17NSGlassEffectViewP10$19ebb7df48RootView_",
+                  "frame": [
+                    0,
+                    0,
+                    400,
+                    310
+                  ],
+                  "hidden": 0,
+                  "alpha": 1,
+                  "layer": {
+                    "class": "NSViewBackingLayer",
+                    "corner": 0,
+                    "opacity": 1
+                  },
+                  "children": [],
+                  "corner": 0
+                }
+              ],
+              "corner": 24
+            }
+          ],
+          "corner": 0
+        },
+        {
+          "class": "NSView",
+          "frame": [
+            0,
+            0,
+            400,
+            310
+          ],
+          "hidden": 0,
+          "alpha": 1,
+          "layer": {
+            "class": "NSViewBackingLayer",
+            "corner": 0,
+            "opacity": 1
+          },
+          "children": [
+            {
+              "class": "NSView",
+              "frame": [
+                0,
+                0,
+                400,
+                265
+              ],
+              "hidden": 0,
+              "alpha": 1,
+              "layer": {
+                "class": "NSViewBackingLayer",
+                "corner": 0,
+                "opacity": 1
+              },
+              "children": [
+                {
+                  "class": "NSView",
+                  "frame": [
+                    0,
+                    0,
+                    400,
+                    265
+                  ],
+                  "hidden": 0,
+                  "alpha": 1,
+                  "layer": {
+                    "class": "NSViewBackingLayer",
+                    "corner": 0,
+                    "opacity": 1
+                  },
+                  "children": [
+                    {
+                      "class": "NSScrollView",
+                      "frame": [
+                        0,
+                        0,
+                        400,
+                        265
+                      ],
+                      "hidden": 0,
+                      "alpha": 1,
+                      "layer": {
+                        "class": "NSViewBackingLayer",
+                        "corner": 0,
+                        "opacity": 1
+                      },
+                      "children": [
+                        {
+                          "class": "_NSCollectionViewColorFillView",
+                          "frame": [
+                            0,
+                            0,
+                            383,
+                            265
+                          ],
+                          "hidden": 0,
+                          "alpha": 1,
+                          "layer": {
+                            "class": "NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 1
+                          },
+                          "children": [],
+                          "corner": 0
+                        },
+                        {
+                          "class": "NSClipView",
+                          "frame": [
+                            0,
+                            0,
+                            383,
+                            265
+                          ],
+                          "hidden": 0,
+                          "alpha": 1,
+                          "layer": {
+                            "class": "NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 1
+                          },
+                          "children": [
+                            {
+                              "class": "_TtC8DropoverP33_71CFA0F0C63AB28398F754CC8386B23B14CollectionView",
+                              "frame": [
+                                0,
+                                0,
+                                383,
+                                386
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [
+                                {
+                                  "class": "NSView",
+                                  "frame": [
+                                    8,
+                                    0,
+                                    122,
+                                    122
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        40,
+                                        122,
+                                        76
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            23,
+                                            0,
+                                            76,
+                                            76
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_937EF28964DE0A93F827F43FDF0E227F14TitleTextField",
+                                      "frame": [
+                                        10,
+                                        22,
+                                        102.5,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSStackView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            102.5,
+                                            15
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null,
+                                            null,
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        18,
+                                        6,
+                                        86,
+                                        13
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            86,
+                                            13
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "NSView",
+                                  "frame": [
+                                    253,
+                                    0,
+                                    122,
+                                    122
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        40,
+                                        122,
+                                        76
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            23,
+                                            0,
+                                            76,
+                                            76
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_937EF28964DE0A93F827F43FDF0E227F14TitleTextField",
+                                      "frame": [
+                                        9.5,
+                                        22,
+                                        103,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSStackView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            103,
+                                            15
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null,
+                                            null,
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        16,
+                                        6,
+                                        90,
+                                        13
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            90,
+                                            13
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "NSView",
+                                  "frame": [
+                                    8,
+                                    128,
+                                    122,
+                                    122
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        40,
+                                        122,
+                                        76
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            23,
+                                            0,
+                                            76,
+                                            76
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_937EF28964DE0A93F827F43FDF0E227F14TitleTextField",
+                                      "frame": [
+                                        10,
+                                        22,
+                                        102.5,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSStackView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            102.5,
+                                            15
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null,
+                                            null,
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        16,
+                                        6,
+                                        90.5,
+                                        13
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            90.5,
+                                            13
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "NSView",
+                                  "frame": [
+                                    253,
+                                    128,
+                                    122,
+                                    122
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        40,
+                                        122,
+                                        76
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            23,
+                                            0,
+                                            76,
+                                            76
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_937EF28964DE0A93F827F43FDF0E227F14TitleTextField",
+                                      "frame": [
+                                        9.5,
+                                        22,
+                                        103,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSStackView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            103,
+                                            15
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null,
+                                            null,
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        18,
+                                        6,
+                                        86,
+                                        13
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            86,
+                                            13
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "NSView",
+                                  "frame": [
+                                    8,
+                                    256,
+                                    122,
+                                    122
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        40,
+                                        122,
+                                        76
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            23,
+                                            0,
+                                            76,
+                                            76
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "_TtC8DropoverP33_937EF28964DE0A93F827F43FDF0E227F14TitleTextField",
+                                      "frame": [
+                                        10.5,
+                                        22,
+                                        101,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "NSStackView",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            101,
+                                            15
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [
+                                            null,
+                                            null,
+                                            null
+                                          ],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        16,
+                                        6,
+                                        90,
+                                        13
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            90,
+                                            13
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                },
+                                {
+                                  "class": "NSView",
+                                  "frame": [
+                                    253,
+                                    256,
+                                    122,
+                                    122
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 1,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 1
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "NSImageView",
+                                      "frame": [
+                                        0,
+                                        49.5,
+                                        122.5,
+                                        56
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_NSImageViewSimpleImageView",
+                                          "frame": [
+                                            33,
+                                            0,
+                                            56,
+                                            56
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    },
+                                    {
+                                      "class": "NSTextField",
+                                      "frame": [
+                                        14.5,
+                                        21,
+                                        93,
+                                        15
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [
+                                        {
+                                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                                          "frame": [
+                                            0,
+                                            0,
+                                            93,
+                                            15
+                                          ],
+                                          "hidden": 0,
+                                          "alpha": 1,
+                                          "layer": {
+                                            "class": "NSViewBackingLayer",
+                                            "corner": 0,
+                                            "opacity": 1
+                                          },
+                                          "children": [],
+                                          "corner": 0
+                                        }
+                                      ],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                }
+                              ],
+                              "corner": 0
+                            }
+                          ],
+                          "corner": 0
+                        },
+                        {
+                          "class": "NSScroller",
+                          "frame": [
+                            383,
+                            0,
+                            17,
+                            265
+                          ],
+                          "hidden": 0,
+                          "alpha": 1,
+                          "layer": {
+                            "class": "NSKVONotifying_NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 1
+                          },
+                          "children": [],
+                          "corner": 0
+                        }
+                      ],
+                      "corner": 0
+                    },
+                    {
+                      "class": "NSProgressIndicator",
+                      "frame": [
+                        192,
+                        124.5,
+                        16,
+                        16
+                      ],
+                      "hidden": 0,
+                      "alpha": 1,
+                      "layer": {
+                        "class": "NSViewBackingLayer",
+                        "corner": 0,
+                        "opacity": 1
+                      },
+                      "children": [],
+                      "corner": 0
+                    }
+                  ],
+                  "corner": 0
+                }
+              ],
+              "corner": 0
+            },
+            {
+              "class": "Dropover.ShelfNavigationBar",
+              "frame": [
+                0,
+                265,
+                400,
+                45
+              ],
+              "hidden": 0,
+              "alpha": 1,
+              "layer": {
+                "class": "NSViewBackingLayer",
+                "corner": 0,
+                "opacity": 1
+              },
+              "children": [
+                {
+                  "class": "DropoverCore.NavigationControl",
+                  "frame": [
+                    7,
+                    6,
+                    32,
+                    32
+                  ],
+                  "hidden": 0,
+                  "alpha": 1,
+                  "layer": {
+                    "class": "NSViewBackingLayer",
+                    "corner": 0,
+                    "opacity": 1
+                  },
+                  "children": [
+                    {
+                      "class": "_TtC12DropoverCoreP33_1F58D4D52D8052FAC90D646BE45B833616VibrantImageView",
+                      "frame": [
+                        12,
+                        10,
+                        9,
+                        12
+                      ],
+                      "hidden": 0,
+                      "alpha": 0.94,
+                      "layer": {
+                        "class": "NSViewBackingLayer",
+                        "corner": 0,
+                        "opacity": 0.9399999976158142
+                      },
+                      "children": [
+                        {
+                          "class": "_NSImageViewSimpleImageView",
+                          "frame": [
+                            0,
+                            0,
+                            9,
+                            12
+                          ],
+                          "hidden": 0,
+                          "alpha": 1,
+                          "layer": {
+                            "class": "NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 1
+                          },
+                          "children": [],
+                          "corner": 0
+                        }
+                      ],
+                      "corner": 0
+                    }
+                  ],
+                  "corner": 0
+                },
+                {
+                  "class": "Dropover.ShelfNavigationTitleView",
+                  "frame": [
+                    46,
+                    7,
+                    50.5,
+                    31
+                  ],
+                  "hidden": 0,
+                  "alpha": 1,
+                  "layer": {
+                    "class": "NSViewBackingLayer",
+                    "corner": 0,
+                    "opacity": 1
+                  },
+                  "children": [
+                    {
+                      "class": "NSTextField",
+                      "frame": [
+                        -2,
+                        0,
+                        54.5,
+                        31
+                      ],
+                      "hidden": 0,
+                      "alpha": 1,
+                      "layer": {
+                        "class": "NSViewBackingLayer",
+                        "corner": 0,
+                        "opacity": 1
+                      },
+                      "children": [
+                        {
+                          "class": "_TtC6AppKitP33_72EBFCF981BE77E1C6F26FD717D0893922NSTextFieldSimpleLabel",
+                          "frame": [
+                            0,
+                            0,
+                            54.5,
+                            31
+                          ],
+                          "hidden": 0,
+                          "alpha": 1,
+                          "layer": {
+                            "class": "NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 1
+                          },
+                          "children": [],
+                          "corner": 0
+                        }
+                      ],
+                      "corner": 0
+                    }
+                  ],
+                  "corner": 0
+                },
+                {
+                  "class": "NSStackView",
+                  "frame": [
+                    293,
+                    6.5,
+                    100,
+                    32
+                  ],
+                  "hidden": 0,
+                  "alpha": 1,
+                  "layer": {
+                    "class": "NSViewBackingLayer",
+                    "corner": 0,
+                    "opacity": 1
+                  },
+                  "children": [
+                    {
+                      "class": "DropoverCore.NavigationControl",
+                      "frame": [
+                        0,
+                        0,
+                        32,
+                        32
+                      ],
+                      "hidden": 0,
+                      "alpha": 1,
+                      "layer": {
+                        "class": "NSViewBackingLayer",
+                        "corner": 0,
+                        "opacity": 1
+                      },
+                      "children": [
+                        {
+                          "class": "_TtC12DropoverCoreP33_1F58D4D52D8052FAC90D646BE45B833616VibrantImageView",
+                          "frame": [
+                            8,
+                            8.5,
+                            16,
+                            15
+                          ],
+                          "hidden": 0,
+                          "alpha": 0.94,
+                          "layer": {
+                            "class": "NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 0.9399999976158142
+                          },
+                          "children": [
+                            {
+                              "class": "_NSImageViewSimpleImageView",
+                              "frame": [
+                                0,
+                                0,
+                                16,
+                                15
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [],
+                              "corner": 0
+                            }
+                          ],
+                          "corner": 0
+                        }
+                      ],
+                      "corner": 0
+                    },
+                    {
+                      "class": "DropoverCore.SegmentedControl",
+                      "frame": [
+                        40,
+                        0,
+                        60,
+                        32
+                      ],
+                      "hidden": 0,
+                      "alpha": 1,
+                      "layer": {
+                        "class": "NSViewBackingLayer",
+                        "corner": 0,
+                        "opacity": 1
+                      },
+                      "children": [
+                        {
+                          "class": "NSStackView",
+                          "frame": [
+                            2,
+                            2.5,
+                            56,
+                            27
+                          ],
+                          "hidden": 0,
+                          "alpha": 1,
+                          "layer": {
+                            "class": "NSViewBackingLayer",
+                            "corner": 0,
+                            "opacity": 1
+                          },
+                          "children": [
+                            {
+                              "class": "_TtC12DropoverCoreP33_B49FFAE77F60242B2592695B0C9E695523SegmentedControlSegment",
+                              "frame": [
+                                0,
+                                0,
+                                27,
+                                27
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [
+                                {
+                                  "class": "_TtC12DropoverCoreP33_B49FFAE77F60242B2592695B0C9E695516VibrantImageView",
+                                  "frame": [
+                                    6.5,
+                                    7,
+                                    15,
+                                    14
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 0.94,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 0.9399999976158142
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "_NSImageViewSimpleImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        15,
+                                        14
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                }
+                              ],
+                              "corner": 0
+                            },
+                            {
+                              "class": "_TtC12DropoverCoreP33_B49FFAE77F60242B2592695B0C9E695523SegmentedControlSegment",
+                              "frame": [
+                                29,
+                                0,
+                                27,
+                                27
+                              ],
+                              "hidden": 0,
+                              "alpha": 1,
+                              "layer": {
+                                "class": "NSViewBackingLayer",
+                                "corner": 0,
+                                "opacity": 1
+                              },
+                              "children": [
+                                {
+                                  "class": "_TtC12DropoverCoreP33_B49FFAE77F60242B2592695B0C9E695516VibrantImageView",
+                                  "frame": [
+                                    5.5,
+                                    8,
+                                    16,
+                                    12
+                                  ],
+                                  "hidden": 0,
+                                  "alpha": 0.94,
+                                  "layer": {
+                                    "class": "NSViewBackingLayer",
+                                    "corner": 0,
+                                    "opacity": 0.9399999976158142
+                                  },
+                                  "children": [
+                                    {
+                                      "class": "_NSImageViewSimpleImageView",
+                                      "frame": [
+                                        0,
+                                        0,
+                                        16,
+                                        12
+                                      ],
+                                      "hidden": 0,
+                                      "alpha": 1,
+                                      "layer": {
+                                        "class": "NSViewBackingLayer",
+                                        "corner": 0,
+                                        "opacity": 1
+                                      },
+                                      "children": [],
+                                      "corner": 0
+                                    }
+                                  ],
+                                  "corner": 0
+                                }
+                              ],
+                              "corner": 0
+                            }
+                          ],
+                          "corner": 0
+                        }
+                      ],
+                      "corner": 0
+                    }
+                  ],
+                  "corner": 0
+                }
+              ],
+              "corner": 0
+            },
+            {
+              "class": "Dropover.DragSessionInboundDropView",
+              "frame": [
+                0,
+                0,
+                400,
+                310
+              ],
+              "hidden": 0,
+              "alpha": 1,
+              "layer": {
+                "class": "NSViewBackingLayer",
+                "corner": 0,
+                "opacity": 1
+              },
+              "children": [],
+              "corner": 0
+            }
+          ],
+          "corner": 0
+        }
+      ],
+      "corner": 0
+    }
+  }
+}

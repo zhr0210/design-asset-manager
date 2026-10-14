@@ -12,7 +12,7 @@ import type { TagIntentTestHooks } from '../independent-tags/tag-intent-backup'
 import { createHostSchemaMaintenance, type HostMaintenanceStorage } from './host-schema-maintenance.internal'
 import {readWorkMedia as readSavedWorkMedia,writeWorkMedia as writeSavedWorkMedia,readWorkMediaFile as readSavedWorkMediaFile} from '../work-mode/work-media-storage'
 import type {WorkVideoRuntime} from '../work-mode/windows-video-runtime'
-import {readWorkSets as readSavedWorkSets,writeWorkSet as writeSavedWorkSet,writeWorkLayout as writeSavedWorkLayout} from './work-sets'
+import {readWorkSets as readSavedWorkSets,writeWorkLayout as writeSavedWorkLayout} from './work-sets'
 import {measurePreviewColors as measureColors} from './measure-preview-colors'
 import {readOrganization as readLibraryOrganization,writeOrganization as writeLibraryOrganization} from './library-organization'
 import {readNotebook as readAssetNotebook,saveNotebook as saveAssetNotebook} from './asset-notebook'
@@ -744,7 +744,7 @@ export function createActiveLibraryHost(
   const writeWorkMedia:ActiveLibraryHost['writeWorkMedia']=(input,signal)=>run(active=>writeSavedWorkMedia(active,input,dependencies.videoRuntime,signal))
   const readWorkMediaFile:ActiveLibraryHost['readWorkMediaFile']=input=>run(active=>readSavedWorkMediaFile(active,input))
   const readWorkSets:ActiveLibraryHost['readWorkSets']=(scope,device)=>run(active=>readSavedWorkSets(active,scope,device))
-  const writeWorkSet:ActiveLibraryHost['writeWorkSet']=(input,device,layout)=>run(active=>writeSavedWorkSet(active,input,device,layout))
+  const writeWorkSet:ActiveLibraryHost['writeWorkSet']=(input,device,layout)=>schemaMaintenance.writeWorkSet(input,device,layout)
   const writeWorkLayout:ActiveLibraryHost['writeWorkLayout']=(input,device)=>run(active=>writeSavedWorkLayout(active,input,device))
   const readOrganization:ActiveLibraryHost['readOrganization']=scope=>run(active=>readLibraryOrganization(active,scope))
   const writeOrganization:ActiveLibraryHost['writeOrganization']=input=>run(active=>writeLibraryOrganization(active,input))

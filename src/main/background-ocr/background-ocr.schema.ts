@@ -25,4 +25,4 @@ CREATE TABLE background_ocr_attempts (
 CREATE INDEX background_ocr_attempts_recent ON background_ocr_attempts(updated_at DESC,intent_id);
 CREATE INDEX background_ocr_candidates ON background_analysis_intents(capability,decision,created_at,id);
 `
-export function applyBackgroundOcrSchema(db:Database.Database){const v=Number(db.pragma('user_version',{simple:true}));if(v===13||v===14||v===15)return;if(v!==12)throw Error('BACKGROUND_OCR_UPGRADE_REQUIRED');db.exec(BACKGROUND_OCR_SQL);db.prepare("INSERT INTO background_ocr_permission VALUES(1,0,0,'','')").run();db.pragma('user_version=13')}
+export function applyBackgroundOcrSchema(db:Database.Database){const v=Number(db.pragma('user_version',{simple:true}));if(v>=13&&v<=16)return;if(v!==12)throw Error('BACKGROUND_OCR_UPGRADE_REQUIRED');db.exec(BACKGROUND_OCR_SQL);db.prepare("INSERT INTO background_ocr_permission VALUES(1,0,0,'','')").run();db.pragma('user_version=13')}

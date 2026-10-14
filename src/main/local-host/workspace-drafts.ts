@@ -1,3 +1,4 @@
+import {projectRetiredWorkSetDraft} from '../../shared/contracts/work-set.contract'
 import fs from 'node:fs'
 import path from 'node:path'
 import { randomUUID } from 'node:crypto'
@@ -58,6 +59,7 @@ export function createWorkspaceDrafts(input: { directory: string; current(): { i
   }
   const project = (owner: string, record: Stored): WorkspaceDraftRecord => {
     const { owner: storedOwner, ...value } = record
+    if(value.kind==='work-set'){value.value=projectRetiredWorkSetDraft(value.value);if(value.base&&typeof value.base==='object'&&'value'in value.base)value.base={...value.base,value:projectRetiredWorkSetDraft(value.base.value)}}
     return structuredClone({ ...value, owned: owner === storedOwner, activeElsewhere: owner !== storedOwner && active.has(storedOwner) })
   }
   const sameScope = (left: WorkspaceDraftScope, right: WorkspaceDraftScope) => left.libraryIdentity === right.libraryIdentity && left.kind === right.kind && left.entityId === right.entityId
@@ -100,6 +102,13 @@ export function createWorkspaceDrafts(input: { directory: string; current(): { i
     }
   }
   return Object.freeze({
+    retireWorkSetFields:(libraryIdentity:string)=>serial(()=>{
+      const affected=[...records.values()].filter(r=>r.libraryIdentity===libraryIdentity&&r.kind==='work-set').map(r=>{const value=projectRetiredWorkSetDraft(r.value),base=r.base&&typeof r.base==='object'&&'value'in r.base?{...r.base,value:projectRetiredWorkSetDraft(r.base.value)}:r.base;return{prior:r,next:{...r,value,base}}}).filter(({prior,next})=>JSON.stringify(prior)!==JSON.stringify(next))
+      if(!affected.length)return
+      fs.writeFileSync(path.join(input.directory,`retired-work-set-drafts-${randomUUID()}.json`),JSON.stringify({version:1,records:affected.map(r=>r.prior)}),{flag:'wx',mode:0o600})
+      for(const {next} of affected)records.set(next.id,next)
+      try{persist()}catch(error){for(const {prior} of affected)records.set(prior.id,prior);throw error}
+    }),
     /** A new document revokes its owner's prior epoch; counters may restart at one. */
     beginWriter(owner: string, writerId: string) {
       if (!id(writerId)) throw Error('INVALID_DRAFT_WRITER')

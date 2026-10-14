@@ -1,0 +1,9 @@
+{
+  "pid": 18449,
+  "observedAtMs": 1791974089589,
+  "publicTargetWindowID": 43143,
+  "present": false,
+  "appStillRunning": true,
+  "reasonForWindowRemoval": "not established",
+  "remainingPhysicalInput": "left/center not qualified; earlier manual movement request no longer applicable"
+}

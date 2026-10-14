@@ -1,0 +1,4253 @@
+[
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970738829,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -27.853352516889572,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970739030,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -31.570366978645325,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970739231,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -35.474113032221794,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970739433,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -39.56224848330021,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970739634,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -43.82181039452553,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970739835,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -48.23554080724716,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970740036,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -52.82543298602104,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970740237,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -57.574594378471375,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970740439,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -62.51517474651337,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970740639,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -67.5831141769886,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970740841,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -72.85253024101257,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970741045,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -78.33157569169998,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970741251,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -84.01645869016647,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970741443,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -89.4527096748352,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970741644,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -95.28264099359512,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970741845,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -101.24115937948226,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970742045,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -107.30993461608887,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970742246,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -113.51196932792664,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970742448,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -119.82644134759903,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970742649,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -126.24765992164613,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970742850,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -132.75570142269135,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970743051,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -139.3510690331459,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970743252,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -146.02362722158432,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970743453,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -152.7636717557907,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970743654,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -159.56503266096115,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970743856,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -166.4394029378891,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970744057,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -173.31275486946106,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970744258,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -180.2215332388878,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970744460,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -187.20091289281845,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970744664,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -194.22762763500214,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970744865,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -201.16251158714292,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970745070,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -208.19585156440735,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970745263,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -214.79753291606906,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970745464,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -221.66712296009067,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970745665,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -228.443696141243,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970745865,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -235.18799376487732,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970746067,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -241.8707114458084,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970746267,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -248.46036434173584,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "epochMs": 1791970746468,
+      "window": 43143,
+      "state": {
+        "class": "NSViewBackingLayer",
+        "frame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "opacity": 1,
+        "presentationFrame": [
+          0,
+          0,
+          86,
+          14
+        ],
+        "animations": [],
+        "children": [
+          {
+            "class": "CALayer",
+            "frame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "opacity": 1,
+            "presentationFrame": [
+              0,
+              0,
+              86,
+              14
+            ],
+            "animations": [],
+            "children": [
+              {
+                "class": "CALayer",
+                "frame": [
+                  10,
+                  1,
+                  804,
+                  14
+                ],
+                "opacity": 1,
+                "presentationFrame": [
+                  -254.96809434890747,
+                  1,
+                  804,
+                  14
+                ],
+                "animations": [
+                  {
+                    "key": "MarqueeAnimation",
+                    "class": "CABasicAnimation",
+                    "duration": 20.1,
+                    "begin": 551030.9597974168,
+                    "repeat": 0,
+                    "keyPath": "transform.translation.x"
+                  }
+                ],
+                "children": [
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      0,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  },
+                  {
+                    "class": "CATextLayer",
+                    "frame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "opacity": 1,
+                    "presentationFrame": [
+                      402,
+                      0,
+                      390,
+                      14
+                    ],
+                    "animations": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

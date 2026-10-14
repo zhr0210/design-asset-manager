@@ -1,0 +1,24 @@
+Window: "", App: Dropover.
+0 窗口 Secondary Actions: Raise
+	1 container
+		2 图像
+		3 text 压缩影像 压缩图像和照片以显示在网页上，在社交网络上共享或通过电子邮件发送。 仅支持.jpg和.bmp图像。 其他格式将被忽略。
+		4 滚动区
+			5 container
+				6 text 画面质量 80%
+			7 文本 良好质量，适度压缩。压缩速度很快。
+			8 container
+				9 弹出式按钮 显示, Value: 在 Finder 中显示
+				10 转换 创建一个副本, Value: on
+				11 文本 保存在
+				12 菜单按钮 婚宴现场图片
+		13 按钮 取消
+		14 按钮 继续
+15 menu bar
+	16 Dropover
+	17 Edit
+	18 查看
+	19 窗口
+	20 Help
+
+The focused UI element is 0 窗口 Secondary Actions: Raise

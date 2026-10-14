@@ -1,0 +1,110 @@
+{
+  "version": "5.2.0",
+  "binarySHA256": "b0120976ab702cbd3eaca13e4e596bb5d4d6db8eeae776fb78e234b9d78b5294",
+  "publicWindow": 43143,
+  "material": "generated PNG fixtures only",
+  "dimensions": [
+    {
+      "count": 1,
+      "frame": [
+        1820,
+        994,
+        400,
+        207
+      ],
+      "screenshot": "one-expanded.png"
+    },
+    {
+      "count": 3,
+      "frame": [
+        1820,
+        899,
+        400,
+        310
+      ],
+      "screenshot": "three-expanded.png"
+    },
+    {
+      "count": 5,
+      "frame": [
+        1820,
+        899,
+        400,
+        310
+      ],
+      "screenshot": "five-expanded.png"
+    },
+    {
+      "count": 7,
+      "frame": [
+        1820,
+        774,
+        400,
+        435
+      ],
+      "screenshot": "seven-expanded.png"
+    }
+  ],
+  "expandedRemoval7to5": {
+    "frame": [
+      1820,
+      774,
+      400,
+      435
+    ],
+    "stayedSameSize": true,
+    "reexpandedFrame": [
+      1820,
+      899,
+      400,
+      310
+    ]
+  },
+  "doubleClickBackground": {
+    "afterFrame": [
+      2208,
+      1002,
+      198,
+      207
+    ],
+    "side": "right",
+    "restoredByGrabber": true,
+    "leftAndCenterMatrix": "NOT_RUN"
+  },
+  "clipboard": "Expanded Command-V did not add; compact after settled collapse added. No general unsupported claim.",
+  "additionalBoundarySamples": [
+    {
+      "count": 2,
+      "frame": [
+        1820,
+        1002,
+        400,
+        207
+      ],
+      "screenshot": "two-expanded.png"
+    },
+    {
+      "count": 6,
+      "frame": [
+        1820,
+        774,
+        400,
+        435
+      ],
+      "screenshot": "six-expanded.png"
+    }
+  ],
+  "emptyState": {
+    "removedFinalPublicReferences": true,
+    "expandedCanRemain": true,
+    "compactDisclosureHidden": true
+  },
+  "systemSharing": {
+    "observedSelector": "NSSharingService.performWithItems:",
+    "items": 1,
+    "AirDropChooser": "Wi-Fi off",
+    "canceled": true,
+    "networkChanged": false,
+    "sent": false
+  }
+}

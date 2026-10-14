@@ -265,5 +265,6 @@ not authorize weakening their safety or privacy guarantees.
 - [0488 — Library folders and palettes](0488-library-folders-and-palettes-store-references.md): reference-only membership, explicit v6 upgrade and normalized palette storage.
 
 - [0489 — Work sets and native window authority](0489-work-sets-separate-saved-references-from-native-window-authority.md): per-set saves, device layouts and independent sandboxed windows.
+- [0494 — Work sets retire own notes and palettes](0494-work-sets-retire-own-notes-and-palettes.md): confirmed product decision to remove work-set-owned notes/colors and historical data; reference/Host authority retained, implementation pending.
 
 - [0490 — Dedicated OCR results and corrections](0490-dedicated-ocr-preserves-empty-results-and-user-corrections.md): explicit v8 storage, valid-empty precedence and user correction protection.

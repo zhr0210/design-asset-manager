@@ -11,6 +11,7 @@ import {enableNotebookStorage} from './asset-notebook.schema'
 import { enableIntakeRecoveryStorage } from './intake-recovery.schema'
 import { enableDownloadJournal } from '../managed-download/download-journal.schema'
 import fs from 'node:fs/promises'
+import {applyWorkSetRetirementSchema} from './work-set-retirement.schema'
 import path from 'node:path'
 import Database from 'better-sqlite3'
 import { ActiveLibraryHostError } from '../../shared/contracts/active-library.contract'
@@ -227,7 +228,8 @@ export function assertLibraryDataSchema(database: Database.Database): void {
     })
     initializeLibraryDataSchema(expected)
     const version = database.pragma('user_version', { simple: true })
-    if(version===15)applyWorkMediaSchema(expected)
+    if(version===16)applyWorkSetRetirementSchema(expected)
+    else if(version===15)applyWorkMediaSchema(expected)
     else if(version===14)applyBasicAnalysisSchema(expected)
     else if(version===13){applyTagExecutionSchema(expected);applyTagDecisionSchema(expected);applyBackgroundAnalysisSchema(expected);applyBackgroundOcrSchema(expected)}
     else if(version===12){applyTagExecutionSchema(expected);applyTagDecisionSchema(expected);applyBackgroundAnalysisSchema(expected)}

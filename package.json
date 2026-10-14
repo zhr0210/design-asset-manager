@@ -395,7 +395,10 @@
     "test-windows-schema-backup-qualification": "node scripts/run-electron-node-test.mjs scripts/windows-schema-backup-qualification.test.ts",
     "test-visual-admission-isolation": "node scripts/run-ts-test.mjs scripts/visual-admission-isolation.test.ts",
     "test-pi-prepare-offline": "node scripts/run-ts-test.mjs scripts/pi-prepare-offline.test.mjs",
-    "build:macos-runtime": "node scripts/build-macos-runtime.mjs"
+    "build:macos-runtime": "node scripts/build-macos-runtime.mjs",
+    "test-work-set-retirement": "node scripts/run-electron-node-test.mjs scripts/work-set-retirement.test.ts",
+    "test-work-set-draft-retirement": "node scripts/run-electron-node-test.mjs scripts/work-set-draft-retirement.test.ts",
+    "test-work-image-document": "node scripts/run-electron-node-test.mjs scripts/work-image-document.test.ts"
   },
   "dependencies": {
     "archiver": "7.0.1",
