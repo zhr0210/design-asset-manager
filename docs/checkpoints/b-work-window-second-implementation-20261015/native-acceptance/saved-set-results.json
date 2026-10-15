@@ -1,0 +1,55 @@
+{
+  "sets": [
+    {
+      "id": "work-set:25066284-44f5-4265-8fb0-33f9690c7d15",
+      "name": "PUBLIC-empty-new",
+      "revision": 1,
+      "members": 0
+    },
+    {
+      "id": "work-set:b35a196e-c9e7-4c1d-a20f-736fc8e8bd20",
+      "name": "B-native-design-public",
+      "revision": 7,
+      "members": 9
+    },
+    {
+      "id": "work-set:d573441f-9168-48d8-83e5-c934295146e5",
+      "name": "PUBLIC alignment 1 3 5 7 · Long scrolling native capsule",
+      "revision": 8,
+      "members": 0
+    },
+    {
+      "id": "work-set:fa82ea1c-7d90-4d55-99ad-aeeee36f70cb",
+      "name": "PUBLIC-moved-2",
+      "revision": 1,
+      "members": 2
+    }
+  ],
+  "layouts": [
+    {
+      "set_id": "work-set:b35a196e-c9e7-4c1d-a20f-736fc8e8bd20",
+      "device_id": "device:df1b18c7-8bc1-495d-b103-b7edda239365",
+      "layout_json": "{\"x\":12,\"y\":467,\"width\":220,\"height\":240,\"pinned\":true,\"open\":true,\"presentation\":\"compact\"}"
+    },
+    {
+      "set_id": "work-set:b35a196e-c9e7-4c1d-a20f-736fc8e8bd20",
+      "device_id": "device:6315e35e-9f9a-423d-86f7-b694cfaabf37",
+      "layout_json": "{\"x\":40,\"y\":71,\"width\":220,\"height\":240,\"pinned\":true,\"open\":false,\"presentation\":\"compact\"}"
+    },
+    {
+      "set_id": "work-set:d573441f-9168-48d8-83e5-c934295146e5",
+      "device_id": "device:6315e35e-9f9a-423d-86f7-b694cfaabf37",
+      "layout_json": "{\"x\":12,\"y\":88,\"width\":400,\"height\":207,\"indicatorColor\":\"#6040FF\",\"alwaysShowIndicator\":true,\"currentSpaceOnly\":true,\"expansion\":{\"edge\":\"left\",\"compactBounds\":{\"x\":12,\"y\":71,\"width\":220,\"height\":240}},\"pinned\":false,\"open\":true,\"presentation\":\"expanded\"}"
+    },
+    {
+      "set_id": "work-set:fa82ea1c-7d90-4d55-99ad-aeeee36f70cb",
+      "device_id": "device:6315e35e-9f9a-423d-86f7-b694cfaabf37",
+      "layout_json": "{\"x\":484,\"y\":71,\"width\":220,\"height\":240,\"pinned\":true,\"open\":true,\"presentation\":\"compact\"}"
+    },
+    {
+      "set_id": "work-set:25066284-44f5-4265-8fb0-33f9690c7d15",
+      "device_id": "device:6315e35e-9f9a-423d-86f7-b694cfaabf37",
+      "layout_json": "{\"x\":928,\"y\":71,\"width\":220,\"height\":240,\"pinned\":true,\"open\":true,\"presentation\":\"compact\"}"
+    }
+  ]
+}

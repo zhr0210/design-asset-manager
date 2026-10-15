@@ -1,18 +1,32 @@
 import AppKit
 
+final class WorkShelfTextRegion:NSAccessibilityElement {
+    weak var canvas:WorkShelfAnnotationCanvas?
+    let index:Int
+    init(canvas:WorkShelfAnnotationCanvas,index:Int){self.canvas=canvas;self.index=index;super.init();setAccessibilityElement(true);setAccessibilityEnabled(true);setAccessibilityRole(.button);setAccessibilityParent(canvas)}
+    override func accessibilityLabel()->String?{guard let canvas,canvas.recognized.indices.contains(index) else{return nil};let mark=canvas.recognized[index];return "切换文字遮挡：\(mark["text"] as? String ?? "文字区域 \(index+1)")"}
+    override func accessibilityFrame()->NSRect{guard let canvas,canvas.recognized.indices.contains(index),let window=canvas.window else{return .zero};let mark=canvas.recognized[index];return window.convertToScreen(canvas.convert(canvas.markFrame(mark),to:nil))}
+    override func accessibilityPerformPress()->Bool{canvas?.toggleRecognized(index) ?? false}
+}
+
 final class WorkShelfAnnotationCanvas:NSView {
     var image:NSImage?
     var marks:[[String:Any]]=[]
-    var recognized:[[String:Any]]=[]
+    var recognized:[[String:Any]]=[] {didSet{regions=recognized.indices.map{WorkShelfTextRegion(canvas:self,index:$0)};NSAccessibility.post(element:self,notification:.layoutChanged)}}
+    private var regions:[WorkShelfTextRegion]=[]
     var history:[[[String:Any]]]=[]
     var selectedIndex:Int?
     var adjusting=false,resizing=false
     var initialMark:[String:Any]?
-    var smart=false
+    var smart=false {didSet{NSAccessibility.post(element:self,notification:.layoutChanged)}}
     var color="#000000"
     var start:NSPoint?,current:NSPoint?
     override var isFlipped:Bool{true}
     override var acceptsFirstResponder:Bool{true}
+    override func isAccessibilityElement()->Bool{true}
+    override func accessibilityRole()->NSAccessibility.Role?{.group}
+    override func accessibilityLabel()->String?{"遮挡图像画布"}
+    override func accessibilityChildren()->[Any]?{smart ? regions:[]}
     var imageFrame:NSRect{guard let image else{return .zero};return workShelfImageRect(image,in:bounds.insetBy(dx:12,dy:12))}
     override func draw(_ dirtyRect:NSRect){
         guard let image else{return};let rect=imageFrame;image.draw(in:rect,from:.zero,operation:.sourceOver,fraction:1,respectFlipped:true,hints:nil)
@@ -34,13 +48,18 @@ final class WorkShelfAnnotationCanvas:NSView {
     }
     func markFrame(_ mark:[String:Any])->NSRect{let r=imageFrame;return NSRect(x:r.minX+(mark["x"] as? Double ?? 0)*r.width,y:r.minY+(mark["y"] as? Double ?? 0)*r.height,width:(mark["width"] as? Double ?? 0)*r.width,height:(mark["height"] as? Double ?? 0)*r.height)}
     func saveUndo(){history.append(marks);if history.count>100{history.removeFirst()}}
+    @discardableResult func toggleRecognized(_ index:Int)->Bool{
+        guard smart,recognized.indices.contains(index) else{return false};let mark=recognized[index]
+        if let existing=marks.firstIndex(where:{($0["ocrIndex"] as? Int)==(mark["ocrIndex"] as? Int)}){saveUndo();marks.remove(at:existing)}else{guard marks.count<100 else{return false};saveUndo();marks.append(mark)}
+        needsDisplay=true;return true
+    }
     func undo(){guard let previous=history.popLast() else{return};marks=previous;selectedIndex=nil;needsDisplay=true}
     override func keyDown(with event:NSEvent){if event.keyCode==51,let selectedIndex,marks.indices.contains(selectedIndex){saveUndo();marks.remove(at:selectedIndex);self.selectedIndex=nil;needsDisplay=true}else{super.keyDown(with:event)}}
     override func mouseDown(with event:NSEvent){
         let point=convert(event.locationInWindow,from:nil);guard imageFrame.contains(point) else{return};window?.makeFirstResponder(self)
         start=point;current=point;adjusting=false;initialMark=nil
         if smart {
-            if let mark=recognized.first(where:{markFrame($0).contains(point)}){saveUndo();if let index=marks.firstIndex(where:{($0["ocrIndex"] as? Int)==(mark["ocrIndex"] as? Int)}){marks.remove(at:index)}else if marks.count<100{marks.append(mark)};needsDisplay=true}
+            if let index=recognized.firstIndex(where:{markFrame($0).contains(point)}){toggleRecognized(index)}
             return
         }
         if let index=marks.indices.reversed().first(where:{markFrame(marks[$0]).insetBy(dx:-5,dy:-5).contains(point)}){
@@ -90,7 +109,7 @@ final class WorkShelfRedaction:NSViewController {
         shelf?.action("ocr",["assetId":id,"operation":"read"],presentsReply:true){[weak self] reply in
             guard let self,self.generation==token,self.view.window != nil,self.canvas.smart else{return}
             guard reply["ok"] as? Bool==true,let value=reply["value"] as? [String:Any],let evidence=value["evidence"] as? [String:Any],let observation=evidence["observation"] as? [String:Any],let blocks=observation["blocks"] as? [[String:Any]] else{self.canvas.smart=false;self.mode.selectItem(at:0);self.status.stringValue="智能遮挡需要已完成的本机 OCR；请先从菜单识别文字。";return}
-            self.canvas.recognized=blocks.prefix(100).enumerated().compactMap{index,block in guard let points=block["polygon"] as? [[Double]],points.count==4 else{return nil};let xs=points.map{$0[0]},ys=points.map{$0[1]},x=xs.min()!,y=ys.min()!,w=xs.max()!-x,h=ys.max()!-y;guard w>0,h>0 else{return nil};return["kind":"redact","x":x,"y":y,"width":w,"height":h,"color":"#000000","ocrIndex":index]}
+            self.canvas.recognized=blocks.prefix(100).enumerated().compactMap{index,block in guard let points=block["polygon"] as? [[Double]],points.count==4 else{return nil};let xs=points.map{$0[0]},ys=points.map{$0[1]},x=xs.min()!,y=ys.min()!,w=xs.max()!-x,h=ys.max()!-y;guard w>0,h>0 else{return nil};return["kind":"redact","x":x,"y":y,"width":w,"height":h,"color":"#000000","ocrIndex":index,"text":block["text"] as? String ?? ""]}
             self.canvas.needsDisplay=true;self.status.stringValue=blocks.isEmpty ? "有效空结果：未识别到文字，可使用手动遮挡。":"点击蓝框文字区域选择或取消遮挡，再导出独立副本。"
         }
     }
@@ -103,7 +122,7 @@ final class WorkShelfRedaction:NSViewController {
         guard export.isEnabled,!canvas.marks.isEmpty else{status.stringValue="请先绘制至少一项标注。";return};let generation=UUID();self.generation=generation
         let panel=NSSavePanel();panel.nameFieldStringValue="标注副本.png";panel.allowedContentTypes=[.png];guard panel.runModal() == .OK,let destination=panel.url else{return}
         export.isEnabled=false
-        shelf?.action("handoff",["assetIds":[id],"handoffKind":"processed-image","imageTransform":["format":"png","quality":100,"stripMetadata":true,"annotations":canvas.marks.map{mark in var value=mark;value.removeValue(forKey:"ocrIndex");return value}]],presentsReply:true){[weak self] reply in
+        shelf?.action("handoff",["assetIds":[id],"handoffKind":"processed-image","imageTransform":["format":"png","quality":100,"stripMetadata":true,"annotations":canvas.marks.map{mark in var value=mark;value.removeValue(forKey:"ocrIndex");value.removeValue(forKey:"text");return value}]],presentsReply:true){[weak self] reply in
             guard let self,self.generation==generation,self.view.window != nil,self.shelf?.retired==false else{return};self.export.isEnabled=true
             guard reply["ok"] as? Bool==true,let records=reply["receipts"] as? [[String:String]],let receipt=records.first?["id"] else{self.status.stringValue=reply["message"] as? String ?? "未完成，草稿保持。";return}
             self.shelf?.action("file-action",["id":receipt,"operation":"copy","destination":destination.path],presentsReply:true){[weak self] reply in guard let self,self.generation==generation else{return};self.status.stringValue=reply["message"] as? String ?? "副本导出结果未确认。"}

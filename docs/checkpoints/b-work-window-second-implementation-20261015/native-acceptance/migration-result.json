@@ -1,0 +1,30 @@
+{
+  "version": 16,
+  "workColumns": [
+    "id",
+    "name",
+    "columns_count",
+    "revision",
+    "created_at"
+  ],
+  "workSets": [
+    [
+      "B-native-design-public",
+      7
+    ]
+  ],
+  "members": 9,
+  "backups": [
+    {
+      "path": ".dam/schema-backups/tag-intent-iGMg4xDOL6Yx/library.sqlite",
+      "version": 7,
+      "retiredLengths": [
+        [
+          26,
+          21
+        ]
+      ]
+    }
+  ],
+  "originalsIntact": true
+}

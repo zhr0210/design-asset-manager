@@ -1,0 +1,5 @@
+
+> design-asset-manager@1.0.0 test-work-image-document
+> node scripts/run-electron-node-test.mjs scripts/work-image-document.test.ts
+
+PASS actual multi-image outputs: independently decoded vertical/horizontal dimensions, source order and white gaps; PDF separate pages/size/image streams; cancellation.

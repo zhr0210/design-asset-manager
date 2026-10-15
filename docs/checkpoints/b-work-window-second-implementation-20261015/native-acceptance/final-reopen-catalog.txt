@@ -1,0 +1,91 @@
+Window: "Design Asset Manager", App: Electron.
+0 标准窗口 Design Asset Manager, Secondary Actions: Raise
+	1 HTML 内容 Design Asset Manager, URL: file:///Users/meigong/.codex/worktrees/3bfa/design-asset-manager-macos/out/renderer/index.html#/library
+		2 container
+			3 container 主导航
+				4 link Description: 资料库管理, Value: file:///Users/meigong/.codex/worktrees/3bfa/design-asset-manager-macos/out/renderer/index.html#
+				5 container 工作区导航
+					6 切换按钮 Description: 全部, Value: 0
+						7 图像
+					8 切换按钮 Description: 文件夹, Value: 0
+						9 图像
+					10 切换按钮 Description: 工作模式, Value: 1
+						11 图像
+						12 文本 工作模式
+					13 切换按钮 Description: 回收站, Value: 0
+						14 图像
+				15 按钮 切换明暗外观
+					16 图像
+				17 按钮 Description: 打开设置, Help: 设置
+					18 图像
+			19 container 素材导航
+				20 按钮 后退
+					21 图像
+				22 按钮 (disabled) 前进
+					23 图像
+				24 按钮 AI 与模型
+					25 图像
+					26 文本 AI 与模型
+				27 按钮 Description: 添加素材, Help: 添加图片或 MP4 视频
+					28 图像
+			29 container
+				30 标题 让参考，回到手边。, Value: 1
+					31 文本 让参考，回到手边。
+				32 文本 保存你的工作集，在设计时随时展开。
+				33 按钮 新建工作集
+				34 按钮 恢复工作窗口
+				35 按钮 找回所有窗口
+				36 按钮 收起资料库
+				37 按钮 打开工作集 B-native-design-public
+					38 文本 B-native-design-public
+					39 container
+						40 text 9 份内容
+				41 按钮 编辑工作集 B-native-design-public
+					42 图像
+				43 按钮 打开工作集 PUBLIC alignment 1 3 5 7 · Long scrolling native capsule
+					44 文本 PUBLIC alignment 1 3 5 7 · Long scrolling native capsule
+					45 container
+						46 text 0 份内容
+				47 按钮 编辑工作集 PUBLIC alignment 1 3 5 7 · Long scrolling native capsule
+					48 图像
+				49 按钮 打开工作集 PUBLIC-moved-2
+					50 文本 PUBLIC-moved-2
+					51 container
+						52 text 2 份内容
+				53 按钮 编辑工作集 PUBLIC-moved-2
+					54 图像
+				55 按钮 打开工作集 PUBLIC-empty-new
+					56 文本 PUBLIC-empty-new
+					57 container
+						58 text 0 份内容
+				59 按钮 编辑工作集 PUBLIC-empty-new
+					60 图像
+				61 开合三角标记 原单素材卡片与工具
+					62 文本 原单素材卡片与工具
+			63 container
+				64 按钮 (disabled) 标签筛选, Help: 进入素材文件夹后筛选标签
+					65 图像
+					66 文本 标签筛选
+				67 文本 以颜色、内容或灵感寻找
+				68 container
+					69 图像
+					70 文本栏 (settable) Description: 搜索素材, Placeholder: 搜索你的素材…
+				71 按钮 (disabled) 随机打乱
+					72 图像
+				73 切换按钮 (disabled) Description: 未标签, Value: 0
+					74 图像
+				75 切换按钮 (disabled) Description: 未分类, Value: 0
+					76 图像
+				77 按钮 更多功能菜单
+	78 关闭按钮
+	79 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	80 最小化按钮
+81 menu bar
+	82 Electron
+	83 File
+	84 Edit
+	85 View
+	86 Window
+	87 Help
+
+The focused UI element is 10 切换按钮 Description: 工作模式, Value: 1

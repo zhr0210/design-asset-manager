@@ -35,7 +35,7 @@ extension NativeWorkShelf {
         let ids=targets(),version=revision,generation=UUID();systemGeneration=generation
         action("saved-files",["assetIds":ids],presentsReply:true){[weak self] reply in
             guard let self,!self.retired,!self.frozen,self.systemGeneration==generation,self.revision==version else{return}
-            guard reply["ok"] as? Bool==true,let files=reply["files"] as? [[String:String]],!files.isEmpty else{self.feedback(reply["message"] as? String ?? "没有可恢复的历史交付副本。");return}
+            guard reply["ok"] as? Bool==true,let files=reply["files"] as? [[String:String]],!files.isEmpty else{self.inform(reply["message"] as? String ?? "没有可恢复的历史交付副本。");return}
             let menu=NSMenu();let summary=NSMenuItem(title:reply["message"] as? String ?? "历史交付副本",action:nil,keyEquivalent:"");summary.isEnabled=false;menu.addItem(summary)
             for file in files{guard let id=file["id"],let name=file["fileName"],let path=file["file"] else{continue};self.systemReceiptsByPath[path]=id;let item=NSMenuItem(title:name,action:#selector(self.revealSavedFile(_:)),keyEquivalent:"");item.target=self;item.representedObject=id;menu.addItem(item)}
             menu.popUp(positioning:nil,at:NSPoint(x:0,y:self.dropdown.bounds.height),in:self.dropdown)
@@ -47,10 +47,10 @@ extension NativeWorkShelf {
         let generation=UUID();systemGeneration=generation
         action("system-files",["assetIds":ids,"expectedRevision":requestedRevision],presentsReply:true){[weak self] reply in
             guard let self,!self.retired,!self.frozen,self.window.isVisible,self.systemGeneration==generation else{return}
-            guard reply["ok"] as? Bool==true,let files=reply["files"] as? [[String:Any]],files.count==ids.count else{self.feedback(reply["message"] as? String ?? "副本准备未完成，未请求系统操作。");return}
-            guard self.revision==requestedRevision else{self.feedback("工作集已变化，请重新打开菜单。");return}
+            guard reply["ok"] as? Bool==true,let files=reply["files"] as? [[String:Any]],files.count==ids.count else{self.inform(reply["message"] as? String ?? "副本准备未完成，未请求系统操作。");return}
+            guard self.revision==requestedRevision else{self.inform("工作集已变化，请重新打开菜单。");return}
             let urls=files.compactMap{($0["file"] as? String).map{URL(fileURLWithPath:$0)}}
-            guard urls.count==ids.count else{self.feedback("副本目标无效，未发出系统请求。");return}
+            guard urls.count==ids.count else{self.inform("副本目标无效，未发出系统请求。");return}
             for (index,url) in urls.enumerated(){if let id=files[index]["id"] as? String{self.systemReceiptsByPath[url.path]=id}}
             completion(urls)
         }
@@ -58,7 +58,7 @@ extension NativeWorkShelf {
     @objc func systemAction(_ sender:NSMenuItem){
         guard let value=sender.representedObject as? [String:Any],let operation=value["operation"] as? String,let ids=value["ids"] as? [String],let targetRevision=value["revision"] as? Int else{return}
         if operation=="annotate"{
-            guard ids.count==1,let id=ids.first,items.first(where:{$0.id==id})?.type != "mp4" else{feedback("标注请在展开态选中一张图片。");return}
+            guard ids.count==1,let id=ids.first,items.first(where:{$0.id==id})?.type != "mp4" else{inform("标注请在展开态选中一张图片。");return}
             let controller=WorkShelfRedaction(shelf:self,id:id),pop=NSPopover();pop.behavior = .semitransient;pop.contentViewController=controller;pop.contentSize=NSSize(width:600,height:500);tools=pop;pop.show(relativeTo:dropdown.bounds,of:dropdown,preferredEdge:.maxY);return
         }
         if operation=="dam-preview"{if let id=ids.first{action("focus",["assetId":id])};return}
@@ -71,7 +71,7 @@ extension NativeWorkShelf {
                 self.previewURLs=urls;self.window.makeKeyAndOrderFront(nil);NSApp.activate(ignoringOtherApps:true)
                 if let panel=QLPreviewPanel.shared(){panel.dataSource=self;panel.delegate=self;panel.reloadData();panel.currentPreviewItemIndex=0;panel.makeKeyAndOrderFront(nil)}
             case "share":
-                let picker=NSSharingServicePicker(items:urls);self.sharingPicker=picker;picker.delegate=self
+                let picker=NSSharingServicePicker(items:urls);self.sharingEscapeTimestamp=nil;self.sharingDismissalUntil=0;self.sharingPicker=picker;picker.delegate=self
                 picker.show(relativeTo:self.dropdown.bounds,of:self.dropdown,preferredEdge:.maxY)
             case "open-with":
                 let apps=urls.map{Set(NSWorkspace.shared.urlsForApplications(toOpen:$0))}.reduce(nil as Set<URL>?){previous,current in previous.map{$0.intersection(current)} ?? current} ?? []
@@ -79,19 +79,19 @@ extension NativeWorkShelf {
                 for app in apps.sorted(by:{$0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending}){
                     let item=NSMenuItem(title:app.deletingPathExtension().lastPathComponent,action:#selector(self.openWithApplication(_:)),keyEquivalent:"");item.target=self;item.image=NSWorkspace.shared.icon(forFile:app.path);item.image?.size=NSSize(width:16,height:16);item.representedObject=["app":app,"ids":ids,"revision":targetRevision];menu.addItem(item)
                 }
-                if apps.isEmpty{self.feedback("没有支持此组文件的本机应用。")}else{menu.popUp(positioning:nil,at:NSPoint(x:0,y:self.dropdown.bounds.height),in:self.dropdown)}
-            case "copy-files":NSPasteboard.general.clearContents();NSPasteboard.general.writeObjects(urls as [NSURL]);self.feedback("已复制 \(urls.count) 项交付副本。")
-            case "copy-paths":NSPasteboard.general.clearContents();NSPasteboard.general.setString(urls.map(\.path).joined(separator:"\n"),forType:.string);self.feedback("已复制交付副本路径。")
+                if apps.isEmpty{self.inform("没有支持此组文件的本机应用。")}else{menu.popUp(positioning:nil,at:NSPoint(x:0,y:self.dropdown.bounds.height),in:self.dropdown)}
+            case "copy-files":NSPasteboard.general.clearContents();NSPasteboard.general.writeObjects(urls as [NSURL]);self.inform("已复制 \(urls.count) 项交付副本。")
+            case "copy-paths":NSPasteboard.general.clearContents();NSPasteboard.general.setString(urls.map(\.path).joined(separator:"\n"),forType:.string);self.inform("已复制交付副本路径。")
             case "desktop":
                 guard urls.count==1 else{return}
-                do{try NSWorkspace.shared.setDesktopImageURL(urls[0],for:self.bestScreen(self.window.frame),options:[:]);self.feedback("已设置桌面图片；可在系统设置中恢复。")}catch{self.feedback("系统未接受桌面图片：\(error.localizedDescription)")}
+                do{try NSWorkspace.shared.setDesktopImageURL(urls[0],for:self.bestScreen(self.window.frame),options:[:]);self.inform("已设置桌面图片；可在系统设置中恢复。")}catch{self.inform("系统未接受桌面图片：\(error.localizedDescription)")}
             case "info":
                 let alert=NSAlert();alert.messageText="交付副本文件信息"
                 alert.informativeText=urls.map{url in let value=try? url.resourceValues(forKeys:[.fileSizeKey,.contentTypeKey,.creationDateKey,.contentModificationDateKey]);return "\(url.lastPathComponent)\n\(url.path)\n\(value?.fileSize ?? 0) 字节 · \(value?.contentType?.localizedDescription ?? "未知类型")\n修改：\(value?.contentModificationDate?.description ?? "未知")"}.joined(separator:"\n\n")
                 alert.runModal()
             case "open":
-                for url in urls{if !NSWorkspace.shared.open(url){self.feedback("系统无法打开 \(url.lastPathComponent)，副本保留。")}}
-            default:self.feedback("系统操作未提供。")
+                for url in urls{if !NSWorkspace.shared.open(url){self.inform("系统无法打开 \(url.lastPathComponent)，副本保留。")}}
+            default:self.inform("系统操作未提供。")
             }
         }
     }
@@ -104,18 +104,18 @@ extension NativeWorkShelf {
         if operation=="trash"{let alert=NSAlert();alert.messageText="将 \(urls.count) 项交付副本移到系统废纸篓？";alert.informativeText="只处理交付副本，素材库原件和工作集引用保持。";alert.addButton(withTitle:"取消");alert.addButton(withTitle:"移到废纸篓");guard alert.runModal() == .alertSecondButtonReturn else{return}}
         func next(_ index:Int){
             guard index<urls.count,!self.retired,!self.frozen else{return}
-            let url=urls[index];guard let id=self.systemReceiptsByPath[url.path] else{self.feedback("副本记录已失效，请重新打开菜单。");return}
+            let url=urls[index];guard let id=self.systemReceiptsByPath[url.path] else{self.inform("副本记录已失效，请重新打开菜单。");return}
             var target=destination?.appendingPathComponent(url.lastPathComponent)
             if operation=="rename"{
                 let alert=NSAlert();alert.messageText="副本改名";let field=NSTextField(string:url.lastPathComponent);field.frame=NSRect(x:0,y:0,width:300,height:24);alert.accessoryView=field;alert.addButton(withTitle:"确定");alert.addButton(withTitle:"取消");guard alert.runModal() == .alertFirstButtonReturn else{return}
-                let name=field.stringValue;guard !name.isEmpty,!name.contains("/"),!name.contains("\\"),name != ".",name != ".." else{self.feedback("文件名无效。");return};target=url.deletingLastPathComponent().appendingPathComponent(name)
+                let name=field.stringValue;guard !name.isEmpty,!name.contains("/"),!name.contains("\\"),name != ".",name != ".." else{self.inform("文件名无效。");return};target=url.deletingLastPathComponent().appendingPathComponent(name)
             }
             var request:[String:Any]=["id":id,"operation":operation];if let target{request["destination"]=target.path}
             let generation=self.systemGeneration
             self.action("file-action",request,presentsReply:true){[weak self] reply in
                 guard let self,!self.retired,self.systemGeneration==generation else{return}
-                guard reply["ok"] as? Bool==true else{self.feedback("已完成 \(index)/\(urls.count) 项。\(reply["message"] as? String ?? "操作未确认")");return}
-                self.feedback(reply["message"] as? String ?? "副本操作已完成。");next(index+1)
+                guard reply["ok"] as? Bool==true else{self.inform("已完成 \(index)/\(urls.count) 项。\(reply["message"] as? String ?? "操作未确认")");return}
+                self.inform(reply["message"] as? String ?? "副本操作已完成。");next(index+1)
             }
         }
         next(0)
@@ -124,16 +124,22 @@ extension NativeWorkShelf {
         guard let value=sender.representedObject as? [String:Any],let app=value["app"] as? URL,let ids=value["ids"] as? [String],let targetRevision=value["revision"] as? Int else{return}
         withSystemFiles(ids,revision:targetRevision){[weak self] urls in
             NSWorkspace.shared.open(urls,withApplicationAt:app,configuration:NSWorkspace.OpenConfiguration()){[weak self] _,error in
-                DispatchQueue.main.async{if let error{self?.feedback("打开请求未完成：\(error.localizedDescription)，副本保留。")}}
+                DispatchQueue.main.async{if let error{self?.inform("打开请求未完成：\(error.localizedDescription)，副本保留。")}}
             }
         }
     }
     func sharingServicePicker(_ sharingServicePicker:NSSharingServicePicker,didChoose service:NSSharingService?){
-        if service==nil{feedback("已取消系统共享，副本保留。")}else{feedback("已交给系统共享界面，请在系统中核对最终发送结果。")}
+        guard sharingPicker === sharingServicePicker else{return};sharingPicker=nil
+        if sharingEscapeTimestamp==nil{sharingEscapeTimestamp=NSApp.currentEvent?.timestamp}
+        // AppKit can call this before forwarding the dismissal key, with its
+        // currentEvent still pointing to the menu click. Cover that delivery
+        // interval as well as repeated dispatch of the exact Escape event.
+        if service==nil{sharingDismissalUntil=ProcessInfo.processInfo.systemUptime+0.35}
+        if service==nil{inform("已取消系统共享，副本保留。")}else{inform("已交给系统共享界面，请在系统中核对最终发送结果。")}
     }
     func sharingServicePicker(_ sharingServicePicker:NSSharingServicePicker,delegateFor sharingService:NSSharingService)->NSSharingServiceDelegate?{self}
-    func sharingService(_ sharingService:NSSharingService,didShareItems items:[Any]){feedback("系统已确认共享完成；交付副本保留。")}
-    func sharingService(_ sharingService:NSSharingService,didFailToShareItems items:[Any],error:Error){feedback("系统共享未完成：\(error.localizedDescription)，副本保留。")}
+    func sharingService(_ sharingService:NSSharingService,didShareItems items:[Any]){inform("系统已确认共享完成；交付副本保留。")}
+    func sharingService(_ sharingService:NSSharingService,didFailToShareItems items:[Any],error:Error){inform("系统共享未完成：\(error.localizedDescription)，副本保留。")}
     func numberOfPreviewItems(in panel:QLPreviewPanel!)->Int{previewURLs.count}
     func previewPanel(_ panel:QLPreviewPanel!,previewItemAt index:Int)->QLPreviewItem!{previewURLs.indices.contains(index) ? previewURLs[index] as NSURL:nil}
 }

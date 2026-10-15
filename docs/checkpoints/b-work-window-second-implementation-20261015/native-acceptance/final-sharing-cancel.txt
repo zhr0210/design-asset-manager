@@ -1,0 +1,20 @@
+Window: "PUBLIC-moved-2", App: DAM Shelf B.
+0 system dialog PUBLIC-moved-2, Secondary Actions: Raise
+	1 button 收起工作集
+	2 button 工作集操作菜单
+	3 text PUBLIC-moved-2 · 已选1份
+	4 scroll area Secondary Actions: Scroll Up, Scroll Down
+		5 collection (disabled)
+			6 section (disabled)
+				7 button Description: native-design-09.png，800×800, Value: 已选择
+					8 image
+					9 text native-design-09.png 800×800
+				10 button Description: native-design-08.png，600×1200, Value: 未选择
+					11 image
+					12 text native-design-08.png 600×1200
+		13 scroll bar (disabled, settable, float) 0
+14 menu bar
+	15 DAM Shelf B
+	16 编辑
+
+The focused UI element is 5 collection (disabled)

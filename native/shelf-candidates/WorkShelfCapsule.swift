@@ -5,6 +5,7 @@ import QuartzCore
  text copies. This is a custom AppKit control, not a claimed NSGlassEffectView. */
 final class WorkShelfCapsule:NSButton {
     private let material=NSVisualEffectView()
+    private let textViewport=NSView()
     private let viewport=CALayer(),textTrack=CALayer(),fade=CAGradientLayer()
     private let highlight=CALayer()
     private let first=CATextLayer(),second=CATextLayer(),chevron=NSImageView()
@@ -16,7 +17,11 @@ final class WorkShelfCapsule:NSButton {
         isBordered=false;title="";wantsLayer=true
         material.material = .hudWindow;material.blendingMode = .withinWindow;material.state = .active
         material.wantsLayer=true;material.layer?.cornerRadius=14;material.layer?.masksToBounds=true
-        addSubview(material);material.layer?.addSublayer(highlight);layer?.addSublayer(viewport);viewport.addSublayer(textTrack)
+        addSubview(material);material.layer?.addSublayer(highlight)
+        // AppKit owns subview layer ordering. Keep text in a foreground view so
+        // the vibrancy view cannot composite over a manually inserted root layer.
+        textViewport.wantsLayer=true;textViewport.setAccessibilityElement(false);addSubview(textViewport)
+        textViewport.layer?.addSublayer(viewport);viewport.addSublayer(textTrack)
         textTrack.addSublayer(first);textTrack.addSublayer(second)
         fade.startPoint=CGPoint(x:0,y:0.5);fade.endPoint=CGPoint(x:1,y:0.5)
         fade.locations=[0,0.15,0.85,1]
@@ -48,7 +53,8 @@ final class WorkShelfCapsule:NSButton {
         material.layer?.borderWidth=0.5;material.layer?.borderColor=NSColor.labelColor.withAlphaComponent(0.03).cgColor
         layer?.shadowColor=NSColor.black.cgColor;layer?.shadowOpacity=dark ? 0.1:0;layer?.shadowRadius=4;layer?.shadowOffset=CGSize(width:0,height:-2)
         chevron.frame=NSRect(x:bounds.width-22,y:8,width:10,height:12);chevron.contentTintColor = .labelColor
-        viewport.frame=CGRect(x:12,y:6,width:max(1,bounds.width-42),height:16)
+        textViewport.frame=NSRect(x:12,y:6,width:max(1,bounds.width-42),height:16)
+        viewport.frame=textViewport.bounds
         textTrack.frame=viewport.bounds
         let font=NSFont.systemFont(ofSize:12,weight:.semibold)
         let width=ceil((currentName as NSString).size(withAttributes:[.font:font]).width),distance=width+12

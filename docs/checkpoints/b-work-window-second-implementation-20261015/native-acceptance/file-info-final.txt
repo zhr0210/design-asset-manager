@@ -1,0 +1,13 @@
+Window: "", App: DAM Shelf B.
+0 dialog Description: alert, Secondary Actions: Raise
+	1 image DAM Shelf B alert
+	2 text 交付副本文件信息 native-design-09 原件副本.png
+/Users/meigong/.codex/worktrees/3bfa/design-asset-manager-macos/.scratch/b-work-window-second-implementation-20261015/profile/work-file-handoffs/906a800b-584a-4aea-93ac-25856ef3eac4/native-design-09 原件副本.png
+23332 字节 · PNG image
+修改：2026-10-15 03:57:54 +0000
+	3 button OK
+4 menu bar
+	5 DAM Shelf B
+	6 编辑
+
+The focused UI element is 0 dialog Description: alert, Secondary Actions: Raise

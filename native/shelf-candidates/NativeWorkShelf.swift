@@ -285,6 +285,9 @@ final class NativeWorkShelf:NSObject,QLPreviewPanelDataSource,QLPreviewPanelDele
     var systemGeneration=UUID()
     var previewURLs:[URL]=[]
     var systemReceiptsByPath:[String:String]=[:]
+    var sharingEscapeTimestamp:TimeInterval?
+    var sharingDismissalUntil:TimeInterval=0
+    var feedbackNeedsRetry=false
     var sharingPicker:NSSharingServicePicker?
     var name="工作集"
     let indicator=NSView()
@@ -385,7 +388,7 @@ final class NativeWorkShelf:NSObject,QLPreviewPanelDataSource,QLPreviewPanelDele
         compactForeground.frame=presentation.planeFrame(size:NSSize(width:220,height:240));compactForeground.isHidden=expanded
         expandedForeground.frame=presentation.planeFrame(size:b.size);expandedForeground.isHidden = !expanded
         for v in [scroll,stack,back,dropdown,capsule,heading] { v.isHidden=small }
-        errorField.isHidden=small || errorField.stringValue.isEmpty;retry.isHidden=small || errorField.stringValue.isEmpty
+        errorField.isHidden=small || errorField.stringValue.isEmpty;retry.isHidden=small || errorField.stringValue.isEmpty || !feedbackNeedsRetry
         let minimum=expanded ? NSSize(width:220,height:160) : NSSize(width:220,height:240)
         if window.minSize != minimum { window.minSize=minimum }
         let resizable=false
@@ -456,6 +459,9 @@ final class NativeWorkShelf:NSObject,QLPreviewPanelDataSource,QLPreviewPanelDele
         if event.keyCode==49 { if !event.isARepeat,let primary { action("focus",["assetId":primary]) };return true }
         if event.keyCode==51 || event.keyCode==117 { if !selected.isEmpty { edit("remove",items.filter{selected.contains($0.id)}.map(\.id)) };return true }
         if event.keyCode==53 {
+            if sharingPicker != nil{sharingEscapeTimestamp=event.timestamp;return true}
+            if sharingEscapeTimestamp==event.timestamp{return true}
+            if ProcessInfo.processInfo.systemUptime<=sharingDismissalUntil{return true}
             if colorPicker?.isShown==true{dismissColorPicker();return true}
             if let pop=tools,pop.isShown{pop.close();return true}
             if expanded { toggleExpanded() };return true
@@ -616,7 +622,13 @@ final class NativeWorkShelf:NSObject,QLPreviewPanelDataSource,QLPreviewPanelDele
         guard !frozen,!retired,let value=sender.representedObject as? [String:Any],let kind=value["kind"] as? String,let ids=value["ids"] as? [String],let summary=value["summary"] as? String else{return}
         let controller=WorkShelfTools(shelf:self,kind:kind,ids:ids,summary:summary);let pop=NSPopover();pop.behavior = .semitransient;pop.contentViewController=controller;pop.contentSize=NSSize(width:300,height:["processed-image","convert","compress","metadata","stitch"].contains(kind) ? 400 : 220);tools=pop;pop.show(relativeTo:dropdown.bounds,of:dropdown,preferredEdge:.maxY)
     }
-    func feedback(_ text:String) { errorField.stringValue=String(text.prefix(300));retry.isHidden=text.isEmpty;layout() }
+    func feedback(_ text:String,needsRetry:Bool=true) {
+        if !needsRetry,feedbackNeedsRetry,!errorField.stringValue.isEmpty{return}
+        feedbackNeedsRetry=needsRetry && !text.isEmpty
+        errorField.textColor=feedbackNeedsRetry ? .systemRed:.secondaryLabelColor
+        errorField.stringValue=String(text.prefix(300));retry.isHidden=text.isEmpty || !feedbackNeedsRetry;layout()
+    }
+    func inform(_ text:String){feedback(text,needsRetry:false)}
     func receive(_ board:NSPasteboard)->Bool {
         guard !frozen else{return false}
         if let data=board.data(forType:NSPasteboard.PasteboardType("com.dam.work-members")),let value=try? JSONSerialization.jsonObject(with:data) as? [String:Any] { action("members",["transfer":value]);return true }
@@ -762,7 +774,7 @@ final class WorkShelfTools:NSViewController {
             if let defaults=UserDefaults.standard.dictionary(forKey:"dam-work-image-"+kind){width.integerValue=defaults["width"] as? Int ?? 1024;height.integerValue=defaults["height"] as? Int ?? 1024;quality.integerValue=defaults["quality"] as? Int ?? 90;format.selectItem(withTitle:defaults["format"] as? String ?? "png");strip.state=(defaults["strip"] as? Bool ?? true) ? .on:.off}
             if kind=="compress" || kind=="metadata"{resizeEnabled.state = .off;resizeEnabled.isEnabled=false;if let type=shelf?.items.first(where:{$0.id==ids.first})?.type{format.selectItem(withTitle:type=="jpg" ? "jpeg":type)};format.isEnabled=false;strip.state=kind=="metadata" ? .on:.off;strip.isEnabled=false;quality.integerValue=kind=="metadata" ? 100:80}
         }
-        if kind=="stitch" {direction.frame=NSRect(x:18,y:265,width:264,height:28);direction.addItems(withTitles:["垂直拼接 · 等宽","水平拼接 · 等高"]);gap.frame=NSRect(x:18,y:220,width:264,height:26);gap.setAccessibilityLabel("图片间距，0到256像素");scale.frame=NSRect(x:18,y:176,width:264,height:28);scale.addItems(withTitles:["保留原尺寸 · 居中","等比等宽/等高"]);view.addSubview(direction);view.addSubview(gap);view.addSubview(scale);status.stringValue=summary+"；默认原尺寸纵向居中拼接"}
+        if kind=="stitch" {direction.frame=NSRect(x:18,y:265,width:264,height:28);direction.addItems(withTitles:["垂直拼接","水平拼接"]);gap.frame=NSRect(x:18,y:220,width:264,height:26);gap.setAccessibilityLabel("图片间距，0到256像素");scale.frame=NSRect(x:18,y:176,width:264,height:28);scale.addItems(withTitles:["保留原尺寸 · 居中","等比等宽/等高"]);view.addSubview(direction);view.addSubview(gap);view.addSubview(scale);status.stringValue=summary+"；默认原尺寸纵向居中拼接"}
         if kind=="pdf"{status.stringValue=summary+"；按工作集顺序逐图一页，白底，图像像素对应页面点数"}
         if kind=="metadata"{status.stringValue=summary+"；移除 EXIF/IPTC/XMP/ICC，自动转正，输出 sRGB；JPEG 将重新编码"}
         if kind=="compress"{status.stringValue=summary+"；PNG 无损；JPEG/WebP 按质量重新编码，可能没有大小收益"}

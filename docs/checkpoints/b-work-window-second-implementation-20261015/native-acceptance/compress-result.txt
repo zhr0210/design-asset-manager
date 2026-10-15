@@ -1,0 +1,54 @@
+Window: "PUBLIC alignment 1 3 5 7 · Long scrolling native capsule", App: DAM Shelf B.
+0 system dialog PUBLIC alignment 1 3 5 7 · Long scrolling native capsule, Secondary Actions: Raise
+	1 button 收起工作集
+	2 button 工作集操作菜单
+		3 popover Secondary Actions: Cancel
+			4 text 大小未减少；图像处理生成800×800 PNG独立副本。PNG无损，质量设置不适用。仅部分保留元数据；输出含exif、icc，不保证完整保留。交付副本已准备；不会自动清理，请在接收应用读完后明确清理。
+			5 button 生成副本
+			6 button 取消
+			7 button 目的：保留交付副本…
+			8 pop up button 完成后：只保留副本
+			9 button 拖出已生成副本
+			10 checkbox (disabled) 等比缩小至边界（不放大）, Value: 0
+			11 text field (settable) Description: 输出最大宽度, Value: 1024
+			12 text field (settable) Description: 输出最大高度, Value: 1024
+			13 pop up button (disabled) png
+			14 text field (settable) Description: JPEG或WebP质量，1到100，PNG不应用质量, Value: 80
+			15 checkbox (disabled) 移除元数据, Value: 0
+	16 text PUBLIC alignment 1 3 5 7 · Long scrolling native capsule · 已选1份
+	17 scroll area Secondary Actions: Scroll Up, Scroll Down
+		18 collection (disabled)
+			19 section (disabled)
+				20 button Description: native-design-09.png，800×800, Value: 已选择
+					21 image
+					22 text native-design-09.png 800×800
+				23 button Description: native-design-08.png，600×1200, Value: 未选择
+					24 image
+					25 text native-design-08.png 600×1200
+				26 button Description: native-design-07.png，1200×600, Value: 未选择
+					27 image
+					28 text native-design-07.png 1200×600
+				29 button Description: native-design-06.png，800×800, Value: 未选择
+					30 image
+					31 text native-design-06.png 800×800
+				32 button Description: native-design-05.png，600×1200, Value: 未选择
+					33 image
+					34 text native-design-05.png 600×1200
+				35 button Description: native-design-04.png，1200×600, Value: 未选择
+					36 image
+					37 text native-design-04.png 1200×600
+		38 scroll bar (settable, float) 0
+			39 value indicator (settable, float) 0
+			40 increment arrow button
+			41 decrement arrow button
+			42 increment page button
+			43 decrement page button
+44 menu bar
+	45 DAM Shelf B
+	46 编辑
+
+Selected text: ```
+1024
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).
