@@ -1,19 +1,13 @@
 # Workspace Toolbar Is Contextual
 
-Workspace Toolbar should serve the currently active workspace rather than act
-as a global command dumping ground. Asset Grid toolbar controls should focus on
-search, view mode, sorting, filtering, and thumbnail size; when a Sources
-Section selection applies Source Scope, that scope remains visibly labeled with
-a clear-scope action instead of becoming a hidden filter. Candidate Review Page
-toolbar controls should focus on Capture Batch filters, Candidate Status
-filters, Batch Promotion, and rejection actions; Web Capture Entry toolbar
-controls should focus on URL navigation, back and forward navigation, and
-capture controls.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-This keeps each workspace operationally dense without making the top of the app
-feel like a mixed global menu. Global navigation stays in Workspace Navigation,
-while toolbar actions stay close to the content they modify.
+## Decision
 
-When sorting by a Text Custom Field, ADR 0451 keeps the chosen field, direction,
-Natural/Exact mode and any Natural language visible from the sort control
-rather than hiding them behind the current operating-system locale.
+Workspace Toolbar should serve the currently active workspace rather than act as a global command dumping ground.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[工作台与导航规格](../product/specs/workspace.md#adr-0036)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/asset-workspace.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

@@ -10,7 +10,6 @@ import type {WorkScope,WorkSetCatalog,WorkSetWrite,WorkLayoutWrite,WorkWindowLay
 import type {OrganizationScope,OrganizationSnapshot,OrganizationWrite,MeasuredPreviewColors} from './library-organization.contract'
 import type {NotebookScope, NotebookSnapshot, NotebookSaveRequest} from './asset-notebook.contract'
 import type { IntakeRecoveryState, IntakeRecoveryReview } from './intake-recovery.contract'
-import type { DownloadJournalCommand, DownloadJournalResult } from './download-journal.contract'
 import type { ImageVariantInput } from './image-tools.contract'
 import type { VisualAiEvidence } from './visual-ai.contract'
 import type { TagIntentScope, TagIntentContext, TagIntentCommit, TagIntentSummary, TagIntentSnapshot } from './independent-tag-intent.contract'
@@ -267,7 +266,6 @@ export interface ActiveLibraryHost {
   readTagEffectReceipt(input:import('./tag-execution.contract').TagExecutionScope&{requestId:string}):Promise<TagRecoveryReceipt>
   saveTagBatch(input:TagBatchCommit,signal?:AbortSignal):Promise<TagBatchSaved>
   saveTagIntent(input: TagIntentCommit, signal?: AbortSignal): Promise<TagIntentSummary>
-  downloadJournal(command: DownloadJournalCommand): Promise<DownloadJournalResult>
   listIntakeRecovery(): Promise<IntakeRecoveryState>
   prepareIntakeRecovery(input: { id: string; selectSource?: boolean }): Promise<IntakeRecoveryReview | { kind: 'cancelled' }>
   runIntakeRecovery(receipt: string): Promise<{ assetId: string }>
@@ -314,9 +312,6 @@ export interface ActiveLibraryHost {
   /** Main-only bounded PNG bytes from the explicit clipboard-image action. */
   importClipboardImageFromReader(input: { requestId: string; libraryIdentity: string; generation: string; fileName: string }, read: () => Promise<Uint8Array>): Promise<{ assetId: string }>
   importClipboardImage(input: { requestId: string; libraryIdentity: string; generation: string; fileName: string; bytes: Uint8Array }): Promise<{ assetId: string }>
-  importDownloadedImage(input: { requestId: string; generation: string; fileName: string; sourceUrl: string; bytes: Uint8Array }): Promise<{ assetId: string }>
-  /** Main-only: resume a previously admitted download without another HTTP request. */
-  recoverDownloadedImage(input: { requestId: string; generation: string; fileName: string; sourceUrl: string }): Promise<{ assetId: string }>
   saveImageVariant(input: ImageVariantInput, signal?: AbortSignal): Promise<{ assetId: string }>
   /** Main-only authority-cycle gate; its release cannot release another cycle. */
   holdBusinessAdmission():()=>void

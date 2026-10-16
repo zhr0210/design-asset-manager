@@ -18,7 +18,7 @@ import { readLibraryManifestDeclaration } from '../src/main/library-lifecycle/li
 import { openReadonlyLibraryDatabase } from '../src/main/library-lifecycle/readonly-library-database.internal'
 import { enableVisualAiStorage } from '../src/main/visual-ai/visual-ai-storage'
 import { createVisualAdmission } from '../src/main/visual-ai/visual-admission'
-import { enableDownloadJournal } from '../src/main/managed-download/download-journal.schema'
+import { enableDownloadJournal } from '../src/main/library-lifecycle/legacy-download.schema'
 import { enableIntakeRecoveryStorage } from '../src/main/library-lifecycle/intake-recovery.schema'
 import { enableNotebookStorage } from '../src/main/library-lifecycle/asset-notebook.schema'
 import { enableOrganizationStorage } from '../src/main/library-lifecycle/library-organization.schema'

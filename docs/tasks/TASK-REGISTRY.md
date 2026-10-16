@@ -12,6 +12,23 @@
 - `RUX:U01–U32/A01–A03`是旧交互验收编号；`Deferred:U01–U12`是后来的待测表。相同数字不合并。RUX明细按历史规格读，不杜撰缺失标题或已验状态。
 - `SCOPED_PASS`只用于明确范围已成立，整个责任目标可继续PARTIAL；`NOT_ASSESSED`表示尚无完整证据，不能推断完全无实现。延期、取消和工具/设备缺口分别保留。
 
+开发问题的复现、状态和下一检查统一见[本地问题](../agents/DEVELOPMENT-PROBLEMS.md)，可复用规则见[LESSONS](../../LESSONS.md)。本表继续只维护跨系列责任；相关问题不自动恢复成获批队列。
+
+<a id="documentation-rebuild"></a>
+## 文档体系与索引重整
+
+2026-10-15本地完成：根任务导航、18个跨层子系统、开发规范、20份详细能力规格、493篇决策路由、词库去重、历史/来源和人工/机器索引已归位；三日期候选与严重问题即时提示已接入现有反馈读取。AI开发入口为[AGENTS](../../AGENTS.md)，功能阅读见[子系统目录](../subsystems/README.md)，迁移、逐段保全、导航/治理回归及限制见[本轮证据](../checkpoints/documentation-rebuild-20261015/README.md)。不新增产品UI/模型/原生或安装资格，不启动旧问题/功能队列。
+
+## 2026-10-15本地开发反馈接线
+
+GOVERNANCE范围内的本地问题/分组经验已由context路由消费，规则、原验收入口、增长预算和写回示范已验证。[实际工具结果](../checkpoints/development-feedback-20261015/README.md)保存源码身份、检查和限度；具体问题状态仍以[本地问题](../agents/DEVELOPMENT-PROBLEMS.md)为准。本项不关闭旧应用/模型/原生资格，也不启动历史队列。
+
+## 2026-10-14本地完成项
+
+设置整合及模块清理：原AI与更多功能进入全窗口设置，素材任务中心和采集下载模块移除。候选`dam-d96e08246b8b97c4`两端正式路径/保存重开通过，保留本地Copy、模型下载、原数据及权限保护。扩展旧回归的夹具/挂起缺口见[本轮结果](../checkpoints/settings-integration-20261014/README.md)，不关闭其他长期模型、发行或平台目标。
+
+功能与菜单整理首项：停用的外部素材库集成及其项目内容已完整拆除，旧DAM库只读找回保留并独立。07c2候选`dam-ebab19b0cac16211`的两端普通入口/菜单/设置/取消与退出通过，内部相关检查通过；空库控制台诊断仍为WARN。见[本轮结果](../checkpoints/menu-cleanup-20261014/README.md)。该项不代表其他长期功能资格关闭。
+
 ## 当前责任与接续
 
 下列各行都继承普通入口→实际执行→正确结果→保存重开→相关失败/取消/原件保护要求；记录“已验”指对应证据版本，不自动转记到后续产物。
@@ -124,16 +141,6 @@
 - 证据：[f175-30min-and-reopen-real.json](../checkpoints/af-macos-20261010/f175-30min-and-reopen-real.json)；[f175-original-row-protection.json](../checkpoints/af-macos-20261010/f175-original-row-protection.json)。
 - 下一动作：30分钟含空闲且只有3种图片内容；下一批先冻结规模/多样性/阈值。
 
-<a id="eagle"></a>
-### EAGLE · 停止集成方向，移除Eagle相关产品功能
-
-- 状态：**2026-10-13用户停止原集成方向；本地分支已归档并删除，产品功能移除待实施**。
-- 历史来源：`codex/eagle-integration`的8cf60c7保留在本地恢复标签`archive/eagle-integration-20261013`；原配对/端口与限定证据只作历史，不继续扩展。
-- 剩余条件：后续在main集成移除导入、同步、写回及相关菜单/设置/适配/测试接线的变更；先追踪消费者，不仅删除分支或隐藏按钮。
-- 数据保护：不读取、操作或删除Eagle库和外部原件；保全DAM中已经收录的素材、笔记、颜色及来源记录，必要兼容处理不得冒充已验收。
-- 证据：[BRANCHES.md](../handoff/BRANCHES.md)；[EAGLE-E-20261008.md](../handoff/EAGLE-E-20261008.md)。
-- 下一动作：本轮只删除经归档的本地Git分支；产品功能清理另行实施，不把本轮合并称为已移除Eagle功能。
-
 <a id="assistant"></a>
 ### ASSISTANT · 受控设计助手提议工作集
 
@@ -193,7 +200,7 @@
 
 - 状态：**Issue31软件主要改动已实施，双端限定路径已验，整体PARTIAL**；2026-10-14用户调用implement；工作集悬浮窗目标继续延期，与文档职责整理分开验收。
 - 本轮范围：主工作台/辅助页面/主资料库专注/单素材卡片的中性色与强调色、设计生成同步、窄导航与入口、底部检索、标题与状态、明暗/回退。07c2候选dam-bab1cdcdc23d65f9的真实路径和限制见[实施结果](../checkpoints/app-design-alignment-20261014/README.md)。
-- 剩余条件：本轮物理原生输入/系统偏好、完整异常/跨端恢复及实际下载/Eagle/旧库矩阵；源码与工具/平台资格分别保留。悬浮窗全底板Liquid Glass、220×240、常显原生按钮等继续排除，现有色板指针及停靠覆盖/设备缺口不因本轮UI资格关闭。
+- 剩余条件：本轮物理原生输入/系统偏好、完整异常/跨端恢复及实际下载/旧库矩阵；源码与工具/平台资格分别保留。悬浮窗全底板Liquid Glass、220×240、常显原生按钮等继续排除，现有色板指针及停靠覆盖/设备缺口不因本轮UI资格关闭。
 - 来源：[DESIGN](../../DESIGN.md)、[工作台交互](../design/WORKSPACE-INTERACTIONS.md)、[悬浮窗交互](../design/WORK-WINDOW-INTERACTIONS.md)、[CURRENT-STATE](../handoff/CURRENT-STATE.md)。
 - 接续：按当前TASK补Issue31剩余矩阵，具体证据范围由CURRENT-STATE与报告维护；不自动开启延期悬浮窗改造或历史队列，不创建定时自动化。
 
@@ -209,7 +216,6 @@
 | B | MODEL / RESOURCE | 每平台/模型/量化/模式分别绑定 |
 | C | SEARCH | 质量/代际/硬条件不由覆盖率替代 |
 | D | WORK / NATIVE | Browser不替原生，手工工作集不替助手 |
-| E | EAGLE | 用户延期，独立分支 |
 | F | SCALE / LIBRARY / RELEASE | 规模与普通包不替签名发行 |
 | WC01（父级） | GOVERNANCE / RESOURCE / MODEL / AUTH / UI | 原Windows六卡与后续失败差额按各证据保留PARTIAL |
 | WC:W01 | GOVERNANCE / SCALE | WIP/候选/source归属 |
@@ -298,7 +304,6 @@
 | DualClient:T15 | 已有视觉与标签 AI 的浏览器闭环 | AI |
 | DualClient:T16 | OCR 环境选择、识别与修订恢复 | AI / LIBRARY |
 | DualClient:T17 | 独立下载、取消与获准入库 | DOWNLOAD |
-| DualClient:T18 | 连接库入口与独立索引反馈 | EAGLE |
 | DualClient:T19 | 旧素材只读找回与准入反馈 | LIBRARY |
 | DualClient:T20 | 跨客户端切库、未保存审查与安全退出 | LIBRARY / NATIVE / AUTH |
 | DualClient:T21 | 移除旧桥回退，闭合双端能力与故障契约 | GOVERNANCE / LIBRARY |
@@ -346,7 +351,6 @@ T01–T22源码收尾与所有组合实测分列；T23 Mac适用范围通过不�
 | Deferred:U05 | WORK：官方实片/取帧/重开已验范围；Native差额仍保留 |
 | Deferred:U06 | MODEL：8B和其他声明模式 |
 | Deferred:U07 | SEARCH：189覆盖及175限定3图/重开已验，不再当新未完成任务 |
-| Deferred:U08 | EAGLE：用户延期方向调整 |
 | Deferred:U09 | RELEASE：签名安装/商业发行延期 |
 | Deferred:U10 | WINDOW-EXT：交互扩展延期；云上传分享取消 |
 | Deferred:U11 | 各责任条目剩余条件：WC/父#24/全矩阵，不另建泛化“全部补验”任务 |

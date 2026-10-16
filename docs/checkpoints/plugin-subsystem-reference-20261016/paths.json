@@ -1,0 +1,18 @@
+[
+  "AGENTS.md",
+  "TASK.md",
+  "ARCHITECTURE.md",
+  "CONTRIBUTING.md",
+  "docs/subsystems/README.md",
+  "docs/subsystems/plugin-system.md",
+  "docs/product/CAPABILITY-SCOPE.md",
+  "docs/product/README.md",
+  "docs/product/specs/model-extension.md",
+  "docs/adr/indexes/topics/model-extension.md",
+  ".codeindex/documentation-map.json",
+  ".codeindex/module-map.json",
+  "scripts/check-documentation.py",
+  "scripts/check-docs-sync.py",
+  "scripts/documentation-governance.test.py",
+  "scripts/agent-context-router.test.mjs"
+]

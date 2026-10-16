@@ -6,12 +6,12 @@ IPC handlers expose main-process services to the preload bridge and renderer.
 
 - `asset-card.ipc.ts`: Main-only open/draft synchronization and owned-card-only inspect/action.
 - `ai-backend.ipc.ts`: restored trusted configuration and explicit connectivity/model-list probes, using injected App Settings and a dependency-isolated, GET-only ModelServiceProbe (no legacy inference imports).
-- `asset.ipc.ts`: asset library operations.
+- `asset.ipc.ts`: retained legacy surface; ordinary active-Library operations use `active-library.ipc.ts`.
 - `asset-tag.ipc.ts` and `tag.ipc.ts`: tag workflows.
-- `download.ipc.ts`: download queue.
+- `active-library.ipc.ts`: current held-Library operations; material-download IPC is retired.
 - `settings.ipc.ts`: app settings.
 - `ai-client.ipc.ts`, `ai-worker.ipc.ts`, `ai-model.ipc.ts`: AI controls.
-- `ai-runtime.ipc.ts`: AI Runtime controls and Platform AI Branch Status projection channels.
+- `ai-runtime.ipc.ts`: retained legacy controls; current composition rejects these channels through `disabled-app.ipc.ts`.
 - `color-palette.ipc.ts`, `ocr*.ipc.ts`: analysis helpers.
 
 ## Rules
@@ -57,8 +57,6 @@ npm run build
 
 `visual-ai.ipc.ts` registers scoped prepare/run/results/cancel/tag-confirmation for the main
 window and the current owned native card. See [Visual AI](../visual-ai/README.md).
-`download.ipc.ts` adds explicit receipt-based execution beside history CRUD; old URL-based
-enqueue requests cannot bypass confirmation. See [Managed download](../managed-download/README.md).
 
 `image-tools:prepare/save/discard` is a narrow image-variant bridge, accepting identities and
 bounded options instead of file paths. Main and current owned native card are the only
@@ -77,12 +75,11 @@ Merge/delete stay in the disabled list pending identity retention and recovery s
 原件读取仅存在于Main内部，不增加文件路径或原件读取Preload channel。区域基于
 方向归正/旋转/镜像后的画面。review补充输入来源/尺寸；save仍只接受receipt。
 
-`download:retry` keeps its id argument and response envelope. For a live recovery-required
-job it selects held, verified local recovery after the UI confirmation, rather than another
-HTTP transfer. Normal failed/cancelled downloads retain Range retry semantics; importing and
-completed jobs cannot start another attempt. No recovery path accepts Renderer file paths.
-
 2026-09-13: browser/site-login/external-search/page-extraction IPC handlers and their Preload
-methods are removed. Local `tag-search:*`, Library, independent `download:*`, AI and image
+methods are removed. Local `tag-search:*`, Library, AI and image
 tools are retained. The generic application composition no longer accepts browser managers,
 extractors, login services or browser event registrars.
+
+2026-10-14: Material `download:*` and `downloads:get-path-plan` public commands are removed. Model artifact downloads remain separate. Legacy Library schema tables remain for existing data/version compatibility; no new material download can be dispatched.
+
+正式注册以`main-ipc-composition.ts`及其消费者为准；完整路径见[Local Host](../../../docs/subsystems/local-host.md#clients)。模块/函数存在不代表已注册。

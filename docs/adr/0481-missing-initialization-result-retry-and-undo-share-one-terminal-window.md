@@ -1,44 +1,13 @@
 # Missing Initialization Result Retry And Undo Share One Terminal Window
 
-The first proven terminal reconciliation of a Missing Custom Field
-Initialization Operation starts one **Missing Initialization Action Window**
-using ADR 0087's user-configurable Reviewed Batch Action duration, defaulting to
-30 days. Active, Paused or outcome-ambiguous operations do not start or lose
-reconciliation authority through this clock. Unlike Custom Field Migration,
-initialization has no required source-lifecycle disposition, so opening or
-acknowledging the result is not a prerequisite for the deadline.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The terminal result detail, ADR 0479 Retry-Eligible failure evidence, successful
-effect evidence for Undo, ADR 0480 direction and every executable Retry/Undo
-action share the same original deadline. Manual retry, retry success, Undo
-admission, partial Undo, result viewing, acknowledgement, application restart,
-Library Switch or opening the exact instance on another compatible device does
-not restart or extend it. A retry success joins the remaining Undo set only for
-the time still left. The library-bound operation stores one authoritative
-deadline so no device receives a fresh local window.
+## Decision
 
-At the deadline, trusted execution admits no new Retry or Undo owner group. An
-owner group already inside an atomic forward or reverse commit finishes or
-rolls back at its normal boundary; later selected groups do not start. Required
-outcome reconciliation may retain only the protected authority needed to prove
-that in-flight group, but the action window remains expired and authorizes no
-new mutation. As soon as that outcome is proven, executable owner/effect/failure
-detail expires against the original deadline rather than receiving an
-extension.
+The first proven terminal reconciliation of a Missing Custom Field Initialization Operation starts one **Missing Initialization Action Window** using ADR 0087's user-configurable Reviewed Batch Action duration, defaulting to 30 days.
 
-After terminal reconciliation and while no Retry, Undo or ambiguous outcome is
-in flight, the user may confirm **Clear Missing Initialization Result And End
-Actions**. Review discloses the currently Retry-Eligible count, still-current
-Undo-eligible count, conflicts/exclusions and Forward Recovery Open or Missing
-Initialization Undo Direction. Confirmation closes every remaining action and
-deletes the same detailed authority that normal expiry would remove. It never
-sets a field to Missing, retries an assignment, changes a current value,
-resolves a conflict or creates a new window.
+## Detailed contract and provenance
 
-Normal expiry or confirmed early clearing removes owner identities, field and
-assignment detail, per-owner outcomes, effect evidence, retry attempt detail
-and executable intent. Current Custom Field Values remain authoritative. At
-most an ADR 0087 value-free Pruned Batch Detail remains with the first terminal
-time, scope and owner-class counts, aggregate forward/retry/Undo outcome
-classes, and expired-versus-cleared disposition. It is not Resume, Retry, Undo,
-Redo, backup, sync, search, plugin or reconstruction authority.
+详细状态、交互、数值边界和例外的唯一正文为[布尔与缺失字段初始化规格](../product/specs/missing-initialization.md#adr-0481)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

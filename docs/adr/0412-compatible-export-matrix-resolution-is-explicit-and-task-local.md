@@ -1,15 +1,13 @@
 # Compatible Export Matrix Resolution Is Explicit And Task-Local
 
-A multi-variant Compatible Export cannot truthfully confirm while any selected asset × variant cell has unknown capability or inclusion state. Silently dropping unsupported cells would make the reviewed output smaller than the user's selected intent, while blocking the entire task would prevent deliberate partial plans.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Every cell must reach **Compatible Export Matrix Resolution** before confirmation: executable under current proven capability, or explicitly excluded for this task. Unsupported or excluded cells remain visible with exact reasons and never make another variant for the same asset unavailable. The user may edit a recipe, remove a whole variant, install a capability explicitly and rebuild evidence, or leave review; installation and fallback are never automatic.
+## Decision
 
-**Exclude All Currently Unsupported And Continue** is an optional reviewed bulk action that shows affected count and reasons before applying equivalent task-local exclusions. It changes no variant, preset, or Variant Set Preset; creates no remembered rule; hides no excluded cell; waives no revalidation; and cannot make an empty executable plan confirmable.
+A multi-variant Compatible Export cannot truthfully confirm while any selected asset × variant cell has unknown capability or inclusion state.
 
-Each **Pre-Execution Compatible Export Exclusion** retains count and reason in confirmation, immediate result, and activity summary. It creates no commit unit, is neither failure nor cancellation, consumes no retry budget, and does not contribute to Partial Variant Success or Partial Placement Success. Those outcomes compare only confirmed executable placements.
+## Detailed contract and provenance
 
-Evidence drift rebuilds dependent cells. A formerly executable cell that loses support becomes unresolved and blocks confirmation. An excluded cell that becomes executable remains excluded, is marked **Now Supported**, and requires explicit reinclusion; capability installation or recipe relaxation never expands outputs automatically.
+详细状态、交互、数值边界和例外的唯一正文为[导出、交付与性能规格](../product/specs/export.md#adr-0412)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/media-handoff.md)，当前资格只查CURRENT-STATE。
 
-**Reinclude Compatible Export Exclusions** has three reviewed scopes: selected Now Supported cells, every Now Supported exclusion in the current variant, or every Now Supported exclusion in the complete matrix. Preview shows affected count, new physical outputs, changed capacity estimate, and introduced name/destination conflicts. Still-unsupported cells remain excluded. Evidence drift refreshes scope and consequences before confirmation rather than partially applying a stale choice.
-
-ADR 0397 owns independent variant commit and result semantics. ADR 0399 requires the complete progressive matrix to close before execution, and ADR 0383 keeps task-wide Original versus Compatible mode separation. Matrix resolution grants no destination conflict choice, publication authority, or future-plan consent beyond the reviewed task.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

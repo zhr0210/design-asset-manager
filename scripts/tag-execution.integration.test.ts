@@ -1,3 +1,5 @@
+import { legacySchemaImport } from './fixtures/legacy-schema-import'
+import { seedRetiredDownloadRecord, retiredDownloadCount } from './fixtures/retired-download-record'
 import {build} from 'esbuild'
 import {readFrozenLibrarySource} from './fixtures/read-frozen-library-source'
 import {pathToFileURL} from 'node:url'
@@ -344,12 +346,12 @@ await test('v10 preserves OCR edits, notebook, work layout, organization and dow
   const org=await f.host.readOrganization(scope);await f.host.writeOrganization({...scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'User folder',folderKind:'assets',parentId:null,assetIds:[f.asset.id]}})
   const work=await f.host.readWorkSets(scope,'device-v10'),set=await f.host.writeWorkSet({...scope,sessionToken:work.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'User set',note:'User note',assetIds:[f.asset.id],colors:[],columns:1}}},'device-v10')
   const layout={x:12,y:20,width:400,height:500,pinned:true,open:false};await f.host.writeWorkLayout({...scope,sessionToken:work.sessionToken,id:set.sets[0].id,layout},'device-v10')
-  await f.host.downloadJournal({kind:'create',generation:scope.generation,taskId:'download-v10',url:'https://fixture.invalid/not-requested.png',fileName:'generated.png'})
+  seedRetiredDownloadRecord(f.dbFile, f.scope, 'download-v10')
   const claim=await startClaim(f.host,{...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId,inputSha256:'b'.repeat(64),origin:'tags-only'});await f.host.commitTagExecution({...f.scope,sessionToken:context.sessionToken,requestId:f.intent.requestId,attemptToken:claim.attemptToken,tags:['新建议']})
   await f.host.close();await f.host.reopen()
   assert.equal((await f.host.readOcr(f.scope)).editedText,'User OCR retained');assert.equal((await f.host.readNotebook(f.scope)).revision,1)
   assert.equal((await f.host.readOrganization(scope)).folders[0].name,'User folder');assert.deepEqual((await f.host.readWorkSets(scope,'device-v10')).sets[0].layout,layout)
-  assert.equal((await f.host.downloadJournal({kind:'list',generation:scope.generation})).intents!.length,1);assert.deepEqual((await f.host.readTagExecution(f.scope)).current?.tags,['新建议'])
+  assert.equal(retiredDownloadCount(f.dbFile),1);assert.deepEqual((await f.host.readTagExecution(f.scope)).current?.tags,['新建议'])
  }finally{await f.close()}
 })
 
@@ -361,7 +363,7 @@ await test('frozen v9 inspector and its version helper refuse v10 with database 
   const frozen=await readFrozenLibrarySource(base,manifest)
   const source=frozen['library-open-control-store.internal.ts'],version=frozen['library-schema-version.ts']
   const output=path.resolve('dist-temp/tests/frozen-v9-inspector.mjs')
-  await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},outfile:output,bundle:true,platform:'node',format:'esm',packages:'external',logLevel:'silent',plugins:[{name:'frozen-version',setup(b){b.onResolve({filter:/library-schema-version$/},()=>({path:'frozen-v9-version',namespace:'frozen'}));b.onLoad({filter:/.*/,namespace:'frozen'},()=>({contents:version,loader:'ts'}))}}]})
+  await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},outfile:output,bundle:true,platform:'node',format:'esm',packages:'external',logLevel:'silent',plugins:[legacySchemaImport,{name:'frozen-version',setup(b){b.onResolve({filter:/library-schema-version$/},()=>({path:'frozen-v9-version',namespace:'frozen'}));b.onLoad({filter:/.*/,namespace:'frozen'},()=>({contents:version,loader:'ts'}))}}]})
   const old=await import(pathToFileURL(output).href),declaration=readLibraryManifestDeclaration(new Uint8Array(await fs.readFile(path.join(f.library,'.dam','library.manifest.json'))));if(declaration.kind!=='compatible')throw Error('fixture manifest')
   const before=await fs.readFile(f.dbFile),db=openReadonlyLibraryDatabase(f.dbFile)
   try{assert.equal(old.inspectLibraryControlStore(db,declaration.declaration).kind,'unsupported')}finally{db.close()}

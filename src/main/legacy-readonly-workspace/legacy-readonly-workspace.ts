@@ -3,7 +3,7 @@ import { constants as fsConstants } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type Database from 'better-sqlite3';
-import type { LegacyReadOnlyAssetProjection, LegacyReadOnlyProjection, LegacyReadOnlyReview, LegacyReadOnlyWorkspace } from '../../shared/contracts/external-connected-library.contract';
+import type { LegacyReadOnlyAssetProjection, LegacyReadOnlyProjection, LegacyReadOnlyReview, LegacyReadOnlyWorkspace } from '../../shared/contracts/legacy-readonly-workspace.contract';
 import { openReadonlyLibraryDatabase, sqliteRecoverySidecarsAbsent } from '../library-lifecycle/readonly-library-database.internal';
 const ID = /^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/u;
 const MAX_PREVIEW_BYTES = 32 * 1024 * 1024;
@@ -103,7 +103,7 @@ export function createLegacyReadOnlyWorkspace(input: {
                 limitations: [
                     'The selected legacy database is held in a read-only transaction and is never migrated or attached to a writer.',
                     'Preview reads are limited to the separately selected asset root and supported image bytes.',
-                    'Legacy content is not automatically copied or merged into Eagle.'
+                    'Legacy content is not automatically copied into the active library.'
                 ]
             };
             return inspect();

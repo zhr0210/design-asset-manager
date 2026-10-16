@@ -1,3 +1,5 @@
+import { legacySchemaImport } from './fixtures/legacy-schema-import'
+import { seedRetiredDownloadRecord, retiredDownloadCount } from './fixtures/retired-download-record'
 import {build} from 'esbuild'
 import {readFrozenLibrarySource} from './fixtures/read-frozen-library-source'
 import {pathToFileURL} from 'node:url'
@@ -112,12 +114,12 @@ await test('a legacy combined current is seeded exactly once and v12 keeps prior
   const note=await f.host.readNotebook(scope);await f.host.saveNotebook({...scope,sessionToken:note.sessionToken,sourceRef:note.sourceRef,expectedRevision:note.revision,allowUpgrade:false,book:note.book})
   const org=await f.host.readOrganization(f.scope);await f.host.writeOrganization({...f.scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'User folder',folderKind:'assets',parentId:null,assetIds:[id]}})
   const work=await f.host.readWorkSets(f.scope,'device-v12'),set=await f.host.writeWorkSet({...f.scope,sessionToken:work.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'User set',note:'User note',assetIds:[id],colors:[],columns:1}}},'device-v12'),layout={x:12,y:20,width:400,height:500,pinned:true,open:false};await f.host.writeWorkLayout({...f.scope,sessionToken:work.sessionToken,id:set.sets[0].id,layout},'device-v12')
-  await f.host.downloadJournal({kind:'create',generation:f.scope.generation,taskId:'download-v12',url:'https://fixture.invalid/not-requested.png',fileName:'generated.png'})
+  seedRetiredDownloadRecord(f.dbFile, f.scope, 'download-v12')
   for(const recipe of ['visual-ai-v1','independent-tags-v1']){
    await f.host.saveTagIntent({...scope,sessionToken:c.sessionToken,expectedSchemaVersion:12,allowUpgrade:false,requestId:recipe,assetRevision:asset.revision,previewGeneration:asset.thumbnailRef,backendId:'synthetic',model:'synthetic-model',backendBindingSha256:'a'.repeat(64),recipeId:recipe,recipeVersion:'1'})
    const claim=await f.host.claimTagExecution({...scope,sessionToken:c.sessionToken,requestId:recipe,inputSha256:'b'.repeat(64),origin:recipe==='visual-ai-v1'?'combined':'tags-only'}),ref={...scope,sessionToken:c.sessionToken,requestId:recipe,attemptToken:claim.attemptToken};await f.host.markTagExecutionSent(ref);await f.host.commitTagExecution({...ref,tags:['新的标签'],...(recipe==='visual-ai-v1'?{combinedEvidence:{...e,id:'v12-combined',output:{...e.output,tags:['新的标签']}}}:{})})
   }
-  await f.host.close();await f.host.reopen();assert.equal((await f.host.readOcr(scope)).editedText,'User OCR');assert.equal((await f.host.readNotebook(scope)).revision,1);assert.equal((await f.host.readOrganization(f.scope)).folders[0].name,'User folder');assert.deepEqual((await f.host.readWorkSets(f.scope,'device-v12')).sets[0].layout,layout);assert.equal((await f.host.downloadJournal({kind:'list',generation:f.scope.generation})).intents!.length,1);assert.equal((await f.host.listAssets())[0].aiCaption,'User caption');assert.deepEqual((await f.host.listAssets())[0].tags,['已确认']);assert.deepEqual((await f.host.readTagExecution(scope)).current?.tags,['新的标签'])
+  await f.host.close();await f.host.reopen();assert.equal((await f.host.readOcr(scope)).editedText,'User OCR');assert.equal((await f.host.readNotebook(scope)).revision,1);assert.equal((await f.host.readOrganization(f.scope)).folders[0].name,'User folder');assert.deepEqual((await f.host.readWorkSets(f.scope,'device-v12')).sets[0].layout,layout);assert.equal(retiredDownloadCount(f.dbFile),1);assert.equal((await f.host.listAssets())[0].aiCaption,'User caption');assert.deepEqual((await f.host.listAssets())[0].tags,['已确认']);assert.deepEqual((await f.host.readTagExecution(scope)).current?.tags,['新的标签'])
  }finally{await f.close()}
 })
 await test('postcommit settings restoration failure quarantines v12 and does not allow further business writes',async()=>{
@@ -129,7 +131,7 @@ await test('the frozen v11 reader refuses v12 without changing database bytes',a
  try{
   await configure(f);await f.host.close();const base=path.resolve('scripts/fixtures/background-v11'),manifest=JSON.parse(await fs.readFile(path.join(base,'manifest.json'),'utf8')),frozen=await readFrozenLibrarySource(base,manifest)
   const source=frozen['library-open-control-store.internal.ts'],version=frozen['library-schema-version.ts'],output=path.resolve('dist-temp/tests/background-v11-reader.mjs')
-  await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},outfile:output,bundle:true,platform:'node',format:'esm',packages:'external',logLevel:'silent',plugins:[{name:'frozen-version',setup(b){b.onResolve({filter:/library-schema-version$/},()=>({path:'frozen-v11',namespace:'frozen'}));b.onLoad({filter:/.*/,namespace:'frozen'},()=>({contents:version,loader:'ts'}))}}]})
+  await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},outfile:output,bundle:true,platform:'node',format:'esm',packages:'external',logLevel:'silent',plugins:[legacySchemaImport,{name:'frozen-version',setup(b){b.onResolve({filter:/library-schema-version$/},()=>({path:'frozen-v11',namespace:'frozen'}));b.onLoad({filter:/.*/,namespace:'frozen'},()=>({contents:version,loader:'ts'}))}}]})
   const old=await import(pathToFileURL(output).href),decl=readLibraryManifestDeclaration(new Uint8Array(await fs.readFile(path.join(f.root,'library/.dam/library.manifest.json'))));if(decl.kind!=='compatible')throw Error('fixture manifest');const before=await fs.readFile(f.dbFile),db=openReadonlyLibraryDatabase(f.dbFile);try{assert.equal(old.inspectLibraryControlStore(db,decl.declaration).kind,'unsupported')}finally{db.close()};assert.deepEqual(await fs.readFile(f.dbFile),before)
  }finally{await f.close()}
 })

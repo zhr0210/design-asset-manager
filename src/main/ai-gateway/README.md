@@ -1,3 +1,5 @@
+协议/连接与三类执行目标、选择/排程/驻留/资源的当前分工见[AI系统职责](../../../docs/subsystems/ai-system.md#scheduling-ownership)。本模块适配绑定的服务，不因使用Pi/HTTP或localhost而取得模型进程/显存控制权；实际拥有者与缺口由该系统说明和源码核对。
+
 当前候选、Windows 分发和验证缺口统一见 [CURRENT-STATE](../../../docs/handoff/CURRENT-STATE.md)。2026-10-05，获批 ChatGPT 订阅已在受控普通 Windows Browser 实例用真实 Main safeStorage 完成 Luna low 生成图探测、公开图副本分析与关闭重开。其他 Provider、付费 API、安装包、原生桌面生命周期及全部模型质量仍未验收；范围见 [本轮交接](../../../docs/handoff/WC01-PI-REASONING-20261005.md)和[准入矩阵](PROVIDER-MATRIX.md)。下面带日期的段落是历史证据，不覆盖当前投影。
 
 2026-10-05 思考强度接入：在“AI 与模型 → 连接与账号”选择连接后配置可选 `reasoning`。目录由固定 Pi 0.99.1 声明；Luna 支持 off/low/medium/high/xhigh/max，off 映射 none。省略保持既有 raw stream 行为（该 Luna 的实际默认 wire 为 none），显式档位经 `streamSimple` 转换；不支持的实际任务模型在 Worker auth/refresh/network 前拒绝，不静默降档。兼容接口未声明此能力，只允许模型默认。连接保存、执行 binding、确认单、重试、能力证明和视觉证据保持同一档位，旧省略档位的 binding 字节不变。视觉分析、反推与独立标签均接线；生成图验收也复用同一 Visual Controller。

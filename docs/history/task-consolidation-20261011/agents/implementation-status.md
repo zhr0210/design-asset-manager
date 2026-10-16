@@ -1,12 +1,10 @@
-2026-10-10 Mac A–D/F 正式收敛正在进行；当前状态以 [TASK](../../../../TASK.md)、[CURRENT-STATE](../../../handoff/CURRENT-STATE.md)、[Mac验收记录](../handoff/AF-MACOS-20261010.md) 为准。以下2026-10-08及更早段落保留原平台/产物历史身份，不能替代当前Mac资格。Eagle由用户延期到独立分支；未推送/关闭父级。
+2026-10-10 Mac A–D/F 正式收敛正在进行；当前状态以 [TASK](../../../../TASK.md)、[CURRENT-STATE](../../../handoff/CURRENT-STATE.md)、[Mac验收记录](../handoff/AF-MACOS-20261010.md) 为准。以下2026-10-08及更早段落保留原平台/产物历史身份，不能替代当前Mac资格。未推送/关闭父级。
+
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
 
 # 当前：F 1 万条与候选验证，父级未完成（2026-10-08）
 
-用户已将 Eagle/E 开发测试留给 macOS，继续 F，首轮选1万条。当前源码/未签名 Windows x64候选 `dam-8ddc7686f890b3e3` / 786输入、1.0.0；包已生成并普通启动健康/确认退出通过，安装/升级/卸载与签名发布未验。实际生产Host入库10000条，持续测试分三批新增9副本；原件逐个流式SHA核对合计10009记录/24种不同内容。fcc版本v1/v13/v14真实小库迁移/工程恢复和30.14分钟2B CPU+OCR后台通过：9描述+9OCR、重开无重发、驻留归零，非Browser用户路径；8ddc最终10009条重建31.636s、词法P95 1003ms、分页227ms、重开1148ms，335文件/211向量与旧行仍保持。持续期间检索+后台读组合P95 2259.69ms，并发两秒目标未证明。Chrome普通新入口实报ERR_BLOCKED_BY_CLIENT，未绕过；8ddc UI未执行。桌面专项仍后续集中、macOS未验，4MiB旧schema备份限制未扩大，**F父级未完成**。准确入口、版本分界及证据见 [F记录](../../../handoff/RELEASE-SCALE-F-20261008.md)；旧E等待及“不扩F”保留历史身份。
-
-# 2026-10-08：E正式接线已实施，真实Eagle/Browser验收未成立
-
-普通composition接Main加密配对与安装包、伴随双端同意及稳定目录身份；官方v2经授权本机网关，保留独立索引、Journal、Outbox、三方冲突与未知结果核对。当前dam-11b22b18c2708872 / 782输入，受控相关回归/typecheck/build/context通过；插件0.2.0尚未安装、用户所选专用公开库待创建，没有实际Eagle读取/写入/冲突/恢复证据。Chrome新端口直开出现ERR_BLOCKED_BY_CLIENT，未绕过；当前候选Browser未验收。69份untracked覆盖警告保留。见[准确状态](../../../handoff/EAGLE-E-20261008.md)。E父级未完成，不扩F；旧D及更早记录按原版本保持。
+当前源码/未签名 Windows x64候选 `dam-8ddc7686f890b3e3` / 786输入、1.0.0；包已生成并普通启动健康/确认退出通过，安装/升级/卸载与签名发布未验。实际生产Host入库10000条，持续测试分三批新增9副本；原件逐个流式SHA核对合计10009记录/24种不同内容。fcc版本v1/v13/v14真实小库迁移/工程恢复和30.14分钟2B CPU+OCR后台通过：9描述+9OCR、重开无重发、驻留归零，非Browser用户路径；8ddc最终10009条重建31.636s、词法P95 1003ms、分页227ms、重开1148ms，335文件/211向量与旧行仍保持。持续期间检索+后台读组合P95 2259.69ms，并发两秒目标未证明。Chrome普通新入口实报ERR_BLOCKED_BY_CLIENT，未绕过；8ddc UI未执行。桌面专项仍后续集中、macOS未验，4MiB旧schema备份限制未扩大，**F父级未完成**。准确入口、版本分界及证据见 [F记录](../../../handoff/RELEASE-SCALE-F-20261008.md)；旧E等待及“不扩F”保留历史身份。
 
 # 实施状态与高风险接线
 
@@ -28,7 +26,6 @@
 
 `/library`现使用正式LibraryCanvas：Active Library数据、底部词法/标签检索、受控预览、
 占位侧栏及专注画廊。Main/Preload/schema未新增；原生卡片、标签、AI/图片工具及恢复入口保留。
-生成素材与授权Eagle副本均通过9项真实Electron闭环，完整原生/AI/下载回归通过；
 本轮限定样本验证不代表整库迁移或字体/PDF支持。笔记、色板、多工作集持久化仍未交付。
 [交付与范围](../../../design/FORMAL-LIBRARY-CANVAS-20260914.md)。
 
@@ -88,25 +85,6 @@ Library及原生卡片确认选定服务、模型和1–8张受控预览后才�
 保护已有合成集成证据；本轮Electron执行结果见TASK，未操作真实用户素材。
 资料库创建/回滚/schema实现内聚到内部Module，下载与副本共享受管Capture入库。
 [工具说明](../../../../src/main/image-tools/README.md)。
-
-External Connected Library has a separately composed app-owned SQLite Module,
-official-shape Eagle Web API v2 Adapter, bounded companion Plugin artifact,
-Main/IPC/Preload/Renderer surface and window-independent coordinator. Protocol
-tests and full Electron tests use only loopback synthetic Eagle and generated
-files; the production provider remains unconfigured and does not probe a real
-Eagle port. Real pairing, plugin installation and user-library writes are not
-implemented evidence. Eagle remains the sole Original authority; connected
-items do not enter Managed Capture/Promotion.
-Synthetic evidence also covers an offline queued new Asset whose lost add
-response is recovered by exact custom Eagle item identity and content read-back
-before DAM-owned staging is released. Provider lookup now distinguishes
-authoritative absence from timeout/transport/invalid responses; failure
-injection proves uncertain Add and cleanup outcomes retain staging/state and
-are not replayed as confirmed deletion. Host calls and companion writes are
-serialized locally, file edit operations retain their immutable start
-fingerprint, and conflict decisions commit only after a current-library
-read-back. Without a trusted provider/Library/volume identity resolver, the
-Web API Adapter negotiates read/index capabilities only.
 
 Legacy Read-Only Workspace has a user-selected SQLite database and asset-root
 Adapter plus summary/list/search/preview UI. It uses the recovery-sidecar-
@@ -225,7 +203,7 @@ AI、图片工具和原生卡片的单项/小批操作改用Main内部按ID素�
 
 按用户最新范围，内置浏览器、网页采集、外部来源搜索与网站登录管理已从运行代码、
 页面和IPC/Preload移除，PhotoShow资源不再随源码保留。本地检索/导入、独立下载、
-AI、图片工具、Eagle和恢复能力保持。旧网页段落为此前状态，当前以本段和
+旧网页段落为此前状态，当前以本段和
 [移除报告](../../../product/WEB-COLLECTION-RETIREMENT-20260913.md)为准。真实库验证暂停。
 
 插件平台为[讨论稿](../../../product/PLUGIN-PLATFORM-DISCUSSION-20260913.md)，未实现SDK、
@@ -236,7 +214,7 @@ AI、图片工具、Eagle和恢复能力保持。旧网页段落为此前状态�
 
 正式专注画布接入库内v5笔记表；按素材保存，多页/便签独立于原件。首次保存确认升级，
 读取不升级；版本冲突与失效会话拒绝写入，回收/恢复保留笔记。验证和当前限制见
-[笔记规格](../../../product/ASSET-NOTEBOOKS-20260917.md)及TASK；不是Eagle迁移或真实库验证。
+[笔记规格](../../../product/ASSET-NOTEBOOKS-20260917.md)及TASK；
 
 ## 普通文件夹与色板（2026-09-19）
 
@@ -258,7 +236,6 @@ v7支持工作集引用/顺序/备注/颜色、每设备窗口几何和置顶恢
 画面描述、独立建议、提示词和OCR。底部词法搜索覆盖这些字段并解释命中，
 AI汇总/当前标签分类动态引用素材，无需确认建议或复制文件；重分析更新分类但保留确认标签。
 使用本机合成HTTP响应与临时库完成正式Electron闭环，不代表真实模型推理质量。
-自定义AI规则、语义/向量搜索、自动分析和真实Eagle操作未在此轮实施。
 详情与检查入口见 [第四步规格](../../../product/AI-DISCOVERY-20260920.md)。
 
 

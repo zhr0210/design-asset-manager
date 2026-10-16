@@ -1,5 +1,7 @@
 # DAM 双客户端实施与验收证据矩阵
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 核对日期：2026-10-03。规格：[LOCAL-DUAL-CLIENT-SPEC.md](../../../product/LOCAL-DUAL-CLIENT-SPEC.md)；
 设计：[LOCAL-DUAL-CLIENT-DESIGN.md](../../../product/LOCAL-DUAL-CLIENT-DESIGN.md)；
 任务归属：[23 票拆分](../../../product/LOCAL-DUAL-CLIENT-TICKETS.md)。
@@ -39,7 +41,6 @@ PASS、零timeout；19既有失败、Electron MockTimers、Pi默认分发前置�
 以及早期e1/7b、efda/f44各候选均保留在原证据行，不绑定为最新f8e的执行结果。
 
 **未闭合项**：完整业务逐项CU/所有草稿类型故障矩阵、完整缩放、安装包双入口、
-真实账号/模型与连接库，以及原生置顶/跨屏/托盘/跨应用效果。当前工具没有原生
 表面，系统专项为BLOCKED_UX_ACCEPTANCE；真实数据与外部动作超出合成授权而NOT_RUN。
 Browser部分路径通过不能清除这些缺口，不宣称23票/76故事全部通过。旧schema/
 AI evidence提取、Pi平台seal及其他无关WIP排除；本次实施检查点提交当前分支，不push。
@@ -77,7 +78,6 @@ Runtime 数据。真实库迁移、下载、认证和外发不在此次执行范
 | E06 | `library-organization.test.ts`、`active-library-tags.test.ts`、`asset-tagging-workflow.test.ts`、`local-dam-settings-conflict.test.ts` | ISO-P：组织与标签正式领域路径、共享设置与 Backend 并发基线；不能推导所有字段/所有别名操作均有完整冲突 CU |
 | E07 | `asset-notebook.test.ts`、`notebook-session.test.ts`、`work-sets.test.ts` | ISO-P：Notebook 来源/版本与 WorkSet 内容、成员引用、窗口权限的隔离边界。完整 Browser 参考表面及原生窗口 CU 另列 |
 | E08 | `ocr-controller-lifecycle.test.ts`、`asset-ocr-storage.test.ts`、`ocr-draft-recovery-baseline.test.ts` | ISO-P：取消/迟到响应、OCR 权威存储、人工修订与恢复原基线；真实 OCR 环境执行 NOT_RUN。合成 fixture 识别只证明正式命令与界面结果链 |
-| E09 | `external-connected-library-core.test.ts`、`external-connected-library-ipc.test.ts`、`connected-library-background.test.ts`、`scoped-asset-reads.test.ts` | ISO-P：连接库资格/索引与受限读取合成路径；真实 Eagle 原件未访问、未批准写入。`legacy-readonly-workspace.test.ts` 有 Windows 打开 SQLite 置换失败 |
 | E10 | `asset-trash-lifecycle.test.ts`、`asset-trash-sqlite-persistence.test.ts`、`capture-intake-workflow.test.ts`、`capture-intake-sqlite-persistence.test.ts` | ISO-P：Trash 与 Capture 的合成持久结果；`intake-recovery.test.ts` 在 E16 曾失败，E21 当前重跑 PASS。该隔离结果仍不能替代失败收录恢复的完整 Browser CU |
 | E11 | `auth-account-lifecycle.test.ts`、`pi-provider-admission.test.ts`、`pi-credentials.test.ts`、`pi-oauth.test.ts` | ISO-P：账号生命周期、准入与凭据 Adapter。E16 时 `pi-auth-prompts.test.ts`、`pi-runtime.test.ts`、`pi-ui.test.mjs` 有失败；E21 当前 Pi Runtime/UI PASS，`pi-auth-prompts.test.ts` 的 Windows mode 断言仍 FAIL。E16 历史记录保留；真实厂商登录与模型推理 NOT_RUN |
 | E12 | `work-set-draft-recovery.test.mjs` | 单独补充 ISO-P，不并入原 88 数量：真实 React DOM + 私有 Electron profile 的组件/接线测试；目标缺失保留原基线，普通保存拒绝，显式另存失败保留，成功/放弃清除，普通新建保留。原三个回归切片红→绿；新增普通本地草稿的 Add 初始化/目标选择两条也红→绿，保留备注与原 CAS 基准并去重加入素材/颜色。另有当前源码通过回归：动态选择的 clean 旧恢复记录保留、核对并采用当前基准仍保留输入、关闭 X 暂存/重新打开/明确 Cancel 清除。Save As 后关闭 X 的源记录误标 loaded 先 red 后修复 green，两记录都保留且不再冒称正在显示，允许后续恢复/放弃。不是正式产品 CU |
@@ -92,12 +92,11 @@ Runtime 数据。真实库迁移、下载、认证和外发不在此次执行范
 | E21 | [当前安全套件](../../../../.scratch/local-dual-client/final-current-test-suite.md)、[执行记录](../../../../.scratch/local-dual-client/final-current-test-suite.json) | COMPLETE：111个唯一隔离测试文件PASS、19FAIL；28个syntax-only PASS、0FAIL；另1个focused case PASS，不能覆盖其整文件失败。159个唯一计划文件/检查、含28条实际外部执行共181条记录。保留E16及各次初败/红绿过程/原golden失败；补download/OCR/reconcile/Pi/WorkSet、Connection/expiry/Settings顺序、受控picker及E28页面确认回归并合并实际复跑。prior-five相同源码/日志SHA只补出处；Settings既有6个view/CAS、WorkSet已有文件复跑不增加唯一文件/用例数，Recovery新文件两次6/6只增一个唯一文件。未提供的执行时间/耗时不虚构。相对历史latest PASS无新增剩余失败。typecheck作为补充证据，未计成隔离用例；未跑真实profile/model/provider或可执行E2E。源码仍可变，记录逐项可查，不能将检查集合視为单一不可变产品构建 |
 | E22 | [根任务与 Settings 补充检查](../../../../.scratch/local-dual-client/root-current-checks.md) | 主Agent实际观测的 focused registration PASS 277；WorkSet恢复与 transition复测 PASS，范围见 E12/E17。Settings Agent 的 `local-dam-settings-view.test.mjs` 6/6 PASS：正式 Settings route/store + 合成 CAS Client + 私有Electron profile，覆盖clean同步、dirty冲突、明确采用基准、CAS失败保留、unmount guard、保存中晚输入。是隔离验证，非正式Settings/profile或CU；registration复跑与Settings脚本作为两项外部记录并入E21，E16不变 |
 | E23 | 根任务 `dam-b70ae88aba1de344` 双tab Settings CU；[冲突截图](../../../../.scratch/local-dual-client/cu-root/settings-conflict.jpg)、[重开截图](../../../../.scratch/local-dual-client/cu-root/settings-reopened.jpg) | 根任务报告受控合成正式链路通过：clean同步 → dirty冲突 → 展开当前内容 → 明确采用基准仍保留输入 → 保存 → peer刷新持久结果。只属于b70构建上述设置路径；当时尚未包含随后 disabled fallback 与 ActiveLibraryControls 安全guidance文案修复，主Agent仍准备下一构建复走。不代表所有设置字段、切库退出或全量CU已验 |
-| E24 | 根任务 `dam-b70ae88aba1de344` 下载/旧素材只读/不可用状态/暗色 CU；[取消](../../../../.scratch/local-dual-client/cu-root/download-canceled.jpg)、[重试](../../../../.scratch/local-dual-client/cu-root/download-retried.jpg)、[旧素材检索](../../../../.scratch/local-dual-client/cu-root/legacy-search.jpg)、[重开](../../../../.scratch/local-dual-client/cu-root/legacy-reopened.jpg)、[模型](../../../../.scratch/local-dual-client/cu-root/models-unavailable.jpg)、[连接库](../../../../.scratch/local-dual-client/cu-root/connected-unavailable.jpg)、[暗色](../../../../.scratch/local-dual-client/cu-root/library-dark.jpg) | 根任务报告受控合成正式 IAB 链路：第二个独立 slow-image 任务准备/披露→确认→取消显示 canceled→重试→imported 通过；第一任务取消前已完成，不能计作取消验证，两张素材分别来自已完成首任务与第二任务重试，没有取消任务的重复提交。合成 legacy-cases 通过页面选择SQLite/来源目录→审查1素材/1标签/1关系→只读打开→标签检索→刷新仍1素材→关闭；未访问真实旧库。Eagle未配对检查及原因、模型目录未签名/存储禁用原因可见，OCR选择取消后仍未配置；只证明不可用/取消路径，不证明连接、安装或推理。暗色可读；viewport.set(960×720)与Ctrl+-未实际生效，DOM为1098×884/DPR1，尺寸/缩放验收记录工具限制，不计PASS。仅属b70上述范围，后续构建需按受影响路径复测 |
 | E25 | [Settings / caption 测试修复复跑](../../../../.scratch/local-dual-client/test-logs-current/1790920732650-settings-and-display-results.json) | Agent实际执行四个脚本最终PASS：`settings-service-defaults.test.ts`、`settings-migration-ipc-contract.test.ts`、`settings-migration-panel-contract.test.ts`、`asset-display-workflow.test.ts`。仅修改测试以核对现行窄Client/禁用迁移/正式OCR配置与caption手工编辑语义，保留Main只读/拒绝保护；不改产品或放宽准入。panel先FAIL再PASS，共5条外部执行并入E21，各次日志保留。隔离/源码契约检查，不是CU |
 | E26 | [新 Luna 正式 Browser CU](../../../../.scratch/local-dual-client/cu-luna-final/REPORT-new-agent.md)，同目录截图01–16；[旧预检阻塞](../../../../.scratch/local-dual-client/cu-luna-final/REPORT.md)保留 | 独立IAB标签、`dam-b70ae88aba1de344 win32/x64 · 受控测试`、合成browser-acceptance库；通过可见菜单核对About，报告1280×720浅色，16截图已复核。WorkSet备注未保存返回/重开、已有素材Add/Save As/保存重开3引用、移除成员后仍可选原素材再加入、双tab冲突保留B/核对A/明确采用/保存B并同步、编辑modal关闭X→本机草稿列表→恢复相同备注通过；截图06是采用后保存B状态，完整冲突步骤依据报告，不能把单截图当全过程。标签别名/父子层级创建、按别名找标签和已关联素材、空素材picker取消无新增、AI未配置原因与不可执行状态通过；未启动AI、未访问非测试来源。本轮越界picker拒绝及已启动AI取消NOT_RUN，后续793 root picker拒绝另见E29；原生结论独立。当时根任务核对WorkSet源码未变，随后E28修改WorkSet放弃/dirty目标选择为页面确认；历史通过不覆盖新代码。E29 root在793复测页面弃稿/Recovery及Main反馈/Settings/selector/transition的指定普通用户路径，不能归给Luna；modal目标切换、clean旧恢复、保存中迟到输入、重连/golden仍未全验。Host重启限定恢复见E28，视觉失败不改写 |
 | E27 | [先前五项出处](../../../../.scratch/local-dual-client/test-logs-current/standards-prior-five-results.json)、[motion/AI单case/原golden复跑](../../../../.scratch/local-dual-client/test-logs-current/standards-latest-motion-and-parity-results.json) | prior-five源SHA/日志SHA逐项核对与E21现有PASS相同，只补佐证，不重新执行或重复计数。`workspace-motion.test.ts`改用现行canonical route/Shared Client合成读取后整文件PASS：普通/减弱motion、单挂载表面、设置键盘/草稿取消、AI链接导航、菜单Escape焦点/inert、明暗截图，无写动作/外部请求/页面异常；这是隔离UI检查，非正式CU。AI quiescence只执行具名Main委托/退出排空case 1 PASS，完整AI集成仍FAIL。原`check-gallery-parity.mjs`复跑FAIL：1.097186%通道差异超过<0.5%门槛；scratch只读诊断发现主要文本差异，不修改golden/阈值，不计golden PASS。实际三条执行并入E21，源/日志哈希与未运行范围保留 |
 | E28 | [Luna 2f6 恢复/确认 CU](../../../../.scratch/local-dual-client/cu-final-transition-luna/REPORT.md)、[页面确认实际回归](../../../../.scratch/local-dual-client/test-logs-current/standards-final-page-confirmation-results.json)、[标准化元数据](../../../../.scratch/local-dual-client/test-logs-current/standards-final-page-confirmation-normalized-results.json) | About可见核对`dam-2f6f9008130d3493 win32/x64 · 受控测试`；重启后恢复原WorkSet备注/3引用、显式保存/重开一致，以及恢复原描述/取消回到未保存状态PASS。仅报告及CU inline截图/可访问状态，未导出截图文件。一次性合成草稿放弃打开JS确认后IAB输入/快照超时，未接受确认，不计放弃成功；随后工程定点停止合成Host不计正常退出CU。主Agent改Recovery/WorkSet放弃与dirty目标选择为页面确认；隔离WorkSet recovery脚本PASS、reference 14/14（11旧+3新）、新Recovery 6/6且实际复跑两次均PASS。4条实际记录并入E21，只新Recovery增1唯一文件；旧测试再跑不重复计用例。后续793 root正式复测见E29，Luna 793 namespace另行阻塞，不将root结果归给Luna；2f6历史BLOCKED_UX_ACCEPTANCE、native与真实模型结论保留 |
-| E29 | [最终793 root正式Browser CU](../../../../.scratch/local-dual-client/cu-final-793-root/REPORT.md)，同目录14截图已复核；[Luna 793工具阻塞](../../../../.scratch/local-dual-client/cu-793-luna/REPORT-namespace-blocked.md) | 正式React→Shared Client→HTTP/SSE→受控Host；IAB主会话tabs4/6，About可见793/win32/x64/受控测试，合成profile/library已核对、无主桌面窗启动。页面picker越界/不存在拒绝、逐层打开6素材；Recovery取消保留/明确放弃后列表清空且原WorkSet不变；WorkSet页面弃稿Escape保输入/confirm回到已保存3引用；两tab Settings比较/明确采用保输入/保存同步/刷新持久/恢复原偏好；另一tab dirty阻止关库且明确中文说明；关库审查1草稿→取消→精确重开，正常关闭/重开6素材+1草稿；scoped窗口open/unpin/hide/restore/clean-close的Browser状态反馈；正常quit审查1草稿并保留→session55273 exit0，AX仅断连status可访问、业务冻结、顶部草稿banner与底部指导无重叠，指定路径PASS。备注精确值和完整时序依据报告/AX，截图核对可见3引用与已保存/未保存状态。Luna旧及fresh namespace无IAB/launch不可达，未执行业务；本轮root补做，不能算Luna通过。Host已正常结束，旧URL不可继续使用；modal dirty目标切换、断流/丢回执、完整尺寸缩放/长内容、安装包双入口仍NOT_RUN/CU-PENDING；native真实效果BLOCKED，真实模型/账号/provider/Eagle/旧库NOT_RUN |
+| E29 | [最终793 root正式Browser CU](../../../../.scratch/local-dual-client/cu-final-793-root/REPORT.md)，同目录14截图已复核；[Luna 793工具阻塞](../../../../.scratch/local-dual-client/cu-793-luna/REPORT-namespace-blocked.md) | 正式React→Shared Client→HTTP/SSE→受控Host；IAB主会话tabs4/6，About可见793/win32/x64/受控测试，合成profile/library已核对、无主桌面窗启动。页面picker越界/不存在拒绝、逐层打开6素材；Recovery取消保留/明确放弃后列表清空且原WorkSet不变；WorkSet页面弃稿Escape保输入/confirm回到已保存3引用；两tab Settings比较/明确采用保输入/保存同步/刷新持久/恢复原偏好；另一tab dirty阻止关库且明确中文说明；关库审查1草稿→取消→精确重开，正常关闭/重开6素材+1草稿；scoped窗口open/unpin/hide/restore/clean-close的Browser状态反馈；正常quit审查1草稿并保留→session55273 exit0，AX仅断连status可访问、业务冻结、顶部草稿banner与底部指导无重叠，指定路径PASS。备注精确值和完整时序依据报告/AX，截图核对可见3引用与已保存/未保存状态。Luna旧及fresh namespace无IAB/launch不可达，未执行业务；本轮root补做，不能算Luna通过。Host已正常结束，旧URL不可继续使用；modal dirty目标切换、断流/丢回执、完整尺寸缩放/长内容、安装包双入口仍NOT_RUN/CU-PENDING；native真实效果BLOCKED，真实模型/账号/provider/旧库NOT_RUN |
 | E30 | [选择性index候选最终结果](../../../../.scratch/local-dual-client/index-candidate-results/final-results.json)；候选导出位于`.scratch/local-dual-client/index-candidate/` | 独立构建`dam-e1d747797c875d55`/source656，root实际typecheck/build exit0；30个唯一聚焦文件latest PASS、0FAIL。首轮29PASS/1FAIL：recovery脚本因runner将ELECTRON_RUN_AS_NODE误置空而启动失败，原日志保留，unset环境重跑PASS；retained AI IPC测试恢复11条前轮源码断言后候选单独重跑exit0。30首轮+2followup实际记录保持在独立报告，未重复计成32唯一文件，也不并入E21。此记录形成时只增测试断言/README，产品源码未变；此后真实CU及Store修复另列E31。候选排除了此前schema/AI evidence提取及Pi seal等WIP，源码与793不同；E30记录时尚无Host/CU；随后e1刷新CU失败及新7b复测见E31。原生/真实Pi bundle仍未运行，不把793 CU、WIP111/19或真实Runtime证据归给候选，30聚焦PASS不等于全套产品/76故事通过 |
 | E31 | [初版候选e1正式CU失败](../../../../.scratch/local-dual-client/cu-candidate-e1-root/REPORT.md)、[修复后7b正式CU](../../../../.scratch/local-dual-client/cu-candidate-7b-root/REPORT.md)；`settings-calibration-*.log` | e1普通建库/页面新建目录/Copy2图PASS，刷新后两图可见但业务冻结FAIL，console为SETTINGS_LOAD_SUPERSEDED；已核验Host工程停止exit1，不算正常quit。Store普通mount/event读取等待最新required-read，后required/save仍使旧barrier拒绝，identity清理；新增3协调情景旧实现红→绿，13/13及reconcile-failure/reconnect/settings-view(6/6)四文件复测PASS，不将普通后读成功当校准成功。重新构建7b/source656、typecheck/build exit0。Root IAB可见About/受控身份、逐层已有库打开2图、刷新无冻结且工作模式可操作；创建A2/B1，modal新草稿选A取消/Escape精确保输入，确认A去重；A脏改选B取消保A/confirm切B，取消加入后重开A/B原备注与2/1引用；页面弃稿Escape保输入/confirm恢复保存内容；Settings直接刷新、两tab比较/采用保输入/保存同步/刷新/恢复原偏好；关库审查1草稿取消精确重开，正常close/reopen2图+1草稿；正常菜单quit保留1草稿→session51027 exit0，AX仅连接指导、草稿banner与底部指导分开。关闭clean peer后立即关库曾被未回应保护拒绝，回收等待期后真实点击重试成功，不计瞬时恢复。Luna spawn/followup线程上限阻塞，实际root CU；部分截图备注低于视口，精确值以AX/报告核对。此轮未重新建库/Copy，不把e1步骤转作7b操作；完整断流/丢回执/尺寸缩放/长内容/安装双入口及其余业务未全验，native BLOCKED/真实模型NOT_RUN，原golden和19文件失败保持 |
 | E32 | `index-candidate-results/context-check-budget-fix-v2.log`、`agent-context-router-budget-fix-v2.log`；Windows launcher精准修复 | context:check PASS，691/691owned、47excluded。原Windows npm.cmd直接spawn启动失败修成Node执行npm CLI argv；Desktop Shell以现有窄生命周期Interface作为first-pass必读，composition定位/安全ADR/全文件保守预算不变；AL-01旧详情完整搬至可查history，README现行约束保留。两条曾超预算路径通过。完整router仍在588行AI Runtime panel contract firstRead断言FAIL，没有改测试断言/预算或引入未暂存AI提取；root混合WIP的旧AI脚本未跟踪失败、初次导出无Git元数据失败和候选预算失败分别保留，不混作产品错误 |
@@ -135,7 +134,7 @@ E21 当前仍有 19 个隔离文件失败，另1个AI委托具名单case通过�
 intake/owned download recovery、图片工具、Pi Runtime/UI、现行路由motion
 及部分静态契约已复跑通过，逐项见当前报告。历史失败保持可查，不将平台原因改写为通过，
 也不在本轮放宽生产准入。E2E/flow 脚本的 syntax-only
-PASS 不表示脚本运行；真实模型、外部账号、真实连接库和原生系统行为均无此替代证据。
+PASS 不表示脚本运行；真实模型、外部账号、和原生系统行为均无此替代证据。
 
 
 ## 正式调用链覆盖
@@ -171,7 +170,6 @@ Desktop IPC 和回环 HTTP 都进入该编排。领域 registrar 由
 | 视觉 / 标签 AI | `VisualAiPanel`、IndependentTagIntent/Decision/Batch、AI background | `visualAi`、`independentTags`、`tagExecution/Batches/Recovery/Decisions`、background | 相应 registrar → controller → checked Host writes / AI gateway | CODE、E11；codec、备份与多个集成 ISO-F；真实模型 NOT_RUN，逐动作外发仍须原授权 |
 | OCR | `OcrEnvironmentSettings`、`DedicatedOcrPanel`、background OCR panel | `assetOcr.*`、`backgroundOcr.*` | `asset-ocr.ipc.ts`、`background-ocr.ipc.ts` → OCR controller/runtime | CODE、E08；已有 OCR 选择与 fixture CU 待汇总；旧 OCR 自动安装接口 disabled |
 | 下载 | `DownloadQueue`、`download.store` | `managedDownloads.*`、保留的历史 download 方法 | `download.ipc.ts` → managed download / App Download SQLite | CODE、E18/E21；managed-resume / Store / production Copy intake / owned恢复当前通过，persistent/space当前 ISO-F；b70限定披露/取消/重试/入库CU通过见E24，其余持久恢复与新构建待验 |
-| Eagle 连接库 | `ConnectedLibrariesPage` | `connectedLibrary.*`（shared connected factory） | `external-connected-library.ipc.ts` → independent index/journal | CODE、E09；仅合成证据，真实 Eagle 未接入验收、原件写入未授权 |
 | 旧素材只读 | `LegacyLibraryPage` | `legacyReadonly.*` | 同上 → legacy read-only workspace | CODE、E09/E21中旧SQLite swap ISO-F；E24的b70合成只读审查/检索/刷新/关闭CU通过，真实旧库迁移不在本轮 |
 | 文字复制 | ColorSwatch/LibraryCanvas/OCR/Pi diagnostics/WorkSetWindow 等可见入口 | 浏览器 `navigator.clipboard.writeText`；不绕到任意 Host clipboard API | 浏览器/桌面 WebContents 的实际权限 | CODE；相关入口有失败反馈；真实剪贴板结果和权限拒绝 Browser CU 待验，原生跨应用效果另验 |
 
@@ -207,7 +205,6 @@ E21 首次登记检查发现无 controller 的 disabled fallback 漏两新命令
 | `assets` | `D apply-path-migration`, `D extract-palette`, `D get-custom-category`, `list`, `D path-governance-report`, `D path-migration-report`, `reset-caption-edited`, `D save`, `D save-custom-category`, `D trigger-extract-save`, `update-caption` |
 | `background-analysis` | `change`, `confirm`, `discard`, `prepare`, `read` |
 | `background-ocr` | `confirm`, `discard`, `prepare`, `read`, `revoke` |
-| `connected-library` | `cleanup-candidates`, `confirm`, `confirm-cleanup`, `conflicts`, `disconnect`, `index-next`, `inspect`, `list`, `media-preview`, `operations`, `prepare`, `prepare-file`, `prepare-new`, `queue-lifecycle`, `queue-metadata`, `resolve-conflict`, `search`, `sync` |
 | `cooperative-model` | `D cancel-download`, `D delete`, `D download`, `D list` |
 | `doctor` | `D clearLastReport`, `D getLastReport`, `D listChecks`, `D repairCheck`, `D runAll`, `D runCheck`, `D runChecks` |
 | `download` | `cancel`, `clear`, `enqueue`, `jobs`, `list`, `prepare`, `retry`, `save` |
@@ -272,7 +269,6 @@ E21 首次登记检查发现无 controller 的 disabled fallback 漏两新命令
 | `drafts:changed` | profile draft mutation → WorkspaceRecovery | 主端 Desktop/Browser；读取投影仍含 owned/activeElsewhere | E04；刷新/重启/恢复放弃 CU 待验 |
 | `files:requested` | file-selection notify → FileSelectionOverlay | 选择 owner 的 Desktop 主窗或 Browser client | E01/E02；窗口取消/失效 CU 待验 |
 | `settings:changed` | settings/backend save → AppShell、已挂载配置编辑器 | 主端 Desktop/Browser；clean刷新、dirty保留原基线 | E06；对开表单同步冲突 CU 待验 |
-| `connected-library:changed` | connected/legacy 已提交操作 → 两个正式页面 | 主端 Desktop/Browser | E09；真实 Eagle NOT_RUN，合成完整 UI 待验 |
 | `download:imported` | managed download 完成 → AppShell session | 主端 Desktop/Browser；带库身份与代际 | download Store/owned恢复当前 ISO-P；b70第二任务取消/重试/入库CU见E24，其余持久恢复待验 |
 | `image-tools:saved` | derived save → AppShell session；Card 内 state refresh | 主端 Desktop/Browser，Card受限状态 | 图片工具集成E21当前 ISO-P；派生保存重开CU待验 |
 | `asset-ocr:changed` | OCR权威写入 → AppShell / DedicatedOcrPanel | 主端 Desktop/Browser，Card/Work刷新各自 scope | E08；fixture UI 部分已观察，终轮待汇总 |
@@ -314,7 +310,6 @@ T 编号沿用批准拆分的含义；本矩阵不自动发布、关闭或修改
 | T15 视觉标签AI | 54–57 | CODE；codec/backup/tag/Pi集成ISO-F | 真实模型NOT_RUN；Browser授权/取消/结果全程CU待验 |
 | T16 OCR识别修订 | 28,37–39,41–46,54 | CODE、E08/E15；4d合成OCR人工修订/退出重启重开，b70选择取消E24；background集成ISO-F | E41正式页面OCR picker/peer配置同步、合成识别审查取消/确认/1/1完成及双tab修订比较采用/保存重开/复制PASS；E42同profile重启持久读取PASS。真实OCR Runtime NOT_RUN，完整故障矩阵待验 |
 | T17 下载 | 29,49–50 | CODE、E18/E21；Store/resume/production Copy intake/owned恢复 ISO-P，persistent/space当前 ISO-F | b70第二任务披露/取消/重试/入库CU通过E24；其余恢复与新构建CU待验 |
-| T18 连接库 | 69 | CODE、E09；b70未配对不可用路径E24 | 合成完整连接CU待验；真实Eagle NOT_RUN，不改ownership |
 | T19 旧素材只读 | 75 | CODE、legacy suite ISO-F；b70合成只读CU E24 | b70选择/审查/检索/刷新/关闭通过；新构建受影响路径待验，真实旧库不迁移、不写入 |
 | T20 全局切库退出 | 10–11,31,40,48,68 | CODE、E05/E03/E04/E27/E28/E29；历史b70与2f6分别保留 | E29跨tab dirty拒绝限定保留；E43/E45原2草稿保留正常quit均exit0。E45关库取消原草稿精确恢复、页面关开7素材2草稿PASS；原生dirty/账号/未送达全参与者矩阵及系统锁专项待验 |
 | T21 契约与故障闭合 | 36,39,47–50,62–64 | CODE、E01–E06/E17；本文264项Shared Client静态目录 | E43/E45实际丢回执和SSE断流/校准后手动保存指定路径PASS；漏事件/重启完整矩阵及其它写命令故障未全验，277静态登记不等于全部功能闭合 |
@@ -325,7 +320,7 @@ T 编号沿用批准拆分的含义；本矩阵不自动发布、关闭或修改
 
 “P(E…) / F”只指对应隔离证据范围；所有 CU-PENDING 项都须绑定最终构建的实际
 用户路径复测。表内 `N-BLOCKED` 指原生必需部分；`REAL-NOT_RUN` 指真实账号/模型/
-真实连接库等尚未运行，不是产品能力一定缺失。CODE 不自动清除这些状态。
+等尚未运行，不是产品能力一定缺失。CODE 不自动清除这些状态。
 
 | 故事 | 用户可观察结果 | 归属票 | 当前代码/隔离证据 | Browser / 系统待验与限制 |
 | --- | --- | --- | --- | --- |
@@ -385,7 +380,7 @@ T 编号沿用批准拆分的含义；本矩阵不自动发布、关闭或修改
 | 54 | 同一权威AI/OCR结果服务 | T15,T16,T22 | CODE；P(E08)，AI多集成F | fixture与真实模型分列；REAL-NOT_RUN |
 | 55 | 每动作披露授权不静默外发 | T14,T15,T22 | CODE，review/receipt；P(E02,E11)部分 | 实际授权/取消完整CU-PENDING；真实外发NOT_RUN |
 | 56 | 无模型可基础整理检索 | T04,T15,T22 | P(E01)，CODE；E26 b70无AI配置仍WorkSet/标签别名检索通过 | 上述限定基础业务通过；其余基础路径CU-PENDING |
-| 57 | 同一能力/前提/不可用原因 | T13,T15,T22 | CODE，app命令目录+本文事件/禁用目录；b70模型/连接库E24、Inspector AI未配置E26 | 限定不可用说明通过；不证明已启动AI取消/真实推理，其余能力文案及最终小fixCU-PENDING，D接口不恢复 |
+| 57 | 同一能力/前提/不可用原因 | T13,T15,T22 | CODE，app命令目录+本文事件/禁用目录；b70模型E24、Inspector AI未配置E26 | 限定不可用说明通过；不证明已启动AI取消/真实推理，其余能力文案及最终小fixCU-PENDING，D接口不恢复 |
 | 58 | 两端文字复制失败反馈 | T05,T22,T23 | 可见入口CODE | Browser权限/真实复制CU-PENDING；跨应用N-BLOCKED |
 | 59 | 已准入系统动作Host执行 | T14,T22,T23 | CODE，auth-url/open/native commands | 真实系统效果N-BLOCKED；无任意进程API |
 | 60 | 布局来自真实窗口 | T11,T22,T23 | WorkWindow port.bounds CODE；P(E07)部分 | 原生几何/跨屏N-BLOCKED；Browser坐标不能替代 |
@@ -397,7 +392,6 @@ T 编号沿用批准拆分的含义；本矩阵不自动发布、关闭或修改
 | 66 | Browser/native/后台分别结论 | T22,T23 | E13–E32分列；E29完整WIP793 root限定CU，E30选择性e1聚焦测试，E31 7b修复及限定CU | Browser PARTIAL DELIVERY/CU-PENDING，native N-BLOCKED；WIP E21的111/19+1focused与候选30latest PASS不混算，793 CU不覆盖候选；历史2f6/Luna793工具阻塞保留 |
 | 67 | 尺寸缩放主题长内容可用 | T05,T22 | 共享样式CODE；b70暗色可读E24；现行路由motion隔离P(E27) | E44菜单960/640通过但恢复提示遮挡FAIL保留；E45修复后640深浅/提示操作无重叠、960/1280About、2411字符逐字读取PASS。缩放未验，golden1.097186%FAIL不变 |
 | 68 | 退出冻结排空释锁 | T20,T22,T23 | CODE；P(E05)部分；E15 b70正常quit，E29 793 1草稿审查/保留→session55273 exit0 | E45原2草稿审查保留→Host89241 exit0、业务控件退出AX且指导可访问PASS；全部参与者排空、系统锁/原生效果仍待专项 |
-| 69 | 连接库资格索引同步等价 | T18,T22,T23 | P(E09)；CODE；b70未配对不可用原因E24 | E24不算连接成功；合成完整CU-PENDING，真实Eagle NOT_RUN |
 | 70 | 模型摘要存储诊断 | T13,T22 | model Workspace部分P、storage F；b70未签名/存储禁用原因E24 | E24仅不可用状态；其余摘要CU-PENDING，不是安装/真实推理证明 |
 | 71 | 设置共用且处理冲突 | T13,T22 | P(E06,E22)，clean同步dirty保留CODE；b70 E23、最终793 E29 | 793两tab比较/采用保输入/保存同步/刷新持久/恢复原偏好及dirty阻止关库PASS；其余字段/故障/取消仍待验，候选7b限定CU见E31 |
 | 72 | 可见构建环境标识 | T02,T13,T22 | About CODE；历史E26/E28，最终793 root可见菜单/About与截图E29；候选e1/656 E30与修复后7b/656 E31 | 793与7b/win32/x64/受控测试可见核对分别PASS；候选7b的About与限定CU见E31，不转用793其余结果 |
@@ -415,7 +409,6 @@ T 编号沿用批准拆分的含义；本矩阵不自动发布、关闭或修改
 | G03 | 最终f8e故障/恢复布局/相关生命周期已复测，完整业务CU仍未闭合 | E41–E45按各自构建补OCR/复制/未知回执/实际SSE/相关尺寸主题/2411长备注/关库取消精确恢复/正常关开与quit。E45当前f8e为最终受影响范围，不转用旧结果作为全量验收；完整缩放、安装包双入口、其它逐项业务及所有编辑器故障矩阵仍NOT_RUN/CU-PENDING。旧产品FAIL与修复后PASS分列；整体PARTIAL DELIVERY |
 | G04 | 原生系统验收受工具限制 | E29只核对Browser指定窗口命令和状态反馈；不能用该证据证明真实桌面置顶/隐藏/找回/关闭、跨屏/几何/托盘/跨应用效果，T23仍BLOCKED_UX_ACCEPTANCE。后台Adapter及合成port通过只证明对应边界；候选无原生运行，均不清除此项 |
 | G05 | 完整WIP19文件失败与原golden视觉漂移，候选聚焦证据分列 | E21完整WIP111隔离文件PASS/19FAIL、28仅语法PASS、另1具名AI委托case PASS；181执行/159唯一项，历史E16的88/33与162执行保留。E27 motion整文件PASS、AI单case不覆盖整文件FAIL、原golden1.097186%仍FAIL。E29最终793受影响普通CU限定PASS，不覆盖这些失败。E30不同源码候选的30文件latest PASS只属聚焦验证，初29/1启动失败与unset重跑保留，不加入E21或改写WIP/golden结果。生产backup/codec、Windows权限/fsync/SQLite置换限制不改为PASS、不放宽准入 |
-| G06 | 真实账号、模型、Runtime与连接库未运行 | 本轮只允许合成profile/指定fixture；真实厂商认证由用户输入，真实模型/外发/真实Eagle与旧库须各自已有授权。未交付的禁用安装/Runtime能力不补齐、不虚报 |
 
 完成声明分别给出Browser各路径、Desktop/native、隔离测试与未运行项目。
 G01/G02已有正式接线，最终f8e受影响范围CU见E45，完整旧范围按原构建报告保留；

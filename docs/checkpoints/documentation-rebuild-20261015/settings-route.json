@@ -1,0 +1,254 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": true,
+    "explicitRoute": null
+  },
+  "routes": [
+    {
+      "id": "settings-paths",
+      "summary": "Application settings, migrations, managed paths, filesystem safety and platform adapters.",
+      "score": 76,
+      "matched": [
+        "settings",
+        "path",
+        "migration"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "shared"
+      ]
+    }
+  ],
+  "documentation": [
+    "docs/subsystems/settings-recovery.md"
+  ],
+  "states": [
+    {
+      "route": "settings-paths",
+      "reality": "Current Implementation",
+      "summary": "Settings, dry-run migrations and managed path/platform adapters have live IPC and focused governance tests.",
+      "evidence": [
+        "src/main/services/settings.service.ts",
+        "src/main/ipc/settings.ipc.ts",
+        "src/renderer/stores/settings.store.ts",
+        "src/main/path-migration/path-migration-executor.ts",
+        "src/main/platform/path-resolver.ts",
+        "src/renderer/routes/Settings.tsx"
+      ]
+    },
+    {
+      "route": "settings-paths",
+      "reality": "Target Architecture",
+      "summary": "Accepted per-Library ownership and Control Directory authority are not represented by the current global settings paths.",
+      "evidence": [
+        "docs/adr/0275-in-place-reference-libraries-keep-originals-and-split-caches.md"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "src/shared/contracts/settings.contract.ts",
+      "role": "contract",
+      "reality": "Current Implementation",
+      "reason": "Shared settings compatibility Interface.",
+      "read_mode": "full",
+      "routeId": "settings-paths",
+      "estimatedTokens": 252,
+      "required": true
+    },
+    {
+      "path": "src/main/services/settings.service.ts",
+      "anchor": "class SettingsService",
+      "role": "implementation",
+      "reality": "Current Implementation",
+      "reason": "Current settings persistence and defaults.",
+      "read_mode": "symbol",
+      "routeId": "settings-paths",
+      "estimatedTokens": 5422,
+      "required": true
+    },
+    {
+      "path": "src/main/ipc/settings.ipc.ts",
+      "anchor": "registerSettingsIpc",
+      "role": "adapter",
+      "reality": "Current Implementation",
+      "reason": "Live Settings IPC Adapter composed by Electron Main.",
+      "read_mode": "symbol",
+      "routeId": "settings-paths",
+      "estimatedTokens": 1038,
+      "required": false
+    },
+    {
+      "path": "src/renderer/stores/settings.store.ts",
+      "role": "caller",
+      "reality": "Current Implementation",
+      "reason": "Renderer load/save caller and in-memory settings state.",
+      "read_mode": "full",
+      "routeId": "settings-paths",
+      "estimatedTokens": 1886,
+      "required": false
+    },
+    {
+      "path": "src/main/platform/path-resolver.ts",
+      "role": "adapter",
+      "reality": "Current Implementation",
+      "reason": "Cross-platform managed path Adapter.",
+      "read_mode": "full",
+      "routeId": "settings-paths",
+      "estimatedTokens": 435,
+      "required": false
+    },
+    {
+      "path": "src/main/path-migration/path-migration-executor.ts",
+      "role": "implementation",
+      "reality": "Current Implementation",
+      "reason": "Current explicit migration executor.",
+      "read_mode": "full",
+      "routeId": "settings-paths",
+      "estimatedTokens": 3007,
+      "required": false
+    }
+  ],
+  "validations": [
+    "npm run test-ai-backend-restoration",
+    "npm run test-settings-compatibility",
+    "npm run test-settings-migration",
+    "npm run test-path-governance-docs"
+  ],
+  "feedback": {
+    "problems": [],
+    "lessons": [
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 28,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#candidate-identity"
+        },
+        "matchedRoutes": [
+          "*"
+        ]
+      },
+      {
+        "id": "DAM-L002",
+        "group": "frontend",
+        "status": "active",
+        "check": "判断本次是否改变可见布局、交互或等待/错误/恢复反馈；若涉及UI/UX，按DESIGN及交互规格从正式入口检查受影响状态，缺陷须复现并验证根因和修复效果，动态问题保留适用连续帧。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l002",
+        "line": 42,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#ui-verification"
+        },
+        "matchedRoutes": [
+          "settings-paths"
+        ]
+      },
+      {
+        "id": "DAM-L003",
+        "group": "frontend",
+        "status": "active",
+        "check": "调整页面生命周期或转场时，用未保存输入切换分类并返回，再检查取消、保存、离开与重开；确认草稿没有因组件卸载消失。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l003",
+        "line": 54,
+        "promotion": {
+          "state": "observing",
+          "distinctDates": 1,
+          "events": 1,
+          "severity": "ordinary"
+        },
+        "matchedRoutes": [
+          "settings-paths"
+        ]
+      },
+      {
+        "id": "DAM-L005",
+        "group": "integration",
+        "status": "active",
+        "check": "改变共享Client方法、返回形状或事件时，搜索正式调用者与测试替身，检查所有受影响分支；夹具必须满足当前契约，修正后运行行为验证，模拟通过不代替正式界面结果。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l005",
+        "line": 95,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#engineering-scope"
+        },
+        "matchedRoutes": [
+          "settings-paths"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not inspect or mutate actual user settings, Runtime data or Asset Library paths for ordinary code work.",
+    "Do not use platform branches for shared settings semantics."
+  ],
+  "warnings": [
+    "Current global settings paths are not proof of the accepted per-Library authority model.",
+    "Budget deferred 1 context item(s); use --expand only if the first pass is insufficient.",
+    "Validation limit deferred 1 additional command(s)."
+  ],
+  "deferred": {
+    "context": [
+      {
+        "path": "scripts/settings-migration.test.ts",
+        "role": "test",
+        "reality": "Current Implementation",
+        "reason": "Focused migration planning and rollback evidence.",
+        "read_mode": "full",
+        "routeId": "settings-paths",
+        "estimatedTokens": 2321,
+        "required": false
+      }
+    ],
+    "validations": [
+      "node scripts/run-ts-test.mjs scripts/settings-service-defaults.test.ts"
+    ]
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 6,
+    "estimatedFileTokens": 12040,
+    "estimatedMetadataTokens": 2106,
+    "outputEstimatedTokens": 2106,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 14146,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

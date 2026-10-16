@@ -1,15 +1,13 @@
 # Duplicate Text Finding Sessions Refresh Explicitly and Never Mutate in Place
 
-Following ADR 0181's stable-generation principle, ADR 0445 findings are dynamic across evaluations, but each opened **Duplicate Text Finding Session** binds one complete query plan, lifecycle scope, comparison-key policy and current-owner projection generation. Later edits, imports, Candidate Promotion or Undo, deletion and restoration may expose Results Available to Refresh, yet cannot insert, remove, regroup, reorder or replace rows and counts inside the active session. The header keeps the frozen session totals distinct from the complete newer generation's prospective totals or added/removed counts; it never mixes evidence from two generations.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The ADR 0447 Duplicate Text Comparison Panel remains read-only. Editing opens the occurrence's normal Candidate or Design Asset Inspector, and a successful commit marks the session refreshable without optimistically removing the row, closing its group or mutating its displayed original form. Any later action reached from a frozen row must revalidate the owner's current identity and lifecycle before mutation; stale session membership grants no operation authority.
+## Decision
 
-Explicit refresh atomically replaces the session with one complete newest generation and follows ADR 0081 result-set selection rules. Closing and later reopening a saved User Smart Filter evaluates a fresh generation; the filter persists its criteria, exact field dependency and comparison mode under ADR 0041, never duplicate memberships or a durable result snapshot. This preserves stable inspection while ensuring deliberate refresh sees current library state.
+Following ADR 0181's stable-generation principle, ADR 0445 findings are dynamic across evaluations, but each opened **Duplicate Text Finding Session** binds one complete query plan, lifecycle scope, comparison-key policy and current-owner projection generation.
 
-ADR 0449 permits session-only group collapse without changing this frozen
-generation and prohibits persistent ignored/resolved result state. Only an
-explicit saved filter criterion may narrow a later evaluation.
+## Detailed contract and provenance
 
-ADR 0452 applies the same complete-generation and explicit-refresh boundary to
-Distinct Text Value Browser pages and counts, without making that browser a
-Duplicate Text Finding Session or storing either result snapshot.
+详细状态、交互、数值边界和例外的唯一正文为[文本字段、检索与编辑规格](../product/specs/custom-text.md#adr-0448)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

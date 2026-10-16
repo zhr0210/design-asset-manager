@@ -374,7 +374,7 @@
     },
     {
       "id": "R13",
-      "requirement": "原件/预览/派生物、Copy和三种库边界",
+      "requirement": "原件/预览/派生物、Copy和库类型边界",
       "basis": "S00 §2.2、7",
       "chapters": [
         "HOST-03",
@@ -966,7 +966,6 @@
     },
     {
       "id": "DAM-A002",
-      "decision": "Library Host保持权威；Managed/Eagle/Legacy独立",
       "chapters": [
         "HOST-03",
         "DATA-12"
@@ -1875,5 +1874,6 @@
     }
   ],
   "allTargetChangesSpecOnly": true,
-  "realModelOrPlatformAcceptance": false
+  "realModelOrPlatformAcceptance": false,
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

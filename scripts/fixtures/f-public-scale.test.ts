@@ -51,13 +51,15 @@ try {
   if (!previous) await fs.writeFile(baselineFile, JSON.stringify({ originalCount, rows: protectedRows }, null, 2))
   const baseline = previous ?? { originalCount, rows: protectedRows }
   await fs.mkdir(sourceFiles, { recursive: true })
-  const samples = (await fs.readdir('.scratch/e-eagle-20261008/public-imports')).filter(name => name.endsWith('.png')).sort()
+  const sampleDirectory = process.env.DAM_PUBLIC_SAMPLE_DIRECTORY
+  assert.ok(sampleDirectory && path.isAbsolute(sampleDirectory), 'Select the approved public sample directory with DAM_PUBLIC_SAMPLE_DIRECTORY')
+  const samples = (await fs.readdir(sampleDirectory)).filter(name => name.endsWith('.png')).sort()
   assert.equal(samples.length, 3)
   const master = path.join(base, 'public-masters')
   await fs.mkdir(master, { recursive: true })
   const originals: { name: string; sha256: string; bytes: number }[] = []
   for (const name of samples) {
-    const bytes = await fs.readFile(path.join('.scratch/e-eagle-20261008/public-imports', name))
+    const bytes = await fs.readFile(path.join(sampleDirectory, name))
     originals.push({ name, sha256: sha(bytes), bytes: bytes.length })
     await fs.writeFile(path.join(master, name), bytes)
   }

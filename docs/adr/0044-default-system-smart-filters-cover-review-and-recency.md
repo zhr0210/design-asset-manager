@@ -1,15 +1,13 @@
 # Default System Smart Filters Cover Review and Recency
 
-The default System Smart Filters should include suspected duplicates, tag
-suggestions awaiting confirmation, candidates nearing expiration, and recent
-captures. Suspected duplicates, pending tag suggestions, and expiration are
-review-focused System Smart Filters with unresolved Review Signal semantics.
-Recent Captures is an informational system-provided dynamic view with Match
-Count semantics; recency is not unresolved work and does not create an
-attention badge.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0413 removes Unsorted membership from default review work. Users can browse
-the protected collection directly or explicitly save an ordinary User Smart
-Filter for that scope, but the application does not create an Unfiled System
-Smart Filter, unresolved signal or attention count merely because an asset has
-no more specific collection.
+## Decision
+
+The default System Smart Filters should include suspected duplicates, tag suggestions awaiting confirmation, candidates nearing expiration, and recent captures.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[筛选、审查与回收站规格](../product/specs/review-trash.md#adr-0044)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/library-lifecycle.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

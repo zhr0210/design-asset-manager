@@ -12,7 +12,7 @@ const require=createRequire(import.meta.url)
 const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-native-start-')))
 const profile=path.join(root,'profile'),errors=[],consoleErrors=[]
 const childEnv={...process.env}
-for(const key of ['ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL','DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E','DAM_CONNECTED_LIBRARY_SYNTHETIC_E2E'])delete childEnv[key]
+for(const key of ['ELECTRON_RUN_AS_NODE','ELECTRON_RENDERER_URL','DAM_ACTIVE_LIBRARY_SYNTHETIC_E2E'])delete childEnv[key]
 let app
 try{
  await test('ordinary Desktop renders its discoverable workspace through the actual preload',async()=>{

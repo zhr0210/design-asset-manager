@@ -1,0 +1,30 @@
+{
+  "lessons-first-commit.json": {
+    "sha": "303819c583c68b80c41f41530fc5c9c78f4429b1",
+    "html_url": "https://github.com/yetone/magpie/commit/303819c583c68b80c41f41530fc5c9c78f4429b1",
+    "author_date": "2026-10-05T19:10:21Z",
+    "subject": "docs: LESSONS.md keeps what the nightly review of merged work finds, and agents read it before changing code"
+  },
+  "standards-origin-commit.json": {
+    "sha": "926bcaa37964bb3f3bfdfe99979fd29e7e6a4c23",
+    "html_url": "https://github.com/yetone/magpie/commit/926bcaa37964bb3f3bfdfe99979fd29e7e6a4c23",
+    "author_date": "2026-10-05T17:37:44Z",
+    "subject": "docs: code standards distilled from PR reviews, linked from AGENTS.md (Junjie Zhou on Discord)"
+  },
+  "pr-889": {
+    "number": 889,
+    "title": "docs: introduce subsystem references and semantic change review",
+    "html_url": "https://github.com/yetone/magpie/pull/889",
+    "merged_at": "2026-10-05T11:10:39Z",
+    "merge_commit_sha": "390db187c155c2f3fcf72dfb299cf9c0ca27ed9e",
+    "author": "junjiezhou1122"
+  },
+  "pr-1339-comments": [
+    {
+      "url": "https://github.com/yetone/magpie/pull/1339#issuecomment-6063735313",
+      "author": "yetone",
+      "created_at": "2026-10-08T15:51:30Z",
+      "updated_at": "2026-10-08T15:51:30Z"
+    }
+  ]
+}

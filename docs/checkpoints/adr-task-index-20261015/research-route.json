@@ -1,0 +1,81 @@
+{
+  "ok": true,
+  "scope": "scoped",
+  "taskType": {
+    "requested": "research",
+    "resolved": "research",
+    "focus": "比较既有选择、理由与被排除方案；源码事实另核对"
+  },
+  "topic": "retrieval",
+  "candidates": [
+    {
+      "id": "0183",
+      "title": "Canonical Embeddings Are Durable Results And ANN Indexes Are Rebuildable",
+      "path": "docs/adr/0183-canonical-embeddings-are-durable-results-and-ann-indexes-are-rebuildable.md",
+      "classification": "Core",
+      "status": "not-declared",
+      "matchedTopics": [
+        "retrieval"
+      ],
+      "focusFacets": [
+        "product",
+        "architecture"
+      ],
+      "referencesToCheck": [
+        "0143",
+        "0144",
+        "0169"
+      ],
+      "moreReferences": 3
+    },
+    {
+      "id": "0181",
+      "title": "Asset Search Is Hybrid Explainable And Complete Without Vectors",
+      "path": "docs/adr/0181-asset-search-is-hybrid-explainable-and-complete-without-vectors.md",
+      "classification": "Core",
+      "status": "not-declared",
+      "matchedTopics": [
+        "retrieval"
+      ],
+      "focusFacets": [
+        "product",
+        "architecture"
+      ],
+      "referencesToCheck": [
+        "0144",
+        "0179",
+        "0182"
+      ],
+      "moreReferences": 12
+    },
+    {
+      "id": "0182",
+      "title": "Search By Image Uses An Explicit Ephemeral Query Source",
+      "path": "docs/adr/0182-search-by-image-uses-an-explicit-ephemeral-query-source.md",
+      "classification": "Core",
+      "status": "not-declared",
+      "matchedTopics": [
+        "retrieval"
+      ],
+      "focusFacets": [
+        "product",
+        "architecture"
+      ],
+      "referencesToCheck": [
+        "0173",
+        "0181",
+        "0184"
+      ]
+    }
+  ],
+  "totalMatches": 4,
+  "deferred": 1,
+  "topicIndexes": [
+    "docs/adr/indexes/topics/retrieval.md"
+  ],
+  "limits": {
+    "maxCandidates": 3,
+    "maxOutputBytes": 12000
+  },
+  "note": "Metadata only; read selected ADRs/details next. Type is a reading focus, not an applicability filter. No match is not proof that no decision applies."
+}

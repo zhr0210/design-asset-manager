@@ -1,10 +1,12 @@
 > 历史批次记录；当前状态以 [CURRENT-STATE](../../../handoff/CURRENT-STATE.md) 为准。旧候选、等待与资格保持原时间身份。
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 # Mac实体浮窗点击／图片拖出修复（2026-10-09）
 
 更新：用户回执公开 coffee 可实际拖入，其他成员未准备；物理点击未单独回答。8ff 已从正式入口正常退出、普通重开、开库、恢复三参考及备注，所选资料/向量/原件签名相同。后续授权全面 REA 分析 Dropover 并整合进 DAM，见 [新任务与重开证据](DROPOVER-INTEGRATION-20261009.md)。下文“待回执/待重开”保留原时点，不代表这些补验仍未执行；全部父级仍未关闭。
 
-用户明确报告真实桌面T23窗口点击图片切到Codex、无法拖入Photoshop。此前只证明AX点击本窗专注预览，不能覆盖实际鼠标失败。本轮继续该失败，不扩大离线／Windows／Eagle／签名发行，多屏仍无设备。
+用户明确报告真实桌面T23窗口点击图片切到Codex、无法拖入Photoshop。此前只证明AX点击本窗专注预览，不能覆盖实际鼠标失败。
 
 当前代码2a45c3f／codex/macos-migration；普通构建 **dam-8ff82743005c5fbd**／784输入，SHA 8ff82743005c5fbd65ee0a78974213e6aed4eae1ad88ef4d16e7072931d92d00，UTC13:30:11.614。未推送。入口仍npm run start:desktop -- --profile=/Users/meigong/Documents/DAM-public-macos-profile；目标库DAM-T23-macos-library。
 

@@ -1,0 +1,244 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": true,
+    "explicitRoute": null
+  },
+  "routes": [
+    {
+      "id": "asset-discovery",
+      "summary": "Host-backed Asset Discovery, lexical and prepared semantic/image queries, paging and Match Explanation.",
+      "score": 41,
+      "matched": [
+        "素材库中搜索"
+      ],
+      "modules": [
+        "shared",
+        "renderer",
+        "electron-main"
+      ]
+    }
+  ],
+  "documentation": [
+    "docs/subsystems/asset-discovery.md"
+  ],
+  "states": [
+    {
+      "route": "asset-discovery",
+      "reality": "Current Implementation",
+      "summary": "The Library caller uses useHostAssetSearch and the shared Client for Host-backed lexical paging and prepared semantic/image queries; coverage and real-model qualification are separate evidence.",
+      "evidence": [
+        "src/shared/workflows/asset-discovery.workflow.ts",
+        "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+        "src/shared/client/workspace-client.ts",
+        "src/main/asset-search/README.md",
+        "src/renderer/routes/Library.tsx",
+        "scripts/asset-discovery-workflow.test.ts"
+      ]
+    },
+    {
+      "route": "asset-discovery",
+      "reality": "Target Architecture",
+      "summary": "Broader retrieval quality/scale/platform qualification and independent cross-library rank fusion remain separate targets; these ADRs do not negate the current single-library query path.",
+      "evidence": [
+        "docs/adr/0181-asset-search-is-hybrid-explainable-and-complete-without-vectors.md",
+        "docs/adr/0182-search-by-image-uses-an-explicit-ephemeral-query-source.md",
+        "docs/adr/0404-cross-library-rank-fusion-never-compares-raw-scores.md"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "src/shared/workflows/asset-discovery.workflow.ts",
+      "anchor": "projectAssetDiscovery",
+      "role": "interface",
+      "reality": "Current Implementation",
+      "reason": "Pure Discovery Module and Match Explanation projection.",
+      "read_mode": "full",
+      "routeId": "asset-discovery",
+      "estimatedTokens": 3915,
+      "required": true
+    },
+    {
+      "path": "src/renderer/routes/Library.tsx",
+      "anchor": "useHostAssetSearch",
+      "role": "caller",
+      "reality": "Current Implementation",
+      "reason": "Formal Library caller; follow its useHostAssetSearch import to verify the actual Host query path.",
+      "read_mode": "symbol",
+      "routeId": "asset-discovery",
+      "estimatedTokens": 9383,
+      "required": false
+    }
+  ],
+  "validations": [
+    "npm run test-asset-discovery-workflow",
+    "npm run test-scoped-asset-reads"
+  ],
+  "feedback": {
+    "problems": [
+      {
+        "id": "DAM-P001",
+        "group": "frontend",
+        "status": "needs-reproduction",
+        "check": "核对当前查询 Client 与旧键盘夹具的完整接口，在隔离运行中确认是否仍因缺 searchAssetsPage 而超时；正确修复夹具后保留键盘行为断言并执行相关检查。",
+        "source": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+        "anchor": "dam-p001",
+        "line": 15,
+        "matchedRoutes": [
+          "asset-discovery"
+        ]
+      }
+    ],
+    "lessons": [
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 28,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#candidate-identity"
+        },
+        "matchedRoutes": [
+          "*"
+        ]
+      },
+      {
+        "id": "DAM-L002",
+        "group": "frontend",
+        "status": "active",
+        "check": "判断本次是否改变可见布局、交互或等待/错误/恢复反馈；若涉及UI/UX，按DESIGN及交互规格从正式入口检查受影响状态，缺陷须复现并验证根因和修复效果，动态问题保留适用连续帧。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l002",
+        "line": 42,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#ui-verification"
+        },
+        "matchedRoutes": [
+          "asset-discovery"
+        ]
+      },
+      {
+        "id": "DAM-L008",
+        "group": "integration",
+        "status": "active",
+        "check": "改变模块导航时对照正式调用者、Client/Host链和模块README；旧摘要与当前源码冲突就修正所属索引，区分源码接线与实际模型/用户资格，不复制另一份完成状态。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l008",
+        "line": 82,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 1,
+          "events": 2,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#semantic-review"
+        },
+        "matchedRoutes": [
+          "asset-discovery"
+        ]
+      },
+      {
+        "id": "DAM-L005",
+        "group": "integration",
+        "status": "active",
+        "check": "改变共享Client方法、返回形状或事件时，搜索正式调用者与测试替身，检查所有受影响分支；夹具必须满足当前契约，修正后运行行为验证，模拟通过不代替正式界面结果。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l005",
+        "line": 95,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#engineering-scope"
+        },
+        "matchedRoutes": [
+          "asset-discovery"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not read Source Discovery code for a local Asset Discovery task unless the task crosses that seam.",
+    "Do not infer semantic or visual retrieval from Runtime probes or model files."
+  ],
+  "warnings": [
+    "Current Asset Discovery is lexical-only and in-memory; durable semantic and visual paths are not live.",
+    "Budget deferred 3 context item(s); use --expand only if the first pass is insufficient."
+  ],
+  "deferred": {
+    "context": [
+      {
+        "path": "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+        "anchor": "useHostAssetSearch",
+        "role": "caller",
+        "reality": "Current Implementation",
+        "reason": "Current Client calls, query modes, paging, stale-response guards and displayed-row refresh consumers.",
+        "read_mode": "symbol",
+        "routeId": "asset-discovery",
+        "estimatedTokens": 3192,
+        "required": false
+      },
+      {
+        "path": "scripts/asset-discovery-workflow.test.ts",
+        "role": "test",
+        "reality": "Current Implementation",
+        "reason": "Focused executable behavior evidence.",
+        "read_mode": "full",
+        "routeId": "asset-discovery",
+        "estimatedTokens": 2867,
+        "required": false
+      },
+      {
+        "path": "src/main/asset-search/README.md",
+        "role": "readme",
+        "reality": "Current Implementation",
+        "reason": "Host search ownership, query/refresh contracts and focused checks; verify source before claiming behavior.",
+        "read_mode": "full",
+        "routeId": "asset-discovery",
+        "estimatedTokens": 1145,
+        "required": false
+      }
+    ],
+    "validations": []
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 2,
+    "estimatedFileTokens": 13298,
+    "estimatedMetadataTokens": 2235,
+    "outputEstimatedTokens": 2235,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 15533,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

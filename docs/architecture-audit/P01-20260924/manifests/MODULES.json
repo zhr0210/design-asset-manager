@@ -292,8 +292,7 @@
       ],
       "forbiddenCapabilities": [
         "global-getDatabase",
-        "open-new-library-connection",
-        "eagle-original-write"
+        "open-new-library-connection"
       ],
       "compatibilityCallers": [
         "main.visual-ai-ipc"
@@ -672,5 +671,6 @@
       "expected": "UNKNOWN_REVIEW_REQUIRED",
       "executed": false
     }
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

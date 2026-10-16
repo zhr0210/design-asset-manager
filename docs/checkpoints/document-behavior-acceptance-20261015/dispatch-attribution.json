@@ -1,0 +1,8 @@
+{
+  "agent": "/root/quality_attribution",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "low",
+  "fork_turns": "none",
+  "purpose": "Verify the already predeclared distinction between document defects and ordinary agent judgment; no candidate edit or expected answer supplied to the agent.",
+  "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-doc-quality-probe-20261015-86qcjk73\n子智能体读过资料却仍给出普通方案，我想继续增加全局约束让它给出更好方案，评估这个做法。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+}

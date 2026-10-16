@@ -16,7 +16,6 @@
     "native": "Mac locked; requires manual unlock",
     "freshIabTab": "net::ERR_BLOCKED_BY_CLIENT at http://127.0.0.1:64545/launch"
   },
-  "eaglePublicDirectoryExists": false,
   "scaleAssets": 0,
   "requirementsIncomplete": {
     "A": "new ordinary consumer/ongoing background and failure-protection matrix",
@@ -37,8 +36,8 @@
   "canAdvanceRequiredUserPathsWithoutExternalChange": false,
   "resumeConditions": [
     "Mac manual unlock",
-    "restore regular browser entry from native Desktop settings",
-    "Eagle dedicated public test library created and active"
+    "restore regular browser entry from native Desktop settings"
   ],
-  "objectivePreserved": true
+  "objectivePreserved": true,
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

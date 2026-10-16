@@ -1,9 +1,7 @@
 
 > design-asset-manager@1.0.0 build
-> node scripts/build-macos-runtime.mjs && node scripts/build-eagle-companion.mjs && node scripts/build-identity.mjs && electron-vite build
 
 {"sourceDigest":"f1005ab7eb79977b1fcfef30891caf45c3881d4c63b1d3d133e0e3d1c6293fcf","files":{"owned-memory":"9bb55b15c5afbd70b583e6d91478ec0d6ae69dcb90cce7d4e891ee3b8f2eb4de","video":"c468e9296208a1b9e344896213bf03c8f24364d3c35cad39766c18d9a24f9b7e"}}
-{"file":"DAM-Eagle-Companion-0.2.0.eagleplugin","bytes":10571,"sha256":"2a59de81f2eed49d1965f963913893d4fc06ca664f50e238665f93eaeee7d507","installed":false}
 {"buildId":"dam-5be87024c1293899","sourceCount":790}
 vite v5.4.21 building SSR bundle for production...
 transforming...
@@ -14,7 +12,6 @@ out/main/ai-service/tools/retrieval_probe/flag.jpg                  1.33 kB
 out/main/ai-service/tools/local_ocr_worker.py                       5.54 kB
 out/main/ai-service/tools/managed_vision_worker.py                  7.46 kB
 out/main/ai-service/tools/retrieval_worker.py                       7.51 kB
-out/main/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin     10.57 kB
 out/main/ai-service/tools/retrieval_probe/astronaut.jpg            14.96 kB
 out/main/macos-runtime/owned-memory                                33.73 kB
 out/main/macos-runtime/video                                       95.30 kB

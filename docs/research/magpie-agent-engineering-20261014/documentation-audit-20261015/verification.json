@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-15T06:52:59.958675+00:00",
+  "scope": "Research/proposal artifacts only; no effective documentation migration, product execution or tool behavior change",
+  "upstream_sha": "01c41e8ba2aad586ec885c92bc4b959a49005eda",
+  "upstream_selected_sources_verified": 25,
+  "inventory_files": 1269,
+  "worklist_files": 1269,
+  "outside_research_files_identity_unchanged": 1223,
+  "changed_outside_research": [],
+  "markdown_local_targets_checked": [
+    "docs/research/magpie-agent-engineering-20261014/AGENTS-REVISION-PROPOSAL.md",
+    "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+    "docs/research/magpie-agent-engineering-20261014/README.md",
+    "docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/README.md"
+  ],
+  "anchor_check": "Only prior-proposal section anchor referenced; verified heading exists. General link scan findings remain heuristic candidates.",
+  "errors": [],
+  "tests": "No product, UI, model or runtime tests applicable to research/proposal-only changes."
+}

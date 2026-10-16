@@ -1,9 +1,13 @@
 # Referenced Source Rewrite Cancels Only Before Old-Source Trash
 
-Rewrite Referenced Source may be cancelled during capability encoding only at a checkpoint where the encoder can stop without publishing or mutating the user-owned source. The accepted request prevents further encoding and may remove only the exact application-owned Referenced Source Rewrite Staging proven to belong to that operation. If an encoder cannot stop immediately, cancellation remains pending until that checkpoint; unprovable or failed staging cleanup is shown as operation-scoped cleanup attention and never authorizes touching the original.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-After staging becomes complete and passes full validation, cancellation remains available until the **Referenced Source Rewrite Destructive Boundary** begins. An accepted cancellation before that boundary durably closes the rewrite, keeps the exact old source and prior Source Content Generation authoritative, creates no recovery receipt and prevents restart from issuing trash or publication. It removes only proven operation-owned staging; closing the page, application exit or Library Switch does not convert cancellation into an implicit continuation.
+## Decision
 
-Once the operating-system trash request for the old source begins, generic cancellation and force-stop are unavailable. The call must settle or reconcile under ADR 0319–0320: proven trash failure leaves the old source authoritative, proven trash success continues publication or Referenced Source Rewrite Publication Recovery, and ambiguity remains recovery attention without another trash request. A cancellation request cannot choose rollback, discard staging or skip recovery after this boundary, because the old source may already have moved.
+Rewrite Referenced Source may be cancelled during capability encoding only at a checkpoint where the encoder can stop without publishing or mutating the user-owned source.
 
-ADR 0347 defines one Referenced Compound Source Rewrite Destructive Boundary at the first old-member trash request. Before it, cancellation closes the whole group and removes only proven staging; after it, no member-level cancellation is available and the complete item must settle through group publication recovery. Successful publication and new Source Content Generation commit are final outcomes of this operation, not cancellable states or one-click undo. The Rewritten Old Source Recovery Receipt remains available under ADR 0321, and making recovered bytes current is a separately reviewed new rewrite. ADR 0330 batch items obey this same boundary independently; cancelling a batch never reverses committed items. Window closure, shutdown and restart reconcile evidence but never repeat trash, publication or restoration. The current application has no referenced-source rewrite cancellation checkpoints or destructive boundary. This ADR records target architecture only and encodes, accesses, creates, copies, relinks, moves, rewrites, restores, trashes, deletes, reads or writes no runtime/user file and changes no public IPC, database schema or AI Worker API.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[引用源操作与恢复规格](../product/specs/referenced-operations.md#adr-0329)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/storage-intake.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

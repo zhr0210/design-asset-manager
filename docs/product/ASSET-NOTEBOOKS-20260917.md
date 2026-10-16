@@ -1,7 +1,6 @@
-# 图片笔记正式保存与恢复
+# 图片笔记：持久化与用户契约
 
-2026-09-17。本轮完成计划第1项：将既有专注画布的多页、画笔/形状/文字/便签接入正式素材库。
-沿用批准界面，存储由Main持有的Active Library连接负责，不修改图片字节。
+本页保存图片笔记的有效数据/用户契约，不维护验收时间线。交互见[工作台规格](../design/INTERACTIONS.md#workspace)，当前执行见[组织子系统](../subsystems/organization.md)。v5是该功能首次引入版本，不代表当前整库最新schema；更高版本保留数据，不降级。
 
 ## 数据与接口
 
@@ -31,25 +30,7 @@ v5的AI证据、下载、变体恢复、素材查询和精确schema校验均同�
 
 当前注释针对静态受控预览；1:1是预览像素。不声称视频逐帧标注、永久删除、导出或搜索索引已完成。
 
-## 验证范围
 
-全部验证使用独立合成库，不读取或迁移用户Eagle库，不外发素材。
+## 验证与来源
 
-- 主进程：升级确认、取消无写入、v5关库重开/新host重启、库隔离、旧会话拒绝、重复版本冲突、
-  预览不匹配、malformed与未知字段、回收站保存拒绝/恢复保留、SQLite失败回滚、可信IPC。
-- 会话：读取合并去重、保存期间新编辑仍dirty、失败重试、失效响应不回填、冲突草稿与远端结果共存。
-- Electron：实际图形创建、首次升级取消/确认、失败保留草稿后重试、关库重开及完整进程重启恢复。
-- 图像来源哈希前后不变。读接口不会写库；没有把localStorage保存当成正式存储。
-
-最终执行结果和证据由TASK记录。实现入口：`src/main/library-lifecycle/asset-notebook.ts`、
-`src/renderer/components/library/canvas/notebook-session.ts`及共享FocusView。
-
-## 本轮结果
-
-上述Main/会话测试通过；正式Electron12环节通过（`dam-library-canvas-e2e-2kWUJQ`），
-v5完整既有应用回归通过（`dam-active-library-electron-e2e-9zFsn7`），涵盖AI证据、
-下载/图片变体、恢复和进程重启。15组视觉对照、10组原型笔记交互、真实Library键盘、
-类型/构建、token/context检查通过。没有读取真实Eagle库或调用真实外部AI。
-
-[正式保存后的笔记画布](../design/artifacts/asset-notebooks-20260917/notebook-saved.png)仅含合成设计。
-不宣称未保存草稿可跨进程恢复；崩溃或明确放弃时，只有已提交到库的笔记保证持久化。
+聚焦检查、真实Host/共享UI与保存重开分别证明；当前资格仅看CURRENT-STATE。原合成样本、过程、用例/构建身份和当时结果完整保留在[历史验收原文](../history/documentation-rebuild-20261015/product--ASSET-NOTEBOOKS-20260917.md)。原截图在本地未定位，已登记为来源产物未携带，不伪造替代截图或把历史结果转记当前。

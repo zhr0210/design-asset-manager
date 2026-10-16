@@ -1,17 +1,13 @@
 # Physical Reclaim Completions Aggregate By Volume With Independent Expiry
 
-When one host startup reconciliation generation or one physical-reclaim scheduler dispatch generation completes more than one target, Storage Management presents a **Physical Reclaim Completion Summary** instead of stacking one ADR 0254 result card per target. Results aggregate only within that exact generation and stable physical volume. Cross-volume bytes and results from later generations remain separate.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Each volume summary shows completed-target count, actual physical bytes reclaimed and ADR 0260's mutually exclusive Removed Now, Already Absent, Mixed and Completed As Shared target counts plus ADR 0255 Shared Bytes Retained By Other Owners. Shared and Already Absent values contribute zero newly freed storage. Under ADR 0259 the summary defaults to collapsed and expands only on explicit user disclosure into path-free package/publisher/target identities with each target's corresponding outcome class, ADR 0266 individual completion time and ADR 0267 Actual Reclaimed/Shared Retained bytes; ADR 0268 may filter those details by one complete-snapshot outcome class without filtering the header. It exposes no managed path or owner evidence payload.
+## Decision
 
-Aggregation is presentation-only. Every constituent Physical Reclaim Completed Result retains its own completion time, one-usable-viewing acknowledgement and 24-hour hard expiry. A later target cannot join an older generation's summary, restart an acknowledged result, extend another target's deadline or delay ADR 0256 closure merely because their physical volume matches.
+When one host startup reconciliation generation or one physical-reclaim scheduler dispatch generation completes more than one target, Storage Management presents a **Physical Reclaim Completion Summary** instead of stacking one ADR 0254 result card per target.
 
-ADR 0264 orders multiple summary cards by each frozen snapshot's latest constituent completion time, not by volume, bytes or outcome. Ordering does not merge snapshots or alter any constituent completion time or expiry.
+## Detailed contract and provenance
 
-When a usable renderer acknowledges projection of a summary, that viewing opportunity acknowledges every constituent result currently included in the rendered summary projection. ADR 0258 defines a large summary's authoritative header member snapshot as the complete rendered projection even when its 50-row detail pages remain lazy. The card remains stable for that surface session. After the user dismisses/leaves, acknowledged constituents are pruned; on a later view, the summary is recomputed only from still-unacknowledged and unexpired results. A result not included in the rendered projection keeps its own viewing opportunity until its 24-hour deadline.
+详细状态、交互、数值边界和例外的唯一正文为[存储清理结果与可访问导航规格](../product/specs/storage-review.md#adr-0257)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Each constituent acknowledgement independently satisfies only that target's ADR 0256 result-closure prerequisite. Summary totals do not become a replacement terminal record and do not authorize deletion, retry, owner mutation or evidence pruning. If one target's closure check remains blocked, other targets may still close normally.
-
-The summary creates no startup modal, OS notification, badge-driven urgency, Activity History entry or long-lived aggregation record. Its retained state contains only an opaque dispatch/startup generation, stable-volume identity, constituent opaque target/result identities, counts, actual byte totals and path-free product identity/class fields. ADR 0262 may resolve the current OS volume display name ephemerally for the local header without retaining it. The state contains no paths, payload, credentials, user content, owner details or attention history and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
-
-The current project has no Physical Reclaim Pending scheduler, completion-result projection or per-volume result aggregation. This ADR changes documentation only: it aggregates/acknowledges/prunes no real result or bytes, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API. ADR 0258 defines uncapped large-summary paging, stable ordering and header-level acknowledgement without changing constituent lifetimes.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

@@ -1,45 +1,13 @@
 # Missing Initialization Undo Closes Forward Retry Before Reversal
 
-A terminal Missing initialization result begins **Forward Recovery Open**:
-proven successful owner groups remain potentially Undo-eligible while ADR 0479
-Retry-Eligible failures may still continue the original frozen intent. Retry
-and Undo never execute concurrently. While a retry is in flight, Undo admission
-waits for that owner group to settle; every retry success joins the same
-successful-effect set that a later Undo Completed may revalidate and clear.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Undo Completed is an explicit irreversible direction change for that result,
-not another action that coexists with forward recovery. Its review discloses
-the still-current successful-group count, the currently Retry-Eligible count
-that will be abandoned, conflicts and exclusions. Trusted preflight must prove
-the terminal operation, exact Local Library Instance, exclusive ownership,
-complete effect evidence and at least the authority needed to start reversal.
-If preflight fails, Forward Recovery Open remains unchanged. On confirmed
-admission, one durable **Missing Initialization Undo Direction** transition
-first closes every remaining Retry Missing Initialization Failure authority and
-then permits the first clear-to-Missing owner commit.
+## Decision
 
-ADR 0477 Cancel Remaining And Undo Completed uses the same ordering: remaining
-forward owners become terminal, all resulting or pre-existing retry eligibility
-closes, and only then may Undo start. There is no force-cancellation of an
-in-flight owner write and no interval in which the old plan can both retry a
-failure and undo a success.
+A terminal Missing initialization result begins **Forward Recovery Open**: proven successful owner groups remain potentially Undo-eligible while ADR 0479 Retry-Eligible failures may still continue the original frozen intent.
 
-Undo continues to revalidate and commit successful owner groups independently.
-A later edit, lifecycle change, unavailable owner, transient Undo failure or
-other drift may leave some effects unchanged and produce a truthful partial
-Undo result, but it never reopens old forward Retry authority, replays the
-frozen assignment or changes the direction back. Failed and never-attempted
-forward groups remain untouched. Any later desire to assign values again
-requires a newly reviewed Missing Custom Field Initialization Plan; Redo is not
-manufactured from the closed operation.
+## Detailed contract and provenance
 
-The direction transition and aggregate state are library-bound operation
-authority under ADR 0477, so another compatible exclusive device observes and
-continues the same direction rather than maintaining a device-local toggle.
-Terminal history records that forward retry was closed and the aggregate Undo
-outcome without retaining private assignments or creating manual Custom Field
-Undo entries.
+详细状态、交互、数值边界和例外的唯一正文为[布尔与缺失字段初始化规格](../product/specs/missing-initialization.md#adr-0480)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
 
-ADR 0481 bounds both directions by one deadline from first terminal
-reconciliation. Undo admission and partial reversal receive only the remaining
-window and never restart it.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

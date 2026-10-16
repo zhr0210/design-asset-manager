@@ -1,0 +1,23 @@
+[
+  {
+    "agent": "/root/gui_shell_plan",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-gui-system-probe-20261015-rgtffrro\n我要调整设置导航和窗口外壳，先给出定位与验证计划。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/gui_reconnect",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-gui-system-probe-20261015-rgtffrro\n断网后设置页提示重新连接，连接恢复就直接放开保存可以吗？给出排查计划。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/gui_native_boundary",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-gui-system-probe-20261015-rgtffrro\n想把所有窗口的界面都改成同一套React组件，评估这个方案。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  }
+]

@@ -1,5 +1,7 @@
 # 首轮独立标签实施前收敛评审
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 日期2026-09-27；**MODE=SPEC，ready_for_review / implementation not_started**。
 本轮用户在提供完整交接包并确认SPEC范围后要求“开始修改”。授权仅为本轮受限文档修订与独立纯规格检查；包内历史授权不是新增IMPLEMENT/模型/库操作授权。
 
@@ -22,7 +24,6 @@
 | E1 / REV-05A | 已复现的参考模型事实：原P26 closing→close→commit(new)产生1效果；不是生产漏洞。[B-COUNTER/B-P26] Host普通run非ready拒绝。[S-HOST/S-CLOSE] | AC-05区分普通业务、关闭协调记录、回执重读；G07映射03/06 | 本轮纯模型8例之一系列通过；真正Host事务/关闭竞争仍NOT_RUN |
 | E2 / REV-05B | 已复现的参考模型事实：priority10 vs0、ageCap5、100轮后台0次。[B-COUNTER/B-P13] | AC-06有条件配额/轮转，登记未来P13 G08，不给01新增依赖 | 后续生产scheduler需明确K/后台轮转/可执行前提与真实轨迹；当前手动标签不实现完整公平调度 |
 | F1 / REV-06 | 设计推导：全局projectionRevision失效与持续后台更新可能妨碍分页，未实测。[B-P16；B-REVIEW §5] | DEFER-16，区分成员排序变化与展示变化，权限每页即时复核 | P16实施前分页活性用例；不阻塞01 |
-| F2 / REV-07 | 源码事实：v8 reader漏项；Eagle DDL在版本guard前。运行影响仍未复现。[S-VARIANT/S-EAGLE] | 分别登记DEFER-V8/DEFER-EAGLE | 各自最小合成数据复现；V8若影响02兼容必须面对，Eagle不成标签前置；不访问真实库 |
 | F3 / REV-08 | 已定用户目标默认tags/caption/OCR与历史自动Embedding条款不同。[B-REVIEW §5；B-SPEC80；S-ADR] | AC-07及SUP-AUTO-01，仅替代默认自动项范围，保留能力/历史 | P11/P17实施时更新正式ADR/启用策略；不重复询问已确定产品答案 |
 
 ## 3. 当前可开始与不能据此放行的范围

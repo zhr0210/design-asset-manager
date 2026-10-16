@@ -16,7 +16,6 @@ import { hasTransientLibraryNotes } from '../library/canvas/notebook-session'
 import { hasTransientWorkspaceEdits } from '../../workspace-edit-guards'
 import { flushLibraryDrafts } from '../../stores/library-view.store'
 import { useSettingsStore } from '../../stores/settings.store'
-import { useDownloadStore } from '../../stores/download.store'
 import { useAssetStore } from '../../stores/asset.store'
 import WorkspaceRail from './WorkspaceRail'
 import { DESKTOP_VIEWPORT_POLICY } from '../../../shared/desktop-viewport-policy'
@@ -28,10 +27,11 @@ import type { AssetCardReturnEvent, AssetCardChangedEvent } from '../../../share
 function AppShellContent() {
   const location = useLocation()
   const library = location.pathname === '/library'
+  const settings = location.pathname === '/settings' || location.pathname.startsWith('/settings/')
   const nativeMac = /Electron/.test(navigator.userAgent) && /Mac/.test(navigator.platform)
-  return <div className="workspace-shell" data-native-mac={nativeMac||undefined} data-library-workspace={library || undefined} data-settings-workspace={location.pathname === '/settings' || undefined} style={{ minWidth: 0, minHeight: DESKTOP_VIEWPORT_POLICY.shell.minContentHeight }}>
+  return <div className="workspace-shell" data-native-mac={nativeMac||undefined} data-library-workspace={library || undefined} data-settings-workspace={settings || undefined} style={{ minWidth: 0, minHeight: DESKTOP_VIEWPORT_POLICY.shell.minContentHeight }}>
     {nativeMac&&<div className="native-window-drag" aria-hidden="true"/>}
-    {!library&&<WorkspaceRail />}
+    {!library&&!settings&&<WorkspaceRail />}
     <div className="workspace-stage">
       <AuthActivity />
       <FileSelectionOverlay />
@@ -39,7 +39,7 @@ function AppShellContent() {
       <WorkspaceConnection />
       <WorkspaceTransitions />
       <main className="workspace-content">
-        <section data-overlay-workspace="true" className={library ? 'workspace-page-library' : 'workspace-page'}><WorkspaceEntrance route={location.pathname}><Outlet /></WorkspaceEntrance></section>
+        <section data-overlay-workspace="true" className={library ? 'workspace-page-library' : 'workspace-page'}><WorkspaceEntrance route={settings ? '/settings' : location.pathname}><Outlet /></WorkspaceEntrance></section>
       </main>
     </div>
   </div>
@@ -58,7 +58,7 @@ export default function AppShell() {
   useEffect(() => {
     const api = getWorkspaceClient()
     const stopReconcile = api?.onReconcile(async()=>{
-      await Promise.all([session.refresh('ready-assets'),useSettingsStore.getState().loadSettings(true),useDownloadStore.getState().loadDownloads(true),useDownloadStore.getState().loadManaged(true)])
+      await Promise.all([session.refresh('ready-assets'),useSettingsStore.getState().loadSettings(true)])
       if(session.getSnapshot().error)throw Error('WORKSPACE_RECONCILIATION_FAILED')
       if(session.getSnapshot().projection.state==='ready') {
         const assets=useAssetStore.getState()
@@ -69,9 +69,6 @@ export default function AppShell() {
     const stopSettings = api?.onSettingsChanged(() => { void useSettingsStore.getState().loadSettings() })
     const stopWorkspace = api?.onWorkspaceChanged?.(() => { void session.refresh('ready-assets') })
     const stopConnection = api?.onConnectionChanged?.((state: { connected: boolean }) => { if (state.connected) void session.refresh('ready-assets') })
-    const stopDownload = api?.managedDownloads?.onImported((scope: { libraryIdentity: string; generation: string }) => {
-      void session.receive({ kind: 'download-imported', scope })
-    })
     const stopTools = api?.imageTools?.onSaved?.((scope: { libraryIdentity: string; generation: string }) => {
       void session.receive({ kind: 'tool-saved', scope })
     })
@@ -79,13 +76,11 @@ export default function AppShell() {
     const stopAi = api?.visualAi?.onChanged?.((scope: { libraryIdentity: string; generation: string; assetId:string }) => {
       void session.receive({ kind: 'visual-ai-changed', scope })
     })
-    const showDownloadReview = () => navigate('/downloads')
-    window.addEventListener('managed-download-review', showDownloadReview)
     const stopChanges = api?.assetCard?.onChanged((event: AssetCardChangedEvent) => {
       void session.receive({ kind: 'card-drafts', context: event })
     })
     const stopReturn = api?.assetCard?.onReturn((context: AssetCardReturnEvent) => session.receive({ kind: 'card-return', context }))
-    return () => { stopReconcile?.(); stopNavigate?.(); stopSettings?.(); stopWorkspace?.(); stopConnection?.(); stopChanges?.(); stopReturn?.(); stopDownload?.(); stopOcr?.(); stopAi?.(); stopTools?.(); window.removeEventListener('managed-download-review', showDownloadReview) }
+    return () => { stopReconcile?.(); stopNavigate?.(); stopSettings?.(); stopWorkspace?.(); stopConnection?.(); stopChanges?.(); stopReturn?.(); stopOcr?.(); stopAi?.(); stopTools?.() }
   }, [navigate, session])
   useEffect(() => {
     if (location.pathname === '/') navigate(APP_HOME_ROUTE.path, { replace: true })

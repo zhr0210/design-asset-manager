@@ -1,0 +1,294 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": true,
+    "explicitRoute": null
+  },
+  "routes": [
+    {
+      "id": "capture-intake",
+      "summary": "Copy Into Library planning, Capture Gateway, Candidate identity, Promotion and Active Library composition.",
+      "score": 88,
+      "matched": [
+        "copy into library",
+        "candidate",
+        "preview"
+      ],
+      "modules": [
+        "capture-intake",
+        "library-lifecycle",
+        "electron-main"
+      ]
+    }
+  ],
+  "documentation": [
+    "docs/subsystems/storage-intake.md"
+  ],
+  "states": [
+    {
+      "route": "capture-intake",
+      "reality": "Current Implementation",
+      "summary": "Formal Active Library IPC composes Copy planning, Capture Gateway, SQLite Promotion and required Sharp Preview; Renderer uses path-free reviewed actions.",
+      "evidence": [
+        "src/main/ipc/active-library.ipc.ts"
+      ]
+    },
+    {
+      "route": "capture-intake",
+      "reality": "Validated Tracer",
+      "summary": "Safe Copy planning, Candidate activation, Preview gating, Promotion and SQLite persistence are proven in isolation.",
+      "evidence": [
+        "src/main/capture-intake/capture-intake.types.ts",
+        "src/main/capture-intake/capture-gateway.ts",
+        "src/main/capture-intake/sqlite-capture-persistence.adapter.ts",
+        "scripts/capture-intake-sqlite-persistence.test.ts"
+      ]
+    },
+    {
+      "route": "capture-intake",
+      "reality": "Target Architecture",
+      "summary": "Additional producers, formats and broad real-data/platform qualification remain separately scoped; the current local Copy path is already composed.",
+      "evidence": [
+        "docs/adr/0105-asset-candidates-persist-separately-from-downloads.md",
+        "docs/adr/0106-all-capture-producers-use-one-gateway.md",
+        "docs/adr/0123-supported-formats-require-automatic-system-preview.md",
+        "docs/adr/0292-add-assets-requires-explicit-ownership-and-fully-manages-references.md",
+        "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "src/main/capture-intake/capture-intake.types.ts",
+      "anchor": "CaptureGateway",
+      "role": "interface",
+      "reality": "Validated Tracer",
+      "reason": "Candidate, Promotion and persistence Interface.",
+      "read_mode": "full",
+      "routeId": "capture-intake",
+      "estimatedTokens": 2428,
+      "required": true
+    },
+    {
+      "path": "src/main/library-lifecycle/active-library-session.ts",
+      "anchor": "createActiveLibrarySession",
+      "role": "composition",
+      "reality": "Validated Tracer",
+      "reason": "Inspected and exclusively locked per-Library authority.",
+      "read_mode": "symbol",
+      "routeId": "capture-intake",
+      "estimatedTokens": 4169,
+      "required": true
+    },
+    {
+      "path": "src/main/capture-intake/README.md",
+      "role": "readme",
+      "reality": "Validated Tracer",
+      "reason": "Nearest Module authority, production composition, recovery protections and current evidence limits.",
+      "read_mode": "full",
+      "routeId": "capture-intake",
+      "estimatedTokens": 1212,
+      "required": true
+    },
+    {
+      "path": "docs/adr/0123-supported-formats-require-automatic-system-preview.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Requires automatic System Preview evidence before Promotion for supported formats.",
+      "read_mode": "full",
+      "routeId": "capture-intake",
+      "matched": [
+        "preview"
+      ],
+      "estimatedTokens": 793,
+      "required": true
+    },
+    {
+      "path": "docs/adr/0292-add-assets-requires-explicit-ownership-and-fully-manages-references.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Defines explicit ownership and the ordinary Copy default.",
+      "read_mode": "full",
+      "routeId": "capture-intake",
+      "matched": [
+        "copy into library"
+      ],
+      "estimatedTokens": 2055,
+      "required": true
+    }
+  ],
+  "validations": [
+    "npm run test-asset-authority-baseline",
+    "npm run test-intake-recovery",
+    "npm run test-active-library-session",
+    "npm run test-active-library-capture-composition"
+  ],
+  "feedback": {
+    "problems": [
+      {
+        "id": "DAM-P006",
+        "group": "integration",
+        "status": "in-progress",
+        "check": "对照Main注册、生产Active Library工厂、managed模型/Runtime与子系统正文，确认普通入口不再指向旧全局删除或禁用Runtime；执行导航、条款保全和相关路由回归，保留产品资格差别。",
+        "source": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+        "anchor": "dam-p006",
+        "line": 83,
+        "matchedRoutes": [
+          "capture-intake"
+        ]
+      }
+    ],
+    "lessons": [
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 28,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#candidate-identity"
+        },
+        "matchedRoutes": [
+          "*"
+        ]
+      },
+      {
+        "id": "DAM-L002",
+        "group": "frontend",
+        "status": "active",
+        "check": "判断本次是否改变可见布局、交互或等待/错误/恢复反馈；若涉及UI/UX，按DESIGN及交互规格从正式入口检查受影响状态，缺陷须复现并验证根因和修复效果，动态问题保留适用连续帧。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l002",
+        "line": 42,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#ui-verification"
+        },
+        "matchedRoutes": [
+          "capture-intake"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not claim Electron IPC, Renderer Add Assets UI or a real Preview Adapter exists for this tracer.",
+    "Do not use user Asset Library or Runtime database data for routing or tests."
+  ],
+  "warnings": [
+    "Current local Copy and isolated tracer guarantees coexist; this index does not grant broad format or real-library qualification.",
+    "Budget deferred 6 context item(s); use --expand only if the first pass is insufficient.",
+    "Validation limit deferred 2 additional command(s)."
+  ],
+  "deferred": {
+    "context": [
+      {
+        "path": "src/main/index.ts",
+        "anchor": "setupIpcHandlers",
+        "role": "composition",
+        "reality": "Current Implementation",
+        "reason": "Formal Electron composition root; its registered IPC list currently contains no Capture Intake entry.",
+        "read_mode": "symbol",
+        "routeId": "capture-intake",
+        "estimatedTokens": 23665,
+        "required": false
+      },
+      {
+        "path": "src/main/capture-intake/capture-gateway.ts",
+        "anchor": "createCaptureGateway",
+        "role": "implementation",
+        "reality": "Validated Tracer",
+        "reason": "Safe managed-original commit and Promotion implementation.",
+        "read_mode": "symbol",
+        "routeId": "capture-intake",
+        "estimatedTokens": 5326,
+        "required": false
+      },
+      {
+        "path": "scripts/capture-intake-sqlite-persistence.test.ts",
+        "role": "test",
+        "reality": "Validated Tracer",
+        "reason": "SQLite restart and rollback evidence.",
+        "read_mode": "full",
+        "routeId": "capture-intake",
+        "estimatedTokens": 3133,
+        "required": false
+      },
+      {
+        "path": "docs/adr/0105-asset-candidates-persist-separately-from-downloads.md",
+        "role": "adr",
+        "reality": "Target Architecture",
+        "reason": "Separates Candidate identity from ordinary Download Task state.",
+        "read_mode": "full",
+        "routeId": "capture-intake",
+        "matched": [
+          "candidate"
+        ],
+        "estimatedTokens": 243,
+        "required": false
+      },
+      {
+        "path": "src/main/ipc/active-library.ipc.ts",
+        "anchor": "registerActiveLibraryIpc",
+        "role": "composition",
+        "reality": "Current Implementation",
+        "reason": "Current production composition; qualification is recorded separately.",
+        "read_mode": "symbol",
+        "routeId": "capture-intake",
+        "estimatedTokens": 407,
+        "required": false
+      },
+      {
+        "path": "src/main/capture-intake/add-assets.workflow.ts",
+        "anchor": "createAddAssetsWorkflow",
+        "role": "implementation",
+        "reality": "Validated Tracer",
+        "reason": "Reviewed Copy Plan and activation orchestration.",
+        "read_mode": "symbol",
+        "routeId": "capture-intake",
+        "estimatedTokens": 3661,
+        "required": false
+      }
+    ],
+    "validations": [
+      "npm run test-capture-intake-workflow",
+      "npm run test-capture-intake-sqlite-persistence"
+    ]
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 5,
+    "estimatedFileTokens": 10657,
+    "estimatedMetadataTokens": 2667,
+    "outputEstimatedTokens": 2667,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 13324,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

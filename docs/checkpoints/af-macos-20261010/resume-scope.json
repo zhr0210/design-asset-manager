@@ -1,8 +1,8 @@
 {
   "userMacUnlocked": true,
   "iabIndependentEntryRestoredOn342516": true,
-  "eagleLibrary": "/Users/meigong/Pictures/测试库.library",
   "userExplicitlyAllowsExistingNonPrivateContents": true,
   "previousHost90302PhysicalExitConfirmed": true,
-  "goalToolLastStatus": "blocked; user-authorized work resumed, tool has no active-status setter"
+  "goalToolLastStatus": "blocked; user-authorized work resumed, tool has no active-status setter",
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

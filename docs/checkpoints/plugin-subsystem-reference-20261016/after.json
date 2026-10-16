@@ -1,0 +1,66 @@
+[
+  {
+    "path": "AGENTS.md",
+    "sha256": "076fe898f9ca4b82864b0527cc74c3e425b3d0d64982f03a266712ad4f250f74"
+  },
+  {
+    "path": "TASK.md",
+    "sha256": "e3add62f183f89ac26d6edb5f6fe02c33a88c4a799d493ebe8b00b9352488ba9"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "sha256": "70b25ad1f72ddfa2a5f294af2af75f49d4f1874682f9d17a9a015c345a2d8cde"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "sha256": "f3909a53b4e22fa363938ace6ddacfcf85a7815a0ab81e39b07f1dd3a7a7b9fd"
+  },
+  {
+    "path": "docs/subsystems/README.md",
+    "sha256": "03bd13bb55cab03aaf13f260325126a20fd905a3223585e14d63aaf1959a4fec"
+  },
+  {
+    "path": "docs/subsystems/plugin-system.md",
+    "sha256": "573a568df7801e183b743a8ebdac6f74482c7f7e8792a6a1e40f81a14569d323"
+  },
+  {
+    "path": "docs/product/CAPABILITY-SCOPE.md",
+    "sha256": "1fb2fff1762f5ec26f3c2b481f38b3cb07cc57f0ffdc02aba9c4525c5f05c01b"
+  },
+  {
+    "path": "docs/product/README.md",
+    "sha256": "e9fba38dd4fb7c41f5f04435fdf1af987f55841213643b1d6b3e04c4fb1ce228"
+  },
+  {
+    "path": "docs/product/specs/model-extension.md",
+    "sha256": "ba3fe1b078ed4301920c5caf6142d660254f68f67734c93092f98e822630b66a"
+  },
+  {
+    "path": "docs/adr/indexes/topics/model-extension.md",
+    "sha256": "4eb815add9a5ebd1d2ee55fcc360909ebc6cad0c01e23d2df62896737132ee9a"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "sha256": "bd3420e0814b16f371903dc93a5a8e30df7b49f804dbaf359d2eccd2b47ac746"
+  },
+  {
+    "path": ".codeindex/module-map.json",
+    "sha256": "2ad66e0c5f19485603d4b89abe54151b03fcd4b8df354d542c063548e2408754"
+  },
+  {
+    "path": "scripts/check-documentation.py",
+    "sha256": "81b8e1c6c026f05cf1027864878fa314e1063c191e50648ff122b130982c5e0e"
+  },
+  {
+    "path": "scripts/check-docs-sync.py",
+    "sha256": "3ef3b9217de091837280244a42c2334316e84261a1fbdeea6f3e6e61c9cf0c64"
+  },
+  {
+    "path": "scripts/documentation-governance.test.py",
+    "sha256": "58212dc62e155bed9f869df0ee01116db6641d2059a101bfeeb801064c346423"
+  },
+  {
+    "path": "scripts/agent-context-router.test.mjs",
+    "sha256": "10f90fb5f6859591b534432ab46486c96013e553d5f62de10e0fcfa18c88aa97"
+  }
+]

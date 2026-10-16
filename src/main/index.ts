@@ -81,11 +81,7 @@ import { createElectronAssetCardWindow } from './asset-card/electron-asset-card-
 import { EVENT_ASSET_CARD_CHANGED, EVENT_ASSET_CARD_RETURN } from '../shared/contracts/asset-card.contract'
 import { createVisualAiController } from './visual-ai/visual-ai-controller'
 import { EVENT_VISUAL_AI_UPDATED } from '../shared/contracts/visual-ai.contract'
-import { createManagedDownloads } from './managed-download/managed-download'
-import { DownloadService } from './services/download.service'
-import {
-  createConnectedLibraryRuntime,readConnectedSyntheticE2eConfiguration,type ConnectedLibraryRuntime
-} from './external-connected-library/connected-library-runtime'
+import { createLegacyReadOnlyRuntime } from './legacy-readonly-workspace/legacy-readonly-runtime'
 
 protocol.registerSchemesAsPrivileged([
   {scheme:'dam-workmedia',privileges:{standard:true,secure:true,supportFetchAPI:true,corsEnabled:true,stream:true}},
@@ -93,7 +89,6 @@ protocol.registerSchemesAsPrivileged([
     scheme: 'dam-preview',
     privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true }
   },
-  { scheme:'dam-connected-preview',privileges:{standard:true,secure:true,supportFetchAPI:true,corsEnabled:true,stream:true} },
   { scheme:'dam-legacy-preview',privileges:{standard:true,secure:true,supportFetchAPI:true,corsEnabled:true,stream:true} }
 ])
 
@@ -104,7 +99,6 @@ const trustedRendererEntryUrl = isDev && process.env['ELECTRON_RENDERER_URL']
   : pathToFileURL(join(__dirname, '../renderer/index.html')).toString()
 const syntheticE2e = readSyntheticE2eConfiguration()
 const syntheticFixtures = syntheticE2e ? readSyntheticFixtures(syntheticE2e.rootDirectory) : undefined
-const connectedSyntheticE2e = readConnectedSyntheticE2eConfiguration({encoded:process.env.DAM_CONNECTED_LIBRARY_SYNTHETIC_E2E,activeRoot:syntheticE2e?.rootDirectory??null,isPackaged:app.isPackaged,requested:process.argv.includes('--dam-active-library-synthetic-e2e')})
 
 const profileArguments = process.argv.filter(argument => argument.startsWith('--dam-profile='))
 if (profileArguments.length > 1 || (syntheticE2e && profileArguments.length)) throw Error('PROFILE_ARGUMENT_INVALID')
@@ -144,7 +138,7 @@ let mainWindow: BrowserWindow | null = null
 let trustedMainFrame: object | null = null
 let appStorage: AppStorage | undefined
 let activeLibraryHost: ReturnType<typeof createProductionActiveLibraryHost> | undefined
-let connectedRuntime: ConnectedLibraryRuntime | undefined
+let legacyRuntime: ReturnType<typeof createLegacyReadOnlyRuntime> | undefined
 let workWindows:ReturnType<typeof createWorkWindowController>|undefined
 let workMedia:ReturnType<typeof createWorkMediaController>|undefined
 let assetCard: ReturnType<typeof createAssetCardController> | undefined
@@ -169,7 +163,6 @@ let tagBatches:ReturnType<typeof createTagBatchController>|undefined
 let tagDecisions:ReturnType<typeof createTagDecisionController>|undefined
 let tagExecution:ReturnType<typeof createTagExecutionController>|undefined
 let tagIntents: ReturnType<typeof createTagIntentController> | undefined
-let managedDownloads: ReturnType<typeof createManagedDownloads> | undefined
 let localServer: Awaited<ReturnType<typeof createLocalDamServer>> | undefined
 let workspaceDrafts: ReturnType<typeof createWorkspaceDrafts> | undefined
 const draftOwner = (context: MainInvokeContext) => isBrowserContext(context) ? `client:${context.id}` : `native:${context.sender.id}`
@@ -290,7 +283,7 @@ function registerWorkspaceCommand(channel: string, handler: MainIpcHandler): voi
           ?await measureAiStage(aiDiagnostics?.record,typeof query?.queryId==='string'?query.queryId:randomUUID(),'index-query',()=>Promise.resolve(handler(context,...args)),{language})
           :await handler(context, ...args)
         if (['settings:save', 'ai-backend:save', 'ai-backend:delete'].includes(channel)) publishWorkspaceEvent('settings:changed')
-        if ((result as { success?: boolean } | null)?.success && ['connected-library:confirm', 'connected-library:index-next', 'connected-library:queue-metadata', 'connected-library:prepare-new', 'connected-library:prepare-file', 'connected-library:queue-lifecycle', 'connected-library:sync', 'connected-library:resolve-conflict', 'connected-library:confirm-cleanup', 'connected-library:disconnect', 'legacy-readonly:confirm', 'legacy-readonly:close'].includes(channel)) publishWorkspaceEvent('connected-library:changed')
+        if ((result as { success?: boolean } | null)?.success && ['legacy-readonly:confirm', 'legacy-readonly:close'].includes(channel)) publishWorkspaceEvent('legacy-readonly:changed')
         return result
       }), channel)
   }
@@ -427,7 +420,7 @@ app.whenReady().then(async () => {
       onChanged: (context, owner) => { publishToWorkspace(owner, EVENT_ASSET_CARD_CHANGED, context); if(context.metadataChanged)publishWorkspaceEvent('workspace:changed') },
       onCardReleased: token => { visualAi?.cancelOwner(`card:${token}`); tagIntents?.cancelOwner(`card:${token}`);tagExecution?.cancelOwner(`card:${token}`);tagDecisions?.cancelOwner(`card:${token}`);tagBatches?.cancelOwner(`card:${token}`);tagRecovery?.cancelOwner(`card:${token}`);backgroundAnalysis?.cancelOwner(`card:${token}`);basicAnalysis?.cancelOwner(`card:${token}`); imageTools?.discardOwner(`card:${token}`) }
     })
-    connectedRuntime=await createConnectedLibraryRuntime({userDataDirectory:app.getPath('userData'),synthetic:connectedSyntheticE2e,openConnectedPage:()=>{if(mainWindow&&!mainWindow.isDestroyed()){mainWindow.show();mainWindow.focus()}publishWorkspaceEvent('workspace:navigate',{path:'/connected-libraries'})},requestQuit:()=>app.quit()})
+    legacyRuntime = createLegacyReadOnlyRuntime()
     setupIpcHandlers()
     localServer = await createLocalDamServer({
       health: () => ({ buildId: DAM_BUILD_IDENTITY.buildId, platform: process.platform, arch: process.arch, version: app.getVersion() }),
@@ -449,19 +442,15 @@ app.whenReady().then(async () => {
         }
         if(reference.startsWith('handoff/')){const id=decodeURIComponent(reference.slice(8));if(!workMedia)throw Error('MEDIA_DENIED');return workMedia.files.readFile(id)}
         const parts = reference.split('/').map(decodeURIComponent)
-        if (parts.length !== 4 || !['active', 'connected', 'legacy'].includes(parts[0]) || parts.some(part => !/^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/.test(part))) throw Error('MEDIA_DENIED')
+        if (parts.length !== 4 || !['active', 'legacy'].includes(parts[0]) || parts.some(part => !/^[A-Za-z0-9][A-Za-z0-9._:~-]{0,255}$/.test(part))) throw Error('MEDIA_DENIED')
         const [kind, identity, generation, assetId] = parts
         const current = () => {
-          if (kind === 'connected') {
-            const state = connectedRuntime!.connected.inspect()
-            return { identity: state.libraryIdentity, generation: state.generation, available: state.state !== 'unconfigured' }
-          }
-          const state = kind === 'legacy' ? connectedRuntime!.legacy.inspect() : activeLibraryHost!.inspect()
+          const state = kind === 'legacy' ? legacyRuntime!.legacy.inspect() : activeLibraryHost!.inspect()
           return { identity: state.identity, generation: state.generation, available: state.state === 'ready' }
         }
         const check = () => { const state = current(); if (!state.available || state.identity !== identity || state.generation !== generation) throw Error('MEDIA_DENIED') }
         check()
-        const bytes = await (kind === 'connected' ? connectedRuntime!.connected.readPreview(assetId) : kind === 'legacy' ? connectedRuntime!.legacy.readPreview(assetId) : activeLibraryHost!.readPreview(assetId))
+        const bytes = await (kind === 'legacy' ? legacyRuntime!.legacy.readPreview(assetId) : activeLibraryHost!.readPreview(assetId))
         check()
         return { bytes, type: previewMediaType(bytes) }
       }
@@ -530,7 +519,7 @@ app.whenReady().then(async () => {
     }
   })
 
-  connectedRuntime?.registerProtocols(protocol)
+  legacyRuntime?.registerProtocols(protocol)
 
   // A reported client presentation failure must retain the ready Host's recovery entries.
   await workspaceLaunch.ready().catch(() => {})
@@ -547,7 +536,7 @@ app.on('window-all-closed', () => {})
 
 const libraryQuiescence = createLibraryQuiescence({
   current: () => ({
-    visualAdmission, activeLibraryHost, workWindows, managedDownloads, assetCard,
+    visualAdmission, activeLibraryHost, workWindows, assetCard,
     tagDecisions, tagBatches, tagRecovery, visualAi, tagExecution, tagIntents,
     imageTools, backgroundAnalysis, basicAnalysis, backgroundOcr, ocr, aiConnections, aiAcceptance, managedVision, retrievalRuntime, queryFileGrants
   }),
@@ -564,7 +553,7 @@ const shutdownCoordinator = new ShutdownCoordinator({
     await managedModels?.drain()
     await retrievalModels?.drain()
     await libraryQuiescence.drainForShutdown()
-    await connectedRuntime?.drain()
+    await legacyRuntime?.drain()
     await aiDeviceSampler?.stop()
     await localServer?.close()
     appStorage?.close()
@@ -645,7 +634,7 @@ function setupIpcHandlers() {
       return (operation as (owner: string, request: any) => unknown)(selectionOwner(context), request)
     })
   }
-  if (!appStorage || !activeLibraryHost || !connectedRuntime || !visualAdmission) throw new Error('Main application state is unavailable.')
+  if (!appStorage || !activeLibraryHost || !legacyRuntime || !visualAdmission) throw new Error('Main application state is unavailable.')
   const settingsService = syntheticE2e ? createSyntheticSettingsService(syntheticE2e, syntheticFixtures) : SettingsService.getInstance()
   aiDiagnostics=createAiDiagnostics(appStorage.database,DAM_BUILD_IDENTITY.buildId)
   appStorage.database.exec('CREATE TABLE IF NOT EXISTS ai_resource_policy(singleton INTEGER PRIMARY KEY CHECK(singleton=1),policy TEXT NOT NULL)')
@@ -813,9 +802,6 @@ function setupIpcHandlers() {
     if(syntheticE2e&&process.env.DAM_SYNTHETIC_BACKGROUND_OCR==='1'){const k=<T>(value:T)=>({kind:'known' as const,value,sampledAt:performance.now()});return{memory:k({free:8*1024**3,total:16*1024**3}),battery:k(false),lowPower:k(false),thermal:k('nominal' as const),idle:k('idle' as const),visible:k(true),gpuFree:{kind:'unknown'}}}
     return sampleBackgroundTelemetry(Boolean(mainWindow&&!mainWindow.isDestroyed()&&mainWindow.isVisible()))
   }})
-  managedDownloads = createManagedDownloads({ host: activeLibraryHost, history: new DownloadService(appStorage.database), fetch: syntheticE2e ? syntheticFixtures?.fetch ?? (async()=>{throw Error('SYNTHETIC_ENDPOINT_DENIED')}) : undefined, onImported: job => {
-    publishWorkspaceEvent('download:imported', { libraryIdentity: job.libraryIdentity, generation: job.generation, assetId: job.assetId })
-  } })
   basicAnalysis=createBasicAnalysisController({diagnostics:aiDiagnostics.record,host:activeLibraryHost,settings:()=>settingsService.getSettings(),provider:aiConnections.provider,admission:visualAdmission,tags:tagExecution,ocr,ocrRuntime,
     resourceReadiness:rule=>rule.backendId===MANAGED_VISION_ID?managedVision?.backgroundReadiness():undefined,
     upgrade:async(input,signal)=>{if((await activeLibraryHost!.readAssetContext([])).schemaVersion>=14)return;const releaseOcr=ocr!.holdForMaintenance(),release=visualAdmission!.hold();try{await backgroundOcr?.suspendAndDrain();await Promise.all([tagBatches!.suspendAndDrain(),tagExecution!.suspendAndDrain(),visualAi!.suspendAndDrain()]);await activeLibraryHost!.enableBasicAnalysis(input,signal)}finally{tagBatches!.resume();tagExecution!.resume();visualAi!.resume();ocr!.resume();releaseOcr();release()}},
@@ -823,7 +809,6 @@ function setupIpcHandlers() {
   backgroundAnalysis=createBackgroundAnalysisController({basic:basicAnalysis,flush:scope=>tagRecovery!.flush(scope),host:activeLibraryHost,admission:visualAdmission,telemetry:()=>sampleBackgroundTelemetry(Boolean(mainWindow&&!mainWindow.isDestroyed()&&mainWindow.isVisible())),holdOcr:()=>ocr!.holdForMaintenance(),visuals:{suspendAndDrain:async()=>{tagRecovery?.invalidate();await backgroundOcr?.suspendAndDrain();await Promise.all([basicAnalysis!.suspendAndDrain(),tagBatches!.suspendAndDrain(),tagExecution!.suspendAndDrain(),visualAi!.suspendAndDrain()])},resume:()=>{basicAnalysis!.resume();ocr!.resume();tagBatches!.resume();tagExecution!.resume();visualAi!.resume()}}})
   registerMainIpcComposition({
     aiAcceptance,aiConnections,openAuthUrl:url=>shell.openExternal(url),
-    appDatabase: appStorage.database,
     settingsService,
     selectSettingsFolder: syntheticE2e && !syntheticE2e.interactiveDialogs ? async () => ({ canceled: true, path: '' }) : async (request) => {
       const result = await showNativeOpenDialog({
@@ -860,12 +845,8 @@ function setupIpcHandlers() {
     backgroundOcr,
     ocr,
     imageTools,
-    managedDownloads,
-    externalConnectedLibrary:{
-      host:connectedRuntime.connected,
-      pairing:connectedRuntime.pairing,
-      companionArtifact:connectedRuntime.companionArtifact,
-      legacy:connectedRuntime.legacy,
+    legacyReadOnlyWorkspace:{
+      legacy:legacyRuntime.legacy,
       isTrustedSender:isTrustedWorkspace
     },
     handle: registerWorkspaceCommand

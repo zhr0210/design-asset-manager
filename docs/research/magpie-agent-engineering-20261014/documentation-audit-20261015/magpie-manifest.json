@@ -1,0 +1,189 @@
+{
+  "sha": "01c41e8ba2aad586ec885c92bc4b959a49005eda",
+  "tree_truncated": false,
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 5004,
+      "sha256": "5707edbc78e0fb582eca1822b3f4bb24a09d16174ab8e7a01e2cb0f7e2c55034",
+      "local_source": "../reread-20261015/sources/magpie/AGENTS.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/AGENTS.md"
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 23,
+      "sha256": "393eb9b3f95f2e78f501b4ff03e50b6fe0ed5c26d03ba6cd44b6dc885565698e",
+      "local_source": "../reread-20261015/sources/magpie/CLAUDE.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/CLAUDE.md"
+    },
+    {
+      "path": "LESSONS.md",
+      "bytes": 33842,
+      "sha256": "53391f50b784bcfaffde033984972d9f660ddb6a25ae30bd15df043d9e82a14f",
+      "local_source": "../reread-20261015/sources/magpie/LESSONS.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/LESSONS.md"
+    },
+    {
+      "path": "README.md",
+      "bytes": 18506,
+      "sha256": "a3ad9cb4a712bb65388f2c1a7d36dff0de26ecd683809725dbe71e8a019d29ae",
+      "local_source": "../reread-20261015/sources/magpie/README.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/README.md"
+    },
+    {
+      "path": "Makefile",
+      "bytes": 6782,
+      "sha256": "5171ca939ca1cc702ad92e7fb4e0d6d5b39608b0957712e4ec91a3d83f181f37",
+      "local_source": "../reread-20261015/sources/magpie/Makefile",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/Makefile"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "bytes": 19094,
+      "sha256": "432be586d359ca52fa445f9085a1ff3c713e48f9ccd59ea0418741234bb8dc43",
+      "local_source": "../reread-20261015/sources/magpie/docs/code-standards.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/code-standards.md"
+    },
+    {
+      "path": "docs/contributors.md",
+      "bytes": 5060,
+      "sha256": "a420a7f3edf44f9c9b8f3028ad1ea630f4ef4781b0f9da8a050355bab3212681",
+      "local_source": "../reread-20261015/sources/magpie/docs/contributors.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/contributors.md"
+    },
+    {
+      "path": "internal/gui/tests/README.md",
+      "bytes": 148801,
+      "sha256": "f9ce559bbcfba2c4e9899627f428777531040645470fcf9153e6ca2dce70df37",
+      "local_source": "../reread-20261015/sources/magpie/internal/gui/tests/README.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/internal/gui/tests/README.md"
+    },
+    {
+      "path": ".github/ui-preview/README.md",
+      "bytes": 2890,
+      "sha256": "1d5d9ad160945595c46a14d6929b6367630d8c1657ba61fe22d03a31e94fa632",
+      "local_source": "../reread-20261015/sources/magpie/.github/ui-preview/README.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/.github/ui-preview/README.md"
+    },
+    {
+      "path": ".github/workflows/docker.yml",
+      "bytes": 5285,
+      "sha256": "6e1c2e07360f93740cb2fcc20b5c8615e69bf87f0554af673f6ca4be87ed9469",
+      "local_source": "../reread-20261015/sources/magpie/.github/workflows/docker.yml",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/.github/workflows/docker.yml"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "bytes": 5559,
+      "sha256": "d79e5bb4940f1dc9dff06e499506be5b2f4aa10c62bca96deb2a4a13d7d9e3e4",
+      "local_source": "../reread-20261015/sources/magpie/.github/workflows/release.yml",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/.github/workflows/release.yml"
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "bytes": 7001,
+      "sha256": "e5c59acc7010fd7396c227d4aeabd01c81f82a09f477af2dd242c9b159811252",
+      "local_source": "../reread-20261015/sources/magpie/.github/workflows/test.yml",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/.github/workflows/test.yml"
+    },
+    {
+      "path": ".github/workflows/ui-preview.yml",
+      "bytes": 5415,
+      "sha256": "f750140e980fd0e9e1b5fe57a8f409884295a33db6d943fdc85a8da77fe218b9",
+      "local_source": "../reread-20261015/sources/magpie/.github/workflows/ui-preview.yml",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/.github/workflows/ui-preview.yml"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "bytes": 3933,
+      "sha256": "97e00539f4fa36c72ce47f5aeb8ddeeec42d99ac6509ec5dc5fde99d97e543a3",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/README.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/README.md"
+    },
+    {
+      "path": "docs/subsystems/agent-wiring.md",
+      "bytes": 71610,
+      "sha256": "4bc6383a7eb4982f91a445c347c04fb60fa0d0ca497bdc4a974aed070c7067bf",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/agent-wiring.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/agent-wiring.md"
+    },
+    {
+      "path": "docs/subsystems/claude-subscription-bridge.md",
+      "bytes": 25589,
+      "sha256": "c75785c76d41b7753abab27cf6a0c61bf132caf8510f863200fa440a325d9f87",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/claude-subscription-bridge.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/claude-subscription-bridge.md"
+    },
+    {
+      "path": "docs/subsystems/gateway-middleware.md",
+      "bytes": 6737,
+      "sha256": "2d7b4f27b6a6fa9fd6c5ef065bdff0878b451b9d756b71da804fa72d754d21e9",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/gateway-middleware.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/gateway-middleware.md"
+    },
+    {
+      "path": "docs/subsystems/gateway-routing.md",
+      "bytes": 180623,
+      "sha256": "91649647049b819c7a546ed7c8ba8cafc1f8fd458d14b52c47730225f7a89e7d",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/gateway-routing.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/gateway-routing.md"
+    },
+    {
+      "path": "docs/subsystems/gateway-sessions.md",
+      "bytes": 32318,
+      "sha256": "f61322f16d603008ab819f275570033d21c4e5bb078f8514c04ded9cf2b513ea",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/gateway-sessions.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/gateway-sessions.md"
+    },
+    {
+      "path": "docs/subsystems/gui-shell.md",
+      "bytes": 60562,
+      "sha256": "8fbcd92840fe2d6c2ad8ba5ce4c793afe7e80e6768827b9bc7fabf72605e2254",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/gui-shell.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/gui-shell.md"
+    },
+    {
+      "path": "docs/subsystems/library.md",
+      "bytes": 41996,
+      "sha256": "6fe1e9fd5f1f0d9008b1a17248186e145a50c26fd35e3d233438d63e0896c6c6",
+      "local_source": "sources/magpie/docs/subsystems/library.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/library.md"
+    },
+    {
+      "path": "docs/subsystems/plugin-runtime.md",
+      "bytes": 32247,
+      "sha256": "6d16b0fd4cacbe7131e7a292b12b558da4bf95d130960b374529b652bc822eef",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/plugin-runtime.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/plugin-runtime.md"
+    },
+    {
+      "path": "docs/subsystems/provider-plugins.md",
+      "bytes": 37407,
+      "sha256": "14d72924e1ef8ecda092ac865c54ec669a4c5ac247fec2fc0ef5f96d3b3c9928",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/provider-plugins.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/provider-plugins.md"
+    },
+    {
+      "path": "docs/subsystems/providers-accounts.md",
+      "bytes": 86531,
+      "sha256": "1e67678a072f23218f1fa57780a7ac50a6d6077d97892f0b0f63574ec9ab700b",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/providers-accounts.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/providers-accounts.md"
+    },
+    {
+      "path": "docs/subsystems/sync-backup.md",
+      "bytes": 6732,
+      "sha256": "6af63406b80ea6e373d472f4e7a3e87f1104410dac35ed38ee600198a5f0755b",
+      "local_source": "../reread-20261015/sources/magpie/docs/subsystems/sync-backup.md",
+      "pinned_url": "https://github.com/yetone/magpie/blob/01c41e8ba2aad586ec885c92bc4b959a49005eda/docs/subsystems/sync-backup.md"
+    }
+  ],
+  "repository": "https://github.com/yetone/magpie",
+  "retrieved_at": "2026-10-15T06:43:36.788222+00:00",
+  "commit": {
+    "sha": "01c41e8ba2aad586ec885c92bc4b959a49005eda",
+    "date": "2026-10-15T06:19:00Z",
+    "message": "library: a skill probe's download goes when it is probed again or 15 minutes are up, and one a magpie that quit left behind goes at the next probe (#2321)\n\nProbeSkills kept each GitHub probe's download, a magpie-skill-* folder in\nthe temp dir, cached for 15 minutes. An expired one went only at the\n*next* probe, so a magpie that quit, or a test that ended, left it there\nfor good. One go test ./internal/library left 22. This machine's temp dir\nhad 5477, and with old test homes they filled the disk under a full run\n(gateway tests failed \"no space left on device\").\n\n- keepProbe: each cached probe has a timer that removes its folder when\n  probeLife is up. A probe of the same input replaces it and removes the\n  old folder at once, outside the lock.\n- sweepStaleDownloads, at each probe: a magpie-skill-* in the temp dir over\n  an hour old goes. No live one is that old, since a probe is kept 15\n  minutes and a fetch takes seconds.\n- internal/library's TestMain gives the tests a temp dir of their own\n  (TMPDIR, and TMP/TEMP for Windows), ends the cached probes, and fails a\n  run that leaves a skill download there. A test binary started again by a\n  test keeps its parent's temp dir.\n\nRun (on origin/main 8b89b2e36): go test -count=1 -timeout 60m ./... all ok;\ngofmt clean; go vet darwin, GOOS=linux -tags nogui, GOOS=windows clean.\n\nBroken by hand, each went red:\n- a replaced probe's folder kept (TestProbeDownloadEndsWithIt)\n- no removal at expiry (TestProbeDownloadEndsWithIt)\n- the sweep ignores age, or the prefix, or doesn't run\n  (TestStaleDownloadsSwept)\n- TestMain doesn't end the probes: \"the tests left 16 skill downloads\"\n\nNot tried: the Windows box, though TMP/TEMP are set for it."
+  },
+  "scope": "25 selected guideline, subsystem, workflow and verification documents; not a full code review"
+}

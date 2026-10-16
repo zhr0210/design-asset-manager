@@ -1,75 +1,21 @@
-# 2026-10-09 macOS 迁移接线
+# 自有推理Runtime与保留诊断
 
-退出确认绑定每次 launch 的物理 close，独立于异步文件清理；旧 launch 的清理不能确认替代进程退出。未确认退出继续保持驻留许可和 unknown，整个 Host drain 仍等待已登记的清理完成。安装环境真实测试 `scripts/macos-real-vision-close-race.test.ts` 使用指定公开 profile 的只读模型/官方二进制、独立临时数据库；延迟清理和 TERM 交付是明确故障注入，不代替普通 UI 验收。
+跨层职责与用户入口见[所属子系统](../../../../docs/subsystems/ai-system.md#execution)，三类执行目标及模型选择/排程/驻留/准入的分界见[职责表](../../../../docs/subsystems/ai-system.md#scheduling-ownership)。本模块只拥有自有Runtime的真实实例/allocator及回收，不因此取得用户启动服务的终止权。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
 
-Managed prepare 返回属于该消费者的释放句柄；视觉、独立标签与基础描述在 finally 解除准备保护。后续传输／资源信号合并不负责识别这个所有者，不能把保护滞留到120秒超时；释放准备保护不释放尚未退出的模型驻留。
+## 入口与拥有者
 
-正式 Main 复用原 Managed GGUF/消费者与 Governor，按目标选择固定 llama.cpp b11429 Mac arm64/x64 包，完整 SHA/有界 tar 检查后把受支持的 dylib 别名转换为普通文件。Apple Silicon Metal 方案只计同一 RAM 池；驱动/设备/采样未知不批准新 GPU 方案。Mac 自有子进程使用 source-bound libproc helper 读取创建身份、physical footprint 与 lifetime peak，仍仅以实际 close 释放许可。
+managed-vision-runtime管理可信Python/原生GGUF执行，managed-gguf-packages校验平台运行包；OCR、retrieval、Pi使用独立拥有者，共享资源准入而非共享任意allocator。
 
-Python 绑定保留 venv 入口，不解析成丢失环境的系统解释器；从 pyvenv/version 选择实际 site-packages。Mac 正式选择器选择可信环境根后由 Main 拼接 bin/python3，避免通用文件选择器丢失符号链接入口。Worker 的 POSIX 峰值使用真实 getrusage，Darwin bytes/Linux KiB 分别转换。
+## 状态、提交与失败
 
-本轮 M4/24GiB：官方固定运行包内部实际执行、2B Q4_K_M/Q8_0 Metal 公共图推理与物理释放通过；正式 Browser 库存安装已完成，最终 UI 加载/分析/重开因 macOS 锁定尚未验收。精确版本/证据见 [Mac迁移](../../../../docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-MIGRATION-20261009.md)。以下保留 Windows/旧分支证据，32项旧 Runtime 通道仍禁用。
+模型/解释器/依赖/runner指纹冻结到实例；准备保护由消费者finally解除，驻留要等实际close。每次launch物理退出与异步文件清理分开，旧清理不能确认新进程。UNKNOWN保持隔离/占用；资源可用不恢复已撤销业务权限。
 
----
+## 平台与保留接口
 
-# 正式托管视觉运行时（2026-10-06）
+Mac Metal共享RAM只算一池，libproc观测绑定创建身份；Windows CPU/CUDA及原生约束按实际配置。32个旧Runtime IPC仍禁用，platform-ai-branch-evidence的record/readStatus仅是保留Seam，不启动模型或授予资格。
 
-`managed-vision-runtime.ts` 是当前 Main 的自有视觉进程入口，接线为“本地模型与 OCR → Main 命名动作 → 模型/可信 Python 依赖指纹 → 共享驻留准入 → 隔离 stdio worker → 必要视觉验证 → 连接配置 → 正式基础分析”。它与既有 Pi/外部服务共用能力消费者，不启动研究 HTTP 服务或执行模型仓库代码。
+## 详细契约、来源与验证
 
-当前支持 Qwen3-VL-2B/4B-Instruct、Windows x64 已安装 Transformers/Python 3.11、CPU float32、有限图像/context/tokens。正式 Hugging Face 安装、只读引用与受管复制共用[模型管理](../../model-library-workspace/README.md)库存。上游 HTTPS 固定版本不冒充 DAM 发布签名。模型、解释器、依赖与 bundled runner 的漂移会撤销旧资格；重新加载进行真实双色识别复核，目录存在或健康检查不等于 ready。
+[逐段技术契约](../../../../docs/subsystems/ai-system.md#execution)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../../docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
 
-加载前按组合申请 16/25 GiB RAM 驻留许可（包含加载峰值余量），计算前申请 1 GiB 增量；实际 RSS/峰值/时间绑定执行实例。安静/正常/加速控制后续线程和空闲卸载时限，高预留/压力在当前工作单元后收敛。只有自有 ChildProcess 的实际 close 释放驻留；迟到 close/UNKNOWN 不能凭 Promise 结束清零。停用保留模型配置与分析证据，停止新准入并等待实际退出。
-
-完整预算预检覆盖新增驻留、现有许可、视觉准备和计算增量，加载前及指纹校验后均检查。加载本身不占推理槽，实际双色验证仍必须获得执行许可，允许已准入 OCR 与加载合理共存。后台 readiness 动态拒绝加载、验证、正在计算、退出、冷却及预算不足，防止资源等待反复生成任务尝试。
-
-`python-environment-binding.ts` 核对已安装依赖；`ai-service/tools/managed_vision_worker.py` 由构建复制进实际 Main 资源。它通过私有 stdio 接受受控预览，不开放端口，不执行自定义模型代码。实际组合、测量边界与用户验收见 [A 记录](../../../../docs/handoff/AI-CORE-20261006.md)。更多模型/GPU/平台及 DAM 签名发行未由此交付；Hugging Face 上游安装与 B 的生命周期由模型管理负责。
-
-## 保留的 Platform AI Branch evidence
-
-`platform-ai-branch-evidence.internal.ts` deepens the retained Main implementation
-of Platform AI Branch Status. Its Interface is `record(evidence)` and
-`readStatus(platformBranch, sources)`. It owns latest records, freshness, ordered
-source collection and the existing readiness mapper/status projector calls.
-The two retained Runtime IPC adapters share its process-local instance.
-
-## Wiring and permissions
-
-**These retained branch/probe adapters are separate from the managed production entry above.** Formal
-Main registers `main-ipc-composition.ts` → `disabled-app.ipc.ts`; all 32 retained
-Runtime/branch/probe/Llama channels remain `LIBRARY_FEATURE_DISABLED`. The old
-`ai-runtime.ipc.ts` and `llama-runtime.ipc.ts` registrars are not called. Existing
-Asset OCR, Visual AI, account and Acceptance entry points are independent.
-The new Module itself imports no Runtime owner, bootstrap, settings, SQLite,
-model files or network transport. It does not authorize a probe, load or install.
-
-## Preserved behavior
-
-- Latest Python evidence is keyed by lane; ONNX by **requested** family. Readiness
-  still interprets the returned family. OCR and Llama each have one latest record.
-- Records retain their original object references. Resolved failed probes replace
-  earlier evidence; thrown probes do not record. No history, cloning or eviction.
-- Five-minute TTL includes the exact boundary. Invalid dates are ignored; future
-  dates and clock rollback retain the old behavior. Runtime/configuration changes
-  do not add invalidation. Llama server startup's internal probe does not record.
-- Worker Promise rejection alone degrades to null. Its synchronous throw and
-  other source/mapper/projector errors propagate to the unchanged IPC envelopes.
-  Both await checkpoints, source order and per-kind clock observations remain.
-- Mapper/projector policy is unchanged: Runtime Probe, Model Readiness and Real
-  Model Path remain separate. Artifact paths and ready-to-load alone prove no
-  inference. No public contract, Worker HTTP or production registration changes.
-
-## Verification
-
-`test-platform-ai-branch-evidence` exercises the fixed Interface with synthetic
-records and source summaries. `test-platform-ai-branch-evidence-ipc` bundles both
-complete retained IPC adapters with synthetic side-effect owners, never importing
-their real bootstrap/DB/model/endpoint dependencies. `test-platform-ai-branch-disabled`
-uses the actual production composition and temporary App storage to check all 32
-Runtime channels remain unavailable. Readiness/projector and OCR/Llama transport
-tests remain independent; three duplicate store tests were replaced.
-
-These checks do not prove a production model path or restore the old entry points.
-Native navigation/visible-state evidence and remaining older test limitations
-are recorded separately in `TASK.md`.
-
-2026-10-09 停止取证：首次触发者在abort监听器重入前冻结；有界诊断只保留停止类别、安全码、自有PID、关联尝试及信号请求／物理close观察。超时与迟到close分列，不能把信号请求当退出。旧记录缺这些字段时保留未知，不推断或回填历史原因。
+实际命令见package.json、.codeindex/tests-map.json和子系统验证入口。用户功能按[真实验收](../../../../docs/agents/ui-ux-acceptance.md)执行；UI/真实推理/原生/库资格分列，当前版本只见CURRENT-STATE，不把内部接线或本次重写当新PASS。

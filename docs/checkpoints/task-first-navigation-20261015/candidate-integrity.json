@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "snapshot_files": 2632,
+  "snapshot_changes": [],
+  "live_drift_since_candidate": [],
+  "scope": "Candidate excludes TASK and checkpoint reporting; these may change during closeout."
+}

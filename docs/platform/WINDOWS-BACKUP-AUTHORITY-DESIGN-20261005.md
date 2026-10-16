@@ -6,7 +6,7 @@
 
 保留强 source writer 隔离目标，推荐继续评审 **B2：独立受保护 authority 拥有 Control Store 的全部物理写入与唯一 SQLite 事务**。B1 只能保护新 snapshot / 执行资源；A 只能提供协作 Host 下的固定镜像和检测。不能用 A/B1 悄悄缩小目标，再给当前 Windows backup 放行。
 
-这是设计建议，不是 Accepted ADR。B2 改变当前 Main-owned connection、直接 SQL 调用和存储提交权威，是需要明确批准的架构、ownership 与公共兼容 seam 取舍。Main 继续决定业务动作、scope、用户许可、用户状态与结果同步；拟议 authority 才持有经过批准的物理对象、connection 和原子提交。真实旧库迁移、Original / Managed Copy / Eagle ownership、Full Library Backup、恢复写入及 macOS 均不在本批。
+这是设计建议，不是 Accepted ADR。B2 改变当前 Main-owned connection、直接 SQL 调用和存储提交权威，是需要明确批准的架构、ownership 与公共兼容 seam 取舍。Main 继续决定业务动作、scope、用户许可、用户状态与结果同步；拟议 authority 才持有经过批准的物理对象、connection 和原子提交。
 
 本批交付 threat contract、机制候选、窄接口、失败分类和受控测试计划。所有未来测试均 **NOT_RUN**；本批没有创建或修改 OS 身份、权限、对象保护策略或产品源码。当前实施事实仍来自 [2026-10-04 交接](../handoff/WINDOWS-BACKUP-BOUNDARY-20261004.md)，本批静态复核与终态见 [2026-10-05 交接](../handoff/WINDOWS-BACKUP-AUTHORITY-20261005.md)。
 

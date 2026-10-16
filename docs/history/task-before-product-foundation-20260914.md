@@ -1,6 +1,8 @@
 <!-- Historical TASK snapshot; relative links rebased for this archive location. -->
 # Current Task
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 ## 本轮已完成：移除内置网页采集；插件平台讨论稿（2026-09-13）
 
 用户明确：保留本地素材库搜索和本地导入，移除内置浏览器、网页采集、外部来源
@@ -23,7 +25,6 @@
   `dam-active-library-electron-e2e-8MCBP7/evidence`，本地库界面已目检。
 - Main登记183个invoke/0个入站event；AI/卡片/图片工具/下载出站通知保留。
   typecheck/build、打包配置审计、权限基线、context:check和Router 268评估通过。
-- 111个受保护核心文件与备份逐字节一致，Eagle companion原有差异保持；原暂存
   patch保持，未暂存内容或提交。真实数据没有被读取、修改、迁移或清理。
 - [移除报告](../product/WEB-COLLECTION-RETIREMENT-20260913.md)列出删除文件、
   保留能力、实际后果、备份及逐文件审计清单。

@@ -1,15 +1,13 @@
 # Physical Reclaim Summary Cards Sort By Latest Completion Time
 
-Physical Reclaim Completion Summary cards are transient completion results, not a persistent volume inventory. Their primary order is therefore the authoritative **Latest Constituent Completion Time** of each immutable ADR 0258 summary snapshot, descending so the most recently completed snapshot appears first.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The sort timestamp is the maximum completion instant among the snapshot's constituent ADR 0254 results. It compares normalized UTC instants, never localized display strings, renderer receipt time, acknowledgement time, expiry time, volume mount time or generation identifier. A constituent without a valid authoritative completion instant cannot form a valid one-viewing/24-hour result or enter a usable summary.
+## Decision
 
-If two snapshots have the same latest completion instant, their next key is the current ADR 0262/0263 disambiguated volume label under the application locale's deterministic display collation. Remaining ties use host-only opaque stable-volume identity and then opaque startup/scheduler generation identity. Those final keys affect order only and are never rendered, logged or exposed as suffixes.
+Physical Reclaim Completion Summary cards are transient completion results, not a persistent volume inventory.
 
-When a usable Storage Management surface session begins, the relative order of its projected cards freezes. A newly arriving summary is inserted at the position determined by the same keys without re-sorting the existing cards against changed labels; an expired, acknowledged or removed card simply closes its visual gap while all surviving cards retain their relative order. A volume rename, first duplicate-name suffix, mount-state change or locale change may update permitted presentation but does not move an existing card during that session. A later session computes a fresh order.
+## Detailed contract and provenance
 
-Actual reclaimed bytes, shared-retained bytes, target count, Removed Now, Already Absent, Mixed, Completed As Shared, expansion state, selected page and remaining expiry never affect order. The application exposes no “largest reclaim first,” attention-priority or result-class sort, and it does not treat ordering as a deletion recommendation, severity judgment or proof of reading.
+详细状态、交互、数值边界和例外的唯一正文为[存储清理结果与可访问导航规格](../product/specs/storage-review.md#adr-0264)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Card order is ephemeral renderer projection state. It is not persisted as a preference, result field, database row, Full Library Backup, export/merge/sync record, Activity History, telemetry or support payload and changes no constituent acknowledgement or expiry.
-
-The current project has no Physical Reclaim Completion Summary card list. This ADR changes documentation only: it sorts/acknowledges/expires no real result, reads no user asset, runtime database, package/cache/model/private state and changes no public IPC/schema/AI Worker API. ADR 0265 displays this exact latest completion instant in the summary header without deriving order from localized text.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

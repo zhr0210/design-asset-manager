@@ -1,0 +1,42 @@
+{
+  "buildId": "dam-ebab19b0cac16211",
+  "platform": "darwin",
+  "arch": "arm64",
+  "browserPath": "Browser plugin not available; repository Playwright with Chrome",
+  "viewports": {
+    "browser": "1024x900",
+    "desktop": "ordinary default"
+  },
+  "checks": [
+    "desktop: ordinary workspace, menu, settings and legacy picker cancellation passed",
+    "browser: ordinary workspace, menu, settings and legacy picker cancellation passed"
+  ],
+  "errors": [],
+  "consoleErrors": [
+    {
+      "client": "desktop",
+      "error": "[Store] Failed to load assets from DB"
+    },
+    {
+      "client": "desktop",
+      "error": "[Store] Failed to load assets from DB"
+    },
+    {
+      "client": "browser",
+      "error": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "client": "browser",
+      "error": "[Store] Failed to load assets from DB"
+    },
+    {
+      "client": "browser",
+      "error": "[Store] Failed to load assets from DB"
+    }
+  ],
+  "failedResources": [],
+  "consoleQualification": "WARN: empty-library Store diagnostics and browser 404 messages; target controls work, no pageerror; not a console-clean claim",
+  "hostExitCode": 0,
+  "scope": "Ordinary empty isolated profile; no user library, account or inference actions",
+  "compatibilityFallback": true
+}

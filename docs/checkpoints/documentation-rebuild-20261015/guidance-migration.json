@@ -1,0 +1,377 @@
+{
+  "records": [
+    {
+      "source": "AGENTS.md",
+      "paragraph": 1,
+      "sha256": "e8f328b850798625605da90d1b71fa31df204672b39ab34401edf6f2de529d50",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 2,
+      "sha256": "512c7e79a62196f70e79aff6208bafdb776d6c74dbf071cc2a32755044f0acb4",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 3,
+      "sha256": "27c21d38683dbfcaba7575d84b7a4b62e9d42b80e2444e25dab5edf144522e86",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 4,
+      "sha256": "4d7e6fbd7cb4e7eb6ce18c6514f4fb3005c989658c8cfae83a134edd29e09a0c",
+      "decision": "rewrite as ownership/navigation; current content stays in owning document",
+      "destination": "CONTRIBUTING.md#7-文档维护"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 5,
+      "sha256": "383cd79b904d9bf142830e6bf5b016efd2e0baf97f32535fef1369ce0436cd73",
+      "decision": "preserve WIP and collaboration detail; root keeps short commitment",
+      "destination": "CONTRIBUTING.md#6-git候选与长任务"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 6,
+      "sha256": "9a71f2a10fcb0a09d808f90189de89ba22207300352744cc29eef6f87863bebf",
+      "decision": "rewrite as ownership/navigation; current content stays in owning document",
+      "destination": "CONTRIBUTING.md#7-文档维护"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 7,
+      "sha256": "96330bcda73508bf4deb9e0270367cfc04d4bf2f1549e10eed7568f41768fc64",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 8,
+      "sha256": "21814549081ffdf31e62e1f2f9fb8a9519c5e1877ba099f3545fc44350cc5588",
+      "decision": "preserve required proof and scope; no new product qualification",
+      "destination": "docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 9,
+      "sha256": "722e9c3afc730f8fcd9569f916fa50036949a8e71cd4d5efbac3c0cd46aa2acb",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 10,
+      "sha256": "0f3c0f44fffe6643de32673130277d8cfef0676a24148cace5e1daf1c69f2edd",
+      "decision": "preserve full protection in task-triggered guide",
+      "destination": "CONTRIBUTING.md#5-真实测试与持续许可"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 11,
+      "sha256": "bed6e5ef39bc7ba3d3763de625f4b3a451c472e8ad8eb61506b825ab72e1d811",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 12,
+      "sha256": "8289ce6f05150b1fc6cb288eb8863fc4c09e655931cee056dd62dd7dda9f002d",
+      "decision": "preserve WIP and collaboration detail; root keeps short commitment",
+      "destination": "CONTRIBUTING.md#6-git候选与长任务"
+    },
+    {
+      "source": "AGENTS.md",
+      "paragraph": 13,
+      "sha256": "87c08456f0fb1662895ec554c5a0db848c3afe795518a4343cd3ff30d828540a",
+      "decision": "rewrite as ownership/navigation; current content stays in owning document",
+      "destination": "CONTRIBUTING.md#7-文档维护"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 1,
+      "sha256": "4016289c972587a678810ff23f518427d20e89989ca7dd78a60623564a84a617",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 2,
+      "sha256": "433c47f7573f15b02cea3769a8fd13470c404626065df7c9275a92d53c9eb367",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 3,
+      "sha256": "738d4b6d1c5c068824bf3fe8f9590d4642cda8c5985e02bc9304e3989a706d47",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 4,
+      "sha256": "957c51c5cc388f5182b53d8767e9cd68e967a1f4bbe886cd349f749f118dc62e",
+      "decision": "preserve guarantee, keep local specifics in subsystem/module",
+      "destination": "docs/code-standards.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 5,
+      "sha256": "a62cc39be2912ef8615c165be9ec8b4a53e3d025495092f8d669088f4f182d32",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 6,
+      "sha256": "6983af2f9f8d66ba037f8fa8758ade03c7059e292362dabbbeafa7e82f60d598",
+      "decision": "preserve required proof and scope; no new product qualification",
+      "destination": "docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 7,
+      "sha256": "9fd426eda0d260a54ba01faf02a255c13ab67f2c8115420c7962c26e0a41fd09",
+      "decision": "preserve full protection in task-triggered guide",
+      "destination": "CONTRIBUTING.md#5-真实测试与持续许可"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 8,
+      "sha256": "01bd9a5085260bb088a709cc6ca8e28bb8dff63288a36d1402f30f7c8b8b496b",
+      "decision": "preserve guarantee, keep local specifics in subsystem/module",
+      "destination": "docs/code-standards.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 9,
+      "sha256": "2b12bb1ef6260c6af4d4a097ebdda0324a11a00bb870fe2ae5919895ba32d384",
+      "decision": "preserve guarantee, keep local specifics in subsystem/module",
+      "destination": "docs/code-standards.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 10,
+      "sha256": "451a144cc418e8bafe89df08288c4142599d7983dea52dd405d6a2959550ed7b",
+      "decision": "preserve guarantee, keep local specifics in subsystem/module",
+      "destination": "docs/code-standards.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 11,
+      "sha256": "6085a65f4f6757f4e85ddf9b983bdf53fd32cd0ba66f88ff3aba61b39247fe2a",
+      "decision": "preserve guarantee, keep local specifics in subsystem/module",
+      "destination": "docs/code-standards.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 12,
+      "sha256": "cff61df103406eaf28c0bf002d2d6816be1a83910ed82f542d6048b8904e2710",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 13,
+      "sha256": "473d9657759ce58f0c9bbf72020ee00afa67e80748b60a049d8f7aa11b6597ba",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 14,
+      "sha256": "632ea3fce7a05dacda9358a8833cce77f20b37f146f2577851c2427c3032e312",
+      "decision": "preserve required proof and scope; no new product qualification",
+      "destination": "docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 15,
+      "sha256": "d64d2844be9e150c0a189c09ebf295c5a4eea4ac94c5050f74da9d12f6e3e2e6",
+      "decision": "preserve required proof and scope; no new product qualification",
+      "destination": "docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 16,
+      "sha256": "0d36c8858d9da93a5f2d6edfb25e18539f0cf275970d1325478bc3ea89ca6302",
+      "decision": "preserve required proof and scope; no new product qualification",
+      "destination": "docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 17,
+      "sha256": "b0d63d938cd66314c19c974c16d0270057e49c1e5f900299c1db3dd3b19aee0d",
+      "decision": "preserve full protection in task-triggered guide",
+      "destination": "CONTRIBUTING.md#5-真实测试与持续许可"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 18,
+      "sha256": "c9f7406db279b08d177082193fbbd9f0a9591fa6d9ec8f542c55c9708e7f7acd",
+      "decision": "preserve required proof and scope; no new product qualification",
+      "destination": "docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 19,
+      "sha256": "bfb48b8ee0b7f089c0d31a56587012ea66908489b5220085b1c620b591bd0abb",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 20,
+      "sha256": "d9e1070c9c8420057b0bdcb8ed6ea37b32256f02eb6ea5d3c30037804a6d78d2",
+      "decision": "preserve WIP and collaboration detail; root keeps short commitment",
+      "destination": "CONTRIBUTING.md#6-git候选与长任务"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 21,
+      "sha256": "4ae0118222ad002f5e3107bfae1549e668640bded9d11982906fd114cad965ac",
+      "decision": "preserve WIP and collaboration detail; root keeps short commitment",
+      "destination": "CONTRIBUTING.md#6-git候选与长任务"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 22,
+      "sha256": "20e76275033ad26c17daa78aa4ea76979a5ad86bc2ab4e4caffc507bbe1c5962",
+      "decision": "rewrite as ownership/navigation; current content stays in owning document",
+      "destination": "CONTRIBUTING.md#7-文档维护"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 23,
+      "sha256": "a4ec29e249e044177733a89bbc392995a5601cc3a4a27ce9d96e083e62b75220",
+      "decision": "rewrite as ownership/navigation; current content stays in owning document",
+      "destination": "CONTRIBUTING.md#7-文档维护"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 24,
+      "sha256": "1b0234c9f47149489c3001a58674336f933cc0cbac248330de6a50d687692266",
+      "decision": "rewrite as ownership/navigation; current content stays in owning document",
+      "destination": "CONTRIBUTING.md#7-文档维护"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 25,
+      "sha256": "dce81857924ae51368a5c88471be2b9b96e4ad293cac15da794ef8f0cdd38ca7",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 26,
+      "sha256": "55e42d55c51ac160ff2b5d6c57117596daa014536763b2d7273b4a19620370c4",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 27,
+      "sha256": "4e59de78ed2fbef610623cca6ab2d83d34b948851ed46d9d5273465cab39dafa",
+      "decision": "preserve WIP and collaboration detail; root keeps short commitment",
+      "destination": "CONTRIBUTING.md#6-git候选与长任务"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 28,
+      "sha256": "a48f0bc5b1a6cab201e6e8336f019d5902e792508bc0e6c1bfe765a0a66f76ec",
+      "decision": "explicitly supersede no-three-date wording with approved candidate mechanism",
+      "destination": "CONTRIBUTING.md#9-本地开发反馈闭环"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 29,
+      "sha256": "b725cc00adddab7385982bff1b721962421331cf812c5fc80efee4957ab36f56",
+      "decision": "explicitly supersede no-three-date wording with approved candidate mechanism",
+      "destination": "CONTRIBUTING.md#9-本地开发反馈闭环"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 30,
+      "sha256": "938c72d0276b80c76b0ef5ccf8637287fa81e17b0ed076b357fe0e9771746f7c",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 31,
+      "sha256": "ca6227bef83d56ba75d1892309521963eda370e5a14cd7b777e65ecfca31a53b",
+      "decision": "explicitly supersede no-three-date wording with approved candidate mechanism",
+      "destination": "CONTRIBUTING.md#9-本地开发反馈闭环"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 32,
+      "sha256": "c0c6e320dcae29482c63209ee603666a6a82e04bacb72607a9d935a53842fd6f",
+      "decision": "preserve WIP and collaboration detail; root keeps short commitment",
+      "destination": "CONTRIBUTING.md#6-git候选与长任务"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 33,
+      "sha256": "9c075fd2f9eb8c44f84c3a650353073a99c9073acb7f61ce28ba88d5bc5e1421",
+      "decision": "explicitly supersede no-three-date wording with approved candidate mechanism",
+      "destination": "CONTRIBUTING.md#9-本地开发反馈闭环"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 34,
+      "sha256": "412b25f3f5709c69f5080e09abad0605671e6560cce3a7fea23f80295e347174",
+      "decision": "preserve full protection in task-triggered guide",
+      "destination": "CONTRIBUTING.md#5-真实测试与持续许可"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 35,
+      "sha256": "e3cfb34be8672069a3fc1949197b4127a7a5e14702edf60098560520288cc2e7",
+      "decision": "explicitly supersede no-three-date wording with approved candidate mechanism",
+      "destination": "CONTRIBUTING.md#9-本地开发反馈闭环"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 36,
+      "sha256": "b385e08cadeb106b8354f2c7b9fcb926291808bc61060b71beb46a85d2f858e9",
+      "decision": "explicitly supersede no-three-date wording with approved candidate mechanism",
+      "destination": "CONTRIBUTING.md#9-本地开发反馈闭环"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 37,
+      "sha256": "aa65be1ece64e0743e2629225b8089a956c1f204470dc6baf2ef73cf55da28f1",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 38,
+      "sha256": "d1fa344c17904aac48a8ed2eb0d5a086a694fd466a9e92f77c050d98e3437a11",
+      "decision": "rewrite as ownership/navigation; current content stays in owning document",
+      "destination": "CONTRIBUTING.md#7-文档维护"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 39,
+      "sha256": "7839d42d630f78d132754c12aef960bb28174185e12950fac10a9c190e7233bd",
+      "decision": "preserve required proof and scope; no new product qualification",
+      "destination": "docs/agents/ui-ux-acceptance.md"
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "paragraph": 40,
+      "sha256": "8ce6c93dfd2ea15a9e9d8eda4d2d14912b9db4024dd3c7775e905ff08a88000c",
+      "decision": "retain goal/autonomy/entry semantics; detailed methods in guide",
+      "destination": "AGENTS.md"
+    }
+  ],
+  "explicit_scope_change": "Only approved three-date candidate mechanism and removal of obsolete blanket protected-file bans; data/privacy/result guarantees remain.",
+  "source_of_decisions": "User-confirmed plan; original per-constraint decision table preserved in research and baseline."
+}

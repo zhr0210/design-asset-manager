@@ -13,7 +13,7 @@ import {enableVisualAiStorage} from '../src/main/visual-ai/visual-ai-storage'
 import {enableWorkSetStorage} from '../src/main/library-lifecycle/work-set.schema'
 import {enableOrganizationStorage} from '../src/main/library-lifecycle/library-organization.schema'
 import {enableNotebookStorage} from '../src/main/library-lifecycle/asset-notebook.schema'
-import {enableDownloadJournal} from '../src/main/managed-download/download-journal.schema'
+import {enableDownloadJournal} from '../src/main/library-lifecycle/legacy-download.schema'
 import {enableIntakeRecoveryStorage} from '../src/main/library-lifecycle/intake-recovery.schema'
 const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-ocr-storage-'))),source=path.join(root,'generated.png'),library=path.join(root,'library')
 await sharp({create:{width:100,height:100,channels:3,background:'#eee'}}).png().toFile(source)

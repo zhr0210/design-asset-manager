@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "blocks_checked": 71,
+  "errors": [],
+  "design": {
+    "yaml_unchanged": true,
+    "visual_body_from_overview_unchanged": true
+  },
+  "scope": "Canonical comparison allows heading depth and link target changes only; old bytes retained. Old heading fragments preserved as compatibility navigation. Current no-PASS/target/proposal distinctions kept."
+}

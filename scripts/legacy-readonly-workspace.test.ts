@@ -6,6 +6,8 @@ import path from 'node:path'
 
 import Database from 'better-sqlite3'
 import { createLegacyReadOnlyWorkspace } from '../src/main/legacy-readonly-workspace'
+import { registerLegacyReadOnlyWorkspaceIpc } from '../src/main/ipc/legacy-readonly-workspace.ipc'
+import { createLegacyReadOnlyWorkspaceClient } from '../src/shared/client/legacy-readonly-workspace.client'
 import { CREATE_ASSETS_TABLE, CREATE_ASSET_TAGS_TABLE, CREATE_TAGS_TABLE } from '../src/main/db/schema'
 
 const root=await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(),'dam-legacy-readonly-')))
@@ -24,18 +26,32 @@ fixture.close()
 const before=await evidence(databasePath)
 let sequence=0
 const workspace=createLegacyReadOnlyWorkspace({selection:{selectLegacyDatabase:async()=>({kind:'selected',databasePath,assetRootDirectory:root,tildeRootDirectory:root})},evidenceLevel:'synthetic-read-only',createIdentity:(kind)=>`${kind}:${++sequence}`})
-const planned=await workspace.prepare();assert.equal(planned.kind,'planned');if(planned.kind!=='planned')throw new Error()
+const handlers = new Map<string, (...args: any[]) => any>()
+registerLegacyReadOnlyWorkspaceIpc({ legacy: workspace, isTrustedSender: event => (event as any).trusted === true }, (channel, handler) => {
+  assert.equal(handlers.has(channel), false)
+  handlers.set(channel, handler)
+})
+assert.equal(handlers.size, 7)
+const invoke = async (channel: string, request?: unknown, trusted = true) => handlers.get(channel)!({ trusted }, request)
+const api = createLegacyReadOnlyWorkspaceClient({ invoke }).legacyReadonly
+assert.equal((await invoke('legacy-readonly:prepare', undefined, false)).code, 'UNTRUSTED_SENDER')
+assert.equal(workspace.inspect().state, 'unconfigured', 'An untrusted caller cannot start the picker or open a database')
+assert.equal((await invoke('legacy-readonly:confirm', { receipt: '../invalid' })).success, false)
+const planned=await api.prepare();assert.equal(planned.kind,'planned');if(planned.kind!=='planned')throw new Error()
 assert.deepEqual(planned.review.counts,{assets:1,tags:1,relations:1})
 assert.equal(planned.review.mutationPolicy,'no-migration-no-copy-no-write')
-const ready=await workspace.confirm(planned.review.receipt)
+const ready=await api.confirm(planned.review.receipt)
 assert.equal(ready.state,'ready')
 assert.equal(ready.evidenceLevel,'synthetic-read-only')
-const listed=await workspace.list();assert.equal(listed.length,1);assert.deepEqual(listed[0].tags,['archive']);assert.equal(listed[0].referencedFileAvailable,true)
-assert.equal((await workspace.search('poster')).length,1)
-assert.equal((await workspace.search('archive')).length,1)
+const listed=await api.list();assert.equal(listed.length,1);assert.deepEqual(listed[0].tags,['archive']);assert.equal(listed[0].referencedFileAvailable,true)
+assert.equal((await api.search('poster')).length,1)
+assert.equal((await api.search('archive')).length,1)
 assert.deepEqual(Buffer.from(await workspace.readPreview('legacy-asset')),previewBytes)
 await assert.rejects(workspace.readPreview('../private'),/LEGACY_READONLY_REQUEST_INVALID/)
-await workspace.close()
+assert.equal((await invoke('legacy-readonly:media-preview', { assetId: 'legacy-asset', identity: ready.identity, generation: 'stale' })).success, false)
+assert.equal((await invoke('legacy-readonly:media-preview', { assetId: 'legacy-asset', identity: ready.identity, generation: ready.generation, path: '/private' })).success, false)
+assert.equal(await api.readPreview('legacy-asset', ready.identity, ready.generation), previewBytes.toString('base64'))
+await api.close()
 const after=await evidence(databasePath)
 assert.deepEqual(after,before,'Read-only workspace must not change legacy database bytes or stat.')
 for(const suffix of['-wal','-shm','-journal'])await assert.rejects(fs.access(`${databasePath}${suffix}`))

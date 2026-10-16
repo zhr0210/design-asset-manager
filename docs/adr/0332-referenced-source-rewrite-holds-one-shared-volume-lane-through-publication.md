@@ -1,14 +1,13 @@
 # Referenced Source Rewrite Holds One Shared Volume Lane Through Publication
 
-Every Rewrite Referenced Source item, whether started alone or through Referenced Source Rewrite Batch, uses the existing **Referenced Source Volume Lane** for its source's stable physical-volume identity. It acquires that shared lane before authoritative source reading and holds it through encoding, same-volume staging, complete validation, the Referenced Source Rewrite Destructive Boundary, old-source trash, publication, Source Content Generation commit and immediate reconciliation or a durably recorded safe/attention state. Thus relocation, cross-volume transfer and rewrite cannot run through separate schedulers against the same volume; ADR 0348 removes the former cross-format current-source-change participant.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Only one application-directed Referenced Source operation actively uses a physical volume at a time, including long PSD, TIFF, PSB or other professional-format encodes. Items on disjoint physical volumes may proceed concurrently, but their authoritative library commits remain item-atomic through the active library's single-write boundary. The lane is an application scheduler, not an operating-system lock against external editors, so exact source and staging evidence is still freshly checked before the destructive boundary and publication.
+## Decision
 
-An item waiting for user input, unavailable media or Referenced Source Rewrite Recovery Review first durably records its exact state and retains Design Asset, source-path and operation-staging guards, then releases the I/O lane rather than blocking the volume indefinitely. Continuation, automatic retry or Retry Failed Referenced Source Rewrites must reacquire the current source-volume lane and fully revalidate source, generation, plan, capability and staging evidence. Cancellation or volume loss releases the lane only after a safe encoder checkpoint; an in-progress trash, publication or commit settles or reconciles before release.
+Every Rewrite Referenced Source item, whether started alone or through Referenced Source Rewrite Batch, uses the existing **Referenced Source Volume Lane** for its source's stable physical-volume identity.
 
-ADR 0347 acquires every physical volume containing a current or staged compound member in the same stable deterministic order and holds the applicable lanes through complete candidate validation, member publication and the group generation commit or durable recovery. Waiting recovery may release lanes only after preserving all group/path/staging guards, and continuation must reacquire the complete current volume set. Version one shows progress and lane-wait reasons but offers no user concurrency control and does not infer higher concurrency from device labels, filesystem type or claimed SSD/network performance. Any future increase requires measured memory, I/O, encoder-isolation and recovery evidence and cannot weaken item guards or create a second lane namespace for rewrites. The current application has no Referenced Source Volume Lane scheduler or source-rewrite execution. This ADR records target architecture only and encodes, accesses, creates, copies, relinks, moves, rewrites, restores, trashes, deletes, reads or writes no runtime/user file and changes no public IPC, database schema or AI Worker API.
+## Detailed contract and provenance
 
-ADR 0390 generalizes the shared underlying scheduler as Physical Volume File
-Lane and adds Asset Export plus a separate media-resource gate. Rewrite remains
-an exclusive participant in the same lane and neither export nor encoding may
-bypass its source-volume ownership by using another queue.
+详细状态、交互、数值边界和例外的唯一正文为[引用源操作与恢复规格](../product/specs/referenced-operations.md#adr-0332)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/storage-intake.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

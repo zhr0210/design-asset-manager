@@ -1,0 +1,36 @@
+{
+  "buildId": "dam-d96e08246b8b97c4",
+  "checks": [
+    "desktop: full-window settings, all integrated sections, AI tabs, preference draft retention, legacy cancel, recovery and return passed",
+    "browser: full-window settings, all integrated sections, AI tabs, preference draft retention, legacy cancel, recovery and return passed"
+  ],
+  "errors": [],
+  "consoleErrors": [
+    {
+      "client": "desktop",
+      "error": "[Store] Failed to load assets from DB"
+    },
+    {
+      "client": "browser",
+      "error": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "client": "browser",
+      "error": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "client": "browser",
+      "error": "[Store] Failed to load assets from DB"
+    },
+    {
+      "client": "browser",
+      "error": "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "saveAcrossClients": true,
+  "reopen": true,
+  "normalQuit": true,
+  "browserViewport": "1024x900",
+  "profile": "empty ordinary isolated profile",
+  "scope": "No user library, accounts or inference configured"
+}

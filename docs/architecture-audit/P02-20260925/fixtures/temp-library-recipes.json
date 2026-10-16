@@ -336,19 +336,12 @@
       "mode": "NOT_MATERIALIZED"
     },
     {
-      "id": "TEMP-EAGLE-HIGHER",
-      "domain": "eagle-index",
-      "fixtureOnlyMutation": "independent synthetic index user_version=99 with one expected table absent",
-      "expectedTargetBehavior": "reject before DDL, zero mutation",
-      "currentSourceConcern": "initializer runs DDL before version guard; observed branch, not executed",
-      "mode": "NOT_MATERIALIZED"
-    },
-    {
       "id": "TEMP-LEGACY",
       "domain": "legacy-readonly",
       "fixtureOnlyMutation": "synthetic legacy fixture via existing read-only test builder",
       "expectedTargetBehavior": "inspect read-only; migration plan denied",
       "mode": "NOT_MATERIALIZED"
     }
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

@@ -1,5 +1,7 @@
 # P02｜版本、结构与启用动作矩阵
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 依据当前源码，不是实际打开某个资料库的结果。表名来自声明与初始化调用链；精确列/约束/索引仍以源码和后续真实SQLite签名验证为准。
 
 ## 1. 版本增量
@@ -64,7 +66,6 @@ v1 → v2（视觉证据）
 | 数据域 | 现状 | P02规则 |
 | --- | --- | --- |
 | Managed Library | 明确v1–v8及精确结构 | 本登记的唯一迁移对象 |
-| Eagle index | 独立schema version1，7张connected_library_*表 | 独立registry；原件仍属Eagle；不运行Managed步骤 |
 | App state | download_tasks，Main增加app_device_identity，OCR增加local_ocr_runtime | 没有同一个Managed版本序列；不设为v8 |
 | Legacy | 显式只读，当前opener限定darwin并拒绝sidecars | 永远不走迁移；不能改变journal_mode来“帮助打开” |
 | Model Workspace/lock DB | 各自存储与格式 | 不纳入库业务schema编号，不借迁移读取模型缓存 |

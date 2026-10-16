@@ -1,5 +1,7 @@
 # P02｜统一能力查询与迁移编排
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 状态：Proposed / SPEC。统一的是能力事实与编排入口，不是把所有数据域合为一个数据库。
 
 ## 1. 边界和最小接口
@@ -33,7 +35,6 @@ SchemaSnapshot包含：domain、library identity及本次generation（内部）�
 - 当前库必须通过控制身份、application_id、已知版本及DDL/列/索引/FK/trigger结构验证。
 - 已知精确profile内：能力present或upgrade-required；不需要升级则NoOp，不备份、不写DDL。
 - 版本更高且未知：unsupported；无版本/非法/结构与版本不符：recovery-required。
-- 域错误：wrong-domain；Legacy：read-only-domain；Eagle/App不能进入Managed registry。
 - 权限、库关闭、模型缺失、空间不足是不同维度，不由schema存在性替代。
 
 F02这类读取实现遗漏必须作为operational caveat保留，不能用中央矩阵“理论可读”盖过当前分支缺口。集中后也要真实运行对应业务路径才能去掉caveat。
@@ -98,7 +99,7 @@ App记录保存位置、权限、配额/清理与最小字段仍是待批准细�
 ## 7. 拟改边界与渐进顺序
 
 1. 先引入Host内部已知profile/能力查询与registry投影，复用既有精确检查器；只替换少数枚举调用，保持普通读零目标库写。
-2. 针对F02建立v8副本恢复夹具，针对F03建立独立Eagle高版本零写夹具。只有获准IMPLEMENT才修复。
+只有获准IMPLEMENT才修复。
 3. 选一个不跨文件的大体量计算的首次写（如笔记/组织）接入备份与协调；保留原入口和数据事务，验证失败再重开。
 4. 然后覆盖下载/副本/OCR的各自边界；不统一提前schema启用时机。
 5. 所有读写路径才逐步改用集中能力查询；旧helper可成为内部委托适配，不按名字批量删除。

@@ -5,6 +5,7 @@ import path from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import Ajv from 'ajv'
+import { loadDevelopmentFeedback, selectDevelopmentFeedback, deferDevelopmentFeedback } from './development-feedback.mjs'
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url)
 const DEFAULT_ROOT = path.resolve(path.dirname(SCRIPT_PATH), '..')
@@ -488,7 +489,7 @@ export function validateCatalog({
   for (const [routeId, route] of Object.entries(routes)) {
     validateKnownKeys(
       route,
-      new Set(['summary', 'aliases', 'keywords', 'modules', 'states', 'read_first', 'test_profiles', 'adrs', 'avoid', 'warnings']),
+      new Set(['summary', 'aliases', 'keywords', 'modules', 'states', 'read_first', 'test_profiles', 'adrs', 'avoid', 'warnings', 'documentation']),
       `Route ${routeId}`,
       errors
     )
@@ -510,6 +511,17 @@ export function validateCatalog({
     validateStringList(route.test_profiles, `Route ${routeId}.test_profiles`, errors, { min: 1 })
     validateStringList(route.avoid, `Route ${routeId}.avoid`, errors)
     validateStringList(route.warnings, `Route ${routeId}.warnings`, errors)
+    // Local prose references are navigation metadata, never executable source
+    // authority. Keep the tracked-only policy for source and commands intact.
+    for (const reference of route.documentation ?? []) {
+      const absolute = path.join(root, reference)
+      if (!/^docs\/(?:(?:subsystems|agents)\/[a-z0-9-]+|(?:platform|product)\/[A-Za-z0-9-]+)\.md$/.test(reference) ||
+          !fs.existsSync(absolute) || fs.lstatSync(absolute).isSymbolicLink() ||
+          !fs.lstatSync(absolute).isFile() ||
+          !fs.realpathSync(absolute).startsWith(`${fs.realpathSync(root)}${path.sep}`)) {
+        errors.push(makeFinding('DOCUMENTATION_REFERENCE_INVALID', `Route ${routeId} has an invalid documentation reference.`, reference))
+      }
+    }
     for (const moduleId of route.modules ?? []) {
       if (!modules[moduleId]) errors.push(makeFinding('UNKNOWN_MODULE', `Route ${routeId} references unknown Module ${moduleId}.`))
     }
@@ -1082,6 +1094,16 @@ function makeRouteError(code, message, detail = {}) {
   return { ok: false, error: { code, message, ...detail } }
 }
 
+function extractedContractReferences(root, adrItems) {
+  return adrItems.flatMap(item => {
+    const source = fs.readFileSync(path.join(root, item.path), 'utf8')
+    const match = source.match(/\]\((\.\.\/product\/specs\/[a-z0-9-]+\.md#adr-\d{4})\)/)
+    if (!match) return []
+    const [file, anchor] = match[1].split('#')
+    return [{ decision: item.path, reference: `${path.posix.normalize(path.posix.join(path.posix.dirname(item.path), file))}#${anchor}` }]
+  })
+}
+
 export function buildContextPack({
   catalog,
   testsMap,
@@ -1216,11 +1238,16 @@ export function buildContextPack({
   )
   const selectedValidations = validations.slice(0, limits.maxTests)
   const deferredValidations = validations.slice(limits.maxTests)
+  const feedback = selectDevelopmentFeedback(
+    loadDevelopmentFeedback(root, Object.keys(catalog.routes)),
+    selected.map(entry => entry.routeId)
+  )
   const projectPackMetadata = () => {
     const warnings = uniqueBy(
       [
         ...selected.flatMap((entry) => entry.route.warnings),
         ...(secondaryRouteHint ? [secondaryRouteHint] : []),
+        ...(feedback.deferred > 0 ? [`Feedback limit deferred ${feedback.deferred} related record(s); read their local indexes for the remainder.`] : []),
         ...(deferred.length > 0 ? [`Budget deferred ${deferred.length} context item(s); use --expand only if the first pass is insufficient.`] : []),
         ...(deferredValidations.length > 0 ? [`Validation limit deferred ${deferredValidations.length} additional command(s).`] : [])
       ],
@@ -1237,9 +1264,12 @@ export function buildContextPack({
         matched: entry.matched.slice(0, 8),
         modules: entry.route.modules
       })),
+      documentation: uniqueBy(selected.flatMap(entry => entry.route.documentation ?? []), value => value),
+      contractReferences: extractedContractReferences(root, items.filter(item => item.role === 'adr')),
       states: selected.flatMap((entry) => entry.route.states.map((state) => ({ route: entry.routeId, ...state }))),
       firstRead: items.map(({ routeIndex, priority, required: isRequired, triggers, ...item }) => ({ ...item, required: isRequired === true })),
       validations: selectedValidations,
+      feedback,
       avoid: uniqueBy(selected.flatMap((entry) => entry.route.avoid), (value) => value),
       warnings,
       deferred: {
@@ -1251,6 +1281,11 @@ export function buildContextPack({
 
   let packMetadata = projectPackMetadata()
   let estimatedMetadataTokens = estimateMetadataTokens(packMetadata)
+  while (estimatedMetadataTokens > MAX_METADATA_TOKENS &&
+      deferDevelopmentFeedback(feedback)) {
+    packMetadata = projectPackMetadata()
+    estimatedMetadataTokens = estimateMetadataTokens(packMetadata)
+  }
   while (estimatedFileTokens + estimatedMetadataTokens > limits.maxEstimatedTokens) {
     let optionalIndex = -1
     for (let index = items.length - 1; index >= 0; index -= 1) {
@@ -1263,6 +1298,12 @@ export function buildContextPack({
     const [removed] = items.splice(optionalIndex, 1)
     estimatedFileTokens -= removed.estimatedTokens
     deferred.push(removed)
+    packMetadata = projectPackMetadata()
+    estimatedMetadataTokens = estimateMetadataTokens(packMetadata)
+  }
+
+  while (estimatedFileTokens + estimatedMetadataTokens > limits.maxEstimatedTokens &&
+      deferDevelopmentFeedback(feedback)) {
     packMetadata = projectPackMetadata()
     estimatedMetadataTokens = estimateMetadataTokens(packMetadata)
   }
@@ -1298,7 +1339,7 @@ export function buildContextPack({
       estimatedTokens,
       maxFiles: limits.maxFiles,
       maxEstimatedTokens: limits.maxEstimatedTokens,
-      truncated: deferred.length > 0 || deferredValidations.length > 0
+      truncated: deferred.length > 0 || deferredValidations.length > 0 || feedback.deferred > 0
     }
   }
 }
@@ -1318,12 +1359,20 @@ function renderPack(pack) {
   console.log('\nReality:')
   for (const state of pack.states) console.log(`- [${state.reality}] ${state.route}: ${state.summary}`)
   console.log('\nFirst read:')
+  for (const reference of pack.documentation) console.log(`Documentation reference: ${reference}`)
+  for (const contract of pack.contractReferences) console.log(`Applicable detail: ${contract.reference} (from ${contract.decision})`)
   pack.firstRead.forEach((item, index) => {
     const locator = item.anchor ? `${item.path}#${item.anchor}` : item.path
     console.log(`${index + 1}. [${item.reality}] [${item.role}/${item.read_mode}] ${locator} (~${item.estimatedTokens} tokens) — ${item.reason}`)
   })
   console.log('\nValidation:')
   for (const command of pack.validations) console.log(`- ${command}`)
+  console.log('\nRelated problems and lessons (checks, not a new task queue):')
+  for (const item of [...pack.feedback.problems, ...pack.feedback.lessons]) {
+    console.log(`- ${item.id} [${item.group}/${item.status}] ${item.source}#${item.anchor}: ${item.check}`)
+    if (item.promotion) console.log(`  Rule review: ${item.promotion.state}; ${item.promotion.distinctDates} review date(s), severity=${item.promotion.severity}${item.promotion.rule ? `; ${item.promotion.rule}` : ''}`)
+  }
+  console.log(`Write back: problems → ${pack.feedback.writeBack.problems}; lessons → ${pack.feedback.writeBack.lessons}; task → ${pack.feedback.writeBack.currentTask}; evidence → current checkpoint.`)
   if (pack.warnings.length > 0) {
     console.log('\nWarnings:')
     for (const warning of pack.warnings) console.log(`- ${warning}`)
@@ -1466,6 +1515,13 @@ function runMain(argv, root) {
   const untrackedFiles = untrackedRepositoryFiles(root)
   const snapshot = repositorySnapshot(root)
   const report = validateCatalog({ ...context, root, files, untrackedFiles })
+  try {
+    const entries = loadDevelopmentFeedback(root, Object.keys(context.catalog.routes))
+    report.feedback = { records: entries.length, sources: ['docs/agents/DEVELOPMENT-PROBLEMS.md', 'LESSONS.md'] }
+  } catch (error) {
+    report.ok = false
+    report.errors.push(makeFinding('FEEDBACK_INVALID', error instanceof Error ? error.message : String(error)))
+  }
 
   if (command === 'check') {
     if (options.json) console.log(JSON.stringify({ ...report, snapshot }, null, 2))

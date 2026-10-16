@@ -1,0 +1,167 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": false,
+    "explicitRoute": "release-packaging"
+  },
+  "routes": [
+    {
+      "id": "release-packaging",
+      "summary": "Packaging, signing, release evidence, native dependencies and external release gates.",
+      "score": null,
+      "matched": [
+        "explicit route"
+      ],
+      "modules": [
+        "electron-main"
+      ]
+    }
+  ],
+  "states": [
+    {
+      "route": "release-packaging",
+      "reality": "Current Implementation",
+      "summary": "Release planning, evidence and packaging governance are extensively tested; external credentials and signed-candidate gates remain environment-specific.",
+      "evidence": [
+        "src/main/packaging/release-flow-governance.ts",
+        "package.json",
+        "scripts/release-flow-governance.test.ts"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "src/main/packaging/release-flow-governance.ts",
+      "anchor": "createReleaseFlowGovernancePlan",
+      "role": "interface",
+      "reality": "Current Implementation",
+      "reason": "Release phase and gate projection Module.",
+      "read_mode": "symbol",
+      "routeId": "release-packaging",
+      "estimatedTokens": 3543,
+      "required": true
+    },
+    {
+      "path": "scripts/release-flow-governance.test.ts",
+      "role": "test",
+      "reality": "Current Implementation",
+      "reason": "Focused release-flow governance evidence.",
+      "read_mode": "full",
+      "routeId": "release-packaging",
+      "estimatedTokens": 1818,
+      "required": false
+    },
+    {
+      "path": "scripts/run-electron-builder.mjs",
+      "role": "adapter",
+      "reality": "Current Implementation",
+      "reason": "Current build runner Adapter.",
+      "read_mode": "full",
+      "routeId": "release-packaging",
+      "estimatedTokens": 1917,
+      "required": false
+    }
+  ],
+  "validations": [
+    "npm run test-release-flow-governance",
+    "npm run test-release-candidate-governance",
+    "npm run test-release-checksums",
+    "npm run test-package-smoke"
+  ],
+  "feedback": {
+    "problems": [],
+    "lessons": [
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 22,
+        "matchedRoutes": [
+          "*"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not sign, publish, notarize or upload artifacts without explicit approval for that external action.",
+    "Do not inspect credentials or private signing material."
+  ],
+  "warnings": [
+    "A passing local preflight does not prove external signing, notarization or distribution gates completed.",
+    "Budget deferred 1 context item(s); use --expand only if the first pass is insufficient.",
+    "Validation limit deferred 25 additional command(s)."
+  ],
+  "deferred": {
+    "context": [
+      {
+        "path": "package.json",
+        "anchor": "\"build\"",
+        "role": "contract",
+        "reality": "Current Implementation",
+        "reason": "Packaging configuration and platform artifact contract.",
+        "read_mode": "full",
+        "routeId": "release-packaging",
+        "estimatedTokens": 12590,
+        "required": false
+      }
+    ],
+    "validations": [
+      "npm run test-release-update-metadata",
+      "npm run test-release-trust-evidence-checks",
+      "npm run test-release-trust-evidence",
+      "npm run test-release-readiness-summary",
+      "npm run test-release-readiness-writer",
+      "npm run test-release-publish-approval",
+      "npm run test-release-platform-targets",
+      "npm run test-release-target-selection",
+      "npm run test-release-script-targets",
+      "npm run test-electron-builder-runner-options",
+      "npm run test-release-branding-preflight",
+      "npm run test-release-branding-approval-template",
+      "npm run test-release-branding-evidence",
+      "npm run test-release-signed-candidate-preflight",
+      "npm run test-release-environment-manifest",
+      "npm run test-release-signing-environment-status",
+      "npm run test-release-signing-environment-template",
+      "npm run test-release-signed-candidate-dispatch-status",
+      "npm run test-release-install-smoke-preflight",
+      "npm run test-release-external-gate-plan",
+      "npm run test-release-external-gate-status",
+      "npm run test-release-external-gate-status-writer",
+      "npm run test-release-evidence-bundle-status",
+      "npm run test-signed-release-workflow",
+      "npm run test-macos-signing-entitlements"
+    ]
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 3,
+    "estimatedFileTokens": 7278,
+    "estimatedMetadataTokens": 1524,
+    "outputEstimatedTokens": 1524,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 8802,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

@@ -19,7 +19,9 @@
       "src/renderer",
       "src/preload",
       "src/shared",
-      "ai-service"
+      "ai-service",
+      "native/shelf-candidates",
+      "pi-runtime"
     ],
     "extensions": [
       ".ts",
@@ -39,7 +41,9 @@
       "**/*.test.ts",
       "**/*.test.tsx",
       "ai-service/eval/datasets/**",
-      "ai-service/eval/reports/**"
+      "ai-service/eval/reports/**",
+      "pi-runtime/node_modules/**",
+      "pi-runtime/runtime/**"
     ]
   },
   "modules": {
@@ -57,14 +61,14 @@
       "readme": "src/main/README.md"
     },
     "capture-intake": {
-      "purpose": "Safe Copy planning, Candidate identity, Promotion and persistence adapters for the isolated intake tracer.",
+      "purpose": "Reviewed Copy planning, Candidate/Promotion, SQLite persistence and required Preview, composed by the held Active Library Host.",
       "owns": [
         "src/main/capture-intake/**"
       ],
       "readme": "src/main/capture-intake/README.md"
     },
     "library-lifecycle": {
-      "purpose": "Read-only Library opening/creation planning, Manifest/filesystem evidence, Exclusive Lock, Active Library authority and Asset Trash tracers.",
+      "purpose": "Held Library identity/storage/SQLite authority, production open/create/Asset/Trash and separately testable inspection and maintenance seams.",
       "owns": [
         "src/main/library-lifecycle/**"
       ],
@@ -103,6 +107,24 @@
         "ai-service/**"
       ],
       "readme": "ai-service/README.md"
+    },
+    "native-shelf": {
+      "purpose": "Owned Swift/AppKit presentation, interaction and native handoff for shelf candidates; Host business authority remains separate.",
+      "owns": [
+        "native/shelf-candidates/**"
+      ],
+      "readme": "native/shelf-candidates/README.md"
+    },
+    "pi-runtime": {
+      "purpose": "Sealed private Node/Pi protocol worker; receives frozen actions, owns no Library commits or generic tool authority.",
+      "owns": [
+        "pi-runtime/**"
+      ],
+      "exclude": [
+        "pi-runtime/node_modules/**",
+        "pi-runtime/runtime/**"
+      ],
+      "readme": "pi-runtime/README.md"
     }
   },
   "routes": {
@@ -126,8 +148,7 @@
         "bulk selection",
         "multi select",
         "library toolbar",
-        "comparison tray",
-        "Eagle 连接库"
+        "comparison tray"
       ],
       "keywords": [
         "tag",
@@ -142,7 +163,6 @@
         "批量",
         "缩略图",
         "user edit",
-        "Eagle",
         "同步"
       ],
       "modules": [
@@ -275,20 +295,6 @@
           "priority": 6
         },
         {
-          "path": "src/main/external-connected-library/README.md",
-          "triggers": [
-            "Eagle",
-            "connected",
-            "连接库",
-            "旧库"
-          ],
-          "role": "readme",
-          "reality": "Current Implementation",
-          "reason": "Connected ownership and evidence limits.",
-          "read_mode": "full",
-          "priority": 2
-        },
-        {
           "path": "src/renderer/components/library/canvas/LibraryFocus.tsx",
           "anchor": "export function LibraryFocus",
           "triggers": [
@@ -303,11 +309,23 @@
           "reason": "Controlled preview, read-only focus information, ordered filmstrip and keyboard/zoom behavior.",
           "read_mode": "symbol",
           "priority": 2
+        },
+        {
+          "path": "src/main/legacy-readonly-workspace/README.md",
+          "triggers": [
+            "legacy",
+            "旧库",
+            "旧素材"
+          ],
+          "role": "readme",
+          "reality": "Current Implementation",
+          "reason": "Independent read-only recovery ownership, picker and preview boundaries.",
+          "read_mode": "full",
+          "priority": 2
         }
       ],
       "test_profiles": [
-        "asset_workspace",
-        "external_connected_library"
+        "asset_workspace"
       ],
       "adrs": [
         {
@@ -339,10 +357,14 @@
       ],
       "warnings": [
         "Current Asset Workspace depth is uneven; verify the exact caller before describing a complete workflow."
+      ],
+      "documentation": [
+        "docs/subsystems/gui-shell.md",
+        "docs/subsystems/library-lifecycle.md"
       ]
     },
     "asset-discovery": {
-      "summary": "Local Asset Discovery, lexical matching, Match Explanation and future semantic or visual retrieval.",
+      "summary": "Host-backed Asset Discovery, lexical and prepared semantic/image queries, paging and Match Explanation.",
       "aliases": [
         "asset discovery",
         "library search",
@@ -390,16 +412,19 @@
       "states": [
         {
           "reality": "Current Implementation",
-          "summary": "The live Asset Workspace performs bounded in-memory lexical matching over loaded assets and explains matched fields.",
+          "summary": "The Library caller uses useHostAssetSearch and the shared Client for Host-backed lexical paging and prepared semantic/image queries; coverage and real-model qualification are separate evidence.",
           "evidence": [
             "src/shared/workflows/asset-discovery.workflow.ts",
+            "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+            "src/shared/client/workspace-client.ts",
+            "src/main/asset-search/README.md",
             "src/renderer/routes/Library.tsx",
             "scripts/asset-discovery-workflow.test.ts"
           ]
         },
         {
           "reality": "Target Architecture",
-          "summary": "Durable lexical indexes, embeddings, explicit image queries and multi-channel rank fusion remain future work.",
+          "summary": "Broader retrieval quality/scale/platform qualification and independent cross-library rank fusion remain separate targets; these ADRs do not negate the current single-library query path.",
           "evidence": [
             "docs/adr/0181-asset-search-is-hybrid-explainable-and-complete-without-vectors.md",
             "docs/adr/0182-search-by-image-uses-an-explicit-ephemeral-query-source.md",
@@ -423,18 +448,26 @@
           "anchor": "useHostAssetSearch",
           "role": "caller",
           "reality": "Current Implementation",
-          "reason": "Live caller proving the lexical Module is wired into Asset Workspace.",
+          "reason": "Formal Library caller; follow its useHostAssetSearch import to verify the actual Host query path.",
           "read_mode": "symbol",
           "priority": 2
         },
         {
-          "path": "src/renderer/components/library/LibraryToolbar.tsx",
-          "anchor": "lexical-only",
+          "path": "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+          "anchor": "useHostAssetSearch",
           "role": "caller",
           "reality": "Current Implementation",
-          "reason": "Current UI capability evidence and lexical-only disclosure.",
+          "reason": "Current Client calls, query modes, paging, stale-response guards and displayed-row refresh consumers.",
           "read_mode": "symbol",
           "priority": 3
+        },
+        {
+          "path": "src/main/asset-search/README.md",
+          "role": "readme",
+          "reality": "Current Implementation",
+          "reason": "Host search ownership, query/refresh contracts and focused checks; verify source before claiming behavior.",
+          "read_mode": "full",
+          "priority": 2
         },
         {
           "path": "scripts/asset-discovery-workflow.test.ts",
@@ -491,6 +524,10 @@
       ],
       "warnings": [
         "Current Asset Discovery is lexical-only and in-memory; durable semantic and visual paths are not live."
+      ],
+      "documentation": [
+        "docs/subsystems/asset-discovery.md",
+        "docs/subsystems/ai-system.md"
       ]
     },
     "asset-lifecycle": {
@@ -546,17 +583,15 @@
       "states": [
         {
           "reality": "Current Implementation",
-          "summary": "The live assets:delete chain still hard-deletes Asset and tag rows through the process-global database.",
+          "summary": "Production Active Library Host composes inspected/locked storage with Asset/Tag/Trash operations; legacy global assets:delete is not the active-library authority. UI/platform qualification is separate.",
           "evidence": [
-            "src/shared/contracts/asset.contract.ts",
-            "src/main/ipc/asset.ipc.ts",
-            "src/main/services/asset.service.ts",
-            "src/renderer/stores/asset.store.ts"
+            "src/main/active-library-runtime.ts",
+            "src/main/ipc/active-library.ipc.ts"
           ]
         },
         {
           "reality": "Validated Tracer",
-          "summary": "Coherent read-only Library Open Inspection, Manifest/filesystem, real cross-process lock and recoverable Trash are tracers, not production activation.",
+          "summary": "Inspection, Manifest/filesystem, lease and Trash tracer seams retain isolated evidence; they do not negate the existing production Host composition.",
           "evidence": [
             "src/main/library-lifecycle/asset-trash.ts",
             "src/main/library-lifecycle/sqlite-asset-trash.adapter.ts",
@@ -577,7 +612,7 @@
         },
         {
           "reality": "Target Architecture",
-          "summary": "Production Trash and Capture must use one inspected and exclusively locked Active Library; legacy formalization requires reviewed verified-copy migration and Trash-aware reads.",
+          "summary": "Broader migration, format, volume, recovery and scale guarantees remain capability-specific targets; verify each current consumer and qualification.",
           "evidence": [
             "docs/adr/0067-design-asset-deletion-uses-asset-trash-not-candidate-cleanup.md",
             "docs/adr/0069-deleted-assets-are-hidden-outside-trash-unless-included.md",
@@ -604,60 +639,6 @@
           "reason": "Inspection/Trash tracer limits and the temporary pre-cutover authority policy.",
           "read_mode": "full",
           "priority": 1
-        },
-        {
-          "path": "src/main/services/asset.service.ts",
-          "anchor": "deleteAsset",
-          "role": "implementation",
-          "reality": "Current Implementation",
-          "reason": "Current hard-delete behavior.",
-          "read_mode": "symbol",
-          "priority": 2,
-          "required": true,
-          "triggers": [
-            "asset",
-            "trash",
-            "restore",
-            "delete",
-            "active library",
-            "legacy",
-            "authority",
-            "sole writer",
-            "删除",
-            "回收站",
-            "恢复",
-            "活动素材库",
-            "迁移",
-            "生命周期",
-            "权威"
-          ]
-        },
-        {
-          "path": "src/main/ipc/asset.ipc.ts",
-          "anchor": "registerAssetIpc",
-          "role": "composition",
-          "reality": "Current Implementation",
-          "reason": "Live Electron registration and handler chain for the legacy hard-delete channel.",
-          "read_mode": "symbol",
-          "priority": 2,
-          "required": true,
-          "triggers": [
-            "asset",
-            "trash",
-            "restore",
-            "delete",
-            "active library",
-            "legacy",
-            "authority",
-            "sole writer",
-            "删除",
-            "回收站",
-            "恢复",
-            "活动素材库",
-            "迁移",
-            "生命周期",
-            "权威"
-          ]
         },
         {
           "path": "src/main/library-lifecycle/asset-trash.ts",
@@ -849,6 +830,40 @@
             "library lease",
             "素材库锁"
           ]
+        },
+        {
+          "path": "src/main/active-library-runtime.ts",
+          "anchor": "createProductionActiveLibraryHost",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Held Active Library owns current Asset/Tag/Trash writes; legacy delete is not the ordinary authority.",
+          "read_mode": "symbol",
+          "priority": 1,
+          "triggers": [
+            "asset",
+            "trash",
+            "delete",
+            "素材",
+            "回收站",
+            "删除"
+          ]
+        },
+        {
+          "path": "src/main/ipc/active-library.ipc.ts",
+          "anchor": "registerActiveLibraryIpc",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "triggers": [
+            "asset",
+            "trash",
+            "delete",
+            "素材",
+            "回收站",
+            "删除"
+          ]
         }
       ],
       "test_profiles": [
@@ -961,21 +976,22 @@
       ],
       "avoid": [
         "Do not reuse assets:delete for the new Trash authority.",
-        "Do not wire the tracer to the process-global database or infer ownership for legacy Assets.",
+        "Do not infer legacy ownership or detach production storage from the held Library lease.",
         "Do not treat Manifest identities or relative bindings as physical filesystem, lock or write qualification.",
         "Do not use permission bits, OS/drive labels or successful stat as atomic, durable or locking qualification.",
         "Do not create, recover, delete or steal lock storage while inspecting or acquiring an existing Library lock."
       ],
       "warnings": [
-        "The tested Trash Module is not composed into the live Electron runtime, UI, list or search path.",
-        "Compatible means generated-fixture inspection eligibility only. Production readers, volume qualification, populated-library adapters and writable activation remain unimplemented.",
-        "Manifest-compatible means declaration parsing passed; production Library Root, filesystem, lock qualification and writable activation remain unimplemented.",
         "Filesystem-observed means selected role shape and trusted memory qualification were evaluated; no real volume or future Asset allocation is qualified.",
-        "Lock proof is macOS temporary-root evidence only; other platforms refuse before open. Review ADR 0278 for release/drain semantics; inspect is not acquisition."
+        "Lock proof is macOS temporary-root evidence only; other platforms refuse before open. Review ADR 0278 for release/drain semantics; inspect is not acquisition.",
+        "Production Host and isolated tracers coexist; accepted contracts, source wiring and current user qualification are separate."
+      ],
+      "documentation": [
+        "docs/subsystems/library-lifecycle.md"
       ]
     },
     "library-creation": {
-      "summary": "Read-only new-library planning, future confirmed creation, registration and inactive Library Start composition.",
+      "summary": "Production Library open/create composition and isolated read-only creation planning; ownership and volume qualification remain explicit.",
       "aliases": [
         "library creation",
         "new library creation",
@@ -1007,6 +1023,13 @@
       ],
       "states": [
         {
+          "reality": "Current Implementation",
+          "summary": "Formal Main uses a production Active Library Host for explicit open/create; read-only planning tracers are separate seams, not proof that ordinary composition is absent.",
+          "evidence": [
+            "src/main/active-library-runtime.ts"
+          ]
+        },
+        {
           "reality": "Validated Tracer",
           "summary": "A bound prepare/inspect Module plans missing or explicitly empty targets without mutation; receipt and capacity evidence remain non-authoritative.",
           "evidence": [
@@ -1019,7 +1042,7 @@
         },
         {
           "reality": "Target Architecture",
-          "summary": "Confirmation, versioned initialization, registration and an inactive provider remain separate blocked tickets; production startup is unchanged.",
+          "summary": "Broader identity, migration, storage-volume and recovery guarantees remain separate targets; formal open/create composition must be checked independently from the read-only planner.",
           "evidence": [
             "docs/adr/0275-in-place-reference-libraries-keep-originals-and-split-caches.md",
             "docs/adr/0282-managed-originals-bind-to-stable-originals-without-taking-over-files.md",
@@ -1147,6 +1170,20 @@
           "reason": "Detailed planning invariants and confirmation boundary.",
           "read_mode": "full",
           "priority": 6
+        },
+        {
+          "path": "src/main/active-library-runtime.ts",
+          "anchor": "createProductionActiveLibraryHost",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "triggers": [
+            "ordinary library creation",
+            "production library creation",
+            "正式创建素材库"
+          ]
         }
       ],
       "test_profiles": [
@@ -1205,6 +1242,9 @@
         "Ready means reviewable fixture planning only; it is not confirmation, creation, registration, Session issuance or production behavior.",
         "Qualification and capacity are trusted Main fixture observations; they do not qualify a real Windows/macOS volume.",
         "Available bytes are not reserved. AL-08 must freshly recheck exact staging/publication/rollback paths and ownership before writing."
+      ],
+      "documentation": [
+        "docs/subsystems/library-lifecycle.md"
       ]
     },
     "capture-intake": {
@@ -1252,6 +1292,13 @@
       ],
       "states": [
         {
+          "reality": "Current Implementation",
+          "summary": "Formal Active Library IPC composes Copy planning, Capture Gateway, SQLite Promotion and required Sharp Preview; Renderer uses path-free reviewed actions.",
+          "evidence": [
+            "src/main/ipc/active-library.ipc.ts"
+          ]
+        },
+        {
           "reality": "Validated Tracer",
           "summary": "Safe Copy planning, Candidate activation, Preview gating, Promotion and SQLite persistence are proven in isolation.",
           "evidence": [
@@ -1263,7 +1310,7 @@
         },
         {
           "reality": "Target Architecture",
-          "summary": "One Capture Gateway should serve all producers through an inspected Active Library connection, real Preview Adapter and Renderer flow.",
+          "summary": "Additional producers, formats and broad real-data/platform qualification remain separately scoped; the current local Copy path is already composed.",
           "evidence": [
             "docs/adr/0105-asset-candidates-persist-separately-from-downloads.md",
             "docs/adr/0106-all-capture-producers-use-one-gateway.md",
@@ -1337,6 +1384,21 @@
           "reason": "SQLite restart and rollback evidence.",
           "read_mode": "full",
           "priority": 7
+        },
+        {
+          "path": "src/main/ipc/active-library.ipc.ts",
+          "anchor": "registerActiveLibraryIpc",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "triggers": [
+            "copy",
+            "import",
+            "入库",
+            "导入"
+          ]
         }
       ],
       "test_profiles": [
@@ -1406,11 +1468,14 @@
         "Do not use user Asset Library or Runtime database data for routing or tests."
       ],
       "warnings": [
-        "Capture Intake is a Validated Tracer, not Current Implementation in the formal runtime."
+        "Current local Copy and isolated tracer guarantees coexist; this index does not grant broad format or real-library qualification."
+      ],
+      "documentation": [
+        "docs/subsystems/library-lifecycle.md"
       ]
     },
     "source-discovery": {
-      "summary": "Embedded web collection is retired; independent direct-image downloads and future external-browser connector boundaries.",
+      "summary": "Embedded web collection and material task downloads are retired; local Copy and future external-browser connector boundaries.",
       "aliases": [
         "source discovery",
         "web capture",
@@ -1454,11 +1519,10 @@
       "states": [
         {
           "reality": "Current Implementation",
-          "summary": "Embedded browser, website login and external Source Discovery removed. Independent direct-image downloads remain.",
+          "summary": "Embedded browser, website login and external Source Discovery removed. Material task/download execution is retired; local Copy remains.",
           "evidence": [
             "src/renderer/App.tsx",
             "src/main/ipc/main-ipc-composition.ts",
-            "src/main/managed-download/managed-download.ts",
             "scripts/web-retirement.test.ts"
           ]
         },
@@ -1471,15 +1535,6 @@
         }
       ],
       "read_first": [
-        {
-          "path": "src/main/managed-download/managed-download.ts",
-          "role": "implementation",
-          "reality": "Current Implementation",
-          "reason": "Retained direct-image download execution without embedded browser.",
-          "read_mode": "full",
-          "priority": 1,
-          "required": true
-        },
         {
           "path": "src/main/ipc/main-ipc-composition.ts",
           "role": "composition",
@@ -1533,6 +1588,11 @@
       ],
       "warnings": [
         "Historical web collection plans are not current implementation or authorization."
+      ],
+      "documentation": [
+        "docs/subsystems/plugin-system.md",
+        "docs/subsystems/library-lifecycle.md",
+        "docs/product/CAPABILITY-SCOPE.md"
       ]
     },
     "ai-analysis": {
@@ -1750,6 +1810,9 @@
       ],
       "warnings": [
         "AI slices are partial; inspect the exact Electron-to-Worker-to-SQLite call path before claiming an automatic pipeline."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "prompt-reverse": {
@@ -1790,7 +1853,8 @@
         "renderer",
         "electron-main",
         "shared",
-        "ai-worker"
+        "ai-worker",
+        "pi-runtime"
       ],
       "states": [
         {
@@ -1927,10 +1991,13 @@
       ],
       "warnings": [
         "The current AI Worker IPC writes Prompt Reverse results directly to the process-global SQLite schema; inspect that compatibility seam before changing persistence."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "ai-runtime": {
-      "summary": "Cross-platform AI Runtime selection, process control, capability probes and AI Console diagnostics.",
+      "summary": "Current managed vision/OCR/retrieval/Pi execution, resource lifecycle and retained disabled legacy Runtime diagnostics.",
       "aliases": [
         "ai runtime",
         "model runtime",
@@ -1962,19 +2029,15 @@
         "electron-main",
         "renderer",
         "shared",
-        "ai-worker"
+        "ai-worker",
+        "pi-runtime"
       ],
       "states": [
         {
           "reality": "Current Implementation",
-          "summary": "Runtime selection, process management, probes and shared platform status have substantial live and tested plumbing.",
+          "summary": "Managed vision is a current owned-process path; OCR/retrieval/Pi have separate executors. Legacy Runtime/branch/probe IPC is disabled by production composition.",
           "evidence": [
-            "src/main/services/ai-runtime/ai-runtime-manager.ts",
-            "src/main/ipc/ai-runtime.ipc.ts",
-            "src/shared/contracts/ai-runtime.contract.ts",
-            "src/renderer/components/settings/AiRuntimePanel.tsx",
-            "src/renderer/modules/ai-console-status/ai-console-status.module.ts",
-            "src/renderer/routes/AiConsolePage.tsx"
+            "src/main/services/ai-runtime/managed-vision-runtime.ts"
           ]
         },
         {
@@ -2126,6 +2189,22 @@
           "reason": "Focused Runtime lifecycle evidence.",
           "read_mode": "full",
           "priority": 7
+        },
+        {
+          "path": "src/main/services/ai-runtime/managed-vision-runtime.ts",
+          "anchor": "createManagedVisionRuntime",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "triggers": [
+            "managed runtime",
+            "真实运行时",
+            "managed vision",
+            "模型退出",
+            "模型驻留"
+          ]
         }
       ],
       "test_profiles": [
@@ -2167,11 +2246,15 @@
         "Do not branch product workflow or response shapes merely because Runtime adapters differ by OS."
       ],
       "warnings": [
-        "Runtime Probe, package readiness and Real Model Path are different evidence levels."
+        "Legacy ai-runtime.ipc.ts and ai-runtime-manager tests are retained seams, not ordinary enabled Runtime controls.",
+        "Real-model, device and platform qualification must be checked independently from probes or source wiring."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "model-library": {
-      "summary": "Temporarily contained legacy model acquisition plus the target dedicated, verified Model Library lifecycle.",
+      "summary": "Current managed model inventory/source/transfer plus contained legacy mutation seams and separate signed-catalog architecture.",
       "aliases": [
         "model library",
         "model weight",
@@ -2223,13 +2306,9 @@
       "states": [
         {
           "reality": "Current Implementation",
-          "summary": "Legacy direct, cooperative and Llama acquisition plus direct deletion fail closed; Worker loaders are local-only; AI Console labels filesystem presence unverified. The dedicated Model Library installer remains unimplemented.",
+          "summary": "Formal managed-model inventory, verified source/transfer and explicit use coexist with contained old mutation channels; the signed Catalog core/pilot is a separate bounded path.",
           "evidence": [
-            "src/main/services/ai-models/legacy-model-mutation.policy.ts",
-            "src/main/ipc/ai-model.ipc.ts",
-            "src/main/ipc/llama-runtime.ipc.ts",
-            "ai-service/models/wd_tagger.py",
-            "src/renderer/routes/AiConsolePage.tsx"
+            "src/main/model-library-workspace/managed-model-library.ts"
           ]
         },
         {
@@ -2356,6 +2435,21 @@
           "reason": "Current model workspace and controlled storage UI.",
           "read_mode": "symbol",
           "priority": 7
+        },
+        {
+          "path": "src/main/model-library-workspace/managed-model-library.ts",
+          "anchor": "createManagedModelLibrary",
+          "role": "implementation",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 2,
+          "triggers": [
+            "managed models",
+            "正式模型",
+            "模型库存",
+            "本地模型"
+          ]
         }
       ],
       "test_profiles": [
@@ -2414,8 +2508,11 @@
         "Do not re-enable a legacy downloader while the pinned, verified, transactional Model Artifact Installer is absent."
       ],
       "warnings": [
-        "Legacy acquisition is intentionally unavailable; this containment layer is not the accepted dedicated Model Library and read-only evidence or cancellation is not an install transaction.",
-        "Local-only loading prevents network acquisition but does not by itself prove artifact trust or safe deserialization."
+        "Legacy direct/cooperative/Llama mutation policies do not describe every current managed-model action.",
+        "Downloaded, structurally valid, runtime-supported and real-inference-qualified are separate states; development validation never downloads weights."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "model-library-core": {
@@ -2805,6 +2902,9 @@
       "warnings": [
         "Temporary fixtures prove bounded transactions and current-host SQLite/OS single-writer crash release only, not production root selection, cross-platform or power-loss durability, Installed state or Model Readiness.",
         "The sequence floor and freshness clock are tracer-only in-memory evidence, not persisted anti-rollback state or Trusted Current Time."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "model-storage-root-registry": {
@@ -2917,6 +3017,9 @@
       ],
       "warnings": [
         "The task-local locator and Registry SQLite prove only the isolated current-host workflow, not production locator durability, removable-volume portability or power-loss safety."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "model-library-product-pilot": {
@@ -3096,6 +3199,9 @@
       "warnings": [
         "The current release bundle is intentionally absent, so the live page is fail-closed and storage configuration remains disabled in this build.",
         "Generated fixtures prove the workflow only; they are not publisher-qualified models, production signing keys or current online trust."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "runtime-package": {
@@ -3307,6 +3413,9 @@
       ],
       "warnings": [
         "Current production Runtime Package operations are disabled; isolated local-manifest tests do not prove a live installation path. Remote catalog, mirrors and offline-full distribution remain unimplemented."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md"
       ]
     },
     "settings-paths": {
@@ -3522,6 +3631,11 @@
       ],
       "warnings": [
         "Current global settings paths are not proof of the accepted per-Library authority model."
+      ],
+      "documentation": [
+        "docs/subsystems/gui-shell.md",
+        "docs/subsystems/local-host.md",
+        "docs/subsystems/library-lifecycle.md"
       ]
     },
     "desktop-shell": {
@@ -3752,6 +3866,10 @@
       "warnings": [
         "Treat IPC and Preload as compatibility seams; inspect only the affected call chain.",
         "The shared lifecycle Interface is the first-pass entry. Before changing Main window or startup wiring, follow src/main/index.ts#createWindow even when its full-file budget defers it."
+      ],
+      "documentation": [
+        "docs/subsystems/gui-shell.md",
+        "docs/subsystems/local-host.md"
       ]
     },
     "official-model-catalog-release": {
@@ -3950,6 +4068,10 @@
       "warnings": [
         "The checked-in input is intentionally absent; a passing fixture proves the gate, not a qualified production Catalog.",
         "Catalog release admission is not Fresh Trust Install Admission and authorizes no model payload transfer."
+      ],
+      "documentation": [
+        "docs/subsystems/ai-system.md",
+        "docs/platform/BUILD-AND-RELEASE.md"
       ]
     },
     "release-packaging": {
@@ -4071,6 +4193,9 @@
       ],
       "warnings": [
         "A passing local preflight does not prove external signing, notarization or distribution gates completed."
+      ],
+      "documentation": [
+        "docs/platform/BUILD-AND-RELEASE.md"
       ]
     },
     "agent-governance": {
@@ -4195,6 +4320,132 @@
       "warnings": [
         "The Router answers where to inspect first; it does not prove behavior without the returned code and executable evidence.",
         "TASK is required for matched continuity or recovery work; archived checkpoints are historical evidence, never additional task authorization."
+      ],
+      "documentation": [
+        "docs/agents/engineering.md"
+      ]
+    },
+    "work-mode": {
+      "summary": "Saved work sets, default Electron windows, macOS B AppKit candidate, native media and file handoff.",
+      "aliases": [
+        "work mode",
+        "work set",
+        "work window",
+        "floating window",
+        "工作模式",
+        "工作集",
+        "悬浮工作窗",
+        "原生悬浮窗"
+      ],
+      "keywords": [
+        "AppKit",
+        "NSPanel",
+        "native shelf",
+        "native dragging",
+        "window docking",
+        "窗口停靠",
+        "悬浮窗",
+        "视频参考帧",
+        "文件交付",
+        "多屏"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "shared",
+        "native-shelf"
+      ],
+      "states": [
+        {
+          "reality": "Current Implementation",
+          "summary": "Main selects the native macOS factory only with --dam-work-window-candidate=b; default uses Electron. Host keeps content, membership, revisions and commits.",
+          "evidence": [
+            "src/main/index.ts",
+            "src/main/work-mode/work-window-controller.ts"
+          ]
+        }
+      ],
+      "read_first": [
+        {
+          "path": "src/main/work-mode/work-window-controller.ts",
+          "anchor": "createWorkWindowController",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 1
+        },
+        {
+          "path": "src/main/index.ts",
+          "anchor": "nativeShelfCandidate",
+          "role": "composition",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 3
+        },
+        {
+          "path": "src/main/work-mode/native-shelf-work-window.ts",
+          "anchor": "createNativeShelfWorkWindow",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 2
+        },
+        {
+          "path": "src/main/work-mode/electron-work-window.ts",
+          "anchor": "createElectronWorkWindow",
+          "role": "adapter",
+          "reality": "Current Implementation",
+          "reason": "Current production composition; qualification is recorded separately.",
+          "read_mode": "symbol",
+          "priority": 4
+        },
+        {
+          "path": "src/main/work-mode/README.md",
+          "role": "readme",
+          "reality": "Current Implementation",
+          "reason": "Host/native ownership and private protocol; no physical UI qualification implied.",
+          "read_mode": "full",
+          "priority": 1
+        }
+      ],
+      "test_profiles": [
+        "desktop_shell",
+        "asset_workspace"
+      ],
+      "adrs": [
+        {
+          "path": "docs/adr/0489-work-sets-separate-saved-references-from-native-window-authority.md",
+          "triggers": [
+            "work set",
+            "工作集"
+          ],
+          "reason": "Library content and device window authority remain separate."
+        },
+        {
+          "path": "docs/adr/0493-dropover-style-interaction-allows-platform-native-implementation.md",
+          "triggers": [
+            "AppKit",
+            "原生",
+            "native"
+          ],
+          "reason": "Accepted native presentation boundary and separate platform acceptance."
+        }
+      ],
+      "avoid": [
+        "Do not switch the B factory to default while editing documentation.",
+        "Do not treat Browser, internal protocol or compiled Swift checks as physical input/animation/handoff evidence."
+      ],
+      "warnings": [
+        "B uses AppKit, not SwiftUI; current NSVisualEffectView does not establish target Liquid Glass.",
+        "Mac and Windows native behavior, multi-display and receiver effects require separate evidence."
+      ],
+      "documentation": [
+        "docs/subsystems/gui-shell.md",
+        "docs/subsystems/local-host.md",
+        "docs/subsystems/library-lifecycle.md"
       ]
     }
   }

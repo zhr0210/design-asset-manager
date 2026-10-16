@@ -1,19 +1,13 @@
 # Expired Time Bounded Packages Leave Default Discovery But Remain Auditable
 
-When a Time-Bounded Official Offline Package passes its signed `validUntil`, it enters **Install Window Ended**. Official Model/Runtime Catalog default install, update, recommendation and ordinary browse results exclude it so users are not led toward an ineligible new installation. Install Window Ended is an expected package-lifecycle state, not Critical Revocation, Analysis Suspension, Catalog Delisting, signature failure or proof that installed code/results became unsafe.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0215 defines the symmetric pre-window Install Window Not Started state and explicit Upcoming/Preview projection. Neither pre-window nor ended packages appear in default install discovery, and neither lifecycle state can be bypassed through possession of external bytes.
+## Decision
 
-The package remains available through an explicit Historical/Expired Packages search or filter. Its immutable history retains release identity/class, manifest/digests, signed Offline Package Time-Bound Justification, UTC/localized window, Time-Bounded Offline Release Approval identity, affected scope, end-state reason and stable replacement/recovery route when known. If no replacement exists the catalog says so rather than inventing one. Historical discoverability does not restore an Install action or claim that payload bytes remain downloadable forever.
+When a Time-Bounded Official Offline Package passes its signed `validUntil`, it enters **Install Window Ended**.
 
-Direct release URLs, cached catalogs, mirrors, previously downloaded package files and offline copies cannot bypass the ended window. Inspection and signature/provenance display remain available, but a new import/staging/promotion is blocked by the same ADR 0208–0211 trusted-time decision. A mirror may retain immutable bytes according to release-retention policy, yet transport availability has no installation authority.
+## Detailed contract and provenance
 
-Already installed instances remain visible in Model Library, AI Console/Runtime Registry and Storage Management with exact producing/acquisition provenance plus a contextual **Installed — Install Window Ended** marker and replacement/recovery action. They are not hidden, de-ranked, uninstalled, deactivated, deleted or migrated automatically. Future local execution continues unless a separate applicable entitlement, ADR 0165 Model Trust Statement or ADR 0192 Runtime Trust Statement changes it; committed tags, OCR, descriptions, palettes, embeddings and indexes remain untouched.
+详细状态、交互、数值边界和例外的唯一正文为[备份、模型信任与安装规格](../product/specs/backup-trust.md#adr-0214)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Window end itself produces no operating-system notification, modal, repeated toast or global grid/search badge. It may update the installed package's contextual detail and historical catalog count silently. If a stable replacement is available, installation/selection remains a separately reviewed user action; no automatic download, activation, result migration or reanalysis follows from expiration.
-
-Extending/reopening a window requires a new immutable manifest/evidence identity and a new ADR 0213 exact-candidate approval. Published `validUntil` and historical state are never edited in place. A new candidate may reference/reuse identical content digests through ordinary deduplication, but cannot resurrect the old release identity or erase that its original window ended.
-
-Full Library Backup dependency inventory preserves the exact historical installed package identity and lifecycle provenance without embedding package payload by implication. Restore may show the ended dependency and its replacement route, but never reinstalls it through the expired window or treats historical availability as current eligibility. Existing backed-up committed results retain their provenance even when no replacement is available.
-
-The current project has no Install Window Ended lifecycle state, default-vs-historical catalog projection, expired direct-import gate, installed contextual marker, replacement route or immutable extension-candidate workflow. This ADR records target behavior only: it expires/hides/downloads/installs/deletes nothing, reads no catalog/package/model/runtime/backup/asset/result/private data, performs no time/network check and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

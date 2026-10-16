@@ -1,0 +1,34 @@
+[
+  {
+    "path": "docs/subsystems/ai-system.md",
+    "sha256": "f1ce39821c9cf57f480e173639dbf537df5cda159a2811c5e016c6713fde1e51"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "sha256": "12ab098f4111d27a045260753b26d0b1e34c939edf80360a42312859f70063fb"
+  },
+  {
+    "path": "CONTEXT.md",
+    "sha256": "91533fb439298c25760bde43d6a23168ddac16ba478ae21b72704b583ad1b6de"
+  },
+  {
+    "path": "TASK.md",
+    "sha256": "016eb79e3cf6062a17713d1680d462bd91cde590f16aac015a7a844f1b38feea"
+  },
+  {
+    "path": "docs/agents/domain.md",
+    "sha256": "0d37731ae10e3a2c3b339f3f69d478327c4bb8944c876072d66d9561da62ead4"
+  },
+  {
+    "path": "src/main/ai-gateway/README.md",
+    "sha256": "27bcaeef984a014587e3db467c4b49c30de822046e17821cb4ad8b16d4e43929"
+  },
+  {
+    "path": "src/main/services/ai-runtime/README.md",
+    "sha256": "920ce14a3e6a86b392836efb861f93230d34c1da5f3dff5db3606b3a3b8bacf8"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "sha256": "3eb250c0e2b63d6ef5c19c17c509da553a146639e16e0805475488805842ab2e"
+  }
+]

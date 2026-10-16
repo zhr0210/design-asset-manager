@@ -1,0 +1,23 @@
+[
+  {
+    "agent": "/root/ai_model_policy",
+    "session_id": "01a14372-5ecd-7433-bfee-739b99397a7d",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/ai_target_control",
+    "session_id": "01a14372-36f2-7f90-8f9f-b947ec052a42",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/ai_runtime_release",
+    "session_id": "01a14372-91be-7b22-8844-cb074cfa3485",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

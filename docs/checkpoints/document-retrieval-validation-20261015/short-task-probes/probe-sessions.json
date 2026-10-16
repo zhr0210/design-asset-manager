@@ -1,0 +1,26 @@
+[
+  {
+    "agent": "/root/short_format_docs",
+    "file": "docs/checkpoints/document-retrieval-validation-20261015/short-task-probes/short_format_docs.trace.json",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "tools": 6,
+    "has_final": true
+  },
+  {
+    "agent": "/root/short_window_plan",
+    "file": "docs/checkpoints/document-retrieval-validation-20261015/short-task-probes/short_window_plan.trace.json",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "tools": 8,
+    "has_final": true
+  },
+  {
+    "agent": "/root/short_compact_docs",
+    "file": "docs/checkpoints/document-retrieval-validation-20261015/short-task-probes/short_compact_docs.trace.json",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "tools": 10,
+    "has_final": true
+  }
+]

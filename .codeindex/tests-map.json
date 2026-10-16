@@ -13,12 +13,7 @@
     "npm run test-library-view-draft-lifetime",
     "npm run test-asset-library-keyboard",
     "node scripts/run-ts-test.mjs scripts/asset-display-workflow.test.ts",
-    "node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts"
-  ],
-  "external_connected_library": [
-    "npm run test-external-connected-library-core",
-    "npm run test-eagle-adapter-companion",
-    "npm run test-external-connected-library-ipc",
+    "node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts",
     "npm run test-legacy-readonly-workspace"
   ],
   "asset_discovery": [
@@ -48,11 +43,6 @@
   ],
   "source_discovery": [
     "npm run test-web-retirement",
-    "npm run test-download-store-integrity",
-    "npm run test-managed-download-resume",
-    "npm run test-download-space-management",
-    "npm run test-persistent-download",
-    "npm run test-owned-download-recovery",
     "npm run test-asset-authority-baseline"
   ],
   "ai_analysis": [
@@ -151,7 +141,7 @@
   "architecture_knowledge": [
     "python3 scripts/check-adr-router.py",
     "python3 scripts/check-agent-context.py",
-    "python3 scripts/check-docs-sync.py --mode phase-summary"
+    "python3 scripts/check-docs-sync.py"
   ],
   "runtime_package": [
     "npm run test-runtime-package-session",

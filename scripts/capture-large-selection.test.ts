@@ -1,11 +1,14 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import os from 'node:os'
 import { randomUUID } from 'node:crypto'
 import { createAddAssetsWorkflow, createInMemoryCapturePersistenceAdapter } from '../src/main/capture-intake'
 
-// Focused prepare-only regression. Real public bytes, no import or fake product success.
-const source = path.resolve('.scratch/e-eagle-20261008/public-imports/public-04-coffee-qqzcl635t2eg.png')
+// Focused prepare-only regression with an isolated PNG fixture.
+const root = await fs.mkdtemp(path.join(os.tmpdir(), 'dam-capture-large-selection-'))
+const source = path.join(root, 'fixture.png')
+await fs.writeFile(source, Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aK0cAAAAASUVORK5CYII=', 'base64'))
 const before = await fs.readFile(source)
 let concurrent = 0, peak = 0
 const originalOpen = fs.open
@@ -40,4 +43,5 @@ try {
 } finally {
   fs.open = originalOpen
   assert.deepEqual(await fs.readFile(source), before)
+  await fs.rm(root, { recursive: true, force: true })
 }

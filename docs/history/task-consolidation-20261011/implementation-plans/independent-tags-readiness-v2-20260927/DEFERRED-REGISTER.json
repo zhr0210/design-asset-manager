@@ -28,19 +28,6 @@
       "status": "registered-NOT_RUN"
     },
     {
-      "id": "DEFER-EAGLE",
-      "sourceRefs": [
-        "S-EAGLE",
-        "B-REVIEW"
-      ],
-      "classification": "source-order-fact-with-runtime-impact-unverified",
-      "owner": "independent Eagle index schema reproduction",
-      "task01Blocker": false,
-      "issue": "CREATE IF NOT EXISTS executes before user_version guard",
-      "requiredBeforeOwnDelivery": "Temporary unknown-version index and missing-object scenario; observe zero writes requirement independently; no real Eagle access",
-      "status": "registered-NOT_RUN"
-    },
-    {
       "id": "DEFER-AUTO",
       "sourceRefs": [
         "S-ADR",
@@ -66,5 +53,6 @@
       "requiredBeforeOwnDelivery": "Specify quota/rotation guarantee and assumptions; same scenario on future actual scheduler, no required progress when resource/permission unavailable",
       "status": "registered-NOT_RUN"
     }
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

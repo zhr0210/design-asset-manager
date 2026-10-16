@@ -175,7 +175,6 @@ export default React.forwardRef<ActiveLibraryControlActions,ActiveLibraryControl
       </>} />
       <div className="flex justify-center gap-6 border-t px-5 py-4 ui-meta" style={{borderColor:'var(--ui-border)'}}>
         <NavLink to="/legacy-library" className="hover:underline">使用过旧版本？找回旧素材</NavLink>
-        <NavLink to="/connected-libraries" className="hover:underline">已有 Eagle 库？了解连接方式</NavLink>
       </div>
     </div>}
 

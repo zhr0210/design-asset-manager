@@ -1,15 +1,13 @@
 # Physical Reclaim Detail Rows Show Actual Reclaimed And Shared-Retained Bytes
 
-Every explicitly expanded Physical Reclaim Completion Summary detail row shows two labeled byte fields after ADR 0266's individual completion time: **Actual Reclaimed** and **Shared Retained**. Both are authoritative non-negative integer byte counts from that exact constituent result and both remain visible when zero.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The two fields reuse ADR 0261 Storage Byte Display compact IEC units, exact hover/focus byte integers and accessible text without a row-specific formatter. Compact rounding never replaces the raw integers used for validation. Missing, negative, fractional, non-finite or otherwise unassessable row evidence is not coerced to `0 B`.
+## Decision
 
-Across every constituent in the frozen ADR 0258 member snapshot, including all unloaded lazy pages, the sum of row Actual Reclaimed values must equal the header's authoritative actual reclaimed byte total. The sum of row Shared Retained values must independently equal the header's Shared Bytes Retained By Other Owners total. The host validates both invariants from the full snapshot; the renderer never computes either header total from currently loaded pages.
+Every explicitly expanded Physical Reclaim Completion Summary detail row shows two labeled byte fields after ADR 0266's individual completion time: **Actual Reclaimed** and **Shared Retained**.
 
-An Already Absent-only target shows `0 B` Actual Reclaimed and `0 B` Shared Retained because it freed no bytes in the completing episode. Removed Now and Mixed targets report only bytes actually reclaimed. A Completed As Shared target reports the bytes still retained by other owners separately and may also report actual bytes reclaimed earlier in its mixed completion episode; shared bytes never contribute to Actual Reclaimed.
+## Detailed contract and provenance
 
-The row does not display or derive an already-absent historical size, logical/apparent package size, projected cleanup size, estimated reclaimability, allocation estimate or per-owner share. Existing completion evidence needed to prove object absence remains host-only and is never relabeled as storage freed. Owner categories, identities and byte apportionment remain outside the result projection.
+详细状态、交互、数值边界和例外的唯一正文为[存储清理结果与可访问导航规格](../product/specs/storage-review.md#adr-0267)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Row bytes do not affect ADR 0258 alphabetical order, page membership, ADR 0264 card ordering, disclosure, acknowledgement or expiry. There is no largest-first row sort, byte filter, progress bar, comparison badge or recommendation based on either value.
-
-The current project has no Physical Reclaim Completion Summary details or row-byte projection. This ADR changes documentation only: it totals/formats/reclaims no real bytes, reads no user asset, runtime database, package/cache/model/private state and changes no public IPC/schema/AI Worker API. ADR 0268 filters full-snapshot details only by outcome class and never by these byte values.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

@@ -1,9 +1,13 @@
 # Partially Migrated Custom Fields Remain Queryable With Explicit Coverage
 
-Waiting for a large Custom Field Type Migration to finish would hide already committed work, while mixing source and target identities would make apparently complete queries return invented results. A target Custom Field Definition is therefore searchable and filterable from the start of its ADR 0426 task, even before the first target value is committed, but every Inspector, criterion/facet and result surface involving it exposes **Partial Custom Field Migration Coverage** while any requested migration item remains non-terminal.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Search and filter evaluation uses only durable values committed to the target definition. It never infers a missing target value from the source field, executes the conversion rule at query time, merges the two field identities, or counts previewed/pending values as matches. The coverage state shows committed target-value owners together with current failed, conflict, unconvertible and remaining counts so a syntactically valid query cannot appear complete by omission.
+## Decision
 
-A Saved Search or User Smart Filter may be created, saved and executed against the target during migration. Its criterion keeps the exact target Custom Field Dependency Reference under ADR 0421; partial coverage is durable execution state, not a mutation of the saved criteria or identity. When every requested migration item reaches a terminal outcome, the live coverage state clears automatically without rewriting the query, while ADR 0426 Custom Field Migration Result discloses retained-unconvertible, conflict and failed items for its ADR 0429 retention lifecycle.
+Waiting for a large Custom Field Type Migration to finish would hide already committed work, while mixing source and target identities would make apparently complete queries return invented results.
 
-This ADR does not add Custom Field criteria to a cross-library or Offline Library Catalog projection. Any future projection that supports them must preserve the same committed-target-only semantics and must not claim complete coverage without durable migration-state evidence.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[自定义字段与迁移规格](../product/specs/custom-fields.md#adr-0427)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

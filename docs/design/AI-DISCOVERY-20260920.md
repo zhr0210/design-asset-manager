@@ -18,5 +18,5 @@
 - [1024px文件夹](artifacts/ai-discovery-20260920/ai-folders-compact.png)
 - [分析详情](artifacts/ai-discovery-20260920/ai-details-light.png)
 
-截图全部为生成的测试素材与合成分析响应。真实模型质量、真实Eagle及语义检索不在本轮验证范围。
+截图全部为生成的测试素材与合成分析响应。
 测试源文件校验值未变；未修改真实素材库、未安装模型/依赖、未外发用户素材。

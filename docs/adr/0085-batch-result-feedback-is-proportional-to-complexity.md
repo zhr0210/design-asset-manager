@@ -1,13 +1,13 @@
 # Batch Result Feedback Is Proportional to Complexity
 
-Batch Result Feedback should match the complexity and risk of the result. A
-fully successful low-risk Direct Batch Action may use only Candidate Undo Toast.
-Any result with skipped, failed, or excluded items should show Inline Batch
-Result with a visible reason summary and Batch Result Detail available for
-inspection. Reviewed Batch Actions should return to Batch Inspector with their
-result visible, while Hard Delete should show an irreversible Inline Batch
-Result and never expose an undo entry.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0457 therefore returns Batch Text Edit to Batch Inspector with persisted
-outcome counts and direct conflict/failure detail. A fully successful edit still
-shows its reviewed result rather than collapsing into a generic one-line toast.
+## Decision
+
+Batch Result Feedback should match the complexity and risk of the result.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[批量操作与冲突规格](../product/specs/batch-conflicts.md#adr-0085)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

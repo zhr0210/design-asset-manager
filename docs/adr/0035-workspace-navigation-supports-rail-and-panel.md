@@ -1,17 +1,13 @@
 # Workspace Navigation Supports Rail and Panel
 
-Workspace Navigation should support two coordinated forms: a compact
-Navigation Rail and an expanded Navigation Panel. Desktop should default to the
-expanded panel, while narrow windows or user collapse should keep the rail
-visible with icons, active state, and badges.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Hover or click can temporarily reveal the Navigation Panel from the rail, and a
-user-pinned expanded state should be remembered. Collapsing navigation must not
-hide important review counts: Capture Inbox, Smart Filters, referenced-source
-offline/missing/exception attention, and other attention-bearing entries should
-keep aggregate badge visibility in the rail without exposing private source
-names or paths.
+## Decision
 
-This preserves Eagle-like information density when space allows while keeping
-the Asset Grid wide enough for visual scanning when the user or viewport needs
-more room.
+Workspace Navigation should support two coordinated forms: a compact Navigation Rail and an expanded Navigation Panel.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[工作台与导航规格](../product/specs/workspace.md#adr-0035)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/asset-workspace.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

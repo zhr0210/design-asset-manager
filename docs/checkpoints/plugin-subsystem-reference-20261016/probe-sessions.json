@@ -1,0 +1,16 @@
+[
+  {
+    "agent": "/root/plugin_doc_boundary",
+    "session_id": "01a1426e-f5d7-71d0-bb7d-d790cf641a79",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/plugin_doc_entry",
+    "session_id": "01a1426e-cd3c-7363-aea5-b92e9ff7db9e",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

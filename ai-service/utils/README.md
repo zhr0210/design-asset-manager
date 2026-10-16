@@ -11,7 +11,7 @@ Shared Python helpers for preprocessing, tag cleanup, translation, localization,
 
 ## Rules
 
-- Treat `tag_fusion.py` as protected.
+- 可在获批目标内修改tag_fusion.py；保持标签归一/融合契约、人工确认优先与调用方兼容，运行相关行为回归，不设文件级禁改。
 - Keep helpers deterministic and covered by AI service tests.
 
 ## Tests

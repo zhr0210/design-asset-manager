@@ -1,0 +1,168 @@
+{
+  "source": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+  "exact_before": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+  "paragraphs": [
+    {
+      "paragraph": 1,
+      "sha256": "60d8887f3e51da3f3bd3a2b4a45c09ba52c00ac5e7134664dd39994aaac4b520",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 2,
+      "sha256": "977aee564a1791a349cc7a4db0ab796753d541e615ecbdc44fb8d26ccf53cb8b",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 3,
+      "sha256": "076438a1d6e7f3ddbba4779c61a1d7062830f3f43f387fc884337f13bf874251",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 4,
+      "sha256": "5c8b484c84fd158190024ff182291135537587a8eeb23c940720ebb8174a7364",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 5,
+      "sha256": "9a3168c6d6822fc7517242ef1593658242470eb16f49518c7b637f091bcf2d09",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 6,
+      "sha256": "81abcbecc11fb0e5c0ddf15aac8602b3234445af8d8b546b5e92e8c3870a623b",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 7,
+      "sha256": "af614d2c6a0f13e05527c71d2cf7bae20256d756e604947a805464b35242d82d",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 8,
+      "sha256": "85547a5cfc41f26ec90077063a8a5002617d67a1462edbe5277f2142b563970d",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 9,
+      "sha256": "84ca01be4245277b6c4a1de29f842bb2e9acce1d89d781a7fcbfbd693f9c24bf",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 10,
+      "sha256": "00dce5fb3dd25ed639fb9395d0fd09e2204aa997d68cf46230f72c717e02e9de",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 11,
+      "sha256": "7b77afeeb1ef9c57076a224bbba16c4d87825f496410117220e99cd164888c9b",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 12,
+      "sha256": "7a77d09aacd3ecfba86e695bd6d87827d36554800505a00dcc7a8310f8864211",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 13,
+      "sha256": "7b2c833d55c71f88c67ce1209ec774ce13310e298063b8381743be854cd7aa70",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 14,
+      "sha256": "314e518892285f7be1d4c4b013a9a589f42ebb3b963b2c9d20beab8acc86e3a0",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 15,
+      "sha256": "9ca262d74bfb186940b308f6ef9f883ad7af4bdbd55147dfe121d27317fb861c",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 16,
+      "sha256": "2c61de8d785efe255b366380248b96f7281882d4ea65000771ca3b63a2482e72",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 17,
+      "sha256": "f1fd93e7dc842c292ec455337cac6d709e9c05554fb53fa4bb25cd45e9f0cdb4",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 18,
+      "sha256": "3800b547c953d0e8992bb42c3a11985fa1166b7756e03e05877ed919550b735a",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 19,
+      "sha256": "585deae2f1034a31b1165b526df4e48a3fcc3e4391867bac26e1bb5d153c325b",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 20,
+      "sha256": "61ede1bce36b6168506fe61ccb337f1cf9472176a5efdcfe1e72263a47c121b3",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 21,
+      "sha256": "59f2a12976a2c364f272ff8996226a416253c9cc435ce32c33d1254417b83a22",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 22,
+      "sha256": "f594635c66c9995782d71588fc90ce39cd2f8abd1dac59caebd043b245fc3e62",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 23,
+      "sha256": "fefa97dc78a1cb8594ab9336e194ac771162c2f8b2210159941ef1577b530ad0",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 24,
+      "sha256": "4a6db3ead11f8798bb331cda0384effc8fac3a768f7df470ad7d67ae4f115fcf",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 25,
+      "sha256": "60b38b10a3cef2623800c72317b7bbe6c3805c60f619524b4c2325fb4fa37ba3",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 26,
+      "sha256": "f3de9dc9ca1ec36a6647093f79e0557419581a0c4b4dc8ecea6d52476f0fce9e",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 27,
+      "sha256": "fe73dd50dc57b77f1204f7532df0742110e6eff2a4f64d42c4819e8f5ab53172",
+      "destination": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    }
+  ]
+}

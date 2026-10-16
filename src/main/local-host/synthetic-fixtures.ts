@@ -19,7 +19,7 @@ export function readSyntheticFixtures(rootDirectory: string) {
   }
   return Object.freeze({
     origin: origin.origin,
-    permits: (command: string) => inference.has(command) || ['download:prepare','download:enqueue','download:retry'].includes(command) || config.ocr && ['asset-ocr:configure','asset-ocr:run','background-ocr:confirm'].includes(command),
+    permits: (command: string) => inference.has(command) || config.ocr && ['asset-ocr:configure','asset-ocr:run','background-ocr:confirm'].includes(command),
     assertBackend,
     authorizePi(request: unknown) {
       const value = request as {kind?:string;connection?:AiBackendConfig}

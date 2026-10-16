@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "old_topics": 19,
+  "units": 524,
+  "preserved_units": 506,
+  "navigation_units": 18,
+  "unresolved": [],
+  "old_heading_errors": [],
+  "scope": "Canonical text keeps wording/numbers/exceptions; heading/title/navigation consolidated. Original bytes in before; provenance paths and paragraph hashes in migration.json."
+}

@@ -1,19 +1,13 @@
 # Offline Trust Evidence Has No Age Only Expiration
 
-Official Dated Offline Trust Evidence has no application-invented age-only expiration such as 90, 180 or 365 days. Evidence age is always displayed, but elapsed time alone does not turn an otherwise exactly verified Official Offline Model/Runtime Package or ADR 0188 Offline Full Installer into an invalid package. This preserves intentional long-term and air-gapped deployment without pretending that old evidence is the latest online state.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0212 therefore requires Official Stable Offline packages to omit current-time install windows by default. A signed time window is allowed only for an explicitly exceptional release class with complete justification/disclosure and never as an indirect age cutoff, update pressure or connectivity requirement.
+## Decision
 
-New offline installation is blocked only by a typed **Offline Evidence Validity Decision**: invalid/unknown signature or trust chain; missing/invalid trusted signing-time evidence where required by the signing scheme; manifest, digest, size or package binding mismatch; an explicit signed `notBefore`/`validUntil` boundary that is not satisfied; incompatible application/catalog schema, platform, architecture, ABI/API or dependency closure; a trust root/signing delegation known to be revoked for the relevant signing scope; or an applicable known model/runtime security revocation or suspension. Archive safety, license and ordinary install-plan blockers remain separately enforced.
+Official Dated Offline Trust Evidence has no application-invented age-only expiration such as 90, 180 or 365 days.
 
-An explicit validity period is authoritative only when it is inside the signed evidence and bound to the exact package/manifest. A filename date, release-page wording, mirror timestamp, filesystem creation/modification time, download time, archive metadata or unsigned README cannot create, extend or remove validity. The UI distinguishes **Evidence Age** from **Evidence Validity** so “old” never reads as “signature failed,” and shows issue date, any signed validity boundary, freshness, compatibility result and path-free blocking reason before confirmation.
+## Detailed contract and provenance
 
-ADR 0208 requires Trusted Current Time Assessment only when such a signed current-time installation boundary exists. Clock rollback cannot revive a package, and Time Not Assessable blocks that new installation without an in-app override. An otherwise valid official package with no current-time install boundary remains unaffected by inability to assess current time, while still requiring its signing-time and all other verification.
+详细状态、交互、数值边界和例外的唯一正文为[备份、模型信任与安装规格](../product/specs/backup-trust.md#adr-0207)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Signing-key or certificate expiration after a valid, trusted signing time does not retroactively create an age cap for a package that was correctly signed while the delegation was valid. This does not protect a key/root that is explicitly revoked for that signing time/scope, a signature without required trustworthy timestamp evidence or a package whose signed policy says otherwise. Key rotation, repository migration or availability of a newer bundle likewise does not invalidate an older bundle by implication.
-
-Offline evidence is still monotonic against device state. An old package cannot roll back a newer accepted statement, clear a revocation/suspension, revive a blocked digest or replace newer trust-root policy. Trust-root revocation is enforced only from authentic application-embedded or previously verified signed state; the application does not invent revocation because it cannot connect. A later online refresh may accept newer monotonic evidence, but does not silently reinstall, activate, delete or replace an already installed package.
-
-Validity boundaries govern new staging/promotion, not committed results and not existing execution by implication. Expiration of package-install evidence after a successful installation does not delete the package, alter tags/OCR/descriptions/embeddings or automatically stop a verified installed model/runtime. Stopping future execution requires a separately applicable ADR 0165/0192 trust statement, explicit continuous-entitlement contract or another already-governed execution rule. Existing non-revoked installations therefore remain usable offline.
-
-The current project has no Dated Offline Trust Evidence schema, trusted signing-time verifier, Offline Evidence Validity Decision, signed validity-boundary handling, evidence age/validity UI separation or monotonic root-revocation merger. This ADR records target behavior only: it reads/verifies/installs no package, accesses no model/runtime/cache/asset/result/private state, performs no network request and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

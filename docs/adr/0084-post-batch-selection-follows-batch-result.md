@@ -1,14 +1,13 @@
 # Post-Batch Selection Follows Batch Result
 
-Candidate Batch Actions should leave selection and focus based on what actually
-happened. Lower-risk metadata actions such as adding tags, assigning
-collections, or extending retention should keep the Visible Selection and
-refresh Batch Inspector. Confirm to Library and Reject Candidate should remove
-successful items from the active selection while keeping skipped, failed, and
-excluded items selected with their reasons visible. Hard Delete should clear
-deleted items from selection, move Result Focus to the next visible candidate,
-show Batch Result Feedback, and never offer Batch Undo.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0457 Batch Text Edit keeps the selected owners visible and refreshes Batch
-Inspector after execution. Changed, unchanged, invalid, conflict, failed and
-excluded outcomes remain inspectable without silently narrowing the selection.
+## Decision
+
+Candidate Batch Actions should leave selection and focus based on what actually happened.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[批量操作与冲突规格](../product/specs/batch-conflicts.md#adr-0084)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

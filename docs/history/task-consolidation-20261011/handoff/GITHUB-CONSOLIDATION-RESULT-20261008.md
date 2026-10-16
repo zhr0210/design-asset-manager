@@ -1,5 +1,7 @@
 # GitHub 整合最终回执（2026-10-08）
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 **源码整合已完成；产品未完成项保持未完成。** 后续从
 [GitHub main](https://github.com/zhr0210/design-asset-manager/tree/main)接续。
 
@@ -22,7 +24,7 @@
 [检查回执](../../../handoff/GITHUB-CONSOLIDATION-CHECKS-20261008.json)。
 [新源码Actions](https://github.com/zhr0210/design-asset-manager/actions/runs/37792705712)
 截至本回执仍运行/排队，未声称通过；旧PR CI成功不继承。
-Mac真实运行/原生、Eagle、WC01、T23/父#24、D/E/F及首版父级没有在本轮关闭。
+Mac真实运行/原生、WC01、T23/父#24、D/E/F及首版父级没有在本轮关闭。
 
 ## 恢复点
 

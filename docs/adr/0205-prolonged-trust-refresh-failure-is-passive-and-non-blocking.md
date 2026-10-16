@@ -1,15 +1,13 @@
 # Prolonged Trust Refresh Failure Is Passive And Non Blocking
 
-A failed Model/Runtime Trust Catalog refresh is connectivity or metadata-verification state, not evidence that an installed model/runtime became unsafe. For the first seven elapsed days after the relevant Last Verified Trust State becomes stale, Model Library and AI Console show only the ordinary Trust Metadata Freshness state, last verified time and a manual refresh action. They do not create a banner, modal, toast loop, navigation badge or operating-system notification merely because refresh attempts fail.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-After more than seven elapsed days without a newly verified state, the application creates one **Prolonged Trust Refresh Notice** for that stale episode. It appears as a passive in-app banner in Model Library and AI Console with a path-free failure category, last verified time, offline/privacy explanation and **Refresh Trust Metadata** action. The two surfaces project the same notice identity rather than counting as separate alerts. It does not interrupt the Asset Workspace, open either surface automatically or repeat on every launch, failed attempt, network transition, library open or clock tick.
+## Decision
 
-The notice may be dismissed for the current stale episode; the ordinary freshness indicator remains available. It becomes eligible once again only after a successfully verified catalog state ends that episode and a later independent state remains stale for another seven days. A materially different signed execution revocation or model advisory is not refresh-failure repetition and follows ADR 0199 independently. Successful recovery clears the banner silently and sends no success notification.
+A failed Model/Runtime Trust Catalog refresh is connectivity or metadata-verification state, not evidence that an installed model/runtime became unsafe.
 
-Refresh failure, age or notice visibility never blocks loading or future local analysis with an already installed, verified and not-known-revoked model/runtime. It does not clear or weaken a previously accepted revocation/suspension, authorize an unknown artifact, label stale state current, replace a capability, download remediation or change committed tags, OCR, descriptions, palettes, embeddings, indexes or their provenance. Existing safety enforcement continues from Last Verified Model/Runtime Trust State under ADRs 0165 and 0192.
+## Detailed contract and provenance
 
-No Prolonged Trust Refresh Notice is eligible for an operating-system notification, regardless of duration, retry count, library size or number of affected identities. It is not New Material Trust Attention because no new signed trust statement was accepted. ADRs 0201 through 0203 notification preferences, permission and priority therefore do not apply to this notice. Diagnostics retain only path-free stale-episode identity, duration class and safe failure category, without URLs, credentials, library/model names, asset/result content or private paths.
+详细状态、交互、数值边界和例外的唯一正文为[备份、模型信任与安装规格](../product/specs/backup-trust.md#adr-0205)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Elapsed-age calculation uses the monotonic-safe persisted freshness rules from ADR 0204. Clock rollback, timezone change, suspend/resume or a large forward jump cannot manufacture repeated seven-day notices or mark a failed response verified. Automatic attempts retain ADR 0204 cadence, coalescing and backoff; the banner does not increase polling frequency.
-
-The current project has no per-root/channel stale-episode projection, seven-day passive-notice threshold, cross-surface notice identity, per-episode dismissal or verified-recovery clearing. This ADR records target behavior only: it performs no refresh or network request, sends no notification, loads/blocks no model/runtime, reads no assets/results/private state and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

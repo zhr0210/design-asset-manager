@@ -1,13 +1,13 @@
 # Asset Export Admission Uses Non-Preemptive Task Fair Rotation
 
-Multiple confirmed export tasks can compete for the same bounded lanes and media resources. Draining one task completely can starve later tasks, while newest-first or manual priority invites unstable completion promises. Admission therefore uses stable task fairness without interrupting work already in a commit boundary.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-**Asset Export Task Fair Rotation** is a stable non-preemptive ring. A newly confirmed task joins the tail. After one commit unit is admitted from an eligible task, the next admission opportunity starts from the next eligible task. A task-internal variant or manual-retry preference chooses that task's candidate only after the task receives its turn. Running, publication, and recovery units are never preempted.
+## Decision
 
-A paused, retry-delayed, conflict/recovery-blocked, or resource/volume-waiting task does not hold the rotation head and accumulates no banked turns. It remains in the ring for reconsideration when evidence changes. When only one task is eligible, it may fill all currently proven safe capacity. Disjoint-volume concurrency may admit several tasks, and each new admission advances fairness independently. Version one exposes Pause/Resume but no manual task ordering or priority slider.
+Multiple confirmed export tasks can compete for the same bounded lanes and media resources.
 
-A confirmed ADR 0397 task freezes **Compatible Export Variant Priority**. Within its own turn, otherwise equally eligible units prefer the earlier variant, but lanes, resource gates, pressure, and safe intermediate reuse can change actual dispatch or completion order. The UI keeps reviewed priority visible and explains waiting reasons rather than presenting observed completion order as a guarantee.
+## Detailed contract and provenance
 
-Automatic-retry delay reserves no lane, resource slot, or queue head. After delay and current-evidence validation, the placement returns at its original frozen variant priority. Explicit Retry Asset Export Placements gives freshly preflighted selected placements preference over ordinary unstarted placements only inside the same task; it grants no cross-task priority and never preempts active work.
+详细状态、交互、数值边界和例外的唯一正文为[导出、交付与性能规格](../product/specs/export.md#adr-0407)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/media-handoff.md)，当前资格只查CURRENT-STATE。
 
-ADR 0390 owns physical-volume lanes, the Media Processing Resource Gate, and safe shared intermediates. ADR 0408 can reduce safe admission below the fair scheduler's available turns but cannot silently change the ring or create priority through resource pressure.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

@@ -121,7 +121,7 @@ components:
 
 本文件是DAM当前有效的设计系统：视觉语言、颜色、排版、布局、层次、形状、组件样式及通用反馈。主工作台与独立大预览使用桌面素材工具的信息结构；悬浮工作窗采用同一视觉语言与原生系统材质。
 
-功能流程见[工作台交互规格](docs/design/WORKSPACE-INTERACTIONS.md)和[悬浮工作窗交互规格](docs/design/WORK-WINDOW-INTERACTIONS.md)，技术分工见[工作模式模块](src/main/work-mode/README.md)。实际可用性见[当前状态](docs/handoff/CURRENT-STATE.md)，验收方法见[验收流程](docs/agents/ui-ux-acceptance.md)。文档职责按[文档维护规则](CONTRIBUTING.md#7-文档维护)划分。
+本文件只维护设计规范，不承载界面系统的启动/路由接线、状态权威、通信、草稿恢复或退出实现说明；这些从[GUI系统说明](docs/subsystems/gui-shell.md)进入。功能流程见[工作台交互规格](docs/design/INTERACTIONS.md#workspace)和[悬浮工作窗交互规格](docs/design/INTERACTIONS.md#work-window)，原生局部机制见[工作模式模块](src/main/work-mode/README.md)。实际可用性见[当前状态](docs/handoff/CURRENT-STATE.md)，验收方法见[验收流程](docs/agents/ui-ux-acceptance.md)。文档职责按[文档维护规则](CONTRIBUTING.md#7-文档维护)划分。
 
 ## Overview
 
@@ -197,7 +197,7 @@ Apple参考的展示级字体转换为桌面信息密度，不用于工具栏或
 
 ### 配置、任务与其他应用页面
 
-AI与模型、任务中心、标签管理、设置、仪表盘、连接库、旧素材及帮助页面沿用主工作台的窄图标导航外壳。导航的宽度、控件尺度、中性色、材质及选中反馈保持一致；不因页面切换恢复宽侧栏、独立装饰底板或另一套组件外观。
+主素材工作台使用窄图标导航。设置使用整页布局，占满主窗口，内部由分类导航与内容区组成，不叠加主页导航、工具条或素材搜索栏。设置内的功能共用控件尺度、中性色、材质及选中反馈；返回入口清晰可见，不另造装饰底板或另一套组件外观。
 
 页面内部按内容职责布局：配置使用表单与分组，任务使用列表与进度，标签使用表格或列表，概览使用摘要。内部布局不套用素材网格的卡片比例、底部搜索或密度滑条；文字层级、间距及通用组件遵循同一设计系统。导航入口的分组与位置由工作台交互规格定义。
 

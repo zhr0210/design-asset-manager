@@ -4,18 +4,13 @@
 from __future__ import annotations
 
 import re
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ADR_DIR = ROOT / "docs" / "adr"
-ROUTER = ADR_DIR / "README.md"
+ROUTER = ADR_DIR / "indexes" / "classification.md"
 
-EXPECTED_COUNTS = {
-    "Core ADRs": 89,
-    "Spec-candidate ADRs": 195,
-    "Historical ADRs": 9,
-    "Supporting ADRs": 199,
-}
 
 
 def expand_token(token: str) -> set[int]:
@@ -55,7 +50,7 @@ def parse_fenced_class(router: str, heading: str) -> set[int]:
 
 def parse_historical(router: str) -> set[int]:
     match = re.search(
-        r"^### Historical ADRs\s*\n(.*?)(?=^## Product Spine)",
+        r"^### Historical ADRs\s*\n(.*?)(?=^## |\Z)",
         router,
         re.MULTILINE | re.DOTALL,
     )
@@ -92,7 +87,7 @@ def main() -> int:
         adr_files[number] = path
 
     corpus = set(adr_files)
-    expected_corpus = set(range(1, 493))
+    expected_corpus = set(range(1, max(corpus, default=0) + 1))
     missing = expected_corpus - corpus
     unexpected = corpus - expected_corpus
     if missing:
@@ -107,7 +102,7 @@ def main() -> int:
         )
 
     if not ROUTER.exists():
-        errors.append("Missing docs/adr/README.md")
+        errors.append("Missing ADR classification index")
         router = ""
     else:
         router = ROUTER.read_text(encoding="utf-8")
@@ -139,14 +134,11 @@ def main() -> int:
         "Historical ADRs": len(historical),
         "Supporting ADRs": len(supporting),
     }
-    for label, expected in EXPECTED_COUNTS.items():
-        actual = actual_counts[label]
-        if actual != expected:
-            errors.append(f"{label} count is {actual}, expected {expected}")
+    # The corpus grows; validate the actual exhaustive partition, not frozen counts.
 
     classified = core | spec | historical | supporting
     if classified != expected_corpus:
-        errors.append("ADR classifications do not cover exactly 0001–0492")
+        errors.append("ADR classifications do not cover the actual corpus")
 
     for number in sorted(historical):
         path = adr_files.get(number)
@@ -175,6 +167,40 @@ def main() -> int:
             + ", ".join(f"{reference:04d}" for reference in sorted(references))
         )
 
+    try:
+        index = json.loads((ROOT / '.codeindex' / 'adr-index.json').read_text())
+        entries = index['entries']
+        if len(entries) != len(corpus) or {int(e['id']) for e in entries} != corpus:
+            errors.append('ADR metadata does not cover the exact decision corpus')
+        for entry in entries:
+            number = int(entry['id'])
+            expected_class = 'Core' if number in core else 'Spec-candidate' if number in spec else 'Historical' if number in historical else 'Supporting'
+            if entry['classification'] != expected_class:
+                errors.append(f"ADR {number:04d} metadata classification drift")
+            source = adr_files[number].read_text()
+            title = re.search(r'^# (.+)$', source, re.MULTILINE)
+            if not title or entry['title'] != title[1]:
+                errors.append(f"ADR {number:04d} metadata title drift")
+            status_match = re.search(r'^status:\s*(accepted|proposed|deprecated|superseded)\b', source, re.MULTILINE | re.IGNORECASE)
+            declared = status_match[1].lower() if status_match else 'not-declared'
+            if expected_class == 'Historical':
+                declared = 'superseded'
+            if entry['status'] != declared:
+                errors.append(f"ADR {number:04d} metadata status drift")
+        for topic in index['topics']:
+            topic_source = (ROOT / topic['reference']).read_text()
+            linked = set(re.findall(r'\[(\d{4}) · ', topic_source))
+            expected = {e['id'] for e in entries if topic['id'] in e['topics']}
+            if linked != expected:
+                errors.append('ADR topic coverage drift: ' + topic['id'])
+        task_index = (ADR_DIR / 'indexes' / 'tasks.md').read_text()
+        for task_type in index['taskTypes']:
+            if f"| `{task_type['id']}` |" not in task_index:
+                errors.append('ADR task index drift: ' + task_type['id'])
+
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        errors.append('ADR metadata invalid: ' + str(exc))
+
     if errors:
         print("[FAIL] ADR router validation failed")
         for error in errors:
@@ -183,7 +209,7 @@ def main() -> int:
 
     print("[PASS] ADR router validation passed")
     print(
-        "492 ADRs: "
+        f"{len(corpus)} ADRs: "
         f"{len(core)} Core, {len(supporting)} Supporting, "
         f"{len(spec)} Spec-candidate, {len(historical)} Historical"
     )

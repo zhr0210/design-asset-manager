@@ -1,5 +1,7 @@
 # 当前：WC01 owned H进程重启 / retention tracer（2026-10-05，VALIDATED_TRACER / STOP）
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 本批仅 owned 合成 H进程重启/retention：原operation/scope/canonical payload/digest/result与delivery ACK意图在副作用前写有界append journal，H实际退出/新PID+UUID恢复，A唯一SQLite writer保持。恢复只精确核对原receipt，missing/不匹配保持unknown并关闭通知推进；不盲重发、不重推理、不自动grant；历史success/receipt不降级。监督方保有head/length与对象身份，不能证明supervisor冷启动antirollback或断电耐久。
 
 最终run-02 16PASS/0FAIL/0cancel、5脚本syntaxPASS；32H（30ready/2故意loadfail）与29A全部known child/stdio退出、reader0/uncertainfalse；QR03持久reservation1但actualstub0，其余15case各actualstub1，重启后delta0。QR01保持同一个A而H换PID，其余有效case重建A。14有效fixture pairs非递归清理，2损坏pairs保留；run-01 2PASS/14FAIL及16pairs原样保留，18retainedpairs共94对象副本已封存，不自动清理Temp。首轮JSON字段顺序误报immutable变化已修复为22固定字段逐值严格比较。
@@ -157,7 +159,7 @@ max1合成attempt不是真实OCR/tag域验收；effectcommit/finish/outbox、Hre
   历史f44完整suite113/22+28syntax、原golden1.097186%FAIL、默认Pi0/5FAIL和router
   无关AI断言FAIL不改判；fixture5/5和独立复跑不替代分发/安装包或真实模型。
 - 未覆盖完整业务逐项/缩放/所有草稿故障矩阵；原生工具无表面为BLOCKED_UX_ACCEPTANCE，
-  真实模型/账号/连接库/安装包NOT_RUN。提交当前分支的实施检查点，不push、不关闭
+  真实模型/账号/安装包NOT_RUN。提交当前分支的实施检查点，不push、不关闭
   Issue；无关schema/AI evidence/Pi seal等WIP排除。最终源码/报告绑定入口：
   .scratch/local-dual-client/final-checkpoint-20261003.json，证据本体不提交。
 
@@ -303,7 +305,7 @@ max1合成attempt不是真实OCR/tag域验收；effectcommit/finish/outbox、Hre
   未运行产品或 CU，不将本次规格交付表述为双客户端已实现。
 - 只读规格复核已采纳：系统动作仅限正式接线与准入允许者；未交付原生文件交接
   不列本轮必需验收；补单素材卡片、派生图片保存、标签别名/层级、旧素材只读、
-  收录恢复、连接库与模型Workspace现有摘要/设置/构建诊断。真实数据权限不扩大。
+  收录恢复与模型Workspace现有摘要/设置/构建诊断。真实数据权限不扩大。
   后续 Browser CU 继续由用户指定 GPT-6 Luna/high 子智能体执行，主 Agent
   复核结果；不以构建/契约测试代替用户路径。
 - MeshCentral 已清理：PTY2905/16331 的临时代理和服务停止，相关 Node/Agent
@@ -795,7 +797,7 @@ typecheck、脚本语法与公共报告脱敏检查通过。未提交或暂存�
 ## 历史：用户授权8份设计稿的本地模型复测（2026-09-23）
 
 用户允许使用1份PSD和7张图片复测已验证模型。本轮仅在权限受限的临时目录建立最长边1600像素的预览，
-PSD只用合成图；8份原文件测试前后SHA-256一致。没有写入活动库/Eagle连接库、正式AI结果或provider配置，
+PSD只用合成图；8份原文件测试前后SHA-256一致。
 没有向外部发送图片。原图、预览图及模型原文不入项目文档。
 
 RapidOCR1.4.4：8/8执行成功，人工选取的33项可见文字锚点命中30项，其中R2的装饰小字仅1/4；

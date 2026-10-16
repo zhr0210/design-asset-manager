@@ -1,0 +1,88 @@
+{
+  "scope": "New short natural task prompts, no document/index lookup instructions or request to report retrieval steps.",
+  "prompt_gate": {
+    "passed": true,
+    "source": "dispatch.json preserves exact messages; only task/workspace/read-only boundaries."
+  },
+  "results": [
+    {
+      "agent": "short_compact_docs",
+      "calls": 5,
+      "complete": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "protocol_text_observed": true,
+      "maintenance_heading_observed": true,
+      "authority_decision_text_observed": true,
+      "adr489_command_observed": false,
+      "call_ids": [
+        "call_665b1e40349544a4b0346fdf588b0db7",
+        "call_f82759aaafc34bdca9ea788f37339441",
+        "call_3013bdaba4c14be5830a281314307e0d",
+        "call_6735d9bd7b564892aa82bea1843ffbd4",
+        "call_317e2d8448944dd0b277a40516cc28c2"
+      ],
+      "nonzero_reads": [
+        {
+          "id": "call_317e2d8448944dd0b277a40516cc28c2",
+          "exit": 128
+        }
+      ],
+      "review": "Primary agent cross-checked commands, returned content and final against criteria.json; no source hints in dispatch.",
+      "status": "PASS_SCOPED",
+      "finding": "Without lookup request, read normal entry, task/topic views, maintenance rules and relevant background; plan includes preservation, scoped consolidation and new short-task blind validation. Also notices duplicate policy text; not automatically expanded into this task.",
+      "limit": "Read broad relevant governance pages, including full classification/background; no entire ADR corpus. Five tool calls, not proven minimal-context optimality. Implementation plan only."
+    },
+    {
+      "agent": "short_format_docs",
+      "calls": 3,
+      "complete": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "protocol_text_observed": true,
+      "maintenance_heading_observed": true,
+      "authority_decision_text_observed": false,
+      "adr489_command_observed": false,
+      "call_ids": [
+        "call_b75c1caafeac4f5b8044f48dd6b12ecd",
+        "call_40bd0bfac0a544918b934070eb802bf6",
+        "call_1d721d7e59a841cbb37fd50b0c777c2f"
+      ],
+      "nonzero_reads": [],
+      "review": "Primary agent cross-checked commands, returned content and final against criteria.json; no source hints in dispatch.",
+      "status": "PASS_SCOPED",
+      "finding": "Without saying to verify or read rules, found maintenance protocol and states strict formatting needs structural/diff checks, not semantic subagent or full product tests.",
+      "limit": "No actual formatting change executed. No Git in candidate; correctly reports snapshot-diff limitation. Three tool calls."
+    },
+    {
+      "agent": "short_window_plan",
+      "calls": 4,
+      "complete": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "protocol_text_observed": false,
+      "maintenance_heading_observed": false,
+      "authority_decision_text_observed": true,
+      "adr489_command_observed": true,
+      "call_ids": [
+        "call_6348510da50b42478e91c4cf5327c8d9",
+        "call_f995878609334949b34ab6bcd8642620",
+        "call_b6d672e02883499e8b44fc6783c884eb",
+        "call_94cfb552bdd14ac7866a74611daec7bf"
+      ],
+      "nonzero_reads": [
+        {
+          "id": "call_b6d672e02883499e8b44fc6783c884eb",
+          "exit": 2
+        }
+      ],
+      "review": "Primary agent cross-checked commands, returned content and final against criteria.json; no source hints in dispatch.",
+      "status": "PASS_SCOPED",
+      "finding": "Without asking to check prior decisions, followed normal entry to work-mode/local-host topic views, actual ADR0489 then 0485/0491, subsystem and focused source; rejects independent persistent/authorization authority while allowing presentation optimization.",
+      "limit": "Four read calls, no runtime/implementation proof; did not need every neighboring ADR to support assessed ownership constraint."
+    }
+  ],
+  "all_pass": true,
+  "older_results": "Prior long-prompt tests remain source-era PASS_SCOPED only; do not count as compliance with this new unprompted retrieval standard.",
+  "repair": "No new case failed the tested retrieval/understanding criteria. Preserve the observed duplicate governance wording as an out-of-scope finding; do not modify candidate or add search hints to pass."
+}

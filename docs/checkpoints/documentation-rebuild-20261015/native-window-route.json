@@ -1,0 +1,211 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": true,
+    "explicitRoute": null
+  },
+  "routes": [
+    {
+      "id": "work-mode",
+      "summary": "Saved work sets, default Electron windows, macOS B AppKit candidate, native media and file handoff.",
+      "score": 40,
+      "matched": [
+        "原生悬浮窗"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "shared",
+        "native-shelf"
+      ]
+    }
+  ],
+  "documentation": [
+    "docs/subsystems/work-mode.md",
+    "docs/subsystems/media-handoff.md"
+  ],
+  "states": [
+    {
+      "route": "work-mode",
+      "reality": "Current Implementation",
+      "summary": "Main selects the native macOS factory only with --dam-work-window-candidate=b; default uses Electron. Host keeps content, membership, revisions and commits.",
+      "evidence": [
+        "src/main/index.ts",
+        "src/main/work-mode/work-window-controller.ts"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "src/main/work-mode/README.md",
+      "role": "readme",
+      "reality": "Current Implementation",
+      "reason": "Host/native ownership and private protocol; no physical UI qualification implied.",
+      "read_mode": "full",
+      "routeId": "work-mode",
+      "estimatedTokens": 692,
+      "required": false
+    },
+    {
+      "path": "src/main/work-mode/native-shelf-work-window.ts",
+      "anchor": "createNativeShelfWorkWindow",
+      "role": "adapter",
+      "reality": "Current Implementation",
+      "reason": "Current production composition; qualification is recorded separately.",
+      "read_mode": "symbol",
+      "routeId": "work-mode",
+      "estimatedTokens": 6046,
+      "required": false
+    },
+    {
+      "path": "src/main/work-mode/electron-work-window.ts",
+      "anchor": "createElectronWorkWindow",
+      "role": "adapter",
+      "reality": "Current Implementation",
+      "reason": "Current production composition; qualification is recorded separately.",
+      "read_mode": "symbol",
+      "routeId": "work-mode",
+      "estimatedTokens": 1779,
+      "required": false
+    },
+    {
+      "path": "docs/adr/0493-dropover-style-interaction-allows-platform-native-implementation.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Accepted native presentation boundary and separate platform acceptance.",
+      "read_mode": "full",
+      "routeId": "work-mode",
+      "matched": [
+        "原生"
+      ],
+      "estimatedTokens": 1142,
+      "required": false
+    }
+  ],
+  "validations": [
+    "npm run test-desktop-viewport-policy",
+    "npm run test-app-navigation-workflow",
+    "npm run test-electron-main-lifecycle-policy",
+    "npm run test-work-frame-provenance"
+  ],
+  "feedback": {
+    "problems": [],
+    "lessons": [
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 28,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#candidate-identity"
+        },
+        "matchedRoutes": [
+          "*"
+        ]
+      },
+      {
+        "id": "DAM-L002",
+        "group": "frontend",
+        "status": "active",
+        "check": "判断本次是否改变可见布局、交互或等待/错误/恢复反馈；若涉及UI/UX，按DESIGN及交互规格从正式入口检查受影响状态，缺陷须复现并验证根因和修复效果，动态问题保留适用连续帧。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l002",
+        "line": 42,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#ui-verification"
+        },
+        "matchedRoutes": [
+          "work-mode"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not switch the B factory to default while editing documentation.",
+    "Do not treat Browser, internal protocol or compiled Swift checks as physical input/animation/handoff evidence."
+  ],
+  "warnings": [
+    "B uses AppKit, not SwiftUI; current NSVisualEffectView does not establish target Liquid Glass.",
+    "Mac and Windows native behavior, multi-display and receiver effects require separate evidence.",
+    "Budget deferred 2 context item(s); use --expand only if the first pass is insufficient.",
+    "Validation limit deferred 11 additional command(s)."
+  ],
+  "deferred": {
+    "context": [
+      {
+        "path": "src/main/work-mode/work-window-controller.ts",
+        "anchor": "createWorkWindowController",
+        "role": "composition",
+        "reality": "Current Implementation",
+        "reason": "Current production composition; qualification is recorded separately.",
+        "read_mode": "symbol",
+        "routeId": "work-mode",
+        "estimatedTokens": 16182,
+        "required": false
+      },
+      {
+        "path": "src/main/index.ts",
+        "anchor": "nativeShelfCandidate",
+        "role": "composition",
+        "reality": "Current Implementation",
+        "reason": "Current production composition; qualification is recorded separately.",
+        "read_mode": "symbol",
+        "routeId": "work-mode",
+        "estimatedTokens": 23665,
+        "required": false
+      }
+    ],
+    "validations": [
+      "npm run test-file-selection-bulk-ui",
+      "npm run test-asset-card",
+      "npm run test-asset-description-draft",
+      "npm run test-native-open-dialog",
+      "npm run test-asset-store-loading",
+      "npm run test-asset-workspace-session",
+      "npm run test-library-view-draft-lifetime",
+      "npm run test-asset-library-keyboard",
+      "node scripts/run-ts-test.mjs scripts/asset-display-workflow.test.ts",
+      "node scripts/run-ts-test.mjs scripts/asset-tagging-workflow.test.ts",
+      "npm run test-legacy-readonly-workspace"
+    ]
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 4,
+    "estimatedFileTokens": 9659,
+    "estimatedMetadataTokens": 1856,
+    "outputEstimatedTokens": 1856,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 11515,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

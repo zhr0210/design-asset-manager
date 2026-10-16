@@ -57,6 +57,17 @@ html.app-design .workspace-shell { background: var(--canvas); font:13px/1.6 -app
 html.app-design .workspace-stage { margin:0; border:0; border-radius:0; background:var(--canvas); box-shadow:none; }
 html.app-design .workspace-shell:not([data-library-workspace=true]) { grid-template-columns:70px minmax(0,1fr); }
 html.app-design .workspace-page { padding:52px 28px 28px; }
+html.app-design .workspace-shell[data-settings-workspace=true] { grid-template-columns:minmax(0,1fr); }
+html.app-design .workspace-shell[data-settings-workspace=true] > .workspace-stage { margin:0; }
+html.app-design .settings-screen { width:100%; max-width:none; margin:0; min-height:100%; }
+html.app-design .settings-screen .preferences-layout { grid-template-columns:200px minmax(0,1fr); }
+html.app-design .settings-feature-content > .ui-page { padding:0; margin:0; max-width:none; }
+html.app-design .settings-feature-content .ui-page-header { margin-top:0; }
+html.app-design .settings-application-actions { margin-top:20px; padding-top:12px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:5px; }
+html.app-design .settings-application-actions button { display:flex; align-items:center; gap:9px; padding:10px 11px; text-align:left; border-radius:9px; font-size:12px; }
+@media(max-width:720px) {
+  html.app-design .settings-screen .preferences-layout { grid-template-columns:1fr; }
+}
 html.app-design .ui-page-header h1 { font-size:28px; font-weight:650; letter-spacing:-.02em; }
 html.app-design .ui-page-header { margin-bottom:24px; }
 html.app-design .ui-page-description { font-size:13px; line-height:1.6; }

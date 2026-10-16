@@ -1,9 +1,13 @@
 # Custom Field Migration Results And Undo Share A Reviewed Retention Window
 
-A Custom Field Type Migration may change 100,000 owners, so expiring its result before the user has reviewed the outcome would hide the only safe rollback entry, while retaining item evidence forever would turn activity history into metadata version history. Every ADR 0426 Custom Field Migration Result is therefore an ADR 0086 Reviewed Batch Action whose complete result and **Custom Field Migration Undo Window** share the ADR 0087 user-configurable retention period, defaulting to 30 days.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The retention clock does not start merely because the task becomes terminal or the result is opened. It starts only after **Custom Field Migration Result Acknowledgement**: the user reviews the terminal counts and explicitly chooses either Archive Source Field or Keep Source Field Active. Before acknowledgement, the complete result and Undo entry do not expire; failed, conflict and retained-unconvertible attention follows ADRs 0090 and 0093 until repaired or explicitly acknowledged rather than disappearing through time alone.
+## Decision
 
-During the window, Undo Custom Field Migration remains bounded by ADR 0426. A later edit to a migration-created target value excludes only that value from Undo and does not extend or restart the shared deadline; excluded and still-eligible counts are recalculated before confirmation. After acknowledgement, the user may adjust the retention deadline. Clearing the complete result early is unavailable before acknowledgement and then requires a distinct **Clear Migration Result And End Undo** confirmation that discloses the remaining eligible Undo count; it removes no Custom Field Definition or Value and cannot be reversed into a new Undo window.
+A Custom Field Type Migration may change 100,000 owners, so expiring its result before the user has reviewed the outcome would hide the only safe rollback entry, while retaining item evidence forever would turn activity history into metadata version history.
 
-At normal expiry or confirmed early clearing, item references, reason snapshots, mappings and Undo evidence are deleted. The record becomes ADR 0087 **Pruned Batch Detail** containing only time, source/target type pair, aggregate terminal counts and final source-field disposition, without Custom Field Values, per-item outcomes or executable conversion intent. Expiry never archives or deletes either field, changes a value, resolves a conflict, removes an ADR 0421 dependency, or prevents a future separately reviewed migration.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[自定义字段与迁移规格](../product/specs/custom-fields.md#adr-0429)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

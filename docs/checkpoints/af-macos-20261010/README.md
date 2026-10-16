@@ -1,6 +1,8 @@
 # A–D/F Mac 当前检查点
 
-当前状态和下一动作以 [TASK](../../../TASK.md) 与 [本轮记录](../../handoff/AF-MACOS-20261010.md) 为准。Goal active，未全部完成，Eagle延期独立分支。
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
+当前状态和下一动作以 [TASK](../../../TASK.md) 与 [本轮记录](../../handoff/AF-MACOS-20261010.md) 为准。
 
 - `f-10000-copy-real.json` / `f-packaged-real-reopen.json`：真实万条UI Copy、33条恢复、240分页保选择、5be普通Mac包重开万条和三位置查询、Original全字节核对；仅3内容，不当万条质量样本。
 - `a-nine-background-effects-real.jpg` / `a-nine-effects-protection.json`：5be包新三张真实标签/描述/OCR9效果；旧187选定字段/原件及旧186向量/2任务全字段保持。GPU仅2B真实挑战，九后台效果为2B CPU/OCR；结果内容与人工重跑仍待。

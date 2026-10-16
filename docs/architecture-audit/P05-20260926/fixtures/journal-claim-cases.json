@@ -291,9 +291,7 @@
     },
     {
       "id": "J24",
-      "sequence": [
-        "unsupported schema or Legacy/Eagle target"
-      ],
+      "sequence": [],
       "expected": "no Managed Journal DDL/write",
       "testIds": [
         "T07"
@@ -301,5 +299,6 @@
       "plannedEvidenceLevel": "L2/L3",
       "actualResult": "NOT_RUN"
     }
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

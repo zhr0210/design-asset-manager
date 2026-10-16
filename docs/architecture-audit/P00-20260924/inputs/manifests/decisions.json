@@ -16,7 +16,6 @@
   },
   {
     "id": "DAM-A002",
-    "decision": "Library Host保持权威；Managed/Eagle/Legacy独立",
     "chapters": [
       "HOST-03",
       "DATA-12"

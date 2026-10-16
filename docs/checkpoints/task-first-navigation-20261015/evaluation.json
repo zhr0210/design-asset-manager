@@ -1,0 +1,33 @@
+{
+  "scope": "Only these three fixed-candidate read-only scenarios; no product, UI, protocol interoperability or model acceptance.",
+  "original_runs": {
+    "review_settings_request": {
+      "result": "insufficient_for_current_settings_contract",
+      "observed": "自主读取ADR目录、0152、源码、产品基准、DESIGN前100行和设计目录；未到工作台交互正文，未识别分类搜索是现行约定。"
+    },
+    "review_plugin_request": {
+      "result": "core_direction_supported_detail_coverage_limited",
+      "observed": "0484等原文与Host源码支持高层架构区分；未跟0154详细正文限制具体接口设计，不单凭未读所有链接否定高层结论。"
+    }
+  },
+  "cases": {
+    "task_first_settings": {
+      "result": "supported_with_limitations",
+      "observed": "读取settings-recovery、工作台交互1-130行，工具输出含应用导航和分类搜索条款；DESIGN关键词返回200/202行配置呈现；Settings/AiWorkspace源码支持保存作用域及重复面板分析。最终明确现行契约与拟改提案。",
+      "limits": "一次批量输出截断，但评分所需条款实际可见；未全读视觉细则，不支持细化视觉定稿或已验收。"
+    },
+    "task_first_plugin": {
+      "result": "supported_with_limitations",
+      "observed": "读取子系统导航、model-extension入口、0484/0483完整可见文本、optional-targets以及Host/Client源码；最终区分协议适配、插件运行时、Host权威和目标/交付。",
+      "limits": "早期批量读取截断、猜测了两个不存在的路径后补定位；未读0154详情，只支持高层方向和候选纵切。其local-host/index.ts缺失判断不能泛化为组合入口缺失：实际src/main/index.ts存在，README中的index.ts指代不清。"
+    },
+    "task_first_boundary": {
+      "result": "supported_with_limitations",
+      "observed": "工作窗模块/专题→0485、0489、0491、0493原文及work-sets/autosave/draft/controller源码，保留Host持久化/交付权威，允许窗口输入/拖放适配。",
+      "limits": "部分源码批量搜索截断；后续原文及独立源码片段支撑本次权威分配结论，不证明运行性能/产品验收。"
+    }
+  },
+  "conclusion": "两个代表任务的关键证据链得到改善，边界任务仍消费有效ADR；未证明单一因果或对所有未来任务稳定。批量输出效率、猜测路径仍有局限；不为这些剩余问题堆全局强制阅读规则。",
+  "isolation": "No inherited parent conversation; gpt-6.1-sol low, fork none. Normal project instructions remain available. Prompts contain only task/workspace/read-only limits. TASK/research/checkpoints/history omitted from fixed text snapshot; no scoring answers provided.",
+  "mutations": "No product code, domain decision text, model or user data changed. Main agent wrote navigation/methods and task evidence only."
+}

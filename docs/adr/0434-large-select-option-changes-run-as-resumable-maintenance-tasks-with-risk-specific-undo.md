@@ -1,7 +1,13 @@
 # Large Select-Option Changes Run As Resumable Maintenance Tasks With Risk-Specific Undo
 
-A Select-option merge or permanent deletion may touch 100,000 owners and must neither monopolize the library nor pretend to be one reversible schema edit. Each confirmed plan therefore becomes a durable library-bound **Custom Field Option Maintenance Task** in ADR 0430's single **Custom Field Schema Maintenance Lane**, shared with type migrations under ADR 0431 responsiveness and resource guards. Current values and unresolved suggestions commit atomically per Candidate or Design Asset, dependency changes commit atomically per dependent object, and all commits serialize through the lane. Pause and Library Switch stop future admission at these boundaries; restart reconciles committed and pending work, and changed evidence becomes a visible conflict or failure rather than an overwrite.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Custom Field Option Merge may be cancelled at an item boundary, leaving completed replacements truthfully reported. Its terminal result is an ADR 0086 Reviewed Batch Action whose complete detail and **Custom Field Option Merge Undo Window** share a user-configurable 30-day default beginning only after explicit result review and confirmation of the source option's resulting lifecycle. **Undo Custom Field Option Merge** restores only unchanged merge effects—including exact Single/Multi Select membership, unresolved-suggestion identity and compatible dependency references—and excludes later-edited or conflicting objects. It restores the source lifecycle only when ADR 0433 permits it, never deletes the target option or rolls back unrelated metadata; early result clearing ends Undo and expiry leaves only value-free aggregate detail under ADRs 0087 and 0429.
+## Decision
 
-Permanent Delete Custom Field Select Option remains cancellable only until its first destructive item commit. Confirmation immediately blocks new manual, AI and import assignment to the option; after destruction starts, the task may be paused and resumed but cannot be cancelled or undone, and every completed removal remains authoritative. The option stays visibly **Custom Field Option Deletion In Progress** while remaining durable values continue to query by their exact identity with partial-coverage disclosure. Conflicts or failures block finalization. Only after no value or suggestion retains the identity and every required dependency placeholder is durably committed may the option definition and search projection be deleted. Its terminal action follows ADR 0087 Hard Delete retention with a user-configurable 90-day-default irreversible summary; result-history expiry never clears an unfinished task, conflict or missing-reference repair need.
+A Select-option merge or permanent deletion may touch 100,000 owners and must neither monopolize the library nor pretend to be one reversible schema edit.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[自定义字段与迁移规格](../product/specs/custom-fields.md#adr-0434)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

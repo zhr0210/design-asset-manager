@@ -54,8 +54,8 @@
   "requestedExternalAction": "manually unlock macOS and resume Goal; use native candidate advanced maintenance normal Browser entry",
   "goalDisposition": "blocked after this saved audit",
   "fullObjectiveRetained": true,
-  "eagleDeferred": true,
   "twoUnrelatedWipFilesUnchanged": true,
   "secretRead": false,
-  "pushed": false
+  "pushed": false,
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

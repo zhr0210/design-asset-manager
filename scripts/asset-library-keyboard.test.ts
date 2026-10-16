@@ -166,7 +166,9 @@ const settings = {
   drafts: {list:async()=>[],put:async()=>({}),remove:async()=>{}},
   onReconcile: () => () => {},
   library: { inspect: () => qa.inspect(), close: async () => { qa.projection={state:'closed',identity:null,generation:null};return {success:true} }, notebookRead: async () => ({success:true,value:{book:{pages:[],active:null},revision:0,sessionToken:'qa-session',sourceRef:'preview:qa',requiresUpgrade:false}}) },
-  managedDownloads: { onImported: listen('download') }, imageTools: { onSaved: listen('tools') },
+  retrieval:{coverage:async()=>null},
+  retrievalModels:{read:async()=>({entries:[]})},
+  imageTools: { onSaved: listen('tools') },
   assetOcr: { onChanged: listen('ocr'), read: async()=>({ok:false,error:'Synthetic OCR unavailable'}), status: async()=>({ok:false,error:'Synthetic OCR unavailable'}) },
   visualAi: { onChanged: listen('ai'), backends: async()=>({ok:true,value:[]}), results: async()=>({ok:true,value:[]}) },
   assetCard: { onChanged: listen('card'), onReturn: listen('return'), updateDraft: async () => ({ok:true,state:null}) },
@@ -369,9 +371,9 @@ async function runRealLibraryBrowserTests() {
       const fixture = (window as any).__libraryQA
       const scope = {libraryIdentity:'qa-library',generation:'qa-generation'}
       const before = fixture.qa.calls.length
-      await fixture.qa.listeners.download({...scope,generation:'old'})
+      await fixture.qa.listeners.tools({...scope,generation:'old'})
       if (fixture.qa.calls.length !== before) throw Error('Old Shell event refreshed assets')
-      await fixture.qa.listeners.download(scope)
+      await fixture.qa.listeners.tools(scope)
       await new Promise(resolve => setTimeout(resolve, 0))
       if (fixture.qa.calls.length !== before + 1) throw Error('Current Shell event did not refresh assets')
       let first = true

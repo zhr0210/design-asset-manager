@@ -1,7 +1,6 @@
 ---
 status: accepted
 date: 2026-10-11
-delivery: target-only
 ---
 
 # Dropover 式交互允许平台原生实现
@@ -12,11 +11,11 @@ Electron、React 与 Local DAM Host 继续作为当前应用基础；原生交�
 
 相比只用 Electron 标准窗口接口，这个选择允许更深的平台交互控制，同时接受分别构建、打包、维护和真实验收的成本。它不承诺消除 Electron 的全部运行成本，也不承诺 Windows 与 macOS 系统场景一一等价。
 
-本决定仅确认原生实现的前提。是否由原生层直接拥有架子拖动、收缩、停靠和动画，哪些内容仍由 React 绘制，以及暂存内容与已入库工作集的关系，仍待逐项确认；没有授权把访谈中未定方案写成已实施架构或移除既有功能。
+现行已确认分工见下节；初次访谈中未定的呈现边界已由后续明确选择替代。菜单作用范围、可量化性能门槛及进程合并仍待具体确认，不由本决定补造。
 
 参考：[本机 Dropover 逆向报告](../../artifacts/reverse-engineering/dropover-5.2.0/REPORT.md)、[工作窗口当前适配](../../src/main/work-mode/electron-work-window.ts)、[工作集与窗口权威](0489-work-sets-separate-saved-references-from-native-window-authority.md)、[共享 Host](0491-local-clients-share-one-host-and-product-workspace.md)。
 
-## 2026-10-13：已确认的性能与视觉取舍
+## 已确认的性能与视觉取舍
 
 用户选择以悬浮工作窗口的响应与动画达到原生级为性能目标，并允许在适合的UI/UX中直接采用原生组件；macOS前端应尽量与系统组件保持一致的视觉语言。此选择接受原生呈现与共享工作台分别维护的成本，保留既有Electron/React/Host业务基础。整体资源开销仍需独立测量与优化，本决定没有设定与Dropover相同的整应用资源预算。
 

@@ -1,0 +1,23 @@
+[
+  {
+    "agent": "short_compact_docs",
+    "message": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-short-doc-probe-20261015-t4vqjfnh\n任务：精简合并给AI用的项目约束和索引，给出实施计划。\n只读；仅在该工作区评估，不修改、不联网、不运行应用/模型/服务，不再委派。",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none"
+  },
+  {
+    "agent": "short_format_docs",
+    "message": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-short-doc-probe-20261015-t4vqjfnh\n任务：修正文档标点和Markdown表格对齐，给出处理计划。\n只读；仅在该工作区评估，不修改、不联网、不运行应用/模型/服务，不再委派。",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none"
+  },
+  {
+    "agent": "short_window_plan",
+    "message": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-short-doc-probe-20261015-t4vqjfnh\n任务：想让各悬浮窗进程自行保存工作集并处理文件交付，评估这个方案。\n只读；仅在该工作区评估，不修改、不联网、不运行应用/模型/服务，不再委派。",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none"
+  }
+]

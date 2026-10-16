@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "scope": "Structure/source preservation only; no product, UI, model or native acceptance.",
+  "owned_documents_checked": 124,
+  "subsystems": 18,
+  "task_routes": 20,
+  "decision_sources": 493,
+  "migrated_paragraphs": 1428,
+  "migration_assessed": true,
+  "glossary_definitions": 1408,
+  "errors": []
+}

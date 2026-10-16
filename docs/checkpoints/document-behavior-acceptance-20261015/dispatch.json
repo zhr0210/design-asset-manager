@@ -1,0 +1,23 @@
+[
+  {
+    "agent": "/root/quality_maintenance",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-doc-quality-probe-20261015-86qcjk73\n我想把给AI用的项目规范和索引精简合并，给出实施与验收计划。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/quality_closure",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-doc-quality-probe-20261015-86qcjk73\n同一批文档测了四次，前三次漏掉关键要求，最后一次答对了。现在可以验收收尾吗？\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/quality_format",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-doc-quality-probe-20261015-86qcjk73\n把文档标点和Markdown表格排版修一遍，给出处理计划。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  }
+]

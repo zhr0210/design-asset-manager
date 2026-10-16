@@ -1,0 +1,2115 @@
+{
+  "records": [
+    {
+      "source": "src/main/README.md",
+      "source_rule": 1,
+      "sha256": "fa03d63093afd62e2a98234beea5ff839e4bc357948adc20013f84deefbaab4c",
+      "destination": "docs/subsystems/contracts/main.md#rule-001",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 2,
+      "sha256": "52c7f42bd11ae0ac3df73f8d0c1a54a828b9f9a90c0fdd0d4e1eb0b827cdb54c",
+      "destination": "docs/subsystems/contracts/main.md#rule-002",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 3,
+      "sha256": "165dd94141e6423a3170b6b882d6791e34d90e13f77d743ae1e5e8e126a850c4",
+      "destination": "docs/subsystems/contracts/main.md#rule-003",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 4,
+      "sha256": "c9d84776f1a819dc15672584741481cf97ffcdeac4839f8b95e1c2f8fa362e5d",
+      "destination": "docs/subsystems/contracts/main.md#rule-004",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 5,
+      "sha256": "a284c428d3bd516830fcd0b30452346651dc86a80d502dff16666c2a7e51ad9b",
+      "destination": "docs/subsystems/contracts/main.md#rule-005",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 6,
+      "sha256": "a2cc0b3a309abc80da777d4d9e7ff365aaf0220f474f1dea87ea940e99845a55",
+      "destination": "docs/subsystems/contracts/main.md#rule-006",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 7,
+      "sha256": "28b91dd193ecf3e8004b5dc1b610a35a2a211e0da7fc77ba27b791cca0fb96ab",
+      "destination": "docs/subsystems/contracts/main.md#rule-007",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 8,
+      "sha256": "f31cdc8b75afee532673927ae028cb8c59d948e159aa82e786ff28d0f5780010",
+      "destination": "docs/subsystems/contracts/main.md#rule-008",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 9,
+      "sha256": "a6270c0d14bf8e1fd4b267f3a9fee3d128556badd148b2966e19336b8f95b4cc",
+      "destination": "docs/subsystems/contracts/main.md#rule-009",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 10,
+      "sha256": "3ba94bd5530c0a984ecc2fec52f79a8b5a689532a55947e8bcdfa56b9315d47e",
+      "destination": "docs/subsystems/contracts/main.md#rule-010",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 11,
+      "sha256": "ce0e88d2932a934b484daca410eed6569106e0efd626d3502ef94b02c80c2aab",
+      "destination": "docs/subsystems/contracts/main.md#rule-011",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 12,
+      "sha256": "8cb8fe27bdb51545239aed10194aabab9a92bc0f89c2c84f6a91834fe26121d1",
+      "destination": "docs/subsystems/contracts/main.md#rule-012",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 13,
+      "sha256": "8559129bfd83bfc8d0f2485c8cd4b787edd22fd4b2596eeb2f0b8b9dae0f2661",
+      "destination": "docs/subsystems/contracts/main.md#rule-013",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 14,
+      "sha256": "f132a33f2d0b9d3b2ace0daa76439c478ace7500498b66245c728fab979c1d99",
+      "destination": "docs/subsystems/contracts/main.md#rule-014",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 15,
+      "sha256": "2fb143b3cf1f6b5445ded1c490f7330f148b1d255272ec0dbbdb8b09f2bcb34d",
+      "destination": "docs/subsystems/contracts/main.md#rule-015",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 16,
+      "sha256": "41b8601379e8b83b66536683129bd684c0bf9d9e6deaf734ed2f1f5ab67ae4ab",
+      "destination": "docs/subsystems/contracts/main.md#rule-016",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 17,
+      "sha256": "aa90fc840c8dbb3eb1c7b69f2d4bf85f0975d31ecc1af826f4c7da3d2363a6c9",
+      "destination": "docs/subsystems/contracts/main.md#rule-017",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 18,
+      "sha256": "ee45386bcd00f3b9bf9f36808aba7cbac30af130ccf50b92c3cfce2b39788dc6",
+      "destination": "docs/subsystems/contracts/main.md#rule-018",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 19,
+      "sha256": "d78ec6df756435eb5eac4f1f8e715483bc157c5e8a13e1abb23b0fa0da0339eb",
+      "destination": "docs/subsystems/contracts/main.md#rule-019",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 20,
+      "sha256": "488755e7e8d6f118c00ed48a7a3deadd7d55921388c13b996e2eca1a6a70cf86",
+      "destination": "docs/subsystems/contracts/main.md#rule-020",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 21,
+      "sha256": "0e43ccaa911ff7eb1153255ac337294aa2d77f50563122dfb89b227c40a840c2",
+      "destination": "docs/subsystems/contracts/main.md#rule-021",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 22,
+      "sha256": "f4406dd029022b0e5578d8a0933f6d2f197b933cde517437749cad67e81cf210",
+      "destination": "docs/subsystems/contracts/main.md#rule-022",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 23,
+      "sha256": "ad07e77c7a05cb0b0928b97f9b769ae0c7b9f8e14bd0cdb99c7cf22832fd22e6",
+      "destination": "docs/subsystems/contracts/main.md#rule-023",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 24,
+      "sha256": "0fa97bc86198d36dc3e6e83481acf91850494f802ffca374fb1b9ec56f04036a",
+      "destination": "docs/subsystems/contracts/main.md#rule-024",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 25,
+      "sha256": "84582366bf512b51b7a68d4dd568682e57b2424d61de60cf100566a8a85431d9",
+      "destination": "docs/subsystems/contracts/main.md#rule-025",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 26,
+      "sha256": "012c85119610ba9f1df99efc90d635ac371f29662c11a5145560dbb72c63b64a",
+      "destination": "docs/subsystems/contracts/main.md#rule-026",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 27,
+      "sha256": "e1ddbcaf4c19c51d7e20db85863651617a08b97fbac1728e70d572760f347f75",
+      "destination": "docs/subsystems/contracts/main.md#rule-027",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 28,
+      "sha256": "accd62b975a7481cd5c8e263aa303cd81a9aa06b5643fd74e013e4ad64c8520e",
+      "destination": "docs/subsystems/contracts/main.md#rule-028",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 29,
+      "sha256": "5092a22ede1c45b409b5106859dfa8a2984d45fad30225053f6d875918d87ffb",
+      "destination": "docs/subsystems/contracts/main.md#rule-029",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 30,
+      "sha256": "879314789befdc3bf40a50e1556db5f2863c613b39ee16d9328854a7adabcbd1",
+      "destination": "docs/subsystems/contracts/main.md#rule-030",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 31,
+      "sha256": "bffbb51e4583d999c36dabcdf4f6004caa2b301645e2142d63372615d603dcf8",
+      "destination": "docs/subsystems/contracts/main.md#rule-031",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/main/README.md",
+      "source_rule": 32,
+      "sha256": "7bd54b0e0cbe7f855bfa3042a46f4f9eb00369f6592d70697d957bde731d4885",
+      "destination": "docs/subsystems/contracts/main.md#rule-032",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 1,
+      "sha256": "ffedb56809cf45c87addbfc234c8807d57aeb3aedf385567c3fdeb15f8865052",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-001",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 2,
+      "sha256": "48d3cd7a4f67f88a5f9e34fb99e2bbdf2b91639ec3279ecbfd3ebf2b431c3046",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-002",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 3,
+      "sha256": "5a96901a22902b695bb4f53768d1c8bbdbb394a583821e00b92e683796796cc4",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-003",
+      "scope": "historical/superseded"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 4,
+      "sha256": "72193b426704dad125eabb1fb2cf3c367ad09198d45b2571453bb33e4902339b",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-004",
+      "scope": "historical/superseded"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 5,
+      "sha256": "1e135093d37cb7a971d4a501e703d51bcda09f983b3253e9f203dc40fb0c7f82",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-005",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 6,
+      "sha256": "32e3e9783ff1b3e246b66270d8cfb3a8fbbb30caefd37b9e4030a4aa9939ed0f",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-006",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 7,
+      "sha256": "883383539db920d7aaa97e0b60cd78f65392e8fa01f811cce1da024f2d52b834",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-007",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 8,
+      "sha256": "8e59b3495bf32f5e7ea2a67cda55820e5ba2b3b4bee49b2ca54e1987a245c270",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-008",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 9,
+      "sha256": "b2d4cbd9d323ac87b662d23d0b3d2f71970f4f3bf6f850cb0bf19a4d5bbc58ef",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-009",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 10,
+      "sha256": "468ee30ebc461fab8f7c490c7c5ec7f23dbf075a1eea93347401d60678966c6e",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-010",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 11,
+      "sha256": "cac9f11655344e3b4e8380af4455db9d425eba83e9646ae2649621a8d0b754e3",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-011",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 12,
+      "sha256": "9667ed2cd957487c2b6dd34929550e821b99886c9cdbd18e16cf3bdd077a6eb5",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-012",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 13,
+      "sha256": "042aa1af36845a20ec2d919e6fb21ae34a2c8764a97760d196cbf70fc2d8d5b8",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-013",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 14,
+      "sha256": "80915f0ffc58a3150ee324fb3086541f3c5d3dde39be5c16b8a5c3ddab57dcce",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-014",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 15,
+      "sha256": "4fd2360714458391db3e5220b528bb289fa749a9e85d4b05e2522312dba07714",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-015",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 16,
+      "sha256": "dc3b48b816517b8debba8b3c06afb14533ee1ee02c6f18b69b9dda61ed6a8a82",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-016",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 17,
+      "sha256": "092813f9a1509d998f0f4c924d45fc3940bf73f1531f17af165667376850eb01",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-017",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 18,
+      "sha256": "30e2f68f4fdeafe454514874a358a55fd187a07ee8504049655aa06c7c37a9b8",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-018",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 19,
+      "sha256": "05fa49c959ab85af3c6d2b0e867fced27b9cc065f620f8753d46677432dd7a86",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-019",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 20,
+      "sha256": "6d4191cadfa6d7ed90034937461691d256dbceb2b03a6efb12858b4c3f7941ba",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-020",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 21,
+      "sha256": "5ae28b632ed86f1c0813be3d6fe1674ceab3cd6ef4769e647023666e1429937e",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-021",
+      "scope": "historical/superseded"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 22,
+      "sha256": "8ae6a2f7453745f20d9c40d7793eebd16b0676258bf7c39582e5b0229a062201",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-022",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 23,
+      "sha256": "20a2d96c246dc7609f9e9de8b14fe775d751369d75fcd6f4bdeec521912e759c",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-023",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/renderer/README.md",
+      "source_rule": 24,
+      "sha256": "1140b9246cf49196c42019f29e1806cb4bb4898b84852f7fba7bae1dcd7449c5",
+      "destination": "docs/subsystems/contracts/renderer.md#rule-024",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 1,
+      "sha256": "05363720feaab6b5c8452be46660bb3e2952d268c4db853c57c845a6a372ff0d",
+      "destination": "docs/subsystems/contracts/shared.md#rule-001",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 2,
+      "sha256": "8b7323320c5e1bd06c624cd883632b8a392ed1cd209ce31e585818f820f3a648",
+      "destination": "docs/subsystems/contracts/shared.md#rule-002",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 3,
+      "sha256": "5a15ec90cff9aa37617ef00634900948c05d71032d013596a2d63cf80df92d17",
+      "destination": "docs/subsystems/contracts/shared.md#rule-003",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 4,
+      "sha256": "e18b573c8c4899b25138ceb62d48f72335e21bf82e95f8294f5dcba58f3c3146",
+      "destination": "docs/subsystems/contracts/shared.md#rule-004",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 5,
+      "sha256": "6f93fc6c770cf7371cb13d7b4f249057983258b7846613a869d7e1f71c1e42ed",
+      "destination": "docs/subsystems/contracts/shared.md#rule-005",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 6,
+      "sha256": "1616f634dbdf000a8a47d6b0022d1d6a95ed7953ee538789eafc45281d85a674",
+      "destination": "docs/subsystems/contracts/shared.md#rule-006",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 7,
+      "sha256": "10a6ac9357c6ff180d2c7e05d12eeab9becdaeaf21e77eff3472e8f4738b02b3",
+      "destination": "docs/subsystems/contracts/shared.md#rule-007",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 8,
+      "sha256": "8cd815548af96cdecee1d3c3f16382e1f6677b4ee560bb60150f368b62bf92fc",
+      "destination": "docs/subsystems/contracts/shared.md#rule-008",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 9,
+      "sha256": "deb7fbe85303730a2aa03a1bfde1af22c773fb680c7d2f9bf9e9d6ad561553ba",
+      "destination": "docs/subsystems/contracts/shared.md#rule-009",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 10,
+      "sha256": "1f561e3b4eae7769c9474d68e97e1ff02fe3d189874b6f6a624b233edc7355be",
+      "destination": "docs/subsystems/contracts/shared.md#rule-010",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 11,
+      "sha256": "437b8061f413463cba643379a797548daabc60959141ade6f9b60aca70d64935",
+      "destination": "docs/subsystems/contracts/shared.md#rule-011",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 12,
+      "sha256": "d2f76c38602362ccce1a3bf676e3d8018048f8c64b0ba9dda234c0e51d2c0c47",
+      "destination": "docs/subsystems/contracts/shared.md#rule-012",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 13,
+      "sha256": "85b557d17fd205514846a52d39c63e51b6ac3144de38ca170c93c0685c4a977c",
+      "destination": "docs/subsystems/contracts/shared.md#rule-013",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 14,
+      "sha256": "4c5b11bca3b98dba5630bce6e4da95c021c2d10d1ebab385022fc0cab857e518",
+      "destination": "docs/subsystems/contracts/shared.md#rule-014",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 15,
+      "sha256": "f87a3bbdcda08aa96a1c1bf7cd92d72f19c2e458d206287d520992b2996178b5",
+      "destination": "docs/subsystems/contracts/shared.md#rule-015",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 16,
+      "sha256": "8e488349e5a664dcdaf6a68c4ada5d7e63640429fa4d4e665646f013b410024f",
+      "destination": "docs/subsystems/contracts/shared.md#rule-016",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 17,
+      "sha256": "a08d3ed7c900e026e08ad380cf831b266bcb69cc503efb020a66fcef4592664f",
+      "destination": "docs/subsystems/contracts/shared.md#rule-017",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 18,
+      "sha256": "1a1e975ab1d2b63f473bfdbb30847859710f385698be7435261bc033fc4cff6a",
+      "destination": "docs/subsystems/contracts/shared.md#rule-018",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 19,
+      "sha256": "cef41a342e6fc7244c40430ea9ab91f34b6fc812c8f0e3cb3c6459c5fec561b1",
+      "destination": "docs/subsystems/contracts/shared.md#rule-019",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 20,
+      "sha256": "3566d53334c3306f81c36a281ec4d42b61042f901a56da211455562b2325e514",
+      "destination": "docs/subsystems/contracts/shared.md#rule-020",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 21,
+      "sha256": "8c827382f988ee2ea62a03c50e1b9c173dd61ea3ed77cd40ec6d5c6ae3ba5faf",
+      "destination": "docs/subsystems/contracts/shared.md#rule-021",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 22,
+      "sha256": "0bb284f4cc2631a35bde58fe1bb8ddd2e6178e8ba5e6fb8ad6a95802f543e953",
+      "destination": "docs/subsystems/contracts/shared.md#rule-022",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 23,
+      "sha256": "9c4884e161d785daa6408c148177d166d0277895a501478522ee689d06c11c49",
+      "destination": "docs/subsystems/contracts/shared.md#rule-023",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 24,
+      "sha256": "fce7115d052a49b18c1acab4bc6dc5064b6446fd918335651ec5d3f9dc12c68b",
+      "destination": "docs/subsystems/contracts/shared.md#rule-024",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 25,
+      "sha256": "bb19e49e59bee8eef5a32f11447a2d83b8e8594ad09f8937402658374c197d56",
+      "destination": "docs/subsystems/contracts/shared.md#rule-025",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 26,
+      "sha256": "33618e3fd2589e73e8d5ea4950e89486b8555940c0f607a97232bcf42b6f3db3",
+      "destination": "docs/subsystems/contracts/shared.md#rule-026",
+      "scope": "historical/superseded"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 27,
+      "sha256": "c9a9815b1fd260b3c0ab4d1bbaba2f69d91f8d7f90c58e22dbd4d37941c25246",
+      "destination": "docs/subsystems/contracts/shared.md#rule-027",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 28,
+      "sha256": "b225d40af386146253a40dbb1876959c91258feb9fdcbd4c4686423609dd8e15",
+      "destination": "docs/subsystems/contracts/shared.md#rule-028",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 29,
+      "sha256": "0088509c2e1a9a408c398b7a7b8b01bd7b404a95843d306b94e7b2ace4f455bb",
+      "destination": "docs/subsystems/contracts/shared.md#rule-029",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 30,
+      "sha256": "c139c44a7f68fe10f955de2f85c47f9c4d7f6ae96862c5cc5e92f5cd0d0923db",
+      "destination": "docs/subsystems/contracts/shared.md#rule-030",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 31,
+      "sha256": "a05f6699d3ae6ade8f633a3bab0c79d22bbad4b8eab3f6d3ae075b78328b0e74",
+      "destination": "docs/subsystems/contracts/shared.md#rule-031",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 32,
+      "sha256": "74cbe5910fb0e0155db5208e25ad9e9f782ea05cc545eee1b6a90dc8202f8e3f",
+      "destination": "docs/subsystems/contracts/shared.md#rule-032",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 33,
+      "sha256": "e905d2e68466a9e3c297b73d775d966221bb7ba11952ace1ea8d256c71df010d",
+      "destination": "docs/subsystems/contracts/shared.md#rule-033",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 34,
+      "sha256": "187a0070c83d495f9fdb6e725ad5dfab21d89a83206ba7e107ab04a9c5a0a64e",
+      "destination": "docs/subsystems/contracts/shared.md#rule-034",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 35,
+      "sha256": "907552108f55eba2553c18c9171fe3ea12024a6052cddd20d2f05c7e335a1d24",
+      "destination": "docs/subsystems/contracts/shared.md#rule-035",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 36,
+      "sha256": "49f314d3edd788a6be33f7f368583ddc91d9c21c988405fb48fed58e2fb0445e",
+      "destination": "docs/subsystems/contracts/shared.md#rule-036",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 37,
+      "sha256": "4e104f760ac8f29fa2b92406adce3e345687b6b8f3fff0cad2912f45e03f7a64",
+      "destination": "docs/subsystems/contracts/shared.md#rule-037",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 38,
+      "sha256": "f4cc57b1113cebbd01ce7ee7588a23f27b3358e84ce3a5ee85383c7ef30c3075",
+      "destination": "docs/subsystems/contracts/shared.md#rule-038",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 39,
+      "sha256": "ac9d6ae5aff58da1fa8ee5e32df2a7840fd815edfc9f8a39206a5374b2d2bb56",
+      "destination": "docs/subsystems/contracts/shared.md#rule-039",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 40,
+      "sha256": "a4bd409297bad622ad4d647c1b32515b08134c09ae887156877415b5d662b98f",
+      "destination": "docs/subsystems/contracts/shared.md#rule-040",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 41,
+      "sha256": "92ddbf612d8cd5890ea18f5c5ff423f94459cc2679b5f818ff4a9783651090fa",
+      "destination": "docs/subsystems/contracts/shared.md#rule-041",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 42,
+      "sha256": "58afbec440f361d53c1d464d7856461d55eb718f3d42c9658e885e3b51ebda16",
+      "destination": "docs/subsystems/contracts/shared.md#rule-042",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 43,
+      "sha256": "def43cb0fe2a37e5726872a2943a519433e09d9c7ecff965ee331bb032af6b42",
+      "destination": "docs/subsystems/contracts/shared.md#rule-043",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 44,
+      "sha256": "7af90ce5d0b79818aaae8eb8f751943566329f2525233a619c4a80ee6adeeb50",
+      "destination": "docs/subsystems/contracts/shared.md#rule-044",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 45,
+      "sha256": "7f4e73be233fedc776333336cf6a0fafe0f6aba69dc97e66549422e2708a34db",
+      "destination": "docs/subsystems/contracts/shared.md#rule-045",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 46,
+      "sha256": "1865e8f7b63748e61f033ceb80f4f6acbf6e51ef037ed0b9b3e2d1b086f3cc6d",
+      "destination": "docs/subsystems/contracts/shared.md#rule-046",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 47,
+      "sha256": "dc7f5486f95f46eb55300d159c2e3dbda36e37c43b7b3df1db6533255cc947c3",
+      "destination": "docs/subsystems/contracts/shared.md#rule-047",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 48,
+      "sha256": "02cc8ff08690de2c83b861473e5d77524b04bd70b237d363d9fa5590073aa651",
+      "destination": "docs/subsystems/contracts/shared.md#rule-048",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 49,
+      "sha256": "648527ae7c0ef43080ad34cb9f436922f1a18ae6c0ba9c1745f0cc5b6368483b",
+      "destination": "docs/subsystems/contracts/shared.md#rule-049",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 50,
+      "sha256": "91068c95e1e33022a1f1e83125cd1b25691ca0d0e1853bff79543dd49a4df56f",
+      "destination": "docs/subsystems/contracts/shared.md#rule-050",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 51,
+      "sha256": "6b43bab8753d6be1b4c9164d7c165be06390edd250219947c1a6de57e97c7314",
+      "destination": "docs/subsystems/contracts/shared.md#rule-051",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 52,
+      "sha256": "e6410e76e8f2ea3fca7c646ceb3b5c822c7cd38cf5d97fb82c2372493ea5c486",
+      "destination": "docs/subsystems/contracts/shared.md#rule-052",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 53,
+      "sha256": "1d1725b66487ec8507a648dc2942e8994ed4925ef62b1cff3095656611b71693",
+      "destination": "docs/subsystems/contracts/shared.md#rule-053",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 54,
+      "sha256": "2a0fb909877019ef139bada558f5b46053a4763f6832269856fcafc08f80abc7",
+      "destination": "docs/subsystems/contracts/shared.md#rule-054",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 55,
+      "sha256": "865fbc7e16f59ba33be24dec129a1023ff13f09ef362af96550115a25e62a73a",
+      "destination": "docs/subsystems/contracts/shared.md#rule-055",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 56,
+      "sha256": "db2853d94b801ceebf19c2ea125fd6b53dc9466a2950b843b13d903a1cd2654d",
+      "destination": "docs/subsystems/contracts/shared.md#rule-056",
+      "scope": "named-retained-lane-only"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 57,
+      "sha256": "8b6966c478a2fd3088dc5cec95634ae717357a3b41c3f8e211c6bc7435541799",
+      "destination": "docs/subsystems/contracts/shared.md#rule-057",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 58,
+      "sha256": "d8d11c77be81b63531ee8f0d12d6c846f92740093b4a714d34ad0e5b16446767",
+      "destination": "docs/subsystems/contracts/shared.md#rule-058",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 59,
+      "sha256": "e9e34e5e457b106bd728d38a674c98f4af46586c73928209e3f00e118d5e78d1",
+      "destination": "docs/subsystems/contracts/shared.md#rule-059",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 60,
+      "sha256": "e6fd4a875e8cec61d0c011ceb6cde1189794b0d3d5586b4e805958e33da4c443",
+      "destination": "docs/subsystems/contracts/shared.md#rule-060",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/shared/README.md",
+      "source_rule": 61,
+      "sha256": "c118c165a715a520ff8060e2c3510a3ac97310e309f8b89ce1b6a595c38d2791",
+      "destination": "docs/subsystems/contracts/shared.md#rule-061",
+      "scope": "current-owner-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 1,
+      "sha256": "f3512c733230c0a6bfb8e40f47157ce097707968741863ea58ba04a9802a13c6",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/work-mode.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 2,
+      "sha256": "b49dd299ac4eeb867fffcdad7a8f09d8e559b1161b5e1d97e1867b810f0e5dfd",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-002",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 3,
+      "sha256": "ae728fdab8749437cf2aa97d5716e7417f7f16ffea73482d7a78b5b0d04d4ff0",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-003",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 4,
+      "sha256": "d2214743f77dbba333c822d28c6808b26e028356f7544d3ebbda2f91983c183f",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-004",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 5,
+      "sha256": "5260bb7cdb3810a2e385246490b0bf1fdec553945afd6523d6c213703d62a554",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-005",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 6,
+      "sha256": "ac9ab28df6b9c3fb077323f2e6827b15aef44e86ac9f5b1f29e0b205a5dfb6b5",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-006",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 7,
+      "sha256": "b466568b3baea99070b3ed8920ffa88d7cee31c1fea25447bbfac478a24df6ff",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-007",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 8,
+      "sha256": "339c474de039b0d8ccd03a2b5a5813134050f2ead13633b8f494e877e8677682",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/work-mode.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 9,
+      "sha256": "4b843699b5e09f1288a5c703306c86f85fbee3a733e7f9ec64231b7b0f9e7809",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-009",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 10,
+      "sha256": "013b316cf0f0de2ba6a86378bf123f7afca60fd2eddbcec0ac4a1db7a9df850d",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-010",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 11,
+      "sha256": "1d81a9ae74e732a6bfa1b36c8c205fa148ec933f0affd888ad350d2eb9198043",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-011",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 12,
+      "sha256": "0f236d0e41755ff4ea214fee11533e0dd6b16bb21addeaefef55c49ebc5dbfe4",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-012",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 13,
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-013",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 14,
+      "sha256": "aa4fbe355e33dd1adbe85b2225d186591ea5a92068afc3277c9571433defcc4f",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/work-mode.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 15,
+      "sha256": "c68da10c02af8003e5a9dcfb415742667b4522dcca5fb5f161439fc6b99fc956",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-015",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 16,
+      "sha256": "3f57e8c43351260f2f5ac8c5f9a0c4c66bf659ad98127ce908fb2e0123c6ba2d",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-016",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 17,
+      "sha256": "5870909bcbe192dbb65dd2bf22c3cd705a472f05729af6a18d8a3785b6ad8537",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-017",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 18,
+      "sha256": "1e1ee7323ad061d1b20265bc6c0a70fdf6f25b124d0fb731c181e01b9500e4b5",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-018",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 19,
+      "sha256": "3d614da887a3ea3ea766032ba515f042ac4d9796d10ae4d8af6417dd55492335",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-019",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 20,
+      "sha256": "27b12baae8b6134a2f80e84aadc3329ee2a011eeb8182a944bf4e26e54d35cd9",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-020",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 21,
+      "sha256": "8852af55aa5d5868c393426ce48493f2bfc92acc90a825a3f9363195c0323937",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/work-mode.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 22,
+      "sha256": "1cec93b721e49487bea1291d9e8058fcde49b50f9c4f85559aa02f0de7e4e826",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-022",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 23,
+      "sha256": "0438a1da1f7889746308695c0507b2d8f646d5fe22b24d2577256c4c82f402d1",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-023",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 24,
+      "sha256": "65252a83f4e26546b4e62458fa487e46db1fab671d861e4a88c484071d95588b",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-024",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 25,
+      "sha256": "1373cddc28d759b6f4a7b45ce1b36d4239a16972c3c5ef7a9b9e3f980b4364f5",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-025",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 26,
+      "sha256": "7bc4be27b8c73e9d0123218998203d417092a89044786754d8ef796305d60ae6",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-026",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 27,
+      "sha256": "59e640caec11f116e4ffe7a41453904b228fa918cf9bfb2362b00017067e5748",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-027",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 28,
+      "sha256": "6fdfe1475a55a521f60d3d8d8676b2f0dd4fad8a07057d47daa49e2ecb2a1e68",
+      "destination": "docs/subsystems/contracts/work-mode.md#p-028",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/work-mode/README.md",
+      "source_paragraph": 29,
+      "sha256": "9800c3cce0de65d8fb23d27c8f77dd271df3087140383e09d21787ed94074e2e",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/work-mode.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 1,
+      "sha256": "0319187ccdb7f37e232f092909282db85be7d410db56ac3756475914fe49c7eb",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 2,
+      "sha256": "39f4ee51665df3282584262651efee70643dd9d3f14123180c09ddcf7c0e49a4",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-002",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 3,
+      "sha256": "21cc413b1289186c939dac53806a2758556014ac5ab3cb567eb164bf45ba069d",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-003",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 4,
+      "sha256": "ed49be8df83c766d2d469efe60d997ef2e8ac9b457905bf41f09767bda831dd2",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-004",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 5,
+      "sha256": "6230b498cf43fd201cc22da15dd527709590f074c67a9172ba129b6a5517f3ec",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-005",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 6,
+      "sha256": "cb709c4807d83eb795e29cd144eb2845ee06f1894bd8d624ac0672330b865c61",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 7,
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-007",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 8,
+      "sha256": "ed780262f3998aa83971c55054aae3dfda83f5e89f30616af1a3b8de446fac44",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 9,
+      "sha256": "334c233796ac10cfdd66873fbf43e7cba603004e2189fbb27935216beab72d13",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-009",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 10,
+      "sha256": "fe3aaffb379eb4b75380c1565f4bea479c78cc1b5a0e07623f102057c1b69395",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-010",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 11,
+      "sha256": "b8ed4b0a4eddb10444765864d443e84f3bb0013a8c86cc689d8f66b16032dd27",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-011",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 12,
+      "sha256": "f55af694b12ff7c1cf2a57b4aa12d5c3e09b4430180ddb1c95b81eae0c14adac",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-012",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 13,
+      "sha256": "0fb6e0f11507b9d03f5df232c41a4dafd1dc9e98b3411143448bfa58c11d1eca",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-013",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 14,
+      "sha256": "f27b3d11cfa478227480bf6bf643f1f1047e11de6cf7d9a4bfc59b0954f017f2",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 15,
+      "sha256": "0656480c71f865cac1a2d176ec268072d203c1d6d7f660cf7ad5f75a207e589e",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-015",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 16,
+      "sha256": "942360b56007a4238de6bd985c29c3ed2ec53107cfb7c9d1d4aea570057a9fc5",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 17,
+      "sha256": "d5af5e242e0960e7ff7f684745b2765fc9c7923230cde6ff307084d858d4c111",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-017",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 18,
+      "sha256": "753d75314d39639eecff00a88ae9b6437bff95cab30084ad1be19bec39d38ae0",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 19,
+      "sha256": "72e433a6080b9b0d903142a15e039be37c730fd8fc7f6baf962529e95ad70735",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-019",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 20,
+      "sha256": "80937328f4f7b2400b498c2e504a90057378843e8c8870ab4738c70572fefef7",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 21,
+      "sha256": "aebfce35a82e6eba8e12717ca593f28480a2185b16654ecd6d276ad3978a8d34",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-021",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 22,
+      "sha256": "a436d4c3432eaf2e6957604cd422f0df5b4aa7d33be4c4e824856089177a60cb",
+      "destination": "docs/subsystems/contracts/ai-runtime.md#p-022",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/services/ai-runtime/README.md",
+      "source_paragraph": 23,
+      "sha256": "a4fc1405a8263d7bc41f81faba72b9d029b39fe2b65686b92a471d974cfbe366",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-runtime.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 1,
+      "sha256": "4f2786439ab9b2774a053c3fca428ecd29c4e25151b117f4a73878b873c74b6b",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 2,
+      "sha256": "84b599b3bd0ba7ae8c32e9196425ddc7086530ec4bc63f52dd67ab94eecd38ad",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 3,
+      "sha256": "a7d512df9451188d78d309b31c3921696c935732b9f138468c93333666890cc6",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-003",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 4,
+      "sha256": "fd517fcf2ddb078534aebbf57a489398aca0b7eff6c0f68b149e0de8281c805a",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 5,
+      "sha256": "fe5586014b5064f5c1b2ce3a14082b8311568a932b7b6022015479f7954291b7",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 6,
+      "sha256": "ae97a61791db23ccd1d429a2237882ab6fd7c7abfeb8e0466db3b0cf31329361",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 7,
+      "sha256": "6ac9fa2f0fbf0a84f8240280277bc91c2ea4437a0397ccaf75d98feaa92beeea",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 8,
+      "sha256": "83fd84b17385e7879cd0eefd621c54d8e2efdbd718f422701aa5f9a0a4b305ac",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-008",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 9,
+      "sha256": "2a30705973d77240972d8c96e3855fe73852402fdbbdbe16862256b070bd5ba3",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-009",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 10,
+      "sha256": "73c893aaa5b5ea75e0fa5d3238186f230b1c2a977110051611c2dbb1a2c1a52d",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-010",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 11,
+      "sha256": "6eebc96f97d8db603b1b019283d5470eaeacf205cea9f8d5205d2c00111064c8",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-011",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 12,
+      "sha256": "15f850f15615717c930440c519c8c5de5d3dede35af559f216fba8502e94de33",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-012",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 13,
+      "sha256": "bc667e23228543596b1a0221999d82b670388f86524d0b5d319abbb2fa398444",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-013",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 14,
+      "sha256": "1384d21fbc1166eaf29a32f55f827227832174d91fac8165b4b44e18ebea23b5",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-014",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 15,
+      "sha256": "683a1d43953d8a7493a30aaca16842549ccba69c36357943030270a30c4c076b",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 16,
+      "sha256": "51ad5131ddf6734605b2b1c183b7fc67afb37927a517a4e1a95301506019da86",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-016",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 17,
+      "sha256": "e655c393022e2d15093002f5256d42dbd814c368725c68212278a4af1ddd46eb",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 18,
+      "sha256": "1bf35d73e56cb476728a1d1628a3552aedce59db2d70fc9b3918b080e4e2345c",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 19,
+      "sha256": "e4f16884d55aec8de2dc19144c08b32b120d328c4d3d30db90ec046b6fa9ce85",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-019",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 20,
+      "sha256": "f1f4d44848c512a2768256a437ab2312d47a7035ba3eb680d62229fe2063667c",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-020",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 21,
+      "sha256": "1e424175da889667e29899775fd3ce6ccf56d58d3e278803eb12733c02d139e8",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 22,
+      "sha256": "8751348ebb74666bc81db9c2fbb650ab695f67aea7185240606e5552cef17226",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-022",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 23,
+      "sha256": "e218273b6a560ec7c7e6f335de514c09433a8389bf5a92aea281b10eb6fff047",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-023",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 24,
+      "sha256": "5d6c8a3434c80a26ba7e2d78e6965861649c783c48a757e04869ee09ed466af4",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/visual-ai.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/visual-ai/README.md",
+      "source_paragraph": 25,
+      "sha256": "83dd1f05a41578e0a656925b27245ca719537a0ea793073c2a03851ece0cd922",
+      "destination": "docs/subsystems/contracts/visual-ai.md#p-025",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 1,
+      "sha256": "5c13416d4f861faa6708615d76ad00e797c04f64579dde4d512d36266f5acc6c",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ocr.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 2,
+      "sha256": "aa9dd8a110a40685e4e3bfdef6bdc454efa060acf93adc8750248ed4a9bda6cf",
+      "destination": "docs/subsystems/contracts/ocr.md#p-002",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 3,
+      "sha256": "7265b09cf4c44fece21dd696e23a42a28d8cdba900a897cd1174b0b00e84f85a",
+      "destination": "docs/subsystems/contracts/ocr.md#p-003",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 4,
+      "sha256": "ee0a20f5cdf1167a6b7ccf984b6b51d9d6a772c425947b2045e755a6c049c1a9",
+      "destination": "docs/subsystems/contracts/ocr.md#p-004",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 5,
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
+      "destination": "docs/subsystems/contracts/ocr.md#p-005",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 6,
+      "sha256": "9981962ab627f29ddd83c36e962c1872e6dc73fefc364ace4046c12e4678102f",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ocr.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 7,
+      "sha256": "7719d56e40a48b58ec5b96da863daf5083e680394cf238167837c457d9ed0e5f",
+      "destination": "docs/subsystems/contracts/ocr.md#p-007",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 8,
+      "sha256": "ff4725b43a5293e8f57616d405c8569ea1084cb6c5fa4989d7f180b98dcf45e7",
+      "destination": "docs/subsystems/contracts/ocr.md#p-008",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 9,
+      "sha256": "7bb73a54b04a10be05d89e732a15ae7327f7a9db4c09945c7b89502408178f91",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ocr.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 10,
+      "sha256": "c5e67a4df9073acdc11e54adc104985e2943dabfb40343b327859b2076690b4c",
+      "destination": "docs/subsystems/contracts/ocr.md#p-010",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 11,
+      "sha256": "8cbc872c29795f4c5e55aee35f98c32c89d1d886a166cfdef5496761176ab437",
+      "destination": "docs/subsystems/contracts/ocr.md#p-011",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 12,
+      "sha256": "302649d450e8ac4cedf145ce1adda20a5b91c7e00cb69974e09de92dc2554188",
+      "destination": "docs/subsystems/contracts/ocr.md#p-012",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 13,
+      "sha256": "c73e543fc600237e95c10dbb7e2c6df8bfaf3e55dcf892498b03a40f87e77c4e",
+      "destination": "docs/subsystems/contracts/ocr.md#p-013",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 14,
+      "sha256": "6379b39bacee6eda63c6b75da07304233db672180b600631f146fbdd88276bd3",
+      "destination": "docs/subsystems/contracts/ocr.md#p-014",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 15,
+      "sha256": "69c63fc1e9790e78c6b4932e07452b03d0dd7249964a9ef5f1cfb4c93d7a93f0",
+      "destination": "docs/subsystems/contracts/ocr.md#p-015",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 16,
+      "sha256": "3a0e17caace0c4b44896a78b8446365bf5dae7498c06ca89c4c3718cb29d90c9",
+      "destination": "docs/subsystems/contracts/ocr.md#p-016",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 17,
+      "sha256": "17dbeb76b01a1b0835719c3175f9fe364c71c62e8189f44f0a00df3f46131850",
+      "destination": "docs/subsystems/contracts/ocr.md#p-017",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 18,
+      "sha256": "dc88b3e701519b7c62692b40b334c05e849225d762f09ee2d826bef0c80969e3",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ocr.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 19,
+      "sha256": "bda6ce11ca22d0102579e53e0c78710a17562ecd00e5ce1646b55b53ca965a7a",
+      "destination": "docs/subsystems/contracts/ocr.md#p-019",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 20,
+      "sha256": "98f5f9287aefc111dee4fb43e19783b883742c6ded1d296ffffaf8a367a37357",
+      "destination": "docs/subsystems/contracts/ocr.md#p-020",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 21,
+      "sha256": "0b15ca09a43b04814426edd32d708bff6921a934c5c4eff62fcd272fadbdb9c5",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ocr.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 22,
+      "sha256": "bbbce162d07f91ffb57ad0851f1890458d3353844ba2dd5a28abc5af36bb1818",
+      "destination": "docs/subsystems/contracts/ocr.md#p-022",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 23,
+      "sha256": "cd2a3543685c1caa1eeb61204169252f0a0b30256898df4ecc787c8c35860ab7",
+      "destination": "docs/subsystems/contracts/ocr.md#p-023",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 24,
+      "sha256": "94e3c9fc9d5aa0c07d507b8609d9d53fd7298cec8d01701f4ef842d45151bdfd",
+      "destination": "docs/subsystems/contracts/ocr.md#p-024",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 25,
+      "sha256": "8f4e48e093052a44a8229fb3d8249f508e14e2bdc91b2af57189997b903e64b5",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ocr.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 26,
+      "sha256": "45cb004d79d733366fea28df5c45dc0a342e56936590d6b6291ea3183229fe19",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ocr.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/ocr/README.md",
+      "source_paragraph": 27,
+      "sha256": "b8f1d622b49682a63be12a23334e4a9bcfcf565892a73ee498a2fe412f4e8d1a",
+      "destination": "docs/subsystems/contracts/ocr.md#p-027",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 1,
+      "sha256": "e79cb5aefc91fdd1741dfaa2eeed57abbb80b0c4772d91688851b5c171a0aaa5",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-analysis.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 2,
+      "sha256": "3d1a579d45e9fdbb8d0fa70f91750dcfc9aee985c76389b3563733650a1d912b",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-002",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 3,
+      "sha256": "c337301f5cd58fac97f30bb1856d843deaffddd4997f87782ded1623b62dbce2",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-003",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 4,
+      "sha256": "2215dcca1efaf4dae1a97dc0abf98fe192537a8d3097db70599e4081a8f130d1",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-004",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 5,
+      "sha256": "7271c432c4d38adbc4c8d6f4b2a5a7caa7cec7625193fef24496b172468757a3",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-005",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 6,
+      "sha256": "7916b91a02bc6502bb14cd816bc01f40a34d3f908283d40c4f9b14a488b626c2",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-006",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 7,
+      "sha256": "2b4284695ee8290c3c1dbb8f7a0ae74b47fcdeb07695d69629bffaa24c9b48fc",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-007",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 8,
+      "sha256": "24d50aa9cd3f742d1acee12d92eb5eab20c6ef3d402a9894246a3ebc8d349fa0",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-008",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 9,
+      "sha256": "2148cf0681f584164c4ff2b2419d8c343ae1dd83f5117285e6d4e0890585aded",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-009",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 10,
+      "sha256": "585cdcb907e3c23017b501e576c97c7dcc17f63456591de340dd29beff3ba0fb",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-analysis.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 11,
+      "sha256": "3fb8b33832c0ab51494f7d68b4a737218877bd3e577d54022f0d8cd24f3a3b57",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-analysis.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 12,
+      "sha256": "53cf3eea32630577eba838be7d80519d08c27058dd291964d94f9f7e68107489",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-analysis.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 13,
+      "sha256": "c030b089529730db97c914c56782f75bdeb0e121872019d9c4d9bb988f29816b",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-013",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 14,
+      "sha256": "2b59b25d939b300b2783e7dfe2cacef51b308012c022a2175562e22dc257fc09",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-014",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 15,
+      "sha256": "4adeef9c64b4694bb18cb2aab88fa401609ae0818e83aa769d2ce962030c5167",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-015",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 16,
+      "sha256": "e2d7a087374edf77ee38eee8c987e3fcfdc6ba2257f317c2e58d9bca69ee3e03",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-016",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 17,
+      "sha256": "9794dfb3e42e00fc74c830da445862597b8286365a8ca20653bce4d59c59bea3",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-017",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 18,
+      "sha256": "a7802d59e5c8fd03532bc8bb446bd31f0491a205efc0039e21d91ef455c24ae9",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-018",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 19,
+      "sha256": "81f9874bd9cd5adc1669c8016cd18b1a9e8da14be670b8c216274dba909c2565",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-019",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 20,
+      "sha256": "a046b34645e1d277a5a059dcb280af915b79b10cf98c4b1fcf2754ce2c591b52",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-020",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 21,
+      "sha256": "a42fcccb465aa6f3ebc9cbac223b910e0bb6c16ae94cfea81949c75c10395f1f",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-analysis.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 22,
+      "sha256": "9e7db0750046e225d7e7d62052a50a36bc9a0542b734cfb010ee525cfc3af0b0",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-022",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 23,
+      "sha256": "1c5520999feb6311c96e0e57e23b0c5b25431cea770f4fc4bfc45714aec30c33",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/ai-analysis.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/background-analysis/README.md",
+      "source_paragraph": 24,
+      "sha256": "b385eb4ce2afee962f6c567b8ae6b4bbb3aa068cfea27bab9970f743ec0081f8",
+      "destination": "docs/subsystems/contracts/ai-analysis.md#p-024",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 1,
+      "sha256": "3b722855f61a0e9bf9b4a9393e53b380bf8de625303ec82757018656b82c9abd",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 2,
+      "sha256": "1fb74d475b4e35aa90ff88885777e4eb5a94f6be3bb19e94ad3f68ad8080370d",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 3,
+      "sha256": "86a82dd42417231adda38a6e2424cb9f015afeab32c7a490b89255ea860cb72e",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-003",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 4,
+      "sha256": "f6b32d317035207dddb2cf76c69ea2e22a2072f8a502d2d7c6ac34417406a54b",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-004",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 5,
+      "sha256": "21ed040e185c06c3ed2f0f01bc25188f102fb2677da0de3a017ef1a0186d98ce",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-005",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 6,
+      "sha256": "1a2418b2b7333066b6e955b4932705c468ea91fbea98ae8c6e2a597e68bf6f1c",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-006",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 7,
+      "sha256": "e778dccc01203b83e210079d0c9d1665e7fc0fe1c2f79e2c621fac5b535d4450",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 8,
+      "sha256": "03e2e2a6677ccde77cb6391b1c01892e5c38d4b54c6051fb2c42c012038cbd0b",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-008",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 9,
+      "sha256": "bfb3f564451939d18e92b49d617599b37dad2a3048cbb50ec01ce3141c878db4",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-009",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 10,
+      "sha256": "47829e3b876a55e4f2c769dad015eb4da0de2a3d69ab3440107e4776b5f382a3",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-010",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 11,
+      "sha256": "ec694e0268c9d79805a75a069135e538dba16a5fbec77ac265a0b99da85b7ede",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-011",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 12,
+      "sha256": "51370da51a78523207813f6818668aa13dee42f8c239541082243b0cb7c49d2b",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 13,
+      "sha256": "81a1433d0f612110c1700e5c898bb4113a15276952b975747732d95a88e9fa9e",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-013",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 14,
+      "sha256": "98f53aedcb8bf57faa82dcf90347f433c7d2dd185393f1d7ae8854e2b1de1e5c",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-014",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 15,
+      "sha256": "994d49f5b348c8a2639cadb0d814b9af567c356abf24d0df7bc89ac274461334",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 16,
+      "sha256": "701cea2cf48087010b7be45186c89d7f441760a2e0d92765129f5dc87dbabbcb",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 17,
+      "sha256": "2b86c514a547fe126bfa3f338528550baa5837affc49664478ddefcd080b0569",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-017",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 18,
+      "sha256": "54026f2e664972a66edee7537dd00a84ecad6bc50d082ef13234a0c46255c1e9",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-018",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 19,
+      "sha256": "cbead06e170494a8c39c9f48fd77ca544e992c857a0d342e0400df33651620f7",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-019",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 20,
+      "sha256": "bccc9e8b34a58b262224b9eab9c37c04ad88df77e0097c39d52193eeef8d9212",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-020",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 21,
+      "sha256": "d37292db3998878b45a203501b9073da059150c294cdaf31dfbdef14d8dda6c5",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 22,
+      "sha256": "cb7b6ea7c9a5181b2b658a5483ddb03ee4d03206c943d58f95a4c3100a82ddd4",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-022",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 23,
+      "sha256": "16f8473365870d5219a7a3fea43ac654356737f5b7d676f26ff78642f45ade56",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-023",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 24,
+      "sha256": "c8f404ca226b553a0e89f9780f863a41a2fddf726efab1a978e27f79d13d218c",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-024",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 25,
+      "sha256": "45e2b7c834f5f3d684ab83a61087c2397eb9e15f6753e4d5c0037dfce6769254",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-025",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 26,
+      "sha256": "418cc75cfbd2419913e58875151c7f6d51e7047ef1bdb3ea815bc421b098f5ce",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 27,
+      "sha256": "dadde6a95b9bec22bf41df184cce9f3e488ba158ea09fc1de965c0c397027bc9",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-027",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 28,
+      "sha256": "39a1b40918d12ce3a915d9cdb96ff273d8569c3d83165d34efb2f55af8997502",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-028",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 29,
+      "sha256": "37dcfd1daee6d4cc9f6f113478f9bf56cfb7c0a444baef764b9cf05be11b63fa",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 30,
+      "sha256": "81e3dd4516a1153c66ab4f18e8bd8b711bb1d20a1013c52766842b235c974f1a",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 31,
+      "sha256": "43aa27ca0abf2aa82cc879dda5bb6130538f18cc743000edf57a34fd1c1559a2",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 32,
+      "sha256": "b19fdde6ad8c35c64db7f137f8b40c67e0b14c261cac8e7b17d175fe5b29ad5b",
+      "destination": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "scope": "source-era technical/qualification record; current owner is docs/subsystems/library-lifecycle.md",
+      "decision": "preserve-source-and-rewrite-current-mechanism"
+    },
+    {
+      "source": "src/main/library-lifecycle/README.md",
+      "source_paragraph": 33,
+      "sha256": "e36000f9cd514162d0e0aef5d39c47444d70d0964e0f0be64c26aeb0d40a3bbf",
+      "destination": "docs/subsystems/contracts/library-lifecycle.md#p-033",
+      "scope": "named interface/version contract; applicability follows current owner, not historical delivery claims",
+      "decision": "extract-scoped-contract"
+    }
+  ],
+  "source_rules": 117,
+  "source_paragraphs": 161,
+  "note": "Exact dated source snapshots preserve historical parameters and safety details. Current mechanism rewritten separately; no blanket requalification or universal applicability inferred.",
+  "detailed_contract_paragraphs": 112
+}

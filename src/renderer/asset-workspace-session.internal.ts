@@ -4,7 +4,7 @@ import type { Asset } from './stores/asset.store'
 
 type Scope = { libraryIdentity: string; generation: string }
 export type WorkspaceEvent =
-  | { kind: 'download-imported' | 'tool-saved' | 'ocr-changed'; scope: Scope }
+  | { kind: 'tool-saved' | 'ocr-changed'; scope: Scope }
   | { kind: 'visual-ai-changed'; scope: Scope & { assetId: string } }
   | { kind: 'card-drafts' | 'card-metadata'; context: AssetCardChangedEvent }
   | { kind: 'card-return'; context: AssetCardReturnEvent }
@@ -139,7 +139,7 @@ export function createAssetWorkspaceSession(adapters: WorkspaceAdapters) {
         await Promise.all([adapters.assets.loadAssets(), adapters.assets.loadTags(),
           ...(adapters.assets.selectedId() === event.scope.assetId ? [adapters.assets.loadAssetTags(event.scope.assetId)] : [])])
         return
-      case 'download-imported': case 'tool-saved':
+      case 'tool-saved':
         await Promise.all([adapters.assets.loadAssets(), adapters.assets.loadTags()])
     }
   }

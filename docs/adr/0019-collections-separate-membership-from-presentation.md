@@ -2,7 +2,7 @@
 
 Asset Collections provide the underlying multi-membership organization model,
 while Collection Groups and Collection Boards provide different presentations
-of that model. Collection Groups support Eagle-like tree navigation and
+of that model. Collection Groups support high-density tree navigation and
 hierarchical browsing; Collection Boards support Miro- or Framer-like visual
 review for projects, moodboards, inspiration boards, and creative comparison.
 

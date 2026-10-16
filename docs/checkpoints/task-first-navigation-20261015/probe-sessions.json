@@ -1,0 +1,32 @@
+[
+  {
+    "agent": "/root/task_first_plugin",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/review_settings_request",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/task_first_settings",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/review_plugin_request",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/task_first_boundary",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

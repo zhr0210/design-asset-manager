@@ -55,7 +55,6 @@ function fixture() {
       close: async () => { state.closed++; projection = { state: 'closed', identity: null, generation: null } },
     },
     workWindows: { drain: async () => {} },
-    managedDownloads: { drain: async () => {} },
     assetCard: { invalidate() {} },
     tagDecisions: { invalidate() {} },
     tagBatches: {
@@ -107,8 +106,7 @@ function fixture() {
 }
 
 await test('library work checkpoints settle before business admission is held or model owners drain', async () => {
-  const f = fixture(), work = deferred(), download = deferred()
-  let downloadStarted = false
+  const f = fixture(), work = deferred()
   f.participants.workWindows = { drain: () => work.promise }
   const pending = f.module.onAuthorityWillChange()
   await tick()
@@ -117,14 +115,9 @@ await test('library work checkpoints settle before business admission is held or
   assert.equal(f.business.held.size, 0)
   assert.equal(f.state.ownerDrains, 0)
 
-  // A participant made available while the first checkpoint runs must be read at its own stage.
-  f.participants.managedDownloads = { drain: () => { downloadStarted = true; return download.promise } }
+  // The work-window checkpoint must settle before business admission is held.
   work.resolve()
   await tick()
-  assert.equal(downloadStarted, true)
-  assert.equal(f.business.held.size, 0)
-  assert.equal(f.state.ownerDrains, 0)
-  download.resolve()
   await pending
   assert.equal(f.business.held.size, 1)
   assert.ok(f.state.ownerDrains > 0)

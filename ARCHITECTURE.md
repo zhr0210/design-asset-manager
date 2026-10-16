@@ -1,110 +1,81 @@
-# DAM 技术架构与代码地图
+# DAM 技术架构
 
-本文解释稳定结构和责任，不维护某台机器的资格/PASS快照。实际状态见
-[CURRENT-STATE](docs/handoff/CURRENT-STATE.md)；产品目标见[产品基准](docs/product/PRODUCT-FOUNDATION.md)。
-2026-10-06按当前目录、Local Host、工作窗口及AI Gateway调用说明复核；目录存在不证明某功能已可用。
+本文解释稳定结构、责任和平台差异。完整[子系统目录](docs/subsystems/README.md)连接当前运行链、模块、源码与验证；产品目标看[产品基准](docs/product/PRODUCT-FOUNDATION.md)，实际版本/资格仅看[CURRENT-STATE](docs/handoff/CURRENT-STATE.md)，详细目标看[规格目录](docs/product/specs/README.md)。源码存在不证明用户功能完成。
 
-## 1. 产品形态与进程
+一级软件系统按GUI与窗口、应用Host与系统集成、资料库与素材、AI能力与执行、搜索与检索组织。页面里的业务仍由相应数据/执行拥有者处理；开发审查/反馈与构建发行是工程资料，未来范围是产品规格，不作为第六个运行系统。此归类只是文档入口，不重写实际进程或权限。
+
+[插件与扩展子系统](docs/subsystems/plugin-system.md)单列为target-only目标：围绕五个运行系统的公开能力、隔离执行和协议适配组织规划；尚未交付的SDK/安装器/MCP不纳入当前运行或资格声明。
+
+[Agent资源与配置管理](docs/subsystems/agent-resources.md)同为target-only目标，管理指令/Skills/MCP配置/Hooks等资源；内置AI与外部Agent分发范围未定，不改变现有素材Library或插件执行边界。
+
+## 1. 进程与客户端
 
 ```text
-Desktop Renderer ── Preload / IPC ──┐
-                                   ├─ 一个 Electron Local Host（每个明确 profile）
-Browser Renderer ── 本机 HTTP/SSE ──┘      │
-     共享 React 产品与 Client 契约        ├─ 当前 Library 权威、事务和受控文件
-                                         ├─ 账号/设置、任务、原生窗口与退出
-                                         └─ Pi / OCR / 本地执行进程 / 云端协议适配
+Desktop React ─ Preload/IPC ─┐
+Browser React ─ HTTP/SSE ────┼─ Electron Local Host（每个明确profile）
+                            │  ├─ 持锁Library / App状态 / 凭据 / 事务
+                            │  ├─ AI能力控制器 / 资源准入 / 事件与退出
+                            │  ├─ Pi私有Node Worker / OCR与专用Python
+                            │  └─ GGUF进程 / 平台helper / 文件交付
+                            └─ 工作窗Controller
+                               ├─ 默认Electron/React工作窗
+                               └─ macOS B候选：Swift/AppKit子进程
+                                  （NSPanel / NSCollectionView / 动画 / 拖放）
 ```
 
-Browser 是正式本机产品客户端，不是远程开发服务器或另一个数据后端。
-原生卡片和 Work Window 有更窄的身份、成员与媒体权限，不能冒充主工作区。
-关闭一个客户端与退出整个 Host 是不同动作；跨端草稿和任务状态不能由一个页面单独决定。
+Desktop/Browser共享同一个产品Client和Host，Browser是正式本机客户端，不是局域网服务或独立数据库。原生卡片/工作窗是权限更窄的角色，不能冒充全工作区。关闭一个视图和退出整个Host分开；退出/切库须核对全部草稿参与者并排空。
 
-## 2. 技术栈及版本事实
+## 2. 技术栈与平台矩阵
 
-| 层 | 采用的技术 / 责任 | 精确事实来源 |
-| --- | --- | --- |
-| UI | React、TypeScript、Router、Zustand；样式/token及motion沿用项目规范 | package.json / package-lock.json、DESIGN.md |
-| 桌面宿主 | Electron；原生窗口、系统凭据、应用生命周期 | 锁文件、实际平台与进程版本 |
-| 构建 | electron-vite / Vite、TypeScript、Electron Builder | electron.vite.config.ts、tsconfig.json、package.json |
-| 数据 | SQLite、better-sqlite3；活动库与App状态分开 | Host composition、schema与匹配Electron ABI产物 |
-| 图片 | Sharp/libvips等受控预处理 | 锁文件、平台资格、实际安装资源 |
-| 模型协议 | Pi独立Node Worker和既有兼容服务适配 | pi-runtime锁、release清单与真实执行 |
-| 专用推理 | OCR/Python/本地Runtime按具体能力运行 | 对应模块、环境与质量/资源证据 |
-| 双端传输 | 命名Client、Desktop IPC、loopback HTTP/SSE | src/shared/client、src/main/local-host |
+| 范围 | 共享部分 | macOS | Windows |
+| --- | --- | --- | --- |
+| 主工作台/设置/独立大预览 | React、TypeScript、Router、Zustand；DESIGN/token/motion | Electron Desktop或同机Browser | Electron Desktop或同机Browser |
+| 默认工作集窗 | Host控制器、成员/修订/布局契约 | Electron BrowserWindow + React | Electron BrowserWindow + React |
+| B悬浮窗候选 | Host内容/提交、私有快照/意图协议 | Swift/AppKit、NSPanel、NSCollectionView、QuartzCore、系统拖放/文件承诺；React仅按需大预览 | 当前启动器拒绝；不是复用Mac原生组件 |
+| 视频参考帧 | 媒体记录、受控文件/range、资源账本 | AVFoundation Swift helper | Media Foundation C++ helper |
+| 本地推理/资源 | Pi协议、可信Python、GGUF与共享准入 | Metal/共享RAM、libproc观测 | CPU/CUDA、平台进程/原生约束 |
+| 数据/构建 | SQLite/better-sqlite3、Sharp/libvips、electron-vite/Vite、Electron Builder | 对应ABI/资源、DMG/签名公证 | 对应ABI/资源、安装器/签名 |
 
-不在多份手写文档中重复易漂移的具体版本。依赖声明范围、锁定版本、实际部署版本和验证资格须分别核对。
-Linux、Windows与macOS依赖不能互拷；WSL执行不自动证明Windows原生结果。
+B已接入主程序的可选工厂：`src/main/index.ts`检查`--dam-work-window-candidate=b`才选择`createNativeShelfWorkWindow`。普通启动仍选`createElectronWorkWindow`；`npm run start:work-b`是macOS候选入口，不能在文档整理中改为默认。B不是SwiftUI；已有NSVisualEffectView不证明目标Liquid Glass完成。
 
-## 3. 代码地图
+精确依赖由package.json/锁、生成身份与实际平台产物核对；声明范围、锁版本、部署版本和资格分别表达。Linux/Windows/macOS依赖不能互拷，WSL执行不替代Windows原生验收。
 
-| 位置 | 拥有什么 | 不拥有什么 |
-| --- | --- | --- |
-| src/main/index.ts | 当前组合入口、服务装配、启动/关闭协调 | 不应包含所有领域算法 |
-| src/main/local-host/ | 浏览器会话、命名命令、选择凭据、媒体/事件和草稿协调 | 通用SQL、任意文件/命令、第二套领域数据库 |
-| src/shared/client/ 与 src/preload/ | 产品Client契约、传输适配和窄桥 | 数据权威或无限invoke |
-| src/renderer/ | 共享展示、导航、输入草稿和可恢复交互 | 可信路径、模型进程、SQLite写权 |
-| src/main/library-lifecycle/、capture-intake/ | 受检活动库、lease、Capture/Promotion、恢复/Trash提交 | 未授权修改外部源 |
-| src/main/independent-tags/、visual-ai/、ocr/ | 各能力输入、任务/执行检查、结果提交协调 | 用户隐私的任意读取、绕过Host落库 |
-| src/main/background-analysis/、background-ocr/ | 已有计划与单能力调度边界 | 目录存在不代表全能力自动执行或Governor完整 |
-| src/main/ai-gateway/、ai-credentials/ | Provider/连接/账号生命周期与安全凭据接口 | 普通Renderer读取秘密、静默外发 |
-| pi-runtime/、ai-service/ | 模型协议、专用推理和隔离执行 | 活动资料库权威写入 |
-| src/main/work-mode/、asset-card/ | 原生参考窗口、成员范围、恢复与撤权 | 删除原件或替代全库整理 |
-| src/main/external-connected-library/、src/main/legacy-readonly-workspace/ | Eagle独立原件权威、旧库只读找回 | 强行转换为Managed ownership |
-| src/main/model-library/、src/main/model-library-workspace/ | 模型制品与受限产品入口，各按实际接线判断 | 下载或probe直接等同安装激活 |
-| src/main/platform/ 与构建工具 | OS、原生资源、文件身份和打包差异 | 向共享UI泄漏任意平台权限 |
-| scripts/、docs/history/ | 测试/维护工具与历史 | 自动生产入口或新任务授权 |
+## 3. 状态权威与依赖方向
 
-目录地图用于定位，不是所有子目录都在当前生产图内的证明。清理前核查动态入口、打包、测试和设计参考消费者。
+- App profile拥有设置、凭据、草稿和App记录；活动Library拥有素材、人工内容、分析证据、组织与工作集。
+- Active Library Host把已检查身份、存储角色、私有SQLite和真实独占lease绑定为不可拆分session；Capture/Promotion/Trash/维护复用该权威，不复用全局删除通道。
+- Original、Preview、Variant/兼容交付分开；派生索引可重建，canonical向量/人工内容不是缓存。默认Copy不改变外部源，旧库只读单独处理。
+- Renderer负责展示和输入，Shared负责契约/纯规则/Client；不能借Shared导入Main磁盘或Renderer全局副作用。组合根依赖适配器，领域能力不依赖UI组件或厂商私有实现。
+- Worker只得受控输入/实际计划，不写Library。Host验证结果再事务提交、通知；发送、响应、验证、提交、通知和物理释放是不同事实。
 
-## 4. 状态所有权和依赖方向
+## 4. 执行链与兼容
 
-客户端表达产品动作；Host检查身份、数据范围、修订与当前会话，再调用领域服务。
-计算进程只接收必要的受控输入，返回有来源的结果；Host事务保存并发布已提交变化。
-Active Library 与 App Download 使用独立 SQLite；历史 Site 数据仅兼容，不新建网站功能。
-Capture/Promotion/Trash 必须使用已检查且持有独占写锁的 Active Library Control Directory connection；
-不能复用全局库或旧删除 channel，活动库模式的 `assets:delete` 固定拒绝。
-Model Library管理权重/数据Artifact，Runtime Package管理可执行依赖；下载、probe和已验证激活不是同一状态。
-App设置/凭据/草稿归明确profile，资料库内容归当前Library；实现不满足时应修正，不用特殊启动器遮蔽。
-已发送、已返回、已验证、已提交、已通知和已释放是不同事实，不能用其中一步推断其余步骤。
+检索实际从Library/useHostAssetSearch通过searchAssetsPage或retrieval.query到Host，包含词法/颜色分页及已准备空间的语义/图像链，不再是仅加载行上的内存匹配。硬条件、快照、模型空间及异步后权限复核由对应拥有者保证。
 
-Shared放契约、纯规则与可复用客户端定义；不能通过它偷偷导入Main的磁盘或Renderer的全局副作用。
-组合根依赖具体Adapter，领域能力不依赖某个UI组件或厂商私有参数；新后端变动优先收敛在适配边界。
-跨模块流程使用明确调用/服务关系，事件用于已发生状态的通知；不能用事件堆出不可追踪的隐式业务指挥链。
+基础分析、独立标签、描述、OCR、深度分析/反推共享适用资源与提交机制，但每项能力有自己的输入/证据/current。Pi统一允许协议，不等于本地推理加速或全能力资源治理；旧FastAPI/poller只描述其自身lane，不能套到所有当前路径。
 
-## 5. 必须保持的产品语义
+AI仍为一个一级系统，内部区分模型选择/路由、任务调度、模型驻留和资源准入；详细[职责/代码拥有者](docs/subsystems/ai-system.md#scheduling-ownership)与[执行目标](docs/subsystems/ai-system.md#inference-targets)分别说明。DAM自有本地Runtime、独立本机服务和远端服务按位置及控制权分类，不能用HTTP/Pi或localhost推定生命周期权限。Host统一验证/提交；本地预算与远端限额分开，外部调用的本地准备/缓冲仍计资源；Runtime保留真实allocator/回收权，资源不足不静默换模型或转云。本轮明确边界，不把0492全部Proposed方案或所有服务支持记为已交付。
 
-Original、Preview、Variant以及Candidate/Asset分开；默认Copy，不静默改源。
-用户确认/编辑与模型证据分开；新推理失败不清空旧有效结果，迟到响应不覆盖较新输入。
-会话授权不是持久任务记录；关库、换库、换账号/目标后重新核对资格，A→B→A不能复活旧权限。
-未知提交先检查权威结果，不自动重复副作用；取消不等于远端停止计费或本地子进程退出。
-共享资源账本区分驻留与临时占用；真实危险/UNKNOWN保守处理，单能力不支持不扩散成无关停机。
-资源许可恢复不恢复被撤销的业务权限。账号登录归 Main；页面退出仅解绑，明确取消、目标改变与退出应用按账号生命周期收敛；收到回调不等于凭据提交。
-所有浏览器和原生窗口调用保持各自scope，loopback不自动免除Origin/会话校验。
+正式managed模型库存与来源/恢复传输已存在；签名官方Catalog核心/registry/pilot仍各有受限资格，不能将后者未交付的完整生态误记为模型管理全部未实现。32个旧Runtime/branch/probe及通用Runtime Package操作被当前生产注册拒绝，保留模块/测试不表示普通入口启用。
 
-这些是语义，不是永久冻结类名、目录、状态字段或旧函数的理由；替换实现须证明等价或明确迁移。
+会话、角色、成员、来源、修订和撤权贯穿每次动作；A→B→A不复活旧权限。未知提交不盲重发，取消不等于远端停止/零费用或本地进程退出。驻留、计算、材料、外发许可各有生命周期，UNKNOWN保守处理；更换实现须保持这些保证而不冻结内部类名。
 
-## 6. AI目标架构与当前实现分开
+## 5. 代码与能力地图
 
-当前入口：[Local Host](src/main/local-host/README.md)、[AI Gateway](src/main/ai-gateway/README.md)、[Library](src/main/library-lifecycle/README.md)、[Work Mode](src/main/work-mode/README.md)。
-Pi/专用OCR/Python按实际链路执行；Legacy Worker保留的结果同步走Electron poller，不能绕过权威提交，也不将旧poller描述套到全部Pi请求。模型推理不在Electron Main线程执行。
+跨层完整链见子系统正文，局部机制见源码旁README：
 
-目标主链：能力请求 → 持久任务 → 配方与执行配置 → 资源准入 → 后端执行 → 独立结果/证据 → 检索与复用。
-标签、描述、OCR是可分别完成和重跑的能力；物理执行可共享模型/预处理，不用为了逻辑独立重复所有计算。
-模型驻留、计算许可、输入材料和用户外发许可是不同生命周期。Pi只统一协议，不自动等于推理加速或资源治理。
+界面外壳、React/Client/Host/原生界面的组成、启动、路由与恢复协作从[GUI系统说明](docs/subsystems/gui-shell.md)进入；视觉语言与组件规范仍只归DESIGN。
 
-独立描述、统一Governor、全能力后台协作、语义/混合检索和设计助手应按真实用户任务接入已有链路。
-在当前状态中逐项记录能否通过普通入口使用，不能从目标目录、接口或受控测试推出生产可用。
-先完成少量验证组合，再扩模型；不先冻结微服务、通用Agent平台和完整插件市场。
+| 位置 | 责任 |
+| --- | --- |
+| src/main/index.ts、ipc | 唯一组合/命名注册，不容纳所有领域算法 |
+| local-host、app-shutdown、shared/client、preload | 本机传输、角色、草稿、退出和窄桥 |
+| library-lifecycle、capture-intake、app-storage | 持锁库/事务/存储角色、Copy、恢复、App状态 |
+| asset-search、retrieval-workspace | 词法/颜色/向量、快照、query grants与解释 |
+| background-analysis、independent-tags、ocr、visual-ai | 能力调度、执行/决策、证据/提交 |
+| ai-gateway、ai-credentials、pi-runtime | 连接/账号安全、封印协议Worker |
+| model-library-workspace、model-library、local-ai-resources、services/ai-runtime | 正式库存与隔离core、预算与真实进程生命周期 |
+| work-mode、asset-card、native/shelf-candidates | 获授参考窗、原生呈现、视频/文件交接 |
+| platform、packaging、scripts、CI | 平台适配、资源闭包、验证与发行 |
 
-## 7. 构建也是产品边界
-
-正式功能需要的Worker、本地导入文件、原生库和资源必须进入对应平台的实际产物。
-源码可编译、开发目录可运行、安装资源完整、真实账号可用和模型质量是不同证据。
-生成规则决定依赖闭包；不能只手动复制资源或修改seal摘要让某次测试通过。
-签名/发布属于独立动作，但开发交付也应提供清楚且可复现的本地启动入口，不只交散落的脚本。
-
-## 8. 改变架构时
-
-先明确受影响用户结果、实际消费者、数据迁移及失败恢复；优先小范围替换重复责任。
-难以逆转的决定进入现有ADR体系，普通函数/参数/测试变化留在模块和任务记录。
-原型保留为视觉参考，Tracer明确隔离；它们可以支持研究，但不能代替普通产品能力。
+目录不是生产可用证明。变更先明确实际消费者、迁移/失败影响，更新唯一契约正文；详细流程、UI、目标、版本结果各有归属。构建须包含真实Worker/import/helper资源，开发目录能跑、安装包完整与用户真实可用分别证明。发布/签名不由文档更新自动授权。

@@ -1,17 +1,13 @@
 # Physical Reclaim Completes As Shared When Other Owners Retain All Remaining Bytes
 
-When an ADR 0252 revalidation proves that the deleted target has no remaining reference and every byte object still physically present in its reclaim scope is held by at least one other current authoritative owner, the host may commit **Physical Reclaim Completed As Shared**. This is an owner-graph resolution of the deleted target's cleanup responsibility, not physical reclamation and not an age-based abandonment.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Completion As Shared is unavailable if any scoped object is unowned but not authoritatively removed/absent, if any owner category is incomplete or unassessable, or if target/volume/byte identity is unstable. Mixed progress may complete only when every object is either ADR 0254 Removed Now/Already Absent or explicitly retained by another valid owner. An owner-generation change before commit invalidates the projection and requires a fresh complete owner-graph evaluation.
+## Decision
 
-The host atomically confirms the target reference remains terminally deleted and clears that target's Physical Reclaim Pending state, ADR 0253 backoff, latest failure reason and active reclaim lease. It does not unlink shared bytes, remove or weaken another owner, transfer the deleted target's authorization or recreate a target reference. No later target timer/startup/mount/manual trigger may retry those shared bytes under the deleted target identity.
+When an ADR 0252 revalidation proves that the deleted target has no remaining reference and every byte object still physically present in its reclaim scope is held by at least one other current authoritative owner, the host may commit **Physical Reclaim Completed As Shared**.
 
-ADR 0254's one path-free Physical Reclaim Completed Result gains a Completed As Shared outcome. It reports actual bytes already reclaimed/absent separately from **Shared Bytes Retained By Other Owners**, and the shared amount contributes zero newly freed storage. The result expires after one usable Storage Management viewing opportunity or 24 hours and creates no OS notification, Activity History entry, cleanup authority or Undo.
+## Detailed contract and provenance
 
-When ADR 0257 aggregates it, the per-volume summary keeps Shared Bytes Retained By Other Owners separate from actual reclaimed storage and retains this target's independent expiry/closure. ADR 0267 shows both raw values separately on the target row and requires their full-snapshot sums to match the header. Aggregation never transfers those shared bytes to the summary or another deleted target.
+详细状态、交互、数值边界和例外的唯一正文为[模型存储与清理恢复规格](../product/specs/model-storage-lifecycle.md#adr-0255)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-When a later governed owner transition removes the last remaining valid owner of those physical objects, that transition's own owner-safe cleanup or Physical Reclaim Pending state becomes responsible for the bytes. It never resurrects this deleted target, reopens its completed scheduler or borrows its old delete authorization. Generic orphan reconciliation may act only from current terminal owner evidence, not from this historical target scope.
-
-Completion As Shared does not immediately remove the minimal terminal reference-deletion evidence retained for transaction/recovery reconciliation. ADR 0256 may later prune only this deleted target's evidence after result/dependency closure and a clean startup check; current owners and shared bytes remain. The completion record retains only opaque target, terminal-delete, current-owner/object and stable-volume identities, actually reclaimed/already-absent/shared byte counts, completion/expiry times and renderer-projection acknowledgement. It contains no paths, payload, owner evidence details, user content, credentials or attention history and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
-
-The current project has no managed package-copy owner graph, Physical Reclaim Pending scheduler or Completed As Shared result. This ADR changes documentation only: it evaluates/transfers/clears/unlinks no real owner or bytes, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

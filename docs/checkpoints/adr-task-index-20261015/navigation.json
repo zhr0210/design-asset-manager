@@ -1,0 +1,50 @@
+[
+  {
+    "kind": "design",
+    "topic": "work-mode",
+    "ok": true,
+    "selected": [
+      "0489",
+      "0493",
+      "0485"
+    ],
+    "deferred": 0,
+    "bytes": 1957
+  },
+  {
+    "kind": "research",
+    "topic": "retrieval",
+    "ok": true,
+    "selected": [
+      "0183",
+      "0181",
+      "0182"
+    ],
+    "deferred": 1,
+    "bytes": 2111
+  },
+  {
+    "kind": "operations",
+    "topic": "library-storage",
+    "ok": true,
+    "selected": [
+      "0276",
+      "0284",
+      "0275"
+    ],
+    "deferred": 14,
+    "bytes": 2079
+  },
+  {
+    "kind": "documentation",
+    "topic": "custom-fields",
+    "ok": true,
+    "selected": [
+      "0415",
+      "0416",
+      "0417"
+    ],
+    "deferred": 22,
+    "bytes": 2098
+  }
+]

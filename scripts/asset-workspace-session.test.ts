@@ -151,14 +151,14 @@ await test('native return mismatch, failure and missing asset do not introduce r
 })
 await test('events preserve refresh sets and ignore other scopes and revoked display', async () => {
   const f = fixture()
-  for (const kind of ['download-imported', 'tool-saved', 'ocr-changed'] as const) await f.module.receive({ kind, scope })
+  for (const kind of ['tool-saved', 'ocr-changed'] as const) await f.module.receive({ kind, scope })
   await f.module.receive({ kind: 'visual-ai-changed', scope: { ...scope, assetId: 'synthetic-asset' } })
   f.selected = 'other'; await f.module.receive({ kind: 'visual-ai-changed', scope: { ...scope, assetId: 'synthetic-asset' } })
   await f.module.receive({ kind: 'card-drafts', context: { ...context, windowSelectionChanged: true } })
   await f.module.receive({ kind: 'card-metadata', context: { ...context, metadataChanged: true } })
   await f.module.receive({ kind: 'card-metadata', context })
-  assert.deepEqual(f.calls, ['assets', 'tags', 'assets', 'tags', 'assets', 'assets', 'tags', 'relations:synthetic-asset', 'assets', 'tags', 'drafts:synthetic-asset', 'desktop:synthetic-asset', 'assets'])
+  assert.deepEqual(f.calls, ['assets', 'tags', 'assets', 'assets', 'tags', 'relations:synthetic-asset', 'assets', 'tags', 'drafts:synthetic-asset', 'desktop:synthetic-asset', 'assets'])
   const before = f.calls.length
   await f.module.receive({ kind: 'ocr-changed', scope: { ...scope, generation: 'other' } }); assert.equal(f.calls.length, before)
-  f.module.revoke(); const after = f.calls.length; await f.module.receive({ kind: 'card-drafts', context }); await f.module.receive({ kind: 'download-imported', scope }); assert.equal(f.calls.length, after)
+  f.module.revoke(); const after = f.calls.length; await f.module.receive({ kind: 'card-drafts', context });  assert.equal(f.calls.length, after)
 })

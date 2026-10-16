@@ -1,5 +1,7 @@
 # P00｜基线与历史证据矩阵
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 MODE=SPEC。本次业务测试、类型检查、构建、应用启动、模型执行、真实库访问均为NOT_RUN。仅执行Git/文本/JSON/摘要检查；静态检查不冒充L1–L6业务行为证据。
 
 ## 1. 证据口径
@@ -36,7 +38,6 @@ MODE=SPEC。本次业务测试、类型检查、构建、应用启动、模型�
 | 生成图模型，T05/T24 | `node scripts/run-electron-node-test.mjs scripts/test-local-visual-ai.ts` | 默认只准备；显式执行参数才L5 | NOT_RUN / 无 |
 | 授权8图模型，T05/T24 | `node scripts/run-electron-node-test.mjs scripts/test-authorized-visual-ai.ts` | 需显式opt-in、loopback、受限输入manifest | NOT_RUN；私有输入未取得 |
 | 工作集，T19 | `npm run test-work-sets` / `npm run test-work-sets-electron` | L2/L4；不是全平台 | NOT_RUN / 无 |
-| Eagle/Legacy，T02 | `npm run test-external-connected-library-core` / `npm run test-legacy-readonly-workspace` | 合成边界；不能据此开启真实连接 | NOT_RUN / 无 |
 | 查询/旧通道，T01/T24 | `npm run test-scoped-asset-reads` / `npm run test-app-ipc-registration` / `npm run test-web-retirement` | 元数据/注册/源码规则 | NOT_RUN / 无 |
 | Python，T24 | `npm run test-python-unittest` | 既有隔离offline启动器 | NOT_RUN / 无 |
 | Windows/签名包/压力体验，T23/T24 | 对应平台工作流与真实环境需另行选择 | L6 | NOT_RUN；环境证据未取得 |
@@ -53,7 +54,6 @@ MODE=SPEC。本次业务测试、类型检查、构建、应用启动、模型�
 | 模型HTTP仅返回models | T24 | 合成models列表 | 不认定图像推理ready |
 | 历史模型不同平台/Runtime | T24 | M4+llama报告映射Windows/Ollama | 拒绝等价通过宣称 |
 | 旧受限IPC和退休网页 | T01/T24 | active-library拒绝表/App路由表 | 不当作待恢复功能 |
-| 真实Eagle未配对 | T24 | UnavailableProvider生产分支 | 不把synthetic Adapter结果升级为真实可用 |
 | 任务持久化但旧权限失效 | T02/T07（后续） | 重开新generation的临时库 | 必须重新验证身份/授权，不复活旧receipt |
 
 本阶段只把T01/T24的文档/源码判定作为当前检查。最后一项是后续契约验证需求，未开始P01或实施任务系统。

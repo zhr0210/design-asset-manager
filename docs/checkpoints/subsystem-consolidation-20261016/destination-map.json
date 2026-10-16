@@ -1,0 +1,78 @@
+{
+  "gui-shell": {
+    "path": "docs/subsystems/gui-shell.md",
+    "anchor": ""
+  },
+  "asset-workspace": {
+    "path": "docs/subsystems/gui-shell.md",
+    "anchor": "asset-workspace"
+  },
+  "work-mode": {
+    "path": "docs/subsystems/gui-shell.md",
+    "anchor": "reference-windows"
+  },
+  "local-host": {
+    "path": "docs/subsystems/local-host.md",
+    "anchor": "clients"
+  },
+  "settings-recovery": {
+    "path": "docs/subsystems/local-host.md",
+    "anchor": "configuration"
+  },
+  "media-handoff": {
+    "path": "docs/subsystems/local-host.md",
+    "anchor": "handoff"
+  },
+  "library-lifecycle": {
+    "path": "docs/subsystems/library-lifecycle.md",
+    "anchor": "library"
+  },
+  "storage-intake": {
+    "path": "docs/subsystems/library-lifecycle.md",
+    "anchor": "intake"
+  },
+  "organization": {
+    "path": "docs/subsystems/library-lifecycle.md",
+    "anchor": "organization"
+  },
+  "ai-connections": {
+    "path": "docs/subsystems/ai-system.md",
+    "anchor": "connections"
+  },
+  "model-library": {
+    "path": "docs/subsystems/ai-system.md",
+    "anchor": "models"
+  },
+  "ai-analysis": {
+    "path": "docs/subsystems/ai-system.md",
+    "anchor": "requests"
+  },
+  "ocr": {
+    "path": "docs/subsystems/ai-system.md",
+    "anchor": "ocr"
+  },
+  "visual-ai": {
+    "path": "docs/subsystems/ai-system.md",
+    "anchor": "visual"
+  },
+  "ai-runtime": {
+    "path": "docs/subsystems/ai-system.md",
+    "anchor": "execution"
+  },
+  "asset-discovery": {
+    "path": "docs/subsystems/asset-discovery.md",
+    "anchor": ""
+  },
+  "engineering": {
+    "path": "docs/agents/engineering.md",
+    "anchor": ""
+  },
+  "platform-release": {
+    "path": "docs/platform/BUILD-AND-RELEASE.md",
+    "anchor": ""
+  },
+  "optional-targets": {
+    "path": "docs/product/CAPABILITY-SCOPE.md",
+    "anchor": ""
+  }
+}

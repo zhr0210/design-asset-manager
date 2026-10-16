@@ -1,9 +1,13 @@
 # Folder Mapping Conflicts Require Explicit Reuse Rename Or Skip
 
-A Copy Into Library Plan enters **Folder Mapping Conflict Review** whenever a proposed folder-derived node conflicts with existing library organization at the same reviewed position. The review shows the complete proposed and existing hierarchy, node names and object kinds, affected candidate counts, and downstream branches. Every conflict requires one explicit choice before the mapping plan can be confirmed: **Reuse Existing**, **Create With New Name**, or **Skip This Mapping**. Copying itself is not classified as failed merely because one mapping is skipped or later needs renewed review.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Reuse Existing is available only when the existing and proposed objects are the same kind and the user deliberately selects the shown existing identity. Equal text never establishes semantic equivalence, and an Asset Collection cannot be reused as a Collection Group or vice versa. Create With New Name requires an editable collision-free name and previews the resulting hierarchy; the application may suggest a unique name but never selects or commits a suffix automatically. Skip This Mapping removes the affected branch's mapping intent and lets its candidates use the ordinary ADR 0032 collection-target order, including Unsorted Collection when no other target exists. None of the choices renames, moves, merges, replaces or deletes an existing collection object.
+## Decision
 
-One resolution may be applied across a Homogeneous Conflict Set only when proposed kind, existing kind, conflict reason and available choices match under ADR 0100. The review previews every resulting reuse, name or skipped candidate scope before accepting the shared choice; heterogeneous or newly divergent conflicts remain independent. Batch handling never treats visual name similarity as identity, crosses library boundaries, or applies one Collection target to otherwise unrelated folder branches.
+A Copy Into Library Plan enters **Folder Mapping Conflict Review** whenever a proposed folder-derived node conflicts with existing library organization at the same reviewed position.
 
-The application revalidates the resolved target identities and hierarchy immediately before each Candidate Promotion. A still-matching reviewed target may be created or reused item-atomically under ADR 0336. If an expected object was renamed, moved, deleted, replaced by another identity, changed kind or newly collides, only affected candidates enter renewed Folder Mapping Conflict Review or explicit collection-target selection. Their copied Candidate Artifacts remain valid and active; unaffected candidates continue, and no stale name is followed, no automatic fallback is selected, and no committed copy is rolled back. The current application has no Folder Mapping Conflict Review or promotion-time mapping-target revalidation. This ADR records target architecture only and reads, creates, reuses, renames, moves, merges, replaces or deletes no runtime/user file, Candidate, collection object or membership and changes no public IPC, database schema or AI Worker API.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[Copy与复合原件规格](../product/specs/compound-originals.md#adr-0337)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/storage-intake.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

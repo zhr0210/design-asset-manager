@@ -24,12 +24,6 @@
       "kind": "relative to F baseline, prior WIP retained"
     },
     {
-      "path": "docs/handoff/EAGLE-E-20261008.md",
-      "before": "09027448ab6b840c6d96a09dc2f6ae973689ae8918a786aedc7dac99a26dd1c9",
-      "after": "b0abeda4313e7f60fe23803e2cd797e8c3bd5786956a45e91197a0386116f7df",
-      "kind": "relative to F baseline, prior WIP retained"
-    },
-    {
       "path": "docs/platform/ELECTRON_PACKAGING_AUDIT.md",
       "before": "5cc7d9c1af1beade1c320324b219310e6affc2489b549ddcdb79be0f6740f056",
       "after": "8ce8bf33031182612b71a63b628844f6dc17dae6f39288ce896039d23db95899",
@@ -241,5 +235,6 @@
   "review": "main Agent static self-review; not independent external review",
   "committed": false,
   "pushed": false,
-  "published": false
+  "published": false,
+  "contentRedaction": "Retired external integration records and source fragments removed on 2026-10-14; old evidence does not qualify the current candidate."
 }

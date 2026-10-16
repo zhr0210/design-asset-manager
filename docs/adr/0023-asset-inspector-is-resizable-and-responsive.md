@@ -1,21 +1,13 @@
 # Asset Inspector Is Resizable and Responsive
 
-The persistent right-side Asset Inspector should default visible on desktop,
-while remaining resizable and collapsible. The user's inspector width and
-collapsed state should be remembered for the workspace so repeated asset review
-feels stable across selection changes and app sessions.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The inspector must have layout guardrails: minimum and maximum widths should
-protect the Asset Grid's scanning area, resizing should reflow grid columns
-without overlapping asset cards, and collapsing the inspector should preserve
-the current asset selection. On narrow windows, the inspector should become a
-right-side drawer or bottom detail layer for the selected asset instead of
-permanently consuming grid space.
+## Decision
 
-ADR 0453 Expanded Text editors may resize vertically only within the available
-Inspector or responsive detail-layer bounds. Resizing must not create
-horizontal overflow, hide the field's validation evidence or turn the current
-editor height into portable Custom Field Definition metadata.
+The persistent right-side Asset Inspector should default visible on desktop, while remaining resizable and collapsible.
 
-This keeps Eagle-like always-available detail inspection on desktop without
-making the Asset Grid feel cramped, unstable, or visually overloaded.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[工作台与导航规格](../product/specs/workspace.md#adr-0023)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/asset-workspace.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

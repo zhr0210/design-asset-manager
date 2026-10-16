@@ -1,0 +1,71 @@
+[
+  {
+    "path": "AGENTS.md",
+    "exists": true,
+    "sha256": "08092b6d65af7f5d0d6e3d27b41160517dd6ac2a6da30ef52e3af72c41aa423d"
+  },
+  {
+    "path": "DESIGN.md",
+    "exists": true,
+    "sha256": "9020ba05c117d32d1df107a2f5ae4955aa1ef66c883ed69bf4afec6a1f10f48b"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "exists": true,
+    "sha256": "d388af8f08d88b60fde2688bcd36d0cfcc20ee64f0e6d012f4aa89ba7c71c01d"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "exists": true,
+    "sha256": "2179e28538ebf8972008f2ab02ee961f7dc27f09f348b6f1c65fc79fd169b44c"
+  },
+  {
+    "path": "TASK.md",
+    "exists": true,
+    "sha256": "5897f048eaf7a2eddc2ec992dcfd16c472b03e84d2e8598533bd94c8a2e88f09"
+  },
+  {
+    "path": "docs/subsystems/README.md",
+    "exists": true,
+    "sha256": "c099ebaa07a9f35828381db39b1a55ed3476a93ecee1c6d590ea727d01bf68eb"
+  },
+  {
+    "path": "docs/subsystems/local-host.md",
+    "exists": true,
+    "sha256": "d83bb9ba98767b71d3aea8c4b6ccee0befa9975103f4209429b1f9cb5642b984"
+  },
+  {
+    "path": "docs/subsystems/asset-workspace.md",
+    "exists": true,
+    "sha256": "fa67618de1e9475c4e559c227db748d0cc9851ae3f8e253bad19a0d495674bd0"
+  },
+  {
+    "path": "docs/subsystems/settings-recovery.md",
+    "exists": true,
+    "sha256": "62de66683d7fe95077774171346ee38f2dc273998009c13e89490d9fe04c40ea"
+  },
+  {
+    "path": "docs/design/README.md",
+    "exists": true,
+    "sha256": "ee01b475fba9a27c5b2b27604df40925de73175ed2274c04b5b17a3477a0a36b"
+  },
+  {
+    "path": "src/renderer/README.md",
+    "exists": true,
+    "sha256": "c9ae2a740abe9c6cdbf79afcc313ad958da38f33d298c2fb348a310d2ef94b2d"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "exists": true,
+    "sha256": "29979cdb32dcbc53a0b611a161b63b44fb7ef44afac9ad76b58b4b38496136ce"
+  },
+  {
+    "path": ".codeindex/module-map.json",
+    "exists": true,
+    "sha256": "3480d44fc9cb28bd1e7df398ea9d7b03f667c8eacc112882ecc2d6e5c6cc9ba8"
+  },
+  {
+    "path": "docs/subsystems/gui-shell.md",
+    "exists": false
+  }
+]

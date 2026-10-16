@@ -1,0 +1,5 @@
+{
+  "yaml_unchanged": true,
+  "visual_body_from_overview_unchanged": true,
+  "scope": "Only the ownership/navigation paragraph before Overview changes. No technical migration from visual rules was needed; design measurements and behavior-spec links retained."
+}

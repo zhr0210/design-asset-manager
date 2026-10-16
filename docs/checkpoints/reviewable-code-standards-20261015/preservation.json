@@ -1,0 +1,16 @@
+{
+  "old_anchors": [
+    "engineering-scope",
+    "host-authority",
+    "data-integrity",
+    "behaviour-tests",
+    "isolation",
+    "resource-lifetime",
+    "ui-verification",
+    "candidate-identity",
+    "semantic-review",
+    "lesson-promotion"
+  ],
+  "missing": [],
+  "review": "All original ten sections were reviewed against baseline: old guarantees moved into guarantee/action fields; scope/autonomy, Host, data, test isolation/real use, lifetime/platform, UI, candidate/reporting, document ownership/behavior validation and lesson-promotion semantics retained. New material expands executable review and examples; links are unexecuted evidence entrypoints. No new incident counts or product implementation claims."
+}

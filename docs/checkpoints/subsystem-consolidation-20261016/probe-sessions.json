@@ -1,0 +1,37 @@
+[
+  {
+    "agent": "/root/five_engineering",
+    "session_id": "01a14244-57dd-7bd0-b910-158e7266e9d8",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/five_future",
+    "session_id": "01a14245-5841-7903-bf2e-e5d1875df188",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/five_discovery",
+    "session_id": "01a14245-35da-7650-abd6-cb14126e7054",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/five_gui_data",
+    "session_id": "01a14244-3824-7d43-9f65-090bf963d20c",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/five_ai",
+    "session_id": "01a14244-0c8c-7b02-90e1-eef1f803a9b6",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

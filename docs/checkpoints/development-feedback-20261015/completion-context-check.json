@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "errors": [],
+  "warnings": [
+    {
+      "code": "UNTRACKED_FIRST_PARTY_SOURCE",
+      "message": "6 untracked first-party source file(s) were excluded from trusted ownership coverage."
+    }
+  ],
+  "coverage": {
+    "trackedRepositoryFiles": 3623,
+    "repositoryFiles": 3623,
+    "relevantSourceFiles": 845,
+    "indexableSourceFiles": 798,
+    "ownedSourceFiles": 798,
+    "excludedSourceFiles": 47,
+    "unownedSourceFiles": 0,
+    "duplicateSourceFiles": 0,
+    "untrackedFirstPartySourceFiles": 6
+  },
+  "feedback": {
+    "records": 13,
+    "sources": [
+      "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "LESSONS.md"
+    ]
+  },
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  }
+}

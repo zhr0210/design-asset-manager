@@ -1,6 +1,6 @@
 # A/B 原生窗口候选
 
-视觉只由[DESIGN](../../DESIGN.md)维护，当前B用户行为见[悬浮工作窗交互规格](../../docs/design/WORK-WINDOW-INTERACTIONS.md)，技术机制见[工作模式模块](../../src/main/work-mode/README.md)。旧候选结果不构成新视觉设计的资格，实际版本与缺口由[CURRENT-STATE](../../docs/handoff/CURRENT-STATE.md)维护。
+视觉只由[DESIGN](../../DESIGN.md)维护，当前B用户行为见[悬浮工作窗交互规格](../../docs/design/INTERACTIONS.md#work-window)，技术机制见[工作模式模块](../../src/main/work-mode/README.md)。旧候选结果不构成新视觉设计的资格，实际版本与缺口由[CURRENT-STATE](../../docs/handoff/CURRENT-STATE.md)维护。
 
 ## B色板选择器（2026-10-13）
 

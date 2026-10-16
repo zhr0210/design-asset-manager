@@ -1,0 +1,589 @@
+{
+  "schema_version": 1,
+  "purpose": "Documentation responsibilities and task navigation; not capability acceptance or a second task registry.",
+  "topics": [
+    {
+      "id": "gui-shell",
+      "title": "GUI系统：界面外壳、状态与跨端协作",
+      "routes": [
+        "desktop-shell",
+        "asset-workspace",
+        "settings-paths",
+        "work-mode"
+      ],
+      "sources": [
+        "src/renderer/main.tsx",
+        "src/renderer/App.tsx",
+        "src/renderer/components/layout/AppShell.tsx",
+        "src/renderer/components/layout/WorkspaceConnection.tsx",
+        "src/renderer/components/layout/WorkspaceTransitions.tsx",
+        "src/renderer/workspace-client.ts",
+        "src/renderer/browser-transport.ts",
+        "src/renderer/asset-workspace-session.internal.ts",
+        "src/renderer/workspace-transition-participant.ts",
+        "src/renderer/workspace-drafts.ts",
+        "src/renderer/README.md"
+      ],
+      "test_profiles": [
+        "desktop_shell",
+        "asset_workspace",
+        "settings_paths"
+      ],
+      "reference": "docs/subsystems/gui-shell.md",
+      "source_roots": [
+        "src/renderer/components/layout/",
+        "src/renderer/main.tsx",
+        "src/renderer/workspace-client.ts",
+        "src/renderer/browser-transport.ts",
+        "src/renderer/asset-workspace-session.internal.ts",
+        "src/renderer/workspace-transition-participant.ts",
+        "src/renderer/workspace-drafts.ts"
+      ]
+    },
+    {
+      "id": "local-host",
+      "title": "应用、双客户端与生命周期",
+      "routes": [
+        "desktop-shell"
+      ],
+      "sources": [
+        "src/main/index.ts",
+        "src/main/local-host/README.md",
+        "src/main/local-host/local-dam-server.ts",
+        "src/main/local-host/workspace-transitions.ts",
+        "src/shared/client/workspace-client.ts",
+        "src/preload/index.ts",
+        "src/renderer/App.tsx"
+      ],
+      "test_profiles": [
+        "desktop_shell",
+        "main_ipc_registration"
+      ],
+      "reference": "docs/subsystems/local-host.md",
+      "source_roots": [
+        "src/main/local-host/",
+        "src/preload/"
+      ]
+    },
+    {
+      "id": "library-lifecycle",
+      "title": "资料库、持锁与维护",
+      "routes": [
+        "asset-lifecycle",
+        "library-creation"
+      ],
+      "sources": [
+        "src/main/active-library-runtime.ts",
+        "src/main/library-lifecycle/active-library-host.ts",
+        "src/main/library-lifecycle/active-library-session.ts",
+        "src/main/ipc/active-library.ipc.ts",
+        "src/main/library-lifecycle/production-active-library-dependencies.ts",
+        "src/main/library-lifecycle/README.md",
+        "src/main/library-lifecycle/LIBRARY-START.md"
+      ],
+      "test_profiles": [
+        "asset_lifecycle",
+        "library_start",
+        "library_creation",
+        "asset_trash"
+      ],
+      "reference": "docs/subsystems/library-lifecycle.md",
+      "source_roots": [
+        "src/main/active-library-runtime.ts",
+        "src/main/ipc/active-library.ipc.ts",
+        "src/main/library-lifecycle/"
+      ]
+    },
+    {
+      "id": "storage-intake",
+      "title": "原件、Copy入库与派生文件",
+      "routes": [
+        "capture-intake",
+        "source-discovery"
+      ],
+      "sources": [
+        "src/main/capture-intake/README.md",
+        "src/main/capture-intake/add-assets.workflow.ts",
+        "src/main/capture-intake/capture-gateway.ts",
+        "src/main/library-lifecycle/owned-image-intake.ts",
+        "src/main/library-lifecycle/owned-image-recovery.ts",
+        "src/main/image-tools/README.md"
+      ],
+      "test_profiles": [
+        "capture_intake",
+        "asset_storage_safety",
+        "source_discovery"
+      ],
+      "reference": "docs/subsystems/storage-intake.md",
+      "source_roots": [
+        "src/main/capture-intake/",
+        "src/main/library-lifecycle/"
+      ]
+    },
+    {
+      "id": "asset-workspace",
+      "title": "素材工作台、详情与共享展示",
+      "routes": [
+        "asset-workspace"
+      ],
+      "sources": [
+        "src/renderer/routes/Library.tsx",
+        "src/renderer/components/library/canvas/LibraryCanvas.tsx",
+        "src/renderer/components/library/canvas/LibraryFocus.tsx",
+        "src/renderer/stores/asset.store.ts",
+        "src/renderer/README.md",
+        "src/main/asset-card/README.md"
+      ],
+      "test_profiles": [
+        "asset_workspace"
+      ],
+      "reference": "docs/subsystems/asset-workspace.md",
+      "source_roots": [
+        "src/renderer/components/library/canvas/",
+        "src/renderer/routes/",
+        "src/renderer/stores/"
+      ]
+    },
+    {
+      "id": "organization",
+      "title": "组织、标签、笔记与人工内容",
+      "routes": [
+        "asset-workspace",
+        "asset-lifecycle"
+      ],
+      "sources": [
+        "src/main/library-lifecycle/library-organization.ts",
+        "src/main/library-lifecycle/asset-notebook.ts",
+        "src/main/library-lifecycle/work-sets.ts",
+        "src/main/library-lifecycle/active-library-tag-metadata.ts",
+        "src/main/independent-tags/README.md",
+        "src/shared/client/workspace-client.ts"
+      ],
+      "test_profiles": [
+        "asset_workspace",
+        "asset_lifecycle"
+      ],
+      "reference": "docs/subsystems/organization.md",
+      "source_roots": [
+        "src/main/library-lifecycle/"
+      ]
+    },
+    {
+      "id": "asset-discovery",
+      "title": "文字、颜色、语义与图像检索",
+      "routes": [
+        "asset-discovery"
+      ],
+      "sources": [
+        "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+        "src/main/asset-search/README.md",
+        "src/main/retrieval-workspace/README.md",
+        "src/main/retrieval-workspace/retrieval-runtime.ts",
+        "src/shared/workflows/asset-discovery.workflow.ts",
+        "src/shared/client/workspace-client.ts"
+      ],
+      "test_profiles": [
+        "asset_discovery"
+      ],
+      "reference": "docs/subsystems/asset-discovery.md",
+      "source_roots": [
+        "src/main/retrieval-workspace/",
+        "src/renderer/components/library/canvas/",
+        "src/shared/workflows/"
+      ]
+    },
+    {
+      "id": "ai-analysis",
+      "title": "基础分析、独立标签与后台任务",
+      "routes": [
+        "ai-analysis"
+      ],
+      "sources": [
+        "src/main/background-analysis/README.md",
+        "src/main/independent-tags/README.md",
+        "src/main/background-analysis/basic-analysis-controller.ts",
+        "src/main/background-analysis/background-analysis-controller.ts",
+        "src/main/ipc/main-ipc-composition.ts"
+      ],
+      "test_profiles": [
+        "ai_analysis",
+        "python_ai_worker"
+      ],
+      "reference": "docs/subsystems/ai-analysis.md",
+      "source_roots": [
+        "src/main/background-analysis/",
+        "src/main/ipc/main-ipc-composition.ts"
+      ]
+    },
+    {
+      "id": "ocr",
+      "title": "OCR执行、空结果与修正",
+      "routes": [
+        "ai-analysis",
+        "ai-runtime"
+      ],
+      "sources": [
+        "src/main/ocr/README.md",
+        "src/main/background-ocr/README.md",
+        "src/main/ocr/ocr-controller.ts",
+        "src/main/ocr/ocr-runtime.ts",
+        "src/main/ipc/asset-ocr.ipc.ts"
+      ],
+      "test_profiles": [
+        "ai_analysis",
+        "cross_platform_runtime"
+      ],
+      "reference": "docs/subsystems/ocr.md",
+      "source_roots": [
+        "src/main/ipc/asset-ocr.ipc.ts",
+        "src/main/ocr/"
+      ]
+    },
+    {
+      "id": "visual-ai",
+      "title": "深度分析、提示词反推与图片工具",
+      "routes": [
+        "prompt-reverse",
+        "ai-analysis"
+      ],
+      "sources": [
+        "src/main/visual-ai/README.md",
+        "src/main/visual-ai/visual-ai-controller.ts",
+        "src/main/visual-ai/openai-vision.transport.ts",
+        "src/renderer/components/asset/VisualAiPanel.tsx",
+        "src/main/ipc/visual-ai.ipc.ts",
+        "src/main/image-tools/README.md"
+      ],
+      "test_profiles": [
+        "prompt_reverse",
+        "ai_analysis"
+      ],
+      "reference": "docs/subsystems/visual-ai.md",
+      "source_roots": [
+        "src/main/ipc/visual-ai.ipc.ts",
+        "src/main/visual-ai/",
+        "src/renderer/components/asset/"
+      ]
+    },
+    {
+      "id": "ai-connections",
+      "title": "AI连接、账号与Pi协议",
+      "routes": [
+        "prompt-reverse",
+        "ai-runtime"
+      ],
+      "sources": [
+        "src/main/ai-gateway/README.md",
+        "src/main/ai-gateway/PROVIDER-MATRIX.md",
+        "src/main/ai-gateway/ai-connection-service.ts",
+        "src/main/ai-gateway/pi-runtime-host.ts",
+        "pi-runtime/README.md",
+        "src/main/ipc/ai-connection.ipc.ts",
+        "pi-runtime/worker.mjs"
+      ],
+      "test_profiles": [
+        "prompt_reverse",
+        "shared_ai_runtime"
+      ],
+      "reference": "docs/subsystems/ai-connections.md",
+      "source_roots": [
+        "pi-runtime/",
+        "src/main/ai-gateway/",
+        "src/main/ipc/ai-connection.ipc.ts"
+      ]
+    },
+    {
+      "id": "model-library",
+      "title": "模型制品、正式库存与签名目录",
+      "routes": [
+        "model-library",
+        "model-library-core",
+        "model-storage-root-registry",
+        "model-library-product-pilot",
+        "official-model-catalog-release"
+      ],
+      "sources": [
+        "src/main/model-library-workspace/README.md",
+        "src/main/model-library-workspace/managed-model-library.ts",
+        "src/main/model-library-workspace/china-model-mirror.ts",
+        "src/main/model-library-workspace/model-file-transfer.ts",
+        "src/main/model-library/README.md",
+        "src/main/model-library-workspace/model-library-workspace.composition.ts"
+      ],
+      "test_profiles": [
+        "model_library",
+        "model_library_core_tracer",
+        "model_library_root_registry_tracer",
+        "model_library_product_pilot",
+        "official_model_catalog_release"
+      ],
+      "reference": "docs/subsystems/model-library.md",
+      "source_roots": [
+        "src/main/model-library-workspace/"
+      ]
+    },
+    {
+      "id": "ai-runtime",
+      "title": "执行Runtime、资源与物理退出",
+      "routes": [
+        "ai-runtime",
+        "runtime-package"
+      ],
+      "sources": [
+        "src/main/services/ai-runtime/README.md",
+        "src/main/services/ai-runtime/managed-vision-runtime.ts",
+        "src/main/local-ai-resources/resource-governor.ts",
+        "src/main/visual-ai/visual-admission.ts",
+        "src/main/retrieval-workspace/retrieval-runtime.ts",
+        "src/main/ipc/disabled-app.ipc.ts"
+      ],
+      "test_profiles": [
+        "shared_ai_runtime",
+        "cross_platform_runtime",
+        "runtime_package"
+      ],
+      "reference": "docs/subsystems/ai-runtime.md",
+      "source_roots": [
+        "src/main/ipc/disabled-app.ipc.ts",
+        "src/main/local-ai-resources/",
+        "src/main/retrieval-workspace/",
+        "src/main/services/ai-runtime/",
+        "src/main/visual-ai/"
+      ]
+    },
+    {
+      "id": "work-mode",
+      "title": "工作集、macOS原生悬浮窗与预览",
+      "routes": [
+        "work-mode",
+        "desktop-shell"
+      ],
+      "sources": [
+        "src/main/work-mode/README.md",
+        "src/main/work-mode/work-window-controller.ts",
+        "src/main/work-mode/native-shelf-work-window.ts",
+        "src/main/work-mode/electron-work-window.ts",
+        "src/main/work-mode/shelf-draft-store.ts",
+        "native/shelf-candidates/README.md",
+        "src/main/index.ts",
+        "native/shelf-candidates/NativeWorkShelf.swift",
+        "native/shelf-candidates/WorkShelfInteraction.swift",
+        "native/shelf-candidates/WorkShelfColorPicker.swift"
+      ],
+      "test_profiles": [
+        "desktop_shell",
+        "asset_workspace"
+      ],
+      "reference": "docs/subsystems/work-mode.md",
+      "source_roots": [
+        "native/shelf-candidates/",
+        "src/main/work-mode/"
+      ]
+    },
+    {
+      "id": "media-handoff",
+      "title": "视频参考帧与跨应用文件交付",
+      "routes": [
+        "work-mode"
+      ],
+      "sources": [
+        "src/main/work-mode/work-media-controller.ts",
+        "src/main/work-mode/work-media-storage.ts",
+        "src/main/work-mode/work-file-handoff.ts",
+        "src/main/work-mode/macos-video-runtime.ts",
+        "src/main/work-mode/windows-video-runtime.ts",
+        "src/main/work-mode/media-response.ts"
+      ],
+      "test_profiles": [
+        "desktop_shell",
+        "asset_storage_safety"
+      ],
+      "reference": "docs/subsystems/media-handoff.md",
+      "source_roots": [
+        "src/main/work-mode/"
+      ]
+    },
+    {
+      "id": "settings-recovery",
+      "title": "设置、路径、诊断与旧库找回",
+      "routes": [
+        "settings-paths",
+        "desktop-shell"
+      ],
+      "sources": [
+        "src/renderer/routes/Settings.tsx",
+        "src/main/services/settings.service.ts",
+        "src/main/ipc/settings.ipc.ts",
+        "src/main/path-migration/path-migration-executor.ts",
+        "src/main/local-host/workspace-drafts.ts",
+        "src/main/legacy-readonly-workspace/README.md"
+      ],
+      "test_profiles": [
+        "settings_paths",
+        "desktop_shell"
+      ],
+      "reference": "docs/subsystems/settings-recovery.md",
+      "source_roots": [
+        "src/main/ipc/settings.ipc.ts",
+        "src/main/local-host/",
+        "src/main/path-migration/",
+        "src/main/services/",
+        "src/renderer/routes/"
+      ]
+    },
+    {
+      "id": "platform-release",
+      "title": "平台、构建资源、安装与发行",
+      "routes": [
+        "release-packaging",
+        "official-model-catalog-release"
+      ],
+      "sources": [
+        "src/main/platform/path-resolver.ts",
+        "src/main/packaging/release-flow-governance.ts",
+        "scripts/run-electron-builder.mjs",
+        "package.json",
+        ".github/workflows/cross-platform-governance.yml",
+        ".github/workflows/macos-package-artifact.yml",
+        ".github/workflows/release-packaging-dry-run.yml",
+        ".github/workflows/release-signed-candidate.yml"
+      ],
+      "test_profiles": [
+        "release_flow",
+        "official_model_catalog_release"
+      ],
+      "reference": "docs/subsystems/platform-release.md",
+      "source_roots": [
+        "./",
+        ".github/workflows/cross-platform-governance.yml",
+        ".github/workflows/macos-package-artifact.yml",
+        ".github/workflows/release-packaging-dry-run.yml",
+        ".github/workflows/release-signed-candidate.yml",
+        "scripts/run-electron-builder.mjs",
+        "src/main/packaging/",
+        "src/main/platform/"
+      ]
+    },
+    {
+      "id": "engineering",
+      "title": "工程导航、规范、审查与反馈",
+      "routes": [
+        "agent-governance"
+      ],
+      "sources": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "docs/code-standards.md",
+        "LESSONS.md",
+        "docs/agents/DEVELOPMENT-PROBLEMS.md",
+        ".codeindex/module-map.json",
+        "scripts/agent-context-router.mjs",
+        "scripts/development-feedback.mjs",
+        "scripts/check-documentation.py",
+        "scripts/check-docs-sync.py",
+        "scripts/check-adr-router.py",
+        "scripts/documentation-governance.test.py",
+        "scripts/agent-context-router.test.mjs",
+        "scripts/development-feedback.test.mjs",
+        "scripts/adr-context.mjs",
+        "scripts/adr-context.test.mjs"
+      ],
+      "test_profiles": [
+        "agent_context_router",
+        "architecture_knowledge"
+      ],
+      "reference": "docs/subsystems/engineering.md",
+      "source_roots": [
+        "./",
+        "scripts/agent-context-router.mjs",
+        "scripts/development-feedback.mjs",
+        "scripts/check-documentation.py",
+        "scripts/check-docs-sync.py",
+        "scripts/check-adr-router.py",
+        "scripts/documentation-governance.test.py",
+        "scripts/agent-context-router.test.mjs",
+        "scripts/development-feedback.test.mjs",
+        "scripts/adr-context.mjs",
+        "scripts/adr-context.test.mjs"
+      ]
+    },
+    {
+      "id": "optional-targets",
+      "title": "有效目标、可选能力与退休范围",
+      "routes": [
+        "source-discovery"
+      ],
+      "sources": [
+        "docs/product/PRODUCT-FOUNDATION.md",
+        "docs/adr/README.md",
+        "docs/product/PLUGIN-PLATFORM-DISCUSSION-20260913.md",
+        "docs/product/WEB-COLLECTION-RETIREMENT-20260913.md"
+      ],
+      "test_profiles": [
+        "source_discovery"
+      ],
+      "reference": "docs/subsystems/optional-targets.md",
+      "source_roots": []
+    }
+  ],
+  "module_references": [
+    "ai-service/README.md",
+    "ai-service/core/README.md",
+    "ai-service/eval/README.md",
+    "ai-service/models/README.md",
+    "ai-service/models/legacy/README.md",
+    "ai-service/prompts/qwen3vl/README.md",
+    "ai-service/utils/README.md",
+    "ai-service/workers/README.md",
+    "native/shelf-candidates/README.md",
+    "pi-runtime/README.md",
+    "src/main/README.md",
+    "src/main/ai-acceptance/README.md",
+    "src/main/ai-gateway/README.md",
+    "src/main/asset-card/README.md",
+    "src/main/asset-search/README.md",
+    "src/main/background-analysis/README.md",
+    "src/main/background-ocr/README.md",
+    "src/main/capture-intake/README.md",
+    "src/main/image-tools/README.md",
+    "src/main/independent-tags/README.md",
+    "src/main/ipc/README.md",
+    "src/main/legacy-readonly-workspace/README.md",
+    "src/main/library-lifecycle/README.md",
+    "src/main/local-host/README.md",
+    "src/main/model-library-workspace/README.md",
+    "src/main/model-library/README.md",
+    "src/main/ocr/README.md",
+    "src/main/platform/windows-backup-native/README.md",
+    "src/main/retrieval-workspace/README.md",
+    "src/main/services/README.md",
+    "src/main/services/ai-client/README.md",
+    "src/main/services/ai-runtime/README.md",
+    "src/main/services/color-palette/README.md",
+    "src/main/visual-ai/README.md",
+    "src/main/work-mode/README.md",
+    "src/renderer/README.md",
+    "src/renderer/components/asset/README.md",
+    "src/renderer/components/gallery/README.md",
+    "src/renderer/components/library/README.md",
+    "src/renderer/components/library/canvas/README.md",
+    "src/renderer/components/tag/README.md",
+    "src/shared/README.md"
+  ],
+  "active_contracts": [
+    "docs/design/INTERACTIONS.md",
+    "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+    "docs/design/WORK-WINDOW-INTERACTIONS.md",
+    "docs/design/WORKSPACE-INTERACTIONS.md",
+    "docs/product/APP-DESIGN-ALIGNMENT-SPEC-20261013.md",
+    "docs/product/ASSET-NOTEBOOKS-20260917.md",
+    "docs/product/COMMERCIAL-DEVELOPMENT-GOALS.md",
+    "docs/product/LIBRARY-ORGANIZATION-20260919.md",
+    "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+    "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+    "docs/product/PRODUCT-FOUNDATION.md",
+    "docs/product/RELEASE-ACCEPTANCE.md",
+    "docs/product/WORK-MODE-AND-MOTION-REFERENCE.md",
+    "docs/product/WORK-SETS-20260920.md"
+  ]
+}

@@ -1,21 +1,13 @@
 # Interrupted Recovery Delete Reconciles Once And Shows A Twenty-Four-Hour Result
 
-When ADR 0245 Recovery-Protected Reference Removal In Flight is interrupted by main-process termination or an unclean application exit, the next host performs one idempotent **Interrupted Recovery Delete Reconciliation** before package cleanup, recovery actions or another owner mutation may act on that exact target. Reconciliation reads only the minimal device-local owner generations and transaction journal needed to determine which side of the atomic reference-removal boundary durably committed.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-If durable evidence proves that reference and recovery-gate removal committed, the delete decision remains terminal as **Recovered As Deleted**. The host does not recreate either record or reinterpret later ADR 0244 scan expiry. Already removed physical bytes remain removed; any unowned managed bytes still present continue only through owner-safe physical cleanup or ADR 0230-style Physical Reclaim Pending.
+## Decision
 
-If durable evidence proves that reference removal did not commit, the original ambiguous managed-copy reference and ADR 0240 recovery safety gate remain authoritative as **Recovered As Protected**. The accepted delete authorization, exact-name confirmation and old owner scan remain consumed. Reconciliation does not rerun the scan, reopen confirmation, restart ADR 0245's five-second transaction or retry the destructive reference write.
+When ADR 0245 Recovery-Protected Reference Removal In Flight is interrupted by main-process termination or an unclean application exit, the next host performs one idempotent **Interrupted Recovery Delete Reconciliation** before package cleanup, recovery actions or another owner mutation may act on that exact target.
 
-If neither committed nor uncommitted outcome can be proved, reconciliation emits no false recovered outcome and performs no reference or byte mutation. ADR 0247 places the exact target behind a neutral Recovery Delete Reconciliation Safety Gate that blocks cleanup and owner-changing actions until bounded local evidence repair establishes an outcome; missing, corrupt or contradictory records are not proof of either side.
+## Detailed contract and provenance
 
-After a proven outcome, Storage Management receives one path-free **Recovered Protected-Copy Delete Result** with Recovered As Deleted or Recovered As Protected status. It identifies the package in ordinary path-free product terms, states that an interrupted delete was reconciled rather than retried and shows the current reference and physical-reclaim class. It may report actual reclaimed bytes when authoritative evidence provides them, but never substitutes the earlier reclaim projection for a final result.
+详细状态、交互、数值边界和例外的唯一正文为[模型存储与清理恢复规格](../product/specs/model-storage-lifecycle.md#adr-0246)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-The result expires at the earlier of one usable Storage Management viewing opportunity or 24 elapsed hours after reconciliation. A viewing opportunity begins only when a usable renderer acknowledges projection; the card remains stable for that surface session and is pruned after dismissal or leaving the surface. If never projected, the hard cap removes it. No focus duration, eye tracking, click history or proof of reading is recorded.
-
-The result is explanatory only. It creates no startup modal, OS notification, badge-driven urgency, Activity History entry, owner, scan, confirmation, cleanup authorization or storage reservation. Its dismissal or expiry cannot alter the recovered reference outcome or stop owner-safe physical cleanup that follows an already committed deletion.
-
-The reconciliation/result record retains only opaque transaction, target, gate, scan, owner-generation and volume identities, committed/uncommitted result class, coarse physical-reclaim class, reconciliation/expiry times and renderer-projection acknowledgement. It contains no typed package name, paths, payload, owner evidence, credentials, user content, filesystem event trail or attention history and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
-
-The current Runtime Package/session implementation has no recovery-delete journal, startup reference-removal reconciliation, Physical Reclaim Pending continuation or 24-hour protected-copy delete result. This ADR changes documentation only: it reconciles/retries/deletes no real reference or bytes, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.
-
-ADR 0250 applies the same one-viewing-or-24-hour explanatory-result pattern to an interrupted ADR 0249 finalization, but it reconciles terminal normalization of an already neutral-gated target. Its non-commit result restores ADR 0247 neutral safety rather than this ADR's original ADR 0240 protected reference state.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

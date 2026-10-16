@@ -3,7 +3,6 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import os from 'node:os'
 import { createAssetLibraryPathGovernanceReport } from '../src/main/path-migration/asset-library-path-governance'
-import { createDownloadPathDryRunPlan, sanitizeDownloadFilename } from '../src/main/path-migration/download-path-governance'
 import { createMediaPathGovernancePlan } from '../src/main/path-migration/media-path-governance'
 
 const assetReport = createAssetLibraryPathGovernanceReport([
@@ -18,17 +17,6 @@ assert.equal(assetReport.autoUpdateFilePath, false)
 assert.equal(assetReport.missingFileReportShape[0].existenceCheckDeferred, true)
 assert.equal(assetReport.remapSuggestions[1].suggestedAction, 'skip-empty-path')
 
-assert.equal(sanitizeDownloadFilename('bad:name?.png'), 'bad_name_.png')
-const downloadPlan = createDownloadPathDryRunPlan({
-  downloadsRoot: path.join('workspace', 'downloads'),
-  requestedFilename: 'bad:name?.png',
-  existingFilenames: ['bad_name_.png']
-})
-assert.equal(downloadPlan.phase, '14B')
-assert.equal(downloadPlan.dryRunOnly, true)
-assert.equal(downloadPlan.autoModifyDownloadQueue, false)
-assert.equal(downloadPlan.sanitizedFilename, 'bad_name_-2.png')
-assert.equal(downloadPlan.duplicateStrategy, 'append-counter')
 
 const mediaPlan = createMediaPathGovernancePlan('thumbnail', 'asset-1', 'thumb.jpg', 'legacy-thumb.jpg')
 assert.equal(mediaPlan.phase, '14C')
@@ -40,7 +28,6 @@ assert.equal(mediaPlan.reference.relativePath, 'thumbnail/asset-1/thumb.jpg')
 
 for (const file of [
   '.codeindex/asset-library-path-governance.json',
-  '.codeindex/download-path-governance.json',
   '.codeindex/media-path-governance.json'
 ]) {
   const manifest = JSON.parse(await fs.readFile(file, 'utf8')) as { privacy?: { containsRealAssetPaths?: boolean } }
@@ -49,7 +36,6 @@ for (const file of [
 
 for (const file of [
   'src/main/path-migration/asset-library-path-governance.ts',
-  'src/main/path-migration/download-path-governance.ts',
   'src/main/path-migration/media-path-governance.ts'
 ]) {
   const source = await fs.readFile(file, 'utf8')

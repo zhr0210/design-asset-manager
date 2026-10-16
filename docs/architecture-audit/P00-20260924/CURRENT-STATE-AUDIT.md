@@ -1,5 +1,7 @@
 # P00｜当前状态审计
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 MODE=SPEC；2026-09-24；状态：ready_for_review。本文是源码/材料审计，不是业务测试报告。仅核查P00，不实施后续阶段。
 
 ## 1. 输入、优先级与出处
@@ -41,7 +43,6 @@ package-lock为v3；锁定Electron30.5.1、React18.3.1、TypeScript5.9.3、bette
 | F07 | 主查询仍以列表读取和Renderer纯词法投影为主 | `active-library-asset-queries.ts`；`Library.tsx:167` | 未接目标Host分页/中文FTS/混合向量索引 |
 | F08 | 工作集内容/布局经Host持久化；原生窗按token/成员范围调用 | `index.ts:149`；`work-window-controller.ts`；Host `writeWorkSet` | 不等于视频、跨软件原件拖出已交付 |
 | F09 | 模型库Workspace正式可达，但发行目录输入为null | `model-library-workspace.composition.ts:65–89`；`official-model-catalog.release-input.json` | 源码会解析为missing；本轮未执行该模块或查看真实目录 |
-| F10 | Eagle正式组合选择UnavailableProvider | `connected-library-runtime.ts:43–59` | 合成Adapter存在，不等于真实Eagle已配对 |
 | F11 | Legacy正式只读入口存在 | `legacy-readonly-workspace.ts:37–106`；`readonly-library-database.internal.ts` | 只读opener当前显式限定darwin；旧资料库本轮未选择/打开 |
 | F12 | 旧Worker/Runtime IPC受限；旧反推与旧删除明确拒绝 | `disabled-app.ipc.ts`；`active-library.ipc.ts:138–145` | 不是待自动恢复功能；不能删掉拒绝边界 |
 | F13 | 主窗口sandbox=false；contextIsolation=true、nodeIntegration=false | `index.ts:102–106` | 不能宣传所有窗口均已沙箱化；不在P00修改 |
@@ -52,10 +53,10 @@ package-lock为v3；锁定Electron30.5.1、React18.3.1、TypeScript5.9.3、bette
 1. **S00未丢失**：原稿字节一致，源码的主路径与其总体描述相符。S00不是最新运行验收，本次不自动沿用其中的“通过”。
 2. **目标不是现状**：包中的`ai/planning`、`jobs`、`resources`、`egress`、`search`等逻辑模块不是现有正式统一执行层；P00不创建空目录。
 3. **后台默认能力有规范差异**：包U01以标签/描述/OCR为默认基础分析，反推主动触发；仓库CONTEXT的Baseline Automatic Analysis Profile与ADR0169还包含Embedding。两者是目标/旧目标的待对齐事项，当前不据此启用任何后台队列，也不擅改ADR。
-4. **资料库权威不能机械统一**：包“所有权威写入经Host”应解释为各数据域的权威边界。Managed资产经Active Library Host，Eagle原件属于Eagle，App DB存应用状态，Legacy不写。不能把所有数据库都迁入一个库连接。
+4. **资料库权威不能机械统一**：包“所有权威写入经Host”应解释为各数据域的权威边界。不能把所有数据库都迁入一个库连接。
 5. **旧代码有局部价值但不代表正式入口**：旧Provider的中文策略/重试已经部分迁入新transport，旧全局数据库同步不能直接恢复。`ai-runtime-adapter.ts`是plan-only结构，不能称为完整推理网关。
 6. **文档漂移仍在**：Renderer README旧段落仍写下载不可执行、工作集持久化待实现；当前组合/Host和v7模块已存在。Capture README保留早期未接线清单。P00只记录，不覆盖用户文档。
-7. **数据结果与任务状态不同**：已保存AI/OCR结果可重开，不等于未完成推理可断点恢复；Eagle Outbox和下载Journal也不是目标AI Job Journal。
+7. **数据结果与任务状态不同**：已保存AI/OCR结果可重开，不等于未完成推理可断点恢复；
 
 ## 5. 缺口与影响
 
@@ -63,7 +64,7 @@ package-lock为v3；锁定Electron30.5.1、React18.3.1、TypeScript5.9.3、bette
 - G02：历史私有8图原件、临时manifest与模型原文不在审计材料内；此前文档声明已清理。本轮不查找原件或临时目录，事实质量与原文件保持不变只能引用历史报告，不能复核字节。
 - G03：2B与8B UI总环节JSON内容相同且没有模型/时间字段，单独该文件无法标识某次执行；需配合同目录模型专属`*-ui-real-local-ai-report.json`。仍缺统一runId。
 - G04：非AI模块聚焦测试脚本存在，但本轮未取得覆盖全部模块的原始stdout/exitCode。说明文档中历史“通过”只作为历史叙述，不冒充完整日志。
-- G05：Windows、签名包、真实Eagle、大库/压力调度、云费用/最终计算位置未独立核验；均NOT_RUN或unknown。
+- G05：Windows、签名包、真实大库/压力调度、云费用/最终计算位置未独立核验；均NOT_RUN或unknown。
 - G06：`src/main/model-library-workspace/README.md`不存在；改从composition/workspace源码核查，未把缺README误判为缺模块。
 - G07：未执行完整静态依赖分析，未穷举动态import、字符串生成SQL、全部隐藏调用方；MODULE-REACHABILITY是聚焦入口人工追踪，不是安全证明或删除许可。
 - G08：不读取本机已安装权重、Runtime缓存或用户配置。锁文件/已归档校验清单不能证明此刻机器仍可运行相同模型。

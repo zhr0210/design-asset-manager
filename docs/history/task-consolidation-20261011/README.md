@@ -1,5 +1,7 @@
 # 2026-10-11任务文档整理：历史索引
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 
 - [原换主机说明](REHOST-before-consolidation.md)：旧Windows/main接续因果，与当前准备流程分开。
 - [愿景审阅包](vision-audit-20261003/README-START-HERE.md)：WC01六卡、DP01–DP10、RUX:R00–R08、EXT01/02完整原来源；28份声明SHA核验通过，未执行tools。
@@ -14,7 +16,6 @@
 以下文档被已有checkpoint引用绑定。为保持原摘要/来源，在原路径保留原字节；无需另复制到历史目录，其日期已界定身份。它们不维护新的实时状态。
 
 - [AI-CORE-20261006.md](../../handoff/AI-CORE-20261006.md)
-- [EAGLE-E-20261008.md](../../handoff/EAGLE-E-20261008.md)
 - [FOUNDATION-ADOPTION-20261006.md](../../handoff/FOUNDATION-ADOPTION-20261006.md)
 - [LOCAL-AI-NON-UI-CLOSURE-20261007.md](../../handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md)
 - [MACOS-DELIVERY-CLOSURE-20261010.md](../../handoff/MACOS-DELIVERY-CLOSURE-20261010.md)

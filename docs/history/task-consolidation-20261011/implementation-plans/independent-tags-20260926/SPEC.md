@@ -1,5 +1,7 @@
 # First implementation spec: independent tag analysis
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 Status: Draft for review. MODE=SPEC. No implementation or publication performed.
 
 ## Problem Statement
@@ -48,7 +50,6 @@ Status: Draft for review. MODE=SPEC. No implementation or publication performed.
 全部为本轮具体提案，等待审阅；过去阶段未自动改成Accepted。
 
 - 使用现有可信Main控制器与Active Library Host边界。主要测试入口为产品意图（准备、运行、读取结果、确认/拒绝、取消、恢复）；Provider/时钟仅作为可替换测试依赖，不向Renderer暴露SQL、路径或执行token。
-- 第一轮选择Managed库、手动tags、每批1–8个明确素材；主窗口和当前素材卡片保持原权限。Eagle/Legacy无新写口。描述、OCR、prompt独立化及自动Promotion订阅暂不纳入。
 - 先内部抽取单次Provider与兼容协调，固定旧综合请求/重试/解析行为；新tags采用新Recipe与严格完整响应，不修改旧综合四字段成功定义。新Recipe最多8个非空标签，每项最多80 UTF-16，去重规则版本化；空数组结构有效但不声称素材不存在任何对象。中文是质量检查维度，不能用简单字符正则排除合法品牌名后宣称语义质量已通过。
 - additive标签契约与逐能力summary，旧综合API保留。新标签结果覆盖有效AI标签投影，caption/OCR/prompt继续从原有效来源读取，不能拼装为一条虚构综合Evidence。旧路径在新模式写入标签时也必须经过同一代次/current规则；未完成适配前不允许两路同时更新当前标签。
 - 每次明确新请求分配requestGeneration；同clientRequestId相同内容返回原回执，不同内容冲突。强制重跑新ID/新代次。attempt claim使用当前Host session/lease identity与epoch，不能假定libraryGeneration每次重开变化。
@@ -72,8 +73,7 @@ Status: Draft for review. MODE=SPEC. No implementation or publication performed.
 
 ## Out of Scope
 
-自动后台三能力、自动云fallback/计费供应商接入、完整GPU遥测/Runtime自动安装、MLX/Windows优化、FTS/向量引擎、全应用GC、设计助手、主沙箱迁移、旧代码删除、Eagle真实接入、真实用户库迁移、开源/签名发布以及X阶段。
-P02的Eagle检查顺序等无关修复独立保留，不能夹在标签功能内扩大范围。旧已批准Qwen测试不是本轮已经执行的证据。
+旧已批准Qwen测试不是本轮已经执行的证据。
 
 ## Further Notes
 

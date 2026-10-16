@@ -1,0 +1,183 @@
+--- before/AGENTS.md
++++ after/AGENTS.md
+@@ -12,12 +12,12 @@
+ 
+ ## 按任务读取与写回
+ 
+-处理本项目的任何任务，先按[任务类型](docs/adr/indexes/tasks.md)与[主题/影响范围](docs/adr/indexes/topics.md)筛选少量ADR摘要，再读相关原文及链接契约，核对状态、前提与替代范围。类型只调阅读重点，不排除相关决定；不全量加载全部Core或语料，冲突显式说明，不增加逐次审批。
++按当前问题选择下表入口：功能/体验从所属子系统与行为规格进入，取舍比较可从ADR进入。所有任务均按主题与影响范围核对相关决定，但不统一先过ADR；[任务类型](docs/adr/indexes/tasks.md)与[主题](docs/adr/indexes/topics.md)用于筛选所需背景。读取足以支撑本次结论的权威章节，核对状态、前提与替代范围；不全量加载历史，冲突显式说明，不增加逐次审批。
+ 
+ | 时机 | 读取 | 写回 |
+ | --- | --- | --- |
+ | 明确产品与本次目标 | [产品基准](docs/product/PRODUCT-FOUNDATION.md)、[TASK](TASK.md)；接续查[当前状态](docs/handoff/CURRENT-STATE.md) | 范围归TASK；实际资格归CURRENT-STATE；跨系列责任归[主台账](docs/tasks/TASK-REGISTRY.md) |
+-| 定位功能、接口、状态或平台实现 | [架构](ARCHITECTURE.md)→[子系统目录](docs/subsystems/README.md)→所属专题/模块→源码 | 机制归模块；用户契约/目标归[产品规格](docs/product/README.md) |
++| 定位功能、接口、状态或平台实现 | [子系统目录](docs/subsystems/README.md)→所属专题的行为/机制正文与源码；跨层结构查[架构](ARCHITECTURE.md) | 机制归模块；用户契约/目标归[产品规格](docs/product/README.md) |
+ | 开发、诊断、Git或准备环境 | [CONTRIBUTING](CONTRIBUTING.md)相关章节；命令以package.json为准 | 工程方法归指南，执行证据归本任务检查点 |
+ | 编写或审查代码 | [开发规范](docs/code-standards.md)相关保证与所属子系统 | 通用保证归规范，局部保证归模块/测试；审查绑定候选 |
+ | 影响UI/UX，包括后端等待/错误/恢复反馈 | [DESIGN](DESIGN.md)、[交互目录](docs/design/README.md)、[真实验收](docs/agents/ui-ux-acceptance.md) | 视觉归DESIGN，行为归交互规格，预览/根因/复验归报告 |
+--- before/CONTRIBUTING.md
++++ after/CONTRIBUTING.md
+@@ -42,7 +42,9 @@
+ 
+ 所有项目任务都按主题和影响范围核对已有决定；ADR的作用涵盖产品边界、设计、数据/隐私、架构、技术和协作取舍，不按任务类型设读取白名单。调研、规划、需求或设计讨论、文档和操作任务同样适用；这些只是例子，不是完整清单。
+ 
+-开始时先按[任务类型索引](docs/adr/indexes/tasks.md)和[主题目录](docs/adr/indexes/topics.md)定位候选，再按主题定位[子系统](docs/subsystems/README.md)，读取[相关ADR](docs/adr/README.md#read-protocol)及其链接的详细契约，核对决定状态、适用条件与明确替代范围；涉及代码/工程变更时，再按[开发规范](docs/code-standards.md)核对适用保证。已有ADR解释有意选择及其原因，日常修改也要消费，不以“没有新架构决定”跳过。context:route是筛选线索，预算延后或关键词未命中不表示决定不适用；按子系统/ADR索引补查，不全量通读493篇。
++按当前问题选择首入口：功能/体验任务从[所属子系统](docs/subsystems/README.md)及相关行为规格进入，取舍比较可从[ADR主题](docs/adr/indexes/topics.md)进入，文档维护从本文§7进入。再按涉及的行为、数据、权限或兼容范围核对相关决定与必要的详细契约；[任务类型](docs/adr/indexes/tasks.md)只调阅读重点，不规定所有任务先读ADR。涉及代码/工程变更时按[开发规范](docs/code-standards.md)核对适用保证。已有ADR解释有意选择及其原因，不因“没有新架构决定”跳过相关取舍；也不以无关ADR数量证明理解。
++
++读取围绕要回答的问题收口：先定位标题/关键词再读适用章节，区分源码事实、当前约定和修改提案。工具输出截断时核对关键段落是否实际可见，缺失则缩小范围补读，或明确缩小结论；不要把批量读取请求当作已读证据。context:route是筛选线索，预算延后或未命中不表示决定不适用；沿所属专题/原文引用补查，不递归通读所有链接或493篇记录。
+ 
+ 若方案与有效决定冲突，显式指出对应条款、前提变化和取舍；核对用户最新明确要求与具体替代范围，不能静默推翻或将所有内部改动重新变成审批。规范和ADR不冻结内部类名/目录/接口；SDK/API值查安装类型与原始资料，不凭模型记忆猜。
+ 
+@@ -116,7 +118,7 @@
+ 1. **先定独立判据。** 依据用户已确认要求、原有规范/源码明确任务预期、适用保证与边界；不能从本次新措辞反推“正确答案”。主Agent在派发前保存判据，与验证提示分开。
+ 2. **固定候选。** 为受影响文档与检索工具记录字节身份；验证期间不修改候选。可用隔离的非敏感仓库资料副本；记录其包含/排除范围，缺失资料只作具体覆盖限制，不假称完整环境。Agent指令性只读不冒称OS/沙箱强制隔离。
+ 3. **简短任务盲探查。** 默认低思考强度、全新上下文，不继承编写会话或上一轮答案。派发只含简短自然任务、工作区和必要执行边界：不提示“依据项目文档/规范”“先查看索引/详细文档”“检查已有取舍”，不指定入口、文件、ADR编号、检索顺序/关键词、预期结论、评分答案，也不要求列读取文件/命令或报告检索过程。让子智能体从正常项目指令自行决定是否和怎样检索；主Agent在后台核对可观察工具轨迹，不能靠任务措辞诱发期望阅读。发出前审查提示，含这类引导则改短后再派；已泄题的运行不算无引导验收，保留记录并换新上下文。验证代理只读，主Agent唯一写入；不启动应用/模型/服务、联网或接触资料库/秘密，不递归委派。
+-4. **检查可观察行为。** 选一至两个代表任务，并加适用的相邻/边界案例。按是否自行形成正确检索链判断，不只按最终答对或自述评分：若提示未引导仍未检索所需正文，或只靠摘要/先验得出结论，不能标为索引通过。核对实际工具调用、读取文件/章节、路由参数/结果和最终理解：到达权威正文，识别有效/提案/历史与资格差异，知道写回位置，没有无关全量加载。自报“读过”不够，不索取隐藏思维链。以工具轨迹和原文支持判定，不只检查它会复述新句子。
++4. **检查可观察行为。** 选一至两个代表任务，并加适用的相邻/边界案例。按实际结论是否得到适用正文支持判断，不规定唯一检索顺序，不以读完所有链接或文件数量评分。核对工具实际返回的章节、必要的路由结果和最终理解：识别现行约定/修改提案、有效/历史与资格差异；涉及写入才核对归属。关键正文未读、只靠摘要/先验或截断后缺少必要条款，不能标为该范围通过；未读但不影响当前结论的详情只限制后续深入设计，不据此否定已有依据的高层建议。自报“读过”不够，不索取隐藏思维链；检查是否有无关全量加载。
+ 5. **主Agent修正并复验。** 区分任务歧义、入口不显眼、召回不足、正文冲突、误解或上下文过载，修对应拥有者/导航。复验使用新子智能体和等价简短任务，不能添加“去查文档”等提醒或把正确路径塞进提示，也不复用已经知道答案的上下文。对修正后的最终候选重验相关范围，保留原失败；重复无新证据则定位，不无限堆规则。
+ 6. **适用加严与收尾。** 影响大、严重保护或低思考结果不稳定时增加相邻案例或更强复核，不降低标准。结果只证明本候选与实际场景，不保证所有未来模型/措辞，不代替独立代码审查、产品真实验收或保护测试。工具/子智能体不可用就保留具体未验缺口，主Agent自审不能冒称独立探查。
+ 
+--- before/TASK.md
++++ after/TASK.md
+@@ -1,4 +1,8 @@
+-# 当前任务：无阅读提示的文档消费验收
++# 当前任务：按问题选择文档入口
++
++用户确认取消所有任务统一先读ADR的顺序；本轮已调整任务导航、相关功能入口和基于结论的检索验收方法。设置/插件两个简短任务与Host权威边界案例已由三个全新低思考只读Agent复验，关键结论均有实际正文支持；批量输出截断及猜测路径等局限明确保留，不泛化为所有任务通过。仅文档与索引，不改变产品决定、功能、模型或资料库，不提交/推送/发布。结构检查与实际轨迹结果归[本轮检查点](docs/checkpoints/task-first-navigation-20261015/README.md)。本轮目标完成后停止。
++
++## 前项：无阅读提示的文档消费验收
+ 
+ 用户要求子智能体只收到简短自然任务和必要工作区/执行边界，不提醒查看文档/索引或报告检索过程；主Agent按实际工具轨迹判断自主链路。已修改维护/验收协议、开发规范与工程专题，已用三个新低思考上下文完成短任务复验，主Agent核对实际工具轨迹/正文与独立判据，均限场景通过；旧长提示只保留原结果，不作为新标准通过。
+ 
+--- before/docs/code-standards.md
++++ after/docs/code-standards.md
+@@ -7,7 +7,7 @@
+ 
+ 先描述普通入口、触发条件和可观察前后行为，追踪Client→Host→执行/提交→回读与反馈。检查相邻同类入口、直接消费者和基于旧含义的假设；不能修一个函数就关闭父级目标，也不为当前任务建设无消费者的平台。历史计划不是新队列，旧限制/PASS不覆盖最新明确要求和当前事实。
+ 
+-ADR是所有项目任务的相关决定上下文，不仅适用于代码工作。本规范中的开发/测试/审查要求不缩小其适用范围；任何任务都按主题与影响范围读取[相关ADR](adr/README.md#read-protocol)和所链接的详细契约，理解既有取舍。核对状态/前提/明确替代范围；与有效决定冲突时指出条款和原因，不静默改写。读取既有决定不适用新增ADR的三条件，也不产生逐接口审批或冻结实现手段。
++ADR是所有项目任务的相关决定上下文，不仅适用于代码工作，也不是统一首入口。功能/体验先查所属正文，按主题与影响范围读取[相关ADR](adr/README.md#read-protocol)及支撑本次结论的契约条款，理解既有取舍。核对状态/前提/明确替代范围；与有效决定冲突时指出条款和原因，不静默改写。读取既有决定不适用新增ADR的三条件，也不产生逐接口审批或冻结实现手段。
+ 
+ 审查：目标为何需要每项变化，是否尊重相关有效决定，共享接口的调用方/测试替身是否同步，局部特殊规则是否被错误推广为全局。
+ 
+--- before/docs/agents/domain.md
++++ after/docs/agents/domain.md
+@@ -9,7 +9,7 @@
+ 
+ - For every project task, identify its subject and impact, then read the ADRs relevant to that scope. Task type is never an exemption: research, planning, product/design discussions, documentation, operations and engineering are examples, not an exhaustive list. Where implementation facts matter, also inspect the relevant code, callers and tests.
+ - For an unclear domain term, search `CONTEXT.md` for that exact term.
+-- Use [task types](../adr/indexes/tasks.md) and [topics](../adr/indexes/topics.md) to select a small set of candidate metadata before reading exact ADRs/details. Task type changes reading focus, never applicability. Use [the reading protocol](../adr/README.md#read-protocol) for the selected set. Check status, assumptions and explicit supersession, then follow extracted details in docs/product/specs. Existing ADRs provide decision context for any task; reading them is not conditional on changing code or proposing a new irreversible decision.
++- Choose the first source by the question: feature/experience work starts with its subsystem and behavior contract; trade-off comparisons may start with ADRs. Use [task types](../adr/indexes/tasks.md) and [topics](../adr/indexes/topics.md) when selecting decision context. Task type changes focus, never applicability or a mandatory reading order. Read the decisions and contract sections needed to support the actual conclusion, checking status, assumptions and explicit supersession. A high-level comparison does not require every linked detail; concrete behavior/permission designs require their applicable clauses. Existing ADRs matter beyond code changes or new irreversible decisions.
+ - Context-route matches are navigation hints; deferred or unmatched ADRs may still apply. Follow subsystem/source references as needed. Do not read the entire corpus for each task.
+ - If a proposal conflicts with an effective decision, identify the ADR/clause and explain the reason or changed assumptions. Respect the latest explicit user decision and its precise replacement scope; do not silently override or invent a new per-interface approval requirement.
+ - Verify current behavior in the composition root and executable tests.
+--- before/docs/adr/README.md
++++ after/docs/adr/README.md
+@@ -1,6 +1,6 @@
+ # ADR任务索引
+ 
+-ADR是所有项目任务的相关决定上下文，按任务类型选择阅读关注面，再按主题/影响范围挑原文；不全量加载493篇，也不把全部Core当启动必读。
++ADR是所有项目任务的相关决定上下文，不是统一首站。功能/体验先从[子系统](../subsystems/README.md)与行为规格理解当前契约，取舍比较可直接从这里进入；按主题/影响范围挑原文，任务类型只调关注面。不全量加载493篇，也不把全部Core当启动必读。
+ 
+ | 需要什么 | 进入哪里 |
+ | --- | --- |
+@@ -12,7 +12,7 @@
+ ## Read Protocol
+ 
+ 1. 明确本次任务类型及主题/影响范围；类型只调阅读重点，不排除任何任务或同主题相关决定。
+-2. 先用任务/主题索引或元数据路由挑少量候选，再完整读选中的ADR与链接的详细契约。预算延后/未命中不等于无适用决定。
++2. 需要决定背景时，用任务/主题索引或元数据路由挑少量候选，读取支撑当前结论的决定及适用契约章节。高层比较不要求遍历全部细节；规定具体行为/权限/执行机制前须核对相应条款。预算延后/未命中不等于无适用决定。
+ 3. 核对声明状态、前提与后续明确替代，按需跟到跨主题的原文引用。未显式声明状态不等于未批准；Proposed/Historical不冒充现行有效规则。
+ 4. 若结论或方案与有效决定冲突，指出条款及原因/前提变化；按最新明确用户决定的具体替代范围处理，不静默推翻或增加逐次审批。
+ 5. 决定有效性、当前实现和实际资格分开：当前机制见[子系统](../subsystems/README.md)，交付见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，目标细节见[规格](../product/specs/README.md)。
+--- before/docs/adr/indexes/tasks.md
++++ after/docs/adr/indexes/tasks.md
+@@ -1,6 +1,6 @@
+ # 按任务类型选择ADR阅读关注面
+ 
+-任何项目任务均适用ADR；下面分类不是准入白名单，也不决定某项ADR对其他任务无效。先选最接近的任务类型，再选主题/影响范围，查少量候选摘要，最后读选中的原文。新类型用general，或直接按主题检索。
++任何项目任务均适用相关ADR，但不必以ADR为首入口；功能/体验可先从[所属子系统与行为规格](../../subsystems/README.md)进入。需要决定背景时，用下面分类调整关注面，再按主题/影响范围选少量原文。分类不是准入白名单，也不决定某项ADR对其他任务无效。新类型用general，或直接按主题检索。
+ 
+ | 类型id | 任务 | 阅读重点 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/workspace.md
++++ after/docs/adr/indexes/topics/workspace.md
+@@ -3,6 +3,8 @@
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+ 运行关系见[相关子系统](../../../subsystems/asset-workspace.md)，其他主题见[主题目录](../topics.md)。
++
++本表覆盖工作台及早期收录决定，不是设置任务的必读清单。设置分类/搜索/保存体验直接查[设置专题及其行为规格](../../../subsystems/settings-recovery.md)；只核对本次触及的决定，不把下面历史收录条目当设置要求。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/model-extension.md
++++ after/docs/adr/indexes/topics/model-extension.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/model-library.md)，其他主题见[主题目录](../topics.md)。
++按问题分流：模型制品/安装/库存见[模型子系统](../../../subsystems/model-library.md)；插件、SDK与MCP见[扩展目标与边界](../../../subsystems/optional-targets.md#插件sdk与mcp接入)。扩展条款先核对[0484现行修订](../../0484-extension-contracts-and-deferred-agent-development-access.md)和[0483核心范围](../../0483-ai-plus-core-product-and-extension-boundaries.md)，具体贡献面见[0154详细契约](../../../product/specs/model-extension.md#adr-0154)；下表保留来源分组，不以编号先后决定效力。其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/subsystems/README.md
++++ after/docs/subsystems/README.md
+@@ -1,6 +1,8 @@
+ # 功能与子系统目录
+ 
+ 这里按功能协作关系组织当前软件；一个子系统可以跨Host、Shared Client、Renderer、原生helper或Worker，不按一个文件夹等于一个完整功能。先选相关专题，再跟源码核对；任何任务都按主题与影响范围读取[相关ADR](../adr/README.md#read-protocol)及链接契约，理解既有取舍。有效目标、实际实现和运行资格分别维护。
++
++设置分类/搜索/保存体验从[设置专题](settings-recovery.md)进入；插件、SDK、MCP接入从[扩展目标与边界](optional-targets.md#插件sdk与mcp接入)进入。模型权重的安装与存储仍归模型专题，不因同属可选能力而与插件运行时混为一谈。
+ 
+ | 功能/子系统 | 相关任务路由 | 实现定位线索 |
+ | --- | --- | --- |
+--- before/docs/subsystems/settings-recovery.md
++++ after/docs/subsystems/settings-recovery.md
+@@ -7,6 +7,8 @@
+ 全窗口/settings承载全局配置、AI与模型、维护和恢复；主页素材导航不在设置上方继续显示。profile设置/草稿归App，当前库内容归Library。旧DAM库通过独立只读工作区找回，不强行转换为Managed。
+ 
+ ## 正式入口与运行链
++
++设置分类、搜索范围、草稿生命周期与旧路由的当前行为见[工作台交互：应用页面导航](../design/WORKSPACE-INTERACTIONS.md#应用页面导航)；呈现见[DESIGN：配置、任务与其他应用页面](../../DESIGN.md#配置任务与其他应用页面)。评估整合时先区分现行约定、源码偏差与拟改变的体验，不把可改进的现行约定直接称作实现缺陷；AI连接管理另见[连接专题](ai-connections.md)。
+ 
+ 普通设置入口→分类页/表单→命名Client→可信Main→修订检查/原子保存→双端回读。路径迁移先plan/审查再执行，配置与实际库身份分别核对。收到的恢复草稿需显式采用/丢弃，不自动覆盖用户当前输入。
+ 
+--- before/docs/subsystems/optional-targets.md
++++ after/docs/subsystems/optional-targets.md
+@@ -9,6 +9,12 @@
+ ## 正式入口与运行链
+ 
+ 未来明确任务先读对应目标规格与重大取舍，核对当前实现消费者，再决定具体实施。当前本地Copy/理解/检索/工作集复用不依赖完整生态、云开发/MCP或每项未来状态机先完成。
++
++### 插件、SDK与MCP接入
++
++扩展接入首先核对[0484的现行边界与阶段](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)及[0483核心/可选能力范围](../adr/0483-ai-plus-core-product-and-extension-boundaries.md)：公共能力契约、MCP工具/资源适配与隔离插件运行时各有职责，Accepted目标不等于已有公开API。具体贡献面/权限设计按[扩展面详细契约](../product/specs/model-extension.md#adr-0154)和[扩展决定目录](../adr/indexes/topics/model-extension.md)选择适用条款；讨论稿仅保留来源，不取代现行修订。
++
++当前可复用的业务/权限边界从[Local Host](local-host.md)及源码旁README核对，不把现有WorkspaceClient/内部IPC当公共插件SDK。模型制品与插件包不同，前者的当前实现归[模型专题](model-library.md)。
+ 
+ ## 失败、取消与兼容保护
+ 
+--- before/docs/subsystems/engineering.md
++++ after/docs/subsystems/engineering.md
+@@ -8,7 +8,7 @@
+ 
+ ## 正式入口与运行链
+ 
+-任何项目任务先按任务类型的阅读重点和主题/影响范围筛出少量ADR元数据，再核对选中的原文/适用契约，不按任务类型排除。实现类任务再沿用户目标→任务路由/所属专题→相关ADR及其适用详细契约/源码→相关问题/经验转检查→实现/验证→原问题复验→经验事件/日期→候选评估→规范或保护测试。一个事故一主记录可关联多模块，闭源本地记录不依赖GitHub评论。
++首入口按当前问题选择，功能/体验从所属专题与行为契约进入，取舍比较可从ADR进入；任何任务仍按主题/影响范围核对相关决定，不固定检索顺序或排除任务类型。实现类任务沿用户目标→所属正文/任务路由→相关决定、必要契约与源码→相关问题/经验转检查→实现/验证→原问题复验→经验事件/日期→候选评估→规范或保护测试。一个事故一主记录可关联多模块，闭源本地记录不依赖GitHub评论。
+ 
+ AI读取材料改变含义、适用范围或检索链路时，批次结束按[维护协议](../../CONTRIBUTING.md#document-retrieval-validation)执行全新低思考只读探查：只给简短任务/工作区/必要边界，不提示查文档、阅读步骤或报告检索过程；主Agent核对实际工具轨迹/理解、修正与新上下文复验。纯排版只做适用结构检查；过程证据留本任务检查点。
+ 
+--- before/docs/product/specs/model-extension.md
++++ after/docs/product/specs/model-extension.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[model-library](../../subsystems/model-library.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++插件接入与公共契约从[扩展目标与边界](../../subsystems/optional-targets.md#插件sdk与mcp接入)进入，模型制品的当前机制另查[model-library](../../subsystems/model-library.md)；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 

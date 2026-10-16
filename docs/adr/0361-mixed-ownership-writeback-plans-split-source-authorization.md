@@ -1,11 +1,13 @@
 # Mixed-Ownership Writeback Plans Split Source Authorization
 
-A selection containing both Managed Assets and Referenced Assets may enter one read-only **Mixed-Ownership Metadata Writeback Plan** and share one semantic Metadata Writeback Field Set. Planning groups every item by its current Asset File Ownership and produces a **Managed Metadata Writeback Sub-Batch** and a **Referenced Metadata Writeback Sub-Batch**; it does not make the selection one executable batch, copy or move an Original Asset, or change ownership. Ownership or source-generation drift makes only the affected item stale and requires a fresh plan under its current evidence.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Each sub-batch has an independent **Writeback Ownership Confirmation**. The Managed confirmation authorizes protected mutation of library-owned originals and presents the resulting managed generation, ADR 0362 recovery basis and storage consequences. The Referenced confirmation prominently identifies the user-owned external source paths and physical volumes, reports availability, permission and old-source recovery evidence, and separately authorizes mutation of those external bytes. Confirming either sub-batch never submits, authorizes or changes the other; the user may confirm one, both in separate actions, or neither.
+## Decision
 
-Before either confirmation, a visible edit to the shared field selection may replan both ownership groups. Once one sub-batch is confirmed, its plan is frozen; later edits affect only an unconfirmed group and may not silently alter the confirmed work. Each sub-batch owns its own validation, cancellation boundary, execution, recovery, retry and result under ADR 0360 and the ownership-specific source-operation rules. A failure in one group does not roll back or misreport the other, although proven shared library, path, source or volume safety dependencies may pause an affected lane.
+A selection containing both Managed Assets and Referenced Assets may enter one read-only **Mixed-Ownership Metadata Writeback Plan** and share one semantic Metadata Writeback Field Set.
 
-The application may present both outcomes in one activity record linked to the originating mixed plan, but the record must retain ownership badges, separate confirmation evidence and per-item outcomes. It is not one atomic transaction, one source-modification authorization, one undo unit or one ownership conversion. No writeback item changes Asset File Ownership, and an ownership conversion completed before that item's write boundary invalidates the item rather than transferring its earlier authority.
+## Detailed contract and provenance
 
-The current application has no Mixed-Ownership Metadata Writeback Plan, ownership-specific writeback sub-batches or Writeback Ownership Confirmation surface. This ADR records target architecture only and reads, compares, serializes, stages, writes, rewrites, restores, embeds, exports, imports, attaches, converts, moves, deletes or changes no runtime/user file, sidecar, directory, database, metadata value, tag, analysis result, source relationship or ownership state and changes no public IPC, database schema or AI Worker API.
+详细状态、交互、数值边界和例外的唯一正文为[归属转换与元数据写回规格](../product/specs/writeback.md#adr-0361)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/storage-intake.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

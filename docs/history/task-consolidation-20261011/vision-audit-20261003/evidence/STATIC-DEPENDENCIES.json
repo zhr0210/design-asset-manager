@@ -96,7 +96,6 @@
     "src/main/services/tests/test_color_family_classifier.ts",
     "src/main/services/tests/test_color_palette_service.ts",
     "src/main/services/tests/test_text_color_extractor.ts",
-    "src/preload/external-connected-library.preload.ts",
     "src/preload/model-library-workspace.preload.ts",
     "src/renderer/components/ai/ModelLibraryStatusCard.tsx",
     "src/renderer/components/layout/Sidebar.tsx",
@@ -125,5 +124,6 @@
     "does not cover every script/packager/test/golden root",
     "does not prove dynamic calls, subprocess entrypoints or type-only module side effects",
     "unreached code may be legitimate CLI, test, retained compatibility or future work"
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

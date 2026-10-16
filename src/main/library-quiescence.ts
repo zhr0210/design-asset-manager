@@ -11,7 +11,6 @@ export interface LibraryQuiescenceParticipants {
   visualAdmission?: { hold(): Release }
   activeLibraryHost?: Pick<ActiveLibraryHost, 'inspect' | 'readVisualSession' | 'holdBusinessAdmission' | 'close'> & Partial<Pick<ActiveLibraryHost,'suspendRetrievalWork'>>
   workWindows?: { drain(): Completion }
-  managedDownloads?: { drain(): Completion }
   assetCard?: { invalidate(): void }
   tagDecisions?: { invalidate(): void }
   tagBatches?: ResumableDrainable & { invalidate(): void }
@@ -99,7 +98,6 @@ export function createLibraryQuiescence(dependencies: LibraryQuiescenceDependenc
       authorityBarrierRelease = current().visualAdmission?.hold()
       suspendOwners(false)
       await current().workWindows?.drain()
-      await current().managedDownloads?.drain()
       authorityBusinessRelease = current().activeLibraryHost!.holdBusinessAdmission()
       await drainOwners(false)
       invalidateIntents()
@@ -151,7 +149,6 @@ export function createLibraryQuiescence(dependencies: LibraryQuiescenceDependenc
       current().visualAdmission?.hold()
       suspendOwners(true)
       await current().workWindows?.drain()
-      await current().managedDownloads?.drain()
       current().assetCard?.invalidate()
       current().activeLibraryHost?.holdBusinessAdmission()
       await drainOwners(true)

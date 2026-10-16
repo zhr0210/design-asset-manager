@@ -1,3 +1,5 @@
+import { legacySchemaImport } from './fixtures/legacy-schema-import'
+import { seedRetiredDownloadRecord, retiredDownloadCount } from './fixtures/retired-download-record'
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -21,7 +23,7 @@ import { createTagIntentController } from '../src/main/independent-tags/tag-inte
 import { tagIntentSpacePolicy, withTagIntentGrowthCap, type TagIntentTestHooks } from '../src/main/independent-tags/tag-intent-backup'
 import { createNewInstallAppSettingsDefaults } from '../src/main/services/settings/settings-defaults.builder'
 import { enableVisualAiStorage } from '../src/main/visual-ai/visual-ai-storage'
-import { enableDownloadJournal } from '../src/main/managed-download/download-journal.schema'
+import { enableDownloadJournal } from '../src/main/library-lifecycle/legacy-download.schema'
 import { enableIntakeRecoveryStorage } from '../src/main/library-lifecycle/intake-recovery.schema'
 import { enableNotebookStorage } from '../src/main/library-lifecycle/asset-notebook.schema'
 import { enableOrganizationStorage } from '../src/main/library-lifecycle/library-organization.schema'
@@ -101,7 +103,7 @@ for(const version of [1,2,3,4,5,6,7,8]) await test(`v${version} upgrades after v
   } finally { await f.close() }
 })
 
-await test('v9 keeps OCR correction, notebook, work set, organization and download journal read/write usable',async()=>{
+await test('v9 keeps OCR correction, notebook, work set, organization usable and retired records preserved',async()=>{
   const f=await fixture()
   try {
     await f.host.saveTagIntent(await f.command())
@@ -115,14 +117,13 @@ await test('v9 keeps OCR correction, notebook, work set, organization and downlo
     await f.host.writeOrganization({...scope,sessionToken:org.sessionToken,expectedRevision:org.revision,allowUpgrade:false,command:{kind:'create',name:'Preserved folder',folderKind:'assets',parentId:null,assetIds:[f.asset.id]}})
     const work=await f.host.readWorkSets(scope,'device:synthetic')
     await f.host.writeWorkSet({...scope,sessionToken:work.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'Preserved set',assetIds:[f.asset.id],note:'User note',colors:[],columns:1}}},'device:synthetic')
-    const intent=await f.host.downloadJournal({kind:'create',generation:scope.generation,taskId:'download-synthetic',url:'https://fixture.invalid/not-requested.png',fileName:'generated.png'})
-    assert.equal(intent.version,9)
+    seedRetiredDownloadRecord(f.dbFile, scope, 'download-synthetic')
     await f.host.close();await f.host.reopen()
     assert.equal((await f.host.readOcr(f.scope)).editedText,'User OCR retained')
     assert.equal((await f.host.readNotebook(f.scope)).revision,1)
     assert.equal((await f.host.readOrganization(scope)).folders[0].name,'Preserved folder')
     assert.equal((await f.host.readWorkSets(scope,'device:synthetic')).sets[0].note,'User note')
-    assert.equal((await f.host.downloadJournal({kind:'list',generation:scope.generation})).intents!.length,1)
+    assert.equal(retiredDownloadCount(f.dbFile),1)
     assert.equal((await f.host.readTagIntentContext(f.scope)).schemaVersion,9)
   } finally { await f.close() }
 })
@@ -301,7 +302,7 @@ async function frozenV8(name:string) {
   const folder=path.resolve('scripts/fixtures/independent-tags-v8'),source=(await fs.readFile(path.join(folder,name+'.txt'),'utf8')).replace(/\r\n/g,'\n')
   const manifest=JSON.parse(await fs.readFile(path.join(folder,'manifest.json'),'utf8'))
   assert.equal(createHash('sha256').update(source).digest('hex'),manifest[name].sha256)
-  const result=await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},bundle:true,platform:'node',format:'esm',packages:'external',write:false})
+  const result=await build({stdin:{contents:source,loader:'ts',resolveDir:path.resolve('src/main/library-lifecycle')},bundle:true,platform:'node',format:'esm',packages:'external',write:false,plugins:[legacySchemaImport]})
   const output=path.resolve('dist-temp/tests','frozen-'+name+'.mjs');await fs.writeFile(output,result.outputFiles[0].text)
   return import(pathToFileURL(output).href)
 }
@@ -402,14 +403,10 @@ await test('v9 visual evidence, confirmed tags, palette, layout and owned downlo
     const w=await f.host.readWorkSets(scope,'device:test'),saved=await f.host.writeWorkSet({...scope,sessionToken:w.sessionToken,allowUpgrade:false,command:{kind:'create',value:{name:'Layout',note:'',assetIds:[f.asset.id],colors:[],columns:1}}},'device:test')
     const layout={x:20,y:20,width:400,height:500,pinned:true,open:true}
     await f.host.writeWorkLayout({...scope,sessionToken:w.sessionToken,id:saved.sets[0].id,layout},'device:test')
-    const bytes=await fs.readFile(path.join(f.root,'generated.png')),download={requestId:'v9-recovery',generation:scope.generation,fileName:'recovered.png',sourceUrl:'https://fixture.invalid/not-requested',bytes}
     const db=new Database(f.dbFile)
     const fault=()=>db.exec("CREATE TRIGGER synthetic_failure BEFORE INSERT ON promotion_links BEGIN SELECT RAISE(ABORT,'fixture'); END")
     const clear=()=>db.exec('DROP TRIGGER synthetic_failure')
     try {
-      fault();await assert.rejects(f.host.importDownloadedImage(download));clear()
-      const imported=await f.host.recoverDownloadedImage(download)
-      assert.ok((await f.host.listAssets()).some(a=>a.id===imported.assetId))
       const images=createImageToolsController({host:f.host,onSaved(){}})
       const review=await images.prepare('test',{...f.scope,options:{rotation:90,mirror:false,crop:'original',maxEdge:640}})
       fault();await assert.rejects(images.save('test',review.receipt));clear()

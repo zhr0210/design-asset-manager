@@ -1,0 +1,6 @@
+{
+  "candidate": "../candidate.json",
+  "files": 2632,
+  "drift": [],
+  "limitations": "First-party tracked + nonignored untracked text; no symlinks; excludes TASK, checkpoints, research, history, third-party unpacked, runtime/user/build material. Missing provenance/task links are a known snapshot limitation. Read-only by prompt and file mode, not OS enforcement."
+}

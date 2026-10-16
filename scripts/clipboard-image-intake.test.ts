@@ -53,11 +53,10 @@ try{
  db=new Database(path.join(library,'.dam','library.sqlite'),{fileMustExist:true});await bad({...request,generation:'stale-after-reopen'});const reopenedRequest={...request,...scope};assert.deepEqual(await host.importClipboardImage(reopenedRequest),first);assert.deepEqual(counts(),completedCounts)
  assets=await host.listAssets();const saved=assets.find(a=>a.id===first.assetId)!;assert.equal(saved.title,'User fixture title');assert.equal(saved.aiCaption,'User fixture caption');assert.equal(saved.fileName,'User renamed.png');assert.equal(sha((await host.readManagedOriginal(saved.id,saved.revision,saved.thumbnailRef)).bytes),sourceHashes[0])
  // Existing non-clipboard consumers retain their distinct origins and limit paths.
- const download=await host.importDownloadedImage({requestId:'legacy-download',generation:scope.generation,fileName:'Downloaded.png',sourceUrl:'https://fixture.invalid/public.png',bytes:pngs[0]})
  const variant=await host.saveImageVariant({...scope,requestId:'legacy-variant',assetId:saved.id,sourceRevision:saved.revision,previewGeneration:saved.thumbnailRef,fileName:'Variant.png',bytes:pngs[1],options:{source:'preview',rotation:0,mirror:false,crop:'original',maxEdge:1600}})
- const origins=db.prepare('SELECT id,source_site_id AS site,capture_method AS method,image_metadata_json AS metadata FROM assets WHERE id IN (?,?)').all(download.assetId,variant.assetId) as any[]
- assert.equal(origins.find(a=>a.id===download.assetId)!.site,'web-download');assert.equal(origins.find(a=>a.id===variant.assetId)!.site,'image-tools');assert.equal(JSON.parse(origins.find(a=>a.id===variant.assetId)!.metadata).kind,'controlled-preview-variant')
- // The clipboard branch really exceeds the unchanged32MiB download/variant cap.
+ const origins=db.prepare('SELECT id,source_site_id AS site,capture_method AS method,image_metadata_json AS metadata FROM assets WHERE id=?').all(variant.assetId) as any[]
+ assert.equal(origins.find(a=>a.id===variant.assetId)!.site,'image-tools');assert.equal(JSON.parse(origins.find(a=>a.id===variant.assetId)!.metadata).kind,'controlled-preview-variant')
+ // The clipboard branch really exceeds the unchanged32MiB variant cap.
  const large=await sharp({create:{width:3000,height:3000,channels:4,background:'#22aacc'}}).png({compressionLevel:0}).toBuffer();assert.ok(large.byteLength>32*1024*1024&&large.byteLength<96*1024*1024)
  const largeResult=await host.importClipboardImage({...reopenedRequest,requestId:'clip-large',fileName:'Large clipboard.png',bytes:large}),largeRow=db.prepare('SELECT file_path AS original FROM assets WHERE id=?').get(largeResult.assetId) as {original:string}
  assert.ok(largeRow.original.startsWith(path.join(library,'Originals')+path.sep));assert.equal(sha(await fs.readFile(largeRow.original)),sha(large));assert.equal((await sharp(await host.readPreview(largeResult.assetId)).metadata()).width,1600)

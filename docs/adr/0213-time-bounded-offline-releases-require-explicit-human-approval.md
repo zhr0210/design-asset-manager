@@ -1,17 +1,13 @@
 # Time Bounded Offline Releases Require Explicit Human Approval
 
-Every Time-Bounded Official Offline Package requires a separate **Time-Bounded Offline Release Approval** before Release Flow may reach `publish_ready`. The approval is an authenticated human decision by an authorized official release maintainer, not a schema-valid manifest, package signature, CI success, automated policy result or ordinary publish button. It supplements rather than replaces package/catalog signing, platform trust gates and the existing separate Release Publish Approval.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The package proposer/author cannot approve their own time-bound exception. Proposal and approval identities must be distinct human identities in the official release authority registry. Bots, service accounts, build jobs, signing keys, catalog mirrors and package publishers may assemble/validate evidence but cannot satisfy the approver role. A project without an eligible second authorized maintainer waits or releases a normal non-time-bounded stable package; urgency, preview deadlines or security-incident labeling do not create an automated/self-approval bypass.
+## Decision
 
-Approval binds the exact release class, reason category, UTC `notBefore`/`validUntil`, affected capability/package identities, complete manifest and payload digests, platform/architecture targets, signed Offline Package Time-Bound Justification, user-facing disclosure and recovery/replacement route. One approval may cover multiple artifacts only when every exact target/digest is enumerated. Rebuild, repack, re-sign with changed bytes/evidence, window/scope/reason/recovery change or added target invalidates the approval and requires a new human review.
+Every Time-Bounded Official Offline Package requires a separate **Time-Bounded Offline Release Approval** before Release Flow may reach `publish_ready`.
 
-Release Flow first creates a **Time-Bounded Offline Release Request** for a complete immutable candidate. CI verifies structure, allowed ADR 0212 reason class, stable-channel prohibition, digest binding, disclosure completeness and proposer/approver separation. The authorized maintainer then explicitly approves or rejects that exact request. Missing, stale, mismatched, revoked or self-approved evidence keeps the target blocked and prevents official publish/upload/mirror promotion; CI reports typed path-free causes rather than silently deleting the candidate.
+## Detailed contract and provenance
 
-Approval is single-candidate authority, not a reusable waiver for a model family, publisher, version range, channel, future incident or arbitrary window extension. It may be withdrawn before publication, which blocks promotion without rewriting the candidate. After publication, the immutable approval decision identity remains release provenance; correcting or superseding the package uses a new candidate/approval and never mutates published bytes or history.
+详细状态、交互、数值边界和例外的唯一正文为[备份、模型信任与安装规格](../product/specs/backup-trust.md#adr-0213)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-ADR 0214 requires any post-expiration extension/reopening to use that new-candidate/new-approval path. The original request, approval and Install Window Ended history remain immutable even when the successor references identical content digests.
-
-Public release evidence exposes package/release class, reason category, window, affected scope, recovery route, approval status/time and opaque proposer/approver identities sufficient to audit separation. It does not expose private legal advice, vulnerability details, credentials, signing keys, personal contact information or internal discussion. Download/install surfaces consume the already signed public projection and cannot infer approval from repository ownership or package signature alone.
-
-Forks and third-party catalogs may operate their own authorization registries and approval workflows under their own trust roots, but cannot reuse this project's official approval identity or label self-approved time-bounded artifacts as Official. The current project has no time-bounded release request/approval schema, distinct-role registry check, exact-candidate approval binding, invalidation/revocation logic or CI/Release Flow gate. This ADR records target behavior only: it dispatches/approves/signs/publishes nothing, changes no GitHub/release settings, reads no credentials/private evidence/package data and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

@@ -1,11 +1,13 @@
 # Retention Extension Supports Single and Batch Actions
 
-Retention Extension should be available for both a single asset candidate and a
-Candidate Batch Action. The default extension choices should be 7 days, 30
-days, and a custom date, with batch extension showing the number of candidates
-that will be affected before confirmation.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Extending retention keeps candidates in Capture Inbox and does not promote them
-into the Asset Library. This gives users relief during large capture sessions
-without turning candidate storage into implicit library admission or a silent
-permanent archive.
+## Decision
+
+Retention Extension should be available for both a single asset candidate and a Candidate Batch Action.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[筛选、审查与回收站规格](../product/specs/review-trash.md#adr-0053)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/library-lifecycle.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-15 Asia/Shanghai",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "before": "762aec27bb71a95f6daed65a7c9a2ba0ae2b089e509e99f6400c73cf4a94b55d"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "before": "73633f3a7b237d90c4231529f38c34707ffc7e2c5e4efa3395bbebe8ca9d8c50"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "before": "855239f0774190780b3d2dbfd968a6404151a68df900519fc8fd92068e4a1305"
+    },
+    {
+      "path": "docs/agents/domain.md",
+      "before": "4fd5e07e5b4b17e890a02e28379c1bbda16884e878e6f69b891684d3c3dfa473"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "before": "6c18507527af978f9c7bf40f6a0def6866696c9963b92e7c326ba97189c1e305"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "before": "65bf7300188e040d91823770d8cf2f2508a638d274347324be7e2115361d2b37"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "before": "cb5c159c7d7d22e758c1a2a363ca13d096160737be638e80fb0a4e469a6b5e8e"
+    },
+    {
+      "path": "TASK.md",
+      "before": "2b0f7b44aca6519df72977dabbe39421d7fdfcfb5e001d6a9b729fd5fa446511"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+      "before": "73aa7484d250687f594a0ff560462a54689f81fd77f90b716718462992bb6d9e"
+    }
+  ],
+  "scope": "Only documentation in this correction; other WIP and prior evidence preserved."
+}

@@ -2,7 +2,7 @@
 
 分支：codex/full-project-20261001。来源为当前DAM本地工作区的完整可公开源码，不限于最后RUX增量；GitHub main是父基线，本地编辑分支与原暂存选择保留。
 
-包括Renderer/Main/Preload/Shared、Python AI服务、Pi固定版本适配、Eagle companion、构建配置、SQL合成夹具、测试、ADR/产品/设计/工程文档。未带入node_modules、Pi执行依赖包、模型权重、真实账号/素材库、运行SQLite、截图/视频、原始评测证据、审计before/after/源码副本、历史交接ZIP、旧根构建产物或本地协作记录。所有被排除项本地保留，未删除。
+未带入node_modules、Pi执行依赖包、模型权重、真实账号/素材库、运行SQLite、截图/视频、原始评测证据、审计before/after/源码副本、历史交接ZIP、旧根构建产物或本地协作记录。所有被排除项本地保留，未删除。
 
 ## 真实能力边界
 

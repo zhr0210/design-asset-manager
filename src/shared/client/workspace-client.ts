@@ -5,7 +5,6 @@ import type { WorkspaceDraftApi, WorkspaceDraftInput, WorkspaceDraftScope } from
 import type { TransitionReview } from '../contracts/workspace-transition.contract'
 import {ORGANIZATION_COLORS,ORGANIZATION_READ,ORGANIZATION_WRITE,type OrganizationScope,type OrganizationWrite} from '../contracts/library-organization.contract'
 import {NOTEBOOK_READ,NOTEBOOK_SAVE,type NotebookScope,type NotebookSaveRequest} from '../contracts/asset-notebook.contract'
-import type { PrepareDownload } from '../contracts/managed-download.contract'
 import type { WorkspaceTransport, ClientEvent } from './workspace-transport'
 import type { AiBackendConfig } from '../types/ai-backend.types'
 import type { FilePickerSnapshot } from '../contracts/file-selection.contract'
@@ -124,11 +123,11 @@ import type {
 } from '../contracts/runtime-package.contract'
 import { createModelLibraryWorkspacePreloadApi } from
   './model-library-workspace.client'
-import { createExternalConnectedLibraryPreloadApi } from './external-connected-library.client'
+import { createLegacyReadOnlyWorkspaceClient } from './legacy-readonly-workspace.client'
 
 // Named product operations shared by Desktop and Browser. The transport stays private.
 export function createWorkspaceClient(transport: WorkspaceTransport) {
-const connectedPreload=createExternalConnectedLibraryPreloadApi({invoke:(channel,request)=>transport.invoke(channel,request)})
+const legacyClient=createLegacyReadOnlyWorkspaceClient({invoke:(channel,request)=>transport.invoke(channel,request)})
 return Object.freeze({
   transitions: {
     ready: (input: { draftWriterId: string }) => transport.invoke('workspace:ready', input),
@@ -186,17 +185,17 @@ return Object.freeze({
     transport.on('settings:changed', listener)
     return () => transport.removeListener('settings:changed', listener)
   },
-  onConnectedLibrariesChanged: (listener: () => void) => {
-    transport.on('connected-library:changed', listener)
-    return () => transport.removeListener('connected-library:changed', listener)
+  onLegacyLibraryChanged: (listener: () => void) => {
+    transport.on('legacy-readonly:changed', listener)
+    return () => transport.removeListener('legacy-readonly:changed', listener)
   },
   onWorkspaceChanged: (listener: (payload: unknown) => void) => {
     const receive = (_event: ClientEvent, payload: unknown) => listener(payload)
     transport.on('workspace:changed', receive)
     return () => transport.removeListener('workspace:changed', receive)
   },
-  onNavigate: (listener: (request: { path: '/connected-libraries' }) => void) => {
-    const receive = (_event: ClientEvent, request: { path: '/connected-libraries' }) => listener(request)
+  onNavigate: (listener: (request: { path: string }) => void) => {
+    const receive = (_event: ClientEvent, request: { path: string }) => listener(request)
     transport.on('workspace:navigate', receive)
     return () => transport.removeListener('workspace:navigate', receive)
   },
@@ -220,18 +219,7 @@ return Object.freeze({
     prepare: (input: { id: string; selectSource?: boolean }) => transport.invoke('library-recovery:prepare', input),
     run: (receipt: string) => transport.invoke('library-recovery:run', { receipt })
   },
-  managedDownloads: {
-    prepare: (input: PrepareDownload) => transport.invoke('download:prepare', input),
-    run: (receipt: string) => transport.invoke('download:enqueue', receipt),
-    list: () => transport.invoke('download:jobs'),
-    cancel: (id: string) => transport.invoke('download:cancel', id),
-    retry: (id: string) => transport.invoke('download:retry', id),
-    onImported: (listener: (scope: { libraryIdentity: string; generation: string; assetId: string }) => void) => {
-      const receive = (_event: ClientEvent, scope: { libraryIdentity: string; generation: string; assetId: string }) => listener(scope)
-      transport.on('download:imported', receive)
-      return () => transport.removeListener('download:imported', receive)
-    }
-  },
+
   buildIdentity:()=>transport.invoke('app:build-identity'),
   aiAcceptance:{prepare:(input:unknown)=>transport.invoke('ai-acceptance:prepare',input),confirm:(id:string)=>transport.invoke('ai-acceptance:confirm',id),status:(id:string)=>transport.invoke('ai-acceptance:status',id),cancel:(id:string)=>transport.invoke('ai-acceptance:cancel',id),discard:(id:string)=>transport.invoke('ai-acceptance:discard',id)},
   aiConnections:{activeLogins:()=>transport.invoke('ai-connection:active-logins'),prepareValidation:(id:string)=>transport.invoke('ai-connection:prepare-validation',id),confirmValidation:(receipt:string)=>transport.invoke('ai-connection:confirm-validation',receipt),discardValidation:(receipt:string)=>transport.invoke('ai-connection:discard-validation',receipt),credentialStatus:(id:string)=>transport.invoke('ai-connection:credential-status',id),setApiKey:(input:unknown)=>transport.invoke('ai-connection:set-api-key',input),migrateCredential:(input:unknown)=>transport.invoke('ai-connection:migrate-credential',input),clearCredential:(id:string)=>transport.invoke('ai-connection:clear-credential',id),login:(id:string)=>transport.invoke('ai-connection:login',id),loginStatus:(id:string)=>transport.invoke('ai-connection:login-status',id),currentLogin:(id:string)=>transport.invoke('ai-connection:current-login',id),authDiagnostic:(id:string)=>transport.invoke('ai-connection:auth-diagnostic',id),answerLogin:(input:unknown)=>transport.invoke('ai-connection:answer-login',input),cancelLogin:(id:string)=>transport.invoke('ai-connection:cancel-login',id),openAuthUrl:(input:unknown)=>transport.invoke('ai-connection:open-auth-url',input)},
@@ -294,7 +282,7 @@ return Object.freeze({
       return () => transport.removeListener(EVENT_ASSET_CARD_RETURN, receive)
     }
   },
-  ...connectedPreload,
+  ...legacyClient,
   workSets:{
     listHandoffs:(scope:WorkMediaScope):Promise<WorkResult<WorkHandoffReceipt[]>>=>transport.invoke('work-files:list',scope),
     mediaStatus:(scope:WorkScope):Promise<WorkResult<{schemaVersion:number;sessionToken:string}>>=>transport.invoke('work-media:status',scope),
@@ -336,12 +324,6 @@ return Object.freeze({
     trashInspect: async (assetId: string) => { const result = await transport.invoke(CHANNEL_LIBRARY_TRASH_INSPECT, { assetId }); return result?.success ? result.value : result },
     trashList: async () => { const result = await transport.invoke(CHANNEL_LIBRARY_TRASH_LIST); return result?.success ? result.value : result }
   },
-  // Independent download history
-  listDownloads: () => transport.invoke('download:list'),
-  saveDownload: (task: any) => transport.invoke('download:save', task),
-  clearDownloads: () => transport.invoke('download:clear'),
-  enqueueDownload: (task: any) => transport.invoke('download:enqueue', task),
-  retryDownload: (id: string) => transport.invoke('download:retry', id),
 
   // Assets IPC API
   searchAssetsPage: async (input: import('../contracts/asset-search.contract').AssetSearchRequest) => {
@@ -611,7 +593,6 @@ return Object.freeze({
 
   // Path Governance APIs
   getAssetLibraryPathGovernanceReport: () => transport.invoke('assets:path-governance-report'),
-  getDownloadPathPlan: (requestedFilename: string) => transport.invoke('downloads:get-path-plan', requestedFilename),
   applyPathMigration: (options?: { deleteLegacyFiles?: boolean }) => transport.invoke('assets:apply-path-migration', options),
   getPathMigrationReport: () => transport.invoke('assets:path-migration-report')
 })

@@ -1,7 +1,7 @@
 # Local Clients Share One Host And Product Workspace
 
 Status: Accepted (2026-10-02). The user confirmed the complete design after Q1–Q8 with “我觉得没问题”.
-This records target architecture, not delivered capability; implementation and acceptance are still pending.
+This records the accepted architecture; current implementation and remaining acceptance are tracked separately in subsystem references and CURRENT-STATE, not inferred from this decision.
 
 DAM's Desktop Asset Workspace and formal Browser Asset Workspace share the same React product
 presentation and one Local DAM Host per explicit profile. Electron initially hosts that authority;

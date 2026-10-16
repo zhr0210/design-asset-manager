@@ -640,7 +640,6 @@
     ],
     "unresolved": [
       "Native actual receiver/drag/pin/hide/displays deferred by user",
-      "Reference/Eagle original delivery unsupported",
       "68 untracked first-party files excluded from context ownership coverage"
     ]
   },
@@ -754,5 +753,6 @@
     "stopAfter": "D"
   },
   "commit": false,
-  "push": false
+  "push": false,
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

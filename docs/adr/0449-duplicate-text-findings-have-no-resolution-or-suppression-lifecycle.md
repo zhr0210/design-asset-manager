@@ -1,7 +1,13 @@
 # Duplicate Text Findings Have No Resolution or Suppression Lifecycle
 
-An ADR 0445 Duplicate Text Value Finding is query evidence, not a Review Signal or attention queue. A matching group, comparison key or owner therefore has no persistent resolved, dismissed, snoozed, acknowledged, expected-duplicate or ignored state; the application creates no attention badge, Review History entry or portable suppression table for it. ADR 0051 continues to govern actual Review Signals, including content-oriented duplicate review, but does not apply merely because Text values share a comparison key.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The user may collapse a group only as presentation state inside the current ADR 0448 Duplicate Text Finding Session. Collapse does not change membership, totals or filter truth, is not saved or backed up, and ends with that session. This avoids letting an accepted repetition silently hide future owners that later enter the same dynamic group.
+## Decision
 
-A User Smart Filter may instead be explicitly edited under ADR 0047 to add ADR 0450 ordinary visible Text conditions or owner, collection and lifecycle criteria. ADR 0447 applies those declared criteria before duplicate grouping; no result-row action secretly creates an exclusion, and the criteria remain inspectable and removable like every other saved filter condition. A group leaves the result only after explicit refresh evaluates fewer than two matching in-scope owners.
+An ADR 0445 Duplicate Text Value Finding is query evidence, not a Review Signal or attention queue.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[文本字段、检索与编辑规格](../product/specs/custom-text.md#adr-0449)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

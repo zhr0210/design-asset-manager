@@ -72,9 +72,7 @@ try{
   await reset();await page.evaluate(()=>window.fixture.remote({libraryPath:'Synthetic/Library/Remote',concurrency:6,delayInterval:2.5}))
   await page.waitForFunction(()=>document.querySelector('input[aria-label="素材存储路径偏好"]').value==='Synthetic/Library/Remote')
   assert.equal(await save().isDisabled(),true);assert.equal((await inspect()).editing,false);assert.deepEqual((await inspect()).writes,[])
-  await page.getByRole('button',{name:'采集与下载',exact:true}).click()
-  assert.equal(await page.getByRole('slider',{name:'并发任务上限',exact:true}).inputValue(),'6')
-  assert.equal(await page.getByRole('slider',{name:'请求间隔',exact:true}).inputValue(),'2.5')
+  assert.equal(await page.getByRole('button',{name:'采集与下载',exact:true}).count(),0)
  })
 
  await test('dirty remote conflict preserves input, exposes saved comparison and blocks saving until adoption',async()=>{

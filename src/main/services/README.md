@@ -1,10 +1,10 @@
 # Main Services
 
-Business services for local assets, tags, settings, downloads, colors, OCR, and AI polling.
+Business services for local assets, tags, settings, colors, OCR, and AI polling.
 
 ## Entry Files
 
-- `asset.service.ts`: asset persistence and file preparation.
+- `asset.service.ts`: retained legacy asset operations; ordinary held-Library operations use the Active Library Host.
 - `color-palette.service.ts`: color palette facade.
 - `ai-client.service.ts`: Electron-side AI polling facade.
 - `ai-client/ai-result-sync.projector.ts`: pure projection rules for Worker task results before SQLite sync.
@@ -23,7 +23,7 @@ Business services for local assets, tags, settings, downloads, colors, OCR, and 
 
 - Keep public service methods stable.
 - Split helper logic into small local modules before changing behavior.
-- Do not change database schema or AI polling semantics from this folder.
+- schema变更通过Host拥有的维护/迁移入口保持事务、备份与兼容；services不能绕过该权威。旧Worker结果同步保持Electron-owned语义，不把poller强加到所有当前Pi/managed能力。
 - Keep Platform AI Branch Status projection in main-process services; renderer should consume projected workflow status instead of recomputing probe/readiness meaning.
 - Model Artifact Readiness mappers should accept existing service state and avoid exposing local filesystem paths in projected evidence.
 - Worker model status mapping should use the shared cooperative readiness snapshot contract instead of declaring a main-process-only approximation.
@@ -88,5 +88,6 @@ npm run build
 | v1.0.0 | 2026-05-31 | Rewrote README with compact service ownership and change-log rules. |
 
 2026-09-13: embedded browser, page injection, website search/login and their services are
-removed. Historical changelog rows describe prior releases. DownloadService and asset/tag/AI
-services remain; persisted legacy website records are not deleted by this source change.
+removed. Historical changelog rows describe prior releases. Asset/tag/AI services remain; material DownloadService was removed on 2026-10-14; persisted legacy website records are not deleted by this source change.
+
+当前生产与保留legacy服务分流见[AI Runtime](../../../docs/subsystems/ai-system.md#execution)和[Library](../../../docs/subsystems/library-lifecycle.md#library)；旧版本Change Log不授予执行资格。

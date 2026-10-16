@@ -12,11 +12,9 @@ plugins supply capabilities while the host retains identity, persistence and
 permission authority. Missing models leave reliable manual operations available.
 
 Embedded browsing, page collection, site login and external website search are
-retired. Local Copy import, Asset Discovery and independent direct-image downloads
-remain. Future Chrome/Edge connectors submit reviewed intake through ADR 0106;
+retired. Local Copy import and Asset Discovery remain. Material task/download execution is retired by the 2026-10-14 product cleanup. Future Chrome/Edge connectors submit reviewed intake through ADR 0106;
 they do not restore browser ownership of the app surface.
 
-Eagle remains a reference for dependable asset-management basics. The product's
-differentiation is searchable AI understanding and practical optional tools.
+The product's differentiation is searchable AI understanding and practical optional tools.
 The former embedded browser made native web layering compete with app overlays;
 its staged-retention rationale is preserved in historical ADR 0010.

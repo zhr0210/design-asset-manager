@@ -3,7 +3,7 @@
   "requirements": [
     {
       "id": "R13",
-      "requirement": "原件/预览/派生物、Copy和三种库边界",
+      "requirement": "原件/预览/派生物、Copy和库类型边界",
       "basis": "S00 §2.2、7",
       "chapters": [
         "HOST-03",

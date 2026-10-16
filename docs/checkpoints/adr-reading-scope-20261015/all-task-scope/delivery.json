@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "scope": "Any project task; ADR relevance selected by subject and impact, never by task-type whitelist. Documentation only.",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "before": "67dd393f4cb44d9d2092c37dfa23c280e232c2e43ac31437fb46e40e7dcdac5b",
+      "after": "55b9b84c76be16a6bb1d99e4126be7faf8284801bb45e471e7292b46f234a844"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "before": "dd0aefbcb0e3a9095375b15cb9c309ee809b0f259c705caf01d9bd2f34c46166",
+      "after": "5e2d28185be7ff3094d76d8ac362d129790adf8c917aefb3dbeffe28725cae69"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "before": "5d9c499af83098e6bb4f7c78b37f47ffd34849f5e29afdaa94d100110fe52abe",
+      "after": "878b13fda7644a2c317a88df03ffb72242efec227ceb094c1576ad301397d12f"
+    },
+    {
+      "path": "docs/agents/domain.md",
+      "before": "4ad74c1dd8113df045157da29f41380ca8650e986f595daafe2117dfbd6a80aa",
+      "after": "6cf5705efc6a0176ecbca57e55b3bf331fe83fcd419ead6c31e1e9a9982c8c39"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "before": "c5e26a93ef5aff04905689de59f332e587aea89900b490c8e71451992e9e1cc7",
+      "after": "9b39f9bf450ad33a84ce3e59543964283ff12038bab195ac6d2fa503d6a0293b"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "before": "0956143112c79a84150fad2bfeb64c4a3f94f81a96943e3c24278282e1bbc854",
+      "after": "71d6fe4a20fa5f7f69dee5a295a0e4a0acfed3d3d805f27bdeb3c3ad4e206c53"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "before": "f93d3cffe7d9a97b1d03fa1cabdcdc73f94c4b8b82997a3527be14696b6ee890",
+      "after": "182c83fa3d7e9d0dec62cd620577cb9565b7a177712c0ae0f9d13dc2420b4cea"
+    },
+    {
+      "path": "TASK.md",
+      "before": "fc3962cb6ad1b13e79bd7e59722f7b5586e281c199ed08d462a36e524433df75",
+      "after": "9d7599ef912e8fc881a5c96d86cc411bd9bf072359edb8fe6b5c65e3c989d33c"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+      "before": "14e408e8b85001c20151d63adab1cf65ef7065b69bf9b2ce34f7e8d14d2a3272",
+      "after": "ca5aa41c195f2edd0a765a84b34aab044f6ad31ce6889a382ef063e5cdd3d34d"
+    }
+  ],
+  "errors": []
+}

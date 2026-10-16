@@ -1,0 +1,23 @@
+[
+  {
+    "agent": "/root/ai_target_control",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-ai-boundaries-probe-20261016-bp8921j9\n本机Ollama和云API都走HTTP，想统一管理并在任务结束时释放模型显存，评估怎么划分职责。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/ai_model_policy",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-ai-boundaries-probe-20261016-bp8921j9\n前台描述和后台OCR同时排队，内存不足时让资源层自动换小模型或云服务，可以吗？给出排查和设计建议。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/ai_runtime_release",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-ai-boundaries-probe-20261016-bp8921j9\n想把模型选择、排队、加载回收都交给一个调度器，收到取消ACK就归还全部资源，评估这个方案。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "agent": "/root/task_first_settings",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-task-first-probe-20261015-o62zwe9b\n我想将设置里的所有设置进行整合，让整个设置页面使用体验更符合人为习惯，并优化UI/ux 等设计以及交互体验\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/task_first_plugin",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-task-first-probe-20261015-o62zwe9b\n我想添加一个插件子系统，让插件能够通过某个连接接入软件，这个借口必须是通用协议，方便从其他软件移植\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/task_first_boundary",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-task-first-probe-20261015-o62zwe9b\n想让各悬浮窗进程自行保存工作集并处理文件交付，评估这个方案。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  }
+]
+

@@ -1,0 +1,32 @@
+{
+  "source": "Primary-agent collaboration.spawn_agent invocations; task field copied, boundary wording summarized. Full raw tool calls remain in the parent session; child rollout omits its initial task.",
+  "probes": [
+    {
+      "agent": "/root/probe_semantic_docs",
+      "task": "我们准备把一批供后续AI阅读的项目约束、术语和功能索引合并精简，部分定义和定位方式会改变。请依据项目现有材料，说明你会怎样验证整理后没有让后续AI漏掉相关要求；给出准备、验收和发现问题后的步骤，以及结果应记录到哪里。现在只做只读准备，不实施修改。",
+      "candidate": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-document-consumer-20261015-dbt2p15k",
+      "fork_turns": "none",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "low",
+      "boundary_summary": "只读边界：仅候选内项目材料/必要源码；不读候选外、不访问网络/账号/私人资料、不启动应用/模型/服务/构建/测试、不写文件、不派代理。允许只读搜索、文档读取和已有导航查询；副本不含Git/历史/研究/检查点/任务报告/运行数据，缺失作具体限制。最终列实际命令、文件/章节及证据，不提供隐藏思考。"
+    },
+    {
+      "agent": "/root/probe_format_boundary",
+      "task": "这次只修正文档里的句末标点、空白和Markdown表格对齐；确认不改变原意、适用范围、标题/锚点、链接、阅读入口或索引召回。请依据项目规则说明这次要做哪些验证、是否需要启动额外的行为验证，以及应把结果写在哪里。只做准备，不修改。",
+      "candidate": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-document-consumer-20261015-dbt2p15k",
+      "fork_turns": "none",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "low",
+      "boundary_summary": "只读边界：仅候选内项目材料/必要源码；不读候选外、不访问网络/账号/私人资料、不启动应用/模型/服务/构建/测试、不写文件、不派代理。允许只读搜索、文档读取和已有导航查询；副本不含Git/历史/研究/检查点/任务报告/运行数据，缺失作具体限制。最终列实际命令、文件/章节及证据，不提供隐藏思考。"
+    },
+    {
+      "agent": "/root/probe_window_proposal",
+      "task": "为了减少多个悬浮工作窗之间的协调开销，有人建议把工作集保存、素材访问和文件交付都下放给每个窗口进程自行管理。请检查这是否符合项目已有取舍，说明哪些部分可以自主优化、哪些地方可能冲突，以及下一步应核对和记录什么。本次只评估，不实施。",
+      "candidate": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-document-consumer-20261015-dbt2p15k",
+      "fork_turns": "none",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "low",
+      "boundary_summary": "只读边界：仅候选内项目材料/必要源码；不读候选外、不访问网络/账号/私人资料、不启动应用/模型/服务/构建/测试、不写文件、不派代理。允许只读搜索、文档读取和已有导航查询；副本不含Git/历史/研究/检查点/任务报告/运行数据，缺失作具体限制。最终列实际命令、文件/章节及证据，不提供隐藏思考。"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  "AGENTS.md",
+  "DESIGN.md",
+  "ARCHITECTURE.md",
+  "CONTRIBUTING.md",
+  "TASK.md",
+  "docs/subsystems/README.md",
+  "docs/subsystems/local-host.md",
+  "docs/subsystems/asset-workspace.md",
+  "docs/subsystems/settings-recovery.md",
+  "docs/design/README.md",
+  "src/renderer/README.md",
+  ".codeindex/documentation-map.json",
+  ".codeindex/module-map.json",
+  "docs/subsystems/gui-shell.md"
+]

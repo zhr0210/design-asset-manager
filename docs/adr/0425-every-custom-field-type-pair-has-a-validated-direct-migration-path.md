@@ -1,9 +1,13 @@
 # Every Custom Field Type Pair Has A Validated Direct Migration Path
 
-Complete Custom Field planning cannot leave unusual but legitimate schema changes blocked merely because they lack a universal semantic conversion. The **Complete Custom Field Conversion Matrix** therefore covers all 56 directed source-to-different-target pairs among ADR 0417's eight types. Every pair resolves through an ADR 0424 lossless conversion, an explicitly selected rule-governed conversion, or **Manual Custom Field Conversion Mapping**.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Manual mapping is a host-validated migration tool for pairs or remaining values that have no adequate general rule. It supports structured batch conditions, **Distinct-Value Mapping** from a source value to a valid target value, and **Per-Item Conversion Override** when identical source values legitimately need different results. Every proposed target value must conform to the target Custom Field Definition before it can enter the ADR 0423 migration preview or commit set; Number targets additionally require ADR 0435 exact-domain and range validation without implicit rounding, DateTime targets require ADR 0436 explicit state/zone evidence and ADR 0437 whole-second-through-nanosecond precision without hidden normalization, and Text targets require ADR 0440 NFC-preserved content within the active grapheme limit without silent truncation. ADR 0441 keeps zero-length Text outside the target value set as Missing and preserves non-empty whitespace-only Text as a visible present target; ADR 0442 blocks unsafe controls while retaining warned valid invisible formatting; ADR 0443 validates present targets against the active grapheme minimum and portable pattern.
+## Decision
 
-Manual mapping never mutates the source value, executes plugin/user code, creates a Formula field, or converts through Text or another hidden intermediate type. Values without a confirmed valid target remain Unconvertible Custom Field Values on the source field; completeness means every type pair has a safe user-controlled path, not that every source value is guessed or forced to convert.
+Complete Custom Field planning cannot leave unusual but legitimate schema changes blocked merely because they lack a universal semantic conversion.
 
-This ADR fixes complete pair coverage. ADR 0426 owns large-set execution, cancellation, concurrency, result review and undo. ADR 0428 owns reusable rule and explicit Distinct-Value Mapping intent without persisting per-item overrides or execution authority. The built-in lossless/rule catalogs for each pair remain dependent decisions rather than reasons to omit a type pair from the target architecture.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[自定义字段与迁移规格](../product/specs/custom-fields.md#adr-0425)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

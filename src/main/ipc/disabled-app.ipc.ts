@@ -20,7 +20,7 @@ const DISABLED_CHANNELS = [
   'llama-runtime:stop-server', 'llama-runtime:test-server',
   'llama-runtime:open-install-root', 'llama-runtime:list-local-models',
   'llama-runtime:health-check',
-  'assets:path-migration-report', 'assets:path-governance-report', 'assets:apply-path-migration', 'downloads:get-path-plan',
+  'assets:path-migration-report', 'assets:path-governance-report', 'assets:apply-path-migration',
   'doctor:runAll', 'doctor:runChecks', 'doctor:runCheck', 'doctor:repairCheck', 'doctor:getLastReport', 'doctor:clearLastReport', 'doctor:listChecks',
   'aiRuntime:listRuntimes', 'aiRuntime:getRuntimeState', 'aiRuntime:getActiveRuntime',
   'aiRuntime:getMacOSCapabilities', 'aiRuntime:getWindowsCapabilities', 'aiRuntime:getPythonMpsStatus', 'aiRuntime:getPythonCudaStatus',

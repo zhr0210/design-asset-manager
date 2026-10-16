@@ -1,0 +1,23 @@
+{
+  "ok": false,
+  "affected": {
+    "engineering": [
+      "scripts/agent-context-router.mjs",
+      "scripts/check-adr-router.py",
+      "scripts/check-docs-sync.py",
+      "scripts/check-documentation.py",
+      "scripts/development-feedback.mjs",
+      "scripts/documentation-governance.test.py"
+    ]
+  },
+  "unmapped": [
+    "scripts/agent-context-router.test.mjs",
+    "scripts/development-feedback.test.mjs"
+  ],
+  "errors": [
+    "Unmapped changed source: scripts/agent-context-router.test.mjs",
+    "Unmapped changed source: scripts/development-feedback.test.mjs"
+  ],
+  "scope": "Explicit candidate only; owning-doc changes/declarations require semantic review.",
+  "assessed": true
+}

@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "scope": "scoped",
+  "taskType": {
+    "requested": "design",
+    "resolved": "design",
+    "focus": "核对行为与呈现取舍，视觉具体正文仍归DESIGN"
+  },
+  "topic": "work-mode",
+  "candidates": [
+    {
+      "id": "0489",
+      "title": "Work Sets Separate Saved References From Native Window Authority",
+      "path": "docs/adr/0489-work-sets-separate-saved-references-from-native-window-authority.md",
+      "classification": "Supporting",
+      "status": "accepted",
+      "matchedTopics": [
+        "work-mode"
+      ],
+      "focusFacets": [
+        "interaction"
+      ],
+      "referencesToCheck": [
+        "0493"
+      ]
+    },
+    {
+      "id": "0493",
+      "title": "Dropover 式交互允许平台原生实现",
+      "path": "docs/adr/0493-dropover-style-interaction-allows-platform-native-implementation.md",
+      "classification": "Supporting",
+      "status": "accepted",
+      "matchedTopics": [
+        "work-mode"
+      ],
+      "focusFacets": [
+        "interaction"
+      ],
+      "referencesToCheck": [
+        "0489",
+        "0491"
+      ]
+    },
+    {
+      "id": "0485",
+      "title": "Work Mode Preserves Reference Context And Host-Owned Media",
+      "path": "docs/adr/0485-work-mode-preserves-reference-context-and-host-owned-media.md",
+      "classification": "Core",
+      "status": "accepted",
+      "matchedTopics": [
+        "work-mode"
+      ],
+      "focusFacets": [
+        "interaction",
+        "accessibility"
+      ],
+      "referencesToCheck": [
+        "0009",
+        "0013",
+        "0106"
+      ],
+      "moreReferences": 3
+    }
+  ],
+  "totalMatches": 3,
+  "deferred": 0,
+  "topicIndexes": [
+    "docs/adr/indexes/topics/work-mode.md"
+  ],
+  "limits": {
+    "maxCandidates": 3,
+    "maxOutputBytes": 12000
+  },
+  "note": "Metadata only; read selected ADRs/details next. Type is a reading focus, not an applicability filter. No match is not proof that no decision applies."
+}

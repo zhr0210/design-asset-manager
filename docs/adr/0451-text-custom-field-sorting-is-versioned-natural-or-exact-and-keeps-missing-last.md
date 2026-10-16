@@ -1,11 +1,13 @@
 # Text Custom Field Sorting Is Versioned Natural or Exact and Keeps Missing Last
 
-Text Custom Fields support ascending and descending **Text Custom Field Sort** with an explicit **Text Custom Field Sort Mode** of Natural or Exact Unicode. Natural is the default and uses numeric-aware, versioned Unicode collation tailored by one canonical stored language tag, so `Project 2` precedes `Project 10` in ascending order while case, diacritics and punctuation remain later ordering distinctions rather than discarded equality. Creating a Natural sort visibly proposes the current interface language, lets the user choose another supported language or the root collation, and freezes the resolved language/tailoring plus Unicode/collation-data versions; another device or later interface-language change never substitutes its operating-system collator.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Exact Unicode compares the authoritative ADR 0440 NFC scalar sequence without locale, numeric segmentation or ADR 0450 comparison transforms. For Natural ties, the requested direction also applies to the authoritative NFC scalar sequence; any remaining equal-value tie uses opaque stable owner identity in fixed ascending order. Missing is always placed last in both directions instead of flooding the top of a descending view. Whitespace-only Text remains a present sortable value, and Conforming, Out-of-Constraint or Unknown validation status never changes value order.
+## Decision
 
-Temporary and saved sorts retain the exact field identity, direction, mode and relevant language/version evidence. A Saved Search or User Smart Filter therefore follows ADR 0421 when that field is archived, deleted or remapped and never falls back to a same-name field or unrelated sort. Sort changes remain presentation-only under ADR 0081 when membership is unchanged; ADR 0181 result generations freeze their ordering, and a newer value/index generation is adopted only through that surface's normal explicit refresh. An unavailable or upgraded collation policy requires an explicit compatible selection or reviewed policy migration rather than silent reinterpretation.
+Text Custom Fields support ascending and descending **Text Custom Field Sort** with an explicit **Text Custom Field Sort Mode** of Natural or Exact Unicode.
 
-ADR 0452 uses an explicit Natural or Exact Unicode mode to order browser
-entries, with the same stable tie and version rules, but that session-only
-display order is not automatically copied into the resulting asset filter.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[文本字段、检索与编辑规格](../product/specs/custom-text.md#adr-0451)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

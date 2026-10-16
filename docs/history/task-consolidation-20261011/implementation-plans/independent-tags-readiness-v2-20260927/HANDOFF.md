@@ -1,5 +1,7 @@
 # 下一位工程师：只定位任务01候选
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 本轮完成受限SPEC收敛，业务代码、真实资料库、模型与原报告均未更改。先读[READINESS-REVIEW](READINESS-REVIEW.md)，再读[ACTIVE-CONTRACT-ADDENDUM](ACTIVE-CONTRACT-ADDENDUM.md)、[FIRST-ROUND-PLAN.v2](FIRST-ROUND-PLAN.v2.json)、[TEST-GATE-MATRIX](TEST-GATE-MATRIX.md)。旧冲突条款按[SUPERSEDES](SUPERSEDES.json)限定范围解释，历史原文在inputs内。
 
 ## 唯一下一实施候选
@@ -10,6 +12,6 @@
 
 已核对候选验证入口：`node scripts/run-ts-test.mjs scripts/visual-ai-transport.test.ts`、`npm run test-visual-ai-download-integration`、`node scripts/run-electron-node-test.mjs scripts/asset-ocr-storage.test.ts`、`npm run typecheck`。本轮未运行；获准01时以真实源码/环境重新核对，再最小测试先红后绿与审查。不把参考模型PASS代替生产回归。
 
-任务02A方案与03两个开写门槛是后续票放行条件，不是01须先建设的通用平台。公平、FTS分页、Eagle及自动Embedding替代登记在DEFERRED-REGISTER，不抢做。
+任务02A方案与03两个开写门槛是后续票放行条件，不是01须先建设的通用平台。
 
 7父任务/依赖不变；01/07草案副本字节保持原样，02–06仅必要验收修订。全部仍待审/未实施，GitHub未发布，根TASK未更新。完成此轮后停止。

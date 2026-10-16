@@ -396,9 +396,7 @@
     },
     {
       "id": "S34",
-      "sequence": [
-        "unknown higher schema or Eagle or Legacy target"
-      ],
+      "sequence": [],
       "expected": "reject new Managed writes; no migration side effects",
       "tests": [
         "T02"
@@ -428,5 +426,6 @@
       ],
       "actualResult": "NOT_RUN"
     }
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

@@ -1,0 +1,80 @@
+{
+  "ok": true,
+  "scope": "scoped",
+  "taskType": {
+    "requested": "operations",
+    "resolved": "operations",
+    "focus": "核对原件、锁、迁移/恢复、权限和不确定状态"
+  },
+  "topic": "library-storage",
+  "candidates": [
+    {
+      "id": "0276",
+      "title": "Existing Libraries Open Through Inspection And Tiered Migration",
+      "path": "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md",
+      "classification": "Core",
+      "status": "not-declared",
+      "matchedTopics": [
+        "library-storage"
+      ],
+      "focusFacets": [
+        "data"
+      ],
+      "referencesToCheck": [
+        "0003",
+        "0277",
+        "0279"
+      ],
+      "moreReferences": 5
+    },
+    {
+      "id": "0284",
+      "title": "Managed Original Recovery Defaults To Verified Copy Back",
+      "path": "docs/adr/0284-managed-original-recovery-defaults-to-verified-copy-back.md",
+      "classification": "Core",
+      "status": "not-declared",
+      "matchedTopics": [
+        "library-storage"
+      ],
+      "focusFacets": [
+        "data",
+        "trust"
+      ],
+      "referencesToCheck": [
+        "0067",
+        "0185",
+        "0282"
+      ],
+      "moreReferences": 5
+    },
+    {
+      "id": "0275",
+      "title": "In-Place Reference Libraries Keep Originals And Split Caches",
+      "path": "docs/adr/0275-in-place-reference-libraries-keep-originals-and-split-caches.md",
+      "classification": "Core",
+      "status": "not-declared",
+      "matchedTopics": [
+        "library-storage"
+      ],
+      "focusFacets": [
+        "data"
+      ],
+      "referencesToCheck": [
+        "0034",
+        "0123",
+        "0196"
+      ],
+      "moreReferences": 8
+    }
+  ],
+  "totalMatches": 17,
+  "deferred": 14,
+  "topicIndexes": [
+    "docs/adr/indexes/topics/library-storage.md"
+  ],
+  "limits": {
+    "maxCandidates": 3,
+    "maxOutputBytes": 12000
+  },
+  "note": "Metadata only; read selected ADRs/details next. Type is a reading focus, not an applicability filter. No match is not proof that no decision applies."
+}

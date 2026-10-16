@@ -134,16 +134,6 @@
       "newProductionCases": "proposed-not-implemented"
     },
     {
-      "id": "G11-eagle-guard-order",
-      "rule": "DEFER-EAGLE / F",
-      "minimalCounterexample": "合成未知高version且部分表缺失，再调用initializer",
-      "referenceScope": "源码顺序事实，未执行",
-      "productionAcceptance": "未来临时Eagle索引断言版本拒绝前零DDL；生产Eagle/真实库不访问",
-      "owner": "独立Eagle复现（不阻塞01）",
-      "existingCommandIds": [],
-      "newProductionCases": "proposed-not-implemented"
-    },
-    {
       "id": "G12-three-defaults",
       "rule": "AC-07 / F",
       "minimalCounterexample": "默认基础plan误带Embedding或因替代删除旧向量",
@@ -153,5 +143,6 @@
       "existingCommandIds": [],
       "newProductionCases": "proposed-not-implemented"
     }
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

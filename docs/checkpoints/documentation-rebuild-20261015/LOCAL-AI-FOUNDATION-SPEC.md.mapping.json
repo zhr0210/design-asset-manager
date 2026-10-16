@@ -1,0 +1,156 @@
+{
+  "source": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+  "exact_before": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+  "paragraphs": [
+    {
+      "paragraph": 1,
+      "sha256": "9fd03c5d762b3caa9030fa713c52218dda7f6252668c910e8c23cb12018784ff",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 2,
+      "sha256": "14cd9766709f6a03d7e56cb415ec20666cf417dcb53cb99d6609f97c1ae2c82d",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 3,
+      "sha256": "d1bd1c3680ebd0893105870d859e52ec46a3c48002d2210cfa709efc49c7dd1e",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 4,
+      "sha256": "42bb740d267e37f7aa0a709c887a3b5d16694332ddb4c83e6e28319433843fed",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 5,
+      "sha256": "357e7d02947455909a203391ec6fdc145260a1aab5157e28139b51cc93618649",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 6,
+      "sha256": "5c8b484c84fd158190024ff182291135537587a8eeb23c940720ebb8174a7364",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 7,
+      "sha256": "3b1a87c43454bb6b2905e50fa97512f7e976bb5bf177370a90be0bcf87cbd8d4",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 8,
+      "sha256": "c75e67536a5c1736e6fe1f83d66f02fcddb6b92c4b334884fb170e351871a04d",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 9,
+      "sha256": "26757b13529e82a03188758f53d5de4bed5bafac1736f87495ad5bd33b7cec1e",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "source-era context"
+    },
+    {
+      "paragraph": 10,
+      "sha256": "af614d2c6a0f13e05527c71d2cf7bae20256d756e604947a805464b35242d82d",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 11,
+      "sha256": "2f6f10017c916d3c1b05c15a3bec6bed37c4e3084f693cb9e924614f93230b9b",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 12,
+      "sha256": "9b092a508d792ac16f91035bf8feb86375bfb657ed310cde6f1b9df632d5f1d9",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 13,
+      "sha256": "dc2d65684a29a4f5382398f387c6c96ab00275cde426ee444233dfd5557ab173",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 14,
+      "sha256": "ff118428f0569f4d6cf00ecf9b5320002355f7407003e7ab6ce04d21bc66101d",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 15,
+      "sha256": "864f11150995b685c48a669e79bbdbb6b04446ce6452c38d16fb7863f38efec5",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 16,
+      "sha256": "7b77afeeb1ef9c57076a224bbba16c4d87825f496410117220e99cd164888c9b",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 17,
+      "sha256": "c49cf748192567ede45c679200063f870e7dd0487c1f8096936a3fe6e6953e35",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 18,
+      "sha256": "7b2c833d55c71f88c67ce1209ec774ce13310e298063b8381743be854cd7aa70",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 19,
+      "sha256": "931667790c41d6bbe8704c942f6d04ab70f803f428dca0e414a6909a643439dd",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 20,
+      "sha256": "9ca262d74bfb186940b308f6ef9f883ad7af4bdbd55147dfe121d27317fb861c",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 21,
+      "sha256": "536116d3a0ed23f88b5ccd3bf955156b3fc5cda7bd6a4bbb7b26c822c1a86748",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 22,
+      "sha256": "4a6db3ead11f8798bb331cda0384effc8fac3a768f7df470ad7d67ae4f115fcf",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 23,
+      "sha256": "211302665ab694b698380b73ebc391a05dcd1b61da7a6e20db09f30bf06a2b6f",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 24,
+      "sha256": "f3de9dc9ca1ec36a6647093f79e0557419581a0c4b4dc8ecea6d52476f0fce9e",
+      "destination": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    },
+    {
+      "paragraph": 25,
+      "sha256": "7ce7d570813f823e44c50adb535291e76dbc287923099105fb78f0cbd96e45fd",
+      "destination": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "role": "retained capability requirement or scoped publication context"
+    }
+  ]
+}

@@ -46,6 +46,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Setup Python for documentation checks
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Documentation structure and navigation
+        run: |
+          python scripts/check-documentation.py
+          python scripts/documentation-governance.test.py
+          python scripts/check-adr-router.py
+          node scripts/adr-context.mjs check --json
+          node --test scripts/adr-context.test.mjs
+
       - name: Typecheck
         run: npm run typecheck
 

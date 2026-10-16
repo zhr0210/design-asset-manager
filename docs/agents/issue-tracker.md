@@ -1,8 +1,12 @@
-# Issue tracker: GitHub
+# Development issues: local records and scoped GitHub work
 
-This repository uses GitHub Issues through `gh`. This file describes how to
-operate the tracker when it is in scope; it is not permission to create issues,
-send comments, change labels or continue an old queue.
+The local [development problem records](DEVELOPMENT-PROBLEMS.md) are the authority
+for feedback from use, regression checks and diagnostics. Related records and
+checks appear in `context:route`'s `feedback`; follow
+[CONTRIBUTING](../../CONTRIBUTING.md#9-本地开发反馈闭环) to write results back.
+Private or public GitHub Issues through `gh` remain available for a task that
+explicitly references that tracker. This file is not permission to upload local
+records, create issues, send comments, change labels or continue an old queue.
 
 The latest user request controls priorities. An old issue number, ready label
 or closed dependency does not authorize resuming superseded work. Read a

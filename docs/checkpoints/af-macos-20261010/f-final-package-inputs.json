@@ -7,11 +7,11 @@
     "preload/work-window.cjs": true,
     "preload/asset-card.cjs": true,
     "main/macos-runtime/video": true,
-    "main/macos-runtime/owned-memory": true,
-    "main/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin": true
+    "main/macos-runtime/owned-memory": true
   },
   "electron": "30.5.1",
   "arch": "arm64",
   "signed": false,
-  "ordinaryStartupVerified": false
+  "ordinaryStartupVerified": false,
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

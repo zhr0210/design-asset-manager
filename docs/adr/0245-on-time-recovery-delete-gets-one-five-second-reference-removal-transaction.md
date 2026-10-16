@@ -1,23 +1,13 @@
 # On-Time Recovery Delete Gets One Five-Second Reference Removal Transaction
 
-When the host accepts an ADR 0241 Delete Recovery-Protected Managed Copy request before ADR 0244's no-owner scan deadline, it atomically consumes that exact delete authorization and enters one **Recovery-Protected Reference Removal In Flight** transaction. Acceptance freezes the target, recovery-gate generation, owner-scan generation, stable volume identity and exact package confirmation that authorized the request. Later expiry of the five-minute scan-validity window does not cancel or weaken this already accepted transaction.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The transaction receives at most five elapsed seconds from host acceptance to reach a terminal reference-removal outcome. It uses a narrow target/owner-store transaction lock rather than an ADR 0229 Storage Resolution Volume Slot, and it does not hold or renew the earlier scan token. The confirmation and scan countdown are replaced by a non-cancellable Deleting Recovery-Protected Copy status; closing the window, renderer loss, low-disk changes or another review cannot switch targets, edit scope, request a new scan or reuse the authorization.
+## Decision
 
-Before its atomic commit boundary, the host revalidates the frozen target, gate and volume identity and proves against the current owner generation that no installed, rollback, transaction, kept, pending or other declared owner has appeared. A newly observed or unassessable owner aborts and rolls back the transaction before reference commit, preserves the managed-copy reference and recovery safety gate and returns the target to Recovery Owner Changed. The accepted delete attempt is consumed; continuation requires a fresh scan and newly typed confirmation rather than an automatic retry.
+When the host accepts an ADR 0241 Delete Recovery-Protected Managed Copy request before ADR 0244's no-owner scan deadline, it atomically consumes that exact delete authorization and enters one **Recovery-Protected Reference Removal In Flight** transaction.
 
-The only destructive commit removes the ambiguous application-managed copy reference and its recovery safety gate and records the terminal delete decision atomically. It does not rewrite package payloads or delete installed/extracted content, active rollback data, user assets, External User-Owned Packages, another managed reference or any unrelated storage class.
+## Detailed contract and provenance
 
-If durable reference removal has not committed within five seconds, the host rolls back the attempt, retains the reference and safety gate and reports **Reference Removal Timed Out**. The old scan proof and consumed authorization cannot be reused, and no background or startup path retries the user-intent write. A new attempt starts only after another explicit complete owner scan and exact-name confirmation.
+详细状态、交互、数值边界和例外的唯一正文为[模型存储与清理恢复规格](../product/specs/model-storage-lifecycle.md#adr-0245)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Once durable reference removal commits within the cap, the user's delete decision is terminal even if physical unlinking is incomplete. Owner-safe deletion of now-unowned managed bytes may finish after the five-second transaction. Failure, a busy file, volume loss or delayed cleanup becomes ADR 0230-style **Physical Reclaim Pending**; reconciliation may retry only physical cleanup and may never recreate or remove a reference, repeat the delete authorization, infer Keep/Pending or widen the target. The result reports actual zero, partial or full bytes reclaimed rather than treating logical reference removal as immediate disk reclamation.
-
-ADR 0252 governs those retries. Each attempt rechecks current owner, stable volume and exact byte identity and may pause as blocked, not assessable or waiting for volume; no result can reopen this transaction or repeat its user-intent write.
-
-The transaction journal retains only opaque target, gate, scan, owner-generation and volume identities, acceptance/deadline timestamps, commit-boundary class and terminal reason needed to determine whether reference removal committed. It contains no typed package name, paths, payload, owner evidence, credentials, user content or private state and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
-
-If process termination interrupts this transaction, ADR 0246 uses that minimal journal for one idempotent startup reconciliation. It preserves a proven committed deletion or restores a proven non-commit without rerunning the scan, confirmation or reference write, then exposes one path-free result for at most one usable viewing opportunity or 24 hours.
-
-The current Runtime Package/session implementation has no recovery-protected reference-removal transaction, owner-store lock, five-second commit cap or Physical Reclaim Pending continuation for this flow. This ADR changes documentation only: it accepts/deletes/reconciles no real package copy, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.
-
-ADR 0249 uses the same five-second separation for a later, separately authorized unassessable-delete finalization, but its atomic scope normalizes an ADR 0247 neutral gate and ambiguous journal rather than retrying this reference-removal transaction. The two authorizations and journals are never interchangeable.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

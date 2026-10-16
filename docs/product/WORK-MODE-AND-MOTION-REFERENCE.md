@@ -17,8 +17,6 @@
 
 已核实的竞品信息（2026-09-14，官方页面说明，不代表本机实测）：
 
-- Eagle已有独立图片窗口、置顶和多参考窗口，不能宣传它完全没有悬浮参考。
-  [Eagle官方说明](https://eagle.cool/blog/post/eagle-image-pin-on-top-for-designers)
 - PureRef提供置顶参考画布及场景保存/加载，可以借鉴参考排布与持续可见的交互。
   [功能手册](https://www.pureref.com/handbook/features/)、[保存设置](https://www.pureref.com/handbook/2.0/settings/)
 - macOS ScreenFloat提供录屏、悬浮显示、拖出及从视频当前位置提取静帧。

@@ -1,0 +1,81 @@
+[
+  {
+    "path": "AGENTS.md",
+    "exists": true,
+    "sha256": "2df70163d148df680f60856416de2d63861a552e2522ffc92a2e27e0668a9368"
+  },
+  {
+    "path": "TASK.md",
+    "exists": true,
+    "sha256": "a6d0d4b1a2b3212fbb0604a43428c0d41192f7343f07e1cda27d3261b499f203"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "exists": true,
+    "sha256": "366e688eb612cac528a6d6543a45b1efe3f636d62b0b2fa80ecdf599c5a366c0"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "exists": true,
+    "sha256": "beab23be04ef6dc2f548ab2f286cea218dcb528456821365c8fe3028b69ed970"
+  },
+  {
+    "path": "docs/subsystems/README.md",
+    "exists": true,
+    "sha256": "ef49ce53f307de0c2de9590348398fbc4c34e2142820d49cf5e479a55c773a71"
+  },
+  {
+    "path": "docs/subsystems/plugin-system.md",
+    "exists": false
+  },
+  {
+    "path": "docs/product/CAPABILITY-SCOPE.md",
+    "exists": true,
+    "sha256": "281ec6153d5fe03360b892cc05a0cd94e69b3fbe51c325b5acd2057a8aa93ee9"
+  },
+  {
+    "path": "docs/product/README.md",
+    "exists": true,
+    "sha256": "4930f6b01d4c666c5d0e3acfa40b818e0e4946e4bd8838fa44528840c0b47bb2"
+  },
+  {
+    "path": "docs/product/specs/model-extension.md",
+    "exists": true,
+    "sha256": "76d4ded20986bc6a57eaade8d3a239b5f6c792ce35f845f4f802eb1636000263"
+  },
+  {
+    "path": "docs/adr/indexes/topics/model-extension.md",
+    "exists": true,
+    "sha256": "da435bb477357c304aabf7837b40f67bc36c730e54ad4794c97c807d03714d9a"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "exists": true,
+    "sha256": "aa5f298534768b52e0a04f14cdae192685a030d4f1bfa01086767270638885d4"
+  },
+  {
+    "path": ".codeindex/module-map.json",
+    "exists": true,
+    "sha256": "6b4c131b71cee6ce59570288e16a3e37cf103a4558f03ef12835f2b39fcd6368"
+  },
+  {
+    "path": "scripts/check-documentation.py",
+    "exists": true,
+    "sha256": "d26d8e7764343d15845af8c5b9f053ca31f193a2a1e69577a3ebc0ed96a8937c"
+  },
+  {
+    "path": "scripts/check-docs-sync.py",
+    "exists": true,
+    "sha256": "c12700129b2d17735ded39bc85259ace9fae586b58e7ffde125a87f842ab82ac"
+  },
+  {
+    "path": "scripts/documentation-governance.test.py",
+    "exists": true,
+    "sha256": "31e126fda3afe8173320284e0e6cb014619b603c2d91e35102143949ca24e58b"
+  },
+  {
+    "path": "scripts/agent-context-router.test.mjs",
+    "exists": true,
+    "sha256": "0dc9d5f1ad47791cc4112b39614a7aac65c514ae98fcffcea56a985f433eb7d4"
+  }
+]

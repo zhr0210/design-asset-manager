@@ -1,0 +1,149 @@
+[
+  {
+    "case": "search",
+    "task": "在本地素材库中搜索图片",
+    "expected_route": "asset-discovery",
+    "actual_route": "asset-discovery",
+    "ok": true,
+    "documentation": [
+      "docs/subsystems/asset-discovery.md"
+    ],
+    "budget": {
+      "basis": "full-file-conservative",
+      "bytesPerToken": 3,
+      "selectedFiles": 2,
+      "estimatedFileTokens": 13298,
+      "estimatedMetadataTokens": 2235,
+      "outputEstimatedTokens": 2235,
+      "maxMetadataTokens": 4000,
+      "estimatedTokens": 15533,
+      "maxFiles": 7,
+      "maxEstimatedTokens": 16000,
+      "truncated": true
+    },
+    "scope": "Actual context navigation only; no app/model/native execution."
+  },
+  {
+    "case": "native-window",
+    "task": "修复macOS原生悬浮窗的停靠",
+    "expected_route": "work-mode",
+    "actual_route": "work-mode",
+    "ok": true,
+    "documentation": [
+      "docs/subsystems/work-mode.md",
+      "docs/subsystems/media-handoff.md"
+    ],
+    "budget": {
+      "basis": "full-file-conservative",
+      "bytesPerToken": 3,
+      "selectedFiles": 4,
+      "estimatedFileTokens": 9659,
+      "estimatedMetadataTokens": 1856,
+      "outputEstimatedTokens": 1856,
+      "maxMetadataTokens": 4000,
+      "estimatedTokens": 11515,
+      "maxFiles": 7,
+      "maxEstimatedTokens": 16000,
+      "truncated": true
+    },
+    "scope": "Actual context navigation only; no app/model/native execution."
+  },
+  {
+    "case": "ocr-analysis",
+    "task": "AI tagging OCR task result sync",
+    "expected_route": "ai-analysis",
+    "actual_route": "ai-analysis",
+    "ok": true,
+    "documentation": [
+      "docs/subsystems/ai-analysis.md",
+      "docs/subsystems/ocr.md",
+      "docs/subsystems/visual-ai.md"
+    ],
+    "budget": {
+      "basis": "full-file-conservative",
+      "bytesPerToken": 3,
+      "selectedFiles": 5,
+      "estimatedFileTokens": 11682,
+      "estimatedMetadataTokens": 2632,
+      "outputEstimatedTokens": 2632,
+      "maxMetadataTokens": 4000,
+      "estimatedTokens": 14314,
+      "maxFiles": 7,
+      "maxEstimatedTokens": 16000,
+      "truncated": true
+    },
+    "scope": "Actual context navigation only; no app/model/native execution."
+  },
+  {
+    "case": "copy",
+    "task": "Copy Into Library Candidate preview",
+    "expected_route": "capture-intake",
+    "actual_route": "capture-intake",
+    "ok": true,
+    "documentation": [
+      "docs/subsystems/storage-intake.md"
+    ],
+    "budget": {
+      "basis": "full-file-conservative",
+      "bytesPerToken": 3,
+      "selectedFiles": 5,
+      "estimatedFileTokens": 10657,
+      "estimatedMetadataTokens": 2667,
+      "outputEstimatedTokens": 2667,
+      "maxMetadataTokens": 4000,
+      "estimatedTokens": 13324,
+      "maxFiles": 7,
+      "maxEstimatedTokens": 16000,
+      "truncated": true
+    },
+    "scope": "Actual context navigation only; no app/model/native execution."
+  },
+  {
+    "case": "settings",
+    "task": "Application settings path migration",
+    "expected_route": "settings-paths",
+    "actual_route": "settings-paths",
+    "ok": true,
+    "documentation": [
+      "docs/subsystems/settings-recovery.md"
+    ],
+    "budget": {
+      "basis": "full-file-conservative",
+      "bytesPerToken": 3,
+      "selectedFiles": 6,
+      "estimatedFileTokens": 12040,
+      "estimatedMetadataTokens": 2106,
+      "outputEstimatedTokens": 2106,
+      "maxMetadataTokens": 4000,
+      "estimatedTokens": 14146,
+      "maxFiles": 7,
+      "maxEstimatedTokens": 16000,
+      "truncated": true
+    },
+    "scope": "Actual context navigation only; no app/model/native execution."
+  },
+  {
+    "case": "packaging",
+    "task": "Release packaging signing",
+    "expected_route": "release-packaging",
+    "actual_route": "release-packaging",
+    "ok": true,
+    "documentation": [
+      "docs/subsystems/platform-release.md"
+    ],
+    "budget": {
+      "basis": "full-file-conservative",
+      "bytesPerToken": 3,
+      "selectedFiles": 4,
+      "estimatedFileTokens": 9387,
+      "estimatedMetadataTokens": 1683,
+      "outputEstimatedTokens": 1683,
+      "maxMetadataTokens": 4000,
+      "estimatedTokens": 11070,
+      "maxFiles": 7,
+      "maxEstimatedTokens": 16000,
+      "truncated": true
+    },
+    "scope": "Actual context navigation only; no app/model/native execution."
+  }
+]

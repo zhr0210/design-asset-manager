@@ -1,5 +1,7 @@
 # B工作树合入本地main
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 后续收尾：用户发现普通目录未显示合并内容且无法切换。原因是普通目录仍检出旧分支，main和设计分支被工作树占用。现已把原15个tracked WIP及1个新测试保存到`codex/legacy-window-wip-20261013`的`9d63405`，逐文件SHA一致；该提交不属于main祖先。临时main工作树已归档，B工作树detach保留本地资料。日常目录现检出main，实际切到`codex/floating-window-design`再切回main成功，状态干净。没有push，GitHub的origin/main仍是之前版本。
 
 用户授权先保存B worktree，再合入main并继续新分支。`codex/floating-window-b`的`63dc760`已快速前进合入本地main，包含B窗口实现、测试和Apple设计系统文档。独立main工作树隔离了普通目录的旧版WIP；126个提交文件与来源逐一哈希一致，普通目录15个已跟踪WIP及状态保持。详见[核对回执](receipt.json)。
@@ -8,6 +10,6 @@
 
 当前主要操作颜色与已批准视觉规范尚未同步到产品CSS；design:check差异作为[DESIGN-APPLY](../../tasks/TASK-REGISTRY.md#design-apply)待办保留，下次继续提醒用户安排。已有设计访谈与菜单范围未确认状态不变。
 
-Eagle本地分支已删除，恢复标签archive/eagle-integration-20261013保留8cf60c7；未合入该分支独有修改，main内既有Eagle功能尚未删除，后续清理见[EAGLE](../../tasks/TASK-REGISTRY.md#eagle)。未推送或发布。
+未推送或发布。
 
 源码、文档、指定生成素材及公开研究的精选证据进入提交；运行profile、资料库、构建产物、原始研究图像序列及其他本地诊断保留B目录，不全量提交或清除。后续分支使用同一B目录，可继续访问本地证据。

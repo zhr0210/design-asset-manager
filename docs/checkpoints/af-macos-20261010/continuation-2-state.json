@@ -15,9 +15,9 @@
   "nativeToolState": "Mac locked, revalidated this turn",
   "iabState": "old tab connection interrupted after old Host normal exit",
   "pendingUserFacts": [
-    "Mac unlock",
-    "dedicated public Eagle library active"
+    "Mac unlock"
   ],
   "goalStatus": "active",
-  "userPathAcceptance": false
+  "userPathAcceptance": false,
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

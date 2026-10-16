@@ -14,7 +14,6 @@ export default defineConfig({
         if(process.platform==='darwin')chmodSync(resolve(options.dir||'out/main','shelf-candidates/DAM Shelf B.app/Contents/MacOS/Shelf'),0o755)
       },
       buildStart(){
-        this.emitFile({type:'asset',fileName:'eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin',source:readFileSync(resolve(__dirname,'build/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin'))})
         if(process.platform==='darwin') {
           for(const name of ['MacOS/Shelf','Info.plist','_CodeSignature/CodeResources'])this.emitFile({type:'asset',fileName:`shelf-candidates/DAM Shelf B.app/Contents/${name}`,source:readFileSync(resolve(__dirname,'build/shelf-candidates/DAM Shelf B.app/Contents',name))})
           for(const name of ['owned-memory','video'] as const) {

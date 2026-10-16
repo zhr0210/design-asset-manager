@@ -1,0 +1,503 @@
+[
+  {
+    "path": ".codeindex/documentation-map.json",
+    "exists": true,
+    "sha256": "b96a1d26dd803fcd61d64b56fc0ff5ca7ad99f5797646fd7415bbe2d4be7932c"
+  },
+  {
+    "path": ".codeindex/module-map.json",
+    "exists": true,
+    "sha256": "9589fda81955c71a58a9bf13f3e3f8b540a79f611ddaa5f2f8a245d2d3fabbc7"
+  },
+  {
+    "path": ".codeindex/module-map.schema.json",
+    "exists": true,
+    "sha256": "149d3e937e90ea611e706e9c5d4f488dda0a2f068c4723e4ee0cd5b6fc75e1d7"
+  },
+  {
+    "path": "AGENTS.md",
+    "exists": true,
+    "sha256": "3b4f4b3d7e83c446db4b968ec9a2131b982496af496b8275a2d085769d409060"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "exists": true,
+    "sha256": "b737d314de145a008bab120c55ed7a738a0294a766206745995236f3f07a2892"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "exists": true,
+    "sha256": "15b5471f7c35a47e4aaabb0f786e7a4b26e062b0cb087c4148ad7eb0da367660"
+  },
+  {
+    "path": "TASK.md",
+    "exists": true,
+    "sha256": "a1ef11bae47020a8f761ae05517217fce6d00c3de6c000bc3ce72460bf57b941"
+  },
+  {
+    "path": "docs/adr/indexes/reading-context.md",
+    "exists": true,
+    "sha256": "7d3e48c0e8c03f9fbde914120fed08174adf2b6399d23ce17aa81bfa34746a71"
+  },
+  {
+    "path": "docs/adr/indexes/tasks.md",
+    "exists": true,
+    "sha256": "84ed5e58b20209c0ff1c108327fcf0a1bfc2980f415c5c4ea88ab80d90de97b5"
+  },
+  {
+    "path": "docs/adr/indexes/topics/add-assets.md",
+    "exists": true,
+    "sha256": "46f12117dae886414041122dfa5a3fd63bcacc735486bce89d880f1fcf8dee19"
+  },
+  {
+    "path": "docs/adr/indexes/topics/backup-trust.md",
+    "exists": true,
+    "sha256": "e85a4a9a1a5952cdb951269d55e02c8fba487d955c6efe712604260260d0d3b4"
+  },
+  {
+    "path": "docs/adr/indexes/topics/batch-conflicts.md",
+    "exists": true,
+    "sha256": "c80fd3e82b08f8ac96e84d54e34a4a5df0d09f213ece269606c08353d3683d61"
+  },
+  {
+    "path": "docs/adr/indexes/topics/capture.md",
+    "exists": true,
+    "sha256": "46cf3ed60d2b053844104d0cb575e663cdf03517cc5e20d0185bd338b9e6f3fe"
+  },
+  {
+    "path": "docs/adr/indexes/topics/compound-originals.md",
+    "exists": true,
+    "sha256": "9d90e5689af79fb7eb5526fd81f2d412911d756497ac0a97107280b1fa160082"
+  },
+  {
+    "path": "docs/adr/indexes/topics/custom-fields.md",
+    "exists": true,
+    "sha256": "aec0cd78b65ef839828bac191aea2560c1e83d3d513eb22cd49a3664a085eecf"
+  },
+  {
+    "path": "docs/adr/indexes/topics/custom-number.md",
+    "exists": true,
+    "sha256": "2c159683382a9b01e348922c5b1f7faa3e6cde906ecbd4189ad4980efa746d62"
+  },
+  {
+    "path": "docs/adr/indexes/topics/custom-text.md",
+    "exists": true,
+    "sha256": "36fe2d662cd2b0fd5be77308a427e0a6907c134557244585f4fb4734cb8960ee"
+  },
+  {
+    "path": "docs/adr/indexes/topics/export.md",
+    "exists": true,
+    "sha256": "5def83479dea19c68204dc7e7715c31208f2063bbba65bb334376ee5ff02f685"
+  },
+  {
+    "path": "docs/adr/indexes/topics/library-storage.md",
+    "exists": true,
+    "sha256": "92429605a64a382ae19a88b6509ae7af1157ce13522c556809cefa13d23103b2"
+  },
+  {
+    "path": "docs/adr/indexes/topics/local-host.md",
+    "exists": true,
+    "sha256": "534e734408f5c081203705ea6d9eb88a8638325df178f18b5366741eb6131253"
+  },
+  {
+    "path": "docs/adr/indexes/topics/manual-undo.md",
+    "exists": true,
+    "sha256": "0e210c8093a3959ce8396d11dfe30bb591de425a53467d7717f5b6ac6c40bc34"
+  },
+  {
+    "path": "docs/adr/indexes/topics/missing-initialization.md",
+    "exists": true,
+    "sha256": "f30fe6622412ac1bd56f292bb5b14ca77120b39573e8d7f746921230884557ec"
+  },
+  {
+    "path": "docs/adr/indexes/topics/model-extension.md",
+    "exists": true,
+    "sha256": "0daa126cd3ffc6d039db762eb11f49b0747e3a915d5cac2568e01431bfdceac2"
+  },
+  {
+    "path": "docs/adr/indexes/topics/model-storage-lifecycle.md",
+    "exists": true,
+    "sha256": "cf5fbf86491f14e5fa4597b34451aeaa2aee7f577cec20c1c2a29eaccffcd8c1"
+  },
+  {
+    "path": "docs/adr/indexes/topics/modern-boundaries.md",
+    "exists": true,
+    "sha256": "128de27402a4137b9ea7d03708276c4e30010dbe4cc4ed812189c83d5110e797"
+  },
+  {
+    "path": "docs/adr/indexes/topics/ocr.md",
+    "exists": true,
+    "sha256": "2b14dca53e0eea97f1ee32987711cf691cb3b0c78b90ec68a6843e09e4573145"
+  },
+  {
+    "path": "docs/adr/indexes/topics/platform-runtime.md",
+    "exists": true,
+    "sha256": "b014589fd1c56b73fc8d9b35cbe072da215f96bff2fd8150651adbf8bc9622c6"
+  },
+  {
+    "path": "docs/adr/indexes/topics/portability.md",
+    "exists": true,
+    "sha256": "1d729b3b323a94ede04826d93e19ae521491012fe5cb94421a950799409dfb3f"
+  },
+  {
+    "path": "docs/adr/indexes/topics/preview-analysis.md",
+    "exists": true,
+    "sha256": "e61884b841124a1e07581eb0876bb6914f813ee4964d25fbbaf1ec1c67750314"
+  },
+  {
+    "path": "docs/adr/indexes/topics/progressive-ai.md",
+    "exists": true,
+    "sha256": "cfc2d269b05b6c6219ce9127216e356b0bd62b9716db3a8864505042f4e48019"
+  },
+  {
+    "path": "docs/adr/indexes/topics/referenced-operations.md",
+    "exists": true,
+    "sha256": "61f232b0d280124084f72878ad41f5fbb5f54ebac8206fd2ba248a8b8b72cc1c"
+  },
+  {
+    "path": "docs/adr/indexes/topics/retrieval.md",
+    "exists": true,
+    "sha256": "2fdb45724d0d773a7f3585bc33dcf5f639b9aeafb090acc727894273bd4f13a8"
+  },
+  {
+    "path": "docs/adr/indexes/topics/review-trash.md",
+    "exists": true,
+    "sha256": "51173c558d824781487b3ed99556afc93c99b2fb748ad5ac5153176bf3cadf4d"
+  },
+  {
+    "path": "docs/adr/indexes/topics/search-first-organization.md",
+    "exists": true,
+    "sha256": "0236474be352fe77c1ad5136352581391f3a2898f543e9faecdae1fe245b38cc"
+  },
+  {
+    "path": "docs/adr/indexes/topics/storage-review.md",
+    "exists": true,
+    "sha256": "4a6c2db4a07dc16f071a419859b0bfa009d47e8d2e38ed95e344b57f42bb291e"
+  },
+  {
+    "path": "docs/adr/indexes/topics/work-mode.md",
+    "exists": true,
+    "sha256": "caf7b624e20c8eeed6fc90f2e4f35a1e05bd3f50814d89c3bacaa856fd5fd9c8"
+  },
+  {
+    "path": "docs/adr/indexes/topics/workspace.md",
+    "exists": true,
+    "sha256": "a34bd875584b23c86782d51cc14c0a88bf6958afd3fe494725d44958dd05293f"
+  },
+  {
+    "path": "docs/adr/indexes/topics/writeback.md",
+    "exists": true,
+    "sha256": "9cba4a1f8089d4d004deb0b6d564af85be852bc70348719cbd83cd30ab663ebc"
+  },
+  {
+    "path": "docs/agents/engineering.md",
+    "exists": false
+  },
+  {
+    "path": "docs/platform/BUILD-AND-RELEASE.md",
+    "exists": false
+  },
+  {
+    "path": "docs/platform/README.md",
+    "exists": true,
+    "sha256": "7ffd2214863d154787a1c1066b4cb6bd48ba2103f8cf475ffe1820973b365c01"
+  },
+  {
+    "path": "docs/product/CAPABILITY-SCOPE.md",
+    "exists": false
+  },
+  {
+    "path": "docs/product/README.md",
+    "exists": true,
+    "sha256": "2193873270d8ddcc01719c550d3081b1bbec8c1aa5c33e80a2a8a78e367e0f5b"
+  },
+  {
+    "path": "docs/product/specs/README.md",
+    "exists": true,
+    "sha256": "95deb389d9694a08240e47737d5c1f227697eb107edce456c720ae30ac5747f6"
+  },
+  {
+    "path": "docs/product/specs/backup-trust.md",
+    "exists": true,
+    "sha256": "81951a6b408bbc6c6fe8afde64b7b44c3cb35a03ce46d03cab806a6054c7b275"
+  },
+  {
+    "path": "docs/product/specs/batch-conflicts.md",
+    "exists": true,
+    "sha256": "989d3a12b325511f14f66d38fc64f7aabdfbf6bfba5d491ea84d98984ddd17b3"
+  },
+  {
+    "path": "docs/product/specs/capture.md",
+    "exists": true,
+    "sha256": "0ec6991f62b5b2c539f3f72c2bec9cde2287e8c61d3389c379df78cb7648b2bc"
+  },
+  {
+    "path": "docs/product/specs/compound-originals.md",
+    "exists": true,
+    "sha256": "5542af3d019b15b49fe0b50389848e6f7c6384431823258b35e76083ee348758"
+  },
+  {
+    "path": "docs/product/specs/custom-fields.md",
+    "exists": true,
+    "sha256": "de10b8853e73f8f8f01ba148a2c27b43b779c11e4da83a228408c45885d04ea5"
+  },
+  {
+    "path": "docs/product/specs/custom-number.md",
+    "exists": true,
+    "sha256": "bca16bdaa60e0a4d3888e1bba904c0b8bac619e457650e714b12eec25ad8ec64"
+  },
+  {
+    "path": "docs/product/specs/custom-text.md",
+    "exists": true,
+    "sha256": "45666ce27deaca9d24d8452b86752f8b2b67ac14d8efdf5c0f2198c1274b4597"
+  },
+  {
+    "path": "docs/product/specs/export.md",
+    "exists": true,
+    "sha256": "fa7bb074c94e42459eee6c9ef86023e91ab262cf6c378b6d930a09ada4915344"
+  },
+  {
+    "path": "docs/product/specs/library-storage.md",
+    "exists": true,
+    "sha256": "1e94dba4277239a83af316331c19c18e2443c44852dfdaee20791a51494dd0c1"
+  },
+  {
+    "path": "docs/product/specs/manual-undo.md",
+    "exists": true,
+    "sha256": "76acd59d13f24222f0574eecff4d8c2709c06582fb97569f9a40e9b2cca579c1"
+  },
+  {
+    "path": "docs/product/specs/missing-initialization.md",
+    "exists": true,
+    "sha256": "088ccc92050783f6e7a12e2d737f72436ef13776ec43051787cbed77dea73d97"
+  },
+  {
+    "path": "docs/product/specs/model-extension.md",
+    "exists": true,
+    "sha256": "e9252b2f98ff676327bffdf718e705e4b401417c566a17f1830526955d2c9ed5"
+  },
+  {
+    "path": "docs/product/specs/model-storage-lifecycle.md",
+    "exists": true,
+    "sha256": "6285dd861d4d4b3451e74f10628e86c86d4a585ba1273e418673940673924459"
+  },
+  {
+    "path": "docs/product/specs/portability.md",
+    "exists": true,
+    "sha256": "06325c9552644ad216e267ceca7e6a0421c18012888b4456a2b8cb314e0e78f8"
+  },
+  {
+    "path": "docs/product/specs/preview-analysis.md",
+    "exists": true,
+    "sha256": "70e97970c58119914a3c703f8989d4247b17ae66949684a9f08f7a7b84f14298"
+  },
+  {
+    "path": "docs/product/specs/referenced-operations.md",
+    "exists": true,
+    "sha256": "cfd608b6ab3e9934b01af5929f0071b87cc286438d3bffec9b619dc33677bfb5"
+  },
+  {
+    "path": "docs/product/specs/review-trash.md",
+    "exists": true,
+    "sha256": "a17053690d81c7eecf46c63c5347ac3ed6f1fcf7a9c8adae61eb98c6be83d40b"
+  },
+  {
+    "path": "docs/product/specs/storage-review.md",
+    "exists": true,
+    "sha256": "7f6803fe04670f90e1353a759c58860db9595e11cb4c023bab24975faf3dcc61"
+  },
+  {
+    "path": "docs/product/specs/workspace.md",
+    "exists": true,
+    "sha256": "50e70e941bdfc99b367a63b8c0cbe89fdd93fba1ed0777fb89090f1ff4b71896"
+  },
+  {
+    "path": "docs/product/specs/writeback.md",
+    "exists": true,
+    "sha256": "c7eeab6b76eb3b55b950cdd1185405792fb41ed0e5c3578d51352d4f3871c6a5"
+  },
+  {
+    "path": "docs/subsystems/README.md",
+    "exists": true,
+    "sha256": "90fa44eca66a60604f9afc03b39863aeb3a2852b04aa924f22f5bf5f2f4b6284"
+  },
+  {
+    "path": "docs/subsystems/ai-analysis.md",
+    "exists": true,
+    "sha256": "e6a087a2522fd62eebf6bc2e2aa244037ab66f439d3efbd56ce94271693b9953"
+  },
+  {
+    "path": "docs/subsystems/ai-connections.md",
+    "exists": true,
+    "sha256": "83750795b62788c165f76ea3e58db75a3f13f31418e750baba0cc50603ac3c17"
+  },
+  {
+    "path": "docs/subsystems/ai-runtime.md",
+    "exists": true,
+    "sha256": "8c865423e2379e680e81f670b99b93898b55181b3ec214d26bac88b3363129b1"
+  },
+  {
+    "path": "docs/subsystems/ai-system.md",
+    "exists": false
+  },
+  {
+    "path": "docs/subsystems/asset-discovery.md",
+    "exists": true,
+    "sha256": "69c467c6085b49aaa5ba6bb899235aa2400e9318a3ebb6ae442e10c366b936b7"
+  },
+  {
+    "path": "docs/subsystems/asset-workspace.md",
+    "exists": true,
+    "sha256": "a99d98d731012056dc5fb501c279fa6bbca7b287b6bc15dbd25153e37c0215c6"
+  },
+  {
+    "path": "docs/subsystems/engineering.md",
+    "exists": true,
+    "sha256": "18668e2dcaffeb9482ca86cd23ab9f165bb48d2fdea6f5bc0162ec3a2b76a419"
+  },
+  {
+    "path": "docs/subsystems/gui-shell.md",
+    "exists": true,
+    "sha256": "0a01f840f41f9ca46e63560a3f34468908ac4162a779c936c8baeedc0416333c"
+  },
+  {
+    "path": "docs/subsystems/library-lifecycle.md",
+    "exists": true,
+    "sha256": "9ca04db85821114a4d657f0f285319dc99382852cbc8d5dd64aba6d09b44cd77"
+  },
+  {
+    "path": "docs/subsystems/local-host.md",
+    "exists": true,
+    "sha256": "c204e25d93136ba544dae32b161b1fae0c19705f9c3e407a5b8e5c04e071f101"
+  },
+  {
+    "path": "docs/subsystems/media-handoff.md",
+    "exists": true,
+    "sha256": "9ed5a4f93cc51b785e480234684f66b660117bc47790eec35e2f95123981ecf6"
+  },
+  {
+    "path": "docs/subsystems/model-library.md",
+    "exists": true,
+    "sha256": "6cdc3c6556bbeade174a3db6dd3ef1a0ab1cedfdf3785ae71cd6eee8c9a6a89b"
+  },
+  {
+    "path": "docs/subsystems/ocr.md",
+    "exists": true,
+    "sha256": "624cb5af3f4bed7538b70413a522d484fd6dc191bd0462ee11f0b197aabae620"
+  },
+  {
+    "path": "docs/subsystems/optional-targets.md",
+    "exists": true,
+    "sha256": "ba41feb80c2866adcc531802f503d018c1f65a99d89bccf728da576205b4540b"
+  },
+  {
+    "path": "docs/subsystems/organization.md",
+    "exists": true,
+    "sha256": "a4bebf3aac033a5101bf6096767611c11a75b39be2f00e1bd467e76ff8ea271d"
+  },
+  {
+    "path": "docs/subsystems/platform-release.md",
+    "exists": true,
+    "sha256": "608fdea2b282f9c3c72924972b3dc8a7f18e6a1109efb7ba25f01d97ebf7921b"
+  },
+  {
+    "path": "docs/subsystems/settings-recovery.md",
+    "exists": true,
+    "sha256": "a67f435b7e560a2cedefd3cb912676ffa74ae4b8257167009d68436c5c407e2d"
+  },
+  {
+    "path": "docs/subsystems/storage-intake.md",
+    "exists": true,
+    "sha256": "5cc2c6ac18bcb83db405d08fab0e598f8516ac2bdedb230958da97c4a38ca70c"
+  },
+  {
+    "path": "docs/subsystems/visual-ai.md",
+    "exists": true,
+    "sha256": "86662b7784e48ec37b5e03343f0ddab07b5d6cbae41680f76d2ff797b4e74fa2"
+  },
+  {
+    "path": "docs/subsystems/work-mode.md",
+    "exists": true,
+    "sha256": "0b78b5840e80e5d7bee54310ff32650c6588d59b7f24589db81c44e1f5273097"
+  },
+  {
+    "path": "scripts/agent-context-router.mjs",
+    "exists": true,
+    "sha256": "f8046df946bd59244c60a4bae920766b75e38ce5aaa647c93de5ef78cadd4fbc"
+  },
+  {
+    "path": "scripts/agent-context-router.test.mjs",
+    "exists": true,
+    "sha256": "5c56c2d27ca0bd2fe83b012d0450b1f1b681dbc0aade035f2f9c576bc9b08e3d"
+  },
+  {
+    "path": "scripts/check-docs-sync.py",
+    "exists": true,
+    "sha256": "7258952fad6190b7bde855bdaaf28669607d21e09134f12037ef8fdf50cd2c77"
+  },
+  {
+    "path": "scripts/check-documentation.py",
+    "exists": true,
+    "sha256": "f02e85b7a8f7f87ab6616da9cfdce6031f94c852e558b0bd48d21270a3818ee0"
+  },
+  {
+    "path": "scripts/documentation-governance.test.py",
+    "exists": true,
+    "sha256": "494485a238b25bab7f1b0b385153525ead7d4e4b74f246001772747bd63cdd61"
+  },
+  {
+    "path": "src/main/README.md",
+    "exists": true,
+    "sha256": "0bb53169cbeea9eec0a68de290fcf7645ab08eeec09ac025b903509eaf6c32ee"
+  },
+  {
+    "path": "src/main/background-analysis/README.md",
+    "exists": true,
+    "sha256": "9c538ae473cef1db9be0bf487826be0abcb9c63c26e8c451df3c0d010e3c0472"
+  },
+  {
+    "path": "src/main/ipc/README.md",
+    "exists": true,
+    "sha256": "4c0da1dc8524fd95870e41e0d6e84dbe469349009f991a38c6296c95fc3f5924"
+  },
+  {
+    "path": "src/main/library-lifecycle/README.md",
+    "exists": true,
+    "sha256": "ccbe6def88313c21332eb0de15222fce46838f23eafcf0360fd222e74f3fa603"
+  },
+  {
+    "path": "src/main/ocr/README.md",
+    "exists": true,
+    "sha256": "6b98478d98bf81b3da9e6d37178c1ae8309f9e95d8a8e7a130e76f2af337e58a"
+  },
+  {
+    "path": "src/main/services/README.md",
+    "exists": true,
+    "sha256": "22bb4f3f6f47a0e74f00d877076c03011c0cee8d70450db289279956e2dd3055"
+  },
+  {
+    "path": "src/main/services/ai-runtime/README.md",
+    "exists": true,
+    "sha256": "23d8b0dd7a312bc2cc3e52f90e9a03fe82f3aba6cfbec33c61c447e28cc7692a"
+  },
+  {
+    "path": "src/main/visual-ai/README.md",
+    "exists": true,
+    "sha256": "109bd511408cf6995f323e0a5be885c0ff537e31710edd4a64121eb60b84da13"
+  },
+  {
+    "path": "src/main/work-mode/README.md",
+    "exists": true,
+    "sha256": "101e11a3b9a6142a1fb3faa392a88c3568ee67dafd208c5a5384a51854562bc7"
+  },
+  {
+    "path": "src/renderer/README.md",
+    "exists": true,
+    "sha256": "03cc5a632eff8e06755781a6e6d4ba0700f8fed6b9a08b208bcd722eac8f088d"
+  },
+  {
+    "path": "src/shared/README.md",
+    "exists": true,
+    "sha256": "110ce1be3c07d6356861456d3b370be0cb1796374d10ac5956cf969a0ba8539c"
+  }
+]

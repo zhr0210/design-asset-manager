@@ -1,14 +1,13 @@
 # Source Rewrite Presets Have Explicit Personal And Library Scopes
 
-Saving a Source Rewrite Preset requires an explicit scope and defaults to **Personal Source Rewrite Preset**. A personal preset is device-local application state available while working in any library on that device; it is not written into a Library Root, does not belong to a Registered Library and is not included in Full Library Backup. Saving to the active library instead creates a **Library Source Rewrite Preset** as authoritative portable library state included in that library's normal Full Library Backup and restore.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The two scopes are independent identities, not synchronized views of one preset. Copying a personal preset into a library or a library preset into personal scope is an explicit Save Copy action with a new identity; later rename, edit or deletion never propagates across scopes. Forgetting a library registration does not delete its library presets, while a personal preset never grants another library write authority. Saving, editing or deleting a library preset requires that library to be active and writable under its normal single-owner rules.
+## Decision
 
-On another device, a Library Source Rewrite Preset preserves its semantic rules and remains readable even when required encoders or plugins are absent. Application of the preset re-resolves every current item and installed capability under ADR 0333, marks unsupported outcomes unavailable or excluded and never downloads, installs, enables or substitutes a capability automatically. Personal presets do not appear merely because another device opens the same library.
+Saving a Source Rewrite Preset requires an explicit scope and defaults to **Personal Source Rewrite Preset**.
 
-Neither scope stores source paths, Design Asset identities, Source Content Generations, resolved item/member values, Compound Original membership or roles, cross-member transformations, encoder/plugin binaries, capability proof, destructive confirmation, staging, receipts or recovery state. Applying a preset to ADR 0347 therefore starts a fresh Referenced Compound Source Rewrite Plan with every member defaulted to Keep Current rather than selecting primary or companion rewrites. Once a rewrite is confirmed, its operation record holds its own reviewed plan snapshot and evidence rather than dynamically depending on the preset. Deleting a preset therefore removes only that reusable rule definition and cannot alter, cancel, retry, roll back or resolve an active or recovering rewrite. The current application has no source-rewrite preset store or scope selector. This ADR records target architecture only and encodes, installs, downloads, accesses, creates, copies, relinks, moves, rewrites, restores, trashes, deletes, reads or writes no runtime/user file and changes no public IPC, database schema or AI Worker API.
+## Detailed contract and provenance
 
-ADR 0396 gives Compatible Export Presets analogous personal/library scopes plus
-immutable built-ins, but the two preset families remain independent. A
-source-rewrite preset never authorizes export and a compatible-export preset
-never authorizes current-source mutation.
+详细状态、交互、数值边界和例外的唯一正文为[引用源操作与恢复规格](../product/specs/referenced-operations.md#adr-0334)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/storage-intake.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

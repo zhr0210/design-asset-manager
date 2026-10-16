@@ -1,0 +1,16 @@
+[
+  "AGENTS.md",
+  "CONTRIBUTING.md",
+  "TASK.md",
+  "docs/code-standards.md",
+  "docs/agents/domain.md",
+  "docs/adr/README.md",
+  "docs/adr/indexes/tasks.md",
+  "docs/adr/indexes/topics/workspace.md",
+  "docs/adr/indexes/topics/model-extension.md",
+  "docs/subsystems/README.md",
+  "docs/subsystems/settings-recovery.md",
+  "docs/subsystems/optional-targets.md",
+  "docs/subsystems/engineering.md",
+  "docs/product/specs/model-extension.md"
+]

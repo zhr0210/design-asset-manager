@@ -1,0 +1,26 @@
+[
+  {
+    "agent": "/root/probe_window_proposal",
+    "file": "docs/checkpoints/document-retrieval-validation-20261015/probe_window_proposal.trace.json",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "tools": 12,
+    "has_final": true
+  },
+  {
+    "agent": "/root/probe_format_boundary",
+    "file": "docs/checkpoints/document-retrieval-validation-20261015/probe_format_boundary.trace.json",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "tools": 6,
+    "has_final": true
+  },
+  {
+    "agent": "/root/probe_semantic_docs",
+    "file": "docs/checkpoints/document-retrieval-validation-20261015/probe_semantic_docs.trace.json",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "tools": 6,
+    "has_final": true
+  }
+]

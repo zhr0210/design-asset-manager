@@ -1,9 +1,13 @@
 # Screen Previews Use Explicit Relative Colorimetric Policy
 
-Ordinary color-managed screen previews use an explicit Preview Rendering Policy of ICC media-relative colorimetric intent with Black Point Compensation enabled. The same selected policy applies when rendering tagged P3 and sRGB overview, quick-preview, or tile variants so destination choice and lazy rendering do not silently change reproduction style. This is application rendering policy, not Authoritative Color Evidence and not a claim about the original creator's intent.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The application must not switch rendering intent from image content, format, filename, category, pixel appearance, or the ICC profile header alone. A user may explicitly select perceptual intent when gamut compression and pictorial tonal continuity are preferred. ICC-absolute colorimetric is restricted to an explicit future soft-proof workflow, and saturation intent requires an explicit graphics-oriented choice; neither becomes an automatic ordinary-preview fallback.
+## Decision
 
-Each Color Derivation Generation records the selected rendering intent and Black Point Compensation state alongside its source and destination profile references. Changing either setting invalidates the affected color-dependent derived media and creates a new atomic generation. If the requested intent or transform cannot be validated, the backend exposes the failure and retains the last valid generation or clearly labeled Unmanaged Structural Preview when available; it does not silently substitute another intent or activate partial output.
+Ordinary color-managed screen previews use an explicit Preview Rendering Policy of ICC media-relative colorimetric intent with Black Point Compensation enabled.
 
-Rendering Intent Override scope and persistence are governed by ADR 0133; the product policy is not replaced by a mutable library-wide user default.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[预览、颜色与分析证据规格](../product/specs/preview-analysis.md#adr-0132)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/ai-analysis.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

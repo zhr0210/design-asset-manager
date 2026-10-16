@@ -1,0 +1,130 @@
+--- before/AGENTS.md
++++ after/AGENTS.md
+@@ -20,6 +20,7 @@
+ | 定位功能、接口、状态或平台实现 | [子系统目录](docs/subsystems/README.md)→所属专题的行为/机制正文与源码；跨层结构查[架构](ARCHITECTURE.md) | 机制归模块；用户契约/目标归[产品规格](docs/product/README.md) |
+ | 界面外壳、页面/窗口组成、前端状态或连接恢复 | [GUI系统说明](docs/subsystems/gui-shell.md)→相关场景与模块源码 | 跨层界面机制归GUI/所属模块，功能行为归现有规格；不写进DESIGN |
+ | 插件、SDK、MCP或外部扩展 | [插件子系统](docs/subsystems/plugin-system.md)→适用目标契约与当前可复用模块 | 目标架构与实际交付分开；行为/字段归原规格，机制归系统/模块，证据归报告 |
++| Agent指令、Skills、MCP配置、Hooks或资源分发规划 | [Agent资源管理（目标）](docs/subsystems/agent-resources.md) | 内置/外部分发范围待定；不混同素材库、插件运行时或开发项目文档 |
+ | 开发、诊断、Git、环境或构建发行 | [CONTRIBUTING](CONTRIBUTING.md)及[工程指南](docs/agents/engineering.md)；交付查[构建发行](docs/platform/BUILD-AND-RELEASE.md)，命令以package.json为准 | 开发/交付流程归指南，执行证据归检查点；它们不列软件子系统 |
+ | 编写或审查代码 | [开发规范](docs/code-standards.md)相关保证与所属子系统 | 通用保证归规范，局部保证归模块/测试；审查绑定候选 |
+ | 添加/删减/调整组件或影响UI/UX，含后端等待/错误/恢复反馈 | [DESIGN](DESIGN.md)、[统一交互场景索引](docs/design/INTERACTIONS.md#按场景定位)、[视觉与交互验收](docs/agents/ui-ux-acceptance.md#视觉与交互分别验收) | 最终候选分别比对视觉、交互与适用失败恢复；视觉归DESIGN，行为归INTERACTIONS，实测/差异/复验归报告 |
+--- before/TASK.md
++++ after/TASK.md
+@@ -1,4 +1,8 @@
+-# 当前任务：插件子系统文档与索引
++# 当前任务：登记Agent资源管理未交付子系统
++
++已按用户要求把Agent资源/配置管理加入未交付子系统，登记指令/Skills/MCP配置/Hooks及可选工具，与素材库/插件/开发资料区分，内置/外部分发仍待定。人读/机器入口同步，结构检查及两个全新低思考只读探查在本次范围通过；不等于功能交付。未安装资源、实现API或读取修改真实Agent配置，未提交/推送/发布。原字节与验证见[本轮检查点](docs/checkpoints/agent-resources-target-20261016/README.md)。本轮目标完成后停止。
++
++## 前项：插件子系统文档与索引
+ 
+ 用户明确只建立插件子系统文档/索引，不实施可安装运行MVP。已新增target-only正文和入口，保留五个当前运行系统，衔接原讨论稿/契约/0484及内部可复用边界；机器planned_subsystems独立分类，新增状态保护和修改的路由测试已运行通过。两个全新低思考只读探查按实际轨迹三层核对在本轮范围通过；不等于插件安装或互通已验。本轮未改产品、SDK、模型/资料库，未执行插件或提交/推送/发布。原字节与验证见[本轮检查点](docs/checkpoints/plugin-subsystem-reference-20261016/README.md)。本轮目标完成后停止。
+ 
+--- before/ARCHITECTURE.md
++++ after/ARCHITECTURE.md
+@@ -5,6 +5,8 @@
+ 一级软件系统按GUI与窗口、应用Host与系统集成、资料库与素材、AI能力与执行、搜索与检索组织。页面里的业务仍由相应数据/执行拥有者处理；开发审查/反馈与构建发行是工程资料，未来范围是产品规格，不作为第六个运行系统。此归类只是文档入口，不重写实际进程或权限。
+ 
+ [插件与扩展子系统](docs/subsystems/plugin-system.md)单列为target-only目标：围绕五个运行系统的公开能力、隔离执行和协议适配组织规划；尚未交付的SDK/安装器/MCP不纳入当前运行或资格声明。
++
++[Agent资源与配置管理](docs/subsystems/agent-resources.md)同为target-only目标，管理指令/Skills/MCP配置/Hooks等资源；内置AI与外部Agent分发范围未定，不改变现有素材Library或插件执行边界。
+ 
+ ## 1. 进程与客户端
+ 
+--- before/docs/subsystems/README.md
++++ after/docs/subsystems/README.md
+@@ -19,8 +19,9 @@
+ | 子系统 | 状态 | 入口与职责 |
+ | --- | --- | --- |
+ | [插件与扩展](plugin-system.md) | target-only：规划／尚未交付 | 公共能力契约、插件包/隔离/生命周期、UI贡献与MCP适配；可复用五系统内部能力，不代表已有SDK、安装器或MCP互通 |
++| [Agent资源与配置管理](agent-resources.md) | target-only：规划／尚未交付 | 指令、Skills、MCP配置、Hooks及可选输出压缩工具；服务内置AI还是也向外部Agent分发仍待定 |
+ 
+-此处登记规划边界，不把它算作第六个已运行系统；进入实施仍需具体插件和用户路径，不能据文档自动执行第三方代码。
++此处登记规划边界，不计入五个当前运行系统；进入实施仍需具体范围和用户路径，不能据文档自动执行第三方代码或修改外部Agent配置。
+ 
+ 开发协作/导航/审查/反馈见[工程指南](../agents/engineering.md)与[CONTRIBUTING](../../CONTRIBUTING.md)，构建/签名/发行见[交付指南](../platform/BUILD-AND-RELEASE.md)和[平台文档](../platform/README.md)，有效目标/未来能力/退休边界见[产品范围](../product/CAPABILITY-SCOPE.md)。它们不是软件子系统或新的自动队列，机器导航也单独分类。
+ 
+--- before/docs/subsystems/agent-resources.md
++++ after/docs/subsystems/agent-resources.md
+@@ -0,0 +1,45 @@
++# Agent资源与配置管理子系统
++
++**状态：目标架构／尚未交付。** 用户确认后续接入类似Agent资源管理能力，本轮仅登记规划和索引，不安装Skills/Hooks/RTK、不接入MCP、不探测或修改任何真实Agent配置。服务DAM内置AI，还是同时向外部Agent分发，**尚未决定**；不据本页自动实施或扩大资料/执行范围。
++
++## 按问题定位
++
++| 内容 | 拟管理对象 | 仍待确定 |
++| --- | --- | --- |
++| Instructions | 可选择/组合的Agent指令资源、适用范围与版本 | 内置会话/项目/外部Agent的目标及优先级 |
++| Skills | SKILL.md及附带资源的来源、版本、分组、选择与可用状态 | 运行宿主、兼容格式、更新/本地编辑策略 |
++| MCP配置 | 服务定义、目标、能力发现/可用性和连接配置 | 内部使用或外部配置适配；协议版本/传输及认证方式 |
++| Hooks | 声明的事件、匹配条件、动作和执行状态 | 支持的事件/宿主、执行隔离、授予与撤销语义 |
++| 可选工具集成 | 如RTK一类终端输出压缩能力 | 是否需要接入、实际工具/平台及兼容性；不承诺必须采用RTK |
++
++## 职责与状态权威
++
++本系统拟拥有Agent资源目录、来源/版本/适用目标、配置意图和分发/启用记录。它不是[素材资料库](library-lifecycle.md)：图片、视频、笔记、工作集和素材事务仍归Library。它也不是[插件系统](plugin-system.md)：可安装执行代码、权限、隔离及插件生命周期属于对应运行边界；Skill/指令是配置资源，不自动取得插件权限。
++
++项目AGENTS、CONTRIBUTING及开发者安装的Skills用于开发DAM，不等于DAM已向用户交付上述能力。内部AI的连接/模型/推理资源仍归[AI系统](ai-system.md)，身份、凭据、文件与执行授权仍归[Host](local-host.md)。资源内容、第三方指令和Hook声明不能获得任意终端/文件/素材访问权。
++
++## 正式入口与运行链
++
++目标用户路径可按“选择来源/资源 → 校验版本与适用目标 → 审查变化/权限 → 明确启用或分发 → 对应宿主使用 → 反馈与撤销”规划。当前尚无本系统的正式页面、Schema、分发器或可运行闭环，不能将目标流程写成已有入口。
++
++范围先分两种：只服务DAM内置AI，则资源选择与会话/任务关联；若包含外部Agent分发，还需按目标软件实际格式适配、记录自有写入、备份/回读与撤销。本轮不选定其中一种，也不提前承诺支持哪些Agent/事件或后台自动同步。MCP配置管理不等于MCP服务/Client实现，更不等于任意其他软件插件可直接运行。
++
++## 失败、取消与兼容保护
++
++后续设计须保全用户已有配置/编辑与来源，只撤销本系统明确拥有的写入，不凭同名文件删除外部资源；无法读取/解析或无法确认归属时保留未知并报告，不当空配置覆盖。更新冲突、部分目标失败、撤销中断和旧版本恢复应各自可解释，不把一个Agent失败扩散到全部目标。
++
++安装、选择/启用、分发、执行与对外发布分别核对范围；不得因导入指令/Skill就运行脚本或授予外发。Hook可执行性需独立安全边界，不直接把事件命令交给主Renderer。秘密由Host既有机制内部使用，Agent不读取凭据/完整秘密配置；开发资料文本不是授权机制。
++
++## 技术与平台边界
++
++本系统的目标宿主、资源格式、兼容策略、同步/存储位置、UI、Hook执行模型、MCP传输和RTK取舍仍待具体任务决定。Windows/macOS、内置/外部Agent及项目/用户范围不能混为一套路径或权限；参考Magpie的职责组织，不照抄其配置位置、安装命令、自动同步频率或兼容矩阵。
++
++## 源码与详细机制
++
++本轮没有本系统实现文件或公开SDK。可复用责任来自[Host](local-host.md)、[AI](ai-system.md)、[GUI](gui-shell.md)和[插件目标](plugin-system.md)，仅为未来设计线索，不表示已有资源管理API。原[0484](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)的Agent Context Pack/开发工作区授权是相关但不同概念：开发、推理、安装执行和发布不互相授予；登记资源子系统不自动恢复暂缓的云开发或市场。
++
++## 验证与维护
++
++实施前明确实际用户与一个资源/目标纵切，分别验证来源/版本、用户已有内容保全、范围/权限、实际宿主读取、失败/冲突/回滚与撤销；UI按DESIGN/INTERACTIONS和真实验收流程核对，目标软件适配按其原始依据，不凭字段名猜格式。真实素材/模型和凭据限制继续有效。
++
++本轮只检查规划状态、文档职责和检索可用性；不宣称Skills安装、Hook执行、外部Agent同步或MCP互通通过。实际产品资格仍归CURRENT-STATE与未来任务证据，新取舍按相关ADR/产品规格记录，新增AI材料按[三层行为验收](../../CONTRIBUTING.md#document-retrieval-validation)检验。
+--- before/docs/product/CAPABILITY-SCOPE.md
++++ after/docs/product/CAPABILITY-SCOPE.md
+@@ -17,6 +17,10 @@
+ 扩展接入首先核对[0484的现行边界与阶段](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)及[0483核心/可选能力范围](../adr/0483-ai-plus-core-product-and-extension-boundaries.md)：公共能力契约、MCP工具/资源适配与隔离插件运行时各有职责，Accepted目标不等于已有公开API。具体贡献面/权限设计按[扩展面详细契约](specs/model-extension.md#adr-0154)和[扩展决定目录](../adr/indexes/topics/model-extension.md)选择适用条款；讨论稿仅保留来源，不取代现行修订。
+ 
+ 当前可复用的业务/权限边界从[Local Host](../subsystems/local-host.md)及源码旁README核对，不把现有WorkspaceClient/内部IPC当公共插件SDK。模型制品与插件包不同，前者的当前实现归[模型专题](../subsystems/ai-system.md#models)。
++
++### Agent资源与配置管理（未来目标）
++
++[目标子系统](../subsystems/agent-resources.md)登记指令、Skills、MCP配置、Hooks及可选工具资源管理；只服务内置AI还是包含外部Agent分发待定。本轮仅加规划入口，不建立实施队列，不恢复云开发/市场或授予修改用户Agent配置的权限。
+ 
+ ## 失败、取消与兼容保护
+ 
+--- before/.codeindex/documentation-map.json
++++ after/.codeindex/documentation-map.json
+@@ -438,6 +438,20 @@
+       "test_profiles": [],
+       "reference": "docs/subsystems/plugin-system.md",
+       "source_roots": []
++    },
++    {
++      "id": "agent-resources",
++      "title": "Agent资源与配置管理",
++      "status": "target-only",
++      "routes": [],
++      "sources": [
++        "docs/subsystems/plugin-system.md",
++        "docs/product/CAPABILITY-SCOPE.md",
++        "docs/adr/0484-extension-contracts-and-deferred-agent-development-access.md"
++      ],
++      "test_profiles": [],
++      "reference": "docs/subsystems/agent-resources.md",
++      "source_roots": []
+     }
+   ]
+ }

@@ -1,0 +1,27 @@
+{
+  "basis": "User adopted DOCUMENT-RETRIEVAL-VALIDATION-PROPOSAL semantic-batch scope and prior task ownership/privacy requirements before this implementation.",
+  "semantic_case": [
+    "Find normal project instruction entry and owning maintenance protocol without provided answer paths.",
+    "Recognize a batch that changes meaning/retrieval as requiring a fresh low-reasoning read-only probe.",
+    "Use ordinary task-only prompt without answers; verify observable tool reads and understanding against independently defined criteria.",
+    "Main agent alone writes, freezes candidate, fixes actual cause and reruns a new fresh agent; evidence belongs in checkpoint, not new product glossary/ADR.",
+    "Escalate genuine unresolved semantics/product decisions, not routine verification permission; report absent forced sandbox and probe limitations honestly."
+  ],
+  "formatting_boundary_case": [
+    "Recognize strictly format-only change with no meaning/entry/recall effect: run applicable structural checks; no automatic behavioral probe.",
+    "Do not load all ADRs or raw metadata catalog; use topic/impact screening without invented decision requirements.",
+    "State appropriate documentation ownership and no product/model/UI testing for this scenario."
+  ],
+  "evidence_rule": "Tool invocation transcript + bounded returned excerpts, not hidden reasoning or agent assertion alone; paths and final interpretation checked by primary agent.",
+  "candidate_rule": "Three separate fresh contexts, low reasoning; no sharing answers/history; same candidate files frozen for all.",
+  "authority_boundary_case": {
+    "basis": "Existing accepted ADR0489/0491/0493, unique Host and data/transport boundaries predate this protocol.",
+    "checks": [
+      "Find ordinary project entry and relevant task/topic/decision references without being supplied paths or numbers.",
+      "Read actual relevant decision/contract text, not only metadata or summaries.",
+      "Distinguish movable UI/presentation implementation from the retained Host authority over library, membership, persistence and handoff.",
+      "Surface conflict and do not treat this read-only research as authorization to reverse the decision or declare a working product.",
+      "State appropriate follow-up/record locations and keep reading scoped."
+    ]
+  }
+}

@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { execFileSync, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
+import './development-feedback.test.mjs'
 import {
   buildContextPack,
   loadRepositoryContext,
@@ -72,8 +73,8 @@ assert.equal(health.coverage.repositoryFiles, health.coverage.trackedRepositoryF
 
 const listed = run(['route', '--list', '--json'])
 const routeIds = JSON.parse(listed.stdout).map((route) => route.id)
-assert.equal(routeIds.length, 19)
-assert.ok(routeIds.length <= 19)
+assert.equal(routeIds.length, 20)
+assert.ok(routeIds.length <= 20)
 for (const routeId of [
   'asset-workspace',
   'asset-discovery',
@@ -107,9 +108,6 @@ const publicJson = runNpm([
 ])
 assert.equal(JSON.parse(publicJson.stdout).routes[0].id, 'asset-lifecycle')
 
-const eagleConnected = jsonRoute(['--task', '实现 Eagle 连接库双向同步和旧库只读找回'])
-assert.equal(eagleConnected.routes[0].id, 'asset-workspace')
-assert.ok(eagleConnected.firstRead.some((item) => item.path === 'src/main/external-connected-library/README.md'))
 
 jsonCliError(['check', '--json', '--garbage'], 'INVALID_ARGUMENT')
 jsonCliError(['route', '--task', '--json'], 'INVALID_ARGUMENT')
@@ -479,11 +477,11 @@ assert.equal(automaticAnalysis.routes[0].id, 'ai-analysis')
 assert.ok(automaticAnalysis.firstRead.some((item) => item.path.startsWith('docs/adr/0141-')))
 
 const trash = jsonRoute(['--task', '把 assets:delete 接成可恢复 Trash 并支持 Restore'])
-assert.ok(trash.states.some((state) => state.reality === 'Current Implementation' && /hard-delete/.test(state.summary)))
+assert.ok(trash.states.some((state) => state.reality === 'Current Implementation' && /Production Active Library Host/.test(state.summary)))
 assert.ok(trash.states.some((state) => state.reality === 'Validated Tracer'))
 assert.ok(trash.states.some((state) => state.reality === 'Target Architecture'))
-assert.ok(trash.firstRead.some((item) => item.path === 'src/main/services/asset.service.ts'))
-assert.ok(trash.firstRead.some((item) => item.path === 'src/main/ipc/asset.ipc.ts'))
+assert.ok(trash.firstRead.some((item) => item.path === 'src/main/active-library-runtime.ts'))
+assert.ok([...trash.firstRead, ...trash.deferred.context].some((item) => item.path === 'src/main/ipc/active-library.ipc.ts'))
 assert.ok(trash.firstRead.some((item) => item.path === 'src/main/library-lifecycle/asset-trash.ts'))
 assert.ok(trash.firstRead.some((item) => item.path.startsWith('docs/adr/0067-')))
 
@@ -595,8 +593,8 @@ const capture = jsonRoute(['--task', 'Copy Into Library 的 Candidate Preview �
 const captureStates = capture.states.filter((state) => state.route === 'capture-intake')
 assert.ok(captureStates.some((state) => state.reality === 'Validated Tracer'))
 assert.ok(captureStates.some((state) => state.reality === 'Target Architecture'))
-assert.ok(!captureStates.some((state) => state.reality === 'Current Implementation'))
-assert.ok(capture.warnings.some((warning) => /not Current Implementation/.test(warning)))
+assert.ok(captureStates.some((state) => state.reality === 'Current Implementation' && state.summary.includes('Formal Active Library IPC')))
+assert.ok(capture.warnings.some((warning) => /current local Copy/i.test(warning)))
 assert.ok(capture.firstRead.some((item) => item.path.startsWith('docs/adr/0123-')))
 assert.ok(capture.firstRead.some((item) => item.path.startsWith('docs/adr/0292-')))
 
@@ -792,7 +790,6 @@ const sourceHandoff = jsonRoute([
   'Hand off an external website download into the Capture Gateway'
 ])
 assert.ok(sourceHandoff.firstRead.some((item) => item.path.startsWith('docs/adr/0106-')))
-assert.ok(sourceHandoff.firstRead.some((item) => item.path === 'src/main/managed-download/managed-download.ts'))
 assert.ok(sourceHandoff.firstRead.some((item) => item.path === 'src/main/ipc/main-ipc-composition.ts'))
 
 const sourcePromotionHandoff = jsonRoute([
@@ -839,7 +836,7 @@ assert.ok(modelLibrary.validations.includes('npm run test-legacy-model-managemen
 assert.ok(modelLibrary.validations.includes('npm run test-model-artifact-readiness'))
 assert.ok(!modelLibrary.validations.includes('npm run test-model-library-core-tracer'))
 assert.ok(!modelLibrary.validations.includes('npm run test-model-library-verified-blob-store-tracer'))
-assert.ok(modelLibrary.warnings.some((warning) => /not the accepted dedicated Model Library/.test(warning)))
+assert.ok(modelLibrary.warnings.some((warning) => /Legacy direct.*managed-model/.test(warning)))
 
 const modelLibraryCore = jsonRoute(['--task', 'Design and validate Model Library core interface'])
 assert.equal(modelLibraryCore.routes[0].id, 'model-library-core')
@@ -1400,3 +1397,26 @@ console.log(
   `${Math.min(...fileCounts)}-${Math.max(...fileCounts)} files; ` +
   `${Math.min(...tokenCounts)}-${Math.max(...tokenCounts)} estimated tokens).`
 )
+
+// These are documentation/consumer navigation checks, not product acceptance.
+for (const [task, reference] of [
+  ['修复macOS原生悬浮窗的停靠', 'docs/subsystems/gui-shell.md'],
+  ['Asset Discovery OCR match explanation', 'docs/subsystems/asset-discovery.md'],
+  ['Copy Into Library Candidate preview', 'docs/subsystems/library-lifecycle.md'],
+  ['Application settings path migration', 'docs/subsystems/local-host.md'],
+  ['Agent Context Router ADR governance', 'docs/agents/engineering.md'],
+  ['Release packaging signing', 'docs/platform/BUILD-AND-RELEASE.md'],
+  ['AI analysis background OCR cancellation', 'docs/subsystems/ai-system.md']
+]) {
+  const result = jsonRoute(['--task', task])
+  assert.ok(result.documentation.includes(reference), JSON.stringify(result))
+}
+const optionalScope = jsonRoute(['--module', 'source-discovery', '--task', 'MCP plugin optional targets'])
+assert.ok(optionalScope.documentation.includes('docs/product/CAPABILITY-SCOPE.md'), JSON.stringify(optionalScope))
+assert.ok(optionalScope.documentation.includes('docs/subsystems/plugin-system.md'), JSON.stringify(optionalScope))
+const malformedDocCatalog = structuredClone(repositoryContext.catalog)
+malformedDocCatalog.routes['asset-workspace'].documentation = ['../../private.md']
+assert.equal(catalogHealth(malformedDocCatalog).ok, false)
+
+const migratedInspector = jsonRoute(['--task', 'Observe filesystem eligibility without write probes'])
+assert.ok(migratedInspector.contractReferences.some(item => item.reference.includes('docs/product/specs/library-storage.md#adr-0291')), JSON.stringify(migratedInspector.contractReferences))

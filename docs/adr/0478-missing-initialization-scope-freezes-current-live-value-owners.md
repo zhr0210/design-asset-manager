@@ -1,39 +1,13 @@
 # Missing Initialization Scope Freezes Current Live Value Owners
 
-A Missing Custom Field Initialization Plan writes only one active Local Library
-Instance and freezes a **Missing Initialization Owner Scope** from one of three
-explicit sources. Current Selection uses the selected current owner identities
-from the active result set; a Stable Filter uses one complete, immutable result
-generation evaluated inside the active library; Library-Wide enumerates every
-current Active Candidate and every non-deleted Design Asset in that library at
-planning time. Candidate and Design Asset owners may coexist in one scope and
-remain separately counted. A cross-library result surface never creates one
-cross-library write plan, activates another library or schedules a later write;
-the user must activate each library and create a separate plan there.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Only current value owners can enter the frozen operation. Promoted Candidate
-Records, Candidate History, rejected or expired records in Capture Cleanup
-History, hard-deleted records and Design Assets in Asset Trash are lifecycle
-exclusions even when a search explicitly uses Include Deleted or the user
-selects their visible placeholders. Review shows those exclusions instead of
-silently dropping them or treating historical evidence as current metadata.
-The user must restore the Candidate or Design Asset and create a fresh plan if
-it should receive a value.
+## Decision
 
-Original-file availability is not owner lifecycle. An otherwise active Design
-Asset remains eligible when a referenced source, managed original, volume or
-other source-byte dependency is offline, missing or under its normal recovery
-state because Custom Field Values are authoritative library metadata. Source
-availability alone neither excludes the owner nor creates a conflict; an
-unproven owner identity, non-writable library boundary or owner-specific
-authoritative conflict still blocks that owner under its existing recovery
-contract.
+A Missing Custom Field Initialization Plan writes only one active Local Library Instance and freezes a **Missing Initialization Owner Scope** from one of three explicit sources.
 
-Before confirmation, any owner-lifecycle or result-generation change that
-would alter the reviewed membership invalidates the plan and requires a fresh
-scope preview. Confirmation freezes exact identities and revisions. A later
-Promotion, Reject, cleanup, Asset Trash transition, permanent deletion or other
-loss of current editable-owner status makes only that frozen owner group
-Conflict or Excluded at execution or Undo. Execution never follows a Promotion
-Link, substitutes the resulting Design Asset, restores a deleted object, writes
-history, or admits a newly created, restored or newly matching owner.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[布尔与缺失字段初始化规格](../product/specs/missing-initialization.md#adr-0478)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

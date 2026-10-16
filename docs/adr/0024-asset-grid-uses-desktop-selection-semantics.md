@@ -1,15 +1,13 @@
 # Asset Grid Uses Desktop Selection Semantics
 
-Asset Grid should follow desktop library semantics for selection and preview:
-single-click selects an asset and updates the right-side Asset Inspector,
-double-click opens Asset Preview, Space opens or closes quick preview, and
-multi-select changes the inspector into Batch Inspector mode.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Multi-selection should preserve the grid as the primary context. The Batch
-Inspector should show aggregate information, shared metadata, mixed-value
-states, batch tag actions, batch collection membership actions, and applicable
-asset actions without forcing users into a separate modal workflow.
+## Decision
 
-This matches Eagle and Finder-like expectations for high-volume asset browsing:
-selection is lightweight, preview is fast, and batch work remains adjacent to
-the grid instead of replacing it.
+Asset Grid should follow desktop library semantics for selection and preview: single-click selects an asset and updates the right-side Asset Inspector, double-click opens Asset Preview, Space opens or closes quick preview, and multi-select changes the inspector into Batch Inspector mode.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[工作台与导航规格](../product/specs/workspace.md#adr-0024)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/asset-workspace.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

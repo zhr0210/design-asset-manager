@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-15T09:24:01.997067+00:00",
+  "reviewer": "Primary agent, against acceptance-criteria.json; child self-report cross-checked with tool calls and returned content.",
+  "scope": "Fresh low-reasoning consumption behavior on this frozen documentation/source-text candidate.",
+  "results": [
+    {
+      "agent": "/root/probe_semantic_docs",
+      "status": "PASS_SCOPED",
+      "tool_call_ids": [
+        "call_eddae2a2031e4f3294333f9b30ae85ed",
+        "call_e9a728451a4b49838dad28228734235b",
+        "call_67b6b41b412f4470a8494779ea469649"
+      ],
+      "observed": "AGENTS read, then targeted maintenance search and complete relevant CONTRIBUTING section read; task/topic indexes read. Independently states trigger, fresh low/no-answer probe, independent criteria, fixed candidate, observable reads, cause-oriented repair/new context, writeback and limitations.",
+      "limits": "Three shell tool calls, no actual downstream implementation; provides validation plan rather than executing the scenario. No general claim of model compliance."
+    },
+    {
+      "agent": "/root/probe_format_boundary",
+      "status": "PASS_SCOPED",
+      "tool_call_ids": [
+        "call_3141b43bdd1148a994c2b5393f4db4a1",
+        "call_d00c3259c32f49519cc3d2e77a0c6346",
+        "call_66a785dae1644904b4420b589f34621c"
+      ],
+      "observed": "Found protocol, read guide/AGENTS and bounded ADR indexes, checked commands without executing tests. Correctly says no extra behavioral subagent for strict format-only scope, applicable structure/diff checks, checkpoint writeback; if Markdown parse/meaning changes reclassify.",
+      "limits": "One broad CONTRIBUTING 1–190 read (~guide, not full decision corpus); adjacent keyword search exits1 due no matches, final preserves no-match uncertainty. Did not load raw catalog/all ADRs."
+    },
+    {
+      "agent": "/root/probe_window_proposal",
+      "status": "PASS_SCOPED",
+      "tool_call_ids": [
+        "call_bc94474818de44f098001b2c90c8ddcf",
+        "call_4fbf88e39cd34a7e97e5c892637a9bae",
+        "call_bbba6e39d20f47d6aae004a4c9ced3fb",
+        "call_4b20f3bf7e0a458387adee199f61433b",
+        "call_ec0b3e146eba451796103084d307f994",
+        "call_3317777bd5cb4ef9ab1e126c62e51314"
+      ],
+      "observed": "From AGENTS/task/topic views chose work-mode/local-host plus neighboring topic directories; then read actual ADR0485/0489/0491/0493, subsystem contracts and targeted source. Correctly rejects decentralizing persistent/permission/handoff authority, allows native presentation/bridge optimization and distinguishes pending performance/process strategy. Knows owning writeback and no delivery proof.",
+      "limits": "Six shell read calls, no runtime/performance test; not evidence those platform behaviors pass. Read-only proposal assessment, not new product authorization."
+    }
+  ],
+  "all_actual_cases_pass": true,
+  "repairs_required": false,
+  "repair_note": "No tested requirement failed; no speculative wording/routing change made just to demonstrate a repair. Future failures must trigger the documented cause/fresh-retest loop.",
+  "observability": "Extracted only child tool calls/outputs/final response; no hidden reasoning requested, inspected or archived. Initial child task not present in rollout; dispatch recorded separately."
+}

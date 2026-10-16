@@ -9,3 +9,5 @@
 历史记录入口：[Route A / Route B 原记录](docs/history/project-route-ab.md)。
 
 这里只做导航，不建立第二份产品目标、当前状态或架构真相。
+
+AI开发入口：[AGENTS](AGENTS.md)；文档维护方法：[CONTRIBUTING](CONTRIBUTING.md#7-文档维护)。

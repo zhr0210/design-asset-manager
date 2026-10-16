@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "affected": {
+    "engineering": [
+      "scripts/agent-context-router.mjs",
+      "scripts/agent-context-router.test.mjs",
+      "scripts/check-adr-router.py",
+      "scripts/check-docs-sync.py",
+      "scripts/check-documentation.py",
+      "scripts/development-feedback.mjs",
+      "scripts/development-feedback.test.mjs",
+      "scripts/documentation-governance.test.py"
+    ]
+  },
+  "unmapped": [],
+  "errors": [],
+  "scope": "Explicit candidate only; owning-doc changes/declarations require semantic review.",
+  "assessed": true
+}

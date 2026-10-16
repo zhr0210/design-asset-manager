@@ -1,5 +1,7 @@
 # P27 完整追踪矩阵
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 所有target改动仍为spec-only；现有已接线能力见P00，不被本表否定。规格测试不能替代T编号对应的完整生产验收。
 
 ## 需求
@@ -18,7 +20,7 @@
 | R10 | 高级提示词反推手动批量，明确是创作推演 | P12 | spec-only |
 | R11 | 任务持久化、关库/崩溃后仅恢复未完成部分 | P05, P10, P11, P12, P26 | spec-only |
 | R12 | 普通模式少量验证组合，高级模式开放配置并有手册 | P03, P09, P15 | spec-only |
-| R13 | 原件/预览/派生物、Copy和三种库边界 | P02, P06, P19, P26, P27 | spec-only |
+| R13 | 原件/预览/派生物、Copy和库类型边界 | P02, P06, P19, P26, P27 | spec-only |
 | R14 | 用户描述/确认标签/OCR修订不被重跑覆盖 | P04, P11, P20 | spec-only |
 | R15 | 确定性配色与带来源的OCR区域 | P06, P11, P19 | spec-only |
 | R16 | Host分页、中文词法检索与增量投影 | P16 | spec-only |
@@ -73,7 +75,6 @@
 | ID | 决定 | 状态 |
 | --- | --- | --- |
 | DAM-A001 | 保留模块化单体宿主，计算隔离但不先微服务化 | Proposed；未签收 |
-| DAM-A002 | Library Host保持权威；Managed/Eagle/Legacy独立 | Proposed；未签收 |
 | DAM-A003 | 能力逻辑独立，完整响应可复用物理执行 | Proposed；未签收 |
 | DAM-A004 | Recipe/Profile/Backend/Runtime/Readiness分别版本化 | Proposed；未签收 |
 | DAM-A005 | 持久任务采用可重试执行与幂等结果效果 | Proposed；未签收 |

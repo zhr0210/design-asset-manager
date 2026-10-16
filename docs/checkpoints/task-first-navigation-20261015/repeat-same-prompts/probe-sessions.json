@@ -1,0 +1,16 @@
+[
+  {
+    "agent": "/root/repeat_plugin",
+    "session_id": "01a13f19-960d-7c63-8e4e-f4ed054d2d62",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/repeat_settings",
+    "session_id": "01a13f19-7d0e-7ee0-8b6d-ceb9a8410aa0",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

@@ -1,5 +1,7 @@
 # Design Asset Manager：项目与代码架构交接
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 面向：项目框架设计师、架构评审人员、后续实施负责人。
 
 快照日期：2026-09-24。本文描述当前工作区源码及已有验证记录，不是目标架构批准书。建议先读第 1、3、5、11、12 节，再按模块查阅源码。
@@ -10,7 +12,7 @@ Design Asset Manager（DAM）是面向设计师、美工、剪辑师、编导等
 
 核心用户闭环：**收进素材 → 渐进理解 → 找回并解释命中 → 检查与比较 → 安全复用**。
 
-产品在素材管理和创作参考体验上参考 Eagle，但当前交付范围不等于已实现 Eagle 的全部格式、性能和功能。无模型时基础管理应保持可用；AI 是产品核心体验，但不要求每张素材默认运行所有模型。
+无模型时基础管理应保持可用；AI 是产品核心体验，但不要求每张素材默认运行所有模型。
 
 本次交接希望评审者回答：现有模块如何减轻理解和修改成本、如何把 AI 从分散实现整理为稳定框架、如何保留数据安全和已经验证的功能，以及应按什么顺序迁移。本文提出评审问题与候选方向，不预先决定重写、换技术栈或合并所有服务。
 
@@ -55,7 +57,6 @@ Design Asset Manager
 │   ├── 图片裁剪/旋转/缩放产生新副本
 │   └── 入库中断恢复、版本与原件保护
 ├── 外部与历史数据【独立权限边界】
-│   ├── Eagle Connected Library：Eagle 持有唯一原件
 │   └── Legacy Read-Only Workspace：旧 DAM 数据只读找回
 ├── 基础设施【支撑，不是主工作流】
 │   ├── 设置、标签管理、下载记录
@@ -73,7 +74,6 @@ Design Asset Manager
 
 - **Copy 不等于 Move**：默认导入复制到资料库，不静默移动、覆盖或删除外部来源。
 - **素材、预览和派生物不同**：Original、Preview、图片工具生成的副本不能混为同一种文件所有权。
-- **三种资料库不能混写**：受管活动库、Eagle 连接库、旧库只读工作区有不同权威来源。
 - **用户修改优先**：手工描述、确认标签、OCR 修订、组织关系不被模型重跑覆盖。
 - **AI 建议不是确认事实**：可参与带来源说明的检索/分类；无需强制逐条确认才能继续使用产品。
 - **结果可归因**：测量、观察、推断、创作提示词与用户编辑应有清晰区别；反推不等于找回原始提示词。
@@ -106,10 +106,8 @@ Design Asset Manager
 | AI 服务配置 | 配置 CRUD、显式模型列表/连接检查 | `/models` 成功不证明图像能力或输出质量 |
 | Model Library | 受限正式 Workspace、存储位置管理、核心验证实现 | 完整可信目录→安装→激活闭环不可按页面存在推定 |
 | AI Console | 诊断与状态页面、历史平台投影 | 部分旧 Runtime IPC 已禁用，页面存在不等于各操作可用 |
-| Eagle 连接库 | 独立索引/Journal、Adapter、companion 与隔离测试 | 正式 composition 默认拒绝未建立的配对；未宣称真实 Eagle 已接通 |
 | 旧库找回 | 用户选择旧数据库与素材根，只读列表/检索/预览 | 不迁移、不写入、不自动改成受管库 |
 | Python 多模型 Worker | 模型封装、队列/轮询、分类/翻译等代码仍在 | 旧调用链受限；Florence 隔离实测不等于正式接线；RAM/WD/CLIP未完成本轮实测 |
-| 通用插件平台 | 权限/版本/贡献面有设计 | Eagle companion 是专用集成，不代表通用插件 SDK 已交付 |
 | 视频/参考帧/录屏 | 产品规格已有方向 | 当前图片工作模式不能代表这些能力完成 |
 | Windows/发布 | 平台适配、打包与签名治理脚本存在 | 本轮主要是 macOS 未打包测试，不能替代 Windows/签名安装验收 |
 
@@ -158,7 +156,6 @@ Design Asset Manager
 │   ├── IPC composition：正式通道注册和受限旧通道拒绝
 │   ├── Active Library Host：当前库身份、锁租约、连接、生命周期
 │   ├── 业务模块：Capture、组织、笔记、工作集、下载、图片工具、AI/OCR
-│   ├── 外部边界：Eagle Adapter、只读旧库、HTTP模型、Python子进程
 │   └── 平台基础设施：文件身份、路径、原生窗口、进程、Runtime/发布
 ├── Main Window Renderer：React 用户界面
 │   ├── AppShell / Routes：素材工作区与辅助页面
@@ -176,7 +173,6 @@ Design Asset Manager
     ├── 已启动的兼容视觉模型服务：HTTP，不由当前控制器自动启动
     ├── 专用 OCR：Main 选择的 Python + 本地 RapidOCR
     ├── 旧 FastAPI Worker：代码保留，当前活动库通道受限
-    └── Eagle 应用/companion：外部原件权威，真实配对另行建立
 ```
 
 ### 5.2 一次正式操作的共同路径
@@ -235,7 +231,6 @@ Design Asset Manager
 │   │   ├── ocr/                            专用OCR控制器、进程、环境、存储
 │   │   ├── asset-card/                     单素材原生卡片
 │   │   ├── work-mode/                      多工作集原生窗口与边界
-│   │   ├── external-connected-library/     Eagle Provider/companion/Journal
 │   │   ├── legacy-readonly-workspace/      旧资料只读恢复
 │   │   ├── model-library/                  模型制品核心与验证实现
 │   │   ├── model-library-workspace/        受限正式模型工作区/存储位置
@@ -253,7 +248,6 @@ Design Asset Manager
 │   │   ├── asset-card.ts                   卡片接口
 │   │   ├── work-window.ts                  工作窗口接口
 │   │   ├── model-library-workspace.preload.ts
-│   │   └── external-connected-library.preload.ts
 │   ├── renderer/
 │   │   ├── main.tsx / App.tsx              React启动与HashRouter
 │   │   ├── routes/                         正式页面、窗口页及隔离原型
@@ -277,7 +271,6 @@ Design Asset Manager
 │   ├── tools/local_ocr_worker.py            当前专用OCR子进程入口
 │   ├── tools/、eval/、tests/                探测、实测、回归工具
 │   └── requirements*.txt                  CPU/平台相关依赖声明
-├── eagle-companion/                        专用Eagle插件；非通用插件市场
 ├── scripts/                                TS/SQLite/Electron/Python/发布检查
 ├── .codeindex/                             模块路由与候选验证索引
 ├── .github/workflows/                      跨平台治理和打包/签名流水线
@@ -304,7 +297,6 @@ Design Asset Manager
 | `/settings` | 外观、库、AI/模型、下载、快捷键、维护 | 配置与执行分开 |
 | `/ai-console` | 模型/Runtime诊断与状态 | 较大旧页面，入口不等于功能可用 |
 | `/model-library` | 模型工作区 | 安装/激活能力按真实依赖判定 |
-| `/connected-libraries` | Eagle连接边界 | 未配对时拒绝执行 |
 | `/legacy-library` | 旧DAM只读找回 | 不提供隐式迁移 |
 | `/dashboard` | 汇总辅助页 | 不是当前默认首页 |
 | `/asset-card` | 独立原生卡片页面 | 使用专属Preload |
@@ -312,7 +304,7 @@ Design Asset Manager
 
 ## 7. 数据架构、所有权与版本
 
-### 7.1 三种库与应用状态
+### 7.1 库类型与应用状态
 
 ```text
 数据权威
@@ -330,7 +322,6 @@ Design Asset Manager
 │   ├── app-state.sqlite                   下载历史、设备身份、OCR环境等
 │   ├── 应用设置                           外观/服务配置等
 │   └── Model Workspace控制与存储位置      模型权重不冒充素材
-├── Eagle Connected Library：Eagle拥有原件
 │   ├── DAM独立索引 / 三方基线 / Journal / Outbox
 │   └── 受控预览与暂存，不进入Managed Capture复制原件
 └── Legacy Read-Only Workspace：旧DAM数据只读
@@ -416,7 +407,7 @@ Main库查询 → 素材基本字段 + 确认标签/别名 + 当前AI摘要 + �
   → 未保存草稿处理
   → 撤销待确认与窗口权限
   → 取消/收敛AI、OCR、下载、已开始写入
-  → drain连接库与活动库
+  → drain活动库
   → 释放lease、关闭数据库
 ```
 
@@ -517,7 +508,6 @@ AI能力体系
 
 ### 10.3 仍需单独验证
 
-真实用户库升级/迁移、损坏库/断电恢复、Windows与签名包、原生对话框和多显示器、超大资料库性能、视频/复杂格式、模型长期资源表现、外部服务兼容矩阵，以及真实Eagle配对/写入均不能从当前报告自动推定。
 
 ## 11. 架构评审重点：观察、影响与问题
 
@@ -537,7 +527,6 @@ AI能力体系
 | A10 | Main组合根集中窗口/协议/服务装配 | 容易继续堆积生命周期交叉逻辑 | 如何保留一个清晰组合根，同时减少各模块互相刷新/撤销耦合？ |
 | A11 | 合同存在`ok/value`与`success/error`等多种形态 | 错误分类与UI适配重复 | 是否需要渐进统一错误/结果信封？如何保留公共兼容？ |
 | A12 | 模型库、Runtime包、安装治理设计很多，正式安装仍受限 | 容易把大量基础设施当作产品交付 | 最小“下载校验→启动→能力测试→可用”闭环应如何组合？ |
-| A13 | Eagle原件权威与Managed Copy不同 | 复用通用仓储易抹平第三方写入约束 | 哪些领域接口可共用，哪些必须保持Provider专属？ |
 | A14 | 脚本测试量大且包含源码扫描/合成/真实测试 | 执行成本与证据等级难理解 | 如何建立按风险选择的测试矩阵，淘汰重复而保留重要负向验证？ |
 | A15 | 原型/正式共享部分Gallery组件，但历史界面实现仍在 | 清理容易破坏已批准交互或又产生简化版 | 如何以共享展示契约迁移，分别验收视觉与真实数据链路？ |
 | A16 | 插件、视频和语义检索尚未全部落地 | 过早冻结统一平台会扩大当前复杂度 | 哪个真实能力最适合验证最小扩展接口，哪些接口应暂不建立？ |
@@ -559,7 +548,7 @@ AI能力体系
 3. **方案对比**：至少比较“保留现有边界增量整理”与另一合理方案，列收益、迁移风险、验证成本；不强制微服务或全面重写。
 4. **接口设计**：Library Host、分析能力、模型执行配置、任务、结果投影、窗口与插件之间的最小契约。
 5. **AI专项设计**：明确模型服务配置、权重、Runtime、能力就绪、请求策略、结果质量五者分别由谁管理。
-6. **数据演进计划**：schema版本、旧结果兼容、并发与回滚、三种库边界、用户编辑保护。
+6. **数据演进计划**：schema版本、旧结果兼容、并发与回滚、库类型边界、用户编辑保护。
 7. **迁移顺序**：每一步的输入、修改范围、保留调用方、替换点、验收门槛、回退点。
 8. **删除/合并候选清单**：逐项证明不可达、已被替代或有重复，不按名称批量删除旧代码/测试/文档。
 9. **可量化验收**：实际用户流程、错误恢复、真实模型、资源预算、大库与平台矩阵，而不仅是typecheck/build。
@@ -596,7 +585,6 @@ AI能力体系
 | AI正式与旧路径 | [Visual AI](../../src/main/visual-ai/README.md)；[OCR](../../src/main/ocr/README.md)；[旧Runtime桥接范围](../platform/AI_CLIENT_RUNTIME_ADAPTER.md) |
 | 最新模型证据 | [真实AI对比](../product/QWEN3-VL-REAL-COMPARISON-20260924.md)；[基础模型盘点](../product/BASELINE-AI-INVENTORY-20260920.md) |
 | 模型库边界 | [Model Library核心](../../src/main/model-library/README.md)；[正式Workspace组合](../../src/main/model-library-workspace/model-library-workspace.composition.ts) |
-| Eagle/旧库 | [Eagle连接库](../../src/main/external-connected-library/README.md)；[旧库只读](../../src/main/legacy-readonly-workspace/README.md) |
 | 检索/AI文件夹 | [检索workflow](../../src/shared/workflows/asset-discovery.workflow.ts)；[AI分类workflow](../../src/shared/workflows/ai-folders.workflow.ts) |
 | 架构目标与替代关系 | [ADR索引](../adr/README.md)，按领域选读，不把全部历史规格作为前置 |
 | 测试/构建/发布 | [package.json](../../package.json)；[electron-vite](../../electron.vite.config.ts)；`.github/workflows/` |

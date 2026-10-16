@@ -7,14 +7,19 @@ the core AI+, optional-plugin and deferred development-access boundaries.
 
 ## Select only what the task needs
 
-- For a local implementation task, start with nearby code, callers and tests.
+- For every project task, identify its subject and impact, then read the ADRs relevant to that scope. Task type is never an exemption: research, planning, product/design discussions, documentation, operations and engineering are examples, not an exhaustive list. Where implementation facts matter, also inspect the relevant code, callers and tests.
 - For an unclear domain term, search `CONTEXT.md` for that exact term.
-- For product semantics or irreversible tradeoffs, use `docs/adr/README.md`
-  to select the smallest relevant ADR set, then read each selected ADR fully.
+- Choose the first source by the question: feature/experience work starts with its subsystem and behavior contract; trade-off comparisons may start with ADRs. Use [task types](../adr/indexes/tasks.md) and [topics](../adr/indexes/topics.md) when selecting decision context. Task type changes focus, never applicability or a mandatory reading order. Read the decisions and contract sections needed to support the actual conclusion, checking status, assumptions and explicit supersession. A high-level comparison does not require every linked detail; concrete behavior/permission designs require their applicable clauses. Existing ADRs matter beyond code changes or new irreversible decisions.
+- Context-route matches are navigation hints; deferred or unmatched ADRs may still apply. Follow subsystem/source references as needed. Do not read the entire corpus for each task.
+- If a proposal conflicts with an effective decision, identify the ADR/clause and explain the reason or changed assumptions. Respect the latest explicit user decision and its precise replacement scope; do not silently override or invent a new per-interface approval requirement.
 - Verify current behavior in the composition root and executable tests.
   Accepted decisions, UI labels and Runtime Probes do not prove delivery.
 - Missing optional background is not a reason to scaffold more docs. If an
   unavailable source is necessary to decide safely, state that specific gap.
+
+## Record a new decision
+
+Creating a new ADR is a separate action from reading existing ones. Record a new decision only when all three hold: meaningful reversal cost, a choice that needs context to explain, and real alternatives/trade-offs. Keep context, decision and why; cite a superseded ADR and exact replacement scope when revisiting it. Routine implementation, terminology lookup and documentation maintenance do not each need a new ADR.
 
 ## Meaning and ownership
 
@@ -35,3 +40,5 @@ committing unrelated work.
 Module `ADR-REFERENCE.md` files preserve previously duplicated future rules
 for lookup; the canonical ADR is authoritative. `docs/history/` preserves
 old change logs. Neither belongs in normal startup reading.
+
+词库按既有领域分组，不创造多个Bounded Context。重建时1409个原定义保留意义，其中重复Palette Folder合并后为1408个不同术语；该数字及[迁移词库索引](../checkpoints/documentation-rebuild-20261015/glossary-index.json)是当时快照，后续已确认术语直接在CONTEXT维护，不能把旧数量当现有总数。工程流程术语不加入产品词库。

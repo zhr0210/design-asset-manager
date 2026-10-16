@@ -1,14 +1,19 @@
-# Design Asset Manager Context
+# DAM 领域术语
 
-Product scope lives in [PRODUCT-FOUNDATION](docs/product/PRODUCT-FOUNDATION.md); structure in [ARCHITECTURE](ARCHITECTURE.md); engineering workflow in [CONTRIBUTING](CONTRIBUTING.md).
+这里保留一个产品词库，不是当前交付说明或启动必读。按下表领域与精确词搜索；定义中的目标概念不因被记录而成为已交付能力，也不构成执行授权。产品范围归[产品基准](docs/product/PRODUCT-FOUNDATION.md)，当前机制归[子系统](docs/subsystems/README.md)，详细状态/规则归[规格](docs/product/specs/README.md)。
 
-This is a reference glossary, not startup context or a statement of delivered
-features. Search the exact term needed for the current task; verify behavior
-in code and tests. Domain reading guidance: [domain.md](docs/agents/domain.md).
+## 领域导航
 
-Current candidate/platform/validation facts live in [CURRENT-STATE](docs/handoff/CURRENT-STATE.md). Pi adapts allowed provider protocols; dedicated OCR and Python execute their wired capabilities. The Electron Host owns commits. Historical runtime/poller terms below describe their own lanes rather than every current inference path.
-
-Design Asset Manager manages local image and design reference assets as a searchable, taggable, AI-assisted desktop library. This context defines the product language used across the asset library, capture, tagging, AI, runtime, and governance areas.
+- [Local DAM Clients](#local-dam-clients)
+- [Asset Library](#asset-library)
+- [Tags](#tags)
+- [Capture And Downloads](#capture-and-downloads)
+- [Creation Reference Context](#creation-reference-context)
+- [Visual Analysis](#visual-analysis)
+- [AI Workflows](#ai-workflows)
+- [AI Models And Sources](#ai-models-and-sources)
+- [Runtime And Inference](#runtime-and-inference)
+- [Settings And Governance](#settings-and-governance)
 
 ## Language
 
@@ -36,9 +41,11 @@ _Avoid_: Completed save, automatic overwrite, duplicate asset
 A named library grouping whose direct members reference existing Design Assets and whose children are other ordinary folders.
 _Avoid_: Source directory, physical move, duplicated asset, AI folder
 
+<a id="palette-folder"></a>
+
 **Palette Folder**:
-A named library collection of distinct color codes, optionally associated with the assets from which they were collected.
-_Avoid_: Image color proportions, duplicate image, automatic analysis result
+A named library collection of distinct saved color values for reuse, independent of asset membership and work-window presentation; a color may retain an optional association to the asset from which it was collected.
+_Avoid_: Physical directory, asset membership group, measured image palette, copied original, automatic recoloring
 
 
 **Asset Notebook**:
@@ -3018,6 +3025,14 @@ _Avoid_: Fixed model bundle, hardware tier, automatic optimization
 A Resource Saver, Balanced or Response First intent governing DAM-owned model residency, cache and scheduling within the selected model's verified execution plans.
 _Avoid_: Setup model preference, quality score, automatic model replacement
 
+**Task Model Binding**:
+The reviewed choice of model, provider and applicable inference parameters for one DAM capability execution, distinct from when the task runs or how its resources are admitted.
+_Avoid_: Model scheduler, resource permit, automatic cloud fallback
+
+**DAM Inference Target**:
+An inference destination characterized by both processing location and lifecycle control: a DAM-managed local runtime, a separately managed local service, or a remote service.
+_Avoid_: HTTP means remote, localhost means owned, protocol identity as processing location
+
 **Plan Estimate Evidence**:
 A versioned Local Measured, Catalog Estimate, Derived Estimate or Not Assessed label attached to a setup plan's quality, speed, memory, storage or energy comparison.
 _Avoid_: Unlabelled exact number, parameter-count quality claim, current-free-memory guarantee
@@ -5112,9 +5127,7 @@ _Avoid_: Download path, target filename
 A dynamic view whose asset references match declared AI-tag analysis evidence and criteria without copying originals or confirming suggested tags by membership.
 _Avoid_: Physical directory, Work Set, user-confirmed tag by implication
 
-**Palette Folder**:
-A named collection of saved color values for reuse, independent of asset membership and work-window presentation.
-_Avoid_: Asset folder, measured image palette, copied original
+Palette Folder is defined in [Asset Library](#palette-folder); Work Palette below is a separate Work Set concept.
 
 **Work Palette**:
 The saved color references used in one Work Set, displayed alongside its visual references without changing source image colors or other palette folders.

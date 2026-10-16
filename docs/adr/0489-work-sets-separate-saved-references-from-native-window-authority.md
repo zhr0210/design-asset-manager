@@ -14,8 +14,10 @@ geometry in one transaction. Passive move/resize records geometry separately, wi
 Members remain references: removal/set deletion does not delete assets; unavailable/Trash members remain
 in the saved order for recovery. Recursive library organization is outside a work window.
 
-A Main controller owns up to eight native work windows, one per set. Each has an independent in-memory
-Electron session, a sandboxed narrow preload, an owned frame and a revocable window token. Preview and
+A Main controller owns up to eight native work windows, one per set. The default Electron adapter has an independent in-memory
+Electron session, sandboxed narrow preload, owned frame and revocable window token.
+ADR 0493 refines the macOS B adapter to AppKit presentation with a private scoped bridge;
+Host authority and revocation remain the same, rather than requiring a Chromium session per shelf. Preview and
 notebook access are restricted to that window's current members and held library authority; no general
 application API, arbitrary filesystem path or external network capability is exposed. Closing/switching
 the library drains layout writes and retires its session before revoking every window. Restoring layout
@@ -27,6 +29,4 @@ by explicit user action after the library is reopened; off-screen bounds are cla
 The approved browser prototype and native route share WorkReferencePanel; the prior single Asset Card and
 its AI/image tools remain a compatibility entry rather than being silently removed.
 
-This delivers an image-based multi-window reference workflow. Video/reference-frame execution, safe native
-file handoff, physical monitor-change behavior and Windows packaging still require separate implementation
-or platform evidence; neither saved layout nor BrowserWindow existence proves those capabilities.
+This decision defines the image-based reference workflow. Actual video/frame, native handoff, display and packaging qualification belongs in CURRENT-STATE and versioned reports; the original decision's delivery snapshot is not current proof. Neither saved layout nor a window object establishes those capabilities.

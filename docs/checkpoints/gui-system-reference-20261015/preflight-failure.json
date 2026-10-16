@@ -1,0 +1,6 @@
+{
+  "observed": "Agent Context Router SCHEMA_VALIDATION: desktop-shell/documentation had 4 items, maximum is 3; check and regression failed before any agent dispatch.",
+  "cause": "Appending GUI topic exceeded the existing bounded-navigation contract.",
+  "fix": "Keep GUI, Local Host, Work Mode as desktop-shell direct topics; settings remains reachable via GUI and settings-paths. Preserve existing maxItems=3 rather than widen budget.",
+  "scope": "Metadata only; no product or router/schema code change."
+}

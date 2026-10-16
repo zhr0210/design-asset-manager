@@ -1807,5 +1807,6 @@
       "sha256": "00061181344ba577ee04ed3860536fc1df9596c662fe90c02e1c5c981bc515e9"
     }
   ],
-  "parentGoal": "incomplete; current-build visible user acceptance NOT_RUN"
+  "parentGoal": "incomplete; current-build visible user acceptance NOT_RUN",
+  "contentRedaction": "Retired external integration records and source fragments removed on 2026-10-14; old evidence does not qualify the current candidate."
 }

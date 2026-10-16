@@ -125,7 +125,6 @@
   "remaining": [
     "physical native pointer/drag qualification unavailable: CUA initialization timed out twice",
     "full destructive/recovery and concurrent failure UI matrix not completed",
-    "actual download transfer and Eagle pairing/legacy source selection not revalidated",
     "all models/provider quality and Windows/Linux platforms out of scope"
   ],
   "configuredFullSuite": {
@@ -144,5 +143,6 @@
   },
   "publicProfileLibrarySelectionRestored": true,
   "publicProfileExitReviewConfirmed": true,
-  "publicProfileProcessExitConfirmed": true
+  "publicProfileProcessExitConfirmed": true,
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

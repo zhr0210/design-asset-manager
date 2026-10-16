@@ -1,49 +1,13 @@
 # Missing Initialization Retries Only Proven Transient Uncommitted Failures
 
-A failed Missing initialization owner group is retryable only when trusted
-reconciliation proves both that no field in the atomic group committed and that
-the failure was transient rather than a plan, identity, lifecycle, validation,
-storage-authority or revision conflict. **Retry Missing Initialization
-Failure** is an explicit manual action over one or more user-selected
-Retry-Eligible owner groups; the product offers no automatic retry loop and no
-undifferentiated Retry All that can absorb conflicts, exclusions or unknown
-outcomes.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Immediately before each retry, trusted execution revalidates the exact Local
-Library Instance, operation and failure-effect evidence, owner lifecycle, every
-field identity/type/rule/option/default revision, frozen assignment and the
-exact still-Missing base state for the complete original owner group. The group
-retries with the original frozen values and commits all fields atomically or
-none. Any Present field, owner/lifecycle change, definition or rule drift,
-incompatible operation evidence, ambiguous prior outcome or other mismatch
-reclassifies the complete group as Conflict, Excluded or Manual Recovery
-Required without a write. Retry never shrinks the group, follows Promotion,
-uses a newer default, overwrites a value or turns current equality into revision
-authority.
+## Decision
 
-Retry becomes available only from a terminal reconciled operation result.
-Paused or unstarted owners remain Resume or Cancel Remaining work, not failed
-retry members. A device that did not initiate the operation may retry after ADR
-0477 proves the same exact library-bound authority and exclusive ownership;
-there is no device-local previous-value dependency to transfer or reconstruct.
-An infrastructure interruption whose write outcome is not yet proven enters
-normal operation reconciliation and cannot be labelled transient merely to
-unlock Retry.
+A failed Missing initialization owner group is retryable only when trusted reconciliation proves both that no field in the atomic group committed and that the failure was transient rather than a plan, identity, lifecycle, validation, storage-authority or revision conflict. **Retry Missing Initialization Failure** is an explicit manual action over one or more user-selected Retry-Eligible owner groups; the product offers no automatic retry loop and no undifferentiated Retry All that can absorb conflicts, exclusions or unknown outcomes.
 
-ADR 0092's existing per-owner limit of three attempts applies inside the same
-Unresolved Batch Result, with no simultaneous retry for one owner group. Users
-may select any explicit subset of currently Retry-Eligible groups after
-reviewing counts and reason classes, but cannot select ineligible rows through
-a catch-all action. Each outcome merges into the original result under ADR
-0091, preserving attempt count and latest outcome rather than creating a new
-batch history entry or reopening the frozen scope. Exhaustion, conflict,
-exclusion, acknowledgement or later repair never resets the old count; changed
-intent or repaired non-transient state requires a newly reviewed Missing
-Initialization Plan.
+## Detailed contract and provenance
 
-ADR 0480 closes every remaining Retry-Eligible group when trusted Undo
-admission commits the result's reverse direction. A partial or failed Undo never
-reopens this ADR's forward retry authority.
-ADR 0481 additionally ends all not-yet-admitted Retry at the operation's
-original shared action deadline without resetting that deadline after an
-attempt.
+详细状态、交互、数值边界和例外的唯一正文为[布尔与缺失字段初始化规格](../product/specs/missing-initialization.md#adr-0479)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

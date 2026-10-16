@@ -26,8 +26,6 @@ const settingsService = {
   saveSettings: (patch: Partial<typeof settings>) => { settings = { ...settings, ...patch }; return settings }
 }
 const modelWorkspace = createModelLibraryWorkspace({ officialCatalogReleaseState: 'missing' })
-const connectedProjection={state:'unconfigured',evidenceLevel:'not-connected',provider:'eagle',providerIdentity:null,libraryIdentity:null,generation:null,displayName:null,originalAuthority:'eagle-single-original',scope:null,grant:'none',capabilities:null,counts:{indexed:0,inScope:0,pending:0,conflicts:0,trashed:0,cleanupCandidates:0},cursor:null,indexingComplete:false}
-const connectedHost=new Proxy({inspect:()=>connectedProjection},{get:(target,key)=>key in target?(target as any)[key]:async()=>[]}) as any
 const legacyProjection={state:'unconfigured',evidenceLevel:'not-opened',identity:null,generation:null,counts:{assets:0,tags:0,relations:0},limitations:[]}
 const legacyHost=new Proxy({inspect:()=>legacyProjection},{get:(target,key)=>key in target?(target as any)[key]:async()=>[]}) as any
 const handle = (channel: string, handler: unknown): void => {
@@ -37,14 +35,14 @@ const handle = (channel: string, handler: unknown): void => {
 
 
 registerMainIpcComposition({
-  appDatabase: appStorage.database,
   settingsService,
   selectSettingsFolder: async () => ({ canceled: true, path: '' }),
   modelLibraryWorkspace: { getWorkspace: () => modelWorkspace },
+  workWindows: {} as any,
   aiConnections: {} as any,
   aiAcceptance: {} as any,
   activeLibrary: { host, isTrustedSender: () => true },
-  externalConnectedLibrary:{host:connectedHost,legacy:legacyHost,isTrustedSender:()=>true},
+  legacyReadOnlyWorkspace:{legacy:legacyHost,isTrustedSender:()=>true},
   handle
 })
 
@@ -52,7 +50,7 @@ for (const prefix of ['library:', 'library-trash:']) {
   assert.ok([...handlers.keys()].some((channel) => channel.startsWith(prefix)), `missing ${prefix} handler`)
 }
 for (const channel of ['sites:list', 'sites:save', 'sites:delete', 'sites:login:start', 'sites:login:complete']) assert.equal(handlers.has(channel), false)
-for (const channel of ['download:list', 'download:save', 'download:clear']) assert.equal(handlers.has(channel), true)
+for (const channel of ['download:list', 'download:save', 'download:clear', 'download:prepare', 'download:enqueue', 'download:jobs', 'download:retry', 'download:cancel']) assert.equal(handlers.has(channel), false)
 for (const channel of ['browser:load-url', 'browser:go-back', 'browser:go-forward', 'browser:reload', 'browser:resize', 'browser:hide', 'browser:show', 'browser:capture-snapshot']) assert.equal(handlers.has(channel), false)
 assert.equal(handlers.has('search:run'), false)
 assert.equal(handlers.has('extractor:scan-current-page'), false)
@@ -83,11 +81,10 @@ for (const file of sharedContractFiles.filter((name) => name.endsWith('.ts'))) {
 }
 const preloadSources = await Promise.all([
   readFile(path.join(process.cwd(), 'src/shared/client/workspace-client.ts'), 'utf8'),
-  readFile(path.join(process.cwd(), 'src/shared/client/external-connected-library.client.ts'), 'utf8'),
+  readFile(path.join(process.cwd(), 'src/shared/client/legacy-readonly-workspace.client.ts'), 'utf8'),
   readFile(path.join(process.cwd(), 'src/preload/index.ts'), 'utf8'),
   readFile(path.join(process.cwd(), 'src/preload/asset-card.ts'), 'utf8'),
   readFile(path.join(process.cwd(), 'src/preload/work-window.ts'), 'utf8'),
-  readFile(path.join(process.cwd(), 'src/preload/external-connected-library.preload.ts'), 'utf8'),
   readFile(path.join(process.cwd(), 'src/preload/model-library-workspace.preload.ts'), 'utf8')
 ])
 // The composition owns feature registrars; the Host composition root owns local
@@ -101,6 +98,11 @@ rootChannels.push(...[...draftOperations[1].matchAll(/['"]([^'"]+)['"]/g)].map(m
 const pickerOperations = /Object\.entries\(\{([^}]+)\}\)\) \{\s*registerWorkspaceCommand\(`files:\$\{name\}`/.exec(mainSource)
 assert.ok(pickerOperations, 'Host must register its fixed picker operation set')
 rootChannels.push(...[...pickerOperations[1].matchAll(/([a-zA-Z]+):\s*fileSelection\./g)].map(match=>'files:'+match[1]))
+// Resolve the fixed inline registration loops as well as literal commands.
+for (const match of mainSource.matchAll(/for\s*\(const (\w+) of \[([^\]]+)\] as const\)\s*registerWorkspaceCommand\(`([^`]+)`/g)) {
+  const [, variable, entries, template] = match
+  for (const entry of entries.matchAll(/['"]([^'"]+)['"]/g)) rootChannels.push(template.replace('${' + variable + '}', entry[1]))
+}
 for (const channel of rootChannels) handle(channel, 'Host composition root source registration')
 const preloadInvokeChannels = [...new Set(preloadSources.flatMap((source) => resolvePreloadInvokeChannels(source, constantValues)))]
 const missing = preloadInvokeChannels.filter((channel) => !handlers.has(channel))

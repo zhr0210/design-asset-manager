@@ -1,13 +1,13 @@
 # System Smart Filters Default to Unresolved Review Signals
 
-Review-focused System Smart Filter result pages should default to unresolved
-Review Signals. Resolved Review Signals should leave the main review result
-surface so those filters behave like clearable review queues rather than
-permanent search pages. Informational system-provided views such as Recent
-Captures are ordinary dynamic result views and are not governed by this
-unresolved-only default.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Resolved signals should remain available through filter details, a show
-resolved mode, or Review History. This lets users clear duplicate review, tag
-confirmation, and expiration queues without losing traceability for
-past decisions.
+## Decision
+
+Review-focused System Smart Filter result pages should default to unresolved Review Signals.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[筛选、审查与回收站规格](../product/specs/review-trash.md#adr-0050)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/library-lifecycle.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

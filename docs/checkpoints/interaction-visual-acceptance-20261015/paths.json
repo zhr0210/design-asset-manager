@@ -1,0 +1,19 @@
+[
+  "AGENTS.md",
+  "DESIGN.md",
+  "CONTRIBUTING.md",
+  "TASK.md",
+  "docs/code-standards.md",
+  "docs/design/README.md",
+  "docs/design/INTERACTIONS.md",
+  "docs/design/WORKSPACE-INTERACTIONS.md",
+  "docs/design/WORK-WINDOW-INTERACTIONS.md",
+  "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+  "docs/agents/ui-ux-acceptance.md",
+  "docs/subsystems/gui-shell.md",
+  "docs/subsystems/settings-recovery.md",
+  ".codeindex/documentation-map.json",
+  "docs/product/WORK-SETS-20260920.md",
+  "docs/product/ASSET-NOTEBOOKS-20260917.md",
+  "native/shelf-candidates/README.md"
+]

@@ -1,19 +1,13 @@
 # Managed Original Extensions Follow Verified Real Format Evidence
 
-Managed Original Storage Name v1 assigns its **Validated Storage Extension** only after the staged bytes pass the same signature, structure, and real-decode evidence that selects a versioned Capture Format Capability for preview. The detected format identity and its active verified capability are authoritative. A received filename extension, producer-declared MIME, HTTP content type, operating-system association, or shared rendering worker is only supporting evidence and can neither establish nor override the format; using PDFium to render a PDF-compatible Illustrator file, for example, does not rename that Illustrator original to PDF.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Each verified format capability declares one canonical lowercase extension and its valid received aliases. When the received extension is a declared alias for the detected format, the storage name preserves that alias in lowercase, such as `.TIF` becoming `.tif` rather than being changed to `.tiff`. When the extension is absent, misleading, or invalid for those bytes, the storage name uses the capability's canonical lowercase extension. This changes only the physical filename and never transcodes, repairs, wraps, or rewrites the original bytes. Capability-declared extension tokens must themselves pass the portable filename safety contract.
+## Decision
 
-Vendor and container specificity is preserved when it is part of verified format identity. Camera formats therefore keep capability-verified extensions such as `.cr3`, `.nef`, or `.arw` rather than collapsing to generic `.raw`; AI, PSD, PSB, TIFF, PDF, and other containers likewise retain their actual verified format rather than the extension of a decoder, embedded preview, or normalized derivative. The complete received basename remains separate provenance under ADR 0288 even when the physical extension is corrected.
+Managed Original Storage Name v1 assigns its **Validated Storage Extension** only after the staged bytes pass the same signature, structure, and real-decode evidence that selects a versioned Capture Format Capability for preview.
 
-If no active verified capability can establish the real format and its extension mapping, the application does not invent `.bin`, trust the received suffix, or report a successfully activated original. Candidate Intake, Progressive Reference Indexing, and Managed Original Recovery retain their respective explicit unsupported/capability/scan/recovery state until the required evidence is available. This remains compatible with broad format coverage: installing a verified Format Capability Pack can add evidence and retry the item, but cannot retroactively pretend the earlier allocation succeeded.
+## Detailed contract and provenance
 
-The ADR 0286/0287 allocation journal records the detected format identity, capability identity and revision, received extension evidence, chosen Validated Storage Extension, alias-preserved or canonical-fallback reason, and final storage name without recording a private source path. Replay reuses that committed decision. A later capability or alias-table update applies to new allocations and explicit revalidation only; it never mass-renames existing originals merely for spelling uniformity. Exact-byte ADR 0284 copy-back may reuse a committed name once its recorded format evidence verifies, while an explicit different-byte replacement must revalidate its format and cannot retain an extension that is invalid for the replacement merely to avoid a journaled path change.
+详细状态、交互、数值边界和例外的唯一正文为[资料库身份与存储角色规格](../product/specs/library-storage.md#adr-0289)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/library-lifecycle.md)，当前资格只查CURRENT-STATE。
 
-ADR 0283 external rename/move reconciliation accepts a lowercased or differently cased declared alias, but a suffix that misrepresents the verified bytes enters item-scoped recovery/repair instead of being silently rewritten or recorded as a safe portable managed path. ADR 0290 preserves this extension when reducing a path to fit, and ADR 0291 supplies the exact complete-path budgets. The current normalization service copies a raw basename, falls back from decoder metadata to the received extension, and finally defaults an empty format to JPEG; it has no versioned format-capability extension mapping or allocation evidence. This ADR records target architecture only and reads, detects, decodes, rewrites, allocates, renames, or moves no runtime/user file and changes no public IPC, database schema, or AI Worker API.
-
-ADR 0385 applies the same truthful real-format principle to Original Asset
-Export names. It may preserve a capability-valid received/current alias, but it
-cannot reintroduce a missing or misleading received suffix merely to reproduce
-filename provenance; any visible suffix correction renames only the exact-byte
-external copy.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

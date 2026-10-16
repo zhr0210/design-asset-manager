@@ -1,5 +1,7 @@
 # P02｜源码发现与验证限制
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 以下条目来自当前源码阅读；没有打开任何SQLite，未将静态发现写成运行测试FAIL/PASS。
 
 ## F01：重复的版本判定是真实存在的
@@ -20,12 +22,6 @@ enable函数、读取投影、control inspection、materialization expected-sche
 可从分支推导：v8待恢复记录可能被列出，但准备恢复会因reader提前返回被拒绝；重复登记尚未有Asset的pending意图可能失去旧行判定而触发主键冲突。未宣称所有v8副本保存失败，也未证明用户数据已经损坏。
 
 本轮只记录，未修复。设计夹具M20/M21明确区分当前分支行为与批准修复后的期望。P00/旧测试中关于v8兼容的宽泛陈述，不能代替这个新发现的针对性验证。
-
-## F03：Eagle独立索引的版本拒绝发生在DDL之后
-
-`external-connected-library.schema.ts/initializeExternalConnectedLibrarySchema`先执行一组CREATE TABLE IF NOT EXISTS，再读取user_version并拒绝非0/1；`external-connected-library.ts/createExternalConnectedLibrary`直接调用它，所读调用段没有包围整段初始化的外层事务。
-
-影响：未知高版本且缺某个表的合成index，可能在抛unsupported前已有结构写入；已有表完整时不能仅凭这一点断言发生了变更。本轮未执行该场景，也未连真实Eagle。未来必须先识别域和版本，再在该域自己的受控事务里创建/演进；不能把Managed的良好拒绝规则笼统归给所有域。
 
 ## F04：当前库是DELETE模式，不是WAL
 

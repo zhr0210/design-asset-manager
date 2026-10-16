@@ -1,45 +1,13 @@
 # Number Display Overflow Uses A Labeled Scientific Fallback And Full Detail
 
-An exact Decimal128-equivalent value can produce thousands of ordinary-decimal
-characters under a valid display rule, so inline layout must be bounded without
-turning clipping into false numeric evidence. An inline Number first applies
-ADR 0463's configured precision, rounding, grouping and approximation rules.
-If the resulting numeric token—including sign, digits, separators, exponent
-and `≈` marker but excluding the external unit label—exceeds 64 Unicode extended
-grapheme clusters, or the complete rendered number and unit cannot fit the
-available inline container, the surface uses **Scientific Number Display
-Fallback**.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Scientific Number Display Fallback is a normalized, ungrouped scientific
-representation of the current display result under the same pinned decimal and
-display-locale rules. Automatic Exact therefore falls back from the exact
-authoritative value, while Fixed Decimal Places or Significant Digits falls back
-from their already rounded display result. It preserves the existing `≈`
-state exactly and does not perform a second rounding step. A visible text/icon
-label and accessible name identify Scientific Display Fallback; it is transient
-layout state, not a changed field setting, value, unit, precision mode or
-scientific-notation preference.
+## Decision
 
-Every fallback opens a read-only **Number Display Detail** containing two
-separately labelled values: the complete result of the field's requested
-formatting and the authoritative Exact Custom Field Number. Both are generated
-through the same exact decimal and pinned locale data. Long requested-format
-text is produced only when this detail is opened and appears in a bounded,
-scrollable reading region without arbitrary digit removal. Closing the detail
-discards its generated presentation; it does not create metadata, cache,
-history, search text, telemetry, diagnostics or clipboard content.
+An exact Decimal128-equivalent value can produce thousands of ordinary-decimal characters under a valid display rule, so inline layout must be bounded without turning clipping into false numeric evidence.
 
-If an extremely narrow container cannot fit even the normalized scientific
-fallback plus its approximation/fallback evidence, visual ellipsis is allowed
-only after that fallback has been selected. The clipped state must retain a
-separate visible overflow indicator, accessible explanation and direct Number
-Display Detail entry; ellipsis alone can never imply that the visible prefix is
-the complete exact or rounded number. A resize may restore the scientific
-fallback or requested format immediately without changing any portable state.
+## Detailed contract and provenance
 
-The unit label remains outside the numeric token in every state. It is shown in
-Number Display Detail even when inline layout cannot retain it, and it never
-affects the 64-grapheme numeric threshold, scientific coefficient/exponent,
-rounding result or exact value. Sorting, filtering, range checks, exports,
-editing and AI/import/migration behavior continue to use their existing exact
-contracts rather than whichever inline state happened to fit.
+详细状态、交互、数值边界和例外的唯一正文为[数字字段、显示与精度规格](../product/specs/custom-number.md#adr-0464)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

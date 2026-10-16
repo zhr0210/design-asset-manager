@@ -1,0 +1,9 @@
+[
+  {
+    "check": "new metadata navigation cases in agent-context-router.test.mjs",
+    "observed": "OCR Worker cancellation had equal OCR matches in analysis/search; MCP plugin optional targets had no confident route. Existing268 route-eval cases passed before these new assertions.",
+    "cause": "New tests incorrectly assumed every broad natural phrase must be unambiguous; routing intentionally requires scope.",
+    "fix": "Analysis case names its analysis/background purpose; future product scope explicitly selects existing source-discovery route. No scoring/aliases relaxed or production routing rules changed.",
+    "validation": "Rerun the updated full test below; original failed run retained in this record."
+  }
+]

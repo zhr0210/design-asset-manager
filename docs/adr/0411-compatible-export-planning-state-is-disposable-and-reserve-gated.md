@@ -1,11 +1,13 @@
 # Compatible Export Planning State Is Disposable And Reserve-Gated
 
-Large progressive plans need bounded disk-backed intermediates, but those intermediates are neither durable authorization nor recovery evidence. They must be disposable after the review session while admission protects both temporary-volume and physical-memory headroom.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Normal Cancel or leaving planning invalidates intermediate state immediately and removes it in the background. A crash or forced exit leaves abandoned application-managed state identified by opaque planning-job identity. The next launch never restores, confirms, or reuses it; a new plan validates every source, destination, and capability fact again. Discovery and cleanup do not block launch. Once idle and writable, cleanup completes within 60 seconds; an occupied or temporarily unwritable item remains visibly pending with an exact scoped reason and automatic retry, never valid planning evidence.
+## Decision
 
-Planning temporary data has no fixed per-plan gigabyte cap. Before each bounded chunk, the planner proves enough space while preserving the greater of 5 GB and a configurable percentage of the temporary volume's total capacity, default 5%. The UI shows current use and an explicitly evolving remaining-demand estimate. If the reserve cannot be maintained, planning pauses at a safe chunk boundary and offers space remediation or another local writable temporary volume. Continuing elsewhere requires verified migration and rebinding of the managed planning state. Loss or exhaustion pauses rather than truncating, excluding, lowering quality, or weakening review.
+Large progressive plans need bounded disk-backed intermediates, but those intermediates are neither durable authorization nor recovery evidence.
 
-A device-local planning-memory reserve defaults to 20% of physical memory with a validated 10%–50% range. New chunks preserve that headroom and still pause under operating-system memory pressure. Resource settings change admission only; they cannot change ADR 0410 acceptance thresholds, complete-plan evidence, reserve floors, file/publication correctness, or trust rules. Any additional precise resource setting requires explicit units, default, range, and the same inability to override correctness.
+## Detailed contract and provenance
 
-ADR 0399 owns progressive plan completeness and evidence drift. ADR 0408 separately governs export-execution concurrency and responsiveness. Settings UI follows the shared precise numeric-input-plus-slider interaction in DESIGN.md, but that presentation pattern does not convert fixed safety or acceptance constants into user settings.
+详细状态、交互、数值边界和例外的唯一正文为[导出、交付与性能规格](../product/specs/export.md#adr-0411)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/media-handoff.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

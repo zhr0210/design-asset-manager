@@ -1,0 +1,259 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": true,
+    "explicitRoute": null
+  },
+  "routes": [
+    {
+      "id": "asset-lifecycle",
+      "summary": "Current asset deletion, read-only Library Start and recoverable Trash tracers, and Active Library authority.",
+      "score": 20,
+      "matched": [
+        "filesystem"
+      ],
+      "modules": [
+        "library-lifecycle",
+        "electron-main",
+        "renderer",
+        "shared"
+      ]
+    }
+  ],
+  "documentation": [
+    "docs/subsystems/library-lifecycle.md",
+    "docs/subsystems/organization.md"
+  ],
+  "contractReferences": [
+    {
+      "decision": "docs/adr/0291-managed-original-paths-use-conservative-portable-and-windows-budgets.md",
+      "reference": "docs/product/specs/library-storage.md#adr-0291"
+    }
+  ],
+  "states": [
+    {
+      "route": "asset-lifecycle",
+      "reality": "Current Implementation",
+      "summary": "Production Active Library Host composes inspected/locked storage with Asset/Tag/Trash operations; legacy global assets:delete is not the active-library authority. UI/platform qualification is separate.",
+      "evidence": [
+        "src/main/active-library-runtime.ts",
+        "src/main/ipc/active-library.ipc.ts"
+      ]
+    },
+    {
+      "route": "asset-lifecycle",
+      "reality": "Validated Tracer",
+      "summary": "Inspection, Manifest/filesystem, lease and Trash tracer seams retain isolated evidence; they do not negate the existing production Host composition.",
+      "evidence": [
+        "src/main/library-lifecycle/asset-trash.ts",
+        "src/main/library-lifecycle/sqlite-asset-trash.adapter.ts",
+        "scripts/asset-trash-lifecycle.test.ts",
+        "scripts/asset-trash-sqlite-persistence.test.ts",
+        "src/main/library-lifecycle/library-start.ts",
+        "src/main/library-lifecycle/library-start.tracer.ts",
+        "scripts/library-start-inspection.test.ts",
+        "src/main/library-lifecycle/library-manifest.tracer.ts",
+        "scripts/library-manifest-inspection.test.ts",
+        "src/main/library-lifecycle/library-filesystem.tracer.ts",
+        "scripts/library-filesystem-inspection.test.ts",
+        "src/main/library-lifecycle/exclusive-library-lock.tracer.ts",
+        "scripts/exclusive-library-lock.tracer.test.ts",
+        "src/main/library-lifecycle/library-open-inspection.tracer.ts",
+        "scripts/library-open-inspection.test.ts"
+      ]
+    },
+    {
+      "route": "asset-lifecycle",
+      "reality": "Target Architecture",
+      "summary": "Broader migration, format, volume, recovery and scale guarantees remain capability-specific targets; verify each current consumer and qualification.",
+      "evidence": [
+        "docs/adr/0067-design-asset-deletion-uses-asset-trash-not-candidate-cleanup.md",
+        "docs/adr/0069-deleted-assets-are-hidden-outside-trash-unless-included.md",
+        "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md",
+        "docs/adr/0482-legacy-application-libraries-migrate-by-verified-copy-without-reimport.md"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "src/main/library-lifecycle/library-start.ts",
+      "role": "interface",
+      "reality": "Validated Tracer",
+      "reason": "One inspection entry, opaque scope input and explicitly non-writing outcomes.",
+      "read_mode": "full",
+      "routeId": "asset-lifecycle",
+      "estimatedTokens": 562,
+      "required": true
+    },
+    {
+      "path": "src/main/library-lifecycle/library-filesystem.tracer.ts",
+      "role": "implementation",
+      "reality": "Validated Tracer",
+      "reason": "Read-only selected-role lstat/realpath observation, scoped qualification and role headroom.",
+      "read_mode": "full",
+      "routeId": "asset-lifecycle",
+      "estimatedTokens": 3915,
+      "required": true
+    },
+    {
+      "path": "scripts/library-filesystem-inspection.test.ts",
+      "role": "test",
+      "reality": "Validated Tracer",
+      "reason": "Task-owned roots prove no-write success/failure, links, escape, overlap, headroom and target replacement.",
+      "read_mode": "full",
+      "routeId": "asset-lifecycle",
+      "estimatedTokens": 3031,
+      "required": false
+    },
+    {
+      "path": "docs/adr/0276-existing-libraries-open-through-inspection-and-tiered-migration.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Requires inspection and Exclusive Library Lock evidence before normal writes.",
+      "read_mode": "full",
+      "routeId": "asset-lifecycle",
+      "matched": [
+        "filesystem"
+      ],
+      "estimatedTokens": 2253,
+      "required": true
+    },
+    {
+      "path": "docs/adr/0282-managed-originals-bind-to-stable-originals-without-taking-over-files.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Manifest binding is root-relative and lexical; physical containment and ownership remain later evidence.",
+      "read_mode": "full",
+      "routeId": "asset-lifecycle",
+      "matched": [
+        "filesystem",
+        "filesystem eligibility"
+      ],
+      "estimatedTokens": 1968,
+      "required": true
+    },
+    {
+      "path": "docs/adr/0291-managed-original-paths-use-conservative-portable-and-windows-budgets.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Current role measurements are bounded; final/staging/rollback allocations still require their own full preflight.",
+      "read_mode": "full",
+      "routeId": "asset-lifecycle",
+      "matched": [
+        "filesystem"
+      ],
+      "estimatedTokens": 355,
+      "required": true
+    }
+  ],
+  "validations": [
+    "npm run test-asset-authority-baseline",
+    "npm run test-asset-trash-lifecycle",
+    "npm run test-asset-trash-sqlite-persistence",
+    "npm run test-library-start-foundation"
+  ],
+  "feedback": {
+    "problems": [
+      {
+        "id": "DAM-P006",
+        "group": "integration",
+        "status": "in-progress",
+        "check": "对照Main注册、生产Active Library工厂、managed模型/Runtime与子系统正文，确认普通入口不再指向旧全局删除或禁用Runtime；执行导航、条款保全和相关路由回归，保留产品资格差别。",
+        "source": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+        "anchor": "dam-p006",
+        "line": 83,
+        "matchedRoutes": [
+          "asset-lifecycle"
+        ]
+      }
+    ],
+    "lessons": [
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 28,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#candidate-identity"
+        },
+        "matchedRoutes": [
+          "*"
+        ]
+      },
+      {
+        "id": "DAM-L002",
+        "group": "frontend",
+        "status": "active",
+        "check": "判断本次是否改变可见布局、交互或等待/错误/恢复反馈；若涉及UI/UX，按DESIGN及交互规格从正式入口检查受影响状态，缺陷须复现并验证根因和修复效果，动态问题保留适用连续帧。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l002",
+        "line": 42,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#ui-verification"
+        },
+        "matchedRoutes": [
+          "asset-lifecycle"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not reuse assets:delete for the new Trash authority.",
+    "Do not infer legacy ownership or detach production storage from the held Library lease.",
+    "Do not treat Manifest identities or relative bindings as physical filesystem, lock or write qualification.",
+    "Do not use permission bits, OS/drive labels or successful stat as atomic, durable or locking qualification.",
+    "Do not create, recover, delete or steal lock storage while inspecting or acquiring an existing Library lock."
+  ],
+  "warnings": [
+    "Filesystem-observed means selected role shape and trusted memory qualification were evaluated; no real volume or future Asset allocation is qualified.",
+    "Lock proof is macOS temporary-root evidence only; other platforms refuse before open. Review ADR 0278 for release/drain semantics; inspect is not acquisition.",
+    "Production Host and isolated tracers coexist; accepted contracts, source wiring and current user qualification are separate.",
+    "Secondary route settings-paths also matched; split the task, or retry with --max-routes 2 --expand when both capability packs are required.",
+    "Validation limit deferred 1 additional command(s)."
+  ],
+  "deferred": {
+    "context": [],
+    "validations": [
+      "npm run test-library-filesystem-inspection"
+    ]
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 6,
+    "estimatedFileTokens": 12084,
+    "estimatedMetadataTokens": 2723,
+    "outputEstimatedTokens": 2723,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 14807,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

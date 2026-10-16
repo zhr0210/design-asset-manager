@@ -10,7 +10,7 @@ identity; browser-local storage or unmanaged sidecar files would create a second
 The first explicitly confirmed save upgrades v1–v4 to v5 and adds the notebook table; reads/opening never
 upgrade. The UI discloses that older application versions cannot open v5. A failed save rolls back both
 schema and data changes. Notebook format version is independently recorded. Existing AI/download/recovery
-readers accept v5 without downgrading it. Real third-party/Eagle migration is not authorized by this decision.
+readers accept v5 without downgrading it. Real third-party migration is not authorized by this decision.
 
 Every save is checked under the current held lease against library identity, generation, a fresh binding
 session token, preview reference and notebook revision. Reopening the same persistent generation does not

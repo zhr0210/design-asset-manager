@@ -10,7 +10,7 @@ idempotency. The primary workflow should let users review metadata, tags,
 target organization, duplicate signals, and AI suggestions before committing
 new assets.
 
-This follows the workspace-first direction and the Eagle reference model:
+This follows the workspace-first direction and the asset-management model:
 capture is an acquisition step, while organization and quality control belong
 to the Asset Workspace. The Capture Inbox gives browser capture, future
 browser-extension capture, local API capture, drag-and-drop, batch download,

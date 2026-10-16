@@ -1,7 +1,13 @@
 # Display Gamut Selection Follows The Preview Region
 
-Display Gamut Selection is runtime routing to a validated preview destination and never rewrites the original when a window moves. Under ADR 0147, an existing compatible tile may be reused or the requested visible tile may be lazily rendered for the selected destination. The target display is determined from the screen-space intersection of the visible preview region, not the primary display, cursor position, or window origin. A display becomes Preview-Dominant Display only when it contains a clear majority of that preview region; an even or indeterminate split selects sRGB Preview Variant output.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-P3 selection requires corroborating Output Gamut Evidence from both the main-process display color-space report and renderer output capability for the Preview-Dominant Display. Unknown, unavailable, contradictory, virtual-display, remote-session, or otherwise unverified evidence selects sRGB. The implementation normalizes platform-specific evidence behind one shared capability state rather than exposing macOS and Windows as different product semantics.
+## Decision
 
-Window move, resize, display add/remove, and relevant display-capability changes trigger reevaluation with settling debounce and Gamut Selection Hysteresis so boundary movement does not alternate destinations or cause unnecessary tile renders. A verified dominant P3 display selects P3 Preview Variant output; otherwise sRGB Preview Variant output remains active. Asset Inspector exposes the selected destination gamut, Preview-Dominant Display evidence summary, cache/render state, and fallback reason without displaying private device identifiers or raw local profile paths.
+Display Gamut Selection is runtime routing to a validated preview destination and never rewrites the original when a window moves.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[预览、颜色与分析证据规格](../product/specs/preview-analysis.md#adr-0134)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/ai-analysis.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

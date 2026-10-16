@@ -1,6 +1,6 @@
 import type Database from 'better-sqlite3'
 import { VISUAL_AI_TABLE_SQL, VISUAL_AI_INDEX_SQL } from '../visual-ai/visual-ai.schema'
-import { DOWNLOAD_JOURNAL_SQL } from '../managed-download/download-journal.schema'
+import { DOWNLOAD_JOURNAL_SQL } from '../library-lifecycle/legacy-download.schema'
 import { INTAKE_RECOVERY_SQL } from '../library-lifecycle/intake-recovery.schema'
 import { NOTEBOOK_SQL } from '../library-lifecycle/asset-notebook.schema'
 import { ORGANIZATION_SQL } from '../library-lifecycle/library-organization.schema'

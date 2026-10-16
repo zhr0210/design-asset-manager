@@ -116,16 +116,12 @@
         [
           "design-asset:346b99b3-e23a-4843-bc39-6451f14061e7",
           "public-astronaut",
-          null,
-          0,
-          null
+          0
         ],
         [
           "design-asset:7723ac16-cf0e-42f6-b7b6-b9e680b6e8c4",
           "public-page",
-          null,
-          0,
-          null
+          0
         ],
         [
           "design-asset:b96091fe-9cd6-4ef4-a862-a8a62a68f578",
@@ -145,8 +141,7 @@
         [
           "design-asset:b96091fe-9cd6-4ef4-a862-a8a62a68f578",
           "ocr:2c860796-12eb-4482-83f2-cdf12cfbffee",
-          1,
-          null
+          1
         ]
       ],
       "vectorJobs": [
@@ -156,8 +151,7 @@
           "complete",
           3,
           3,
-          0,
-          null
+          0
         ]
       ]
     }
@@ -175,7 +169,6 @@
     "blenderVideo": "official designated MP4 source still HTTP403 on retry; generated internal H264 is not user qualification",
     "piAccount": "5 runner and17 actual SDK loopback tests pass; real user account login not performed",
     "nativeSpecialties": "ordinary native window and Cmd-Q accepted; drag-to-creation-app/pin/multiple-displays/credential/install behaviors not accepted; screenshot tool only yielded a tiny tilted window thumbnail, not full pixel QA",
-    "eagle": "no actual authorized Eagle library/plugin pairing acceptance this round",
     "remoteCI": "main Actions37793257740 still failed; no push or remote rerun; Windows tracer not validated on Windows",
     "quality": "3 public images only; OCR missed part of scanned page and joined spaces; SigLIP2 similarity is ranking, not accuracy; pure-color Chinese weakness retained"
   },
@@ -233,5 +226,6 @@
     "commit": "d81235049384534c167caea52b85a694f6103d14",
     "bytes": 11971406,
     "sha256": "740288ec6887be94280a5dfa25b5e23a78285cab104519e6c7e218904ee82459"
-  }
+  },
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

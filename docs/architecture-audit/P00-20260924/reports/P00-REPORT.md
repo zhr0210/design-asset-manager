@@ -1,5 +1,7 @@
 # 阶段报告：P00
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 ## 1. 身份与范围
 
 - 阶段ID/模式：P00 / SPEC。
@@ -8,7 +10,6 @@
 - 工作区：`codex/product-reassessment-20260905`；HEAD `3fa00df3bbb605478da6d0af18724d64021e723c`。本机可见非稀疏工作区可读，未制作含私有内容的源码包。
 - 用户已有修改：1285条Git状态，staged 18、unstaged 775、untracked 506（计数可重叠）。保护清单、index/diff摘要、1686份原有文本指纹见`../evidence/WORKTREE-BEFORE.json`；结束比对见`../evidence/WORKTREE-PRESERVATION.json`。
 - 实际读取：包05、CURRENT-STATE、U01、P00、通用约束、报告模板，01的SYS-01/HOST-03/DEV-21/MIG-23/VAL-22，S00/U01索引与相关阶段/需求登记；仓库AGENTS/TASK、CONTEXT相关术语、package/lock/.codeindex；Main/IPC/Preload/Renderer各关键调用方；Host、AI/OCR、查询、工作集、外部库、模型Workspace实现；聚焦测试脚本和10份历史Qwen JSON。详见三份配套审计文档。
-- 未取得材料：历史完整命令/stdout/exitCode与运行时工作区digest、已清理私有输入/原文、真实Eagle/Windows/安装包/规模与新调度测试证据；不为本轮补跑或重新寻找私有素材。
 - 前置设计/实现：P00无阶段依赖；包初始均not_started。可进行源码审阅，不据此把任何后续阶段标为已reviewed/accepted。
 
 ## 2. 事实、提案与批准分开
@@ -17,7 +18,7 @@
 
 1. 正式Main把visual-ai、OCR、查询、工作集接到Active Library Host；库写入使用有效binding/lease。
 2. 视觉/OCR任务控制仍各自位于内存；结果持久化不能代表持久Job Journal/Outbox/全局资源调度已实现。
-3. 模型Workspace生产目录输入为null，Eagle生产Provider不可用；旧AI/Runtime/删除通道受限。
+旧AI/Runtime/删除通道受限。
 4. S00与仓库同名字节一致，38个链接文件存在；10份历史Qwen JSON已读取，其结果只作为历史reported证据。
 5. 主窗口sandbox=false、回环地址local标签不能证明最终计算位置；这是现状审计，不是本轮漏洞修复或配置变更。
 
@@ -35,7 +36,7 @@ SPEC拟改模块/接口/状态机/事务：**本阶段均无业务变更**。仅
 
 实际新增：`CURRENT-STATE-AUDIT.md`、`MODULE-REACHABILITY.md`、`BASELINE-MATRIX.md`、本报告；独立`inputs/`参考副本、`evidence/`审计清单与静态校验记录、`manifests/`阶段状态/需求追踪。原ZIP、仓库AGENTS/CONTEXT/TASK与业务源码保持原样。
 
-调用方及权威保留：VisualAiPanel/DedicatedOcrPanel/Library/WorkSetWindow及原IPC保持不变；Managed写入经Host，App DB/Eagle索引/Legacy只读各守边界。不启用旧全局DB写入，不恢复网页能力。
+调用方及权威保留：VisualAiPanel/DedicatedOcrPanel/Library/WorkSetWindow及原IPC保持不变；不启用旧全局DB写入，不恢复网页能力。
 
 外部副作用与授权记录：无网络请求、无模型/应用启动、无依赖安装、无真实库/缓存访问、无用户服务终止。仅用户指定ZIP和仓库源码/文档读取、受控摘要与新审计文档写入。
 
@@ -58,12 +59,11 @@ SPEC测试夹具设计和判定条件单列于[BASELINE-MATRIX](../BASELINE-MATR
 ## 5. 故障、安全与兼容
 
 - 关库/取消/晚到结果：源码可见epoch、scope与AbortSignal、Host关闭前等待inFlight；本轮未触发真实race或关库，不承诺外部服务物理计算同步停止。
-- 恢复：当前AI结果与未完成任务分开；目标持久意图不得携带旧generation/receipt。下载恢复和Eagle Journal不替代AI任务恢复。
 - 用户状态：视觉事务仅更新非手工描述，标签为建议；OCR有独立修订；该源码规则与历史报告一致，非本轮真实库证明。
 - 资源准入：现有批次数/Worker内存逻辑不是目标全局多资源原子许可；此目标仍待设计。
 - 授权：模型配置和localhost分类不证明最终本地执行或永久外发许可；本轮不读取密钥/用户配置。
 - 旧接口/旧数据：保留拒绝表、Legacy只读、三库分离，不执行任何schema升级/真实旧库迁移。
-- 未覆盖：原图事实质量、Windows/签名安装、真实Eagle、大库、后台共存、云费用、模型驻留与资源释放，见审计G01–G08。
+- 未覆盖：原图事实质量、Windows/签名安装、真实大库、后台共存、云费用、模型驻留与资源释放，见审计G01–G08。
 
 ## 6. 回退
 

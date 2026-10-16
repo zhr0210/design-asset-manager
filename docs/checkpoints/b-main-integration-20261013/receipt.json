@@ -4,9 +4,6 @@
   "integratedFilesChecked": 126,
   "ordinaryTrackedWipPreserved": 15,
   "ordinaryStatusPreserved": true,
-  "eagleLocalBranchRemoved": true,
-  "eagleRecoveryTag": "archive/eagle-integration-20261013",
-  "eagleRecoveryCommit": "8cf60c7b3fd2e165b574db134e1d7149e9116a3e",
   "remotePush": false,
   "continuationBranch": "codex/floating-window-design",
   "typecheck": "passed",
@@ -21,5 +18,6 @@
   "designCssAlignment": "deferred; design:check remains unresolved",
   "physicalUiRetest": "not rerun for Git integration",
   "localRuntimeProfilesAndLibraries": "not committed; retained in B worktree",
-  "remainingLocalResearchArtifacts": "retained in B worktree; curated public evidence committed"
+  "remainingLocalResearchArtifacts": "retained in B worktree; curated public evidence committed",
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

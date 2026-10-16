@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-15 Asia/Shanghai",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "before": "55b9b84c76be16a6bb1d99e4126be7faf8284801bb45e471e7292b46f234a844"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "before": "5e2d28185be7ff3094d76d8ac362d129790adf8c917aefb3dbeffe28725cae69"
+    },
+    {
+      "path": "docs/agents/domain.md",
+      "before": "6cf5705efc6a0176ecbca57e55b3bf331fe83fcd419ead6c31e1e9a9982c8c39"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "before": "9b39f9bf450ad33a84ce3e59543964283ff12038bab195ac6d2fa503d6a0293b"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "before": "182c83fa3d7e9d0dec62cd620577cb9565b7a177712c0ae0f9d13dc2420b4cea"
+    },
+    {
+      "path": "scripts/check-adr-router.py",
+      "before": "da0fbcba8be853a2a45e8209ff38a064099c8a2b604631daa015265b4659ba25"
+    },
+    {
+      "path": "scripts/check-documentation.py",
+      "before": "7220c26adbb5e3e7694892e163142b119b1022783b6ffb939dbdadfd46f3facc"
+    },
+    {
+      "path": ".codeindex/documentation-map.json",
+      "before": "94ae409b3d0966d6e5e04629cfd6b7acdc29a8d5b150613fdd6fcab7a040f93a"
+    },
+    {
+      "path": "TASK.md",
+      "before": "9d7599ef912e8fc881a5c96d86cc411bd9bf072359edb8fe6b5c65e3c989d33c"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+      "before": "ca5aa41c195f2edd0a765a84b34aab044f6ad31ce6889a382ef063e5cdd3d34d"
+    },
+    {
+      "path": ".github/workflows/cross-platform-governance.yml",
+      "before": "f16d73cee30e78b9a13d123494f8b10e93189e31acf9a4cfbfc8cd5673148520"
+    }
+  ]
+}

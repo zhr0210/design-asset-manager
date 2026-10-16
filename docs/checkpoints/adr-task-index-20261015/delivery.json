@@ -1,0 +1,259 @@
+{
+  "ok": true,
+  "scope": "ADR classification/navigation and related checks only; no decision or product implementation changed.",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "before": "55b9b84c76be16a6bb1d99e4126be7faf8284801bb45e471e7292b46f234a844",
+      "after": "b01f7de003b0329596becba6802bee07c020f048e75a42337300f2a7cc7274d1",
+      "kind": "modified"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "before": "5e2d28185be7ff3094d76d8ac362d129790adf8c917aefb3dbeffe28725cae69",
+      "after": "19fa82589df72a6a29c2e175d52ea430e9ba0adbdca69c57d9dc1f885f5e5ec7",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/agents/domain.md",
+      "before": "6cf5705efc6a0176ecbca57e55b3bf331fe83fcd419ead6c31e1e9a9982c8c39",
+      "after": "ee60bbbf998f3d074623113ef8fe69ff268313a0ecfda75c862c496fdd3aceec",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "before": "9b39f9bf450ad33a84ce3e59543964283ff12038bab195ac6d2fa503d6a0293b",
+      "after": "c3edccf977cb8cb1a015e1e0f213e6c74bef00d0defc00b053bd2b64d95c3506",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "before": "182c83fa3d7e9d0dec62cd620577cb9565b7a177712c0ae0f9d13dc2420b4cea",
+      "after": "5c29f98b6d3d53e20ade9524d811cb234e0451319e3ab650a27883cb2ace3444",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/check-adr-router.py",
+      "before": "da0fbcba8be853a2a45e8209ff38a064099c8a2b604631daa015265b4659ba25",
+      "after": "8d3e089763dd41bed01fdb7e0beac4c402c7315a82a8d21e67a2c4e8c211d101",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/check-documentation.py",
+      "before": "7220c26adbb5e3e7694892e163142b119b1022783b6ffb939dbdadfd46f3facc",
+      "after": "f02e85b7a8f7f87ab6616da9cfdce6031f94c852e558b0bd48d21270a3818ee0",
+      "kind": "modified"
+    },
+    {
+      "path": ".codeindex/documentation-map.json",
+      "before": "94ae409b3d0966d6e5e04629cfd6b7acdc29a8d5b150613fdd6fcab7a040f93a",
+      "after": "29979cdb32dcbc53a0b611a161b63b44fb7ef44afac9ad76b58b4b38496136ce",
+      "kind": "modified"
+    },
+    {
+      "path": "TASK.md",
+      "before": "9d7599ef912e8fc881a5c96d86cc411bd9bf072359edb8fe6b5c65e3c989d33c",
+      "after": "aa97caac813e4a292ead072a22d36318f4b5a52ed2c9f21bbafc86e938aae0b8",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+      "before": "ca5aa41c195f2edd0a765a84b34aab044f6ad31ce6889a382ef063e5cdd3d34d",
+      "after": "6629a14bd34f7d7e485a8fa5dd93ff76df06e0fb79e5e41c0eb6dc323b4acab5",
+      "kind": "modified"
+    },
+    {
+      "path": ".github/workflows/cross-platform-governance.yml",
+      "before": "f16d73cee30e78b9a13d123494f8b10e93189e31acf9a4cfbfc8cd5673148520",
+      "after": "28420a9dbcf694cbbd5e77fcdfd97007c37a55e150e23eac85853e96b5552d34",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/indexes/classification.md",
+      "after": "71d7b8a2cc4d47c1218c21d19324a9b500fc13c635b0500ed069e8a21cdb717e",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/reading-context.md",
+      "after": "7d3e48c0e8c03f9fbde914120fed08174adf2b6399d23ce17aa81bfa34746a71",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/tasks.md",
+      "after": "f1148e640f84c9764700e1a4831fc4f1af5ab880544d98a76e91fd44052e4b39",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/add-assets.md",
+      "after": "46f12117dae886414041122dfa5a3fd63bcacc735486bce89d880f1fcf8dee19",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/backup-trust.md",
+      "after": "e85a4a9a1a5952cdb951269d55e02c8fba487d955c6efe712604260260d0d3b4",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/batch-conflicts.md",
+      "after": "c80fd3e82b08f8ac96e84d54e34a4a5df0d09f213ece269606c08353d3683d61",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/capture.md",
+      "after": "46cf3ed60d2b053844104d0cb575e663cdf03517cc5e20d0185bd338b9e6f3fe",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/compound-originals.md",
+      "after": "9d90e5689af79fb7eb5526fd81f2d412911d756497ac0a97107280b1fa160082",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/custom-fields.md",
+      "after": "aec0cd78b65ef839828bac191aea2560c1e83d3d513eb22cd49a3664a085eecf",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/custom-number.md",
+      "after": "2c159683382a9b01e348922c5b1f7faa3e6cde906ecbd4189ad4980efa746d62",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/custom-text.md",
+      "after": "36fe2d662cd2b0fd5be77308a427e0a6907c134557244585f4fb4734cb8960ee",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/export.md",
+      "after": "5def83479dea19c68204dc7e7715c31208f2063bbba65bb334376ee5ff02f685",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/library-storage.md",
+      "after": "92429605a64a382ae19a88b6509ae7af1157ce13522c556809cefa13d23103b2",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/local-host.md",
+      "after": "534e734408f5c081203705ea6d9eb88a8638325df178f18b5366741eb6131253",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/manual-undo.md",
+      "after": "0e210c8093a3959ce8396d11dfe30bb591de425a53467d7717f5b6ac6c40bc34",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/missing-initialization.md",
+      "after": "f30fe6622412ac1bd56f292bb5b14ca77120b39573e8d7f746921230884557ec",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/model-extension.md",
+      "after": "2b324e2ce72d6b378bfd480af12367bb35141e661aa0ce5078c611a3ead49b5e",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/model-storage-lifecycle.md",
+      "after": "cf5fbf86491f14e5fa4597b34451aeaa2aee7f577cec20c1c2a29eaccffcd8c1",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/modern-boundaries.md",
+      "after": "128de27402a4137b9ea7d03708276c4e30010dbe4cc4ed812189c83d5110e797",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/ocr.md",
+      "after": "2b14dca53e0eea97f1ee32987711cf691cb3b0c78b90ec68a6843e09e4573145",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/platform-runtime.md",
+      "after": "b014589fd1c56b73fc8d9b35cbe072da215f96bff2fd8150651adbf8bc9622c6",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/portability.md",
+      "after": "1d729b3b323a94ede04826d93e19ae521491012fe5cb94421a950799409dfb3f",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/preview-analysis.md",
+      "after": "e61884b841124a1e07581eb0876bb6914f813ee4964d25fbbaf1ec1c67750314",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/progressive-ai.md",
+      "after": "cfc2d269b05b6c6219ce9127216e356b0bd62b9716db3a8864505042f4e48019",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/referenced-operations.md",
+      "after": "61f232b0d280124084f72878ad41f5fbb5f54ebac8206fd2ba248a8b8b72cc1c",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/retrieval.md",
+      "after": "2fdb45724d0d773a7f3585bc33dcf5f639b9aeafb090acc727894273bd4f13a8",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/review-trash.md",
+      "after": "51173c558d824781487b3ed99556afc93c99b2fb748ad5ac5153176bf3cadf4d",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/search-first-organization.md",
+      "after": "0236474be352fe77c1ad5136352581391f3a2898f543e9faecdae1fe245b38cc",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/storage-review.md",
+      "after": "4a6c2db4a07dc16f071a419859b0bfa009d47e8d2e38ed95e344b57f42bb291e",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/work-mode.md",
+      "after": "caf7b624e20c8eeed6fc90f2e4f35a1e05bd3f50814d89c3bacaa856fd5fd9c8",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/workspace.md",
+      "after": "e9864e0d71b9d142b8e77841c6e00926e67ad8818ab91d0680d3ca1e480adfbb",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics/writeback.md",
+      "after": "9cba4a1f8089d4d004deb0b6d564af85be852bc70348719cbd83cd30ab663ebc",
+      "kind": "new"
+    },
+    {
+      "path": "docs/adr/indexes/topics.md",
+      "after": "137f129b90c81ff008de41c523bb60dee380d14987dbb81f2141df49b707ebd1",
+      "kind": "new"
+    },
+    {
+      "path": ".codeindex/adr-index.json",
+      "after": "09224149d32e69fc37af8e41203a891ad9b927ff3870ef4e543306f8eaddcaea",
+      "kind": "new"
+    },
+    {
+      "path": "scripts/adr-context.mjs",
+      "after": "fb22b460a0a83c6dad8f00ae7ce6a1fb79ff25cbce70c5434e4410a40880e882",
+      "kind": "new"
+    },
+    {
+      "path": "scripts/adr-context.test.mjs",
+      "after": "163168b1164ad144fdc91db8b1ee636fb4cf2f1091690d6ba35a38bf8c3cae5b",
+      "kind": "new"
+    }
+  ],
+  "baseline_files": 11,
+  "decisions": 493,
+  "topics": 29,
+  "task_types": 12,
+  "default_candidates": 3,
+  "max_candidates": 8,
+  "errors": []
+}

@@ -10,8 +10,7 @@ import { appPath } from '../src/shared/workflows/app-navigation.workflow'
 const ROUTES = [
   { path: appPath('settings'), heading: '设置' },
   { path: appPath('tag-manager'), heading: '标签' },
-  { path: appPath('downloads'), heading: '下载与入库' },
-  { path: appPath('model-library'), heading: '模型库' },
+  { path: appPath('model-library'), heading: '本地视觉模型' },
   { path: appPath('ai-console'), heading: 'AI 与模型' }
 ] as const
 
@@ -72,6 +71,13 @@ const settings = {
 const record = (name, value) => { calls.push(name); return Promise.resolve(value) }
 let folderSelection = 0
 const damClient = Object.freeze({
+  managedVision:{status:async()=>{throw Error('unconfigured fixture')}},
+  managedModels:{read:async()=>{throw Error('unconfigured fixture')}},
+  retrievalModels:{read:async()=>{throw Error('unconfigured fixture')}},
+  aiResources:{read:async()=>{throw Error('unconfigured fixture')}},
+  buildIdentity: () => Promise.resolve({buildId:'dam-fixture',builtAt:'fixture',platform:'fixture',arch:'fixture'}),
+  onLegacyLibraryChanged:()=>()=>{},
+  legacyReadonly:{inspect:async()=>({state:'unconfigured',identity:null,generation:null,counts:{assets:0,tags:0,relations:0},limitations:[]})},
   connectionState: () => ({connected:true,reconciling:false}),
   onConnectionChanged: () => () => {}, onWorkspaceChanged: () => () => {},
   onSettingsChanged: () => () => {}, onNavigate: () => () => {}, onReconcile: () => () => {},
@@ -89,7 +95,6 @@ const damClient = Object.freeze({
     summarize: () => record('modelLibraryWorkspace.summarize', { success: true, value: { catalog: { state: 'unavailable' }, storage: { state: 'not-configured' } } }),
     configureStorage: () => record('modelLibraryWorkspace.configureStorage', { success: false, error: 'disabled in smoke' })
   },
-  managedDownloads: { list: () => record('managedDownloads.list', { ok: true, value: [] }), onImported: () => () => {} },
   listSites: () => record('listSites', [{
     id: 'synthetic-site', name: 'Synthetic Source', base_url: 'https://fixture.invalid/',
     search_url_template: 'https://fixture.invalid/search?q={{keyword}}', requires_auth: 0,
@@ -133,7 +138,7 @@ async function navigate(page: Page, route: string, heading: string) {
   await page.waitForFunction((expected) => {
     const roots = document.querySelectorAll('[data-workspace-route]')
     return roots.length === 1 && roots[0].getAttribute('data-workspace-route') === expected
-  }, route)
+  }, route.startsWith('/settings') ? '/settings' : route)
 }
 
 function isIdentityTransform(transform: string): boolean {
@@ -195,7 +200,7 @@ async function main() {
       return route.abort('blockedbyclient')
     })
     const page = await context.newPage()
-    page.on('pageerror', (error) => pageErrors.push(error.message))
+    page.on('pageerror', (error) => {pageErrors.push(error.message);console.log('Fixture page error:',error.message)})
     const response = await page.goto(`http://127.0.0.1:${address.port}`)
     assert.ok(response?.ok(), `Vite harness failed to load: ${response?.status()}`)
     await page.locator('.workspace-shell').waitFor({ state: 'visible' })
@@ -205,7 +210,7 @@ async function main() {
     const settingsGroup = page.getByRole('navigation', { name: '设置分类' })
     const appearance = settingsGroup.getByRole('button', { name: '外观与操作', exact: true })
     const storage = settingsGroup.getByRole('button', { name: '资料库', exact: true })
-    const advanced = settingsGroup.getByRole('button', { name: '高级维护', exact: true })
+    const advanced = settingsGroup.getByRole('button', { name: '帮助与关于', exact: true })
     assert.equal(await appearance.getAttribute('aria-pressed'), 'true')
     await appearance.focus()
     await appearance.press('ArrowRight')
@@ -254,34 +259,21 @@ async function main() {
         await tasks.press('Enter')
         await page.getByRole('heading', { name: '任务用哪个模型', exact: true }).waitFor({ state: 'visible' })
         assert.equal(await tasks.getAttribute('aria-current'), 'page')
-        assert.equal(await page.locator('[data-workspace-route]').getAttribute('data-workspace-route'), appPath('ai-task-models'))
+        assert.equal(await page.locator('[data-workspace-route]').getAttribute('data-workspace-route'), '/settings')
         await tasks.focus()
         await tasks.press('Tab')
         assert.equal(await models.evaluate((element) => element === document.activeElement), true)
         await models.press('Enter')
-        await page.getByRole('heading', { name: '模型库', exact: true }).waitFor({ state: 'visible' })
+        await page.getByRole('heading', { name: '本地视觉模型', exact: true }).waitFor({ state: 'visible' })
         assert.equal(await models.getAttribute('aria-current'), 'page')
-        assert.equal(await page.locator('[data-workspace-route]').getAttribute('data-workspace-route'), appPath('model-library'))
+        assert.equal(await page.locator('[data-workspace-route]').getAttribute('data-workspace-route'), '/settings')
         await connections.click()
         await navigate(page, route.path, route.heading)
-        const menuTrigger = page.getByRole('button', { name: '打开导航菜单', exact: true })
-        await menuTrigger.click()
-        const menu = page.getByTestId('global-navigation-menu-popover')
-        await menu.waitFor({ state: 'visible' })
-        await menu.getByRole('link').first().focus()
-        assert.equal(await menu.getByRole('link').first().evaluate((element) => element === document.activeElement), true)
-        await page.keyboard.press('Escape')
-        await menu.waitFor({ state: 'detached' })
-        assert.equal(await menuTrigger.evaluate((element) => element === document.activeElement), true)
+        assert.equal(await page.getByRole('button', { name: '打开导航菜单', exact: true }).count(), 0)
         const shell = page.locator('.workspace-shell')
-        const rail = page.getByRole('navigation', { name: '工作区导航' })
-        const shellColumns = await shell.evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' '))
-        assert.equal(await shell.evaluate((element) => getComputedStyle(element).display), 'grid')
-        assert.equal(shellColumns.length, 2)
-        assert.equal(await rail.getByRole('link').count(), 7)
-        assert.ok(((await rail.boundingBox())?.width ?? 0) > 180)
-        const shellBounds = await shell.boundingBox()
-        assert.ok(shellBounds && shellBounds.width === 1440 && shellBounds.height >= 1000)
+        const shellColumns = await shell.evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' '))
+        assert.equal(shellColumns.length, 1)
+        assert.equal(await page.getByRole('complementary', { name: '主导航' }).count(), 0)
         await page.screenshot({ path: path.join(evidenceDirectory, 'ai-console.png'), fullPage: true })
       }
     }
@@ -308,8 +300,8 @@ async function main() {
     assert.deepEqual(pageErrors, [], 'The real workspace routes must not emit page errors')
     assert.ok(qa.calls.includes('settingsLoad'))
     assert.equal(qa.calls.includes('listSites'), false)
-    assert.ok(qa.calls.includes('listDownloads'))
-    for (const read of ['library.inspect', 'managedDownloads.list', 'aiBackendList', 'assetOcr.status', 'modelLibraryWorkspace.summarize']) assert.ok(qa.calls.includes(read), `Shared Client fixture must exercise ${read}`)
+    assert.equal(qa.calls.includes('listDownloads'),false)
+    for (const read of ['library.inspect', 'aiBackendList', 'assetOcr.status', 'modelLibraryWorkspace.summarize']) assert.ok(qa.calls.includes(read), `Shared Client fixture must exercise ${read}`)
     const writes = ['saveSite', 'deleteSite', 'startLoginSite', 'completeLoginSite', 'clearDownloads', 'settingsSave', 'drafts.put', 'drafts.remove', 'assetOcr.configure', 'modelLibraryWorkspace.configureStorage']
     assert.equal(qa.calls.some((call) => writes.includes(call)), false, 'Smoke must not perform a write-like Client action')
     await context.close()
@@ -348,26 +340,7 @@ async function main() {
     assert.equal(motionQa.maxRouteSurfaceCount, 1)
     assert.equal(motionQa.calls.some(call => writes.includes(call)), false, 'Normal-motion smoke must not perform a write-like Client action')
 
-    const menuTrigger = motionPage.getByRole('button', { name: '打开导航菜单', exact: true })
-    await menuTrigger.click()
-    const menu = motionPage.getByTestId('global-navigation-menu-popover')
-    await menu.waitFor({ state: 'visible' })
-    await menuTrigger.click()
-    const menuExit = await menu.evaluateAll((elements) => {
-      const element = elements[0] as HTMLElement | undefined
-      if (!element?.isConnected) return null
-      return {
-        ariaHidden: element.getAttribute('aria-hidden'),
-        inert: element.hasAttribute('inert') || element.inert,
-        pointerEvents: getComputedStyle(element).pointerEvents
-      }
-    })
-    if (menuExit) {
-      assert.equal(menuExit.ariaHidden, 'true')
-      assert.equal(menuExit.inert, true)
-      assert.equal(menuExit.pointerEvents, 'none')
-    }
-    await menu.waitFor({ state: 'detached' })
+    assert.equal(await motionPage.getByRole('button', { name: '打开导航菜单', exact: true }).count(), 0)
     assert.deepEqual(motionExternalRequests, [])
     assert.deepEqual(motionPageErrors, [])
     await motionContext.close()

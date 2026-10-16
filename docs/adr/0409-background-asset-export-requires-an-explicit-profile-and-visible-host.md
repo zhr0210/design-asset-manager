@@ -1,11 +1,13 @@
 # Background Asset Export Requires An Explicit Profile And Visible Host
 
-Confirmed export may usefully continue when a window loses focus or closes, but hidden full-speed work can surprise users and consume resources. Background execution therefore has an explicit admission profile and, when no window is visible, requires the same discoverable application host as other no-window work.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-After no main window has held foreground focus for five continuous seconds, the device-local **Background Asset Export Profile** governs new admission. Pause admits no new placement after active work reaches a safe boundary. Energy Saver admits at most 25% of the current Auto/manual ceiling, rounded down but at least one, and preserves at least 40% physical-memory headroom. Balanced is the default, admits at most 50%, and preserves at least 30% headroom. Full Speed retains the selected ceiling and configured memory reserve. Every non-paused profile uses reduced process and disk-I/O priority and remains subordinate to ADR 0390 lanes/media gates and ADR 0408 resource/responsiveness guards. Foreground return restores ordinary admission without preemption.
+## Decision
 
-**Continue Asset Export After Closing The Window** is a separate default-Off device preference for already confirmed tasks. It works only while the normal platform lifecycle keeps a discoverable application process alive, installs no daemon/service/login helper, does not enable ADR 0174's AI preference, and never lets a worker outlive the host. Explicit Quit always follows ADR 0402 and the operation checkpoints of ADR 0388.
+Confirmed export may usefully continue when a window loses focus or closes, but hidden full-speed work can surprise users and consume resources.
 
-When no window is visible and continued export is enabled, the single ADR 0174 **Application Status Center** remains persistent through the macOS menu bar or Windows notification area. Its Asset Export section exposes only aggregate Running, Waiting, Paused, and Needs Attention counts, selected profile, effective concurrency, limiting reasons, and scoped Pause All/Resume Eligible controls. Open Design Asset Manager and Quit remain global.
+## Detailed contract and provenance
 
-The compact surface exposes no Cancel, output deletion, replacement action, asset name, thumbnail, path, metadata, or other private content. System notifications never substitute for it. If the platform cannot provide a trustworthy visible status item and operable card, continue-after-close is unavailable rather than invisible.
+详细状态、交互、数值边界和例外的唯一正文为[导出、交付与性能规格](../product/specs/export.md#adr-0409)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/media-handoff.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

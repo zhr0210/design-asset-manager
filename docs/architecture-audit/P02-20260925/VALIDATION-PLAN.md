@@ -1,11 +1,12 @@
 # P02｜临时库迁移与失败夹具设计
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 **SPEC：没有创建临时SQLite，没有执行DDL、备份、恢复或业务测试。** 下面的expected只是判定条件，不是PASS。
 
 ## 1. 夹具集合
 
 - `version-capability-cases.json`：64组，v1–v8分别查询8项能力；验证已有能力不升级、缺失能力仅规划到所需版本。
-- `temp-library-recipes.json`：14种临时库建造配方，包含v1–v8、未知高版本99、缺对象、身份不符、WAL/rollback sidecar、Eagle高版本和Legacy。
 - `migration-failure-cases.json`：30个权限/并发/回滚/崩溃/新鲜性/版本分支场景。
 - `backup-recovery-cases.json`：12个备份一致性、文件范围、来源替换、未知状态和恢复授权场景。
 
@@ -23,7 +24,6 @@
 | `test-library-organization` | v6组织/色板与回滚 | NOT_RUN |
 | `test-work-sets` | v7集合/设备布局 | NOT_RUN |
 | `scripts/asset-ocr-storage.test.ts` | v8、修订保留、更低助手不降级 | NOT_RUN |
-| `test-external-connected-library-core` | Eagle独立索引/Journal | NOT_RUN |
 | `test-legacy-readonly-workspace` | 只读旧库字节/sidecar保护 | NOT_RUN |
 
 入口存在不意味着覆盖了本轮所有新场景。特别是F02/F03与迁移备份新协调器尚无本阶段运行日志。better-sqlite3用仓库Electron Node启动器，不能用shell Node ABI异常为理由重编依赖。
@@ -32,14 +32,12 @@
 
 | 追踪 | 未来方法 | 必须满足 | 状态 |
 | --- | --- | --- | --- |
-| T02 | 隔离Managed/Eagle/Legacy实例与伪造域/receipt | 不串库、Legacy零写、Eagle不进Managed迁移、原件不变 | NOT_RUN |
 | T03 | 真实临时v1–v8建造+精确签名+64组查询 | 不靠表名/大于号猜兼容；高版本保留；未知先拒写 | NOT_RUN |
 | T03 | 缺失链每一步DDL故障/首次业务写故障 | 外层事务整体回滚；v2特例与其他能力不同 | NOT_RUN |
 | T03 | 一致备份完成/中断/损坏/空间不足 | 备份可验证才迁移；主文件拷贝不冒充WAL快照 | NOT_RUN |
 | T07 | 独立进程终止并重开受控临时库 | 不假设无sidecar；不复用旧权限；记录与实际DB核对 | NOT_RUN |
 | T07 | staged文件与DB提交交叉故障 | 不宣称全局原子，不误删来源/未知文件，不重复Promotion | NOT_RUN |
 | T03/T07 | v8副本意图读取/重复pending登记 | 能复现当前分支遗漏；批准修复后验证期望，保留先前失败证据 | NOT_RUN |
-| T03 | Eagle version99且缺表 | 必须在DDL前拒绝；单独记录当前实现和拟议修复行为 | NOT_RUN |
 | T07 | 关闭/取消/备份/迁移等待 | 无自等待死锁，提交前后语义区分，lease释放顺序正确 | NOT_RUN |
 
 SQLite正常关闭的测试不能冒充突然断电；单机macOS不能替代Windows、外置/网络卷或签名安装包验证。性能和备份空间数字需实际测量，不在设计中填PASS或拍固定值。

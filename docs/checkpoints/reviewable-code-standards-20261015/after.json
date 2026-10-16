@@ -1,0 +1,18 @@
+[
+  {
+    "path": "docs/code-standards.md",
+    "sha256": "535fcc7a3dccf5364900cd8ffcb5e26f1d47866ac5da1eef409f05f2470640b2"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "sha256": "2179e28538ebf8972008f2ab02ee961f7dc27f09f348b6f1c65fc79fd169b44c"
+  },
+  {
+    "path": "docs/subsystems/engineering.md",
+    "sha256": "18668e2dcaffeb9482ca86cd23ab9f165bb48d2fdea6f5bc0162ec3a2b76a419"
+  },
+  {
+    "path": "TASK.md",
+    "sha256": "5897f048eaf7a2eddc2ec992dcfd16c472b03e84d2e8598533bd94c8a2e88f09"
+  }
+]

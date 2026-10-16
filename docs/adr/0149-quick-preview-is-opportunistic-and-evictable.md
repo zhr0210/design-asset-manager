@@ -1,11 +1,13 @@
 # Quick Preview Is Opportunistic and Evictable
 
-An approximately 2048-pixel Quick Preview is not generated as a separate import-time render requirement. Preview Broker may admit an Opportunistic Quick Preview only when the original contains a validated embedded representation of suitable resolution and composition, or when the already-required overview or render-manifest preflight has produced a suitable raster with negligible additional decode and composition work. The broker does not launch a second professional-format render merely to populate this layer.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Embedded data is eligible only after signature and decode validation, source/aspect/dimension and visual-unit consistency checks, composition freshness evidence when the format exposes it, alpha validation, color-evidence handling, and output limits pass. A stale, undersized, mismatched, malformed, or color-ambiguous embedded image may still contribute explicit fidelity evidence but cannot become Quick Preview merely because it opens. RAW camera previews and PSD composites follow their format-specific validation rules.
+## Decision
 
-The quick result uses the ordinary color and alpha policy and defaults to one sRGB display form when authoritative transformation is available; Unprofiled Color remains explicitly unmanaged. It is never expanded into both permanent sRGB and P3 files. Verified P3 output continues through on-demand tiles, while a compatible embedded wide-gamut quick source may be transformed only if doing so remains within the already-active bounded operation and records its destination.
+An approximately 2048-pixel Quick Preview is not generated as a separate import-time render requirement.
 
-Opportunistic Quick Preview is an evictable Preview Cache entry, not persistent Required Preview Baseline. Its key includes original content, embedded or working-raster provenance, capability/decoder version, visual unit, composition and color generation, rendering policy, alpha recipe, destination, and dimensions. It shares preview-cache budgeting, TTL, LRU, active-view pinning, regeneration-cost evidence, disk-pressure response, and orphan reconciliation with detail tiles, while remaining separate from Analysis Proxy Cache.
+## Detailed contract and provenance
 
-System Preview Ready depends only on the validated persistent overview plus required On-Demand Render Manifest under ADR 0147; Quick Preview absence, eviction, or failed opportunistic admission is non-blocking. Asset Preview falls back from any cached Quick Preview to the aligned persistent overview and then progressively reveals detail tiles under ADR 0148. Eviction does not schedule regeneration, and a later open recreates Quick Preview only if the same opportunistic conditions arise.
+详细状态、交互、数值边界和例外的唯一正文为[预览、颜色与分析证据规格](../product/specs/preview-analysis.md#adr-0149)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/ai-analysis.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

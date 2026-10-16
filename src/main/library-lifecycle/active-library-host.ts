@@ -23,8 +23,6 @@ import {parseRetrievalGeneration,parseAssetSemanticSearch} from '../../shared/co
 import type { VisualAdmission } from '../visual-ai/visual-admission'
 import { validateAssetSearchRequest } from '../../shared/contracts/asset-search.contract'
 import { listIntakeRecovery as listRecovery, prepareIntakeRecovery as prepareRecovery, runIntakeRecovery as recoverIntake, type PreparedIntake } from './intake-recovery'
-import { executeDownloadJournal } from '../managed-download/download-journal'
-import { recoverOwnedDownload } from './owned-download-recovery'
 import { readManagedOriginal as readOwnedOriginal } from './managed-original-read'
 import { createActiveLibraryTagMetadata } from './active-library-tag-metadata'
 import { materializeLibrary, rollbackMaterializedLibrary, assertLibraryDataSchema, type MaterializedLibrary } from './library-materialization.internal'
@@ -555,21 +553,6 @@ export function createActiveLibraryHost(
     if (result.changes !== 1) throw hostError('library-operation-failed')
   })
   const prepareTrash = (input: { designAssetIdentity: string; expectedRevision: string }) => run((active) => active.trash.prepare({ kind: 'move-design-asset-to-trash', ...input }))
-  const downloadJournal: ActiveLibraryHost['downloadJournal'] = command => serialRun(async active => {
-      if (command.generation !== active.generation) throw hostError('library-generation-conflict')
-      if (command.kind !== 'import') return executeDownloadJournal(active, command)
-      const checked = await executeDownloadJournal(active, { ...command, kind: 'read' })
-      const intent = checked.intent!
-      if (!['downloaded', 'importing', 'recovery-required'].includes(intent.phase) || !intent.content_sha256) throw hostError('library-recovery-required')
-      active.database.prepare("UPDATE managed_download_intents SET phase='importing',revision=revision+1 WHERE task_id=? AND revision=?").run(intent.task_id, intent.revision)
-      const input = { requestId: intent.task_id, generation: active.generation, fileName: intent.file_name, sourceUrl: intent.request_url }
-      const admitted = active.database.prepare('SELECT source_generation,source_bytes FROM capture_requests WHERE capture_request_identity=?').get(`capture-request:download:${intent.task_id}:1`) as { source_generation: string; source_bytes: number } | undefined
-      if (admitted && (admitted.source_generation !== `sha256:${intent.content_sha256}` || admitted.source_bytes !== intent.committed_bytes)) throw hostError('library-recovery-required')
-      if (!admitted && active.database.prepare('SELECT 1 FROM assets WHERE id=? UNION ALL SELECT 1 FROM asset_lifecycle WHERE design_asset_identity=?').get(`download-asset:${intent.task_id}`, `download-asset:${intent.task_id}`)) throw hostError('library-recovery-required')
-      const result = admitted ? await recoverOwnedDownload(active, input) : await importOwnedImage(active, { requestId: intent.task_id, fileName: intent.file_name, bytes: checked.bytes!, source: { kind: 'download', url: intent.request_url } }, preview)
-      active.database.prepare("UPDATE managed_download_intents SET phase='completed',asset_id=?,revision=revision+1,updated_at=? WHERE task_id=?").run(result.assetId, new Date().toISOString(), intent.task_id)
-      return { version: checked.version, assetId: result.assetId, intent: { ...intent, phase: 'completed' as const, asset_id: result.assetId, revision: intent.revision + 2 } }
-  })
   const tagClaims:TagExecutionBinding['claims']=new Map()
   const basicAuthority:BasicAuthority={claims:new Map()},backgroundAuthority:BackgroundAuthority={claims:new Map()}
   const executionBinding=(active:Binding):TagExecutionBinding&{basicAuthority:BasicAuthority;backgroundAuthority:BackgroundAuthority}=>{
@@ -689,14 +672,6 @@ export function createActiveLibraryHost(
   const importClipboardImageFromReader:ActiveLibraryHost['importClipboardImageFromReader']=(raw,read)=>{
     try{const input=clipboardHeader(raw,false);if(typeof read!=='function')throw hostError('library-operation-failed');return clipboardWork(input,read,true)}catch(error){return Promise.reject(error)}
   }
-  const importDownloadedImage: ActiveLibraryHost['importDownloadedImage'] = input => serialRun(active => {
-    if (input.generation !== active.generation) throw hostError('library-generation-conflict')
-    return importOwnedImage(active, { ...input, source: { kind: 'download', url: input.sourceUrl } }, preview)
-  })
-  const recoverDownloadedImage: ActiveLibraryHost['recoverDownloadedImage'] = input => serialRun(active => {
-    if (input.generation !== active.generation) throw hostError('library-generation-conflict')
-    return recoverOwnedDownload(active, input)
-  })
   const saveImageVariant = (input: ImageVariantInput, signal?: AbortSignal) => serialRun(async active => {
     const checkSource = () => {
       if (signal?.aborted || input.libraryIdentity !== active.identity || input.generation !== active.generation) throw hostError('library-generation-conflict')
@@ -762,7 +737,7 @@ export function createActiveLibraryHost(
     prepareAddAssets, prepareDroppedAssets, dispatchDroppedAssets, resolveDroppedAssetReferences, dispatchAddAssets, inspectCapture,
     readAssetContext,readBackgroundAnalysis,configureBackgroundAnalysis,changeBackgroundIntent,readTagRecovery,readTagEffectReceipt, readTagDecisionContext,decideTag,holdBusinessAdmission,enableTagExecution,claimTagExecution,markTagExecutionSent,commitTagExecution,finishTagExecution,readTagExecutionRequest,readTagOutbox,ackTagOutbox,readTagExecution, readTagIntentContext, readTagIntents, saveTagIntent,saveTagBatch, listAssets, searchAssets, listTags, searchTags, getTag, listTrash, readPreview, readVisualSession,readVisualPreview, readManagedOriginal, createTag, updateTag, addTagToAsset,
     createTagAlias, removeTagAlias, setTagParent, removeTagFromAsset, batchAddTagsToAssets, batchRemoveTagsFromAssets, replaceTagForAssets, listAssetTags, updateAssetCaption, resetAssetCaptionEdited,
-    listIntakeRecovery, prepareIntakeRecovery, runIntakeRecovery, downloadJournal, prepareTrash, dispatchTrash, inspectTrash, enableVisualAi, saveVisualAiEvidence, listVisualAiEvidence, confirmVisualAiTag, importClipboardImage, importClipboardImageFromReader, importDownloadedImage, recoverDownloadedImage, saveImageVariant
+    listIntakeRecovery, prepareIntakeRecovery, runIntakeRecovery, prepareTrash, dispatchTrash, inspectTrash, enableVisualAi, saveVisualAiEvidence, listVisualAiEvidence, confirmVisualAiTag, importClipboardImage, importClipboardImageFromReader, saveImageVariant
   })
 
   async function openDirectory(directory: string): Promise<CreateLibraryResult> {

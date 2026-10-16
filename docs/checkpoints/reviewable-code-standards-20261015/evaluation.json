@@ -1,0 +1,36 @@
+{
+  "scope": "Four short natural read-only plans on one immutable candidate; verifies retrieval/application of review guidance, not execution of product tests, packaging, UI or inference.",
+  "cases": {
+    "standards_shared": {
+      "status": "通过",
+      "find": "从正常入口与关键词到规范34-62行（回归与扩大表），并核对package/tests-map和LESSONS消费者经验。",
+      "apply": "Client调用者/测试替身/相邻分支、持久化兼容和断点/主题/焦点/草稿；范围不能仅本页。",
+      "help": "给出按风险的验证顺序、候选测试入口和正式路径；缺具体diff不编造消费者集合。",
+      "limits": "多次读取过宽且输出截断；评分关键条款在后续定向正文可见。精确最小测试集合仍需实际变更。"
+    },
+    "standards_baseline": {
+      "status": "通过",
+      "find": "自主搜索规范与指南，实际返回含39-40行失败处置和候选/交付字段。",
+      "apply": "旧失败不豁免、单跑/全套差异需归因，不挑成功或降断言；必要相关检查未过不关闭目标。",
+      "help": "明确记录比较身份/实际失败，区分必要相邻修复与无关本地主记录，未知相关性不能直接声称无关。",
+      "limits": "读取输出有截断，但关键失败条款完整可见；无实际失败名/日志，只证明收尾方案正确。"
+    },
+    "standards_async": {
+      "status": "通过",
+      "find": "关键词命中规范具体取消/物理退出/并发条款，随后读取Runtime专题/契约、资源源码和P002。",
+      "apply": "用屏障/延迟/迟到旧launch/乱序/阈值两侧验证UNKNOWN占用、权限及物理释放；清理测试自有进程/任务。",
+      "help": "分层给出确定性反证、消费者/排空、正式UI和现有模型验证，不以Promise结束证明退出。",
+      "limits": "起初猜测local-ai.md路径后按目录找到ai-runtime；Worker未指定，测试入口为候选；不执行实际竞态或推理。"
+    },
+    "standards_delivery": {
+      "status": "通过",
+      "find": "到达规范交付条目、平台专题、ADR0008及安装/发行门源码，非仅文件名或口头先验。",
+      "apply": "开发态/交叉编译不等于安装交付，候选/产物/OS证据独立；Windows/macOS专项与用户保存重开分列，不自动发布。",
+      "help": "按实际项目candidate/distribution/publish门安排签名/产物闭包/安装和记录；主Agent核对OfficialCatalog/签名/安装专项确在当前代码门中。",
+      "limits": "具体内测/分发范围未给；其完整分发清单不能外推为所有纯本地候选一律必跑，实际实施须先明确目标级别。读取有批量截断但核心规范/安装门段实际可见。"
+    }
+  },
+  "conclusion": "三层关键判据在四个场景中有可观察依据；无关键失败需修订本候选。全部尝试保留。阅读效率仍有截断和猜路径，不把局限说成整体最优或所有任务普遍稳定。",
+  "boundaries": "No product code, dependencies, models, library or release state changed. Normal project instructions available; fork none, low reasoning, no lookup instructions in prompts. Snapshot excludes task/research/history/checkpoints/prior answers; missing provenance paths limit traceability only. No OS-enforced sandbox claim.",
+  "evidence": "probe-sessions.json, dispatch.json, individual trace/response files, criteria.json, candidate-integrity.json, checks.json"
+}

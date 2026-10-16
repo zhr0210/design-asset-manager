@@ -1,7 +1,13 @@
 # Distinct Text Value Browsing Is On Demand, Generation Bound, and Never Schema
 
-A high-cardinality Text Custom Field may have nearly one value per owner, so opening Advanced Filter Panel must not enumerate or render a complete automatic facet. The user explicitly opens a **Distinct Text Value Browser** bound to one exact field identity, current pre-selection query/lifecycle scope, ADR 0450 Text Filter Comparison Mode and policy version, and one complete owner/projection generation. The host supplies bounded cursor pages while the renderer virtualizes loaded entries; there is no total-result cap and no renderer-side full-list materialization. Entry search narrows this browser under its selected comparison mode rather than invoking asset lexical search. Later value or scope changes expose Results Available to Refresh but never splice entries, counts or page boundaries into the active browser generation.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Exact mode gives each authoritative NFC sequence one entry. Case-Insensitive and Normalized modes group by their ADR 0446 transforms, show the total current-owner count and expand every distinct original form with its own count and invisible-format evidence. Missing is excluded from distinct entries and shown as a separate mutually exclusive owner count. Whitespace-Only is a separately labelled, non-additive subset count because those present values also remain selectable distinct entries; a Normalized empty comparison form remains present and never absorbs Missing. Entries use an explicit ADR 0451 Natural or Exact Unicode display order with stable ties.
+## Decision
 
-Selecting one entry creates a visible ADR 0450 Equals condition with the selected original operand and current comparison mode; selecting multiple entries creates an explicit Or group of those conditions. Selecting the Missing or Whitespace-Only summary creates its corresponding presence condition. The browser never creates Select options, changes Custom Field Type, writes schema, stores derived comparison keys as values or turns Text into an enum. Search text, pages, expanded variants, counts and the browser generation remain session state; only the resulting ordinary conditions persist if the user explicitly saves the filter, and reopening computes current values rather than restoring a browser snapshot.
+A high-cardinality Text Custom Field may have nearly one value per owner, so opening Advanced Filter Panel must not enumerate or render a complete automatic facet.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[文本字段、检索与编辑规格](../product/specs/custom-text.md#adr-0452)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

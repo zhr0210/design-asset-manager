@@ -1,0 +1,245 @@
+{
+  "repository": "https://github.com/yetone/magpie",
+  "retrieved_date": "2026-10-15",
+  "timezone": "Asia/Shanghai",
+  "sha": "8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f",
+  "commit_date": "2026-10-15T05:40:27Z",
+  "subject": "tests: two waits that went red at load 80–100 leave room: the reasoning relay is timed by the vendor's clock, otel waits a minute for its export",
+  "license": "MIT",
+  "files": [
+    {
+      "path": ".github/ui-preview/.gitignore",
+      "bytes": 13,
+      "sha256": "16d30e4462189fb14dd611bdb708c510630c576a1f35b9383e89a4352da36c97",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/.gitignore"
+    },
+    {
+      "path": ".github/ui-preview/README.md",
+      "bytes": 2890,
+      "sha256": "1d5d9ad160945595c46a14d6929b6367630d8c1657ba61fe22d03a31e94fa632",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/README.md"
+    },
+    {
+      "path": ".github/ui-preview/cursor.js",
+      "bytes": 4568,
+      "sha256": "345656dcb1d86aa82435c0050a6d12af466d7b8b2ff57da5cfa64cb72f65b9d3",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/cursor.js"
+    },
+    {
+      "path": ".github/ui-preview/package.json",
+      "bytes": 235,
+      "sha256": "62dec65e00c2ec96390edddfe40061a1b30c1d3e90a87df79c6c32c07ba275ba",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/package.json"
+    },
+    {
+      "path": ".github/ui-preview/publish.mjs",
+      "bytes": 11160,
+      "sha256": "88d15b50d4ba4933f2b9f60479a3d794276a53484aa89e4617ad882e7f63b055",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/publish.mjs"
+    },
+    {
+      "path": ".github/ui-preview/record.mjs",
+      "bytes": 31144,
+      "sha256": "0709d8cdf7156c34f0548a61e9b50af028e90db53a6eafdbf39e32b2064f9366",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/record.mjs"
+    },
+    {
+      "path": ".github/ui-preview/run.sh",
+      "bytes": 5521,
+      "sha256": "c37640a75b0751c8341c076671769974e278c7f7512392a17a7919760058e091",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/run.sh"
+    },
+    {
+      "path": ".github/ui-preview/seed.mjs",
+      "bytes": 27105,
+      "sha256": "72be3c2512af9790dea34330cad718ba9571aa5ef2a2111f1e84bcb9397b6eaa",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/ui-preview/seed.mjs"
+    },
+    {
+      "path": ".github/workflows/docker.yml",
+      "bytes": 5285,
+      "sha256": "6e1c2e07360f93740cb2fcc20b5c8615e69bf87f0554af673f6ca4be87ed9469",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/workflows/docker.yml"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "bytes": 5559,
+      "sha256": "d79e5bb4940f1dc9dff06e499506be5b2f4aa10c62bca96deb2a4a13d7d9e3e4",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/workflows/release.yml"
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "bytes": 7001,
+      "sha256": "e5c59acc7010fd7396c227d4aeabd01c81f82a09f477af2dd242c9b159811252",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/workflows/test.yml"
+    },
+    {
+      "path": ".github/workflows/ui-preview.yml",
+      "bytes": 5415,
+      "sha256": "f750140e980fd0e9e1b5fe57a8f409884295a33db6d943fdc85a8da77fe218b9",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/.github/workflows/ui-preview.yml"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 5004,
+      "sha256": "5707edbc78e0fb582eca1822b3f4bb24a09d16174ab8e7a01e2cb0f7e2c55034",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/AGENTS.md"
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 23,
+      "sha256": "393eb9b3f95f2e78f501b4ff03e50b6fe0ed5c26d03ba6cd44b6dc885565698e",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/CLAUDE.md"
+    },
+    {
+      "path": "Dockerfile",
+      "bytes": 2277,
+      "sha256": "b8352c8ee15b75e4fe166c4f01a90e6395b9716bc5737de82501ca473f5a9e2f",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/Dockerfile"
+    },
+    {
+      "path": "LESSONS.md",
+      "bytes": 33842,
+      "sha256": "53391f50b784bcfaffde033984972d9f660ddb6a25ae30bd15df043d9e82a14f",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/LESSONS.md"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1063,
+      "sha256": "79d2c8444715d4bc453ec4f8a0aaf2051a4c1ee5ac08f5bd2e5848aef87c7572",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/LICENSE"
+    },
+    {
+      "path": "Makefile",
+      "bytes": 6782,
+      "sha256": "5171ca939ca1cc702ad92e7fb4e0d6d5b39608b0957712e4ec91a3d83f181f37",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/Makefile"
+    },
+    {
+      "path": "README.md",
+      "bytes": 18506,
+      "sha256": "a3ad9cb4a712bb65388f2c1a7d36dff0de26ecd683809725dbe71e8a019d29ae",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/README.md"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "bytes": 19094,
+      "sha256": "432be586d359ca52fa445f9085a1ff3c713e48f9ccd59ea0418741234bb8dc43",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/code-standards.md"
+    },
+    {
+      "path": "docs/contributors.md",
+      "bytes": 5060,
+      "sha256": "a420a7f3edf44f9c9b8f3028ad1ea630f4ef4781b0f9da8a050355bab3212681",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/contributors.md"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "bytes": 3933,
+      "sha256": "97e00539f4fa36c72ce47f5aeb8ddeeec42d99ac6509ec5dc5fde99d97e543a3",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/README.md"
+    },
+    {
+      "path": "docs/subsystems/agent-wiring.md",
+      "bytes": 71610,
+      "sha256": "4bc6383a7eb4982f91a445c347c04fb60fa0d0ca497bdc4a974aed070c7067bf",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/agent-wiring.md"
+    },
+    {
+      "path": "docs/subsystems/claude-subscription-bridge.md",
+      "bytes": 25589,
+      "sha256": "c75785c76d41b7753abab27cf6a0c61bf132caf8510f863200fa440a325d9f87",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/claude-subscription-bridge.md"
+    },
+    {
+      "path": "docs/subsystems/gateway-middleware.md",
+      "bytes": 6737,
+      "sha256": "2d7b4f27b6a6fa9fd6c5ef065bdff0878b451b9d756b71da804fa72d754d21e9",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/gateway-middleware.md"
+    },
+    {
+      "path": "docs/subsystems/gateway-routing.md",
+      "bytes": 180623,
+      "sha256": "91649647049b819c7a546ed7c8ba8cafc1f8fd458d14b52c47730225f7a89e7d",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/gateway-routing.md"
+    },
+    {
+      "path": "docs/subsystems/gateway-sessions.md",
+      "bytes": 32318,
+      "sha256": "f61322f16d603008ab819f275570033d21c4e5bb078f8514c04ded9cf2b513ea",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/gateway-sessions.md"
+    },
+    {
+      "path": "docs/subsystems/gui-shell.md",
+      "bytes": 60562,
+      "sha256": "8fbcd92840fe2d6c2ad8ba5ce4c793afe7e80e6768827b9bc7fabf72605e2254",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/gui-shell.md"
+    },
+    {
+      "path": "docs/subsystems/library.md",
+      "bytes": 41493,
+      "sha256": "bd000069e612d1aa48a10858717f541a5a5998933ce002327b444abbd932e311",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/library.md"
+    },
+    {
+      "path": "docs/subsystems/plugin-runtime.md",
+      "bytes": 32247,
+      "sha256": "6d16b0fd4cacbe7131e7a292b12b558da4bf95d130960b374529b652bc822eef",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/plugin-runtime.md"
+    },
+    {
+      "path": "docs/subsystems/provider-plugins.md",
+      "bytes": 37407,
+      "sha256": "14d72924e1ef8ecda092ac865c54ec669a4c5ac247fec2fc0ef5f96d3b3c9928",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/provider-plugins.md"
+    },
+    {
+      "path": "docs/subsystems/providers-accounts.md",
+      "bytes": 86531,
+      "sha256": "1e67678a072f23218f1fa57780a7ac50a6d6077d97892f0b0f63574ec9ab700b",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/providers-accounts.md"
+    },
+    {
+      "path": "docs/subsystems/sync-backup.md",
+      "bytes": 6732,
+      "sha256": "6af63406b80ea6e373d472f4e7a3e87f1104410dac35ed38ee600198a5f0755b",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/docs/subsystems/sync-backup.md"
+    },
+    {
+      "path": "go.mod",
+      "bytes": 2414,
+      "sha256": "5769f86829653b4b183fe12ff384682ace230d79578ad0f25da6af64a471cedd",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/go.mod"
+    },
+    {
+      "path": "internal/gui/tests/README.md",
+      "bytes": 148801,
+      "sha256": "f9ce559bbcfba2c4e9899627f428777531040645470fcf9153e6ca2dce70df37",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/internal/gui/tests/README.md"
+    },
+    {
+      "path": "internal/testenv/testenv.go",
+      "bytes": 9317,
+      "sha256": "9d68bc31a30aaa89fa06aa3813a285d7b31e21ef80f8522d4aa49875634bfa2a",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/internal/testenv/testenv.go"
+    },
+    {
+      "path": "internal/testenv/offline_test.go",
+      "bytes": 1452,
+      "sha256": "d25e00e64db93e0763c8cb337a32065e00b8b3ea68b316f9173cb650e7760a53",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/internal/testenv/offline_test.go"
+    },
+    {
+      "path": "internal/provider/migrate_notice_test.go",
+      "bytes": 1330,
+      "sha256": "508cee5a6b408c73e31dcf588afdc7e3cd74ff8668d2b2e646f13d980b891d47",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/internal/provider/migrate_notice_test.go"
+    },
+    {
+      "path": "internal/pluginrt/pluginrt_test.go",
+      "bytes": 4612,
+      "sha256": "856b67fd41de2a183d9c2c05a3733004b28232b38e804fadb158ef1f7b4dc905",
+      "url": "https://github.com/yetone/magpie/blob/8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f/internal/pluginrt/pluginrt_test.go"
+    }
+  ]
+}

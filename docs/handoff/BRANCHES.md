@@ -2,9 +2,9 @@
 
 ## 当前：仅保留main
 
-2026-10-13用户要求清理其他分支，已删除本地`codex/floating-window-b`、`codex/floating-window-design`、`codex/macos-migration`和`codex/legacy-window-wip-20261013`，Eagle分支此前已删除。当前唯一本地分支为main，普通目录`/Users/meigong/Documents/design-asset-manager-macos`检出main。
+当前唯一本地分支为main，普通目录`/Users/meigong/Documents/design-asset-manager-macos`检出main。
 
-B及迁移成果保留在main历史；未合入main的旧WIP保存在标签`archive/legacy-window-wip-20261013`（9d63405），Eagle独有历史保存在`archive/eagle-integration-20261013`（8cf60c7）。标签不是开发分支，仅用于恢复。保留B的detached工作树及本地运行资料/证据，不删除资料库。没有修改远端、push或发布。
+B及迁移成果保留在main历史；标签不是开发分支，仅用于恢复。保留B的detached工作树及本地运行资料/证据，不删除资料库。没有修改远端、push或发布。
 
 以下分支和目录描述保留为整合过程历史，不再作为当前切换或接续指令；后续默认在main继续，除非用户另行要求建立分支。
 
@@ -20,23 +20,20 @@ B提交`63dc760`已快速前进合入本地main；main包含既有macOS迁移历
 
 B工作目录为`/Users/meigong/.codex/worktrees/6699/design-asset-manager-macos`。main整合工作目录为`/Users/meigong/.codex/worktrees/main-integration/design-asset-manager-macos`；普通目录仍为`/Users/meigong/Documents/design-asset-manager-macos`。同一Git仓库中的工作树不是独立产品权威，运行时必须按所选分支重建/核对，不复用另一工作树的旧验收资格。
 
-`codex/eagle-integration`已按用户要求删除，本地恢复标签`archive/eagle-integration-20261013`指向`8cf60c7b3fd2e165b574db134e1d7149e9116a3e`，保留其独有历史；没有合入Eagle分支独有变更。main原位置由`archive/main-before-b-20261013`保留。删除分支没有删除产品中的Eagle功能，后续移除见[EAGLE任务](../tasks/TASK-REGISTRY.md#eagle)。
+main原位置由`archive/main-before-b-20261013`保留。
 
 主要操作色、生成CSS、原生材质与布局应用仍由[DESIGN-APPLY](../tasks/TASK-REGISTRY.md#design-apply)登记；下次继续当前任务时提醒用户安排，不创建定时自动化。本轮构建和内部检查不扩大物理指针、模糊及设备资格。
 
 ## 2026-10-10统一目录记录（历史）
 
-2026-10-10 用户要求统一为一个源码目录，已执行并实测迁移→Eagle→迁移切换。
 
 唯一源码目录：`/Users/meigong/Documents/design-asset-manager-macos`。
 
 | 分支 | 用途 | 当前范围 |
 | --- | --- | --- |
 | main | GitHub源码整合基线 | 本地6b86ef0，未在本次操作刷新远端或合入功能分支 |
-| codex/macos-migration | Mac迁移与A–D/F验收 | 当前检出；Eagle验收延期 |
-| codex/eagle-integration | Eagle联动方向调整 | 0.2.1端口冲突修复、证据与接续；未完成真实配对/读写 |
 
-上述是同一Git仓库里的独立分支，不是三个源码副本。没有其他worktree占用它们；旧 `design-asset-manager-eagle` checkout已移除，分支及历史保持。Eagle本地候选移到 `.scratch/eagle-isolated-20261010/`，12182个常规文件逐一SHA核对相同。没有复制凭据或profile。
+上述是同一Git仓库里的独立分支，不是三个源码副本。没有其他worktree占用它们；没有复制凭据或profile。
 
 在Codex中把上述唯一源码目录打开为项目，分支选择器才作用于正确仓库。旧中文资料目录的master是另一独立仓库，不再作为DAM源码入口；其资料保持未动。
 
@@ -44,7 +41,6 @@ B工作目录为`/Users/meigong/.codex/worktrees/6699/design-asset-manager-macos
 
 ```sh
 cd /Users/meigong/Documents/design-asset-manager-macos
-git switch codex/eagle-integration
 git switch codex/macos-migration
 ```
 

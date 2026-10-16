@@ -1,5 +1,7 @@
 # 测试放行矩阵
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 **所有未来生产验收均NOT_RUN。** 存在测试入口不表示已覆盖新增规则；下列新断言均proposed，需要获准IMPLEMENT后编写。没有创建新的npm命令。
 
 | Gate | 规则 | 最小反例 | 本轮参考模型范围 | 临时库/正式Electron验收 | 所属任务 |
@@ -14,7 +16,6 @@
 | G08-conditional-fairness | AC-06 / E2 | priority10/0 ageCap5，持续前台100轮后台0；资源不满足对照 | 原CE-P13；MF01/MF02展示1/4配额条件，不是生产默认 | 未来实际scheduler假时钟/受控任务测quota/轮转与取消重入；压力不满足不声称必须完成 | 后续P13（不阻塞01） |
 | G09-pagination-liveness | DEFER-16 / F | 无关AI展示更新持续触发全局cursor过期 | 风险登记，未运行参考或生产查询 | 未来QueryPort临时库持续写+翻页保持进展，命中集合变化按声明策略处理，权限/Trash即时过滤 | 后续P16（不阻塞01） |
 | G10-variant-v8 | DEFER-V8 / F | 合成v8 pending副本intent由reader读取/重复恢复 | 源码白名单事实，未执行 | 最小临时v8及新profile复现并单独记录；若升级兼容涉及时关联02，不扩大01 | 独立复现/02兼容涉及时 |
-| G11-eagle-guard-order | DEFER-EAGLE / F | 合成未知高version且部分表缺失，再调用initializer | 源码顺序事实，未执行 | 未来临时Eagle索引断言版本拒绝前零DDL；生产Eagle/真实库不访问 | 独立Eagle复现（不阻塞01） |
 | G12-three-defaults | AC-07 / F | 默认基础plan误带Embedding或因替代删除旧向量 | 只记录产品目标，不执行策略 | 未来Planner默认精确tags/caption/OCR；Embedding在语义检索显式启用后合法准入，历史数据保留 | 后续P11/P17（不阻塞01） |
 
 ## 已核对命令与适用限制

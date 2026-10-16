@@ -1,11 +1,13 @@
 # Post-Admission Companions Require Explicit Validated Attachment
 
-A file discovered after admission may become only a **Companion Attachment Candidate**. Automatic observation is allowed inside an already authorized library or referenced-source scope, and the user may select a file manually, but basename, extension, adjacency, timestamp, metadata resemblance or plugin suggestion never changes membership. The candidate does not affect preview, analysis, Original Handoff, availability or Source Content Generation until the user explicitly invokes **Attach Companion**.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Attach Companion binds the current Design Asset, Source Content Generation, candidate identity and path, one exact capability-declared optional role, ownership mode and complete proposed member set. Confirmation is available only when the active capability validates the candidate's real format and role, the complete resulting relationship and preview/analysis consequences, and proves the candidate is not already authoritative as another standalone original or compound member in the current library. A missing required member remains recovery rather than attachment, and a conflict enters Referenced Compound Membership Conflict Review instead of silently detaching or merging another asset.
+## Decision
 
-Successful attachment keeps the same Design Asset, adds the member to one authoritative manifest and commits one new Source Content Generation. A previously single-file original gains a Compound Original Identity at that commit; an existing Compound Original retains its identity. User-authored organization and metadata remain attached, prior-generation derived evidence becomes stale under existing policy, the companion receives no independent card or analysis lifecycle, and subsequent Original Handoff uses the complete group.
+A file discovered after admission may become only a **Companion Attachment Candidate**.
 
-For a Referenced Asset, attachment adds only one Referenced Compound Member Relationship and never copies, moves, renames, rewrites or writes beside the user-owned candidate. For a Managed Original, the external candidate remains unchanged: an existing safe Compound Original Directory may stage, validate and atomically publish one companion into an exact vacant declared path under a group journal, while a single-file-to-compound transition, layout change or occupied/ambiguous target uses a complete staged Compound Directory Rebuild and the ADR 0343 authority-switch and residue protections. No discovered or selected file becomes library-owned before the corresponding publication and manifest commit succeeds.
+## Detailed contract and provenance
 
-ADR 0350 separately governs explicit removal of an attached optional companion and never hides that decision inside attachment, rewrite or path movement. The current application has no Companion Attachment Candidate, Attach Companion review, single-to-compound transition or post-admission member-manifest commit. This ADR records target architecture only and discovers, selects, reads, copies, publishes, groups, previews, analyzes, moves, rewrites or deletes no runtime/user file, directory, database or cache and changes no public IPC, database schema or AI Worker API.
+详细状态、交互、数值边界和例外的唯一正文为[Copy与复合原件规格](../product/specs/compound-originals.md#adr-0349)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/storage-intake.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

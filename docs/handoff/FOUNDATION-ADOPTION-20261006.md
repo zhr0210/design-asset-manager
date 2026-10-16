@@ -36,7 +36,6 @@
 | 12 | 本地/云/API/订阅、无静默fallback | §7、10；保留 |
 | 13 | 原件/预览/派生、Copy非Move | §10；补保留Reference in Place显式模式 |
 | 14 | 人工编辑/确认、AI建议、组织独立 | §6、8、10；保留 |
-| 15 | Managed/Eagle/Legacy独立ownership | §10；保留Eagle单原件和独立Journal方案链接 |
 | 16 | 四入口/底部搜索、普通/AI/色板 | §5、8；视觉主权归DESIGN |
 | 17 | 笔记、标签别名/层级、Trash/Restore | §3、8；保留 |
 | 18 | 多参考多窗口、恢复、移除不删 | §9；保留完整规格链接 |

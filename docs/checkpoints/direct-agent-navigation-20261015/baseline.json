@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-15 Asia/Shanghai",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "1553e551c5617dcb2f5f78ed343154d82bb980595094c3b1d3e9a07f8fa9cf33"
+    },
+    {
+      "path": "README.md",
+      "sha256": "799639f253db939664f6b53a034e7a804edd22b1df78a7b90424f353dbebcea3"
+    },
+    {
+      "path": "PROJECT.md",
+      "sha256": "8c9a5f2aee6b43d921d077ffd252759cd1d5cf3f7e8884824665f9cdefd1916a"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "1bc7d57125887c782db22223a376a5be6fe56c66976eafea6c72d277d45a42a2"
+    },
+    {
+      "path": "TASK.md",
+      "sha256": "d48df19ae913b9bafeddffda43db56e009922f2f63d86feaefc03a1c31685ce5"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "f4b3d8b081490e08f160c7df00447ac464ba46f2d2f17ed7644a6d5f2c5b9d49"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "sha256": "a4854287442f034334c6cf3cc0ea1df081759be8b061b1e44cf9535196e43230"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "sha256": "3ecf0c9096b5f485f4f982ad8d7991170aeb3d20affd7c7a412b454df79f1aed"
+    },
+    {
+      "path": "docs/handoff/CURRENT-STATE.md",
+      "sha256": "537a04a38fc9038efebd6dcb07209347a442f42ef66bc429fd73525b298a3bf4"
+    },
+    {
+      "path": "docs/tasks/TASK-REGISTRY.md",
+      "sha256": "5a99b365207ab41fca17071a04bb5f9c5fb69cb757f899400608a4bf2bf07ea7"
+    },
+    {
+      "path": "scripts/check-documentation.py",
+      "sha256": "5fb7c9a6f6d82a078aad469fe74ec2569d7adba8e1e7e22a76cb535306154a94"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-REVISION-PROPOSAL.md",
+      "sha256": "76728e317332ec4ee79fe0322668b5a974ebf9d34d53127068f8e6f4f2c4a37c"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+      "sha256": "47db7bc619e25d584d870e0e36cdfa28d51d52ca938eeb10f63124388914b58b"
+    }
+  ],
+  "scope": "Only task documentation/governance files; existing WIP and prior evidence unchanged."
+}

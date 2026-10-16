@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "old": 1408,
+  "new": 1410,
+  "added": [
+    "DAM Inference Target",
+    "Task Model Binding"
+  ],
+  "removed": [],
+  "changed": [],
+  "scope": "Existing definitions unchanged; new2terms only. Domain guide historical count clarified, not rewritten original migration evidence."
+}

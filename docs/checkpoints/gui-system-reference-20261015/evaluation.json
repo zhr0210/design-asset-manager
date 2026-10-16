@@ -1,0 +1,30 @@
+{
+  "scope": "Three read-only plans with fresh low-reasoning contexts on fixed first-party text; proves navigation/application only, not executed user behavior or product qualification.",
+  "cases": {
+    "gui_shell_plan": {
+      "status": "通过",
+      "find": "自主读取AGENTS→gui-shell完整实际输出→AppShell/Settings/App/navigation和交互/验收章节搜索；关键系统正文无截断。",
+      "apply": "按导航→外壳生命周期→草稿→Host定位；明确稳定/settings键、嵌套Outlet、保存条作用域、DESIGN视觉/交互规格/系统机制分工。",
+      "help": "给出相关源码符号、聚焦检查和正式入口/失败/平台计划，不以当前实现证明本轮资格。",
+      "limits": "计划定位而非实际改动；未逐项验证所有界面行为或运行测试。"
+    },
+    "gui_reconnect": {
+      "status": "通过",
+      "find": "由自然重连问题搜索到新系统说明，再核对BrowserTransport/AppShell/Settings/settings.store及重连/unknown tests；关键正文/源码可见。",
+      "apply": "网络/SSE事件不等于可写，快照与mounted reconcilers、当前序号全部成功后才恢复；expected基准/草稿/UNKNOWN无自动重放。",
+      "help": "区分Browser本机断连与外部网络服务，分阶段排查；识别按钮禁用体验与Transport拒绝不同，并明确只是待验证UI观察。",
+      "limits": "未真实断网/点击验证；按钮观察不登记为已复现缺陷，不改产品、不扩大任务。"
+    },
+    "gui_native_boundary": {
+      "status": "通过",
+      "find": "自主到gui-shell→Electron/native work window实现→0493/0489原文和工作窗模块→Swift/AppKit/Host控制器。",
+      "apply": "默认Electron/React与macOS B AppKit分清；大预览可React，B不在AppShell树；统一组件不合并进程/权限或下放Host权威。",
+      "help": "说明收益、系统拖放/窗口运动/输入法等代价，允许最新明确需求重开取舍而不把旧ADR当禁令。",
+      "limits": "最后宽源码检索有截断，但必要系统/ADR/实现条款此前完整可见；性能/行为等价须实际候选比较，本轮未运行。"
+    }
+  },
+  "structural": "Initial context check/test failed because desktop-shell direct docs rose to 4 over max3. Before any probe dispatch, consolidated navigation to GUI/Host/WorkMode, with Settings via GUI or settings route; kept schema/budget. Re-run context check and 268-task route evaluation passed. Full ten feedback tests also passed. Original failure preserved in preflight-failure.json.",
+  "preservation": "DESIGN YAML and entire body from Overview unchanged; only ownership/navigation paragraph changed. No functionality/visual target or old contract removed. One new GUI topic and four route links; 19 subsystem topics, same 20 task routes and493 decisions.",
+  "integrity": "candidate-integrity.json:2633 text files unchanged; normal project instructions, fork none, gpt-6.1-sol low. TASK/history/research/evidence/old answers excluded; file-mode/instruction read-only, not OS sandbox.",
+  "remaining": "No real UI, models, installed binaries or native interactions tested. Source-level composition and behavior descriptions do not create delivery qualification; current state remains its own authority."
+}

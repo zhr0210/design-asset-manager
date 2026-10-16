@@ -1,0 +1,86 @@
+[
+  {
+    "path": "AGENTS.md",
+    "exists": true,
+    "sha256": "9948e0635bc25cb418588dda90215a4700e47770d5c927e6ff6036a7c2f142d1"
+  },
+  {
+    "path": "DESIGN.md",
+    "exists": true,
+    "sha256": "a0d3415fa28c2ee4064f7bb1d20c5714e2948c3db19d3f9a5049bc7da081ed84"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "exists": true,
+    "sha256": "c7d55ea4661251a687a928e4a1710c35350c6079bc8e533056fefed03ec354e2"
+  },
+  {
+    "path": "TASK.md",
+    "exists": true,
+    "sha256": "c3426f6da17ca4be82cab10f405a3f02129d62b2123f6c17c8cb1cf15b90b1aa"
+  },
+  {
+    "path": "docs/code-standards.md",
+    "exists": true,
+    "sha256": "535fcc7a3dccf5364900cd8ffcb5e26f1d47866ac5da1eef409f05f2470640b2"
+  },
+  {
+    "path": "docs/design/README.md",
+    "exists": true,
+    "sha256": "3cab6cc9840000d3ee2d2023021a7dcb95bbc4b4807dc164cbefdea4c72615ff"
+  },
+  {
+    "path": "docs/design/INTERACTIONS.md",
+    "exists": false
+  },
+  {
+    "path": "docs/design/WORKSPACE-INTERACTIONS.md",
+    "exists": true,
+    "sha256": "bfa1d0273b8e99423f8e528b9304d92e64f191ba7167b83fbcf0305c99e89cf5"
+  },
+  {
+    "path": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+    "exists": true,
+    "sha256": "2a1f7b50bf585db02a3b3e778e7014078bcfd9489f1e3b46a1eea1cc1a72af00"
+  },
+  {
+    "path": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+    "exists": true,
+    "sha256": "05c99cec998a21f9e4d7d5fc1fd8cfab25d66bf4e84e9c069d928aef294a982c"
+  },
+  {
+    "path": "docs/agents/ui-ux-acceptance.md",
+    "exists": true,
+    "sha256": "bc0ed9d285d880f1b677c080475d7e28f12aa1be5795f5abe1a9b4ed3bd597b6"
+  },
+  {
+    "path": "docs/subsystems/gui-shell.md",
+    "exists": true,
+    "sha256": "5b95c7a1c00a7f5edfa6249a09cdcf65ffe2e954c4c9574a32dc35788a1a32b5"
+  },
+  {
+    "path": "docs/subsystems/settings-recovery.md",
+    "exists": true,
+    "sha256": "47f8f33a52ab8230c316d12c7ff98171d46bb69d728cb39c1ec1afbe0cb845be"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "exists": true,
+    "sha256": "d094773fec8d9cc2e542d8e24603ebd4ae83d3c5ca6c90a8ca41dc2c4d702599"
+  },
+  {
+    "path": "docs/product/WORK-SETS-20260920.md",
+    "exists": true,
+    "sha256": "2bddeb727677afa2457360d37e24d1c2ce7af940bb5d636c19a621d6f3d7c641"
+  },
+  {
+    "path": "docs/product/ASSET-NOTEBOOKS-20260917.md",
+    "exists": true,
+    "sha256": "13387777fef7fb5d204d8038c1fdc57a28eb109cafdf80f69bfee35eb48b29ee"
+  },
+  {
+    "path": "native/shelf-candidates/README.md",
+    "exists": true,
+    "sha256": "c270f5d119124913166da9595b099f1c6fb56657716e8c879cca13ce7805f3d8"
+  }
+]

@@ -79,8 +79,7 @@ The receipt and screenshots are local evidence under `.scratch`, not releases.
   are checked in Main. A synthetic profile rejects lexical escapes and links
   before resolving a selected target, then rechecks the real path against its root.
 - `command-receipts.ts`: issued review receipts belong to an owner, purpose and
-  generation and expire. `clientReceipt` in Connected Library is an idempotency
-  key, not a permission token.
+  generation and expire. Client-generated idempotency keys are not permission tokens.
 - `workspace-drafts.ts`: bounded, profile-local drafts are separate from saved
   asset content. Recovery retains its original baseline and requires an explicit
   user action. Credentials and image bytes do not belong in drafts or events.

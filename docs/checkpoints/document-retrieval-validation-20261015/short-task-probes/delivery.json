@@ -1,0 +1,39 @@
+{
+  "ok": true,
+  "files": [
+    {
+      "path": "CONTRIBUTING.md",
+      "before": "97c0b10ced59397cf53f072bdfd023e9ef480c1b403de0f681b41932d70c841c",
+      "after": "9849a8bd4e0331baeef428fa2de4d83ad491c0fa74ae51c35ba2907e1c93d150"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "before": "89b7b876d1aaedb30659b4817b047abc7917a1293045d879177fd539a5a51816",
+      "after": "0510495081e7a848e440ce1a6cdb662e8ee2e04ea822c319d583efe5e36f65ee"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "before": "2b102b06b4a9fcaa31b190f920fac0a7a746e9e79401010f356b90cb32be5f09",
+      "after": "23d96f47b0d36c444589ad36f82d935c9eb60b4237ba7b337ecf7cf3abb961bb"
+    },
+    {
+      "path": "TASK.md",
+      "before": "d9cef9a7104ccdf8437e67c9eb62fd0a79b6039c6303de4eebbda1f678d23f30",
+      "after": "69f6785b5a7838adec667fee6c6541def34bff734187d4a54ac317692748cdfa"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/DOCUMENT-RETRIEVAL-VALIDATION-PROPOSAL.md",
+      "before": "6b5eab2eda3f04c71f970e458e1b558b034575106e7ab69d31ee1bcf73e855f3",
+      "after": "016db4932daac8a80e9e821b823101d37ccc8bc993390cccbc0268349eba3e17"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+      "before": "bcc4aca1c7d6fd3e2fc9f9260caba9363bdbc3e1cb0d306674ca11e66e24e6b3",
+      "after": "608cef4b8a572bb04d0fddbc462577f0914c01b49e288d6d2cd6fd72d506233b"
+    }
+  ],
+  "fresh_short_task_probes": 3,
+  "prompt_gate": "No lookup/docs/index instructions or request to report retrieval steps.",
+  "scope": "Acceptance-method correction and actual unprompted probes only; previous long-prompt evidence not promoted.",
+  "errors": []
+}

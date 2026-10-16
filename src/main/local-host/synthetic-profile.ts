@@ -77,7 +77,7 @@ export function requireSyntheticCommand(command: string, fixtures?: ReturnType<t
     'ai-connection:login', 'ai-connection:open-auth-url', 'ai-connection:confirm-validation',
     'ai-backend:health-check', 'ai-backend:list-models', 'ai-acceptance:run', 'ai-acceptance:confirm', 'ai-connection:models',
     'visual-ai:run', 'tag-execution:run', 'tag-batch:run', 'background-analysis:run', 'background-ocr:confirm',
-    'download:prepare', 'download:enqueue', 'download:retry', 'asset-ocr:configure', 'asset-ocr:run'
+    'asset-ocr:configure', 'asset-ocr:run'
   ])
   if (prohibited.has(command) && !fixtures?.permits(command)) throw Error('SYNTHETIC_EXECUTION_DENIED')
 }

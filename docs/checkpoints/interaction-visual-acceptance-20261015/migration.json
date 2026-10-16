@@ -1,0 +1,541 @@
+{
+  "blocks": [
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 1,
+      "source_sha256": "ba861b23563466d82488b14080aaa48a30ec1c1db1770f2945d13ffa86d6a595",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 2,
+      "source_sha256": "576f61163a672b49c3919e955f59556de8a3743b2459fda9dda083f7ca09e48a",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 3,
+      "source_sha256": "03a7530dd744e43a3ef20ab5dce1913948ef7066763fa542d0df0d82fb106e92",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 4,
+      "source_sha256": "a2cc9cf143dc0c35ff1d318fda67a8a4cd4f0f648ee076c02a64e5ecb626269b",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 5,
+      "source_sha256": "74978aa8c7e526c7a62b791c68364fe3556f62355549bcc3d8e016f0fa5e94a8",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 6,
+      "source_sha256": "a10cc45b7f929eb9220a64da1a3dee0533f321cc9ad9db424041096137468a9f",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 7,
+      "source_sha256": "a77d993b1a23ef33f7989a0d02f30cb7d3fe2705c7e27aed904eb63c8960f544",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 8,
+      "source_sha256": "9ae963dc4cf7c40b63ffd0d44b09d67ad7074585cd4b796be56fcdb3e99a1c92",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 9,
+      "source_sha256": "6c0199240c6b6f12e04c2ac20855566059215fae61ca8d1eeefe99d43e6e372b",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 10,
+      "source_sha256": "348d9d22396ab0c51807781a98615e4c55745345af86d254bd04c4585deeaa89",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 11,
+      "source_sha256": "30160b5f708e38fd6d74b940d1694ae7efa592e792f2d65b2789e1ea6f0af208",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 12,
+      "source_sha256": "b349b8363f646d02c4d566c02593a702d42834c0b6d0dc666490fe0a7833155f",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 13,
+      "source_sha256": "2b10f45d0a84ca5fdc403b6c51766111c288ef0f4a633220c9941d4569c8c344",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 14,
+      "source_sha256": "298054684e7dfa4453ccfa1743321a4035ecd55b2714c0898cbfe212c075b5f5",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 15,
+      "source_sha256": "c54f8f5e3f1370f196d048b59486f6fc35d80df6d45fbe56044148b3bb756888",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 16,
+      "source_sha256": "1fd590a73c40cd9096dcc98e7ef287b8f7e9d8166c0eef252b71cb3660260994",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 17,
+      "source_sha256": "c1737391e0031031e355be2f122af33452f05146cc14a96764896b416ea893fc",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 18,
+      "source_sha256": "c0fc8659a93d1b4a9cc564bd987ed3cafdf7a387300d23edc6a5098f64f8d0bb",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 19,
+      "source_sha256": "15b07fe4575a63f2ca023ff5469de90cf8008c294bc05da9c38f16913207f874",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 20,
+      "source_sha256": "53df6d8a04df9db902ed3e65820f72a4e972c3387a66c3e7145879da35f72117",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 21,
+      "source_sha256": "87a2371ec77bbe6f63c13cf2651c6caa1e99ad66b42b476ab4be20300572033a",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 22,
+      "source_sha256": "58a79859fb5ca2608d1b7d45e5576b72ce072baa51a2f96704d97088ce51e78b",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 23,
+      "source_sha256": "dec97150d4e04e2b65532f1ec38d306a7f6d4ab026fb4e6bcd06e086f567fb4b",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 24,
+      "source_sha256": "372905eec85bd9e8f7d0a6d58e3d3be15e37477603f4d62fdb1adf94fb93ce7e",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 25,
+      "source_sha256": "4c0f1007dde1294bbfafd3e7ad31f1809666e4e46c4c7692d1728927caf588f7",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 26,
+      "source_sha256": "b2e7a9f28970c2185ddf9b59020505fe3a98950b349ddc147cbbf032fb13b78b",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 27,
+      "source_sha256": "02b4d3f93ea7a634d9213563c4e761da8e35e5af06d9bd7cf82e8ec286c97806",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 28,
+      "source_sha256": "c1134867c7dcf761fd53bea37f0876e7f63203a5c54891c8c34c65a1bb4f8c92",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 29,
+      "source_sha256": "a50264c7d84559e4e87b5e36ffa97d21738d3d486d361f07c775488f2a6f0022",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 30,
+      "source_sha256": "a4b2be44c1554e0e167ee0e7f399bc674ab9f8eb626ecb45479aa2ca2da45174",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 31,
+      "source_sha256": "e8e0e495142ff27949b2bfa2ee7f280bdb576fffeab7e86695da6e5bad2dfa37",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 32,
+      "source_sha256": "b4d09b8629328754b79558ede1b3bf9978eb8d25ecf1ae1d7eda4b7e1a7feab3",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 33,
+      "source_sha256": "461e8bdec7e18c764fb2a4eb349fd41d909ddac10b7dda844dabdf31f5033aff",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 34,
+      "source_sha256": "c3636ea456abc54c4495c138255e0583f5e88b0d155bc8133c20acb79dfe5ac8",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 35,
+      "source_sha256": "01c70269c11ad468b47bd76b897c357de7f58dbca4c46dd3698a79a7bd685eff",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 36,
+      "source_sha256": "1bbf40116ffa74e5f13f35ab59b0e973d4a07d8441d8157217c2d25dc306b820",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 37,
+      "source_sha256": "16bd853d27696413483f00c33071a4aecb7c859f8ed1e44630ee9aaee8db809a",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 38,
+      "source_sha256": "91254a7929d7ed7ea5e5e6c97c5b4ec7d899e572c68076b1629ba35620a333dd",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORKSPACE-INTERACTIONS.md",
+      "block": 39,
+      "source_sha256": "8e262603abeb48123b87eb01b2d47fc138a8377718eb44546f5931039148b3d0",
+      "target": "docs/design/INTERACTIONS.md#workspace",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 1,
+      "source_sha256": "e57fac5a1fd1f8415635c16ba5569e3ec03ce968a1d6b215934238c93d3dd154",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 2,
+      "source_sha256": "72795ae91350984d1b3a367989c96e4a6bb0c15c2d4ba6ec55870aea26f286dd",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 3,
+      "source_sha256": "e96d427fea043b64460b96628b2d8a4d4d890299299aeacab6f5b5324fbd47fb",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 4,
+      "source_sha256": "8f1fc4f0e48c5ce692e8b92b59a9bd5812ec5588e17ab22609fc47b1faa89f90",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 5,
+      "source_sha256": "8edfb05a857d8767300c8c93eb766fcd81381140c9f26f55ee0df0d816ae32a5",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 6,
+      "source_sha256": "0cf82e0ab6f9f48a60215ff3fcaa55f910ef1dcd9bde167c5e33a73bbe491f44",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 7,
+      "source_sha256": "1a51666e09e468c7dcbd397518c5574cf8013f7803bdedef337994174e332552",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 8,
+      "source_sha256": "7c02515c285c168e3d241ce0de0dd03d06092307b6ea60a4cf4f7e2595079807",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 9,
+      "source_sha256": "154775030e5703ef40217673c3a1346c29e7f4dddd8090e5fb8eccc381848e63",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 10,
+      "source_sha256": "d6d1ea58ed9234940765edc3f2522674be252f07891e1e164ffcc3f94f8d6882",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 11,
+      "source_sha256": "1d085829c78f54b62c719eda30ca3f25e2f966c65280e4d1d1c4bd67b8db117a",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 12,
+      "source_sha256": "e6a42600c63df2c689ca4940d5011f8d97540261b05a3afcac23e1e68e83e1cb",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 13,
+      "source_sha256": "91a2eceb8739e4f6ecd8a6db908a6355c790680080cb95b090e73157c2403199",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 14,
+      "source_sha256": "8586388631b134d785ec57f1b0ddff70e7ea9f5e642454442fc03e35328eab84",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 15,
+      "source_sha256": "6e7efaaf76bcd97032e2d1449deafdb16447dcafd07b6c6d5d4aad6a05507c4d",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 16,
+      "source_sha256": "5b03bd9a833128bdbcca0626c86ff4ca3f949d5b1f7fa769544c0bdd92b08f4c",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 17,
+      "source_sha256": "1694453ba7158565cb67ccccd364deed9cd0db3f3948205a70b149e8a16cd5a9",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 18,
+      "source_sha256": "36bc141fdf4e29f172e1845b9b49a79576731a24ccb5110675d39696315d623f",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 19,
+      "source_sha256": "602987b54ea62ef18d223ecdd2943be84f47ebe8217412f3991de5e1bf326d7c",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 20,
+      "source_sha256": "1f6ae2b99f655ea44e3e639a3b1738734d340825c75b33d0e75f30096009c034",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 21,
+      "source_sha256": "33f05a30b257d43fa69351a94448890cf356c62c279322c2a87231dcd8b944d3",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 22,
+      "source_sha256": "4bc7b3fe172b17a820c33a6c7be98cf7a07ec2f6b77d342bc9ae4f6efca89a55",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 23,
+      "source_sha256": "4d11b21a81ad3c5e8bac589224c87958e8b49ff8e4dba338ed77959f98dabd5d",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+      "block": 24,
+      "source_sha256": "0ca648b47138e9f2e11bd41f577dc7b76f6430884f5295bf9746409e3c421e7d",
+      "target": "docs/design/INTERACTIONS.md#work-window",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 1,
+      "source_sha256": "af0e8145604a0a6e2d072ae0240ab10ff6d44eacb248466e4d9ab7a6d51aed59",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 2,
+      "source_sha256": "065867ed7508211af61139b16992806e379e1aa814843582e4966ae326d70652",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 3,
+      "source_sha256": "a0d68a4d933d676a3dd089de01bf0ca8defed2607866657e5ea54f8b79b69124",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 4,
+      "source_sha256": "1cbc36587172d742cedee0d6746e5d29f334c4707c514d76fff8ed6735cb3dbe",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 5,
+      "source_sha256": "7366780e9ea03f236e35d157c23ca9aaec4417b7adb6069e3960fea71af435a6",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 6,
+      "source_sha256": "f17856804097beec146557f0319ec044f06f563a1e1b7d7c4ac86335e9e2ab1a",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 7,
+      "source_sha256": "876c04b5e4a96d04d87413ced53f043e7b726dfa2821f3e323f42b5c5c86a396",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    },
+    {
+      "source": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+      "block": 8,
+      "source_sha256": "6e983ea99b10c3f27e3a4a4eee738951980dd9f97287b7569895cd5109a6d70e",
+      "target": "docs/design/INTERACTIONS.md#legacy",
+      "canonical_preserved": true
+    }
+  ],
+  "compatibility": {
+    "WORKSPACE-INTERACTIONS.md": {
+      "root": "workspace",
+      "anchors": {
+        "产品表面": "workspace-产品表面",
+        "应用页面导航": "workspace-应用页面导航",
+        "单素材卡片": "workspace-单素材卡片",
+        "搜索与检索信息": "workspace-搜索与检索信息",
+        "交互与动效": "workspace-交互与动效",
+        "专注画布与笔记": "workspace-专注画布与笔记",
+        "普通文件夹与色板的正式交互": "workspace-普通文件夹与色板的正式交互",
+        "ai-结果与找回": "workspace-ai-结果与找回",
+        "专用-ocr": "workspace-专用-ocr",
+        "配色与基础信息区域": "workspace-配色与基础信息区域",
+        "ai与模型入口": "workspace-ai与模型入口",
+        "主窗口与状态行为": "workspace-主窗口与状态行为",
+        "关联产品规格": "workspace-关联产品规格"
+      }
+    },
+    "WORK-WINDOW-INTERACTIONS.md": {
+      "root": "work-window",
+      "anchors": {
+        "入口与展示状态": "work-window-入口与展示状态",
+        "拖动边缘候选与松手": "work-window-拖动边缘候选与松手",
+        "动画与覆盖层": "work-window-动画与覆盖层",
+        "素材选择与文本": "work-window-素材选择与文本",
+        "颜色与自动保存": "work-window-颜色与自动保存",
+        "独立专注预览": "work-window-独立专注预览",
+        "仍待确认的设计项": "work-window-仍待确认的设计项"
+      }
+    },
+    "LEGACY-LIBRARY-INTERACTIONS.md": {
+      "root": "legacy",
+      "anchors": {
+        "legacy-read-only-library": "legacy-legacy-read-only-library",
+        "shared-interaction-rules": "legacy-shared-interaction-rules"
+      }
+    }
+  },
+  "preservation": "Every nonempty original paragraph/table/list/header canonical text preserved. Heading depth and link destinations may change; originals retained byte-for-byte in before."
+}

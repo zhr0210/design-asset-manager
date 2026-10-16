@@ -116,7 +116,6 @@
     {
       "id": "M17",
       "testId": "T02",
-      "given": "Eagle or Legacy sent to managed migration planner",
       "expected": "deny wrong authority domain; Legacy never writes",
       "actualResult": "NOT_RUN"
     },
@@ -211,5 +210,6 @@
       "expected": "new Host session and confirmation required; persisted record does not grant write or network rights",
       "actualResult": "NOT_RUN"
     }
-  ]
+  ],
+  "contentRedaction": "Retired external integration entries removed on 2026-10-14; this is historical evidence, not qualification of the current build."
 }

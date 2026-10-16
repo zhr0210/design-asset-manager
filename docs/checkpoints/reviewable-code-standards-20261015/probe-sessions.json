@@ -1,0 +1,30 @@
+[
+  {
+    "agent": "/root/standards_async",
+    "session_id": "01a13f83-ed42-7950-85c0-b34042d35ef5",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/standards_baseline",
+    "session_id": "01a13f83-c8a2-7fe3-a14a-0316938f91ef",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/standards_shared",
+    "session_id": "01a13f83-aba8-7ca2-96af-00964ecc79e6",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/standards_delivery",
+    "session_id": "01a13f84-66fd-7233-ab44-38cac1b2de81",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

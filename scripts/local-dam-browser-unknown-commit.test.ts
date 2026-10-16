@@ -27,7 +27,7 @@ registerSettingsIpc({ getSettings: read, saveSettings: patch => {
   fs.writeFileSync(settingsFile, JSON.stringify(saved))
   return saved
 } }, async () => ({ canceled: true, path: '' }), (channel, handler) => handlers.set(channel, handler), context => server.isAuthenticated(context))
-const snapshots = ['library:inspect', 'download:list', 'download:jobs', 'connected-library:inspect', 'legacy-readonly:inspect', 'ai-connection:active-logins']
+const snapshots = ['library:inspect', 'legacy-readonly:inspect', 'ai-connection:active-logins']
 for (const command of snapshots) handlers.set(command, async () => ({ success: true }))
 const server = await createLocalDamServer({ rendererDirectory: root, channels: () => [...handlers.keys()],
   invoke: (context, command, args) => handlers.get(command)!(context, ...args), media: async () => { throw Error('UNUSED_MEDIA') }

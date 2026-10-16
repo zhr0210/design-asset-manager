@@ -12,7 +12,7 @@ Shared runtime infrastructure for AI tasks.
 
 ## Rules
 
-- Treat `model_manager.py` as protected.
+- 可在获批目标内修改model_manager.py；保持本地制品加载、任务/资源拥有者和释放语义，核对实际消费者并运行相关行为测试，不设文件级禁改。
 - Preserve GPU memory and lazy-loading behavior.
 
 ## Tests

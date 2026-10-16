@@ -1,0 +1,70 @@
+[
+  {
+    "path": "AGENTS.md",
+    "sha256": "3b4f4b3d7e83c446db4b968ec9a2131b982496af496b8275a2d085769d409060"
+  },
+  {
+    "path": "DESIGN.md",
+    "sha256": "619ca615a46ca9bb54c6315096488b8784caee9792987c51124c88d0c304a0dc"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "sha256": "15b5471f7c35a47e4aaabb0f786e7a4b26e062b0cb087c4148ad7eb0da367660"
+  },
+  {
+    "path": "TASK.md",
+    "sha256": "a1ef11bae47020a8f761ae05517217fce6d00c3de6c000bc3ce72460bf57b941"
+  },
+  {
+    "path": "docs/code-standards.md",
+    "sha256": "4fd6f80b3525ea954e6a04df42a3fd3a001504416090058e3a5735db035367ff"
+  },
+  {
+    "path": "docs/design/README.md",
+    "sha256": "267665bd912a83ced05e5ba71d1d9a8cfb62ff0788577fc64357cf905c983c8a"
+  },
+  {
+    "path": "docs/design/INTERACTIONS.md",
+    "sha256": "392caf9c8e84fc22af33051800bc0b293fb45db728cbdd297d4355e1ab4b4bf0"
+  },
+  {
+    "path": "docs/design/WORKSPACE-INTERACTIONS.md",
+    "sha256": "8ed345156f34b80c609a8659f7dcde5ed695ed2b46cf3b37ce66082a09ee3807"
+  },
+  {
+    "path": "docs/design/WORK-WINDOW-INTERACTIONS.md",
+    "sha256": "8850bdc538c25e6cbd70dfbb45f0b7afa254445bfe5f33c60e36f3976a32d907"
+  },
+  {
+    "path": "docs/design/LEGACY-LIBRARY-INTERACTIONS.md",
+    "sha256": "13b398987f46d9498d2a6b9d3759851ad4416835ebb6ed101cc8ca255b9346eb"
+  },
+  {
+    "path": "docs/agents/ui-ux-acceptance.md",
+    "sha256": "38c9669ccb50ede36f62d3697a0f414b4046ce60b0aa4c70c978c55e458ae3b2"
+  },
+  {
+    "path": "docs/subsystems/gui-shell.md",
+    "sha256": "0a01f840f41f9ca46e63560a3f34468908ac4162a779c936c8baeedc0416333c"
+  },
+  {
+    "path": "docs/subsystems/settings-recovery.md",
+    "sha256": "a67f435b7e560a2cedefd3cb912676ffa74ae4b8257167009d68436c5c407e2d"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "sha256": "b96a1d26dd803fcd61d64b56fc0ff5ca7ad99f5797646fd7415bbe2d4be7932c"
+  },
+  {
+    "path": "docs/product/WORK-SETS-20260920.md",
+    "sha256": "ecf5cf62870ed5b02b4c19bef929f56730e06bb90ba39b8f4ac35923b9199544"
+  },
+  {
+    "path": "docs/product/ASSET-NOTEBOOKS-20260917.md",
+    "sha256": "30b24e572ca0af349dcd94d3ab1bdafd2a69043c81d635f4100e00afea5510e4"
+  },
+  {
+    "path": "native/shelf-candidates/README.md",
+    "sha256": "7908256fbe8971b251951e6624e203df63a7409b77c8617c41f183c84045f230"
+  }
+]

@@ -26,7 +26,7 @@ const nativeName = name => name.split('/').join(path.sep)
 const main = asar.extractFile(archive, nativeName('out/main/index.js')).toString('utf8')
 assert.ok(main.includes(build.sourceDigest), 'packaged Main must contain the exact current source identity')
 for (const name of ['out/preload/index.cjs','out/preload/asset-card.cjs','out/preload/work-window.cjs',
-  'out/main/windows-video/video.exe','out/main/eagle-companion/DAM-Eagle-Companion-0.2.0.eagleplugin']) {
+  'out/main/windows-video/video.exe']) {
   assert.ok(members.includes(name), 'missing packaged entry/resource: ' + name)
   assert.equal(sha(asar.extractFile(archive, nativeName(name))), await fileSha(name), 'packaged bytes differ: ' + name)
 }
@@ -85,7 +85,7 @@ const manifest = { schema:1, generatedAt:new Date().toISOString(), kind:'local u
   artifacts:allFiles.sort((a,b)=>a.name.localeCompare(b.name)),
   runtimeDistribution:{pi:{platform:pi.platform,arch:pi.arch,nodeVersion:pi.nodeVersion,piVersion:pi.piVersion,verifiedFiles:piFiles,releaseSha256:sha(piBytes)},
     backup:{sourceDigest:native.sourceDigest,profile:native.profile},models:{bundled:false,source:'user-selected China ModelScope sources',qualification:'installation is not activation'}},
-  supportScope:{core:'subject to current per-client functional acceptance',eagle:'development/acceptance deferred to macOS by user',
+  supportScope:{core:'subject to current per-client functional acceptance',
     nativeDesktop:'deferred combined acceptance',macOS:'NOT_RUN on this Windows host'},
   promotion:{signed:false,published:false,installationUpgradeUninstall:'NOT_RUN; deferred native acceptance',
     branding:'default Electron icon; not approved product branding',distributionReady:false},

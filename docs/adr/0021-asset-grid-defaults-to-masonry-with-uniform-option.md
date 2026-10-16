@@ -1,12 +1,13 @@
 # Asset Grid Defaults to Masonry with Uniform Option
 
-Asset Grid should default to Masonry Grid so varied design references,
-posters, screenshots, product images, illustrations, and long-form captures
-can be scanned densely while preserving their visual proportions. Uniform Grid
-should remain available as a first-class switch for cases where direct
-comparison matters more than aspect-ratio fidelity.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-This balances Eagle-like high-volume browsing with design-review precision.
-Masonry Grid supports rapid inspiration scanning, while Uniform Grid supports
-UI screenshots, icons, component references, and other asset sets where equal
-tile rhythm makes differences easier to see.
+## Decision
+
+Asset Grid should default to Masonry Grid so varied design references, posters, screenshots, product images, illustrations, and long-form captures can be scanned densely while preserving their visual proportions.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[工作台与导航规格](../product/specs/workspace.md#adr-0021)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/asset-workspace.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

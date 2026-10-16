@@ -1,0 +1,3628 @@
+--- before/.codeindex/documentation-map.json
++++ after/.codeindex/documentation-map.json
+@@ -1,10 +1,10 @@
+ {
+   "schema_version": 1,
+-  "purpose": "Documentation responsibilities and task navigation; not capability acceptance or a second task registry.",
++  "purpose": "Five software runtime subsystems plus separately indexed engineering/delivery/product guides. Source ownership and prose navigation are distinct; first-party source trust rules unchanged.",
+   "topics": [
+     {
+       "id": "gui-shell",
+-      "title": "GUI系统：界面外壳、状态与跨端协作",
++      "title": "GUI与窗口系统",
+       "routes": [
+         "desktop-shell",
+         "asset-workspace",
+@@ -22,343 +22,12 @@
+         "src/renderer/asset-workspace-session.internal.ts",
+         "src/renderer/workspace-transition-participant.ts",
+         "src/renderer/workspace-drafts.ts",
+-        "src/renderer/README.md"
+-      ],
+-      "test_profiles": [
+-        "desktop_shell",
+-        "asset_workspace",
+-        "settings_paths"
+-      ],
+-      "reference": "docs/subsystems/gui-shell.md",
+-      "source_roots": [
+-        "src/renderer/components/layout/",
+-        "src/renderer/main.tsx",
+-        "src/renderer/workspace-client.ts",
+-        "src/renderer/browser-transport.ts",
+-        "src/renderer/asset-workspace-session.internal.ts",
+-        "src/renderer/workspace-transition-participant.ts",
+-        "src/renderer/workspace-drafts.ts"
+-      ]
+-    },
+-    {
+-      "id": "local-host",
+-      "title": "应用、双客户端与生命周期",
+-      "routes": [
+-        "desktop-shell"
+-      ],
+-      "sources": [
+-        "src/main/index.ts",
+-        "src/main/local-host/README.md",
+-        "src/main/local-host/local-dam-server.ts",
+-        "src/main/local-host/workspace-transitions.ts",
+-        "src/shared/client/workspace-client.ts",
+-        "src/preload/index.ts",
+-        "src/renderer/App.tsx"
+-      ],
+-      "test_profiles": [
+-        "desktop_shell",
+-        "main_ipc_registration"
+-      ],
+-      "reference": "docs/subsystems/local-host.md",
+-      "source_roots": [
+-        "src/main/local-host/",
+-        "src/preload/"
+-      ]
+-    },
+-    {
+-      "id": "library-lifecycle",
+-      "title": "资料库、持锁与维护",
+-      "routes": [
+-        "asset-lifecycle",
+-        "library-creation"
+-      ],
+-      "sources": [
+-        "src/main/active-library-runtime.ts",
+-        "src/main/library-lifecycle/active-library-host.ts",
+-        "src/main/library-lifecycle/active-library-session.ts",
+-        "src/main/ipc/active-library.ipc.ts",
+-        "src/main/library-lifecycle/production-active-library-dependencies.ts",
+-        "src/main/library-lifecycle/README.md",
+-        "src/main/library-lifecycle/LIBRARY-START.md"
+-      ],
+-      "test_profiles": [
+-        "asset_lifecycle",
+-        "library_start",
+-        "library_creation",
+-        "asset_trash"
+-      ],
+-      "reference": "docs/subsystems/library-lifecycle.md",
+-      "source_roots": [
+-        "src/main/active-library-runtime.ts",
+-        "src/main/ipc/active-library.ipc.ts",
+-        "src/main/library-lifecycle/"
+-      ]
+-    },
+-    {
+-      "id": "storage-intake",
+-      "title": "原件、Copy入库与派生文件",
+-      "routes": [
+-        "capture-intake",
+-        "source-discovery"
+-      ],
+-      "sources": [
+-        "src/main/capture-intake/README.md",
+-        "src/main/capture-intake/add-assets.workflow.ts",
+-        "src/main/capture-intake/capture-gateway.ts",
+-        "src/main/library-lifecycle/owned-image-intake.ts",
+-        "src/main/library-lifecycle/owned-image-recovery.ts",
+-        "src/main/image-tools/README.md"
+-      ],
+-      "test_profiles": [
+-        "capture_intake",
+-        "asset_storage_safety",
+-        "source_discovery"
+-      ],
+-      "reference": "docs/subsystems/storage-intake.md",
+-      "source_roots": [
+-        "src/main/capture-intake/",
+-        "src/main/library-lifecycle/"
+-      ]
+-    },
+-    {
+-      "id": "asset-workspace",
+-      "title": "素材工作台、详情与共享展示",
+-      "routes": [
+-        "asset-workspace"
+-      ],
+-      "sources": [
++        "src/renderer/README.md",
+         "src/renderer/routes/Library.tsx",
+         "src/renderer/components/library/canvas/LibraryCanvas.tsx",
+         "src/renderer/components/library/canvas/LibraryFocus.tsx",
+         "src/renderer/stores/asset.store.ts",
+-        "src/renderer/README.md",
+-        "src/main/asset-card/README.md"
+-      ],
+-      "test_profiles": [
+-        "asset_workspace"
+-      ],
+-      "reference": "docs/subsystems/asset-workspace.md",
+-      "source_roots": [
+-        "src/renderer/components/library/canvas/",
+-        "src/renderer/routes/",
+-        "src/renderer/stores/"
+-      ]
+-    },
+-    {
+-      "id": "organization",
+-      "title": "组织、标签、笔记与人工内容",
+-      "routes": [
+-        "asset-workspace",
+-        "asset-lifecycle"
+-      ],
+-      "sources": [
+-        "src/main/library-lifecycle/library-organization.ts",
+-        "src/main/library-lifecycle/asset-notebook.ts",
+-        "src/main/library-lifecycle/work-sets.ts",
+-        "src/main/library-lifecycle/active-library-tag-metadata.ts",
+-        "src/main/independent-tags/README.md",
+-        "src/shared/client/workspace-client.ts"
+-      ],
+-      "test_profiles": [
+-        "asset_workspace",
+-        "asset_lifecycle"
+-      ],
+-      "reference": "docs/subsystems/organization.md",
+-      "source_roots": [
+-        "src/main/library-lifecycle/"
+-      ]
+-    },
+-    {
+-      "id": "asset-discovery",
+-      "title": "文字、颜色、语义与图像检索",
+-      "routes": [
+-        "asset-discovery"
+-      ],
+-      "sources": [
+-        "src/renderer/components/library/canvas/useHostAssetSearch.ts",
+-        "src/main/asset-search/README.md",
+-        "src/main/retrieval-workspace/README.md",
+-        "src/main/retrieval-workspace/retrieval-runtime.ts",
+-        "src/shared/workflows/asset-discovery.workflow.ts",
+-        "src/shared/client/workspace-client.ts"
+-      ],
+-      "test_profiles": [
+-        "asset_discovery"
+-      ],
+-      "reference": "docs/subsystems/asset-discovery.md",
+-      "source_roots": [
+-        "src/main/retrieval-workspace/",
+-        "src/renderer/components/library/canvas/",
+-        "src/shared/workflows/"
+-      ]
+-    },
+-    {
+-      "id": "ai-analysis",
+-      "title": "基础分析、独立标签与后台任务",
+-      "routes": [
+-        "ai-analysis"
+-      ],
+-      "sources": [
+-        "src/main/background-analysis/README.md",
+-        "src/main/independent-tags/README.md",
+-        "src/main/background-analysis/basic-analysis-controller.ts",
+-        "src/main/background-analysis/background-analysis-controller.ts",
+-        "src/main/ipc/main-ipc-composition.ts"
+-      ],
+-      "test_profiles": [
+-        "ai_analysis",
+-        "python_ai_worker"
+-      ],
+-      "reference": "docs/subsystems/ai-analysis.md",
+-      "source_roots": [
+-        "src/main/background-analysis/",
+-        "src/main/ipc/main-ipc-composition.ts"
+-      ]
+-    },
+-    {
+-      "id": "ocr",
+-      "title": "OCR执行、空结果与修正",
+-      "routes": [
+-        "ai-analysis",
+-        "ai-runtime"
+-      ],
+-      "sources": [
+-        "src/main/ocr/README.md",
+-        "src/main/background-ocr/README.md",
+-        "src/main/ocr/ocr-controller.ts",
+-        "src/main/ocr/ocr-runtime.ts",
+-        "src/main/ipc/asset-ocr.ipc.ts"
+-      ],
+-      "test_profiles": [
+-        "ai_analysis",
+-        "cross_platform_runtime"
+-      ],
+-      "reference": "docs/subsystems/ocr.md",
+-      "source_roots": [
+-        "src/main/ipc/asset-ocr.ipc.ts",
+-        "src/main/ocr/"
+-      ]
+-    },
+-    {
+-      "id": "visual-ai",
+-      "title": "深度分析、提示词反推与图片工具",
+-      "routes": [
+-        "prompt-reverse",
+-        "ai-analysis"
+-      ],
+-      "sources": [
+-        "src/main/visual-ai/README.md",
+-        "src/main/visual-ai/visual-ai-controller.ts",
+-        "src/main/visual-ai/openai-vision.transport.ts",
+-        "src/renderer/components/asset/VisualAiPanel.tsx",
+-        "src/main/ipc/visual-ai.ipc.ts",
+-        "src/main/image-tools/README.md"
+-      ],
+-      "test_profiles": [
+-        "prompt_reverse",
+-        "ai_analysis"
+-      ],
+-      "reference": "docs/subsystems/visual-ai.md",
+-      "source_roots": [
+-        "src/main/ipc/visual-ai.ipc.ts",
+-        "src/main/visual-ai/",
+-        "src/renderer/components/asset/"
+-      ]
+-    },
+-    {
+-      "id": "ai-connections",
+-      "title": "AI连接、账号与Pi协议",
+-      "routes": [
+-        "prompt-reverse",
+-        "ai-runtime"
+-      ],
+-      "sources": [
+-        "src/main/ai-gateway/README.md",
+-        "src/main/ai-gateway/PROVIDER-MATRIX.md",
+-        "src/main/ai-gateway/ai-connection-service.ts",
+-        "src/main/ai-gateway/pi-runtime-host.ts",
+-        "pi-runtime/README.md",
+-        "src/main/ipc/ai-connection.ipc.ts",
+-        "pi-runtime/worker.mjs"
+-      ],
+-      "test_profiles": [
+-        "prompt_reverse",
+-        "shared_ai_runtime"
+-      ],
+-      "reference": "docs/subsystems/ai-connections.md",
+-      "source_roots": [
+-        "pi-runtime/",
+-        "src/main/ai-gateway/",
+-        "src/main/ipc/ai-connection.ipc.ts"
+-      ]
+-    },
+-    {
+-      "id": "model-library",
+-      "title": "模型制品、正式库存与签名目录",
+-      "routes": [
+-        "model-library",
+-        "model-library-core",
+-        "model-storage-root-registry",
+-        "model-library-product-pilot",
+-        "official-model-catalog-release"
+-      ],
+-      "sources": [
+-        "src/main/model-library-workspace/README.md",
+-        "src/main/model-library-workspace/managed-model-library.ts",
+-        "src/main/model-library-workspace/china-model-mirror.ts",
+-        "src/main/model-library-workspace/model-file-transfer.ts",
+-        "src/main/model-library/README.md",
+-        "src/main/model-library-workspace/model-library-workspace.composition.ts"
+-      ],
+-      "test_profiles": [
+-        "model_library",
+-        "model_library_core_tracer",
+-        "model_library_root_registry_tracer",
+-        "model_library_product_pilot",
+-        "official_model_catalog_release"
+-      ],
+-      "reference": "docs/subsystems/model-library.md",
+-      "source_roots": [
+-        "src/main/model-library-workspace/"
+-      ]
+-    },
+-    {
+-      "id": "ai-runtime",
+-      "title": "执行Runtime、资源与物理退出",
+-      "routes": [
+-        "ai-runtime",
+-        "runtime-package"
+-      ],
+-      "sources": [
+-        "src/main/services/ai-runtime/README.md",
+-        "src/main/services/ai-runtime/managed-vision-runtime.ts",
+-        "src/main/local-ai-resources/resource-governor.ts",
+-        "src/main/visual-ai/visual-admission.ts",
+-        "src/main/retrieval-workspace/retrieval-runtime.ts",
+-        "src/main/ipc/disabled-app.ipc.ts"
+-      ],
+-      "test_profiles": [
+-        "shared_ai_runtime",
+-        "cross_platform_runtime",
+-        "runtime_package"
+-      ],
+-      "reference": "docs/subsystems/ai-runtime.md",
+-      "source_roots": [
+-        "src/main/ipc/disabled-app.ipc.ts",
+-        "src/main/local-ai-resources/",
+-        "src/main/retrieval-workspace/",
+-        "src/main/services/ai-runtime/",
+-        "src/main/visual-ai/"
+-      ]
+-    },
+-    {
+-      "id": "work-mode",
+-      "title": "工作集、macOS原生悬浮窗与预览",
+-      "routes": [
+-        "work-mode",
+-        "desktop-shell"
+-      ],
+-      "sources": [
++        "src/main/asset-card/README.md",
+         "src/main/work-mode/README.md",
+         "src/main/work-mode/work-window-controller.ts",
+         "src/main/work-mode/native-shelf-work-window.ts",
+@@ -368,25 +37,51 @@
+         "src/main/index.ts",
+         "native/shelf-candidates/NativeWorkShelf.swift",
+         "native/shelf-candidates/WorkShelfInteraction.swift",
+-        "native/shelf-candidates/WorkShelfColorPicker.swift"
++        "native/shelf-candidates/WorkShelfColorPicker.swift",
++        "src/renderer/routes/Settings.tsx"
+       ],
+       "test_profiles": [
+         "desktop_shell",
+-        "asset_workspace"
+-      ],
+-      "reference": "docs/subsystems/work-mode.md",
+-      "source_roots": [
++        "asset_workspace",
++        "settings_paths"
++      ],
++      "reference": "docs/subsystems/gui-shell.md",
++      "source_roots": [
++        "src/renderer/components/layout/",
++        "src/renderer/main.tsx",
++        "src/renderer/workspace-client.ts",
++        "src/renderer/browser-transport.ts",
++        "src/renderer/asset-workspace-session.internal.ts",
++        "src/renderer/workspace-transition-participant.ts",
++        "src/renderer/workspace-drafts.ts",
++        "src/renderer/components/library/canvas/",
++        "src/renderer/routes/",
++        "src/renderer/stores/",
+         "native/shelf-candidates/",
+-        "src/main/work-mode/"
++        "src/main/work-mode/",
++        "src/renderer/routes/Settings.tsx"
+       ]
+     },
+     {
+-      "id": "media-handoff",
+-      "title": "视频参考帧与跨应用文件交付",
+-      "routes": [
++      "id": "local-host",
++      "title": "应用Host与系统集成",
++      "routes": [
++        "desktop-shell",
++        "settings-paths",
+         "work-mode"
+       ],
+       "sources": [
++        "src/main/index.ts",
++        "src/main/local-host/README.md",
++        "src/main/local-host/local-dam-server.ts",
++        "src/main/local-host/workspace-transitions.ts",
++        "src/shared/client/workspace-client.ts",
++        "src/preload/index.ts",
++        "src/main/services/settings.service.ts",
++        "src/main/ipc/settings.ipc.ts",
++        "src/main/path-migration/path-migration-executor.ts",
++        "src/main/local-host/workspace-drafts.ts",
++        "src/main/legacy-readonly-workspace/README.md",
+         "src/main/work-mode/work-media-controller.ts",
+         "src/main/work-mode/work-media-storage.ts",
+         "src/main/work-mode/work-file-handoff.ts",
+@@ -396,134 +91,175 @@
+       ],
+       "test_profiles": [
+         "desktop_shell",
++        "main_ipc_registration",
++        "settings_paths",
+         "asset_storage_safety"
+       ],
+-      "reference": "docs/subsystems/media-handoff.md",
+-      "source_roots": [
++      "reference": "docs/subsystems/local-host.md",
++      "source_roots": [
++        "src/main/local-host/",
++        "src/preload/",
++        "src/main/ipc/settings.ipc.ts",
++        "src/main/path-migration/",
++        "src/main/services/",
+         "src/main/work-mode/"
+       ]
+     },
+     {
+-      "id": "settings-recovery",
+-      "title": "设置、路径、诊断与旧库找回",
+-      "routes": [
+-        "settings-paths",
+-        "desktop-shell"
+-      ],
+-      "sources": [
+-        "src/renderer/routes/Settings.tsx",
+-        "src/main/services/settings.service.ts",
+-        "src/main/ipc/settings.ipc.ts",
+-        "src/main/path-migration/path-migration-executor.ts",
+-        "src/main/local-host/workspace-drafts.ts",
+-        "src/main/legacy-readonly-workspace/README.md"
+-      ],
+-      "test_profiles": [
+-        "settings_paths",
+-        "desktop_shell"
+-      ],
+-      "reference": "docs/subsystems/settings-recovery.md",
+-      "source_roots": [
+-        "src/main/ipc/settings.ipc.ts",
+-        "src/main/local-host/",
+-        "src/main/path-migration/",
+-        "src/main/services/",
+-        "src/renderer/routes/"
++      "id": "library-lifecycle",
++      "title": "资料库与素材管理",
++      "routes": [
++        "asset-lifecycle",
++        "library-creation",
++        "capture-intake",
++        "source-discovery",
++        "asset-workspace"
++      ],
++      "sources": [
++        "src/main/active-library-runtime.ts",
++        "src/main/library-lifecycle/active-library-host.ts",
++        "src/main/library-lifecycle/active-library-session.ts",
++        "src/main/ipc/active-library.ipc.ts",
++        "src/main/library-lifecycle/production-active-library-dependencies.ts",
++        "src/main/library-lifecycle/README.md",
++        "src/main/library-lifecycle/LIBRARY-START.md",
++        "src/main/capture-intake/README.md",
++        "src/main/capture-intake/add-assets.workflow.ts",
++        "src/main/capture-intake/capture-gateway.ts",
++        "src/main/library-lifecycle/owned-image-intake.ts",
++        "src/main/library-lifecycle/owned-image-recovery.ts",
++        "src/main/image-tools/README.md",
++        "src/main/library-lifecycle/library-organization.ts",
++        "src/main/library-lifecycle/asset-notebook.ts",
++        "src/main/library-lifecycle/work-sets.ts",
++        "src/main/library-lifecycle/active-library-tag-metadata.ts",
++        "src/main/independent-tags/README.md",
++        "src/shared/client/workspace-client.ts"
++      ],
++      "test_profiles": [
++        "asset_lifecycle",
++        "library_start",
++        "library_creation",
++        "asset_trash",
++        "capture_intake",
++        "asset_storage_safety",
++        "source_discovery",
++        "asset_workspace"
++      ],
++      "reference": "docs/subsystems/library-lifecycle.md",
++      "source_roots": [
++        "src/main/active-library-runtime.ts",
++        "src/main/ipc/active-library.ipc.ts",
++        "src/main/library-lifecycle/",
++        "src/main/capture-intake/"
+       ]
+     },
+     {
+-      "id": "platform-release",
+-      "title": "平台、构建资源、安装与发行",
+-      "routes": [
+-        "release-packaging",
+-        "official-model-catalog-release"
+-      ],
+-      "sources": [
+-        "src/main/platform/path-resolver.ts",
+-        "src/main/packaging/release-flow-governance.ts",
+-        "scripts/run-electron-builder.mjs",
+-        "package.json",
+-        ".github/workflows/cross-platform-governance.yml",
+-        ".github/workflows/macos-package-artifact.yml",
+-        ".github/workflows/release-packaging-dry-run.yml",
+-        ".github/workflows/release-signed-candidate.yml"
+-      ],
+-      "test_profiles": [
+-        "release_flow",
+-        "official_model_catalog_release"
+-      ],
+-      "reference": "docs/subsystems/platform-release.md",
+-      "source_roots": [
+-        "./",
+-        ".github/workflows/cross-platform-governance.yml",
+-        ".github/workflows/macos-package-artifact.yml",
+-        ".github/workflows/release-packaging-dry-run.yml",
+-        ".github/workflows/release-signed-candidate.yml",
+-        "scripts/run-electron-builder.mjs",
+-        "src/main/packaging/",
+-        "src/main/platform/"
++      "id": "ai-system",
++      "title": "AI能力与执行",
++      "routes": [
++        "ai-analysis",
++        "ai-runtime",
++        "prompt-reverse",
++        "model-library",
++        "model-library-core",
++        "model-storage-root-registry",
++        "model-library-product-pilot",
++        "official-model-catalog-release",
++        "runtime-package"
++      ],
++      "sources": [
++        "src/main/background-analysis/README.md",
++        "src/main/independent-tags/README.md",
++        "src/main/background-analysis/basic-analysis-controller.ts",
++        "src/main/background-analysis/background-analysis-controller.ts",
++        "src/main/ipc/main-ipc-composition.ts",
++        "src/main/ocr/README.md",
++        "src/main/background-ocr/README.md",
++        "src/main/ocr/ocr-controller.ts",
++        "src/main/ocr/ocr-runtime.ts",
++        "src/main/ipc/asset-ocr.ipc.ts",
++        "src/main/visual-ai/README.md",
++        "src/main/visual-ai/visual-ai-controller.ts",
++        "src/main/visual-ai/openai-vision.transport.ts",
++        "src/renderer/components/asset/VisualAiPanel.tsx",
++        "src/main/ipc/visual-ai.ipc.ts",
++        "src/main/image-tools/README.md",
++        "src/main/ai-gateway/README.md",
++        "src/main/ai-gateway/PROVIDER-MATRIX.md",
++        "src/main/ai-gateway/ai-connection-service.ts",
++        "src/main/ai-gateway/pi-runtime-host.ts",
++        "pi-runtime/README.md",
++        "src/main/ipc/ai-connection.ipc.ts",
++        "pi-runtime/worker.mjs",
++        "src/main/model-library-workspace/README.md",
++        "src/main/model-library-workspace/managed-model-library.ts",
++        "src/main/model-library-workspace/china-model-mirror.ts",
++        "src/main/model-library-workspace/model-file-transfer.ts",
++        "src/main/model-library/README.md",
++        "src/main/model-library-workspace/model-library-workspace.composition.ts",
++        "src/main/services/ai-runtime/README.md",
++        "src/main/services/ai-runtime/managed-vision-runtime.ts",
++        "src/main/local-ai-resources/resource-governor.ts",
++        "src/main/visual-ai/visual-admission.ts",
++        "src/main/retrieval-workspace/retrieval-runtime.ts",
++        "src/main/ipc/disabled-app.ipc.ts"
++      ],
++      "test_profiles": [
++        "ai_analysis",
++        "python_ai_worker",
++        "cross_platform_runtime",
++        "prompt_reverse",
++        "shared_ai_runtime",
++        "model_library",
++        "model_library_core_tracer",
++        "model_library_root_registry_tracer",
++        "model_library_product_pilot",
++        "official_model_catalog_release",
++        "runtime_package"
++      ],
++      "reference": "docs/subsystems/ai-system.md",
++      "source_roots": [
++        "src/main/background-analysis/",
++        "src/main/ipc/main-ipc-composition.ts",
++        "src/main/ipc/asset-ocr.ipc.ts",
++        "src/main/ocr/",
++        "src/main/ipc/visual-ai.ipc.ts",
++        "src/main/visual-ai/",
++        "src/renderer/components/asset/",
++        "pi-runtime/",
++        "src/main/ai-gateway/",
++        "src/main/ipc/ai-connection.ipc.ts",
++        "src/main/model-library-workspace/",
++        "src/main/ipc/disabled-app.ipc.ts",
++        "src/main/local-ai-resources/",
++        "src/main/retrieval-workspace/",
++        "src/main/services/ai-runtime/"
+       ]
+     },
+     {
+-      "id": "engineering",
+-      "title": "工程导航、规范、审查与反馈",
+-      "routes": [
+-        "agent-governance"
+-      ],
+-      "sources": [
+-        "AGENTS.md",
+-        "CONTRIBUTING.md",
+-        "docs/code-standards.md",
+-        "LESSONS.md",
+-        "docs/agents/DEVELOPMENT-PROBLEMS.md",
+-        ".codeindex/module-map.json",
+-        "scripts/agent-context-router.mjs",
+-        "scripts/development-feedback.mjs",
+-        "scripts/check-documentation.py",
+-        "scripts/check-docs-sync.py",
+-        "scripts/check-adr-router.py",
+-        "scripts/documentation-governance.test.py",
+-        "scripts/agent-context-router.test.mjs",
+-        "scripts/development-feedback.test.mjs",
+-        "scripts/adr-context.mjs",
+-        "scripts/adr-context.test.mjs"
+-      ],
+-      "test_profiles": [
+-        "agent_context_router",
+-        "architecture_knowledge"
+-      ],
+-      "reference": "docs/subsystems/engineering.md",
+-      "source_roots": [
+-        "./",
+-        "scripts/agent-context-router.mjs",
+-        "scripts/development-feedback.mjs",
+-        "scripts/check-documentation.py",
+-        "scripts/check-docs-sync.py",
+-        "scripts/check-adr-router.py",
+-        "scripts/documentation-governance.test.py",
+-        "scripts/agent-context-router.test.mjs",
+-        "scripts/development-feedback.test.mjs",
+-        "scripts/adr-context.mjs",
+-        "scripts/adr-context.test.mjs"
++      "id": "asset-discovery",
++      "title": "搜索与检索",
++      "routes": [
++        "asset-discovery"
++      ],
++      "sources": [
++        "src/renderer/components/library/canvas/useHostAssetSearch.ts",
++        "src/main/asset-search/README.md",
++        "src/main/retrieval-workspace/README.md",
++        "src/main/retrieval-workspace/retrieval-runtime.ts",
++        "src/shared/workflows/asset-discovery.workflow.ts",
++        "src/shared/client/workspace-client.ts"
++      ],
++      "test_profiles": [
++        "asset_discovery"
++      ],
++      "reference": "docs/subsystems/asset-discovery.md",
++      "source_roots": [
++        "src/main/retrieval-workspace/",
++        "src/renderer/components/library/canvas/",
++        "src/shared/workflows/"
+       ]
+-    },
+-    {
+-      "id": "optional-targets",
+-      "title": "有效目标、可选能力与退休范围",
+-      "routes": [
+-        "source-discovery"
+-      ],
+-      "sources": [
+-        "docs/product/PRODUCT-FOUNDATION.md",
+-        "docs/adr/README.md",
+-        "docs/product/PLUGIN-PLATFORM-DISCUSSION-20260913.md",
+-        "docs/product/WEB-COLLECTION-RETIREMENT-20260913.md"
+-      ],
+-      "test_profiles": [
+-        "source_discovery"
+-      ],
+-      "reference": "docs/subsystems/optional-targets.md",
+-      "source_roots": []
+     }
+   ],
+   "module_references": [
+@@ -585,5 +321,104 @@
+     "docs/product/RELEASE-ACCEPTANCE.md",
+     "docs/product/WORK-MODE-AND-MOTION-REFERENCE.md",
+     "docs/product/WORK-SETS-20260920.md"
++  ],
++  "guides": [
++    {
++      "id": "engineering",
++      "title": "工程导航、规范、审查与反馈",
++      "routes": [
++        "agent-governance"
++      ],
++      "sources": [
++        "AGENTS.md",
++        "CONTRIBUTING.md",
++        "docs/code-standards.md",
++        "LESSONS.md",
++        "docs/agents/DEVELOPMENT-PROBLEMS.md",
++        ".codeindex/module-map.json",
++        "scripts/agent-context-router.mjs",
++        "scripts/development-feedback.mjs",
++        "scripts/check-documentation.py",
++        "scripts/check-docs-sync.py",
++        "scripts/check-adr-router.py",
++        "scripts/documentation-governance.test.py",
++        "scripts/agent-context-router.test.mjs",
++        "scripts/development-feedback.test.mjs",
++        "scripts/adr-context.mjs",
++        "scripts/adr-context.test.mjs"
++      ],
++      "test_profiles": [
++        "agent_context_router",
++        "architecture_knowledge"
++      ],
++      "reference": "docs/agents/engineering.md",
++      "source_roots": [
++        "./",
++        "scripts/agent-context-router.mjs",
++        "scripts/development-feedback.mjs",
++        "scripts/check-documentation.py",
++        "scripts/check-docs-sync.py",
++        "scripts/check-adr-router.py",
++        "scripts/documentation-governance.test.py",
++        "scripts/agent-context-router.test.mjs",
++        "scripts/development-feedback.test.mjs",
++        "scripts/adr-context.mjs",
++        "scripts/adr-context.test.mjs"
++      ],
++      "index": "CONTRIBUTING.md"
++    },
++    {
++      "id": "platform-release",
++      "title": "平台、构建资源、安装与发行",
++      "routes": [
++        "release-packaging",
++        "official-model-catalog-release"
++      ],
++      "sources": [
++        "src/main/platform/path-resolver.ts",
++        "src/main/packaging/release-flow-governance.ts",
++        "scripts/run-electron-builder.mjs",
++        "package.json",
++        ".github/workflows/cross-platform-governance.yml",
++        ".github/workflows/macos-package-artifact.yml",
++        ".github/workflows/release-packaging-dry-run.yml",
++        ".github/workflows/release-signed-candidate.yml"
++      ],
++      "test_profiles": [
++        "release_flow",
++        "official_model_catalog_release"
++      ],
++      "reference": "docs/platform/BUILD-AND-RELEASE.md",
++      "source_roots": [
++        "./",
++        ".github/workflows/cross-platform-governance.yml",
++        ".github/workflows/macos-package-artifact.yml",
++        ".github/workflows/release-packaging-dry-run.yml",
++        ".github/workflows/release-signed-candidate.yml",
++        "scripts/run-electron-builder.mjs",
++        "src/main/packaging/",
++        "src/main/platform/"
++      ],
++      "index": "docs/platform/README.md"
++    },
++    {
++      "id": "optional-targets",
++      "title": "有效目标、可选能力与退休范围",
++      "routes": [
++        "source-discovery"
++      ],
++      "sources": [
++        "docs/product/PRODUCT-FOUNDATION.md",
++        "docs/adr/README.md",
++        "docs/product/PLUGIN-PLATFORM-DISCUSSION-20260913.md",
++        "docs/product/WEB-COLLECTION-RETIREMENT-20260913.md"
++      ],
++      "test_profiles": [
++        "source_discovery"
++      ],
++      "reference": "docs/product/CAPABILITY-SCOPE.md",
++      "source_roots": [],
++      "index": "docs/product/README.md"
++    }
+   ]
+ }
+--- before/.codeindex/module-map.json
++++ after/.codeindex/module-map.json
+@@ -360,8 +360,7 @@
+       ],
+       "documentation": [
+         "docs/subsystems/gui-shell.md",
+-        "docs/subsystems/asset-workspace.md",
+-        "docs/subsystems/organization.md"
++        "docs/subsystems/library-lifecycle.md"
+       ]
+     },
+     "asset-discovery": {
+@@ -527,7 +526,8 @@
+         "Current Asset Discovery is lexical-only and in-memory; durable semantic and visual paths are not live."
+       ],
+       "documentation": [
+-        "docs/subsystems/asset-discovery.md"
++        "docs/subsystems/asset-discovery.md",
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "asset-lifecycle": {
+@@ -987,8 +987,7 @@
+         "Production Host and isolated tracers coexist; accepted contracts, source wiring and current user qualification are separate."
+       ],
+       "documentation": [
+-        "docs/subsystems/library-lifecycle.md",
+-        "docs/subsystems/organization.md"
++        "docs/subsystems/library-lifecycle.md"
+       ]
+     },
+     "library-creation": {
+@@ -1472,7 +1471,7 @@
+         "Current local Copy and isolated tracer guarantees coexist; this index does not grant broad format or real-library qualification."
+       ],
+       "documentation": [
+-        "docs/subsystems/storage-intake.md"
++        "docs/subsystems/library-lifecycle.md"
+       ]
+     },
+     "source-discovery": {
+@@ -1591,8 +1590,8 @@
+         "Historical web collection plans are not current implementation or authorization."
+       ],
+       "documentation": [
+-        "docs/subsystems/storage-intake.md",
+-        "docs/subsystems/optional-targets.md"
++        "docs/subsystems/library-lifecycle.md",
++        "docs/product/CAPABILITY-SCOPE.md"
+       ]
+     },
+     "ai-analysis": {
+@@ -1812,9 +1811,7 @@
+         "AI slices are partial; inspect the exact Electron-to-Worker-to-SQLite call path before claiming an automatic pipeline."
+       ],
+       "documentation": [
+-        "docs/subsystems/ai-analysis.md",
+-        "docs/subsystems/ocr.md",
+-        "docs/subsystems/visual-ai.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "prompt-reverse": {
+@@ -1995,8 +1992,7 @@
+         "The current AI Worker IPC writes Prompt Reverse results directly to the process-global SQLite schema; inspect that compatibility seam before changing persistence."
+       ],
+       "documentation": [
+-        "docs/subsystems/visual-ai.md",
+-        "docs/subsystems/ai-connections.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "ai-runtime": {
+@@ -2253,9 +2249,7 @@
+         "Real-model, device and platform qualification must be checked independently from probes or source wiring."
+       ],
+       "documentation": [
+-        "docs/subsystems/ocr.md",
+-        "docs/subsystems/ai-connections.md",
+-        "docs/subsystems/ai-runtime.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "model-library": {
+@@ -2517,7 +2511,7 @@
+         "Downloaded, structurally valid, runtime-supported and real-inference-qualified are separate states; development validation never downloads weights."
+       ],
+       "documentation": [
+-        "docs/subsystems/model-library.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "model-library-core": {
+@@ -2909,7 +2903,7 @@
+         "The sequence floor and freshness clock are tracer-only in-memory evidence, not persisted anti-rollback state or Trusted Current Time."
+       ],
+       "documentation": [
+-        "docs/subsystems/model-library.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "model-storage-root-registry": {
+@@ -3024,7 +3018,7 @@
+         "The task-local locator and Registry SQLite prove only the isolated current-host workflow, not production locator durability, removable-volume portability or power-loss safety."
+       ],
+       "documentation": [
+-        "docs/subsystems/model-library.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "model-library-product-pilot": {
+@@ -3206,7 +3200,7 @@
+         "Generated fixtures prove the workflow only; they are not publisher-qualified models, production signing keys or current online trust."
+       ],
+       "documentation": [
+-        "docs/subsystems/model-library.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "runtime-package": {
+@@ -3420,7 +3414,7 @@
+         "Current production Runtime Package operations are disabled; isolated local-manifest tests do not prove a live installation path. Remote catalog, mirrors and offline-full distribution remain unimplemented."
+       ],
+       "documentation": [
+-        "docs/subsystems/ai-runtime.md"
++        "docs/subsystems/ai-system.md"
+       ]
+     },
+     "settings-paths": {
+@@ -3639,7 +3633,8 @@
+       ],
+       "documentation": [
+         "docs/subsystems/gui-shell.md",
+-        "docs/subsystems/settings-recovery.md"
++        "docs/subsystems/local-host.md",
++        "docs/subsystems/library-lifecycle.md"
+       ]
+     },
+     "desktop-shell": {
+@@ -3873,8 +3868,7 @@
+       ],
+       "documentation": [
+         "docs/subsystems/gui-shell.md",
+-        "docs/subsystems/local-host.md",
+-        "docs/subsystems/work-mode.md"
++        "docs/subsystems/local-host.md"
+       ]
+     },
+     "official-model-catalog-release": {
+@@ -4075,8 +4069,8 @@
+         "Catalog release admission is not Fresh Trust Install Admission and authorizes no model payload transfer."
+       ],
+       "documentation": [
+-        "docs/subsystems/model-library.md",
+-        "docs/subsystems/platform-release.md"
++        "docs/subsystems/ai-system.md",
++        "docs/platform/BUILD-AND-RELEASE.md"
+       ]
+     },
+     "release-packaging": {
+@@ -4200,7 +4194,7 @@
+         "A passing local preflight does not prove external signing, notarization or distribution gates completed."
+       ],
+       "documentation": [
+-        "docs/subsystems/platform-release.md"
++        "docs/platform/BUILD-AND-RELEASE.md"
+       ]
+     },
+     "agent-governance": {
+@@ -4327,7 +4321,7 @@
+         "TASK is required for matched continuity or recovery work; archived checkpoints are historical evidence, never additional task authorization."
+       ],
+       "documentation": [
+-        "docs/subsystems/engineering.md"
++        "docs/agents/engineering.md"
+       ]
+     },
+     "work-mode": {
+@@ -4449,8 +4443,8 @@
+       ],
+       "documentation": [
+         "docs/subsystems/gui-shell.md",
+-        "docs/subsystems/work-mode.md",
+-        "docs/subsystems/media-handoff.md"
++        "docs/subsystems/local-host.md",
++        "docs/subsystems/library-lifecycle.md"
+       ]
+     }
+   }
+--- before/.codeindex/module-map.schema.json
++++ after/.codeindex/module-map.schema.json
+@@ -377,7 +377,7 @@
+           "items": {
+             "type": "string",
+             "maxLength": 240,
+-            "pattern": "^docs/subsystems/[a-z0-9-]+\\.md$"
++            "pattern": "^docs/(?:(?:subsystems|agents)/[a-z0-9-]+|(?:platform|product)/[A-Za-z0-9-]+)\\.md$"
+           }
+         }
+       }
+--- before/AGENTS.md
++++ after/AGENTS.md
+@@ -19,7 +19,7 @@
+ | 明确产品与本次目标 | [产品基准](docs/product/PRODUCT-FOUNDATION.md)、[TASK](TASK.md)；接续查[当前状态](docs/handoff/CURRENT-STATE.md) | 范围归TASK；实际资格归CURRENT-STATE；跨系列责任归[主台账](docs/tasks/TASK-REGISTRY.md) |
+ | 定位功能、接口、状态或平台实现 | [子系统目录](docs/subsystems/README.md)→所属专题的行为/机制正文与源码；跨层结构查[架构](ARCHITECTURE.md) | 机制归模块；用户契约/目标归[产品规格](docs/product/README.md) |
+ | 界面外壳、页面/窗口组成、前端状态或连接恢复 | [GUI系统说明](docs/subsystems/gui-shell.md)→相关场景与模块源码 | 跨层界面机制归GUI/所属模块，功能行为归现有规格；不写进DESIGN |
+-| 开发、诊断、Git或准备环境 | [CONTRIBUTING](CONTRIBUTING.md)相关章节；命令以package.json为准 | 工程方法归指南，执行证据归本任务检查点 |
++| 开发、诊断、Git、环境或构建发行 | [CONTRIBUTING](CONTRIBUTING.md)及[工程指南](docs/agents/engineering.md)；交付查[构建发行](docs/platform/BUILD-AND-RELEASE.md)，命令以package.json为准 | 开发/交付流程归指南，执行证据归检查点；它们不列软件子系统 |
+ | 编写或审查代码 | [开发规范](docs/code-standards.md)相关保证与所属子系统 | 通用保证归规范，局部保证归模块/测试；审查绑定候选 |
+ | 添加/删减/调整组件或影响UI/UX，含后端等待/错误/恢复反馈 | [DESIGN](DESIGN.md)、[统一交互场景索引](docs/design/INTERACTIONS.md#按场景定位)、[视觉与交互验收](docs/agents/ui-ux-acceptance.md#视觉与交互分别验收) | 最终候选分别比对视觉、交互与适用失败恢复；视觉归DESIGN，行为归INTERACTIONS，实测/差异/复验归报告 |
+ | 真实资料、AI、原生或安装验收 | [真实验收](docs/agents/ui-ux-acceptance.md)、所属模块、开发指南§5 | 允许现有真实Worker/外部推理；只用现有模型、不下载权重；证据与缺口分别记录 |
+--- before/ARCHITECTURE.md
++++ after/ARCHITECTURE.md
+@@ -1,6 +1,8 @@
+ # DAM 技术架构
+ 
+ 本文解释稳定结构、责任和平台差异。完整[子系统目录](docs/subsystems/README.md)连接当前运行链、模块、源码与验证；产品目标看[产品基准](docs/product/PRODUCT-FOUNDATION.md)，实际版本/资格仅看[CURRENT-STATE](docs/handoff/CURRENT-STATE.md)，详细目标看[规格目录](docs/product/specs/README.md)。源码存在不证明用户功能完成。
++
++一级软件系统按GUI与窗口、应用Host与系统集成、资料库与素材、AI能力与执行、搜索与检索组织。页面里的业务仍由相应数据/执行拥有者处理；开发审查/反馈与构建发行是工程资料，未来范围是产品规格，不作为第六个运行系统。此归类只是文档入口，不重写实际进程或权限。
+ 
+ ## 1. 进程与客户端
+ 
+--- before/CONTRIBUTING.md
++++ after/CONTRIBUTING.md
+@@ -91,6 +91,8 @@
+ AI开发直接按[AGENTS](AGENTS.md)的任务导航定位唯一正文；功能/机制从[子系统目录](docs/subsystems/README.md)进入，目标细节从[规格目录](docs/product/specs/README.md)进入。不增加独立文档总入口或要求先遍历目录。源码旁README只解释局部拥有者，跨层专题解释协作，互相引用而非复制全文。
+ 
+ README介绍产品；产品基准保存目标；ARCHITECTURE解释结构；CONTRIBUTING说明工程方式；AGENTS保存四类简短常驻约定与任务导航。
++
++软件机制按[五个子系统](docs/subsystems/README.md)组织：GUI、Host系统集成、资料库、AI、检索。开发协作与反馈见[工程指南](docs/agents/engineering.md)，构建/签名/发布见[交付指南](docs/platform/BUILD-AND-RELEASE.md)，未来/可选能力与退休范围见[产品范围](docs/product/CAPABILITY-SCOPE.md)；后面三类不是软件运行子系统。机器目录的topics与guides分别维护，任务路由仍可同时给出相关系统和指南；不把多个内部模块强制平铺成多个一级系统。
+ DESIGN独占视觉规范，CURRENT-STATE独占可用能力与运行身份，TASK保存当前任务；[任务主台账](docs/tasks/TASK-REGISTRY.md)独占跨系列状态与剩余条件。其他文档链接，不复制实时快照。
+ 界面技术系统从[GUI系统说明](docs/subsystems/gui-shell.md)进入：启动/路由、状态投影、Client/Host通信、草稿与恢复机制归系统/模块说明；功能行为仍归已有交互/产品规格，不以“涉及UI”为由写进DESIGN，也不在系统说明重建第二套设计token或功能规格。
+ 每次修改文档，写入前按以下职责选择目标，写入后检查差异是否混入其他职责；现存章节的位置不构成继续追加同类内容的依据。
+--- before/TASK.md
++++ after/TASK.md
+@@ -1,4 +1,8 @@
+-# 当前任务：统一交互正文与视觉/交互验收
++# 当前任务：五个软件子系统归并
++
++已按用户确认归并GUI、Host系统集成、资料库、AI、搜索五个一级软件正文；工程治理/构建发行/未来范围改归辅助指南/产品范围，机器topics/guides分列。19篇524个内容单元全部映射，15个旧路径仅兼容，原锚点/例外/来源保全；99个本任务路径及必要导航工具同步。结构/路由/治理测试通过，五项全新低思考短任务按实际轨迹三层核对在本轮范围通过，失败与局限保留。原字节、去向及验证归[本轮检查点](docs/checkpoints/subsystem-consolidation-20261016/README.md)。未改产品进程/代码、模型/资料库或运行资格，未提交/推送/发布；本轮目标完成后停止。
++
++## 前项：统一交互正文与视觉/交互验收
+ 
+ 用户确认“统一交互正文＋场景索引”，比对与放行方法继续唯一归真实验收流程。已合并三份现行交互的71个块并保留旧路径/锚点，按表面保留输入/原生差异；完善组件增删改的最终候选视觉、交互及失败恢复验收。结构/保全/引用和路由检查通过，四项全新低思考只读探查消费实际正文，在本次计划范围通过；不等于真实UI/动画已验。DESIGN视觉正文/token未变，未改产品/资料库，未提交/推送/发布。原字节、去向、实际轨迹与局限见[本轮检查点](docs/checkpoints/interaction-visual-acceptance-20261015/README.md)。本轮目标完成后停止。
+ 
+--- before/docs/adr/indexes/reading-context.md
++++ after/docs/adr/indexes/reading-context.md
+@@ -87,32 +87,32 @@
+ 
+ | 决策范围 | 主题 | 当前系统 |
+ | --- | --- | --- |
+-| 0001–0008 | 平台与执行边界 | [platform-release](../../subsystems/platform-release.md) |
+-| 0009–0039 | 工作台与导航 | [asset-workspace](../../subsystems/asset-workspace.md) |
+-| 0040–0076 | 筛选、审查与回收站 | [library-lifecycle](../../subsystems/library-lifecycle.md) |
+-| 0077–0104 | 批量操作与冲突 | [organization](../../subsystems/organization.md) |
+-| 0105–0118 | Candidate与入库 | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0119–0150 | 预览、颜色与分析证据 | [ai-analysis](../../subsystems/ai-analysis.md) |
+-| 0151–0167 | 模型与扩展生命周期 | [model-library](../../subsystems/model-library.md) |
+-| 0168–0180 | 渐进分析与资源 | [ai-analysis](../../subsystems/ai-analysis.md) |
++| 0001–0008 | 平台与执行边界 | [platform-release](../../platform/BUILD-AND-RELEASE.md) |
++| 0009–0039 | 工作台与导航 | [asset-workspace](../../subsystems/gui-shell.md#asset-workspace) |
++| 0040–0076 | 筛选、审查与回收站 | [library-lifecycle](../../subsystems/library-lifecycle.md#library) |
++| 0077–0104 | 批量操作与冲突 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0105–0118 | Candidate与入库 | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0119–0150 | 预览、颜色与分析证据 | [ai-analysis](../../subsystems/ai-system.md#requests) |
++| 0151–0167 | 模型与扩展生命周期 | [model-library](../../subsystems/ai-system.md#models) |
++| 0168–0180 | 渐进分析与资源 | [ai-analysis](../../subsystems/ai-system.md#requests) |
+ | 0181–0184 | 解释检索与临时查询 | [asset-discovery](../../subsystems/asset-discovery.md) |
+-| 0185–0222 | 备份、模型信任与安装 | [model-library](../../subsystems/model-library.md) |
+-| 0223–0255 | 模型存储与清理恢复 | [model-library](../../subsystems/model-library.md) |
+-| 0256–0274 | 存储清理结果与可访问导航 | [model-library](../../subsystems/model-library.md) |
+-| 0275–0291 | 资料库身份与存储角色 | [library-lifecycle](../../subsystems/library-lifecycle.md) |
+-| 0292–0300 | 添加素材与来源保护 | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0301–0334 | 引用源操作与恢复 | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0335–0350 | Copy与复合原件 | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0351–0370 | 归属转换与元数据写回 | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0371–0382 | 元数据便携与合并 | [organization](../../subsystems/organization.md) |
+-| 0383–0412 | 导出、交付与性能 | [media-handoff](../../subsystems/media-handoff.md) |
+-| 0413–0414 | 搜索优先组织 | [organization](../../subsystems/organization.md) |
+-| 0415–0439 | 自定义字段与迁移 | [organization](../../subsystems/organization.md) |
+-| 0440–0457 | 文本字段、检索与编辑 | [organization](../../subsystems/organization.md) |
+-| 0458–0464 | 数字字段、显示与精度 | [organization](../../subsystems/organization.md) |
+-| 0465–0471 | 手工编辑撤销与内存 | [organization](../../subsystems/organization.md) |
+-| 0472–0481 | 布尔与缺失字段初始化 | [organization](../../subsystems/organization.md) |
+-| 0482–0493 | 现行核心、双端与原生取舍 | [local-host](../../subsystems/local-host.md) |
++| 0185–0222 | 备份、模型信任与安装 | [model-library](../../subsystems/ai-system.md#models) |
++| 0223–0255 | 模型存储与清理恢复 | [model-library](../../subsystems/ai-system.md#models) |
++| 0256–0274 | 存储清理结果与可访问导航 | [model-library](../../subsystems/ai-system.md#models) |
++| 0275–0291 | 资料库身份与存储角色 | [library-lifecycle](../../subsystems/library-lifecycle.md#library) |
++| 0292–0300 | 添加素材与来源保护 | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0301–0334 | 引用源操作与恢复 | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0335–0350 | Copy与复合原件 | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0351–0370 | 归属转换与元数据写回 | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0371–0382 | 元数据便携与合并 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0383–0412 | 导出、交付与性能 | [media-handoff](../../subsystems/local-host.md#handoff) |
++| 0413–0414 | 搜索优先组织 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0415–0439 | 自定义字段与迁移 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0440–0457 | 文本字段、检索与编辑 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0458–0464 | 数字字段、显示与精度 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0465–0471 | 手工编辑撤销与内存 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0472–0481 | 布尔与缺失字段初始化 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0482–0493 | 现行核心、双端与原生取舍 | [local-host](../../subsystems/local-host.md#clients) |
+ 
+ ## Conflict and Drift Queue
+ 
+--- before/docs/adr/indexes/topics/add-assets.md
++++ after/docs/adr/indexes/topics/add-assets.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/storage-intake.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#intake)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/backup-trust.md
++++ after/docs/adr/indexes/topics/backup-trust.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/model-library.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/ai-system.md#models)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/batch-conflicts.md
++++ after/docs/adr/indexes/topics/batch-conflicts.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/capture.md
++++ after/docs/adr/indexes/topics/capture.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/storage-intake.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#intake)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/compound-originals.md
++++ after/docs/adr/indexes/topics/compound-originals.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/storage-intake.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#intake)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/custom-fields.md
++++ after/docs/adr/indexes/topics/custom-fields.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/custom-number.md
++++ after/docs/adr/indexes/topics/custom-number.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/custom-text.md
++++ after/docs/adr/indexes/topics/custom-text.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/export.md
++++ after/docs/adr/indexes/topics/export.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/media-handoff.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/local-host.md#handoff)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/library-storage.md
++++ after/docs/adr/indexes/topics/library-storage.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/library-lifecycle.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#library)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/local-host.md
++++ after/docs/adr/indexes/topics/local-host.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/local-host.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/local-host.md#clients)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/manual-undo.md
++++ after/docs/adr/indexes/topics/manual-undo.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/missing-initialization.md
++++ after/docs/adr/indexes/topics/missing-initialization.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/model-extension.md
++++ after/docs/adr/indexes/topics/model-extension.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-按问题分流：模型制品/安装/库存见[模型子系统](../../../subsystems/model-library.md)；插件、SDK与MCP见[扩展目标与边界](../../../subsystems/optional-targets.md#插件sdk与mcp接入)。扩展条款先核对[0484现行修订](../../0484-extension-contracts-and-deferred-agent-development-access.md)和[0483核心范围](../../0483-ai-plus-core-product-and-extension-boundaries.md)，具体贡献面见[0154详细契约](../../../product/specs/model-extension.md#adr-0154)；下表保留来源分组，不以编号先后决定效力。其他主题见[主题目录](../topics.md)。
++按问题分流：模型制品/安装/库存见[模型子系统](../../../subsystems/ai-system.md#models)；插件、SDK与MCP见[扩展目标与边界](../../../product/CAPABILITY-SCOPE.md#插件sdk与mcp接入)。扩展条款先核对[0484现行修订](../../0484-extension-contracts-and-deferred-agent-development-access.md)和[0483核心范围](../../0483-ai-plus-core-product-and-extension-boundaries.md)，具体贡献面见[0154详细契约](../../../product/specs/model-extension.md#adr-0154)；下表保留来源分组，不以编号先后决定效力。其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/model-storage-lifecycle.md
++++ after/docs/adr/indexes/topics/model-storage-lifecycle.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/model-library.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/ai-system.md#models)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/modern-boundaries.md
++++ after/docs/adr/indexes/topics/modern-boundaries.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/local-host.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/local-host.md#clients)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/ocr.md
++++ after/docs/adr/indexes/topics/ocr.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/ocr.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/ai-system.md#ocr)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/platform-runtime.md
++++ after/docs/adr/indexes/topics/platform-runtime.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/platform-release.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../platform/BUILD-AND-RELEASE.md)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/portability.md
++++ after/docs/adr/indexes/topics/portability.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/preview-analysis.md
++++ after/docs/adr/indexes/topics/preview-analysis.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/ai-analysis.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/ai-system.md#requests)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/progressive-ai.md
++++ after/docs/adr/indexes/topics/progressive-ai.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/ai-analysis.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/ai-system.md#requests)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/referenced-operations.md
++++ after/docs/adr/indexes/topics/referenced-operations.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/storage-intake.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#intake)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/review-trash.md
++++ after/docs/adr/indexes/topics/review-trash.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/library-lifecycle.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#library)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/search-first-organization.md
++++ after/docs/adr/indexes/topics/search-first-organization.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/organization.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#organization)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/storage-review.md
++++ after/docs/adr/indexes/topics/storage-review.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/model-library.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/ai-system.md#models)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/work-mode.md
++++ after/docs/adr/indexes/topics/work-mode.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/work-mode.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/gui-shell.md#reference-windows)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/workspace.md
++++ after/docs/adr/indexes/topics/workspace.md
+@@ -2,9 +2,9 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/asset-workspace.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/gui-shell.md#asset-workspace)，其他主题见[主题目录](../topics.md)。
+ 
+-本表覆盖工作台及早期收录决定，不是设置任务的必读清单。设置分类/搜索/保存体验直接查[设置专题及其行为规格](../../../subsystems/settings-recovery.md)；只核对本次触及的决定，不把下面历史收录条目当设置要求。
++本表覆盖工作台及早期收录决定，不是设置任务的必读清单。设置分类/搜索/保存体验直接查[设置专题及其行为规格](../../../subsystems/local-host.md#configuration)；只核对本次触及的决定，不把下面历史收录条目当设置要求。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/adr/indexes/topics/writeback.md
++++ after/docs/adr/indexes/topics/writeback.md
+@@ -2,7 +2,7 @@
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+-运行关系见[相关子系统](../../../subsystems/storage-intake.md)，其他主题见[主题目录](../topics.md)。
++运行关系见[相关子系统](../../../subsystems/library-lifecycle.md#intake)，其他主题见[主题目录](../topics.md)。
+ 
+ | 决定 | 性质 | 声明状态 |
+ | --- | --- | --- |
+--- before/docs/agents/engineering.md
++++ after/docs/agents/engineering.md
+@@ -0,0 +1,57 @@
++# 开发协作、导航、审查与反馈
++
++本页是开发/交付指南或产品范围说明，不是软件运行子系统；产品目标、当前实现与运行验收分别维护。软件结构见[五个子系统](../subsystems/README.md)。
++
++## 职责与状态权威
++
++AGENTS是AI开发的首要入口，按任务直接导航到所属正文，不经过独立文档总入口；开发规范保存稳定保证，指南保存方法，子系统/模块保存具体契约。当前任务、跨系列责任、实际资格和证据各有唯一入口。文档与反馈数据不是执行授权。
++
++[开发规范](../code-standards.md)按工程保证、适用场景、审查动作和证据入口组织，包含共享变更扩大回归、已有失败处置、并发/时序反证与候选交付检查；这里不重复维护规则正文。
++
++## 正式入口与运行链
++
++首入口按当前问题选择，功能/体验从所属专题与行为契约进入，取舍比较可从ADR进入；任何任务仍按主题/影响范围核对相关决定，不固定检索顺序或排除任务类型。实现类任务沿用户目标→所属正文/任务路由→相关决定、必要契约与源码→相关问题/经验转检查→实现/验证→原问题复验→经验事件/日期→候选评估→规范或保护测试。一个事故一主记录可关联多模块，闭源本地记录不依赖GitHub评论。
++
++AI读取材料改变含义、适用范围或检索链路时，批次结束按[维护协议](../../CONTRIBUTING.md#document-retrieval-validation)执行全新低思考只读探查：短任务不提示阅读路径或报告检索过程；主Agent按三层标准审查实际轨迹、归因并修对应拥有者，再以新上下文复验失败及受影响相邻范围。关键缺口不作通过，不挑选成功结果。纯排版只做适用结构检查；详细判据/状态/闭环唯一归指南，过程证据留本任务检查点。
++
++## 失败、取消与兼容保护
++
++新复发才记新事件/复盘日期；同一事故重试/多渠道不增加次数。三个不同日期列候选，严重安全/数据/越权立即处理；提升后保留来源引用，未提升说明原因。输出预算延后完整条目，不截断保证或假称无问题。
++
++## 技术与平台边界
++
++物理目录拥有者、业务专题和任务路由多对多；trusted tracked覆盖与未跟踪候选分列。静态索引不证明运行资格，来源冲突要核对用户最新决定与具体替代范围。
++
++## 源码与详细机制
++
++- [AGENTS.md](../../AGENTS.md)
++- [CONTRIBUTING.md](../../CONTRIBUTING.md)
++- [docs/code-standards.md](../code-standards.md)
++- [LESSONS.md](../../LESSONS.md)
++- [docs/agents/DEVELOPMENT-PROBLEMS.md](DEVELOPMENT-PROBLEMS.md)
++- [.codeindex/module-map.json](../../.codeindex/module-map.json)
++- [scripts/agent-context-router.mjs](../../scripts/agent-context-router.mjs)
++- [scripts/development-feedback.mjs](../../scripts/development-feedback.mjs)
++
++- [文档结构与迁移审计](../../scripts/check-documentation.py)
++- [明确候选的文档同步检查](../../scripts/check-docs-sync.py)
++- [治理行为测试](../../scripts/documentation-governance.test.py)
++- [路由回归](../../scripts/agent-context-router.test.mjs)
++- [反馈/三日期回归](../../scripts/development-feedback.test.mjs)
++
++- [ADR类型/主题元数据路由](../../scripts/adr-context.mjs)
++- [ADR有界路由行为测试](../../scripts/adr-context.test.mjs)
++
++## 验证与维护
++
++以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++
++- `npm run test-agent-context-router`
++- `npm run context:check`
++- `python3 scripts/check-adr-router.py`
++- `python3 scripts/check-agent-context.py`
++- `python3 scripts/check-docs-sync.py`
++
++完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
++
++改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/platform/BUILD-AND-RELEASE.md
++++ after/docs/platform/BUILD-AND-RELEASE.md
+@@ -0,0 +1,44 @@
++# 构建、打包、签名与发行
++
++本页是开发/交付指南或产品范围说明，不是软件运行子系统；产品目标、当前实现与运行验收分别维护。软件结构见[五个子系统](../subsystems/README.md)。
++
++## 职责与状态权威
++
++构建规则拥有Worker/本地import/原生资源的产物闭包，平台adapter拥有OS行为，发布门管理签名候选/证据，不授予库操作或新资料/费用权限。package.json是实际命令入口。
++
++## 正式入口与运行链
++
++锁定依赖→平台原生构建/校验→electron-vite主/预加载/共享UI→资源复制/身份生成→本地候选→对应平台打包→独立安装/签名/更新/发布证据。Pi与Swift/C++资源由自己的生成/seal清单进入产品，不从开发目录侥幸读取。
++
++## 失败、取消与兼容保护
++
++声明版本、锁版本、实际依赖与受测产物分清；缺资源/签名/信任输入明确拒绝。不能手工改摘要伪造闭包或把本地tag当发布成功。CI/交叉编译只证明各自检查，安装、系统权限/凭据、真实模型必须独立证据。
++
++## 技术与平台边界
++
++Windows NSIS/原生DLL/Media Foundation与macOS DMG/helper/AppKit/签名公证分别验证；Linux/WSL不替代Windows。四份既有CI复用，不为对齐Magpie文件名造Docker/Makefile或公开预览托管。
++
++## 源码与详细机制
++
++- [src/main/platform/path-resolver.ts](../../src/main/platform/path-resolver.ts)
++- [src/main/packaging/release-flow-governance.ts](../../src/main/packaging/release-flow-governance.ts)
++- [scripts/run-electron-builder.mjs](../../scripts/run-electron-builder.mjs)
++- [package.json](../../package.json)
++- [.github/workflows/cross-platform-governance.yml](../../.github/workflows/cross-platform-governance.yml)
++- [.github/workflows/macos-package-artifact.yml](../../.github/workflows/macos-package-artifact.yml)
++- [.github/workflows/release-packaging-dry-run.yml](../../.github/workflows/release-packaging-dry-run.yml)
++- [.github/workflows/release-signed-candidate.yml](../../.github/workflows/release-signed-candidate.yml)
++
++## 验证与维护
++
++以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++
++- `npm run test-release-flow-governance`
++- `npm run test-release-candidate-governance`
++- `npm run test-release-checksums`
++- `npm run test-package-smoke`
++- `npm run test-release-update-metadata`
++
++完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
++
++改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/platform/README.md
++++ after/docs/platform/README.md
+@@ -1,6 +1,6 @@
+ # 平台契约、工具与证据
+ 
+-先按[平台与交付子系统](../subsystems/platform-release.md)选择正式路径；本目录保留平台机制、工具方法、目标协议与日期证据。文件名/目录存在不代表已运行或已发布。Windows、macOS、WSL和Browser资格不能替代；旧受限通道的说明只适用于对应保留模块。
++先按[构建与发行指南](BUILD-AND-RELEASE.md)选择正式交付路径；这是工程流程，不是软件运行子系统。运行中的系统适配见[Host系统集成](../subsystems/local-host.md)，本目录保留平台机制、工具方法、目标协议与日期证据。文件名/目录存在不代表已运行或已发布。Windows、macOS、WSL和Browser资格不能替代；旧受限通道的说明只适用于对应保留模块。
+ 
+ | 主题 | 职责/来源性质 |
+ | --- | --- |
+--- before/docs/product/CAPABILITY-SCOPE.md
++++ after/docs/product/CAPABILITY-SCOPE.md
+@@ -0,0 +1,43 @@
++# 能力范围、可选目标与退休边界
++
++本页是开发/交付指南或产品范围说明，不是软件运行子系统；产品目标、当前实现与运行验收分别维护。软件结构见[五个子系统](../subsystems/README.md)。
++
++## 职责与状态权威
++
++产品基准拥有核心/可选/远景范围。Custom Field长尾、复杂导出/恢复、扩展SDK、录屏producer等按有效目标规格保存；不由目录/ADR存在判定交付。
++
++## 正式入口与运行链
++
++未来明确任务先读对应目标规格与重大取舍，核对当前实现消费者，再决定具体实施。当前本地Copy/理解/检索/工作集复用不依赖完整生态、云开发/MCP或每项未来状态机先完成。
++
++### 插件、SDK与MCP接入
++
++扩展接入首先核对[0484的现行边界与阶段](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)及[0483核心/可选能力范围](../adr/0483-ai-plus-core-product-and-extension-boundaries.md)：公共能力契约、MCP工具/资源适配与隔离插件运行时各有职责，Accepted目标不等于已有公开API。具体贡献面/权限设计按[扩展面详细契约](specs/model-extension.md#adr-0154)和[扩展决定目录](../adr/indexes/topics/model-extension.md)选择适用条款；讨论稿仅保留来源，不取代现行修订。
++
++当前可复用的业务/权限边界从[Local Host](../subsystems/local-host.md)及源码旁README核对，不把现有WorkspaceClient/内部IPC当公共插件SDK。模型制品与插件包不同，前者的当前实现归[模型专题](../subsystems/ai-system.md#models)。
++
++## 失败、取消与兼容保护
++
++目标未实现不等于可以删要求，Accepted不等于Implemented。退休只替代被明确点名的能力/条款；来源隐私/原件/事务保护仍按适用范围保留。不得通过文档整理重新开放网页采集、素材下载执行或任意插件权限。
++
++## 技术与平台边界
++
++已退休嵌入式网页/网站登录/外部网站搜索与素材任务下载，保留本地Copy、模型下载产品能力及既有用户数据/schema兼容。模型权重下载产品能力不等于本轮验收允许下载。
++
++## 源码与详细机制
++
++- [docs/product/PRODUCT-FOUNDATION.md](PRODUCT-FOUNDATION.md)
++- [docs/adr/README.md](../adr/README.md)
++- [docs/product/PLUGIN-PLATFORM-DISCUSSION-20260913.md](PLUGIN-PLATFORM-DISCUSSION-20260913.md)
++- [docs/product/WEB-COLLECTION-RETIREMENT-20260913.md](WEB-COLLECTION-RETIREMENT-20260913.md)
++
++## 验证与维护
++
++以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++
++- `npm run test-web-retirement`
++- `npm run test-asset-authority-baseline`
++
++完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
++
++改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/product/README.md
++++ after/docs/product/README.md
+@@ -1,6 +1,8 @@
+ # 产品契约、目标规格与来源
+ 
+ 产品目标以[PRODUCT-FOUNDATION](PRODUCT-FOUNDATION.md)为入口。当前机制看[子系统](../subsystems/README.md)，本轮提炼的[详细能力规格](specs/README.md)按主题保留全部有效细节。
++
++核心/可选/未来及退休范围查[能力范围](CAPABILITY-SCOPE.md)；其中扩展SDK/MCP等目标有自己的状态与有效决定，不因预留接口成为已交付软件子系统。
+ 
+ 有效能力契约（不等于已交付）是能力范围内契约，不代表全部已交付；proposal保持原确认状态，原计划，不自动执行不是执行队列，dated-evidence只证明当时范围。当前明确用户决定仅替代其具体范围。UI操作归[交互](../design/README.md)，视觉只归DESIGN，实际资格归CURRENT-STATE。
+ 
+--- before/docs/product/specs/README.md
++++ after/docs/product/specs/README.md
+@@ -6,31 +6,31 @@
+ 
+ | 决策范围/主题 | 详细要求 | 当前系统入口 |
+ | --- | --- | --- |
+-| 0001–0008 平台与执行边界 | 本组保留在ADR正文 | [platform-release](../../subsystems/platform-release.md) |
+-| 0009–0039 工作台与导航 | [详细契约](workspace.md) | [asset-workspace](../../subsystems/asset-workspace.md) |
+-| 0040–0076 筛选、审查与回收站 | [详细契约](review-trash.md) | [library-lifecycle](../../subsystems/library-lifecycle.md) |
+-| 0077–0104 批量操作与冲突 | [详细契约](batch-conflicts.md) | [organization](../../subsystems/organization.md) |
+-| 0105–0118 Candidate与入库 | [详细契约](capture.md) | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0119–0150 预览、颜色与分析证据 | [详细契约](preview-analysis.md) | [ai-analysis](../../subsystems/ai-analysis.md) |
+-| 0151–0167 模型与扩展生命周期 | [详细契约](model-extension.md) | [model-library](../../subsystems/model-library.md) |
+-| 0168–0180 渐进分析与资源 | 本组保留在ADR正文 | [ai-analysis](../../subsystems/ai-analysis.md) |
++| 0001–0008 平台与执行边界 | 本组保留在ADR正文 | [platform-release](../../platform/BUILD-AND-RELEASE.md) |
++| 0009–0039 工作台与导航 | [详细契约](workspace.md) | [asset-workspace](../../subsystems/gui-shell.md#asset-workspace) |
++| 0040–0076 筛选、审查与回收站 | [详细契约](review-trash.md) | [library-lifecycle](../../subsystems/library-lifecycle.md#library) |
++| 0077–0104 批量操作与冲突 | [详细契约](batch-conflicts.md) | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0105–0118 Candidate与入库 | [详细契约](capture.md) | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0119–0150 预览、颜色与分析证据 | [详细契约](preview-analysis.md) | [ai-analysis](../../subsystems/ai-system.md#requests) |
++| 0151–0167 模型与扩展生命周期 | [详细契约](model-extension.md) | [model-library](../../subsystems/ai-system.md#models) |
++| 0168–0180 渐进分析与资源 | 本组保留在ADR正文 | [ai-analysis](../../subsystems/ai-system.md#requests) |
+ | 0181–0184 解释检索与临时查询 | 本组保留在ADR正文 | [asset-discovery](../../subsystems/asset-discovery.md) |
+-| 0185–0222 备份、模型信任与安装 | [详细契约](backup-trust.md) | [model-library](../../subsystems/model-library.md) |
+-| 0223–0255 模型存储与清理恢复 | [详细契约](model-storage-lifecycle.md) | [model-library](../../subsystems/model-library.md) |
+-| 0256–0274 存储清理结果与可访问导航 | [详细契约](storage-review.md) | [model-library](../../subsystems/model-library.md) |
+-| 0275–0291 资料库身份与存储角色 | [详细契约](library-storage.md) | [library-lifecycle](../../subsystems/library-lifecycle.md) |
+-| 0292–0300 添加素材与来源保护 | 本组保留在ADR正文 | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0301–0334 引用源操作与恢复 | [详细契约](referenced-operations.md) | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0335–0350 Copy与复合原件 | [详细契约](compound-originals.md) | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0351–0370 归属转换与元数据写回 | [详细契约](writeback.md) | [storage-intake](../../subsystems/storage-intake.md) |
+-| 0371–0382 元数据便携与合并 | [详细契约](portability.md) | [organization](../../subsystems/organization.md) |
+-| 0383–0412 导出、交付与性能 | [详细契约](export.md) | [media-handoff](../../subsystems/media-handoff.md) |
+-| 0413–0414 搜索优先组织 | 本组保留在ADR正文 | [organization](../../subsystems/organization.md) |
+-| 0415–0439 自定义字段与迁移 | [详细契约](custom-fields.md) | [organization](../../subsystems/organization.md) |
+-| 0440–0457 文本字段、检索与编辑 | [详细契约](custom-text.md) | [organization](../../subsystems/organization.md) |
+-| 0458–0464 数字字段、显示与精度 | [详细契约](custom-number.md) | [organization](../../subsystems/organization.md) |
+-| 0465–0471 手工编辑撤销与内存 | [详细契约](manual-undo.md) | [organization](../../subsystems/organization.md) |
+-| 0472–0481 布尔与缺失字段初始化 | [详细契约](missing-initialization.md) | [organization](../../subsystems/organization.md) |
+-| 0482–0493 现行核心、双端与原生取舍 | 本组保留在ADR正文 | [local-host](../../subsystems/local-host.md) |
++| 0185–0222 备份、模型信任与安装 | [详细契约](backup-trust.md) | [model-library](../../subsystems/ai-system.md#models) |
++| 0223–0255 模型存储与清理恢复 | [详细契约](model-storage-lifecycle.md) | [model-library](../../subsystems/ai-system.md#models) |
++| 0256–0274 存储清理结果与可访问导航 | [详细契约](storage-review.md) | [model-library](../../subsystems/ai-system.md#models) |
++| 0275–0291 资料库身份与存储角色 | [详细契约](library-storage.md) | [library-lifecycle](../../subsystems/library-lifecycle.md#library) |
++| 0292–0300 添加素材与来源保护 | 本组保留在ADR正文 | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0301–0334 引用源操作与恢复 | [详细契约](referenced-operations.md) | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0335–0350 Copy与复合原件 | [详细契约](compound-originals.md) | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0351–0370 归属转换与元数据写回 | [详细契约](writeback.md) | [storage-intake](../../subsystems/library-lifecycle.md#intake) |
++| 0371–0382 元数据便携与合并 | [详细契约](portability.md) | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0383–0412 导出、交付与性能 | [详细契约](export.md) | [media-handoff](../../subsystems/local-host.md#handoff) |
++| 0413–0414 搜索优先组织 | 本组保留在ADR正文 | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0415–0439 自定义字段与迁移 | [详细契约](custom-fields.md) | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0440–0457 文本字段、检索与编辑 | [详细契约](custom-text.md) | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0458–0464 数字字段、显示与精度 | [详细契约](custom-number.md) | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0465–0471 手工编辑撤销与内存 | [详细契约](manual-undo.md) | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0472–0481 布尔与缺失字段初始化 | [详细契约](missing-initialization.md) | [organization](../../subsystems/library-lifecycle.md#organization) |
++| 0482–0493 现行核心、双端与原生取舍 | 本组保留在ADR正文 | [local-host](../../subsystems/local-host.md#clients) |
+ 
+ 修改契约前核对其来源、相互引用和明确替代范围。原文中的“当前项目没有/本次不运行”单独列为来源时代上下文，不当成长期禁令或当前事实。未来Custom Fields、复杂源操作/导出等依旧是目标，不扩张本次开发范围。
+--- before/docs/product/specs/backup-trust.md
++++ after/docs/product/specs/backup-trust.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[model-library](../../subsystems/model-library.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[model-library](../../subsystems/ai-system.md#models)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/batch-conflicts.md
++++ after/docs/product/specs/batch-conflicts.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[organization](../../subsystems/organization.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[organization](../../subsystems/library-lifecycle.md#organization)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/capture.md
++++ after/docs/product/specs/capture.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[storage-intake](../../subsystems/storage-intake.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[storage-intake](../../subsystems/library-lifecycle.md#intake)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/compound-originals.md
++++ after/docs/product/specs/compound-originals.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[storage-intake](../../subsystems/storage-intake.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[storage-intake](../../subsystems/library-lifecycle.md#intake)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/custom-fields.md
++++ after/docs/product/specs/custom-fields.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[organization](../../subsystems/organization.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[organization](../../subsystems/library-lifecycle.md#organization)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/custom-number.md
++++ after/docs/product/specs/custom-number.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[organization](../../subsystems/organization.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[organization](../../subsystems/library-lifecycle.md#organization)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/custom-text.md
++++ after/docs/product/specs/custom-text.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[organization](../../subsystems/organization.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[organization](../../subsystems/library-lifecycle.md#organization)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/export.md
++++ after/docs/product/specs/export.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[media-handoff](../../subsystems/media-handoff.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[media-handoff](../../subsystems/local-host.md#handoff)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/library-storage.md
++++ after/docs/product/specs/library-storage.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[library-lifecycle](../../subsystems/library-lifecycle.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[library-lifecycle](../../subsystems/library-lifecycle.md#library)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/manual-undo.md
++++ after/docs/product/specs/manual-undo.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[organization](../../subsystems/organization.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[organization](../../subsystems/library-lifecycle.md#organization)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/missing-initialization.md
++++ after/docs/product/specs/missing-initialization.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[organization](../../subsystems/organization.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[organization](../../subsystems/library-lifecycle.md#organization)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/model-extension.md
++++ after/docs/product/specs/model-extension.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-插件接入与公共契约从[扩展目标与边界](../../subsystems/optional-targets.md#插件sdk与mcp接入)进入，模型制品的当前机制另查[model-library](../../subsystems/model-library.md)；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++插件接入与公共契约从[扩展目标与边界](../CAPABILITY-SCOPE.md#插件sdk与mcp接入)进入，模型制品的当前机制另查[model-library](../../subsystems/ai-system.md#models)；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/model-storage-lifecycle.md
++++ after/docs/product/specs/model-storage-lifecycle.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[model-library](../../subsystems/model-library.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[model-library](../../subsystems/ai-system.md#models)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/portability.md
++++ after/docs/product/specs/portability.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[organization](../../subsystems/organization.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[organization](../../subsystems/library-lifecycle.md#organization)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/preview-analysis.md
++++ after/docs/product/specs/preview-analysis.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[ai-analysis](../../subsystems/ai-analysis.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[ai-analysis](../../subsystems/ai-system.md#requests)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/referenced-operations.md
++++ after/docs/product/specs/referenced-operations.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[storage-intake](../../subsystems/storage-intake.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[storage-intake](../../subsystems/library-lifecycle.md#intake)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/review-trash.md
++++ after/docs/product/specs/review-trash.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[library-lifecycle](../../subsystems/library-lifecycle.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[library-lifecycle](../../subsystems/library-lifecycle.md#library)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/storage-review.md
++++ after/docs/product/specs/storage-review.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[model-library](../../subsystems/model-library.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[model-library](../../subsystems/ai-system.md#models)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/workspace.md
++++ after/docs/product/specs/workspace.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[asset-workspace](../../subsystems/asset-workspace.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[asset-workspace](../../subsystems/gui-shell.md#asset-workspace)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/product/specs/writeback.md
++++ after/docs/product/specs/writeback.md
+@@ -2,7 +2,7 @@
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+-当前系统从[storage-intake](../../subsystems/storage-intake.md)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
++当前系统从[storage-intake](../../subsystems/library-lifecycle.md#intake)进入；当前实际能力/版本见[CURRENT-STATE](../../handoff/CURRENT-STATE.md)，交互与视觉分别归[交互目录](../../design/README.md)/[DESIGN](../../../DESIGN.md)。详细条款按下面独立主题定位，不全量装入每次上下文。
+ 
+ ## 主题导航
+ 
+--- before/docs/subsystems/README.md
++++ after/docs/subsystems/README.md
+@@ -1,42 +1,23 @@
+-# 功能与子系统目录
++# 软件子系统
+ 
+-这里按功能协作关系组织当前软件；一个子系统可以跨Host、Shared Client、Renderer、原生helper或Worker，不按一个文件夹等于一个完整功能。先选相关专题，再跟源码核对；任何任务都按主题与影响范围读取[相关ADR](../adr/README.md#read-protocol)及链接契约，理解既有取舍。有效目标、实际实现和运行资格分别维护。
++按运行中的状态/权限拥有者组织五个一级系统；一个系统可跨Main、Client、Renderer、原生helper与Worker，内部模块不再平铺成一级系统。按当前问题进入正文的阶段/场景索引，再查必要源码和相关决定；不要求读完五份说明。文档合并不改变进程、API、数据权威或产品资格。
+ 
+-设置分类/搜索/保存体验从[设置专题](settings-recovery.md)进入；插件、SDK、MCP接入从[扩展目标与边界](optional-targets.md#插件sdk与mcp接入)进入。模型权重的安装与存储仍归模型专题，不因同属可选能力而与插件运行时混为一谈。
++| 子系统 | 负责什么 | 先看哪些场景 |
++| --- | --- | --- |
++| [GUI与窗口系统](gui-shell.md) | 页面、外壳、设置/详情/预览、输入与状态投影、参考窗口呈现 | 启动/Client安装、导航/草稿、连接反馈、工作台内容、原生窗口；不拥有业务数据库 |
++| [应用Host与系统集成](local-host.md) | 单一可信进程、命名通信/角色、应用配置/会话/退出、平台系统能力与文件交接 | 双端生命周期、配置/路径迁移、媒体helper、拖出/ZIP/接收；不代替Library内容或AI资格 |
++| [资料库与素材管理](library-lifecycle.md) | 库身份/lease/事务、存储角色、Copy入库、文件夹/标签/笔记/工作集数据及恢复 | 开库/维护、原件/派生、人工优先、内容修订、媒体身份和旧库只读 |
++| [AI能力与执行](ai-system.md) | 连接/账户、模型制品、能力请求/后台任务、推理/资源、验证与提交协调 | 按连接→模型→请求→OCR/视觉能力→执行/释放定位；各阶段仍有独立状态 |
++| [搜索与检索](asset-discovery.md) | 词法/颜色/语义/图像检索，索引、快照/分页、模型空间与命中解释 | 查询/索引与向量生成分开，AI提供执行能力，Host保留权限与结果提交 |
+ 
+-| 功能/子系统 | 相关任务路由 | 实现定位线索 |
+-| --- | --- | --- |
+-| [GUI系统：界面外壳、状态与跨端协作](gui-shell.md) | desktop-shell, asset-workspace, settings-paths, work-mode | src/renderer/main.tsx、AppShell、browser-transport、命名Client与原生控制器 |
+-| [应用、双客户端与生命周期](local-host.md) | desktop-shell | src/main/index.ts、src/main/local-host |
+-| [资料库、持锁与维护](library-lifecycle.md) | asset-lifecycle, library-creation | src/main/active-library-runtime.ts、src/main/library-lifecycle |
+-| [原件、Copy入库与派生文件](storage-intake.md) | capture-intake, source-discovery | src/main/capture-intake、src/main/capture-intake |
+-| [素材工作台、详情与共享展示](asset-workspace.md) | asset-workspace | src/renderer/routes、src/renderer/components |
+-| [组织、标签、笔记与人工内容](organization.md) | asset-workspace, asset-lifecycle | src/main/library-lifecycle、src/main/library-lifecycle |
+-| [文字、颜色、语义与图像检索](asset-discovery.md) | asset-discovery | src/renderer/components、src/main/asset-search |
+-| [基础分析、独立标签与后台任务](ai-analysis.md) | ai-analysis | src/main/background-analysis、src/main/independent-tags |
+-| [OCR执行、空结果与修正](ocr.md) | ai-analysis, ai-runtime | src/main/ocr、src/main/background-ocr |
+-| [深度分析、提示词反推与图片工具](visual-ai.md) | prompt-reverse, ai-analysis | src/main/visual-ai、src/main/visual-ai |
+-| [AI连接、账号与Pi协议](ai-connections.md) | prompt-reverse, ai-runtime | src/main/ai-gateway、src/main/ai-gateway |
+-| [模型制品、正式库存与签名目录](model-library.md) | model-library, model-library-core, model-storage-root-registry, model-library-product-pilot, official-model-catalog-release | src/main/model-library-workspace、src/main/model-library-workspace |
+-| [执行Runtime、资源与物理退出](ai-runtime.md) | ai-runtime, runtime-package | src/main/services、src/main/services |
+-| [工作集、macOS原生悬浮窗与预览](work-mode.md) | work-mode, desktop-shell | src/main/work-mode、src/main/work-mode |
+-| [视频参考帧与跨应用文件交付](media-handoff.md) | work-mode | src/main/work-mode、src/main/work-mode |
+-| [设置、路径、诊断与旧库找回](settings-recovery.md) | settings-paths, desktop-shell | src/renderer/routes、src/main/services |
+-| [平台、构建资源、安装与发行](platform-release.md) | release-packaging, official-model-catalog-release | src/main/platform、src/main/packaging |
+-| [工程导航、规范、审查与反馈](engineering.md) | agent-governance | AGENTS.md、CONTRIBUTING.md |
+-| [有效目标、可选能力与退休范围](optional-targets.md) | source-discovery | docs/product/PRODUCT-FOUNDATION.md、docs/adr/README.md |
++设置页面归GUI，配置保存/路径操作归Host，库维护归Library；工作窗呈现归GUI，成员/修订归Library，实际文件交接归Host。跨系统动作在起点说明完整链，再链接真正拥有者，不复制一份独立状态机。DESIGN只管设计规范，交互只管可观察行为；[INTERACTIONS](../design/INTERACTIONS.md#按场景定位)及[真实验收](../agents/ui-ux-acceptance.md)分别导航预期和证据方法。
+ 
+-## 怎样维护
++## 其他资料按职责进入
+ 
+-正文解释职责/边界、状态权威、主运行链、状态转换、重要约束、失败/取消/兼容及验证。引用源码文件和符号，不逐页复制易漂移版本号；复杂系统可充分展开，不按字数切碎。
++开发协作/导航/审查/反馈见[工程指南](../agents/engineering.md)与[CONTRIBUTING](../../CONTRIBUTING.md)，构建/签名/发行见[交付指南](../platform/BUILD-AND-RELEASE.md)和[平台文档](../platform/README.md)，有效目标/未来能力/退休边界见[产品范围](../product/CAPABILITY-SCOPE.md)。它们不是软件子系统或新的自动队列，机器导航也单独分类。
+ 
+-改变以上契约时同任务更新唯一拥有者；行为保持的内部重构可说明不需正文变更的依据。当前机制归本目录/模块README，用户契约与目标归产品/交互规格，视觉只归DESIGN，实际资格归CURRENT-STATE，历史结果归报告。目录不维护第二份产品进度。
++## 维护与审查
+ 
+-## 怎样说明与审查语义变更
++正文以职责/状态权威、完整执行链、失败/取消/兼容、平台、源码和验证说明机制；复杂主题用章节索引，不用文件数量代表模块数量。局部接口与算法继续归源码旁README，现行行为归产品/交互规格，视觉归DESIGN，实际资格归CURRENT-STATE，证据归任务报告。
+ 
+-1. 写具体触发条件和前后可观察行为，标明受影响子系统。
+-2. 对照base和候选源码，沿实际调用者、状态/权限、平台/适配器和副作用追踪，不能只看改动行；核对相关有效ADR及其替代范围，有冲突写明条款与原因。
+-3. 契约有变化就更新所属正文，核对来源与引用；未变说明依据。
+-4. 核对测试/运行证据确实覆盖声称行为，列出未运行/缺口。文档存在不证明兼容或功能完成。
+-
+-机器导航与验证候选复用.codeindex。旧[implementation-status](../agents/implementation-status.md)仅为兼容入口；任务读取/写回由[AGENTS](../../AGENTS.md)直接导航，维护方法见[CONTRIBUTING](../../CONTRIBUTING.md#7-文档维护)。
++变化时说明触发及前后行为，对照base/候选追踪消费者、权限/数据、副作用及适用决定，更新唯一拥有者或说明契约未变依据。保全有效要求/例外/来源；旧专题只兼容导航，不重建第二套正文。源码存在不证明功能完成，历史PASS不转记。人读与机器文档目录/路由一起维护，方法及三层行为验收见[CONTRIBUTING](../../CONTRIBUTING.md#document-retrieval-validation)。
+--- before/docs/subsystems/ai-analysis.md
++++ after/docs/subsystems/ai-analysis.md
+@@ -1,40 +1,28 @@
+ # 基础分析、独立标签与后台任务
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](ai-system.md#requests)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-Host拥有持久请求、attempt、每能力证据/current、决策及outbox；Main控制器负责输入/调用/提交协调。标签、短描述、OCR是可独立完成/重跑的基础能力；反推不是基础分析自动附带输出。
++[当前正文](ai-system.md#requests).
+ 
+ ## 正式入口与运行链
+ 
+-正式详情单项/一键基础分析或设置后台规则→命名IPC→冻结能力/来源/配置→资源准入→实际executor→验证→claim-fenced事务证据/回执→事件回读。后台启用有独立确认，只处理规则范围的新素材，不因旧收集开关自动回填。
++[当前正文](ai-system.md#requests).
+ 
+ ## 失败、取消与兼容保护
+ 
+-人工编辑/确认/拒绝优先，迟到结果可历史保留但不抢current。资源不足等待，不凭空增加attempt。已发送未确认保持unknown，重开不自动重发；未发送可按新session重新准入。暂停/关库/退出撤销新准入并收敛子任务，成功回读/通知重放不再次推理。
++[当前正文](ai-system.md#requests).
+ 
+ ## 技术与平台边界
+ 
+-手动/后台共享实际执行与资源账本，本地OCR可独立准入。历史Worker poller只是旧lane，不能套到全部Pi/managed执行。真实质量、用量未知和取消费用分别记录。
++[当前正文](ai-system.md#requests).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/background-analysis/README.md](../../src/main/background-analysis/README.md)
+-- [src/main/independent-tags/README.md](../../src/main/independent-tags/README.md)
+-- [src/main/background-analysis/basic-analysis-controller.ts](../../src/main/background-analysis/basic-analysis-controller.ts)
+-- [src/main/background-analysis/background-analysis-controller.ts](../../src/main/background-analysis/background-analysis-controller.ts)
+-- [src/main/ipc/main-ipc-composition.ts](../../src/main/ipc/main-ipc-composition.ts)
++[当前正文](ai-system.md#requests).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](ai-system.md#requests).
+ 
+-- `npm run test-ai-client-ipc-contract`
+-- `node scripts/run-ts-test.mjs scripts/ai-result-sync-projector.test.ts`
+-- `node scripts/run-ts-test.mjs scripts/ai-tag-suggestion-sync-sink.test.ts`
+-- `npm run test-python-unittest`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/ai-connections.md
++++ after/docs/subsystems/ai-connections.md
+@@ -1,44 +1,28 @@
+ # AI连接、账号与Pi协议
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](ai-system.md#connections)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-Main持有连接、账号生命周期与安全凭据接口；Pi独立Node Worker适配允许协议，不拥有Library提交、任意工具或素材读取权。模型目录/安装与连接配置、执行许可、外发范围彼此独立。
++[当前正文](ai-system.md#connections).
+ 
+ ## 正式入口与运行链
+ 
+-设置的连接/账号操作→可信Main→正规登录/安全存储→冻结某次能力的provider/model/effort→已封印Pi资源一动作一进程→有界私有stdio响应→调用者验证并由Host保存。Agent诊断只看非敏感结果。
++[当前正文](ai-system.md#connections).
+ 
+ ## 失败、取消与兼容保护
+ 
+-登录回调到达不等于凭据提交；撤销/目标变更/退出按对应身份收敛。配置漂移不能沿用旧review，已有连接不代表任意资料可外发。失败分类/未知提交保留，不静默切换额外计费服务。
++[当前正文](ai-system.md#connections).
+ 
+ ## 技术与平台边界
+ 
+-Pi资源按平台Node、锁、完整文件清单和Main摘要绑定；依赖改变须生成器重新seal并验证产物，不能手改摘要求通过。DAM使用Pi Worker的模式与Magpie自建provider/gateway、适配Pi客户端的模式不同。
++[当前正文](ai-system.md#connections).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/ai-gateway/README.md](../../src/main/ai-gateway/README.md)
+-- [src/main/ai-gateway/PROVIDER-MATRIX.md](../../src/main/ai-gateway/PROVIDER-MATRIX.md)
+-- [src/main/ai-gateway/ai-connection-service.ts](../../src/main/ai-gateway/ai-connection-service.ts)
+-- [src/main/ai-gateway/pi-runtime-host.ts](../../src/main/ai-gateway/pi-runtime-host.ts)
+-- [pi-runtime/README.md](../../pi-runtime/README.md)
+-- [src/main/ipc/ai-connection.ipc.ts](../../src/main/ipc/ai-connection.ipc.ts)
+-
+-- [pi-runtime/worker.mjs](../../pi-runtime/worker.mjs)
++[当前正文](ai-system.md#connections).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](ai-system.md#connections).
+ 
+-- `npm run test-prompt-reverse-workflow`
+-- `npm run test-openai-compatible-provider`
+-- `npm run test-llama-openai-backend`
+-- `npm run test-python-unittest`
+-- `npm run test-ai-runtime-status-workflow`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/ai-runtime.md
++++ after/docs/subsystems/ai-runtime.md
+@@ -1,42 +1,28 @@
+ # 执行Runtime、资源与物理退出
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](ai-system.md#execution)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-Host资源账本区分模型驻留、准备/计算及临时材料。具体运行器拥有自有进程、私有协议和真实释放句柄。Pi、GGUF、OCR、retrieval有不同执行路径，不能由统一ready标签授予全部能力。
++[当前正文](ai-system.md#execution).
+ 
+ ## 正式入口与运行链
+ 
+-能力请求→当前配置/制品/环境指纹→完整预算→准入→自有进程加载/验证/执行→结果交给Host→物理close后释放。前后台共享预算，准备保护由真实拥有者finally解除，但不提前释放仍存活的驻留。
++[当前正文](ai-system.md#execution).
+ 
+ ## 失败、取消与兼容保护
+ 
+-压力/未知采样拒绝新增危险准入；取消/超时发出停止后仍等真实close。旧launch清理不确认替代进程退出，退出未知保留隔离。idle回收和关库/退出有独立生命周期，失败不能假归还许可。
++[当前正文](ai-system.md#execution).
+ 
+ ## 技术与平台边界
+ 
+-macOS使用Metal/共享RAM和libproc观测，Windows CUDA/CPU与原生Job等按实际路径；监测/终止不冒称硬OS上限。32个旧Runtime/branch/probe通道及通用Runtime Package生产入口由disabled-app拒绝；保留源码/测试不是当前入口。
++[当前正文](ai-system.md#execution).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/services/ai-runtime/README.md](../../src/main/services/ai-runtime/README.md)
+-- [src/main/services/ai-runtime/managed-vision-runtime.ts](../../src/main/services/ai-runtime/managed-vision-runtime.ts)
+-- [src/main/local-ai-resources/resource-governor.ts](../../src/main/local-ai-resources/resource-governor.ts)
+-- [src/main/visual-ai/visual-admission.ts](../../src/main/visual-ai/visual-admission.ts)
+-- [src/main/retrieval-workspace/retrieval-runtime.ts](../../src/main/retrieval-workspace/retrieval-runtime.ts)
+-- [src/main/ipc/disabled-app.ipc.ts](../../src/main/ipc/disabled-app.ipc.ts)
++[当前正文](ai-system.md#execution).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](ai-system.md#execution).
+ 
+-- `npm run test-ai-runtime-status-workflow`
+-- `npm run test-ai-console-status-module`
+-- `npm run test-ai-python-environment`
+-- `npm run test-ai-python-runtime-host-context`
+-- `npm run test-ai-runtime-host-context`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/ai-system.md
++++ after/docs/subsystems/ai-system.md
+@@ -0,0 +1,159 @@
++# AI能力与执行
++
++从连接、模型到请求、执行和结果的完整系统说明。标签、描述、OCR、反推/深度分析可共享基础设施，但输入、许可、证据与人工状态保持各自身份；Pi、模型制品和Runtime不是同一种对象。
++
++## 按任务与阶段定位
++
++| 问题 | 章节 | 谁不拥有这项权威 |
++| --- | --- | --- |
++| 提供方/账号/协议配置 | [连接与账户](#connections) | Pi不拥有Library/任意素材/工具权限 |
++| 模型来源/库存/校验/选择 | [模型制品](#models) | 安装完成不等于启用/推理或外发许可 |
++| 基础分析、后台范围/attempt/current | [能力请求与提交](#requests) | 单次executor成功不等于Host已提交 |
++| OCR空结果/修正 | [OCR](#ocr) | 有效无字不是失败，旧结果不能覆盖人工修正 |
++| 深度分析/反推/派生工具 | [视觉能力](#visual) | 创作推演不是事实，工具不覆盖Original |
++| 预算、Worker/驻留、取消/物理退出 | [执行与资源](#execution) | Promise结束不等于资源已释放 |
++
++## 职责与状态权威
++
++连接/模型/执行资源归App Host，结果及人工内容最终归当前Library事务。GUI只表达能力意图与反馈，搜索系统拥有索引/查询；向量生成可使用AI执行资源，不把所有查询当生成推理。
++
++## 正式入口与运行链
++
++连接/账号与模型准备 → 正式详情/设置后台策略发起能力请求 → 冻结素材/来源/配置和许可 → 资源准入 → 对应Pi/GGUF/OCR/其他executor → 按能力验证 → claim/修订/权限复核 → Library事务证据/current/outbox → GUI回读。开始执行、得到响应、提交、通知、物理释放不是同一个状态。按下表阶段定点阅读，不要求一次全读所有实现。
++
++<a id="connections"></a>
++### 连接、账户与协议
++
++**职责与状态权威。** Main持有连接、账号生命周期与安全凭据接口；Pi独立Node Worker适配允许协议，不拥有Library提交、任意工具或素材读取权。模型目录/安装与连接配置、执行许可、外发范围彼此独立。
++
++**正式入口与运行链。** 设置的连接/账号操作→可信Main→正规登录/安全存储→冻结某次能力的provider/model/effort→已封印Pi资源一动作一进程→有界私有stdio响应→调用者验证并由Host保存。Agent诊断只看非敏感结果。
++
++**失败、取消与兼容保护。** 登录回调到达不等于凭据提交；撤销/目标变更/退出按对应身份收敛。配置漂移不能沿用旧review，已有连接不代表任意资料可外发。失败分类/未知提交保留，不静默切换额外计费服务。
++
++**技术与平台边界。** Pi资源按平台Node、锁、完整文件清单和Main摘要绑定；依赖改变须生成器重新seal并验证产物，不能手改摘要求通过。DAM使用Pi Worker的模式与Magpie自建provider/gateway、适配Pi客户端的模式不同。
++
++<a id="models"></a>
++### 模型制品与正式库存
++
++**职责与状态权威。** 正式managed模型库存/来源/恢复传输归App Host；模型制品是数据，Runtime包是执行依赖。独立签名Catalog核心/registry/pilot有各自受限Seam，不能把其未交付安装能力推断为正式managed库存不存在。
++
++**正式入口与运行链。** 设置→本地模型与OCR→Main命名动作→目录/固定revision与完整SHA→受管恢复传输/只读引用或复制→完整校验→库存→单独加载/验证/启用。签名官方目录走独立release pin与信任根校验；开发缺签名输入时相应页面fail closed，不否认其他managed入口。
++
++**失败、取消与兼容保护。** 下载完成、结构正确、预计适合、运行支持、真实执行通过是不同事实。损坏/环境漂移/撤信任拒绝，临时远端不可用不删除旧内容。暂停/重开不自动恢复，升级失败保留旧制品；不执行仓库代码/pickle/隐含下载。
++
++**技术与平台边界。** 正式来源依既有境内镜像策略逐跳校验，旧huggingface文件名仅兼容命名。平台、量化、CPU/GPU/Metal方案分别验证；本轮开发验收只使用已有权重，不触发模型下载。签名发行仍受独立发布范围。
++
++<a id="requests"></a>
++### 能力请求、后台与结果提交
++
++**职责与状态权威。** Host拥有持久请求、attempt、每能力证据/current、决策及outbox；Main控制器负责输入/调用/提交协调。标签、短描述、OCR是可独立完成/重跑的基础能力；反推不是基础分析自动附带输出。
++
++**正式入口与运行链。** 正式详情单项/一键基础分析或设置后台规则→命名IPC→冻结能力/来源/配置→资源准入→实际executor→验证→claim-fenced事务证据/回执→事件回读。后台启用有独立确认，只处理规则范围的新素材，不因旧收集开关自动回填。
++
++**失败、取消与兼容保护。** 人工编辑/确认/拒绝优先，迟到结果可历史保留但不抢current。资源不足等待，不凭空增加attempt。已发送未确认保持unknown，重开不自动重发；未发送可按新session重新准入。暂停/关库/退出撤销新准入并收敛子任务，成功回读/通知重放不再次推理。
++
++**技术与平台边界。** 手动/后台共享实际执行与资源账本，本地OCR可独立准入。历史Worker poller只是旧lane，不能套到全部Pi/managed执行。真实质量、用量未知和取消费用分别记录。
++
++<a id="ocr"></a>
++### OCR执行与人工修正
++
++**职责与状态权威。** OCR控制器拥有识别生命周期，持久结果及人工修正归当前Library Host；结果中的文字、位置、语言/配方证据与人工文本分别保存。当前能力不由旧FastAPI OCR通道是否启用决定。
++
++**正式入口与运行链。** 正式详情/基础分析/后台OCR→受限asset-ocr动作→当前素材/预览/环境资格→资源准入→自有私有Worker→校验有效文字或有效空结果→Host保存→回读。安装/环境验证、执行资格和识别质量是不同状态。
++
++**失败、取消与兼容保护。** 已验证空结果不退回旧文字；失败/不支持不冒充空结果。人工修正优先，旧代次不得覆盖。取消与环境/库变更收敛真实进程，物理close前占用保留；输入/等待/失败反馈按UI规格检查。
++
++**技术与平台边界。** RapidOCR等通过实际可信Python及已存在模型运行，Darwin与Windows资源测量/依赖分别验证。不因目录在场自动下载或安装依赖权重；测试缺模型仅保留对应缺口。
++
++<a id="visual"></a>
++### 深度分析、反推与图片工具
++
++**职责与状态权威。** 界面表达具体能力意图，Main拥有受控预览、review/执行与身份校验，Host拥有证据与提交。深度分析、反推、独立标签、基础描述不能因共用模型而混为一条无边界结果。
++
++**正式入口与运行链。** 素材详情/获授卡片→VisualAiPanel准备/确认→visual-ai-controller→按当前连接调用Pi/managed或既有传输→解析/验证→Host存证→回读。图片工具产生受控派生/新素材时复用Copy/variant入口，不覆盖Original。
++
++**失败、取消与兼容保护。** 冻结目标、来源、配方和配置；权限/代际/owner变化撤销review。未知远端结果不能标未执行重试，取消保留此前线性化提交；失败留旧有效结果和输入。反推文本命中不等于画面事实，用量/截断/实际调用次数如实表示。
++
++**技术与平台边界。** Pi是协议执行Worker，本地推理由自有Runtime承担；不因为一个openai-compatible文件名推定全部厂商相同。共享UI、真实模型质量和原生卡片交互分别验收。
++
++<a id="execution"></a>
++### Runtime、资源准入与物理退出
++
++**职责与状态权威。** Host资源账本区分模型驻留、准备/计算及临时材料。具体运行器拥有自有进程、私有协议和真实释放句柄。Pi、GGUF、OCR、retrieval有不同执行路径，不能由统一ready标签授予全部能力。
++
++**正式入口与运行链。** 能力请求→当前配置/制品/环境指纹→完整预算→准入→自有进程加载/验证/执行→结果交给Host→物理close后释放。前后台共享预算，准备保护由真实拥有者finally解除，但不提前释放仍存活的驻留。
++
++**失败、取消与兼容保护。** 压力/未知采样拒绝新增危险准入；取消/超时发出停止后仍等真实close。旧launch清理不确认替代进程退出，退出未知保留隔离。idle回收和关库/退出有独立生命周期，失败不能假归还许可。
++
++**技术与平台边界。** macOS使用Metal/共享RAM和libproc观测，Windows CUDA/CPU与原生Job等按实际路径；监测/终止不冒称硬OS上限。32个旧Runtime/branch/probe通道及通用Runtime Package生产入口由disabled-app拒绝；保留源码/测试不是当前入口。
++
++## 失败、取消与兼容保护
++
++每阶段分别识别无配置/无模型、等待、有效空结果、失败、取消和UNKNOWN；不以一个ready代替所有资格。人工优先、来源/库代际/owner失效即撤权；旧attempt不抢current，未知提交不自动重发，物理退出未知保留隔离与资源占用。细则和例外保留在所属阶段。
++
++## 技术与平台边界
++
++macOS Metal/统一内存与Windows CPU/CUDA/原生约束分别验证，Pi只适配允许协议、不替代本地加速/调度。普通CI的隔离不替代真实AI验收；只使用现有模型，不下载补齐或更新权重。旧FastAPI/poller/禁用Runtime通道按原阶段限定，不代表全部正式能力未实现。外部接口/SDK值核对实际安装与原始资料。
++
++## 源码与详细机制
++
++源码按阶段链接定位；下面是去重后的源/测试入口集合，不是本轮已执行或必须每次全跑的清单：
++
++- [src/main/ai-gateway/README.md](../../src/main/ai-gateway/README.md)
++- [src/main/ai-gateway/PROVIDER-MATRIX.md](../../src/main/ai-gateway/PROVIDER-MATRIX.md)
++- [src/main/ai-gateway/ai-connection-service.ts](../../src/main/ai-gateway/ai-connection-service.ts)
++- [src/main/ai-gateway/pi-runtime-host.ts](../../src/main/ai-gateway/pi-runtime-host.ts)
++- [pi-runtime/README.md](../../pi-runtime/README.md)
++- [src/main/ipc/ai-connection.ipc.ts](../../src/main/ipc/ai-connection.ipc.ts)
++- [pi-runtime/worker.mjs](../../pi-runtime/worker.mjs)
++- `npm run test-prompt-reverse-workflow`
++- `npm run test-openai-compatible-provider`
++- `npm run test-llama-openai-backend`
++- `npm run test-python-unittest`
++- `npm run test-ai-runtime-status-workflow`
++- [src/main/model-library-workspace/README.md](../../src/main/model-library-workspace/README.md)
++- [src/main/model-library-workspace/managed-model-library.ts](../../src/main/model-library-workspace/managed-model-library.ts)
++- [src/main/model-library-workspace/china-model-mirror.ts](../../src/main/model-library-workspace/china-model-mirror.ts)
++- [src/main/model-library-workspace/model-file-transfer.ts](../../src/main/model-library-workspace/model-file-transfer.ts)
++- [src/main/model-library/README.md](../../src/main/model-library/README.md)
++- [src/main/model-library-workspace/model-library-workspace.composition.ts](../../src/main/model-library-workspace/model-library-workspace.composition.ts)
++- `npm run test-legacy-model-management-containment`
++- `npm run test-model-acquisition-local-only`
++- `npm run test-model-artifact-readiness`
++- `npm run test-model-artifact-readiness-display`
++- `npm run test-model-library-catalog-admission-tracer`
++- [src/main/background-analysis/README.md](../../src/main/background-analysis/README.md)
++- [src/main/independent-tags/README.md](../../src/main/independent-tags/README.md)
++- [src/main/background-analysis/basic-analysis-controller.ts](../../src/main/background-analysis/basic-analysis-controller.ts)
++- [src/main/background-analysis/background-analysis-controller.ts](../../src/main/background-analysis/background-analysis-controller.ts)
++- [src/main/ipc/main-ipc-composition.ts](../../src/main/ipc/main-ipc-composition.ts)
++- `npm run test-ai-client-ipc-contract`
++- `node scripts/run-ts-test.mjs scripts/ai-result-sync-projector.test.ts`
++- `node scripts/run-ts-test.mjs scripts/ai-tag-suggestion-sync-sink.test.ts`
++- [src/main/ocr/README.md](../../src/main/ocr/README.md)
++- [src/main/background-ocr/README.md](../../src/main/background-ocr/README.md)
++- [src/main/ocr/ocr-controller.ts](../../src/main/ocr/ocr-controller.ts)
++- [src/main/ocr/ocr-runtime.ts](../../src/main/ocr/ocr-runtime.ts)
++- [src/main/ipc/asset-ocr.ipc.ts](../../src/main/ipc/asset-ocr.ipc.ts)
++- `npm run ci:test-runtime-safety`
++- `npm run test-node-host-platform-defaults`
++- [src/main/visual-ai/README.md](../../src/main/visual-ai/README.md)
++- [src/main/visual-ai/visual-ai-controller.ts](../../src/main/visual-ai/visual-ai-controller.ts)
++- [src/main/visual-ai/openai-vision.transport.ts](../../src/main/visual-ai/openai-vision.transport.ts)
++- [src/renderer/components/asset/VisualAiPanel.tsx](../../src/renderer/components/asset/VisualAiPanel.tsx)
++- [src/main/ipc/visual-ai.ipc.ts](../../src/main/ipc/visual-ai.ipc.ts)
++- [src/main/image-tools/README.md](../../src/main/image-tools/README.md)
++- [src/main/services/ai-runtime/README.md](../../src/main/services/ai-runtime/README.md)
++- [src/main/services/ai-runtime/managed-vision-runtime.ts](../../src/main/services/ai-runtime/managed-vision-runtime.ts)
++- [src/main/local-ai-resources/resource-governor.ts](../../src/main/local-ai-resources/resource-governor.ts)
++- [src/main/visual-ai/visual-admission.ts](../../src/main/visual-ai/visual-admission.ts)
++- [src/main/retrieval-workspace/retrieval-runtime.ts](../../src/main/retrieval-workspace/retrieval-runtime.ts)
++- [src/main/ipc/disabled-app.ipc.ts](../../src/main/ipc/disabled-app.ipc.ts)
++- `npm run test-ai-console-status-module`
++- `npm run test-ai-python-environment`
++- `npm run test-ai-python-runtime-host-context`
++- `npm run test-ai-runtime-host-context`
++
++## 验证与维护
++
++先按任务读阶段/适用契约和README，从最小相关回归按消费者扩大；普通界面发起→实际推理→内容质量/证据→Host保存回读→适用取消/重开分列。仅目录/probe/JSON正确不能证明用户功能。新增约束/索引按[三层行为验收](../../CONTRIBUTING.md#document-retrieval-validation)；实际身份/限制见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，步骤见[真实验收](../agents/ui-ux-acceptance.md)。
+--- before/docs/subsystems/asset-discovery.md
++++ after/docs/subsystems/asset-discovery.md
+@@ -5,6 +5,8 @@
+ ## 职责与状态权威
+ 
+ Host拥有文字/颜色派生索引、分页快照及持久canonical向量；派生索引可重建，不取代原件、人工内容和证据。Renderer使用searchAssetsPage与retrieval.query，不在已加载几行素材上重建全库权威。
++
++语义/图像的向量生成与模型/资源准入协作见[AI执行](ai-system.md#execution)，索引空间、查询、分页和命中解释仍由本搜索系统拥有；不能因共享模型而合并结果权威。
+ 
+ ## 正式入口与运行链
+ 
+--- before/docs/subsystems/asset-workspace.md
++++ after/docs/subsystems/asset-workspace.md
+@@ -1,44 +1,28 @@
+ # 素材工作台、详情与共享展示
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](gui-shell.md#asset-workspace)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-共享React负责导航、选择、焦点、编辑草稿与可恢复交互；Host拥有素材/标签/分析提交。asset.store不成为第二份持久数据库或全库检索权威。原型保留视觉研究身份，不将其localStorage当生产持久化。
+-
+-跨页面外壳/会话、桥安装、迟到事件和连接恢复从[GUI系统说明](gui-shell.md)进入；本专题负责素材列表/详情/专注协作，视觉仍归DESIGN，输入行为归对应交互规格。
++[当前正文](gui-shell.md#asset-workspace).
+ 
+ ## 正式入口与运行链
+ 
+-普通主入口→Library/Canvas→受控预览与有界Host列表/查询→Inspector或独立专注。选择与滚动独立于后台行刷新；详情人工编辑通过Client→Host保存再回读。单素材原生卡片是有更窄scope的独立窗口，不等于工作集B窗。
++[当前正文](gui-shell.md#asset-workspace).
+ 
+ ## 失败、取消与兼容保护
+ 
+-等待/失败保留旧可用结果和输入，旧异步应答不能覆盖新选择；切库/退出检查草稿。空库、加载失败、缺权限不是同一种空态。文本输入保持键盘语义，布局/动效/焦点按交互规格，不在模块README复制设计token。
++[当前正文](gui-shell.md#asset-workspace).
+ 
+ ## 技术与平台边界
+ 
+-Desktop与Browser共享页面；macOS工作集AppKit不由本模块渲染。1024/1440共享UI与系统窗口分别验证，正式可见入口不以直接route或注入Store代替。
++[当前正文](gui-shell.md#asset-workspace).
+ 
+ ## 源码与详细机制
+ 
+-- [src/renderer/routes/Library.tsx](../../src/renderer/routes/Library.tsx)
+-- [src/renderer/components/library/canvas/LibraryCanvas.tsx](../../src/renderer/components/library/canvas/LibraryCanvas.tsx)
+-- [src/renderer/components/library/canvas/LibraryFocus.tsx](../../src/renderer/components/library/canvas/LibraryFocus.tsx)
+-- [src/renderer/stores/asset.store.ts](../../src/renderer/stores/asset.store.ts)
+-- [src/renderer/README.md](../../src/renderer/README.md)
+-- [src/main/asset-card/README.md](../../src/main/asset-card/README.md)
++[当前正文](gui-shell.md#asset-workspace).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](gui-shell.md#asset-workspace).
+ 
+-- `npm run test-asset-card`
+-- `npm run test-asset-description-draft`
+-- `npm run test-app-navigation-workflow`
+-- `npm run test-native-open-dialog`
+-- `npm run test-asset-store-loading`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/engineering.md
++++ after/docs/subsystems/engineering.md
+@@ -1,57 +1,28 @@
+ # 工程导航、规范、审查与反馈
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](../agents/engineering.md)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-AGENTS是AI开发的首要入口，按任务直接导航到所属正文，不经过独立文档总入口；开发规范保存稳定保证，指南保存方法，子系统/模块保存具体契约。当前任务、跨系列责任、实际资格和证据各有唯一入口。文档与反馈数据不是执行授权。
+-
+-[开发规范](../code-standards.md)按工程保证、适用场景、审查动作和证据入口组织，包含共享变更扩大回归、已有失败处置、并发/时序反证与候选交付检查；这里不重复维护规则正文。
++[当前正文](../agents/engineering.md#职责与状态权威).
+ 
+ ## 正式入口与运行链
+ 
+-首入口按当前问题选择，功能/体验从所属专题与行为契约进入，取舍比较可从ADR进入；任何任务仍按主题/影响范围核对相关决定，不固定检索顺序或排除任务类型。实现类任务沿用户目标→所属正文/任务路由→相关决定、必要契约与源码→相关问题/经验转检查→实现/验证→原问题复验→经验事件/日期→候选评估→规范或保护测试。一个事故一主记录可关联多模块，闭源本地记录不依赖GitHub评论。
+-
+-AI读取材料改变含义、适用范围或检索链路时，批次结束按[维护协议](../../CONTRIBUTING.md#document-retrieval-validation)执行全新低思考只读探查：短任务不提示阅读路径或报告检索过程；主Agent按三层标准审查实际轨迹、归因并修对应拥有者，再以新上下文复验失败及受影响相邻范围。关键缺口不作通过，不挑选成功结果。纯排版只做适用结构检查；详细判据/状态/闭环唯一归指南，过程证据留本任务检查点。
++[当前正文](../agents/engineering.md#正式入口与运行链).
+ 
+ ## 失败、取消与兼容保护
+ 
+-新复发才记新事件/复盘日期；同一事故重试/多渠道不增加次数。三个不同日期列候选，严重安全/数据/越权立即处理；提升后保留来源引用，未提升说明原因。输出预算延后完整条目，不截断保证或假称无问题。
++[当前正文](../agents/engineering.md#失败取消与兼容保护).
+ 
+ ## 技术与平台边界
+ 
+-物理目录拥有者、业务专题和任务路由多对多；trusted tracked覆盖与未跟踪候选分列。静态索引不证明运行资格，来源冲突要核对用户最新决定与具体替代范围。
++[当前正文](../agents/engineering.md#技术与平台边界).
+ 
+ ## 源码与详细机制
+ 
+-- [AGENTS.md](../../AGENTS.md)
+-- [CONTRIBUTING.md](../../CONTRIBUTING.md)
+-- [docs/code-standards.md](../code-standards.md)
+-- [LESSONS.md](../../LESSONS.md)
+-- [docs/agents/DEVELOPMENT-PROBLEMS.md](../agents/DEVELOPMENT-PROBLEMS.md)
+-- [.codeindex/module-map.json](../../.codeindex/module-map.json)
+-- [scripts/agent-context-router.mjs](../../scripts/agent-context-router.mjs)
+-- [scripts/development-feedback.mjs](../../scripts/development-feedback.mjs)
+-
+-- [文档结构与迁移审计](../../scripts/check-documentation.py)
+-- [明确候选的文档同步检查](../../scripts/check-docs-sync.py)
+-- [治理行为测试](../../scripts/documentation-governance.test.py)
+-- [路由回归](../../scripts/agent-context-router.test.mjs)
+-- [反馈/三日期回归](../../scripts/development-feedback.test.mjs)
+-
+-- [ADR类型/主题元数据路由](../../scripts/adr-context.mjs)
+-- [ADR有界路由行为测试](../../scripts/adr-context.test.mjs)
++[当前正文](../agents/engineering.md#源码与详细机制).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](../agents/engineering.md#验证与维护).
+ 
+-- `npm run test-agent-context-router`
+-- `npm run context:check`
+-- `python3 scripts/check-adr-router.py`
+-- `python3 scripts/check-agent-context.py`
+-- `python3 scripts/check-docs-sync.py`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/gui-shell.md
++++ after/docs/subsystems/gui-shell.md
+@@ -1,6 +1,17 @@
+ # GUI系统：界面外壳、状态与跨端协作
+ 
+ 本页说明当前源码中的界面系统怎样运行，包含React页面、命名Client、可信Host与原生窗口的协作；是功能/机制索引及运行说明，不是前端目录清单或运行通过声明。返回[子系统目录](README.md)。按问题读相关章节，不必每次装入全部界面历史。
++
++## 按场景定位
++
++| 问题 | 本系统正文 | 业务拥有者 |
++| --- | --- | --- |
++| 启动/Client/导航与外壳 | [启动与Client](#启动与client安装)、[页面生命周期](#页面与外壳生命周期) | Host会话/通信 |
++| 列表、详情、专注与素材选择 | [内容页面](#asset-workspace) | [Library内容](library-lifecycle.md#organization)、[检索](asset-discovery.md) |
++| 设置导航、输入/草稿、断连恢复 | [设置界面](#settings-ui)、[校准屏障](#browser断连校准与未知提交) | [Host配置/路径](local-host.md#configuration)、[Library旧库](library-lifecycle.md#legacy) |
++| 默认窗口、macOS B、原生参考与预览 | [参考窗口](#reference-windows) | [Library成员/修订](library-lifecycle.md#organization)、[Host文件交接](local-host.md#handoff) |
++
++这里只拥有呈现/输入与跨层协作说明。界面里的数据、推理、路径、文件交付仍由各系统拥有者处理；视觉见DESIGN，用户动作见INTERACTIONS，检验方式见真实验收流程。
+ 
+ ## 职责与状态权威
+ 
+@@ -19,9 +30,9 @@
+ | Renderer启动 | 区分普通工作区、单素材卡片和Electron工作窗；普通路径先安装Client再导入App | [main.tsx](../../src/renderer/main.tsx)的`startWorkspace`、[workspace-client.ts](../../src/renderer/workspace-client.ts) |
+ | 共享路由/外壳 | HashRouter组成普通页面；AppShell持有会话、全局参与者/覆盖层，设置子路由共用Settings实例 | [App](../../src/renderer/App.tsx)、[AppShell](../../src/renderer/components/layout/AppShell.tsx)、[导航workflow](../../src/shared/workflows/app-navigation.workflow.ts) |
+ | Client与平台传输 | 同一命名产品API；Desktop由Preload适配IPC，Browser由HTTP/SSE适配。Transport不作为Renderer任意调用全局暴露 | [Client工厂](../../src/shared/client/workspace-client.ts)、[Preload](../../src/preload/index.ts)、[BrowserTransport](../../src/renderer/browser-transport.ts) |
+-| 会话与展示状态 | 会话投影Host身份/代际，Store管理列表、选择和输入；不是第二份持久数据库/库授权引擎 | [createAssetWorkspaceSession](../../src/renderer/asset-workspace-session.internal.ts)、[Renderer局部说明](../../src/renderer/README.md)、[素材专题](asset-workspace.md) |
+-| 设置编辑 | 表单输入与原基准分离；expected随补丁提交；冲突采用、选择器和恢复均保留明确用户动作 | [Settings](../../src/renderer/routes/Settings.tsx)、[设置专题](settings-recovery.md)、[settings.store](../../src/renderer/stores/settings.store.ts) |
+-| 独立参考界面 | 单素材卡片、默认Electron工作集窗和macOS B候选有不同桥与生命周期，不能因页面相似共用权限 | [卡片模块](../../src/main/asset-card/README.md)、[工作窗模块](../../src/main/work-mode/README.md)、[工作模式专题](work-mode.md) |
++| 会话与展示状态 | 会话投影Host身份/代际，Store管理列表、选择和输入；不是第二份持久数据库/库授权引擎 | [createAssetWorkspaceSession](../../src/renderer/asset-workspace-session.internal.ts)、[Renderer局部说明](../../src/renderer/README.md)、[素材专题](gui-shell.md#asset-workspace) |
++| 设置编辑 | 表单输入与原基准分离；expected随补丁提交；冲突采用、选择器和恢复均保留明确用户动作 | [Settings](../../src/renderer/routes/Settings.tsx)、[设置专题](local-host.md#configuration)、[settings.store](../../src/renderer/stores/settings.store.ts) |
++| 独立参考界面 | 单素材卡片、默认Electron工作集窗和macOS B候选有不同桥与生命周期，不能因页面相似共用权限 | [卡片模块](../../src/main/asset-card/README.md)、[工作窗模块](../../src/main/work-mode/README.md)、[工作模式专题](gui-shell.md#reference-windows) |
+ 
+ ## 正式入口与运行链
+ 
+@@ -52,7 +63,7 @@
+ 
+ `createAssetWorkspaceSession`检查Host projection的状态/身份/代际，并用inspection sequence、scope lifetime、route/app lifetime淘汰旧异步结果；`ready`还须有identity/generation。只在当前投影有效时加载素材/标签，卡片返回须重新inspect Host，不能把旧窗口状态带进另一库。
+ 
+-AppShell订阅设置、库变化、工具/OCR/AI完成、卡片变化/返回及工作集定位事件，交给对应session或Store更新；卸载注销订阅并使旧回调失效。事件是刷新/定位线索，不授予提交权限；列表/搜索、笔记和工作集的详细状态分别查[素材](asset-workspace.md)、[检索](asset-discovery.md)、[组织](organization.md)及[工作模式](work-mode.md)。
++AppShell订阅设置、库变化、工具/OCR/AI完成、卡片变化/返回及工作集定位事件，交给对应session或Store更新；卸载注销订阅并使旧回调失效。事件是刷新/定位线索，不授予提交权限；列表/搜索、笔记和工作集的详细状态分别查[素材](gui-shell.md#asset-workspace)、[检索](asset-discovery.md)、[组织](library-lifecycle.md#organization)及[工作模式](gui-shell.md#reference-windows)。
+ 
+ ## 失败、取消与兼容保护
+ 
+@@ -86,9 +97,76 @@
+ 
+ Web模糊不等于系统Liquid Glass；现有原生材质接线不证明已达到DESIGN目标。Browser共享UI、macOS原生窗口、Windows原生/安装和媒体helper各自验收，不用一个客户端截图或构建结果代表全部。本文不为文档任务启动UI、模型或安装操作。
+ 
++
++<a id="content-views"></a>
++## 内容页面与设置导航
++
++本系统拥有页面/窗口呈现和输入生命周期，不拥有页面所调用的业务数据库或任意文件权限。设置导航、选择/焦点/草稿与资料库迁移必须按拥有者分开。
++
++<a id="asset-workspace"></a>
++### 素材列表、详情与共享展示
++
++**职责与状态权威。** 共享React负责导航、选择、焦点、编辑草稿与可恢复交互；Host拥有素材/标签/分析提交。asset.store不成为第二份持久数据库或全库检索权威。原型保留视觉研究身份，不将其localStorage当生产持久化。
++
++跨页面外壳/会话、桥安装、迟到事件和连接恢复从[GUI系统说明](gui-shell.md)进入；本专题负责素材列表/详情/专注协作，视觉仍归DESIGN，输入行为归对应交互规格。
++
++**正式入口与运行链。** 普通主入口→Library/Canvas→受控预览与有界Host列表/查询→Inspector或独立专注。选择与滚动独立于后台行刷新；详情人工编辑通过Client→Host保存再回读。单素材原生卡片是有更窄scope的独立窗口，不等于工作集B窗。
++
++**失败、取消与兼容保护。** 等待/失败保留旧可用结果和输入，旧异步应答不能覆盖新选择；切库/退出检查草稿。空库、加载失败、缺权限不是同一种空态。文本输入保持键盘语义，布局/动效/焦点按交互规格，不在模块README复制设计token。
++
++**技术与平台边界。** Desktop与Browser共享页面；macOS工作集AppKit不由本模块渲染。1024/1440共享UI与系统窗口分别验证，正式可见入口不以直接route或注入Store代替。
++
++<a id="settings-ui"></a>
++### 设置的表面与草稿
++
++设置分类、搜索范围、草稿生命周期与旧路由的当前行为见[工作台交互：应用页面导航](../design/INTERACTIONS.md#workspace-应用页面导航)；呈现见[DESIGN：配置、任务与其他应用页面](../../DESIGN.md#配置任务与其他应用页面)。评估整合时先区分现行约定、源码偏差与拟改变的体验，不把可改进的现行约定直接称作实现缺陷；AI连接管理另见[连接专题](ai-system.md#connections)。
++
++设置页面生命周期沿本页原有设置基准/路由章节；配置持久化与路径迁移查[Host配置维护](local-host.md#configuration)，旧库与恢复数据查[资料库](library-lifecycle.md#legacy)。页面出现某项能力，不把其执行权威归给GUI。
++
++<a id="reference-windows"></a>
++### 参考窗口与原生呈现
++
++**职责与状态权威。** Host持有Library、工作集内容/成员/修订、保存、文件任务与撤权。设备布局与库内内容分开。macOS B的Swift/AppKit子进程负责NSPanel/NSCollectionView、输入、窗口frame与动画；React保留主工作台及按需独立大预览。
++
++**正式入口与运行链。** 默认start:desktop/start:browser连接普通Host，work controller默认createElectronWorkWindow；只有--dam-work-window-candidate=b（start:work-b）在macOS选createNativeShelfWorkWindow。B通过正式工作模式工作集打开/恢复，私有父子管道仅传受限快照/意图。A是独立研究比较候选，不是B的产品路径。
++
++**失败、取消与兼容保护。** 按owner/frame/token/成员/库代际核对，旧会话不复活；未保存/unknown flush保留内容和窗口。motionId/gestureId关联终态，迟到动画不覆盖新操作；物理子进程未退出不能释放槽/文件。布局迁移先保留旧记录，不改工作集内容。
++
++**技术与平台边界。** 当前原生B仅macOS，Windows普通窗仍Electron/React。AppKit不等于SwiftUI；B的NSVisualEffectView不证明目标Liquid Glass已实现。原生输入、动画/帧率、多屏/Spaces、接收应用必须实际验收，Browser结果不能替代。菜单范围/性能门槛等未确认项保留在交互规格。
++
++工作集内容/修订与设备布局的持久记录由[资料库](library-lifecycle.md#organization)拥有；文件交付/平台helper由[Host系统集成](local-host.md#handoff)拥有。本节保留窗口到Host的协作契约，不重复定义持久化状态机。
++
++### 本节源码与检查入口
++
++- [src/renderer/routes/Library.tsx](../../src/renderer/routes/Library.tsx)
++- [src/renderer/components/library/canvas/LibraryCanvas.tsx](../../src/renderer/components/library/canvas/LibraryCanvas.tsx)
++- [src/renderer/components/library/canvas/LibraryFocus.tsx](../../src/renderer/components/library/canvas/LibraryFocus.tsx)
++- [src/renderer/stores/asset.store.ts](../../src/renderer/stores/asset.store.ts)
++- [src/renderer/README.md](../../src/renderer/README.md)
++- [src/main/asset-card/README.md](../../src/main/asset-card/README.md)
++- `npm run test-asset-card`
++- `npm run test-asset-description-draft`
++- `npm run test-app-navigation-workflow`
++- `npm run test-native-open-dialog`
++- `npm run test-asset-store-loading`
++- [src/main/work-mode/README.md](../../src/main/work-mode/README.md)
++- [src/main/work-mode/work-window-controller.ts](../../src/main/work-mode/work-window-controller.ts)
++- [src/main/work-mode/native-shelf-work-window.ts](../../src/main/work-mode/native-shelf-work-window.ts)
++- [src/main/work-mode/electron-work-window.ts](../../src/main/work-mode/electron-work-window.ts)
++- [src/main/work-mode/shelf-draft-store.ts](../../src/main/work-mode/shelf-draft-store.ts)
++- [native/shelf-candidates/README.md](../../native/shelf-candidates/README.md)
++- [src/main/index.ts](../../src/main/index.ts)
++- [native/shelf-candidates/NativeWorkShelf.swift](../../native/shelf-candidates/NativeWorkShelf.swift)
++- [native/shelf-candidates/WorkShelfInteraction.swift](../../native/shelf-candidates/WorkShelfInteraction.swift)
++- [native/shelf-candidates/WorkShelfColorPicker.swift](../../native/shelf-candidates/WorkShelfColorPicker.swift)
++- `npm run test-desktop-viewport-policy`
++- `npm run test-electron-main-lifecycle-policy`
++- `npm run test-work-frame-provenance`
++- `npm run test-file-selection-bulk-ui`
++
+ ## 源码与详细机制
+ 
+-按问题从上表和场景内链接进入源码，不另遍历所有文件：启动/桥接查main.tsx、Preload和Client；页面导航查App、AppShell及导航workflow；断连查BrowserTransport和WorkspaceConnection；草稿/切库查participant、WorkspaceTransitions和Host拥有者；实际素材行为查[工作台专题](asset-workspace.md)，模型/账号/原生窗查[子系统目录](README.md)。
++按问题从上表和场景内链接进入源码，不另遍历所有文件：启动/桥接查main.tsx、Preload和Client；页面导航查App、AppShell及导航workflow；断连查BrowserTransport和WorkspaceConnection；草稿/切库查participant、WorkspaceTransitions和Host拥有者；实际素材行为查[工作台专题](gui-shell.md#asset-workspace)，模型/账号/原生窗查[子系统目录](README.md)。
+ 
+ 局部接口保证继续归[Renderer README](../../src/renderer/README.md)及其链接契约；本页不复制历史接口约束全集。任何技术重构仍核对相关有效决定和具体替代范围，目标规格不因现状缺失被删去，源码存在也不等于普通入口已验收。
+ 
+--- before/docs/subsystems/library-lifecycle.md
++++ after/docs/subsystems/library-lifecycle.md
+@@ -1,22 +1,75 @@
+-# 资料库、持锁与维护
++# 资料库与素材管理
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++本系统拥有持锁资料库、原件/派生角色、Copy入库、人工内容、组织关系、工作集数据以及维护恢复；不把页面Store、模型目录或窗口进程变成持久化权威。
++
++## 按问题定位
++
++| 问题 | 章节 | 跨系统边界 |
++| --- | --- | --- |
++| 开库/建库/锁/schema/维护 | [库会话](#library) | Host发起全局切库与退出 |
++| 选择/拖入/剪贴板、Copy与Promotion | [素材入库](#intake) | GUI选范围，Host检查来源与文件 |
++| 文件夹/标签/笔记/工作集内容与修订 | [人工内容与组织](#organization) | GUI展示，AI仅提议结果 |
++| 视频引用/帧/交付副本身份 | [媒体记录](#media) | Host执行平台解码/文件交接 |
++| 旧库只读找回 | [旧库](#legacy) | GUI三步确认；不能冒充Managed迁移 |
+ 
+ ## 职责与状态权威
+ 
+-Active Library Host组合inspection、库身份/代际、独占lease、私有SQLite与存储角色；Main为当前选中库的唯一写入权威。App设置与旧只读库不是这个数据库的别名。
++Main持有受检session、独占lease与事务；Original、Preview、Variant、人工内容和分析证据各有身份。设备布局和工作集内容分别保存；下列完整链保留同一Host边界，不因合并取消独立能力状态。
+ 
+ ## 正式入口与运行链
+ 
+-可见资料库控件发出命名open/create/close等意图；受检并持锁的session才能建立写入能力。Asset/Tag/Trash、Copy、笔记/工作集与schema维护复用同一Host。单独planner和*.tracer文件是局部验证Seam，不代表正式组合尚未存在。
++<a id="library"></a>
++### 库身份、持锁与维护
++
++**职责与状态权威。** Active Library Host组合inspection、库身份/代际、独占lease、私有SQLite与存储角色；Main为当前选中库的唯一写入权威。App设置与旧只读库不是这个数据库的别名。
++
++**正式入口与运行链。** 可见资料库控件发出命名open/create/close等意图；受检并持锁的session才能建立写入能力。Asset/Tag/Trash、Copy、笔记/工作集与schema维护复用同一Host。单独planner和*.tracer文件是局部验证Seam，不代表正式组合尚未存在。
++
++**失败、取消与兼容保护。** lease丢失、库代际改变、未知维护终态、热journal/sidecar、身份/角色不符必须拒绝相应写入。切库排空真实拥有者；维护先备份/持锁/事务，再确认物理settlement，UNKNOWN不释放。旧assets:delete在活动库不能复用为绕开Trash的删除入口。
++
++**技术与平台边界。** mac-volume与Windows local-volume adapter分别提供本地资格；Windows备份原生资源/SQLite/VFS绑定与macOS路径分别核对。历史小库上限不覆盖当前源码；inspection容量也不等于schema备份容量。
++
++<a id="intake"></a>
++### Copy入库、原件与派生
++
++**职责与状态权威。** Host持有入库身份、存储角色与事务；Capture Gateway拥有Candidate、请求幂等与Promotion Link。Original、必要Preview、图像Variant/派生缓存分别拥有身份，Copy默认不移动外部源。
++
++**正式入口与运行链。** 正式文件选择/拖入/剪贴板或图片工具→受控prepare→精确review receipt确认→分项Copy/校验/必要预览→事务Promotion→Host回读/事件→素材工作台。prepare只读，不建立候选或写出文件；Renderer不选择任意目标路径或分配Asset身份。
++
++**失败、取消与兼容保护。** 签名/格式、长度、SHA、symlink/containment、no-replace发布和来源代际在适用边界复查。幂等重放返回已知提交；取消未开始项，已提交项保留。旧下载表只兼容既有schema，不恢复素材下载执行器；源失败与恢复资格不能用预览替代。
++
++**技术与平台边界。** 图片使用受控Sharp/libvips适配。平台文件身份/句柄/原子发布独立验证，格式和视频由实际消费者决定；递归目录/额外格式不能从一个Copy成功推定支持。
++
++<a id="organization"></a>
++### 人工内容、组织与工作集数据
++
++**职责与状态权威。** 普通文件夹/色板/笔记/工作集保存在持锁Library，引用既有Asset，不移动原件。人工标签、编辑描述/OCR与AI证据分开；确认建议是人工决定，不是简单拷贝AI历史。
++
++**正式入口与运行链。** 工作台/详情/笔记/工作集控件→共享命名Client→当前库session→修订/成员检查→事务写入→回读与跨端通知。笔记有页/标注内容，工作集内容与设备窗口布局分开。schema首次升级走Host维护与备份，旧数据保留。
++
++**失败、取消与兼容保护。** 人工编辑优先，确认/拒绝与执行结果各有身份。冲突保留输入并显式恢复，A→B→A不能复活旧review；删除集合/成员不删除原素材。没有当前标签结果时不得用历史合并标签冒充，空内容与未执行分开。
++
++**技术与平台边界。** 产品Client两端共享，原生卡片/工作窗只可编辑当前获授成员。未来Custom Field长尾、批量迁移/undo等目标独立规范，不从现有标签/笔记推出已交付。
++
++<a id="media"></a>
++### 媒体记录与存储角色
++
++Host拥有视频引用、时间/帧/来源记录及独立交付副本；原件、首帧预览、参考帧和兼容导出分开。移除工作集关系不删除视频或交付副本。
++
++解码/媒体权限读取、跨应用交付和清理终态按[Host系统交接](local-host.md#handoff)，不是GUI拖动结束就删除副本。
++
++<a id="legacy"></a>
++### 旧库找回与恢复范围
++
++旧DAM库通过独立只读工作区找回，不强行转换为Managed。App profile拥有恢复草稿，Library拥有明确提交的业务内容；收到恢复草稿须明确采用/丢弃，不能自动覆盖当前输入。路径偏好不切换或迁移活动库；Host配置/迁移见[配置维护](local-host.md#configuration)。旧库三步选择、预览/空/失败用户行为见[统一交互](../design/INTERACTIONS.md#legacy)，实现见[旧库README](../../src/main/legacy-readonly-workspace/README.md)。
+ 
+ ## 失败、取消与兼容保护
+ 
+-lease丢失、库代际改变、未知维护终态、热journal/sidecar、身份/角色不符必须拒绝相应写入。切库排空真实拥有者；维护先备份/持锁/事务，再确认物理settlement，UNKNOWN不释放。旧assets:delete在活动库不能复用为绕开Trash的删除入口。
++各阶段分别执行来源/格式/身份/修订与提交检查；未知终态不冒充空值或释放许可，人工修改优先，重跑/迁移失败保留旧有效数据。原件、旧只读库与恢复副本分别验证，不以GUI表现或通知替代事务/回读。具体例外见上述章节。
+ 
+ ## 技术与平台边界
+ 
+-mac-volume与Windows local-volume adapter分别提供本地资格；Windows备份原生资源/SQLite/VFS绑定与macOS路径分别核对。历史小库上限不覆盖当前源码；inspection容量也不等于schema备份容量。
++存储身份/SQLite/备份/文件发布依实际平台与完整候选核对，不能互拷ABI或用一格式/样本推定全部支持。受管默认Copy，未来长尾能力不自动入队列。
+ 
+ ## 源码与详细机制
+ 
+@@ -27,17 +80,34 @@
+ - [src/main/library-lifecycle/production-active-library-dependencies.ts](../../src/main/library-lifecycle/production-active-library-dependencies.ts)
+ - [src/main/library-lifecycle/README.md](../../src/main/library-lifecycle/README.md)
+ - [src/main/library-lifecycle/LIBRARY-START.md](../../src/main/library-lifecycle/LIBRARY-START.md)
+-
+-## 验证与维护
+-
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
+-
+ - `npm run test-active-library-session`
+ - `npm run test-active-library-tags`
+ - `npm run test-active-library-capture-composition`
+ - `npm run test-asset-trash-lifecycle`
+ - `npm run test-asset-trash-sqlite-persistence`
++- [src/main/capture-intake/README.md](../../src/main/capture-intake/README.md)
++- [src/main/capture-intake/add-assets.workflow.ts](../../src/main/capture-intake/add-assets.workflow.ts)
++- [src/main/capture-intake/capture-gateway.ts](../../src/main/capture-intake/capture-gateway.ts)
++- [src/main/library-lifecycle/owned-image-intake.ts](../../src/main/library-lifecycle/owned-image-intake.ts)
++- [src/main/library-lifecycle/owned-image-recovery.ts](../../src/main/library-lifecycle/owned-image-recovery.ts)
++- [src/main/image-tools/README.md](../../src/main/image-tools/README.md)
++- `npm run test-asset-authority-baseline`
++- `npm run test-intake-recovery`
++- `npm run test-capture-intake-workflow`
++- [src/main/library-lifecycle/library-organization.ts](../../src/main/library-lifecycle/library-organization.ts)
++- [src/main/library-lifecycle/asset-notebook.ts](../../src/main/library-lifecycle/asset-notebook.ts)
++- [src/main/library-lifecycle/work-sets.ts](../../src/main/library-lifecycle/work-sets.ts)
++- [src/main/library-lifecycle/active-library-tag-metadata.ts](../../src/main/library-lifecycle/active-library-tag-metadata.ts)
++- [src/main/independent-tags/README.md](../../src/main/independent-tags/README.md)
++- [src/shared/client/workspace-client.ts](../../src/shared/client/workspace-client.ts)
++- `npm run test-asset-card`
++- `npm run test-asset-description-draft`
++- `npm run test-app-navigation-workflow`
++- `npm run test-native-open-dialog`
++- `npm run test-asset-store-loading`
+ 
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
++媒体源码：[work-media-storage](../../src/main/work-mode/work-media-storage.ts)，[媒体控制器](../../src/main/work-mode/work-media-controller.ts)。
+ 
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
++## 验证与维护
++
++按当前阶段/影响选测试，应用普通入口、保存重开/错误/取消、原件与人工数据保护分别证明；命令入口package.json。运行身份/缺口归CURRENT-STATE，证据归任务报告；架构与局部接口有变化同步所属README。
+--- before/docs/subsystems/local-host.md
++++ after/docs/subsystems/local-host.md
+@@ -1,24 +1,65 @@
+-# 应用、双客户端与生命周期
++# 应用Host与系统集成
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++本系统拥有可信进程、会话/命名通信、应用配置与关闭/退出、原生系统能力和跨应用文件交接。界面只表达意图；Library拥有持久业务内容，AI拥有执行编排，搜索拥有查询/索引。构建签名与发行流程见[开发交付指南](../platform/BUILD-AND-RELEASE.md)，不属于本运行系统。
++
++## 按问题定位
++
++| 问题 | 章节 | 协作方 |
++| --- | --- | --- |
++| 双端启动、角色与退出 | [进程与客户端](#clients) | [GUI](gui-shell.md) |
++| 设置持久化、路径迁移、恢复协作 | [配置维护](#configuration) | [GUI设置](gui-shell.md#settings-ui)、[Library](library-lifecycle.md) |
++| 视频helper、媒体读取、拖出/ZIP/接收 | [系统交接](#handoff) | [Library媒体](library-lifecycle.md#media)、GUI原生窗口 |
+ 
+ ## 职责与状态权威
+ 
+-同一明确profile的Electron Local Host拥有文件、SQLite、账号和执行。Desktop通过Preload/IPC，Browser通过本机HTTP/SSE进入同一命名业务处理器；两端共享React，关闭界面和退出Host不是同一动作。
++每个明确profile一个Host，应用配置/凭据/恢复归profile，业务内容归持锁Library。权限/角色/代际与真实资源生命周期不会因文档合并下放到Renderer或原生子进程。
++
++## 正式入口与运行链
++
++<a id="clients"></a>
++### 进程、双客户端与生命周期
++
++**职责与状态权威。** 同一明确profile的Electron Local Host拥有文件、SQLite、账号和执行。Desktop通过Preload/IPC，Browser通过本机HTTP/SSE进入同一命名业务处理器；两端共享React，关闭界面和退出Host不是同一动作。
+ 
+ 页面/窗口组成、Client安装、连接校准与外壳参与退出的跨层链见[GUI系统说明](gui-shell.md)；本专题继续拥有Host生命周期/权限与传输边界，不把视觉规范搬进来。
+ 
+-## 正式入口与运行链
++**正式入口与运行链。** 普通start:desktop打开桌面，start:browser启动/连接同Host并打开一次性入口；既有会话校验后注册客户端和草稿参与者。业务从WorkspaceClient到Main注册，再到各领域拥有者。切库/退出由transition冻结、收集草稿、排空再撤权，页面不能单独判全局无未保存内容。
+ 
+-普通start:desktop打开桌面，start:browser启动/连接同Host并打开一次性入口；既有会话校验后注册客户端和草稿参与者。业务从WorkspaceClient到Main注册，再到各领域拥有者。切库/退出由transition冻结、收集草稿、排空再撤权，页面不能单独判全局无未保存内容。
++**失败、取消与兼容保护。** Origin/Host/CSRF、角色、文档身份和撤权均保留；unknown提交不自动重发。断连先拒绝写入，权威重读和UI校准后恢复。失败/未知flush保留草稿与窗口；通知失败不撤销已提交结果。浏览器不是任意路径/SQL/命令入口。
++
++**技术与平台边界。** Electron负责平台生命周期/系统对话框。Browser UI结果不证明macOS/Windows窗口、钥匙串、安装器或拖放；profile仅是归属，不授予Agent读取秘密配置。
++
++<a id="configuration"></a>
++### 应用配置、路径与恢复协作
++
++**职责与状态权威。** 全窗口/settings承载全局配置、AI与模型、维护和恢复；主页素材导航不在设置上方继续显示。profile设置/草稿归App，当前库内容归Library。旧DAM库通过独立只读工作区找回，不强行转换为Managed。
++
++**正式入口与运行链。** 普通设置入口→分类页/表单→命名Client→可信Main→修订检查/原子保存→双端回读。路径迁移先plan/审查再执行，配置与实际库身份分别核对。收到的恢复草稿需显式采用/丢弃，不自动覆盖用户当前输入。
++
++**失败、取消与兼容保护。** 分类转场保留未保存输入；旧响应/旧文档writer不覆盖新状态。未知提交显示固定指导并权威回读，不建议盲重发。选择器取消无副作用；退出/切库核对所有参与者，后台计数/空态不能掩盖真正错误。
++
++**技术与平台边界。** 系统选择器、权限、路径根/链接和迁移适配按OS验证；Browser不能得到任意本机路径/命令。诊断输出非敏感摘要，不读完整配置、保险库、环境或内存转储。
++
++设置的具体分类/外观/导航状态归[GUI](gui-shell.md#settings-ui)及[统一交互](../design/INTERACTIONS.md#workspace-应用页面导航)。移动数据/改路径不是单纯GUI布局任务，仍须Host计划/审查和Library身份验证。
++
++<a id="handoff"></a>
++### 平台媒体与文件交付
++
++正式Copy/工作集→视频controller→平台解码helper与共享准入→保存请求/实际时间及完整PNG→限定媒体GET/HEAD/range；交付动作→验证当前成员/来源→生成独立副本或ZIP→系统拖放/默认应用→核对接收。
++
++不以首帧冒充整段分析；范围请求在权限之后，非法/多range拒绝。交付不移动/覆盖第三方源，不以open-requested或拖动结束证明接收成功。取消保留已完成项，未确认helper退出保持占用；清理按显式归属和真实接收检查。
++
++macOS AVFoundation与Windows Media Foundation是不同helper/资源绑定；只按已支持codec/旋转/大小/时长/分辨率接受。记录requested/actual时间，不为Mac写Windows方法标签；文件承诺来源数量未知时保持未确认。
++
++媒体身份、参考帧与存储角色见[Library媒体记录](library-lifecycle.md#media)；窗口拖动/呈现见[GUI](gui-shell.md#reference-windows)。系统open请求、拖动结束与接收应用已取得文件各自证明。
+ 
+ ## 失败、取消与兼容保护
+ 
+-Origin/Host/CSRF、角色、文档身份和撤权均保留；unknown提交不自动重发。断连先拒绝写入，权威重读和UI校准后恢复。失败/未知flush保留草稿与窗口；通知失败不撤销已提交结果。浏览器不是任意路径/SQL/命令入口。
++失效会话、错误角色/代际、断连/unknown提交、未确认flush与helper退出各拒绝其依赖操作；不得通过统一入口减少原来的权限、幂等、事务或进程收尾保证。分支具体约束在上述拥有者章节。
+ 
+ ## 技术与平台边界
+ 
+-Electron负责平台生命周期/系统对话框。Browser UI结果不证明macOS/Windows窗口、钥匙串、安装器或拖放；profile仅是归属，不授予Agent读取秘密配置。
++Electron/本机HTTP与Preload进入相同命名业务处理器，平台系统接口按实际OS验证；macOS原生和Windows资格不互代，Browser也不是任意SQL/文件/终端入口。
+ 
+ ## 源码与详细机制
+ 
+@@ -29,17 +70,29 @@
+ - [src/shared/client/workspace-client.ts](../../src/shared/client/workspace-client.ts)
+ - [src/preload/index.ts](../../src/preload/index.ts)
+ - [src/renderer/App.tsx](../../src/renderer/App.tsx)
+-
+-## 验证与维护
+-
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
+-
+ - `npm run test-desktop-viewport-policy`
+ - `npm run test-app-navigation-workflow`
+ - `npm run test-electron-main-lifecycle-policy`
+ - `npm run test-work-frame-provenance`
+ - `npm run test-file-selection-bulk-ui`
++- [src/renderer/routes/Settings.tsx](../../src/renderer/routes/Settings.tsx)
++- [src/main/services/settings.service.ts](../../src/main/services/settings.service.ts)
++- [src/main/ipc/settings.ipc.ts](../../src/main/ipc/settings.ipc.ts)
++- [src/main/path-migration/path-migration-executor.ts](../../src/main/path-migration/path-migration-executor.ts)
++- [src/main/local-host/workspace-drafts.ts](../../src/main/local-host/workspace-drafts.ts)
++- [src/main/legacy-readonly-workspace/README.md](../../src/main/legacy-readonly-workspace/README.md)
++- `npm run test-ai-backend-restoration`
++- `npm run test-settings-compatibility`
++- `npm run test-settings-migration`
++- `npm run test-path-governance-docs`
++- `node scripts/run-ts-test.mjs scripts/settings-service-defaults.test.ts`
++- [src/main/work-mode/work-media-controller.ts](../../src/main/work-mode/work-media-controller.ts)
++- [src/main/work-mode/work-media-storage.ts](../../src/main/work-mode/work-media-storage.ts)
++- [src/main/work-mode/work-file-handoff.ts](../../src/main/work-mode/work-file-handoff.ts)
++- [src/main/work-mode/macos-video-runtime.ts](../../src/main/work-mode/macos-video-runtime.ts)
++- [src/main/work-mode/windows-video-runtime.ts](../../src/main/work-mode/windows-video-runtime.ts)
++- [src/main/work-mode/media-response.ts](../../src/main/work-mode/media-response.ts)
+ 
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
++## 验证与维护
+ 
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
++按受影响通信/配置/退出/交付场景选择上述测试；实际命令以package.json为准，执行与结果分开。运行状态归CURRENT-STATE，权限/系统动作须实际端证明；[开发规范](../code-standards.md)规定审查保证，[真实验收](../agents/ui-ux-acceptance.md)规定产品证据。
+--- before/docs/subsystems/media-handoff.md
++++ after/docs/subsystems/media-handoff.md
+@@ -1,42 +1,28 @@
+ # 视频参考帧与跨应用文件交付
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](local-host.md#handoff)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-Host拥有视频引用、时间/帧/来源记录及独立交付副本；原件、首帧预览、参考帧和兼容导出分开。移除工作集关系不删除视频或交付副本。
++[当前正文](library-lifecycle.md#media).
+ 
+ ## 正式入口与运行链
+ 
+-正式Copy/工作集→视频controller→平台解码helper与共享准入→保存请求/实际时间及完整PNG→限定媒体GET/HEAD/range；交付动作→验证当前成员/来源→生成独立副本或ZIP→系统拖放/默认应用→核对接收。
++[当前正文](local-host.md#handoff).
+ 
+ ## 失败、取消与兼容保护
+ 
+-不以首帧冒充整段分析；范围请求在权限之后，非法/多range拒绝。交付不移动/覆盖第三方源，不以open-requested或拖动结束证明接收成功。取消保留已完成项，未确认helper退出保持占用；清理按显式归属和真实接收检查。
++[当前正文](local-host.md#handoff).
+ 
+ ## 技术与平台边界
+ 
+-macOS AVFoundation与Windows Media Foundation是不同helper/资源绑定；只按已支持codec/旋转/大小/时长/分辨率接受。记录requested/actual时间，不为Mac写Windows方法标签；文件承诺来源数量未知时保持未确认。
++[当前正文](local-host.md#handoff).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/work-mode/work-media-controller.ts](../../src/main/work-mode/work-media-controller.ts)
+-- [src/main/work-mode/work-media-storage.ts](../../src/main/work-mode/work-media-storage.ts)
+-- [src/main/work-mode/work-file-handoff.ts](../../src/main/work-mode/work-file-handoff.ts)
+-- [src/main/work-mode/macos-video-runtime.ts](../../src/main/work-mode/macos-video-runtime.ts)
+-- [src/main/work-mode/windows-video-runtime.ts](../../src/main/work-mode/windows-video-runtime.ts)
+-- [src/main/work-mode/media-response.ts](../../src/main/work-mode/media-response.ts)
++[当前正文](local-host.md#handoff).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](local-host.md#handoff).
+ 
+-- `npm run test-desktop-viewport-policy`
+-- `npm run test-app-navigation-workflow`
+-- `npm run test-electron-main-lifecycle-policy`
+-- `npm run test-work-frame-provenance`
+-- `npm run test-file-selection-bulk-ui`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/model-library.md
++++ after/docs/subsystems/model-library.md
+@@ -1,42 +1,28 @@
+ # 模型制品、正式库存与签名目录
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](ai-system.md#models)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-正式managed模型库存/来源/恢复传输归App Host；模型制品是数据，Runtime包是执行依赖。独立签名Catalog核心/registry/pilot有各自受限Seam，不能把其未交付安装能力推断为正式managed库存不存在。
++[当前正文](ai-system.md#models).
+ 
+ ## 正式入口与运行链
+ 
+-设置→本地模型与OCR→Main命名动作→目录/固定revision与完整SHA→受管恢复传输/只读引用或复制→完整校验→库存→单独加载/验证/启用。签名官方目录走独立release pin与信任根校验；开发缺签名输入时相应页面fail closed，不否认其他managed入口。
++[当前正文](ai-system.md#models).
+ 
+ ## 失败、取消与兼容保护
+ 
+-下载完成、结构正确、预计适合、运行支持、真实执行通过是不同事实。损坏/环境漂移/撤信任拒绝，临时远端不可用不删除旧内容。暂停/重开不自动恢复，升级失败保留旧制品；不执行仓库代码/pickle/隐含下载。
++[当前正文](ai-system.md#models).
+ 
+ ## 技术与平台边界
+ 
+-正式来源依既有境内镜像策略逐跳校验，旧huggingface文件名仅兼容命名。平台、量化、CPU/GPU/Metal方案分别验证；本轮开发验收只使用已有权重，不触发模型下载。签名发行仍受独立发布范围。
++[当前正文](ai-system.md#models).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/model-library-workspace/README.md](../../src/main/model-library-workspace/README.md)
+-- [src/main/model-library-workspace/managed-model-library.ts](../../src/main/model-library-workspace/managed-model-library.ts)
+-- [src/main/model-library-workspace/china-model-mirror.ts](../../src/main/model-library-workspace/china-model-mirror.ts)
+-- [src/main/model-library-workspace/model-file-transfer.ts](../../src/main/model-library-workspace/model-file-transfer.ts)
+-- [src/main/model-library/README.md](../../src/main/model-library/README.md)
+-- [src/main/model-library-workspace/model-library-workspace.composition.ts](../../src/main/model-library-workspace/model-library-workspace.composition.ts)
++[当前正文](ai-system.md#models).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](ai-system.md#models).
+ 
+-- `npm run test-legacy-model-management-containment`
+-- `npm run test-model-acquisition-local-only`
+-- `npm run test-model-artifact-readiness`
+-- `npm run test-model-artifact-readiness-display`
+-- `npm run test-model-library-catalog-admission-tracer`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/ocr.md
++++ after/docs/subsystems/ocr.md
+@@ -1,41 +1,28 @@
+ # OCR执行、空结果与修正
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](ai-system.md#ocr)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-OCR控制器拥有识别生命周期，持久结果及人工修正归当前Library Host；结果中的文字、位置、语言/配方证据与人工文本分别保存。当前能力不由旧FastAPI OCR通道是否启用决定。
++[当前正文](ai-system.md#ocr).
+ 
+ ## 正式入口与运行链
+ 
+-正式详情/基础分析/后台OCR→受限asset-ocr动作→当前素材/预览/环境资格→资源准入→自有私有Worker→校验有效文字或有效空结果→Host保存→回读。安装/环境验证、执行资格和识别质量是不同状态。
++[当前正文](ai-system.md#ocr).
+ 
+ ## 失败、取消与兼容保护
+ 
+-已验证空结果不退回旧文字；失败/不支持不冒充空结果。人工修正优先，旧代次不得覆盖。取消与环境/库变更收敛真实进程，物理close前占用保留；输入/等待/失败反馈按UI规格检查。
++[当前正文](ai-system.md#ocr).
+ 
+ ## 技术与平台边界
+ 
+-RapidOCR等通过实际可信Python及已存在模型运行，Darwin与Windows资源测量/依赖分别验证。不因目录在场自动下载或安装依赖权重；测试缺模型仅保留对应缺口。
++[当前正文](ai-system.md#ocr).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/ocr/README.md](../../src/main/ocr/README.md)
+-- [src/main/background-ocr/README.md](../../src/main/background-ocr/README.md)
+-- [src/main/ocr/ocr-controller.ts](../../src/main/ocr/ocr-controller.ts)
+-- [src/main/ocr/ocr-runtime.ts](../../src/main/ocr/ocr-runtime.ts)
+-- [src/main/ipc/asset-ocr.ipc.ts](../../src/main/ipc/asset-ocr.ipc.ts)
++[当前正文](ai-system.md#ocr).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](ai-system.md#ocr).
+ 
+-- `npm run test-ai-client-ipc-contract`
+-- `node scripts/run-ts-test.mjs scripts/ai-result-sync-projector.test.ts`
+-- `node scripts/run-ts-test.mjs scripts/ai-tag-suggestion-sync-sink.test.ts`
+-- `npm run ci:test-runtime-safety`
+-- `npm run test-node-host-platform-defaults`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/optional-targets.md
++++ after/docs/subsystems/optional-targets.md
+@@ -1,43 +1,32 @@
+ # 有效目标、可选能力与退休范围
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](../product/CAPABILITY-SCOPE.md)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-产品基准拥有核心/可选/远景范围。Custom Field长尾、复杂导出/恢复、扩展SDK、录屏producer等按有效目标规格保存；不由目录/ADR存在判定交付。
++[当前正文](../product/CAPABILITY-SCOPE.md#职责与状态权威).
+ 
+ ## 正式入口与运行链
+ 
+-未来明确任务先读对应目标规格与重大取舍，核对当前实现消费者，再决定具体实施。当前本地Copy/理解/检索/工作集复用不依赖完整生态、云开发/MCP或每项未来状态机先完成。
++[当前正文](../product/CAPABILITY-SCOPE.md#正式入口与运行链).
+ 
+ ### 插件、SDK与MCP接入
+ 
+-扩展接入首先核对[0484的现行边界与阶段](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)及[0483核心/可选能力范围](../adr/0483-ai-plus-core-product-and-extension-boundaries.md)：公共能力契约、MCP工具/资源适配与隔离插件运行时各有职责，Accepted目标不等于已有公开API。具体贡献面/权限设计按[扩展面详细契约](../product/specs/model-extension.md#adr-0154)和[扩展决定目录](../adr/indexes/topics/model-extension.md)选择适用条款；讨论稿仅保留来源，不取代现行修订。
+-
+-当前可复用的业务/权限边界从[Local Host](local-host.md)及源码旁README核对，不把现有WorkspaceClient/内部IPC当公共插件SDK。模型制品与插件包不同，前者的当前实现归[模型专题](model-library.md)。
++[当前正文](../product/CAPABILITY-SCOPE.md#插件sdk与mcp接入).
+ 
+ ## 失败、取消与兼容保护
+ 
+-目标未实现不等于可以删要求，Accepted不等于Implemented。退休只替代被明确点名的能力/条款；来源隐私/原件/事务保护仍按适用范围保留。不得通过文档整理重新开放网页采集、素材下载执行或任意插件权限。
++[当前正文](../product/CAPABILITY-SCOPE.md#失败取消与兼容保护).
+ 
+ ## 技术与平台边界
+ 
+-已退休嵌入式网页/网站登录/外部网站搜索与素材任务下载，保留本地Copy、模型下载产品能力及既有用户数据/schema兼容。模型权重下载产品能力不等于本轮验收允许下载。
++[当前正文](../product/CAPABILITY-SCOPE.md#技术与平台边界).
+ 
+ ## 源码与详细机制
+ 
+-- [docs/product/PRODUCT-FOUNDATION.md](../product/PRODUCT-FOUNDATION.md)
+-- [docs/adr/README.md](../adr/README.md)
+-- [docs/product/PLUGIN-PLATFORM-DISCUSSION-20260913.md](../product/PLUGIN-PLATFORM-DISCUSSION-20260913.md)
+-- [docs/product/WEB-COLLECTION-RETIREMENT-20260913.md](../product/WEB-COLLECTION-RETIREMENT-20260913.md)
++[当前正文](../product/CAPABILITY-SCOPE.md#源码与详细机制).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](../product/CAPABILITY-SCOPE.md#验证与维护).
+ 
+-- `npm run test-web-retirement`
+-- `npm run test-asset-authority-baseline`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/organization.md
++++ after/docs/subsystems/organization.md
+@@ -1,42 +1,28 @@
+ # 组织、标签、笔记与人工内容
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](library-lifecycle.md#organization)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-普通文件夹/色板/笔记/工作集保存在持锁Library，引用既有Asset，不移动原件。人工标签、编辑描述/OCR与AI证据分开；确认建议是人工决定，不是简单拷贝AI历史。
++[当前正文](library-lifecycle.md#organization).
+ 
+ ## 正式入口与运行链
+ 
+-工作台/详情/笔记/工作集控件→共享命名Client→当前库session→修订/成员检查→事务写入→回读与跨端通知。笔记有页/标注内容，工作集内容与设备窗口布局分开。schema首次升级走Host维护与备份，旧数据保留。
++[当前正文](library-lifecycle.md#organization).
+ 
+ ## 失败、取消与兼容保护
+ 
+-人工编辑优先，确认/拒绝与执行结果各有身份。冲突保留输入并显式恢复，A→B→A不能复活旧review；删除集合/成员不删除原素材。没有当前标签结果时不得用历史合并标签冒充，空内容与未执行分开。
++[当前正文](library-lifecycle.md#organization).
+ 
+ ## 技术与平台边界
+ 
+-产品Client两端共享，原生卡片/工作窗只可编辑当前获授成员。未来Custom Field长尾、批量迁移/undo等目标独立规范，不从现有标签/笔记推出已交付。
++[当前正文](library-lifecycle.md#organization).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/library-lifecycle/library-organization.ts](../../src/main/library-lifecycle/library-organization.ts)
+-- [src/main/library-lifecycle/asset-notebook.ts](../../src/main/library-lifecycle/asset-notebook.ts)
+-- [src/main/library-lifecycle/work-sets.ts](../../src/main/library-lifecycle/work-sets.ts)
+-- [src/main/library-lifecycle/active-library-tag-metadata.ts](../../src/main/library-lifecycle/active-library-tag-metadata.ts)
+-- [src/main/independent-tags/README.md](../../src/main/independent-tags/README.md)
+-- [src/shared/client/workspace-client.ts](../../src/shared/client/workspace-client.ts)
++[当前正文](library-lifecycle.md#organization).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](library-lifecycle.md#organization).
+ 
+-- `npm run test-asset-card`
+-- `npm run test-asset-description-draft`
+-- `npm run test-app-navigation-workflow`
+-- `npm run test-native-open-dialog`
+-- `npm run test-asset-store-loading`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/platform-release.md
++++ after/docs/subsystems/platform-release.md
+@@ -1,44 +1,28 @@
+ # 平台、构建资源、安装与发行
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](../platform/BUILD-AND-RELEASE.md)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-构建规则拥有Worker/本地import/原生资源的产物闭包，平台adapter拥有OS行为，发布门管理签名候选/证据，不授予库操作或新资料/费用权限。package.json是实际命令入口。
++[当前正文](../platform/BUILD-AND-RELEASE.md#职责与状态权威).
+ 
+ ## 正式入口与运行链
+ 
+-锁定依赖→平台原生构建/校验→electron-vite主/预加载/共享UI→资源复制/身份生成→本地候选→对应平台打包→独立安装/签名/更新/发布证据。Pi与Swift/C++资源由自己的生成/seal清单进入产品，不从开发目录侥幸读取。
++[当前正文](../platform/BUILD-AND-RELEASE.md#正式入口与运行链).
+ 
+ ## 失败、取消与兼容保护
+ 
+-声明版本、锁版本、实际依赖与受测产物分清；缺资源/签名/信任输入明确拒绝。不能手工改摘要伪造闭包或把本地tag当发布成功。CI/交叉编译只证明各自检查，安装、系统权限/凭据、真实模型必须独立证据。
++[当前正文](../platform/BUILD-AND-RELEASE.md#失败取消与兼容保护).
+ 
+ ## 技术与平台边界
+ 
+-Windows NSIS/原生DLL/Media Foundation与macOS DMG/helper/AppKit/签名公证分别验证；Linux/WSL不替代Windows。四份既有CI复用，不为对齐Magpie文件名造Docker/Makefile或公开预览托管。
++[当前正文](../platform/BUILD-AND-RELEASE.md#技术与平台边界).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/platform/path-resolver.ts](../../src/main/platform/path-resolver.ts)
+-- [src/main/packaging/release-flow-governance.ts](../../src/main/packaging/release-flow-governance.ts)
+-- [scripts/run-electron-builder.mjs](../../scripts/run-electron-builder.mjs)
+-- [package.json](../../package.json)
+-- [.github/workflows/cross-platform-governance.yml](../../.github/workflows/cross-platform-governance.yml)
+-- [.github/workflows/macos-package-artifact.yml](../../.github/workflows/macos-package-artifact.yml)
+-- [.github/workflows/release-packaging-dry-run.yml](../../.github/workflows/release-packaging-dry-run.yml)
+-- [.github/workflows/release-signed-candidate.yml](../../.github/workflows/release-signed-candidate.yml)
++[当前正文](../platform/BUILD-AND-RELEASE.md#源码与详细机制).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](../platform/BUILD-AND-RELEASE.md#验证与维护).
+ 
+-- `npm run test-release-flow-governance`
+-- `npm run test-release-candidate-governance`
+-- `npm run test-release-checksums`
+-- `npm run test-package-smoke`
+-- `npm run test-release-update-metadata`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/settings-recovery.md
++++ after/docs/subsystems/settings-recovery.md
+@@ -1,46 +1,28 @@
+ # 设置、路径、诊断与旧库找回
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](local-host.md#configuration)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-全窗口/settings承载全局配置、AI与模型、维护和恢复；主页素材导航不在设置上方继续显示。profile设置/草稿归App，当前库内容归Library。旧DAM库通过独立只读工作区找回，不强行转换为Managed。
+-
+-设置子路由怎样保留外壳实例、如何与连接校准/退出参与者协作见[GUI系统说明](gui-shell.md)；本专题继续拥有路径、维护、恢复和相关设置机制。
++[当前正文](local-host.md#configuration).
+ 
+ ## 正式入口与运行链
+ 
+-设置分类、搜索范围、草稿生命周期与旧路由的当前行为见[工作台交互：应用页面导航](../design/INTERACTIONS.md#workspace-应用页面导航)；呈现见[DESIGN：配置、任务与其他应用页面](../../DESIGN.md#配置任务与其他应用页面)。评估整合时先区分现行约定、源码偏差与拟改变的体验，不把可改进的现行约定直接称作实现缺陷；AI连接管理另见[连接专题](ai-connections.md)。
+-
+-普通设置入口→分类页/表单→命名Client→可信Main→修订检查/原子保存→双端回读。路径迁移先plan/审查再执行，配置与实际库身份分别核对。收到的恢复草稿需显式采用/丢弃，不自动覆盖用户当前输入。
++[当前正文](local-host.md#configuration).
+ 
+ ## 失败、取消与兼容保护
+ 
+-分类转场保留未保存输入；旧响应/旧文档writer不覆盖新状态。未知提交显示固定指导并权威回读，不建议盲重发。选择器取消无副作用；退出/切库核对所有参与者，后台计数/空态不能掩盖真正错误。
++[当前正文](local-host.md#configuration).
+ 
+ ## 技术与平台边界
+ 
+-系统选择器、权限、路径根/链接和迁移适配按OS验证；Browser不能得到任意本机路径/命令。诊断输出非敏感摘要，不读完整配置、保险库、环境或内存转储。
++[当前正文](local-host.md#configuration).
+ 
+ ## 源码与详细机制
+ 
+-- [src/renderer/routes/Settings.tsx](../../src/renderer/routes/Settings.tsx)
+-- [src/main/services/settings.service.ts](../../src/main/services/settings.service.ts)
+-- [src/main/ipc/settings.ipc.ts](../../src/main/ipc/settings.ipc.ts)
+-- [src/main/path-migration/path-migration-executor.ts](../../src/main/path-migration/path-migration-executor.ts)
+-- [src/main/local-host/workspace-drafts.ts](../../src/main/local-host/workspace-drafts.ts)
+-- [src/main/legacy-readonly-workspace/README.md](../../src/main/legacy-readonly-workspace/README.md)
++[当前正文](local-host.md#configuration).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](local-host.md#configuration).
+ 
+-- `npm run test-ai-backend-restoration`
+-- `npm run test-settings-compatibility`
+-- `npm run test-settings-migration`
+-- `npm run test-path-governance-docs`
+-- `node scripts/run-ts-test.mjs scripts/settings-service-defaults.test.ts`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/storage-intake.md
++++ after/docs/subsystems/storage-intake.md
+@@ -1,42 +1,28 @@
+ # 原件、Copy入库与派生文件
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](library-lifecycle.md#intake)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-Host持有入库身份、存储角色与事务；Capture Gateway拥有Candidate、请求幂等与Promotion Link。Original、必要Preview、图像Variant/派生缓存分别拥有身份，Copy默认不移动外部源。
++[当前正文](library-lifecycle.md#intake).
+ 
+ ## 正式入口与运行链
+ 
+-正式文件选择/拖入/剪贴板或图片工具→受控prepare→精确review receipt确认→分项Copy/校验/必要预览→事务Promotion→Host回读/事件→素材工作台。prepare只读，不建立候选或写出文件；Renderer不选择任意目标路径或分配Asset身份。
++[当前正文](library-lifecycle.md#intake).
+ 
+ ## 失败、取消与兼容保护
+ 
+-签名/格式、长度、SHA、symlink/containment、no-replace发布和来源代际在适用边界复查。幂等重放返回已知提交；取消未开始项，已提交项保留。旧下载表只兼容既有schema，不恢复素材下载执行器；源失败与恢复资格不能用预览替代。
++[当前正文](library-lifecycle.md#intake).
+ 
+ ## 技术与平台边界
+ 
+-图片使用受控Sharp/libvips适配。平台文件身份/句柄/原子发布独立验证，格式和视频由实际消费者决定；递归目录/额外格式不能从一个Copy成功推定支持。
++[当前正文](library-lifecycle.md#intake).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/capture-intake/README.md](../../src/main/capture-intake/README.md)
+-- [src/main/capture-intake/add-assets.workflow.ts](../../src/main/capture-intake/add-assets.workflow.ts)
+-- [src/main/capture-intake/capture-gateway.ts](../../src/main/capture-intake/capture-gateway.ts)
+-- [src/main/library-lifecycle/owned-image-intake.ts](../../src/main/library-lifecycle/owned-image-intake.ts)
+-- [src/main/library-lifecycle/owned-image-recovery.ts](../../src/main/library-lifecycle/owned-image-recovery.ts)
+-- [src/main/image-tools/README.md](../../src/main/image-tools/README.md)
++[当前正文](library-lifecycle.md#intake).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](library-lifecycle.md#intake).
+ 
+-- `npm run test-asset-authority-baseline`
+-- `npm run test-intake-recovery`
+-- `npm run test-active-library-session`
+-- `npm run test-active-library-capture-composition`
+-- `npm run test-capture-intake-workflow`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/visual-ai.md
++++ after/docs/subsystems/visual-ai.md
+@@ -1,42 +1,28 @@
+ # 深度分析、提示词反推与图片工具
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](ai-system.md#visual)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-界面表达具体能力意图，Main拥有受控预览、review/执行与身份校验，Host拥有证据与提交。深度分析、反推、独立标签、基础描述不能因共用模型而混为一条无边界结果。
++[当前正文](ai-system.md#visual).
+ 
+ ## 正式入口与运行链
+ 
+-素材详情/获授卡片→VisualAiPanel准备/确认→visual-ai-controller→按当前连接调用Pi/managed或既有传输→解析/验证→Host存证→回读。图片工具产生受控派生/新素材时复用Copy/variant入口，不覆盖Original。
++[当前正文](ai-system.md#visual).
+ 
+ ## 失败、取消与兼容保护
+ 
+-冻结目标、来源、配方和配置；权限/代际/owner变化撤销review。未知远端结果不能标未执行重试，取消保留此前线性化提交；失败留旧有效结果和输入。反推文本命中不等于画面事实，用量/截断/实际调用次数如实表示。
++[当前正文](ai-system.md#visual).
+ 
+ ## 技术与平台边界
+ 
+-Pi是协议执行Worker，本地推理由自有Runtime承担；不因为一个openai-compatible文件名推定全部厂商相同。共享UI、真实模型质量和原生卡片交互分别验收。
++[当前正文](ai-system.md#visual).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/visual-ai/README.md](../../src/main/visual-ai/README.md)
+-- [src/main/visual-ai/visual-ai-controller.ts](../../src/main/visual-ai/visual-ai-controller.ts)
+-- [src/main/visual-ai/openai-vision.transport.ts](../../src/main/visual-ai/openai-vision.transport.ts)
+-- [src/renderer/components/asset/VisualAiPanel.tsx](../../src/renderer/components/asset/VisualAiPanel.tsx)
+-- [src/main/ipc/visual-ai.ipc.ts](../../src/main/ipc/visual-ai.ipc.ts)
+-- [src/main/image-tools/README.md](../../src/main/image-tools/README.md)
++[当前正文](ai-system.md#visual).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](ai-system.md#visual).
+ 
+-- `npm run test-prompt-reverse-workflow`
+-- `npm run test-openai-compatible-provider`
+-- `npm run test-llama-openai-backend`
+-- `npm run test-python-unittest`
+-- `npm run test-ai-client-ipc-contract`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/docs/subsystems/work-mode.md
++++ after/docs/subsystems/work-mode.md
+@@ -1,47 +1,28 @@
+ # 工作集、macOS原生悬浮窗与预览
+ 
+-本页描述当前源码的跨层职责与运行路径；不是运行验收或目标全量交付声明。返回[子系统目录](README.md)，具体用户契约见[产品/目标规格](../product/README.md)与[交互目录](../design/README.md)。
++旧入口仅作兼容导航；唯一正文已归位到[对应系统或指南](gui-shell.md#reference-windows)，不在此维护重复规则。原字节及逐段去向见[迁移记录](../checkpoints/subsystem-consolidation-20261016/README.md)。
+ 
+ ## 职责与状态权威
+ 
+-Host持有Library、工作集内容/成员/修订、保存、文件任务与撤权。设备布局与库内内容分开。macOS B的Swift/AppKit子进程负责NSPanel/NSCollectionView、输入、窗口frame与动画；React保留主工作台及按需独立大预览。
++[当前正文](gui-shell.md#reference-windows).
+ 
+ ## 正式入口与运行链
+ 
+-默认start:desktop/start:browser连接普通Host，work controller默认createElectronWorkWindow；只有--dam-work-window-candidate=b（start:work-b）在macOS选createNativeShelfWorkWindow。B通过正式工作模式工作集打开/恢复，私有父子管道仅传受限快照/意图。A是独立研究比较候选，不是B的产品路径。
++[当前正文](gui-shell.md#reference-windows).
+ 
+ ## 失败、取消与兼容保护
+ 
+-按owner/frame/token/成员/库代际核对，旧会话不复活；未保存/unknown flush保留内容和窗口。motionId/gestureId关联终态，迟到动画不覆盖新操作；物理子进程未退出不能释放槽/文件。布局迁移先保留旧记录，不改工作集内容。
++[当前正文](gui-shell.md#reference-windows).
+ 
+ ## 技术与平台边界
+ 
+-当前原生B仅macOS，Windows普通窗仍Electron/React。AppKit不等于SwiftUI；B的NSVisualEffectView不证明目标Liquid Glass已实现。原生输入、动画/帧率、多屏/Spaces、接收应用必须实际验收，Browser结果不能替代。菜单范围/性能门槛等未确认项保留在交互规格。
++[当前正文](gui-shell.md#reference-windows).
+ 
+ ## 源码与详细机制
+ 
+-- [src/main/work-mode/README.md](../../src/main/work-mode/README.md)
+-- [src/main/work-mode/work-window-controller.ts](../../src/main/work-mode/work-window-controller.ts)
+-- [src/main/work-mode/native-shelf-work-window.ts](../../src/main/work-mode/native-shelf-work-window.ts)
+-- [src/main/work-mode/electron-work-window.ts](../../src/main/work-mode/electron-work-window.ts)
+-- [src/main/work-mode/shelf-draft-store.ts](../../src/main/work-mode/shelf-draft-store.ts)
+-- [native/shelf-candidates/README.md](../../native/shelf-candidates/README.md)
+-- [src/main/index.ts](../../src/main/index.ts)
+-
+-- [native/shelf-candidates/NativeWorkShelf.swift](../../native/shelf-candidates/NativeWorkShelf.swift)
+-- [native/shelf-candidates/WorkShelfInteraction.swift](../../native/shelf-candidates/WorkShelfInteraction.swift)
+-- [native/shelf-candidates/WorkShelfColorPicker.swift](../../native/shelf-candidates/WorkShelfColorPicker.swift)
++[当前正文](gui-shell.md#reference-windows).
+ 
+ ## 验证与维护
+ 
+-以下是相关聚焦检查入口，按改动风险选择，不自动执行整组：
++[当前正文](gui-shell.md#reference-windows).
+ 
+-- `npm run test-desktop-viewport-policy`
+-- `npm run test-app-navigation-workflow`
+-- `npm run test-electron-main-lifecycle-policy`
+-- `npm run test-work-frame-provenance`
+-- `npm run test-file-selection-bulk-ui`
+-
+-完整配置见[tests-map](../../.codeindex/tests-map.json)，实际命令以package.json/对应脚本为准。正式用户结果、保存重开、真实推理和原生专项按[真实验收](../agents/ui-ux-acceptance.md)；实际版本/缺口仅见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，剩余责任见[主台账](../tasks/TASK-REGISTRY.md)。
+-
+-改变这里的职责、接口、状态、运行路径、兼容或失败语义时同任务更新正文并描述前后行为；局部内部机制归源码旁README，运行证据归本任务报告，不在本页按日期追加PASS。
+--- before/scripts/agent-context-router.mjs
++++ after/scripts/agent-context-router.mjs
+@@ -515,11 +515,11 @@
+     // authority. Keep the tracked-only policy for source and commands intact.
+     for (const reference of route.documentation ?? []) {
+       const absolute = path.join(root, reference)
+-      if (!/^docs\/subsystems\/[a-z0-9-]+\.md$/.test(reference) ||
++      if (!/^docs\/(?:(?:subsystems|agents)\/[a-z0-9-]+|(?:platform|product)\/[A-Za-z0-9-]+)\.md$/.test(reference) ||
+           !fs.existsSync(absolute) || fs.lstatSync(absolute).isSymbolicLink() ||
+           !fs.lstatSync(absolute).isFile() ||
+           !fs.realpathSync(absolute).startsWith(`${fs.realpathSync(root)}${path.sep}`)) {
+-        errors.push(makeFinding('DOCUMENTATION_REFERENCE_INVALID', `Route ${routeId} has an invalid subsystem reference.`, reference))
++        errors.push(makeFinding('DOCUMENTATION_REFERENCE_INVALID', `Route ${routeId} has an invalid documentation reference.`, reference))
+       }
+     }
+     for (const moduleId of route.modules ?? []) {
+@@ -1359,7 +1359,7 @@
+   console.log('\nReality:')
+   for (const state of pack.states) console.log(`- [${state.reality}] ${state.route}: ${state.summary}`)
+   console.log('\nFirst read:')
+-  for (const reference of pack.documentation) console.log(`Subsystem reference: ${reference}`)
++  for (const reference of pack.documentation) console.log(`Documentation reference: ${reference}`)
+   for (const contract of pack.contractReferences) console.log(`Applicable detail: ${contract.reference} (from ${contract.decision})`)
+   pack.firstRead.forEach((item, index) => {
+     const locator = item.anchor ? `${item.path}#${item.anchor}` : item.path
+--- before/scripts/agent-context-router.test.mjs
++++ after/scripts/agent-context-router.test.mjs
+@@ -1400,16 +1400,19 @@
+ 
+ // These are documentation/consumer navigation checks, not product acceptance.
+ for (const [task, reference] of [
+-  ['修复macOS原生悬浮窗的停靠', 'work-mode'],
+-  ['Asset Discovery OCR match explanation', 'asset-discovery'],
+-  ['Copy Into Library Candidate preview', 'storage-intake'],
+-  ['Application settings path migration', 'settings-recovery'],
+-  ['Agent Context Router ADR governance', 'engineering'],
+-  ['Release packaging signing', 'platform-release']
++  ['修复macOS原生悬浮窗的停靠', 'docs/subsystems/gui-shell.md'],
++  ['Asset Discovery OCR match explanation', 'docs/subsystems/asset-discovery.md'],
++  ['Copy Into Library Candidate preview', 'docs/subsystems/library-lifecycle.md'],
++  ['Application settings path migration', 'docs/subsystems/local-host.md'],
++  ['Agent Context Router ADR governance', 'docs/agents/engineering.md'],
++  ['Release packaging signing', 'docs/platform/BUILD-AND-RELEASE.md'],
++  ['AI analysis background OCR cancellation', 'docs/subsystems/ai-system.md']
+ ]) {
+   const result = jsonRoute(['--task', task])
+-  assert.ok(result.documentation.includes(`docs/subsystems/${reference}.md`), JSON.stringify(result))
+-}
++  assert.ok(result.documentation.includes(reference), JSON.stringify(result))
++}
++const optionalScope = jsonRoute(['--module', 'source-discovery', '--task', 'MCP plugin optional targets'])
++assert.ok(optionalScope.documentation.includes('docs/product/CAPABILITY-SCOPE.md'), JSON.stringify(optionalScope))
+ const malformedDocCatalog = structuredClone(repositoryContext.catalog)
+ malformedDocCatalog.routes['asset-workspace'].documentation = ['../../private.md']
+ assert.equal(catalogHealth(malformedDocCatalog).ok, false)
+--- before/scripts/check-docs-sync.py
++++ after/scripts/check-docs-sync.py
+@@ -78,7 +78,8 @@
+                 commit = subprocess.check_output(['git', 'rev-parse', '--verify', args.base + '^{commit}'], cwd=ROOT, text=True).strip()
+                 paths = subprocess.check_output(['git', 'diff', '--name-only', '-z', commit, 'HEAD', '--'], cwd=ROOT).decode().split('\0')
+                 paths = [p for p in paths if p]
+-            topics = json.loads((ROOT / '.codeindex/documentation-map.json').read_text())['topics']
++            docmap = json.loads((ROOT / '.codeindex/documentation-map.json').read_text())
++            topics = docmap['topics'] + docmap.get('guides', [])
+             declarations = json.loads(args.declarations.read_text()) if args.declarations else {}
+             if not isinstance(declarations, dict):
+                 raise ValueError('Declarations must be an object keyed by subsystem')
+--- before/scripts/check-documentation.py
++++ after/scripts/check-documentation.py
+@@ -66,6 +66,35 @@
+     return marker in destination and canonical_text(destination.split(marker, 1)[1].lstrip()).startswith(canonical_text(source))
+ 
+ 
++def entry_navigation_errors(root: Path, entry: dict, kind: str) -> list[str]:
++    """Runtime ownership and supporting guides have different human indexes."""
++    ref = entry['reference']
++    path = root / ref
++    if path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
++        return [f'{ref}: document leaves owned repository scope']
++    if kind == 'subsystem':
++        if ref != f"docs/subsystems/{entry['id']}.md":
++            return [f'{ref}: software subsystem must use its canonical runtime reference']
++        index = root / 'docs/subsystems/README.md'
++    elif kind == 'guide':
++        if not ref.startswith(('docs/agents/', 'docs/platform/', 'docs/product/')):
++            return [f'{ref}: guide is not a software subsystem']
++        index = root / entry.get('index', '')
++        if index.is_symlink() or not index.resolve().is_relative_to(root.resolve()):
++            return [f'{ref}: guide index leaves owned repository scope']
++    else:
++        return [f'{ref}: unknown documentation category']
++    if not path.is_file() or not index.is_file():
++        return [f'{ref}: document or human index is missing']
++    if '旧入口仅作兼容导航' in path.read_text():
++        return [f'{ref}: compatibility entry cannot own a current topic']
++    import os
++    relative = Path(os.path.relpath(path, index.parent)).as_posix()
++    if f'({relative})' not in index.read_text():
++        return [f'{ref}: missing from its human {kind} index']
++    return []
++
++
+ def verify(root: Path = ROOT, migration: bool = False) -> dict:
+     errors: list[str] = []
+     active = {str(p.relative_to(root)) for p in root.glob('*.md')}
+@@ -79,16 +108,15 @@
+     docmap = json.loads((root / '.codeindex/documentation-map.json').read_text())
+     route_ids = set(catalog['routes'])
+     topics = docmap['topics']
+-    if len({t['id'] for t in topics}) != len(topics):
++    guides = docmap.get('guides', [])
++    entries = topics + guides
++    if len({t['id'] for t in entries}) != len(entries):
+         errors.append('Duplicate documentation topic')
+-    references = {t['reference'] for t in topics}
+-    subsystem_index = (root / 'docs/subsystems/README.md').read_text()
+-    for topic in topics:
++    references = {t['reference'] for t in entries}
++    for topic in entries:
+         ref = topic['reference']
+-        if f"({topic['id']}.md)" not in subsystem_index:
+-            errors.append(f'{ref}: missing from human subsystem index')
+-        if ref != f"docs/subsystems/{topic['id']}.md":
+-            errors.append(f'Unexpected topic reference: {ref}')
++        errors.extend(entry_navigation_errors(root, topic, 'subsystem' if topic in topics else 'guide'))
++        active.add(ref)
+         for rid in topic['routes']:
+             if rid not in route_ids:
+                 errors.append(f"{topic['id']}: unknown route {rid}")
+@@ -111,7 +139,7 @@
+             errors.append(f'{rid}: no documentation consumer')
+         for ref in route.get('documentation', []):
+             if ref not in references:
+-                errors.append(f'{rid}: unowned subsystem reference {ref}')
++                errors.append(f'{rid}: unowned documentation reference {ref}')
+     active.update(docmap.get('module_references', []))
+     active.update(docmap.get('active_contracts', []))
+     for path in sorted(active):
+@@ -183,7 +211,7 @@
+             if set(before_terms) != set(current_terms) or len(set(current_terms)) != len(current_terms):
+                 errors.append('Glossary term lost or duplicate left without a merge decision')
+     return {'ok': not errors, 'scope': 'Structure/source preservation only; no product, UI, model or native acceptance.',
+-            'owned_documents_checked': len(active), 'subsystems': len(topics), 'task_routes': len(route_ids),
++            'owned_documents_checked': len(active), 'subsystems': len(topics), 'guides': len(guides), 'task_routes': len(route_ids),
+             'decision_sources': len(decisions), 'migrated_paragraphs': paragraph_count, 'migration_assessed': migration,
+             'glossary_definitions': len(current_terms), 'errors': errors}
+ 
+--- before/scripts/documentation-governance.test.py
++++ after/scripts/documentation-governance.test.py
+@@ -70,5 +70,34 @@
+             (root / 'entry.md').write_text('[x](../outside.md#private)')
+             self.assertIn('leaves owned repository scope', docs.local_links(root, 'entry.md')[0])
+ 
++    def test_software_topics_and_guides_use_their_own_indexes(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            root = Path(tmp)
++            (root / 'docs/subsystems').mkdir(parents=True)
++            (root / 'docs/agents').mkdir(parents=True)
++            (root / 'docs/subsystems/README.md').write_text('[GUI](gui-shell.md)\n')
++            (root / 'docs/subsystems/gui-shell.md').write_text('# GUI\n')
++            (root / 'docs/agents/engineering.md').write_text('# Engineering\n')
++            (root / 'CONTRIBUTING.md').write_text('[Methods](docs/agents/engineering.md)\n')
++            runtime = {'id': 'gui-shell', 'reference': 'docs/subsystems/gui-shell.md'}
++            guide = {'id': 'engineering', 'reference': 'docs/agents/engineering.md',
++                     'index': 'CONTRIBUTING.md'}
++            self.assertEqual(docs.entry_navigation_errors(root, runtime, 'subsystem'), [])
++            self.assertEqual(docs.entry_navigation_errors(root, guide, 'guide'), [])
++            self.assertTrue(docs.entry_navigation_errors(root, guide, 'subsystem'))
++            self.assertTrue(docs.entry_navigation_errors(root, runtime, 'guide'))
++            (root / 'CONTRIBUTING.md').write_text('# No guide entry\n')
++            self.assertTrue(docs.entry_navigation_errors(root, guide, 'guide'))
++            guide['index'] = '../private.md'
++            self.assertTrue(docs.entry_navigation_errors(root, guide, 'guide'))
++
++    def test_delivery_guide_stays_a_real_sync_consumer_outside_software_topics(self):
++        guide = {'id': 'delivery', 'reference': 'docs/platform/BUILD-AND-RELEASE.md',
++                 'sources': ['scripts/package.mjs'], 'source_roots': []}
++        missing = sync.assess(['scripts/package.mjs', 'docs/subsystems/gui-shell.md'], [guide])
++        self.assertFalse(missing['ok'])
++        self.assertEqual(missing['affected'], {'delivery': ['scripts/package.mjs']})
++        self.assertTrue(sync.assess(['scripts/package.mjs', guide['reference']], [guide])['ok'])
++
+ if __name__ == '__main__':
+     unittest.main()
+--- before/src/main/README.md
++++ after/src/main/README.md
+@@ -12,7 +12,7 @@
+ - [library-quiescence.ts](library-quiescence.ts)
+ - [local-host/README.md](local-host/README.md)
+ 
+-跨层关系、状态权威、平台及失败语义见[local-host](../../docs/subsystems/local-host.md)，局部详细保证见[模块接口约束](../../docs/subsystems/contracts/main.md)。使用当前命名Client和正式组合核对消费者，不从目录或类型推定启用。
++跨层关系、状态权威、平台及失败语义见[local-host](../../docs/subsystems/local-host.md#clients)，局部详细保证见[模块接口约束](../../docs/subsystems/contracts/main.md)。使用当前命名Client和正式组合核对消费者，不从目录或类型推定启用。
+ 
+ ## 验证与维护
+ 
+--- before/src/main/background-analysis/README.md
++++ after/src/main/background-analysis/README.md
+@@ -1,6 +1,6 @@
+ # 基础分析与后台执行
+ 
+-跨层职责与用户入口见[所属子系统](../../../docs/subsystems/ai-analysis.md)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
++跨层职责与用户入口见[所属子系统](../../../docs/subsystems/ai-system.md#requests)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
+ 
+ ## 入口与拥有者
+ 
+@@ -16,6 +16,6 @@
+ 
+ ## 详细契约、来源与验证
+ 
+-[逐段技术契约](../../../docs/subsystems/contracts/ai-analysis.md)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
++[逐段技术契约](../../../docs/subsystems/ai-system.md#requests)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
+ 
+ 实际命令见package.json、.codeindex/tests-map.json和子系统验证入口。用户功能按[真实验收](../../../docs/agents/ui-ux-acceptance.md)执行；UI/真实推理/原生/库资格分列，当前版本只见CURRENT-STATE，不把内部接线或本次重写当新PASS。
+--- before/src/main/ipc/README.md
++++ after/src/main/ipc/README.md
+@@ -82,4 +82,4 @@
+ 
+ 2026-10-14: Material `download:*` and `downloads:get-path-plan` public commands are removed. Model artifact downloads remain separate. Legacy Library schema tables remain for existing data/version compatibility; no new material download can be dispatched.
+ 
+-正式注册以`main-ipc-composition.ts`及其消费者为准；完整路径见[Local Host](../../../docs/subsystems/local-host.md)。模块/函数存在不代表已注册。
++正式注册以`main-ipc-composition.ts`及其消费者为准；完整路径见[Local Host](../../../docs/subsystems/local-host.md#clients)。模块/函数存在不代表已注册。
+--- before/src/main/library-lifecycle/README.md
++++ after/src/main/library-lifecycle/README.md
+@@ -1,6 +1,6 @@
+ # 持锁资料库与Host维护
+ 
+-跨层职责与用户入口见[所属子系统](../../../docs/subsystems/library-lifecycle.md)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
++跨层职责与用户入口见[所属子系统](../../../docs/subsystems/library-lifecycle.md#library)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
+ 
+ ## 入口与拥有者
+ 
+@@ -22,6 +22,6 @@
+ 
+ ## 详细契约、来源与验证
+ 
+-[逐段技术契约](../../../docs/subsystems/contracts/library-lifecycle.md)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
++[逐段技术契约](../../../docs/subsystems/library-lifecycle.md#library)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
+ 
+ 实际命令见package.json、.codeindex/tests-map.json和子系统验证入口。用户功能按[真实验收](../../../docs/agents/ui-ux-acceptance.md)执行；UI/真实推理/原生/库资格分列，当前版本只见CURRENT-STATE，不把内部接线或本次重写当新PASS。
+--- before/src/main/ocr/README.md
++++ after/src/main/ocr/README.md
+@@ -1,6 +1,6 @@
+ # 专用OCR与修正
+ 
+-跨层职责与用户入口见[所属子系统](../../../docs/subsystems/ocr.md)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
++跨层职责与用户入口见[所属子系统](../../../docs/subsystems/ai-system.md#ocr)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
+ 
+ ## 入口与拥有者
+ 
+@@ -16,6 +16,6 @@
+ 
+ ## 详细契约、来源与验证
+ 
+-[逐段技术契约](../../../docs/subsystems/contracts/ocr.md)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
++[逐段技术契约](../../../docs/subsystems/ai-system.md#ocr)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
+ 
+ 实际命令见package.json、.codeindex/tests-map.json和子系统验证入口。用户功能按[真实验收](../../../docs/agents/ui-ux-acceptance.md)执行；UI/真实推理/原生/库资格分列，当前版本只见CURRENT-STATE，不把内部接线或本次重写当新PASS。
+--- before/src/main/services/README.md
++++ after/src/main/services/README.md
+@@ -90,4 +90,4 @@
+ 2026-09-13: embedded browser, page injection, website search/login and their services are
+ removed. Historical changelog rows describe prior releases. Asset/tag/AI services remain; material DownloadService was removed on 2026-10-14; persisted legacy website records are not deleted by this source change.
+ 
+-当前生产与保留legacy服务分流见[AI Runtime](../../../docs/subsystems/ai-runtime.md)和[Library](../../../docs/subsystems/library-lifecycle.md)；旧版本Change Log不授予执行资格。
++当前生产与保留legacy服务分流见[AI Runtime](../../../docs/subsystems/ai-system.md#execution)和[Library](../../../docs/subsystems/library-lifecycle.md#library)；旧版本Change Log不授予执行资格。
+--- before/src/main/services/ai-runtime/README.md
++++ after/src/main/services/ai-runtime/README.md
+@@ -1,6 +1,6 @@
+ # 自有推理Runtime与保留诊断
+ 
+-跨层职责与用户入口见[所属子系统](../../../../docs/subsystems/ai-runtime.md)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
++跨层职责与用户入口见[所属子系统](../../../../docs/subsystems/ai-system.md#execution)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
+ 
+ ## 入口与拥有者
+ 
+@@ -16,6 +16,6 @@
+ 
+ ## 详细契约、来源与验证
+ 
+-[逐段技术契约](../../../../docs/subsystems/contracts/ai-runtime.md)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../../docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
++[逐段技术契约](../../../../docs/subsystems/ai-system.md#execution)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../../docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
+ 
+ 实际命令见package.json、.codeindex/tests-map.json和子系统验证入口。用户功能按[真实验收](../../../../docs/agents/ui-ux-acceptance.md)执行；UI/真实推理/原生/库资格分列，当前版本只见CURRENT-STATE，不把内部接线或本次重写当新PASS。
+--- before/src/main/visual-ai/README.md
++++ after/src/main/visual-ai/README.md
+@@ -1,6 +1,6 @@
+ # 视觉能力与受控Provider调用
+ 
+-跨层职责与用户入口见[所属子系统](../../../docs/subsystems/visual-ai.md)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
++跨层职责与用户入口见[所属子系统](../../../docs/subsystems/ai-system.md#visual)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
+ 
+ ## 入口与拥有者
+ 
+@@ -16,6 +16,6 @@
+ 
+ ## 详细契约、来源与验证
+ 
+-[逐段技术契约](../../../docs/subsystems/contracts/visual-ai.md)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
++[逐段技术契约](../../../docs/subsystems/ai-system.md#visual)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
+ 
+ 实际命令见package.json、.codeindex/tests-map.json和子系统验证入口。用户功能按[真实验收](../../../docs/agents/ui-ux-acceptance.md)执行；UI/真实推理/原生/库资格分列，当前版本只见CURRENT-STATE，不把内部接线或本次重写当新PASS。
+--- before/src/main/work-mode/README.md
++++ after/src/main/work-mode/README.md
+@@ -1,6 +1,6 @@
+ # 工作集与原生呈现
+ 
+-跨层职责与用户入口见[所属子系统](../../../docs/subsystems/work-mode.md)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
++跨层职责与用户入口见[所属子系统](../../../docs/subsystems/gui-shell.md#reference-windows)。本文只解释局部当前机制；历史资格不在此累积，具体参数以当前源码/聚焦检查为准。
+ 
+ ## 入口与拥有者
+ 
+@@ -16,6 +16,6 @@
+ 
+ ## 详细契约、来源与验证
+ 
+-[逐段技术契约](../../../docs/subsystems/contracts/work-mode.md)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
++[逐段技术契约](../../../docs/subsystems/gui-shell.md#reference-windows)保留命名接口/版本下的全部适用机制与保护。[迁移前完整技术/演进原文](../../../docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md)保存全部细节、数字和当时上下文；其旧“当前/未验/禁用/下一步”只对应原日期，不能替代本页与实际源码。修改局部参数时精确查该来源及对应源码/测试，保留仍适用保护，不从摘要推导放宽。
+ 
+ 实际命令见package.json、.codeindex/tests-map.json和子系统验证入口。用户功能按[真实验收](../../../docs/agents/ui-ux-acceptance.md)执行；UI/真实推理/原生/库资格分列，当前版本只见CURRENT-STATE，不把内部接线或本次重写当新PASS。
+--- before/src/renderer/README.md
++++ after/src/renderer/README.md
+@@ -13,7 +13,7 @@
+ - [routes/Settings.tsx](routes/Settings.tsx)
+ - [components/library/canvas/README.md](components/library/canvas/README.md)
+ 
+-外壳、启动、路由、Client安装、状态投影与连接/草稿/退出协作见[GUI系统说明](../../docs/subsystems/gui-shell.md)；素材浏览/详情跨层关系见[asset-workspace](../../docs/subsystems/asset-workspace.md)，局部详细保证见[模块接口约束](../../docs/subsystems/contracts/renderer.md)。使用当前命名Client和正式组合核对消费者，不从目录或类型推定启用。
++外壳、启动、路由、Client安装、状态投影与连接/草稿/退出协作见[GUI系统说明](../../docs/subsystems/gui-shell.md)；素材浏览/详情跨层关系见[asset-workspace](../../docs/subsystems/gui-shell.md#asset-workspace)，局部详细保证见[模块接口约束](../../docs/subsystems/contracts/renderer.md)。使用当前命名Client和正式组合核对消费者，不从目录或类型推定启用。
+ 
+ ## 验证与维护
+ 
+--- before/src/shared/README.md
++++ after/src/shared/README.md
+@@ -12,7 +12,7 @@
+ - [workflows/asset-discovery.workflow.ts](workflows/asset-discovery.workflow.ts)
+ - [contracts/active-library.contract.ts](contracts/active-library.contract.ts)
+ 
+-跨层关系、状态权威、平台及失败语义见[local-host](../../docs/subsystems/local-host.md)，局部详细保证见[模块接口约束](../../docs/subsystems/contracts/shared.md)。使用当前命名Client和正式组合核对消费者，不从目录或类型推定启用。
++跨层关系、状态权威、平台及失败语义见[local-host](../../docs/subsystems/local-host.md#clients)，局部详细保证见[模块接口约束](../../docs/subsystems/contracts/shared.md)。使用当前命名Client和正式组合核对消费者，不从目录或类型推定启用。
+ 
+ ## 验证与维护
+ 

@@ -1,15 +1,13 @@
 # Batch Result History Entry Points Stay Contextual
 
-Batch Result History should be findable without turning the Asset Workspace
-into a log center. The primary Batch Result Entry Point should live in Capture
-Inbox Activity Panel. Batch Inspector should show the most recent result
-immediately after execution, and individual candidates or deleted placeholders
-may expose Candidate History Link and Inspector History Section for related
-history. The Asset Workspace should not keep a persistent global batch history
-button by default, preserving the browsing surface while keeping failed,
-skipped, excluded, and irreversible results recoverable from their natural
-workflow contexts.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0392 gives Asset Export its immediate completion page and contextual Export
-Activity inside Asset Workspace. Local File Recovery stays separate because it
-contains recovery authority rather than ordinary result history.
+## Decision
+
+Batch Result History should be findable without turning the Asset Workspace into a log center.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[批量操作与冲突规格](../product/specs/batch-conflicts.md#adr-0089)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

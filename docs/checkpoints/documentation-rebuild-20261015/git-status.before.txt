@@ -1,0 +1,519 @@
+ M .codeindex/module-map.json
+ M .codeindex/tests-map.json
+ M .gitignore
+ M AGENTS.md
+ M ARCHITECTURE.md
+ M CONTRIBUTING.md
+ M DESIGN.md
+ M TASK.md
+ M artifacts/window-candidates/color-selector-20261013/build.log
+ M artifacts/window-candidates/core-rebuild-20261013/build.log
+ M docs/REHOST.md
+ M docs/adr/0009-asset-workspace-is-the-primary-surface.md
+ M docs/adr/0010-web-capture-entry-evolves-in-stages.md
+ M docs/adr/0011-capture-inbox-precedes-asset-library-commit.md
+ M docs/adr/0018-assets-use-multiple-collection-memberships.md
+ M docs/adr/0019-collections-separate-membership-from-presentation.md
+ M docs/adr/0021-asset-grid-defaults-to-masonry-with-uniform-option.md
+ M docs/adr/0022-asset-grid-uses-persistent-asset-inspector.md
+ M docs/adr/0023-asset-inspector-is-resizable-and-responsive.md
+ M docs/adr/0024-asset-grid-uses-desktop-selection-semantics.md
+ M docs/adr/0025-asset-preview-stays-contextual.md
+ M docs/adr/0034-workspace-navigation-has-three-sections.md
+ M docs/adr/0035-workspace-navigation-supports-rail-and-panel.md
+ M docs/adr/0487-asset-notebooks-use-versioned-library-owned-storage.md
+ M docs/agents/GITHUB-SNAPSHOT-20261001.md
+ M docs/agents/PRODUCT-INSTRUCTION-ALIGNMENT-20260914.md
+ M docs/agents/implementation-status.md
+ M docs/agents/issue-tracker.md
+ M docs/agents/ui-ux-acceptance.md
+ M docs/architecture-audit/P00-20260924/BASELINE-MATRIX.md
+ M docs/architecture-audit/P00-20260924/CURRENT-STATE-AUDIT.md
+ M docs/architecture-audit/P00-20260924/MODULE-REACHABILITY.md
+ M docs/architecture-audit/P00-20260924/inputs/01-OVERALL-ARCHITECTURE.md
+ M docs/architecture-audit/P00-20260924/inputs/05-AI-CONTEXT-HANDOFF.md
+ M docs/architecture-audit/P00-20260924/inputs/manifests/decisions.json
+ M docs/architecture-audit/P00-20260924/inputs/manifests/requirements.json
+ M docs/architecture-audit/P00-20260924/inputs/manifests/stages.json
+ M docs/architecture-audit/P00-20260924/inputs/prompts/00-COMMON-INSTRUCTIONS.md
+ M docs/architecture-audit/P00-20260924/inputs/prompts/P00.md
+ M docs/architecture-audit/P00-20260924/inputs/sources/PROJECT-ARCHITECTURE-HANDOFF-20260924.md
+ M docs/architecture-audit/P00-20260924/manifests/stages.json
+ M docs/architecture-audit/P00-20260924/reports/P00-REPORT.md
+ M docs/architecture-audit/P01-20260924/MODULE-DEPENDENCIES.md
+ M docs/architecture-audit/P01-20260924/VALIDATION-PLAN.md
+ M docs/architecture-audit/P01-20260924/inputs/prompts/P01.md
+ M docs/architecture-audit/P01-20260924/manifests/MODULES.json
+ M docs/architecture-audit/P01-20260924/manifests/stages.json
+ M docs/architecture-audit/P02-20260925/README.md
+ M docs/architecture-audit/P02-20260925/SCHEMA-GOVERNANCE-SPEC.md
+ M docs/architecture-audit/P02-20260925/SOURCE-FINDINGS.md
+ M docs/architecture-audit/P02-20260925/VALIDATION-PLAN.md
+ M docs/architecture-audit/P02-20260925/VERSION-CAPABILITY-MATRIX.md
+ M docs/architecture-audit/P02-20260925/adr/ADR-P02-SCHEMA-GOVERNANCE.proposed.md
+ M docs/architecture-audit/P02-20260925/fixtures/migration-failure-cases.json
+ M docs/architecture-audit/P02-20260925/fixtures/temp-library-recipes.json
+ M docs/architecture-audit/P02-20260925/inputs/prompts/P02.md
+ M docs/architecture-audit/P02-20260925/manifests/REQUIREMENT-TRACE.json
+ M docs/architecture-audit/P02-20260925/manifests/VERSION-CAPABILITIES.json
+ M docs/architecture-audit/P02-20260925/manifests/stages.json
+ M docs/architecture-audit/P02-20260925/reports/P02-REPORT.md
+ M docs/architecture-audit/P03-20260926/inputs/prompts/P03.md
+ M docs/architecture-audit/P03-20260926/manifests/stages.json
+ M docs/architecture-audit/P04-20260926/COMPATIBILITY-MIGRATION.md
+ M docs/architecture-audit/P04-20260926/CURRENT-BASELINE.md
+ M docs/architecture-audit/P04-20260926/VALIDATION-PLAN.md
+ M docs/architecture-audit/P04-20260926/fixtures/selection-scenarios.json
+ M docs/architecture-audit/P04-20260926/inputs/P04.md
+ M docs/architecture-audit/P04-20260926/manifests/stages.json
+ M docs/architecture-audit/P04-20260926/reports/P04-REPORT.md
+ M docs/architecture-audit/P05-20260926/fixtures/journal-claim-cases.json
+ M docs/architecture-audit/P05-20260926/inputs/P05.md
+ M docs/architecture-audit/P05-20260926/manifests/stages.json
+ M docs/architecture-audit/P06-P27-SPEC-20260926/HANDOFF.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P06/inputs/P06.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P07/inputs/P07.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P08/inputs/P08.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P09/inputs/P09.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P10/inputs/P10.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P11/inputs/P11.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P12/inputs/P12.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P13/inputs/P13.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P14/inputs/P14.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P15/inputs/P15.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P16/inputs/P16.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P17/inputs/P17.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P18/inputs/P18.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P19/inputs/P19.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P20/inputs/P20.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P21/inputs/P21.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P22/inputs/P22.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P23/inputs/P23.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P24/inputs/P24.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P25/inputs/P25.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P26/inputs/P26.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P27/DESIGN.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P27/TRACEABILITY.json
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P27/TRACEABILITY.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/P27/inputs/P27.md
+ M docs/architecture-audit/P06-P27-SPEC-20260926/WORKTREE-BASELINE.json
+ M docs/checkpoints/af-macos-20261010/README.md
+ M docs/checkpoints/af-macos-20261010/adf-goal-block-audit-3.json
+ D docs/checkpoints/af-macos-20261010/af-build-after-eagle-isolation.txt
+ M docs/checkpoints/af-macos-20261010/af-final-candidate-build.txt
+ M docs/checkpoints/af-macos-20261010/build-approved-runner.txt
+ M docs/checkpoints/af-macos-20261010/build-current.txt
+ M docs/checkpoints/af-macos-20261010/build-final.txt
+ M docs/checkpoints/af-macos-20261010/continuation-2-state.json
+ M docs/checkpoints/af-macos-20261010/f-final-package-inputs.json
+ M docs/checkpoints/af-macos-20261010/goal-blocked-audit-3.json
+ M docs/checkpoints/af-macos-20261010/picker-build.txt
+ M docs/checkpoints/af-macos-20261010/resume-scope.json
+ M docs/checkpoints/af-macos-20261010/search-first-page-build.txt
+ M docs/checkpoints/af-macos-20261010/search-refresh-build.txt
+ M docs/checkpoints/af-macos-20261010/search-refresh-fix-checkpoint.json
+ M docs/checkpoints/af-macos-20261010/unified-directory.json
+ M docs/checkpoints/app-design-alignment-20261014/README.md
+ M docs/checkpoints/app-design-alignment-20261014/validation.json
+ M docs/checkpoints/b-main-integration-20261013/README.md
+ M docs/checkpoints/b-main-integration-20261013/receipt.json
+ M docs/checkpoints/c-search-20261007/README.md
+ M docs/checkpoints/c-search-coverage-20261008/README.md
+ M docs/checkpoints/d-work-mode-20261008/README.md
+ M docs/checkpoints/d-work-mode-20261008/manifest.json
+ D docs/checkpoints/d-work-mode-20261008/task.patch
+ M docs/checkpoints/dropover-local-20261010/bd59-build.txt
+ D docs/checkpoints/e-eagle-20261008/DAM-Eagle-Companion-0.2.0.eagleplugin
+ D docs/checkpoints/e-eagle-20261008/README.md
+ D docs/checkpoints/e-eagle-20261008/manifest.json
+ D docs/checkpoints/e-eagle-20261008/public-sources.json
+ D docs/checkpoints/e-eagle-20261008/task.patch
+ D docs/checkpoints/f-release-scale-20261008/F-ONLY.patch
+ M docs/checkpoints/f-release-scale-20261008/MANIFEST.json
+ M docs/checkpoints/f-release-scale-20261008/README.md
+ M docs/checkpoints/f-release-scale-20261008/new-files/docs/handoff/RELEASE-SCALE-F-20261008.md
+ D docs/checkpoints/f-release-scale-20261008/new-files/scripts/capture-large-selection.test.ts
+ D docs/checkpoints/f-release-scale-20261008/new-files/scripts/fixtures/f-public-scale.test.ts
+ D docs/checkpoints/f-release-scale-20261008/new-files/scripts/verify-local-candidate.mjs
+ M docs/checkpoints/local-ai-foundation-20261007/README.md
+ M docs/checkpoints/local-ai-foundation-20261007/manifest.json
+ D docs/checkpoints/local-ai-foundation-20261007/patches/docs/agents/implementation-status.md.patch
+ D docs/checkpoints/local-ai-foundation-20261007/patches/docs/product/PRODUCT-FOUNDATION.md.patch
+ D docs/checkpoints/local-ai-foundation-20261007/patches/docs/product/RELEASE-ACCEPTANCE.md.patch
+ D docs/checkpoints/local-ai-foundation-20261007/patches/scripts/local-dam-native-start.test.mjs.patch
+ D docs/checkpoints/local-ai-foundation-20261007/patches/src/main/index.ts.patch
+ D docs/checkpoints/local-ai-foundation-20261007/task.patch
+ M docs/checkpoints/local-ai-t23-20261007/README.md
+ M docs/checkpoints/macos-bugfix-delivery-20261010/build-clipboard-open-final.txt
+ M docs/checkpoints/macos-migration-20261009/acceptance.json
+ M docs/checkpoints/macos-t23-20261009/build-delivery.log
+ M docs/checkpoints/macos-t23-failures-20261009/build-prepared-final.txt
+ M docs/checkpoints/macos-t23-native-click-20261009/build-picture-green.txt
+ M docs/checkpoints/macos-t23-native-forensics-20261009/build-ds-store.txt
+ M docs/checkpoints/main-merge-audit-20261013/README.md
+ M docs/design/AI-DISCOVERY-20260920.md
+ D docs/design/CONNECTED-LEGACY-INTERACTIONS.md
+ M docs/design/FORMAL-LIBRARY-CANVAS-20260914.md
+ M docs/design/GALLERY-PARITY-20260915.md
+ M docs/design/UI-SYSTEM.html
+ M docs/design/UI-UX-HANDOFF-20260911.html
+ M docs/design/UI-UX-HANDOFF-20260911.md
+ M docs/design/WORKSPACE-INTERACTIONS.md
+ M docs/design/WORKSPACE-MOTION.md
+ M docs/design/WORKSPACE-UI-SYSTEM.md
+ M docs/design/reviews/APP-DESIGN-AUDIT-20261013.md
+ M docs/design/reviews/APP-DESIGN-IMPLEMENTATION-INTERVIEW-20261013.md
+ M docs/design/reviews/APP-DESIGN-TICKET-PROPOSAL-20261014.md
+ D docs/eagle-reference-analysis.md
+ M docs/handoff/BRANCHES.md
+ M docs/handoff/CURRENT-STATE.md
+ M docs/handoff/DEFERRED-ACCEPTANCE.md
+ D docs/handoff/EAGLE-E-20261008.md
+ M docs/handoff/FOUNDATION-ADOPTION-20261006.md
+ M docs/handoff/INCLUDED-EXCLUDED.md
+ M docs/handoff/PUBLIC-SOURCE-MANIFEST.json
+ M docs/handoff/README.md
+ M docs/handoff/RELEASE-SCALE-F-20261008.md
+ M docs/handoff/WORK-MODE-D-20261008.md
+ M docs/history/design-before-edge-canvas-20260915/DESIGN.md
+ M docs/history/design-before-parity-20260915/TASK.md
+ M docs/history/design-system-restructure-20261013/DESIGN.before.md
+ M docs/history/design-system-restructure-20261013/TASK.before.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/CURRENT-STATE-before-closure.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/DROPOVER-INTEGRATION-20261009.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/DROPOVER-LOCAL-CHECKPOINT-20261010.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-MIGRATION-20261009.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-20261009.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-FAILURES-20261009.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-NATIVE-CLICK-20261009.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/MACOS-T23-NATIVE-FORENSICS-20261009.md
+ M docs/history/handoff-snapshots/macos-20261009-20261010/TASK-before-closure.md
+ M docs/history/task-before-astra-instruction-audit-20260912.md
+ M docs/history/task-before-gallery-glass-prototype-20260914.md
+ M docs/history/task-before-inspector-info-20260920.md
+ M docs/history/task-before-library-canvas-integration-20260914.md
+ M docs/history/task-before-minimal-canvas-20260914.md
+ M docs/history/task-before-native-work-blur-20260920.md
+ M docs/history/task-before-organization-20260919.md
+ M docs/history/task-before-product-foundation-20260914.md
+ M docs/history/task-before-real-ai-preflight-20260920.md
+ M docs/history/task-before-scoped-asset-reads-20260913.md
+ M docs/history/task-before-worksets-20260920.md
+ M docs/history/task-consolidation-20261011/README.md
+ M docs/history/task-consolidation-20261011/REHOST-before-consolidation.md
+ M docs/history/task-consolidation-20261011/agents/implementation-status.md
+ M docs/history/task-consolidation-20261011/handoff/AF-MACOS-20261010.md
+ M docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/REVIEW-FORM.md
+ M docs/history/task-consolidation-20261011/handoff/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/DAM-INDEPENDENT-TAGS-V2-REVIEW-20260927/revision-v2/checks/verify-revision.py
+ M docs/history/task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-20261008.md
+ M docs/history/task-consolidation-20261011/handoff/GITHUB-CONSOLIDATION-RESULT-20261008.md
+ M docs/history/task-consolidation-20261011/handoff/MACOS-BUGFIX-DELIVERY-20261010.md
+ M docs/history/task-consolidation-20261011/handoff/MACOS-CONTINUATION-20261008.md
+ M docs/history/task-consolidation-20261011/handoff/MACOS-REMAINING-ACCEPTANCE-20261008.md
+ M docs/history/task-consolidation-20261011/handoff/PROJECT-ARCHITECTURE-HANDOFF-20260924.html
+ M docs/history/task-consolidation-20261011/handoff/macos-transfer-receipts-20261008/candidate-final-manifest.json
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-20260926/SPEC.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/ACTIVE-CONTRACT-ADDENDUM.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/DEFERRED-REGISTER.json
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/HANDOFF.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/PLAN-CHANGES.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/READINESS-REVIEW.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/REFERENCES.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATE-MATRIX.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/TEST-GATES.json
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/checks/verify-revision.py
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/03-engineering-report/REPORT.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/01-REVIEW.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/04-engineering-review/02-NEXT-AI-PROMPT.md
+ M docs/history/task-consolidation-20261011/implementation-plans/independent-tags-readiness-v2-20260927/inputs/package/README-START-HERE.md
+ M docs/history/task-consolidation-20261011/implementation-reports/task01-provider-extraction-20260927/REVIEW.md
+ M docs/history/task-consolidation-20261011/product/LOCAL-DUAL-CLIENT-IMPLEMENTATION.md
+ M docs/history/task-consolidation-20261011/vision-audit-20261003/04-GOVERNANCE-ADJUSTMENTS.md
+ M docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/MASTER-ROADMAP-20260930.md
+ M docs/history/task-consolidation-20261011/vision-audit-20261003/baselines/RUX-EXECUTION-PLAN-20261001.md
+ M docs/history/task-consolidation-20261011/vision-audit-20261003/evidence/STATIC-DEPENDENCIES.json
+ M docs/history/task-snapshots/TASK-20261005-before-wc01-close-12.md
+ M docs/platform/CI_MATRIX.md
+ M docs/platform/WINDOWS-BACKUP-AUTHORITY-DESIGN-20261005.md
+ M docs/platform/WINDOWS-CONTROL-STORE-MIGRATION-DESIGN-20261005.md
+ M docs/product/AI-DISCOVERY-20260920.md
+ M docs/product/APP-DESIGN-ALIGNMENT-SPEC-20261013.md
+ M docs/product/ASSET-NOTEBOOKS-20260917.md
+ D docs/product/EAGLE-CONNECTED-LIBRARY-PLAN.md
+ M docs/product/LIBRARY-ORGANIZATION-20260919.md
+ M docs/product/LOCAL-AI-EVALUATION-20260920.md
+ M docs/product/LOCAL-AI-REAL-DESIGN-RETEST-20260923.md
+ M docs/product/LOCAL-DUAL-CLIENT-SPEC.md
+ M docs/product/LOCAL-DUAL-CLIENT-TICKETS.md
+ M docs/product/NORTH-STAR.html
+ M docs/product/PRODUCT-FOUNDATION.md
+ M docs/product/RAPIDOCR-EVALUATION-20260920.md
+ M docs/product/REFACTOR-FUNCTION-MAP-20260911.md
+ M docs/product/RELEASE-ACCEPTANCE.md
+ M docs/product/WEB-COLLECTION-RETIREMENT-20260913.md
+ M docs/product/WORK-MODE-AND-MOTION-REFERENCE.md
+ M docs/tasks/CONSOLIDATION-20261011.json
+ M docs/tasks/CONSOLIDATION-20261011.md
+ M docs/tasks/TASK-REGISTRY.md
+ D eagle-companion/README.md
+ D eagle-companion/index.html
+ D eagle-companion/js/pairing.cjs
+ D eagle-companion/js/plugin.cjs
+ D eagle-companion/manifest.json
+ M electron.vite.config.ts
+ M package.json
+ M scripts/active-library-electron.e2e.test.mjs
+ M scripts/agent-context-router.mjs
+ M scripts/agent-context-router.test.mjs
+ M scripts/app-ipc-registration.test.ts
+ M scripts/app-navigation-workflow.test.ts
+ M scripts/app-storage.test.ts
+ M scripts/asset-library-keyboard.test.ts
+ M scripts/asset-ocr-storage.test.ts
+ M scripts/asset-workspace-session.test.ts
+ M scripts/background-analysis.integration.test.ts
+ M scripts/background-ocr.integration.test.ts
+ D scripts/build-eagle-companion.mjs
+ M scripts/build-identity.mjs
+ M scripts/capture-large-selection.test.ts
+ M scripts/clipboard-image-intake.test.ts
+ D scripts/connected-library-background.test.ts
+ D scripts/download-space-management.test.ts
+ D scripts/download-status-workflow.test.ts
+ D scripts/download-store-integrity.test.ts
+ D scripts/eagle-adapter-companion.test.ts
+ D scripts/eagle-companion-artifact.test.ts
+ D scripts/eagle-production-pairing.test.ts
+ M scripts/export-candidate-source.mjs
+ D scripts/external-connected-library-core.test.ts
+ D scripts/external-connected-library-electron.e2e.test.mjs
+ D scripts/external-connected-library-ipc.test.ts
+ M scripts/fixtures/f-public-scale.test.ts
+ M scripts/independent-tag-intent.integration.test.ts
+ M scripts/intake-recovery-electron.e2e.test.mjs
+ M scripts/legacy-readonly-workspace.test.ts
+ M scripts/library-quiescence.test.ts
+ M scripts/local-dam-browser-unknown-commit.test.ts
+ D scripts/local-dam-download-intake.test.ts
+ M scripts/local-dam-launch.test.ts
+ M scripts/local-dam-native-start.test.mjs
+ M scripts/local-dam-receipts.test.ts
+ M scripts/local-dam-settings-view.test.mjs
+ D scripts/managed-download-resume.test.ts
+ D scripts/owned-download-recovery.test.ts
+ M scripts/path-governance-late-phases.test.ts
+ D scripts/persistent-download-electron.e2e.test.mjs
+ D scripts/persistent-download.test.ts
+ M scripts/tag-decision.integration.test.ts
+ M scripts/tag-execution.integration.test.ts
+ M scripts/verify-local-candidate.mjs
+ D scripts/visual-ai-download.integration.test.ts
+ M scripts/web-retirement.test.ts
+ M scripts/windows-backup-production.test.ts
+ M scripts/workspace-motion.test.ts
+ M scripts/workspace-reconcile-store-failure.test.ts
+ M src/main/README.md
+ M src/main/app-storage/app-storage.ts
+ D src/main/external-connected-library/README.md
+ D src/main/external-connected-library/connected-library-background-coordinator.ts
+ D src/main/external-connected-library/connected-library-runtime.ts
+ D src/main/external-connected-library/eagle-companion-http.adapter.ts
+ D src/main/external-connected-library/eagle-companion.port.ts
+ D src/main/external-connected-library/eagle-pairing.ts
+ D src/main/external-connected-library/eagle-provider.port.ts
+ D src/main/external-connected-library/eagle-web-api.adapter.ts
+ D src/main/external-connected-library/external-connected-library.schema.ts
+ D src/main/external-connected-library/external-connected-library.ts
+ D src/main/external-connected-library/index.ts
+ D src/main/external-connected-library/unavailable-eagle-provider.ts
+ M src/main/image-tools/README.md
+ M src/main/independent-tags/tag-intent.schema.ts
+ M src/main/index.ts
+ M src/main/ipc/README.md
+ M src/main/ipc/disabled-app.ipc.ts
+ D src/main/ipc/download.ipc.ts
+ D src/main/ipc/external-connected-library.ipc.ts
+ M src/main/ipc/main-ipc-composition.ts
+ M src/main/ipc/path-governance.ipc.ts
+ M src/main/legacy-readonly-workspace/README.md
+ M src/main/legacy-readonly-workspace/legacy-readonly-workspace.ts
+ M src/main/library-lifecycle/README.md
+ M src/main/library-lifecycle/active-library-host.ts
+ M src/main/library-lifecycle/intake-recovery.schema.ts
+ M src/main/library-lifecycle/intake-recovery.ts
+ M src/main/library-lifecycle/library-materialization.internal.ts
+ M src/main/library-lifecycle/library-open-control-store.internal.ts
+ D src/main/library-lifecycle/owned-download-recovery.ts
+ M src/main/library-quiescence.ts
+ M src/main/local-host/README.md
+ M src/main/local-host/command-receipts.ts
+ M src/main/local-host/synthetic-fixtures.ts
+ M src/main/local-host/synthetic-profile.ts
+ D src/main/managed-download/README.md
+ D src/main/managed-download/download-journal.schema.ts
+ D src/main/managed-download/download-journal.ts
+ D src/main/managed-download/managed-download.ts
+ D src/main/managed-download/resumable-image-transfer.ts
+ D src/main/path-migration/download-path-governance.ts
+ M src/main/services/README.md
+ D src/main/services/download.service.ts
+ M src/main/visual-ai/README.md
+ D src/preload/external-connected-library.preload.ts
+ M src/renderer/App.tsx
+ M src/renderer/README.md
+ M src/renderer/asset-workspace-session.internal.ts
+ M src/renderer/browser-transport.ts
+ M src/renderer/components/layout/AppShell.tsx
+ D src/renderer/components/layout/GlobalNavigationMenu.tsx
+ D src/renderer/components/layout/Sidebar.tsx
+ D src/renderer/components/layout/Topbar.tsx
+ M src/renderer/components/layout/WorkspaceRail.tsx
+ M src/renderer/components/library/ActiveLibraryControls.tsx
+ M src/renderer/components/library/canvas/LibraryCanvas.tsx
+ M src/renderer/routes/AboutPage.tsx
+ M src/renderer/routes/AiWorkspace.tsx
+ D src/renderer/routes/ConnectedLibrariesPage.tsx
+ M src/renderer/routes/Dashboard.tsx
+ D src/renderer/routes/DownloadQueue.tsx
+ M src/renderer/routes/LegacyLibraryPage.tsx
+ M src/renderer/routes/Settings.tsx
+ M src/renderer/routes/refactor-prototype/RefactorPrototype.tsx
+ D src/renderer/stores/download.store.ts
+ M src/renderer/styles/app-design.css
+ M src/shared/build-identity.generated.ts
+ D src/shared/client/external-connected-library.client.ts
+ M src/shared/client/workspace-client.ts
+ M src/shared/client/workspace-read-commands.ts
+ M src/shared/contracts/active-library.contract.ts
+ D src/shared/contracts/download-journal.contract.ts
+ D src/shared/contracts/download.contract.ts
+ D src/shared/contracts/external-connected-library.contract.ts
+ D src/shared/contracts/managed-download.contract.ts
+ M src/shared/index.ts
+ D src/shared/types/download.types.ts
+ M src/shared/workflows/app-navigation.workflow.ts
+ D src/shared/workflows/download-status.workflow.ts
+?? LESSONS.md
+?? docs/agents/DEVELOPMENT-PROBLEMS.md
+?? docs/checkpoints/development-feedback-20261015/README.md
+?? docs/checkpoints/development-feedback-20261015/completion-context-check.json
+?? docs/checkpoints/development-feedback-20261015/completion-governance-route.json
+?? docs/checkpoints/development-feedback-20261015/completion-packaging-route.json
+?? docs/checkpoints/development-feedback-20261015/completion-search-route.json
+?? docs/checkpoints/development-feedback-20261015/completion-source-manifest.json
+?? docs/checkpoints/development-feedback-20261015/context-check.json
+?? docs/checkpoints/development-feedback-20261015/packaging-route.json
+?? docs/checkpoints/development-feedback-20261015/search-route.json
+?? docs/checkpoints/menu-cleanup-20261014/README.md
+?? docs/checkpoints/menu-cleanup-20261014/browser-legacy-cancel.png
+?? docs/checkpoints/menu-cleanup-20261014/browser-menu.png
+?? docs/checkpoints/menu-cleanup-20261014/browser-settings.png
+?? docs/checkpoints/menu-cleanup-20261014/desktop-legacy-cancel.png
+?? docs/checkpoints/menu-cleanup-20261014/desktop-menu.png
+?? docs/checkpoints/menu-cleanup-20261014/desktop-settings.png
+?? docs/checkpoints/menu-cleanup-20261014/validation.json
+?? docs/checkpoints/settings-integration-20261014/README.md
+?? docs/checkpoints/settings-integration-20261014/browser-settings-about.png
+?? docs/checkpoints/settings-integration-20261014/browser-settings-dark.png
+?? docs/checkpoints/settings-integration-20261014/desktop-settings-about.png
+?? docs/checkpoints/settings-integration-20261014/desktop-settings-dark.png
+?? docs/checkpoints/settings-integration-20261014/validation.json
+?? docs/design/LEGACY-LIBRARY-INTERACTIONS.md
+?? docs/research/magpie-agent-engineering-20261014/AGENTS-REVISION-PROPOSAL.md
+?? docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md
+?? docs/research/magpie-agent-engineering-20261014/DAM-DISCUSSION.md
+?? docs/research/magpie-agent-engineering-20261014/DAM-IMPLEMENTATION-PROPOSAL.md
+?? docs/research/magpie-agent-engineering-20261014/DISCUSSIONS.md
+?? docs/research/magpie-agent-engineering-20261014/PLAYBOOK.md
+?? docs/research/magpie-agent-engineering-20261014/README.md
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/AGENTS-REVISION-PROPOSAL.before.md
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/README.md
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/file-review-plan.json
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/inventory.json
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/link-findings.json
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/magpie-manifest.json
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/sources/magpie/docs/subsystems/library.md
+?? docs/research/magpie-agent-engineering-20261014/documentation-audit-20261015/verification.json
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/README.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/comparison.json
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/evidence-links.json
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/.gitignore
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/README.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/cursor.js
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/package.json
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/publish.mjs
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/record.mjs
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/run.sh
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/ui-preview/seed.mjs
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/workflows/docker.yml
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/workflows/release.yml
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/workflows/test.yml
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/.github/workflows/ui-preview.yml
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/AGENTS.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/CLAUDE.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/Dockerfile
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/LESSONS.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/LICENSE
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/Makefile
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/README.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/code-standards.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/contributors.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/README.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/agent-wiring.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/claude-subscription-bridge.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/gateway-middleware.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/gateway-routing.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/gateway-sessions.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/gui-shell.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/library.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/plugin-runtime.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/provider-plugins.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/providers-accounts.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/docs/subsystems/sync-backup.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/go.mod
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/internal/gui/tests/README.md
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/internal/pluginrt/pluginrt_test.go
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/internal/provider/migrate_notice_test.go
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/internal/testenv/offline_test.go
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/magpie/internal/testenv/testenv.go
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/sources/manifest.json
+?? docs/research/magpie-agent-engineering-20261014/reread-20261015/verification.json
+?? docs/research/magpie-agent-engineering-20261014/sources/SOURCE-REGISTER.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/.github/workflows/docker.yml
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/.github/workflows/release.yml
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/.github/workflows/test.yml
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/.github/workflows/ui-preview.yml
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/AGENTS.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/CLAUDE.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/LESSONS.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/LICENSE
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/Makefile
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/code-standards.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/contributors.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/README.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/agent-wiring.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/claude-subscription-bridge.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/gateway-middleware.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/gateway-routing.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/gateway-sessions.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/gui-shell.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/library.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/plugin-runtime.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/provider-plugins.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/providers-accounts.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/docs/subsystems/sync-backup.md
+?? docs/research/magpie-agent-engineering-20261014/sources/magpie/internal/agent/dsh_test.go
+?? docs/research/magpie-agent-engineering-20261014/sources/manifest.json
+?? docs/research/magpie-agent-engineering-20261014/sources/provenance.json
+?? docs/research/magpie-agent-engineering-20261014/sources/repository.json
+?? scripts/development-feedback.mjs
+?? scripts/development-feedback.test.mjs
+?? scripts/fixtures/legacy-schema-import.ts
+?? scripts/fixtures/retired-download-record.ts
+?? scripts/visual-ai-intake.integration.test.ts
+?? src/main/ipc/legacy-readonly-workspace.ipc.ts
+?? src/main/legacy-readonly-workspace/legacy-readonly-runtime.ts
+?? src/main/library-lifecycle/legacy-download.schema.ts
+?? src/main/library-lifecycle/owned-image-recovery.ts
+?? src/shared/client/legacy-readonly-workspace.client.ts
+?? src/shared/contracts/legacy-readonly-workspace.contract.ts

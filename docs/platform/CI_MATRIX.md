@@ -9,6 +9,12 @@ The current product task need not repeat release template filenames.
 
 Phase 8A adds a GitHub Actions workflow for cross-platform governance checks.
 
+## 文档与导航检查
+
+现有跨平台workflow通过setup-python@v6明确选择Python 3.12，再在构建前运行`python scripts/check-documentation.py`、`python scripts/documentation-governance.test.py`和`python scripts/check-adr-router.py`，验证当前权威链接/锚点、子系统/路由关系、候选归属及条款保全检查的行为。普通CI不依赖本地ZIP，不执行一次性迁移审计，也不代替语义审查或真实UI/模型资格。
+
+文档同步应对明确候选使用`check-docs-sync.py --paths-file ...`或`--base ...`；无范围输出NOT ASSESSED，不用整个工作树的无关WIP求绿。
+
 ## Workflow
 
 - Workflow: `.github/workflows/cross-platform-governance.yml`
@@ -44,6 +50,19 @@ These variables document CI intent and give future runtime/downloader code stabl
 `npm run ci:test-governance` runs platform, doctor, settings compatibility,
 migration preview, path governance, desktop workflow, and managed-copy source
 retention checks.
+
+Agent context checks also validate the local development problem/lesson records.
+The router test consumes `development-feedback.test.mjs`: related-only selection,
+cross-module deduplication, next-read updates, resolved-item exclusion and explicit
+failure on invalid records. `npm run test-development-feedback` runs this focused
+subset directly. These checks read development documents and temporary fixtures;
+they do not start an AI Worker, download models or contact an inference service.
+
+The CI-safe switches above apply to this hosted workflow. Formal user-path AI
+acceptance allows an existing real Worker and an already selected external
+inference service within the approved data/cost scope, using existing models only
+without downloading or filling in weights. It is recorded separately and does
+not inherit a pass from this CI. See [real acceptance](../agents/ui-ux-acceptance.md).
 
 `npm run ci:test-runtime-safety` runs bootstrap, runtime profile/package, and mock/safe AI runtime checks.
 
@@ -147,3 +166,5 @@ does not read release secrets, candidate binaries, signing assets, or GitHub
 settings.
 
 `npm run test-ci-governance` verifies that the workflow and npm scripts keep these boundaries intact.
+
+文档检查的解释器选择遵循[setup-python官方说明](https://github.com/actions/setup-python)：显式选版本，避免依赖各runner的默认python命令。未在本轮触发远端CI，配置检查与远端运行结果分别记录。

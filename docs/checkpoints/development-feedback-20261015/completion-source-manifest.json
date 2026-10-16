@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-15",
+  "timezone": "Asia/Shanghai",
+  "head": "a7b7803fcee9609d163b2d8ae84ed9bb3fc2773e",
+  "node": "v26.11.1",
+  "candidate": "local development tools, not application build",
+  "scope": "Feedback routing, source navigation, documentation and checks; no product runtime or model qualification",
+  "files": {
+    "AGENTS.md": "d622ba725d325d2bae00ed30e53779396d643eb579ddea9cbca37ee9834869f1",
+    "CONTRIBUTING.md": "62316ff1700e95894832b8b077b3d281a82a90e3da538b20d30ac142e9a0999a",
+    "LESSONS.md": "0156273f3cd5137433b46a2bf668a4db69ac38b2c70a6ee2244c9ca639839524",
+    "docs/agents/DEVELOPMENT-PROBLEMS.md": "d76e1ea885fbe5ed1894b8123f16a7b3253fe140897f053000df9d34f1363a98",
+    "docs/agents/ui-ux-acceptance.md": "bc0ed9d285d880f1b677c080475d7e28f12aa1be5795f5abe1a9b4ed3bd597b6",
+    "docs/agents/issue-tracker.md": "d953ebe88eee7580d055ac800f830d1177cccd7687e8d2781bdc8a651cf34230",
+    "scripts/development-feedback.mjs": "8d7e93595c032c4900f0934684e02d1f04b3ddfc2baa399d887e3eb8bb4bda13",
+    "scripts/development-feedback.test.mjs": "28bf030151387a2bb7a21b6f5486f907852233d03592d91fe85af3dfa313582b",
+    "scripts/agent-context-router.mjs": "98ed4fe836b8991c3bcca4f2d5cb6a3bdf3e1155d32768f087b2c65ec28fe7b0",
+    "scripts/agent-context-router.test.mjs": "a32dce6af2197f81618ab51e7fb61349e126241af1153bf422fa7561ff44305e",
+    ".codeindex/module-map.json": "de30a3406808b85cdf8fc8e3d4f2006ac508046a0c96e0a68a8b0ad49585f4f9",
+    ".codeindex/tests-map.json": "a02e645ad7660cae35d917e66178cc130766a61b315e5ee805672bae2eebeee9",
+    "src/renderer/components/library/canvas/useHostAssetSearch.ts": "16efc124f4c64762a891d4986fd87f3f513f4430b6321e1c09badf992f0f2ec5",
+    "src/shared/client/workspace-client.ts": "7d4162ee53d736024c06269120877cdd521177993f065228a2729d34882fc978",
+    "src/main/asset-search/README.md": "c0038ec1b00543a0890013a31a940d7e07146b00db40743aadbf1d7b435f5c3d"
+  }
+}

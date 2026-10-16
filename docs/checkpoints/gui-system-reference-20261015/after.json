@@ -1,0 +1,58 @@
+[
+  {
+    "path": "AGENTS.md",
+    "sha256": "9948e0635bc25cb418588dda90215a4700e47770d5c927e6ff6036a7c2f142d1"
+  },
+  {
+    "path": "DESIGN.md",
+    "sha256": "a0d3415fa28c2ee4064f7bb1d20c5714e2948c3db19d3f9a5049bc7da081ed84"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "sha256": "b737d314de145a008bab120c55ed7a738a0294a766206745995236f3f07a2892"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "sha256": "c7d55ea4661251a687a928e4a1710c35350c6079bc8e533056fefed03ec354e2"
+  },
+  {
+    "path": "TASK.md",
+    "sha256": "c3426f6da17ca4be82cab10f405a3f02129d62b2123f6c17c8cb1cf15b90b1aa"
+  },
+  {
+    "path": "docs/subsystems/README.md",
+    "sha256": "90fa44eca66a60604f9afc03b39863aeb3a2852b04aa924f22f5bf5f2f4b6284"
+  },
+  {
+    "path": "docs/subsystems/local-host.md",
+    "sha256": "c204e25d93136ba544dae32b161b1fae0c19705f9c3e407a5b8e5c04e071f101"
+  },
+  {
+    "path": "docs/subsystems/asset-workspace.md",
+    "sha256": "a99d98d731012056dc5fb501c279fa6bbca7b287b6bc15dbd25153e37c0215c6"
+  },
+  {
+    "path": "docs/subsystems/settings-recovery.md",
+    "sha256": "47f8f33a52ab8230c316d12c7ff98171d46bb69d728cb39c1ec1afbe0cb845be"
+  },
+  {
+    "path": "docs/design/README.md",
+    "sha256": "3cab6cc9840000d3ee2d2023021a7dcb95bbc4b4807dc164cbefdea4c72615ff"
+  },
+  {
+    "path": "src/renderer/README.md",
+    "sha256": "03cc5a632eff8e06755781a6e6d4ba0700f8fed6b9a08b208bcd722eac8f088d"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "sha256": "d094773fec8d9cc2e542d8e24603ebd4ae83d3c5ca6c90a8ca41dc2c4d702599"
+  },
+  {
+    "path": ".codeindex/module-map.json",
+    "sha256": "9589fda81955c71a58a9bf13f3e3f8b540a79f611ddaa5f2f8a245d2d3fabbc7"
+  },
+  {
+    "path": "docs/subsystems/gui-shell.md",
+    "sha256": "5b95c7a1c00a7f5edfa6249a09cdcf65ffe2e954c4c9574a32dc35788a1a32b5"
+  }
+]

@@ -1,0 +1,299 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": true,
+    "explicitRoute": null
+  },
+  "routes": [
+    {
+      "id": "ai-analysis",
+      "summary": "Contextual AI tagging, captions, OCR, deep analysis and Electron-owned result synchronization.",
+      "score": 29,
+      "matched": [
+        "ai tag",
+        "ocr"
+      ],
+      "modules": [
+        "electron-main",
+        "ai-worker",
+        "renderer",
+        "preload",
+        "shared"
+      ]
+    }
+  ],
+  "documentation": [
+    "docs/subsystems/ai-analysis.md",
+    "docs/subsystems/ocr.md",
+    "docs/subsystems/visual-ai.md"
+  ],
+  "states": [
+    {
+      "route": "ai-analysis",
+      "reality": "Current Implementation",
+      "summary": "Worker-backed tagging, caption/OCR projection and Electron-owned result synchronization exist in partial live slices.",
+      "evidence": [
+        "src/main/services/ai-client.service.ts",
+        "src/main/ipc/ai-client.ipc.ts",
+        "src/main/services/ai-client/ai-result-sync.projector.ts",
+        "src/renderer/stores/asset.store.ts",
+        "ai-service/app.py"
+      ]
+    },
+    {
+      "route": "ai-analysis",
+      "reality": "Target Architecture",
+      "summary": "A unified automatic progressive analysis baseline for eligible newly activated Candidates and Design Assets, with capability evidence and non-blocking fallback, remains incomplete.",
+      "evidence": [
+        "docs/adr/0140-ai-results-preserve-view-evidence-and-derive-asset-projections.md",
+        "docs/adr/0141-automatic-analysis-is-local-progressive-and-resource-aware.md",
+        "docs/adr/0168-unavailable-analysis-capabilities-create-lightweight-intents.md"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "src/shared/contracts/ai-client.contract.ts",
+      "role": "contract",
+      "reality": "Current Implementation",
+      "reason": "Cross-process AI Client Interface and sync events.",
+      "read_mode": "full",
+      "routeId": "ai-analysis",
+      "estimatedTokens": 689,
+      "required": true
+    },
+    {
+      "path": "src/main/ipc/ai-client.ipc.ts",
+      "anchor": "registerAiClientIpc",
+      "role": "composition",
+      "reality": "Current Implementation",
+      "reason": "Live Electron composition of AI Client polling and request handlers.",
+      "read_mode": "symbol",
+      "routeId": "ai-analysis",
+      "estimatedTokens": 896,
+      "required": true
+    },
+    {
+      "path": "src/main/services/ai-client.service.ts",
+      "anchor": "class AiClientService",
+      "role": "implementation",
+      "reality": "Current Implementation",
+      "reason": "Electron orchestration and Worker polling path.",
+      "read_mode": "symbol",
+      "routeId": "ai-analysis",
+      "estimatedTokens": 8624,
+      "required": false
+    },
+    {
+      "path": "docs/adr/0001-electron-owns-ai-result-sync.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Keeps authoritative AI result writes and Renderer notifications in Electron rather than the Python Worker.",
+      "read_mode": "full",
+      "routeId": "ai-analysis",
+      "matched": [
+        "result sync"
+      ],
+      "estimatedTokens": 142,
+      "required": true
+    },
+    {
+      "path": "docs/adr/0140-ai-results-preserve-view-evidence-and-derive-asset-projections.md",
+      "role": "adr",
+      "reality": "Target Architecture",
+      "reason": "Protects generated evidence and user-authored projections.",
+      "read_mode": "full",
+      "routeId": "ai-analysis",
+      "matched": [
+        "sync"
+      ],
+      "estimatedTokens": 1331,
+      "required": true
+    }
+  ],
+  "validations": [
+    "npm run test-ai-client-ipc-contract",
+    "node scripts/run-ts-test.mjs scripts/ai-result-sync-projector.test.ts",
+    "node scripts/run-ts-test.mjs scripts/ai-tag-suggestion-sync-sink.test.ts",
+    "npm run test-python-unittest"
+  ],
+  "feedback": {
+    "problems": [
+      {
+        "id": "DAM-P002",
+        "group": "host",
+        "status": "needs-reproduction",
+        "check": "在隔离范围定位旧回归停在哪个阶段，区分断言等待、Worker 退出、Host 收尾与环境问题；保存超时证据并确认自有进程退出，不以最终断言输出替代执行结束。",
+        "source": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+        "anchor": "dam-p002",
+        "line": 28,
+        "matchedRoutes": [
+          "ai-analysis"
+        ]
+      }
+    ],
+    "lessons": [
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 28,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#candidate-identity"
+        },
+        "matchedRoutes": [
+          "*"
+        ]
+      },
+      {
+        "id": "DAM-L002",
+        "group": "frontend",
+        "status": "active",
+        "check": "判断本次是否改变可见布局、交互或等待/错误/恢复反馈；若涉及UI/UX，按DESIGN及交互规格从正式入口检查受影响状态，缺陷须复现并验证根因和修复效果，动态问题保留适用连续帧。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l002",
+        "line": 42,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#ui-verification"
+        },
+        "matchedRoutes": [
+          "ai-analysis"
+        ]
+      },
+      {
+        "id": "DAM-L004",
+        "group": "host",
+        "status": "active",
+        "check": "适用真实验收允许现有真实Worker和外部推理，仅用现有模型不下载；保存正式请求、结果、提交/回读和取消保护证据，资源释放以实际进程退出为准，缺模型只阻塞对应范围。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l004",
+        "line": 68,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#resource-lifetime"
+        },
+        "matchedRoutes": [
+          "ai-analysis"
+        ]
+      },
+      {
+        "id": "DAM-L005",
+        "group": "integration",
+        "status": "active",
+        "check": "改变共享Client方法、返回形状或事件时，搜索正式调用者与测试替身，检查所有受影响分支；夹具必须满足当前契约，修正后运行行为验证，模拟通过不代替正式界面结果。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l005",
+        "line": 95,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#engineering-scope"
+        },
+        "matchedRoutes": [
+          "ai-analysis"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not send user asset content or persist query text to an external router.",
+    "Do not treat a Runtime Probe or installed model file as a proven Real Model Path."
+  ],
+  "warnings": [
+    "AI slices are partial; inspect the exact Electron-to-Worker-to-SQLite call path before claiming an automatic pipeline.",
+    "Secondary route asset-discovery also matched; split the task, or retry with --max-routes 2 --expand when both capability packs are required.",
+    "Budget deferred 4 context item(s); use --expand only if the first pass is insufficient."
+  ],
+  "deferred": {
+    "context": [
+      {
+        "path": "src/renderer/stores/asset.store.ts",
+        "anchor": "generateAiSuggestions",
+        "role": "caller",
+        "reality": "Current Implementation",
+        "reason": "Contextual Asset Workspace AI caller.",
+        "read_mode": "symbol",
+        "routeId": "ai-analysis",
+        "estimatedTokens": 9554,
+        "required": false
+      },
+      {
+        "path": "ai-service/app.py",
+        "anchor": "enqueue_tag",
+        "role": "adapter",
+        "reality": "Current Implementation",
+        "reason": "Python Worker HTTP composition and inference routes.",
+        "read_mode": "symbol",
+        "routeId": "ai-analysis",
+        "estimatedTokens": 3982,
+        "required": false
+      },
+      {
+        "path": "scripts/ai-client-ipc-contract.test.ts",
+        "role": "test",
+        "reality": "Current Implementation",
+        "reason": "Focused cross-process contract evidence.",
+        "read_mode": "full",
+        "routeId": "ai-analysis",
+        "estimatedTokens": 1053,
+        "required": false
+      },
+      {
+        "path": "src/main/services/ai-client/ai-result-sync.projector.ts",
+        "anchor": "projectAiTaskSyncAction",
+        "role": "interface",
+        "reality": "Current Implementation",
+        "reason": "Pure Worker-result projection before authoritative writes.",
+        "read_mode": "symbol",
+        "routeId": "ai-analysis",
+        "estimatedTokens": 2439,
+        "required": false
+      }
+    ],
+    "validations": []
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 5,
+    "estimatedFileTokens": 11682,
+    "estimatedMetadataTokens": 2632,
+    "outputEstimatedTokens": 2632,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 14314,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

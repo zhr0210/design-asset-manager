@@ -31,7 +31,7 @@
 
 ## 各页面的设计深化
 
-- **主素材库/连接库/旧库**：保留可信的检查与确认链，统一工作区进入、
+- **主素材库/旧库**：保留可信的检查与确认链，统一工作区进入、
   检查器、筛选和批量动作。冲突与只读语义不受动效影响。
 - **设置**：外观、存储与采集、维护与诊断分组；分类切换保留未保存路径草稿。
   外观直接切换；存储偏好显示更改状态并明确保存。移除没有真实执行器的
@@ -53,7 +53,6 @@
 及快速路由切换。该测试不是实际模型、库、原生选择器或 Electron IPC 证明。
 
 `node scripts/active-library-electron.e2e.test.mjs` 与
-`node scripts/external-connected-library-electron.e2e.test.mjs` 验证正式
 Main/Preload/Renderer 的合成库流程；键盘边界另用
 `npm run test-asset-library-keyboard`。测试截图须在完整生产样式下目检。
 

@@ -1,0 +1,31 @@
+{
+  "scope": "文档/术语职责分界与代码拥有者核对，未重构产品，不执行模型/服务或证明运行覆盖。",
+  "cases": {
+    "ai_target_control": {
+      "status": "通过（当前范围）",
+      "find": "自主搜索到ai-system并定向读1-65行的新三目标/四职责正文，再核对managed/资源/连接与一个旧ExternalHTTPProvider。",
+      "apply": "相同HTTP不等控制权；区分自有Runtime、用户Ollama和云服务，资源/驻留及本地预处理预算分开。",
+      "help": "列统一任务接口与可选管理能力的候选边界，不承诺远端显存回收或无计费；未知服务控制权保守处理。",
+      "limits": "初/末宽搜索截断，关键新正文与源码片段可见。旧ExternalHttpRuntimeProvider.stop只作该保留实现的反例，不证明它在当前正式Main启用；未来协议API未核验。"
+    },
+    "ai_model_policy": {
+      "status": "通过（当前范围）",
+      "find": "自主关键词实际返回新四职责/不可暗换绑定条款，随后查Governor队列、基础分析和OCR源码。",
+      "apply": "资源压力只能等待/降并发/请求自有闲置回收，不静默换模型/quant/输入或云目的地；当前foreground/background机制不是完整全局aging/抢占。",
+      "help": "按Governor注入、permit/驻留、超时作用范围和同一绑定安排检查；如需模型降级回到明确批准策略和新绑定，不让资源层越权。",
+      "limits": "新正文来自关键整行搜索返回，首次宽检索截断但必需规则实际可见；猜了一次错误ADR路径后找到目录。不代表排队/超时真实问题已复现。"
+    },
+    "ai_runtime_release": {
+      "status": "通过（取消/回收边界）；新增入口覆盖未验",
+      "find": "以0173/0492及现有资源设计/源码到达必要原文，没有直接读取新ai-system正文。",
+      "apply": "拒绝取消ACK归还全部资源，Host策略/Runtime allocator/owner代次/UNKNOWN分开；知道0492仍Proposed，不能全量记已实现。",
+      "help": "给出未启动预约与已执行/驻留分别核销、实际close/回收证据的计划，不合并模型语义选择和释放权。",
+      "limits": "此项仅证明既有机制边界的理解及新改动未导致明显保护误解，不把它冒称新章节独立可发现证据。部分宽源码截断，关键Proposed状态/回收原文和源码片段可见。"
+    }
+  },
+  "terminology": "terminology-check.json证明原1408定义未改，新增Task Model Binding/DAM Inference Target两个领域定义；无新增Bounded Context。旧外部HTTP Runtime术语仍保留，不等远端；domain指南旧计数澄清为历史快照。",
+  "candidate": "2640explicit first-party texts unchanged; TASK/Git/history/research/checkpoints/prior answers/runtime/user/secret data excluded. gpt-6.1-sol low fork none; only short natural task/workspace/read-only limits. No lookup/answers passed, no hidden thoughts captured.",
+  "structure": "仍5runtime+2planned+3guides，源拥有者元数据新增已有文件定位，任务路由/产品接口不变。docs/context/ADR/sync与术语差异检查见checks.json。",
+  "acceptance": "两个代表任务实际消费新正文，第三个相邻边界任务以其他权威来源正确理解；不要求唯一链路，不把第三项未验的新入口计入通过。无关键语义失败需修改本候选，不为求完整表演循环重跑。",
+  "limits": "本地控制权目前没有统一配置字段；远端限额和所有Runtime策略覆盖需逐实际消费者核对。0492整套方案仍未批准/实现，引用不转记当前资格；实际UI、模型、性能、资源释放和网络成本均未验。"
+}

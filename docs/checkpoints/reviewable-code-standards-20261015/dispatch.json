@@ -1,0 +1,30 @@
+[
+  {
+    "agent": "/root/standards_shared",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-review-standards-probe-20261015-4aazlc8z\n我改了共享Client返回结构和设置布局断点，目前只跑了本页测试，帮我安排剩余验证。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/standards_baseline",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-review-standards-probe-20261015-4aazlc8z\n有个测试在主分支也失败，另一个单跑通过、整套失败，我想直接交付本次修复，评估如何收尾。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/standards_async",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-review-standards-probe-20261015-4aazlc8z\n准备修改Worker取消和超时逻辑，给出验证计划。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/standards_delivery",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-review-standards-probe-20261015-4aazlc8z\nmacOS开发态跑过，Windows只交叉构建成功，准备交付安装包，列剩余检查。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  }
+]

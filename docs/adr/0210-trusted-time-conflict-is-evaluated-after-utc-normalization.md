@@ -1,17 +1,13 @@
 # Trusted Time Conflict Is Evaluated After UTC Normalization
 
-Every Trusted Current Time source is converted to one UTC absolute instant before comparison. The platform adapter supplies an epoch/UTC instant rather than a localized display string; Catalog-Bound Authenticated Time Evidence uses signed UTC schema values. Timezone, locale and daylight-saving rules are presentation inputs only. Beijing `20:00 +08:00`, London `12:00 +00:00` and Los Angeles `05:00 -07:00` represent the same instant and therefore create no conflict when each resolves to `12:00Z`.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-After UTC normalization, two independently acceptable current-time sources are considered corroborated when their evidence intervals differ by no more than a fixed **Trusted Time Skew Tolerance** of five minutes. The interval accounts for declared source uncertainty and bounded catalog request/response duration rather than comparing rounded UI labels. The tolerance is a security protocol constant, not a user preference, localization setting or package-supplied value.
+## Decision
 
-When normalized acceptable sources differ by more than five minutes, the assessment becomes **Trusted Time Conflict**. The application does not automatically prefer the later value, earlier value, operating-system value or catalog value, and disputed new evidence cannot advance or lower Verified Time High-Water Mark. Previously accepted monotonic high-water evidence is preserved. A missing source is not itself a conflict and remains governed by the ordinary ADR 0208 assessability rules.
+Every Trusted Current Time source is converted to one UTC absolute instant before comparison.
 
-Under ADR 0211, one independently acceptable source may produce Single-Source Trusted Time Assessment. If another acceptable source appears before promotion it becomes a required corroboration recheck, but the application never manufactures a conflict from source absence alone.
+## Detailed contract and provenance
 
-Within tolerance, package-window evaluation remains conservative. The earliest credible instant must satisfy signed `notBefore`, and the latest credible instant must remain before signed `validUntil` according to schema boundary semantics. If the small corroborated interval crosses a package boundary, the install is blocked as **Validity Boundary Not Proven**, not mislabeled as a source conflict. This prevents a five-minute tolerance from becoming five minutes of extra package validity.
+详细状态、交互、数值边界和例外的唯一正文为[备份、模型信任与安装规格](../product/specs/backup-trust.md#adr-0210)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-Trusted Time Conflict and Validity Boundary Not Proven block only new staging/promotion of an official offline package whose signed installation window requires current time. They do not affect packages without such a window, existing installed non-revoked models/runtimes, trust-catalog browsing/refresh, package inspection, original assets, previews, committed analysis results or ordinary application use. Neither state sends an operating-system notification or changes the device clock.
-
-Recovery presents one passive path: synchronize/correct time in supported OS settings and retry the existing signed Trust Catalog Metadata Refresh. A new pair of acceptable UTC-normalized sources is evaluated again; timezone conversion is automatic and never a user conflict-resolution choice. The application provides no manual choose-source, enter-time, widen-tolerance or Continue Anyway control.
-
-Shared status exposes only UTC-normalized difference class, tolerance result, source classes, evidence freshness and typed recovery state. UI may render local dates with explicit timezone for explanation, but diagnostics do not expose raw service responses, device/network identity, credentials or private content. The current project has no UTC trusted-time normalization contract, skew/uncertainty evaluator, Trusted Time Conflict or Validity Boundary Not Proven state. This ADR records target behavior only: it reads/changes no clock, contacts no OS/catalog service, installs no package, accesses no model/runtime/asset/result/private state and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

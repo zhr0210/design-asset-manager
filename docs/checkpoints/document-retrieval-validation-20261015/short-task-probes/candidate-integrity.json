@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "changed_or_missing": [],
+  "unexpected_files": [],
+  "normative_matches_live": {
+    "AGENTS.md": true,
+    "CONTRIBUTING.md": true,
+    "docs/code-standards.md": true,
+    "docs/subsystems/engineering.md": true
+  },
+  "files": 2300,
+  "boundary": "Readonly by instructions + 0444 files; no forced OS sandbox. Host normally injects root AGENTS/environment even with fork_turns none."
+}

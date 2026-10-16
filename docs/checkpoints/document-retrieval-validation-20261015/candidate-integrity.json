@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "files": 2300,
+  "modified_or_missing": [],
+  "unexpected_files": [],
+  "normative_files_still_match_live": {
+    "AGENTS.md": true,
+    "CONTRIBUTING.md": true,
+    "docs/code-standards.md": true,
+    "docs/subsystems/engineering.md": true
+  },
+  "note": "All three tool traces used this candidate as workdir; root normal AGENTS/environment was also injected by the host. Fresh means no parent conversation history, not absence of normal repo instructions."
+}

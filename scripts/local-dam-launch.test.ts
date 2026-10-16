@@ -58,13 +58,13 @@ async function mainStartup(failAt: 'storage' | 'server' | 'browser') {
   let readyCallback!: () => Promise<void>, browserAttempts = 0, desktopCreations = 0
   const window = { isDestroyed: () => false, show: () => { effects.push('show-desktop') }, focus: () => { effects.push('focus-desktop') } }
   const context = vm.createContext({
-    ownsSingleHost: true, syntheticE2e: undefined, connectedSyntheticE2e: undefined,
+    ownsSingleHost: true, syntheticE2e: undefined,
     process: { platform: 'win32', arch: 'x64', pid: 1 },
     DAM_BUILD_IDENTITY: {buildId:'dam-controlled-launch'},
     fs: {promises:{writeFile:async()=>{},rename:async()=>{},rm:async()=>{}}},
     browserEntryRequested: failAt === 'browser', createWorkspaceLaunch,
     approvedExit: false, appStorage: undefined, activeLibraryHost: undefined, workspaceDrafts: undefined,
-    workWindows: undefined, assetCard: undefined, connectedRuntime: undefined, localServer: undefined,
+    workWindows: undefined, assetCard: undefined, legacyRuntime: undefined, localServer: undefined,
     workMedia: undefined,
     requestedProfile: 'SYNTHETIC_PROFILE', SettingsService: { configureProfile: () => {} },
     aiDeviceSampler: undefined, visualAdmission: undefined, managedModels: undefined, retrievalModels: undefined,
@@ -97,8 +97,10 @@ async function mainStartup(failAt: 'storage' | 'server' | 'browser') {
     },
     createProductionActiveLibraryHost: () => ({ inspect: () => ({ state: 'unconfigured' }) }),
     createWorkspaceDrafts: () => ({ flush: async () => { effects.push('flush-drafts') } }),
+    nativeShelfCandidate: false, clipboard: {},
+    createWorkMemberTools: () => ({}), createNativeClipboardImageReader: () => async () => null,
     createWorkWindowController: () => ({}), createAssetCardController: () => ({}),
-    createConnectedLibraryRuntime: async () => ({ drain: async () => { effects.push('drain-connected') }, registerProtocols: () => { effects.push('register-connected-preview') } }),
+    createLegacyReadOnlyRuntime: () => ({ drain: async () => { effects.push('drain-legacy') }, registerProtocols: () => { effects.push('register-legacy-preview') } }),
     setupIpcHandlers: () => { effects.push('register-ipc') },
     createLocalDamServer: async () => {
       effects.push('create-server')
@@ -276,7 +278,7 @@ await test('Main startup failure reports fixed safe guidance, approves cleanup e
     assert.equal(result.effects.filter(effect => effect === 'prevent-quit').length, 1)
     assert.ok(result.effects.includes('cancel-files') && result.effects.includes('drain-library'))
     if (failAt === 'server') {
-      assert.ok(result.effects.includes('flush-drafts') && result.effects.includes('drain-connected') && result.effects.includes('close-storage'), 'partly initialized resources use the existing shutdown drain')
+      assert.ok(result.effects.includes('flush-drafts') && result.effects.includes('drain-legacy') && result.effects.includes('close-storage'), 'partly initialized resources use the existing shutdown drain')
     }
     assert.ok(!result.effects.some(effect => ['configure-workspace', 'register-preview', 'open-browser', 'create-desktop', 'review-exit'].includes(effect)))
     assert.equal(result.handlers.has('activate'), false)

@@ -9,7 +9,7 @@ confirmation, and candidates nearing expiration. Asset Trash and other Library
 Utility Entries remain in a stable bottom utility area rather than becoming a
 fifth organization section.
 
-This keeps the Eagle-like library structure clear while separating collection
+This keeps the high-density library structure clear while separating collection
 ownership, source provenance, workflow destinations, and review queues. Users
 can distinguish formal organization, the actual referenced folder hierarchy,
 capture intake, web collection, and system-assisted review without treating a

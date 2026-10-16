@@ -1,0 +1,23 @@
+{
+  "basis": "User explicitly requires short natural tasks with no reading/retrieval hints; prior accepted requirements remain the oracle.",
+  "prompt_gate": [
+    "Only short task, workspace and execution restrictions.",
+    "No documents/index/decisions lookup request; no file or ADR IDs, search order/keywords, expected conclusion, or request to report read files/commands.",
+    "Fresh low-reasoning context; prior answers and scoring excluded from candidate."
+  ],
+  "cases": {
+    "compact_docs": [
+      "Independently finds ownership and maintenance rules through normal entry.",
+      "Preserves effective requirements, distinguishes semantic/retrieval changes from pure formatting and applies appropriate behavioral validation without being asked how to verify."
+    ],
+    "format_only": [
+      "Independently consults relevant guidance; no unrelated product/model tests or automatic semantic probe for a strictly typographic task.",
+      "Checks structure/diff; would reclassify actual meaning/entry changes."
+    ],
+    "window_ownership": [
+      "Independently finds relevant subsystem and actual decisions/contracts, not only a guess or metadata.",
+      "Distinguishes presentation/coordination optimization from retained Host persistence, asset permission and handoff authority; no product acceptance inferred."
+    ]
+  },
+  "grading": "Final correctness alone does not prove a usable index. Parent checks actual tool reads. Preserve failure, fix real material/lookup cause, rerun a fresh equivalent brief task without adding lookup hints."
+}

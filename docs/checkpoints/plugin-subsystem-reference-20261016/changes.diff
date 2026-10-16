@@ -1,0 +1,311 @@
+--- before/AGENTS.md
++++ after/AGENTS.md
+@@ -19,6 +19,7 @@
+ | 明确产品与本次目标 | [产品基准](docs/product/PRODUCT-FOUNDATION.md)、[TASK](TASK.md)；接续查[当前状态](docs/handoff/CURRENT-STATE.md) | 范围归TASK；实际资格归CURRENT-STATE；跨系列责任归[主台账](docs/tasks/TASK-REGISTRY.md) |
+ | 定位功能、接口、状态或平台实现 | [子系统目录](docs/subsystems/README.md)→所属专题的行为/机制正文与源码；跨层结构查[架构](ARCHITECTURE.md) | 机制归模块；用户契约/目标归[产品规格](docs/product/README.md) |
+ | 界面外壳、页面/窗口组成、前端状态或连接恢复 | [GUI系统说明](docs/subsystems/gui-shell.md)→相关场景与模块源码 | 跨层界面机制归GUI/所属模块，功能行为归现有规格；不写进DESIGN |
++| 插件、SDK、MCP或外部扩展 | [插件子系统](docs/subsystems/plugin-system.md)→适用目标契约与当前可复用模块 | 目标架构与实际交付分开；行为/字段归原规格，机制归系统/模块，证据归报告 |
+ | 开发、诊断、Git、环境或构建发行 | [CONTRIBUTING](CONTRIBUTING.md)及[工程指南](docs/agents/engineering.md)；交付查[构建发行](docs/platform/BUILD-AND-RELEASE.md)，命令以package.json为准 | 开发/交付流程归指南，执行证据归检查点；它们不列软件子系统 |
+ | 编写或审查代码 | [开发规范](docs/code-standards.md)相关保证与所属子系统 | 通用保证归规范，局部保证归模块/测试；审查绑定候选 |
+ | 添加/删减/调整组件或影响UI/UX，含后端等待/错误/恢复反馈 | [DESIGN](DESIGN.md)、[统一交互场景索引](docs/design/INTERACTIONS.md#按场景定位)、[视觉与交互验收](docs/agents/ui-ux-acceptance.md#视觉与交互分别验收) | 最终候选分别比对视觉、交互与适用失败恢复；视觉归DESIGN，行为归INTERACTIONS，实测/差异/复验归报告 |
+--- before/TASK.md
++++ after/TASK.md
+@@ -1,4 +1,8 @@
+-# 当前任务：五个软件子系统归并
++# 当前任务：插件子系统文档与索引
++
++用户明确只建立插件子系统文档/索引，不实施可安装运行MVP。已新增target-only正文和入口，保留五个当前运行系统，衔接原讨论稿/契约/0484及内部可复用边界；机器planned_subsystems独立分类，新增状态保护和修改的路由测试已运行通过。两个全新低思考只读探查按实际轨迹三层核对在本轮范围通过；不等于插件安装或互通已验。本轮未改产品、SDK、模型/资料库，未执行插件或提交/推送/发布。原字节与验证见[本轮检查点](docs/checkpoints/plugin-subsystem-reference-20261016/README.md)。本轮目标完成后停止。
++
++## 前项：五个软件子系统归并
+ 
+ 已按用户确认归并GUI、Host系统集成、资料库、AI、搜索五个一级软件正文；工程治理/构建发行/未来范围改归辅助指南/产品范围，机器topics/guides分列。19篇524个内容单元全部映射，15个旧路径仅兼容，原锚点/例外/来源保全；99个本任务路径及必要导航工具同步。结构/路由/治理测试通过，五项全新低思考短任务按实际轨迹三层核对在本轮范围通过，失败与局限保留。原字节、去向及验证归[本轮检查点](docs/checkpoints/subsystem-consolidation-20261016/README.md)。未改产品进程/代码、模型/资料库或运行资格，未提交/推送/发布；本轮目标完成后停止。
+ 
+--- before/ARCHITECTURE.md
++++ after/ARCHITECTURE.md
+@@ -3,6 +3,8 @@
+ 本文解释稳定结构、责任和平台差异。完整[子系统目录](docs/subsystems/README.md)连接当前运行链、模块、源码与验证；产品目标看[产品基准](docs/product/PRODUCT-FOUNDATION.md)，实际版本/资格仅看[CURRENT-STATE](docs/handoff/CURRENT-STATE.md)，详细目标看[规格目录](docs/product/specs/README.md)。源码存在不证明用户功能完成。
+ 
+ 一级软件系统按GUI与窗口、应用Host与系统集成、资料库与素材、AI能力与执行、搜索与检索组织。页面里的业务仍由相应数据/执行拥有者处理；开发审查/反馈与构建发行是工程资料，未来范围是产品规格，不作为第六个运行系统。此归类只是文档入口，不重写实际进程或权限。
++
++[插件与扩展子系统](docs/subsystems/plugin-system.md)单列为target-only目标：围绕五个运行系统的公开能力、隔离执行和协议适配组织规划；尚未交付的SDK/安装器/MCP不纳入当前运行或资格声明。
+ 
+ ## 1. 进程与客户端
+ 
+--- before/CONTRIBUTING.md
++++ after/CONTRIBUTING.md
+@@ -93,6 +93,8 @@
+ README介绍产品；产品基准保存目标；ARCHITECTURE解释结构；CONTRIBUTING说明工程方式；AGENTS保存四类简短常驻约定与任务导航。
+ 
+ 软件机制按[五个子系统](docs/subsystems/README.md)组织：GUI、Host系统集成、资料库、AI、检索。开发协作与反馈见[工程指南](docs/agents/engineering.md)，构建/签名/发布见[交付指南](docs/platform/BUILD-AND-RELEASE.md)，未来/可选能力与退休范围见[产品范围](docs/product/CAPABILITY-SCOPE.md)；后面三类不是软件运行子系统。机器目录的topics与guides分别维护，任务路由仍可同时给出相关系统和指南；不把多个内部模块强制平铺成多个一级系统。
++
++已明确的目标子系统可在同目录单列规划入口；例如[插件子系统](docs/subsystems/plugin-system.md)归planned_subsystems并明确target-only，与当前topics、辅助guides分开。新增文档不代表API/运行时交付或新实施授权；原产品/ADR详细要求继续保留唯一正文。
+ DESIGN独占视觉规范，CURRENT-STATE独占可用能力与运行身份，TASK保存当前任务；[任务主台账](docs/tasks/TASK-REGISTRY.md)独占跨系列状态与剩余条件。其他文档链接，不复制实时快照。
+ 界面技术系统从[GUI系统说明](docs/subsystems/gui-shell.md)进入：启动/路由、状态投影、Client/Host通信、草稿与恢复机制归系统/模块说明；功能行为仍归已有交互/产品规格，不以“涉及UI”为由写进DESIGN，也不在系统说明重建第二套设计token或功能规格。
+ 每次修改文档，写入前按以下职责选择目标，写入后检查差异是否混入其他职责；现存章节的位置不构成继续追加同类内容的依据。
+--- before/docs/subsystems/README.md
++++ after/docs/subsystems/README.md
+@@ -14,6 +14,14 @@
+ 
+ ## 其他资料按职责进入
+ 
++### 目标子系统（未交付）
++
++| 子系统 | 状态 | 入口与职责 |
++| --- | --- | --- |
++| [插件与扩展](plugin-system.md) | target-only：规划／尚未交付 | 公共能力契约、插件包/隔离/生命周期、UI贡献与MCP适配；可复用五系统内部能力，不代表已有SDK、安装器或MCP互通 |
++
++此处登记规划边界，不把它算作第六个已运行系统；进入实施仍需具体插件和用户路径，不能据文档自动执行第三方代码。
++
+ 开发协作/导航/审查/反馈见[工程指南](../agents/engineering.md)与[CONTRIBUTING](../../CONTRIBUTING.md)，构建/签名/发行见[交付指南](../platform/BUILD-AND-RELEASE.md)和[平台文档](../platform/README.md)，有效目标/未来能力/退休边界见[产品范围](../product/CAPABILITY-SCOPE.md)。它们不是软件子系统或新的自动队列，机器导航也单独分类。
+ 
+ ## 维护与审查
+--- before/docs/subsystems/plugin-system.md
++++ after/docs/subsystems/plugin-system.md
+@@ -0,0 +1,74 @@
++# 插件与扩展子系统
++
++**状态：目标架构／尚未交付。** 本轮只建立文档和检索入口，不实现公共SDK、MCP Client/Server、插件安装器或隔离运行时，也不执行第三方代码。当前五个运行系统见[软件目录](README.md)，本系统在目录中单列为规划。目标依据为[产品基准](../product/PRODUCT-FOUNDATION.md)、[0483核心边界](../adr/0483-ai-plus-core-product-and-extension-boundaries.md)及[0484现行修订](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)。
++
++## 按问题定位
++
++| 问题 | 章节/权威细则 | 状态与边界 |
++| --- | --- | --- |
++| 插件能提供哪些功能 | [目标职责](#职责与状态权威)、[扩展面契约](../product/specs/model-extension.md#adr-0154) | 先选少量命名能力验证，七个参考面不是已冻结MVP |
++| 其他软件怎样接入/MCP是什么 | [协议与宿主](#协议与宿主边界) | 入站服务、出站工具连接和可安装插件是不同范围，协议不替代领域契约/隔离 |
++| 开发、安装、启用、禁用、更新/卸载 | [目标生命周期](#正式入口与运行链) | 开发与安装/执行/发布许可分别处理，尚无交付流程 |
++| 权限、原件、结果与用户数据 | [失败与保护](#失败取消与兼容保护) | Host统一授权/写入，插件只提议结果；卸载不删既有用户资料 |
++| 当前可复用代码与缺口 | [源码与详细机制](#源码与详细机制) | 内部Client/IPC是复用线索，不是公开SDK或第三方授权 |
++| 怎样证明首个插件闭环 | [验证与维护](#验证与维护) | 未来实施任务按真实插件、目标平台和实际入口存证，本轮不冒充验收 |
++
++## 职责与状态权威
++
++插件系统的目标职责是公开版本化能力、发现/协商兼容、管理插件包及激活生命周期、在隔离边界执行，并将工具/UI贡献接入正式用户流程。详细贡献面仍以原契约和0484明确替代范围为准，本页只组织系统关系，不新建第二份SDK字段/权限Schema。
++
++| 拥有者 | 插件可请求/提议 | 不下放的权威 |
++| --- | --- | --- |
++| [Host与系统集成](local-host.md) | 有范围的输入句柄、命名能力调用、任务/进度与取消 | 会话/来源/角色、授权/撤权、文件访问与实际进程/交付生命周期 |
++| [资料库](library-lifecycle.md) | 元数据建议、派生素材/导出提案，经审查后提交 | 原件、人工内容、库身份/修订/事务与正式结果；不能直写SQLite |
++| [AI能力与执行](ai-system.md) | 适用分析提供者、按既定服务/模型的受限调用 | 外发目的地、费用、资源准入、结果验证；插件包/模型制品/Runtime身份分开 |
++| [GUI](gui-shell.md) | 已声明命令/面板等受限贡献 | 主Renderer/Preload权限与任意Store，不得伪造应用授权对话框 |
++| 插件子系统（目标） | 清单/版本兼容、能力绑定、隔离单元、配额与生命周期记录 | 不取代上述业务/信任拥有者，也不开放通用终端/文件/SQL接口 |
++
++基础标签、描述、OCR和确定性配色仍是核心能力，不要求用户先安装插件；录屏、专业处理等可选能力按产品范围选择。安装、激活、能力就绪与信任是独立状态，不能用一个enabled代表全部资格。
++
++## 正式入口与运行链
++
++以下为目标流程，不是当前可点击功能；具体首批插件、语言/运行单元、UI插槽、包格式和稳定兼容承诺仍须结合实际消费者确定，不在文档任务冻结。
++
++1. **开发**：模板/Schema/类型/示例与测试 → 明确开发工作区 → 校验/打包。开发授权不默认包括真实库、凭据、执行生成代码或发布；外部AI开发连接器仍按0484暂缓范围处理。
++2. **安装/更新**：用户选择来源/包 → 看兼容性与权限 → 完整校验与暂存 → 原子登记；失败保留旧版本。权限扩大的更新不能自动激活，签名不代替安全/质量验证。
++3. **激活/执行**：用户动作或独立声明获准的后台条件 → 当前能力/授权/资源复核 → 隔离运行 → 受控输入与有界结果 → Host验证/审查/事务提交 → 回读与可理解反馈。结果“收到”和“正式保存”分开。
++4. **禁用/撤权/卸载**：拒绝新准入 → 取消或收敛在途任务 → 等待实际终态 → 撤销注册/句柄。既有用户素材及归属明确的结果保留；插件缓存、用户创作数据和明确删除数据意图按契约分别处理。
++
++### 协议与宿主边界
++
++公共业务契约与传输解耦。MCP可作为工具/资源适配候选：DAM调用其他软件需要出站Client，其他软件调用DAM需要入站Server；带面板/预览/生命周期的插件还需要扩展运行时。MCP不自动提供运行时、推理API或授权引擎，不保证其他宿主插件原包直接运行，具体版本/传输留实施时核验。
++
++可选命令、分析、声明式UI及Host审核的派生/导出提案见0484；不能把完整市场、计费、云开发、全部贡献面和旧候选语言矩阵当首个插件闭环的前置，也不能用此理由取消隔离/权限/数据保护。未来浏览器Producer不恢复已退休网页/素材下载执行器。
++
++## 失败、取消与兼容保护
++
++第三方代码不在Main/主Renderer/Preload以完整权限加载；独立进程本身不足以证明隔离。校验来源/权限、限制输入句柄、路径/网络目的地、并发/字节/时间/资源及结果大小；不把原件路径、凭据或内部IPC交给插件。对应细则见[0155权限](../adr/0155-extension-permissions-use-tiered-consent-and-update-reapproval.md)、[0156隔离](../adr/0156-third-party-extensions-run-in-isolated-execution-cells.md)、[0158撤销](../adr/0158-extension-revocation-is-risk-classified-and-non-destructive.md)。
++
++授权/库代际/输入版本变化使旧句柄失效；任务取消/超时不等于插件进程退出或远端零费用，UNKNOWN不能盲重发或假释放。崩溃不能破坏Host/用户数据，卸载不抹去历史来源与已提交结果。稳定API承诺须明确兼容/迁移政策；首个稳定SDK之前标实验性，不虚构旧ADR的支持窗口已对外承诺，已实际发布的承诺仍须兑现。
++
++## 技术与平台边界
++
++插件代码包、数据型模型制品、可执行Runtime和外部工具服务各自有身份/信任/升级/资源生命周期，不因共用下载或JSON合并。普通扩展贡献、敏感权限、外发范围和开发工作区授权分别披露；一次可信审查可以包含多个明确授予，不要求重复弹窗。
++
++Windows/macOS按实际目标验证安装/执行隔离、系统交付、取消/退出、UI及兼容性；Browser共享UI不替代原生行为。文档存在不授予下载/安装模型、启动服务或读取秘密；正式推理验收继续只用现有模型。
++
++## 源码与详细机制
++
++当前有可复用内部能力，下表不表示已有公共实现或可立即授予第三方：
++
++| 已有入口 | 可复用责任 | 尚需插件专项补齐 |
++| --- | --- | --- |
++| [Host模块](../../src/main/local-host/README.md)、[命名Client](../../src/shared/client/workspace-client.ts) | 正式业务/会话/事务与传输边界 | 公开小契约、外部身份/授权、版本发现与协议适配；不直接公开WorkspaceClient |
++| [Copy入库](../../src/main/capture-intake/README.md)、[Library](library-lifecycle.md) | 计划/审查、来源验证、原件及结果持久化 | 插件专用staging/结果提案、归属与失败恢复 |
++| [AI连接](../../src/main/ai-gateway/README.md)、[AI系统](ai-system.md) | 既定推理适配、取消/资源与验证 | 第三方权限绑定、隔离/限额和实际插件协议；Pi不等于插件执行器 |
++| [GUI系统](gui-shell.md)、[交互正文](../design/INTERACTIONS.md) | 统一界面语言/可见用户路径 | 声明式插槽、隔离UI、安全消息和卸载后的界面收尾 |
++
++原[2026-09-13讨论稿](../product/PLUGIN-PLATFORM-DISCUSSION-20260913.md)保存SDK、安装、参考插件等设想，后续[0484](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)控制具体替代范围；[0154详细契约](../product/specs/model-extension.md#adr-0154)保存贡献面/例外，其他决定由[扩展目录](../adr/indexes/topics/model-extension.md)选择。讨论稿中的示例SDK/旧采集建议不当现行API。
++
++## 验证与维护
++
++未来明确实施先选一个真实插件/外部软件与命名能力，验证“可见发现/选择 → 权限及输入范围 → 实际隔离执行 → 结果预览/审查 → Host保存回读 → 取消/撤权/卸载保护”。读/写/网络边界、坏包/版本/权限升级、崩溃/超时/旧句柄、用户编辑/旧结果与平台资格分别存证。带UI的贡献按DESIGN/INTERACTIONS和真实视觉/交互验收，不以一个tools/call返回成功代替插件系统完成。
++
++本轮只验证文档可发现/用对及规划状态准确，公共API/SDK、安装与隔离、MCP互通和完整插件生命周期均不因本页宣称通过。没有自动实施队列或新平台；实际能力和候选资格仍见[CURRENT-STATE](../handoff/CURRENT-STATE.md)，证据归各实施任务。修改目标取舍核对已有ADR，修改AI材料按[三层行为验收](../../CONTRIBUTING.md#document-retrieval-validation)，产品细节写回其原规格而不复制全文。
+--- before/docs/product/CAPABILITY-SCOPE.md
++++ after/docs/product/CAPABILITY-SCOPE.md
+@@ -11,6 +11,8 @@
+ 未来明确任务先读对应目标规格与重大取舍，核对当前实现消费者，再决定具体实施。当前本地Copy/理解/检索/工作集复用不依赖完整生态、云开发/MCP或每项未来状态机先完成。
+ 
+ ### 插件、SDK与MCP接入
++
++跨系统规划与当前复用边界统一从[插件子系统（目标）](../subsystems/plugin-system.md)进入；本页保留核心/可选/退休范围，详细字段/权限与取舍继续归原契约/ADR，不建立第二份SDK正文。
+ 
+ 扩展接入首先核对[0484的现行边界与阶段](../adr/0484-extension-contracts-and-deferred-agent-development-access.md)及[0483核心/可选能力范围](../adr/0483-ai-plus-core-product-and-extension-boundaries.md)：公共能力契约、MCP工具/资源适配与隔离插件运行时各有职责，Accepted目标不等于已有公开API。具体贡献面/权限设计按[扩展面详细契约](specs/model-extension.md#adr-0154)和[扩展决定目录](../adr/indexes/topics/model-extension.md)选择适用条款；讨论稿仅保留来源，不取代现行修订。
+ 
+--- before/docs/product/README.md
++++ after/docs/product/README.md
+@@ -3,6 +3,8 @@
+ 产品目标以[PRODUCT-FOUNDATION](PRODUCT-FOUNDATION.md)为入口。当前机制看[子系统](../subsystems/README.md)，本轮提炼的[详细能力规格](specs/README.md)按主题保留全部有效细节。
+ 
+ 核心/可选/未来及退休范围查[能力范围](CAPABILITY-SCOPE.md)；其中扩展SDK/MCP等目标有自己的状态与有效决定，不因预留接口成为已交付软件子系统。
++
++插件规划的系统入口见[插件与扩展子系统（target-only）](../subsystems/plugin-system.md)，原讨论稿、有效契约和0484修订由该页按问题链接。
+ 
+ 有效能力契约（不等于已交付）是能力范围内契约，不代表全部已交付；proposal保持原确认状态，原计划，不自动执行不是执行队列，dated-evidence只证明当时范围。当前明确用户决定仅替代其具体范围。UI操作归[交互](../design/README.md)，视觉只归DESIGN，实际资格归CURRENT-STATE。
+ 
+--- before/docs/product/specs/model-extension.md
++++ after/docs/product/specs/model-extension.md
+@@ -1,4 +1,6 @@
+ # 模型与扩展生命周期：详细能力契约
++
++插件整体职责/阶段及内部复用关系见[插件子系统（目标）](../../subsystems/plugin-system.md)，本页仍独占具体扩展面条款；系统入口不改变本页状态或已确认例外。
+ 
+ 本文承接原ADR中的细节，保留所有原数字、例外、状态和相互约束；[来源映射](../../checkpoints/documentation-rebuild-20261015/adr-migration.json)逐段核对。**有效要求不是当前交付声明，也不是本轮实施队列。** 现行已批准产品/设计在其明确替代范围内优先；不凭实现缺失判决定无效。
+ 
+--- before/docs/adr/indexes/topics/model-extension.md
++++ after/docs/adr/indexes/topics/model-extension.md
+@@ -1,4 +1,6 @@
+ # 模型与扩展生命周期：ADR候选目录
++
++插件/SDK/MCP的系统关系与状态从[插件子系统（目标）](../../../subsystems/plugin-system.md)进入；该页不取代以下原决定/详细契约，也不宣称已交付。
+ 
+ 仅列标题/性质/原文声明状态，非正文合集或已交付声明。先按具体任务挑少量决定，再读原文和链接契约。未显式状态不等于未批准；Proposed/Historical不冒充有效已确认规则。
+ 
+--- before/.codeindex/documentation-map.json
++++ after/.codeindex/documentation-map.json
+@@ -420,5 +420,24 @@
+       "source_roots": [],
+       "index": "docs/product/README.md"
+     }
++  ],
++  "planned_subsystems": [
++    {
++      "id": "plugin-system",
++      "title": "插件与扩展子系统",
++      "status": "target-only",
++      "routes": [
++        "source-discovery"
++      ],
++      "sources": [
++        "docs/product/PLUGIN-PLATFORM-DISCUSSION-20260913.md",
++        "docs/product/specs/model-extension.md",
++        "docs/adr/0484-extension-contracts-and-deferred-agent-development-access.md",
++        "docs/adr/0483-ai-plus-core-product-and-extension-boundaries.md"
++      ],
++      "test_profiles": [],
++      "reference": "docs/subsystems/plugin-system.md",
++      "source_roots": []
++    }
+   ]
+ }
+--- before/.codeindex/module-map.json
++++ after/.codeindex/module-map.json
+@@ -1590,6 +1590,7 @@
+         "Historical web collection plans are not current implementation or authorization."
+       ],
+       "documentation": [
++        "docs/subsystems/plugin-system.md",
+         "docs/subsystems/library-lifecycle.md",
+         "docs/product/CAPABILITY-SCOPE.md"
+       ]
+--- before/scripts/check-documentation.py
++++ after/scripts/check-documentation.py
+@@ -72,7 +72,11 @@
+     path = root / ref
+     if path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
+         return [f'{ref}: document leaves owned repository scope']
+-    if kind == 'subsystem':
++    if kind in ('subsystem', 'planned-subsystem'):
++        if kind == 'planned-subsystem' and entry.get('status') != 'target-only':
++            return [f'{ref}: planned subsystem must declare target-only']
++        if kind == 'subsystem' and entry.get('status') == 'target-only':
++            return [f'{ref}: target-only belongs in planned_subsystems']
+         if ref != f"docs/subsystems/{entry['id']}.md":
+             return [f'{ref}: software subsystem must use its canonical runtime reference']
+         index = root / 'docs/subsystems/README.md'
+@@ -86,6 +90,8 @@
+         return [f'{ref}: unknown documentation category']
+     if not path.is_file() or not index.is_file():
+         return [f'{ref}: document or human index is missing']
++    if kind == 'planned-subsystem' and '状态：目标架构／尚未交付' not in path.read_text():
++        return [f'{ref}: planned subsystem must visibly distinguish target from delivery']
+     if '旧入口仅作兼容导航' in path.read_text():
+         return [f'{ref}: compatibility entry cannot own a current topic']
+     import os
+@@ -109,13 +115,15 @@
+     route_ids = set(catalog['routes'])
+     topics = docmap['topics']
+     guides = docmap.get('guides', [])
+-    entries = topics + guides
++    planned = docmap.get('planned_subsystems', [])
++    entries = topics + planned + guides
+     if len({t['id'] for t in entries}) != len(entries):
+         errors.append('Duplicate documentation topic')
+     references = {t['reference'] for t in entries}
+     for topic in entries:
+         ref = topic['reference']
+-        errors.extend(entry_navigation_errors(root, topic, 'subsystem' if topic in topics else 'guide'))
++        kind = 'subsystem' if topic in topics else 'planned-subsystem' if topic in planned else 'guide'
++        errors.extend(entry_navigation_errors(root, topic, kind))
+         active.add(ref)
+         for rid in topic['routes']:
+             if rid not in route_ids:
+@@ -211,7 +219,7 @@
+             if set(before_terms) != set(current_terms) or len(set(current_terms)) != len(current_terms):
+                 errors.append('Glossary term lost or duplicate left without a merge decision')
+     return {'ok': not errors, 'scope': 'Structure/source preservation only; no product, UI, model or native acceptance.',
+-            'owned_documents_checked': len(active), 'subsystems': len(topics), 'guides': len(guides), 'task_routes': len(route_ids),
++            'owned_documents_checked': len(active), 'subsystems': len(topics), 'planned_subsystems': len(planned), 'guides': len(guides), 'task_routes': len(route_ids),
+             'decision_sources': len(decisions), 'migrated_paragraphs': paragraph_count, 'migration_assessed': migration,
+             'glossary_definitions': len(current_terms), 'errors': errors}
+ 
+--- before/scripts/check-docs-sync.py
++++ after/scripts/check-docs-sync.py
+@@ -79,7 +79,7 @@
+                 paths = subprocess.check_output(['git', 'diff', '--name-only', '-z', commit, 'HEAD', '--'], cwd=ROOT).decode().split('\0')
+                 paths = [p for p in paths if p]
+             docmap = json.loads((ROOT / '.codeindex/documentation-map.json').read_text())
+-            topics = docmap['topics'] + docmap.get('guides', [])
++            topics = docmap['topics'] + docmap.get('planned_subsystems', []) + docmap.get('guides', [])
+             declarations = json.loads(args.declarations.read_text()) if args.declarations else {}
+             if not isinstance(declarations, dict):
+                 raise ValueError('Declarations must be an object keyed by subsystem')
+--- before/scripts/documentation-governance.test.py
++++ after/scripts/documentation-governance.test.py
+@@ -99,5 +99,21 @@
+         self.assertEqual(missing['affected'], {'delivery': ['scripts/package.mjs']})
+         self.assertTrue(sync.assess(['scripts/package.mjs', guide['reference']], [guide])['ok'])
+ 
++    def test_planned_subsystem_needs_visible_state_and_cannot_count_as_current(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            root = Path(tmp)
++            (root / 'docs/subsystems').mkdir(parents=True)
++            (root / 'docs/subsystems/README.md').write_text('[Plugin](plugin-system.md)\n')
++            target = root / 'docs/subsystems/plugin-system.md'
++            entry = {'id':'plugin-system','reference':'docs/subsystems/plugin-system.md',
++                     'status':'target-only'}
++            target.write_text('状态：目标架构／尚未交付\n')
++            self.assertEqual(docs.entry_navigation_errors(root, entry, 'planned-subsystem'), [])
++            self.assertTrue(docs.entry_navigation_errors(root, entry, 'subsystem'))
++            target.write_text('# Plugin\n')
++            self.assertTrue(docs.entry_navigation_errors(root, entry, 'planned-subsystem'))
++            entry.pop('status')
++            self.assertTrue(docs.entry_navigation_errors(root, entry, 'planned-subsystem'))
++
+ if __name__ == '__main__':
+     unittest.main()
+--- before/scripts/agent-context-router.test.mjs
++++ after/scripts/agent-context-router.test.mjs
+@@ -1413,6 +1413,7 @@
+ }
+ const optionalScope = jsonRoute(['--module', 'source-discovery', '--task', 'MCP plugin optional targets'])
+ assert.ok(optionalScope.documentation.includes('docs/product/CAPABILITY-SCOPE.md'), JSON.stringify(optionalScope))
++assert.ok(optionalScope.documentation.includes('docs/subsystems/plugin-system.md'), JSON.stringify(optionalScope))
+ const malformedDocCatalog = structuredClone(repositoryContext.catalog)
+ malformedDocCatalog.routes['asset-workspace'].documentation = ['../../private.md']
+ assert.equal(catalogHealth(malformedDocCatalog).ok, false)

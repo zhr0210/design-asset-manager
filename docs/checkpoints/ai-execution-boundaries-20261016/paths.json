@@ -1,0 +1,10 @@
+[
+  "docs/subsystems/ai-system.md",
+  "ARCHITECTURE.md",
+  "CONTEXT.md",
+  "TASK.md",
+  "docs/agents/domain.md",
+  "src/main/ai-gateway/README.md",
+  "src/main/services/ai-runtime/README.md",
+  ".codeindex/documentation-map.json"
+]

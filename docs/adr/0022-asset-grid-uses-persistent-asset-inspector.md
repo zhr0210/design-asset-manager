@@ -6,7 +6,7 @@ is the home for the selected asset preview, color palette, title, source URL,
 notes, tags, collection memberships, duplicate and analysis signals, basic file
 information, and asset actions.
 
-This follows the Eagle reference pattern: the grid stays fast for visual
+This follows the asset-management pattern: the grid stays fast for visual
 scanning, while metadata review and editing remain immediately available
 without forcing every asset card to carry heavy detail UI. The same pattern
 should apply to confirmed design assets and asset candidates when the candidate

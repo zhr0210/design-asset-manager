@@ -14,7 +14,7 @@ import { createSharpSystemPreviewAdapter } from '../capture-intake/sharp-system-
 import { createSqliteCapturePersistenceAdapter } from '../capture-intake/sqlite-capture-persistence.adapter'
 import { createSqliteCapturePromotionLifecycleSink } from '../capture-intake/sqlite-asset-lifecycle.adapter'
 import { readVariantIntent, completeVariantIntent, type VariantIntent } from './image-variant-intents'
-import { recoverOwnedImage } from './owned-download-recovery'
+import { recoverOwnedImage } from './owned-image-recovery'
 import { importOwnedImage } from './owned-image-intake'
 
 type Binding = { root: string; managed: string; staging: string; previews: string; identity: string; generation: string; database: Database.Database; session: ActiveLibrarySession }

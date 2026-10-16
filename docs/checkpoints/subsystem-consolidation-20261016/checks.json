@@ -1,0 +1,71 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "command": [
+        "python3",
+        "scripts/check-documentation.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"scope\": \"Structure/source preservation only; no product, UI, model or native acceptance.\",\n  \"owned_documents_checked\": 163,\n  \"subsystems\": 5,\n  \"guides\": 3,\n  \"task_routes\": 20,\n  \"decision_sources\": 493,\n  \"migrated_paragraphs\": 0,\n  \"migration_assessed\": false,\n  \"glossary_definitions\": 1408,\n  \"errors\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check-agent-context.py"
+      ],
+      "exit_code": 0,
+      "stdout": "[OK] AGENTS.md\n[OK] TASK.md\n[OK] .codeindex/module-map.json\n[OK] .codeindex/module-map.schema.json\n[OK] .codeindex/forbidden-paths.json\n[OK] .codeindex/tests-map.json\n[OK] scripts/agent-context-router.mjs\n[OK] scripts/agent-context-router.test.mjs\n[OK] Tracked first-party source ownership 807/807 files\n[PASS] Agent context check passed\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check-adr-router.py"
+      ],
+      "exit_code": 0,
+      "stdout": "[PASS] ADR router validation passed\n493 ADRs: 89 Core, 200 Supporting, 195 Spec-candidate, 9 Historical\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/documentation-governance.test.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ".........\n----------------------------------------------------------------------\nRan 9 tests in 0.005s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check-docs-sync.py",
+        "--paths-file",
+        "docs/checkpoints/subsystem-consolidation-20261016/paths.json",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"affected\": {\n    \"engineering\": [\n      \"scripts/agent-context-router.mjs\",\n      \"scripts/agent-context-router.test.mjs\",\n      \"scripts/check-docs-sync.py\",\n      \"scripts/check-documentation.py\",\n      \"scripts/documentation-governance.test.py\"\n    ]\n  },\n  \"unmapped\": [],\n  \"errors\": [],\n  \"scope\": \"Explicit candidate only; owning-doc changes/declarations require semantic review.\",\n  \"assessed\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "scripts/agent-context-router.test.mjs"
+      ],
+      "exit_code": 0,
+      "summary": "Executed after correcting new test scope assumptions and before final immutable candidate dispatch.268 route-eval tasks plus10 feedback tests passed;duration33947ms. New direct-guide route cases and invalid-path rejection passed; original failed run retained in preflight-failures.json."
+    },
+    {
+      "command": [
+        "local_links",
+        "docs/checkpoints/subsystem-consolidation-20261016/README.md"
+      ],
+      "exit_code": 0,
+      "errors": []
+    }
+  ]
+}

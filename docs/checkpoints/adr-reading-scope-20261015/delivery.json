@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "scope": "Documentation-only correction; no new ADR, code behavior or product qualification.",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "before": "762aec27bb71a95f6daed65a7c9a2ba0ae2b089e509e99f6400c73cf4a94b55d",
+      "after": "67dd393f4cb44d9d2092c37dfa23c280e232c2e43ac31437fb46e40e7dcdac5b"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "before": "73633f3a7b237d90c4231529f38c34707ffc7e2c5e4efa3395bbebe8ca9d8c50",
+      "after": "dd0aefbcb0e3a9095375b15cb9c309ee809b0f259c705caf01d9bd2f34c46166"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "before": "855239f0774190780b3d2dbfd968a6404151a68df900519fc8fd92068e4a1305",
+      "after": "5d9c499af83098e6bb4f7c78b37f47ffd34849f5e29afdaa94d100110fe52abe"
+    },
+    {
+      "path": "docs/agents/domain.md",
+      "before": "4fd5e07e5b4b17e890a02e28379c1bbda16884e878e6f69b891684d3c3dfa473",
+      "after": "4ad74c1dd8113df045157da29f41380ca8650e986f595daafe2117dfbd6a80aa"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "before": "6c18507527af978f9c7bf40f6a0def6866696c9963b92e7c326ba97189c1e305",
+      "after": "c5e26a93ef5aff04905689de59f332e587aea89900b490c8e71451992e9e1cc7"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "before": "65bf7300188e040d91823770d8cf2f2508a638d274347324be7e2115361d2b37",
+      "after": "0956143112c79a84150fad2bfeb64c4a3f94f81a96943e3c24278282e1bbc854"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "before": "cb5c159c7d7d22e758c1a2a363ca13d096160737be638e80fb0a4e469a6b5e8e",
+      "after": "f93d3cffe7d9a97b1d03fa1cabdcdc73f94c4b8b82997a3527be14696b6ee890"
+    },
+    {
+      "path": "TASK.md",
+      "before": "2b0f7b44aca6519df72977dabbe39421d7fdfcfb5e001d6a9b729fd5fa446511",
+      "after": "fc3962cb6ad1b13e79bd7e59722f7b5586e281c199ed08d462a36e524433df75"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-ROUTING-DISCUSSION.md",
+      "before": "73aa7484d250687f594a0ff560462a54689f81fd77f90b716718462992bb6d9e",
+      "after": "14e408e8b85001c20151d63adab1cf65ef7065b69bf9b2ce34f7e8d14d2a3272"
+    }
+  ],
+  "route_adrs": [
+    "docs/adr/0489-work-sets-separate-saved-references-from-native-window-authority.md",
+    "docs/adr/0493-dropover-style-interaction-allows-platform-native-implementation.md"
+  ],
+  "errors": []
+}

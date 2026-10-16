@@ -10,8 +10,8 @@ Task workers that call model wrappers and produce results for Electron polling.
 
 ## Rules
 
-- Treat `tag_worker.py` as protected.
-- Do not bypass the Electron polling flow when syncing results.
+- 修改tag_worker.py需核对实际调用者/兼容输出并运行相关行为测试；允许目标内必要修改，不设文件级禁改。
+- 保留旧Worker lane的Electron-owned结果提交；poller不是所有新Pi/managed能力的统一执行路径。
 
 ## Tests
 

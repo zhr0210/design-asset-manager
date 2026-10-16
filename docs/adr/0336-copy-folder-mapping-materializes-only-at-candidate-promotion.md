@@ -1,9 +1,13 @@
 # Copy Folder Mapping Materializes Only At Candidate Promotion
 
-When Copy Into Library contains at least one selected folder, its Copy Into Library Plan visibly defaults **Create Collections From Folders** on while allowing the user to turn it off before confirmation. The mapping preview shows selected roots and depth, proposed Collection Groups and Asset Collections, affected candidate counts, name collisions and unmapped files. A loose-file-only selection defaults the option off and continues to use ordinary Candidate Promotion targets. The setting is part of this reviewed plan only; it is not silently remembered as an application, library, source or plugin default.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Confirmation stores one **Folder Collection Mapping Intent** with each affected Candidate Identity but creates no Collection Group, Asset Collection, Collection Membership or physical folder mirror. Each intent binds only the reviewed relative folder position and proposed collection target identities needed for that Candidate; it neither makes the external folder a Source Tree nor creates continuing monitoring or synchronization. Copying still places managed originals under ADR 0285 through ADR 0291 storage buckets, so later external-folder or managed-original moves, renames and deletions do not restructure collection organization.
+## Decision
 
-At Candidate Promotion, a promotion-time user-selected target has highest priority; otherwise the confirmed mapping intent precedes Collection Suggestion, current workspace context and Unsorted Collection under ADR 0032. The promotion transaction creates or reuses only the reviewed Collection Group/Asset Collection nodes required by that successfully promoted Candidate and commits its Collection Membership item-atomically. Failed, excluded, cancelled, rejected or never-promoted Candidates therefore create no empty collection hierarchy. A user may override one or multiple candidates during promotion without rewriting other candidates' intents, and later ordinary collection editing remains independent from the source folders.
+When Copy Into Library contains at least one selected folder, its Copy Into Library Plan visibly defaults **Create Collections From Folders** on while allowing the user to turn it off before confirmation.
 
-Plan-time name collisions enter ADR 0337 Folder Mapping Conflict Review and cannot be silently merged, suffixed or replaced. Unmapped candidates simply fall through the normal ADR 0032 target order rather than blocking Copy Into Library. The current application has no Copy Into Library folder-mapping plan or candidate-bound deferred mapping intent. This ADR records target architecture only and selects, scans, copies, creates, renames, maps, modifies or deletes no runtime/user file, Candidate, Collection or membership and changes no public IPC, database schema or AI Worker API.
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[Copy与复合原件规格](../product/specs/compound-originals.md#adr-0336)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/storage-intake.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

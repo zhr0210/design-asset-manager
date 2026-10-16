@@ -1,0 +1,45 @@
+{
+  "scope": "Five fixed-candidate read-only plans, graded by actual tools/visible prose/source and applied outcome, not self-report. No user-facing product, real inference, install, native or visual qualification.",
+  "cases": {
+    "five_ai": {
+      "status": "通过",
+      "find": "自主由旧AI兼容入口进入ai-system完整输出，再到后台/基础分析/OCR/独立标签/Runtime README与controller；关键读取无截断。",
+      "apply": "区分请求→claim→准入→sent→executor→验证→Host事务/current/outbox→GUI及物理释放；UNKNOWN、人工优先、旧lane和持续后台重排分清。",
+      "help": "按owner/request/attempt/launch列可执行定位步骤与最小证据，不把仍占用直接定性泄漏或假称新架构已实现。",
+      "limits": "代码只读，不证明根因/资源释放实测；实际测试选择还须核对本次具体范围。"
+    },
+    "five_gui_data": {
+      "status": "通过",
+      "find": "五系统目录/GUI完整→Host配置与Library→Settings/AppShell/Main/工作窗源码及INTERACTIONS。",
+      "apply": "页面与路径偏好/真正迁移分开；GUI呈现、Library数据、Host交付有不同拥有者，默认Electron与Bflag仍分开。",
+      "help": "三系统影响表和按操作分列验证，真实迁移需副本；保留未确认菜单/性能边界。",
+      "limits": "最后宽测试/验收搜索截断，但必要系统/配置/窗口与交互条款此前可见；不代表实际UI/迁移通过。"
+    },
+    "five_engineering": {
+      "status": "通过",
+      "find": "AGENTS/旧工程兼容→docs/agents/engineering.md、BUILD-AND-RELEASE、规范/指南与实际package/CI/scripts。",
+      "apply": "工程/发行不归软件子系统；文档/脚本/内部候选/签名/安装/发布证据分开，不自动发布或泄露凭据。",
+      "help": "按唯一正文去重、可执行手册、必要工具及验证列计划；明确现行交付指南仍非完整操作手册，不借目录归并假称发行准备完成。",
+      "limits": "只验证重新归类资料可发现/使用；本轮不承诺全面重写发行操作手册或执行构建签名。"
+    },
+    "five_discovery": {
+      "status": "通过",
+      "find": "目录→asset-discovery与AI阶段→retrieval/视觉/基础分析源码和0182/0183原文。",
+      "apply": "caption与embedding语义/空间/持久证据分开；共享模型/资源不自动共用输出或授权；当前SigLIP与生成视觉事实另核对。",
+      "help": "可组合父任务但保留能力子结果/部分成功/独立失效；指出旧ADR未实现摘要不覆盖当前源码，不把目标混现状。",
+      "limits": "未运行模型/质量或性能比较；旧摘要作为具体历史冲突保留，无本轮产品修复。"
+    },
+    "five_future": {
+      "status": "通过",
+      "find": "五系统目录→CAPABILITY-SCOPE明确产品入口→0484/详细扩展契约→Host/Client/intake/AI源码说明。",
+      "apply": "MCP客户端/服务端/隔离运行时与领域契约不同，目标不等现有SDK；不公开内部IPC或恢复退休采集能力。",
+      "help": "列可复用Host业务边界与当前缺口，建议具体窄纵切并保留未互通资格。",
+      "limits": "猜测了不存在的local-host/index.ts且末次宽源码输出截断；核心0484/产品范围/Host原文已完整可见，未据此虚构公共能力。"
+    }
+  },
+  "preservation": "19 prior entries tracked as524units:506 original canonical text retained across5runtime docs/3guides,18 title/navigation units explicitly consolidated. Original byte copies, old headings/links, exceptions/numbers, source/test pointers retained;15 old files are compatibility navigation only, not active systems. No new product ADR/glossary or runtime authority change.",
+  "tooling": "Added guides category beside topics; documentation checker validates own human index/category, sync combines runtime+guide source consumers. Router bounded documentation path accepts local guides with same source trust/path/symlink protections and max3. Updated actual route expectations and behavioral tests; no product source changes.",
+  "failures": "New probe-specific route tests initially assumed broad OCR phrase/unregistered MCP phrase could route without scope; retained evidence then corrected test input/explicit existing route. Production ambiguity/NO_ROUTE safeguards not relaxed; final268route tasks+10feedback+9documentation tests pass.",
+  "integrity": "2638explicit first-party text files frozen before first dispatch, matches live tree; TASK/history/research/checkpoints/prior answers/secrets/runtime data/Git excluded. Fork none, model gpt-6.1-sol low, no lookup hints. Prompt/file-mode read-only, not OS enforcement.",
+  "remaining": "Five-case result does not guarantee all future model/task navigation or product behavior. Read efficiency still has minor redundant searches; actual UI/native/model tests not run because documentation scope."
+}

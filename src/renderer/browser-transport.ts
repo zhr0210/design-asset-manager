@@ -57,13 +57,13 @@ export async function createBrowserTransport(): Promise<WorkspaceTransport> {
     const version = ++sequence
     connected = false; reconciling = true; emit('workspace:connection',{connected:false,reconciling:true})
     try {
-      const snapshots = await Promise.all(['library:inspect','settings:load','download:list','download:jobs','connected-library:inspect','legacy-readonly:inspect','ai-connection:active-logins'].map(command => invoke(command)))
+      const snapshots = await Promise.all(['library:inspect','settings:load','legacy-readonly:inspect','ai-connection:active-logins'].map(command => invoke(command)))
       if(snapshots.some(value => value?.success === false || value?.ok === false)) throw Error('WORKSPACE_RECONCILIATION_FAILED')
       await Promise.all([...reconcilers].map(listener=>listener()))
       if (version !== sequence) return
       reconciling = false; connected = true
       emit('workspace:connection',{connected:true,reconciling:false})
-      for (const name of ['settings:changed','connected-library:changed','drafts:changed']) emit(name,null)
+      for (const name of ['settings:changed','legacy-readonly:changed','drafts:changed']) emit(name,null)
     } catch { if(version===sequence){connected=false;reconciling=false;emit('workspace:connection',{connected:false,reconciling:false})} }
   }
   events.addEventListener('connected', () => { void reconcile() })
@@ -80,10 +80,10 @@ export async function createBrowserTransport(): Promise<WorkspaceTransport> {
     mediaUrl(reference) {
       const media=/^dam-workmedia:\/\/media\/([^?#]+)$/.exec(reference)
       if(media&&[4,5].includes(media[1].split('/').length))return '/media/work/'+media[1]
-      if (/^\/media\/(?:active|connected|legacy)\/[A-Za-z0-9%._:~/-]+$/.test(reference)) return reference
-      const match = /^dam-(preview|connected-preview|legacy-preview):\/\/preview\/([^?#]+)$/.exec(reference)
+      if (/^\/media\/(?:active|legacy)\/[A-Za-z0-9%._:~/-]+$/.test(reference)) return reference
+      const match = /^dam-(preview|legacy-preview):\/\/preview\/([^?#]+)$/.exec(reference)
       if (!match || match[2].split('/').length !== 3) return ''
-      const kind = match[1] === 'preview' ? 'active' : match[1] === 'connected-preview' ? 'connected' : 'legacy'
+      const kind = match[1] === 'preview' ? 'active' : 'legacy'
       return `/media/${kind}/${match[2]}`
     }
   }

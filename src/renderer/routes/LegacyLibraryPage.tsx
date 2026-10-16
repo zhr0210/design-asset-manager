@@ -7,7 +7,7 @@ import type {
   LegacyReadOnlyAssetProjection,
   LegacyReadOnlyProjection,
   LegacyReadOnlyReview
-} from '../../shared/contracts/external-connected-library.contract'
+} from '../../shared/contracts/legacy-readonly-workspace.contract'
 import {
   Button,
   EmptyState,
@@ -67,7 +67,7 @@ export default function LegacyLibraryPage() {
 
   useEffect(() => {
     void run('initial-load', refresh)
-    const client=requireWorkspaceClient(),stop=client.onConnectedLibrariesChanged(() => { void refresh().catch(() => setError('旧素材状态暂不可读，请刷新重试。')) }),stopReconcile=client.onReconcile(refresh)
+    const client=requireWorkspaceClient(),stop=client.onLegacyLibraryChanged(() => { void refresh().catch(() => setError('旧素材状态暂不可读，请刷新重试。')) }),stopReconcile=client.onReconcile(refresh)
     return()=>{++refreshEpoch.current;stop();stopReconcile()}
   }, [])
 
@@ -119,7 +119,7 @@ export default function LegacyLibraryPage() {
       <div className="ui-section-heading">
         <div>
           <h2>尚未打开旧 DAM 库</h2>
-          <p className="ui-muted">请只选择本应用旧版生成的 .db 或 .sqlite 文件。Eagle Library 不是旧 DAM 库。</p>
+          <p className="ui-muted">请只选择本应用旧版生成的 .db 或 .sqlite 文件。</p>
         </div>
         <StatusBadge tone="neutral">等你选择</StatusBadge>
       </div>
@@ -293,7 +293,7 @@ function LegacyReview({ review, busy, onConfirm, onCancel }: {
       <StatusBadge tone="neutral">{review.counts.relations} 个标签关系</StatusBadge>
     </div>
     <Notice tone="neutral" style={{ marginTop: 16 }}>
-      打开后仍是只读访问，不会编辑数据库、移动素材或并入 Eagle。
+      打开后仍是只读访问，不会编辑数据库或移动素材。
     </Notice>
     <div className="ui-actions" style={{ marginTop: 16 }}>
       <Button

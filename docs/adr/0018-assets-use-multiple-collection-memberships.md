@@ -9,7 +9,7 @@ Under ADR 0414, “project” and “client project” here are user-authored wo
 contexts, not first-class Client or Project entities. Collection names and
 hierarchy gain no hidden lifecycle, billing, permission or delivery semantics.
 
-This follows the Eagle reference model where one reference can belong to
+This follows the asset-management model where one reference can belong to
 multiple working contexts without duplicating the original file. A packaging
 reference, for example, can simultaneously belong to collections for a client
 project, a food-brand board, and a typography study while keeping one Original

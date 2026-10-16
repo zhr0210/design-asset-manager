@@ -36,7 +36,7 @@ npm run start:browser -- "--profile=G:\antigravity\Design Asset Manager 1001\.sc
 
 复用既有工作集/WorkspaceClient/Native token、Capture、Active Library、修订/幂等/草稿与唯一 Host。`work-media` owns v15 的帧和视频状态；Windows Media Foundation 自有 MIT helper 真正解码 H.264，不下载编解码器或执行外部仓库代码。正常构建把受源/制品指纹约束的 `video.exe` 发至 `out/main/windows-video/`；512 MiB Governor 预算串行解码，helper在解码前施加384 MiB process commit限制。取消/关库保留占用直到实际进程 close，失败旧帧保持。
 
-原件、首帧预览、参考帧与交付副本分离。`work-file-handoff` 保留来源与转换记录、核验成员/源版本/完整字节，64份/1 GiB保留上限；仅明确清理调用系统回收站。Native私有actor/token限制拖出已准备副本；默认应用打开只返回“已请求打开”，不伪造接收成功。当前正式交付支持受管 Copy；Reference/Eagle 外部原件交付保持拒绝，没有移动/覆盖外部源。
+原件、首帧预览、参考帧与交付副本分离。`work-file-handoff` 保留来源与转换记录、核验成员/源版本/完整字节，64份/1 GiB保留上限；仅明确清理调用系统回收站。Native私有actor/token限制拖出已准备副本；默认应用打开只返回“已请求打开”，不伪造接收成功。当前正式交付支持受管 Copy；
 
 真实升级第一次失败：1,638,400字节数据库超过旧1 MiB初始备份映像边界。已同步正式profile、来源、Native传输与target初始输入到4 MiB，近4 MiB真实 SQLite备份回读、包内 Runtime及C副本升级通过。**制品1 MiB校验、128 MiB进程/256 MiB job、已有VFS journal/source增长约束、身份/空间/事务/commit证据均保留**；没有把 dispatch 或 qualify 固定为成功。大于4 MiB初始映像的Windows维护路径仍明确未覆盖。
 
@@ -58,4 +58,4 @@ C源库仍v14、165素材、330文件，31张白名单相关表全部旧列内�
 
 Native专项 `NOT_RUN`：指定设计/剪辑应用的真实打开/导入、拒绝/不支持/目标应用关闭；真实Windows拖拽、置顶/隐藏/恢复；实际多屏、断开显示器后的可见性；原生安装与平台效果。按用户安排后续集中验证，不把浏览器下载、toast、默认应用请求或内部假OS port替代这些结果。因此D父级保持未完成。
 
-当前范围仅Windows H.264未旋转MP4，≤96 MiB、≤1小时、≤3840×2160；最多100帧。macOS/其它编解码器、Reference/Eagle原件交付、全视频智能/录屏未交付。旧T23指定Chrome压力与父#24仍维持原状态；本轮不重新执行A–C、不启动E–F。
+当前范围仅Windows H.264未旋转MP4，≤96 MiB、≤1小时、≤3840×2160；最多100帧。旧T23指定Chrome压力与父#24仍维持原状态；本轮不重新执行A–C、不启动E–F。

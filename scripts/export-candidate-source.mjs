@@ -21,7 +21,7 @@ const hashFile = async file => { const hash = createHash('sha256'); for await (c
 const originalHead = git(['rev-parse', 'HEAD']).trim(), originalBranch = git(['branch', '--show-current']).trim()
 const indexBefore = await hashFile(path.join(root, '.git/index'))
 const names = [...new Set(git(['ls-files', '--cached', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean))]
-const roots = ['src/', 'scripts/', 'docs/', 'ai-service/', 'pi-runtime/', 'eagle-companion/', '.codeindex/', '.github/']
+const roots = ['src/', 'scripts/', 'docs/', 'ai-service/', 'pi-runtime/', '.codeindex/', '.github/']
 const exact = new Set(['AGENTS.md', 'ARCHITECTURE.md', 'CONTRIBUTING.md', 'CONTEXT.md', 'DESIGN.md', 'ORIGINAL_REQUEST.md', 'PROJECT.md', 'README.md', 'TASK.md',
   '.gitattributes', '.gitignore', 'package.json', 'package-lock.json', 'electron.vite.config.ts', 'postcss.config.js', 'tailwind.config.js', 'tsconfig.json',
   'build/installer.nsh', 'build/entitlements.mac.plist', 'build/release-branding.example.json', 'build/release-signing-environment.example.json', 'build/macos/DAM 浏览器版.app/Contents/Info.plist',
@@ -79,10 +79,9 @@ async function productWalk(directory) {
 }
 await productWalk('src'); await productWalk('ai-service/tools')
 const fixed = ['build/installer.nsh', 'scripts/run-electron-builder.mjs', 'scripts/electron-builder-runner-options.mjs', 'scripts/native-package-inputs.mjs',
-  'package.json', 'package-lock.json', 'electron.vite.config.ts', 'scripts/build-identity.mjs', 'scripts/build-eagle-companion.mjs',
+  'package.json', 'package-lock.json', 'electron.vite.config.ts', 'scripts/build-identity.mjs',
   'pi-runtime/worker.mjs', 'pi-runtime/provider-policy.json', 'pi-runtime/auth-interaction.mjs', 'pi-runtime/openai-chatgpt-auth.mjs', 'pi-runtime/model-reasoning.mjs', 'pi-runtime/release.json',
   'scripts/windows-backup-build-closure.mjs']
-for (const name of ['manifest.json', 'index.html', 'js/plugin.cjs', 'js/pairing.cjs', 'README.md']) fixed.push('eagle-companion/' + name)
 for (const name of fixed) product[name] = await hashFile(path.join(root, name))
 if (process.platform === 'win32') Object.assign(product, (await windowsBackupBuildClosure(root)).files)
 const sourceBuildText = await fs.readFile(path.join(root, generated), 'utf8')

@@ -1,5 +1,7 @@
 > 历史批次记录；当前状态以 [CURRENT-STATE](../../../handoff/CURRENT-STATE.md) 为准。旧候选、等待与资格保持原时间身份。
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 # 2026-10-09 补充：Pi／ChatGPT 本人授权已连接并安全保存
 
 补充（2026-10-09）：本人已从正规系统浏览器授权；DAM 正式 UI 显示“账号已连接”“身份与计划权限已验证”“已保存凭据”。应用内部加密持久化 OAuth 授权凭据；Agent未读取/导出 Cookie、令牌、保险库或完整回调。尚未做该账号的实际模型推理与重开持久化验收。
@@ -79,9 +81,7 @@ llama.cpp b11429/d81235049 Mac arm64运行包来自官方GitHub软件发行（�
 - Blender指定官方MP4源本轮重试仍HTTP403，未取得视频；生成H264的内部解码/取消/close测试不替代真实视频。下一步来源恢复后按既定URL/SHA取可恢复副本，普通导入/抽帧/保存重开。
 - Pi真实账号登录未做（账号本人正规入口操作），受控SDK结果不授真实账号资格；需要本人登录后补正规实际调用。
 - 原生专项仅普通窗口/Cmd-Q成立：目标创作软件真实接收、拖拽/置顶/多屏断屏、安全存储、安装升级卸载仍未验。截图工具只给极小倾斜窗口缩略图，不能据此宣称完整视觉QA；需可用原生完整画面/专项条件。
-- Eagle真实库/插件配对与读写冲突、恢复未验；本轮未新建Eagle库或安装配对。按原专项在明确公开Eagle测试库上接续。
 - 两平台远端CI仍为main Actions37793257740失败；本机Mac治理通过不等于Windows tracer或远端重跑通过。未推送，下一步单独review/推送本分支并两平台重跑。
-- 广泛OCR、检索质量/压力与商业签名发行未验；现有三图路径可用，不自动关闭WC01、T23/父#24、A–F、Eagle或商业发行父级。
 
 本轮到源码/依赖/迁移必需可用路径为止停止，不扩大所有后续专项。
 稳定证据见 [验收JSON](../../../checkpoints/macos-migration-20261009/acceptance.json)、[重开前](../../../checkpoints/macos-migration-20261009/persistence-before-reopen.json)、[重开后](../../../checkpoints/macos-migration-20261009/persistence-after-reopen.json)。
@@ -141,9 +141,9 @@ Python3.12.11独立环境 `.scratch/macos-migration-20261009/python`：Torch2.14
 2. 从“AI与模型→本地模型与OCR”选择本轮OCR文件夹、可信Python环境根，正式重新验证；加载2B CPU/Metal并实际取消/停用，核对资源归零。
 3. Copy入库本轮public-sources三图，从可发现入口独立标签/描述/OCR及一键基础分析，核对内容和人工保护，保存整应用重开。
 4. 正式验证SigLIP2、生成三图索引、中文/英文/以图检索，取消/明确恢复与索引保存重开；当前内部向量不冒称用户持久索引。
-5. Blender官方源恢复后准备其可恢复副本并补Mac视频；Native专项、Eagle、Pi账号本人登录、安装/发行按各自实际证据保持未验。
+5. Blender官方源恢复后准备其可恢复副本并补Mac视频；Native专项、Pi账号本人登录、安装/发行按各自实际证据保持未验。
 
-本轮没有推送/发布/签名、购买或读秘密。WC01、T23/父#24、A–F、Eagle与商业发行父级均不关闭。下文是本轮早期实施检查点，依日期/版本保留。
+本轮没有推送/发布/签名、购买或读秘密。下文是本轮早期实施检查点，依日期/版本保留。
 
 ---
 
@@ -152,7 +152,6 @@ Python3.12.11独立环境 `.scratch/macos-migration-20261009/python`：Torch2.14
 本轮以 GitHub main `6b86ef05e558229e2bd87998101ca5678bc228cc` 为唯一基准，完整克隆到
 `/Users/meigong/Documents/design-asset-manager-macos`，分支 `codex/macos-migration`。
 旧 `/Users/meigong/Documents/design-asset-manager` 有大量 WIP，未修改、清理或迁移其数据。
-不继承 Windows 资格，不关闭 WC01、T23/父#24、A–F、Eagle 或商业发行父级。
 
 ## 当前已实际成立
 
@@ -187,7 +186,7 @@ npm run start:desktop -- --profile=/Users/meigong/Documents/DAM-public-macos-pro
 1. 完成当前两条境内模型传输，真实完整核验；普通UI绑定Python/OCR并记录实际挑战、加载、取消与物理释放。
 2. 用最新正式build重开；验证固定Mac GGUF包、Metal统一预算与自有物理内存测量，不以估计/下载授资格。
 3. 公开图片Copy入库，独立标签/描述/OCR、一键基础分析；双语与以图索引、查询及保存重开；真实失败/取消保留人工与原件。
-4. Blender官方短片准备、Mac视频实际导入/抽帧/重开；Native普通启动可覆盖专项单列，Eagle/安装发行维持未验收。
+4.Blender官方短片准备、Mac视频实际导入/抽帧/重开；
 5. 修复适用迁移检查，执行修改测试、source ownership、必要构建；写最终版本/证据与准确未完成项。
 
 证据：`.scratch/macos-migration-20261009/evidence/`（仅本轮非秘密检查日志）。

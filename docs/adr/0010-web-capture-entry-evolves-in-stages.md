@@ -11,8 +11,7 @@ Pinterest-oriented capture workflows do not break. It must not regain primary
 surface ownership or host app-level menus, docks, inspectors, or workspace
 overlays.
 
-Medium term, the capture architecture should move toward the Eagle reference
-model: browser extension, local API, and focused capture-window workflows bring
+The proposed model uses browser extensions, a local API, and focused capture-window workflows to bring
 asset candidates into the Asset Workspace, while webpage UI remains responsible
 only for discovery and capture handoff. This preserves current capability while
 moving product interaction, animation, and organization back under the

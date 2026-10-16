@@ -1,0 +1,37 @@
+{
+  "scope": "Four fresh low-reasoning read-only plans; verifies migrated-contract discovery and acceptance-method application. No actual visual, UI interaction, animation, model or native product qualification.",
+  "migration": "71 nonempty original paragraphs/tables/lists/headings preserved canonically (only heading depth/link targets may differ). Original byte copies retained. All old headings remain compatibility navigation; new explicit anchors scope workspace/work-window/legacy. Existing reports/history/ADR left intact. DESIGN YAML and entire Overview-onward visual body unchanged.",
+  "cases": {
+    "interaction_component": {
+      "status": "通过",
+      "find": "自主定位统一交互与验收流程，定向读取ui-ux-acceptance117-170及现行设置/设计章节；必要正文实际可见。",
+      "apply": "删除须验剩余布局/焦点/导航/替代入口、草稿/保存和共享影响；最终候选视觉/交互/适用失败恢复分列。",
+      "help": "给出基准→状态/输入→正式操作→结果→证据/放行的计划；不以组件消失或测试绿收尾。",
+      "limits": "首次宽搜索截断，随后定向读取完整；未知具体组件，只支持计划，不证明任何真实界面通过。"
+    },
+    "interaction_motion": {
+      "status": "通过",
+      "find": "自主到统一work-window183-216行和验收117-164，实际读取保留的84%/16%、严格0.4、deltaX时长及接管条款。",
+      "apply": "拒绝终点截图/Browser测试替代原生动态；需过程连续帧、中断/反向、覆盖层/抓手、旧回调和实际多屏/设备证据。",
+      "help": "按本次子目标列候选/原生/恢复记录，必需未验保留NOT_RUN/BLOCKED，不连带宣布整个B完成。",
+      "limits": "实际动画未运行，采样/设备/性能资格未取得；首搜索截断，随后必要场景与方法完整可见。"
+    },
+    "interaction_reference": {
+      "status": "通过",
+      "find": "无提示自主关键词读取ui-ux-acceptance125-127/153-161等实际原文，无关键截断。",
+      "apply": "当前截图只能作现状证据，不能自封批准baseline；无批准图仍可按DESIGN明确条款验有依据范围，缺必要项不通过。",
+      "help": "列已覆盖预期与未定项、记录当前候选与可比条件，不逐项让用户兜底，不制造像素阈值。",
+      "limits": "只评基准方法，未查看实际设计/界面，不证明风格一致。"
+    },
+    "interaction_surfaces": {
+      "status": "通过",
+      "find": "从实际预览源码进入统一INTERACTIONS的场景提示及98-113/229-240定向正文，主库和工作集差异可见。",
+      "apply": "区分共用组件与不同Space/保存/切图策略，引用主库临时平移、工作集开关/准备后切图；不把原差异当缺陷或仅改CSS。",
+      "help": "给出现状/实现/契约取舍和受影响测试，不因合并文件偷统一产品行为或自动保存。",
+      "limits": "初期猜测一个不存在路径并多次宽检索；最终到源码/正文。未运行，不能凭源码断言闪白或性能。"
+    }
+  },
+  "candidate": "2634 enumerated first-party texts unchanged during probes; TASK/history/research/evidence/prior answers/Git excluded. gpt-6.1-sol low fork none; normal project instructions available. Read-only by prompt/file mode, not OS enforced.",
+  "checks": "Structure/current links, old anchors, canonical block preservation, explicit paths sync, context/ADR indexes and268 route tasks+10 feedback tests passed. No new mirror tests added. checks.json records actual execution.",
+  "closure": "All attempts retained; no critical document-consumption failure observed, so no extra corrective loop fabricated. Results limited to these tasks; visual reference/interaction execution must occur on future actual component changes."
+}

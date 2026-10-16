@@ -1,5 +1,7 @@
 # 来源定位索引
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 包内路径相对于DAM-COMPLETE-HANDOFF-20260927；inputs/package保留选定字节副本。行号为本次字节版本，摘要见SOURCE-REVIEW.json。源码定位为真实仓库，未运行对应模块。
 
 | ID | 类型 | 路径 | 行范围 / symbol |
@@ -38,6 +40,5 @@
 | S-SCHEMA | source | `src/main/library-lifecycle/library-open-control-store.internal.ts` | 34–79 initialize/inspectLibraryControlStore |
 | S-READ | source | `src/main/library-lifecycle/active-library-host.ts` | 349–374 readPreview |
 | S-VARIANT | source | `src/main/library-lifecycle/image-variant-intents.ts` | 19–23 readVariantIntent |
-| S-EAGLE | source | `src/main/external-connected-library/external-connected-library.schema.ts` | 3–115 initializeExternalConnectedLibrarySchema |
 | S-ADR | source | `docs/adr/0141-automatic-analysis-is-local-progressive-and-resource-aware.md` | 1–17 automatic baseline |
 | S-DESIGN | source | `DESIGN.md` | 124–160 共享UI边界 |

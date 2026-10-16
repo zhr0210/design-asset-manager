@@ -1,16 +1,13 @@
 # Batch Progress Is Lightweight and Contextual
 
-Batch Operation In Flight should expose progress without blocking the user's
-workspace. Capture Inbox Activity Panel should show Batch Progress Summary.
-Currently visible candidate cards or details may show Item Progress State, while
-navigation away from the active review surface should keep a Background
-Progress Indicator available. Completion Transition should turn progress into
-Inline Batch Result for complex outcomes or Candidate Undo Toast for fully
-successful low-risk actions. The app should not use a blocking full-screen
-progress modal by default.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0458 projects Batch Text Edit recovery from its durable operation record.
-After interruption, the contextual surface shows proven completed and remaining
-counts plus Resume, Cancel Remaining and Undo Completed only when the current
-device holds the required protected evidence; it never exposes previous Text in
-global progress or notifications.
+## Decision
+
+Batch Operation In Flight should expose progress without blocking the user's workspace.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[批量操作与冲突规格](../product/specs/batch-conflicts.md#adr-0095)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

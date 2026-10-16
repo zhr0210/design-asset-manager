@@ -1,0 +1,16 @@
+[
+  {
+    "agent": "/root/plugin_doc_entry",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-plugin-doc-probe-20261016-x6uj3xnw\n我想做一个可安装的分析插件，另外能通过通用协议复用其他软件的工具，先评估现有基础和下一步。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/plugin_doc_boundary",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-plugin-doc-probe-20261016-x6uj3xnw\n插件能否直接拿主窗口Client读写素材和调用AI？安装、卸载时应处理什么？先给出方案评估。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  }
+]

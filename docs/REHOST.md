@@ -12,7 +12,7 @@ cd DAM
 node scripts/handoff-preflight.mjs
 ```
 
-本机尚未推送的`codex/macos-migration`交付不能假定包含在远端main；接续该成果应取得明确commit/已审核差异，并核对相应运行证据，不能照旧分支或旧ZIP覆盖新main。当前统一目录及Eagle隔离见[BRANCHES](handoff/BRANCHES.md)。
+本机尚未推送的`codex/macos-migration`交付不能假定包含在远端main；接续该成果应取得明确commit/已审核差异，并核对相应运行证据，不能照旧分支或旧ZIP覆盖新main。
 
 ## 按目标平台准备
 

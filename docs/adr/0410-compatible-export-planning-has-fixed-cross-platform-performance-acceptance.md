@@ -1,17 +1,13 @@
 # Compatible Export Planning Has Fixed Cross-Platform Performance Acceptance
 
-Evidence-gated progressive planning has no useful scale claim without repeatable responsiveness, completion, memory, cancellation, and leak criteria. These criteria are product acceptance evidence, not configurable limits or minimum supported hardware.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Minimum validation uses two synthetic, non-private shapes: 100,000 Design Assets × 10 variants for 1,000,000 cells, and 1,000 Design Assets × 100 variants for 100,000 cells. Both include multi-visual-unit recipes and ADR 0394 XMP companions so physical output count exceeds cell count and exercises the output tree, naming, capacity, and conflicts. They are minimum evidence shapes, never supported-count ceilings or permission to truncate larger plans.
+## Decision
 
-Formal release builds run cold and repeat cases on two **Compatible Export Planning Performance Reference Devices**: macOS on Apple M1 with 16 GB memory and SSD, and Windows on a documented approximately 2020-class four-core/eight-thread x64 processor with 16 GB memory and SSD. Neither relies on a discrete GPU. Exact OS/build and Windows processor/storage models accompany evidence. Faster-device results are supplemental. These profiles are not installation gates, Minimum Supported System Requirements, or encoder-throughput promises.
+Evidence-gated progressive planning has no useful scale claim without repeatable responsiveness, completion, memory, cancellation, and leak criteria.
 
-Both profiles present the truthful planning surface and usable Cancel within one second. Repeat planning shows first real completed-chunk statistics and matrix content within two seconds; cold planning does so within five seconds. The 1,000,000-cell shape completes repeat planning within 60 seconds and cold planning within 90 seconds. The 100,000-cell variant-axis shape completes repeat planning within 15 seconds and cold planning within 30 seconds. Completion requires every selected cell, physical member, path/name, capability consequence, estimated byte, destination constraint, and conflict needed for confirmation; skeletons, invented progress, sampling, or hidden ongoing evidence do not satisfy it.
+## Detailed contract and provenance
 
-Combined resident memory across the full application process tree stays at or below 2 GB and grows no more than 1 GB above measured pre-planning baseline. Within 60 seconds after Cancel or leaving planning it settles to no more than 200 MB above baseline. After one warm-up, five planning-and-exit runs show no sustained cumulative growth, and final settled memory is no more than 10% above the first settled value. Disk-backed state cannot hide retained processes, mappings, or leaks.
+详细状态、交互、数值边界和例外的唯一正文为[导出、交付与性能规格](../product/specs/export.md#adr-0410)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/media-handoff.md)，当前资格只查CURRENT-STATE。
 
-Cancel enters truthful Cancelling and stops new chunk dispatch within 200 ms; every planner/worker acknowledges within one second; active chunks release file handles, planning leases, and temporary resource pins within five seconds. The partial plan remains incomplete and unconfirmable. Read-only cancellation changes no destination or output, while the separate 60-second memory-settle requirement still applies.
-
-Missing any acceptance threshold is a release-performance or memory-leak failure. It never permits shrinking fixtures, hiding matrix content, weakening complete review, or reclassifying a reference profile as unsupported merely to pass.
-
-ADR 0431 reuses these two documented hardware profiles for 100,000-owner Custom Field Migration responsiveness evidence. That reuse does not import export-planning completion or memory thresholds into migration and does not make either profile a minimum installation requirement.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

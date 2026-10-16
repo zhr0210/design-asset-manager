@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-15",
+  "source_sha": "8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f",
+  "files": 39,
+  "sha256_verified": true,
+  "pinned_git_blob_ids_verified": true,
+  "report_links_checked": true,
+  "magpie_code_executed": false,
+  "runtime_tests_executed": false,
+  "dam_effective_guidance_changed": false
+}

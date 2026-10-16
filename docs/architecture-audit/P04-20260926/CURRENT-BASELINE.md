@@ -1,5 +1,7 @@
 # 源码现状与边界
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 读取日期2026-09-26。下表是源码事实与推导风险，非本轮运行复现。完整文件指纹见 `evidence/SOURCE-INVENTORY.json`。
 
 | ID | 当前事实 / 可核对入口 | 对P04的影响 |
@@ -16,10 +18,10 @@
 | F10 | `active-library-asset-queries.ts:76`使用ocr?.text ?? visualAi?.ocrText，专用空文字阻止视觉OCR回退；aiCaption与visualAi.caption并列。`asset-discovery.workflow.ts:204`可独立检索不同的AI描述 | 新投影保留人工为主要描述，AI建议仍可有清楚来源的独立命中；“优先”不必抹去所有AI历史 |
 | F11 | 当前visual-ai-v1字面量跨提示更新；视觉证据有model/backendId/inputSha但无精确recipe/profile版本或请求代次。v8 OCR有三个模型hash/引擎版本/观测尺寸/归一化四边形 | 历史兼容只投影真实存在信息，不以当前P03配方回填历史digest |
 
-正式链路：Main组合根注册visual-ai与asset-ocr → 控制器 → ActiveLibraryHost `run`持库连接 → 各领域事务。Renderer/Provider/Python不取得库写入权。Eagle/Legacy不纳入本轮Managed证据迁移。
+正式链路：Main组合根注册visual-ai与asset-ocr → 控制器 → ActiveLibraryHost `run`持库连接 → 各领域事务。Renderer/Provider/Python不取得库写入权。
 
 模块README有部分版本范围仍写v2–v7，实际storage与查询接受v8；以已核对源码为准。原AssetCaptionPanel含旧重生成逻辑，但Inspector在activeLibraryMode传入aiActionsEnabled=false；不将旧分支误报为当前正式重跑会解除人工锁。
 
 锁文件读到Ajv6.15.0、better-sqlite3 12.10.0、Electron30.5.1、TypeScript5.9.3、Sharp0.34.5；这只是锁版本，未执行原生模块，也未验证平台兼容。复用P01的draft-07文档格式，不安装schema依赖。
 
-P02的v8副本intent reader遗漏、Eagle初始化检查顺序问题仍是前序未修发现；本轮不扩展修复或复现。
+本轮不扩展修复或复现。

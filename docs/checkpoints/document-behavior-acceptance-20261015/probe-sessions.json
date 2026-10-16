@@ -1,0 +1,30 @@
+[
+  {
+    "agent": "/root/quality_maintenance",
+    "session_id": "01a13f28-20ff-7502-b23e-2aa8fbd3ce91",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/quality_closure",
+    "session_id": "01a13f28-39b2-7fe1-9ff2-99e26635c94d",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/quality_format",
+    "session_id": "01a13f28-52f9-70e3-a474-a881e917baf0",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/quality_attribution",
+    "session_id": "01a13f29-744e-7d72-b763-57daea032ba7",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

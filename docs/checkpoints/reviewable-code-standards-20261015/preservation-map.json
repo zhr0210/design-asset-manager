@@ -1,0 +1,56 @@
+{
+  "scope": "Semantic preservation review relative to before/docs/code-standards.md, not identity of rewritten prose. Original bytes retained; no product qualification changes.",
+  "sections": [
+    {
+      "anchor": "engineering-scope",
+      "preserved": "User-result scope/full chain, neighboring consumers and assumptions, related ADR scope/status/override/autonomy.",
+      "expanded": "Consumer/sibling checks made executable; unrelated findings stay local instead of scope creep."
+    },
+    {
+      "anchor": "host-authority",
+      "preserved": "Unique Host, identity/role/member/source/input/revision checks, Native/Worker least authority, no arbitrary Browser/local execution; no authority from document text.",
+      "expanded": "Rejected/expired/generation-invalid request cases and actual upstream types/units/default evidence."
+    },
+    {
+      "anchor": "data-integrity",
+      "preserved": "Copy default, originals/preview/variants/index separation, legacy read-only/manual priority, transaction/revision/idempotence/cancel/revoke, unknown reads/commits, recoverable copies.",
+      "expanded": "Unreadable/parse/hash/lost-receipt injection; explicitly read-only plan no business writes, distinct from UI preview."
+    },
+    {
+      "anchor": "behaviour-tests",
+      "preserved": "Smallest related tests risk expansion, run changed tests/necessary build, meaningful regression red evidence, no implementation-mirroring or relaxed acceptance, user outcome boundary.",
+      "expanded": "Existing failures classification/local owner record; concrete shared-change regression trigger table."
+    },
+    {
+      "anchor": "isolation",
+      "preserved": "Temporary deterministic tests, fixed dependency/controlled network, Electron ABI runner, real Worker/external inference existing models only and allowed scope, no secret access.",
+      "expanded": "Check actual network destination and profile/config/cache/draft scope; avoid latest fixtures."
+    },
+    {
+      "anchor": "resource-lifetime",
+      "preserved": "Cancel/timeout/Promise separate physical exit/remote bill, UNKNOWN held, generation-safe late events, cleanup, platform qualification and local capability independence.",
+      "expanded": "Barriers, delays/order/concurrent edits/threshold sides and lock/queue waits, actual terminal-state assertions."
+    },
+    {
+      "anchor": "ui-verification",
+      "preserved": "DESIGN/interaction authority, every affected UI scope formal entry/preview, reported-root reproduction, continuous frames, Browser/native distinction/full user loop.",
+      "expanded": "Direct source/lesson links; no second UI style rules."
+    },
+    {
+      "anchor": "candidate-identity",
+      "preserved": "HEAD/WIP/candidate/build/process/platform/model separate, rerun affected changed evidence, report usable outcome/failures/gaps, self-review label, stop scope.",
+      "expanded": "Integration-result qualification, persistent local command/exit/behavior evidence, local commit body link if committing, no masked pipeline failure or fake install/publication."
+    },
+    {
+      "anchor": "semantic-review",
+      "preserved": "Before/after behavior/source consumer audit, doc ownership/current vs target, source/links preservation/no circular-only coverage; blind fresh-agent three-layer validation.",
+      "expanded": "P005/P006 examples; methods remain solely in CONTRIBUTING."
+    },
+    {
+      "anchor": "lesson-promotion",
+      "preserved": "One incident record, concrete checks, three new review dates/critical immediate, don't increment retry/reread, evaluate scope/counterexamples/autonomy/duplicate consumers; source/reasons retained.",
+      "expanded": "Direct lesson/problem/method evidence entrypoints."
+    }
+  ],
+  "non_adoptions": "No Go commands or race detector mandate, native-select/click/stripe styling, mandatory bilingual/WebKit suite, external-maintainer PR approval or 16-artifact release rule. No forced all-suite each small edit; no automatic model download or publishing."
+}

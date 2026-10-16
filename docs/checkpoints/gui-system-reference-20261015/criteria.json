@@ -1,0 +1,19 @@
+{
+  "basis": "用户要求加入GUI系统文件且DESIGN只作设计规范。已有职责约定、当前main/AppShell/browser-transport/Settings及Host源码为判据，不从新文案反推。",
+  "cases": {
+    "shell": [
+      "自主找到GUI跨层说明/必要源码，区分Renderer、Client传输、Host和独立原生界面；理解main.tsx→Client安装→App/AppShell，设置复用稳定生命周期。",
+      "技术机制写GUI/模块，视觉写DESIGN，功能行为归既有规格，当前资格归CURRENT-STATE/报告；不创建重复权威。"
+    ],
+    "reconnect": [
+      "明确连接恢复事件不等于重新具备写入资格，读取快照并等待mounted reconcilers成功；UNKNOWN结果不自动重发，失败保留输入且提示可发现。",
+      "将校准/迟到读/expected基线/flush问题转为具体检查及适用测试，不宣称仅源码/浏览器截图证明原生或真实UI完成。"
+    ],
+    "native": [
+      "默认工作窗Electron/React和macOS B AppKit条件工厂分清，B非SwiftUI也非共享React树；不因统一前端自动推翻原生选择。",
+      "视觉可以共享语言，但Host保存/成员/交付/修订权威不能下放；评估改动需相关决定和平台证据，不宣称B已默认。"
+    ]
+  },
+  "grading": "按三层行为验收核对实际读取/返回与结论应用，短任务无文档/路径/关键词/答案提示。必要遗漏先定位修正再全新复验；不以文件数量或读全链接评分。",
+  "scope": "仅文档与索引，不改变产品代码、视觉token、UI行为或运行资格。"
+}

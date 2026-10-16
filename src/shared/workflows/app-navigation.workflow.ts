@@ -1,8 +1,6 @@
 export type AppRouteId =
   | 'dashboard'
-  | 'downloads'
   | 'library'
-  | 'connected-libraries'
   | 'legacy-library'
   | 'tag-manager'
   | 'model-library'
@@ -23,7 +21,6 @@ export interface AppNavigationItem {
   topbarTitle: string
   shell: AppShellKind
   showTopbar: boolean
-  showDownloadBadge?: boolean
 }
 
 export const APP_DEFAULT_ROUTE_ID: AppRouteId = 'library'
@@ -32,22 +29,12 @@ export const APP_FALLBACK_TITLE = '设计素材管理器'
 export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
   {
     id: 'dashboard',
-    path: '/dashboard',
-    routeSegment: 'dashboard',
+    path: '/settings/overview',
+    routeSegment: 'settings/overview',
     sidebarLabel: '仪表盘',
     topbarTitle: '仪表盘',
     shell: 'desktop',
     showTopbar: false
-  },
-  {
-    id: 'downloads',
-    path: '/tasks',
-    routeSegment: 'tasks',
-    sidebarLabel: '任务中心',
-    topbarTitle: '任务中心',
-    shell: 'desktop',
-    showTopbar: false,
-    showDownloadBadge: true
   },
   {
     id: 'library',
@@ -59,18 +46,9 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     showTopbar: false
   },
   {
-    id: 'connected-libraries',
-    path: '/connected-libraries',
-    routeSegment: 'connected-libraries',
-    sidebarLabel: 'Eagle 连接库',
-    topbarTitle: 'Eagle 连接库',
-    shell: 'desktop',
-    showTopbar: false
-  },
-  {
     id: 'legacy-library',
-    path: '/legacy-library',
-    routeSegment: 'legacy-library',
+    path: '/settings/legacy',
+    routeSegment: 'settings/legacy',
     sidebarLabel: '找回旧素材',
     topbarTitle: '旧 DAM 库（只读）',
     shell: 'desktop',
@@ -78,8 +56,8 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
   },
   {
     id: 'tag-manager',
-    path: '/tag-manager',
-    routeSegment: 'tag-manager',
+    path: '/settings/tags',
+    routeSegment: 'settings/tags',
     sidebarLabel: '标签管理',
     topbarTitle: '标签管理中心',
     shell: 'desktop',
@@ -87,8 +65,8 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
   },
   {
     id: 'model-library',
-    path: '/ai/local-models',
-    routeSegment: 'ai/local-models',
+    path: '/settings/ai/local-models',
+    routeSegment: 'settings/ai/local-models',
     sidebarLabel: '模型库',
     topbarTitle: '模型库',
     shell: 'desktop',
@@ -96,17 +74,17 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
   },
   {
     id: 'ai-console',
-    path: '/ai/connections',
-    routeSegment: 'ai/connections',
+    path: '/settings/ai/connections',
+    routeSegment: 'settings/ai/connections',
     sidebarLabel: 'AI 与模型',
     topbarTitle: 'AI 与模型',
     shell: 'desktop',
     showTopbar: false
   },
-  {id:'ai-task-models',path:'/ai/task-models',routeSegment:'ai/task-models',sidebarLabel:'任务用哪个模型',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
-  {id:'ai-background',path:'/ai/background',routeSegment:'ai/background',sidebarLabel:'后台分析与资源',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
-  {id:'ai-diagnostics',path:'/ai/diagnostics',routeSegment:'ai/diagnostics',sidebarLabel:'高级诊断',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
-  {id:'about',path:'/about',routeSegment:'about',sidebarLabel:'帮助与关于',topbarTitle:'帮助与关于',shell:'desktop',showTopbar:false},
+  {id:'ai-task-models',path:'/settings/ai/task-models',routeSegment:'settings/ai/task-models',sidebarLabel:'任务用哪个模型',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
+  {id:'ai-background',path:'/settings/ai/background',routeSegment:'settings/ai/background',sidebarLabel:'后台分析与资源',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
+  {id:'ai-diagnostics',path:'/settings/ai/diagnostics',routeSegment:'settings/ai/diagnostics',sidebarLabel:'高级诊断',topbarTitle:'AI 与模型',shell:'desktop',showTopbar:false},
+  {id:'about',path:'/settings/about',routeSegment:'settings/about',sidebarLabel:'帮助与关于',topbarTitle:'帮助与关于',shell:'desktop',showTopbar:false},
   {
     id: 'settings',
     path: '/settings',
@@ -126,9 +104,7 @@ export const APP_MODEL_LIBRARY_ROUTE = APP_NAVIGATION_ITEMS.find(
 )!
 export const APP_OVERLAY_ROUTE_IDS: readonly AppRouteId[] = [
   'dashboard',
-  'downloads',
   'library',
-  'connected-libraries',
   'legacy-library',
   'tag-manager',
   'model-library',
@@ -136,14 +112,6 @@ export const APP_OVERLAY_ROUTE_IDS: readonly AppRouteId[] = [
   'settings',
   'about'
 ] as const
-export const APP_MENU_ROUTE_IDS: readonly AppRouteId[] = ['tag-manager','dashboard','connected-libraries','legacy-library','about'] as const
-
-export function getAppMenuNavigationItems(): AppNavigationItem[] {
-  return APP_MENU_ROUTE_IDS
-    .map((id) => APP_NAVIGATION_ITEMS.find((item) => item.id === id))
-    .filter((item): item is AppNavigationItem => Boolean(item))
-}
-
 export function getAppNavigationItem(pathname: string): AppNavigationItem | undefined {
   return APP_NAVIGATION_ITEMS.find((item) => item.path === resolveAppPath(pathname))
 }
@@ -163,8 +131,8 @@ export function shouldShowAppTopbar(pathname: string): boolean {
 }
 
 /** Display/navigation metadata only; Main remains the authority. */
-export const APP_ROUTE_ALIASES: Readonly<Record<string,string>> = {'/ai-console':'/ai/connections','/model-library':'/ai/local-models','/downloads':'/tasks'}
-export function resolveAppPath(pathname:string,search=''):string {return pathname==='/settings'&&new URLSearchParams(search).get('section')==='ai'?'/ai/connections':APP_ROUTE_ALIASES[pathname]??pathname}
+export const APP_ROUTE_ALIASES: Readonly<Record<string,string>> = {"/dashboard":"/settings/overview","/legacy-library":"/settings/legacy","/tag-manager":"/settings/tags","/ai/local-models":"/settings/ai/local-models","/ai/connections":"/settings/ai/connections","/ai/task-models":"/settings/ai/task-models","/ai/background":"/settings/ai/background","/ai/diagnostics":"/settings/ai/diagnostics","/about":"/settings/about","/ai-console":"/settings/ai/connections","/model-library":"/settings/ai/local-models"}
+export function resolveAppPath(pathname:string,search=''):string {return pathname==='/settings'&&new URLSearchParams(search).get('section')==='ai'?'/settings/ai/connections':APP_ROUTE_ALIASES[pathname]??pathname}
 export function appPath(id:AppRouteId):string {return APP_NAVIGATION_ITEMS.find(item=>item.id===id)!.path}
 export const AI_SECTION_ROUTES:readonly AppRouteId[]=['ai-console','ai-task-models','model-library','ai-background','ai-diagnostics']
 export function appScope(id:AppRouteId):'app'|'library'{return ['library','tag-manager'].includes(id)?'library':'app'}

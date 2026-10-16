@@ -1,0 +1,1826 @@
+{
+  "generated": "2026-10-15T08:05:28.879727+00:00",
+  "scope": "This task only. Baseline archive and checkpoint evidence are separate. Other source/product WIP is not staged or committed.",
+  "files": [
+    {
+      "path": ".codeindex/module-map.json",
+      "before": "de30a3406808b85cdf8fc8e3d4f2006ac508046a0c96e0a68a8b0ad49585f4f9",
+      "after": "3480d44fc9cb28bd1e7df398ea9d7b03f667c8eacc112882ecc2d6e5c6cc9ba8",
+      "kind": "modified"
+    },
+    {
+      "path": ".codeindex/module-map.schema.json",
+      "before": "48aa507e9a2e96fc7f8eb632b82b9b590f649322ed567731c785029a74c1032f",
+      "after": "149d3e937e90ea611e706e9c5d4f488dda0a2f068c4723e4ee0cd5b6fc75e1d7",
+      "kind": "modified"
+    },
+    {
+      "path": ".codeindex/tests-map.json",
+      "before": "a02e645ad7660cae35d917e66178cc130766a61b315e5ee805672bae2eebeee9",
+      "after": "ce528569e376cd971aa3a1ded2ed3ef4f208b16928f164d1c3aac1846a5e2c0f",
+      "kind": "modified"
+    },
+    {
+      "path": "AGENTS.md",
+      "before": "d622ba725d325d2bae00ed30e53779396d643eb579ddea9cbca37ee9834869f1",
+      "after": "1553e551c5617dcb2f5f78ed343154d82bb980595094c3b1d3e9a07f8fa9cf33",
+      "kind": "modified"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "before": "b220a0e89523533a1f183965ea650a464452f04ab05d5f2f5b68dbab2987a2ab",
+      "after": "d388af8f08d88b60fde2688bcd36d0cfcc20ee64f0e6d012f4aa89ba7c71c01d",
+      "kind": "modified"
+    },
+    {
+      "path": "CONTEXT.md",
+      "before": "bdabbb291eb614c5dd0e5927a45fda8afc4c43fbd53655cf80c27532927cb944",
+      "after": "91533fb439298c25760bde43d6a23168ddac16ba478ae21b72704b583ad1b6de",
+      "kind": "modified"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "before": "62316ff1700e95894832b8b077b3d281a82a90e3da538b20d30ac142e9a0999a",
+      "after": "1bc7d57125887c782db22223a376a5be6fe56c66976eafea6c72d277d45a42a2",
+      "kind": "modified"
+    },
+    {
+      "path": "LESSONS.md",
+      "before": "0156273f3cd5137433b46a2bf668a4db69ac38b2c70a6ee2244c9ca639839524",
+      "after": "c144ae9b2bf2ea02aee42f13ea5e4233043369fecbc580900165829628e33868",
+      "kind": "modified"
+    },
+    {
+      "path": "PROJECT.md",
+      "before": "42150d7fea518fa8e43292d5ce19f1336300f6e073a1fe263cf6915c6b628573",
+      "after": "8c9a5f2aee6b43d921d077ffd252759cd1d5cf3f7e8884824665f9cdefd1916a",
+      "kind": "modified"
+    },
+    {
+      "path": "README.md",
+      "before": "11edc8e30ab60a036b8a5f7605ebc7745f095d5add7548be8cc1153548235789",
+      "after": "799639f253db939664f6b53a034e7a804edd22b1df78a7b90424f353dbebcea3",
+      "kind": "modified"
+    },
+    {
+      "path": "TASK.md",
+      "before": "680d4a5995b360ee5d112b69a69f3ada0c0056b831fa916934469b05f3193d24",
+      "after": "d48df19ae913b9bafeddffda43db56e009922f2f63d86feaefc03a1c31685ce5",
+      "kind": "modified"
+    },
+    {
+      "path": "ai-service/core/README.md",
+      "before": "8eca833e13d765211608049c285280df9b2183624ac9d2ba6b860b0cac3e8ae3",
+      "after": "93f0118f8ceee03a8ca5d82624841636992dffd311b5b649c00ceef402956a34",
+      "kind": "modified"
+    },
+    {
+      "path": "ai-service/utils/README.md",
+      "before": "6f0d213035901be383b4ea35a24f38fb02f0e200ec69ea59faf63ff4972c4a64",
+      "after": "6102f339bc0bcfc75a25f7e37f6885b20b48bcea61bf996696713c98db673ad2",
+      "kind": "modified"
+    },
+    {
+      "path": "ai-service/workers/README.md",
+      "before": "611a5fc3156046c7ae6311156a52a12a558230dc394d2fbf812753d5f6fa8fe3",
+      "after": "954250f6d7296edaf8c801cbd3f0aaf3b99aba2635b58424bff667846cbb5ca8",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0021-asset-grid-defaults-to-masonry-with-uniform-option.md",
+      "before": "8c352a0d4a0340c1953d1e5989f7ca517a84b5e2cbbedb9990546d6eebe7b404",
+      "after": "0de4dde81e56276f3952ef1b235ddd68cddbe66c3ca6e1a5f5ad095de705cbcc",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0023-asset-inspector-is-resizable-and-responsive.md",
+      "before": "389ff07aca14d48502deec29d8948ba8adbbca178c3e5618fc89742e5ca14b8d",
+      "after": "e3cc3316e4495de32d61e9ebb99f0f490c1b1b85ed5b23bd17fd685bd88b3400",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0024-asset-grid-uses-desktop-selection-semantics.md",
+      "before": "b8938362802dfe4e2357b858c7b126b6fae5745f5873f516030b2cfc7ec599a5",
+      "after": "bb1feb2af3c63f4fc1cccebe7254144d03c31ab0db2dff7d5f0b827c469da2f2",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0025-asset-preview-stays-contextual.md",
+      "before": "27c44b9306bb706220780da1fa90773b7dcf5e2548362d7be8520521a1aaef55",
+      "after": "d568a9120c33ae77c50507d45953e5ed27a452010b66c639b0fc6f6484414927",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0027-candidate-review-page-uses-candidate-grid.md",
+      "before": "49ce46fbd34d02b1b17acddcd71575b8d0255c59ca253116e54a9860d4275367",
+      "after": "f3d43f0051c1ac9433b644c3e282b9aeb3cdfc273885730d0d3da37b8df1d4b1",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0029-candidate-expiration-is-non-interruptive.md",
+      "before": "a0379dfc853fc13929de7a3396ebe656aab960b5e0dabeae9a33331f77640014",
+      "after": "6ce6f625fbcb757d80fe644dc8c203e79413d681a669f11889477720bd6cb577",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0030-web-capture-success-keeps-source-context.md",
+      "before": "0aed502150ff35ed4be4c683f22a0fc8f7ca9cde638aa91417ecea4c2bb8e9a6",
+      "after": "bbe4ccfb03010abea6b252dd6f9e49e791511365c3658f51525b0222da92522c",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0035-workspace-navigation-supports-rail-and-panel.md",
+      "before": "0735dd5b02b41f22b3b9d259efd6f81c2bb5db25254bb63dd99005d1dc3573fd",
+      "after": "483ecf06712dce4db83fb8f34caf9781f9a2a3424388009e357128d1bb4849d0",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0036-workspace-toolbar-is-contextual.md",
+      "before": "9294433bbf24deb7d0dd02ede9086f6cef3979a7cc5bff6a0fd33163ca1064fc",
+      "after": "1c613cd0b57d7ac38943fb6a77c651b544097718d968bb12d9151a8cd44a00d0",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0038-cross-library-search-results-are-grouped.md",
+      "before": "f2cc14b6bde0b64bd4e6cddb6d79738acb806fcaa9dea72ee75801de86bfc570",
+      "after": "856eae17e7210758070212e448280d348cabf7bf0a0e7576ac421b0f19a221eb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0044-default-system-smart-filters-cover-review-and-recency.md",
+      "before": "7463ed4150f698d4a61d17367a3db389fef857c1350a34d706a3849539fdc085",
+      "after": "e8c6315edb7e8aa1f0386a50742b100f72bf71f251380c449d9c9f05e211b1af",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0046-smart-filter-results-hide-empty-groups.md",
+      "before": "003b11a7a055607366c591d3c7c62789be61a3be53ba05f697c0fc7dff06fd9f",
+      "after": "067f3d0233f0438cec742405c58e5c6c6f613614a74b21db140ff56459891438",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0049-smart-filter-counts-match-filter-ownership.md",
+      "before": "8a0bc52465c50a133af3ff199bfcd4b2ed39f5938251b2283ff7c956dc0b3c91",
+      "after": "11c3f076a055d3803bc6af9e7f62546c63e9087617933ce31c9a5e4ebe20df1f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0050-system-smart-filters-default-to-unresolved-review-signals.md",
+      "before": "3a0d202aa20010e06eb5d0769ba68ad19f9152687ff2be19953404d1c2863453",
+      "after": "57b5b54c52c3f5630fe74a3c2ff7607b976d664ac051d1c6b62b2b5eeb496214",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0053-retention-extension-supports-single-and-batch-actions.md",
+      "before": "119670e7e9b84081c2fb3d50c95495a3f605bcda0713eecaa505c56ce0a25930",
+      "after": "5d0a8d88d9d7f21e2f091a508e2a71a18c22b5f7acd2fafa8423e509a90b9dad",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0056-recovered-candidate-indicator-fades-after-seven-days.md",
+      "before": "9a7521abc84da5e4860e49a062f21fa663eba5593fdf5fc0ede89e995a8bdd06",
+      "after": "c3e90842aa53a2450c6f8dd2eb3915bc08cf06bb2d35c0af1e389dcd27305604",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0057-capture-cleanup-history-shows-minimal-recovery-fields.md",
+      "before": "c01bf880de05faa02cce0a6f704dfb84819054417c1dfc0080ba977a3125cae0",
+      "after": "98bb675331838c38ab13d61af8254cb38de65cd19485fdf10c9e597f0de1ec6e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0062-candidate-promotion-feedback-keeps-review-context.md",
+      "before": "1a0dd9f8835fad20fee3b5221a4475a7fba064fe40ee0e4226a11e500e030cf0",
+      "after": "65e714e74fad2d1aeb5a240c5e27d6d6f3c2c3a043a4c11291a95d2fc4559ffd",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0070-asset-trash-is-a-library-utility-entry.md",
+      "before": "508ed0595b2d8f5f78baa51825650c333c4473008161aaf461d728c1a47470d7",
+      "after": "4dbaa39354b4e1dce856c6085562bc4850df714ce1dea6f7d3cd1f25172470f2",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0076-candidate-cards-show-one-primary-state-badge.md",
+      "before": "d62eec0a7b21252e737f263d198edecffeb1313ff9a7e708c708157ff66f2dc7",
+      "after": "9b6a66656f1f00a8178f5919e0edee94dffe0d06404eab82e1e96f10649e1a7d",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0081-selection-persists-only-within-the-same-result-set.md",
+      "before": "26b9a75893a69d31bedc4777178c903823284e50f38e244e053a422d89adf11d",
+      "after": "897d4a9ef692a7c9a50d2e599c1739845e2500737c474c815c0acc9d253abad6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0084-post-batch-selection-follows-batch-result.md",
+      "before": "54e772eea1735ac4679aaa679f292d874cb3b0e2e9c6828a26c417c6ac2577a5",
+      "after": "12c2b7a8274f4af8e1c0db92af3c4f1820b557a8e53f95ecbf306fd6293ed4d5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0085-batch-result-feedback-is-proportional-to-complexity.md",
+      "before": "49e96532fe654fb3efd5fd107b2111c83d06301dd1644cf12e75d08ca46ccce5",
+      "after": "219a309eceb97d6a51d36f8b2851bbf1f8a5049616ff46b34504c0b401bbd46a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0087-batch-activity-retention-is-tiered-by-importance.md",
+      "before": "5213f29df6eb7a80e86dd831b501d17d68bf82bf06ff7e22a3a7aa6faf096415",
+      "after": "8de1484f4074f357130a555af13caea63cc90e04297444e131ada9063b45523e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0089-batch-result-history-entry-points-stay-contextual.md",
+      "before": "13d801528e0c64177d2e7782cfd5c30b98ee423c67b0b9a6cbce13dfd2307b59",
+      "after": "dbc70b4792b027b6b0176415f6e7a534cd367210c1e17aa54802227e9b652951",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0092-batch-retry-uses-attempt-limits.md",
+      "before": "35681e388b1d568a1b6f98bcbb28cb1d82416fb235fabfc436d65d39269a6064",
+      "after": "a521a09c8659b99a6a41b08ecf731057da2e660ff0f08d37f03a079c93fafdbd",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0095-batch-progress-is-lightweight-and-contextual.md",
+      "before": "d8afe7d6e9aef90af8d84855e0120e600735b58c5a220d94448dc03865f3455e",
+      "after": "845fea092afa0dc01f93d9b2a2a9ce924d8249dcfc9f3f7ff4787db9dea4d434",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0098-metadata-conflict-review-stays-contextual.md",
+      "before": "d91cecdd791e779f4ffa27f1577c7746a625b5c6939048644d7b5fd41cbc7f32",
+      "after": "1550529a00a5ebe73bd91ace4a74e797f1dde1feb25d201c6f132345d340262d",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0104-library-conflict-counts-confirm-after-persistence.md",
+      "before": "0200495462289967c3281c4bdb31d1ab6eb9b6c3e1838244f5d6ae3053d6dc27",
+      "after": "ba44a08f92b1678d025a6dd2177f7d0e4d41d6d7076dbd7e2572626c3361704a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0109-successful-capture-activity-is-ephemeral.md",
+      "before": "d0f16aa68ca8547834bf59eb840d75cf6c083a6f8ae1f1c2654cc926a0fcb867",
+      "after": "d6ae0a64825f847ccc30d7ced10a4f96aa1b4a6e1447d616320129ee3d94576d",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0113-intake-recovery-shares-capture-concurrency.md",
+      "before": "117d2ae1e84f06da017c7271c256adb9e0b82536159ad612f6cdae4d39e9ec92",
+      "after": "5b8b152e143ae4b7c79ffb4f2ad98f8b06775227b7384561379a2d56d14ec32a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0132-screen-previews-use-explicit-relative-colorimetric-policy.md",
+      "before": "6330965ae4df2972c30670fc9bd7f9d7629479ba811c94266e19ae1b8ba7729d",
+      "after": "9d8763cb56eb728c94b8b11bb917aab50e90930c4c0b295bbfc201af97dd8feb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0134-display-gamut-selection-follows-the-preview-region.md",
+      "before": "999b7457944edbf2fec51d2855d0f4a708633f36aea39a9d510fa5285fec8773",
+      "after": "fd1fe50f88c9731ad4e4bb67f3a9e3156ad2d760b492966263431624ea4ee5ed",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0146-storage-management-separates-originals-previews-and-analysis-cache.md",
+      "before": "1ca26392edfbda61a0209c7090b2760ea814c5aea457650f26d09f8114a994a9",
+      "after": "2082f916f32dd07234a1200e6536a117fde4b23f18969887544cac3a304df40e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0148-asset-preview-progressively-reveals-current-viewport-tiles.md",
+      "before": "d98a52bf26ddc470e917279af52f3590650f0c11fe66210790212b8cc29fbd4e",
+      "after": "ab518f6c7b2b8107dbf6d0529ed3983d55fea5d6220a95df862751930834eddb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0149-quick-preview-is-opportunistic-and-evictable.md",
+      "before": "a814032c47ab830eda9c167efa94f4923b7d3516e506cfe8589bdc296240bb3f",
+      "after": "04192c2af763ad6b189ce75eba44171eb75c808aa61d45dba13666fc09a4405a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0154-extension-api-v1-exposes-scoped-contribution-surfaces.md",
+      "before": "a2324f71bba3060b28d1db7861c1f967f78f75ace298540ab94a2a27b444acab",
+      "after": "c048f29901cdaeae916edd600379270d8611385c3250d5b88133feba30687a35",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0204-trust-catalog-refresh-is-stale-driven-bounded-and-app-active.md",
+      "before": "3caba6a2b9d1aacc17b55a8c4f447393a8fd62d79a705450de9ac4d00cdd9429",
+      "after": "134a20a0f76ed345caf4bae4f4dfb7d8e7d9921c51c75365e7921ae03a0bfc60",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0205-prolonged-trust-refresh-failure-is-passive-and-non-blocking.md",
+      "before": "4e5fb3c937beec1fb086b677b682d24ded20adcf46d821a1454147599912be6a",
+      "after": "99b93469a66b5a36a16c19c1042e902586100ad496408ef09e7667d5bb4ddec7",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0207-offline-trust-evidence-has-no-age-only-expiration.md",
+      "before": "68148f4657e7f409285f426f389dbfa9eacac66e5a826f9f26efb812247e7e5d",
+      "after": "0d4d4483617184bb7724c5a91d27489ff0597c1c2158ad9e64608bc91b4dab79",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0208-time-bounded-offline-install-requires-trusted-current-time.md",
+      "before": "b2603e9eb3982edf199fc9ceac0725bb12b8053d38cb91af0c4eb333c5a61786",
+      "after": "56d5040e4d3a759a5e861e1654e76fdc4b4f6df7c6c37ce808cce921927f63c5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0209-trusted-time-uses-no-independent-network-service.md",
+      "before": "768ae9356f4ad5f6330cba468ac24061e0788bcc07b91e9aefd782ec259bd4db",
+      "after": "647cd258733c152e56b55dce58f216e76ed364cfcdd92d1a94df96bae7afd729",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0210-trusted-time-conflict-is-evaluated-after-utc-normalization.md",
+      "before": "d7183f67b259bcc4302c6fd07b5df4b9b28e4d5e790fe010d9783f2d5abbb78a",
+      "after": "c3059467c23166300a7508bf8dc5abf73411d6b5f03186d2d497097093e8329f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0211-one-acceptable-time-source-can-assess-time-bounded-offline-install.md",
+      "before": "21fb7570da13184d18d0b6869361f06b5711742eee38659a6a03dc942cf6cea1",
+      "after": "f82abdacfe08389f1e86203be8fe6280930c2cdaa9de4a81560fa7a753cbf92e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0212-stable-offline-packages-default-to-no-install-time-window.md",
+      "before": "c8108115bae1a9703979dcc24b1deee594609f2fc0ba6a62c14ccb17c25484d7",
+      "after": "248c9608aa31d8febb01f18a853a6c759ec603302e65e006c875e5b1a8adf52a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0213-time-bounded-offline-releases-require-explicit-human-approval.md",
+      "before": "a3fab60e620d1963c709947c596f16176bba6feb7f604d23fcdf4501238cb096",
+      "after": "0da25517210f4ef3e94132ffd83b1b0b6095c57fbfdbfd4263b8631adfe897e3",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0214-expired-time-bounded-packages-leave-default-discovery-but-remain-auditable.md",
+      "before": "3ab906e958fada2f515afdc68c44e4736bab417c0db15535ef91db59f3804304",
+      "after": "cfc40441613fbd1198546693584e36bbf88359cd234eaffe53cebfe7cd9d228e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0215-not-yet-open-time-bounded-packages-stay-outside-managed-installation.md",
+      "before": "e1ec1e2841fc8038cb65f803ee8a12da99e618ef1943eb047d28fd4902f6810f",
+      "after": "3c5f4ff636a96bad3b85df178836204d1da2d235a03ba8afdeb256e4ce4e4f74",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0217-external-package-inspection-state-is-session-only-and-path-free.md",
+      "before": "07e27ca21a9657dd206b46d41878807a0fb3de5075a2aaab38732740735c7e88",
+      "after": "dd9bcabb7bf5ead33459ba07deb6e2b28c8dda68b996fe7b8abeb77c63aa57ca",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0218-external-package-inspection-shows-session-bound-identity-evidence.md",
+      "before": "2674ba85fd25d0cef3b012be2065b3657271a89c54a5bf8713d507cafe913338",
+      "after": "b8ba55933644dd75ad8639cf8cc6fb01d648631d7e65d515e721292273342db6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0219-full-package-digest-view-and-copy-are-explicit-and-session-bound.md",
+      "before": "9b2f05c6faab65c7a0f63805e24dc272d7fefd8303e69feba325b010207d9201",
+      "after": "b2619039dd8427474a65944438fcfcaff54aa473acbb272b348751e4003ac6f3",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0220-digest-mismatch-details-show-expected-and-actual-without-enabling-install.md",
+      "before": "760b707969bce3610eae2565c3f8b1aa6ccb128295a88468c4225cb2ae54d438",
+      "after": "5c4b14822039d70193f1892d749a496ce6afc2286c7bb387d7de7419c6cdccef",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0223-awaiting-package-decisions-expire-after-seven-days-and-explicit-keep-pins-them.md",
+      "before": "2f8d26c31cd6c927ab2644110dada9b28bd866f531df27968bd08499054581d8",
+      "after": "08c47f1940ee28ce69f809ecbf69ec779296fb13a51744d395225785e9198973",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0224-missed-pending-package-warnings-receive-one-24-hour-grace.md",
+      "before": "f46de834128660dc72cef7e2de4eddaf51416e8c78d3addb6893a22e735cc290",
+      "after": "dc55d605c9bb4b5d256569c284265f7249ccb267c33426390e7905ccc3075113",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0225-unpinning-a-kept-package-copy-starts-a-new-pending-decision-cycle.md",
+      "before": "c1b810c248a57746d0607d5fc8dc016fa391f1547eeb94ae0b49cf1095b0e2d5",
+      "after": "5a19368cef13c82cbdcc8948e3d9e07271b2576c0b46ad76865c18a9de130a7a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0226-new-keep-pins-must-preserve-the-storage-safety-reserve.md",
+      "before": "b91387881b1cad262a99fda1fad1075acf35632a4f8e6355b1c9923c9da90702",
+      "after": "4e2fcdeb1edd93c878c065c4042de3a8ce6611aca26eb431d5db4a14f1a52338",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0227-storage-resolution-holds-pending-package-cleanup-for-at-most-thirty-minutes.md",
+      "before": "8f4b26e68b7465f910539b1025d578c750a4d46d40952a7a4b440c2e1229b28f",
+      "after": "2810b0274eac1a0dec30e11515fe1af25ec54e2c2ceb8394920a3e8fd9b30120",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0228-storage-resolution-holds-share-one-cumulative-thirty-minute-episode-budget.md",
+      "before": "cd383920fea8f8746c719f7b92aa7e9e31b5122789d02ceb6ac0271ee8ee8fde",
+      "after": "53c4eb4f6cfb74885d857e9cb4dd0b14f3ec61fc5948b8a2150ac27622d6b13c",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0229-only-one-storage-resolution-hold-may-be-active-per-volume.md",
+      "before": "f572d6cf09748c2bd53e62461eb8d668062ffff3dbdb16d9ed41dc252d949460",
+      "after": "c14afc7c873cd1ee33790fec4d6c6c1abca7a28461eef76ec2454d9d36d7a22e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0230-managed-package-copy-batch-delete-is-user-selected-and-owner-aware.md",
+      "before": "0b61490c620e89a422726bb28dd883113578360429900cb6adcbc0b153931a54",
+      "after": "ff011d8742305cda5f7d3a6771617a539a2460da0ab3e1063a3c7bafd880560b",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0231-managed-copy-cleanup-sorting-freezes-during-selection.md",
+      "before": "7883790709c50403229f738fe292c880c935a4e3a74c7a5eb68a89489439a589",
+      "after": "f1523cc392f38bc3d03fbd7ac892661921b19f0e82787a917ea7540cc1053a41",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0232-shortfall-coverage-does-not-auto-stop-selection-or-keep-the-target.md",
+      "before": "eaedefc596eb80a28bf3727a7a6860178ad5b0819774838f3a317267ff6c7891",
+      "after": "c2f6a9fac4ca124efd858f3f15ddc6f4f15a8f9212cb4f7e7ac86bd25c4cfd46",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0233-not-yet-covered-selections-may-execute-as-explicit-partial-cleanup.md",
+      "before": "10e0f08c775f8ef8841a9d7b2dc4f55c2bf10b640e8f0db3cd1891f98a76420d",
+      "after": "51c89ac232ea9cf0736719edf3fbf3da9ea9b83ee7d208e910dbbb643306eead",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0234-running-batch-cleanup-gets-one-five-minute-terminal-drain.md",
+      "before": "fa606854e23ef7aa3577bdd419e8c72d6d94680c77e2fe8bb77dc5c5cd1256f4",
+      "after": "d1f43a24d3b6c3b51ba91872f9da026c4acafb90a2bc674a20a5255345b6280c",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0235-covered-drain-results-get-one-sixty-second-explicit-keep-decision.md",
+      "before": "22e03cea7354b9c248bdd09c148409d333b4e2298c403e3eca9295ddfa001467",
+      "after": "65da49c217e1c40c024a430646b861e9c6e6464ed850f9e17805ec28a67fe22f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0236-post-cleanup-keep-now-uses-a-live-compact-final-confirmation.md",
+      "before": "65afd3de21a03770310fd16eff5ff7a363860ed3d2de44bf26054e26d28dd9e2",
+      "after": "e4fe098798caeddad797951564a5084e588aaf145175d43e8433e2ac7cf45cf2",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0237-safe-final-keep-recheck-accepts-nonblocking-byte-drift.md",
+      "before": "8dc6bd0368fa76e11d154e3a87a74184c2789bbde5326d5d83c21ddf796bfa86",
+      "after": "3945d7891945d8ffed47fbfa06b9f5d87b9be0f49059d53a240e89ae72e6e5fc",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0238-on-time-final-keep-requests-get-one-five-second-commit-transaction.md",
+      "before": "9d7dad1c0443fa3828f496cd9057ff2b098c2de2f341ee1c6be29e299ab42786",
+      "after": "12813d8e4dd928c727abeb3573af9bfbc84dcb77998b22ab254c1fcbc533976f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0239-interrupted-keep-commits-reconcile-once-and-show-a-24-hour-result.md",
+      "before": "4511ef4ca53a38a4a81f55e59fe91bafc07a0330e77a153a7fe2bcfb9b0f0d69",
+      "after": "45dfa28c8b10ba7501130331b4b66278891b1e51a98281cf90f164a88ead4e9a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0240-unassessable-keep-recovery-protects-only-the-affected-copy.md",
+      "before": "119f5e32a55a98462fde2ed68117ce43d5d704d8cb00816d1f0653ca233dc632",
+      "after": "291396fd2da2f00c625bca5ba10f5a83bb4e5e07ca758eb288bd7763160fd7a4",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0241-unrecoverable-keep-state-allows-only-owner-proven-advanced-delete.md",
+      "before": "6264cb446898f54ed8f1f69313bb5d0f6e7059a864f0ba98a44b2b6d1834c1cd",
+      "after": "2d4c0409962520c1cd2ea44c7df2f7972bc3b80dae753fab71d5d8f0c9e1a839",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0242-blocking-managed-owners-route-to-their-normal-lifecycle.md",
+      "before": "3755e591fea33267d9ff24852221ce64c0ff778365d6dd3bbc35751c279c6a16",
+      "after": "e87d16f3066445bf3a31853778ace8bde687262f5629bcdc781109c63daed558",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0243-owner-changes-require-a-new-explicit-recovery-delete-scan-and-confirmation.md",
+      "before": "79e75a2e5a97f44771a7e95277b440e8dabcf62e48ffe3d67e5e14e4cb01a719",
+      "after": "11230c9f8c0bce5a405493207050299b123946e53700a3ad2d649ec2003b4061",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0244-recovery-delete-owner-scan-proof-expires-after-five-minutes.md",
+      "before": "16d5985c8bd9b0faf53ea47bf8f13cbb591fccc507d04db4d2f2f68173f77816",
+      "after": "5f90f8ed392109a08244caef4a4d580210774caf5bfe64a28b1794c6d99591e6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0245-on-time-recovery-delete-gets-one-five-second-reference-removal-transaction.md",
+      "before": "e64215cefff0494157cde34454e39d5de1ce508c2119a630b7ee98c3ac9f063d",
+      "after": "e96a7ce59ed5da93e005eef0242a56578ba1eb476aca6c9c6360ae058b899381",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0246-interrupted-recovery-delete-reconciles-once-and-shows-a-24-hour-result.md",
+      "before": "7be5822c35d9e5307de23ec1f6c04cbdf2ff5588963d52ac97c2d2ef2c33dc0e",
+      "after": "74129a5b91327087d4957978b197d65a38118d0cc1d159e10a354887971c8d96",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0247-unassessable-recovery-delete-reconciliation-protects-only-the-affected-copy.md",
+      "before": "d149f9ee8e2da44188c4905bbdb662364dda46cf4fe3b87ed6e175cd6615fb2d",
+      "after": "b640966cd6f4c0308e5076995d9516f61feb6b962e107d3a6d6ac0bd629b6025",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0248-unassessable-recovery-delete-uses-a-fresh-owner-proven-finalization.md",
+      "before": "ddd39b31712a0014caa2afbcf54aeb996bd4b4ec57b0de040e858dc8f8952e3f",
+      "after": "66b85149fd9d095fb4b357078580d5e2dc4c0830a4f15dcf043c0a61e6c5b1a8",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0249-on-time-unassessable-delete-finalization-gets-one-five-second-normalization-transaction.md",
+      "before": "53af281374e9019911f10bfa2fd1b92054f00c1f8fad6fe34491b4b37d61c9fb",
+      "after": "a5903309d2f9ccb1b5bbc5ad6fb5c464e620f35b16c26060bcebc4b67afba000",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0250-interrupted-unassessable-delete-finalization-reconciles-once-and-restores-neutral-safety.md",
+      "before": "741d9ecee1b823c642f30ed71a6415f45e5a7613c0dfbb03c58e2b11952dc629",
+      "after": "9d5936e5b7204ff2885df194d4e3017db674ad0c9d5fa4bcef692801c3773a29",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0251-unassessable-delete-finalization-allows-new-fully-gated-manual-attempts.md",
+      "before": "869200682bdde5ec0fd82d77453c2c67b606f6780f09d4be17e345b5f142c8de",
+      "after": "b4f573d908235c8fd1dba509ed63dc2c28cbc1b1683814a6c51f910727e84c3a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0252-physical-reclaim-pending-retries-owner-safe-cleanup-without-repeating-delete-intent.md",
+      "before": "f601eeb5e87ea9d5aee6cc7e403154d42021949a2383d6cbc793d578e45a8658",
+      "after": "b62c87b692767404e1aef9b6700c56d04853b6db1213cd1fe354923bab4cbfaf",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0253-physical-reclaim-retries-at-one-five-thirty-minutes-then-six-hour-intervals.md",
+      "before": "55c1e557e4ef5cbb52e2a3a9bebad3e6b9d9da40b2885ece97176ed0f6b21da1",
+      "after": "91b87af6021950cee055ecffe5ae9bfe1e0b07449dc3a3322e55f92db4bdb4dc",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0254-physical-reclaim-completion-clears-pending-state-and-shows-one-24-hour-result.md",
+      "before": "1a8e3fc3c7fb25fc632fa1e8da972afda7050eb954dfa52b2180e2a5855ccde0",
+      "after": "9946bfd95c937ebf4a01f2ba32e1af14631333d3341c09daddd4b1c618f3582f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0255-physical-reclaim-completes-as-shared-when-other-owners-retain-all-remaining-bytes.md",
+      "before": "38002bfbabc1892bf381284c665be20a50fed0cfb7480c46050898dfa1720bff",
+      "after": "575342658c0d3b7cb6a7187a3331e86721a7868ffe18f35d54a7d75733d6a9f1",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0256-terminal-package-copy-deletion-evidence-is-pruned-after-result-and-startup-closure.md",
+      "before": "7755748108755472794d6a7237f51e32e95ecd1fc690438a6fa09e2032f400ff",
+      "after": "a528187159abbf5c0f654f865475aa886c688df0d452cb744fdf8134cebb5191",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0257-physical-reclaim-completions-aggregate-by-volume-with-independent-expiry.md",
+      "before": "16cf6979c39601124b9699ccde64308ddf90510348361fb468d7f6b250ce8e71",
+      "after": "c51ecd7a421a51b2159cfc8e7a7a87ca0cd41fd9ad22aeba4a046f6c81b9cd36",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0258-large-physical-reclaim-summaries-use-fifty-item-lazy-pages-with-header-acknowledgement.md",
+      "before": "1e2850c7d3bbcfef1c0fab037578b757c1160b6b3a8a7568a32176b06f95b770",
+      "after": "9bbdd8b296c7e3de3321d04742475f5942bc0627a9dde0cb77ee9209f840bb3f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0259-physical-reclaim-completion-summaries-default-to-collapsed-session-only-disclosure.md",
+      "before": "66bb2c533564285f77cdc16221251db43353dc03587696e4e6ed9bd6f944b6a6",
+      "after": "fec6e4b80f91a33f041fb4ed0b9bb982c13be825f3c8bd70ed2de93da5dc060f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0260-physical-reclaim-summary-headers-use-two-fixed-complete-metric-lines.md",
+      "before": "a30b61458be80383a78a00746f5e0eeb5d0d10d368c412e31436ba615921a4ae",
+      "after": "2de687e4f94aa416b424d849674d4cc44ae2ad6953ab9d0eb943f77fcc363412",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0261-storage-byte-displays-use-localized-iec-units-with-exact-byte-values.md",
+      "before": "115a67b6ad07346be3d95ec6b21ecdd10695708523192226930763ff17e50079",
+      "after": "c91420bf9f540f983046f0ecf7ae6af424e2c71a66390b0d93621575c1a3eb5b",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0262-physical-reclaim-summaries-use-ephemeral-path-free-volume-labels.md",
+      "before": "a318cf3e72f6e1c4e65b464da19c11965cad35030cf5edef3910ea06894e0436",
+      "after": "83515467ee30060d91c939890d5392332e1943dc55f8899498289e0765f229d1",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0263-duplicate-volume-display-names-use-session-only-ordinals.md",
+      "before": "b1c5c96fed6a3044c1afb39bbce58ad5381a2dcd8caa9fabf6ca20d0867bab35",
+      "after": "d218ca30846e07b6a7f60743eebb4a2385b511da7243f930b7ad3502f3d27d9a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0264-physical-reclaim-summary-cards-sort-by-latest-completion-time.md",
+      "before": "b43b476b4de3573cdf03e3094281c9f9006a68e51a097cd1df119e8843d1579a",
+      "after": "be32af7857363db3f711840b3dc24f413fac4bc80d1ac85e00973b211e623d52",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0265-physical-reclaim-summary-headers-show-localized-latest-completion-time.md",
+      "before": "763e889f39ca5d9faa0a8b48fccaa33e15434f112ed7b187e180c7db173087d8",
+      "after": "6beeb95c6e576bbac59db6c95d87c7d0221f06e74d3711890346518c786f0144",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0266-physical-reclaim-detail-rows-show-individual-completion-times.md",
+      "before": "201cafa6715582f87aa2c3ae85803aaf6eb5daa78094714153f11ad47976f1b5",
+      "after": "abd0daaa5d34662d04d2b89747e76720533dbb00b07b605ee8c172a43d6a9b5a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0267-physical-reclaim-detail-rows-show-actual-reclaimed-and-shared-retained-bytes.md",
+      "before": "2baa1909de775a46d630edd0a0874a1bfe17748cd5c7d56dbf4e90fab44d9219",
+      "after": "008293e232660e31739795a7e8c7ee6f5044f989b474e7e519512109585346cb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0268-physical-reclaim-outcome-counts-filter-full-snapshot-details.md",
+      "before": "70878be6d27d1372a0a828bf83959f3ff4c156da6b12ea13e740fad9db2f4b4c",
+      "after": "6bce03dba78d50215b1443e31e0beb9c4abd232b59253380fe6b4d8628745ebe",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0269-physical-reclaim-details-use-bounded-direct-jump-pagination-controls.md",
+      "before": "279fdf7fcbad2948e408f58f116fee461ad4dae585d5492ea943d34184496794",
+      "after": "8597ae8d9fbb7cadb3804b26d2a90ad1dc1d048295a440fabed211c9f16066eb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0270-physical-reclaim-page-prefetch-uses-three-page-session-memory-cache.md",
+      "before": "ce8a7764cb9ae354ac5ff7b83e46f28a28b9d31e2d3bae9123bd4080f5244ea3",
+      "after": "850a5609aeed3124c6002a2c3f0b7b497fc1bbefa62b6ed72be589a295058d54",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0271-physical-reclaim-demand-page-loads-preserve-current-rows-with-inline-retry.md",
+      "before": "1312102de1e960ed01fcfedb3efa020dbe578d6b7a157a1b6b69aa3e32fc2468",
+      "after": "9bbb78226a7171bd21e4ea6035137c82bf300c43cd34a34db42f39102273f6a6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0272-physical-reclaim-demand-page-retry-is-manual-single-flight-without-attempt-limits.md",
+      "before": "e1681e9911cee7b9aadb9c7d266dee3d4bc0c738fa84017ffbbd0c6e826c304a",
+      "after": "8fe4f488461450f8218a969899a47545792e053cb48cffc9516a98652d61dc46",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0273-physical-reclaim-demand-page-loads-have-a-ten-second-monotonic-deadline.md",
+      "before": "c0754cc1ab0c3a1d84c500019de4b850d94c3bf6b02af0e3898f32223dcf0d33",
+      "after": "dd8dfa357a4a59789007e49e91163af1bce4cc03158a9c4d363362538d18e0c0",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0274-physical-reclaim-page-navigation-restores-keyboard-focus-and-announces-outcomes.md",
+      "before": "e3b4883847a595cdab3661f34d76f872fe22fc57e8f73ef6bc52a8e7873c1f26",
+      "after": "22a57233aabed85ed934c2afd3a00ade7b450a206877f58d38c0d0ee09ecd5c0",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0286-sequential-originals-buckets-seal-after-two-thousand-commits.md",
+      "before": "51db61f3da5b895e3d3363bfd2d0ab67ccc77dc02ea7c537402e28e583ade318",
+      "after": "6d2c87f10dbd12356107f7c7c28947d597b80e857c87e08552d8024f13f8c194",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0287-managed-original-names-use-a-twelve-character-base32-disambiguator.md",
+      "before": "63b7face1b4de5cc79ef95fd8e7f955da75e10e163f2d208aa0f1940a0cb4631",
+      "after": "689b24f84567e69d9efcbb49b3c9f656cac113be7b421d54b99e9ae388f36ddf",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0288-managed-original-readable-stems-preserve-unicode-with-dual-length-budgets.md",
+      "before": "5486d4489598cfdc4812ad77beec6775e805161cf6c02c12c087c7e76d607cde",
+      "after": "906257360fc4b670922ca1c170ed8ad79680d92400fab9815d89536991e40c35",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0289-managed-original-extensions-follow-verified-real-format-evidence.md",
+      "before": "12a23e48a0d608212be5396a15e439e63a441f4c418709948d1e6b59ce746cbb",
+      "after": "b6c9d755c09079cac8936766799d83ef810fc28d37cd7bbe0f7d635c20f336b9",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0290-managed-original-path-overflow-shrinks-only-the-readable-stem.md",
+      "before": "70263e27e4befb63687422cb9e8b2edfbd8ebdd2867003bc6483a579fb37aa67",
+      "after": "5a109f73fd0d301486a22620e745f1e5d1bff2424952e08b4e89e4111b5e646b",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0291-managed-original-paths-use-conservative-portable-and-windows-budgets.md",
+      "before": "efacd9de20533bc8031baffda053a5f7e365c6e9602fd5e3f0910a3ac5c60083",
+      "after": "07969ad87e67585a16c32fcbebb917b6beed26f09a2213f57096ea301ec3f66a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0329-referenced-source-rewrite-cancels-only-before-old-source-trash.md",
+      "before": "24dab1e68937b98463cc1e548f50f0976770952f3f4e19e8c19604aeaefcaf5f",
+      "after": "036303d5a7f9a53692a4b8ccc425a9d7adedcdacf564b931145eb366919ac6b6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0330-referenced-source-rewrite-batches-use-one-plan-and-commit-per-item.md",
+      "before": "29b4249f442d067809ac0841b2ea86051ee275c91412637c7629683e4c224fd1",
+      "after": "025033b7b8a03c5025c25e56baf82398d82dac884ff72ae29818703b09501c4e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0331-referenced-source-rewrite-automatic-retry-reencodes-before-the-destructive-boundary.md",
+      "before": "ee25fcfdd6146033e47747558f24d8bf7be225ad42c3b3ffefcdbb379146c5cb",
+      "after": "3740431e4ec6005dda2415893922f5c5a0c16551ea4353b7696fd20bb93008c6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0332-referenced-source-rewrite-holds-one-shared-volume-lane-through-publication.md",
+      "before": "5793a629cdb26be031621d163dcce499c7c0789b9cc31f35296f782c41378192",
+      "after": "18671a26978e6213d182486a20f8a61c92e588fb1d8d65ac7a0693ec38667144",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0333-source-rewrite-plans-keep-current-by-default-and-resolve-per-format.md",
+      "before": "af577f43819f0892848baabd52090b91f580d556edc17112eadd3ff14ab788c4",
+      "after": "27b869bd94ccd7d61488ce7a07b0757732d69140f54b9a17a2f97158cf864321",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0334-source-rewrite-presets-have-explicit-personal-and-library-scopes.md",
+      "before": "f371705d30975718dd24b18b9f6281012ce5d6cc47eb59ed833cc76f5ad8405c",
+      "after": "b2248fe0e2e77c0124876bb98aa8e7b7f12210ad487705f0d6304539c8cf0e30",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0336-copy-folder-mapping-materializes-only-at-candidate-promotion.md",
+      "before": "815d4a76681172e4ca0b102e8d5f121a73e6f25495b59d396704e3c2b5f88222",
+      "after": "59f894b6e826cff5e56b52d04881c55702295b285ce617b3e1d416eced8dfa2d",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0337-folder-mapping-conflicts-require-explicit-reuse-rename-or-skip.md",
+      "before": "7afff8a98e0d45734c1f91ccb3f15b496eabf84c6d8e73d919e745f02864776b",
+      "after": "4dc0436ce8f56be05cffeb73f638ec18bb5fa569d02149fb36a9ca45e91d25dc",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0338-copy-folder-plans-do-not-follow-directory-indirection.md",
+      "before": "d07af6c00b518e0f5f7a86457150bbb73a9561e5d54a59aa75934f7ec4b90c0a",
+      "after": "7e6b52153bbc10cadad01554391808ce078fdc168bab007470b03038ac498700",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0343-compound-recovery-uses-member-publish-or-complete-directory-rebuild.md",
+      "before": "656d4e8b109bd01b7ed3e27964b092f7b3a6b9f032e200eabf845e625b2dd7fd",
+      "after": "de67dd3031602bb3e0eb27a1d0379c8b1451aff0ea0e2dec913c5cc26611bb74",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0345-referenced-compound-source-paths-move-through-one-group-plan.md",
+      "before": "59e8b16e51e87dd9afc191afa5849b1c89fe40e6b6830e8e328c18cef5c30045",
+      "after": "3c17530b1b692a1d6e82c2d951d9c950d55f8f8d60948d4a7a839bb4a21620ec",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0346-referenced-compound-source-deletion-commits-after-every-member-reaches-os-trash.md",
+      "before": "2800449be85bc7be25e7bfd0b6e2fd1f5ddac40c4f15fdedbc774b6f6d2e5f8b",
+      "after": "faf004fd11c17ad87bd285682026d24d4c98bba9e7005bc480f0e8e119bf2be5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0347-referenced-compound-source-rewrite-validates-the-whole-group-before-member-publication.md",
+      "before": "bd96a7262b7c9ea79c19a589f8eb5070ded239f40e4c5e0b44e07cbc509c0c42",
+      "after": "ebcd19973d2f56ea7b5f8e64faf44e45e3e9421779941a7e1e8ce512402863b5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0349-post-admission-companions-require-explicit-validated-attachment.md",
+      "before": "786209cc65553e5a66a44ed3316f5f9c34050dda0a4595fd4e8c5fbbb7592067",
+      "after": "771e5c59f121e0f340f37100480e3c527ada4d81f28ed6453c4fc318a5a45776",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0354-residue-recovery-preserves-exact-generations-and-replaces-earlier-content.md",
+      "before": "416f9c02edd76569b290c1ac77721e54544dde2597f60a2e15b3872ea3596254",
+      "after": "955747086bcfb38857262433785ae5bd28e5d3c9aabc88e3bf213f6c9b06d54b",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0355-ownership-conversion-batches-use-one-direction-and-commit-per-asset.md",
+      "before": "ddbeef7289a4893a0ad7565a6758af18178fc2f90cdbdb041277ced74c939178",
+      "after": "9a77096f68044b6fa0fc9580957634cd5e9ca03021126d6f145d1184184c6c2a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0356-managed-to-referenced-batches-review-one-root-and-every-final-path.md",
+      "before": "b23999edcd2928a0c4a25f1708b8f8a2f9ef0b46ce73e1f92ea65dd8f66dd021",
+      "after": "e188a20399764edf3e75cbea30c99367bd01982cdd16dc691f862963694b4a4a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0359-metadata-writeback-conflicts-preserve-scalars-and-append-keywords-by-default.md",
+      "before": "e6798f387dd58f8359ed1d71f95d8fbcb8bd61956fa5cbc8b5c3151c09ec7fcd",
+      "after": "f7fb37b6c467dc97198cec828391efe03620b29a8a5731ba737aacf935c0b6b9",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0360-metadata-writeback-batches-resolve-fields-and-commit-per-asset.md",
+      "before": "9928403a4dbdb837252948b3fd6406201e7f76e996d5c3cd62beac3fea00573d",
+      "after": "0eb8294c288d0e067a2f65facb5b2058d3fe44ae9bcae4641a37ee33788c06e5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0361-mixed-ownership-writeback-plans-split-source-authorization.md",
+      "before": "cff3c5bc5ab934a6b3c88eb7f01bf438225922e68006fa09a5a98c7c561da6d6",
+      "after": "1e5303675b593466606c4b9ecc42b61b9d2bb9a18d57bc1152950fd21552c658",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0363-repeated-managed-writebacks-require-explicit-recovery-point-disposition.md",
+      "before": "e6e65fe4b7a8742c824f3c6cf3f8b58837c15f6fac8c9a37620c7c6d3c5afbfa",
+      "after": "ea79942fd133f12545557f3cc99f4b408d0f9b52219fef9ae401f9725d296a98",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0364-managed-writeback-recovery-points-export-or-return-as-a-new-generation.md",
+      "before": "77ed11fb44b1d7ecb5174155181e6f3374176e20b9cc124348a37f7ea1924918",
+      "after": "1806929ebf0c42a1fdb2ea0e27ede4fda00dc6fdc97f5aae28ad44853962b704",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0365-use-as-current-requires-explicit-local-recovery-point-disposition.md",
+      "before": "ec2a0ccc1d65eabb44694e7531327872d20006f0c63c1da172d1feb1265fdf54",
+      "after": "b6efa0fac2713f07d4948bd6366e99f3d39bb05efaaa6dcaf83a6df84d0943ae",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0366-managed-writeback-recovery-point-cleanup-uses-complete-set-system-trash.md",
+      "before": "bd0ed2d8dfd397253639e24f1f0e5c01870af9686859c1a8eba53aa971fc641f",
+      "after": "eb153ac64298ef4cb56a5df0f1111520157e149f25c4a844935f07ea811c73af",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0367-managed-writeback-recovery-cleanup-batches-commit-per-point.md",
+      "before": "ff9255f2fc5b834ca40c177e42c67e5119ffb605f3c05dfedfe7b6358024035e",
+      "after": "6c06e916c672bfb269d3918f46904aab00939bd62c8047d2041b599848fddf7c",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0368-mixed-managed-recovery-storage-cleanup-splits-authority-by-type.md",
+      "before": "c0f70a1cfbcfed313ab49b7e1a4a7148f985ffbac722d1580f0cc7f80ff74a08",
+      "after": "a313d1d2c7e5e47f241f9d68274b52b622209e79f73114562355f4edcb2f4074",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0369-backup-protected-recovery-points-are-indexed-not-locally-cleaned.md",
+      "before": "b7e4f42a666ebc0587cbf65d9a4518507bcda9cbbfd23f771e0a3ce42800a6b5",
+      "after": "58928c0985ac4d8018c782d5245c07f8f8626d2a0121e5e1ab39673e74772731",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0370-backup-recovery-availability-uses-passive-manifest-and-selected-payload-tiers.md",
+      "before": "1c933dc369390b2fc4ba4cd9a613bf85a81b10176956464b5af3e709e735bfaf",
+      "after": "e628f877d1114b8d321d604409dc5b740502ad756a70f5c3ae1cbf5893f09e5d",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0379-pending-metadata-import-sessions-are-explicit-portable-and-source-detached.md",
+      "before": "f8d83fada6f44c495e54ae76a71acbf9ea921f851740cc82018120142df2016d",
+      "after": "8210a15ee83e663d2942e930899c557362f8bbe952a24108fce121595756065a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0381-portability-shared-objects-commit-by-dependency-and-undo-by-exclusive-effect.md",
+      "before": "9a3e75c6836180f40969f548d73becc873f4b4c128d0f7de05abdd29f747cc72",
+      "after": "47d0364d0760977d0e68b9b8d1c222ce043645cc016e8bc06d3db769cd91999b",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0384-asset-export-uses-contained-flat-sets-and-explicit-collection-projection.md",
+      "before": "65d3f7127960b664f863beff467b7f31e38f95f26a1cf215dbc1cec4ab43fb37",
+      "after": "bcfa962be55c49531d6dc1169c8ca9c5fa374e4a00e9bb9af97533e5277189a6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0385-asset-export-names-separate-human-provenance-from-managed-storage.md",
+      "before": "27ab9910c357604ca3b340646aef42163e3c9e2c9764f45797101f340af288ac",
+      "after": "ae6748925fd2b6b0f785b0bdaaab8dc0d1f67e92ced16f43be1f8acd07766ee8",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0386-asset-export-conflicts-require-visual-safe-destination-decisions.md",
+      "before": "1c4d08caca3bba17977033889d497ed11fbd0127da2a8369c4b1081c24573b5e",
+      "after": "84da626d5c1f05677c524e3a9f649a851e36ef105483428fd7d0ee2c26e4fec7",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0387-asset-export-publishes-verified-results-per-placement.md",
+      "before": "e1fc360a620bc83740f12849241092964f37281140e05ed93f167dddd041062b",
+      "after": "65fac245a4c95a54f27b0295df6ec8e4a21b34ea27b1177324ae83e16b2edf19",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0388-asset-export-pause-cancel-and-retry-stop-before-publication.md",
+      "before": "36633d475d2bf185b84a79aebc026750ae97fcf6949a732463d7c32141ce3691",
+      "after": "c6e301b93882010b77d1c015645c5c23654adb5bb54859a88d591753304c90f5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0389-asset-export-unique-names-use-reviewed-minimum-number-suffixes.md",
+      "before": "8cedbb65347ccc7c36c8c45fe011deb44d5cf2fc0bd15532a6f22900a40d11e7",
+      "after": "44fd778804ed02fd0975d4d3f971adf59d1a46eba461cc8de58cbb87e7af2708",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0390-asset-export-shares-physical-volume-lanes-and-bounds-heavy-encoding.md",
+      "before": "053507106f4a804fe0a8d4dee2fc9c2877f879223d196d7b145045ea04b21f08",
+      "after": "f9f89a6abe833a4c11d5f282e8bab7446434c21e351394389eceb15aa7949462",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0391-empty-export-set-roots-are-reclaimed-only-before-first-publication.md",
+      "before": "4f1d8a7fed474f1b669aed4545e409d1afd449e40b3f3bc8a11ac2822c6b02fe",
+      "after": "0345af2439617c297d84eb1dbf14dd167eed2a126d9a353503ad4b136a5eb05a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0392-asset-export-activity-expires-separately-from-replacement-recovery.md",
+      "before": "5dca6bee5ff7a361af0945b28bd37047a65f6b9ad4b90284082a15915b709be1",
+      "after": "1101a093d93de96c2fe7e1a87487ddd18db2de5bf79936a2d4898dfd6e5f6992",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0394-compatible-export-xmp-companions-are-explicit-atomic-output-members.md",
+      "before": "4227f090044e8dbc714305ea7bc6980f346fca5c7d4b505ba42dec53da085dbe",
+      "after": "fb01e2185f47a19fe580ba2c406eb5428b8f56916bd66b3a5f692894bc61f78f",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0395-compatible-export-metadata-routes-embedded-first-with-optional-xmp-mirror.md",
+      "before": "e69d64acb15440ec0a2e3903f221b8544a3dc75295e976d4263ad6da2c8d6bac",
+      "after": "8a6660905b2136fc0eed5e3ca7e1f363fda49135c58a9eec4014323e8b6867a8",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0396-compatible-export-presets-store-reusable-intent-without-authorization.md",
+      "before": "22f507a69b72f9c3d40f70c58d8b4e39519ecb5e3347c62df78fd740db4125d8",
+      "after": "86ea21f2acbfa84ec28ccaea5f5f4a484ffbe885ec4550b861118ca33f81c3b9",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0397-compatible-export-variants-commit-and-report-independently.md",
+      "before": "368dad537f0679340592eec46551912d10c7c2a0e00b7ef0c6c217a07f930f10",
+      "after": "509305dd859102b9ed70c69300ba9ef90deb416802efaa8049f271993b5c5fe9",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0398-compatible-export-variant-set-presets-own-recipe-snapshots.md",
+      "before": "61c30f64561ea2a8ee19a37a48ec8dc84e5fa5f9c48599a6c9d24c96ef2ab875",
+      "after": "49ab81d885e776296a64747e26aab29f6bd02be1ecbf907091b7f1c6abadfebf",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0399-compatible-export-uses-evidence-gated-progressive-planning-without-arbitrary-variant-caps.md",
+      "before": "3c3a66eda2db0a4cc853ce7e1e46686474a5b52a31c9527dfd8ba35c96502c6e",
+      "after": "a7011b63626a24819367cace7190569dddfff7b7fcfc5ccf908e99dedc922616",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0407-asset-export-admission-uses-non-preemptive-task-fair-rotation.md",
+      "before": "ea81ddb5065aef9e562ba24a11e24d586c6541da72eb36efd9fddeb340255a29",
+      "after": "9b09ca8bcd14e80bc23f9d8be965c145e83f57fc9ce15b24287cadf72f1176d5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0408-asset-export-admission-is-bounded-by-resource-and-responsiveness-guards.md",
+      "before": "c4507a94f714e6cca444794c89f019856705d196fe01a47591609155355d04fb",
+      "after": "7a52c1031f1d2e7ed177de9cc9a47c6f99ee95a42b571d2febfa3cabb3de11a6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0409-background-asset-export-requires-an-explicit-profile-and-visible-host.md",
+      "before": "19fedec548a4b50a5a20ef1e1b50595f8f21e687c9f26486afe9380b1998a323",
+      "after": "1c3e02adc4e4a4fe2ffefcf800df09f777670e0769174d1f90eab62b3a6844f6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0410-compatible-export-planning-has-fixed-cross-platform-performance-acceptance.md",
+      "before": "eaaede8adb93fbabe3b272cb09fe9d0dd9f112679d3d6b709ff210b72b0934a0",
+      "after": "e83966359af25a74ba2ff8fdc76063a39c045d87ceeacaebcb11487b8af8f45e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0411-compatible-export-planning-state-is-disposable-and-reserve-gated.md",
+      "before": "da040345df26f8ee6149738a1421a56e48550ba8dee016305d62da446fa98a0e",
+      "after": "9d385c001133ee3f26ebe940c41bc454c9f316d35e353b705be25ae4006a1271",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0412-compatible-export-matrix-resolution-is-explicit-and-task-local.md",
+      "before": "8745e38c2e55207469536b6c9bafb56f3352b4e7d2c641d3934fb6e307dadf56",
+      "after": "e8edae24ffe2a5e20a4de3917d4054dc21322b3eda9d11a87a931faf7cde6613",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0425-every-custom-field-type-pair-has-a-validated-direct-migration-path.md",
+      "before": "3ecb83bd57ad296e0b2aad9e098cda53191bac164b8a65d4416b8798fb775ebb",
+      "after": "328a5397e8b930cb7ca25a19f81abc87aba7e32d757eaa446546e15ebce2898a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0426-custom-field-migration-commits-per-owner-and-resumes-from-durable-checkpoints.md",
+      "before": "0382e1b51ce6e6617c277811fe714f10c0c5b23645f94af924d1a4606b1ef86c",
+      "after": "fa053e1489c83f10f21ac6c22d163cf4ba8f1aa36d5202a40c9094e2d5a0c202",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0427-partially-migrated-custom-fields-remain-queryable-with-explicit-coverage.md",
+      "before": "d65685cc63778d9af188665b1b65dafc41c77941905890deb2f15e65f8f7c386",
+      "after": "421a6678b3e549fb44f342c985dcda36b0e0432d39b615abd51caa5df2975e27",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0428-custom-field-conversion-presets-store-portable-rules-without-execution-authority.md",
+      "before": "f1c233b4fb84119e87c75f65f05a0866ba78122ed847eb18b6cbbd0355764938",
+      "after": "1c3dde31f1cd2804aa0644697fa44a605435b4d65fa5406ada58687b1d4420eb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0429-custom-field-migration-results-and-undo-share-a-reviewed-retention-window.md",
+      "before": "50b97c54b7b93a28907098610d797313b44b8ca109e6f4db6d199bca55e83329",
+      "after": "e802a1e7621051182feeffad90d34401dffa916a3b250d279881e57222009ef1",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0430-custom-field-migrations-use-one-cooperative-library-maintenance-lane.md",
+      "before": "b3cb1e8a206ef5d276e8721380a3c7c41dca59a430dc4a4590d626bbe8900fad",
+      "after": "4aed56f48607ecdba405e828901e810eab8ab8a2ecb6c76d36fc753fbd70e666",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0431-custom-field-migration-has-fixed-cross-platform-responsiveness-acceptance.md",
+      "before": "9de95f38edd7de54cd8b9ebfe4493e48ae06cc22253ca7103fccbeeb772b4189",
+      "after": "48ad77fc5b36e7c255a2ce2f2aa899a64a6a588f8192b0b974a7e57928efffc5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0434-large-select-option-changes-run-as-resumable-maintenance-tasks-with-risk-specific-undo.md",
+      "before": "2a987a88056504ea2a7014b9437e10487aaa4c2086db8d8f0335558b9b9be2fd",
+      "after": "993908408f442934774ec292648a9104cc41e3515c202ef704b47d3b2cbf7a43",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0446-duplicate-text-comparison-keys-are-versioned-derived-evidence.md",
+      "before": "0bca67df1ffc7ee58204ab1bd169455209b7987e6579410e5381f61fa657bd75",
+      "after": "25ae56a80f2a35a1e2508a016be630fa109cfed787ec9660e7486c335a3877da",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0447-duplicate-text-findings-span-live-owner-types-with-explicit-lifecycle-scope.md",
+      "before": "f9bf6221b96c51cf722ebc2ab26e5509eedb62d78dd012c1bc641c2dabf0c557",
+      "after": "07182657541125d605a1957a8f0902dc164443375d69f5748ae4d3920ec6c21d",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0448-duplicate-text-finding-sessions-refresh-explicitly-and-never-mutate-in-place.md",
+      "before": "fb7d5dd0891794a0371512bff7f31e3b01c29774276e838fec47c318f3670a55",
+      "after": "3dd95ad538cda864516097ba30e061577952b154380733d098bbcfaeb7075fa5",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0449-duplicate-text-findings-have-no-resolution-or-suppression-lifecycle.md",
+      "before": "4c69d4ff189025964cf622ade69513a472dd7098970c3556f848e3d8e8068572",
+      "after": "82b3db189318ed2d21a4ff5c3698fc387fd36ace66f580c8bf65362159620cfb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0450-text-custom-field-filters-use-complete-explicit-operator-semantics.md",
+      "before": "edb0ac5e9716bbdd8c27dd4f5b69b531557cdb8981aba00ff761aa9b793fd582",
+      "after": "b8edf7249f9121f8a1c3c7c51ab76c261a3f1b756fdc012e5e83910f427c1c6e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0451-text-custom-field-sorting-is-versioned-natural-or-exact-and-keeps-missing-last.md",
+      "before": "9cea3be851fe033bdd6d8c64d583b0fd1368cb81f7623ea8aac8e9c2322d85a6",
+      "after": "5f800629ad88acc82d4e4a6f072e31544a6a6c2ec66cbef28b9de4a2ddc94726",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0452-distinct-text-value-browsing-is-on-demand-generation-bound-and-never-schema.md",
+      "before": "48cc9f968762af9e9594db0478cca4b4b57f3db8f753cb6dca66a504e776ecc8",
+      "after": "be8f792534e47da55fc7262005f43f7042dea4b996e30e13bfabc0f4454d9744",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0453-text-editor-presentation-is-portable-reversible-and-content-neutral.md",
+      "before": "b7df15f9cc4ee53110237a3530ef834e1d94f07d805b2ce1878a73c24b351e26",
+      "after": "c66c6d9d56852b8490eeb8867f28f614d6dd1bddf82c484bdaca8e75bed4ce8a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0454-text-edit-drafts-are-revision-bound-and-commit-only-at-defined-boundaries.md",
+      "before": "a043cdbf115d159c60a12daf6956556321a9f82a1831ab93b2d0aa2cf0f1015d",
+      "after": "a86ce557e2a27808b37da8eb0b2b9bb2a9a2e7f016a492431ffa2ddaac8cece3",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0456-manual-text-edit-undo-is-layered-revision-guarded-and-session-only.md",
+      "before": "88fc332f7658aad0e40ff07d7c3b66958b693fc8a6e131d22432ffeaf05188d4",
+      "after": "cefba786fb1b3ec00b416416561c7143a66c2537a02217f813ca397059247558",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0457-batch-text-editing-uses-reviewed-frozen-plans-and-per-owner-commits.md",
+      "before": "8d01e89965bb57dee178a696cac7d8b40d6a6c681978187ad282407665a025a9",
+      "after": "6fa23c3e24c524b42f60373192f5529f05a2e68519530907c70f7c0cb9de4ce6",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0459-text-input-accepts-only-explicit-plain-unicode-transfer-data.md",
+      "before": "2098089d557f29c5f5c653fc302e9901b59bcc362c8d3307a65324cda6f89cf4",
+      "after": "4514e48d74318c8f0b576f4c9cd9ae77603ef5163cf8be5b7953daea06524627",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0460-text-copy-and-cut-are-explicit-plain-text-clipboard-actions.md",
+      "before": "c983e6c235d46e69aed449d353ef53c2d2d73adfec3c8d8d3ad9ee02d8820bc3",
+      "after": "4fb6eab33a816f27eccf06a928052331cbbbc855327757c8a40c7b4030a3d912",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0462-number-input-is-locale-declared-ambiguity-blocking-and-exact.md",
+      "before": "6a6bcb7d56aded5d642e6db64836cf1202d7863b979c9c4e50df9eb4812c255d",
+      "after": "f460178851497a13769b52d0c5760b959d7e5152a123252d84fd2993fbe2bba8",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0463-number-display-is-exact-by-default-and-marks-every-rounded-approximation.md",
+      "before": "b25ebafc5f5ee6dbd243674614a4d85fefc41028b0ef7b0dbe12fa052623ab44",
+      "after": "5002509d8d175dfd8a9d915c671e2011079587054512e8f698d5a874cf80d970",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0464-number-display-overflow-uses-a-labeled-scientific-fallback-and-full-detail.md",
+      "before": "860d97ed73368ecf1689554ce475ae8bb7d891a184fbb279688b6e92c5719163",
+      "after": "d4f6fe57b2d96821561a49c239b6ab864ab28149a68370985b3c4267bd3c8b30",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0466-unsaved-custom-field-resolution-preflights-all-drafts-and-commits-atomically-per-owner.md",
+      "before": "83dbe5c48c130dc24093e70a9a532fd3969be649ae7573d5faa50923fee2812b",
+      "after": "19db90facf5405c775bcb41a54144ad1214bb9a2e568b7d94c7cfa93611f455e",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0467-atomic-multi-field-owner-commits-use-one-compound-manual-undo-step.md",
+      "before": "843dc03c764c2bc9722706a536d32f025be8ca193fdfbc5576438bded81b273d",
+      "after": "8f3a1ffa1357604035ed2c0dc2c891fb63e531ae4b3bcae67263dad412456a12",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0468-unavailable-manual-undo-stays-blocking-until-revalidated-or-explicitly-removed.md",
+      "before": "dbc3f4ff7af7ad5bc75e8a4f0df674e737b132baf4578f6d29d0ccbb59a60f00",
+      "after": "6e9f5a2e2e28a4939356466c191cbb89d79dc6626fadcb6eb4bd9dfaf9499468",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0469-manual-custom-field-undo-uses-adjustable-count-and-memory-budgets.md",
+      "before": "af34130afa28f568b5b464f81d3fda5593ac7552da6d2c43e9c50ac59af90d5e",
+      "after": "be41c7c9db9719fb17ce7ef21e7ea0f7c00c6efac52bda7806d5f07a5c187f19",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0470-save-without-manual-undo-clears-the-observable-manual-history-after-proven-commit.md",
+      "before": "7b21f536ba08dbd96185a8cb0b9bece593fdd0face41dfc5db8ccc0edeb9816e",
+      "after": "ccdd22aebeb5487cb98ca4fd284474b77f94beb470696d9286716480f97f3917",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0471-critical-memory-pressure-may-reclaim-complete-manual-undo-entries-as-a-last-resort.md",
+      "before": "fa9b8a977f97bc2d2d7d39c1083616c02f00578b8b9124fc205493c04156d388",
+      "after": "a4bad58c7e468083e32cc101191c6c216ef5a9f1c2b95065a6c155ccae045fe1",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0478-missing-initialization-scope-freezes-current-live-value-owners.md",
+      "before": "deb424d2f47472a59ce79d8f8c3e6d2e4fa27e7a641fd2cc9f14a16a801a1637",
+      "after": "cdc871b04c2b6f068d0b3fde7c94315730a94a098e054bd3ae2099d6f08d3960",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0479-missing-initialization-retries-only-proven-transient-uncommitted-failures.md",
+      "before": "38523825c11fb23dc40dfd9bcf885c4464a2aa06462ad798ad2da25f76d5e314",
+      "after": "24b3489c3a395317269365094059746ff93825e46569addfd0fce3d36943756c",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0480-missing-initialization-undo-closes-forward-retry-before-reversal.md",
+      "before": "8b1ad0b2e6c3dcd6173cbd96ee3ae413876748fdd06a611f25cc54ebd707370c",
+      "after": "a871538644c5dc54d095bd68a85fa498b613a7c242bf196c5523c1d862ece3b8",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0481-missing-initialization-result-retry-and-undo-share-one-terminal-window.md",
+      "before": "539904224fd2d96cb129397d71593b7f9adaf159e4df0c54a4a90787817bee2c",
+      "after": "1b72010f13a1b744792b9dc71ee214cba2e6569b89c1f1073fa261125c9c3ff1",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0489-work-sets-separate-saved-references-from-native-window-authority.md",
+      "before": "67e2ce5054bee3167e319b44ede4c723e4cc7c51ef46609edb54319cceb91072",
+      "after": "33400bf51f69dc7e7211fc77a144189fd46a9281fdf6160c6e6c6b26afe33c55",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0491-local-clients-share-one-host-and-product-workspace.md",
+      "before": "8c1cfdeddc5249be01f57bf315454e573b20ab7a90ff90bcb1b4fd2256d9a9de",
+      "after": "1d206d7c7ecaba712becd0a6bd6772a608ae7429145d2df9a14c73e643eaf593",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/0493-dropover-style-interaction-allows-platform-native-implementation.md",
+      "before": "3ac7659e9f9b705a16682d1fffbeaa5f541c529d8f7c61b7328d30b04409deba",
+      "after": "15bbae585d1a76f8588614713528e45f703ade33a22aafbb07937384b3aca313",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "before": "203d0f909e20343ea1ca4dee2fe7a76723b458e1d4c07b2846195be736149fe4",
+      "after": "6c18507527af978f9c7bf40f6a0def6866696c9963b92e7c326ba97189c1e305",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "before": "d76e1ea885fbe5ed1894b8123f16a7b3253fe140897f053000df9d34f1363a98",
+      "after": "32c4ea18f5b251f156724c20a0c55f20b1e3561bd3ab0b8eece34fd7fd50ddb7",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/agents/domain.md",
+      "before": "7b9e26c2aabe25b676ef4799b6226bfc270fde6314168cbb0ed9d8088f8140a4",
+      "after": "4fd5e07e5b4b17e890a02e28379c1bbda16884e878e6f69b891684d3c3dfa473",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/agents/implementation-status.md",
+      "before": "4d1b3cdde2be5c7db2adda5925c798b60a0d3d0d589720780986ebae1bdd857f",
+      "after": "27528defd9318df262490fc6318f2eb7486fccd2f4ba33cdf3e4b241defe4a1a",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/handoff/CURRENT-STATE.md",
+      "before": "4de4b4cc46fc6aa5276aed7bd1911f3775a5b27f75f83e0e68920d4036761041",
+      "after": "537a04a38fc9038efebd6dcb07209347a442f42ef66bc429fd73525b298a3bf4",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/platform/CI_MATRIX.md",
+      "before": "fcce35cc77b56d9ca53a94a2252cac2e89eb5b28f8f5a4a8880adbbc91eaf583",
+      "after": "cbebf315c1d494f00396fbf1d93e73c0e20c5a09ddca1d3151c33df95c5f8798",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/product/ASSET-NOTEBOOKS-20260917.md",
+      "before": "03ab98ca0c18dfecdb5cab094cb515e853dce1faf77990e71a3d62095725dc4e",
+      "after": "13387777fef7fb5d204d8038c1fdc57a28eb109cafdf80f69bfee35eb48b29ee",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/product/LIBRARY-ORGANIZATION-20260919.md",
+      "before": "7de3ce75fe49240c33e3e0ce59e8c79d74c31f68d6ab7decf193a6e1b70441bd",
+      "after": "e62e624625450155d722353cfcd9962c3a18ed8a17bed3ec2011024e081d16d1",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/product/LOCAL-AI-FOUNDATION-SPEC.md",
+      "before": "87146b7b976a3f2f230f7041a54f18f8aaef73b02f6927198c4acc549bcb635b",
+      "after": "6afdd149c302f72a060f5dfa2ef5c61cea7ff6371c2d023f47ffb461dbbb3a17",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/product/LOCAL-DUAL-CLIENT-DESIGN.md",
+      "before": "438c9fc04ce81fde98f8cd271ac41ff5d646f5360977fe0b52dbe83b6fc8be0f",
+      "after": "f075e0ad98badef6f2443118378ea86201ceb0540ef8869f7315dd488b3222b3",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/product/LOCAL-DUAL-CLIENT-SPEC.md",
+      "before": "261a34f5e50fb82a95ac18e59e80fe180dc87a87eabe05196b5aef9f5b0491c0",
+      "after": "f079a6dcec8511d2acd9c65f82396915267a4dac21cb1a2c2d441989930166cb",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/product/WORK-SETS-20260920.md",
+      "before": "318ced8128532237eaf684528813e9bdc8951afdcb4f90a723bc8781b7fe236e",
+      "after": "2bddeb727677afa2457360d37e24d1c2ce7af940bb5d636c19a621d6f3d7c641",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/research/magpie-agent-engineering-20261014/AGENTS-REVISION-PROPOSAL.md",
+      "before": "02fe50c02b0609d1657045a64a229aab913c42fb708016283481ca007d800bfd",
+      "after": "76728e317332ec4ee79fe0322668b5a974ebf9d34d53127068f8e6f4f2c4a37c",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/tasks/TASK-REGISTRY.md",
+      "before": "becb0c819630330b4e74349decedcfb18ee2aac2ca8a438eab70c5fd3db151c9",
+      "after": "5a99b365207ab41fca17071a04bb5f9c5fb69cb757f899400608a4bf2bf07ea7",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/agent-context-router.mjs",
+      "before": "98ed4fe836b8991c3bcca4f2d5cb6a3bdf3e1155d32768f087b2c65ec28fe7b0",
+      "after": "f8046df946bd59244c60a4bae920766b75e38ce5aaa647c93de5ef78cadd4fbc",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/agent-context-router.test.mjs",
+      "before": "a32dce6af2197f81618ab51e7fb61349e126241af1153bf422fa7561ff44305e",
+      "after": "5c56c2d27ca0bd2fe83b012d0450b1f1b681dbc0aade035f2f9c576bc9b08e3d",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/check-adr-router.py",
+      "before": "b199ca041ac3f722e94b1aebb16393f289dcf6ffea86e2bab95dd1d8eada8037",
+      "after": "da0fbcba8be853a2a45e8209ff38a064099c8a2b604631daa015265b4659ba25",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/check-docs-sync.py",
+      "before": "e6cd570d7d139ac7244661451a9a7e3a0fd1c4297656050d23aa83abd43c4f4e",
+      "after": "7258952fad6190b7bde855bdaaf28669607d21e09134f12037ef8fdf50cd2c77",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/development-feedback.mjs",
+      "before": "8d7e93595c032c4900f0934684e02d1f04b3ddfc2baa399d887e3eb8bb4bda13",
+      "after": "cbdcb90e8b2b2d70fa6334e46b497465f836371e022c05f7fcf276641e2d7f13",
+      "kind": "modified"
+    },
+    {
+      "path": "scripts/development-feedback.test.mjs",
+      "before": "28bf030151387a2bb7a21b6f5486f907852233d03592d91fe85af3dfa313582b",
+      "after": "0bab29f238a670f315b16e12aa3a1e29f67c093bc481a43c77f184363edbab83",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/README.md",
+      "before": "c896d2d0a811591a5aff90ad971257cb3e693c6d22bb1906688507212369829a",
+      "after": "0bb53169cbeea9eec0a68de290fcf7645ab08eeec09ac025b903509eaf6c32ee",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/background-analysis/README.md",
+      "before": "29bcfae58da367f4d70a6cbf314b27c6bb120d51d88c375674f82d7c7522b2a6",
+      "after": "9c538ae473cef1db9be0bf487826be0abcb9c63c26e8c451df3c0d010e3c0472",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/ipc/README.md",
+      "before": "f4d0a24ddbdf20c4bc77a284370a67091cc951010a200963d9f17f6b0acc82ff",
+      "after": "4c0da1dc8524fd95870e41e0d6e84dbe469349009f991a38c6296c95fc3f5924",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/library-lifecycle/README.md",
+      "before": "86437e3153ecb1212764e297bcc50f3b932b1a7453c008e964925552e304a634",
+      "after": "ccbe6def88313c21332eb0de15222fce46838f23eafcf0360fd222e74f3fa603",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/ocr/README.md",
+      "before": "eb7a215e75930dfe0d5a45af925cd89db3c3ad4e7a32df50885bf7cf20b0a0c2",
+      "after": "6b98478d98bf81b3da9e6d37178c1ae8309f9e95d8a8e7a130e76f2af337e58a",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/services/README.md",
+      "before": "18efe971ffa8438760aeedf80450cbfd31d9d873d4c4e28e148e5c7417710fb3",
+      "after": "22bb4f3f6f47a0e74f00d877076c03011c0cee8d70450db289279956e2dd3055",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/services/ai-runtime/README.md",
+      "before": "0920805641417917b6cf5e7c910ea2ef7d91d0290e38694f365c32c9376f5438",
+      "after": "23d8b0dd7a312bc2cc3e52f90e9a03fe82f3aba6cfbec33c61c447e28cc7692a",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/visual-ai/README.md",
+      "before": "a886bcfe24b3ea0099b1575480fb4442b7f23c2170cbc16f490e320d6ad2473c",
+      "after": "109bd511408cf6995f323e0a5be885c0ff537e31710edd4a64121eb60b84da13",
+      "kind": "modified"
+    },
+    {
+      "path": "src/main/work-mode/README.md",
+      "before": "0bd8eca27a9e85ad0c331aaece6e6ce9dd120d01ebbebff5149dbfe79bc3c147",
+      "after": "101e11a3b9a6142a1fb3faa392a88c3568ee67dafd208c5a5384a51854562bc7",
+      "kind": "modified"
+    },
+    {
+      "path": "src/renderer/README.md",
+      "before": "e4ba881c9102dd6add66487d8188b53cc63a8bb557cfa4c19d8fc4f56c6da8d9",
+      "after": "c9ae2a740abe9c6cdbf79afcc313ad958da38f33d298c2fb348a310d2ef94b2d",
+      "kind": "modified"
+    },
+    {
+      "path": "src/shared/README.md",
+      "before": "0cbf67d421a17fd6796730a6dc58290b4f125373282743a6cc3265a32c59f6b5",
+      "after": "110ce1be3c07d6356861456d3b370be0cb1796374d10ac5956cf969a0ba8539c",
+      "kind": "modified"
+    },
+    {
+      "path": ".codeindex/documentation-map.json",
+      "after": "94ae409b3d0966d6e5e04629cfd6b7acdc29a8d5b150613fdd6fcab7a040f93a",
+      "kind": "new"
+    },
+    {
+      "path": "docs/README.md",
+      "after": "f4b3d8b081490e08f160c7df00447ac464ba46f2d2f17ed7644a6d5f2c5b9d49",
+      "kind": "new"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "after": "855239f0774190780b3d2dbfd968a6404151a68df900519fc8fd92068e4a1305",
+      "kind": "new"
+    },
+    {
+      "path": "docs/design/README.md",
+      "after": "ee01b475fba9a27c5b2b27604df40925de73175ed2274c04b5b17a3477a0a36b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/README.md",
+      "after": "1aea28bcf140c75f3fa42a5ef63f6b55f61f8e1bc3893c8cc1fa5ad0de078913",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/AGENTS.before.md",
+      "after": "d622ba725d325d2bae00ed30e53779396d643eb579ddea9cbca37ee9834869f1",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/CONTRIBUTING.before.md",
+      "after": "62316ff1700e95894832b8b077b3d281a82a90e3da538b20d30ac142e9a0999a",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/README.md",
+      "after": "c747f55947a05cff25030d38acc5405b7ff25be48c6d194349132da50a61be43",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/modules/src--main--background-analysis--README.md",
+      "after": "29bcfae58da367f4d70a6cbf314b27c6bb120d51d88c375674f82d7c7522b2a6",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/modules/src--main--library-lifecycle--README.md",
+      "after": "86437e3153ecb1212764e297bcc50f3b932b1a7453c008e964925552e304a634",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/modules/src--main--ocr--README.md",
+      "after": "eb7a215e75930dfe0d5a45af925cd89db3c3ad4e7a32df50885bf7cf20b0a0c2",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/modules/src--main--services--ai-runtime--README.md",
+      "after": "0920805641417917b6cf5e7c910ea2ef7d91d0290e38694f365c32c9376f5438",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/modules/src--main--visual-ai--README.md",
+      "after": "a886bcfe24b3ea0099b1575480fb4442b7f23c2170cbc16f490e320d6ad2473c",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/modules/src--main--work-mode--README.md",
+      "after": "0bd8eca27a9e85ad0c331aaece6e6ce9dd120d01ebbebff5149dbfe79bc3c147",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/product--ASSET-NOTEBOOKS-20260917.md",
+      "after": "03ab98ca0c18dfecdb5cab094cb515e853dce1faf77990e71a3d62095725dc4e",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/product--LIBRARY-ORGANIZATION-20260919.md",
+      "after": "7de3ce75fe49240c33e3e0ce59e8c79d74c31f68d6ab7decf193a6e1b70441bd",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/product--LOCAL-AI-FOUNDATION-SPEC.md",
+      "after": "87146b7b976a3f2f230f7041a54f18f8aaef73b02f6927198c4acc549bcb635b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/history/documentation-rebuild-20261015/product--LOCAL-DUAL-CLIENT-SPEC.md",
+      "after": "261a34f5e50fb82a95ac18e59e80fe180dc87a87eabe05196b5aef9f5b0491c0",
+      "kind": "new"
+    },
+    {
+      "path": "docs/platform/README.md",
+      "after": "7ffd2214863d154787a1c1066b4cb6bd48ba2103f8cf475ffe1820973b365c01",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/README.md",
+      "after": "2193873270d8ddcc01719c550d3081b1bbec8c1aa5c33e80a2a8a78e367e0f5b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/README.md",
+      "after": "95deb389d9694a08240e47737d5c1f227697eb107edce456c720ae30ac5747f6",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/backup-trust.md",
+      "after": "81951a6b408bbc6c6fe8afde64b7b44c3cb35a03ce46d03cab806a6054c7b275",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/batch-conflicts.md",
+      "after": "989d3a12b325511f14f66d38fc64f7aabdfbf6bfba5d491ea84d98984ddd17b3",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/capture.md",
+      "after": "0ec6991f62b5b2c539f3f72c2bec9cde2287e8c61d3389c379df78cb7648b2bc",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/compound-originals.md",
+      "after": "5542af3d019b15b49fe0b50389848e6f7c6384431823258b35e76083ee348758",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/custom-fields.md",
+      "after": "de10b8853e73f8f8f01ba148a2c27b43b779c11e4da83a228408c45885d04ea5",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/custom-number.md",
+      "after": "bca16bdaa60e0a4d3888e1bba904c0b8bac619e457650e714b12eec25ad8ec64",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/custom-text.md",
+      "after": "45666ce27deaca9d24d8452b86752f8b2b67ac14d8efdf5c0f2198c1274b4597",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/export.md",
+      "after": "fa7bb074c94e42459eee6c9ef86023e91ab262cf6c378b6d930a09ada4915344",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/library-storage.md",
+      "after": "1e94dba4277239a83af316331c19c18e2443c44852dfdaee20791a51494dd0c1",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/manual-undo.md",
+      "after": "76acd59d13f24222f0574eecff4d8c2709c06582fb97569f9a40e9b2cca579c1",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/missing-initialization.md",
+      "after": "088ccc92050783f6e7a12e2d737f72436ef13776ec43051787cbed77dea73d97",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/model-extension.md",
+      "after": "a8db73bbdfc3449613c2572a353d318d34cbe14527cf934d8a6d1ab49238714b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/model-storage-lifecycle.md",
+      "after": "6285dd861d4d4b3451e74f10628e86c86d4a585ba1273e418673940673924459",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/portability.md",
+      "after": "06325c9552644ad216e267ceca7e6a0421c18012888b4456a2b8cb314e0e78f8",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/preview-analysis.md",
+      "after": "70e97970c58119914a3c703f8989d4247b17ae66949684a9f08f7a7b84f14298",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/referenced-operations.md",
+      "after": "cfd608b6ab3e9934b01af5929f0071b87cc286438d3bffec9b619dc33677bfb5",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/review-trash.md",
+      "after": "a17053690d81c7eecf46c63c5347ac3ed6f1fcf7a9c8adae61eb98c6be83d40b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/storage-review.md",
+      "after": "7f6803fe04670f90e1353a759c58860db9595e11cb4c023bab24975faf3dcc61",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/workspace.md",
+      "after": "50e70e941bdfc99b367a63b8c0cbe89fdd93fba1ed0777fb89090f1ff4b71896",
+      "kind": "new"
+    },
+    {
+      "path": "docs/product/specs/writeback.md",
+      "after": "c7eeab6b76eb3b55b950cdd1185405792fb41ed0e5c3578d51352d4f3871c6a5",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "after": "a4854287442f034334c6cf3cc0ea1df081759be8b061b1e44cf9535196e43230",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/ai-analysis.md",
+      "after": "e6a087a2522fd62eebf6bc2e2aa244037ab66f439d3efbd56ce94271693b9953",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/ai-connections.md",
+      "after": "83750795b62788c165f76ea3e58db75a3f13f31418e750baba0cc50603ac3c17",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/ai-runtime.md",
+      "after": "8c865423e2379e680e81f670b99b93898b55181b3ec214d26bac88b3363129b1",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/asset-discovery.md",
+      "after": "69c467c6085b49aaa5ba6bb899235aa2400e9318a3ebb6ae442e10c366b936b7",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/asset-workspace.md",
+      "after": "fa67618de1e9475c4e559c227db748d0cc9851ae3f8e253bad19a0d495674bd0",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/ai-analysis.md",
+      "after": "464f79ca001174470ad05a76caa7d960516996774ed8bd516968f11570e1bf95",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/ai-runtime.md",
+      "after": "e23d91d2983c62c04a8b273e20410c416943c318507b946dbff64481fa2ca0de",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/library-lifecycle.md",
+      "after": "8c27a3906154f53cc675c4ec652ce85498d9141d13bdedd9fc935d8ef98c584b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/main.md",
+      "after": "95e455a2ca004b1ec033376dc8a9ac246e9b93be6c1ef00461f9773da3a3b1e8",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/ocr.md",
+      "after": "6d644fdf8f1f3f1ba9cc7a1de4792dba3126874731d55af4f83ff7b56d425394",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/renderer.md",
+      "after": "79111a4960dc0776dc3d06e2ee01554bd251bbd9927845a52152d01b6b78181a",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/shared.md",
+      "after": "ccdfb40bb1f4e090433c3ed3b598c3e158f51317016fdb3172fc75393110e87c",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/visual-ai.md",
+      "after": "1a5057302fc132ab1ae3b23e786853f46ea43212ac67f369e6ee1f21dffbb192",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/contracts/work-mode.md",
+      "after": "341814a29fd8881ba935dc78cc3e9575d470139bd262708a381f45723fe6f23d",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/engineering.md",
+      "after": "3ecf0c9096b5f485f4f982ad8d7991170aeb3d20affd7c7a412b454df79f1aed",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/library-lifecycle.md",
+      "after": "9ca04db85821114a4d657f0f285319dc99382852cbc8d5dd64aba6d09b44cd77",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/local-host.md",
+      "after": "d83bb9ba98767b71d3aea8c4b6ccee0befa9975103f4209429b1f9cb5642b984",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/media-handoff.md",
+      "after": "9ed5a4f93cc51b785e480234684f66b660117bc47790eec35e2f95123981ecf6",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/model-library.md",
+      "after": "6cdc3c6556bbeade174a3db6dd3ef1a0ab1cedfdf3785ae71cd6eee8c9a6a89b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/ocr.md",
+      "after": "624cb5af3f4bed7538b70413a522d484fd6dc191bd0462ee11f0b197aabae620",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/optional-targets.md",
+      "after": "3e6296ff723eb9b6be0b667635c3205f770294b65d00b2091d9d29050c8cccfe",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/organization.md",
+      "after": "a4bebf3aac033a5101bf6096767611c11a75b39be2f00e1bd467e76ff8ea271d",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/platform-release.md",
+      "after": "608fdea2b282f9c3c72924972b3dc8a7f18e6a1109efb7ba25f01d97ebf7921b",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/settings-recovery.md",
+      "after": "1d2769258e9e75ff584a8419a8f9e66b5d1c4177c69639ab75e7959658b503f6",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/storage-intake.md",
+      "after": "5cc2c6ac18bcb83db405d08fab0e598f8516ac2bdedb230958da97c4a38ca70c",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/visual-ai.md",
+      "after": "86662b7784e48ec37b5e03343f0ddab07b5d6cbae41680f76d2ff797b4e74fa2",
+      "kind": "new"
+    },
+    {
+      "path": "docs/subsystems/work-mode.md",
+      "after": "0b78b5840e80e5d7bee54310ff32650c6588d59b7f24589db81c44e1f5273097",
+      "kind": "new"
+    },
+    {
+      "path": "scripts/check-documentation.py",
+      "after": "5fb7c9a6f6d82a078aad469fe74ec2569d7adba8e1e7e22a76cb535306154a94",
+      "kind": "new"
+    },
+    {
+      "path": "scripts/documentation-governance.test.py",
+      "after": "494485a238b25bab7f1b0b385153525ead7d4e4b74f246001772747bd63cdd61",
+      "kind": "new"
+    },
+    {
+      "path": ".github/workflows/cross-platform-governance.yml",
+      "before": "93f6cd75c66048a662e1ea94bce0e21913d93b449f9c63f9dfa7c0d2cc30a365",
+      "after": "f16d73cee30e78b9a13d123494f8b10e93189e31acf9a4cfbfc8cd5673148520",
+      "kind": "modified",
+      "baseline": "HEAD; clean at task start"
+    }
+  ]
+}

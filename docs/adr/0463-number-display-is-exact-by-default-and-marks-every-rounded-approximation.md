@@ -1,46 +1,13 @@
 # Number Display Is Exact By Default And Marks Every Rounded Approximation
 
-Number presentation must be readable without disguising an exact metadata value
-as a rounded replacement. Every Number definition therefore has one portable
-**Custom Field Number Display Precision** mode: Automatic Exact, Fixed Decimal
-Places or Significant Digits. Automatic Exact is the default and uses an
-application-pinned shortest round-trip ordinary-decimal or scientific
-representation that reconstructs the complete Exact Custom Field Number.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-Fixed Decimal Places accepts 0 through 34 places after the decimal point.
-Significant Digits accepts 1 through 34 significant digits. Both are
-presentation-only and round directly in exact decimal arithmetic through
-round-half-to-even: an exact midpoint selects the candidate whose retained last
-digit is even. They never convert through binary floating point or change the
-stored value, range, equality, ordering, filters, migrations, AI suggestions or
-structured numeric exports.
+## Decision
 
-A precision-limited rendering receives the `≈` marker exactly when its rounded
-numeric result differs from the authoritative value. Adding or omitting
-trailing zeros while preserving the same numeric value is not approximate.
-When a negative nonzero value rounds to zero, it renders as an approximate
-canonical zero rather than inventing negative zero. Every approximation has
-direct full-exact-value access, and field focus continues to load ADR 0462's
-complete round-trip edit representation rather than the rounded display.
+Number presentation must be readable without disguising an exact metadata value as a rounded replacement.
 
-Every Number definition also has one portable **Custom Field Number Grouping
-Display** preference: Auto, On or Off, defaulting to Auto. Auto follows the
-current display locale's standard grouping behavior for ordinary decimal
-notation; On requests that locale's standard valid grouping wherever ordinary
-notation supports it; Off suppresses grouping. Scientific notation is never
-grouped. Digit shapes, separators and grouping patterns come from
-application-pinned data for the current device-local display locale, so they
-may localize across devices without changing field intent or numeric identity.
+## Detailed contract and provenance
 
-The Custom Field Number Unit Label is rendered outside the numeric token and
-after any approximation marker. It never participates in digit counting,
-rounding, grouping, parsing or conversion. Changing precision mode, precision
-count, grouping preference, unit label or display locale updates presentation
-without constraint revalidation, index rebuild, metadata-value revision or
-loss of full-exact access.
+详细状态、交互、数值边界和例外的唯一正文为[数字字段、显示与精度规格](../product/specs/custom-number.md#adr-0463)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/organization.md)，当前资格只查CURRENT-STATE。
 
-ADR 0464 resolves inline overflow through a 64-grapheme numeric-token budget,
-an explicitly labelled normalized Scientific Number Display Fallback and
-read-only detail containing both complete requested formatting and the
-authoritative exact value. Visual ellipsis is allowed only after even the
-fallback cannot fit and remains visibly identified as clipped.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

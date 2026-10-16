@@ -1,0 +1,15 @@
+{
+  "ok": false,
+  "scope": "Structure/source preservation only; no product, UI, model or native acceptance.",
+  "owned_documents_checked": 91,
+  "subsystems": 18,
+  "task_routes": 20,
+  "decision_sources": 493,
+  "migrated_paragraphs": 1428,
+  "glossary_definitions": 1408,
+  "errors": [
+    "docs/subsystems/contracts/ai-analysis.md: missing anchor ../../../src/main/library-lifecycle/README.md#host-private-schema-maintenance",
+    "src/main/background-ocr/README.md: missing anchor ../library-lifecycle/README.md#host-private-schema-maintenance",
+    "src/main/independent-tags/README.md: missing anchor ../library-lifecycle/README.md#host-private-schema-maintenance"
+  ]
+}

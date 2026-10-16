@@ -1,0 +1,30 @@
+[
+  {
+    "agent": "/root/interaction_reference",
+    "session_id": "01a13fa8-0d96-7cb1-9c7b-02849af972b0",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/interaction_surfaces",
+    "session_id": "01a13fa8-8444-7583-8b54-d4f790ef6829",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/interaction_component",
+    "session_id": "01a13fa7-b365-7972-ad66-e4e94bd07c10",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/interaction_motion",
+    "session_id": "01a13fa7-da74-7920-9462-9ab625f52892",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

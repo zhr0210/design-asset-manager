@@ -1,6 +1,6 @@
 import { isKnownLibrarySchemaVersion } from './library-schema-version'
 import type Database from 'better-sqlite3'
-import { enableDownloadJournal } from '../managed-download/download-journal.schema'
+import { enableDownloadJournal } from './legacy-download.schema'
 
 export const INTAKE_RECOVERY_SQL = `CREATE TABLE image_variant_intents (
   request_id TEXT PRIMARY KEY,

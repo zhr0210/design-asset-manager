@@ -1,0 +1,16 @@
+[
+  {
+    "agent": "/root/agent_resources_sync",
+    "session_id": "01a1429e-95da-7390-8c06-60ce34e14f8f",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/agent_resources_scope",
+    "session_id": "01a1429e-6ed4-7f21-aa17-94a193bdc371",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

@@ -1,19 +1,13 @@
 # Terminal Package-Copy Deletion Evidence Is Pruned After Result And Startup Closure
 
-Minimal **Terminal Package-Copy Deletion Evidence** created by ADR 0245 or ADR 0249 is not a permanent deletion history. After ADR 0254 Physical Reclaim Completed or ADR 0255 Physical Reclaim Completed As Shared, it becomes eligible for pruning only when the completion result has been acknowledged/left or reached its 24-hour expiry and no active transaction, recovery result, safety gate, Physical Reclaim Pending/backoff/lease, owner transition or idempotency dependency still references the deleted target.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-ADR 0257 summary projection may acknowledge several constituent results at once, but it does not merge this eligibility. Each target independently closes its result and later startup evidence; one blocked or newer target cannot retain or prune another target's terminal record.
+## Decision
 
-ADR 0258 permits one usable acknowledgement of an authoritative large-summary header snapshot to satisfy result closure for all constituents in that snapshot, including unloaded detail pages. Paging through rows is not a closure prerequisite; every target still retains its independent dependency and later clean-startup closure checks.
+Minimal **Terminal Package-Copy Deletion Evidence** created by ADR 0245 or ADR 0249 is not a permanent deletion history.
 
-Eligibility also requires one successful **Deletion Evidence Closure Check** during a later clean host startup after physical completion. The check must prove from current authoritative owner generations that the deleted target reference and all recovery gates remain absent, no interrupted transaction can still reconcile against the evidence and current managed-object ownership is internally consistent. Missing, corrupt, contradictory or unassessable evidence retains the terminal record rather than guessing closure.
+## Detailed contract and provenance
 
-After both gates pass, the host atomically prunes the target's terminal deletion evidence and obsolete per-target reconciliation journal. It writes no long-lived tombstone, deletion Activity History or per-target pruning marker. If the pruning transaction is interrupted, atomicity leaves either the complete evidence or the complete pruned state; a later startup may safely repeat the closure check without deleting package bytes or owner references.
+详细状态、交互、数值边界和例外的唯一正文为[存储清理结果与可访问导航规格](../product/specs/storage-review.md#adr-0256)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-For ADR 0255 Completed As Shared, pruning removes only the deleted target's evidence. Every current owner/reference and shared managed-byte object remains unchanged and continues under its own lifecycle. Its later last-owner transition owns any physical cleanup and never needs the pruned target's authorization.
-
-A later verified download, reacquisition or import of the same package creates a new Verified Managed Package Copy identity, owner/decision state and current install/Keep/delete review. It inherits no old scan, confirmation, authorization, failure, result or deletion state. Existing currently owned verified content may still be safely deduplicated under fresh owner accounting, but physical byte reuse never reuses the old managed-copy identity.
-
-Closure checking is local, bounded and silent. It creates no startup modal, notification, badge, user action, network request, support report or telemetry. Until eligible, the minimal evidence remains device-local and path-free; after pruning, no per-target record remains in Full Library Backup, export/merge/sync, telemetry, publisher feedback or support logs.
-
-Before pruning, the record contains only opaque target, terminal transaction, owner-generation and completion identities plus dependency/closure classes. It contains no path, payload, package-name confirmation, credentials, user content or attention history. The current project has no Verified Managed Package Copy deletion journal, physical-reclaim completion or startup closure compactor. This ADR changes documentation only: it checks/prunes/reacquires no real record or bytes, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

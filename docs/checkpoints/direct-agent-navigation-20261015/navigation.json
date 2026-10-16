@@ -1,0 +1,222 @@
+{
+  "ok": true,
+  "snapshot": {
+    "head": "a7b7803fcee9",
+    "dirty": true
+  },
+  "query": {
+    "provided": true,
+    "explicitRoute": null
+  },
+  "routes": [
+    {
+      "id": "agent-governance",
+      "summary": "Agent guidance, current task ledger, context routing, ADR routing and repository governance checks.",
+      "score": 130,
+      "matched": [
+        "agent context",
+        "context router",
+        "adr",
+        "governance"
+      ],
+      "modules": [
+        "electron-main",
+        "renderer",
+        "preload",
+        "shared",
+        "ai-worker"
+      ]
+    }
+  ],
+  "documentation": [
+    "docs/subsystems/engineering.md"
+  ],
+  "contractReferences": [],
+  "states": [
+    {
+      "route": "agent-governance",
+      "reality": "Current Implementation",
+      "summary": "AGENTS provides stable project guidance; TASK is consulted for task continuity. The Router and checks provide optional bounded navigation evidence.",
+      "evidence": [
+        "AGENTS.md",
+        "TASK.md",
+        ".codeindex/module-map.json",
+        "scripts/agent-context-router.mjs",
+        "scripts/agent-context-router.test.mjs",
+        "scripts/check-agent-context.py"
+      ]
+    }
+  ],
+  "firstRead": [
+    {
+      "path": "AGENTS.md",
+      "role": "interface",
+      "reality": "Current Implementation",
+      "reason": "Stable project guidance and risk boundaries.",
+      "read_mode": "full",
+      "routeId": "agent-governance",
+      "estimatedTokens": 1145,
+      "required": true
+    }
+  ],
+  "validations": [
+    "npm run test-agent-context-router",
+    "npm run context:check",
+    "python3 scripts/check-adr-router.py",
+    "python3 scripts/check-agent-context.py"
+  ],
+  "feedback": {
+    "problems": [],
+    "lessons": [
+      {
+        "id": "DAM-L007",
+        "group": "common",
+        "status": "active",
+        "check": "修改上下文或反馈输出时，用积累后的长记录验证总预算；检查完整检查不被截断、延后数量可见、必需源码仍可读，不能只验证初始少量记录。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l007",
+        "line": 15,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 1,
+          "events": 1,
+          "severity": "ordinary",
+          "rule": "scripts/development-feedback.test.mjs"
+        },
+        "matchedRoutes": [
+          "agent-governance"
+        ]
+      },
+      {
+        "id": "DAM-L001",
+        "group": "common",
+        "status": "active",
+        "check": "验证记录绑定当前候选、客户端和实际环境，分别列通过、失败、未运行与阻塞；未复现或未验根因/修复效果的问题不能关闭，旧证据不转记到新候选。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l001",
+        "line": 28,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#candidate-identity"
+        },
+        "matchedRoutes": [
+          "*"
+        ]
+      },
+      {
+        "id": "DAM-L008",
+        "group": "integration",
+        "status": "active",
+        "check": "改变模块导航时对照正式调用者、Client/Host链和模块README；旧摘要与当前源码冲突就修正所属索引，区分源码接线与实际模型/用户资格，不复制另一份完成状态。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l008",
+        "line": 82,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 1,
+          "events": 2,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#semantic-review"
+        },
+        "matchedRoutes": [
+          "agent-governance"
+        ]
+      },
+      {
+        "id": "DAM-L006",
+        "group": "integration",
+        "status": "active",
+        "check": "删除或移动初始化调用时，核对前后注册段、启动/退出顺序与实际消费者；执行注册保护并从正式入口验证受影响功能，不能仅以无残留文本作为完成证明。",
+        "source": "LESSONS.md",
+        "anchor": "dam-l006",
+        "line": 107,
+        "promotion": {
+          "state": "promoted",
+          "distinctDates": 0,
+          "events": 0,
+          "severity": "ordinary",
+          "rule": "docs/code-standards.md#engineering-scope"
+        },
+        "matchedRoutes": [
+          "agent-governance"
+        ]
+      }
+    ],
+    "deferred": 0,
+    "writeBack": {
+      "problems": "docs/agents/DEVELOPMENT-PROBLEMS.md",
+      "lessons": "LESSONS.md",
+      "currentTask": "TASK.md",
+      "responsibilities": "docs/tasks/TASK-REGISTRY.md",
+      "capabilityEvidence": "docs/handoff/CURRENT-STATE.md",
+      "evidence": "Current checkpoint",
+      "contracts": "Module README/spec; DESIGN.md"
+    },
+    "scope": "Checks, not task authorization."
+  },
+  "avoid": [
+    "Do not load the complete module catalog, all ADRs or CONTEXT.md into an ordinary task context.",
+    "Do not let index claims override current code, callers and tests."
+  ],
+  "warnings": [
+    "The Router answers where to inspect first; it does not prove behavior without the returned code and executable evidence.",
+    "TASK is required for matched continuity or recovery work; archived checkpoints are historical evidence, never additional task authorization.",
+    "Budget deferred 3 context item(s); use --expand only if the first pass is insufficient.",
+    "Validation limit deferred 1 additional command(s)."
+  ],
+  "deferred": {
+    "context": [
+      {
+        "path": "scripts/agent-context-router.mjs",
+        "anchor": "export function buildContextPack",
+        "role": "implementation",
+        "reality": "Current Implementation",
+        "reason": "Deterministic route, budget and live repository validation Implementation.",
+        "read_mode": "symbol",
+        "routeId": "agent-governance",
+        "estimatedTokens": 22862,
+        "required": false
+      },
+      {
+        "path": ".codeindex/module-map.json",
+        "anchor": "\"routes\"",
+        "role": "contract",
+        "reality": "Current Implementation",
+        "reason": "Versioned human-maintained semantic catalog; query it through the Router rather than loading it wholesale.",
+        "read_mode": "symbol",
+        "routeId": "agent-governance",
+        "estimatedTokens": 53272,
+        "required": false
+      },
+      {
+        "path": "scripts/agent-context-router.test.mjs",
+        "role": "test",
+        "reality": "Current Implementation",
+        "reason": "Router Interface and drift-defense evidence.",
+        "read_mode": "full",
+        "routeId": "agent-governance",
+        "estimatedTokens": 25966,
+        "required": false
+      }
+    ],
+    "validations": [
+      "python3 scripts/check-docs-sync.py"
+    ]
+  },
+  "budget": {
+    "basis": "full-file-conservative",
+    "bytesPerToken": 3,
+    "selectedFiles": 1,
+    "estimatedFileTokens": 1145,
+    "estimatedMetadataTokens": 1852,
+    "outputEstimatedTokens": 1852,
+    "maxMetadataTokens": 4000,
+    "estimatedTokens": 2997,
+    "maxFiles": 7,
+    "maxEstimatedTokens": 16000,
+    "truncated": true
+  }
+}

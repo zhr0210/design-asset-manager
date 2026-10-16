@@ -1,0 +1,30 @@
+[
+  {
+    "path": "AGENTS.md",
+    "sha256": "c8ac913b2a29678912bdc71c167c9db03585b794e92c68190acf86415ef77aa4"
+  },
+  {
+    "path": "TASK.md",
+    "sha256": "016eb79e3cf6062a17713d1680d462bd91cde590f16aac015a7a844f1b38feea"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "sha256": "12ab098f4111d27a045260753b26d0b1e34c939edf80360a42312859f70063fb"
+  },
+  {
+    "path": "docs/subsystems/README.md",
+    "sha256": "69f147893c8b0753314e6922a03974481aef0a14f797879ea77263cfa0679770"
+  },
+  {
+    "path": "docs/subsystems/agent-resources.md",
+    "sha256": "6ea3389a02707eb9560e9f6d23f088fe24c020a05ecfe48fb5636de66a49c2d8"
+  },
+  {
+    "path": "docs/product/CAPABILITY-SCOPE.md",
+    "sha256": "1d516f0fdf8e98e9c9a950c146f6b23214bbdc2abcd58816a76effe702726fd8"
+  },
+  {
+    "path": ".codeindex/documentation-map.json",
+    "sha256": "3eb250c0e2b63d6ef5c19c17c509da553a146639e16e0805475488805842ab2e"
+  }
+]

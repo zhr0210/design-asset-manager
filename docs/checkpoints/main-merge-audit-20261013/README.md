@@ -1,5 +1,7 @@
 # main合并完整性与相关功能验证
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 对象：本地main的56ee968，运行构建dam-8816c1fa125661e6；来源B提交63dc760。当前审查只修复权限基线登记和反例测试，不修改产品实现、设计规范、CSS、用户原件或AI/OCR设置。
 
 ## 结果
@@ -20,4 +22,4 @@
 
 未发现本次Git合并导致的产品异常，不等于全部产品无bug。普通start:desktop仍使用原Electron工作窗，原生B通过start:work-b启用；原生代码已在main，不是默认入口自动切换。普通桌面窗口全UI矩阵、AI/OCR/全部provider、物理取色拖动、多屏/Spaces/高帧率及Dropover覆盖层视觉不在本轮关闭资格。
 
-Apple新颜色、生成CSS、明显Liquid Glass和220×240紧凑布局仍待应用，design:check差异继续登记DESIGN-APPLY；不把待实施设计误判为合并丢失。Eagle分支已删除，main既有Eagle功能清理仍是后续任务。没有push或发布。
+Apple新颜色、生成CSS、明显Liquid Glass和220×240紧凑布局仍待应用，design:check差异继续登记DESIGN-APPLY；不把待实施设计误判为合并丢失。没有push或发布。

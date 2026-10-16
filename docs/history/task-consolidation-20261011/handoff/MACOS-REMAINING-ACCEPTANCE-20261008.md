@@ -1,9 +1,10 @@
 # 整合后补充：开发治理仍有阻塞
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 从GitHub main继续，先查[源码整合记录](GITHUB-CONSOLIDATION-20261008.md)和
 [当前候选检查回执](../../../handoff/GITHUB-CONSOLIDATION-CHECKS-20261008.json)。全量治理尚未通过；
 Windows旧模型存储tracer、旧UI/目录治理断言和Python测试环境须逐项核对。
-此清单中的WC/T23/A–F、Mac原生和Eagle验收状态不变，Git合并不关闭父级。
 
 ---
 
@@ -70,7 +71,6 @@ Windows旧模型存储tracer、旧UI/目录治理断言和Python测试环境须�
 证据入口：[A](../../../handoff/AI-CORE-20261006.md)、[B](../../../handoff/MODEL-MANAGEMENT-20261006.md)、
 [底座无界面收尾](../../../handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md)、[T23](LOCAL-AI-T23-BROWSER-20261007.md)、
 [C续验](../../../handoff/SEARCH-C-COVERAGE-20261008.md)、[D](../../../handoff/WORK-MODE-D-20261008.md)、
-[E](../../../handoff/EAGLE-E-20261008.md)、[F](../../../handoff/RELEASE-SCALE-F-20261008.md)。
 
 T23原Chrome页压力属于Windows原指定范围，Mac新压力样本可新增平台
 证据，但不能将旧项改成通过。全部Provider、CLIP/WD/RAM++质量、

@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "scope": "scoped",
+  "taskType": {
+    "requested": "documentation",
+    "resolved": "documentation",
+    "focus": "定位唯一正文/决定来源与准确替代范围，不把规格搬成新决定"
+  },
+  "topic": "custom-fields",
+  "candidates": [
+    {
+      "id": "0415",
+      "title": "Typed Custom Fields Are Core Library-Owned Metadata",
+      "path": "docs/adr/0415-typed-custom-fields-are-core-library-owned-metadata.md",
+      "classification": "Supporting",
+      "status": "not-declared",
+      "matchedTopics": [
+        "custom-fields"
+      ],
+      "focusFacets": [
+        "product"
+      ],
+      "referencesToCheck": [
+        "0413",
+        "0414",
+        "0416"
+      ],
+      "moreReferences": 2
+    },
+    {
+      "id": "0416",
+      "title": "Custom Field Values Belong Only To Candidates And Design Assets",
+      "path": "docs/adr/0416-custom-field-values-belong-only-to-candidates-and-design-assets.md",
+      "classification": "Supporting",
+      "status": "not-declared",
+      "matchedTopics": [
+        "custom-fields"
+      ],
+      "focusFacets": [
+        "product"
+      ],
+      "referencesToCheck": [
+        "0415",
+        "0439",
+        "0447"
+      ],
+      "moreReferences": 14
+    },
+    {
+      "id": "0417",
+      "title": "Custom Fields Start With Eight Portable Non-Relational Types",
+      "path": "docs/adr/0417-custom-fields-start-with-eight-portable-non-relational-types.md",
+      "classification": "Supporting",
+      "status": "not-declared",
+      "matchedTopics": [
+        "custom-fields"
+      ],
+      "focusFacets": [
+        "product"
+      ],
+      "referencesToCheck": [
+        "0097",
+        "0181",
+        "0423"
+      ],
+      "moreReferences": 36
+    }
+  ],
+  "totalMatches": 25,
+  "deferred": 22,
+  "topicIndexes": [
+    "docs/adr/indexes/topics/custom-fields.md"
+  ],
+  "limits": {
+    "maxCandidates": 3,
+    "maxOutputBytes": 12000
+  },
+  "note": "Metadata only; read selected ADRs/details next. Type is a reading focus, not an applicability filter. No match is not proof that no decision applies."
+}

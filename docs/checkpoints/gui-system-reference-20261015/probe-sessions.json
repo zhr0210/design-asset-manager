@@ -1,0 +1,23 @@
+[
+  {
+    "agent": "/root/gui_reconnect",
+    "session_id": "01a13f95-4fc1-79b2-8bdf-d2b047289bcc",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/gui_shell_plan",
+    "session_id": "01a13f95-2476-7863-9126-4462e9bac8f7",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  },
+  {
+    "agent": "/root/gui_native_boundary",
+    "session_id": "01a13f95-6bec-7890-8e80-8d5fcbbfc9ab",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "has_final": true
+  }
+]

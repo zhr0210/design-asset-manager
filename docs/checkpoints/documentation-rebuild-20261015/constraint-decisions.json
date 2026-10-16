@@ -1,0 +1,29 @@
+[
+  {
+    "source": "ai-service/core/README.md",
+    "old": "- Treat `model_manager.py` as protected.",
+    "decision": "rewrite-scoped-guarantee-remove-blanket-file-or-folder-ban",
+    "new": "- 可在获批目标内修改model_manager.py；保持本地制品加载、任务/资源拥有者和释放语义，核对实际消费者并运行相关行为测试，不设文件级禁改。",
+    "basis": "Approved engineering autonomy; preserve ownership/result compatibility rather than freeze filenames or all polling."
+  },
+  {
+    "source": "ai-service/utils/README.md",
+    "old": "- Treat `tag_fusion.py` as protected.",
+    "decision": "rewrite-scoped-guarantee-remove-blanket-file-or-folder-ban",
+    "new": "- 可在获批目标内修改tag_fusion.py；保持标签归一/融合契约、人工确认优先与调用方兼容，运行相关行为回归，不设文件级禁改。",
+    "basis": "Approved engineering autonomy; preserve ownership/result compatibility rather than freeze filenames or all polling."
+  },
+  {
+    "source": "src/main/services/README.md",
+    "old": "- Do not change database schema or AI polling semantics from this folder.",
+    "decision": "rewrite-scoped-guarantee-remove-blanket-file-or-folder-ban",
+    "new": "- schema变更通过Host拥有的维护/迁移入口保持事务、备份与兼容；services不能绕过该权威。旧Worker结果同步保持Electron-owned语义，不把poller强加到所有当前Pi/managed能力。",
+    "basis": "Approved engineering autonomy; preserve ownership/result compatibility rather than freeze filenames or all polling."
+  },
+  {
+    "source": "ai-service/workers/README.md",
+    "old": "Treat tag_worker.py as protected",
+    "decision": "remove-blanket-file-ban; retain consumer/compatibility/behavior checks",
+    "basis": "Same approved autonomy; code unchanged."
+  }
+]

@@ -1,5 +1,7 @@
 # 验证计划与执行边界
 
+> 2026-10-14内容清理：停用的外部集成记录已删去，本页仅保留其余历史内容；原功能总数、摘要及验收结论不作为当前构建的统计或资格。
+
 本轮仅运行文档静态检查；所有下列业务/schema语义/selector测试 **NOT_RUN**。JSON能解析、字段引用一致不等于validator执行、数据库事务或模型通过。
 
 ## 可复用入口（源码存在，未运行）
@@ -24,7 +26,6 @@ package命令映射与直接脚本路径见 `evidence/TEST-ENTRY-INVENTORY.json`
 | T04/T05 / L3 | 完整JSON的一项无效；截断JSON同字段看似有效 | 前者新独立配方可部分成功；后者全拒绝；P03旧综合配方行为保持 |
 | T02/T04/T06 / L2–L4 | 16条compatibility-cases，合成v1/v2/v8及未来已分配profile | 旧综合/专用OCR可读，unknown不补造，旧current种子、独立空值、新旧单写正确 |
 | T06 / L2–L3 | 事务前/中/后故障，提交后响应丢失，通知失败 | 全事务回滚或完整提交；查询既有receipt而不是自动再次推理 |
-| T02 / L2–L3 | 未知高schema、Eagle/Legacy、失效lease/session | 零Managed越权DDL/写入，旧Writer不可继续 |
 | T04 / L4 | Inspector/搜索/AI文件夹读取同一projectionRevision | 标签立即可用但confirmed关系未新增；每能力来源准确 |
 
 夹具都是JSON配方与期望，没有模型文本、私有路径或SQLite文件。未来测试应从同一Host小接口驱动，使用临时合成库、生成图片、内存Provider/受控故障，不用真实库补齐这些安全断言。

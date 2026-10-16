@@ -1,0 +1,16 @@
+[
+  {
+    "agent": "/root/agent_resources_scope",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-agent-resources-probe-20261016-eflb2orq\n我想管理AI用的指令、Skills和Hooks，这属于素材库还是插件系统，当前有什么基础？\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  },
+  {
+    "agent": "/root/agent_resources_sync",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "fork_turns": "none",
+    "prompt": "工作区：/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-agent-resources-probe-20261016-eflb2orq\n把资源同步到外部Agent，并在停用时删除它的全部配置，先评估这项方案。\n仅作只读方案评估；只在该工作区内查看，不修改文件、不联网、不运行应用/模型/服务、不再委派。"
+  }
+]

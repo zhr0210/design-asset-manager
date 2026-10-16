@@ -10,7 +10,7 @@ B2 需要把 **全部 Active Control Store 物理 SQLite opener、DDL、读写�
 
 当前有86个 `ActiveLibraryHost` 方法。第3节逐一归入22族，覆盖公开和Main-only方法；bootstrap、两个瞬态只读 opener、锁 SQLite、schema helper、隐式 trigger 和 open reconciliation 在第2/4节补齐。静态发现扫描401个 `src/main` 源文件、101个 lexical matches，只是检索索引：`.prepare()` 也可能是业务准备动作，不能把数量当完整 SQL 或实接证明。完整方法映射与源码 SHA 在本批 `inventory-coverage.json` / `source-access-index.json`；细粒度调用与行号保存在本机三份 analysis。
 
-当前实接分三类：正式 Host 持有的业务连接；同源创建/open/lock/validator helpers（有的文件名含 tracer，仍被正式调用）；未正式接线的 Windows backup qualification 模块。旧 global DB、App Storage、Connected/Eagle、Legacy readonly 和模型存储不迁入 B2。
+当前实接分三类：正式 Host 持有的业务连接；同源创建/open/lock/validator helpers（有的文件名含 tracer，仍被正式调用）；未正式接线的 Windows backup qualification 模块。旧 global DB、App Storage、Connected/Legacy readonly 和模型存储不迁入 B2。
 
 ## 2. 当前 opener、layout 与 authority 分配
 
@@ -73,7 +73,7 @@ B2 需要把 **全部 Active Control Store 物理 SQLite opener、DDL、读写�
 
 `src/main/db/index.ts`没有active dispatch。11个非测试direct getDatabase consumer为旧`ipc/{asset,ai-worker,path-governance}.ipc.ts`、`services/{asset,asset-tag,tag,tag-search,ai-client,ai-task,color-palette}.service.ts`、`services/text-detection/qwen-vl-text-box-provider.ts`；旧registrars没有在current index/Main composition接线。path-migration executor的global setter/reopen与测试/mock另列。不能把global getter改指A而暗中恢复旧channel。Active facade仍拒绝assets:delete/path迁移/prompt reverse。
 
-正式App Storage database用于download history/device/OCR Runtime配置（`index.ts:351–354,572,578`、`app-storage/app-storage.ts`）；active managed_download_intents/chunks却在Library Control Store，二者不得合并。Connected/Eagle独立index/journal、LegacyReadOnlyWorkspace显式readonly旧DB、Model Library/Runtime数据、Pi/provider/credentials、workspace drafts与真实窗口均不迁入A。shared `db/schema.ts`只共享DDL声明，不是global connection dispatch。Source SQL/文件声明被读取不代表实际库、模型或进程已读取/运行。
+正式App Storage database用于download history/device/OCR Runtime配置（`index.ts:351–354,572,578`、`app-storage/app-storage.ts`）；active managed_download_intents/chunks却在Library Control Store，二者不得合并。shared `db/schema.ts`只共享DDL声明，不是global connection dispatch。Source SQL/文件声明被读取不代表实际库、模型或进程已读取/运行。
 
 ## 6. 最小兼容Interface草案（私有、未实现）
 

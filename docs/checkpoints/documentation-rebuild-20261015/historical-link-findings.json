@@ -1,0 +1,791 @@
+{
+  "type": "Classified historical/source candidates; not current functional failures or a full Markdown grammar audit.",
+  "records": [
+    {
+      "source": "docs/design/AI-DISCOVERY-20260920.md",
+      "target": "artifacts/ai-discovery-20260920/report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/AI-DISCOVERY-20260920.md",
+      "target": "artifacts/ai-discovery-20260920/ai-folders-light.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/AI-DISCOVERY-20260920.md",
+      "target": "artifacts/ai-discovery-20260920/ai-folders-dark.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/AI-DISCOVERY-20260920.md",
+      "target": "artifacts/ai-discovery-20260920/ai-folders-compact.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/AI-DISCOVERY-20260920.md",
+      "target": "artifacts/ai-discovery-20260920/ai-details-light.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+      "target": "../../mobbin.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+      "target": "artifacts/gallery-glass-20260914/library.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+      "target": "artifacts/gallery-glass-20260914/work-mode.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+      "target": "artifacts/gallery-glass-20260914/work-mode-dark.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+      "target": "artifacts/ai-folder-palette-20260914/organization-library.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+      "target": "artifacts/ai-folder-palette-20260914/color-menu.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/CORE-EXPERIENCE-PROTOTYPE-20260914.md",
+      "target": "artifacts/ai-folder-palette-20260914/window-palette.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/EDGE-CANVAS-20260915.md",
+      "target": "artifacts/edge-canvas-20260915/neutral-library-manager.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/EDGE-CANVAS-20260915.md",
+      "target": "artifacts/edge-canvas-20260915/formal-side.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/FOCUS-NOTES-20260914.md",
+      "target": "artifacts/focus-notes-20260914/annotated-focus.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/FOCUS-NOTES-20260914.md",
+      "target": "artifacts/focus-notes-20260914/notes-narrow.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/FORMAL-LIBRARY-CANVAS-20260914.md",
+      "target": "artifacts/formal-library-canvas-20260914/formal-library-side.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/FORMAL-LIBRARY-CANVAS-20260914.md",
+      "target": "artifacts/formal-library-canvas-20260914/formal-library-focus.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/prototype-all.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/formal-all.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/prototype-folders.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/formal-folders.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/prototype-focus.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/formal-focus.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/prototype-dark-menu.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/formal-dark-menu.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/electron-side.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GALLERY-PARITY-20260915.md",
+      "target": "artifacts/gallery-parity-20260915/electron-focus.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GLASS-POLISH-20260914.md",
+      "target": "artifacts/glass-polish-20260914/clean-glass.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/GLASS-POLISH-20260914.md",
+      "target": "artifacts/glass-polish-20260914/dark-glass.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/INSPECTOR-FOCUS-20260914.md",
+      "target": "artifacts/inspector-focus-20260914/side-inspector.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/INSPECTOR-FOCUS-20260914.md",
+      "target": "artifacts/inspector-focus-20260914/focus-mode.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/INSPECTOR-INFO-20260920.md",
+      "target": "artifacts/inspector-info-20260920/formal-library-side.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/INSPECTOR-INFO-20260920.md",
+      "target": "artifacts/inspector-info-20260920/inspector-tags-unclipped.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/INSPECTOR-INFO-20260920.md",
+      "target": "artifacts/inspector-info-20260920/inspector-tags-dark.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/INSPECTOR-INFO-20260920.md",
+      "target": "artifacts/inspector-info-20260920/report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/MINIMAL-CANVAS-20260914.md",
+      "target": "../../mobbin.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/MINIMAL-CANVAS-20260914.md",
+      "target": "artifacts/minimal-canvas-20260914/all.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/MINIMAL-CANVAS-20260914.md",
+      "target": "artifacts/minimal-canvas-20260914/folders.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/MINIMAL-CANVAS-20260914.md",
+      "target": "artifacts/minimal-canvas-20260914/dark.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/renderer/components/library/BulkActionDock.tsx",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/renderer/routes/BrowserPage.tsx",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/main/ipc/browser.ipc.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/main/services/browser-preview-injection.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/renderer/routes/Sites.tsx",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/renderer/routes/Search.tsx",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/main/ipc/search.ipc.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/renderer/routes/DownloadQueue.tsx",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/renderer/stores/download.store.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/UI-UX-HANDOFF-20260911.md",
+      "target": "../../src/main/ipc/download.ipc.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/reviews/APP-DESIGN-AUDIT-20261013.md",
+      "target": "../../../src/renderer/components/layout/GlobalNavigationMenu.tsx",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/reviews/APP-DESIGN-AUDIT-20261013.md",
+      "target": "../../../src/shared/workflows/download-status.workflow.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/design/reviews/APP-DESIGN-AUDIT-20261013.md",
+      "target": "../../../src/renderer/routes/DownloadQueue.tsx",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/CURRENT-STATE.md",
+      "target": "../../artifacts/window-candidates/checkpoint.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md",
+      "target": "../../.scratch/local-ai-implementation-20261006/non-ui-validation/validation-final.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md",
+      "target": "../../.scratch/local-ai-implementation-20261006/evidence/protection-non-ui-final.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md",
+      "target": "../../.scratch/local-ai-implementation-20261006/evidence/performance-non-ui-final.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md",
+      "target": "../../.scratch/local-ai-implementation-20261006/cold-cancel-f97a7f87-f340-4a7c-8c9d-9067242fa5ea/result.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md",
+      "target": "../../.scratch/local-ai-implementation-20261006/oom-fault-b683523c-9fa5-43fc-a70c-f0eff45f069e/result.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/LOCAL-AI-NON-UI-CLOSURE-20261007.md",
+      "target": "../../.scratch/local-ai-implementation-20261006/evidence/diagnostics-22bc-frozen.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/handoff/WINDOWS-QUALIFICATION-20261003.md",
+      "target": "../../.scratch/windows-qualification-20261003/computer-use-final.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/ASSET-NOTEBOOKS-20260917.md",
+      "target": "../design/artifacts/asset-notebooks-20260917/notebook-saved.png",
+      "classification": "Historical media not located by exact filename search in repository artifacts/docs",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/DEVELOPMENT-REVIEW-20260907.md",
+      "target": "../../src/renderer/stores/download.store.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/DOWNLOAD-RESTART-RECOVERY-PLAN-20260913.md",
+      "target": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-persistent-download-proposal-20260913-31g1gfjh/verify_journal.py",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/DOWNLOAD-RESTART-RECOVERY-PLAN-20260913.md",
+      "target": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-persistent-download-proposal-20260913-31g1gfjh/verification.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/DOWNLOAD-RESTART-RECOVERY-PLAN-20260913.md",
+      "target": "../../src/main/managed-download/download-journal.schema.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/DOWNLOAD-RESTART-RECOVERY-PLAN-20260913.md",
+      "target": "../../src/main/managed-download/download-journal.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/DOWNLOAD-RESTART-RECOVERY-PLAN-20260913.md",
+      "target": "../../scripts/persistent-download.test.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/FLORENCE-EVALUATION-20260920.md",
+      "target": "FLORENCE-EVALUATION-20260920.manifest.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/FLORENCE-EVALUATION-20260920.md",
+      "target": "evidence/florence-20260923/manifest.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/FLORENCE-EVALUATION-20260920.md",
+      "target": "evidence/florence-20260923/florence-cpu.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/FLORENCE-EVALUATION-20260920.md",
+      "target": "evidence/florence-20260923/florence-mps.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/FLORENCE-EVALUATION-20260920.md",
+      "target": "evidence/florence-20260923/florence-od-verified-cpu.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/FLORENCE-EVALUATION-20260920.md",
+      "target": "evidence/florence-20260923/florence-od-verified-mps.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/INTAKE-RECOVERY-SPACE-MANAGEMENT-20260913.md",
+      "target": "../../src/main/managed-download/download-journal.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LIBRARY-ORGANIZATION-20260919.md",
+      "target": "../design/artifacts/library-organization-20260919/folders.png",
+      "classification": "Historical media not located by exact filename search in repository artifacts/docs",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LIBRARY-ORGANIZATION-20260919.md",
+      "target": "../design/artifacts/library-organization-20260919/palette.png",
+      "classification": "Historical media not located by exact filename search in repository artifacts/docs",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-ACCEPTANCE-20260920.md",
+      "target": "../design/artifacts/local-ai-acceptance-20260920/successful-run.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-ACCEPTANCE-20260920.md",
+      "target": "../design/artifacts/local-ai-acceptance-20260920/stability-recheck.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-ACCEPTANCE-20260920.md",
+      "target": "../design/artifacts/local-ai-acceptance-20260920/real-retrieval-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-ACCEPTANCE-20260920.md",
+      "target": "../design/artifacts/local-ai-acceptance-20260920/real-result-folder-and-prompt-search.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-EVALUATION-20260920.md",
+      "target": "LOCAL-AI-EVALUATION-20260920.manifest.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-EVALUATION-20260920.md",
+      "target": "../design/artifacts/local-ai-evaluation-20260920/baseline-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-EVALUATION-20260920.md",
+      "target": "../design/artifacts/local-ai-evaluation-20260920/candidate-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-AI-EVALUATION-20260920.md",
+      "target": "../design/artifacts/local-ai-evaluation-20260920/experiment-status.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/01-desktop-client-expand.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/02-dual-launch-local-host.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/03-picker-library-lifecycle.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/04-copy-intake-gallery-discovery.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/05-folders-palettes-copy.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/06-tags-smart-folders.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/07-trash-intake-recovery.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/08-description-recovery-draft.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/09-notebook-draft-adoption.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/10-workset-content-recovery.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/11-native-work-windows-card.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/12-image-tools-derived-save.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/13-settings-model-summary.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/14-account-provider-lifecycle.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/15-visual-tag-ai-workflow.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/16-ocr-run-correct-recover.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/17-independent-download-workflow.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/19-legacy-readonly-discovery.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/20-global-transition-shutdown.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/21-client-contract-fault-closure.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/22-browser-user-path-acceptance.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/LOCAL-DUAL-CLIENT-TICKETS.md",
+      "target": "../../.scratch/local-dual-client/issues/23-native-system-acceptance.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "QWEN3-VL-8B-EVALUATION-20260924.manifest.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/2b-generated-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/2b-real-eight-metrics.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/2b-real-eight-4096-metrics.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/2b-ui-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/2b-ui-real-local-ai-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/8b-generated-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/8b-real-eight-metrics.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/8b-real-eight-reverse-metrics.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/8b-ui-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/QWEN3-VL-REAL-COMPARISON-20260924.md",
+      "target": "evidence/qwen-comparison-20260924/8b-ui-real-local-ai-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/RAPIDOCR-EVALUATION-20260920.md",
+      "target": "RAPIDOCR-EVALUATION-20260920.manifest.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/RAPIDOCR-EVALUATION-20260920.md",
+      "target": "../design/artifacts/dedicated-ocr-20260920/model-report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/RAPIDOCR-EVALUATION-20260920.md",
+      "target": "../design/artifacts/dedicated-ocr-20260920/report.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/RAPIDOCR-EVALUATION-20260920.md",
+      "target": "../design/artifacts/dedicated-ocr-20260920/dedicated-ocr-corrected.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/RAPIDOCR-EVALUATION-20260920.md",
+      "target": "../design/artifacts/dedicated-ocr-20260920/dedicated-ocr-empty.png",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/REFACTOR-FUNCTION-MAP-20260911.md",
+      "target": "../../src/main/ipc/search.ipc.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/REFACTOR-FUNCTION-MAP-20260911.md",
+      "target": "../../src/main/ipc/download.ipc.ts",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/REFACTOR-FUNCTION-MAP-20260911.md",
+      "target": "../../src/main/managed-download/README.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/REFACTOR-FUNCTION-MAP-20260911.md",
+      "target": "../../src/main/managed-download/README.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/WEB-COLLECTION-RETIREMENT-20260913.md",
+      "target": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-web-retirement-vwg7hgmy/source-before-removal.tar.gz",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/WEB-COLLECTION-RETIREMENT-20260913.md",
+      "target": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-web-retirement-vwg7hgmy/removal-audit.json",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "docs/product/WEB-COLLECTION-RETIREMENT-20260913.md",
+      "target": "/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-web-retirement-vwg7hgmy/staged.patch",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    },
+    {
+      "source": "src/renderer/routes/work-mode-prototype/README.md",
+      "target": "../../../../mobbin.md",
+      "classification": "Target missing at original relative location; current location/cause not established by the initial scan",
+      "disposition": "preserve dated source; current authority routes to owning subsystem/specification; no fabricated replacement"
+    }
+  ]
+}

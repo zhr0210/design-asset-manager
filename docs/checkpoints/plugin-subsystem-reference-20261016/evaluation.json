@@ -1,0 +1,23 @@
+{
+  "scope": "Only planned subsystem documentation and indexing; two fixed-candidate read-only evaluations. No plugin/runtime/MCP implementation or product qualification.",
+  "cases": {
+    "plugin_doc_entry": {
+      "status": "通过",
+      "find": "自主从正常入口到plugin-system目标正文，再读0484/0154细则、旧讨论、产品基准与Host/AI/Client源码。",
+      "apply": "明确可复用内部基础但公共SDK/可安装平台/MCP未交付；分清出站Client、入站Server和隔离运行时，七贡献面/市场非MVP前置。",
+      "help": "列一个命名专业分析能力与真实外部工具的分步闭环，指出旧稿配色/采集建议与现行核心/退休边界，未误恢复旧功能。",
+      "limits": "只读静态检索不等完整实现不存在证明或真实互通验证；候选版本/技术选型留未来具体任务。"
+    },
+    "plugin_doc_boundary": {
+      "status": "通过",
+      "find": "直接读取新目标正文、0484/0483与0155/0156/0158/0160原文，核对扩展细则与Client。",
+      "apply": "拒绝把主窗口完整Client作为SDK；Host/Library/AI/GUI边界、包与模型/Runtime身份、安装/激活/信任分别处理。",
+      "help": "具体列授权/输入/提案/隔离、升级权限差异、撤权/卸载等待终态和用户内容保留，提供未来真实验证路径。",
+      "limits": "API字段和首批面仍是目标/候选；未执行安装/隔离/第三方代码或测试。"
+    }
+  },
+  "classification": "Runtime topics=5; planned_subsystems=1 status target-only; guides=3. New classification behavior tests reject planned entry without metadata/visible state or when passed as current runtime. Existing bounded route includes planned system plus product scope and Library; max3 unchanged.",
+  "integrity": "2639first-party text candidate unchanged. gpt-6.1-sol low fork none, natural brief tasks only plus workspace/read-only limits; no answers/lookup hints, no hidden reasoning collected. TASK/history/research/checkpoints/prior answers/Git and user/runtime/secret data excluded.",
+  "validation": "checks.json:10documentation-governance tests plus268route evaluations and10feedback tests, docs/context/ADR/sync/local-link checks. Test modifications were executed; no new product test or real UI/model/installation run.",
+  "limits": "Results prove two current document-consumption scenarios only; actualSDK/version/interoperability/isolation remains unverified. Original product/ADR contracts unchanged except additive navigation pointers."
+}

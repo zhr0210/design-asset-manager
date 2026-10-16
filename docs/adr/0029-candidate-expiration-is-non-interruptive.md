@@ -1,12 +1,13 @@
 # Candidate Expiration Is Non-Interruptive
 
-Asset candidates nearing expiration should show a Retention Warning in the
-Candidate Review Page and the right-side Asset Inspector, including remaining
-days before cleanup. Users should be able to extend retention, delete
-immediately, or restore rejected candidates to pending review from both single
-candidate and batch contexts.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The app should not show interruptive expiration notifications by default. The
-dedicated Capture Inbox entry should carry a count badge for candidates that
-need attention, keeping cleanup visible without disrupting normal asset
-browsing or review work.
+## Decision
+
+Asset candidates nearing expiration should show a Retention Warning in the Candidate Review Page and the right-side Asset Inspector, including remaining days before cleanup.
+
+## Detailed contract and provenance
+
+详细状态、交互、数值边界和例外的唯一正文为[工作台与导航规格](../product/specs/workspace.md#adr-0029)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/asset-workspace.md)，当前资格只查CURRENT-STATE。
+
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。

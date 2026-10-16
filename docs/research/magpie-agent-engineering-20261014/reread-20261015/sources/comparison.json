@@ -1,0 +1,162 @@
+{
+  "old_sha": "2c18c697c2cc2b98677c1fa41314559361612f71",
+  "new_sha": "8b89b2e36c4ae5b98e6672e86ec0ab1cdd7af77f",
+  "files": [
+    {
+      "path": ".github/ui-preview/.gitignore",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/ui-preview/README.md",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/ui-preview/cursor.js",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/ui-preview/package.json",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/ui-preview/publish.mjs",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/ui-preview/record.mjs",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/ui-preview/run.sh",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/ui-preview/seed.mjs",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": ".github/workflows/docker.yml",
+      "comparison": "unchanged"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "comparison": "changed"
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "comparison": "changed"
+    },
+    {
+      "path": ".github/workflows/ui-preview.yml",
+      "comparison": "unchanged"
+    },
+    {
+      "path": "AGENTS.md",
+      "comparison": "unchanged"
+    },
+    {
+      "path": "CLAUDE.md",
+      "comparison": "unchanged"
+    },
+    {
+      "path": "Dockerfile",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": "LESSONS.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "LICENSE",
+      "comparison": "unchanged"
+    },
+    {
+      "path": "Makefile",
+      "comparison": "unchanged"
+    },
+    {
+      "path": "README.md",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": "docs/code-standards.md",
+      "comparison": "unchanged"
+    },
+    {
+      "path": "docs/contributors.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/README.md",
+      "comparison": "unchanged"
+    },
+    {
+      "path": "docs/subsystems/agent-wiring.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/claude-subscription-bridge.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/gateway-middleware.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/gateway-routing.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/gateway-sessions.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/gui-shell.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/library.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/plugin-runtime.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/provider-plugins.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/providers-accounts.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "docs/subsystems/sync-backup.md",
+      "comparison": "changed"
+    },
+    {
+      "path": "go.mod",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": "internal/gui/tests/README.md",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": "internal/testenv/testenv.go",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": "internal/testenv/offline_test.go",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": "internal/provider/migrate_notice_test.go",
+      "comparison": "newly-inspected"
+    },
+    {
+      "path": "internal/pluginrt/pluginrt_test.go",
+      "comparison": "newly-inspected"
+    }
+  ]
+}

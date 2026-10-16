@@ -1,7 +1,7 @@
 interface Grant { owner: string; generation: string; purpose: string; expires: number }
 const rawReceiptCommands = new Set([
   'library:create:confirm','library:add:dispatch','image-tools:save','image-tools:discard',
-  'download:enqueue','download:discard','ai-connection:confirm-validation','ai-connection:discard-validation',
+  'ai-connection:confirm-validation','ai-connection:discard-validation',
   'background-ocr:confirm','background-ocr:discard','asset-ocr:run','tag-decision:confirm','tag-decision:discard',
   'background-analysis:confirm','background-analysis:confirm-execution','background-analysis:discard','basic-analysis:run','basic-analysis:discard','tag-batch:run','tag-batch:discard',
   'tag-execution:run','tag-execution:discard-review','independent-tags:confirm','visual-ai:run','visual-ai:discard-review'

@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "command": [
+        "python3",
+        "scripts/check-documentation.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"scope\": \"Structure/source preservation only; no product, UI, model or native acceptance.\",\n  \"owned_documents_checked\": 165,\n  \"subsystems\": 5,\n  \"planned_subsystems\": 2,\n  \"guides\": 3,\n  \"task_routes\": 20,\n  \"decision_sources\": 493,\n  \"migrated_paragraphs\": 0,\n  \"migration_assessed\": false,\n  \"glossary_definitions\": 1410,\n  \"errors\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check-agent-context.py"
+      ],
+      "exit_code": 0,
+      "stdout": "[OK] AGENTS.md\n[OK] TASK.md\n[OK] .codeindex/module-map.json\n[OK] .codeindex/module-map.schema.json\n[OK] .codeindex/forbidden-paths.json\n[OK] .codeindex/tests-map.json\n[OK] scripts/agent-context-router.mjs\n[OK] scripts/agent-context-router.test.mjs\n[OK] Tracked first-party source ownership 807/807 files\n[PASS] Agent context check passed\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check-adr-router.py"
+      ],
+      "exit_code": 0,
+      "stdout": "[PASS] ADR router validation passed\n493 ADRs: 89 Core, 200 Supporting, 195 Spec-candidate, 9 Historical\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check-docs-sync.py",
+        "--paths-file",
+        "docs/checkpoints/ai-execution-boundaries-20261016/paths.json",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"affected\": {},\n  \"unmapped\": [],\n  \"errors\": [],\n  \"scope\": \"Explicit candidate only; owning-doc changes/declarations require semantic review.\",\n  \"assessed\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "local_links",
+        "docs/checkpoints/ai-execution-boundaries-20261016/README.md"
+      ],
+      "exit_code": 0,
+      "errors": []
+    }
+  ]
+}

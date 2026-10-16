@@ -30,7 +30,7 @@ Main内部 `managed-original-read.ts` 仅在Host持有当前Library lease时，�
 不接受Renderer路径；拒绝越界、符号链接、非普通文件、额外硬链接及超限。
 有界读取前后核对文件/目录身份、素材绑定和Capture记录的源SHA-256。读取
 指纹仅由Main保存，save再次验证；原件被替换或改动后，旧receipt不能保存。
-该内部读取方法没有新增Preload channel，也不接到Eagle或Reference来源。
+该内部读取方法没有新增Preload channel，也不接到Reference来源。
 
 save消费五分钟单次receipt，绑定窗口、Library identity/generation、素材
 revision、预览generation和冻结输出。原生卡片仅能处理当前素材；换图/关窗/

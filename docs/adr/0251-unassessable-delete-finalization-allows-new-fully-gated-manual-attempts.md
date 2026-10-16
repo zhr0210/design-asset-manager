@@ -1,15 +1,13 @@
 # Unassessable Delete Finalization Allows New Fully Gated Manual Attempts
 
-When ADR 0249 times out or rolls back, or ADR 0250 recovers an interrupted finalization as gated or unprovable, the ADR 0247 target enters **Fresh Finalization Review Required**. No old scan, typed package name, renderer state, accepted authorization, transaction generation or recovered-result card re-enables Finalize Unassessable Recovery Delete. The neutral safety gate remains authoritative until the user completes the current evidence workflow again.
+Decision class: Spec-candidate（详细契约已提炼，决定效力未取消）。
 
-The user must explicitly run a new ADR 0247 Recheck Delete Reconciliation Evidence and Repair Delete Reconciliation Record against the latest target, owner and journal generations. If those actions now prove the old recovery-delete outcome, ordinary ADR 0246 resolution applies and no finalization is needed. Only if the latest bounded recheck/repair remains unassessable may the user begin ADR 0248's new complete owner scan, exact-name confirmation and final host revalidation.
+## Decision
 
-There is no lifetime attempt limit, hidden cooldown or permanent lockout for separately authorized manual finalizations. A fixed cap could strand owner-proven unneeded bytes after a transient process, volume or storage failure. This does not grant retry authority: every attempt receives new evidence and consent, and no timeout, crash, low-disk condition, restart, renderer reopen or repeated failure automatically schedules or starts another scan, repair, confirmation or transaction.
+When ADR 0249 times out or rolls back, or ADR 0250 recovers an interrupted finalization as gated or unprovable, the ADR 0247 target enters **Fresh Finalization Review Required**.
 
-At most one ADR 0248 review/finalization transaction may be active host-wide for the exact target. A target-scoped generation/transaction lease rejects duplicate submissions and makes other windows read-only observers of the current state. Ordinary button debouncing and duplicate-request rejection enforce that single attempt but are not a cooldown. Distinct targets may proceed independently when their owner stores, volumes and transaction evidence prove safe separation.
+## Detailed contract and provenance
 
-While Fresh Finalization Review Required remains, Storage Management shows only the latest path-free finalization failure class and the next required action. A new failure atomically replaces the previous class rather than appending an attempt record. Proven recovery, terminal deletion or target retirement clears it. The app keeps no cumulative attempt count, failure timeline, long-lived Activity History entry, notification badge or support/publisher report.
+详细状态、交互、数值边界和例外的唯一正文为[模型存储与清理恢复规格](../product/specs/model-storage-lifecycle.md#adr-0251)。此处保留取舍索引；具体机制见[所属子系统](../subsystems/model-library.md)，当前资格只查CURRENT-STATE。
 
-The latest-failure state retains only opaque target, neutral-gate and last-attempt generation, typed failure/recovery class and last terminal time needed to prevent duplicate reuse. It contains no typed package-name content, scan payload, paths, bytes, credentials, user content or attention history and is excluded from Full Library Backup, export/merge/sync, telemetry, publisher feedback and support logs.
-
-The current Runtime Package/session implementation has no neutral recovery-delete gate, finalization review generation, host-wide target lease or latest-only finalization failure state. This ADR changes documentation only: it retries/scans/repairs/finalizes no real package copy, reads no runtime database/package/cache/model/asset/private state and changes no public IPC/schema/AI Worker API.
+本次只整理文档，未宣称该能力已实现。原文与全部段落身份保存在[迁移检查点](../checkpoints/documentation-rebuild-20261015/README.md)，映射见adr-migration.json；来源上下文与有效能力要求在规格中分开。
