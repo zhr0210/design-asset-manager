@@ -1,3 +1,6 @@
+import {applyWorkSetRetirementSchema} from './work-set-retirement.schema'
+import {readWorkSets,writeWorkSet as persistWorkSet} from './work-sets'
+import {validateWorkWrite} from '../../shared/contracts/work-set.contract'
 import {applyWorkMediaSchema} from '../work-mode/work-media.schema'
 import {validateWorkScope,workId} from '../../shared/contracts/work-set.contract'
 import { ActiveLibraryHostError, type ActiveLibraryHost, type ActiveLibraryHostErrorCode, type ActiveLibraryHostState } from '../../shared/contracts/active-library.contract'
@@ -187,10 +190,34 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
     return readBackgroundAnalysis(active, input)
   })
 
+  const writeWorkSet:ActiveLibraryHost['writeWorkSet']=async(input,device,layout)=>{
+    const request=validateWorkWrite(input)
+    const needsUpgrade=await access.run(active=>Number(active.database.pragma('user_version',{simple:true}))<16)
+    if(!needsUpgrade)return access.run(active=>persistWorkSet(active,request,device,layout))
+    return maintain(null,async(active,prepareBackup)=>{
+      const check=()=>{
+        if(!isCurrent(active)||active.identity!==request.libraryIdentity||active.generation!==request.generation||active.notebookSession!==request.sessionToken)throw access.hostError('library-generation-conflict')
+        const catalog=readWorkSets(active,request,device),command=request.command
+        if(command.kind!=='create'&&!catalog.sets.some(set=>set.id===command.id&&set.revision===command.expectedRevision))throw new ActiveLibraryHostError('work-set-conflict','工作集已变化，未执行迁移，请重新核对。')
+        return catalog
+      }
+      const prior=check()
+      if(!prior.requiresUpgrade)return persistWorkSet(active,request,device,layout)
+      if(!request.allowUpgrade)throw new ActiveLibraryHostError('work-set-upgrade-required','确认升级至 v16将移除工作集历史备注和用色，保留素材笔记、独立色板和原件；旧版应用无法打开。')
+      const backup=await prepareBackup(()=>{check()})
+      return commit(active,backup,()=>{
+        check();const version=Number(active.database.pragma('user_version',{simple:true}))
+        applyWorkSetRetirementSchema(active.database)
+        if(version<10)seedTagCurrent(access.executionBinding(active))
+        access.hooks?.afterDdl?.();assertLibraryDataSchema(active.database)
+        const saved=persistWorkSet(active,request,device,layout);access.hooks?.beforeCommit?.();return saved
+      })
+    })
+  }
   const enableWorkMedia:ActiveLibraryHost['enableWorkMedia']=input=>maintain(null,async(active,prepareBackup)=>{
     const scope=validateWorkScope({libraryIdentity:input.libraryIdentity,generation:input.generation})
     const check=()=>{if(!isCurrent(active)||active.identity!==scope.libraryIdentity||active.generation!==scope.generation||active.notebookSession!==workId(input.sessionToken))throw access.hostError('library-generation-conflict')}
-    check();const version=Number(active.database.pragma('user_version',{simple:true}));if(version===15)return
+    check();const version=Number(active.database.pragma('user_version',{simple:true}));if(version>=15)return
     if(input.allowUpgrade!==true||input.expectedSchemaVersion!==version)throw new ActiveLibraryHostError('work-set-upgrade-required','请核对并确认视频参考存储升级至 v15；旧版应用将无法打开此库。')
     const backup=await prepareBackup(check)
     await commit(active,backup,()=>{check();applyWorkMediaSchema(active.database);if(version<10)seedTagCurrent(access.executionBinding(active));access.hooks?.afterDdl?.();assertLibraryDataSchema(active.database);access.hooks?.beforeCommit?.()})
@@ -264,5 +291,5 @@ export function createHostSchemaMaintenance<B extends MaintenanceBinding>(
   const saveTagIntent: ActiveLibraryHost['saveTagIntent'] = (input, signal) => persistTagIntents([input], active => existingTagIntent(active, input), active => insertTagIntent(active, input), signal)
   const saveTagBatch: ActiveLibraryHost['saveTagBatch'] = (input, signal) => persistTagIntents(tagBatchInputs(input), active => existingTagBatch(active, input), active => insertTagBatch(active, input), signal)
 
-  return { enableWorkMedia,enableTagExecution, enableBasicAnalysis, configureBackgroundExecution, configureBackgroundAnalysis, configureBackgroundOcr, decideTag, saveTagIntent, saveTagBatch, revokeBackgroundOcr, isAdmissionClosed: () => admissionClosed }
+  return { writeWorkSet, enableWorkMedia,enableTagExecution, enableBasicAnalysis, configureBackgroundExecution, configureBackgroundAnalysis, configureBackgroundOcr, decideTag, saveTagIntent, saveTagBatch, revokeBackgroundOcr, isAdmissionClosed: () => admissionClosed }
 }

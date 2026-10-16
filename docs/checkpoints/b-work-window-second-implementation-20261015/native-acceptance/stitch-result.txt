@@ -1,0 +1,51 @@
+Window: "PUBLIC alignment 1 3 5 7 · Long scrolling native capsule", App: DAM Shelf B.
+0 system dialog PUBLIC alignment 1 3 5 7 · Long scrolling native capsule, Secondary Actions: Raise
+	1 button 收起工作集
+	2 button 工作集操作菜单
+		3 popover Secondary Actions: Cancel
+			4 text 等比白底拼接已按所选顺序生成2份来源的独立副本；库中原件保持。交付副本已准备；不会自动清理，请在接收应用读完后明确清理。
+			5 button 生成副本
+			6 button 取消
+			7 button 目的：保留交付副本…
+			8 pop up button 完成后：只保留副本
+			9 button 拖出已生成副本
+			10 pop up button 垂直拼接 · 等宽
+			11 text field (settable) Description: 图片间距，0到256像素, Value: 0
+			12 pop up button 保留原尺寸 · 居中
+	13 text PUBLIC alignment 1 3 5 7 · Long scrolling native capsule · 已选2份
+	14 scroll area Secondary Actions: Scroll Up, Scroll Down
+		15 collection (disabled)
+			16 section (disabled)
+				17 button Description: native-design-09.png，800×800, Value: 已选择
+					18 image
+					19 text native-design-09.png 800×800
+				20 button Description: native-design-08.png，600×1200, Value: 已选择
+					21 image
+					22 text native-design-08.png 600×1200
+				23 button Description: native-design-07.png，1200×600, Value: 未选择
+					24 image
+					25 text native-design-07.png 1200×600
+				26 button Description: native-design-06.png，800×800, Value: 未选择
+					27 image
+					28 text native-design-06.png 800×800
+				29 button Description: native-design-05.png，600×1200, Value: 未选择
+					30 image
+					31 text native-design-05.png 600×1200
+				32 button Description: native-design-04.png，1200×600, Value: 未选择
+					33 image
+					34 text native-design-04.png 1200×600
+		35 scroll bar (settable, float) 0
+			36 value indicator (settable, float) 0
+			37 increment arrow button
+			38 decrement arrow button
+			39 increment page button
+			40 decrement page button
+41 menu bar
+	42 DAM Shelf B
+	43 编辑
+
+Selected text: ```
+0
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).

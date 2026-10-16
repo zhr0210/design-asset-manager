@@ -1,6 +1,35 @@
 import AppKit
 import QuartzCore
 
+/** The unclamped compact origin survives a presentation change. Only owned
+ user movement translates this relation; display clamping is not a gesture. */
+struct WorkShelfExpansionAnchor {
+    enum Horizontal:String { case center, left, right }
+    let horizontal:Horizontal
+    var compact:NSRect
+    var expanded:NSRect
+    init(compact:NSRect,screen:NSRect,count:Int=0) {
+        self.compact=compact
+        let size=NSSize(width:min(400,screen.width),height:min(count<=2 ? 207:count<=5 ? 310:435,screen.height))
+        let centered=compact.midX-size.width/2
+        horizontal=centered<screen.minX ? .left : centered+size.width>screen.maxX ? .right : .center
+        let x:CGFloat
+        switch horizontal {case .left:x=compact.minX;case .right:x=compact.maxX-size.width;case .center:x=centered}
+        expanded=Self.clamp(NSRect(x:x,y:compact.midY-size.height/2,width:size.width,height:size.height),to:screen)
+    }
+    static func clamp(_ frame:NSRect,to screen:NSRect)->NSRect {
+        var result=frame
+        result.size=NSSize(width:min(frame.width,screen.width),height:min(frame.height,screen.height))
+        result.origin=NSPoint(x:max(screen.minX,min(frame.minX,screen.maxX-result.width)),y:max(screen.minY,min(frame.minY,screen.maxY-result.height)))
+        return result
+    }
+    mutating func moved(from old:NSRect,to new:NSRect) {
+        compact=compact.offsetBy(dx:new.minX-old.minX,dy:new.minY-old.minY)
+        expanded=expanded.offsetBy(dx:new.minX-old.minX,dy:new.minY-old.minY)
+    }
+    init(compact:NSRect,expanded:NSRect,horizontal:Horizontal){self.compact=compact;self.expanded=expanded;self.horizontal=horizontal}
+}
+
 struct ShelfEdgeDecision {
     let edge:String
     let progress:CGFloat
@@ -22,17 +51,30 @@ func shelfEdgeDecision(_ frame:NSRect,screen:NSRect,others:[NSRect],deltaX:Doubl
     let p=min(1,max(0,(left ? screen.minX-frame.minX:frame.maxX-screen.maxX)/(frame.width*0.84)))
     return ShelfEdgeDecision(edge:edge,progress:p,target:target,docks:p>0 && ((left ? deltaX<0:deltaX>0) || p>0.4))
 }
-final class WorkShelfDockOverlay:NSView {
+final class WorkShelfDockOverlay:NSVisualEffectView {
     weak var shelf:NativeWorkShelf?
-    var edge="left"
+    private let tint=NSView()
+    private let arrow=NSImageView()
+    var edge="left" {didSet{needsLayout=true}}
+    override init(frame:NSRect) {
+        super.init(frame:frame)
+        material = .popover;blendingMode = .withinWindow;state = .active
+        tint.wantsLayer=true;tint.autoresizingMask=[.width,.height]
+        arrow.contentTintColor = .labelColor;arrow.imageScaling = .scaleProportionallyDown
+        addSubview(tint);addSubview(arrow);updateTint()
+    }
+    required init?(coder:NSCoder){nil}
+    override func viewDidChangeEffectiveAppearance(){super.viewDidChangeEffectiveAppearance();updateTint()}
+    private func updateTint(){effectiveAppearance.performAsCurrentDrawingAppearance{tint.layer?.backgroundColor=NSColor.windowBackgroundColor.withAlphaComponent(0.25).cgColor}}
+    override func layout() {
+        super.layout();tint.frame=bounds
+        let x=edge=="left" ? bounds.width-bounds.width*0.08:bounds.width*0.08
+        arrow.frame=NSRect(x:x-8,y:bounds.midY-12,width:16,height:24)
+        arrow.image=NSImage(systemSymbolName:edge=="left" ? "chevron.right":"chevron.left",accessibilityDescription:nil)
+    }
     override func hitTest(_ point:NSPoint)->NSView? {
         guard !isHidden,alphaValue>0.01,let shelf,!shelf.moving,!shelf.animating,shelf.docked else{return nil}
-        return super.hitTest(point)
-    }
-    override func draw(_ dirtyRect:NSRect) {
-        NSColor.windowBackgroundColor.withAlphaComponent(0.65).setFill();bounds.fill()
-        let x=edge=="left" ? bounds.width-bounds.width*0.08:bounds.width*0.08
-        NSImage(systemSymbolName:edge=="left" ? "chevron.right":"chevron.left",accessibilityDescription:nil)?.draw(in:NSRect(x:x-8,y:bounds.midY-12,width:16,height:24))
+        return bounds.contains(convert(point,from:superview)) ? self:nil
     }
     override func mouseDown(with event:NSEvent){shelf?.interaction.eventAt=event.timestamp;shelf?.beginUserTracking();shelf?.dragStartPoint=shelf?.eventScreenPoint(event) ?? .zero}
     override func mouseDragged(with event:NSEvent){shelf?.moveFromEvent(event)}
@@ -58,6 +100,8 @@ final class WorkShelfInteractionController {
     var wasDocked=false
     var activeCommand:Int?
     var overlayGeneration=0
+    private var needsPresentationSettlement=false
+    var interruptedPresentationSize:NSSize?{needsPresentationSettlement && shelf.expanded ? shelf.expansionAnchor?.expanded.size:nil}
     init(_ shelf:NativeWorkShelf){self.shelf=shelf;overlay.shelf=shelf;overlay.isHidden=true;overlay.wantsLayer=true;overlay.autoresizingMask=[.width,.height];shelf.root.addSubview(overlay)}
     func actualFrame(displayed:Bool=false)->NSRect {
         if !displayed && !shelf.animating{frameSource="appkit";return shelf.window.frame}
@@ -67,18 +111,36 @@ final class WorkShelfInteractionController {
         }
         frameSource="appkit-fallback";return shelf.window.frame
     }
-    func frameRecord(_ frame:NSRect)->[String:Any]{["x":frame.minX,"y":(NSScreen.screens.first?.frame.maxY ?? 0)-frame.maxY,"width":frame.width,"height":frame.height,"presentation":shelf.expanded ? "expanded":"compact","docked":shelf.docked]}
+    func frameRecord(_ frame:NSRect)->[String:Any]{
+        let top=NSScreen.screens.first?.frame.maxY ?? 0
+        var result:[String:Any]=["x":frame.minX,"y":top-frame.maxY,"width":frame.width,"height":frame.height,"presentation":shelf.expanded ? "expanded":"compact","docked":shelf.docked]
+        if shelf.expanded,let anchor=shelf.expansionAnchor{let c=anchor.compact;result["expansion"]=["edge":anchor.horizontal.rawValue,"compactBounds":["x":c.minX,"y":top-c.maxY,"width":c.width,"height":c.height]]}
+        return result
+    }
     func acknowledgement(_ id:Int,_ status:String,_ reason:String="") {
         var v=frameRecord(actualFrame(displayed:shelf.window.isVisible));v["event"]="motionAck";v["motionId"]=id;v["gestureId"]=gestureId;v["status"]=status;v["reason"]=reason;v["nativeAt"]=ProcessInfo.processInfo.systemUptime;v["transitionId"]=generation;v["frameSource"]=frameSource;emit(v)
     }
     func feedback(_ visible:Bool,edge:String?=nil,animated:Bool=true){
+        if !visible && overlay.isHidden && !shelf.dockFeedbackVisible && !shelf.dockButtonsHidden{return}
+        if visible{shelf.presentation.finishImmediately()}
         overlayGeneration+=1;let token=overlayGeneration
+        shelf.dockFeedbackVisible=visible
+        if !visible{shelf.dockButtonsHidden=false}
+        shelf.layout()
         shelf.root.addSubview(overlay,positioned:.above,relativeTo:nil);overlay.frame=shelf.root.bounds;if let edge{overlay.edge=edge}
-        overlay.needsDisplay=true
+        overlay.needsLayout=true;overlay.layoutSubtreeIfNeeded()
         if visible{if overlay.isHidden{overlay.alphaValue=0};overlay.isHidden=false}
-        NSAnimationContext.runAnimationGroup({c in c.duration=animated && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? 0.3:0;overlay.animator().alphaValue=visible ? 1:0},completionHandler:{[weak self] in guard let self,self.overlayGeneration==token else{return};self.overlay.isHidden = !visible})
+        NSAnimationContext.runAnimationGroup({c in
+            c.duration=animated && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? 0.3:0
+            overlay.animator().alphaValue=visible ? 1:0
+            for button in shelf.contentButtons{button.animator().alphaValue=visible ? 0:1}
+        },completionHandler:{[weak self] in
+            guard let self,self.overlayGeneration==token else{return}
+            self.overlay.isHidden = !visible;self.shelf.dockButtonsHidden=visible;self.shelf.layout()
+        })
     }
-    func interrupt(){
+    func interrupt(presentation:Bool=true){
+        if presentation{shelf.presentation.stop()}
         guard shelf.animating else{return}
         let frame=actualFrame();generation+=1
         NSAnimationContext.runAnimationGroup({c in c.duration=0;shelf.window.animator().setFrame(frame,display:true)})
@@ -88,7 +150,9 @@ final class WorkShelfInteractionController {
     }
     func begin(){
         guard !shelf.moving,!shelf.frozen,!shelf.retired,!shelf.assetDragging else{return}
+        needsPresentationSettlement=shelf.presentation.active && shelf.animating
         interrupt();gestureId+=1;deltaX=0;wasDocked=shelf.docked;shelf.moving=true;shelf.dragMoved=false
+        shelf.presentation.finishAfterInput()
         shelf.dragStartFrame=actualFrame();shelf.dragStartPoint=NSEvent.mouseLocation
         shelf.motion("begin")
     }
@@ -98,7 +162,16 @@ final class WorkShelfInteractionController {
         let point=shelf.eventScreenPoint(event),dx=point.x-shelf.dragStartPoint.x,dy=point.y-shelf.dragStartPoint.y
         if !shelf.dragMoved && hypot(dx,dy)<=3{return}
         shelf.dragMoved=true;deltaX=event.deltaX
-        shelf.window.setFrameOrigin(NSPoint(x:initial.minX+dx,y:initial.minY+dy))
+        var target=initial.offsetBy(dx:dx,dy:dy)
+        if shelf.expanded {
+            let area=shelf.bestScreen(target).visibleFrame
+            target.size=NSSize(width:min(target.width,area.width),height:min(target.height,area.height))
+            target.origin=NSPoint(x:max(area.minX,min(target.minX,area.maxX-target.width)),y:max(area.minY,min(target.minY,area.maxY-target.height)))
+        }
+        let previous=shelf.window.frame
+        shelf.window.setFrame(target,display:true)
+        if shelf.expanded || needsPresentationSettlement{shelf.expansionAnchor?.moved(from:previous,to:shelf.window.frame)}
+        else{shelf.expansionAnchor=nil}
         if !shelf.expanded,let d=decision(){
             if d.progress>0.4 && overlay.isHidden{feedback(true,edge:d.edge)}
             else if d.progress<=0.4 && !overlay.isHidden{feedback(false)}
@@ -109,12 +182,45 @@ final class WorkShelfInteractionController {
         let f=actualFrame(),screen=shelf.bestScreen(f)
         return shelfEdgeDecision(f,screen:screen.frame,others:NSScreen.screens.filter{$0 != screen}.map{$0.frame},deltaX:deltaX)
     }
-    func clickedRestore(){emit(["event":"undockIntent","gestureId":gestureId]);feedback(false)}
+    func clickedRestore(){guard !shelf.frozen,!shelf.retired,shelf.docked,!shelf.moving,!shelf.animating else{return};emit(["event":"undockIntent","gestureId":gestureId]);feedback(false)}
+    @discardableResult func doubleClickDock(_ point:NSPoint)->Bool {
+        guard !shelf.expanded,!shelf.docked,!shelf.frozen,!shelf.retired,!shelf.assetDragging else{return false}
+        let b=shelf.root.bounds
+        guard b.contains(point),min(point.x,b.width-point.x,point.y,b.height-point.y)<=26 else{return false}
+        let frame=actualFrame(),screen=shelf.bestScreen(frame),area=screen.visibleFrame
+        let preferLeft=abs(frame.minX-area.minX)<=abs(frame.maxX-area.maxX)
+        let candidates=preferLeft ? [true,false]:[false,true]
+        guard let left=candidates.first(where:{left in
+            let target=NSRect(x:left ? area.minX-frame.width*0.84:area.maxX-frame.width*0.16,y:frame.minY,width:frame.width,height:frame.height)
+            return !NSScreen.screens.filter({$0 != screen}).contains(where:{$0.frame.intersects(target)})
+        }) else{return false}
+        begin();shelf.moving=false;shelf.dragStartFrame=nil;deltaX=0
+        shelf.motion("double-click-dock",edge:left ? "left":"right")
+        emit(["event":"dockIntent","edge":left ? "left":"right","gestureId":gestureId,"deltaX":0.0])
+        return true
+    }
     func finish(){
         guard shelf.moving else{return}
         shelf.moving=false;shelf.dragStartFrame=nil;shelf.motion(shelf.dragMoved ? "finished-moved":"finished-click")
-        if !shelf.dragMoved{if wasDocked{clickedRestore()}else{shelf.geometry()};return}
-        shelf.docked=false;shelf.geometry()
+        if !shelf.dragMoved{if settleInterruptedPresentation(){return};if wasDocked{clickedRestore()}else{shelf.resizeExpandedIfNeeded();shelf.geometry()};return}
+        shelf.docked=false
+        if settleInterruptedPresentation(){return}
+        shelf.geometry()
+        completeRelease()
+    }
+    private func settleInterruptedPresentation()->Bool {
+        guard needsPresentationSettlement else{return false}
+        needsPresentationSettlement=false
+        guard let anchor=shelf.expansionAnchor else{return false}
+        let desired=shelf.expanded ? WorkShelfExpansionAnchor.clamp(anchor.expanded,to:shelf.bestScreen(actualFrame()).visibleFrame):anchor.compact
+        guard actualFrame() != desired else{return false}
+        animate(desired,duration:shelf.expanded ? 0.18:0.23,docking:false,onComplete:{[weak self] in
+            guard let self,self.shelf.dragMoved else{return};self.completeRelease()
+        })
+        return true
+    }
+    private func completeRelease(){
+        shelf.resizeExpandedIfNeeded()
         guard !shelf.expanded,!shelf.assetDragging,let d=decision() else{feedback(false);shelf.geometry();return}
         shelf.motion("eligible",edge:d.edge)
         if d.docks{emit(["event":"dockIntent","edge":d.edge,"gestureId":gestureId,"deltaX":deltaX]);return}
@@ -126,8 +232,8 @@ final class WorkShelfInteractionController {
             emit(["event":"undockIntent","gestureId":gestureId,"restore":restore])
         }else{shelf.geometry()}
     }
-    func animate(_ target:NSRect,duration:Double,docking:Bool,id:Int?=nil){
-        interrupt();generation+=1;let token=generation;activeCommand=id;shelf.animating=true;shelf.animationTarget=target
+    func animate(_ target:NSRect,duration:Double,docking:Bool,id:Int?=nil,onComplete:(()->Void)?=nil){
+        interrupt(presentation:false);generation+=1;let token=generation;activeCommand=id;shelf.animating=true;shelf.animationTarget=target
         let duration=shelf.window.isVisible && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? duration:0
         animationDuration=duration;timingName=docking ? "easeOut":"easeInEaseOut"
         if !docking{feedback(false)}
@@ -135,12 +241,13 @@ final class WorkShelfInteractionController {
         let complete:()->Void = {[weak self] in
             guard let self,self.generation==token,!self.shelf.retired else{return}
             self.shelf.animating=false;self.shelf.animationTarget=nil;self.shelf.docked=docking;self.activeCommand=nil
+            if !self.shelf.expanded{self.shelf.expansionAnchor=nil}
             if docking{self.feedback(true,edge:target.midX<self.shelf.bestScreen(target).frame.midX ? "left":"right")}
             self.shelf.layout();self.shelf.motion("animation-complete")
-            if let id{self.acknowledgement(id,"completed")};self.shelf.geometry()
+            if let id{self.acknowledgement(id,"completed")};self.shelf.geometry();onComplete?()
         }
         if duration==0{shelf.window.setFrame(target,display:true);complete()}
         else{NSAnimationContext.runAnimationGroup({c in c.duration=duration;c.timingFunction=CAMediaTimingFunction(name:docking ? .easeOut:.easeInEaseOut);c.allowsImplicitAnimation=true;shelf.window.animator().setFrame(target,display:true)},completionHandler:complete)}
     }
-    func retire(){interrupt();generation+=1;shelf.moving=false;feedback(false,animated:false)}
+    func retire(){interrupt();shelf.presentation.retire();generation+=1;shelf.moving=false;feedback(false,animated:false)}
 }

@@ -37,7 +37,7 @@ try{
  db=new Database(path.join(library,'.dam','library.sqlite'),{fileMustExist:true})
  const links=sourceBytes.map(bytes=>db!.prepare('SELECT p.design_asset_identity AS assetId,r.capture_request_identity AS requestId,r.source_generation AS generation,c.managed_original_ref AS originalRef FROM capture_requests r JOIN asset_candidates c ON c.capture_request_identity=r.capture_request_identity JOIN promotion_links p ON p.candidate_identity=c.candidate_identity WHERE r.source_generation=?').get('sha256:'+sha(bytes)) as {assetId:string;requestId:string;generation:string;originalRef:string})
  const ids=links.map(link=>link.assetId),state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!},device='device:zip-test'
- const initial=await host.readWorkSets(scope,device),created=await host.writeWorkSet({...scope,sessionToken:initial.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Public ZIP fixture',assetIds:ids,note:'ZIP persistence test',colors:[],columns:3}}},device),set=created.sets[0]
+ const initial=await host.readWorkSets(scope,device),created=await host.writeWorkSet({...scope,sessionToken:initial.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Public ZIP fixture',assetIds:ids,columns:3}}},device),set=created.sets[0]
  const request:WorkHandoffRequest={...scope,setId:set.id,assetId:ids[0],kind:'zip',action:'prepare',assetIds:ids}
  const admission=createVisualAdmission({memory:()=>({free:8*1024**3,total:16*1024**3})});let opened=0
  const options={host,admission,root:handoffRoot,open:async()=>{opened++;return ''},trash:async()=>{throw Error('NOT_USED')}}
@@ -88,10 +88,10 @@ try{
  db.close();db=undefined;await host.close();await host.reopen();const resumed=host.inspect(),resumedScope={libraryIdentity:resumed.identity!,generation:resumed.generation!}
  files=createWorkFileHandoffs(options);assert.deepEqual(Buffer.from((await files.readFile(receipt.id)).bytes),Buffer.from(payload.bytes))
  const catalog=await host.readWorkSets(resumedScope,device),saved=catalog.sets.find(s=>s.id===set.id)!
- await host.writeWorkSet({...resumedScope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:saved.revision,value:{name:saved.name,assetIds:[ids[0],ids[2]],note:saved.note,colors:saved.colors,columns:saved.columns}}},device)
+ await host.writeWorkSet({...resumedScope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:saved.revision,value:{name:saved.name,assetIds:[ids[0],ids[2]],columns:saved.columns}}},device)
  await assert.rejects(files.readFile(receipt.id),/参考已移除/);await assert.rejects(files.nativeFile('fixture-owner',receipt.id),/参考已移除/)
  const after=await host.readWorkSets(resumedScope,device),removed=after.sets.find(s=>s.id===set.id)!
- await host.writeWorkSet({...resumedScope,sessionToken:after.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:removed.revision,value:{name:removed.name,assetIds:ids,note:removed.note,colors:removed.colors,columns:removed.columns}}},device)
+ await host.writeWorkSet({...resumedScope,sessionToken:after.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:removed.revision,value:{name:removed.name,assetIds:ids,columns:removed.columns}}},device)
  assert.deepEqual(Buffer.from((await files.readFile(receipt.id)).bytes),Buffer.from(payload.bytes),'restored current membership may authorize intact archive again')
  // Actual maximum batch: 64 independently imported images, not synthesized receipts.
  const extraFiles:string[]=[]
@@ -99,7 +99,7 @@ try{
  selections=extraFiles;const maximumIntake=await host.prepareAddAssets();if(maximumIntake.kind!=='planned')throw Error('MAXIMUM_INTAKE');await host.dispatchAddAssets(maximumIntake.plan.receipt)
  const maximumAssets=await host.listAssets();assert.equal(maximumAssets.length,64)
  const maximumIds=[...ids,...extraFiles.map(file=>maximumAssets.find(asset=>asset.fileName===path.basename(file))!.id)],maximumCatalog=await host.readWorkSets(resumedScope,device)
- const maximumSet=(await host.writeWorkSet({...resumedScope,sessionToken:maximumCatalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Maximum64',assetIds:maximumIds,note:'All actual imports',columns:4,colors:[]}}},device)).sets.find(set=>set.name==='Maximum64')!
+ const maximumSet=(await host.writeWorkSet({...resumedScope,sessionToken:maximumCatalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Maximum64',assetIds:maximumIds,columns:4,}}},device)).sets.find(set=>set.name==='Maximum64')!
  const maximumReceipt=await files.prepare('fixture-owner',{...resumedScope,setId:maximumSet.id,assetId:maximumIds[0],assetIds:maximumIds,kind:'zip',action:'prepare'})
  assert.equal(maximumReceipt.archive?.count,64)
  const maximumRecord=await fs.readFile(path.join(handoffRoot,maximumReceipt.id.slice(8),'receipt.json'));assert.ok(maximumRecord.length>16384&&maximumRecord.length<128*1024,'64-member receipt really requires ZIP-only bounded metadata allowance')

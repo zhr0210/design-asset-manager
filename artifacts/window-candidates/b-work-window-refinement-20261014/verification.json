@@ -1,0 +1,50 @@
+{
+  "builtCandidate": "dam-c534b500b396a7f9",
+  "nativeSourceDigest": "91a392206d0e0b97c8d55825ad6e27dabea8156d6e48695fec51ee39c1d340f4",
+  "nativeBinarySHA256": "275c6cca276a48dc40537d00c7d46469ec87173211f416a09f6d28867c6c6eff",
+  "actualFinalCandidateUIQualified": "PARTIAL",
+  "reason": "Formal core single-display behavior verified; high-frame-rate equivalence, full display/accessibility/input interruption matrix incomplete",
+  "publicOriginals": {
+    "count": 9,
+    "sha256BeforeAfterEqual": true
+  },
+  "selfReview": "Direct same-session review; reproduced foreground hit, unrendered reversal, interrupted sizing and recreated chrome findings repaired; final native regressions rerun",
+  "formalEntry": "npm run start:work-b -> 工作模式 -> 打开/恢复工作集",
+  "designCheck": {
+    "status": "FAIL",
+    "tokenYamlUnchangedFromHEAD": true,
+    "generatedCssUnchangedInThisTask": true
+  },
+  "finalFocusedChecks": {
+    "native": {
+      "status": "PASS",
+      "localLog": "native-check.log"
+    },
+    "build": {
+      "status": "PASS",
+      "localLog": "build-check.log"
+    },
+    "typecheck": {
+      "status": "PASS",
+      "localLog": "typecheck-check.log"
+    },
+    "layout": {
+      "status": "PASS",
+      "localLog": "layout-check.log"
+    },
+    "motion-host": {
+      "status": "PASS",
+      "localLog": "motion-host-check.log"
+    },
+    "controller": {
+      "status": "PASS",
+      "localLog": "controller-check.log"
+    }
+  },
+  "actualFinalHostBuild": "dam-c534b500b396a7f9",
+  "actualFinalHostPID": 61077,
+  "historicalEarlierHost": {
+    "build": "dam-52bb8c52dccaa4ce",
+    "pid": 17600
+  }
+}

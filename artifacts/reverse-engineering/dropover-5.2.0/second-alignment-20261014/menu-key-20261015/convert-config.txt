@@ -1,0 +1,24 @@
+Window: "", App: Dropover.
+0 窗口 Secondary Actions: Raise
+	1 container
+		2 图像
+		3 text 转换图像类型 将图像的格式转换为指定的格式。
+		4 滚动区
+			5 container
+				6 弹出式按钮 目标图像格式, Value: JPG
+				7 text 画面质量 100%
+			8 文本 高质量，最小压缩。压缩速度很快。
+			9 container
+				10 弹出式按钮 显示, Value: 在 Finder 中显示
+				11 文本 保存在
+				12 菜单按钮 moved-output
+		13 按钮 取消
+		14 按钮 继续
+15 menu bar
+	16 Dropover
+	17 Edit
+	18 查看
+	19 窗口
+	20 Help
+
+The focused UI element is 0 窗口 Secondary Actions: Raise

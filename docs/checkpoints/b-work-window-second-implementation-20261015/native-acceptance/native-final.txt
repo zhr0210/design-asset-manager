@@ -1,0 +1,16 @@
+
+> design-asset-manager@1.0.0 test-native-work-shelf
+> node scripts/run-native-work-shelf-tests.mjs
+
+PASS actual AppKit count changes including empty, centered compact relation, no resize chrome, independent indicator/Space settings, overflow animation/hide cancellation and bounded manual annotation. Controlled native path; formal UI separate.
+PASS native refinement: centered/symmetric edge expansion, no-move restoration, screen clamping, translated/reopened relation, staged crossfade interruption/draft retention, background-only 160ms selection and reuse
+PASS production AppKit interaction: proportional symmetric progress, strict .4/raw-delta duration boundaries, adjacent-screen rejection, expanded/asset-drag refusal and visible expanded bounds, completed/canceled receipts, actual-frame interruption and stale completion protection, owned mouse event path. Controlled AppKit inputs; physical CU separate.
+Empty grid destination: entered=1, updated=1
+Card target WorkShelfCard: []
+Card target WorkShelfRoundedImage: []
+Card target NSTextField: []
+Card target NSTextField: []
+PASS cancellation waits for Host confirmation; late handoff completion cannot restore revoked result or enable generation prematurely.
+PASS delivery error remains local, input retained, successful correction updates status without clearing an independent autosave conflict.
+PASS window-wide destination: native thumbnail legacy/promise registrations removed, all display descendants transparent to asset drops, plain-text editor registration retained, file-as-text routed to Host without editing; update, completion and freeze protections. Controlled sender, not UI acceptance.
+PASS production native color picker: opaque RGB round-trip, HSV area/hue controls, preview without commit, exact HEX display, single confirmation, canceled/duplicate refusal, independent window indicator selection. AppKit controls; physical UI path separately required.

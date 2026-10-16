@@ -23,7 +23,7 @@ try{
  const creation=await host.prepareCreate();if(creation.kind!=='planned')throw Error('FIXTURE_CREATE');await host.confirmCreate(creation.plan.receipt)
  const intake=await host.prepareAddAssets();if(intake.kind!=='planned')throw Error('FIXTURE_INTAKE');await host.dispatchAddAssets(intake.plan.receipt)
  const assets=await host.listAssets(),first=assets.find(a=>a.fileName==='first.png')!,second=assets.find(a=>a.fileName==='second.png')!,state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!},device='device:file-active-test'
- const catalog=await host.readWorkSets(scope,device),value={name:'Active file fixture',assetIds:[first.id,second.id],colors:[],columns:2,note:'saved fixture'}
+ const catalog=await host.readWorkSets(scope,device),value={name:'Active file fixture',assetIds:[first.id,second.id],columns:2}
  const created=await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value}},device),set=created.sets[0]
  const originalHashes=await Promise.all(value.assetIds.map(async assetId=>sha((await realHost.readWorkMediaFile({...scope,setId:set.id,assetId})).bytes)))
  const files=createWorkFileHandoffs({host,root:path.join(root,'handoffs'),open:async()=>'',trash:async()=>{throw Error('NOT_USED')}}),media=createWorkMediaController({host,files,changed(){}}),owner={}
@@ -36,9 +36,9 @@ try{
  assert.equal((await controller.act(owner,{token,kind:'notes-dirty',dirty:true})).success,true)
  assert.equal((await controller.act(owner,{token,kind:'dock',edge:'left'})).success,true,'notesDirty is not an active file task');assert.equal((await controller.act(owner,{token,kind:'undock'})).success,true)
  assert.equal((await controller.act(owner,{token,kind:'notes-dirty',dirty:false})).success,true)
- const draft={...value,note:'unsaved fixture retained'};await controller.act(owner,{token,kind:'draft',expectedRevision:1,value:draft})
+ const draft={...value,name:'unsaved fixture retained'};await controller.act(owner,{token,kind:'draft',expectedRevision:1,value:draft})
  const held=gate(first.id),job=controller.nativeHandoff(owner,{token,request});await held.entered;assert.equal(files.hasActive(actor),true)
- const activeDenied=async(promise:Promise<any>)=>{const reply=await promise;assert.equal(reply.success,false);assert.equal(reply.code,'WORK_OPERATION_ACTIVE');assert.match(reply.error,/正在准备交付/);assert.equal(controller!.count(),1);assert.equal(destroyed,0);const current=await controller!.inspect(owner);assert.equal(current.success,true);if(current.success)assert.equal(current.value.draft?.note,draft.note)}
+ const activeDenied=async(promise:Promise<any>)=>{const reply=await promise;assert.equal(reply.success,false);assert.equal(reply.code,'WORK_OPERATION_ACTIVE');assert.match(reply.error,/正在准备交付/);assert.equal(controller!.count(),1);assert.equal(destroyed,0);const current=await controller!.inspect(owner);assert.equal(current.success,true);if(current.success)assert.equal(current.value.draft?.name,draft.name)}
  await activeDenied(controller.act(owner,{token,kind:'close',discard:true}));await activeDenied(controller.act(owner,{token,kind:'close',discard:false}))
  await activeDenied(controller.control({...scope,id:set.id,kind:'close'}));await activeDenied(controller.act(owner,{token,kind:'dock',edge:'left'}));await activeDenied(controller.act(owner,{token,kind:'undock'}))
  let cancelDone=false;const cancellation=controller.nativeMediaCancel(owner,{token}).then(reply=>{cancelDone=true;return reply});await new Promise(resolve=>setImmediate(resolve));assert.equal(cancelDone,false,'cancel is a physical settlement barrier, not an early boolean')

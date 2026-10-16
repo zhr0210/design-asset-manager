@@ -1,0 +1,12 @@
+{
+  "reduceMotionBefore": false,
+  "temporaryReduceMotionEnabled": true,
+  "restorePending": false,
+  "reduceMotionRestored": false,
+  "appearanceBefore": "dark",
+  "appearanceRestorePending": false,
+  "reduceMotionAfter": false,
+  "reduceMotionRestoredToOriginal": true,
+  "appearanceAfter": "dark",
+  "settingsPageRestored": "General"
+}

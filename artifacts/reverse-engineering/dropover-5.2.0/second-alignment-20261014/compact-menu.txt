@@ -1,0 +1,83 @@
+The following is a diff from the previous accessibility tree for Window: "7 张图片" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++	23 菜单 Secondary Actions: Cancel
++		24 打开用, ID: didSelectItem:
++			25 菜单 Secondary Actions: Cancel
++				26 Preview, ID: didSelectApplicationMenuItemWithMenuItem:
++				27 Adobe Acrobat, ID: didSelectApplicationMenuItemWithMenuItem:
++				28 Adobe Illustrator, ID: didSelectApplicationMenuItemWithMenuItem:
++				29 Adobe Photoshop 2026, ID: didSelectApplicationMenuItemWithMenuItem:
++				30 BaiduNetdisk_mac, ID: didSelectApplicationMenuItemWithMenuItem:
++				31 Brave Browser, ID: didSelectApplicationMenuItemWithMenuItem:
++				32 Camoufox, ID: didSelectApplicationMenuItemWithMenuItem:
++				33 CleanShot X, ID: didSelectApplicationMenuItemWithMenuItem:
++				34 ColorSync Utility, ID: didSelectApplicationMenuItemWithMenuItem:
++				35 Corel PHOTO-PAINT 2025, ID: didSelectApplicationMenuItemWithMenuItem:
++				36 Doubao, ID: didSelectApplicationMenuItemWithMenuItem:
++				37 DoubaoWork, ID: didSelectApplicationMenuItemWithMenuItem:
++				38 Eagle, ID: didSelectApplicationMenuItemWithMenuItem:
++				39 Google Chrome, ID: didSelectApplicationMenuItemWithMenuItem:
++				40 Google Chrome for Testing, ID: didSelectApplicationMenuItemWithMenuItem:
++				41 HP Smart, ID: didSelectApplicationMenuItemWithMenuItem:
++				42 Image Playground, ID: didSelectApplicationMenuItemWithMenuItem:
++				43 LibreOffice, ID: didSelectApplicationMenuItemWithMenuItem:
++				44 LibreOfficeDev, ID: didSelectApplicationMenuItemWithMenuItem:
++				45 Microsoft Edge, ID: didSelectApplicationMenuItemWithMenuItem:
++				46 Microsoft Edge, ID: didSelectApplicationMenuItemWithMenuItem:
++				47 Microsoft Edge, ID: didSelectApplicationMenuItemWithMenuItem:
++				48 QuarkFile, ID: didSelectApplicationMenuItemWithMenuItem:
++				49 QuickTime Player, ID: didSelectApplicationMenuItemWithMenuItem:
++				50 Safari, ID: didSelectApplicationMenuItemWithMenuItem:
++				51 Topaz Photo, ID: didSelectApplicationMenuItemWithMenuItem:
++				52 ima.copilot, ID: didSelectApplicationMenuItemWithMenuItem:
++		53 在 Finder 中显示, ID: didSelectItem:
++		54 快速查看, ID: didSelectItem:
++		55 隔空投送, ID: didSelectItem:
++		56 邮件, ID: didSelectItem:
++		57 信息, ID: didSelectItem:
++		58 添加到“照片”, ID: didSelectItem:
++		59 更多
++			60 菜单 Secondary Actions: Cancel
++				61 提醒事项, ID: didSelectItem:
++				62 快捷指令, ID: didSelectItem:
++		63 复制 Dropover 链接..., ID: didSelectItem:
++		64 复制 iCloud 链接, ID: didSelectItem:
++		65 从剪贴板添加, ID: didSelectItem:
++		66 复制 7 张图片, ID: didSelectItem:
++		67 将文件复制到..., ID: gen_copy_pick_solo
++			68 菜单 Secondary Actions: Cancel
++				69 下载, ID: gen_copy_folder_solo
++				70 选择文件夹..., ID: gen_copy_pick_solo
++		71 将文件移动到..., ID: gen_move_pick_solo
++			72 菜单 Secondary Actions: Cancel
++				73 下载, ID: gen_move_folder_solo
++				74 选择文件夹..., ID: gen_move_pick_solo
++		75 所有操作, ID: DropoverFileOperationsRootMenuItem
++			76 菜单 Secondary Actions: Cancel
++				77 (disabled) 图像动作
++				78 调整大小..., ID: img_resize
++				79 转换图片..., ID: img_convert
++				80 压缩..., ID: img_compress
++				81 删除图像元数据, ID: img_remove_metadata
++				82 合并合并..., ID: img_stitch
++				83 提取文字 (OCR)..., ID: img_ocr_solo
++				84 创建PDF..., ID: img_topdf
++				85 (disabled) 一般行动
++				86 显示信息, ID: gen_get_info_solo
++				87 改名..., ID: gen_batch_rename_solo
++				88 压缩（ZIP）..., ID: gen_zip_solo
++				89 复制路径, ID: gen_copy_path_solo
++				90 移到废纸篓, ID: gen_recycle_solo
++		91 清空窗口, ID: didSelectItem:
++		92 停靠到边缘, ID: didSelectItem:
++		93 自定义窗口, ID: didSelectItem:
++			94 菜单 Secondary Actions: Cancel
++				95 更改名称..., ID: didSelectChangeNameMenuItem:
++				96 Indicator Color
++					97 container
++						98 文本 指示器颜色
++						99 集合 Secondary Actions: AXScrollToTop, AXScrollToBottom
++				100 始终显示指示器, ID: didSelectAlwaysShowIndicatorMenuItem:
++				101 固定窗口, ID: didSelectPinMenuItem:
++				102 将此窗口保留在自己的 Space 中, ID: didSelectKeepInOwnSpaceMenuItem:
++		103 打开"系统偏好", ID: didSelectItem:
+The focused UI element is 0 窗口 7 张图片, Secondary Actions: Raise

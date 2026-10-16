@@ -1,0 +1,27 @@
+Window: "PUBLIC-moved-2", App: DAM Shelf B.
+0 system dialog PUBLIC-moved-2, Secondary Actions: Raise
+	1 button 收起工作集
+	2 button 工作集操作菜单
+		3 popover Secondary Actions: Cancel
+			4 container 遮挡图像画布
+				5 button 切换文字遮挡：PUBLIC 9: 800 x 800
+			6 pop up button 智能遮挡 · OCR
+			7 button 撤销
+			8 color well Description: 遮挡颜色, Value: rgb 0 0 0 1, Secondary Actions: Show color panel
+			9 text 副本已复制至 /Users/meigong/.codex/worktrees/3bfa/design-asset-manager-macos/.scratch/b-work-window-second-implementation-20261015/native-acceptance/moved/PUBLIC-smart-final.png；库内原件保持。
+			10 button 导出 PNG 副本…
+			11 button 取消编辑
+	12 text PUBLIC-moved-2 · 已选1份
+	13 scroll area Secondary Actions: Scroll Up, Scroll Down
+		14 collection (disabled)
+			15 section (disabled)
+				16 button Description: native-design-09.png，800×800, Value: 已选择
+					17 image
+					18 text native-design-09.png 800×800
+				19 button Description: native-design-08.png，600×1200, Value: 未选择
+					20 image
+					21 text native-design-08.png 600×1200
+		22 scroll bar (disabled, settable, float) 0
+23 menu bar
+	24 DAM Shelf B
+	25 编辑

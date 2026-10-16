@@ -114,6 +114,8 @@ Web模糊不等于系统Liquid Glass；现有原生材质接线不证明已达�
 
 **失败、取消与兼容保护。** 等待/失败保留旧可用结果和输入，旧异步应答不能覆盖新选择；切库/退出检查草稿。空库、加载失败、缺权限不是同一种空态。文本输入保持键盘语义，布局/动效/焦点按交互规格，不在模块README复制设计token。
 
+**当前内容与迁移。** 整合后的工作集仅保存name/assetIds/columns；v16按[ADR0494](../adr/0494-work-sets-retire-own-notes-and-palettes.md)显式备份退役工作集自己的备注和用色，素材Notebook、独立色板及原件保留。数量调档、设备指示器/Space与系统副本动作的局部机制见[工作窗模块](../../src/main/work-mode/README.md)。旧资料库只读打开不触发退役。
+
 **技术与平台边界。** Desktop与Browser共享页面；macOS工作集AppKit不由本模块渲染。1024/1440共享UI与系统窗口分别验证，正式可见入口不以直接route或注入Store代替。
 
 <a id="settings-ui"></a>
@@ -132,7 +134,7 @@ Web模糊不等于系统Liquid Glass；现有原生材质接线不证明已达�
 
 **失败、取消与兼容保护。** 按owner/frame/token/成员/库代际核对，旧会话不复活；未保存/unknown flush保留内容和窗口。motionId/gestureId关联终态，迟到动画不覆盖新操作；物理子进程未退出不能释放槽/文件。布局迁移先保留旧记录，不改工作集内容。
 
-**技术与平台边界。** 当前原生B仅macOS，Windows普通窗仍Electron/React。AppKit不等于SwiftUI；B的NSVisualEffectView不证明目标Liquid Glass已实现。原生输入、动画/帧率、多屏/Spaces、接收应用必须实际验收，Browser结果不能替代。菜单范围/性能门槛等未确认项保留在交互规格。
+**技术与平台边界。** 当前原生B仅macOS，Windows普通窗仍Electron/React。AppKit不等于SwiftUI；B在macOS 26使用NSGlassEffectView，旧系统回退NSVisualEffectView；胶囊用AppKit vibrancy，不将其冒称NSGlassEffectView。原生输入、动画/帧率、多屏/Spaces、接收应用必须实际验收，Browser结果不能替代。菜单紧凑全部/展开所选优先的范围已经确认；性能门槛等未确认项保留在交互规格。
 
 工作集内容/修订与设备布局的持久记录由[资料库](library-lifecycle.md#organization)拥有；文件交付/平台helper由[Host系统集成](local-host.md#handoff)拥有。本节保留窗口到Host的协作契约，不重复定义持久化状态机。
 

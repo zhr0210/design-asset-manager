@@ -7,7 +7,7 @@ import {TAG_EXECUTION_SQL} from '../independent-tags/tag-execution.schema'
 import { TAG_INTENT_SQL } from '../independent-tags/tag-intent.schema'
 import { CURRENT_MANAGED_SCHEMA_VERSION, isKnownLibrarySchemaVersion } from './library-schema-version'
 import {OCR_SQL} from '../ocr/ocr.schema'
-import {WORK_SET_SQL} from './work-set.schema'
+import {WORK_SET_SQL,RETIRED_WORK_SET_SQL} from './work-set.schema'
 import {ORGANIZATION_SQL} from './library-organization.schema'
 import {NOTEBOOK_SQL} from './asset-notebook.schema'
 import { INTAKE_RECOVERY_SQL } from './intake-recovery.schema'
@@ -123,7 +123,7 @@ function inspectLibraryControlContent(
     }
     if (isKnownLibrarySchemaVersion(version,3)) {
       // Exact statements, including immutable identity enforcement; full schema is checked on binding.
-      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + WORK_SET_SQL : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (isKnownLibrarySchemaVersion(version,11) ? '\n'+TAG_DECISION_SQL : '') + (version>=12?'\n'+(version>=15?WORK_MEDIA_BACKGROUND_SQL:BACKGROUND_ANALYSIS_SQL):'') + (version>=13?'\n'+BACKGROUND_OCR_SQL:'') + (version>=14?'\n'+BASIC_ANALYSIS_SQL:'')+(version>=15?'\n'+WORK_MEDIA_SQL:'')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
+      const statements = (DOWNLOAD_JOURNAL_SQL + ((isKnownLibrarySchemaVersion(version,4)) ? '\n' + INTAKE_RECOVERY_SQL : '') + ((isKnownLibrarySchemaVersion(version,5)) ? '\n' + NOTEBOOK_SQL : '') + ((isKnownLibrarySchemaVersion(version,6)) ? '\n' + ORGANIZATION_SQL : '') + ((isKnownLibrarySchemaVersion(version,7)) ? '\n' + (version>=16?RETIRED_WORK_SET_SQL:WORK_SET_SQL) : '') + (isKnownLibrarySchemaVersion(version,8) ? '\n' + OCR_SQL : '') + (isKnownLibrarySchemaVersion(version,9) ? '\n' + TAG_INTENT_SQL : '') + (isKnownLibrarySchemaVersion(version,10) ? '\n' + TAG_EXECUTION_SQL : '') + (isKnownLibrarySchemaVersion(version,11) ? '\n'+TAG_DECISION_SQL : '') + (version>=12?'\n'+(version>=15?WORK_MEDIA_BACKGROUND_SQL:BACKGROUND_ANALYSIS_SQL):'') + (version>=13?'\n'+BACKGROUND_OCR_SQL:'') + (version>=14?'\n'+BASIC_ANALYSIS_SQL:'')+(version>=15?'\n'+WORK_MEDIA_SQL:'')).match(/CREATE (?:TABLE|(?:UNIQUE )?INDEX|TRIGGER)[\s\S]*?(?:END;|;(?=\s*CREATE|\s*$))/g) ?? []
       for (const sql of statements) {
         const [, kind, name] = /^CREATE (TABLE|(?:UNIQUE )?INDEX|TRIGGER) (\w+)/.exec(sql)!
         const row = schema.find(item => item.name === name)

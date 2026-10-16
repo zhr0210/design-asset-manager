@@ -19,12 +19,28 @@ func emit(_ v:[String:Any]){events.append(v)}
   let _=NSApplication.shared
   let root=URL(fileURLWithPath:NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString);try FileManager.default.createDirectory(at:root,withIntermediateDirectories:true);defer{try? FileManager.default.removeItem(at:root)}
   let shelf=NativeWorkShelf(root:root);shelf.window.setFrame(f,display:false)
+  events=[];precondition(shelf.interaction.doubleClickDock(NSPoint(x:110,y:12)))
+  precondition(events.contains{$0["event"] as? String=="dockIntent" && $0["deltaX"] as? Double==0})
+  events=[];precondition(!shelf.interaction.doubleClickDock(NSPoint(x:110,y:27)) && events.isEmpty)
+  shelf.expanded=true;precondition(!shelf.interaction.doubleClickDock(NSPoint(x:110,y:12)));shelf.expanded=false
+  shelf.interaction.feedback(true,edge:"left",animated:false)
+  RunLoop.current.run(until:Date().addingTimeInterval(0.05))
+  precondition(shelf.back.isHidden && shelf.dropdown.isHidden && !shelf.back.isEnabled,"Covered buttons leave the visible/accessibility surface")
+  shelf.layout();precondition(shelf.back.isHidden && shelf.dropdown.isHidden,"Layout refresh cannot revive covered controls")
+  shelf.interaction.feedback(false,animated:false)
+  RunLoop.current.run(until:Date().addingTimeInterval(0.05))
+  precondition(!shelf.back.isHidden && shelf.back.isEnabled && shelf.back.alphaValue==1,"Restoring feedback returns controls")
+  shelf.docked=true;events=[]
+  let coveredDelete=NSEvent.keyEvent(with:.keyDown,location:.zero,modifierFlags:[],timestamp:ProcessInfo.processInfo.systemUptime,windowNumber:shelf.window.windowNumber,context:nil,characters:"\u{7f}",charactersIgnoringModifiers:"\u{7f}",isARepeat:false,keyCode:51)!
+  shelf.selected=["covered-reference"];_ = shelf.key(coveredDelete)
+  precondition(!events.contains{$0["kind"] as? String=="edit"},"Docked content cannot accept a destructive keyboard action")
+  shelf.selected=[];shelf.docked=false
   shelf.expanded=true;shelf.moving=true;shelf.dragMoved=true;events=[];shelf.completeUserTracking();precondition(!events.contains{$0["event"] as? String=="dockIntent"})
   shelf.expanded=false;shelf.assetDragging=true;shelf.moving=true;shelf.dragMoved=true;events=[];shelf.completeUserTracking();precondition(!events.contains{$0["event"] as? String=="dockIntent"});shelf.assetDragging=false
   // Production transition completion/geometry and old-token cancellation, no copied animation implementation.
   shelf.interaction.animate(f.offsetBy(dx:30,dy:0),duration:0,docking:false,id:4);RunLoop.current.run(until:Date().addingTimeInterval(0.05))
   precondition(events.contains{$0["event"] as? String=="motionAck" && $0["status"] as? String=="completed" && $0["motionId"] as? Int==4})
-  events=[];shelf.expanded=true;try shelf.command(["op":"bounds","motionId":6,"gestureId":0,"presentation":"expanded","docked":true,"x":0.0,"y":50.0,"width":640.0,"height":520.0]);precondition(events.contains{$0["motionId"] as? Int==6 && $0["status"] as? String=="failed"});shelf.expanded=false
+  events=[];shelf.expanded=true;try shelf.command(["op":"bounds","motionId":6,"gestureId":shelf.interaction.gestureId,"presentation":"expanded","docked":true,"x":0.0,"y":50.0,"width":640.0,"height":520.0]);precondition(events.contains{$0["motionId"] as? Int==6 && $0["status"] as? String=="failed"});shelf.expanded=false
   shelf.window.orderFrontRegardless();events=[]
   shelf.interaction.animate(f.offsetBy(dx:200,dy:0),duration:1,docking:false,id:5)
   RunLoop.current.run(until:Date().addingTimeInterval(0.1));let displayed=shelf.interaction.actualFrame();shelf.interruptTransition()
@@ -38,6 +54,12 @@ func emit(_ v:[String:Any]){events.append(v)}
   func event(_ type:CGEventType,_ x:CGFloat)->NSEvent{NSEvent(cgEvent:CGEvent(mouseEventSource:nil,mouseType:type,mouseCursorPosition:CGPoint(x:x,y:top-start.y),mouseButton:.left)!)!}
   events=[];shelf.root.mouseDown(with:event(.leftMouseDown,start.x));shelf.root.mouseDragged(with:event(.leftMouseDragged,start.x-200));shelf.root.mouseUp(with:event(.leftMouseUp,start.x-200))
   precondition(events.contains{$0["event"] as? String=="dockIntent" && $0["edge"] as? String=="left"})
-  shelf.retire();print("PASS production AppKit interaction: proportional symmetric progress, strict .4/raw-delta duration boundaries, adjacent-screen rejection, explicit expanded/asset-drag refusal, completed/canceled transition receipts, interruption uses actual frame and stale completion cannot overwrite a new frame, owned mouse event path. Controlled AppKit inputs; physical CU separate.")
+  shelf.expanded=true
+  let workArea=shelf.bestScreen(f).visibleFrame
+  shelf.window.setFrame(NSRect(x:workArea.minX+40,y:workArea.minY+40,width:640,height:520),display:false)
+  events=[];shelf.root.mouseDown(with:event(.leftMouseDown,start.x));shelf.root.mouseDragged(with:event(.leftMouseDragged,workArea.maxX+1000));shelf.root.mouseUp(with:event(.leftMouseUp,workArea.maxX+1000))
+  precondition(workArea.contains(shelf.window.frame) && shelf.expanded,"Expanded window stays reachable when dragged past the display edge")
+  precondition(!events.contains{$0["event"] as? String=="dockIntent"})
+  shelf.retire();print("PASS production AppKit interaction: proportional symmetric progress, strict .4/raw-delta duration boundaries, adjacent-screen rejection, expanded/asset-drag refusal and visible expanded bounds, completed/canceled receipts, actual-frame interruption and stale completion protection, owned mouse event path. Controlled AppKit inputs; physical CU separate.")
  }
 }

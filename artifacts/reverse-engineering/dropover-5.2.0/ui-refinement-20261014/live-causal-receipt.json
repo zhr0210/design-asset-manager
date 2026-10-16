@@ -1,0 +1,159 @@
+{
+  "os": {
+    "version": "27.0",
+    "build": "26A428"
+  },
+  "nativeBinarySHA256": "07267e86e50446f04a1bef02940918a2d48b53b457ee481d0795f5ae335d6488",
+  "before": {
+    "event": "before-intervention",
+    "epochMs": 1791952056540,
+    "state": "waiting-for-key",
+    "key": 1,
+    "hasKeyAppearance": 1,
+    "windowCorner": 0,
+    "topCorner": 0,
+    "bottomCorner": 0,
+    "cornerRadiiNil": false,
+    "cornerPathNil": true,
+    "glassCorner": 24,
+    "frame": [
+      1951,
+      409,
+      220,
+      240
+    ]
+  },
+  "temporary": {
+    "event": "temporary-corner-24",
+    "epochMs": 1791952056540,
+    "state": "temporary-window-corner-24",
+    "key": 1,
+    "hasKeyAppearance": 1,
+    "windowCorner": 24,
+    "topCorner": 24,
+    "bottomCorner": 24,
+    "cornerRadiiNil": false,
+    "cornerPathNil": true,
+    "glassCorner": 24,
+    "frame": [
+      1951,
+      409,
+      220,
+      240
+    ]
+  },
+  "restored": {
+    "event": "restored",
+    "epochMs": 1791952060579,
+    "state": "restored",
+    "key": 1,
+    "hasKeyAppearance": 1,
+    "windowCorner": 0,
+    "topCorner": 0,
+    "bottomCorner": 0,
+    "cornerRadiiNil": false,
+    "cornerPathNil": true,
+    "glassCorner": 24,
+    "frame": [
+      1951,
+      409,
+      220,
+      240
+    ]
+  },
+  "selectedCaptures": [
+    {
+      "beganEpochMs": 1791952056043.9392,
+      "controlledBackdrop": "blue based on public user screenshot",
+      "displayCrop": [
+        1927,
+        587,
+        268,
+        288
+      ],
+      "endedEpochMs": 1791952056090.492,
+      "excludedKnownToolCursorWindowIDs": [
+        40093
+      ],
+      "file": "display-030.png",
+      "ignoreShadowsDisplay": false,
+      "ignoreShadowsSingleWindow": false,
+      "index": 30,
+      "noForeignForegroundWindows": true,
+      "publicWindowID": 37984,
+      "targetFrame": [
+        1951,
+        611,
+        220,
+        240
+      ],
+      "cornerPhase": "waiting-for-key",
+      "keyAtStart": 1,
+      "windowCornerAtStart": 0,
+      "phaseStable": true
+    },
+    {
+      "beganEpochMs": 1791952058381.5188,
+      "controlledBackdrop": "blue based on public user screenshot",
+      "displayCrop": [
+        1927,
+        587,
+        268,
+        288
+      ],
+      "endedEpochMs": 1791952058445.183,
+      "excludedKnownToolCursorWindowIDs": [
+        40093
+      ],
+      "file": "display-041.png",
+      "ignoreShadowsDisplay": false,
+      "ignoreShadowsSingleWindow": false,
+      "index": 41,
+      "noForeignForegroundWindows": true,
+      "publicWindowID": 37984,
+      "targetFrame": [
+        1951,
+        611,
+        220,
+        240
+      ],
+      "cornerPhase": "temporary-window-corner-24",
+      "keyAtStart": 1,
+      "windowCornerAtStart": 24,
+      "phaseStable": true
+    },
+    {
+      "beganEpochMs": 1791952062561.1748,
+      "controlledBackdrop": "blue based on public user screenshot",
+      "displayCrop": [
+        1927,
+        587,
+        268,
+        288
+      ],
+      "endedEpochMs": 1791952062630.5928,
+      "excludedKnownToolCursorWindowIDs": [
+        40093
+      ],
+      "file": "display-060.png",
+      "ignoreShadowsDisplay": false,
+      "ignoreShadowsSingleWindow": false,
+      "index": 60,
+      "noForeignForegroundWindows": true,
+      "publicWindowID": 37984,
+      "targetFrame": [
+        1951,
+        611,
+        220,
+        240
+      ],
+      "cornerPhase": "restored",
+      "keyAtStart": 1,
+      "windowCornerAtStart": 0,
+      "phaseStable": true
+    }
+  ],
+  "qualification": "Controlled reversible runtime diagnosis on exact already-running native public fixture; not implementation or new product qualification",
+  "privateAPI": "NSWindow._setCornerRadius: diagnostic only; original radii object and corner path restored",
+  "productSourceChanged": false
+}

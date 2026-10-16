@@ -149,6 +149,7 @@
     "dist:mac": "npm run build && node scripts/run-electron-builder.mjs --platform=mac --mode=dist",
     "postinstall": "electron-builder install-app-deps",
     "typecheck": "tsc --noEmit",
+    "test-native-work-shelf": "node scripts/run-native-work-shelf-tests.mjs",
     "build:shelf-candidates": "node scripts/build-shelf-candidates.mjs",
     "start:shelf-a": "node scripts/launch-window-candidate.mjs --candidate=a",
     "start:work-b": "node scripts/launch-window-candidate.mjs --candidate=b",
@@ -385,7 +386,10 @@
     "build:macos-runtime": "node scripts/build-macos-runtime.mjs",
     "test-app-design-style": "node scripts/app-design-style.test.mjs",
     "test-ui-theme-sync": "node scripts/run-ts-test.mjs scripts/ui-theme-sync.test.ts",
-    "test-visual-ai-intake-integration": "node scripts/run-electron-node-test.mjs scripts/visual-ai-intake.integration.test.ts"
+    "test-visual-ai-intake-integration": "node scripts/run-electron-node-test.mjs scripts/visual-ai-intake.integration.test.ts",
+"test-work-set-retirement": "node scripts/run-electron-node-test.mjs scripts/work-set-retirement.test.ts",
+    "test-work-set-draft-retirement": "node scripts/run-electron-node-test.mjs scripts/work-set-draft-retirement.test.ts",
+    "test-work-image-document": "node scripts/run-electron-node-test.mjs scripts/work-image-document.test.ts"
   },
   "dependencies": {
     "archiver": "7.0.1",

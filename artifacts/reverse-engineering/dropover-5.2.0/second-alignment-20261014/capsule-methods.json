@@ -1,0 +1,143 @@
+[
+  {
+    "type": "send",
+    "payload": {
+      "event": "methods",
+      "class": "DropoverCore.DisclosureIndicatorControl",
+      "methods": [
+        {
+          "selector": "init",
+          "symbol": "0x105470b90 DropoverCore!-[DropoverCore.DisclosureIndicatorControl init]",
+          "module": "DropoverCore",
+          "offset": "0x28b90"
+        },
+        {
+          "selector": "initWithCoder:",
+          "symbol": "0x105470bb0 DropoverCore!-[DropoverCore.DisclosureIndicatorControl initWithCoder:]",
+          "module": "DropoverCore",
+          "offset": "0x28bb0"
+        },
+        {
+          "selector": "fittingSize",
+          "symbol": "0x10547120c DropoverCore!-[DropoverCore.DisclosureIndicatorControl fittingSize]",
+          "module": "DropoverCore",
+          "offset": "0x2920c"
+        },
+        {
+          "selector": "intrinsicContentSize",
+          "symbol": "0x105471208 DropoverCore!-[DropoverCore.DisclosureIndicatorControl intrinsicContentSize]",
+          "module": "DropoverCore",
+          "offset": "0x29208"
+        },
+        {
+          "selector": "layout",
+          "symbol": "0x105470da0 DropoverCore!-[DropoverCore.DisclosureIndicatorControl layout]",
+          "module": "DropoverCore",
+          "offset": "0x28da0"
+        },
+        {
+          "selector": "acceptsFirstMouse:",
+          "symbol": "0x105470dc8 DropoverCore!-[DropoverCore.DisclosureIndicatorControl acceptsFirstMouse:]",
+          "module": "DropoverCore",
+          "offset": "0x28dc8"
+        },
+        {
+          "selector": ".cxx_destruct",
+          "symbol": "0x105470e00 DropoverCore!-[DropoverCore.DisclosureIndicatorControl .cxx_destruct]",
+          "module": "DropoverCore",
+          "offset": "0x28e00"
+        }
+      ]
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "event": "methods",
+      "class": "DropoverCore.DisclosureIndicatorTextContainerView",
+      "methods": [
+        {
+          "selector": "init",
+          "symbol": "0x105495d10 DropoverCore!-[DropoverCore.DisclosureIndicatorTextContainerView init]",
+          "module": "DropoverCore",
+          "offset": "0x4dd10"
+        },
+        {
+          "selector": "initWithCoder:",
+          "symbol": "0x105495d30 DropoverCore!-[DropoverCore.DisclosureIndicatorTextContainerView initWithCoder:]",
+          "module": "DropoverCore",
+          "offset": "0x4dd30"
+        },
+        {
+          "selector": "initWithFrame:",
+          "symbol": "0x105495d78 DropoverCore!-[DropoverCore.DisclosureIndicatorTextContainerView initWithFrame:]",
+          "module": "DropoverCore",
+          "offset": "0x4dd78"
+        },
+        {
+          "selector": ".cxx_destruct",
+          "symbol": "0x105495da4 DropoverCore!-[DropoverCore.DisclosureIndicatorTextContainerView .cxx_destruct]",
+          "module": "DropoverCore",
+          "offset": "0x4dda4"
+        }
+      ]
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "event": "methods",
+      "class": "_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView",
+      "methods": [
+        {
+          "selector": "initWithFrame:",
+          "symbol": "0x105496ad8 DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView initWithFrame:]",
+          "module": "DropoverCore",
+          "offset": "0x4ead8"
+        },
+        {
+          "selector": "initWithCoder:",
+          "symbol": "0x105496af8 DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView initWithCoder:]",
+          "module": "DropoverCore",
+          "offset": "0x4eaf8"
+        },
+        {
+          "selector": "layout",
+          "symbol": "0x105496f08 DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView layout]",
+          "module": "DropoverCore",
+          "offset": "0x4ef08"
+        },
+        {
+          "selector": "fittingSize",
+          "symbol": "0x10549876c DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView fittingSize]",
+          "module": "DropoverCore",
+          "offset": "0x5076c"
+        },
+        {
+          "selector": "intrinsicContentSize",
+          "symbol": "0x105498768 DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView intrinsicContentSize]",
+          "module": "DropoverCore",
+          "offset": "0x50768"
+        },
+        {
+          "selector": "viewDidChangeEffectiveAppearance",
+          "symbol": "0x105497214 DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView viewDidChangeEffectiveAppearance]",
+          "module": "DropoverCore",
+          "offset": "0x4f214"
+        },
+        {
+          "selector": "viewDidChangeBackingProperties",
+          "symbol": "0x10549737c DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView viewDidChangeBackingProperties]",
+          "module": "DropoverCore",
+          "offset": "0x4f37c"
+        },
+        {
+          "selector": ".cxx_destruct",
+          "symbol": "0x105498140 DropoverCore!-[_TtC12DropoverCoreP33_774D8655560D3F271F11437B61C3D17017AnimatingTextView .cxx_destruct]",
+          "module": "DropoverCore",
+          "offset": "0x50140"
+        }
+      ]
+    }
+  }
+]

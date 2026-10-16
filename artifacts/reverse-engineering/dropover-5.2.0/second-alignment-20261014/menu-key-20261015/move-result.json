@@ -1,0 +1,6 @@
+{
+  "action": "move",
+  "sourceNoLongerExists": true,
+  "destinationExists": true,
+  "unchangedBytes": true
+}

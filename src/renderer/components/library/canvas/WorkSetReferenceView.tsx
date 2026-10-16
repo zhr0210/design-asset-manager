@@ -17,7 +17,7 @@ import {WorkFileHandoffPanel} from './WorkFileHandoffPanel'
 import './work-set-reference.css'
 
 type Baseline = { revision: number; value: WorkSetValue }
-const valueOf = (set: SavedWorkSet): WorkSetValue => ({ name: set.name, assetIds: set.assetIds, note: set.note, colors: set.colors, columns: set.columns })
+const valueOf = (set: SavedWorkSet): WorkSetValue => ({ name: set.name, assetIds: set.assetIds, columns: set.columns })
 const same = (a: WorkSetValue, b: WorkSetValue) => JSON.stringify(a) === JSON.stringify(b)
 
 /** Same reference presentation as the native window, through the workspace's scoped Host commands. */
@@ -30,11 +30,11 @@ export function WorkSetReferenceView({ id, model, assets, close, preview, locate
   const scope = { ...model.scope, kind: 'work-set' as const, entityId: id }
   const current = model.catalog?.sets.find(set => set.id === id)
   const initial = useRef(currentWorkspaceDraft(scope))
-  const [base, setBase] = useState<Baseline>(() => initial.current?.base as Baseline || { revision: current?.revision || 0, value: current ? valueOf(current) : { name: '', assetIds: [], note: '', colors: [], columns: 2 } })
+  const [base, setBase] = useState<Baseline>(() => initial.current?.base as Baseline || { revision: current?.revision || 0, value: current ? valueOf(current) : { name: '', assetIds: [], columns: 2 } })
   const [value, setValue] = useState<WorkSetValue>(() => initial.current?.value as WorkSetValue || base.value)
   const [retainedRecovery, setRetainedRecovery] = useState(Boolean(initial.current))
   const [error, setError] = useState(''), [status, setStatus] = useState(''), [saving, setSaving] = useState(false)
-  const [add, setAdd] = useState(false), [query, setQuery] = useState(''), [color, setColor] = useState(''), [upgrade, setUpgrade] = useState(false)
+  const [add, setAdd] = useState(false), [query, setQuery] = useState(''), [upgrade, setUpgrade] = useState(false)
   const [native, setNative] = useState<WorkWindowControlState>(), [nativeBusy, setNativeBusy] = useState(false)
   const [discard, setDiscard] = useState(false)
   const [mediaAsset,setMediaAsset]=useState<string|null>(initialMediaAssetId??null),[handoffAsset,setHandoffAsset]=useState<string|null>(null)
@@ -131,20 +131,18 @@ export function WorkSetReferenceView({ id, model, assets, close, preview, locate
       <div className="work-reference-navigation"><button onClick={() => void leave()} disabled={saving || nativeBusy}><ArrowLeft size={15}/>返回工作模式</button><span>页面工作区</span><button onClick={() => void openNative()} disabled={!current || nativeBusy || model.busy}>在桌面展开</button>
         {native && <><small>{native.visible ? '桌面窗口可见' : '桌面窗口已隐藏'}{native.hasUnsaved ? ' · 有未保存内容' : ''}</small><button disabled={nativeBusy} onClick={() => void control({ kind: 'recover' })}>找回桌面窗口</button><button disabled={nativeBusy} onClick={() => void control({ kind: 'close' })}>关闭桌面窗口</button></>}
       </div>
-      {discard?<div className="file-picker" role="alertdialog" aria-label="放弃页面草稿"><h2>放弃页面草稿</h2><p>只放弃当前页面的工作集草稿。已保存的工作集与素材保持原样。</p><footer><Button onClick={()=>setDiscard(false)}>继续编辑</Button><Button variant="primary" onClick={()=>{setDiscard(false);setRetainedRecovery(false);removeWorkspaceDraft(scope);if(current){setBase({revision:current.revision,value:valueOf(current)});setValue(valueOf(current));setError('')}else close()}}>确认放弃页面草稿</Button></footer></div>:<WorkReferencePanel name={value.name || '暂不可用的工作集'} items={items} note={value.note} colors={value.colors} columns={value.columns} fitColumns pinned={Boolean(native?.pinned)} nativeControls={Boolean(native)} dirty={dirty} saving={saving || model.busy || nativeBusy} status={status} error={error || native?.layoutError} onInspect={inspect} onPreview={inspect}
+      {discard?<div className="file-picker" role="alertdialog" aria-label="放弃页面草稿"><h2>放弃页面草稿</h2><p>只放弃当前页面的工作集草稿。已保存的工作集与素材保持原样。</p><footer><Button onClick={()=>setDiscard(false)}>继续编辑</Button><Button variant="primary" onClick={()=>{setDiscard(false);setRetainedRecovery(false);removeWorkspaceDraft(scope);if(current){setBase({revision:current.revision,value:valueOf(current)});setValue(valueOf(current));setError('')}else close()}}>确认放弃页面草稿</Button></footer></div>:<WorkReferencePanel name={value.name || '暂不可用的工作集'} items={items} columns={value.columns} fitColumns pinned={Boolean(native?.pinned)} nativeControls={Boolean(native)} dirty={dirty} saving={saving || model.busy || nativeBusy} status={status} error={error || native?.layoutError} onInspect={inspect} onPreview={inspect}
         onRemove={assetId => update({ ...value, assetIds: value.assetIds.filter(a => a !== assetId) })}
         onMove={(assetId, delta) => { const ids = [...value.assetIds], from = ids.indexOf(assetId), to = from + delta; if (to >= 0 && to < ids.length) { [ids[from], ids[to]] = [ids[to], ids[from]]; update({ ...value, assetIds: ids }) } }}
-        onAdd={() => setAdd(!add)} onNote={note => update({ ...value, note })} onColors={colors => update({ ...value, colors })} onColumns={columns => update({ ...value, columns })}
+        onAdd={() => setAdd(!add)} onColumns={columns => update({ ...value, columns })}
         onPin={() => void control({ kind: 'pin', pinned: !native?.pinned } as Omit<WorkWindowControlInput, 'libraryIdentity' | 'generation' | 'id'>)} onHide={() => void control({ kind: 'hide' })} onSave={() => void save()}
-        onCopyColor={hex => { void navigator.clipboard.writeText(hex).then(() => setStatus('已复制 ' + hex)).catch(() => setError('复制失败，请重试。')) }}
         onTransfer={assetId => { const asset = references.assets.find(a => a.id === assetId); if (asset) void leave().then(left => { if (left) locate(asset) }) }} transferLabel="在资料库检查"
         extra={<div className="work-reference-fields"><label>名称<input aria-label="工作参考名称" value={value.name} maxLength={80} onChange={e => update({ ...value, name: e.target.value })}/></label>
           <section aria-label="工作参考交付">{value.assetIds.map(assetId=>{const asset=references.assets.find(a=>a.id===assetId);return asset&&<div key={assetId}><button disabled={!current?.assetIds.includes(assetId)} onClick={()=>setHandoffAsset(handoffAsset===assetId?null:assetId)}>交付 {asset.title}</button>{asset.fileType==='mp4'&&<button disabled={!current?.assetIds.includes(assetId)} onClick={()=>setMediaAsset(assetId)}>视频与参考帧 {asset.title}</button>}</div>})}</section>
           {handoffAsset&&value.assetIds.includes(handoffAsset)&&<WorkFileHandoffPanel key={handoffAsset} scope={{...model.scope,setId:id,assetId:handoffAsset}} video={references.assets.find(a=>a.id===handoffAsset)?.fileType==='mp4'}/>}
           {add && <section aria-label="添加工作参考"><label>查找素材<input aria-label="查找工作参考" value={query} onChange={e => setQuery(e.target.value)}/></label><WorkSetAssetChoices search={references} pick={id=>update({...value,assetIds:[...value.assetIds,id]})}/></section>}
-          <form onSubmit={event => { event.preventDefault(); if (!/^#[0-9a-f]{6}$/i.test(color)) { setError('请输入六位颜色代码，如 #AABBCC。'); return } update({ ...value, colors: [...new Set([...value.colors, color.toUpperCase()])] }); setColor('') }}><label>添加用色<input aria-label="工作颜色代码" value={color} maxLength={7} onChange={e => setColor(e.target.value)} placeholder="#AABBCC"/></label><button type="submit">添加工作颜色</button></form>
-          {model.catalog?.requiresUpgrade && <label><input type="checkbox" checked={upgrade} onChange={e => setUpgrade(e.target.checked)}/>首次保存升级到 v7，旧版应用将无法打开此库；原件保留。我了解并同意。</label>}
-          {(conflict || !current) && <div role="status"><p>{current ? '工作集已在另一界面修改。页面草稿仍保留。' : '原工作集已不存在或暂不可用，页面草稿仍保留。'}</p>{current && <><details><summary>核对当前已保存内容</summary><p>{current.name} · {current.assetIds.length} 份参考 · {current.colors.join('、')}</p><pre>{current.note || '尚无工作备注'}</pre></details><button disabled={saving} onClick={() => { setBase({ revision: current.revision, value: valueOf(current) }); setError(''); setStatus('已采用当前保存版本为基准，页面输入仍保留。') }}>核对后采用当前工作集为基准</button></>}</div>}
+          {model.catalog?.requiresUpgrade && <label><input type="checkbox" checked={upgrade} onChange={e => setUpgrade(e.target.checked)}/>升级到 v16：备份后彻底清理工作集历史备注和用色，旧版应用无法再打开此库；素材备注、色板库及原件保留。我了解并同意。</label>}
+          {(conflict || !current) && <div role="status"><p>{current ? '工作集已在另一界面修改。页面草稿仍保留。' : '原工作集已不存在或暂不可用，页面草稿仍保留。'}</p>{current && <><details><summary>核对当前已保存内容</summary><p>{current.name} · {current.assetIds.length} 份参考</p></details><button disabled={saving} onClick={() => { setBase({ revision: current.revision, value: valueOf(current) }); setError(''); setStatus('已采用当前保存版本为基准，页面输入仍保留。') }}>核对后采用当前工作集为基准</button></>}</div>}
         </div>}
         footerExtra={<><button disabled={saving || model.busy} onClick={() => void save(true)}>另存工作集</button><button disabled={saving || nativeBusy || model.busy} onClick={()=>setDiscard(true)}>放弃页面草稿</button></>}/>}
     </dialog>

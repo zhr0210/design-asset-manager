@@ -1,0 +1,12 @@
+{
+  "sourceFixtures": 9,
+  "allRecordedReceiptsHashVerified": 20,
+  "receiptKinds": {
+    "zip": 2,
+    "preview": 4,
+    "compatible-png": 4,
+    "processed-image": 4,
+    "original": 6
+  },
+  "allNineMemberZIPsBytesAndCRCVerified": true
+}

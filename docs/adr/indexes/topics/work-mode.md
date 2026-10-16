@@ -9,3 +9,4 @@
 | [0485 · Work Mode Preserves Reference Context And Host-Owned Media](../../0485-work-mode-preserves-reference-context-and-host-owned-media.md) | Core | accepted |
 | [0489 · Work Sets Separate Saved References From Native Window Authority](../../0489-work-sets-separate-saved-references-from-native-window-authority.md) | Supporting | accepted |
 | [0493 · Dropover 式交互允许平台原生实现](../../0493-dropover-style-interaction-allows-platform-native-implementation.md) | Supporting | accepted |
+| [0494 · 工作集退役独立备注和用色](../../0494-work-sets-retire-own-notes-and-palettes.md) | Supporting | not-declared |

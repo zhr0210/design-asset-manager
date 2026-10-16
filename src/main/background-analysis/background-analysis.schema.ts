@@ -35,4 +35,4 @@ BEGIN
  AND policy.singleton=1 AND policy.enabled=1 AND k.enabled=1;
 END;
 `
-export function applyBackgroundAnalysisSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version>=12&&version<=15)return;if(version!==11)throw Error('BACKGROUND_SCHEMA_UNSUPPORTED');db.exec(BACKGROUND_ANALYSIS_SQL);db.prepare('INSERT INTO background_analysis_policy VALUES(1,0,0)').run();for(const cap of ['tags','caption','ocr'])db.prepare('INSERT INTO background_analysis_capabilities VALUES(?,1)').run(cap);db.pragma('user_version=12')}
+export function applyBackgroundAnalysisSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version>=12&&version<=16)return;if(version!==11)throw Error('BACKGROUND_SCHEMA_UNSUPPORTED');db.exec(BACKGROUND_ANALYSIS_SQL);db.prepare('INSERT INTO background_analysis_policy VALUES(1,0,0)').run();for(const cap of ['tags','caption','ocr'])db.prepare('INSERT INTO background_analysis_capabilities VALUES(?,1)').run(cap);db.pragma('user_version=12')}

@@ -13378,6 +13378,36 @@
         "悬浮窗",
         "macOS"
       ]
+    },
+    {
+      "id": "0494",
+      "title": "工作集只保存素材引用与呈现，退役独立备注和用色",
+      "path": "docs/adr/0494-work-sets-retire-own-notes-and-palettes.md",
+      "topics": [
+        "work-mode"
+      ],
+      "facets": [
+        "product",
+        "persistence",
+        "compatibility",
+        "failure",
+        "interaction"
+      ],
+      "classification": "Supporting",
+      "status": "not-declared",
+      "detail": null,
+      "references": [
+        "0489"
+      ],
+      "keywords": [
+        "工作集",
+        "备注",
+        "用色",
+        "v16",
+        "迁移",
+        "work set",
+        "retirement"
+      ]
     }
   ],
   "keywordPolicy": "Bilingual title concepts plus explicit scope labels for selected decisions; heuristic navigation, never a compatibility/applicability verdict."

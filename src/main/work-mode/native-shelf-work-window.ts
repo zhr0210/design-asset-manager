@@ -37,8 +37,9 @@ export function createNativeShelfWorkWindow(
   let previewBytes=0
   // Native compact presentation has its own actual geometry. The React detail
   // surface retains the original editor size; neither lies about OS bounds.
-  if(!(input.legacyLayout??input.layout).presentation)writeFileSync(join(root,'legacy-layout.json'),JSON.stringify(input.legacyLayout??input.layout),{flag:'wx',mode:0o600})
   let geometry = nativeShelfLayout(input.layout,screen.getAllDisplays().map(d=>d.workArea))
+  const savedLayout=input.legacyLayout??input.layout
+  if(!savedLayout.presentation||JSON.stringify(savedLayout)!==JSON.stringify(geometry))writeFileSync(join(root,'legacy-layout.json'),JSON.stringify(savedLayout),{flag:'wx',mode:0o600})
   let gestureVersion=0
   const motions=new Map<number,{resolve:()=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>;target:WorkWindowLayout}>()
   let dockTarget: WorkWindowLayout | undefined
@@ -64,8 +65,8 @@ export function createNativeShelfWorkWindow(
     child.stdin.write(JSON.stringify(command) + '\n')
   }
   const geometryCommand = (layout: WorkWindowLayout) => ({
-    op: 'bounds', x: layout.x, y: layout.y, width: layout.width, height: layout.height,
-    presentation:layout.presentation??'compact',docked: Boolean(layout.dock), ...(layout.dock ? { normal: layout.dock.normalBounds } : {})
+    op: 'bounds', indicatorColor:layout.indicatorColor??null,alwaysShowIndicator:layout.alwaysShowIndicator??false,currentSpaceOnly:layout.currentSpaceOnly??false, x: layout.x, y: layout.y, width: layout.width, height: layout.height,
+    ...(layout.expansion?{expansion:layout.expansion}:{}),presentation:layout.presentation??'compact',docked: Boolean(layout.dock), ...(layout.dock ? { normal: layout.dock.normalBounds } : {})
   })
   // The existing sandboxed renderer remains the complex editing surface; its
   // authenticated frame/member APIs are not exposed to the native child.
@@ -104,7 +105,7 @@ export function createNativeShelfWorkWindow(
         try{
          if(e.status==='failed')throw Object.assign(Error('原生窗口拒绝了运动请求，布局未保存。'),{code:'WORK_MOTION_FAILED'})
          if(e.status!=='completed'||e.gestureId!==gestureVersion)throw Object.assign(Error('窗口移动已由新输入接管。'),{code:'WORK_MOTION_CANCELED'})
-         geometry=validateWorkLayout({x:e.x,y:e.y,width:e.width,height:e.height,presentation:e.presentation,pinned:geometry.pinned,open:true,...(e.docked&&dockTarget?.dock?{dock:dockTarget.dock}:{})})
+         geometry=validateWorkLayout({x:e.x,y:e.y,width:e.width,height:e.height,...(e.expansion?{expansion:e.expansion}:{}),presentation:e.presentation,pinned:geometry.pinned,indicatorColor:geometry.indicatorColor,alwaysShowIndicator:geometry.alwaysShowIndicator,currentSpaceOnly:geometry.currentSpaceOnly,open:true,...(e.docked&&dockTarget?.dock?{dock:dockTarget.dock}:{})})
          if(['x','y','width','height'].some(key=>Math.abs(Number(geometry[key as keyof WorkWindowLayout])-Number(pending.target[key as keyof WorkWindowLayout]))>1))throw Object.assign(Error('实际窗口位置与目标不符，未保存布局。'),{code:'WORK_MOTION_FRAME_MISMATCH'})
          pending.resolve()
         }catch(error){pending.reject(error instanceof Error?error:Error('INVALID_MOTION_ACK'))}
@@ -112,7 +113,7 @@ export function createNativeShelfWorkWindow(
         recordMotion({phase:'geometry',motionId:e.motionId,currentMotionId:motionVersion,x:e.x,y:e.y,width:e.width,height:e.height,docked:e.docked})
         if(e.motionId!==motionVersion||Number(e.gestureId)<gestureVersion)return
         const next = validateWorkLayout({ x: e.x, y: e.y, width: e.width, height: e.height,
-          open: true, pinned: geometry.pinned,presentation:e.presentation,
+          open: true, pinned: geometry.pinned,indicatorColor:geometry.indicatorColor,alwaysShowIndicator:geometry.alwaysShowIndicator,currentSpaceOnly:geometry.currentSpaceOnly,presentation:e.presentation,...(e.expansion?{expansion:e.expansion}:{}),
           ...(e.docked === true && dockTarget?.dock ? { dock: dockTarget.dock } : {}) })
         geometry = next
         input.changed()
@@ -136,7 +137,7 @@ export function createNativeShelfWorkWindow(
         if(!Number.isSafeInteger(e.gestureId)||e.gestureId!==gestureVersion||typeof e.deltaX!=='number'||!Number.isFinite(e.deltaX))return
         handler?.({ kind: 'dock', edge: e.edge,gestureId:e.gestureId as number,deltaX:e.deltaX })
       } else if (e.event === 'undockIntent') {
-        const restore=e.restore===undefined?undefined:validateWorkLayout({...e.restore as Record<string,unknown>,pinned:geometry.pinned,open:true})
+        const restore=e.restore===undefined?undefined:validateWorkLayout({...e.restore as Record<string,unknown>,pinned:geometry.pinned,indicatorColor:geometry.indicatorColor,alwaysShowIndicator:geometry.alwaysShowIndicator,currentSpaceOnly:geometry.currentSpaceOnly,open:true})
         recordMotion({phase:'undockIntent',...(restore?{restore:{x:restore.x,y:restore.y,width:restore.width,height:restore.height}}:{})})
         if(!Number.isSafeInteger(e.gestureId)||e.gestureId!==gestureVersion)return
         handler?.({kind:'undock',gestureId:e.gestureId as number,...(restore?{restore:{x:restore.x,y:restore.y,width:restore.width,height:restore.height}}:{})})
@@ -170,7 +171,7 @@ export function createNativeShelfWorkWindow(
     for(const [key,encoded]of previewCache)if(!validKeys.has(key)){previewBytes-=Buffer.byteLength(encoded,'base64');previewCache.delete(key)}
     for(const key of metadataCache.keys())if(!validKeys.has(key))metadataCache.delete(key)
     const cachedItems=()=>itemValues().map(item=>({...item,...metadataCache.get(assetKey(item.id)),...(previewCache.has(assetKey(item.id))?{preview:previewCache.get(assetKey(item.id))}:{})}))
-    send({ op: 'publish', libraryIdentity:snapshot.scope.libraryIdentity,generation:snapshot.scope.generation,name: value.name, colors: value.colors,note:value.note,ack:snapshot.nativeSaveSerial??0,items:cachedItems() })
+    send({ op: 'publish', libraryIdentity:snapshot.scope.libraryIdentity,generation:snapshot.scope.generation,name: value.name,revision:snapshot.set.revision, ack:snapshot.nativeSaveSerial??0,items:cachedItems() })
     void (async () => {
       for (const asset of snapshot.assets.slice(0, 200)) {
         if (snapshot.set.unavailableIds.includes(asset.id)) continue
@@ -188,7 +189,7 @@ export function createNativeShelfWorkWindow(
         } catch { /* Unavailable member stays unavailable; no arbitrary file fallback. */ }
         if (destroyed || sequence !== current) return
       }
-      if (!destroyed && sequence === current) send({ op: 'publish', libraryIdentity:snapshot.scope.libraryIdentity,generation:snapshot.scope.generation,name: value.name, colors: value.colors,note:value.note,ack:snapshot.nativeSaveSerial??0,
+      if (!destroyed && sequence === current) send({ op: 'publish', libraryIdentity:snapshot.scope.libraryIdentity,generation:snapshot.scope.generation,name: value.name,revision:snapshot.set.revision, ack:snapshot.nativeSaveSerial??0,
         items:cachedItems() })
     })()
   }
@@ -225,6 +226,7 @@ export function createNativeShelfWorkWindow(
       })
       return retirement
     },
+    setWindowMetadata:value=>{geometry=validateWorkLayout({...geometry,...value});send({op:'metadata',indicatorColor:geometry.indicatorColor??null,alwaysShowIndicator:geometry.alwaysShowIndicator??false,currentSpaceOnly:geometry.currentSpaceOnly??false})},
     setPinned: value => { geometry = { ...geometry, pinned: value }; send({ op: 'pin', pinned: value }); detail?.setPinned(value) },
     bounds: () => ({ ...geometry, ...(geometry.dock ? { dock: { ...geometry.dock, normalBounds: { ...geometry.dock.normalBounds } } } : {}) }),
     setBounds: value => { dockTarget = value; send(geometryCommand(value)) },

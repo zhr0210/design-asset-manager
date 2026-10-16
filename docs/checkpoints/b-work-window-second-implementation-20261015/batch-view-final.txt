@@ -1,0 +1,1 @@
+Actual React batch Renderer: explicit sequence/cache, Space preview, Cmd/Shift/checkbox/select-all, single and multi drag, visible item failure/retry, stop keeps completed, shared in-flight request, revocation/token/unmount races and unknown-result no replay. Controlled bridge; physical drop separate.

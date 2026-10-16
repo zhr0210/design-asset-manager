@@ -22,7 +22,7 @@ try{
  assert.ok(first&&second)
  const state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!},device='device:handoff-test'
  const catalog=await host.readWorkSets(scope,device)
- const created=await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Fixture two distinct images',assetIds:[first.id,second.id],colors:[],columns:2,note:''}}},device)
+ const created=await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Fixture two distinct images',assetIds:[first.id,second.id],columns:2,}}},device)
  const set=created.sets[0],handoffRoot=path.join(root,'handoffs'),files=createWorkFileHandoffs({host,root:handoffRoot,open:async()=>'',trash:async()=>{throw Error('NOT_USED')}})
  await fs.mkdir(handoffRoot);await fs.writeFile(path.join(handoffRoot,'.DS_Store'),Buffer.alloc(6148))
  const media=createWorkMediaController({host,files,changed(){}}),owner={}

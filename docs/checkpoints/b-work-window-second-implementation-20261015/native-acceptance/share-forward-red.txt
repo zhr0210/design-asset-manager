@@ -1,0 +1,26 @@
+
+> design-asset-manager@1.0.0 test-native-work-shelf
+> node scripts/run-native-work-shelf-tests.mjs
+
+node:internal/errors:999
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-native-tests-iCLHJ3/work-shelf-second-alignment
+main/work-shelf-second-alignment.test.swift:24: Precondition failed: AppKit may dismiss its picker before forwarding Escape to the shelf
+
+    at genericNodeError (node:internal/errors:999:15)
+    at wrappedFn (node:internal/errors:544:14)
+    at ChildProcess.exithandler (node:child_process:420:12)
+    at ChildProcess.emit (node:events:514:20)
+    at maybeClose (node:internal/child_process:1156:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:334:5) {
+  code: null,
+  killed: false,
+  signal: 'SIGTRAP',
+  cmd: '/var/folders/f4/shnswpzd58bg4kx8hv46y2zw0000gn/T/dam-native-tests-iCLHJ3/work-shelf-second-alignment',
+  stdout: '',
+  stderr: 'main/work-shelf-second-alignment.test.swift:24: Precondition failed: AppKit may dismiss its picker before forwarding Escape to the shelf\n'
+}
+
+Node.js v26.11.1

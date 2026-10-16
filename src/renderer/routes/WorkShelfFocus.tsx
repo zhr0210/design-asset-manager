@@ -85,7 +85,7 @@ export function WorkShelfFocus({snapshot,api}:{snapshot:WorkWindowSnapshot;api:W
  return <main className={`gallery-design minimal-prototype native-work-surface work-shelf-focus ${dark?'dark':''}`} data-native-backdrop>
   {error&&<div className="work-focus-error" role="alert">{error}<button onClick={()=>{setError('');setRefresh(v=>v+1)}}>重试读取</button></div>}
   {asset?<FocusView asset={{id,title:asset.title,src:src(id),kind:'image',pixelLabel:'预览像素 1:1',previewWidth:previewDimensions.current.get(id)?.w,previewHeight:previewDimensions.current.get(id)?.h}} items={images} change={next=>void changeImage(next)} close={()=>void close()} autoSave shelfPresentation notebook={notebook} video={null}
-   details={<LibraryDetails asset={asset} focus memberPalette={palette} addWorkColor={color=>{void member('add-color',{color}).catch(e=>setError(e.message))}}
+   details={<LibraryDetails asset={asset} focus memberPalette={palette}
     analysis={<VisualAiPanel memberApi={visual} libraryTools={false} scope={snapshot.scope} assetIds={[id]} promptDraft={promptDraft} onUsePrompt={setPromptDraft} onChanged={()=>setRefresh(v=>v+1)} onConfigure={()=>{void api.act({token:snapshot.token,kind:'configure-ai'})}}/>}
     ocrPanel={<DedicatedOcrPanel memberApi={ocr} asset={asset} scope={{...snapshot.scope,assetId:id}}/>}/>}/>:<div role="status">正在读取专注预览…</div>}
  </main>

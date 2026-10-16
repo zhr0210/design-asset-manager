@@ -1,0 +1,154 @@
+{
+  "commandCount": 250,
+  "exitZero": 229,
+  "failedOrTimedOut": [
+    {
+      "name": "test-doctor-ipc",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.19,
+      "log": "test-doctor-ipc.log"
+    },
+    {
+      "name": "test-asset-library-keyboard",
+      "code": 1,
+      "timeout": false,
+      "seconds": 16.24,
+      "log": "test-asset-library-keyboard.log"
+    },
+    {
+      "name": "test-app-ipc-registration",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.34,
+      "log": "test-app-ipc-registration.log"
+    },
+    {
+      "name": "test-host-schema-maintenance",
+      "code": 1,
+      "timeout": false,
+      "seconds": 2.49,
+      "log": "test-host-schema-maintenance.log"
+    },
+    {
+      "name": "test-visual-ai-download-integration",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.03,
+      "log": "test-visual-ai-download-integration.log"
+    },
+    {
+      "name": "test-active-library-electron-e2e",
+      "code": 1,
+      "timeout": false,
+      "seconds": 36.9,
+      "log": "test-active-library-electron-e2e.log"
+    },
+    {
+      "name": "test-external-connected-library-electron-e2e",
+      "code": 1,
+      "timeout": true,
+      "seconds": 300.19,
+      "log": "test-external-connected-library-electron-e2e.log"
+    },
+    {
+      "name": "test-persistent-download-electron-e2e",
+      "code": 1,
+      "timeout": true,
+      "seconds": 300.1,
+      "log": "test-persistent-download-electron-e2e.log"
+    },
+    {
+      "name": "test-intake-recovery-electron-e2e",
+      "code": 1,
+      "timeout": true,
+      "seconds": 300.1,
+      "log": "test-intake-recovery-electron-e2e.log"
+    },
+    {
+      "name": "test-library-canvas-electron",
+      "code": 1,
+      "timeout": false,
+      "seconds": 35.13,
+      "log": "test-library-canvas-electron.log"
+    },
+    {
+      "name": "test-gallery-parity",
+      "code": 1,
+      "timeout": false,
+      "seconds": 2.36,
+      "log": "test-gallery-parity.log"
+    },
+    {
+      "name": "test-work-sets-electron",
+      "code": 1,
+      "timeout": false,
+      "seconds": 34.83,
+      "log": "test-work-sets-electron.log"
+    },
+    {
+      "name": "test-local-dam-connection-view",
+      "code": 1,
+      "timeout": false,
+      "seconds": 60.97,
+      "log": "test-local-dam-connection-view.log"
+    },
+    {
+      "name": "test-windows-codec-qualification",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.03,
+      "log": "test-windows-codec-qualification.log"
+    },
+    {
+      "name": "test-windows-codec-faults",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.02,
+      "log": "test-windows-codec-faults.log"
+    },
+    {
+      "name": "test-windows-schema-backup-qualification",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.72,
+      "log": "test-windows-schema-backup-qualification.log"
+    },
+    {
+      "name": "test-visual-admission-isolation",
+      "code": -15,
+      "timeout": true,
+      "seconds": 120.02,
+      "log": "test-visual-admission-isolation.log"
+    },
+    {
+      "name": "work-media-existing-library.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.19,
+      "log": "work-media-existing-library.test.log"
+    },
+    {
+      "name": "work-media-preservation.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.18,
+      "log": "work-media-preservation.test.log"
+    },
+    {
+      "name": "work-media-real-evidence.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.19,
+      "log": "work-media-real-evidence.test.log"
+    },
+    {
+      "name": "work-media.test",
+      "code": 1,
+      "timeout": false,
+      "seconds": 0.24,
+      "log": "work-media.test.log"
+    }
+  ],
+  "scope": "All 220 registered test-* commands plus 30 unregistered Work Set/native TypeScript and mjs checks. Swift checks compiled and run separately. Exit zero may include internally skipped platform cases; not all-platform acceptance."
+}

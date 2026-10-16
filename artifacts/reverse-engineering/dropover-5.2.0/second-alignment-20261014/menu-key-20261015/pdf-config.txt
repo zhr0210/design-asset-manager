@@ -1,0 +1,20 @@
+Window: "", App: Dropover.
+0 窗口 Secondary Actions: Raise
+	1 container
+		2 图像
+		3 text 从图像创建 PDF 从多个图像创建一个单一的PDF文件。
+		4 滚动区
+			5 container
+				6 弹出式按钮 显示, Value: 在 Finder 中显示
+				7 文本 保存在
+				8 菜单按钮 moved-output
+		9 按钮 取消
+		10 按钮 继续
+11 menu bar
+	12 Dropover
+	13 Edit
+	14 查看
+	15 窗口
+	16 Help
+
+The focused UI element is 0 窗口 Secondary Actions: Raise

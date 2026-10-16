@@ -26,7 +26,7 @@ test('a task type alone never falls back to every Core decision',()=>{
 
 test('task type changes reading focus but never excludes relevant data or ownership decisions',()=>{
   const ids=kind=>routeAdrMetadata(catalog,{kind,topic:'work-mode',limit:8}).candidates.map(c=>c.id).sort()
-  assert.deepEqual(ids('design'),['0485','0489','0493'])
+  assert.deepEqual(ids('design'),['0485','0489','0493','0494'])
   assert.deepEqual(ids('research'),ids('design'))
   assert.deepEqual(ids('operations'),ids('design'))
   const fixture=structuredClone(catalog)
@@ -40,7 +40,7 @@ test('task type changes reading focus but never excludes relevant data or owners
 test('new task kinds retain the general relevance path and do not create a whitelist',()=>{
   const result=routeAdrMetadata(catalog,{kind:'new-task-kind',topic:'work-mode'})
   assert.equal(result.taskType.resolved,'general')
-  assert.equal(result.totalMatches,3)
+  assert.equal(result.totalMatches,4)
 })
 
 test('default output is bounded, preserves whole metadata records and exposes deferred choices',()=>{

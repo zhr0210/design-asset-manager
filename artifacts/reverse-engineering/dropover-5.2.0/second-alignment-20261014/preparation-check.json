@@ -1,0 +1,15 @@
+{
+  "type": "documentation-and-research-only",
+  "productCodeChanged": false,
+  "libraryMigrationExecuted": false,
+  "libraryOriginalContentMatch": true,
+  "localSpecificationReady": true,
+  "publishedIssue": false,
+  "scope": "Confirmed preparation, no implementation",
+  "notQualified": [
+    "left/center physical double-click comparison",
+    "small-screen/multiple-display/Spaces matrix",
+    "full original system/file-action execution matrix",
+    "future DAM implementation"
+  ]
+}

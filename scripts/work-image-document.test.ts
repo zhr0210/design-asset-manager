@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict'
+import sharp from 'sharp'
+import {composeWorkImages} from '../src/main/work-mode/work-image-document'
+const red=await sharp({create:{width:80,height:40,channels:3,background:'#ff0000'}}).png().toBuffer(),blue=await sharp({create:{width:40,height:80,channels:3,background:'#0000ff'}}).png().toBuffer()
+for(const direction of ['vertical','horizontal'] as const){const output=await composeWorkImages([red,blue],{kind:'stitch',direction,gap:12,scale:'uniform'},()=>{}),decoded=await sharp(output).removeAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(decoded.info.width,direction==='vertical'?80:212);assert.equal(decoded.info.height,direction==='vertical'?212:80);const pixel=(x:number,y:number)=>[...decoded.data.subarray((y*decoded.info.width+x)*3,(y*decoded.info.width+x)*3+3)];assert.ok(pixel(10,10)[0]>245);const gap=direction==='vertical'?pixel(10,45):pixel(165,10);assert.deepEqual(gap,[255,255,255]);assert.ok((direction==='vertical'?pixel(10,80):pixel(190,10))[2]>245)}
+const pdf=Buffer.from(await composeWorkImages([red,blue],{kind:'pdf',direction:'vertical',gap:0},()=>{})).toString('binary');assert.ok(pdf.includes('/Count 2'));assert.ok(pdf.includes('/MediaBox [0 0 80 40]'));assert.ok(pdf.includes('/MediaBox [0 0 40 80]'));assert.equal((pdf.match(/\/Subtype \/Image/g)||[]).length,2)
+await assert.rejects(composeWorkImages([red],{kind:'pdf',direction:'vertical',gap:0},()=>{throw Error('CANCELLED')}),/CANCELLED/)
+console.log('PASS actual multi-image outputs: independently decoded vertical/horizontal dimensions, source order and white gaps; PDF separate pages/size/image streams; cancellation.')
+
+const centered=await sharp(await composeWorkImages([red,blue],{kind:'stitch',direction:'vertical',gap:0,scale:'original'},()=>{})).removeAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(centered.info.width,80);assert.equal(centered.info.height,120);assert.deepEqual([...centered.data.subarray((50*80+5)*3,(50*80+5)*3+3)],[255,255,255]);assert.ok(centered.data[(50*80+25)*3+2]>245)

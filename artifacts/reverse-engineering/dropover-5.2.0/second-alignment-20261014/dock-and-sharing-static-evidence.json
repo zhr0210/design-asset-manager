@@ -1,0 +1,1213 @@
+[
+  {
+    "evidence_id": "ev_c90df5f230c16b0d122f6f69a91ccb220730a9c7c83c266943dcd22a23e1ccc1",
+    "procedure": {
+      "address": "0x100009b90",
+      "name": "FUN_100009b90",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100009b90",
+            "end": "0x100009d83"
+          }
+        ],
+        "total_bytes": 500,
+        "span_bytes": 500,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100009b90()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined1[16] local_40 @ Stack[-0x40]:16",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\nvoid FUN_100009b90(undefined8 param_1)\n\n{\n  long unaff_x20;\n  undefined8 local_40;\n  undefined8 uStack_38;\n  undefined8 uStack_30;\n  undefined8 uStack_28;\n  \n  if (*(char *)(unaff_x20 + 0x10) == '\\0') {\n    if (DAT_100977e80 != -1) {\n      _swift_once(&DAT_100977e80,FUN_100191bc8);\n    }\n    uStack_38 = 0;\n    local_40 = 0;\n    uStack_28 = 0;\n    uStack_30 = 0;\n    (**(code **)(DAT_100ab41c8 + 0x80))\n              (FUN_100007298,0,0xd00000000000005b,0x8000000100669d40,0xd00000000000002b,\n               0x8000000100669ff0,0x18b,&local_40);\n    FUN_1000098b8(&local_40);\n    FUN_100009704(param_1);\n  }\n  else if (*(char *)(unaff_x20 + 0x10) == '\\x01') {\n    if (DAT_100977e80 != -1) {\n      _swift_once(&DAT_100977e80,FUN_100191bc8);\n    }\n    uStack_38 = 0;\n    local_40 = 0;\n    uStack_28 = 0;\n    uStack_30 = 0;\n    (**(code **)(DAT_100ab41c8 + 0x80))\n              (FUN_1000072c4,0,0xd00000000000005b,0x8000000100669d40,0xd00000000000002b,\n               0x8000000100669ff0,0x18e,&local_40);\n    FUN_1000098b8(&local_40);\n    FUN_10016c814(0,0);\n  }\n  else {\n    if (DAT_100977e80 != -1) {\n      _swift_once(&DAT_100977e80,FUN_100191bc8);\n    }\n    uStack_38 = 0;\n    local_40 = 0;\n    uStack_28 = 0;\n    uStack_30 = 0;\n    (**(code **)(DAT_100ab41c8 + 0x90))\n              (FUN_1000072f0,0,0xd00000000000005b,0x8000000100669d40,0xd00000000000002b,\n               0x8000000100669ff0,0x191,&local_40);\n    FUN_1000098b8(&local_40);\n  }\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_860b66d3fa3a71fff0eb363a9bbfe0df973a2e07e111bd5e9e135a3c40319459",
+    "procedure": {
+      "address": "0x100050778",
+      "name": "FUN_100050778",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100050778",
+            "end": "0x100050d2b"
+          }
+        ],
+        "total_bytes": 1460,
+        "span_bytes": 1460,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100050778()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_100 @ Stack[-0x100]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_108 @ Stack[-0x108]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_110 @ Stack[-0x110]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_118 @ Stack[-0x118]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_120 @ Stack[-0x120]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_128 @ Stack[-0x128]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_60 @ Stack[-0x60]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_70 @ Stack[-0x70]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_80 @ Stack[-0x80]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_90 @ Stack[-0x90]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_b8 @ Stack[-0xb8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_c0 @ Stack[-0xc0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_d0 @ Stack[-0xd0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_d8 @ Stack[-0xd8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_e0 @ Stack[-0xe0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_e8 @ Stack[-0xe8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_f8 @ Stack[-0xf8]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_100050778(undefined8 param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,\n                  ID param_5)\n\n{\n  _CocoaArrayWrapper _Var1;\n  code *pcVar2;\n  int iVar3;\n  DispatchWorkItemFlags DVar4;\n  DispatchQoS DVar5;\n  DispatchTime DVar6;\n  long lVar7;\n  ID IVar8;\n  undefined *puVar9;\n  undefined *puVar10;\n  OS_dispatch_queue *pOVar11;\n  void *aBlock;\n  DispatchQoS DVar12;\n  undefined8 *puVar13;\n  undefined8 *puVar14;\n  long extraout_x8;\n  DispatchWorkItemFlags flags;\n  long lVar15;\n  long extraout_x8_00;\n  long extraout_x8_01;\n  long extraout_x8_02;\n  __int64 _Var16;\n  long extraout_x12;\n  long lVar17;\n  long lVar18;\n  long unaff_x20;\n  long lVar19;\n  undefined8 uVar20;\n  long lVar21;\n  DispatchQoS qos;\n  long lVar22;\n  DispatchTime deadline;\n  DispatchTime DVar23;\n  undefined8 uVar24;\n  undefined1 auStack_130 [8];\n  undefined *local_128;\n  code *local_120;\n  undefined *local_e0;\n  undefined8 local_d8;\n  code *local_d0;\n  undefined *puStack_c8;\n  code *local_c0;\n  undefined *local_b8;\n  undefined1 auStack_b0 [32];\n  \n  DVar4 = Dispatch::DispatchWorkItemFlags::typeMetadataAccessor();\n  lVar22 = *(long *)(DVar4.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar22 + 0x40));\n  flags.unknown = auStack_130 + -(extraout_x8 + 0xfU & 0xfffffffffffffff0);\n  DVar5 = Dispatch::DispatchQoS::typeMetadataAccessor();\n  lVar15 = *(long *)(DVar5.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar15 + 0x40));\n  qos.unknown = flags.unknown + -(extraout_x8_00 + 0xfU & 0xfffffffffffffff0);\n  DVar6 = Dispatch::DispatchTime::typeMetadataAccessor();\n  lVar21 = *(long *)(DVar6.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar21 + 0x40));\n  DVar23.unknown = qos.unknown + -(extraout_x8_01 + 0xfU & 0xfffffffffffffff0);\n  (*(code *)PTR____chkstk_darwin_100877100)();\n  deadline.unknown = DVar23.unknown + -extraout_x12;\n  lVar7 = 0;\n  FUN_10022f004();\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(*(long *)(lVar7 + -8) + 0x40));\n  lVar17 = (long)deadline.unknown - (extraout_x8_02 + 0xfU & 0xfffffffffffffff0);\n  IVar8 = _objc_msgSend(param_5,\"state\");\n  lVar18 = _TtC8Dropover26DragSessionActionStateView::state;\n  if (((IVar8 == 3) &&\n      (*(char *)(unaff_x20 + _TtC8Dropover15DragSessionView::interactionEnabled) == '\\x01')) &&\n     (*(char *)(*(long *)(unaff_x20 + _TtC8Dropover15DragSessionView::backgroundView) +\n               _TtC8Dropover25DragSessionBackgroundView::state) != '\\x03')) {\n    lVar19 = *(long *)(unaff_x20 + _TtC8Dropover15DragSessionView::actionStateView);\n    _swift_beginAccess(lVar19 + _TtC8Dropover26DragSessionActionStateView::state,auStack_b0,0,0);\n    FUN_10001728c(lVar19 + lVar18,lVar17,FUN_10022f004);\n    lVar18 = lVar17;\n    _swift_getEnumCaseMultiPayload(lVar17,lVar7);\n    if ((int)lVar18 == 3) {\n      uVar20 = *(undefined8 *)(unaff_x20 + _TtC8Dropover15DragSessionView::itemsController);\n      puVar9 = &DAT_1006e7750;\n      _swift_getKeyPath(&DAT_1006e7750);\n      puVar10 = &DAT_1006e7778;\n      _swift_getKeyPath(&DAT_1006e7778);\n      Combine::Published::_get_subscript(&local_e0,uVar20,puVar9,puVar10);\n      _swift_release(puVar9);\n      _swift_release(puVar10);\n      lVar18 = *(long *)(local_e0 + 0x10);\n      _swift_bridgeObjectRelease();\n      if (lVar18 != 0) {\n        puVar9 = local_e0;\n        FUN_1001818e8();\n        if ((ulong)puVar9 >> 0x3e == 0) {\n          _Var16 = *(long *)(((ulong)puVar9 & 0xffffffffffffff8) + 0x10);\n        }\n        else {\n          _Var1.unknown = (undefined *)((ulong)puVar9 & 0xffffffffffffff8);\n          if ((long)puVar9 < 0) {\n            _Var1.unknown = puVar9;\n          }\n          _Var16 = Swift::_CocoaArrayWrapper::get_endIndex(_Var1);\n        }\n        if (_Var16 == 0) {\n          _swift_bridgeObjectRelease();\n        }\n        else {\n          if (((ulong)puVar9 & 0xc000000000000001) == 0) {\n            if (*(long *)(((ulong)puVar9 & 0xffffffffffffff8) + 0x10) == 0) {\n                    /* WARNING: Does not return */\n              pcVar2 = (code *)SoftwareBreakpoint(1,0x100050d2c);\n              (*pcVar2)();\n            }\n            IVar8 = *(ID *)(puVar9 + 0x20);\n          }\n          else {\n            IVar8 = 0;\n            FUN_100054e80();\n          }\n          _swift_bridgeObjectRelease(puVar9);\n          _objc_msgSend(param_5,\"locationInView:\",IVar8);\n          uVar20 = param_1;\n          uVar24 = param_2;\n          _objc_msgSend(IVar8,\"bounds\");\n          iVar3 = 0;\n          _CGRectContainsPoint(uVar20,uVar24,param_3,param_4,param_1,param_2);\n          if ((iVar3 != 0) &&\n             (*(char *)(unaff_x20 + _TtC8Dropover15DragSessionView::hasHandledDoubleClick) != '\\x01'\n             )) {\n            *(undefined1 *)(unaff_x20 + _TtC8Dropover15DragSessionView::hasHandledDoubleClick) = 1;\n            pOVar11 = (OS_dispatch_queue *)0x0;\n            FUN_100009e38(0,&DAT_10097cc80,&PTR__OBJC_CLASS___OS_dispatch_queue_10096aed0);\n            local_128 = (extension_Dispatch)::__C::OS_dispatch_queue::get_main(pOVar11);\n            Dispatch::DispatchTime::now((DispatchTime)local_128);\n            Dispatch::__infix(DVar23,0.25);\n            local_120 = *(code **)(lVar21 + 8);\n            (*local_120)(DVar23.unknown,DVar6.unknown);\n            puVar9 = &DAT_10087da88;\n            _swift_allocObject(&DAT_10087da88,0x18,7);\n            _swift_unknownObjectWeakInit(puVar9 + 0x10,unaff_x20);\n            local_c0 = FUN_1000591d0;\n            local_e0 = PTR___NSConcreteStackBlock_1008770f0;\n            local_d8 = 0x42000000;\n            local_d0 = FUN_10000a920;\n            puStack_c8 = &DAT_10087e108;\n            local_b8 = puVar9;\n            aBlock = __Block_copy(&local_e0);\n            DVar12.unknown = local_b8;\n            _swift_release();\n            Dispatch::DispatchQoS::get_unspecified(DVar12);\n            local_e0 = PTR___swiftEmptyArrayStorage_100879d08;\n            puVar13 = &DAT_10097cc88;\n            FUN_100002d4c(&DAT_10097cc88,PTR_typeMetadataAccessor_10087a120,\n                          PTR_Dispatch__Dispatch__DispatchWorkItemFlags_>Swift__SetAlgebra_10087a130\n                         );\n            puVar9 = &DAT_10097cc90;\n            FUN_10000268c(&DAT_10097cc90,&DAT_1006e89a0);\n            puVar14 = &DAT_10097cc98;\n            FUN_100002d08(&DAT_10097cc98,&DAT_10097cc90,&DAT_1006e89a0,\n                          PTR_Swift__Swift__Array<undefined>_>Swift__Sequence_100879360);\n            Swift::SetAlgebra::_init(flags.unknown,&local_e0,puVar9,puVar14,DVar4.unknown,puVar13);\n            (extension_Dispatch)::__C::OS_dispatch_queue::_asyncAfter(deadline,qos,flags);\n            __Block_release(aBlock);\n            (**(code **)(lVar22 + 8))(flags.unknown,DVar4.unknown);\n            (**(code **)(lVar15 + 8))(qos.unknown,DVar5.unknown);\n            (*local_120)(deadline.unknown,DVar6.unknown);\n            lVar18 = unaff_x20 + _TtC8Dropover15DragSessionView::delegate;\n            _swift_unknownObjectWeakLoadStrong();\n            if (lVar18 != 0) {\n              FUN_10025a58c(unaff_x20);\n              _swift_unknownObjectRelease(lVar18);\n            }\n          }\n        }\n      }\n    }\n    else {\n      FUN_1000172d0(lVar17,FUN_10022f004);\n    }\n  }\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_86b7b45c594fb65b9f1168e36d9e7038d738dd932e098fb939d5908c0a8304fa",
+    "procedure": {
+      "address": "0x100006d08",
+      "name": "FUN_100006d08",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100006d08",
+            "end": "0x10000710b"
+          }
+        ],
+        "total_bytes": 1028,
+        "span_bytes": 1028,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100006d08()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_60 @ Stack[-0x60]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_70 @ Stack[-0x70]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined1[16] local_a0 @ Stack[-0xa0]:16",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_a8 @ Stack[-0xa8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_b0 @ Stack[-0xb0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_c0 @ Stack[-0xc0]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n\nuint FUN_100006d08(double param_1,double param_2,double param_3,double param_4,ID param_5,ID param_6\n                  )\n\n{\n  ulong uVar1;\n  _CocoaArrayWrapper _Var2;\n  code *pcVar3;\n  bool bVar4;\n  _StringGuts _Var5;\n  ID IVar6;\n  undefined *puVar7;\n  ulong self;\n  undefined *puVar8;\n  undefined *puVar9;\n  long lVar10;\n  _StringGuts _Var11;\n  long unaff_x20;\n  undefined *puVar12;\n  uint uVar13;\n  ulong uVar14;\n  ulong uVar15;\n  double dVar16;\n  double dVar17;\n  undefined1 auStack_d0 [16];\n  double local_c0;\n  long local_b0;\n  ID local_a8;\n  undefined *local_a0;\n  undefined8 uStack_98;\n  undefined8 uStack_90;\n  undefined8 uStack_88;\n  \n  if (*(char *)(unaff_x20 + 0x10) == '\\0') {\n    _Var11.unknown = &DAT_e400000000000000;\n    _Var5.unknown = (undefined *)0x6b636f64;\nLAB_100006d68:\n    bVar4 = Swift::_stringCompareWithSmolCheck(_Var5,_Var11,(_StringComparisonResult)0x6e);\n    _swift_bridgeObjectRelease(_Var11.unknown);\n    if (!bVar4) {\n      if (*(long *)(param_5 + _TtC8Dropover17DragSessionWindow::overlayController) == 0) {\n                    /* WARNING: Does not return */\n        pcVar3 = (code *)SoftwareBreakpoint(1,0x10000710c);\n        (*pcVar3)();\n      }\n      if (((*(byte *)(*(long *)(param_5 + _TtC8Dropover17DragSessionWindow::overlayController) +\n                     0x11) & 1) == 0) && (IVar6 = _objc_msgSend(param_5,\"contentView\"), IVar6 != 0))\n      {\n        _objc_msgSend(param_6,\"locationInWindow\");\n        _objc_msgSend(IVar6,\"convertPoint:fromView:\",0);\n        _objc_msgSend(param_5,\"frame\");\n        dVar17 = param_3 - param_1;\n        if (param_1 <= param_3 - param_1) {\n          dVar17 = param_1;\n        }\n        _objc_msgSend(param_5,\"frame\");\n        dVar16 = param_4 - param_2;\n        if (param_2 <= param_4 - param_2) {\n          dVar16 = param_2;\n        }\n        if (dVar16 <= dVar17) {\n          dVar17 = dVar16;\n        }\n        dVar16 = 26.0;\n        if (dVar17 <= 26.0) {\n          puVar7 = (undefined *)_objc_msgSend(param_5,\"contentView\");\n          puVar9 = PTR___swiftEmptyArrayStorage_100879d08;\n          if (puVar7 != (undefined *)0x0) {\n            (extension_DropoverCore)::__C::NSView::recursiveSubviews();\n            puVar9 = puVar7;\n          }\n          puVar7 = (undefined *)((ulong)puVar9 & 0xffffffffffffff8);\n          if ((ulong)puVar9 >> 0x3e == 0) {\n            uVar14 = *(ulong *)(puVar7 + 0x10);\n            puVar12 = PTR___swiftEmptyArrayStorage_100879d08;\n          }\n          else {\n            _Var2.unknown = puVar7;\n            if ((long)puVar9 < 0) {\n              _Var2.unknown = puVar9;\n            }\n            uVar14 = Swift::_CocoaArrayWrapper::get_endIndex(_Var2);\n            puVar12 = PTR___swiftEmptyArrayStorage_100879d08;\n          }\n          PTR___swiftEmptyArrayStorage_100879d08 = puVar12;\n          if (uVar14 != 0) {\n            uVar15 = 0;\n            local_a8 = IVar6;\n            do {\n              while( true ) {\n                if (((ulong)puVar9 & 0xc000000000000001) == 0) {\n                  if (*(ulong *)(puVar7 + 0x10) <= uVar15) {\n                    /* WARNING: Does not return */\n                    pcVar3 = (code *)SoftwareBreakpoint(1,0x100007090);\n                    (*pcVar3)();\n                  }\n                  self = *(ulong *)(puVar9 + uVar15 * 8 + 0x20);\n                }\n                else {\n                  self = uVar15;\n                  FUN_100054e6c(uVar15,puVar9);\n                }\n                uVar1 = uVar15 + 1;\n                if (SCARRY8(uVar15,1)) {\n                    /* WARNING: Does not return */\n                  pcVar3 = (code *)SoftwareBreakpoint(1,0x10000708c);\n                  (*pcVar3)();\n                }\n                IVar6 = _objc_msgSend(self,\"isHidden\");\n                if (((IVar6 & 1) == 0) && (_objc_msgSend(self,\"alphaValue\"), 0.0 < dVar16)) break;\n                uVar15 = uVar15 + 1;\n                if (uVar1 == uVar14) goto LAB_1000070c4;\n              }\n              puVar8 = puVar12;\n              _swift_isUniquelyReferenced_nonNull_native();\n              local_a0 = puVar12;\n              if (((ulong)puVar8 & 1) == 0) {\n                FUN_100023e0c(0,*(long *)(puVar12 + 0x10) + 1,1);\n              }\n              uVar15 = *(ulong *)(local_a0 + 0x10);\n              lVar10 = uVar15 + 1;\n              if (*(ulong *)(local_a0 + 0x18) >> 1 <= uVar15) {\n                local_b0 = lVar10;\n                FUN_100023e0c(1 < *(ulong *)(local_a0 + 0x18),lVar10,1);\n                lVar10 = local_b0;\n              }\n              *(long *)(local_a0 + 0x10) = lVar10;\n              *(ulong *)(local_a0 + uVar15 * 8 + 0x20) = self;\n              puVar12 = local_a0;\n              uVar15 = uVar1;\n            } while (uVar1 != uVar14);\n          }\nLAB_1000070c4:\n          _swift_bridgeObjectRelease(puVar9);\n          puVar9 = puVar12;\n          FUN_100008f18(puVar12,param_6);\n          uVar13 = (uint)puVar9;\n          _swift_release(puVar12);\n          goto LAB_100006ef4;\n        }\n        if (DAT_100977e80 != -1) {\n          _swift_once(&DAT_100977e80,FUN_100191bc8);\n        }\n        lVar10 = DAT_100ab41c8;\n        (*(code *)PTR____chkstk_darwin_100877100)();\n        uStack_98 = 0;\n        local_a0 = (undefined *)0x0;\n        uStack_88 = 0;\n        uStack_90 = 0;\n        local_c0 = dVar17;\n        (**(code **)(lVar10 + 0x80))\n                  (FUN_100009ef4,auStack_d0,0xd00000000000005b,0x8000000100669d40,0xd000000000000031\n                   ,0x800000010066a0e0,0x16d,&local_a0);\n        FUN_1000098b8(&local_a0);\n      }\n    }\n  }\n  else {\n    if (*(char *)(unaff_x20 + 0x10) == '\\x01') {\n      _Var5.unknown = (undefined *)0x74636172746572;\n      _Var11.unknown = (undefined *)0xe700000000000000;\n      goto LAB_100006d68;\n    }\n    _swift_bridgeObjectRelease(&DAT_e400000000000000);\n  }\n  uVar13 = 0;\nLAB_100006ef4:\n  return uVar13 & 1;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_8dbc865cae0660a792fa2b662a2e7d99128cc0fd08698e16802972eed8f4c9a7",
+    "procedure": {
+      "address": "0x100007cd8",
+      "name": "FUN_100007cd8",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100007cd8",
+            "end": "0x100008023"
+          }
+        ],
+        "total_bytes": 844,
+        "span_bytes": 844,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100007cd8()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_60 @ Stack[-0x60]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_70 @ Stack[-0x70]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_80 @ Stack[-0x80]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_90 @ Stack[-0x90]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_98 @ Stack[-0x98]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_a0 @ Stack[-0xa0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_b0 @ Stack[-0xb0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined1[16] local_c0 @ Stack[-0xc0]:16",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_opt_self replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_100007cd8(double param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,\n                  ID param_5,byte param_6)\n\n{\n  undefined *puVar1;\n  code *pcVar2;\n  bool bVar3;\n  bool bVar4;\n  ID IVar5;\n  undefined *puVar6;\n  undefined *puVar7;\n  void *aBlock;\n  undefined *puVar8;\n  void *aBlock_00;\n  double dVar9;\n  undefined8 uVar10;\n  undefined *local_c0;\n  undefined8 uStack_b8;\n  code *local_b0;\n  undefined *puStack_a8;\n  code *local_a0;\n  undefined *local_98;\n  \n  dVar9 = param_1;\n  IVar5 = _objc_msgSend(param_5,\"screen\");\n  if (IVar5 == 0) {\n    if (DAT_100977e80 != -1) {\n      _swift_once(&DAT_100977e80,FUN_100191bc8);\n    }\n    uStack_b8 = 0;\n    local_c0 = (undefined *)0x0;\n    puStack_a8 = (undefined *)0x0;\n    local_b0 = (code *)0x0;\n    (**(code **)(DAT_100ab41c8 + 0x98))\n              (FUN_1000073e4,0,0xd00000000000005b,0x8000000100669d40,0xd00000000000002b,\n               0x8000000100669dc0,0x1f8,&local_c0);\n    FUN_1000098b8(&local_c0);\n  }\n  else {\n    FUN_10000731c(param_5,IVar5,param_6 & 1);\n    param_1 = ABS(param_1);\n    bVar3 = false;\n    if ((1.0 <= param_1) && (bVar3 = false, !NAN(param_1))) {\n      bVar3 = param_1 < 1.5;\n    }\n    if (bVar3) {\n      uVar10 = 0x3fe3333333333333;\n    }\n    else {\n      bVar3 = false;\n      if ((1.5 <= param_1) && (bVar3 = false, !NAN(param_1))) {\n        bVar3 = param_1 < 2.0;\n      }\n      if (bVar3) {\n        uVar10 = 0x3fdccccccccccccd;\n      }\n      else {\n        bVar3 = true;\n        bVar4 = false;\n        if (param_1 < 3.0) {\n          bVar3 = false;\n          bVar4 = true;\n          if (!NAN(param_1)) {\n            bVar3 = param_1 < 2.0;\n            bVar4 = false;\n          }\n        }\n        uVar10 = 0x3fd6666666666666;\n        if (bVar3 != bVar4) {\n          uVar10 = 0x3fd3333333333333;\n        }\n      }\n    }\n    puVar6 = &DAT_10087af00;\n    _swift_allocObject(&DAT_10087af00,0x40,7);\n    *(undefined8 *)(puVar6 + 0x10) = uVar10;\n    *(ID *)(puVar6 + 0x18) = param_5;\n    *(double *)(puVar6 + 0x20) = dVar9;\n    *(undefined8 *)(puVar6 + 0x28) = param_2;\n    *(undefined8 *)(puVar6 + 0x30) = param_3;\n    *(undefined8 *)(puVar6 + 0x38) = param_4;\n    puVar7 = &DAT_10087af28;\n    _swift_allocObject(&DAT_10087af28,0x20,7);\n    *(code **)(puVar7 + 0x10) = FUN_100009924;\n    *(undefined **)(puVar7 + 0x18) = puVar6;\n    puVar1 = PTR___NSConcreteStackBlock_1008770f0;\n    local_a0 = FUN_100009938;\n    local_c0 = PTR___NSConcreteStackBlock_1008770f0;\n    uStack_b8 = 0x42000000;\n    local_b0 = FUN_10017c710;\n    puStack_a8 = &DAT_10087af40;\n    local_98 = puVar7;\n    aBlock = __Block_copy(&local_c0);\n    puVar8 = local_98;\n    _swift_retain(puVar7);\n    _swift_release(puVar8);\n    puVar8 = &DAT_10087af78;\n    _swift_allocObject(&DAT_10087af78,0x28,7);\n    *(ID *)(puVar8 + 0x10) = param_5;\n    puVar8[0x18] = param_6 & 1;\n    *(ID *)(puVar8 + 0x20) = IVar5;\n    local_a0 = FUN_100009984;\n    local_c0 = puVar1;\n    uStack_b8 = 0x42000000;\n    local_b0 = FUN_10000a920;\n    puStack_a8 = &DAT_10087af90;\n    local_98 = puVar8;\n    aBlock_00 = __Block_copy(&local_c0);\n    _swift_release(local_98);\n    NSAnimationContext::runAnimationGroup_completionHandler_\n              ((ID)&_OBJC_CLASS___NSAnimationContext,\"runAnimationGroup:completionHandler:\",aBlock,\n               aBlock_00);\n    __Block_release(aBlock_00);\n    __Block_release(aBlock);\n    puVar8 = puVar7;\n    _swift_isEscapingClosureAtFileLocation(puVar7,\"\",0x5b,0x209,0x2e,1);\n    _swift_release(puVar6);\n    _swift_release(puVar7);\n    if (((ulong)puVar8 & 1) != 0) {\n                    /* WARNING: Does not return */\n      pcVar2 = (code *)SoftwareBreakpoint(1,0x10000800c);\n      (*pcVar2)();\n    }\n  }\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_b6d9fda13cf4003975d1a593b589a38c1d4fe3c0987374e07b9271752bc0e151",
+    "procedure": {
+      "address": "0x1000718d0",
+      "name": "FUN_1000718d0",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1000718d0",
+            "end": "0x100071a2f"
+          }
+        ],
+        "total_bytes": 352,
+        "span_bytes": 352,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_1000718d0()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nundefined8 FUN_1000718d0(undefined8 param_1)\n\n{\n  long lVar1;\n  undefined *self;\n  ID self_00;\n  ID IVar2;\n  NSString *pNVar3;\n  ID self_01;\n  ID unaff_x20;\n  \n  lVar1 = _TtC8Dropover17DragSessionWindow::keyboardSelectionHintOverlayView;\n  self_01 = *(ID *)(unaff_x20 + _TtC8Dropover17DragSessionWindow::keyboardSelectionHintOverlayView);\n  if (self_01 != 0) {\n    self = &_OBJC_CLASS___CATransition;\n    _objc_allocWithZone();\n    self_00 = _objc_msgSend((ID)self,\"init\");\n    _objc_msgSend(self_00,\"setType:\",*(undefined8 *)PTR__kCATransitionFade_100877da8);\n    _objc_msgSend(self_00,\"setDuration:\",0x3fc999999999999a);\n    IVar2 = _objc_msgSend(unaff_x20,\"contentView\");\n    if ((IVar2 != 0) && (IVar2 = _objc_msgSend(IVar2,\"layer\"), IVar2 != 0)) {\n      pNVar3 = (extension_Foundation)::Swift::String::_bridgeToObjectiveC();\n      _objc_msgSend(IVar2,\"addAnimation:forKey:\",self_00,pNVar3);\n    }\n    _objc_msgSend(self_01,\"removeFromSuperview\");\n    *(undefined8 *)(unaff_x20 + lVar1) = 0;\n    return 0;\n  }\n  return param_1;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_d728882a4dd84de2041e8f98876054e59b86399283a14c2fef10b37206275f70",
+    "procedure": {
+      "address": "0x1000729a8",
+      "name": "FUN_1000729a8",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1000729a8",
+            "end": "0x100072e57"
+          }
+        ],
+        "total_bytes": 1200,
+        "span_bytes": 1200,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_1000729a8()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_100 @ Stack[-0x100]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_108 @ Stack[-0x108]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_110 @ Stack[-0x110]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_60 @ Stack[-0x60]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_78 @ Stack[-0x78]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_98 @ Stack[-0x98]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_a0 @ Stack[-0xa0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_b0 @ Stack[-0xb0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_b8 @ Stack[-0xb8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_c0 @ Stack[-0xc0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_c8 @ Stack[-0xc8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_d0 @ Stack[-0xd0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_d8 @ Stack[-0xd8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_e8 @ Stack[-0xe8]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_f0 @ Stack[-0xf0]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_f8 @ Stack[-0xf8]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_1000729a8(undefined8 param_1)\n\n{\n  DispatchTime deadline;\n  undefined *puVar1;\n  DispatchQoS qos;\n  DispatchWorkItemFlags flags;\n  DispatchTimeInterval DVar2;\n  undefined7 extraout_var;\n  Date DVar4;\n  undefined **ppuVar5;\n  OS_dispatch_queue *pOVar6;\n  undefined *puVar7;\n  void *aBlock;\n  DispatchQoS DVar8;\n  undefined *puVar9;\n  long extraout_x8;\n  long extraout_x8_00;\n  undefined *puVar10;\n  long extraout_x8_01;\n  long extraout_x8_02;\n  long extraout_x8_03;\n  long extraout_x12;\n  long unaff_x20;\n  undefined8 uVar11;\n  long lVar12;\n  undefined8 *puVar13;\n  long lVar14;\n  code *pcVar15;\n  DispatchTime DVar16;\n  long lVar17;\n  long lVar18;\n  undefined *local_110;\n  long local_108;\n  DispatchTime local_100;\n  undefined *local_f8;\n  DispatchQoS local_f0;\n  long local_e8;\n  undefined *puStack_e0;\n  DispatchWorkItemFlags local_d8;\n  long local_d0;\n  undefined *local_c8;\n  undefined *local_c0;\n  code *local_b8;\n  code *local_b0;\n  undefined *puStack_a8;\n  code *local_a0;\n  undefined *local_98;\n  undefined1 auStack_90 [24];\n  long lVar3;\n  \n  _swift_getObjectType();\n  local_c8 = (undefined *)Dispatch::DispatchWorkItemFlags::typeMetadataAccessor();\n  local_d0 = *(long *)(local_c8 + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(local_d0 + 0x40));\n  puVar10 = (undefined *)((long)&local_110 - (extraout_x8 + 0xfU & 0xfffffffffffffff0));\n  local_d8.unknown = puVar10;\n  puStack_e0 = (undefined *)Dispatch::DispatchQoS::typeMetadataAccessor();\n  local_e8 = *(long *)(puStack_e0 + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(local_e8 + 0x40));\n  puVar10 = puVar10 + -(extraout_x8_00 + 0xfU & 0xfffffffffffffff0);\n  local_f0.unknown = puVar10;\n  DVar2 = Dispatch::DispatchTimeInterval::typeMetadataAccessor();\n  lVar3 = CONCAT71(extraout_var,DVar2.value);\n  lVar14 = *(long *)(lVar3 + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar14 + 0x40));\n  puVar13 = (undefined8 *)(puVar10 + -(extraout_x8_01 + 0xfU & 0xfffffffffffffff0));\n  local_f8 = (undefined *)Dispatch::DispatchTime::typeMetadataAccessor();\n  local_108 = *(long *)(local_f8 + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(local_108 + 0x40));\n  DVar16.unknown = (undefined *)((long)puVar13 - (extraout_x8_02 + 0xfU & 0xfffffffffffffff0));\n  (*(code *)PTR____chkstk_darwin_100877100)();\n  local_100.unknown = DVar16.unknown + -extraout_x12;\n  DVar4 = Foundation::Date::typeMetadataAccessor();\n  lVar17 = *(long *)(DVar4.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar17 + 0x40));\n  lVar12 = (long)(DVar16.unknown + -extraout_x12) - (extraout_x8_03 + 0xfU & 0xfffffffffffffff0);\n  _objc_msgSendSuper2((objc_super *)&stack0xffffffffffffff88,\"mouseDown:\",param_1);\n  FUN_1000718d0();\n  Foundation::Date::init();\n  lVar18 = _TtC8Dropover17DragSessionWindow::lastUserInteractionTimestamp;\n  _swift_beginAccess(unaff_x20 + _TtC8Dropover17DragSessionWindow::lastUserInteractionTimestamp,\n                     &local_c0,0x21,0);\n  (**(code **)(lVar17 + 0x18))(unaff_x20 + lVar18,lVar12,DVar4.unknown);\n  _swift_endAccess(&local_c0);\n  if (DAT_100977d38 != -1) {\n    _swift_once(&DAT_100977d38,FUN_100017c54);\n  }\n  uVar11 = *(undefined8 *)(DAT_100ab3da8 + 0x60);\n  _swift_retain(uVar11);\n  FUN_10001ace0();\n  _swift_release(uVar11);\n  (**(code **)(lVar17 + 8))(lVar12,DVar4.unknown);\n  lVar18 = _TtC8Dropover17DragSessionWindow::eventObservers;\n  _swift_beginAccess(unaff_x20 + _TtC8Dropover17DragSessionWindow::eventObservers,auStack_90,0,0);\n  lVar12 = *(long *)(unaff_x20 + lVar18);\n  lVar18 = *(long *)(lVar12 + 0x10);\n  if (lVar18 != 0) {\n    lVar17 = lVar12 + 0x20;\n    _swift_bridgeObjectRetain(lVar12);\n    do {\n      FUN_100073bb4(lVar17,&local_c0);\n      ppuVar5 = &local_c0;\n      _swift_unknownObjectWeakLoadStrong();\n      if (ppuVar5 != (undefined **)0x0) {\n        _swift_unknownObjectRelease();\n        (*local_b8)(4,param_1);\n      }\n      FUN_1000741f8(&local_c0);\n      lVar17 = lVar17 + 0x28;\n      lVar18 = lVar18 + -1;\n    } while (lVar18 != 0);\n    _swift_bridgeObjectRelease(lVar12);\n  }\n  pOVar6 = (OS_dispatch_queue *)0x0;\n  FUN_100016d84();\n  local_110 = (extension_Dispatch)::__C::OS_dispatch_queue::get_main(pOVar6);\n  Dispatch::DispatchTime::now((DispatchTime)local_110);\n  *puVar13 = 100;\n  (**(code **)(lVar14 + 0x68))\n            (puVar13,*(undefined4 *)\n                      PTR___enum_case_for_Dispatch_DispatchTimeInterval_milliseconds_Dispatch_DispatchTimeInterval_Type___>__Swift_Int___>_Dispatch_DispatchTimeInterval_10087a100\n             ,lVar3);\n  deadline.unknown = local_100.unknown;\n  Dispatch::__infix(DVar16,(DispatchTimeInterval)(__int8)puVar13);\n  (**(code **)(lVar14 + 8))(puVar13,lVar3);\n  puVar1 = local_f8;\n  pcVar15 = *(code **)(local_108 + 8);\n  (*pcVar15)(DVar16.unknown,local_f8);\n  puVar10 = &DAT_10087fa48;\n  _swift_allocObject(&DAT_10087fa48,0x18,7);\n  _swift_unknownObjectWeakInit(puVar10 + 0x10);\n  puVar7 = &DAT_10087fa70;\n  _swift_allocObject(&DAT_10087fa70,0x20,7);\n  *(undefined **)(puVar7 + 0x10) = puVar10;\n  *(undefined8 *)(puVar7 + 0x18) = param_1;\n  local_a0 = FUN_1000745a0;\n  local_c0 = PTR___NSConcreteStackBlock_1008770f0;\n  local_b8 = (code *)0x42000000;\n  local_b0 = FUN_10000a920;\n  puStack_a8 = &DAT_10087fa88;\n  local_98 = puVar7;\n  aBlock = __Block_copy(&local_c0);\n  DVar8.unknown = local_98;\n  _swift_release();\n  qos.unknown = local_f0.unknown;\n  DVar8 = Dispatch::DispatchQoS::get_unspecified(DVar8);\n  local_c0 = PTR___swiftEmptyArrayStorage_100879d08;\n  FUN_10000ad88();\n  puVar10 = &DAT_10097cc90;\n  FUN_10000268c(&DAT_10097cc90,&DAT_1006e89a0);\n  puVar9 = puVar10;\n  FUN_10000adcc();\n  puVar7 = local_c8;\n  flags.unknown = local_d8.unknown;\n  Swift::SetAlgebra::_init(local_d8.unknown,&local_c0,puVar10,puVar9,local_c8,DVar8.unknown);\n  (extension_Dispatch)::__C::OS_dispatch_queue::_asyncAfter(deadline,qos,flags);\n  __Block_release(aBlock);\n  (**(code **)(local_d0 + 8))(flags.unknown,puVar7);\n  (**(code **)(local_e8 + 8))(qos.unknown,puStack_e0);\n  (*pcVar15)(deadline.unknown,puVar1);\n  *(undefined1 *)(unaff_x20 + _TtC8Dropover17DragSessionWindow::isMouseDown) = 1;\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_d419e0e5b2433a8c7cfee38c53602d3e894c9b5f462b6148ad59d870c1467dba",
+    "procedure": {
+      "address": "0x100223b78",
+      "name": "FUN_100223b78",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100223b78",
+            "end": "0x100223dc7"
+          }
+        ],
+        "total_bytes": 592,
+        "span_bytes": 592,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100223b78()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_60 @ Stack[-0x60]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_68 @ Stack[-0x68]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_70 @ Stack[-0x70]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_78 @ Stack[-0x78]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_80 @ Stack[-0x80]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_100223b78(long param_1,undefined8 param_2,undefined8 param_3)\n\n{\n  undefined8 *puVar1;\n  undefined8 uVar2;\n  ulong uVar3;\n  undefined8 uVar4;\n  long lVar5;\n  URL UVar6;\n  ID self;\n  undefined *puVar7;\n  NSArray *pNVar8;\n  long extraout_x8;\n  undefined1 *puVar9;\n  long extraout_x8_00;\n  code *pcVar10;\n  long unaff_x20;\n  undefined *puVar11;\n  long lVar12;\n  long lVar13;\n  long lVar14;\n  \n  lVar5 = 0;\n  FUN_1002c42ec();\n  lVar13 = *(long *)(lVar5 + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar13 + 0x40));\n  puVar9 = &stack0xffffffffffffff80 + -(extraout_x8 + 0xfU & 0xfffffffffffffff0);\n  UVar6 = Foundation::URL::typeMetadataAccessor();\n  lVar14 = *(long *)(UVar6.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar14 + 0x40));\n  lVar12 = (long)puVar9 - (extraout_x8_00 + 0xfU & 0xfffffffffffffff0);\n  puVar1 = (undefined8 *)(unaff_x20 + _TtC8Dropover20SharingServiceAction::completion);\n  uVar2 = *puVar1;\n  uVar4 = puVar1[1];\n  *puVar1 = param_2;\n  puVar1[1] = param_3;\n  FUN_10000d410(uVar2,uVar4);\n  puVar11 = PTR___swiftEmptyArrayStorage_100879d08;\n  lVar5 = *(long *)(param_1 + 0x10);\n  if (lVar5 == 0) {\n    _swift_retain(param_3);\n    puVar11 = PTR___swiftEmptyArrayStorage_100879d08;\n  }\n  else {\n    _swift_retain(param_3);\n    FUN_1000240c4(0,lVar5,0);\n    param_1 = param_1 + ((ulong)*(byte *)(lVar13 + 0x50) + 0x20 &\n                        ((ulong)*(byte *)(lVar13 + 0x50) ^ 0xffffffffffffffff));\n    lVar13 = *(long *)(lVar13 + 0x48);\n    do {\n      FUN_1000685dc(param_1,puVar9);\n      pcVar10 = *(code **)(lVar14 + 0x20);\n      (*pcVar10)(lVar12,puVar9,UVar6.unknown);\n      uVar3 = *(ulong *)(puVar11 + 0x10);\n      if (*(ulong *)(puVar11 + 0x18) >> 1 <= uVar3) {\n        FUN_1000240c4(1 < *(ulong *)(puVar11 + 0x18),uVar3 + 1,1);\n      }\n      *(ulong *)(puVar11 + 0x10) = uVar3 + 1;\n      (*pcVar10)(puVar11 + *(long *)(lVar14 + 0x48) * uVar3 +\n                           ((ulong)*(byte *)(lVar14 + 0x50) + 0x20 &\n                           ((ulong)*(byte *)(lVar14 + 0x50) ^ 0xffffffffffffffff)),lVar12,\n                 UVar6.unknown);\n      param_1 = param_1 + lVar13;\n      lVar5 = lVar5 + -1;\n    } while (lVar5 != 0);\n  }\n  self = *(ID *)(unaff_x20 + _TtC8Dropover20SharingServiceAction::sharingService);\n  if (self == 0) {\n    _swift_bridgeObjectRelease(puVar11);\n  }\n  else {\n    puVar7 = puVar11;\n    FUN_10002bf48(puVar11);\n    _swift_bridgeObjectRelease(puVar11);\n    pNVar8 = (extension_Foundation)::Swift::Array<undefined>::_bridgeToObjectiveC();\n    _swift_bridgeObjectRelease(puVar7);\n    _objc_msgSend(self,\"performWithItems:\",pNVar8);\n  }\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_dacb52592d05cea6469b47abd901af79ea823480767d9732723b8c50566a357a",
+    "procedure": {
+      "address": "0x10007249c",
+      "name": "_TtC8Dropover17DragSessionWindow::mouseDragged:",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x10007249c",
+            "end": "0x1000724eb"
+          }
+        ],
+        "total_bytes": 80,
+        "span_bytes": 80,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "void __swiftcall mouseDragged:(ID param_1, SEL param_2, ID param_3)",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n/* Function Stack Size: 0x18 bytes */\n\nvoid _TtC8Dropover17DragSessionWindow::mouseDragged_(ID param_1,SEL param_2,ID param_3)\n\n{\n  FUN_1000722ec(param_3);\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_002d81896fd643d681e3be8eb020ffa985181804e4f96f5993774883da786590",
+    "procedure": {
+      "address": "0x1000095d0",
+      "name": "FUN_1000095d0",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1000095d0",
+            "end": "0x100009703"
+          }
+        ],
+        "total_bytes": 308,
+        "span_bytes": 308,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_1000095d0()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nundefined1 FUN_1000095d0(ulong param_1)\n\n{\n  byte bVar1;\n  bool bVar2;\n  ID IVar3;\n  undefined8 uVar4;\n  long lVar5;\n  long lVar6;\n  byte *pbVar7;\n  long lVar8;\n  byte *pbVar9;\n  \n  IVar3 = _objc_msgSend(param_1,\"contentView\");\n  if (IVar3 != 0) {\n    uVar4 = 0;\n    FUN_1000ec4d4(0);\n    _swift_dynamicCastClass(IVar3,uVar4);\n    if ((IVar3 != 0) && (*(long *)(IVar3 + _TtC8Dropover25ShelfContentContainerView::panel) != 0)) {\n      return 2;\n    }\n  }\n  IVar3 = param_1;\n  FUN_100009478();\n  if (*(long *)(IVar3 + 0x10) == 0) {\n    _swift_bridgeObjectRelease();\n  }\n  else {\n    FUN_100007c24();\n    lVar5 = *(long *)(IVar3 + 0x10);\n    pbVar7 = (byte *)(IVar3 + 0x20);\n    lVar6 = lVar5;\n    pbVar9 = pbVar7;\n    do {\n      lVar8 = lVar6;\n      if (lVar8 == 0) break;\n      bVar1 = *pbVar9;\n      lVar6 = lVar8 + -1;\n      pbVar9 = pbVar9 + 1;\n    } while ((bVar1 & 1) != 0);\n    do {\n      lVar6 = lVar5;\n      if (lVar6 == 0) break;\n      bVar1 = *pbVar7;\n      lVar5 = lVar6 + -1;\n      pbVar7 = pbVar7 + 1;\n    } while (bVar1 != 1);\n    _swift_bridgeObjectRelease(IVar3);\n    if ((param_1 & 1) == 0) {\n      bVar2 = lVar8 == 0;\n    }\n    else {\n      bVar2 = lVar6 != 0;\n    }\n    if (lVar8 != 0 || lVar6 != 0) {\n      return bVar2;\n    }\n  }\n  return 2;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_a68d29bba1d8d7e81f22a883e5fb945d8ddb6cd5aca63d98465ad27c810ea664",
+    "procedure": {
+      "address": "0x100007c24",
+      "name": "FUN_100007c24",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100007c24",
+            "end": "0x100007cd7"
+          }
+        ],
+        "total_bytes": 180,
+        "span_bytes": 180,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100007c24()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nbool FUN_100007c24(double param_1,ID param_2)\n\n{\n  bool bVar1;\n  ID self;\n  double dVar2;\n  double dVar3;\n  \n  self = _objc_msgSend(param_2,\"screen\");\n  bVar1 = false;\n  if (self != 0) {\n    _objc_msgSend(self,\"frame\");\n    _CGRectGetMinX();\n    dVar2 = param_1;\n    _objc_msgSend(param_2,\"frame\");\n    _CGRectGetMinX();\n    param_1 = param_1 - dVar2;\n    _objc_msgSend(self,\"frame\");\n    _CGRectGetMaxX();\n    dVar3 = dVar2;\n    _objc_msgSend(param_2,\"frame\");\n    _CGRectGetMaxX();\n    bVar1 = ABS(dVar2 - dVar3) < ABS(param_1);\n  }\n  return bVar1;\n}\n\n",
+    "assembly": [
+      "0x100007c24: stp d11, d10, [sp, #-0x50]!",
+      "0x100007c28: stp d9, d8, [sp, #0x10]",
+      "0x100007c2c: stp x22, x21, [sp, #0x20]",
+      "0x100007c30: stp x20, x19, [sp, #0x30]",
+      "0x100007c34: stp x29, x30, [sp, #0x40]",
+      "0x100007c38: add x29, sp, #0x40",
+      "0x100007c3c: mov x19, x0",
+      "0x100007c40: adrp x8, 0x100968000",
+      "0x100007c44: ldr x1, [x8, #0x2b8]",
+      "0x100007c48: bl 0x100662758",
+      "0x100007c4c: mov x29, x29",
+      "0x100007c50: bl 0x1006627ac",
+      "0x100007c54: cbz x0, 0x100007cc0",
+      "0x100007c58: adrp x21, 0x100968000",
+      "0x100007c5c: ldr x1, [x21, #0x300]",
+      "0x100007c60: mov x20, x0",
+      "0x100007c64: bl 0x100662758",
+      "0x100007c68: bl 0x1006622c0",
+      "0x100007c6c: fmov d8, d0",
+      "0x100007c70: ldr x1, [x21, #0x300]",
+      "0x100007c74: mov x0, x19",
+      "0x100007c78: bl 0x100662758",
+      "0x100007c7c: bl 0x1006622c0",
+      "0x100007c80: fabd d10, d8, d0",
+      "0x100007c84: ldr x1, [x21, #0x300]",
+      "0x100007c88: mov x0, x20",
+      "0x100007c8c: bl 0x100662758",
+      "0x100007c90: bl 0x100662290",
+      "0x100007c94: fmov d8, d0",
+      "0x100007c98: ldr x1, [x21, #0x300]",
+      "0x100007c9c: mov x0, x19",
+      "0x100007ca0: bl 0x100662758",
+      "0x100007ca4: bl 0x100662290",
+      "0x100007ca8: fmov d9, d0",
+      "0x100007cac: mov x0, x20",
+      "0x100007cb0: bl 0x10066277c",
+      "0x100007cb4: fabd d0, d8, d9",
+      "0x100007cb8: fcmp d10, d0",
+      "0x100007cbc: cset w0, hi",
+      "0x100007cc0: ldp x29, x30, [sp, #0x40]",
+      "0x100007cc4: ldp x20, x19, [sp, #0x30]",
+      "0x100007cc8: ldp x22, x21, [sp, #0x20]",
+      "0x100007ccc: ldp d9, d8, [sp, #0x10]",
+      "0x100007cd0: ldp d11, d10, [sp], #0x50",
+      "0x100007cd4: ret"
+    ],
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_2f2b8f8bf0831d7791b0dc9b1f5f23013ddc0097626faca749b969ddbb0265e5",
+    "procedure": {
+      "address": "0x1000722ec",
+      "name": "FUN_1000722ec",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1000722ec",
+            "end": "0x10007249b"
+          }
+        ],
+        "total_bytes": 432,
+        "span_bytes": 432,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_1000722ec()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_88 @ Stack[-0x88]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\nvoid FUN_1000722ec(undefined8 param_1)\n\n{\n  Date DVar1;\n  undefined1 *puVar2;\n  long extraout_x8;\n  long unaff_x20;\n  undefined8 uVar3;\n  long lVar4;\n  long lVar5;\n  long lVar6;\n  undefined1 auStack_90 [8];\n  code *local_88;\n  undefined1 auStack_68 [24];\n  \n  _swift_getObjectType();\n  DVar1 = Foundation::Date::typeMetadataAccessor();\n  lVar6 = *(long *)(DVar1.unknown + -8);\n  (*(code *)PTR____chkstk_darwin_100877100)(*(undefined8 *)(lVar6 + 0x40));\n  _objc_msgSendSuper2((objc_super *)&stack0xffffffffffffffb0,\"mouseDragged:\",param_1);\n  Foundation::Date::init();\n  lVar5 = _TtC8Dropover17DragSessionWindow::lastUserInteractionTimestamp;\n  _swift_beginAccess(unaff_x20 + _TtC8Dropover17DragSessionWindow::lastUserInteractionTimestamp,\n                     auStack_90,0x21,0);\n  (**(code **)(lVar6 + 0x18))\n            (unaff_x20 + lVar5,auStack_90 + -(extraout_x8 + 0xfU & 0xfffffffffffffff0),DVar1.unknown\n            );\n  _swift_endAccess(auStack_90);\n  if (DAT_100977d38 != -1) {\n    _swift_once(&DAT_100977d38,FUN_100017c54);\n  }\n  uVar3 = *(undefined8 *)(DAT_100ab3da8 + 0x60);\n  _swift_retain(uVar3);\n  FUN_10001ace0();\n  _swift_release(uVar3);\n  (**(code **)(lVar6 + 8))(auStack_90 + -(extraout_x8 + 0xfU & 0xfffffffffffffff0),DVar1.unknown);\n  lVar5 = _TtC8Dropover17DragSessionWindow::eventObservers;\n  _swift_beginAccess(unaff_x20 + _TtC8Dropover17DragSessionWindow::eventObservers,auStack_68,0,0);\n  lVar6 = *(long *)(unaff_x20 + lVar5);\n  lVar5 = *(long *)(lVar6 + 0x10);\n  if (lVar5 != 0) {\n    lVar4 = lVar6 + 0x20;\n    _swift_bridgeObjectRetain(lVar6);\n    do {\n      FUN_100073bb4(lVar4,auStack_90);\n      puVar2 = auStack_90;\n      _swift_unknownObjectWeakLoadStrong();\n      if (puVar2 != (undefined1 *)0x0) {\n        _swift_unknownObjectRelease();\n        (*local_88)(0,param_1);\n      }\n      FUN_1000741f8(auStack_90);\n      lVar4 = lVar4 + 0x28;\n      lVar5 = lVar5 + -1;\n    } while (lVar5 != 0);\n    _swift_bridgeObjectRelease(lVar6);\n  }\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_60e2f62c79aea6ecfc9cefe380722b8e77151cc6b0293624d29072d3ad4a6c5f",
+    "procedure": {
+      "address": "0x100072e58",
+      "name": "FUN_100072e58",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100072e58",
+            "end": "0x100072ec7"
+          }
+        ],
+        "total_bytes": 112,
+        "span_bytes": 112,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100072e58()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_100072e58(long param_1,undefined8 param_2)\n\n{\n  undefined1 auStack_38 [24];\n  \n  _swift_beginAccess(param_1 + 0x10,auStack_38,0,0);\n  param_1 = param_1 + 0x10;\n  _swift_unknownObjectWeakLoadStrong();\n  if ((param_1 != 0) &&\n     (*(char *)(param_1 + _TtC8Dropover17DragSessionWindow::isMouseDown) == '\\x01')) {\n    FUN_100072ec8(param_2);\n  }\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_f3efaf639cc2026563a5ac60cadea68413d2bbdf61f188d2194008f5ec6e8b31",
+    "procedure": {
+      "address": "0x100072ec8",
+      "name": "FUN_100072ec8",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100072ec8",
+            "end": "0x10007301b"
+          }
+        ],
+        "total_bytes": 340,
+        "span_bytes": 340,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100072ec8()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_60 @ Stack[-0x60]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_70 @ Stack[-0x70]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_100072ec8(ulong param_1)\n\n{\n  long lVar1;\n  long lVar2;\n  ID IVar3;\n  long lVar4;\n  ulong uVar5;\n  ID unaff_x20;\n  long lVar6;\n  undefined1 auStack_88 [24];\n  undefined8 local_70;\n  long lStack_68;\n  \n  IVar3 = _objc_msgSend(unaff_x20,\"contentView\");\n  if (IVar3 != 0) {\n    FUN_1001b62e0();\n    lVar1 = IVar3 + 0x20;\n    lVar6 = *(long *)(IVar3 + 0x10) + 1;\n    lVar4 = lVar1;\n    while (lVar6 = lVar6 + -1, lVar6 != 0) {\n      lVar2 = *(long *)(lVar4 + 0x20);\n      FUN_10000d490(lVar4,*(undefined8 *)(lVar4 + 0x18));\n      uVar5 = param_1;\n      (**(code **)(lVar2 + 8))();\n      lVar4 = lVar4 + 0x28;\n      if ((uVar5 & 1) == 0) {\n        _swift_bridgeObjectRelease(IVar3);\n        return;\n      }\n    }\n    for (lVar6 = *(long *)(IVar3 + 0x10); lVar6 != 0; lVar6 = lVar6 + -1) {\n      FUN_10001b51c(lVar1,auStack_88);\n      lVar4 = lStack_68;\n      FUN_10000d490(auStack_88,local_70);\n      (**(code **)(lVar4 + 0x10))();\n      FUN_10000d4b4(auStack_88);\n      lVar1 = lVar1 + 0x28;\n    }\n    _swift_bridgeObjectRelease(IVar3);\n    *(undefined1 *)\n     (unaff_x20 + _TtC8Dropover17DragSessionWindow::shouldNotifyWindowMovementRespondersOnMouseDown)\n         = 1;\n  }\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_63f9ba74df45336f9b46898fee901826fa6b02e0e51686a31cd857c0c34a1da6",
+    "procedure": {
+      "address": "0x1000745a0",
+      "name": "FUN_1000745a0",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1000745a0",
+            "end": "0x1000745a7"
+          }
+        ],
+        "total_bytes": 8,
+        "span_bytes": 8,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_1000745a0()",
+      "locals": []
+    },
+    "pseudocode": "\nvoid FUN_1000745a0(void)\n\n{\n  long unaff_x20;\n  \n  FUN_100072e58(*(undefined8 *)(unaff_x20 + 0x10),*(undefined8 *)(unaff_x20 + 0x18));\n  return;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_b5b98f41c3e2f4ab611acb45a3f54d97edf95c16230aa04b4aca80b7c0da110e",
+    "procedure": {
+      "address": "0x100009704",
+      "name": "FUN_100009704",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100009704",
+            "end": "0x1000098b7"
+          }
+        ],
+        "total_bytes": 436,
+        "span_bytes": 436,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100009704()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined1[16] local_70 @ Stack[-0x70]:16",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nbool FUN_100009704(long param_1)\n\n{\n  undefined1 uVar1;\n  byte bVar2;\n  code *pcVar3;\n  uint uVar4;\n  long lVar5;\n  long lVar6;\n  undefined8 local_70;\n  undefined8 uStack_68;\n  undefined8 uStack_60;\n  undefined8 uStack_58;\n  \n  lVar5 = param_1;\n  FUN_1000095d0();\n  lVar6 = _TtC8Dropover17DragSessionWindow::overlayController;\n  uVar4 = (uint)lVar5;\n  if ((uVar4 & 0xff) == 2) {\n    if (DAT_100977e80 != -1) {\n      _swift_once(&DAT_100977e80,FUN_100191bc8);\n    }\n    uStack_68 = 0;\n    local_70 = 0;\n    uStack_58 = 0;\n    uStack_60 = 0;\n    (**(code **)(DAT_100ab41c8 + 0x90))\n              (FUN_10000598c,0,0xd00000000000005b,0x8000000100669d40,0xd00000000000001c,\n               0x8000000100669da0,0x99,&local_70);\n    FUN_1000098b8(&local_70);\n  }\n  else {\n    lVar5 = *(long *)(param_1 + _TtC8Dropover17DragSessionWindow::overlayController);\n    if (lVar5 == 0) {\n                    /* WARNING: Does not return */\n      pcVar3 = (code *)SoftwareBreakpoint(1,0x1000098b4);\n      (*pcVar3)();\n    }\n    uVar1 = *(undefined1 *)\n             (*(long *)(lVar5 + 0x28) + _TtC8Dropover22DragSessionOverlayView::pointingState);\n    *(undefined1 *)(*(long *)(lVar5 + 0x28) + _TtC8Dropover22DragSessionOverlayView::pointingState)\n         = 1;\n    _swift_retain(lVar5);\n    FUN_100263938(uVar1);\n    _swift_release(lVar5);\n    lVar6 = *(long *)(param_1 + lVar6);\n    if (lVar6 == 0) {\n                    /* WARNING: Does not return */\n      pcVar3 = (code *)SoftwareBreakpoint(1,0x1000098b8);\n      (*pcVar3)();\n    }\n    lVar5 = *(long *)(lVar6 + 0x28);\n    bVar2 = *(byte *)(lVar5 + _TtC8Dropover22DragSessionOverlayView::pointingDirection);\n    *(undefined1 *)(lVar5 + _TtC8Dropover22DragSessionOverlayView::pointingDirection) = 1;\n    if ((bVar2 & 1) == 0) {\n      _swift_retain(lVar6);\n      FUN_10026370c(lVar5);\n      _swift_release(lVar6);\n    }\n    FUN_100007cd8(0,0,param_1,uVar4 & 1);\n  }\n  return (uVar4 & 0xff) != 2;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_629e2b9156670c9006b8fdc27b8f4277c54f604b415f7018f4266fb3a70fbcf3",
+    "procedure": {
+      "address": "0x100009478",
+      "name": "FUN_100009478",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100009478",
+            "end": "0x1000095cf"
+          }
+        ],
+        "total_bytes": 344,
+        "span_bytes": 344,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100009478()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nundefined * FUN_100009478(ID param_1)\n\n{\n  ID IVar1;\n  ulong uVar2;\n  undefined *puVar3;\n  undefined *puVar4;\n  undefined *puVar5;\n  \n  IVar1 = _objc_msgSend(param_1,\"screen\");\n  puVar5 = PTR___swiftEmptyArrayStorage_100879d08;\n  if (IVar1 != 0) {\n    uVar2 = 0;\n    FUN_100009188(0,param_1,IVar1);\n    puVar5 = PTR___swiftEmptyArrayStorage_100879d08;\n    if ((uVar2 & 1) != 0) {\n      puVar3 = (undefined *)0x0;\n      FUN_100026254(0,1,1,PTR___swiftEmptyArrayStorage_100879d08);\n      uVar2 = *(ulong *)(puVar3 + 0x10);\n      puVar5 = puVar3;\n      if (*(ulong *)(puVar3 + 0x18) >> 1 <= uVar2) {\n        puVar5 = (undefined *)(ulong)(1 < *(ulong *)(puVar3 + 0x18));\n        FUN_100026254(puVar5,uVar2 + 1,1,puVar3);\n      }\n      *(ulong *)(puVar5 + 0x10) = uVar2 + 1;\n      puVar5[uVar2 + 0x20] = 0;\n    }\n    uVar2 = 1;\n    FUN_100009188(1,param_1,IVar1);\n    if ((uVar2 & 1) != 0) {\n      puVar3 = puVar5;\n      _swift_isUniquelyReferenced_nonNull_native();\n      puVar4 = puVar5;\n      if (((ulong)puVar3 & 1) == 0) {\n        puVar4 = (undefined *)0x0;\n        FUN_100026254(0,*(long *)(puVar5 + 0x10) + 1,1,puVar5);\n      }\n      uVar2 = *(ulong *)(puVar4 + 0x10);\n      puVar5 = puVar4;\n      if (*(ulong *)(puVar4 + 0x18) >> 1 <= uVar2) {\n        puVar5 = (undefined *)(ulong)(1 < *(ulong *)(puVar4 + 0x18));\n        FUN_100026254(puVar5,uVar2 + 1,1,puVar4);\n      }\n      *(ulong *)(puVar5 + 0x10) = uVar2 + 1;\n      puVar5[uVar2 + 0x20] = 1;\n    }\n  }\n  return puVar5;\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "evidence_id": "ev_76f2dfdb1c2de83cf7a2d64a41674289d973e5da1cfd7f06955742b0f2fd9120",
+    "procedure": {
+      "address": "0x100006250",
+      "name": "FUN_100006250",
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100006250",
+            "end": "0x1000069bb"
+          }
+        ],
+        "total_bytes": 1900,
+        "span_bytes": 1900,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_100006250()",
+      "locals": [
+        {
+          "description": "undefined8 local_10 @ Stack[-0x10]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_100 @ Stack[-0x100]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_20 @ Stack[-0x20]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_30 @ Stack[-0x30]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_40 @ Stack[-0x40]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_50 @ Stack[-0x50]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_60 @ Stack[-0x60]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_70 @ Stack[-0x70]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_80 @ Stack[-0x80]:8",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined8 local_90 @ Stack[-0x90]:8",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\n/* WARNING: Function: _objc_retain replaced with injection: _objc_retain_fixup */\n/* WARNING: Function: _objc_retainAutoreleasedReturnValue replaced with injection:\n   _objc_retain_fixup */\n/* WARNING: Function: _objc_release replaced with injection: _objc_release_fixup */\n\nvoid FUN_100006250(double param_1,double param_2,char param_3,ID param_4,long param_5,long param_6)\n\n{\n  uint uVar1;\n  undefined *puVar2;\n  byte bVar3;\n  undefined1 uVar4;\n  bool bVar5;\n  code *pcVar6;\n  uint uVar7;\n  ID self;\n  ID IVar8;\n  undefined8 uVar9;\n  long lVar10;\n  undefined *puVar11;\n  undefined8 uVar12;\n  long lVar13;\n  long lVar14;\n  ID IVar15;\n  double *pdVar16;\n  double dVar17;\n  double dVar18;\n  double dVar19;\n  double dVar20;\n  double dVar21;\n  undefined1 auStack_f8 [24];\n  undefined1 auStack_e0 [24];\n  undefined1 auStack_c8 [24];\n  undefined1 auStack_b0 [32];\n  \n  _swift_beginAccess(param_5 + 0x10,auStack_b0,0,0);\n  param_5 = param_5 + 0x10;\n  _swift_weakLoadStrong();\n  if (param_5 == 0) {\n    return;\n  }\n  _swift_beginAccess(param_6 + 0x10,auStack_c8,0,0);\n  self = param_6 + 0x10;\n  _swift_unknownObjectWeakLoadStrong();\n  if (self == 0) {\n    _swift_release(param_5);\n    return;\n  }\n  IVar8 = _objc_msgSend(self,\"contentView\");\n  if (IVar8 == 0) {\nLAB_100006384:\n    _swift_release(param_5);\n    return;\n  }\n  uVar9 = 0;\n  FUN_1000ec4d4(0);\n  _swift_dynamicCastClass(IVar8,uVar9);\n  lVar14 = _TtC8Dropover15DragSessionView::outgoingItems;\n  if (IVar8 == 0) {\n    _swift_release(param_5);\n    return;\n  }\n  lVar10 = *(long *)(IVar8 + _TtC8Dropover25ShelfContentContainerView::dragSessionView);\n  _swift_beginAccess(lVar10 + _TtC8Dropover15DragSessionView::outgoingItems,auStack_e0,0,0);\n  puVar11 = *(undefined **)(lVar10 + lVar14);\n  puVar2 = PTR___swiftEmptyArrayStorage_100879d08;\n  if (puVar11 != (undefined *)0x0) {\n    puVar2 = puVar11;\n  }\n  lVar14 = *(long *)(puVar2 + 0x10);\n  _swift_bridgeObjectRetain();\n  _swift_bridgeObjectRelease(puVar2);\n  if (lVar14 != 0) goto LAB_100006384;\n  IVar8 = self;\n  FUN_1000095d0();\n  uVar7 = (uint)IVar8;\n  if ((uVar7 & 0xff) == 2) {\n    _swift_release(param_5);\n    return;\n  }\n  if (param_3 == '\\0') {\n    _objc_msgSend(param_4,\"deltaX\");\n    *(double *)(param_5 + 0x18) = param_1;\n    _objc_msgSend(param_4,\"deltaY\");\n    *(double *)(param_5 + 0x20) = param_1;\n    dVar18 = param_1;\n  }\n  else {\n    dVar18 = *(double *)(param_5 + 0x20);\n  }\n  pdVar16 = (double *)(param_5 + 0x18);\n  dVar19 = *pdVar16;\n  uVar1 = uVar7 & 1;\n  FUN_1000069bc(self,uVar1);\n  if (param_3 == '\\x04') {\n    dVar19 = param_1;\n    _objc_msgSend(param_4,\"locationInWindow\");\n    *(double *)(param_5 + 0x28) = dVar19;\n    *(double *)(param_5 + 0x30) = param_2;\n    _objc_msgSend(self,\"frame\");\n    bVar5 = false;\n    *(double *)(param_5 + 0x38) = dVar19;\n    *(double *)(param_5 + 0x40) = param_2;\n    *(bool *)(param_5 + 0x58) = param_1 <= 0.0;\n    goto LAB_100006690;\n  }\n  if (param_3 != '\\x03') {\n    bVar5 = false;\n    dVar19 = param_1;\n    goto LAB_100006690;\n  }\n  dVar21 = *(double *)(param_5 + 0x28);\n  dVar20 = *(double *)(param_5 + 0x30);\n  dVar17 = param_1;\n  _objc_msgSend(param_4,\"locationInWindow\");\n  lVar14 = _TtC8Dropover17DragSessionWindow::overlayController;\n  if ((dVar21 == dVar17) && (dVar20 == param_2)) {\n    if (*(long *)(self + _TtC8Dropover17DragSessionWindow::overlayController) == 0) {\n                    /* WARNING: Does not return */\n      pcVar6 = (code *)SoftwareBreakpoint(1,0x1000069b4);\n      (*pcVar6)();\n    }\n    if (*(char *)(*(long *)(self + _TtC8Dropover17DragSessionWindow::overlayController) + 0x11) !=\n        '\\x01') goto LAB_100006574;\n    IVar15 = self;\n    FUN_100006ae8(self,param_4);\n    if ((IVar15 & 1) == 0) {\n      FUN_1000078b0(self,uVar1);\n      dVar19 = dVar17;\n      dVar18 = param_2;\n    }\n    else {\n      FUN_10016c814(0,0);\n      dVar19 = dVar17;\n      dVar18 = param_2;\n    }\n    lVar14 = *(long *)(self + lVar14);\n    if (lVar14 == 0) {\n                    /* WARNING: Does not return */\n      pcVar6 = (code *)SoftwareBreakpoint(1,0x1000069b8);\n      (*pcVar6)();\n    }\n    *(undefined1 *)(lVar14 + 0x11) = 0;\n    IVar15 = *(ID *)(lVar14 + 0x20);\n    _swift_retain(lVar14);\n    IVar15 = _objc_msgSend(IVar15,\"isVisible\");\n    if ((IVar15 & 1) != 0) {\n      _objc_msgSend(*(ID *)(lVar14 + 0x20),\"orderOut:\",lVar14);\n    }\n    FUN_1002177f4();\n    _swift_release(lVar14);\n  }\n  else {\nLAB_100006574:\n    if ((((IVar8 & 1) != 0) || (0.0 <= *pdVar16)) || (param_1 <= 0.0)) {\n      if ((((IVar8 & 1) == 0) || (*pdVar16 <= 0.0)) || (param_1 <= 0.0)) {\n        dVar17 = 0.4;\n        if (param_1 <= 0.4) {\n          dVar19 = dVar17;\n          dVar18 = param_2;\n          if ((param_1 == 0.0) &&\n             (IVar15 = self, FUN_100006ae8(self,param_4), dVar19 = dVar17, dVar18 = param_2,\n             (IVar15 & 1) != 0)) {\nLAB_100006974:\n            FUN_10016c814(0,0);\n            *(undefined8 *)(param_5 + 0x20) = 0;\n          }\n          else if (0.0 < param_1) {\n            IVar15 = self;\n            FUN_100006ae8(self,param_4);\n            if ((IVar15 & 1) != 0) goto LAB_100006974;\n            FUN_1000078b0(self,uVar1);\n            *(undefined8 *)(param_5 + 0x20) = 0;\n          }\n          else {\n            IVar15 = _objc_msgSend(param_4,\"clickCount\");\n            if ((IVar15 == 2) && (IVar15 = self, FUN_100006d08(self,param_4), (IVar15 & 1) != 0)) {\n              FUN_100009b90(self);\n            }\n          }\n          goto LAB_10000668c;\n        }\n        FUN_100007cd8(dVar19,dVar18,self,uVar1);\n        lVar14 = *(long *)(self + _TtC8Dropover17DragSessionWindow::overlayController);\n        if (lVar14 == 0) {\n                    /* WARNING: Does not return */\n          pcVar6 = (code *)SoftwareBreakpoint(1,0x1000069bc);\n          (*pcVar6)();\n        }\n        *(undefined1 *)(lVar14 + 0x11) = 1;\n        _swift_retain(lVar14);\n        FUN_1002172e0();\n        _swift_release(lVar14);\n      }\n      else {\n        FUN_100007cd8(dVar19,dVar18,self,1);\n      }\n      bVar5 = true;\n      *pdVar16 = 0.0;\n      *(undefined8 *)(param_5 + 0x20) = 0;\n      param_2 = dVar18;\n      goto LAB_100006690;\n    }\n    FUN_100007cd8(dVar19,dVar18,self,0);\n    *pdVar16 = 0.0;\n    *(undefined8 *)(param_5 + 0x20) = 0;\n  }\nLAB_10000668c:\n  bVar5 = true;\n  param_2 = dVar18;\nLAB_100006690:\n  lVar14 = _TtC8Dropover17DragSessionWindow::overlayController;\n  lVar10 = *(long *)(self + _TtC8Dropover17DragSessionWindow::overlayController);\n  if (lVar10 == 0) {\n                    /* WARNING: Does not return */\n    pcVar6 = (code *)SoftwareBreakpoint(1,0x1000069a4);\n    (*pcVar6)();\n  }\n  lVar13 = *(long *)(lVar10 + 0x28);\n  bVar3 = *(byte *)(lVar13 + _TtC8Dropover22DragSessionOverlayView::pointingDirection);\n  *(byte *)(lVar13 + _TtC8Dropover22DragSessionOverlayView::pointingDirection) =\n       ((byte)IVar8 ^ 0xff) & 1;\n  if ((uint)bVar3 == (uVar7 & 1)) {\n    _swift_retain(lVar10);\n    FUN_10026370c(lVar13);\n    _swift_release(lVar10);\n  }\n  if (param_3 == '\\0') {\n    lVar10 = *(long *)(self + lVar14);\n    if (lVar10 == 0) {\n                    /* WARNING: Does not return */\n      pcVar6 = (code *)SoftwareBreakpoint(1,0x1000069b0);\n      (*pcVar6)();\n    }\n    dVar19 = 0.4;\n    *(bool *)(lVar10 + 0x11) = 0.4 < param_1;\n    if (param_1 <= 0.4) {\n      IVar8 = *(ID *)(lVar10 + 0x20);\n      _swift_retain(lVar10);\n      IVar8 = _objc_msgSend(IVar8,\"isVisible\");\n      if ((int)IVar8 != 0) {\n        _objc_msgSend(*(ID *)(lVar10 + 0x20),\"orderOut:\",lVar10);\n      }\n      FUN_1002177f4();\n    }\n    else {\n      _swift_retain(lVar10);\n      FUN_1002172e0();\n    }\n    _swift_release(lVar10);\n  }\n  if (bVar5) {\n    *(undefined1 *)(param_5 + 0x58) = 0;\n    IVar8 = _objc_msgSend(self,\"windowNumber\");\n    _objc_msgSend(self,\"frame\");\n    _swift_beginAccess(param_5 + 0x48,auStack_f8,0x21,0);\n    uVar9 = *(undefined8 *)(param_5 + 0x48);\n    _swift_isUniquelyReferenced_nonNull_native(uVar9);\n    uVar12 = *(undefined8 *)(param_5 + 0x48);\n    *(undefined8 *)(param_5 + 0x48) = 0x8000000000000000;\n    FUN_10029d528(dVar19,param_2,IVar8,uVar9);\n    *(undefined8 *)(param_5 + 0x48) = uVar12;\n    _swift_endAccess(auStack_f8);\n  }\n  lVar10 = *(long *)(self + lVar14);\n  if (lVar10 != 0) {\n    if (*(char *)(lVar10 + 0x11) == '\\x01') {\n      lVar10 = *(long *)(lVar10 + 0x28);\n      *(bool *)(lVar10 + _TtC8Dropover22DragSessionOverlayView::showsGrabber) = 0.4 < param_1;\n      uVar7 = 0x3f000000;\n      if (param_1 <= 0.4) {\n        uVar7 = 0;\n      }\n      _objc_msgSend(*(ID *)(lVar10 + _TtC8Dropover22DragSessionOverlayView::grabberLayer),\n                    \"setOpacity:\",(ulong)uVar7);\n      lVar14 = *(long *)(self + lVar14);\n      if (lVar14 == 0) {\n                    /* WARNING: Does not return */\n        pcVar6 = (code *)SoftwareBreakpoint(1,0x1000069ac);\n        (*pcVar6)();\n      }\n      uVar4 = *(undefined1 *)\n               (*(long *)(lVar14 + 0x28) + _TtC8Dropover22DragSessionOverlayView::pointingState);\n      *(bool *)(*(long *)(lVar14 + 0x28) + _TtC8Dropover22DragSessionOverlayView::pointingState) =\n           param_3 == '\\0' || param_3 == '\\x04';\n      _swift_retain(lVar14);\n      FUN_100263938(uVar4);\n      _swift_release(lVar14);\n      _swift_release(param_5);\n    }\n    else {\n      _swift_release(param_5);\n    }\n    return;\n  }\n                    /* WARNING: Does not return */\n  pcVar6 = (code *)SoftwareBreakpoint(1,0x1000069a8);\n  (*pcVar6)();\n}\n\n",
+    "assembly": null,
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  }
+]

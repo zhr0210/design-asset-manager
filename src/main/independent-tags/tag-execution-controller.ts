@@ -59,7 +59,7 @@ export function createTagExecutionController(deps:{
     try{if(deps.host.inspect().state==='ready'){
      await deps.host.readVisualSession(plan.input)
      const known=await deps.host.readAssetContext([])
-     if(known.schemaVersion>=9&&known.schemaVersion<=15){deps.legacy.resume();deps.admission.resume()}
+     if(known.schemaVersion>=9&&known.schemaVersion<=16){deps.legacy.resume();deps.admission.resume()}
     }}finally{releaseBarrier()}
    }
   })().finally(()=>{cutover=undefined})

@@ -29,7 +29,7 @@ BEGIN SELECT RAISE(ABORT,'REFERENCE_FRAME_EVIDENCE_IMMUTABLE'); END;
  * Rebuild the three connected capture tables in dependency order, keeping all
  * existing rows. Foreign keys remain enabled throughout. No source backfill. */
 export function applyWorkMediaSchema(db: Database.Database) {
-    if (Number(db.pragma('user_version', { simple: true })) === 15)
+    if (Number(db.pragma('user_version', { simple: true })) >= 15)
         return;
     applyBasicAnalysisSchema(db);
     const tables = ['capture_requests', 'asset_candidates', 'promotion_links'];

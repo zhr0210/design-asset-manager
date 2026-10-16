@@ -14,4 +14,5 @@ CREATE TABLE work_window_layouts (
  set_id TEXT NOT NULL REFERENCES work_sets(id) ON DELETE CASCADE,
  device_id TEXT NOT NULL, layout_json TEXT NOT NULL, PRIMARY KEY(set_id,device_id)
 );`
+export const RETIRED_WORK_SET_SQL=WORK_SET_SQL.replace(' note TEXT NOT NULL,','').replace(' colors_json TEXT NOT NULL,','')
 export function enableWorkSetStorage(db:Database.Database){const v=Number(db.pragma('user_version',{simple:true}));if(isKnownLibrarySchemaVersion(v,7))return;if(![1,2,3,4,5,6].includes(v))throw Error('WORK_SET_SCHEMA_UNSUPPORTED');db.transaction(()=>{enableOrganizationStorage(db);db.exec(WORK_SET_SQL);db.pragma('user_version = 7')})()}

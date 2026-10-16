@@ -58,7 +58,7 @@ async function create(){const plan=await host.prepareCreate();assert.equal(plan.
 
 const asset=await create(),a=host.inspect(),scope={libraryIdentity:a.identity!,generation:a.generation!},device='device:test'
 let catalog=await host.readWorkSets(scope,device);assert.equal(catalog.requiresUpgrade,true)
-const value={name:'Project A',note:'Reference notes',assetIds:[asset.id],colors:['#AABBCC'],columns:2}
+const value={name:'Project A',assetIds:[asset.id],columns:2}
 await assert.rejects(host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:false,command:{kind:'create',value}},device))
 catalog=await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:true,command:{kind:'create',value}},device)
 const set=catalog.sets[0],layout={x:9000,y:7000,width:420,height:600,pinned:true,open:true}
@@ -68,7 +68,7 @@ await assert.rejects(host.writeWorkSet({...scope,sessionToken:catalog.sessionTok
 let ports:{port:WorkWindowPort;last:WorkWindowSnapshot|null;shown:boolean;destroyed:boolean;layout:WorkWindowLayout;readPreview:(url:string)=>Promise<Uint8Array>}[]=[]
 let server:Awaited<ReturnType<typeof createLocalDamServer>>|undefined,events=0,beforeClose:()=>Promise<()=>void>=async()=>()=>{}
 const controller=createWorkWindowController({host,deviceId:device,beforeWorkspaceClose:()=>beforeClose(),theme:()=> 'light',areas:()=>[{x:0,y:0,width:1200,height:800}],changed:()=>{events++;server?.publish('work-sets:changed',null)},locate:()=>{},hideMain:()=>{},createWindow:input=>{const p:any={last:null,shown:false,destroyed:false,layout:input.layout,readPreview:input.readPreview};p.port={publish:(s:WorkWindowSnapshot|null)=>p.last=s,show:()=>p.shown=true,hide:()=>p.shown=false,destroy:()=>{p.destroyed=true;input.closed()},setPinned:(v:boolean)=>p.layout.pinned=v,bounds:()=>p.layout,setBounds:(v:WorkWindowLayout)=>p.layout=v,visible:()=>p.shown,isTrusted:(e:unknown)=>e===p};ports.push(p);return p.port}})
-const [opened,repeated]=await Promise.all([controller.open({...scope,id:set.id}),controller.open({...scope,id:set.id})]);assert.equal(opened.success,true);assert.equal(repeated.success,true);assert.equal(ports.length,1);assert.equal(controller.count(),1);assert.ok(ports[0].layout.x+ports[0].layout.width<=1200);assert.ok(ports[0].layout.y+ports[0].layout.height<=800)
+const [opened,repeated]=await Promise.all([controller.open({...scope,id:set.id}),controller.open({...scope,id:set.id})]);assert.equal(opened.success,true,JSON.stringify(opened));assert.equal(repeated.success,true,JSON.stringify(repeated));assert.equal(ports.length,1);assert.equal(controller.count(),1);assert.ok(ports[0].layout.x+ports[0].layout.width<=1200);assert.ok(ports[0].layout.y+ports[0].layout.height<=800)
 assert.equal((await controller.inspect({})).success,false)
 if(!opened.success)throw Error();const token=opened.value.token
 // Both formal Client adapters control an existing window by saved id, never a native token.
@@ -111,12 +111,12 @@ assert.equal(ports[0].shown,true);assert.equal(ports[0].destroyed,false)
 assert.equal((await controller.act({}, {token,kind:'hide'})).success,false);assert.equal((await controller.act(ports[0],{token:'stale',kind:'hide'})).success,false)
 assert.equal((await controller.act(ports[0],{token,kind:'save',expectedRevision:1,value:{...value,assetIds:['asset:outside']}})).success,false)
 const bytes=await ports[0].readPreview(`dam-preview://preview/${scope.libraryIdentity}/${scope.generation}/${asset.id}`);assert.ok(bytes.length>0);await assert.rejects(ports[0].readPreview(`dam-preview://preview/${scope.libraryIdentity}/${scope.generation}/asset:outside`))
-await controller.act(ports[0],{token,kind:'draft',expectedRevision:1,value:{...value,note:'Draft'}});assert.equal(controller.hasUnsaved(),true)
+await controller.act(ports[0],{token,kind:'draft',expectedRevision:1,value:{...value,name:'Draft'}});assert.equal(controller.hasUnsaved(),true)
 const dirtyClose=await browserClient.workSets.control({...scope,id:set.id,kind:'close'})
 assert.equal(dirtyClose.success,true);assert.equal(dirtyClose.value.status,'review-required');assert.match(dirtyClose.value.message,/未保存/)
 assert.equal(dirtyClose.value.window.open,true);assert.equal(dirtyClose.value.window.hasUnsaved,true);assert.equal(ports[0].destroyed,false)
-assert.equal((await controller.inspect(ports[0])).value.draft?.note,'Draft')
-const saved=await controller.act(ports[0],{token,kind:'save',expectedRevision:1,value:{...value,note:'Draft',assetIds:[]}});assert.equal(saved.success,true);assert.equal((await host.listAssets()).length,1)
+assert.equal((await controller.inspect(ports[0])).value.draft?.name,'Draft')
+const saved=await controller.act(ports[0],{token,kind:'save',expectedRevision:1,value:{...value,name:'Draft',assetIds:[]}});assert.equal(saved.success,true);assert.equal((await host.listAssets()).length,1)
 // Saved content differs from the retained draft, so an explicit discard clears it.
 await controller.act(ports[0],{token,kind:'discard-draft'});assert.equal(controller.hasUnsaved(),false)
 let flushed!:()=>void,releaseClose!:(release:()=>void)=>void,thawed=false
@@ -124,10 +124,10 @@ const flushing=new Promise<void>(resolve=>flushed=resolve)
 beforeClose=()=>new Promise<()=>void>(resolve=>{releaseClose=resolve;flushed()})
 const racingClose=browserClient.workSets.control({...scope,id:set.id,kind:'close'})
 await flushing
-await controller.act(ports[0],{token,kind:'draft',expectedRevision:2,value:{...value,assetIds:[],note:'Input delivered while close review flushes'}})
+await controller.act(ports[0],{token,kind:'draft',expectedRevision:2,value:{...value,assetIds:[],name:'Input delivered while close review flushes'}})
 releaseClose(()=>{thawed=true})
 assert.equal((await racingClose).value.status,'review-required');assert.equal(thawed,true);assert.equal(ports[0].destroyed,false)
-assert.equal((await controller.inspect(ports[0])).value.draft?.note,'Input delivered while close review flushes')
+assert.equal((await controller.inspect(ports[0])).value.draft?.name,'Input delivered while close review flushes')
 await controller.act(ports[0],{token,kind:'discard-draft'})
 beforeClose=async()=>{throw Error('SYNTHETIC_FLUSH_FAILURE')}
 assert.equal((await browserClient.workSets.control({...scope,id:set.id,kind:'close'})).success,false);assert.equal(ports[0].destroyed,false)
@@ -138,7 +138,7 @@ assert.equal(ports[0].destroyed,false)
 await controller.act(ports[0],{token,kind:'notes-dirty',dirty:false})
 const faultDb=new Database(path.join(selected,'.dam','library.sqlite'));faultDb.exec("CREATE TRIGGER fail_work_layout BEFORE INSERT ON work_window_layouts BEGIN SELECT RAISE(ABORT,'SYNTHETIC_LAYOUT_FAILURE'); END;")
 const prior=(await host.readWorkSets(scope,device)).sets.find(s=>s.id===set.id)!
-assert.equal((await controller.act(ports[0],{token,kind:'save',expectedRevision:prior.revision,value:{...value,note:'Must roll back'}})).success,false)
+assert.equal((await controller.act(ports[0],{token,kind:'save',expectedRevision:prior.revision,value:{...value,name:'Must roll back'}})).success,false)
 assert.equal((await host.readWorkSets(scope,device)).sets.find(s=>s.id===set.id)!.revision,prior.revision)
 faultDb.exec('DROP TRIGGER fail_work_layout');faultDb.close()
 const beforeNativePinEvents=events
@@ -159,7 +159,7 @@ assert.equal((await host.readWorkSets(scope,device)).sets.find(s=>s.id===other.i
 assert.equal((await browserClient.workSets.windows(scope)).value.length,1)
 await controller.open({...scope,id:other.id})
 await controller.drain();assert.equal(controller.count(),0);assert.equal((await controller.open({...scope,id:other.id})).success,false);assert.ok(ports.every(p=>p.destroyed));await assert.rejects(ports[1].readPreview(`dam-preview://preview/${scope.libraryIdentity}/${scope.generation}/${asset.id}`))
-await host.close();await host.reopen();catalog=await host.readWorkSets(scope,device);assert.equal(catalog.sets.length,2);assert.equal(catalog.sets.find(s=>s.id===set.id)?.note,'Draft');assert.equal(catalog.sets.find(s=>s.id===set.id)?.layout?.pinned,false);assert.ok(catalog.sets.every(s=>s.layout?.open))
+await host.close();await host.reopen();catalog=await host.readWorkSets(scope,device);assert.equal(catalog.sets.length,2);assert.equal(catalog.sets.find(s=>s.id===set.id)?.name,'Draft');assert.equal(catalog.sets.find(s=>s.id===set.id)?.layout?.pinned,false);assert.ok(catalog.sets.every(s=>s.layout?.open))
 await host.close();host=createActiveLibraryHost(dependencies);await host.open();catalog=await host.readWorkSets(scope,device);assert.equal(catalog.sets.length,2);await host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:false,command:{kind:'delete',id:other.id,expectedRevision:other.revision}},device);assert.equal((await host.listAssets()).length,1);await host.close();assert.equal(await hash(),before)
 eventsAbort.abort();await eventReader.cancel().catch(()=>{});await server.close()
 const clamped=visibleWorkBounds({...layout,x:-3000,y:-500},[{x:0,y:0,width:1000,height:700}]);assert.ok(clamped.x>=0&&clamped.y>=0);assert.ok(clamped.x+clamped.width<=1000&&clamped.y+clamped.height<=700)

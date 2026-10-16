@@ -64,7 +64,7 @@ CREATE TABLE basic_analysis_outbox (
 `
 export function applyBasicAnalysisSchema(db: Database.Database) {
   const version = Number(db.pragma('user_version', { simple: true }))
-  if (version === 14 || version === 15) return
+  if (version >= 14 && version <= 16) return
   applyTagExecutionSchema(db)
   applyTagDecisionSchema(db)
   applyBackgroundAnalysisSchema(db)

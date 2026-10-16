@@ -59,7 +59,9 @@ export type WorkMediaWrite = WorkMediaScope & {
 export type WorkMediaFile = WorkMediaScope & {
     frameId?: string;
 };
+export interface WorkImageAnnotation {kind:'redact';x:number;y:number;width:number;height:number;color:string;text?:string}
 export interface WorkImageTransform {
+    annotations?:WorkImageAnnotation[];
     format: 'png' | 'jpeg' | 'webp';
     /** PNG is lossless: this setting is accepted but is not applied to PNG. */
     quality: number;
@@ -78,12 +80,13 @@ export interface WorkHandoffImageResult {
     /** Actual output blocks only; this does not promise all source metadata survived. */
     retainedMetadata: Array<'exif' | 'icc' | 'iptc' | 'xmp'>;
 }
-export type WorkHandoffKind = 'original' | 'preview' | 'compatible-png' | 'reference-frame' | 'processed-image' | 'zip';
+export type WorkHandoffKind = 'original' | 'preview' | 'compatible-png' | 'reference-frame' | 'processed-image' | 'zip' | 'pdf' | 'stitch' | 'ocr-text';
 export type WorkHandoffRequest = WorkMediaScope & {
     kind: WorkHandoffKind;
     frameId?: string;
     imageTransform?: WorkImageTransform;
     assetIds?: string[];
+    composition?:{direction:'vertical'|'horizontal';gap:number;scale?:'original'|'uniform'};
     action: 'prepare' | 'open';
 };
 export interface WorkHandoffReceipt {
@@ -147,9 +150,9 @@ export function validateWorkMediaWrite(value: unknown): WorkMediaWrite {
     throw Error('视频操作无效。');
 }
 export function validateWorkHandoff(value: unknown): WorkHandoffRequest {
-    const r = workRecord(value, ['libraryIdentity', 'generation', 'setId', 'assetId', 'kind', 'frameId', 'imageTransform', 'assetIds', 'action']);
+    const r = workRecord(value, ['libraryIdentity', 'generation', 'setId', 'assetId', 'kind', 'frameId', 'imageTransform', 'assetIds', 'composition','action']);
     const scope = validateWorkMediaScope({ libraryIdentity: r.libraryIdentity, generation: r.generation, setId: r.setId, assetId: r.assetId });
-    if (typeof r.kind !== 'string' || typeof r.action !== 'string' || !['original', 'preview', 'compatible-png', 'reference-frame', 'processed-image', 'zip'].includes(r.kind) || !['prepare', 'open'].includes(r.action) || (r.kind === 'reference-frame') !== (r.frameId !== undefined) || (r.kind === 'processed-image') !== (r.imageTransform !== undefined) || (r.kind === 'zip') !== (r.assetIds !== undefined))
+    if (typeof r.kind !== 'string' || typeof r.action !== 'string' || !['original', 'preview', 'compatible-png', 'reference-frame', 'processed-image', 'zip','pdf','stitch','ocr-text'].includes(r.kind) || !['prepare', 'open'].includes(r.action) || (r.kind === 'reference-frame') !== (r.frameId !== undefined) || (r.kind === 'processed-image') !== (r.imageTransform !== undefined) || (['zip','pdf','stitch'].includes(r.kind)) !== (r.assetIds !== undefined) || (r.kind==='stitch') !== (r.composition!==undefined))
         throw Error('文件交付选项无效。');
     let assetIds: string[] | undefined;
     if (r.assetIds !== undefined) {
@@ -157,10 +160,11 @@ export function validateWorkHandoff(value: unknown): WorkHandoffRequest {
         assetIds = r.assetIds.map(workId);
         if (assetIds[0] !== scope.assetId || new Set(assetIds).size !== assetIds.length) throw Error('ZIP参考顺序或成员无效，请重新选择。');
     }
-    return { ...scope, kind: r.kind as WorkHandoffKind, action: r.action as WorkHandoffRequest['action'], ...(r.frameId !== undefined ? { frameId: workId(r.frameId) } : {}), ...(r.imageTransform !== undefined ? { imageTransform: validateWorkImageTransform(r.imageTransform) } : {}), ...(assetIds ? { assetIds } : {}) };
+    let composition:WorkHandoffRequest['composition'];if(r.composition!==undefined){const c=workRecord(r.composition,['direction','gap','scale']);if(!['vertical','horizontal'].includes(String(c.direction))||!Number.isInteger(c.gap)||Number(c.gap)<0||Number(c.gap)>256)throw Error('拼接参数无效');if(c.scale!==undefined&&!['original','uniform'].includes(String(c.scale)))throw Error('拼接缩放策略无效');composition={...(c.scale?{scale:c.scale as 'original'|'uniform'}:{}),direction:c.direction as 'vertical'|'horizontal',gap:Number(c.gap)}}
+    return { ...scope,...(composition?{composition}:{}), kind: r.kind as WorkHandoffKind, action: r.action as WorkHandoffRequest['action'], ...(r.frameId !== undefined ? { frameId: workId(r.frameId) } : {}), ...(r.imageTransform !== undefined ? { imageTransform: validateWorkImageTransform(r.imageTransform) } : {}), ...(assetIds ? { assetIds } : {}) };
 }
 export function validateWorkImageTransform(value: unknown): WorkImageTransform {
-    const r = workRecord(value, ['format', 'quality', 'resize', 'stripMetadata']);
+    const r = workRecord(value, ['format', 'quality', 'resize', 'stripMetadata','annotations']);
     if (typeof r.format !== 'string' || !['png', 'jpeg', 'webp'].includes(r.format) || !Number.isInteger(r.quality) || Number(r.quality) < 1 || Number(r.quality) > 100 || typeof r.stripMetadata !== 'boolean')
         throw Error('图像处理选项无效。');
     let resize: WorkImageTransform['resize'];
@@ -170,5 +174,7 @@ export function validateWorkImageTransform(value: unknown): WorkImageTransform {
             throw Error('图像缩放尺寸无效，请使用1–4096像素的边界。');
         resize = { fit: 'inside', width: Number(s.width), height: Number(s.height) };
     }
-    return { format: r.format as WorkImageTransform['format'], quality: Number(r.quality), stripMetadata: r.stripMetadata, ...(resize ? { resize } : {}) };
+    let annotations:WorkImageAnnotation[]|undefined
+    if(r.annotations!==undefined){if(!Array.isArray(r.annotations)||r.annotations.length>100)throw Error('标注数量超过100项。');annotations=r.annotations.map(value=>{const a=workRecord(value,['kind','x','y','width','height','color','text']);if(!['redact'].includes(String(a.kind))||['x','y','width','height'].some(k=>typeof a[k]!=='number'||!Number.isFinite(a[k])||Number(a[k])<0||Number(a[k])>1)||Number(a.width)<=0||Number(a.height)<=0||Number(a.x)+Number(a.width)>1.000001||Number(a.y)+Number(a.height)>1.000001||typeof a.color!=='string'||!/^#[0-9a-f]{6}$/i.test(a.color)||a.text!==undefined&&(typeof a.text!=='string'||a.text.length>200))throw Error('图像标注无效。');return{kind:a.kind as WorkImageAnnotation['kind'],x:Number(a.x),y:Number(a.y),width:Number(a.width),height:Number(a.height),color:a.color as string,...(a.text!==undefined?{text:a.text as string}:{})}})}
+    return { ...(annotations?{annotations}:{}),format: r.format as WorkImageTransform['format'], quality: Number(r.quality), stripMetadata: r.stripMetadata, ...(resize ? { resize } : {}) };
 }

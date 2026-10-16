@@ -1,0 +1,49 @@
+Window: "PUBLIC alignment 1 3 5 7 · Long scrolling native capsule", App: DAM Shelf B.
+0 system dialog PUBLIC alignment 1 3 5 7 · Long scrolling native capsule, Secondary Actions: Raise
+	1 button 收起工作集
+	2 button 工作集操作菜单
+		3 popover Secondary Actions: Cancel
+			4 text 已完成 1 项；有效空结果与执行失败分别显示。
+			5 scroll area Secondary Actions: Scroll Up, Scroll Down
+				6 text entry area native-design-09.png
+PUBLIC 9: 800 x 800
+				7 scroll bar (disabled, settable, float) 0
+			8 button 开始识别
+			9 button 取消运行
+			10 button 复制文字
+			11 button 导出文字副本
+	12 text PUBLIC alignment 1 3 5 7 · Long scrolling native capsule · 已选1份
+	13 scroll area Secondary Actions: Scroll Up, Scroll Down
+		14 collection (disabled)
+			15 section (disabled)
+				16 button Description: native-design-09.png，800×800, Value: 已选择
+					17 image
+					18 text native-design-09.png 800×800
+				19 button Description: native-design-08.png，600×1200, Value: 未选择
+					20 image
+					21 text native-design-08.png 600×1200
+				22 button Description: native-design-07.png，1200×600, Value: 未选择
+					23 image
+					24 text native-design-07.png 1200×600
+				25 button Description: native-design-06.png，800×800, Value: 未选择
+					26 image
+					27 text native-design-06.png 800×800
+				28 button Description: native-design-05.png，600×1200, Value: 未选择
+					29 image
+					30 text native-design-05.png 600×1200
+				31 button Description: native-design-04.png，1200×600, Value: 未选择
+					32 image
+					33 text native-design-04.png 1200×600
+		34 scroll bar (settable, float) 0
+			35 value indicator (settable, float) 0
+			36 increment arrow button
+			37 decrement arrow button
+			38 increment page button
+			39 decrement page button
+	40 text 已取消系统共享，副本保留。
+41 menu bar
+	42 DAM Shelf B
+	43 编辑
+
+The focused UI element is 6 text entry area native-design-09.png
+PUBLIC 9: 800 x 800

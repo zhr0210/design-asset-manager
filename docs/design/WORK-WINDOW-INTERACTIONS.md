@@ -30,3 +30,19 @@
 
 [Canonical section](INTERACTIONS.md#work-window-仍待确认的设计项).
 
+
+## 展开与收起的位置关系
+
+[Canonical section](INTERACTIONS.md#work-window-展开与收起的位置关系).
+
+## 素材、选择与输入
+
+[Canonical section](INTERACTIONS.md#work-window-素材选择与文本).
+
+## 操作菜单范围
+
+[Canonical section](INTERACTIONS.md#work-window-操作菜单范围).
+
+## 内容与自动保存
+
+[Canonical section](INTERACTIONS.md#work-window-颜色与自动保存).

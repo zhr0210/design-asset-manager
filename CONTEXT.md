@@ -5129,8 +5129,8 @@ _Avoid_: Physical directory, Work Set, user-confirmed tag by implication
 
 Palette Folder is defined in [Asset Library](#palette-folder); Work Palette below is a separate Work Set concept.
 
-**Work Palette**:
-The saved color references used in one Work Set, displayed alongside its visual references without changing source image colors or other palette folders.
+**Work Palette (Retired)**:
+A former set of color references belonging to a Work Set. Work Sets no longer include their own color palette in the current product model; independent Palette Folders retain their meaning.
 _Avoid_: Image color measurement, global palette deletion, automatic recoloring
 
 **Single-Asset Card**:
@@ -5142,16 +5142,28 @@ The core creation-facing mode that keeps selected visual references available be
 _Avoid_: Library organization mode, embedded browser, recording plugin
 
 **Work Set**:
-A saved library-bound set of asset references with its own order, presentation and work notes, independent of Collection membership and original-file ownership.
+A saved library-bound set of asset references with its own order and presentation, independent of Collection membership and original-file ownership. Work notes and a work palette are no longer part of its content.
 _Avoid_: Duplicate asset library, Collection, permanent copy of every referenced original
+
+**Work Set Reference Fault**:
+An unexpected inability to access a Work Set member that should be usable in the current library. This is a fault rather than a supported offline membership state.
+_Avoid_: Normal offline member, optional reference, implied removal from the Work Set
 
 **Work Window Layout**:
 The device-specific placement, size, pinning and restore state of a Work Window, separate from its Work Set's reference content.
 _Avoid_: Asset ownership, permission grant, global collection order
 
+**Work Window Indicator**:
+A visual marker identifying a Work Window, with an optional color and visibility preference, distinct from the colors or content of its referenced assets.
+_Avoid_: Work Palette, image color measurement, asset tag or access permission
+
 **Work Window**:
 A native floating presentation of a Work Set that coexists with other reference windows and external creative applications under current library access authority.
 _Avoid_: Saved permission token, single asset identity, library management window
+
+**Work Window Expansion Anchor**:
+The spatial reference relating a Work Window's compact and expanded presentations, so changing presentation does not unintentionally shift its placement. User-initiated repositioning moves this reference with the window.
+_Avoid_: Permanently fixed top-left corner, forced return to a position the user has moved away from
 
 **Video Reference Frame**:
 A user-selected visual reference tied to actual video presentation time and source generation, with durable selection and annotation meaning.

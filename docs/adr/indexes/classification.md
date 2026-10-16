@@ -6,11 +6,11 @@
 
 | Class | Count | Share |
 | --- | ---: | ---: |
-| Core | 89 | 18.05% |
-| Supporting | 200 | 40.57% |
-| Spec-candidate | 195 | 39.55% |
-| Historical | 9 | 1.83% |
-| Total | 493 | 100% |
+| Core | 89 | 18.02% |
+| Supporting | 201 | 40.69% |
+| Spec-candidate | 195 | 39.47% |
+| Historical | 9 | 1.82% |
+| Total | 494 | 100% |
 
 ### Core ADRs
 

@@ -1,0 +1,8 @@
+{
+  "observedOldPID": 18449,
+  "currentPID": 64347,
+  "diagnosticFile": "Dropover-2026-10-14-220237.ips",
+  "readScope": "Selected exception/process timestamp metadata only; no full crash dump, environment or memory read.",
+  "copyOutputVerified": true,
+  "resizeCanceledButCaptureFailed": true
+}

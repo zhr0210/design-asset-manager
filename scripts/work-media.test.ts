@@ -76,7 +76,7 @@ assert.equal((await host.readRetrievalCoverage()).total, 1, 'Whole-image retriev
 await assert.rejects(host.searchSemanticPage({...scope, query:'', mode:'image', imageAssetId:clip.id, tagScope:'includes-pending', limit:10}), /RETRIEVAL_QUERY_VIDEO_UNSUPPORTED/);
 assert.ok((await sharp(await host.readPreview(clip.id)).metadata()).width);
 let catalog = await host.readWorkSets(scope, 'device:media-test');
-catalog = await host.writeWorkSet({ ...scope, sessionToken: catalog.sessionToken, allowUpgrade: false, command: { kind: 'create', value: { name: '视频工作集', assetIds: [clip.id, picture.id], colors: [], columns: 2, note: '素材与帧分别保存' } } }, 'device:media-test');
+catalog = await host.writeWorkSet({ ...scope, sessionToken: catalog.sessionToken, allowUpgrade: true, command: { kind: 'create', value: { name: '视频工作集', assetIds: [clip.id, picture.id],  columns: 2 } } }, 'device:media-test');
 const mediaScope = { ...scope, setId: catalog.sets[0].id, assetId: clip.id };
 process.stdout.write('work-media: native capture and persistence\n');
 let media = await host.readWorkMedia(mediaScope);
@@ -151,7 +151,7 @@ assert.equal(media.frames.length, 1);
 assert.equal(media.frames[0].pngSha256, frameDigests[1]);
 await assert.rejects(host.readWorkMediaFile({ ...mediaScope, ...scope, frameId: evidence[0].id }));
 const current = await host.readWorkSets(scope, 'device:media-test');
-await host.writeWorkSet({ ...scope, sessionToken: current.sessionToken, allowUpgrade: false, command: { kind: 'save', id: current.sets[0].id, expectedRevision: current.sets[0].revision, value: { name: current.sets[0].name, assetIds: [picture.id], note: '保留视频原件', colors: [], columns: 2 } } }, 'device:media-test');
+await host.writeWorkSet({ ...scope, sessionToken: current.sessionToken, allowUpgrade: false, command: { kind: 'save', id: current.sets[0].id, expectedRevision: current.sets[0].revision, value: { name: current.sets[0].name, assetIds: [picture.id],   columns: 2 } } }, 'device:media-test');
 await assert.rejects(host.readWorkMediaFile({ ...mediaScope, ...scope }));
 assert.ok((await host.listAssets()).some(a => a.id === clip.id));
 await host.close();

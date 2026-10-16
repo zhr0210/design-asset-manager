@@ -201,6 +201,7 @@ GOVERNANCE范围内的本地问题/分组经验已由context路由消费，规�
 - 状态：**Issue31软件主要改动已实施，双端限定路径已验，整体PARTIAL**；2026-10-14用户调用implement；工作集悬浮窗目标继续延期，与文档职责整理分开验收。
 - 本轮范围：主工作台/辅助页面/主资料库专注/单素材卡片的中性色与强调色、设计生成同步、窄导航与入口、底部检索、标题与状态、明暗/回退。07c2候选dam-bab1cdcdc23d65f9的真实路径和限制见[实施结果](../checkpoints/app-design-alignment-20261014/README.md)。
 - 剩余条件：本轮物理原生输入/系统偏好、完整异常/跨端恢复及实际下载/旧库矩阵；源码与工具/平台资格分别保留。悬浮窗全底板Liquid Glass、220×240、常显原生按钮等继续排除，现有色板指针及停靠覆盖/设备缺口不因本轮UI资格关闭。
+- B悬浮窗独立进度：原生设计与第二轮功能已接入，正式验收仍PARTIAL；见[第二轮检查点](../checkpoints/b-work-window-second-implementation-20261015/README.md)。主工作台与B分别保存候选证据，旧design:check差异须在整合候选重验。
 - 来源：[DESIGN](../../DESIGN.md)、[工作台交互](../design/WORKSPACE-INTERACTIONS.md)、[悬浮窗交互](../design/WORK-WINDOW-INTERACTIONS.md)、[CURRENT-STATE](../handoff/CURRENT-STATE.md)。
 - 接续：按当前TASK补Issue31剩余矩阵，具体证据范围由CURRENT-STATE与报告维护；不自动开启延期悬浮窗改造或历史队列，不创建定时自动化。
 

@@ -2,6 +2,24 @@
 
 视觉只由[DESIGN](../../DESIGN.md)维护，当前B用户行为见[悬浮工作窗交互规格](../../docs/design/INTERACTIONS.md#work-window)，技术机制见[工作模式模块](../../src/main/work-mode/README.md)。旧候选结果不构成新视觉设计的资格，实际版本与缺口由[CURRENT-STATE](../../docs/handoff/CURRENT-STATE.md)维护。
 
+## B轮廓、锚点与呈现机制（2026-10-14）
+
+B改用带系统圆角框架的非激活NSPanel（titled + fullSizeContentView）；隐藏原生标题栏内容、使用既有AppKit按钮，玻璃铺满底板。macOS26+玻璃采用与当前系统框架一致的16pt圆角，旧系统保留VisualEffect回退。没有生产私有圆角setter、额外描边遮盖或关闭阴影/聚焦。
+
+WorkShelfExpansionAnchor保存紧凑frame及中心/左/右位置关系；只有实际用户拖动平移关系，屏幕夹取不当作用户移动。geometry附带可选expansion，由Host严格校验并保存，重开通过同一bounds命令恢复。紧凑态及停靠态不携带该字段。
+
+WorkShelfPresentation只拥有前景视图、短期透明快照及可取消的延迟任务；窗口运动仍由WorkShelfInteraction控制。图片/文字在固定尺寸前景平面中呈现，快照不接受输入；实际透明度为零的平面不接受鼠标命中。再次切换从当前frame/opacity接续，拖动立即接管，冻结/隐藏结算目标并撤销旧回调。选择背景是独立CALayer，业务选择先更新，仅背景opacity做160ms过渡，复用卡片直接同步状态。全部时序取自DESIGN；真实运行资格只见CURRENT-STATE及本轮报告。
+
+相关原生回归统一执行`npm run test-native-work-shelf`，涵盖呈现、交互、接收和颜色浮层；这些受控AppKit输入仍不替代正式原生验收。
+
+## B原生设计接线（2026-10-14）
+
+2026-10-14本工作树已实施B原生设计：220×240紧凑布局、系统图标按钮、紧凑/展开的NSGlassEffectView底板（支持系统）、窗内NSVisualEffectView停靠覆盖与独立图标抓手。Host布局归一化/校验与原生尺寸同步，旧紧凑布局原文在转换前保留；展开拖窗限制在目标屏可见区域。原生仅呈现，Host权威不变。
+
+菜单以展示时的完整目标集合打开交付面板：紧凑全部、展开所选优先，并显示范围/数量；引用故障不静默过滤，后项失败回传已有回执并报告不完整状态。Escape先关闭交付浮层；冻结/隐藏/退休先撤销取色草稿再关浮层，防止关闭通知迟到后重新提交；停靠期间内容按钮和内容键盘操作退出，恢复入口保留。
+
+实际候选、正式结果及缺口只看[CURRENT-STATE](../../docs/handoff/CURRENT-STATE.md)和[实施检查点](../../docs/checkpoints/b-native-design-implementation-20261014/README.md)，以下各旧候选记录不作为新实现的验收。
+
 ## B色板选择器（2026-10-13）
 
 展开窗右侧的直接HEX输入已替换为“添加”按钮。WorkShelfColorPicker通过AppKit颜色区域、原生色相滑条、只读HEX及确认/取消按钮组成原生浮层；只保存不透明六位HEX，不添加透明度存储。选色预览不写Host；确认走既有colors编辑及300ms自动保存，重复颜色禁止添加。浮层关闭开始即撤销未提交选择，迟到确认、冻结、隐藏或关闭不会复活草稿。
@@ -35,7 +53,7 @@ npm run start:work-b
 
 Native UI 不读 Library SQLite、不拥有账号/AI状态、不接受 Browser 任意路径或命令。B 窗口原生拖动及动画在 AppKit 内执行；Host 只保存完成后的实际几何。原生 Close 请求走现有 Workspace close/草稿核对；错误/未保存时显示复杂面板。未确认子进程退出不记作 close 工具成功，进程记录按实际 PID核对。
 
-A候选的AppKit背景在macOS26+使用NSGlassEffectView，旧系统使用NSVisualEffectView；B当前NativeWorkShelf仍使用NSVisualEffectView，整个底板Liquid Glass是后续设计目标，不能因A使用玻璃而记作B已经实现。最低链接目标13只是构建目标，不是旧系统实测。动画遵循系统减少动态效果，过渡闭包有资格令牌，旧完成不能覆盖新操作。A与B分别持有本阶段profile，B业务仍由唯一Host持有，不能把A JSON暂存记录写成Library Asset。
+A及本轮B的AppKit背景在macOS26+使用NSGlassEffectView，旧系统使用NSVisualEffectView；B底板已接线但完整视觉/系统设置矩阵仍需按实际版本验收，不能因A使用玻璃而继承其资格。最低链接目标13只是构建目标，不是旧系统实测。动画遵循系统减少动态效果，过渡闭包有资格令牌，旧完成不能覆盖新操作。A与B分别持有本阶段profile，B业务仍由唯一Host持有，不能把A JSON暂存记录写成Library Asset。
 
 ## 尚未完成
 

@@ -15,4 +15,4 @@ export const TAG_DECISION_SQL=`CREATE TABLE independent_tag_rejections (
 CREATE TRIGGER independent_tag_rejection_immutable BEFORE UPDATE ON independent_tag_rejections
 BEGIN SELECT RAISE(ABORT,'TAG_REJECTION_IMMUTABLE'); END;
 `
-export function applyTagDecisionSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version>=11&&version<=15)return;if(version!==10)throw Error('TAG_DECISION_SCHEMA_UNSUPPORTED');db.exec(TAG_DECISION_SQL);db.pragma('user_version=11')}
+export function applyTagDecisionSchema(db:Database.Database){const version=Number(db.pragma('user_version',{simple:true}));if(version>=11&&version<=16)return;if(version!==10)throw Error('TAG_DECISION_SCHEMA_UNSUPPORTED');db.exec(TAG_DECISION_SQL);db.pragma('user_version=11')}

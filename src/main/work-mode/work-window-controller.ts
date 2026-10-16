@@ -11,12 +11,12 @@ import type {ActiveLibraryHost} from '../../shared/contracts/active-library.cont
 import {validateWorkScope,validateWorkLayout,validateWorkWrite,validateWorkValue,validateWorkWindowControl,workRecord,workId,workRevision,workClipboardRequestId,type WorkScope,type WorkSetWrite,type WorkSetCatalog,type WorkWindowSnapshot,type WorkWindowAction,type WorkResult,type WorkWindowLayout,type WorkWindowControlState,type WorkWindowControlResult,type WorkClipboardEffect} from '../../shared/contracts/work-set.contract'
 import {validateNotebook,type NotebookSaveRequest} from '../../shared/contracts/asset-notebook.contract'
 import {visibleWorkBounds,dockWorkBounds,expandedWorkBounds,type WorkArea} from './work-window-bounds'
-export interface WorkWindowPort{traceLayoutSave?(layout:WorkWindowLayout):(status:'committed'|'failed')=>void;freeze?(value:boolean):Promise<void>;bindShelfActions?(listener:(action:ShelfAction)=>Promise<ShelfReply>):void;openFocus?(assetId:string):void;closeFocus?():void;feedback?(message:string):void;bindNativeIntents?(listener:(intent:import('./native-shelf-work-window').NativeShelfIntent)=>void):void;showDetail?():void;readFileIcon?(verifiedFile:string):Promise<Uint8Array>;edgeDock?:boolean;configureDock?(layout:WorkWindowLayout,options?:{gestureId?:number;deltaX?:number}):void|Promise<void>;startDragFiles?(files:string[],icon:Uint8Array):void;startDrag?(file:string,icon:Uint8Array):void;publish(value:WorkWindowSnapshot|null):void;show():void;hide():void;destroy():void|Promise<void>;setPinned(value:boolean):void;bounds():WorkWindowLayout;setBounds(value:WorkWindowLayout):void;visible():boolean;isTrusted(event:unknown):boolean}
+export interface WorkWindowPort{setWindowMetadata?(value:Pick<WorkWindowLayout,'indicatorColor'|'alwaysShowIndicator'|'currentSpaceOnly'>):void;traceLayoutSave?(layout:WorkWindowLayout):(status:'committed'|'failed')=>void;freeze?(value:boolean):Promise<void>;bindShelfActions?(listener:(action:ShelfAction)=>Promise<ShelfReply>):void;openFocus?(assetId:string):void;closeFocus?():void;feedback?(message:string):void;bindNativeIntents?(listener:(intent:import('./native-shelf-work-window').NativeShelfIntent)=>void):void;showDetail?():void;readFileIcon?(verifiedFile:string):Promise<Uint8Array>;edgeDock?:boolean;configureDock?(layout:WorkWindowLayout,options?:{gestureId?:number;deltaX?:number}):void|Promise<void>;startDragFiles?(files:string[],icon:Uint8Array):void;startDrag?(file:string,icon:Uint8Array):void;publish(value:WorkWindowSnapshot|null):void;show():void;hide():void;destroy():void|Promise<void>;setPinned(value:boolean):void;bounds():WorkWindowLayout;setBounds(value:WorkWindowLayout):void;visible():boolean;isTrusted(event:unknown):boolean}
 class ClipboardAttachmentError extends Error{readonly code='CLIPBOARD_ATTACHMENT_INCOMPLETE';constructor(readonly effect:WorkClipboardEffect){super('图片已保存到素材库，但未确认加入工作集；未覆盖现有内容。请在资料库查看该图片并重新加入。')}}
-const savedValue=(s:{name:string;note:string;colors:string[];columns:number;assetIds:string[]})=>validateWorkValue({name:s.name,note:s.note,colors:s.colors,columns:s.columns,assetIds:s.assetIds})
-interface Entry{nativeFrozen?:boolean;nativeCancelEpoch?:number;dropAbort?:AbortController;nativeTransient?:boolean;shelf?:ReturnType<typeof createShelfAutosave>;nativeTasks?:Set<Promise<unknown>>;nativeReceipts?:Map<string,string>;nativeUnknown?:Set<string>;pasteActive?:boolean;clipboardAssets?:Set<string>;fileRetiring?:symbol;notesDirty?:boolean;port:WorkWindowPort;state:WorkWindowSnapshot;sessionToken:string;queue:Promise<unknown>;timer?:ReturnType<typeof setTimeout>}
+const savedValue=(s:{name:string;columns:number;assetIds:string[]})=>validateWorkValue({name:s.name,columns:s.columns,assetIds:s.assetIds})
+interface Entry{nativeCancelActive?:boolean;nativeFrozen?:boolean;nativeCancelEpoch?:number;dropAbort?:AbortController;nativeTransient?:boolean;shelf?:ReturnType<typeof createShelfAutosave>;nativeTasks?:Set<Promise<unknown>>;nativeReceipts?:Map<string,string>;nativeUnknown?:Set<string>;pasteActive?:boolean;clipboardAssets?:Set<string>;fileRetiring?:symbol;notesDirty?:boolean;port:WorkWindowPort;state:WorkWindowSnapshot;sessionToken:string;queue:Promise<unknown>;timer?:ReturnType<typeof setTimeout>}
 /** Windows are owned separately; private paths and broad application APIs never enter their preload. */
-export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDrafts?:ReturnType<typeof import('./shelf-draft-store').createShelfDraftStore>;memberTools?:ReturnType<typeof import('./work-member-tools').createWorkMemberTools>;readClipboardImage?:()=>Promise<Uint8Array>;media?:ReturnType<typeof import('./work-media-controller').createWorkMediaController>;host:ActiveLibraryHost;deviceId:string;areas:()=>WorkArea[];theme:()=> 'light'|'dark';createWindow:(input:{layout:WorkWindowLayout;changed:()=>void;closed:()=>void;readMetadata?:(id:string)=>Promise<{width:number|null;height:number|null}>;readPreview:(url:string)=>Promise<Uint8Array>;readMedia?:(url:string)=>Promise<{bytes:Uint8Array;type:string}>})=>WorkWindowPort;beforeWorkspaceClose:()=>Promise<()=>void>;changed:()=>void;locate:(scope:WorkScope,setId:string,assetId?:string)=>void;hideMain:()=>void}){
+export function createWorkWindowController(deps:{retireWorkSetDrafts?:(libraryIdentity:string)=>Promise<void>;configureAi?:()=>void;shelfDrafts?:ReturnType<typeof import('./shelf-draft-store').createShelfDraftStore>;memberTools?:ReturnType<typeof import('./work-member-tools').createWorkMemberTools>;readClipboardImage?:()=>Promise<Uint8Array>;media?:ReturnType<typeof import('./work-media-controller').createWorkMediaController>;host:ActiveLibraryHost;deviceId:string;areas:()=>WorkArea[];theme:()=> 'light'|'dark';createWindow:(input:{layout:WorkWindowLayout;changed:()=>void;closed:()=>void;readMetadata?:(id:string)=>Promise<{width:number|null;height:number|null}>;readPreview:(url:string)=>Promise<Uint8Array>;readMedia?:(url:string)=>Promise<{bytes:Uint8Array;type:string}>})=>WorkWindowPort;beforeWorkspaceClose:()=>Promise<()=>void>;changed:()=>void;locate:(scope:WorkScope,setId:string,assetId?:string)=>void;hideMain:()=>void}){
  const entries=new Map<string,Entry>();let epoch=0;let retiredSession:string|null=null;let draining=false,drainPromise:Promise<void>|null=null
  const result=async<T>(fn:()=>Promise<T>|T):Promise<WorkResult<T>>=>{try{return{success:true,value:await fn()}}catch(e){return{success:false,error:e instanceof Error&&'code'in e?e.message:e instanceof Error&&e.message==='TOO_MANY_WINDOWS'?'最多同时打开8个工作窗口，请先关闭其他工作窗口。':'操作未完成，请重试。',...(e&&typeof e==='object'&&'code'in e?{code:String(e.code)}:{}),...(e instanceof ClipboardAttachmentError?{effect:e.effect}:{})}}}
  const matches=(s:WorkScope)=>{const a=deps.host.inspect();return a.state==='ready'&&a.identity===s.libraryIdentity&&a.generation===s.generation}
@@ -29,18 +29,19 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
   return{hasActive:media.hasActive.bind(media),cancel:media.revoke.bind(media),whenIdle:media.whenIdle.bind(media)}
  }
  const assertFileIdle=(e:Entry)=>{if(e.pasteActive||e.nativeTasks?.size||fileLifecycle()?.hasActive(fileActor(e)))throw Object.assign(Error('正在准备交付，请完成或取消后再关闭。'),{code:'WORK_OPERATION_ACTIVE'})}
- const assertFileAdmission=(e:Entry)=>{if(draining||e.fileRetiring)throw Object.assign(Error('窗口正在退出，未开始新的交付操作。'),{code:'WORK_OPERATION_RETIRING'})}
- const entryUnsaved=(e:Entry)=>Boolean(e.nativeTransient||e.notesDirty||e.state.draft&&JSON.stringify(e.state.draft)!==JSON.stringify(validateWorkValue({name:e.state.set.name,assetIds:e.state.set.assetIds,note:e.state.set.note,colors:e.state.set.colors,columns:e.state.set.columns})))
+ const assertFileAdmission=(e:Entry)=>{if(e.nativeCancelActive)throw Object.assign(Error('取消仍在等待当前任务退出，尚未接入新操作。'),{code:'WORK_OPERATION_CANCELLING'});if(draining||e.fileRetiring)throw Object.assign(Error('窗口正在退出，未开始新的交付操作。'),{code:'WORK_OPERATION_RETIRING'})}
+ const entryUnsaved=(e:Entry)=>Boolean(e.nativeTransient||e.notesDirty||e.state.draft&&JSON.stringify(e.state.draft)!==JSON.stringify(validateWorkValue({name:e.state.set.name,assetIds:e.state.set.assetIds,columns:e.state.set.columns})))
  const controlState=(e:Entry,open=true):WorkWindowControlState=>({id:e.state.set.id,open,pinned:e.port.bounds().pinned,visible:open&&e.port.visible(),hasUnsaved:entryUnsaved(e),...(e.state.layoutError?{layoutError:e.state.layoutError}:{})})
  const invalidate=async()=>{epoch++;const held=[...entries.values()];for(const e of held){e.shelf?.dispose();deps.memberTools?.retire(fileActor(e));clearTimeout(e.timer);e.port.publish(null)};await Promise.all(held.map(async e=>{await deps.media?.revoke(fileActor(e));await e.port.destroy();entries.delete(e.state.set.id)}));deps.changed()}
  const locateEntry=(event:unknown,token?:string)=>{for(const e of entries.values())if(e.port.isTrusted(event)&&(!token||token===e.state.token)){assertCurrent(e);return e}throw Error('UNTRUSTED_WORK_WINDOW')}
  const persist=(e:Entry)=>{const save=async()=>{assertCurrent(e);const layout=validateWorkLayout({...e.port.bounds(),open:true});e.state={...e.state,geometry:layout,pinned:layout.pinned};const receipt=e.port.traceLayoutSave?.(layout);try{await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout},deps.deviceId);assertCurrent(e);receipt?.('committed');e.state={...e.state,geometry:layout,pinned:layout.pinned,layoutError:undefined};e.port.publish(e.state)}catch(error){receipt?.('failed');if(entries.get(e.state.set.id)===e){e.state={...e.state,layoutError:'窗口位置未保存，请重试。'};e.port.publish(e.state)}throw error}finally{deps.changed()}};const task=e.queue.then(save);e.queue=task.catch(()=>{});return task}
  const applyBounds=async(e:Entry,layout:WorkWindowLayout)=>{if(e.port.edgeDock&&e.port.configureDock)await e.port.configureDock(layout);else e.port.setBounds(layout);assertCurrent(e)}
  const geometryChanged=(e:Entry)=>{clearTimeout(e.timer);e.timer=setTimeout(()=>{void(async()=>{assertCurrent(e);const actual=e.port.bounds();if(actual.dock){const target=visibleWorkBounds(actual,deps.areas());if(actual.x!==target.x||actual.y!==target.y||actual.width!==target.width||actual.height!==target.height)await applyBounds(e,target)}await persist(e)})().catch(()=>{})},250)}
- const refreshEntry=async(e:Entry)=>{const before=epoch;const catalog=await deps.host.readWorkSets(e.state.scope,deps.deviceId);if(before!==epoch)return;assertCurrent(e);const set=catalog.sets.find(s=>s.id===e.state.set.id);if(!set){clearTimeout(e.timer);e.shelf?.dispose();deps.memberTools?.retire(fileActor(e));await e.port.destroy();entries.delete(e.state.set.id);return}const assets=(await deps.host.readAssetContext(set.assetIds)).assets;if(before!==epoch)return;assertCurrent(e);e.state={...e.state,set,assets:[...assets]};e.sessionToken=catalog.sessionToken;e.port.publish(e.state)}
+ const refreshEntry=async(e:Entry)=>{const before=epoch;const catalog=await deps.host.readWorkSets(e.state.scope,deps.deviceId);if(before!==epoch)return;assertCurrent(e);const set=catalog.sets.find(s=>s.id===e.state.set.id);if(!set){clearTimeout(e.timer);e.shelf?.dispose();deps.memberTools?.retire(fileActor(e));await e.port.destroy();entries.delete(e.state.set.id);return}const assets=(await deps.host.readAssetContext(set.assetIds)).assets;if(before!==epoch)return;assertCurrent(e);if(e.state.set.assetIds.some(id=>!set.assetIds.includes(id)))deps.memberTools?.retire(fileActor(e));e.state={...e.state,set,assets:[...assets]};e.sessionToken=catalog.sessionToken;e.port.publish(e.state)}
  const refresh=async()=>{for(const e of [...entries.values()]){try{await refreshEntry(e)}catch{if(entries.get(e.state.set.id)===e){clearTimeout(e.timer);await e.port.destroy();entries.delete(e.state.set.id)}}}}
- const read=(input:unknown)=>result(async()=>{const catalog=await deps.host.readWorkSets(validateWorkScope(input),deps.deviceId);if(catalog.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');return catalog})
- const write=(input:unknown)=>result(async()=>{const r=validateWorkWrite(input);if(r.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');const value=await deps.host.writeWorkSet(r,deps.deviceId);deps.changed();await refresh();return value})
+ const retireDrafts=async(catalog:WorkSetCatalog,libraryIdentity:string)=>{if(!catalog.requiresUpgrade){deps.shelfDrafts?.retireWorkSetFields(libraryIdentity);await deps.retireWorkSetDrafts?.(libraryIdentity)}}
+ const read=(input:unknown)=>result(async()=>{const scope=validateWorkScope(input),catalog=await deps.host.readWorkSets(scope,deps.deviceId);await retireDrafts(catalog,scope.libraryIdentity);if(catalog.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');return catalog})
+ const write=(input:unknown)=>result(async()=>{const r=validateWorkWrite(input);if(r.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');const value=await deps.host.writeWorkSet(r,deps.deviceId);await retireDrafts(value,r.libraryIdentity);deps.changed();await refresh();return value})
  const windows=(input:unknown)=>result(async()=>{const scope=validateWorkScope(input);if(!matches(scope))throw Error('STALE_LIBRARY');await Promise.all([...entries.values()].map(e=>e.queue));if(!matches(scope))throw Error('STALE_LIBRARY');return[...entries.values()].map(e=>{assertCurrent(e);return controlState(e)})})
  const control=(input:unknown)=>result(async():Promise<WorkWindowControlResult>=>{const a=validateWorkWindowControl(input);if(!matches(a))throw Error('STALE_LIBRARY');const e=entries.get(a.id);if(!e)throw Object.assign(Error('此工作窗口已关闭，请重新打开。'),{code:'WORK_WINDOW_MISSING'});const retirement=Symbol('workspace-close');if(a.kind==='close'){assertFileIdle(e);assertFileAdmission(e);e.fileRetiring=retirement}let release:(()=>void)|undefined;try{if(a.kind==='close'){await e.port.freeze?.(true);e.nativeFrozen=true;const flushed=await e.shelf?.flush();if(flushed&&!flushed.ok)throw Error(flushed.message)};release=a.kind==='close'?await deps.beforeWorkspaceClose():undefined;const run=async():Promise<WorkWindowControlResult>=>{assertCurrent(e)
   if(a.kind==='close'){
@@ -53,6 +54,7 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
   return{status:'applied',window:controlState(e)}
  };const task=e.queue.then(run);e.queue=task.catch(()=>{});const applied=await task;if(a.kind!=='close'){await persist(e);return{...applied,window:controlState(e)}}return applied}finally{release?.();if(entries.get(e.state.set.id)===e){e.nativeFrozen=false;await e.port.freeze?.(false).catch(()=>{});if(e.fileRetiring===retirement)e.fileRetiring=undefined}}})
  const open=async(input:unknown):Promise<WorkResult<WorkWindowSnapshot>>=>result(async()=>{if(draining)throw Error('LIBRARY_TRANSITION');const r=workRecord(input,['libraryIdentity','generation','id','theme']),scope=validateWorkScope({libraryIdentity:r.libraryIdentity,generation:r.generation}),id=workId(r.id);if(r.theme!==undefined&&!['light','dark'].includes(String(r.theme)))throw Error('INVALID_THEME');if(!matches(scope))throw Error('STALE_LIBRARY');const existing=entries.get(id);if(existing){assertCurrent(existing);if(r.theme==='light'||r.theme==='dark'){existing.state={...existing.state,theme:r.theme};existing.port.publish(existing.state)}existing.port.show();return existing.state}if(entries.size>=8)throw Error('TOO_MANY_WINDOWS');const before=epoch,catalog=await deps.host.readWorkSets(scope,deps.deviceId),set=catalog.sets.find(s=>s.id===id);if(catalog.sessionToken===retiredSession)throw Error('LIBRARY_TRANSITION');if(!set)throw Error('SET_MISSING');const assets=(await deps.host.readAssetContext(set.assetIds)).assets;if(before!==epoch||!matches(scope)||draining)throw Error('STALE_LIBRARY');if(entries.has(id)){const existing=entries.get(id)!;existing.port.show();return existing.state}
+  await retireDrafts(catalog,scope.libraryIdentity)
   const layout={...visibleWorkBounds(set.layout,deps.areas(),entries.size),open:true}
   if(entries.has(id)){const existing=entries.get(id)!;existing.port.show();return existing.state}if(entries.size>=8)throw Error('TOO_MANY_WINDOWS');
   const state:WorkWindowSnapshot={token:randomUUID(),scope,set,assets:[...assets],pinned:layout.pinned,geometry:layout,theme:r.theme==='dark'?'dark':r.theme==='light'?'light':deps.theme()};let entry:Entry
@@ -104,7 +106,7 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
   const value=await deps.media.files.openExisting(fileActor(e),workId(r.id),guard);try{assertCurrent(e)}catch{throw Object.assign(Error('系统打开已请求，但当前窗口已结束；副本保留，请先核对接收应用，勿盲目重开。'),{code:'WORK_HANDOFF_OPEN_SCOPE_CHANGED'})}return value
  })
  const nativeIcon=async(e:Entry,file:{file:string;assetId:string;kind:import('../../shared/contracts/work-media.contract').WorkHandoffKind})=>{
-  if(file.kind!=='zip')return deps.host.readPreview(file.assetId)
+  if(!['zip','pdf','ocr-text'].includes(file.kind))return deps.host.readPreview(file.assetId)
   if(!e.port.readFileIcon)throw Object.assign(Error('当前窗口无法读取归档的系统文件图标，未开始拖出。'),{code:'NATIVE_FILE_ICON_UNAVAILABLE'})
   const icon=await e.port.readFileIcon(file.file)
   if(!icon.byteLength)throw Object.assign(Error('归档的系统文件图标不可用，未开始拖出。'),{code:'NATIVE_FILE_ICON_UNAVAILABLE'})
@@ -150,20 +152,25 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
    if(action.kind==='edit')return await e.shelf!.edit(action)
    if(action.kind==='review-save'||action.kind==='resolve-save'){
     const catalog=await deps.host.readWorkSets(e.state.scope,deps.deviceId);assertCurrent(e);const saved=catalog.sets.find(s=>s.id===e.state.set.id);if(!saved)throw Error('工作集已不存在，草稿保留。')
-    if(action.kind==='review-save')return{ok:true,review:{revision:saved.revision,name:saved.name,note:saved.note,count:saved.assetIds.length}}
+    if(action.kind==='review-save')return{ok:true,review:{revision:saved.revision,name:saved.name,count:saved.assetIds.length}}
     if(saved.revision!==action.revision)throw Error('核对期间工作集又有更新，草稿保留，请重新核对。')
     if(e.state.draft?.assetIds.some(id=>!saved.assetIds.includes(id)))throw Error('部分草稿成员已被移出工作集，未覆盖当前引用；请在主界面核对成员。')
     e.state={...e.state,set:saved};return await e.shelf!.rebase(saved.revision)
    }
    if(action.kind==='retry')return await e.shelf!.retry()
-   if(action.kind==='cancel'){e.nativeCancelEpoch=(e.nativeCancelEpoch??0)+1;e.dropAbort?.abort();const outcomes=await Promise.allSettled([deps.media?.revoke(fileActor(e)),...e.nativeTasks??[]]);if(outcomes[0].status==='rejected')throw outcomes[0].reason;return{ok:true,message:'已等待当前项返回并停止后续项，已完成副本与入库素材保留。'}}
+   if(action.kind==='cancel'){e.nativeCancelActive=true;try{e.nativeCancelEpoch=(e.nativeCancelEpoch??0)+1;e.dropAbort?.abort();const outcomes=await Promise.allSettled([deps.media?.revoke(fileActor(e)),...e.nativeTasks??[]]);if(outcomes[0].status==='rejected')throw outcomes[0].reason;return{ok:true,message:'已等待当前项返回并停止后续项，已完成副本与入库素材保留。'}}finally{e.nativeCancelActive=false}}
    const flushed=await e.shelf?.flush();if(flushed&&!flushed.ok)return flushed
-   const member=(id:string)=>{assertCurrent(e);if(!e.state.set.assetIds.includes(id)||e.state.set.unavailableIds.includes(id))throw Error('素材已失效，未执行操作。')}
+   const member=(id:string)=>{
+    assertCurrent(e)
+    if(!e.state.set.assetIds.includes(id))throw Error('该成员已移出当前工作集，未执行操作。')
+    if(e.state.set.unavailableIds.includes(id)||!e.state.assets.some(asset=>asset.id===id))throw Error('工作集引用故障：成员无法访问，未跳过或删除引用，请检查资料库。')
+   }
    if(action.kind==='focus'){member(action.assetId);e.state={...e.state,focusAssetId:action.assetId,focusRequest:(e.state.focusRequest??0)+1};e.port.publish(e.state);e.port.openFocus?.(action.assetId);return{ok:true}}
    if(action.kind==='paste'){const reply=await actEntry(e,{token:e.state.token,kind:'paste-image',requestId:randomUUID(),expectedRevision:e.state.set.revision});return reply.success?{ok:true}:{ok:false,message:reply.error}}
+   const admittedEpoch=e.nativeCancelEpoch??0
    const prepare=async(id:string,kind:import('../../shared/contracts/work-media.contract').WorkHandoffKind,extra:Record<string,unknown>={})=>{
-    member(id);if(!deps.media)throw Error('交付模块尚未就绪。')
-    const asset=e.state.assets.find(a=>a.id===id)!,key=JSON.stringify([id,asset.revision,asset.thumbnailRef,kind,extra])
+    member(id);if((e.nativeCancelEpoch??0)!==admittedEpoch)throw Error('操作已取消。');if(!deps.media)throw Error('交付模块尚未就绪。')
+    const asset=e.state.assets.find(a=>a.id===id)!,current=(await deps.host.readAssetContext([id])).assets[0];member(id);if(!current||current.revision!==asset.revision||current.thumbnailRef!==asset.thumbnailRef)throw Error('素材已变化，请重新读取工作集后操作。');const key=JSON.stringify([id,asset.revision,asset.thumbnailRef,kind,extra])
     e.nativeReceipts??=new Map();e.nativeUnknown??=new Set()
     const cached=e.nativeReceipts.get(key);if(cached){try{await deps.media.files.nativeFile(fileActor(e),cached);member(id);return cached}catch{e.nativeReceipts.delete(key)}}
     if(e.nativeUnknown.has(key))throw Error('上一份副本结果未确认，请核对交付记录，未重复创建。')
@@ -171,9 +178,57 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
     let reply;try{reply=await deps.media.handoff(fileActor(e),request)}catch{e.nativeUnknown.add(key);throw Error('副本结果未确认，请核对保留记录。')}
     if(!reply.success)throw Error(reply.error);member(id);e.nativeReceipts.set(key,reply.value.id);return reply.value.id
    }
-   const admittedEpoch=e.nativeCancelEpoch??0
    const run=async():Promise<ShelfReply>=>{
     assertCurrent(e);if((e.nativeCancelEpoch??0)!==admittedEpoch)throw Error('操作在开始前已取消。')
+    if(action.kind==='saved-files'){
+     if(!deps.media)throw Error('交付模块未就绪。');const files:NonNullable<ShelfReply['files']>=[];let skipped=0
+     for(const assetId of action.assetIds){member(assetId);const scope={...e.state.scope,setId:e.state.set.id,assetId},receipts=await deps.media.files.list(scope)
+      for(const receipt of receipts){if(files.length>=64)break;try{await deps.media.files.resumeNative(fileActor(e),scope,receipt.id,previousActor=>{member(assetId);if(previousActor!==fileActor(e)&&[...entries.values()].some(active=>fileActor(active)===previousActor))throw Error('其他窗口仍持有此副本。')});const checked=await deps.media.files.nativeFile(fileActor(e),receipt.id);member(assetId);files.push({id:receipt.id,assetId,fileName:receipt.fileName,file:checked.file})}catch{assertCurrent(e);skipped++}}
+     }
+     return{ok:true,files,message:files.length?`已恢复 ${files.length} 份原生副本；${skipped} 份已回收、来源变化或仍被其他窗口持有，未恢复。`:'没有可恢复的原生交付副本；已回收、来源变化或其他窗口持有的记录不会交付。'}
+    }
+    if(action.kind==='receipt-files'){
+     if(!deps.media)throw Error('交付模块未就绪。');const files:NonNullable<ShelfReply['files']>=[]
+     for(const id of action.ids){const checked=await deps.media.files.nativeFile(fileActor(e),id);member(checked.assetId);const data=await deps.media.files.readFile(id);member(checked.assetId);files.push({id,assetId:checked.assetId,fileName:data.fileName,file:checked.file})}
+     return{ok:true,files}
+    }
+    if(action.kind==='ocr'){
+     const check=()=>{if(action.operation==='cancel')assertCurrent(e);else member(action.assetId)};check();if(!deps.memberTools)throw Error('OCR 服务未就绪。')
+     const value=await deps.memberTools.call({owner:fileActor(e),scope:e.state.scope,assetId:action.assetId,check},'ocr-'+action.operation,action.receipt?{receipt:action.receipt}:{})
+     return{ok:true,value}
+    }
+    if(action.kind==='reference-set'){
+     if(e.state.set.revision!==action.expectedRevision)throw Error('工作集已变化，请重新打开菜单。');action.assetIds.forEach(member)
+     if(action.operation==='clear'){
+      await deps.host.writeWorkSet({...e.state.scope,sessionToken:e.sessionToken,allowUpgrade:false,command:{kind:'save',id:e.state.set.id,expectedRevision:action.expectedRevision,value:{...savedValue(e.state.set),assetIds:[]}}},deps.deviceId);await refreshEntry(e);deps.changed();return{ok:true,message:'已清空引用，素材原件保留。'}
+     }
+     if(entries.size>=8)throw Error('最多同时打开8个工作窗口，请先关闭其他窗口。')
+     const prior=new Set((await deps.host.readWorkSets(e.state.scope,deps.deviceId)).sets.map(s=>s.id)),value=validateWorkValue({name:action.name,columns:2,assetIds:action.operation==='new'?[]:action.assetIds})
+     const intentKey='reference-set:'+JSON.stringify([action.operation,action.expectedRevision,value]);e.nativeUnknown??=new Set()
+     if(e.nativeUnknown.has(intentKey))throw Error('上一份新工作集提交未确认，请先在工作模式核对已保存集合，未重复创建。')
+     let catalog:WorkSetCatalog
+     try{catalog=await deps.host.writeWorkSet({...e.state.scope,sessionToken:e.sessionToken,allowUpgrade:false,command:action.operation==='new'?{kind:'create',value}:{kind:'fork',id:e.state.set.id,expectedRevision:action.expectedRevision,value,move:action.operation==='move'}},deps.deviceId)}catch(error){if(error instanceof Error&&/ACK_UNCERTAIN|SETTLEMENT_FAILED|SETTINGS_RESTORE_FAILED/.test(error.message)){e.nativeUnknown.add(intentKey);throw Error('新工作集提交结果未确认，库与窗口保持；请在工作模式核对保留记录，不会自动或用相同意图重复创建。')}throw error}
+     assertCurrent(e);const target=catalog.sets.find(s=>!prior.has(s.id));await refreshEntry(e);deps.changed();if(!target)throw Error('新工作集结果未确认，请核对工作模式，勿重复创建。')
+     const shown=await open({...e.state.scope,id:target.id});if(!shown.success)throw Error('新工作集已保存，但窗口未打开，请在工作模式打开该集合。')
+     return{ok:true,message:'新工作集已保存并打开。'}
+    }
+    if(action.kind==='file-action'){
+     if(!deps.media)throw Error('交付模块未就绪。');const checked=await deps.media.files.nativeFile(fileActor(e),action.id);member(checked.assetId)
+     const value=await deps.media.files.fileAction(fileActor(e),action.id,action.operation,action.destination,()=>{member(checked.assetId);if((e.nativeCancelEpoch??0)!==admittedEpoch)throw Error('操作已取消。')});assertCurrent(e)
+     e.nativeReceipts?.clear();return{ok:true,message:value.message}
+    }
+    if(action.kind==='system-files'){
+     const revision=e.state.set.revision;if(revision!==action.expectedRevision)throw Error('工作集已变化，请重新打开菜单。')
+     action.assetIds.forEach(member);const files:NonNullable<ShelfReply['files']>=[]
+     for(const id of action.assetIds){const receipt=await prepare(id,'original'),checked=await deps.media!.files.nativeFile(fileActor(e),receipt),data=await deps.media!.files.readFile(receipt);member(id);if(e.state.set.revision!==revision)throw Error('准备期间工作集已变化，副本保留，未发出系统请求。');files.push({id:receipt,assetId:id,fileName:data.fileName,file:checked.file})}
+     return{ok:true,files}
+    }
+    if(action.kind==='window-settings'){
+     if(!e.port.setWindowMetadata)throw Error('原生窗口设置未就绪。')
+     const before=e.port.bounds(),layout=validateWorkLayout({...before,pinned:action.pinned,indicatorColor:action.indicatorColor,alwaysShowIndicator:action.alwaysShowIndicator,currentSpaceOnly:action.currentSpaceOnly,open:true})
+     await deps.host.writeWorkLayout({...e.state.scope,sessionToken:e.sessionToken,id:e.state.set.id,layout},deps.deviceId);assertCurrent(e)
+     e.port.setWindowMetadata(layout);e.port.setPinned(layout.pinned);e.state={...e.state,geometry:layout,pinned:layout.pinned};e.port.publish(e.state);deps.changed();return{ok:true}
+    }
     if(action.kind==='promise'){
      member(action.assetId);const receipt=action.receiptId??await prepare(action.assetId,'original')
      const checked=await deps.media!.files.nativeFile(fileActor(e),receipt);member(action.assetId)
@@ -188,10 +243,16 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
      return{ok:true,message:'副本写入完成；请在接收应用核对。'}
     }
     if(action.kind==='handoff'){
-     action.assetIds.forEach(member);const receipts:NonNullable<ShelfReply['receipts']>=[]
-     const targets=action.handoffKind==='zip'?[action.assetIds[0]]:action.assetIds
-     for(const id of targets){const receipt=await prepare(id,action.handoffKind,{...(action.handoffKind==='zip'?{assetIds:action.assetIds}:{}),...(action.imageTransform?{imageTransform:action.imageTransform}:{})});const file=await deps.media!.files.nativeFile(fileActor(e),receipt);member(id);const data=await deps.media!.files.readFile(receipt);receipts.push({id:receipt,fileName:data.fileName,assetId:id})}
-     return{ok:true,message:`${receipts.length}份副本已完成`,receipts}
+     action.assetIds.forEach(member);const receipts:NonNullable<ShelfReply['receipts']>=[],details:string[]=[]
+     const targets=['zip','pdf','stitch'].includes(action.handoffKind)?[action.assetIds[0]]:action.assetIds
+     try{
+      for(const id of targets){const receipt=await prepare(id,action.handoffKind,{...(['zip','pdf','stitch'].includes(action.handoffKind)?{assetIds:action.assetIds}:{}),...(action.imageTransform?{imageTransform:action.imageTransform}:{}),...(action.composition?{composition:action.composition}:{})});await deps.media!.files.nativeFile(fileActor(e),receipt);member(id);const data=await deps.media!.files.readFile(receipt);receipts.push({id:receipt,fileName:data.fileName,assetId:id});details.push(data.message)}
+     }catch(error){
+      assertCurrent(e)
+      const message=error instanceof Error?error.message:'执行结果未确认，请核对保留记录。'
+      return{ok:false,message:`本次交付未完成（已完成 ${receipts.length}/${action.assetIds.length} 项）。${message} 原目标与已完成副本保留。`,receipts}
+     }
+     return{ok:true,message:details.join('\n'),receipts}
     }
     if(action.kind==='members'||action.kind==='drop'){
      const revision=e.state.set.revision;let ids:string[]=[],partial=0
@@ -244,7 +305,7 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
     if(!saved)throw Error('SET_MISSING')
     if(saved.assetIds.includes(imported)){await refreshEntry(e);return e.state}
     if(saved.revision!==revision||entryUnsaved(e)||saved.assetIds.length>=200)throw Error('ATTACHMENT_CONFLICT')
-    const updated=await deps.host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:false,command:{kind:'save',id:saved.id,expectedRevision:revision,value:{name:saved.name,note:saved.note,colors:saved.colors,columns:saved.columns,assetIds:[...saved.assetIds,imported]}}},deps.deviceId)
+    const updated=await deps.host.writeWorkSet({...scope,sessionToken:catalog.sessionToken,allowUpgrade:false,command:{kind:'save',id:saved.id,expectedRevision:revision,value:{name:saved.name,columns:saved.columns,assetIds:[...saved.assetIds,imported]}}},deps.deviceId)
     assertCurrent(e);const set=updated.sets.find(set=>set.id===saved.id);if(!set||!set.assetIds.includes(imported))throw Error('ATTACHMENT_UNCONFIRMED')
     const assets=(await deps.host.readAssetContext(set.assetIds)).assets;assertCurrent(e)
     e.sessionToken=updated.sessionToken;e.state={...e.state,set,assets:[...assets],...(e.state.draft?{draft:undefined,draftRevision:undefined}:{})};e.port.publish(e.state);deps.changed();return e.state
@@ -255,7 +316,7 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
   else if(a.kind==='notes-dirty'){workRecord(a,['token','kind','dirty']);if(typeof a.dirty!=='boolean')throw Error('INVALID_ACTION');e.notesDirty=a.dirty;deps.changed()}
   else if(a.kind==='draft'){workRecord(a,['token','kind','expectedRevision','value']);const value=validateWorkValue(a.value);if(value.assetIds.some(id=>!e.state.set.assetIds.includes(id)))throw Error('MEMBERSHIP_NOT_GRANTED');e.state={...e.state,draft:value,draftRevision:workRevision(a.expectedRevision)};deps.changed()}
   else if(a.kind==='discard-draft'){workRecord(a,['token','kind']);e.state={...e.state,draft:undefined,draftRevision:undefined};e.port.publish(e.state);deps.changed()}
-  else if(a.kind==='save'){workRecord(a,['token','kind','expectedRevision','value']);const value=validateWorkValue(a.value);if(value.assetIds.some(id=>!e.state.set.assetIds.includes(id)))throw Error('MEMBERSHIP_NOT_GRANTED');const saved=await deps.host.writeWorkSet({...e.state.scope,sessionToken:e.sessionToken,allowUpgrade:false,command:{kind:'save',id:e.state.set.id,expectedRevision:workRevision(a.expectedRevision),value}},deps.deviceId,{...e.port.bounds(),open:true});assertCurrent(e);const set=saved.sets.find(s=>s.id===e.state.set.id)!;e.state={...e.state,set,...(JSON.stringify(e.state.draft)===JSON.stringify(value)?{draft:undefined,draftRevision:undefined}:{})};e.port.publish(e.state);deps.changed()}
+  else if(a.kind==='save'){workRecord(a,['token','kind','expectedRevision','value']);const value=validateWorkValue(a.value);if(value.assetIds.some(id=>!e.state.set.assetIds.includes(id)))throw Error('MEMBERSHIP_NOT_GRANTED');const saved=await deps.host.writeWorkSet({...e.state.scope,sessionToken:e.sessionToken,allowUpgrade:false,command:{kind:'save',id:e.state.set.id,expectedRevision:workRevision(a.expectedRevision),value}},deps.deviceId,{...e.port.bounds(),open:true});assertCurrent(e);const set=saved.sets.find(s=>s.id===e.state.set.id)!;if(e.state.set.assetIds.some(id=>!set.assetIds.includes(id)))deps.memberTools?.retire(fileActor(e));e.state={...e.state,set,...(JSON.stringify(e.state.draft)===JSON.stringify(value)?{draft:undefined,draftRevision:undefined}:{})};e.port.publish(e.state);deps.changed()}
   else if(a.kind==='pin'){workRecord(a,['token','kind','pinned']);if(typeof a.pinned!=='boolean')throw Error('INVALID_ACTION');e.port.setPinned(a.pinned);e.state={...e.state,pinned:a.pinned};e.port.publish(e.state)}
   else if(a.kind==='dock'||a.kind==='undock'){
    workRecord(a,a.kind==='dock'?['token','kind','edge',...(ownedNativeIntent?['gestureId','deltaX']:[])]:['token','kind',...(ownedNativeIntent?['restore','gestureId']:[])])
@@ -281,7 +342,7 @@ export function createWorkWindowController(deps:{configureAi?:()=>void;shelfDraf
   try{const a=workRecord(input,['token','kind','expectedRevision','value','pinned','assetId','dirty','discard','edge','requestId']);return actEntry(locateEntry(event,workId(a.token)),input)}
   catch(error){return result<WorkWindowSnapshot>(()=>{throw error})}
  }
- const memberTools=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','assetId','operation','input']),e=locateEntry(event,workId(r.token)),assetId=workId(r.assetId);const check=()=>{assertCurrent(e);if(!e.state.set.assetIds.includes(assetId)||e.state.set.unavailableIds.includes(assetId))throw Error('MEMBERSHIP_NOT_GRANTED')};check();assertFileAdmission(e);if(!deps.memberTools||typeof r.operation!=='string')throw Error('MEMBER_TOOLS_UNAVAILABLE');if(r.operation==='add-color'){const q=workRecord(r.input,['color']);if(typeof q.color!=='string'||!/^#[0-9a-f]{6}$/i.test(q.color)||!e.shelf)throw Error('颜色无效');if(e.nativeTransient)throw Error('请先结束文字输入');const reply=await e.shelf.addColor(q.color.toUpperCase());if(!reply.ok)throw Error(reply.message);return e.state.set.colors};return deps.memberTools.call({owner:fileActor(e),scope:e.state.scope,assetId,check},r.operation,r.input)})
+ const memberTools=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','assetId','operation','input']),e=locateEntry(event,workId(r.token)),assetId=workId(r.assetId);const check=()=>{assertCurrent(e);if(!e.state.set.assetIds.includes(assetId)||e.state.set.unavailableIds.includes(assetId))throw Error('MEMBERSHIP_NOT_GRANTED')};check();assertFileAdmission(e);if(!deps.memberTools||typeof r.operation!=='string')throw Error('MEMBER_TOOLS_UNAVAILABLE');return deps.memberTools.call({owner:fileActor(e),scope:e.state.scope,assetId,check},r.operation,r.input)})
  const notebookRead=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','assetId']),e=locateEntry(event,workId(r.token)),assetId=workId(r.assetId);if(!e.state.set.assetIds.includes(assetId))throw Error('MEMBERSHIP_NOT_GRANTED');const value=await deps.host.readNotebook({...e.state.scope,assetId});assertCurrent(e);return value})
  const notebookSave=(event:unknown,input:unknown)=>result(async()=>{const r=workRecord(input,['token','request']),e=locateEntry(event,workId(r.token)),q=workRecord(r.request,['assetId','libraryIdentity','generation','sessionToken','sourceRef','expectedRevision','allowUpgrade','book']);const assetId=workId(q.assetId);if(!e.state.set.assetIds.includes(assetId)||q.libraryIdentity!==e.state.scope.libraryIdentity||q.generation!==e.state.scope.generation||(q.allowUpgrade!==false&&(!e.shelf||q.allowUpgrade!==true))||!Number.isSafeInteger(q.expectedRevision)||Number(q.expectedRevision)<0)throw Error('MEMBERSHIP_NOT_GRANTED');const request:NotebookSaveRequest={...e.state.scope,assetId,sessionToken:workId(q.sessionToken),sourceRef:workId(q.sourceRef),expectedRevision:Number(q.expectedRevision),allowUpgrade:q.allowUpgrade===true,book:validateNotebook(q.book)};const saved=await deps.host.saveNotebook(request);assertCurrent(e);return saved})
  const drain=()=>{

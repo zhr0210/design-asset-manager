@@ -1,0 +1,166 @@
+{
+  "1": {
+    "format": "JPEG",
+    "screenshotPixels": [
+      800,
+      414
+    ],
+    "windowPoints": [
+      400.0,
+      207.0
+    ]
+  },
+  "3": {
+    "format": "JPEG",
+    "screenshotPixels": [
+      800,
+      620
+    ],
+    "windowPoints": [
+      400.0,
+      310.0
+    ]
+  },
+  "5": {
+    "format": "JPEG",
+    "screenshotPixels": [
+      800,
+      620
+    ],
+    "windowPoints": [
+      400.0,
+      310.0
+    ]
+  },
+  "7": {
+    "format": "JPEG",
+    "screenshotPixels": [
+      800,
+      870
+    ],
+    "windowPoints": [
+      400.0,
+      435.0
+    ]
+  },
+  "traces": [
+    {
+      "trace": "profile/native-shelf-ui/39439bd4-7be8-4f02-ae32-0fc9a9efff57/motion-trace.json",
+      "savedFrames": [
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 484,
+          "y": 71,
+          "width": 220,
+          "height": 240,
+          "presentation": "compact"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 484,
+          "y": 71,
+          "width": 220,
+          "height": 240,
+          "presentation": "compact"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 394,
+          "y": 88,
+          "width": 400,
+          "height": 207,
+          "presentation": "expanded"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 394,
+          "y": 36,
+          "width": 400,
+          "height": 310,
+          "presentation": "expanded"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 394,
+          "y": 31,
+          "width": 400,
+          "height": 435,
+          "presentation": "expanded"
+        }
+      ]
+    },
+    {
+      "trace": "profile/native-shelf-ui/a3c05790-e7ab-46ab-95ac-f903e88de9c0/motion-trace.json",
+      "savedFrames": [
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 40,
+          "y": 71,
+          "width": 220,
+          "height": 240,
+          "presentation": "compact"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 40,
+          "y": 71,
+          "width": 220,
+          "height": 240,
+          "presentation": "compact"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 40,
+          "y": 31,
+          "width": 400,
+          "height": 435,
+          "presentation": "expanded"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 40,
+          "y": 31,
+          "width": 400,
+          "height": 435,
+          "presentation": "expanded"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 40,
+          "y": 71,
+          "width": 220,
+          "height": 240,
+          "presentation": "compact"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 40,
+          "y": 31,
+          "width": 400,
+          "height": 435,
+          "presentation": "expanded"
+        },
+        {
+          "buildId": "dam-d06367346016b4be",
+          "phase": "host-save-committed",
+          "x": 40,
+          "y": 71,
+          "width": 220,
+          "height": 240,
+          "presentation": "compact"
+        }
+      ]
+    }
+  ]
+}

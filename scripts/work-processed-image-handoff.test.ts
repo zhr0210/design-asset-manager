@@ -29,7 +29,7 @@ try{
  assert.ok(first&&second&&big)
  const state=host.inspect(),scope={libraryIdentity:state.identity!,generation:state.generation!},device='device:processed-image-test'
  const initial=await host.readWorkSets(scope,device)
- const created=await host.writeWorkSet({...scope,sessionToken:initial.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Generated image transforms',assetIds:[first.id,second.id,big.id],colors:[],columns:2,note:'Preserve original bytes'}}},device)
+ const created=await host.writeWorkSet({...scope,sessionToken:initial.sessionToken,allowUpgrade:true,command:{kind:'create',value:{name:'Generated image transforms',assetIds:[first.id,second.id,big.id],columns:2,}}},device)
  const set=created.sets[0],handoffRoot=path.join(root,'handoffs')
  const admission=createVisualAdmission({memory:()=>({free:8*1024**3,total:16*1024**3})})
  const options={host,admission,root:handoffRoot,open:async()=>'',trash:async(file:string)=>{await fs.unlink(file)}}
@@ -106,14 +106,14 @@ try{
  assert.equal((await fs.readdir(byteRoot)).length,1)
  // Real saved-set member removal revokes reading and preparation of formerly delivered copies.
  const latest=await host.readWorkSets(scope,device),held=latest.sets.find(s=>s.id===set.id)!
- await host.writeWorkSet({...scope,sessionToken:latest.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:held.revision,value:{name:held.name,assetIds:[second.id,big.id],colors:held.colors,columns:held.columns,note:held.note}}},device)
+ await host.writeWorkSet({...scope,sessionToken:latest.sessionToken,allowUpgrade:true,command:{kind:'save',id:set.id,expectedRevision:held.revision,value:{name:held.name,assetIds:[second.id,big.id],columns:held.columns,}}},device)
  await assert.rejects(files.prepare('fixture-actor',firstRequest),/参考已移除/)
  await assert.rejects(files.readFile(firstReceipt.id),/参考已移除/)
  db.close();db=undefined;await host.close();await host.reopen()
  const reopened=host.inspect();assert.equal(reopened.state,'ready')
  const reopenedScope={libraryIdentity:reopened.identity!,generation:reopened.generation!}
  const reopenedSet=(await host.readWorkSets(reopenedScope,device)).sets.find(s=>s.id===set.id)!
- assert.equal(reopenedSet.note,'Preserve original bytes');assert.deepEqual(reopenedSet.assetIds,[second.id,big.id])
+ assert.equal('note' in reopenedSet,false);assert.deepEqual(reopenedSet.assetIds,[second.id,big.id])
  const reopenedFiles=createWorkFileHandoffs(options)
  assert.deepEqual(Buffer.from((await reopenedFiles.readFile(orientedReceipt.id)).bytes),Buffer.from(orientedFile.bytes))
  assert.equal((await reopenedFiles.list({...reopenedScope,setId:set.id,assetId:second.id}))[0].image?.format,'webp')

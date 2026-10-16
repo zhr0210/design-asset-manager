@@ -1,0 +1,70 @@
+{
+  "type": "send",
+  "payload": {
+    "event": "window-inventory",
+    "pid": 64347,
+    "atMs": 1791987400732,
+    "windows": [
+      {
+        "number": 4294967296,
+        "class": "NSStatusBarWindow",
+        "visible": 1,
+        "key": 0,
+        "frame": [
+          1610,
+          1230,
+          38,
+          30
+        ]
+      },
+      {
+        "number": 44504,
+        "class": "..NSKVONotifying_Dropover.DragSessionWindow",
+        "visible": 1,
+        "key": 1,
+        "frame": [
+          -167,
+          943,
+          198,
+          207
+        ]
+      },
+      {
+        "number": 44505,
+        "class": "Dropover.DragSessionOverlayTooltipWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          0,
+          -32,
+          26,
+          32
+        ]
+      },
+      {
+        "number": 44506,
+        "class": "..NSKVONotifying_Dropover.ActionDockWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "number": 44514,
+        "class": "NSKVONotifying_TUINSWindow",
+        "visible": 0,
+        "key": 0,
+        "frame": [
+          0,
+          446,
+          54,
+          54
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,167 @@
+[
+  {
+    "type": "send",
+    "payload": {
+      "class": "Dropover.DragSessionWindow",
+      "methods": [
+        {
+          "selector": "windowWillMove:",
+          "address": "0x736a4",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseDragged:",
+          "address": "0x7249c",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseUp:",
+          "address": "0x727a0",
+          "module": "Dropover"
+        },
+        {
+          "selector": "rightMouseDown:",
+          "address": "0x72800",
+          "module": "Dropover"
+        },
+        {
+          "selector": "otherMouseDown:",
+          "address": "0x7294c",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseDown:",
+          "address": "0x7301c",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseEntered:",
+          "address": "0x73184",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseExited:",
+          "address": "0x73320",
+          "module": "Dropover"
+        }
+      ]
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "class": "Dropover.DragSessionView",
+      "methods": [
+        {
+          "selector": "mouseDown:",
+          "address": "0x52170",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseDragged:",
+          "address": "0x52cd0",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseUp:",
+          "address": "0x52d20",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseEntered:",
+          "address": "0x52ef0",
+          "module": "Dropover"
+        },
+        {
+          "selector": "rightMouseDown:",
+          "address": "0x5310c",
+          "module": "Dropover"
+        },
+        {
+          "selector": "mouseExited:",
+          "address": "0x53270",
+          "module": "Dropover"
+        },
+        {
+          "selector": "draggingSession:movedToPoint:",
+          "address": "0x534d0",
+          "module": "Dropover"
+        },
+        {
+          "selector": "didRecognizeDoubleClick:",
+          "address": "0x50d80",
+          "module": "Dropover"
+        },
+        {
+          "selector": "acceptsFirstMouse:",
+          "address": "0x4d7e4",
+          "module": "Dropover"
+        },
+        {
+          "selector": "initWithFrame:",
+          "address": "0x4dd18",
+          "module": "Dropover"
+        }
+      ]
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "class": "Dropover.DragSessionBackgroundView",
+      "methods": [
+        {
+          "selector": "setFrameSize:",
+          "address": "0x45c90",
+          "module": "Dropover"
+        },
+        {
+          "selector": "viewDidMoveToWindow",
+          "address": "0x45cd0",
+          "module": "Dropover"
+        },
+        {
+          "selector": "initWithFrame:",
+          "address": "0x46f64",
+          "module": "Dropover"
+        }
+      ]
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "class": "Dropover.DragSessionNavigationBar",
+      "methods": [
+        {
+          "selector": "initWithFrame:",
+          "address": "0x17d7cc",
+          "module": "Dropover"
+        },
+        {
+          "selector": "setFrameSize:",
+          "address": "0x17d9c4",
+          "module": "Dropover"
+        },
+        {
+          "selector": "viewDidMoveToWindow",
+          "address": "0x17ded8",
+          "module": "Dropover"
+        }
+      ]
+    }
+  },
+  {
+    "type": "send",
+    "payload": {
+      "class": "Dropover.ActionsController",
+      "methods": [
+        {
+          "selector": "didSelectItem:",
+          "address": "0x22ad5c",
+          "module": "Dropover"
+        }
+      ]
+    }
+  }
+]

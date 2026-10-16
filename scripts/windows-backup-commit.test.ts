@@ -341,9 +341,9 @@ await test('invalid target expectations and malformed captured binding refuse be
   const f = await fixture()
   try {
     f.db.transaction(() => applyTagIntentSchema(f.db))()
-    // v15 is now a supported target. Use the first unsupported version,
+    // v16 is now a supported target. Use the first unsupported version,
     // while retaining captured/nonintegral/invalid expectation coverage.
-    for (const value of [0, 1, 16, 9.5, NaN, Infinity]) {
+    for (const value of [0, 1, 17, 9.5, NaN, Infinity]) {
       const other = {...f.expected, targetSchemaVersion: value}
       assert.throws(() => f.db.transaction(() => writeWindowsBackupCommitMarker(f.db, other))(), /BACKUP_COMMIT_EXPECTATION_REFUSED/)
       assert.throws(() => f.inspect(other), /BACKUP_COMMIT_EXPECTATION_REFUSED/)
